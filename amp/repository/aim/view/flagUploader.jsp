@@ -14,48 +14,48 @@
 
 <style type="text/css">
 div.fileinputs {
-	position: relative;
+position: relative;
 }
 
 div.pseudoInput {
-	position: absolute;
-	top: -8px;
+position: absolute;
+top: -8px;
 
-	z-index: 1;
-        width:75px;
-        height:20px;
-        font-size:10px;
+z-index: 1;
+width:75px;
+height:20px;
+font-size:10px;
 }
 
 input.hide{
-	position:absolute;
+position:absolute;
 
-			left:0px;
-			-moz-opacity:0;
-			filter:alpha(opacity: 0);
-			opacity: 0;
-			z-index: 2;
+left:0px;
+-moz-opacity:0;
+filter:alpha(opacity: 0);
+opacity: 0;
+z-index: 2;
 }</style>
 
 <!--[if IE]>
-	<style type="text/css">
-	div.pseudoInput {
-	position: absolute;
-	top: -12px;
-	z-index: 1;
+<style type="text/css">
+div.pseudoInput {
+position: absolute;
+top: -12px;
+z-index: 1;
 }
-	input.hide
-		{
-			position:absolute;
-			left: 154px;
-			-moz-opacity:0;
-			filter:alpha(opacity: 0);
-			opacity: 0;
-			z-index: 2;
-			width:0px;
-			border-width:0px;
-		}
-	</style>
+input.hide
+{
+position:absolute;
+left: 154px;
+-moz-opacity:0;
+filter:alpha(opacity: 0);
+opacity: 0;
+z-index: 2;
+width:0px;
+border-width:0px;
+}
+</style>
 <![endif]-->
 
 
@@ -63,87 +63,87 @@ input.hide{
 
 <script language="JavaScript">
 
- function buttonClicked (status)
-  {
-	 if (status == "depressed"){
-           document.getElementById("pseudobutton").style.borderStyle = "inset";
-         }
+function buttonClicked (status)
+{
+  if (status == "depressed"){
+    document.getElementById("pseudobutton").style.borderStyle = "inset";
+  }
 
-	 else{
-		document.getElementById("pseudobutton").style.borderStyle = "outset";
-                document.getElementById("pseudotext").value=document.getElementById("flagUploader").value;
-      }
+  else{
+    document.getElementById("pseudobutton").style.borderStyle = "outset";
+    document.getElementById("pseudotext").value=document.getElementById("flagUploader").value;
+  }
+}
+
+
+
+function validate() {
+
+  if (document.aimFlagUploaderForm.countryId.value == "-1") {
+
+    alert("Please select a country");
+
+    document.aimFlagUploaderForm.countryId.focus();
+
+    return false;
+
   }
 
 
 
-	function validate() {
+  /*
 
-		if (document.aimFlagUploaderForm.countryId.value == "-1") {
+  if (trim(document.aimFlagUploaderForm.flagFile.value).length == 0) {
 
-			alert("Please select a country");
+    alert("Please select a flag");
 
-			document.aimFlagUploaderForm.countryId.focus();
+    document.aimFlagUploaderForm.flagFile.focus();
 
-			return false;
+    return false;
 
-		}
+  }*/
 
-
-
-		/*
-
-		if (trim(document.aimFlagUploaderForm.flagFile.value).length == 0) {
-
-			alert("Please select a flag");
-
-			document.aimFlagUploaderForm.flagFile.focus();
-
-			return false;
-
-		}*/
-
-	}
+}
 
 
 
-	function upload() {
+function upload() {
 
-		ret = validate();
+  ret = validate();
 
-		if (ret == true) {
+  if (ret == true) {
 
-			document.aimFlagUploaderForm.submit();
+    document.aimFlagUploaderForm.submit();
 
-		}
+  }
 
-		return ret;
+  return ret;
 
-	}
-
-
-
-	function setAsDefault(id) {
-
-		<digi:context name="url" property="context/module/moduleinstance/setDefaultFlag.do" />
-
-		document.aimFlagUploaderForm.action = "<%=url%>?id="+id;
-
-		document.aimFlagUploaderForm.submit();
-
-	}
+}
 
 
 
-    function deleteFlag(id) {
+function setAsDefault(id) {
 
-        <digi:context name="url" property="context/module/moduleinstance/deleteFlag.do" />
+  <digi:context name="url" property="context/module/moduleinstance/setDefaultFlag.do" />
 
-        document.aimFlagUploaderForm.action = "<%=url%>?CountryId="+id;
+  document.aimFlagUploaderForm.action = "<%=url%>?id="+id;
 
-        document.aimFlagUploaderForm.submit();
+  document.aimFlagUploaderForm.submit();
 
-	}
+}
+
+
+
+function deleteFlag(id) {
+
+  <digi:context name="url" property="context/module/moduleinstance/deleteFlag.do" />
+
+  document.aimFlagUploaderForm.action = "<%=url%>?CountryId="+id;
+
+  document.aimFlagUploaderForm.submit();
+
+}
 
 
 
@@ -165,302 +165,309 @@ input.hide{
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 
-	<tr>
+  <tr>
 
-		<td class=r-dotted-lg width=14>&nbsp;</td>
+    <td class=r-dotted-lg width=14>&nbsp;</td>
 
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+    <td align=left class=r-dotted-lg vAlign=top width=750>
 
-			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+      <table cellPadding=5 cellSpacing=0 width="100%" border=0>
 
-				<tr>
+        <tr>
 
-					<!-- Start Navigation -->
+          <!-- Start Navigation -->
 
-					<td height=33><span class=crumb>
+          <td height=33><span class=crumb>
 
-						<c:set var="trnViewAdmin">
+            <c:set var="trnViewAdmin">
 
-							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+              <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 
-						</c:set>
+            </c:set>
 
-						<digi:link href="/admin.do" styleClass="comment" title="${trnViewAdmin}" >
+            <digi:link href="/admin.do" styleClass="comment" title="${trnViewAdmin}" >
 
-						<digi:trn key="aim:AmpAdminHome">
+              <digi:trn key="aim:AmpAdminHome">
 
-						Admin Home
+              Admin Home
 
-						</digi:trn>
+              </digi:trn>
 
-						</digi:link>&nbsp;&gt;&nbsp;
+            </digi:link>&nbsp;&gt;&nbsp;
 
-						<digi:trn key="aim:flagUploader">
+            <digi:trn key="aim:flagUploader">
 
-						Flag uploader
+            Flag uploader
 
-						</digi:trn>
+            </digi:trn>
 
-					</td>
+          </td>
 
-					<!-- End navigation -->
+          <!-- End navigation -->
 
-				</tr>
+        </tr>
 
-				<tr>
+        <tr>
 
-					<td height=16 vAlign=center width=571>
+          <td height=16 vAlign=center width=571>
 
-						<span class=subtitle-blue>
+            <span class=subtitle-blue>
 
-							<digi:trn key="aim:flagUploaderSelector">
+              <digi:trn key="aim:flagUploaderSelector">
 
-								Flag uploader/selector
+              Flag uploader/selector
 
-							</digi:trn>
+              </digi:trn>
 
-						</span>
+            </span>
 
-					</td>
+          </td>
 
-				</tr>
+        </tr>
 
-				<tr>
+        <tr>
 
-					<digi:form action="/uploadFlag.do" method="post" enctype="multipart/form-data">
+          <digi:form action="/uploadFlag.do" method="post" enctype="multipart/form-data">
 
-					<td noWrap width=100% vAlign="top">
+            <td noWrap width=100% vAlign="top">
 
-						<table width=730 cellpadding=1 cellSpacing=1 border=0>
+              <table width=730 cellpadding=1 cellSpacing=1 border=0>
 
-							<tr><td noWrap vAlign="top">
+                <tr><td noWrap vAlign="top">
 
-								<table cellPadding=4 cellSpacing=1 width="200" valign="top">
+                  <table cellPadding=4 cellSpacing=1 width="200" valign="top">
 
-									<logic:iterate name="aimFlagUploaderForm" property="cntryFlags" id="flag"
+                    <logic:iterate name="aimFlagUploaderForm" property="cntryFlags" id="flag"
 
-									type="org.digijava.module.aim.helper.Flag">
+                    type="org.digijava.module.aim.helper.Flag">
 
-									<tr bgColor=#ffffff>
+                    <tr bgColor=#ffffff>
 
-										<td valign="top" align="center" width="60">
+                      <td valign="top" align="center" width="60">
 
-											<img src="<%=displayFlag%>?id=<bean:write name="flag" property="cntryId" />"
+                        <img src="<%=displayFlag%>?id=<bean:write name="flag" property="cntryId" />"
 
-											border="0" height="34" width="50">
+                        border="0" height="34" width="50">
 
-										</td>
+                      </td>
 
-										<td valign="top" align="left">
+                      <td valign="top" align="left">
 
-											<bean:write name="flag" property="cntryName" />&nbsp;
+                        <bean:write name="flag" property="cntryName" />&nbsp;
 
-											<c:if test="${flag.defaultFlag == true}">
+                        <c:if test="${flag.defaultFlag == true}">
 
-												<digi:img src="images/bullet_green.gif" border="0" height="9" width="9" align="center" />
+                          <digi:img src="images/bullet_green.gif" border="0" height="9" width="9" align="center" />
 
-											</c:if>
+                        </c:if>
 
-											<c:if test="${flag.defaultFlag == false}">
+                        <c:if test="${flag.defaultFlag == false}">
 
-												<a href="javascript:setAsDefault('<bean:write name="flag" property="cntryId" />')"><digi:img src="images/bullet_grey.gif" border="0" height="9" width="9" align="center" /></a>
+                          <a href="javascript:setAsDefault('<bean:write name="flag" property="cntryId" />')"><digi:img src="images/bullet_grey.gif" border="0" height="9" width="9" align="center" /></a>
 
-                                            </c:if>
+                        </c:if>
 
-                                            &nbsp;
+                        &nbsp;
 
-                                            <a href="javascript:deleteFlag('<bean:write name="flag" property="cntryId" />')">
+                        <a href="javascript:deleteFlag('<bean:write name="flag" property="cntryId" />')">
 
-                                               <digi:img src="images/trash_12.gif" border="0" height="11" width="11" align="center" />
+                        <digi:img src="images/trash_12.gif" border="0" height="11" width="11" align="center" />
 
-                                            </a>
+</a>
 
-										</td>
+                      </td>
 
-									</tr>
+                    </tr>
 
-									</logic:iterate>
+                    </logic:iterate>
 
-								</table>
+                  </table>
 
-							</td>
+            </td>
 
-							<td noWrap vAlign="top">
+            <td noWrap vAlign="top">
 
-									<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+              <table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
 
-										<tr bgcolor="#aaaaaa">
+                <tr bgcolor="#aaaaaa">
 
-											<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
+                  <td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 
-												<digi:trn key="aim:uploadFlag">
+                    <digi:trn key="aim:uploadFlag">
 
-													Upload Flag</digi:trn>
+                      Upload Flag</digi:trn>
 
-											</td>
+                  </td>
 
-										</tr>
+                </tr>
 
-										<tr>
+                <tr>
 
-											<td align="center">
+                  <td align="center">
 
-												<table width="100%" cellpadding="2" cellspacing="1">
+                    <table width="100%" cellpadding="2" cellspacing="1">
 
-													<tr>
+                      <tr>
 
-														<td colspan="2" align="center">
+                        <td colspan="2" align="center">
 
-															<html:errors/>
+                          <html:errors/>
 
-														</td>
+                        </td>
 
-													</tr>
+                      </tr>
 
-													<tr>
+                      <tr>
 
-														<td>
+                        <td>
 
-															<digi:trn key="aim:country">Country</digi:trn>
+                          <digi:trn key="aim:country">Country</digi:trn>
 
-														</td>
+                        </td>
 
-														<td>
+                        <td>
+                          <c:set var="selCountry">
+                          <digi:trn key="aim:flagUploader:selectCountry">
+                          Select Country
+                        </digi:trn>
 
-															<html:select property="countryId" styleClass="inp-text">
 
-																<html:option value="-1">-- Select Country --</html:option>
-                                                                <c:forEach var="cn" items="${aimFlagUploaderForm.countries}">
-                                                                  <c:set var="cnName">
-                                                                    <digi:trn key="aim:cn:${cn.name}">${cn.name}</digi:trn>
-                                                                  </c:set>
-                                                                  <html:option value="${cn.id}">${cnName}</html:option>
-                                                                </c:forEach>
+                          </c:set>
 
-																<%--<html:optionsCollection name="aimFlagUploaderForm" property="countries"	value="id" label="name" />--%>
+                          <html:select property="countryId" styleClass="inp-text">
 
-															</html:select>
+                            <html:option value="-1">--<c:out value="${selCountry}" />--</html:option>
+                            <c:forEach var="cn" items="${aimFlagUploaderForm.countries}">
+                              <c:set var="cnName">
+                                <digi:trn key="aim:cn:${cn.name}">${cn.name}</digi:trn>
+                              </c:set>
+                              <html:option value="${cn.id}">${cnName}</html:option>
+                            </c:forEach>
 
-														</td>
+                            <%--<html:optionsCollection name="aimFlagUploaderForm" property="countries"	value="id" label="name" />--%>
 
-													</tr>
+                          </html:select>
 
-													<tr>
+                        </td>
 
-														<td>
+                      </tr>
 
-															<digi:trn key="aim:flag">Flag</digi:trn>
+                      <tr>
 
-														</td>
+                        <td>
 
-														<td nowrap>
-                                                                                                                  <div class="fileinputs">
-                                                                                                                <div class="pseudoInput">
-                                                                                                                   <input type="text" id="pseudotext"  READONLY/>
-                                                                                                                    <input type="button" id="pseudobutton" value="<digi:trn key="aim:browseFile">Browse...</digi:trn>" style="width:75px; height:20px;font-size:10px;"/>
-                                                                                                                    <html:file name="aimFlagUploaderForm" property="flagFile" styleId="flagUploader" styleClass="hide" onmousedown="buttonClicked('depressed');" onmouseup="buttonClicked('normal');" onmouseout="buttonClicked('phased');"  />
+                          <digi:trn key="aim:flag">Flag</digi:trn>
 
+                        </td>
 
-                                                                                                                  </div>
-                                                                                                                </div>
+                        <td nowrap>
+                          <div class="fileinputs">
+                            <div class="pseudoInput">
+                              <input type="text" id="pseudotext"  READONLY/>
+                              <input type="button" id="pseudobutton" value="<digi:trn key="aim:browseFile">Browse...</digi:trn>" style="width:75px; height:20px;font-size:10px;"/>
+                              <html:file name="aimFlagUploaderForm" property="flagFile" styleId="flagUploader" styleClass="hide" onmousedown="buttonClicked('depressed');" onmouseup="buttonClicked('normal');" onmouseout="buttonClicked('phased');"  />
 
-														</td>
 
+                            </div>
+                          </div>
 
+                        </td>
 
-													</tr>
 
-													<tr>
 
-														<td colspan="2" align="center">
+                      </tr>
 
-															<table cellPadding=3 cellSpacing=3>
+                      <tr>
 
-															<tr>
+                        <td colspan="2" align="center">
 
-																<td>
+                          <table cellPadding=3 cellSpacing=3>
 
-                                                                  <c:set var="trnUploadBtn">
+                            <tr>
 
-                                                                    <digi:trn key="aim:flUploadBtn">Upload</digi:trn>
+                              <td>
 
-                                                                  </c:set>
+                                <c:set var="trnUploadBtn">
 
-                                                                  <input type="submit" value="${trnUploadBtn}" class="dr-menu" onclick="return upload()">
+                                  <digi:trn key="aim:flUploadBtn">Upload</digi:trn>
 
-																</td>
+                                </c:set>
 
-																<td>
+                                <input type="submit" value="${trnUploadBtn}" class="dr-menu" onclick="return upload()">
 
-                                                                  <c:set var="trnClearBtn">
+                              </td>
 
-                                                                    <digi:trn key="aim:flClearBtn">Clear</digi:trn>
+                              <td>
 
-                                                                  </c:set>
+                                <c:set var="trnClearBtn">
 
-                                                                  <input type="reset" value="${trnClearBtn}" class="dr-menu">
+                                  <digi:trn key="aim:flClearBtn">Clear</digi:trn>
 
-																</td>
+                                </c:set>
 
-															</tr>
+                                <input type="reset" value="${trnClearBtn}" class="dr-menu">
 
-															</table>
+                              </td>
 
-														</td>
+                            </tr>
 
-													</tr>
+                          </table>
 
-												</table>
+                        </td>
 
-											</td>
+                      </tr>
 
-										</tr>
+                    </table>
 
-									</table>
+                  </td>
 
-								</td>
+                </tr>
 
-							</tr>
+              </table>
 
-						</table>
+            </td>
 
-					</td>
+                </tr>
 
-					</digi:form>
+              </table>
 
-				</tr>
+    </td>
 
-				<tr>
+          </digi:form>
 
-					<td>
+        </tr>
 
-						<digi:img src="images/bullet_green.gif" border="0" height="9" width="9" align="top" /> -
+        <tr>
 
-						<digi:trn key="aim:defaultFlag">Default Flag</digi:trn>
+          <td>
 
-					</td>
+            <digi:img src="images/bullet_green.gif" border="0" height="9" width="9" align="top" /> -
 
-				</tr>
+            <digi:trn key="aim:defaultFlag">Default Flag</digi:trn>
 
-				<tr>
+          </td>
 
-					<td>
+        </tr>
 
-						<digi:trn key="aim:flagUploadHelpPhrase1">Click the image</digi:trn>
+        <tr>
 
-						<digi:img src="images/bullet_grey.gif" border="0" height="9" width="9" align="top" />
+          <td>
 
-						<digi:trn key="aim:flagUploadHelpPhrase2">next to the flag to make it as the default for the site</digi:trn>
+            <digi:trn key="aim:flagUploadHelpPhrase1">Click the image</digi:trn>
 
-					</td>
+            <digi:img src="images/bullet_grey.gif" border="0" height="9" width="9" align="top" />
 
-				</tr>
+            <digi:trn key="aim:flagUploadHelpPhrase2">next to the flag to make it as the default for the site</digi:trn>
 
-			</table>
+          </td>
 
-		</td>
+        </tr>
 
-	</tr>
+      </table>
+
+</td>
+
+  </tr>
 
 
 

@@ -19,12 +19,23 @@
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 <jsp:include page="TrailCells.jsp"/>
 <!-- generate report data -->
-<%int rowIdx = 0;%>
+<%
+	int rowIdx = 0;
+	int recordsPerPage = ((Integer)request.getAttribute("recordsPerPage")).intValue();
+	int pageNumber = ((Integer)request.getAttribute("pageNumber")).intValue();
+	boolean	paginar = ((Boolean)request.getAttribute("paginar")).booleanValue();
+	if(paginar){
+		request.setAttribute("paginar", new Boolean(false));	
+	}
+%>
 
 <logic:notEqual name="reportMeta" property="hideActivities" value="true">
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
 
-<% if(bckColor.equals("true")) {%>
+<% 
+	if(!paginar || paginar && rowIdx >= pageNumber * recordsPerPage && rowIdx < (pageNumber + 1) * recordsPerPage){
+		if(bckColor.equals("true")) {
+%>
 <bean:define id="bckColor" value="false" toScope="page"/>
 
 <tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#DDDDDD', '#FFFFFF', '#FFFF00');" style="<%=display%>">
@@ -47,11 +58,21 @@
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
 		<bean:define id="columnNo" name="columnNo" type="java.lang.Integer" scope="page" toScope="request"/>
 		<bean:define id="bckColor" name="bckColor" type="java.lang.String" toScope="request"/>		
-		<jsp:include page="<%=viewable.getViewerPath()%>"/>	
+		<jsp:include page="<%=viewable.getViewerPath()%>"/>			
 	</logic:iterate>
 </tr>
 
-<% } rowIdx++;%>
+<% 
+		} 
+	}
+rowIdx++;
+%>
 </logic:iterate>
 </logic:notEqual>
-
+<%
+	if(paginar){
+		int	totalPages = rowIdx /recordsPerPage;
+		totalPages += rowIdx % recordsPerPage == 0 ? 0 : 1;		
+		request.setAttribute("totalPages", new Integer(totalPages));
+	}
+%>

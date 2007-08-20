@@ -132,6 +132,20 @@
 		<tr>
 			<td><!-- begin big report table --> 
 
+			<%
+				request.setAttribute("paginar", new Boolean(true));
+				if(request.getAttribute("recordsPerPage")==null){
+					request.setAttribute("recordsPerPage", new Integer(10));
+				}
+				int pageNumber = 0;
+				if(request.getParameter("pageNumber")==null){
+					request.setAttribute("pageNumber", new Integer(0));
+				}else{
+					request.setAttribute("pageNumber", Integer.valueOf(request.getParameter("pageNumber")));
+					pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
+				}
+			%>
+			
 			<table id='reportTable'  cellSpacing="0" cellPadding="1" width="100%" class="reportsBorderTable">
 				<bean:define id="viewable" name="report"
 					type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
@@ -139,6 +153,33 @@
 			</table>
 
 			<!-- end of big report table --></td>
+		</tr>
+		<tr>
+			<td>
+				&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<digi:trn key="aim:pages">Pages :</digi:trn>&nbsp;
+				<%
+					int totalPages = ((Integer)request.getAttribute("totalPages")).intValue();
+					for(int i = 0; i < totalPages; i++){
+						if(i==pageNumber){
+				%>
+						<font color="#FF0000"><%=i + 1%></font>
+				<%
+						}else{
+				%>					
+							<a  style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~pageNumber=<%=i%>');">
+								<%=i + 1%> 
+							</a> 
+				<%
+						}
+						if(i < totalPages - 1) out.write("|&nbsp");
+					}
+				%>
+			</td>
 		</tr>
 	</logic:notEqual>
 	<logic:equal name="report" property="totalUniqueRows" value="0">

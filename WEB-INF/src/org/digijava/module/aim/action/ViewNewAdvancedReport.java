@@ -28,9 +28,12 @@ import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DbUtil;
 
 /**
  * 
@@ -56,7 +59,16 @@ public class ViewNewAdvancedReport extends Action {
 		String widget=request.getParameter("widget");
 		request.setAttribute("widget",widget);
 		
-
+		TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");				
+		AmpApplicationSettings ampAppSettings = null;				
+						
+		ampAppSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
+		if(ampAppSettings==null)
+			ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
+		
+		if(ampAppSettings!=null)
+			request.setAttribute("recordsPerPage", ampAppSettings.getDefaultRecordsPerPage());
+		
 		
 		//check currency code:
 		if(hs.getAttribute("reportCurrencyCode")==null) hs.setAttribute("reportCurrencyCode",Constants.DEFAULT_CURRENCY);

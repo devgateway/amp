@@ -188,7 +188,7 @@ function confirmFunc() {
 																 		<%
 																 			}
 																 			else
-																 				if (report.getType().equals(new Long (2))){
+																 				if (report.getType().equals(new Long (3))){
 																 		%>
 																	 			<li>
 																 					<digi:trn key="aim:regionalType">regional</digi:trn>
@@ -196,11 +196,19 @@ function confirmFunc() {
 																 		<%
 																 				}
 																 				else
-																 					if (report.getType().equals(new Long(3))){
+																 					if (report.getType().equals(new Long(2))){
 																 		%>
 																		 			<li>
 																 						<digi:trn key="aim:componentType">component</digi:trn>
 																		 			</li>
+																		<%
+																 				}
+																 				else
+																 					if (report.getType().equals(new Long(4))){
+																 		%> 			
+																	 					<li>
+																	 						<digi:trn key="aim:contributionType">contribution</digi:trn>
+																			 			</li>
 																 		<%
 																 					}
 																 		%>

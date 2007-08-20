@@ -164,7 +164,8 @@
 				&nbsp;
 			</td>
 		</tr>
-		<tr>
+		<logic:notEmpty name="totalPages" scope="request">
+			<tr>
 			<td>
 				<digi:trn key="aim:pages">Pages :</digi:trn>&nbsp;
 				<%
@@ -185,7 +186,9 @@
 					}
 				%>
 			</td>
-		</tr>
+			</tr>
+		</logic:notEmpty>
+		
 	</logic:notEqual>
 	<logic:equal name="report" property="totalUniqueRows" value="0">
 		<tr>

@@ -701,6 +701,7 @@ public class FeaturesUtil {
 		Iterator i=settings.iterator();
 		while (i.hasNext()) {
 			AmpGlobalSettings element = (AmpGlobalSettings) i.next();
+			// TODO would it be better if we add 'key' field in db for this?
 			if(element.getGlobalSettingsName().equals(globalSettingName)) return element.getGlobalSettingsValue();
 		}
 		return null;

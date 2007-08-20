@@ -3,6 +3,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ProposedProjCost;
 
@@ -72,7 +73,11 @@ public class Activity implements Comparable {
 	private String acChapter;
 	private String accessionInstrument;
 	
-
+	/**
+	 * Total cost of the activity.
+	 * @see AmpActivity#getTotalCost()
+	 */
+	private Double totalCost;
 
 	public String getAccessionInstrument() {
 		return accessionInstrument;
@@ -676,5 +681,11 @@ public class Activity implements Comparable {
 	}
 	public void setMfdCntTitle(String mfdCntTitle) {
 		this.mfdCntTitle = mfdCntTitle;
+	}
+	public Double getTotalCost() {
+		return totalCost;
+	}
+	public void setTotalCost(Double totalCost) {
+		this.totalCost = totalCost;
 	}
 }

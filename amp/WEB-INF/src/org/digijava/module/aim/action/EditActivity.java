@@ -30,7 +30,6 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.request.Site;
@@ -117,6 +116,8 @@ public class EditActivity
         HttpSession session = request.getSession();
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");
         
+        AmpActivity activity = null;
+		String computeTotals=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_COMPUTE_TOTALS);
 
         //if("true".compareTo(request.getParameter("public"))!=0) 
         	//return mapping.findForward("forward");
@@ -404,7 +405,7 @@ public class EditActivity
             eaForm.setPerspectives(DbUtil.getAmpPerspective());
 
             if(activityId != null) {
-                AmpActivity activity = ActivityUtil.getAmpActivity(activityId);
+                activity = ActivityUtil.getAmpActivity(activityId);
 
                 /* Insert Categories */
                 AmpCategoryValue ampCategoryValue	= CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACCHAPTER_NAME, activity.getCategories());
@@ -1440,7 +1441,14 @@ public class EditActivity
 		overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(
 				fb, Constants.COMMITMENT);
 		
-		eaForm.setTotalCommitted(overallTotalCommitted);
+		
+		if (computeTotals!=null &&  "Off".equals(computeTotals) && activity!=null && activity.getTotalCost()!=null){
+			eaForm.setTotalCommitted(DecimalToText.ConvertDecimalToText(activity.getTotalCost().doubleValue()));
+		}else{
+			eaForm.setTotalCommitted(overallTotalCommitted);
+		}
+		
+		
 		overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(
 				fb, Constants.DISBURSEMENT);
 		

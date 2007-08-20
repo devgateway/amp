@@ -624,14 +624,14 @@ public class ActivityUtil {
 	}
 
 
-        public static Collection searchActivities(Long ampThemeId,
+        public static Collection<AmpActivity> searchActivities(Long ampThemeId,
                                                   String statusCode,
                                                   Long donorOrgId,
                                                   Date fromDate,
                                                   Date toDate,
                                               Long locationId,
                                               TeamMember teamMember) {
-            Collection result = null;
+            Collection<AmpActivity> result = null;
             try {
                 Session session = PersistenceManager.getRequestDBSession();
                 String oql = "select act from " + AmpActivity.class.getName() +
@@ -864,6 +864,7 @@ public class ActivityUtil {
 			    activity.setOrgrole(new HashSet(ampActivity.getOrgrole()));
 			    activity.setIssues(new HashSet(ampActivity.getIssues()));
 			    activity.setCosts(new HashSet(ampActivity.getCosts()));
+			    activity.setTotalCost(ampActivity.getTotalCost());
 			    
 			    /* Categories */
 			    activity.setCategories( ampActivity.getCategories() );
@@ -900,6 +901,8 @@ public class ActivityUtil {
 				activity = new Activity();
 				AmpActivity ampAct = (AmpActivity) actItr.next();
 				activity.setActivityId(ampAct.getAmpActivityId());
+				
+				activity.setTotalCost(ampAct.getTotalCost());
 
 //				activity.setStatus(ampAct.getStatus().getName()); // TO BE DELETED
 				activity.setStatusReason(ampAct.getStatusReason().trim());
@@ -2399,20 +2402,19 @@ public static Collection getFundingByOrg(Long id) {
 		}
 		return result;
     }
+    
     /**
      * Comparator for AmpActivity class.
      * Compears activities by its ID's.
-     * AmpActivity is comparable but for some unknowns reason it is comparable by name,
+     * AmpActivity is comparable itself, but it is comparable by names,
      * so this class was created to compeare them with ID's
+     * @see AmpActivity#compareTo(AmpActivity)
      */
-    public static class ActivityIdComparator implements Comparator{
+    public static class ActivityIdComparator implements Comparator<AmpActivity>{
 
-		public int compare(Object obj1, Object obj2) {
-			AmpActivity act1= (AmpActivity)obj1;
-			AmpActivity act2= (AmpActivity)obj2;
+		public int compare(AmpActivity act1, AmpActivity act2) {
 			return act1.getAmpActivityId().compareTo(act2.getAmpActivityId());
 		}
-
     }
 
 } // End

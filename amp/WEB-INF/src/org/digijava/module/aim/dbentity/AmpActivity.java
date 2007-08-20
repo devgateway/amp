@@ -1,14 +1,16 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Set;
 
-import org.digijava.kernel.dbentity.*;
-import org.digijava.kernel.user.*;
+import org.digijava.kernel.dbentity.Country;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 
 public class AmpActivity
-		  implements Comparable, Serializable, LoggerIdentifiable {
+		  implements Comparable<AmpActivity>, Serializable, LoggerIdentifiable {
 
 
 	private Boolean budget;
@@ -54,6 +56,13 @@ public class AmpActivity
     private Double funAmount;
     private String currencyCode;
     private String funDate;
+    
+    /**
+     * Total cost of the activity.
+     * Currently this is used only on bolivia adn values are imported from SYSFIN db.
+     * Global setting is controling if total cost is cmputed or displayd from this field.
+     */
+    private Double totalCost;
 
     private Set activityPrograms;
     // use contFirstName and contLastName instead.
@@ -478,10 +487,10 @@ public class AmpActivity
 		this.country = country;
 	}
 
-	public int compareTo(Object o) {
-			  if (!(o instanceof AmpActivity)) throw new ClassCastException();
-
-			  AmpActivity act = (AmpActivity) o;
+	public int compareTo(AmpActivity act) {
+//			  if (!(o instanceof AmpActivity)) throw new ClassCastException();
+//
+//			  AmpActivity act = (AmpActivity) o;
 			  return (this.name.trim().toLowerCase().
 									compareTo(act.name.trim().toLowerCase()));
 
@@ -1025,5 +1034,18 @@ public class AmpActivity
 	public String getObjectName() {
 		// TODO Auto-generated method stub
 		return this.getAmpId()+" "+this.getName();
+	}
+
+	/**
+	 * Returns total cost of the activity
+	 * @return total cost of the activity
+	 * @see #totalCost
+	 */
+	public Double getTotalCost() {
+		return totalCost;
+	}
+
+	public void setTotalCost(Double totalCost) {
+		this.totalCost = totalCost;
 	}
 }

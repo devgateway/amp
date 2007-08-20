@@ -55,7 +55,10 @@ function toggleChildrenEdit(callerId) {
 }
 
 function toggleChildrenVisibility(callerId) {
+//alert("aaa"+callerId);
+
 		caller = document.getElementById(callerId);
+	//	alert("caller-"+caller);
 		inputs = caller.getElementsByTagName('input');
 		for(i=1 ; i< inputs.length; i++){ 
 			if(inputs[i].type!="checkbox") continue;

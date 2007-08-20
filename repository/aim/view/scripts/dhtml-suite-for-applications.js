@@ -127,6 +127,7 @@ DHTMLSuite.config.prototype = {
 		
 		this.defaultCssPath = this.cssPath;
 		this.defaultImagePath = this.imagePath;
+		//expandAll();
 			
 	}	
 	// }}}

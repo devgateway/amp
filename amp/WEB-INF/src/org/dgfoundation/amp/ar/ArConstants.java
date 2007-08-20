@@ -76,4 +76,7 @@ public final class ArConstants {
 	//reportsFilter
 	
 	public final static String REPORTS_FILTER="ReportsFilter";
+	
+	//the currency in use
+	public final static String SELECTED_CURRENCY="SelectedCurrency";
 }

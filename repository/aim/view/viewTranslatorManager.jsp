@@ -16,12 +16,128 @@
 	}
 </script>
 
+
+<style type="text/css">
+<!--
+div.fileinputs {
+	position: relative;
+	height: 30px;
+	width: 300px;
+}
+
+input.file {
+	width: 300px;
+	margin: 0;
+}
+
+input.file.hidden {
+	position: relative;
+	text-align: right;
+	-moz-opacity:0 ;
+	filter:alpha(opacity: 0);
+	width: 300px;
+	opacity: 0;
+	z-index: 2;
+}
+
+div.fakefile {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+
+div.fakefile input {
+	margin-bottom: 5px;
+	margin-left: 0;
+	width: 217px;
+}
+div.fakefile2 {
+	position: absolute;
+	top: 0px;
+	left: 217px;
+	width: 300px;
+	padding: 0;
+	margin: 0;
+	z-index: 1;
+	line-height: 90%;
+}
+div.fakefile2 input{
+	width: 83px;
+}
+-->
+</style>
+
+<script type="text/javascript">
+	var W3CDOM = (document.createElement && document.getElementsByTagName);
+
+	function initFileUploads() {
+		if (!W3CDOM) return;
+		var fakeFileUpload = document.createElement('div');
+		fakeFileUpload.className = 'fakefile';
+		fakeFileUpload.appendChild(document.createElement('input'));
+		
+		var fakeFileUpload2 = document.createElement('div');
+		fakeFileUpload2.className = 'fakefile2';
+		
+		
+		var button = document.createElement('input');
+		button.type = 'button';
+		
+		button.value = '<digi:trn key="aim:browse">Browse..."</digi:trn>';
+		fakeFileUpload2.appendChild(button);
+		
+		fakeFileUpload.appendChild(fakeFileUpload2);
+		var x = document.getElementsByTagName('input');
+		for (var i=0;i<x.length;i++) {
+			if (x[i].type != 'file') continue;
+			if (x[i].parentNode.className != 'fileinputs') continue;
+			x[i].className = 'file hidden';
+			var clone = fakeFileUpload.cloneNode(true);
+			x[i].parentNode.appendChild(clone);
+			x[i].relatedElement = clone.getElementsByTagName('input')[0];
+ 
+ 			x[i].onchange = x[i].onmouseout = function () {
+				this.relatedElement.value = this.value;
+			}
+		}
+	}
+	
+	function initFileUploads3() {
+		if (!W3CDOM) return;
+		var fakeFileUpload = document.createElement('div');
+		fakeFileUpload.className = 'fakefile';
+		fakeFileUpload.appendChild(document.createElement('input'));
+		var image = document.createElement('img');
+		image.src='pix/button_select.gif';
+		fakeFileUpload.appendChild(image);
+		var x = document.getElementsByTagName('input');
+		for (var i=0;i<x.length;i++) {
+			if (x[i].type != 'file') continue;
+			if (x[i].parentNode.className != 'fileinputs') continue;
+			x[i].className = 'file hidden';
+			var clone = fakeFileUpload.cloneNode(true);
+			x[i].parentNode.appendChild(clone);
+			x[i].relatedElement = clone.getElementsByTagName('input')[0];
+			x[i].onchange = x[i].onmouseout = function () {
+				this.relatedElement.value = this.value;
+			}
+		}
+	}
+
+
+	
+</script>
+
 <digi:instance property="aimTranslatorManagerForm" />
 <digi:context name="digiContext" property="context" />
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
-
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
@@ -110,7 +226,11 @@
 					<digi:form action="/translationManager.do" method="post" enctype="multipart/form-data">
 						<tr>
 							<td>
-								<html:file property="fileUploaded"></html:file>
+								<!-- <html:file property="fileUploaded"></html:file> -->
+								<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+									<!-- CSS content must be put in a separated file and a class must be generated -->
+									<input id="fileUploaded" name="fileUploaded" type="file" class="file">
+								</div>
 							</td>
 						</tr>
 							 <tr>
@@ -189,6 +309,9 @@
 		</td>
 	</tr>
 </table>
+<script type="text/javascript">
+	initFileUploads();
+</script>
 
 
 

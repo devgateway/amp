@@ -83,6 +83,7 @@ public class Constants
 	//public static  String COUNTRY = "";
 	
 	public static final String GLOBALSETTINGS_DATEFORMAT="Default Date Format";
+	public static final String GLOBALSETTINGS_COMPUTE_TOTALS="Compute Totals for Activities";
 	
 	public static final String CURRENCY_RATE_DEAFULT_START_DATE = "25/04/2005";
 	public static final String CURRENCY_RATE_DEAFULT_END_DATE = "01/05/2005";

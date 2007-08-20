@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -60,6 +61,10 @@ public class GetActivities extends Action {
 			throws Exception {
 		logger.debug("got asynchronous request for Activities list");
 		response.setContentType("text/xml");
+		String s=response.getCharacterEncoding();
+		Locale loc=response.getLocale();
+		System.out.println(s);
+		System.out.println(loc);
 		ActivitiesForm actForm = (ActivitiesForm) form;
 		logger.debug("programId=" + actForm.getProgramId() + " statusCode=" + actForm.getStatusId());
 		HttpSession session = request.getSession();
@@ -78,6 +83,7 @@ public class GetActivities extends Action {
 			String xml = activities2XML(activities);
 			logger.debug("Setting XML in the response");
 			// return xml
+			
 			outputStream.println(xml);
 			logger.debug("returning response XML");
 		} catch (Exception e) {
@@ -94,7 +100,7 @@ public class GetActivities extends Action {
 		return null;
 	}
 
-private Collection getActivities(Long ampThemeId,
+private Collection<AmpActivity> getActivities(Long ampThemeId,
             String statusCode,
             Long donorOrgId,
             Date fromDate,
@@ -104,7 +110,7 @@ private Collection getActivities(Long ampThemeId,
             boolean recurse) throws AimException{
 
 	
-		Collection result=null;
+		Collection<AmpActivity> result=null;
 		
 		result = ActivityUtil.searchActivities(ampThemeId,
 	            statusCode,
@@ -120,7 +126,7 @@ private Collection getActivities(Long ampThemeId,
 				
 				for (Iterator iter = children.iterator(); iter.hasNext();) {
 					AmpTheme prog = (AmpTheme) iter.next();
-					Collection subActivities = ActivityUtil.searchActivities(
+					Collection<AmpActivity> subActivities = ActivityUtil.searchActivities(
 							prog.getAmpThemeId(), statusCode, donorOrgId,
 							fromDate, toDate, locationId, teamMember);
 					if (subActivities!= null && subActivities.size()>0){
@@ -130,14 +136,14 @@ private Collection getActivities(Long ampThemeId,
 			}
 		}
 		
-		Set activities = new TreeSet(new ActivityUtil.ActivityIdComparator());
-		List sortedActivities = null;
+		Set<AmpActivity> activities = new TreeSet<AmpActivity>(new ActivityUtil.ActivityIdComparator());
+		List<AmpActivity> sortedActivities = null;
 		if (result!=null){
 			for (Iterator iter = result.iterator(); iter.hasNext();) {
 				AmpActivity element = (AmpActivity) iter.next();
 				activities.add(element);
 			}
-			sortedActivities = new ArrayList(activities);
+			sortedActivities = new ArrayList<AmpActivity>(activities);
 			Collections.sort(sortedActivities);
 		}
 		
@@ -206,7 +212,8 @@ private Collection getActivities(Long ampThemeId,
 		double proposedSum = 0;
 		double actualSum = 0;
 		double plannedSum = 0;
-		String result = "<" + ROOT_TAG;
+		String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"; 
+		result += "<" + ROOT_TAG;
 		String temp = "";
 		if (acts != null && acts.size() > 0) {
 			for (Iterator iter = acts.iterator(); iter.hasNext();) {

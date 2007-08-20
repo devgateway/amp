@@ -31,6 +31,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.dbentity.AmpField;
 
@@ -117,15 +118,23 @@ public class ViewChannelOverview extends TilesAction {
 					perspective = Constants.DONOR;
 				}
 
-				if (activity.getStatus().equalsIgnoreCase("Planned")) {
-					logger.debug("Planned");
-					formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
-							new Integer(0),new Integer(0),perspective,currCode)));
-				} else {
-					logger.debug("Not planned");
-					formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
-							new Integer(0),new Integer(1),perspective,currCode)));
+				String computeTotals=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_COMPUTE_TOTALS);
+				if (computeTotals!=null && "Off".equals(computeTotals) && activity.getTotalCost()!=null){
+					//if global settings is off and imported totals exist
+					formBean.setGrandTotal(mf.format(activity.getTotalCost().doubleValue()));
+				}else{
+					//else compute total cost in old way
+					if (activity.getStatus().equalsIgnoreCase("Planned")) {
+						logger.debug("Planned");
+						formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
+								new Integer(0),new Integer(0),perspective,currCode)));
+					} else {
+						logger.debug("Not planned");					
+						formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
+								new Integer(0),new Integer(1),perspective,currCode)));
+					}
 				}
+				
 			}
 
 			AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());

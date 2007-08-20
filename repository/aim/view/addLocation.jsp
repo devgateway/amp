@@ -18,204 +18,204 @@
 
 <script language="JavaScript">
 
-	function validate(string,length) {
+function validate(string,length) {
 
-    if (string.length > length) {
+  if (string.length > length) {
 
-        return false;
+    return false;
 
-    }
+  }
 
-    if (string.length < length) {
+  if (string.length < length) {
 
-        return false;
+    return false;
 
-    }
-
-
-
-    var valid="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  }
 
 
 
-    for (var i=0; i<length; i++) {
+  var valid="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-        if (valid.indexOf(string.charAt(i)) < 0) {
 
-            return false;
 
-        }
+  for (var i=0; i<length; i++) {
+
+    if (valid.indexOf(string.charAt(i)) < 0) {
+
+      return false;
 
     }
 
+  }
 
 
-    return true;
 
-} 
+  return true;
 
+}
 
 
-	function addLoc() {
 
-	  level = document.aimAddLocationForm.categoryLevel.value;
+function addLoc() {
 
-	  if ((document.aimAddLocationForm.name.value.length==0) ||
+  level = document.aimAddLocationForm.categoryLevel.value;
 
-   				(document.aimAddLocationForm.name.value==null)) {
+  if ((document.aimAddLocationForm.name.value.length==0) ||
 
-   			alert('Please enter name for this location.');
+  (document.aimAddLocationForm.name.value==null)) {
 
-      		document.aimAddLocationForm.name.focus();
+    alert('Please enter name for this location.');
 
-      		return false;
+    document.aimAddLocationForm.name.focus();
 
-      }
+    return false;
 
-      if (level == 0) { //is country
+  }
 
-      	if ((document.aimAddLocationForm.iso.value.length==0) ||
+  if (level == 0) { //is country
 
-   				(document.aimAddLocationForm.iso.value==null)) {
+  if ((document.aimAddLocationForm.iso.value.length==0) ||
 
-   			alert('Please enter iso code for this country');
+  (document.aimAddLocationForm.iso.value==null)) {
 
-      		document.aimAddLocationForm.iso.focus();
+    alert('Please enter iso code for this country');
 
-      		return false;
+    document.aimAddLocationForm.iso.focus();
 
-      	}
+    return false;
 
-      	if (validate(document.aimAddLocationForm.iso.value, 2) == false){
+  }
 
-      		alert('Select alphabets only for 2-character iso code');
+  if (validate(document.aimAddLocationForm.iso.value, 2) == false){
 
-      		return false;
+    alert('Select alphabets only for 2-character iso code');
 
-      	}
+    return false;
 
-      	
+  }
 
-      	if ((document.aimAddLocationForm.iso3.value.length==0) ||
 
-   				(document.aimAddLocationForm.iso3.value==null)) {
 
-   			alert('Please enter iso3 code for this country');
+  if ((document.aimAddLocationForm.iso3.value.length==0) ||
 
-      		document.aimAddLocationForm.iso3.focus();
+  (document.aimAddLocationForm.iso3.value==null)) {
 
-      		return false;
+    alert('Please enter iso3 code for this country');
 
-      	}
+    document.aimAddLocationForm.iso3.focus();
 
+    return false;
 
-      	if (validate(document.aimAddLocationForm.iso.value, 2) == false){
-      		alert('Select alphabets only for 2-character iso code');
-      		return false;
+  }
 
-		}
 
-      	if (validate(document.aimAddLocationForm.iso3.value, 3) == false){
-      		alert('Select alphabets only for 3-character iso3 code');
-      		return false;
-      	}
+  if (validate(document.aimAddLocationForm.iso.value, 2) == false){
+    alert('Select alphabets only for 2-character iso code');
+    return false;
 
-      }
-      else {
+  }
 
-      	if (isNaN(document.aimAddLocationForm.gsLat.value)) {
+  if (validate(document.aimAddLocationForm.iso3.value, 3) == false){
+    alert('Select alphabets only for 3-character iso3 code');
+    return false;
+  }
 
-      		alert('Please enter only numerical values into Latitude Field.');
+}
+else {
 
-      		document.aimAddLocationForm.gsLat.focus();
+  if (isNaN(document.aimAddLocationForm.gsLat.value)) {
 
-      		return false;
+    alert('Please enter only numerical values into Latitude Field.');
 
-      	}
+    document.aimAddLocationForm.gsLat.focus();
 
-      	if (isNaN(document.aimAddLocationForm.gsLong.value)) {
+    return false;
 
-      		alert('Please enter only numerical values into Longitude Field.');
+  }
 
-      		document.aimAddLocationForm.gsLong.focus();
+  if (isNaN(document.aimAddLocationForm.gsLong.value)) {
 
-      		return false;
+    alert('Please enter only numerical values into Longitude Field.');
 
-      	}
+    document.aimAddLocationForm.gsLong.focus();
 
-      }
+    return false;
 
-	  document.aimAddLocationForm.edFlag.value = "off";
+  }
 
-	  document.aimAddLocationForm.submit();
+}
 
-	}
+document.aimAddLocationForm.edFlag.value = "off";
 
+document.aimAddLocationForm.submit();
 
+}
 
-	function textCounter(field, countfield, maxlimit) {
 
-		if (field.value.length > maxlimit) // if too long...trim it!
 
-			field.value = field.value.substring(0, maxlimit);
+function textCounter(field, countfield, maxlimit) {
 
-			// otherwise, update 'characters left' counter
+  if (field.value.length > maxlimit) // if too long...trim it!
 
-		else
+  field.value = field.value.substring(0, maxlimit);
 
-			countfield.value = maxlimit - field.value.length;
+  // otherwise, update 'characters left' counter
 
-	}
+  else
 
-	
+  countfield.value = maxlimit - field.value.length;
 
-	function getIso(code) {
+}
 
-		if (code == 2)
 
-			window.open("http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2");
 
-		else if (code == 3)
+function getIso(code) {
 
-			window.open("http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3");
+  if (code == 2)
 
-		else
+  window.open("http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2");
 
-			return false;
+  else if (code == 3)
 
-	}
+  window.open("http://en.wikipedia.org/wiki/ISO_3166-1_alpha-3");
 
-	
+  else
 
-	function move() {
+  return false;
 
-		<digi:context name="selectLoc" property="context/module/moduleinstance/locationManager.do" />
+}
 
-		url = "<%= selectLoc %>";
 
-		document.aimAddLocationForm.edFlag.value = "cancl";
 
-		document.aimAddLocationForm.action = "<%= selectLoc %>";
+function move() {
 
-		document.aimAddLocationForm.submit();
+  <digi:context name="selectLoc" property="context/module/moduleinstance/locationManager.do" />
 
-	}
+  url = "<%= selectLoc %>";
 
-	
+  document.aimAddLocationForm.edFlag.value = "cancl";
 
-	function load() {
+  document.aimAddLocationForm.action = "<%= selectLoc %>";
 
-		document.aimAddLocationForm.name.focus();			  
+  document.aimAddLocationForm.submit();
 
-	}
+}
 
 
 
-	function unload() {
+function load() {
 
-	}
+  document.aimAddLocationForm.name.focus();
 
-	
+}
+
+
+
+function unload() {
+
+}
+
+
 
 </script>
 
@@ -223,7 +223,7 @@
 
 <!--  AMP Admin Logo -->
 
-	<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="teamPagesHeader.jsp" flush="true" />
 
 <!-- End of Logo -->
 
@@ -237,330 +237,337 @@
 
 <digi:form action="/addLocation.do" method="post">
 
-<html:hidden property="edFlag" />
+  <html:hidden property="edFlag" />
 
-<html:hidden property="categoryLevel" />
+  <html:hidden property="categoryLevel" />
 
-<html:hidden property="start" value="false" />
+  <html:hidden property="start" value="false" />
 
-	<c:set var="location">
-		<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" 
-		categoryIndex="${aimAddLocationForm.categoryLevel}"/> 
-	</c:set>
+  <c:set var="location">
+    <category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>"
+    categoryIndex="${aimAddLocationForm.categoryLevel}"/>
+  </c:set>
 
 
-	<table cellPadding=5 cellSpacing=0 width="600">
+  <table cellPadding=5 cellSpacing=0 width="600">
 
-		<tr>
+    <tr>
 
-			<!-- Start Navigation -->
+      <!-- Start Navigation -->
 
-			<td height=33 width="600"><span class=crumb>
+      <td height=33 width="600"><span class=crumb>
 
-				<c:set var="translation">
+        <c:set var="translation">
 
-					<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+          <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 
-				</c:set>
+        </c:set>
 
-				<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
+        <digi:link href="/admin.do" styleClass="comment" title="${translation}" >
 
-					<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
+          <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
 
-				</digi:link>&nbsp;&gt;&nbsp;
+        </digi:link>&nbsp;&gt;&nbsp;
 
-				<c:set var="translation">
+        <c:set var="translation">
 
-					<digi:trn key="aim:clickToViewRegionManager">Click here to goto Region Manager</digi:trn>
+          <digi:trn key="aim:clickToViewRegionManager">Click here to goto Region Manager</digi:trn>
 
-				</c:set>
+        </c:set>
 
-				<digi:link href="/locationManager.do" styleClass="comment" title="${translation}" >
+        <digi:link href="/locationManager.do" styleClass="comment" title="${translation}" >
 
-					<digi:trn key="aim:regionManager">Region Manager</digi:trn>
+          <digi:trn key="aim:regionManager">Region Manager</digi:trn>
 
-				</digi:link>&nbsp;&gt;&nbsp;
+        </digi:link>&nbsp;&gt;&nbsp;
 
-				<c:if test="${aimAddLocationForm.edAction == 'create'}">
+        <c:if test="${aimAddLocationForm.edAction == 'create'}">
 
-					<digi:trn key="aim:AmpAddALocation">Add</digi:trn> 
-					 ${location}
+          <digi:trn key="aim:AmpAddALocation">Add</digi:trn>
+          ${location}
 
-				</c:if>
+        </c:if>
 
-				<c:if test="${aimAddLocationForm.edAction == 'edit'}">
+        <c:if test="${aimAddLocationForm.edAction == 'edit'}">
 
-					<digi:trn key="aim:AmpEditALocation">Edit</digi:trn> 
-					 ${location}
+          <digi:trn key="aim:AmpEditALocation">Edit</digi:trn>
+          ${location}
 
-				</c:if>
+        </c:if>
 
-			</td>
+      </td>
 
-			<!-- End navigation -->
+      <!-- End navigation -->
 
-		</tr>
+    </tr>
 
-		<tr>
+    <tr>
 
-			<td height=16 vAlign=center width=600 ><span class=subtitle-blue> 
+      <td height=16 vAlign=center width=600 ><span class=subtitle-blue>
 
-				<digi:trn key="aim:regionManager">Region Manager</digi:trn>
+        <digi:trn key="aim:regionManager">Region Manager</digi:trn>
 
-            </td>
+      </td>
 
-		</tr>
+    </tr>
 
-		<tr>
+    <tr>
 
-			<td noWrap width=600 vAlign="top">
+      <td noWrap width=600 vAlign="top">
 
-				<table width=600 cellspacing=1 cellSpacing=1>
+        <table width=600 cellspacing=1 cellSpacing=1>
 
-					<tr><td noWrap width=600 vAlign="top">
+          <tr><td noWrap width=600 vAlign="top">
 
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
+            <table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
 
-							<tr bgColor=#f4f4f2>
+              <tr bgColor=#f4f4f2>
 
-								<td vAlign="top" width="100%">
+                <td vAlign="top" width="100%">
 
-									&nbsp;
+                &nbsp;
 
-								</td>
+                </td>
 
-							</tr>
+              </tr>
 
-							<tr bgColor=#f4f4f2>
+              <tr bgColor=#f4f4f2>
 
-								<td valign="top">
+                <td valign="top">
 
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>	
+                  <table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
 
-										<tr>
+                    <tr>
 
-											<td bgColor=#ffffff class=box-border>
+                      <td bgColor=#ffffff class=box-border>
 
-												<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
+                        <table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
 
-													<!-- Page Logic -->
+                          <!-- Page Logic -->
 
-													<tr>
+                          <tr>
 
-														<td><digi:errors /></td>
+                            <td><digi:errors /></td>
 
-													</tr>
+                          </tr>
 
-													<tr>
+                          <tr>
 
-														<td>
+                            <td>
 
-															<table width="100%" border="0" cellspacing="4">
+                              <table width="100%" border="0" cellspacing="4">
 
-																<tr>
+                                <tr>
+                                  <c:set var="locName">
+                                    <digi:trn key="aim:addLocation:Name">
+                                    Name
+                                    </digi:trn>
 
-																	<td width="30%" align="right"><FONT color=red>* </FONT>Name</td>
-																	<td width="70%" align="left">
 
-																		<html:text property="name" size="25"
+                                  </c:set>
 
-																			onkeydown="textCounter(this.form.name,this.form.cname,200);" 
+                                  <td width="30%" align="right"><FONT color=red>* </FONT><c:out value="${locName}"/></td>
+                                  <td width="70%" align="left">
 
-																			onkeyup="textCounter(this.form.name,this.form.cname,200);" />
+                                    <html:text property="name" size="25"
 
-																		<input readonly type="text" name="cname" size="3" maxlength="4" value="">
+                                    onkeydown="textCounter(this.form.name,this.form.cname,200);"
 
-																		<digi:trn key="aim:AmpAddLocCharleft">characters left</digi:trn>
+                                    onkeyup="textCounter(this.form.name,this.form.cname,200);" />
 
-                                   									</td>
+                                    <input readonly type="text" name="cname" size="3" maxlength="4" value="">
 
-                                								</tr>
+                                    <digi:trn key="aim:AmpAddLocCharleft">characters left</digi:trn>
 
-                                							<c:choose>
+                                  </td>
 
-                                								<c:when test="${aimAddLocationForm.categoryLevel == 0}">
+                                </tr>
 
-                                									<tr>
+                                <c:choose>
 
-																		<td width="30%" align="right"><FONT color=red>* </FONT>ISO</td>
-																		<td width="70%" align="left">
+                                  <c:when test="${aimAddLocationForm.categoryLevel == 0}">
 
-																			<html:text property="iso" size="5" maxlength="2" />
+                                    <tr>
 
-																			<br>
+                                      <td width="30%" align="right"><FONT color=red>* </FONT>ISO</td>
+                                      <td width="70%" align="left">
 
-																			<a href="javascript:getIso(2)">
+                                        <html:text property="iso" size="5" maxlength="2" />
 
-																			<digi:trn key="aim:isoCodeList">ISO code list</digi:trn></a>
+                                        <br>
 
-																		</td>
+                                        <a href="javascript:getIso(2)">
 
-                                									</tr>
+                                          <digi:trn key="aim:isoCodeList">ISO code list</digi:trn></a>
 
-                                									<tr>
+                                      </td>
 
-																		<td width="30%" align="right"><FONT color=red>* </FONT>ISO3</td>
-																		<td width="70%" align="left">
+                                    </tr>
 
-																			<html:text property="iso3" size="5" maxlength="3" />
+                                    <tr>
 
-																			<br>
+                                      <td width="30%" align="right"><FONT color=red>* </FONT>ISO3</td>
+                                      <td width="70%" align="left">
 
-																			<a href="javascript:getIso(3)">
+                                        <html:text property="iso3" size="5" maxlength="3" />
 
-																			<digi:trn key="aim:iso3CodeList">ISO3 code list</digi:trn></a>
+                                        <br>
 
-																		</td>
+                                        <a href="javascript:getIso(3)">
 
-                                									</tr>
+                                          <digi:trn key="aim:iso3CodeList">ISO3 code list</digi:trn></a>
 
-                                								
+                                      </td>
 
-                                									<tr>
+                                    </tr>
 
-																	<td width="30%" align="right"></td>
-																		<td width="70%" align="left">
 
-																		<digi:trn key="aim:allMarkedRequiredField">
-																		All fields marked with an <FONT color=red><B><BIG>*</BIG>
-																		</B></FONT> are required.</digi:trn>	
-																		</td>
 
-                                									</tr>
+                                    <tr>
 
-										 						</c:when>
-													<c:otherwise>
-																	<tr>
+                                      <td width="30%" align="right"></td>
+                                      <td width="70%" align="left">
 
-															<td width="30%" align="right"><digi:trn key="aim:lcCode">Code</digi:trn></td>
-															<td width="70%" align="left"><html:text property="code"
-																size="10" /></td>
-	                                								</tr>
+                                        <digi:trn key="aim:allMarkedRequiredField">
+                                          All fields marked with an <FONT color=red><B><BIG>*</BIG>
+</B></FONT> are required.</digi:trn>
+                                      </td>
 
-																	<tr>
+                                    </tr>
 
-															<td width="30%" align="right"><digi:trn key="aim:lcLatitude">Latitude</digi:trn></td>
-															<td width="70%" align="left"><html:text property="gsLat"
-																size="10" /></td>
-	                               									</tr>
+                                  </c:when>
+                                  <c:otherwise>
+                                    <tr>
 
-																	<tr>
+                                      <td width="30%" align="right"><digi:trn key="aim:lcCode">Code</digi:trn></td>
+                                      <td width="70%" align="left"><html:text property="code"
+                                        size="10" /></td>
+                                    </tr>
 
-															<td width="30%" align="right"><digi:trn key="aim:lcLongitude">Longitude</digi:trn></td>
-															<td width="70%" align="left"><html:text property="gsLong"
-																size="10" /></td>
-	                                								</tr>
+                                    <tr>
 
-	                                								<tr>
+                                      <td width="30%" align="right"><digi:trn key="aim:lcLatitude">Latitude</digi:trn></td>
+                                      <td width="70%" align="left"><html:text property="gsLat"
+                                        size="10" /></td>
+                                    </tr>
 
-															<td width="30%" align="right"><digi:trn key="aim:lcGeoCode">Geo Code</digi:trn></td>
-															<td width="70%" align="left"><html:text
-																property="geoCode" size="10" /></td>
-										 							</tr>
+                                    <tr>
 
-														<tr>
-															<td width="30%" align="right"><digi:trn key="aim:lcDescription">Description</digi:trn></td>
-															<td width="70%" align="left"><html:textarea
-																property="description" cols="40" rows="3" /></td>
-														</tr>
-                                								</c:otherwise>
+                                      <td width="30%" align="right"><digi:trn key="aim:lcLongitude">Longitude</digi:trn></td>
+                                      <td width="70%" align="left"><html:text property="gsLong"
+                                        size="10" /></td>
+                                    </tr>
 
-                                							</c:choose>
+                                    <tr>
 
-																
+                                      <td width="30%" align="right"><digi:trn key="aim:lcGeoCode">Geo Code</digi:trn></td>
+                                      <td width="70%" align="left"><html:text
+                                        property="geoCode" size="10" /></td>
+                                    </tr>
 
-																<tr>
+                                    <tr>
+                                      <td width="30%" align="right"><digi:trn key="aim:lcDescription">Description</digi:trn></td>
+                                      <td width="70%" align="left"><html:textarea
+                                        property="description" cols="40" rows="3" /></td>
+                                    </tr>
+                                  </c:otherwise>
 
-													<td width=30% align=right>
-													</td>
-													<td width=70% align=left>
-														<font color=red><digi:trn key="aim:statusMandatoryFields">* Mandatory fields</digi:trn></font>
-													</td>
-												</tr>
-												<tr>
-																	<td colspan="2" width="60%">	
+                                </c:choose>
 
-																		<table width="100%" cellspacing="5">
 
-																			<tr>
 
-																				<td width="45%" align="right">
-																				
-																					<c:set var="translation">
-																						<digi:trn key="btn:regionManagerSave">
-																							Save
-																						</digi:trn>
-																					</c:set>
+                                <tr>
 
-																					<input type="button" value="${translation}" class="dr-menu" onclick="addLoc()"></td>
+                                  <td width=30% align=right>
+                                  </td>
+                                  <td width=70% align=left>
+                                    <font color=red><digi:trn key="aim:statusMandatoryFields">* Mandatory fields</digi:trn></font>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td colspan="2" width="60%">
 
-																				<td width="8%" align="left">
-																				
-																					<c:set var="translation">
-																						<digi:trn key="btn:regionManagerReset">
-																							Reset
-																						</digi:trn>
-																					</c:set>
+                                    <table width="100%" cellspacing="5">
 
-																					<input type="reset" value="${translation}" class="dr-menu"></td>
+                                      <tr>
 
-																				<td width="45%" align="left">
-																				
-																					<c:set var="translation">
-																						<digi:trn key="btn:regionManagerCancel">
-																							Cancel
-																						</digi:trn>
-																					</c:set>
+                                        <td width="45%" align="right">
 
-																					<input type="button" value="${translation}" class="dr-menu" onclick="move()"></td>
+                                          <c:set var="translation">
+                                            <digi:trn key="btn:regionManagerSave">
+                                            Save
+                                            </digi:trn>
+                                          </c:set>
 
-																			</tr>
+                                          <input type="button" value="${translation}" class="dr-menu" onclick="addLoc()"></td>
 
-																		</table>
+                                          <td width="8%" align="left">
 
-																	</td>
+                                            <c:set var="translation">
+                                              <digi:trn key="btn:regionManagerReset">
+                                              Reset
+                                              </digi:trn>
+                                            </c:set>
 
-																</tr>
+                                            <input type="reset" value="${translation}" class="dr-menu"></td>
 
-															</table>
+                                            <td width="45%" align="left">
 
-														</td>
+                                              <c:set var="translation">
+                                                <digi:trn key="btn:regionManagerCancel">
+                                                Cancel
+                                                </digi:trn>
+                                              </c:set>
 
-													</tr>
+                                              <input type="button" value="${translation}" class="dr-menu" onclick="move()"></td>
 
-													<!-- end page logic -->
+                                      </tr>
 
-												</table>
+                                    </table>
 
-											</td>
+                                  </td>
 
-										</tr>
+                                </tr>
 
-									</table>
+                              </table>
 
-								</td>
+                </td>
 
-							</tr>
+                          </tr>
 
-							<tr><td bgColor=#f4f4f2>
+                          <!-- end page logic -->
 
-								&nbsp;
+                        </table>
 
-							</td></tr>
-
-						</table>
-
-					</td>
+      </td>
 
                     </tr>
 
-		</table>
+                  </table>
 
-			</td>
+</td>
 
-		</tr>
+              </tr>
 
-	</table>
+              <tr><td bgColor=#f4f4f2>
+
+              &nbsp;
+
+</td></tr>
+
+            </table>
+
+</td>
+
+              </tr>
+
+        </table>
+
+</td>
+
+          </tr>
+
+  </table>
 
 </digi:form>
 

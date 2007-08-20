@@ -10,10 +10,6 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<!-- dynamic tooltip -->
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-ajax.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-folder-tree-static.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-context-menu.js"/>"></script>
 
 	<script type="text/javascript">
 		var idOfFolderTrees = ['dhtmlgoodies_tree'];
@@ -245,6 +241,14 @@ function checkUncheckAll2() {
 												<field:display name="A.C. Chapter" feature="Identification">&nbsp;</field:display>
 												<field:display name="Accession Instrument" feature="Identification">&nbsp;</field:display>
 											</feature:display>
+
+
+
+
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
+
+
+
 												
 											<feature:display name="Location" module="Project ID and Planning">
 												<field:display name="Implementation Level" feature="Location">&nbsp;</field:display>
@@ -278,11 +282,11 @@ function checkUncheckAll2() {
 											</feature:display>
 												
 											<feature:display name="M & E" module="Trend Analysis and Forecasting">
-												<field:display name="Indicator Base Value" feature="M & E"></field:display>
-												<field:display name="Indicator Current Value" feature="M & E"></field:display>
-												<field:display name="Indicator Target Value" feature="M & E"></field:display>
-												<field:display name="Indicator Description" feature="M & E"></field:display>
-												<field:display name="Indicator ID" feature="M & E"></field:display>
+												<field:display name="Indicator Base Value" feature="M & E">&nbsp;</field:display>
+												<field:display name="Indicator Current Value" feature="M & E">&nbsp;</field:display>
+												<field:display name="Indicator Target Value" feature="M & E">&nbsp;</field:display>
+												<field:display name="Indicator Description" feature="M & E">&nbsp;</field:display>
+												<field:display name="Indicator ID" feature="M & E">&nbsp;</field:display>
 												<field:display name="Indicator Name" feature="M & E"></field:display>
 											</feature:display>
 											<feature:display name="Costing" module="Activity Costing">
@@ -293,39 +297,43 @@ function checkUncheckAll2() {
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
 																				<c:if test="${!empty aimAdvancedReportForm.ampColumns}">
-																					
+																				
+																					<input type="button" value="Expand" onclick="treeObj.expandAll()">
+																					<input type="button" value="Collapse" onclick="treeObj.collapseAll()">
 																					<!-- 
 																						Because the donor report and the contribution report are now different (the donor has also the indicator columnns)
 																						we have to create different c:if for each report								
 																						 -->
 																						 <font size="3">
-																							<ul id="dhtmlgoodies_tree" class="dhtmlgoodies_tree">	
+																							<ul id="dhtmlgoodies_tree" class="DHTMLSuite_tree">	
 																							<bean:define name="aimAdvancedReportForm" property="ampTreeColumns" id="ampTreeColumns" type="java.util.Map"  toScope="page"/>
-																							<li >
+																							<li noDrag="true">
 																							<input type=checkbox id="root" 
 																											name="root" 
 																											value="root"
 																											onclick="checkUncheckAll3();"
 																											
 																								/>
-																							<a href="#" id="1">AMP</a>
+																							<a id="1">AMP</a>
 																								<ul>																
 																							<logic:iterate name="ampTreeColumns" id="ampTreeColumn" type="java.util.Map.Entry" >
 																								<bean:define id="themeColumn" name="ampTreeColumn" property="key" type="java.lang.String" scope="page"/>
 																								<bean:define id="columnCollection" name="ampTreeColumn" property="value" type="java.util.ArrayList" scope="page"/>
-																								<li id="limodule:<bean:write name="themeColumn"/>">
+																								<div id="limodule:<bean:write name="themeColumn"/>" noDrag="true">
+																								<li id="limodule:<bean:write name="themeColumn"/>" noDrag="true">
+																								
 																								<input type=checkbox id="moduleVis:<bean:write name="themeColumn"/>" 
 																											name="selectedThemes" 
 																											value="<bean:write name="themeColumn"/>"
 																											onclick="toggleChildrenVisibility('limodule:<bean:write name="themeColumn"/>')"
 																											
 																								/>
-																								<a href="#" id="module:<bean:write name="themeColumn"/>">
+																								<a id="module:<bean:write name="themeColumn"/>">
 																									<bean:write name="themeColumn"/>
 																								</a>
 																								<ul>
 																								<logic:iterate name="columnCollection" id="ampColumnFromTree" type="org.digijava.module.aim.dbentity.AmpColumns">
-																									<li class="dhtmlgoodies_sheet.gif">
+																									<li class="dhtmlgoodies_sheet.gif" noDrag="true">
 																										<input type=checkbox id="fieldVis:<bean:write name="ampColumnFromTree" property="columnId"/>" 
 																											name="selectedColumns" 
 																											value="<bean:write name="ampColumnFromTree" property="columnId"/>"
@@ -336,12 +344,22 @@ function checkUncheckAll2() {
 																									</li>	
 																								</logic:iterate>
 																								</ul>
-																								</li>
+																								
+																								</li></div>
 																							</logic:iterate>
 																							</ul>
 																							</li></ul>
 																						</font>
-
+																				<script type="text/javascript">
+																			        treeObj = new DHTMLSuite.JSDragDropTree();
+																			        treeObj.setTreeId('dhtmlgoodies_tree');
+																			        //treeObj.setMaximumDepth(7);
+																			        //treeObj.setMessageMaximumDepthReached('Maximum depth reached'); // If you want to show a message when maximum depth is reached, i.e. on drop.		
+																			        treeObj.init();
+																			        treeObj.showHideNode(false,'dhtmlgoodies_tree');
+																			        
+																			        //treeObj.expandAll();
+																				</script>
 <!-- 																						
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'donor'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
@@ -556,6 +574,8 @@ function checkUncheckAll2() {
 
 
 </digi:form>
-
+<script type="text/javascript">
+	        treeObj.expandAll();
+</script>
 
 

@@ -45,63 +45,6 @@ function gotoStep() {
 
 
 <html:hidden property="moveColumn"/>
-											<feature:display name="Identification" module="Project ID and Planning">
-												<field:display name="Actual Approval Date" feature="Identification" ></field:display>
-												<field:display name="Actual Completion Date" feature="Identification"></field:display>
-												<field:display name="Actual Start Date" feature="Identification"></field:display>
-												<field:display name="Description" feature="Identification"></field:display>
-												<field:display name="Objective" feature="Identification"></field:display>					
-												<field:display name="Project Id" feature="Identification"></field:display>
-												<field:display name="Project Title" feature="Identification"></field:display>
-												<field:display name="Status" feature="Identification"></field:display>
-												<field:display name="Team" feature="Identification"></field:display>
-												<field:display name="A.C. Chapter" feature="Identification"></field:display>
-												<field:display name="Accession Instrument" feature="Identification"></field:display>
-											</feature:display>
-												
-											<feature:display name="Location" module="Project ID and Planning">
-												<field:display name="Implementation Level" feature="Location"></field:display>
-												<field:display name="Region" feature="Location"></field:display>
-												<field:display name="Sector" feature="Location"></field:display>
-											</feature:display>
-											
-											<feature:display  name="Funding Organizations" module="Funding">
-												<field:display name="Cumulative Commitment" feature="Funding Organizations"></field:display>
-												<field:display name="Cumulative Disbursement" feature="Funding Organizations"></field:display>
-												<field:display name="Donor Agency" feature="Funding Organizations"></field:display>
-												<field:display name="Donor Commitment Date" feature="Funding Organizations"></field:display>
-												<field:display name="Donor Group" feature="Funding Organizations"></field:display>
-												<field:display name="Financing Instrument" feature="Funding Organizations"></field:display>
-												<field:display name="Type Of Assistance" feature="Funding Organizations"></field:display>
-											</feature:display>
-											
-											<feature:display name="Issues" module="Issues">
-												<field:display name="Actors" feature="Issues"></field:display>
-												<field:display name="Component description" feature="Issues"></field:display>
-												<field:display name="Component Name" feature="Issues"></field:display>
-												<field:display name="Issues" feature="Issues"></field:display>
-												<field:display name="Measures Taken" feature="Issues"></field:display>
-												<field:display name="Physical Progress" feature="Issues"></field:display>
-												<field:display name="Physical progress description" feature="Issues"></field:display>
-												<field:display name="Physical progress title" feature="Issues"></field:display>
-											</feature:display>	
-											
-											<feature:display name="Contact Information" module="Contact Information">
-												<field:display name="Contact Name" feature="Contact Information"></field:display>
-											</feature:display>
-												
-											<feature:display name="M & E" module="Trend Analysis and Forecasting">
-												<field:display name="Indicator Base Value" feature="M & E"></field:display>
-												<field:display name="Indicator Current Value" feature="M & E"></field:display>
-												<field:display name="Indicator Target Value" feature="M & E"></field:display>
-												<field:display name="Indicator Description" feature="M & E"></field:display>
-												<field:display name="Indicator ID" feature="M & E"></field:display>
-												<field:display name="Indicator Name" feature="M & E"></field:display>
-											</feature:display>
-											<feature:display name="Costing" module="Activity Costing">
-												<field:display name="Costing Donor" feature="Costing"></field:display>
-												<field:display name="Total Costs" feature="Costing"></field:display>
-											</feature:display>
 
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
 <tr>

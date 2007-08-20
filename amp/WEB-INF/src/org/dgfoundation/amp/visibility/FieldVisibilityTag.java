@@ -79,8 +79,8 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	
 	public int doEndTag() throws JspException 
     {
-		if (bodyContent==null) return  SKIP_BODY;
-		if(bodyContent.getString()==null) return SKIP_BODY;
+		if (bodyContent==null) return  EVAL_PAGE;//SKIP_BODY;
+		if(bodyContent.getString()==null) return EVAL_PAGE;
 		String bodyText = bodyContent.getString();
        
        try {

@@ -129,9 +129,11 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedSectors(null);
 		filterForm.setSelectedStatuses(null);
 		HttpSession httpSession = request.getSession();
-		TeamMember teamMember = (TeamMember) httpSession .getAttribute(Constants.CURRENT_MEMBER);;
+		TeamMember teamMember = (TeamMember) httpSession .getAttribute(Constants.CURRENT_MEMBER);
 		AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
 		filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
+		String name = tempSettings.getCurrency().getCurrencyName() + "s";
+		httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 		filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
 		filterForm.setFromYear(null);
 		filterForm.setToYear(null);
@@ -145,7 +147,16 @@ public class ReportsFilterPicker extends MultiAction {
 	
 	public ActionForward modeSelect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if(request.getParameter("apply")!=null && request.getAttribute("apply")==null) return modeApply(mapping,form,request,response);
-		if(request.getParameter("reset")!=null && request.getAttribute("reset")==null) return modeReset(mapping,form,request,response);		
+		if(request.getParameter("reset")!=null && request.getAttribute("reset")==null) return modeReset(mapping,form,request,response);
+		
+		HttpSession httpSession = request.getSession();
+		
+		if (httpSession.getAttribute(ArConstants.SELECTED_CURRENCY) == null){
+			TeamMember teamMember = (TeamMember) httpSession  .getAttribute(Constants.CURRENT_MEMBER);
+			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+			String name = tempSettings.getCurrency().getCurrencyName() + "s";
+			httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
+		}
 		return mapping.findForward("forward");
 	}
 	
@@ -153,7 +164,9 @@ public class ReportsFilterPicker extends MultiAction {
 	 * generate a session based AmpARFilter object based on the form selections
 	 * @param mapping
 	 * @param form
-	 * @param request
+	 * @param requestTeamMember teamMember = (TeamMember) httpSession  .getAttribute(Constants.CURRENT_MEMBER);
+			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+			
 	 * @param response
 	 * @return
 	 * @throws Exception
@@ -210,6 +223,8 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setDonors(Util.getSelectedObjects(AmpOrganisation.class,filterForm.getSelectedDonors()));
 		AmpCurrency currency = (AmpCurrency) Util.getSelectedObject(AmpCurrency.class,filterForm.getCurrency());
 		arf.setCurrency(currency);
+		String name = currency.getCurrencyName() + "s";
+		httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 		Integer all=new Integer(-1);
 		if(!all.equals(filterForm.getLineMinRank())) arf.setLineMinRank(filterForm.getLineMinRank());
 		if(!all.equals(filterForm.getPlanMinRank())) arf.setPlanMinRank(filterForm.getPlanMinRank());

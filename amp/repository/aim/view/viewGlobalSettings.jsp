@@ -170,7 +170,7 @@ function saveClicked() {
                                         <c:set var="globSettings">
                                           <digi:trn key="aim:cn:${global.key}">${global.value}</digi:trn>
                                         </c:set>
-                                        <option>${globSettings}</option>
+                                        <html:option value="${global.key}"> ${globSettings} </html:option>
                                       </logic:iterate>
                                     </html:select>
                                     <%}else { %>
@@ -179,7 +179,7 @@ function saveClicked() {
                                         <c:set var="globSettings">
                                           <digi:trn key="aim:globalSettings:${global.key}">${global.value}</digi:trn>
                                         </c:set>
-                                        <option>${globSettings}</option>
+                                        <html:option value="${global.key}"> ${globSettings} </html:option>
                                       </logic:iterate>
                                     </html:select>
                                     <%} %>										</logic:notEmpty>

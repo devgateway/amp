@@ -7,10 +7,12 @@ package org.digijava.module.aim.util;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 import net.sf.hibernate.Hibernate;
@@ -379,6 +381,30 @@ public class ProgramUtil {
 	        }
 	        return ampTheme;
 		}
+		
+		
+		public static String getHierarchyName(AmpTheme prog){
+			String result="";
+			List<AmpTheme> progs=new ArrayList<AmpTheme>();
+			AmpTheme curProg = prog;
+			while (curProg.getParentThemeId()!=null) {
+				curProg = curProg.getParentThemeId();
+				progs.add(curProg);
+			}
+
+			
+			Collections.reverse(progs);
+			
+			for (ListIterator<AmpTheme> iterator = progs.listIterator(); iterator.hasNext();) {
+				AmpTheme p = (AmpTheme) iterator.next();
+				result += p.getName() + " > ";
+			}
+			
+			result += prog.getName();
+			return result;
+		}
+		
+		
 		
 	/* Commemted by pcsingh
 	 * due to some doubt abt assignment of indicator from one theme to other

@@ -84,7 +84,8 @@ public class AddProgram
                          return mapping.findForward("added");
                     }
                 }
-                prgLst.add(prg);
+                prg.setName(ProgramUtil.getHierarchyName(prg));
+                prgLst.add(prg); 
                 eaform.setActPrograms(prgLst);
             }
             return mapping.findForward("added");

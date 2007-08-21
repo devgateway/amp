@@ -453,7 +453,10 @@ public class EditActivity
                         if(prgSet != null) {
                             Iterator prgItr = prgSet.iterator();
                             while(prgItr.hasNext()) {
-                                actPrgs.add((AmpTheme) prgItr.next());
+                            	AmpTheme prg=(AmpTheme) prgItr.next();
+                            	String newName=ProgramUtil.getHierarchyName(prg);
+                            	prg.setName(newName);
+                                actPrgs.add(prg);
                             }
                         }
                         eaForm.setActPrograms(actPrgs);

@@ -54,7 +54,7 @@ public class UpdateCurrency extends Action {
 
                 if (crForm.getDoAction() == null ||
                                 crForm.getDoAction().equals("showCurrencies")) {
-                        if (crForm.getCurrencyCode() != null ) {
+                        if (crForm.getCurrencyCode() != null && !crForm.getCurrencyCode().equals("") ) {
                                 Iterator itr = crForm.getAllCurrencies().iterator();
                                 AmpCurrency curr = null;
                                 while (itr.hasNext()) {
@@ -65,10 +65,10 @@ public class UpdateCurrency extends Action {
                                                         if (country!=null){
                                                                 crForm.setCountryIso(country.getIso());
                                                         }else{
-                                                                crForm.setCountryIso(null);
+                                                                crForm.setCountryIso("-1");
                                                                 }
                                                 }else{
-                                                        crForm.setCountryIso(null);
+                                                        crForm.setCountryIso("-1");
                                                 }
                                                 crForm.setCountryName(curr.getCountryName());
                                                 crForm.setCurrencyName(curr.getCurrencyName());
@@ -79,7 +79,7 @@ public class UpdateCurrency extends Action {
                         } else {
                                 crForm.setId(new Long(-1));
                                 crForm.setCountryName(null);
-                                crForm.setCountryIso("");
+                                crForm.setCountryIso("-1");
                                 crForm.setCurrencyCode(null);
                                 crForm.setCurrencyName(null);
                                 crForm.setExchangeRate(null);
@@ -109,11 +109,15 @@ public class UpdateCurrency extends Action {
 
                 } else {
                         AmpCurrency curr = new AmpCurrency();
-                        if (crForm.getCountryIso()!=null){
+                        if (crForm.getCountryIso()!=null && !crForm.getCountryIso().equals("-1")){
                                 String countryName=DbUtil.getDgCountry(crForm.getCountryIso()).getCountryName();
-                                curr.setCountryName(countryName);
+                            curr.setCountryName(countryName);
                         }else{
-                                curr.setCountryName(crForm.getCountryName());
+                                if (crForm.getCountryIso().equals("-1") && (crForm.getCountryName()==null || crForm.getCountryName().equals(""))){
+                                        curr.setCountryName(null);
+                                }else{
+                                        curr.setCountryName(crForm.getCountryName());
+                                }
                         }
                         curr.setCurrencyCode(crForm.getCurrencyCode());
                         curr.setCurrencyName(crForm.getCurrencyName());
@@ -131,7 +135,7 @@ public class UpdateCurrency extends Action {
                         }
                         CurrencyUtil.saveCurrency(curr,cRate);
                         crForm.setCountryName(null);
-                        crForm.setCountryIso(null);
+                        crForm.setCountryIso("-1");
                         crForm.setCurrencyCode(null);
                         crForm.setCurrencyName(null);
                         crForm.setExchangeRate(null);
@@ -139,6 +143,7 @@ public class UpdateCurrency extends Action {
                         crForm.setAllCurrencies(null);
                         crForm.setDoAction(null);
                         crForm.setId(null);
+                        return mapping.findForward("curManager");
                 }
                 } catch (Exception e) {
                         e.printStackTrace(System.out);

@@ -47,16 +47,16 @@ function deleteCurrency(code) {
 		  {
 			<digi:context name="deleteCurrency" property="context/module/moduleinstance/deleteCurrency.do" />
 			document.aimCurrencyForm.action = "<%= deleteCurrency %>~id="+code;
-				  
+
 			document.aimCurrencyForm.target = "_self";
 			document.aimCurrencyForm.submit();
 		  }
 }
 function validate(){
-		 
-		
+
+
 			return(confirm(" Do you want to delete this Currency ?"));
-		
+
 }
 function submit() {
 	document.aimCurrencyForm.target = "_self";
@@ -78,6 +78,11 @@ function sortSubmit(value){
 <digi:form action="/currencyManager.do">
 
 <html:hidden property="page"/>
+<html:hidden property="currencyCode"/>
+<html:hidden property="currencyName"/>
+<html:hidden property="countryIso"/>
+
+
 
 <table width="100%" cellspacing=0 cellpadding=0 valign="top" align="left">
 <tr><td>
@@ -186,7 +191,7 @@ function sortSubmit(value){
 										<td align="left" width="20%" style="cursor:pointer;" onclick="sortSubmit(1)" onMouseOver="this.className='colHeaderOver'"
 										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:currCode">Code</digi:trn></b>
-										</td>										
+										</td>
 										<td align="left" width="35%"  style="cursor:pointer;" onclick="sortSubmit(2)" onMouseOver="this.className='colHeaderOver'"
 										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:currencyName">Currency Name</digi:trn></b>
@@ -194,7 +199,7 @@ function sortSubmit(value){
 										<td colspan="2" align="left" style="cursor:pointer;" onMouseOver="this.className='colHeaderOver'"  onclick="sortSubmit(3)"
 										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:countryName">Country</digi:trn></b>
-										</td>										
+										</td>
 									</tr>
 									<c:if test="${empty aimCurrencyForm.currency}">
 									<tr bgcolor="#f4f4f2">
@@ -211,7 +216,7 @@ function sortSubmit(value){
 									<tr class="rowNormal">
 										<%  } else { %>
 									<tr class="rowAlternate">
-											<% 
+											<%
 											}
 											index++;
 											%>
@@ -246,14 +251,14 @@ function sortSubmit(value){
 												<c:out value="${curr.currencyName}"/></a>
 											</td>
 											<td align="left">
-												<a href="javascript:editCurrency('<c:out value="${curr.currencyCode}"/>')">												
+												<a href="javascript:editCurrency('<c:out value="${curr.currencyCode}"/>')">
 												<c:out value="${curr.countryName}"/></a>
 											</td>
 											<td align="right">
 												<a href="javascript:deleteCurrency('<c:out value="${curr.currencyCode}"/>')">
 										 		<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this Currency"/>
-												</a>													
-											</td>											
+												</a>
+											</td>
 										</tr>
 										</c:forEach>
 									</c:if>

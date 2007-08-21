@@ -298,8 +298,12 @@ function checkUncheckAll2() {
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
 																				<c:if test="${!empty aimAdvancedReportForm.ampColumns}">
 																				
-																					<input type="button" value="Expand" onclick="treeObj.expandAll()">
-																					<input type="button" value="Collapse" onclick="treeObj.collapseAll()">
+																					<html:button onclick="treeObj.expandAll()" property="expand">
+																						<digi:trn key="btn:expand">Expand</digi:trn>
+																					</html:button>
+																					<html:button  property="collapse" onclick="treeObj.collapseAll()">
+																						<digi:trn key="btn:collapse">Collapse</digi:trn>
+																					</html:button>
 																					<!-- 
 																						Because the donor report and the contribution report are now different (the donor has also the indicator columnns)
 																						we have to create different c:if for each report								
@@ -339,7 +343,7 @@ function checkUncheckAll2() {
 																											value="<bean:write name="ampColumnFromTree" property="columnId"/>"
 																										/>
 																										<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>">
-																											<bean:write name="ampColumnFromTree" property="columnName"/>
+																											<digi:trn key="aim:report:${ampColumnFromTree.columnName}"><bean:write name="ampColumnFromTree" property="columnName"/></digi:trn>
 																										</a>
 																									</li>	
 																								</logic:iterate>

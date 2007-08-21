@@ -136,7 +136,6 @@ public class GlobalSettings extends Action {
 		Session session = null;
 		String qryStr = null;
 		Query qry = null;
-		
 		if (tableName == null || tableName.length() == 0)
 			return ret;
 		
@@ -156,7 +155,6 @@ public class GlobalSettings extends Action {
 					
 					//logger.info("Values:" + rs.getString(1) + "," + rs.getString(2) );
 					KeyValue keyValue	= new KeyValue( rs.getObject(1)+"", rs.getString(2) );
-					
 					ret.add( keyValue );
 				}
 				conn.close();

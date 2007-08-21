@@ -136,14 +136,14 @@ function saveClicked() {
                                     <c:set var="dic">
                                       <%out.write(dictionaryValue);%>
                                     </c:set>
-                                    <digi:trn key="aim:${dic}">
+                                    
                                       <%out.write(dictionaryValue);%>
-                                    </digi:trn>
+                                    
 
                                     <%}else{%>
-                                    <digi:trn key="aim:<%=globalSett.getGlobalSettingsValue()%>">
+                                    
                                       <%=globalSett.getGlobalSettingsValue()%>
-                                    </digi:trn>
+                                    
                                     <%}%>
 
 
@@ -176,10 +176,13 @@ function saveClicked() {
                                     <%}else { %>
                                     <html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
                                       <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
+                                      	<c:set var="valueOfSetting">
+                                      		<%= globalSett.getGlobalSettingsPossibleValues()%>
+                                      	</c:set>
                                         <c:set var="globSettings">
-                                          <digi:trn key="aim:globalSettings:${global.key}">${global.value}</digi:trn>
+                                          <digi:trn key="aim:globalSettings:${valueOfSetting}:${global.value}">${global.value}</digi:trn>
                                         </c:set>
-                                        <html:option value="${global.key}"> ${globSettings} </html:option>
+                                        <html:option value="${global.key}"> ${globSettings}</html:option>
                                       </logic:iterate>
                                     </html:select>
                                     <%} %>										</logic:notEmpty>

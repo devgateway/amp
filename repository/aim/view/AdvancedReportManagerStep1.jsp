@@ -342,7 +342,7 @@ function checkUncheckAll2() {
 																											name="selectedColumns" 
 																											value="<bean:write name="ampColumnFromTree" property="columnId"/>"
 																										/>
-																										<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>">
+																										<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>" >
 																											<digi:trn key="aim:report:${ampColumnFromTree.columnName}"><bean:write name="ampColumnFromTree" property="columnName"/></digi:trn>
 																										</a>
 																									</li>	

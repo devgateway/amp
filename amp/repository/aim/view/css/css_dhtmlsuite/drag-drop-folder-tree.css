@@ -13,6 +13,8 @@
 }
 .DHTMLSuite_tree a{
 	color:#000;
+	size:10
+	text-decoration:none	
 }
 
 .DHTMLSuite_tree,#floatingContainer{

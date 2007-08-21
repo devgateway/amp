@@ -123,7 +123,7 @@
     <form-bean name="aimNPDForm" type="org.digijava.module.aim.form.NpdForm" />
     <form-bean name="aimActiityListForm" type="org.digijava.module.aim.form.ActivitiesForm" />
     <form-bean name="aimNPDgraphForm" type="org.digijava.module.aim.form.NpdGraphForm" />
-	<form-bean name="npdSettingsForm" type="org.digijava.module.aim.form.NpdSettingsForm"/>  
+	<form-bean name="npdSettingsForm" type="org.digijava.module.aim.form.NpdSettingsForm"/>
   </form-beans>
 
   <global-forwards>
@@ -134,7 +134,7 @@
     <action name="aimUserDetailForm" path="/aim/userProfile" scope="request" type="org.digijava.module.aim.action.ViewUserProfile" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_viewUserProfile" />
     </action>
-    
+
     <action name="aimLoginForm" path="/aim/index" scope="request" type="org.digijava.module.aim.action.ViewAmp" validate="false">
       <forward name="forward" path="/showLayout.do?layout=index" />
       <forward name="selectTeam" path="/showLayout.do?layout=selectTeam" />
@@ -179,8 +179,8 @@
     </action>
     <action name="aimReportsFilterPickerForm" path="/aim/reportsFilterPicker" scope="session" type="org.digijava.module.aim.action.ReportsFilterPicker" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_filterPicker" />
-      <forward name="mydesktop" path="/aim/showDesktop.do" redirect="true" />      
-      <forward name="reportView" path="/aim/viewNewAdvancedReport.do?reload=true" />      
+      <forward name="mydesktop" path="/aim/showDesktop.do" redirect="true" />
+      <forward name="reportView" path="/aim/viewNewAdvancedReport.do?reload=true" />
     </action>
 
 
@@ -210,12 +210,12 @@
     <action path="/aim/viewEUActivityDetails" scope="request" type="org.digijava.module.aim.action.ViewEUActivity" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_euActivityDetails" />
     </action>
-    
+
     <action name="aimYearlyComparisonsForm" path="/aim/yearlyComparisonsFilter" scope="request" type="org.digijava.module.aim.action.YearlyComparisonsFilter" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewYearlyComparisons" />
     </action>
     <action parameter="/showLayout.do?layout=aim_editableTasks" path="/aim/viewEditableTasks" type="org.apache.struts.actions.ForwardAction" />
-    
+
     <action forward="/showLayout.do?layout=desktopLayout" path="/aim/viewMyDesktop" />
     <action forward="/showLayout.do?layout=portfolioDashboardLayout" name="aimPortfolioDashboardForm" path="/aim/viewPortfolioDashboard" />
     <action forward="/showLayout.do?layout=layoutSurveyList" name="aimSurveyForm" path="/aim/viewSurveyList" />
@@ -295,8 +295,8 @@
     <action name="aimMyDesktopForm" path="/aim/deleteMemberLink" scope="session" type="org.digijava.module.aim.action.DeleteMemberLink" validate="false">
       <forward name="forward" path="/aim/viewMyDesktop.do" redirect="true" />
     </action>
-    
-    
+
+
     <action name="aimRelatedLinksForm" path="/aim/viewAllDocuments" scope="session" type="org.digijava.module.aim.action.ViewRelatedLinks" validate="false">
       <forward name="forward" path="/showLayout.do?layout=moreDocuments" />
       <forward name="index" path="/aim/index.do" redirect="true" />
@@ -450,7 +450,7 @@
       <forward name="forward" path="/showLayout.do?layout=orgTypeManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimAddOrgTypeForm" path="/aim/editOrgType" scope="request" type="org.digijava.module.aim.action.EditOrgType" validate="true" 
+    <action name="aimAddOrgTypeForm" path="/aim/editOrgType" scope="request" type="org.digijava.module.aim.action.EditOrgType" validate="true"
     		parameter="action" input="/showLayout.do?layout=editOrgType">
       <forward name="forward" path="/showLayout.do?layout=editOrgType" />
       <forward name="index" path="/aim/index.do" redirect="true" />
@@ -520,6 +520,7 @@
 	 <action name="aimCurrencyForm" path="/aim/saveCurrency" scope="session" type="org.digijava.module.aim.action.UpdateCurrency" validate="false"
 				input="/showLayout.do?layout=aim_updateCurrency">
       <forward name="forward" path="/showLayout.do?layout=aim_updateCurrency" />
+       <forward name="curManager" path="/aim/currencyManager.do"/>
     </action>
     <action name="aimAddCurrencyForm" path="/aim/editCurrency" scope="request" type="org.digijava.module.aim.action.EditCurrency" validate="false">
       <forward name="forward" path="/aim/currencyManager.do" />
@@ -883,7 +884,7 @@
       <forward name="forward" path="/showLayout.do?layout=auditLoggerManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    
+
     <action name="aimIndicatorForm" path="/aim/indicatorManager" scope="session" type="org.digijava.module.aim.action.IndicatorManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=indicatorManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
@@ -978,11 +979,11 @@
       <forward name="forwardToPreview" path="/aim/previewActivity.do" redirect="true" />
       <forward name="accessDenyed" path="/showLayout.do?layout=editActivityDenyed" />
     </action>
-    
+
     <action name="aimEUActivityForm" path="/aim/editEUActivity" scope="session" type="org.digijava.module.aim.action.EditEUActivity">
       <forward name="forward" path="/showLayout.do?layout=aim_editEUActivity" />
     </action>
-    
+
     <action name="aimEditActivityForm" path="/aim/addActivity" scope="session" type="org.digijava.module.aim.action.AddAmpActivity">
       <forward name="addActivityStep1" path="/showLayout.do?layout=addActivityStep1" />
       <forward name="addActivityStep2" path="/showLayout.do?layout=addActivityStep2" />
@@ -1212,7 +1213,7 @@
       <forward name="forward" path="/showLayout.do?layout=viewNewAdvancedReport" />
     </action>
     <action path="/aim/projectFicheExport" type="org.digijava.module.aim.action.ProjectFicheExport" validate="false" />
-    
+
     <action name="aimAdvancedReportForm" path="/aim/pdfExport" scope="session" type="org.digijava.module.aim.action.PDFExportAction" validate="false" />
     <action name="aimAdvancedReportForm" path="/aim/xlsExport" scope="session" type="org.digijava.module.aim.action.XLSExportAction" validate="false" />
     <action name="aimAdvancedReportForm" path="/aim/csvExport" scope="session" type="org.digijava.module.aim.action.CSVExportAction" validate="false" />
@@ -1379,7 +1380,7 @@
       <forward name="saved" path="/aim/getComponents.do" redirect="true" />
       <forward name="forward" path="/showLayout.do?layout=aim_addComponents" />
       <forward name="delete" path="/aim/getComponents.do" redirect="true" />
-	  <forward name="editComponent" path="/showLayout.do?layout=aim_editComponents" />      
+	  <forward name="editComponent" path="/showLayout.do?layout=aim_editComponents" />
   	</action>
   	<action name="aimComponentsForm" path="/aim/componentIndicatorManager" scope="session" type="org.digijava.module.aim.action.ComponentIndicatorManager">
 		<forward name="forward" path="/showLayout.do?layout=componentIndicatorManager"/>
@@ -1426,10 +1427,10 @@
     <action name="aimTranslatorManagerForm" path="/aim/translationManager" scope="session" type="org.digijava.module.aim.action.TranslatorManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewTranslatorManager" />
     </action>
-   
+
     <action input="/showLayout.do?layout=viewNpdSettings" name="npdSettingsForm" scope="request" path="/aim/npdSettingsAction" parameter="actionType" type="org.digijava.module.aim.action.NpdSettingsAction" validate="false">
 		<forward name="forward" path="/showLayout.do?layout=viewNpdSettings"/>
-	</action>  
+	</action>
   </action-mappings>
 </struts-config>
 

@@ -1,5 +1,7 @@
 package org.digijava.module.aim.util;
 
+import java.text.DecimalFormat;
+
 import net.sf.hibernate.ObjectNotFoundException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
@@ -9,8 +11,8 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.exception.AimException;
 
-public class NpdSettingsUtil {
-	private static Logger logger = Logger.getLogger(NpdSettingsUtil.class);
+public class NpdUtil {
+	private static Logger logger = Logger.getLogger(NpdUtil.class);
 
 	public static void updateSettings(NpdSettings settings) throws AimException {
 		Session session = null;
@@ -25,11 +27,11 @@ public class NpdSettingsUtil {
 				try {
 					tx.rollback();
 				} catch (Exception ex) {
-					logger.error("...Rollback failed");
+					logger.error("...Rollback of NPD failed");
 					throw new AimException("Can't rollback", ex);
 				}
 			}
-			throw new AimException("Can't update settings", e);
+			throw new AimException("Can't update NPD settings", e);
 		}
 	}
 
@@ -53,9 +55,13 @@ public class NpdSettingsUtil {
 			throw new AimException("Team can't be found", ex);
 		} catch (Exception e) {
 			logger.error("Unable to load NpdSettings");
-			throw new AimException("Can't rollback", e);
+			throw new AimException("Cannot load NPD Settings", e);
 		}
 		return npdSettings;
+	}
+	
+	public static DecimalFormat getNumberFormatter(){
+		return new DecimalFormat("###,###,###,###,###") ;
 	}
 
 }

@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -8,7 +9,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -28,9 +28,9 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.ActivitiesForm;
 import org.digijava.module.aim.helper.ActivityItem;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
 /**
@@ -55,16 +55,12 @@ public class GetActivities extends Action {
 	public static final String ROOT_TAG = "activityList";
 
 	private static Logger logger = Logger.getLogger(GetActivities.class);
-
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		logger.debug("got asynchronous request for Activities list");
 		response.setContentType("text/xml");
-		String s=response.getCharacterEncoding();
-		Locale loc=response.getLocale();
-		System.out.println(s);
-		System.out.println(loc);
 		ActivitiesForm actForm = (ActivitiesForm) form;
 		logger.debug("programId=" + actForm.getProgramId() + " statusCode=" + actForm.getStatusId());
 		HttpSession session = request.getSession();
@@ -84,7 +80,7 @@ public class GetActivities extends Action {
 			logger.debug("Setting XML in the response");
 			// return xml
 			
-			outputStream.println(xml);
+			outputStream.write(xml.getBytes());
 			logger.debug("returning response XML");
 		} catch (Exception e) {
 			logger.info(e);
@@ -212,6 +208,7 @@ private Collection<AmpActivity> getActivities(Long ampThemeId,
 		double proposedSum = 0;
 		double actualSum = 0;
 		double plannedSum = 0;
+		DecimalFormat mf=NpdUtil.getNumberFormatter();
 		String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"; 
 		result += "<" + ROOT_TAG;
 		String temp = "";
@@ -227,9 +224,9 @@ private Collection<AmpActivity> getActivities(Long ampThemeId,
 				temp += item.getXml();
 			}
 		}
-		result += " proposedSum=\"" + CurrencyWorker.formatAmount(String.valueOf(proposedSum))+ "\" ";
-		result += " actualSum=\"" + CurrencyWorker.formatAmount(String.valueOf(actualSum))+ "\" ";
-		result += " plannedSum=\"" + CurrencyWorker.formatAmount(String.valueOf(plannedSum))+ "\" ";
+		result += " proposedSum=\"" + mf.format(proposedSum)+ "\" ";
+		result += " actualSum=\"" + mf.format(actualSum)+ "\" ";
+		result += " plannedSum=\"" + mf.format(plannedSum)+ "\" ";
 		result += ">" + temp + "</" + ROOT_TAG + ">";
 		return result;
 	}

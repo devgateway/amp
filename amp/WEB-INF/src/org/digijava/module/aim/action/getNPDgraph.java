@@ -27,7 +27,7 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.NpdGraphForm;
 import org.digijava.module.aim.helper.NpdGraphTooltipGenerator;
 import org.digijava.module.aim.util.ChartUtil;
-import org.digijava.module.aim.util.NpdSettingsUtil;
+import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -82,7 +82,7 @@ public class getNPDgraph extends Action {
             response.setContentType("image/png");            
            
     		Long teamId=TeamUtil.getCurrentTeam(request).getAmpTeamId();
-    		NpdSettings npdSettings=NpdSettingsUtil.getCurrentSettings(teamId);            
+    		NpdSettings npdSettings=NpdUtil.getCurrentSettings(teamId);            
             Double angle=null;
             
             if(npdSettings.getAngle()!=null){

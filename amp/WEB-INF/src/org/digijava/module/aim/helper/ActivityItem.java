@@ -1,6 +1,7 @@
 package org.digijava.module.aim.helper;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,6 +13,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.NpdUtil;
 
 /**
  * Activity helper bean.
@@ -58,6 +60,7 @@ public class ActivityItem {
 	
 	private List donors;
 
+	
 	/**
 	 * Default constructor.
 	 * Not very usful.
@@ -114,6 +117,7 @@ public class ActivityItem {
 	 * @return String representing XML of the Activity.
 	 */
 	public String getXml() {
+		DecimalFormat df=NpdUtil.getNumberFormatter();
 		String result = "";
 		if (id != null) {
 			result += "<" + TAG_NAME;

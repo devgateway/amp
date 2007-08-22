@@ -22,7 +22,7 @@ import org.digijava.module.aim.helper.FilteredAmpTheme;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.NpdSettingsUtil;
+import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
 /**
@@ -39,7 +39,7 @@ public class ViewNPD extends Action {
 		//dimensions should come from NPD settings not from constants
 		TeamMember teamMember = (TeamMember) request.getSession().getAttribute("currentMember");
 		Long teamId=teamMember.getTeamId();
-		NpdSettings npdSettings=NpdSettingsUtil.getCurrentSettings(teamId);
+		NpdSettings npdSettings=NpdUtil.getCurrentSettings(teamId);
 		npdForm.setGraphWidth(npdSettings.getWidth().intValue());
 		npdForm.setGraphHeight(npdSettings.getHeight().intValue());
 		npdForm.setYears(new ArrayList(ProgramUtil.getYearsBeanList()));

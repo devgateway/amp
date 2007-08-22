@@ -12,7 +12,7 @@ import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.form.NpdSettingsForm;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.NpdSettingsUtil;
+import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class NpdSettingsAction extends DispatchAction {
@@ -33,7 +33,7 @@ public class NpdSettingsAction extends DispatchAction {
 			teamId = form.getAmpTeamId();
 		}
 
-		NpdSettings npdSettings = NpdSettingsUtil.getCurrentSettings(teamId);	
+		NpdSettings npdSettings = NpdUtil.getCurrentSettings(teamId);	
 		if(npdSettings.getAngle()==null){
 			form.setAngle("");
 		}else {
@@ -63,7 +63,7 @@ public class NpdSettingsAction extends DispatchAction {
 		} else {
 			teamId = form.getAmpTeamId();
 		}
-		NpdSettings npdSettings = NpdSettingsUtil.getCurrentSettings(teamId);	
+		NpdSettings npdSettings = NpdUtil.getCurrentSettings(teamId);	
 		
 		if(form.getAngle().equals("")){
 			npdSettings.setAngle(null);
@@ -74,7 +74,7 @@ public class NpdSettingsAction extends DispatchAction {
 		
 		npdSettings.setHeight(form.getHeight());
 		npdSettings.setWidth(form.getWidth());
-		NpdSettingsUtil.updateSettings(npdSettings);
+		NpdUtil.updateSettings(npdSettings);
 		return arg0.findForward("forward");
 	}
 

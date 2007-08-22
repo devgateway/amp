@@ -5,6 +5,7 @@
 
 package org.digijava.module.aim.util;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -2274,6 +2275,7 @@ public static Collection getFundingByOrg(Long id) {
     	private Double proposedAmout;
     	private Double plannedAmount;
     	private Double actualAmount;
+    	private DecimalFormat df=NpdUtil.getNumberFormatter();
     	
 		public void AddPalenned(double amount){
 			if(plannedAmount != null){	
@@ -2295,20 +2297,20 @@ public static Collection getFundingByOrg(Long id) {
     		if (actualAmount==null){
     			return "N/A";
     		}
-			return CurrencyWorker.formatAmount(actualAmount.toString());
+			return df.format(actualAmount);
 		}
     	
 		public String plannedAmount() {
 			if (plannedAmount==null){
 				return "N/A";
 			}
-			return CurrencyWorker.formatAmount(plannedAmount.toString());
+			return df.format(plannedAmount);
 		}
 		public String proposedAmout() {
 			if (proposedAmout==null){
 				return "N/A";
 			}
-			return CurrencyWorker.formatAmount(proposedAmout.toString());
+			return df.format(proposedAmout);
 		}
 		
 		public void setProposedAmout(double proposedAmout) {

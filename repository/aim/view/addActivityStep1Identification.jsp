@@ -11,6 +11,14 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script language="JavaScript">
+	function budgetCheckboxClick()
+	{
+	 if(document.aimEditActivityForm.budget.checked==false)
+	 	document.aimEditActivityForm.budgetCheckbox.value="unchecked";
+	 else if(document.aimEditActivityForm.budget.checked==true)
+	 	document.aimEditActivityForm.budgetCheckbox.value="checked";
+	}
+
 
 </script>
 
@@ -208,21 +216,144 @@
 											</td></tr>											
 											</field:display>
 											
-											<field:display name="Activity Budget" feature="Identification">
-											<tr bgcolor="#ffffff"><td valign="top" align="left">
+												
+											<tr bgcolor="#ffffff"><td colspan="2" valign="top" align="left">
+											<table>
+											 <tr>
+												<field:display name="Activity Budget" feature="Identification">
+												<td valign="top" align="left">
+											
 												<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
 												<digi:trn key="aim:actBudget">
 												Activity Budget
 												</digi:trn>
 												</a>
-											</td>
-											<td valign="top" align="left">
-													<html:checkbox property="budget">
+												</td>
+												
+												<td valign="top" align="left">
+													<html:checkbox property="budget"  onclick="budgetCheckboxClick();">
 													<digi:trn key="aim:actBudgeton">
 												Activity is On Budget
 												</digi:trn>
 													</html:checkbox>
-											</td></tr>
+													<input type="hidden" name="budgetCheckbox">
+												</td>
 											</field:display>
+											
+											<c:if test="${aimEditActivityForm.budget==true}">
+											
+											<field:display name="FY" feature="Identification">
+											<td valign="top" align="left">
+												<a title="<digi:trn key="aim:FY">FY</digi:trn>">
+												<digi:trn key="aim:actFY">
+												FY
+												</digi:trn>
+												</a>
+														<br/>
+														<html:text property="FY" size="5"/>
+											</td>
+										</field:display>
+											
+										<field:display name="Vote" feature="Identification">
+											<td valign="top" align="left">
+												<a title="<digi:trn key="aim:Vote">Vote</digi:trn>">
+												<digi:trn key="aim:actVote">
+												Vote
+												</digi:trn>
+												</a>
+											<br/>
+													<html:text property="vote" size="3"/>
+										</td>	
+											</field:display>
+											
+											<field:display name="Sub-Vote" feature="Identification">
+											<td valign="top" align="left">
+												<a title="<digi:trn key="aim:Sub-Vote">Sub-Vote</digi:trn>">
+												<digi:trn key="aim:actSub-Vote">
+												Sub-Vote
+												</digi:trn>
+												</a>
+											<br/>
+										<html:text property="subVote" size="3"/>
+										</td>
+											</field:display>
+											
+	
+											
+								<field:display name="Sub-Program" feature="Identification">
+										<td valign="top" align="left">
+											<a title="<digi:trn key="aim:Sub_Program">Sub-Program</digi:trn>">
+											<digi:trn key="aim:actSubProgram">
+												Sub-Program
+												</digi:trn>
+												</a>
+											<br/>
+											<html:text property="subProgram" size="3"/>
+								
+									</td>
+								</field:display>
+											
+								<field:display name="Project Code" feature="Identification">
+										<td valign="top" align="left">
+											<a title="<digi:trn key="aim:ProjectCode">Project Code</digi:trn>">
+											<digi:trn key="aim:actProjectCode">
+												Project Code
+												</digi:trn>
+												</a>
+										<br/><html:text property="projectCode" size="7"/>
+								
+									</td>
+								</field:display>			
+									</tr>
+								</table>
+								</td></tr>		
+								</c:if>
+								<c:if test="${aimEditActivityForm.budget==true}">
+								<field:display name="GBS/SBS" feature="Identification">
+										<tr bgcolor="#ffffff"><td valign="top" align="left">
+											<a title="<digi:trn key="aim:GBS">GBS</digi:trn>">
+											<digi:trn key="aim:actGBS">
+												GBS/SBS ??
+												</digi:trn>
+												</a>
+											</td>
+										<td valign="top" align="left">
+												<html:radio property="gbsSbs" value="1"/>GBS<br/>
+												<html:radio property="gbsSbs" value="2"/>SBS<br/>								
+												<html:radio property="gbsSbs" value="3"/>Basket<br/>
+												<html:radio property="gbsSbs" value="4"/>DPS on Budget
+									</td>
+								</field:display>	
+								</c:if>
+												
+								
+										
+								<field:display name="Government Approval Procedures" feature="Identification">
+										<tr bgcolor="#ffffff"><td valign="top" align="left">
+											<a title="<digi:trn key="aim:governmentApprovalProcedures">Government Approval Procedures </digi:trn>">
+											<digi:trn key="aim:actGovernmentApprovalProcedures">
+												Government Approval Procedures 
+												</digi:trn>
+												</a>
+											</td>
+										<td valign="top" align="left">
+												Yes<html:radio property="governmentApprovalProcedures" value="true"/> &nbsp;&nbsp;No<html:radio property="governmentApprovalProcedures" value="false"/>
+									</td></tr>
+								</field:display>	
+								
+								<field:display name="Joint Criteria" feature="Identification">
+										<tr bgcolor="#ffffff"><td valign="top" align="left">
+											<a title="<digi:trn key="aim:jointCriteria">Joint Criteria</digi:trn>">
+											<digi:trn key="aim:actJointCriteria">
+												Joint Criteria 
+												</digi:trn>
+												</a>
+											</td>
+										<td valign="top" align="left">
+												Yes<html:radio property="jointCriteria" value="true"/> &nbsp;&nbsp;No<html:radio property="jointCriteria" value="false"/>
+									</td></tr>
+								</field:display>
+								
+								
 										</table>
 

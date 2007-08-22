@@ -926,7 +926,27 @@ public class ShowActivityPrintPreview
                 eaForm.setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
 
                 eaForm.setConditions(activity.getCondition().trim());
-
+                
+                /*
+                 * tanzania adds
+                 */ 
+                if(activity.getFY()!=null)
+                	eaForm.setFY(activity.getFY().trim());
+                if(activity.getVote()!=null)
+                	eaForm.setVote(activity.getVote().trim());
+                if(activity.getSubVote()!=null)
+                	eaForm.setSubVote(activity.getSubVote().trim());
+                if(activity.getSubProgram()!=null)
+                	eaForm.setSubProgram(activity.getSubProgram().trim());
+                if(activity.getProjectCode()!=null)
+                	eaForm.setProjectCode(activity.getProjectCode().trim());
+                
+                eaForm.setGbsSbs(activity.getGbsSbs());
+                eaForm.setGovernmentApprovalProcedures(activity.isGovernmentApprovalProcedures());
+                eaForm.setJointCriteria(activity.isJointCriteria());
+                
+                
+                
                 if(activity.getActivityCreator() != null) {
                     User usr = activity.getActivityCreator().getUser();
                     if(usr != null) {
@@ -988,6 +1008,20 @@ public class ShowActivityPrintPreview
                 eaForm.setActAthFirstName(null);
                 eaForm.setActAthLastName(null);
                 eaForm.setActAthEmail(null);
+                
+                /*
+				 * tanzania adds
+				 */
+				eaForm.setFY(null);
+				eaForm.setVote(null);
+				eaForm.setSubVote(null);
+				eaForm.setSubProgram(null);
+				eaForm.setProjectCode(null);
+				eaForm.setGbsSbs(new Integer(0));
+				eaForm.setGovernmentApprovalProcedures(false);
+				eaForm.setJointCriteria(false);
+                
+                
             }
         }
         return mapping.findForward("forward");

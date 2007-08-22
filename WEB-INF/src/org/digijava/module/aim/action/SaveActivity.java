@@ -442,7 +442,23 @@ public class SaveActivity extends Action {
                 }
 				activity.setAmpId(eaForm.getAmpId());
 				activity.setName(eaForm.getTitle());
-				activity.setBudget(eaForm.getBudget());
+				if("unchecked".equals(eaForm.getBudgetCheckbox())==true)
+					activity.setBudget(new Boolean(false));
+				else activity.setBudget(new Boolean(true));
+				
+				/*
+				 * tanzania adds 
+				 */
+				activity.setFY(eaForm.getFY());
+				activity.setVote(eaForm.getVote());
+				activity.setSubVote(eaForm.getSubVote());
+				activity.setSubProgram(eaForm.getSubProgram());
+				activity.setProjectCode(eaForm.getProjectCode());
+				activity.setGovernmentApprovalProcedures(eaForm.getGovernmentApprovalProcedures());
+				
+				activity.setGbsSbs(eaForm.getGbsSbs());
+				activity.setJointCriteria(eaForm.getJointCriteria());
+				
 				if (eaForm.getDescription() == null
 						|| eaForm.getDescription().trim().length() == 0) {
 					activity.setDescription(new String(" "));

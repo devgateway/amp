@@ -123,6 +123,36 @@ public class AmpActivity
 
 	/* Categories */
 	private Set categories;
+	
+	
+	/*
+	 * Tanzania adds
+	 */
+
+	 private String FY;
+	 private String vote;
+	 private String subVote;
+	 private String subProgram;
+	 private String projectCode;
+	 private Integer gbsSbs;
+	 private Boolean governmentApprovalProcedures;
+	 private Boolean jointCriteria;
+	
+	public Boolean isGovernmentApprovalProcedures() {
+		return governmentApprovalProcedures;
+	}
+
+	public void setGovernmentApprovalProcedures(Boolean governmentApprovalProcedures) {
+		this.governmentApprovalProcedures = governmentApprovalProcedures;
+	}
+
+	public Boolean isJointCriteria() {
+		return jointCriteria;
+	}
+
+	public void setJointCriteria(Boolean jointCriteria) {
+		this.jointCriteria = jointCriteria;
+	}
 
 	public Set getCategories() {
 		return categories;
@@ -1036,7 +1066,55 @@ public class AmpActivity
 		return this.getAmpId()+" "+this.getName();
 	}
 
-	/**
+	public String getFY() {
+		return FY;
+	}
+
+	public void setFY(String fy) {
+		FY = fy;
+	}
+
+	public Integer getGbsSbs() {
+		return gbsSbs;
+	}
+
+	public void setGbsSbs(Integer gbsSbs) {
+		this.gbsSbs = gbsSbs;
+	}
+
+	public String getProjectCode() {
+		return projectCode;
+	}
+
+	public void setProjectCode(String projectCode) {
+		this.projectCode = projectCode;
+	}
+
+	public String getSubProgram() {
+		return subProgram;
+	}
+
+	public void setSubProgram(String subProgram) {
+		this.subProgram = subProgram;
+	}
+
+	public String getSubVote() {
+		return subVote;
+	}
+
+	public void setSubVote(String subVote) {
+		this.subVote = subVote;
+	}
+
+	public String getVote() {
+		return vote;
+	}
+
+	public void setVote(String vote) {
+		this.vote = vote;
+	}
+	
+		/**
 	 * Returns total cost of the activity
 	 * @return total cost of the activity
 	 * @see #totalCost

@@ -115,13 +115,13 @@ public class EditActivity
 
         HttpSession session = request.getSession();
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-        
+
         AmpActivity activity = null;
 		String computeTotals=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_COMPUTE_TOTALS);
 
-        //if("true".compareTo(request.getParameter("public"))!=0) 
+        //if("true".compareTo(request.getParameter("public"))!=0)
         	//return mapping.findForward("forward");
-		
+
         ActionErrors errors = new ActionErrors();
 
         ampContext = getServlet().getServletContext();
@@ -194,7 +194,7 @@ public class EditActivity
             eaForm.setDocReset(true);
             eaForm.setComponentReset(true);
             eaForm.reset(mapping, request);
-          
+
 
             eaForm.setActivityId(activityId);
             HashMap activityMap = (HashMap) ampContext
@@ -691,17 +691,17 @@ public class EditActivity
                     }
 
                     if (impLevel >= 0) {
-                    	eaForm.setImplemLocationLevel( 
-                    			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
+                    	eaForm.setImplemLocationLevel(
+                    			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY,
                     													new Long(impLevel) ).getId()
                     			);
                     }
                     else
-                    	eaForm.setImplemLocationLevel( 
-                    			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
+                    	eaForm.setImplemLocationLevel(
+                    			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY,
 										new Long(0) ).getId()
                     	);
-                    
+
                     /*switch(impLevel) {
                         case 0:
                             eaForm.setImplementationLevel("country");
@@ -770,7 +770,7 @@ public class EditActivity
                                 }
                             }
                         }
-                        
+
                         eaForm.setActivitySectors(activitySectors);
                     }
 
@@ -782,9 +782,9 @@ public class EditActivity
                     eaForm.setProgramDescription(activity
                                                  .getProgramDescription().trim());
 
-                    double totComm = 0;
-                    double totDisb = 0;
-                    double totExp = 0;
+                    long totComm = 0;
+                    long totDisb = 0;
+                    long totExp = 0;
 
                     ArrayList fundingOrgs = new ArrayList();
                     Iterator fundItr = activity.getFunding().iterator();
@@ -853,8 +853,8 @@ public class EditActivity
                                         fundDet.getTransactionAmount()
                                         .doubleValue(), frmExRt,
                                         toExRt);
-                                    
-                                   
+
+
                                     eaForm.setCurrCode(toCurrCode);
                                     if(fundDet.getTransactionType().intValue() ==
                                        Constants.COMMITMENT) {
@@ -1413,38 +1413,38 @@ public class EditActivity
         		session.setAttribute("logframepr","true");
         		return mapping.findForward("forwardToPreview");
         	}
-        
-      
+
+
         Collection ampFundingsAux = DbUtil.getAmpFunding(activityId);
         FilterParams fp = (FilterParams) session.getAttribute("filterParams");
 		TeamMember teamMember=(TeamMember)session.getAttribute("currentMember");
-		if(fp==null) 
+		if(fp==null)
         {
         	fp=new FilterParams();
         }
-		
+
 			ApplicationSettings apps = null;
     		if ( teamMember != null )	{
     			apps = teamMember.getAppSettings();
     		}
     		if(apps!=null){
-    		
-    			if (fp.getCurrencyCode() == null) 
+
+    			if (fp.getCurrencyCode() == null)
     			{
-    				
+
     					Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
     					if (curr != null) {
     						fp.setCurrencyCode(curr.getCurrencyCode());
     					}
-    				
+
     			}
-    			
+
 
 
     			if (fp.getFiscalCalId() == null) {
     				fp.setFiscalCalId(apps.getFisCalId());
     			}
-    			
+
 
     			if (fp.getPerspective() == null) {
     				String perspective = CommonWorker.getPerspective(apps
@@ -1457,9 +1457,9 @@ public class EditActivity
     				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
     				fp.setToYear(year+Constants.TO_YEAR_RANGE);
     			}
-    		
 
-        
+
+
         Collection fb = FinancingBreakdownWorker.getFinancingBreakdownList(
 				activityId, ampFundingsAux, fp);
         eaForm.setFinancingBreakdown(fb);
@@ -1470,31 +1470,31 @@ public class EditActivity
 		String overallTotalUnExpended = "";
 		overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(
 				fb, Constants.COMMITMENT);
-		
-		
+
+
 		if (computeTotals!=null &&  "Off".equals(computeTotals) && activity!=null && activity.getTotalCost()!=null){
 			eaForm.setTotalCommitted(DecimalToText.ConvertDecimalToText(activity.getTotalCost().doubleValue()));
 		}else{
 			eaForm.setTotalCommitted(overallTotalCommitted);
 		}
-		
-		
+
+
 		overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(
 				fb, Constants.DISBURSEMENT);
-		
+
 		eaForm.setTotalDisbursed(overallTotalDisbursed);
 		overallTotalUnDisbursed = DecimalToText.getDifference(
 				overallTotalCommitted, overallTotalDisbursed);
 		eaForm.setTotalUnDisbursed(overallTotalUnDisbursed);
 		overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(
 				fb, Constants.EXPENDITURE);
-		
+
 		eaForm.setTotalExpended(overallTotalExpenditure);
 		overallTotalUnExpended = DecimalToText.getDifference(
 				overallTotalDisbursed, overallTotalExpenditure);
 		eaForm.setTotalUnExpended(overallTotalUnExpended);
     		}
-    
+
         return mapping.findForward("forward");
     }
 }

@@ -3,6 +3,7 @@
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <script langauage="JavaScript">
 	function onCancel()
@@ -12,7 +13,7 @@
 			document.aimProgramTypeForm.target = "_self";
 			document.aimProgramTypeForm.submit();
 	}
-		  
+
 	function onDelete() {
 		var flag = confirm("Are You Sure?");
 		return flag;
@@ -29,9 +30,9 @@
 			document.aimProgramTypeForm.target = "_self";
 			document.aimProgramTypeForm.submit();
 			 }
-	
+
 	}
-	
+
 </script>
 
 <digi:instance property="aimProgramTypeForm" />
@@ -49,7 +50,7 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-	
+
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
@@ -66,7 +67,7 @@
 							 Program Type Manager
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:addProgramType">Add Program Type</digi:trn>	
+						<digi:trn key="aim:addProgramType">Add Program Type</digi:trn>
 					</td>
 					<!-- End navigation -->
 				</tr>
@@ -92,24 +93,24 @@
 								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
-										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>	
+										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
 											<tr>
 												<td bgColor=#ffffff class=box-border>
 													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
 														<tr bgColor=#dddddb>
 															<!-- header -->
 															<td bgColor=#dddddb height="20" 			align="center" colspan="5"><B>
-																<digi:trn key="aim:addProgramType">Add Program Type</digi:trn>	
+																<digi:trn key="aim:addProgramType">Add Program Type</digi:trn>
 															<!-- end header -->
 														</tr>
 														<!-- Page Logic -->
 														<tr>
-															<td width="100%">	
+															<td width="100%">
 																<table width="100%" border=0	 bgColor=#f4f4f2>
 																	<tr>
-																		
+
 																		<td width="30%" align="right"><font color=red>*</font>
-																		<digi:trn key="aim:progTypeName">Program Type Name</digi:trn>	
+																		<digi:trn key="aim:progTypeName">Program Type Name</digi:trn>
 																		</td>
 																	    <td width="30%" >
 																	          <html:textarea property="name" cols="10" rows="1" />
@@ -117,42 +118,47 @@
 																	</tr>
 																	<tr>
 																		<td width="30%" align="right">
-																	        <digi:trn key="aim:progTypeDesc">Program Type Description</digi:trn>	
+																	        <digi:trn key="aim:progTypeDesc">Program Type Description</digi:trn>
 																		</td>
 																		<td width="30%">
 																           <html:textarea property="description" cols="40" rows="3" />
 																		</td>
 																	</tr>
-	
-															</tr>	
-															<td width=30% align = right>
-																			<font color=red>* Mandatory fields</font>
-																		</td>
+
+															</tr>
+                                                                                                                        <td width=30% align = right>
+																			<font color=red>*
+                                                                                                                                                          <digi:trn key="aim:ProgramType:Mandatoryfields">Mandatory fields</digi:trn>
+																			</font>
+															</td>
 														  <tr>
 															<td colspan="2" width="60%">
 			<table width="100%" cellspacing="5">
 				<tr>
 					<td width="50%" align="right">
-
-							<input  type="button" name="addBtn" value="Save" onclick="saveScheme()"/>
+						<c:set var="save">
+							<digi:trn key="aim:ProgramType:save">Save</digi:trn>
+						</c:set>
+							<html:submit value="${save}" styleClass="dr-menu" onclick="saveScheme()"/>
 					</td>
 					<td width="50%" align="left">
-						<%--<html:reset value="Cancel" styleClass="dr-menu" 	onclick="javascript:history.go(-1)"/>--%>
-						<html:reset value="Cancel" styleClass="dr-menu" 	onclick="onCancel()"/>
-							<%--<input  type="button" name="addBtn" value="Cancel" onclick="onCancel()"/>--%>
+						<c:set var="cancel">
+							<digi:trn key="aim:ProgramType:cancel">Cancel</digi:trn>
+						</c:set>
+						<html:reset value="${cancel}" styleClass="dr-menu" onclick="onCancel()"/>
 					</td>
 				</tr>
 			</table>
 		</td>
 	</tr>
-																</table>	
+																</table>
 															</td>
 														</tr>
 													<!-- end page logic -->
 													</table>
 												</td>
 											</tr>
-											
+
 										</table>
 									</td>
 								</tr>

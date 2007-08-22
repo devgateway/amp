@@ -10,10 +10,10 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-		
+
 <script language="JavaScript">
 	<!--
-	
+
 	function addEUActivity() {
 			openNewWindow(700, 420);
 			<digi:context name="addEUActivity" property="context/module/moduleinstance/editEUActivity.do?new" />
@@ -45,7 +45,7 @@
 		document.aimEditActivityForm.action = "<%= addRegFunding %>";
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
-	} 		
+	}
 
 	function editFunding(id) {
 		openNewWindow(650, 500);
@@ -53,13 +53,13 @@
 		document.aimEditActivityForm.action = "<%= addRegFunding %>&fundId="+id;
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
-	} 		
+	}
 
 	function removeRegFundings() {
 		<digi:context name="rem" property="context/module/moduleinstance/removeRegionalFunding.do?edit=true" />
 		document.aimEditActivityForm.action = "<%= rem %>";
 		document.aimEditActivityForm.target = "_self";
-		document.aimEditActivityForm.submit();	
+		document.aimEditActivityForm.submit();
 	}
 
 	function validateForm() {
@@ -105,22 +105,25 @@
 														</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
 												</c:if>
-												<c:if test="${aimEditActivityForm.pageId == 1}">								
+												<c:if test="${aimEditActivityForm.pageId == 1}">
 													<c:set var="translation">
 														<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 													</c:set>
-													<digi:link href="/viewMyDesktop.do" styleClass="comment" 
-													onclick="return quitRnot()" title="${translation}" >
+													<c:set var="message">
+														<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+													</c:set>
+													<digi:link href="/viewMyDesktop.do" styleClass="comment"
+													onclick="return quitRnot1('${message}')" title="${translation}" >
 														<digi:trn key="aim:portfolio">
 															Portfolio
 														</digi:trn>
-													</digi:link>&nbsp;&gt;&nbsp;								
-												</c:if>																	
+													</digi:link>&nbsp;&gt;&nbsp;
+												</c:if>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAddActivityStep1">
 														Click here to go to Add Activity Step 1</digi:trn>
 												</c:set>
-												<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" 
+												<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment"
 												title="${translation}" >
 													<c:if test="${aimEditActivityForm.editAct == true}">
 														<digi:trn key="aim:editActivityStep1">
@@ -131,30 +134,30 @@
 														<digi:trn key="aim:addActivityStep1">
 															Add Activity - Step 1
 														</digi:trn>
-													</c:if>																
+													</c:if>
 												</digi:link>&nbsp;&gt;&nbsp;
-												
+
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAddActivityStep2">
 														Click here to goto Add Activity Step 2</digi:trn>
 												</c:set>
-												<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" 
-												title="${translation}" >	
+												<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment"
+												title="${translation}" >
 													<digi:trn key="aim:addActivityStep2">
 														Step 2
 													</digi:trn>
-												</digi:link>&nbsp;&gt;&nbsp;						
-												
+												</digi:link>&nbsp;&gt;&nbsp;
+
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAddActivityStep3">
 														Click here to goto Add Activity Step 3</digi:trn>
 												</c:set>
-												<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" 
-												title="${translation}" >	
+												<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment"
+												title="${translation}" >
 													<digi:trn key="aim:addActivityStep3">
 														Step 3
 													</digi:trn>
-												</digi:link>&nbsp;&gt;&nbsp;						
+												</digi:link>&nbsp;&gt;&nbsp;
 												<digi:trn key="aim:addActivityStep4">
 													Step 4
 												</digi:trn>
@@ -171,22 +174,22 @@
 												<digi:trn key="aim:addNewActivity">
 													Add New Activity
 												</digi:trn>
-											</c:if>			
+											</c:if>
 											<c:if test="${aimEditActivityForm.editAct == true}">
 												<digi:trn key="aim:editActivity">
 													Edit Activity
 												</digi:trn>:
 													<bean:write name="aimEditActivityForm" property="title"/>
-											</c:if>										
+											</c:if>
 										</td>
-									</tr>	
+									</tr>
 								</table>
 							</td></tr>
 							<tr> <td>
 								<digi:errors/>
-							</td></tr>				
+							</td></tr>
 							<tr><td>
-								<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">  
+								<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 									<tr><td width="75%" vAlign="top">
 										<table cellPadding=0 cellSpacing=0 width="100%" vAlign="top" >
 											<tr>
@@ -200,19 +203,19 @@
 															<td width="13" height="20" background="module/aim/images/right-side.gif"></td>
 														</tr>
 													</table>
-												</td>								
+												</td>
 											</tr>
-											
+
 											<tr valign="top">
 												<td width="100%" bgcolor="#f4f4f2">
-													<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" 
+													<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left"
 													bgcolor="#006699">
 													<tr>
 															<td bgColor=#f4f4f2 align="center" vAlign="top">
 																<table width="95%">
 																	<tr>
 																		<td>
-																			<IMG alt=Link height=10 
+																			<IMG alt=Link height=10
 																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																			<a title="<digi:trn key="aim:costing">Costing</digi:trn>">
 																				<b><digi:trn key="aim:costing">Costing</digi:trn></b>
@@ -224,46 +227,46 @@
 																	<tr><td valign="top">
 																<logic:notEmpty name="aimEditActivityForm" property="costs">
 																<bean:define id="costs" name="aimEditActivityForm" property="costs" toScope="request"/>
-																<bean:define id="mode" value="form" type="java.lang.String" toScope="request"/>																
+																<bean:define id="mode" value="form" type="java.lang.String" toScope="request"/>
 																<jsp:include page="viewCostsSummary.jsp"/>
 				                                               </logic:notEmpty>
-																	
+
 																	</td></tr>
-				
+
 
 																	<tr><td>
 																	&nbsp;
 																	</td></tr>
 																	<tr><td>
 															<input type="button" value="Add Activity" class="buton" onclick="addEUActivity()"/>
-																	
+
 																	</td></tr>
-																	
+
 																	<tr>
 																		<td align="left">
 																			<table width="100%" cellSpacing=5 cellPadding=0 border=0
 																			class="box-border-nopadding">
-																	
-<!--  
+
+<!--
 																	<tr><td bgColor=#f4f4f2 align="center">
 																		<table cellPadding=3>
 																			<tr>
 																				<td>
-																					<input type="submit" value=" << Back " class="dr-menu" 
+																					<input type="submit" value=" << Back " class="dr-menu"
 																					onclick="gotoStep(3)">
 																				</td>
 																				<td>
-																					<input type="submit" value="Next >> " class="dr-menu" 
+																					<input type="submit" value="Next >> " class="dr-menu"
 																					onclick="gotoStep(5)">
 																				</td>
 																				<td>
-																					<input type="reset" value="Reset" class="dr-menu" 
+																					<input type="reset" value="Reset" class="dr-menu"
 																					onclick="return resetAll()">
 																				</td>
 																			</tr>
 																		</table>
-																	</td></tr>																	
-	-->																
+																	</td></tr>
+	-->
 																</table>
 															</td>
 														</tr>
@@ -275,8 +278,8 @@
 									<td width="25%" vAlign="top" align="right">
 										<!-- edit activity form menu -->
 											<jsp:include page="editActivityMenu.jsp" flush="true" />
-										<!-- end of activity form menu -->							
-									</td></tr>									
+										<!-- end of activity form menu -->
+									</td></tr>
 								</table>
 							</td></tr>
 							<tr><td>
@@ -289,5 +292,5 @@
 			</table>
 		</td>
 	</tr>
-</table>	
+</table>
 </digi:form>

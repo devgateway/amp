@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" %>
+s<%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -113,7 +113,7 @@ function validateForm() {
       alert("Please select status! Maybe the  Feature \"Project ID and Planning\" is disabled!");
       return false;
     }
-    	
+
 /*	if (document.aimEditActivityForm.status.value == "-1") {
 		alert("Please select status");
 		document.aimEditActivityForm.status.focus();
@@ -210,7 +210,11 @@ function popupwin()
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop </digi:trn>
 									</c:set>
-									<digi:link href="/viewMyDesktop.do" styleClass="comment"  onclick="return quitRnot()" title="${translation}">
+                                                                        		<c:set var="message">
+										<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+									</c:set>
+									<digi:link href="/viewMyDesktop.do" styleClass="comment"  onclick="return quitRnot1('${message}')" title="${translation}">
+
 										<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
@@ -283,7 +287,7 @@ function popupwin()
 									<tr><td>&nbsp;</td></tr>
 									<tr><td><jsp:include page="addActivityStep1Identification.jsp"/>
 									</td></tr>
-									
+
 									<tr><td>
 										&nbsp;
 									</td></tr>
@@ -302,7 +306,7 @@ function popupwin()
 									&nbsp;
 									</feature:display>
 											<jsp:include page="addActivityStep1Planning.jsp"/>
-									
+
 
 <!--
 									<tr><td bgColor=#f4f4f2 align="center">
@@ -320,7 +324,7 @@ function popupwin()
 									</td></tr>
  -->
 
-								
+
 								</table>
 
 								<!-- end contents -->

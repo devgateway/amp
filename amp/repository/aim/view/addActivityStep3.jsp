@@ -168,7 +168,10 @@
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 									</c:set>
 
-									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot()" title="${translation}" >
+										<c:set var="message">
+										<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+									</c:set>
+									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot1('${message}')" title="${translation}" >
 										<digi:trn key="aim:portfolio">
 											Portfolio
 										</digi:trn>

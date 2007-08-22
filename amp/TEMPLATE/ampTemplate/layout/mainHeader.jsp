@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" %> 
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
@@ -15,13 +15,14 @@
 		<TITLE>AMP<tiles:getAsString name="title"/></TITLE>
 		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 		<META HTTP-EQUIV="Expires" CONTENT="0">
-		<META HTTP-EQUIV="Cache-Control" CONTENT="private">		
+		<META HTTP-EQUIV="Cache-Control" CONTENT="private">
 		<script language="javascript">
-		function quitRnot()
+			function quitRnot1(message)
 		{
+
 		}
 		</script>
-		
+
 	</HEAD>
 
 	<BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
@@ -40,12 +41,12 @@
 								</TD>
 								<TD align="left" vAlign="center" >
 								<%--<digi:insert attribute="headerTopMiddle" />--%>
-									<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp" flush="true" />				
+									<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp" flush="true" />
 								</TD>
 								<TD width="20" align="right" vAlign="center" bgColor=#195C79>
 										<digi:insert attribute="dropdownLangSwitch" />
 								</TD>
-								
+
 							</TR>
 						</TBODY>
 					</TABLE>
@@ -59,11 +60,11 @@
 						  	<TR bgColor=#F7F9E4 height="15">
 						   	<TD align="left" vAlign="center" height="15">
 									<digi:insert attribute="headerMiddle" />
-								</TD>	
+								</TD>
 							<td align="right" vAlign="top" height="15">
-									<digi:insert attribute="loginWidget" />	
-							</td>	
-							  	
+									<digi:insert attribute="loginWidget" />
+							</td>
+
 							</TR>
 						</TBODY>
 					</TABLE>
@@ -71,7 +72,7 @@
 			</TR>
 			<%--<TR>
 				<TD width="100%" vAlign="top" align="left">
-					<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp" flush="true" />				
+					<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp" flush="true" />
 				</TD>
 		  </TR>--%>
 		  <TR>

@@ -25,6 +25,7 @@ public class AmpTheme implements Serializable
 	private String outputs;
 	private String beneficiaries;
 	private String environmentConsiderations;
+	private String programviewname;
 			
 	public Set getActivities() {
 		return activities;
@@ -245,5 +246,13 @@ public class AmpTheme implements Serializable
 	}
 	public String getEnvironmentConsiderations () {
 		return this.environmentConsiderations;
+	}
+
+	public String getProgramviewname() {
+		return programviewname;
+	}
+
+	public void setProgramviewname(String programviewname) {
+		this.programviewname = programviewname;
 	}
 }

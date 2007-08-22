@@ -1,3 +1,4 @@
+
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -10,7 +11,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-		
+
 <script language="JavaScript">
 
 	<!--
@@ -21,7 +22,7 @@
 		document.aimEditActivityForm.action = "<%= addRegFunding %>";
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
-	} 		
+	}
 
 	function editFunding(id) {
 		openNewWindow(650, 500);
@@ -29,13 +30,13 @@
 		document.aimEditActivityForm.action = "<%= addRegFunding %>&fundId="+id;
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
-	} 		
+	}
 
 	function removeRegFundings() {
 		<digi:context name="rem" property="context/module/moduleinstance/removeRegionalFunding.do?edit=true" />
 		document.aimEditActivityForm.action = "<%= rem %>";
 		document.aimEditActivityForm.target = "_self";
-		document.aimEditActivityForm.submit();	
+		document.aimEditActivityForm.submit();
 	}
 
 	function validateForm() {
@@ -43,7 +44,7 @@
 	}
 
 	-->
-	
+
 </script>
 
 <digi:instance property="aimEditActivityForm" />
@@ -83,22 +84,25 @@
 														</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
 												</c:if>
-												<c:if test="${aimEditActivityForm.pageId == 1}">								
+												<c:if test="${aimEditActivityForm.pageId == 1}">
 													<c:set var="translation">
 														<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 													</c:set>
-													<digi:link href="/viewMyDesktop.do" styleClass="comment" 
-													onclick="return quitRnot()" title="${translation}" >
+													<c:set var="message">
+														<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+													</c:set>
+													<digi:link href="/viewMyDesktop.do" styleClass="comment"
+													onclick="return quitRnot1('${message}')" title="${translation}" >
 														<digi:trn key="aim:portfolio">
 															Portfolio
 														</digi:trn>
-													</digi:link>&nbsp;&gt;&nbsp;								
-												</c:if>																	
+													</digi:link>&nbsp;&gt;&nbsp;
+												</c:if>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAddActivityStep1">
 														Click here to go to Add Activity Step 1</digi:trn>
 												</c:set>
-												<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" 
+												<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment"
 												title="${translation}" >
 													<c:if test="${aimEditActivityForm.editAct == true}">
 														<digi:trn key="aim:editActivityStep1">
@@ -109,30 +113,30 @@
 														<digi:trn key="aim:addActivityStep1">
 															Add Activity - Step 1
 														</digi:trn>
-													</c:if>																
+													</c:if>
 												</digi:link>&nbsp;&gt;&nbsp;
-												
+
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAddActivityStep2">
 														Click here to goto Add Activity Step 2</digi:trn>
 												</c:set>
-												<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" 
-												title="${translation}" >	
+												<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment"
+												title="${translation}" >
 													<digi:trn key="aim:addActivityStep2">
 														Step 2
 													</digi:trn>
-												</digi:link>&nbsp;&gt;&nbsp;						
-												
+												</digi:link>&nbsp;&gt;&nbsp;
+
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAddActivityStep3">
 														Click here to goto Add Activity Step 3</digi:trn>
 												</c:set>
-												<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" 
-												title="${translation}" >	
+												<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment"
+												title="${translation}" >
 													<digi:trn key="aim:addActivityStep3">
 														Step 3
 													</digi:trn>
-												</digi:link>&nbsp;&gt;&nbsp;						
+												</digi:link>&nbsp;&gt;&nbsp;
 												<digi:trn key="aim:addActivityStep4">
 													Step 4
 												</digi:trn>
@@ -149,22 +153,22 @@
 												<digi:trn key="aim:addNewActivity">
 													Add New Activity
 												</digi:trn>
-											</c:if>			
+											</c:if>
 											<c:if test="${aimEditActivityForm.editAct == true}">
 												<digi:trn key="aim:editActivity">
 													Edit Activity
 												</digi:trn>:
 													<bean:write name="aimEditActivityForm" property="title"/>
-											</c:if>										
+											</c:if>
 										</td>
-									</tr>	
+									</tr>
 								</table>
 							</td></tr>
 							<tr> <td>
 								<digi:errors/>
-							</td></tr>				
+							</td></tr>
 							<tr><td>
-								<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">  
+								<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 									<tr><td width="75%" vAlign="top">
 										<table cellPadding=0 cellSpacing=0 width="100%" vAlign="top">
 											<tr>
@@ -180,18 +184,18 @@
 															<td width="13" height="20" background="module/aim/images/right-side.gif"></td>
 														</tr>
 													</table>
-												</td>								
+												</td>
 											</tr>
 											<tr>
 												<td width="100%" bgcolor="#f4f4f2">
-													<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" 
+													<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left"
 													bgcolor="#006699">
 														<tr>
 															<td bgColor=#f4f4f2 align="center" vAlign="top">
 																<table width="95%" bgcolor="#f4f4f2">
 																	<tr>
 																		<td>
-																			<IMG alt=Link height=10 
+																			<IMG alt=Link height=10
 																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																			<a title="<digi:trn key="aim:regionalFunding">Regional funding</digi:trn>">
 																				<b><digi:trn key="aim:regionalFunding">Regional funding</digi:trn></b>
@@ -208,9 +212,9 @@
 																					<tr><td>
 																							<b>
 																							<digi:trn key="aim:donorcommitments">Donor Commitments</digi:trn> - (
-																							<digi:trn key="aim:totalActualAllocation">Total actual 
-																							allocation</digi:trn> = 
-																							<c:out value="${aimEditActivityForm.totalCommitments}"/> 
+																							<digi:trn key="aim:totalActualAllocation">Total actual
+																							allocation</digi:trn> =
+																							<c:out value="${aimEditActivityForm.totalCommitments}"/>
 																							<c:out value="${aimEditActivityForm.currCode}"/>)
 																							</b>
 																						</td></tr>
@@ -220,8 +224,8 @@
 																							<b>
 																							<digi:trn key="aim:donordisbursements">Donor Disbursements</digi:trn> - (
 																							<digi:trn key="aim:totalActualToDate">Total actual to date
-																							</digi:trn> = 
-																							<c:out value="${aimEditActivityForm.totalDisbursements}"/> 
+																							</digi:trn> =
+																							<c:out value="${aimEditActivityForm.totalDisbursements}"/>
 																							<c:out value="${aimEditActivityForm.currCode}"/>)
 																							</b>
 																						</td></tr>
@@ -231,8 +235,8 @@
 																							<b>
 																							<digi:trn key="aim:expenditures">Expenditures</digi:trn> - (
 																							<digi:trn key="aim:totalActualToDate">Total actual to date
-																							</digi:trn> = 
-																							<c:out value="${aimEditActivityForm.totalExpenditures}"/> 
+																							</digi:trn> =
+																							<c:out value="${aimEditActivityForm.totalExpenditures}"/>
 																							<c:out value="${aimEditActivityForm.currCode}"/>)
 																							</b>
 																						</td></tr>
@@ -245,13 +249,13 @@
 																		>
 																		<digi:trn key="aim:totalRegionalActualDisbursement">Regional Grand Total Actual Disbursements</digi:trn>=
 																		<c:out value="${aimEditActivityForm.regionTotalDisb}"/>
-																		<c:out value="${aimEditActivityForm.currCode}"/>																			
+																		<c:out value="${aimEditActivityForm.currCode}"/>
 																		</font></b>
 																		</td></tr>
-																				
-																				
-																				<logic:iterate name="aimEditActivityForm" property="regionalFundings" 
-																				id="regionalFunding" 
+
+
+																				<logic:iterate name="aimEditActivityForm" property="regionalFundings"
+																				id="regionalFunding"
 																				type="org.digijava.module.aim.helper.RegionalFunding"> <!-- L1 START-->
 																				<tr><td>
 																					<!-- Region name -->
@@ -261,7 +265,7 @@
 																					<bean:write name="regionalFunding" property="regionName"/>
 																					&nbsp;
 																					<a href="javascript:editFunding('
-																						<bean:write name="regionalFunding" property="regionId"/> 
+																						<bean:write name="regionalFunding" property="regionId"/>
 																					')">Edit this funding</a>
 																				</td></tr>
 																				<tr><td>
@@ -269,15 +273,15 @@
 																					<table width="100%" cellSpacing=1 cellPadding=3 border=0
 																					bgcolor="#d7eafd">
 																					<logic:notEmpty name="regionalFunding" property="commitments">
-																					
+
 																						<tr><td>
 																							<b>
 																							<digi:trn key="aim:donorcommitments">Donor Commitments</digi:trn>
 																							<field:display name="Total Donor Commitments" feature="Regional Funding">
 																							 - (
-																							<digi:trn key="aim:totalActualAllocation">Total actual 
-																							allocation</digi:trn> = 
-																							<c:out value="${aimEditActivityForm.totalCommitments}"/> 
+																							<digi:trn key="aim:totalActualAllocation">Total actual
+																							allocation</digi:trn> =
+																							<c:out value="${aimEditActivityForm.totalCommitments}"/>
 																							<c:out value="${aimEditActivityForm.currCode}"/>)
 																							</field:display>
 																							</b>
@@ -292,9 +296,9 @@
 																									<field:display name="Date Commitments" feature="Regional Funding"><td>Date</td></field:display>
 																									<field:display name="Perspective Commitments" feature="Regional Funding"><td>Perspective</td></field:display>
 																								</tr>
-																								<logic:iterate name="regionalFunding" 
-																								property="commitments" id="commitment" 
-																								type="org.digijava.module.aim.helper.FundingDetail"> 
+																								<logic:iterate name="regionalFunding"
+																								property="commitments" id="commitment"
+																								type="org.digijava.module.aim.helper.FundingDetail">
 																								<!-- L2 START-->
 																								<tr bgcolor="#ffffff">
 																									<field:display name="Actual/Planned Commitments" feature="Regional Funding"><td><c:out value="${commitment.adjustmentTypeName}"/></td></field:display>
@@ -307,11 +311,11 @@
 																										<digi:trn key='<%="aim:"+commitment.getPerspectiveNameTrimmed() %>'>
 																											<bean:write name="commitment" property="perspectiveName"/>
 																										</digi:trn>
-																									
+
 																									</td></field:display>
-																								</tr>																			
+																								</tr>
 																								</logic:iterate>	<!-- L2 END-->
-																							</table>	
+																							</table>
 																						</td></tr>
 																					</logic:notEmpty>
 																					<logic:notEmpty name="regionalFunding" property="disbursements">
@@ -321,8 +325,8 @@
 																							<field:display name="Total Donor Disbursements" feature="Regional Funding">
 																							 - (
 																							<digi:trn key="aim:totalActualToDate">Total actual to date
-																							</digi:trn> = 
-																							<c:out value="${aimEditActivityForm.totalDisbursements}"/> 
+																							</digi:trn> =
+																							<c:out value="${aimEditActivityForm.totalDisbursements}"/>
 																							<c:out value="${aimEditActivityForm.currCode}"/>)
 																							</field:display>
 																							</b>
@@ -337,8 +341,8 @@
 																									<field:display name="Date Disbursements" feature="Regional Funding"><td>Date</td></field:display>
 																									<field:display name="Perspective Disbursements" feature="Regional Funding"><td>Perspective</td></field:display>
 																								</tr>
-																								<logic:iterate name="regionalFunding" 
-																								property="disbursements" id="disbursement" 
+																								<logic:iterate name="regionalFunding"
+																								property="disbursements" id="disbursement"
 																								type="org.digijava.module.aim.helper.FundingDetail">
 																								<!-- L3 START-->
 																								<tr bgcolor="#ffffff">
@@ -355,10 +359,10 @@
 																											<bean:write name="disbursement" property="perspectiveName"/>
 																										</digi:trn>
 																									</td></field:display>
-																								</tr>																			
+																								</tr>
 																								</logic:iterate>	<!-- L3 END-->
-																							</table>																		
-																						</td></tr>															
+																							</table>
+																						</td></tr>
 																					</logic:notEmpty>
 																					<logic:notEmpty name="regionalFunding" property="expenditures">
 																						<tr><td>
@@ -367,8 +371,8 @@
 																							<field:display name="Total Donor Expenditures" feature="Regional Funding">
 																							 - (
 																							<digi:trn key="aim:totalActualToDate">Total actual to date
-																							</digi:trn> = 
-																							<c:out value="${aimEditActivityForm.totalExpenditures}"/> 
+																							</digi:trn> =
+																							<c:out value="${aimEditActivityForm.totalExpenditures}"/>
 																							<c:out value="${aimEditActivityForm.currCode}"/>)
 																							</field:display>
 																							</b>
@@ -383,8 +387,8 @@
 																									<field:display name="Date Expenditures" feature="Regional Funding"><td>Date</td></field:display>
 																									<field:display name="Perspective Expenditures" feature="Regional Funding"><td>Perspective</td></field:display>
 																								</tr>
-																								<logic:iterate name="regionalFunding" 
-																								property="expenditures" id="expenditure" 
+																								<logic:iterate name="regionalFunding"
+																								property="expenditures" id="expenditure"
 																								type="org.digijava.module.aim.helper.FundingDetail">
 																								<!-- L4 START-->
 																								<tr bgcolor="#ffffff">
@@ -411,10 +415,10 @@
 																				</logic:iterate>	<!-- L1 END-->
 																				<TR><TD>
 																					<FONT color=blue>*
-																						<digi:trn key="aim:allTheAmountsInThousands">	
+																						<digi:trn key="aim:allTheAmountsInThousands">
 																							All the amounts are in thousands (000)
 				  																		</digi:trn>
-																					</FONT>								
+																					</FONT>
 																				</TD></TR>
 																			</logic:notEmpty>
 																			<logic:notEmpty name="aimEditActivityForm" property="fundingRegions">
@@ -422,10 +426,10 @@
 																				<!-- No fundings -->
 																				<tr><td>
 																					<html:button  styleClass="dr-menu" property="submitButton" onclick="addRegionalFunding()">
-																							<digi:trn key="btn:addFundings">Add Fundings</digi:trn> 
+																							<digi:trn key="btn:addFundings">Add Fundings</digi:trn>
 																					</html:button>
-																					
-																				</td></tr>														
+
+																				</td></tr>
 																			</logic:empty>
 																			<logic:notEmpty name="aimEditActivityForm" property="regionalFundings">
 																				<tr><td bgcolor=#ffffff>
@@ -433,17 +437,17 @@
 																						<tr>
 																							<td>
 																								<html:button  styleClass="dr-menu" property="submitButton" onclick="addRegionalFunding()">
-																									<digi:trn key="btn:addFundings">Add Fundings</digi:trn> 
+																									<digi:trn key="btn:addFundings">Add Fundings</digi:trn>
 																								</html:button>
 																							</td>
 																							<td>
 																								<html:button  styleClass="dr-menu" property="submitButton" onclick="removeRegFundings()">
-																									<digi:trn key="btn:removeFundings">Remove Fundings</digi:trn> 
+																									<digi:trn key="btn:removeFundings">Remove Fundings</digi:trn>
 																								</html:button>
 																							</td>
 																						</tr>
 																					</table>
-																				</td></tr>															
+																				</td></tr>
 																			</logic:notEmpty>
 																			</logic:notEmpty>
 																			<logic:empty name="aimEditActivityForm" property="fundingRegions">
@@ -452,19 +456,19 @@
 																					</digi:trn>
 																				</td></tr>
 																			</logic:empty>
-																			</table>	
+																			</table>
 																		</td>
 																	</tr>
-																	
-<!-- 
+
+<!--
 																	<tr><td bgColor=#f4f4f2 align="center">
 																		<table cellPadding=3>
 																			<tr>
 																				<td>
 																					<html:submit  styleClass="dr-menu" property="submitButton" onclick="gotoStep(3)">
-																							<< <digi:trn key="btn:back">Back</digi:trn> 
+																							<< <digi:trn key="btn:back">Back</digi:trn>
 																					</html:submit>
-																					
+
 																				</td>
 																				<td>
 																					<html:submit  styleClass="dr-menu" property="submitButton" onclick="gotoStep(5)">
@@ -473,13 +477,13 @@
 																				</td>
 																				<td>
 																					<html:reset  styleClass="dr-menu" property="submitButton" onclick="return resetAll()">
-																							<digi:trn key="btn:reset">Reset</digi:trn> 
+																							<digi:trn key="btn:reset">Reset</digi:trn>
 																					</html:reset>
 																				</td>
 																			</tr>
 																		</table>
-																	</td></tr>	
- -->																																	
+																	</td></tr>
+ -->
 																</table>
 															</td>
 														</tr>
@@ -491,8 +495,8 @@
 									<td width="25%" vAlign="top" align="right">
 										<!-- edit activity form menu -->
 											<jsp:include page="editActivityMenu.jsp" flush="true" />
-										<!-- end of activity form menu -->							
-									</td></tr>									
+										<!-- end of activity form menu -->
+									</td></tr>
 								</table>
 							</td></tr>
 							<tr><td>
@@ -505,5 +509,5 @@
 			</table>
 		</td>
 	</tr>
-</table>	
+</table>
 </digi:form>

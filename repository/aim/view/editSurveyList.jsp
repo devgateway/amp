@@ -106,11 +106,15 @@
 
 								</c:set>
 
-								<digi:link href="/viewMyDesktop.do" styleClass="comment"  onclick="return quitRnot()"  title="${translation}">
+								<c:set var="message">
+										<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+									</c:set>
+
+								<digi:link href="/viewMyDesktop.do" styleClass="comment"  onclick="return quitRnot1('${message}')"  title="${translation}">
 
 									<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 
-								</digi:link>&nbsp;&gt;&nbsp;								
+								</digi:link>&nbsp;&gt;&nbsp;
 
 								<digi:trn key="aim:aidEffectivenessSurvey">Aid Effectiveness Survey</digi:trn>
 
@@ -136,17 +140,17 @@
 
 									<digi:trn key="aim:addNewActivity">Add New Activity</digi:trn>
 
-								</c:if>			
+								</c:if>
 
 								<c:if test="${aimEditActivityForm.editAct == true}">
 
 									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>
 
-								</c:if>										
+								</c:if>
 
 							</td>
 
-						</tr>	
+						</tr>
 
 					</table>
 
@@ -218,15 +222,15 @@
 
 									<tr><td>
 
-									
+
 
 								<!-- Indicator Table starts here -->
 
-									
+
 
 									<TABLE width="656"  align="center" cellpadding="4" cellspacing="1" class="box-border-nopadding">
 
-                 					<TR bgcolor="#DDDDDB" > 
+                 					<TR bgcolor="#DDDDDB" >
 
                  					<%--
 
@@ -246,9 +250,9 @@
 
 									</TR>
 
-									<nested:empty name="aimEditActivityForm" property="survey"> 
+									<nested:empty name="aimEditActivityForm" property="survey">
 
-			                    		<TR valign="top"> 
+			                    		<TR valign="top">
 
 											<TD align="center" colspan="7" width="742"><span class="note"> No records found </span></TD>
 
@@ -262,7 +266,7 @@
 
 			  	                   					    type="org.digijava.module.aim.helper.SurveyFunding">
 
-											<TR valign="top" bgcolor="#f4f4f2"> 
+											<TR valign="top" bgcolor="#f4f4f2">
 
 												<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap" />
 
@@ -306,7 +310,7 @@
 
 														<nested:notEmpty name="surveyFund" property="survey">
 
-															<nested:optionsCollection name="surveyFund" property="survey" 
+															<nested:optionsCollection name="surveyFund" property="survey"
 
 																					value="surveyId" label="year" />
 
@@ -332,13 +336,13 @@
 
 								</table>
 
-										
+
 
 								<!-- Indicator Table ends here -->
 
-									
 
-									</td></tr>									
+
+									</td></tr>
 
 								</table>
 
@@ -350,9 +354,9 @@
 
 							</table>
 
-							</td></tr>							
+							</td></tr>
 
-						</table>						
+						</table>
 
 						</td>
 
@@ -362,7 +366,7 @@
 
 							<jsp:include page="donorEditActivityMenu.jsp" flush="true" />
 
-						<!-- end of activity form menu -->							
+						<!-- end of activity form menu -->
 
 						</td></tr>
 

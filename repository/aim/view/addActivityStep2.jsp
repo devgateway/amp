@@ -256,7 +256,11 @@ function fnChk(frmContrl){
                               Click here to view MyDesktop
                               </digi:trn>
                             </c:set>
-                            <digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot()" title="${trans}">
+                            <c:set var="message">
+								<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+							</c:set>
+                            <digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot1('${message}')" title="${trans}">
+
                               <digi:trn key="aim:portfolio">
                               Portfolio
                               </digi:trn>
@@ -375,7 +379,7 @@ function fnChk(frmContrl){
                                       &nbsp;
                                       </feature:display>
 		                            	<jsp:include page="addActivityStep2Sector.jsp"/>
-		                             
+
                                       <tr>
                                         <td>
                                         &nbsp;
@@ -389,7 +393,7 @@ function fnChk(frmContrl){
                                           &nbsp;
                                         </td>
                                       </tr>
-<!-- 
+<!--
                                       <tr>
                                         <td bgColor=#f4f4f2 align="center">
                                           <table cellPadding=3>
@@ -415,7 +419,7 @@ function fnChk(frmContrl){
                                           </table>
                                         </td>
                                       </tr>
- -->                                                                            
+ -->
                                     </table>
                                     <!-- end contents -->
                                   </td>

@@ -58,14 +58,18 @@ function resetAll()
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
-								<c:if test="${aimEditActivityForm.pageId == 1}">								
-									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot()" title="Click here to view MyDesktop ">
+								<c:if test="${aimEditActivityForm.pageId == 1}">
+
+                                                                  <c:set var="message">
+										<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+									</c:set>
+									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot1('${message}')" title="Click here to view MyDesktop ">
 										<digi:trn key="aim:portfolio">
 											Portfolio
 										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;								
-								</c:if>				
-								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" 
+									</digi:link>&nbsp;&gt;&nbsp;
+								</c:if>
+								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment"
 								title="Click here to goto Add Activity Step 1">
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivityStep1">
@@ -76,47 +80,47 @@ function resetAll()
 									<digi:trn key="aim:addActivityStep1">
 										Add Activity - Step 1
 									</digi:trn>
-								</c:if>																
-								</digi:link>&nbsp;&gt;&nbsp;						
-									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" 
-									title="Click here to goto Add Activity Step 2" >						
+								</c:if>
+								</digi:link>&nbsp;&gt;&nbsp;
+									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment"
+									title="Click here to goto Add Activity Step 2" >
 									<digi:trn key="aim:addActivityStep2">
 									Step 2
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;			
-									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" 
-									title="Click here to goto Add Activity Step 3">						
+									</digi:link>&nbsp;&gt;&nbsp;
+									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment"
+									title="Click here to goto Add Activity Step 3">
 									<digi:trn key="aim:addActivityStep3">
 									Step 3
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;							
-									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" 
-									title="Click here to goto Add Activity Step 4">						
+									</digi:link>&nbsp;&gt;&nbsp;
+									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment"
+									title="Click here to goto Add Activity Step 4">
 									<digi:trn key="aim:addActivityStep4">
 									Step 4
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;			
-									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment" 
-									title="Click here to goto Add Activity Step 5">						
+									</digi:link>&nbsp;&gt;&nbsp;
+									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment"
+									title="Click here to goto Add Activity Step 5">
 									<digi:trn key="aim:addActivityStep5">
 									Step 5
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-									<digi:link href="/addActivity.do?step=6&edit=true" styleClass="comment" 
-									title="Click here to goto Add Activity Step 6">						
+									<digi:link href="/addActivity.do?step=6&edit=true" styleClass="comment"
+									title="Click here to goto Add Activity Step 6">
 									<digi:trn key="aim:addActivityStep6">
 									Step 6
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-									<digi:link href="/addActivity.do?step=7&edit=true" styleClass="comment" 
-									title="Click here to goto Add Activity Step 7">						
+									<digi:link href="/addActivity.do?step=7&edit=true" styleClass="comment"
+									title="Click here to goto Add Activity Step 7">
 									<digi:trn key="aim:addActivityStep7">
 									Step 7
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;									
+									</digi:link>&nbsp;&gt;&nbsp;
 									<digi:trn key="aim:addActivityStep8" >
 									Step 8
-									</digi:trn>									
+									</digi:trn>
 								</span>
 							</td>
 						</tr>
@@ -130,20 +134,20 @@ function resetAll()
 									<digi:trn key="aim:addNewActivity">
 										Add New Activity
 									</digi:trn>
-								</c:if>			
+								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">
 										Edit Activity
 									</digi:trn>:
 										<bean:write name="aimEditActivityForm" property="title"/>
-								</c:if>				
+								</c:if>
 							</td>
-						</tr>	
+						</tr>
 					</table>
 				</td></tr>
 				<tr><td>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
-						<tr><td width="75%" vAlign="top">	
+						<tr><td width="75%" vAlign="top">
 						<table cellPadding=0 cellSpacing=0 width="100%">
 							<tr>
 								<td width="100%">
@@ -160,7 +164,7 @@ function resetAll()
 											</td>
 										</tr>
 									</table>
-								</td>							
+								</td>
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
@@ -189,7 +193,7 @@ function resetAll()
 											<tr>
 												<td align="right">
 													<digi:trn key="aim:donorFundingContactInformation">
-													Donor funding contact information</digi:trn>	
+													Donor funding contact information</digi:trn>
 												</td>
 												<field:display name="Donor First Name" feature="Donor Contact Information">
 												<td align="right">
@@ -214,7 +218,7 @@ function resetAll()
 													</digi:trn></b>
 												</td>
 												<td>
-													<html:text property="dnrCntLastName" styleClass="inp-text"/>												
+													<html:text property="dnrCntLastName" styleClass="inp-text"/>
 												</td>
 											</tr>
 											</field:display>
@@ -229,8 +233,8 @@ function resetAll()
 													</digi:trn></b>
 												</td>
 												<td>
-													<html:text property="dnrCntEmail" styleClass="inp-text"/>												
-												</td>												
+													<html:text property="dnrCntEmail" styleClass="inp-text"/>
+												</td>
 											</tr>
 											</field:display>
 											<field:display name="Donor Title" feature="Donor Contact Information">
@@ -244,8 +248,8 @@ function resetAll()
 													</digi:trn></b>
 												</td>
 												<td>
-													<html:text property="dnrCntTitle" styleClass="inp-text"/>												
-												</td>												
+													<html:text property="dnrCntTitle" styleClass="inp-text"/>
+												</td>
 											</tr>
 											</field:display>
 											<field:display name="Donor Organization" feature="Donor Contact Information">
@@ -259,8 +263,8 @@ function resetAll()
 													</digi:trn></b>
 												</td>
 												<td>
-													<html:text property="dnrCntOrganization" styleClass="inp-text"/>												
-												</td>												
+													<html:text property="dnrCntOrganization" styleClass="inp-text"/>
+												</td>
 											</tr>
 											</field:display>
 											<field:display name="Donor Phone Number" feature="Donor Contact Information">
@@ -274,8 +278,8 @@ function resetAll()
 													</digi:trn></b>
 												</td>
 												<td>
-													<html:text property="dnrCntPhoneNumber" styleClass="inp-text"/>												
-												</td>												
+													<html:text property="dnrCntPhoneNumber" styleClass="inp-text"/>
+												</td>
 											</tr>
 											</field:display>
 											<field:display name="Donor Fax Number" feature="Donor Contact Information">
@@ -289,8 +293,8 @@ function resetAll()
 													</digi:trn></b>
 												</td>
 												<td>
-													<html:text property="dnrCntFaxNumber" styleClass="inp-text"/>												
-												</td>												
+													<html:text property="dnrCntFaxNumber" styleClass="inp-text"/>
+												</td>
 											</tr>
 											</field:display>
 											</feature:display>
@@ -301,7 +305,7 @@ function resetAll()
 											<tr>
 												<td align="right">
 													<digi:trn key="aim:mofedContactInformation">
-													MOFED contact information</digi:trn>	
+													MOFED contact information</digi:trn>
 												</td>
 												<field:display name="Mofed First Name" feature="Mofed Contact Information">
 												<td align="right">
@@ -326,7 +330,7 @@ function resetAll()
 													</digi:trn></b>
 												</td>
 												<td>
-													<html:text property="mfdCntLastName" styleClass="inp-text"/>												
+													<html:text property="mfdCntLastName" styleClass="inp-text"/>
 												</td>
 											</tr>
 											</field:display>
@@ -341,8 +345,8 @@ function resetAll()
 													</digi:trn></b>
 												</td>
 												<td>
-													<html:text property="mfdCntEmail" styleClass="inp-text"/>												
-												</td>												
+													<html:text property="mfdCntEmail" styleClass="inp-text"/>
+												</td>
 											</tr>
 											</field:display>
 											<field:display name="Mofed Title" feature="Mofed Contact Information">
@@ -356,8 +360,8 @@ function resetAll()
 													</digi:trn></b>
 												</td>
 												<td>
-													<html:text property="mfdCntTitle" styleClass="inp-text"/>												
-												</td>												
+													<html:text property="mfdCntTitle" styleClass="inp-text"/>
+												</td>
 											</tr>
 											</field:display>
 											<field:display name="Mofed Organization" feature="Mofed Contact Information">
@@ -371,8 +375,8 @@ function resetAll()
 													</digi:trn></b>
 												</td>
 												<td>
-													<html:text property="mfdCntOrganization" styleClass="inp-text"/>												
-												</td>												
+													<html:text property="mfdCntOrganization" styleClass="inp-text"/>
+												</td>
 											</tr>
 											</field:display>
 											<field:display name="Mofed Phone Number" feature="Mofed Contact Information">
@@ -386,8 +390,8 @@ function resetAll()
 													</digi:trn></b>
 												</td>
 												<td>
-													<html:text property="mfdCntPhoneNumber" styleClass="inp-text"/>												
-												</td>												
+													<html:text property="mfdCntPhoneNumber" styleClass="inp-text"/>
+												</td>
 											</tr>
 											</field:display>
 											<field:display name="Mofed Fax Number" feature="Mofed Contact Information">
@@ -401,41 +405,41 @@ function resetAll()
 													</digi:trn></b>
 												</td>
 												<td>
-													<html:text property="mfdCntFaxNumber" styleClass="inp-text"/>												
-												</td>												
+													<html:text property="mfdCntFaxNumber" styleClass="inp-text"/>
+												</td>
 											</tr>
 											</field:display>
-											</feature:display>											
+											</feature:display>
 										</table>
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
 									</td></tr>
-<!-- 
+<!--
 									<tr><td bgColor=#f4f4f2 align="center">
 										<table cellPadding=3>
 											<tr>
 												<td>
 													<html:button  styleClass="dr-menu" property="submitButton" onclick="gotoStep(7)">
-															<< <digi:trn key="btn:back">Back</digi:trn> 
+															<< <digi:trn key="btn:back">Back</digi:trn>
 													</html:button>
 												</td>
-												<logic:notEmpty name="ME" scope="application">												 										
+												<logic:notEmpty name="ME" scope="application">
 													<td>
 														<html:submit  styleClass="dr-menu" property="submitButton" onclick="gotoStep(10)">
 																<digi:trn key="btn:next">Next</digi:trn> >>
 														</html:submit>
-														
+
 													</td>
 												</logic:notEmpty>
-												<logic:empty name="ME" scope="application">												 										
+												<logic:empty name="ME" scope="application">
 													<td>
 													<html:button  styleClass="dr-menu" property="submitButton" onclick="previewClicked()">
 															<digi:trn key="btn:preview">Preview</digi:trn>
 													</html:button>
-													
+
 													</td>
-												</logic:empty>												
+												</logic:empty>
 												<td>
 													<html:reset  styleClass="dr-menu" property="submitButton" onclick="return resetAll()">
 															<digi:trn key="btn:reset">Reset</digi:trn>
@@ -443,19 +447,19 @@ function resetAll()
 												</td>
 											</tr>
 										</table>
-									</td></tr>	
- -->																										
+									</td></tr>
+ -->
 								</table>
 								<!-- end contents -->
 							</td></tr>
 							</table>
-							</td></tr>							
+							</td></tr>
 						</table>
 						</td>
 						<td width="25%" vAlign="top" align="right">
 						<!-- edit activity form menu -->
 							<jsp:include page="editActivityMenu.jsp" flush="true" />
-						<!-- end of activity form menu -->							
+						<!-- end of activity form menu -->
 						</td></tr>
 					</table>
 				</td></tr>

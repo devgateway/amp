@@ -14,10 +14,16 @@ function sameAsfunction(val)
 			else
 				document.aimEditActivityForm.revisedStartDate.value = "";
 		}
-}		  
+}
 
 function quitRnot()
 {
 	var temp = confirm('WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.');
+	return(temp);
+}
+function quitRnot1(message)
+{
+	var msg= message;
+	var temp = confirm(msg);
 	return(temp);
 }

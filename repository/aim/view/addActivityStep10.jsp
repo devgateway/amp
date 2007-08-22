@@ -33,7 +33,7 @@
 	}
 
 	function validateEntryByLeader() {
-		
+
 		if (containsValidNumericValue(document.aimEditActivityForm.baseVal) == false) {
 			alert("Invalid Base value or Base value not entered");
 			document.aimEditActivityForm.baseVal.focus();
@@ -43,7 +43,7 @@
 			alert("Base value date not entered");
 			document.aimEditActivityForm.baseValDate.focus();
 			return false;
-		}		
+		}
 		if (containsValidNumericValue(document.aimEditActivityForm.targetVal) == false) {
 			alert("Invalid Target value or Target value not entered");
 			document.aimEditActivityForm.targetVal.focus();
@@ -54,20 +54,20 @@
 			document.aimEditActivityForm.targetValDate.focus();
 			return false;
 		}
-		
+
 		if (document.aimEditActivityForm.revTargetValDate != null) {
-/*		
+/*
 			if (containsValidNumericValue(document.aimEditActivityForm.currentVal) == false) {
 				alert("Invalid Revised target value or Revised target value not entered");
 				document.aimEditActivityForm.currentVal.focus();
 				return false;
 			}
-	*/	
+	*/
 			if (isEmpty(document.aimEditActivityForm.revTargetValDate.value) == true) {
 				alert("Revised target value date not entered");
 				document.aimEditActivityForm.revTargetValDate.focus();
 				return false;
-			}				  
+			}
 		}
 
 /*
@@ -76,12 +76,12 @@
 			document.aimEditActivityForm.currentVal.focus();
 			return false;
 		}
-*/	
+*/
 		if (isEmpty(document.aimEditActivityForm.currValDate.value) == true) {
 			alert("Current value date not entered");
 			document.aimEditActivityForm.currValDate.focus();
 			return false;
-		}		
+		}
 		return true;
 	}
 
@@ -95,8 +95,8 @@
 			alert("Current value date not entered");
 			document.aimEditActivityForm.currValDate.focus();
 			return false;
-		}		
-		return true;			  
+		}
+		return true;
 	}
 
 	function setValues(val) {
@@ -108,17 +108,17 @@
 		}
 		if (valid == true) {
 			document.aimEditActivityForm.indicatorId.value = val;
-			document.aimEditActivityForm.submit();				  
+			document.aimEditActivityForm.submit();
 		}
 	}
-	
+
 	function addIndicator()
 	{
 		openNewRsWindow(750, 400);
 		<digi:context name="selCreateInd" property="context/module/moduleinstance/selectCreateIndicators.do" />
 		document.aimEditActivityForm.action = "<%=selCreateInd%>?addIndicatorForStep9=true";
 		document.aimEditActivityForm.target = popupPointer.name;
-		document.aimEditActivityForm.submit();				  
+		document.aimEditActivityForm.submit();
 	}
 
 
@@ -166,15 +166,18 @@
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
-								<c:if test="${aimEditActivityForm.pageId == 1}">								
-									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot()" 
+								<c:if test="${aimEditActivityForm.pageId == 1}">
+										<c:set var="message">
+										<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+									</c:set>
+									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot1('${message}')"
 									title="Click here to view MyDesktop ">
 										<digi:trn key="aim:portfolio">
 											Portfolio
 										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;								
-								</c:if>				
-								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" 
+									</digi:link>&nbsp;&gt;&nbsp;
+								</c:if>
+								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment"
 								title="Click here to goto Add Activity Step 1">
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivityStep1">
@@ -185,53 +188,53 @@
 									<digi:trn key="aim:addActivityStep1">
 										Add Activity - Step 1
 									</digi:trn>
-								</c:if>																
-								</digi:link>&nbsp;&gt;&nbsp;						
-									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" 
-									title="Click here to goto Add Activity Step 2" >						
+								</c:if>
+								</digi:link>&nbsp;&gt;&nbsp;
+									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment"
+									title="Click here to goto Add Activity Step 2" >
 									<digi:trn key="aim:addActivityStep2">
 									Step 2
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;			
-									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" 
-									title="Click here to goto Add Activity Step 3">						
+									</digi:link>&nbsp;&gt;&nbsp;
+									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment"
+									title="Click here to goto Add Activity Step 3">
 									<digi:trn key="aim:addActivityStep3">
 									Step 3
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;							
-									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" 
-									title="Click here to goto Add Activity Step 4">						
+									</digi:link>&nbsp;&gt;&nbsp;
+									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment"
+									title="Click here to goto Add Activity Step 4">
 									<digi:trn key="aim:addActivityStep4">
 									Step 4
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;			
-									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment" 
-									title="Click here to goto Add Activity Step 5">						
+									</digi:link>&nbsp;&gt;&nbsp;
+									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment"
+									title="Click here to goto Add Activity Step 5">
 									<digi:trn key="aim:addActivityStep5">
 									Step 5
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-									<digi:link href="/addActivity.do?step=6&edit=true" styleClass="comment" 
-									title="Click here to goto Add Activity Step 6">						
+									<digi:link href="/addActivity.do?step=6&edit=true" styleClass="comment"
+									title="Click here to goto Add Activity Step 6">
 									<digi:trn key="aim:addActivityStep6">
 									Step 6
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-									<digi:link href="/addActivity.do?step=7&edit=true" styleClass="comment" 
-									title="Click here to goto Add Activity Step 7">						
+									<digi:link href="/addActivity.do?step=7&edit=true" styleClass="comment"
+									title="Click here to goto Add Activity Step 7">
 									<digi:trn key="aim:addActivityStep7">
 									Step 7
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;									
-									<digi:link href="/addActivity.do?step=8&edit=true" styleClass="comment" 
-									title="Click here to goto Add Activity Step 8">						
+									</digi:link>&nbsp;&gt;&nbsp;
+									<digi:link href="/addActivity.do?step=8&edit=true" styleClass="comment"
+									title="Click here to goto Add Activity Step 8">
 									<digi:trn key="aim:addActivityStep8">
 									Step 8
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;									
+									</digi:link>&nbsp;&gt;&nbsp;
 									<digi:trn key="aim:addActivityStep9" >
 									Step 9
-									</digi:trn>									
+									</digi:trn>
 								</span>
 							</td>
 						</tr>
@@ -245,20 +248,20 @@
 									<digi:trn key="aim:addNewActivity">
 										Add New Activity
 									</digi:trn>
-								</c:if>			
+								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">
 										Edit Activity
 									</digi:trn>:
 										<bean:write name="aimEditActivityForm" property="title"/>
-								</c:if>				
+								</c:if>
 							</td>
-						</tr>	
+						</tr>
 					</table>
 				</td></tr>
 				<tr><td>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
-						<tr><td width="75%" vAlign="top">	
+						<tr><td width="75%" vAlign="top">
 						<table cellPadding=0 cellSpacing=0 width="100%">
 							<tr>
 								<td width="100%">
@@ -275,7 +278,7 @@
 											</td>
 										</tr>
 									</table>
-								</td>							
+								</td>
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
@@ -306,9 +309,9 @@
 											</tr>
 											</logic:empty>
 											<logic:notEmpty name="aimEditActivityForm" property="indicatorsME">
-											<logic:iterate name="aimEditActivityForm" property="indicatorsME" id="indicator" 
+											<logic:iterate name="aimEditActivityForm" property="indicatorsME" id="indicator"
 											type="org.digijava.module.aim.helper.ActivityIndicator">
-											
+
 											<tr>
 												<td bgcolor=#f4f4f2 align="left" colspan="2">&nbsp;&nbsp;
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
@@ -329,20 +332,20 @@
 															<img src= "../ampTemplate/images/arrow_right.gif" border=0>
 														</digi:link>
 													</c:if>&nbsp;&nbsp;&nbsp;<b>
-													<bean:define id="indName"> 
+													<bean:define id="indName">
 														<field:display name="Indicator Name" feature="M&E">
 															<bean:write name="indicator" property="indicatorName"/>
 														</field:display>
 													</bean:define>
 
-													<digi:trn key="<%=indName%>"><%=indName%></digi:trn></b> - 
+													<digi:trn key="<%=indName%>"><%=indName%></digi:trn></b> -
 													<field:display name="Indicator ID" feature="M&E">
 														<bean:write name="indicator" property="indicatorCode" />
 													</field:display>
-													 
+
 												</td>
 											</tr>
-											
+
 											<c:if test="${aimEditActivityForm.expIndicatorId==indicator.indicatorId}">
 											<tr>
 												<td colspan="2">
@@ -379,7 +382,7 @@
 																<td colspan="4">
 																	<bean:write name="indicator" property="baseValComments" />
 																</td>
-															</tr>																
+															</tr>
 															<tr>
 																<td><b>
 																	<digi:trn key="aim:meTargetValue">Target Value</digi:trn></b>
@@ -394,14 +397,14 @@
 																<td align="left">&nbsp;&nbsp;
 																	<bean:write name="indicator" property="targetValDate" />
 																</td>
-															</tr>	
+															</tr>
 															<tr>
 																<td><digi:trn key="aim:meTargetValComments">Comments</digi:trn>
 																</td>
 																<td colspan="4">
 																	<bean:write name="indicator" property="targetValComments" />
 																</td>
-															</tr>															
+															</tr>
 															<tr>
 																<td><b>
 																	<digi:trn key="aim:meRevisedTargetValue">Revised Target Value</digi:trn></b>
@@ -423,17 +426,17 @@
 																<td colspan="4">
 																	<bean:write name="indicator" property="revisedTargetValComments" />
 																</td>
-															</tr>															
+															</tr>
 														</c:if>
-														
+
 														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='yes'}">
 															<tr>
-																<td><b>																
+																<td><b>
 																	<digi:trn key="aim:meBaseValue">Base Value</digi:trn></b>
 																	<font color="red">*</font></td>
 																<td>
 																<html:text property="baseVal" size="10" maxlength="10"/>
-																	<!-- <input type="text" name="baseVal" 
+																	<!-- <input type="text" name="baseVal"
 																	value="<bean:write name="indicator" property="baseVal"/>"
 																	class="inp-text" size="10">
 																	-->
@@ -444,7 +447,7 @@
 																	<font color="red">*</font>
 																</td>
 																<td align="left">
-																	<input type="text" name="baseValDate" 
+																	<input type="text" name="baseValDate"
 																	value="<bean:write name="indicator" property="baseValDate" />"
 																	class="inp-text" size="10" readonly="true" id="baseValDate">&nbsp;&nbsp;
 																	<a href="javascript:calendar('baseValDate')">
@@ -457,18 +460,18 @@
 																</td>
 																<td colspan="4">
 																<html:textarea property="baseValComments" cols="38" rows="2" styleClass="inp-text"/>
-																	
+
 																</td>
-															</tr>															
+															</tr>
 															<tr>
 																<td><b>
-																	<digi:trn key="aim:meTargetValue">Target Value</digi:trn>	
+																	<digi:trn key="aim:meTargetValue">Target Value</digi:trn>
 																	</b><font color="red">*</font>
 																</td>
 																<c:if test="${indicator.targetValDate == null}">
 																<td>
 																<html:text property="targetVal" size="10" maxlength="10"/>
-																	<!-- <input type="text" name="targetVal" 
+																	<!-- <input type="text" name="targetVal"
 																	value="<bean:write name="indicator" property="targetVal" />"
 																	class="inp-text" size="10">
 																	-->
@@ -479,7 +482,7 @@
 																	<font color="red">*</font>
 																</td>
 																<td align="left">
-																	<input type="text" name="targetValDate" 
+																	<input type="text" name="targetValDate"
 																	value="<bean:write name="indicator" property="targetValDate" />"
 																	class="inp-text" size="10" readonly="true" id="targetValDate">&nbsp;&nbsp;
 																	<a href="javascript:calendar('targetValDate')">
@@ -489,7 +492,7 @@
 																</c:if>
 																<c:if test="${indicator.targetValDate != null}">
 																<td>
-																	<input type="text" name="targetVal" 
+																	<input type="text" name="targetVal"
 																	value="<bean:write name="indicator" property="targetVal" />"
 																	class="inp-text" size="10" disabled="true">
 																</td>
@@ -498,23 +501,23 @@
 																	<digi:trn key="aim:meDate">Date</digi:trn>
 																</td>
 																<td align="left">
-																	<input type="text" name="targetValDate" 
+																	<input type="text" name="targetValDate"
 																	value="<bean:write name="indicator" property="targetValDate" />"
 																	class="inp-text" size="10" readonly="true" id="targetValDate">&nbsp;&nbsp;
 																</td>
-																</c:if>																
+																</c:if>
 															</tr>
 															<tr>
 																<td><digi:trn key="aim:meTargetValComments">Comments</digi:trn>
 																</td>
 																<td colspan="4">
 																<html:textarea property="targetValComments" cols="38" rows="2" styleClass="inp-text"/>
-																
-																<!-- 
+
+																<!--
 																<textarea name="targetValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="targetValComments" /></textarea>
 																-->
 																</td>
-															</tr>															
+															</tr>
 															<c:if test="${indicator.targetValDate != null}">
 															<tr>
 																<td><b>
@@ -523,11 +526,11 @@
 																</td>
 																<td>
 																<html:text property="revTargetVal" size="10" maxlength="10"/>
-																	<!-- <input type="text" name="revTargetVal" 
+																	<!-- <input type="text" name="revTargetVal"
 																	value="<bean:write name="indicator" property="revisedTargetVal" />"
 																	class="inp-text" size="10">
 																	-->
-																	
+
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
@@ -535,7 +538,7 @@
 																	<font color="red">*</font>
 																</td>
 																<td align="left">
-																	<input type="text" name="revTargetValDate" 
+																	<input type="text" name="revTargetValDate"
 																	value="<bean:write name="indicator" property="revisedTargetValDate" />"
 																	class="inp-text" size="10" readonly="true" id="revisedTargetValDate">&nbsp;&nbsp;
 																	<a href="javascript:calendar('revTargetValDate')">
@@ -548,7 +551,7 @@
 																</td>
 																<td colspan="4">
 																<html:textarea property="revTargetValComments" cols="38" rows="2" styleClass="inp-text"/>
-																<!-- 
+																<!--
 																	<textarea name="revTargetValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="revisedTargetValComments" /></textarea>
 																-->
 																</td>
@@ -556,7 +559,7 @@
 															</c:if>
 
 														</c:if>
-														
+
 														<logic:notEmpty name="indicator" property="priorValues" >
 															<tr bgColor=#dddddb><td bgColor=#dddddb align="left" colspan="5"><b>
 																<digi:trn key="aim:mePriorValues">Prior Values</digi:trn> :</b>
@@ -584,14 +587,14 @@
 																	<td colspan="4">
 																		<bean:write name="priorValues" property="comments" />
 																	</td>
-																</tr>																
+																</tr>
 															</logic:iterate>
 														</logic:notEmpty>
 
 														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='yes' ||
 																indicator.baseValDate!=null}">
-														
-														<%--		
+
+														<%--
 														<logic:notEmpty name="indicator" property="baseValDate">
 														--%>
 															<tr>
@@ -601,7 +604,7 @@
 																</b></td>
 																<td>
 																	<html:text property="currentVal" size="10" maxlength="10"/>
-																	<!-- <input type="text" name="currentVal" 
+																	<!-- <input type="text" name="currentVal"
 																	value="<bean:write name="indicator" property="currentVal" />"
 																	class="inp-text" size="10">
 																-->
@@ -609,28 +612,28 @@
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
 																	<digi:trn key="aim:meDate">Date</digi:trn>
-																	<font color="red">*</font>																	
+																	<font color="red">*</font>
 																</td>
 																<td align="left">
-																	<input type="text" name="currValDate" 
+																	<input type="text" name="currValDate"
 																	value="<bean:write name="indicator" property="currentValDate" />"
 																	class="inp-text" size="10" readonly="true" id="currValDate">&nbsp;&nbsp;
 																	<a href="javascript:calendar('currValDate')">
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
-															</tr>	
+															</tr>
 															<tr>
 																<td><digi:trn key="aim:meCurrentValComments">Comments</digi:trn>
 																</td>
 																<td colspan="4">
 																<html:textarea property="currentValComments" cols="38" rows="2" styleClass="inp-text"/>
-																	
-																	<!-- 
+
+																	<!--
 																	<textarea name="currentValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="currentValComments" /></textarea>
 																 -->
 																</td>
-															</tr>															
+															</tr>
 														<tr>
 															<%--
 															<td><b>
@@ -650,11 +653,11 @@
 																</html:select>
 															</td>
 														</tr>
-														<tr><td>&nbsp;</td></tr>										
+														<tr><td>&nbsp;</td></tr>
 														<tr>
 															<td>&nbsp;</td>
 															<td colspan="3" align="center">
-																<input type="button" class="buton" value="<digi:trn key='btn:setValues'>Set Values</digi:trn>" 
+																<input type="button" class="buton" value="<digi:trn key='btn:setValues'>Set Values</digi:trn>"
 																onclick="setValues('<c:out value="${indicator.indicatorId}" />')">
 															</td>
 															<td>&nbsp;</td>
@@ -676,7 +679,7 @@
 											</tr>
 											<tr>
 												<td width="32%" align="center" colspan="2">
-													<input type="button" value="Add Indicator" class="dr-menu" onclick="addIndicator()">	
+													<input type="button" value="Add Indicator" class="dr-menu" onclick="addIndicator()">
 												</td>
 											</tr>
 											<tr>
@@ -689,7 +692,7 @@
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
 									</td></tr>
-<%-- 									
+<%--
 									<tr><td bgColor=#f4f4f2 align="center">
 										<table cellPadding=3>
 											<tr>
@@ -704,21 +707,21 @@
 												</td>
 											</tr>
 										</table>
-									</td></tr>									
- --%>									
+									</td></tr>
+ --%>
 								</table>
 							</td></tr><%--
 							<tr><td>
 							<input type="button" value="Add Indicator" class="dr-menu" onclick="addIndicator()">
 							</td></tr>--%>
 							</table>
-							</td></tr>							
+							</td></tr>
 						</table>
 						</td>
 						<td width="25%" vAlign="top" align="right">
 						<!-- edit activity form menu -->
 							<jsp:include page="editActivityMenu.jsp" flush="true" />
-						<!-- end of activity form menu -->							
+						<!-- end of activity form menu -->
 						</td></tr>
 					</table>
 				</td></tr>

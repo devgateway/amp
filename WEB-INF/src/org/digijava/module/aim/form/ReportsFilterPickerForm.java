@@ -39,6 +39,9 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private String text;
 	private String pageSize; //the specific page sizes
 
+	private Boolean governmentApprovalProcedures;
+	private Boolean jointCriteria;
+	
 	public String getText() {
 		return text;
 	}
@@ -194,6 +197,22 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setPageSize(String pageSize) {
 		this.pageSize = pageSize;
+	}
+
+	public Boolean getGovernmentApprovalProcedures() {
+		return governmentApprovalProcedures;
+	}
+
+	public void setGovernmentApprovalProcedures(Boolean governmentApprovalProcedures) {
+		this.governmentApprovalProcedures = governmentApprovalProcedures;
+	}
+
+	public Boolean getJointCriteria() {
+		return jointCriteria;
+	}
+
+	public void setJointCriteria(Boolean jointCriteria) {
+		this.jointCriteria = jointCriteria;
 	}
 	
 	

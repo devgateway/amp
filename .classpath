@@ -84,7 +84,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-lang-2.0.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/CordaEmbedder.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/displaytag-1.0.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/ehcache-1.2.3.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/ELJTagLib.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jasperreports.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jaxb-api.jar"/>

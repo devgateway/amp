@@ -136,19 +136,15 @@ function saveClicked() {
                                     <c:set var="dic">
                                       <%out.write(dictionaryValue);%>
                                     </c:set>
-                                    
+                                    <digi:trn key="aim:globalSettings:${dic}">
                                       <%out.write(dictionaryValue);%>
-                                    
+                                    </digi:trn>
 
                                     <%}else{%>
-                                    
+                                    <digi:trn key="aim:globalSettings:${globalSett.globalSettingsValue}">
                                       <%=globalSett.getGlobalSettingsValue()%>
-                                    
+                                    </digi:trn>
                                     <%}%>
-
-
-
-
                                 </b>
                               </td>
 
@@ -180,7 +176,7 @@ function saveClicked() {
                                       		<%= globalSett.getGlobalSettingsPossibleValues()%>
                                       	</c:set>
                                         <c:set var="globSettings">
-                                          <digi:trn key="aim:globalSettings:${valueOfSetting}:${global.value}">${global.value}</digi:trn>
+                                          <digi:trn key="aim:globalSettings:${global.value}">${global.value}</digi:trn>
                                         </c:set>
                                         <html:option value="${global.key}"> ${globSettings}</html:option>
                                       </logic:iterate>

@@ -70,9 +70,9 @@ public class FundingAdded extends Action {
 			}
 		}
 
-		long totComm = eaForm.getTotalCommitments();
-		long totDisb = eaForm.getTotalDisbursements();
-		long totExp = eaForm.getTotalExpenditures();
+		double totComm = eaForm.getTotalCommitments();
+		double totDisb = eaForm.getTotalDisbursements();
+		double totExp = eaForm.getTotalExpenditures();
 
 		Funding newFund = new Funding();
 

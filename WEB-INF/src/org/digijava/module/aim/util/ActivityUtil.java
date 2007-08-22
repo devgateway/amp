@@ -333,6 +333,19 @@ public class ActivityUtil {
 				oldActivity.setApprovalStatus(activity.getApprovalStatus());
 				
 				oldActivity.setCategories( activity.getCategories() );
+				
+				/*
+				 * tanzania ADDS
+				 */
+				oldActivity.setFY(activity.getFY());
+				oldActivity.setGovernmentApprovalProcedures(activity.isGovernmentApprovalProcedures());
+				oldActivity.setJointCriteria(activity.isJointCriteria());
+				oldActivity.setGbsSbs(activity.getGbsSbs());
+				oldActivity.setProjectCode(activity.getProjectCode());
+				oldActivity.setSubProgram(activity.getSubProgram());
+				oldActivity.setSubVote(activity.getSubVote());
+				oldActivity.setVote(activity.getVote());
+				
 			}
 
             Iterator itr=null;
@@ -869,7 +882,22 @@ public class ActivityUtil {
 			    
 			    /* Categories */
 			    activity.setCategories( ampActivity.getCategories() );
-
+			    
+			    
+			    /*
+			     * tanzania adds
+			     */
+			    activity.setGbsSbs(ampActivity.getGbsSbs());
+			    activity.setGovernmentApprovalProcedures(ampActivity.isGovernmentApprovalProcedures());
+			    activity.setJointCriteria(ampActivity.isJointCriteria());
+			    activity.setVote(ampActivity.getVote());
+			    activity.setSubProgram(ampActivity.getSubProgram());
+			    activity.setSubVote(ampActivity.getSubVote());
+			    activity.setFY(ampActivity.getFY());
+			    activity.setProjectCode(ampActivity.getProjectCode());
+			  
+			    
+			    
 			}
 		} catch (Exception e) {
 		 	logger.error("Unable to getAmpActivity");

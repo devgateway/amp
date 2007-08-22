@@ -61,7 +61,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
     private List actPrograms;
 	private Collection programCollection;
     private Long selectedPrograms[];
-    
+
     private Long logframeCategory;
 
 	private String originalAppDate;
@@ -78,7 +78,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String currentValDate;
 	private String currentValComments;
 	private String programDescription;
-	
+
 	private List costs;
 
 	// location selector pop-up
@@ -97,7 +97,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	//private Collection assistanceTypes = null;
 
 	private String step = null;
-	
+
 	private String visibleProgram=null;
 
 	private Collection activitySectors; // sectors related to the activity
@@ -160,7 +160,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String mfdCntOrganization;
 	private String mfdCntPhoneNumber;
 	private String mfdCntFaxNumber;
-	
+
 	private String actAthFirstName;
 	private String actAthLastName;
 	private String actAthEmail;
@@ -221,8 +221,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String totalExpenditure = "";
 	private String totalUnExpended = "";
 	private String totalExpended="";
-	
-	
+
+
 	/* START FINANCIAL EDIT */
 	private Collection fundingOrganizations; // Collection of FundingOrganization objects
 	private String orgFundingId;
@@ -350,9 +350,9 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	private String editKey;
 
-	private double totalCommitments;
-	private double totalDisbursements;
-	private double totalExpenditures;
+	private long totalCommitments;
+	private long totalDisbursements;
+	private long totalExpenditures;
 	private String currCode;
 
 	private boolean donorFlag;
@@ -388,13 +388,13 @@ public class EditActivityForm extends ActionForm implements Serializable{
     private String lineMinRank;
 	private String planMinRank;
 	private Collection actRankCollection;
-	
+
 	/*Categories*/
 	private Long acChapter				= new Long(0);
 	private Long accessionInstrument	= new Long(0);
 
 	 private Collection searchedSectors = null; // list of searched Sectors.
-	 
+
 	 /*
 	  * Tanzania ADDS
 	  */
@@ -404,10 +404,10 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 private String subProgram;
 	 private String projectCode;
 	 private Integer gbsSbs;
-	 
+
 	 private Boolean governmentApprovalProcedures;
 	 private Boolean jointCriteria;
-	
+
 	public Boolean getGovernmentApprovalProcedures() {
 		return governmentApprovalProcedures;
 	}
@@ -501,7 +501,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			orgTypes = null;
 //			implementationLevel = null;
 			implemLocationLevel		= null;
-			
+
 			selectedPhysicalProgress = null;
 			componentDesc = null;
 			selPhyProg = null;
@@ -2981,42 +2981,42 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	/**
 	 * @return Returns the totalCommitments.
 	 */
-	public double getTotalCommitments() {
+	public long getTotalCommitments() {
 		return totalCommitments;
 	}
 
 	/**
 	 * @param totalCommitments The totalCommitments to set.
 	 */
-	public void setTotalCommitments(double totalCommitments) {
+	public void setTotalCommitments(long totalCommitments) {
 		this.totalCommitments = totalCommitments;
 	}
 
 	/**
 	 * @return Returns the totalDisbursements.
 	 */
-	public double getTotalDisbursements() {
+	public long getTotalDisbursements() {
 		return totalDisbursements;
 	}
 
 	/**
 	 * @param totalDisbursements The totalDisbursements to set.
 	 */
-	public void setTotalDisbursements(double totalDisbursements) {
+	public void setTotalDisbursements(long totalDisbursements) {
 		this.totalDisbursements = totalDisbursements;
 	}
 
 	/**
 	 * @return Returns the totalExpenditures.
 	 */
-	public double getTotalExpenditures() {
+	public long getTotalExpenditures() {
 		return totalExpenditures;
 	}
 
 	/**
 	 * @param totalExpenditures The totalExpenditures to set.
 	 */
-	public void setTotalExpenditures(double totalExpenditures) {
+	public void setTotalExpenditures(long totalExpenditures) {
 		this.totalExpenditures = totalExpenditures;
 	}
 	/**
@@ -3789,7 +3789,7 @@ public String getPurpose() {
 	public void setOverallCost(Double overallCost) {
 		this.overallCost = overallCost;
 	}
-	
+
 
 	public Collection getBenAgencies() {
 		return benAgencies;
@@ -3822,7 +3822,7 @@ public String getPurpose() {
 	public void setSelConAgencies(Long[] selConAgencies) {
 		this.selConAgencies = selConAgencies;
 	}
-	
+
 	public Long getDocType() {
 		return docType;
 	}
@@ -3952,7 +3952,7 @@ public String getPurpose() {
 		this.selActivitySectors = selActivitySectors;
 	}
 
-    
+
 	public String getStatus() {
 		return status;
 	}

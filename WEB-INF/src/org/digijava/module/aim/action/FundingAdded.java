@@ -34,7 +34,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class FundingAdded extends Action {
-	
+
 	private static Logger logger = Logger.getLogger(FundingAdded.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -42,10 +42,10 @@ public class FundingAdded extends Action {
 			throws Exception {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
-		
+
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		
+
 		Iterator fundOrgsItr = eaForm.getFundingOrganizations().iterator();
 		FundingOrganization fundOrg = null;
 		boolean found = false;
@@ -70,23 +70,23 @@ public class FundingAdded extends Action {
 			}
 		}
 
-		double totComm = eaForm.getTotalCommitments();
-		double totDisb = eaForm.getTotalDisbursements();
-		double totExp = eaForm.getTotalExpenditures();
-		
+		long totComm = eaForm.getTotalCommitments();
+		long totDisb = eaForm.getTotalDisbursements();
+		long totExp = eaForm.getTotalExpenditures();
+
 		Funding newFund = new Funding();
-		
+
 		if (eaForm.getFundingId() != null && eaForm.getFundingId().longValue() > 0) {
 			newFund.setFundingId(eaForm.getFundingId().longValue());
 		} else {
-			newFund.setFundingId(System.currentTimeMillis());	
+			newFund.setFundingId(System.currentTimeMillis());
 		}
 		//newFund.setAmpTermsAssist(DbUtil.getAssistanceType(eaForm.getAssistanceType()));
 		newFund.setTypeOfAssistance( CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getAssistanceType()) );
 		newFund.setOrgFundingId(eaForm.getOrgFundingId());
 		newFund.setModality(DbUtil.getModality(eaForm.getModality()));
 		newFund.setConditions(eaForm.getFundingConditions());
-		
+
 		Collection fundDetails = new ArrayList();
 		if (eaForm.getFundingDetails() != null) {
 			Iterator itr = eaForm.getFundingDetails().iterator();
@@ -137,7 +137,7 @@ public class FundingAdded extends Action {
 		}
 		List sortedList = new ArrayList(fundDetails);
 		Collections.sort(sortedList,FundingValidator.dateComp);
-		
+
 		newFund.setFundingDetails(sortedList);
 
 		ArrayList fundList = new ArrayList();
@@ -153,11 +153,11 @@ public class FundingAdded extends Action {
 		eaForm.setDupFunding(false);
 		eaForm.setFirstSubmit(false);
 
-		if (eaForm.getFundingDetails() != null) 
+		if (eaForm.getFundingDetails() != null)
 		{
 			int i=0;
 			Iterator fundItr1 = eaForm.getFundingDetails().iterator();
-			while(fundItr1.hasNext()) 
+			while(fundItr1.hasNext())
 			{
 				i++;
 				FundingDetail fundDetItr1 = (FundingDetail) fundItr1.next();
@@ -183,7 +183,7 @@ public class FundingAdded extends Action {
 				}
 			}
 		}
-		
+
 		fundOrg.setFundings(fundList);
 		ArrayList fundingOrgs = new ArrayList();
 		if (eaForm.getFundingOrganizations() != null) {
@@ -194,7 +194,7 @@ public class FundingAdded extends Action {
 		eaForm.setTotalDisbursements(totDisb);
 		eaForm.setTotalExpenditures(totExp);
 		eaForm.setStep("3");
-		
+
 		return mapping.findForward("forward");
 	}
 }

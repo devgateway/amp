@@ -56,6 +56,9 @@ public class AmpARFilter implements Filter {
 	private Integer fromYear;
 	private Integer toYear;	
 	
+	private Boolean governmentApprovalProcedures;
+	private Boolean jointCriteria;
+	
 	private String pageSize; // to be used for exporting reports
 	
 	private String text;
@@ -119,13 +122,19 @@ public class AmpARFilter implements Filter {
 		String LINE_MIN_RANK_FILTER="SELECT amp_activity_id FROM amp_activity WHERE line_min_rank="+lineMinRank;
 		String PLAN_MIN_RANK_FILTER="SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank="+planMinRank;
 		
-		String TEXT_FILTER = "SELECT a.amp_activity_id FROM amp_activity a WHERE a.name LIKE '%"+text+"%'" +
+		if(text!=null)
+		{
+			if("".equals(text.trim())==false)
+			{
+				String TEXT_FILTER = "SELECT a.amp_activity_id FROM amp_activity a WHERE a.name LIKE '%"+text+"%'" +
 				" UNION SELECT b.amp_activity_id FROM amp_activity b, dg_editor e where b.description = e.editor_key AND e.body LIKE '%"+text+"%'"+
 				" UNION SELECT b.amp_activity_id FROM amp_activity b, dg_editor e where b.objectives = e.editor_key AND e.body LIKE '%"+text+"%'"+
 				" UNION SELECT b.amp_activity_id FROM amp_activity b, dg_editor e where b.purpose = e.editor_key AND e.body LIKE '%"+text+"%'"+
 				" UNION SELECT b.amp_activity_id FROM amp_activity b, dg_editor e where b.results = e.editor_key AND e.body LIKE '%"+text+"%'";
-				
-	
+				queryAppend(TEXT_FILTER);
+			}
+		}
+		
 		String RISK_FILTER="SELECT v.activity_id from AMP_ME_INDICATOR_VALUE v, AMP_INDICATOR_RISK_RATINGS r where v.risk=r.amp_ind_risk_ratings_id and r.amp_ind_risk_ratings_id in ("+Util.toCSString(risks,true)+")";
 		
 		
@@ -139,8 +148,17 @@ public class AmpARFilter implements Filter {
 		if(risks!=null && risks.size()>0) queryAppend(RISK_FILTER);
 		if(lineMinRank!=null) queryAppend(LINE_MIN_RANK_FILTER);
 		if(planMinRank!=null) queryAppend(PLAN_MIN_RANK_FILTER);
-		if(text!=null) queryAppend(TEXT_FILTER);
 		
+		if(governmentApprovalProcedures!=null)
+		{
+			String GOVERNMENT_APPROVAL_FILTER="SELECT a.amp_activity_id from amp_activity where governmentApprovalProcedures="+governmentApprovalProcedures.toString();
+			queryAppend(GOVERNMENT_APPROVAL_FILTER);
+		}
+		if(jointCriteria!=null)
+		{
+			String JOINT_CRITERIA_FILTER="SELECT a.amp_activity_id from amp_activity where jointCriteria="+jointCriteria.toString();
+			queryAppend(JOINT_CRITERIA_FILTER);
+		}
 	}
 	
 	
@@ -437,5 +455,21 @@ public class AmpARFilter implements Filter {
 
 	public void setPageSize(String pageSize) {
 		this.pageSize = pageSize;
+	}
+
+	public Boolean getGovernmentApprovalProcedures() {
+		return governmentApprovalProcedures;
+	}
+
+	public void setGovernmentApprovalProcedures(Boolean governmentApprovalProcedures) {
+		this.governmentApprovalProcedures = governmentApprovalProcedures;
+	}
+
+	public Boolean getJointCriteria() {
+		return jointCriteria;
+	}
+
+	public void setJointCriteria(Boolean jointCriteria) {
+		this.jointCriteria = jointCriteria;
 	} 
 }

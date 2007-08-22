@@ -141,6 +141,8 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setPlanMinRank(null);
 		filterForm.setText(null);
 		filterForm.setPageSize(null);
+		filterForm.setGovernmentApprovalProcedures(null);
+		filterForm.setJointCriteria(null);
 	
 		return modeApply(mapping,form,request,response);
 	}
@@ -244,6 +246,10 @@ public class ReportsFilterPicker extends MultiAction {
 	    }
 		
 		arf.setRisks(Util.getSelectedObjects(AmpIndicatorRiskRatings.class,filterForm.getSelectedRisks()));
+		
+		arf.setGovernmentApprovalProcedures(filterForm.getGovernmentApprovalProcedures());
+		arf.setJointCriteria(filterForm.getJointCriteria());
+		
 		
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER,arf);
 

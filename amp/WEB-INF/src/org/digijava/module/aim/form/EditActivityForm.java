@@ -51,6 +51,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private AmpTeamMember updatedBy;
 	private Collection perspectives;
 	private Boolean budget=null;
+	private String budgetCheckbox;
 	private double regionTotalDisb;
 	private AmpTeam team;
 
@@ -393,7 +394,36 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long accessionInstrument	= new Long(0);
 
 	 private Collection searchedSectors = null; // list of searched Sectors.
+	 
+	 /*
+	  * Tanzania ADDS
+	  */
+	 private String FY;
+	 private String vote;
+	 private String subVote;
+	 private String subProgram;
+	 private String projectCode;
+	 private Integer gbsSbs;
+	 
+	 private Boolean governmentApprovalProcedures;
+	 private Boolean jointCriteria;
 	
+	public Boolean getGovernmentApprovalProcedures() {
+		return governmentApprovalProcedures;
+	}
+
+	public void setGovernmentApprovalProcedures(Boolean governmentApprovalProcedures) {
+		this.governmentApprovalProcedures = governmentApprovalProcedures;
+	}
+
+	public Boolean getJointCriteria() {
+		return jointCriteria;
+	}
+
+	public void setJointCriteria(Boolean jointCriteria) {
+		this.jointCriteria = jointCriteria;
+	}
+
 	public Collection getSearchedSectors() {
 		return searchedSectors;
 	}
@@ -4002,5 +4032,61 @@ public String getPurpose() {
 
 	public void setImplemLocationLevel(Long implemLocationLevel) {
 		this.implemLocationLevel = implemLocationLevel;
+	}
+
+	public String getFY() {
+		return FY;
+	}
+
+	public void setFY(String fy) {
+		FY = fy;
+	}
+
+	public Integer getGbsSbs() {
+		return gbsSbs;
+	}
+
+	public void setGbsSbs(Integer gbsSbs) {
+		this.gbsSbs = gbsSbs;
+	}
+
+	public String getProjectCode() {
+		return projectCode;
+	}
+
+	public void setProjectCode(String projectCode) {
+		this.projectCode = projectCode;
+	}
+
+	public String getSubProgram() {
+		return subProgram;
+	}
+
+	public void setSubProgram(String subProgram) {
+		this.subProgram = subProgram;
+	}
+
+	public String getSubVote() {
+		return subVote;
+	}
+
+	public void setSubVote(String subVote) {
+		this.subVote = subVote;
+	}
+
+	public String getVote() {
+		return vote;
+	}
+
+	public void setVote(String vote) {
+		this.vote = vote;
+	}
+
+	public String getBudgetCheckbox() {
+		return budgetCheckbox;
+	}
+
+	public void setBudgetCheckbox(String budgetCheckbox) {
+		this.budgetCheckbox = budgetCheckbox;
 	}
 }

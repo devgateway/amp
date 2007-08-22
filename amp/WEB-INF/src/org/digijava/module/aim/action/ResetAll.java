@@ -105,6 +105,19 @@ public class ResetAll extends Action
 				eaForm.setStatusId(new Long(0));
 				eaForm.setStatusReason(null);
 				eaForm.setBudget(null);
+				
+				/*
+				 * tanzania adds
+				 */
+				eaForm.setFY(null);
+				eaForm.setVote(null);
+				eaForm.setSubVote(null);
+				eaForm.setSubProgram(null);
+				eaForm.setProjectCode(null);
+				eaForm.setGbsSbs(new Integer(0));
+				eaForm.setGovernmentApprovalProcedures(new Boolean(false));
+				eaForm.setJointCriteria(new Boolean(false));
+				
 	    	}
 	    	if(eaForm.getStep().equals("2"))
 	    	{

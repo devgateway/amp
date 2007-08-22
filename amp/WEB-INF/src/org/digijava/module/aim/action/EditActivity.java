@@ -468,6 +468,33 @@ public class EditActivity
                     eaForm.setTeam(activity.getTeam());
                     eaForm.setUpdatedBy(activity.getUpdatedBy());
                     eaForm.setBudget(activity.getBudget());
+                    
+                    /*
+                     * Tanzania adds
+                     */
+                    if(activity.getFY()!=null)
+                    	eaForm.setFY(activity.getFY().trim());
+                    if(activity.getVote()!=null)
+                    	eaForm.setVote(activity.getVote().trim());
+                    if(activity.getSubVote()!=null)
+                    	eaForm.setSubVote(activity.getSubVote().trim());
+                    if(activity.getSubProgram()!=null)
+                    	eaForm.setSubProgram(activity.getSubProgram().trim());
+                    if(activity.getProjectCode()!=null)
+                    	eaForm.setProjectCode(activity.getProjectCode().trim());
+                    
+                    if(activity.getGbsSbs()!=null)
+                    	eaForm.setGbsSbs(activity.getGbsSbs());
+                    
+                    
+                    if(activity.isGovernmentApprovalProcedures()!=null)
+                    	eaForm.setGovernmentApprovalProcedures(activity.isGovernmentApprovalProcedures());
+                    else eaForm.setGovernmentApprovalProcedures(new Boolean(false));
+                    
+                    if(activity.isJointCriteria()!=null)
+                    	eaForm.setJointCriteria(activity.isJointCriteria());
+                    else activity.setJointCriteria(new Boolean(false));
+                    
                     if(activity.getDescription()!=null) eaForm.setDescription(activity.getDescription().trim());
                     if(activity.getObjective()!=null) eaForm.setObjectives(activity.getObjective().trim());
                     if(activity.getPurpose()!=null) eaForm.setPurpose(activity.getPurpose().trim());

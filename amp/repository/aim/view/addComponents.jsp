@@ -150,7 +150,11 @@ function closeWindow()
 
                                   </tr>
                                   <td width=30% align = right>
-                                    <font color=red>* Mandatory fields</font>
+                                     <font color=red>*
+                                      <digi:trn key="aim:addNewComponent:mandatoryFields">
+                                      Mandatory fields
+                                      </digi:trn>
+                                    </font>
                                   </td>
                                   <tr>
                                     <td colspan="2" width="60%">

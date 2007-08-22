@@ -48,7 +48,7 @@ public class GetProgramTreeNode extends DispatchAction {
 			String xml = ProgramUtil.getThemesHierarchyXML(themes);
 
 			// return xml
-			outputStream.println(xml);
+			outputStream.write(xml.getBytes());
 			outputStream.close();
 		} catch (Exception e) {
 			e.printStackTrace();

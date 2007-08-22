@@ -433,7 +433,6 @@ public class EditActivity
                 }
 
                 // load the activity details
-
                 String actApprovalStatus = DbUtil.getActivityApprovalStatus(
                     activityId);
                 eaForm.setApprovalStatus(actApprovalStatus);
@@ -454,9 +453,12 @@ public class EditActivity
                             Iterator prgItr = prgSet.iterator();
                             while(prgItr.hasNext()) {
                             AmpTheme prg=(AmpTheme) prgItr.next();
+                        	String newName=ProgramUtil.getHierarchyName(prg);
+                        	prg.setName(newName);
                             actPrgs.add(prg);
                             }
                         }
+                        
                         eaForm.setActPrograms(actPrgs);
                     }catch(Exception ex){
                         ex.printStackTrace();

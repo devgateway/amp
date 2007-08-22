@@ -71,6 +71,7 @@
                                                                       ${theProgram.ampThemeId}
                                                                       </html:multibox>
                                                                       ${theProgram.name}
+                                                                      ${theProgram.programviewname}
                                                                     </td>
                                                                   </tr>
                                                                 </table>

@@ -4344,6 +4344,7 @@ DHTMLSuite.JSDragDropTree.prototype = {
 			if(srcEl.tagName=='A')thisNode = srcEl.parentNode.getElementsByTagName('IMG')[0];	
 			
 		}
+		if(thisNode==null) return;
 		if(thisNode.style.visibility=='hidden')return;		
 		var parentNode = thisNode.parentNode;
 		inputId = parentNode.id.replace(/[^0-9]/g,'');

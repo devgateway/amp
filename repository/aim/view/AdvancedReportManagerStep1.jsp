@@ -354,16 +354,7 @@ function checkUncheckAll2() {
 																							</ul>
 																							</li></ul>
 																						</font>
-																				<script type="text/javascript">
-																			        treeObj = new DHTMLSuite.JSDragDropTree();
-																			        treeObj.setTreeId('dhtmlgoodies_tree');
-																			        //treeObj.setMaximumDepth(7);
-																			        //treeObj.setMessageMaximumDepthReached('Maximum depth reached'); // If you want to show a message when maximum depth is reached, i.e. on drop.		
-																			        treeObj.init();
-																			        treeObj.showHideNode(false,'dhtmlgoodies_tree');
-																			        
-																			        //treeObj.expandAll();
-																				</script>
+
 <!-- 																						
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'donor'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
@@ -579,7 +570,14 @@ function checkUncheckAll2() {
 
 </digi:form>
 <script type="text/javascript">
-	        treeObj.expandAll();
+function initScripts() {
+treeObj = new DHTMLSuite.JSDragDropTree();
+treeObj.setTreeId('dhtmlgoodies_tree');
+treeObj.init();
+treeObj.showHideNode(false,'dhtmlgoodies_tree');
+treeObj.expandAll();
+}
+window.onload=initScripts;
 </script>
 
 

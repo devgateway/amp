@@ -158,6 +158,23 @@
 		</tr>
 </logic:notEqual>
 	<tr>
+		<td colspan="4">Government Approval Procedures </td>
+		</tr>
+	<tr>
+		<td colspan="4" valign="top" align="left">
+					Yes<html:radio property="governmentApprovalProcedures" value="true"/> &nbsp;&nbsp;No<html:radio property="governmentApprovalProcedures" value="false"/>
+									</td></tr>
+	
+	<tr>
+		<td colspan="4">Joint Criteria</td>
+		</tr>
+	<tr>
+		<td colspan="4" valign="top" align="left">
+					Yes<html:radio property="jointCriteria" value="true"/> &nbsp;&nbsp;No<html:radio property="jointCriteria" value="false"/>
+									</td></tr>
+		
+
+	<tr>
 	<td>&nbsp;</td>
 	</tr>
 		

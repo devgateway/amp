@@ -14,9 +14,27 @@
 	function budgetCheckboxClick()
 	{
 	 if(document.aimEditActivityForm.budget.checked==false)
+	 {	
 	 	document.aimEditActivityForm.budgetCheckbox.value="unchecked";
+	 	document.getElementById("FY").style.display='none';
+	 	document.getElementById("Vote").style.display='none';
+	 	document.getElementById("Sub-Vote").style.display='none';
+	 	document.getElementById("Sub-Program").style.display='none';
+	 	document.getElementById("ProjectCode").style.display='none';
+	 	document.getElementById("financial").style.display='none';
+
+
+	 	}
 	 else if(document.aimEditActivityForm.budget.checked==true)
-	 	document.aimEditActivityForm.budgetCheckbox.value="checked";
+		{
+		 	document.aimEditActivityForm.budgetCheckbox.value="checked";
+		 	document.getElementById("FY").style.display='';
+		 	document.getElementById("Vote").style.display='';
+		 	document.getElementById("Sub-Vote").style.display='';
+		 	document.getElementById("Sub-Program").style.display='';
+		 	document.getElementById("ProjectCode").style.display='';
+		 	document.getElementById("financial").style.display='';
+		 	}
 	}
 
 
@@ -24,7 +42,7 @@
 
 
 <digi:instance property="aimEditActivityForm" />
-										<table width="100%" bgcolor="#cccccc" cellPadding=5 cellSpacing=1>
+										<table width="100%" bgcolor="#cccccc" cellPadding=5 cellSpacing=1 onload="budgetCheckboxClick();">
 											
 											<field:display name="Project Title" feature="Identification">
 											&nbsp;
@@ -217,9 +235,9 @@
 											</field:display>
 											
 												
-											<tr bgcolor="#ffffff"><td colspan="2" valign="top" align="left">
-											<table>
-											 <tr>
+											<tr bgcolor="#ffffff">
+											
+											
 												<field:display name="Activity Budget" feature="Identification">
 												<td valign="top" align="left">
 											
@@ -228,10 +246,7 @@
 												Activity Budget
 												</digi:trn>
 												</a>
-												</td>
-												
-												<td valign="top" align="left">
-													<html:checkbox property="budget"  onclick="budgetCheckboxClick();">
+																									<html:checkbox property="budget"  onclick="budgetCheckboxClick();">
 													<digi:trn key="aim:actBudgeton">
 												Activity is On Budget
 												</digi:trn>
@@ -240,93 +255,98 @@
 												</td>
 											</field:display>
 											
-											<c:if test="${aimEditActivityForm.budget==true}">
+								<td>
+								<table>
+											 <tr>
 											
 											<field:display name="FY" feature="Identification">
-											<td valign="top" align="left">
+											<td valign="top" align="left" id="FY" align="right">
 												<a title="<digi:trn key="aim:FY">FY</digi:trn>">
 												<digi:trn key="aim:actFY">
 												FY
 												</digi:trn>
 												</a>
 														<br/>
-														<html:text property="FY" size="5"/>
+														<html:text property="FY" size="12"/>
 											</td>
 										</field:display>
 											
 										<field:display name="Vote" feature="Identification">
-											<td valign="top" align="left">
+											<td valign="top" align="left" id="Vote" align="right">
 												<a title="<digi:trn key="aim:Vote">Vote</digi:trn>">
 												<digi:trn key="aim:actVote">
 												Vote
 												</digi:trn>
 												</a>
 											<br/>
-													<html:text property="vote" size="3"/>
+													<html:text property="vote" size="12"/>
 										</td>	
 											</field:display>
 											
 											<field:display name="Sub-Vote" feature="Identification">
-											<td valign="top" align="left">
+											<td valign="top" align="left" id="Sub-Vote" align="right">
 												<a title="<digi:trn key="aim:Sub-Vote">Sub-Vote</digi:trn>">
 												<digi:trn key="aim:actSub-Vote">
 												Sub-Vote
 												</digi:trn>
 												</a>
 											<br/>
-										<html:text property="subVote" size="3"/>
+										<html:text property="subVote" size="12"/>
 										</td>
 											</field:display>
 											
 	
 											
 								<field:display name="Sub-Program" feature="Identification">
-										<td valign="top" align="left">
+										<td valign="top" align="left" id="Sub-Program" align="right">
 											<a title="<digi:trn key="aim:Sub_Program">Sub-Program</digi:trn>">
 											<digi:trn key="aim:actSubProgram">
 												Sub-Program
 												</digi:trn>
 												</a>
 											<br/>
-											<html:text property="subProgram" size="3"/>
+											<html:text property="subProgram" size="12"/>
 								
 									</td>
 								</field:display>
 											
 								<field:display name="Project Code" feature="Identification">
-										<td valign="top" align="left">
+										<td valign="top" align="left" id="ProjectCode" align="right">
 											<a title="<digi:trn key="aim:ProjectCode">Project Code</digi:trn>">
 											<digi:trn key="aim:actProjectCode">
 												Project Code
 												</digi:trn>
 												</a>
-										<br/><html:text property="projectCode" size="7"/>
+										<br/><html:text property="projectCode" size="12"/>
 								
 									</td>
-								</field:display>			
+								</field:display>	
+									
 									</tr>
 								</table>
 								</td></tr>		
-								</c:if>
-								<c:if test="${aimEditActivityForm.budget==true}">
+								
+								
 								<field:display name="GBS/SBS" feature="Identification">
-										<tr bgcolor="#ffffff"><td valign="top" align="left">
-											<a title="<digi:trn key="aim:GBS">GBS</digi:trn>">
+										<tr bgcolor="#ffffff" id="financial"><td valign="top" align="left" >
+											<a title="<digi:trn key="aim:GBS">Financial Instrument</digi:trn>">
 											<digi:trn key="aim:actGBS">
-												GBS/SBS ??
+												Financial Instrument
 												</digi:trn>
 												</a>
 											</td>
-										<td valign="top" align="left">
+										<td valign="top" align="left" >
 												<html:radio property="gbsSbs" value="1"/>GBS<br/>
 												<html:radio property="gbsSbs" value="2"/>SBS<br/>								
 												<html:radio property="gbsSbs" value="3"/>Basket<br/>
 												<html:radio property="gbsSbs" value="4"/>DPS on Budget
 									</td>
+									</tr>
 								</field:display>	
-								</c:if>
+	
 												
-								
+							
+									
 										
 								<field:display name="Government Approval Procedures" feature="Identification">
 										<tr bgcolor="#ffffff"><td valign="top" align="left">
@@ -357,3 +377,8 @@
 								
 										</table>
 
+<c:if test="${aimEditActivityForm.budget==false}">
+									<script>
+										budgetCheckboxClick();
+									</script>
+								</c:if>		

@@ -20,7 +20,7 @@ A:visited
 
 A:hover 
 {
-
+	FONT-SIZE: 10px; 
 	COLOR: #0e69b3; 
 	TEXT-DECORATION: none
 }

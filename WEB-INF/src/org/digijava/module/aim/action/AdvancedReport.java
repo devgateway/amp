@@ -1512,7 +1512,7 @@ public class AdvancedReport extends Action {
 					
 				}
 				if(added) {
-					System.out.println("-------------->"+themeName);
+					
 					ampTreeColumn.put(themeName, aux);
 				}
 			}

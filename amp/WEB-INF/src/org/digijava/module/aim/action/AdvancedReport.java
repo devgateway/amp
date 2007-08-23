@@ -10,6 +10,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -32,6 +33,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpColumnsOrder;
 import org.digijava.module.aim.dbentity.AmpColumnsVisibility;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
@@ -1431,6 +1433,8 @@ public class AdvancedReport extends Action {
 			Collection ampAllFields= FeaturesUtil.getAMPFieldsVisibility();
 			Collection allAmpColumns=formColumns;
 			TreeSet ampThemes=new TreeSet();
+			TreeSet ampThemesOrdered=new TreeSet();
+			ArrayList ampColumnsOrder =(ArrayList) ampContext.getAttribute("ampColumnsOrder");
 			for(Iterator it=allAmpColumns.iterator();it.hasNext();)
 			{
 				AmpColumns ampColumn=(AmpColumns) it.next();
@@ -1447,11 +1451,72 @@ public class AdvancedReport extends Action {
 							ampColumnVisibilityObj.setParent((AmpFeaturesVisibility) ampFieldVisibility.getParent());
 							ampColumnsVisibles.add(ampColumnVisibilityObj);
 							ampThemes.add(ampFieldVisibility.getParent().getName());
+							for(Iterator kt=ampColumnsOrder.iterator();kt.hasNext();)
+							{
+								AmpColumnsOrder aco=(AmpColumnsOrder) kt.next();
+								if(ampFieldVisibility.getParent().getName().compareTo(aco.getColumnName())==0)
+									ampThemesOrdered.add(aco);
+							}
 						}
 					}
 				}
 			}
-			HashMap ampTreeColumn=new HashMap();
+			LinkedHashMap ampTreeColumn=new LinkedHashMap();
+			for(Iterator it=ampThemesOrdered.iterator();it.hasNext();)
+			{
+				AmpColumnsOrder aco=(AmpColumnsOrder) it.next();
+				String themeName=(String) aco.getColumnName();
+				ArrayList aux=new ArrayList();
+				boolean added=false;
+				for(Iterator jt=ampColumnsVisibles.iterator();jt.hasNext();)
+				{
+					AmpColumnsVisibility acv=(AmpColumnsVisibility) jt.next();
+					if(themeName.compareTo(acv.getParent().getName())==0)
+					{
+						////donor contribution regional component
+						if("donor".compareTo(reportType)==0)
+						{
+							aux.add(acv.getAmpColumn());
+							added=true;
+						}
+						//the contribution report doesn't have access to columns 33-38 from amp_columns
+						if("contribution".compareTo(reportType)==0 )
+						{
+							if(acv.getAmpColumn().getColumnId().intValue()<33 || acv.getAmpColumn().getColumnId().intValue()>38) 
+								{
+									aux.add(acv.getAmpColumn());
+									added=true;
+								}
+						}
+						//the regional report doesn't have access to columns 33-38 from amp_columns
+						
+						if("regional".compareTo(reportType)==0)
+						{
+							
+							if((acv.getAmpColumn().getColumnId().intValue()<33 || acv.getAmpColumn().getColumnId().intValue()>38) && acv.getAmpColumn().getColumnId().intValue()!=5) 
+							{
+								aux.add(acv.getAmpColumn());
+								added=true;
+							}
+						}
+						
+						if("component".compareTo(reportType)==0)
+						{
+							if(acv.getAmpColumn().getColumnId().intValue()!=5)
+							{
+								aux.add(acv.getAmpColumn());
+								added=true;
+							}
+						}
+					}
+					
+				}
+				if(added) {
+					System.out.println("-------------->"+themeName);
+					ampTreeColumn.put(themeName, aux);
+				}
+			}
+			/*
 			for(Iterator it=ampThemes.iterator();it.hasNext();)
 			{
 				String themeName=(String) it.next();
@@ -1501,9 +1566,11 @@ public class AdvancedReport extends Action {
 					
 				}
 				if(added) {
+					System.out.println("-------------->"+themeName);
 					ampTreeColumn.put(themeName, aux);
 				}
-			}
+				
+			}*/
 			return ampTreeColumn;
 	}
 

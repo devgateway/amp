@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpColumnsOrder;
 import org.digijava.module.aim.dbentity.AmpFeature;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
@@ -1905,5 +1906,38 @@ public class FeaturesUtil {
 				}
 				return airr;
 			}
+			
+			/**
+			 * 
+			 * @author dan
+			 *
+			 * @return
+			 */
+				public static Collection getAMPColumnsOrder() {
+					Session session = null;
+					Collection col = new ArrayList();
+					String qryStr = null;
+					Query qry = null;
+
+					try {
+						session = PersistenceManager.getSession();
+						qryStr = "select f from " + AmpColumnsOrder.class.getName() + " f order by f.indexOrder asc";
+						qry = session.createQuery(qryStr);
+						col = qry.list();
+
+					} catch (Exception ex) {
+						logger.error("Exception : " + ex.getMessage());
+					} finally {
+						if (session != null) {
+							try {
+								PersistenceManager.releaseSession(session);
+							} catch (Exception rsf) {
+								logger.error("Release session failed :" + rsf.getMessage());
+							}
+						}
+					}
+					return col;
+				}
+			
 			
 }

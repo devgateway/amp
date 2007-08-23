@@ -2,7 +2,7 @@
  * CSVExportAction.java
  * (c) 2006 Development Gateway Foundation
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
- * 
+ *
  */
 package org.digijava.module.aim.action;
 
@@ -26,107 +26,118 @@ import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.digijava.module.aim.dbentity.AmpReports;
+import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+import javax.servlet.*;
 
 /**
  * CSV Export is actually using the XLS export API. The difference is only at
  * the output processing where XLS is simply converted to CSV
- * 
+ *
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * @since Sep 7, 2006
- * 
+ *
  */
-public class CSVExportAction extends Action {
+public class CSVExportAction
+    extends Action {
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws java.lang.Exception {
+  public ActionForward execute(ActionMapping mapping, ActionForm form,
+                               HttpServletRequest request,
+                               HttpServletResponse response) throws java.lang.
+      Exception {
 
-		GroupReportData rd = ARUtil.generateReport(mapping, form, request,
-				response);
+    GroupReportData rd = ARUtil.generateReport(mapping, form, request,
+                                               response);
 
-		rd.setCurrentView(GenericViews.XLS);
-		
-        HttpSession session=request.getSession();
-		AmpReports r=(AmpReports) session.getAttribute("reportMeta");
+    rd.setCurrentView(GenericViews.XLS);
 
+    HttpSession session = request.getSession();
+    AmpReports r = (AmpReports) session.getAttribute("reportMeta");
 
-		response.setContentType("application/vnd.ms-excel");
-		response.setHeader("Content-Disposition",
-				"inline; filename=data.csv");
+    response.setContentType("application/vnd.ms-excel");
+    response.setHeader("Content-Disposition",
+                       "inline; filename=data.csv ");
 
-		HSSFWorkbook wb = new HSSFWorkbook();
-		
-		String sheetName=rd.getName();
-		if(sheetName.length()>31) sheetName=sheetName.substring(0,31);
-		
-		HSSFSheet sheet = wb.createSheet(sheetName);
+    HSSFWorkbook wb = new HSSFWorkbook();
 
-		IntWrapper rowId = new IntWrapper();
-		IntWrapper colId = new IntWrapper();
+    String sheetName = rd.getName();
+    if (sheetName.length() > 31)
+      sheetName = sheetName.substring(0, 31);
 
-		HSSFRow row = sheet.createRow(rowId.intValue());
+    HSSFSheet sheet = wb.createSheet(sheetName);
 
-		GroupReportDataXLS grdx = new GroupReportDataXLS(wb,sheet, row, rowId,
-				colId, null, rd);
+    IntWrapper rowId = new IntWrapper();
+    IntWrapper colId = new IntWrapper();
 
-		grdx.setMetadata(r);
+    HSSFRow row = sheet.createRow(rowId.intValue());
 
-		String sortBy=(String) session.getAttribute("sortBy");
-		if(sortBy!=null) rd.setSorterColumn(sortBy); 
-	
-		
-		//show title+desc
-		rowId.inc();
-		colId.reset();
-		row=sheet.createRow(rowId.shortValue());
-		HSSFCell cell=row.createCell(colId.shortValue());
-		cell.setCellValue(AmpReports.getNote(session) + "\n");
-		grdx.makeColSpan(rd.getTotalDepth());
-		rowId.inc();
-		colId.reset();
-		
-		row=sheet.createRow(rowId.shortValue());
-		cell=row.createCell(colId.shortValue());
-		cell.setCellValue("Report Name: "+r.getName());
-		
-		
-		
-		grdx.makeColSpan(rd.getTotalDepth());
-		rowId.inc();
-		colId.reset();
-		
-		row=sheet.createRow(rowId.shortValue());
-		cell=row.createCell(colId.shortValue());
-		cell.setCellValue("Report Description: "+r.getReportDescription());
-		grdx.makeColSpan(rd.getTotalDepth());
-		rowId.inc();
-		colId.reset();
+    GroupReportDataXLS grdx = new GroupReportDataXLS(wb, sheet, row, rowId,
+        colId, null, rd);
 
+    grdx.setMetadata(r);
 
-		grdx.generate();
+    String sortBy = (String) session.getAttribute("sortBy");
+    if (sortBy != null)
+      rd.setSorterColumn(sortBy);
 
-		// we now iterate the rows and create the csv
+    //show title+desc
+    rowId.inc();
+    colId.reset();
+    row = sheet.createRow(rowId.shortValue());
+    HSSFCell cell = row.createCell(colId.shortValue());
+    cell.setCellValue(AmpReports.getNote(session) + "\n");
+    grdx.makeColSpan(rd.getTotalDepth());
+    rowId.inc();
+    colId.reset();
 
-		StringBuffer sb = new StringBuffer();
-		Iterator i = sheet.rowIterator();
-		while (i.hasNext()) {
-			HSSFRow crow = (HSSFRow) i.next();
-			for(short ii=crow.getFirstCellNum();ii<=crow.getLastCellNum();ii++){
-				HSSFCell ccell = crow.getCell(ii);
-				String s="";
-				if(ccell!=null) if(ccell.getCellType()==HSSFCell.CELL_TYPE_NUMERIC) s=Double.toString(ccell.getNumericCellValue());
-				else s=ccell.getStringCellValue();
-				sb.append("\"").append(s).append("\"");
-				if (ii<crow.getLastCellNum())
-					sb.append(",");
-			}
-			sb.append("\n");
+    row = sheet.createRow(rowId.shortValue());
+    cell = row.createCell(colId.shortValue());
+    cell.setCellValue("Report Name: " + r.getName());
 
-		}
+    grdx.makeColSpan(rd.getTotalDepth());
+    rowId.inc();
+    colId.reset();
 
-		response.getWriter().write(sb.toString());
+    row = sheet.createRow(rowId.shortValue());
+    cell = row.createCell(colId.shortValue());
 
-		return null;
-	}
+    cell.setCellValue("Report Description: " + r.getReportDescription());
+    grdx.makeColSpan(rd.getTotalDepth());
+    rowId.inc();
+    colId.reset();
+
+    grdx.generate();
+
+    // we now iterate the rows and create the csv
+
+    StringBuffer sb = new StringBuffer();
+    Iterator i = sheet.rowIterator();
+    while (i.hasNext()) {
+      HSSFRow crow = (HSSFRow) i.next();
+      for (short ii = crow.getFirstCellNum(); ii <= crow.getLastCellNum(); ii++) {
+        HSSFCell ccell = crow.getCell(ii);
+        String s = "";
+        if (ccell != null) {
+          if (ccell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC)
+            s = Double.toString(ccell.getNumericCellValue());
+          else
+            s = ccell.getStringCellValue();
+          sb.append("\"").append(s).append("\"");
+
+          if (ii < crow.getLastCellNum())
+            sb.append(",");
+        }
+      }
+      sb.append("\n");
+
+    }
+
+    ServletOutputStream out = response.getOutputStream();
+    out.write(sb.toString().getBytes());
+
+    out.close();
+
+    return null;
+  }
 
 }

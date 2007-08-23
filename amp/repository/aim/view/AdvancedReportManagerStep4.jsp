@@ -27,14 +27,14 @@ function check(){
 	var desc = document.aimAdvancedReportForm.reportDescription.value;
 	var stat=0;
     var a = temp.charAt(0);
-	
+
 	/*if (isNaN(a)) {
 		alert("Not Numeric");
 	} else {
 		alert("Numeric");
 		flag=1;
 	}*/
-	
+
 	if(trim(temp) == "")
 	{
 		alert(" Please enter report title");
@@ -48,7 +48,7 @@ function check(){
 	}
 	else
 	{
-		for (var i = 0; i < temp.length; i++) 
+		for (var i = 0; i < temp.length; i++)
 		{
 			if (iChars.indexOf(temp.charAt(i)) != -1)
 			{
@@ -69,7 +69,7 @@ function check(){
 		return false;
 }
 
-function gotoStep() 
+function gotoStep()
 {
 	if(check())
 	{
@@ -134,31 +134,31 @@ function backStep() {
 								<digi:link href="/advancedReportManager.do?check=forward" styleClass="comment" title="${translation}" >
 								<digi:trn key="aim:reportBuilder:selectcolumn">
 									Report Builder : Select Column
-								</digi:trn>					
-								&gt;&gt;		
+								</digi:trn>
+								&gt;&gt;
 								</digi:link>&nbsp;&nbsp;
-								
+
 								<digi:link href="/advancedReportManager.do?check=4" styleClass="comment" title="${translation}" >
 								<digi:trn key="aim:reportBuilder:selectrows">
 									Report Builder : Select Rows
-								</digi:trn>					
-								&gt;&gt;		
+								</digi:trn>
+								&gt;&gt;
 								</digi:link>&nbsp;&nbsp;
-								
-								
+
+
 								<digi:link href="/advancedReportManager.do?check=SelectMeasures" styleClass="comment" title="${translation}" >
 								<digi:trn key="aim:reportBuilder:selectmeasures">
 									Report Builder : Select Measure
-								</digi:trn>					
-								&gt;&gt;		
+								</digi:trn>
+								&gt;&gt;
 								</digi:link>&nbsp;&nbsp;
 
 								<digi:trn key="aim:reportBuilder:reportDetails">
 									Report Builder: Report Details
-								</digi:trn>					
+								</digi:trn>
 							</td>
 						</tr>
-					</table>	
+					</table>
 				</td>
 			</tr>
 		 	<tr>
@@ -179,7 +179,7 @@ function backStep() {
 			</tr>
 			<TR>
 			<TD vAlign="top" align="center">
-	
+
 				<TABLE width="100%" cellSpacing=0 cellPadding=0 vAlign="top" align="left" bgcolor="#f4f4f4" class="box-border-nopadding">
 					<TR>
 						<TD bgcolor="#f4f4f4">
@@ -188,19 +188,19 @@ function backStep() {
 								<TR bgColor=#f4f4f2>
 									<TD vAlign="top" align="center" width="100%" bgColor=#f4f4f2>
 										<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2 >
-											<tr>	
-												<td>		
-													<digi:errors/>	
+											<tr>
+												<td>
+													<digi:errors/>
 													<font color="red">
 														<UL>
 															<logic:equal name="aimAdvancedReportForm" property="duplicatedReportName" value="true">
 																<LI><digi:trn key="aim:reportBuilder:error:duplicatedReportName">A report with the same name already exists. Please choose another report name.</digi:trn></LI>
 															</logic:equal>
 															<logic:present name="aimAdvancedReportForm" property="duplicatedReportOwner">
-																<LI><digi:trn key="aim:reportBuilder:error:duplicatedReportOwner">The report with this name is owned by </digi:trn>&nbsp;<bean:write name="aimAdvancedReportForm" property="duplicatedReportOwner"/>.</LI>															
-															</logic:present>				
+																<LI><digi:trn key="aim:reportBuilder:error:duplicatedReportOwner">The report with this name is owned by </digi:trn>&nbsp;<bean:write name="aimAdvancedReportForm" property="duplicatedReportOwner"/>.</LI>
+															</logic:present>
 														</UL>
-													</font>													
+													</font>
 												</td>
 											</tr>
 											<TR>
@@ -213,7 +213,7 @@ function backStep() {
 															<tr>
 																<td align="left" height=20  bgColor=#f4f4f2 width=150 class=box-title>
 																	<FONT color=red><BIG>*</BIG> </font><digi:trn key="aim:reportBuilder:ReportTitle">Report Title</digi:trn>
-																	
+
 																</td>
 															</tr>
 															<tr>
@@ -222,10 +222,10 @@ function backStep() {
 																</td>
 															</tr>
 															<tr>
-					
+
 																<td align="left"  bgColor=#f4f4f2 height=20 width=150 class=box-title >
 																<digi:trn key="aim:reportBuilder:ReporDescription">Report Description</digi:trn>
-																	
+
 																</td>
 															</tr>
 															<tr>
@@ -242,10 +242,13 @@ function backStep() {
 											<tr bgcolor="#f4f4f2">
 												<td align="center" colspan="2" bgcolor="#f4f4f2">
 													<html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:backStep()">
-															<< <digi:trn key="btn:previous">Previous</digi:trn> 
+															<< <digi:trn key="btn:previous">Previous</digi:trn>
 													</html:button>
-													<html:button  styleClass="dr-menu" property="submitButton"  onclick="return quitAdvRptMngr()">
-															<digi:trn key="btn:cancel">Cancel</digi:trn> 
+													<c:set var="message">
+														<digi:trn key="aim:reports:DataNotSaved">Do you really want to quit Report Generator? \nWarning: All your Current Data Will be Lost... press OK to QUIT Report Generator.</digi:trn>
+													</c:set>
+													<html:button  styleClass="dr-menu" property="submitButton"  onclick="return quitAdvRptMngr('${message}')">
+															<digi:trn key="btn:cancel">Cancel</digi:trn>
 													</html:button>
 													<html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:saveReport()">
 															<digi:trn key="btn:saveReport">Save Report</digi:trn>
@@ -254,7 +257,7 @@ function backStep() {
 											</tr>
 										</TABLE>
 									</TD>
-								</TR>	
+								</TR>
 							</TABLE>
 						</TD>
 					</TR>
@@ -262,11 +265,11 @@ function backStep() {
 			</TD>
 			</TR>
 		</table>
-	</td>	
+	</td>
 	<td class=r-dotted-lg align=left vAlign=top >	&nbsp;</td>
 </tr>
 </table>
-</td>	
+</td>
 </TR>
 </TABLE>
 

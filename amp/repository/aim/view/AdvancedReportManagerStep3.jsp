@@ -188,7 +188,10 @@
 																<html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:history.back()">
 																	<< <digi:trn key="btn:previous">Previous</digi:trn>
 																</html:button>
-																<html:button  styleClass="dr-menu" property="submitButton"  onclick="return quitAdvRptMngr()">
+																<c:set var="message">
+																	<digi:trn key="aim:reports:DataNotSaved">Do you really want to quit Report Generator? \nWarning: All your Current Data Will be Lost... press OK to QUIT Report Generator.</digi:trn>
+																</c:set>
+																<html:button  styleClass="dr-menu" property="submitButton"  onclick="return quitAdvRptMngr('${message}')">
 																	<digi:trn key="btn:cancel">Cancel</digi:trn>
 																</html:button>
 																<html:button  styleClass="dr-menu" property="submitButton"  onclick="popup_barChart()">

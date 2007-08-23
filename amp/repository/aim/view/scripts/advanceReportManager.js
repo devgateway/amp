@@ -15,3 +15,16 @@ function quitAdvRptMngr() {
 			return(false);
 		}
 }
+
+function quitAdvRptMngr(msg) {
+
+		var temp = confirm(msg);
+		if(temp.toString()=="true"){
+		document.aimAdvancedReportForm.action = "/viewMyDesktop.do";
+		document.aimAdvancedReportForm.target = "_self";
+		document.aimAdvancedReportForm.submit();
+		}
+		else{
+			return(false);
+		}
+}

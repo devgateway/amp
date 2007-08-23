@@ -20,7 +20,7 @@ function moveUp(val)
 		document.aimAdvancedReportForm.moveColumn.value = val;
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
-	}	
+	}
 
 }
 
@@ -35,7 +35,7 @@ function moveDown(val)
 		document.aimAdvancedReportForm.moveColumn.value = val;
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
-	}	
+	}
 }
 
 function moveUpAdjType(val)
@@ -50,7 +50,7 @@ function moveUpAdjType(val)
 		document.aimAdvancedReportForm.moveColumn.value = val;
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
-	}	
+	}
 
 }
 function moveDownAdjType(val)
@@ -64,7 +64,7 @@ function moveDownAdjType(val)
 		document.aimAdvancedReportForm.moveColumn.value = val;
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
-	}	
+	}
 
 }
 function check(){
@@ -189,30 +189,30 @@ function checkUncheckAll2() {
 											<digi:link href="/advancedReportManager.do?check=forward" styleClass="comment" title="${translation}" >
 											<digi:trn key="aim:reportBuilder:selectcolumn">
 												Report Builder : Select Column
-											</digi:trn>					
-											&gt;&gt;		
+											</digi:trn>
+											&gt;&gt;
 											</digi:link>&nbsp;&nbsp;
-								
+
 											<digi:link href="/advancedReportManager.do?check=SelectMeasures" styleClass="comment" title="${translation}" >
 											<digi:trn key="aim:reportBuilder:selectrows">
 												Report Builder : Select Rows
-											</digi:trn>					
-											&gt;&gt;		
+											</digi:trn>
+											&gt;&gt;
 											</digi:link>&nbsp;&nbsp;
 
 											<digi:trn key="aim:reportBuilder:selectmeasures">
 												Report Builder : Select Measure
-											</digi:trn>					
+											</digi:trn>
 										</td>
 									</tr>
-								</table>	
+								</table>
 							</td>
 						</tr>
 		 				<tr>
 
 							<td height=16 vAlign=right align=center>
 								<span class=subtitle-blue>
-								
+
 								<digi:trn key="aim:reportBuilder:selectmeasure">
 												Report Builder : Select Measures
 								</digi:trn>
@@ -225,14 +225,14 @@ function checkUncheckAll2() {
 								<digi:trn key="aim:reportBuilder:ReportType">
 								 Report Type :
 								</digi:trn>
-						
-						
+
+
 								<bean:write name="aimAdvancedReportForm" property="arReportType"/>
 							<td>
 						</tr>
 						<TR>
 							<TD vAlign="top" align="center">
-								<TABLE width="100%" cellSpacing=0 cellPadding=0 vAlign="top" align="left" bgcolor="#f4f4f4" 
+								<TABLE width="100%" cellSpacing=0 cellPadding=0 vAlign="top" align="left" bgcolor="#f4f4f4"
 								class="box-border-nopadding">
 									<TR>
 										<TD bgcolor="#f4f4f4">
@@ -240,25 +240,25 @@ function checkUncheckAll2() {
 												<jsp:include page="AdvancedReportManagerMenu.jsp" flush="true"/>
 												<TR bgColor=#f4f4f2>
 													<TD vAlign="top" align="left" width="100%"></TD>
-												</TR>				
+												</TR>
 												<TR bgColor=#f4f4f2>
 													<TD vAlign="top" align="center" width="100%" bgColor=#f4f4f2>
 														<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2 >
 															<TR>
 																<TD width="100%" bgcolor="#f4f4f2" align="center"  valign=top>
-																	<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top" 
+																	<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top"
 																	align="center" bgColor=#f4f4f2 class="box-border-nopadding" border=0>
 																		<TR>
 																			<TD width="50%" vAlign="top" align="left" bgcolor="#eeeeee">
-																				<TABLE width="100%" cellPadding="3" cellSpacing="1" vAlign="top" 
+																				<TABLE width="100%" cellPadding="3" cellSpacing="1" vAlign="top"
 																				align="left" bgcolor="#eeeeee" >
-																					<tr height=10>	<td>	</td>	</tr>												
+																					<tr height=10>	<td>	</td>	</tr>
 																					<TR bgcolor="#eeeeee">
 																						<td align="center" class=box-title>
 																						  <digi:trn key="aim:reportBuilder:AvailableMeasures">
 																							Available Measures
 																						  </digi:trn>
-																						</td>	
+																						</td>
 																					</tr>
 																					<tr height="10">
 																						<td align="right">
@@ -271,10 +271,10 @@ function checkUncheckAll2() {
 																					</tr>
 																					<TR>
 																						<TD>
-																							<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" 
+																							<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top"
 																							align="top" bgcolor="#aaaaaa" border=0>
 																								<c:if test="${!empty aimAdvancedReportForm.ampMeasures}">
-																								<logic:iterate name="aimAdvancedReportForm" id="ampMeasures"	
+																								<logic:iterate name="aimAdvancedReportForm" id="ampMeasures"
 																								property="ampMeasures" >
 																								<TR bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
@@ -296,7 +296,7 @@ function checkUncheckAll2() {
 																					<tr>
 																						<c:if test="${empty aimAdvancedReportForm.ampMeasures}">
 																						<td>
-																							<TABLE width="100%" height="100" cellPadding=2 cellSpacing=0 
+																							<TABLE width="100%" height="100" cellPadding=2 cellSpacing=0
 																							vAlign="top" align="center" bgcolor="#f4f4f2">
 																								<tr bgcolor="#eeeeee">
 																									<td class=box-title align=center>
@@ -312,9 +312,9 @@ function checkUncheckAll2() {
 																				</TABLE>
 																			</TD>
 																			<TD width="50%" vAlign="top" align="left" bgcolor="#eeeeee">
-																				<TABLE width="100%" cellPadding="2" cellSpacing="1" vAlign="top" 
+																				<TABLE width="100%" cellPadding="2" cellSpacing="1" vAlign="top"
 																				align="top" bgcolor="#eeeeee" border=0>
-																					<tr height=10><td></td></tr>												
+																					<tr height=10><td></td></tr>
 																					<TR bgcolor="#eeeeee">
 																						<td align="center" class=box-title>
 																						  <digi:trn key="aim:reportBuilder:NomeasuresAdd">
@@ -323,7 +323,7 @@ function checkUncheckAll2() {
 																					<digi:trn key="aim:reportBuilder:SelectedMeasur">
 																							Selected Measures
 																						  </digi:trn>
-																							
+
 																						</td>
 																					</tr>
 																					<tr height=10>
@@ -334,14 +334,14 @@ function checkUncheckAll2() {
 																							<input type="checkbox" name="checkall2" onclick="checkUncheckAll2(this);">
 																							</input>
 																						</td>
-																					</tr>																	
+																					</tr>
 																					<TR>
 																						<c:if test="${!empty aimAdvancedReportForm.addedMeasures}">
 																						<TD>
-																						<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" 
+																						<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top"
 																						align="top" bgcolor="#aaaaaa" border=0>
 																							<c:if test="${!empty aimAdvancedReportForm.addedMeasures}">
-																							<logic:iterate name="aimAdvancedReportForm" id="addedMeasures"	
+																							<logic:iterate name="aimAdvancedReportForm" id="addedMeasures"
 																							property="addedMeasures" >
 																							<tr bgcolor=#ffffff>
 																								<td align="left" width="98%">
@@ -355,11 +355,11 @@ function checkUncheckAll2() {
 																									</html:multibox>
 																								</td>
 																								<td align="right">
-																									<IMG alt="Move Up"  height=10 
-																									src="../ampTemplate/images/up-arrow.jpg" width=10 
+																									<IMG alt="Move Up"  height=10
+																									src="../ampTemplate/images/up-arrow.jpg" width=10
 																									onclick="moveUp(<c:out value='${addedMeasures.measureId}' />)">
-																									<IMG alt="Move Down" styleClass="test" height=10 
-																									src="../ampTemplate/images/down-arrow.jpg" width=10 
+																									<IMG alt="Move Down" styleClass="test" height=10
+																									src="../ampTemplate/images/down-arrow.jpg" width=10
 																									onclick="moveDown(<c:out value='${addedMeasures.measureId}' />)">
 																								</td>
 																							</tr>
@@ -367,18 +367,18 @@ function checkUncheckAll2() {
 																							</c:if>
 																						</TABLE>
 																						</TD>
-																						</c:if>														
-																		
+																						</c:if>
+
 																						<c:if test="${empty aimAdvancedReportForm.addedMeasures}">
 																						<td >
-																							<TABLE width="100%" height="100" cellPadding=2 cellSpacing=0 
+																							<TABLE width="100%" height="100" cellPadding=2 cellSpacing=0
 																							vAlign="top" align="center" bgcolor="#f4f4f2">
-																								<tr bgcolor="#eeeeee">	
+																								<tr bgcolor="#eeeeee">
 																									<td class=box-title align=center>
 																									<digi:trn key="aim:reportBuilder:NOmeasuresselected ">
-																									No measures selected 
+																									No measures selected
 																						  </digi:trn>
-																									
+
 																									</td>
 																								</tr>
 																							</table>
@@ -391,10 +391,10 @@ function checkUncheckAll2() {
 																		<TR><TD colspan="2">
 																			<table width="638" bgColor=#f4f4f2 class="box-border-nopadding" border=0>
 																				<tr align="center">
-																					<td align="center" class="box-title" rowspan="2" width="300">		
+																					<td align="center" class="box-title" rowspan="2" width="300">
 																						&nbsp;&nbsp;&nbsp;&nbsp;
 																						<digi:trn key="aim:AnnualReport:Kindreport">
-																								Kind of report													
+																								Kind of report
 																							</digi:trn>
 																					</td>
 																					<td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -406,7 +406,7 @@ function checkUncheckAll2() {
 																					</td>
 																				<tr align="center">
 																					<td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-																						<html:radio property="reportOption" value="Q"> 
+																						<html:radio property="reportOption" value="Q">
 																							<digi:trn key="aim:QuarterlyReport">
 																								Quarterly
 																							</digi:trn>
@@ -415,27 +415,27 @@ function checkUncheckAll2() {
 																				</tr>
 																				<tr align="center">
 																					<td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-																						<html:checkbox property="hideActivities"> 
+																						<html:checkbox property="hideActivities">
 																							<digi:trn key="aim:summaryReport">
 																								Summary Report
 																							</digi:trn>
 																						</html:checkbox>
 																					</td>
 																				</tr>
-																	
+
 																			<tr align="center">
 																					<td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-																						<html:checkbox property="drilldownTab"> 
+																						<html:checkbox property="drilldownTab">
 																							<digi:trn key="aim:drilldownTab">
 																							Show as a drilldown in My Tabs
 																							</digi:trn>
 																						</html:checkbox>
 																					</td>
 																				</tr>
-																	
+
 																		<tr align="center">
 																					<td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-																						<html:checkbox property="publicReport"> 
+																						<html:checkbox property="publicReport">
 																							<b><digi:trn key="aim:publicReport">
 																							Public Report
 																							</digi:trn>
@@ -443,7 +443,7 @@ function checkUncheckAll2() {
 																						</html:checkbox>
 																					</td>
 																				</tr>
-																	
+
 																			</table>
 																		</TD></TR>
 																	</TABLE>
@@ -455,20 +455,23 @@ function checkUncheckAll2() {
 																		 <digi:trn key="btn:add">Add</digi:trn> >>
 																	</html:button>
 																	<html:button  styleClass="dr-menu" property="submitButton"  onclick="deleteColumn()">
-																		<< <digi:trn key="btn:remove">Remove</digi:trn> 
+																		<< <digi:trn key="btn:remove">Remove</digi:trn>
 																	</html:button>
 																</td>
 															</tr>	<!-- Add and Remove Button-->
-															<tr>	
+															<tr>
 																<td height=30>	&nbsp;</td>	</tr>
 															<tr>
 																<td align="right" colspan="2">
 																	<html:hidden name="stepName" property="stepName" value="SelectMeasures" />
 																	<html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:backStep()">
-																		<< <digi:trn key="btn:previous">Previous</digi:trn> 
+																		<< <digi:trn key="btn:previous">Previous</digi:trn>
 																	</html:button>
-																	<html:button  styleClass="dr-menu" property="submitButton"  onclick="return quitAdvRptMngr()">
-																		<digi:trn key="btn:cancel">Cancel</digi:trn> 
+																	<c:set var="message">
+																		<digi:trn key="aim:reports:DataNotSaved">Do you really want to quit Report Generator? \nWarning: All your Current Data Will be Lost... press OK to QUIT Report Generator.</digi:trn>
+																	</c:set>
+																	<html:button  styleClass="dr-menu" property="submitButton"  onclick="return quitAdvRptMngr('${message}')">
+																		<digi:trn key="btn:cancel">Cancel</digi:trn>
 																	</html:button>
 																	<html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:gotoStep()">
 																		<digi:trn key="btn:next">Next</digi:trn> >>
@@ -477,7 +480,7 @@ function checkUncheckAll2() {
 															</tr>
 														</TABLE>
 													</TD>
-												</TR>	
+												</TR>
 											</TABLE>
 										</TD>
 									</TR>
@@ -485,12 +488,12 @@ function checkUncheckAll2() {
 							</TD>
 						</TR>
 					</table>
-				</td>	
+				</td>
 				<td class=r-dotted-lg align=left vAlign=top >&nbsp;
 				</td>
 			</tr>
 		</table>
-	</td>	
+	</td>
 </TR>
 </TABLE>
 </digi:form>

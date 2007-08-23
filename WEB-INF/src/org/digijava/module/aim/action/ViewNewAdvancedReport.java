@@ -61,9 +61,10 @@ public class ViewNewAdvancedReport extends Action {
 		
 		TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");				
 		AmpApplicationSettings ampAppSettings = null;				
-						
+		if(tm!=null)				
 		ampAppSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
 		if(ampAppSettings==null)
+			if(tm!=null)
 			ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 		
 		if(ampAppSettings!=null)

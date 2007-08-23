@@ -5,8 +5,8 @@ package org.digijava.module.aim.startup;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Enumeration;
-import java.util.Iterator;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -19,7 +19,7 @@ import net.sf.hibernate.Session;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpFeature;
+import org.digijava.module.aim.dbentity.AmpColumnsOrder;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -156,6 +156,9 @@ public class AMPStartupListener extends HttpServlet
         	AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),session);
         	ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
         	ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
+        	Collection ampColumns=FeaturesUtil.getAMPColumnsOrder();
+        	ampContext.setAttribute("ampColumnsOrder",ampColumns);
+        	
         	
     	} catch (Exception e) {
     		logger.error("Exception while initialising AMP :" + e.getMessage());

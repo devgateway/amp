@@ -54,7 +54,7 @@ public class CSVExportAction
     HttpSession session = request.getSession();
     AmpReports r = (AmpReports) session.getAttribute("reportMeta");
 
-    response.setContentType("application/vnd.ms-excel; charset=UTF-16");
+    response.setContentType("application/vnd.ms-excel");
     response.setHeader("Content-Disposition",
                        "inline; filename=data.csv ");
 
@@ -94,7 +94,6 @@ public class CSVExportAction
     cell = row.createCell(colId.shortValue());
     cell.setCellValue("Report Name: " + r.getName());
 
-
     grdx.makeColSpan(rd.getTotalDepth());
     rowId.inc();
     colId.reset();
@@ -132,10 +131,10 @@ public class CSVExportAction
       sb.append("\n");
 
     }
+    PrintWriter out = new PrintWriter(new OutputStreamWriter(response.
+        getOutputStream(), "UnicodeLittle"), true);
 
-
-    ServletOutputStream out = response.getOutputStream();
-    out.write(sb.toString().getBytes());
+    out.println(sb.toString());
 
     out.close();
 

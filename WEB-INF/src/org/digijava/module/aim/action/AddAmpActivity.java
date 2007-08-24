@@ -32,6 +32,7 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.module.aim.dbentity.AmpCategoryClass;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
@@ -102,9 +103,27 @@ public class AddAmpActivity extends Action {
 				prevSelSectors = new ArrayList();
 				prevSelSectors.add(sect);
 			}
+			
+				Collection col =FeaturesUtil.getGlobalSettings();
+	            Iterator itr = col.iterator();
+	            String view=null;
+	            while(itr.hasNext())
+	           {
+	             AmpGlobalSettings args = (AmpGlobalSettings)itr.next();
+	             view = args.getGlobalSettingsValue();
+	           }
+		            if (view.equalsIgnoreCase("On"))
+					{
+						sect.setCount(1);
+					}
+					  else 
+					{
+						sect.setCount(2);
+					}
+		
 			eaForm.setActivitySectors(prevSelSectors);
 			return mapping.findForward("addActivityStep2");
-		}
+	}
 		// Remove sectors
 		else
 			if (request.getParameter("remSectors") != null){

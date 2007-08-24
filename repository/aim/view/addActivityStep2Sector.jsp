@@ -127,17 +127,19 @@
                                                                 </table>
                                                               </td>
                                                             </tr>
+                                                            <c:set var="sectror" value="${activitySectors.count}"/>
                                                           </c:forEach>
                                                           <tr>
                                                             <td>
                                                               <table cellSpacing=2 cellPadding=2>
                                                                 <tr>
+                                                                <c:if test="${sectror == 1}">
                                                                 	<field:display name="Add Sectors Button" feature="Sectors">&nbsp;</field:display>
-                                                                    <td>
+                                                                  <td>
                                                                       <input type="button" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' class="buton"  onclick="addSectors();">
                                                                     </td>
-
-                                                                    <field:display name="Remove Sectors Button" feature="Sectors">&nbsp;</field:display>
+                                                                 </c:if>
+																    <field:display name="Remove Sectors Button" feature="Sectors">&nbsp;</field:display>
                                                                   <td>
 																	<input type="button" class="buton" onclick="return removeSelSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
                                                                   </td>

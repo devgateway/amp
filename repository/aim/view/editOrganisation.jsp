@@ -32,7 +32,7 @@
 			document.aimAddOrgForm.submit();
 		}
 	}
-	
+
 	function addSector()
 	{
 		<digi:context name="addSec" property="context/module/moduleinstance/editOrganisation.do" />
@@ -50,7 +50,7 @@
 	function removeSelSectors() {
 		var flag = validate();
 		if (flag == false) return false;
-	    
+
 	    <digi:context name="addSec" property="context/module/moduleinstance/editOrganisation.do" />
 		document.aimAddOrgForm.action = "<%= addSec %>"+"~ampOrgId="+document.aimAddOrgForm.ampOrgId.value+"~actionFlag=edit~remSectors=true";
 		document.aimAddOrgForm.target = "_self";
@@ -80,7 +80,7 @@
 		}
 		return true;
 	}
-	
+
 </script>
 <script language="JavaScript">
 
@@ -92,7 +92,7 @@ function openOrgWindow(wndWidth, wndHeight,location){
     wndHeight = window.screen.availHeight/2;
   }
 
- 
+
   popupPointer = window.open(location, "orgPopup", "height=" + wndHeight + ",width=" + wndWidth + ",menubar=no,scrollbars=no");
 }
 
@@ -144,8 +144,6 @@ function loadPage()
 						flag = true;
 					document.aimAddOrgForm.orgTypeFlag.value = "national";
 				}
-				else
-					return false;
 			}
 			else if (document.aimAddOrgForm.ampOrgTypeId.options[index].text == "Regional Government") {
               if (document.aimAddOrgForm.orgTypeFlag.value != "regional") {
@@ -158,28 +156,19 @@ function loadPage()
 						flag = true;
 						document.aimAddOrgForm.orgTypeFlag.value = "regional";
 					}
-					else
-						return false;
 				 }
 			 	else if (document.aimAddOrgForm.ampOrgTypeId.options[index].text == "Multilateral") {
 							if (document.aimAddOrgForm.orgTypeFlag.value != "multilateral") {
 								document.aimAddOrgForm.orgTypeFlag.value = "multilateral";
 								flag = true;
 							}
-							else
-								return false;
 				 		}
 				 		else if (document.aimAddOrgForm.orgTypeFlag.value != "others") {
 				 				//if (document.aimAddOrgForm.orgTypeFlag.value == "multilateral")
 									flag = true;
 			 					document.aimAddOrgForm.orgTypeFlag.value = "others";
 			 				}
-			 		 		else
-			 		 			return false;
 
-			if (flag == true) {
-                document.aimAddOrgForm.submit();
-			}
 		}
 		else {
 			if (document.aimAddOrgForm.orgTypeFlag.value == "regional")
@@ -187,6 +176,7 @@ function loadPage()
 			document.aimAddOrgForm.orgTypeFlag.value = "none";
 			return false;
 		}
+        document.aimAddOrgForm.submit();
 	}
 
 	// defunct
@@ -360,7 +350,7 @@ function loadPage()
 							   </digi:trn>
 							</b>
 						</logic:equal>
-						
+
 						<logic:equal name="aimAddOrgForm" property="flag" value="orgCodeExist" >
 							<b><digi:trn key="aim:orgCodeExistMsg"><font color="#FF0000">
                                		Please choose other organization code as it is currently in use by some other organization !</font>
@@ -816,7 +806,7 @@ function loadPage()
 																				<tr>
 																					<td width="42%" align="right">
 																						<html:button  styleClass="dr-menu" property="submitButton" onclick="return check()" >
-																							<digi:trn key="btn:save">Save</digi:trn> 
+																							<digi:trn key="btn:save">Save</digi:trn>
 																						</html:button>
 																					</td>
 																					<td width="8%" align="left">
@@ -833,7 +823,7 @@ function loadPage()
 																		<tr>
 																			<td colspan="3" width="555"  align="center" height="27">
 																				<html:button  styleClass="dr-menu" property="submitButton"  onclick="return msg()">
-																					<digi:trn key="btn:deleteThisOrganization">Delete this Organization</digi:trn> 
+																					<digi:trn key="btn:deleteThisOrganization">Delete this Organization</digi:trn>
 																				</html:button>
 																			</td>
 																		</tr>

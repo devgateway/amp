@@ -332,14 +332,14 @@
 															<img src= "../ampTemplate/images/arrow_right.gif" border=0>
 														</digi:link>
 													</c:if>&nbsp;&nbsp;&nbsp;<b>
-													<bean:define id="indName">
-														<field:display name="Indicator Name" feature="M&E">
+													<field:display name="Indicator Name" feature="M & E">
+														<bean:define id="indName">
 															<bean:write name="indicator" property="indicatorName"/>
-														</field:display>
-													</bean:define>
-
-													<digi:trn key="<%=indName%>"><%=indName%></digi:trn></b> -
-													<field:display name="Indicator ID" feature="M&E">
+														</bean:define>
+														<digi:trn key="<%=indName%>"><%=indName%></digi:trn></b> -
+													</field:display>
+													
+													<field:display name="Indicator ID" feature="M & E">
 														<bean:write name="indicator" property="indicatorCode" />
 													</field:display>
 

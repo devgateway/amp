@@ -2014,7 +2014,18 @@ public static Collection getFundingByOrg(Long id) {
 						session.delete(notesAmp);
 					}
 				}
-			
+				
+				//	 delete all previous comments
+				ArrayList col = org.digijava.module.aim.util.DbUtil.getAllCommentsByActivityId(ampAct.getAmpActivityId());
+				logger.debug("col.size() [Inside deleting]: " + col.size());
+					if (col != null) {
+						Iterator itr = col.iterator();
+						while (itr.hasNext()) {
+							AmpComments comObj = (AmpComments) itr.next();
+							session.delete(comObj);
+						}
+					}
+				logger.debug("comments deleted");
 				
 			}
 			session.delete(ampAct);

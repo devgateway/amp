@@ -4117,6 +4117,30 @@ public class DbUtil {
         return comments;
     }
 
+    public static ArrayList getAllCommentsByActivityId(Long aid) {
+        Session session = null;
+        Query qry = null;
+        ArrayList comments = new ArrayList();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select o from " + AmpComments.class.getName()
+                + " o "
+                + "where (o.ampActivityId=:aid)";
+            qry = session.createQuery(queryString);
+            qry.setParameter("aid", aid, Hibernate.LONG);
+            Iterator itr = qry.list().iterator();
+            while (itr.hasNext()) {
+                AmpComments com = (AmpComments) itr.next();
+                comments.add(com);
+            }
+        } catch (Exception e) {
+            logger.error("Unable to get all comments");
+            logger.debug("Exceptiion " + e);
+        }
+        return comments;
+    }
+
     public static AmpComments getAmpComment(Long id) {
         Session session = null;
         AmpComments comment = null;

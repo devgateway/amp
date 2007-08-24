@@ -101,10 +101,19 @@ public class CategAmountColWorker extends ColumnWorker {
 		double exchangeRate=rs.getDouble("exchange_rate");
 		String currencyCode=rs.getString("currency_code");
 		String perspectiveCode=null; 
+		double fixedExchangeRate=1;
 		
 		//the most important meta name, the source name (donor name, region name, component name)
 		String headMetaName=rsmd.getColumnName(4);
 
+
+		try {
+			fixedExchangeRate=rs.getDouble("fixed_exchange_rate");
+		
+		} catch (SQLException e) {
+
+		}
+		
 
 		try {
 			perspectiveCode=rs.getString("perspective_code");
@@ -159,7 +168,12 @@ public class CategAmountColWorker extends ColumnWorker {
 		}
 
 		acc.setAmount(tr_amount);
+		
+		//use fixed exchange rate only if it has been entered. Else use 
+		if(fixedExchangeRate!=1)
+			acc.setFromExchangeRate(fixedExchangeRate); else
 		acc.setFromExchangeRate(exchangeRate);
+		
 		acc.setCurrencyDate(td);
 		acc.setCurrencyCode(currencyCode);
 		//put toExchangeRate

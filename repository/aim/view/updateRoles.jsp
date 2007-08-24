@@ -20,6 +20,12 @@ function permissionCheck()
   }
 }
 
+function cancel(){
+  aimUpdateRoleForm.action="${contextPath}/aim/roles.do";
+  aimUpdateRoleForm.target = "_self";
+  aimUpdateRoleForm.submit();
+}
+
 function load() {}
 
 function unload() {}
@@ -357,7 +363,7 @@ function unload() {}
                                               <c:set var="trnCancelBtn">
                                                 <digi:trn key="aim:btnCancel">Cancel</digi:trn>&nbsp;
                                               </c:set>
-                                              <html:reset value="${trnCancelBtn}"  styleClass="dr-menu" onclick="javascript:history.go(-1)"/>
+                                              <html:reset value="${trnCancelBtn}"  styleClass="dr-menu"  onclick="cancel()"/>
                                             </td>
                                           </tr>
                                         </table>
@@ -370,7 +376,7 @@ function unload() {}
                                               <html:submit value="${btnSave}" styleClass="dr-menu" onclick="return permissionCheck()" />
                                             </td>
                                             <td width="50%" align="left">
-                                              <html:reset value="${btnCancel}" styleClass="dr-menu" onclick="javascript:history.go(-1)" />
+                                              <html:reset value="${btnCancel}" styleClass="dr-menu"  onclick="cancel()" />
                                             </td>
                                           </tr>
                                         </table>
@@ -384,7 +390,7 @@ function unload() {}
                                             </td>
                                             <td width="50%" align="left">
 
-                                              <html:reset value="${btnCancel}" styleClass="dr-menu" onclick="javascript:history.go(-1)" />
+                                              <html:reset value="${btnCancel}" styleClass="dr-menu"  onclick="cancel()" />
                                             </td>
                                           </tr>
                                         </table>

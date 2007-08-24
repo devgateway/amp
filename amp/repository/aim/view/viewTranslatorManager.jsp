@@ -80,17 +80,17 @@ div.fakefile2 input{
 		var fakeFileUpload = document.createElement('div');
 		fakeFileUpload.className = 'fakefile';
 		fakeFileUpload.appendChild(document.createElement('input'));
-		
+
 		var fakeFileUpload2 = document.createElement('div');
 		fakeFileUpload2.className = 'fakefile2';
-		
-		
+
+
 		var button = document.createElement('input');
 		button.type = 'button';
-		
+
 		button.value = '<digi:trn key="aim:browse">Browse..."</digi:trn>';
 		fakeFileUpload2.appendChild(button);
-		
+
 		fakeFileUpload.appendChild(fakeFileUpload2);
 		var x = document.getElementsByTagName('input');
 		for (var i=0;i<x.length;i++) {
@@ -100,13 +100,13 @@ div.fakefile2 input{
 			var clone = fakeFileUpload.cloneNode(true);
 			x[i].parentNode.appendChild(clone);
 			x[i].relatedElement = clone.getElementsByTagName('input')[0];
- 
+
  			x[i].onchange = x[i].onmouseout = function () {
 				this.relatedElement.value = this.value;
 			}
 		}
 	}
-	
+
 	function initFileUploads3() {
 		if (!W3CDOM) return;
 		var fakeFileUpload = document.createElement('div');
@@ -130,7 +130,7 @@ div.fakefile2 input{
 	}
 
 
-	
+
 </script>
 
 <digi:instance property="aimTranslatorManagerForm" />
@@ -172,7 +172,7 @@ div.fakefile2 input{
 				</tr>
 				<tr>
 					<td height=16 vAlign=center width=571>
-						<html:errors />
+						<digi:errors />
 					</td>
 				</tr>
 				<tr>

@@ -92,6 +92,12 @@ import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.common.util.DateTimeUtil;
 import java.util.Locale;
 import java.text.Collator;
+import org.digijava.module.aim.helper.CountryBean;
+import org.digijava.kernel.translator.util.TrnCountry;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
+import javax.servlet.http.HttpServletRequest;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -5610,6 +5616,29 @@ public class DbUtil {
         }
     }
 
+    public static String getTrnText(String key, String defaultText, HttpServletRequest request) {
+        TranslatorWorker trnWorker = TranslatorWorker.getInstance();
+        org.digijava.kernel.entity.Locale locale=RequestUtils.getNavigationLanguage(request);
+        Site site=RequestUtils.getSite(request);
+        try {
+            Message msg = trnWorker.getMessage(key, locale.getCode(),site.getSiteId());
+            if (msg == null) {
+                msg = new Message();
+                msg.setKey(key);
+                msg.setLocale(locale.getCode());
+                msg.setMessage(defaultText);
+                msg.setSiteId(site.getSiteId());
+                trnWorker.save(msg);
+                return defaultText;
+            } else {
+                return msg.getMessage();
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
+    }
+
     public static class HelperUserNameComparator implements Comparator {
         public int compare(Object obj1, Object obj2) {
             User user1 = (User) obj1;
@@ -5618,11 +5647,66 @@ public class DbUtil {
         }
     }
 
-    public static class HelperAmpOrgGroupNameComparator  implements Comparator {
-               public int compare(Object obj1, Object obj2) {
-                   AmpOrgGroup o1 = (AmpOrgGroup) obj1;
-                   AmpOrgGroup o2 = (AmpOrgGroup) obj2;
-                   return o1.getOrgGrpName().compareTo(o2.getOrgGrpName());
+    public static class HelperTrnCountryNameComparator implements Comparator<TrnCountry> {
+        Locale locale;
+        Collator collator;
+
+        public HelperTrnCountryNameComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperTrnCountryNameComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(TrnCountry o1, TrnCountry o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+
+            int result = collator.compare(o1.getName(), o2.getName());
+            return result;
+        }
+    }
+
+    public static class HelperAmpOrgGroupNameComparator implements Comparator<AmpOrgGroup> {
+        Locale locale;
+        Collator collator;
+
+        public HelperAmpOrgGroupNameComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAmpOrgGroupNameComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(AmpOrgGroup o1, AmpOrgGroup o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+
+            int result = collator.compare(o1.getOrgGrpName(), o2.getOrgGrpName());
+            return result;
+        }
+    }
+
+    public static class HelperAmpOrgTypeNameComparator implements Comparator<AmpOrgType> {
+        Locale locale;
+        Collator collator;
+
+        public HelperAmpOrgTypeNameComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAmpOrgTypeNameComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(AmpOrgType o1, AmpOrgType o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+
+            int result = collator.compare(o1.getOrgType(), o2.getOrgType());
+            return result;
         }
     }
 }

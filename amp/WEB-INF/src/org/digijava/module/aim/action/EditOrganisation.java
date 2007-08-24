@@ -177,12 +177,23 @@ public class EditOrganisation extends Action {
 					 	editForm.setSectorScheme(SectorUtil.getAllSectorSchemes());
 					 if (null == editForm.getRegion() || editForm.getRegion().size() < 1)
 					 	editForm.setRegion(LocationUtil.getAllRegionsUnderCountry(DbUtil.getCountryByName("Ethiopia").getIso()));
-					 if (null == editForm.getOrgType() || editForm.getOrgType().size() < 1)
-					 	editForm.setOrgType(DbUtil.getAllOrgTypes());
+					 if (null == editForm.getOrgType() || editForm.getOrgType().size() < 1){
+                         Collection col=DbUtil.getAllOrgTypes();
+                         if(col!=null){
+                             List sortedCol =new ArrayList(col);
+                             Collections.sort(sortedCol,new DbUtil.HelperAmpOrgTypeNameComparator());
+                             editForm.setOrgType(sortedCol);
+                         }
+                     }
 					 if (null == editForm.getSectorScheme() || editForm.getSectorScheme().size() < 1)
 					 	editForm.setSectorScheme(SectorUtil.getAllSectorSchemes());
 					 if (null == editForm.getOrgGroupColl() || editForm.getOrgGroupColl().size() < 1){
-                        editForm.setOrgGroupColl(DbUtil.getAllOrgGroups());
+                         Collection col=DbUtil.getAllOrgGroups();
+                         if(col!=null){
+                             List sortedCol =new ArrayList(col);
+                             Collections.sort(sortedCol,new DbUtil.HelperAmpOrgGroupNameComparator());
+                             editForm.setOrgGroupColl(sortedCol);
+                         }
                      }
 					 Collection orgGroup = new ArrayList();
 					 editForm.setOrgGroup(orgGroup);

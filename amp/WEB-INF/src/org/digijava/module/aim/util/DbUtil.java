@@ -92,7 +92,6 @@ import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.common.util.DateTimeUtil;
 import java.util.Locale;
 import java.text.Collator;
-import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.kernel.translator.util.TrnCountry;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.request.Site;

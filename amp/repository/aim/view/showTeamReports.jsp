@@ -243,9 +243,11 @@ function confirmFunc() {
 																	<bean:write name="report" property="ampReportId" />
 																</c:set>
 																<c:set target="${urlParams}" property="event" value="edit" />
-															[ <digi:link href="/deleteAllReports.do" name="urlParams" title="${translation}" onclick="return confirmFunc()" >
-																<digi:trn key="aim:reportDelete">Delete</digi:trn>
-															</digi:link> ]
+																<logic:equal name="teamFlag" scope="session" value="true">
+																	[ <digi:link href="/deleteAllReports.do" name="urlParams" title="${translation}" onclick="return confirmFunc()" >
+																		<digi:trn key="aim:reportDelete">Delete</digi:trn>
+																	</digi:link> ]
+																</logic:equal>
 															[ <digi:link href="/editReport.do" name="urlParams" title="${translation}" >
 																<digi:trn key="aim:reportEdit">Edit</digi:trn>
 															</digi:link> ]

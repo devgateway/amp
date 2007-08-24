@@ -12,7 +12,11 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
 <tr class=newClsTableL1SubTotalEndSectionLabel><td colspan='<bean:write name="columnReport" property="totalDepth"/>'>
-<b><digi:trn key="rep:popup:${columnReport.nameTrn}">${columnReport.name}</digi:trn></b>
+<b>
+	<digi:trn key="rep:popu:${columnReport.columnIdTrn}">${columnReport.columnId}</digi:trn>
+	<% if (!("".equals(columnReport.getRepName()))){ %>
+		: <digi:trn key="rep:pop:${columnReport.repNameTrn}">${columnReport.repName}</digi:trn>
+	<% } %>
 </td></tr>
 
 <%int rowIdx = 2;%>

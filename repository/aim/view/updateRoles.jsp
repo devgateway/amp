@@ -39,6 +39,12 @@ function unload() {}
   <html:hidden property="action" />
 
   <jsp:include page="teamPagesHeader.jsp" flush="true" />
+  <c:set var="btnSave">
+    <digi:trn key="btn:save">Save</digi:trn>
+  </c:set>
+  <c:set var="btnCancel">
+    <digi:trn key="btn:cancel">Cancel</digi:trn>
+  </c:set>
 
 
   <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
@@ -348,9 +354,9 @@ function unload() {}
                                               <html:submit value="${trnDeleteBtn}" styleClass="dr-menu"/>
                                             </td>
                                             <td width="50%" align="left">
-                                             <c:set var="trnCancelBtn">
-                                              <digi:trn key="aim:btnCancel">Cancel</digi:trn>&nbsp;
-                                            </c:set>
+                                              <c:set var="trnCancelBtn">
+                                                <digi:trn key="aim:btnCancel">Cancel</digi:trn>&nbsp;
+                                              </c:set>
                                               <html:reset value="${trnCancelBtn}"  styleClass="dr-menu" onclick="javascript:history.go(-1)"/>
                                             </td>
                                           </tr>
@@ -361,10 +367,10 @@ function unload() {}
                                         <table width="100%" cellspacing="5">
                                           <tr>
                                             <td width="50%" align="right">
-                                              <html:submit value="Save" styleClass="dr-menu" onclick="return permissionCheck()" />
+                                              <html:submit value="${btnSave}" styleClass="dr-menu" onclick="return permissionCheck()" />
                                             </td>
                                             <td width="50%" align="left">
-                                              <html:reset value="Cancel" styleClass="dr-menu" onclick="javascript:history.go(-1)" />
+                                              <html:reset value="${btnCancel}" styleClass="dr-menu" onclick="javascript:history.go(-1)" />
                                             </td>
                                           </tr>
                                         </table>
@@ -373,15 +379,11 @@ function unload() {}
                                         <table width="100%" cellspacing="5">
                                           <tr>
                                             <td width="50%" align="right">
-                                              <c:set var="btnSave">
-                                                <digi:trn key="btn:save">Save</digi:trn>
-                                              </c:set>
+
                                               <html:submit value="${btnSave}" styleClass="dr-menu" onclick="return permissionCheck()" />
                                             </td>
                                             <td width="50%" align="left">
-                                              <c:set var="btnCancel">
-                                                <digi:trn key="btn:cancel">Cancel</digi:trn>
-                                              </c:set>
+
                                               <html:reset value="${btnCancel}" styleClass="dr-menu" onclick="javascript:history.go(-1)" />
                                             </td>
                                           </tr>
@@ -390,11 +392,14 @@ function unload() {}
                                   </td>
                                 </tr>
                                 <tr><td>
+                                  <c:set var="mandatoryFields">
+                                    <digi:trn key="aim:updateRoles:MandatoryFields">Mandatory Fields</digi:trn>
+                                  </c:set>
                                   <logic:equal name="aimUpdateRoleForm" property="action" value="edit">
-                                    <FONT color=red>*&nbsp;Mandatory fields</FONT>
+                                    <FONT color=red>*&nbsp;<c:out value="${mandatoryFields}"/></FONT>
                                   </logic:equal>
                                   <logic:equal name="aimUpdateRoleForm" property="action" value="add">
-                                    <FONT color=red>*&nbsp;Mandatory fields</FONT>
+                                    <FONT color=red>*&nbsp;<c:out value="${mandatoryFields}"/></FONT>
                                   </logic:equal>
                                   </td></tr>
                               </table>

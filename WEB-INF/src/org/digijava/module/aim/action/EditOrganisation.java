@@ -182,12 +182,7 @@ public class EditOrganisation extends Action {
 					 if (null == editForm.getSectorScheme() || editForm.getSectorScheme().size() < 1)
 					 	editForm.setSectorScheme(SectorUtil.getAllSectorSchemes());
 					 if (null == editForm.getOrgGroupColl() || editForm.getOrgGroupColl().size() < 1){
-                         Collection orgGroups = DbUtil.getAllOrgGroups();
-                         if(orgGroups!=null){
-                             List sortedOrgGroups=new ArrayList(orgGroups);
-                             Collections.sort(sortedOrgGroups,new DbUtil.HelperAmpOrgGroupNameComparator());
-                             editForm.setOrgGroupColl(sortedOrgGroups);
-                         }
+                        editForm.setOrgGroupColl(DbUtil.getAllOrgGroups());
                      }
 					 Collection orgGroup = new ArrayList();
 					 editForm.setOrgGroup(orgGroup);
@@ -766,7 +761,7 @@ public class EditOrganisation extends Action {
 	                                }
 									DbUtil.delete(org);
 									logger.debug("Organisation deleted");
-	
+
 							    	return mapping.findForward("added");
 					    		}
 					    	}

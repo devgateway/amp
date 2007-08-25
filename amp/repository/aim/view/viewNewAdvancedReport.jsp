@@ -90,11 +90,12 @@
 					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
 					</c:set>
 					<digi:trn key="rep:pop:AllAmount"><%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%></digi:trn>&nbsp;
+					<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>">
 					<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
 					<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"> 
 						<%=selCurrency %>
 					</digi:trn>
-
+					</logic:present>
 					</span>			
 				</font>
 			</td>

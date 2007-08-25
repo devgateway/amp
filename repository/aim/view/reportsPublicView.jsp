@@ -32,7 +32,7 @@ Showing all activities...
 <ul id="PublicTabs" class="shadeTabs">
 <logic:iterate name="publicReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" indexId="position"> 
 			<logic:equal name="position" value="0">
-				<bean:define id="firstReportName" name="report" property="name" toScope="page"/>
+				<bean:define id="firstReportName" name="report" property="name" toScope="Page"/>
 			</logic:equal>
 			<logic:equal name="report" property="publicReport" value="true">
 			<li><a id='Tab-<bean:write name="report" property="name"/>' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea"><bean:write name="report" property="name"/></a></li>
@@ -42,7 +42,7 @@ Showing all activities...
 
 
 <div id="ajaxcontentarea" class="contentstyle">
-Text
+
 </div>
 
 <script type="text/javascript">

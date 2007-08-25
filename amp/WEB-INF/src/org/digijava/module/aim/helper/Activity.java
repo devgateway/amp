@@ -73,6 +73,16 @@ public class Activity implements Comparable {
 	private String acChapter;
 	private String accessionInstrument;
 	
+	private String FY;
+	private String vote;
+	private String subVote;
+	private String subProgram;
+	private String projectCode;
+	private Integer financialInstrument;
+	private String financialInstrumentString;
+	private Boolean governmentApprovalProcedures;
+	private Boolean jointCriteria;
+	
 	/**
 	 * Total cost of the activity.
 	 * @see AmpActivity#getTotalCost()
@@ -687,5 +697,67 @@ public class Activity implements Comparable {
 	}
 	public void setTotalCost(Double totalCost) {
 		this.totalCost = totalCost;
+	}
+	public Integer getFinancialInformation() {
+		return financialInstrument;
+	}
+	public void setFinancialInstrument(Integer financialInformation) {
+		this.financialInstrument = financialInformation;
+		switch(financialInformation.intValue())
+		{
+		case 1: {this.setFinancialInstrumentString("GBS");break;}
+		case 2: {this.setFinancialInstrumentString("SBS");break;}
+		case 3: {this.setFinancialInstrumentString("Basket");break;}
+		case 4: {this.setFinancialInstrumentString("DPS on Budget");break;}
+		case -1: {this.setFinancialInstrumentString("");break;}
+		}
+	}
+	public String getFY() {
+		return FY;
+	}
+	public void setFY(String fy) {
+		FY = fy;
+	}
+	public Boolean getGovernmentApprovalProcedures() {
+		return governmentApprovalProcedures;
+	}
+	public void setGovernmentApprovalProcedures(Boolean governmentApprovalProcedures) {
+		this.governmentApprovalProcedures = governmentApprovalProcedures;
+	}
+	public Boolean getJointCriteria() {
+		return jointCriteria;
+	}
+	public void setJointCriteria(Boolean jointCriteria) {
+		this.jointCriteria = jointCriteria;
+	}
+	public String getProjectCode() {
+		return projectCode;
+	}
+	public void setProjectCode(String projectCode) {
+		this.projectCode = projectCode;
+	}
+	public String getSubProgram() {
+		return subProgram;
+	}
+	public void setSubProgram(String subProgram) {
+		this.subProgram = subProgram;
+	}
+	public String getSubVote() {
+		return subVote;
+	}
+	public void setSubVote(String subVote) {
+		this.subVote = subVote;
+	}
+	public String getVote() {
+		return vote;
+	}
+	public void setVote(String vote) {
+		this.vote = vote;
+	}
+	public String getFinancialInstrumentString() {
+		return financialInstrumentString;
+	}
+	public void setFinancialInstrumentString(String financialInstrumentString) {
+		this.financialInstrumentString = financialInstrumentString;
 	}
 }

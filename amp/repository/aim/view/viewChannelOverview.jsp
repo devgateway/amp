@@ -328,9 +328,106 @@ function commentWin(val) {
 																			</TD></TR>
 																			<TR><TD bgcolor="#ffffff">
 																				<logic:equal name="activity" property="budget" value="true">
-																				<digi:trn key="aim:actBudgeton">
-																						Activity is On Budget
-																				</digi:trn>
+																				<table>
+																				<tr>
+																					<td>
+																						<digi:trn key="aim:actBudgeton">
+																							Activity is On Budget
+																						</digi:trn>
+																					</td>
+																				</tr>
+																				<field:display name="FY" feature="Identification">
+																				<tr>
+																					<td>
+																					<digi:trn key="aim:actFY">
+																					FY
+																					</digi:trn>:
+																					<c:out value="${activity.FY}"/>
+																					</td>
+																				</tr>
+																				</field:display>
+																				<field:display name="Vote" feature="Identification">
+																				<tr>
+																					<td>
+																					<digi:trn key="aim:actVote">
+																					Vote
+																					</digi:trn>:
+																					<c:out value="${activity.vote}"/>
+																					</td>
+																				</tr>
+																				</field:display>
+																				<field:display name="Sub-Vote" feature="Identification">
+																				<tr>
+																					<td>
+																					<digi:trn key="aim:actSub-Vote">
+																					Sub-Vote
+																					</digi:trn>:
+																					<c:out value="${activity.subVote}"/>
+																					</td>
+																				</tr>
+																				</field:display>
+																				<field:display name="Sub-Program" feature="Identification">
+																				<tr>
+																					<td>
+																					<digi:trn key="aim:actSub-Program">
+																					Sub-Program
+																					</digi:trn>:
+																					<c:out value="${activity.subProgram}"/>
+																					</td>
+																				</tr>
+																				</field:display>
+																				<field:display name="Project Code" feature="Identification">
+																				<tr>
+																					<td>
+																					<digi:trn key="aim:actProjectCode">
+																					Project Code
+																					</digi:trn>:
+																					<c:out value="${activity.projectCode}"/>
+																					</td>
+																				</tr>
+																				</field:display>
+																				<field:display name="GBS/SBS" feature="Identification">
+																				<tr>
+																					<td>
+																					<digi:trn key="aim:actGBS">
+																					Financial Instrument
+																					</digi:trn>:
+																					<!-- this part is to be replaced when the category manager is ready -->
+																					<c:out value="${activity.financialInstrumentString}"/>
+																					</td>
+																				</tr>
+																				</field:display>
+																				<field:display name="Government Approval Procedures" feature="Identification">
+																				<tr>
+																					<td>
+																					<digi:trn key="aim:actGovernmentApprovalProcedures">
+																					Government Approval Procedures 
+																					</digi:trn>:
+																					<c:if test="${activity.governmentApprovalProcedures==true}">
+																						<c:out value="Yes"/>
+																					</c:if>	
+																					<c:if test="${activity.governmentApprovalProcedures==false || activity.governmentApprovalProcedures==''}">
+																						<c:out value="No"/>
+																					</c:if>
+																					</td>
+																				</tr>
+																				</field:display>
+																				<field:display name="JointCriteria" feature="Identification">
+																				<tr>
+																					<td>
+																					<digi:trn key="aim:actJointCriteria">
+																					Joint Criteria
+																					</digi:trn>:
+																					<c:if test="${activity.jointCriteria==true}">
+																						<c:out value="Yes"/>
+																					</c:if>	
+																					<c:if test="${activity.jointCriteria==false || activity.jointCriteria==''}">
+																						<c:out value="No"/>
+																					</c:if>
+																					</td>
+																				</tr>
+																				</field:display>
+																				</table>
 																				</logic:equal>
 																				<logic:equal name="activity" property="budget" value="false">
 																				<digi:trn key="aim:actBudgetoff">

@@ -343,11 +343,6 @@
 									</td>
 									</tr>
 								</field:display>	
-	
-												
-							
-									
-										
 								<field:display name="Government Approval Procedures" feature="Identification">
 										<tr bgcolor="#ffffff"><td valign="top" align="left">
 											<a title="<digi:trn key="aim:governmentApprovalProcedures">Government Approval Procedures </digi:trn>">

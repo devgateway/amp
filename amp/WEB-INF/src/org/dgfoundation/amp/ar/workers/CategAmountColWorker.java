@@ -222,12 +222,12 @@ public class CategAmountColWorker extends ColumnWorker {
 			EthiopianCalendar ec=new EthiopianCalendar();
 			EthiopianCalendar tempDate=new EthiopianCalendar();
 			ec=tempDate.getEthiopianDate(calendar);
-			if(filter.getCalendarType().equals(Constants.ETH_FY))
+			if(filter.getCalendarType().getAmpFiscalCalId().equals(Constants.ETH_FY))
 			{
 				year=new Integer(ec.ethFiscalYear);
 				quarter=new String("Q"+ec.ethFiscalQrt);
 			}
-			if(filter.getCalendarType().equals(Constants.ETH_CAL))
+			if(filter.getCalendarType().getAmpFiscalCalId().equals(Constants.ETH_CAL))
 			{
 				year=new Integer(ec.ethYear);
 				quarter=new String("Q"+ec.ethQtr);

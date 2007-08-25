@@ -87,7 +87,8 @@ public class GroupColumn extends Column {
     	if(src instanceof CellColumn || src instanceof AmountCellColumn) return verticalSplitByCateg((CellColumn)src,category,ids,generateTotalCols,reportMetadata);
     	else {
     		GroupColumn srcG=(GroupColumn) src;
-    		GroupColumn dest=new GroupColumn(src);
+    		GroupColumn dest=null;
+   			dest=new GroupColumn(src);
     		Iterator i=srcG.iterator();
     		while (i.hasNext()) {
 				Column element = (Column) i.next();
@@ -214,7 +215,7 @@ public class GroupColumn extends Column {
      * @param src the predecessor Column
      */
     public GroupColumn(Column src) {
-        super(src.getParent(),src.getName());
+       	super(src.getParent(),src.getName());
         this.setContentCategory(src.getContentCategory());
     }
     

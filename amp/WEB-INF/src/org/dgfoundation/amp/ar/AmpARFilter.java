@@ -151,16 +151,17 @@ public class AmpARFilter implements Filter {
 		
 		if(governmentApprovalProcedures!=null)
 		{
-			String GOVERNMENT_APPROVAL_FILTER="SELECT a.amp_activity_id from amp_activity where governmentApprovalProcedures="+governmentApprovalProcedures.toString();
+			String GOVERNMENT_APPROVAL_FILTER="SELECT a.amp_activity_id from amp_activity a where governmentApprovalProcedures="+governmentApprovalProcedures.toString();
 			queryAppend(GOVERNMENT_APPROVAL_FILTER);
 		}
 		if(jointCriteria!=null)
 		{
-			String JOINT_CRITERIA_FILTER="SELECT a.amp_activity_id from amp_activity where jointCriteria="+jointCriteria.toString();
+			String JOINT_CRITERIA_FILTER="SELECT a.amp_activity_id from amp_activity a where jointCriteria="+jointCriteria.toString();
 			queryAppend(JOINT_CRITERIA_FILTER);
 		}
+
 	}
-	
+
 	
 	/**
 	 * @return Returns the ampCurrencyCode.

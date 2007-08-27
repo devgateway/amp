@@ -398,7 +398,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	 private Boolean governmentApprovalProcedures;
 	 private Boolean jointCriteria;
-
+	 
+	 private ArrayList <Boolean>fundingActives;
+	 private ArrayList <Boolean>delegatedCooperations;
+	 private ArrayList <Boolean>delegatedPartners;
+	 
 	public Boolean getGovernmentApprovalProcedures() {
 		return governmentApprovalProcedures;
 	}
@@ -4085,7 +4089,31 @@ public String getPurpose() {
 		this.budgetCheckbox = budgetCheckbox;
 	}
 
-  public void setCreatedBy(AmpTeamMember createdBy) {
+	public ArrayList<Boolean> getFundingActives() {
+		return fundingActives;
+	}
+
+	public void setFundingActives(ArrayList<Boolean> fundingActives) {
+		this.fundingActives = fundingActives;
+	}
+
+	public ArrayList<Boolean> getDelegatedCooperations() {
+		return delegatedCooperations;
+	}
+
+	public void setDelegatedCooperations(ArrayList<Boolean> delegatedCooperations) {
+		this.delegatedCooperations = delegatedCooperations;
+	}
+
+	public ArrayList<Boolean> getDelegatedPartners() {
+		return delegatedPartners;
+	}
+
+	public void setDelegatedPartners(ArrayList<Boolean> delegatedPartners) {
+		this.delegatedPartners = delegatedPartners;
+	}
+	
+	public void setCreatedBy(AmpTeamMember createdBy) {
     this.createdBy = createdBy;
   }
 }

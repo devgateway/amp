@@ -1,19 +1,18 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
-import org.digijava.kernel.dbentity.Country;
-import org.digijava.kernel.user.User;
-import org.digijava.module.aim.util.LoggerIdentifiable;
+import org.digijava.kernel.dbentity.*;
+import org.digijava.kernel.user.*;
+import org.digijava.module.aim.util.*;
 
 public class AmpActivity
 		  implements Comparable<AmpActivity>, Serializable, LoggerIdentifiable {
 
 
-	private Boolean budget;
+        private AmpTeamMember createdBy;
+        private Boolean budget;
     private Long ampActivityId ;
 	private String ampId ;
 	private String name ;
@@ -56,7 +55,7 @@ public class AmpActivity
     private Double funAmount;
     private String currencyCode;
     private String funDate;
-    
+
     /**
      * Total cost of the activity.
      * Currently this is used only on bolivia adn values are imported from SYSFIN db.
@@ -123,8 +122,8 @@ public class AmpActivity
 
 	/* Categories */
 	private Set categories;
-	
-	
+
+
 	/*
 	 * Tanzania adds
 	 */
@@ -137,7 +136,7 @@ public class AmpActivity
 	 private Integer gbsSbs;
 	 private Boolean governmentApprovalProcedures;
 	 private Boolean jointCriteria;
-	
+
 	public Boolean isGovernmentApprovalProcedures() {
 		return governmentApprovalProcedures;
 	}
@@ -1113,7 +1112,7 @@ public class AmpActivity
 	public void setVote(String vote) {
 		this.vote = vote;
 	}
-	
+
 		/**
 	 * Returns total cost of the activity
 	 * @return total cost of the activity
@@ -1123,7 +1122,15 @@ public class AmpActivity
 		return totalCost;
 	}
 
-	public void setTotalCost(Double totalCost) {
+  public AmpTeamMember getCreatedBy() {
+    return createdBy;
+  }
+
+  public void setTotalCost(Double totalCost) {
 		this.totalCost = totalCost;
 	}
+
+  public void setCreatedBy(AmpTeamMember createdBy) {
+    this.createdBy = createdBy;
+  }
 }

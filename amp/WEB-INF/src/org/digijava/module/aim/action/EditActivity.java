@@ -35,6 +35,7 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
@@ -458,7 +459,7 @@ public class EditActivity
                             actPrgs.add(prg);
                             }
                         }
-                        
+
                         eaForm.setActPrograms(actPrgs);
                     }catch(Exception ex){
                         ex.printStackTrace();
@@ -466,9 +467,10 @@ public class EditActivity
                     eaForm.setTitle(activity.getName().trim());
                     eaForm.setCosts(new ArrayList(activity.getCosts()));
                     eaForm.setTeam(activity.getTeam());
+                    eaForm.setCreatedBy(activity.getActivityCreator());
                     eaForm.setUpdatedBy(activity.getUpdatedBy());
                     eaForm.setBudget(activity.getBudget());
-                    
+
                     /*
                      * Tanzania adds
                      */
@@ -482,19 +484,19 @@ public class EditActivity
                     	eaForm.setSubProgram(activity.getSubProgram().trim());
                     if(activity.getProjectCode()!=null)
                     	eaForm.setProjectCode(activity.getProjectCode().trim());
-                    
+
                     if(activity.getGbsSbs()!=null)
                     	eaForm.setGbsSbs(activity.getGbsSbs());
-                    
-                    
+
+
                     if(activity.isGovernmentApprovalProcedures()!=null)
                     	eaForm.setGovernmentApprovalProcedures(activity.isGovernmentApprovalProcedures());
                     else eaForm.setGovernmentApprovalProcedures(new Boolean(false));
-                    
+
                     if(activity.isJointCriteria()!=null)
                     	eaForm.setJointCriteria(activity.isJointCriteria());
                     else activity.setJointCriteria(new Boolean(false));
-                    
+
                     if(activity.getDescription()!=null) eaForm.setDescription(activity.getDescription().trim());
                     if(activity.getObjective()!=null) eaForm.setObjectives(activity.getObjective().trim());
                     if(activity.getPurpose()!=null) eaForm.setPurpose(activity.getPurpose().trim());
@@ -1359,6 +1361,9 @@ public class EditActivity
                     eaForm.setMfdCntOrganization(activity.getMfdCntOrganization());
                     eaForm.setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
                     eaForm.setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
+
+                    AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+                    activity.setActivityCreator(teamMember);
 
                     eaForm.setConditions(activity.getCondition().trim());
 

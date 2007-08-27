@@ -33,11 +33,11 @@ function fnEditProject(id)
 function previewLogframe(id)
 {
 
-    
+
     <digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
 	var url ="<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
 	openURLinWindow(url,650,500);
-    
+
 }
 
 function projectFiche(id)
@@ -168,9 +168,9 @@ function commentWin(val) {
 	                                          		&nbsp;
 												</field:display>
 											</feature:display>
-										</module:display>	
-										
-										
+										</module:display>
+
+
 										<module:display name="Previews">
 											<feature:display name="Edit Activity" module="Previews">
 												<field:display feature="Edit Activity" name="Edit Activity Button">
@@ -178,10 +178,10 @@ function commentWin(val) {
 														<digi:trn key="btn:edit">Edit</digi:trn>
 												</html:button>
 												&nbsp;
-												</field:display>		
+												</field:display>
 											</feature:display>
 										</module:display>
-										
+
 										<module:display name="Previews">
 												<feature:display name="Logframe" module="Previews">
 													<field:display name="Logframe Preview Button" feature="Logframe" >
@@ -191,7 +191,7 @@ function commentWin(val) {
 													</field:display>
 												</feature:display>
 										</module:display>
-										
+
                                         <c:if test="${aimChannelOverviewForm.buttonText == 'validate'}">
 											<input type="button" value='<digi:trn key="aim:validate">Validate</digi:trn>' class="dr-menu"
 												onclick="fnEditProject(<c:out value="${activity.activityId}"/>)">
@@ -214,7 +214,7 @@ function commentWin(val) {
 								</TABLE>
 								</TD>
 							</TR>
-							
+
 							<TR bgColor=#f4f4f2>
 								<TD vAlign="top" align="center" width="100%"><html:errors /></TD>
 							</TR>
@@ -440,7 +440,7 @@ function commentWin(val) {
 																				</digi:trn>
 																				</logic:equal>
 																			</TD></TR>
-			
+
 																		</TABLE>
 																	</TD>
 																</TR>
@@ -478,7 +478,7 @@ function commentWin(val) {
 																								value="${actSect.subsectorLevel2Name}" /> &nbsp;</li>
 																						</c:if>
 																					</c:if>
-			
+
 																				</c:forEach>
 																			</ul>
 																			</TD>
@@ -553,7 +553,7 @@ function commentWin(val) {
 																		</TD>
 																	</TR>
 														</feature:display>
-														
+
 														<feature:display name="Identification" module="Project ID and Planning">
 															<TR>
 																<TD>
@@ -581,7 +581,7 @@ function commentWin(val) {
 																		<digi:edit key="${activity.objective}"/>
 																		<ul>
 																		<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
-		
+
 																		 	<logic:equal name="comments" property="key" value="Objective Assumption">
 																				<logic:iterate name="comments" id="comment" property="value"
 																					type="org.digijava.module.aim.dbentity.AmpComments">
@@ -600,7 +600,7 @@ function commentWin(val) {
 																		</logic:iterate>
 																		</ul>
 																		</field:display>
-		
+
 																		<field:display feature="Identification" name="Purpose">
 																		<logic:notEmpty name="activity" property="purpose">
 																			<i><b><digi:trn
@@ -608,7 +608,7 @@ function commentWin(val) {
 																			<digi:edit key="${activity.purpose}" />
 																			<ul>
 																			<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
-		
+
 																			 	<logic:equal name="comments" property="key" value="Purpose Assumption">
 																					<logic:iterate name="comments" id="comment" property="value"
 																						type="org.digijava.module.aim.dbentity.AmpComments">
@@ -628,7 +628,7 @@ function commentWin(val) {
 																			</ul>
 																		</logic:notEmpty>
 																		</field:display>
-																		
+
 																		<field:display feature="Identification" name="Results">
 																		<logic:notEmpty name="activity" property="results">
 																			<i><b><digi:trn
@@ -636,7 +636,7 @@ function commentWin(val) {
 																			<digi:edit key="${activity.results}" />
 																			<ul>
 																			<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
-		
+
 																			 	<logic:equal name="comments" property="key" value="Results Assumption">
 																					<logic:iterate name="comments" id="comment" property="value"
 																						type="org.digijava.module.aim.dbentity.AmpComments">
@@ -661,7 +661,7 @@ function commentWin(val) {
 																</TABLE>
 																</TD>
 															</TR>
-															
+
 														</feature:display>
 													</module:display>
 
@@ -734,7 +734,7 @@ function commentWin(val) {
 															</TR>
 														</feature:display>
 													</module:display>
-													
+
 													<logic:notEmpty name="activity" property="accessionInstrument">
 													<TR>
 														<TD>
@@ -790,10 +790,10 @@ function commentWin(val) {
 																<b><digi:trn key="aim:relatedOrganizations">Related Organizations</digi:trn></b>
 																</TD>
 															</TR>
-															
-															
-															
-															
+
+
+
+
 															<TR>
 																<TD bgcolor="#fffff">
 																<TABLE width="100%" cellSpacing="2" cellPadding="2"
@@ -853,7 +853,7 @@ function commentWin(val) {
 																					</TR>
 																				</TABLE>
 																				</TD>
-																			</TR>	
+																			</TR>
 																		</feature:display>
 																		<feature:display module="Organizations" name="Implementing Agency">
 																			<TR>
@@ -1072,7 +1072,7 @@ function commentWin(val) {
 																</TR>
 															</field:display>
 														</feature:display>
-													</module:display>													
+													</module:display>
 													<module:display name="Funding">
 														<feature:display name="Funding Organizations" module="Funding">
 															<field:display name="Financing Instrument" feature="Funding Organizations">
@@ -1087,7 +1087,7 @@ function commentWin(val) {
 																				Financing Instruments</digi:trn></b></TD>
 																		</TR>
 																		<c:if test="${!empty activity.uniqueModalities}">
-			
+
 																			<c:forEach var="modal" items="${activity.uniqueModalities}">
 																				<TR>
 																					<TD bgcolor="#ffffff"><c:out value="${modal.name}" />
@@ -1113,17 +1113,19 @@ function commentWin(val) {
 																<b><digi:trn key="aim:activityCreationDetails">
 																	Activity creation details</digi:trn></b></TD>
 															</TR>
-															<TR>
+																								<TR>
 																<TD bgcolor="#ffffff"><i><digi:trn key="aim:createdBy">Created By</digi:trn></i>:
-																<c:out value="${activity.actAthFirstName}" />&nbsp; <c:out
-																	value="${activity.actAthLastName}" /></TD>
+																<c:out value="${activity.createdBy.user.firstNames}"/>
+																	<c:out value="${activity.createdBy.user.lastName}"/>	-
+																	<c:out value="${activity.createdBy.user.email}"/>
+
+																</TD>
 															</TR>
 															<TR>
 																<TD bgcolor="#ffffff"><i><digi:trn key="aim:email">Email</digi:trn></i>:
 																<bean:define id="mailTo">
-																		mailto:<c:out value="${activity.actAthEmail}" />
-																</bean:define> <a href="<%=mailTo%>"> <c:out
-																	value="${activity.actAthEmail}" /></a></TD>
+																		mailto:<c:out value="${activity.createdBy.user.email}"/>
+																</bean:define> <a href="<%=mailTo%>"> <c:out value="${activity.createdBy.user.email}"/></a></TD>
 															</TR>
 															<TR>
 																<TD bgcolor="#ffffff"><i><digi:trn key="aim:createdDate">Created date</digi:trn></i>:

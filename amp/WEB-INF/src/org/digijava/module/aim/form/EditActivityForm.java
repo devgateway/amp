@@ -5,24 +5,14 @@
 
 package org.digijava.module.aim.form;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeSet;
+import java.io.*;
+import java.util.*;
+import javax.servlet.http.*;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.upload.FormFile;
-import org.digijava.module.aim.dbentity.AmpField;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.ActivityIndicator;
-import org.digijava.module.aim.helper.FundingDetail;
-import org.digijava.module.aim.helper.OrgProjectId;
+import org.apache.struts.action.*;
+import org.apache.struts.upload.*;
+import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.*;
 
 public class EditActivityForm extends ActionForm implements Serializable{
 
@@ -49,6 +39,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String createdDate;
 	private String updatedDate;
 	private AmpTeamMember updatedBy;
+        private AmpTeamMember createdBy;
 	private Collection perspectives;
 	private Boolean budget=null;
 	private String budgetCheckbox;
@@ -61,7 +52,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
     private List actPrograms;
 	private Collection programCollection;
     private Long selectedPrograms[];
-    
+
     private Long logframeCategory;
 
 	private String originalAppDate;
@@ -78,7 +69,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String currentValDate;
 	private String currentValComments;
 	private String programDescription;
-	
+
 	private List costs;
 
 	// location selector pop-up
@@ -97,7 +88,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	//private Collection assistanceTypes = null;
 
 	private String step = null;
-	
+
 	private String visibleProgram=null;
 
 	private Collection activitySectors; // sectors related to the activity
@@ -160,7 +151,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String mfdCntOrganization;
 	private String mfdCntPhoneNumber;
 	private String mfdCntFaxNumber;
-	
+
 	private String actAthFirstName;
 	private String actAthLastName;
 	private String actAthEmail;
@@ -221,8 +212,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String totalExpenditure = "";
 	private String totalUnExpended = "";
 	private String totalExpended="";
-	
-	
+
+
 	/* START FINANCIAL EDIT */
 	private Collection fundingOrganizations; // Collection of FundingOrganization objects
 	private String orgFundingId;
@@ -388,13 +379,13 @@ public class EditActivityForm extends ActionForm implements Serializable{
     private String lineMinRank;
 	private String planMinRank;
 	private Collection actRankCollection;
-	
+
 	/*Categories*/
 	private Long acChapter				= new Long(0);
 	private Long accessionInstrument	= new Long(0);
 
 	 private Collection searchedSectors = null; // list of searched Sectors.
-	 
+
 	 /*
 	  * Tanzania ADDS
 	  */
@@ -404,10 +395,10 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 private String subProgram;
 	 private String projectCode;
 	 private Integer gbsSbs;
-	 
+
 	 private Boolean governmentApprovalProcedures;
 	 private Boolean jointCriteria;
-	
+
 	public Boolean getGovernmentApprovalProcedures() {
 		return governmentApprovalProcedures;
 	}
@@ -501,7 +492,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			orgTypes = null;
 //			implementationLevel = null;
 			implemLocationLevel		= null;
-			
+
 			selectedPhysicalProgress = null;
 			componentDesc = null;
 			selPhyProg = null;
@@ -3789,7 +3780,7 @@ public String getPurpose() {
 	public void setOverallCost(Double overallCost) {
 		this.overallCost = overallCost;
 	}
-	
+
 
 	public Collection getBenAgencies() {
 		return benAgencies;
@@ -3822,7 +3813,7 @@ public String getPurpose() {
 	public void setSelConAgencies(Long[] selConAgencies) {
 		this.selConAgencies = selConAgencies;
 	}
-	
+
 	public Long getDocType() {
 		return docType;
 	}
@@ -3952,7 +3943,7 @@ public String getPurpose() {
 		this.selActivitySectors = selActivitySectors;
 	}
 
-    
+
 	public String getStatus() {
 		return status;
 	}
@@ -4086,7 +4077,15 @@ public String getPurpose() {
 		return budgetCheckbox;
 	}
 
-	public void setBudgetCheckbox(String budgetCheckbox) {
+  public AmpTeamMember getCreatedBy() {
+    return createdBy;
+  }
+
+  public void setBudgetCheckbox(String budgetCheckbox) {
 		this.budgetCheckbox = budgetCheckbox;
 	}
+
+  public void setCreatedBy(AmpTeamMember createdBy) {
+    this.createdBy = createdBy;
+  }
 }

@@ -38,6 +38,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ReportUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -66,7 +67,9 @@ public class UpdateAppSettings extends Action {
 			uForm.setUpdated(true);
 		} else {
 			uForm.setUpdated(false);
-		}
+		}		
+		
+		uForm.setPerspectiveEnabled(FeaturesUtil.isPerspectiveEnabled());
 
 		if (uForm.getType() == null
 				|| uForm.getType().trim().equals("")) {
@@ -160,7 +163,7 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings.setFiscalCalendar(DbUtil
 						.getAmpFiscalCalendar(uForm.getFisCalendarId()));
 				ampAppSettings.setLanguage(uForm.getLanguage());
-				ampAppSettings.setDefaultPerspective(uForm.getDefPerspective());
+				ampAppSettings.setDefaultPerspective(FeaturesUtil.isPerspectiveEnabled() ? uForm.getDefPerspective() : Constants.DEF_MFD_PERSPECTIVE);
 				ampAppSettings.setTeam(TeamUtil.getAmpTeam(tm.getTeamId()));
 				
 				AmpReports ampReport			= ReportUtil.getAmpReports(uForm.getDefaultReportForTeamId());

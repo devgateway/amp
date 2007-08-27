@@ -42,7 +42,9 @@ public class UpdateAppSettingsForm extends ActionForm {
 
 	private List languages;
 	
-	private Collection reports; 
+	private Collection reports;
+
+	private boolean perspectiveEnabled; 
 
 	public Collection getReports() {
 		return reports;
@@ -191,4 +193,15 @@ public class UpdateAppSettingsForm extends ActionForm {
 	public void setDefaultReportForTeamId(Long defaultReportForTeamId) {
 		this.defaultReportForTeamId = defaultReportForTeamId;
 	}
+
+	public void setPerspectiveEnabled(boolean perspectiveEnabled) {
+		this.perspectiveEnabled = perspectiveEnabled;
+	}
+
+	public boolean isPerspectiveEnabled() {
+		return perspectiveEnabled;
+	}
+
+
+	
 }

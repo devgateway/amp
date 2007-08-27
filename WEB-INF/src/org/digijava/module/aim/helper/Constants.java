@@ -254,9 +254,11 @@ public class Constants
 	public static final String FINANCIAL_PG_CODE = "FP";
 
 	//global settings
-	public static final String GLOBAL_BUDGET_FILTER="Public View Budget Filter";
-	public static final String GLOBAL_PUBLIC_VIEW="Public View";
-	public static final String GLOBAL_DEFAULT_COUNTRY="Default Country";
+	public static final String GLOBAL_BUDGET_FILTER = "Public View Budget Filter";
+	public static final String GLOBAL_PUBLIC_VIEW = "Public View";
+	public static final String GLOBAL_DEFAULT_COUNTRY = "Default Country";
+	public static final String GLOBAL_PERSPECTIVE = "Perspective";
+	
 	
 	public static final String GLOBAL_DEFAULT_SECTOR_SCHEME="Default Sector Scheme";
 	

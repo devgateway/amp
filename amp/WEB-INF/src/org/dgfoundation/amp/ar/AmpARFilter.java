@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,6 +27,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 /**
  * Filtering bean. Holds info about filtering parameters and creates the filtering query
@@ -91,6 +93,10 @@ public class AmpARFilter implements Filter {
 		else perspective="MA";
 
 		this.setPerspective(DbUtil.getPerspective(perspective));
+		
+		this.setAmpTeams(new TreeSet());
+		this.getAmpTeams().add(tm.getTeamId());
+		this.getAmpTeams().addAll(TeamUtil.getAmpLevel0TeamIds(tm.getTeamId()));
 
 		String widget=(String) request.getAttribute("widget");
 		if(widget!=null) this.setWidget(new Boolean(widget).booleanValue());
@@ -113,7 +119,7 @@ public class AmpARFilter implements Filter {
 	
 	public void generateFilterQuery() {
 		String BUDGET_FILTER="SELECT amp_activity_id FROM amp_activity WHERE budget="+(budget!=null?budget.toString():"null")+(budget!=null && budget.booleanValue()==false?" OR budget is null":"");
-		String TEAM_FILTER="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IN ("+Util.toCSString(ampTeams,true)+") OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("+Util.toCSString(ampTeams,true)+") )";
+		String TEAM_FILTER="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IN ("+Util.toCSString(ampTeams,false)+") OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("+Util.toCSString(ampTeams,false)+") )";
 		String STATUS_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("+Util.toCSString(statuses,true)+")";
 		String ORG_FILTER = "SELECT amp_activity_id FROM v_donors WHERE amp_donor_org_id IN ("+Util.toCSString(donors,true)+")";
 		String SECTOR_FILTER="SELECT amp_activity_id FROM v_sectors WHERE amp_sector_id IN ("+Util.toCSString(sectors,true)+")";

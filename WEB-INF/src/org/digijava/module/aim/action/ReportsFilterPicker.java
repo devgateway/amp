@@ -132,7 +132,7 @@ public class ReportsFilterPicker extends MultiAction {
 		TeamMember teamMember = (TeamMember) httpSession .getAttribute(Constants.CURRENT_MEMBER);
 		AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
 		filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
-		String name = tempSettings.getCurrency().getCurrencyName() + "s";
+		String name = "- " + tempSettings.getCurrency().getCurrencyName();
 		httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 		filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
 		filterForm.setFromYear(null);
@@ -156,7 +156,7 @@ public class ReportsFilterPicker extends MultiAction {
 		if (httpSession.getAttribute(ArConstants.SELECTED_CURRENCY) == null){
 			TeamMember teamMember = (TeamMember) httpSession  .getAttribute(Constants.CURRENT_MEMBER);
 			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
-			String name = tempSettings.getCurrency().getCurrencyName() + "s";
+			String name = "- " + tempSettings.getCurrency().getCurrencyName();
 			httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 		}
 		return mapping.findForward("forward");
@@ -225,7 +225,7 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setDonors(Util.getSelectedObjects(AmpOrganisation.class,filterForm.getSelectedDonors()));
 		AmpCurrency currency = (AmpCurrency) Util.getSelectedObject(AmpCurrency.class,filterForm.getCurrency());
 		arf.setCurrency(currency);
-		String name = currency.getCurrencyName() + "s";
+		String name = "- " + currency.getCurrencyName();
 		httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
 		Integer all=new Integer(-1);
 		if(!all.equals(filterForm.getLineMinRank())) arf.setLineMinRank(filterForm.getLineMinRank());

@@ -73,7 +73,7 @@ public class GetTeamActivities
                 if(appSettings != null) {
                     numRecords = appSettings.getDefaultRecordsPerPage().intValue();
                 }
-            } else if(session.getAttribute("currentMember") != null) {
+            } else if(tm != null) {
 
                 id = tm.getTeamId();
                 if(tm.getAppSettings() != null)

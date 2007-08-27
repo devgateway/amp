@@ -1,112 +1,167 @@
-package org.digijava.module.aim.dbentity ;
+package org.digijava.module.aim.dbentity;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Set;
 
-import org.digijava.kernel.dbentity.*;
-import org.digijava.kernel.user.*;
-import org.digijava.module.aim.util.*;
+import org.digijava.kernel.dbentity.Country;
+import org.digijava.kernel.user.User;
+import org.digijava.module.aim.util.LoggerIdentifiable;
 
-public class AmpActivity
-		  implements Comparable<AmpActivity>, Serializable, LoggerIdentifiable {
+public class AmpActivity implements Comparable<AmpActivity>, Serializable,
+		LoggerIdentifiable {
 
+	private AmpTeamMember createdBy;
 
-        private AmpTeamMember createdBy;
-        private Boolean budget;
-    private Long ampActivityId ;
-	private String ampId ;
-	private String name ;
-	private String description ;
-	private String objective ;
+	private Boolean budget;
+
+	private Long ampActivityId;
+
+	private String ampId;
+
+	private String name;
+
+	private String description;
+
+	private String objective;
+
 	private String purpose;
+
 	private String results;
-    private String documentSpace;
-//	private AmpStatus status ; // TO BE DELETED
-	private String language ;
-	private String version ;
-	private String calType; 	// values GREGORIAN, ETH_CAL, ETH_FISCAL_CAL
-	private String condition ;
-	private Date activityApprovalDate;  // defunct
-	private Date activityStartDate ;    // defunct
-	private Date activityCloseDate ;    // defunct
-	private Date originalCompDate;      // defunct
+
+	private String documentSpace;
+
+	// private AmpStatus status ; // TO BE DELETED
+	private String language;
+
+	private String version;
+
+	private String calType; // values GREGORIAN, ETH_CAL, ETH_FISCAL_CAL
+
+	private String condition;
+
+	private Date activityApprovalDate; // defunct
+
+	private Date activityStartDate; // defunct
+
+	private Date activityCloseDate; // defunct
+
+	private Date originalCompDate; // defunct
+
 	private Date contractingDate;
+
 	private Date disbursmentsDate;
-	private Set sectors ;
-	private Set locations ;
+
+	private Set sectors;
+
+	private Set locations;
+
 	private Set orgrole;
-//	private AmpLevel level ; //TO BE DELETED
-	private Set internalIds ;
-	private Set funding ;
+
+	// private AmpLevel level ; //TO BE DELETED
+	private Set internalIds;
+
+	private Set funding;
+
 	private Set progress;
-	private Set documents ;
+
+	private Set documents;
+
 	private Set notes;
+
 	private Set issues;
+
 	private Set costs;
-	private AmpModality modality ;
+
+	private AmpModality modality;
+
 	private AmpTheme themeId;
+
 	private String programDescription;
+
 	private AmpTeam team;
+
 	private Set member;
+
 	private Country country;
+
 	private String contactName;
+
 	private AmpTeamMember updatedBy;
 
-    private Double funAmount;
-    private String currencyCode;
-    private String funDate;
+	private Double funAmount;
 
-    /**
-     * Total cost of the activity.
-     * Currently this is used only on bolivia adn values are imported from SYSFIN db.
-     * Global setting is controling if total cost is cmputed or displayd from this field.
-     */
-    private Double totalCost;
+	private String currencyCode;
 
-    private Set activityPrograms;
-    // use contFirstName and contLastName instead.
-								 // The field is defunct
+	private String funDate;
+
+	private Set activityPrograms;
+
+	// use contFirstName and contLastName instead.
+	// The field is defunct
 
 	// Donor contact information
 	private String contFirstName;
+
 	private String contLastName;
+
 	private String email;
+
 	private String dnrCntTitle;
+
 	private String dnrCntOrganization;
+
 	private String dnrCntPhoneNumber;
+
 	private String dnrCntFaxNumber;
 
 	// MOFED contact information
 	private String mofedCntFirstName;
+
 	private String mofedCntLastName;
+
 	private String mofedCntEmail;
+
 	private String mfdCntTitle;
+
 	private String mfdCntOrganization;
+
 	private String mfdCntPhoneNumber;
+
 	private String mfdCntFaxNumber;
 
+	private String comments;
 
-	private String comments ;
 	private String statusReason;
+
 	private Set components;
 
 	private Date proposedStartDate;
+
 	private Date actualStartDate;
+
 	private Date proposedApprovalDate;
+
 	private Date actualApprovalDate;
+
 	private Date actualCompletionDate;
-    private Date proposedCompletionDate;
+
+	private Date proposedCompletionDate;
+
 	private Set closingDates;
 
+	private User author; // use activityCreator instead
 
-    private User author;                        // use activityCreator instead
-    										  // This field is defunct
+	// This field is defunct
 
 	private AmpTeamMember activityCreator;
+
 	private Date createdDate;
+
 	private Date updatedDate;
 
-	//private Set teamList;
+	// private Set teamList;
 	private String contractors;
 
 	private Set regionalFundings;
@@ -117,31 +172,40 @@ public class AmpActivity
 	private Set survey;
 
 	private Integer lineMinRank;
+
 	private Integer planMinRank;
+
 	private Collection actRankColl;
 
 	/* Categories */
 	private Set categories;
 
-
 	/*
 	 * Tanzania adds
 	 */
 
-	 private String FY;
-	 private String vote;
-	 private String subVote;
-	 private String subProgram;
-	 private String projectCode;
-	 private Integer gbsSbs;
-	 private Boolean governmentApprovalProcedures;
-	 private Boolean jointCriteria;
+	private String FY;
+
+	private String vote;
+
+	private String subVote;
+
+	private String subProgram;
+
+	private String projectCode;
+
+	private Integer gbsSbs;
+
+	private Boolean governmentApprovalProcedures;
+
+	private Boolean jointCriteria;
 
 	public Boolean isGovernmentApprovalProcedures() {
 		return governmentApprovalProcedures;
 	}
 
-	public void setGovernmentApprovalProcedures(Boolean governmentApprovalProcedures) {
+	public void setGovernmentApprovalProcedures(
+			Boolean governmentApprovalProcedures) {
 		this.governmentApprovalProcedures = governmentApprovalProcedures;
 	}
 
@@ -190,8 +254,6 @@ public class AmpActivity
 		return funding;
 	}
 
-
-
 	/**
 	 * @return
 	 */
@@ -209,10 +271,9 @@ public class AmpActivity
 	/**
 	 * @return
 	 */
-//	public AmpLevel getLevel() { //TO BE DELETED
-//		return level;
-//	}
-
+	// public AmpLevel getLevel() { //TO BE DELETED
+	// return level;
+	// }
 	/**
 	 * @return
 	 */
@@ -255,10 +316,9 @@ public class AmpActivity
 	/**
 	 * @return
 	 */
-//	public AmpStatus getStatus() { // TO BE DELETED
-//		return status;
-//	}
-
+	// public AmpStatus getStatus() { // TO BE DELETED
+	// return status;
+	// }
 	/**
 	 * @return
 	 */
@@ -299,7 +359,6 @@ public class AmpActivity
 		funding = set;
 	}
 
-
 	/**
 	 * @param set
 	 */
@@ -321,10 +380,9 @@ public class AmpActivity
 	/**
 	 * @param level
 	 */
-//	public void setLevel(AmpLevel level) { // TO BE DELETED
-//		this.level = level;
-//	}
-
+	// public void setLevel(AmpLevel level) { // TO BE DELETED
+	// this.level = level;
+	// }
 	/**
 	 * @param set
 	 */
@@ -353,7 +411,6 @@ public class AmpActivity
 		orgrole = set;
 	}
 
-
 	/**
 	 * @param set
 	 */
@@ -364,10 +421,9 @@ public class AmpActivity
 	/**
 	 * @param status
 	 */
-//	public void setStatus(AmpStatus status) { // TO BE DELETED
-//		this.status = status;
-//	}
-
+	// public void setStatus(AmpStatus status) { // TO BE DELETED
+	// this.status = status;
+	// }
 	/**
 	 * @param string
 	 */
@@ -422,7 +478,6 @@ public class AmpActivity
 		return notes;
 	}
 
-
 	/**
 	 * @param string
 	 */
@@ -445,12 +500,13 @@ public class AmpActivity
 	}
 
 	public AmpModality getModality() {
-			return modality;
+		return modality;
 	}
 
 	public void setModality(AmpModality modality) {
-			this.modality = modality;
+		this.modality = modality;
 	}
+
 	public AmpTheme getThemeId() {
 		return themeId;
 	}
@@ -474,6 +530,7 @@ public class AmpActivity
 	public void setMember(Set member) {
 		this.member = member;
 	}
+
 	/**
 	 * @return
 	 */
@@ -517,13 +574,14 @@ public class AmpActivity
 	}
 
 	public int compareTo(AmpActivity act) {
-//			  if (!(o instanceof AmpActivity)) throw new ClassCastException();
-//
-//			  AmpActivity act = (AmpActivity) o;
-			  return (this.name.trim().toLowerCase().
-									compareTo(act.name.trim().toLowerCase()));
+		// if (!(o instanceof AmpActivity)) throw new ClassCastException();
+		//
+		// AmpActivity act = (AmpActivity) o;
+		return (this.name.trim().toLowerCase().compareTo(act.name.trim()
+				.toLowerCase()));
 
 	}
+
 	/**
 	 * @return
 	 */
@@ -558,152 +616,190 @@ public class AmpActivity
 	public String getEmail() {
 		return email;
 	}
+
 	/**
-	 * @param email The email to set.
+	 * @param email
+	 *            The email to set.
 	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	/**
 	 * @return Returns the statusReason.
 	 */
 	public String getStatusReason() {
 		return statusReason;
 	}
+
 	/**
-	 * @param statusReason The statusReason to set.
+	 * @param statusReason
+	 *            The statusReason to set.
 	 */
 	public void setStatusReason(String statusReason) {
 		this.statusReason = statusReason;
 	}
+
 	/**
 	 * @return Returns the components.
 	 */
 	public Set getComponents() {
 		return components;
 	}
+
 	/**
-	 * @param components The components to set.
+	 * @param components
+	 *            The components to set.
 	 */
 	public void setComponents(Set components) {
 		this.components = components;
 	}
+
 	/**
 	 * @return Returns the activityApprovalDate.
 	 */
 	public Date getActivityApprovalDate() {
 		return activityApprovalDate;
 	}
+
 	/**
-	 * @param activityApprovalDate The activityApprovalDate to set.
+	 * @param activityApprovalDate
+	 *            The activityApprovalDate to set.
 	 */
 	public void setActivityApprovalDate(Date activityApprovalDate) {
 		this.activityApprovalDate = activityApprovalDate;
 	}
+
 	/**
 	 * @return Returns the actualApprovalDate.
 	 */
 	public Date getActualApprovalDate() {
 		return actualApprovalDate;
 	}
+
 	/**
-	 * @param actualApprovalDate The actualApprovalDate to set.
+	 * @param actualApprovalDate
+	 *            The actualApprovalDate to set.
 	 */
 	public void setActualApprovalDate(Date actualApprovalDate) {
 		this.actualApprovalDate = actualApprovalDate;
 	}
+
 	/**
 	 * @return Returns the actualCompletionDate.
 	 */
 	public Date getActualCompletionDate() {
 		return actualCompletionDate;
 	}
+
 	/**
-	 * @param actualCompletionDate The actualCompletionDate to set.
+	 * @param actualCompletionDate
+	 *            The actualCompletionDate to set.
 	 */
 	public void setActualCompletionDate(Date actualCompletionDate) {
 		this.actualCompletionDate = actualCompletionDate;
 	}
+
 	/**
 	 * @return Returns the actualStartDate.
 	 */
 	public Date getActualStartDate() {
 		return actualStartDate;
 	}
+
 	/**
-	 * @param actualStartDate The actualStartDate to set.
+	 * @param actualStartDate
+	 *            The actualStartDate to set.
 	 */
 	public void setActualStartDate(Date actualStartDate) {
 		this.actualStartDate = actualStartDate;
 	}
+
 	/**
 	 * @return Returns the proposedApprovalDate.
 	 */
 	public Date getProposedApprovalDate() {
 		return proposedApprovalDate;
 	}
+
 	/**
-	 * @param proposedApprovalDate The proposedApprovalDate to set.
+	 * @param proposedApprovalDate
+	 *            The proposedApprovalDate to set.
 	 */
 	public void setProposedApprovalDate(Date proposedApprovalDate) {
 		this.proposedApprovalDate = proposedApprovalDate;
 	}
+
 	/**
 	 * @return Returns the proposedStartDate.
 	 */
 	public Date getProposedStartDate() {
 		return proposedStartDate;
 	}
+
 	/**
-	 * @param proposedStartDate The proposedStartDate to set.
+	 * @param proposedStartDate
+	 *            The proposedStartDate to set.
 	 */
 	public void setProposedStartDate(Date proposedStartDate) {
 		this.proposedStartDate = proposedStartDate;
 	}
+
 	/**
 	 * @return Returns the closingDates.
 	 */
 	public Set getClosingDates() {
 		return closingDates;
 	}
+
 	/**
-	 * @param closingDates The closingDates to set.
+	 * @param closingDates
+	 *            The closingDates to set.
 	 */
 	public void setClosingDates(Set closingDates) {
 		this.closingDates = closingDates;
 	}
+
 	/**
 	 * @return Returns the author.
 	 */
 	public User getAuthor() {
 		return author;
 	}
+
 	/**
-	 * @param author The author to set.
+	 * @param author
+	 *            The author to set.
 	 */
 	public void setAuthor(User author) {
 		this.author = author;
 	}
+
 	/**
 	 * @return Returns the createdDate.
 	 */
 	public Date getCreatedDate() {
 		return createdDate;
 	}
+
 	/**
-	 * @param createdDate The createdDate to set.
+	 * @param createdDate
+	 *            The createdDate to set.
 	 */
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
+
 	/**
 	 * @return Returns the updatedDate.
 	 */
 	public Date getUpdatedDate() {
 		return updatedDate;
 	}
+
 	/**
-	 * @param updatedDate The updatedDate to set.
+	 * @param updatedDate
+	 *            The updatedDate to set.
 	 */
 	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
@@ -717,7 +813,8 @@ public class AmpActivity
 	}
 
 	/**
-	 * @param contFirstName The contFirstName to set.
+	 * @param contFirstName
+	 *            The contFirstName to set.
 	 */
 	public void setContFirstName(String contFirstName) {
 		this.contFirstName = contFirstName;
@@ -731,31 +828,38 @@ public class AmpActivity
 	}
 
 	/**
-	 * @param contLastName The contLastName to set.
+	 * @param contLastName
+	 *            The contLastName to set.
 	 */
 	public void setContLastName(String contLastName) {
 		this.contLastName = contLastName;
 	}
+
 	/**
 	 * @return Returns the programDescription.
 	 */
 	public String getProgramDescription() {
 		return programDescription;
 	}
+
 	/**
-	 * @param programDescription The programDescription to set.
+	 * @param programDescription
+	 *            The programDescription to set.
 	 */
 	public void setProgramDescription(String programDescription) {
 		this.programDescription = programDescription;
 	}
+
 	/**
 	 * @return Returns the contractors.
 	 */
 	public String getContractors() {
 		return contractors;
 	}
+
 	/**
-	 * @param contractors The contractors to set.
+	 * @param contractors
+	 *            The contractors to set.
 	 */
 	public void setContractors(String contractors) {
 		this.contractors = contractors;
@@ -769,62 +873,70 @@ public class AmpActivity
 	}
 
 	/**
-	 * @param activityCreator The activityCreator to set.
+	 * @param activityCreator
+	 *            The activityCreator to set.
 	 */
 	public void setActivityCreator(AmpTeamMember activityCreator) {
 		this.activityCreator = activityCreator;
 	}
+
 	/**
 	 * @return Returns the mofedCntEmail.
 	 */
 	public String getMofedCntEmail() {
 		return mofedCntEmail;
 	}
+
 	/**
-	 * @param mofedCntEmail The mofedCntEmail to set.
+	 * @param mofedCntEmail
+	 *            The mofedCntEmail to set.
 	 */
 	public void setMofedCntEmail(String mofedCntEmail) {
 		this.mofedCntEmail = mofedCntEmail;
 	}
+
 	/**
 	 * @return Returns the mofedCntFirstName.
 	 */
 	public String getMofedCntFirstName() {
 		return mofedCntFirstName;
 	}
+
 	/**
-	 * @param mofedCntFirstName The mofedCntFirstName to set.
+	 * @param mofedCntFirstName
+	 *            The mofedCntFirstName to set.
 	 */
 	public void setMofedCntFirstName(String mofedCntFirstName) {
 		this.mofedCntFirstName = mofedCntFirstName;
 	}
+
 	/**
 	 * @return Returns the mofedCntLastName.
 	 */
 	public String getMofedCntLastName() {
 		return mofedCntLastName;
 	}
+
 	/**
-	 * @param mofedCntLastName The mofedCntLastName to set.
+	 * @param mofedCntLastName
+	 *            The mofedCntLastName to set.
 	 */
 	public void setMofedCntLastName(String mofedCntLastName) {
 		this.mofedCntLastName = mofedCntLastName;
 	}
 
-//Commented by Mikheil - in general, Hibernate classes do not need to overrride
-//this method, because it may lead to incorrect functinoality
-/*
-	public boolean equals(Object obj) {
-		if (obj == null)
-			throw new NullPointerException();
-
-		if (!(obj instanceof AmpActivity))
-			throw new ClassCastException();
-
-		AmpActivity act = (AmpActivity) obj;
-		return this.ampActivityId.equals(act.getAmpActivityId());
-	}
-    */
+	// Commented by Mikheil - in general, Hibernate classes do not need to
+	// overrride
+	// this method, because it may lead to incorrect functinoality
+	/*
+	 * public boolean equals(Object obj) { if (obj == null) throw new
+	 * NullPointerException();
+	 * 
+	 * if (!(obj instanceof AmpActivity)) throw new ClassCastException();
+	 * 
+	 * AmpActivity act = (AmpActivity) obj; return
+	 * this.ampActivityId.equals(act.getAmpActivityId()); }
+	 */
 
 	/**
 	 * @return Returns the regionalFundings.
@@ -834,13 +946,12 @@ public class AmpActivity
 	}
 
 	/**
-	 * @param regionalFundings The regionalFundings to set.
+	 * @param regionalFundings
+	 *            The regionalFundings to set.
 	 */
 	public void setRegionalFundings(Set regionalFundings) {
 		this.regionalFundings = regionalFundings;
 	}
-
-
 
 	/**
 	 * @return Returns the approvalStatus.
@@ -848,8 +959,10 @@ public class AmpActivity
 	public String getApprovalStatus() {
 		return approvalStatus;
 	}
+
 	/**
-	 * @param approval_status The approval_status to set.
+	 * @param approval_status
+	 *            The approval_status to set.
 	 */
 	public void setApprovalStatus(String approvalStatus) {
 		this.approvalStatus = approvalStatus;
@@ -862,44 +975,45 @@ public class AmpActivity
 		return survey;
 	}
 
-    public String getDocumentSpace() {
-        return documentSpace;
-    }
+	public String getDocumentSpace() {
+		return documentSpace;
+	}
 
-    public String getCurrencyCode() {
-        return currencyCode;
-    }
+	public String getCurrencyCode() {
+		return currencyCode;
+	}
 
-    public Double getFunAmount() {
-        return funAmount;
-    }
+	public Double getFunAmount() {
+		return funAmount;
+	}
 
-    public String getFunDate() {
-        return funDate;
-    }
+	public String getFunDate() {
+		return funDate;
+	}
 
-    /**
-	 * @param survey The survey to set.
+	/**
+	 * @param survey
+	 *            The survey to set.
 	 */
 	public void setSurvey(Set survey) {
 		this.survey = survey;
 	}
 
-    public void setDocumentSpace(String documentSpace) {
-        this.documentSpace = documentSpace;
-    }
+	public void setDocumentSpace(String documentSpace) {
+		this.documentSpace = documentSpace;
+	}
 
-    public void setCurrencyCode(String currenyCode) {
-        this.currencyCode = currenyCode;
-    }
+	public void setCurrencyCode(String currenyCode) {
+		this.currencyCode = currenyCode;
+	}
 
-    public void setFunAmount(Double funAmount) {
-        this.funAmount = funAmount;
-    }
+	public void setFunAmount(Double funAmount) {
+		this.funAmount = funAmount;
+	}
 
-    public void setFunDate(String funDate) {
-        this.funDate = funDate;
-    }
+	public void setFunDate(String funDate) {
+		this.funDate = funDate;
+	}
 
 	public Integer getLineMinRank() {
 		return lineMinRank;
@@ -921,28 +1035,30 @@ public class AmpActivity
 		return actRankColl;
 	}
 
-    public Set getActivityPrograms() {
-        return activityPrograms;
-    }
+	public Set getActivityPrograms() {
+		return activityPrograms;
+	}
 
-    public Date getProposedCompletionDate() {
-        return proposedCompletionDate;
-    }
+	public Date getProposedCompletionDate() {
+		return proposedCompletionDate;
+	}
 
-    public void setActRankColl(Collection actRankColl) {
+	public void setActRankColl(Collection actRankColl) {
 		this.actRankColl = actRankColl;
 	}
 
-    public void setActivityPrograms(Set activityPrograms) {
-        this.activityPrograms = activityPrograms;
-    }
-
-    public void setProposedCompletionDate(Date proposedCompletionDate) {
-        this.proposedCompletionDate = proposedCompletionDate;
+	public void setActivityPrograms(Set activityPrograms) {
+		this.activityPrograms = activityPrograms;
 	}
+
+	public void setProposedCompletionDate(Date proposedCompletionDate) {
+		this.proposedCompletionDate = proposedCompletionDate;
+	}
+
 	public Boolean getBudget() {
 		return budget;
 	}
+
 	public void setBudget(Boolean budget) {
 		this.budget = budget;
 	}
@@ -957,7 +1073,8 @@ public class AmpActivity
 
 	public Date getContractingDate() {
 		return contractingDate;
-}
+	}
+
 	public void setContractingDate(Date contractingDate) {
 		this.contractingDate = contractingDate;
 	}
@@ -1051,18 +1168,15 @@ public class AmpActivity
 	}
 
 	public Object getObjectType() {
-		// TODO Auto-generated method stub
 		return this.getClass().getName();
 	}
 
 	public Object getIdentifier() {
-		// TODO Auto-generated method stub
 		return this.getAmpActivityId().toString();
 	}
 
 	public String getObjectName() {
-		// TODO Auto-generated method stub
-		return this.getAmpId()+" "+this.getName();
+		return this.getAmpId() + " " + this.getName();
 	}
 
 	public String getFY() {
@@ -1113,24 +1227,11 @@ public class AmpActivity
 		this.vote = vote;
 	}
 
-		/**
-	 * Returns total cost of the activity
-	 * @return total cost of the activity
-	 * @see #totalCost
-	 */
-	public Double getTotalCost() {
-		return totalCost;
+	public AmpTeamMember getCreatedBy() {
+		return createdBy;
 	}
 
-  public AmpTeamMember getCreatedBy() {
-    return createdBy;
-  }
-
-  public void setTotalCost(Double totalCost) {
-		this.totalCost = totalCost;
+	public void setCreatedBy(AmpTeamMember createdBy) {
+		this.createdBy = createdBy;
 	}
-
-  public void setCreatedBy(AmpTeamMember createdBy) {
-    this.createdBy = createdBy;
-  }
 }

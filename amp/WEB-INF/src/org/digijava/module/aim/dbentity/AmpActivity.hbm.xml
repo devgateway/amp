@@ -85,7 +85,6 @@ tanzania adds
     <property name="governmentApprovalProcedures" column="governmentApprovalProcedures" type="java.lang.Boolean"/>
     <property name="jointCriteria" column="jointCriteria" type="java.lang.Boolean"/>
   
-<property name="totalCost" column="totalCost" type="java.lang.Double"/>
 		<many-to-one name="themeId" column="amp_theme_id" class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none"/>
 		<many-to-one name="modality" column="amp_modality_id" class="org.digijava.module.aim.dbentity.AmpModality" cascade="none"/>
 		<many-to-one name="team" column="amp_team_id" class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none"/>

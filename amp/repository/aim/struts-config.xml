@@ -444,7 +444,7 @@
     <action name="aimAddOrgForm" path="/aim/editOrganisation" scope="session" type="org.digijava.module.aim.action.EditOrganisation" validate="false">
       <forward name="forward" path="/showLayout.do?layout=editOrganisation" />
       <forward name="index" path="/aim/index.do" redirect="true" />
-      <forward name="added" path="/aim/organisationManager.do" redirect="true" />
+      <forward name="added" path="/aim/organisationManager.do?added=true" redirect="true" />
     </action>
     <action name="aimOrgTypeManagerForm" path="/aim/orgTypeManager" scope="request" type="org.digijava.module.aim.action.OrgTypeManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=orgTypeManager" />

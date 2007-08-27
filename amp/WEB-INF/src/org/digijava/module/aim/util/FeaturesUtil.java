@@ -30,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.FeatureTemplates;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
 
 public class FeaturesUtil {
@@ -63,6 +64,14 @@ public class FeaturesUtil {
 		String s=FeaturesUtil.getGlobalSettingValue("Feature Template");
 		if(s!=null)
 			if(templateId.compareTo(new Long(Long.parseLong(s)))==0) return true;
+		return false;
+	}
+	
+	public static boolean isPerspectiveEnabled() {
+		String perspectiveStr = FeaturesUtil
+				.getGlobalSettingValue(Constants.GLOBAL_PERSPECTIVE);
+		if (perspectiveStr != null && "On".equals(perspectiveStr))
+			return true;
 		return false;
 	}
 	

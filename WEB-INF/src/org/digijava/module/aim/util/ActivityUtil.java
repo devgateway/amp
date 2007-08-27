@@ -915,7 +915,6 @@ public class ActivityUtil {
         activity.setOrgrole(new HashSet(ampActivity.getOrgrole()));
         activity.setIssues(new HashSet(ampActivity.getIssues()));
         activity.setCosts(new HashSet(ampActivity.getCosts()));
-        activity.setTotalCost(ampActivity.getTotalCost());
 
         /* Categories */
         activity.setCategories(ampActivity.getCategories());
@@ -970,7 +969,6 @@ public class ActivityUtil {
         AmpActivity ampAct = (AmpActivity) actItr.next();
         activity.setActivityId(ampAct.getAmpActivityId());
 
-        activity.setTotalCost(ampAct.getTotalCost());
 
 //				activity.setStatus(ampAct.getStatus().getName()); // TO BE DELETED
         activity.setStatusReason(ampAct.getStatusReason().trim());

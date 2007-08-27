@@ -118,21 +118,14 @@ public class ViewChannelOverview extends TilesAction {
 					perspective = Constants.DONOR;
 				}
 
-				String computeTotals=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_COMPUTE_TOTALS);
-				if (computeTotals!=null && "Off".equals(computeTotals) && activity.getTotalCost()!=null){
-					//if global settings is off and imported totals exist
-					formBean.setGrandTotal(mf.format(activity.getTotalCost().doubleValue()));
-				}else{
-					//else compute total cost in old way
-					if (activity.getStatus().equalsIgnoreCase("Planned")) {
-						logger.debug("Planned");
-						formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
-								new Integer(0),new Integer(0),perspective,currCode)));
-					} else {
-						logger.debug("Not planned");					
-						formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
-								new Integer(0),new Integer(1),perspective,currCode)));
-					}
+				if (activity.getStatus().equalsIgnoreCase("Planned")) {
+					logger.debug("Planned");
+					formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
+							new Integer(0),new Integer(0),perspective,currCode)));
+				} else {
+					logger.debug("Not planned");					
+					formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
+							new Integer(0),new Integer(1),perspective,currCode)));
 				}
 				
 			}

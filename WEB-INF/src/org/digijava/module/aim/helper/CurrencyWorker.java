@@ -41,9 +41,7 @@ public class CurrencyWorker {
 		return resultStr;
 	}
 
-	
-	
-	
+
 	public static double convertToUSD(double amnt,String fromCurrencyCode) {
 		exchangeRate = CurrencyUtil.getExchangeRate(fromCurrencyCode);
 		return amnt/exchangeRate;

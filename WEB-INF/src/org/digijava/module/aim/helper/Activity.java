@@ -1,9 +1,11 @@
 package org.digijava.module.aim.helper;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Set;
 
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.form.*;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.form.ProposedProjCost;
 
 public class Activity
     implements Comparable {
@@ -82,11 +84,6 @@ public class Activity
   private Boolean governmentApprovalProcedures;
   private Boolean jointCriteria;
 
-  /**
-   * Total cost of the activity.
-   * @see AmpActivity#getTotalCost()
-   */
-  private Double totalCost;
   private AmpTeamMember createdBy;
 
   public String getAccessionInstrument() {
@@ -797,14 +794,6 @@ public class Activity
 
   public void setMfdCntTitle(String mfdCntTitle) {
     this.mfdCntTitle = mfdCntTitle;
-  }
-
-  public Double getTotalCost() {
-    return totalCost;
-  }
-
-  public void setTotalCost(Double totalCost) {
-    this.totalCost = totalCost;
   }
 
   public Integer getFinancialInformation() {

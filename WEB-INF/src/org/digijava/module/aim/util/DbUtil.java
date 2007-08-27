@@ -2668,19 +2668,23 @@ public class DbUtil {
             while (iter.hasNext()) {
                 AmpFundingDetail ampFundingDetail = (AmpFundingDetail) iter
                     .next();
-                toCurrency = CurrencyUtil.getExchangeRate(ampCurrencyCode,
-                    adjustmentType.intValue(), ampFundingDetail
-                    .getTransactionDate());
-                fromCurrency = CurrencyUtil.getExchangeRate(ampFundingDetail
-                    .getAmpCurrencyId().getCurrencyCode(), adjustmentType
-                    .intValue(), ampFundingDetail.getTransactionDate());
-                logger.debug("to Currency: " + toCurrency);
-                logger.debug("From Currency: " + fromCurrency);
+                Double fixedRateToUSD = ampFundingDetail.getFixedExchangeRate();
+                if (fixedRateToUSD!=null && fixedRateToUSD.doubleValue()!=1){
+                	toCurrency=fixedRateToUSD.doubleValue();
+                	amount += ampFundingDetail.getTransactionAmount().doubleValue() / toCurrency;
+                }else{
+                    toCurrency = CurrencyUtil.getExchangeRate(ampCurrencyCode,
+                    		adjustmentType.intValue(), ampFundingDetail.getTransactionDate());
+                    fromCurrency = CurrencyUtil.getExchangeRate(ampFundingDetail
+                            .getAmpCurrencyId().getCurrencyCode(), adjustmentType
+                            .intValue(), ampFundingDetail.getTransactionDate());
+                        logger.debug("to Currency: " + toCurrency);
+                        logger.debug("From Currency: " + fromCurrency);
+                        amount = amount + CurrencyWorker.convert1(ampFundingDetail
+                                                  .getTransactionAmount().doubleValue(),
+                                                  fromCurrency, toCurrency);
+                }
 
-                amount = amount
-                    + CurrencyWorker.convert1(ampFundingDetail
-                                              .getTransactionAmount().doubleValue(),
-                                              fromCurrency, toCurrency);
             }
             logger.debug("Amount: " + amount);
 

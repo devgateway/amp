@@ -33,6 +33,7 @@ import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 
 /**
@@ -252,8 +253,10 @@ public class ViewAmp
 
             appSettings.setLanguage(langCode);
 
-            appSettings.setPerspective(ampAppSettings
-                    .getDefaultPerspective());
+            appSettings.setPerspective(FeaturesUtil.isPerspectiveEnabled() 
+            							? ampAppSettings.getDefaultPerspective()
+            							: Constants.DEF_MFD_PERSPECTIVE);
+             
 
             tm.setMemberId(member.getAmpTeamMemId());
             tm.setMemberName(member.getUser().getName());
@@ -280,7 +283,7 @@ public class ViewAmp
             } else {
                 tm.setTranslator(false);
             }
-            session.setAttribute("currentMember", tm);
+            session.setAttribute(Constants.CURRENT_MEMBER, tm);
 
             // Set the session infinite. i.e. session never timeouts
             session.setMaxInactiveInterval(-1);

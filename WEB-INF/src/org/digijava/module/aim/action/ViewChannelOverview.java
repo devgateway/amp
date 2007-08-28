@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.ChannelOverviewForm;
 import org.digijava.module.aim.helper.Activity;
@@ -31,9 +32,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.aim.dbentity.AmpField;
 
 public class ViewChannelOverview extends TilesAction {
 

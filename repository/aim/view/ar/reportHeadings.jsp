@@ -46,12 +46,12 @@
                 <%=subColumn.getName(reportMeta.getHideActivities())%>
 
               </c:set>
-              <digi:trn key="aim:protfilio:${portfTitle}"><%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
+             <digi:trn key="aim:protfilio:${portfTitle}"><%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
 </a>
             </logic:equal>
             <logic:notEqual name="widget" scope="request" value="true">
               <html:link style="color:#FFFFFF;cursor:pointer" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
-                <digi:trn key="aim:report:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
+              <digi:trn key="aim:report:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
 
               </html:link>
             </logic:notEqual>
@@ -65,7 +65,7 @@
             </c:if>
           </logic:equal>
           <logic:notEqual name="column" property="columnDepth" value="1">
-            <digi:trn key="aim:report:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
+            <digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
           </logic:notEqual>
         </td>
 

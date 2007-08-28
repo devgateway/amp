@@ -72,16 +72,21 @@ public class GetActivities extends Action {
 			Date fromYear = yearToDate(actForm.getStartYear(), false);
 			Date toYear = yearToDate(actForm.getEndYear(), true);
 
+			//retrive acivities
 			Collection activities = getActivities(actForm.getProgramId(),
 					actForm.getStatusId(), actForm.getDonorId(), fromYear,
 					toYear, null, tm, true);
-			logger.debug("Converting results to XML");
+
+			//convert activities to xml
+			logger.debug("Converting activities to XML");
 			String xml = activities2XML(activities);
-			logger.debug("Setting XML in the response");
-			// return xml
-			
+
+			logger.debug("Setting activties XML in the response");
 			outputStream.write(xml.getBytes());
-			logger.debug("returning response XML");
+
+			// return xml
+			logger.debug("closing and returning response XML of NPD Activities");
+			outputStream.close();
 		} catch (Exception e) {
 			logger.info(e);
 			if (outputStream != null) {
@@ -92,34 +97,46 @@ public class GetActivities extends Action {
 				}
 			}
 		}
-		outputStream.close();
 		return null;
 	}
 
-private Collection<AmpActivity> getActivities(Long ampThemeId,
-            String statusCode,
-            Long donorOrgId,
-            Date fromDate,
-            Date toDate,
-            Long locationId,
-            TeamMember teamMember,
-            boolean recurse) throws AimException{
+	/**
+	 * Retrives Activities filtered according params.
+	 * @param ampThemeId filter activities assigne to programm(Theme) specified ith this id.
+	 * @param statusCode filter activities, get anly with this status.
+	 * @param donorOrgId 
+	 * @param fromDate
+	 * @param toDate
+	 * @param locationId
+	 * @param teamMember
+	 * @param recurse
+	 * @return
+	 * @throws AimException
+	 */
+	private Collection<AmpActivity> getActivities(Long ampThemeId,
+			String statusCode,
+			Long donorOrgId,
+			Date fromDate,
+			Date toDate,
+			Long locationId,
+			TeamMember teamMember,
+			boolean recurse) throws AimException{
 
-	
+
 		Collection<AmpActivity> result=null;
-		
+
 		result = ActivityUtil.searchActivities(ampThemeId,
-	            statusCode,
-	            donorOrgId,
-	            fromDate,
-	            toDate,
-	            locationId,
-	            teamMember);
-		
+				statusCode,
+				donorOrgId,
+				fromDate,
+				toDate,
+				locationId,
+				teamMember);
+
 		if (recurse){
 			Collection children = ProgramUtil.getAllSubThemesFor(ampThemeId);
 			if (children!= null && children.size() > 0){
-				
+
 				for (Iterator iter = children.iterator(); iter.hasNext();) {
 					AmpTheme prog = (AmpTheme) iter.next();
 					Collection<AmpActivity> subActivities = ActivityUtil.searchActivities(
@@ -131,7 +148,7 @@ private Collection<AmpActivity> getActivities(Long ampThemeId,
 				}
 			}
 		}
-		
+
 		Set<AmpActivity> activities = new TreeSet<AmpActivity>(new ActivityUtil.ActivityIdComparator());
 		List<AmpActivity> sortedActivities = null;
 		if (result!=null){
@@ -142,9 +159,10 @@ private Collection<AmpActivity> getActivities(Long ampThemeId,
 			sortedActivities = new ArrayList<AmpActivity>(activities);
 			Collections.sort(sortedActivities);
 		}
-		
+
 		return sortedActivities;
 	}
+
 	/**
 	 * Converts year represented as String to date. It can create last day or
 	 * first day of the year depending on the second parameter. todo: this
@@ -178,6 +196,12 @@ private Collection<AmpActivity> getActivities(Long ampThemeId,
 		return null;
 	}
 
+	/**
+	 * Converts Exception stack trace to XML.
+	 * used to display trace instead of results in ajax calls.
+	 * @param e 
+	 * @return String representing XML of error
+	 */
 	private String stackTrace2XML(Exception e) {
 		String result = "<error>";
 		result += "<frame>" + e + "</frame>";

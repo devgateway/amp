@@ -17,9 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionServlet;
-import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.helper.Constants;
 
 /**

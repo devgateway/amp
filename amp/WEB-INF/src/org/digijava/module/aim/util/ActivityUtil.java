@@ -57,7 +57,6 @@ import org.digijava.module.aim.dbentity.AmpReportLocation;
 import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpStatus;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.EUActivity;
@@ -2456,11 +2455,9 @@ public class ActivityUtil {
     ActivityAmounts result = new ActivityAmounts();
 
     AmpCategoryValue statusValue = CategoryManagerUtil.
-        getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY,
-                                         act.getCategories());
+        getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY,act.getCategories());
 
     if (act != null && statusValue != null) {
-//			AmpStatus status = act.getStatus(); // TO BE DELETED
       if (statusValue.getValue().equals(Constants.ACTIVITY_STATUS_PROPOSED) &&
           act.getFunAmount() != null) {
         String currencyCode = act.getCurrencyCode();
@@ -2468,8 +2465,7 @@ public class ActivityUtil {
         if (currencyCode == null || currencyCode.trim().equals("")) {
           currencyCode = "USD";
         } //end of AMP-1403
-        tempProposed = CurrencyWorker.convert(act.getFunAmount().doubleValue(),
-                                              currencyCode);
+        tempProposed = CurrencyWorker.convert(act.getFunAmount().doubleValue(),currencyCode);
         result.setProposedAmout(tempProposed);
       }
       else {
@@ -2479,14 +2475,11 @@ public class ActivityUtil {
             AmpFunding funding = (AmpFunding) iter.next();
             Set details = funding.getFundingDetails();
             if (details != null) {
-              for (Iterator detailIterator = details.iterator();
-                   detailIterator.hasNext(); ) {
-                AmpFundingDetail detail = (AmpFundingDetail) detailIterator.
-                    next();
+              for (Iterator detailIterator = details.iterator();detailIterator.hasNext(); ) {
+                AmpFundingDetail detail = (AmpFundingDetail) detailIterator.next();
                 Integer transType = detail.getTransactionType();
 
-                Double amount = new Double(detail.getTransactionAmount().
-                                           doubleValue());
+                Double amount = new Double(detail.getTransactionAmount().doubleValue());
 
                 Integer adjastType = detail.getAdjustmentType();
 
@@ -2495,8 +2488,7 @@ public class ActivityUtil {
                 if (detail.getAmpCurrencyId() != null
                     && detail.getAmpCurrencyId().getCurrencyCode() != null
                     &&
-                    detail.getAmpCurrencyId().getCurrencyCode().trim().
-                    equals("")) {
+                    detail.getAmpCurrencyId().getCurrencyCode().trim().equals("")) {
                   currencyCode = detail.getAmpCurrencyId().getCurrencyCode();
                 } //end of AMP-1403
 
@@ -2505,16 +2497,34 @@ public class ActivityUtil {
                     && adjastType != null && amount != null
                     && detail.getAmpCurrencyId() != null) {
 
-                  if (adjastType.intValue() == Constants.ACTUAL) {
-                    tempActual = CurrencyWorker.convert(amount.doubleValue(),
-                        currencyCode);
-                    result.AddActual(tempActual);
-                  }
-                  if (adjastType.intValue() == Constants.PLANNED) {
-                    tempPlanned = CurrencyWorker.convert(amount.doubleValue(),
-                        currencyCode);
-                    result.AddPalenned(tempPlanned);
-                  }
+                	if (detail.getFixedExchangeRate()!=null && detail.getFixedExchangeRate().doubleValue()!=1d 
+                			&& tocode!=null && tocode.trim().equals("USD")){
+                		//in this case we use fixed exchange rates to convert to USD, see AMP-1821,
+                		
+                		//convert to USD with fixed rate secified in the FundingDetail
+            			double tempAmount = amount.doubleValue()/detail.getFixedExchangeRate().doubleValue();
+            			//sett to correct place
+                		if (adjastType.intValue() == Constants.ACTUAL) {
+                			result.AddActual(tempAmount);
+                		}else if (adjastType.intValue() == Constants.PLANNED) {
+                			result.AddPalenned(tempAmount);
+                		}
+
+                	}else{
+                		//calculate in old way
+
+                		double tempAmount = CurrencyWorker.convert(amount.doubleValue(),currencyCode);
+
+            			//sett to correct place
+                		if (adjastType.intValue() == Constants.ACTUAL) {
+                			result.AddActual(tempAmount);
+                		}
+                		if (adjastType.intValue() == Constants.PLANNED) {
+                			result.AddPalenned(tempAmount);
+                		}
+
+                	}
+                	
                 }
               }
             }

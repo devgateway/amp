@@ -234,11 +234,11 @@
 											</td></tr>											
 											</field:display>
 											
-												
+											<feature:display name="Budget" module="Project ID and Planning">	
 											<tr bgcolor="#ffffff">
 											
 											
-												<field:display name="Activity Budget" feature="Identification">
+												
 												<td valign="top" align="left">
 											
 												<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
@@ -246,20 +246,20 @@
 												Activity Budget
 												</digi:trn>
 												</a>
-																									<html:checkbox property="budget"  onclick="budgetCheckboxClick();">
+													<html:checkbox property="budget"  onclick="budgetCheckboxClick();">
 													<digi:trn key="aim:actBudgeton">
 												Activity is On Budget
 												</digi:trn>
 													</html:checkbox>
 													<input type="hidden" name="budgetCheckbox">
 												</td>
-											</field:display>
+											
 											
 								<td>
 								<table>
 											 <tr>
 											
-											<field:display name="FY" feature="Identification">
+											<field:display name="FY" feature="Budget">
 											<td valign="top" align="left" id="FY" align="right">
 												<a title="<digi:trn key="aim:FY">FY</digi:trn>">
 												<digi:trn key="aim:actFY">
@@ -271,7 +271,7 @@
 											</td>
 										</field:display>
 											
-										<field:display name="Vote" feature="Identification">
+										<field:display name="Vote" feature="Budget">
 											<td valign="top" align="left" id="Vote" align="right">
 												<a title="<digi:trn key="aim:Vote">Vote</digi:trn>">
 												<digi:trn key="aim:actVote">
@@ -283,7 +283,7 @@
 										</td>	
 											</field:display>
 											
-											<field:display name="Sub-Vote" feature="Identification">
+											<field:display name="Sub-Vote" feature="Budget">
 											<td valign="top" align="left" id="Sub-Vote" align="right">
 												<a title="<digi:trn key="aim:Sub-Vote">Sub-Vote</digi:trn>">
 												<digi:trn key="aim:actSub-Vote">
@@ -297,7 +297,7 @@
 											
 	
 											
-								<field:display name="Sub-Program" feature="Identification">
+								<field:display name="Sub-Program" feature="Budget">
 										<td valign="top" align="left" id="Sub-Program" align="right">
 											<a title="<digi:trn key="aim:Sub_Program">Sub-Program</digi:trn>">
 											<digi:trn key="aim:actSubProgram">
@@ -310,7 +310,7 @@
 									</td>
 								</field:display>
 											
-								<field:display name="Project Code" feature="Identification">
+								<field:display name="Project Code" feature="Budget">
 										<td valign="top" align="left" id="ProjectCode" align="right">
 											<a title="<digi:trn key="aim:ProjectCode">Project Code</digi:trn>">
 											<digi:trn key="aim:actProjectCode">
@@ -327,7 +327,7 @@
 								</td></tr>		
 								
 								
-								<field:display name="GBS/SBS" feature="Identification">
+								<field:display name="GBS/SBS" feature="Budget">
 										<tr bgcolor="#ffffff" id="financial"><td valign="top" align="left" >
 											<a title="<digi:trn key="aim:GBS">Financial Instrument</digi:trn>">
 											<digi:trn key="aim:actGBS">
@@ -343,7 +343,7 @@
 									</td>
 									</tr>
 								</field:display>	
-								<field:display name="Government Approval Procedures" feature="Identification">
+								<field:display name="Government Approval Procedures" feature="Budget">
 										<tr bgcolor="#ffffff"><td valign="top" align="left">
 											<a title="<digi:trn key="aim:governmentApprovalProcedures">Government Approval Procedures </digi:trn>">
 											<digi:trn key="aim:actGovernmentApprovalProcedures">
@@ -356,7 +356,7 @@
 									</td></tr>
 								</field:display>	
 								
-								<field:display name="Joint Criteria" feature="Identification">
+								<field:display name="Joint Criteria" feature="Budget">
 										<tr bgcolor="#ffffff"><td valign="top" align="left">
 											<a title="<digi:trn key="aim:jointCriteria">Joint Criteria</digi:trn>">
 											<digi:trn key="aim:actJointCriteria">
@@ -368,7 +368,7 @@
 												Yes<html:radio property="jointCriteria" value="true"/> &nbsp;&nbsp;No<html:radio property="jointCriteria" value="false"/>
 									</td></tr>
 								</field:display>
-								
+								</feature:display>
 								
 										</table>
 

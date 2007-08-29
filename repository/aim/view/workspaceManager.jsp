@@ -56,7 +56,11 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>Workspace Manager</span>
+					<td height=16 vAlign=center width=571>
+                                          <span class=subtitle-blue>
+                                          <digi:trn key="aim:workspaceManager">
+                                          Workspace Manager
+                                          </digi:trn></span>
 					</td>
 				</tr>
 				<tr>
@@ -278,7 +282,7 @@
 												</digi:trn>
 												</digi:link>
 											</td>
-										</tr>							
+										</tr>
 										<!-- end of other links -->
 									</table>
 								</td>

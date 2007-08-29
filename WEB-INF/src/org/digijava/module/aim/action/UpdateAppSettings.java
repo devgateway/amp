@@ -22,6 +22,8 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.SiteDomain;
@@ -234,10 +236,16 @@ public class UpdateAppSettings extends Action {
 					.getMemberAppSettings(tm.getMemberId());
 			ApplicationSettings applicationSettings = getReloadedAppSettings(tempSettings);
 			tm.setAppSettings(applicationSettings);
-			if (session.getAttribute("currentMember") != null) {
-				session.removeAttribute("currentMember");
-				session.setAttribute("currentMember", tm);
+			if (session.getAttribute(Constants.CURRENT_MEMBER) != null) {
+				session.removeAttribute(Constants.CURRENT_MEMBER);
+				session.setAttribute(Constants.CURRENT_MEMBER, tm);
 			}
+			
+			AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
+			if (arf != null) {
+				arf.selectPerspective(tm);
+			}
+			
 			logger.debug("settings updated");
 
 			session.setAttribute(Constants.DESKTOP_SETTINGS_CHANGED,new Boolean(true));

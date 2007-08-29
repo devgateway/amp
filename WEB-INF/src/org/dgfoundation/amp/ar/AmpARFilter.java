@@ -75,24 +75,11 @@ public class AmpARFilter implements Filter {
 	}
 	
 	public void readRequestData(HttpServletRequest request) {
-		this.generatedFilterQuery=initialFilterQuery;
-		String perspective=null;
-		TeamMember tm = (TeamMember) request.getSession()
-		.getAttribute(Constants.CURRENT_MEMBER);
-		
-		if(tm!=null) {perspective = tm.getAppSettings().getPerspective();
-		if (perspective != null){
-			if (perspective.equals("Donor"))
-				perspective = "DN";
-			if (perspective.equals("MOFED"))
-				perspective = "MA";
-		}
-		else
-			perspective="MA";
-		}
-		else perspective="MA";
+		this.generatedFilterQuery = initialFilterQuery;
+		TeamMember tm = (TeamMember) request.getSession().getAttribute(
+				Constants.CURRENT_MEMBER);
 
-		this.setPerspective(DbUtil.getPerspective(perspective));
+		selectPerspective(tm);
 		
 		this.setAmpTeams(new TreeSet());
 		this.getAmpTeams().add(tm.getTeamId());
@@ -109,6 +96,25 @@ public class AmpARFilter implements Filter {
 			
 		this.setAmpReportId(new Long(ampReportId));
 		
+	}
+
+	public void selectPerspective(TeamMember tm) {
+		String perspectiveCode = null;
+		if (tm != null) {
+			String perspective = tm.getAppSettings().getPerspective();
+			if (perspective != null) {
+				if (perspective.equals("Donor"))
+					perspectiveCode = "DN";
+				if (perspective.equals("MOFED"))
+					perspectiveCode = "MA";
+			} else {
+				perspectiveCode = "MA";
+			}
+		} else {
+			perspectiveCode = "MA";
+		}
+
+		this.setPerspective(DbUtil.getPerspective(perspectiveCode));
 	}
 	
 

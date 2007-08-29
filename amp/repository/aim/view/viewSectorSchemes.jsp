@@ -99,8 +99,11 @@
 															<c:set var="trnEditScheme">
 																<digi:trn key="aim:clickToEditScheme">Click here to Edit Scheme</digi:trn>
 															</c:set>
+
+
+
 															[ <digi:link href="/updateSectorSchemes.do" name="urlParams2" title="${trnEditScheme}" >
-															Edit
+															 <digi:trn key="btn:edit">Edit</digi:trn>
 															</digi:link>
 															]
 														</td>
@@ -117,7 +120,7 @@
 															</c:set>
 															[ <digi:link href="/updateSectorSchemes.do" name="urlParams4"
 																title="${trnDeleteScheme}" onclick="return onDelete()">
-																Delete
+																 <digi:trn key="btn:delete">Delete</digi:trn>
 															</digi:link>
 															]
 

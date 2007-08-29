@@ -171,6 +171,8 @@ function closeWindow() 
 	-->
 </script>
 
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+
 <digi:instance property="aimThemeForm" />
 <digi:form action="/addThemeIndicator.do" method="post">
 <digi:context name="digiContext" property="context"/>
@@ -223,8 +225,10 @@ function closeWindow() 
 								<td>
 										<html:text name="aimThemeForm" property="creationDate" styleId="themeDate" readonly="true" size="10"/>
 								</td>
-								<td align="right" vAlign="center">&nbsp;<a href='javascript:calendar("themeDate")'>
-   			          			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
+								<td align="right" vAlign="center">&nbsp;
+									<a id="date1" href='javascript:pickDate("date1",document.aimThemeForm.creationDate)'>
+										<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+									</a>
 								</td>
 								</tr>
 						</table>
@@ -304,8 +308,9 @@ function closeWindow() 
 															styleId="<%=calIdIndex%>" readonly="true" size="10"/>
 														</td>
 														<td align="left" vAlign="center">&nbsp;
-						             					<a href='javascript:calendar("<%=calIdIndex%>")'>	
-		   						          			<img src="../ampTemplate/images/show-calendar.gif" border="1"></a>
+															<a id="date2" href='javascript:pickDate("date2",document.aimThemeForm.prgIndValues)'>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+															</a>
 														</td>
 													</tr>
 												</table>

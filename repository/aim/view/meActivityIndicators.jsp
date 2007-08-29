@@ -12,7 +12,7 @@
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
@@ -505,15 +505,9 @@
 																				id="baseValDate"></td>
 
 																				<td align="left" vAlign="center">
-
-																					<a href="javascript:calendar('baseValDate')">
-
-																						<img src="../ampTemplate/images/show-calendar.gif"
-
-																						alt="Click to View Calendar" border=0>
-
+																					<a id="date1" href='javascript:pickDate("date1",document.aimUpdateIndicatorValuesForm.baseValDate)'>
+																						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																					</a>
-
 																				</td>
 
 																			</tr>
@@ -607,15 +601,9 @@
 																				</td>
 
 																				<td align="left" vAlign="center">
-
-																					<a href="javascript:calendar('targetValDate')">
-
-																						<img src="../ampTemplate/images/show-calendar.gif"
-
-																						alt="Click to View Calendar" border=0>
-
+																					<a id="date2" href='javascript:pickDate("date2",document.aimUpdateIndicatorValuesForm.targetValDate)'>
+																						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																					</a>
-
 																				</td>
 
 																				</c:if>
@@ -665,15 +653,9 @@
 																				id="revisedTargetValDate"></td>
 
 																				<td align="left" vAlign="center">
-
-																					<a href="javascript:calendar('revisedTargetValDate')">
-
-																						<img src="../ampTemplate/images/show-calendar.gif"
-
-																						alt="Click to View Calendar" border=0>
-
+																					<a id="date3" href='javascript:pickDate("date3",document.aimUpdateIndicatorValuesForm.revisedTargetValDate)'>
+																						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																					</a>
-
 																				</td>
 
 																			</tr>

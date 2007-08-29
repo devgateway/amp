@@ -8,6 +8,7 @@
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 <digi:instance property="aimCurrencyRateForm" />
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
@@ -106,8 +107,9 @@ function closePopup() {
 												<html:text property="updateCRateDate" size="10" styleClass="inp-text" readonly="true" styleId="updateCRateDate"/>
 											</td>
 											<td align="left" vAlign="center">&nbsp;
-												<a href="javascript:calendar('updateCRateDate')">
-												<img src="../ampTemplate/images/show-calendar.gif" border=0></a>
+								 				<a id="date1" href='javascript:pickDateCurrency("date1",document.aimCurrencyRateForm.updateCRateDate)'>
+													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+												</a>
 											</td>
 										</tr>
 									</table>

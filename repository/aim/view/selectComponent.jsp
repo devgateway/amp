@@ -24,6 +24,7 @@
  int indexE = 0; %>
 
 
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 
 <digi:instance property="aimEditActivityForm" />
@@ -141,8 +142,10 @@
 																	</c:forEach>
 																</select>&nbsp;
 																<input type="text" readonly="true" name="<%=field4%>" id="<%=field4%>"value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">&nbsp;
-																<a href=javascript:calendar('<%=field4%>')>
-																<img src='../ampTemplate/images/show-calendar.gif' border='0'></a>&nbsp;
+																<a id="date1<%=field4%>" href='javascript:pickDateById("date1<%=field4%>","<%=field4%>")'>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																</a>
+																&nbsp;
 																<select name="<%=field5%>" value="<c:out value="${comm.perspectiveCode}"/>" class="inp-text">
 																	<c:forEach var="pers" items="${aimEditActivityForm.perspectives}">
 																		<c:if test="${comm.perspectiveCode == pers.code}">
@@ -154,9 +157,9 @@
 																		<c:out value="${pers.name}"/>
 																		</option>
 																	</c:forEach>
-																</select>&nbsp;aaaaa
-																<input type='button' value='Delete' class='inp-text'onclick="removeCommitment('<%=divName%>')">bbbbbbb
-															</div>ccccccccccc
+																</select>&nbsp;
+																<input type='button' value='Delete' class='inp-text'onclick="removeCommitment('<%=divName%>')">
+															</div>
 														</c:forEach>
 													</c:if>
 												</c:forEach>
@@ -212,7 +215,11 @@
 														</option>
 													</c:forEach>
 												</select>&nbsp;<input type="text" name="<%=field4%>" id="<%=field4%>" readonly="true"
-												value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">&nbsp;<a href=javascript:calendar("<%=field4%>")><img src='../ampTemplate/images/show-calendar.gif' border='0'></a>&nbsp;<select name="<%=field5%>"
+												value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">&nbsp;
+												<a id="date2<%=field4%>" href='javascript:pickDateById("date2<%=field4%>","<%=field4%>")'>
+													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+												</a>
+												&nbsp;<select name="<%=field5%>"
 												class="inp-text">
 													<c:forEach var="pers" items="${aimEditActivityForm.perspectives}">
 														<c:if test="${comm.perspectiveCode == pers.code}">
@@ -285,7 +292,11 @@
 														</option>
 													</c:forEach>
 												</select>&nbsp;<input type="text" name="<%=field4%>" id="<%=field4%>" readonly="true"
-												value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">&nbsp;<a href=javascript:calendar("<%=field4%>")><img src='../ampTemplate/images/show-calendar.gif' border='0'></a>&nbsp;<select name="<%=field5%>" value="<c:out value="${comm.perspectiveCode}"/>" class="inp-text">
+												value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">&nbsp;
+												<a id="date3<%=field4%>" href='javascript:pickDateById("date3<%=field4%>","<%=field4%>")'>
+													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+												</a>
+												&nbsp;<select name="<%=field5%>" value="<c:out value="${comm.perspectiveCode}"/>" class="inp-text">
 													<c:forEach var="pers" items="${aimEditActivityForm.perspectives}">
 														<c:if test="${comm.perspectiveCode == pers.code}">
 															<option selected="true" value="<c:out value="${pers.code}"/>">
@@ -369,7 +380,7 @@ function addCommitments()
 
 	s += "</select>&nbsp;";
 	s += "<input type='text' name='comm_" + numComm + "_4' id='comm_" + numComm + "_4' size='10' class='inp-text'>&nbsp;";
-	s += "<a href=javascript:calendar('comm_" + numComm + "_4')><img src='../ampTemplate/images/show-calendar.gif' border='0'></a>&nbsp;";
+	s += "<a id='date1comm_"+numComm+"_4' href='javascript:pickDateById(\"date1comm_"+numComm+"_4\",\"comm_"+numComm+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a>&nbsp;";
 	s += "<select name='comm_" + numComm + "_5' class='inp-text'>";
 	<% itr = eaForm.getPerspectives().iterator();
 		while (itr.hasNext()) {
@@ -430,7 +441,7 @@ function addDisbursement()
 
 	s += "</select>&nbsp;";
 	s += "<input type='text' name='disb_" + numDisb + "_4' id='disb_" + numDisb + "_4' size='10' class='inp-text'>&nbsp;";
-	s += "<a href=javascript:calendar('disb_" + numDisb + "_4')><img src='../ampTemplate/images/show-calendar.gif' border='0'></a>&nbsp;";
+	s += "<a id='date1disb_"+numDisb+"_4' href='javascript:pickDateById(\"date1disb_"+numDisb+"_4\",\"disb_"+numDisb+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a>&nbsp;";
 	s += "<select name='disb_" + numDisb + "_5' class='inp-text'>";
 	<% itr = eaForm.getPerspectives().iterator();
 		while (itr.hasNext()) {
@@ -493,7 +504,7 @@ function addExpenditure()
 
 	s += "</select>&nbsp;";
 	s += "<input type='text' name='expn_" + numExpn + "_4' id='expn_" + numExpn + "_4' size='10' class='inp-text'>&nbsp;";
-	s += "<a href=javascript:calendar('expn_" + numExpn + "_4')><img src='../ampTemplate/images/show-calendar.gif' border='0'></a>&nbsp;";
+	s += "<a id='date1expn_"+numExpn+"_4' href='javascript:pickDateById(\"date1expn_"+numExpn+"_4\",\"expn_"+numExpn+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a>&nbsp;";
 	s += "<select name='expn_" + numExpn + "_5' class='inp-text'>";
 	<% itr = eaForm.getPerspectives().iterator();
 		while (itr.hasNext()) {

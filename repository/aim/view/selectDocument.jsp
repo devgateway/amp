@@ -7,6 +7,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+
+
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript">
@@ -231,9 +234,9 @@
 														</a>
 													</td>
 													<td align="left" vAlign="center">&nbsp;
-													<a href="javascript:calendar('docDate')">
-														<img src= "../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-													</a>
+														<a id="date1" href='javascript:pickDate("date1",document.aimEditActivityForm.docDate)'>
+															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+														</a>
 													</td>
 												</tr>
 											</table>

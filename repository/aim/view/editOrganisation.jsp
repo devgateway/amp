@@ -15,6 +15,8 @@
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
 
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+
 <script language="JavaScript" type="text/javascript">
 	function addPledge() {
 		<digi:context name="addSec" property="context/module/moduleinstance/editOrganisation.do" />
@@ -707,8 +709,9 @@ function loadPage()
 																											styleId="<%=tempIndexStr%>" styleClass="inp-text" readonly="true" size="10"/>
 																										</td>
 																										<td align="left" vAlign="center">&nbsp;
-																			             					<a href='javascript:calendar("<%=tempIndexStr%>")'>
-															   						        	  			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
+																											<a id="transDate<%=tempIndexStr%>" href='javascript:pickDateById("transDate<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																												<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																											</a>
 																										</td>
 																									</tr>
 																								</table>

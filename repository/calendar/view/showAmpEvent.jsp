@@ -9,6 +9,8 @@
 
 <digi:instance property="calendarEventForm"/>
 
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+
 <link rel="stylesheet" href="<digi:file src="module/calendar/css/main.css"/>">
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
@@ -302,9 +304,9 @@ function delSubmit(){
                                 </td>
                                 <td>&nbsp;</td>
                                 <td>
-                                    <a href="javascript:calendar('selectedStartDate');">
-                                        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-                                    </a>
+	                        		<a id="date1" href='javascript:pickDate("date1",document.calendarEventForm.selectedStartDate)'>
+										<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+									</a>
                                 </td>
                                 <td>&nbsp;&nbsp;</td>
                                 <td>
@@ -413,9 +415,9 @@ function delSubmit(){
                                 </td>
                                 <td>&nbsp;</td>
                                 <td>
-                                    <a href="javascript:calendar('selectedEndDate')">
-                                        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-                                    </a>
+                                	<a id="date2" href='javascript:pickDate("date2",document.calendarEventForm.selectedEndDate)'>
+										<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+									</a>
                                 </td>
                                 <td>&nbsp;&nbsp;</td>
                                 <td>

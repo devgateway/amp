@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public  class CommonWorker	{
 
@@ -42,8 +43,10 @@ public  class CommonWorker	{
 				ff.setGoButtonPresent(true);
 			}
 				
-			if ( ampFilterId.intValue()==8)
+			if (ampFilterId.intValue() == 8
+				&& FeaturesUtil.isPerspectiveEnabled()) {
 				ff.setPerspectivePresent(true);
+			}
 		}
 		return ff;
 	}

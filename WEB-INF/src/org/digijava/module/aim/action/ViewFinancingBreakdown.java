@@ -41,12 +41,12 @@ public class ViewFinancingBreakdown extends TilesAction {
 		FinancingBreakdownForm formBean = (FinancingBreakdownForm) form;
 		HttpSession session = request.getSession();
 
-		if (session.getAttribute("currentMember") == null) {
+		if (session.getAttribute(Constants.CURRENT_MEMBER) == null) {
 			formBean.setSessionExpired(true);
 		} else {
 			formBean.setSessionExpired(false);
 			TeamMember teamMember = (TeamMember) session
-					.getAttribute("currentMember");
+					.getAttribute(Constants.CURRENT_MEMBER);
 			FinancialFilters ff = CommonWorker.getFilters(teamMember
 					.getTeamId(), "FP");
 			formBean.setCalendarPresent(ff.isCalendarPresent());
@@ -67,15 +67,14 @@ public class ViewFinancingBreakdown extends TilesAction {
 			
 			Collection ampFundings = DbUtil.getAmpFunding(id);
 			FilterParams fp = (FilterParams) session
-					.getAttribute("filterParams");
+					.getAttribute(Constants.FILTER_PARAMS);
 
 			if (fp == null) {
 				fp = new FilterParams();
 			}
+			
 			ApplicationSettings apps = null;
-			if (teamMember != null) {
-				apps = teamMember.getAppSettings();
-			}
+			apps = teamMember.getAppSettings();
 
 			if (fp.getCurrencyCode() == null) 
 			{
@@ -84,19 +83,13 @@ public class ViewFinancingBreakdown extends TilesAction {
 					fp.setCurrencyCode(curr.getCurrencyCode());
 				}
 			}
-			
-
 
 			if (fp.getFiscalCalId() == null) {
 				fp.setFiscalCalId(apps.getFisCalId());
 			}
 			
-
-			if (fp.getPerspective() == null) {
-				String perspective = CommonWorker.getPerspective(apps
-						.getPerspective());
-				fp.setPerspective(perspective);
-			}
+			String perspective = CommonWorker.getPerspective(apps.getPerspective());
+			fp.setPerspective(perspective);
 
 			if (fp.getFromYear() == 0 || fp.getToYear() == 0) {
 				int year = new GregorianCalendar().get(Calendar.YEAR);
@@ -109,7 +102,7 @@ public class ViewFinancingBreakdown extends TilesAction {
 			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
 			formBean.setFromYear(fp.getFromYear());
 			formBean.setToYear(fp.getToYear());
-			session.setAttribute("filterParams", fp);
+			session.setAttribute(Constants.FILTER_PARAMS, fp);
 
 			Collection fb = FinancingBreakdownWorker.getFinancingBreakdownList(
 					id, ampFundings, fp);

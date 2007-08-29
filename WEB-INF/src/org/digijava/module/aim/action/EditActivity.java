@@ -459,7 +459,7 @@ public class EditActivity
                             actPrgs.add(prg);
                             }
                         }
-                        
+
                         eaForm.setActPrograms(actPrgs);
                     }catch(Exception ex){
                         ex.printStackTrace();
@@ -470,7 +470,7 @@ public class EditActivity
                     eaForm.setCreatedBy(activity.getActivityCreator());
                     eaForm.setUpdatedBy(activity.getUpdatedBy());
                     eaForm.setBudget(activity.getBudget());
-                    
+
                     /*
                      * Tanzania adds
                      */
@@ -484,19 +484,19 @@ public class EditActivity
                     	eaForm.setSubProgram(activity.getSubProgram().trim());
                     if(activity.getProjectCode()!=null)
                     	eaForm.setProjectCode(activity.getProjectCode().trim());
-                    
+
                     if(activity.getGbsSbs()!=null)
                     	eaForm.setGbsSbs(activity.getGbsSbs());
-                    
-                    
+
+
                     if(activity.isGovernmentApprovalProcedures()!=null)
                     	eaForm.setGovernmentApprovalProcedures(activity.isGovernmentApprovalProcedures());
                     else eaForm.setGovernmentApprovalProcedures(new Boolean(false));
-                    
+
                     if(activity.isJointCriteria()!=null)
                     	eaForm.setJointCriteria(activity.isJointCriteria());
                     else activity.setJointCriteria(new Boolean(false));
-                    
+
                     if(activity.getDescription()!=null) eaForm.setDescription(activity.getDescription().trim());
                     if(activity.getObjective()!=null) eaForm.setObjectives(activity.getObjective().trim());
                     if(activity.getPurpose()!=null) eaForm.setPurpose(activity.getPurpose().trim());
@@ -751,7 +751,7 @@ public class EditActivity
                                     ActivitySector actSect = new ActivitySector();
                                     if(parent != null) {
                                         actSect.setId(parent.getAmpSectorId());
-                                    	
+
                         				Collection coll =FeaturesUtil.getGlobalSettings();
                         	            Iterator itr = coll.iterator();
                         	            String view=null;
@@ -764,11 +764,11 @@ public class EditActivity
                         					{
                         		            	actSect.setCount(1);
                         					}
-                        					  else 
+                        					  else
                         					{
                         						 actSect.setCount(2);
                         					}
-                        		            
+
                                         actSect.setSectorId(parent.getAmpSectorId());
                                         actSect.setSectorName(parent.getName());
                                         if(subsectorLevel1 != null) {
@@ -1362,8 +1362,11 @@ public class EditActivity
                     eaForm.setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
                     eaForm.setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
 
-                    AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
-                    activity.setActivityCreator(teamMember);
+                    if(eaForm.getIsPreview()!=1){
+                         AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+                         activity.setActivityCreator(teamMember);
+                     }
+
 
                     eaForm.setConditions(activity.getCondition().trim());
 

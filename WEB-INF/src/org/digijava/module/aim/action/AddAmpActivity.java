@@ -16,6 +16,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.digijava.module.aim.dbentity.AmpActivity ;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -85,7 +88,7 @@ public class AddAmpActivity extends Action {
 			//return mapping.findForward("index");
 
 		//return mapping.findForward("publicPreview");
-		
+
 		EditActivityForm eaForm = (EditActivityForm) form;
 		// Add sectors
 		if (request.getParameter("addSector") != null){
@@ -102,7 +105,7 @@ public class AddAmpActivity extends Action {
 				prevSelSectors = new ArrayList();
 				prevSelSectors.add(sect);
 			}
-			
+
 				Collection col =FeaturesUtil.getGlobalSettings();
 	            Iterator itr = col.iterator();
 	            String view=null;
@@ -115,11 +118,11 @@ public class AddAmpActivity extends Action {
 					{
 						sect.setCount(1);
 					}
-					  else 
+					  else
 					{
 						sect.setCount(2);
 					}
-		
+
 			eaForm.setActivitySectors(prevSelSectors);
 			return mapping.findForward("addActivityStep2");
 	}
@@ -153,8 +156,8 @@ public class AddAmpActivity extends Action {
 				return mapping.findForward("addActivityStep2");
 			}
 		//
-		
-		//we use this pointer to simplify adding items in the selectors: 
+
+		//we use this pointer to simplify adding items in the selectors:
 		session.setAttribute("eaf",eaForm);
 		String logframepr=(String)session.getAttribute("logframepr");//logframepreview
 		if(logframepr==null || logframepr=="") logframepr="";
@@ -162,8 +165,8 @@ public class AddAmpActivity extends Action {
 				eaForm.setStep("9");
 				eaForm.setPageId(1);
 			}
-		
-		
+
+
 		//eaForm.setAllComps(ActivityUtil.getAllComponentNames());
         ProposedProjCost propProjCost=null;
         if(eaForm.getProProjCost()!=null){
@@ -221,12 +224,12 @@ public class AddAmpActivity extends Action {
 			teamLeadFlag = teamMember.getTeamHead();
 			workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
         }
-    
+
 		if (teamLeadFlag && workingTeamFlag)
 			eaForm.setWorkingTeamLeadFlag("yes");
 		else
 			eaForm.setWorkingTeamLeadFlag("no");
-    
+
 		if (!eaForm.isEditAct() || logframepr.compareTo("true")==0){
 			if(teamMember!=null)
 			if (teamMember.getTeamHead())
@@ -300,7 +303,7 @@ public class AddAmpActivity extends Action {
                 ed.setGroupName(Constants.GROUP_OTHER);
                 org.digijava.module.editor.util.DbUtil.saveEditor(ed);
 		    }
-		    
+
 		    //---
 		    if (eaForm.getPurpose() == null || eaForm.getPurpose().trim().length() == 0) {
 		        eaForm.setPurpose("aim-purp-" + teamMember.getMemberId() + "-" + System.currentTimeMillis());
@@ -320,7 +323,7 @@ public class AddAmpActivity extends Action {
                 ed.setGroupName(Constants.GROUP_OTHER);
                 org.digijava.module.editor.util.DbUtil.saveEditor(ed);
 		    }
-		    
+
 		    if (eaForm.getResults() == null || eaForm.getResults().trim().length() == 0) {
 		        eaForm.setResults("aim-results-" + teamMember.getMemberId() + "-" + System.currentTimeMillis());
 				User user = RequestUtils.getUser(request);
@@ -360,7 +363,7 @@ public class AddAmpActivity extends Action {
                 ed.setGroupName(Constants.GROUP_OTHER);
                 org.digijava.module.editor.util.DbUtil.saveEditor(ed);
 		    }
-		    
+
 		    if (eaForm.getResults() == null || eaForm.getResults().trim().length() == 0) {
 		        eaForm.setResults("aim-results-" + teamMember.getMemberId() + "-" + System.currentTimeMillis());
 				User user = RequestUtils.getUser(request);
@@ -437,10 +440,10 @@ public class AddAmpActivity extends Action {
 				}
 				eaForm.setOverallCost(new Double(grandCost));
 				eaForm.setOverallContribution(new Double(grandContribution));
-				
-				
+
+
 			}
-			
+
 //			Collection statusCol = null; TO BE DELETED
 //			// load the status from the database
 //			if(eaForm.getStatusCollection() == null) {
@@ -527,7 +530,7 @@ public class AddAmpActivity extends Action {
 				 * 2. Get the maximum of the ampActivityId + 1, MAX_NUM
 				 * 3. merge them
 				 */
-				String ampId = 
+				String ampId =
 					FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY).toUpperCase();
 				/*if (eaForm.getFundingOrganizations() != null) {
 					if (eaForm.getFundingOrganizations().size() == 1) {
@@ -539,8 +542,8 @@ public class AddAmpActivity extends Action {
 						}
 					}
 				}*/
-				
-				
+
+
 				long maxId = ActivityUtil.getActivityMaxId();
 				maxId++;
 				ampId += "/" + maxId;
@@ -550,17 +553,29 @@ public class AddAmpActivity extends Action {
 			/*
 			 * If the mode is 'Add', set the Activity Creator as the current logged in user
 			 */
-			if (teamMember!=null && (!eaForm.isEditAct()) &&
-					(eaForm.getActAthEmail() == null || eaForm.getActAthEmail().trim().length() == 0)) {
-				User usr = DbUtil.getUser(teamMember.getEmail());
-				if (usr != null) {
-					eaForm.setActAthFirstName(usr.getFirstNames());
-					eaForm.setActAthLastName(usr.getLastName());
-					eaForm.setActAthEmail(usr.getEmail());
-					eaForm.setActAthAgencySource(usr.getOrganizationName());
-				}
-				
-			}
+                        if(eaForm.getIsPreview()!=1){
+                                if (teamMember!=null && (!eaForm.isEditAct()) &&
+                                                (eaForm.getActAthEmail() == null || eaForm.getActAthEmail().trim().length() == 0)) {
+                                        User usr = DbUtil.getUser(teamMember.getEmail());
+                                        if (usr != null) {
+                                                eaForm.setActAthFirstName(usr.getFirstNames());
+                                                eaForm.setActAthLastName(usr.getLastName());
+                                                eaForm.setActAthEmail(usr.getEmail());
+                                                eaForm.setActAthAgencySource(usr.getOrganizationName());
+                                        }
+                        }
+
+                        }else {
+                                AmpActivity activity = ActivityUtil.getAmpActivity(eaForm.getActivityId());
+                                if(activity.getActivityCreator()!=null){
+                                        eaForm.setActAthFirstName(activity.getActivityCreator().getUser().getFirstNames());
+                                        eaForm.setActAthLastName(activity.getActivityCreator().getUser().getLastName());
+                                        eaForm.setActAthEmail(activity.getActivityCreator().getUser().getEmail());
+                                        eaForm.setActAthAgencySource(activity.getActivityCreator().getUser().getOrganizationName());
+                                }
+                                eaForm.setIsPreview(0);
+                        }
+
 
 			Collection euActs=EUActivityUtil.getEUActivities(eaForm.getActivityId());
 			// EUActivities = same as Costs
@@ -571,7 +586,7 @@ public class AddAmpActivity extends Action {
 			String rskColor = MEIndicatorsUtil.getRiskColor(risk);
 			request.setAttribute("overallRisk",riskName);
 			request.setAttribute("riskColor",rskColor);
-			
+
 			Long prev = new Long(-1);
 			Long next = new Long(-1);
 			if (eaForm.getActivityId() != null){
@@ -579,7 +594,7 @@ public class AddAmpActivity extends Action {
 				if(rep!=null) {
 				Collection ids = (Collection) rep.getOwnerIds();
 				Iterator it = ids.iterator();
-				
+
 				while (it.hasNext()) {
 					Long el = (Long) it.next();
 					if (el.compareTo(eaForm.getActivityId()) == 0){
@@ -587,13 +602,13 @@ public class AddAmpActivity extends Action {
 							next = new Long(((Long)it.next()).longValue());
 						break;
 					}
-					prev = new Long(el.longValue());				
+					prev = new Long(el.longValue());
 				}
 			}
 			request.setAttribute("nextId", next);
 			request.setAttribute("prevId", prev);
 			}
-			
+
 //			if(eaForm.getStatusCollection() == null) { //TO BE DELETED
 //				eaForm.setStatusCollection(DbUtil.getAmpStatus());
 //			}
@@ -604,9 +619,9 @@ public class AddAmpActivity extends Action {
 			if (eaForm.getLevelCollection() == null) {
 				eaForm.setLevelCollection(DbUtil.getAmpLevels());
 			}
-			
-			if(teamMember==null) return mapping.findForward("publicPreview"); 
-			else 
+
+			if(teamMember==null) return mapping.findForward("publicPreview");
+			else
 				{
 				ArrayList colAux=new ArrayList();
 				Collection ampFields=DbUtil.getAmpFields();
@@ -640,12 +655,12 @@ public class AddAmpActivity extends Action {
 							eaForm.setCurrentVal(0);
 							eaForm.setCurrentValDate(null);
 							eaForm.setIndicatorRisk(null);
-							
-							
+
+
 						}
 
 						//get the levels of risks
-						
+
 						if(!eaForm.getIndicatorsME().isEmpty())
 							eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
 							return mapping.findForward("previewLogframe");

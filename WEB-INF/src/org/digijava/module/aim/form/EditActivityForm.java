@@ -16,7 +16,8 @@ import org.digijava.module.aim.helper.*;
 
 public class EditActivityForm extends ActionForm implements Serializable{
 
-	private Long activityId = null;
+private int isPreview=0;
+  private Long activityId = null;
 	private String ampId = null;
 	private String title = null;
 	private String description = null;
@@ -398,11 +399,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	 private Boolean governmentApprovalProcedures;
 	 private Boolean jointCriteria;
-	 
+
 	 private ArrayList <Boolean>fundingActives;
 	 private ArrayList <Boolean>delegatedCooperations;
 	 private ArrayList <Boolean>delegatedPartners;
-	 
+
 	public Boolean getGovernmentApprovalProcedures() {
 		return governmentApprovalProcedures;
 	}
@@ -4109,11 +4110,19 @@ public String getPurpose() {
 		return delegatedPartners;
 	}
 
-	public void setDelegatedPartners(ArrayList<Boolean> delegatedPartners) {
+  public int getIsPreview() {
+    return isPreview;
+  }
+
+  public void setDelegatedPartners(ArrayList<Boolean> delegatedPartners) {
 		this.delegatedPartners = delegatedPartners;
 	}
-	
+
 	public void setCreatedBy(AmpTeamMember createdBy) {
     this.createdBy = createdBy;
+  }
+
+  public void setIsPreview(int isPreview) {
+    this.isPreview = isPreview;
   }
 }

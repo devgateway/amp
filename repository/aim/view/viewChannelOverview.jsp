@@ -50,7 +50,7 @@ function projectFiche(id)
 function preview(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
-   document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=2~activityId=" + id;
+   document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=2~activityId=" + id+"~isPreview=" +1;
 	document.aimChannelOverviewForm.target = "_self";
    document.aimChannelOverviewForm.submit();
 }
@@ -401,11 +401,11 @@ function commentWin(val) {
 																				<tr>
 																					<td>
 																					<digi:trn key="aim:actGovernmentApprovalProcedures">
-																					Government Approval Procedures 
+																					Government Approval Procedures
 																					</digi:trn>:
 																					<c:if test="${activity.governmentApprovalProcedures==true}">
 																						<c:out value="Yes"/>
-																					</c:if>	
+																					</c:if>
 																					<c:if test="${activity.governmentApprovalProcedures==false || activity.governmentApprovalProcedures==''}">
 																						<c:out value="No"/>
 																					</c:if>
@@ -420,7 +420,7 @@ function commentWin(val) {
 																					</digi:trn>:
 																					<c:if test="${activity.jointCriteria==true}">
 																						<c:out value="Yes"/>
-																					</c:if>	
+																					</c:if>
 																					<c:if test="${activity.jointCriteria==false || activity.jointCriteria==''}">
 																						<c:out value="No"/>
 																					</c:if>

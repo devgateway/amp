@@ -215,10 +215,13 @@ public class Constants
 	public static final String SA_FEATURE = "SA"; //* Standard AMP Form Fields code
 	
 	
-	public static final String DEF_FLAG_EXIST = "defFlagExist"; 
-	
+	public static final String DEF_FLAG_EXIST = "defFlagExist"; 	
 	public static final String DSKTP_FLTR_CHANGED = "dsktpFltrChanged";
+	
+	// Session attributes names
 	public static final String CURRENT_MEMBER = "currentMember";
+	public static final String FILTER_PARAMS = "filterParams";
+	
 	
 	public static final String AMP_PROJECTS = "ampProjects";
 	public static final String DIRTY_ACTIVITY_LIST = "dirtyActivityList";

@@ -197,9 +197,9 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 												<TD>
 													<html:select property="perspective" styleClass="dr-menu">
 														<logic:iterate id="persp" name="aimFinancingBreakdownForm" property="perspectives">
-															<bean:define id="code" name="persp" property="code"/>
-															<bean:define id="name" name="persp" property="name"/>
-															<option value="<%=code %>"><digi:trn key="<%="aim:persp:"+code %>"><%=name %></digi:trn></option>
+															<bean:define id="code" name="persp" property="code" />
+															<bean:define id="name" name="persp" property="name" />																		
+															<option value="<%=code %>"  <logic:equal name="aimFinancingBreakdownForm" property="perspective" value="<%=(String)code%>">selected</logic:equal> ><digi:trn key="<%="aim:persp:"+code %>"><%=name %></digi:trn></option>
 														</logic:iterate>
 														
 													</html:select>

@@ -14,6 +14,8 @@
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
 
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+
 <script language="JavaScript">
 
 	<!--
@@ -269,7 +271,7 @@
 
 							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
 							<c:set var="index" value="-1"/>
-						 	<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}">
+						 	<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}" >
 						 	<c:if test="${fundingDetail.transactionType==0}">
 								<c:if test="${aimEditActivityForm.donorFlag == true}">
 								 	<c:if test="${fundingDetail.perspectiveCode=='DN'}">
@@ -300,8 +302,9 @@
 															styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
 														</td>
 														<td align="left" vAlign="center">&nbsp;
-						             					<a href='javascript:calendar("<%=tempIndexStr%>")'>
-		   						          			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
+															<a id="trans2Date<%=tempIndexStr%>" href='javascript:pickDateById("trans2Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+															</a>
 														</td>
 													</tr>
 												</table>
@@ -388,12 +391,14 @@
 													<tr>
 														<td>
 															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
+															
 															<html:text name="fundingDetail" indexed="true" property="transactionDate"
-															styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
+															styleId="<%=tempIndexStr%>" readonly="true" size="10" />
 														</td>
 														<td align="left" vAlign="center">&nbsp;
-						             					<a href='javascript:calendar("<%=tempIndexStr%>")'>
-		   						          			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
+															<a id="trans3Date<%=tempIndexStr%>" href='javascript:pickDateById("trans3Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+															</a>
 														</td>
 													</tr>
 												</table>
@@ -557,8 +562,9 @@
 															styleId="<%=tempIndexStr%>" size="10"/>
 														</td>
 														<td align="left" vAlign="center">&nbsp;
-					   			          			<a href='javascript:calendar("<%=tempIndexStr%>")'>
-      					      			 			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
+															<a id="trans4Date<%=tempIndexStr%>" href='javascript:pickDateById("trans4Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+															</a>
 														</td>
 													</tr>
 												</table>
@@ -612,11 +618,12 @@
 														<td>
 															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
 															<html:text name="fundingDetail" indexed="true" property="transactionDate" readonly="true"
-															styleId="<%=tempIndexStr%>" size="10"/>
+															styleId="<%=tempIndexStr%>" size="10" />
 														</td>
 														<td align="left" vAlign="center">&nbsp;
-					   			          			<a href='javascript:calendar("<%=tempIndexStr%>")'>
-      					      			 			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
+															<a id="transDate<%=tempIndexStr%>" href='javascript:pickDateById("transDate<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+															</a>
 														</td>
 													</tr>
 												</table>
@@ -745,8 +752,9 @@
 																		styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
 																	</td>
 																	<td align="left" vAlign="center">&nbsp;
-			         						    					<a href='javascript:calendar("<%=tempIndexStr%>")'>
-								   			          			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
+																		<a id="trans5Date<%=tempIndexStr%>" href='javascript:pickDateById("trans5Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																			<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		</a>
 																		<% tempIndex++; %>
 																	</td>
 																</tr>
@@ -821,8 +829,9 @@
 																		styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
 																	</td>
 																	<td align="left" vAlign="center">&nbsp;
-			         						    					<a href='javascript:calendar("<%=tempIndexStr%>")'>
-								   			          			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
+																		<a id="trans6Date<%=tempIndexStr%>" href='javascript:pickDateById("trans6Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																			<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																		</a>
 																		<% tempIndex++; %>
 																	</td>
 																</tr>

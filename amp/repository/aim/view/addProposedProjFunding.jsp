@@ -10,6 +10,8 @@
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
 
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+
 <script language="JavaScript" type="text/javascript">
 	function addPropFunding() {
       var fna=aimEditActivityForm.funAmount.value;
@@ -96,7 +98,9 @@
                           <html:text property="proProjCost.funDate" styleId="funDate" readonly="true" style="width:100px;"/>
                         </td>
                         <td valign="center" align="center">
-                          <a href='javascript:calendar("funDate")'><img  align="right" src="../ampTemplate/images/show-calendar.gif" border="0"></a>
+							<a id="date1" href='javascript:pickDate("date1",document.aimEditActivityForm.proProjCost.funDate)'>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+							</a>
                         </td>
                       </tr>
                     </table>

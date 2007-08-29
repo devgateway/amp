@@ -57,8 +57,9 @@
 												styleId="revisedCompDate" size="10" styleClass="inp-text" readonly="true"/>
 											</td>
 											<td align="left" vAlign="center">&nbsp;
-												<a href="javascript:calendar('revisedCompDate')">
-													<img src="../ampTemplate/images/show-calendar.gif" border=0></a>
+												<a id="date1" href='javascript:pickDate("date1",document.aimEditActivityForm.revisedCompDate)'>
+													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+												</a>
 											</td>
 										</tr>
 									</table>									

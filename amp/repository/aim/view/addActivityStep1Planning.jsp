@@ -13,7 +13,6 @@
 
 </script>
 
-
 <digi:instance property="aimEditActivityForm" />
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
@@ -139,9 +138,9 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-															<a href="javascript:calendar('originalAppDate')">
-																<img src= "../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-															</a>
+																<a id="date1" href='javascript:pickDate("date1",document.aimEditActivityForm.originalAppDate)'>
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																</a>
 															</td>
 														</tr>
 													</table>
@@ -165,7 +164,7 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a href="javascript:calendar('revisedAppDate')">
+																<a id="date2" href='javascript:pickDate("date2",document.aimEditActivityForm.revisedAppDate)'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
@@ -196,7 +195,7 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a href="javascript:calendar('originalStartDate')">
+																<a id="date3" href='javascript:pickDate("date3",document.aimEditActivityForm.originalStartDate)'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
@@ -223,7 +222,7 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a href="javascript:calendar('revisedStartDate')">
+																<a id="date4" href='javascript:pickDate("date4",document.aimEditActivityForm.revisedStartDate)'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
@@ -254,8 +253,8 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a href="javascript:calendar('contractingDate')">
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to view the Calendar" border=0>
+																<a id="date5" href='javascript:pickDate("date5",document.aimEditActivityForm.contractingDate)'>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
 														</tr>
@@ -281,8 +280,8 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a href="javascript:calendar('disbursementsDate')">
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to view the Calendar" border=0>
+																<a id="date6" href='javascript:pickDate("date6",document.aimEditActivityForm.disbursementsDate)'>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
 															<td>&nbsp;
@@ -311,8 +310,8 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a href="javascript:calendar('proposedCompDate')">
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to view the Calendar" border=0>
+																<a id="date7" href='javascript:pickDate("date7",document.aimEditActivityForm.proposedCompDate)'>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
 														</tr>
@@ -338,7 +337,7 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a href="javascript:calendar('currentCompDate')">
+																<a id="date8" href='javascript:pickDate("date8",document.aimEditActivityForm.currentCompDate)'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>

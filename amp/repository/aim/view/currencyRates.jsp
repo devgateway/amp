@@ -11,7 +11,7 @@
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
-
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
 <script language="JavaScript">
 
 function addExchangeRate() {
@@ -176,8 +176,9 @@ function fnSubmit() {
 														styleId="filterByDateFrom" styleClass="inp-text"/>
 													</td>
 													<td align="left" vAlign="center">&nbsp;
-														<a href="javascript:calendar('filterByDateFrom')">
-														<img src="../ampTemplate/images/show-calendar.gif" border=0></a>
+														<a id="date1" href='javascript:pickDate("date1",document.aimCurrencyRateForm.filterByDateFrom)'>
+															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+														</a>
 													</td>
 												</tr>
 											</table>

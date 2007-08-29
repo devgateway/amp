@@ -23,11 +23,25 @@ function clearDefault(editBox)
 {
 		if(editBox.value=='Amount') editBox.value='';
 }	
+
+function selectOrganisation() {
+		openNewWindow(650, 420);
+		<digi:context name="selectOrganization" property="context/module/moduleinstance/selectOrganization.do?orgSelReset=true&edit=true&step=3" />
+		document.aimEditActivityForm.action = "<%= selectOrganization %>";
+		document.aimEditActivityForm.target = popupPointer.name;
+		document.aimEditActivityForm.submit();
+}
 </script>
 
 <!-- code for rendering that nice calendar -->
+<bean:define id="langBean" name="org.digijava.kernel.navigation_language" scope="request" type="org.digijava.kernel.entity.Locale" toScope="page" />
+<bean:define id="lang" name="langBean" property="code" scope="page" toScope="page" />
+
 <script type="text/javascript">
-	calendarObjForForm = new DHTMLSuite.calendar({callbackFunctionOnDayClick:'getDateFromCalendar',isDragable:false,displayTimeBar:false}); 
+	var myCalendarModel = new DHTMLSuite.calendarModel();
+	
+	myCalendarModel.setLanguageCode('<bean:write name="lang" />'); 
+	calendarObjForForm = new DHTMLSuite.calendar({callbackFunctionOnDayClick:'getDateFromCalendar',isDragable:false,displayTimeBar:false,calendarModelReference:myCalendarModel}); 
 		
 	function getDateFromCalendar(inputArray)
 	{
@@ -144,6 +158,14 @@ function clearDefault(editBox)
 								</option>
 							</logic:iterate>
 							</select>
+							
+							<input style="text-align:left" type='text' name='contrAmount' disabled="disabled"
+									value='${aimEUActivityForm.contrDonorId[idx]}'>
+								<!-- <digi:trn key="btn:selOrganizations">Sel Org</digi:trn> -->
+ 						    <html:button  styleClass="buton" property="submitButton" onclick="selectOrganisation()">
+								Sel Org
+							</html:button>
+							
 
 							<select name="contrFinTypeId" style="width: 100px" class="inp-text">
 								<option value="-1"><digi:trn key="aim:addEditActivitySelectFinancingInstrument">Select Financing Instrument</digi:trn></option>

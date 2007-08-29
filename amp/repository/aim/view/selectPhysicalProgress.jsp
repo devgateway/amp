@@ -62,6 +62,8 @@
 -->
 </script>
 
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+
 <digi:instance property="aimEditActivityForm" />
 <%--
 <digi:form action="/phyProgSelected.do" method="post"> --%>
@@ -128,9 +130,9 @@
 													</td>
 													<td>
 														&nbsp;
-														<a href="javascript:calendar('phyProgRepDate')">
-														<img src="../ampTemplate/images/show-calendar.gif" border=0
-														tabindex="3"></a>
+														<a id="date1" href='javascript:pickDate("date1",document.aimEditActivityForm.phyProgRepDate)'>
+															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+														</a>
 													</td>													
 												</tr>
 											</table>										

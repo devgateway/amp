@@ -50,15 +50,16 @@ public class AutopatcherService extends AbstractServiceImpl {
 			appliedPatches=new ArrayList();
 			try {
 				session = PersistenceManager.getSession();
-			String realRootPath=serviceContext.getRealPath("/WEB-INF/");
-			logger.debug("Computed WEB-INF realPath is "+realRootPath);
+			String realRootPath=serviceContext.getRealPath("/"+patchesDir+"/");
 			logger.info("Applying patches...");
+			logger.info("Patch directory is "+realRootPath);
 			Collection<File> allPatchesFiles = PatcherUtil.getAllPatchesFiles(serviceContext.getRealPath(patchesDir));
 			Set allAppliedPatches = PatcherUtil.getAllAppliedPatches(session);
 			Iterator i=allPatchesFiles.iterator();
 			while (i.hasNext()) {
 				File element = (File) i.next();
-				if(allAppliedPatches.contains(element.getAbsolutePath())) continue;
+				String localPatchPath=element.getAbsolutePath().substring(realRootPath.length()+1,element.getAbsolutePath().length());
+				if(allAppliedPatches.contains(localPatchPath)) continue;
 				
 				try {
 				LineNumberReader bis=new LineNumberReader(new FileReader(element));
@@ -78,14 +79,15 @@ public class AutopatcherService extends AbstractServiceImpl {
 					
 				Connection connection = PersistenceManager.getSession().connection();
 				Statement st=connection.createStatement();
-	
+				logger.info("Executing sql command: "+sqlCommand);
 				st.execute(sqlCommand);
+				
 				st.close();
 				
 				}
 				
 				PatchFile pf=new PatchFile();
-				pf.setAbsolutePatchName(element.getAbsolutePath());
+				pf.setAbsolutePatchName(localPatchPath);
 				pf.setInvoked(new Timestamp(System.currentTimeMillis()));
 				
 				

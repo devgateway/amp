@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -110,10 +111,15 @@
 														<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 													</c:set>
 													<c:set var="message">
-														<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-													</c:set>
+<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+</c:set>
+<c:set var="quote">'</c:set>
+<c:set var="escapedQuote">\'</c:set>
+<c:set var="msg">
+${fn:replace(message,quote,escapedQuote)}
+</c:set>
 													<digi:link href="/viewMyDesktop.do" styleClass="comment"
-													onclick="return quitRnot1('${message}')" title="${translation}" >
+													onclick="return quitRnot1('${msg}')" title="${translation}" >
 														<digi:trn key="aim:portfolio">
 															Portfolio
 														</digi:trn>

@@ -14631,7 +14631,7 @@ DHTMLSuite.calendarLanguageModel.prototype = {
 	{
 		switch(this.languageCode){
 			case "ge":	/* German */
-				this.monthArray = ['Januar','Februar','M?rz','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+				this.monthArray = ['Januar','Februar','Marz','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
 				this.monthArrayShort = ['Jan','Feb','Mar','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
 				this.dayArray = ['Mon','Die','Mit','Don','Fre','Sam','Son'];	
 				this.weekString = 'Woche';
@@ -14664,7 +14664,7 @@ DHTMLSuite.calendarLanguageModel.prototype = {
 				this.weekString = 'Semana';
 				this.todayIsString = 'Hoy es';
 				this.todayString = 'Hoy';
-				this.timeString = '';
+				this.timeString = 'Hora';
 				break; 	
 			case "pt-br":  /* Brazilian portuguese (pt-br) */
 				this.monthArray = ['Janeiro','Fevereiro','Mar&ccedil;o','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];

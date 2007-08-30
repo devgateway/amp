@@ -4,6 +4,7 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:form name="aimUserEmailForm" type="org.digijava.module.um.form.UserEmailForm" action="/resetUserPassword.do" >
 
@@ -20,13 +21,13 @@
 		<td align=left class=r-dotted-lg vAlign=top width=520><br>
 			<table border=0 cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
-					<td width="3">&nbsp;</td>				
+					<td width="3">&nbsp;</td>
 					<td colspan="2">
 						<digi:errors/>
 					</td>
 				</tr>
 				<tr>
-					<td width="3">&nbsp;</td>				
+					<td width="3">&nbsp;</td>
 					<td align=right class=f-names noWrap>
 						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 						<digi:trn key="aim:email">Email</digi:trn>
@@ -36,9 +37,9 @@
 						<font color="red">
 						<digi:trn key="aim:userIdExample1">
 						e.g. yourname@emailaddress.com
-						</digi:trn>						
-						</font>						
-					</td>					
+						</digi:trn>
+						</font>
+					</td>
 				</tr>
 				<tr>
 					<td width="3">&nbsp;</td>
@@ -56,12 +57,12 @@
 						<c:set var="translation">
 							<digi:trn key="aim:clickToUseAmp">Click here to Use AMP now</digi:trn>
 						</c:set>
-						<digi:link href="/index.do" title="${translation}" >	
+						<digi:link href="/index.do" title="${translation}" >
 						<digi:trn key="aim:useAMPSiteNow">
 						Use AMP Ethiopia now
 						</digi:trn>
 						</digi:link>
-						<BR><BR><BR>						
+						<BR><BR><BR>
       	     	</td>
         		</tr>
         		<tr>
@@ -71,15 +72,15 @@
 	          	<td class=r-dotted-lg-buttom vAlign=top>
 						<digi:img src="module/aim/images/i-C2160E.gif" width="13" height="9"/>
 						 <digi:trn key="aim:loginWarning">
-						 You are signing-in to one or more secure applications for        
-	        		     official business. You have been granted the right to access these        
-    	      		 	 applications and the information contained in them to facilitate        
-        	   			 your official business. Your accounts and passwords are your        
-						 responsibility. Do not share them with anyone.        
+						 You are signing-in to one or more secure applications for
+	        		     official business. You have been granted the right to access these
+    	      		 	 applications and the information contained in them to facilitate
+        	   			 your official business. Your accounts and passwords are your
+						 responsibility. Do not share them with anyone.
 						 </digi:trn>
 						<BR><BR>
           		</td>
-  				</tr> 
+  				</tr>
         		<tr>
           		<td vAlign=top>&nbsp;</td>
   				</tr>

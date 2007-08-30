@@ -47,6 +47,7 @@ import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpFundingOrganisation;
 import org.digijava.module.aim.dbentity.AmpLevel;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpModality;
@@ -607,6 +608,35 @@ public class DbUtil {
         return org;
     }
 
+    public static AmpFundingOrganisation getFundingOrganisation(Long orgId, Long activityId) {
+        Session session = null;
+        AmpFundingOrganisation fOrg = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            // modified by Priyajith
+            // desc:used select query instead of session.load
+            // start
+            String queryString = "select o from "
+                + AmpFundingOrganisation.class.getName() + " o "
+                + "where (o.ampOrgId=:orgId) and (o.ampActivityId=:activityId)";
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("orgId", orgId, Hibernate.LONG);
+            qry.setParameter("activityId", activityId, Hibernate.LONG);
+            Iterator itr = qry.list().iterator();
+            while (itr.hasNext()) {
+                fOrg = (AmpFundingOrganisation) itr.next();
+            }
+            // end
+
+        } catch (Exception ex) {
+            logger.error("Unable to get organisation from database", ex);
+        }
+        logger.debug("Getting organisation successfully ");
+        return fOrg;
+    }
+    
+    
     public static ArrayList getAmpComponent(Long ampActivityId) {
         ArrayList component = new ArrayList();
         Query q = null;

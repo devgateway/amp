@@ -682,6 +682,7 @@ public class SaveActivity extends Action {
 								.getAmpOrgId());
 						AmpOrgRole ampOrgRole = new AmpOrgRole();
 						ampOrgRole.setActivity(activity);
+						
 						ampOrgRole.setRole(role);
 						ampOrgRole.setOrganisation(ampOrg);
 						orgRole.add(ampOrgRole);

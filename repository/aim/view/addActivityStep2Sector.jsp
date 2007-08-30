@@ -133,11 +133,11 @@
                                                             <td>
                                                               <table cellSpacing=2 cellPadding=2>
                                                                 <tr>
-                                                                <c:if test="${sectror == 1}">
                                                                 	<field:display name="Add Sectors Button" feature="Sectors">&nbsp;</field:display>
                                                                   <td>
                                                                       <input type="button" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' class="buton"  onclick="addSectors();">
                                                                     </td>
+                                                                <c:if test="${sectror == 1}">
                                                                  </c:if>
 																    <field:display name="Remove Sectors Button" feature="Sectors">&nbsp;</field:display>
                                                                   <td>

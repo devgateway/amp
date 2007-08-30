@@ -99,6 +99,16 @@ public class AutopatcherService extends AbstractServiceImpl {
 				connection.commit();
 				st.close();
 				
+				PatchFile pf=new PatchFile();
+				pf.setAbsolutePatchName(localPatchPath);
+				pf.setInvoked(new Timestamp(System.currentTimeMillis()));
+				
+				
+				session.save(pf);
+				
+				appliedPatches.add(element.getAbsolutePath());
+			
+				
 				}
 				
 				catch (BatchUpdateException e) {
@@ -112,14 +122,6 @@ public class AutopatcherService extends AbstractServiceImpl {
 				
 				
 
-				PatchFile pf=new PatchFile();
-				pf.setAbsolutePatchName(localPatchPath);
-				pf.setInvoked(new Timestamp(System.currentTimeMillis()));
-				
-				
-				session.save(pf);
-				
-				appliedPatches.add(element.getAbsolutePath());
 				
 				} catch (Exception e ) {
 					logger.error(e);

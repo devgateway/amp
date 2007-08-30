@@ -72,20 +72,24 @@ public class AutopatcherService extends AbstractServiceImpl {
 				bis.close();
 							
 				StringTokenizer stok=new StringTokenizer(sb.toString(),";");
+				logger.info("Executing sql commands: "+sb.toString());
+				Connection connection = PersistenceManager.getSession().connection();
+				Statement st=connection.createStatement();
+
 				while(stok.hasMoreTokens()) {
 					
 				String sqlCommand=stok.nextToken();
 				if(sqlCommand.trim().equals("")) continue;
-					
-				Connection connection = PersistenceManager.getSession().connection();
-				Statement st=connection.createStatement();
-				logger.info("Executing sql command: "+sqlCommand);
-				st.execute(sqlCommand);
+			
+				st.addBatch(sqlCommand);
 				
-				st.close();
 				
 				}
+
+				st.executeBatch();
 				
+				st.close();
+
 				PatchFile pf=new PatchFile();
 				pf.setAbsolutePatchName(localPatchPath);
 				pf.setInvoked(new Timestamp(System.currentTimeMillis()));

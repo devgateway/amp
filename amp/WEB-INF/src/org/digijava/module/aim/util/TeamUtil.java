@@ -1615,15 +1615,18 @@ public class TeamUtil {
                 String donors = "";
 
                 while(orgItr.hasNext()) {
-                    AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-                    if(orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
-                        if(donors.trim().length() > 0) {
-                            donors += ", ";
-                        }
-                        donors += orgRole.getOrganisation().getName();
+                  AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
+                  AmpRole ampRole = orgRole.getRole();
+                  if (ampRole != null) {
+                    String roleCode = ampRole.getRoleCode();
+                    if (roleCode != null && roleCode.equals(Constants.DONOR)) {
+                      if (donors.trim().length() > 0) {
+                        donors += ", ";
+                      }
+                      donors += orgRole.getOrganisation().getName();
                     }
+                  }
                 }
-
                 act.setDonors(donors);
                 col.add(act);
 

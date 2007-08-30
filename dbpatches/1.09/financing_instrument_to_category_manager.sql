@@ -37,8 +37,8 @@ o.name AS `donor_name`,
 acv_mod.category_value as `financing_instrument_name`,
 `getExchange`(`c`.`currency_code`,`euc`.`transaction_date`) AS `exchange_rate`
 from amp_eu_activity eu, amp_eu_activity_contributions euc, amp_currency c, amp_category_value acv_term, amp_category_value acv_mod, amp_organisation o 
-where eu.id=euc.eu_activity_id and euc.amount_currency=c.amp_currency_id and acv_term.id=euc.financing_type_id and
-acv_mod.id = euc.financing_instrument_id and o.amp_org_id=euc.donor_id
-order by amp_activity_id;
+where eu.id=euc.eu_activity_id and euc.amount_currency=c.amp_currency_id and acv_term.id=euc.financing_type_id and 
+acv_mod.id = euc.financing_instrument_id and o.amp_org_id=euc.donor_id 
+order by amp_activity_id; 
 
 COMMIT;

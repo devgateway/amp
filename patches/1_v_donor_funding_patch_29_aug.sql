@@ -3,7 +3,7 @@ select `f`.`amp_activity_id` AS `amp_activity_id`,`f`.`amp_funding_id` AS `amp_f
 `amp_fund_detail_id` AS `amp_fund_detail_id`,`d`.`name` AS `donor_name`,`fd`.`transaction_type` AS `transaction_type`,
 `fd`.`adjustment_type` AS `adjustment_type`,date_format(`fd`.`transaction_date`,_latin1'%Y-%m-%d') AS `transaction_date`,
 `fd`.`transaction_amount` AS `transaction_amount`,`c`.`currency_code` AS `currency_code`,
-`cval`.`category_value` AS `terms_assist_name`,`amp_staging`.`getExchange`(`c`.`currency_code`,`fd`.`transaction_date`) AS `exchange_rate`,
+`cval`.`category_value` AS `terms_assist_name`,`getExchange`(`c`.`currency_code`,`fd`.`transaction_date`) AS `exchange_rate`,
 `fd`.`fixed_exchange_rate` AS `fixed_exchange_rate`,`p`.`code` AS `perspective_code` 
 from (((((`amp_funding` `f` join `amp_funding_detail` `fd`) join `amp_category_value` `cval`) join `amp_currency` `c`) join 
 `amp_organisation` `d`) join `amp_perspective` `p`) 

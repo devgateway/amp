@@ -27,10 +27,10 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.form.GlobalSettingsForm;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
@@ -53,54 +53,28 @@ public class GlobalSettings extends Action {
 				}
 			}
 		
-		//FeaturesUtil featUtil = new FeaturesUtil();
 		GlobalSettingsForm gsForm = (GlobalSettingsForm) form;
-		if(request.getParameter("save")!=null)
-		{
+		if(request.getParameter("save")!=null){
 			String save = request.getParameter("save");
 			logger.info(" this is the action "+save);
 			
 			logger.info(" id is "+gsForm.getGlobalId()+"   name is "+gsForm.getGlobalSettingsName()+ "  value is... "+gsForm.getGsfValue());
 			this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
 			//ActionErrors errors = new ActionErrors(); 
-			refreshGlobalSettingsCache	= true;		
+			refreshGlobalSettingsCache	= true;	
 		}
-//		if (gsForm.getNewSettingName() != null && gsForm.getNewSettingName().length() > 0){
-//			
-//			
-//		}
-		/*Collection a = FeaturesUtil.getDefaultCountryISO();
-		String iso=null;
-		Iterator itr1 = a.iterator();
-		while (itr1.hasNext())
-		{
-			AmpGlobalSettings ampGS = (AmpGlobalSettings)itr1.next();
-			logger.info(" hope this is the correct one.. "+ampGS.getGlobalSettingsValue());
-			iso = ampGS.getGlobalSettingsValue();
-		}
-		logger.info(" this is the ISO .... in iso "+iso);
-		Collection b = FeaturesUtil.getDefaultCountry(iso);
-		Iterator itr2 = b.iterator();
-		while (itr2.hasNext())
-		{
-			Country ampGS = (Country)itr2.next();
-			logger.info(" hope this is the correct country name one.. "+ampGS.getCountryName());
-		}*/
 		Collection col = FeaturesUtil.getGlobalSettings();
 		if (refreshGlobalSettingsCache) {
 			FeaturesUtil.setGlobalSettingsCache(col);
 			FeaturesUtil.logGlobalSettingsCache();
-			//FeatureManager.refreshTemplateGlobalSettings(getServlet());
+			org.digijava.module.aim.helper.GlobalSettings globalSettings = (org.digijava.module.aim.helper.GlobalSettings) getServlet().getServletContext().getAttribute(Constants.GLOBAL_SETTINGS);
+	    	globalSettings.setPerspectiveEnabled(FeaturesUtil.isPerspectiveEnabled());			
 		}
 		gsForm.setGsfCol(col);
 		Iterator itr = col.iterator();
 		while (itr.hasNext())
 		{
 			AmpGlobalSettings ampGS = (AmpGlobalSettings)itr.next();
-//			gsForm.setGlobalId(ampGS.getGlobalId()); 
-//			gsForm.setGlobalSettingsName(ampGS.getGlobalSettingsName());
-//			gsForm.setGsfValue(ampGS.getGlobalSettingsValue());
-//			
 			/**
 			 *  Getting the name of the criteria for possible values:
 			 *  if v_view_name => the values are taken from the specified view
@@ -124,6 +98,7 @@ public class GlobalSettings extends Action {
 		}
 		Collection countries = FeaturesUtil.getCountryNames();
 		gsForm.setCountryNameCol(countries);
+    	
 		
 		saveErrors(request, errors);
 		return mapping.findForward("viewGS");

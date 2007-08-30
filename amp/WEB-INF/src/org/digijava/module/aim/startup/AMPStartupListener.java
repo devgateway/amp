@@ -22,6 +22,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumnsOrder;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 
@@ -159,6 +160,10 @@ public class AMPStartupListener extends HttpServlet
         	Collection ampColumns=FeaturesUtil.getAMPColumnsOrder();
         	ampContext.setAttribute("ampColumnsOrder",ampColumns);
         	
+        	GlobalSettings globalSettings = new GlobalSettings();
+        	globalSettings.setPerspectiveEnabled(FeaturesUtil.isPerspectiveEnabled());
+        	
+        	ampContext.setAttribute(Constants.GLOBAL_SETTINGS, globalSettings);
         	
     	} catch (Exception e) {
     		logger.error("Exception while initialising AMP :" + e.getMessage());

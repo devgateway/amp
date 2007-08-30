@@ -83,7 +83,7 @@ public class PatcherUtil {
 	public static Collection<File> getAllPatchesFiles(String abstractPatchesLocation)
 			throws InvalidPatchRepositoryException {
 		File dir = new File(abstractPatchesLocation);
-		ArrayList<File> patchFiles = new ArrayList<File>();
+		Set<File> patchFiles = new TreeSet<File>();
 		if (!dir.isDirectory())
 			throw new InvalidPatchRepositoryException(
 					"Patches repository needs to be a dir!");

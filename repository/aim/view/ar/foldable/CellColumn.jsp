@@ -18,7 +18,7 @@
 </logic:equal>
 <logic:notEqual name="columnNo" value="0">
 
-<td valign="top"  class="reportsBorderTD" bgcolor="<%= bckColor.equals("true")?"#DDDDDD":"#eeeeee" %>" >
+<td valign="top"  class="reportsBorderTD" bgcolor="<%= bckColor.equals("true")?"#dddddd":"#eeeeee" %>" >
 </logic:notEqual> 
 <% if(c!=null) {
 	request.setAttribute("cell",c);

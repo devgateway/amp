@@ -133,16 +133,18 @@
                                                             <td>
                                                               <table cellSpacing=2 cellPadding=2>
                                                                 <tr>
-                                                                	<field:display name="Add Sectors Button" feature="Sectors">&nbsp;</field:display>
-                                                                  <td>
-                                                                      <input type="button" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' class="buton"  onclick="addSectors();">
-                                                                    </td>
-                                                                <c:if test="${sectror == 1}">
-                                                                 </c:if>
-																    <field:display name="Remove Sectors Button" feature="Sectors">&nbsp;</field:display>
+																<logic:equal name="aimEditActivityForm" property="multiSectorSelecting" value="On">
+																	<field:display name="Add Sectors Button" feature="Sectors">&nbsp;
+    		                                                            <td>
+            		                                                        <input type="button" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' class="buton"  onclick="addSectors();">
+                    	                                                </td>
+                                                                    </field:display>                                                          
+																</logic:equal>      
+																    <field:display name="Remove Sectors Button" feature="Sectors">&nbsp;
                                                                   <td>
 																	<input type="button" class="buton" onclick="return removeSelSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
                                                                   </td>
+	                                                                  </field:display>
 
                                                                 </tr>
                                                               </table>

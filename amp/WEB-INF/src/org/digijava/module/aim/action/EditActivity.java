@@ -119,7 +119,9 @@ public class EditActivity
     AmpActivity activity = null;
     String computeTotals = FeaturesUtil.getGlobalSettingValue(Constants.
         GLOBALSETTINGS_COMPUTE_TOTALS);
-
+    
+    
+    
     //if("true".compareTo(request.getParameter("public"))!=0)
     //return mapping.findForward("forward");
 
@@ -136,6 +138,11 @@ public class EditActivity
     EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
     Long activityId = eaForm.getActivityId();
 
+    // set Globam Settings Multi-Sector Selecting
+    String multiSectorSelect = FeaturesUtil.getGlobalSettingValue(Constants.
+    		GLOBALSETTINGS_MULTISECTORSELECT);
+    eaForm.setMultiSectorSelecting(multiSectorSelect);    
+    //
     String errorMsgKey = "";
 
     // Checking whether the user have write access to the activity

@@ -218,9 +218,14 @@ public class Constants
 	public static final String DEF_FLAG_EXIST = "defFlagExist"; 	
 	public static final String DSKTP_FLTR_CHANGED = "dsktpFltrChanged";
 	
+	
+	//	 Application attributes names
+	public static final String GLOBAL_SETTINGS = "globalSettings";
+	
 	// Session attributes names
 	public static final String CURRENT_MEMBER = "currentMember";
 	public static final String FILTER_PARAMS = "filterParams";
+	
 	
 	
 	public static final String AMP_PROJECTS = "ampProjects";

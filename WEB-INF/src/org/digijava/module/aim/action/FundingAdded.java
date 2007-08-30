@@ -32,6 +32,7 @@ import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class FundingAdded extends Action {
 
@@ -44,7 +45,9 @@ public class FundingAdded extends Action {
 		EditActivityForm eaForm = (EditActivityForm) form;
 
 		HttpSession session = request.getSession();
-		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
+		
+		boolean perspectiveEnabled = FeaturesUtil.isPerspectiveEnabled();
 
 		Iterator fundOrgsItr = eaForm.getFundingOrganizations().iterator();
 		FundingOrganization fundOrg = null;
@@ -107,13 +110,17 @@ public class FundingAdded extends Action {
 							.getReportingOrganizationId());
 					fundDet.setReportingOrganizationName(org.getName());
 				}
-				String perspective = fundDet.getPerspectiveCode();
-				Iterator itr1 = eaForm.getPerspectives().iterator();
-				while (itr1.hasNext()) {
-					AmpPerspective pers = (AmpPerspective) itr1.next();
-					if (pers.getCode().equals(perspective)) {
-						fundDet.setPerspectiveName(pers.getName());
+				if(perspectiveEnabled){
+					String perspective = fundDet.getPerspectiveCode();
+					Iterator itr1 = eaForm.getPerspectives().iterator();
+					while (itr1.hasNext()) {
+						AmpPerspective pers = (AmpPerspective) itr1.next();
+						if (pers.getCode().equals(perspective)) {
+							fundDet.setPerspectiveName(pers.getName());
+						}
 					}
+				}else{
+					fundDet.setPerspectiveName("MOFED");
 				}
 				if (fundDet.getAdjustmentType() == Constants.PLANNED)
 					fundDet.setAdjustmentTypeName("Planned");
@@ -171,7 +178,7 @@ public class FundingAdded extends Action {
 					{
 						if((fundDetItr2.getAdjustmentTypeName().equalsIgnoreCase(fundDetItr1.getAdjustmentTypeName()))&&
 						(fundDetItr2.getCurrencyName().equalsIgnoreCase(fundDetItr1.getCurrencyName()))&&
-						(fundDetItr2.getPerspectiveName().equalsIgnoreCase(fundDetItr1.getPerspectiveName()))&&
+						( !perspectiveEnabled || perspectiveEnabled && fundDetItr2.getPerspectiveName().equalsIgnoreCase(fundDetItr1.getPerspectiveName()) )&&
 						(fundDetItr2.getTransactionAmount().equalsIgnoreCase(fundDetItr1.getTransactionAmount()))&&
 						(fundDetItr2.getTransactionDate().equalsIgnoreCase(fundDetItr1.getTransactionDate()))&&
 						(fundDetItr2.getTransactionType()==fundDetItr1.getTransactionType()))

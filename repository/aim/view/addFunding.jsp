@@ -263,9 +263,11 @@
 									<a title="<digi:trn key="aim:CommitmentDate">The date (day, month, year) when funding commitment was signed</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:CommitmentDateFIE">Commitment Date</digi:trn></font></b></a>
 								</td>
-								<td align="center" valign="middle" colspan="2" width="120">
-									<a title="<digi:trn key="aim:PerpectiveofUser">Select perspective (Donor/ MoFED / implementing agency) of user entering the information</digi:trn>">
-									<b><font color="white"><digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn></font></b></a>
+								<td align="center" valign="middle" colspan="2">
+									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+										<a title="<digi:trn key="aim:PerpectiveofUser">Select perspective (Donor/ MoFED / implementing agency) of user entering the information</digi:trn>">
+										<b><font color="white"><digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn></font></b></a>
+									</logic:equal>	
 								</td>
 							</tr>
 
@@ -310,13 +312,15 @@
 												</table>
 											</td>
 											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
-												disabled="false">
-													<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
-													<c:if test="${sessionScope.currentMember.teamType != 'DONOR'}">
-														<html:option value="MA"><digi:trn key="aim:PerspectiveOp2">Goverment</digi:trn></html:option>
-													</c:if>
-												</html:select>
+												<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+													<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
+													disabled="false">
+														<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
+														<c:if test="${sessionScope.currentMember.teamType != 'DONOR'}">
+															<html:option value="MA"><digi:trn key="aim:PerspectiveOp2">Goverment</digi:trn></html:option>
+														</c:if>
+													</html:select>
+												</logic:equal>
 											</td>
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
@@ -403,11 +407,13 @@
 												</table>
 											</td>
 											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
-												disabled="false">
-													<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
-													<html:option value="MA"><digi:trn key="aim:PerspectiveOp2">Goverment</digi:trn></html:option>
-												</html:select>
+												<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+													<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
+													disabled="false">
+														<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
+														<html:option value="MA"><digi:trn key="aim:PerspectiveOp2">Goverment</digi:trn></html:option>
+													</html:select>
+												</logic:equal>
 											</td>
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
@@ -515,9 +521,11 @@
 								<b><font color="white">
                                   <digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:DisbursementDateFIE">Disbursement Date</digi:trn></font></b></a>
 								</td>
-								<td align="center" valign="middle" colspan="2" width="120">
-									<a title="<digi:trn key="aim:PerpectiveofUser">Select perspective (Donor/ MoFED / implementing agency) of user entering the information</digi:trn>">
-									<b><font color="white"><digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn></font></b></a>
+								<td align="center" valign="middle" colspan="2">
+									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+										<a title="<digi:trn key="aim:PerpectiveofUser">Select perspective (Donor/ MoFED / implementing agency) of user entering the information</digi:trn>">
+										<b><font color="white"><digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn></font></b></a>
+									</logic:equal>
 								</td>
 							</tr>
 							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
@@ -569,11 +577,13 @@
 												</table>
 											</td>
 											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
-												disabled="false">
-													<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
-													<html:option value="MA">MOFED</html:option>
-												</html:select>
+												<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+													<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
+													disabled="false">
+														<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
+														<html:option value="MA">MOFED</html:option>
+													</html:select>
+												</logic:equal>
 											</td>
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
@@ -628,11 +638,13 @@
 												</table>
 											</td>
 											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
-												disabled="false">
-													<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
-													<html:option value="MA"><digi:trn key="aim:PerspectiveOp2">Goverment</digi:trn></html:option>
-												</html:select>
+												<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+													<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
+													disabled="false">
+														<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
+														<html:option value="MA"><digi:trn key="aim:PerspectiveOp2">Goverment</digi:trn></html:option>
+													</html:select>
+												</logic:equal>
 											</td>
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
@@ -677,7 +689,7 @@
 			<table width="100%" cellpadding=0 cellspacing=1 vAlign="top" align="left" bgcolor="#006699">
 			<tr><td>
 
-			<table width="100%" cellpadding=0 cellspacing=0>
+			<table width="100%" cellpadding=0 cellspacing=0 border="1">
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
  						<a title="<digi:trn key='aim:ExpenditureofFund'>Amount effectively spent by the implementing agency</digi:trn>"><digi:trn key="aim:expenditures">Expenditures</digi:trn></a>
@@ -701,9 +713,11 @@
 									<a title="<digi:trn key="aim:DateofExpenditure">Date of actual expenditure</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:ExpenditureDateFIE">Expenditure Date</digi:trn></font></b></a>
 								</td>
-								<td align="center" valign="middle" colspan="2" width="120">
-									<a title="<digi:trn key="aim:PerpectiveofUser">Select perspective (Donor/ MoFED / implementing agency) of user entering the information</digi:trn>">
-									<b><font color="white"><digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn></font></b></a>
+								<td align="center" valign="middle" colspan="2">
+									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+										<a title="<digi:trn key="aim:PerpectiveofUser">Select perspective (Donor/ MoFED / implementing agency) of user entering the information</digi:trn>">
+										<b><font color="white"><digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn></font></b></a>
+									</logic:equal>
 								</td>
 							</tr>
 							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
@@ -713,10 +727,7 @@
 								<c:if test="${aimEditActivityForm.donorFlag == true}">
 								 	<c:if test="${fundingDetail.perspectiveCode=='DN'}">
 
-									 	<tr>
-											<td colspan="6">
-												<table width="100%" cellSpacing=1 cellPadding=0 vAlign="top" align="left">
-													<tr bgcolor="#ffffff">
+									 	<tr bgcolor="#ffffff">
 														<td valign="bottom">
 															<c:set var="index" value="${index+1}"/>
 															<c:if test="${aimEditActivityForm.statusId==1}">
@@ -760,11 +771,13 @@
 															</table>
 														</td>
 														<td valign="bottom">
-															<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
-															disabled="false">
-																<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
-																<html:option value="MA">MOFED</html:option>
-															</html:select>
+															<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
+																disabled="false">
+																	<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
+																	<html:option value="MA">MOFED</html:option>
+																</html:select>
+															</logic:equal>
 														</td>
 														<td>
 															<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,2)">
@@ -782,18 +795,12 @@
 													<tr>
 														<td colspan="6" bgcolor="#dddddd"></td>
 													</tr>
-												</table>
-											</td>
-										</tr>
 									</c:if>
 								</c:if>
 								<c:if test="${aimEditActivityForm.donorFlag == false}">
 								 	<%--  <c:if test="${fundingDetail.perspectiveCode=='MA'}"> --%>
 
-									 	<tr>
-											<td colspan="6">
-												<table width="100%" cellSpacing=1 cellPadding=0 vAlign="top" align="left">
-													<tr bgcolor="#ffffff">
+									 	<tr bgcolor="#ffffff">
 														<td valign="bottom">
 															<c:set var="index" value="${index+1}"/>
 													<c:if test="${aimEditActivityForm.statusId==1}">
@@ -837,11 +844,13 @@
 															</table>
 														</td>
 														<td valign="bottom">
-															<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
-															disabled="false">
-																<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
-																<html:option value="MA"><digi:trn key="aim:PerspectiveOp2">Goverment</digi:trn></html:option>
-															</html:select>
+															<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
+																disabled="false">
+																	<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
+																	<html:option value="MA"><digi:trn key="aim:PerspectiveOp2">Goverment</digi:trn></html:option>
+																</html:select>
+															</logic:equal>
 														</td>
 														<td>
 															<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,2)">
@@ -859,9 +868,6 @@
 													<tr>
 														<td colspan="6" bgcolor="#dddddd"></td>
 													</tr>
-												</table>
-											</td>
-										</tr>
 
 									<%--  </c:if> --%>
 								</c:if>

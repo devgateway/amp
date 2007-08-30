@@ -27,7 +27,7 @@ public class AmpPatchLog implements Serializable {
 	private String sql;
 	private String response;
 	private String actionName;
-	private String actionReason;
+	private String failureReason;
 	private Boolean successful;
 	public String getActionName() {
 		return actionName;
@@ -77,23 +77,25 @@ public class AmpPatchLog implements Serializable {
 	public void setSuccessful(Boolean successful) {
 		this.successful = successful;
 	}
-	public String getActionReason() {
-		return actionReason;
+	public String getFailureReason() {
+		return failureReason;
 	}
-	public void setActionReason(String actionReason) {
-		this.actionReason = actionReason;
+	public void setFailureReason(String reason) {
+		this.failureReason = reason;
 	}
 	
 	public String toString() {
-		return Util.getBeanAsString(this, "", false);
+		return Util.getBeanAsString(this, "");
 	}
 	
 	public static final String ACTION_APPLY="apply";
 	public static final String ACTION_ROLLBACK="rollback";
 	
-	public static final String REASON_PENDING_EXEC="pendingExecution";
-	public static final String REASON_REQUESTED_BY_DEPENDENCY="requestedByDependency";
-	public static final String REASON_TARGETS_FILTER="targetsFilterDoNotApply";
-	
+	public static final String REASON_PENDING_EXEC="Pending Execution";
+	public static final String REASON_REQUESTED_BY_DEPENDENCY="Requested By Dependency";
+	public static final String REASON_TARGETS_FILTER="Targets Filter Do Not Apply";
+	public static final String REASON_CONDITION_FAILED="Execution Denied By Patch Condition";
+	public static final String REASON_SQL_EXCEPTION="SQL Exception";
+	public static final String REASON_XML_INVALID="XML Validation Failure";	
 	
 }

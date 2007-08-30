@@ -12,9 +12,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import net.sf.hibernate.Hibernate;
@@ -50,13 +52,25 @@ public final class Util {
 		return (Identifiable) ret.iterator().next();
 	}
 	
+	public static String getBeanAsString(Object b, String ignoredProperties) {
+		Map m=getBeanProperties(b,ignoredProperties);
+		String ret=new String();
+		Iterator i=m.keySet().iterator();
+		while (i.hasNext()) {
+			String element = (String) i.next();
+			Object value=m.get(element);
+			ret+=element+": "+ (value instanceof Collection?Util.toCSString((Collection) value, true):value);
+		}
+		return ret;
+	}
+	
 	/**
 	 * provides a way to display this bean in HTML. Properties are automatically shown along with their values. CollectionS are unfolded and
 	 * excluded properties (internally used) are not shown.
 	 * @see AmpARFilter.IGNORED_PROPERTIES
 	 */
-	public static String getBeanAsString(Object b,String ignoredProperties,boolean html) {
-		StringBuffer ret=new StringBuffer();
+	public static Map getBeanProperties(Object b,String ignoredProperties) {
+		Map<String, Object> ret=new HashMap<String, Object>();
 		BeanInfo beanInfo = null;
 		try {
 			beanInfo = Introspector.getBeanInfo(b.getClass());
@@ -64,13 +78,8 @@ public final class Util {
 		for (int i = 0; i < propertyDescriptors.length; i++) {
 			Method m=propertyDescriptors[i].getReadMethod();
 			Object object = m.invoke(b,new Object[]{});
-			if(object==null || ignoredProperties.contains(propertyDescriptors[i].getName())) continue;			
-			ret.append(html?"<b>":"").append(propertyDescriptors[i].getName()).append(": ").append(html?"</b>":"");
-			if(object instanceof Collection) 
-				ret.append(Util.toCSString((Collection) object,false));
-			
-			else ret.append(object);
-			if(i<propertyDescriptors.length) ret.append("; ");
+			if(object==null || ignoredProperties.contains(propertyDescriptors[i].getName())) continue;
+			ret.put(propertyDescriptors[i].getName(),object instanceof Collection?Util.toCSString((Collection) object,false):object);
 		}
 		} catch (IntrospectionException e) {
 			logger.error(e);
@@ -85,10 +94,12 @@ public final class Util {
 			logger.error(e);
 			e.printStackTrace();
 		}
-		return ret.toString();
+		return ret;
 		
 	}
 	
+	
+		
 	
 	/**
 	 * loads using Hibernate the object of the specified type, identified by the serializable object

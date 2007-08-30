@@ -113,7 +113,7 @@ public class AmpPatch implements Serializable {
 	}
 	
 	public String toString() {	
-	return Util.getBeanAsString(this, IGNORED_BEANSTRING_PROPS, false);	
+	return Util.getBeanAsString(this, IGNORED_BEANSTRING_PROPS);	
 	}
 	
 	public static final String IGNORED_BEANSTRING_PROPS="logs";

@@ -840,11 +840,10 @@ public class EditActivity
                                     fundDetItr
                                     .next();
                                 FundingDetail fundingDetail = new FundingDetail();
-                                if(fundDet.getFixedExchangeRate()!=null)
+                                if(fundDet.getFixedExchangeRate()!=null && 
+                                		fundDet.getFixedExchangeRate().doubleValue()!=1){
                                 	fundingDetail.setFixedExchangeRate(fundDet.getFixedExchangeRate());
-                                AmpCurrency rateCurrencyId=fundDet.getRateCurrencyId();
-                                if(rateCurrencyId!=null){
-                                fundingDetail.setFixedExchangeCurrCode(rateCurrencyId.getCurrencyCode());
+                                	fundingDetail.setUseFixedRate(true);
                                 }
                                 fundingDetail.setIndexId(indexId++);
                                 int adjType = fundDet.getAdjustmentType()

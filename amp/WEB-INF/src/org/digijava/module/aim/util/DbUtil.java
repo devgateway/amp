@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import java.text.Collator;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -13,7 +14,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
@@ -27,8 +31,12 @@ import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.translator.util.TrnCountry;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
@@ -41,16 +49,13 @@ import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpFundingOrganisation;
 import org.digijava.module.aim.dbentity.AmpLevel;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgType;
@@ -59,7 +64,6 @@ import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
-import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpReportCache;
 import org.digijava.module.aim.dbentity.AmpReportLocation;
 import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
@@ -81,7 +85,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.EthiopianCalendar;
-import org.digijava.module.aim.helper.FilterProperties;
 import org.digijava.module.aim.helper.FiscalCalendar;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.ParisIndicator;
@@ -91,13 +94,6 @@ import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.common.util.DateTimeUtil;
-import java.util.Locale;
-import java.text.Collator;
-import org.digijava.kernel.translator.util.TrnCountry;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.RequestUtils;
-import javax.servlet.http.HttpServletRequest;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -480,26 +476,6 @@ public class DbUtil {
         return o;
     }
 
-    public static AmpModality getModality(Long id) {
-        Session session = null;
-        AmpModality modality = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-
-            String queryString = "select m from " + AmpModality.class.getName()
-                + " m " + "where (m.ampModalityId=:id)";
-            Query qry = session.createQuery(queryString);
-            qry.setParameter("id", id, Hibernate.LONG);
-            Iterator itr = qry.list().iterator();
-            while (itr.hasNext())
-                modality = (AmpModality) itr.next();
-
-        } catch (Exception e) {
-            logger.error("Uanble to get modality :" + e);
-        }
-        return modality;
-    }
 
     public static ArrayList getOrgRole(Long id) {
         ArrayList list = new ArrayList();
@@ -608,35 +584,6 @@ public class DbUtil {
         return org;
     }
 
-    public static AmpFundingOrganisation getFundingOrganisation(Long orgId, Long activityId) {
-        Session session = null;
-        AmpFundingOrganisation fOrg = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            // modified by Priyajith
-            // desc:used select query instead of session.load
-            // start
-            String queryString = "select o from "
-                + AmpFundingOrganisation.class.getName() + " o "
-                + "where (o.ampOrgId=:orgId) and (o.ampActivityId=:activityId)";
-            Query qry = session.createQuery(queryString);
-            qry.setParameter("orgId", orgId, Hibernate.LONG);
-            qry.setParameter("activityId", activityId, Hibernate.LONG);
-            Iterator itr = qry.list().iterator();
-            while (itr.hasNext()) {
-                fOrg = (AmpFundingOrganisation) itr.next();
-            }
-            // end
-
-        } catch (Exception ex) {
-            logger.error("Unable to get organisation from database", ex);
-        }
-        logger.debug("Getting organisation successfully ");
-        return fOrg;
-    }
-    
-    
     public static ArrayList getAmpComponent(Long ampActivityId) {
         ArrayList component = new ArrayList();
         Query q = null;
@@ -1670,7 +1617,9 @@ public class DbUtil {
         return col;
     }
 
-    public static Collection getAllAssistanceTypes() {
+    /**
+     * Replaced by getAllAssistanceTypesFromCM() which uses the category manager
+     * public static Collection getAllAssistanceTypes() {
         Session session = null;
         Collection col = null;
 
@@ -1685,6 +1634,13 @@ public class DbUtil {
             logger.debug(e.toString());
         }
         return col;
+    }*/
+    /**
+     * Replaces DbUtil.getAllAssistanceTypes()
+     */
+    public static Collection<AmpCategoryValue> getAllAssistanceTypesFromCM() {
+    	return 
+    		CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_NAME, null);
     }
 
     public static Collection getAllCountries() {
@@ -1770,7 +1726,7 @@ public class DbUtil {
         return country;
     }
 
-    public static ArrayList getAmpModality() {
+/*    public static ArrayList getAmpModality() {
         Session session = null;
         Query q = null;
         AmpModality ampModality = null;
@@ -1800,8 +1756,19 @@ public class DbUtil {
 
         }
         return modality;
+    }*/
+    
+    public static ArrayList<AmpCategoryValue> getAmpModality() {
+    	ArrayList<AmpCategoryValue> result	= new ArrayList<AmpCategoryValue> (
+    		CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY, true)
+    		);
+    	
+    	return result;
     }
 
+    /** 
+     * @deprecated Use getAmpStatusFromCM instead which uses the Category Manager
+     */
     public static ArrayList getAmpStatus() {
         Session session = null;
         Query q = null;
@@ -1826,6 +1793,14 @@ public class DbUtil {
                          + ex.getMessage());
         }
         return status;
+    }
+    
+    public static ArrayList<AmpCategoryValue> getAmpStatusFromCM() {
+    	ArrayList<AmpCategoryValue> result	= 
+    		new ArrayList<AmpCategoryValue> (
+    				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY, true)
+    		);
+    	return result;
     }
 
     /**
@@ -3622,7 +3597,7 @@ public class DbUtil {
     // filterFlag, adjustmentFlag, CurrencyCode, calendarId, region,
     // modalityId,donorId(orgId)
     // statusId, sectorId
-    public static String[] setFilterDetails(FilterProperties filter) {
+    /*public static String[] setFilterDetails(FilterProperties filter) {
         logger.debug("In setFilterDetails(FilterProperties filter) Function");
         Session session = null;
         String names = "";
@@ -3645,7 +3620,7 @@ public class DbUtil {
             String modName = " Financing Instrument(All) -  ", statusName = "Status(All) - ", sectorName = "Sector(All) - ", orgName = "Donor(All) - ";
             String fromYear = "", toYear = "", startDate = "", closeDate = "";
             Iterator iter = null;
-            AmpModality mod;
+            //AmpModality mod;
             AmpFiscalCalendar fisCal;
             AmpRegion region;
             AmpSector sector;
@@ -3770,7 +3745,7 @@ public class DbUtil {
         logger.debug("End of setFilterDetails()");
         return (name);
     } // End of SetFilterDetails Function
-
+*/
     public static Collection getAllLevels() {
         Session session = null;
         Collection col = null;
@@ -3820,7 +3795,7 @@ public class DbUtil {
         return col;
     }
 
-    public static Collection getAllFinancingInstruments() {
+    /*public static Collection getAllFinancingInstruments() {
         Session session = null;
         Collection col = new ArrayList();
 
@@ -3834,6 +3809,11 @@ public class DbUtil {
             e.printStackTrace(System.out);
         }
         return col;
+    }*/
+    
+    public static Collection<AmpCategoryValue> getAllFinancingInstruments() {
+    	return CategoryManagerUtil.getAmpCategoryValueCollectionByKey(
+    				CategoryConstants.FINANCING_INSTRUMENT_KEY, null);
     }
 
     public static Collection getAllDonorOrgs() {
@@ -4956,17 +4936,17 @@ public class DbUtil {
                                                 // Filtering by financing-instrument here
                                                 if (null != financingInstrument && financingInstrument.trim().length() > 1
                                                     && !"all".equalsIgnoreCase(financingInstrument)) {
-                                                    if (!financingInstrument.equalsIgnoreCase(fund.getModalityId().getName()))
+                                                    if (!financingInstrument.equalsIgnoreCase( fund.getFinancingInstrument().getValue() ))
                                                         continue;
                                                 }
                                                 if ("9".equalsIgnoreCase(indcCode)) {
                                                     if (j == 0)
-                                                        if (!"Direct Budget Support".equalsIgnoreCase(fund.getModalityId().getName())) {
+                                                        if (!"Direct Budget Support".equalsIgnoreCase( fund.getFinancingInstrument().getValue() )) {
                                                             //logger.debug("continue[indcCode=9]: because of !Direct Budget Suppor");
                                                             continue;
                                                         }
                                                     if (j == 1)
-                                                        if ("Direct Budget Support".equalsIgnoreCase(fund.getModalityId().getName())) {
+                                                        if ("Direct Budget Support".equalsIgnoreCase( fund.getFinancingInstrument().getValue() )) {
                                                             //logger.debug("continue[indcCode=9]: because of Direct Budget Suppor");
                                                             continue;
                                                         }

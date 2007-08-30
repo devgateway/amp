@@ -1083,8 +1083,8 @@ public class ActivityUtil {
         }
 
         if (ampAct.getModality() != null) {
-          activity.setModality(ampAct.getModality().getName());
-          activity.setModalityCode(ampAct.getModality().getModalityCode());
+          activity.setModality(ampAct.getModality().getValue());
+          activity.setModalityCode(ampAct.getModality().getIndex() + "");
         }
 
         queryString = "select distinct f.typeOfAssistance.value from " +
@@ -1192,7 +1192,7 @@ public class ActivityUtil {
         Iterator itr = qry.list().iterator();
         while (itr.hasNext()) {
           AmpFunding fund = (AmpFunding) itr.next();
-          modalities.add(fund.getModalityId());
+          modalities.add( fund.getFinancingInstrument() );
         }
         activity.setModalities(modalities);
         activity.setUniqueModalities(new TreeSet(modalities));
@@ -2488,7 +2488,7 @@ public class ActivityUtil {
                 if (detail.getAmpCurrencyId() != null
                     && detail.getAmpCurrencyId().getCurrencyCode() != null
                     &&
-                    !detail.getAmpCurrencyId().getCurrencyCode().trim().equals("")) {
+                    detail.getAmpCurrencyId().getCurrencyCode().trim().equals("")) {
                   currencyCode = detail.getAmpCurrencyId().getCurrencyCode();
                 } //end of AMP-1403
 
@@ -2512,17 +2512,8 @@ public class ActivityUtil {
 
                 	}else{
                 		//calculate in old way
-                        double toCurrency = CurrencyUtil.getExchangeRate(
-                        		tocode,
-                        		detail.getAdjustmentType().intValue(), 
-                        		detail.getTransactionDate());
-                        double fromCurrency = CurrencyUtil.getExchangeRate(
-                        		currencyCode, 
-                        		detail.getAdjustmentType().intValue(), 
-                        		detail.getTransactionDate());
 
-                		double tempAmount = CurrencyWorker.convert1(
-                				amount.doubleValue(), fromCurrency, toCurrency);
+                		double tempAmount = CurrencyWorker.convert(amount.doubleValue(),currencyCode);
 
             			//sett to correct place
                 		if (adjastType.intValue() == Constants.ACTUAL) {

@@ -450,7 +450,7 @@ public class ViewQuarterlyDateRange extends Action
 		//formBean.setFiltersNames(setFiltersNames);
 		
 		String filterNames[] =new String[2];
-		filterNames = DbUtil.setFilterDetails(filter);
+		//filterNames = DbUtil.setFilterDetails(filter);
 		for(int i=0; i< filterNames.length; i++)
 		{
 			logger.info("Filter HTML : + " + filterNames[i]);

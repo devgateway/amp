@@ -2,7 +2,11 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 
-
+/**
+ * 
+ * @deprecated use AmpCategoryValue instead from Category Manager
+ *
+ */
 public class AmpTermsAssist implements Serializable
 {
 	private Long ampTermsAssistId ;

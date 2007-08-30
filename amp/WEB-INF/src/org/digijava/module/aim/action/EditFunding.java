@@ -55,7 +55,7 @@ public class EditFunding extends Action {
 									formBean.setAssistanceType( funding.getTypeOfAssistance().getId() );
 								else formBean.setAssistanceType(new Long(0));
 								formBean.setOrgFundingId(funding.getOrgFundingId());
-								formBean.setModality(funding.getModality().getAmpModalityId());
+								formBean.setModality(funding.getFinancingInstrument().getId());
 								formBean.setFundingConditions(funding.getConditions());
 								
 								formBean.setFundingDetails(new ArrayList(funding.getFundingDetails()));
@@ -81,7 +81,7 @@ public class EditFunding extends Action {
 				}
 			}
 		}
-		Collection c = DbUtil.getAllAssistanceTypes();
+		//Collection c = DbUtil.getAllAssistanceTypes();
 		formBean.setNumComm(numComm);
 		formBean.setNumDisb(numDisb);
 		formBean.setNumExp(numExp);

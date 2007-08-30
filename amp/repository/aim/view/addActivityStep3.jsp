@@ -461,8 +461,8 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                 </td>
                                                                                 <td width="1">:</td>
                                                                                 <td bgcolor="#FFFFFF" align="left">
-                                                                                  <logic:notEmpty name="funding" property="modality">
-                                                                                    <bean:write name="funding"	property="modality.name"/>
+                                                                                  <logic:notEmpty name="funding" property="financingInstrument">
+                                                                                    <bean:write name="funding"	property="financingInstrument.value"/>
                                                                                   </logic:notEmpty>
                                                                                 </td>
                                                                               </tr>

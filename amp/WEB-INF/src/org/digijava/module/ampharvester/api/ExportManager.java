@@ -329,10 +329,11 @@ public class ExportManager {
         throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Organization["+organization.getCode()+"] Assistance");
       }
 
-      if (ampFunding.getModalityId() != null) {
+      if (ampFunding.getFinancingInstrument() != null) {
         CodeValueType cvtFinancingInstrument = new CodeValueTypeImpl();
-        cvtFinancingInstrument.setCode(ampFunding.getModalityId().getModalityCode());
-        cvtFinancingInstrument.setValue(ampFunding.getModalityId().getName());
+//        cvtFinancingInstrument.setCode(ampFunding.getModalityId().getModalityCode());
+        cvtFinancingInstrument.setCode(ampFunding.getFinancingInstrument().getIndex() + "");
+        cvtFinancingInstrument.setValue(ampFunding.getFinancingInstrument().getValue());
         ft.setFinancingInstrument(cvtFinancingInstrument);
       }
       if (ampFunding.getConditions() != null) {

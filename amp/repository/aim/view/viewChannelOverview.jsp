@@ -401,11 +401,11 @@ function commentWin(val) {
 																				<tr>
 																					<td>
 																					<digi:trn key="aim:actGovernmentApprovalProcedures">
-																					Government Approval Procedures
+																					Government Approval Procedures 
 																					</digi:trn>:
 																					<c:if test="${activity.governmentApprovalProcedures==true}">
 																						<c:out value="Yes"/>
-																					</c:if>
+																					</c:if>	
 																					<c:if test="${activity.governmentApprovalProcedures==false || activity.governmentApprovalProcedures==''}">
 																						<c:out value="No"/>
 																					</c:if>
@@ -420,7 +420,7 @@ function commentWin(val) {
 																					</digi:trn>:
 																					<c:if test="${activity.jointCriteria==true}">
 																						<c:out value="Yes"/>
-																					</c:if>
+																					</c:if>	
 																					<c:if test="${activity.jointCriteria==false || activity.jointCriteria==''}">
 																						<c:out value="No"/>
 																					</c:if>
@@ -1090,7 +1090,7 @@ function commentWin(val) {
 
 																			<c:forEach var="modal" items="${activity.uniqueModalities}">
 																				<TR>
-																					<TD bgcolor="#ffffff"><c:out value="${modal.name}" />
+																					<TD bgcolor="#ffffff"><c:out value="${modal.value}" />
 																					</TD>
 																				</TR>
 																			</c:forEach>

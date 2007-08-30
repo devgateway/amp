@@ -1,4 +1,4 @@
-package org.digijava.module.aim.dbentity;
+package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -14,154 +14,97 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 
 	private AmpTeamMember createdBy;
 
-	private Boolean budget;
-
-	private Long ampActivityId;
-
-	private String ampId;
-
-	private String name;
-
-	private String description;
-
-	private String objective;
-
+        private Boolean budget;
+    private Long ampActivityId ;
+	private String ampId ;
+	private String name ;
+	private String description ;
+	private String objective ;
 	private String purpose;
-
 	private String results;
-
-	private String documentSpace;
-
-	// private AmpStatus status ; // TO BE DELETED
-	private String language;
-
-	private String version;
-
-	private String calType; // values GREGORIAN, ETH_CAL, ETH_FISCAL_CAL
-
-	private String condition;
-
-	private Date activityApprovalDate; // defunct
-
-	private Date activityStartDate; // defunct
-
-	private Date activityCloseDate; // defunct
-
-	private Date originalCompDate; // defunct
-
+    private String documentSpace;
+//	private AmpStatus status ; // TO BE DELETED
+	private String language ;
+	private String version ;
+	private String calType; 	// values GREGORIAN, ETH_CAL, ETH_FISCAL_CAL
+	private String condition ;
+	private Date activityApprovalDate;  // defunct
+	private Date activityStartDate ;    // defunct
+	private Date activityCloseDate ;    // defunct
+	private Date originalCompDate;      // defunct
 	private Date contractingDate;
-
 	private Date disbursmentsDate;
-
-	private Set sectors;
-
-	private Set locations;
-
+	private Set sectors ;
+	private Set locations ;
 	private Set orgrole;
-
-	// private AmpLevel level ; //TO BE DELETED
-	private Set internalIds;
-
-	private Set funding;
-
+//	private AmpLevel level ; //TO BE DELETED
+	private Set internalIds ;
+	private Set funding ;
 	private Set progress;
-
-	private Set documents;
-
+	private Set documents ;
 	private Set notes;
-
 	private Set issues;
-
 	private Set costs;
-
-	private AmpModality modality;
-
+	//private AmpModality modality ;
+	private AmpCategoryValue modality;
 	private AmpTheme themeId;
-
 	private String programDescription;
-
 	private AmpTeam team;
-
 	private Set member;
-
 	private Country country;
-
 	private String contactName;
-
 	private AmpTeamMember updatedBy;
 
-	private Double funAmount;
+    private Double funAmount;
+    private String currencyCode;
+    private String funDate;
 
-	private String currencyCode;
 
-	private String funDate;
 
-	private Set activityPrograms;
-
-	// use contFirstName and contLastName instead.
-	// The field is defunct
+    private Set activityPrograms;
+    // use contFirstName and contLastName instead.
+								 // The field is defunct
 
 	// Donor contact information
 	private String contFirstName;
-
 	private String contLastName;
-
 	private String email;
-
 	private String dnrCntTitle;
-
 	private String dnrCntOrganization;
-
 	private String dnrCntPhoneNumber;
-
 	private String dnrCntFaxNumber;
 
 	// MOFED contact information
 	private String mofedCntFirstName;
-
 	private String mofedCntLastName;
-
 	private String mofedCntEmail;
-
 	private String mfdCntTitle;
-
 	private String mfdCntOrganization;
-
 	private String mfdCntPhoneNumber;
-
 	private String mfdCntFaxNumber;
 
 	private String comments;
 
 	private String statusReason;
-
 	private Set components;
 
 	private Date proposedStartDate;
-
 	private Date actualStartDate;
-
 	private Date proposedApprovalDate;
-
 	private Date actualApprovalDate;
-
 	private Date actualCompletionDate;
-
-	private Date proposedCompletionDate;
-
+    private Date proposedCompletionDate;
 	private Set closingDates;
 
 	private User author; // use activityCreator instead
 
-	// This field is defunct
+    										  // This field is defunct
 
 	private AmpTeamMember activityCreator;
-
 	private Date createdDate;
-
 	private Date updatedDate;
 
-	// private Set teamList;
+	//private Set teamList;
 	private String contractors;
 
 	private Set regionalFundings;
@@ -172,9 +115,7 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	private Set survey;
 
 	private Integer lineMinRank;
-
 	private Integer planMinRank;
-
 	private Collection actRankColl;
 
 	/* Categories */
@@ -224,6 +165,15 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setCategories(Set categories) {
 		this.categories = categories;
 	}
+	
+		
+	public AmpCategoryValue getModality() {
+		return modality;
+	}
+
+	public void setModality(AmpCategoryValue modality) {
+		this.modality = modality;
+	}
 
 	public Set getCosts() {
 		return costs;
@@ -254,6 +204,8 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 		return funding;
 	}
 
+
+
 	/**
 	 * @return
 	 */
@@ -271,9 +223,10 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	/**
 	 * @return
 	 */
-	// public AmpLevel getLevel() { //TO BE DELETED
-	// return level;
-	// }
+//	public AmpLevel getLevel() { //TO BE DELETED
+//		return level;
+//	}
+
 	/**
 	 * @return
 	 */
@@ -316,9 +269,10 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	/**
 	 * @return
 	 */
-	// public AmpStatus getStatus() { // TO BE DELETED
-	// return status;
-	// }
+//	public AmpStatus getStatus() { // TO BE DELETED
+//		return status;
+//	}
+
 	/**
 	 * @return
 	 */
@@ -359,6 +313,7 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 		funding = set;
 	}
 
+
 	/**
 	 * @param set
 	 */
@@ -380,9 +335,10 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	/**
 	 * @param level
 	 */
-	// public void setLevel(AmpLevel level) { // TO BE DELETED
-	// this.level = level;
-	// }
+//	public void setLevel(AmpLevel level) { // TO BE DELETED
+//		this.level = level;
+//	}
+
 	/**
 	 * @param set
 	 */
@@ -411,6 +367,7 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 		orgrole = set;
 	}
 
+
 	/**
 	 * @param set
 	 */
@@ -421,9 +378,10 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	/**
 	 * @param status
 	 */
-	// public void setStatus(AmpStatus status) { // TO BE DELETED
-	// this.status = status;
-	// }
+//	public void setStatus(AmpStatus status) { // TO BE DELETED
+//		this.status = status;
+//	}
+
 	/**
 	 * @param string
 	 */
@@ -478,6 +436,7 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 		return notes;
 	}
 
+
 	/**
 	 * @param string
 	 */
@@ -497,14 +456,6 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	 */
 	public void setNotes(Set notes) {
 		this.notes = notes;
-	}
-
-	public AmpModality getModality() {
-		return modality;
-	}
-
-	public void setModality(AmpModality modality) {
-		this.modality = modality;
 	}
 
 	public AmpTheme getThemeId() {
@@ -530,7 +481,6 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setMember(Set member) {
 		this.member = member;
 	}
-
 	/**
 	 * @return
 	 */
@@ -616,7 +566,6 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public String getEmail() {
 		return email;
 	}
-
 	/**
 	 * @param email
 	 *            The email to set.
@@ -624,14 +573,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 	/**
 	 * @return Returns the statusReason.
 	 */
 	public String getStatusReason() {
 		return statusReason;
 	}
-
 	/**
 	 * @param statusReason
 	 *            The statusReason to set.
@@ -639,14 +586,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setStatusReason(String statusReason) {
 		this.statusReason = statusReason;
 	}
-
 	/**
 	 * @return Returns the components.
 	 */
 	public Set getComponents() {
 		return components;
 	}
-
 	/**
 	 * @param components
 	 *            The components to set.
@@ -654,14 +599,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setComponents(Set components) {
 		this.components = components;
 	}
-
 	/**
 	 * @return Returns the activityApprovalDate.
 	 */
 	public Date getActivityApprovalDate() {
 		return activityApprovalDate;
 	}
-
 	/**
 	 * @param activityApprovalDate
 	 *            The activityApprovalDate to set.
@@ -669,14 +612,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setActivityApprovalDate(Date activityApprovalDate) {
 		this.activityApprovalDate = activityApprovalDate;
 	}
-
 	/**
 	 * @return Returns the actualApprovalDate.
 	 */
 	public Date getActualApprovalDate() {
 		return actualApprovalDate;
 	}
-
 	/**
 	 * @param actualApprovalDate
 	 *            The actualApprovalDate to set.
@@ -684,14 +625,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setActualApprovalDate(Date actualApprovalDate) {
 		this.actualApprovalDate = actualApprovalDate;
 	}
-
 	/**
 	 * @return Returns the actualCompletionDate.
 	 */
 	public Date getActualCompletionDate() {
 		return actualCompletionDate;
 	}
-
 	/**
 	 * @param actualCompletionDate
 	 *            The actualCompletionDate to set.
@@ -699,14 +638,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setActualCompletionDate(Date actualCompletionDate) {
 		this.actualCompletionDate = actualCompletionDate;
 	}
-
 	/**
 	 * @return Returns the actualStartDate.
 	 */
 	public Date getActualStartDate() {
 		return actualStartDate;
 	}
-
 	/**
 	 * @param actualStartDate
 	 *            The actualStartDate to set.
@@ -714,14 +651,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setActualStartDate(Date actualStartDate) {
 		this.actualStartDate = actualStartDate;
 	}
-
 	/**
 	 * @return Returns the proposedApprovalDate.
 	 */
 	public Date getProposedApprovalDate() {
 		return proposedApprovalDate;
 	}
-
 	/**
 	 * @param proposedApprovalDate
 	 *            The proposedApprovalDate to set.
@@ -729,14 +664,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setProposedApprovalDate(Date proposedApprovalDate) {
 		this.proposedApprovalDate = proposedApprovalDate;
 	}
-
 	/**
 	 * @return Returns the proposedStartDate.
 	 */
 	public Date getProposedStartDate() {
 		return proposedStartDate;
 	}
-
 	/**
 	 * @param proposedStartDate
 	 *            The proposedStartDate to set.
@@ -744,14 +677,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setProposedStartDate(Date proposedStartDate) {
 		this.proposedStartDate = proposedStartDate;
 	}
-
 	/**
 	 * @return Returns the closingDates.
 	 */
 	public Set getClosingDates() {
 		return closingDates;
 	}
-
 	/**
 	 * @param closingDates
 	 *            The closingDates to set.
@@ -759,14 +690,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setClosingDates(Set closingDates) {
 		this.closingDates = closingDates;
 	}
-
 	/**
 	 * @return Returns the author.
 	 */
 	public User getAuthor() {
 		return author;
 	}
-
 	/**
 	 * @param author
 	 *            The author to set.
@@ -774,14 +703,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setAuthor(User author) {
 		this.author = author;
 	}
-
 	/**
 	 * @return Returns the createdDate.
 	 */
 	public Date getCreatedDate() {
 		return createdDate;
 	}
-
 	/**
 	 * @param createdDate
 	 *            The createdDate to set.
@@ -789,14 +716,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
-
 	/**
 	 * @return Returns the updatedDate.
 	 */
 	public Date getUpdatedDate() {
 		return updatedDate;
 	}
-
 	/**
 	 * @param updatedDate
 	 *            The updatedDate to set.
@@ -834,14 +759,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setContLastName(String contLastName) {
 		this.contLastName = contLastName;
 	}
-
 	/**
 	 * @return Returns the programDescription.
 	 */
 	public String getProgramDescription() {
 		return programDescription;
 	}
-
 	/**
 	 * @param programDescription
 	 *            The programDescription to set.
@@ -849,14 +772,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setProgramDescription(String programDescription) {
 		this.programDescription = programDescription;
 	}
-
 	/**
 	 * @return Returns the contractors.
 	 */
 	public String getContractors() {
 		return contractors;
 	}
-
 	/**
 	 * @param contractors
 	 *            The contractors to set.
@@ -879,14 +800,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setActivityCreator(AmpTeamMember activityCreator) {
 		this.activityCreator = activityCreator;
 	}
-
 	/**
 	 * @return Returns the mofedCntEmail.
 	 */
 	public String getMofedCntEmail() {
 		return mofedCntEmail;
 	}
-
 	/**
 	 * @param mofedCntEmail
 	 *            The mofedCntEmail to set.
@@ -894,14 +813,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setMofedCntEmail(String mofedCntEmail) {
 		this.mofedCntEmail = mofedCntEmail;
 	}
-
 	/**
 	 * @return Returns the mofedCntFirstName.
 	 */
 	public String getMofedCntFirstName() {
 		return mofedCntFirstName;
 	}
-
 	/**
 	 * @param mofedCntFirstName
 	 *            The mofedCntFirstName to set.
@@ -909,14 +826,12 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setMofedCntFirstName(String mofedCntFirstName) {
 		this.mofedCntFirstName = mofedCntFirstName;
 	}
-
 	/**
 	 * @return Returns the mofedCntLastName.
 	 */
 	public String getMofedCntLastName() {
 		return mofedCntLastName;
 	}
-
 	/**
 	 * @param mofedCntLastName
 	 *            The mofedCntLastName to set.
@@ -927,8 +842,8 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 
 	// Commented by Mikheil - in general, Hibernate classes do not need to
 	// overrride
-	// this method, because it may lead to incorrect functinoality
-	/*
+//this method, because it may lead to incorrect functinoality
+/*
 	 * public boolean equals(Object obj) { if (obj == null) throw new
 	 * NullPointerException();
 	 * 
@@ -936,7 +851,7 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	 * 
 	 * AmpActivity act = (AmpActivity) obj; return
 	 * this.ampActivityId.equals(act.getAmpActivityId()); }
-	 */
+    */
 
 	/**
 	 * @return Returns the regionalFundings.
@@ -953,13 +868,14 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 		this.regionalFundings = regionalFundings;
 	}
 
+
+
 	/**
 	 * @return Returns the approvalStatus.
 	 */
 	public String getApprovalStatus() {
 		return approvalStatus;
 	}
-
 	/**
 	 * @param approval_status
 	 *            The approval_status to set.
@@ -975,23 +891,23 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 		return survey;
 	}
 
-	public String getDocumentSpace() {
-		return documentSpace;
-	}
+    public String getDocumentSpace() {
+        return documentSpace;
+    }
 
-	public String getCurrencyCode() {
-		return currencyCode;
-	}
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
 
-	public Double getFunAmount() {
-		return funAmount;
-	}
+    public Double getFunAmount() {
+        return funAmount;
+    }
 
-	public String getFunDate() {
-		return funDate;
-	}
+    public String getFunDate() {
+        return funDate;
+    }
 
-	/**
+    /**
 	 * @param survey
 	 *            The survey to set.
 	 */
@@ -999,21 +915,21 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 		this.survey = survey;
 	}
 
-	public void setDocumentSpace(String documentSpace) {
-		this.documentSpace = documentSpace;
-	}
+    public void setDocumentSpace(String documentSpace) {
+        this.documentSpace = documentSpace;
+    }
 
-	public void setCurrencyCode(String currenyCode) {
-		this.currencyCode = currenyCode;
-	}
+    public void setCurrencyCode(String currenyCode) {
+        this.currencyCode = currenyCode;
+    }
 
-	public void setFunAmount(Double funAmount) {
-		this.funAmount = funAmount;
-	}
+    public void setFunAmount(Double funAmount) {
+        this.funAmount = funAmount;
+    }
 
-	public void setFunDate(String funDate) {
-		this.funDate = funDate;
-	}
+    public void setFunDate(String funDate) {
+        this.funDate = funDate;
+    }
 
 	public Integer getLineMinRank() {
 		return lineMinRank;
@@ -1035,30 +951,28 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 		return actRankColl;
 	}
 
-	public Set getActivityPrograms() {
-		return activityPrograms;
-	}
+    public Set getActivityPrograms() {
+        return activityPrograms;
+    }
 
-	public Date getProposedCompletionDate() {
-		return proposedCompletionDate;
-	}
+    public Date getProposedCompletionDate() {
+        return proposedCompletionDate;
+    }
 
-	public void setActRankColl(Collection actRankColl) {
+    public void setActRankColl(Collection actRankColl) {
 		this.actRankColl = actRankColl;
 	}
 
-	public void setActivityPrograms(Set activityPrograms) {
-		this.activityPrograms = activityPrograms;
-	}
+    public void setActivityPrograms(Set activityPrograms) {
+        this.activityPrograms = activityPrograms;
+    }
 
-	public void setProposedCompletionDate(Date proposedCompletionDate) {
-		this.proposedCompletionDate = proposedCompletionDate;
+    public void setProposedCompletionDate(Date proposedCompletionDate) {
+        this.proposedCompletionDate = proposedCompletionDate;
 	}
-
 	public Boolean getBudget() {
 		return budget;
 	}
-
 	public void setBudget(Boolean budget) {
 		this.budget = budget;
 	}
@@ -1073,8 +987,7 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 
 	public Date getContractingDate() {
 		return contractingDate;
-	}
-
+}
 	public void setContractingDate(Date contractingDate) {
 		this.contractingDate = contractingDate;
 	}
@@ -1176,7 +1089,7 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	}
 
 	public String getObjectName() {
-		return this.getAmpId() + " " + this.getName();
+		return this.getAmpId()+" "+this.getName();
 	}
 
 	public String getFY() {

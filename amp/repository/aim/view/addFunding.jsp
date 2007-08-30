@@ -20,22 +20,15 @@
 
 	<!--
 
-	function useFixedRateClicked(field1,el) {
+	function useFixedRateClicked(field1,field2) {
 		var fld1 = document.getElementById(field1);
-		var useList = document.getElementsByName(el.name);
+		var fld2 = document.getElementById(field2);
 		if (fld1.disabled == true) {
 			fld1.disabled = false;
 		} else {
 			fld1.disabled = true;
-			
 		}
-
-		for (var i=0;i<useList.length;i++){
-			if (useList[i].tagName=='INPUT' && useList[i].type=="hidden"){
-				useList[i].value=el.checked;
-			}
 		}
-	}
 
 	function trim(s) {
 		return s.replace( /^\s*/, "" ).replace( /\s*$/, "" );
@@ -205,18 +198,18 @@
 									<b><digi:trn key="aim:financingInstrument">Financing Instrument</digi:trn></b></a>
 								</td>
 								<td align="left" bgcolor=#ECF3FD>
-
-									<c:if test="${aimEditActivityForm.donorFlag == true}">
-										<html:select property="modality" styleClass="inp-text" disabled="true">
+									<%-- 	<html:select property="modality" styleClass="inp-text" disabled="${aimEditActivityForm.donorFlag}">
 											<html:optionsCollection name="aimEditActivityForm" property="modalityCollection"
 											value="ampModalityId" label="name" />
 										</html:select>
+									--%>
+									<c:if test="${aimEditActivityForm.donorFlag == true}">
+										<category:showoptions firstLine="${translation}" outerdisabled="${aimEditActivityForm.donorFlag}" name="aimEditActivityForm" property="modality" 
+										keyName="<%= org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
 									</c:if>
 									<c:if test="${aimEditActivityForm.donorFlag == false}">
-										<html:select property="modality" styleClass="inp-text">
-											<html:optionsCollection name="aimEditActivityForm" property="modalityCollection"
-											value="ampModalityId" label="name" />
-										</html:select>
+										<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="modality" 
+										keyName="<%= org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
 									</c:if>
 								</td>
 							</tr>
@@ -278,7 +271,7 @@
 
 							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
 							<c:set var="index" value="-1"/>
-						 	<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}" >
+						 	<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}">
 						 	<c:if test="${fundingDetail.transactionType==0}">
 								<c:if test="${aimEditActivityForm.donorFlag == true}">
 								 	<c:if test="${fundingDetail.perspectiveCode=='DN'}">
@@ -352,7 +345,6 @@
 													String jsUrl = "useFixedRateClicked('" + exchRatefldId + "')";
 												%>
 												<html:checkbox name="fundingDetail" indexed="true" property="useFixedRate" onclick="<%=jsUrl%>"/>
-												<html:hidden name="fundingDetail" property="useFixedRate" indexed="true"/>
 											</td>
 											<td colspan="4">
 
@@ -399,9 +391,8 @@
 													<tr>
 														<td>
 															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-															
 															<html:text name="fundingDetail" indexed="true" property="transactionDate"
-															styleId="<%=tempIndexStr%>" readonly="true" size="10" />
+															styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
 														</td>
 														<td align="left" vAlign="center">&nbsp;
 															<a id="trans3Date<%=tempIndexStr%>" href='javascript:pickDateById("trans3Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
@@ -445,10 +436,10 @@
 											<td align="right">
 												<% String exchRatefldId = "exchFld"+ (t++);
 													String exchCurrfldId = "exchCurr"+ (t++);
-													String jsUrl = "useFixedRateClicked('" + exchRatefldId + "',this)";
+													String jsUrl = "useFixedRateClicked('" + exchRatefldId + "')";
 												%>
-												<html:checkbox name="fundingDetail" indexed="true" property="useFixedRate" onclick="<%=jsUrl%>"/>
-												<html:hidden name="fundingDetail" property="useFixedRate" indexed="true"/>
+												<html:checkbox name="fundingDetail" indexed="true" property="useFixedRate"
+												onclick="<%=jsUrl%>"/>
 											</td>
 											<td colspan="4">
 												<logic:equal name="fundingDetail" property="useFixedRate" value="true">
@@ -626,7 +617,7 @@
 														<td>
 															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
 															<html:text name="fundingDetail" indexed="true" property="transactionDate" readonly="true"
-															styleId="<%=tempIndexStr%>" size="10" />
+															styleId="<%=tempIndexStr%>" size="10"/>
 														</td>
 														<td align="left" vAlign="center">&nbsp;
 															<a id="transDate<%=tempIndexStr%>" href='javascript:pickDateById("transDate<%=tempIndexStr%>",<%=tempIndexStr%>)'>

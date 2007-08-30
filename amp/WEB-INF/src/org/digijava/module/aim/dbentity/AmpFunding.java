@@ -42,8 +42,9 @@ public class AmpFunding implements Serializable
 	private Boolean delegatedPartner;
 	
 	private ArrayList <Boolean>activeList;
+	//private AmpModality modalityId;
+	private AmpCategoryValue financingInstrument;
 	
-	private AmpModality modalityId;
 	
 	//private Set survey;
 	
@@ -328,17 +329,13 @@ public class AmpFunding implements Serializable
 		closingDateHistory = set;
 	}
 
-	/**
-	 * @return Returns the modalityId.
-	 */
-	public AmpModality getModalityId() {
-		return modalityId;
+		
+	public AmpCategoryValue getFinancingInstrument() {
+		return financingInstrument;
 	}
-	/**
-	 * @param modalityId The modalityId to set.
-	 */
-	public void setModalityId(AmpModality modalityId) {
-		this.modalityId = modalityId;
+
+	public void setFinancingInstrument(AmpCategoryValue financingInstrument) {
+		this.financingInstrument = financingInstrument;
 	}
 
 	public AmpCategoryValue getTypeOfAssistance() {

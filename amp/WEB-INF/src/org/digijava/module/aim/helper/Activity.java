@@ -801,8 +801,31 @@ public class Activity
   }
 
   public void setFinancialInstrument(Integer financialInformation) {
-    //TODO  - replace using the category manager 
-	this.financialInstrument=financialInformation;  
+	if (financialInformation == null)
+		return;
+    this.financialInstrument = financialInformation;
+    switch (financialInformation.intValue()) {
+      case 1: {
+        this.setFinancialInstrumentString("GBS");
+        break;
+      }
+      case 2: {
+        this.setFinancialInstrumentString("SBS");
+        break;
+      }
+      case 3: {
+        this.setFinancialInstrumentString("Basket");
+        break;
+      }
+      case 4: {
+        this.setFinancialInstrumentString("DPS on Budget");
+        break;
+      }
+      case -1: {
+        this.setFinancialInstrumentString("");
+        break;
+      }
+    }
   }
 
   public String getFY() {

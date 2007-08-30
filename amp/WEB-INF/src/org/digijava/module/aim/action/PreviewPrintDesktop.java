@@ -6,7 +6,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.form.DesktopForm;
 import java.util.Collection;
-import org.digijava.module.aim.dbentity.AmpModality;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.ArrayList;

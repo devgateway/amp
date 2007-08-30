@@ -5,24 +5,14 @@
 
 package org.digijava.module.aim.form;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeSet;
+import java.io.*;
+import java.util.*;
+import javax.servlet.http.*;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.upload.FormFile;
-import org.digijava.module.aim.dbentity.AmpField;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.ActivityIndicator;
-import org.digijava.module.aim.helper.FundingDetail;
-import org.digijava.module.aim.helper.OrgProjectId;
+import org.apache.struts.action.*;
+import org.apache.struts.upload.*;
+import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.*;
 
 public class EditActivityForm extends ActionForm implements Serializable{
 
@@ -95,7 +85,7 @@ private int isPreview=0;
 	private List selectedOrgs = null; // list of organisations to be added to the activity
 
 	private Collection levelCollection = null;
-	private Collection modalityCollection = null;
+	//private Collection modalityCollection = null;
 	//private Collection assistanceTypes = null;
 
 	private String step = null;
@@ -497,7 +487,7 @@ private int isPreview=0;
 			selectedOrgs = null;
 			levelCollection = null;
 			programCollection = null;
-			modalityCollection = null;
+//			modalityCollection = null;
 			//assistanceTypes = null;
 			step = "1";
 			activitySectors = null;
@@ -1103,20 +1093,6 @@ private int isPreview=0;
 		this.modality = modality;
 	}
 
-	/**
-	 * @return Returns the modalityCollection.
-	 */
-	public Collection getModalityCollection() {
-		return modalityCollection;
-	}
-
-	/**
-	 * @param modalityCollection
-	 *            The modalityCollection to set.
-	 */
-	public void setModalityCollection(Collection modalityCollection) {
-		this.modalityCollection = modalityCollection;
-	}
 
 	/**
 	 * @return Returns the objectives.

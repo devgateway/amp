@@ -187,8 +187,8 @@ public class ProjectFicheExport extends Action {
 				tbl.addCell(new Cell(CurrencyUtil.df.format(contr.getAmount())));
 				tbl.addCell(new Cell(contr.getAmountCurrency().getCurrencyCode()));
 				tbl.addCell(new Cell(contr.getDonor().getName()));
-				tbl.addCell(new Cell(contr.getFinancingType().getTermsAssistName()));
-				tbl.addCell(new Cell(contr.getFinancingInstrument().getName()));
+				tbl.addCell(new Cell(contr.getFinancingTypeCategVal().getValue()));
+				tbl.addCell(new Cell(contr.getFinancingInstr().getValue()));
 			}
 			document.add(tbl);
 			

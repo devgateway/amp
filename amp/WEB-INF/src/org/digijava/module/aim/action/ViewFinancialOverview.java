@@ -17,7 +17,6 @@ import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.FinancialOverviewForm;
 import org.digijava.module.aim.helper.CommonWorker;
@@ -72,17 +71,17 @@ public class ViewFinancialOverview extends TilesAction {
 			formBean.setFromYear(Constants.FROM_YEAR);
 			formBean.setToYear(Constants.TO_YEAR);
 
-			AmpModality ampModality = null;
+			AmpCategoryValue modality = null;
 			if (ampActivity != null) {
-				ampModality = ampActivity.getModality();
+				modality = ampActivity.getModality();
 
 				if (logger.isDebugEnabled())
 					logger.debug("Modality name : "
-							+ (ampModality != null ? ampModality.getName()
+							+ (modality != null ? modality.getValue()
 									: "null"));
 
-				if (ampModality != null)
-					formBean.setTypeOfAssistance(ampModality.getName());
+				if (modality != null)
+					formBean.setTypeOfAssistance(modality.getValue());
 
 				formBean.setAmpId(ampActivity.getAmpId());
 

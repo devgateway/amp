@@ -240,7 +240,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		if(cats.size()>0) newcol=GroupColumn.verticalSplitByCategs(funding, cats, true,this.reportMetadata);
 		else
 			try {
-				newcol=(Column) funding.clone();
+				newcol=new GroupColumn();
+				newcol.getItems().add((Column) funding.clone());
 			} catch (CloneNotSupportedException e) {
 				logger.error(e);
 				e.printStackTrace();

@@ -55,7 +55,7 @@
         <listener>
                 <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
         </listener>
-	
+
 	<!-- Startup servlet used for URL preloading -->
 	<servlet>
           <servlet-name>url-preloader</servlet-name>
@@ -254,6 +254,11 @@
 		<taglib-uri>/taglib/displaytag</taglib-uri>
 		<taglib-location>/WEB-INF/tld/displaytag-11.tld</taglib-location>
 	</taglib>
+        <taglib>
+		<taglib-uri>/taglib/jstl-functions</taglib-uri>
+		<taglib-location>/WEB-INF/fn.tld</taglib-location>
+	</taglib>
+
 
 
 	<security-constraint>

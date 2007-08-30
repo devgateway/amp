@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -47,6 +49,17 @@ public class PatcherUtil {
 		return ret;
 	}
 
+	public static Set getAllAppliedPatches(Session session) throws HibernateException {
+		
+		Query query = session.createQuery("select p.absolutePatchName from "
+				+ PatchFile.class.getName() + " p");
+		List col = query.list();
+		TreeSet ret=new TreeSet();
+		ret.addAll(col);
+		return ret;
+	
+	}
+	
 	public static String getFileMD5(File f) throws NoSuchAlgorithmException,
 			IOException {
 		MessageDigest algorithm = MessageDigest.getInstance("MD5");

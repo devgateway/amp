@@ -522,8 +522,12 @@
 					<td>&nbsp;</td>
 
 					<td align="left">
+                                        <c:set var="btnSubmit">
+                                        <digi:trn key="btn:submit">Submit</digi:trn>
+                                        </c:set>
 
-						<html:submit value="Submit" styleClass="dr-menu" />
+
+						<html:submit value="${btnSubmit}" styleClass="dr-menu" />
 
 					</td>
 

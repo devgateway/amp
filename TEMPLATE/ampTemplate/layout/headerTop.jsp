@@ -2,12 +2,20 @@
 
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 
 
 
 <digi:context name="displayFlag" property="context/aim/default/displayFlag.do" />
+<c:set var="message">
+<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+</c:set>
+<c:set var="quote">'</c:set>
+<c:set var="escapedQuote">\'</c:set>
+<c:set var="msg">
+${fn:replace(message,quote,escapedQuote)}
+</c:set>
 
 
 
@@ -21,10 +29,9 @@
 
    			<td valign="center" height="34">&nbsp;
 
-   			<c:set var="message">
-				<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-			</c:set>
-   			<digi:link href="/" module="aim" styleClass="heading" onclick="return quitRnot1('${message}')" title="Aid Management Platform">
+
+
+   			<digi:link href="/" module="aim" styleClass="heading" onclick="return quitRnot1('${msg}')" title="Aid Management Platform">
 
 					<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn>
 

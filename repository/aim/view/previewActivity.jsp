@@ -1036,7 +1036,7 @@ function disable() {
                                                                                   </a>
                                                                                 </td>
                                                                                 <td width="25%"><b>
-                                                                                [<digi:trn key="aim:exchange">Exchange Rate</digi:trn>]</b>
+                                                                                <digi:trn key="aim:exchange">Exchange Rate</digi:trn></b>
                                                                                 </td>
                                                                               </tr>
                                                                               <c:if test="${!empty funding.fundingDetails}">
@@ -1063,7 +1063,7 @@ function disable() {
                                                                                     <td width="120" align="right">
                                                                                       <field:display name="Amount Commitment" feature="Funding Organizations">
                                                                                       	<FONT color=blue>*</FONT>
-                                                                                      	<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
+                                                                                      	<bean:write name="fundingDetail" property="transactionAmount" format="###,###,###,###,###"/>&nbsp;
                                                                                       </field:display>
                                                                                     </td>
 
@@ -1099,7 +1099,7 @@ function disable() {
                                                                                         </td>
                                                                                         <td width="120" align="right">
                                                                                         <field:display name="Amount Commitment" feature="Funding Organizations">
-                                                                                          <FONT color=blue>*</FONT>
+                                                                                          <FONT color=blue>*</FONT> 
                                                                                           <bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
                                                                                           </field:display>
                                                                                         </td>

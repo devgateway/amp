@@ -47,9 +47,9 @@
 		<hibernate-class>org.digijava.kernel.entity.Image</hibernate-class>
 		<hibernate-class>org.digijava.kernel.user.Group</hibernate-class>
 		<hibernate-class>org.digijava.kernel.user.GroupPermission</hibernate-class>
-		<hibernate-class >org.digijava.kernel.entity.Locale</hibernate-class>
+		<hibernate-class precache="true">org.digijava.kernel.entity.Locale</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.UserPreferences</hibernate-class>
-		<hibernate-class >org.digijava.kernel.dbentity.Country</hibernate-class>
+		<hibernate-class precache="true">org.digijava.kernel.dbentity.Country</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.OrganizationType</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.HowDidYouHear</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.ModuleInstance</hibernate-class>
@@ -60,7 +60,7 @@
 		<hibernate-class>org.digijava.kernel.entity.OracleLocale</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.PrincipalPermission</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.PrincipalPermissionParameter</hibernate-class>
-		<hibernate-class  filter="not (obj.key like 'cpv:%')" region="org.digijava.kernel.entity.Message.id_cache">org.digijava.kernel.entity.Message</hibernate-class>
+		<hibernate-class precache="true" filter="not (obj.key like 'cpv:%')" region="org.digijava.kernel.entity.Message.id_cache">org.digijava.kernel.entity.Message</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.AccessLog</hibernate-class>
 		<hibernate-class>org.digijava.module.common.dbentity.ItemStatus</hibernate-class>
 		<hibernate-class>org.digijava.module.common.dbentity.ModuleTeaser</hibernate-class>

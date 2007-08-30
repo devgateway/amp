@@ -194,24 +194,26 @@ public class ShowCalendarEvent
             // attendee users
             List selectedUsersList=new ArrayList();
             List ampUsers=AmpDbUtil.getUsers();
-            if(ampUsers!=null && ampUsers.size()!=0){
+            if (ampUsers != null && ampUsers.size() != 0) {
                 Iterator userIt = AmpDbUtil.getUsers().iterator();
                 List attendeeUsers = new ArrayList();
-                while(userIt.hasNext()) {
+                while (userIt.hasNext()) {
                     User user = (User) userIt.next();
-                    LabelValueBean lvb = new LabelValueBean(user.getFirstNames() +
+                    if (!user.isBanned()) {
+                        LabelValueBean lvb = new LabelValueBean(user.getFirstNames() +
                             " " +
                             user.getLastName(), user.getId().toString());
-                    attendeeUsers.add(lvb);
+                        attendeeUsers.add(lvb);
 
-                    String[] selUsers = calendarEventForm.getSelectedUsers();
-                    if(selUsers != null) {
-                        for(int i = 0; i < selUsers.length; i++) {
-                            String uid = "u:" + user.getId().toString();
-                            if(uid.equals(selUsers[i])) {
-                                LabelValueBean lvbs = new LabelValueBean(user.getFirstNames() + " " + user.getLastName(), uid);
-                                selectedUsersList.add(lvbs);
-                                break;
+                        String[] selUsers = calendarEventForm.getSelectedUsers();
+                        if (selUsers != null) {
+                            for (int i = 0; i < selUsers.length; i++) {
+                                String uid = "u:" + user.getId().toString();
+                                if (uid.equals(selUsers[i])) {
+                                    LabelValueBean lvbs = new LabelValueBean(user.getFirstNames() + " " + user.getLastName(), uid);
+                                    selectedUsersList.add(lvbs);
+                                    break;
+                                }
                             }
                         }
                     }

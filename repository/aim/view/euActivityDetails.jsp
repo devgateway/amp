@@ -59,7 +59,7 @@
 		<tr><td class="box-border-nopadding">
 				Funding Org:&nbsp;<bean:write name="contribution" property="donor.name" /><br/>
 				Financing Instrument:&nbsp;<bean:write name="contribution" property="financingType.termsAssistName"/><br/>
-				Financing Type:&nbsp;<bean:write name="contribution" property="financingInstrument.name"/><br/>				
+				Financing Type:&nbsp;<bean:write name="contribution" property="financingInstr.value"/><br/>				
 				Amount:&nbsp;<bean:write name="contribution" property="amount" />&nbsp;<bean:write
 						name="contribution" property="amountCurrency.currencyCode" />
 		</td></tr>

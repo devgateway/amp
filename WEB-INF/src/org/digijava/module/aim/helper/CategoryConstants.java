@@ -24,6 +24,9 @@ public class CategoryConstants {
 	
 	public static final String TYPE_OF_ASSISTENCE_NAME		= "Type of Assistence";
 	public static final String TYPE_OF_ASSISTENCE_KEY		= "type_of_assistence";
+	
+	public static final String FINANCING_INSTRUMENT_NAME		= "Financing Instrument";
+	public static final String FINANCING_INSTRUMENT_KEY		= "financing_instrument";
 
 }
 

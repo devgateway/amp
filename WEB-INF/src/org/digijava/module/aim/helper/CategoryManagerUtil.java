@@ -363,7 +363,7 @@ public class CategoryManagerUtil {
 	 * If null the ordered property of the AmpCategoryClass object is checked.
 	 * @return A collection of AmpCategoryValues witch belong to the AmpCategoryClass with key=categoryKey
 	 */
-	public static Collection getAmpCategoryValueCollectionByKey(String categoryKey, Boolean ordered) {
+	public static Collection<AmpCategoryValue> getAmpCategoryValueCollectionByKey(String categoryKey, Boolean ordered) {
 		boolean shouldOrderAlphabetically;
 		AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClassByKey(categoryKey);
 		if (ampCategoryClass == null)
@@ -374,12 +374,12 @@ public class CategoryManagerUtil {
 		else
 			shouldOrderAlphabetically	= ordered.booleanValue();
 
-		List ampCategoryValues			= ampCategoryClass.getPossibleValues();
+		List<AmpCategoryValue> ampCategoryValues			= ampCategoryClass.getPossibleValues();
 
 		if ( !shouldOrderAlphabetically )
 				return ampCategoryValues;
 
-		TreeSet treeSet	= new TreeSet( new CategoryManagerUtil().new CategoryComparator() );
+		TreeSet<AmpCategoryValue> treeSet	= new TreeSet<AmpCategoryValue>( new CategoryManagerUtil().new CategoryComparator() );
 		treeSet.addAll(ampCategoryValues);
 
 

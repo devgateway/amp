@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -27,13 +26,13 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpMeasures;
-import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpRegion;
@@ -13598,25 +13597,25 @@ public class ReportUtil {
 	iter=level.iterator();
 	while(iter.hasNext())
 	{
-		AmpModality ampModality=(AmpModality) iter.next();
+		AmpCategoryValue ampModality=(AmpCategoryValue) iter.next();
 		if(!(ampModalityId.equals(All)))
 		{
-			if(!(ampModalityId.equals(ampModality.getAmpModalityId())))
+			if(!(ampModalityId.equals(ampModality.getId())))
 				continue;
 		}
 		session = PersistenceManager.getSession();
 		String queryString = "select distinct activity from "
 			+ AmpReportCache.class.getName()
 			+ " activity where " + strClause + 
-					"(activity.ampTeamId in(" + teamClause + ")) and (activity.ampModalityId='" + ampModality.getAmpModalityId() + "') and (activity.reportType='1')";
+					"(activity.ampTeamId in(" + teamClause + ")) and (activity.ampModalityId='" + ampModality.getId() + "') and (activity.reportType='1')";
 
 		Query qry = session.createQuery(queryString);
 		//logger.debug("Query: " + queryString);
 		if(qry.list().size()>0)
 		{
 			AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
-			ahReport.setId(ampModality.getAmpModalityId());
-			ahReport.setName(ampModality.getName());
+			ahReport.setId(ampModality.getId());
+			ahReport.setName(ampModality.getValue());
 			ahReport.setLabel("Funding Instrument ");
 			iterActivity = qry.list().iterator();
 			ahReport.setActivities(new ArrayList());
@@ -13644,24 +13643,24 @@ public class ReportUtil {
 		String strClause="";
 		if(inClause!=null) strClause= " (activity.ampActivityId in(" + inClause + ")) and ";
 		
-	level=(ArrayList)DbUtil.getAllAssistanceTypes();
+	level=(ArrayList)DbUtil.getAllAssistanceTypesFromCM();
 	iter=level.iterator();
 	while(iter.hasNext())
 	{
-		AmpTermsAssist ampTermsAssist=(AmpTermsAssist) iter.next();
+		AmpCategoryValue ampTermsAssist=(AmpCategoryValue) iter.next();
 		session = PersistenceManager.getSession();
 		String queryString = "select distinct activity from "
 			+ AmpReportCache.class.getName()
 			+ " activity where " + strClause + 
-					"(activity.ampTeamId in(" + teamClause + ")) and (activity.termAssistName='" + ampTermsAssist.getTermsAssistName() + "') and (activity.reportType='1')";
+					"(activity.ampTeamId in(" + teamClause + ")) and (activity.termAssistName='" + ampTermsAssist.getValue() + "') and (activity.reportType='1')";
 
 		Query qry = session.createQuery(queryString);
 		//logger.debug("Query: " + queryString);
 		if(qry.list().size()>0)
 		{
 			AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
-			ahReport.setId(ampTermsAssist.getAmpTermsAssistId());
-			ahReport.setName(ampTermsAssist.getTermsAssistName());
+			ahReport.setId(ampTermsAssist.getId());
+			ahReport.setName(ampTermsAssist.getValue());
 			ahReport.setLabel("Type Of Assistance ");
 			iterActivity = qry.list().iterator();
 			ahReport.setActivities(new ArrayList());
@@ -13688,29 +13687,29 @@ public class ReportUtil {
 		String strClause="";
 		if(inClause!=null) strClause= " (activity.ampActivityId in(" + inClause + ")) and ";
 		
-	level=DbUtil.getAmpStatus();
+	level=DbUtil.getAmpStatusFromCM();
 	iter=level.iterator();
 	 
 	while(iter.hasNext())
 	{
-		AmpStatus ampStatus=(AmpStatus) iter.next();
+		AmpCategoryValue ampStatus=(AmpCategoryValue) iter.next();
 		if(!(ampStatusId.equals(All)))
 		{
-			if(!(ampStatusId.equals(ampStatus.getAmpStatusId())))
+			if(!(ampStatusId.equals(ampStatus.getId())))
 				continue;
 		}
 		session = PersistenceManager.getSession();
 		String queryString = "select activity from "
 			+ AmpActivity.class.getName()
-			+ " activity where "+ strClause+" (activity.team.ampTeamId in(" + teamClause + ")) and (activity.status.ampStatusId='" + ampStatus.getAmpStatusId() + "')";
+			+ " activity where "+ strClause+" (activity.team.ampTeamId in(" + teamClause + ")) and (activity.status.ampStatusId='" + ampStatus.getId() + "')";
 
 		Query qry = session.createQuery(queryString);
 		//logger.debug("Query: " + queryString);
 		if(qry.list().size()>0)
 		{
 			AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
-			ahReport.setId(ampStatus.getAmpStatusId());
-			ahReport.setName(ampStatus.getName());
+			ahReport.setId(ampStatus.getId());
+			ahReport.setName(ampStatus.getValue());
 			ahReport.setLabel("Status ");
 			iterActivity = qry.list().iterator();
 			ahReport.setActivities(new ArrayList());

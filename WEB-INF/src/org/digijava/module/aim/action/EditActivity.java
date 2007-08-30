@@ -51,7 +51,6 @@ import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
-import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
@@ -122,7 +121,7 @@ public class EditActivity
 
         //if("true".compareTo(request.getParameter("public"))!=0)
         	//return mapping.findForward("forward");
-
+		
         ActionErrors errors = new ActionErrors();
 
         ampContext = getServlet().getServletContext();
@@ -195,7 +194,7 @@ public class EditActivity
             eaForm.setDocReset(true);
             eaForm.setComponentReset(true);
             eaForm.reset(mapping, request);
-
+          
 
             eaForm.setActivityId(activityId);
             HashMap activityMap = (HashMap) ampContext
@@ -699,11 +698,11 @@ public class EditActivity
                     			);
                     }
                     else
-                    	eaForm.setImplemLocationLevel(
-                    			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY,
+                    	eaForm.setImplemLocationLevel( 
+                    			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
 										new Long(0) ).getId()
                     	);
-
+                    
                     /*switch(impLevel) {
                         case 0:
                             eaForm.setImplementationLevel("country");
@@ -751,7 +750,7 @@ public class EditActivity
                                     ActivitySector actSect = new ActivitySector();
                                     if(parent != null) {
                                         actSect.setId(parent.getAmpSectorId());
-
+                                    	
                         				Collection coll =FeaturesUtil.getGlobalSettings();
                         	            Iterator itr = coll.iterator();
                         	            String view=null;
@@ -764,11 +763,11 @@ public class EditActivity
                         					{
                         		            	actSect.setCount(1);
                         					}
-                        					  else
+                        					  else 
                         					{
                         						 actSect.setCount(2);
                         					}
-
+                        		            
                                         actSect.setSectorId(parent.getAmpSectorId());
                                         actSect.setSectorName(parent.getName());
                                         if(subsectorLevel1 != null) {
@@ -790,7 +789,7 @@ public class EditActivity
                                 }
                             }
                         }
-
+                        
                         eaForm.setActivitySectors(activitySectors);
                     }
 
@@ -828,7 +827,7 @@ public class EditActivity
                         fund.setFundingId(ampFunding.getAmpFundingId().
                                           longValue());
                         fund.setOrgFundingId(ampFunding.getFinancingId());
-                        fund.setModality(ampFunding.getModalityId());
+                        fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
                         fund.setConditions(ampFunding.getConditions());
                         Collection fundDetails = ampFunding.getFundingDetails();
                         if(fundDetails != null && fundDetails.size() > 0) {
@@ -841,10 +840,11 @@ public class EditActivity
                                     fundDetItr
                                     .next();
                                 FundingDetail fundingDetail = new FundingDetail();
-                                if(fundDet.getFixedExchangeRate()!=null && 
-                                		fundDet.getFixedExchangeRate().doubleValue()!=1){
+                                if(fundDet.getFixedExchangeRate()!=null)
                                 	fundingDetail.setFixedExchangeRate(fundDet.getFixedExchangeRate());
-                                	fundingDetail.setUseFixedRate(true);
+                                AmpCurrency rateCurrencyId=fundDet.getRateCurrencyId();
+                                if(rateCurrencyId!=null){
+                                fundingDetail.setFixedExchangeCurrCode(rateCurrencyId.getCurrencyCode());
                                 }
                                 fundingDetail.setIndexId(indexId++);
                                 int adjType = fundDet.getAdjustmentType()
@@ -1394,27 +1394,28 @@ public class EditActivity
 						CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.IMPLEMENTATION_LOCATION_KEY, new Long(0)).getId()
 				);
 
-            Collection modalColl = null;
+            //Collection modalColl = null;
             // load the modalities from the database
-            if(eaForm.getModalityCollection() == null) {
+           /* if(eaForm.getModalityCollection() == null) { //No need to load modalitiees. Using category manager.
                 modalColl = DbUtil.getAmpModality();
                 eaForm.setModalityCollection(modalColl);
             } else {
                 modalColl = eaForm.getModalityCollection();
-            }
+            }*/
 
             // Initally set the modality as "Project Support"
-            if(modalColl != null && eaForm.getModality() == null) {
-                Iterator itr = modalColl.iterator();
+            Collection financingInstrValues	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY, null);
+            if ( financingInstrValues != null && financingInstrValues.size() > 0 ) { 
+                Iterator itr = financingInstrValues.iterator();
                 while(itr.hasNext()) {
-                    AmpModality mod = (AmpModality) itr.next();
-                    if(mod.getName().equalsIgnoreCase("Project Support")) {
-                        eaForm.setModality(mod.getAmpModalityId());
+                    AmpCategoryValue financingInstr = (AmpCategoryValue) itr.next();
+                    if(financingInstr.getValue().equalsIgnoreCase("Project Support")) {
+                        eaForm.setModality( financingInstr.getId() );
                         break;
                     }
                 }
             }
-            Collection levelCol = null;
+            //Collection levelCol = null;
             // Loading the levels from the database
             /*if(eaForm.getLevelCollection() == null) {
                 levelCol = DbUtil.getAmpLevels();
@@ -1438,38 +1439,38 @@ public class EditActivity
         		session.setAttribute("logframepr","true");
         		return mapping.findForward("forwardToPreview");
         	}
-
-
+        
+      
         Collection ampFundingsAux = DbUtil.getAmpFunding(activityId);
         FilterParams fp = (FilterParams) session.getAttribute("filterParams");
 		TeamMember teamMember=(TeamMember)session.getAttribute("currentMember");
-		if(fp==null)
+		if(fp==null) 
         {
         	fp=new FilterParams();
         }
-
+		
 			ApplicationSettings apps = null;
     		if ( teamMember != null )	{
     			apps = teamMember.getAppSettings();
     		}
     		if(apps!=null){
-
-    			if (fp.getCurrencyCode() == null)
+    		
+    			if (fp.getCurrencyCode() == null) 
     			{
-
+    				
     					Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
     					if (curr != null) {
     						fp.setCurrencyCode(curr.getCurrencyCode());
     					}
-
+    				
     			}
-
+    			
 
 
     			if (fp.getFiscalCalId() == null) {
     				fp.setFiscalCalId(apps.getFisCalId());
     			}
-
+    			
 
     			if (fp.getPerspective() == null) {
     				String perspective = CommonWorker.getPerspective(apps
@@ -1482,9 +1483,9 @@ public class EditActivity
     				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
     				fp.setToYear(year+Constants.TO_YEAR_RANGE);
     			}
+    		
 
-
-
+        
         Collection fb = FinancingBreakdownWorker.getFinancingBreakdownList(
 				activityId, ampFundingsAux, fp);
         eaForm.setFinancingBreakdown(fb);
@@ -1495,27 +1496,27 @@ public class EditActivity
 		String overallTotalUnExpended = "";
 		overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(
 				fb, Constants.COMMITMENT);
+		
 
-
-		eaForm.setTotalCommitted(overallTotalCommitted);
-
-
+			eaForm.setTotalCommitted(overallTotalCommitted);
+		
+		
 		overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(
 				fb, Constants.DISBURSEMENT);
-
+		
 		eaForm.setTotalDisbursed(overallTotalDisbursed);
 		overallTotalUnDisbursed = DecimalToText.getDifference(
 				overallTotalCommitted, overallTotalDisbursed);
 		eaForm.setTotalUnDisbursed(overallTotalUnDisbursed);
 		overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(
 				fb, Constants.EXPENDITURE);
-
+		
 		eaForm.setTotalExpended(overallTotalExpenditure);
 		overallTotalUnExpended = DecimalToText.getDifference(
 				overallTotalDisbursed, overallTotalExpenditure);
 		eaForm.setTotalUnExpended(overallTotalUnExpended);
     		}
-
+    
         return mapping.findForward("forward");
     }
 }

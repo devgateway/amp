@@ -37,10 +37,13 @@ import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.ReportUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
-
+/**
+ * @deprecated replaced by ViewNewAdvancedReport
+ *
+ */
 public class ViewAdvancedReport extends Action
 {
-	private static Logger logger = Logger.getLogger(ViewAdvancedReport.class) ;
+	/*private static Logger logger = Logger.getLogger(ViewAdvancedReport.class) ;
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 	HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
@@ -489,12 +492,12 @@ public class ViewAdvancedReport extends Action
 		
 //		dbReturnSet=ReportUtil.getAdvancedReport(ampTeamId,fromYr,toYr,perspective,ampCurrencyCode,ampModalityId,ampStatusId,ampOrgId,ampSectorId,fiscalCalId,startDate,closeDate,region,ampReportId);
 //		logger.debug("Number of Records:" + dbReturnSet.size());
-		/*iter=dbReturnSet.iterator();
+		iter=dbReturnSet.iterator();
 		while(iter.hasNext())
 		{
 			Column col =(Column) iter.next();
 			formBean.getTitles().add(col.getColumnName());
-		}*/	
+		}	
 
 		Collection pageRecords = new ArrayList();
 		int page=0;
@@ -562,15 +565,15 @@ public class ViewAdvancedReport extends Action
 		//formBean.setFiltersNames(setFiltersNames);
 		
 		String filterNames[] =new String[2];
-		filterNames = DbUtil.setFilterDetails(filter);
-	/*	for(int i=0; i< filterNames.length; i++)
+		//filterNames = DbUtil.setFilterDetails(filter);
+		for(int i=0; i< filterNames.length; i++)
 		{
 			logger.debug("Filter HTML : + " + filterNames[i]);
-		}*/
+		}
 		formBean.setFilter(filterNames);
 		
 //---------------------------------------------------		
-		/*BEGIN CODE FOR GRAND TOTAL*/
+		BEGIN CODE FOR GRAND TOTAL
 		int yearRange=(toYr-fromYr)+1;
 		if(rsc.getHierarchy().size()==0)
 		{
@@ -744,7 +747,7 @@ public class ViewAdvancedReport extends Action
 				formBean.getTotFund().add(fund);
 			}
 		}	
-		/*END CODE FOR GRAND TOTAL*/
+		END CODE FOR GRAND TOTAL
 
 
 		formBean.setFiscalYearRange(new ArrayList());
@@ -785,5 +788,5 @@ public class ViewAdvancedReport extends Action
 		formBean.setFilterCnt(filterCnt);
 		
 		return mapping.findForward("forward");
-	}
+	}*/
 }

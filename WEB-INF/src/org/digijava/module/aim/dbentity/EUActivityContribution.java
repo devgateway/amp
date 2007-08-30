@@ -18,8 +18,10 @@ public class EUActivityContribution implements Serializable, Comparable {
 	private AmpCurrency amountCurrency;
 	private EUActivity euActivity;
 	private AmpOrganisation donor;
-	private AmpTermsAssist financingType;
-	private AmpModality financingInstrument;
+	//private AmpTermsAssist financingType;
+	private AmpCategoryValue financingTypeCategVal;
+	//private AmpModality financingInstrument;
+	private AmpCategoryValue financingInstr;
 	private Date transactionDate;
 	
 	public EUActivity getEuActivity() {
@@ -70,21 +72,16 @@ public class EUActivityContribution implements Serializable, Comparable {
 		this.donor = donor;
 	}
 
-	public AmpModality getFinancingInstrument() {
-		return financingInstrument;
-	}
 
-	public void setFinancingInstrument(AmpModality financingInstrument) {
-		this.financingInstrument = financingInstrument;
-	}
-
-	public AmpTermsAssist getFinancingType() {
+/*	public AmpTermsAssist getFinancingType() {
 		return financingType;
 	}
 
 	public void setFinancingType(AmpTermsAssist financingType) {
 		this.financingType = financingType;
-	}
+	}*/
+	
+	
 
 	public int compareTo(Object arg0) {
 		return this.getId().compareTo(((EUActivityContribution)arg0).getId());
@@ -96,6 +93,22 @@ public class EUActivityContribution implements Serializable, Comparable {
 
 	public void setTransactionDate(Date transactionDate) {
 		this.transactionDate = transactionDate;
+	}
+
+	public AmpCategoryValue getFinancingInstr() {
+		return financingInstr;
+	}
+
+	public void setFinancingInstr(AmpCategoryValue financingInstr) {
+		this.financingInstr = financingInstr;
+	}
+
+	public AmpCategoryValue getFinancingTypeCategVal() {
+		return financingTypeCategVal;
+	}
+
+	public void setFinancingTypeCategVal(AmpCategoryValue financingTypeCategVal) {
+		this.financingTypeCategVal = financingTypeCategVal;
 	}
 
 }

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Collection;
 
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
-import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 
 /**
@@ -18,7 +17,8 @@ public class Funding implements Serializable
     private AmpCategoryValue typeOfAssistance;
 	private String orgFundingId;
 	private String signatureDate;
-	private AmpModality modality;
+	//private AmpModality modality;
+	private AmpCategoryValue financingInstrument;
 	private Collection fundingDetails;	// Collection of Funding Details
    	private String currentFunding;
    	private String propStartDate;
@@ -144,19 +144,16 @@ public class Funding implements Serializable
 	public void setReportingDate(String reportingDate) {
 		this.reportingDate = reportingDate;
 	}
-	/**
-	 * @return Returns the modality.
-	 */
-	public AmpModality getModality() {
-		return modality;
-	}
-	/**
-	 * @param modality The modality to set.
-	 */
-	public void setModality(AmpModality modality) {
-		this.modality = modality;
-	}
 	
+		
+	public AmpCategoryValue getFinancingInstrument() {
+		return financingInstrument;
+	}
+
+	public void setFinancingInstrument(AmpCategoryValue financingInstrument) {
+		this.financingInstrument = financingInstrument;
+	}
+
 	public boolean equals(Object e) {
 		if (e instanceof Funding) {
 			Funding tmp = (Funding) e;

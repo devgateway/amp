@@ -424,7 +424,8 @@ public class ShowActivityPrintPreview
                     fund.setFundingId(ampFunding.getAmpFundingId().
                                       longValue());
                     fund.setOrgFundingId(ampFunding.getFinancingId());
-                    fund.setModality(ampFunding.getModalityId());
+                    //fund.setModality(ampFunding.getModalityId());
+                    fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
                     fund.setConditions(ampFunding.getConditions());
                     Collection fundDetails = ampFunding.getFundingDetails();
                     if(fundDetails != null && fundDetails.size() > 0) {

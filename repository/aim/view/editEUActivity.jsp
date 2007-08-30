@@ -141,10 +141,10 @@ function selectOrganisation() {
 						
 							<select name="contrFinInstrId" class="inp-text" style="width: 100px">
 								<option value="-1"><digi:trn key="aim:addEditActivitySelectTypeOfAssistance">Select Type of Assistance</digi:trn></option>
-							<logic:iterate name="aimEUActivityForm" property="finInstrs" id="modality" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpModality">
-								<option value='<bean:write name="modality" property="ampModalityId"/>'
-								<c:if test="${ aimEUActivityForm.contrFinInstrId[idx] == modality.ampModalityId }">selected</c:if>>
-								<bean:write name="modality" property="name"/>
+							<logic:iterate name="aimEUActivityForm" property="finInstrs" id="modality" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
+								<option value='<bean:write name="modality" property="id"/>'
+								<c:if test="${ aimEUActivityForm.contrFinInstrId[idx] == modality.id }">selected</c:if>>
+								<bean:write name="modality" property="value"/>
 								</option>
 							</logic:iterate>
 							</select>

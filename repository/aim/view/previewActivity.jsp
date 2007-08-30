@@ -790,7 +790,9 @@ function disable() {
 											Level</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-											<category:getoptionvalue categoryValueId="${aimEditActivityForm.levelId}"/>
+											<c:if test="${aimEditActivityForm.levelId>0}" >
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.levelId}"/>
+											</c:if>
 										</td>
 									</tr>
 									</field:display>
@@ -2049,7 +2051,10 @@ function disable() {
 											<digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.accessionInstrument}"/>
+											<c:if test="${aimEditActivityForm.accessionInstrument > 0}">
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.accessionInstrument}"/>
+											</c:if>
+											&nbsp;
 										</td>
 									</tr>
 									</field:display>
@@ -2059,7 +2064,10 @@ function disable() {
 											<digi:trn key="aim:acChapter"> A.C. Chapter</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.acChapter}"/>
+											<c:if test="${aimEditActivityForm.acChapter > 0}">
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.acChapter}"/>
+											</c:if>
+											&nbsp;
 										</td>
 									</tr>
 									</field:display>

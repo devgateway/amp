@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.digijava.kernel.user.User;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -230,31 +231,32 @@ public class SaveActivity extends Action {
 											boolean useFixedRate = false;
 											if (fundDet.getTransactionType() == Constants.COMMITMENT) {
 												if (fundDet.isUseFixedRate() &&
-														fundDet.getFixedExchangeRate().doubleValue() > 0
-														&& fundDet.getFixedExchangeRate().doubleValue() != 1d) {
+														fundDet.getFixedExchangeRate() > 0) {
 													useFixedRate = true;
 												}
 											}
 
 											if (!useFixedRate) {
-												Double transAmt = new Double(DecimalToText.getDouble(fundDet.getTransactionAmount()));
+												Double transAmt = new Double(
+														DecimalToText.getDouble(fundDet.getTransactionAmount()));
 												ampFundDet.setTransactionAmount(transAmt);
-												ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
-												ampFundDet.setFixedExchangeRate(null);
+												ampFundDet.setAmpCurrencyId(
+														CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
 											} else {
 												// Use the fixed exchange rate
 												double transAmt = DecimalToText.getDouble(fundDet.getTransactionAmount());
 
 												Date trDate = DateConversion.getDate(fundDet.getTransactionDate());
-//												double frmExRt = CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,trDate);
+												double frmExRt = CurrencyUtil.getExchangeRate(
+														fundDet.getCurrencyCode(),1,trDate);
 
-//												double amt = CurrencyWorker.convert1(transAmt, frmExRt,1);
-//												amt *= fundDet.getFixedExchangeRate();
-//												ampFundDet.setTransactionAmount(new Double(amt));
-												ampFundDet.setTransactionAmount(new Double(transAmt));
+												double amt = CurrencyWorker.convert1(transAmt, frmExRt,1);
+												amt *= fundDet.getFixedExchangeRate();
+												ampFundDet.setTransactionAmount(new Double(amt));
 												ampFundDet.setFixedExchangeRate(fundDet.getFixedExchangeRate());
-												ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
-//												ampFundDet.setRateCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getFixedExchangeCurrCode()));
+												ampFundDet.setAmpCurrencyId(
+														CurrencyUtil.getCurrencyByCode(fundDet.getFixedExchangeCurrCode()));
+												ampFundDet.setRateCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getFixedExchangeCurrCode()));
 											}
 											ampFundDet.setAmpFundingId(ampFunding);
 											if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
@@ -1076,7 +1078,8 @@ public class SaveActivity extends Action {
 								 * ampFunding.setSignatureDate(DateConversion
 								 * .getDate(fund.getSignatureDate()));
 								 */
-								ampFunding.setModalityId(fund.getModality());
+//								ampFunding.setModalityId(fund.getModality());
+								ampFunding.setFinancingInstrument(fund.getFinancingInstrument());
 								if (fund.getConditions() != null
 										&& fund.getConditions().trim().length() != 0) {
 									ampFunding.setConditions(fund
@@ -1121,8 +1124,7 @@ public class SaveActivity extends Action {
 										boolean useFixedRate = false;
 										if (fundDet.getTransactionType() == Constants.COMMITMENT) {
 											if (fundDet.isUseFixedRate() &&
-													fundDet.getFixedExchangeRate().doubleValue() > 0 
-													&& fundDet.getFixedExchangeRate().doubleValue() != 1) {
+													fundDet.getFixedExchangeRate() > 0) {
 												useFixedRate = true;
 											}
 										}
@@ -1131,19 +1133,23 @@ public class SaveActivity extends Action {
 											Double transAmt = new Double(
 													DecimalToText.getDouble(fundDet.getTransactionAmount()));
 											ampFundDet.setTransactionAmount(transAmt);
-											ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
-											ampFundDet.setFixedExchangeRate(null);
+											ampFundDet.setAmpCurrencyId(
+													CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
 										} else {
 											// Use the fixed exchange rate
 											double transAmt = DecimalToText.getDouble(fundDet.getTransactionAmount());
 
 											Date trDate = DateConversion.getDate(fundDet.getTransactionDate());
-//											double frmExRt = CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,trDate);
-//											double amt = CurrencyWorker.convert1(transAmt, frmExRt,1);
-//											amt *= fundDet.getFixedExchangeRate();
-											ampFundDet.setTransactionAmount(new Double(transAmt));
+											double frmExRt = CurrencyUtil.getExchangeRate(
+													fundDet.getCurrencyCode(),1,trDate);
+
+											double amt = CurrencyWorker.convert1(transAmt, frmExRt,1);
+											amt *= fundDet.getFixedExchangeRate();
+											ampFundDet.setTransactionAmount(new Double(amt));
 											ampFundDet.setFixedExchangeRate(fundDet.getFixedExchangeRate());
-											ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
+											ampFundDet.setAmpCurrencyId(
+													CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
+											ampFundDet.setRateCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getFixedExchangeCurrCode()));
 										}
 										ampFundDet.setAmpFundingId(ampFunding);
 										if (fundDet.getTransactionType() == Constants.EXPENDITURE) {

@@ -9,7 +9,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
-import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;

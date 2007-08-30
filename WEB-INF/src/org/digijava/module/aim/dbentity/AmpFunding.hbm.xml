@@ -37,7 +37,7 @@
 
 		<many-to-one name="ampDonorOrgId" column="amp_donor_org_id" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>
 		
-		<many-to-one name="modalityId" column="amp_modality_id" class="org.digijava.module.aim.dbentity.AmpModality" cascade="none"/>		
+		<!--  <many-to-one name="modalityId" column="amp_modality_id" class="org.digijava.module.aim.dbentity.AmpModality" cascade="none"/>	 -->
 
 		<set name="fundingDetails" cascade="all" table="AMP_FUNDING_DETAIL" inverse="false">
 			<cache usage="read-write" />
@@ -53,6 +53,7 @@
 		
 		<many-to-one name="ampActivityId" column="amp_activity_id" class="org.digijava.module.aim.dbentity.AmpActivity"/>
 		<many-to-one name="typeOfAssistance" column="type_of_assistance_category_value_id" class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none"/>
+		<many-to-one name="financingInstrument" column="financing_instr_category_value_id" class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none"/>
 	
 		<!--
 		<set name="survey" cascade="save-update" table="amp_ahsurvey" inverse="true">

@@ -23,7 +23,6 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.ChannelOverviewForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
@@ -101,12 +100,12 @@ public class GetActivityDetails extends Action {
 		if(activity != null)
 			logger.info(" Activity ID  = " + activity.getAmpId());
 		String modName ="";
-		AmpModality modality = activity.getModality();
+		AmpCategoryValue modality = activity.getModality();
 		if (modality != null) {
-			modName = modality.getName();
+			modName = modality.getValue();
 			//logger.info("Project Modality : " + modName);
 			coForm.setModality(modName);
-			modName = modality.getModalityCode();
+			modName = modality.getIndex() + "";
 			modalityCode = modName;
 			//logger.info("Project Modality Code: " + modName);
 			coForm.setModalityCode(modName);					
@@ -118,15 +117,15 @@ public class GetActivityDetails extends Action {
 			Iterator itrf = funding.iterator(); 
 			boolean flag = true; 
 			while (itrf.hasNext()) {
-				AmpFunding ampf = (AmpFunding) itrf.next();
-				AmpModality modal = ampf.getModalityId();
-				if (modal != null) {
+				AmpFunding ampf 				= (AmpFunding) itrf.next();
+				AmpCategoryValue financingInstr	= ampf.getFinancingInstrument();
+				if (financingInstr != null) {
 					if (!coForm.getModal().isEmpty()) {
 						for (int i = 0; flag && i < coForm.getModal().size(); i++) {
 							Iterator itr = coForm.getModal().iterator();
 							while (itr.hasNext()) {
-								AmpModality amod = (AmpModality) itr.next();
-								if (modal.getName().equals(amod.getName())) {
+								AmpCategoryValue amod = (AmpCategoryValue) itr.next();
+								if (financingInstr.getValue().equals(amod.getValue())) {
 									flag = false;
 									break;
 								}
@@ -134,26 +133,26 @@ public class GetActivityDetails extends Action {
 						}
 					}
 					if (flag)
-						coForm.getModal().add(modal);
+						coForm.getModal().add(financingInstr);
 				}
 			}
 		}
 		
 
 		// start $3
-		if (modality != null) {
-			if (modality.getModalityCode().equals(Constants.PROGRAM_SUPPORT) ||
-					modality.getModalityCode().equals(Constants.OTHER_AID)) {
+		/*if (modality != null) {
+			if (modality.getModalityCode().equals(Constants.PROGRAM_SUPPORT) || // Modality Code is always a number in all databases
+					modality.getModalityCode().equals(Constants.OTHER_AID)) {	// so there is no use for these tests 
 				if (activity.getThemeId() != null) {
 					modName = activity.getThemeId().getName() ;
 					//logger.info("Program/Theme Name : " + modName) ;
 					coForm.setTheme(modName) ;						
 				}
 			}
-		}
+		}*/
 		// end $3
 	
-		if (modality != null) {
+		/*if (modality != null) {
 			if (!(modality.getModalityCode().equals(Constants.DIRECT_BUDGET_SUPPORT))) {
 				modName = "";
 				AmpCategoryValue ampCategoryValue	= 
@@ -195,7 +194,7 @@ public class GetActivityDetails extends Action {
 				coForm.setSectors(sectors);
 				coForm.setSubSectors(subSectors);
 			}					
-		}
+		}*/
 		
 		dbReturnSet = activity.getInternalIds();
 		itera = dbReturnSet.iterator();
@@ -277,7 +276,7 @@ public class GetActivityDetails extends Action {
 			coForm.setResults(activity.getResults());
 
 			if (activity.getModality() != null) 
-				coForm.setModality(activity.getModality().getName());
+				coForm.setModality(activity.getModality().getValue());
 			AmpCategoryValue ampCategoryValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
 			if (ampCategoryValue != null)
 				coForm.setStatus( ampCategoryValue.getValue() );
@@ -292,14 +291,14 @@ public class GetActivityDetails extends Action {
 			if (list.size() >= 2) {
 				coForm.setReportingagency((String) list.get(0));
 				coForm.setFundingagency((String) list.get(1));
-				if (activity.getModality() != null && 
+				/*if (activity.getModality() != null && // Modality Code is always a number in all databases so there is no need for these tests
 						(!activity.getModality().
 								getModalityCode().equals(Constants.DIRECT_BUDGET_SUPPORT))) {
 					if (list.size() >= 4) {
 						coForm.setImplagency((String) list.get(2));
 						coForm.setRelatedins((String) list.get(3));
 					}
-				}
+				}*/
 
 			}
 

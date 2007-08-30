@@ -25,13 +25,13 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.form.EUActivityForm;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -88,7 +88,7 @@ public class EditEUActivity extends MultiAction {
 		EUActivityForm eaf = (EUActivityForm) form;
 		eaf.setCurrencies(CurrencyUtil.getAmpCurrency());
 		eaf.setDonors(DbUtil.getAllOrganisation());
-		eaf.setFinTypes(DbUtil.getAllAssistanceTypes());
+		eaf.setFinTypes(DbUtil.getAllAssistanceTypesFromCM());
 		eaf.setFinInstrs(DbUtil.getAllFinancingInstruments());
 		
 		eaf.getContrAmountList().clear();
@@ -156,8 +156,8 @@ public class EditEUActivity extends MultiAction {
 					euaf.getContrAmountList().add(element2.getAmount().toString());
 					euaf.getContrCurrIdList().add(element2.getAmountCurrency().getAmpCurrencyId().toString());
 					euaf.getContrDonorIdList().add(element2.getDonor().getAmpOrgId().toString());
-					euaf.getContrFinInstrIdList().add(element2.getFinancingInstrument().getAmpModalityId().toString());
-					euaf.getContrFinTypeIdList().add(element2.getFinancingType().getAmpTermsAssistId().toString());
+					euaf.getContrFinInstrIdList().add(element2.getFinancingInstr().getId().toString());
+					euaf.getContrFinTypeIdList().add(element2.getFinancingTypeCategVal().getId().toString());
 				}
 		return modeFinalize(mapping,form,request,response);
 	}
@@ -330,13 +330,17 @@ public class EditEUActivity extends MultiAction {
 		// create the contribution objects:
 		eua.getContributions().clear();
 		for (int i = 0; i < euaf.getContrAmountList().size(); i++) {
+			Long financingInstrumentId	= new Long ( (String)euaf.getContrFinInstrIdList().get(i) );
+			Long typeOfAssistanceId		= new Long( (String) euaf.getContrFinTypeIdList().get(i) );
+			
 			EUActivityContribution eac=new EUActivityContribution();
 			eac.setEuActivity(eua);
 			eac.setAmount(new Double((String) euaf.getContrAmountList().get(i)));
 			eac.setAmountCurrency((AmpCurrency) sess.load(AmpCurrency.class,new Long((String) euaf.getContrCurrIdList().get(i))));
 			eac.setDonor((AmpOrganisation) sess.load(AmpOrganisation.class,new Long((String) euaf.getContrDonorIdList().get(i))));
-			eac.setFinancingInstrument((AmpModality) sess.load(AmpModality.class,new Long((String) euaf.getContrFinInstrIdList().get(i))));
-			eac.setFinancingType((AmpTermsAssist) sess.load(AmpTermsAssist.class,new Long((String) euaf.getContrFinTypeIdList().get(i))));
+			//eac.setFinancingInstrument((AmpModality) sess.load(AmpModality.class,new Long((String) euaf.getContrFinInstrIdList().get(i))));
+			eac.setFinancingInstr( CategoryManagerUtil.getAmpCategoryValueFromDb(financingInstrumentId) );
+			eac.setFinancingTypeCategVal( CategoryManagerUtil.getAmpCategoryValueFromDb(typeOfAssistanceId) );
 			eac.setTransactionDate(new Date(System.currentTimeMillis()));
 			
 			eua.getContributions().add(eac);

@@ -27,7 +27,6 @@ import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpExternalMapping;
-import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
@@ -190,7 +189,7 @@ public class FreeBalanceHarvester {
 				
 				AmpTermsAssist ata=(AmpTermsAssist) session.load(AmpTermsAssist.class,new Long(1));
 				
-				AmpModality am= (AmpModality) session.load(AmpModality.class,new Long(3));
+				//AmpModality am= (AmpModality) session.load(AmpModality.class,new Long(3));
 				
 				Transaction tx=session.beginTransaction();
 

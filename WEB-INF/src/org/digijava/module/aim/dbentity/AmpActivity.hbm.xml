@@ -86,7 +86,8 @@ tanzania adds
     <property name="jointCriteria" column="jointCriteria" type="java.lang.Boolean"/>
   
 		<many-to-one name="themeId" column="amp_theme_id" class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none"/>
-		<many-to-one name="modality" column="amp_modality_id" class="org.digijava.module.aim.dbentity.AmpModality" cascade="none"/>
+		<!-- <many-to-one name="modality" column="amp_modality_id" class="org.digijava.module.aim.dbentity.AmpModality" cascade="none"/>  -->
+		<many-to-one name="modality" column="amp_categ_val_modality_id" class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none"/>
 		<many-to-one name="team" column="amp_team_id" class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none"/>
 		<many-to-one name="country" column="country_iso" class="org.digijava.kernel.dbentity.Country" cascade="none"/>
 

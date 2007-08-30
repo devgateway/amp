@@ -2488,7 +2488,7 @@ public class ActivityUtil {
                 if (detail.getAmpCurrencyId() != null
                     && detail.getAmpCurrencyId().getCurrencyCode() != null
                     &&
-                    detail.getAmpCurrencyId().getCurrencyCode().trim().equals("")) {
+                    !detail.getAmpCurrencyId().getCurrencyCode().trim().equals("")) {
                   currencyCode = detail.getAmpCurrencyId().getCurrencyCode();
                 } //end of AMP-1403
 
@@ -2512,8 +2512,17 @@ public class ActivityUtil {
 
                 	}else{
                 		//calculate in old way
+                        double toCurrency = CurrencyUtil.getExchangeRate(
+                        		tocode,
+                        		detail.getAdjustmentType().intValue(), 
+                        		detail.getTransactionDate());
+                        double fromCurrency = CurrencyUtil.getExchangeRate(
+                        		currencyCode, 
+                        		detail.getAdjustmentType().intValue(), 
+                        		detail.getTransactionDate());
 
-                		double tempAmount = CurrencyWorker.convert(amount.doubleValue(),currencyCode);
+                		double tempAmount = CurrencyWorker.convert1(
+                				amount.doubleValue(), fromCurrency, toCurrency);
 
             			//sett to correct place
                 		if (adjastType.intValue() == Constants.ACTUAL) {

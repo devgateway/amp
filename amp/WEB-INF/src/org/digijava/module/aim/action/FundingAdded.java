@@ -92,6 +92,7 @@ public class FundingAdded extends Action {
 			Iterator itr = eaForm.getFundingDetails().iterator();
 			while (itr.hasNext()) {
 				FundingDetail fundDet = (FundingDetail) itr.next();
+				
 				String formattedAmt = CurrencyWorker.formatAmount(
 						fundDet.getTransactionAmount());
 				fundDet.setTransactionAmount(formattedAmt);
@@ -107,6 +108,7 @@ public class FundingAdded extends Action {
 							.getReportingOrganizationId());
 					fundDet.setReportingOrganizationName(org.getName());
 				}
+				
 				String perspective = fundDet.getPerspectiveCode();
 				Iterator itr1 = eaForm.getPerspectives().iterator();
 				while (itr1.hasNext()) {

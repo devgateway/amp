@@ -82,8 +82,8 @@ public class AmpARFilter implements Filter {
 		selectPerspective(tm);
 		
 		this.setAmpTeams(new TreeSet());
-		this.getAmpTeams().add(tm.getTeamId());
-		this.getAmpTeams().addAll(TeamUtil.getAmpLevel0TeamIds(tm.getTeamId()));
+		this.getAmpTeams().add(TeamUtil.getAmpTeam(tm.getTeamId()));
+		this.getAmpTeams().addAll(TeamUtil.getAmpLevel0Teams(tm.getTeamId()));
 
 		String widget=(String) request.getAttribute("widget");
 		if(widget!=null) this.setWidget(new Boolean(widget).booleanValue());
@@ -125,7 +125,7 @@ public class AmpARFilter implements Filter {
 	
 	public void generateFilterQuery() {
 		String BUDGET_FILTER="SELECT amp_activity_id FROM amp_activity WHERE budget="+(budget!=null?budget.toString():"null")+(budget!=null && budget.booleanValue()==false?" OR budget is null":"");
-		String TEAM_FILTER="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IN ("+Util.toCSString(ampTeams,false)+") OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("+Util.toCSString(ampTeams,false)+") )";
+		String TEAM_FILTER="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IN ("+Util.toCSString(ampTeams,true)+") OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("+Util.toCSString(ampTeams,true)+") )";
 		String STATUS_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("+Util.toCSString(statuses,true)+")";
 		String ORG_FILTER = "SELECT amp_activity_id FROM v_donors WHERE amp_donor_org_id IN ("+Util.toCSString(donors,true)+")";
 		String SECTOR_FILTER="SELECT amp_activity_id FROM v_sectors WHERE amp_sector_id IN ("+Util.toCSString(sectors,true)+")";

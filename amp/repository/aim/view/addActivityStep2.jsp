@@ -9,6 +9,8 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -286,9 +288,14 @@ function fnChk(frmContrl){
                                 </digi:trn>
                               </c:set>
                               <c:set var="message">
-                                <digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-                              </c:set>
-                              <digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot1('${message}')" title="${trans}">
+<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+</c:set>
+<c:set var="quote">'</c:set>
+<c:set var="escapedQuote">\'</c:set>
+<c:set var="msg">
+${fn:replace(message,quote,escapedQuote)}
+</c:set>
+                              <digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot1('${msg}')" title="${trans}">
 
                                 <digi:trn key="aim:portfolio">
                                 Portfolio

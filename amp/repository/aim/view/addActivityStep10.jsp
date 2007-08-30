@@ -9,6 +9,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -170,10 +171,19 @@
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
 								<c:if test="${aimEditActivityForm.pageId == 1}">
-										<c:set var="message">
-										<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-									</c:set>
-									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot1('${message}')"
+
+
+
+<c:set var="message">
+<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+</c:set>
+<c:set var="quote">'</c:set>
+<c:set var="escapedQuote">\'</c:set>
+<c:set var="msg">
+${fn:replace(message,quote,escapedQuote)}
+</c:set>
+
+									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot1('${msg}')"
 									title="Click here to view MyDesktop ">
 										<digi:trn key="aim:portfolio">
 											Portfolio
@@ -341,7 +351,7 @@
 														</bean:define>
 														<digi:trn key="<%=indName%>"><%=indName%></digi:trn></b> -
 													</field:display>
-													
+
 													<field:display name="Indicator ID" feature="M & E">
 														<bean:write name="indicator" property="indicatorCode" />
 													</field:display>

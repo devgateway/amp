@@ -1,4 +1,4 @@
-START TRANSACTION;
+
 INSERT INTO amp_category_class(category_name,is_multiselect,is_ordered, keyName) 
 	VALUES('Financing Instrument', b'0', b'0', 'financing_instrument');
 
@@ -41,4 +41,3 @@ where eu.id=euc.eu_activity_id and euc.amount_currency=c.amp_currency_id and acv
 acv_mod.id = euc.financing_instrument_id and o.amp_org_id=euc.donor_id 
 order by amp_activity_id; 
 
-COMMIT;

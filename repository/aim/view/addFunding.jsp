@@ -20,13 +20,20 @@
 
 	<!--
 
-	function useFixedRateClicked(field1,field2) {
+	function useFixedRateClicked(field1,el) {
 		var fld1 = document.getElementById(field1);
-		var fld2 = document.getElementById(field2);
+		var useList = document.getElementsByName(el.name);
 		if (fld1.disabled == true) {
 			fld1.disabled = false;
 		} else {
 			fld1.disabled = true;
+			
+		}
+
+		for (var i=0;i<useList.length;i++){
+			if (useList[i].tagName=='INPUT' && useList[i].type=="hidden"){
+				useList[i].value=el.checked;
+			}
 		}
 	}
 
@@ -345,6 +352,7 @@
 													String jsUrl = "useFixedRateClicked('" + exchRatefldId + "')";
 												%>
 												<html:checkbox name="fundingDetail" indexed="true" property="useFixedRate" onclick="<%=jsUrl%>"/>
+												<html:hidden name="fundingDetail" property="useFixedRate" indexed="true"/>
 											</td>
 											<td colspan="4">
 
@@ -437,10 +445,10 @@
 											<td align="right">
 												<% String exchRatefldId = "exchFld"+ (t++);
 													String exchCurrfldId = "exchCurr"+ (t++);
-													String jsUrl = "useFixedRateClicked('" + exchRatefldId + "')";
+													String jsUrl = "useFixedRateClicked('" + exchRatefldId + "',this)";
 												%>
-												<html:checkbox name="fundingDetail" indexed="true" property="useFixedRate"
-												onclick="<%=jsUrl%>"/>
+												<html:checkbox name="fundingDetail" indexed="true" property="useFixedRate" onclick="<%=jsUrl%>"/>
+												<html:hidden name="fundingDetail" property="useFixedRate" indexed="true"/>
 											</td>
 											<td colspan="4">
 												<logic:equal name="fundingDetail" property="useFixedRate" value="true">

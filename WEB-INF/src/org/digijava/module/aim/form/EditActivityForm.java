@@ -5,14 +5,24 @@
 
 package org.digijava.module.aim.form;
 
-import java.io.*;
-import java.util.*;
-import javax.servlet.http.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.TreeSet;
 
-import org.apache.struts.action.*;
-import org.apache.struts.upload.*;
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.helper.*;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.upload.FormFile;
+import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.OrgProjectId;
 
 public class EditActivityForm extends ActionForm implements Serializable{
 

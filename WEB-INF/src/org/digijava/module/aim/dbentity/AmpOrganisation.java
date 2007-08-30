@@ -48,6 +48,7 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable
 
 	//Pledges
 	private Set fundingDetails;
+	
 	//
 	public Set getSectors() {
 		return sectors;

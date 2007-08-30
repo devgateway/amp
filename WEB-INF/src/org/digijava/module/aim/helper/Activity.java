@@ -801,29 +801,8 @@ public class Activity
   }
 
   public void setFinancialInstrument(Integer financialInformation) {
-    this.financialInstrument = financialInformation;
-    switch (financialInformation.intValue()) {
-      case 1: {
-        this.setFinancialInstrumentString("GBS");
-        break;
-      }
-      case 2: {
-        this.setFinancialInstrumentString("SBS");
-        break;
-      }
-      case 3: {
-        this.setFinancialInstrumentString("Basket");
-        break;
-      }
-      case 4: {
-        this.setFinancialInstrumentString("DPS on Budget");
-        break;
-      }
-      case -1: {
-        this.setFinancialInstrumentString("");
-        break;
-      }
-    }
+    //TODO  - replace using the category manager 
+	this.financialInstrument=financialInformation;  
   }
 
   public String getFY() {

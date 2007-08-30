@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date ; 
 import java.util.Set ; 
 import org.digijava.module.aim.dbentity.AmpOrganisation ;
@@ -32,6 +33,15 @@ public class AmpFunding implements Serializable
 //	private AmpTermsAssist ampTermsAssistId ;
 	private AmpCategoryValue typeOfAssistance;
 	private Set closingDateHistory;
+	
+	/*
+	 * tanzania adds funding amp-1707
+	 */
+	private Boolean active;
+	private Boolean delegatedCooperation;
+	private Boolean delegatedPartner;
+	
+	private ArrayList <Boolean>activeList;
 	
 	private AmpModality modalityId;
 	
@@ -337,6 +347,38 @@ public class AmpFunding implements Serializable
 
 	public void setTypeOfAssistance(AmpCategoryValue typeOfAssistence) {
 		this.typeOfAssistance = typeOfAssistence;
+	}
+
+	public Boolean getActive() {
+		return active;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
+	public Boolean getDelegatedCooperation() {
+		return delegatedCooperation;
+	}
+
+	public void setDelegatedCooperation(Boolean delegatedCooperation) {
+		this.delegatedCooperation = delegatedCooperation;
+	}
+
+	public Boolean getDelegatedPartner() {
+		return delegatedPartner;
+	}
+
+	public void setDelegatedPartner(Boolean delegatedPartner) {
+		this.delegatedPartner = delegatedPartner;
+	}
+
+	public ArrayList<Boolean> getActiveList() {
+		return activeList;
+	}
+
+	public void setActiveList(ArrayList<Boolean> activeList) {
+		this.activeList = activeList;
 	}
 	
 	

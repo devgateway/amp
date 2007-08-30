@@ -92,6 +92,13 @@ public class AddAmpActivity
     //return mapping.findForward("publicPreview");
 
     EditActivityForm eaForm = (EditActivityForm) form;
+    
+    // set Globam Settings Multi-Sector Selecting
+    String multiSectorSelect = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.
+    		GLOBALSETTINGS_MULTISECTORSELECT);
+    eaForm.setMultiSectorSelecting(multiSectorSelect);    
+    //
+    
     // Add sectors
     if (request.getParameter("addSector") != null) {
       ActivitySector sect = (ActivitySector) session.getAttribute(
@@ -110,14 +117,14 @@ public class AddAmpActivity
       }
 
 
-      String view = FeaturesUtil.getGlobalSettingValue(
+      /*String view = FeaturesUtil.getGlobalSettingValue(
           "Allow Multiple Sectors");
       if (view.equalsIgnoreCase("On")) {
         sect.setCount(1);
       }
       else {
         sect.setCount(2);
-      }
+      }*/
 
       eaForm.setActivitySectors(prevSelSectors);
       return mapping.findForward("addActivityStep2");

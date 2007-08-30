@@ -66,6 +66,7 @@ private int isPreview=0;
 	private String disbursementsDate;
 	private String proposedCompDate;
 	private Collection activityCloseDates;
+	private String multiSectorSelecting;
 
 	private String currentValDate;
 	private String currentValComments;
@@ -4111,4 +4112,12 @@ public String getPurpose() {
   public void setIsPreview(int isPreview) {
     this.isPreview = isPreview;
   }
+
+public String getMultiSectorSelecting() {
+	return multiSectorSelecting;
+}
+
+public void setMultiSectorSelecting(String multiSectorSelecting) {
+	this.multiSectorSelecting = multiSectorSelecting;
+}
 }

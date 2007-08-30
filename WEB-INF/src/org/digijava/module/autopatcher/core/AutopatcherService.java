@@ -3,6 +3,7 @@ package org.digijava.module.autopatcher.core;
 import java.io.File;
 import java.io.FileReader;
 import java.io.LineNumberReader;
+import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -73,8 +74,16 @@ public class AutopatcherService extends AbstractServiceImpl {
 							
 				StringTokenizer stok=new StringTokenizer(sb.toString(),";");
 				logger.info("Executing sql commands: "+sb.toString());
+				
+				
 				Connection connection = PersistenceManager.getSession().connection();
+				connection.setAutoCommit(false);
+				
+				try {				
 				Statement st=connection.createStatement();
+				
+				
+				
 
 				while(stok.hasMoreTokens()) {
 					
@@ -87,8 +96,21 @@ public class AutopatcherService extends AbstractServiceImpl {
 				}
 
 				st.executeBatch();
-				
+				connection.commit();
 				st.close();
+				
+				}
+				
+				catch (BatchUpdateException e) {
+					e.printStackTrace();
+					logger.error(e);
+					connection.rollback();
+					
+				} finally {
+					connection.close();
+				}
+				
+				
 
 				PatchFile pf=new PatchFile();
 				pf.setAbsolutePatchName(localPatchPath);

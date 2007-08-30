@@ -129,10 +129,9 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
     var theCells = null;
 	var marked_row = new Array;
 	var lastClickedCells = null;
-	var firsColor=null
+	var firsColor=null;
 
-
-
+	
     // 1. Pointer and mark feature are disabled or the browser can't get the
     //    row -> exits
     if ((thePointerColor == '' && theMarkColor == '')
@@ -188,10 +187,12 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
 
     // 4. Defines the new color
     // 4.1 Current color is the default one
+	//alert("Current="+currentColor+" Default="+ theDefaultColor);
     if (currentColor == ''
         || currentColor.toLowerCase() == theDefaultColor.toLowerCase()) {
         if (theAction == 'over' && thePointerColor != '') {
             newColor              = thePointerColor;
+            //alert("New = "+ newColor);
         }
         else if (theAction == 'click' && theMarkColor != '') {
             newColor              = theMarkColor;
@@ -238,15 +239,17 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
         if (domDetect) {
         	if(lastClickedRowNum == -1) firstColor=currentColor;
             for (c = 0; c < rowCellsCnt; c++) {
+            	//alert("Set2 color = " + newColor);
                 theCells[c].setAttribute('bgcolor', newColor, 0);
                  if (lastClickedRow != -1&&lastClickedCells!=null)
                  	{
                  		if(lastClickedRowNum==-1){
                                 lastClickedCells[c].setAttribute('bgcolor', firstColor, 0);
                                 }
-                 		else {
-                                lastClickedCells[c].setAttribute('bgcolor', lastClickedRowNum%2==0?"#FFFFFF":"DDDDDD", 0);
-                                }
+                 		//else {
+                 		//		alert("PLM2");
+                 		//	    lastClickedCells[c].setAttribute('bgcolor', lastClickedRowNum%2==0?"#eeeeee":"#dddddd", 0);
+                        //       }
                  	} // theDefaultColor
                  lastClickedRow=theRow;
             } // end for

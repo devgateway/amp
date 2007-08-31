@@ -31,14 +31,16 @@ import org.digijava.module.aim.util.FeaturesUtil;
  *
  */
 public class GetDesktopActivities extends Action {
-	
+
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
-		
+
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		DesktopForm dForm = (DesktopForm) form;
-		
+		if(session.getAttribute(Constants.DEFAULT_TEAM_REPORT)==null){
+                  session.setAttribute("filterCurrentReport",null);
+                }
 		session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
 		String risk=(String) request.getParameter("risk");
 		AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
@@ -66,7 +68,7 @@ public class GetDesktopActivities extends Action {
 				session.setAttribute(ArConstants.REPORTS_FILTER, arf);
 			}
 		}
-		
+
 		if (Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||
 				"Donor".equalsIgnoreCase(tm.getTeamType())) {
 			dForm.setShowAddActivityLink(false);
@@ -76,11 +78,11 @@ public class GetDesktopActivities extends Action {
 		dForm.setTeamId(tm.getTeamId());
 		dForm.setTeamHead(tm.getTeamHead());
 
-		
+
 		// load activities
 		/*
-		 * The activities of the user is stored in a session scoped varible 'ampProjects' declared in the class 
-		 * org.digijava.module.aim.helper.Constants. 
+		 * The activities of the user is stored in a session scoped varible 'ampProjects' declared in the class
+		 * org.digijava.module.aim.helper.Constants.
 		 */
 		Collection col = (Collection) session.getAttribute(Constants.AMP_PROJECTS);
 		//if (col == null) {
@@ -91,8 +93,8 @@ public class GetDesktopActivities extends Action {
 		dForm.setTotalCalculated(false);
 		dForm.setSearchKey(null);
 		Collection col1 = (Collection) session.getAttribute(Constants.AMP_PROJECTS);
-		dForm.setActivities(new ArrayList(col1));		
-		
+		dForm.setActivities(new ArrayList(col1));
+
 		return mapping.findForward("forward");
 	}
 }

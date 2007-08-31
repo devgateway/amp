@@ -200,7 +200,7 @@ public class SaveActivity extends Action {
 									
 									ampFunding.setActive(fOrg.getFundingActive());
 									ampFunding.setDelegatedCooperation(fOrg.getDelegatedCooperation());
-									ampFunding.setActive(fOrg.getDelegatedPartner());
+									ampFunding.setDelegatedPartner(fOrg.getDelegatedPartner());
 
 									// add funding details for each funding
 									Set fundDeatils = new HashSet();

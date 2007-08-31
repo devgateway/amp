@@ -68,7 +68,10 @@ function edit(key) {
 }
 
 function commentWin(commentId) {
-		openNewWindow(600, 400);
+
+
+		openNewWindowWithName(600,400,commentId);
+
 		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
 		url = "<%=commentUrl %>?comment=" + commentId + "&edit=" + "true";
 		document.aimEditActivityForm.action = url;

@@ -162,6 +162,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 			E.printStackTrace();
 		}
 		
+		this.reset();
 		return EVAL_PAGE;
 	}
 	private void printListView (Collection ampCategoryValues, boolean isMultiselect, Long valueId, Collection valueIdsColl) throws Exception {
@@ -266,6 +267,12 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		else
 			return categoryClass.getisMultiselect();
 	}
+	
+	private void reset () {
+		innerDynamicAttributes	= new StringBuffer(" ");
+		outerDynamicAttributes	= new StringBuffer(" ");
+	}
+	
 	public String getName() {
 		return name;
 	}

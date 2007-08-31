@@ -45,7 +45,10 @@ public class AmpARFilter implements Filter {
 	private Set sectors=null;
 	private Set regions=null;
 	private Set risks=null;
-	private Long ampModalityId=null;
+	
+	private Set financingInstruments=null;
+	//private Long ampModalityId=null;
+	
 	private AmpCurrency currency=null;
 	private Set ampTeams=null;
 	private AmpFiscalCalendar calendarType=null;
@@ -130,7 +133,7 @@ public class AmpARFilter implements Filter {
 		String ORG_FILTER = "SELECT amp_activity_id FROM v_donors WHERE amp_donor_org_id IN ("+Util.toCSString(donors,true)+")";
 		String SECTOR_FILTER="SELECT amp_activity_id FROM v_sectors WHERE amp_sector_id IN ("+Util.toCSString(sectors,true)+")";
 		String REGION_FILTER="SELECT amp_activity_id FROM v_regions WHERE name IN ("+Util.toCSString(regions,true)+")";
-		String FINANCING_INSTR_FILTER="SELECT amp_activity_id FROM v_financing_instrument WHERE amp_modality_id='"+ampModalityId+"'";
+		String FINANCING_INSTR_FILTER="SELECT amp_activity_id FROM v_financing_instrument WHERE amp_modality_id IN ("+Util.toCSString(financingInstruments, false)+")";
 		String LINE_MIN_RANK_FILTER="SELECT amp_activity_id FROM amp_activity WHERE line_min_rank="+lineMinRank;
 		String PLAN_MIN_RANK_FILTER="SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank="+planMinRank;
 		
@@ -156,7 +159,7 @@ public class AmpARFilter implements Filter {
 		if(donors!=null && donors.size()>0) queryAppend(ORG_FILTER);
 		if(sectors!=null && sectors.size()!=0) queryAppend(SECTOR_FILTER);
 		if(regions!=null && regions.size()>0) queryAppend(REGION_FILTER);
-		if(ampModalityId!=null && ampModalityId.intValue()!=0) queryAppend(FINANCING_INSTR_FILTER);
+		if(financingInstruments!=null && financingInstruments.size()>0) queryAppend(FINANCING_INSTR_FILTER);
 		if(risks!=null && risks.size()>0) queryAppend(RISK_FILTER);
 		if(lineMinRank!=null) queryAppend(LINE_MIN_RANK_FILTER);
 		if(planMinRank!=null) queryAppend(PLAN_MIN_RANK_FILTER);
@@ -191,22 +194,15 @@ public class AmpARFilter implements Filter {
 	}
 
 
-	/**
-	 * @return Returns the ampModalityId.
-	 */
-	public Long getAmpModalityId() {
-		return ampModalityId;
+	
+
+	public Set getFinancingInstruments() {
+		return financingInstruments;
 	}
 
-
-	/**
-	 * @param ampModalityId The ampModalityId to set.
-	 */
-	public void setAmpModalityId(Long ampModalityId) {
-		this.ampModalityId = ampModalityId;
+	public void setFinancingInstruments(Set financingInstruments) {
+		this.financingInstruments = financingInstruments;
 	}
-
- 
 
 	/**
 	 * @return Returns the sectors.

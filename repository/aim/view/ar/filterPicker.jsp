@@ -144,6 +144,14 @@
 			</td>
 			
 		</tr>
+		<tr>
+			<td colspan="4"><b><digi:trn key="rep:filer:financingInstrument">Financing Instrument</digi:trn></b></td>
+		</tr>
+		<tr>
+			<td colspan="4">
+			<category:showoptions size="3" outerstyle="width: 400px" styleClass="inp-text" name="aimReportsFilterPickerForm" property="selectedFinancingInstruments" multiselect="true" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>"/>
+			</td>
+		</tr>
 	<logic:notEqual name="widget" value="true" scope="request">
 		<tr>
 			<td colspan="4"><b>Page Size</b></td>

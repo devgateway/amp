@@ -239,6 +239,15 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.getStatuses().add(value);
 		}
 		
+		if(filterForm.getSelectedFinancingInstruments()!=null && filterForm.getSelectedFinancingInstruments().length>0)
+				arf.setFinancingInstruments(new HashSet()); 
+		else 
+			arf.setStatuses(null);
+		
+		for (int i = 0; filterForm.getSelectedFinancingInstruments()!=null && i < filterForm.getSelectedFinancingInstruments().length; i++) {
+			arf.getFinancingInstruments().add( filterForm.getSelectedFinancingInstruments()[i] );
+		}
+		
 		
 	    if(filterForm.getPageSize()!=null)
 	    {

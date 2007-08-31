@@ -197,6 +197,10 @@ public class SaveActivity extends Action {
 									AmpFunding ampFunding = new AmpFunding();
 									ampFunding.setAmpFundingId(new Long(fund
 											.getFundingId()));
+									
+									ampFunding.setActive(fOrg.getFundingActive());
+									ampFunding.setDelegatedCooperation(fOrg.getDelegatedCooperation());
+									ampFunding.setActive(fOrg.getDelegatedPartner());
 
 									// add funding details for each funding
 									Set fundDeatils = new HashSet();
@@ -257,6 +261,7 @@ public class SaveActivity extends Action {
 //												ampFundDet.setRateCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getFixedExchangeCurrCode()));
 											}
 											ampFundDet.setAmpFundingId(ampFunding);
+											
 											if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
 												ampFundDet.setExpCategory(
 														fundDet.getClassification());
@@ -1067,6 +1072,12 @@ public class SaveActivity extends Action {
 							while (itr2.hasNext()) {
 								Funding fund = (Funding) itr2.next();
 								AmpFunding ampFunding = new AmpFunding();
+								
+								
+								ampFunding.setActive(fOrg.getFundingActive());
+								ampFunding.setDelegatedCooperation(fOrg.getDelegatedCooperation());
+								ampFunding.setActive(fOrg.getDelegatedPartner());
+								
 								ampFunding.setAmpDonorOrgId(DbUtil
 										.getOrganisation(fOrg.getAmpOrgId()));
 								ampFunding.setFinancingId(fund

@@ -117,9 +117,25 @@
 	function validateForm() {
 		return true;
 	}
-
+	
+	function indexedCheckboxClick(name)
+	{
+		index1=name.indexOf("[");
+		index2=name.indexOf("]");
+		index=name.substring(index1+1, index2);
+		propertyName=name.substring(index2+2, name.length);
+		hiddenName="fundingOrganization["+index+"]."+propertyName+"String";
+		checkboxName="fundingOrganization["+index+"]."+propertyName;
+		inputHidden=document.getElementsByName(hiddenName);
+		checkboxArray=document.getElementsByName(checkboxName);
+		checkbox=checkboxArray[0];
+		if(checkbox.checked==true )
+		{	inputHidden[0].value="checked";}
+		if(checkbox.checked==false)
+		{	inputHidden[0].value="unchecked";}
+		
+	}
 	-->
-
 </script>
 
 <digi:instance property="aimEditActivityForm" />
@@ -127,6 +143,7 @@
 <html:hidden property="step"/>
 <html:hidden property="orgId"/>
 <html:hidden property="fundingId"/>
+
 
 <input type="hidden" name="prevOrg">
 <input type="hidden" name="edit" value="true">
@@ -404,10 +421,39 @@ ${fn:replace(message,quote,escapedQuote)}
                                                         <tr>
                                                           <td>
                                                           	<field:display name="Organizations Selector" feature="Funding Organizations">
+                                                          	<table>
+                                                          	<tr>
+                                                          		<td colspan="3">
                                                             	<html:multibox property="selFundingOrgs">
 	                                                              <bean:write name="fundingOrganization" property="ampOrgId"/>
 	                                                            </html:multibox>
                                                             <bean:write name="fundingOrganization" property="orgName"/>
+                                                            </td>
+                                                            </tr>
+                                                            <tr>
+                                                            <field:display name="Active Funding Organization" feature="Funding Organizations">
+                                                            <td>
+                          										<html:select property="fundingActive" indexed="true" name="fundingOrganization">
+                          											<html:option value="true">Active</html:option>
+                          											<html:option value="false">Inactive</html:option>                          											
+                          										</html:select> 
+                                                            </td>
+                                                            </field:display>
+                                                            <field:display name="Delegated Cooperation" feature="Funding Organizations">
+                                                            <td>
+                          										
+                          									Delegated Cooperation<html:checkbox name="fundingOrganization" property="delegatedCooperation" indexed="true" onclick="indexedCheckboxClick(this.name);"/>
+                          									<html:hidden name="fundingOrganization" property="delegatedCooperationString" indexed="true"/>
+                                                            </td>
+                                                            </field:display>
+                                                            <field:display name="Delegated Partner" feature="Funding Organizations">
+                                                            <td>
+                          									Delegated Partner<html:checkbox property="delegatedPartner" indexed="true" name="fundingOrganization" onclick="indexedCheckboxClick(this.name);"/>
+                          									<html:hidden name="fundingOrganization" property="delegatedPartnerString" indexed="true"/>
+                          							        </td>
+                                                            </field:display>
+															</tr>
+                                                            </table>
                                                             </field:display>
                                                           </td>
                                                         </tr>

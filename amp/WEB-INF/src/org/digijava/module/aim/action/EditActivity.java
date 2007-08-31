@@ -796,7 +796,8 @@ public class EditActivity
                     actSect.setId(parent.getAmpSectorId());
                     String view = FeaturesUtil.getGlobalSettingValue(
                         "Allow Multiple Sectors");
-                    if (view!=null && view.equalsIgnoreCase("On")) {
+                    if (view!=null)
+                    if (view.equalsIgnoreCase("On")) {
                       actSect.setCount(1);
                     }
                     else {
@@ -827,7 +828,7 @@ public class EditActivity
 
             eaForm.setActivitySectors(activitySectors);
           }
-
+       
           if (activity.getThemeId() != null) {
             eaForm
                 .setProgram(activity.getThemeId()
@@ -840,22 +841,30 @@ public class EditActivity
           double totDisb = 0;
           double totExp = 0;
 
-          ArrayList fundingOrgs = new ArrayList();
-          Iterator fundItr = activity.getFunding().iterator();
-          while (fundItr.hasNext()) {
-            AmpFunding ampFunding = (AmpFunding) fundItr.next();
-            AmpOrganisation org = ampFunding.getAmpDonorOrgId();
-            FundingOrganization fundOrg = new FundingOrganization();
-            fundOrg.setAmpOrgId(org.getAmpOrgId());
-            fundOrg.setOrgName(org.getName());
-            int index = fundingOrgs.indexOf(fundOrg);
-            //logger.info("Getting the index as " + index
-            //	+ " for fundorg " + fundOrg.getOrgName());
-            if (index > -1) {
-              fundOrg = (FundingOrganization) fundingOrgs
-                  .get(index);
-            }
 
+
+                    ArrayList fundingOrgs = new ArrayList();
+                    Iterator fundItr = activity.getFunding().iterator();
+                    while(fundItr.hasNext()) {
+                        AmpFunding ampFunding = (AmpFunding) fundItr.next();
+                        AmpOrganisation org = ampFunding.getAmpDonorOrgId();
+                        FundingOrganization fundOrg = new FundingOrganization();
+                        fundOrg.setAmpOrgId(org.getAmpOrgId());
+                        fundOrg.setOrgName(org.getName());
+                        
+                        fundOrg.setFundingActive(ampFunding.getActive());
+                        fundOrg.setDelegatedCooperation(ampFunding.getDelegatedCooperation());
+                        fundOrg.setDelegatedPartner(ampFunding.getDelegatedPartner());
+                        
+                        int index = fundingOrgs.indexOf(fundOrg);
+                        //logger.info("Getting the index as " + index
+                        //	+ " for fundorg " + fundOrg.getOrgName());
+                        if(index > -1) {
+                            fundOrg = (FundingOrganization) fundingOrgs
+                                .get(index);
+                        }
+
+                      
             Funding fund = new Funding();
             //fund.setAmpTermsAssist(ampFunding.getAmpTermsAssistId());
             fund.setTypeOfAssistance(ampFunding.getTypeOfAssistance());

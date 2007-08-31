@@ -83,6 +83,7 @@ public class QuarterlyInfoWorker {
 				Date transactionDate = (Date) row[1];
 				// modified by priyajith
 				AmpCurrency curr = (AmpCurrency) row[2];
+				Double fixedRate=(row[3]!=null && ((Double)row[3]).doubleValue()!=1)? (Double)row[3]:null;
 		//		fromCurrency = CurrencyUtil.getExchangeRate(curr.getCurrencyCode());
 				//end
 				fromCurrency = CurrencyUtil.getExchangeRate(curr.getCurrencyCode(),Constants.PLANNED,transactionDate);
@@ -91,13 +92,18 @@ public class QuarterlyInfoWorker {
 				double tmpAmt = 0.0;
 				if (transactionAmount != null)
 					tmpAmt = transactionAmount.doubleValue();
-				String strAmt = CurrencyWorker.convert(tmpAmt, fromCurrency,
-						targetCurrency);
+				
+				if (fixedRate!=null && fixedRate.doubleValue()!=1
+						&& selCurrency !=null 
+						&& selCurrency.trim().equals("USD")){
+					fromCurrency=fixedRate.doubleValue();
+				}
+				
+				String strAmt = CurrencyWorker.convert(tmpAmt, fromCurrency,targetCurrency);
 				quarterlyInfo.setPlannedAmount(strAmt);
 				String strDate = DateConversion.ConvertDateToString(transactionDate);
 				quarterlyInfo.setDateDisbursed(strDate);
-				FiscalDO fdo = FiscalCalendarWorker.getFiscalYrQtr(
-						transactionDate, fp.getFiscalCalId());
+				FiscalDO fdo = FiscalCalendarWorker.getFiscalYrQtr(transactionDate, fp.getFiscalCalId());
 				quarterlyInfo.setFiscalYear(fdo.getFiscalYear());
 				quarterlyInfo.setFiscalQuarter(fdo.getFiscalQuarter());
 				quarterlyInfo.setAggregate(1);
@@ -111,6 +117,7 @@ public class QuarterlyInfoWorker {
 				fp.getTransactionType(), Constants.ACTUAL);
 		
 		if (arrayList.size() > 0 || c1.size() > 0) {
+			//here it is !!!!!
 			arrayList1 = merge(arrayList, c1, fromCurrency, selCurrency,fp.getFiscalCalId());
 			if (fp.getFiscalCalId().longValue() == Constants.ETH_CAL.longValue()
 					|| fp.getFiscalCalId().longValue() == Constants.ETH_FY.longValue()) {
@@ -151,12 +158,20 @@ public class QuarterlyInfoWorker {
 			Date transactionDate = (Date) row[1];
 			// modified by priyajith
 			AmpCurrency curr = (AmpCurrency) row[2];
+			Double fixedRate=(Double) row[3];
 			fromCurrency = CurrencyUtil.getExchangeRate(curr.getCurrencyCode(),Constants.ACTUAL,transactionDate);
 			double targetCurrency = CurrencyUtil.getExchangeRate(selCurrency,Constants.ACTUAL,transactionDate);	
 			//end			
 			double tmpAmt = 0.0;
 			if (transactionAmount != null)
 				tmpAmt = transactionAmount.doubleValue();
+			
+			if (fixedRate!=null && fixedRate.doubleValue()!=1
+					&& selCurrency !=null 
+					&& selCurrency.trim().equals("USD")){
+				fromCurrency=fixedRate.doubleValue();
+			}
+			
 			String strAmt = CurrencyWorker.convert(tmpAmt, fromCurrency,
 					targetCurrency);
 			String strDate = DateConversion

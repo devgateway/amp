@@ -30,11 +30,12 @@ public class CurrencyWorker {
 		} else {
 			resultDbl = amt;
 		}
-		//resultStr = mf.format(Math.round(resultDbl));
 		//*** fix for AMP-1755
 		String inputString = String.valueOf(resultDbl);
 		resultStr = CurrencyWorker.formatAmount(inputString);
 		//***
+		//I am sorry but this is fix of AMP-1821 !
+//		resultStr = mf.format(Math.round(resultDbl));
 		
 		if (logger.isDebugEnabled())
 			logger.debug("convert returns=" + resultStr);

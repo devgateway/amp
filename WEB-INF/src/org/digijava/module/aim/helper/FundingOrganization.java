@@ -13,8 +13,11 @@ public class FundingOrganization implements Comparable{
 	private Collection fundings;
 	private String currentOrganization;
 	Boolean fundingActive;
+	String fundingActiveString;
 	Boolean delegatedCooperation;
+	String delegatedCooperationString;
 	Boolean delegatedPartner;
+	String delegatedPartnerString;
 	
 	public Long getAmpOrgId() {
 		return ampOrgId;
@@ -83,5 +86,29 @@ public class FundingOrganization implements Comparable{
 
 	public void setFundingActive(Boolean fundingActive) {
 		this.fundingActive = fundingActive;
+	}
+
+	public String getDelegatedCooperationString() {
+		return delegatedCooperationString;
+	}
+
+	public void setDelegatedCooperationString(String delegatedCooperationString) {
+		this.delegatedCooperationString = delegatedCooperationString;
+	}
+
+	public String getDelegatedPartnerString() {
+		return delegatedPartnerString;
+	}
+
+	public void setDelegatedPartnerString(String delegatedPartnerString) {
+		this.delegatedPartnerString = delegatedPartnerString;
+	}
+
+	public String getFundingActiveString() {
+		return fundingActiveString;
+	}
+
+	public void setFundingActiveString(String fundingActiveString) {
+		this.fundingActiveString = fundingActiveString;
 	}
 }

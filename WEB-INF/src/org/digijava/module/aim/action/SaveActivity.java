@@ -198,6 +198,7 @@ public class SaveActivity extends Action {
 									ampFunding.setAmpFundingId(new Long(fund
 											.getFundingId()));
 									
+									
 									ampFunding.setActive(fOrg.getFundingActive());
 									ampFunding.setDelegatedCooperation(fOrg.getDelegatedCooperation());
 									ampFunding.setDelegatedPartner(fOrg.getDelegatedPartner());
@@ -1075,8 +1076,14 @@ public class SaveActivity extends Action {
 								
 								
 								ampFunding.setActive(fOrg.getFundingActive());
-								ampFunding.setDelegatedCooperation(fOrg.getDelegatedCooperation());
-								ampFunding.setActive(fOrg.getDelegatedPartner());
+								if("unchecked".equals(fOrg.getDelegatedCooperationString()) || fOrg.getDelegatedCooperation()==null)
+									ampFunding.setDelegatedCooperation(false);
+								else 
+									ampFunding.setDelegatedCooperation(true);
+								if("unchecked".equals(fOrg.getDelegatedPartnerString()) || fOrg.getDelegatedPartner()==null)
+									ampFunding.setDelegatedPartner(false);
+								else 
+									ampFunding.setDelegatedPartner(true);
 								
 								ampFunding.setAmpDonorOrgId(DbUtil
 										.getOrganisation(fOrg.getAmpOrgId()));

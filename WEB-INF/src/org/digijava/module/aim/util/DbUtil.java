@@ -1047,7 +1047,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = new String();
             queryString = "select f.transactionAmount,"
-                + "f.transactionDate,f.ampCurrencyId from "
+                + "f.transactionDate,f.ampCurrencyId, f.fixedExchangeRate from "
                 + AmpFundingDetail.class.getName()
                 + " f where (f.ampFundingId=:ampFundingId) "
                 + " and (f.orgRoleCode=:perspective) "

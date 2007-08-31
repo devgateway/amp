@@ -796,7 +796,7 @@ public class EditActivity
                     actSect.setId(parent.getAmpSectorId());
                     String view = FeaturesUtil.getGlobalSettingValue(
                         "Allow Multiple Sectors");
-                    if (view.equalsIgnoreCase("On")) {
+                    if (view!=null && view.equalsIgnoreCase("On")) {
                       actSect.setCount(1);
                     }
                     else {

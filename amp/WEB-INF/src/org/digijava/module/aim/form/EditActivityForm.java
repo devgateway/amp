@@ -17,7 +17,7 @@ import org.digijava.module.aim.helper.*;
 public class EditActivityForm extends ActionForm implements Serializable{
 
 private int isPreview=0;
-  private Long activityId = null;
+	private Long activityId = null;
 	private String ampId = null;
 	private String title = null;
 	private String description = null;
@@ -400,11 +400,8 @@ private int isPreview=0;
 
 	 private Boolean governmentApprovalProcedures;
 	 private Boolean jointCriteria;
-
-	 private ArrayList <Boolean>fundingActives;
-	 private ArrayList <Boolean>delegatedCooperations;
-	 private ArrayList <Boolean>delegatedPartners;
-
+	 
+	 
 	public Boolean getGovernmentApprovalProcedures() {
 		return governmentApprovalProcedures;
 	}
@@ -931,8 +928,14 @@ private int isPreview=0;
 	/**
 	 * @return Returns the fundingOrganizations.
 	 */
-	public Collection getFundingOrganizations() {
-		return fundingOrganizations;
+	public FundingOrganization getFundingOrganization(int index) {
+		int currentSize = fundingOrganizations.size();
+		if (index >= currentSize) {
+			for (int i = 0; i <= index - currentSize; i++) {
+				fundingOrganizations.add(new FundingOrganization());
+			}
+		}
+		return (FundingOrganization) ((ArrayList)fundingOrganizations).get(index);
 	}
 
 	/**
@@ -4077,44 +4080,27 @@ public String getPurpose() {
 		this.budgetCheckbox = budgetCheckbox;
 	}
 
-	public ArrayList<Boolean> getFundingActives() {
-		return fundingActives;
-	}
-
-	public void setFundingActives(ArrayList<Boolean> fundingActives) {
-		this.fundingActives = fundingActives;
-	}
-
-	public ArrayList<Boolean> getDelegatedCooperations() {
-		return delegatedCooperations;
-	}
-
-	public void setDelegatedCooperations(ArrayList<Boolean> delegatedCooperations) {
-		this.delegatedCooperations = delegatedCooperations;
-	}
-
-	public ArrayList<Boolean> getDelegatedPartners() {
-		return delegatedPartners;
-	}
-
-  public int getIsPreview() {
-    return isPreview;
-  }
-
-  public void setDelegatedPartners(ArrayList<Boolean> delegatedPartners) {
-		this.delegatedPartners = delegatedPartners;
-	}
-
+	
 	public void setCreatedBy(AmpTeamMember createdBy) {
     this.createdBy = createdBy;
   }
 
-  public void setIsPreview(int isPreview) {
+	public Collection getFundingOrganizations() {
+		return fundingOrganizations;
+	}
+	
+	public int getIsPreview() {
+    return isPreview;
+  }
+  
+   public void setIsPreview(int isPreview) {
     this.isPreview = isPreview;
   }
-
-public String getMultiSectorSelecting() {
+	
+	
+	public String getMultiSectorSelecting() {
 	return multiSectorSelecting;
+}
 }
 
 public void setMultiSectorSelecting(String multiSectorSelecting) {

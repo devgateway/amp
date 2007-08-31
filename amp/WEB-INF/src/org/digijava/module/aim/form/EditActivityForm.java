@@ -4101,9 +4101,13 @@ public String getPurpose() {
 	public String getMultiSectorSelecting() {
 	return multiSectorSelecting;
 }
+
+	public void setMultiSectorSelecting(String multiSectorSelecting) {
+		this.multiSectorSelecting = multiSectorSelecting;
+	}
+
+
+
 }
 
-public void setMultiSectorSelecting(String multiSectorSelecting) {
-	this.multiSectorSelecting = multiSectorSelecting;
-}
-}
+

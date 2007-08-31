@@ -21,19 +21,19 @@ function load() {
 function test(callerId) {
 		caller = document.getElementById(callerId);
 		inputs = caller.getElementsByTagName('input');
-		for(i=1 ; i< inputs.length; i++){ 
+		for(i=1 ; i< inputs.length; i++){
 			;//alert(inputs[i].id.indexOf("moduleEdit"));
 		}
-		
+
 }
 
 function toggleChildrenEdit(callerId) {
 		caller = document.getElementById(callerId);
 		inputs = caller.getElementsByTagName('input');
 		var found=0;
-		for(i=1 ; i< inputs.length; i++){ 
+		for(i=1 ; i< inputs.length; i++){
 			if(inputs[i].type!="checkbox") continue;
-			if(inputs[i].id.indexOf("moduleEdit")==0 || 
+			if(inputs[i].id.indexOf("moduleEdit")==0 ||
 			inputs[i].id.indexOf("featureEdit")==0 ||
 			inputs[i].id.indexOf("fieldEdit")==0)
 			{
@@ -43,15 +43,15 @@ function toggleChildrenEdit(callerId) {
 					inputaux=inputs[i];
 				}
 			}
-			
-			if(inputs[i].id.indexOf("moduleEdit")==0 || 
+
+			if(inputs[i].id.indexOf("moduleEdit")==0 ||
 			inputs[i].id.indexOf("featureEdit")==0 ||
 			inputs[i].id.indexOf("fieldEdit")==0)
 			 {
 			 	inputs[i].checked=inputaux.checked;
 			 }
 		}
-		
+
 }
 
 function toggleChildrenVisibility(callerId) {
@@ -60,17 +60,17 @@ function toggleChildrenVisibility(callerId) {
 		caller = document.getElementById(callerId);
 	//	alert("caller-"+caller);
 		inputs = caller.getElementsByTagName('input');
-		for(i=1 ; i< inputs.length; i++){ 
+		for(i=1 ; i< inputs.length; i++){
 			if(inputs[i].type!="checkbox") continue;
-			if(inputs[i].id.indexOf("moduleEdit")==0 || 
+			if(inputs[i].id.indexOf("moduleEdit")==0 ||
 			inputs[i].id.indexOf("featureEdit")==0 ||
 			inputs[i].id.indexOf("fieldEdit")==0 ||
 			inputs[i].id.indexOf("moduleMandatory")==0 ||
 			inputs[i].id.indexOf("featureMandatory")==0 ||
 			inputs[i].id.indexOf("fieldMandatory")==0) continue;
-			inputs[i].checked=inputs[0].checked;			
+			inputs[i].checked=inputs[0].checked;
 		}
-		
+
 }
 
 
@@ -78,9 +78,9 @@ function toggleChildrenMandatory(callerId) {
 		caller = document.getElementById(callerId);
 		inputs = caller.getElementsByTagName('input');
 		var found=0;
-		for(i=1 ; i< inputs.length; i++){ 
+		for(i=1 ; i< inputs.length; i++){
 			if(inputs[i].type!="checkbox") continue;
-			if(inputs[i].id.indexOf("moduleMandatory")==0 || 
+			if(inputs[i].id.indexOf("moduleMandatory")==0 ||
 			inputs[i].id.indexOf("featureMandatory")==0 ||
 			inputs[i].id.indexOf("fieldMandatory")==0)
 			{
@@ -90,15 +90,15 @@ function toggleChildrenMandatory(callerId) {
 					inputaux=inputs[i];
 				}
 			}
-			
-			if(inputs[i].id.indexOf("moduleMandatory")==0 || 
+
+			if(inputs[i].id.indexOf("moduleMandatory")==0 ||
 			inputs[i].id.indexOf("featureMandatory")==0 ||
 			inputs[i].id.indexOf("fieldMandatory")==0)
 			 {
 			 	inputs[i].checked=inputaux.checked;
 			 }
 		}
-		
+
 }
 
 function openURLinWindow(url,wndWidth, wndHeight) {
@@ -146,6 +146,19 @@ function openNewWindow(wndWidth, wndHeight){
 
 	popupPointer = window.open("about:blank", "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=yes");
 }
+
+function openNewWindowWithName(wndWidth, wndHeight, popupName){
+	window.name = "opener" + new Date().getTime();
+	if (wndWidth == null || wndWidth == 0 || wndHeight == null || wndHeight == 0) {
+		wndWidth = window.screen.availWidth/2;
+		wndHeight = window.screen.availHeight/2;
+	}
+	var t = ((screen.width)-wndWidth)/2;
+	var l = ((screen.height)-wndHeight)/2;
+
+	popupPointer = window.open("about:blank",popupName, "height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=yes");
+}
+
 
 function openNewWindowWithMenubar(wndWidth, wndHeight){
 	window.name = "opener" + new Date().getTime();

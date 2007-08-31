@@ -77,7 +77,7 @@
 			<u><digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn></u></a>
 		</logic:notEmpty>
 <a style="cursor:pointer"
-			onclick="displayStaticMessage(document.getElementById('filterPicker-<bean:write name="reportMeta" property="ampReportId"/>').innerHTML,false,400,400);return false">
+			onclick="displayStaticMessage(document.getElementById('filterPicker-<bean:write name="reportMeta" property="ampReportId"/>').innerHTML,false,400,500);return false">
 		<u><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></u> </a></div>
 		</td>
 	</tr>

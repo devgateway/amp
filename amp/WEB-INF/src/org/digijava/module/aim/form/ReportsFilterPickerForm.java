@@ -28,6 +28,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedStatuses;
 	private Object[] selectedDonors;
 	private Object[] selectedRisks;
+	private Object[] selectedFinancingInstruments;;
 	
 	private Long fromYear;
 	private Long toYear;
@@ -80,6 +81,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 			this.selectedRisks = null;
 			this.selectedSectors = null;
 			this.selectedStatuses = null;
+			this.selectedFinancingInstruments = null;
 		}
 	}
 	
@@ -162,6 +164,18 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setSelectedStatuses(Object[] selectedStatuses) {
 		this.selectedStatuses = selectedStatuses;
 	}
+	
+	
+	
+	public Object[] getSelectedFinancingInstruments() {
+		return selectedFinancingInstruments;
+	}
+
+	public void setSelectedFinancingInstruments(
+			Object[] selectedFinancingInstruments) {
+		this.selectedFinancingInstruments = selectedFinancingInstruments;
+	}
+
 	public Long getCurrency() {
 		return currency;
 	}

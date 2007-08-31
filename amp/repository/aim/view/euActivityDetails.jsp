@@ -58,7 +58,7 @@
 		<logic:iterate name="euActivity" property="contributions" id="contribution">
 		<tr><td class="box-border-nopadding">
 				Funding Org:&nbsp;<bean:write name="contribution" property="donor.name" /><br/>
-				Financing Instrument:&nbsp;<bean:write name="contribution" property="financingType.termsAssistName"/><br/>
+				Financing Instrument:&nbsp;<bean:write name="contribution" property="financingTypeCategVal.value"/><br/>
 				Financing Type:&nbsp;<bean:write name="contribution" property="financingInstr.value"/><br/>				
 				Amount:&nbsp;<bean:write name="contribution" property="amount" />&nbsp;<bean:write
 						name="contribution" property="amountCurrency.currencyCode" />

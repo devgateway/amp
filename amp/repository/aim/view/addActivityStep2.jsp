@@ -255,13 +255,13 @@ function fnChk(frmContrl){
       </td>
     </tr>
     <tr>
-      <td width="100%" vAlign="top" align="left">
+      <td width="100%" vAlign="top" align="left" class=r-dotted-lg>
         <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
           <tr>
             <td class=r-dotted-lg width="10">
             &nbsp;
             </td>
-            <td align=left vAlign=top class=r-dotted-lg>
+            <td align=left vAlign=top>
               <table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
                 <tr>
                   <td>
@@ -288,15 +288,14 @@ function fnChk(frmContrl){
                                 </digi:trn>
                               </c:set>
                               <c:set var="message">
-<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-</c:set>
-<c:set var="quote">'</c:set>
-<c:set var="escapedQuote">\'</c:set>
-<c:set var="msg">
-${fn:replace(message,quote,escapedQuote)}
-</c:set>
+								<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
+								</c:set>
+								<c:set var="quote">'</c:set>
+								<c:set var="escapedQuote">\'</c:set>
+								<c:set var="msg">
+									${fn:replace(message,quote,escapedQuote)}
+								</c:set>
                               <digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot1('${msg}')" title="${trans}">
-
                                 <digi:trn key="aim:portfolio">
                                 Portfolio
                                 </digi:trn>
@@ -321,8 +320,8 @@ ${fn:replace(message,quote,escapedQuote)}
                             </digi:link>
                             &nbsp;&gt;&nbsp;
                             <digi:trn	key="aim:addActivityStep2">
-                            Step 2
-</digi:trn>
+                            	Step 2
+							</digi:trn>
                           </span>
                         </td>
                       </tr>
@@ -379,83 +378,97 @@ ${fn:replace(message,quote,escapedQuote)}
                       <tr>
                         <td width="75%" vAlign="top">
                           <table cellPadding=0 cellSpacing=0 width="100%">
-                            <tr>
-                              <td width="100%">
-                                <table cellPadding=0 cellSpacing=0 width="100%" border=0>
-                                  <tr>
-                                    <td width="13" height="20" background="module/aim/images/left-side.gif">
-                                    &nbsp
-                                    </td>
-                                    <td vAlign="center" align="center" class="textalb" height="20" bgcolor="#006699">
-                                      <digi:trn	key="aim:step2of9LocationAndSectors">
-                                      Step 2 of 9: Location | Sectors
-</digi:trn>
-                                    </td>
-                                    <td width="13" height="20" background="module/aim/images/right-side.gif">
-                                    &nbsp
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                            <feature:display name="Location" module="Project ID and Planning">
-                              <tr>
-                                <td width="100%" bgcolor="#f4f4f2">
-                                  <jsp:include page="addActivityStep2Location.jsp"/>
-                                  <!-- Add Location -->
-                                </td>
-                              </tr>
-                            </feature:display>
-                            <tr>
-                              <td>
-                              &nbsp;
-                              </td>
-                            </tr>
-                            <feature:display name="Sectors" module="Project ID and Planning">
-                            &nbsp;
-                            </feature:display>
-                            <jsp:include page="addActivityStep2Sector.jsp"/>
-
-                            <tr>
-                              <td>
-                              &nbsp;
-                              </td>
-                            </tr>
-                            <feature:display name="NPD Programs" module="National Planning Dashboard">
-                              <jsp:include page="addActivityStep2Program.jsp"/>
-                            </feature:display>
-                            <tr>
-                              <td>
-                              &nbsp;
-                              </td>
-                            </tr>
-                            <!--
-                            <tr>
-                              <td bgColor=#f4f4f2 align="center">
-                                <table cellPadding=3>
-                                  <tr>
-                                    <td>
-                                      <html:submit styleClass="dr-menu" property="submitButton" onclick="return gotoStep(1)">
-                                        &lt;&lt; <digi:trn key="btn:back">Back</digi:trn>
-                                      </html:submit>
-                                    </td>
-                                    <td>
-                                      <html:button styleClass="dr-menu" property="submitButton"
-                                      onclick="goNextStep()">
-                                      <digi:trn key="btn:next">Next</digi:trn> &gt;&gt;
-                                      </html:button>
-                                    </td>
-                                    <td>
-                                      <html:reset styleClass="dr-menu"
-                                      property="submitButton" onclick="return resetAll()">
-                                      <digi:trn key="btn:reset">Reset</digi:trn>
-                                      </html:reset>
-                                    </td>
-                                  </tr>
-                                </table>
-                              </td>
-                            </tr>
-                            -->
+                          	<tr>
+                          		<td>
+                          			<table width="100%">
+                          				<tr>
+                          				    <td width="100%">
+				                                <table cellPadding=0 cellSpacing=0 width="100%" border=0>
+				                                  <tr>
+				                                    <td width="13" height="20" background="module/aim/images/left-side.gif">
+				                                    &nbsp
+				                                    </td>
+				                                    <td vAlign="center" align="center" class="textalb" height="20" bgcolor="#006699">
+				                                   		<digi:trn	key="aim:step2of9LocationAndSectors">
+				                                      		Step 2 of 9: Location | Sectors
+														</digi:trn>
+				                                    </td>
+				                                    <td width="13" height="20" background="module/aim/images/right-side.gif">
+				                                    &nbsp
+				                                    </td>
+				                                  </tr>
+			                                	</table>
+			                              </td>	
+			                            </tr>
+			                            <feature:display name="Location" module="Project ID and Planning">
+			                              <tr>
+			                                <td width="100%" bgcolor="#f4f4f2">
+			                                  <jsp:include page="addActivityStep2Location.jsp"/>
+			                                  <!-- Add Location -->
+			                                </td>
+			                              </tr>
+			                            </feature:display>
+			                            <tr>
+			                              <td>
+			                              &nbsp;
+			                              </td>
+			                            </tr>
+			                            <feature:display name="Sectors" module="Project ID and Planning">
+			                            &nbsp;
+			                            </feature:display>
+			                            <jsp:include page="addActivityStep2Sector.jsp"/>
+			
+			                            <tr>
+			                              <td>
+			                              &nbsp;
+			                              </td>
+			                            </tr>
+			                            <feature:display name="NPD Programs" module="National Planning Dashboard">
+			                              <jsp:include page="addActivityStep2Program.jsp"/>
+			                            </feature:display>
+			                            <tr>
+			                              <td>
+			                              &nbsp;
+			                              </td>
+			                            </tr>
+			                            <!--
+			                            <tr>
+			                              <td bgColor=#f4f4f2 align="center">
+			                                <table cellPadding=3>
+			                                  <tr>
+			                                    <td>
+			                                      <html:submit styleClass="dr-menu" property="submitButton" onclick="return gotoStep(1)">
+			                                        &lt;&lt; <digi:trn key="btn:back">Back</digi:trn>
+			                                      </html:submit>
+			                                    </td>
+			                                    <td>
+			                                      <html:button styleClass="dr-menu" property="submitButton"
+			                                      onclick="goNextStep()">
+			                                      <digi:trn key="btn:next">Next</digi:trn> &gt;&gt;
+			                                      </html:button>
+			                                    </td>
+			                                    <td>
+			                                      <html:reset styleClass="dr-menu"
+			                                      property="submitButton" onclick="return resetAll()">
+			                                      <digi:trn key="btn:reset">Reset</digi:trn>
+			                                      </html:reset>
+			                                    </td>
+			                                  </tr>
+			                                </table>
+			                              </td>
+			                            </tr>
+			                            -->
+                          			</table>
+                          		</td>
+                          		<td width="25%" vAlign="top" align="right">
+					              <!-- edit activity form menu -->
+					              <jsp:include page="editActivityMenu.jsp" flush="true" />
+					              <!-- end of activity form menu -->
+				           	 	</td>
+                          	
+                          	</tr>
+                             
+                            
                           </table>
                           <!-- end contents -->
                         </td>
@@ -465,11 +478,7 @@ ${fn:replace(message,quote,escapedQuote)}
                 </tr>
               </table>
             </td>
-            <td width="25%" vAlign="top" align="right">
-              <!-- edit activity form menu -->
-              <jsp:include page="editActivityMenu.jsp" flush="true" />
-              <!-- end of activity form menu -->
-            </td>
+            
           </tr>
         </table>
       </td>
@@ -480,13 +489,5 @@ ${fn:replace(message,quote,escapedQuote)}
       </td>
     </tr>
   </table>
-</td>
-<td width="10">
-&nbsp;
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
+
 </digi:form>

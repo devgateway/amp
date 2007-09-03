@@ -18,6 +18,11 @@
 </script>
 
 <digi:instance property="aimEditActivityForm" />
+							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#f4f4f2">
+                                <tr>
+                                  <td bgColor=#f4f4f2 align="center" vAlign="top"><!-- contents -->
+                                    <table width="95%" bgcolor="#f4f4f2">
+                                    
                                       <tr>
                                         <td>
                                           <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
@@ -27,7 +32,7 @@
                                               Program
                                             </digi:trn>
                                           </b>
-</a>
+										  </a>
                                         </td>
                                       </tr>
                                       <tr>
@@ -113,3 +118,7 @@
                                         </td>
                                       </tr>
 									</field:display>
+								</table>
+							</td>
+						</tr>
+					</table>

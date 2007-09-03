@@ -338,10 +338,7 @@ function deleteFlag(id) {
 
                             <html:option value="-1">--<c:out value="${selCountry}" />--</html:option>
                             <c:forEach var="cn" items="${aimFlagUploaderForm.countries}">
-                              <c:set var="cnName">
-                                <digi:trn key="aim:cn:${cn.name}">${cn.name}</digi:trn>
-                              </c:set>
-                              <html:option value="${cn.id}">${cnName}</html:option>
+                              <html:option value="${cn.id}">${cn.name}</html:option>
                             </c:forEach>
 
                             <%--<html:optionsCollection name="aimFlagUploaderForm" property="countries"	value="id" label="name" />--%>

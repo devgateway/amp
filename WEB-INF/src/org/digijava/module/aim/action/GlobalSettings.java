@@ -34,12 +34,13 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.aim.helper.CountryBean;
 
 public class GlobalSettings extends Action {
 	private static Logger logger 				= Logger.getLogger(GlobalSettings.class);
 	private ActionErrors errors					= new ActionErrors();
-	
-	public ActionForward execute(ActionMapping mapping, ActionForm form, 
+
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
 	HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
 		boolean refreshGlobalSettingsCache			= false;
@@ -52,23 +53,23 @@ public class GlobalSettings extends Action {
 					return mapping.findForward("index");
 				}
 			}
-		
+
 		GlobalSettingsForm gsForm = (GlobalSettingsForm) form;
 		if(request.getParameter("save")!=null){
 			String save = request.getParameter("save");
 			logger.info(" this is the action "+save);
-			
+
 			logger.info(" id is "+gsForm.getGlobalId()+"   name is "+gsForm.getGlobalSettingsName()+ "  value is... "+gsForm.getGsfValue());
 			this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
-			//ActionErrors errors = new ActionErrors(); 
-			refreshGlobalSettingsCache	= true;	
+			//ActionErrors errors = new ActionErrors();
+			refreshGlobalSettingsCache	= true;
 		}
 		Collection col = FeaturesUtil.getGlobalSettings();
 		if (refreshGlobalSettingsCache) {
 			FeaturesUtil.setGlobalSettingsCache(col);
 			FeaturesUtil.logGlobalSettingsCache();
 			org.digijava.module.aim.helper.GlobalSettings globalSettings = (org.digijava.module.aim.helper.GlobalSettings) getServlet().getServletContext().getAttribute(Constants.GLOBAL_SETTINGS);
-	    	globalSettings.setPerspectiveEnabled(FeaturesUtil.isPerspectiveEnabled());			
+	    	globalSettings.setPerspectiveEnabled(FeaturesUtil.isPerspectiveEnabled());
 		}
 		gsForm.setGsfCol(col);
 		Iterator itr = col.iterator();
@@ -78,7 +79,7 @@ public class GlobalSettings extends Action {
 			/**
 			 *  Getting the name of the criteria for possible values:
 			 *  if v_view_name => the values are taken from the specified view
-			 *  if t_type => the value is checked to be of the specified type 
+			 *  if t_type => the value is checked to be of the specified type
 			 */
 			String possibleValuesTable		= ampGS.getGlobalSettingsPossibleValues();
 			Collection possibleValues		= null;
@@ -87,7 +88,7 @@ public class GlobalSettings extends Action {
 				possibleValues				= this.getPossibleValues(possibleValuesTable);
 				possibleValuesDictionary	= new HashMap();
 				Iterator pvIterator			= possibleValues.iterator();
-				
+
 				while (pvIterator.hasNext()) {
 					KeyValue keyValue	= (KeyValue) pvIterator.next();
 					possibleValuesDictionary.put(keyValue.getKey(), keyValue.getValue());
@@ -96,15 +97,15 @@ public class GlobalSettings extends Action {
 			gsForm.setPossibleValues( ampGS.getGlobalSettingsName(), possibleValues );
 			gsForm.setPossibleValuesDictionary( ampGS.getGlobalSettingsName(), possibleValuesDictionary );
 		}
-		Collection countries = FeaturesUtil.getCountryNames();
+		Collection<CountryBean> countries = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
 		gsForm.setCountryNameCol(countries);
-    	
-		
+
+
 		saveErrors(request, errors);
 		return mapping.findForward("viewGS");
 	}
-	
-	
+
+
 	private Collection getPossibleValues(String tableName)
 	{
 		Collection ret 	= new Vector();
@@ -113,7 +114,7 @@ public class GlobalSettings extends Action {
 		Query qry = null;
 		if (tableName == null || tableName.length() == 0)
 			return ret;
-		
+
 		try{
 				session				= PersistenceManager.getSession();
 				Connection	conn	= session.connection();
@@ -123,11 +124,11 @@ public class GlobalSettings extends Action {
 				ResultSet rs		= st.executeQuery(qryStr);
 				//qry.setString (0, tableName);
 				//Iterator iterator 	= session.iterate(qryStr);
-				
+
 				//Collection coll		= qry.list();
-				//Iterator iterator 	= coll.iterator(); 
+				//Iterator iterator 	= coll.iterator();
 				while (rs.next()){
-					
+
 					//logger.info("Values:" + rs.getString(1) + "," + rs.getString(2) );
 					KeyValue keyValue	= new KeyValue( rs.getObject(1)+"", rs.getString(2) );
 					ret.add( keyValue );
@@ -138,7 +139,7 @@ public class GlobalSettings extends Action {
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
 			ex.printStackTrace(System.out);
-		} 
+		}
 		finally {
 			if (session != null) {
 				try {
@@ -150,9 +151,9 @@ public class GlobalSettings extends Action {
 		}
 		return ret;
 	}
-	
+
 	private void  updateGlobalSetting(Long id, String value) {
-		
+
 		Session session 	= null;
 		String qryStr 		= null;
 		Query qry 			= null;
@@ -160,14 +161,14 @@ public class GlobalSettings extends Action {
 		try{
 				session					= PersistenceManager.getSession();
 				tx						= session.beginTransaction();
-				
+
 				qryStr 					= "select gs from "+ AmpGlobalSettings.class.getName() + " gs where gs.globalId = :id " ;
 				qry 					= session.createQuery(qryStr);
 				qry.setLong ("id", id.longValue());
 				AmpGlobalSettings ags	= (AmpGlobalSettings) qry.list().get(0);
-				
+
 				boolean changeValue		= this.testCriterion(ags, value);
-				
+
 				if (changeValue)
 						ags.setGlobalSettingsValue(value);
 				tx.commit();
@@ -183,7 +184,7 @@ public class GlobalSettings extends Action {
 					logger.error("Rollback failed !");
 				}
 			}
-		} 
+		}
 		finally {
 			if (session != null) {
 				try {
@@ -195,7 +196,7 @@ public class GlobalSettings extends Action {
 		}
 	}
 	/**
-	 * 
+	 *
 	 * @param ags the AmpGlobalSettings whos value should be changed
 	 * @param value the new value that should be applied
 	 * @return true if value is of the specified type (as returned by AmpGlobalSettings.getGlobalSettingsPossibleValues() )
@@ -238,8 +239,8 @@ public class GlobalSettings extends Action {
 					return false;
 				}
 			}
-			
+
 		}
 		return true;
-	} 
+	}
 }

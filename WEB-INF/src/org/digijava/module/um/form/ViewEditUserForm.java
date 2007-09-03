@@ -3,6 +3,10 @@ package org.digijava.module.um.form;
 import java.util.*;
 
 import org.apache.struts.action.*;
+import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.helper.CountryBean;
 
 public class ViewEditUserForm
     extends ActionForm {
@@ -17,16 +21,16 @@ public class ViewEditUserForm
   private String mailingAddress;
 
   private Long selectedOrgGroupId;
-  private Collection orgGroups;
+  private Collection<AmpOrgGroup> orgGroups;
 
   private String selectedOrgTypeId;
-  private Collection orgTypes;
+  private Collection<AmpOrgType> orgTypes;
 
   private String selectedOrgName;
-  private Collection orgs;
+  private Collection<AmpOrganisation> orgs;
 
   private String selectedCountryIso;
-  private Collection countries;
+  private Collection<CountryBean> countries;
 
   private String selectedLanguageCode;
   private Collection languages;
@@ -44,7 +48,7 @@ public class ViewEditUserForm
     return contacts;
   }
 
-  public Collection getCountries() {
+  public Collection<CountryBean> getCountries() {
     return countries;
   }
 
@@ -80,15 +84,15 @@ public class ViewEditUserForm
     return name;
   }
 
-  public Collection getOrgGroups() {
+  public Collection<AmpOrgGroup> getOrgGroups() {
     return orgGroups;
   }
 
-  public Collection getOrgs() {
+  public Collection<AmpOrganisation> getOrgs() {
     return orgs;
   }
 
-  public Collection getOrgTypes() {
+  public Collection<AmpOrgType> getOrgTypes() {
     return orgTypes;
   }
 
@@ -157,15 +161,15 @@ public class ViewEditUserForm
     this.selectedCountryIso = selectedCountryIso;
   }
 
-  public void setOrgTypes(Collection orgTypes) {
+  public void setOrgTypes(Collection<AmpOrgType> orgTypes) {
     this.orgTypes = orgTypes;
   }
 
-  public void setOrgs(Collection orgs) {
+  public void setOrgs(Collection<AmpOrganisation> orgs) {
     this.orgs = orgs;
   }
 
-  public void setOrgGroups(Collection orgGroups) {
+  public void setOrgGroups(Collection<AmpOrgGroup> orgGroups) {
     this.orgGroups = orgGroups;
   }
 
@@ -201,7 +205,7 @@ public class ViewEditUserForm
     this.email = email;
   }
 
-  public void setCountries(Collection countries) {
+  public void setCountries(Collection<CountryBean> countries) {
     this.countries = countries;
   }
 

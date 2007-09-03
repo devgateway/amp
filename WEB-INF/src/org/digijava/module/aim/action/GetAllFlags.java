@@ -10,19 +10,24 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.FlagUploaderForm;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.kernel.translator.util.TrnCountry;
+import java.util.Collection;
+import org.digijava.module.aim.helper.CountryBean;
 
 public class GetAllFlags extends Action {
-	
+
 	private static Logger logger = Logger.getLogger(GetAllFlags.class);
-	
+
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
-		
+
 		FlagUploaderForm fuForm = (FlagUploaderForm) form;
 		fuForm.setCntryFlags(FeaturesUtil.getAllCountryFlags());
-		fuForm.setCountries(FeaturesUtil.getAllCountries());
-		
+        Collection<CountryBean> countries = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
+
+		fuForm.setCountries(countries);
+
 		return mapping.findForward("forward");
 	}
-	
+
 }

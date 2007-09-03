@@ -511,6 +511,24 @@ public class FeaturesUtil {
     return col;
   }
 
+  public static Collection<Country> getAllDgCountries() {
+    Session session = null;
+    Collection<Country> col = new ArrayList();
+    String qryStr = null;
+    Query qry = null;
+
+    try {
+      session = PersistenceManager.getRequestDBSession();
+      qryStr = "select c from " + Country.class.getName() +
+          " c order by c.countryName asc";
+      qry = session.createQuery(qryStr);
+      col = qry.list();
+    }catch (Exception ex) {
+      throw new RuntimeException(ex);
+    }
+    return col;
+  }
+
   public static Collection getAllCountryFlags() {
     Session session = null;
     Collection col = new ArrayList();

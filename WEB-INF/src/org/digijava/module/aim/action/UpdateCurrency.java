@@ -29,6 +29,8 @@ import org.digijava.module.aim.form.CurrencyForm;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import java.util.Collection;
+import org.digijava.module.aim.helper.CountryBean;
 
 public class UpdateCurrency extends Action {
 
@@ -87,24 +89,8 @@ public class UpdateCurrency extends Action {
                         }
                         if (crForm.getCountries() == null ||
                                         crForm.getCountries().size() < 1) {
-                                List countries = org.digijava.module.um.util.DbUtil.getCountries();
-                                HashMap countriesMap = new HashMap();
-                                Iterator iterator = TrnUtil.getCountries(
-                                                RequestUtils.getNavigationLanguage(request).getCode())
-                                                .iterator();
-                                while (iterator.hasNext()) {
-                                        TrnCountry item = (TrnCountry) iterator.next();
-                                        countriesMap.put(item.getIso(), item);
-                                }
-                                //sort countries
-                                List sortedCountries = new ArrayList();
-                                iterator = countries.iterator();
-                                while (iterator.hasNext()) {
-                                        Country item = (Country) iterator.next();
-                                        sortedCountries.add(countriesMap.get(item.getIso()));
-                                }
-                                Collections.sort(sortedCountries, TrnUtil.countryNameComparator);
-                                crForm.setCountries(sortedCountries);
+                            Collection<CountryBean> countries = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
+                            crForm.setCountries(countries);
                         }
 
                 } else {

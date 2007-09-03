@@ -147,3 +147,86 @@ background-color: yellow;
 }
 
 </style>
+
+<!-- New DTHML Filters -->
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"> 
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
+
+<div id="myFilter" style="display: none"> 
+        <jsp:include page="/aim/reportsFilterPicker.do" />
+        <!-- 
+		<a href='#' onclick='hideFilter();return false'>
+			<b>
+				<digi:trn key="rep:pop:Close">Close</digi:trn>
+			</b>
+		</a>
+		 -->
+</div> 
+
+<div id="mySorter" style="display: none"> 
+		<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
+        <!-- 
+		<a href='#' onclick='hideSorter();return false'>
+			<b>
+				<digi:trn key="rep:pop:Close">Close</digi:trn>
+			</b>
+		</a>
+		 -->
+</div> 
+
+<script type="text/javascript">
+	var myPanel1 = new YAHOO.widget.Panel("new", { 
+	    fixedcenter: true,  
+	    constraintoviewport: true,  
+	    underlay:"shadow",  
+	    close:true,  
+	    visible:false,  
+	    modal:true,
+	    draggable:true} ); 
+	myPanel1.setHeader("Select filters");
+	myPanel1.setBody("Empty");
+	myPanel1.render(document.body);
+	var element = document.getElementById("myFilter");
+	element.style.display = "inline";
+	myPanel1.setBody(element);
+	
+	var myPanel2 = new YAHOO.widget.Panel("new2", { 
+	    fixedcenter: true,  
+	    constraintoviewport: true,  
+	    underlay:"shadow",  
+	    close:true,  
+	    visible:false,  
+	    modal:true,
+	    draggable:true} ); 
+	myPanel2.setHeader("Please select hierarchy sorter criteria");
+	myPanel2.setBody("Empty");
+	myPanel2.render(document.body);
+	var element2 = document.getElementById("mySorter");
+	element2.style.display = "inline";
+	myPanel2.setBody(element2);
+	
+	function showFilter() {
+		myPanel1.show();
+	}
+	function hideFilter() {
+		myPanel1.hide();
+	}
+	function showSorter() {
+		myPanel2.show();
+	}
+	function hideSorter() {
+		myPanel2.hide();
+	}
+</script>
+<style type="text/css">
+.mask {
+  -moz-opacity: 0.8;
+  opacity:.80;
+  filter: alpha(opacity=80);
+  background-color:#2f2f2f;
+}
+</style>

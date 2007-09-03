@@ -18,12 +18,6 @@
 
 <html:hidden property="ampReportId"/>
 	<table>
-	<tr>
-		<td class=clsTableTitleCol colspan="4" align="center">
-		<digi:trn key="rep:filer:Selectfilters">Select filters</digi:trn>
-		</td>
-	</tr>
-		
 		<tr>
 			<td colspan="4"><b>Keywords</b></td>
 		</tr>

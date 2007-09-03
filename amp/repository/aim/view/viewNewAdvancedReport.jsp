@@ -7,22 +7,24 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
-
-
+<!-- 
 <div style='position:relative;display:none;' id="sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>">
 	
 		<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
 		<br/>
 		<a href='#' onclick='closeMessage();return false'><b><digi:trn key="rep:pop:Close">Close</digi:trn></b></a>
 </div>
-
+ -->
+<!-- 
 <div style='position:relative;display:none;' id="filterPicker-<bean:write name="reportMeta" property="ampReportId"/>">
 		<jsp:include page="/aim/reportsFilterPicker.do" />
-		
 		<br/>
 		<a href='#' onclick='closeMessage();return false'><b><digi:trn key="rep:pop:Close">Close</digi:trn></b></a>
 
 </div>
+ -->
+
+
 
 <div align="center">		
 <table  cellSpacing="0" cellPadding="0" width="99%" border="0" align="center">
@@ -71,14 +73,17 @@
 
 
 	<tr>
-		<td><logic:notEmpty name="reportMeta" property="hierarchies">
-			<div id="menucontainer"><a style="cursor:pointer"
-				onclick="displayStaticMessage(document.getElementById('sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>').innerHTML,false,400,150);return false">
-			<u><digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn></u></a>
-		</logic:notEmpty>
-<a style="cursor:pointer"
-			onclick="displayStaticMessage(document.getElementById('filterPicker-<bean:write name="reportMeta" property="ampReportId"/>').innerHTML,false,400,500);return false">
-		<u><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></u> </a></div>
+		<td>
+		<div id="menucontainer">
+			<logic:notEmpty name="reportMeta" property="hierarchies">
+				<a style="cursor:pointer"
+					onClick="showSorter(); ">
+				<u><digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn></u> </a>
+			</logic:notEmpty>
+			<a style="cursor:pointer"
+				onClick="showFilter(); ">
+			<u><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></u> </a>
+		</div>
 		</td>
 	</tr>
 	<tr>

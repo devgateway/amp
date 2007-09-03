@@ -17,16 +17,19 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.form.AddLocationForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.kernel.translator.util.TrnCountry;
+import java.util.Collection;
+import org.digijava.module.aim.helper.CountryBean;
 
 public class LocationManager extends Action {
 
 	private static Logger logger = Logger.getLogger(LocationManager.class);
-	
+
 		  public ActionForward execute(ActionMapping mapping, ActionForm form,
 								javax.servlet.http.HttpServletRequest request,
 								javax.servlet.http.HttpServletResponse
 								response) throws java.lang.Exception {
-		  	 
+
 			  		HttpSession session = request.getSession();
 		  			 if (session.getAttribute("ampAdmin") == null) {
 		  			    return mapping.findForward("index");
@@ -42,7 +45,7 @@ public class LocationManager extends Action {
 					 boolean edFlag = true;
 					 boolean edLevelFlag = false;
 					 String flag = addForm.getEdFlag();
-					 
+
 					 if ( (flag != null) && flag.equals("yes")) {
 		  			 	edFlag = false;
 		  			 	addForm.setEdFlag(null);
@@ -53,7 +56,7 @@ public class LocationManager extends Action {
 		  			 	addForm.setEdAction(null);
 					 	addForm.setCategoryLevel(null);
 		  			 }
-					 
+
 		  			 if (edFlag) {
 		  			 	if (request.getParameter("start") != null
 		  			 			&& request.getParameter("start").equals("false")) {
@@ -64,14 +67,14 @@ public class LocationManager extends Action {
 		  			 		addForm.reset(mapping, request);
 		  			 		}
 		  			 }
-					 
+
 					 if (level == null || level.trim().length() == 0) {
 					 	if (addForm.getLevel() == null || addForm.getLevel().trim().length() == 0)
 					 		addForm.setLevel("country");
 					 }
 					 else
 					 	addForm.setLevel(level);
-					 
+
 					 if (edFlag || edLevelFlag) {
 					 	if (addForm.getLevel().equals("country") || addForm.getLevel().equals("region")) {
 					 		addForm.setRegionId(new Long(-1));
@@ -93,10 +96,11 @@ public class LocationManager extends Action {
 					 		addForm.setWoreda(null);
 					 		}
 					 }
-					 
+
 					 if (addForm.getLevel().equals("country")) {
 					 			addForm.setImpLevelValue(new Integer(1));
-					 			addForm.setCountry(DbUtil.getAllCountries());
+                                Collection<CountryBean> countries = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
+					 			addForm.setCountry(countries);
 					 } else if (addForm.getLevel().equals("region")) {
 								if (addForm.getCountry() == null) {
 									return mapping.findForward("index");
@@ -121,10 +125,10 @@ public class LocationManager extends Action {
 								else {
 									addForm.setImpLevelValue(new Integer(3));
 									addForm.setZone(LocationUtil.getAllZonesUnderRegion(addForm.getRegionId()));
-									
+
 									if (addForm.getZone().isEmpty()) {
 										// Checking whether this region is currently being referenced by some activity
-										// if yes then 'delete' link is not shown against this region by setting regionFlag='no' 
+										// if yes then 'delete' link is not shown against this region by setting regionFlag='no'
 										AmpLocation ampLoc = LocationUtil.getAmpLocation(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
 								   		if (ampLoc !=null) {
 								   			addForm.setRegionFlag("no");
@@ -146,7 +150,7 @@ public class LocationManager extends Action {
 								else {
 									addForm.setImpLevelValue(new Integer(4));
 									addForm.setWoreda(LocationUtil.getAllWoredasUnderZone(addForm.getZoneId()));
-									
+
 									// Checking whether this zone is currently being referenced by some activity
 									// if yes then 'delete' link is not shown against this zone by setting zoneFlag='no'
 									AmpLocation ampLoc = LocationUtil.getAmpLocation(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
@@ -164,12 +168,12 @@ public class LocationManager extends Action {
 												addForm.setWoredaFlag("yes");
 								   		}
 									}
-										
+
 								}
 					 } else {
 								return mapping.findForward("index");
 					 }
-					 
+
 					 return mapping.findForward("forward");
 			}
 

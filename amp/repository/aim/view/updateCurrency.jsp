@@ -139,10 +139,7 @@ function unload() {
                           <html:option value="-1"><digi:trn key="aim:selectCountry">Select a country</digi:trn></html:option>
                           <c:if test="${!empty aimCurrencyForm.countries}">
                             <c:forEach var="country" items="${aimCurrencyForm.countries}">
-                              <c:set var="trnCountryName">
-                                <digi:trn key="aim:cn:${country.name}">${country.name}</digi:trn>
-                              </c:set>
-                              <html:option value="${country.iso}">${trnCountryName}</html:option>
+                              <html:option value="${country.iso}">${country.name}</html:option>
                             </c:forEach>
                           </c:if>
                         </html:select>

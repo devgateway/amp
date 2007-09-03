@@ -1,4 +1,4 @@
-/** 
+/**
  * AddLocation.java
  * @author Akash Sharma
  * Created on 1/02/2005
@@ -16,8 +16,11 @@ import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.dbentity.AmpWoreda;
 import org.digijava.module.aim.form.AddLocationForm;
 import javax.servlet.http.*;
+import org.digijava.kernel.translator.util.TrnCountry;
+import java.util.Collection;
+import org.digijava.module.aim.helper.CountryBean;
 
-public class AddLocation extends Action 
+public class AddLocation extends Action
 {
   private static Logger logger = Logger.getLogger(AddLocation.class);
 
@@ -27,7 +30,7 @@ public class AddLocation extends Action
 							   HttpServletResponse response) throws java.lang.Exception
   {
 	 AddLocationForm addForm = (AddLocationForm) form;
-	 
+
 	 Long categoryLevel	 = addForm.getCategoryLevel();
 	 String action = addForm.getEdAction();
 	 boolean edFlag = false;
@@ -52,10 +55,10 @@ public class AddLocation extends Action
 	 	Country ctry  = new Country();
 	 	AmpRegion reg = null;
  		AmpZone zon   = null;
- 		
- 		/* If we are adding a location which is not a country we need to get the country 
+
+ 		/* If we are adding a location which is not a country we need to get the country
  		 * from the database to which the respective location will belong
- 		 * If we are adding a country we shouldn't get anything from db. 
+ 		 * If we are adding a country we shouldn't get anything from db.
  		 */
 	 	if (addForm.getCountryId() != null && categoryLevel.longValue() > 0) {
 	 		ctry = DbUtil.getDgCountry(addForm.getCountryId());
@@ -72,8 +75,9 @@ public class AddLocation extends Action
 		 		ctry.setCountryId(new Long(LocationUtil.getDgCountryWithMaxCountryId().intValue() + 1));
 		 		ctry.setMessageLangKey("cn:" + ctry.getIso());
 		 		DbUtil.add(ctry);
-		 		
-		 		addForm.setCountry( DbUtil.getAllCountries() );
+
+                 Collection<CountryBean> countries = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
+                 addForm.setCountry(countries);
 	 		}
 	 		else {
 	 			ActionErrors errors = new  ActionErrors();
@@ -88,7 +92,7 @@ public class AddLocation extends Action
 	 		if(ctry != null) {
 	 			reg.setCountry(ctry);
 	 		}
-	 		if (addForm.getDescription() == null || 
+	 		if (addForm.getDescription() == null ||
 					addForm.getDescription().trim().length() == 0) {
 				reg.setDescription(" 	");}
 			else
@@ -123,13 +127,13 @@ public class AddLocation extends Action
 	 		zon.setName(addForm.getName());
 	 		zon.setZoneCode(addForm.getCode());
 	 		DbUtil.add(zon);
-	 	}		 
+	 	}
 	 	if ( categoryLevel.longValue() == 3 ){ // is woreda
 	 		AmpWoreda w = new AmpWoreda();
 	 		zon = new AmpZone();
 	 		if (addForm.getZoneId() != null) {
 	 			zon = LocationUtil.getAmpZone(addForm.getZoneId());
-	 		}		 	
+	 		}
 	 		if(ctry != null) {
 	 			w.setCountry(ctry);
 	 		}
@@ -244,7 +248,7 @@ public class AddLocation extends Action
 		 		if (addForm.getRegionId() != null) {
 		 			obj = LocationUtil.getAmpRegion(addForm.getRegionId());
 		 		}
-			 	
+
 		 		obj.setGeoCode(addForm.getGeoCode());
 		 		obj.setGsLat(addForm.getGsLat());
 		 		obj.setGsLong(addForm.getGsLong());
@@ -255,7 +259,7 @@ public class AddLocation extends Action
 					obj.setDescription(" ");
 				else
 					obj.setDescription(addForm.getDescription());
-		 
+
 		 		DbUtil.update(obj);
 		 	}
 		 	if ( categoryLevel.longValue() == 2 ){ // is zone
@@ -263,7 +267,7 @@ public class AddLocation extends Action
 		 		if (addForm.getZoneId() != null) {
 		 			obj = LocationUtil.getAmpZone(addForm.getZoneId());
 		 		}
-			 	
+
 		 		obj.setGeoCode(addForm.getGeoCode());
 		 		obj.setGsLat(addForm.getGsLat());
 		 		obj.setGsLong(addForm.getGsLong());
@@ -274,7 +278,7 @@ public class AddLocation extends Action
 					obj.setDescription(" ");
 				else
 					obj.setDescription(addForm.getDescription());
-		 
+
 		 		DbUtil.update(obj);
 		 	}
 		 	if ( categoryLevel.longValue() == 3 ){ // is woreda
@@ -282,7 +286,7 @@ public class AddLocation extends Action
 		 		if (addForm.getWoredaId() != null) {
 		 			obj = LocationUtil.getAmpWoreda(addForm.getWoredaId());
 		 		}
-			 	
+
 		 		obj.setGeoCode(addForm.getGeoCode());
 		 		obj.setGsLat(addForm.getGsLat());
 		 		obj.setGsLong(addForm.getGsLong());
@@ -293,10 +297,10 @@ public class AddLocation extends Action
 					obj.setDescription(" ");
 				else
 					obj.setDescription(addForm.getDescription());
-		 
+
 		 		DbUtil.update(obj);
 		 	}
-		 	
+
 		 	addForm.setEdFlag("yes");
 		 	return mapping.findForward("added");
    	}
@@ -326,7 +330,7 @@ public class AddLocation extends Action
 	 	addForm.setEdFlag("yes");
    		return mapping.findForward("added");
    }
-   		
+
 	return null;
   }
  }

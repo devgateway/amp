@@ -163,10 +163,7 @@ function saveClicked() {
                                     <%if (globalSett.getGlobalSettingsName().trim().equals("Default Country".trim())) { %>
                                     <html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
                                       <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
-                                        <c:set var="globSettings">
-                                          <digi:trn key="aim:cn:${global.key}">${global.value}</digi:trn>
-                                        </c:set>
-                                        <html:option value="${global.key}"> ${globSettings} </html:option>
+                                        <html:option value="${global.key}">${global.value}</html:option>
                                       </logic:iterate>
                                     </html:select>
                                     <%}else { %>

@@ -1,3 +1,4 @@
+
 package org.digijava.module.aim.util;
 
 import java.text.Collator;
@@ -94,6 +95,9 @@ import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.kernel.translator.util.TrnUtil;
+import java.util.*;
+import org.digijava.module.aim.helper.CountryBean;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -1639,7 +1643,7 @@ public class DbUtil {
      * Replaces DbUtil.getAllAssistanceTypes()
      */
     public static Collection<AmpCategoryValue> getAllAssistanceTypesFromCM() {
-    	return 
+    	return
     		CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_NAME, null);
     }
 
@@ -1757,16 +1761,16 @@ public class DbUtil {
         }
         return modality;
     }*/
-    
+
     public static ArrayList<AmpCategoryValue> getAmpModality() {
     	ArrayList<AmpCategoryValue> result	= new ArrayList<AmpCategoryValue> (
     		CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.FINANCING_INSTRUMENT_KEY, true)
     		);
-    	
+
     	return result;
     }
 
-    /** 
+    /**
      * @deprecated Use getAmpStatusFromCM instead which uses the Category Manager
      */
     public static ArrayList getAmpStatus() {
@@ -1794,9 +1798,9 @@ public class DbUtil {
         }
         return status;
     }
-    
+
     public static ArrayList<AmpCategoryValue> getAmpStatusFromCM() {
-    	ArrayList<AmpCategoryValue> result	= 
+    	ArrayList<AmpCategoryValue> result	=
     		new ArrayList<AmpCategoryValue> (
     				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ACTIVITY_STATUS_KEY, true)
     		);
@@ -3810,7 +3814,7 @@ public class DbUtil {
         }
         return col;
     }*/
-    
+
     public static Collection<AmpCategoryValue> getAllFinancingInstruments() {
     	return CategoryManagerUtil.getAmpCategoryValueCollectionByKey(
     				CategoryConstants.FINANCING_INSTRUMENT_KEY, null);
@@ -5626,6 +5630,8 @@ public class DbUtil {
         return col;
     }
 
+
+
     /**
      * Returns LabelValueBean's for all AmpStatus entities.
      * Status code is used as value and Status name as Label.
@@ -5653,27 +5659,77 @@ public class DbUtil {
         }
     }
 
-    public static String getTrnText(String key, String defaultText, HttpServletRequest request) {
-        TranslatorWorker trnWorker = TranslatorWorker.getInstance();
-        org.digijava.kernel.entity.Locale locale=RequestUtils.getNavigationLanguage(request);
+    public static Collection<CountryBean> getTranlatedCountries(HttpServletRequest request) {
+        Session session = null;
+        Collection<CountryBean> trnCnCol = null;
+        Collection msgCol = null;
+        Query qry = null;
+
+        org.digijava.kernel.entity.Locale navLang = RequestUtils.getNavigationLanguage(request);
         Site site=RequestUtils.getSite(request);
+
         try {
-            Message msg = trnWorker.getMessage(key, locale.getCode(),site.getSiteId());
-            if (msg == null) {
-                msg = new Message();
-                msg.setKey(key);
-                msg.setLocale(locale.getCode());
-                msg.setMessage(defaultText);
-                msg.setSiteId(site.getSiteId());
-                trnWorker.save(msg);
-                return defaultText;
-            } else {
-                return msg.getMessage();
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select msg " +
+               " from "+Message.class.getName()+" msg" +
+               " where (msg.key like ('cn:%')) and (msg.siteId=:siteId) and (msg.locale=:locale)";
+
+            qry = session.createQuery(queryString);
+            qry.setParameter("siteId", site.getId(), Hibernate.LONG);
+            qry.setParameter("locale", navLang.getCode(), Hibernate.STRING);
+
+            msgCol = qry.list();
+            if(msgCol!=null && msgCol.size()!=0){
+                trnCnCol = new ArrayList<CountryBean>();
+                for (Iterator msgIter = msgCol.iterator(); msgIter.hasNext(); ) {
+                    Message msg = (Message) msgIter.next();
+                    if(msg!=null){
+                        String cnIso=msg.getKey().substring(3);
+                        if(cnIso!=null && !cnIso.equals("")){
+                            Country cn=getDgCountry(cnIso);
+                            if(cn!=null){
+                                CountryBean trnCn=new CountryBean();
+                                trnCn.setId(cn.getCountryId());
+                                trnCn.setIso(cnIso);
+                                trnCn.setIso3(cn.getIso3());
+                                trnCn.setName(msg.getMessage());
+                                trnCnCol.add(trnCn);
+                            }
+                        }else if(msg.getKey().equalsIgnoreCase("cn:")){
+                            CountryBean trnCn=new CountryBean();
+                            trnCn.setIso(cnIso);
+                            trnCn.setName(msg.getMessage());
+                            trnCnCol.add(trnCn);
+                        }
+                    }
+                }
+            }else{
+                trnCnCol = new ArrayList<CountryBean>();
+                Collection<Country> cnCol=FeaturesUtil.getAllDgCountries();
+                if(cnCol!=null && cnCol.size()!=0){
+                    for (Iterator cnIter = cnCol.iterator(); cnIter.hasNext(); ) {
+                        Country cn = (Country) cnIter.next();
+                        if(cn!=null){
+                            CountryBean trnCn=new CountryBean();
+                            trnCn.setId(cn.getCountryId());
+                            trnCn.setIso(cn.getIso());
+                            trnCn.setIso3(cn.getIso3());
+                            trnCn.setName(cn.getCountryName());
+                            trnCnCol.add(trnCn);
+                        }
+                    }
+                }
             }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-
+        if(trnCnCol!=null && trnCnCol.size()!=0){
+            List<CountryBean> sortedCountrieList = new ArrayList<CountryBean>(trnCnCol);
+            Collections.sort(sortedCountrieList, new HelperTrnCountryNameComparator(navLang.getCode()));
+            return sortedCountrieList;
+        }else{
+            return null;
+        }
     }
 
     public static class HelperUserNameComparator implements Comparator {
@@ -5684,7 +5740,7 @@ public class DbUtil {
         }
     }
 
-    public static class HelperTrnCountryNameComparator implements Comparator<TrnCountry> {
+    public static class HelperTrnCountryNameComparator implements Comparator<CountryBean> {
         Locale locale;
         Collator collator;
 
@@ -5696,7 +5752,7 @@ public class DbUtil {
             this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
         }
 
-        public int compare(TrnCountry o1, TrnCountry o2) {
+        public int compare(CountryBean o1, CountryBean o2) {
             collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
 

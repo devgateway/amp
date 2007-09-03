@@ -12,6 +12,10 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.aim.util.ProgramUtil;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.*;
+import org.apache.log4j.Logger;
 
 /**
  * Returns XML of the tree of programs. Currently used in NPD page. This action
@@ -19,49 +23,58 @@ import org.digijava.module.aim.util.ProgramUtil;
  * objects of TreeItem class which extends HierarchyMember from kernel by adding
  * XML functionality - every item can return its own XML. Complete XML is
  * composed using this parts.
- * 
+ *
  * @author Irakli Kobiashvili - ikobiashvili@picktek.com
  * @see org.digijava.module.aim.helper.TreeItem
  * @see org.digijava.kernel.util.collections.HierarchyMember
- * 
+ *
  */
-public class GetProgramTreeNode extends DispatchAction {
+public class GetProgramTreeNode
+    extends DispatchAction {
+  private static Logger logger = Logger.getLogger(GetProgramTreeNode.class);
 
-	protected ActionForward unspecified(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
-		return doWork(mapping, form, request, response);
-	}
+  protected ActionForward unspecified(ActionMapping mapping, ActionForm form,
+                                      HttpServletRequest request,
+                                      HttpServletResponse response) throws
+      Exception {
+    return doWork(mapping, form, request, response);
+  }
 
-	private ActionForward doWork(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) {
-		response.setContentType("text/xml");
+  private ActionForward doWork(ActionMapping mapping, ActionForm form,
+                               HttpServletRequest request,
+                               HttpServletResponse response) throws Exception {
+    response.setContentType("text/xml");
 
-		ServletOutputStream outputStream = null;
-		try {
-			outputStream = response.getOutputStream();
+    OutputStreamWriter outputStream = null;
+    PrintWriter out = null;
 
-			// get All themes from DB
-			List themes = ProgramUtil.getAllThemes(true);
+    try {
+      outputStream = new OutputStreamWriter(response.
+                                            getOutputStream(), "UTF-8");
+      // get All themes from DB
+      List themes = ProgramUtil.getAllThemes(true);
 
-			// Construct XML tree
-			String xml = ProgramUtil.getThemesHierarchyXML(themes);
+      // Construct XML tree
+      String xml = ProgramUtil.getThemesHierarchyXML(themes);
 
-			// return xml
-			outputStream.write(xml.getBytes());
-			outputStream.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (outputStream != null) {
-				try {
-					outputStream.println("Error retriving tree: "
-							+ e.toString());
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		}
-		return null;
-	}
+      // return xml
+      out = new PrintWriter(outputStream, true);
+
+      out.println(xml);
+
+      out.close();
+
+    }
+    catch (UnsupportedEncodingException ex) {
+      logger.error(ex);
+      throw ex;
+    }
+    catch (IOException ex) {
+      logger.error(ex);
+      throw ex;
+    }
+
+    return null;
+  }
 
 }

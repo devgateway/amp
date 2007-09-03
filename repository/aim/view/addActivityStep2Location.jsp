@@ -20,7 +20,7 @@
 </script>
 
 <digi:instance property="aimEditActivityForm" />
-                              <table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
+                              <table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#f4f4f2">
                                 <tr>
                                   <td bgColor=#f4f4f2 align="center" vAlign="top"><!-- contents -->
                                     <table width="95%" bgcolor="#f4f4f2">
@@ -48,7 +48,7 @@
                                       </tr>
                                       <tr>
                                         <td vAlign="center">
-                                          <table border=0>
+                                          <table width="100%" cellspacing="1" cellpadding="5" bgcolor="#ffffff">
                                           <field:display name="Implementation Level" feature="Location">
                                             <tr>
                                               <td>

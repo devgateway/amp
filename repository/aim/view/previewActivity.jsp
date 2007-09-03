@@ -1160,7 +1160,7 @@ function disable() {
                                                                                 <td><digi:trn key='aim:totalcommittment'>
                                                                                 TOTAL:
                                                                                 </digi:trn></td>
-                                                                                      <TD  colspan="4" align="right"><bean:write name="aimEditActivityForm" property="totalCommitted"/></TD>
+                                                                                      <TD  colspan="4" align="right"><bean:write name="aimEditActivityForm" property="totalCommitted"/>&nbsp;USD</TD>
                                                                                 </tr>
                                                                               </c:if>
                                                                               <tr bgcolor="#ffffff">

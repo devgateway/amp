@@ -1,21 +1,20 @@
 package org.digijava.module.aim.action;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.aim.util.ProgramUtil;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.*;
-import org.apache.log4j.Logger;
 
 /**
  * Returns XML of the tree of programs. Currently used in NPD page. This action

@@ -1,6 +1,8 @@
 package org.digijava.module.aim.action;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,7 +68,7 @@ public class GetActivities extends Action {
 		HttpSession session = request.getSession();
 		TeamMember tm =  (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		ServletOutputStream outputStream = null;
-		outputStream = response.getOutputStream();
+		outputStream =  response.getOutputStream();
 
 		try {
 			Date fromYear = yearToDate(actForm.getStartYear(), false);
@@ -82,8 +84,11 @@ public class GetActivities extends Action {
 			String xml = activities2XML(activities);
 
 			logger.debug("Setting activties XML in the response");
-			outputStream.write(xml.getBytes());
-
+			PrintWriter out = new PrintWriter(outputStream, true);
+			
+			out.println(xml);
+//			outputStream.write(xml.getBytes());
+			out.close();
 			// return xml
 			logger.debug("closing and returning response XML of NPD Activities");
 			outputStream.close();

@@ -6,7 +6,7 @@ SET @counter := -1;
 INSERT INTO amp_category_value(category_value, amp_category_class_id, index_column ) 
 	(SELECT ty.title, acc.id, @counter := @counter + 1 FROM amp_category_class acc, amp_program_type ty WHERE acc.keyName='program_type')
 	UNION
-	(SELECT th.type, acc.id, @counter := @counter + 1 FROM amp_category_class acc, amp_theme th 
+	(SELECT DISTINCT(th.type), acc.id, @counter := @counter + 1 FROM amp_category_class acc, amp_theme th 
 	WHERE acc.keyName='program_type' AND th.type NOT IN 
 		(SELECT category_value FROM amp_category_value) ); 
 

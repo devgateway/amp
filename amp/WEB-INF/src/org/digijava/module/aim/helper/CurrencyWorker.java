@@ -31,15 +31,17 @@ public class CurrencyWorker {
 			resultDbl = amt;
 		}
 		//*** fix for AMP-1755
-		String inputString = String.valueOf(resultDbl);
-		resultStr = CurrencyWorker.formatAmount(inputString);
-		//***
-		//I am sorry but this is fix of AMP-1821 !
+		DecimalFormat format = new DecimalFormat();
+		String inputString= format.format(resultDbl);
+//		String inputString = String.valueOf(resultDbl);
+//		resultStr = CurrencyWorker.formatAmount(inputString);
+		
 //		resultStr = mf.format(Math.round(resultDbl));
 		
 		if (logger.isDebugEnabled())
 			logger.debug("convert returns=" + resultStr);
-		return resultStr;
+//		return resultStr;
+		return inputString;
 	}
 
 

@@ -1,5 +1,6 @@
 package org.digijava.module.aim.helper ;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -108,7 +109,9 @@ public class FinancingBreakdownWorker
 		if ( logger.isDebugEnabled() )
 		logger.debug("getOverallTotal(Collection c , type= " + type 
 		+ ") returning total " + total ) ;
-		strTotal = DecimalToText.ConvertDecimalToText(total) ;
+//		strTotal = DecimalToText.ConvertDecimalToText(total) ;
+		DecimalFormat format = new DecimalFormat();
+		strTotal= format.format(total);
 		return strTotal ;	
 	}
 	

@@ -19,7 +19,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpProgramType;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
@@ -54,7 +53,7 @@ public class ThemeManager extends Action {
 				ThemeForm themeForm = (ThemeForm) form;
 
 				themes = ProgramUtil.getParentThemes();
-				themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
+				//themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
 				
 				themeForm.setThemes(themes);
 				return mapping.findForward("forward");
@@ -115,7 +114,7 @@ public class ThemeManager extends Action {
 		}
 		themes = ProgramUtil.getParentThemes();
 		themeForm.setThemes(themes);
-		themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
+		//themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
 		return mapping.findForward("forward");
 	}
 }

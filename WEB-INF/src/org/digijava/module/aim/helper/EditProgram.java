@@ -3,6 +3,7 @@ package org.digijava.module.aim.helper ;
 import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpTheme;
 
 public class EditProgram
@@ -12,7 +13,9 @@ public class EditProgram
 	private AmpTheme parentThemeId ;
 	private String themeCode ;
 	private String name ;
-	private String type ;
+	//private String type ;
+	private AmpCategoryValue typeCategVal;
+	
 	private int indlevel;
 	private String description ;
 	private String language ;
@@ -135,17 +138,14 @@ public class EditProgram
 	public void setThemeCode(String themeCode) {
 		this.themeCode = themeCode;
 	}
-	/**
-	 * @return Returns the type.
-	 */
-	public String getType() {
-		return type;
+	
+	
+	
+	public AmpCategoryValue getTypeCategVal() {
+		return typeCategVal;
 	}
-	/**
-	 * @param type The type to set.
-	 */
-	public void setType(String type) {
-		this.type = type;
+	public void setTypeCategVal(AmpCategoryValue typeCategVal) {
+		this.typeCategVal = typeCategVal;
 	}
 	/**
 	 * @return Returns the version.

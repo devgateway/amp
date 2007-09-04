@@ -128,7 +128,7 @@ public class AddThemeIndicator extends Action
 		themeForm.setName(null);
 		themeForm.setType(null);
 		themeForm.setCreationDate(null);
-		themeForm.setProgramType(null);
+		themeForm.setProgramTypeCategValId(new Long(0));
 		themeForm.setIndicatorDescription(null);
 		themeForm.setCategory(0);
 		themeForm.setNpIndicator(false);

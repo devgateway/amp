@@ -28,7 +28,6 @@ import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.kernel.util.collections.HierarchyMemberFactory;
-import org.digijava.module.aim.dbentity.AmpProgramType;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
@@ -44,7 +43,6 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.EditProgram;
 import org.digijava.module.aim.helper.TreeItem;
 import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpProgramType;
 import org.digijava.module.aim.exception.AimException;
 
 public class ProgramUtil {
@@ -1196,7 +1194,7 @@ public class ProgramUtil {
 				tempAmpTheme.setName(editPrg.getName());
 				tempAmpTheme.setThemeCode(editPrg.getThemeCode());
 				tempAmpTheme.setDescription(editPrg.getDescription());
-				tempAmpTheme.setType(editPrg.getType());
+				tempAmpTheme.setTypeCategoryValue( editPrg.getTypeCategVal() );
 
 				tempAmpTheme.setLeadAgency( editPrg.getLeadAgency() );
 				tempAmpTheme.setTargetGroups( editPrg.getTargetGroups() );
@@ -1327,11 +1325,13 @@ public class ProgramUtil {
 
         }
 
-        /*
+        /**
          * Added by Govind
+         * 
+         * @deprecated Use Category Manager functions instead
          */
 
-        public static Collection getProgramTypes() {
+        /*public static Collection getProgramTypes() {
     		Session session = null;
     		Collection col = null;
     		try {
@@ -1354,24 +1354,28 @@ public class ProgramUtil {
     		}
     		return col;
     	}
-        /*
+*/     
+        /**
          * to save New Program Types
+         * AmpProgramType no longer used. Use Category Manager instead
          */
-        public static void saveNewProgramType(AmpProgramType prg) {
+        /*public static void saveNewProgramType(AmpProgramType prg) {
         	DbUtil.add(prg);
 
-    	}
-        /*
+    	}*/
+        /**
          * update a Program
+         * AmpProgramType no longer used. Use Category Manager instead
          */
-        public static void updateProgramType(AmpProgramType prg) {
+        /*public static void updateProgramType(AmpProgramType prg) {
         	DbUtil.update(prg);
 
-    	}
-        /*
+    	}*/
+        /**
          * to get the Program Type for Editing
+         * AmpProgramType no longer used. Use Category Manager instead
          */
-        public static Collection getProgramTypeForEdititng(Long Id) {
+        /*public static Collection getProgramTypeForEdititng(Long Id) {
     		Session session = null;
     		Collection col = null;
     		try {
@@ -1395,19 +1399,19 @@ public class ProgramUtil {
     			}
     		}
     		return col;
-    	}
-        /*
-         *
+    	}*/
+        /**
+         * @deprecated AmpProgramType no longer used. Use Category Manager instead
          */
-        public static void deleteProgramType(AmpProgramType prg) {
+        /*public static void deleteProgramType(AmpProgramType prg) {
         	try {
 				DbUtil.delete(prg);
 			} catch (JDBCException e) {
 				logger.error(e);
 			}
 
-    	}
-    	       /*
+    	}*/
+    	 /**
          * Used to sort indicators by name
          */
         public static class IndicatorNameComparator implements Comparator {

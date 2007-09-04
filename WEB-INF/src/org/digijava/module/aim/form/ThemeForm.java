@@ -13,7 +13,8 @@ public class ThemeForm extends ActionForm {
 		  private String programName;
 		  private String programCode;
 		  private String programDescription;
-		  private String programType;
+		  //private String programType; replaced by programTypeCategValId which uses Category Manager
+		  private Long programTypeCategValId;
 		  private int prgLevel;
 		  private Long prgParentThemeId;
 		  private Long rootId;
@@ -32,7 +33,7 @@ public class ThemeForm extends ActionForm {
 		  private int valueType;
 		  private String creationDate;
 		  private String flag; 
-		  private Collection programTypeNames;
+		  //private Collection programTypeNames; No longer needed, program type is in category manager
 		  private Long selectTheme;
   		  private String indType;
 		  
@@ -150,18 +151,14 @@ public class ThemeForm extends ActionForm {
 			this.programName = programName;
 		}
 
-		/**
-		 * @return Returns the programType.
-		 */
-		public String getProgramType() {
-			return programType;
+		
+
+		public Long getProgramTypeCategValId() {
+			return programTypeCategValId;
 		}
 
-		/**
-		 * @param programType The programType to set.
-		 */
-		public void setProgramType(String programType) {
-			this.programType = programType;
+		public void setProgramTypeCategValId(Long programTypeCategValId) {
+			this.programTypeCategValId = programTypeCategValId;
 		}
 
 		/**
@@ -383,15 +380,6 @@ public class ThemeForm extends ActionForm {
     public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
-
-	public Collection getProgramTypeNames() {
-		return programTypeNames;
-	}
-
-	public void setProgramTypeNames(Collection programTypeNames) {
-		this.programTypeNames = programTypeNames;
-	}
-
 	
 	public void setProgramLeadAgency (String programLeadAgency) {
 		this.programLeadAgency	= programLeadAgency;

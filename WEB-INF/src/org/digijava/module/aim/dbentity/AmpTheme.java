@@ -11,7 +11,8 @@ public class AmpTheme implements Serializable
 	private AmpTheme parentThemeId ;
 	private String themeCode ;
 	private String name ;
-	private String type ;
+	//private String type ;
+	private AmpCategoryValue typeCategoryValue;
 	private Integer indlevel;
 	private String description ;
 	private String language ;
@@ -82,13 +83,6 @@ public class AmpTheme implements Serializable
 	/**
 	 * @return
 	 */
-	public String getType() {
-		return type;
-	}
-
-	/**
-	 * @return
-	 */
 	public String getVersion() {
 		return version;
 	}
@@ -130,13 +124,6 @@ public class AmpTheme implements Serializable
 
 	public void setName(String string) {
 		name = string;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setType(String string) {
-		type = string;
 	}
 
 	/**
@@ -255,4 +242,13 @@ public class AmpTheme implements Serializable
 	public void setProgramviewname(String programviewname) {
 		this.programviewname = programviewname;
 	}
+
+	public AmpCategoryValue getTypeCategoryValue() {
+		return typeCategoryValue;
+	}
+
+	public void setTypeCategoryValue(AmpCategoryValue typeCategoryValue) {
+		this.typeCategoryValue = typeCategoryValue;
+	}
+	
 }

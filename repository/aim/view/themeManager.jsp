@@ -4,11 +4,12 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
-<script language="JavaScript">
-	<!--
+<script language="JavaScript"><!--
+	
 		function validate() 
 		{
 			if (trim(document.aimThemeForm.programName.value).length == 0) 
@@ -23,18 +24,19 @@
 				document.aimThemeForm.programCode.focus();
 				return false;
 			}
-			if (document.aimThemeForm.programType.value == -1) 
+			if (document.aimThemeForm.programTypeCategValId.value == 0) 
 			{
 				alert("Please Select a  Program type");
-				document.aimThemeForm.programType.focus();
+				document.aimThemeForm.programTypeCategValId.focus();
 				return false;
 			}			
-			if (trim(document.aimThemeForm.programType.value).length == 0) 
-			{
-				alert("Please enter Program type");
-				document.aimThemeForm.programType.focus();
-				return false;
-			}
+			//if (trim(document.aimThemeForm.programType.value).length == 0) 
+			//{
+			//	alert("Please enter Program type");
+			//	document.aimThemeForm.programType.focus();
+			//	return false;
+			//}
+			
 			return true;
 		}
 		function saveProgram()
@@ -83,7 +85,7 @@
 		{
 			document.aimThemeForm.programName.value = "";
 			document.aimThemeForm.programCode.value = "";
-			document.aimThemeForm.programType.value = "";
+			document.aimThemeForm.programTypeCategValId.value = 0;
 			document.aimThemeForm.programDescription.value = "";		
 		}
 
@@ -93,8 +95,8 @@
         function setOutImg(index){
           document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
         }
-	-->
-</script>
+	
+--></script>
 
 <digi:errors/>
 <digi:instance property="aimThemeForm" />
@@ -263,12 +265,16 @@
 																		<font color="red">*</font>
 																</td>
 																<td align="left">
-																	<html:select property="programType" styleClass="inp-text">
-																	<html:option value="-1">Select Progarm Type</html:option>
-																		<html:optionsCollection name="aimThemeForm" property="programTypeNames"
-													 						value="title" label="title" />
-																		</html:select>
-																		<%--<html:text property="programType" size="20" styleClass="inp-text"/>--%>
+																	<c:set var="translation">
+																		<digi:trn key="aim:program:programTypeFirstLine">Please select from below</digi:trn>
+																	</c:set>
+																	<category:showoptions firstLine="${translation}" name="aimThemeForm" property="programTypeCategValId" 
+																		keyName="<%= org.digijava.module.aim.helper.CategoryConstants.PROGRAM_TYPE_KEY %>" styleClass="inp-text" />	
+																	<%--<html:select property="programType" styleClass="inp-text">
+																		<html:option value="-1">Select Progarm Type</html:option>
+																			<html:optionsCollection name="aimThemeForm" property="programTypeNames"
+														 						value="title" label="title" />
+																	</html:select>	--%>
 																</td>
 																</tr>
 																<tr bgColor=#ffffff>

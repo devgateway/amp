@@ -10,6 +10,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.ThemeForm;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -65,13 +66,13 @@ public class AddSubPrgIndicator extends Action
 			themeForm.setProgramName(null);
 			themeForm.setProgramCode(null);
 			themeForm.setProgramDescription(null);
-			themeForm.setProgramType(null);
+			themeForm.setProgramTypeCategValId(new Long(0));
 			themeForm.setPrgParentThemeId(new Long(Long.parseLong(request.getParameter("themeId"))));
 			themeForm.setPrgLevel(indlevel);
 			themeForm.setRootId(roothemeId);
 			themeForm.setPrgLanguage(null);
 			themeForm.setVersion(null);
-			themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
+			//themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
 			return mapping.findForward("addProgram");
 		}
 		else if(event != null && event.equals("save"))
@@ -81,7 +82,7 @@ public class AddSubPrgIndicator extends Action
 			ampTheme.setName(themeForm.getProgramName());
 			ampTheme.setThemeCode(themeForm.getProgramCode());
 			ampTheme.setDescription(themeForm.getProgramDescription());
-			ampTheme.setType(themeForm.getProgramType());
+			ampTheme.setTypeCategoryValue( CategoryManagerUtil.getAmpCategoryValueFromDb(themeForm.getProgramTypeCategValId()) );
 			ampTheme.setParentThemeId(ProgramUtil.getThemeObject(id));
 			ampTheme.setIndlevel(new Integer(level));
 			ampTheme.setLanguage(null);

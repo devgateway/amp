@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ThemeForm;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.EditProgram;
 import org.digijava.module.aim.util.ProgramUtil;
 
@@ -50,8 +51,13 @@ public class EditTheme extends Action {
 				themeForm.setProgramName(ampTheme.getName());
 				themeForm.setProgramCode(ampTheme.getThemeCode());
 				themeForm.setProgramDescription(ampTheme.getDescription());
-				themeForm.setProgramType(ampTheme.getType());
-				themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
+				if (ampTheme.getTypeCategoryValue() != null)
+					themeForm.setProgramTypeCategValId(ampTheme.getTypeCategoryValue().getId());
+				else {
+					logger.error( "AmpTheme " +  ampTheme.getName() + " has Program Type null which should not be allowed.");
+					themeForm.setProgramTypeCategValId( new Long(0) );
+				}
+				//themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
 				
 				themeForm.setProgramLeadAgency( ampTheme.getLeadAgency() );
 				themeForm.setProgramBackground( ampTheme.getBackground() );
@@ -71,10 +77,15 @@ public class EditTheme extends Action {
 				themeForm.setProgramName(ampTheme.getName());
 				themeForm.setProgramCode(ampTheme.getThemeCode());
 				themeForm.setProgramDescription(ampTheme.getDescription());
-				themeForm.setProgramType(ampTheme.getType());
+				if (ampTheme.getTypeCategoryValue() != null)
+					themeForm.setProgramTypeCategValId(ampTheme.getTypeCategoryValue().getId());
+				else {
+					logger.error( "AmpTheme " +  ampTheme.getName() + " has Program Type null which should not be allowed.");
+					themeForm.setProgramTypeCategValId( new Long(0) );
+				}
 				themeForm.setRootId(rootid);
 				
-				themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
+				//themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
 				themeForm.setProgramLeadAgency( ampTheme.getLeadAgency() );
 				themeForm.setProgramBackground( ampTheme.getBackground() );
 				themeForm.setProgramTargetGroups( ampTheme.getTargetGroups() );
@@ -96,7 +107,8 @@ public class EditTheme extends Action {
 					editPrg.setName(themeForm.getProgramName());
 					editPrg.setThemeCode(themeForm.getProgramCode());
 					editPrg.setDescription(themeForm.getProgramDescription());
-					editPrg.setType(themeForm.getProgramType());
+					
+					editPrg.setTypeCategVal( CategoryManagerUtil.getAmpCategoryValueFromDb(themeForm.getProgramTypeCategValId()) );
 					
 					editPrg.setLeadAgency( themeForm.getProgramLeadAgency() );
 					editPrg.setTargetGroups( themeForm.getProgramTargetGroups() );
@@ -117,8 +129,7 @@ public class EditTheme extends Action {
 					editPrg.setName(themeForm.getProgramName());
 					editPrg.setThemeCode(themeForm.getProgramCode());
 					editPrg.setDescription(themeForm.getProgramDescription());
-					editPrg.setType(themeForm.getProgramType());
-					
+					editPrg.setTypeCategVal( CategoryManagerUtil.getAmpCategoryValueFromDb(themeForm.getProgramTypeCategValId()) );					
 					editPrg.setLeadAgency( themeForm.getProgramLeadAgency() );
 					editPrg.setTargetGroups( themeForm.getProgramTargetGroups() );
 					editPrg.setBackground( themeForm.getProgramBackground() );

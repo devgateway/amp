@@ -2,6 +2,11 @@ package org.digijava.module.aim.form;
 
 import org.apache.struts.action.*;
 
+/**
+ * 
+ * @deprecated
+ *
+ */
 public class AddThemeForm extends ActionForm {
 
 	private Long themeId = null;

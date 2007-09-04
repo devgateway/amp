@@ -62,7 +62,7 @@
     <form-bean name="aimThemeForm" type="org.digijava.module.aim.form.ThemeForm" />
     <form-bean name="aimAllIndicatorForm" type="org.digijava.module.aim.form.AllIndicatorForm" />
     <form-bean name="aimUserEmailForm" type="org.digijava.module.um.form.UserEmailForm" />
-    <form-bean name="aimAddThemeForm" type="org.digijava.module.aim.form.AddThemeForm" />
+    <!--<form-bean name="aimAddThemeForm" type="org.digijava.module.aim.form.AddThemeForm" /> -->
     <form-bean name="aimViewSectorForm" type="org.digijava.module.aim.form.AddSectorForm" />
     <form-bean name="aimCurrencyForm" type="org.digijava.module.aim.form.CurrencyForm" />
     <form-bean name="aimAddCurrencyForm" type="org.digijava.module.aim.form.AddCurrencyForm" />
@@ -101,7 +101,7 @@
     <form-bean name="aimProposedProjCostForm" type="org.digijava.module.aim.form.ProposedProjCost" />
     <form-bean name="aimComponentsForm" type="org.digijava.module.aim.form.ComponentsForm" />
     <form-bean name="aimUpdateComponentsForm" type="org.digijava.module.aim.form.UpdateComponentsForm" />
-    <form-bean name="aimProgramTypeForm" type="org.digijava.module.aim.form.ProgramTypeForm" />
+    <!--<form-bean name="aimProgramTypeForm" type="org.digijava.module.aim.form.ProgramTypeForm" /> -->
     <form-bean name="aimPortfolioDashboardForm" type="org.apache.struts.action.DynaActionForm">
       <form-property name="indicatorList" type="java.util.Collection" />
       <form-property name="activityList" type="java.util.Collection" />
@@ -1419,11 +1419,11 @@
     <action name="aimEditActivityForm" path="/aim/remProgram" scope="session" type="org.digijava.module.aim.action.RemProgram" validate="false">
       <forward name="forward" path="/aim/addActivity.do?edit=true" />
     </action>
-    <action name="aimProgramTypeForm" path="/aim/programTypeManager" scope="request" type="org.digijava.module.aim.action.ProgramTypeManager" validate="false">
+    <!--<action name="aimProgramTypeForm" path="/aim/programTypeManager" scope="request" type="org.digijava.module.aim.action.ProgramTypeManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewProgramTypeManager" />
       <forward name="add" path="/showLayout.do?layout=addProgramType" />
       <forward name="edit" path="/showLayout.do?layout=editProgramType" />
-    </action>
+    </action> -->
     <action name="aimTranslatorManagerForm" path="/aim/translationManager" scope="session" type="org.digijava.module.aim.action.TranslatorManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewTranslatorManager" />
     </action>

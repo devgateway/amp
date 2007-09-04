@@ -845,7 +845,7 @@
       <forward name="forward" path="/showLayout.do?layout=userRegistration" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimActivityForm" path="/aim/activityManager" scope="request" type="org.digijava.module.aim.action.ActivityManager" validate="false">
+    <action name="aimActivityForm" path="/aim/activityManager" scope="session" type="org.digijava.module.aim.action.ActivityManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=activityManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>

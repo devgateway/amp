@@ -22,6 +22,8 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
+import net.sf.hibernate.type.StringType;
+import net.sf.hibernate.type.Type;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -1914,8 +1916,8 @@ public class ActivityUtil {
    * get the list of all the activities
    * to display in the activity manager of Admin
    */
-  public static Collection getAllActivitiesList() {
-    Collection col = null;
+  public static List<AmpActivity> getAllActivitiesList() {
+    List col = null;
     Session session = null;
     Query qry = null;
 
@@ -1943,6 +1945,40 @@ public class ActivityUtil {
     }
     return col;
   }
+  
+  /*
+   * get the list of all the activities
+   * to display in the activity manager of Admin
+   */
+  public static List<AmpActivity> getAllActivitiesByName(String name) {
+    List col = null;
+    Session session = null;
+    Query qry = null;
+
+    try {
+      session = PersistenceManager.getSession();
+      String queryString = "select ampAct from " + AmpActivity.class.getName() +
+          " ampAct where ampAct.name like (:name)";
+      qry = session.createQuery(queryString);
+      qry.setParameter("name", "%" + name + "%", Hibernate.STRING);
+      col = qry.list();
+      logger.debug("the size of the ampActivity : " + col.size());
+    }
+    catch (Exception e1) {
+      logger.error("Could not retrieve the activities list", e1);
+    }
+    finally {
+      if (session != null) {
+        try {
+          PersistenceManager.releaseSession(session);
+        }
+        catch (Exception e2) {
+          logger.error("Release session failed");
+        }
+      }
+    }
+    return col;
+  }  
 
   /* functions to DELETE an activity by Admin start here.... */
   public static void deleteActivity(Long ampActId) {

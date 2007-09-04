@@ -6,7 +6,31 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
+
+<div id="mySorter" style="display: none"> 
+		<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
+        <!-- 
+		<a href='#' onclick='hideSorter();return false'>
+			<b>
+				<digi:trn key="rep:pop:Close">Close</digi:trn>
+			</b>
+		</a>
+		 -->
+</div> 
+
+<div id="myFilter" style="display: none"> 
+        <jsp:include page="/aim/reportsFilterPicker.do" />
+        <!-- 
+		<a href='#' onclick='hideFilter();return false'>
+			<b>
+				<digi:trn key="rep:pop:Close">Close</digi:trn>
+			</b>
+		</a>
+		 -->
+</div> 
+
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
+
 <!-- 
 <div style='position:relative;display:none;' id="sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>">
 	

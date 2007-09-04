@@ -156,27 +156,6 @@ background-color: yellow;
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
 
-<div id="myFilter" style="display: none"> 
-        <jsp:include page="/aim/reportsFilterPicker.do" />
-        <!-- 
-		<a href='#' onclick='hideFilter();return false'>
-			<b>
-				<digi:trn key="rep:pop:Close">Close</digi:trn>
-			</b>
-		</a>
-		 -->
-</div> 
-
-<div id="mySorter" style="display: none"> 
-		<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
-        <!-- 
-		<a href='#' onclick='hideSorter();return false'>
-			<b>
-				<digi:trn key="rep:pop:Close">Close</digi:trn>
-			</b>
-		</a>
-		 -->
-</div> 
 
 <script type="text/javascript">
 	var myPanel1 = new YAHOO.widget.Panel("new", { 
@@ -190,9 +169,6 @@ background-color: yellow;
 	myPanel1.setHeader("Select filters");
 	myPanel1.setBody("Empty");
 	myPanel1.render(document.body);
-	var element = document.getElementById("myFilter");
-	element.style.display = "inline";
-	myPanel1.setBody(element);
 	
 	var myPanel2 = new YAHOO.widget.Panel("new2", { 
 	    fixedcenter: true,  
@@ -205,17 +181,20 @@ background-color: yellow;
 	myPanel2.setHeader("Please select hierarchy sorter criteria");
 	myPanel2.setBody("Empty");
 	myPanel2.render(document.body);
-	var element2 = document.getElementById("mySorter");
-	element2.style.display = "inline";
-	myPanel2.setBody(element2);
 	
 	function showFilter() {
+		var element = document.getElementById("myFilter");
+		element.style.display = "inline";
+		myPanel1.setBody(element);
 		myPanel1.show();
 	}
 	function hideFilter() {
 		myPanel1.hide();
 	}
 	function showSorter() {
+		var element2 = document.getElementById("mySorter");
+		element2.style.display = "inline";
+		myPanel2.setBody(element2);
 		myPanel2.show();
 	}
 	function hideSorter() {

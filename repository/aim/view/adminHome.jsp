@@ -283,7 +283,7 @@
                             </td>
                           </tr>
                           </module:display>
-                          <tr>
+                          <%-- <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="translation">
@@ -295,7 +295,7 @@
                                 </digi:trn>
                               </digi:link>
                             </td>
-                          </tr>
+                          </tr> --%>
 
                           <tr>
                             <td class=f-names noWrap>

@@ -34,6 +34,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -245,7 +246,9 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setStatuses(null);
 		
 		for (int i = 0; filterForm.getSelectedFinancingInstruments()!=null && i < filterForm.getSelectedFinancingInstruments().length; i++) {
-			arf.getFinancingInstruments().add( filterForm.getSelectedFinancingInstruments()[i] );
+			Long id					= Long.parseLong(filterForm.getSelectedFinancingInstruments()[i]+"");
+			AmpCategoryValue value	= (AmpCategoryValue) CategoryManagerUtil.getAmpCategoryValueFromDb(id);
+			arf.getFinancingInstruments().add( value );
 		}
 		
 		

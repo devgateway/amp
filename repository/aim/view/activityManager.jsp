@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@ page import="org.digijava.module.aim.form.ActivityForm"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -8,7 +9,8 @@
 
 <script language="JavaScript">
 <!--
-
+	<digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>
+	
 	function deleteIndicator()
 	{
 		return confirm("Do you want to delete the Activity ?");
@@ -16,7 +18,21 @@
 	function load() {}
 
 	function unload() {}
-
+	
+	function searchActivity() {		 
+	     url = "<%= searchOrg %>?action=search";
+	     document.aimActivityForm.action = url;
+	     document.aimActivityForm.submit();
+		 return true;
+	}
+	
+	function resetSearch() {
+	     url = "<%= searchOrg %>?action=reset";
+	     document.aimActivityForm.action = url;
+	     document.aimActivityForm.submit();
+		 return true;
+	}	
+	
 -->
 </script>
 
@@ -67,6 +83,31 @@
 								<td vAlign="top" width="100%">
 
 									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>
+										<tr>
+											<td>
+												<table>
+													<tr>
+														<td align="left">
+															<digi:trn key="aim:keyword">Keyword</digi:trn>&nbsp;
+															<html:text property="keyword" styleClass="inp-text" size="50" />														
+														</td>
+														<td align="center">
+										                    <c:set var="trnResetBtn">
+										                      <digi:trn key="aim:btnReset"> Reset </digi:trn>
+										                    </c:set>
+										                    <input type="button" value="${trnResetBtn}" class="buton" onclick="return resetSearch();">
+										                </td>
+										                <td align="left">
+										                    <c:set var="trnGoBtn">
+										                      <digi:trn key="aim:btnGo"> GO </digi:trn>
+										                    </c:set>
+										                    <input type="button" value="${trnGoBtn}" class="buton"    onclick="return searchActivity();">
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+									
 										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
 											<digi:trn key="aim:activityList">
@@ -81,19 +122,27 @@
 														<tr><td>
 															<table width="100%" cellspacing=1 cellpadding=3 bgcolor="#d7eafd">
 																<tr bgcolor="#ffffff">
+																		<jsp:useBean id="urlParamsSort" type="java.util.Map" class="java.util.HashMap"/>
+																		<c:set target="${urlParamsSort}" property="action" value="sort"/>						
 																		<td width="9" height="15">&nbsp;</td>
 																		<td>
                                                                           <b>
-                                                                            <digi:trn key="aim:ActivityNameCol">
-                                                                            Activity Name
-                                                                            </digi:trn>
+                                                                            <c:set target="${urlParamsSort}" property="sortByColumn" value="activityName"/>	
+																			<digi:link href="/activityManager.do" name="urlParamsSort">
+	                                                                            <digi:trn key="aim:ActivityNameCol">
+	                                                                            	Activity Name
+	                                                                            </digi:trn>
+																			</digi:link>                                                                          
                                                                           </b>
 																		</td>
 																		<td width="100">
                                                                           <b>
-                                                                            <digi:trn key="aim:ActivityIdCol">
-                                                                            Activity Id
-                                                                            </digi:trn>
+                                                                          	<c:set target="${urlParamsSort}" property="sortByColumn" value="activityId"/>	
+																			 <digi:link href="/activityManager.do" name="urlParamsSort">
+	                                                                            <digi:trn key="aim:ActivityIdCol">
+	                                                                            	Activity Id
+	                                                                            </digi:trn>
+	                                                                        </digi:link> 
                                                                           </b>
 																		</td>
 																		<td align="left" width="12">&nbsp;</td>
@@ -133,9 +182,9 @@
 																		</digi:link>
 																	</td>
 																	</tr>
-																</logic:iterate>
+																</logic:iterate>																
 															</table>
-														</td></tr>
+														</td></tr>														
 													</logic:notEmpty>
 													<logic:empty name="aimActivityForm" property="activityList">
 														<tr align="center" bgcolor="#ffffff"><td><b>
@@ -149,6 +198,63 @@
 										<tr><td bgColor=#ffffff height="20" align="left">
 												<img src= "../ampTemplate/images/start_button.gif" border=0> - <b>Unassigned Activities</b>
 										</td></tr>
+										<tr bgcolor="#ffffff">
+											<td>&nbsp;</td>
+										</tr>										
+										<tr bgcolor="#ffffff">
+											<td>
+												<%
+													ActivityForm aimActivityForm = (ActivityForm) pageContext.getAttribute("aimActivityForm");
+													java.util.List pagelist = new java.util.ArrayList();
+													for(int i = 0; i < aimActivityForm.getTotalPages(); i++)
+														pagelist.add(new Integer(i + 1));
+													pageContext.setAttribute("pagelist",pagelist);
+													pageContext.setAttribute("maxpages", new Integer(aimActivityForm.getTotalPages()));
+													pageContext.setAttribute("actualPage", new Integer(aimActivityForm.getPage()));
+												%>
+												<jsp:useBean id="urlParamsPagination" type="java.util.Map" class="java.util.HashMap"/>
+												<c:set target="${urlParamsPagination}" property="action" value="getPage"/>
+												<digi:trn key="aim:pages">Pages :</digi:trn>&nbsp;
+												<logic:iterate name="pagelist" id="pageidx" type="java.lang.Integer">
+													<c:set target="${urlParamsPagination}" property="page" value="${pageidx - 1}"/>													
+														<c:if test="${(pageidx - 1) eq actualPage}"> 
+																<bean:write name="pageidx"/>
+													 	</c:if>
+														<c:if test="${(pageidx - 1) ne actualPage}"> 
+															<digi:link href="/activityManager.do"  name="urlParamsPagination" >
+																<bean:write name="pageidx"/>
+															</digi:link>
+													 	</c:if>
+													<c:if test="${pageidx < maxpages}"> | </c:if>
+												</logic:iterate>
+											</td>											
+										</tr>
+										<tr bgcolor="#ffffff">
+											<td>&nbsp;</td>
+										</tr>
+										<tr bgcolor="#ffffff">
+											<td> 
+											    <digi:trn key="aim:pageSize">Pages Size:</digi:trn>
+												<jsp:useBean id="urlParamsPageSize" type="java.util.Map" class="java.util.HashMap"/>
+												<c:set target="${urlParamsPageSize}" property="action" value="setPageSize"/>
+												<%
+													pageContext.setAttribute("pageSize", new Integer(aimActivityForm.getPageSize()));
+													for(int i = 10; i < 50; i = i + 10){
+														pageContext.setAttribute("actualPageSize", new Integer(i));
+												%>
+													<c:if test="${pageSize ne actualPageSize}"> 
+														<c:set target="${urlParamsPageSize}" property="pageSize" value="${actualPageSize}"/>
+														<digi:link href="/activityManager.do"  name="urlParamsPageSize"><%=i%></digi:link> 
+													</c:if>
+													<c:if test="${pageSize eq actualPageSize}"> 
+														<%=i%>
+													</c:if>
+													<c:if test="${actualPageSize lt 40}"> 
+														|
+													</c:if>													
+												<%}%>
+											</td>
+										</tr>
 									</table>
 
 								</td>

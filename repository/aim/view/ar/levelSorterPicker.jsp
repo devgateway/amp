@@ -6,6 +6,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
+
+<logic:present name="reportMeta" scope="session">
 <bean:define id="reportMeta" name="reportMeta"
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
 	toScope="page" />
@@ -50,3 +52,4 @@
 		</tr>
 	</table>
 </digi:form>
+</logic:present>

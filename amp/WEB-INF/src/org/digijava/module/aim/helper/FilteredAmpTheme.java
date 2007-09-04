@@ -29,7 +29,7 @@ public class FilteredAmpTheme extends AmpTheme {
 		this.setAmpThemeId( 	ampTheme.getAmpThemeId() );
 		this.setName( 			ampTheme.getName() );
 		this.setThemeCode( 		ampTheme.getThemeCode() );
-		this.setType( 			ampTheme.getType() );
+		this.setTypeCategoryValue(	ampTheme.getTypeCategoryValue() );
 		this.setDescription( 	filterString(ampTheme.getDescription()) );
 		this.setLeadAgency( 	filterString(ampTheme.getLeadAgency()) );
 		this.setTargetGroups( 	filterString(ampTheme.getTargetGroups()) );

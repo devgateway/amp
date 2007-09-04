@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ThemeForm;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 
@@ -48,7 +49,7 @@ public class AddTheme extends Action
 			themeForm.setProgramName(null);
 			themeForm.setProgramCode(null);
 			themeForm.setProgramDescription(null);
-			themeForm.setProgramType(null);
+			themeForm.setProgramTypeCategValId(new Long(0));
 			themeForm.setPrgLanguage(null);
 			themeForm.setVersion(null);
 			return mapping.findForward("forward");
@@ -59,7 +60,7 @@ public class AddTheme extends Action
 			ampTheme.setName(themeForm.getProgramName());
 			ampTheme.setThemeCode(themeForm.getProgramCode());
 			ampTheme.setDescription(themeForm.getProgramDescription());
-			ampTheme.setType(themeForm.getProgramType());
+			ampTheme.setTypeCategoryValue( CategoryManagerUtil.getAmpCategoryValueFromDb(themeForm.getProgramTypeCategValId()) );
 			ampTheme.setIndlevel(new Integer(0));			
 			ampTheme.setLeadAgency( themeForm.getProgramLeadAgency() );
 			ampTheme.setTargetGroups( themeForm.getProgramTargetGroups() );
@@ -74,7 +75,7 @@ public class AddTheme extends Action
 			themeForm.setProgramName(null);
 			themeForm.setProgramCode(null);
 			themeForm.setProgramDescription(null);
-			themeForm.setProgramType(null);
+			themeForm.setProgramTypeCategValId( new Long(0) );
 			DbUtil.add(ampTheme);
 			return mapping.findForward("saveIt");
 		}

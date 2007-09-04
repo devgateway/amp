@@ -1,6 +1,6 @@
 /*
  * Program Type.java
- */
+ 
 
 package org.digijava.module.aim.action;
 
@@ -21,7 +21,11 @@ import org.digijava.module.aim.dbentity.AmpProgramType;
 import org.digijava.module.aim.form.ProgramTypeForm;
 import org.digijava.module.aim.util.ProgramUtil;
 
-
+*//**
+ * 
+ * @deprecated Use Category Manager instead.
+ *
+ *//*
 
 public class ProgramTypeManager extends Action {
 	
@@ -100,3 +104,4 @@ public class ProgramTypeManager extends Action {
 		return mapping.findForward("forward");
 	}
 }
+*/

@@ -1,6 +1,6 @@
 /*
  * GetTheme.java
- */
+ 
 
 package org.digijava.module.aim.action;
 
@@ -52,7 +52,8 @@ public class GetTheme extends Action {
 			themeForm.setThemeCode(ampTheme.getThemeCode());
 			themeForm.setThemeName(ampTheme.getName());
 			themeForm.setDescription(ampTheme.getDescription());
-			themeForm.setType(ampTheme.getType());
+			if (ampTheme.getTypeCategoryValue() != null)
+				themeForm.setType( ampTheme.getTypeCategoryValue().getId() );
 			logger.debug("values set.");
 		}
 
@@ -75,3 +76,4 @@ public class GetTheme extends Action {
 		}
 	}
 }
+*/

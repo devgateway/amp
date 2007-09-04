@@ -15,7 +15,10 @@ public class DecimalToText
 		if ( logger.isDebugEnabled() )
 			logger.debug("Decimal passed : " + decimal ) ;
 
-		String val = String.valueOf(decimal);
+		DecimalFormat format = new DecimalFormat();
+		String val= format.format(decimal);
+		
+//		String val = String.valueOf(decimal);
 		StringTokenizer tok = new StringTokenizer(val, ".");
 		
 		String text = null;

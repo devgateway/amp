@@ -170,7 +170,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		acc.setAmount(tr_amount);
 		
 		//use fixed exchange rate only if it has been entered. Else use 
-		if(fixedExchangeRate!=1)
+		if(fixedExchangeRate!=1 && fixedExchangeRate!=0)
 			acc.setFromExchangeRate(fixedExchangeRate); else
 		acc.setFromExchangeRate(exchangeRate);
 		

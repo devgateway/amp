@@ -676,21 +676,19 @@
 								</tr>
 							</table>
 						</td>
-					</tr>
-					<tr >
-			<table  cellPadding=3 cellSpacing=1>
+				</tr>
 			<tr>
-			<td><img src= "../ampTemplate/images/arrow_right.gif" border=0>  Level 1, </td>
-			<td>	<img src= "../ampTemplate/images/square1.gif" border=0>  Level 2, </td>
-			<td>	<img src= "../ampTemplate/images/square2.gif" border=0>  Level 3, </td>
-			<td>	<img src= "../ampTemplate/images/square3.gif" border=0>  Level 4, </td>
-			<td>	<img src= "../ampTemplate/images/square4.gif" border=0>  Level 5, </td>
-			<td>	<img src= "../ampTemplate/images/square5.gif" border=0>  Level 6, </td>
-			<td>	<img src= "../ampTemplate/images/square6.gif" border=0>  Level 7, </td>
-			<td>	<img src= "../ampTemplate/images/square7.gif" border=0>  Level 8. </td>
+						<td class=r-dotted-lg width="20%" nowrap="nowrap">
+								<img src= "../ampTemplate/images/arrow_right.gif" border=0>  Level 1,
+								<img src= "../ampTemplate/images/square1.gif" border=0>  Level 2,
+								<img src= "../ampTemplate/images/square2.gif" border=0>  Level 3,
+								<img src= "../ampTemplate/images/square3.gif" border=0>  Level 4,
+								<img src= "../ampTemplate/images/square4.gif" border=0>  Level 5,
+								<img src= "../ampTemplate/images/square5.gif" border=0>  Level 6,
+								<img src= "../ampTemplate/images/square6.gif" border=0>  Level 7,
+								<img src= "../ampTemplate/images/square7.gif" border=0>  Level 8.
+						</td>
 			</tr>
-			</table>
-		</tr>
 				</table>
 			</td>
 		</tr>

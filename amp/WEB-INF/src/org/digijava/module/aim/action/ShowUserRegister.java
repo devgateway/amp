@@ -21,6 +21,8 @@ import org.digijava.module.um.util.DbUtil;
 import org.digijava.kernel.translator.util.TrnCountry;
 import org.digijava.kernel.util.SiteUtils;
 import org.apache.log4j.Logger;
+import java.util.Collection;
+import org.digijava.module.aim.helper.CountryBean;
 
 public class ShowUserRegister extends Action {
 
@@ -34,11 +36,11 @@ public class ShowUserRegister extends Action {
 			UserRegisterForm registerForm = (UserRegisterForm) form;
 			String actionFlag = request.getParameter("actionFlag");
 			logger.debug("actionFlag: " + actionFlag);
-			
+
 			if ("".equals(actionFlag) || actionFlag == null) {
-				if (registerForm.getCountryResidence() == null) {
+
 					// set country resident data
-					List countries = DbUtil.getCountries();
+
 					HashMap countriesMap = new HashMap();
 					Iterator iterator = TrnUtil.getCountries(
 							RequestUtils.getNavigationLanguage(request).getCode())
@@ -48,22 +50,16 @@ public class ShowUserRegister extends Action {
 						countriesMap.put(item.getIso(), item);
 					}
 					// sort countries
-					List sortedCountries = new ArrayList();
-					iterator = countries.iterator();
-					while (iterator.hasNext()) {
-						Country item = (Country) iterator.next();
-						sortedCountries.add(countriesMap.get(item.getIso()));
-					}
-					Collections.sort(sortedCountries, TrnUtil.countryNameComparator);
+                    Collection<CountryBean> countrieCol = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
 
-					if (sortedCountries != null) {
-						//            sortedCountries.add(0, new Country( new Long( 0
-						// ),null,"Select a country",null,null,null,null ) );
-						sortedCountries
-								.add(0, new TrnCountry("-1", "-- Select a country --"));
-					}
-					registerForm.setCountryResidence(sortedCountries);
-					logger.debug("sortedCountries.size : " + sortedCountries.size());
+//					if (countrieCol != null) {
+//						            sortedCountries.add(0, new Country( new Long( 0
+//						 ),null,"Select a country",null,null,null,null ) );
+//						sortedCountries
+//								.add(0, new TrnCountry("-1", "-- Select a country --"));
+//					}
+					registerForm.setCountryResidence(countrieCol);
+					logger.debug("sortedCountries.size : " + countrieCol.size());
 
 					// set default web site
 					registerForm.setWebSite("http://");
@@ -90,26 +86,26 @@ public class ShowUserRegister extends Action {
 					Collections.sort(sortedLanguages, TrnUtil.localeNameComparator);
 
 					registerForm.setNavigationLanguages(sortedLanguages);
-					
+
 					// set organisation types
 					registerForm.setOrgTypeColl(DbUtil.getAllOrgTypes());
-				}
+
 			}
 			else if ("typeSelected".equals(actionFlag)) {
 				//	load organisation groups related to selected organisation-type
 				registerForm.setOrgGroupColl(DbUtil.getOrgGroupByType(registerForm.getSelectedOrgType()));
 				if (null != registerForm.getOrgColl() && registerForm.getOrgColl().size() != 0)
-					registerForm.getOrgColl().clear();				
+					registerForm.getOrgColl().clear();
 			}
 			else if ("groupSelected".equals(actionFlag))
 				//	load organisations related to selected organisation-group
 				registerForm.setOrgColl(DbUtil.getOrgByGroup(registerForm.getSelectedOrgGroup()));
-			
+
 		} catch (Exception e) {
 			logger.error("Exception from ShowUserRegister :" + e);
 			return mapping.findForward(null);
 		}
-		
+
 		return mapping.findForward("forward");
 	}
 }

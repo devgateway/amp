@@ -12,9 +12,12 @@
 <tr class=newClsTableL1SubTotalEndSection>
 	<td colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
 	
-	<logic:present name="grandTotal" scope="request">
+	<c:if test="${reportData.levelDepth <= 2}">
 		<b>
-	</logic:present>
+	</c:if>
+	<!--<logic:present name="grandTotal" scope="request">
+		<b>
+	</logic:present> -->
 	<i>
 	<digi:trn key="rep:popup:totalsFor">TOTALS FOR</digi:trn>
 	<digi:trn key="rep:popu:${reportData.columnIdTrn}">${reportData.columnId}</digi:trn>
@@ -22,9 +25,13 @@
 		: <digi:trn key="rep:pop:${reportData.repNameTrn}">${reportData.repName}</digi:trn>
 	<% } %>
 	</i>
+	<c:if test="${reportData.levelDepth <= 2}">
+		</b>
+	</c:if>
+	<!-- 
 	<logic:present name="grandTotal" scope="request">
 		</b>
-	</logic:present>
+	</logic:present> -->
 	</td>
 	<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
 		<td>

@@ -110,13 +110,9 @@ function clearForms()
 		</td>
 		<td align="left" width="50%">
 			<html:select property="role" styleClass="inp-text">
-			<html:option value="">
-					------ 
-				<digi:trn key="aim:addTeamMemberSelectRole">Select role</digi:trn>
-					------
-			</html:option>
-			<html:optionsCollection name="aimTeamMemberForm" property="ampRoles"
-			value="ampTeamMemRoleId" label="role" />
+				<%@include file="teamMemberRolesDropDown.jsp" %>
+				<%--<html:optionsCollection name="aimTeamMemberForm" property="ampRoles"
+				value="ampTeamMemRoleId" label="role" /> --%>
 			</html:select>
 		</td>
 	</tr>

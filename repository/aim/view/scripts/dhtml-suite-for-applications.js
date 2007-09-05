@@ -14676,13 +14676,13 @@ DHTMLSuite.calendarLanguageModel.prototype = {
 				this.timeString = '';				
 				break;
 			case "fr":      /* French */
-				this.monthArray = ['Janvier','F?vrier','Mars','Avril','Mai','Juin','Juillet','Ao?t','Septembre','Octobre','Novembre','D?cembre'];		
+				this.monthArray = ['Janvier','F&eacute;vrier','Mars','Avril','Mai','Juin','Juillet','Ao&ucirc;t','Septembre','Octobre','Novembre','D&eacute;cembre'];		
 				this.monthArrayShort = ['Jan','Fev','Mar','Avr','Mai','Jun','Jul','Aou','Sep','Oct','Nov','Dec'];
 				this.dayArray = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
-				this.weekString = 'Sem';
+				this.weekString = 'Semaine';
 				this.todayIsString = "Aujourd'hui";
 				this.todayString = 'Aujourd';
-				this.timeString = '';
+				this.timeString = 'Heure';
 				break; 	
 			case "da": /*Danish*/
 				this.monthArray = ['januar','februar','marts','april','maj','juni','juli','august','september','oktober','november','december'];

@@ -336,10 +336,7 @@
 
               <html:select  property="selectedCountryResidence" styleClass="inp-text">
                   <c:forEach var="cn" items="${aimUserRegisterForm.countryResidence}">
-                    <c:set var="cnName">
-                      <digi:trn key="aim:cn:${cn.name}">${cn.name}</digi:trn>
-                    </c:set>
-                    <html:option value="${cn.iso}">${cnName}</html:option>
+                    <html:option value="${cn.iso}">${cn.name}</html:option>
                   </c:forEach>
               </html:select>
 

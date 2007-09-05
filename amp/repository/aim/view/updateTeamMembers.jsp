@@ -112,8 +112,9 @@
 		</td>
 		<td align="left" width="50%">
 			<html:select property="role">
-				<html:option value="">------ Select role ------</html:option>
-				<html:optionsCollection name="aimTeamMemberForm" property="ampRoles" value="ampTeamMemRoleId" label="role" />
+				<%@include file="teamMemberRolesDropDown.jsp" %>
+				<%-- <html:option value="">------ Select role ------</html:option>
+				<html:optionsCollection name="aimTeamMemberForm" property="ampRoles" value="ampTeamMemRoleId" label="role" /> --%>
 			</html:select>
 		</td>
 	</tr>

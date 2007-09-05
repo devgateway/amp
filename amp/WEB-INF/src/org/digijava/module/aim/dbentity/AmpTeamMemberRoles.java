@@ -8,6 +8,8 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.digijava.module.aim.helper.CategoryManagerUtil;
+
 public class AmpTeamMemberRoles implements Serializable {
 	
 	private Long ampTeamMemRoleId;
@@ -91,5 +93,15 @@ public class AmpTeamMemberRoles implements Serializable {
 
 	public void setTeamHead(Boolean teamHead) {
 		this.teamHead = teamHead;
+	}
+	
+	/**
+	 * 
+	 * @return the translation key used
+	 */
+	public String getAmpTeamMemberKey () {
+		String asciiName	= CategoryManagerUtil.asciiStringFilter(role);
+		return 
+			"aim:AmpTeamMemeberRoleTrnKey:" + asciiName;
 	}
 }

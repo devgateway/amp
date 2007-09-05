@@ -117,7 +117,7 @@
 	function validateForm() {
 		return true;
 	}
-	
+
 	function indexedCheckboxClick(name)
 	{
 		index1=name.indexOf("[");
@@ -133,7 +133,7 @@
 		{	inputHidden[0].value="checked";}
 		if(checkbox.checked==false)
 		{	inputHidden[0].value="unchecked";}
-		
+
 	}
 	-->
 </script>
@@ -318,7 +318,6 @@ ${fn:replace(message,quote,escapedQuote)}
                                     <td>
                                     	<bean:define name="aimEditActivityForm" id="myForm" type="org.digijava.module.aim.form.EditActivityForm"/>
                              	  	<feature:display name="Proposed Project Cost" module="Funding">
-                                      <c:if test="${not empty aimEditActivityForm.proProjCost && aimEditActivityForm.proProjCost!=''}">
                                         <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing=0 cellPadding=0>
                                           <tr>
                                             <td>
@@ -370,14 +369,12 @@ ${fn:replace(message,quote,escapedQuote)}
                                                       </tr>
                                                       <tr>
                                                         <td>
-                                                           <c:if test="${isStatusPlanned}">
-                                                            <c:if test="${aimEditActivityForm.proProjCost==null}">
-                                                              <input type="button" value="Add Funding" class="buton" onclick="addPropFunding()">
-                                                            </c:if>
-                                                            <c:if test="${aimEditActivityForm.proProjCost!=null}">
-                                                              <input type="Button" value="Edit Funding" class="buton" onclick="addPropFunding()">
-                                                              <input type="Button" value="Remove Funding" class="buton" onclick="delPropFunding()">
-                                                            </c:if>
+                                                          <c:if test="${aimEditActivityForm.proProjCost==null}">
+                                                            <input type="button" value="Add Funding" class="buton" onclick="addPropFunding()">
+                                                          </c:if>
+                                                          <c:if test="${aimEditActivityForm.proProjCost!=null}">
+                                                            <input type="Button" value="Edit Funding" class="buton" onclick="addPropFunding()">
+                                                            <input type="Button" value="Remove Funding" class="buton" onclick="delPropFunding()">
                                                           </c:if>
                                                         </td>
                                                       </tr>
@@ -393,7 +390,6 @@ ${fn:replace(message,quote,escapedQuote)}
                                             </td>
                                           </tr>
                                         </table>
-                                      </c:if>
                                       </feature:display>
                                       <feature:display name="Funding Organizations" module="Funding">
                                       <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing=0 cellPadding=0 >
@@ -435,13 +431,13 @@ ${fn:replace(message,quote,escapedQuote)}
                                                             <td>
                           										<html:select property="fundingActive" indexed="true" name="fundingOrganization">
                           											<html:option value="true">Active</html:option>
-                          											<html:option value="false">Inactive</html:option>                          											
-                          										</html:select> 
+                          											<html:option value="false">Inactive</html:option>
+                          										</html:select>
                                                             </td>
                                                             </field:display>
                                                             <field:display name="Delegated Cooperation" feature="Funding Organizations">
                                                             <td>
-                          										
+
                           									Delegated Cooperation<html:checkbox name="fundingOrganization" property="delegatedCooperation" indexed="true" onclick="indexedCheckboxClick(this.name);"/>
                           									<html:hidden name="fundingOrganization" property="delegatedCooperationString" indexed="true"/>
                                                             </td>

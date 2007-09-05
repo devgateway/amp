@@ -32,6 +32,7 @@ import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class AddRegionalFunding extends Action {
 	
@@ -109,6 +110,8 @@ public class AddRegionalFunding extends Action {
 			Map disb = new HashMap();
 			Map exp = new HashMap();
 			
+			boolean perspectiveEnabled = FeaturesUtil.isPerspectiveEnabled();
+			
 			while (paramNames.hasMoreElements()) {
 				param = (String) paramNames.nextElement();
 				if (param.startsWith("comm_")) {
@@ -123,6 +126,12 @@ public class AddRegionalFunding extends Action {
 					}
 
 					FundingDetail fd = (FundingDetail) comm.get(new Integer(index));
+					
+					if(!perspectiveEnabled){
+						fd.setPerspectiveName("MOFED");
+						fd.setPerspectiveCode(Constants.MOFED);
+					}
+					
 					if (fd != null) {
 						switch (num) {
 						case 1:
@@ -166,6 +175,12 @@ public class AddRegionalFunding extends Action {
 					}
 
 					FundingDetail fd = (FundingDetail) disb.get(new Integer(index));
+					
+					if(!perspectiveEnabled){
+						fd.setPerspectiveName("MOFED");
+						fd.setPerspectiveCode(Constants.MOFED);
+					}
+					
 					if (fd != null) {
 						switch (num) {
 						case 1:
@@ -210,6 +225,12 @@ public class AddRegionalFunding extends Action {
 					}
 
 					FundingDetail fd = (FundingDetail) exp.get(new Integer(index));
+					
+					if(!perspectiveEnabled){
+						fd.setPerspectiveName("MOFED");
+						fd.setPerspectiveCode(Constants.MOFED);
+					}
+					
 					if (fd != null) {
 						switch (num) {
 						case 1:

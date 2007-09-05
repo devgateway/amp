@@ -317,7 +317,7 @@ function commentWin(val) {
 																</TR>
 															</field:display>
 														</feature:display>
-														<feature:display name="Identification" module="Project ID and Planning">
+														<feature:display name="Budget" module="Project ID and Planning">
 															<field:display feature="Identification" name="Activity Budget">
 																<TR>
 																	<TD>
@@ -336,7 +336,7 @@ function commentWin(val) {
 																						</digi:trn>
 																					</td>
 																				</tr>
-																				<field:display name="FY" feature="Identification">
+																				<field:display name="FY" feature="Budget">
 																				<tr>
 																					<td>
 																					<digi:trn key="aim:actFY">
@@ -346,7 +346,7 @@ function commentWin(val) {
 																					</td>
 																				</tr>
 																				</field:display>
-																				<field:display name="Vote" feature="Identification">
+																				<field:display name="Vote" feature="Budget">
 																				<tr>
 																					<td>
 																					<digi:trn key="aim:actVote">
@@ -356,7 +356,7 @@ function commentWin(val) {
 																					</td>
 																				</tr>
 																				</field:display>
-																				<field:display name="Sub-Vote" feature="Identification">
+																				<field:display name="Sub-Vote" feature="Budget">
 																				<tr>
 																					<td>
 																					<digi:trn key="aim:actSub-Vote">
@@ -366,7 +366,7 @@ function commentWin(val) {
 																					</td>
 																				</tr>
 																				</field:display>
-																				<field:display name="Sub-Program" feature="Identification">
+																				<field:display name="Sub-Program" feature="Budget">
 																				<tr>
 																					<td>
 																					<digi:trn key="aim:actSub-Program">
@@ -376,7 +376,7 @@ function commentWin(val) {
 																					</td>
 																				</tr>
 																				</field:display>
-																				<field:display name="Project Code" feature="Identification">
+																				<field:display name="Project Code" feature="Budget">
 																				<tr>
 																					<td>
 																					<digi:trn key="aim:actProjectCode">
@@ -386,7 +386,7 @@ function commentWin(val) {
 																					</td>
 																				</tr>
 																				</field:display>
-																				<field:display name="GBS/SBS" feature="Identification">
+																				<field:display name="GBS/SBS" feature="Budget">
 																				<tr>
 																					<td>
 																					<digi:trn key="aim:actGBS">
@@ -397,7 +397,7 @@ function commentWin(val) {
 																					</td>
 																				</tr>
 																				</field:display>
-																				<field:display name="Government Approval Procedures" feature="Identification">
+																				<field:display name="Government Approval Procedures" feature="Budget">
 																				<tr>
 																					<td>
 																					<digi:trn key="aim:actGovernmentApprovalProcedures">
@@ -412,7 +412,7 @@ function commentWin(val) {
 																					</td>
 																				</tr>
 																				</field:display>
-																				<field:display name="JointCriteria" feature="Identification">
+																				<field:display name="JointCriteria" feature="Budget">
 																				<tr>
 																					<td>
 																					<digi:trn key="aim:actJointCriteria">

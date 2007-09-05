@@ -980,7 +980,7 @@
 								'<bean:write name="theme" property="description" />',
 								'<bean:write name="theme" property="leadAgency" />',
 								'<bean:write name="theme" property="themeCode" />',
-								'<bean:write name="theme" property="type" />',
+								'<bean:write name="theme" property="typeCategoryValue.value" />',
 								'<bean:write name="theme" property="targetGroups" />',
 								'<bean:write name="theme" property="background" />',
 								'<bean:write name="theme" property="objectives" />',

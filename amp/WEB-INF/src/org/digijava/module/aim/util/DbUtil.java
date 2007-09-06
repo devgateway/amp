@@ -3836,6 +3836,24 @@ public class DbUtil {
         }
         return col;
     }
+    
+    public static Collection getAllOrgGrpBeeingUsed(){
+        Session session = null;
+        Collection col = new ArrayList();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select distinct c.orgGrpId from " + AmpOrganisation.class.getName()
+                + " c order by c.orgGrpId.orgGrpName";
+            Query qry = session.createQuery(queryString);
+            col = qry.list();
+        } catch (Exception e) {
+            logger.debug("Exception from getAllOrgGrpBeeingUsed()");
+            logger.debug(e.toString());
+        }
+        return col;
+    	
+    }
 
     public static Collection getAllOrgGroups() {
         Session session = null;

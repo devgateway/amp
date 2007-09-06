@@ -98,7 +98,7 @@
 			<td colspan="4">
 			<html:select multiple="true" property="selectedDonors" size="3" style="width: 400px" styleClass="inp-text">
 				<html:optionsCollection property="donors"
-					value="ampOrgId" label="name" />
+					value="ampOrgGrpId" label="orgGrpName" />
 			</html:select>
 			</td>
 		</tr>

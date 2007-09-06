@@ -3,8 +3,10 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.digijava.module.aim.util.Identifiable;
 
-public class AmpOrgGroup implements Serializable, Comparable
+
+public class AmpOrgGroup implements Serializable, Comparable, Identifiable
 {
 	private Long ampOrgGrpId;
 	private String orgGrpName;
@@ -80,4 +82,11 @@ public class AmpOrgGroup implements Serializable, Comparable
 		return this.orgGrpName.trim().toLowerCase().compareTo(((AmpOrgGroup)arg0).getOrgGrpName().trim().toLowerCase());
 		//return 0;
 	}
+	public Object getIdentifier() {
+		return this.getAmpOrgGrpId();
+	}
+	public String toString() {
+		return this.getOrgGrpName();
+	}
+
 }

@@ -6,6 +6,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import org.digijava.module.aim.util.DbUtil;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,6 +23,8 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.DesktopForm;
 import org.digijava.module.aim.helper.AmpProject;
 import org.digijava.module.aim.helper.AmpProjectDonor;
@@ -104,7 +107,7 @@ public class FilterDesktopActivities extends Action {
 				}
 
 			}
-			boolean flag = false;
+/*			boolean flag = false;
 			if (dForm.getFltrDonor() != null
 					&& dForm.getFltrDonor().length > 0) {
 				// Filter activities based on Donors
@@ -126,6 +129,47 @@ public class FilterDesktopActivities extends Action {
 								AmpProjectDonor pDnr = (AmpProjectDonor) itr.next();
 								for (int j = 0;j < dnr.length;j ++) {
 									if (pDnr.getAmpDonorId().longValue() == dnr[j]) {
+										flag = true;
+										break;
+									}
+								}
+								if (flag) break;
+
+							}
+							if (!flag) {
+								activities.remove(proj);
+								i--;
+							}
+							flag = false;
+						}
+					}
+				}
+			}
+*/
+			boolean flag = false;
+			if (dForm.getFltrDonor() != null
+					&& dForm.getFltrDonor().length > 0) {
+				// Filter activities based on Donor Groups
+				long dnr[] = dForm.getFltrDonor();
+				boolean allSelected = false;
+				for (int i = 0; i < dnr.length;i++) {
+					if (dnr[i] == -1) {
+						allSelected = true;
+						break;
+					}
+				}
+
+				if (!allSelected) {
+					if (activities != null && activities.size() > 0) {
+						for (int i = 0;i < activities.size();i ++) {
+							AmpProject proj = (AmpProject) activities.get(i);
+							Iterator itr = proj.getDonor().iterator();
+							while (itr.hasNext()) {
+								AmpProjectDonor pDnr = (AmpProjectDonor) itr.next();
+								AmpOrgGroup grp = DbUtil.getAmpOrgGroup(pDnr.getAmpDonorId());
+								
+								for (int j = 0;j < dnr.length;j ++) {
+									if (grp.getAmpOrgGrpId().longValue() == dnr[j]) {
 										flag = true;
 										break;
 									}

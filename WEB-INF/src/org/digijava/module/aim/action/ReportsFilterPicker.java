@@ -30,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -80,8 +81,10 @@ public class ReportsFilterPicker extends MultiAction {
 		//create the pageSizes Collection for the dropdown
 		Collection pageSizes=new ArrayList();
 		
-		ArrayList donors;
-		if(ampTeamId!=null) donors=DbUtil.getAmpDonorsByFunding(ampTeamId); else donors=new ArrayList();
+		Collection donors;
+		//if(ampTeamId!=null) donors=DbUtil.getAmpDonorsByFunding(ampTeamId); else donors=new ArrayList();
+//		donors = DbUtil.getAllOrgGroups();
+		donors = DbUtil.getAllOrgGrpBeeingUsed();
 		Collection allIndicatorRisks = MEIndicatorsUtil.getAllIndicatorRisks();
 		
 		filterForm.setCurrencies(currency);
@@ -226,7 +229,7 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setText(filterForm.getText());
 		arf.setFromYear(filterForm.getFromYear()==null || filterForm.getFromYear().longValue()==-1?null:new Integer(filterForm.getFromYear().intValue()));
 		arf.setToYear(filterForm.getToYear()==null || filterForm.getToYear().longValue()==-1?null:new Integer(filterForm.getToYear().intValue()));
-		arf.setDonors(Util.getSelectedObjects(AmpOrganisation.class,filterForm.getSelectedDonors()));
+		arf.setDonors(Util.getSelectedObjects(AmpOrgGroup.class,filterForm.getSelectedDonors()));
 		AmpCurrency currency = (AmpCurrency) Util.getSelectedObject(AmpCurrency.class,filterForm.getCurrency());
 		arf.setCurrency(currency);
 		String name = "- " + currency.getCurrencyName();

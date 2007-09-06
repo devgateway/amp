@@ -85,8 +85,11 @@ public class AmpARFilter implements Filter {
 		selectPerspective(tm);
 		
 		this.setAmpTeams(new TreeSet());
-		this.getAmpTeams().add(TeamUtil.getAmpTeam(tm.getTeamId()));
-		this.getAmpTeams().addAll(TeamUtil.getAmpLevel0Teams(tm.getTeamId()));
+		if(tm!=null){
+			this.getAmpTeams().add(TeamUtil.getAmpTeam(tm.getTeamId()));
+			this.getAmpTeams().addAll(TeamUtil.getAmpLevel0Teams(tm.getTeamId()));	
+		}
+		
 
 		String widget=(String) request.getAttribute("widget");
 		if(widget!=null) this.setWidget(new Boolean(widget).booleanValue());

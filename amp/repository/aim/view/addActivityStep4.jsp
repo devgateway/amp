@@ -300,7 +300,9 @@ ${fn:replace(message,quote,escapedQuote)}
 																									<field:display name="Total Amount Commitments" feature="Regional Funding"><td>Total Amount</td></field:display>
 																									<field:display name="Currency Commitments" feature="Regional Funding"><td>Currency</td></field:display>
 																									<field:display name="Date Commitments" feature="Regional Funding"><td>Date</td></field:display>
-																									<field:display name="Perspective Commitments" feature="Regional Funding"><td>Perspective</td></field:display>
+																									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																										<field:display name="Perspective Commitments" feature="Regional Funding"><td>Perspective</td></field:display>
+																									</logic:equal>
 																								</tr>
 																								<logic:iterate name="regionalFunding"
 																								property="commitments" id="commitment"
@@ -313,12 +315,15 @@ ${fn:replace(message,quote,escapedQuote)}
 																									<c:out value="${commitment.transactionAmount}"/></td></field:display>
 																									<field:display name="Currency Commitments" feature="Regional Funding"><td><c:out value="${commitment.currencyCode}"/></td></field:display>
 																									<field:display name="Date Commitments" feature="Regional Funding"><td><c:out value="${commitment.transactionDate}"/></td></field:display>
-																									<field:display name="Perspective Commitments" feature="Regional Funding"><td>
-																										<digi:trn key='<%="aim:"+commitment.getPerspectiveNameTrimmed() %>'>
-																											<bean:write name="commitment" property="perspectiveName"/>
-																										</digi:trn>
-
-																									</td></field:display>
+																									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																										<field:display name="Perspective Commitments" feature="Regional Funding">
+																											<td>
+																												<digi:trn key='<%="aim:"+commitment.getPerspectiveNameTrimmed() %>'>
+																													<bean:write name="commitment" property="perspectiveName"/>
+																												</digi:trn>																									
+																											</td>
+																										</field:display>
+																									</logic:equal>
 																								</tr>
 																								</logic:iterate>	<!-- L2 END-->
 																							</table>
@@ -345,7 +350,9 @@ ${fn:replace(message,quote,escapedQuote)}
 																									<field:display name="Total Amount Disbursements" feature="Regional Funding"><td>Total Amount</td></field:display>
 																									<field:display name="Currency Disbursements" feature="Regional Funding"><td>Currency</td></field:display>
 																									<field:display name="Date Disbursements" feature="Regional Funding"><td>Date</td></field:display>
-																									<field:display name="Perspective Disbursements" feature="Regional Funding"><td>Perspective</td></field:display>
+																									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																										<field:display name="Perspective Disbursements" feature="Regional Funding"><td>Perspective</td></field:display>
+																									</logic:equal>
 																								</tr>
 																								<logic:iterate name="regionalFunding"
 																								property="disbursements" id="disbursement"
@@ -360,11 +367,13 @@ ${fn:replace(message,quote,escapedQuote)}
 																									</td></field:display>
 																									<field:display name="Currency Disbursements" feature="Regional Funding"><td><c:out value="${disbursement.currencyCode}"/></td></field:display>
 																									<field:display name="Date Disbursements" feature="Regional Funding"><td><c:out value="${disbursement.transactionDate}"/></td></field:display>
-																									<field:display name="Perspective Disbursements" feature="Regional Funding"><td>
-																										<digi:trn key='<%="aim:"+disbursement.getPerspectiveNameTrimmed() %>'>
-																											<bean:write name="disbursement" property="perspectiveName"/>
-																										</digi:trn>
-																									</td></field:display>
+																									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																										<field:display name="Perspective Disbursements" feature="Regional Funding"><td>
+																											<digi:trn key='<%="aim:"+disbursement.getPerspectiveNameTrimmed() %>'>
+																												<bean:write name="disbursement" property="perspectiveName"/>
+																											</digi:trn>
+																										</td></field:display>
+																									</logic:equal>
 																								</tr>
 																								</logic:iterate>	<!-- L3 END-->
 																							</table>
@@ -391,7 +400,9 @@ ${fn:replace(message,quote,escapedQuote)}
 																									<field:display name="Total Amount Expenditures" feature="Regional Funding"><td>Total Amount</td></field:display>
 																									<field:display name="Currency Expenditures" feature="Regional Funding"><td>Currency</td></field:display>
 																									<field:display name="Date Expenditures" feature="Regional Funding"><td>Date</td></field:display>
-																									<field:display name="Perspective Expenditures" feature="Regional Funding"><td>Perspective</td></field:display>
+																									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																										<field:display name="Perspective Expenditures" feature="Regional Funding"><td>Perspective</td></field:display>
+																									</logic:equal>
 																								</tr>
 																								<logic:iterate name="regionalFunding"
 																								property="expenditures" id="expenditure"
@@ -406,11 +417,13 @@ ${fn:replace(message,quote,escapedQuote)}
 																									</td></field:display>
 																									<field:display name="Currency Expenditures" feature="Regional Funding"><td><c:out value="${expenditure.currencyCode}"/></td></field:display>
 																									<field:display name="Date Expenditures" feature="Regional Funding"><td><c:out value="${expenditure.transactionDate}"/></td></field:display>
-																									<field:display name="Perspective Expenditures" feature="Regional Funding"><td>
-																										<digi:trn key='<%="aim:"+expenditure.getPerspectiveNameTrimmed() %>'>
-																											<bean:write name="expenditure" property="perspectiveName"/>
-																										</digi:trn>
-																									</td></field:display>
+																									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																										<field:display name="Perspective Expenditures" feature="Regional Funding"><td>
+																											<digi:trn key='<%="aim:"+expenditure.getPerspectiveNameTrimmed() %>'>
+																												<bean:write name="expenditure" property="perspectiveName"/>
+																											</digi:trn>
+																										</td></field:display>
+																									</logic:equal>
 																								</tr>
 																								</logic:iterate>	<!-- L4 END-->
 																							</table>

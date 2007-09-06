@@ -18,6 +18,7 @@ import org.digijava.module.aim.form.TeamPagesForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class ShowConfigureTeam extends Action {
 
@@ -60,20 +61,32 @@ public class ShowConfigureTeam extends Action {
 		/* setting all the filter applicable to a page */
 		Collection col = DbUtil.getAllPageFilters(pageId);
 		
-		List temp = (List) col;
-		Collections.sort(temp);
-		col = (Collection) temp;
+
+		Collections.sort((List) col);
 
 		tpForm.setFilters(col);
 
 		Collection teamPageFilters = DbUtil.getTeamPageFilters(tm.getTeamId(),
 				pageId);
 
+		if (!FeaturesUtil.isPerspectiveEnabled()) {
+			AmpFilters perspectiveFilter = null;
+			for (Iterator iter = col.iterator(); iter.hasNext();) {
+				AmpFilters element = (AmpFilters) iter.next();
+				if (element.getAmpFilterId().equals(Constants.PERSPECTIVE)) {
+					perspectiveFilter = element;
+					break;
+				}
+			}
+			if (perspectiveFilter != null)
+				col.remove(perspectiveFilter);
+		}
+		
 		int index = 0;
-		Iterator itr1 = col.iterator();
+		Iterator iterator = col.iterator();
 		Long filters[] = new Long[col.size()];
-		while (itr1.hasNext()) {
-			AmpFilters filt1 = (AmpFilters) itr1.next();
+		while (iterator.hasNext()) {
+			AmpFilters filt1 = (AmpFilters) iterator.next();
 			Iterator itr2 = teamPageFilters.iterator();
 			while (itr2.hasNext()) {
 				Long filtId = (Long) itr2.next();

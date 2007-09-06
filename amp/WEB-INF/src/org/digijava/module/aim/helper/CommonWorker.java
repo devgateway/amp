@@ -32,18 +32,18 @@ public  class CommonWorker	{
 		ff.setGoButtonPresent(false);
 		while ( iter.hasNext() )	{
 			Long ampFilterId = (Long)iter.next();
-			if ( ampFilterId.intValue()==1 )	{
+			if ( ampFilterId.equals(Constants.CALENDAR) )	{
 				ff.setCalendarPresent(true);
 				ff.setYearRangePresent(true);
 				ff.setGoButtonPresent(true);
 			}
 				
-			if ( ampFilterId.intValue()==2)	{
+			if ( ampFilterId.equals(Constants.CURRENCY))	{
 				ff.setCurrencyPresent(true);
 				ff.setGoButtonPresent(true);
 			}
 				
-			if (ampFilterId.intValue() == 8
+			if (ampFilterId.equals(Constants.PERSPECTIVE)
 				&& FeaturesUtil.isPerspectiveEnabled()) {
 				ff.setPerspectivePresent(true);
 			}

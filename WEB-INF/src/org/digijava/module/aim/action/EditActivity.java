@@ -427,7 +427,7 @@ public class EditActivity
 
       if (activityId != null) {
         activity = ActivityUtil.getAmpActivity(activityId);
-
+        
         /* Insert Categories */
         AmpCategoryValue ampCategoryValue = CategoryManagerUtil.
             getAmpCategoryValueFromList(CategoryConstants.ACCHAPTER_NAME,
@@ -482,9 +482,9 @@ public class EditActivity
               while (prgItr.hasNext()) {
                 AmpTheme prg = (AmpTheme) prgItr.next();
                 String newName = ProgramUtil.getHierarchyName(prg);
-                prg.setName(newName);
+                prg.setProgramviewname(newName);
                 actPrgs.add(prg);
-              }
+                 }
             }
 
             eaForm.setActPrograms(actPrgs);

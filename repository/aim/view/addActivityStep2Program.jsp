@@ -75,7 +75,6 @@
                                                                       <html:multibox property="selectedPrograms" value="${theProgram.ampThemeId}">
                                                                       ${theProgram.ampThemeId}
                                                                       </html:multibox>
-                                                                      ${theProgram.name}
                                                                       ${theProgram.programviewname}
                                                                     </td>
                                                                   </tr>

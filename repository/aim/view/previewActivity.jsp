@@ -873,7 +873,7 @@ function disable() {
                                             <c:if test="${!empty aimEditActivityForm.actPrograms}">
                                               <c:forEach var="tempPgm" items="${aimEditActivityForm.actPrograms}">
                                                 <c:if test="${tempPgm!=null}">
-                                                  <c:out value="${tempPgm.name}"/>
+                                                  *&nbsp;&nbsp;<c:out value="${tempPgm.programviewname}"/> <br>
                                                 </c:if>
                                               </c:forEach>
                                             </c:if>

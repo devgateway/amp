@@ -102,7 +102,10 @@
                                         <digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										<digi:trn key="aim:DateFIE">Date</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-										<digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn><br>
+										<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+											<digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn>
+										</logic:equal>
+										<br>
 										<div id="comm">
 											<c:if test="${aimEditActivityForm.componentId != -1}">
 											kkkkkk
@@ -146,18 +149,20 @@
 																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 																&nbsp;
-																<select name="<%=field5%>" value="<c:out value="${comm.perspectiveCode}"/>" class="inp-text">
-																	<c:forEach var="pers" items="${aimEditActivityForm.perspectives}">
-																		<c:if test="${comm.perspectiveCode == pers.code}">
-																			<option selected="true" value="<c:out value="${pers.code}"/>">
-																		</c:if>
-																		<c:if test="${comm.perspectiveCode != pers.code}">
-																			<option value="<c:out value="${pers.code}"/>">
-																		</c:if>
-																		<c:out value="${pers.name}"/>
-																		</option>
-																	</c:forEach>
-																</select>&nbsp;
+																<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																	<select name="<%=field5%>" value="<c:out value="${comm.perspectiveCode}"/>" class="inp-text">
+																		<c:forEach var="pers" items="${aimEditActivityForm.perspectives}">
+																			<c:if test="${comm.perspectiveCode == pers.code}">
+																				<option selected="true" value="<c:out value="${pers.code}"/>">
+																			</c:if>
+																			<c:if test="${comm.perspectiveCode != pers.code}">
+																				<option value="<c:out value="${pers.code}"/>">
+																			</c:if>
+																			<c:out value="${pers.name}"/>
+																			</option>
+																		</c:forEach>
+																	</select>&nbsp;
+																</logic:equal>
 																<input type='button' value='Delete' class='inp-text'onclick="removeCommitment('<%=divName%>')">
 															</div>
 														</c:forEach>
@@ -177,7 +182,10 @@
 												<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:DateFIE">Date</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn><br>
+												<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+													<digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn>
+												</logic:equal>
+												<br>
 									<div id="disb">
 										<c:if test="${aimEditActivityForm.componentId != -1}">
 											<c:forEach var="fundComp" items="${aimEditActivityForm.selectedComponents}">
@@ -219,19 +227,23 @@
 												<a id="date2<%=field4%>" href='javascript:pickDateById("date2<%=field4%>","<%=field4%>")'>
 													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 												</a>
-												&nbsp;<select name="<%=field5%>"
-												class="inp-text">
-													<c:forEach var="pers" items="${aimEditActivityForm.perspectives}">
-														<c:if test="${comm.perspectiveCode == pers.code}">
-															<option selected="true" value="<c:out value="${pers.code}"/>">
-														</c:if>
-														<c:if test="${comm.perspectiveCode != pers.code}">
-															<option value="<c:out value="${pers.code}"/>">
-														</c:if>
-														<c:out value="${pers.name}"/>
-														</option>
-													</c:forEach>
-												</select>&nbsp;<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text'
+												&nbsp;
+												<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+													<select name="<%=field5%>"
+													class="inp-text">
+														<c:forEach var="pers" items="${aimEditActivityForm.perspectives}">
+															<c:if test="${comm.perspectiveCode == pers.code}">
+																<option selected="true" value="<c:out value="${pers.code}"/>">
+															</c:if>
+															<c:if test="${comm.perspectiveCode != pers.code}">
+																<option value="<c:out value="${pers.code}"/>">
+															</c:if>
+															<c:out value="${pers.name}"/>
+															</option>
+														</c:forEach>
+													</select>&nbsp;
+												</logic:equal>
+												<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text'
 												onclick="removeDisbursement('<%=divName%>')"></div>
 											</c:forEach>
 											</c:if>
@@ -250,7 +262,10 @@
 												<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:DateFIE">Date</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn><br>
+												<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+													<digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn>
+												</logic:equal>
+												<br>
 									<div id="expn">
 										<c:if test="${aimEditActivityForm.componentId != -1}">
 											<c:forEach var="fundComp" items="${aimEditActivityForm.selectedComponents}">
@@ -296,18 +311,22 @@
 												<a id="date3<%=field4%>" href='javascript:pickDateById("date3<%=field4%>","<%=field4%>")'>
 													<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 												</a>
-												&nbsp;<select name="<%=field5%>" value="<c:out value="${comm.perspectiveCode}"/>" class="inp-text">
-													<c:forEach var="pers" items="${aimEditActivityForm.perspectives}">
-														<c:if test="${comm.perspectiveCode == pers.code}">
-															<option selected="true" value="<c:out value="${pers.code}"/>">
-														</c:if>
-														<c:if test="${comm.perspectiveCode != pers.code}">
-															<option value="<c:out value="${pers.code}"/>">
-														</c:if>
-														<c:out value="${pers.name}"/>
-														</option>
-													</c:forEach>
-												</select>&nbsp;<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text'
+												&nbsp;
+												<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+													<select name="<%=field5%>" value="<c:out value="${comm.perspectiveCode}"/>" class="inp-text">
+														<c:forEach var="pers" items="${aimEditActivityForm.perspectives}">
+															<c:if test="${comm.perspectiveCode == pers.code}">
+																<option selected="true" value="<c:out value="${pers.code}"/>">
+															</c:if>
+															<c:if test="${comm.perspectiveCode != pers.code}">
+																<option value="<c:out value="${pers.code}"/>">
+															</c:if>
+															<c:out value="${pers.name}"/>
+															</option>
+														</c:forEach>
+													</select>&nbsp;
+												</logic:equal>
+												<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text'
 												onclick="removeExpenditure('<%=divName%>')"></div>
 											</c:forEach>
 											</c:if>
@@ -381,6 +400,7 @@ function addCommitments()
 	s += "</select>&nbsp;";
 	s += "<input type='text' name='comm_" + numComm + "_4' id='comm_" + numComm + "_4' size='10' class='inp-text'>&nbsp;";
 	s += "<a id='date1comm_"+numComm+"_4' href='javascript:pickDateById(\"date1comm_"+numComm+"_4\",\"comm_"+numComm+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a>&nbsp;";
+	<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 	s += "<select name='comm_" + numComm + "_5' class='inp-text'>";
 	<% itr = eaForm.getPerspectives().iterator();
 		while (itr.hasNext()) {
@@ -398,6 +418,7 @@ function addCommitments()
 			<% }
 		} %>
 	s += "</select>&nbsp;";
+	</logic:equal>
     <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
 	s += '<input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeCommitment("'+ divname + '")><br>';
 
@@ -442,6 +463,7 @@ function addDisbursement()
 	s += "</select>&nbsp;";
 	s += "<input type='text' name='disb_" + numDisb + "_4' id='disb_" + numDisb + "_4' size='10' class='inp-text'>&nbsp;";
 	s += "<a id='date1disb_"+numDisb+"_4' href='javascript:pickDateById(\"date1disb_"+numDisb+"_4\",\"disb_"+numDisb+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a>&nbsp;";
+	<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 	s += "<select name='disb_" + numDisb + "_5' class='inp-text'>";
 	<% itr = eaForm.getPerspectives().iterator();
 		while (itr.hasNext()) {
@@ -460,6 +482,7 @@ function addDisbursement()
 
 		} %>
 	s += "</select>&nbsp;";
+	</logic:equal>
 	<c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
 	s += '<input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeDisbursement("'+ divname + '")><br>';
 
@@ -505,6 +528,7 @@ function addExpenditure()
 	s += "</select>&nbsp;";
 	s += "<input type='text' name='expn_" + numExpn + "_4' id='expn_" + numExpn + "_4' size='10' class='inp-text'>&nbsp;";
 	s += "<a id='date1expn_"+numExpn+"_4' href='javascript:pickDateById(\"date1expn_"+numExpn+"_4\",\"expn_"+numExpn+"_4\")'><img src='../ampTemplate/images/show-calendar.gif' alt='Click to View Calendar' border=0></a>&nbsp;";
+	<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 	s += "<select name='expn_" + numExpn + "_5' class='inp-text'>";
 	<% itr = eaForm.getPerspectives().iterator();
 		while (itr.hasNext()) {
@@ -522,6 +546,7 @@ function addExpenditure()
 			<% }
 		} %>
 	s += "</select>&nbsp;";
+	</logic:equal>
 	<c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
 	s += '<input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeExpenditure("'+ divname + '")><br>';
 

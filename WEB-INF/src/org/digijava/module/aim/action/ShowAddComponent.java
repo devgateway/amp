@@ -33,6 +33,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 
 public class ShowAddComponent extends Action {
@@ -46,12 +47,14 @@ public class ShowAddComponent extends Action {
 		logger.debug("Action is " + action);
 
 		HttpSession session = request.getSession();
-		TeamMember tm = (TeamMember) session.getAttribute("currentMember");		
+		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);		
 		
 		try
 		{
 			EditActivityForm eaForm = (EditActivityForm) form;
 			eaForm.setStep("5");
+			
+			boolean perspectiveEnabled = FeaturesUtil.isPerspectiveEnabled();
 			
 			if( action != null && action.equalsIgnoreCase("show") )
 			{
@@ -62,13 +65,18 @@ public class ShowAddComponent extends Action {
 				eaForm.setComponentId(new Long(-1));
 				eaForm.setComponentTitle(null);
 				eaForm.setComponentDesc(null);
-				if (tm.getAppSettings().getPerspective()
-						.equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
-					request.setAttribute("defPerspective",Constants.DONOR);
-				} else if (tm.getAppSettings().getPerspective().
-						equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
+				if(perspectiveEnabled){
+					if (tm.getAppSettings().getPerspective()
+							.equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
+						request.setAttribute("defPerspective",Constants.DONOR);
+					} else if (tm.getAppSettings().getPerspective().
+							equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
+						request.setAttribute("defPerspective",Constants.MOFED);
+					}
+				}else{
 					request.setAttribute("defPerspective",Constants.MOFED);
 				}
+				
 				String defCurr = CurrencyUtil.getCurrency(
 						tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 				request.setAttribute("defCurrency",defCurr);				
@@ -92,13 +100,19 @@ public class ShowAddComponent extends Action {
 						break;
 					}
 				}
-				if (tm.getAppSettings().getPerspective()
-						.equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
-					request.setAttribute("defPerspective",Constants.DONOR);
-				} else if (tm.getAppSettings().getPerspective().
-						equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
+				
+				if(perspectiveEnabled){
+					if (tm.getAppSettings().getPerspective()
+							.equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
+						request.setAttribute("defPerspective",Constants.DONOR);
+					} else if (tm.getAppSettings().getPerspective().
+							equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
+						request.setAttribute("defPerspective",Constants.MOFED);
+					}
+				}else{
 					request.setAttribute("defPerspective",Constants.MOFED);
 				}
+				
 				String defCurr = CurrencyUtil.getCurrency(
 						tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 				request.setAttribute("defCurrency",defCurr);				
@@ -141,6 +155,11 @@ public class ShowAddComponent extends Action {
 							comm.put(new Integer(index),new FundingDetail());	
 						}
 						FundingDetail fd = (FundingDetail) comm.get(new Integer(index));
+						
+						if(!perspectiveEnabled){
+							fd.setPerspectiveName("MOFED");
+							fd.setPerspectiveCode(Constants.MOFED);
+						}
 
 						if( fd != null )
 						{
@@ -195,6 +214,12 @@ public class ShowAddComponent extends Action {
 						}
 
 						FundingDetail fd = ( FundingDetail ) disb.get( new Integer( index ) );
+						
+						if(!perspectiveEnabled){
+							fd.setPerspectiveName("MOFED");
+							fd.setPerspectiveCode(Constants.MOFED);
+						}
+						
 						if ( fd != null ) 
 						{
 							switch ( num ) 
@@ -249,6 +274,12 @@ public class ShowAddComponent extends Action {
 						}
 
 						FundingDetail fd = ( FundingDetail ) exp.get( new Integer( index ) );
+						
+						if(!perspectiveEnabled){
+							fd.setPerspectiveName("MOFED");
+							fd.setPerspectiveCode(Constants.MOFED);
+						}
+						
 						if ( fd != null ) 
 						{
 							switch ( num ) 
@@ -368,67 +399,8 @@ public class ShowAddComponent extends Action {
 		} 
 		catch ( Exception e ) 
 		{
-			logger.debug( "Exception" );
-			e.printStackTrace( System.out );
+			logger.debug(e);
 		}
 		return mapping.findForward("forward");
 	}
 }
- 		
-
-
-
-
-/*					
-				
-		if (request.getParameter("componentReset") != null && request.getParameter("componentReset").equals("false")) 
-		{
-			eaForm.setComponentReset(false);
-		} 
-		else 
-		{
-			eaForm.setComponentReset(true);
-			eaForm.reset(mapping, request);
-		}
-
-		if (request.getParameter("id") != null) 
-		{
-			try 
-			{
-				long id = Long.parseLong(request.getParameter("id"));
-				Long cId = new Long(id);
-				Collection selComps = eaForm.getSelectedComponents();
-				if (selComps != null && selComps.size() > 0) 
-				{
-					Iterator itr = selComps.iterator();
-					while (itr.hasNext()) 
-					{
-						Components comp = (Components) itr.next();
-						if (comp.getComponentId().equals(cId)) 
-						{
-							eaForm.setComponentTitle(comp.getTitle());
-							eaForm.setComponentAmount(comp.getAmount());
-							eaForm.setComponentDesc(comp.getDescription());
-							eaForm.setComponentRepDate(comp.getReportingDate());
-							eaForm.setComponentId(comp.getComponentId());
-							eaForm.setCurrencyCode(comp.getCurrencyCode());
-												
-							break;
-						}
-					}
-				}
-			} 
-			catch (Exception e) 
-			{
-				logger.error("Exception :" + e);
-			}
-		}
-		eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
-		return mapping.findForward("forward");
-	}
-}
-
-*/
-
-
-

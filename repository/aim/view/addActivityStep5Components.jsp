@@ -107,7 +107,9 @@
 																					<field:display name="Total Amount Commitments" feature="Components"><td>Total Amount</td></field:display>
 																					<field:display name="Currency Commitments" feature="Components"><td>Currency</td></field:display>
 																					<field:display name="Date Commitments" feature="Components"><td>Date</td></field:display>
-																					<field:display name="Perspective Commitments" feature="Components"><td>Perspective</td></field:display>
+																					<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																						<field:display name="Perspective Commitments" feature="Components"><td>Perspective</td></field:display>
+																					</logic:equal>
 																				</tr>
 																				<logic:iterate name="selComponents" property="commitments" 
 																				id="commitment" 
@@ -126,13 +128,15 @@
 																						<td>
 																							<c:out value="${commitment.transactionDate}"/>
 																						</td></field:display>
-																						<field:display name="Perspective Commitments" feature="Components">
-																						<td>
-																							<digi:trn key='<%="aim:"+commitment.getPerspectiveNameTrimmed() %>'>
-																									<bean:write name="commitment" property="perspectiveName"/>
-																							</digi:trn>
-																							
-																						</td></field:display>
+																						<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																							<field:display name="Perspective Commitments" feature="Components">
+																								<td>
+																									<digi:trn key='<%="aim:"+commitment.getPerspectiveNameTrimmed() %>'>
+																											<bean:write name="commitment" property="perspectiveName"/>
+																									</digi:trn>																								
+																								</td>
+																							</field:display>
+																						</logic:equal>
 																					</tr>																			
 																				</logic:iterate>	<!-- L2 END-->
 																			</table>	
@@ -155,7 +159,9 @@
 																					<field:display name="Total Amount Disbursements" feature="Components"><td>Total Amount</td></field:display>
 																					<field:display name="Currency Disbursements" feature="Components"><td>Currency</td></field:display>
 																					<field:display name="Date Disbursements" feature="Components"><td>Date</td></field:display>
-																					<field:display name="Perspective Disbursements" feature="Components"><td>Perspective</td></field:display>
+																					<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																						<field:display name="Perspective Disbursements" feature="Components"><td>Perspective</td></field:display>
+																					</logic:equal>
 																				</tr>
 																				<logic:iterate name="selComponents" property="disbursements" 
 																				id="disbursement" 
@@ -176,13 +182,14 @@
 																						<td>
 																							<c:out value="${disbursement.transactionDate}"/>
 																						</td></field:display>
-																						<field:display name="Perspective Disbursements" feature="Components">
-																						<td>
-																							<digi:trn key='<%="aim:"+disbursement.getPerspectiveNameTrimmed() %>'>
-																								<bean:write name="disbursement" property="perspectiveName"/>
-																							</digi:trn>
-																							
-																						</td></field:display>
+																						<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																							<field:display name="Perspective Disbursements" feature="Components">
+																							<td>
+																								<digi:trn key='<%="aim:"+disbursement.getPerspectiveNameTrimmed() %>'>
+																									<bean:write name="disbursement" property="perspectiveName"/>
+																								</digi:trn>																								
+																							</td></field:display>
+																						</logic:equal>
 																					</tr>																			
 																				</logic:iterate>	
 																				<!-- L3 END-->
@@ -203,7 +210,9 @@
 																					<field:display name="Total Amount Expenditures" feature="Components"><td>Total Amount</td></field:display>
 																					<field:display name="Currency Expenditures" feature="Components"><td>Currency</td></field:display>
 																					<field:display name="Date Expenditures" feature="Components"><td>Date</td></field:display>
-																					<field:display name="Perspective Expenditures" feature="Components"><td>Perspective</td></field:display>
+																					<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																						<field:display name="Perspective Expenditures" feature="Components"><td>Perspective</td></field:display>
+																					</logic:equal>
 																				</tr>
 																				<logic:iterate name="selComponents" property="expenditures" 
 																				id="expenditure" 
@@ -226,12 +235,14 @@
 																					<td>
 																						<c:out value="${expenditure.transactionDate}"/>
 																					</td></field:display>
-																					<field:display name="Perspective Expenditures" feature="Components">
-																					<td>
-																							<digi:trn key='<%="aim:"+expenditure.getPerspectiveNameTrimmed() %>'>
-																								<bean:write name="expenditure" property="perspectiveName"/>
-																							</digi:trn>
-																					</td></field:display>
+																					<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																						<field:display name="Perspective Expenditures" feature="Components">
+																						<td>
+																								<digi:trn key='<%="aim:"+expenditure.getPerspectiveNameTrimmed() %>'>
+																									<bean:write name="expenditure" property="perspectiveName"/>
+																								</digi:trn>
+																						</td></field:display>
+																					</logic:equal>
 																				</tr>
 																			</logic:iterate>	
 																			<!-- L4 END-->

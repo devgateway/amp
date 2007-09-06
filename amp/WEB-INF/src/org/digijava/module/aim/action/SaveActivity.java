@@ -1452,9 +1452,14 @@ public class SaveActivity extends Action {
 					activity.setApprovalStatus(eaForm.getApprovalStatus());
 					// create a new activity
 
-					actId = ActivityUtil.saveActivity(activity,
-							eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
-							field, relatedLinks, tm.getMemberId(), tempComp);
+//					actId = ActivityUtil.saveActivity(activity,
+//							eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
+//							field, relatedLinks, tm.getMemberId(), tempComp);
+					
+					actId = ActivityUtil.saveActivity(activity, null, false, eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
+	                        field, relatedLinks,tm.getMemberId() , eaForm.getIndicatorsME(), tempComp);
+					
+					
 					//for logging the activity
 					 AuditLoggerUtil.logObject(session, request,activity,"add");
 

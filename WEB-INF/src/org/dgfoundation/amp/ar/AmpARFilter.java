@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpPerspective;
@@ -83,6 +84,9 @@ public class AmpARFilter implements Filter {
 				Constants.CURRENT_MEMBER);
 
 		selectPerspective(tm);
+
+		AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
+		this.setCurrency(tempSettings.getCurrency());
 		
 		this.setAmpTeams(new TreeSet());
 		if(tm!=null){

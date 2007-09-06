@@ -158,13 +158,10 @@ public class ReportsFilterPicker extends MultiAction {
 		HttpSession httpSession = request.getSession();
 		
 		if (httpSession.getAttribute(ArConstants.SELECTED_CURRENCY) == null){
-			ReportsFilterPickerForm filterForm=(ReportsFilterPickerForm) form;
 			TeamMember teamMember = (TeamMember) httpSession  .getAttribute(Constants.CURRENT_MEMBER);
 			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
 			String name = "- " + tempSettings.getCurrency().getCurrencyName();
 			httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
-			filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());
-			return modeApply(mapping, form, request, response);
 		}
 		return mapping.findForward("forward");
 	}

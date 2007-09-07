@@ -100,7 +100,7 @@ public abstract class XLSExporter extends Exporter {
 			cs.setBorderRight(HSSFCellStyle.BORDER_HAIR);
 			cs.setBorderTop(HSSFCellStyle.BORDER_HAIR);
 			HSSFDataFormat df = wb.createDataFormat();
-			cs.setDataFormat(df.getFormat("###,###,###,###"));
+			cs.setDataFormat(df.getFormat("###,###,###,##0.#0"));
 			cs.setFont(font);
 			cs.setWrapText(true);
 			cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);

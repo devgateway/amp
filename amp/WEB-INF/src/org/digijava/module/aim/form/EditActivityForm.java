@@ -21,6 +21,7 @@ private int isPreview=0;
 	private String ampId = null;
 	private String title = null;
 	private String description = null;
+	private String lessonsLearned=null;
 	private String purpose = null;
 	private String results = null;
 	private Double overallCost = null;
@@ -396,7 +397,7 @@ private int isPreview=0;
 	 private String subVote;
 	 private String subProgram;
 	 private String projectCode;
-	 private Integer gbsSbs;
+	 private Long gbsSbs;
 
 	 private Boolean governmentApprovalProcedures;
 	 private Boolean jointCriteria;
@@ -4028,11 +4029,11 @@ public String getPurpose() {
 		FY = fy;
 	}
 
-	public Integer getGbsSbs() {
+	public Long getGbsSbs() {
 		return gbsSbs;
 	}
 
-	public void setGbsSbs(Integer gbsSbs) {
+	public void setGbsSbs(Long gbsSbs) {
 		this.gbsSbs = gbsSbs;
 	}
 
@@ -4104,6 +4105,14 @@ public String getPurpose() {
 
 	public void setMultiSectorSelecting(String multiSectorSelecting) {
 		this.multiSectorSelecting = multiSectorSelecting;
+	}
+
+	public String getLessonsLearned() {
+		return lessonsLearned;
+	}
+
+	public void setLessonsLearned(String lessonsLearned) {
+		this.lessonsLearned = lessonsLearned;
 	}
 
 

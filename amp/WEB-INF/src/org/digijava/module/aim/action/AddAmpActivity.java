@@ -335,6 +335,29 @@ public class AddAmpActivity
           org.digijava.module.editor.util.DbUtil.saveEditor(ed);
         }
 
+//      ---
+        if (eaForm.getLessonsLearned() == null ||
+            eaForm.getLessonsLearned().trim().length() == 0) {
+          eaForm.setLessonsLearned("aim-less-" + teamMember.getMemberId() + "-" +
+                            System.currentTimeMillis());
+          User user = RequestUtils.getUser(request);
+          String currentLang = RequestUtils.getNavigationLanguage(request).
+              getCode();
+          String refUrl = RequestUtils.getSourceURL(request);
+          String key = eaForm.getPurpose();
+          Editor ed = org.digijava.module.editor.util.DbUtil.createEditor(user,
+              currentLang,
+              refUrl,
+              key,
+              key,
+              " ",
+              null,
+              request);
+          ed.setLastModDate(new Date());
+          ed.setGroupName(Constants.GROUP_OTHER);
+          org.digijava.module.editor.util.DbUtil.saveEditor(ed);
+        }
+   
         if (eaForm.getResults() == null ||
             eaForm.getResults().trim().length() == 0) {
           eaForm.setResults("aim-results-" + teamMember.getMemberId() + "-" +

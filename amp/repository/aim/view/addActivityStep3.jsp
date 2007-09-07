@@ -129,12 +129,44 @@
 		inputHidden=document.getElementsByName(hiddenName);
 		checkboxArray=document.getElementsByName(checkboxName);
 		checkbox=checkboxArray[0];
+
 		if(checkbox.checked==true )
-		{	inputHidden[0].value="checked";}
+		{	inputHidden[0].value="checked"; }
 		if(checkbox.checked==false)
 		{	inputHidden[0].value="unchecked";}
 
 	}
+	
+	function delegatedCooperationClick(name)
+	{	
+		index1=name.indexOf("[");
+		index2=name.indexOf("]");
+		index=name.substring(index1+1, index2);
+		propertyName=name.substring(index2+2, name.length);
+		hiddenName="fundingOrganization["+index+"]."+propertyName+"String";
+		checkboxName="fundingOrganization["+index+"]."+propertyName;
+		inputHidden=document.getElementsByName(hiddenName);
+		checkboxArray=document.getElementsByName(checkboxName);
+		checkbox=checkboxArray[0];
+
+		for(i=0;;i++)
+		{
+			if(i!=index)
+			{
+				fundOrgCheckbox=document.getElementsByName("fundingOrganization["+i+"]."+propertyName);
+				fundOrgHidden=document.getElementsByName("fundingOrganization["+i+"]."+propertyName+"String");
+				if (fundOrgCheckbox.length==0) break;
+				fundOrgCheckbox[0].checked=false; fundOrgCheckbox.value="off";
+				fundOrgHidden[0].value="unchecked"	
+			}
+		}
+		
+		if(checkbox.checked==true )
+		{	inputHidden[0].value="checked";}
+		if(checkbox.checked==false)
+		{	inputHidden[0].value="unchecked";}
+	}
+	
 	-->
 </script>
 
@@ -425,10 +457,9 @@ ${fn:replace(message,quote,escapedQuote)}
 	                                                            </html:multibox>
                                                             <bean:write name="fundingOrganization" property="orgName"/>
                                                             </td>
-                                                            </tr>
-                                                            <tr>
+                                                           
                                                             <field:display name="Active Funding Organization" feature="Funding Organizations">
-                                                            <td>
+                                                            <td> &nbsp;&nbsp;
                           										<html:select property="fundingActive" indexed="true" name="fundingOrganization">
                           											<html:option value="true">Active</html:option>
                           											<html:option value="false">Inactive</html:option>
@@ -438,7 +469,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                             <field:display name="Delegated Cooperation" feature="Funding Organizations">
                                                             <td>
 
-                          									Delegated Cooperation<html:checkbox name="fundingOrganization" property="delegatedCooperation" indexed="true" onclick="indexedCheckboxClick(this.name);"/>
+                          									Delegated Cooperation<html:checkbox name="fundingOrganization" property="delegatedCooperation" indexed="true" onclick="delegatedCooperationClick(this.name);"/>
                           									<html:hidden name="fundingOrganization" property="delegatedCooperationString" indexed="true"/>
                                                             </td>
                                                             </field:display>

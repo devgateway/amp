@@ -17,11 +17,11 @@ import org.dgfoundation.amp.ar.MetaInfo;
 /**
  * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
- * @since Jul 8, 2006 Cell holding amounts.
+ * @since Jul 8, 2006 Cell holding amounts.82
  * 
  */
 public class AmountCell extends Cell {
-	public static DecimalFormat mf = new DecimalFormat("###,###,###,###,###");
+	public static DecimalFormat mf = new DecimalFormat("###,###,###,###,###.##");
 
 	protected double amount;
 	
@@ -155,7 +155,8 @@ public class AmountCell extends Cell {
 			ret += element.getAmount();
 			//logger.info("amount++"+element.getAmount());
 		}
-		//logger.info("total amount for owner "+this.getOwnerId()+"="+ret);
+		
+		//logger.info("******total amount for owner "+this.getOwnerId()+"="+ret);
 		return ret;
 	}
 

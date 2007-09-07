@@ -67,9 +67,8 @@ public class GetActivities extends Action {
 		logger.debug("programId=" + actForm.getProgramId() + " statusCode=" + actForm.getStatusId());
 		HttpSession session = request.getSession();
 		TeamMember tm =  (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
-		ServletOutputStream outputStream = null;
-		outputStream =  response.getOutputStream();
-
+		OutputStreamWriter outputStream =null;
+		
 		try {
 			Date fromYear = yearToDate(actForm.getStartYear(), false);
 			Date toYear = yearToDate(actForm.getEndYear(), true);
@@ -84,6 +83,7 @@ public class GetActivities extends Action {
 			String xml = activities2XML(activities);
 
 			logger.debug("Setting activties XML in the response");
+			outputStream =  new OutputStreamWriter( response.getOutputStream(),"UTF-8");
 			PrintWriter out = new PrintWriter(outputStream, true);
 			
 			out.println(xml);
@@ -96,7 +96,7 @@ public class GetActivities extends Action {
 			logger.info(e);
 			if (outputStream != null) {
 				try {
-					outputStream.println(stackTrace2XML(e));
+					outputStream.write(stackTrace2XML(e));
 				} catch (IOException e1) {
 					logger.info(e1);
 				}

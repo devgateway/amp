@@ -97,15 +97,30 @@ public class ViewComment extends Action {
 														editForm.setFieldName("Results Verification");
 														field = DbUtil.getAmpFieldByName("Results Verification");
 													}
+													else
+														if (comment.equals("resObjVerIndicators")||comment.equals("viewresObjVerIndicators")){
+															editForm.setFieldName("Results Objectively Verifiable Indicators");
+															field = DbUtil.getAmpFieldByName("Results Objectively Verifiable Indicators");
+														}
+														else
+															if (comment.equals("objObjVerIndicators")||comment.equals("viewObjObjVerIndicators")){
+																editForm.setFieldName("Objective Objectively Verifiable Indicators");
+																field = DbUtil.getAmpFieldByName("Objective Objectively Verifiable Indicators");
+															}
+															else
+																if (comment.equals("purpObjVerIndicators")||comment.equals("viewpurpObjVerIndicators")){
+																	editForm.setFieldName("Purpose Objectively Verifiable Indicators");
+																	field = DbUtil.getAmpFieldByName("Purpose Objectively Verifiable Indicators");
+																}
 							editForm.setField(field);
 						//}
 						 	
 						logger.debug("editForm.getCommentsCol().size() [At Start-I]: " + editForm.getCommentsCol().size());
 						if (editForm.isEditAct()) {
 							if (comment.equals("viewccd")||comment.equals("ccd")
-									||comment.equals("viewobjAssumption")||comment.equals("objAssumption")||comment.equals("viewobjVerification")||comment.equals("objVerification")
-									||comment.equals("viewpurpAssumption")||comment.equals("purpAssumption")||comment.equals("viewpurpVerification")||comment.equals("purpVerification")
-									||comment.equals("viewresAssumption")||comment.equals("resAssumption")||comment.equals("viewresVerification")||comment.equals("resVerification")) {
+									||comment.equals("viewobjAssumption")||comment.equals("objAssumption")||comment.equals("viewobjVerification")||comment.equals("objVerification")||comment.equals("viewobjObjVerIndicators")||comment.equals("objObjVerIndicators")
+									||comment.equals("viewpurpAssumption")||comment.equals("purpAssumption")||comment.equals("viewpurpVerification")||comment.equals("purpVerification")||comment.equals("viewresObjVerIndicators")||comment.equals("resObjVerIndicators")
+									||comment.equals("viewresAssumption")||comment.equals("resAssumption")||comment.equals("viewresVerification")||comment.equals("resVerification")||comment.equals("viewpurpObjVerIndicators")||comment.equals("purpObjVerIndicators")) {
 								String activityId = request.getParameter("actId");
 								Long id = null;
 								if (activityId != null && activityId.length() != 0)

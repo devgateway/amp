@@ -114,6 +114,7 @@ public class ShowActivityPrintPreview
                 }
                 eaForm.setTitle(activity.getName().trim());
                 eaForm.setDescription(activity.getDescription().trim());
+                eaForm.setLessonsLearned(activity.getLessonsLearned().trim());
                 eaForm.setObjectives(activity.getObjective().trim());
                 if(activity.getDocumentSpace() == null ||
                    activity.getDocumentSpace().trim().length() == 0) {
@@ -1018,7 +1019,7 @@ public class ShowActivityPrintPreview
 				eaForm.setSubVote(null);
 				eaForm.setSubProgram(null);
 				eaForm.setProjectCode(null);
-				eaForm.setGbsSbs(new Integer(0));
+				eaForm.setGbsSbs(null);
 				eaForm.setGovernmentApprovalProcedures(false);
 				eaForm.setJointCriteria(false);
                 

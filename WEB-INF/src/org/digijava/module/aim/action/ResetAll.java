@@ -90,6 +90,7 @@ public class ResetAll extends Action
 			   eaForm.setTitle(null);
 			   eaForm.setTeam(null);
 				eaForm.setDescription(null);
+				eaForm.setLessonsLearned(null);
 				eaForm.setObjectives(null);
                 eaForm.setDocumentSpace(null);
 				eaForm.setSelectedOrganizations(null);
@@ -114,7 +115,7 @@ public class ResetAll extends Action
 				eaForm.setSubVote(null);
 				eaForm.setSubProgram(null);
 				eaForm.setProjectCode(null);
-				eaForm.setGbsSbs(new Integer(0));
+				eaForm.setGbsSbs(null);
 				eaForm.setGovernmentApprovalProcedures(new Boolean(false));
 				eaForm.setJointCriteria(new Boolean(false));
 				

@@ -19,6 +19,7 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	private String ampId ;
 	private String name ;
 	private String description ;
+	private String lessonsLearned;
 	private String objective ;
 	private String purpose;
 	private String results;
@@ -135,7 +136,7 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 
 	private String projectCode;
 
-	private Integer gbsSbs;
+	private Long gbsSbs;
 
 	private Boolean governmentApprovalProcedures;
 
@@ -1100,11 +1101,11 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 		FY = fy;
 	}
 
-	public Integer getGbsSbs() {
+	public Long getGbsSbs() {
 		return gbsSbs;
 	}
 
-	public void setGbsSbs(Integer gbsSbs) {
+	public void setGbsSbs(Long gbsSbs) {
 		this.gbsSbs = gbsSbs;
 	}
 
@@ -1146,5 +1147,13 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 
 	public void setCreatedBy(AmpTeamMember createdBy) {
 		this.createdBy = createdBy;
+	}
+
+	public String getLessonsLearned() {
+		return lessonsLearned;
+	}
+
+	public void setLessonsLearned(String lessonsLearned) {
+		this.lessonsLearned = lessonsLearned;
 	}
 }

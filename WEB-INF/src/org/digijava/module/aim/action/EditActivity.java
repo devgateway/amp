@@ -529,6 +529,8 @@ public class EditActivity
 
           if (activity.getDescription() != null)
             eaForm.setDescription(activity.getDescription().trim());
+          if (activity.getLessonsLearned()!=null)
+        	eaForm.setLessonsLearned(activity.getLessonsLearned().trim());
           if (activity.getObjective() != null)
             eaForm.setObjectives(activity.getObjective().trim());
           if (activity.getPurpose() != null)

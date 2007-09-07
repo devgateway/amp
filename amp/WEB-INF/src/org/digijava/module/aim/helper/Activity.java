@@ -79,7 +79,7 @@ public class Activity
   private String subVote;
   private String subProgram;
   private String projectCode;
-  private Integer financialInstrument;
+  private Long financialInstrument;
   private String financialInstrumentString;
   private Boolean governmentApprovalProcedures;
   private Boolean jointCriteria;
@@ -796,36 +796,12 @@ public class Activity
     this.mfdCntTitle = mfdCntTitle;
   }
 
-  public Integer getFinancialInformation() {
+  public Long getFinancialInformation() {
     return financialInstrument;
   }
 
-  public void setFinancialInstrument(Integer financialInformation) {
-	if (financialInformation == null)
-		return;
-    this.financialInstrument = financialInformation;
-    switch (financialInformation.intValue()) {
-      case 1: {
-        this.setFinancialInstrumentString("GBS");
-        break;
-      }
-      case 2: {
-        this.setFinancialInstrumentString("SBS");
-        break;
-      }
-      case 3: {
-        this.setFinancialInstrumentString("Basket");
-        break;
-      }
-      case 4: {
-        this.setFinancialInstrumentString("DPS on Budget");
-        break;
-      }
-      case -1: {
-        this.setFinancialInstrumentString("");
-        break;
-      }
-    }
+  public void setFinancialInstrument(Long financialInformation) {
+	this.financialInstrument=financialInformation;
   }
 
   public String getFY() {

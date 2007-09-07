@@ -110,17 +110,22 @@
 														<TD><digi:trn key="aim:totalAmount">Total Amount</digi:trn></TD>
 	                         	<TD><digi:trn key="aim:currency">Currency</digi:trn></TD>
 														<TD><digi:trn key="aim:date">Date</digi:trn></TD>
-	                         	<TD><digi:trn key="aim:perspective">Perspective</digi:trn></TD>
+														
+														<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+	                         								<TD><digi:trn key="aim:perspective">Perspective</digi:trn></TD>
+	                         							</logic:equal>
 													</TR>
 													<c:forEach var="comm" items="${rd.commitments}">
 														<TR valign="top" bgcolor="#f4f4f2"> 
 					    	           		<TD>
 																<c:out value="${comm.adjustmentTypeName}"/>
 															</TD>
-							                 <TD align="right"><c:out value="${comm.transactionAmount}"/></TD>
+							                 <TD><c:out value="${comm.transactionAmount}"/></TD>
 							                 <TD><c:out value="${comm.currencyCode}"/></TD>
 					      			         <TD><c:out value="${comm.transactionDate}"/></TD>
-								               <TD><c:out value="${comm.perspectiveName}"/></TD>
+					      			          <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+								               	<TD><c:out value="${comm.perspectiveName}"/></TD>
+								              </logic:equal> 
 														</TR>
 													</c:forEach>
 												</TABLE>
@@ -153,17 +158,21 @@
 														<TD><digi:trn key="aim:totalAmount">Total Amount</digi:trn></TD>
 	                         	<TD><digi:trn key="aim:currency">Currency</digi:trn></TD>
 														<TD><digi:trn key="aim:date">Date</digi:trn></TD>
-	                         	<TD><digi:trn key="aim:perspective">Perspective</digi:trn></TD>
+								<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+	                         		<TD><digi:trn key="aim:perspective">Perspective</digi:trn></TD>
+	                         	</logic:equal>
 													</TR>
 													<c:forEach var="comm" items="${rd.disbursements}">
 														<TR valign="top" bgcolor="#f4f4f2"> 
 					    	           		<TD>
 																<c:out value="${comm.adjustmentTypeName}"/>
 															</TD>
-							                 <TD align="right"><c:out value="${comm.transactionAmount}"/></TD>
+							                 <TD><c:out value="${comm.transactionAmount}"/></TD>
 							                 <TD><c:out value="${comm.currencyCode}"/></TD>
 					      			         <TD><c:out value="${comm.transactionDate}"/></TD>
-								               <TD><c:out value="${comm.perspectiveName}"/></TD>
+					      			         <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+								               	<TD><c:out value="${comm.perspectiveName}"/></TD>
+								             </logic:equal>
 														</TR>
 													</c:forEach>
 												</TABLE>
@@ -196,17 +205,21 @@
 														<TD><digi:trn key="aim:totalAmount">Total Amount</digi:trn></TD>
 	                         	<TD><digi:trn key="aim:currency">Currency</digi:trn></TD>
 														<TD><digi:trn key="aim:date">Date</digi:trn></TD>
-	                         	<TD><digi:trn key="aim:perspective">Perspective</digi:trn></TD>
+								<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+	                         		<TD><digi:trn key="aim:perspective">Perspective</digi:trn></TD>
+	                         	</logic:equal>
 													</TR>
 													<c:forEach var="comm" items="${rd.expenditures}">
 														<TR valign="top" bgcolor="#f4f4f2"> 
 					    	           		<TD>
 																<c:out value="${comm.adjustmentTypeName}"/>
 															</TD>
-							                 <TD align="right"><c:out value="${comm.transactionAmount}"/></TD>
+							                 <TD><c:out value="${comm.transactionAmount}"/></TD>
 							                 <TD><c:out value="${comm.currencyCode}"/></TD>
 					      			         <TD><c:out value="${comm.transactionDate}"/></TD>
-								               <TD><c:out value="${comm.perspectiveName}"/></TD>
+					      					<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">	         
+								               	<TD><c:out value="${comm.perspectiveName}"/></TD>
+											</logic:equal>
 														</TR>
 													</c:forEach>
 												</TABLE>

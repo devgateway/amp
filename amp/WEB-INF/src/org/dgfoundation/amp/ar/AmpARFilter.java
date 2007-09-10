@@ -12,7 +12,9 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -416,7 +418,23 @@ public class AmpARFilter implements Filter {
 		
 	}
 
-	private static final String IGNORED_PROPERTIES="class#generatedFilterQuery#initialQueryLength#widget#publicView#ampReportId";
+	private static List<String> IGNORED_PROPERTIES = new ArrayList<String>();
+	static{
+		IGNORED_PROPERTIES.add("class");
+		IGNORED_PROPERTIES.add("generatedFilterQuery");
+		IGNORED_PROPERTIES.add("initialQueryLength");
+		IGNORED_PROPERTIES.add("widget");
+		IGNORED_PROPERTIES.add("publicView");
+		IGNORED_PROPERTIES.add("ampReportId");
+	}
+	
+	public static void showPerspectiveProperty(boolean show){
+		if(show){
+			IGNORED_PROPERTIES.remove("perspective");			
+		}else{
+			IGNORED_PROPERTIES.add("perspective");
+		}
+	}
 
 	public Integer getLineMinRank() {
 		return lineMinRank;

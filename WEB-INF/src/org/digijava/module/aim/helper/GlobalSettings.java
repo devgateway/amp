@@ -1,5 +1,7 @@
 package org.digijava.module.aim.helper;
 
+import org.dgfoundation.amp.ar.AmpARFilter;
+
 /**
  * 
  * 
@@ -25,8 +27,17 @@ package org.digijava.module.aim.helper;
 public class GlobalSettings {
 	private Boolean perspectiveEnabled;
 
+	private static final GlobalSettings INSTANCE = new GlobalSettings();
+	
+	public static GlobalSettings getInstance(){
+		return INSTANCE;
+	}
+	
+	private GlobalSettings(){}
+
 	public void setPerspectiveEnabled(Boolean isPerspectiveEnabled) {
 		this.perspectiveEnabled = isPerspectiveEnabled;
+		AmpARFilter.showPerspectiveProperty(isPerspectiveEnabled.booleanValue());
 	}
 
 	public Boolean getPerspectiveEnabled() {

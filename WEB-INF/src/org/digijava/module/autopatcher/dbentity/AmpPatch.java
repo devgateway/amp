@@ -3,7 +3,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
-import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.PropertyListable;
 
 /**
 * AmpPatch.java
@@ -12,7 +12,7 @@ import org.dgfoundation.amp.Util;
 * @package org.digijava.module.autopatcher.dbentity
 * @since 12.08.2007
  */
-public class AmpPatch implements Serializable {
+public class AmpPatch extends PropertyListable implements Serializable {
 	private static final long serialVersionUID = 5759615519655548333L;
 	
 	private Long id;
@@ -72,6 +72,7 @@ public class AmpPatch implements Serializable {
 		this.lastInvoked = lastInvoked;
 	}
 
+	@PropertyListableIgnore
 	public List getLogs() {
 		return logs;
 	}
@@ -111,10 +112,12 @@ public class AmpPatch implements Serializable {
 	public void setFeatureAdded(String featureAdded) {
 		this.featureAdded = featureAdded;
 	}
-	
-	public String toString() {	
-	return Util.getBeanAsString(this, IGNORED_BEANSTRING_PROPS);	
+
+	@Override
+	public String getBeanName() {
+	   return name;
 	}
 	
-	public static final String IGNORED_BEANSTRING_PROPS="logs";
+	
+	
 }

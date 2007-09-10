@@ -7,8 +7,6 @@ package org.digijava.module.autopatcher.dbentity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import org.dgfoundation.amp.Util;
-
 
 /**
 * AmpPatchLog.java
@@ -84,9 +82,7 @@ public class AmpPatchLog implements Serializable {
 		this.failureReason = reason;
 	}
 	
-	public String toString() {
-		return Util.getBeanAsString(this, "");
-	}
+	
 	
 	public static final String ACTION_APPLY="apply";
 	public static final String ACTION_ROLLBACK="rollback";

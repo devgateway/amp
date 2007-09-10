@@ -1,22 +1,14 @@
 package org.dgfoundation.amp; 
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import net.sf.hibernate.Hibernate;
@@ -26,7 +18,8 @@ import net.sf.hibernate.Session;
 import net.sf.swarmcache.ObjectCache;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -34,6 +27,7 @@ import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.editor.exception.EditorException;
+import org.springframework.beans.BeanWrapperImpl;
 
 public final class Util {
 
@@ -44,7 +38,7 @@ public final class Util {
 	 * @param source
 	 * @param selected an object whose toString property returns the id of the selected object
 	 * @return the set
-	 * @see getSelectedObjects method
+	 * @see Util#getSelectedObjects method
 	 */
 	public static Identifiable getSelectedObject(Collection source, Object selected) {
 		Set ret=getSelectedObjects(source, new Object[] {selected});
@@ -52,52 +46,26 @@ public final class Util {
 		return (Identifiable) ret.iterator().next();
 	}
 	
-	public static String getBeanAsString(Object b, String ignoredProperties) {
-		Map m=getBeanProperties(b,ignoredProperties);
-		String ret=new String();
-		Iterator i=m.keySet().iterator();
-		while (i.hasNext()) {
-			String element = (String) i.next();
-			Object value=m.get(element);
-			ret+=element+": "+ (value instanceof Collection?Util.toCSString((Collection) value, true):value);
-		}
-		return ret;
-	}
-	
 	/**
-	 * provides a way to display this bean in HTML. Properties are automatically shown along with their values. CollectionS are unfolded and
-	 * excluded properties (internally used) are not shown.
-	 * @see AmpARFilter.IGNORED_PROPERTIES
+	 * Returns a Collection of the same type as the source, holding 
+	 * the elements of the original collection inside WrapDynaBean items 
+	 * @param source the source collection
+	 * @return the target collection - a list
+	 * @see BeanWrapperImpl
 	 */
-	public static Map getBeanProperties(Object b,String ignoredProperties) {
-		Map<String, Object> ret=new HashMap<String, Object>();
-		BeanInfo beanInfo = null;
-		try {
-			beanInfo = Introspector.getBeanInfo(b.getClass());
-		PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-		for (int i = 0; i < propertyDescriptors.length; i++) {
-			Method m=propertyDescriptors[i].getReadMethod();
-			Object object = m.invoke(b,new Object[]{});
-			if(object==null || ignoredProperties.contains(propertyDescriptors[i].getName())) continue;
-			ret.put(propertyDescriptors[i].getName(),object instanceof Collection?Util.toCSString((Collection) object,false):object);
+	public static List<BeanWrapperImpl> createBeanWrapperItemsCollection(Collection source) {
+		List<BeanWrapperImpl> dest=new ArrayList<BeanWrapperImpl>();
+		Iterator i=source.iterator();
+		while (i.hasNext()) {
+			Object element = (Object) i.next();
+			BeanWrapperImpl bwi=new BeanWrapperImpl(element);
+
+			dest.add(bwi);
 		}
-		} catch (IntrospectionException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
-		return ret;
-		
+		return dest;
+
 	}
-	
+		
 	
 		
 	
@@ -244,9 +212,11 @@ public final class Util {
 			if(identifiable) item=((Identifiable)element).getIdentifier();
 			
 			if (item instanceof String)
-				ret += "'" + (String) item + "'";
-			else
-				ret += item.toString();
+				ret += "'" + (String) item + "'"; else
+			if (item instanceof PropertyListable)
+				ret += ((PropertyListable)item).getBeanName();
+			
+			else	ret += item.toString();
 			if (i.hasNext())
 				ret += ",";
 		}
@@ -269,6 +239,8 @@ public final class Util {
 	 *            the currency date
 	 * @return the exchange rate
 	 * @author mihai 06.05.2007
+	 * @see CategAmountColWorker
+	 * @see AmountCell
 	 */
 	public static double getExchange(String currency, java.sql.Date currencyDate) {
 		Connection conn = null;
@@ -332,6 +304,5 @@ public final class Util {
 
 	}
 
-	//not thread safe
-//	public static SimpleDateFormat dateFormat = new SimpleDateFormat(FeaturesUtil.getGlobalSettingValue("Default Date Format"));
+
 }

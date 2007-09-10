@@ -8,7 +8,7 @@ package org.dgfoundation.amp.ar;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
+import java.util.Hashtable;
 
 /**
  * Class describing a viewable behaviour. Viewable objects always have a viewer
@@ -22,8 +22,8 @@ import java.util.HashMap;
  */
 public abstract class Viewable implements Cloneable {
 	
-	//cached viewerPath
-	protected static HashMap viewerPaths=new HashMap();
+	//thread safe cached viewerPath
+	protected static Hashtable viewerPaths=new Hashtable();
 	
 	/**
 	 * returns the viewer name for the specified view type.

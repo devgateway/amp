@@ -117,6 +117,7 @@ public class AutopatcherService extends AbstractServiceImpl {
 					connection.rollback();
 					
 				} finally {
+					connection.setAutoCommit(true);
 					connection.close();
 				}
 				

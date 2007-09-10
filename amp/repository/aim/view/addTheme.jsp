@@ -66,6 +66,7 @@
 </script>
 
 <digi:form action="/themeManager.do" method="post">
+
 		<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" align="center" border="0">
 				<tr bgColor="blue"><td height="1" colspan="2"></td></tr>
 				<tr bgColor=#dddddb>

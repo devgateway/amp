@@ -73,6 +73,8 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStatus;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
@@ -101,7 +103,237 @@ import org.digijava.module.aim.helper.CountryBean;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
+    
 
+	public static String getDescParsed(String str)
+	{
+		StringBuffer strbuff = new StringBuffer();
+		char[] ch = new char[str.length()];
+		
+		ch = str.toCharArray();
+
+		for(int i=0; i<ch.length; i++)
+		{
+			if(ch[i] == '<')
+			{
+				while(ch[i] != '>')
+					i++;
+			}
+			else if(ch[i] == '&')
+			{
+				if(ch[i+1] == 'n' && ch[i+2] == 'b' && ch[i+3] == 's' && ch[i+4] == 'p' && ch[i+5] == ';')
+					i = i+5;
+				else
+					strbuff.append(ch[i]);
+			}
+			else
+			{
+				if(i < ch.length)
+					strbuff.append(ch[i]);
+			}
+		}
+		str = new String(strbuff);
+		return str;
+	}
+    
+
+    /**
+	 * Removes the team-reports and member-reports association table.
+	 * @param reportId	A Long array of the reports to be updated
+	 * @param teamId  	The teamId of the team whose association with 
+	 * 					the specified reports must be removed. When the 
+	 * 					teams are dissociated with the reports, the association
+	 * 					from the members of that team also gets removed.   
+	 */
+	public static void removeTeamReports(Long reportId[],Long teamId) {
+		Session session = null;
+		Transaction tx = null;
+		
+		if (reportId == null || reportId.length <= 0) return;
+		
+		try {
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			
+			String queryString = "select tm from "
+				+ AmpTeamMember.class.getName()
+				+ " tm where (tm.ampTeam=:teamId)";
+
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			Collection col = qry.list();
+			if (col != null && col.size() > 0) {
+				for (int i = 0;i < reportId.length;i ++) {
+					if (reportId[i] != null) {
+						queryString = "select r from " 
+							+ AmpReports.class.getName() 
+							+ " r where (r.ampReportId=:repId)";
+						qry = session.createQuery(queryString);
+						qry.setParameter("repId",reportId[i],Hibernate.LONG);
+						Iterator itr = qry.list().iterator();
+						if (itr.hasNext()) {
+							AmpReports ampReport = (AmpReports) itr.next();
+							if (ampReport.getMembers() != null) {
+								/*
+								 * removing the team members association with the
+								 * report
+								 */
+								ampReport.getMembers().removeAll(col);
+								session.update(ampReport);
+							}
+						}
+						
+						/*
+						 * removing the teams association with the report
+						 */
+						queryString = "select tr from " + AmpTeamReports.class.getName() 
+							+ " tr where (tr.team=:teamId) and "
+							+ " (tr.report=:repId)";
+						qry = session.createQuery(queryString);
+						qry.setParameter("teamId",teamId,Hibernate.LONG);
+						qry.setParameter("repId",reportId[i],Hibernate.LONG);
+						itr = qry.list().iterator();
+						if (itr.hasNext()) {
+							AmpTeamReports ampTeamRep = (AmpTeamReports) itr.next();
+							session.delete(ampTeamRep);
+						}
+					}
+				}
+			}
+			tx.commit();
+
+		} catch (Exception e) {
+			logger.error("Exception from updateMemberReports");
+			logger.error(e.getMessage());
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception tex) {
+					logger.error("Transaction rollback failed");
+					logger.error(tex);
+				}
+			}
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception ex) {
+					logger.error("Failed to release session");
+				}
+			}
+		}
+	}
+
+	/**
+	 * Associated the reports with the given team 
+	 * @param reportId The Long array of reportIds which are to be associated 
+	 * 				   with the given team
+	 * @param teamId   The team id of the team to which the reports are to be 
+	 * 				   assigned	
+	 */
+	public static void addTeamReports(Long reportId[],Long teamId) {
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			
+			String queryString = "select tm from "
+				+ AmpTeam.class.getName()
+				+ " tm where (tm.ampTeamId=:teamId)";
+
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			AmpTeam team = null;
+			if (itr.hasNext()) {
+				team = (AmpTeam) itr.next();
+			}
+			if (team != null) {
+				if (reportId != null && reportId.length > 0) {
+					queryString = "select rep from "
+						+ AmpReports.class.getName() 
+						+ " rep where rep.ampReportId in (";
+					StringBuffer temp = new StringBuffer();
+					for (int i = 0;i < reportId.length;i ++) {
+						temp.append(reportId[i]);
+						if ((i+1) != reportId.length) {
+							temp.append(",");
+						}
+					}
+					temp.append(")");
+					queryString += temp;
+					qry = session.createQuery(queryString);
+					logger.debug("Query :" + qry.getQueryString());
+					itr = qry.list().iterator();
+					while (itr.hasNext()) {
+						AmpReports report = (AmpReports) itr.next();
+						if (report != null) {
+							String tempQry = "select teamRep from "
+								+ AmpTeamReports.class.getName()
+								+ " teamRep where (teamRep.team=:tId) and "
+								+ " (teamRep.report=:rId)";
+							Query tmpQry = session.createQuery(tempQry);
+							tmpQry.setParameter("tId",team.getAmpTeamId(),Hibernate.LONG);
+							tmpQry.setParameter("rId",report.getAmpReportId(),Hibernate.LONG);
+							Iterator tmpItr = tmpQry.list().iterator();
+							if (!tmpItr.hasNext()) {
+								AmpTeamReports tr = new AmpTeamReports();
+								tr.setTeam(team);
+								tr.setReport(report);
+								tr.setTeamView(false);
+								session.save(tr);								
+							}
+						}
+					}
+				}
+			}
+			tx.commit();
+		} catch (Exception e) {
+			logger.error("Exception from addTeamReports()");
+			logger.error(e.getMessage());
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Rollback failed");
+					logger.error(rbf.getMessage());
+				}
+			}
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+					logger.error(rsf.getMessage());
+				}
+			}
+		}
+	}
+
+    
+    
+    public static AmpReports getAmpReports (Long id) {
+		Session session		= null;
+		AmpReports report	= null;
+		try{
+			session		= PersistenceManager.getSession();
+			report		= (AmpReports)session.get(AmpReports.class, id);
+		} catch (Exception ex) {
+			logger.error("Unable to get AmpReports by Id :" + ex);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		return report;
+	}
+	
+    
     public static AmpPerspective getPerspectiveByCode(String code) {
         Session session = null;
         List perspectives = new ArrayList();

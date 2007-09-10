@@ -149,12 +149,13 @@
 	<digi:trn key="rep:pop:SelectedFilters">Currently Selected Filters:</digi:trn>
 		<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
 			<bean:define id="filterName" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>"/>
-			<% java.lang.String trn = filterName.toString().replaceAll(" ","");
-			   trn = trn.replaceAll("<b>","");
-			   trn = trn.replaceAll("</b>","");
-			   trn = trn.replaceAll(";","");
-			%>
-			<digi:trn key="<%="aim:"+trn %>"><%=filterName %></digi:trn>
+<%--
+			<logic:iterate id="element" name="filterName" property="viewableParameters">
+			<digi:trn key="arFilter:${element.key}">
+			${element.value}
+			</digi:trn>
+			</logic:iterate>
+--%>	
 			
 		</logic:present>
 	</td>

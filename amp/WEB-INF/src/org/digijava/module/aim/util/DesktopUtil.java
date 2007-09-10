@@ -345,7 +345,6 @@ public class DesktopUtil {
 						projects = getActivities(childTeamId,false,memberId);
 					} else {
 						// Working team
-						logger.info("Loading activities for Donor team leader");
 						Set act = team.getActivityList();
 						if (act != null) {
 							Iterator actItr = act.iterator();
@@ -359,7 +358,7 @@ public class DesktopUtil {
 					}
 				} else {
 					// Mofed team
-					logger.info("Loading activities for Mofed team leader");
+					
 					Collection temp = new ArrayList();
 					if (team.getAccessType() != null && team.getAccessType().
 							equalsIgnoreCase(Constants.TYPE_MNGMT)) {
@@ -482,7 +481,7 @@ public class DesktopUtil {
 					String objKey = (String) obj[2];
 					ed = org.digijava.module.editor.util.DbUtil.getEditor(descKey,"en");
 					if (ed != null && ed.getBody() != null && ed.getBody().trim().length() > 0) {
-						String temp = ReportUtil.getDescParsed(ed.getBody()).toLowerCase();
+						String temp = DbUtil.getDescParsed(ed.getBody()).toLowerCase();
 						if (temp.indexOf(searchKey) > -1) {
 							act.add(actId);
 							continue;
@@ -490,7 +489,7 @@ public class DesktopUtil {
 					}
 					ed = org.digijava.module.editor.util.DbUtil.getEditor(objKey,"en");
 					if (ed != null && ed.getBody() != null && ed.getBody().trim().length() > 0) {
-						String temp = ReportUtil.getDescParsed(ed.getBody()).toLowerCase();
+						String temp = DbUtil.getDescParsed(ed.getBody()).toLowerCase();
 						if (temp.indexOf(searchKey) > -1) {
 							act.add(actId);
 						}

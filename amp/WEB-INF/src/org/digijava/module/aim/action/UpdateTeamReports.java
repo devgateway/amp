@@ -15,7 +15,6 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.ReportsForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.ReportUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class UpdateTeamReports extends Action {
@@ -59,7 +58,7 @@ public class UpdateTeamReports extends Action {
 		if (raForm.getRemoveReports() != null) {
 			/* remove all selected reports */
 			Long selReports[] = raForm.getSelReports();
-			ReportUtil.removeTeamReports(selReports,tm.getTeamId());
+			DbUtil.removeTeamReports(selReports,tm.getTeamId());
 			raForm.setRemoveReports(null);
 			
 			/** setting the addReport property so that the system 
@@ -81,7 +80,7 @@ public class UpdateTeamReports extends Action {
 
 			logger.info("in assign reports");
 			Long selReports[] = raForm.getSelReports();
-			ReportUtil.addTeamReports(selReports,tm.getTeamId());
+			DbUtil.addTeamReports(selReports,tm.getTeamId());
 			raForm.setAssignReports(null);
 			
 			/*

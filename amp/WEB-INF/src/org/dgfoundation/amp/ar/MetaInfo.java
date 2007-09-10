@@ -74,4 +74,8 @@ public class MetaInfo implements Comparable {
 		return null;
 	}
 
+	public void setValue(Comparable value) {
+		this.value = value;
+	}
+
 }

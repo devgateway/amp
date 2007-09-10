@@ -10,7 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -41,9 +40,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
-import org.digijava.module.aim.util.ReportUtil;
 import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.springframework.beans.BeanWrapperImpl;
 
 /**
@@ -118,7 +115,7 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		if (ampReportId != null){
 			
-			AmpReports rep = (AmpReports) ReportUtil.getAmpReports(new Long(ampReportId));
+			AmpReports rep = (AmpReports) DbUtil.getAmpReports(new Long(ampReportId));
 			httpSession.setAttribute("filterCurrentReport", rep);
 		}
 		

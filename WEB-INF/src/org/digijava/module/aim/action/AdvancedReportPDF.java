@@ -1,4 +1,4 @@
-package org.digijava.module.aim.action;
+/*package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -126,13 +126,13 @@ public class AdvancedReportPDF extends Action {
                 logger.info("formbean is null");
             }
 
-            /*
+            
              * if(reportColl != null) { if (reportColl.size() == 0) {
              * logger.info("collection is empty"); } else {
              * logger.info("collection is not empty"); iter =
              * reportColl.iterator(); } } else logger.info("Collection is
              * NULL..........." + reportColl.size());
-             */
+             
             logger.info("All Report Size : " + formBean.getAllReports().size());
             logger.info("Report ID : " + formBean.getCreatedReportId());
 
@@ -194,10 +194,10 @@ public class AdvancedReportPDF extends Action {
                 logger.info("ColumnColl : " + iter.next());
             }
 
-            /*
+            
              * DataArray[][] contains data for Reports The report contains
              * Selected columns, Year, and Measure Selected.
-             */
+             
             ind = 0;
 
             if (formBean.getAcBalFlag().equals("true")) {
@@ -274,11 +274,11 @@ public class AdvancedReportPDF extends Action {
                 logger.info("assistCnt========="+assistCnt+" iiiiiii="+i);
                 totalcnt+=totalcnt2+totalcnt3;
                 if (hsize == 0)
-                	i += (totalcnt /* * rsc.getHierarchy().size()*/)+assistCnt;
+                	i += (totalcnt  * rsc.getHierarchy().size())+assistCnt;
                 else
-                	i += (totalcnt /* * rsc.getHierarchy().size()*/)+assistCnt+1;
+                	i += (totalcnt  * rsc.getHierarchy().size())+assistCnt+1;
                                 
-                logger.info("---------TOTAL COUNT with HRRCHY= " + (totalcnt /** rsc.getHierarchy().size()*/) + "iiiiiiiiiiiiiiii=" + i);
+                logger.info("---------TOTAL COUNT with HRRCHY= " + (totalcnt *//** rsc.getHierarchy().size()*//*) + "iiiiiiiiiiiiiiii=" + i);
                 
                 
                 int totCols=0;
@@ -288,7 +288,7 @@ public class AdvancedReportPDF extends Action {
                 else
                 	totCols=columnDetails.length + ((formBean.getFiscalYearRange().size() + 1) * rsc.getMeasures().size()) + formBean.getColumnHierarchie().size()+10;
                 
-                	dataArray = new Object[i /*+1+assistCnt*/][totCols];
+                	dataArray = new Object[i +1+assistCnt][totCols];
                 	logger.info("****dataArray size with HHHH= " + (i) + " :::::" + totCols);
             } else {
                 // calculate no. of rows for grant/loan= assistance type rows
@@ -318,10 +318,10 @@ public class AdvancedReportPDF extends Action {
             // (formBean.getFiscalYearRange().size()+1)*rsc.getMeasures().size()*4];
             logger.info("...............row Data.........=" + rowData.length + " ----n=" + n);
 
-            /*
+            
              * Code inserts the LABELS selected columns, year value followed by
              * the selected Measures at row 0 in the DataArray[][].
-             */
+             
             int j2 = 3;
 
             if (formBean.getHierarchyFlag() == "true") {
@@ -1011,7 +1011,7 @@ public class AdvancedReportPDF extends Action {
                                                             
                                                             
                                                             while (funds.hasNext()) {
-                                                                /*
+                                                                
                                                                  * ind = ind +
                                                                  * 1; if(ind >
                                                                  * formBean.getFiscalYearRange().size()) {
@@ -1026,7 +1026,7 @@ public class AdvancedReportPDF extends Action {
                                                                  * dataArray[row][position] =
                                                                  * new
                                                                  * String(""+year); }
-                                                                 */
+                                                                 
                                                                 logger.info(" IND intrrrrrrrrrrrrr " + ind);
                                                                 ind++;
 
@@ -1904,12 +1904,12 @@ public class AdvancedReportPDF extends Action {
                                 logger.info("=======Total No of activities..." + ahr.getProject().size());
                             }
 
-                            /*
+                            
                              * if(ahr.getActivities()!=null)
                              * //logger.info("^^^^++^^^^"+ahr.getActivities().size());
                              * if(ahr.getLevels()!=null)
                              * //logger.info("^^^^--^^^^"+ahr.getLevels().size());
-                             */
+                             
                         }
                     }
 
@@ -1938,7 +1938,7 @@ public class AdvancedReportPDF extends Action {
                     
                     while (itrtot.hasNext()) {
                     	ind++;
-                    	/*if (qtrlyFlag) {
+                    	if (qtrlyFlag) {
                             if ((tmp % (msize * 4)) == 0) {
                                 dataArray[row][position++] = "--";
                             }
@@ -1949,7 +1949,7 @@ public class AdvancedReportPDF extends Action {
                                 dataArray[row][position++] = "++";
                             }
                             //position++;
-                        }*/
+                        }
                         
                         if (yearIter.hasNext()) {
                             yearValue = (Integer) yearIter.next();
@@ -2112,9 +2112,9 @@ public class AdvancedReportPDF extends Action {
                     }
                 }
 
-                /*
+                
                  * Creates Excel document when excel link is clicked
-                 */
+                 
                 if ((request.getParameter("docType") != null) && request.getParameter("docType").equals("excel")) {
                     AdvancedReportDatasource dataSource = new AdvancedReportDatasource(dataArray, rsc.getColumns().size(), rowData);
 
@@ -2189,9 +2189,9 @@ public class AdvancedReportPDF extends Action {
                     }
                 }
 
-                /*
+                
                  * Creates CSV document when csv link is clicked
-                 */
+                 
                 if ((request.getParameter("docType") != null) && request.getParameter("docType").equals("csv")) {
                     AdvancedReportDatasource dataSource = new AdvancedReportDatasource(dataArray, rsc.getColumns().size(), rowData);
 
@@ -2545,7 +2545,7 @@ public class AdvancedReportPDF extends Action {
         
         while (itrtot.hasNext()) {
         	ind++;
-        	/*if (qtrlyFlag) {
+        	if (qtrlyFlag) {
                 if ((tmp % (msize * 4)) == 0) {
                     dataArray[row][position++] = "--";
                 }
@@ -2556,7 +2556,7 @@ public class AdvancedReportPDF extends Action {
                     dataArray[row][position++] = "++";
                 }
                 //position++;
-            }*/
+            }
             
             if (yearIter.hasNext()) {
                 yearValue = (Integer) yearIter.next();
@@ -2630,3 +2630,4 @@ public class AdvancedReportPDF extends Action {
         logger.info("********************* END Fill TOTAL..........row=" + row);
     }
 } // end of CLass
+*/

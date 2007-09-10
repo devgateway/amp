@@ -41,7 +41,6 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.ReportUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -168,7 +167,7 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings.setDefaultPerspective(FeaturesUtil.isPerspectiveEnabled() ? uForm.getDefPerspective() : Constants.DEF_MFD_PERSPECTIVE);
 				ampAppSettings.setTeam(TeamUtil.getAmpTeam(tm.getTeamId()));
 				
-				AmpReports ampReport			= ReportUtil.getAmpReports(uForm.getDefaultReportForTeamId());
+				AmpReports ampReport			= DbUtil.getAmpReports(uForm.getDefaultReportForTeamId());
 				HttpSession	httpSession			= request.getSession();
 				AmpReports defaultAmpReport		= (AmpReports)httpSession.getAttribute(Constants.DEFAULT_TEAM_REPORT);
 				/**

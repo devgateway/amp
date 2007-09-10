@@ -85,6 +85,8 @@
 															<a href="javascript:edit('<%=objKey%>')">
 															<digi:trn key="aim:edit">Edit</digi:trn></a>	
 															&nbsp;
+															<a href="javascript:commentWin('objObjVerIndicators')" id="CommentObjObjVerIndicators"><digi:trn key="aim:addEditObjVerIndicators">Add/Edit Objectively Verifiable Indicators</digi:trn></a>
+															&nbsp;
 															<a href="javascript:commentWin('objAssumption')" id="CommentObjAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
 															&nbsp;
 															<a href="javascript:commentWin('objVerification')" id="CommentObjVerification"><digi:trn key="aim:addEditVerification">Add/Edit Verification</digi:trn></a>		
@@ -155,6 +157,9 @@
 			
 															<a href="javascript:edit('<%=purpKey%>')">
 															<digi:trn key="aim:edit">Edit</digi:trn></a>
+																&nbsp;
+															<a href="javascript:commentWin('purpObjVerIndicators')" id="CommentPurpObjVerInd"><digi:trn key="aim:addEditObjVerIndicators">Add/Edit Objectively Verifiable Indicators</digi:trn></a>
+														
 															&nbsp;
 															<a href="javascript:commentWin('purpAssumption')" id="CommentPurpAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
 															&nbsp;
@@ -193,6 +198,9 @@
 			
 															<a href="javascript:edit('<%=resKey%>')">
 															<digi:trn key="aim:edit">Edit</digi:trn></a>
+																&nbsp;
+															<a href="javascript:commentWin('resObjVerIndicators')" id="CommentResObjVerInd"><digi:trn key="aim:addEditObjVerIndicators">Add/Edit Objectively Verifiable Indicators</digi:trn></a>
+															
 															&nbsp;
 															<a href="javascript:commentWin('resAssumption')" id="CommentResAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
 															&nbsp;
@@ -202,6 +210,41 @@
 												</table>
 											</td></tr>
 											</field:display>
+											
+											<field:display name="Lessons Learned" feature="Identification">
+											<tr bgcolor="#ffffff"><td valign="top" align="left">
+												<a title="<digi:trn key="aim:Lessons Learned">Lessons Learned</digi:trn>">
+												<digi:trn key="aim:lessonslearned">
+												Lessons Learned
+												</digi:trn>
+												</a>
+											</td>
+											<td valign="top" align="left">
+												<table cellPadding=0 cellSpacing=0>
+													<tr>
+														<td>
+															<bean:define id="lessonsLearnedKey">
+																<c:out value="${aimEditActivityForm.lessonsLearned}"/>
+															</bean:define>
+			
+															<digi:edit key="<%=lessonsLearnedKey%>"/>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<%--
+															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
+															--%>
+															<a href="javascript:edit('<%=lessonsLearnedKey%>')">
+															<digi:trn key="aim:edit">Edit</digi:trn></a>
+														</td>
+													</tr>
+												</table>
+											</td></tr>
+											</field:display>
+											
+											
+											
 											<field:display name="Accession Instrument" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:DescriptionOfAccessionInstrument">Accession Instrument of the project</digi:trn>">
@@ -336,11 +379,12 @@
 												</a>
 											</td>
 										<td valign="top" align="left" >
-												<html:radio property="gbsSbs" value="1"/>GBS<br/>
+											<category:showoptions  listView="true" name="aimEditActivityForm" property="gbsSbs" categoryName="<%=org.digijava.module.aim.helper.CategoryConstants.FINANCIAL_INSTRUMENT_NAME %>" styleClass="inp-text" />
+											<!-- 	<html:radio property="gbsSbs" value="1"/>GBS<br/>
 												<html:radio property="gbsSbs" value="2"/>SBS<br/>								
 												<html:radio property="gbsSbs" value="3"/>Basket<br/>
-												<html:radio property="gbsSbs" value="4"/>DPS on Budget
-									</td>
+												<html:radio property="gbsSbs" value="4"/>DPS on Budget -->
+										</td>
 									</tr>
 								</field:display>	
 								<field:display name="Government Approval Procedures" feature="Budget">

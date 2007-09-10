@@ -138,6 +138,7 @@ public class SaveActivity extends Action {
 			CategoryManagerUtil.addCategoryToSet(eaForm.getAcChapter(), activity.getCategories() );
 			CategoryManagerUtil.addCategoryToSet(eaForm.getStatusId(), activity.getCategories() );
 			CategoryManagerUtil.addCategoryToSet(eaForm.getLevelId(), activity.getCategories() );
+			CategoryManagerUtil.addCategoryToSet(eaForm.getGbsSbs(), activity.getCategories() );
 			/* END - Saving categories to AmpActivity */
 
             if(eaForm.getProProjCost()==null){
@@ -461,7 +462,7 @@ public class SaveActivity extends Action {
 				activity.setProjectCode(eaForm.getProjectCode());
 				activity.setGovernmentApprovalProcedures(eaForm.getGovernmentApprovalProcedures());
 
-				activity.setGbsSbs(eaForm.getGbsSbs());
+
 				activity.setJointCriteria(eaForm.getJointCriteria());
 
 				if (eaForm.getDescription() == null
@@ -470,6 +471,12 @@ public class SaveActivity extends Action {
 				} else {
 					activity.setDescription(eaForm.getDescription());
 				}
+				if (eaForm.getLessonsLearned() == null
+						|| eaForm.getLessonsLearned().trim().length() == 0) {
+					activity.setLessonsLearned(new String(" "));
+				} else {
+					activity.setLessonsLearned(eaForm.getLessonsLearned());
+				}				
 				if (eaForm.getPurpose() == null
 						|| eaForm.getPurpose().trim().length() == 0) {
 					activity.setPurpose(new String(" "));
@@ -1502,6 +1509,7 @@ public class SaveActivity extends Action {
 			eaForm.setAccessionInstrument(new Long(0));
 			eaForm.setAcChapter(new Long(0));
 			eaForm.setStatusId(new Long(0));
+			eaForm.setGbsSbs(new Long(0));
 			/* END - Clearing categories */
 
 			int temp = eaForm.getPageId();

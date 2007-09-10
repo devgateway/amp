@@ -8,7 +8,6 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,7 +35,7 @@ public class PatcherUtil {
 
 	public static Map<String, AmpPatch> getAllRecordedPatches(Session hs) throws HibernateException,
 			SQLException {
-		Query query = hs.createQuery("select from p from "
+		Query query = hs.createQuery("select p from "
 				+ AmpPatch.class.getName() + " p");
 		List col = query.list();
 		Map<String, AmpPatch> ret=new HashMap<String, AmpPatch>();
@@ -45,7 +44,6 @@ public class PatcherUtil {
 			AmpPatch element = (AmpPatch) i.next();
 			ret.put(element.getAbstractLocation(), element);
 		}
-		
 		return ret;
 	}
 

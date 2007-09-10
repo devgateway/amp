@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config>
+	<secondary-pages>
+		<page page="editPermission" name="gateperm_editPermission" title="Edit Permission Object"/>
+		<page
+			page="listPermissions" name="gateperm_listPermissions" title="Permission Objects List">
+		</page>
+	</secondary-pages>
+
+</config>

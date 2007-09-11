@@ -393,7 +393,7 @@ function commentWin(val) {
 																					Financial Instrument
 																					</digi:trn>:
 																					<!-- this part is to be replaced when the category manager is ready -->
-																					<c:out value="${activity.financialInstrumentString}"/>
+																					<c:out value="${activity.financialInstrument}"/>
 																					</td>
 																				</tr>
 																				</field:display>

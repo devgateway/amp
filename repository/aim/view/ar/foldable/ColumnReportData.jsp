@@ -19,21 +19,29 @@
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 <jsp:include page="TrailCells.jsp"/>
 <!-- generate report data -->
-<%
-	int rowIdx = 0;
-	int recordsPerPage = ((Integer)request.getAttribute("recordsPerPage")).intValue();
-	int pageNumber = ((Integer)request.getAttribute("pageNumber")).intValue();
-	boolean	paginar = ((Boolean)request.getAttribute("paginar")).booleanValue();
-	if(paginar){
-		request.setAttribute("paginar", new Boolean(false));	
-	}
-%>
+
+<bean:define id="recordsPerPage" name="recordsPerPage" scope="request" toScope="page" type="java.lang.Integer"/>
+<bean:define id="pageNumber" name="pageNumber" scope="request"  type="java.lang.Integer"/>
+
+<c:set var="rowIdx" value="<%=new Integer(0)%>" scope="page"/>
+<bean:define id="rowIdx" name="rowIdx" scope="page" toScope="page" type="java.lang.Integer"/>
+	
+<c:set var="paginarLocal" value="<%=new Boolean(false)%>" scope="page"/>
+<bean:define id="paginarLocal" name="paginarLocal" type="java.lang.Boolean" toScope="page"/>
+
+<bean:define id="paginar" name="paginar" type="java.lang.Boolean" scope="request" toScope="page"/>
+<c:if test="${paginar}">
+	<c:set var="paginar" value="<%=new Boolean(false)%>" scope="request"/>
+	<c:set var="paginarLocal" value="<%=new Boolean(true)%>" scope="page"/>
+	<bean:define id="paginarLocal" name="paginarLocal" type="java.lang.Boolean" toScope="page"/>
+</c:if>
+
 
 <logic:notEqual name="reportMeta" property="hideActivities" value="true">
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
 
+	<c:if test="<%=!paginarLocal.booleanValue() || paginarLocal.booleanValue() && rowIdx.intValue() >= pageNumber.intValue() * recordsPerPage.intValue() && rowIdx.intValue() < (pageNumber.intValue() + 1) * recordsPerPage.intValue()%>">
 <% 
-	if(!paginar || paginar && rowIdx >= pageNumber * recordsPerPage && rowIdx < (pageNumber + 1) * recordsPerPage){
 		if(bckColor.equals("true")) {
 %>
 <bean:define id="bckColor" value="false" toScope="page"/>
@@ -63,16 +71,15 @@
 </tr>
 
 <% 
-		} 
 	}
-rowIdx++;
 %>
+	</c:if>
+	<c:set var="rowIdx" value="<%=new Integer(rowIdx.intValue() + 1)%>" scope="page"/>
+	<bean:define id="rowIdx" name="rowIdx" scope="page" toScope="page" type="java.lang.Integer"/>
 </logic:iterate>
 </logic:notEqual>
-<%
-	if(paginar){
-		int	totalPages = rowIdx /recordsPerPage;
-		totalPages += rowIdx % recordsPerPage == 0 ? 0 : 1;		
-		request.setAttribute("totalPages", new Integer(totalPages));
-	}
-%>
+
+<c:if test="${paginarLocal}">
+	<c:set var="totalPages" value="<%=new Integer(rowIdx.intValue() /recordsPerPage.intValue() + (rowIdx.intValue() % recordsPerPage.intValue() == 0 ? 0 : 1))%>" scope="page"/>
+	<bean:define id="totalPages" name="totalPages" type="java.lang.Integer" toScope="request"/>
+</c:if>

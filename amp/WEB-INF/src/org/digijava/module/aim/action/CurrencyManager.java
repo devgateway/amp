@@ -17,6 +17,10 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.form.CurrencyForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.CurrencyUtil;
+import java.util.*;
+import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.helper.CountryBean;
 
 public class CurrencyManager extends Action {
 
@@ -37,10 +41,10 @@ public class CurrencyManager extends Action {
 		}
 
 		CurrencyForm crForm = (CurrencyForm) form;
-		
+
 		try {
-			
-		
+
+
 			int page = crForm.getPage();
 			if (page < 1) page = 1;
 			String reload = request.getParameter("reload");
@@ -49,13 +53,14 @@ public class CurrencyManager extends Action {
 			if (cantDelete != null){
 				crForm.setCantDelete(true);
 			}
-			
+
 			String sortingValue = request.getParameter("sortingValue");
 			if (sortingValue == null) {
-				if ((crForm.getAllCurrencies() == null)
-						|| ((reload != null) && (reload.compareTo("true") == 0))) {
+				if ((crForm.getAllCurrencies() == null)	|| ((reload != null) && (reload.compareTo("true") == 0))) {
 					crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(-1));
-				}
+				}else{
+                    crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(-1));
+                }
 			} else if (sortingValue.equalsIgnoreCase("-1")) {
 				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(-1));
 			} else if (sortingValue.equalsIgnoreCase("1")) {
@@ -65,7 +70,23 @@ public class CurrencyManager extends Action {
 			} else if (sortingValue.equalsIgnoreCase("3")) {
 				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(3));
 			}
-			
+
+            Collection currencies =crForm.getAllCurrencies();
+            if(currencies!=null){
+                for (Iterator cuIter = currencies.iterator(); cuIter.hasNext(); ) {
+                    AmpCurrency cur = (AmpCurrency) cuIter.next();
+                    if(cur.getCountryId()!=null){
+                        Country cn=cur.getCountryId();
+                        CountryBean cnB=DbUtil.getTranlatedCountryByIso(request,cn.getIso());
+                        if(cnB!=null){
+                            cn.setCountryName(cnB.getName());
+                            cur.setCountryId(cn);
+                        }
+                    }
+                }
+                crForm.setAllCurrencies(currencies);
+            }
+
 			boolean filtered = false;
 			// filter the records
 			ArrayList tempList = new ArrayList();
@@ -80,24 +101,24 @@ public class CurrencyManager extends Action {
 					curr = (AmpCurrency) itr.next();
 					if (curr.getActiveFlag() == null) {
 						if (type == 0) {
-							tempList.add(curr);							
+							tempList.add(curr);
 						}
 					} else if (curr.getActiveFlag().intValue() == type) {
 						tempList.add(curr);
 					}
 				}
 				filtered = true;
-			}			
+			}
 
 			if (!filtered) {
 				tempList = new ArrayList(crForm.getAllCurrencies());
 	 		}
-			
+
 			if (crForm.getNumRecords() == 0) {
 				crForm.setNumRecords(Constants.NUM_RECORDS);
 			}
 
-			crForm.setCurrency(new ArrayList());		
+			crForm.setCurrency(new ArrayList());
 			int numPages = tempList.size() / crForm.getNumRecords();
 			numPages += (tempList.size() % crForm.getNumRecords() != 0) ? 1 : 0;
 			if (page > numPages) page = numPages;
@@ -114,27 +135,27 @@ public class CurrencyManager extends Action {
 			 		Integer pageNum = new Integer(i+1);
 			 		pages.add(pageNum);
 				}
-			}							
+			}
 			crForm.setPages(pages);
-			
+
 			logger.debug("templist size = " + tempList.size());
 			logger.debug(stIndex + "," + edIndex);
 			for (int i = stIndex;i < edIndex;i ++) {
 				crForm.getCurrency().add(tempList.get(i));
-			}			
-				
+			}
+
 			crForm.setCurrentPage(new Integer(page));
 			crForm.setCountryName(null);
 			crForm.setCurrencyCode(null);
 			crForm.setCurrencyName(null);
 			crForm.setExchangeRate(null);
 			crForm.setExchangeRateDate(null);
-			crForm.setId(null);			
+			crForm.setId(null);
 
 			} catch (Exception e) {
 				logger.error(e);
-			}		
-		
+			}
+
 			return mapping.findForward("forward");
 	}
 }

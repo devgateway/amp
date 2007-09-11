@@ -1028,6 +1028,25 @@ public class ActivityUtil {
             )
             );
         /* END - Set Categories */
+        
+        activity.setFinancialInstrument(CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+                CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+            CategoryConstants.FINANCIAL_INSTRUMENT_KEY, ampAct.getCategories())
+            ));
+        /*
+         * Tanzania adds
+         */
+
+        activity.setFY(ampAct.getFY());
+       
+        activity.setVote(ampAct.getVote());
+        activity.setSubProgram(ampAct.getSubProgram());
+        activity.setSubVote(ampAct.getSubVote());
+        activity.setJointCriteria(ampAct.isJointCriteria());
+        activity.setGovernmentApprovalProcedures(ampAct.
+                                                 isGovernmentApprovalProcedures());
+        activity.setProjectCode(ampAct.getProjectCode());
+
 
         Collection col = ampAct.getClosingDates();
         List dates = new ArrayList();
@@ -1199,20 +1218,7 @@ public class ActivityUtil {
         activity.setModalities(modalities);
         activity.setUniqueModalities(new TreeSet(modalities));
 
-        /*
-         * Tanzania adds
-         */
-
-        activity.setFY(ampAct.getFY());
-        activity.setFinancialInstrument(ampAct.getGbsSbs());
-        activity.setVote(ampAct.getVote());
-        activity.setSubProgram(ampAct.getSubProgram());
-        activity.setSubVote(ampAct.getSubVote());
-        activity.setJointCriteria(ampAct.isJointCriteria());
-        activity.setGovernmentApprovalProcedures(ampAct.
-                                                 isGovernmentApprovalProcedures());
-        activity.setProjectCode(ampAct.getProjectCode());
-
+      
       }
     }
     catch (Exception e) {

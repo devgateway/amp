@@ -79,7 +79,7 @@ public class Activity
   private String subVote;
   private String subProgram;
   private String projectCode;
-  private Long financialInstrument;
+  private String financialInstrument;
   private String financialInstrumentString;
   private Boolean governmentApprovalProcedures;
   private Boolean jointCriteria;
@@ -796,11 +796,11 @@ public class Activity
     this.mfdCntTitle = mfdCntTitle;
   }
 
-  public Long getFinancialInformation() {
+  public String getFinancialInstrument() {
     return financialInstrument;
   }
 
-  public void setFinancialInstrument(Long financialInformation) {
+  public void setFinancialInstrument(String financialInformation) {
 	this.financialInstrument=financialInformation;
   }
 

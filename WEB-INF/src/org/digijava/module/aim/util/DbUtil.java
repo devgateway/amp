@@ -5984,7 +5984,7 @@ public class DbUtil {
         }
     }
 
-    public static CountryBean getTranlatedCountryByIso(HttpServletRequest request, String iso) {
+    public static Country getTranlatedCountry(HttpServletRequest request, Country country) {
         Session session = null;
         Collection msgCol = null;
         Query qry = null;
@@ -6003,43 +6003,28 @@ public class DbUtil {
             qry.setParameter("locale", navLang.getCode(), Hibernate.STRING);
             msgCol = qry.list();
 
-            Country cn = getDgCountry(iso);
-            if (cn != null) {
+            if (country != null) {
                 if (msgCol != null && msgCol.size() != 0) {
-                    CountryBean trnCn = null;
                     for (Iterator msgIter = msgCol.iterator(); msgIter.hasNext(); ) {
                         Message msg = (Message) msgIter.next();
                         if (msg != null) {
                             String cnIso = msg.getKey().substring(3);
-                            if (cnIso != null && !cnIso.equals("") && cnIso.equalsIgnoreCase(cn.getIso())) {
-                                trnCn = new CountryBean();
-                                trnCn.setId(cn.getCountryId());
-                                trnCn.setIso(cnIso);
-                                trnCn.setIso3(cn.getIso3());
-                                trnCn.setName(msg.getMessage());
+                            if (cnIso.equals(country.getIso())) {
+                                country.setCountryName(msg.getMessage());
                                 break;
-                            } else if (msg.getKey().equalsIgnoreCase("cn:")) {
-                                trnCn = new CountryBean();
-                                trnCn.setIso(cnIso);
-                                trnCn.setName(msg.getMessage());
                             }
                         }
                     }
-                    return trnCn;
-                } else {
-                    CountryBean trnCn = new CountryBean();
-                    trnCn.setId(cn.getCountryId());
-                    trnCn.setIso(cn.getIso());
-                    trnCn.setIso3(cn.getIso3());
-                    trnCn.setName(cn.getCountryName());
-                    return trnCn;
                 }
             }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-        return null;
+        return country;
     }
+
+
+
 
     public static class HelperUserNameComparator implements Comparator {
         public int compare(Object obj1, Object obj2) {

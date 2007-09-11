@@ -46,39 +46,33 @@ public class UpdateCurrency extends Action {
 
                 CurrencyForm crForm = (CurrencyForm) form;
 
-                if (crForm.getDoAction() == null ||
-                                crForm.getDoAction().equals("showCurrencies")) {
-                        if (crForm.getCurrencyCode() != null && !crForm.getCurrencyCode().equals("") ) {
-                                Iterator itr = crForm.getAllCurrencies().iterator();
-                                AmpCurrency curr = null;
-                                while (itr.hasNext()) {
-                                        curr = (AmpCurrency) itr.next();
-                                        if (curr.getCurrencyCode().equals(crForm.getCurrencyCode())) {
-                                                if (curr.getCountryName()!=null && !curr.getCountryName().equals("")){
-                                                        Country country=DbUtil.getCountryByName(curr.getCountryName());
-                                                        if (country!=null){
-                                                                crForm.setCountryIso(country.getIso());
-                                                        }else{
-                                                                crForm.setCountryIso("-1");
-                                                                }
-                                                }else{
-                                                        crForm.setCountryIso("-1");
-                                                }
-                                                crForm.setCountryName(curr.getCountryName());
-                                                crForm.setCurrencyName(curr.getCurrencyName());
-                                                crForm.setId(curr.getAmpCurrencyId());
-                                                break;
-                                        }
+                if (crForm.getDoAction() == null || crForm.getDoAction().equals("showCurrencies")) {
+                    if (crForm.getCurrencyCode() != null && !crForm.getCurrencyCode().equals("") ) {
+                        Iterator itr = crForm.getAllCurrencies().iterator();
+                        AmpCurrency curr = null;
+                        while (itr.hasNext()) {
+                            curr = (AmpCurrency) itr.next();
+                            if (curr.getCurrencyCode().equals(crForm.getCurrencyCode())) {
+                                if(curr.getCountryId()!=null){
+                                    crForm.setCountryId(curr.getCountryId().getCountryId());
+                                    crForm.setCountryName(curr.getCountryId().getCountryName());
+                                }else{
+                                    crForm.setCountryIso("-1");
                                 }
-                        } else {
-                                crForm.setId(new Long(-1));
-                                crForm.setCountryName(null);
-                                crForm.setCountryIso("-1");
-                                crForm.setCurrencyCode(null);
-                                crForm.setCurrencyName(null);
-                                crForm.setExchangeRate(null);
-                                crForm.setExchangeRateDate(null);
+                                crForm.setCurrencyName(curr.getCurrencyName());
+                                crForm.setId(curr.getAmpCurrencyId());
+                                break;
+                            }
                         }
+                    } else {
+                        crForm.setId(new Long(-1));
+                        crForm.setCountryName(null);
+                        crForm.setCountryIso("-1");
+                        crForm.setCurrencyCode(null);
+                        crForm.setCurrencyName(null);
+                        crForm.setExchangeRate(null);
+                        crForm.setExchangeRateDate(null);
+                    }
                         if (crForm.getCountries() == null ||
                                         crForm.getCountries().size() < 1) {
                             Collection<CountryBean> countries = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
@@ -89,18 +83,13 @@ public class UpdateCurrency extends Action {
                      AmpCurrency curr=CurrencyUtil.getCurrencyByCode(crForm.getCurrencyCode());
                      if(curr==null){
                          curr = new AmpCurrency();
-                         if (crForm.getCountryIso() != null && !crForm.getCountryIso().equals("-1")) {
-                             Country cn=DbUtil.getDgCountry(crForm.getCountryIso());
+                         if (crForm.getCountryId() == null ||
+                             crForm.getCountryId().equals(-1)) {
+                             return mapping.findForward("curManager");
+                         } else {
+                             Country cn=DbUtil.getDgCountry(crForm.getCountryId());
                              if(cn!=null){
                                  curr.setCountryId(cn);
-                                 String countryName = cn.getCountryName();
-                                 curr.setCountryName(countryName);
-                             }
-                         } else {
-                             if (crForm.getCountryIso().equals("-1") && (crForm.getCountryName() == null || crForm.getCountryName().equals(""))) {
-                                 curr.setCountryName(null);
-                             } else {
-                                 curr.setCountryName(crForm.getCountryName());
                              }
                          }
                          curr.setCurrencyCode(crForm.getCurrencyCode());

@@ -255,9 +255,6 @@ function sortSubmit(value){
                                                 <c:if test="${curr.countryId!=null}">
                                                 ${curr.countryId.countryName}
                                                 </c:if>
-                                                <c:if test="${curr.countryId==null}">
-                                                ${curr.countryName}
-                                                </c:if>
                                               </a>
                                             </td>
 											<td align="right">

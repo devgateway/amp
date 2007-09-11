@@ -12,19 +12,20 @@ public class CurrencyForm extends ActionForm {
 	private int numRecords;
 	private Integer currentPage;
 	private int page;
-	
+
 	private String filterByCurrency;
-	
+
 	private Long id;
 	private String currencyCode;
 	private String currencyName;
 	private String countryIso;
+    private Long countryId;
 	private Double exchangeRate;
 	private String exchangeRateDate;
 	private Collection countries;
 	private String countryName;
 	private boolean cantDelete = false;
-	
+
 	private String doAction;
 	private String closeFlag;
 
@@ -231,8 +232,17 @@ public class CurrencyForm extends ActionForm {
 	public boolean getCantDelete() {
 		return cantDelete;
 	}
-	public void setCantDelete(boolean cantDelete) {
+
+    public Long getCountryId() {
+        return countryId;
+    }
+
+    public void setCantDelete(boolean cantDelete) {
 		this.cantDelete = cantDelete;
 	}
+
+    public void setCountryId(Long countryId) {
+        this.countryId = countryId;
+    }
 
 }

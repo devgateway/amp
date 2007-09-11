@@ -27,6 +27,13 @@ function validate() {
     document.aimCurrencyForm.currencyName.focus();
     return false;
   }
+  var cn=document.getElementById("lstCountry");
+  if(cn!=null){
+    if(cn.value=="-1"){
+      alert("Please select country");
+      cn.focus();
+    }
+  }
   return true;
 }
 
@@ -132,14 +139,15 @@ function unload() {
                     </tr>
                     <tr bgcolor="#f4f4f2">
                       <td align="right" valign="middle" width="50%">
+                        <FONT color=red>*</FONT>
                         <digi:trn key="aim:country">Country</digi:trn>&nbsp;
                       </td>
                       <td align="left" valign="middle">
-                        <html:select property="countryIso" styleClass="inp-text">
+                        <html:select property="countryId" styleId="lstCountry" styleClass="inp-text">
                           <html:option value="-1"><digi:trn key="aim:selectCountry">Select a country</digi:trn></html:option>
                           <c:if test="${!empty aimCurrencyForm.countries}">
                             <c:forEach var="country" items="${aimCurrencyForm.countries}">
-                              <html:option value="${country.iso}">${country.name}</html:option>
+                              <html:option value="${country.id}">${country.name}</html:option>
                             </c:forEach>
                           </c:if>
                         </html:select>

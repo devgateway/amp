@@ -16,6 +16,8 @@
 
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 
+<%@ taglib uri="/taglib/category" prefix="category" %>
+
 
 
 
@@ -524,7 +526,11 @@
 
 											<td>
 
-												<html:select property="status" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
+													<c:set var="translation">
+														<digi:trn key="aim:PIFilterStatusFirstLine">All Statuses</digi:trn>
+													</c:set>
+													<category:showoptions firstLine="${translation}" styleClass="dr-menu" name="aimParisIndicatorReportForm" property="status" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>" />
+												<%-- <html:select property="status" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
 													<html:option value="all"><digi:trn key="aim:allStatus">All Status</digi:trn></html:option>
 
@@ -536,7 +542,7 @@
 
 													</logic:notEmpty>
 
-												</html:select>
+												</html:select> --%>
 
 											</td>
 
@@ -577,8 +583,11 @@
 										<c:if test="${aimParisIndicatorReportForm.indicatorCode != '6'}">
 
 											<td>
-
-												<html:select property="financingInstrument" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
+													<c:set var="translation">
+														<digi:trn key="aim:PIFilterFinInstrFirstLine">All Financing Instruments</digi:trn>
+													</c:set>
+													<category:showoptions firstLine="${translation}" styleClass="dr-menu" name="aimParisIndicatorReportForm" property="financingInstrument" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" />
+												<%--<html:select property="financingInstrument" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
 													<html:option value="all"><digi:trn key="aim:allFinancingInstruments">All Financing Instruments</digi:trn></html:option>
 
@@ -590,8 +599,8 @@
 
 													</logic:notEmpty>
 
-												</html:select>
-
+												</html:select> --%>
+		
 											</td>
 
 										</c:if>

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.helper.Constants;
 
 public class ParisIndicatorReportForm extends ActionForm {
@@ -34,9 +35,11 @@ public class ParisIndicatorReportForm extends ActionForm {
 	private String currency = null;
 	private String perspective = null;
 	private String orgGroup = null;
-	private String status = null;			
+	
+	private Long status = null;
+		
 	private String termAssist = null;			// defunct
-	private String financingInstrument = null;
+	private Long financingInstrument = null;
 	private String calendar = null;
 	private String donor = null;
 	private String sector = null;
@@ -60,12 +63,12 @@ public class ParisIndicatorReportForm extends ActionForm {
 			currency = Constants.DEFAULT_CURRENCY;
 			perspective = "MA";
 			orgGroup = "all";
-			status = "all";
+			status = new Long(0);
 			termAssist = "all";
 			calendar = "";
 			donor = "all";
 			sector = "all";
-			financingInstrument = "all";
+			financingInstrument = new Long(0);
 			numColsCalculated = "4";
 			reset = Boolean.FALSE;
 			filterFlag = Boolean.FALSE;
@@ -148,13 +151,13 @@ public class ParisIndicatorReportForm extends ActionForm {
 	/**
 	 * @return Returns the financingInstrument.
 	 */
-	public String getFinancingInstrument() {
+	public Long getFinancingInstrument() {
 		return financingInstrument;
 	}
 	/**
 	 * @param financingInstrument The financingInstrument to set.
 	 */
-	public void setFinancingInstrument(String financingInstrument) {
+	public void setFinancingInstrument(Long financingInstrument) {
 		this.financingInstrument = financingInstrument;
 	}
 	/**
@@ -203,13 +206,13 @@ public class ParisIndicatorReportForm extends ActionForm {
 	/**
 	 * @return Returns the status.
 	 */
-	public String getStatus() {
+	public Long getStatus() {
 		return status;
 	}
 	/**
 	 * @param status The status to set.
 	 */
-	public void setStatus(String status) {
+	public void setStatus(Long status) {
 		this.status = status;
 	}
 	/**

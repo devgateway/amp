@@ -6,7 +6,6 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,14 +20,17 @@ import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.ParisIndicatorReportForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.CommonWorker;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.helper.ParisIndicator;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;
+
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
+
 
 public class ParisIndicatorReport extends Action {
 
@@ -94,8 +96,8 @@ public class ParisIndicatorReport extends Action {
 					svForm.setStatusColl(DbUtil.getAllActivityStatus());
 				//if (null == svForm.getTermAssistColl() || svForm.getTermAssistColl().size() < 1)
 					//svForm.setTermAssistColl(DbUtil.getAllTermAssist());
-				if (null == svForm.getFinancingInstrumentColl() || svForm.getFinancingInstrumentColl().size() < 1)
-					svForm.setFinancingInstrumentColl(DbUtil.getAllFinancingInstruments());
+//				if (null == svForm.getFinancingInstrumentColl() || svForm.getFinancingInstrumentColl().size() < 1)
+//					svForm.setFinancingInstrumentColl(DbUtil.getAllFinancingInstruments());
 				if (null == svForm.getCalendarColl() || svForm.getCalendarColl().size() < 1)
 					svForm.setCalendarColl(DbUtil.getAllFisCalenders());
 				if (null == svForm.getDonorColl() || svForm.getDonorColl().size() < 1)
@@ -153,9 +155,15 @@ public class ParisIndicatorReport extends Action {
 						svForm.setNumColsCalculated("8");
 					else if ("9".equalsIgnoreCase(svForm.getIndicatorCode()))
 						svForm.setNumColsCalculated("5");
+					
+					/* Added by Alex Gartner for category manager compatibility.
+					 * Getting the AmpCategoryValue object for the financingInstrument ID*/
+					AmpCategoryValue financingInstrument	= CategoryManagerUtil.getAmpCategoryValueFromDb(svForm.getFinancingInstrument());
+					AmpCategoryValue status					= CategoryManagerUtil.getAmpCategoryValueFromDb(svForm.getStatus());
+					/* End by Alex Gartner*/
 					svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator(svForm.getIndicatorCode(),svForm.getDonor(),
-							svForm.getOrgGroup(),svForm.getStatus(),svForm.getStartYear().intValue(),svForm.getCloseYear().intValue(),
-							svForm.getCurrency(),svForm.getTermAssist(),svForm.getFinancingInstrument(),
+							svForm.getOrgGroup(), status, svForm.getStartYear().intValue(),svForm.getCloseYear().intValue(),
+							svForm.getCurrency(),svForm.getTermAssist(),financingInstrument,
 							svForm.getPerspective(),svForm.getSector(),svForm.getCalendar()));
 					
 					if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()) || "5b".equalsIgnoreCase(svForm.getIndicatorCode())) {

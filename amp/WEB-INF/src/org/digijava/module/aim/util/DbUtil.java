@@ -5023,7 +5023,7 @@ public class DbUtil {
     }
 
     public static Collection getAidSurveyReportByIndicator(String indcCode, String donor, String orgGroup,
-        String status, int startYear, int closeYear, String currency, String termAssist, String financingInstrument,
+        AmpCategoryValue statusCM, int startYear, int closeYear, String currency, String termAssist, AmpCategoryValue financingInstr,
         String perspective, String sector, String calendar) {
 
         Session session = null;
@@ -5134,11 +5134,14 @@ public class DbUtil {
                         while (itr2.hasNext()) {
                             AmpAhsurvey svy = (AmpAhsurvey) itr2.next();
                             // Filtering by activity-status here
-                            if (null != status && status.trim().length() > 1 && !"all".equalsIgnoreCase(status)) {
+                            if (null != statusCM) {
                                 AmpCategoryValue statusValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, svy.getAmpActivityId().getCategories());
-                                if (statusValue != null && !status.equalsIgnoreCase(statusValue.getValue()))
+
+                                if ( statusValue == null || (!statusCM.getId().equals(statusValue.getId()) )  )
+                                		continue;
+                                /*if (statusValue != null && !status.equalsIgnoreCase(statusValue.getValue()))
                                     ;
-                                continue;
+                                continue;*/
                             }
                             // Filtering by activity-sector here
                             if (null != sector && sector.trim().length() > 1 && !"all".equalsIgnoreCase(sector)) {
@@ -5188,9 +5191,8 @@ public class DbUtil {
                                             // Only those donors are considered who have funding for the activity/project
                                             if (0 == dnOrg.getAmpOrgId().compareTo(fund.getAmpDonorOrgId().getAmpOrgId())) {
                                                 // Filtering by financing-instrument here
-                                                if (null != financingInstrument && financingInstrument.trim().length() > 1
-                                                    && !"all".equalsIgnoreCase(financingInstrument)) {
-                                                    if (!financingInstrument.equalsIgnoreCase( fund.getFinancingInstrument().getValue() ))
+                                                if (null != financingInstr) {
+                                                    if (!financingInstr.getId().equals(fund.getFinancingInstrument().getId()) )
                                                         continue;
                                                 }
                                                 if ("9".equalsIgnoreCase(indcCode)) {

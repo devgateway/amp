@@ -135,7 +135,7 @@ public class PatcherWorker {
 			up = PatcherUtil.getUnmarshalledPatch(f);
 		
 		
-		logger.info(Util.getBeanAsString(up, ""));
+		//logger.info(Util.getBeanAsString(up, ""));
 		
 		if(up.getDependencies()!=null && !up.getDependencies().trim().equals("")) {
 			//the patch has dependencies, check their status first

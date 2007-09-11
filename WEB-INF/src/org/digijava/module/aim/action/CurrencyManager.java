@@ -80,7 +80,7 @@ public class CurrencyManager extends Action {
                         Country cn=DbUtil.getTranlatedCountry(request,cur.getCountryId());
                         cur.setCountryId(cn);
                     }else{
-                        Country cn=DbUtil.getCountryByName("multi-country");
+                        Country cn=DbUtil.getCountryByName("Multi-country");
                         cur.setCountryId(DbUtil.getTranlatedCountry(request,cn));
                     }
                 }

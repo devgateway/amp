@@ -16,6 +16,7 @@
 
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 
 
@@ -511,8 +512,12 @@
 										<c:if test = "${aimParisIndicatorReportForm.indicatorCode != '10a'}">
 
 											<td>
+												<c:set var="translation">
+														<digi:trn key="aim:PIFilterStatusFirstLine">All Statuses</digi:trn>
+												</c:set>
+												<category:showoptions firstLine="${translation}" styleClass="dr-menu" name="aimParisIndicatorReportForm" property="status" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>" />
 
-												<html:select property="status" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
+												<%--<html:select property="status" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
 													<html:option value="all"><digi:trn key="aim:allStatus">All Status</digi:trn></html:option>
 
@@ -524,7 +529,7 @@
 
 													</logic:notEmpty>
 
-												</html:select>
+												</html:select> --%>
 
 											</td>
 
@@ -617,8 +622,11 @@
 											</td>
 
 											<td>
-
-												<html:select property="financingInstrument" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
+												<c:set var="translation">
+														<digi:trn key="aim:PIFilterFinInstrFirstLine">All Financing Instruments</digi:trn>
+												</c:set>
+												<category:showoptions firstLine="${translation}" styleClass="dr-menu" name="aimParisIndicatorReportForm" property="financingInstrument" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" />
+												<%--<html:select property="financingInstrument" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
 													<html:option value="all"><digi:trn key="aim:allFinancingInstruments">All Financing Instruments</digi:trn></html:option>
 
@@ -630,7 +638,7 @@
 
 													</logic:notEmpty>
 
-												</html:select>
+												</html:select> --%>
 
 											</td>
 
@@ -1238,7 +1246,7 @@
 											<div align="center">
 
 												<c:if test="${index == 1}">
-
+												
 													<fmt:formatNumber type="number" value="${rowVal}" pattern="####" maxFractionDigits="0" />
 
 												</c:if>
@@ -1270,7 +1278,6 @@
 																</c:when>
 
 																<c:otherwise >
-
 																	<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />
 
 																</c:otherwise>

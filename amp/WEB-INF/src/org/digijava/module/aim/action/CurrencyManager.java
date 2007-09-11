@@ -76,11 +76,11 @@ public class CurrencyManager extends Action {
             if(currencies!=null){
                 for (Iterator cuIter = currencies.iterator(); cuIter.hasNext(); ) {
                     AmpCurrency cur = (AmpCurrency) cuIter.next();
-                    if(cur.getCountryId()!=null){
-                        Country cn=DbUtil.getTranlatedCountry(request,cur.getCountryId());
-                        cur.setCountryId(cn);
+                    Country cn=cur.getCountryId();
+                    if(cn!=null){
+                        cur.setCountryId(DbUtil.getTranlatedCountry(request,cn));
                     }else{
-                        Country cn=DbUtil.getCountryByName("Multi-country");
+                        cn=DbUtil.getCountryByName("Multi-country");
                         cur.setCountryId(DbUtil.getTranlatedCountry(request,cn));
                     }
                 }

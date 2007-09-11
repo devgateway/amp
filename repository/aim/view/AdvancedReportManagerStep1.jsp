@@ -33,7 +33,7 @@ function moveUp(val)
 		document.aimAdvancedReportForm.moveColumn.value = val;
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
-	}	
+	}
 }
 
 function moveDown(val)
@@ -47,7 +47,7 @@ function moveDown(val)
 		document.aimAdvancedReportForm.moveColumn.value = val;
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
-	}	
+	}
 }
 function check(){
 	if(document.aimAdvancedReportForm.removeColumns == null){
@@ -67,7 +67,7 @@ function gotoStep() {
 }
 /*added here*/
 function backStep() {
-	if (check()){	
+	if (check()){
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=forward" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.target = "_self";
@@ -170,11 +170,11 @@ function checkUncheckAll2() {
 								</digi:link>&nbsp;&gt;&nbsp;
 								<digi:trn key="aim:reportBuilder:selectcolumn">
 									Report Builder : Select Column
-								</digi:trn>					
-								&gt;		
+								</digi:trn>
+								&gt;
 							</td>
 						</tr>
-					</table>	
+					</table>
 				</td>
 			</tr>
 		 	<tr>
@@ -203,7 +203,7 @@ function checkUncheckAll2() {
 								<TR bgColor=#f4f4f2>
 									<TD vAlign="top" align="left" width="100%">
 									</TD>
-								</TR>				
+								</TR>
 
 								<TR bgColor=#f4f4f2>
 									<TD vAlign="top" align="center" width="100%" bgColor=#f4f4f2>
@@ -212,15 +212,15 @@ function checkUncheckAll2() {
 												<TD width="100%" bgcolor="pink" align="center"  valign=top>
 													<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top" align="center" bgColor=#f4f4f2 class="box-border-nopadding" border=0>
 														<TR>
-				
+
 															<TD width="50%" vAlign="top" align="left" bgcolor="#eeeeee">
 																<TABLE width="100%" cellPadding="3" cellSpacing="1" vAlign="top" align="left" bgcolor="#eeeeee" border=0>
-																	<tr height=10>	<td>	</td>	</tr>												
+																	<tr height=10>	<td>	</td>	</tr>
 																	<TR bgcolor="#eeeeee">
 																		<td align="center" class=box-title>
 																			<digi:trn key="aim:report:AvailableColumns">Available Columns </digi:trn>
-																			
-																		</td>	
+
+																		</td>
 																	</tr>
 
 																	<tr height=10>	<td align="right">
@@ -234,7 +234,7 @@ function checkUncheckAll2() {
 												<field:display name="Actual Completion Date" feature="Identification">&nbsp;</field:display>
 												<field:display name="Actual Start Date" feature="Identification">&nbsp;</field:display>
 												<field:display name="Description" feature="Identification">&nbsp;</field:display>
-												<field:display name="Objective" feature="Identification">&nbsp;</field:display>					
+												<field:display name="Objective" feature="Identification">&nbsp;</field:display>
 												<field:display name="Project Id" feature="Identification">&nbsp;</field:display>
 												<field:display name="Project Title" feature="Identification">&nbsp;</field:display>
 												<field:display name="Status" feature="Identification">&nbsp;</field:display>
@@ -250,7 +250,7 @@ function checkUncheckAll2() {
 
 
 
-												
+
 											<feature:display name="Location" module="Project ID and Planning">
 												<field:display name="Implementation Level" feature="Location">&nbsp;</field:display>
 												<field:display name="Region" feature="Location">&nbsp;</field:display>
@@ -276,7 +276,7 @@ function checkUncheckAll2() {
 												<field:display name="Physical Progress" feature="Issues">&nbsp;</field:display>
 												<field:display name="Physical progress description" feature="Issues">&nbsp;</field:display>
 												<field:display name="Physical progress title" feature="Issues">&nbsp;</field:display>
-											</feature:display>	
+											</feature:display>
 											<module:display name="Contact Information"></module:display>
 											<feature:display name="Contact Information" module="Contact Information">
 												<field:display name="Contact Name" feature="Contact Information">&nbsp;</field:display>
@@ -299,71 +299,71 @@ function checkUncheckAll2() {
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
 																				<c:if test="${!empty aimAdvancedReportForm.ampColumns}">
-																				
+
 																					<html:button styleClass="dr-menu" onclick="treeObj.expandAll()" property="expand">
 																						<digi:trn key="btn:expand">Expand</digi:trn>
 																					</html:button>
 																					<html:button styleClass="dr-menu"  property="collapse" onclick="treeObj.collapseAll()">
 																						<digi:trn key="btn:collapse">Collapse</digi:trn>
 																					</html:button>
-																					<!-- 
+																					<!--
 																						Because the donor report and the contribution report are now different (the donor has also the indicator columnns)
-																						we have to create different c:if for each report								
+																						we have to create different c:if for each report
 																						 -->
 																						 <font size="3">
-																							<ul id="dhtmlgoodies_tree" class="DHTMLSuite_tree">	
+																							<ul id="dhtmlgoodies_tree" class="DHTMLSuite_tree">
 																							<bean:define name="aimAdvancedReportForm" property="ampTreeColumns" id="ampTreeColumns" type="java.util.Map"  toScope="page"/>
 																							<li noDrag="true">
-																							<input type=checkbox id="root" 
-																											name="root" 
+																							<input type=checkbox id="root"
+																											name="root"
 																											value="root"
 																											onclick="checkUncheckAll3();"
-																											
+
 																								/>
-																							<a id="1">AMP</a>
-																								<ul>																
+																							<a id="1"><digi:trn key="aim:report:AMP">AMP</digi:trn></a>
+																								<ul>
 																							<logic:iterate name="ampTreeColumns" id="ampTreeColumn" type="java.util.Map.Entry" >
 																								<bean:define id="themeColumn" name="ampTreeColumn" property="key" type="java.lang.String" scope="page"/>
 																								<bean:define id="columnCollection" name="ampTreeColumn" property="value" type="java.util.ArrayList" scope="page"/>
 																								<div id="limodule:<bean:write name="themeColumn"/>" noDrag="true">
 																								<li id="limodule:<bean:write name="themeColumn"/>" noDrag="true">
-																								
-																								<input type=checkbox id="moduleVis:<bean:write name="themeColumn"/>" 
-																											name="selectedThemes" 
+
+																								<input type=checkbox id="moduleVis:<bean:write name="themeColumn"/>"
+																											name="selectedThemes"
 																											value="<bean:write name="themeColumn"/>"
 																											onclick="toggleChildrenVisibility('limodule:<bean:write name="themeColumn"/>')"
-																											
+
 																								/>
 																								<a id="module:<bean:write name="themeColumn"/>">
-																									<bean:write name="themeColumn"/>
+																								<digi:trn key="aim:report:${themeColumn}"><bean:write name="themeColumn"/></digi:trn>
 																								</a>
 																								<ul>
 																								<logic:iterate name="columnCollection" id="ampColumnFromTree" type="org.digijava.module.aim.dbentity.AmpColumns">
 																									<li class="dhtmlgoodies_sheet.gif" noDrag="true">
-																										<input type=checkbox id="fieldVis:<bean:write name="ampColumnFromTree" property="columnId"/>" 
-																											name="selectedColumns" 
+																										<input type=checkbox id="fieldVis:<bean:write name="ampColumnFromTree" property="columnId"/>"
+																											name="selectedColumns"
 																											value="<bean:write name="ampColumnFromTree" property="columnId"/>"
 																										/>
 																										<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>" >
 																											<digi:trn key="aim:report:${ampColumnFromTree.columnName}"><bean:write name="ampColumnFromTree" property="columnName"/></digi:trn>
 																										</a>
-																									</li>	
+																									</li>
 																								</logic:iterate>
 																								</ul>
-																								
+
 																								</li></div>
 																							</logic:iterate>
 																							</ul>
 																							</li></ul>
 																						</font>
 
-<!-- 																						
+<!--
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'donor'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
 																						<tr bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
 																							<digi:trn key="aim:report:${ampColumns.columnName}"><c:out value="${ampColumns.columnName}"/></digi:trn>
-																									
+
 																							</td>
 																							<td align="right">
 																							<html:multibox property="selectedColumns">
@@ -373,21 +373,21 @@ function checkUncheckAll2() {
 																						</tr>
 																						</logic:iterate>
 																						</c:if>
-																						
- -->																						
+
+ -->
 																						<!-- the contribution report doesn't have access to columns 33-38 from amp_columns -->
 <!-- 																						<c:if test="${aimAdvancedReportForm.arReportType == 'contribution'}">
-																						
+
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
 																						<c:if test="${ampColumns.columnId<'33' || ampColumns.columnId>'38'}">
 																						<tr bgcolor="#ffffff">
-																						
+
 																							<td align="left" width="98%" valign=top>
 																							<digi:trn key="aim:report:${ampColumns.columnName}"><c:out value="${ampColumns.columnName}"/></digi:trn>
-																								
+
 																							</td>
 																							<td align="right">
-																							
+
 																							<html:multibox property="selectedColumns">
 																							<c:out value="${ampColumns.columnId}"/>
 																							</html:multibox>
@@ -396,10 +396,10 @@ function checkUncheckAll2() {
 																						</c:if>
 																						</logic:iterate>
 																						</c:if>
- -->																						
-																						
+ -->
+
 																						<!-- the regional report doesn't have access to columns 33-38 from amp_columns -->
-<!-- 
+<!--
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
 																						<logic:notEqual name="ampColumns" property="columnId" value="5">
@@ -407,11 +407,11 @@ function checkUncheckAll2() {
 																						<tr bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
 																							<digi:trn key="aim:report:${ampColumns.columnName}"><c:out value="${ampColumns.columnName}"/></digi:trn>
-																								
+
 																							</td>
 																							<td align="right">
 																							<html:multibox property="selectedColumns">
-																							<c:out value="${ampColumns.columnId}"/>	
+																							<c:out value="${ampColumns.columnId}"/>
 					  																	    </html:multibox>
 																							</td>
 																						</tr>
@@ -420,9 +420,9 @@ function checkUncheckAll2() {
 																						</logic:iterate>
 																						</c:if>
 -->
-																					
+
 																						<!-- the new component report containing also indicator columns 30-35 -->
-<!-- 
+<!--
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'component'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
 																						<logic:notEqual name="ampColumns" property="columnId" value="5">
@@ -430,25 +430,25 @@ function checkUncheckAll2() {
 																						<tr bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
 																							<digi:trn key="aim:report:${ampColumns.columnName}"><c:out value="${ampColumns.columnName}"/></digi:trn>
-																								
+
 																							</td>
 																							<td align="right">
 																							<html:multibox property="selectedColumns">
-																							<c:out value="${ampColumns.columnId}"/>	
+																							<c:out value="${ampColumns.columnId}"/>
 					  																	    </html:multibox>
 																							</td>
 																						</tr>
-																						
+
 																						</logic:notEqual>
 																						</logic:iterate>
 																						</c:if>
-	-->																					
-																					
+	-->
+
 																				</c:if>
 																			</TABLE>
 																		</TD>
-																	</TR>												
-		
+																	</TR>
+
 																	<tr>
 																		<c:if test="${empty aimAdvancedReportForm.ampColumns}">
 																			<td >
@@ -462,42 +462,42 @@ function checkUncheckAll2() {
 																	</tr>
 																</TABLE>
 															</TD>
-				
+
 															<TD width="50%" vAlign="top" align="left" bgcolor="#eeeeee">
 																<TABLE width="100%" cellPadding="2" cellSpacing="1" vAlign="top" align="top" bgcolor="#eeeeee" border=0>
-																	<tr height=10>	<td>	</td>	</tr>												
+																	<tr height=10>	<td>	</td>	</tr>
 																	<TR bgcolor="#eeeeee">
 																		<td align="center" class=box-title>
 																		<digi:trn key="aim:report:Selectedcolumns">Selected Columns</digi:trn>
-																			
+
 																		</td>
 																	</tr>
 																	<tr height=10>	<td align="right"><digi:trn key="aim:report:SelectAll">Select All</digi:trn>
 																	<input type="checkbox" name="checkall2" onclick="checkUncheckAll2(this);">
 																	</input>
 																	</td>
-																	</tr>																	
+																	</tr>
 																	<tr height=10>	<td>	</td>	</tr>
 																	<TR>
 																		<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
 																				<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
-																				
+
 																					<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
 																						<tr bgcolor=#ffffff>
 																						<td align="left" width="98%">
-																					
-																					 <digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>		
-																						
+
+																					 <digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>
+
 																						</td>
-																					
+
 																						<td align="right">
-																							
+
 																							<html:multibox property="removeColumns" >
-																							<c:out value="${addedColumns.columnId}"/>																							  
+																							<c:out value="${addedColumns.columnId}"/>
 					  																	    </html:multibox>
-					  																	    
+
 																						</td>
 																							<td align="right">
 																								<IMG alt="Move Up"  height=10 src="../ampTemplate/images/up-arrow.jpg" width=10 onclick="moveUp(<c:out value='${addedColumns.columnId}' />)">
@@ -509,8 +509,8 @@ function checkUncheckAll2() {
 																				</c:if>
 																			</TABLE>
 																		</TD>
-																		</c:if>														
-																		
+																		</c:if>
+
 																		<c:if test="${empty aimAdvancedReportForm.addedColumns}">
 																			<td >
 																				<TABLE width="100%" height="200" cellPadding=2 cellSpacing=0 vAlign="top" align="center" bgcolor="#f4f4f2">
@@ -520,7 +520,7 @@ function checkUncheckAll2() {
 																				</table>
 																			</td>
 																		</c:if>
-																	</TR>												
+																	</TR>
 																</TABLE>
 															</TD>
 														</TR>
@@ -531,32 +531,32 @@ function checkUncheckAll2() {
 												<td align="center">
 													<html:button  styleClass="dr-menu" property="submitButton"  onclick="addColumn()">
 														<digi:trn key="btn:add">  Add </digi:trn> >>&nbsp;&nbsp;&nbsp;
-													</html:button>					
+													</html:button>
 													<html:button  styleClass="dr-menu" property="submitButton"  onclick="deleteColumn()">
-														<< <digi:trn key="btn:remove">Remove</digi:trn> 
-													</html:button>					
+														<< <digi:trn key="btn:remove">Remove</digi:trn>
+													</html:button>
 
 												</td>
 											</tr>	<!-- Add and Remove Button-->
 											<tr>
 												<td align="right" colspan="2">
 												   <html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:backStep()">
-														<< <digi:trn key="btn:previous">Previous</digi:trn> 
-													</html:button>					
+														<< <digi:trn key="btn:previous">Previous</digi:trn>
+													</html:button>
 													<c:set var="message">
 														<digi:trn key="aim:reports:DataNotSaved">Do you really want to quit Report Generator? \nWarning: All your Current Data Will be Lost... press OK to QUIT Report Generator.</digi:trn>
 													</c:set>
 													<html:button  styleClass="dr-menu" property="submitButton"  onclick="return quitAdvRptMngr('${message}')">
-														<digi:trn key="btn:cancel">Cancel</digi:trn> 
-													</html:button>					
+														<digi:trn key="btn:cancel">Cancel</digi:trn>
+													</html:button>
 													<html:button  styleClass="dr-menu" property="submitButton" onclick="javascript:gotoStep()">
 														<digi:trn key="btn:next">Next</digi:trn> >>
-													</html:button>					
+													</html:button>
 												</td>
 											</tr>
 										</TABLE>
 									</TD>
-								</TR>	
+								</TR>
 							</TABLE>
 						</TD>
 					</TR>
@@ -564,11 +564,11 @@ function checkUncheckAll2() {
 			</TD>
 			</TR>
 		</table>
-	</td>	
+	</td>
 	<td class=r-dotted-lg align=left vAlign=top >	&nbsp;</td>
 </tr>
 </table>
-</td>	
+</td>
 </TR>
 </TABLE>
 

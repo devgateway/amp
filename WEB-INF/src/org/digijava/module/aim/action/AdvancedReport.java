@@ -51,10 +51,10 @@ import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.Report;
 import org.digijava.module.aim.helper.ReportSelectionCriteria;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.ReportUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 
@@ -155,8 +155,8 @@ public class AdvancedReport extends Action {
 			// Fills the column that can be selected from AMP_COLUMNS
 			if(formBean.getAmpColumns() == null)
 			{
-				formBean.setAmpColumns(ReportUtil.getColumnList());
-				formBean.setAmpMeasures(ReportUtil.getMeasureList());
+				formBean.setAmpColumns(AdvancedReportUtil.getColumnList());
+				formBean.setAmpMeasures(AdvancedReportUtil.getMeasureList());
 				formBean.setReportTitle("");
 				formBean.setReportDescription("");
 				/*iter = formBean.getAmpMeasures().iterator();
@@ -188,7 +188,7 @@ public class AdvancedReport extends Action {
 				if (formBean.getMaxStep().intValue() < 1)
 					formBean.setMaxStep(new Integer(1));
 				
-				HashMap ampTreeColumns=this.buildAmpTreeColumnSimple(ReportUtil.getColumnList(), formBean.getArReportType());
+				HashMap ampTreeColumns=this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnList(), formBean.getArReportType());
 				//TODO
 				//System.out.println("ssssssssssssssssssss"+formBean.getArReportType());
 				formBean.setAmpTreeColumns(ampTreeColumns);
@@ -296,7 +296,7 @@ public class AdvancedReport extends Action {
 				//for storing the value of year filter 
 				/* report Title check */
 				ActionErrors errors = new ActionErrors();	
-				AmpTeamMember found = ReportUtil.checkDuplicateReportName(formBean.getReportTitle());
+				AmpTeamMember found = AdvancedReportUtil.checkDuplicateReportName(formBean.getReportTitle());
 				if(found!=null)
 				{ 
 					formBean.setDuplicatedReportName(true);
@@ -502,7 +502,7 @@ public class AdvancedReport extends Action {
 					{
 						page = 1;
 //						reports=ReportUtil.generateAdvancedReport(ampTeamId,fromYr,toYr,fiscalCalId,ampCurrencyCode,perspective, transc, formBean.getAddedColumns(),formBean.getColumnHierarchie());
-						reports=ReportUtil.getAdvancedReport(ampTeamId,fromYr,toYr,perspective,ampCurrencyCode,All,All,All,All,fiscalCalId,null,null,"All","All",rsc);
+						//reports=ReportUtil.getAdvancedReport(ampTeamId,fromYr,toYr,perspective,ampCurrencyCode,All,All,All,All,fiscalCalId,null,null,"All","All",rsc);
 						//logger.info("Page is NULL............................" + reports.size());
 						formBean.setFinalData(reports);
 						httpSession.setAttribute("ampReports",reports);
@@ -971,7 +971,7 @@ public class AdvancedReport extends Action {
 					AmpTeamMember found 	= null;
 					/* No need to check for duplicate if editing an exisiting report */
 					if ( !formBean.getInEditingMode() ){
-						found 			= ReportUtil.checkDuplicateReportName(formBean.getReportTitle());
+						found 			= AdvancedReportUtil.checkDuplicateReportName(formBean.getReportTitle());
 						if (formBean.getInEditingMode() == true) {
 							
 							found = new AmpTeamMember(); //stupid fix
@@ -1089,7 +1089,7 @@ public class AdvancedReport extends Action {
 							}
 							else { // This is the case of a new Report being created
 //								logger.info ("Saving report.." );
-								ReportUtil.saveReport(ampReports,teamMember.getTeamId(),teamMember.getMemberId(),teamMember.getTeamHead());
+								AdvancedReportUtil.saveReport(ampReports,teamMember.getTeamId(),teamMember.getMemberId(),teamMember.getTeamHead());
 //								log the add action for a report
 								AuditLoggerUtil.logObject(httpSession,request,ampReports,"add");
 							}

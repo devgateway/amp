@@ -72,16 +72,16 @@ public class CurrencyManager extends Action {
 			}
 
             Collection currencies =crForm.getAllCurrencies();
+
             if(currencies!=null){
                 for (Iterator cuIter = currencies.iterator(); cuIter.hasNext(); ) {
                     AmpCurrency cur = (AmpCurrency) cuIter.next();
                     if(cur.getCountryId()!=null){
-                        Country cn=cur.getCountryId();
-                        CountryBean cnB=DbUtil.getTranlatedCountryByIso(request,cn.getIso());
-                        if(cnB!=null){
-                            cn.setCountryName(cnB.getName());
-                            cur.setCountryId(cn);
-                        }
+                        Country cn=DbUtil.getTranlatedCountry(request,cur.getCountryId());
+                        cur.setCountryId(cn);
+                    }else{
+                        Country cn=DbUtil.getCountryByName("multi-country");
+                        cur.setCountryId(DbUtil.getTranlatedCountry(request,cn));
                     }
                 }
                 crForm.setAllCurrencies(currencies);

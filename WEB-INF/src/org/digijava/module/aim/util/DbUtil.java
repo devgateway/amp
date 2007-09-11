@@ -103,13 +103,13 @@ import org.digijava.module.aim.helper.CountryBean;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
-    
+
 
 	public static String getDescParsed(String str)
 	{
 		StringBuffer strbuff = new StringBuffer();
 		char[] ch = new char[str.length()];
-		
+
 		ch = str.toCharArray();
 
 		for(int i=0; i<ch.length; i++)
@@ -135,26 +135,26 @@ public class DbUtil {
 		str = new String(strbuff);
 		return str;
 	}
-    
+
 
     /**
 	 * Removes the team-reports and member-reports association table.
 	 * @param reportId	A Long array of the reports to be updated
-	 * @param teamId  	The teamId of the team whose association with 
-	 * 					the specified reports must be removed. When the 
+	 * @param teamId  	The teamId of the team whose association with
+	 * 					the specified reports must be removed. When the
 	 * 					teams are dissociated with the reports, the association
-	 * 					from the members of that team also gets removed.   
+	 * 					from the members of that team also gets removed.
 	 */
 	public static void removeTeamReports(Long reportId[],Long teamId) {
 		Session session = null;
 		Transaction tx = null;
-		
+
 		if (reportId == null || reportId.length <= 0) return;
-		
+
 		try {
 			session = PersistenceManager.getSession();
 			tx = session.beginTransaction();
-			
+
 			String queryString = "select tm from "
 				+ AmpTeamMember.class.getName()
 				+ " tm where (tm.ampTeam=:teamId)";
@@ -165,8 +165,8 @@ public class DbUtil {
 			if (col != null && col.size() > 0) {
 				for (int i = 0;i < reportId.length;i ++) {
 					if (reportId[i] != null) {
-						queryString = "select r from " 
-							+ AmpReports.class.getName() 
+						queryString = "select r from "
+							+ AmpReports.class.getName()
 							+ " r where (r.ampReportId=:repId)";
 						qry = session.createQuery(queryString);
 						qry.setParameter("repId",reportId[i],Hibernate.LONG);
@@ -182,11 +182,11 @@ public class DbUtil {
 								session.update(ampReport);
 							}
 						}
-						
+
 						/*
 						 * removing the teams association with the report
 						 */
-						queryString = "select tr from " + AmpTeamReports.class.getName() 
+						queryString = "select tr from " + AmpTeamReports.class.getName()
 							+ " tr where (tr.team=:teamId) and "
 							+ " (tr.report=:repId)";
 						qry = session.createQuery(queryString);
@@ -225,20 +225,20 @@ public class DbUtil {
 	}
 
 	/**
-	 * Associated the reports with the given team 
-	 * @param reportId The Long array of reportIds which are to be associated 
+	 * Associated the reports with the given team
+	 * @param reportId The Long array of reportIds which are to be associated
 	 * 				   with the given team
-	 * @param teamId   The team id of the team to which the reports are to be 
-	 * 				   assigned	
+	 * @param teamId   The team id of the team to which the reports are to be
+	 * 				   assigned
 	 */
 	public static void addTeamReports(Long reportId[],Long teamId) {
 		Session session = null;
 		Transaction tx = null;
-		
+
 		try {
 			session = PersistenceManager.getSession();
 			tx = session.beginTransaction();
-			
+
 			String queryString = "select tm from "
 				+ AmpTeam.class.getName()
 				+ " tm where (tm.ampTeamId=:teamId)";
@@ -253,7 +253,7 @@ public class DbUtil {
 			if (team != null) {
 				if (reportId != null && reportId.length > 0) {
 					queryString = "select rep from "
-						+ AmpReports.class.getName() 
+						+ AmpReports.class.getName()
 						+ " rep where rep.ampReportId in (";
 					StringBuffer temp = new StringBuffer();
 					for (int i = 0;i < reportId.length;i ++) {
@@ -283,7 +283,7 @@ public class DbUtil {
 								tr.setTeam(team);
 								tr.setReport(report);
 								tr.setTeamView(false);
-								session.save(tr);								
+								session.save(tr);
 							}
 						}
 					}
@@ -313,8 +313,8 @@ public class DbUtil {
 		}
 	}
 
-    
-    
+
+
     public static AmpReports getAmpReports (Long id) {
 		Session session		= null;
 		AmpReports report	= null;
@@ -332,8 +332,8 @@ public class DbUtil {
 		}
 		return report;
 	}
-	
-    
+
+
     public static AmpPerspective getPerspectiveByCode(String code) {
         Session session = null;
         List perspectives = new ArrayList();
@@ -4068,7 +4068,7 @@ public class DbUtil {
         }
         return col;
     }
-    
+
     public static Collection getAllOrgGrpBeeingUsed(){
         Session session = null;
         Collection col = new ArrayList();
@@ -4084,7 +4084,7 @@ public class DbUtil {
             logger.debug(e.toString());
         }
         return col;
-    	
+
     }
 
     public static Collection getAllOrgGroups() {
@@ -5982,6 +5982,63 @@ public class DbUtil {
         }else{
             return null;
         }
+    }
+
+    public static CountryBean getTranlatedCountryByIso(HttpServletRequest request, String iso) {
+        Session session = null;
+        Collection msgCol = null;
+        Query qry = null;
+
+        org.digijava.kernel.entity.Locale navLang = RequestUtils.getNavigationLanguage(request);
+        Site site = RequestUtils.getSite(request);
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select msg " +
+                " from " + Message.class.getName() + " msg" +
+                " where (msg.key like ('cn:%')) and (msg.siteId=:siteId) and (msg.locale=:locale)";
+
+            qry = session.createQuery(queryString);
+            qry.setParameter("siteId", site.getId(), Hibernate.LONG);
+            qry.setParameter("locale", navLang.getCode(), Hibernate.STRING);
+            msgCol = qry.list();
+
+            Country cn = getDgCountry(iso);
+            if (cn != null) {
+                if (msgCol != null && msgCol.size() != 0) {
+                    CountryBean trnCn = null;
+                    for (Iterator msgIter = msgCol.iterator(); msgIter.hasNext(); ) {
+                        Message msg = (Message) msgIter.next();
+                        if (msg != null) {
+                            String cnIso = msg.getKey().substring(3);
+                            if (cnIso != null && !cnIso.equals("") && cnIso.equalsIgnoreCase(cn.getIso())) {
+                                trnCn = new CountryBean();
+                                trnCn.setId(cn.getCountryId());
+                                trnCn.setIso(cnIso);
+                                trnCn.setIso3(cn.getIso3());
+                                trnCn.setName(msg.getMessage());
+                                break;
+                            } else if (msg.getKey().equalsIgnoreCase("cn:")) {
+                                trnCn = new CountryBean();
+                                trnCn.setIso(cnIso);
+                                trnCn.setName(msg.getMessage());
+                            }
+                        }
+                    }
+                    return trnCn;
+                } else {
+                    CountryBean trnCn = new CountryBean();
+                    trnCn.setId(cn.getCountryId());
+                    trnCn.setIso(cn.getIso());
+                    trnCn.setIso3(cn.getIso3());
+                    trnCn.setName(cn.getCountryName());
+                    return trnCn;
+                }
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+        return null;
     }
 
     public static class HelperUserNameComparator implements Comparator {

@@ -251,9 +251,15 @@ function sortSubmit(value){
 												<c:out value="${curr.currencyName}"/></a>
 											</td>
 											<td align="left">
-												<a href="javascript:editCurrency('<c:out value="${curr.currencyCode}"/>')">
-												<c:out value="${curr.countryName}"/></a>
-											</td>
+                                              <a href="javascript:editCurrency('${curr.currencyCode}')">
+                                                <c:if test="${curr.countryId!=null}">
+                                                ${curr.countryId.countryName}
+                                                </c:if>
+                                                <c:if test="${curr.countryId==null}">
+                                                ${curr.countryName}
+                                                </c:if>
+                                              </a>
+                                            </td>
 											<td align="right">
 												<a href="javascript:deleteCurrency('<c:out value="${curr.currencyCode}"/>')">
 										 		<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this Currency"/>

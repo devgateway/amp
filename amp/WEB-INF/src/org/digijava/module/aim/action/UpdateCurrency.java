@@ -57,7 +57,10 @@ public class UpdateCurrency extends Action {
                                     crForm.setCountryId(curr.getCountryId().getCountryId());
                                     crForm.setCountryName(curr.getCountryId().getCountryName());
                                 }else{
-                                    crForm.setCountryIso("-1");
+                                    Country cn=DbUtil.getCountryByName("Multi-country");
+                                    if(cn!=null){
+                                        crForm.setCountryId(cn.getCountryId());
+                                    }
                                 }
                                 crForm.setCurrencyName(curr.getCurrencyName());
                                 crForm.setId(curr.getAmpCurrencyId());
@@ -67,7 +70,7 @@ public class UpdateCurrency extends Action {
                     } else {
                         crForm.setId(new Long(-1));
                         crForm.setCountryName(null);
-                        crForm.setCountryIso("-1");
+                        crForm.setCountryId(Long.valueOf(-1));
                         crForm.setCurrencyCode(null);
                         crForm.setCurrencyName(null);
                         crForm.setExchangeRate(null);
@@ -108,7 +111,7 @@ public class UpdateCurrency extends Action {
                          }
                          CurrencyUtil.saveCurrency(curr, cRate);
                          crForm.setCountryName(null);
-                         crForm.setCountryIso("-1");
+                         crForm.setCountryId(Long.valueOf(-1));
                          crForm.setCurrencyCode(null);
                          crForm.setCurrencyName(null);
                          crForm.setExchangeRate(null);

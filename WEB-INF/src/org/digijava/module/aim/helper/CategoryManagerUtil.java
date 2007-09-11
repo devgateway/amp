@@ -284,6 +284,7 @@ public class CategoryManagerUtil {
 		if((returnCollection!=null)&&(!returnCollection.isEmpty())){
             return (AmpCategoryClass)returnCollection.toArray()[0];
         }else{
+        	logger.error( "No AmpCategoryClass found with id '" + categoryId + "'" );
             return null;
         }
 	}
@@ -323,6 +324,7 @@ public class CategoryManagerUtil {
         if((returnCollection!=null)&&(!returnCollection.isEmpty())){
             return (AmpCategoryClass)returnCollection.toArray()[0];
         }else{
+        	logger.error( "No AmpCategoryClass found with name '" + name + "'" );
             return null;
         }
 
@@ -465,7 +467,7 @@ public class CategoryManagerUtil {
 				 col		= query.list();
 
 		} catch (Exception ex) {
-			logger.error("Unable to get the id from AmpCategoryClass: " + ex);
+			logger.error("Error retrieving AmpCategoryClass with key '" + key + "': " + ex);
 		} finally {
 			try {
 				PersistenceManager.releaseSession(dbSession);
@@ -481,7 +483,10 @@ public class CategoryManagerUtil {
 			AmpCategoryClass x=(AmpCategoryClass) it.next();
 			return x;
 		}
-		else return null;
+		else{
+			logger.error( "No AmpCategoryClass found with key '" + key + "'" );
+			return null;
+		}
 	}
 	/**
 	 *

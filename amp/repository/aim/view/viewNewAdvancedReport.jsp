@@ -167,20 +167,11 @@
 	<logic:notEqual name="report" property="totalUniqueRows" value="0">
 		<tr>
 			<td><!-- begin big report table --> 
-
-			<%
-				request.setAttribute("paginar", new Boolean(true));
-				if(request.getAttribute("recordsPerPage")==null){
-					request.setAttribute("recordsPerPage", new Integer(10));
-				}
-				int pageNumber = 0;
-				if(request.getParameter("pageNumber")==null){
-					request.setAttribute("pageNumber", new Integer(0));
-				}else{
-					request.setAttribute("pageNumber", Integer.valueOf(request.getParameter("pageNumber")));
-					pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
-				}
-			%>
+			<c:set var="pageNumber" value="<%=new Integer(0)%>" scope="request"/>
+			<c:set var="paginar" value="<%=new Boolean(true)%>" scope="request"/>
+			<c:if test="${not empty param.pageNumber }">
+				<c:set var="pageNumber" value="<%=Integer.valueOf(request.getParameter("pageNumber"))%>" scope="request"/>
+			</c:if>	
 			
 			<table id='reportTable'  cellSpacing="0" cellPadding="1" width="100%" class="reportsBorderTable">
 				<bean:define id="viewable" name="report"
@@ -199,23 +190,20 @@
 			<tr>
 			<td>
 				<digi:trn key="aim:pages">Pages :</digi:trn>&nbsp;
-				<%
-					int totalPages = ((Integer)request.getAttribute("totalPages")).intValue();
-					for(int i = 0; i < totalPages; i++){
-						if(i==pageNumber){
-				%>
-						<font color="#FF0000"><%=i + 1%></font>
-				<%
-						}else{
-				%>					
-							<a  style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~pageNumber=<%=i%>');">
-								<%=i + 1%> 
+				<bean:define id="totalPages" name="totalPages" type="java.lang.Integer" scope="request" toScope="page"/>
+				<c:forEach var="i" begin="0" end="${totalPages - 1}">
+					<c:if  test="${i eq pageNumber}">
+						<font color="#FF0000"><c:out value="${i + 1}" /></font>
+					</c:if>
+					<c:if  test="${i ne pageNumber}">	
+							<a  style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~pageNumber=<c:out value="${i}" />');">
+								<c:out value="${i + 1}" />
 							</a> 
-				<%
-						}
-						if(i < totalPages - 1) out.write("|&nbsp");
-					}
-				%>
+					</c:if>
+					<c:if  test="${i < totalPages - 1}">	
+						|&nbsp
+					</c:if>				
+				</c:forEach>
 			</td>
 			</tr>
 		</logic:notEmpty>

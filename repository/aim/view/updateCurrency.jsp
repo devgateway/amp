@@ -41,14 +41,9 @@ function validate() {
 function saveCurrency() {
   var valid = validate();
   if (valid != false) {
-    opener.document.aimCurrencyForm.currencyCode.value=document.aimCurrencyForm.currencyCode.value;
-    opener.document.aimCurrencyForm.currencyName.value=document.aimCurrencyForm.currencyName.value;
-    opener.document.aimCurrencyForm.countryId.value=aimCurrencyForm.countryId.value;
     <digi:context name="back" property="context/module/moduleinstance/saveCurrency.do" />
-    opener.document.aimCurrencyForm.action = "<%= back %>";
-    opener.document.aimCurrencyForm.target = window.opener.name;
-    opener.document.aimCurrencyForm.submit();
-    window.close();
+    document.aimCurrencyForm.action = "<%= back %>";
+    document.aimCurrencyForm.submit();
   }
   return valid;
 
@@ -101,10 +96,8 @@ function unload() {
 <digi:form action="/saveCurrency.do">
 
   <input type="hidden" name="selectedDate">
-  <html:hidden property="doAction" value="updateCurrency"/>
   <html:hidden property="id"/>
   <html:hidden property="closeFlag"/>
-   <html:hidden property="doAction" styleId="doAction"/>
 
   <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
     <tr>
@@ -116,7 +109,17 @@ function unload() {
             </td></tr>
             <tr>
               <td vAlign="center" width="100%" align ="center" height="20">
-                <html:errors />
+                <c:if test="${!empty aimCurrencyForm.errors}">
+                  <table>
+                    <c:forEach var="ms" items="${aimCurrencyForm.errors}">
+                      <tr>
+                        <td style="color:red;">
+                        ${ms}
+                        </td>
+                      </tr>
+                    </c:forEach>
+                  </table>
+                </c:if>
               </td></tr>
               <tr>
                 <td align="center">
@@ -223,4 +226,10 @@ function unload() {
       </td>
             </tr>
   </table>
+  <script language="javaScript">
+  document.aimCurrencyForm.currencyCode.focus();
+  if (document.aimCurrencyForm.closeFlag.value == "true") {
+    closePopup();
+  }
+  </script>
 </digi:form>

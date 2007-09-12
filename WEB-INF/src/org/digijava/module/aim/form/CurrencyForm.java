@@ -28,7 +28,7 @@ public class CurrencyForm extends ActionForm {
 
 	private String doAction;
 	private String closeFlag;
-
+    private Collection errors;
 	/**
 	 * @return Returns the allCurrencies.
 	 */
@@ -237,12 +237,20 @@ public class CurrencyForm extends ActionForm {
         return countryId;
     }
 
+    public Collection getErrors() {
+        return errors;
+    }
+
     public void setCantDelete(boolean cantDelete) {
 		this.cantDelete = cantDelete;
 	}
 
     public void setCountryId(Long countryId) {
         this.countryId = countryId;
+    }
+
+    public void setErrors(Collection errors) {
+        this.errors = errors;
     }
 
 }

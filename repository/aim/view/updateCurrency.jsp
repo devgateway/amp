@@ -29,9 +29,10 @@ function validate() {
   }
   var cn=document.getElementById("lstCountry");
   if(cn!=null){
-    if(cn.value=="-1"){
+    if(cn.value==-1){
       alert("Please select country");
       cn.focus();
+      return false;
     }
   }
   return true;
@@ -42,8 +43,8 @@ function saveCurrency() {
   if (valid != false) {
     opener.document.aimCurrencyForm.currencyCode.value=document.aimCurrencyForm.currencyCode.value;
     opener.document.aimCurrencyForm.currencyName.value=document.aimCurrencyForm.currencyName.value;
-    opener.document.aimCurrencyForm.countryIso.value=aimCurrencyForm.countryIso.value;
-    <digi:context name="back" property="context/module/moduleinstance/saveCurrency.do?doAction=updateCurrency" />
+    opener.document.aimCurrencyForm.countryId.value=aimCurrencyForm.countryId.value;
+    <digi:context name="back" property="context/module/moduleinstance/saveCurrency.do" />
     opener.document.aimCurrencyForm.action = "<%= back %>";
     opener.document.aimCurrencyForm.target = window.opener.name;
     opener.document.aimCurrencyForm.submit();
@@ -103,6 +104,7 @@ function unload() {
   <html:hidden property="doAction" value="updateCurrency"/>
   <html:hidden property="id"/>
   <html:hidden property="closeFlag"/>
+   <html:hidden property="doAction" styleId="doAction"/>
 
   <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
     <tr>

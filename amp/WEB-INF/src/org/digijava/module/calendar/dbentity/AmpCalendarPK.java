@@ -2,45 +2,78 @@ package org.digijava.module.calendar.dbentity;
 
 import java.io.Serializable;
 
-public class AmpCalendarPK implements Serializable {
-    private Calendar calendar;
+public class AmpCalendarPK
+    implements Serializable {
+  private Calendar calendar;
 
-    public AmpCalendarPK() {
+  public AmpCalendarPK() {
 
+  }
+
+  public AmpCalendarPK(Long ampCalendarId) {
+    this.calendar = new Calendar();
+    this.calendar.setId(ampCalendarId);
+  }
+
+  public AmpCalendarPK(Calendar calendar) {
+    this.calendar = calendar;
+  }
+
+  public Calendar getCalendar() {
+    return calendar;
+  }
+
+  public void setCalendar(Calendar calendar) {
+    this.calendar = calendar;
+  }
+
+  public boolean equals(Object o) {
+    if (! (o instanceof AmpCalendarPK)) {
+      return false;
     }
+    AmpCalendarPK otherAmpCalendarPK = (AmpCalendarPK) o;
+    long id = this != null && this.calendar != null ?
+        this.calendar.getId().longValue() : 0;
+    long otherId = otherAmpCalendarPK != null &&
+        otherAmpCalendarPK.calendar != null ?
+        otherAmpCalendarPK.calendar.getId().longValue() : 0;
+    return id == otherId;
+  }
 
-    public AmpCalendarPK(Long ampCalendarId) {
-        this.calendar = new Calendar();
-        this.calendar.setId(ampCalendarId);
-    }
+  public int hashCode() {
+    return this != null && this.calendar != null ?
+        this.calendar.getId().hashCode() : 0;
+  }
 
-    public AmpCalendarPK(Calendar calendar) {
-        this.calendar = calendar;
-    }
+  public java.util.Calendar getCalendar(java.util.Date date) {
+    java.util.Calendar cal = java.util.Calendar.getInstance();
+    cal.setTime(date);
+    return cal;
+  }
 
-    public Calendar getCalendar() {
-        return calendar;
-    }
+  public int getStartMonth() {
+    java.util.Calendar cal = getCalendar(getCalendar().getStartDate());
+    return cal.get(java.util.Calendar.MONTH);
+  }
 
-    public void setCalendar(Calendar calendar) {
-        this.calendar = calendar;
-    }
+  public int getEndMonth() {
+    java.util.Calendar cal = getCalendar(getCalendar().getEndDate());
+    return cal.get(java.util.Calendar.MONTH);
+  }
 
-    public boolean equals(Object o) {
-        if(!(o instanceof AmpCalendarPK)) {
-            return false;
-        }
-        AmpCalendarPK otherAmpCalendarPK = (AmpCalendarPK) o;
-        long id = this != null && this.calendar != null ?
-            this.calendar.getId().longValue() : 0;
-        long otherId = otherAmpCalendarPK != null &&
-            otherAmpCalendarPK.calendar != null ?
-            otherAmpCalendarPK.calendar.getId().longValue() : 0;
-        return id == otherId;
-    }
+  public int getStartDay() {
+    java.util.Calendar cal = getCalendar(getCalendar().getStartDate());
+    return cal.get(java.util.Calendar.DATE);
+  }
 
-    public int hashCode() {
-        return this != null && this.calendar != null ?
-            this.calendar.getId().hashCode() : 0;
-    }
+  public int getEndDay() {
+    java.util.Calendar cal = getCalendar(getCalendar().getEndDate());
+    return cal.get(java.util.Calendar.DATE);
+  }
+
+  public int getStartHour() {
+    java.util.Calendar cal = getCalendar(getCalendar().getStartDate());
+    return cal.get(java.util.Calendar.HOUR_OF_DAY);
+  }
+
 }

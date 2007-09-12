@@ -198,9 +198,9 @@ public class AmpDbUtil {
                     while(it.hasNext()) {
                         AmpCalendarAttendee attendee = (AmpCalendarAttendee) it.
                             next();
-                        if(attendee.getId().longValue() < 0) {
-                            attendee.setId(new Long( -attendee.getId().
-                                longValue()));
+                        Long attendeeId=attendee.getId();
+                        if(attendeeId!=null&&attendeeId < 0) {
+                            attendee.setId(-attendeeId);
                             session.delete(attendee);
                             it.remove();
                         }

@@ -133,12 +133,15 @@ public class PreviewCalendarEventDone
         } catch(Exception ex) {
             return mapping.findForward("failure");
         }
+        calendarEventForm.setMethod(null);
         return mapping.findForward("save");
     }
 
     public ActionForward edit(ActionMapping mapping, ActionForm form,
                               HttpServletRequest request,
                               HttpServletResponse response) throws Exception {
+      CalendarEventForm calendarEventForm = (CalendarEventForm) form;
+       calendarEventForm.setMethod(null);
         return mapping.findForward("edit");
     }
 

@@ -184,7 +184,11 @@ function fnSubmit() {
 											</table>
 										</td>
 										<td bgcolor="#f4f4f2" vAlign="center">
-											<digi:trn key="aim:andPrev7Days">and previous 7 days</digi:trn>
+											<digi:trn key="aim:andPrev7Days">and previous</digi:trn>
+											<html:select property="timePeriod" styleClass="inp-text">
+												<html:optionsCollection name="aimCurrencyRateForm" property="timePeriods"
+												value="value" label="label" />&nbsp;&nbsp;&nbsp;
+											</html:select>
 										</td>
 										<td bgcolor="#f4f4f2" vAlign="center">
                                           <c:set var="trnGoBtn">

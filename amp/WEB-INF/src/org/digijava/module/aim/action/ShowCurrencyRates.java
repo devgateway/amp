@@ -76,20 +76,22 @@ public class ShowCurrencyRates extends Action {
 
 
 		if (crForm.getFilterByDateFrom() == null
-				|| crForm.getFilterByDateFrom().trim().length() == 0||(isFromAdminHome!=null&&isFromAdminHome)) {
+				|| crForm.getFilterByDateFrom().trim().length() == 0||(isFromAdminHome!=null && isFromAdminHome)) {
 //			crForm.setFilterByDateFrom(Constants.CURRENCY_RATE_DEAFULT_END_DATE);//AMP-1421
 			crForm.setFilterByDateFrom(DateTimeUtil.formatDate(new Date()));
                         crForm.setClean(false);
 		}
 
 //        if(!crForm.getFilterByDateFrom().equals(crForm.getPrevFromDate()) || crForm.getAllRates() == null) {
-            
+
 			crForm.setPrevFromDate(crForm.getFilterByDateFrom());
             Date toDate = DateConversion.getDate(crForm.getFilterByDateFrom());
 //            long stDt = toDate.getTime();
             Calendar cal=Calendar.getInstance();
             cal.setTime(toDate);
+
             switch (crForm.getTimePeriod()) {
+            case 0:	cal.add(Calendar.DATE,-7);    break;
 			case 1:	cal.add(Calendar.DATE,-7);    break;
 			case 2:	cal.add(Calendar.DATE, -14);  break;
 			case 3:	cal.add(Calendar.MONTH,-1);   break;

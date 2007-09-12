@@ -159,7 +159,7 @@ function popupwin()
 	var l = ((screen.height)-wndHeight)/2;
 	winpopup=window.open('',"popup","height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=yes,status=no,toolbar=no");
 	winpopup.document.write('<html>\n<head>\n');
-	winpopup.document.write('<title>About : Status</title>\n');Status
+	winpopup.document.write('<title>About : Status</title>\n');
 	winpopup.document.write('</head>\n');
 	winpopup.document.write('<body bgcolor="#f4f4f2">\n');
 	winpopup.document.write('<font face="verdana" size=1>\n');

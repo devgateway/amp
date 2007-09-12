@@ -37,7 +37,6 @@ public class GlobalSettings {
 
 	public void setPerspectiveEnabled(Boolean isPerspectiveEnabled) {
 		this.perspectiveEnabled = isPerspectiveEnabled;
-		AmpARFilter.showPerspectiveProperty(isPerspectiveEnabled.booleanValue());
 	}
 
 	public Boolean getPerspectiveEnabled() {

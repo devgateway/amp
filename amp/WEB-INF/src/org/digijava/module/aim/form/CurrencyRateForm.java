@@ -9,6 +9,7 @@ import javax.servlet.http.*;
 
 import org.apache.struts.action.*;
 import org.apache.struts.upload.*;
+import org.apache.struts.util.LabelValueBean;
 
 public class CurrencyRateForm
     extends ActionForm {
@@ -40,7 +41,10 @@ public class CurrencyRateForm
 
   private FormFile currRateFile;
   private Boolean clean;
+  private List<LabelValueBean> timePeriods;
+  private int timePeriod;
 
+  
   /**
    * @return Returns the allRates.
    */
@@ -365,4 +369,20 @@ public class CurrencyRateForm
   public void setClean(Boolean clean) {
     this.clean = clean;
   }
+
+public List<LabelValueBean> getTimePeriods() {
+	return timePeriods;
+}
+
+public void setTimePeriods(List<LabelValueBean> timePeriods) {
+	this.timePeriods = timePeriods;
+}
+
+public int getTimePeriod() {
+	return timePeriod;
+}
+
+public void setTimePeriod(int timePeriod) {
+	this.timePeriod = timePeriod;
+}
 }

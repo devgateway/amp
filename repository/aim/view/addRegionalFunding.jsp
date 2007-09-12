@@ -422,11 +422,13 @@ function addCommitments() {
 		Iterator itr = col.iterator();
 		while (itr.hasNext()) {
 			AmpCurrency curr = (AmpCurrency) itr.next();	
-			if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
-				s += "<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>";
-			<% } else { %>
-				s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";				  			
-			<% }
+			if (curr != null){
+				if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
+					s += "<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>";
+				<% } else { %>
+					s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";				  			
+				<% }
+			}
 		 }%>
 	
 	s += "</select>&nbsp;";

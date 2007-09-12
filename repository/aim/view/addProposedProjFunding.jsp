@@ -98,7 +98,7 @@
                           <html:text property="proProjCost.funDate" styleId="funDate" readonly="true" style="width:100px;"/>
                         </td>
                         <td valign="center" align="center">
-							<a id="date1" href='javascript:pickDate("date1",document.aimEditActivityForm.proProjCost.funDate)'>
+							<a id="date1" href='javascript:pickDateByIdDxDy("date1","funDate",210,80)'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 							</a>
                         </td>

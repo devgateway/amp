@@ -166,7 +166,7 @@ function selectOrganisation() {
 								Sel Org
 							</html:button>
 							
-
+							<logic:present name="aimEUActivityForm" property="finTypes">
 							<select name="contrFinTypeId" style="width: 100px" class="inp-text">
 								<option value="-1"><digi:trn key="aim:addEditActivitySelectFinancingInstrument">Select Financing Instrument</digi:trn></option>
 							<logic:iterate name="aimEUActivityForm" property="finTypes" id="finType" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpTermsAssist">
@@ -176,6 +176,7 @@ function selectOrganisation() {
 								</option>
 							</logic:iterate>
 							</select>
+							</logic:present>
 						</td>
 
 							</tr>

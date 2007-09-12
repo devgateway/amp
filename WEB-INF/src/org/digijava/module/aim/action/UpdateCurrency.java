@@ -56,11 +56,6 @@ public class UpdateCurrency extends Action {
                                 if(curr.getCountryId()!=null){
                                     crForm.setCountryId(curr.getCountryId().getCountryId());
                                     crForm.setCountryName(curr.getCountryId().getCountryName());
-                                }else{
-                                    Country cn=DbUtil.getCountryByName("Multi-country");
-                                    if(cn!=null){
-                                        crForm.setCountryId(cn.getCountryId());
-                                    }
                                 }
                                 crForm.setCurrencyName(curr.getCurrencyName());
                                 crForm.setId(curr.getAmpCurrencyId());

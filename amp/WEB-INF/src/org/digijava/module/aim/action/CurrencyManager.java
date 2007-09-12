@@ -79,9 +79,6 @@ public class CurrencyManager extends Action {
                     Country cn=cur.getCountryId();
                     if(cn!=null){
                         cur.setCountryId(DbUtil.getTranlatedCountry(request,cn));
-                    }else{
-                        cn=DbUtil.getCountryByName("Multi-country");
-                        cur.setCountryId(DbUtil.getTranlatedCountry(request,cn));
                     }
                 }
                 crForm.setAllCurrencies(currencies);

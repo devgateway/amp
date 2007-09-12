@@ -184,7 +184,7 @@ function fnSubmit() {
 											</table>
 										</td>
 										<td bgcolor="#f4f4f2" vAlign="center">
-											<digi:trn key="aim:andPrev7Days">and previous</digi:trn>
+											<digi:trn key="aim:andPrevDays">and previous</digi:trn>
 											<html:select property="timePeriod" styleClass="inp-text">
 												<html:optionsCollection name="aimCurrencyRateForm" property="timePeriods"
 												value="value" label="label" />&nbsp;&nbsp;&nbsp;
@@ -244,7 +244,7 @@ function fnSubmit() {
                                   </td>
                                 </tr>
                                 </table>
-								
+
 
 							</td></tr>
 							<tr><td bgcolor="#ffffff" valign="top" align="left">
@@ -253,7 +253,7 @@ function fnSubmit() {
 									<tr bgcolor="eeeeee">
 										<td align="center" width="3">
 											<input type="checkbox" name="checkAll" onclick="checkall()">
-										</td>									
+										</td>
 										<td align="center" width="40" onMouseOver="this.className='colHeaderOver'"
 										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:currCode">Code</digi:trn></b>
@@ -286,13 +286,13 @@ function fnSubmit() {
 									<tr class="rowNormal">
 									<% } else { %>
 									<tr class="rowAlternate">
-									<% } 
+									<% }
 									index++;%>
 										<td align="center" width="3">
 											<html:multibox property="selectedRates">
 												<c:out value="${cRates.id}"/>
 											</html:multibox>
-										</td>									
+										</td>
 										<td align="left">
                                           <digi:trn key="aim:currency${cRates.currencyCode}">${cRates.currencyCode}</digi:trn>
 										</td>
@@ -306,10 +306,10 @@ function fnSubmit() {
 										</td>
 										<td align="right">
 											<c:out value="${cRates.exchangeRate}"/>
-										</td>										
+										</td>
 									</tr>
 									</c:forEach>
-									</c:if>									
+									</c:if>
 								</table>
 							</td></tr>
 							<tr>
@@ -327,7 +327,7 @@ function fnSubmit() {
 									<tr>
 										<td>
 											<bean:size name="aimCurrencyRateForm" property="pages" id="totpages"/>
-											Page <u><c:out value="${aimCurrencyRateForm.currentPage}"/></u> of 
+											Page <u><c:out value="${aimCurrencyRateForm.currentPage}"/></u> of
 											<u><c:out value="${totpages}"/></u>
 										</td>
 									</tr>
@@ -342,11 +342,11 @@ function fnSubmit() {
 												<c:if test="${currPage != aimCurrencyRateForm.currentPage}">
 													<c:set target="${urlParams}" property="page">
 														<c:out value="${currPage}"/>
-													</c:set>																							
+													</c:set>
 													<digi:link href="/showCurrencyRates.do" name="urlParams">
-													<c:out value="${currPage}"/></digi:link> 
-												</c:if>												
-												| 
+													<c:out value="${currPage}"/></digi:link>
+												</c:if>
+												|
 											</c:forEach>
 										</td>
 									</tr>
@@ -392,26 +392,26 @@ function fnSubmit() {
 										<td align="center" colspan="2">
 											<b>
 											Load currency rates from a CSV file</b>
-										</td>										
-									</tr>								
+										</td>
+									</tr>
 									<tr bgcolor="#ffffff">
 										<td align="center">
 											<table width="350" cellSpacing="3" cellPadding="1" vAlign="top" align="center">
 												<tr>
 													<td align="left" width="320">
-														<html:file name="aimCurrencyRateForm" property="ratesFile" 
+														<html:file name="aimCurrencyRateForm" property="ratesFile"
 														size="40" styleClass="dr-menu"/>
 														<input type="file" name="file" size="50" class="dr-menu">
 													</td>
 													<td align="left">
 														<input type="button" value="Load" class="buton" onclick="selectFile()">
-													</td>										
+													</td>
 												</tr>
-											</table>										
-										</td>										
+											</table>
+										</td>
 									</tr>
 								</table>
-							</td></tr>							
+							</td></tr>
 							--%>
 						</table>
 					</td>

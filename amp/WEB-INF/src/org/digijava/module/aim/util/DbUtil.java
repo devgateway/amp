@@ -1947,7 +1947,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select c from " + Country.class.getName()
-                + " c " + "where (c.id=:id)";
+                + " c " + "where (c.countryId=:id)";
             Query qry = session.createQuery(queryString);
             qry.setParameter("id", id, Hibernate.LONG);
             Iterator itr = qry.list().iterator();

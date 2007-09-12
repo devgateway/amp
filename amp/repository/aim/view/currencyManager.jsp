@@ -28,7 +28,7 @@ function makeActive(code) {
 function addNewCurrency() {
 	openNewWindow(450, 230);
 	<digi:context name="add" property="context/module/moduleinstance/updateCurrency.do" />
-	document.aimCurrencyForm.action = "<%= add %>~doAction=showCurrencies~closeFlag=false";
+	document.aimCurrencyForm.action = "<%= add %>~doAction=new~closeFlag=false";
 	document.aimCurrencyForm.target = popupPointer.name;
 	document.aimCurrencyForm.submit();
 }
@@ -36,7 +36,7 @@ function addNewCurrency() {
 function editCurrency(code) {
 	openNewWindow(450, 230);
 	<digi:context name="add" property="context/module/moduleinstance/updateCurrency.do" />
-	document.aimCurrencyForm.action = "<%= add %>~doAction=showCurrencies~currencyCode="+code;
+	document.aimCurrencyForm.action = "<%= add %>~doAction=show~currencyCode="+code;
 	document.aimCurrencyForm.target = popupPointer.name;
 	document.aimCurrencyForm.submit();
 }
@@ -80,7 +80,7 @@ function sortSubmit(value){
 <html:hidden property="page"/>
 <html:hidden property="currencyCode"/>
 <html:hidden property="currencyName"/>
-<html:hidden property="countryIso"/>
+<html:hidden property="countryId"/>
 
 
 

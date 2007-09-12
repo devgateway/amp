@@ -21,7 +21,7 @@ import org.dgfoundation.amp.ar.MetaInfo;
  * 
  */
 public class AmountCell extends Cell {
-	public static DecimalFormat mf = new DecimalFormat("###,###,###,###,###.##");
+	public static DecimalFormat mf = new DecimalFormat("###,###,###,###,###");
 
 	protected double amount;
 	

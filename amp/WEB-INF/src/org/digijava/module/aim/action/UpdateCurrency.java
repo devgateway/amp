@@ -23,6 +23,7 @@ import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import java.util.ArrayList;
 
 public class UpdateCurrency extends Action {
 
@@ -44,6 +45,10 @@ public class UpdateCurrency extends Action {
         try {
 
             CurrencyForm crForm = (CurrencyForm) form;
+            crForm.setCloseFlag("false");
+            crForm.setErrors(new ArrayList());
+            Collection errors =crForm.getErrors();
+
             AmpCurrency curr = null;
 
             if (crForm.getCurrencyCode() != null &&
@@ -82,7 +87,8 @@ public class UpdateCurrency extends Action {
             if (crForm.getCurrencyCode() != null && crForm.getDoAction().equals("add")) {
                 curr = CurrencyUtil.getCurrencyByCode(crForm.getCurrencyCode());
                 if (curr != null) {
-                    return mapping.findForward("curManager");
+                    errors.add("Currency with same code alrady exists");
+                    return mapping.findForward("forward");
                 }else{
                     curr = new AmpCurrency();
                 }
@@ -98,7 +104,8 @@ public class UpdateCurrency extends Action {
                 }
 
                 saveCurr(curr,crForm);
-                return mapping.findForward("curManager");
+                crForm.setCloseFlag("true");
+                return mapping.findForward("forward");
 
             } else if (crForm.getDoAction().equals("new")) {
                 crForm.setDoAction("add");
@@ -119,13 +126,15 @@ public class UpdateCurrency extends Action {
                 }
 
                 saveCurr(curr,crForm);
-                return mapping.findForward("curManager");
+                crForm.setCloseFlag("true");
+                return mapping.findForward("forward");
             } else if (crForm.getCurrencyCode() != null && crForm.getDoAction().equals("show")){
                 crForm.setDoAction("edit");
             }
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
+
         return mapping.findForward("forward");
     }
 

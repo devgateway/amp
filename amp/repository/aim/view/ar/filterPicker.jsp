@@ -2,7 +2,7 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
-<%@ taglib uri="/taglib/struts-html" prefix="html"%> 
+<%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
@@ -19,14 +19,14 @@
 <html:hidden property="ampReportId"/>
 	<table>
 		<tr>
-			<td colspan="4"><b>Keywords</b></td>
+			<td colspan="4"><b><digi:trn key="rep:filter:keywords">Keywords</digi:trn> </b></td>
 		</tr>
 		<tr>
 			<td colspan="4">
 			<html:text property="text" style="width: 400px" styleClass="inp-text"/>
 			</td>
 		</tr>
-		
+
 		<tr>
 			<td colspan="4"><b><digi:trn key="rep:filer:Currency">Currency</digi:trn></b></td>
 		</tr>
@@ -35,7 +35,7 @@
 			<html:select property="currency" style="width: 400px" styleClass="inp-text">
 				<html:optionsCollection property="currencies"
 					value="ampCurrencyId" label="currencyName" />
-			
+
 			</html:select>
 			</td>
 		</tr>
@@ -62,14 +62,14 @@
 			<% } %>
 			<td align="center">
 			<html:select property="fromYear" styleClass="inp-text">
-				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>			
+				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>
 				<html:optionsCollection property="fromYears" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
 			</td>
 
 			<td align="center">
 			<html:select property="toYear" styleClass="inp-text">
-				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>			
+				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>
 				<html:optionsCollection property="toYears" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
 			</td>
@@ -87,10 +87,10 @@
 			</html:select>
 			</td>
 		</tr>
-		
-			
-			
-		
+
+
+
+
 		<tr>
 			<td colspan="4"><b><digi:trn key="rep:filer:donor">Donor</digi:trn></b></td>
 		</tr>
@@ -112,12 +112,12 @@
 			<td>
 			<b><digi:trn key="rep:filer:PlanningMinRank">Planning Min. Rank</digi:trn></b>
 			</td>
-			
+
 		</tr>
 		<tr>
-			<td valign="top" >			
+			<td valign="top" >
 					<category:showoptions outerstyle="width: 190px" styleClass="inp-text" property="selectedStatuses" size="3" name="aimReportsFilterPickerForm" multiselect="true" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY%>"/>
-			</td>			
+			</td>
 			<td valign="top" >
 			<html:select multiple="true" property="selectedRisks" size="3" styleClass="inp-text">
 				<html:optionsCollection property="risks"
@@ -126,17 +126,17 @@
 			</td>
 			<td valign="top" >
 			<html:select property="lineMinRank" style="width: 50px" styleClass="inp-text">
-				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>						
+				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>
 				<html:optionsCollection property="actRankCollection" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
 			</td>
 			<td valign="top" >
 			<html:select property="planMinRank" style="width: 50px" styleClass="inp-text">
-				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>						
+				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>
 				<html:optionsCollection property="actRankCollection" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
 			</td>
-			
+
 		</tr>
 		<tr>
 			<td colspan="4"><b><digi:trn key="rep:filer:financingInstrument">Financing Instrument</digi:trn></b></td>
@@ -148,7 +148,7 @@
 		</tr>
 	<logic:notEqual name="widget" value="true" scope="request">
 		<tr>
-			<td colspan="4"><b>Page Size</b></td>
+			<td colspan="4"><b><digi:trn key="rep:filter:pageSize"> Page Size</digi:trn></b></td>
 		</tr>
 		<tr>
 			<td colspan="4">
@@ -160,32 +160,32 @@
 		</tr>
 </logic:notEqual>
 	<tr>
-		<td colspan="4">Government Approval Procedures </td>
+		<td colspan="4"><digi:trn key="rep:filter:govAppProc"> Government Approval Procedures </digi:trn></td>
 		</tr>
 	<tr>
 		<td colspan="4" valign="top" align="left">
-					Yes<html:radio property="governmentApprovalProcedures" value="true"/> &nbsp;&nbsp;No<html:radio property="governmentApprovalProcedures" value="false"/>
+					<digi:trn key="rep:filter:yes">Yes</digi:trn><html:radio property="governmentApprovalProcedures" value="true"/> &nbsp;&nbsp;<digi:trn key="rep:filter:no"> No</digi:trn><html:radio property="governmentApprovalProcedures" value="false"/>
 									</td></tr>
-	
+
 	<tr>
-		<td colspan="4">Joint Criteria</td>
+		<td colspan="4"><digi:trn key="rep:filter:jointCriteria"> Joint Criteria</digi:trn></td>
 		</tr>
 	<tr>
 		<td colspan="4" valign="top" align="left">
-					Yes<html:radio property="jointCriteria" value="true"/> &nbsp;&nbsp;No<html:radio property="jointCriteria" value="false"/>
-									</td></tr>
-		
+					<digi:trn key="rep:filter:yes">Yes</digi:trn><html:radio property="jointCriteria" value="true"/> &nbsp;&nbsp;<digi:trn key="rep:filter:no"> No</digi:trn><html:radio property="jointCriteria" value="false"/>
+		</td>
+	</tr>
 
 	<tr>
 	<td>&nbsp;</td>
 	</tr>
-		
+
 	<tr>
 	<td align="center"  colspan="4">
 	<html:submit styleClass="buton" property="apply"><digi:trn key="rep:filer:Apply">Apply</digi:trn></html:submit>&nbsp;
 	<html:submit styleClass="buton" property="reset"><digi:trn key="rep:filer:Reset">Reset</digi:trn></html:submit>
 	</td>
-		
+
 	</tr>
 	</table>
 </digi:form>

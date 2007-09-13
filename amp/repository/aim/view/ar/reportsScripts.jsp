@@ -16,9 +16,9 @@
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
-	
+
 <script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>	
+	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
@@ -52,7 +52,7 @@ messageObj.setShadowOffset(5);	// Large shadow
 DHTMLSuite.commonObj.setCssCacheStatus(false);
 
 function displayMessage(url)
-{	
+{
 	messageObj.setSource(url);
 	messageObj.setCssClassMessageBox(false);
 	messageObj.setSize(400,200);
@@ -66,19 +66,19 @@ function displayStaticMessage(messageContent,cssClass,width,height)
 	messageObj.setSize(width,height);
 	messageObj.setCssClassMessageBox(cssClass);
 	messageObj.setSource(false);	// no html source since we want to use a static message here.
-	messageObj.setShadowDivVisible(true);	// Disable shadow for these boxes	
+	messageObj.setShadowDivVisible(true);	// Disable shadow for these boxes
 	messageObj.display();
-	
-	
+
+
 }
 
 function closeMessage()
 {
-	messageObj.close();	
+	messageObj.close();
 }
 
 
-</script>	
+</script>
 
 
 <!-- virtual pagination -->
@@ -149,7 +149,7 @@ background-color: yellow;
 </style>
 
 <!-- New DTHML Filters -->
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"> 
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>">
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-min.js'/>" > .</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
@@ -158,30 +158,31 @@ background-color: yellow;
 
 
 <script type="text/javascript">
-	var myPanel1 = new YAHOO.widget.Panel("new", { 
-	    fixedcenter: true,  
-	    constraintoviewport: true,  
-	    underlay:"shadow",  
-	    close:true,  
-	    visible:false,  
+	var myPanel1 = new YAHOO.widget.Panel("new", {
+	    fixedcenter: true,
+	    constraintoviewport: true,
+	    underlay:"shadow",
+	    close:true,
+	    visible:false,
 	    modal:true,
-	    draggable:true} ); 
-	myPanel1.setHeader("Select filters");
+	    draggable:true} );
+	    var msg='\n<digi:trn key="rep:filter:selectFilter">Select filters</digi:trn>';
+	myPanel1.setHeader(msg);
 	myPanel1.setBody("Empty");
 	myPanel1.render(document.body);
-	
-	var myPanel2 = new YAHOO.widget.Panel("new2", { 
-	    fixedcenter: true,  
-	    constraintoviewport: true,  
-	    underlay:"shadow",  
-	    close:true,  
-	    visible:false,  
+
+	var myPanel2 = new YAHOO.widget.Panel("new2", {
+	    fixedcenter: true,
+	    constraintoviewport: true,
+	    underlay:"shadow",
+	    close:true,
+	    visible:false,
 	    modal:true,
-	    draggable:true} ); 
+	    draggable:true} );
 	myPanel2.setHeader("Please select hierarchy sorter criteria");
 	myPanel2.setBody("Empty");
 	myPanel2.render(document.body);
-	
+
 	function showFilter() {
 		var element = document.getElementById("myFilter");
 		element.style.display = "inline";

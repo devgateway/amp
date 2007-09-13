@@ -35,7 +35,7 @@ public class ViewComment extends Action {
 								HttpServletResponse response) throws java.lang.Exception {
 
 					 logger.debug("In view comment");
-					 
+
 					 HttpSession session = request.getSession();
 
 					 // if user is not logged in, forward him to the home page
@@ -57,7 +57,7 @@ public class ViewComment extends Action {
 						 editForm.setActionFlag("create");
 					 }
 					 String comment = request.getParameter("comment");
-					 
+
 					 TeamMember member = (TeamMember) request.getSession().getAttribute("currentMember");
 					 logger.debug("CommentFlag[before IF] : " + editForm.isCommentFlag());
 					 if (comment != null && comment.trim().length() != 0) {
@@ -114,7 +114,7 @@ public class ViewComment extends Action {
 																}
 							editForm.setField(field);
 						//}
-						 	
+
 						logger.debug("editForm.getCommentsCol().size() [At Start-I]: " + editForm.getCommentsCol().size());
 						if (editForm.isEditAct()) {
 							if (comment.equals("viewccd")||comment.equals("ccd")
@@ -128,9 +128,9 @@ public class ViewComment extends Action {
 								if (id == null)
 									id = editForm.getActivityId();
 								col = DbUtil.getAllCommentsByField(editForm.getField().getAmpFieldId(),id);
-								
+
 							if(!commentColInSession.isEmpty())	//if there was some comments added before in this session...
-								
+
 								{
 									ArrayList colAux=new ArrayList();
 									colAux.addAll(col);
@@ -157,14 +157,16 @@ public class ViewComment extends Action {
 								editForm.setCommentFlag(false);
 								return mapping.findForward("forward");
 							}
-							else 
+							else
 								if (editForm.isCommentFlag() == false) {
-									col = DbUtil.getAllCommentsByField(editForm.getField().getAmpFieldId(),editForm.getActivityId());
-									editForm.setCommentsCol(col);
-								}	
+                                    if(editForm.getField()!=null){
+                                        col = DbUtil.getAllCommentsByField(editForm.getField().getAmpFieldId(), editForm.getActivityId());
+                                        editForm.setCommentsCol(col);
+                                    }
+								}
 						}
 						logger.debug("editForm.getCommentsCol().size() [At Start-II]: " + editForm.getCommentsCol().size());
-						 	
+
 						editForm.setActionFlag("create");
 						editForm.setAmpCommentId(null);			 // Clearing the ampCommentId property
 						if (editForm.getCommentText() != null)	// Clearing the commentText property
@@ -176,7 +178,7 @@ public class ViewComment extends Action {
 						logger.debug("CommentFlag[forwarding] : " + editForm.isCommentFlag());
 						return mapping.findForward("forward");
 					}
-					 
+
 					 if ("create".equals(action)) {
 					 	AmpComments com = new AmpComments();
 						com.setAmpFieldId(editForm.getField());
@@ -186,7 +188,7 @@ public class ViewComment extends Action {
 							com.setComment(editForm.getCommentText());
 						com.setCommentDate(new Date());
 						com.setMemberId(TeamMemberUtil.getAmpTeamMember(member.getMemberId()));
-						 	
+
 						editForm.getCommentsCol().add(com);  // for setting activityId in saveAvtivity.java
 					 	commentColInSession.put(editForm.getField().getAmpFieldId(),editForm.getCommentsCol());
 					 	session.setAttribute("commentColInSession",commentColInSession);
@@ -194,8 +196,8 @@ public class ViewComment extends Action {
 						editForm.setCommentText("");  	// Clear the commentText
 						logger.debug("Comment added");
 						return mapping.findForward("forward");
-					} 
-					 else if ("edit".equals(action)){						
+					}
+					 else if ("edit".equals(action)){
 						AmpComments com = (AmpComments) editForm.getCommentsCol().get(Integer.parseInt(request.getParameter("ampCommentId")));
 							if (editForm.getCommentText() == null || editForm.getCommentText().trim().length() == 0) {
 								logger.debug("Inside IF [EDIT]");
@@ -207,7 +209,7 @@ public class ViewComment extends Action {
 							 		com.setComment(" ");
 							 	else
 							 		com.setComment(editForm.getCommentText());
-							 	
+
 							 	editForm.getCommentsCol().set(Integer.parseInt(request.getParameter("ampCommentId")),com);  // for setting activityId in saveAvtivity.java
 							 	commentColInSession.put(editForm.getField().getAmpFieldId(),editForm.getCommentsCol());
 							 	session.setAttribute("commentColInSession",commentColInSession);
@@ -217,8 +219,8 @@ public class ViewComment extends Action {
 							 	logger.debug("Comment updated");
 								return mapping.findForward("forward");
 							 }
-					    } 
-					 	 else if ("delete".equals(action)){	
+					    }
+					 	 else if ("delete".equals(action)){
 					 	 		editForm.getCommentsCol().remove(Integer.parseInt(request.getParameter("ampCommentId")));
 							 	commentColInSession.put(editForm.getField().getAmpFieldId(),editForm.getCommentsCol());
 							 	session.setAttribute("commentColInSession",commentColInSession);

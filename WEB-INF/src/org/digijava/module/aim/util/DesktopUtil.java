@@ -163,11 +163,14 @@ public class DesktopUtil {
 							while (fItr.hasNext()) {
 								AmpFunding funding = (AmpFunding) fItr.next();
 								AmpProjectDonor projDonor = new AmpProjectDonor();
+								if(funding.getAmpDonorOrgId()==null)
+									continue;
+									
 								projDonor.setAmpDonorId(funding.getAmpDonorOrgId().getAmpOrgId());
 								projDonor.setDonorName(funding.getAmpDonorOrgId().getName());
 								if (project.getDonor().contains(projDonor) == false)
 									project.getDonor().add(projDonor);
-
+									
 								Iterator fdItr = funding.getFundingDetails().iterator();
 								while (fdItr.hasNext()) {
 									AmpFundingDetail fd = (AmpFundingDetail) fdItr.next();

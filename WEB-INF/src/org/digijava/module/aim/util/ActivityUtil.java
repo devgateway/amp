@@ -1128,15 +1128,18 @@ public class ActivityUtil {
           while (orgItr.hasNext()) {
             AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
             AmpOrganisation auxOrgRel = orgRole.getOrganisation();
-            RelOrganization relOrg = new RelOrganization();
-            relOrg.setOrgName(auxOrgRel.getName());
-            relOrg.setRole(orgRole.getRole().getRoleCode());
-            relOrg.setAcronym(auxOrgRel.getAcronym());
-            relOrg.setOrgCode(auxOrgRel.getOrgCode());
-            relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
-            relOrg.setOrgTypeId(auxOrgRel.getOrgTypeId());
-            if (!relOrgs.contains(relOrg)) {
-              relOrgs.add(relOrg);
+            if(auxOrgRel!=null)
+            {
+            	RelOrganization relOrg = new RelOrganization();
+                relOrg.setOrgName(auxOrgRel.getName());
+                relOrg.setRole(orgRole.getRole().getRoleCode());
+                relOrg.setAcronym(auxOrgRel.getAcronym());
+                relOrg.setOrgCode(auxOrgRel.getOrgCode());
+                relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
+                relOrg.setOrgTypeId(auxOrgRel.getOrgTypeId());
+                if (!relOrgs.contains(relOrg)) {
+                	relOrgs.add(relOrg);
+                }
             }
           }
         }

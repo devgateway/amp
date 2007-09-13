@@ -20,7 +20,9 @@ public class FinancingBreakdownWorker
 			if ( logger.isDebugEnabled() )
 			logger.debug("getDonor() of worker class returning organisation " 
 			+ ampOrganisation.getName() ) ;
-			return ampOrganisation.getName() ;
+			if (ampOrganisation!=null)
+				return ampOrganisation.getName() ;
+			return"";
 	}
 	
 	public static String getTotalDonorFund(FilterParams fp)	{

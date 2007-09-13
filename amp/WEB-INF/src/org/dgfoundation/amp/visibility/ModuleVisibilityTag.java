@@ -28,9 +28,27 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 public class ModuleVisibilityTag extends BodyTagSupport {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3079619271981032373L;
 	private String name;
 	private String enabled;
+	private String type;
+	private String parentModule;
 	
+	public String getParentModule() {
+		return parentModule;
+	}
+	public void setParentModule(String parentModule) {
+		this.parentModule = parentModule;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	public String getEnabled() {
 		return enabled;
 	}
@@ -54,9 +72,11 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		// TODO Auto-generated method stub
 		ServletContext ampContext=pageContext.getServletContext();
 		AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+		
 		if(ampTreeVisibility!=null)
+		{
 		//String bodyText = bodyContent.getString();
-		if(!existModuleinDB(ampTreeVisibility)){
+			if(!existModuleinDB(ampTreeVisibility)){
     		//insert in db;	   
    			   //insert(templateid, modulename);
    			   
@@ -66,7 +86,18 @@ public class ModuleVisibilityTag extends BodyTagSupport {
    			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
    			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
    			   
-   		   }
+   		   	}
+			else 
+				if(!checkTypeAndParentOfModule(ampTreeVisibility)) //parent or type is not ok
+					{
+						FeaturesUtil.updateModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId(), parentModule, type);
+						AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+			   			ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+			   			ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+					}
+				
+			
+		}
 		
 		return EVAL_BODY_BUFFERED;//super.doStartTag();
 	}
@@ -135,5 +166,23 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		return true;
 	}
 	
+	public boolean checkTypeAndParentOfModule(AmpTreeVisibility atv)
+	{
+		AmpModulesVisibility moduleByNameFromRoot=null;
+		boolean typeOK=false;
+		boolean parentOK=false;
+		if(atv!=null)
+			moduleByNameFromRoot = atv.getModuleByNameFromRoot(this.getName());
+		else return typeOK && parentOK;
+		if(this.getType()!=null && moduleByNameFromRoot.getType()!=null)
+			if(moduleByNameFromRoot.getType().getName().compareTo(this.getType())==0)
+				 typeOK=true;//return true; //they are identical
+		if(this.getParentModule()!=null && moduleByNameFromRoot.getParent()!=null)
+			if(moduleByNameFromRoot.getParent().getName().compareTo(this.getParentModule())==0)
+				parentOK=true;
+		//if(moduleByNameFromRoot==null) return false;
+		return typeOK && parentOK;
+	}
+
 	
 }

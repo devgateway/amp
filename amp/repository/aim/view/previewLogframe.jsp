@@ -24,53 +24,11 @@
 
 <!--
 
-function gotoStep(value) {
-	document.aimEditActivityForm.step.value = value;
-	<digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
-	document.aimEditActivityForm.action = "<%= step %>";
-	document.aimEditActivityForm.target = "_self";
-	document.aimEditActivityForm.submit();
-}
-
-function backClicked() {
-	document.aimEditActivityForm.step.value = "8";
-	<digi:context name="backStep" property="context/module/moduleinstance/addActivity.do?edit=true" />
-	document.aimEditActivityForm.action = "<%= backStep %>";
-	document.aimEditActivityForm.target = "_self";
-	document.aimEditActivityForm.submit();
-}
-
-function disable() {
-	document.aimEditActivityForm.submitButton.disabled = true;
-	document.aimEditActivityForm.backButton.disabled = true;
-	var appstatus = document.aimEditActivityForm.approvalStatus.value;
-	var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
-	if (appstatus == "started") {
-		if (wTLFlag == "yes") {
-			//if (confirm("Do you want to approve this activity ?"))
-				document.aimEditActivityForm.approvalStatus.value = "approved";
-		}
-		else if (confirm("Do you want to submit this activity for approval ?"))
-				document.aimEditActivityForm.approvalStatus.value = "created";
-	}
-	if (appstatus == "approved") {
-		if (wTLFlag != "yes")
-			document.aimEditActivityForm.approvalStatus.value = "edited";
-	}
-	else if (wTLFlag == "yes") {
-		if (appstatus == "created" || appstatus == "edited") {
-			if (confirm("Do you want to approve this activity ?"))
-				document.aimEditActivityForm.approvalStatus.value = "approved";
-		}
-	}
-	document.aimEditActivityForm.submit();
-	return true;
-}
 -->
 
 </script>
 
-<digi:form action="/saveActivity.do" method="post">
+
 <html:hidden property="step" />
 <html:hidden property="editAct" />
 <html:hidden property="approvalStatus" />
@@ -80,7 +38,6 @@ function disable() {
 <tr><td valign="top" width="100%" vAlign="top" align="left">
 
  <bean:define id="defaultCurrency" name="currentMember" property="appSettings.currencyId" type="java.lang.Long" scope="session" toScope="page"/> 
-
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" vAlign="top" align="left" border=0>
 	<tr>
 		<td valign="top" class=r-dotted-lg width="10" align="left" vAlign="top">&nbsp;</td>
@@ -115,9 +72,12 @@ function disable() {
 								</td>
 							</tr>
 							<tr><td valign="top" width="100%" bgcolor="#f4f4f2">
-									<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
+								<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#ffffff">
+									<tr>
+									<td width="60%">
+									<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left">
 										<tr><td valign="top" colspan="2" bgcolor="#ffffff" height="20">&nbsp;</td></tr>
-										<tr><td valign="top" align="left" vAlign="top" bgcolor="#ffffff" width="30%">
+										<tr><td valign="top" align="left" vAlign="top" bgcolor="#ffffff" width="40%">
 											<digi:trn key="aim:programId">Program ID:</digi:trn>
 										</td>
 										<td valign="top" align="left" vAlign="top" bgcolor="#ffffff"> 
@@ -127,8 +87,8 @@ function disable() {
 										</td>
 										</tr>
 										
-										<tr><td valign="top" align="left" vAlign="top" bgcolor="#ffffff" width="30%">
-											<digi:trn key="aim:programName">Program Name:</digi:trn>
+										<tr><td valign="top" align="left" vAlign="top" bgcolor="#ffffff" width="40%">
+											<digi:trn key="aim:programName">Program Name</digi:trn>:
 										</td>
 										<td valign="top" align="left" vAlign="top" bgcolor="#ffffff"> 
 											<logic:notEmpty name="aimEditActivityForm" property="title">
@@ -137,16 +97,56 @@ function disable() {
 										</td>
 										</tr>
 										
-										<tr><td valign="top" align="left" vAlign="top" bgcolor="#ffffff" width="30%">
-											
-											<digi:trn key="aim:contractPeriodExpiration">Contract Period Expiration:</digi:trn>
+										<tr><td valign="top" align="left" vAlign="top" bgcolor="#ffffff" width="40%">
+											<digi:trn key="aim:contractPeriodExpiration">Contract Period Expiration</digi:trn>:
 										</td>
 										<td valign="top" align="left" vAlign="top" bgcolor="#ffffff"> 
 											<c:out default="" value="${aimEditActivityForm.currentCompDate}"/>
 										</td>
 										</tr>
+										<tr><td valign="top" align="left" vAlign="top" bgcolor="#ffffff" width="40%">
+											<digi:trn key="aim:disbursementPeriodExpiration">Disbursement Period Expiration</digi:trn>:
+										</td>
+										<td valign="top" align="left" vAlign="top" bgcolor="#ffffff"> 
+											<c:out default="" value="${aimEditActivityForm.disbursementsDate}"/>
+										</td>
+										</tr>
 									</table>
-								</td></tr>
+									</td>
+									<td>
+										<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#ffffff">
+											<tr><td valign="top" colspan="2" bgcolor="#ffffff" height="20">&nbsp;</td></tr>
+											<tr valign="top">
+												<td valign="top" align="left" vAlign="top" bgcolor="#ffffff" width="30%">
+												<digi:trn key="aim:totalBudget"> Total Budget</digi:trn>:
+												</td>
+												<td valign="top" align="left" vAlign="top" bgcolor="#ffffff"> 
+													<bean:write name="aimEditActivityForm" property="allCosts" format="###,###,###"/>
+												</td>
+											</tr>
+											<tr valign="top">
+												<td valign="top" align="left" vAlign="top" bgcolor="#ffffff" width="30%">
+												<digi:trn key="aim:ipaBudget"> IPA Budget</digi:trn>:
+												</td>
+												<td valign="top" align="left" vAlign="top" bgcolor="#ffffff"> 
+													??????????????????
+												</td>
+											</tr>
+											<tr valign="top">
+												<td valign="top" align="left" vAlign="top" bgcolor="#ffffff" colspan="2">
+													<font color="ff0000">
+													<digi:trn key="aim:allTheAmountsInThousands">
+														All the amounts are in thousands (000)
+													</digi:trn>
+													</font>
+												</td>
+											</tr>
+										</table>
+									</td>
+									</tr>
+								</table>
+								</td>
+								</tr>
 								<tr>
 								<td valign="top" width="70%" bgcolor="#f4f4f2">
 									<table width="75%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#006699" >
@@ -155,11 +155,12 @@ function disable() {
 											<digi:trn key="aim:overallObjective">Overall Objective</digi:trn>
 										</td>
 										<td valign="top"  width="33%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699" >
-											<digi:trn key="aim:indicatorsPreview">Indicators</digi:trn>
+											<digi:trn key="aim:objectivelyIndicatorsPreview">Objectively Verifiable Indicators</digi:trn>
 										</td>
 										<td valign="top"  width="33%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
 											<digi:trn key="aim:verification">Verification</digi:trn>
 										</td>
+										
 										
 									</tr>
 									<tr>
@@ -191,11 +192,12 @@ function disable() {
 										</logic:iterate>
 										
 										</td>
-
+										
 									</tr>
 								</table>
 								</td>
 							</tr>
+							
 							<tr>
 								<td valign="top" width="100%" bgcolor="#f4f4f2">
 									<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699" >
@@ -204,7 +206,7 @@ function disable() {
 											<digi:trn key="aim:projectPurpose">Project Purpose</digi:trn>
 										</td>
 										<td valign="top" width="25%"  vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699" >
-											<digi:trn key="aim:indicatorsPreview">Indicators</digi:trn>
+											<digi:trn key="aim:objectivelyIndicatorsPreview">Objectively Verifiable Indicators</digi:trn>
 										</td>
 										<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
 											<digi:trn key="aim:verification">Verification</digi:trn>
@@ -264,7 +266,7 @@ function disable() {
 											<digi:trn key="aim:results">Results</digi:trn>
 										</td>
 										<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699" >
-											<digi:trn key="aim:indicatorsPreview">Indicators</digi:trn>
+											<digi:trn key="aim:objectivelyIndicatorsPreview">Objectively Verifiable Indicators</digi:trn>
 										</td>
 										<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
 											<digi:trn key="aim:verification">Verification</digi:trn>
@@ -370,11 +372,20 @@ function disable() {
 	</table>
 </td></tr>
 <tr>
-	<td valign="top" bgcolor="#ffffff" align="center" width="50%" >
-		<html:button styleClass="buton" value="Close" onclick="return window.close()" property="closeButton"/>
-		&nbsp;&nbsp;&nbsp;
-		<html:button styleClass="buton" value="Print" onclick="return window.print()" property="printButton"/>&nbsp;&nbsp;
+	<td valign="top" bgcolor="#ffffff" align="center" width="100%" >
+		<table width="98%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#ffffff" >
+			<tr>
+				<td width="75%" align="center">
+					<html:button styleClass="buton" value="Close" onclick="return window.close()" property="closeButton"/>
+						&nbsp;&nbsp;&nbsp;
+					<html:button styleClass="buton" value="Print" onclick="return window.print()" property="printButton"/>&nbsp;&nbsp;
+				</td>
+				<td valign="top"  width="25%" vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699" >
+					<digi:trn key="aim:preconditions">Preconditions</digi:trn>
+				</td>
+				
+			</tr>
+		</table>
 	</td>
 </tr>
 </table>
-</digi:form>

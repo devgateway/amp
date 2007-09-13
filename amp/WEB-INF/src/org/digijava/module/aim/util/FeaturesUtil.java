@@ -26,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpModulesType;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -1541,30 +1542,21 @@ public class FeaturesUtil {
     Query q = null;
     Collection c = null;
     AmpModulesVisibility id = null;
-    Iterator iter = null;
 
     try {
-      session = PersistenceManager.getRequestDBSession();
+      session = PersistenceManager.getSession();
       String queryString = new String();
       queryString = "select a from " + AmpModulesVisibility.class.getName()
-          + " a where (a.moduleName=:moduleName) ";
+          + " a where (a.name=:moduleName) ";
       q = session.createQuery(queryString);
       q.setParameter("moduleName", moduleName, Hibernate.STRING);
       c = q.list();
-      if (c.size() != 0) {
-        iter = c.iterator();
-        if (iter.hasNext()) {
-          id = (AmpModulesVisibility) iter.next();
-        }
-      }
-      else {
-        if (logger.isDebugEnabled())
-          logger.debug("No page with corresponding name");
-      }
+      if(c.size()!=0)
+    	  id=(AmpModulesVisibility) c.iterator().next();
+     
     }
     catch (Exception ex) {
-      if (logger.isDebugEnabled())
-        logger.error("Unable to get page id  from database", ex);
+      ex.printStackTrace();
     }
     finally {
       if (session != null) {
@@ -1576,11 +1568,47 @@ public class FeaturesUtil {
         }
       }
     }
-    if (logger.isDebugEnabled())
-      logger.debug("getPageId() returning page id:" + id);
     return id;
   }
 
+  /**
+   * @author dan
+   */
+  public static AmpModulesType getAmpModulesType(String typeName) {
+
+    Session session = null;
+    Query q = null;
+    Collection c = null;
+    AmpModulesType id = null;
+    try {
+      session = PersistenceManager.getSession();
+      String queryString = new String();
+      queryString = "select a from " + AmpModulesType.class.getName()
+          + " a where (a.name=:typeName) ";
+      q = session.createQuery(queryString);
+      q.setParameter("typeName", typeName, Hibernate.STRING);
+      c = q.list();
+      if(c.size()!=0)
+    	  id=(AmpModulesType) c.iterator().next();
+     
+    }
+    catch (Exception ex) {
+    	ex.printStackTrace();
+    }
+    finally {
+      if (session != null) {
+        try {
+          PersistenceManager.releaseSession(session);
+        }
+        catch (Exception rsf) {
+          logger.error("Release session failed :" + rsf.getMessage());
+        }
+      }
+    }
+    return id;
+  }
+
+  
   /**
    * @author dan
    */
@@ -1973,6 +2001,51 @@ public class FeaturesUtil {
     return;
   }
 
+  /**
+   * @author dan
+   */
+  public static void updateModuleVisibility(Long id, String moduleParentName, String type) {
+    Session session = null;
+    AmpModulesVisibility module = new AmpModulesVisibility();
+    AmpTemplatesVisibility template = null;
+    Collection col = new ArrayList();
+    String qryStr = null;
+    Query qry = null;
+    AmpModulesVisibility moduleParent;
+    AmpModulesType ampType;
+    Transaction tx;
+    try {
+      session = PersistenceManager.getSession();
+      tx = session.beginTransaction();
+      module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,id);
+      moduleParent = getModuleVisibility(moduleParentName);
+      ampType=getAmpModulesType(type);
+      module.setParent(moduleParent);
+      module.setType(ampType);
+      session.save(module);
+      tx.commit();
+      //session.saveOrUpdate(template);
+      //tx.commit();
+
+    }
+    catch (Exception ex) {
+      logger.error("Exception : " + ex.getMessage());
+      ex.printStackTrace();
+    }
+    finally {
+      if (session != null) {
+        try {
+          PersistenceManager.releaseSession(session);
+        }
+        catch (Exception rsf) {
+          logger.error("Release session failed :" + rsf.getMessage());
+        }
+      }
+    }
+    return;
+  }
+
+  
   /**
    * @author dan
    */

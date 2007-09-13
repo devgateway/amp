@@ -52,26 +52,42 @@ public class AmpTreeVisibility {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void buildAmpTreeVisibility(AmpObjectVisibility ampObjVis)
+	public boolean buildAmpTreeVisibilityMultiLevel(AmpObjectVisibility ampObjVis)
 	{
 		this.root=ampObjVis;
 		this.setItems(new HashMap());
-		////System.out.println("all items:::::"+ampObjVis.getAllItems().size());
-		////System.out.println("---- items:"+ampObjVis.getItems().size());
-		
+		boolean existSubmodules=false;
 		for(Iterator it=ampObjVis.getAllItems().iterator();it.hasNext();)
 		{
+			boolean notEmpty=false;
 			AmpModulesVisibility module=(AmpModulesVisibility)it.next();
 			AmpTreeVisibility moduleNode= new AmpTreeVisibility();
-			moduleNode.setRoot(module);
-			//attach the features
-			////System.out.println("----	module:"+module.getName());
+			if(!module.getSubmodules().isEmpty()) existSubmodules=true;
+			if(module.getParent()==null)
+				{
+					moduleNode.setRoot(module);
+					getModuleTree(moduleNode);
+					notEmpty=true;
+				}
+			else {
+				;//System.out.println("	si NU are submodule:::"+module.getName());
+			}
+			if(notEmpty)
+				this.getItems().put(module.getName(), moduleNode);
+		}		
+		return existSubmodules;
+	}
+	
+	public int getModuleTree(AmpTreeVisibility moduleNode)
+	{
+		AmpModulesVisibility module=(AmpModulesVisibility) moduleNode.getRoot();
+		if(module.getSubmodules().isEmpty()) 
+		{
 			for(Iterator jt=module.getItems().iterator();jt.hasNext();)
 			{
 				AmpFeaturesVisibility feature= (AmpFeaturesVisibility)jt.next();
 				AmpTreeVisibility  featureNode=new AmpTreeVisibility();
 				featureNode.setRoot(feature);
-				////System.out.println("----		"+feature.getName());
 				for(Iterator kt=feature.getItems().iterator();kt.hasNext();)
 				{
 					AmpFieldsVisibility field= (AmpFieldsVisibility)kt.next();
@@ -80,14 +96,75 @@ public class AmpTreeVisibility {
 					fieldNode.setItems(null);
 					featureNode.getItems().put(field.getName(),fieldNode);
 				}
-				//moduleNode.setItems(new HashMap());
+				moduleNode.getItems().put(feature.getName(), featureNode);
+			}
+		return 0;
+		}
+		for(Iterator it=module.getSubmodules().iterator();it.hasNext();)
+		{
+			AmpModulesVisibility moduleAux=(AmpModulesVisibility)it.next();
+			
+			AmpTreeVisibility moduleNodeAux= new AmpTreeVisibility();
+			moduleNodeAux.setRoot(moduleAux);
+				{
+					getModuleTree(moduleNodeAux);
+				}
+				moduleNode.getItems().put(moduleAux.getName(), moduleNodeAux);
+		}
+		return 1;
+	}
+	
+	public void buildAmpTreeVisibility(AmpObjectVisibility ampObjVis)
+	{
+		buildAmpTreeVisibilityMultiLevel(ampObjVis);
+		this.root=ampObjVis;
+		this.setItems(new HashMap());
+		
+		for(Iterator it=ampObjVis.getAllItems().iterator();it.hasNext();)
+		{
+			AmpModulesVisibility module=(AmpModulesVisibility)it.next();
+			AmpTreeVisibility moduleNode= new AmpTreeVisibility();
+			moduleNode.setRoot(module);
+			for(Iterator jt=module.getItems().iterator();jt.hasNext();)
+			{
+				AmpFeaturesVisibility feature= (AmpFeaturesVisibility)jt.next();
+				AmpTreeVisibility  featureNode=new AmpTreeVisibility();
+				featureNode.setRoot(feature);
+				for(Iterator kt=feature.getItems().iterator();kt.hasNext();)
+				{
+					AmpFieldsVisibility field= (AmpFieldsVisibility)kt.next();
+					AmpTreeVisibility  fieldNode=new AmpTreeVisibility();
+					fieldNode.setRoot(field);
+					fieldNode.setItems(null);
+					featureNode.getItems().put(field.getName(),fieldNode);
+				}
 				moduleNode.getItems().put(feature.getName(), featureNode);
 			}
 			this.getItems().put(module.getName(), moduleNode);
 		}
-		//attach the fields
 		this.root=ampObjVis;
-		//return this.root;
+	}
+	
+	public void displayVisibilityTreeForDebug(AmpTreeVisibility atv)
+	{
+		for(Iterator it=atv.getItems().values().iterator();it.hasNext();)
+		{
+			Object obj=it.next();
+			AmpTreeVisibility treeNode=(AmpTreeVisibility)obj;
+			displayRecTreeForDebug(treeNode);
+		}
+		
+	}
+	
+	public void displayRecTreeForDebug(AmpTreeVisibility atv)
+	{
+		if(atv.getItems()==null) return;
+		if(atv.getItems().isEmpty()) return;
+		for(Iterator it=atv.getItems().values().iterator();it.hasNext();)
+		{
+			AmpTreeVisibility auxTree=(AmpTreeVisibility) it.next();
+			displayRecTreeForDebug(auxTree);
+		}
 	}
 	
 	public boolean isVisibleObject(AmpObjectVisibility aov)

@@ -81,6 +81,9 @@
 			org.digijava.module.aim.dbentity.AmpModulesVisibility
 		</hibernate-class>
 		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpModulesType
+		</hibernate-class>
+		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpTemplatesVisibility
 		</hibernate-class>
 		<hibernate-class>

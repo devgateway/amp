@@ -735,7 +735,16 @@ public class AddAmpActivity
             }
 
             //get the levels of risks
-
+            
+            Long defaultCurrency=teamMember.getAppSettings().getCurrencyId();
+	        double allCosts=0;
+            for(Iterator it=eaForm.getCosts().iterator();it.hasNext();)
+            {
+            	EUActivity euAct=(EUActivity) it.next();
+            	euAct.setDesktopCurrencyId(defaultCurrency);
+            	allCosts+=euAct.getTotalCostConverted();
+            }
+            eaForm.setAllCosts(new Double(allCosts));
             if (!eaForm.getIndicatorsME().isEmpty())
               eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
             return mapping.findForward("previewLogframe");

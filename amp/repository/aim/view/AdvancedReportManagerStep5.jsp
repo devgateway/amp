@@ -307,7 +307,6 @@ function deleteColumn()
 																	<TR bgcolor="#eeeeee">
 																		<td align="center" class=box-title>
 																			<digi:trn key="aim:report:ColumnHierarchy">Column Hierarchy</digi:trn>
-
 																		</td>
 																	</tr>
 																	<tr height=10>	<td>	</td>	</tr>
@@ -332,7 +331,7 @@ function deleteColumn()
 																						</td>
 																						<td align="right">
 																							<html:multibox property="removeColumns" >
-																						<digi:trn key="aim:report:${columnHierarchie.columnId}"><c:out value="${columnHierarchie.columnId}"/></digi:trn>
+																								<c:out value="${columnHierarchie.columnId}"/>
 																						    </html:multibox>
 																						</td>
 																							<td align="right">

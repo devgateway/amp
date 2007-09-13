@@ -78,11 +78,9 @@ public class UpdateCurrency extends Action {
                 crForm.setExchangeRate(null);
                 crForm.setExchangeRateDate(null);
             }
-            if (crForm.getCountries() == null ||
-                crForm.getCountries().size() < 1) {
-                Collection<CountryBean> countries = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
-                crForm.setCountries(countries);
-            }
+
+            Collection<CountryBean> countries = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
+            crForm.setCountries(countries);
 
             if (crForm.getCurrencyCode() != null && crForm.getDoAction().equals("add")) {
                 curr = CurrencyUtil.getCurrencyByCode(crForm.getCurrencyCode());

@@ -148,7 +148,7 @@ function unload() {
                         <digi:trn key="aim:country">Country</digi:trn>&nbsp;
                       </td>
                       <td align="left" valign="middle">
-                        <html:select property="countryId" styleId="lstCountry" styleClass="inp-text">
+                        <html:select property="countryId" styleId="lstCountry" styleClass="inp-text" style="width:250px;">
                           <html:option value="-1"><digi:trn key="aim:selectCountry">Select a country</digi:trn></html:option>
                           <c:if test="${!empty aimCurrencyForm.countries}">
                             <c:forEach var="country" items="${aimCurrencyForm.countries}">

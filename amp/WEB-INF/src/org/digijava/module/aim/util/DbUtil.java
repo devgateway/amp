@@ -5937,7 +5937,7 @@ public class DbUtil {
                     Message msg = (Message) msgIter.next();
                     if(msg!=null){
                         String cnIso=msg.getKey().substring(3);
-                        if(cnIso!=null && !cnIso.equals("")){
+                        if(cnIso!=null){
                             Country cn=getDgCountry(cnIso);
                             if(cn!=null){
                                 CountryBean trnCn=new CountryBean();
@@ -5947,11 +5947,6 @@ public class DbUtil {
                                 trnCn.setName(msg.getMessage());
                                 trnCnCol.add(trnCn);
                             }
-                        }else if(msg.getKey().equalsIgnoreCase("cn:")){
-                            CountryBean trnCn=new CountryBean();
-                            trnCn.setIso(cnIso);
-                            trnCn.setName(msg.getMessage());
-                            trnCnCol.add(trnCn);
                         }
                     }
                 }

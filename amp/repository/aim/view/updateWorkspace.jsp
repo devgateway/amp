@@ -12,8 +12,8 @@
 <!--
 
 function addChildWorkspaces() {
-		if (document.aimUpdateWorkspaceForm.workspaceType.value != "Team") { 
-			if (document.aimUpdateWorkspaceForm.category.value == "-1") { 
+		if (document.aimUpdateWorkspaceForm.workspaceType.value != "Team") {
+			if (document.aimUpdateWorkspaceForm.category.value == "-1") {
 				alert("Team category is required");
 				document.aimUpdateWorkspaceForm.category.focus();
 				return false;
@@ -44,7 +44,7 @@ function removeChildWorkspace(id) {
 	document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=admin&tId="+id;
 	document.aimUpdateWorkspaceForm.target = "_self";
 	document.aimUpdateWorkspaceForm.addFlag.value = false;
-	document.aimUpdateWorkspaceForm.submit();		  
+	document.aimUpdateWorkspaceForm.submit();
 }
 }
 
@@ -69,11 +69,11 @@ function update(action) {
 			document.aimUpdateWorkspaceForm.submit();
 		}
 	}
-	else 
+	else
 	if (action != "reset"){
-		if (!validateAimUpdateWorkspaceForm(document.aimUpdateWorkspaceForm)) 
+		if (!validateAimUpdateWorkspaceForm(document.aimUpdateWorkspaceForm))
 			return false;
-		 
+
 	    if (action != "reset"){
 		if (event == "add" || event == "edit") {
 			if (relFlag == "set") {
@@ -89,7 +89,7 @@ function update(action) {
 				var lab5	= document.aimUpdateWorkspaceForm.typeId.options[index4].text;
 				var bsize	= parseInt(document.aimUpdateWorkspaceForm.relatedTeamBilatCollSize.value, 10);
 				var val6	= document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
-			
+
 				if (val1 == "DONOR" && val2 == "Team") {
 					if (val5 == "0") {
 							alert("Please select team type");
@@ -142,7 +142,7 @@ function relTeam() {
 	var val2    = document.aimUpdateWorkspaceForm.workspaceType.options[index2].value;
 	var val3    = document.aimUpdateWorkspaceForm.typeId.options[index3].value;
 	var val4	= document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
-	
+
 	if (val1 == "DONOR" && val2 == "Team") {
 		if (val4 == "no") {
 			if (val3 != "0") {
@@ -163,7 +163,7 @@ function relTeam() {
 	else {
 		if (document.getElementById("relTeamRow"))
 			document.getElementById("relTeamRow").style.display = 'none';
-		return false;	
+		return false;
 	}
 }
 function cancel()
@@ -182,7 +182,7 @@ function cancel()
 <digi:instance property="aimUpdateWorkspaceForm" />
 <digi:context name="digiContext" property="context" />
 
-<digi:form action="/updateWorkspace.do" method="post" name="aimUpdateWorkspaceForm" 
+<digi:form action="/updateWorkspace.do" method="post" name="aimUpdateWorkspaceForm"
 type="org.digijava.module.aim.form.UpdateWorkspaceForm"
 onsubmit="return validateAimUpdateWorkspaceForm(this);">
 
@@ -223,28 +223,28 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
-						<digi:trn key="aim:addTeam">Add Team</digi:trn>	
+						<digi:trn key="aim:addTeam">Add Team</digi:trn>
 						</logic:equal>
 						<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="edit">
-						<digi:trn key="aim:editTeam">Edit Team</digi:trn>	
+						<digi:trn key="aim:editTeam">Edit Team</digi:trn>
 						</logic:equal>
 						<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="delete">
-						<digi:trn key="aim:deleteTeam">Delete Team</digi:trn>	
+						<digi:trn key="aim:deleteTeam">Delete Team</digi:trn>
 						</logic:equal>
 						<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="view">
-						<digi:trn key="aim:viewTeam">View Team</digi:trn>	
+						<digi:trn key="aim:viewTeam">View Team</digi:trn>
 						</logic:equal></span>
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>Workspace Manager</span>
+					<td height=16 vAlign=center width=571><span class=subtitle-blue><digi:trn key="aim:workspaceManager">Workspace Manager</digi:trn></span>
 					</td>
 				</tr>
 				<tr bgColor=#f4f4f2>
 					<td bgColor=#f4f4f2>
 						<digi:errors />
 					</td>
-				</tr>	
+				</tr>
 				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="100%" cellspacing=1 cellSpacing=1>
@@ -257,7 +257,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 							</tr>
 							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>	
+									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
 										<tr bgColor=#f4f4f2>
 											<td bgColor=#f4f4f2>
 												<table border="0" cellPadding=0 cellSpacing=0 width="100%">
@@ -265,16 +265,16 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 														<td bgColor=#c9c9c7 class=box-title height="20" align="center">
 															<!-- Table title -->
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
-																<digi:trn key="aim:addTeam">Add Team</digi:trn>	
+																<digi:trn key="aim:addTeam">Add Team</digi:trn>
 															</logic:equal>
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="edit">
-																<digi:trn key="aim:editTeam">Edit Team</digi:trn>	
+																<digi:trn key="aim:editTeam">Edit Team</digi:trn>
 															</logic:equal>
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="delete">
-																<digi:trn key="aim:deleteTeam">Delete Team</digi:trn>	
+																<digi:trn key="aim:deleteTeam">Delete Team</digi:trn>
 															</logic:equal>
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="view">
-																<digi:trn key="aim:viewTeam">View Team</digi:trn>	
+																<digi:trn key="aim:viewTeam">View Team</digi:trn>
 															</logic:equal>
 															<!-- end table title -->
 														</td>
@@ -288,7 +288,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 													<tr>
 														<td width="150" align="right" bgcolor="#f4f4f2">
 															<font color="red"><b>*</b></font>
-															<digi:trn key="aim:teamName">Team Name</digi:trn>			
+															<digi:trn key="aim:teamName">Team Name</digi:trn>
 														</td>
 														<td align="left" bgcolor="#f4f4f2">
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="delete">
@@ -308,7 +308,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 													<tr>
 														<td align="right" bgcolor="#f4f4f2">
 															<font color="red"><b>*</b></font>
-															<digi:trn key="aim:teamCategory">Team Category</digi:trn>			
+															<digi:trn key="aim:teamCategory">Team Category</digi:trn>
 														</td>
 														<td align="left" bgcolor="#f4f4f2">
 															<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'delete'}">
@@ -320,7 +320,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 															<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'edit'}">
 																<c:choose>
 																	<c:when test="${aimUpdateWorkspaceForm.relatedTeamFlag == 'noedit'}">
-																		<b><bean:write name="aimUpdateWorkspaceForm" property="category" /></b>		
+																		<b><bean:write name="aimUpdateWorkspaceForm" property="category" /></b>
 																	</c:when>
 																	<c:otherwise>
 																		<html:select property="category" styleClass="inp-text" onchange="relTeam()">
@@ -333,9 +333,9 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 															</c:if>
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
 																<html:select property="category" styleClass="inp-text" onchange="relTeam()">
-																	<html:option value="-1">-- 
+																	<html:option value="-1">--
 																		<digi:trn key="aim:createWorkspaceSelectCategFirstLine">
-																			Select Category 
+																			Select Category
 																		</digi:trn>
 																		--
 																	</html:option>
@@ -347,7 +347,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 													</tr>
 													<tr>
 														<td align="right" bgcolor="#f4f4f2">
-															<digi:trn key="aim:createWorkspaceTeamType">Team Type</digi:trn>			
+															<digi:trn key="aim:createWorkspaceTeamType">Team Type</digi:trn>
 														</td>
 														<td align="left" bgcolor="#f4f4f2">
 															<c:set var="teamTypeFirstLine">
@@ -374,10 +374,10 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																<category:showoptions firstLine="${teamTypeFirstLine}" outeronchange="relTeam()" name="aimUpdateWorkspaceForm" property="typeId" styleClass="inp-text" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>"/>
 															</c:if>
 														</td>
-													</tr>	
+													</tr>
 													<tr>
 														<td align="right" bgcolor="#f4f4f2">
-															<digi:trn key="aim:description">Descriptions</digi:trn>		
+															<digi:trn key="aim:description">Descriptions</digi:trn>
 														</td>
 														<td align="left" bgcolor="#f4f4f2">
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="delete">
@@ -393,11 +393,11 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																<html:textarea property="description" rows="3" cols="50" styleClass="inp-text"/>
 															</logic:equal>
 														</td>
-													</tr>	
+													</tr>
 													<tr>
 														<td align="right" bgcolor="#f4f4f2">
 															<font color="red"><b>*</b></font>
-															<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>		
+															<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>
 														</td>
 														<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
 														<td align="left" bgcolor="#f4f4f2">
@@ -421,7 +421,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																				<html:option value="-1"><digi:trn key="aim:selectWorkspace">-- Select Workspace --</digi:trn></html:option>
 																				<html:option value="Management"><digi:trn key="aim:management">Management</digi:trn></html:option>
 																				<html:option value="Team"><digi:trn key="aim:team">Team</digi:trn></html:option>
-																			</html:select>	
+																			</html:select>
 																		</c:otherwise>
 																	</c:choose>
 																</c:when>
@@ -430,13 +430,13 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																</c:otherwise>
 															</c:choose>
 														</td>
-														</c:if>														
+														</c:if>
 													</tr>
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
 														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'no'}">
 															<tr id="relTeamRow">
 																<td align="right" bgcolor="#f4f4f2">
-																	<digi:trn key="aim:relatedTeam">Related Team</digi:trn>		
+																	<digi:trn key="aim:relatedTeam">Related Team</digi:trn>
 																</td>
 																<td align="left" bgcolor="#f4f4f2">
 																	<html:select property="relatedTeam" styleClass="inp-text">
@@ -448,14 +448,14 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																			<logic:notEmpty name="aimUpdateWorkspaceForm" property="relatedTeamBilatColl" >
 																				<optgroup label="Bilateral" style="FONT-WEIGHT: bold;COLOR: #cc0000;">
 																				<%--<html:option value="-1" style="FONT-WEIGHT: bold;COLOR: #cc0000;">-- Bilateral --</html:option>--%>
-																				<html:optionsCollection name="aimUpdateWorkspaceForm" property="relatedTeamBilatColl" 
+																				<html:optionsCollection name="aimUpdateWorkspaceForm" property="relatedTeamBilatColl"
 																										value="ampTeamId" label="name" />
 																				</optgroup>
 																			</logic:notEmpty>
 																			<logic:notEmpty name="aimUpdateWorkspaceForm" property="relatedTeamMutilatColl" >
 																				<optgroup label="Multilateral" style="FONT-WEIGHT: bold;COLOR: #006600">
 																				<%--<html:option value="-1">-- Multilateral --</html:option>--%>
-																				<html:optionsCollection name="aimUpdateWorkspaceForm" property="relatedTeamMutilatColl" 
+																				<html:optionsCollection name="aimUpdateWorkspaceForm" property="relatedTeamMutilatColl"
 																										value="ampTeamId" label="name" />
 																				</optgroup>
 																			</logic:notEmpty>
@@ -469,7 +469,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 														<c:if test="${aimUpdateWorkspaceForm.category == 'DONOR' && aimUpdateWorkspaceForm.workspaceType == 'Team'}">
 															<tr id="relTeamRow">
 																<td align="right" bgcolor="#f4f4f2">
-																	<digi:trn key="aim:relatedTeam">Related Team</digi:trn>		
+																	<digi:trn key="aim:relatedTeam">Related Team</digi:trn>
 																</td>
 																<td align="left" bgcolor="#f4f4f2">
 																	<c:choose>
@@ -485,19 +485,19 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																					<logic:notEmpty name="aimUpdateWorkspaceForm" property="relatedTeamBilatColl" >
 																						<optgroup label="Bilateral" style="FONT-WEIGHT: bold;COLOR: #cc0000;">
 																						<%--<html:option value="-1" style="FONT-WEIGHT: bold;COLOR: #cc0000;">-- Bilateral --</html:option>--%>
-																						<html:optionsCollection name="aimUpdateWorkspaceForm" property="relatedTeamBilatColl" 
+																						<html:optionsCollection name="aimUpdateWorkspaceForm" property="relatedTeamBilatColl"
 																												value="ampTeamId" label="name" styleClass="COLOR: #cc0000;" />
 																						</optgroup>
 																					</logic:notEmpty>
 																					<logic:notEmpty name="aimUpdateWorkspaceForm" property="relatedTeamMutilatColl" >
 																						<optgroup label="Multilateral" style="FONT-WEIGHT: bold;COLOR: #006600">
 																						<%--<html:option value="-1">-- Multilateral --</html:option>--%>
-																						<html:optionsCollection name="aimUpdateWorkspaceForm" property="relatedTeamMutilatColl" 
+																						<html:optionsCollection name="aimUpdateWorkspaceForm" property="relatedTeamMutilatColl"
 																												value="ampTeamId" label="name" styleClass="COLOR: #006600" />
 																						</optgroup>
 																					</logic:notEmpty>
 																				</html:select>
-																			</c:if>	
+																			</c:if>
 																		</c:when>
 																		<c:otherwise>
 																			<logic:notEmpty name="aimUpdateWorkspaceForm" property="relatedTeam" >
@@ -516,7 +516,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
 															<tr>
 																<td align="right" width="150" bgcolor="#f4f4f2">
-																	<digi:trn key="aim:childWorkspacesOrTeams">Child Workspaces/Teams</digi:trn>		
+																	<digi:trn key="aim:childWorkspacesOrTeams">Child Workspaces/Teams</digi:trn>
 																</td>
 																<td align="left" bgcolor="#f4f4f2">
 																	<c:set var="translation">
@@ -525,14 +525,14 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																		</digi:trn>
 																	</c:set>
 																	<input type="button" value="${translation}" class="buton" onclick="addChildWorkspaces()">
-																</td>																
+																</td>
 															</tr>
 														</c:if>
 													</c:if>
 													<c:if test="${!empty aimUpdateWorkspaceForm.childWorkspaces}">
 													<tr>
 														<td colspan="2" align="center" bgcolor="#f4f4f2">
-															<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center" 
+															<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center"
 															class="box-border-nopadding">
 															<c:forEach var="workspaces" items="${aimUpdateWorkspaceForm.childWorkspaces}">
 																<tr>
@@ -542,11 +542,11 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																	<td align="right" width="10">
 																		<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 																		<a href="javascript:removeChildWorkspace(<c:out value="${workspaces.ampTeamId}"/>)">
-																	 	<digi:img src="module/cms/images/deleteIcon.gif" 
+																	 	<digi:img src="module/cms/images/deleteIcon.gif"
 																		border="0" alt="Remove this child workspace"/></a>&nbsp;
 																		</c:if>
-																	</td>																	
-																</tr>															
+																	</td>
+																</tr>
 															</c:forEach>
 															</table>
 														</td>
@@ -569,7 +569,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																		</c:if>
 																		<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'edit'}">
 																			<input type="button" value="${translation}" class="dr-menu" onclick="update('edit')"/>
-																		</c:if>																		
+																		</c:if>
 																	</td>
 																	<td>
 																		<!-- <html:reset value="Clear" styleClass="dr-menu"/> -->
@@ -589,9 +589,9 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																		<input name="" value="${translation}" onclick="cancel()" class="dr-menu" type="button">
 																	</td>
 																</tr>
-															</table>										
+															</table>
 														</td>
-													</tr>													
+													</tr>
 													</c:if>
 												</table>
 											</td>
@@ -606,7 +606,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 						</table>
 					</td>
 					<td noWrap width=100% vAlign="top">
-						<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>	
+						<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>
 							<tr>
 								<td>
 									<table cellPadding=0 cellSpacing=0 width=100>

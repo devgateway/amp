@@ -21,7 +21,17 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
 	 * @author dan
 	 */
 	private Set templates;
+	private Set submodules;
+	private AmpModulesType type;
 	
+	public AmpModulesType getType() {
+		return type;
+	}
+
+	public void setType(AmpModulesType type) {
+		this.type = type;
+	}
+
 	public Set getTemplates() {
 		return templates;
 	}	
@@ -33,12 +43,13 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
 	public AmpObjectVisibility getParent() {
 		// TODO Auto-generated method stub
 		//templates.iterator().next();
-		return null;
+		return super.parent;
 	}
 
 	public int compareTo(Object arg0) {
 		// TODO Auto-generated method stub
-		AmpModulesVisibility x=(AmpModulesVisibility) arg0;
+		
+		AmpObjectVisibility x=(AmpObjectVisibility) arg0;
 		return this.getId().compareTo(x.getId());
 		
 	}
@@ -71,6 +82,14 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
 	
 	public AmpTemplatesVisibility getTemplate() {
 		return (AmpTemplatesVisibility) parent;
+	}
+
+	public Set getSubmodules() {
+		return submodules;
+	}
+
+	public void setSubmodules(Set submodules) {
+		this.submodules = submodules;
 	}
 		
 }

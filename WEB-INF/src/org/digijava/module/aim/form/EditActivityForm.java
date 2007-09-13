@@ -54,7 +54,7 @@ private int isPreview=0;
     private List actPrograms;
 	private Collection programCollection;
     private Long selectedPrograms[];
-
+    private Double allCosts;
     private Long logframeCategory;
 
 	private String originalAppDate;
@@ -4113,6 +4113,14 @@ public String getPurpose() {
 
 	public void setLessonsLearned(String lessonsLearned) {
 		this.lessonsLearned = lessonsLearned;
+	}
+
+	public Double getAllCosts() {
+		return allCosts;
+	}
+
+	public void setAllCosts(Double allCosts) {
+		this.allCosts = allCosts;
 	}
 
 

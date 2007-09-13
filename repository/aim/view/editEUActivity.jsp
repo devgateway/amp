@@ -24,7 +24,7 @@ function clearDefault(editBox)
 		if(editBox.value=='Amount') editBox.value='';
 }	
 
-function selectOrganisation() {
+function selectOrganisation1() {
 		openNewWindow(650, 420);
 		<digi:context name="selectOrganization" property="context/module/moduleinstance/selectOrganization.do?orgSelReset=true&edit=true&step=3" />
 		document.aimEditActivityForm.action = "<%= selectOrganization %>";
@@ -162,17 +162,17 @@ function selectOrganisation() {
 							<input style="text-align:left" type='text' name='contrAmount' disabled="disabled"
 									value='${aimEUActivityForm.contrDonorId[idx]}'>
 								<!-- <digi:trn key="btn:selOrganizations">Sel Org</digi:trn> -->
- 						    <html:button  styleClass="buton" property="submitButton" onclick="selectOrganisation()">
+ 						    <html:button  styleClass="buton" property="submitButton" onclick="selectOrganisation1()">
 								Sel Org
 							</html:button>
 							
 							<logic:present name="aimEUActivityForm" property="finTypes">
 							<select name="contrFinTypeId" style="width: 100px" class="inp-text">
 								<option value="-1"><digi:trn key="aim:addEditActivitySelectFinancingInstrument">Select Financing Instrument</digi:trn></option>
-							<logic:iterate name="aimEUActivityForm" property="finTypes" id="finType" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpTermsAssist">
-								<option value='<bean:write name="finType" property="ampTermsAssistId"/>'
-								<c:if test="${ aimEUActivityForm.contrFinTypeId[idx] == finType.ampTermsAssistId }">selected</c:if>>
-								<bean:write name="finType" property="termsAssistName"/>
+							<logic:iterate name="aimEUActivityForm" property="finTypes" id="finType" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
+								<option value='<bean:write name="finType" property="id"/>'
+								<c:if test="${ aimEUActivityForm.contrFinTypeId[idx] == finType.id }">selected</c:if>>
+								<bean:write name="finType" property="value"/>
 								</option>
 							</logic:iterate>
 							</select>

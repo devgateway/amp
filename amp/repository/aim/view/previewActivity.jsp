@@ -444,7 +444,7 @@ function disable() {
                                          </c:if>
 										</td>
 									</tr>
-									
+
 									<logic:present name="currentMember" scope="session">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
@@ -487,7 +487,7 @@ function disable() {
 										</td>
 									</tr>
 									</field:display>
-									
+
 									<field:display feature="Identification" name="Purpose">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
@@ -527,7 +527,7 @@ function disable() {
 										</td>
 									</tr>
 									</field:display>
-									
+
 									<field:display feature="Identification" name="Results">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
@@ -541,7 +541,7 @@ function disable() {
                                          </c:if>
 										</td>
 									</tr>
-									
+
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:resultsComments">
@@ -596,7 +596,7 @@ function disable() {
 										</td>
 									</tr>
 									</field:display>
-									
+
 									<field:display feature="Identification" name="Organizations and Project ID">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -623,9 +623,9 @@ function disable() {
 											</c:if>
 										</td>
 									</tr>
-									</field:display>					
+									</field:display>
 									</feature:display>
-									
+
 									<feature:display module="Project ID and Planning" name="Planning">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -664,7 +664,7 @@ function disable() {
 													</td>
 												</tr>
 												</field:display>
-											
+
 												<field:display name="Proposed Approval Date" feature="Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:originalApprovalDate">
@@ -765,8 +765,8 @@ function disable() {
 													<td colspan="3">&nbsp;</td>
 												</tr>
 												</c:if>
-												
-												
+
+
 												<field:display name="Status" feature="Planning">
 												<tr>
 													<td colspan="3"><digi:trn key="aim:status">Status</digi:trn> :
@@ -781,7 +781,7 @@ function disable() {
 										</td>
 									</tr>
 									</feature:display>
-									
+
 									<feature:display name="Location" module="Project ID and Planning">
 									<field:display name="Implementation Level" feature="Location">
 									<tr>
@@ -827,7 +827,7 @@ function disable() {
 									</tr>
 									</field:display>
 									</feature:display>
-									
+
 									<feature:display name="Sectors" module="Project ID and Planning">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -976,7 +976,7 @@ function disable() {
                                                   <table cellSpacing=8 cellPadding=0 border=0 width="100%" class="box-border-nopadding">
                                                     <logic:notEmpty name="aimEditActivityForm" property="fundingOrganizations">
                                                       <logic:iterate name="aimEditActivityForm" property="fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
-                                                     
+
                                                         <logic:notEmpty name="fundingOrganization" property="fundings">
                                                           <logic:iterate name="fundingOrganization" indexId="index" property="fundings" id="funding" type="org.digijava.module.aim.helper.Funding">
                                                             <tr>
@@ -999,7 +999,22 @@ function disable() {
                                                                                   <bean:write name="funding"	property="orgFundingId"/>
                                                                                 </td>
                                                                               </tr>
-                                                                              </field:display>
+                                                                             </field:display>
+                                                                             <field:display name="Funding Organization Name" feature="Funding Organizations">
+                                                                              <tr>
+                                                                                <td bgcolor="#FFFFFF" align="left" width="150">
+
+                                                                                  <a title="<digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>">
+                                                                                  	<digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>
+                                                                                  </a>
+                                                                                </td>
+                                                                                <td width="1">:</td>
+                                                                                <td bgcolor="#FFFFFF" align="left">
+                                                                                  ${fundingOrganization.orgName}
+                                                                                </td>
+                                                                              </tr>
+                                                                             </field:display>
+
                                                                               <!-- type of assistance -->
                                                                               <field:display name="Type Of Assistance" feature="Funding Organizations">
                                                                               <tr>
@@ -1013,6 +1028,21 @@ function disable() {
                                                                                 <td bgcolor="#FFFFFF" align="left">
                                                                                   <logic:notEmpty name="funding" property="typeOfAssistance">
                                                                                     <bean:write name="funding"	property="typeOfAssistance.value"/>
+                                                                                  </logic:notEmpty>
+                                                                                </td>
+                                                                              </tr>
+																			</field:display>
+																			<field:display name="Type Of Assistance" feature="Funding Organizations">
+                                                                              <tr>
+                                                                                <td bgcolor="#FFFFFF" align="left" width="150">
+                                                                                  <a title="<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>">
+                                                                                 	 <digi:trn key="aim:financialInst">Financial Instrument</digi:trn>
+																				  </a>
+                                                                                </td>
+                                                                                <td width="1">:</td>
+                                                                                <td bgcolor="#FFFFFF" align="left">
+                                                                                  <logic:notEmpty name="funding" property="financingInstrument">
+                                                                                    <bean:write name="funding"	property="financingInstrument.value"/>
                                                                                   </logic:notEmpty>
                                                                                 </td>
                                                                               </tr>
@@ -1084,7 +1114,7 @@ function disable() {
 
                                                                                     </td>
                                                                                       </tr>
-                                                                                     
+
                                                                                   </c:if>
 
                                                                                   <c:if test="${aimEditActivityForm.donorFlag == false}">
@@ -1099,7 +1129,7 @@ function disable() {
                                                                                         </td>
                                                                                         <td width="120" align="right">
                                                                                         <field:display name="Amount Commitment" feature="Funding Organizations">
-                                                                                          <FONT color=blue>*</FONT> 
+                                                                                          <FONT color=blue>*</FONT>
                                                                                           <bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
                                                                                           </field:display>
                                                                                         </td>
@@ -1208,7 +1238,7 @@ function disable() {
 																									<bean:write name="fundingDetail" property="transactionDate"/>
 																								</field:display>
 																							</td>
-																							
+
 																						</tr>
 																						</c:if>
 
@@ -1265,7 +1295,7 @@ function disable() {
 																									<bean:write name="fundingDetail" property="transactionDate"/>
 																								</field:display>
 																							</td>
-																							
+
 																						</tr>
 																						</c:if>
 																						</c:if>
@@ -1318,7 +1348,7 @@ function disable() {
 																									<bean:write name="fundingDetail" property="transactionDate"/>
 																								</field:display>
 																							</td>
-																							
+
 																						</tr>
 																						<tr>
 																							<td colspan=5 bgcolor="#ffffff">&nbsp;&nbsp;
@@ -1355,7 +1385,7 @@ function disable() {
 																									<bean:write name="fundingDetail" property="transactionDate"/>
 																								</field:display>
 																							</td>
-																							
+
 																						</tr>
 																						<tr>
 																							<td colspan=5 bgcolor="#ffffff">&nbsp;&nbsp;
@@ -1390,7 +1420,7 @@ function disable() {
 																									<bean:write name="fundingDetail" property="transactionDate"/>
 																								</field:display>
 																							</td>
-																							
+
 																						</tr>
 																						<tr>
 																							<td colspan=5 bgcolor="#ffffff">&nbsp;&nbsp;
@@ -1428,7 +1458,7 @@ function disable() {
 														</td>
 													</tr>
 												</table>
-										<!--  
+										<!--
 											<table  border="0" cellpadding="4" cellspacing="1">
 				                 					<TR bgcolor="#DDDDDB" >
 							                        	<TD><digi:trn key="aim:orgFundingId">Org Funding ID</digi:trn></TD>
@@ -1654,7 +1684,7 @@ function disable() {
 											<digi:trn key="aim:relatedOrganizations">
 											Related Organizations</digi:trn>
 										</td>
-										
+
 										<td bgcolor="#ffffff">
 											<feature:display name="Implementing Agency" module="Organizations">
 											<b><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></b><br/>
@@ -1668,7 +1698,7 @@ function disable() {
 													</td></tr>
 												</table>
 											</logic:notEmpty><br/></feature:display>
-											
+
 											<feature:display name="Beneficiary Agency" module="Organizations">
 											<b><digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="benAgencies">
@@ -1682,7 +1712,7 @@ function disable() {
 												</table>
 											</logic:notEmpty><br/>
 											</feature:display>
-											
+
 											<feature:display name="Contracting Agency" module="Organizations">
 											<b><digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="conAgencies">
@@ -1983,7 +2013,7 @@ function disable() {
 										</td>
 									</tr>
 									</feature:display>
-									
+
 									<feature:display name="Implementing Agency" module="Organizations">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -2014,7 +2044,7 @@ function disable() {
 										</td>
 									</tr>
 									</feature:display>
-									
+
 									<module:display name="Contact Information">
 									<feature:display name="Donor Contact Information" module="Contact Information">
 									<tr>
@@ -2043,8 +2073,8 @@ function disable() {
 									</tr>
 									</feature:display>
 									</module:display>
-									
-									
+
+
 									<field:display name="Accession Instrument" feature="Identification">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">

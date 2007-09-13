@@ -2006,11 +2006,7 @@ public class FeaturesUtil {
    */
   public static void updateModuleVisibility(Long id, String moduleParentName, String type) {
     Session session = null;
-    AmpModulesVisibility module = new AmpModulesVisibility();
-    AmpTemplatesVisibility template = null;
-    Collection col = new ArrayList();
-    String qryStr = null;
-    Query qry = null;
+    AmpModulesVisibility module ;//= new AmpModulesVisibility();
     AmpModulesVisibility moduleParent;
     AmpModulesType ampType;
     Transaction tx;

@@ -116,7 +116,7 @@ public class AmpTreeVisibility {
 	
 	public void buildAmpTreeVisibility(AmpObjectVisibility ampObjVis)
 	{
-		buildAmpTreeVisibilityMultiLevel(ampObjVis);
+		//buildAmpTreeVisibilityMultiLevel(ampObjVis);
 		this.root=ampObjVis;
 		this.setItems(new HashMap());
 		

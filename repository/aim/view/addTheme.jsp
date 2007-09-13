@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <c:set var="translation_progname">
@@ -136,10 +137,11 @@
 						<font color="red">*</font>
 					</td>
 					<td align="left">
-						<html:select property="programType" styleClass="inp-text">
-							<html:option value="-1">Select Progarm Type</html:option>
-							<html:optionsCollection name="aimThemeForm" property="programTypeNames" value="title" label="title" />
-			  	  </html:select>
+					<c:set var="translation">
+						<digi:trn key="aim:program:programTypeFirstLine">Please select from below</digi:trn>
+					</c:set>
+					<category:showoptions firstLine="${translation}" name="aimThemeForm" property="programTypeCategValId" 
+					keyName="<%= org.digijava.module.aim.helper.CategoryConstants.PROGRAM_TYPE_KEY %>" styleClass="inp-text" />	
 					</td>
 				</tr>
 				<tr bgColor=#ffffff>

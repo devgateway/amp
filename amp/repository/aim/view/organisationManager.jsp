@@ -170,12 +170,12 @@
 																<table width="634" border=0	 bgColor=#f4f4f2>
 																	<tr>
 																		<td height="30" width="220"><b>
-																			<digi:trn key="aim:organizationName">Organization
-                                                                            Name</digi:trn></b>
-																		</td>																	
-																		<td height="30" width="220"><b>
 																			<digi:trn key="aim:organizationAcronym">Organization
                                                                             Acrony</digi:trn></b>
+																		</td>																	
+																		<td height="30" width="220"><b>
+																			<digi:trn key="aim:organizationName">Organization
+                                                                            Name</digi:trn></b>
 																		</td>
 																	<%--<td height="30" width="171"><b>
 																			<digi:trn key="aim:organizationCountry">Country</digi:trn></b>
@@ -196,12 +196,12 @@
 																		  <c:set target="${urlParams}" property="ampOrgId">
 																		  	<bean:write name="organisation" property="ampOrgId" />
 																		  </c:set>
-																		  <digi:link href="/editOrganisation.do" name="urlParams">
-																		  	<bean:write name="organisation" property="name" />
+																		  <digi:link href="/editOrganisation.do" name="urlParams">																		  	
+																		  	<bean:write name="organisation" property="acronym" />
 																		  </digi:link>
 																		</td>
 																		<td height="30">
-																		  	<bean:write name="organisation" property="acronym" />																		  
+																		  	<bean:write name="organisation" property="name" />																		  
 																		</td>
 																	<%--<td height="30" width="171">
                                                                             <logic:notEmpty name="organisation" property="countryId">

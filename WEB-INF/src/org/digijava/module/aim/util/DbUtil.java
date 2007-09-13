@@ -6008,8 +6008,7 @@ public class DbUtil {
                     for (Iterator msgIter = msgCol.iterator(); msgIter.hasNext(); ) {
                         Message msg = (Message) msgIter.next();
                         if (msg != null) {
-                            String cnIso = msg.getKey().substring(3);
-                            if (cnIso.equals(country.getIso())) {
+                            if (msg.getKey().equals(country.getMessageLangKey())) {
                                 country.setCountryName(msg.getMessage());
                                 break;
                             }

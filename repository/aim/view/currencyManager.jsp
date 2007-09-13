@@ -36,7 +36,7 @@ function addNewCurrency() {
 function editCurrency(code) {
 	openNewWindow(450, 230);
 	<digi:context name="add" property="context/module/moduleinstance/updateCurrency.do" />
-	document.aimCurrencyForm.action = "<%= add %>~doAction=show~currencyCode="+code;
+	document.aimCurrencyForm.action = "<%= add %>~closeFlag=false~doAction=show~currencyCode="+code;
 	document.aimCurrencyForm.target = popupPointer.name;
 	document.aimCurrencyForm.submit();
 }

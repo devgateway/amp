@@ -91,13 +91,12 @@ public class ShowCurrencyRates extends Action {
             cal.setTime(toDate);
 
             switch (crForm.getTimePeriod()) {
-            case 0:	cal.add(Calendar.DATE,-7);    break;
-			case 1:	cal.add(Calendar.DATE,-7);    break;
-			case 2:	cal.add(Calendar.DATE, -14);  break;
-			case 3:	cal.add(Calendar.MONTH,-1);   break;
-			case 4:	cal.add(Calendar.MONTH, -4);  break;
-			case 5:	cal.add(Calendar.YEAR, -1);	  break;
-			default:break;
+                case 1:	cal.add(Calendar.DATE,-7);    break;
+                case 2:	cal.add(Calendar.DATE, -14);  break;
+                case 3:	cal.add(Calendar.MONTH,-1);   break;
+                case 4:	cal.add(Calendar.MONTH, -4);  break;
+                case 5:	cal.add(Calendar.YEAR, -1);	  break;
+                default:break;
 			}
 //            stDt -= SEVEN_DAYS;
 //            Date fromDate = new Date(stDt);

@@ -198,7 +198,7 @@
                                 <digi:trn key="aim:clickToViewCurrencyRatesManager">Click here to view Currency Rates Manager</digi:trn>
                               </c:set>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <digi:link href="/showCurrencyRates.do~clean=true" title="${translation}">
+                              <digi:link href="/showCurrencyRates.do~clean=true~timePeriod=1" title="${translation}">
                                 <digi:trn key="aim:currencyRateManager">Currency Rate Manager</digi:trn>
                               </digi:link>
                             </td>

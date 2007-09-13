@@ -261,32 +261,27 @@ function delSubmit(){
               </td>
             </tr>
             <tr>
-              <td nowrap="nowrap" valign="top"><br /><digi:trn key="calendar:organizations">&nbsp;Organizations&nbsp;&nbsp;</digi:trn></td>
-              <td>
-
-                <a title="Facilitates tracking activities in donors' internal databases">
-                  <br />
-                  <digi:link href="/selectOrganization.do?orgSelReset=true&edit=true" onclick="window.open(this.href, 'users', 'HEIGHT=500,resizable=yes,scrollbars=yes,WIDTH=500');return false;">
-                    <digi:trn key="calendar:addOrganizations">Add Organizations</digi:trn>
-                  </digi:link>
-                  &nbsp
-                  <a href="#" onclick="return removeSelOrganisations();">
-                    <digi:trn key="calendar:deleteOrganisation">Delete Organization</digi:trn>
-
-                  </a>
-                </a>
-                <br /><br />
-                <html:select name="calendarEventForm" property="selectedDonors" multiple="multiple" size="5" styleId="organizationList" style="width: 61%;">
-                  <logic:notEmpty name="calendarEventForm" property="donors">
-                    <bean:define id="donors" name="calendarEventForm" property="donors" type="java.util.List"/>
-                    <html:options collection="donors" property="value" labelProperty="label"/>
-                  </logic:notEmpty>
-                </html:select>
-
-              </td>
-
-      </td>
-            </tr>
+             <td nowrap="nowrap" valign="top"><br /><digi:trn key="calendar:organizations">&nbsp;Organizations&nbsp;&nbsp;</digi:trn></td>
+	              <td>
+	                <a title="Facilitates tracking activities in donors' internal databases">
+	                  <br />
+	                  <digi:link href="/selectOrganization.do?orgSelReset=true&edit=true" onclick="window.open(this.href, 'users', 'HEIGHT=500,resizable=yes,scrollbars=yes,WIDTH=500');return false;">
+	                    <digi:trn key="calendar:addOrganizations">Add Organizations</digi:trn>
+	                  </digi:link>
+	                  &nbsp
+	                  <a href="#" onclick="return removeSelOrganisations();">
+	                    <digi:trn key="calendar:deleteOrganisation">Delete Organization</digi:trn>
+	                  </a>
+	                </a>
+	                <br /><br />
+	                <html:select name="calendarEventForm" property="selectedDonors" multiple="multiple" size="5" styleId="organizationList" style="width: 61%;">
+	                  <logic:notEmpty name="calendarEventForm" property="donors">
+	                    <bean:define id="donors" name="calendarEventForm" property="donors" type="java.util.List"/>
+	                    <html:options collection="donors" property="value" labelProperty="label"/>
+	                  </logic:notEmpty>
+	                </html:select>
+	              </td>
+		    </tr>
             <tr>
               <td nowrap="nowrap">&nbsp;<span class="redbold">*</span><digi:trn key="calendar:from">From&nbsp;&nbsp;</digi:trn></td>
               <html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
@@ -580,8 +575,4 @@ function delSubmit(){
               </td>
             </tr>
           </table>
-        </digi:form>
-</td>
-    </tr>
-  </table>
-</table>
+      </digi:form>

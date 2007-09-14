@@ -41,6 +41,7 @@ public class AddFunding extends Action {
 		formBean.setActualStartDate("");
 		formBean.setFundingConditions("");
 		formBean.setFundingDetails(null);
+		formBean.setFundingMTEFProjections(null);
 		formBean.setEditFunding(false);
 		formBean.setNumComm(0);
 		formBean.setNumDisb(0);

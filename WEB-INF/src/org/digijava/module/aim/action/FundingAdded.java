@@ -29,6 +29,7 @@ import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.FundingValidator;
+import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -142,11 +143,38 @@ public class FundingAdded extends Action {
 				fundDetails.add(fundDet);
 			}
 		}
+		
+		Collection mtefProjections=new ArrayList();
+		if (eaForm.getFundingMTEFProjections() != null) {
+			Iterator itr = eaForm.getFundingMTEFProjections().iterator();
+			while (itr.hasNext()) {
+				MTEFProjection mtef = (MTEFProjection) itr.next();
+				
+				
+				String formattedAmt = CurrencyWorker.formatAmount(
+						mtef.getAmount());
+				mtef.setAmount(formattedAmt);
+				if (mtef.getCurrencyCode() != null
+						&& mtef.getCurrencyCode().trim().length() != 0) {
+					AmpCurrency currency = CurrencyUtil.getCurrencyByCode(mtef.getCurrencyCode());
+					mtef.setCurrencyName(currency.getCountryName());
+				}
+				if (mtef.getReportingOrganizationId() != null
+						&& mtef.getReportingOrganizationId().intValue() != 0) {
+					AmpOrganisation org = DbUtil.getOrganisation(mtef
+							.getReportingOrganizationId());
+					mtef.setReportingOrganizationName(org.getName());
+				
+				}
+				mtefProjections.add(mtef);
+			}
+		}
+		
 		List sortedList = new ArrayList(fundDetails);
 		Collections.sort(sortedList,FundingValidator.dateComp);
 
 		newFund.setFundingDetails(sortedList);
-
+		newFund.setMtefProjections(mtefProjections);
 		ArrayList fundList = new ArrayList();
 		if (fundOrg.getFundings() != null) {
 			fundList = new ArrayList(fundOrg.getFundings());

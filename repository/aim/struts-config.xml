@@ -1302,6 +1302,11 @@
     <action name="aimEditActivityForm" path="/aim/addFundingDetail" scope="session" type="org.digijava.module.aim.action.AddFundingDetail">
       <forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout" />
     </action>
+    
+    <action name="aimEditActivityForm" path="/aim/addMTEFProjection" scope="session" type="org.digijava.module.aim.action.AddMTEFProjection">
+      <forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout" />
+    </action>
+    
     <action name="aimEditActivityForm" path="/aim/remSelFundOrgs" scope="session" type="org.digijava.module.aim.action.RemoveSelFundingOrgs">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
     </action>

@@ -13,6 +13,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -38,6 +40,7 @@ public class EditFunding extends Action {
 		formBean.setOrgFundingId("");
 		formBean.setSignatureDate("");
 		formBean.setFundingDetails(null);
+		formBean.setFundingMTEFProjections(null);
 		ArrayList fundingOrganizations = new ArrayList(formBean.getFundingOrganizations());
 		if (fundingOrganizations != null) {
 			for (int i = 0; i < fundingOrganizations.size(); i++) {
@@ -87,6 +90,7 @@ public class EditFunding extends Action {
 		formBean.setNumExp(numExp);
 		//formBean.setAssistanceTypes(c);
 		formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
+		formBean.setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
 		formBean.setOrganizations(DbUtil.getAllOrganisation());
 		formBean.setEditFunding(true);
 		formBean.setDupFunding(true);

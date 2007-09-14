@@ -40,6 +40,7 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
@@ -58,6 +59,7 @@ import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AmpProject;
+import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
@@ -69,6 +71,7 @@ import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
+import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
@@ -272,6 +275,26 @@ public class SaveActivity extends Action {
 										}
 									}
 									ampFunding.setFundingDetails(fundDeatils);
+									
+									Set mtefPrj=new HashSet();
+									if(fund.getMtefProjections()!=null)
+									{
+										Iterator mtefItr=fund.getMtefProjections().iterator();
+										while (mtefItr.hasNext())
+										{
+											MTEFProjection mtef=(MTEFProjection)mtefItr.next();
+											AmpFundingMTEFProjection ampmtef=new AmpFundingMTEFProjection();
+											ampmtef.setAmount(Double.valueOf(mtef.getAmount()));
+											ampmtef.setAmpFundingId(ampFunding);
+											ampmtef.setCurrency(CurrencyUtil.getCurrencyByCode(mtef.getCurrencyCode()));
+											ampmtef.setProjected(CategoryManagerUtil.getAmpCategoryValueFromDb(mtef.getProjected(),
+													CategoryManagerUtil.loadAmpCategoryClass(CategoryConstants.MTEF_PROJECTION_KEY).getId() ).getId() );
+											ampmtef.setProjectionDate(mtef.getProjectionDate());
+											mtefPrj.add(ampmtef);
+										}
+									}
+									
+									
 									fundings.add(ampFunding);
 								}
 							}

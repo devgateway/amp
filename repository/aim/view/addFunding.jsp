@@ -59,8 +59,21 @@
 		} else if (type == 2) {
 			document.aimEditActivityForm.event.value = "addExpenditures";
 		}
+	 	document.aimEditActivityForm.action="/addFundingDetail.do";
 	 	document.aimEditActivityForm.submit();
 	}
+	
+	function addMTEFProjection() {
+
+	//	var flag = validateFundingExchangeRate();
+	//	if (flag == false) return false;
+		
+	document.aimEditActivityForm.event.value = "addProjections";
+ 	document.aimEditActivityForm.action="/addMTEFProjection.do";
+ 	document.aimEditActivityForm.submit();
+	}
+	
+	
 
 	function removeFundingDetail(index,type) {
 		var flag = confirm("Are you sure you want to remove the selected transaction ?");
@@ -73,6 +86,16 @@
 				document.aimEditActivityForm.event.value = "delExpenditures";
 			}
 			document.aimEditActivityForm.transIndexId.value=index;
+		 	document.aimEditActivityForm.action="/addFundingDetail.do";
+			document.aimEditActivityForm.submit();
+		}
+	}
+	
+	function removeMTEFProjection(index) {
+		var flag = confirm("Are you sure you want to remove the selected projection ?");
+		if(flag != false) {
+			document.aimEditActivityForm.transIndexId.value=index;
+		 	document.aimEditActivityForm.action="/addMTEFProjection.do";
 			document.aimEditActivityForm.submit();
 		}
 	}
@@ -233,6 +256,107 @@
 			<digi:trn key="aim:pleaseEnterTheAmountInThousands">
 			Please enter amount in thousands (000)</digi:trn>
 	</td></tr>
+	
+	<tr>
+    	<td width="100%" vAlign="top">
+
+			<table width="100%" cellpadding=0 cellspacing=1 vAlign="top" align="left" bgcolor="#006699">
+			<tr><td>
+
+			<table width="100%" cellpadding=1 cellspacing=0 bgcolor="#ffffff">
+				<tr>
+					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center" colspan="4">
+						<digi:trn key="aim:MTEF Projection">MTEF Projection</digi:trn>
+					</td>
+				</tr>
+				<tr bgcolor="#003366" class="textalb" align="center">
+					<td><b><font color="white"><digi:trn key="aim:Projected">Projected</digi:trn>/<br><digi:trn key="aim:Pipeline">Pipeline</digi:trn></font></b>
+					</td>
+					<td><b><font color="white"><digi:trn key="aim:Amount">Amount</digi:trn></font></b>
+					</td>
+					<td><b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b>
+					</td>
+					<td><b><font color="white"><digi:trn key="aim:ProjectionDate">Projection Date</digi:trn></font></b>
+					</td>
+				</tr>
+				
+				<% int tempPrjIndex = 0; %>
+				<% String tempPrjIndexStr = ""; %>
+				<c:if test="${ !empty aimEditActivityForm.fundingMTEFProjections}">
+				<c:set var="indexMTEF" value="-1"/>
+				<c:forEach var="mtefProjection" items="${aimEditActivityForm.fundingMTEFProjections}">
+					
+				 	<tr>
+						<td valign="bottom"> 
+						<c:set var="indexMTEF" value="${indexMTEF+1}"/>
+						<html:select name="mtefProjection" property="projected"> 
+							<logic:iterate name="aimEditActivityForm" property="projections" id="projection" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
+							<html:option value="${projection.id}" >
+								<digi:trn key="<%= org.digijava.module.aim.helper.CategoryManagerUtil.getTranslationKeyForCategoryValue(projection) %>">
+									<bean:write name="projection" property="value"/>
+								</digi:trn>
+							</html:option>
+						
+							</logic:iterate>
+						</html:select>
+						</td>
+						<td valign="bottom">
+							<html:text name="mtefProjection" indexed="true" property="amount" size="17" styleClass="amt"/>
+						</td>
+						<td valign="bottom">
+						<html:select name="mtefProjection" indexed="true" property="currencyCode" styleClass="inp-text">
+							<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode"
+												label="currencyName"/>
+						</html:select>
+						</td>
+						<td vAlign="bottom">
+							<table cellPadding=0 cellSpacing=0>
+							<tr>
+								<td>
+								<% tempPrjIndexStr = "" + tempPrjIndex; tempPrjIndex++;%>
+								<html:text name="mtefProjection" indexed="true" property="projectionDate"
+								styleId="<%=tempPrjIndexStr%>" readonly="true" size="10"/>
+								</td>
+								<td align="left" vAlign="center">&nbsp;
+									<a id="trans2Date<%=tempPrjIndexStr%>" href='javascript:pickDateById("trans2Date<%=tempPrjIndexStr%>",<%=tempPrjIndexStr%>)'>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+									</a>
+									</td>
+							</tr>
+							</table>
+						</td>
+
+											<td>
+												<a href="javascript:removeMTEFProjection(<bean:write name="mtefProjection" property="indexId"/>,0)">
+												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this projection"/>
+												</a>
+											</td>
+										</tr>
+
+				</c:forEach>
+				</c:if>
+				
+				
+				<tr bgcolor="#ffffff">
+					<td align="center" colspan="4">
+						<table cellPadding=3>
+							<tr>
+								<td>
+									<input class="buton" type="button" name="addMTEFProj" value="<digi:trn key='aim:addMTEFProjection'>Add Projection</digi:trn>"
+								   onclick="addMTEFProjection()">
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				
+				
+				</table>
+				</td>
+				</tr>
+				</table>
+				</td>
+				</tr>
 
 
 	<% int tempIndex = 0; %>

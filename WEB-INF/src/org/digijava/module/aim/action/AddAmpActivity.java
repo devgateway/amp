@@ -551,6 +551,8 @@ public class AddAmpActivity
 
         // load all the active currencies
         eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
+        
+        eaForm.setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
 
         // load all the perspectives
         eaForm.setPerspectives(DbUtil.getAmpPerspective());

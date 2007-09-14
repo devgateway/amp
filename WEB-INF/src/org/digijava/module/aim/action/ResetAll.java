@@ -26,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -48,6 +49,7 @@ import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
+import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
@@ -413,12 +415,13 @@ public class ResetAll extends Action
 					fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
 					fund.setConditions(ampFunding.getConditions());
 					Collection fundDetails = ampFunding.getFundingDetails();
+					Collection mtefProjections=ampFunding.getMtefProjections();
 					Collection funding = new ArrayList();
 					if (fundDetails != null && fundDetails.size() > 0)
 					{
 						Iterator fundDetItr = fundDetails.iterator();
 						Collection fundDetail = new ArrayList();
-
+						
 						while (fundDetItr.hasNext())
 						{
 							AmpFundingDetail fundDet = (AmpFundingDetail) fundDetItr.next();
@@ -452,6 +455,25 @@ public class ResetAll extends Action
 							fundingDetail.setTransactionType(fundDet.getTransactionType().intValue());
 							fundDetail.add(fundingDetail);
 						}
+						Collection mtefPrj=new ArrayList();
+						if(mtefProjections!=null && mtefProjections.size()>0)
+						{
+							Iterator prjIterator=mtefProjections.iterator();
+							
+							while (prjIterator.hasNext())
+							{
+								AmpFundingMTEFProjection projection=(AmpFundingMTEFProjection)prjIterator.next();
+								MTEFProjection mtef=new MTEFProjection();
+								mtef.setAmount(projection.getAmount().toString());
+								mtef.setCurrencyCode(projection.getCurrency().getCurrencyCode());
+								mtef.setCurrencyName(projection.getCurrency().getCurrencyName());
+								mtef.setProjected(CategoryManagerUtil.getStringValueOfAmpCategoryValue(CategoryManagerUtil.getAmpCategoryValueFromDb(projection.getProjected())));
+								mtef.setProjectionDate(projection.getProjectionDate());
+								mtefPrj.add(mtef);
+								
+							}
+						}
+						fund.setMtefProjections(mtefPrj);
 						fund.setFundingDetails(fundDetail);
 						funding.add(fund);
 					}

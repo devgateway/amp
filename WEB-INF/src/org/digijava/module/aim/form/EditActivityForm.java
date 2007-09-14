@@ -388,6 +388,11 @@ private int isPreview=0;
 	private Long accessionInstrument	= new Long(0);
 
 	 private Collection searchedSectors = null; // list of searched Sectors.
+	 
+	 private String equalOpportunity;
+	 private String environment;
+	 private String minorities;
+	 
 
 	 /*
 	  * Tanzania ADDS
@@ -4121,6 +4126,30 @@ public String getPurpose() {
 
 	public void setAllCosts(Double allCosts) {
 		this.allCosts = allCosts;
+	}
+
+	public String getEnvironment() {
+		return environment;
+	}
+
+	public void setEnvironment(String environment) {
+		this.environment = environment;
+	}
+
+	public String getEqualOpportunity() {
+		return equalOpportunity;
+	}
+
+	public void setEqualOpportunity(String equalOpportunity) {
+		this.equalOpportunity = equalOpportunity;
+	}
+
+	public String getMinorities() {
+		return minorities;
+	}
+
+	public void setMinorities(String minorities) {
+		this.minorities = minorities;
 	}
 
 

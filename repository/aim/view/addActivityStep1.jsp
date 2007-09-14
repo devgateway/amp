@@ -324,7 +324,9 @@ ${fn:replace(message,quote,escapedQuote)}
 									&nbsp;
 									</feature:display>
 											<jsp:include page="addActivityStep1Planning.jsp"/>
-
+									
+									<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
+									
 
 <!--
 									<tr><td bgColor=#f4f4f2 align="center">

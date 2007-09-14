@@ -476,7 +476,30 @@ public class SaveActivity extends Action {
 					activity.setLessonsLearned(new String(" "));
 				} else {
 					activity.setLessonsLearned(eaForm.getLessonsLearned());
-				}				
+				}
+				
+				if (eaForm.getEqualOpportunity() == null
+						|| eaForm.getEqualOpportunity().trim().length() == 0) {
+					activity.setEqualOpportunity(new String(" "));
+				} else {
+					activity.setEqualOpportunity(eaForm.getEqualOpportunity());
+				}
+				
+				if (eaForm.getEnvironment() == null
+						|| eaForm.getEnvironment().trim().length() == 0) {
+					activity.setEnvironment(new String(" "));
+				} else {
+					activity.setEnvironment(eaForm.getEnvironment());
+				}
+				
+				if (eaForm.getMinorities() == null
+						|| eaForm.getMinorities().trim().length() == 0) {
+					activity.setMinorities(new String(" "));
+				} else {
+					activity.setMinorities(eaForm.getMinorities());
+				}
+				
+				
 				if (eaForm.getPurpose() == null
 						|| eaForm.getPurpose().trim().length() == 0) {
 					activity.setPurpose(new String(" "));

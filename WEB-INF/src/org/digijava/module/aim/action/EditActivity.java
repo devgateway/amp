@@ -529,6 +529,14 @@ public class EditActivity
 
           if (activity.getDescription() != null)
             eaForm.setDescription(activity.getDescription().trim());
+          
+          if (activity.getEqualOpportunity() != null)
+              eaForm.setEqualOpportunity(activity.getEqualOpportunity().trim());
+          if (activity.getEnvironment() != null)
+              eaForm.setEnvironment(activity.getEnvironment().trim());
+          if (activity.getMinorities() != null)
+              eaForm.setMinorities(activity.getMinorities().trim());
+            
           if (activity.getLessonsLearned()!=null)
         	eaForm.setLessonsLearned(activity.getLessonsLearned().trim());
           if (activity.getObjective() != null)

@@ -24,6 +24,11 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	private String purpose;
 	private String results;
     private String documentSpace;
+    
+    private String equalOpportunity;
+    private String environment;
+    private String minorities;
+    
 //	private AmpStatus status ; // TO BE DELETED
 	private String language ;
 	private String version ;
@@ -1155,5 +1160,29 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 
 	public void setLessonsLearned(String lessonsLearned) {
 		this.lessonsLearned = lessonsLearned;
+	}
+
+	public String getEnvironment() {
+		return environment;
+	}
+
+	public void setEnvironment(String environment) {
+		this.environment = environment;
+	}
+
+	public String getEqualOpportunity() {
+		return equalOpportunity;
+	}
+
+	public void setEqualOpportunity(String equalOpportunity) {
+		this.equalOpportunity = equalOpportunity;
+	}
+
+	public String getMinorities() {
+		return minorities;
+	}
+
+	public void setMinorities(String minorities) {
+		this.minorities = minorities;
 	}
 }

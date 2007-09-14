@@ -122,6 +122,9 @@ public class ResetAll extends Action
 	    	}
 	    	if(eaForm.getStep().equals("2"))
 	    	{
+	    		eaForm.setEqualOpportunity(null);
+	    		eaForm.setMinorities(null); 
+	    		eaForm.setEnvironment(null);
 	    		eaForm.setLevelId(new Long(0));
 //	    		eaForm.setImplementationLevel(null);
 	    		eaForm.setImplemLocationLevel( 

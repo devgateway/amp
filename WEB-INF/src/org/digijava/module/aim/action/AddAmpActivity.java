@@ -54,6 +54,7 @@ import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.editor.dbentity.Editor;
+import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.Constants;
 
 /**
@@ -565,8 +566,44 @@ public class AddAmpActivity
             "/aim/addActivity.do?edit=true";
         response.sendRedirect(eaForm.getContext() + url);
       }
+      else if (eaForm.getStep().equals("2.2")) { // shows the edit page of the editor module
+          eaForm.setStep("2");
+          // When the contents are saved the editor module redirects to the url specified in the 'referrer' parameter
+          String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() +
+              "&referrer=" + eaForm.getContext() +
+              "/aim/addActivity.do?edit=true";
+          response.sendRedirect(eaForm.getContext() + url);
+        }
       else if (eaForm.getStep().equals("2")) { // show the step 2 page.
-        return mapping.findForward("addActivityStep2");
+    	  if (eaForm.getContext() == null) {
+              SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+
+              String url = SiteUtils.getSiteURL(currentDomain, request.getScheme(),
+                                                request.getServerPort(),
+                                                request.getContextPath());
+              eaForm.setContext(url);
+            }
+    	  
+    	  if (eaForm.getEqualOpportunity() == null ||
+    	            eaForm.getEqualOpportunity().trim().length() == 0) {
+    	          eaForm.setEqualOpportunity("aim-eo-" + teamMember.getMemberId() + "-" +
+    	                               System.currentTimeMillis());
+    	          setEditorKey(eaForm.getEqualOpportunity(), request);
+    	        }
+    	  if (eaForm.getEnvironment() == null ||
+  	            eaForm.getEnvironment().trim().length() == 0) {
+  	          eaForm.setEnvironment("aim-env-" + teamMember.getMemberId() + "-" +
+  	                               System.currentTimeMillis());
+  	          setEditorKey(eaForm.getEnvironment(), request);
+  	        }
+    	  if (eaForm.getMinorities() == null ||
+  	            eaForm.getMinorities().trim().length() == 0) {
+  	          eaForm.setMinorities("aim-min-" + teamMember.getMemberId() + "-" +
+  	                               System.currentTimeMillis());
+  	          setEditorKey(eaForm.getMinorities(), request);
+  	        }
+    	  
+    	  return mapping.findForward("addActivityStep2");
       }
       else if (eaForm.getStep().equals("3")) { // show the step 3 page.
         return mapping.findForward("addActivityStep3");
@@ -787,6 +824,31 @@ public class AddAmpActivity
       return null;
     }
     return null;
+  }
+  
+  public void setEditorKey(String s, HttpServletRequest request)
+  {
+	  User user = RequestUtils.getUser(request);
+      String currentLang = RequestUtils.getNavigationLanguage(request).
+          getCode();
+      String refUrl = RequestUtils.getSourceURL(request);
+      String key = s;
+      Editor ed = org.digijava.module.editor.util.DbUtil.createEditor(user,
+          currentLang,
+          refUrl,
+          key,
+          key,
+          " ",
+          null,
+          request);
+      ed.setLastModDate(new Date());
+      ed.setGroupName(Constants.GROUP_OTHER);
+      try {
+		org.digijava.module.editor.util.DbUtil.saveEditor(ed);
+	} catch (EditorException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
   }
 }
 

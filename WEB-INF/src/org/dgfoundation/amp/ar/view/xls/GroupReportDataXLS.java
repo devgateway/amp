@@ -83,13 +83,14 @@ public class GroupReportDataXLS extends XLSExporter {
 			element.invokeExporter(this);
 		}
 		
+		rowId.inc();
+		colId.reset();
+		
 		TrailCellsXLS trails=new TrailCellsXLS(this,grd);
 		trails.generate();
 		
 
 		// add an empty row
-		//rowId.inc();
-		//colId.reset();
 		//HSSFRow row=sheet.createRow(rowId.shortValue());
 		//HSSFCell cell=this.getRegularCell(row);
 		//cell.setCellValue("xx");

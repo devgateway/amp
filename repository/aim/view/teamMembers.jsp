@@ -14,9 +14,11 @@
 <!--
 
 function checkSelMembers() {
+	var msg='';
 	if (document.aimTeamMemberForm.selMembers.checked != null) { 
 		if (document.aimTeamMemberForm.selMembers.checked == false) {
-			alert("Please choose a member to remove");
+			msg+='\n <digi:trn key="aim:members:selectMembersToRemove">Please choose a member to remove</digi:trn>';
+			alert(msg);
 			return false;
 		}
 	} else { // 
@@ -30,7 +32,8 @@ function checkSelMembers() {
 		}
 
 		if (flag == 0) {
-			alert("Please choose a member to remove");
+			msg+='\n <digi:trn key="aim:members:selectMembersToRemove">Please choose a member to remove</digi:trn>';
+			alert(msg);
 			return false;					  
 		}
 	}

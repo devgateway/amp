@@ -20,7 +20,7 @@ public class AmpUserUtil {
     try {
         session = PersistenceManager.getRequestDBSession();
         String queryString = "select u from " + User.class.getName()
-            + " u";
+            + " u" +" where u.banned=0";
         qry = session.createQuery(queryString);
         users = qry.list();
     } catch(Exception e) {

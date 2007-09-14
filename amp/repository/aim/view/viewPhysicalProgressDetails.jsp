@@ -194,12 +194,6 @@ method="post">
 																<digi:trn key="aim:allTheAmountsInThousands">	
 																	All the amounts are in thousands (000)
 		  														</digi:trn>
-		  														<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>">
-																	<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-																	<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"> 
-																		<%=selCurrency %>
-																	</digi:trn>
-																</logic:present>
 															</FONT>								
 														</TD></TR>
 													</TABLE>

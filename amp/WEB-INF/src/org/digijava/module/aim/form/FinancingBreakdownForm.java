@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 public class FinancingBreakdownForm extends MainProjectDetailsForm
 {
@@ -135,5 +137,10 @@ public class FinancingBreakdownForm extends MainProjectDetailsForm
 	public void setPerpsectiveNameTrimmed(String perpsectiveNameTrimmed) {
 		this.perpsectiveNameTrimmed = perpsectiveNameTrimmed;
 	}	
+	
+	public String getSelectedCurrency(){
+		AmpCurrency c = CurrencyUtil.getCurrencyByCode(this.getCurrency());
+		return c.getCurrencyName();
+	}
 }
 	

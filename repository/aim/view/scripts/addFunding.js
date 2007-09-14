@@ -31,6 +31,47 @@ function validateFunding() {
 	return validateFundingDetails(numComm,numDisb,numExp);
 }
 
+function validateFundingTrn(errmsg1,errmsg2,errmsg3) {
+	var fundId = trim(document.aimEditActivityForm.orgFundingId.value);
+	var assistType = trim(document.aimEditActivityForm.assistanceType.value);
+	var mod=trim(document.aimEditActivityForm.modality.value);
+	var errmsg='';
+	if (assistType == 0) {
+		errmsg+=errmsg1;
+	}
+	if (fundId.length == 0) {
+		errmsg+=errmsg2;
+	}
+	if (mod == 0) {
+		errmsg+=errmsg3;
+	}
+	if (errmsg!=''){
+		alert (errmsg);
+		document.aimEditActivityForm.orgFundingId.focus();
+		return false;
+	}
+	/*
+	var sigDate = trim(document.aimEditActivityForm.signatureDate.value);
+	if (sigDate.length == 0) {
+		alert ("Signature date not entered");
+		document.aimEditActivityForm.signatureDate.focus();
+		return false;
+	}*/
+	var numComm = document.aimEditActivityForm.numComm.value;
+	var numDisb = document.aimEditActivityForm.numDisb.value;
+	var numExp = document.aimEditActivityForm.numExp.value;
+
+	if (numComm == 0) {
+		alert ("Please enter a commitment");
+		return false;	
+	}
+	if (numExp > 0 && numDisb == 0) {
+		alert ("Expenditure entered without entering Disbursement");
+		return false;		
+	}
+	return validateFundingDetails(numComm,numDisb,numExp);
+}
+
 function validateFundingExchangeRate() {
 	var fundId = trim(document.aimEditActivityForm.orgFundingId.value);
 	

@@ -137,12 +137,12 @@ function saveClicked() {
                                     <c:set var="dic">
                                       <%out.write(dictionaryValue);%>
                                     </c:set>
-                                    <digi:trn key="aim:globalSettings:${dic}">
+                                    <digi:trn key='aim:globalSettings:${fn:replace(dic, " ", "_")}'>
                                       <%out.write(dictionaryValue);%>
                                     </digi:trn>
 
                                     <%}else{%>
-                                    <digi:trn key="aim:globalSettings:${globalSett.globalSettingsValue}">
+                                    <digi:trn key='aim:globalSettings:${fn:replace(globalSett.globalSettingsValue, " ", "_")}'>
                                       <%=globalSett.getGlobalSettingsValue()%>
                                     </digi:trn>
                                     <%}%>

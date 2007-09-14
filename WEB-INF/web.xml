@@ -103,6 +103,7 @@
 				     	/repository/cms/struts-config.xml,
 				     	/repository/exception/struts-config.xml,
 				     	/repository/syndication/struts-config.xml
+				     	/repository/help/struts-config.xml
 			</param-value>
 		</init-param>
 		<init-param>
@@ -144,7 +145,8 @@
 				     	/repository/exception/struts-config.xml,
 				     	/repository/digifeed/struts-config.xml,
 				     	/repository/syndication/struts-config.xml,
-				       	/repository/gateperm/struts-config.xml
+				     		/repository/gateperm/struts-config.xml,
+				     	/repository/help/struts-config.xml
 			</param-value>
 		</init-param>
 		<init-param>

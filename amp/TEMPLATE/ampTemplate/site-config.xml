@@ -1,6 +1,34 @@
 <?xml version="1.0"?>
 <site-config>
 	<site-layout>
+		<layout name="helpLayout" file="helpLayout.jsp">
+			<put name="title">Help</put>
+			<put-item name="headerTop" file="headerTop.jsp"/>
+			<put-item name="headerMiddle" file="headerMiddle.jsp"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>			
+			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
+			<put-item name="footer" layout="footerLayout"/>
+			<put-item name="body" layout="helpBodyLayout"/>
+		</layout>
+		<layout name="helpBodyLayout" file="helpBodyLayout.jsp">
+			<put-item name="helpTopics" module="help" instance="default" teaser="helpTopics"/>
+			<put-item name="helpBody" module="help" page="helpBody"/>
+			<put-item name="rightColumn" layout="helpRightColumnLayout"/>
+		</layout>
+		<layout name="helpRightColumnLayout" file="helpRightColumnLayout.jsp">
+			<put-item name="create_Edit" module="help" page="create_Edit"/>
+			<put-item name="search" module="help" page="helpSearch"/>
+		</layout>
+		<layout name="createHelpTopicLayout" extends="helpLayout">
+			<put-item name="body" module="help" page="helpWizardBody"/>
+		</layout>
+		<layout name="editHelpTopicLayout" extends="helpLayout">
+			<put-item name="body" module="help" page="helpWizardBody"/>
+		</layout>
+		<layout name="seachResultsLayout" extends="helpLayout">
+			<put-item name="body" module="help" page="searchResults"/>
+		</layout>
+		
 		<layout name="footerLayout" file="footerLayout.jsp">
 			<put name="version">1.09 RC1</put>
 		    <put-item name="transmode" module="translation" instance="default" teaser="modeSwitch"/>

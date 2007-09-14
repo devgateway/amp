@@ -21,6 +21,7 @@
 <!--
 	function validate() 
 	{
+	
 		if (trim(document.aimThemeForm.programName.value).length == 0) 
 		{
 			alert("${translation_progname}");
@@ -33,10 +34,10 @@
 			document.aimThemeForm.programCode.focus();
 			return false;
 		}			
-		if (trim(document.aimThemeForm.programType.value).length == 0) 
+		if (trim(document.aimThemeForm.programTypeCategValId.value) == 0) 
 		{
 			alert("${translation_progtype}");
-			document.aimThemeForm.programType.focus();
+			document.aimThemeForm.programTypeCategValId.focus();
 			return false;
 		}
 		return true;

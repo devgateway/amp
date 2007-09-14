@@ -96,7 +96,14 @@
           document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
         }
 	
---></script>
+	function Name(){
+		var string = "${themes.name}";
+		var string2  = string.replace(/[\(\)']/g, '');
+		return string2;
+	}
+
+-->
+</script>
 
 <digi:errors/>
 <digi:instance property="aimThemeForm" />
@@ -377,8 +384,7 @@
 														<logic:notEmpty name="aimThemeForm" property="themes">
 															<tr><td>
 																<table width="100%" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
-																	<logic:iterate name="aimThemeForm" property="themes" id="themes" 
-																	type="org.digijava.module.aim.dbentity.AmpTheme">
+																	<logic:iterate name="aimThemeForm" property="themes" id="themes" 	type="org.digijava.module.aim.dbentity.AmpTheme">
 																		<tr bgcolor="#ffffff">
 																			<td width="9" height="15" bgcolor="#f4f4f2">
 																					<img src= "../ampTemplate/images/arrow_right.gif" border=0>
@@ -391,8 +397,10 @@
 																					<c:set target="${urlParams}" property="themeId">
 																							<bean:write name="themes" property="ampThemeId" />
 																					</c:set><b>
-																					<a href="javascript:addSubProgram('<bean:write name="themes" property="ampThemeId" />','<bean:write name="themes" property="name"/>')" title="Click here to add Sub-Programs">
+																												<a href='javascript:addSubProgram("${themes.ampThemeId}","Name()")' title="Click here to add Sub-Programs">
+																					
 																							<bean:write name="themes" property="name"/>
+																							
 																					</a></b>
 																			</td>
 																			<td align="right" bgcolor="#f4f4f2" width="75">

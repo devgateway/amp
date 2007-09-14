@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ page import="java.util.Map"%>
 
 
@@ -173,9 +174,10 @@ function saveClicked() {
                                       		<%= globalSett.getGlobalSettingsPossibleValues()%>
                                       	</c:set>
                                         <c:set var="globSettings">
-                                          <digi:trn key="aim:globalSettings:${global.value}">${global.value}</digi:trn>
+                                          <digi:trn key='aim:globalSettings:${fn:replace(global.value, " ", "_")}'>${global.value}</digi:trn>
                                         </c:set>
-                                        <html:option value="${global.key}"> ${globSettings}</html:option>
+
+                                        <html:option value="${global.key}">${globSettings}</html:option>
                                       </logic:iterate>
                                     </html:select>
                                     <%} %>										</logic:notEmpty>

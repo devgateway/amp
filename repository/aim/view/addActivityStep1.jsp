@@ -59,12 +59,10 @@ function selectOrganisation() {
 }
 
 function edit(key) {
-	document.aimEditActivityForm.step.value = "1.1";
-        document.aimEditActivityForm.submit();
-	document.aimEditActivityForm.action = "/editor/showEditText.do?id=" + key + "&referrer=/aim/addActivity.do?edit=true";
-	document.aimEditActivityForm.editKey.value = key;
-	document.aimEditActivityForm.target = "_self";
-	document.aimEditActivityForm.submit();
+  document.aimEditActivityForm.editKey.value = key;
+  document.aimEditActivityForm.step.value = "1.1";
+  document.aimEditActivityForm.submit();
+
 }
 
 function commentWin(commentId) {

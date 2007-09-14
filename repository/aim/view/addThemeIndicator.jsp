@@ -172,8 +172,6 @@ function closeWindow() 
 </script>
 
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
-
-<digi:instance property="aimThemeForm" />
 <digi:form action="/addThemeIndicator.do" method="post">
 <digi:context name="digiContext" property="context"/>
 <input type="hidden" name="event">
@@ -308,7 +306,7 @@ function closeWindow() 
 															styleId="<%=calIdIndex%>" readonly="true" size="10"/>
 														</td>
 														<td align="left" vAlign="center">&nbsp;
-															<a id="date2" href='javascript:pickDate("date2",document.aimThemeForm.prgIndValues)'>
+															<a id="date_<%=calIdIndex%>" href='javascript:pickDate("date_<%=calIdIndex%>",document.getElementsByName("prgIndValues[<%=calIdIndex%>].creationDate")[0])'>
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 															</a>
 														</td>

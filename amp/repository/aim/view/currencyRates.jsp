@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
@@ -294,7 +295,7 @@ function fnSubmit() {
 											</html:multibox>
 										</td>
 										<td align="left">
-                                          <digi:trn key="aim:currency${cRates.currencyCode}">${cRates.currencyCode}</digi:trn>
+                                          <digi:trn key='aim:currency:${fn:replace(cRates.currencyCode, " ", "_")}'>${cRates.currencyCode}</digi:trn>
 										</td>
 										<td align="left">
 											<c:out value="${cRates.currencyName}"/>

@@ -227,7 +227,7 @@ function sortSubmit(value){
 															Click here to make the currency inactive
 														</digi:trn>
 													</c:set>
-													<a href="javascript:makeInactive('<c:out value="${curr.currencyCode}"/>')"
+													<a href="javascript:makeInactive('${curr.currencyCode}')"
 													title="${translation}">
 													<digi:img src="module/aim/images/bullet_green.gif" border="0"/></a>
 												</c:if>
@@ -237,18 +237,19 @@ function sortSubmit(value){
 															Click here to make the currency Active
 														</digi:trn>
 													</c:set>
-													<a href="javascript:makeActive('<c:out value="${curr.currencyCode}"/>')"
+													<a href="javascript:makeActive('${curr.currencyCode}')"
 													title="${translation}">
 													<digi:img src="module/aim/images/bullet_grey.gif" border="0"/></a>
 												</c:if>
 											</td>
 											<td align="left">
-												<a href="javascript:editCurrency('<c:out value="${curr.currencyCode}"/>')">
-												<c:out value="${curr.currencyCode}"/></a>
+                                              <a href="javascript:editCurrency('${curr.currencyCode}')">
+                                                <digi:trn key='aim:currency:${fn:replace(curr.currencyCode, " ", "_")}'>${curr.currencyCode}</digi:trn>
+                                              </a>
 											</td>
 											<td align="left">
-												<a href="javascript:editCurrency('<c:out value="${curr.currencyCode}"/>')">
-												<c:out value="${curr.currencyName}"/></a>
+												<a href="javascript:editCurrency('${curr.currencyCode}')">
+												${curr.currencyName}</a>
 											</td>
 											<td align="left">
                                               <a href="javascript:editCurrency('${curr.currencyCode}')">
@@ -258,7 +259,7 @@ function sortSubmit(value){
                                               </a>
                                             </td>
 											<td align="right">
-												<a href="javascript:deleteCurrency('<c:out value="${curr.currencyCode}"/>')">
+												<a href="javascript:deleteCurrency('${curr.currencyCode}')">
 										 		<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this Currency"/>
 												</a>
 											</td>

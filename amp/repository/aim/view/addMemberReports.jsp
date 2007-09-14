@@ -114,7 +114,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>Team Workspace Setup</span>
+					<td height=16 vAlign=center width=571><span class=subtitle-blue><digi:trn key="aim:members:teamWorkspacesetup"> Team Workspace Setup </digi:trn> </span>
 					</td>
 				</tr>
 				<tr>
@@ -244,7 +244,10 @@
 															<table cellspacing="5">
 																<tr>
 																	<td>
-																		<html:submit styleClass="dr-menu" value="Assign report" 
+																	<c:set var="assignReport">
+																		<digi:trn key="aim:memberReports:assignReport">Assign report</digi:trn>
+																	 </c:set>
+																		<html:submit styleClass="dr-menu" value="${assignReport}" 
 																		property="assignReports" onclick="return validate()"/>
 																	</td>
 																</tr>

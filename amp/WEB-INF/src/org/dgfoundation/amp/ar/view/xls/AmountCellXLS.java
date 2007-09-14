@@ -6,6 +6,8 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
+import java.text.DecimalFormat;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -55,8 +57,10 @@ public class AmountCellXLS extends XLSExporter {
 		HSSFCell cell=this.getCell(getAmountStyle());
 		
 		cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
-	
-		cell.setCellValue(ac.getAmount());
+		
+		DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
+		mf.setMaximumFractionDigits(2);
+		cell.setCellValue(mf.format(ac.getAmount()));
 		colId.inc();
 	}
 

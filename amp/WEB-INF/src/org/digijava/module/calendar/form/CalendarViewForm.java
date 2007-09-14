@@ -1,13 +1,11 @@
 package org.digijava.module.calendar.form;
 
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
+import javax.servlet.http.*;
 
-import org.apache.struts.action.ActionForm;
-import org.digijava.kernel.user.User;
-import org.digijava.module.calendar.entity.DateBreakDown;
-import org.digijava.module.calendar.entity.DateNavigator;
-import org.digijava.module.calendar.entity.EventsFilter;
+import org.apache.struts.action.*;
+import org.digijava.kernel.user.*;
+import org.digijava.module.calendar.entity.*;
 
 public class CalendarViewForm
     extends ActionForm {
@@ -32,8 +30,9 @@ public class CalendarViewForm
     private EventsFilter filter;
     private boolean filterInUse;
     private List ampCalendarGraphs;
+  private Boolean resetFilter;
 
-    public GregorianCalendar getCurrentDate() {
+  public GregorianCalendar getCurrentDate() {
         return currentDate;
     }
 
@@ -120,7 +119,11 @@ public class CalendarViewForm
         return ampCalendarGraphs;
     }
 
-    public void setView(String view) {
+  public Boolean getResetFilter() {
+    return resetFilter;
+  }
+
+  public void setView(String view) {
         this.view = view;
     }
 
@@ -203,6 +206,18 @@ public class CalendarViewForm
     public void setAmpCalendarGraphs(List ampCalendarGraphs) {
         this.ampCalendarGraphs = ampCalendarGraphs;
     }
+
+  public void setResetFilter(Boolean resetFilter) {
+    this.resetFilter = resetFilter;
+  }
+
+  public void reset(ActionMapping mapping, HttpServletRequest request) {
+    /* if(filter!=null){
+       this.filter.setShowPublicEvents(false);
+     }
+    */
+  }
+
 
 }
 

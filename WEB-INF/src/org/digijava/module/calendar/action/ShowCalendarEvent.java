@@ -1,6 +1,7 @@
 package org.digijava.module.calendar.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -17,7 +18,11 @@ import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.dbentity.Calendar;
@@ -45,6 +50,21 @@ public class ShowCalendarEvent
 
             // calendar type
             List calendarTypesList = DateNavigator.getCalendarTypes();
+            
+            Collection defCnISO=FeaturesUtil.getDefaultCountryISO();
+            if(defCnISO!=null){
+                AmpGlobalSettings sett=(AmpGlobalSettings)defCnISO.iterator().next();
+                if(!sett.getGlobalSettingsValue().equalsIgnoreCase("et")){
+                    for(Iterator iter = calendarTypesList.iterator(); iter.hasNext(); ) {
+                        LabelValueBean item = (LabelValueBean) iter.next();
+                        if(item.getLabel().equalsIgnoreCase("ethiopian") ||
+                            item.getLabel().equalsIgnoreCase("ethiopian fy")){
+                            iter.remove();
+                        }
+                    }
+                }
+            }
+
             calendarEventForm.setCalendarTypes(calendarTypesList);
             // selected calendar type
             int selectedCalendarType = calendarEventForm.
@@ -201,8 +221,7 @@ public class ShowCalendarEvent
                     User user = (User) userIt.next();
                     if (!user.isBanned()) {
                         LabelValueBean lvb = new LabelValueBean(user.getFirstNames() +
-                            " " +
-                            user.getLastName(), user.getId().toString());
+                            " " + user.getLastName(), user.getId().toString());
                         attendeeUsers.add(lvb);
 
                         String[] selUsers = calendarEventForm.getSelectedUsers();

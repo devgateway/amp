@@ -19,6 +19,8 @@ public class FundingOrganization implements Comparable{
 	Boolean delegatedPartner;
 	String delegatedPartnerString;
 	
+	
+	
 	public Long getAmpOrgId() {
 		return ampOrgId;
 	}
@@ -111,4 +113,6 @@ public class FundingOrganization implements Comparable{
 	public void setFundingActiveString(String fundingActiveString) {
 		this.fundingActiveString = fundingActiveString;
 	}
+
+	
 }

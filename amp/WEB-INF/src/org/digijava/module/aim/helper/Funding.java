@@ -20,6 +20,7 @@ public class Funding implements Serializable
 	//private AmpModality modality;
 	private AmpCategoryValue financingInstrument;
 	private Collection fundingDetails;	// Collection of Funding Details
+	private Collection mtefProjections;
    	private String currentFunding;
    	private String propStartDate;
    	private String propCloseDate;
@@ -160,5 +161,13 @@ public class Funding implements Serializable
 			return fundingId == tmp.fundingId;
 		}
 		throw new ClassCastException();
+	}
+
+	public Collection getMtefProjections() {
+		return mtefProjections;
+	}
+
+	public void setMtefProjections(Collection mtefProjections) {
+		this.mtefProjections = mtefProjections;
 	}
 }

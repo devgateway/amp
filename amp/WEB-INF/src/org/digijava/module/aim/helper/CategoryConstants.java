@@ -30,8 +30,12 @@ public class CategoryConstants {
 	
 	public static final String PROGRAM_TYPE_NAME				= "Program Type";
 	public static final String PROGRAM_TYPE_KEY				= "program_type";
+	
 	public static final String FINANCIAL_INSTRUMENT_NAME="Financial Instrument";
 	public static final String FINANCIAL_INSTRUMENT_KEY="financial_instrument";
+	
+	public static final String MTEF_PROJECTION_NAME="MTEF Projection";
+	public static final String MTEF_PROJECTION_KEY="mtef_projection";
 	
 }
 

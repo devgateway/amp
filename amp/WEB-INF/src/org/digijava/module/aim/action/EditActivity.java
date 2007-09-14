@@ -79,6 +79,7 @@ import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
+import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
@@ -994,6 +995,7 @@ public class EditActivity
                                                  .getTransactionType().intValue());
                 fundDetail.add(fundingDetail);
               }
+              
               if (fundDetail != null)
                 Collections.sort(fundDetail,
                                  FundingValidator.dateComp);
@@ -1508,6 +1510,9 @@ public class EditActivity
 
       // load all the perspectives
       eaForm.setPerspectives(DbUtil.getAmpPerspective());
+      
+      //load the possible projection values
+      eaForm.setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
 
     }
     catch (Exception e) {

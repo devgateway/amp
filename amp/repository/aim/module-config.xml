@@ -99,6 +99,9 @@
 			org.digijava.module.aim.dbentity.AmpFundingDetail
 		</hibernate-class>
 		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpFundingMTEFProjection
+		</hibernate-class>
+		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpCurrency
 		</hibernate-class>
 		<hibernate-class>

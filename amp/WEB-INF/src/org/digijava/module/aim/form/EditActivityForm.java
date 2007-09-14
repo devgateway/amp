@@ -234,6 +234,10 @@ private int isPreview=0;
 	private Collection currencies;
 	private Collection organizations;
 	private List fundingDetails; //Collection of FundingDetail objects
+	private List fundingMTEFProjections; //collection of funding mtefprojections objects
+	private Collection projections; //the values in the category manager for the projections
+	
+	
 	private boolean dupFunding;
 	private boolean editFunding;
 	private int offset;
@@ -4120,12 +4124,27 @@ public String getPurpose() {
 		this.lessonsLearned = lessonsLearned;
 	}
 
-	public Double getAllCosts() {
+	public List getFundingMTEFProjections() {
+		return fundingMTEFProjections;
+	}
+
+public Double getAllCosts() {
 		return allCosts;
 	}
 
 	public void setAllCosts(Double allCosts) {
 		this.allCosts = allCosts;
+	}
+	public void setFundingMTEFProjections(List fundingMTEFProjections) {
+		this.fundingMTEFProjections = fundingMTEFProjections;
+	}
+
+	public Collection getProjections() {
+		return projections;
+	}
+
+	public void setProjections(Collection projections) {
+		this.projections = projections;
 	}
 
 	public String getEnvironment() {

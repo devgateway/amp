@@ -8,9 +8,9 @@ package org.dgfoundation.amp.ar.cell;
 
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.MetaInfo;
 
@@ -62,7 +62,7 @@ public class AmountCell extends Cell {
 	 */
 	public AmountCell() {
 		super();
-		mergedCells = new TreeSet();
+		mergedCells = new HashSet();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -71,7 +71,7 @@ public class AmountCell extends Cell {
 	 */
 	public AmountCell(Long id) {
 		super(id);
-		mergedCells = new TreeSet();
+		mergedCells = new HashSet();
 		// TODO Auto-generated constructor stub
 	}
 

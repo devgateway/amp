@@ -64,6 +64,13 @@
 	{
 		window.close();
 	}
+	
+	function Name(){
+		var string = "${themes.name}";
+		var string2  = string.replace(/[\(\)']/g, '');
+		return string2;
+	}
+	
 -->
 </script>
 
@@ -209,7 +216,7 @@
 				<tr bgColor=#ffffff><td height="30" colspan="2"></td></tr>
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="25" align="center" colspan="2">
-						<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="aimThemeForm" property="prgParentThemeId" />','<bean:write name="aimThemeForm" property="prgLevel"/>','<bean:write name="aimThemeForm" property="name"/>')">&nbsp;&nbsp;
+						<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="aimThemeForm" property="prgParentThemeId" />','<bean:write name="aimThemeForm" property="prgLevel"/>','Name()')">&nbsp;&nbsp;
 						<input styleClass="dr-menu" type="reset" value="Cancel" onclick="closeWindow()">
 				</td>
 			</tr>

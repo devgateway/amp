@@ -21,7 +21,7 @@ import org.dgfoundation.amp.ar.MetaInfo;
  * 
  */
 public class AmountCell extends Cell {
-	public static DecimalFormat mf = new DecimalFormat("###,###,###,###,###");
+	public static DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
 
 	protected double amount;
 	
@@ -87,7 +87,7 @@ public class AmountCell extends Cell {
 	 * @see org.dgfoundation.amp.ar.cell.Cell#toString()
 	 */
 	public String toString() {
-		// TODO Auto-generated method stub
+		mf.setMaximumFractionDigits(2);
 		return mf.format(getAmount());
 	}
 
@@ -217,7 +217,7 @@ public class AmountCell extends Cell {
 		} else {
 			resultDbl = amount;
 		}
-		return Math.round(resultDbl);
+		return resultDbl;//Math.round(resultDbl);
 	}
 
 	/**

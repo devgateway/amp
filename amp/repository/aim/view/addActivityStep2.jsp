@@ -431,6 +431,11 @@ function fnChk(frmContrl){
 			                              &nbsp;
 			                              </td>
 			                            </tr>
+			                            <feature:display name="Cross Cutting Issues" module="National Planning Dashboard">
+											&nbsp;
+										</feature:display>
+											<jsp:include page="addActivityStep2CrossCuttingIssues.jsp"/>
+			                            
 			                            <!--
 			                            <tr>
 			                              <td bgColor=#f4f4f2 align="center">

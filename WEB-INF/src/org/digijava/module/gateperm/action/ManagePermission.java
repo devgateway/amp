@@ -24,7 +24,6 @@ import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.gateperm.core.CompositePermission;
 import org.digijava.module.gateperm.core.Gate;
-import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.GatePermission;
 import org.digijava.module.gateperm.core.Permission;
 import org.digijava.module.gateperm.form.PermissionForm;
@@ -53,7 +52,7 @@ public class ManagePermission extends MultiAction {
 	PermissionForm pf = (PermissionForm) form;
 
 	List<Class> gates = new ArrayList<Class>();
-	List<Class> name = Arrays.asList(GatePermConst.availableGates);
+	List<Class> name = Arrays.asList(PermissionUtil.getAvailableGates(this.getServlet().getServletContext()));
 	gates.addAll(name);
 	pf.set_availableGateTypes(gates);
 

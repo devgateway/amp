@@ -50,7 +50,8 @@ public abstract class PropertyListable implements Cloneable {
     
     /**
          * provides a way to display this bean in HTML. Properties are automatically shown along with their values.
-         * CollectionS are unfolded and excluded properties (internally used) are not shown.
+         * CollectionS are unfolded and excluded properties (internally used) are not shown. You may use the 
+         * java adnotation @PropertyListableIgnore in order to ignore the getters for the properties you may not want to list externally
          */
     
     @PropertyListableIgnore

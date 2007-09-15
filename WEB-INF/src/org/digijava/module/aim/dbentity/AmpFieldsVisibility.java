@@ -11,15 +11,13 @@ import java.util.Iterator;
 
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.module.gateperm.core.GateConstants;
 
 public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializable {
-	/**
-	 * 
-	 */
+    
+    	private final static String [] IMPLEMENTED_ACTIONS=new String[] { GateConstants.Actions.EDIT, GateConstants.Actions.VIEW } ;
+    	
 	private static final long serialVersionUID = 1255296454545642749L;
-	/**
-	 * 
-	 */
 
 
 	public int compareTo(Object arg0) {
@@ -59,5 +57,18 @@ public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializ
 		}
 		return false;
 	}
-		
+
+	@Override
+	public String[] getImplementedActions() {
+	   return IMPLEMENTED_ACTIONS;
+	}
+
+
+	@Override
+	public Class getPermissibleCategory() {
+	    return AmpFieldsVisibility.class;
+	}
+
+
+			
 }

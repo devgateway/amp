@@ -91,5 +91,16 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
 	public void setSubmodules(Set submodules) {
 		this.submodules = submodules;
 	}
+
+	@Override
+	public String[] getImplementedActions() {
+	    // TODO Auto-generated method stub
+	    return null;
+	}
+
+	@Override
+	public Class getPermissibleCategory() {
+	    return AmpModulesVisibility.class;
+	}
 		
 }

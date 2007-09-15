@@ -88,7 +88,11 @@ public class AmountCell extends Cell {
 	 */
 	public String toString() {
 		mf.setMaximumFractionDigits(2);
-		return mf.format(getAmount());
+		double am = getAmount();
+		if (am == 0)
+			return "";
+		else
+			return mf.format(getAmount());
 	}
 
 	/*

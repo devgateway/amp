@@ -60,7 +60,11 @@ public class AmountCellXLS extends XLSExporter {
 		
 		DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
 		mf.setMaximumFractionDigits(2);
-		cell.setCellValue(mf.format(ac.getAmount()));
+		double tempAm = ac.getAmount();
+		if (tempAm == 0)
+			cell.setCellValue("");
+		else
+			cell.setCellValue(mf.format(tempAm));
 		colId.inc();
 	}
 

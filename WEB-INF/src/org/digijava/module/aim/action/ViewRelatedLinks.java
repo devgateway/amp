@@ -48,7 +48,7 @@ public class ViewRelatedLinks extends Action {
 		if (session.getAttribute("ampAdmin") != null) {
 			String key = (String) session.getAttribute("ampAdmin");
 			if (key.equalsIgnoreCase("yes")) {
-				TeamMember tmem = (TeamMember) session.getAttribute("currentMember");
+				TeamMember tmem = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 				if (tmem != null && tmem.getTeamId() != null) {
 					permitted = true;
 				}
@@ -105,7 +105,7 @@ public class ViewRelatedLinks extends Action {
 					boolean found = false;
 					while (itr.hasNext()) {
 						CMSContentItem cmsItem = (CMSContentItem) itr.next();
-						if (found) 
+						if (found)
 							docList.add(cmsItem);
 						else 
 							if (docId.equals(new Long(cmsItem.getId()))){
@@ -116,49 +116,15 @@ public class ViewRelatedLinks extends Action {
 								docList.add(cmsItem);
 					}
 					
-					activity.setDocuments(docList);
-					DbUtil.update(activity);
+
+					ActivityUtil.updateActivityDocuments(activity.getAmpActivityId(), docList);
 				}
 			}
 			pagedCol = new ArrayList();
 			pagedCol =DbUtil.getAllDocuments(teamId);
 			rlForm.setAllDocuments(pagedCol);
 		}
-			
-			
-		/*
-		int stIndex = ((page - 1) * numRecords) + 1;
-		int edIndex = page * numRecords;
-		if (edIndex > col.size()) {
-			edIndex = col.size();
-		}
 
-		Vector vect = new Vector();
-		vect.addAll(col);
-
-		Collection pagedCol = new ArrayList();
-		for (int i = (stIndex - 1); i < edIndex; i++) {
-			pagedCol.add(vect.get(i));
-		}
-
-		int numPages = col.size() / numRecords;
-		numPages += (col.size() % numRecords != 0) ? 1 : 0;
-
-		Collection pages = rlForm.getPages();
-		if (pages == null || pages.size() == 0) {
-			pages = new ArrayList();
-			if (numPages > 1) {
-				pages = new ArrayList();
-				for (int i = 0; i < numPages; i++) {
-					Integer pageNum = new Integer(i + 1);
-					pages.add(pageNum);
-				}
-			}
-			rlForm.setPages(pages);			
-		}
-		
-		rlForm.setCurrentPage(new Integer(page));
-		*/
 		rlForm.setRelatedLinks(pagedCol);
 		return mapping.findForward("forward");
 	}

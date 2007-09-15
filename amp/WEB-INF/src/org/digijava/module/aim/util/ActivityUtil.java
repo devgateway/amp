@@ -638,6 +638,42 @@ public class ActivityUtil {
     }
   }
 
+  public static void updateActivityDocuments(Long activityId, Set documents) {
+		Session session = null;
+		Transaction tx = null;
+		AmpActivity oldActivity = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			tx = session.beginTransaction();
+
+			oldActivity = (AmpActivity) session.load(AmpActivity.class,
+					activityId);
+
+			if (oldActivity == null) {
+				logger.debug("Previous Activity is null");
+				return;
+			}
+
+			oldActivity.setDocuments(documents);
+			
+			session.update(oldActivity);
+			tx.commit();
+			logger.debug("Activity saved");
+		} catch (Exception ex) {
+			logger.error("Exception from saveActivity()  " + ex.getMessage());
+			ex.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+					logger.debug("Transaction Rollbacked");
+				} catch (HibernateException e) {
+					logger.error("Rollback failed :" + e);
+				}
+			}
+		}
+	}
+  
   public static Collection getComponents(Long actId) {
     Session session = null;
     Collection col = new ArrayList();

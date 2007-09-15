@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.form.RelatedLinksForm;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
@@ -31,7 +32,7 @@ extends Action {
 			HttpServletResponse response) throws Exception {
 		
 		HttpSession session = request.getSession();
-		if (session.getAttribute("currentMember") == null) 
+		if (session.getAttribute(Constants.CURRENT_MEMBER) == null) 
 			return mapping.findForward("index");
 		
 		RelatedLinksForm rlForm = (RelatedLinksForm) form;
@@ -52,9 +53,8 @@ extends Action {
 				else docList.add(cmsItem);
 			}
 			
-			activity.setDocuments(docList);
 			rlForm.setAllDocuments(null);
-			DbUtil.update(activity);
+			ActivityUtil.updateActivityDocuments(activity.getAmpActivityId(), docList);
 		}
 		return mapping.findForward("forward");
 	}

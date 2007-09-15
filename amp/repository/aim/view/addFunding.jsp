@@ -280,8 +280,8 @@
 					</td>
 				</tr>
 				
-				<% int tempPrjIndex = 0; %>
-				<% String tempPrjIndexStr = ""; %>
+				<% int tempIndex = 0; %>
+				<% String tempIndexStr = ""; %>
 				<c:if test="${ !empty aimEditActivityForm.fundingMTEFProjections}">
 				<c:set var="indexMTEF" value="-1"/>
 				<c:forEach var="mtefProjection" items="${aimEditActivityForm.fundingMTEFProjections}">
@@ -313,12 +313,12 @@
 							<table cellPadding=0 cellSpacing=0>
 							<tr>
 								<td>
-								<% tempPrjIndexStr = "" + tempPrjIndex; tempPrjIndex++;%>
+								<% tempIndexStr = "" + tempIndex; tempIndex++;%>
 								<html:text name="mtefProjection" indexed="true" property="projectionDate"
-								styleId="<%=tempPrjIndexStr%>" readonly="true" size="10"/>
+								styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
 								</td>
 								<td align="left" vAlign="center">&nbsp;
-									<a id="trans2Date<%=tempPrjIndexStr%>" href='javascript:pickDateById("trans2Date<%=tempPrjIndexStr%>",<%=tempPrjIndexStr%>)'>
+									<a id="trans7Date<%=tempIndexStr%>" href='javascript:pickDateById("trans7Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 									</a>
 									</td>
@@ -359,8 +359,6 @@
 				</tr>
 
 
-	<% int tempIndex = 0; %>
-	<% String tempIndexStr = ""; %>
 	<!-- commitments -->
 	<tr>
 		<td width="100%" vAlign="top">

@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
-import org.digijava.module.gateperm.core.GateConstants;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 /**
  * ActionUtil.java TODO description here
@@ -29,7 +29,7 @@ public final class ActionUtil {
 	 */
 	public static Set<String> getAvailableActions() {
 		TreeSet<String> al=new TreeSet<String>();
-		Field[] fields = GateConstants.Actions.class.getFields();
+		Field[] fields = GatePermConst.Actions.class.getFields();
 		for (int i = 0; i < fields.length; i++) {
 			try {
 				al.add((String) fields[i].get(null));

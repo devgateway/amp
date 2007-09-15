@@ -24,67 +24,92 @@ import org.digijava.module.gateperm.util.PermissionUtil;
  * @since 29.08.2007
  */
 public abstract class Permissible implements Identifiable {
-    private static Logger logger = Logger.getLogger(Permissible.class);
+	private static Logger logger = Logger.getLogger(Permissible.class);
 
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface PermissibleProperty {
-	String type();
+	@Retention(RetentionPolicy.RUNTIME)
+	public @interface PermissibleProperty {
+		String type();
 
-	public final static String PROPERTY_TYPE_ID    = "ID";
+		public final static String PROPERTY_TYPE_ID = "ID";
 
-	public final static String PROPERTY_TYPE_LABEL = "LABEL";
-    }
-
-    public static String getPermissiblePropertyName(Class permClass, String type) {	
-	Class c = permClass;
-	while (!c.equals(Object.class)) {
-	    Field[] declaredFields = c.getDeclaredFields();
-	    for (int i = 0; i < declaredFields.length; i++) {
-		if (declaredFields[i].isAnnotationPresent(PermissibleProperty.class)) {
-		    PermissibleProperty annotation = declaredFields[i].getAnnotation(PermissibleProperty.class);
-		    if (type.equals(annotation.type()))
-			return declaredFields[i].getName();
-		}
-	    }
-	    c = permClass.getSuperclass();
+		public final static String PROPERTY_TYPE_LABEL = "LABEL";
 	}
-	return null;
-    }
 
-    /**
-         * Returns a set of actions that this Permissible object implements. An object may not need all possible actions
-         * that a permission may allow. It may only need a subset of them
-         * 
-         * @return
-         */
-    public abstract String[] getImplementedActions();
+	public static String getPermissiblePropertyName(Class permClass, String type) {
+		Class c = permClass;
+		while (!c.equals(Object.class)) {
+			Field[] declaredFields = c.getDeclaredFields();
+			for (int i = 0; i < declaredFields.length; i++) {
+				if (declaredFields[i]
+						.isAnnotationPresent(PermissibleProperty.class)) {
+					PermissibleProperty annotation = declaredFields[i]
+							.getAnnotation(PermissibleProperty.class);
+					if (type.equals(annotation.type()))
+						return declaredFields[i].getName();
+				}
+			}
+			c = permClass.getSuperclass();
+		}
+		return null;
+	}
 
-    /**
-         * @return the object category to identify specific permission objects. This is usually a constant stored in
-         *         Permissible and it usually represents its Class.
-         */
-    public abstract Class getPermissibleCategory();
+	/**
+	 * Returns a set of actions that this Permissible object implements. An
+	 * object may not need all possible actions that a permission may allow. It
+	 * may only need a subset of them
+	 * 
+	 * @return
+	 */
+	public abstract String[] getImplementedActions();
 
-    /**
-         * Gets the list of linked permissions with this object. Queries the permissions to produce a set of unique
-         * allowed actions for this object.
-         * 
-         * @param scope
-         *                a map with the scope of the application (various variables like request, session or parts of
-         *                request, session - currentMember, etc... that are relevant for the Gate logic All the actions
-         *                that are not implemented by the Permissible object will be retained.
-         * @see getImplementedActions()
-         * @return the collection of unique allowed actions
-         */
-    public Collection<String> getAllowedActions(Map scope) {
-	Set<String> actions = new TreeSet<String>();
-	Permission permissionForPermissible = PermissionUtil.getPermissionMapForPermissible(this).getPermission();
-	actions.addAll(permissionForPermissible.getAllowedActions(scope));
-	logger.debug("Actions allowed for object " + this.getIdentifier() + " of type "
-		+ this.getClass().getSimpleName() + " are " + actions);
-	Collection implementedActions = Arrays.asList(getImplementedActions());
-	actions.retainAll(implementedActions);
-	return actions;
-    }
+	/**
+	 * @return the object category to identify specific permission objects. This
+	 *         is usually a constant stored in Permissible and it usually
+	 *         represents its Class.
+	 */
+	public abstract Class getPermissibleCategory();
+
+	/**
+	 * Gets the list of linked permissions with this object. Queries the
+	 * permissions to produce a set of unique allowed actions for this object.
+	 * 
+	 * @param scope
+	 *            a map with the scope of the application (various variables
+	 *            like request, session or parts of request, session -
+	 *            currentMember, etc... that are relevant for the Gate logic All
+	 *            the actions that are not implemented by the Permissible object
+	 *            will be retained.
+	 * @see getImplementedActions()
+	 * @return the collection of unique allowed actions
+	 */
+	public Collection<String> getAllowedActions(Map scope) {
+		Set<String> actions = new TreeSet<String>();
+		Permission permissionForPermissible = PermissionUtil
+				.getPermissionMapForPermissible(this).getPermission();
+		actions.addAll(permissionForPermissible.getAllowedActions(scope));
+		logger.debug("Actions allowed for object " + this.getIdentifier()
+				+ " of type " + this.getClass().getSimpleName() + " are "
+				+ actions);
+		Collection implementedActions = Arrays.asList(getImplementedActions());
+		actions.retainAll(implementedActions);
+		return actions;
+	}
+
+	/**
+	 * Returns true if the current object is allowed to do the specified action
+	 * for the given scope
+	 * 
+	 * @param actionName
+	 *            the name of the action defined in GatePermConst class
+	 * @param scope
+	 *            the scope with the objects that represent the current state of
+	 *            amp - eg: request,session,etc...
+	 * @see GatePermConst
+	 * @return
+	 */
+	public boolean canDo(String actionName, Map scope) {
+		Collection<String> allowedActions = getAllowedActions(scope);
+		return allowedActions.contains(actionName);
+	}
 
 }

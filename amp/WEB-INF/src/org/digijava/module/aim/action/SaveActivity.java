@@ -286,7 +286,7 @@ public class SaveActivity extends Action {
 											AmpFundingMTEFProjection ampmtef=new AmpFundingMTEFProjection();
 											ampmtef.setAmount(Double.valueOf(mtef.getAmount()));
 											ampmtef.setAmpFundingId(ampFunding);
-											ampmtef.setCurrency(CurrencyUtil.getCurrencyByCode(mtef.getCurrencyCode()));
+											ampmtef.setAmpCurrency(CurrencyUtil.getCurrencyByCode(mtef.getCurrencyCode()));
 											ampmtef.setProjected(CategoryManagerUtil.getAmpCategoryValueFromDb(mtef.getProjected(),
 													CategoryManagerUtil.loadAmpCategoryClass(CategoryConstants.MTEF_PROJECTION_KEY).getId() ).getId() );
 											ampmtef.setProjectionDate(mtef.getProjectionDate());

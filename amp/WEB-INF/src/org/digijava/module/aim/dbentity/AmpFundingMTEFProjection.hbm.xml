@@ -10,11 +10,11 @@
 			</generator>
 		</id>
 
-		<property name="projected" column="projected"  type="java.lang.Long"/>
+		<property name="projected" column="projected"  type="java.lang.Long"></property>
 		<property name="projectionDate" column="projection_date" type="java.util.Date" />
 		<property name="amount" column="amount"  type="java.lang.Double"/>
 		
-		<many-to-one name="ampCurrencyId" column="amp_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>
+		<many-to-one name="ampCurrency" column="amp_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>
 		<many-to-one name="ampFundingId" column="amp_funding_id" class="org.digijava.module.aim.dbentity.AmpFunding" not-null="true"/>
 	</class>
 </hibernate-mapping>

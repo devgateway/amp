@@ -21,7 +21,7 @@ function submitForm(mode) {
 <html:optionsCollection property="_availablePermissibleCategories" value="simpleName" label="simpleName"/>
 </html:select>
 </td></tr>
-
+<logic:notEmpty name="permissionMapForm" property="permissibleCategory">
 <tr><td colspan="2"><b>You can...</b></td></tr>
 <tr><td align="right"><b>Assign a global permission to the entire class:</b></td>
 <td>
@@ -32,7 +32,7 @@ function submitForm(mode) {
 <html:button property="saveGlobal" onclick="submitForm('saveGlobal')">Assign</html:button>
 </td>
 <tr><td colspan="2"><b>OR...</b></td></tr>
-
+</logic:notEmpty>
 <tr><td valign="top" align="right"><b>Assign a specific permission for each object of this class:</b></td>
 <td>
 <logic:notEmpty name="permissionMapForm" property="permissionMaps">

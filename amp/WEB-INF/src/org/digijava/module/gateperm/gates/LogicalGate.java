@@ -1,7 +1,7 @@
 /**
  * LogicalGate.java (c) 2007 Development Gateway Foundation
  */
-package org.digijava.module.gateperm.core;
+package org.digijava.module.gateperm.gates;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.exception.NotBoundGateInputException;
 
 /**

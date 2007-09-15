@@ -98,16 +98,22 @@ public class ManagePermissionMap extends MultiAction {
 	    HttpServletRequest request, HttpServletResponse response) throws Exception {
 	Session hs = PersistenceManager.getRequestDBSession();
 	Class permCatClass = pf.get_permissibleCategoriesMap().get(pf.getPermissibleCategory());
-	PermissionMap globalPermissionForPermissibleClass = PermissionUtil
-		.getGlobalPermissionForPermissibleClass(permCatClass);
-	if (globalPermissionForPermissibleClass == null)
-	    globalPermissionForPermissibleClass = new PermissionMap();
-	globalPermissionForPermissibleClass.setObjectIdentifier(null);
-	globalPermissionForPermissibleClass.setPermissibleCategory(pf.getPermissibleCategory());
+	Long globalPermissionMapIdForPermissibleClass = PermissionUtil
+		.getGlobalPermissionMapIdForPermissibleClass(permCatClass);
+	PermissionMap globalPermissionMapForPermissibleClass=null;
+	if (globalPermissionMapIdForPermissibleClass == null)
+	    globalPermissionMapForPermissibleClass = new PermissionMap();
+	else 
+		globalPermissionMapForPermissibleClass = (PermissionMap) hs.get(PermissionMap.class,globalPermissionMapIdForPermissibleClass );	
+	
+	globalPermissionMapForPermissibleClass.setObjectIdentifier(null);
+	globalPermissionMapForPermissibleClass.setPermissibleCategory(pf.getPermissibleCategory());
 	Permission p = (Permission) hs.get(Permission.class, pf.getPermissionId());
-	globalPermissionForPermissibleClass.setPermission(p);
-	hs.saveOrUpdate(globalPermissionForPermissibleClass);
+	globalPermissionMapForPermissibleClass.setPermission(p);	
+	hs.saveOrUpdate(globalPermissionMapForPermissibleClass);
+	
 	hs.flush();
+	
 	PersistenceManager.releaseSession(hs);
 	return mapping.getInputForward();
     }
@@ -134,7 +140,7 @@ public class ManagePermissionMap extends MultiAction {
 	    transaction.commit();
 	}
 	hs.flush();
-	hs.close();
+	
 
 	PersistenceManager.releaseSession(hs);
 
@@ -168,9 +174,10 @@ public class ManagePermissionMap extends MultiAction {
 	//load the global permission value:
 	Class permCatClass = form.get_permissibleCategoriesMap().get(form.getPermissibleCategory());
 	
-	PermissionMap globalPermissionForPermissibleClass = PermissionUtil
+	Permission globalPermissionForPermissibleClass = PermissionUtil
 	.getGlobalPermissionForPermissibleClass(permCatClass);
-	if(globalPermissionForPermissibleClass!=null) form.setPermissionId(globalPermissionForPermissibleClass.getPermission().getId());
+	if(globalPermissionForPermissibleClass!=null) form.setPermissionId(globalPermissionForPermissibleClass.getId());
+	
 
 	Session hs = PersistenceManager.getRequestDBSession();
 	Map<Long, String> objectLabels = PermissionUtil.getAllPermissibleObjectLabelsForPermissibleClass(permCatClass);
@@ -205,7 +212,7 @@ public class ManagePermissionMap extends MultiAction {
 	form.getPermissionMaps().addAll(ts);
 
 	hs.flush();
-	hs.close();
+	
 	PersistenceManager.releaseSession(hs);
 
 	return mapping.getInputForward();

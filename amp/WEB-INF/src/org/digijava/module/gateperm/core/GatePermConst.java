@@ -14,13 +14,9 @@ import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
  * @since 05.09.2007
  */
 public final class GatePermConst {
-	/**
-	 * list here all the available gates in the system. Since subclass search
-	 * through reflection is not supported by Java, we need a list with them
-	 * All Gates must extend the Gate class
-	 */
-	public static final Class[] availableGates = new Class[] {
-			LogicalGate.class, ScriptingGate.class };
+	
+	public static Class[] availableGatesSingleton=null;
+	
 
 	/**
 	 * list here all the available permissibles in the system. Since subclass search

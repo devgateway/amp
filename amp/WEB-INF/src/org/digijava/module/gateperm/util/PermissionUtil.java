@@ -3,18 +3,26 @@
  */
 package org.digijava.module.gateperm.util;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
+
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.gateperm.core.Gate;
+import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
 import org.digijava.module.gateperm.core.Permission;
 import org.digijava.module.gateperm.core.PermissionMap;
@@ -29,6 +37,43 @@ import org.digijava.module.gateperm.core.PermissionMap;
 public final class PermissionUtil {
     private static Logger logger = Logger.getLogger(PermissionUtil.class);
 
+    
+	private static final String gateDefLocation="/classes/org/digijava/module/gateperm/gates";
+	private static final String gateDefPackage="org.digijava.module.gateperm.gates";
+	
+	/**
+	 * list here all the available gates in the system. Since subclass search
+	 * through reflection is not supported by Java, we need a list with them
+	 * All Gates must extend the Gate class
+	 */
+	public static synchronized Class[] getAvailableGates(ServletContext sc) {
+		String realPath = sc.getRealPath("/WEB-INF/");
+		if(GatePermConst.availableGatesSingleton!=null) return GatePermConst.availableGatesSingleton;
+		
+		File dir = new File(realPath+gateDefLocation);
+		FileFilter filter = new FileFilter() {
+			public boolean accept(File f) {
+				return f.getName().endsWith(".class");
+			}
+		};
+
+		ArrayList<Class> gateFiles=new ArrayList<Class>();
+		if(!dir.isDirectory()) throw new RuntimeException("Gate definition path is invalid! Should be a directory:"+dir.getAbsolutePath());
+		File[] files = dir.listFiles(filter);
+		for (int i = 0; i < files.length; i++) {
+			String className = files[i].getName().substring(0, files[i].getName().length()-6);
+			try {
+				Class c=Class.forName(gateDefPackage+"."+className);
+				if(Gate.class.isAssignableFrom(c)) gateFiles.add(c);				
+			} catch (ClassNotFoundException e) {
+				logger.error(e);
+				throw new RuntimeException("ClassNotFundingException occured "+e);
+			}
+		}
+		GatePermConst.availableGatesSingleton=gateFiles.toArray(new Class[0]);
+		return GatePermConst.availableGatesSingleton;
+	}
+    
     public static List<Permission> getAllPermissions() {
 	Session session;
 
@@ -75,16 +120,19 @@ public final class PermissionUtil {
 
     }
     
-    public static PermissionMap getGlobalPermissionForPermissibleClass(Class permClass) {
+   
+    
+    public static Long getGlobalPermissionMapIdForPermissibleClass(Class permClass) {
 	  try {
 	    Session session = PersistenceManager.getSession();
 	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
 		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier is null");
 	    query.setParameter("categoryName", permClass.getSimpleName());
 	    List col = query.list();
-	    PersistenceManager.releaseSession(session);
 	    if(col.size()==0) return null;
-	    return (PermissionMap) col.get(0);
+	    PermissionMap pm= (PermissionMap) col.get(0);	  
+	    PersistenceManager.releaseSession(session);
+	    return pm.getId();
 	} catch (HibernateException e) {
 	    logger.error(e);
 	    throw new RuntimeException( "HibernateException Exception encountered", e);
@@ -94,7 +142,29 @@ public final class PermissionUtil {
 	}	  
 	  
     }
+
     
+    public static Permission getGlobalPermissionForPermissibleClass(Class permClass) {
+  	  try {
+  	    Session session = PersistenceManager.getSession();
+  	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
+  		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier is null");
+  	    query.setParameter("categoryName", permClass.getSimpleName());
+  	    List col = query.list();
+  	    if(col.size()==0) return null;
+  	    PermissionMap pm= (PermissionMap) col.get(0);	  
+  	    PersistenceManager.releaseSession(session);
+  	    return pm.getPermission();
+  	} catch (HibernateException e) {
+  	    logger.error(e);
+  	    throw new RuntimeException( "HibernateException Exception encountered", e);
+  	} catch (SQLException e) {
+  	    logger.error(e);
+  	    throw new RuntimeException( "SQLException Exception encountered", e);
+  	}	  
+  	  
+      }
+
 
     public static PermissionMap getPermissionMapForPermissible(Permissible obj) {
 	Session session;
@@ -161,8 +231,6 @@ public final class PermissionUtil {
 	    throw new RuntimeException("SQLException Exception encountered", e);
 	} finally {
 	    try {
-		session.flush();
-		session.close();
 		PersistenceManager.releaseSession(session);
 	    } catch (HibernateException e) {
 		logger.error(e);

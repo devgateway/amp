@@ -8,15 +8,21 @@ import java.util.Set;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.util.LoggerIdentifiable;
+import org.digijava.module.gateperm.core.Permissible;
 
-public class AmpActivity implements Comparable<AmpActivity>, Serializable,
+public class AmpActivity extends Permissible implements Comparable<AmpActivity>, Serializable,
 		LoggerIdentifiable {
 
 	private AmpTeamMember createdBy;
 
-        private Boolean budget;
+    private Boolean budget;
+    
+    @PermissibleProperty(type=Permissible.PermissibleProperty.PROPERTY_TYPE_ID)        
     private Long ampActivityId ;
+    
 	private String ampId ;
+	
+	@PermissibleProperty(type=Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL)
 	private String name ;
 	private String description ;
 	private String lessonsLearned;
@@ -1091,7 +1097,7 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	}
 
 	public Object getIdentifier() {
-		return this.getAmpActivityId().toString();
+		return this.getAmpActivityId();
 	}
 
 	public String getObjectName() {
@@ -1185,4 +1191,17 @@ public class AmpActivity implements Comparable<AmpActivity>, Serializable,
 	public void setMinorities(String minorities) {
 		this.minorities = minorities;
 	}
+
+	@Override
+	public String[] getImplementedActions() {
+		// TODO Auto-generated method stub// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Class getPermissibleCategory() {
+		return AmpActivity.class;
+	}
+	
+
 }

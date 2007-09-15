@@ -9,7 +9,7 @@ public class AmpFundingMTEFProjection {
 		private Long ampFundingMTEFProjectionId ;
 		private Long projected; //to be  added to category manager
 		private Double amount;
-		private AmpCurrency ampCurrencyId;
+		private AmpCurrency ampCurrency;
 		private Date projectionDate;
 		private AmpFunding  ampFundingId;
 		
@@ -31,11 +31,11 @@ public class AmpFundingMTEFProjection {
 		public void setAmpFundingMTEFProjectionId(Long ampFundingMTEFProjectionId) {
 			this.ampFundingMTEFProjectionId = ampFundingMTEFProjectionId;
 		}
-		public AmpCurrency getAmpCurrencyId() {
-			return ampCurrencyId;
+		public AmpCurrency getAmpCurrency() {
+			return ampCurrency;
 		}
-		public void setAmpCurrencyId(AmpCurrency currency) {
-			this.ampCurrencyId = currency;
+		public void setAmpCurrency(AmpCurrency currency) {
+			this.ampCurrency = currency;
 		}
 		public Long getProjected() {
 			return projected;

@@ -465,8 +465,8 @@ public class ResetAll extends Action
 								AmpFundingMTEFProjection projection=(AmpFundingMTEFProjection)prjIterator.next();
 								MTEFProjection mtef=new MTEFProjection();
 								mtef.setAmount(projection.getAmount().toString());
-								mtef.setCurrencyCode(projection.getCurrency().getCurrencyCode());
-								mtef.setCurrencyName(projection.getCurrency().getCurrencyName());
+								mtef.setCurrencyCode(projection.getAmpCurrency().getCurrencyCode());
+								mtef.setCurrencyName(projection.getAmpCurrency().getCurrencyName());
 								mtef.setProjected(CategoryManagerUtil.getStringValueOfAmpCategoryValue(CategoryManagerUtil.getAmpCategoryValueFromDb(projection.getProjected())));
 								mtef.setProjectionDate(projection.getProjectionDate());
 								mtefPrj.add(mtef);

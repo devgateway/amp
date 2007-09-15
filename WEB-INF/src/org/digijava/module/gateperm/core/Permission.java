@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dgfoundation.amp.PropertyListable;
-import org.dgfoundation.amp.PropertyListable.PropertyListableIgnore;
 
 /**
  * Permission.java TODO description here
@@ -24,6 +23,8 @@ public abstract class Permission extends PropertyListable implements Serializabl
     protected String	  name;
 
     protected String	  description;
+    
+    protected Set<PermissionMap> permissibleObjects;
     
     protected Set<CompositePermission> compositeLinkedPermissions;
 
@@ -79,6 +80,14 @@ public abstract class Permission extends PropertyListable implements Serializabl
     
     public String toString() {
 	return name+"("+this.getClass().getSimpleName()+")";
+    }
+
+    public Set<PermissionMap> getPermissibleObjects() {
+        return permissibleObjects;
+    }
+
+    public void setPermissibleObjects(Set<PermissionMap> permissibles) {
+        this.permissibleObjects = permissibles;
     }
 
 }

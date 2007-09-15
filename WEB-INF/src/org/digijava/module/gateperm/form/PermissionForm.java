@@ -7,7 +7,6 @@ package org.digijava.module.gateperm.form;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.beanutils.WrapDynaBean;
 import org.apache.struts.action.ActionForm;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.gateperm.core.Permission;

@@ -13,18 +13,25 @@ import java.io.Serializable;
  * @package org.digijava.module.gateperm.core
  * @since 29.08.2007
  */
-public class PermissionMap implements Serializable {
+public class PermissionMap implements Serializable,Comparable {
 	
 	private static final long serialVersionUID = -7294750950373378335L;
 	protected Long id;
-	protected String categoryName;
-	protected String objectIdentifier;
+	protected String permissibleCategory;
+	protected Long objectIdentifier;
 	protected Permission permission;
-	public String getCategoryName() {
-		return categoryName;
+	
+	//this is a helper property and never persisted:
+	protected Long permissionId;
+	
+	//this is a helper property and never persisted:
+	protected String objectLabel;
+	
+	public String getPermissibleCategory() {
+		return permissibleCategory;
 	}
-	public void setCategoryName(String className) {
-		this.categoryName = className;
+	public void setPermissibleCategory(String className) {
+		this.permissibleCategory = className;
 	}
 	public Long getId() {
 		return id;
@@ -32,10 +39,10 @@ public class PermissionMap implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getObjectIdentifier() {
+	public Long getObjectIdentifier() {
 		return objectIdentifier;
 	}
-	public void setObjectIdentifier(String objectId) {
+	public void setObjectIdentifier(Long objectId) {
 		this.objectIdentifier = objectId;
 	}
 	public Permission getPermission() {
@@ -43,5 +50,22 @@ public class PermissionMap implements Serializable {
 	}
 	public void setPermission(Permission permission) {
 		this.permission = permission;
+	}
+	public String getObjectLabel() {
+	    return objectLabel;
+	}
+	public void setObjectLabel(String objectLabel) {
+	    this.objectLabel = objectLabel;
+	}
+	public Long getPermissionId() {
+	    return permissionId;
+	}
+	public void setPermissionId(Long permissionId) {
+	    this.permissionId = permissionId;
+	}
+	public int compareTo(Object o) {
+	    PermissionMap pm=(PermissionMap) o;
+	    if(this.getObjectLabel()!=null) return this.getObjectLabel().compareTo(pm.getObjectLabel());
+	    return this.getObjectIdentifier().compareTo(pm.getObjectIdentifier());
 	}
 }

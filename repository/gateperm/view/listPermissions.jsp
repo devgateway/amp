@@ -39,17 +39,17 @@ ${fn:replace(message,quote,escapedQuote)}
 <td><bean:write name="perm" property="class.simpleName"/></td>
 <td>
 <logic:equal name="perm" property="class.simpleName" value="GatePermission">
-Actions:
+<b>Actions:</b>
 <bean:write name="perm" property="actions"/>
 <br/>
-Gate Init:
+<b>Gate Init:</b>
 <bean:write name="perm" property="gateTypeName"/>
 <br/>
-Gate Parameters:	
+<b>Gate Parameters:	</b>
 <bean:write name="perm" property="gateParameters"/>
 </logic:equal>
 <logic:equal name="perm" property="class.simpleName" value="CompositePermission">
-Permissions
+<b>Permissions:</b>
 <bean:write name="perm" property="permissions"/>
 </logic:equal>
 </td>
@@ -87,7 +87,7 @@ Permissions
 var tableWidgetObj = new DHTMLSuite.tableWidget();
 tableWidgetObj.setTableId('permissionsList');
 tableWidgetObj.setTableWidth('80%');
-tableWidgetObj.setTableHeight(250	);
+tableWidgetObj.setTableHeight(200);
 //tableWidgetObjsetNoCssLayout();
 tableWidgetObj.setColumnSort(Array('S','S','S'));
 tableWidgetObj.init();

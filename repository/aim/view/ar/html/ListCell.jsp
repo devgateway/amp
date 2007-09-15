@@ -17,5 +17,5 @@
 </logic:iterate>
 </ul>
 </div>
-<div align="center" onMouseOver="stm(['<bean:write name="listCell" property="column.name"/> List',document.getElementById('<bean:write name="listCell" property="column.name"/>-<bean:write name="listCell" property="ownerId"/>').innerHTML],Style[0])" onMouseOut="htm()">[<u>list...</u>]
+<div align="center" onMouseOver="stm(['<bean:write name="listCell" property="column.name"/> List',document.getElementById('<bean:write name="listCell" property="column.name"/>-<bean:write name="listCell" property="ownerId"/>').innerHTML],Style[1])" onMouseOut="htm()">[<u>list...</u>]
 </div>

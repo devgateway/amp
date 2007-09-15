@@ -73,6 +73,7 @@ public class AutopatcherService extends AbstractServiceImpl {
 				bis.close();
 							
 				StringTokenizer stok=new StringTokenizer(sb.toString(),";");
+				logger.info("Applying patch "+element.getAbsolutePath());
 				logger.info("Executing sql commands: "+sb.toString());
 				
 				

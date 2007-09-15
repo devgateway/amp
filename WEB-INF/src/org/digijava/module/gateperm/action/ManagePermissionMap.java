@@ -21,7 +21,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.gateperm.core.GateConstants;
+import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permission;
 import org.digijava.module.gateperm.core.PermissionMap;
 import org.digijava.module.gateperm.form.PermissionMapForm;
@@ -53,7 +53,7 @@ public class ManagePermissionMap extends MultiAction {
 	List<Permission> allPermissions = PermissionUtil.getAllPermissions();
 	pf.set_availablePermissions(allPermissions);
 
-	List<Class> availablePermissibleCategories = Arrays.asList(GateConstants.availablePermissibles);
+	List<Class> availablePermissibleCategories = Arrays.asList(GatePermConst.availablePermissibles);
 	Map<String, Class> permissibleCategoriesMap = new HashMap<String, Class>();
 	Iterator i = availablePermissibleCategories.iterator();
 	while (i.hasNext()) {

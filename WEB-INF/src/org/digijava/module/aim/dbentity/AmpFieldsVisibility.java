@@ -11,11 +11,11 @@ import java.util.Iterator;
 
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
-import org.digijava.module.gateperm.core.GateConstants;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializable {
     
-    	private final static String [] IMPLEMENTED_ACTIONS=new String[] { GateConstants.Actions.EDIT, GateConstants.Actions.VIEW } ;
+    	private final static String [] IMPLEMENTED_ACTIONS=new String[] { GatePermConst.Actions.EDIT, GatePermConst.Actions.VIEW } ;
     	
 	private static final long serialVersionUID = 1255296454545642749L;
 

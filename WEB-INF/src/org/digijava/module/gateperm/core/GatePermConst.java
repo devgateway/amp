@@ -13,7 +13,7 @@ import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
  * @package org.digijava.module.gateperm.core
  * @since 05.09.2007
  */
-public final class GateConstants {
+public final class GatePermConst {
 	/**
 	 * list here all the available gates in the system. Since subclass search
 	 * through reflection is not supported by Java, we need a list with them

@@ -9,18 +9,20 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.gateperm.core.Permissible;
 
 /**
  * @author dan
  *
  */
-public abstract class AmpObjectVisibility implements Serializable, Comparable {
+public abstract class AmpObjectVisibility  extends Permissible implements Serializable, Comparable {
 
-	/**
-	 * 
-	 */
+    	@PermissibleProperty(type=Permissible.PermissibleProperty.PROPERTY_TYPE_ID)
 	protected Long id;
+	
+	@PermissibleProperty(type=Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL)
 	protected String name;
+	
 	protected Set items;
 	protected Set allItems;
 	protected String nameTrimmed;
@@ -84,4 +86,10 @@ public abstract class AmpObjectVisibility implements Serializable, Comparable {
 		return this.name+" - id="+super.toString();
 	}
 
+
+	public Object getIdentifier() {
+	    return id; 
+	}
+
+	
 }

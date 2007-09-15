@@ -287,4 +287,8 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 		// TODO Auto-generated method stub
 		return this.getName();
 	}
+	
+	public String getNameTrn(){
+		return this.name.toLowerCase().replaceAll(" ",	"");
+	}
 }

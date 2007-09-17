@@ -22,14 +22,15 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
-import net.sf.hibernate.type.StringType;
-import net.sf.hibernate.type.Type;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.utils.MapBuilder;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
+import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
@@ -225,6 +226,15 @@ public class ActivityUtil {
           }
         }
 
+        // delete all previous Reference Docs
+        if (oldActivity.getReferenceDocs() != null) {
+          Iterator refItr = oldActivity.getReferenceDocs().iterator();
+          while (refItr.hasNext()) {
+            AmpActivityReferenceDoc refDoc = (AmpActivityReferenceDoc) refItr.next();
+            session.delete(refDoc);
+          }
+        }
+
         // delete all previous sectors
         if (oldActivity.getSectors() != null) {
           Iterator iItr = oldActivity.getSectors().iterator();
@@ -267,6 +277,7 @@ public class ActivityUtil {
         oldActivity.getInternalIds().clear();
         oldActivity.getLocations().clear();
         oldActivity.getOrgrole().clear();
+        oldActivity.getReferenceDocs().clear();
         oldActivity.getSectors().clear();
         oldActivity.getCosts().clear();
 
@@ -328,6 +339,7 @@ public class ActivityUtil {
         oldActivity.setInternalIds(activity.getInternalIds());
         oldActivity.setLocations(activity.getLocations());
         oldActivity.setOrgrole(activity.getOrgrole());
+        oldActivity.setReferenceDocs(activity.getReferenceDocs());
         oldActivity.setSectors(activity.getSectors());
         oldActivity.setIssues(activity.getIssues());
 
@@ -600,6 +612,37 @@ public class ActivityUtil {
     return activityId;
   }
 
+  /**
+   * Return all reference documents for Activity
+   * @param activityId
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public static Collection<AmpActivityReferenceDoc> getReferenceDocumentsFor(Long activityId) throws DgException{
+	  String oql="select refdoc from "+AmpActivityReferenceDoc.class.getName()+" refdoc "+
+	  " where refdoc.activity.ampActivityId=:actId";
+	  try {
+		Session session=PersistenceManager.getRequestDBSession();
+		Query query=session.createQuery(oql);
+		query.setLong("actId", activityId);
+		return query.list();
+	} catch (Exception e) {
+		logger.error(e);
+		throw new DgException("Cannot loat reference documents for activity id="+activityId,e);
+	}
+  }
+  
+  public static void updateActivity(AmpActivity activity,Collection<AmpActivityReferenceDoc> refdocs) throws DgException{
+	  try {
+		Session session=PersistenceManager.getRequestDBSession();
+		
+	} catch (DgException e) {
+		logger.error(e);
+		throw new DgException("Cannot loat reference documents for activity id=",e);
+	}
+  }
+  
+  
   public static void updateActivityCreator(AmpTeamMember creator,
                                            Long activityId) {
     Session session = null;
@@ -2631,5 +2674,21 @@ public class ActivityUtil {
       return act1.getAmpActivityId().compareTo(act2.getAmpActivityId());
     }
   }
+  
+  /**
+   * Creates map from {@link AmpActivityReferenceDoc} collection 
+   * where each elements key is the id of {@link AmpCategoryValue} object which is asigned to the element itself 
+   *
+   */
+  public static class CategoryIdRefDocMapBuilder extends MapBuilder<Long, AmpActivityReferenceDoc>{
 
+	@Override
+	public Long resolveKey(AmpActivityReferenceDoc e) {
+		// this is not error, please create other builder if you want RefDoc id as key. 
+		return e.getCategoryValue().getId();
+//		return e.getId();
+	}
+	  
+  }
+  
 } // End

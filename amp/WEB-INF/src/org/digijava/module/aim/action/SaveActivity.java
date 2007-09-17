@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.jcr.Node;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -33,8 +35,10 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -63,7 +67,6 @@ import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.Funding;
@@ -75,6 +78,7 @@ import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
+import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
@@ -682,6 +686,35 @@ public class SaveActivity extends Action {
 					activity.setStatusReason(" ");
 				}
 
+				//save reference docs
+				List formRefDocs=eaForm.getReferenceDocs();
+				Collection<AmpActivityReferenceDoc> activityRefDocs=ActivityUtil.getReferenceDocumentsFor(eaForm.getActivityId());
+	        	//create map where keys are category value ids.
+	        	Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=
+	        		new ActivityUtil.CategoryIdRefDocMapBuilder().createMap(activityRefDocs);
+				
+	        	Set<AmpActivityReferenceDoc> resultRefDocs=new HashSet<AmpActivityReferenceDoc>();
+				for (Iterator refIter = formRefDocs.iterator(); refIter.hasNext();) {
+					ReferenceDoc refDoc = (ReferenceDoc) refIter.next();
+					if(ArrayUtils.contains(eaForm.getSelectedReferenceDocs(), refDoc.getCategoryValueId())){
+						AmpActivityReferenceDoc dbRefDoc=null;//categoryRefDocMap.get(refDoc.getCategoryValueId());
+						//if (dbRefDoc==null){
+							dbRefDoc=new AmpActivityReferenceDoc();
+							dbRefDoc.setCreated(new Date());
+							AmpCategoryValue catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(refDoc.getCategoryValueId());
+							dbRefDoc.setCategoryValue(catVal);
+							dbRefDoc.setActivity(activity);
+						//}
+						dbRefDoc.setActivity(activity);
+						dbRefDoc.setComment(refDoc.getComment());
+						dbRefDoc.setLastEdited(new Date());
+						resultRefDocs.add(dbRefDoc);
+						
+					}
+				}
+				activity.setReferenceDocs(resultRefDocs);
+				
+				
 				// set the sectors
 				if (eaForm.getActivitySectors() != null) {
 					Set sectors = new HashSet();

@@ -986,6 +986,7 @@
 
     <action name="aimEditActivityForm" path="/aim/addActivity" scope="session" type="org.digijava.module.aim.action.AddAmpActivity">
       <forward name="addActivityStep1" path="/showLayout.do?layout=addActivityStep1" />
+      <forward name="addActivityStep1_5" path="/showLayout.do?layout=addActivityStep1_5" />
       <forward name="addActivityStep2" path="/showLayout.do?layout=addActivityStep2" />
       <forward name="addActivityStep3" path="/showLayout.do?layout=addActivityStep3" />
       <forward name="addActivityStep4" path="/showLayout.do?layout=addActivityStep4" />

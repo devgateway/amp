@@ -9,6 +9,7 @@ import java.io.*;
 import java.util.*;
 import javax.servlet.http.*;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.struts.action.*;
 import org.apache.struts.upload.*;
 import org.digijava.module.aim.dbentity.*;
@@ -75,6 +76,10 @@ private int isPreview=0;
 
 	private List costs;
 
+	private List referenceDocs;
+	private Long[] selectedReferenceDocs;
+	private String[] refDocComments;
+	
 	// location selector pop-up
 	private Long selLocs[] = null; // location selected from step 2 page to
 	// remove from the locations list
@@ -392,7 +397,7 @@ private int isPreview=0;
 	private Long accessionInstrument	= new Long(0);
 
 	 private Collection searchedSectors = null; // list of searched Sectors.
-	 
+
 	 private String equalOpportunity;
 	 private String environment;
 	 private String minorities;
@@ -4128,7 +4133,7 @@ public String getPurpose() {
 		return fundingMTEFProjections;
 	}
 
-public Double getAllCosts() {
+	public Double getAllCosts() {
 		return allCosts;
 	}
 
@@ -4158,7 +4163,7 @@ public Double getAllCosts() {
 	public String getEqualOpportunity() {
 		return equalOpportunity;
 	}
-
+	
 	public void setEqualOpportunity(String equalOpportunity) {
 		this.equalOpportunity = equalOpportunity;
 	}
@@ -4171,6 +4176,53 @@ public Double getAllCosts() {
 		this.minorities = minorities;
 	}
 
+	public List getReferenceDocs() {
+		return referenceDocs;
+	}
+
+	public ReferenceDoc getReferenceDoc(int index) {
+		return (ReferenceDoc)referenceDocs.get(index);
+	}
+
+	public void setReferenceDocs(List referenceDocs) {
+		this.referenceDocs = referenceDocs;
+	}
+
+	public void setReferenceDoc(int index,ReferenceDoc doc) {
+		this.referenceDocs = referenceDocs;
+	}
+
+	public Long[] getSelectedReferenceDocs() {
+		return selectedReferenceDocs;
+	}
+
+	public void setSelectedReferenceDocs(Long[] selectedReferenceDocs) {
+		this.selectedReferenceDocs = selectedReferenceDocs;
+	}
+
+	public String[] getRefDocComments() {
+		return refDocComments;
+	}
+
+	public String getRefDocComment(int index) {
+		return (refDocComments==null || refDocComments.length<=index)?"":refDocComments[index];
+	}
+
+	public void setRefDocComments(String[] refDocComments) {
+		this.refDocComments = refDocComments;
+	}
+
+	public void setRefDocComment(int index, String comment) {
+		if (refDocComments==null){
+			refDocComments=new String[index+1];
+		}
+		if (refDocComments.length<=index){
+			String[] newArray=new String[index+1];
+			System.arraycopy(refDocComments, 0, newArray, 0, refDocComments.length);
+			refDocComments=newArray;
+		}
+		refDocComments[index]=comment;
+	}
 
 
 }

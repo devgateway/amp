@@ -150,6 +150,7 @@
 	<page name="viewProjectPdf" title=" - View Project PDF " />
 	<page page="viewActivityDetails" name="aim_viewActivityDetails" title="AMP - View Activity Details" />
 	<page name="addActivityStep1" title=" - Add Activity - Identification | Planning" />
+	<page name="addActivityStep1_5" title=" - Add Activity - References" />
 	<page name="addActivityStep2" title=" - Add Activity - Location | Sectors" />
 	<page name="addActivityStep3" title=" - Add Activity - Funding" />
 	<page name="addActivityStep4" title=" - Add Activity - Regional Funding" />

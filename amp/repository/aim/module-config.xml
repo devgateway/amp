@@ -293,6 +293,11 @@
 	<hibernate-class>
 			  org.digijava.module.aim.dbentity.NpdSettings
 	</hibernate-class>
+	<hibernate-class>
+			  org.digijava.module.aim.dbentity.AmpActivityReferenceDoc
+	</hibernate-class>
+
+
 	</hibernate-classes>
         <!-- highlights classes End-->
 

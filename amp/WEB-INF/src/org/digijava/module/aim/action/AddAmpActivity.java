@@ -10,6 +10,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -33,6 +35,8 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
@@ -43,6 +47,7 @@ import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -507,6 +512,55 @@ public class AddAmpActivity
               IMPLEMENTATION_LOCATION_KEY, new Long(0)).getId()
               );
 
+        
+        	//get all possible refdoc names from categories
+        	Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
+
+        	if (catValues!=null){
+            	//get list of ref docs for activity
+            	Collection<AmpActivityReferenceDoc> activityRefDocs=ActivityUtil.getReferenceDocumentsFor(eaForm.getActivityId());
+
+            	//create map where keys are category value ids.
+            	Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=
+            		new ActivityUtil.CategoryIdRefDocMapBuilder().createMap(activityRefDocs);
+            	
+            	//create arrays, number of elements as much as category values
+            	Long[] refdocIds=new Long[catValues.size()];
+            	String[] refdocComments=new String[catValues.size()];
+            	
+            	int c=0;
+            	int selectedIds=0;
+            	List<ReferenceDoc> refDocs=new ArrayList<ReferenceDoc>();
+            	for(AmpCategoryValue catVal: catValues){
+            		AmpActivityReferenceDoc refDoc=categoryRefDocMap.get(catVal.getId());
+            		ReferenceDoc doc=new ReferenceDoc();
+            		doc.setCategoryValueId(catVal.getId());
+            		doc.setCategoryValue(catVal.getValue());
+            		if (refDoc==null){
+            			refdocComments[c]="";
+            			doc.setComment("");
+            			doc.setChecked(false);
+            		}else{
+            			refdocIds[selectedIds++]=refDoc.getCategoryValue().getId();
+            			refdocComments[c]=refDoc.getComment();
+            			doc.setComment(refDoc.getComment());
+            			doc.setRefDocId(refDoc.getId());
+            			doc.setChecked(true);
+            		}
+            		refDocs.add(doc);
+            		c++;
+            	}
+            	
+            	//set selected ids
+            	eaForm.setSelectedReferenceDocs(refdocIds);
+            	//set all comments, someare empty
+            	eaForm.setRefDocComments(refdocComments);
+            	
+            	eaForm.setReferenceDocs(refDocs);
+        		
+        	}
+        	
+        
         // load the modalities from the database
         /*if (eaForm.getModalityCollection() == null) { // no longer necessary since they are in Category Manager
          modalColl = DbUtil.getAmpModality();
@@ -551,7 +605,7 @@ public class AddAmpActivity
 
         // load all the active currencies
         eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
-        
+
         eaForm.setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
 
         // load all the perspectives
@@ -567,6 +621,9 @@ public class AddAmpActivity
             "&referrer=" + eaForm.getContext() +
             "/aim/addActivity.do?edit=true";
         response.sendRedirect(eaForm.getContext() + url);
+      }
+      else if (eaForm.getStep().equals("1_5")) { // show the 'Refernces' step page.
+          return mapping.findForward("addActivityStep1_5");
       }
       else if (eaForm.getStep().equals("2.2")) { // shows the edit page of the editor module
           eaForm.setStep("2");
@@ -605,7 +662,7 @@ public class AddAmpActivity
   	          setEditorKey(eaForm.getMinorities(), request);
   	        }
     	  
-    	  return mapping.findForward("addActivityStep2");
+        return mapping.findForward("addActivityStep2");
       }
       else if (eaForm.getStep().equals("3")) { // show the step 3 page.
         return mapping.findForward("addActivityStep3");
@@ -850,7 +907,7 @@ public class AddAmpActivity
 	} catch (EditorException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
-	}
+}
   }
 }
 

@@ -109,12 +109,12 @@ public class FieldVisibilityTag extends BodyTagSupport {
  		    AmpFieldsVisibility ampFieldFromTree=ampTreeVisibility.getFieldByNameFromRoot(getName());
    			HashMap<String, HttpSession> sessionMap=new HashMap<String, HttpSession>();
    			sessionMap.put("session", pageContext.getSession());
-   			if(ampFieldFromTree.canDo("view", sessionMap))   
+   			//if(ampFieldFromTree.canDo("view", sessionMap))   
    				if(isFieldActive (ampTreeVisibility)){
    				   pageContext.getOut().print(bodyText);
    			    }
    			    else return SKIP_BODY;//the field is not active!!!
-   			else return SKIP_BODY;
+//   			else return SKIP_BODY;
    			   
    		   }
     	   

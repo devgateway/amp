@@ -206,10 +206,12 @@
 																		<table width="100%" cellspacing="5">
 																			<tr>
 																				<td width="50%" align="right">
-																					<html:submit value="Save" styleClass="dr-menu"/>
+																					<c:set var="translation"><digi:trn key="aim:teamWorkspaceSetup:members:save">save</digi:trn> </c:set>
+																					<html:submit value="${translation}" styleClass="dr-menu"/>
 																				</td>	
 																				<td width="50%" align="left">	
-																					<html:reset value="Cancel" styleClass="dr-menu" onclick="javascript:history.go(-1)"/>
+																					<c:set var="translation"><digi:trn key="aim:teamWorkspaceSetup:members:cancel">cancel</digi:trn> </c:set>
+																					<html:reset value="${translation}" styleClass="dr-menu" onclick="javascript:history.go(-1)"/>
 																				</td>
 																			</tr>
 																		</table>

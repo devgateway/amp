@@ -71,7 +71,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
     private String currencyCode;
     private String funDate;
 
-
+    private Set referenceDocs;
 
     private Set activityPrograms;
     // use contFirstName and contLastName instead.
@@ -1201,6 +1201,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	@Override
 	public Class getPermissibleCategory() {
 		return AmpActivity.class;
+	}
+
+	public Set getReferenceDocs() {
+		return referenceDocs;
+	}
+
+	public void setReferenceDocs(Set referenceDocs) {
+		this.referenceDocs = referenceDocs;
 	}
 	
 

@@ -19,6 +19,8 @@ public class CategoryConstants {
 	public static final String IMPLEMENTATION_LOCATION_NAME			= "Implementation Location";
 	public static final String IMPLEMENTATION_LOCATION_KEY				= "implementation_location";
 	
+	public static final String REFERENCE_DOCS_KEY = "reference_docs";
+	
 	public static final String TEAM_TYPE_NAME		= "Team Type";
 	public static final String TEAM_TYPE_KEY		= "team_type";
 	

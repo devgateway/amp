@@ -5,9 +5,11 @@
  */
 package org.dgfoundation.amp.visibility;
 
+import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
@@ -47,8 +49,9 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		// TODO Auto-generated constructor stub
 	}
 		public int doStartTag() throws JspException {
-		
+	
  	   ServletContext ampContext=pageContext.getServletContext();
+ 	   
 	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 	   if(ampTreeVisibility!=null)
 		   if(!existFieldinDB(ampTreeVisibility)){
@@ -62,7 +65,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 	   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 	   		   }
-	   		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+	   		ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 	   		if(ampTreeVisibility!=null)
 	   		   if(!isFeatureTheParent(ampTreeVisibility)){
 	   			   //update(featureId, fieldname);
@@ -97,20 +100,22 @@ public class FieldVisibilityTag extends BodyTagSupport {
     	    * 
     	    * if field is active then display the content
     	    */
-    	   if(ampTreeVisibility!=null)
-    	   if(! existFeature(ampTreeVisibility)) {
-    		   //error
-    		  //System.out.println("error!!!! feature "+this.getFeature()+" doesn't exist");
-    		  return SKIP_BODY;
-    	   }
-   		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+    	   
    		   if(ampTreeVisibility!=null)
-   		   if(isFieldActive (ampTreeVisibility)){
-   			pageContext.getOut().print(bodyText);
-   		   }
-   		   else{
-   			//System.out.println("Field MANAGER!!!! field "+this.getName()+" is not ACTIVE");
-   			   ;//the field is not active!!!
+   		   {
+   			if(! existFeature(ampTreeVisibility)) 
+ 			   return SKIP_BODY;
+   			
+ 		    AmpFieldsVisibility ampFieldFromTree=ampTreeVisibility.getFieldByNameFromRoot(getName());
+   			HashMap<String, HttpSession> sessionMap=new HashMap<String, HttpSession>();
+   			sessionMap.put("session", pageContext.getSession());
+   			if(ampFieldFromTree.canDo("view", sessionMap))   
+   				if(isFieldActive (ampTreeVisibility)){
+   				   pageContext.getOut().print(bodyText);
+   			    }
+   			    else return SKIP_BODY;//the field is not active!!!
+   			else return SKIP_BODY;
+   			   
    		   }
     	   
        }

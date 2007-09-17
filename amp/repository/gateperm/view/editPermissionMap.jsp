@@ -14,6 +14,8 @@ function submitForm(mode) {
 
 <html:hidden property="mode"/>
 
+<digi:errors/>
+
 <table border="1">
 <tr><td align="right">Permissible Category</td><td>
 <html:select property="permissibleCategory" onchange="submitForm('permissibleCategoryPicked')">

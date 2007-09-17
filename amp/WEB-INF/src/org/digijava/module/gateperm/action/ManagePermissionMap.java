@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -106,6 +108,17 @@ public class ManagePermissionMap extends MultiAction {
 	else 
 		globalPermissionMapForPermissibleClass = (PermissionMap) hs.get(PermissionMap.class,globalPermissionMapIdForPermissibleClass );	
 	
+	if(pf.getPermissionId().longValue()==0 && globalPermissionMapForPermissibleClass.getId()==null)  {
+		PersistenceManager.releaseSession(hs);
+		 return mapping.getInputForward();
+	} else if(pf.getPermissionId().longValue()==0) {
+		hs.delete(globalPermissionMapForPermissibleClass);
+		hs.flush();
+		pf.setPermissionId(new Long(0));
+		PersistenceManager.releaseSession(hs);
+		return mapping.getInputForward();		
+	}
+	
 	globalPermissionMapForPermissibleClass.setObjectIdentifier(null);
 	globalPermissionMapForPermissibleClass.setPermissibleCategory(pf.getPermissibleCategory());
 	Permission p = (Permission) hs.get(Permission.class, pf.getPermissionId());
@@ -124,6 +137,13 @@ public class ManagePermissionMap extends MultiAction {
 	Iterator i = pf.getPermissionMaps().iterator();
 	while (i.hasNext()) {
 	    PermissionMap element = (PermissionMap) i.next();
+	    if(element.getId()!=null) {
+	    	Long elementId=element.getId();
+	    	Long permissionId = element.getPermissionId();
+	    	element=(PermissionMap) hs.get(PermissionMap.class, elementId);
+	    	element.setPermissionId(permissionId);
+	    }
+	    
 	    // we ignore unpersisted unselected permission maps
 	    if (element.getId() == null && element.getPermissionId() == 0)
 		continue;
@@ -131,6 +151,7 @@ public class ManagePermissionMap extends MultiAction {
 	    // we delete previously persisted but unselected permissions
 	    if (element.getId() != null && element.getPermissionId() == 0) {
 		hs.delete(element);
+		transaction.commit();
 		continue;
 	    }
 	    // we save/update anything else
@@ -144,7 +165,7 @@ public class ManagePermissionMap extends MultiAction {
 
 	PersistenceManager.releaseSession(hs);
 
-	return mapping.getInputForward();
+	return modePermissibleCategoryPicked(mapping, pf, request, response);	
     }
 
     private ActionForward modeReset(ActionMapping mapping, PermissionMapForm form, HttpServletRequest request,

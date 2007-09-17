@@ -172,7 +172,7 @@ public final class PermissionUtil {
 	    session = PersistenceManager.getSession();
 
 	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
-		    + " p WHERE p.permissibleCategory=:categoryName AND (p.objectIdentifier is null OR p.objectIdentifier=:objectId) ORDER BY p.objectId");
+		    + " p WHERE p.permissibleCategory=:categoryName AND (p.objectIdentifier is null OR p.objectIdentifier=:objectId) ORDER BY p.objectIdentifier");
 	    query.setParameter("objectId", obj.getIdentifier());
 	    query.setParameter("categoryName", obj.getPermissibleCategory().getSimpleName());
 	    List col = query.list();

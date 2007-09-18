@@ -819,9 +819,16 @@ public class CurrencyUtil {
 //			q.setParameter("currencyCode", currencyCode, Hibernate.STRING);
 
 //			q.setParameter("exchangeRateDate", exchangeRateDate,Hibernate.DATE);
-			if (q.list().size() > 0)
+			boolean searchOther = false;
+			if (q.list().size() > 0){
 				exchangeRate = (Double) q.list().get(0);
-			else {
+				if (exchangeRate == null)
+					searchOther = true;
+			}
+			else
+				searchOther = true;
+				
+			if (searchOther){
 				queryString = "select f.exchangeRate from "
 						+ AmpCurrencyRate.class.getName()
 						+ " f where (f.toCurrencyCode=:currencyCode) and (f.exchangeRateDate<:exchangeRateDate) order by f.exchangeRateDate desc";
@@ -830,8 +837,12 @@ public class CurrencyUtil {
 							Hibernate.STRING);
 					q.setParameter("exchangeRateDate", exchangeRateDate,
 							Hibernate.DATE);
-					if (q.list().size() > 0)
+					if (q.list().size() > 0){
 						exchangeRate = (Double) q.list().get(0);
+						Iterator itr = q.list().iterator();
+						while ((exchangeRate == null)&&(itr.hasNext())) //fix for null currency
+							exchangeRate = (Double) itr.next();
+					}
 					else {
 						queryString = "select f.exchangeRate from "
 								+ AmpCurrencyRate.class.getName()
@@ -841,8 +852,12 @@ public class CurrencyUtil {
 								Hibernate.STRING);
 						q.setParameter("exchangeRateDate", exchangeRateDate,
 								Hibernate.DATE);
-						if (q.list().size() > 0)
+						if (q.list().size() > 0){
 							exchangeRate = (Double) q.list().get(0);
+							Iterator itr = q.list().iterator();
+							while ((exchangeRate == null)&&(itr.hasNext())) //fix for null currency
+								exchangeRate = (Double) itr.next();
+						}
 					}
 				}
 

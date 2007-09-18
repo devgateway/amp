@@ -28,7 +28,7 @@
 			document.aimAddOrgGroupForm.target = window.opener.name;
 			document.aimAddOrgGroupForm.submit();
 			window.close();
-			window.opener.reload();
+			return true;
 		}
 	}
 
@@ -50,7 +50,7 @@
 	}
 
 	function unload() {
-      window.opener.document.aimAddOrgForm.currUrl.value="";
+        //window.opener.document.aimAddOrgForm.currUrl.value="";
 	}
 
 </script>

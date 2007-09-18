@@ -24,6 +24,17 @@
 		document.aimAddOrgForm.target = "_self";
 		document.aimAddOrgForm.submit();
 	}
+
+	function addGroup() {
+		openNewWindow(600, 400);
+	 	<digi:context name="selectLoc" property="context/module/moduleinstance/editOrgGroup.do" />
+        var id = document.aimAddOrgForm.ampOrgId.value;
+		url = "<%= selectLoc %>?action=createGroup&ampOrgId=" + id;
+		document.aimAddOrgForm.action = url;
+	 	document.aimAddOrgForm.target = popupPointer.name;
+		document.aimAddOrgForm.submit();
+	}
+
 	function removeFundingDetail(index) {
 		var flag = confirm("Are you sure you want to remove the selected transaction ?");
 		if(flag != false) {
@@ -475,7 +486,7 @@ function loadPage()
 																		</td>
 																		<td width="380" height="1" colspan="2">
                                                                  				<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-																				<a href="/aim/orgGroupManager.do">
+																				<a href="javascript:addGroup()">
 																					<digi:trn key="aim:addOrganizationGroup">Add a Group</digi:trn>
 																				</a>
 																		</td>

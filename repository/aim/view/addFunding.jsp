@@ -6,6 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
@@ -256,7 +259,10 @@
 			<digi:trn key="aim:pleaseEnterTheAmountInThousands">
 			Please enter amount in thousands (000)</digi:trn>
 	</td></tr>
-	
+	<% int tempIndex = 0; %>
+	<% String tempIndexStr = ""; %>
+	<feature:display module="Funding" name="MTEF Projections">
+	<field:display feature="MTEF Projections" name="MTEFProjections">
 	<tr>
     	<td width="100%" vAlign="top">
 
@@ -272,7 +278,7 @@
 				<tr bgcolor="#003366" class="textalb" align="center">
 					<td><b><font color="white"><digi:trn key="aim:Projected">Projected</digi:trn>/<br><digi:trn key="aim:Pipeline">Pipeline</digi:trn></font></b>
 					</td>
-					<td><b><font color="white"><digi:trn key="aim:Amount">Amount</digi:trn></font></b>
+					<td><b><font color="white"><digi:trn key="aim:amount">Amount</digi:trn></font></b>
 					</td>
 					<td><b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b>
 					</td>
@@ -280,8 +286,7 @@
 					</td>
 				</tr>
 				
-				<% int tempIndex = 0; %>
-				<% String tempIndexStr = ""; %>
+				
 				<c:if test="${ !empty aimEditActivityForm.fundingMTEFProjections}">
 				<c:set var="indexMTEF" value="-1"/>
 				<c:forEach var="mtefProjection" items="${aimEditActivityForm.fundingMTEFProjections}">
@@ -357,7 +362,8 @@
 				</table>
 				</td>
 				</tr>
-
+	</field:display>
+	</feature:display>
 
 	<!-- commitments -->
 	<tr>

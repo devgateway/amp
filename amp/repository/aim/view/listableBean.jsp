@@ -19,27 +19,42 @@
 
 <!-- Display the bean in a table style -->
 <logic:equal name="style" value="table">
-	<table width="100%">
-		<tr>
-			<td colspan="2" align="center"><i><bean:write name="listable"
-				property="beanName" /></i></td>
-		</tr>
+	<TABLE width="100%">
+		<TR>
+			<TD colspan="2" align="center"><I><bean:write name="listable"
+				property="beanName" /></I></TD>
+		</TR>
 		<logic:iterate id="prop" name="bean" property="propertiesMap">
-			<tr>
-				<td align="right"><b> <digi:trn key="${prefix}:${prop.key}">${prop.key}</digi:trn>
-				:</b></td>
-				<td><bean:write name="prop" property="value" /></td>
-			</tr>
+			<TR>
+				<TD align="right"><B> <digi:trn key="${prefix}:${prop.key}">${prop.key}</digi:trn>
+				:</B></TD>
+				<TD><logic:equal name="prop" property="value.class.simpleName"
+					value="Boolean">
+					<digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
+				</logic:equal> <logic:notEqual name="prop"
+					property="value.class.simpleName" value="Boolean">
+					<bean:write name="prop" property="value" />
+				</logic:notEqual></TD>
+
+
+			</TR>
 		</logic:iterate>
-	</table>
+	</TABLE>
 </logic:equal>
 
 <!-- Display the bean in a comma separated list style -->
 <logic:equal name="style" value="list">
-	<i><bean:write name="listable" property="beanName" /></i>
+	<I><bean:write name="listable" property="beanName" /></I>
 	<logic:iterate id="prop" name="bean" property="propertiesMap">
-		<b> <digi:trn key="${prefix}:${prop.key}">${prop.key}</digi:trn>
-		:</b>
-		<bean:write name="prop" property="value" />;
-</logic:iterate>
+		<B> <digi:trn key="${prefix}:${prop.key}">${prop.key}</digi:trn> :</B>
+		<logic:equal name="prop" property="value.class.simpleName"
+			value="Boolean">
+			<digi:trn key="${prefix}:${prop.value}">${prop.value}</digi:trn>
+		</logic:equal>
+		<logic:notEqual name="prop" property="value.class.simpleName"
+			value="Boolean">
+			<bean:write name="prop" property="value" />
+		</logic:notEqual>
+
+	</logic:iterate>
 </logic:equal>

@@ -167,6 +167,40 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 
+	<tr>
+		<c:if test="${aimEditActivityForm.step != '1_5'}">
+		<td nowrap="nowrap">
+			<IMG alt=Link height="10" src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+			<c:set var="trnClickToAdd1">
+				<digi:trn key="aim:editMenu:referenceTitle">References</digi:trn>
+			</c:set>
+			<a href="javascript:gotoStep('1_5')" class="menu" title="${trnClickToAdd1}">
+				<digi:trn key="aim:editMenu:References">References</digi:trn>
+			</a>
+		</td>
+		</c:if>
+		<c:if test="${aimEditActivityForm.step == '1_5'}">
+		<td nowrap="nowrap">
+			<table width="100%" cellspacing="0" cellpadding="0" valign="top" align="left" border="0">
+				<tr>
+					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					</td>
+					<td bgcolor="#3399ff" height="19" nowrap="nowrap">
+						<IMG alt=Link height="10" src="../ampTemplate/images/arrow-th-BABAB9.gif" width="15">
+						<span class="textalb">
+							<digi:trn key="aim:editMenu:References">References</digi:trn>
+						</span>
+					</td>
+					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					</td>
+				</tr>
+			</table>
+		</td>
+		</c:if>
+	</tr>
+
+
+
 	<feature:display name="Location" module="Project ID and Planning">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 2}">

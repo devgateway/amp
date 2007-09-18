@@ -148,15 +148,10 @@
 	<td width="500">
 	<digi:trn key="rep:pop:SelectedFilters">Currently Selected Filters:</digi:trn>
 		<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
-			<bean:define id="filterName" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>"/>
-<%--
-			<logic:iterate id="element" name="filterName" property="viewableParameters">
-			<digi:trn key="arFilter:${element.key}">
-			${element.value}
-			</digi:trn>
-			</logic:iterate>
---%>	
-			
+		<bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
+		<bean:define id="listableStyle" value="list" toScope="request"/>
+		<bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>		
+			<jsp:include page="${listable.jspFile}"/>		
 		</logic:present>
 	</td>
 	</tr>

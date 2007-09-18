@@ -27,8 +27,9 @@ import org.apache.log4j.Logger;
 public abstract class PropertyListable implements Cloneable {
 
     @Retention(RetentionPolicy.RUNTIME)
-    public @interface PropertyListableIgnore {
+    public @interface PropertyListableIgnore {    	
     }
+    
 
     
     @Override
@@ -56,7 +57,7 @@ public abstract class PropertyListable implements Cloneable {
     
     @PropertyListableIgnore
     public Map getPropertiesMap() {
-	Map<String, String> ret = new HashMap<String, String>();
+	Map<String, Object> ret = new HashMap<String, Object>();
 	BeanInfo beanInfo = null;
 	try {
 	    beanInfo = Introspector.getBeanInfo(this.getClass());
@@ -69,7 +70,7 @@ public abstract class PropertyListable implements Cloneable {
 		Object object = m.invoke(this, new Object[] {});
 		if (object == null ) continue;
 		ret.put(propertyDescriptors[i].getName(), object instanceof Collection ? Util.toCSString(
-			(Collection) object, false) : object.toString());
+			(Collection) object, false) : object);
 	    }
 	} catch (IntrospectionException e) {
 	    logger.error(e);

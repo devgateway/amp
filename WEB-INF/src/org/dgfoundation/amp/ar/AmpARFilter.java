@@ -334,6 +334,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	/**
 	 * @return Returns the perspectiveCode.
 	 */
+	@PropertyListableIgnore
 	public AmpPerspective getPerspective() {
 		return perspective;
 	}
@@ -453,7 +454,9 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	}
 
 	public void setText(String text) {
+		if(text.trim().length()==0) this.text=null;
 		this.text = text;
+		
 	}
 
 	public Integer getFromYear() {

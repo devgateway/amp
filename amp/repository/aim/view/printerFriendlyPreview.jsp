@@ -341,7 +341,7 @@
                                                               ${fund.typeOfAssistance}
 																				</td>
 																			</tr>
-																			<tr>
+																				<%-- <tr>
 																				<td width="35%">
 																					<digi:trn key="aim:financingInstrument">
 																					Financing Instrument</digi:trn>
@@ -357,7 +357,7 @@
 																						</c:forEach>
 																					</c:if>
 																				</td>
-																			</tr>																			
+																			</tr>	 --%>
 																			<c:if test="${!empty fund.fundingDetails}">
                                                               <tr>
                                                                 <td colspan="3">

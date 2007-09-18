@@ -48,6 +48,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	private AmpTeamMember ownerId;	// the member that created the report
 	private Date updatedDate;		// last date when the report was modified
 	
+	private String nameTrn;
 	//to be set in order to get information for translation purposes in pdf and excel reports 
 	private String siteId;
 	private String locale;
@@ -290,5 +291,9 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	
 	public String getNameTrn(){
 		return this.name.toLowerCase().replaceAll(" ",	"");
+	}
+
+	public void setNameTrn(String nameTrn) {
+		this.nameTrn = nameTrn;
 	}
 }

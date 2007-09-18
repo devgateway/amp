@@ -19,6 +19,7 @@ import java.util.TreeSet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -36,7 +37,7 @@ import org.digijava.module.aim.util.TeamUtil;
  * @since Aug 5, 2006
  *
  */
-public class AmpARFilter implements Filter {
+public class AmpARFilter extends PropertyListable implements Filter {
 	
 	protected static Logger logger = Logger.getLogger(AmpARFilter.class);
 	private Long id;
@@ -231,6 +232,7 @@ public class AmpARFilter implements Filter {
 	/**
 	 * @return Returns the generatedFilterQuery.
 	 */
+	@PropertyListableIgnore
 	public String getGeneratedFilterQuery() {
 		return generatedFilterQuery;
 	}
@@ -238,6 +240,7 @@ public class AmpARFilter implements Filter {
 	/**
 	 * @return Returns the initialQueryLength.
 	 */
+	@PropertyListableIgnore
 	public int getInitialQueryLength() {
 		return initialQueryLength;
 	}
@@ -350,6 +353,7 @@ public class AmpARFilter implements Filter {
 		this.publicView = publicView;
 	}
 
+	@PropertyListableIgnore
 	public boolean isWidget() {
 		return widget;
 	}
@@ -435,6 +439,7 @@ public class AmpARFilter implements Filter {
 		this.planMinRank = planMinRank;
 	}
 
+	@PropertyListableIgnore
 	public Long getAmpReportId() {
 		return ampReportId;
 	}
@@ -489,5 +494,10 @@ public class AmpARFilter implements Filter {
 
 	public void setJointCriteria(Boolean jointCriteria) {
 		this.jointCriteria = jointCriteria;
+	}
+
+	@Override
+	public String getBeanName() {
+		return null;
 	} 
 }

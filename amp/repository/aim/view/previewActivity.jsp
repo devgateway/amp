@@ -501,6 +501,7 @@ function disable() {
                                          </c:if>
 										</td>
 									</tr>
+									<logic:present name="aimEditActivityForm" property="allComments">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:purposeComments">
@@ -526,6 +527,7 @@ function disable() {
 
 										</td>
 									</tr>
+									</logic:present>
 									</field:display>
 
 									<field:display feature="Identification" name="Results">
@@ -541,7 +543,7 @@ function disable() {
                                          </c:if>
 										</td>
 									</tr>
-
+									<logic:present name="aimEditActivityForm" property="allComments">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:resultsComments">
@@ -567,6 +569,7 @@ function disable() {
 
 										</td>
 									</tr>
+									</logic:present>
 									</field:display>
 									<field:display name="Activity Budget" feature="Identification">
 									<tr>

@@ -69,7 +69,7 @@ public class ViewNewAdvancedReport extends Action {
 		
 		if(ampAppSettings!=null)
 			request.setAttribute("recordsPerPage", ampAppSettings.getDefaultRecordsPerPage());
-		else request.setAttribute("recordsPerPage", new Integer(10));
+		else request.setAttribute("recordsPerPage", new Integer(25));
 		
 		
 		//check currency code:

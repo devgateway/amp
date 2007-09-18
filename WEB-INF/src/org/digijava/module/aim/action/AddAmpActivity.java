@@ -350,7 +350,7 @@ public class AddAmpActivity
           String currentLang = RequestUtils.getNavigationLanguage(request).
               getCode();
           String refUrl = RequestUtils.getSourceURL(request);
-          String key = eaForm.getPurpose();
+          String key = eaForm.getLessonsLearned();
           Editor ed = org.digijava.module.editor.util.DbUtil.createEditor(user,
               currentLang,
               refUrl,

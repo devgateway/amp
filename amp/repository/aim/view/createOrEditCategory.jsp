@@ -146,7 +146,11 @@
 				</tr>
 				<tr>
 					<td height=16 vAlign=center width=571>
-						<span class=subtitle-blue>Category Manager Creator</span>
+						<span class=subtitle-blue>
+							<digi:trn key="aim:categoryManagerCreator">
+								Category Manager Creator
+							</digi:trn>					
+						</span>
 					</td>
 				</tr>
 				<tr>

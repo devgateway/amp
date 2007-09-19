@@ -4,6 +4,7 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
@@ -163,7 +164,10 @@
 																		</td>
 																		<td width="30%">
 																	          <html:select property="orgTypeId">
-																	    		<html:option value="-1">-- Select Type --</html:option>
+																	            <c:set var="translation">
+																					<digi:trn key="aim:btnSelectType">Select Type</digi:trn>
+																				</c:set>
+																	    		<html:option value="-1">-- ${translation} --</html:option>
 																	    		<logic:notEmpty name="aimAddOrgGroupForm" property="orgTypeColl">
 																					<html:optionsCollection name="aimAddOrgGroupForm" property="orgTypeColl" 
 																		   									value="ampOrgTypeId" label="orgType" />

@@ -4,6 +4,7 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
@@ -162,13 +163,22 @@
 																			<table width="100%" cellspacing="5">
 																				<tr>
 																					<td width="45%" align="right">
-																						<input type="button" value="Save" class="dr-menu" onclick="check()">
+																						<c:set var="translation">
+																							<digi:trn key="aim:btnSave">Save</digi:trn>
+																						</c:set>
+																						<input type="button" value="${translation}" class="dr-menu" onclick="check()">
 																					</td>
 																					<td width="8%" align="left">
-																						<input type="reset" value="Reset" class="dr-menu">
+																						<c:set var="translation">
+																							<digi:trn key="aim:btnReset">Reset</digi:trn>
+																						</c:set>
+																						<input type="reset" value="${translation}" class="dr-menu">
 																					</td>
 																					<td width="45%" align="left">
-																						<input type="button" value="Cancel" class="dr-menu" onclick="move()">
+																						<c:set var="translation">
+																							<digi:trn key="aim:btnCancel">Cancel</digi:trn>
+																						</c:set>																					
+																						<input type="button" value="${translation}" class="dr-menu" onclick="move()">
 																					</td>
 																				</tr>
 																			</table>
@@ -177,7 +187,10 @@
 																	<logic:equal name="aimAddOrgTypeForm" property="deleteFlag" value="delete" >
 																		<tr>
 																			<td colspan="2" width="60%"  align="center">
-																				<input type="button" value="Delete this Type" class="dr-menu" onclick="msg()">
+																				<c:set var="translation">
+																					<digi:trn key="aim:btnDeleteThisType">Delete this Type</digi:trn>
+																				</c:set>																			
+																				<input type="button" value="${translation}" class="dr-menu" onclick="msg()">
 																			</td>
 																		</tr>
 																	</logic:equal>

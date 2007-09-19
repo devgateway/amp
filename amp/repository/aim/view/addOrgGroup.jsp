@@ -30,7 +30,7 @@
 			document.aimAddOrgGroupForm.submit();
 			window.close();
 			<digi:context name="selectLoc" property="/aim/editOrganisation.do" />
-		    url = "<%= selectLoc %>?action=createGroup&orgGroupAdded=true";
+		    url = "<%= selectLoc %>?orgGroupAdded=true";
 		  	window.opener.document.aimAddOrgForm.action = url;
 	 	 	window.opener.document.aimAddOrgForm.target = window.opener.name;
 	 	

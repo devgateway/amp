@@ -44,9 +44,9 @@
 	</td></tr>
 	<digi:form action="/visibilityManager.do" method="post" >
 	<tr>
-		<th>Template name</th>
+		<th><digi:trn key="aim:featureManagerTemplateName">Template name</digi:trn></th>
 		
-		<th> Options</th>
+		<th><digi:trn key="aim:featureManagerOptions">Options</digi:trn></th>
 	</tr>
 	<jsp:useBean id="urlParams10" type="java.util.Map" class="java.util.HashMap"/>
 	<jsp:useBean id="urlParams11" type="java.util.Map" class="java.util.HashMap"/>

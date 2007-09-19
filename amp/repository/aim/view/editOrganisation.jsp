@@ -24,12 +24,21 @@
 		document.aimAddOrgForm.target = "_self";
 		document.aimAddOrgForm.submit();
 	}
-
+	function addGroup99() {
+		openNewWindow(600, 400);
+	 	<digi:context name="selectLoc" property="/aim/editOrganisation.do" />
+		  var id = document.aimAddOrgForm.ampOrgId.value;
+		url = "<%= selectLoc %>?action=createGroup";
+		  document.aimAddOrgForm.action = url;
+	 	 document.aimAddOrgForm.target = popupPointer.name;
+	 	//alert(document.aimAddOrgForm.actionGroup.value);
+		document.aimAddOrgForm.submit();
+	}
 	function addGroup() {
 		openNewWindow(600, 400);
 	 	<digi:context name="selectLoc" property="context/module/moduleinstance/editOrgGroup.do" />
         var id = document.aimAddOrgForm.ampOrgId.value;
-		url = "<%= selectLoc %>?action=createGroup&ampOrgId=" + id;
+		url = "<%= selectLoc %>?action=createGroup";
 		document.aimAddOrgForm.action = url;
 	 	document.aimAddOrgForm.target = popupPointer.name;
 		document.aimAddOrgForm.submit();

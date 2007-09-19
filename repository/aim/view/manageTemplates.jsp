@@ -93,7 +93,7 @@
 	</tr>
 	<tr>
 		<td>
-				<c:set var="translation">
+			<c:set var="translation">
 					<digi:trn key="aim:setTemplateInUse">Click here to Set the Template in use</digi:trn>
 			</c:set>
 			<digi:link href="/GlobalSettings.do" title="${translation}" ><digi:trn key="aim:GlobalSettings">Global Settings</digi:trn></digi:link>

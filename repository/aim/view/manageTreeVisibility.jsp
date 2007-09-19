@@ -40,7 +40,7 @@
 		<td>
 		
 	
-	<p>Template Name: <input type="text" name="templateName" size="30" value="<%=session.getAttribute("templateName")%>"/></p>
+	<p><digi:trn key="aim:newFeatureTemplateNameBbl">Template Name:</digi:trn> <input type="text" name="templateName" size="30" value="<%=session.getAttribute("templateName")%>"/></p>
 	<ul id="dhtmlgoodies_tree" class="dhtmlgoodies_tree">
 	<bean:define name="aimVisibilityManagerForm" property="ampTreeVisibility" id="template" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page"/>
 	<bean:define name="template" property="items" id="modules" type="java.util.Map"  toScope="page"/>
@@ -67,8 +67,10 @@
 		</li>
 		</font>
 	</ul>
-		
-	<html:submit style="dr-menu" value="Save Tree Visibility" property="saveTreeVisibility"/>
+	<c:set var="translation">
+		<digi:trn key="aim:treeVisibilitiSaveTree">Save Tree Visibility</digi:trn>
+	</c:set>
+	<html:submit style="dr-menu" value="${translation}" property="saveTreeVisibility"/>
 		</td>
 	</tr>
 </table>

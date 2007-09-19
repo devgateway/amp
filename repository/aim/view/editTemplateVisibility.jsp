@@ -56,7 +56,7 @@
 	</logic:iterate>
 	</logic:notEmpty>
 	<tr><td>&nbsp;</td><td colspan="2">
-	Template Name: <input type="text" name="templateName" size="30" value="<%=session.getAttribute("templateName")%>"/>
+	<digi:trn key="aim:newFeatureTemplateNameBbl">Template Name:</digi:trn> <input type="text" name="templateName" size="30" value="<%=session.getAttribute("templateName")%>"/>
 	</td></tr>
 	<html:hidden name="aimVisibilityManagerForm" property="templateId" value="<%=request.getParameter("templateId")%>"/>
 	<tr><td>&nbsp;</td><td colspan="2">

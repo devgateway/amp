@@ -37,18 +37,27 @@
 			<td width="100%"> <bean:write name="feature" property="name"/> </td>
 			<td>
 			<select name='<%="feature:"+feature.getNameTrimmed()%>' style="width:130px; border:1px solid #000; color:#ff0000;">
-				<option value="disable" selected>-- Disabled --</option>
-				<option value="enable">-- Enable --</option>											
+				<c:set var="translation">
+					<digi:trn key="aim:newFeatureTemplateDisabled">Disabled</digi:trn>
+				</c:set>			
+				<option value="disable" selected>-- ${translation} --</option>
+				<c:set var="translation">
+					<digi:trn key="aim:newFeatureTemplateEnable">Enable</digi:trn>
+				</c:set>				
+				<option value="enable">-- ${translation} --</option>											
 			</select>
 			</td>
 		</tr>
 	</logic:iterate>
 	<tr><td>&nbsp;</td><td colspan="2">
-	Template Name: <input type="text" name="templateName" size="30"/>
+	<digi:trn key="aim:newFeatureTemplateNameBbl">Template Name:</digi:trn><input type="text" name="templateName" size="30"/>
 	</td></tr>
 	
 	<tr><td>&nbsp;</td><td colspan="2">
-		<html:submit style="dr-menu" value="Save New Template" property="newTemplate"/>
+		<c:set var="translation">
+			<digi:trn key="aim:newFeatureTemplateSaveNewTemplate">Save New Template</digi:trn>
+		</c:set>	
+		<html:submit style="dr-menu" value="${translation}" property="newTemplate"/>
 	</td></tr>
 	</digi:form>
 	

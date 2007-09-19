@@ -23,11 +23,14 @@
 	<digi:form action="/visibilityManager.do" method="post" >
 
 	<tr><td>&nbsp;</td><td colspan="2">
-	Template Name: <input type="text" name="templateName" size="30"/>
+	<digi:trn key="aim:newFeatureTemplateNameBbl">Template Name:</digi:trn> <input type="text" name="templateName" size="30"/>
 	</td></tr>
 	
 	<tr><td>&nbsp;</td><td colspan="2">
-		<html:submit style="dr-menu" value="Save New Template" property="newTemplate"/>
+		<c:set var="translation">
+			<digi:trn key="aim:newFeatureTemplateSaveNewTemplate">Save New Template</digi:trn>
+		</c:set>
+		<html:submit style="dr-menu" value="${translation}" property="newTemplate"/>
 	</td></tr>
 	</digi:form>
 	

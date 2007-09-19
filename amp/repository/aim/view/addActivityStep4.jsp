@@ -272,7 +272,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																					&nbsp;
 																					<a href="javascript:editFunding('
 																						<bean:write name="regionalFunding" property="regionId"/>
-																					')">Edit this funding</a>
+																					')"><digi:trn key="aim:editThisFunding">Edit this funding</digi:trn></a>
 																				</td></tr>
 																				<tr><td>
 																					<!-- Regional funding details -->
@@ -296,12 +296,12 @@ ${fn:replace(message,quote,escapedQuote)}
 																							<table width="100%" cellSpacing=1 cellPadding=3 border=0
 																							bgcolor="#eeeeee">
 																								<tr>
-																									<field:display name="Actual/Planned Commitments" feature="Regional Funding"><td>Actual/Planned</td></field:display>
-																									<field:display name="Total Amount Commitments" feature="Regional Funding"><td>Total Amount</td></field:display>
-																									<field:display name="Currency Commitments" feature="Regional Funding"><td>Currency</td></field:display>
-																									<field:display name="Date Commitments" feature="Regional Funding"><td>Date</td></field:display>
+																									<field:display name="Actual/Planned Commitments" feature="Regional Funding"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
+																									<field:display name="Total Amount Commitments" feature="Regional Funding"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
+																									<field:display name="Currency Commitments" feature="Regional Funding"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
+																									<field:display name="Date Commitments" feature="Regional Funding"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																										<field:display name="Perspective Commitments" feature="Regional Funding"><td>Perspective</td></field:display>
+																										<field:display name="Perspective Commitments" feature="Regional Funding"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
 																									</logic:equal>
 																								</tr>
 																								<logic:iterate name="regionalFunding"
@@ -346,12 +346,12 @@ ${fn:replace(message,quote,escapedQuote)}
 																							<table width="100%" cellSpacing=1 cellPadding=3 border=0
 																							bgcolor="#eeeeee">
 																								<tr>
-																									<field:display name="Actual/Planned Disbursements" feature="Regional Funding"><td>Actual/Planned</td></field:display>
-																									<field:display name="Total Amount Disbursements" feature="Regional Funding"><td>Total Amount</td></field:display>
-																									<field:display name="Currency Disbursements" feature="Regional Funding"><td>Currency</td></field:display>
-																									<field:display name="Date Disbursements" feature="Regional Funding"><td>Date</td></field:display>
+																									<field:display name="Actual/Planned Disbursements" feature="Regional Funding"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
+																									<field:display name="Total Amount Disbursements" feature="Regional Funding"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
+																									<field:display name="Currency Disbursements" feature="Regional Funding"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
+																									<field:display name="Date Disbursements" feature="Regional Funding"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																										<field:display name="Perspective Disbursements" feature="Regional Funding"><td>Perspective</td></field:display>
+																										<field:display name="Perspective Disbursements" feature="Regional Funding"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
 																									</logic:equal>
 																								</tr>
 																								<logic:iterate name="regionalFunding"
@@ -396,12 +396,12 @@ ${fn:replace(message,quote,escapedQuote)}
 																							<table width="100%" cellSpacing=1 cellPadding=3 border=0
 																							bgcolor="#eeeeee">
 																								<tr>
-																									<field:display name="Actual/Planned Expenditures" feature="Regional Funding"><td>Actual/Planned</td></field:display>
-																									<field:display name="Total Amount Expenditures" feature="Regional Funding"><td>Total Amount</td></field:display>
-																									<field:display name="Currency Expenditures" feature="Regional Funding"><td>Currency</td></field:display>
-																									<field:display name="Date Expenditures" feature="Regional Funding"><td>Date</td></field:display>
+																									<field:display name="Actual/Planned Expenditures" feature="Regional Funding"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
+																									<field:display name="Total Amount Expenditures" feature="Regional Funding"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
+																									<field:display name="Currency Expenditures" feature="Regional Funding"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
+																									<field:display name="Date Expenditures" feature="Regional Funding"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																										<field:display name="Perspective Expenditures" feature="Regional Funding"><td>Perspective</td></field:display>
+																										<field:display name="Perspective Expenditures" feature="Regional Funding"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
 																									</logic:equal>
 																								</tr>
 																								<logic:iterate name="regionalFunding"

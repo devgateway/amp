@@ -155,12 +155,12 @@
 																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
 																			bgcolor="#eeeeee">
 																				<tr>
-																					<field:display name="Actual/Planned Disbursements" feature="Components"><td>Actual/Planned</td></field:display>
-																					<field:display name="Total Amount Disbursements" feature="Components"><td>Total Amount</td></field:display>
-																					<field:display name="Currency Disbursements" feature="Components"><td>Currency</td></field:display>
-																					<field:display name="Date Disbursements" feature="Components"><td>Date</td></field:display>
+																					<field:display name="Actual/Planned Disbursements" feature="Components"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
+																					<field:display name="Total Amount Disbursements" feature="Components"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
+																					<field:display name="Currency Disbursements" feature="Components"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
+																					<field:display name="Date Disbursements" feature="Components"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																					<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																						<field:display name="Perspective Disbursements" feature="Components"><td>Perspective</td></field:display>
+																						<field:display name="Perspective Disbursements" feature="Components"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
 																					</logic:equal>
 																				</tr>
 																				<logic:iterate name="selComponents" property="disbursements" 
@@ -312,7 +312,7 @@
 																			<b>
 																				<a href="javascript:
 																				addPhyProgess(-1,<c:out value="${selComponents.componentId}"/>)">
-																				Add Physical Progress</a>
+																				<digi:trn key="aim:addPhysicalProgress">Add Physical Progress</digi:trn></a>
 																			</b>
 																		</td></tr>
 																	</table>																

@@ -199,8 +199,9 @@ public class EditOrganisation
     if (null == editForm.getSectorScheme() ||
         editForm.getSectorScheme().size() < 1)
       editForm.setSectorScheme(SectorUtil.getAllSectorSchemes());
+    String orgGrpAdded = request.getParameter("orgGroupAdded");
     if (null == editForm.getOrgGroupColl() ||
-        editForm.getOrgGroupColl().size() < 1) {
+        editForm.getOrgGroupColl().size() < 1 || "true".equals(orgGrpAdded)) {
       Collection col = DbUtil.getAllOrgGroups();
       if (col != null) {
         List sortedCol = new ArrayList(col);

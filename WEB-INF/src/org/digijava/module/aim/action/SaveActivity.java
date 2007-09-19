@@ -694,6 +694,7 @@ public class SaveActivity extends Action {
 	        		new ActivityUtil.CategoryIdRefDocMapBuilder().createMap(activityRefDocs);
 				
 	        	Set<AmpActivityReferenceDoc> resultRefDocs=new HashSet<AmpActivityReferenceDoc>();
+	        	if(formRefDocs!=null && !formRefDocs.isEmpty())
 				for (Iterator refIter = formRefDocs.iterator(); refIter.hasNext();) {
 					ReferenceDoc refDoc = (ReferenceDoc) refIter.next();
 					if(ArrayUtils.contains(eaForm.getSelectedReferenceDocs(), refDoc.getCategoryValueId())){

@@ -41,7 +41,9 @@ public class AuditLoggerUtil {
 			Collection col = new ArrayList();
 			String qryStr = null;
 			Query qry = null;
-			String objId=(String) o.getIdentifier();
+			String objId;
+			//if(o.getIdentifier() instanceof Long) objId=o.getIdentifier().toString(); 
+			objId=o.getIdentifier().toString();
 			String objType=(String) o.getObjectType();
 			String browser=request.getHeader("user-agent");
 			try {

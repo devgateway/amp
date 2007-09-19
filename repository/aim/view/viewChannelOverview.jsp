@@ -412,7 +412,7 @@ function commentWin(val) {
 																					</td>
 																				</tr>
 																				</field:display>
-																				<field:display name="JointCriteria" feature="Budget">
+																				<field:display name="Joint Criteria" feature="Budget">
 																				<tr>
 																					<td>
 																					<digi:trn key="aim:actJointCriteria">

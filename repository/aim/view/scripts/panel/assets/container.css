@@ -43,10 +43,10 @@ version: 2.2.0
     position:absolute;
     top:0;
     left:0;
-    -moz-opacity: 0.5;
-    opacity:.50;
-
-    background-color:#CCC;
+    -moz-opacity: 0.8;
+  	opacity:.80;
+  	filter: alpha(opacity=80);
+  	background-color:#2f2f2f;
 }
 
 .hide-scrollbars * {

@@ -60,14 +60,11 @@
 </ul>
 </td></tr>
 <script type="text/javascript">
-function initScripts() {
         treeObj = new DHTMLSuite.JSDragDropTree();
         treeObj.setTreeId('tree-<bean:write name="groupReport" property="name"/>');
         treeObj.setMaximumDepth(7);
         treeObj.setMessageMaximumDepthReached('Maximum depth reached'); // If you want to show a message when maximum depth is reached, i.e. on drop.		
         treeObj.init();
         treeObj.showHideNode(false,'tree-<bean:write name="groupReport" property="name"/>');
-        }
-window.onload=initScripts;
 </script>
 </logic:notPresent>

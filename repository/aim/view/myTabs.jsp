@@ -54,11 +54,10 @@
 Click on one of the tabs to display activities. You can create more tabs by using the Advanced Reports Manager.
 </digi:trn>
 </div>
-
 <script type="text/javascript">
-//Start Ajax tabs script for UL with id="maintab" Separate multiple ids each with a comma.
-startajaxtabs("MyTabs");
-reloadTab("MyTabs",tabName);
+	//Start Ajax tabs script for UL with id="maintab" Separate multiple ids each with a comma.
+	startajaxtabs("MyTabs");
+	reloadTab("MyTabs",tabName);
 </script>
 
 <div id="debug"></div>

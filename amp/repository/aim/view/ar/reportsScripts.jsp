@@ -157,32 +157,35 @@ background-color: yellow;
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
 
 
+
 <script type="text/javascript">
-	var myPanel1 = new YAHOO.widget.Panel("new", {
-	    fixedcenter: true,
-	    constraintoviewport: true,
-	    underlay:"shadow",
-	    close:true,
-	    visible:false,
-	    modal:true,
-	    draggable:true} );
+		var myPanel1 = new YAHOO.widget.Panel("new", {
+		    fixedcenter: true,
+		    constraintoviewport: true,
+		    underlay:"shadow",
+		    close:true,
+		    visible:false,
+		    modal:true,
+		    draggable:true} );
+		var myPanel2 = new YAHOO.widget.Panel("new2", {
+		    fixedcenter: true,
+		    constraintoviewport: true,
+		    underlay:"shadow",
+		    close:true,
+		    visible:false,
+		    modal:true,
+		    draggable:true} );
+	function initScripts() {
 	    var msg='\n<digi:trn key="rep:filter:selectFilter">Select filters</digi:trn>';
-	myPanel1.setHeader(msg);
-	myPanel1.setBody("Empty");
-	myPanel1.render(document.body);
-
-	var myPanel2 = new YAHOO.widget.Panel("new2", {
-	    fixedcenter: true,
-	    constraintoviewport: true,
-	    underlay:"shadow",
-	    close:true,
-	    visible:false,
-	    modal:true,
-	    draggable:true} );
-	myPanel2.setHeader("Please select hierarchy sorter criteria");
-	myPanel2.setBody("Empty");
-	myPanel2.render(document.body);
-
+		myPanel1.setHeader(msg);
+		myPanel1.setBody("Empty");
+		myPanel1.render(document.body);
+	
+		myPanel2.setHeader("Please select hierarchy sorter criteria");
+		myPanel2.setBody("Empty");
+		myPanel2.render(document.body);
+	}
+	
 	function showFilter() {
 		var element = document.getElementById("myFilter");
 		element.style.display = "inline";
@@ -201,7 +204,9 @@ background-color: yellow;
 	function hideSorter() {
 		myPanel2.hide();
 	}
+	window.onload=initScripts;
 </script>
+
 <style type="text/css">
 .mask {
   -moz-opacity: 0.8;

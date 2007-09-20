@@ -79,7 +79,10 @@
 	
 
 	function removeFundingDetail(index,type) {
-		var flag = confirm("Are you sure you want to remove the selected transaction ?");
+		<c:set var="translation">
+			<digi:trn key="aim:areYouSureRemoveTransaction">Are you sure you want to remove the selected transaction ?</digi:trn>
+		</c:set>
+		var flag = confirm("${translation}");
 		if(flag != false) {
 			if (type == 0) {
 				document.aimEditActivityForm.event.value = "delCommitments";

@@ -27,9 +27,12 @@
 <!--
 
 function checkSelOrgs() {
+	<c:set var="translation">
+		<digi:trn key="aim:chooseOrganizationToRemove">Please choose an organization to remove</digi:trn>
+	</c:set>
 	if (document.aimEditActivityForm.selOrgs.checked != null) { // only one org. added
 		if (document.aimEditActivityForm.selOrgs.checked == false) {
-			alert("Please choose an organization to remove");
+			alert("${translation}");
 			return false;
 		}
 	} else { // many org. present
@@ -43,7 +46,7 @@ function checkSelOrgs() {
 		}
 
 		if (flag == 0) {
-			alert("Please choose an organization to remove");
+			alert("${translation}");
 			return false;
 		}
 	}
@@ -109,7 +112,10 @@ function resetAll(){
 function validateForm() {
 
 	if (trim(document.aimEditActivityForm.title.value) == "") {
-		alert("Please enter title");
+		<c:set var="translation">
+			<digi:trn key="aim:pleaseEnterTitle">Please enter title</digi:trn>
+		</c:set>
+		alert("${translation}");
 		document.aimEditActivityForm.title.focus();
 		return false;
 	}

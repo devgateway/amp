@@ -257,6 +257,9 @@ function loadPage()
 		var val5 = trim(document.aimAddOrgForm.acronym.value);
 		var val6 = trim(document.aimAddOrgForm.orgCode.value);
 
+		var index3 = document.aimAddOrgForm.ampOrgGrpId.selectedIndex;
+		var val7 = document.aimAddOrgForm.ampOrgGrpId.options[index3].value;
+
 		if (str1.length == 0 || str1 == null) {
 			alert("Please enter name for this Organization.");
 			document.aimAddOrgForm.name.focus();
@@ -275,6 +278,11 @@ function loadPage()
 		if ( val1 == "-1") {
 			alert("Please select type of this Organization.");
 			document.aimAddOrgForm.ampOrgTypeId.focus();
+			return false;
+		}
+		if ( val7 == "-1") {
+			alert("Please select group of this Organization.");
+			document.aimAddOrgForm.ampOrgGrpId.focus();
 			return false;
 		}
 		//if ( val3 == "-1" && val4 != "-1") {
@@ -449,7 +457,7 @@ function loadPage()
 																           <html:select property="ampOrgTypeId" onchange="return orgTypeChanged()">
 																				<c:set var="translation">
 																					<digi:trn key="aim:editOrganisationSelectOrganizationType">Organization Type</digi:trn>
-																				</c:set>																           
+																				</c:set>
 																				<html:option value="-1">-- ${translation} --</html:option>
 																				<logic:notEmpty name="aimAddOrgForm" property="orgType">
 																					<html:optionsCollection name="aimAddOrgForm" property="orgType"
@@ -462,7 +470,7 @@ function loadPage()
 																			<html:select property="regionId" style="display:none">
 																					<c:set var="translation">
 																						<digi:trn key="aim:editOrganisationSelectSpecifyRegion">Specify Region</digi:trn>
-																					</c:set>																			
+																					</c:set>
 																	    			<html:option value="-1">-- ${translation} --</html:option>
 																					<logic:notEmpty name="aimAddOrgForm" property="region">
 																						<html:optionsCollection name="aimAddOrgForm" property="region"
@@ -474,7 +482,7 @@ function loadPage()
 																			<html:select property="regionId" style="display:block">
 																					<c:set var="translation">
 																						<digi:trn key="aim:editOrganisationSelectSpecifyRegion">Specify Region</digi:trn>
-																					</c:set>																			
+																					</c:set>
 																	    			<html:option value="-1">-- ${translation} --</html:option>
 																					<logic:notEmpty name="aimAddOrgForm" property="region">
 																						<html:optionsCollection name="aimAddOrgForm" property="region"
@@ -486,13 +494,13 @@ function loadPage()
 																	</tr>
                                                           			<tr>
 																		<td width="169" align="right" height="30">
-                                                                    		<digi:trn key="aim:organizationGroup">Organization Group</digi:trn>
+                                                                    		<digi:trn key="aim:organizationGroup">Organization Group</digi:trn><font size="2" color="#FF0000">*</font>
 																		</td>
 																	    <td width="380" height="30" colspan="2">
                                                                     		<html:select property="ampOrgGrpId">
 																				<c:set var="translation">
 																					<digi:trn key="aim:editOrganisationSelectGroup">Select Group</digi:trn>
-																				</c:set>				                                                                    		
+																				</c:set>
                                                                     			<html:option value="-1">-- ${translation} --</html:option>
 																	    		<logic:notEmpty name="aimAddOrgForm" property="orgGroup">
 																					<html:optionsCollection name="aimAddOrgForm" property="orgGroup"
@@ -582,7 +590,7 @@ function loadPage()
                                                                     			<html:select property="fiscalCalId">
 																					<c:set var="translation">
 																						<digi:trn key="aim:editOrganisationSelectFiscalCalendar">Fiscal Calendar</digi:trn>
-																					</c:set>	                                                                    			
+																					</c:set>
 																					<html:option value="-1">-- ${translation} --</html:option>
 																					<logic:notEmpty name="aimAddOrgForm" property="fiscalCal">
 																						<html:optionsCollection name="aimAddOrgForm" property="fiscalCal"
@@ -602,7 +610,7 @@ function loadPage()
                                                                     			<html:select property="ampSecSchemeId">
 																					<c:set var="translation">
 																						<digi:trn key="aim:editOrganisationSelectSectorScheme">Sector Scheme</digi:trn>
-																					</c:set>	                                                                                 			
+																					</c:set>
 																					<html:option value="-1">-- ${translation} --</html:option>
 																					<logic:notEmpty name="aimAddOrgForm" property="sectorScheme">
 																						<html:optionsCollection name="aimAddOrgForm" property="sectorScheme"

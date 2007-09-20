@@ -13,6 +13,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 
@@ -51,7 +52,7 @@
 
 	function popup_pdf(val) {
 
-		
+
 
 		openResisableWindow(1000,1000);
 
@@ -91,7 +92,7 @@
 
 	function popup_xls(val) {
 
-		
+
 
 		openResisableWindow(800, 600);
 
@@ -113,7 +114,7 @@
 
 	}
 
-	
+
 
 	function chkYear(val) {
 
@@ -169,9 +170,9 @@
 
 			<table width="100%"  border="0" cellpadding="5" cellspacing="0">
 
-		<%---------------------------------------------------------------------------------------------------------------------------------------%>		
+		<%---------------------------------------------------------------------------------------------------------------------------------------%>
 
-				
+
 
 				<tr>
 
@@ -187,7 +188,7 @@
 
 						<digi:trn key="aim:MyDesktop">Portfolio</digi:trn>
 
-					</digi:link> &gt; 
+					</digi:link> &gt;
 
 					 <c:set var="translation">
 
@@ -205,7 +206,7 @@
 
 				  <td width="2">&nbsp;</td>
 
-			
+
 
 			    </tr>
 
@@ -231,11 +232,11 @@
 
 				</tr>
 
-				
 
-<!--  PDF/XLS Links -->		
 
-			<tr>	
+<!--  PDF/XLS Links -->
+
+			<tr>
 
 
 
@@ -259,11 +260,11 @@
 
                 </td>
 
-            </logic:greaterThan>    
+            </logic:greaterThan>
 
 
 
-			
+
 
 
 
@@ -275,7 +276,7 @@
 
 							<%--<logic:notEmpty name="aimParisIndicatorReportForm" property="multiReport">--%>
 
-							<img src="../ampTemplate/images/xls_icon.jpg" border=0>	
+							<img src="../ampTemplate/images/xls_icon.jpg" border=0>
 
 								<c:set var="translation">
 
@@ -313,11 +314,11 @@
 
 				</tr>
 
-			<%-- </logic:notEmpty>--%>		
+			<%-- </logic:notEmpty>--%>
 
 
 
-			<!-- CSV link 
+			<!-- CSV link
 
 			<tr>
 
@@ -325,7 +326,7 @@
 
 			        <td valign="bottom" class="crumb" >
 
-					
+
 
 					<img src="../ampTemplate/images/icon_csv.gif" border=0>
 
@@ -341,19 +342,19 @@
 
 					</digi:link>
 
-					
 
-			
+
+
 
             </td>
 
             </tr>
 
-				
 
 
 
-<!--  PDF/XLS Links -->		
+
+<!--  PDF/XLS Links -->
 
 
 
@@ -369,11 +370,11 @@
 
 					<td>
 
-<%--===========================================================================================================================================--%>					
+<%--===========================================================================================================================================--%>
 
 						<table border="0" cellspacing="0" cellpadding="0" width="750">
 
-							
+
 
 							<tr bgcolor="#c0c0c0" height=20>
 
@@ -385,27 +386,25 @@
 
 											<td>
 
-												<bean:define id="syear" property="startYear" name="aimParisIndicatorReportForm" />
 
-												<select name="startYear" value="<%=syear%>" class="dr-menu" onchange="chkYear('start')">
+                                                <c:set var="syear">
+                                                ${aimParisIndicatorReportForm.startYear}
+                                                </c:set>
+
+												<select name="startYear" value="${syear}" class="dr-menu" onchange="chkYear('start')">
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="yearColl">
 
-														<logic:iterate id="year" name="aimParisIndicatorReportForm" property="yearColl">
+                                                      <c:forEach var="year" items="${aimParisIndicatorReportForm.yearColl}">
+                                                        <c:if test="${syear == year}">
+                                                          <option value="${year}" selected>${year}</option>
+                                                        </c:if>
 
-															<c:if test="${syear == year}">
+                                                        <c:if test="${syear != year}">
+                                                          <option value="${year}">${year}</option>
+                                                        </c:if>
+                                                      </c:forEach>
 
-																<option value="<%=year%>" selected><%=year%></option>
-
-															</c:if>
-
-															<c:if test="${syear != year}">
-
-																<option value="<%=year%>"><%=year%></option>
-
-															</c:if>
-
-														</logic:iterate>
 
 													</logic:notEmpty>
 
@@ -414,29 +413,22 @@
 											</td>
 
 											<td>
+                                                <c:set var="cyear">
+                                                ${aimParisIndicatorReportForm.closeYear}
+                                                </c:set>
 
-												<bean:define id="cyear" property="closeYear" name="aimParisIndicatorReportForm"/>
-
-												<select name="closeYear" value="<%=cyear%>" class="dr-menu" onchange="chkYear('close')">
+												<select name="closeYear" value="${cyear}" class="dr-menu" onchange="chkYear('close')">
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="yearColl">
+                                                      <c:forEach var="year" items="${aimParisIndicatorReportForm.yearColl}">
+                                                        <c:if test="${cyear == year}">
+                                                          <option value="${year}" selected>${year}</option>
+                                                        </c:if>
 
-														<logic:iterate id="year" name="aimParisIndicatorReportForm" property="yearColl">
-
-															<c:if test="${cyear == year}">
-
-																<option value="<%=year%>" selected><%=year%></option>
-
-															</c:if>
-
-															<c:if test="${cyear != year}">
-
-																<option value="<%=year%>"><%=year%></option>
-
-															</c:if>
-
-														</logic:iterate>
-
+                                                        <c:if test="${cyear != year}">
+                                                          <option value="${year}">${year}</option>
+                                                        </c:if>
+                                                      </c:forEach>
 													</logic:notEmpty>
 
 												</select>
@@ -451,9 +443,9 @@
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="calendarColl">
 
-														<html:optionsCollection name="aimParisIndicatorReportForm" property="calendarColl" 
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="calendarColl"
 
-																				value="ampFiscalCalId" label="name"/> 
+																				value="ampFiscalCalId" label="name"/>
 
 													</logic:notEmpty>
 
@@ -479,9 +471,9 @@
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="currencyColl">
 
-														<html:optionsCollection name="aimParisIndicatorReportForm" property="currencyColl" 
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="currencyColl"
 
-																				value="currencyCode" label="currencyName"/> 
+																				value="currencyCode" label="currencyName"/>
 
 													</logic:notEmpty>
 
@@ -499,11 +491,11 @@
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="donorColl">
 
-														<html:optionsCollection name="aimParisIndicatorReportForm" property="donorColl" 
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="donorColl"
 
 																				value="ampOrgId" label="acronym"/>
 
-													</logic:notEmpty>							
+													</logic:notEmpty>
 
 												</html:select>
 
@@ -523,9 +515,9 @@
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="statusColl">
 
-														<html:optionsCollection name="aimParisIndicatorReportForm" property="statusColl" 
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="statusColl"
 
-																				value="name" label="name"  /> 
+																				value="name" label="name"  />
 
 													</logic:notEmpty>
 
@@ -545,11 +537,11 @@
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="orgGroupColl">
 
-														<html:optionsCollection name="aimParisIndicatorReportForm" property="orgGroupColl" 
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="orgGroupColl"
 
 																				value="orgGrpCode" label="orgGrpName"/>
 
-													</logic:notEmpty>							
+													</logic:notEmpty>
 
 												</html:select>
 
@@ -573,9 +565,9 @@
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="termAssistColl">
 
-														<html:optionsCollection name="aimParisIndicatorReportForm" property="termAssistColl" 
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="termAssistColl"
 
-																				value="termsAssistName" label="termsAssistName"  /> 
+																				value="termsAssistName" label="termsAssistName"  />
 
 													</logic:notEmpty>
 
@@ -611,11 +603,11 @@
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="orgGroupColl">
 
-														<html:optionsCollection name="aimParisIndicatorReportForm" property="orgGroupColl" 
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="orgGroupColl"
 
 																				value="orgGrpCode" label="orgGrpName"/>
 
-													</logic:notEmpty>							
+													</logic:notEmpty>
 
 												</html:select>
 
@@ -632,9 +624,9 @@
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="financingInstrumentColl">
 
-														<html:optionsCollection name="aimParisIndicatorReportForm" property="financingInstrumentColl" 
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="financingInstrumentColl"
 
-																				value="name" label="name"  /> 
+																				value="name" label="name"  />
 
 													</logic:notEmpty>
 
@@ -650,9 +642,9 @@
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="sectorColl">
 
-														<html:optionsCollection name="aimParisIndicatorReportForm" property="sectorColl" 
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="sectorColl"
 
-																				value="ampSectorId" label="name"  /> 
+																				value="ampSectorId" label="name"  />
 
 													</logic:notEmpty>
 
@@ -660,7 +652,7 @@
 
 											</td>
 
-											
+
 
 											<td>
 
@@ -684,15 +676,15 @@
 
 					</td>
 
-					
+
 
 				</tr>
 
-	
+
 
 				<tr>
 
-				
+
 
 					<td width="100%">
 
@@ -812,7 +804,7 @@
 
 									</c:if>
 
-										
+
 
 									<!--Indicator 4 -->
 
@@ -824,7 +816,7 @@
 
 											<strong>
 											<digi:trn key="aim:VolumeOfTehnicalCoOperation">
-											Volume of technical co-operation for capacity development provided through co-ordinated programmes 
+											Volume of technical co-operation for capacity development provided through co-ordinated programmes
 											</digi:trn>
 											</strong>
 
@@ -838,7 +830,7 @@
 
 											<strong>
 											<digi:trn key="aim:totalVolumeOfTehnicalCoOperation">
-											Total volume of technical co-operation provided 
+											Total volume of technical co-operation provided
 											</digi:trn>
 											</strong>
 
@@ -852,7 +844,7 @@
 
 											<strong>
 											<digi:trn key="aim:noOfTC">
-											% of TC for capacity development provided through coordinated programmes consistent with national development strategies 
+											% of TC for capacity development provided through coordinated programmes consistent with national development strategies
 											</digi:trn>
 											</strong>
 
@@ -976,7 +968,7 @@
 
 											<strong>
 											<digi:trn key="aim:aidFlowsToTheGovernmentSector">
-											Aid flows to the government sector that use national procurement procedures  
+											Aid flows to the government sector that use national procurement procedures
 											</digi:trn>
 											</strong>
 
@@ -1024,7 +1016,7 @@
 
 											<strong>
 											<digi:trn key="aim:budgetSupportAidFlowsInTheContextOfProgammeBasedApproach">
-											Budget support aid flows provided in the context of programme based approach 
+											Budget support aid flows provided in the context of programme based approach
 											</digi:trn>
 											</strong>
 
@@ -1038,7 +1030,7 @@
 
 											<strong>
 											<digi:trn key="aim:otherAidFlowsProvidedInTheContextOfProgrammeBasedApproach">
-											Other aid flows provided in the context of programme based approach	
+											Other aid flows provided in the context of programme based approach
 											</digi:trn>
 											</strong>
 
@@ -1086,7 +1078,7 @@
 
 											<strong>
 											<digi:trn key="aim:numberOfMissions">
-											Number of missions to the field that are joint  
+											Number of missions to the field that are joint
 											</digi:trn>
 
 											</strong>
@@ -1121,7 +1113,7 @@
 
 											<strong>
 											<digi:trn key="aim:numberOfCountryAnalytic">
-											Number of country analytic reports that are joint  
+											Number of country analytic reports that are joint
 											</digi:trn>
 											</strong>
 
@@ -1145,7 +1137,7 @@
 
 									</c:if>
 
-									
+
 
 									<!-- end of c:if for all the Indicators-->
 
@@ -1175,7 +1167,7 @@
 
 							</tr>
 
-							
+
 
 							  <c:set var="numCols" value="${aimParisIndicatorReportForm.numColsCalculated}" />
 
@@ -1197,29 +1189,37 @@
 
 							  </logic:empty>
 
-							  <logic:notEmpty name="aimParisIndicatorReportForm" property="donorsColl"> 
+							  <logic:notEmpty name="aimParisIndicatorReportForm" property="donorsColl">
 
 								<%-- <fmt:setLocale value="${en_US}" /> --%>
 
-								<% boolean flag = false; %>	
+								<% boolean flag = false; %>
 
 								<nested:iterate name="aimParisIndicatorReportForm" property="donorsColl">
 
 								<tr>
 
-									<c:set var="yearRange" value="${aimParisIndicatorReportForm.closeYear - aimParisIndicatorReportForm.startYear + 1}" />		
+									<c:set var="yearRange" value="${aimParisIndicatorReportForm.closeYear - aimParisIndicatorReportForm.startYear + 1}" />
 
 									<%--<td width="15%" align="center" height="65" rowspan="3"> --%>
 
-									<td width="15%" align="center" height="65" rowspan='<c:out value="${yearRange}" />' >
+									<td width="15%" align="center" height="65" rowspan='${yearRange}' >
 
 										<div align="center">
-											<bean:define id="key">
+											<c:set var="key">
 												<nested:write property="donor"/>
-											</bean:define>
-											<% String trnTag = ((String)key).toLowerCase().replaceAll(" ","").replaceAll("%",""); %>
+											</c:set>
+                                            <c:set var="key">
+												${fn:replace(key, " ", "")}
+											</c:set>
+                                            <c:set var="key">
+												${fn:replace(key, "%", "")}
+											</c:set>
+                                            <c:set var="key">
+												${fn:toLowerCase(key)}
+											</c:set>
 											<strong>
-											<digi:trn key="<%="aim:pi:"+trnTag %>">
+											<digi:trn key="aim:pi:${key}">
 												<nested:write property="donor" />
 											</digi:trn>
 
@@ -1233,7 +1233,7 @@
 
 									<% if (flag) { %>
 
-									<tr> 
+									<tr>
 
 									<% } %>
 
@@ -1246,7 +1246,7 @@
 											<div align="center">
 
 												<c:if test="${index == 1}">
-												
+
 													<fmt:formatNumber type="number" value="${rowVal}" pattern="####" maxFractionDigits="0" />
 
 												</c:if>
@@ -1338,9 +1338,21 @@
 
 					<tr><td><font color="blue">* <digi:trn key="aim:allTheAmounts">All the amounts are in thousands (000)</digi:trn>
 																	<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>">
-																		<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-																		<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"> 
-																			<%=selCurrency %>
+                                                                    <c:set var="selCurrency">
+                                                                      <%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>
+                                                                    </c:set>
+													               <c:set var="selCurrency">
+                                                                      ${fn:replace(selCurrency," ","")}
+                                                                    </c:set>
+                                                                    <c:set var="selCurrency">
+                                                                      ${fn:replace(selCurrency,"%","")}
+                                                                    </c:set>
+                                                                    <c:set var="selCurrency">
+                                                                      ${fn:toLowerCase(selCurrency)}
+                                                                    </c:set>
+
+																		<digi:trn key="aim:currency:${selCurrency}">
+																			${selCurrency}
 																		</digi:trn>
 																	</logic:present>
 							</font>
@@ -1354,9 +1366,9 @@
 
 					</td>
 
-					
 
-				</tr>			
+
+				</tr>
 
 			</table>
 
@@ -1388,7 +1400,7 @@
 
 							<table border="1" width="50%" cellspacing="0" cellpadding="0">
 
-								<c:set var="flag" value="true" />				
+								<c:set var="flag" value="true" />
 
 								<nested:iterate name="aimParisIndicatorReportForm" property="donorsCollIndc5">
 
@@ -1401,7 +1413,7 @@
 												<c:if test="${cntr == 0}">
 
 													<td align="center" rowspan="2">
-														
+
 														<c:if test="${aimParisIndicatorReportForm.indicatorCode == '5a'}">
 														<strong><digi:trn key="aim:percentOfODAUsingAll">Percent of ODA using all three partner's PFM procedures</digi:trn></strong>
 														</c:if>
@@ -1497,7 +1509,7 @@
 
 							</table>
 
-						</td>	
+						</td>
 
 						<td align="right" width="14" class="r-dotted-lg">&nbsp;</td>
 

@@ -5073,6 +5073,17 @@ public class DbUtil {
                     public int compare(Object o1, Object o2) {
                         AmpOrganisation r1 = (AmpOrganisation) o1;
                         AmpOrganisation r2 = (AmpOrganisation) o2;
+                        AmpOrgGroup og1=r1.getOrgGrpId();
+                        AmpOrgGroup og2=r2.getOrgGrpId();
+                        if(og1!=null && og2!=null){
+                            if(og1.getOrgGrpName()!=null && og2.getOrgGrpName()!=null){
+                                og1.getOrgGrpName().compareTo(og2.getOrgGrpName());
+                            }else{
+                                return 0;
+                            }
+                        }else{
+                            return 0;
+                        }
                         return r1.getAcronym().trim().toLowerCase().compareTo(r2.getAcronym().trim().toLowerCase());
                     }
                 };
@@ -5108,7 +5119,12 @@ public class DbUtil {
                             continue;
                     }
                     ParisIndicator pi = new ParisIndicator(); // represents one row of indicator report.
-                    pi.setDonor(dnOrg.getAcronym());
+                    if(dnOrg.getOrgGrpId()!=null && dnOrg.getOrgGrpId().getOrgGrpName()!=null){
+                        pi.setDonor(dnOrg.getOrgGrpId().getOrgGrpName());
+                    }else{
+                        pi.setDonor("N/A");
+                    }
+
                     pi.setAnswers(new ArrayList());
                     if (indcFlag == 6)
                         answersRow = new double[NUM_ANSWER_COLUMNS];
@@ -5447,7 +5463,17 @@ public class DbUtil {
                     public int compare(Object o1, Object o2) {
                         AmpOrganisation r1 = (AmpOrganisation) o1;
                         AmpOrganisation r2 = (AmpOrganisation) o2;
-                        return r1.getAcronym().trim().toLowerCase().compareTo(r2.getAcronym().trim().toLowerCase());
+                        AmpOrgGroup og1=r1.getOrgGrpId();
+                        AmpOrgGroup og2=r2.getOrgGrpId();
+                        if(og1!=null && og2!=null){
+                            if(og1.getOrgGrpName()!=null && og2.getOrgGrpName()!=null){
+                                return og2.getOrgGrpName().compareTo(og2.getOrgGrpName());
+                            }else{
+                                return 0;
+                            }
+                        }else{
+                            return 0;
+                        }
                     }
                 };
                 sortedDonors.addAll(donors);
@@ -5480,7 +5506,11 @@ public class DbUtil {
                         continue;
 
                     ParisIndicator pi = new ParisIndicator(); // represents one row of indicator report.
-                    pi.setDonor(dnOrg.getAcronym());
+                    if(dnOrg.getOrgGrpId()!=null && dnOrg.getOrgGrpId().getOrgGrpName()!=null){
+                        pi.setDonor(dnOrg.getOrgGrpId().getOrgGrpName());
+                    }else{
+                        pi.setDonor("N/A");
+                    }
                     pi.setAnswers(new ArrayList());
                     for (i = 0; i < YEAR_RANGE; i++) {
                         allDnRow = (double[]) ( ( (ParisIndicator) responses.get(0)).getAnswers().get(i));

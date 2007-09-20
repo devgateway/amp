@@ -408,11 +408,20 @@ ${fn:replace(message,quote,escapedQuote)}
                                                       <tr>
                                                         <td>
                                                           <c:if test="${aimEditActivityForm.proProjCost==null}">
-                                                            <input type="button" value="Add Funding" class="buton" onclick="addPropFunding()">
+                                                          	<c:set var="translation">
+                                                            	<digi:trn key="btn:addFundings">Add Fundings</digi:trn>
+                                                            </c:set>
+                                                            <input type="button" value="${translation}" class="buton" onclick="addPropFunding()">
                                                           </c:if>
                                                           <c:if test="${aimEditActivityForm.proProjCost!=null}">
-                                                            <input type="Button" value="Edit Funding" class="buton" onclick="addPropFunding()">
-                                                            <input type="Button" value="Remove Funding" class="buton" onclick="delPropFunding()">
+                                                          	<c:set var="translation">
+                                                            	<digi:trn key="btn:editFundings">Edit Funding</digi:trn>
+                                                            </c:set>                                                          
+                                                            <input type="Button" value="${translation}" class="buton" onclick="addPropFunding()">
+                                                          	<c:set var="translation">
+                                                            	<digi:trn key="btn:removeFundings">Remove Funding</digi:trn>
+                                                            </c:set>                                                            
+                                                            <input type="Button" value="${translation}" class="buton" onclick="delPropFunding()">
                                                           </c:if>
                                                         </td>
                                                       </tr>

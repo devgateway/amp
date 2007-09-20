@@ -58,7 +58,8 @@ public class EditFunding extends Action {
 									formBean.setAssistanceType( funding.getTypeOfAssistance().getId() );
 								else formBean.setAssistanceType(new Long(0));
 								formBean.setOrgFundingId(funding.getOrgFundingId());
-								formBean.setModality(funding.getFinancingInstrument().getId());
+								if (funding.getFinancingInstrument() != null)
+									formBean.setModality(funding.getFinancingInstrument().getId());
 								formBean.setFundingConditions(funding.getConditions());
 								
 								formBean.setFundingDetails(new ArrayList(funding.getFundingDetails()));

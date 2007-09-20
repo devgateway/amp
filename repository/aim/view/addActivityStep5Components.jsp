@@ -30,7 +30,7 @@
 																		<b><field:display name="Grand Total Commitments" feature="Components">
 																		&nbsp;&nbsp;
 																			<digi:trn key="aim:commitments">Commitments</digi:trn> - (
-																			<digi:trn key="aim:totalActualAllocation">Grand Total actual 
+																			<digi:trn key="aim:grantTotalActualAllocation">Grand Total actual 
 																			allocation</digi:trn> = 
 																			<c:out value="${aimEditActivityForm.totalCommitments}"/> 
 																			<c:out value="${aimEditActivityForm.currCode}"/>)															

@@ -126,25 +126,36 @@ ${fn:replace(message,quote,escapedQuote)}
 													<digi:trn key="aim:clickToViewAddActivityStep2">
 														Click here to goto Add Activity Step 2</digi:trn>
 												</c:set>
-												<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment"
+												<digi:link href="/addActivity.do?step=1_5&edit=true" styleClass="comment"
 												title="${translation}" >
 													<digi:trn key="aim:addActivityStep2">
 														Step 2
 													</digi:trn>
 												</digi:link>&nbsp;&gt;&nbsp;
-
+												
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAddActivityStep3">
 														Click here to goto Add Activity Step 3</digi:trn>
 												</c:set>
-												<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment"
+												<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment"
 												title="${translation}" >
 													<digi:trn key="aim:addActivityStep3">
 														Step 3
 													</digi:trn>
 												</digi:link>&nbsp;&gt;&nbsp;
-												<digi:trn key="aim:addActivityStep4">
-													Step 4
+
+												<c:set var="translation">
+													<digi:trn key="aim:clickToViewAddActivityStep4">
+														Click here to goto Add Activity Step 4</digi:trn>
+												</c:set>
+												<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment"
+												title="${translation}" >
+													<digi:trn key="aim:addActivityStep4">
+														Step 4
+													</digi:trn>
+												</digi:link>&nbsp;&gt;&nbsp;
+												<digi:trn key="aim:addActivityStep5">
+													Step 5
 												</digi:trn>
 											</span>
 										</td>
@@ -183,8 +194,8 @@ ${fn:replace(message,quote,escapedQuote)}
 														<tr>
 															<td width="13" height="20" background="module/aim/images/left-side.gif"></td>
 															<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-																<digi:trn key="aim:step4of9RegionalFunding">
-																	Step 4 of 9: Regional Funding
+																<digi:trn key="aim:step5of10_RegionalFunding">
+																	Step 5 of 10: Regional Funding
 															</digi:trn>
 															</td>
 															<td width="13" height="20" background="module/aim/images/right-side.gif"></td>

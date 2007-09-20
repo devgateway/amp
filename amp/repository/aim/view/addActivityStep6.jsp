@@ -416,7 +416,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 									</c:set>
 
-									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="${translation}">
+									<digi:link href="/addActivity.do?step=1_5&edit=true" styleClass="comment" title="${translation}">
 
 									<digi:trn key="aim:addActivityStep2">
 
@@ -432,7 +432,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 									</c:set>
 
-									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="${translation}">
+									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="${translation}">
 
 									<digi:trn key="aim:addActivityStep3">
 
@@ -443,14 +443,13 @@ ${fn:replace(message,quote,escapedQuote)}
 									</digi:link>&nbsp;&gt;&nbsp;
 
 
-
 									<c:set var="translation">
 
 										<digi:trn key="aim:clickToViewAddActivityStep4">Click here to goto Add Activity Step 4</digi:trn>
 
 									</c:set>
 
-									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="${translation}">
+									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="${translation}">
 
 									<digi:trn key="aim:addActivityStep4">
 
@@ -468,7 +467,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 									</c:set>
 
-									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment" title="${translation}">
+									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="${translation}">
 
 									<digi:trn key="aim:addActivityStep5">
 
@@ -478,9 +477,27 @@ ${fn:replace(message,quote,escapedQuote)}
 
 									</digi:link>&nbsp;&gt;&nbsp;
 
+
+
+									<c:set var="translation">
+
+										<digi:trn key="aim:clickToViewAddActivityStep6">Click here to goto Add Activity Step 6</digi:trn>
+
+									</c:set>
+
+									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment" title="${translation}">
+
 									<digi:trn key="aim:addActivityStep6">
 
 									Step 6
+
+									</digi:trn>
+
+									</digi:link>&nbsp;&gt;&nbsp;
+
+									<digi:trn key="aim:addActivityStep7">
+
+									Step 7
 
 									</digi:trn>
 
@@ -554,9 +571,9 @@ ${fn:replace(message,quote,escapedQuote)}
 
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
 
-												<digi:trn key="aim:step6of9RelatedDocumentsandLinks">
+												<digi:trn key="aim:step7of10_RelatedDocumentsandLinks">
 
-													Step 6 of 9: Related Documents and Links
+													Step 7 of 10: Related Documents and Links
 
 												</digi:trn>
 

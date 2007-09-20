@@ -319,8 +319,14 @@ function fnChk(frmContrl){
                               </c:if>
                             </digi:link>
                             &nbsp;&gt;&nbsp;
-                            <digi:trn	key="aim:addActivityStep2">
-                            	Step 2
+									<digi:link href="/addActivity.do?step=1_2&edit=true" styleClass="comment"
+									title="Click here to goto Add Activity Step 2">
+									<digi:trn key="aim:addActivityStep2">
+									Step 2
+									</digi:trn>
+									</digi:link>&nbsp;&gt;&nbsp;
+                            <digi:trn	key="aim:addActivityStep3">
+                            	Step 3
 							</digi:trn>
                           </span>
                         </td>
@@ -389,8 +395,8 @@ function fnChk(frmContrl){
 				                                    &nbsp
 				                                    </td>
 				                                    <td vAlign="center" align="center" class="textalb" height="20" bgcolor="#006699">
-				                                   		<digi:trn	key="aim:step2of9LocationAndSectors">
-				                                      		Step 2 of 9: Location | Sectors
+				                                   		<digi:trn	key="aim:step3of10_LocationAndSectors">
+				                                      		Step 3 of 10: Location | Sectors
 														</digi:trn>
 				                                    </td>
 				                                    <td width="13" height="20" background="module/aim/images/right-side.gif">

@@ -150,12 +150,22 @@ ${fn:replace(message,quote,escapedQuote)}
 										<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
+								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment"
+								title="Click here to goto Add Activity Step 1">
 								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn key="aim:editActivityStep1">Edit Activity - Step 1</digi:trn>
+									<digi:trn key="aim:editActivityStep1">
+										Edit Activity - Step 1
+									</digi:trn>
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == false}">
-									<digi:trn key="aim:addActivityStep1">Add Activity - Step 1</digi:trn>
+									<digi:trn key="aim:addActivityStep1">
+										Add Activity - Step 1
+									</digi:trn>
 								</c:if>
+								</digi:link>&nbsp;&gt;&nbsp;
+									<digi:trn key="aim:addActivityStep2" >
+									Step 2
+									</digi:trn>
 								</span>
 							</td>
 						</tr>
@@ -191,8 +201,8 @@ ${fn:replace(message,quote,escapedQuote)}
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:step1_5of9References">
-													Step 2 of 9: References</digi:trn>
+												<digi:trn key="aim:step2of10_References">
+													Step 2 of 10: References</digi:trn>
 											</td>
 											<td width="13" height="20" background="module/aim/images/right-side.gif">
 											</td>

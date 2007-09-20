@@ -174,50 +174,56 @@ ${fn:replace(message,quote,escapedQuote)}
 									</digi:trn>
 								</c:if>
 								</digi:link>&nbsp;&gt;&nbsp;
-									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment"
+									<digi:link href="/addActivity.do?step=1_5&edit=true" styleClass="comment"
 									title="Click here to goto Add Activity Step 2" >
 									<digi:trn key="aim:addActivityStep2">
 									Step 2
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment"
-									title="Click here to goto Add Activity Step 3">
+									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment"
+									title="Click here to goto Add Activity Step 3" >
 									<digi:trn key="aim:addActivityStep3">
 									Step 3
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment"
+									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment"
 									title="Click here to goto Add Activity Step 4">
 									<digi:trn key="aim:addActivityStep4">
 									Step 4
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment"
+									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment"
 									title="Click here to goto Add Activity Step 5">
 									<digi:trn key="aim:addActivityStep5">
 									Step 5
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-									<digi:link href="/addActivity.do?step=6&edit=true" styleClass="comment"
+									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment"
 									title="Click here to goto Add Activity Step 6">
 									<digi:trn key="aim:addActivityStep6">
 									Step 6
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-									<digi:link href="/addActivity.do?step=7&edit=true" styleClass="comment"
+									<digi:link href="/addActivity.do?step=6&edit=true" styleClass="comment"
 									title="Click here to goto Add Activity Step 7">
 									<digi:trn key="aim:addActivityStep7">
 									Step 7
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-									<digi:link href="/addActivity.do?step=8&edit=true" styleClass="comment"
+									<digi:link href="/addActivity.do?step=7&edit=true" styleClass="comment"
 									title="Click here to goto Add Activity Step 8">
 									<digi:trn key="aim:addActivityStep8">
 									Step 8
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-									<digi:trn key="aim:addActivityStep9" >
+									<digi:link href="/addActivity.do?step=8&edit=true" styleClass="comment"
+									title="Click here to goto Add Activity Step 9">
+									<digi:trn key="aim:addActivityStep9">
 									Step 9
+									</digi:trn>
+									</digi:link>&nbsp;&gt;&nbsp;
+									<digi:trn key="aim:addActivityStep10" >
+									Step 10
 									</digi:trn>
 								</span>
 							</td>
@@ -254,8 +260,8 @@ ${fn:replace(message,quote,escapedQuote)}
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:step9of9MonitoringnEvaluation">
-													Step 9 of 9: Monitoring and Evaluation
+												<digi:trn key="aim:step10of10_MonitoringnEvaluation">
+													Step 10 of 10: Monitoring and Evaluation
 												</digi:trn>
 											</td>
 											<td width="13" height="20" background="module/aim/images/right-side.gif">

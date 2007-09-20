@@ -611,7 +611,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 									</c:set>
 
-									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="${translation}">
+									<digi:link href="/addActivity.do?step=1_5&edit=true" styleClass="comment" title="${translation}">
 
 										<digi:trn key="aim:addActivityStep2">
 
@@ -621,15 +621,13 @@ ${fn:replace(message,quote,escapedQuote)}
 
 									</digi:link>&nbsp;&gt;&nbsp;
 
-
-
 									<c:set var="translation">
 
-										<digi:trn key="aim:clickToViewAddActivityStep3">Click here to goto Add Activity Step 3</digi:trn>
+										<digi:trn key="aim:clickToViewAddActivityStep3">Click here to goto Add Activity Step 2</digi:trn>
 
 									</c:set>
 
-									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="${translation}">
+									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="${translation}">
 
 										<digi:trn key="aim:addActivityStep3">
 
@@ -647,7 +645,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 									</c:set>
 
-									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="${translation}">
+									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="${translation}">
 
 										<digi:trn key="aim:addActivityStep4">
 
@@ -659,9 +657,27 @@ ${fn:replace(message,quote,escapedQuote)}
 
 
 
-									<digi:trn key="aim:addActivityStep5">
+									<c:set var="translation">
 
-										Step 5
+										<digi:trn key="aim:clickToViewAddActivityStep5">Click here to goto Add Activity Step 5</digi:trn>
+
+									</c:set>
+
+									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="${translation}">
+
+										<digi:trn key="aim:addActivityStep5">
+
+											Step 5
+
+										</digi:trn>
+
+									</digi:link>&nbsp;&gt;&nbsp;
+
+
+
+									<digi:trn key="aim:addActivityStep6">
+
+										Step 6
 
 									</digi:trn>
 
@@ -741,7 +757,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
 
-												<digi:trn key="aim:step5of9Components">Step 5 of 9: Components</digi:trn>
+												<digi:trn key="aim:step6of10_Components">Step 6 of 10: Components</digi:trn>
 
 											</td>
 

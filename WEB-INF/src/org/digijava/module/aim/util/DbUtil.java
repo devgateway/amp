@@ -1876,7 +1876,7 @@ public class DbUtil {
      */
     public static Collection<AmpCategoryValue> getAllAssistanceTypesFromCM() {
     	return
-    		CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_NAME, null);
+    		CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY, null);
     }
 
     public static Collection getAllCountries() {

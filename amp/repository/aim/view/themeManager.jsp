@@ -53,6 +53,10 @@
 		}
 		function addSubProgram(id,name)
 		{
+		
+		
+		
+		
 			<digi:context name="subProgram" property="context/module/moduleinstance/addSubTheme.do?event="/>
 			document.aimThemeForm.action = "<%= subProgram %>&themeId=" + id + "&indname=" + name;
 			document.aimThemeForm.target = "_self";
@@ -96,12 +100,11 @@
           document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
         }
 	
-	function Name(){
-		var string = "${themes.name}";
-		var string2  = string.replace(/[\(\)']/g, '');
+	function Namee(){
+			var string = "${themes.name}";
+			var string2  = string.replace(/[\(\)']/g, '');
 		return string2;
 	}
-
 -->
 </script>
 
@@ -396,12 +399,17 @@
 																					<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																					<c:set target="${urlParams}" property="themeId">
 																							<bean:write name="themes" property="ampThemeId" />
-																					</c:set><b>
-																												<a href='javascript:addSubProgram("${themes.ampThemeId}","Name()")' title="Click here to add Sub-Programs">
+																							
+																					</c:set>
+																						<b>
 																					
+																								<a href="javascript:addSubProgram('${themes.ampThemeId}','${themes.encodeName}')" title="Click here to add Sub-Programs">
+																								
+																				
 																							<bean:write name="themes" property="name"/>
 																							
-																					</a></b>
+																						</a>
+																					</b>
 																			</td>
 																			<td align="right" bgcolor="#f4f4f2" width="75">
 																					<input class="buton" type="button" name="addIndicator" value="<digi:trn key="aim:indicator">Indicator</digi:trn>" onclick="assignIndicators('<bean:write name="themes" property="ampThemeId" />')">

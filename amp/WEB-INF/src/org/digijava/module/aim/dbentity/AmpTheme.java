@@ -1,6 +1,8 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ public class AmpTheme implements Serializable
 	private AmpTheme parentThemeId ;
 	private String themeCode ;
 	private String name ;
+	private String encodeName;
 	//private String type ;
 	private AmpCategoryValue typeCategoryValue;
 	private Integer indlevel;
@@ -249,6 +252,20 @@ public class AmpTheme implements Serializable
 
 	public void setTypeCategoryValue(AmpCategoryValue typeCategoryValue) {
 		this.typeCategoryValue = typeCategoryValue;
+	}
+
+	public String getEncodeName() {		
+		if(name != null) {
+				encodeName = name.replace("'", "\\'");
+				encodeName = encodeName.replace("\"", "\\'");
+				System.out.println(encodeName);
+			
+		}
+		return encodeName;
+	}
+
+	public void setEncodeName(String encodeName) {
+		this.encodeName = encodeName;
 	}
 	
 }

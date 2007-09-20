@@ -277,7 +277,7 @@
 																<tr><td colspan="2"><b>
 																	<a href="javascript:
 																	addPhyProgess(-1,<c:out value="${selComponents.componentId}"/>)">
-																	Add Physical Progress</a>
+																	<digi:trn key="aim:addPhysicalProgress">Add Physical Progress</digi:trn></a>
 																	</b>
 																</td></tr>															
 															</c:if>

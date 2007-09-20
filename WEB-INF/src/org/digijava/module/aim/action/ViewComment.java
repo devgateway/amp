@@ -64,9 +64,14 @@ public class ViewComment extends Action {
 					 	AmpField field = null;
 						ArrayList col = new ArrayList();
 						//if (editForm.isCommentFlag() == false) {
-							if (comment.equals("ccd") || comment.equals("viewccd")){
-								editForm.setFieldName("current completion date");
-								field = DbUtil.getAmpFieldByName("current completion date");
+						if (comment.equals("ccd") || comment.equals("viewccd")){
+							editForm.setFieldName("current completion date");
+							field = DbUtil.getAmpFieldByName("current completion date");
+						}
+						else
+							if (comment.equals("fdd") || comment.equals("viewfdd")){
+								editForm.setFieldName("Final Date for Disbursements");
+								field = DbUtil.getAmpFieldByName("Final Date for Disbursements");
 							}
 							else
 								if (comment.equals("objAssumption")||comment.equals("viewobjAssumption")){
@@ -112,12 +117,13 @@ public class ViewComment extends Action {
 																	editForm.setFieldName("Purpose Objectively Verifiable Indicators");
 																	field = DbUtil.getAmpFieldByName("Purpose Objectively Verifiable Indicators");
 																}
+							
 							editForm.setField(field);
 						//}
 
 						logger.debug("editForm.getCommentsCol().size() [At Start-I]: " + editForm.getCommentsCol().size());
 						if (editForm.isEditAct()) {
-							if (comment.equals("viewccd")||comment.equals("ccd")
+							if (comment.equals("viewccd")||comment.equals("ccd")||comment.equals("fdd")
 									||comment.equals("viewobjAssumption")||comment.equals("objAssumption")||comment.equals("viewobjVerification")||comment.equals("objVerification")||comment.equals("viewobjObjVerIndicators")||comment.equals("objObjVerIndicators")
 									||comment.equals("viewpurpAssumption")||comment.equals("purpAssumption")||comment.equals("viewpurpVerification")||comment.equals("purpVerification")||comment.equals("viewresObjVerIndicators")||comment.equals("resObjVerIndicators")
 									||comment.equals("viewresAssumption")||comment.equals("resAssumption")||comment.equals("viewresVerification")||comment.equals("resVerification")||comment.equals("viewpurpObjVerIndicators")||comment.equals("purpObjVerIndicators")) {
@@ -172,7 +178,7 @@ public class ViewComment extends Action {
 						if (editForm.getCommentText() != null)	// Clearing the commentText property
 							editForm.setCommentText(null);
 						//editForm.setSerializeFlag(false);  //To make sure comment(s) not added to database without user's knowledge
-						if (comment.equals("ccd")||comment.equals("objAssumption")||comment.equals("objVerification")||comment.equals("purpAssumption")
+						if (comment.equals("ccd")||comment.equals("fdd")||comment.equals("objAssumption")||comment.equals("objVerification")||comment.equals("purpAssumption")
 								||comment.equals("purpVerification")||comment.equals("resAssumption")||comment.equals("resVerification"))
 							editForm.setCommentFlag(true);
 						logger.debug("CommentFlag[forwarding] : " + editForm.isCommentFlag());

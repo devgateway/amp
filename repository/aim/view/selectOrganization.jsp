@@ -62,12 +62,14 @@
 
 
 	function validate() {
-	
+		<c:set var="translation">
+			<digi:trn key="aim:chooseOrganizationToAdd">Please choose an organization to add</digi:trn>
+		</c:set>
 		if(document.aimEditActivityForm.selectedOrganisationFromPages.value != "-1") return true;
 
 		if (document.aimEditActivityForm.selOrganisations.checked != null) { // only one
 			if (document.aimEditActivityForm.selOrganisations.checked == false) {
-				alert("Please choose an organization to add");
+				alert("${translation}");
 				return false;
 			}
 		}
@@ -82,7 +84,7 @@
 			}
 
 			if (flag == 0) {
-				alert("Please choose an organization to add");
+				alert("${translation}");
 				return false;
 			}
 		}

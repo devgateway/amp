@@ -41,7 +41,9 @@
 			<table width="100%" cellpadding=1 cellspacing=0 bgcolor="#ffffff" class="box-border-nopadding">
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
-						Funding Item Editor
+						<digi:trn key="aim:fundingItemEditor">
+							Funding Item Editor
+						</digi:trn>						
 					</td>
 				</tr>
 				<tr>
@@ -87,8 +89,13 @@
 							<logic:notEmpty name="aimEditActivityForm" property="selectedLocs">
 							<tr bgcolor="#f4f4f2">
 								<td colspan="2" class="box-border-alt1">
-										<span class="f-names">Commitments - (Total Actual Allocation <%=eaForm.getTotalCommitments()%> 
-															 <%=eaForm.getCurrCode()%>)
+										<span class="f-names">						
+										<digi:trn key="aim:commitments">Commitments</digi:trn>
+										 - (
+										 <digi:trn key="aim:totalActualAllocation">Total Actual Allocation</digi:trn> 
+											<%=eaForm.getTotalCommitments()%> 
+											<%=eaForm.getCurrCode()%>
+											)
 										</span>
 										
 										<a href="javascript:addCommitments()">${translationAdd }</a><br><br>
@@ -122,12 +129,12 @@
 												 <div id="<%=divName%>">
 												<select name="<%=field1%>" class="inp-text">
 													<c:if test="${comm.adjustmentType == 1}">
-														<option value="1" selected="true">Actual</option>
-														<option value="0">Planned</option>
+														<option value="1" selected="true"><digi:trn key="aim:Actual">Actual</digi:trn></option>
+														<option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>
 													<c:if test="${comm.adjustmentType == 0}">
-														<option value="1">Actual</option>
-														<option value="0" selected="true">Planned</option>
+														<option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></option>
+														<option value="0" selected="true"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>					
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>" 
 												value="<c:out value="${comm.transactionAmount}"/>" size="15" class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
@@ -174,7 +181,10 @@
 							</tr>
 							<tr bgcolor="#ffffff">
 								<td colspan="2" class="box-border">
-										<span class="f-names">Disbursement - (Total actual to date <%=eaForm.getTotalDisbursements()%>
+										<span class="f-names"><digi:trn key="aim:disbursement">Disbursement</digi:trn> 
+										- (
+											<digi:trn key="aim:totalActualToDate">Total actual to date</digi:trn> 
+											<%=eaForm.getTotalDisbursements()%>
 															 <%=eaForm.getCurrCode()%>)
 										</span>
 										<a href="javascript:addDisbursement()">${translationAdd }</a><br><br>
@@ -207,12 +217,12 @@
 												 <div id="<%=divName%>">
 												<select name="<%=field1%>" class="inp-text">
 													<c:if test="${comm.adjustmentType == 1}">
-														<option value="1" selected="true">Actual</option>
-														<option value="0">Planned</option>
+														<option value="1" selected="true"><digi:trn key="aim:Actual">Actual</digi:trn></option>
+														<option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>
 													<c:if test="${comm.adjustmentType == 0}">
-														<option value="1">Actual</option>
-														<option value="0" selected="true">Planned</option>
+														<option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></option>
+														<option value="0" selected="true"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>					
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>" 
 												value="<c:out value="${comm.transactionAmount}"/>" size="15" class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
@@ -260,8 +270,13 @@
 							</tr>
 							<tr>
 								<td colspan="2" class="box-border-alt1">
-											<span class="f-names">Expenditure - (Total actual to date <%=eaForm.getTotalExpenditures()%>
-																 <%=eaForm.getCurrCode()%>)</span>
+											<span class="f-names"><digi:trn key="aim:expenditure">Expenditure</digi:trn> 
+											- 	(
+												<digi:trn key="aim:totalActualToDate">Total actual to date</digi:trn>
+												<%=eaForm.getTotalExpenditures()%>
+												<%=eaForm.getCurrCode()%>
+												)
+											</span>
 											<a href="javascript:addExpenditure()">${translationAdd }</a>&nbsp;&nbsp;
 											<br><br>
 												<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
@@ -293,12 +308,12 @@
 												 <div id="<%=divName%>">
 												<select name="<%=field1%>" class="inp-text">
 													<c:if test="${comm.adjustmentType == 1}">
-														<option value="1" selected="true">Actual</option>
-														<option value="0">Planned</option>
+														<option value="1" selected="true"><digi:trn key="aim:Actual">Actual</digi:trn></option>
+														<option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>
 													<c:if test="${comm.adjustmentType == 0}">
-														<option value="1">Actual</option>
-														<option value="0" selected="true">Planned</option>
+														<option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></option>
+														<option value="0" selected="true"><digi:trn key="aim:Planned">Planned</digi:trn></option>
 													</c:if>					
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>" 
 												value="<c:out value="${comm.transactionAmount}"/>" size="15" class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
@@ -412,8 +427,8 @@ function addCommitments() {
 	var newdiv = document.createElement('div');
 	newdiv.setAttribute("id",divname);
 	var s = "<select name='comm_" + numComm + "_1' class='inp-text'>";
-	s += "<option value='1'>Actual</option>";
-	s += "<option value='0'>Planned</option>";
+	s += "<option value='1'><digi:trn key="aim:Actual">Actual</digi:trn></option>";
+	s += "<option value='0'><digi:trn key="aim:Planned">Planned</digi:trn></option>";
 	s += "</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	s += "<input type='text' name='comm_" + numComm + "_2' size='15' class='amt'>&nbsp;";
 	s += "<select name='comm_" + numComm + "_3' class='inp-text'>&nbsp;";
@@ -472,8 +487,8 @@ function addDisbursement() {
 	var newdiv = document.createElement('div');
 	newdiv.setAttribute("id",divname);
 	var s = "<select name='disb_" + numDisb + "_1' class='inp-text'>";
-	s += "<option value='1'>Actual</option>";
-	s += "<option value='0'>Planned</option>";
+	s += "<option value='1'><digi:trn key="aim:Actual">Actual</digi:trn></option>";
+	s += "<option value='0'><digi:trn key="aim:Planned">Planned</digi:trn></option>";
 	s += "</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	s += "<input type='text' name='disb_" + numDisb + "_2' size='15' class='amt'>&nbsp;";
 	s += "<select name='disb_" + numDisb + "_3' class='inp-text'>&nbsp;";
@@ -530,8 +545,8 @@ function addExpenditure() {
 	var newdiv = document.createElement('div');
 	newdiv.setAttribute("id",divname);
 	var s = "<select name='expn_" + numExpn + "_1' class='inp-text'>";
-	s += "<option value='1'>Actual</option>";
-	s += "<option value='0'>Planned</option>";
+	s += "<option value='1'><digi:trn key="aim:Actual">Actual</digi:trn></option>";
+	s += "<option value='0'><digi:trn key="aim:Planned">Planned</digi:trn></option>";
 	s += "</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	s += "<input type='text' name='expn_" + numExpn + "_2' size='15' class='amt'>&nbsp;";
 	s += "<select name='expn_" + numExpn + "_3' class='inp-text'>&nbsp;";

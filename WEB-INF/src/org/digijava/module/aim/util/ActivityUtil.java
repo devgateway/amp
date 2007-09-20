@@ -1295,7 +1295,8 @@ public class ActivityUtil {
         Iterator itr = qry.list().iterator();
         while (itr.hasNext()) {
           AmpFunding fund = (AmpFunding) itr.next();
-          modalities.add( fund.getFinancingInstrument() );
+          if (fund.getFinancingInstrument() != null)
+        	  modalities.add( fund.getFinancingInstrument() );
         }
         activity.setModalities(modalities);
         activity.setUniqueModalities(new TreeSet(modalities));

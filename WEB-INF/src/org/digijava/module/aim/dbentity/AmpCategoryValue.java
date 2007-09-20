@@ -9,7 +9,7 @@ import org.digijava.module.aim.util.Identifiable;
  * @author Alex Gartner
  *
  */
-public class AmpCategoryValue implements Serializable, Identifiable {
+public class AmpCategoryValue implements Serializable, Identifiable, Comparable {
 	private Long id;
 	private AmpCategoryClass ampCategoryClass;
 	private String value;
@@ -58,6 +58,11 @@ public class AmpCategoryValue implements Serializable, Identifiable {
 	}
 	public Object getIdentifier() {
 		return this.getId();
+	}
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		AmpCategoryValue a = (AmpCategoryValue) o;
+		return this.getId().compareTo(a.getId());
 	}
 		
 }

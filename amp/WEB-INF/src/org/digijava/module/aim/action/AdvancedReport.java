@@ -1426,9 +1426,10 @@ public class AdvancedReport extends Action {
 
 	private HashMap buildAmpTreeColumnSimple(Collection formColumns, String reportType)
 	{
+			
 			ArrayList ampColumnsVisibles=new ArrayList();
 			ServletContext ampContext;
-			ampContext=this.getServlet().getServletContext();
+			ampContext=getServlet().getServletContext();
 			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 			Collection ampAllFields= FeaturesUtil.getAMPFieldsVisibility();
 			Collection allAmpColumns=formColumns;

@@ -97,7 +97,6 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 			   			ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 					}
 				
-			
 		}
 		else return SKIP_BODY;
 		

@@ -166,7 +166,8 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-
+	<module:display name="References">
+	<feature:display name="References" module="References">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != '1_5'}">
 		<td nowrap="nowrap">
@@ -198,7 +199,8 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-
+	</feature:display>
+	</module:display>
 
 
 	<feature:display name="Location" module="Project ID and Planning">

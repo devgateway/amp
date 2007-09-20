@@ -21,7 +21,7 @@ public abstract class MapBuilder<K,E> {
 	/**
 	 * Creates Map from colection.
 	 * 
-	 * @param col collection of elements to put in resulting map object
+	 * @param col collection of elements to put in resulting map object, null not permited
 	 * @return HashMap containing elements from col
 	 */
 	public Map<K, E> createMap(Collection<E> col){

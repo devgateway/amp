@@ -687,12 +687,12 @@ public class SaveActivity extends Action {
 				}
 
 				//save reference docs
-				List formRefDocs=eaForm.getReferenceDocs();
-				Collection<AmpActivityReferenceDoc> activityRefDocs=ActivityUtil.getReferenceDocumentsFor(eaForm.getActivityId());
+				//Collection<AmpActivityReferenceDoc> activityRefDocs=ActivityUtil.getReferenceDocumentsFor(eaForm.getActivityId());
 	        	//create map where keys are category value ids.
-	        	Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=
-	        		new ActivityUtil.CategoryIdRefDocMapBuilder().createMap(activityRefDocs);
+	        	//Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=
+	        	//	new ActivityUtil.CategoryIdRefDocMapBuilder().createMap(activityRefDocs);
 				
+				List formRefDocs=eaForm.getReferenceDocs();
 	        	Set<AmpActivityReferenceDoc> resultRefDocs=new HashSet<AmpActivityReferenceDoc>();
 	        	if(formRefDocs!=null && !formRefDocs.isEmpty())
 				for (Iterator refIter = formRefDocs.iterator(); refIter.hasNext();) {

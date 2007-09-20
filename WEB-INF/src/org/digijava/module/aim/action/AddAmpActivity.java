@@ -517,12 +517,16 @@ public class AddAmpActivity
         	Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
 
         	if (catValues!=null){
-            	//get list of ref docs for activity
-            	Collection<AmpActivityReferenceDoc> activityRefDocs=ActivityUtil.getReferenceDocumentsFor(eaForm.getActivityId());
+            	List<ReferenceDoc> refDocs=new ArrayList<ReferenceDoc>();
+        		Collection<AmpActivityReferenceDoc> activityRefDocs=null;
+        		Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=null;
 
-            	//create map where keys are category value ids.
-            	Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=
-            		new ActivityUtil.CategoryIdRefDocMapBuilder().createMap(activityRefDocs);
+        		if (eaForm.getActivityId()!=null){
+            		//get list of ref docs for activity
+        			activityRefDocs=ActivityUtil.getReferenceDocumentsFor(eaForm.getActivityId());
+                	//create map where keys are category value ids.
+                	categoryRefDocMap=new ActivityUtil.CategoryIdRefDocMapBuilder().createMap(activityRefDocs);
+        		}
             	
             	//create arrays, number of elements as much as category values
             	Long[] refdocIds=new Long[catValues.size()];
@@ -530,9 +534,8 @@ public class AddAmpActivity
             	
             	int c=0;
             	int selectedIds=0;
-            	List<ReferenceDoc> refDocs=new ArrayList<ReferenceDoc>();
             	for(AmpCategoryValue catVal: catValues){
-            		AmpActivityReferenceDoc refDoc=categoryRefDocMap.get(catVal.getId());
+            		AmpActivityReferenceDoc refDoc=(categoryRefDocMap==null)?null:categoryRefDocMap.get(catVal.getId());
             		ReferenceDoc doc=new ReferenceDoc();
             		doc.setCategoryValueId(catVal.getId());
             		doc.setCategoryValue(catVal.getValue());

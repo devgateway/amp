@@ -108,7 +108,6 @@
 										<br>
 										<div id="comm">
 											<c:if test="${aimEditActivityForm.componentId != -1}">
-											kkkkkk
 												<c:forEach var="fundComp" items="${aimEditActivityForm.selectedComponents}">
 													<c:if test="${aimEditActivityForm.componentId == fundComp.componentId}">
 														<c:forEach var="comm" items="${fundComp.commitments}">

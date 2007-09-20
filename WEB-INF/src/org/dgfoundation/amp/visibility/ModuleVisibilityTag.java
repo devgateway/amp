@@ -70,6 +70,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 	}
 	public int doStartTag() throws JspException {
 		// TODO Auto-generated method stub
+		
 		ServletContext ampContext=pageContext.getServletContext();
 		AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 		
@@ -98,6 +99,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 				
 			
 		}
+		else return SKIP_BODY;
 		
 		return EVAL_BODY_BUFFERED;//super.doStartTag();
 	}

@@ -628,7 +628,7 @@ public class ActivityUtil {
 		return query.list();
 	} catch (Exception e) {
 		logger.error(e);
-		throw new DgException("Cannot loat reference documents for activity id="+activityId,e);
+		throw new DgException("Cannot load reference documents for activity id="+activityId,e);
 	}
   }
   

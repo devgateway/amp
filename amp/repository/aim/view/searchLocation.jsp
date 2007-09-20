@@ -16,9 +16,12 @@
 <script language="JavaScript">
 <!--
 	function validate() {
+		<c:set var="translation">
+			<digi:trn key="aim:chooseLocationToAdd">Please choose a Location to add</digi:trn>
+		</c:set>
 		if (document.aimEditActivityForm.searchLocs.checked != null) { // only one
 			if (document.aimEditActivityForm.searchLocs.checked == false) {
-				alert("Please choose an organization to add");
+				alert("${translation}");
 				return false;
 			}
 		}
@@ -33,7 +36,7 @@
 			}
 
 			if (flag == 0) {
-				alert("Please choose a Location to add");
+				alert("${translation}");
 				return false;					  
 			}
 		}

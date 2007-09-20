@@ -103,7 +103,7 @@ public class AuditLoggerUtil {
 				aal.setModifyDate(ts);
 				aal.setBrowser(browser);
 				aal.setIp(request.getRemoteAddr());
-				aal.setObjectId((String) o.getIdentifier());
+				aal.setObjectId((String) o.getIdentifier().toString());
 				aal.setObjectType((String) o.getObjectType());
 				aal.setTeamName(tm.getTeamName());
 				aal.setObjectName(o.getObjectName());

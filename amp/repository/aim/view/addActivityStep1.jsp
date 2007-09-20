@@ -116,7 +116,7 @@ function validateForm() {
     var stId=document.getElementsByName("statusId");
 
     if(stId==null || stId[0]==null || stId[0].value==0){
-      alert("Please select status! Maybe the  Feature \"Project ID and Planning\" is disabled!");
+      alert("Please select status!");
       return false;
     }
 

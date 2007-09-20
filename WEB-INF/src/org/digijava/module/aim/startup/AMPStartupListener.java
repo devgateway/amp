@@ -69,8 +69,9 @@ public class AMPStartupListener extends HttpServlet
     			ampContext.setAttribute(Constants.LB_FEATURE,new Boolean(true));
     			ampContext.setAttribute(Constants.SA_FEATURE,new Boolean(true));
         	
+    		if (FeaturesUtil.getDefaultFlag() != null)
+    			ampContext.setAttribute(Constants.DEF_FLAG_EXIST,new Boolean(true));
         
-        	
         	AmpTreeVisibility ampTreeVisibility=new AmpTreeVisibility();
         	//get the default amp template!!!
         	AmpTreeVisibility ampTreeVisibilityAux=new AmpTreeVisibility();

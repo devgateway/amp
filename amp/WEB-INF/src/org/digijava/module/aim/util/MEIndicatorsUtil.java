@@ -413,12 +413,15 @@ public class MEIndicatorsUtil
 			session = PersistenceManager.getSession();
 			String queryString = "select ind from "
 								+ AmpMEIndicators.class.getName() + " ind " 
-								+ "where (name like '" + name + "' && code like '" + code + "')";
+								+ "where (code like '" + code + "')";
 			qry = session.createQuery(queryString);
 			col = qry.list();
 			Iterator itr = col.iterator();
-			while(itr.hasNext())
-				meind = (AmpMEIndicators) itr.next();
+			while(itr.hasNext()){
+				AmpMEIndicators testind = (AmpMEIndicators) itr.next();
+				if (testind.getName().equals(name))
+					meind = testind;
+			}
 		}
 		catch(Exception e)
 		{

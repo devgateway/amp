@@ -98,7 +98,8 @@ public class AddOrgForm extends ActionForm {
 
 
 	public void reset(ActionMapping mapping, HttpServletRequest request){
-		if(("resetMode".equals(mode))&&(request.getParameter("addSector")==null)&&(request.getParameter("remSector")==null)&&(request.getParameter("saveFlag")==null))
+		String rMode = (String) request.getParameter("mode");
+		if(("resetMode".equals(rMode))&&(request.getParameter("addSector")==null)&&(request.getParameter("remSector")==null)&&(request.getParameter("saveFlag")==null)&&(request.getParameter("orgGroupAdded")==null))
 		{	
 	 	  name = null;
 		  acronym = null;

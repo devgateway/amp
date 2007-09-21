@@ -24,13 +24,12 @@
 			return false;
 		}
 		else {
-		
 			document.aimAddOrgGroupForm.orgGrpName.value = str;
 			document.aimAddOrgGroupForm.target = "_self";
 			document.aimAddOrgGroupForm.submit();
 			window.close();
 			<digi:context name="selectLoc" property="/aim/editOrganisation.do" />
-		    url = "<%= selectLoc %>?orgGroupAdded=true";
+		    url = "<%= selectLoc %>?orgGroupAdded=true&ampOrgId="+window.opener.document.aimAddOrgForm.ampOrgId.value+"&actionFlag="+window.opener.document.aimAddOrgForm.actionFlag.value;
 		  	window.opener.document.aimAddOrgForm.action = url;
 	 	 	window.opener.document.aimAddOrgForm.target = window.opener.name;
 	 	
@@ -143,7 +142,7 @@
 																			<table width="100%" cellspacing="5">
 																				<tr>
 																					<td width="45%" align="right">
-																						<input type="submit" value="Save" class="dr-menu" onclick="check()">
+																						<input type="button" value="Save" class="dr-menu" onclick="check()">
 																					</td>
 																					<td width="8%" align="left">
 																						<input type="reset" value="Reset" class="dr-menu">

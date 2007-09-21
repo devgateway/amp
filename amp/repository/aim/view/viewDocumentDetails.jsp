@@ -128,10 +128,17 @@ class="box-border-nopadding">
 		<td vAlign="top" align="center">
 			<table cellSpacing="3" cellPadding="3">
 				<tr>
-
-					<td><input type="button" value="    Edit    " class="dr-menu" onclick="editDocument(${aimRelatedLinksForm.document.docId},${aimRelatedLinksForm.document.activityId})")">
+					<td>
+						<c:set var="translation">
+							<digi:trn key="aim:btnEdit">Edit</digi:trn>
+						</c:set>					
+						<input type="button" value="${translation}" class="dr-menu" onclick="editDocument(${aimRelatedLinksForm.document.docId},${aimRelatedLinksForm.document.activityId})")">
 					</td>
-					<td><input type="button" value="Remove" class="dr-menu"	onclick="deleteDocument(${aimRelatedLinksForm.document.docId},${aimRelatedLinksForm.document.activityId})">
+					<td>
+						<c:set var="translation">
+							<digi:trn key="aim:btnRemove">Remove</digi:trn>
+						</c:set>										
+						<input type="button" value="${translation}" class="dr-menu"	onclick="deleteDocument(${aimRelatedLinksForm.document.docId},${aimRelatedLinksForm.document.activityId})">
 					</td>
 				</tr>
 			</table>

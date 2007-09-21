@@ -159,12 +159,6 @@ function selectOrganisation1() {
 							</logic:iterate>
 							</select>
 							
-							<input style="text-align:left" type='text' name='contrAmount' disabled="disabled"
-									value='${aimEUActivityForm.contrDonorId[idx]}'>
-								<!-- <digi:trn key="btn:selOrganizations">Sel Org</digi:trn> -->
- 						    <html:button  styleClass="buton" property="submitButton" onclick="selectOrganisation1()">
-								Sel Org
-							</html:button>
 							
 							<logic:present name="aimEUActivityForm" property="finTypes">
 							<select name="contrFinTypeId" style="width: 100px" class="inp-text">

@@ -228,7 +228,11 @@
 															<table width="100%" cellSpacing=2 cellPadding=3 vAlign="top" align="center"
 															bgcolor="#ffffff">
 																<tr><td bgcolor="#ffffff" align="left">
-																      <a href="javascript:listActivities()"> List of Unassigned Activities </a>
+																    	<a href="javascript:listActivities()"> 
+																      		<digi:trn key="aim:listOfUnassignedActivities">
+																				List of Unassigned Activities 
+																			</digi:trn> 
+																		</a>
 																</td></tr>
 															</table>
 														</td>
@@ -279,7 +283,11 @@
 																<tr>
 																	<c:if test="${aimTeamActivitiesForm.donorFlag == false}">
 																	<td align="left">
-																	   <a href="javascript:listActivities()"> List of Unassigned Activities </a>
+																	   <a href="javascript:listActivities()"> 
+																			<digi:trn key="aim:listOfUnassignedActivities">
+																				List of Unassigned Activities 
+																			</digi:trn> 
+																	   </a>
 																	</td>																	
 																	</c:if>
 																	<td>	

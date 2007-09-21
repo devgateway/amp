@@ -255,6 +255,7 @@ function checkUncheckAll2() {
 												<field:display name="Implementation Level" feature="Location">&nbsp;</field:display>
 												<field:display name="Region" feature="Location">&nbsp;</field:display>
 												<field:display name="Sector" feature="Location">&nbsp;</field:display>
+												<field:display name="Sub-Sector" feature="Location">&nbsp;</field:display>
 											</feature:display>
 											<module:display name="Funding"></module:display>
 											<feature:display  name="Funding Organizations" module="Funding">

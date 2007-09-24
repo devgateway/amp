@@ -7,39 +7,39 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
 
-<div id="mySorter" style="display: none"> 
+<div id="mySorter" style="display: none">
 		<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
-        <!-- 
+        <!--
 		<a href='#' onclick='hideSorter();return false'>
 			<b>
 				<digi:trn key="rep:pop:Close">Close</digi:trn>
 			</b>
 		</a>
 		 -->
-</div> 
+</div>
 
-<div id="myFilter" style="display: none"> 
+<div id="myFilter" style="display: none">
         <jsp:include page="/aim/reportsFilterPicker.do" />
-        <!-- 
+        <!--
 		<a href='#' onclick='hideFilter();return false'>
 			<b>
 				<digi:trn key="rep:pop:Close">Close</digi:trn>
 			</b>
 		</a>
 		 -->
-</div> 
+</div>
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 
-<!-- 
+<!--
 <div style='position:relative;display:none;' id="sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>">
-	
+
 		<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
 		<br/>
 		<a href='#' onclick='closeMessage();return false'><b><digi:trn key="rep:pop:Close">Close</digi:trn></b></a>
 </div>
  -->
-<!-- 
+<!--
 <div style='position:relative;display:none;' id="filterPicker-<bean:write name="reportMeta" property="ampReportId"/>">
 		<jsp:include page="/aim/reportsFilterPicker.do" />
 		<br/>
@@ -50,7 +50,7 @@
 
 
 
-<div align="center">		
+<div align="center">
 <table  cellSpacing="0" cellPadding="0" width="99%" border="0" align="center">
 
 	<logic:notEqual name="widget" scope="request" value="true">
@@ -73,7 +73,7 @@
 
 	<logic:equal name="viewFormat" scope="request" value="print">
 		<script language="JavaScript">
-	function load() 
+	function load()
 	{
 		window.print();
 	}
@@ -102,7 +102,7 @@
 			<logic:notEmpty name="reportMeta" property="hierarchies">
 				<a style="cursor:pointer"
 					onClick="showSorter(); ">
-				<u><digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn></u> </a>
+				<u><digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn></u> </a>&nbsp;
 			</logic:notEmpty>
 			<a style="cursor:pointer"
 				onClick="showFilter(); ">
@@ -114,32 +114,32 @@
 			<td align="right">
 				<font size="-5" face="arial" color="red">
 					<span  STYLE="font-style:  italic">
-					
+
 					<c:set var="AllAmount">
 					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
 					</c:set>
 					<digi:trn key="rep:pop:AllAmount"><%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%></digi:trn>
 					<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>">
 					<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-					<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"> 
+					<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>">
 						<%=selCurrency %>
 					</digi:trn>
 					</logic:present>
-					</span>			
+					</span>
 				</font>
 			</td>
 		</tr>
-<logic:notEmpty name="reportMeta" property="hierarchies">		
+<logic:notEmpty name="reportMeta" property="hierarchies">
 		<tr>
 			<td>
 				<logic:notEmpty name="report" property="levelSorters">
 				<logic:iterate name="report" property="levelSorters" id="sorter" indexId="levelId">
 				<logic:present name="sorter">
 					<digi:trn key="rep:pop:Level">Level</digi:trn> <bean:write name="levelId"/> <digi:trn key="rep:pop:sortedBy">sorted by</digi:trn> <bean:write name="sorter"/><br/>
-				</logic:present>					
+				</logic:present>
 				</logic:iterate>
 				</logic:notEmpty>
-			</td>		
+			</td>
 		</tr>
 	<tr> <td>&nbsp;</td></tr>
 	</logic:notEmpty>
@@ -150,24 +150,24 @@
 		<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
 		<bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
 		<bean:define id="listableStyle" value="list" toScope="request"/>
-		<bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>		
-			<jsp:include page="${listable.jspFile}"/>		
+		<bean:define id="listableTrnPrefix" value="filterProperty" toScope="request"/>
+			<jsp:include page="${listable.jspFile}"/>
 		</logic:present>
 	</td>
 	</tr>
 	<tr>
-	
+
 
 
 	<logic:notEqual name="report" property="totalUniqueRows" value="0">
 		<tr>
-			<td><!-- begin big report table --> 
+			<td><!-- begin big report table -->
 			<c:set var="pageNumber" value="<%=new Integer(0)%>" scope="request"/>
 			<c:set var="paginar" value="<%=new Boolean(true)%>" scope="request"/>
 			<c:if test="${not empty param.pageNumber }">
 				<c:set var="pageNumber" value="<%=Integer.valueOf(request.getParameter("pageNumber"))%>" scope="request"/>
-			</c:if>	
-			
+			</c:if>
+
 			<table id='reportTable'  cellSpacing="0" cellPadding="1" width="100%" class="reportsBorderTable">
 				<bean:define id="viewable" name="report"
 					type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
@@ -190,19 +190,19 @@
 					<c:if  test="${i eq pageNumber}">
 						<font color="#FF0000"><c:out value="${i + 1}" /></font>
 					</c:if>
-					<c:if  test="${i ne pageNumber}">	
+					<c:if  test="${i ne pageNumber}">
 							<a  style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~pageNumber=<c:out value="${i}" />');">
 								<c:out value="${i + 1}" />
-							</a> 
+							</a>
 					</c:if>
-					<c:if  test="${i < totalPages - 1}">	
+					<c:if  test="${i < totalPages - 1}">
 						|&nbsp
-					</c:if>				
+					</c:if>
 				</c:forEach>
 			</td>
 			</tr>
 		</logic:notEmpty>
-		
+
 	</logic:notEqual>
 	<logic:equal name="report" property="totalUniqueRows" value="0">
 		<tr>
@@ -232,7 +232,7 @@
 			&nbsp;
 		</td>
 	</tr>
-	
+
 </table>
 </div>
 

@@ -697,7 +697,7 @@ public class SaveActivity extends Action {
 	        	if(formRefDocs!=null && !formRefDocs.isEmpty())
 				for (Iterator refIter = formRefDocs.iterator(); refIter.hasNext();) {
 					ReferenceDoc refDoc = (ReferenceDoc) refIter.next();
-					if(ArrayUtils.contains(eaForm.getSelectedReferenceDocs(), refDoc.getCategoryValueId())){
+					if(ArrayUtils.contains(eaForm.getAllReferenceDocNameIds(), refDoc.getCategoryValueId())){
 						AmpActivityReferenceDoc dbRefDoc=null;//categoryRefDocMap.get(refDoc.getCategoryValueId());
 						//if (dbRefDoc==null){
 							dbRefDoc=new AmpActivityReferenceDoc();

@@ -79,8 +79,13 @@ function popupwin()
 }
 
 function toggleDiv(num){
-	var nm="#refComment"+num;
-	$(nm).toggle("fast");
+	var textBoxName='#refComment'+num;
+	var checkBoxName='#refCheck'+num;
+	var hiddenName='referenceDoc['+num+'].checked';//'input[@name=referenceDoc['+num+'].checked]';
+	var hidInput=document.getElementsByName(hiddenName)[0];
+	$(textBoxName).toggle("fast");
+	hidInput.value=$(checkBoxName).get(0).checked;
+	
 }
 
 -->
@@ -238,7 +243,8 @@ ${fn:replace(message,quote,escapedQuote)}
 														<c:forEach items="${aimEditActivityForm.referenceDocs}" var="refDoc" varStatus="loopstatus">
 															<tr valign="top">
 																<td>
-																	<html:multibox onclick="toggleDiv(${loopstatus.index})" styleId="refCheck${loopstatus.index}" name="aimEditActivityForm" property="selectedReferenceDocs" value="${refDoc.categoryValueId}"/>
+																	<html:hidden name="aimEditActivityForm" property="referenceDoc[${loopstatus.index}].checked" value="${refDoc.checked}"/>
+																	<html:multibox onclick="toggleDiv(${loopstatus.index})" styleId="refCheck${loopstatus.index}" name="aimEditActivityForm" property="allReferenceDocNameIds" value="${refDoc.categoryValueId}"/>
 																</td>
 																<td>
 																	${refDoc.categoryValue}

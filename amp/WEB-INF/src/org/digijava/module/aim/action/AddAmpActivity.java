@@ -18,9 +18,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -29,6 +26,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ReportData;
+import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.user.User;
@@ -39,7 +37,6 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpField;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.form.EditActivityForm;
@@ -58,6 +55,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.calendar.util.AmpUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.Constants;
@@ -72,8 +70,7 @@ import org.digijava.module.editor.util.Constants;
  *
  * @author Priyajith
  */
-public class AddAmpActivity
-    extends Action {
+public class AddAmpActivity extends Action {
 
   //private static Logger logger = Logger.getLogger(AddAmpActivity.class);
 
@@ -513,56 +510,68 @@ public class AddAmpActivity
               );
 
         
-        	//get all possible refdoc names from categories
-        	Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
+        if (eaForm.getReferenceDocs()==null){
+        	
+        }
+        
 
-        	if (catValues!=null){
-            	List<ReferenceDoc> refDocs=new ArrayList<ReferenceDoc>();
-        		Collection<AmpActivityReferenceDoc> activityRefDocs=null;
-        		Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=null;
+      	//get all possible refdoc names from categories
+      	Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
+      	
+    	if (catValues!=null && eaForm.getReferenceDocs()==null){
+        	List<ReferenceDoc> refDocs=new ArrayList<ReferenceDoc>();
+    		Collection<AmpActivityReferenceDoc> activityRefDocs=null;
+    		Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=null;
 
-        		if (eaForm.getActivityId()!=null){
-            		//get list of ref docs for activity
-        			activityRefDocs=ActivityUtil.getReferenceDocumentsFor(eaForm.getActivityId());
-                	//create map where keys are category value ids.
-                	categoryRefDocMap=new ActivityUtil.CategoryIdRefDocMapBuilder().createMap(activityRefDocs);
+    		if (eaForm.getActivityId()!=null){
+        		//get list of ref docs for activity
+    			activityRefDocs=ActivityUtil.getReferenceDocumentsFor(eaForm.getActivityId());
+            	//create map where keys are category value ids.
+    			categoryRefDocMap = AmpCollectionUtils.createMap(
+    					activityRefDocs, 
+    					new ActivityUtil.CategoryIdRefDocMapBuilder());
+    		}
+        	
+        	//create arrays, number of elements as much as category values
+        	Long[] refdocIds=new Long[catValues.size()];
+        	String[] refdocComments=new String[catValues.size()];
+        	
+        	int c=0;
+        	int selectedIds=0;
+        	for(AmpCategoryValue catVal: catValues){
+        		AmpActivityReferenceDoc refDoc=(categoryRefDocMap==null)?null:categoryRefDocMap.get(catVal.getId());
+        		ReferenceDoc doc=new ReferenceDoc();
+        		doc.setCategoryValueId(catVal.getId());
+        		doc.setCategoryValue(catVal.getValue());
+        		if (refDoc==null){
+        			refdocComments[c]="";
+        			doc.setComment("");
+        			doc.setChecked(false);
+        		}else{
+        			refdocIds[selectedIds++]=refDoc.getCategoryValue().getId();
+        			refdocComments[c]=refDoc.getComment();
+        			doc.setComment(refDoc.getComment());
+        			doc.setRefDocId(refDoc.getId());
+        			doc.setChecked(true);
         		}
-            	
-            	//create arrays, number of elements as much as category values
-            	Long[] refdocIds=new Long[catValues.size()];
-            	String[] refdocComments=new String[catValues.size()];
-            	
-            	int c=0;
-            	int selectedIds=0;
-            	for(AmpCategoryValue catVal: catValues){
-            		AmpActivityReferenceDoc refDoc=(categoryRefDocMap==null)?null:categoryRefDocMap.get(catVal.getId());
-            		ReferenceDoc doc=new ReferenceDoc();
-            		doc.setCategoryValueId(catVal.getId());
-            		doc.setCategoryValue(catVal.getValue());
-            		if (refDoc==null){
-            			refdocComments[c]="";
-            			doc.setComment("");
-            			doc.setChecked(false);
-            		}else{
-            			refdocIds[selectedIds++]=refDoc.getCategoryValue().getId();
-            			refdocComments[c]=refDoc.getComment();
-            			doc.setComment(refDoc.getComment());
-            			doc.setRefDocId(refDoc.getId());
-            			doc.setChecked(true);
-            		}
-            		refDocs.add(doc);
-            		c++;
-            	}
-            	
-            	//set selected ids
-            	eaForm.setSelectedReferenceDocs(refdocIds);
-            	//set all comments, someare empty
-            	eaForm.setRefDocComments(refdocComments);
-            	
-            	eaForm.setReferenceDocs(refDocs);
-        		
+        		refDocs.add(doc);
+        		c++;
         	}
         	
+        	//set selected ids
+        	eaForm.setAllReferenceDocNameIds(refdocIds);
+        	//set all comments, some are empty
+//        	eaForm.setRefDocComments(refdocComments);
+        	
+        	eaForm.setReferenceDocs(refDocs);
+    		
+    	}
+      	
+          
+        
+        
+        
+        
         
         // load the modalities from the database
         /*if (eaForm.getModalityCollection() == null) { // no longer necessary since they are in Category Manager

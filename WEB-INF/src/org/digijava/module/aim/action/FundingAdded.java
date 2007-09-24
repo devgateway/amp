@@ -64,11 +64,13 @@ public class FundingAdded extends Action {
 		}
 
 		int offset = -1;
-
+		Collection oldFundDetails = null;
 		if (found) {
 			if (eaForm.isEditFunding()) {
 				offset = eaForm.getOffset();
 				ArrayList fundList = new ArrayList(fundOrg.getFundings());
+				Funding fs = (Funding) fundList.get(offset);
+				oldFundDetails = fs.getFundingDetails();
 				fundList.set(offset, null);
 				fundOrg.setFundings(fundList);
 			}
@@ -142,6 +144,36 @@ public class FundingAdded extends Action {
 				}
 				fundDetails.add(fundDet);
 			}
+			
+			// Substract the old fundDetails of the funding we just added
+			if ((found)&&(eaForm.isEditFunding())) {
+				itr = oldFundDetails.iterator();
+				while (itr.hasNext()) {
+					FundingDetail fundDet = (FundingDetail) itr.next();
+					String formattedAmt = CurrencyWorker.formatAmount(
+							fundDet.getTransactionAmount());
+					fundDet.setTransactionAmount(formattedAmt);
+					
+					if (fundDet.getAdjustmentType() == Constants.PLANNED)
+						fundDet.setAdjustmentTypeName("Planned");
+					else if (fundDet.getAdjustmentType() == Constants.ACTUAL) {
+						fundDet.setAdjustmentTypeName("Actual");
+						Date dt = DateConversion.getDate(fundDet.getTransactionDate());
+						double frmExRt = CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,dt);
+						String toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
+						eaForm.setCurrCode(toCurrCode);
+						double toExRt = CurrencyUtil.getExchangeRate(toCurrCode,1,dt);
+						double amt = CurrencyWorker.convert1(DecimalToText.getDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
+						if (fundDet.getTransactionType() == Constants.COMMITMENT)
+							totComm -= amt;
+						else if (fundDet.getTransactionType() == Constants.DISBURSEMENT)
+							totDisb -= amt;
+						else if (fundDet.getTransactionType() == Constants.EXPENDITURE)
+							totExp -= amt;
+					}
+				}
+			}
+			
 		}
 		
 		Collection mtefProjections=new ArrayList();

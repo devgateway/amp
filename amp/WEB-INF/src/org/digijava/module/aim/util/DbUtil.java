@@ -5106,6 +5106,14 @@ public class DbUtil {
                 while (itr1.hasNext()) {
                     AmpOrganisation dnOrg = (AmpOrganisation) itr1.next();
                     // Filtering by donor-organisation here
+                    if(dnOrg.getOrgTypeId()!=null){
+                        if(!dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("bil") &&
+                           !dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("mul")){
+                            continue;
+                        }
+                    }
+
+
                     if (null != donor && donor.trim().length() > 1 && !"all".equalsIgnoreCase(donor)) {
                         if (!donor.equals(dnOrg.getAmpOrgId().toString()))
                             continue;
@@ -5494,6 +5502,13 @@ public class DbUtil {
                 while (itr1.hasNext()) {
                     AmpOrganisation dnOrg = (AmpOrganisation) itr1.next();
                     // Filtering by donor-organisation here
+                    if (dnOrg.getOrgTypeId() != null) {
+                        if (!dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("bil") &&
+                            !dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("mul")) {
+                            continue;
+                        }
+                    }
+
                     if (null != donor && donor.trim().length() > 1 && !"all".equalsIgnoreCase(donor)) {
                         if (!donor.equals(dnOrg.getAmpOrgId().toString()))
                             continue;

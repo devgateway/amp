@@ -76,9 +76,17 @@ private int isPreview=0;
 
 	private List costs;
 
+	/**
+	 * List of ReferenceDoc helper beans
+	 */
 	private List referenceDocs;
-	private Long[] selectedReferenceDocs;
-	private String[] refDocComments;
+	
+	/**
+	 * Doc names come from CategoryValues.
+	 * And this is list of IDs of those CategoryValues.
+	 */
+	private Long[] allReferenceDocNameIds;
+//	private String[] refDocComments;
 	
 	// location selector pop-up
 	private Long selLocs[] = null; // location selected from step 2 page to
@@ -615,6 +623,10 @@ private int isPreview=0;
 			financingBreakdown=null;
 			visibleProgram=null;
 			fundingRegions = null;
+			
+			allReferenceDocNameIds =null;
+//			refDocComments = null;
+			referenceDocs = null;
 		}
 
 		if (orgSelReset) {
@@ -4192,37 +4204,37 @@ public String getPurpose() {
 		this.referenceDocs = referenceDocs;
 	}
 
-	public Long[] getSelectedReferenceDocs() {
-		return selectedReferenceDocs;
+	public Long[] getAllReferenceDocNameIds() {
+		return allReferenceDocNameIds;
 	}
 
-	public void setSelectedReferenceDocs(Long[] selectedReferenceDocs) {
-		this.selectedReferenceDocs = selectedReferenceDocs;
+	public void setAllReferenceDocNameIds(Long[] selectedReferenceDocs) {
+		this.allReferenceDocNameIds = selectedReferenceDocs;
 	}
 
-	public String[] getRefDocComments() {
-		return refDocComments;
-	}
-
-	public String getRefDocComment(int index) {
-		return (refDocComments==null || refDocComments.length<=index)?"":refDocComments[index];
-	}
-
-	public void setRefDocComments(String[] refDocComments) {
-		this.refDocComments = refDocComments;
-	}
-
-	public void setRefDocComment(int index, String comment) {
-		if (refDocComments==null){
-			refDocComments=new String[index+1];
-		}
-		if (refDocComments.length<=index){
-			String[] newArray=new String[index+1];
-			System.arraycopy(refDocComments, 0, newArray, 0, refDocComments.length);
-			refDocComments=newArray;
-		}
-		refDocComments[index]=comment;
-	}
+//	public String[] getRefDocComments() {
+//		return refDocComments;
+//	}
+//
+//	public String getRefDocComment(int index) {
+//		return (refDocComments==null || refDocComments.length<=index)?"":refDocComments[index];
+//	}
+//
+//	public void setRefDocComments(String[] refDocComments) {
+//		this.refDocComments = refDocComments;
+//	}
+//
+//	public void setRefDocComment(int index, String comment) {
+//		if (refDocComments==null){
+//			refDocComments=new String[index+1];
+//		}
+//		if (refDocComments.length<=index){
+//			String[] newArray=new String[index+1];
+//			System.arraycopy(refDocComments, 0, newArray, 0, refDocComments.length);
+//			refDocComments=newArray;
+//		}
+//		refDocComments[index]=comment;
+//	}
 
 
 }

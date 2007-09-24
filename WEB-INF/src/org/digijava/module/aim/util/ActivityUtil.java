@@ -24,7 +24,7 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.utils.MapBuilder;
+import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
@@ -2681,13 +2681,10 @@ public class ActivityUtil {
    * where each elements key is the id of {@link AmpCategoryValue} object which is asigned to the element itself 
    *
    */
-  public static class CategoryIdRefDocMapBuilder extends MapBuilder<Long, AmpActivityReferenceDoc>{
+  public static class CategoryIdRefDocMapBuilder implements AmpCollectionUtils.KeyResolver<Long, AmpActivityReferenceDoc>{
 
-	@Override
-	public Long resolveKey(AmpActivityReferenceDoc e) {
-		// this is not error, please create other builder if you want RefDoc id as key. 
-		return e.getCategoryValue().getId();
-//		return e.getId();
+	public Long resolveKey(AmpActivityReferenceDoc element) {
+		return element.getCategoryValue().getId();
 	}
 	  
   }

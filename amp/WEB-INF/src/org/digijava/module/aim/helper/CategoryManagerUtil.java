@@ -26,6 +26,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryClass;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.exception.NoCategoryClassException;
 
 public class CategoryManagerUtil {
 	private static Logger logger = Logger.getLogger(CategoryManagerUtil.class);
@@ -253,7 +254,7 @@ public class CategoryManagerUtil {
 	 * @param categoryId
 	 * @return AmpCategoryClass object with id=categoryId from the database
 	 */
-	public static AmpCategoryClass loadAmpCategoryClass(Long categoryId) {
+	public static AmpCategoryClass loadAmpCategoryClass(Long categoryId) throws NoCategoryClassException {
 		Session dbSession			= null;
 		Collection returnCollection	= null;
 		try {
@@ -284,8 +285,9 @@ public class CategoryManagerUtil {
 		if((returnCollection!=null)&&(!returnCollection.isEmpty())){
             return (AmpCategoryClass)returnCollection.toArray()[0];
         }else{
-        	logger.error( "No AmpCategoryClass found with id '" + categoryId + "'" );
-            return null;
+        	throw new NoCategoryClassException("No AmpCategoryClass found with id '" + categoryId + "'");
+        	//logger.error( "No AmpCategoryClass found with id '" + categoryId + "'" );
+            
         }
 	}
 	/**
@@ -293,7 +295,7 @@ public class CategoryManagerUtil {
 	 * @param categoryId
 	 * @return AmpCategoryClass object with name=categoryName from the database
 	 */
-	public static AmpCategoryClass loadAmpCategoryClass(String name) {
+	public static AmpCategoryClass loadAmpCategoryClass(String name) throws NoCategoryClassException {
 		Session dbSession			= null;
 		Collection returnCollection	= null;
 		try {
@@ -324,8 +326,7 @@ public class CategoryManagerUtil {
         if((returnCollection!=null)&&(!returnCollection.isEmpty())){
             return (AmpCategoryClass)returnCollection.toArray()[0];
         }else{
-        	logger.error( "No AmpCategoryClass found with name '" + name + "'" );
-            return null;
+        	throw new NoCategoryClassException("No AmpCategoryClass found with name '" + name + "'");
         }
 
 	}
@@ -338,7 +339,14 @@ public class CategoryManagerUtil {
 	 */
 	public static Collection getAmpCategoryValueCollection(String categoryName, Boolean ordered) {
 		boolean shouldOrderAlphabetically;
-		AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClass(categoryName);
+		
+		AmpCategoryClass ampCategoryClass = null; 
+		try {
+			ampCategoryClass = CategoryManagerUtil.loadAmpCategoryClass(categoryName);
+		} catch (NoCategoryClassException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (ampCategoryClass == null)
 			return null;
 		if (ordered == null) {
@@ -367,7 +375,13 @@ public class CategoryManagerUtil {
 	 */
 	public static Collection<AmpCategoryValue> getAmpCategoryValueCollectionByKey(String categoryKey, Boolean ordered) {
 		boolean shouldOrderAlphabetically;
-		AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClassByKey(categoryKey);
+		AmpCategoryClass ampCategoryClass = null;
+		try {
+			ampCategoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(categoryKey);
+		} catch (NoCategoryClassException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (ampCategoryClass == null)
 			return null;
 		if (ordered == null) {
@@ -396,25 +410,29 @@ public class CategoryManagerUtil {
 	 */
 	public static Collection getAmpCategoryValueCollection(Long categoryId, Boolean ordered) {
 		boolean shouldOrderAlphabetically;
-		AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClass(categoryId);
-		if (ampCategoryClass == null)
-			return null;
-		if (ordered == null) {
-			shouldOrderAlphabetically	= ampCategoryClass.getIsOrdered();
+		try {
+			AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClass(categoryId);
+			if (ampCategoryClass == null)
+				return null;
+			if (ordered == null) {
+				shouldOrderAlphabetically	= ampCategoryClass.getIsOrdered();
+			}
+			else
+				shouldOrderAlphabetically	= ordered.booleanValue();
+		
+			List ampCategoryValues		= ampCategoryClass.getPossibleValues();
+		
+			if ( !shouldOrderAlphabetically )
+					return ampCategoryValues;
+		
+			TreeSet treeSet	= new TreeSet( new CategoryManagerUtil().new CategoryComparator() );
+			treeSet.addAll(ampCategoryValues);
+			return treeSet;
 		}
-		else
-			shouldOrderAlphabetically	= ordered.booleanValue();
-
-		List ampCategoryValues		= ampCategoryClass.getPossibleValues();
-
-		if ( !shouldOrderAlphabetically )
-				return ampCategoryValues;
-
-		TreeSet treeSet	= new TreeSet( new CategoryManagerUtil().new CategoryComparator() );
-		treeSet.addAll(ampCategoryValues);
-
-
-		return treeSet;
+		catch(Exception E) {
+			E.printStackTrace();
+			return null;
+		}
 	}
 	/**
 	 * returns a string containing only ascii characters
@@ -454,7 +472,7 @@ public class CategoryManagerUtil {
 	 * @param key The key of the AmpCategoryClass object. (A key can be attributed when creating a new category)
 	 * @return The AmpCategoryClass object with the specified key. If not found returns null.
 	 */
-	public static AmpCategoryClass loadAmpCategoryClassByKey(String key)
+	public static AmpCategoryClass loadAmpCategoryClassByKey(String key) throws NoCategoryClassException
 	{
 		Session dbSession			= null;
 		Collection col=new ArrayList();
@@ -484,8 +502,7 @@ public class CategoryManagerUtil {
 			return x;
 		}
 		else{
-			logger.error( "No AmpCategoryClass found with key '" + key + "'" );
-			return null;
+			throw new NoCategoryClassException("No AmpCategoryClass found with key '" + key + "'");
 		}
 	}
 	/**
@@ -497,7 +514,13 @@ public class CategoryManagerUtil {
 	 */
 	public static Collection getAmpCategoryByKey(String key, Boolean ordered) {
 		boolean shouldOrderAlphabetically;
-		AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClassByKey(key);
+		AmpCategoryClass ampCategoryClass = null;
+		try {
+			ampCategoryClass = CategoryManagerUtil.loadAmpCategoryClassByKey(key);
+		} catch (NoCategoryClassException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (ampCategoryClass == null)
 			return null;
 		if (ordered == null) {

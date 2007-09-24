@@ -438,9 +438,12 @@ function fnChk(frmContrl){
 			                              </td>
 			                            </tr>
 			                            <feature:display name="Cross Cutting Issues" module="National Planning Dashboard">
-											&nbsp;
+			                            	<tr>
+			                            		<td>
+ 													<jsp:include page="addActivityStep2CrossCuttingIssues.jsp"/>
+			                            		</td>
+			                            	</tr>
 										</feature:display>
-											<jsp:include page="addActivityStep2CrossCuttingIssues.jsp"/>
 			                            
 			                            <!--
 			                            <tr>

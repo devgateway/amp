@@ -2995,7 +2995,7 @@ private int isPreview=0;
 	 * @return Returns the totalCommitments.
 	 */
 	public double getTotalCommitments() {
-		return totalCommitments;
+		return Math.round(totalCommitments * 100) / ((double)100);
 	}
 
 	/**
@@ -3009,7 +3009,7 @@ private int isPreview=0;
 	 * @return Returns the totalDisbursements.
 	 */
 	public double getTotalDisbursements() {
-		return totalDisbursements;
+		return Math.round(totalDisbursements * 100) / ((double)100);
 	}
 
 	/**
@@ -3023,7 +3023,7 @@ private int isPreview=0;
 	 * @return Returns the totalExpenditures.
 	 */
 	public double getTotalExpenditures() {
-		return totalExpenditures;
+		return Math.round(totalExpenditures* 100) / ((double)100);
 	}
 
 	/**

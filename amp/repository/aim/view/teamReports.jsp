@@ -8,7 +8,7 @@
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
-<c:set target="${bcparams}" property="dest" value="teamLead"/>			
+<c:set target="${bcparams}" property="dest" value="teamLead"/>
 
 <script type="text/javascript">
 
@@ -16,7 +16,7 @@
 	function listReports()
 	{
 		document.aimTeamReportsForm.addReport.value="List of Unassigned Reports";
-		document.aimTeamReportsForm.action="/updateTeamReports.do";		
+		document.aimTeamReportsForm.action="/updateTeamReports.do";
 		document.aimTeamReportsForm.submit();
 	}
 
@@ -24,7 +24,7 @@
 	function checkall() {
 		var selectbox = document.aimTeamReportsForm.checkAll;
 		var items = document.aimTeamReportsForm.selReports;
-		if (document.aimTeamReportsForm.selReports.checked == true || 
+		if (document.aimTeamReportsForm.selReports.checked == true ||
 							 document.aimTeamReportsForm.selReports.checked == false) {
 				  document.aimTeamReportsForm.selReports.checked = selectbox.checked;
 		} else {
@@ -39,23 +39,23 @@
 			if (document.aimTeamReportsForm.selReports.checked == false) {
 				alert("Please choose a report to remove");
 				return false;
-			}				  
+			}
 		} else {
-			var length = document.aimTeamReportsForm.selReports.length;	  
+			var length = document.aimTeamReportsForm.selReports.length;
 			var flag = 0;
 			for (i = 0;i < length;i ++) {
 				if (document.aimTeamReportsForm.selReports[i].checked == true) {
 					flag = 1;
 					break;
 				}
-			}		
+			}
 
 			if (flag == 0) {
 				alert("Please choose a report to remove");
-				return false;					  
-			}				  
+				return false;
+			}
 		}
-		return true;			  
+		return true;
 	}
 
 -->
@@ -112,7 +112,7 @@
 							</tr>
 							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">	
+									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">
 										<tr><td>
 										<digi:errors />
 										</td></tr>
@@ -150,22 +150,22 @@
 														<td align="center">
 															<digi:trn key="aim:noReportsPresent">No reports present</digi:trn>
 														</td>
-													</tr>	
+													</tr>
 													<tr><td>&nbsp;</td></tr>
 													<tr>
 														<td align="center">
 															<a href="javascript:listReports()"> List of Unassigned Reports </a>
 														</td>
-													</tr>	
-													</logic:empty>							
+													</tr>
+													</logic:empty>
 													<logic:notEmpty name="aimTeamReportsForm" property="reports">
 													<tr>
 														<td>
 															<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
 															bgcolor="#dddddd">
-															<logic:iterate name="aimTeamReportsForm" property="reports" id="reports" 
+															<logic:iterate name="aimTeamReportsForm" property="reports" id="reports"
 															type="org.digijava.module.aim.helper.ReportsCollection">
-																<bean:define id="ampReports" name="reports" property="report" 
+																<bean:define id="ampReports" name="reports" property="report"
 																type="org.digijava.module.aim.dbentity.AmpReports" />
 																<tr bgColor=#f4f4f2>
 																	<td width="3%">
@@ -176,7 +176,7 @@
 																	<td width="73%">
 																		<bean:write name="ampReports" property="name" />
 																	</td>
-																	<jsp:useBean id="urlParams" type="java.util.Map" 
+																	<jsp:useBean id="urlParams" type="java.util.Map"
 																	class="java.util.HashMap"/>
 																	<c:set target="${urlParams}" property="id">
 																		<bean:write name="ampReports" property="ampReportId" />
@@ -227,19 +227,15 @@
 														<td align="left">
 															<table cellspacing="5" width="100%">
 																<tr>
-																	<td align="left">
-													                    <a href="javascript:listReports()"> 
-													                    	<digi:trn key="aim:teamReportListUnassigned">List of Unassigned Reports </digi:trn>
-													                    </a>
-																	</td>
-																	<td >	
+																	<td align="right">
+
 																		<html:submit  styleClass="dr-menu" property="removeReports"  onclick="return validate()">
-																			<digi:trn key="btn:removeSelectedReports">Remove selected reports</digi:trn> 
+																			<digi:trn key="btn:removeSelectedReports">Remove selected reports</digi:trn>
 																		</html:submit>
-																		
+
 																	</td>
 																	<td align="right">
-													                   <a href="javascript:listReports()"> 
+													                   <a href="javascript:listReports()">
 													                    	<digi:trn key="aim:teamReportListUnassigned">List of Unassigned Reports </digi:trn>
 													                    </a>
 																	</td>
@@ -270,7 +266,7 @@
 															<font color="blue">
 															<digi:trn key="aim:reportMemberSpecific">*M</digi:trn>
 															<digi:trn key="aim:teamReportListViewableBySelected">
-															Indicates the report is viewable by selected team members, 
+															Indicates the report is viewable by selected team members,
 															whom the team leader assigns.
 															</digi:trn>
 															</font>
@@ -285,7 +281,7 @@
 							<tr><td bgColor=#f4f4f2>
 								&nbsp;
 							</td></tr>
-						</table>			
+						</table>
 					</td>
 				</tr>
 			</table>

@@ -65,12 +65,12 @@
 			<td width="30%" align="center">
 
 			[ <digi:link href="/visibilityManager.do" name="urlParams10" 
-				title="${translation}" >Edit</digi:link> ]&nbsp;&nbsp;&nbsp;
+				title="${translation}" ><digi:trn key="aim:featureManagerEditLink">Edit</digi:trn></digi:link> ]&nbsp;&nbsp;&nbsp;
 			<c:set var="translation">
 				<digi:trn key="aim:clickToDeleteTemplate">Click here to Delete Template</digi:trn>
 			</c:set>
-			[ <digi:link href="/visibilityManager.do" name="urlParams11" 
-				title="${translation}" onclick="return onDelete()">Delete</digi:link> ]
+			[ <digi:link href="/visibilityManager.do" name="urlParams11"  
+				title="${translation}" onclick="return onDelete()"><digi:trn key="aim:featureManagerDeleteLink">Delete</digi:trn></digi:link> ]
 			</td>
 		</tr>
 	</logic:iterate>

@@ -88,6 +88,19 @@
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="gatePermLink">
+                                <digi:trn key="aim:gatePermLinkTitle">Click here to manage gate permissions and assignments</digi:trn>
+                              </c:set>
+                              <html:link href="/gateperm/managePermMap.do" title="${gatePermLinkTitle}" >
+                                <digi:trn key="aim:gatePermLink">
+                                Manage Gate Permissions
+                                </digi:trn>
+                              </html:link>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class=f-names noWrap>
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="trnSystemSettings">
                                 <digi:trn key="aim:clickToViewSystemSettings">Click here to view System Settings</digi:trn>
                               </c:set>

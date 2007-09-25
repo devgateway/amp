@@ -16,7 +16,8 @@ function submitForm(mode) {
 
 <digi:errors/>
 
-<table border="1">
+<table>
+
 <tr><td align="right">Permissible Category</td><td>
 <html:select property="permissibleCategory" onchange="submitForm('permissibleCategoryPicked')">
 <html:option value="select">--Select--</html:option>
@@ -32,6 +33,10 @@ function submitForm(mode) {
 <html:optionsCollection property="_availablePermissions" value="id" label="name"/>
 </html:select>
 <html:button property="saveGlobal" onclick="submitForm('saveGlobal')">Assign</html:button>
+<digi:link href="/managePerm.do?list" title="EDIT PERMISSIONS">
+<digi:img src="module/gateperm/images/edit.gif" border="0" />&nbsp;Edit Permissions
+</digi:link>
+
 </td>
 <tr><td colspan="2"><b>OR...</b></td></tr>
 </logic:notEmpty>
@@ -60,6 +65,6 @@ function submitForm(mode) {
 <html:submit property="saveDetailed">Assign All</html:submit>
 </logic:notEmpty>
 </td></tr>
-
 </table>
 </digi:form>
+

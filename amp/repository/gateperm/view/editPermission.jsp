@@ -50,7 +50,15 @@ function submitForm(mode) {
 <html:optionsCollection property="_availableGateTypes" value="name" label="simpleName"/>
 </html:select>
 </td></tr>
+
+<tr><td align="right">
+
+</td><td>
+
+</td></tr>
+
 </logic:equal>
+
 
 <logic:equal name="permissionForm" property="type" value="Composite">	
 <tr><td align="right">Permissions:</td><td>
@@ -66,7 +74,8 @@ function submitForm(mode) {
 <logic:iterate id="gateParameter" name="permissionForm" property="gateParameters">
 <tr><td align="right">
 	<bean:write name="gateParameter" property="category"/> :</td><td>
-	<html:textarea indexed="true" name="gateParameter" property="value"/>
+	<html:textarea indexed="true" name="gateParameter" property="value.value"/>
+	<i><bean:write name="gateParameter" property="value.category"/></i>
 </td></tr>
 </logic:iterate>
 </table>

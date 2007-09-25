@@ -7,6 +7,7 @@ package org.digijava.module.gateperm.gates;
 import java.util.Map;
 import java.util.Queue;
 
+import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.gateperm.core.Gate;
 
 import bsh.EvalError;
@@ -22,7 +23,9 @@ import bsh.Interpreter;
  */
 public class ScriptingGate extends Gate {
     
-    	private static final String[] PARAM_NAMES=new String[] {"bshScriptBody"};
+    	private static final MetaInfo[] PARAM_INFO=
+    		new MetaInfo[] {new MetaInfo("bshScriptBody",
+    				"the BSH script contents. see http://www.beanshell.org.The script has one variable, the Map named 'scope'")};
 
 	/** TODO description here
 	 * @param scope
@@ -49,7 +52,7 @@ public class ScriptingGate extends Gate {
 	/** @see org.digijava.module.gateperm.core.Gate#logic()
 	 */
 	@Override
-	public boolean logic() {
+	public boolean logic() throws Exception {
 		Interpreter i=new Interpreter();
 		try {
 			i.set("scope", scope);
@@ -63,18 +66,17 @@ public class ScriptingGate extends Gate {
 	
 	}
 
-	/** @see org.digijava.module.gateperm.core.Gate#parameterNames()
-	 */
 	@Override
-	public String[] parameterNames() {
-		return PARAM_NAMES;
+	public MetaInfo[] mandatoryScopeKeys() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MetaInfo[] parameterInfo() {
+		return PARAM_INFO;
 	}
 
 
-
-	@Override
-	public String[] mandatoryScopeKeys() {
-	    return null;
-	}
 
 }

@@ -75,13 +75,13 @@ ${fn:replace(message,quote,escapedQuote)}
 </logic:iterate>
 </table>
 
-<div align="right">
+<div align="left">&nbsp;&nbsp;
 <digi:link href="/managePerm.do?new" title="NEW">
-<digi:img src="module/gateperm/images/add.gif" border="0" />&nbsp;Add New
+<digi:img src="module/gateperm/images/add.gif" border="0" />Add New Permission
 </digi:link>
+
 </div>
-
-
+<br/>
 <script type="text/javascript">
 <!--
 var tableWidgetObj = new DHTMLSuite.tableWidget();

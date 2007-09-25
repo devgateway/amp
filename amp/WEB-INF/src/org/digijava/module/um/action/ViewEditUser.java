@@ -1,8 +1,6 @@
 package org.digijava.module.um.action;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -21,24 +19,19 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.UserLangPreferences;
 import org.digijava.kernel.entity.UserPreferences;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.helper.CountryBean;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.um.form.ViewEditUserForm;
 import org.digijava.module.um.util.DbUtil;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.util.TeamMemberUtil;
-import java.util.*;
-import org.digijava.kernel.dbentity.Country;
-import org.digijava.module.aim.helper.CountryBean;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.translator.util.TrnCountry;
-import org.digijava.module.aim.util.DbUtil.HelperTrnCountryNameComparator;
-import org.digijava.module.aim.dbentity.AmpOrgType;
 
 public class ViewEditUser extends Action {
 
@@ -123,6 +116,7 @@ public class ViewEditUser extends Action {
             uForm.setSelectedOrgGroupId(null);
             uForm.setSelectedOrgTypeId(null);
             uForm.setSelectedCountryIso(null);
+            uForm.setAssignedOrgId(null);
 
             uForm.setId(null);
             uForm.setEmail(null);
@@ -144,6 +138,7 @@ public class ViewEditUser extends Action {
                 uForm.setLastName(user.getLastName());
                 uForm.setName(user.getName());
                 uForm.setUrl(user.getUrl());
+                uForm.setAssignedOrgId(user.getAssignedOrgId());
 
                 Locale language = null;
                 if (langPref == null) {
@@ -197,12 +192,16 @@ public class ViewEditUser extends Action {
         } else {
             if (uForm.getEvent().equalsIgnoreCase("save")) {
                 if (user != null) {
+                	
                     user.setCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(uForm.getSelectedCountryIso()));
                     user.setEmail(uForm.getEmail());
                     user.setFirstNames(uForm.getFirstNames());
                     user.setLastName(uForm.getLastName());
                     user.setAddress(uForm.getMailingAddress());
                     user.setOrganizationName(uForm.getSelectedOrgName());
+                    
+                    user.setAssignedOrgId(uForm.getAssignedOrgId());
+                    
                     user.setUrl(uForm.getUrl());
 
                     Locale language = DbUtil.getLanguageByCode(uForm.getSelectedLanguageCode());

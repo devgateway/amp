@@ -14,6 +14,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -94,6 +95,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
+import org.digijava.module.gateperm.core.GatePermConst;
 
 /**
  * Loads the activity details of the activity specified in the form bean
@@ -144,49 +146,63 @@ public class EditActivity
     //
     String errorMsgKey = "";
 
+    //gateperm checks are non mandatory, this means that an user still has permissions to edit an activity
+    //those permissions can come from someplace else
+    boolean gatePermEditAllowed = false;
+    if (activityId != null) {
+        activity = ActivityUtil.getAmpActivity(activityId);
+        Map scope=new HashMap();
+        scope.put(GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
+		gatePermEditAllowed = activity.canDo(GatePermConst.Actions.EDIT, scope);
+    }
+    
+    
+    //old permission checking - this will be replaced by a global gateperm stuff
     // Checking whether the user have write access to the activity
-    if (!mapping.getPath().trim().endsWith("viewActivityPreview")) {
-      if (! ("Team".equalsIgnoreCase(tm.getTeamAccessType()))) {
-        errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
-      }
-      else if (tm.getWrite() == false) {
-        errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
-      }
+    
+    if(!gatePermEditAllowed) {
+	    if (!mapping.getPath().trim().endsWith("viewActivityPreview")) {
+	      if (! ("Team".equalsIgnoreCase(tm.getTeamAccessType()))) {
+	        errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
+	      }
+	      else if (tm.getWrite() == false) {
+	        errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
+	      }
+	    }
+	    else {
+	      Collection euActs = EUActivityUtil.getEUActivities(activityId);
+	      request.setAttribute("costs", euActs);
+	    }
+	
+	    if (errorMsgKey.trim().length() > 0) {
+	      errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+	          errorMsgKey));
+	      saveErrors(request, errors);
+	
+	      errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
+	      String url = "/aim/viewChannelOverview.do?ampActivityId="
+	          + activityId + "&tabIndex=0";
+	      RequestDispatcher rd = getServlet().getServletContext()
+	          .getRequestDispatcher(url);
+	      rd.forward(request, response);
+	      return null;
+	
+	    }
+	    else if (tm != null && tm.getWrite() == false)
+	      errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
+	
+	    if (errorMsgKey.trim().length() > 0) {
+	      errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+	          errorMsgKey));
+	      saveErrors(request, errors);
+	      String url = "/aim/viewChannelOverview.do?ampActivityId="
+	          + activityId + "&tabIndex=0";
+	      RequestDispatcher rd = getServlet().getServletContext()
+	          .getRequestDispatcher(url);
+	      rd.forward(request, response);
+	      return null;
+	    }
     }
-    else {
-      Collection euActs = EUActivityUtil.getEUActivities(activityId);
-      request.setAttribute("costs", euActs);
-    }
-
-    if (errorMsgKey.trim().length() > 0) {
-      errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-          errorMsgKey));
-      saveErrors(request, errors);
-
-      errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
-      String url = "/aim/viewChannelOverview.do?ampActivityId="
-          + activityId + "&tabIndex=0";
-      RequestDispatcher rd = getServlet().getServletContext()
-          .getRequestDispatcher(url);
-      rd.forward(request, response);
-      return null;
-
-    }
-    else if (tm != null && tm.getWrite() == false)
-      errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
-
-    if (errorMsgKey.trim().length() > 0) {
-      errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-          errorMsgKey));
-      saveErrors(request, errors);
-      String url = "/aim/viewChannelOverview.do?ampActivityId="
-          + activityId + "&tabIndex=0";
-      RequestDispatcher rd = getServlet().getServletContext()
-          .getRequestDispatcher(url);
-      rd.forward(request, response);
-      return null;
-    }
-
     // load all themes
     Collection themes = new ArrayList(ProgramUtil.getAllThemes());
     eaForm.setProgramCollection(themes);
@@ -425,7 +441,7 @@ public class EditActivity
       eaForm.setPerspectives(DbUtil.getAmpPerspective());
 
       if (activityId != null) {
-        activity = ActivityUtil.getAmpActivity(activityId);
+        
         
         /* Insert Categories */
         AmpCategoryValue ampCategoryValue = CategoryManagerUtil.

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.exception.NotBoundGateInputException;
 
@@ -21,7 +22,13 @@ import org.digijava.module.gateperm.exception.NotBoundGateInputException;
  */
 public class LogicalGate extends Gate {
 
-    private static String [] PARAM_NAMES=new String[] { "leftGateClassName", "rightGateClassName", "operator" };
+		
+    private static final MetaInfo [] PARAM_INFO=new MetaInfo[] { 
+		new MetaInfo("leftGateClassName", "the class name for the left gate"),
+		new MetaInfo("rightGateClassName","the class name for the right gate"),
+		new MetaInfo("operator","the boolean operator - AND, OR, XOR")};
+	
+	
     
     public LogicalGate(Map scope, Queue<String> parameters) {
 	super(scope, parameters);
@@ -60,7 +67,7 @@ public class LogicalGate extends Gate {
          * @see org.digijava.module.gateperm.core.Gate#logic()
          */
     @Override
-    public boolean logic() {
+    public boolean logic() throws Exception  {
 	String leftGateClassInfo = (String) parameters.remove();
 	String rightGateClassInfo = (String) parameters.remove();
 	
@@ -93,17 +100,22 @@ public class LogicalGate extends Gate {
 	}
     }
     
-    @Override
-    public String[] parameterNames() {
-	return PARAM_NAMES;
-    }
 
     public static final int OPERATOR_AND = 0;
     public static final int OPERATOR_OR  = 1;
     public static final int OPERATOR_XOR = 2;
 
-    @Override
-    public String[] mandatoryScopeKeys() {
-	return null;
-    }
+	@Override
+	public MetaInfo[] mandatoryScopeKeys() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MetaInfo[] parameterInfo() {
+		return PARAM_INFO;
+	}
+	
+
+
 }

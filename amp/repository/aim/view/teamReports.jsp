@@ -227,18 +227,19 @@
 														<td align="left">
 															<table cellspacing="5" width="100%">
 																<tr>
-																	<td align="right">
+                                                                                                                                <td align="left">
+													                   <a href="javascript:listReports()">
+													                    	<digi:trn key="aim:teamReportListUnassigned">List of Unassigned Reports </digi:trn>
+													                    </a>
+																	</td>
+																	<td align="left">
 
 																		<html:submit  styleClass="dr-menu" property="removeReports"  onclick="return validate()">
 																			<digi:trn key="btn:removeSelectedReports">Remove selected reports</digi:trn>
 																		</html:submit>
 
 																	</td>
-																	<td align="right">
-													                   <a href="javascript:listReports()">
-													                    	<digi:trn key="aim:teamReportListUnassigned">List of Unassigned Reports </digi:trn>
-													                    </a>
-																	</td>
+
 																</tr>
 															</table>
 														</td>

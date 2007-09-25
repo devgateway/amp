@@ -24,16 +24,7 @@
 		document.aimAddOrgForm.target = "_self";
 		document.aimAddOrgForm.submit();
 	}
-	function addGroup99() {
-		openNewWindow(600, 400);
-	 	<digi:context name="selectLoc" property="/aim/editOrganisation.do" />
-		  var id = document.aimAddOrgForm.ampOrgId.value;
-		url = "<%= selectLoc %>?action=createGroup";
-		  document.aimAddOrgForm.action = url;
-	 	 document.aimAddOrgForm.target = popupPointer.name;
-	 	//alert(document.aimAddOrgForm.actionGroup.value);
-		document.aimAddOrgForm.submit();
-	}
+	
 	function addGroup() {
 		openNewWindow(600, 400);
 	 	<digi:context name="selectLoc" property="context/module/moduleinstance/editOrgGroup.do" />
@@ -676,7 +667,7 @@ function loadPage()
 									                                                                  <c:if test="<%=i<5 %>">
 									                                                                  <field:display name="Add Sectors Button" feature="Sectors">
 									                                                                    <td>
-									                                                                      <input type="button" value="Add Sectors" class="buton"  onclick="addSectors();">
+									                                                                       <input type="button" class="buton" onclick="addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
 									                                                                    </td>
 									                                                                  </field:display>
 									                                                                  </c:if>
@@ -776,10 +767,16 @@ function loadPage()
 																	 				</td>
 																	 			</tr>
 																	 			<tr valign="baseline">
-																	 				<td>
-																	 					<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-																	 					<a onclick="addPledge()" style="cursor:pointer;"><digi:trn key="aim:addPledge">Add Pledge</digi:trn></a>
+																	 				<td colspan="1" width="10px">
+																	 				    <input type="button" class="buton" onclick="addPledge();" value='<digi:trn key="btn:addPledge">Add Pledge</digi:trn>' />
 																	 				</td>
+																	 				<td colspan="5" align="right">
+																	 				<FONT color=blue>*
+																						<digi:trn key="aim:allTheAmountsInThousands">
+																							All the amounts are in thousands (000)
+				  																		</digi:trn>
+																					</FONT>
+																					</td>
 																	 			</tr>
 																	 		</table>
 																	 		<!-- ############################## -->

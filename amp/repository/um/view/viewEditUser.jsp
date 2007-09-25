@@ -240,6 +240,30 @@ function validate(str,value){
               </html:select>
             </td>
           </tr>
+          
+          
+          <tr>
+            <td>
+              <digi:trn key="aim:viewEditUser:verifiedAssignedOrg">
+				Verified Assigned Organisation
+              </digi:trn>
+            </td>
+            <td>
+              <html:select name="umViewEditUserForm" property="assignedOrgId" style="font-family:verdana;font-size:11px;width:180px;">
+                <c:set var="translation">
+                  <digi:trn key="aim:viewEditUser:selectOrganisation">
+                  --Select organisation--
+                  </digi:trn>
+                </c:set>
+                <html:option value="-1">${translation}</html:option>
+                <c:if test="${!empty umViewEditUserForm.orgs}">
+                  <html:optionsCollection name="umViewEditUserForm" property="orgs" value="ampOrgId" label="name"/>
+                </c:if>
+              </html:select>
+            </td>
+          </tr>
+          
+          
           <tr>
             <td>
             &nbsp;

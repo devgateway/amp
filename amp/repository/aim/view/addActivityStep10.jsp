@@ -698,7 +698,7 @@ ${fn:replace(message,quote,escapedQuote)}
 											</tr>
 											<tr>
 												<td width="32%" align="center" colspan="2">
-													<input type="button" value="Add Indicator" class="dr-menu" onclick="addIndicator()">
+													<input type="button" value="<digi:trn key='btn:addIndicator'>Add Indicator</digi:trn>"  class="dr-menu" onclick="addIndicator()">
 												</td>
 											</tr>
 											<tr>

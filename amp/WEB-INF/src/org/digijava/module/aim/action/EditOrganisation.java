@@ -494,8 +494,7 @@ public class EditOrganisation
           fund.setAmount(String.valueOf(e.getAmount()));
           fund.setCurrencyCode(e.getCurrency().getCurrencyCode());
           fund.setProgram(e.getProgram());
-          Date d = new Date();
-          SimpleDateFormat dz = new SimpleDateFormat("dd/mm/yyyy");
+          SimpleDateFormat dz = new SimpleDateFormat("dd/MM/yyyy");
           String date = "";
           if (e.getDate() != null)
             date = dz.format(e.getDate());

@@ -28,7 +28,7 @@ public class SelectLocation extends Action {
 			throws java.lang.Exception {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
-		
+
 		if (request.getParameter("locationReset") != null
 				&& request.getParameter("locationReset").equals("false")) {
 			eaForm.setLocationReset(false);
@@ -39,8 +39,8 @@ public class SelectLocation extends Action {
 		}
 
 		String fill = request.getParameter("fill");
-		
-				
+
+
 		/*if (eaForm.getImplementationLevel().equals("country")) {
 			eaForm.setImpLevelValue(new Integer(1));
 		} else if (eaForm.getImplementationLevel().equals("region")) {
@@ -50,7 +50,7 @@ public class SelectLocation extends Action {
 		} else if (eaForm.getImplementationLevel().equals("woreda")) {
 			eaForm.setImpLevelValue(new Integer(4));
 		}		*/
-		
+
 		Integer impLevelValue;
 		AmpCategoryValue implLocValue	= CategoryManagerUtil.getAmpCategoryValueFromDb( eaForm.getImplemLocationLevel() );
 		if (implLocValue != null) {
@@ -58,67 +58,76 @@ public class SelectLocation extends Action {
 		}
 		else
 			impLevelValue 	= new Integer( 1 );
-		
+
 		eaForm.setImpLevelValue( impLevelValue );
 /*
  * modified by Govind
  */
-		
-		Collection a = FeaturesUtil.getDefaultCountryISO();
-		String iso=null;
-		String CountryName=null;
-		Iterator itr1 = a.iterator();
-		while (itr1.hasNext())
-		{
-			AmpGlobalSettings ampGS = (AmpGlobalSettings)itr1.next();
-			logger.info(" hope this is the correct one.. "+ampGS.getGlobalSettingsValue());
-			iso = ampGS.getGlobalSettingsValue();
-		}
-		logger.info(" this is the ISO .... in iso "+iso);
-		Collection b = FeaturesUtil.getDefaultCountry(iso);
-		Iterator itr2 = b.iterator();
-		while (itr2.hasNext())
-		{
-			Country ampGS = (Country)itr2.next();
-			logger.info(" hope this is the correct country name one.. "+ampGS.getCountryName());
-			CountryName = ampGS.getCountryName();
-		}
-		
-		
-		if (fill == null || fill.trim().length() == 0) {
-			eaForm.setCountry(CountryName);
-			eaForm.setImpCountry(iso);
-			eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(iso));
-			/*eaForm.setCountry(Constants.COUNTRY);
-			eaForm.setImpCountry(Constants.COUNTRY_ISO);
-			eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));*/
-		} else {
-			if (fill.equals("zone")) {
-				if (eaForm.getImpRegion() != null) {
-					eaForm.setZones(LocationUtil.getAllZonesUnderRegion(eaForm.getImpRegion()));
-					//eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
-					eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(iso));
-					eaForm.setImpZone(null);
-					eaForm.setImpMultiWoreda(null);
-					eaForm.setImpWoreda(null);					
-					logger.info("Zones set");
-					logger.info("Zones set size : " + eaForm.getZones().size());
-				}
-			} else if (fill.equals("woreda")) {
-				if (eaForm.getImpZone() != null) {
-					eaForm.setWoredas(LocationUtil.getAllWoredasUnderZone(eaForm.getImpZone()));
-					eaForm.setZones(LocationUtil.getAllZonesUnderRegion(eaForm.getImpRegion()));
-					//eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
-					eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(iso));
-					eaForm.setImpWoreda(null);
-				}
-			}
-		}
-		
-		logger.info("Region = " + eaForm.getImpRegion());
-		logger.info("Imp. level value = " + eaForm.getImpLevelValue());
-		logger.info("Imp. level = " + eaForm.getImplemLocationLevel());
-		
+
+
+		String iso= FeaturesUtil.getDefaultCountryIso();
+                if(iso!=null){
+                  eaForm.setDefaultCountryIsSet(true);
+                  String CountryName = null;
+                  logger.info(" this is the ISO .... in iso " + iso);
+                  Collection b = FeaturesUtil.getDefaultCountry(iso);
+                  Iterator itr2 = b.iterator();
+                  while (itr2.hasNext()) {
+                    Country ampGS = (Country) itr2.next();
+                    logger.info(" hope this is the correct country name one.. " +
+                                ampGS.getCountryName());
+                    CountryName = ampGS.getCountryName();
+                  }
+
+                  if (fill == null || fill.trim().length() == 0) {
+                    eaForm.setCountry(CountryName);
+                    eaForm.setImpCountry(iso);
+                    eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(
+                        iso));
+                    /*eaForm.setCountry(Constants.COUNTRY);
+                        eaForm.setImpCountry(Constants.COUNTRY_ISO);
+                        eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));*/
+                  }
+                  else {
+                    if (fill.equals("zone")) {
+                      if (eaForm.getImpRegion() != null) {
+                        eaForm.setZones(LocationUtil.getAllZonesUnderRegion(
+                            eaForm.getImpRegion()));
+                        //eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
+                        eaForm.setRegions(LocationUtil.
+                                          getAllRegionsUnderCountry(iso));
+                        eaForm.setImpZone(null);
+                        eaForm.setImpMultiWoreda(null);
+                        eaForm.setImpWoreda(null);
+                        logger.info("Zones set");
+                        logger.info("Zones set size : " +
+                                    eaForm.getZones().size());
+                      }
+                    }
+                    else if (fill.equals("woreda")) {
+                      if (eaForm.getImpZone() != null) {
+                        eaForm.setWoredas(LocationUtil.getAllWoredasUnderZone(
+                            eaForm.getImpZone()));
+                        eaForm.setZones(LocationUtil.getAllZonesUnderRegion(
+                            eaForm.getImpRegion()));
+                        //eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
+                        eaForm.setRegions(LocationUtil.
+                                          getAllRegionsUnderCountry(iso));
+                        eaForm.setImpWoreda(null);
+                      }
+                    }
+                  }
+
+                  logger.info("Region = " + eaForm.getImpRegion());
+                  logger.info("Imp. level value = " + eaForm.getImpLevelValue());
+                  logger.info("Imp. level = " + eaForm.getImplemLocationLevel());
+
+                }
+                else{
+                eaForm.setDefaultCountryIsSet(false);
+              }
+
+
 		return mapping.findForward("forward");
 	}
 }

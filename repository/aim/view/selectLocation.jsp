@@ -95,7 +95,7 @@
 	function unload() {
 	}
 	function closeWindow() {
-		window.close();			  
+		window.close();
 	}
 
 	function checkEmpty() {
@@ -140,7 +140,7 @@ function checkNumeric(objName,comma,period,hyphen)
 		var allValid = true;
 		var decPoints = 0;
 		var allNum = "";
-		
+
 		for (i = 0;  i < checkStr.value.length;  i++)
 		{
 			ch = checkStr.value.charAt(i);
@@ -156,7 +156,7 @@ function checkNumeric(objName,comma,period,hyphen)
 			allNum += ch;
 		}
 		if (!allValid)
-		{	
+		{
 			alertsay = "Please enter only numbers in the \"Number of results per page\"."
 			alert(alertsay);
 			return (false);
@@ -165,8 +165,8 @@ function checkNumeric(objName,comma,period,hyphen)
 
 
 	function searchLoc() {
-		if(checkNumeric(document.aimEditActivityForm.tempNumResults	,'','','')==true) 
-		{	
+		if(checkNumeric(document.aimEditActivityForm.tempNumResults	,'','','')==true)
+		{
 			if(checkEmpty())
 			{
 			 <digi:context name="searchLoc" property="context/module/moduleinstance/searchLocation.do"/>
@@ -184,7 +184,7 @@ function checkNumeric(objName,comma,period,hyphen)
 		document.aimEditActivityForm.action = "<%= selectLoc %>";
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
-	} 
+	}
 
 
 </script>
@@ -331,11 +331,14 @@ function checkNumeric(objName,comma,period,hyphen)
 
 <br>
 <br>
+ <c:if test="${!aimEditActivityForm.defaultCountryIsSet}">
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
 				<td align=left vAlign=top>
+
+
 					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
 						<tr bgcolor="#006699">
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
@@ -343,7 +346,7 @@ function checkNumeric(objName,comma,period,hyphen)
 								Search Locations</digi:trn>
 							(<script language="JavaScript">
 								{
-										document.write('<category:getoptionvalue categoryValueId="${aimEditActivityForm.implemLocationLevel}"/>');										
+										document.write('<category:getoptionvalue categoryValueId="${aimEditActivityForm.implemLocationLevel}"/>');
 								}
 							</script>)
 							</td></tr>
@@ -377,7 +380,9 @@ function checkNumeric(objName,comma,period,hyphen)
 							</td>
 						</tr>
 					</table>
+
 				</td>
 			</tr>
 </table>
+</c:if>
 </digi:form>

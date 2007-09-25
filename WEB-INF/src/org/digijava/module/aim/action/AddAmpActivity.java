@@ -749,6 +749,14 @@ public class AddAmpActivity extends Action {
         else {
           AmpActivity activity = ActivityUtil.getAmpActivity(eaForm.
               getActivityId());
+          if("edit".equals(action)) {
+          	//check if we have edit permissin for this activity
+          	Long ampActivityId=Long.parseLong(request.getParameter("ampActivityId"));
+          	
+          }
+
+          
+          
           if (activity.getActivityCreator() != null) {
             eaForm.setActAthFirstName(activity.getActivityCreator().getUser().
                                       getFirstNames());

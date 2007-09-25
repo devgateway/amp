@@ -79,7 +79,7 @@ public abstract class Permission extends PropertyListable implements Serializabl
     }
     
     public String toString() {
-	return name+"("+this.getClass().getSimpleName()+")";
+	return name+"{"+this.getClass().getSimpleName()+"}";
     }
 
     public Set<PermissionMap> getPermissibleObjects() {

@@ -37,7 +37,8 @@ public class CompositePermission extends Permission {
 		Iterator<Permission> i=permissions.iterator();
 		while (i.hasNext()) {
 			Permission element = (Permission) i.next();
-			actions.addAll(element.getAllowedActions(scope));
+			Set<String> allowedActions = element.getAllowedActions(scope);
+			if(allowedActions!=null) actions.addAll(allowedActions);
 		}
 		return actions;
 	}

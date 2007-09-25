@@ -4,6 +4,7 @@
  */
 package org.digijava.module.gateperm.core;
 
+import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 
@@ -44,4 +45,11 @@ public final class GatePermConst {
 
 		public static final String PUBLISH = "PUBLISH";
 	}
+	
+	public static final class ScopeKeys {
+		public static final MetaInfo PERMISSIBLE=new MetaInfo("permissible","object to which the gate is associated");
+		public static final MetaInfo CURRENT_MEMBER= new MetaInfo("currentMember","TeamMember object for the currently logged in user");
+		public static final MetaInfo ACTIVITY_ORG_ROLE=new MetaInfo("activityOrgRole","Complete list of AmpOrgRole objects, holing all mappings between activities and orgs through roles");
+	}
+	
 }

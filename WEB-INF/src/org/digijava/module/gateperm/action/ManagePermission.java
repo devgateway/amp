@@ -156,8 +156,8 @@ public class ManagePermission extends MultiAction {
 	    GatePermission gp = (GatePermission) p;
 	    pf.setGateTypeName(gp.getGateTypeName());
 	    Gate gate = Gate.instantiateGate( pf.getGateTypeName());
-	    for (int i = 0; i < gate.parameterNames().length; i++) {
-		MetaInfo mi = new MetaInfo(gate.parameterNames()[i], (Comparable) gp.getGateParameters().get(i));
+	    for (int i = 0; i < gate.parameterInfo().length; i++) {
+		MetaInfo mi = new MetaInfo(gate.parameterInfo()[i].getCategory(), new MetaInfo(gate.parameterInfo()[i].getValue().toString(),(Comparable) gp.getGateParameters().get(i)));
 		pf.getGateParameters().add(mi);
 	    }
 
@@ -196,8 +196,9 @@ public class ManagePermission extends MultiAction {
 	if (!pf.getGateTypeName().equals("unselected")) {
 
 	    Gate gate = Gate.instantiateGate( pf.getGateTypeName());
-	    for (int i = 0; i < gate.parameterNames().length; i++) {
-		pf.getGateParameters().add(new MetaInfo(gate.parameterNames()[i], ""));
+	    for (int i = 0; i < gate.parameterInfo().length; i++) {
+	    	MetaInfo mi = new MetaInfo(gate.parameterInfo()[i].getCategory(), new MetaInfo(gate.parameterInfo()[i].getValue().toString(),""));
+		pf.getGateParameters().add(mi);
 	    }
 
 	}
@@ -235,7 +236,7 @@ public class ManagePermission extends MultiAction {
 	    Iterator i = pf.getGateParameters().iterator();
 	    while (i.hasNext()) {
 		MetaInfo element = (MetaInfo) i.next();
-		gp.getGateParameters().add((String) element.getValue());
+		gp.getGateParameters().add((String) ((MetaInfo) element.getValue()).getValue());
 	    }
 	} else {
 	    if (p == null)

@@ -83,18 +83,42 @@ public abstract class Permissible implements Identifiable {
 	 * @return the collection of unique allowed actions
 	 */
 	public Collection<String> getAllowedActions(Map scope) {
-		Set<String> actions = new TreeSet<String>();
-		Permission permissionForPermissible = PermissionUtil
-				.getPermissionMapForPermissible(this).getPermission();
-		actions.addAll(permissionForPermissible.getAllowedActions(scope));
-		logger.debug("Actions allowed for object " + this.getIdentifier()
-				+ " of type " + this.getClass().getSimpleName() + " are "
-				+ actions);
-		Collection implementedActions = Arrays.asList(getImplementedActions());
-		actions.retainAll(implementedActions);
+		//put the self into scope:
+		scope.put(GatePermConst.ScopeKeys.PERMISSIBLE,this);
+		
+		
+		  PermissionMap permissionMapForPermissible = PermissionUtil.getPermissionMapForPermissible(this);
+		  Collection<String> actions = processPermissions(permissionMapForPermissible, scope);
+		 
+		  
+		  
+		  Collection implementedActions = Arrays.asList(getImplementedActions());
+		  actions.retainAll(implementedActions);
+			
+		  
 		return actions;
 	}
+	
+	public static Collection<String> processPermissions(PermissionMap permissionMapForPermissible,Map scope) {
+		Set<String> actions = new TreeSet<String>();
+		if(permissionMapForPermissible!=null && permissionMapForPermissible.getPermission()!=null)
+			actions.addAll(permissionMapForPermissible.getPermission().getAllowedActions(scope));
+			logger.info("Actions allowed for object " + permissionMapForPermissible.getObjectIdentifier()
+					+ " of type " + permissionMapForPermissible.getPermissibleCategory() + " are "
+					+ actions);
+		return actions;
+	}
+	
 
+	public static Collection<String> getAllowedActions(Object permissibleIdentifier, Class permissibleClass,Map scope) {
+		PermissionMap permissionMapForPermissible = PermissionUtil.getPermissionMapForPermissible(permissibleIdentifier, permissibleClass);
+		 Collection<String> actions = processPermissions(permissionMapForPermissible, scope);
+		 
+		 //we cannot filter out the implemented actions yet, so we just return the whole list...
+		 return actions;
+	}
+		
+	
 	/**
 	 * Returns true if the current object is allowed to do the specified action
 	 * for the given scope
@@ -112,4 +136,18 @@ public abstract class Permissible implements Identifiable {
 		return allowedActions.contains(actionName);
 	}
 
+	/**
+	 * Static implementation of the same method
+	 * @param actionName
+	 * @param permissibleIdentifier
+	 * @param permissibleClass
+	 * @param scope
+	 * @return
+	 */
+	public static boolean canDo(String actionName,Object permissibleIdentifier, Class permissibleClass, Map scope) {
+		Collection<String> allowedActions = getAllowedActions(permissibleIdentifier, permissibleClass, scope);
+		return allowedActions.contains(actionName);
+	}
+
+	
 }

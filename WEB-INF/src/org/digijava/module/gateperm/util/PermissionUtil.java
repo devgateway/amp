@@ -201,6 +201,42 @@ public final class PermissionUtil {
 
     }
 
+
+    public static PermissionMap getPermissionMapForPermissible(Object permissibleIdentifier,Class permissibleClass) {
+	Session session;
+	try {
+	    session = PersistenceManager.getSession();
+
+	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
+		    + " p WHERE p.permissibleCategory=:categoryName AND (p.objectIdentifier is null OR p.objectIdentifier=:objectId) ORDER BY p.objectIdentifier");
+	    query.setParameter("objectId", permissibleIdentifier);
+	    query.setParameter("categoryName",permissibleClass.getSimpleName());
+	    List col = query.list();
+
+	    if (col.size() == 0)
+		return null;
+
+	    if (col.size() == 1)
+		return (PermissionMap) col.get(0);
+	    Iterator i = col.iterator();
+	    while (i.hasNext()) {
+		PermissionMap element = (PermissionMap) i.next();
+		if (element.getObjectIdentifier() != null)
+		    return element;
+	    }
+
+	    return null;
+
+	} catch (HibernateException e) {
+	    logger.error(e);
+	    throw new RuntimeException("HibernateException Exception encountered", e);
+	} catch (SQLException e) {
+	    logger.error(e);
+	    throw new RuntimeException("SQLException Exception encountered", e);
+	}
+
+    }
+
     
     
     

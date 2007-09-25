@@ -6,6 +6,7 @@ package org.digijava.module.gateperm.gates;
 import java.util.Map;
 import java.util.Queue;
 
+import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.module.gateperm.core.Gate;
 
 /**
@@ -19,7 +20,8 @@ import org.digijava.module.gateperm.core.Gate;
  */
 public class BooleanGate extends Gate {
 
-	private static String [] PARAM_NAMES=new String[] { "boolean" };
+	private static final MetaInfo[] PARAM_INFO=new MetaInfo[] { 
+		new MetaInfo("boolean","true or false, 1 or 0")};
 	
 	/**
 	 * @param scope
@@ -50,27 +52,23 @@ public class BooleanGate extends Gate {
 	 * @see org.digijava.module.gateperm.core.Gate#logic()
 	 */
 	@Override
-	public boolean logic() {
+	public boolean logic() throws Exception {
 		String string = parameters.poll();
 		if("true".equalsIgnoreCase(string) || "1".equals(string)) return true;
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.digijava.module.gateperm.core.Gate#mandatoryScopeKeys()
-	 */
 	@Override
-	public String[] mandatoryScopeKeys() {
+	public MetaInfo[] mandatoryScopeKeys() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.digijava.module.gateperm.core.Gate#parameterNames()
-	 */
 	@Override
-	public String[] parameterNames() {
-		return PARAM_NAMES;
+	public MetaInfo[] parameterInfo() {
+		return PARAM_INFO;
 	}
+
+	
 
 }

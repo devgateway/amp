@@ -28,6 +28,9 @@ public class ViewEditUserForm
 
   private String selectedOrgName;
   private Collection<AmpOrganisation> orgs;
+  
+  /* this is the attached org related with gateperm OrgRoleGate*/
+  private Long assignedOrgId;
 
   private String selectedCountryIso;
   private Collection<CountryBean> countries;
@@ -229,5 +232,15 @@ public class ViewEditUserForm
   public void setDisplaySuccessMessage(Boolean displaySuccessMessage) {
     this.displaySuccessMessage = displaySuccessMessage;
   }
+
+public Long getAssignedOrgId() {
+	return assignedOrgId;
+}
+
+public void setAssignedOrgId(Long assignedOrgId) {
+	this.assignedOrgId = assignedOrgId;
+}
+
+
 
 }

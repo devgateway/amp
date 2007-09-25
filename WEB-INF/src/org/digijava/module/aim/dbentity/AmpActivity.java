@@ -8,11 +8,14 @@ import java.util.Set;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.util.LoggerIdentifiable;
+import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.core.Permissible;
 
 public class AmpActivity extends Permissible implements Comparable<AmpActivity>, Serializable,
 		LoggerIdentifiable {
 
+	private static String [] IMPLEMENTED_ACTIONS=new String[]{GatePermConst.Actions.EDIT};
+	
 	private AmpTeamMember createdBy;
 
     private Boolean budget;
@@ -1194,8 +1197,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	@Override
 	public String[] getImplementedActions() {
-		// TODO Auto-generated method stub// TODO Auto-generated method stub
-		return null;
+		return IMPLEMENTED_ACTIONS;
 	}
 
 	@Override

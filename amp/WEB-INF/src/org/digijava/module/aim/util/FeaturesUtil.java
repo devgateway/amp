@@ -1553,7 +1553,7 @@ public class FeaturesUtil {
       c = q.list();
       if(c.size()!=0)
     	  id=(AmpModulesVisibility) c.iterator().next();
-     
+
     }
     catch (Exception ex) {
       ex.printStackTrace();
@@ -1590,7 +1590,7 @@ public class FeaturesUtil {
       c = q.list();
       if(c.size()!=0)
     	  id=(AmpModulesType) c.iterator().next();
-     
+
     }
     catch (Exception ex) {
     	ex.printStackTrace();
@@ -1608,7 +1608,7 @@ public class FeaturesUtil {
     return id;
   }
 
-  
+
   /**
    * @author dan
    */
@@ -2041,7 +2041,7 @@ public class FeaturesUtil {
     return;
   }
 
-  
+
   /**
    * @author dan
    */
@@ -2244,8 +2244,10 @@ public class FeaturesUtil {
           AmpGlobalSettings.class.getName() +
           " gs where gs.globalSettingsName = 'Default Country' ";
       qry = session.createQuery(qryStr);
-      defaultCountryIso = (String) qry.uniqueResult();
-
+      Object defIso = qry.uniqueResult();
+      if(defIso!=null){
+        defaultCountryIso = (String) defIso;
+      }
     }
     catch (Exception ex) {
       logger.error("Exception : " + ex.getMessage());

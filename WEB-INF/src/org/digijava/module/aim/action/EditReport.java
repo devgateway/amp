@@ -1,6 +1,5 @@
-/*package org.digijava.module.aim.action;
+package org.digijava.module.aim.action;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -27,10 +26,7 @@ import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ReportUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 
 public class EditReport extends Action {
 	private static Logger logger 			= Logger.getLogger(EditReport.class);
@@ -48,17 +44,17 @@ public class EditReport extends Action {
 				AmpReports ampreport	= (AmpReports) session.get(AmpReports.class, new Long(strReportId));
 				//AmpReports ampreport	= this.getAmpReport( request, new Long(strReportId).longValue() );
 				
-				 Must be removed 
+//				 Must be removed 
 //				logger.info( "Ordered columns are:" + ampreport.getOrderedColumns() );
 //				logger.info( "Hierarchies are:" + ampreport.getHierarchies() );
 				//logger.info( "members are:" + ampreport.getMembers() );
-				 Must be removed 
+//				 Must be removed 
 				
 				
 				
 				if ( ampreport !=null ) {
-					formBean.setAmpColumns(ReportUtil.getColumnList());
-					formBean.setAmpMeasures(ReportUtil.getMeasureList());
+					formBean.setAmpColumns(AdvancedReportUtil.getColumnList());
+					formBean.setAmpMeasures(AdvancedReportUtil.getMeasureList());
 					formBean.setReportTitle( ampreport.getName() );
 					formBean.setReportDescription ( ampreport.getReportDescription() );
 					
@@ -103,7 +99,7 @@ public class EditReport extends Action {
 					formBean.setPublicReport( ampreport.getPublicReport() );
 					formBean.setDrilldownTab( ampreport.getDrilldownTab() );
 					
-					 Getting Column Hierarchies 
+//					 Getting Column Hierarchies 
 					Set dbHierarchies				= ampreport.getHierarchies();
 					Iterator dbHierarchiesIterator	= dbHierarchies.iterator();
 					Collection collHierarchies 		= new ArrayList();
@@ -114,7 +110,7 @@ public class EditReport extends Action {
 						collHierarchies.add ( ampReportHierarchie.getColumn() );
 					}
 					formBean.setColumnHierarchie( collHierarchies );
-					 Getting Column Hierarchies 
+//					 Getting Column Hierarchies 
 					
 					this.removeAddedColumnsFromPossibleColumns(formBean);
 					this.removeAddedMeasuresFromPossibleMeasures(formBean);
@@ -160,9 +156,6 @@ public class EditReport extends Action {
 				e.printStackTrace();
 			}
 		}
-		 Must be removed 
-//		logger.info("MY_REPORTS is:" + myreports);
-		 Must be removed  
 		return null;
 	}
 	
@@ -171,7 +164,7 @@ public class EditReport extends Action {
 		Collection addedColumns				= formBean.getAddedColumns();
 		Collection hierarchieColumns		= formBean.getColumnHierarchie();
 		
-		 allAddedColumns will contain all elements from both possibleColumns and addedColumns 
+//		 allAddedColumns will contain all elements from both possibleColumns and addedColumns 
 		Collection allAddedColumns			= new ArrayList ( addedColumns );
 		allAddedColumns.addAll( hierarchieColumns );
 				
@@ -211,4 +204,3 @@ public class EditReport extends Action {
 	}
 	
 }
-*/

@@ -101,11 +101,11 @@ public abstract class Permissible implements Identifiable {
 	
 	public static Collection<String> processPermissions(PermissionMap permissionMapForPermissible,Map scope) {
 		Set<String> actions = new TreeSet<String>();
-		if(permissionMapForPermissible!=null && permissionMapForPermissible.getPermission()!=null)
+		if(permissionMapForPermissible!=null && permissionMapForPermissible.getPermission()!=null) {
 			actions.addAll(permissionMapForPermissible.getPermission().getAllowedActions(scope));
 			logger.info("Actions allowed for object " + permissionMapForPermissible.getObjectIdentifier()
 					+ " of type " + permissionMapForPermissible.getPermissibleCategory() + " are "
-					+ actions);
+					+ actions); }
 		return actions;
 	}
 	

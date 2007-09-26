@@ -19,8 +19,8 @@ public class ParisIndicator4Jrxml
 				//p.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 				p2 = new PrintStream(out2);
 				//System.out.println("creating now- dynamic trend...");
-				
-				
+
+
 				p2.println("<!-- Created with iReport - A designer for JasperReports -->");
 				p2.println("<!DOCTYPE jasperReport PUBLIC '//JasperReports//DTD Report Design//EN' 'http://jasperreports.sourceforge.net/dtds/jasperreport.dtd'>");
 				p2.println("<jasperReport");
@@ -48,7 +48,7 @@ public class ParisIndicator4Jrxml
 				p2.println("</parameter>");
 				p2.println("<queryString><![CDATA[$P!{qu}]]></queryString>");
 				/****************/
-				
+
 //				DYNAMIC CCCCCCCCC
 				String dc;
 				int colCnt =13;
@@ -74,8 +74,8 @@ public class ParisIndicator4Jrxml
 	p2.println("</groupFooter>");
 	p2.println("</group>");
 
-	
-	
+
+
 	p2.println("		<background>");
 	p2.println("			<band height='0'  isSplitAllowed='true' >");
 	p2.println("			</band>");
@@ -101,7 +101,7 @@ public class ParisIndicator4Jrxml
 	p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 	p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='18' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 	p2.println("					</textElement>");
-	p2.println("				<text><![CDATA[PARIS REPORT 4]]></text>");
+	p2.println("				<text><![CDATA[Paris Indicator 4 Report]]></text>");
 	p2.println("				</staticText>");
 	p2.println("			</band>");
 	p2.println("		</title>");
@@ -253,7 +253,7 @@ public class ParisIndicator4Jrxml
 				p2.println("						isPrintInFirstWholeBand='false'");
 				p2.println("						isPrintWhenDetailOverflows='false'/>");
 				p2.println("					<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
-				p2.println("				</line>");							
+				p2.println("				</line>");
 				p2.println("				<line direction='TopDown'>");
 				p2.println("					<reportElement");
 				p2.println("						mode='Opaque'");
@@ -271,7 +271,7 @@ public class ParisIndicator4Jrxml
 				p2.println("						isPrintInFirstWholeBand='false'");
 				p2.println("						isPrintWhenDetailOverflows='false'/>");
 				p2.println("					<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
-				p2.println("				</line>");						
+				p2.println("				</line>");
 				p2.println("				<line direction='TopDown'>");
 				p2.println("					<reportElement");
 				p2.println("						mode='Opaque'");
@@ -363,14 +363,14 @@ public class ParisIndicator4Jrxml
 				p2.println("					<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
 				p2.println("				</line>");
 		 }
-				
+
 		p2.println("			</band>");
 		p2.println("		</columnHeader>");
 		p2.println("		<detail>");
-		
+
 		//here
-		
-		
+
+
 		p2.println("			<band height='"+height1+"'  isSplitAllowed='true' >");
 		p2.println("				<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >");
 		p2.println("					<reportElement");
@@ -393,7 +393,7 @@ public class ParisIndicator4Jrxml
 		p2.println("					</textElement>");
 		p2.println("				<textFieldExpression   class='java.lang.String'><![CDATA[$F{m1}]]></textFieldExpression>");
 		p2.println("				</textField>");
-		
+
 		int count,add=0;
 		String ctextkey;
 		int x=117;
@@ -403,7 +403,7 @@ public class ParisIndicator4Jrxml
 			count = j-1;
 			add++;
 			ctextkey="m"+j;
-			
+
 			p2.println("				<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >");
 			p2.println("					<reportElement");
 			p2.println("						mode='Opaque'");
@@ -432,9 +432,9 @@ public class ParisIndicator4Jrxml
 					x=117;
 					y=y+27;
 					add=0;
-				}					
+				}
 		}
-		
+
 		////
 		count=0;
 		add=0;
@@ -445,8 +445,8 @@ public class ParisIndicator4Jrxml
 				for(int j=2;j<=cols;j++)
 				{
 					count = j-1;
-					add++;			
-					p2.println("				<line direction='TopDown'>");	
+					add++;
+					p2.println("				<line direction='TopDown'>");
 					p2.println("					<reportElement");
 					p2.println("						mode='Opaque'");
 					p2.println("						x='"+x+"'");
@@ -463,7 +463,7 @@ public class ParisIndicator4Jrxml
 					p2.println("						isPrintInFirstWholeBand='false'");
 					p2.println("						isPrintWhenDetailOverflows='false'/>");
 					p2.println("					<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
-					p2.println("				</line>");				
+					p2.println("				</line>");
 					p2.println("				<line direction='TopDown'>");
 					p2.println("					<reportElement");
 					p2.println("						mode='Opaque'");
@@ -481,7 +481,7 @@ public class ParisIndicator4Jrxml
 					p2.println("						isPrintInFirstWholeBand='false'");
 					p2.println("						isPrintWhenDetailOverflows='false'/>");
 					p2.println("					<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
-					p2.println("				</line>");				
+					p2.println("				</line>");
 						x=x+146;
 						if(count%4 == 0)
 						{
@@ -489,10 +489,10 @@ public class ParisIndicator4Jrxml
 							x=117;
 							y=y+27;
 							add=0;
-						}						
+						}
 				}
 				////
-				p2.println("				<line direction='TopDown'>");	
+				p2.println("				<line direction='TopDown'>");
 				p2.println("					<reportElement");
 				p2.println("						mode='Opaque'");
 				p2.println("						x='117'");
@@ -509,8 +509,8 @@ public class ParisIndicator4Jrxml
 				p2.println("						isPrintInFirstWholeBand='false'");
 				p2.println("						isPrintWhenDetailOverflows='false'/>");
 				p2.println("					<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
-				p2.println("				</line>");					
-				p2.println("				<line direction='TopDown'>");	
+				p2.println("				</line>");
+				p2.println("				<line direction='TopDown'>");
 				p2.println("					<reportElement");
 				p2.println("						mode='Opaque'");
 				p2.println("						x='0'");
@@ -528,7 +528,7 @@ public class ParisIndicator4Jrxml
 				p2.println("						isPrintWhenDetailOverflows='false'/>");
 				p2.println("					<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
 				p2.println("				</line>");
-				p2.println("				<line direction='TopDown'>");	
+				p2.println("				<line direction='TopDown'>");
 				p2.println("					<reportElement");
 				p2.println("						mode='Opaque'");
 				p2.println("						x='701'");
@@ -545,7 +545,7 @@ public class ParisIndicator4Jrxml
 				p2.println("						isPrintInFirstWholeBand='false'");
 				p2.println("						isPrintWhenDetailOverflows='false'/>");
 				p2.println("					<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
-				p2.println("				</line>");								
+				p2.println("				</line>");
 				p2.println("				<line direction='TopDown'>");
 				p2.println("					<reportElement");
 				p2.println("						mode='Opaque'");
@@ -565,7 +565,7 @@ public class ParisIndicator4Jrxml
 				p2.println("					<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
 				p2.println("				</line>");
 		 }
-		
+
 		p2.println("			</band>");
 		p2.println("		</detail>");
 		p2.println("		<columnFooter>");
@@ -641,18 +641,18 @@ public class ParisIndicator4Jrxml
 		p2.println("			</band>");
 		p2.println("		</summary>");
 		p2.println("</jasperReport>");
-				
-				
+
+
 				/***************/
 
 
-				
-		//System.out.println("hyup");			
+
+		//System.out.println("hyup");
 		}
-		
+
 		catch(Exception e)
 		{
-			
+
 		}
 	}
 }

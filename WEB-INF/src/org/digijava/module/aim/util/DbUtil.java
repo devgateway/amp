@@ -100,6 +100,7 @@ import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.kernel.translator.util.TrnUtil;
 import java.util.*;
 import org.digijava.module.aim.helper.CountryBean;
+import java.text.DateFormat;
 
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -5134,7 +5135,6 @@ public class DbUtil {
                             continue;
                         }
                     }
-
 
                     if (null != donor && donor.trim().length() > 1 && !"all".equalsIgnoreCase(donor)) {
                         if (!donor.equals(dnOrg.getAmpOrgId().toString()))

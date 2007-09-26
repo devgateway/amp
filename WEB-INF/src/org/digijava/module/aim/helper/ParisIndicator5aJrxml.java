@@ -19,8 +19,8 @@ public class ParisIndicator5aJrxml
 				//p.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 				p2 = new PrintStream(out2);
 				//System.out.println("creating now- dynamic trend...");
-				
-				
+
+
 				p2.println("<!-- Created with iReport - A designer for JasperReports -->");
 				p2.println("<!DOCTYPE jasperReport PUBLIC '//JasperReports//DTD Report Design//EN' 'http://jasperreports.sourceforge.net/dtds/jasperreport.dtd'>");
 				p2.println("<jasperReport");
@@ -77,7 +77,7 @@ public class ParisIndicator5aJrxml
 				p2.println("</group>");
 				if(type.equals("xls"))
 				{
-				
+
 					p2.println("		<background>");
 					p2.println("			<band height='0'  isSplitAllowed='true' >");
 					p2.println("			</band>");
@@ -103,7 +103,7 @@ public class ParisIndicator5aJrxml
 					p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 					p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='18' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 					p2.println("					</textElement>");
-					p2.println("				<text><![CDATA[                  PARIS REPORT 5a]]></text>");
+					p2.println("				<text><![CDATA[Paris Indicator 5a Report]]></text>");
 					p2.println("				</staticText>");
 					p2.println("			</band>");
 					p2.println("		</title>");
@@ -113,7 +113,7 @@ public class ParisIndicator5aJrxml
 					p2.println("		</pageHeader>");
 					p2.println("		<columnHeader>");
 					p2.println("			<band height='61'  isSplitAllowed='true' >");
-					
+
 					p2.println("				<staticText>");
 					p2.println("					<reportElement");
 					p2.println("						mode='Opaque'");
@@ -303,9 +303,9 @@ public class ParisIndicator5aJrxml
 					p2.println("					</textElement>");
 					p2.println("				<text><![CDATA[ Proportion of aid flows to the government sector using all the 3 country PFM systems]]></text>");
 					p2.println("				</staticText>");
-					
-					
-					
+
+
+
 					p2.println("			</band>");
 					p2.println("		</columnHeader>");
 					p2.println("		<detail>");
@@ -331,7 +331,7 @@ public class ParisIndicator5aJrxml
 					p2.println("					</textElement>");
 					p2.println("				<textFieldExpression   class='java.lang.String'><![CDATA[$F{m1}]]></textFieldExpression>");
 					p2.println("				</textField>");
-					
+
 					//HERE
 					int count,add=0;
 					for(int j=2;j<=cols ; j++)
@@ -362,8 +362,8 @@ public class ParisIndicator5aJrxml
 							p2.println("				</textField>");
 
 
-							
-							
+
+
 							x=x+135;
 							if(count%8 == 0)
 							{
@@ -372,17 +372,17 @@ public class ParisIndicator5aJrxml
 								y=y+30;
 								add=0;
 							}
-							
-							
-							
+
+
+
 							//x=x+135;
-							
+
 					}
 					//end
-					
-					
-					
-					
+
+
+
+
 					p2.println("			</band>");
 					p2.println("		</detail>");
 					p2.println("		<columnFooter>");
@@ -399,7 +399,7 @@ public class ParisIndicator5aJrxml
 					p2.println("		</summary>");
 					p2.println("</jasperReport>");
 				}
-				
+
 				else
 				{
 					p2.println("		<background>");
@@ -427,7 +427,7 @@ public class ParisIndicator5aJrxml
 					p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 					p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='18' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 					p2.println("					</textElement>");
-					p2.println("				<text><![CDATA[                  PARIS REPORT 5a]]></text>");
+					p2.println("				<text><![CDATA[Paris Indicator 5a Report]]></text>");
 					p2.println("				</staticText>");
 					p2.println("			</band>");
 					p2.println("		</title>");
@@ -437,7 +437,7 @@ public class ParisIndicator5aJrxml
 					p2.println("		</pageHeader>");
 					p2.println("		<columnHeader>");
 					p2.println("			<band height='61'  isSplitAllowed='true' >");
-					
+
 					p2.println("				<staticText>");
 					p2.println("					<reportElement");
 					p2.println("						mode='Opaque'");
@@ -668,8 +668,8 @@ public class ParisIndicator5aJrxml
 						p2.println("				</line>");
 							l=l+137;
 					}
-					
-					
+
+
 					p2.println("			</band>");
 					p2.println("		</columnHeader>");
 					p2.println("		<detail>");
@@ -695,7 +695,7 @@ public class ParisIndicator5aJrxml
 					p2.println("					</textElement>");
 					p2.println("				<textFieldExpression   class='java.lang.String'><![CDATA[$F{m1}]]></textFieldExpression>");
 					p2.println("				</textField>");
-					
+
 					//HERE
 					int count,add=0;
 					for(int j=2;j<=cols ; j++)
@@ -744,8 +744,8 @@ public class ParisIndicator5aJrxml
 							p2.println("						isPrintWhenDetailOverflows='false'/>");
 							p2.println("					<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
 							p2.println("				</line>");
-							
-							
+
+
 							x=x+135;
 							if(count%8 == 0)
 							{
@@ -754,14 +754,14 @@ public class ParisIndicator5aJrxml
 								y=y+30;
 								add=0;
 							}
-							
-							
-							
+
+
+
 							//x=x+135;
-							
+
 					}
 					//end
-					
+
 					p2.println("				<line direction='TopDown'>");
 					p2.println("					<reportElement");
 					p2.println("						mode='Opaque'");
@@ -780,7 +780,7 @@ public class ParisIndicator5aJrxml
 					p2.println("						isPrintWhenDetailOverflows='false'/>");
 					p2.println("					<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
 					p2.println("				</line>");
-					
+
 					l=0;
 					//System.out.println( " height  "+height);
 					int k = height-2;
@@ -806,7 +806,7 @@ public class ParisIndicator5aJrxml
 							p2.println("				</line>");
 							l=l+137;
 					}
-					
+
 					p2.println("			</band>");
 					p2.println("		</detail>");
 					p2.println("		<columnFooter>");
@@ -886,13 +886,13 @@ public class ParisIndicator5aJrxml
 
 
 
-				
-		//System.out.println("hyup");			
+
+		//System.out.println("hyup");
 		}
-		
+
 		catch(Exception e)
 		{
-			
+
 		}
 	}
 }

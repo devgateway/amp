@@ -23,7 +23,7 @@ public class ParisIndicator7Jrxml
 				int a = (cols/4) * 270 + 80;
 				int b = (cols/4);
 				b= (b*240)+80;
-				
+
 				p2.println("<!-- Created with iReport - A designer for JasperReports -->");
 				p2.println("<!DOCTYPE jasperReport PUBLIC '//JasperReports//DTD Report Design//EN' 'http://jasperreports.sourceforge.net/dtds/jasperreport.dtd'>");
 				p2.println("<jasperReport");
@@ -73,10 +73,10 @@ public class ParisIndicator7Jrxml
 				p2.println("</band>");
 				p2.println("</groupFooter>");
 				p2.println("</group>");
-				
-				
-				
-				
+
+
+
+
 					p2.println("		<background>");
 					p2.println("			<band height='0'  isSplitAllowed='true' >");
 					p2.println("			</band>");
@@ -102,7 +102,7 @@ public class ParisIndicator7Jrxml
 					p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 					p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='18' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 					p2.println("					</textElement>");
-					p2.println("				<text><![CDATA[PARIS REPORT 7]]></text>");
+					p2.println("				<text><![CDATA[Paris Indicator 7 Report]]></text>");
 					p2.println("				</staticText>");
 					p2.println("			</band>");
 					p2.println("		</title>");
@@ -112,7 +112,7 @@ public class ParisIndicator7Jrxml
 					p2.println("		</pageHeader>");
 					p2.println("		<columnHeader>");
 					p2.println("			<band height='125'  isSplitAllowed='true' >");
-					
+
 					p2.println("				<staticText>");
 					p2.println("					<reportElement");
 					p2.println("						mode='Opaque'");
@@ -134,16 +134,16 @@ public class ParisIndicator7Jrxml
 					p2.println("					</textElement>");
 					p2.println("				<text><![CDATA[Donors]]></text>");
 					p2.println("				</staticText>");
-					
-		
+
+
 					String ctextkey;
 					int x=80;
-					int count = 0;					
+					int count = 0;
 					for(int j=2;j<=cols;j+=4)
 					{
-						
+
 						count++;
-						ctextkey="m"+j;						
+						ctextkey="m"+j;
 						p2.println("				<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >");
 						p2.println("					<reportElement");
 						p2.println("						mode='Opaque'");
@@ -165,10 +165,10 @@ public class ParisIndicator7Jrxml
 						p2.println("					</textElement>");
 						p2.println("				<textFieldExpression   class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
 						p2.println("				</textField>");
-							x=x+240;											
+							x=x+240;
 					}
-					
-					
+
+
 					//in here
 					x = 80;
 					for(int j =0;j<count;j++)
@@ -216,7 +216,7 @@ public class ParisIndicator7Jrxml
 						p2.println("				</line>");
 					}
 					x=x+80;
-					
+
 					p2.println("				<staticText>");
 					p2.println("					<reportElement");
 					p2.println("						mode='Opaque'");
@@ -260,8 +260,8 @@ public class ParisIndicator7Jrxml
 						p2.println("				</line>");
 					}
 					x=x+80;
-					
-					
+
+
 					p2.println("				<staticText>");
 					p2.println("					<reportElement");
 					p2.println("						mode='Opaque'");
@@ -331,7 +331,7 @@ public class ParisIndicator7Jrxml
 							p2.println("					<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
 							p2.println("				</line>");
 							x= x+240;
-						}					
+						}
 						int c =(cols/4)*240;
 						p2.println("				<line direction='TopDown'>");
 						p2.println("					<reportElement");
@@ -424,7 +424,7 @@ public class ParisIndicator7Jrxml
 						p2.println("					<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
 						p2.println("				</line>");
 					}
-					p2.println("			</band>");					
+					p2.println("			</band>");
 					p2.println("		</columnHeader>");
 					p2.println("		<detail>");
 					p2.println("			<band height='30'  isSplitAllowed='true' >");
@@ -466,7 +466,7 @@ public class ParisIndicator7Jrxml
 						}
 						////System.out.println(" this is  j "+ j + " ctextkey "+ ctextkey);
 						if(flag)
-						{	
+						{
 							p2.println("				<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >");
 							p2.println("					<reportElement");
 							p2.println("						mode='Opaque'");
@@ -511,7 +511,7 @@ public class ParisIndicator7Jrxml
 							}
 							x=x+80;
 						}
-					
+
 					}
 					if(type.equals("pdf"))
 					{
@@ -645,17 +645,17 @@ public class ParisIndicator7Jrxml
 					p2.println("			</band>");
 					p2.println("		</summary>");
 					p2.println("</jasperReport>");
-					
 
 
 
-				
-		////System.out.println("hyup");			
+
+
+		////System.out.println("hyup");
 		}
-		
+
 		catch(Exception e)
 		{
-			
+
 		}
 	}
 }

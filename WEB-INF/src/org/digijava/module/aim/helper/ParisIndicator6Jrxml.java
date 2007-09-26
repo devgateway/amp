@@ -14,7 +14,7 @@ public class ParisIndicator6Jrxml
      int a = (cols/2);
      int b = 80+(a*150);
      a= (a+1)*150;
-     
+
 				out = new FileOutputStream(filePath);
 				out2 = new FileOutputStream(filePath,true);
 				p = new PrintStream(out);
@@ -22,8 +22,8 @@ public class ParisIndicator6Jrxml
 				//p.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 				p2 = new PrintStream(out2);
 				//System.out.println("creating now- dynamic trend..." + a + "  this si b  "+ b);
-				
-				
+
+
 				p2.println("<!-- Created with iReport - A designer for JasperReports -->");
 				p2.println("<!DOCTYPE jasperReport PUBLIC '//JasperReports//DTD Report Design//EN' 'http://jasperreports.sourceforge.net/dtds/jasperreport.dtd'>");
 				p2.println("<jasperReport");
@@ -73,8 +73,8 @@ public class ParisIndicator6Jrxml
 				p2.println("</band>");
 				p2.println("</groupFooter>");
 				p2.println("</group>");
-				
-				
+
+
 					p2.println("		<background>");
 					p2.println("			<band height='0'  isSplitAllowed='true' >");
 					p2.println("			</band>");
@@ -100,7 +100,7 @@ public class ParisIndicator6Jrxml
 					p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 					p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='18' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 					p2.println("					</textElement>");
-					p2.println("				<text><![CDATA[PARIS REPORT 6]]></text>");
+					p2.println("				<text><![CDATA[Paris Indicator 6 Report]]></text>");
 					p2.println("				</staticText>");
 					p2.println("			</band>");
 					p2.println("		</title>");
@@ -131,7 +131,7 @@ public class ParisIndicator6Jrxml
 					p2.println("					</textElement>");
 					p2.println("				<text><![CDATA[Donors]]></text>");
 					p2.println("				</staticText>");
-					
+
 					String ctextkey;
 					int x=80;
 					int add=0;
@@ -161,7 +161,7 @@ public class ParisIndicator6Jrxml
 						p2.println("				<textFieldExpression   class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
 						p2.println("				</textField>");
 						x=x+150;
-						
+
 					}
 					if(type.equals("pdf"))
 					{
@@ -183,7 +183,7 @@ public class ParisIndicator6Jrxml
 					p2.println("						isPrintWhenDetailOverflows='false'/>");
 					p2.println("					<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
 					p2.println("				</line>");
-					
+
 					 x=80;
 					 add=0;
 					for(int j=1;j<=cols;j+=2)
@@ -208,7 +208,7 @@ public class ParisIndicator6Jrxml
 						p2.println("				</line>");
 						x=x+150;
 					}
-					
+
 					int f = b-30;
 					p2.println("				<line direction='TopDown'>");
 					p2.println("					<reportElement");
@@ -272,8 +272,8 @@ public class ParisIndicator6Jrxml
 					p2.println("					</textElement>");
 					p2.println("				<textFieldExpression   class='java.lang.String'><![CDATA[$F{m1}]]></textFieldExpression>");
 					p2.println("				</textField>");
-					
-					
+
+
 					x=80;
 					for(int j=3;j<=cols;j+=2)
 					{
@@ -301,7 +301,7 @@ public class ParisIndicator6Jrxml
 						p2.println("				<textFieldExpression   class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
 						p2.println("				</textField>");
 						x=x+150;
-						
+
 					}
 					if(type.equals("pdf"))
 					{
@@ -328,7 +328,7 @@ public class ParisIndicator6Jrxml
 						p2.println("				</line>");
 						x=x+150;
 					}
-					
+
 					p2.println("				<line direction='TopDown'>");
 					p2.println("					<reportElement");
 					p2.println("						mode='Opaque'");
@@ -441,17 +441,17 @@ public class ParisIndicator6Jrxml
 					p2.println("			</band>");
 					p2.println("		</summary>");
 					p2.println("</jasperReport>");
-				
 
 
 
-				
-		//System.out.println("hyup");			
+
+
+		//System.out.println("hyup");
 		}
-		
+
 		catch(Exception e)
 		{
-			
+
 		}
 	}
 }

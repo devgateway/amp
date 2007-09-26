@@ -4327,6 +4327,28 @@ public class DbUtil {
         }
         return comments;
     }
+    
+    public static AmpField getAmpFieldById(Long fieldId) {
+        Session session = null;
+        Query qry = null;
+        AmpField field = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select o from " + AmpField.class.getName()
+                + " o " + "where (o.ampFieldId=:id)";
+            qry = session.createQuery(queryString);
+            qry.setParameter("id", fieldId, Hibernate.STRING);
+            Iterator itr = qry.list().iterator();
+            if (itr.hasNext()) {
+                field = (AmpField) itr.next();
+            }
+        } catch (Exception e) {
+            logger.error("Unable to get field");
+            logger.debug("Exceptiion " + e);
+        }
+        return field;
+    }
 
     public static Collection getAmpFields() {
         Session session = null;

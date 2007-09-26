@@ -62,6 +62,10 @@ function selectOrganisation() {
 }
 
 function edit(key) {
+    <digi:context name="nextSetp" property="context/module/moduleinstance/addActivity.do" />
+    document.aimEditActivityForm.action = "<%= nextSetp %>";
+    document.aimEditActivityForm.target = "_self"
+
   document.aimEditActivityForm.editKey.value = key;
   document.aimEditActivityForm.step.value = "1.1";
   document.aimEditActivityForm.submit();
@@ -78,6 +82,7 @@ function commentWin(commentId) {
 		document.aimEditActivityForm.action = url;
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
+		
 }
 
 function removeSelOrganisations() {

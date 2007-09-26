@@ -11,21 +11,21 @@
 
 <script language="JavaScript">
 	<!--
-		function validate() 
+		function validate()
 		{
-			if (trim(document.aimThemeForm.programName.value).length == 0) 
+			if (trim(document.aimThemeForm.programName.value).length == 0)
 			{
 				alert("Please enter Program name");
 				document.aimThemeForm.programName.focus();
 				return false;
-			}	
-			if (trim(document.aimThemeForm.programCode.value).length == 0) 
+			}
+			if (trim(document.aimThemeForm.programCode.value).length == 0)
 			{
 				alert("Please enter Program code");
 				document.aimThemeForm.programCode.focus();
 				return false;
-			}			
-			if (trim(document.aimThemeForm.programType.value).length == 0) 
+			}
+			if (trim(document.aimThemeForm.programType.value).length == 0)
 			{
 				alert("Please enter Program type");
 				document.aimThemeForm.programType.focus();
@@ -54,7 +54,7 @@
 		function saveProgram(id)
 		{
 			var temp = validate();
-			if (temp == true) 
+			if (temp == true)
 			{
 				<digi:context name="addSubThm" property="context/module/moduleinstance/addSubPrgInd.do?event=save" />
 				document.aimThemeForm.action = "<%= addSubThm %>&themeId=" + id;
@@ -208,13 +208,20 @@
 																													<bean:write name="subPrograms" property="name"/>
 																											</a></b>
 																											</logic:notEqual>
-																										
+
 																									</td>
+                                                                                                                                                                                                        <c:set var="indicator">
+                                                                                                                                                                                                        <digi:trn key="aim:indicator">Indicator</digi:trn>
+                                                                                                                                                                                                        </c:set>
+                                                                                                                                                                                                        <c:set var="edit">
+                                                                                                                                                                                                        <digi:trn key="aim:edit">Edit</digi:trn>
+                                                                                                                                                                                                        </c:set>
 																									<td align="right" bgcolor="#ffcccc" width="75">
-																											<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
+
+																											<input class="buton" type="button" name="addIndicator" value="${indicator}" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
 																									</td>
 																									<td align="left" width="50" bgcolor="#ffcccc">
-																											<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">					
+																											<input class="buton" type="button" name="editButton" value="${edit}" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
 																									</td>
 																									<td align="left" width="12" bgcolor="#f4f4f2">
 																											<c:set var="translation">
@@ -273,10 +280,10 @@
 																											</logic:notEqual>
 																										</td>
 																										<td align="right" bgcolor="#f4f4f2" width="75">
-																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
+																												<input class="buton" type="button" name="addIndicator" value="${indicator}" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
 																										</td>
 																										<td align="left" width="50" bgcolor="#f4f4f2">
-																												<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
+																												<input class="buton" type="button" name="editButton" value="${edit}" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
 																										</td>
 																										<td align="left" width="12" bgcolor="#f4f4f2">
 																												<c:set var="translation">
@@ -334,10 +341,10 @@
 																											</logic:notEqual>
 																										</td>
 																										<td align="right" bgcolor="#f4f4f2" width="75">
-																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
+																												<input class="buton" type="button" name="addIndicator" value="${indicator}" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
 																										</td>
 																										<td align="left" width="50" bgcolor="#f4f4f2">
-																												<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
+																												<input class="buton" type="button" name="editButton" value="${edit}" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
 																										</td>
 																										<td align="left" width="12" bgcolor="#f4f4f2">
 																												<c:set var="translation">
@@ -395,10 +402,10 @@
 																											</logic:notEqual>
 																										</td>
 																										<td align="right" bgcolor="#f4f4f2" width="75">
-																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
+																												<input class="buton" type="button" name="addIndicator" value="${indicator}" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
 																										</td>
 																										<td align="left" width="50" bgcolor="#f4f4f2">
-																												<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
+																												<input class="buton" type="button" name="editButton" value="${edit}" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
 																										</td>
 																										<td align="left" width="12" bgcolor="#f4f4f2">
 																												<c:set var="translation">
@@ -456,10 +463,10 @@
 																											</logic:notEqual>
 																										</td>
 																										<td align="right" bgcolor="#f4f4f2" width="75">
-																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
+																												<input class="buton" type="button" name="addIndicator" value="${indicator}" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
 																										</td>
 																										<td align="left" width="50" bgcolor="#f4f4f2">
-																												<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
+																												<input class="buton" type="button" name="editButton" value="${edit}" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
 																										</td>
 																										<td align="left" width="12" bgcolor="#f4f4f2">
 																												<c:set var="translation">
@@ -517,10 +524,10 @@
 																											</logic:notEqual>
 																										</td>
 																										<td align="right" bgcolor="#f4f4f2" width="75">
-																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
+																												<input class="buton" type="button" name="addIndicator" value="${indicator}" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
 																										</td>
 																										<td align="left" width="50" bgcolor="#f4f4f2">
-																												<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
+																												<input class="buton" type="button" name="editButton" value="${edit}" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
 																										</td>
 																										<td align="left" width="12" bgcolor="#f4f4f2">
 																												<c:set var="translation">
@@ -578,10 +585,10 @@
 																											</logic:notEqual>
 																										</td>
 																										<td align="right" bgcolor="#f4f4f2" width="75">
-																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
+																												<input class="buton" type="button" name="addIndicator" value="${indicator}" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
 																										</td>
 																										<td align="left" width="50" bgcolor="#f4f4f2">
-																												<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
+																												<input class="buton" type="button" name="editButton" value="${edit}" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
 																										</td>
 																										<td align="left" width="12" bgcolor="#f4f4f2">
 																												<c:set var="translation">
@@ -630,10 +637,10 @@
 																													<bean:write name="subPrograms" property="name"/></b>
 																										</td>
 																										<td align="right" bgcolor="#f4f4f2" width="75">
-																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
+																												<input class="buton" type="button" name="addIndicator" value="${indicator}" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
 																										</td>
 																										<td align="left" width="50" bgcolor="#f4f4f2">
-																												<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
+																												<input class="buton" type="button" name="editButton" value="${edit}" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
 																										</td>
 																										<td align="left" width="12" bgcolor="#f4f4f2">
 																												<c:set var="translation">
@@ -665,7 +672,7 @@
 														</logic:empty>
 														<tr>
 															<td bgColor=#d7eafd height="20" align="center">
-																	<input class="buton" type="button" name="addSubTheme" value="Add SubProgram Level 1" onclick=" return addSubProgram('<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="rootId"/>','0','<bean:write name="aimThemeForm" property="name"/>')">
+																	<input class="buton" type="button" name="addSubTheme" value="<digi:trn key='aim:AddSubProgramLevel1'>Add SubProgram Level 1</digi:trn>" onclick=" return addSubProgram('<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="rootId"/>','0','<bean:write name="aimThemeForm" property="name"/>')">
 															</td>
 														</tr>
 													</table>
@@ -692,7 +699,7 @@
 				</table>
 			</td>
 		</tr>
-		
+
 	</table>
 	</td>
 	</tr>

@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -27,8 +28,10 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.GlobalSettingsForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.KeyValue;
@@ -70,6 +73,13 @@ public class GlobalSettings extends Action {
 			FeaturesUtil.logGlobalSettingsCache();
 			org.digijava.module.aim.helper.GlobalSettings globalSettings = (org.digijava.module.aim.helper.GlobalSettings) getServlet().getServletContext().getAttribute(Constants.GLOBAL_SETTINGS);
 	    	globalSettings.setPerspectiveEnabled(FeaturesUtil.isPerspectiveEnabled());
+	    	
+	    	ServletContext ampContext = this.getServlet().getServletContext();
+			AmpTreeVisibility ampTreeVisibility=new AmpTreeVisibility();
+			AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateById(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"));
+	    	ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+	    	ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
+	    	
 		}
 		gsForm.setGsfCol(col);
 		Iterator itr = col.iterator();
@@ -101,7 +111,6 @@ public class GlobalSettings extends Action {
 		}
 		Collection<CountryBean> countries = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
 		gsForm.setCountryNameCol(countries);
-
 
 		saveErrors(request, errors);
 		return mapping.findForward("viewGS");

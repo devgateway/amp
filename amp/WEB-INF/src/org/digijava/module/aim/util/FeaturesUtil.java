@@ -1286,6 +1286,35 @@ public class FeaturesUtil {
     return ft.getName();
   }
 
+  
+  /**
+   * @author dan
+   */
+  public static AmpTemplatesVisibility getTemplateNoSession(Long id) {
+    Session session = null;
+    AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
+    try {
+      session = PersistenceManager.getSession();
+      ft = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
+                                                 id);
+    }
+    catch (Exception ex) {
+      logger.error("Exception : " + ex.getMessage());
+    }
+    finally {
+      if (session != null) {
+        try {
+          PersistenceManager.releaseSession(session);
+        }
+        catch (Exception rsf) {
+          logger.error("Release session failed :" + rsf.getMessage());
+        }
+      }
+    }
+    return ft;
+  }
+  
+  
   /**
    * @author dan
    * @param session
@@ -1553,7 +1582,7 @@ public class FeaturesUtil {
       c = q.list();
       if(c.size()!=0)
     	  id=(AmpModulesVisibility) c.iterator().next();
-
+     
     }
     catch (Exception ex) {
       ex.printStackTrace();
@@ -1590,7 +1619,7 @@ public class FeaturesUtil {
       c = q.list();
       if(c.size()!=0)
     	  id=(AmpModulesType) c.iterator().next();
-
+     
     }
     catch (Exception ex) {
     	ex.printStackTrace();
@@ -1608,7 +1637,7 @@ public class FeaturesUtil {
     return id;
   }
 
-
+  
   /**
    * @author dan
    */
@@ -2041,7 +2070,7 @@ public class FeaturesUtil {
     return;
   }
 
-
+  
   /**
    * @author dan
    */
@@ -2247,7 +2276,7 @@ public class FeaturesUtil {
       Object defIso = qry.uniqueResult();
       if(defIso!=null){
         defaultCountryIso = (String) defIso;
-      }
+    }
     }
     catch (Exception ex) {
       logger.error("Exception : " + ex.getMessage());

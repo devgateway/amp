@@ -39,7 +39,7 @@ public class DecimalToText
 	public static String removeCommas(String s)
 	{
 		if (s != null) {	  
-			return s.replaceAll(",","");
+			return removeCharsFromDouble(s);//s.replaceAll(",","");
 		} else {
 			return "0";
 		}
@@ -66,6 +66,24 @@ public class DecimalToText
 		*/
 	}
 
+	public static String removeCharsFromDouble(String s)
+	{
+		String tmp=s;
+		String text="";
+		if ( tmp != null )	{
+			char arr[] = tmp.toCharArray() ;
+			//text = "" ;
+			for (int i = 0 ; i < tmp.length() ; i++ )
+			{
+				if ( arr[i] >= '0' && arr[i]<='9' )
+					text += arr[i] ;
+			}
+		}
+		else
+			text += "0.0";
+		return text;
+	}
+	
 	/** @author jose
 	 * Given a string like 3,92,000 the method will remove the commas and
 	 * parse the double value out of the string and return a double.
@@ -74,10 +92,25 @@ public class DecimalToText
 	 */	
 	public static double getDouble(String s)
 	{
-		String tmp = removeCommas(s) ;
+		//String tmp = removeCommas(s) ;
+		String tmp=s;
+		String text="";
+		//tmp=tmp.replaceAll(" ", "");
 		double value = 0;
+		if ( tmp != null )	{
+			char arr[] = tmp.toCharArray() ;
+			//text = "" ;
+			for (int i = 0 ; i < tmp.length() ; i++ )
+			{
+				if ( arr[i] >= '0' && arr[i]<='9' || arr[i]=='.' )
+					text += arr[i] ;
+			}
+		}
+		else
+			text += "0.0";
 		try {
-			value = Double.parseDouble(tmp);
+			
+			value = Double.parseDouble(text);
 		} catch (NumberFormatException e) {
 			logger.error("Exception from getDouble(): Tried to do parseDouble() on " + tmp);
 		}

@@ -14,8 +14,10 @@ public class GlobalSettingsForm extends ActionForm {
 	String globalSettingsName = null;
 	
 	
-	Map possibleValues 					= new HashMap(); // The values are of type org.digijava.module.aim.helper.KeyValue
-	Map possibleValuesDictionary 		= new HashMap(); // The values are of also of type HashMap (key-value)
+	Map possibleValues 						= new HashMap(); // The values are of type org.digijava.module.aim.helper.KeyValue
+	Map possibleValuesDictionary 			= new HashMap(); // The values are of also of type HashMap (key-value)
+	
+	Map<String, String> globalSettingsType	= new HashMap<String, String>();
 	
 	String newSettingName;
 	String newTableName;
@@ -87,6 +89,14 @@ public class GlobalSettingsForm extends ActionForm {
 	}
 	public Map getPossibleValuesDictionary(String key) {
 		return (Map) possibleValuesDictionary.get(key);
+	}
+	
+	public String getGlobalSettingType(String gsName) {
+		return globalSettingsType.get(gsName);
+	}
+	public void setGlobalSettingType(String gsName, String gsType) {
+		
+		globalSettingsType.put(gsName, gsType);
 	}
 	
 

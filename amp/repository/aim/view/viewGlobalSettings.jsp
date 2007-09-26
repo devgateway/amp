@@ -9,7 +9,7 @@
 <%@ page import="java.util.Map"%>
 
 
-<script langauage="JavaScript">
+<script langauage="JavaScript"><!--
 function saveClicked() {
   <digi:context name="preview" property="context/module/moduleinstance/GlobalSettings.do?action=save" />
   document.aimGlobalSettingsForm.action = "<%= preview %>";
@@ -17,7 +17,70 @@ function saveClicked() {
   document.aimGlobalSettingsForm.submit();
 
 }
-</script>
+
+function populateWithDays(monthId, targetId) {
+	var monthElement	= document.getElementById(monthId);
+	var month			= monthElement.value;
+	//alert ('Month is:' + month);
+	var maxDays	= 0;
+	switch (parseInt(month)) {
+		case 1: ;
+		case 3: ;
+		case 5: ;
+		case 7: ;
+		case 8: ;
+		case 10: ;
+		case 12:
+			maxDays	= 31;
+			break;
+		case 4: ;
+		case 6: ;
+		case 9: ;
+		case 11: 
+			maxDays = 30;
+			break;
+		case 2: 
+			maxDays = 28;
+			break;
+	}
+	
+	selectElement = document.getElementById(targetId);
+	var numDays	= selectElement.length;
+	for (i=0; i< numDays; i++) {
+		selectElement.remove(0);
+	}
+	for (i=1; i<=maxDays; i++){ 
+		newOption		= document.createElement('option');
+		newOption.text	= i;
+		newOption.value	= i;
+		selectElement.add(newOption, null);
+	}
+	
+}
+
+function createDateString(monthId, dayId) {
+	monthElement	= document.getElementById(monthId);
+	dayElement		= document.getElementById(dayId);
+	
+	monthValue		= monthElement.value;
+	if (monthValue.length == 1)
+		monthValue	= '' + 0 + monthValue;
+	
+	dayValue		= dayElement.value;
+	if (dayValue.length == 1)
+		dayValue	= '' + 0 + dayValue;
+	var date		= dayValue + "/" + monthValue;
+	
+	els				= monthElement.form.elements;
+	
+	for (j=0; j<els.length; j++ ) {
+		if (els[j].name != null && els[j].name == 'gsfValue') {
+			els[j].value	= date;
+		}
+	}
+}
+
+--></script>
 
 <digi:instance property="aimGlobalSettingsForm" />
 
@@ -156,10 +219,12 @@ function saveClicked() {
                                   <html:hidden property="globalSettingsName" name="globalSett"/>
 
 
-                                  <% String possibleValues = "possibleValues(" + globalSett.getGlobalSettingsName() + ")"; %>
+                                  <% 
+                                  	String possibleValues 	= "possibleValues(" + globalSett.getGlobalSettingsName() + ")"; 
+                                  	String gsType			= globalSett.getGlobalSettingsPossibleValues();
+                                  %>
 
                                   <logic:notEmpty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
-
 
                                     <%if (globalSett.getGlobalSettingsName().trim().equals("Default Country".trim())) { %>
                                     <html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
@@ -180,9 +245,56 @@ function saveClicked() {
                                         <html:option value="${global.key}">${globSettings}</html:option>
                                       </logic:iterate>
                                     </html:select>
-                                    <%} %>										</logic:notEmpty>
+                                    <%} %>										
+                                    </logic:notEmpty>
                                     <logic:empty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
-                                      <html:text property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>' />
+                                    	<c:set var="type" value="<%=gsType %>" />
+                                    	<c:choose>
+	                                    	<c:when test='${type == "t_Date_No_Year"}'>
+	                                    		<% 
+	                                    			String monthId		= "month" + globalSett.getGlobalId() ;
+		                                    		String dayId		= "day" + globalSett.getGlobalId() ;
+		                                    		String [] dateValues	= globalSett.getGlobalSettingsValue().split("/") ;
+		                                    		int monthNum		= Integer.parseInt(dateValues[1]);
+	                                    		%>
+	                                    		<html:hidden property="gsfValue" value='<%= globalSett.getGlobalSettingsValue() %>'/>
+	                                    		<digi:trn key="aim:globalSettings:month">Month</digi:trn>: 
+	                                    		<select id="<%= monthId %>" onchange="populateWithDays('<%=monthId %>','<%=dayId %>');createDateString('<%=monthId %>','<%=dayId %>')">
+	                                    			<% for (int k=1; k<=12; k++) {
+	                                    					if ( k == monthNum ) {
+	                                    			%>
+	                                    					<option selected="selected" value="<%=k %>"><%=k %></option>
+	                                    			<%
+		                                    				}
+		                                    				else {
+		                                    		%>
+		                                    				<option  value="<%=k %>"><%=k %></option>
+		                                    		<%
+		                                    				}
+	                                    				} 
+	                                    			%>
+	                                    		</select>
+	                                    		<digi:trn key="aim:globalSettings:day">Day</digi:trn>: 
+	                                    		<select id="<%= dayId %>" onchange="createDateString('<%=monthId %>','<%=dayId %>');">
+	                                    			<% for (int k=1; k<=org.digijava.module.aim.action.GlobalSettings.numOfDaysInMonth(monthNum); k++) {
+	                                    					if ( k == Integer.parseInt(dateValues[0]) ) {
+	                                    			%>
+	                                    					<option value="<%=k %>" selected="selected"><%=k %></option>
+	                                    			<%
+		                                    				}
+		                                    				else {
+		                                    		%>
+		                                    				<option value="<%=k %>"><%=k %></option>
+		                                    		<%
+		                                    				}
+	                                    				} 
+	                                    			%>
+	                                    		</select>
+	                                    	</c:when>
+	                                    	<c:otherwise>
+	                                      		<html:text property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>' />
+	                                      	</c:otherwise>
+                                      	</c:choose>
                                     </logic:empty>
                                 </td>
                                 <td bgcolor="#f4f4f2" >

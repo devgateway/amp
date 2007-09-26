@@ -62,6 +62,11 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurvey"/>
 		</set>
 		-->
+		<set name="mtefProjections" cascade="all-delete-orphan">
+			<cache usage="read-write" />
+			<key column="amp_funding_id"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpFundingMTEFProjection"/>
+ 		</set>
 	
 	</class>
 </hibernate-mapping>

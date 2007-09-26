@@ -467,8 +467,8 @@ public class ResetAll extends Action
 								mtef.setAmount(projection.getAmount().toString());
 								mtef.setCurrencyCode(projection.getAmpCurrency().getCurrencyCode());
 								mtef.setCurrencyName(projection.getAmpCurrency().getCurrencyName());
-								mtef.setProjected(CategoryManagerUtil.getStringValueOfAmpCategoryValue(CategoryManagerUtil.getAmpCategoryValueFromDb(projection.getProjected())));
-								mtef.setProjectionDate(projection.getProjectionDate());
+								mtef.setProjected( projection.getProjected().getId() );
+								mtef.setProjectionDate( DateConversion.ConvertDateToString(projection.getProjectionDate()) );
 								mtefPrj.add(mtef);
 								
 							}

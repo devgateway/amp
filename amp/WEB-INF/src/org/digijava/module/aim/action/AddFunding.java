@@ -1,7 +1,10 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -10,10 +13,16 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.MTEFProjection;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class AddFunding extends Action {
 
@@ -41,12 +50,18 @@ public class AddFunding extends Action {
 		formBean.setActualStartDate("");
 		formBean.setFundingConditions("");
 		formBean.setFundingDetails(null);
-		formBean.setFundingMTEFProjections(null);
+		//formBean.setFundingMTEFProjections(null);
 		formBean.setEditFunding(false);
 		formBean.setNumComm(0);
 		formBean.setNumDisb(0);
 		formBean.setNumExp(0);
 		
+		formBean.setFundingMTEFProjections( new ArrayList<MTEFProjection>() );
+		for (int i=0; i<3; i++) {
+			MTEFProjection me	= getMTEFProjection(request.getSession(), i);
+			formBean.getFundingMTEFProjections().add( me );
+		}
+		formBean.setNumProjections(formBean.getFundingMTEFProjections().size());
 		
 		Collection fundingOrganizations = formBean.getFundingOrganizations();
 		Iterator iter = fundingOrganizations.iterator();
@@ -74,5 +89,37 @@ public class AddFunding extends Action {
 		formBean.setDupFunding(true);
 		formBean.setFirstSubmit(false);
 		return mapping.findForward("forward");
+	}
+	public static String getFYDate(int numOfAddedYears) {
+		try {
+			int year		= Integer.parseInt( FeaturesUtil.getGlobalSettingValue("Current Fiscal Year") );
+			year			+= numOfAddedYears;
+			
+			String date		= FeaturesUtil.getGlobalSettingValue("Fiscal Year End Date") + "/" + year;
+			
+			return date;
+		}
+		catch(Exception E) {
+			logger.error("Error getting Fiscal Year global settings");
+			E.printStackTrace();
+			return null;
+		}
+	}
+	public static MTEFProjection getMTEFProjection(HttpSession session, int index) {
+		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
+		String currCode = Constants.DEFAULT_CURRENCY;
+		if (teamMember.getAppSettings() != null) {
+			ApplicationSettings appSettings = teamMember.getAppSettings();
+			if (appSettings.getCurrencyId() != null) {
+				currCode = CurrencyUtil.getCurrency(appSettings.getCurrencyId()).getCurrencyCode();
+			}
+		}
+		
+		MTEFProjection mp = new MTEFProjection();
+		mp.setCurrencyCode(currCode);
+		mp.setProjectionDate( getFYDate(index+1) );
+		mp.setIndex(index);
+		mp.setIndexId(System.currentTimeMillis());
+		return mp;
 	}
 }

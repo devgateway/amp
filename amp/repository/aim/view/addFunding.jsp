@@ -41,7 +41,12 @@
 		var errmsg1='<digi:trn key="aim:addFunding:errmsg:assitanceType">Type Of Assistance not selected</digi:trn>';
 		var errmsg2='\n<digi:trn key="aim:addFunding:errmsg:fundOrgId">Funding Id not entered</digi:trn>';
 		var errmsg3='\n<digi:trn key="aim:addFunding:errmsg:financeInstrument">Financing Instrument not selected</digi:trn>';
+		
 		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3);
+		if ( flag == true ) {
+			var errorMsgProjection	= '<digi:trn key="aim:addFunding:errmsg:projectionamount">Enter amount for projection </digi:trn>';
+			flag					= validateProjection( errorMsgProjection );
+		}
 		if (flag == false) return false;
 		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;
 		document.aimEditActivityForm.action = "<%= fundAdded %>";
@@ -100,6 +105,7 @@
 	function removeMTEFProjection(index) {
 		var flag = confirm("Are you sure you want to remove the selected projection ?");
 		if(flag != false) {
+			document.aimEditActivityForm.event.value = "delProjection";
 			document.aimEditActivityForm.transIndexId.value=index;
 		 	document.aimEditActivityForm.action="/addMTEFProjection.do";
 			document.aimEditActivityForm.submit();
@@ -156,6 +162,7 @@
 <html:hidden property="numComm"/>
 <html:hidden property="numDisb"/>
 <html:hidden property="numExp"/>
+<html:hidden property="numProjections"/>
 <html:hidden property="editAct"/>
 <html:hidden property="firstSubmit"/>
 	
@@ -297,7 +304,7 @@
 				 	<tr>
 						<td valign="bottom"> 
 						<c:set var="indexMTEF" value="${indexMTEF+1}"/>
-						<html:select name="mtefProjection" property="projected"> 
+						<html:select indexed="true" name="mtefProjection" property="projected"> 
 							<logic:iterate name="aimEditActivityForm" property="projections" id="projection" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
 							<html:option value="${projection.id}" >
 								<digi:trn key="<%= org.digijava.module.aim.helper.CategoryManagerUtil.getTranslationKeyForCategoryValue(projection) %>">
@@ -321,6 +328,8 @@
 							<table cellPadding=0 cellSpacing=0>
 							<tr>
 								<td>
+								<html:text name="mtefProjection" indexed="true" property="projectionDate" readonly="true" size="10"/>
+								<%-- 
 								<% tempIndexStr = "" + tempIndex; tempIndex++;%>
 								<html:text name="mtefProjection" indexed="true" property="projectionDate"
 								styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
@@ -329,6 +338,7 @@
 									<a id="trans7Date<%=tempIndexStr%>" href='javascript:pickDateById("trans7Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 									</a>
+								--%>
 									</td>
 							</tr>
 							</table>

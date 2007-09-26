@@ -47,14 +47,14 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 	private static int fieldHeight = 0;
 
 	DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			javax.servlet.http.HttpServletRequest request,
 			javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
 		String pId = request.getParameter("pid");
 		String type = request.getParameter("docType");
-		
+
 		int row, col;
 		ParisIndicatorReportForm formBean = (ParisIndicatorReportForm) form;
 		Collection coll = null;
@@ -93,7 +93,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				}
 			}
 		}
-		
+
 		colCnt1 = b1 / coll.size();
 		logger.info(" this is b1 here..." + b1 + " colcount size...." + coll.size() + "COLL CNT 1 is    "+ colCnt1 + " row size  "+rowCnt1);
 		Object[][] data2 = new Object[rowCnt1][colCnt1];
@@ -107,21 +107,21 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					ParisIndicator pi = (ParisIndicator) iter1.next();
 					ans = pi.getAnswers();
 					int arrSize = ans.size();
-				
+
 					// rowCnt1 = rowCnt1+1;
 					String name = pi.getDonor();
 					data2[row][col] = name;
-					
+
 					for (int i = 0; i < arrSize; i++) {
 						double test[] = (double[]) ans.get(i);
-	
+
 						for (int j = 0; j < test.length; j++) {
 							col++;
 							double val = test[j];
-							
+
 							if(val==-1)
 							{
-								data2[row][col] = "na";
+								data2[row][col] = "n.a.";
 									//System.out.println(" this sis where na is coming "+ col);
 							}
 							else
@@ -139,12 +139,12 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 							for(int i=0;i<arrSize;i++)
 							{
 								//System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
-								if(!data2[row][c].equals("na"))
+								if(!data2[row][c].toString().equalsIgnoreCase("n.a."))
 								{
 									data2[row][c]=data2[row][c]+"%";
 								}
 								c=c+4;
-								
+
 							}
 						}
 					if(pId.equals("9"))
@@ -153,12 +153,12 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 						for(int i=0;i<arrSize;i++)
 						{
 							//System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
-							if(!data2[row][c].equals("na"))
+							if(!data2[row][c].toString().equalsIgnoreCase("n.a."))
 							{
 								data2[row][c]=data2[row][c]+"%";
 							}
 							c=c+5;
-							
+
 						}
 					}
 					if(pId.equals("5a"))
@@ -167,13 +167,13 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 						for(int i=0;i<arrSize;i++)
 						{
 							//System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
-							if(!data2[row][c].equals("na"))
+							if(!data2[row][c].toString().equalsIgnoreCase("n.a."))
 							{
 								data2[row][c]=data2[row][c]+"%";
 								data2[row][c+1]=data2[row][c+1]+"%";
 							}
 							c=c+8;
-							
+
 						}
 					}
 					col = 0;
@@ -181,14 +181,14 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				}
 			}
 		}
-	
+
 		if (pId.equals("6")) {
 			logger.info(" came inside the 6th god damn report");
 			colCnt1=0;
-			
+
 			if (coll.size() > 0) {
 				iter1 = coll.iterator();
-				
+
 				row = col = 0;
 				data2 = new Object[rowCnt1][b1];
 				int yr = formBean.getStartYear().intValue();
@@ -202,17 +202,17 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					int arrSize = ans.size();
 					String name = pi.getDonor();
 					data2[row][col] = name;
-					
+
 					for (int i = 0; i < arrSize; i++) {
 						double test[] = (double[]) ans.get(i);
 						for (int j = 0; j < test.length; j++) {
 							col++;
 							double val = test[j];
-							data2[row][col]= ""+yr;							
+							data2[row][col]= ""+yr;
 							col++;
-							data2[row][col] = "" + val;							
+							data2[row][col] = "" + val;
 							yr=yr+1;
-							
+
 							logger.info(" this is the 6th report "+b1+"  data  "+data2[row][col]);
 						}
 					}
@@ -418,8 +418,8 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 			}
 
 		}
-		
-		
+
+
 		/*
 		 * this is for the 6th indicator
 		 */
@@ -514,8 +514,8 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				}
 			}
 		}
-		
-		
+
+
 
 		/*
 		 * this is for the 7th indicator
@@ -709,11 +709,11 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				}
 			}
 		}
-		
+
 		/*
 		 * this is for 5a
 		 */
-		
+
 		if (pId.equals("5a")) {
 			//logger.info("in the 5th report");
 			String jasperFile = null;
@@ -809,11 +809,11 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				}
 			}
 		}
-		
+
 		/*
 		 * report 5b
 		 */
-		
+
 		if (pId.equals("5b")) {
 			//logger.info("in the 5th report");
 			String jasperFile = null;
@@ -911,7 +911,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 			}
 
 		}
-		
+
 		/*
 		 * report 10a
 		 */

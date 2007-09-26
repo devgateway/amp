@@ -2,6 +2,58 @@ function trim(s) {
 	return s.replace( /^\s*/, "" ).replace( /\s*$/, "" );
 }
 
+function chkNumericForProjection(objName)
+{
+
+	var checkOK = "0123456789.";
+	var checkStr = objName;
+	var allValid = true;
+	var decPoints = 0;
+	var periodFlag = 0;
+	var allNum = "";
+
+	for (i = 0;  i < checkStr.value.length;  i++) {
+		ch = checkStr.value.charAt(i);
+		if (ch == ".") {
+			if (periodFlag == 1) {
+				allValid = false;
+				break;
+			}
+			periodFlag = 1;
+		}
+		for (j = 0;  j < checkOK.length;  j++)
+			if (ch == checkOK.charAt(j))
+				break;
+
+		if (j == checkOK.length) {
+			allValid = false;
+			break;
+		}
+	}
+
+	return allValid;
+}
+
+function validateProjection (errorMsg) {
+	var numProjections	= document.aimEditActivityForm.numProjections.value;
+	var j				= 0;
+	var i				= 0;
+	for (i=0; i<numProjections; i++) {
+		var name		= "mtefProjection[" + i + "].amount";
+		//alert(name);
+		var elements	= document.aimEditActivityForm.elements;
+		for (j=0; j<elements.length; j++) {
+			//alert(j);
+			if (elements[j].name != null && elements[j].name == name ) {
+				//alert("Found " + name + ": " + elements[j].value);
+				var x	= chkNumericForProjection(elements[j]);
+				if( elements[j].value.length == 0 || x==false) {alert(errorMsg + " " +  i); return false;}
+			}
+		}
+	}
+	return true;
+}
+
 function validateFunding() {
 	var fundId = trim(document.aimEditActivityForm.orgFundingId.value);
 	if (fundId.length == 0) {
@@ -98,6 +150,8 @@ function validateFundingExchangeRate() {
 		var decPoints = 0;
 		//var contor;
 		var allNum = "";
+		var j 		= 0;
+		var i		= 0;
 		
 		contor=0;
 		for (i = 0;  i < checkStr.value.length;  i++)
@@ -126,8 +180,9 @@ function validateFundingExchangeRate() {
 		{	
 			alertsay = "Please enter only numbers in the \"Exchange rate\" field or a valid decimal number using \".\" "
 			alert(alertsay);
-			return (false);
+			return false;
 		}
+		return true;
 	}
 
 

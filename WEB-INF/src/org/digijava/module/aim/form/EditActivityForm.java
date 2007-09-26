@@ -79,14 +79,14 @@ private int isPreview=0;
 	 * List of ReferenceDoc helper beans
 	 */
 	private List referenceDocs;
-
+	
 	/**
 	 * Doc names come from CategoryValues.
 	 * And this is list of IDs of those CategoryValues.
 	 */
 	private Long[] allReferenceDocNameIds;
 //	private String[] refDocComments;
-
+	
 	// location selector pop-up
 	private Long selLocs[] = null; // location selected from step 2 page to
 	// remove from the locations list
@@ -246,10 +246,10 @@ private int isPreview=0;
 	private Collection currencies;
 	private Collection organizations;
 	private List fundingDetails; //Collection of FundingDetail objects
-	private List fundingMTEFProjections; //collection of funding mtefprojections objects
+	private List<MTEFProjection> fundingMTEFProjections; //collection of funding mtefprojections objects
 	private Collection projections; //the values in the category manager for the projections
-
-
+	
+	
 	private boolean dupFunding;
 	private boolean editFunding;
 	private int offset;
@@ -261,6 +261,8 @@ private int isPreview=0;
     private int numComm;
 	private int numDisb;
 	private int numExp;
+	/* Projections */
+	private int numProjections;
 
 	private String contractors;
 
@@ -408,7 +410,7 @@ private int isPreview=0;
 	 private String equalOpportunity;
 	 private String environment;
 	 private String minorities;
-
+	 
 
 	 /*
 	  * Tanzania ADDS
@@ -423,8 +425,9 @@ private int isPreview=0;
 	 private Boolean governmentApprovalProcedures;
 	 private Boolean jointCriteria;
   private boolean defaultCountryIsSet;
-
-  public Boolean getGovernmentApprovalProcedures() {
+	 
+	 
+	public Boolean getGovernmentApprovalProcedures() {
 		return governmentApprovalProcedures;
 	}
 
@@ -622,7 +625,7 @@ private int isPreview=0;
 			financingBreakdown=null;
 			visibleProgram=null;
 			fundingRegions = null;
-
+			
 			allReferenceDocNameIds =null;
 //			refDocComments = null;
 			referenceDocs = null;
@@ -4106,7 +4109,7 @@ public String getPurpose() {
 		this.budgetCheckbox = budgetCheckbox;
 	}
 
-
+	
 	public void setCreatedBy(AmpTeamMember createdBy) {
     this.createdBy = createdBy;
   }
@@ -4114,16 +4117,16 @@ public String getPurpose() {
 	public Collection getFundingOrganizations() {
 		return fundingOrganizations;
 	}
-
+	
 	public int getIsPreview() {
     return isPreview;
   }
-
+  
    public void setIsPreview(int isPreview) {
     this.isPreview = isPreview;
   }
-
-
+	
+	
 	public String getMultiSectorSelecting() {
 	return multiSectorSelecting;
 }
@@ -4140,10 +4143,17 @@ public String getPurpose() {
 		this.lessonsLearned = lessonsLearned;
 	}
 
-	public List getFundingMTEFProjections() {
+	public List<MTEFProjection> getFundingMTEFProjections() {
 		return fundingMTEFProjections;
 	}
-
+	
+	public MTEFProjection getMtefProjection(int index) {
+		while ( fundingMTEFProjections.size() <= index ) {
+			fundingMTEFProjections.add( new MTEFProjection() );
+		}
+		return fundingMTEFProjections.get(index);
+	}
+	
 	public Double getAllCosts() {
 		return allCosts;
 	}
@@ -4151,7 +4161,7 @@ public String getPurpose() {
 	public void setAllCosts(Double allCosts) {
 		this.allCosts = allCosts;
 	}
-	public void setFundingMTEFProjections(List fundingMTEFProjections) {
+	public void setFundingMTEFProjections(List<MTEFProjection> fundingMTEFProjections) {
 		this.fundingMTEFProjections = fundingMTEFProjections;
 	}
 
@@ -4174,7 +4184,7 @@ public String getPurpose() {
 	public String getEqualOpportunity() {
 		return equalOpportunity;
 	}
-
+	
 	public void setEqualOpportunity(String equalOpportunity) {
 		this.equalOpportunity = equalOpportunity;
 	}
@@ -4207,19 +4217,19 @@ public String getPurpose() {
 		return allReferenceDocNameIds;
 	}
 
-  public boolean getDefaultCountryIsSet() {
-    return defaultCountryIsSet;
-  }
+	public boolean getDefaultCountryIsSet() {
+    	return defaultCountryIsSet;
+    }
 
-  public void setAllReferenceDocNameIds(Long[] selectedReferenceDocs) {
+	public void setAllReferenceDocNameIds(Long[] selectedReferenceDocs) {
 		this.allReferenceDocNameIds = selectedReferenceDocs;
 	}
+	
+	public void setDefaultCountryIsSet(boolean defaultIsCountrySet) {
+    	this.defaultCountryIsSet = defaultIsCountrySet;
+  	}
 
-  public void setDefaultCountryIsSet(boolean defaultIsCountrySet) {
-    this.defaultCountryIsSet = defaultIsCountrySet;
-  }
-
-  //	public String[] getRefDocComments() {
+//	public String[] getRefDocComments() {
 //		return refDocComments;
 //	}
 //
@@ -4242,6 +4252,18 @@ public String getPurpose() {
 //		}
 //		refDocComments[index]=comment;
 //	}
+
+
+
+
+
+	public int getNumProjections() {
+		return numProjections;
+	}
+
+	public void setNumProjections(int numProjections) {
+		this.numProjections = numProjections;
+	}
 
 
 }

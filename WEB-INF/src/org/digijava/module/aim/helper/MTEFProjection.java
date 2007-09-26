@@ -1,15 +1,16 @@
 package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Date;
 
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 
-public class MTEFProjection implements Serializable{
+public class MTEFProjection implements Serializable, Comparable<MTEFProjection>{
 	
 	private long indexId;
-	private String projected; //to be  added to category manager
+	private Long projected; 
 	private String amount;
 	private String currencyCode;
 	private String currencyName;
@@ -18,8 +19,8 @@ public class MTEFProjection implements Serializable{
 	private String reportingOrganizationName;
 	private Long reportingOrganizationId;
 	
-	private Date projectionDate;
-	private AmpFunding  ampFundingId;
+	private String projectionDate;
+	private AmpFunding  ampFunding;
 	
 	
 		public MTEFProjection() {}
@@ -45,11 +46,11 @@ public class MTEFProjection implements Serializable{
 		}
 
 
-		public Date getProjectionDate() {
+		public String getProjectionDate() {
 			return projectionDate;
 		}
 
-		public void setProjectionDate(Date projectionDate) {
+		public void setProjectionDate(String projectionDate) {
 			this.projectionDate = projectionDate;
 		}
 
@@ -97,20 +98,20 @@ public class MTEFProjection implements Serializable{
 			return (this.indexId == mtefPrj.indexId);
 		}
 
-		public String getProjected() {
+		public Long getProjected() {
 			return projected;
 		}
 
-		public void setProjected(String projected) {
+		public void setProjected(Long projected) {
 			this.projected = projected;
 		}
 
-		public AmpFunding getAmpFundingId() {
-			return ampFundingId;
+		public AmpFunding getAmpFunding() {
+			return ampFunding;
 		}
 
-		public void setAmpFundingId(AmpFunding ampFundingId) {
-			this.ampFundingId = ampFundingId;
+		public void setAmpFunding(AmpFunding ampFundingId) {
+			this.ampFunding = ampFundingId;
 		}
 
 		public Long getReportingOrganizationId() {
@@ -127,6 +128,13 @@ public class MTEFProjection implements Serializable{
 
 		public void setReportingOrganizationName(String reportingOrganizationName) {
 			this.reportingOrganizationName = reportingOrganizationName;
+		}
+
+		public int compareTo(MTEFProjection o) {
+			Date d1 = DateConversion.getDate(this.projectionDate);
+			Date d2 = DateConversion.getDate(o.projectionDate);
+			
+			return d1.compareTo(d2);
 		}
 
 

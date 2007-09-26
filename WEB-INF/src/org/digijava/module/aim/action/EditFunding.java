@@ -18,6 +18,7 @@ import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -61,6 +62,8 @@ public class EditFunding extends Action {
 								if (funding.getFinancingInstrument() != null)
 									formBean.setModality(funding.getFinancingInstrument().getId());
 								formBean.setFundingConditions(funding.getConditions());
+								
+								formBean.setFundingMTEFProjections( new ArrayList<MTEFProjection> (funding.getMtefProjections()) );
 								
 								formBean.setFundingDetails(new ArrayList(funding.getFundingDetails()));
 								if (funding.getFundingDetails() != null) {

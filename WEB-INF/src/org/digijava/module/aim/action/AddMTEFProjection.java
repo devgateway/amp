@@ -1,6 +1,8 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,14 +17,13 @@ import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 
 public class AddMTEFProjection extends Action{
 
-	private ArrayList mtefProjections=null;
+	private List<MTEFProjection> mtefProjections=null;
 	
 	private String event;
 	
@@ -41,29 +42,40 @@ public class AddMTEFProjection extends Action{
 		
 		formBean.setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
 		
-		String currCode = Constants.DEFAULT_CURRENCY;
+		/*String currCode = Constants.DEFAULT_CURRENCY;
 		if (teamMember.getAppSettings() != null) {
 			ApplicationSettings appSettings = teamMember.getAppSettings();
 			if (appSettings.getCurrencyId() != null) {
 				currCode = CurrencyUtil.getCurrency(appSettings.getCurrencyId()).getCurrencyCode();
 			}
-		}		
+		}*/		
 		long index = formBean.getTransIndexId();
 		String subEvent = event.substring(0,3);
 		MTEFProjection mp = null;
 		if (subEvent.equalsIgnoreCase("del") || subEvent.equalsIgnoreCase("add")) {
 			if (formBean.getFundingMTEFProjections() == null) {
 				mtefProjections = new ArrayList();
-				mp = getMTEFProjection(currCode);
+				mp = AddFunding.getMTEFProjection(request.getSession(), 0);
 				mtefProjections.add(mp);		
 			} else {
-				mtefProjections = new ArrayList(formBean.getFundingMTEFProjections());
+				mtefProjections = formBean.getFundingMTEFProjections();
 				if (subEvent.equals("del")) {
+					Iterator<MTEFProjection> iter	= mtefProjections.iterator();
+					int j							= 1;
+					while (iter.hasNext()) {
+						MTEFProjection proj	= iter.next();
+						if (proj.getIndexId() == index) {
+							iter.remove();
+						}
+						else {
+							proj.setProjectionDate( AddFunding.getFYDate(j++) );
+						}
+					}
 					MTEFProjection temp = new MTEFProjection();
 					temp.setIndexId(index);
 					mtefProjections.remove(temp);					
 				} else {
-					mp = getMTEFProjection(currCode);
+					mp = AddFunding.getMTEFProjection(request.getSession(), mtefProjections.size() );
 					mtefProjections.add(mp);							
 				}
 			}
@@ -77,13 +89,13 @@ public class AddMTEFProjection extends Action{
 		
 	}
 	
-	private MTEFProjection getMTEFProjection(String currCode) {
+	/*private MTEFProjection getMTEFProjection(String currCode) {
 		MTEFProjection mp = new MTEFProjection();
 		mp.setCurrencyCode(currCode);
 		
 		mp.setIndex(mtefProjections.size());
 		mp.setIndexId(System.currentTimeMillis());
 		return mp;
-	}
+	}*/
 	
 }

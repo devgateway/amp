@@ -46,6 +46,7 @@ import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -79,6 +80,7 @@ import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
+import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
@@ -905,6 +907,30 @@ public class EditActivity
             fund.setOrgFundingId(ampFunding.getFinancingId());
             fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
             fund.setConditions(ampFunding.getConditions());
+            
+            /* Get MTEF Projections */
+            ArrayList<MTEFProjection> MTEFProjections	= new ArrayList<MTEFProjection>();
+            if (ampFunding.getMtefProjections() != null) {
+            	Iterator<AmpFundingMTEFProjection> iterMtef	= ampFunding.getMtefProjections().iterator();
+            	while ( iterMtef.hasNext() ) {
+	            	AmpFundingMTEFProjection ampProjection		= iterMtef.next();
+	            	MTEFProjection	projection					= new MTEFProjection();
+	            	
+	            	projection.setAmount( ampProjection.getAmount() + "" );
+	            	projection.setProjected( ampProjection.getProjected().getId() );
+	            	projection.setCurrencyCode( ampProjection.getAmpCurrency().getCurrencyCode() );
+	            	projection.setCurrencyName( ampProjection.getAmpCurrency().getCurrencyName() );
+	            	projection.setProjectionDate( DateConversion.ConvertDateToString(ampProjection.getProjectionDate()) );
+	            	//projection.setIndex();
+	            	projection.setAmpFunding( ampProjection.getAmpFunding() );
+	            	MTEFProjections.add(projection);
+            	}
+            	
+            }
+            Collections.sort(MTEFProjections);
+            fund.setMtefProjections(MTEFProjections);
+            /* END - Get MTEF Projections */
+            
             Collection fundDetails = ampFunding.getFundingDetails();
             if (fundDetails != null && fundDetails.size() > 0) {
               Iterator fundDetItr = fundDetails.iterator();

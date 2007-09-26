@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" %>
+.<%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -11,6 +11,7 @@
 <%@page import="org.digijava.module.aim.helper.Constants" %>
 <%@page import="org.digijava.module.aim.helper.CategoryManagerUtil" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
@@ -576,14 +577,46 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                   </tr>
                                                                   <tr>
                                                                     <td>
-                                                                      <table width="98%" border="0" cellpadding="1"                                                                      bgcolor="#ffffff" cellspacing="1">
+                                                                      <table width="98%" border="0" cellpadding="1" bgcolor="#ffffff" cellspacing="1">
                                                                         <tr>
                                                                           <td bgcolor="#FFFFFF" align="right" colspan="2">
                                                                             <table width="100%" border="0" cellSpacing="1" cellPadding="1" bgcolor="#dddddd">
                                                                               <tr bgcolor="#ffffff">
-                                                                                <td colspan="5"><b>
-                                                                                  <a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>">				<digi:trn key="aim:commitments">			Commitments </digi:trn></b>
-</a>
+                                                                                
+                                                                                   
+                                                                                 
+                                                                                 <%-- Rendering projections --%>
+                                                                                 <td colspan="5">
+                                                                                 <b><digi:trn key="aim:funding:projections">Projections</digi:trn></b>
+                                                                                 </td>
+                                                                              </tr>
+                                                                                 <logic:notEmpty name="funding" property="mtefProjections">
+                                                                                 <logic:iterate name="funding" property="mtefProjections" id="projection">
+                                                                                 <tr bgcolor="#ffffff">
+                                                                                 	<td width="50"> 
+                                                                                 		<category:getoptionvalue categoryValueId="${projection.projected}" />
+                                                                                 	</td>
+                                                                                 	<td width="120" align="right">
+                                                                                 		<FONT color="blue">*</FONT>
+                                                                                 		<bean:write name="projection" property="amount" />
+                                                                                 	</td>
+                                                                                 	<td>
+                                                                                 		<bean:write name="projection" property="currencyCode" />
+                                                                                 	</td>
+                                                                                 	<td>
+                                                                                 		<bean:write name="projection" property="projectionDate" />
+                                                                                 	</td>
+                                                                                 	<td>&nbsp;</td>
+                                                                                 </tr>
+                                                                                 </logic:iterate>
+                                                                                 </logic:notEmpty>
+                                                                                 <%-- Rendering projections --%>
+                                                                             <tr bgcolor="#ffffff">
+                                                                                 <td colspan="5">
+                                                                                	<b>
+                                                                                  	<a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>" >			
+                                                                                  		<digi:trn key="aim:commitments">			Commitments </digi:trn></b>
+																					</a>
                                                                                 </td>
                                                                               </tr>
                                                                               <c:if test="${!empty funding.fundingDetails}">
@@ -597,7 +630,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                     <c:if test="${fundingDetail.perspectiveCode != 'DN'}">
                                                                                       <tr bgcolor="#ffffff">
                                                                                     </c:if>
-
+																					<tr>
                                                                                     <td width="50">
 	                                                                                    <field:display name="Adjustment Type Commitment" feature="Funding Organizations">
     	                                                                                	<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>

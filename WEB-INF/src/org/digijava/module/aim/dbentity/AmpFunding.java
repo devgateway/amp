@@ -30,7 +30,7 @@ public class AmpFunding implements Serializable
 	private String comments;
 	private Date signatureDate ;
 	private Set fundingDetails ;
-	private Set mtefProjections;
+	private Set<AmpFundingMTEFProjection> mtefProjections;
 //	private AmpTermsAssist ampTermsAssistId ;
 	private AmpCategoryValue typeOfAssistance;
 	private Set closingDateHistory;
@@ -379,11 +379,11 @@ public class AmpFunding implements Serializable
 		this.activeList = activeList;
 	}
 
-	public Set getMtefProjections() {
+	public Set<AmpFundingMTEFProjection> getMtefProjections() {
 		return mtefProjections;
 	}
 
-	public void setMtefProjections(Set mtefProjections) {
+	public void setMtefProjections(Set<AmpFundingMTEFProjection> mtefProjections) {
 		this.mtefProjections = mtefProjections;
 	}
 	

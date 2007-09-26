@@ -7,11 +7,11 @@ import org.digijava.module.aim.dbentity.AmpFunding ;
 public class AmpFundingMTEFProjection {
 
 		private Long ampFundingMTEFProjectionId ;
-		private Long projected; //to be  added to category manager
+		private AmpCategoryValue projected; 
 		private Double amount;
 		private AmpCurrency ampCurrency;
 		private Date projectionDate;
-		private AmpFunding  ampFundingId;
+		private AmpFunding  ampFunding;
 		
 		public Double getAmount() {
 			return amount;
@@ -19,11 +19,11 @@ public class AmpFundingMTEFProjection {
 		public void setAmount(Double amount) {
 			this.amount = amount;
 		}
-		public AmpFunding getAmpFundingId() {
-			return ampFundingId;
+		public AmpFunding getAmpFunding() {
+			return ampFunding;
 		}
-		public void setAmpFundingId(AmpFunding ampFundingId) {
-			this.ampFundingId = ampFundingId;
+		public void setAmpFunding(AmpFunding ampFundingId) {
+			this.ampFunding = ampFundingId;
 		}
 		public Long getAmpFundingMTEFProjectionId() {
 			return ampFundingMTEFProjectionId;
@@ -37,10 +37,11 @@ public class AmpFundingMTEFProjection {
 		public void setAmpCurrency(AmpCurrency currency) {
 			this.ampCurrency = currency;
 		}
-		public Long getProjected() {
+
+		public AmpCategoryValue getProjected() {
 			return projected;
 		}
-		public void setProjected(Long projected) {
+		public void setProjected(AmpCategoryValue projected) {
 			this.projected = projected;
 		}
 		public Date getProjectionDate() {

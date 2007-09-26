@@ -280,24 +280,7 @@ public class SaveActivity extends Action {
 									}
 									ampFunding.setFundingDetails(fundDeatils);
 									
-									Set mtefPrj=new HashSet();
-									if(fund.getMtefProjections()!=null)
-									{
-										Iterator mtefItr=fund.getMtefProjections().iterator();
-										while (mtefItr.hasNext())
-										{
-											MTEFProjection mtef=(MTEFProjection)mtefItr.next();
-											AmpFundingMTEFProjection ampmtef=new AmpFundingMTEFProjection();
-											ampmtef.setAmount(Double.valueOf(mtef.getAmount()));
-											ampmtef.setAmpFundingId(ampFunding);
-											ampmtef.setAmpCurrency(CurrencyUtil.getCurrencyByCode(mtef.getCurrencyCode()));
-											ampmtef.setProjected(CategoryManagerUtil.getAmpCategoryValueFromDb(mtef.getProjected(),
-													CategoryManagerUtil.loadAmpCategoryClass(CategoryConstants.MTEF_PROJECTION_KEY).getId() ).getId() );
-											ampmtef.setProjectionDate(mtef.getProjectionDate());
-											mtefPrj.add(ampmtef);
-										}
-									}
-									
+									this.saveMTEFProjections(fund, ampFunding);
 									
 									fundings.add(ampFunding);
 								}
@@ -1260,6 +1243,9 @@ public class SaveActivity extends Action {
 									}
 								}
 								ampFunding.setFundingDetails(fundDeatils);
+								
+								this.saveMTEFProjections(fund, ampFunding);
+								
 								fundings.add(ampFunding);
 							}
 						}
@@ -1645,4 +1631,24 @@ public class SaveActivity extends Action {
 		}
 	}
 
+	private void saveMTEFProjections (Funding fund, AmpFunding ampFunding) {
+		Set mtefPrj=new HashSet();
+		if(fund.getMtefProjections()!=null)
+		{
+			Iterator mtefItr=fund.getMtefProjections().iterator();
+			while (mtefItr.hasNext())
+			{
+				MTEFProjection mtef=(MTEFProjection)mtefItr.next();
+				AmpFundingMTEFProjection ampmtef=new AmpFundingMTEFProjection();
+				ampmtef.setAmount(Double.valueOf(mtef.getAmount()));
+				ampmtef.setAmpFunding(ampFunding);
+				ampmtef.setAmpCurrency(CurrencyUtil.getCurrencyByCode(mtef.getCurrencyCode()));
+				ampmtef.setProjected( CategoryManagerUtil.getAmpCategoryValueFromDb(mtef.getProjected()) );
+				ampmtef.setProjectionDate( DateConversion.getDate(mtef.getProjectionDate()) );
+				mtefPrj.add(ampmtef);
+			}
+		}
+		ampFunding.setMtefProjections(mtefPrj);
+	}
+	
 }

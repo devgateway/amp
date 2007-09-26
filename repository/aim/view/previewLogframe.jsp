@@ -168,29 +168,25 @@
 										<digi:edit key="${aimEditActivityForm.objectives}"/>
 										</td>
 										<td valign="top"  width="33%" bgcolor="#ffffff" style="border:1px solid #CCC;">
-										<logic:notEmpty name="aimEditActivityForm" property="indicatorsME">
-												<logic:iterate name="aimEditActivityForm" property="indicatorsME" id="indicator" 
-													type="org.digijava.module.aim.helper.ActivityIndicator">
-													<logic:notEmpty name="indicator" property="indicatorsCategory"><logic:notEmpty name="indicator" property="indicatorsCategory.value">
-													<logic:equal name="indicator" property="indicatorsCategory.value" value="Objective">
-													<bean:write name="indicator" property="indicatorName"/>
-													<br/>
-													</logic:equal>
-													</logic:notEmpty></logic:notEmpty>
-												</logic:iterate>
-											</logic:notEmpty>
+											<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+	                                        	<logic:equal name="comments" property="key" value="Objective Objectively Verifiable Indicators">
+													<logic:iterate name="comments" id="comment" property="value" 
+														type="org.digijava.module.aim.dbentity.AmpComments">
+														<bean:write name="comment" property="comment"/><br/>
+	                                        		</logic:iterate>
+	                                        	</logic:equal>
+											</logic:iterate>
 										</td>
 											
 										<td valign="top"  width="33%" bgcolor="#ffffff" style="border:1px solid #CCC;">
-										<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
-                                        	<logic:equal name="comments" property="key" value="Objective Verification">
-												<logic:iterate name="comments" id="comment" property="value" 
-													type="org.digijava.module.aim.dbentity.AmpComments">
-													<bean:write name="comment" property="comment"/><br/>
-                                        		</logic:iterate>
-                                        	</logic:equal>
-										</logic:iterate>
-										
+											<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+	                                        	<logic:equal name="comments" property="key" value="Objective Verification">
+													<logic:iterate name="comments" id="comment" property="value" 
+														type="org.digijava.module.aim.dbentity.AmpComments">
+														<bean:write name="comment" property="comment"/><br/>
+	                                        		</logic:iterate>
+	                                        	</logic:equal>
+											</logic:iterate>
 										</td>
 										
 									</tr>
@@ -221,27 +217,24 @@
 												<digi:edit key="${aimEditActivityForm.purpose}"/>
 										</td>
 										<td valign="top"  width="25%" bgcolor="#ffffff" style="border:1px solid #CCC;">&nbsp;
-											<logic:notEmpty name="aimEditActivityForm" property="indicatorsME">
-												<logic:iterate name="aimEditActivityForm" property="indicatorsME" id="indicator" 
-													type="org.digijava.module.aim.helper.ActivityIndicator">
-													<logic:notEmpty name="indicator" property="indicatorsCategory"><logic:notEmpty name="indicator" property="indicatorsCategory.value">
-													<logic:equal name="indicator" property="indicatorsCategory.value" value="Purpose">
-													<bean:write name="indicator" property="indicatorName"/>
-													<br/>
-													</logic:equal>
-													</logic:notEmpty></logic:notEmpty>
-												</logic:iterate>
-											</logic:notEmpty>
+											<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+	                                        	<logic:equal name="comments" property="key" value="Purpose Objectively Verifiable Indicators">
+													<logic:iterate name="comments" id="comment" property="value" 
+														type="org.digijava.module.aim.dbentity.AmpComments">
+														<bean:write name="comment" property="comment"/><br/>
+	                                        		</logic:iterate>
+	                                        	</logic:equal>
+											</logic:iterate>
 										</td>
 										<td valign="top"  width="25%" bgcolor="#ffffff" style="border:1px solid #CCC;">
-										<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
-                                        	<logic:equal name="comments" property="key" value="Purpose Verification">
-												<logic:iterate name="comments" id="comment" property="value" 
-													type="org.digijava.module.aim.dbentity.AmpComments">
-													<bean:write name="comment" property="comment"/><br/>
-                                        		</logic:iterate>
-                                        	</logic:equal>
-										</logic:iterate>
+											<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+	                                        	<logic:equal name="comments" property="key" value="Purpose Verification">
+													<logic:iterate name="comments" id="comment" property="value" 
+														type="org.digijava.module.aim.dbentity.AmpComments">
+														<bean:write name="comment" property="comment"/><br/>
+	                                        		</logic:iterate>
+	                                        	</logic:equal>
+											</logic:iterate>
 										</td>
 										<td valign="top"  width="25%" bgcolor="#ffffff" style="border:1px solid #CCC;">
 										<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
@@ -281,28 +274,24 @@
 												<digi:edit key="${aimEditActivityForm.results}"/>
 										</td>
 										<td valign="top"  width="25%" bgcolor="#ffffff" style="border:1px solid #CCC;">
-											<logic:notEmpty name="aimEditActivityForm" property="indicatorsME">
-												<logic:iterate name="aimEditActivityForm" property="indicatorsME" id="indicator" 
-													type="org.digijava.module.aim.helper.ActivityIndicator">
-													<logic:notEmpty name="indicator" property="indicatorsCategory"><logic:notEmpty name="indicator" property="indicatorsCategory.value">
-													<logic:equal name="indicator" property="indicatorsCategory.value" value="Results">
-													<bean:write name="indicator" property="indicatorName"/>
-													<br/>
-													</logic:equal>
-													</logic:notEmpty></logic:notEmpty>
-												</logic:iterate>
-											</logic:notEmpty>
+											<logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+	                                        	<logic:equal name="comments" property="key" value="Results Objectively Verifiable Indicators">
+													<logic:iterate name="comments" id="comment" property="value" 
+														type="org.digijava.module.aim.dbentity.AmpComments">
+														<bean:write name="comment" property="comment"/><br/>
+	                                        		</logic:iterate>
+	                                        	</logic:equal>
+											</logic:iterate>
 										</td>
 										<td valign="top"  width="25%" bgcolor="#ffffff" style="border:1px solid #CCC;">
-										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
-											<logic:equal name="comments" property="key" value="Results Verification">
-												<logic:iterate name="comments" id="comment" property="value" 
-													type="org.digijava.module.aim.dbentity.AmpComments">
-													<bean:write name="comment" property="comment"/><br/>
-                                        		</logic:iterate>
-                                        	</logic:equal>
-										</logic:iterate>
-										
+											 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+												<logic:equal name="comments" property="key" value="Results Verification">
+													<logic:iterate name="comments" id="comment" property="value" 
+														type="org.digijava.module.aim.dbentity.AmpComments">
+														<bean:write name="comment" property="comment"/><br/>
+	                                        		</logic:iterate>
+	                                        	</logic:equal>
+											</logic:iterate>
 										</td>
 										<td valign="top"  width="25%" bgcolor="#ffffff" style="border:1px solid #CCC;">
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">

@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -36,6 +37,7 @@ import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
@@ -235,7 +237,7 @@ public class AddAmpActivity extends Action {
       else
         eaForm.setWorkingTeamLeadFlag("no");
 
-      if (!eaForm.isEditAct() || logframepr.compareTo("true") == 0) {
+      if (!eaForm.isEditAct() || logframepr.compareTo("true") == 0 || request.getParameter("logframe") != null) {
         if (teamMember != null)
           if (teamMember.getTeamHead())
             eaForm.setApprovalStatus("approved");
@@ -814,6 +816,13 @@ public class AddAmpActivity extends Action {
           eaForm.setLevelCollection(DbUtil.getAmpLevels());
         }
 
+//      patch for comments that were not saved yet
+        HashMap unsavedComments = (HashMap) session.getAttribute("commentColInSession");
+        Set keySet = null;
+        if (unsavedComments != null)
+        	keySet = unsavedComments.keySet();
+        
+        
         if (teamMember == null)
           return mapping.findForward("publicPreview");
         else {
@@ -824,8 +833,31 @@ public class AddAmpActivity extends Action {
             AmpField field = (AmpField) itAux.next();
             colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),
                                                   eaForm.getActivityId());
+            // patch for comments that were not saved yet
+            if (keySet != null && keySet.contains(field.getAmpFieldId())){
+            	Collection toAdd = (Collection) unsavedComments.get(field.getAmpFieldId());
+            	Iterator i = toAdd.iterator();
+            	while (i.hasNext()) {
+					AmpComments e1 = (AmpComments) i.next();
+					boolean found = false;
+					Iterator j = colAux.iterator();
+					while (j.hasNext()) {
+						AmpComments e2 = (AmpComments) j.next();
+						if (e1.getAmpCommentId() != null && e1.getAmpCommentId().equals(e2.getAmpCommentId())){
+							found = true;
+							break;
+						}
+					}
+					if (found){
+						j.remove();
+					}
+					colAux.add(e1);
+				}
+            }
+            //
             allComments.put(field.getFieldName(), colAux);
           }
+          
           eaForm.setAllComments(allComments);
           eaForm.setCommentsCol(colAux);
 

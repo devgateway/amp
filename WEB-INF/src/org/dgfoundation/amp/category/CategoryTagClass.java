@@ -250,10 +250,10 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 			out.println("<tr><td>");
 			if ( ( valueId != null && valueId.longValue()	== ampCategoryValue.getId().longValue() ) || 
 					( valueIdsColl != null && valueIdsColl.contains(ampCategoryValue.getId()) ) ) {
-				out.println("<input "+typeProperty+nameProperty+" value='"+ampCategoryValue.getId()+"' checked='checked'"+innerDynamicAttributes+" >"+outputValue+"</input>");
+				out.println("<input "+typeProperty+nameProperty+" value='"+ampCategoryValue.getId()+"' checked='checked'"+innerDynamicAttributes+" />"+outputValue);
 			}
 			else{
-				out.println("<input "+typeProperty+nameProperty+" value='"+ampCategoryValue.getId()+innerDynamicAttributes+"' >"+outputValue+"</input>");
+				out.println("<input "+typeProperty+nameProperty+" value='"+ampCategoryValue.getId()+"' "+innerDynamicAttributes+" />"+outputValue);
 			}
 			out.println("</td></tr>");
 			

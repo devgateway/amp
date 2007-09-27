@@ -303,7 +303,7 @@
 											 <tr>
 											
 											<field:display name="FY" feature="Budget">
-											<td valign="top" align="left" id="FY" align="right">
+											<td valign="top" align="left" id="FY" align="right" style="display:none">
 												<a title="<digi:trn key="aim:FY">FY</digi:trn>">
 												<digi:trn key="aim:actFY">
 												FY
@@ -379,7 +379,7 @@
 												</a>
 											</td>
 										<td valign="top" align="left" >
-											<category:showoptions  listView="true" name="aimEditActivityForm" property="gbsSbs" categoryName="<%=org.digijava.module.aim.helper.CategoryConstants.FINANCIAL_INSTRUMENT_NAME %>" styleClass="inp-text" />
+											<category:showoptions listView="false" name="aimEditActivityForm" property="gbsSbs" categoryName="<%=org.digijava.module.aim.helper.CategoryConstants.FINANCIAL_INSTRUMENT_NAME %>" styleClass="inp-text" />
 											<!-- 	<html:radio property="gbsSbs" value="1"/>GBS<br/>
 												<html:radio property="gbsSbs" value="2"/>SBS<br/>								
 												<html:radio property="gbsSbs" value="3"/>Basket<br/>
@@ -415,9 +415,6 @@
 								</feature:display>
 								
 										</table>
-
-<c:if test="${aimEditActivityForm.budget==false}">
 									<script>
 										budgetCheckboxClick();
 									</script>
-								</c:if>		

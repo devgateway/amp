@@ -43,7 +43,7 @@ private int isPreview=0;
 	private AmpTeamMember updatedBy;
         private AmpTeamMember createdBy;
 	private Collection perspectives;
-	private Boolean budget=null;
+	private Boolean budget=true;
 	private String budgetCheckbox;
 	private double regionTotalDisb;
 	private AmpTeam team;
@@ -629,6 +629,8 @@ private int isPreview=0;
 			allReferenceDocNameIds =null;
 //			refDocComments = null;
 			referenceDocs = null;
+			
+			budget		= true;
 		}
 
 		if (orgSelReset) {

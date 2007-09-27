@@ -466,6 +466,11 @@ public class EditActivity
             CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());
         if (ampCategoryValue != null)
           eaForm.setLevelId(ampCategoryValue.getId());
+        
+        ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+                CategoryConstants.FINANCIAL_INSTRUMENT_KEY, activity.getCategories());
+            if (ampCategoryValue != null)
+              eaForm.setGbsSbs(ampCategoryValue.getId());
         /* End - Insert Categories */
 
         if (tm != null && tm.getTeamType()

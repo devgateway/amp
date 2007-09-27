@@ -16,7 +16,7 @@
 <module:display name="National Planning Dashboard"></module:display>
 <module:display name="Reports"></module:display>
 <module:display name="Funding"></module:display>
-<module:display name="Issues" > </module:display>
+<module:display name="Issues"></module:display>
 <module:display name="Contact Information"></module:display>
 <module:display name="Trend Analysis and Forecasting"></module:display>
 <module:display name="Activity Costing"></module:display>

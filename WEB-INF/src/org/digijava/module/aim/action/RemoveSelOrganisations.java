@@ -31,12 +31,15 @@ public class RemoveSelOrganisations extends Action {
 			for (int i = 0;i < prevOrgs.length;i ++) {
 				boolean flag = false;
 				for (int j = 0;j < selOrgs.length;j ++) {
+					if (prevOrgs[i] != null){
 					if (prevOrgs[i].getAmpOrgId().equals(selOrgs[j])) {
 						flag = true;
 						break;
 					}
+					flag = true;
+					break;
+				 }
 				}
-				
 				if (!flag) {
 					currOrgs[index++] = prevOrgs[i];
 				}

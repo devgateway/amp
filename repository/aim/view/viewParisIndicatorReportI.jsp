@@ -527,6 +527,7 @@
 
 										</c:if>
 
+
 										<c:if test = "${aimParisIndicatorReportForm.indicatorCode == '10a'}">
 
 											<td>
@@ -549,7 +550,7 @@
 
 											<td>
 
-												<input type="button" value="GO" class="dr-menu" onclick="clearFilter()">
+												<input type="button" value="<digi:trn key='aim:go'>GO</digi:trn>" class="dr-menu" onclick="clearFilter()">
 
 											</td>
 
@@ -656,7 +657,7 @@
 
 											<td>
 
-												<input type="button" value="GO" class="dr-menu" onclick="clearFilter()">
+												<input type="button" value="<digi:trn key='aim:go'>GO</digi:trn>" class="dr-menu" onclick="clearFilter()">
 
 											</td>
 

@@ -45,7 +45,7 @@
 		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3);
 		if ( flag == true ) {
 			var errorMsgProjection	= '<digi:trn key="aim:addFunding:errmsg:projectionamount">Enter amount for projection </digi:trn>';
-			flag					= validateProjection( errorMsgProjection );
+			// flag					= validateProjection( errorMsgProjection );
 		}
 		if (flag == false) return false;
 		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;

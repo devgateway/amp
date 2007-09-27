@@ -101,7 +101,7 @@ public class CurrencyWorker {
 
 		String fmt = amt.trim();
 		fmt = fmt.replaceAll(",", "");
-
+		fmt=removeCharsFromDouble(fmt);
 		double value = 0;
 		try {
 			value = Double.parseDouble(fmt);
@@ -114,12 +114,33 @@ public class CurrencyWorker {
 		
 	}
 	
+	
+	public static String removeCharsFromDouble(String s)
+	{
+		String tmp=s;
+		String text="";
+		if ( tmp != null )	{
+			char arr[] = tmp.toCharArray() ;
+			//text = "" ;
+			for (int i = 0 ; i < tmp.length() ; i++ )
+			{
+				if ( arr[i] >= '0' && arr[i]<='9' )
+					text += arr[i] ;
+			}
+		}
+		else
+			text += "0.0";
+		return text;
+	}
+	
+	
 	public static double formatToDouble(String amt)
 	{
 		if(amt==null)
 			return 0;
 		String fmt = amt.trim();
 		fmt = fmt.replaceAll(",", "");
+		fmt=removeCharsFromDouble(fmt);
 		double value = 0;
 		try
 		{
@@ -135,6 +156,7 @@ public class CurrencyWorker {
 	
 	public static boolean validateAmount(String s) {
 		boolean valid = true;
+		//s=removeCharsFromDouble(s);
 		try {
 			Double.parseDouble(s);
 		} catch (NumberFormatException e) {

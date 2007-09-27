@@ -28,6 +28,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
@@ -43,6 +44,11 @@ public class GlobalSettings extends Action {
 	private static Logger logger 				= Logger.getLogger(GlobalSettings.class);
 	private ActionErrors errors					= new ActionErrors();
 
+	private void flushSessionObjects(HttpSession session) {
+		session.removeAttribute(ArConstants.REPORTS_FILTER);
+	
+	}
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 	HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
@@ -61,7 +67,8 @@ public class GlobalSettings extends Action {
 		if(request.getParameter("save")!=null){
 			String save = request.getParameter("save");
 			logger.info(" this is the action "+save);
-
+			flushSessionObjects(session);
+	
 			logger.info(" id is "+gsForm.getGlobalId()+"   name is "+gsForm.getGlobalSettingsName()+ "  value is... "+gsForm.getGsfValue());
 			this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
 			//ActionErrors errors = new ActionErrors();

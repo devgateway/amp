@@ -600,7 +600,7 @@
 													</logic:notEmpty>
 
 												</html:select> --%>
-		
+
 											</td>
 
 										</c:if>
@@ -627,7 +627,7 @@
 
 											<td>
 
-												<input type="button" value="GO" class="dr-menu" onclick="clearFilter()">
+												<input type="button" value="<digi:trn key='aim:go'>GO</digi:trn>" class="dr-menu" onclick="clearFilter()">
 
 											</td>
 
@@ -998,7 +998,7 @@
 					<tr><td><font color="blue">* <digi:trn key="aim:allTheAmounts">All the amounts are in thousands (000)</digi:trn>
 																	<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>">
 																		<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-																		<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>"> 
+																		<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>">
 																			<%=selCurrency %>
 																		</digi:trn>
 																	</logic:present>

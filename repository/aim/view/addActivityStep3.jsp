@@ -581,36 +581,37 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                         <tr>
                                                                           <td bgcolor="#FFFFFF" align="right" colspan="2">
                                                                             <table width="100%" border="0" cellSpacing="1" cellPadding="1" bgcolor="#dddddd">
-                                                                              <tr bgcolor="#ffffff">
-                                                                                
-                                                                                   
-                                                                                 
-                                                                                 <%-- Rendering projections --%>
-                                                                                 <td colspan="5">
-                                                                                 <b><digi:trn key="aim:funding:projections">Projections</digi:trn></b>
-                                                                                 </td>
-                                                                              </tr>
-                                                                                 <logic:notEmpty name="funding" property="mtefProjections">
-                                                                                 <logic:iterate name="funding" property="mtefProjections" id="projection">
-                                                                                 <tr bgcolor="#ffffff">
-                                                                                 	<td width="50"> 
-                                                                                 		<category:getoptionvalue categoryValueId="${projection.projected}" />
-                                                                                 	</td>
-                                                                                 	<td width="120" align="right">
-                                                                                 		<FONT color="blue">*</FONT>
-                                                                                 		<bean:write name="projection" property="amount" />
-                                                                                 	</td>
-                                                                                 	<td>
-                                                                                 		<bean:write name="projection" property="currencyCode" />
-                                                                                 	</td>
-                                                                                 	<td>
-                                                                                 		<bean:write name="projection" property="projectionDate" />
-                                                                                 	</td>
-                                                                                 	<td>&nbsp;</td>
-                                                                                 </tr>
-                                                                                 </logic:iterate>
-                                                                                 </logic:notEmpty>
-                                                                                 <%-- Rendering projections --%>
+                                                                              <%-- Rendering projections --%>
+                                                                              	<feature:display module="Funding" name="MTEF Projections">
+																			  	<field:display feature="MTEF Projections" name="MTEFProjections">
+	                                                                              	<tr bgcolor="#ffffff">                                                                                 
+	                                                                                 <td colspan="5">
+	                                                                                 <b><digi:trn key="aim:funding:projections">Projections</digi:trn></b>
+	                                                                                 </td>
+	                                                                              	</tr>
+	                                                                                 <logic:notEmpty name="funding" property="mtefProjections">
+	                                                                                 <logic:iterate name="funding" property="mtefProjections" id="projection">
+	                                                                                 <tr bgcolor="#ffffff">
+	                                                                                 	<td width="50"> 
+	                                                                                 		<category:getoptionvalue categoryValueId="${projection.projected}" />
+	                                                                                 	</td>
+	                                                                                 	<td width="120" align="right">
+	                                                                                 		<FONT color="blue">*</FONT>
+	                                                                                 		<bean:write name="projection" property="amount" />
+	                                                                                 	</td>
+	                                                                                 	<td>
+	                                                                                 		<bean:write name="projection" property="currencyCode" />
+	                                                                                 	</td>
+	                                                                                 	<td>
+	                                                                                 		<bean:write name="projection" property="projectionDate" />
+	                                                                                 	</td>
+	                                                                                 	<td>&nbsp;</td>
+	                                                                                 </tr>
+	                                                                                 </logic:iterate>
+	                                                                                 </logic:notEmpty>	                                                                                 
+																				</field:display>
+																				</feature:display>    
+																			  <%-- Rendering projections --%>                                                                             
                                                                              <tr bgcolor="#ffffff">
                                                                                  <td colspan="5">
                                                                                 	<b>

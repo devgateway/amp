@@ -1155,11 +1155,15 @@ public class TeamUtil {
 
                 while(orgItr.hasNext()) {
                     AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-                    if(orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
-                        if(donors.trim().length() > 0) {
-                            donors += ", ";
+                    AmpRole role = orgRole.getRole();
+                    if(role != null){
+                      String roleCode = role.getRoleCode();
+                      if (roleCode != null && roleCode.equals(Constants.DONOR)) {
+                        if (donors.trim().length() > 0) {
+                          donors += ", ";
                         }
                         donors += orgRole.getOrganisation().getName();
+                      }
                     }
                 }
 
@@ -1228,12 +1232,16 @@ public class TeamUtil {
 
                     while(orgItr.hasNext()) {
                         AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-                        if(orgRole.getRole().getRoleCode().equals(
-                            Constants.DONOR)) {
-                            if(donors.trim().length() > 0) {
-                                donors += ", ";
+                        AmpRole role = orgRole.getRole();
+                        if(role != null){
+                          String roleCode = role.getRoleCode();
+                          if (roleCode!=null&&roleCode.equals(
+                              Constants.DONOR)) {
+                            if (donors.trim().length() > 0) {
+                              donors += ", ";
                             }
                             donors += orgRole.getOrganisation().getName();
+                          }
                         }
                     }
 

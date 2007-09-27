@@ -77,6 +77,8 @@ function disable() {
 }
 -->
 
+</script>
+
 <%
 	Long actId = (Long) request.getAttribute("actId");
 
@@ -101,7 +103,6 @@ function disable() {
 	}
 %>
 
-</script>
 <digi:context name="digiContext" property="context" />
 <digi:form action="/saveActivity.do" method="post">
 <html:hidden property="step" />

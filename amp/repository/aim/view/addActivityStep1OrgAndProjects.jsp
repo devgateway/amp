@@ -39,18 +39,14 @@
 												<c:forEach items="${aimEditActivityForm.selectedOrganizations}" var="selectedOrganizations">
 														<tr>
 															<td align="left" width=3>
-																<html:multibox property="selOrgs">
-																	<c:out value="${selectedOrganizations.ampOrgId}"/>
-																</html:multibox>
+																<c:if test="${!empty selectedOrganizations.ampOrgId}">
+																<input type="checkbox" name="selOrgs" value="${selectedOrganizations.ampOrgId}">	
+																</c:if>
 															</td>
 															<td align="left" width="367">
 																<c:out value="${selectedOrganizations.name}"/>
 															</td>
-															<td align="left" width="130">
-																<html:text name="selectedOrganizations"
-																property="projectId" indexed="true"
-																styleClass="inp-text" size="15"/>
-															</td>
+															
 														</td></tr>
 													</c:forEach>
 													<tr><td colspan="3">

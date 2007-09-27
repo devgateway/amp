@@ -1,5 +1,6 @@
 package org.digijava.module.aim.helper ;
 
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -18,19 +19,26 @@ public class DateConversion
 					e2 instanceof String) {
 				String tdt1 = (String) e1;
 				String tdt2 = (String) e2;
+				Date dt1=null;
+				Date dt2=null;
 				if (tdt1 == null || tdt1.trim().length() < 1) {
 					return -1;
 				} else if (tdt2 == null || tdt2.trim().length() < 1) {
 					return 1;
 				}
-				Date dt1 = DateConversion.getDate(tdt1);
-				Date dt2 = DateConversion.getDate(tdt2);
+				try{
+					 dt1 = DateConversion.getDate(tdt1);
+					 dt2 = DateConversion.getDate(tdt2);	
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
+				
 				return dt2.compareTo(dt1);
 			} else throw new ClassCastException();
 		}
 	};	
 	
-	public static String ConvertDateToString(Date mysqlDate )
+	public static String ConvertDateToString(Date mysqlDate ) 
 	{
 		String textDate ="";
 		if (mysqlDate != null) {
@@ -49,27 +57,41 @@ public class DateConversion
 	 */
 	public static Date getDate(String strDate)
 	{
-		if (strDate == null) return null;
-		if (strDate.length() > 10 || strDate.length() < 8) return null;
+		if (strDate == null) 
+			return null;
+		try{			
+			SimpleDateFormat formater=new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT);
+			if(strDate!=null && !strDate.equals("") && strDate.length() > 10 ){
+				Date date=DateTimeUtil.parseDate(strDate);     //apr/03/2006			
+				strDate = formater.format(date);
+			}	
+			
+			
+			if (strDate.length() > 10 || strDate.length() < 8) 
+				return null;
+			
+			int index = 0,curr = 0;
+			
+			index = strDate.indexOf('/', curr);
+			int day = Integer.parseInt(strDate.substring(curr, index));
+			
+			curr = index + 1;
+			index = strDate.indexOf('/', curr);
+			int mon = Integer.parseInt(strDate.substring(curr, index));
+			
+			curr = index + 1;
+			int yr = Integer.parseInt(strDate.substring(curr, strDate.length()));
+			
+			GregorianCalendar gc = new GregorianCalendar(yr,mon-1,day) ;
+			/*if ( logger.isDebugEnabled() )
+				logger.debug("getDate returning date with year " + gc.get(Calendar.YEAR)
+						  + " month " + gc.get(Calendar.MONTH) 
+						  + " day "  + gc.get(Calendar.DAY_OF_MONTH)) ; */
+			return gc.getTime() ;	
+		}catch(Exception ex){
+			throw new RuntimeException();
+		}
 		
-		int index = 0,curr = 0;
-		
-		index = strDate.indexOf('/', curr);
-		int day = Integer.parseInt(strDate.substring(curr, index));
-		
-		curr = index + 1;
-		index = strDate.indexOf('/', curr);
-		int mon = Integer.parseInt(strDate.substring(curr, index));
-		
-		curr = index + 1;
-		int yr = Integer.parseInt(strDate.substring(curr, strDate.length()));
-		
-		GregorianCalendar gc = new GregorianCalendar(yr,mon-1,day) ;
-		/*if ( logger.isDebugEnabled() )
-			logger.debug("getDate returning date with year " + gc.get(Calendar.YEAR)
-					  + " month " + gc.get(Calendar.MONTH) 
-					  + " day "  + gc.get(Calendar.DAY_OF_MONTH)) ; */
-		return gc.getTime() ;	
 	}
 	
 	/**@author jose

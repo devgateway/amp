@@ -1,6 +1,8 @@
 package org.digijava.module.aim.helper ;
 
 import org.apache.log4j.Logger;
+
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -23,8 +25,7 @@ public class FiscalCalendarWorker
 	 * @param fiscalCalId The fiscal calendar
 	 * @return FiscalDO object containing fiscal year and quarter
 	 */
-	public static FiscalDO getFiscalYrQtr(Date d, Long fiscalCalId)
-	{
+	public static FiscalDO getFiscalYrQtr(Date d, Long fiscalCalId) 	{
 		FiscalDO fdo  = null ;
 		AmpFiscalCalendar fc = null;
 		
@@ -66,10 +67,14 @@ public class FiscalCalendarWorker
 					int fiscalYr = 0;
 					
 					int year = gc.get(Calendar.YEAR);
-					int stDay = fc.getStartDayNum().intValue();
-					int stMnt = fc.getStartMonthNum().intValue();
+					//
+					DecimalFormat dfDay=new DecimalFormat("00");
+					String stDay = dfDay.format(fc.getStartDayNum().intValue());
+					DecimalFormat dfMonth=new DecimalFormat("00");
+					String  stMnt = dfMonth.format(fc.getStartMonthNum().intValue());
+					//
 					//logger.info("Stday = " + stDay + ", stMnt = " + stMnt);
-					String bsDate = stDay + "/" + stMnt + "/" + year;
+					String bsDate = stMnt + "/" +  stDay + "/" + year;
 					Date baseDate = DateConversion.getDate(bsDate); 
 
 					if (d.after(baseDate) || d.equals(baseDate)) {
@@ -79,7 +84,7 @@ public class FiscalCalendarWorker
 					}
 					//logger.info("Fiscal Yr = " + fiscalYr);
 					int fiscalQtr = 0;
-					bsDate = stDay + "/" + stMnt + "/" + fiscalYr;
+					bsDate = stMnt + "/" +  stDay + "/" + year;
 					///logger.info("Base date got = " + bsDate);
 					baseDate = DateConversion.getDate(bsDate);
 					GregorianCalendar gc1 = new GregorianCalendar();

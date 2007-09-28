@@ -2172,12 +2172,13 @@ public class DbUtil {
     public static Collection searchForOrganisation(String keyword) {
         Session session = null;
         Collection col = null;
+        keyword=keyword.toLowerCase();
 
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct org from "
                 + AmpOrganisation.class.getName() + " org "
-                + "where (acronym like '%" + keyword + "%' || name like '%"
+                + "where (lower(acronym) like '%" + keyword + "%' || lower(name) like '%"
                 + keyword + "%')";
             Query qry = session.createQuery(queryString);
             col = qry.list();

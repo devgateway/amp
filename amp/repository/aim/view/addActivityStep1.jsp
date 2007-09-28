@@ -127,7 +127,10 @@ function validateForm() {
     var stId=document.getElementsByName("statusId");
 
     if(stId==null || stId[0]==null || stId[0].value==0){
-      alert("Please select status!");
+      <c:set var="message">
+			<digi:trn key="aim:pleaseSelectStatus">Please select status!</digi:trn>
+      </c:set>
+      alert("${message}");
       return false;
     }
 
@@ -335,9 +338,9 @@ ${fn:replace(message,quote,escapedQuote)}
 									&nbsp;
 									</feature:display>
 											<jsp:include page="addActivityStep1Planning.jsp"/>
-									
+
 									<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
-									
+
 
 <!--
 									<tr><td bgColor=#f4f4f2 align="center">

@@ -12,14 +12,19 @@
 <!--
 
 function addChildWorkspaces() {
-		if (document.aimUpdateWorkspaceForm.workspaceType.value != "Team") { 
+		if (document.aimUpdateWorkspaceForm.workspaceType.value != "Team") {
 			openNewWindow(650, 380);
 			<digi:context name="addChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
 			document.aimUpdateWorkspaceForm.action = "<%=addChild%>?dest=teamLead";
 			document.aimUpdateWorkspaceForm.target = popupPointer.name;
 			document.aimUpdateWorkspaceForm.submit();
 		} else {
-			alert("Workspace type must be 'Management' to add teams");
+                  <c:set var="message">
+                  <digi:trn key="aim:teamWorkspaceSetup:addChildWorkspace">
+                  Workspace type must be 'Management' to add teams
+                  </digi:trn>
+                  </c:set>
+			alert("${message}");
 			return false;
 		}
 }
@@ -79,14 +84,14 @@ function update(action) {
 					<td height=16 vAlign=center width=571>
 						<span class=subtitle-blue>
 							<digi:trn key="aim:teamWorkspaceSetup">
-								Team Workspace Setup 
+								Team Workspace Setup
 							</digi:trn>
 						</span>
 					</td>
 				</tr>
 				<tr>
 					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%" 
+						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%"
 						valign="top" align="left">
 							<tr bgColor=#3754a1>
 								<td vAlign="top" width="100%">
@@ -100,7 +105,7 @@ function update(action) {
 							</tr>
 							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">	
+									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">
 										<tr bgColor=#f4f4f2>
 											<td bgColor=#f4f4f2>
 												<table border="0" cellPadding=0 cellSpacing=0 width=117>
@@ -122,7 +127,7 @@ function update(action) {
 													<tr bgColor=#dddddb>
 														<td bgColor=#dddddb colspan="2" align="center"><b>
 															<digi:trn key="aim:teamGeneralSettings">
-															General Settings	
+															General Settings
 															</digi:trn></b>
 														</td>
 													</tr>
@@ -140,7 +145,7 @@ function update(action) {
 														<td colspan="2" align="center">
 															<digi:errors/>
 														</td>
-													</tr>													
+													</tr>
 													<tr bgcolor="#f4f4f2">
 														<td align="right" width="30%">
 															<digi:trn key="aim:teamName">
@@ -162,8 +167,8 @@ function update(action) {
 														</td>
 													</tr>
 									<logic:notEmpty name="aimUpdateWorkspaceForm" property="relatedTeamName" scope="session" >
-									
-									
+
+
 													<tr bgcolor="#f4f4f2">
 														<td align="right" width="30%">
 															<digi:trn key="aim:relatedTeam">
@@ -175,10 +180,10 @@ function update(action) {
 														</td>
 													</tr>
 													</logic:notEmpty>
-																					
+
 													<tr bgcolor="#f4f4f2">
 														<td align="right" width="30%">
-															<digi:trn key="aim:teamCategory">Team Category</digi:trn>			
+															<digi:trn key="aim:teamCategory">Team Category</digi:trn>
 														</td>
 														<td align="left">
 															<category:showoptions name="aimUpdateWorkspaceForm" property="typeId" styleClass="inp-text" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>"/>
@@ -186,7 +191,7 @@ function update(action) {
 													</tr>
 													<tr bgcolor="#f4f4f2">
 														<td align="right">
-															<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>		
+															<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>
 														</td>
 														<td align="left">
 															<html:select property="workspaceType" styleClass="inp-text">
@@ -195,22 +200,22 @@ function update(action) {
 																<html:option value="Team">Team</html:option>
 															</html:select>
 														</td>
-													</tr>													
+													</tr>
 													<tr bgcolor="#f4f4f2">
 														<td align="right" width="150" bgcolor="#f4f4f2">
-															<digi:trn key="aim:childWorkspaces">Child Workspaces</digi:trn>		
+															<digi:trn key="aim:childWorkspaces">Child Workspaces</digi:trn>
 														</td>
 														<td align="left" bgcolor="#f4f4f2">
 															<c:set var="translation">
 																<digi:trn key="btn:teamWorkspaceAddChildWorkspace">Add</digi:trn>
 															</c:set>
 															<input type="button" value="${translation}" class="buton" onclick="addChildWorkspaces()">
-														</td>																
+														</td>
 													</tr>
 													<c:if test="${!empty aimUpdateWorkspaceForm.childWorkspaces}">
 													<tr>
 														<td colspan="2" align="center" bgcolor="#f4f4f2">
-															<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center" 
+															<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center"
 															class="box-border-nopadding">
 															<c:forEach var="workspaces" items="${aimUpdateWorkspaceForm.childWorkspaces}">
 																<tr>
@@ -220,20 +225,20 @@ function update(action) {
 																	<td align="right" width="10">
 																		<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 																		<a href="javascript:removeChildWorkspace(<c:out value="${workspaces.ampTeamId}"/>)">
-																	 	<digi:img src="module/cms/images/deleteIcon.gif" 
+																	 	<digi:img src="module/cms/images/deleteIcon.gif"
 																		border="0" alt="Remove this child workspace"/></a>&nbsp;
 																		</c:if>
-																	</td>																	
-																</tr>															
+																	</td>
+																</tr>
 															</c:forEach>
 															</table>
 														</td>
 													</tr>
-													</c:if>	
+													</c:if>
 													<c:if test="${empty aimUpdateWorkspaceForm.childWorkspaces}">
 													<tr>
 														<td colspan="2" align="center" bgcolor="#f4f4f2">
-															<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center" 
+															<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center"
 															class="box-border-nopadding">
 															<tr>
 																<td align="left">
@@ -243,7 +248,7 @@ function update(action) {
 															</table>
 														</td>
 													</tr>
-													</c:if>													
+													</c:if>
 													<tr><td>&nbsp;</td></tr>
 													<tr>
 														<c:set var="translation">
@@ -252,7 +257,7 @@ function update(action) {
 														<td colspan="2" align="center">
 															<html:submit styleClass="dr-menu" value=" ${translation} " onclick="update('edit')"/>
 														</td>
-													</tr>							
+													</tr>
 												</table>
 											</td>
 										</tr>
@@ -262,7 +267,7 @@ function update(action) {
 							<tr><td bgColor=#f4f4f2>
 								&nbsp;
 							</td></tr>
-						</table>			
+						</table>
 					</td>
 				</tr>
 			</table>

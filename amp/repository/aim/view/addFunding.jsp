@@ -41,12 +41,10 @@
 		var errmsg1='<digi:trn key="aim:addFunding:errmsg:assitanceType">Type Of Assistance not selected</digi:trn>';
 		var errmsg2='\n<digi:trn key="aim:addFunding:errmsg:fundOrgId">Funding Id not entered</digi:trn>';
 		var errmsg3='\n<digi:trn key="aim:addFunding:errmsg:financeInstrument">Financing Instrument not selected</digi:trn>';
-		
-		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3);
-		if ( flag == true ) {
-			var errorMsgProjection	= '<digi:trn key="aim:addFunding:errmsg:projectionamount">Enter amount for projection </digi:trn>';
-			// flag					= validateProjection( errorMsgProjection );
-		}
+                var msgEnterAmount='\n<digi:trn key="aim:addFunding:errmsg:enterAmount">Please enter the amount for the transaction</digi:trn>';
+		var msgInvalidAmount='\n<digi:trn key="aim:addFunding:errmsg:invalidAmount">Invalid amount entered for the transaction</digi:trn>';
+		var msgEnterDate='\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>';
+		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate);
 		if (flag == false) return false;
 		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;
 		document.aimEditActivityForm.action = "<%= fundAdded %>";
@@ -59,7 +57,7 @@
 
 		var flag = validateFundingExchangeRate();
 		if (flag == false) return false;
-		
+
 		if (type == 0) {
 			document.aimEditActivityForm.event.value = "addCommitments";
 		} else if (type == 1) {
@@ -70,18 +68,18 @@
 	 	document.aimEditActivityForm.action="/addFundingDetail.do";
 	 	document.aimEditActivityForm.submit();
 	}
-	
+
 	function addMTEFProjection() {
 
 	//	var flag = validateFundingExchangeRate();
 	//	if (flag == false) return false;
-		
+
 	document.aimEditActivityForm.event.value = "addProjections";
  	document.aimEditActivityForm.action="/addMTEFProjection.do";
  	document.aimEditActivityForm.submit();
 	}
-	
-	
+
+
 
 	function removeFundingDetail(index,type) {
 		<c:set var="translation">
@@ -101,7 +99,7 @@
 			document.aimEditActivityForm.submit();
 		}
 	}
-	
+
 	function removeMTEFProjection(index) {
 		var flag = confirm("Are you sure you want to remove the selected projection ?");
 		if(flag != false) {
@@ -165,7 +163,7 @@
 <html:hidden property="numProjections"/>
 <html:hidden property="editAct"/>
 <html:hidden property="firstSubmit"/>
-	
+
 <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class=box-border-nopadding>
 	<!-- funding -->
 	<tr>
@@ -201,7 +199,7 @@
 								<td align="left" bgcolor=#ECF3FD>
 									<c:set var="translation">
 										<digi:trn key="aim:addActivityTypeOfAssistenceFirstLine">Please select from below</digi:trn>
-									</c:set> 
+									</c:set>
 									<c:if test="${aimEditActivityForm.donorFlag == true}">
 				                		<category:showoptions firstLine="${translation}" outerdisabled="true" name="aimEditActivityForm" property="assistanceType" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
 									</c:if>
@@ -244,11 +242,11 @@
 										</html:select>
 									--%>
 									<c:if test="${aimEditActivityForm.donorFlag == true}">
-										<category:showoptions firstLine="${translation}" outerdisabled="${aimEditActivityForm.donorFlag}" name="aimEditActivityForm" property="modality" 
+										<category:showoptions firstLine="${translation}" outerdisabled="${aimEditActivityForm.donorFlag}" name="aimEditActivityForm" property="modality"
 										keyName="<%= org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
 									</c:if>
 									<c:if test="${aimEditActivityForm.donorFlag == false}">
-										<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="modality" 
+										<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="modality"
 										keyName="<%= org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" styleClass="inp-text" />
 									</c:if>
 								</td>
@@ -295,23 +293,26 @@
 					<td><b><font color="white"><digi:trn key="aim:ProjectionDate">Projection Date</digi:trn></font></b>
 					</td>
 				</tr>
-				
-				
+
+
 				<c:if test="${ !empty aimEditActivityForm.fundingMTEFProjections}">
 				<c:set var="indexMTEF" value="-1"/>
 				<c:forEach var="mtefProjection" items="${aimEditActivityForm.fundingMTEFProjections}">
-					
+
 				 	<tr>
-						<td valign="bottom"> 
+						<td valign="bottom">
 						<c:set var="indexMTEF" value="${indexMTEF+1}"/>
-						<html:select indexed="true" name="mtefProjection" property="projected"> 
+
+
+						<html:select indexed="true" name="mtefProjection" property="projected">
+
 							<logic:iterate name="aimEditActivityForm" property="projections" id="projection" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
 							<html:option value="${projection.id}" >
 								<digi:trn key="<%= org.digijava.module.aim.helper.CategoryManagerUtil.getTranslationKeyForCategoryValue(projection) %>">
 									<bean:write name="projection" property="value"/>
 								</digi:trn>
 							</html:option>
-						
+
 							</logic:iterate>
 						</html:select>
 						</td>
@@ -329,7 +330,7 @@
 							<tr>
 								<td>
 								<html:text name="mtefProjection" indexed="true" property="projectionDate" readonly="true" size="10"/>
-								<%-- 
+								<%--
 								<% tempIndexStr = "" + tempIndex; tempIndex++;%>
 								<html:text name="mtefProjection" indexed="true" property="projectionDate"
 								styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
@@ -353,8 +354,8 @@
 
 				</c:forEach>
 				</c:if>
-				
-				
+
+
 				<tr bgcolor="#ffffff">
 					<td align="center" colspan="4">
 						<table cellPadding=3>
@@ -367,8 +368,8 @@
 						</table>
 					</td>
 				</tr>
-				
-				
+
+
 				</table>
 				</td>
 				</tr>
@@ -412,7 +413,7 @@
 									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 										<a title="<digi:trn key="aim:PerpectiveofUser">Select perspective (Donor/ MoFED / implementing agency) of user entering the information</digi:trn>">
 										<b><font color="white"><digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn></font></b></a>
-									</logic:equal>	
+									</logic:equal>
 								</td>
 							</tr>
 
@@ -602,7 +603,7 @@
 													disabled="true" styleId="<%=exchRatefldId%>"/>
 												</logic:equal>
 											</td>
-											
+
 										</tr>
 									</c:if>
 						 	</c:forEach>

@@ -8,7 +8,7 @@
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
-<c:set target="${bcparams}" property="dest" value="teamLead"/>			
+<c:set target="${bcparams}" property="dest" value="teamLead"/>
 
 
 <script type="text/javascript">
@@ -18,14 +18,14 @@
 	function listActivities()
 		{
 			//document.aimTeamActivitiesForm.addActivity.value="List of Unassigned Activities";
-			document.aimTeamActivitiesForm.action="/updateTeamActivity.do";		
+			document.aimTeamActivitiesForm.action="/updateTeamActivity.do";
 			document.aimTeamActivitiesForm.submit();
 		}
 
 	function checkall() {
 		var selectbox = document.aimTeamActivitiesForm.checkAll;
 		var items = document.aimTeamActivitiesForm.selActivities;
-		if (document.aimTeamActivitiesForm.selActivities.checked == true || 
+		if (document.aimTeamActivitiesForm.selActivities.checked == true ||
 							 document.aimTeamActivitiesForm.selActivities.checked == false) {
 				  document.aimTeamActivitiesForm.selActivities.checked = selectbox.checked;
 		} else {
@@ -40,52 +40,57 @@
 			if (document.aimTeamActivitiesForm.selActivities.checked == false) {
 				alert("Please choose an activity to remove");
 				return false;
-			}				  
+			}
 		} else {
-			var length = document.aimTeamActivitiesForm.selActivities.length;	  
+			var length = document.aimTeamActivitiesForm.selActivities.length;
 			var flag = 0;
 			for (i = 0;i < length;i ++) {
 				if (document.aimTeamActivitiesForm.selActivities[i].checked == true) {
 					flag = 1;
 					break;
 				}
-			}		
+			}
 
 			if (flag == 0) {
 				alert("Please choose an activity to remove");
 			return false;
-			}				  
+			}
 		}
-		return true;			  
+		return true;
 	}
 
 	function confirmDelete() {
 		var valid = validate();
 		if (valid == true) {
-			var flag = confirm("Are you sure you want to remove the selected activities");
+                    <c:set var="message">
+                  <digi:trn key="aim:teamWorkspaceSetup:removeSelectedActivities">
+                  Are you sure you want to remove the selected activities
+                  </digi:trn>
+                  </c:set>
+			var flag = confirm("${message}");
 			if(flag == false)
-			
+
 			  return false;
-			else 
+			else
 				return true;
 		} else {
 			return false;
-		}		  
+		}
 
 	}
-	
+
 	function sortMe(val) {
 		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do" />
 			url = "<%= sel %>" ;
-			
+
 			var sval = document.aimTeamActivitiesForm.sort.value;
 			var soval = document.aimTeamActivitiesForm.sortOrder.value;
-			
+
 			if ( val == sval ) {
 				if (soval == "asc")
 					document.aimTeamActivitiesForm.sortOrder.value = "desc";
 				else if (soval == "desc")
-					document.aimTeamActivitiesForm.sortOrder.value = "asc";	
+					document.aimTeamActivitiesForm.sortOrder.value = "asc";
 			}
 			else
 				document.aimTeamActivitiesForm.sortOrder.value = "asc";
@@ -94,7 +99,7 @@
 			document.aimTeamActivitiesForm.action = url;
 			document.aimTeamActivitiesForm.submit();
 	}
-	
+
 	function page(val) {
 		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do" />
 			url = "<%= sel %>?page=" + val ;
@@ -141,7 +146,7 @@
 						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="${translation}" >
 							<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
 						</digi:link>
-						&nbsp;&gt;&nbsp;						
+						&nbsp;&gt;&nbsp;
 						<digi:trn key="aim:activityListinWorkspace">List of Activities in the Workspace</digi:trn>
 					</td>
 				</tr>
@@ -155,7 +160,7 @@
 							<tr bgColor=#3754a1>
 								<td vAlign="top" width="100%">
 									<c:set var="selectedTab" value="1" scope="request"/>
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />								
+									<jsp:include page="teamSetupMenu.jsp" flush="true" />
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>
@@ -164,7 +169,7 @@
 							</tr>
 							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="98%">	
+									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="98%">
 										<tr><td>
 											<digi:errors />
 										</td></tr>
@@ -195,7 +200,7 @@
 																</td>
 																<td width="20%" bgcolor="#dddddd">
 																	<b><digi:trn key="aim:ampId">AMP ID</digi:trn></b>
-																</td>																
+																</td>
 																<td valign="center" align="center" bgcolor="#dddddd">
 																	<a href="javascript:sortMe('activity')" title="Click here to sort by Activity Details">
 																		<b><digi:trn key="aim:activityListinWorkspace">List of Activities in the Workspace</digi:trn></b>
@@ -219,33 +224,33 @@
 																		No activities present
 																	</digi:trn>
 																</td></tr>
-															</table>														
+															</table>
 														</td>
-													</tr>	
+													</tr>
 													<c:if test="${aimTeamActivitiesForm.donorFlag == false}">
 													<tr>
 														<td align="center">
 															<table width="100%" cellSpacing=2 cellPadding=3 vAlign="top" align="center"
 															bgcolor="#ffffff">
 																<tr><td bgcolor="#ffffff" align="left">
-																    	<a href="javascript:listActivities()"> 
+																    	<a href="javascript:listActivities()">
 																      		<digi:trn key="aim:listOfUnassignedActivities">
-																				List of Unassigned Activities 
-																			</digi:trn> 
+																				List of Unassigned Activities
+																			</digi:trn>
 																		</a>
 																</td></tr>
 															</table>
 														</td>
-													</tr>									
-													</c:if>													
+													</tr>
+													</c:if>
 													</logic:empty>
-							
+
 													<logic:notEmpty name="aimTeamActivitiesForm" property="activities">
 													<tr>
 														<td align="left" width="100%" valign="center">
 															<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
 															bgcolor="#dddddd">
-															<logic:iterate name="aimTeamActivitiesForm" property="activities" id="activities" 
+															<logic:iterate name="aimTeamActivitiesForm" property="activities" id="activities"
 															type="org.digijava.module.aim.helper.Activity">
 																<tr><td width=3 bgcolor="#f4f4f2">
 																	<html:multibox property="selActivities">
@@ -254,7 +259,7 @@
 																</td>
 																<td width="20%" bgcolor="#f4f4f2">
 																	<bean:write name="activities" property="ampId" />
-																</td>																
+																</td>
 																<td bgcolor="#f4f4f2">
 																	<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																	<c:set target="${urlParams}" property="activityId">
@@ -265,7 +270,7 @@
 																		<digi:trn key="aim:clickToViewActivityDetails">
 																		Click here to view Activity Details</digi:trn>
 																	</c:set>
-																	<digi:link href="/viewActivityPreview.do" name="urlParams" 
+																	<digi:link href="/viewActivityPreview.do" name="urlParams"
 																	title="${translation}">
 																		<bean:write name="activities" property="name" />
 																	</digi:link>
@@ -276,23 +281,23 @@
 															</logic:iterate>
 															</table>
 														</td>
-													</tr>													
+													</tr>
 													<tr>
 														<td align="center" colspan=2>
 															<table cellspacing="5" width="100%">
 																<tr>
 																	<c:if test="${aimTeamActivitiesForm.donorFlag == false}">
 																	<td align="left">
-																	   <a href="javascript:listActivities()"> 
+																	   <a href="javascript:listActivities()">
 																			<digi:trn key="aim:listOfUnassignedActivities">
-																				List of Unassigned Activities 
-																			</digi:trn> 
+																				List of Unassigned Activities
+																			</digi:trn>
 																	   </a>
-																	</td>																	
+																	</td>
 																	</c:if>
-																	<td>	
+																	<td>
 																		<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return confirmDelete()">
-																			<digi:trn key="btn:removeSelectedActivities">Remove selected activities</digi:trn> 
+																			<digi:trn key="btn:removeSelectedActivities">Remove selected activities</digi:trn>
 																		</html:submit>
 																	</td>
 																</tr>
@@ -311,7 +316,7 @@
 													</digi:trn>
 														<logic:iterate name="aimTeamActivitiesForm" property="pages" id="pages" type="java.lang.Integer">
 													  	<bean:define id="currPage" name="aimTeamActivitiesForm" property="currentPage" />
-														
+
 														<% if (currPage.equals(pages)) { %>
 																<%=pages%>
 														<%	} else { %>
@@ -320,18 +325,18 @@
 															</c:set>
 															<a href="javascript:page(<%=pages%>)" title="${translation}"><%=pages%></a>
 														<% } %>
-														|&nbsp; 
+														|&nbsp;
 													</logic:iterate>
 												</td>
 											</tr>
-										</logic:notEmpty>											
+										</logic:notEmpty>
 									</table>
 								</td>
 							</tr>
 							<tr><td bgColor=#f4f4f2>
 								&nbsp;
 							</td></tr>
-						</table>			
+						</table>
 					</td>
 				</tr>
 			</table>

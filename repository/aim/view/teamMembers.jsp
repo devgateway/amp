@@ -47,8 +47,6 @@ function addTeamMember(id) {
 	document.aimTeamMemberForm.submit();
 	return true;		  
 }
-
-
 -->
 </script>
 
@@ -252,9 +250,9 @@ function addTeamMember(id) {
 							<input type="button" value="<digi:trn key='btn:addMember'>Add Member</digi:trn>" class="dr-menu"  onclick="addTeamMember('<c:out value="${aimTeamMemberForm.teamId}"/>')"/>											
 																	</td>
 																	<td>
-																		<html:button  styleClass="dr-menu" property="removeMember"  onclick="return checkSelMembers()">
+																		<html:submit   styleClass="dr-menu" property="removeMember"  onclick="return checkSelMembers()">
 																			<digi:trn key="btn:removeSelectedMembers"> Remove Selected Members</digi:trn> 
-																		</html:button>
+																		</html:submit>
 
 
 																	</td>

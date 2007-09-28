@@ -1,13 +1,18 @@
 package org.digijava.module.aim.helper ;
 
 import java.awt.Color;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 
 	 
 
 public class Constants
 {
+	
+	public static class GlobalSettings { 
+		public static final String YEAR_RANGE_START="Year Range Start";
+		public static final String NUMBER_OF_YEARS_IN_RANGE="Number of Years in Range";
+	};
+	
 	public static final int COMMITMENT = 0 ;
 	public static final int DISBURSEMENT = 1 ;
 	public static final int EXPENDITURE = 2 ;

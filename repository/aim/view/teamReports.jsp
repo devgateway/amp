@@ -57,6 +57,26 @@
 		}
 		return true;
 	}
+        function confirmDelete() {
+		var valid = validate();
+		if (valid == true) {
+                    <c:set var="message">
+                  <digi:trn key="aim:teamWorkspaceSetup:removeSelectedReports">
+                  Are you sure you want to remove selected reports?
+                  </digi:trn>
+                  </c:set>
+			var flag = confirm("${message}");
+			if(flag == false)
+
+			  return false;
+			else
+				return true;
+		} else {
+			return false;
+		}
+
+	}
+
 
 -->
 
@@ -234,7 +254,7 @@
 																	</td>
 																	<td align="left">
 
-																		<html:submit  styleClass="dr-menu" property="removeReports"  onclick="return validate()">
+																		<html:submit  styleClass="dr-menu" property="removeReports"  onclick="return confirmDelete() ">
 																			<digi:trn key="btn:removeSelectedReports">Remove selected reports</digi:trn>
 																		</html:submit>
 

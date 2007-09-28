@@ -589,6 +589,9 @@ function addComponents()
 
 function validate()
 {
+  var msgEnterAmount='<digi:trn key="aim:selectComponent:errmsg:enterAmount">Amount not entered.</digi:trn>';
+  var msgInvalidAmount='<digi:trn key="aim:selectComponent:errmsg:invalidAmount">Invalid amount entered.</digi:trn>';
+   var msgEnterDate='<digi:trn key="aim:selectComponent:errmsg:enterDate">Date not entered.</digi:trn>';
 
 	var titleFlag = isEmpty(document.aimEditActivityForm.componentTitle.value);
 	if(titleFlag == true) {
@@ -621,12 +624,12 @@ function validate()
 		if (str.match("comm_[0-9]*_2")) {
 			// validate amount
 			if (trim(x.elements[index].value) == "") {
-				alert ("Amount not entered.");
+				alert (msgEnterAmount);
 				x.elements[index].focus();
 				return false;
 			}
 			if (checkAmount(x.elements[index].value) == false) {
-				alert ("Invalid amount entered.");
+				alert (msgInvalidAmount);
 				x.elements[index].focus();
 				return false;
 			}
@@ -634,43 +637,43 @@ function validate()
 		} else if (str.match("comm_[0-9]*_4")) {
 			// validate date
 			if (trim(x.elements[index].value) == "") {
-				alert ("Date not entered.");
+				alert (msgEnterDate);
 				x.elements[index].focus();
 				return false;
 			}
 		} else if (str.match("disb_[0-9]*_2")) {
 			// validate amount
 			if (trim(x.elements[index].value) == "") {
-				alert ("Amount not entered.");
+				alert (msgEnterAmount);
 				x.elements[index].focus();
 				return false;
 			}
 			if (checkAmount(x.elements[index].value) == false) {
-				alert ("Invalid amount entered.");
+				alert (msgInvalidAmount);
 				x.elements[index].focus();
 				return false;
 			}
 		} else if (str.match("disb_[0-9]*_4")) {
 			if (trim(x.elements[index].value) == "") {
-				alert ("Date not entered.");
+				alert (msgEnterDate);
 				x.elements[index].focus();
 				return false;
 			}
 		} else if (str.match("expn_[0-9]*_2")) {
 			// validate amount
 			if (trim(x.elements[index].value) == "") {
-				alert ("Amount not entered.");
+				alert (msgEnterAmount);
 				x.elements[index].focus();
 				return false;
 			}
 			if (checkAmount(x.elements[index].value) == false) {
-				alert ("Invalid amount entered.");
+				alert (msgInvalidAmount);
 				x.elements[index].focus();
 				return false;
 			}
 		} else if (str.match("expn_[0-9]*_4")) {
 			if (trim(x.elements[index].value) == "") {
-				alert ("Date not entered.");
+				alert (msgEnterDate);
 				x.elements[index].focus();
 				return false;
 			}

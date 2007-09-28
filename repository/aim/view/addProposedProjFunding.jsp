@@ -14,13 +14,17 @@
 
 <script language="JavaScript" type="text/javascript">
 	function addPropFunding() {
+
       var fna=aimEditActivityForm.funAmount.value;
       var fnd=aimEditActivityForm.funDate.value;
       if(fna==""){
         alert("Please enter amount");
         return false;
-      }else if(fna.match("[^0-9][,]")){
-        alert("Invalid amount value");
+      }else if(fna.match("[^0-9,]")!=null){
+        <c:set var="message">
+        <digi:trn key="aim:invalidAmountValue">Invalid amount value</digi:trn>
+        </c:set>
+        alert("${message}");
         return false;
       }
       if(fnd==""){

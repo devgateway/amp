@@ -60,21 +60,22 @@ public class UpdateTeamReports extends Action {
 			Long selReports[] = raForm.getSelReports();
 			DbUtil.removeTeamReports(selReports,tm.getTeamId());
 			raForm.setRemoveReports(null);
-			
-			/** setting the addReport property so that the system 
+
+			/** setting the addReport property so that the system
 			 * shows you the unassigned report list
 			 */
-			raForm.setAddReport("");
+			raForm.setAddReport(null);
+                        return mapping.findForward("forward");
 		}
 		if (raForm.getAddReport() != null) {
 			/* show all unassigned reports */
-			
+
 			Collection col = TeamUtil.getAllUnassignedTeamReports(id);
 			raForm.setReports(col);
 			raForm.setTeamId(tm.getTeamId());
 			raForm.setAddReport(null);
 			return mapping.findForward("showAddReport");
-		}  
+		}
 		else if (raForm.getAssignReports() != null) {
 			/* add the selected reports to the team list */
 
@@ -82,10 +83,10 @@ public class UpdateTeamReports extends Action {
 			Long selReports[] = raForm.getSelReports();
 			DbUtil.addTeamReports(selReports,tm.getTeamId());
 			raForm.setAssignReports(null);
-			
+
 			/*
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
-			
+
 			Collection reports = new ArrayList();
 			for (int i = 0; i < selReports.length; i++) {
 				if (selReports[i] != null) {

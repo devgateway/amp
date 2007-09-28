@@ -9,13 +9,16 @@ public class Constants
 {
 	
 	public static class GlobalSettings { 
-		public static final String YEAR_RANGE_START="Year Range Start";
-		public static final String NUMBER_OF_YEARS_IN_RANGE="Number of Years in Range";
+		public static final String YEAR_RANGE_START			= "Year Range Start";
+		public static final String NUMBER_OF_YEARS_IN_RANGE	= "Number of Years in Range";
+		public static final String START_YEAR_DEFAULT_VALUE	= "Start Year Default Value";
+		public static final String END_YEAR_DEFAULT_VALUE		= "End Year Default Value";
 	};
 	
 	public static final int COMMITMENT = 0 ;
 	public static final int DISBURSEMENT = 1 ;
 	public static final int EXPENDITURE = 2 ;
+	public static final int MTEFPROJECTIONS = 3 ;
 	public static final int PLANNED = 0 ;
 	public static final int ACTUAL = 1 ;
 	public static final int FROM_YEAR = 1983 ;

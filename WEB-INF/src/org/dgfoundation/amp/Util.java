@@ -309,7 +309,16 @@ public final class Util {
 		return ret;
 
 	}
-	
+	/**
+	 * As the name implies only the years are checked by this function. 
+	 * 
+	 * @param toBeCheckedDate 
+	 * @param startDate
+	 * @param endDate
+	 * @param calendarTypeId
+	 * @author Alex Gartner - needed for MTEF Projections filter from Financial Progress
+	 * @return If filterStartYear <= toBeCheckedYear && toBeCheckedYear < filterEndYear then it returns true. Otherwise false.
+	 */
 	public static boolean checkYearFilter(Date toBeCheckedDate, Date startDate, Date endDate, Long calendarTypeId ) {
 		EthiopianCalendar ec			= new EthiopianCalendar();
 		GregorianCalendar currentTime	= new GregorianCalendar();
@@ -339,7 +348,7 @@ public final class Util {
 		Integer startYear				= startCalendar.get(Calendar.YEAR);
 		Integer endYear					= endCalendar.get(Calendar.YEAR);
 		
-		if ( startYear < year && year < endYear )
+		if ( startYear <= year && year < endYear )
 				return true;
 		
 		return false;

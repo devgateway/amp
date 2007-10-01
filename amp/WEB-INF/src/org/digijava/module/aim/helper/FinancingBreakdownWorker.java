@@ -25,6 +25,18 @@ public class FinancingBreakdownWorker
 			return"";
 	}
 	
+	public static String getTotalProjections(FilterParams fp) {
+		Collection amounts	= QuarterlyInfoWorker.getQuarterlyForProjections(fp);
+		double totals		= 0;
+		Iterator iter		= amounts.iterator();
+		while (iter.hasNext()) {
+			double temp	= (Double)iter.next();
+			totals			+= temp;
+		}
+		
+		return DecimalToText.getString(totals);
+	}
+	
 	public static String getTotalDonorFund(FilterParams fp)	{
 		if ( logger.isDebugEnabled() )
 			logger.debug("getTotalDonorFund() with FilterParams " +						 " transactionType=" + fp.getTransactionType() +						 " ampFunding=" + fp.getAmpFundingId() );
@@ -89,21 +101,26 @@ public class FinancingBreakdownWorker
 		while ( iter.hasNext() )
 		{
 			financingBreakdown = (FinancingBreakdown)iter.next() ;
-			if ( type == 0 )
+			if ( type == Constants.COMMITMENT )
 			{		  
 					s1 = financingBreakdown.getTotalCommitted() ;
 					s2 = DecimalToText.removeCommas(s1) ;
 					total += Double.parseDouble(s2) ;
 			}
-			else if ( type == 1 )
+			else if ( type == Constants.DISBURSEMENT )
 			{
 				s1 = financingBreakdown.getTotalDisbursed() ;
 				s2 = DecimalToText.removeCommas(s1) ;
 				total += Double.parseDouble(s2) ;
 			}
-			else if ( type == 2 )
+			else if ( type == Constants.EXPENDITURE )
 			{
 				s1 = financingBreakdown.getTotalExpended() ;
+				s2 = DecimalToText.removeCommas(s1) ;
+				total += Double.parseDouble(s2) ;
+			}
+			else if ( type == Constants.MTEFPROJECTION ) {
+				s1 = financingBreakdown.getTotalProjection() ;
 				s2 = DecimalToText.removeCommas(s1) ;
 				total += Double.parseDouble(s2) ;
 			}
@@ -160,6 +177,8 @@ public class FinancingBreakdownWorker
 				fp.setTransactionType(Constants.EXPENDITURE);
 				String totalDonorExpenditure = getTotalDonorFund(fp);
 				financingBreakdown.setTotalExpended(totalDonorExpenditure) ;
+				
+				financingBreakdown.setTotalProjection( getTotalProjections(fp) );
 				
 				String unExpended = DecimalToText.getDifference(totalDonorDisbursement,totalDonorExpenditure) ;
 				financingBreakdown.setUnExpended(unExpended) ;

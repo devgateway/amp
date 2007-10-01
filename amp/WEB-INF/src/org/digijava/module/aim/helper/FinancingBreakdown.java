@@ -11,6 +11,10 @@ public class FinancingBreakdown
 	private String unDisbursed ;
 	private String totalExpended ;
 	private String unExpended ;
+	
+	/* Added for Tanzania */
+	private String totalProjection;
+	
 	private String actualStartDate ;
 	private String actualCompletionDate ;
 	private String signatureDate; // added by Priyajith
@@ -178,5 +182,13 @@ public class FinancingBreakdown
 
 	public void setOrganisation(AmpOrganisation organisation) {
 		this.organisation = organisation;
+	}
+
+	public String getTotalProjection() {
+		return totalProjection;
+	}
+
+	public void setTotalProjection(String totalProjection) {
+		this.totalProjection = totalProjection;
 	}
 }

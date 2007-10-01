@@ -55,6 +55,7 @@ import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpLevel;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -1256,6 +1257,37 @@ public class DbUtil {
         return ampFunding;
     }
 
+    public static Collection getQuarterlyDataForProjections(Long ampFundingId, int adjustmentType) {
+    	logger.debug("getQuarterlyDataForProjections with ampFundingId " + ampFundingId
+    			+ " adjustmentType " + adjustmentType);
+
+    	Session session = null;
+    	Query q = null;
+    	Collection c = null;
+    	Integer adjType = new Integer(adjustmentType);
+
+    	try {
+    		session = PersistenceManager.getRequestDBSession();
+    		String queryString = new String();
+    		queryString = "select p.amount,"
+    			+ "p.projectionDate, p.ampCurrency from "
+    			+ AmpFundingMTEFProjection.class.getName()
+    			+ " p where (p.ampFunding=:ampFundingId) "
+    			+ " and (p.projected=:adjType) order by p.projectionDate ";
+    		q = session.createQuery(queryString);
+    		q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
+    		q.setParameter("adjType", adjType, Hibernate.INTEGER);
+    		c = q.list();
+    	} catch (Exception ex) {
+    		logger.error("Unable to get quarterly data from database", ex);
+
+    	}
+
+    	logger.debug("getQuarterlyDataForProjections() returning a list of size : "
+    			+ c.size());
+    	return c;
+    }
+    
     /**
      * @author jose Returns a collection of records from amp_funding_detail
      *              based on below
@@ -1280,6 +1312,10 @@ public class DbUtil {
         Integer trsType = new Integer(transactionType);
         Integer adjType = new Integer(adjustmentType);
 
+        if (transactionType == Constants.MTEFPROJECTION ) {
+        	return getQuarterlyDataForProjections(ampFundingId, adjustmentType);
+        }
+        
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = new String();

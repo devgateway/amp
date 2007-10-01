@@ -104,6 +104,8 @@ public class FinancingBreakdownFilter extends TilesAction	{
 		overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(fb,2);
 		formBean.setTotalExpended(overallTotalExpenditure);
 		
+		formBean.setTotalProjections( FinancingBreakdownWorker.getOverallTotal(fb, Constants.MTEFPROJECTION) );
+		
 		return  null;
 	}
 }	

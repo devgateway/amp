@@ -128,6 +128,8 @@ public class ViewFinancingBreakdown extends TilesAction {
 			overallTotalUnExpended = DecimalToText.getDifference(
 					overallTotalDisbursed, overallTotalExpenditure);
 			formBean.setTotalUnExpended(overallTotalUnExpended);
+			
+			formBean.setTotalProjections( FinancingBreakdownWorker.getOverallTotal(fb, Constants.MTEFPROJECTION) );
 		}
 		return null;
 	}

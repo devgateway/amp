@@ -272,6 +272,13 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 		    	                    	<field:display name="Funding Organization" feature="Funding Organizations">
 						                    <TD width="20"><digi:trn key="aim:organization">Organization</digi:trn></TD>
 						                </field:display>
+						                
+						                <feature:display module="Funding" name="MTEF Projections">
+											<field:display feature="MTEF Projections" name="MTEFProjections">
+											<td><digi:trn key="aim:financialProgress:totalProjections">Total Projections (Projection&Pipeline)</digi:trn></td>
+											</field:display>
+										</feature:display>
+						                
 						                <field:display name="Total Committed" feature="Funding Organizations">
 											<TD><digi:trn key="aim:totalCommitted">Total Committed</digi:trn></TD>
 										</field:display>
@@ -326,6 +333,11 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 											<field:display name="Funding Organization" feature="Funding Organizations">
 						                  		<TD><jsp:include page="previewFinancingOrganizationPopup.jsp"/></TD>
 						                  	</field:display>
+						                  	
+											<field:display feature="MTEF Projections" name="MTEFProjections">
+												<TD align="right"><bean:write name="breakdown" property="totalProjection"/></TD>
+											</field:display>
+						                  	
 						                  	<field:display name="Total Committed" feature="Funding Organizations">
 							                  <TD align="right"><bean:write name="breakdown" property="totalCommitted"/></TD>
 							                </field:display>
@@ -347,6 +359,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 				                  <TR valign="top" class="note"> 
 														<TD><digi:trn key="aim:total">Total</digi:trn></TD>
 				                    <TD>&nbsp;</TD>
+				                    					<field:display feature="MTEF Projections" name="MTEFProjections"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalProjections"/></TD></field:display>
 														<field:display name="Total Committed" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalCommitted"/></TD></field:display>
 														<field:display name="Total Disbursed" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalDisbursed"/></TD></field:display>
 														<field:display name="Undisbursed Funds" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalUnDisbursed"/></TD></field:display>

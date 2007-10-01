@@ -18,8 +18,9 @@ public class CurrencyWorker {
 
 	private static double exchangeRate = 0.0;
 
-	public static String convert(double amt, double fromExchangeRate,
-			double toExchangeRate) {
+	public static double convertToDouble(double amt, double fromExchangeRate,
+			double toExchangeRate) 
+	{
 		if (logger.isDebugEnabled())
 			logger.debug("convert passed amt=" + amt + " ,fromExchangeRate="
 					+ fromExchangeRate + ",toExchangeRate" + toExchangeRate);
@@ -30,6 +31,15 @@ public class CurrencyWorker {
 		} else {
 			resultDbl = amt;
 		}
+		
+		return resultDbl;
+	}
+	
+	public static String convert(double amt, double fromExchangeRate,
+			double toExchangeRate) {
+		
+		resultDbl	= convertToDouble(amt, fromExchangeRate, toExchangeRate);
+		
 		//*** fix for AMP-1755
 		DecimalFormat format = new DecimalFormat();
 		String inputString= format.format(resultDbl);

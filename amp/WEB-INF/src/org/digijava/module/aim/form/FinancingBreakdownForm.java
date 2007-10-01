@@ -20,10 +20,26 @@ public class FinancingBreakdownForm extends MainProjectDetailsForm
 	private String totalUnDisbursed ;
 	private String totalExpended ;
 	private String totalUnExpended ;
+	
+	/*For projection*/
+	private String totalProjections ;
+	
 	private Collection fiscalYears;
 	private long fiscalCalId;
 	private String perpsectiveNameTrimmed;
 		
+	public String getTotalProjections() {
+		return totalProjections;
+	}
+
+
+
+	public void setTotalProjections(String totalProjections) {
+		this.totalProjections = totalProjections;
+	}
+
+
+
 	/**
 	 * @return
 	 */

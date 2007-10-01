@@ -367,6 +367,15 @@ public class CategoryManagerUtil {
 		return treeSet;
 	}
 	/**
+	 * This is a wrapper function for getAmpCategoryValueCollectionByKey(String categoryKey, Boolean ordered). The function
+	 *  is called with ordered = null.
+	 * @param categoryKey
+	 * @return 
+	 */
+	public static Collection<AmpCategoryValue> getAmpCategoryValueCollectionByKey(String categoryKey) {
+		return getAmpCategoryValueCollectionByKey(categoryKey, null);
+	}
+	/**
 	 *
 	 * @param categoryKey
 	 * @param ordered overrides the property in AmpCategoryClass and decides whether the values should be ordered alphabetically.

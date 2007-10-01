@@ -919,6 +919,7 @@ public class SaveActivity extends Action {
 							.getSelectedOrganizations();
 					for (int i = 0; i < orgProjId.length; i++) {
 						AmpActivityInternalId actInternalId = new AmpActivityInternalId();
+						if(orgProjId[i] != null){
 						actInternalId.setOrganisation(DbUtil
 								.getOrganisation(orgProjId[i].getAmpOrgId()));
 						actInternalId
@@ -926,6 +927,7 @@ public class SaveActivity extends Action {
 						internalIds.add(actInternalId);
 					}
 				}
+			}
 				activity.setInternalIds(internalIds);
 
 				// set components

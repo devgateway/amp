@@ -1632,7 +1632,11 @@ public class SaveActivity extends Action {
 	}
 
 	private void saveMTEFProjections (Funding fund, AmpFunding ampFunding) {
-		Set mtefPrj=new HashSet();
+		if ( ampFunding.getMtefProjections() != null ) {
+			ampFunding.getMtefProjections().clear();
+		}
+		else
+			ampFunding.setMtefProjections(new HashSet<AmpFundingMTEFProjection> ());
 		if(fund.getMtefProjections()!=null)
 		{
 			Iterator mtefItr=fund.getMtefProjections().iterator();
@@ -1645,10 +1649,10 @@ public class SaveActivity extends Action {
 				ampmtef.setAmpCurrency(CurrencyUtil.getCurrencyByCode(mtef.getCurrencyCode()));
 				ampmtef.setProjected( CategoryManagerUtil.getAmpCategoryValueFromDb(mtef.getProjected()) );
 				ampmtef.setProjectionDate( DateConversion.getDate(mtef.getProjectionDate()) );
-				mtefPrj.add(ampmtef);
+				
+				ampFunding.getMtefProjections().add(ampmtef);
 			}
 		}
-		ampFunding.setMtefProjections(mtefPrj);
 	}
 	
 }

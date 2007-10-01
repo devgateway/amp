@@ -5,7 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -24,7 +27,10 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.DigiCacheManager;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.editor.exception.EditorException;
 import org.springframework.beans.BeanWrapperImpl;
@@ -303,6 +309,40 @@ public final class Util {
 		return ret;
 
 	}
-
+	
+	public static boolean checkYearFilter(Date toBeCheckedDate, Date startDate, Date endDate, Long calendarTypeId ) {
+		EthiopianCalendar ec			= new EthiopianCalendar();
+		GregorianCalendar currentTime	= new GregorianCalendar();
+		currentTime.setTime(toBeCheckedDate);
+		
+		ec								= ec.getEthiopianDate( currentTime );
+		
+		Integer year					= currentTime.get(Calendar.YEAR);
+		
+		if(calendarTypeId.equals(Constants.ETH_FY))
+		{
+			year	= new Integer(ec.ethFiscalYear);
+			
+			//quarter=new String("Q"+ec.ethFiscalQrt);
+		}
+		if(calendarTypeId.equals(Constants.ETH_CAL))
+		{
+			year	=	new Integer(ec.ethYear);
+		}
+		
+		GregorianCalendar startCalendar	= new GregorianCalendar();
+		startCalendar.setTime(startDate);
+		
+		GregorianCalendar endCalendar	= new GregorianCalendar();
+		endCalendar.setTime(endDate);
+		
+		Integer startYear				= startCalendar.get(Calendar.YEAR);
+		Integer endYear					= endCalendar.get(Calendar.YEAR);
+		
+		if ( startYear < year && year < endYear )
+				return true;
+		
+		return false;
+	}
 
 }

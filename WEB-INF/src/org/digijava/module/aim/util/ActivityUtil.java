@@ -269,6 +269,18 @@ public class ActivityUtil {
         }
         else
           logger.debug("commentsCol is empty");
+        
+        if ( oldActivity.getCategories() != null ) {
+        	oldActivity.getCategories().clear();
+        }
+        else
+        	oldActivity.setCategories( new HashSet() );
+        
+        if ( oldActivity.getFunding() != null ) {
+        	oldActivity.getFunding().clear();
+        }
+        else
+        	oldActivity.setFunding( new HashSet() );
 
         oldActivity.getClosingDates().clear();
         oldActivity.getComponents().clear();
@@ -333,7 +345,7 @@ public class ActivityUtil {
         oldActivity.setClosingDates(activity.getClosingDates());
         oldActivity.setComponents(activity.getComponents());
         //oldActivity.setDocuments(activity.getDocuments());
-        oldActivity.setFunding(activity.getFunding());
+        oldActivity.getFunding().addAll(activity.getFunding());
         oldActivity.setRegionalFundings(activity.getRegionalFundings());
 
         oldActivity.setInternalIds(activity.getInternalIds());
@@ -351,8 +363,8 @@ public class ActivityUtil {
         oldActivity.setFunDate(activity.getFunDate());
 
         oldActivity.setApprovalStatus(activity.getApprovalStatus());
-
-        oldActivity.setCategories(activity.getCategories());
+        
+        oldActivity.getCategories().addAll( activity.getCategories() );
 
         /*
          * tanzania ADDS
@@ -1809,6 +1821,9 @@ public class ActivityUtil {
         }
         fund.getFundingDetails().clear();
         fund.setFundingDetails(temp.getFundingDetails());
+        
+        fund.getMtefProjections().clear();
+        fund.getMtefProjections().addAll( temp.getMtefProjections() );
         //logger.info("Updating " + fund.getAmpFundingId());
         session.update(fund);
         //logger.info("Updated...");

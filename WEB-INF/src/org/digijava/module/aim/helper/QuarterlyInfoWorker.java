@@ -8,6 +8,8 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -50,6 +52,45 @@ public class QuarterlyInfoWorker {
 		return arrayList;
 	}
 
+	
+	public static ArrayList getQuarterlyForProjections(FilterParams fp) {
+		
+		Collection<AmpCategoryValue> mtefProjectionTypes	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY);
+		Iterator<AmpCategoryValue> iter						= mtefProjectionTypes.iterator();
+		
+		ArrayList amounts									= new ArrayList();
+		
+		while (iter.hasNext()) {
+			AmpCategoryValue mtefProjectionType		= iter.next(); 
+			Collection col		= DbUtil.getQuarterlyDataForProjections(fp.getAmpFundingId(), mtefProjectionType.getId().intValue() );
+			Iterator colIter	= col.iterator();
+			while( colIter.hasNext() ) {
+				Object [] row				= (Object [])colIter.next();
+				
+				Double transactionAmount 	= (Double) row[0];
+				
+				Date transactionDate 		= (Date) row[1];
+				
+				/*Checking Date Filter*/
+				Date startDate				=  DateConversion.getDate( "01/01/" + fp.getFromYear() );
+				Date endDate				=  DateConversion.getDate( "01/01/" + fp.getToYear() );
+				
+				if ( ! Util.checkYearFilter(transactionDate, startDate, endDate, fp.getFiscalCalId()) )
+					continue;
+				/*END - Checking Date Filter*/
+				
+				AmpCurrency currencyObject	= (AmpCurrency)row[2];
+				double fromCurrencyRatio	= Util.getExchange(currencyObject.getCurrencyCode(), new java.sql.Date(transactionDate.getTime()) );
+				double toCurrencyRatio	= Util.getExchange(fp.getCurrencyCode(), new java.sql.Date(transactionDate.getTime()) );
+				
+				Double convertedAmt = CurrencyWorker.convertToDouble(transactionAmount, fromCurrencyRatio,toCurrencyRatio);
+				
+				amounts.add(convertedAmt);
+			}
+		}
+		return amounts;
+	}
+	
 	public static ArrayList getQuarterly(FilterParams fp) {
 
 	//	if (logger.isDebugEnabled())

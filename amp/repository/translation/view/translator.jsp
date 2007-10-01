@@ -7,12 +7,12 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script language="javascript" type="text/javascript"> 
-      
-     function copyText(objName) { 
+<script language="javascript" type="text/javascript">
+
+     function copyText(objName) {
 	  document.getElementsByName('translation')[0].value=document.getElementsByName(objName)[0].value;
      }
-     
+
 </script>
 
 <digi:errors/>
@@ -30,7 +30,7 @@
      <td align="left">
         <bean:define id="backUrl" name="translatorForm" property="back_url" type="java.lang.String"/>
 	    <a href="<%= indexUrl+backUrl%>"><small><digi:trn key="translation:goBack">Go back to where you were</digi:trn></small></a>
-        <p><small>(<digi:trn key="translation:goTo">Go to</digi:trn> <a href="<%= indexUrl%>"><b><digi:trn key="translation:indexPage">Index Page</digi:trn></b></a>)</small>
+        <p><small>(<digi:trn key="translation:goTo">Go to</digi:trn> <a href='<digi:site property="url" />'><b><digi:trn key="translation:indexPage">Index Page</digi:trn></b></a>)</small>
      </td>
   </tr>
 </table>
@@ -47,7 +47,7 @@
   </tr>
   <tr bgcolor="FFFFFF">
      <td align="left" width="50%" height="30" valign="center">
-      <c:if test="${!empty translatorForm.langKey}"> 
+      <c:if test="${!empty translatorForm.langKey}">
         <bean:define id="languageKey" name="translatorForm" property="langKey" type="java.lang.String"/>
 	 	 <digi:trn key="<%=languageKey%>"><%=languageKey%></digi:trn>
  	  </c:if>
@@ -68,10 +68,10 @@
   </tr>
   <tr>
      <td align="right">
-	     <html:submit value="Save Translation" />	     
+	     <html:submit value="Save Translation" />
      </td>
      <td align="left">
-             <html:submit property="deleteTranslation" value="Delete Translation" />	     
+             <html:submit property="deleteTranslation" value="Delete Translation" />
      </td>
   </tr>
   <tr><td>&nbsp;</td></tr>

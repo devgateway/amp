@@ -669,10 +669,12 @@
 																		<digi:trn key="aim:noProgramsPresent">No Programs present</digi:trn></b>
 																</td>
 																</tr>
+																
 														</logic:empty>
 														<tr>
 															<td bgColor=#d7eafd height="20" align="center">
-																	<input class="buton" type="button" name="addSubTheme" value="<digi:trn key='aim:AddSubProgramLevel1'>Add SubProgram Level 1</digi:trn>" onclick=" return addSubProgram('<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="rootId"/>','0','<bean:write name="aimThemeForm" property="name"/>')">
+															
+																	<input class="buton" type="button" name="addSubTheme" value="<digi:trn key='aim:AddSubProgramLevel1'>Add SubProgram Level 1</digi:trn>" onclick=" return addSubProgram('<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="rootId"/>','0','${aimThemeForm.encodeName}')">
 															</td>
 														</tr>
 													</table>

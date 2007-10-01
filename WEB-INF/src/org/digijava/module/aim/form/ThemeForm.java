@@ -25,6 +25,7 @@ public class ThemeForm extends ActionForm {
 		  private Long indicatorId;
 		  private String code;
 		  private String name;
+		  private String encodeName;
 		  private String type;
 		  private String indicatorDescription;
 		  private int category;
@@ -457,5 +458,19 @@ public class ThemeForm extends ActionForm {
 	 */
 	public void setIndType(String indType) {
 		this.indType = indType;
+	}
+
+	public String getEncodeName() {		
+		if(name != null) {
+				encodeName = name.replace("'", "\\'");
+				encodeName = encodeName.replace("\"", "\\'");
+				System.out.println(encodeName);
+			
+		}
+		return encodeName;
+	}
+
+	public void setEncodeName(String encodeName) {
+		this.encodeName = encodeName;
 	}
 }

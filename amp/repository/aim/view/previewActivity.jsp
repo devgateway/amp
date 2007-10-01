@@ -615,14 +615,12 @@ function disable() {
 														<tr><td>
 														<c:out value="${selectedOrganizations.name}"/> :
 														<c:out value="${selectedOrganizations.projectId}"/>
-														<bean:define id="selectedOrgForPopup" name="selectedOrganizations"
-															type="org.digijava.module.aim.helper.OrgProjectId"
-															toScope="request" />
-														<jsp:include page="previewOrganizationPopup.jsp"/>
-														</td></tr>
-
+															<c:if test ="${!empty selectedOrganizations.organisation.ampOrgId}">
+																	<bean:define id="selectedOrgForPopup" name="selectedOrganizations" 	type="org.digijava.module.aim.helper.OrgProjectId"  	toScope="request" />
+																	<jsp:include page="previewOrganizationPopup.jsp"/>
+															</c:if>
+													</td></tr>
 													</c:forEach>
-
 												</table>
 											</c:if>
 										</td>

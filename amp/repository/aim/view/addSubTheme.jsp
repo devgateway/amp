@@ -204,7 +204,7 @@
 																											</logic:equal>
 																											<logic:notEqual name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
 																											<b>
-																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','${subPrograms.encodeName}')" title="Click here to add Sub-Programs">
 																													<bean:write name="subPrograms" property="name"/>
 																											</a></b>
 																											</logic:notEqual>
@@ -274,7 +274,7 @@
 																											</logic:equal>
 																											<logic:notEqual name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
 																											<b>
-																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','${subPrograms.encodeName}')" title="Click here to add Sub-Programs">
 																													<bean:write name="subPrograms" property="name"/>
 																											</a></b>
 																											</logic:notEqual>
@@ -335,7 +335,7 @@
 																											</logic:equal>
 																											<logic:notEqual name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
 																											<b>
-																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','${subPrograms.encodeName}')" title="Click here to add Sub-Programs">
 																													<bean:write name="subPrograms" property="name"/>
 																											</a></b>
 																											</logic:notEqual>
@@ -396,7 +396,7 @@
 																											</logic:equal>
 																											<logic:notEqual name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
 																											<b>
-																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','${subPrograms.encodeName}')" title="Click here to add Sub-Programs">
 																													<bean:write name="subPrograms" property="name"/>
 																											</a></b>
 																											</logic:notEqual>
@@ -457,7 +457,7 @@
 																											</logic:equal>
 																											<logic:notEqual name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
 																											<b>
-																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','${subPrograms.encodeName}')" title="Click here to add Sub-Programs">
 																													<bean:write name="subPrograms" property="name"/>
 																											</a></b>
 																											</logic:notEqual>
@@ -518,7 +518,7 @@
 																											</logic:equal>
 																											<logic:notEqual name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
 																											<b>
-																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','${subPrograms.encodeName}')" title="Click here to add Sub-Programs">
 																													<bean:write name="subPrograms" property="name"/>
 																											</a></b>
 																											</logic:notEqual>
@@ -579,7 +579,7 @@
 																											</logic:equal>
 																											<logic:notEqual name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
 																											<b>
-																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','${subPrograms.encodeName}')" title="Click here to add Sub-Programs">
 																													<bean:write name="subPrograms" property="name"/>
 																											</a></b>
 																											</logic:notEqual>

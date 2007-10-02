@@ -53,10 +53,6 @@
 		}
 		function addSubProgram(id,name)
 		{
-		
-		
-		
-		
 			<digi:context name="subProgram" property="context/module/moduleinstance/addSubTheme.do?event="/>
 			document.aimThemeForm.action = "<%= subProgram %>&themeId=" + id + "&indname=" + name;
 			document.aimThemeForm.target = "_self";
@@ -100,11 +96,6 @@
           document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
         }
 	
-	function Namee(){
-			var string = "${themes.name}";
-			var string2  = string.replace(/[\(\)']/g, '');
-		return string2;
-	}
 -->
 </script>
 

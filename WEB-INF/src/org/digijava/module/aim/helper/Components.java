@@ -7,18 +7,19 @@ package org.digijava.module.aim.helper;
 import java.io.Serializable;
 import java.util.Collection;
 
-public class Components implements Comparable , Serializable{
+
+public class Components<T> implements Comparable , Serializable{
 	
 	private Long componentId;
 	private String title;
 	private String description;
 	private String amount;
-	private Collection commitments;
-	private Collection disbursements;
-	private Collection expenditures;
+	private Collection<T> commitments;
+	private Collection<T> disbursements;
+	private Collection<T> expenditures;
 	private String reportingDate;	
 	private String currencyCode;
-	private Collection phyProgress;
+	private Collection<PhysicalProgress> phyProgress;
 	
 	public Components() {}
 	
@@ -65,13 +66,13 @@ public class Components implements Comparable , Serializable{
 	/**
 	 * @return Returns the phyProgress.
 	 */
-	public Collection getPhyProgress() {
+	public Collection<PhysicalProgress> getPhyProgress() {
 		return phyProgress;
 	}
 	/**
 	 * @param phyProgress The phyProgress to set.
 	 */
-	public void setPhyProgress(Collection phyProgress) {
+	public void setPhyProgress(Collection<PhysicalProgress> phyProgress) {
 		this.phyProgress = phyProgress;
 	}
 	/**
@@ -122,42 +123,42 @@ public class Components implements Comparable , Serializable{
 		/**
 	 * @return Returns the commitments.
 	 */
-	public Collection getCommitments() {
+	public Collection<T> getCommitments() {
 		return commitments;
 	}
 
 	/**
 	 * @param commitments The commitments to set.
 	 */
-	public void setCommitments(Collection commitments) {
+	public void setCommitments(Collection<T> commitments) {
 		this.commitments = commitments;
 	}
 
 		/**
 	 * @return Returns the disbursements.
 	 */
-	public Collection getDisbursements() {
+	public Collection<T> getDisbursements() {
 		return disbursements;
 	}
 
 	/**
 	 * @param disbursements The disbursements to set.
 	 */
-	public void setDisbursements(Collection disbursements) {
+	public void setDisbursements(Collection<T> disbursements) {
 		this.disbursements = disbursements;
 	}
 
 		/**
 	 * @return Returns the expenditures.
 	 */
-	public Collection getExpenditures() {
+	public Collection<T> getExpenditures() {
 		return expenditures;
 	}
 
 	/**
 	 * @param expenditures The expenditures to set.
 	 */
-	public void setExpenditures(Collection expenditures) {
+	public void setExpenditures(Collection<T> expenditures) {
 		this.expenditures = expenditures;
 	}
 

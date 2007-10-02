@@ -117,7 +117,7 @@ public class SaveActivity extends Action {
 		ampContext = getServlet().getServletContext();
 
 		Long actId = null;
-		Components tempComp = new Components();
+		Components<AmpComponentFunding> tempComp = new Components<AmpComponentFunding>();
 
 		// if user has not logged in, forward him to the home page
 		if (session.getAttribute("currentMember") == null) {
@@ -931,205 +931,7 @@ public class SaveActivity extends Action {
 				activity.setInternalIds(internalIds);
 
 				// set components
-				activity.setComponents(new HashSet());
-				if (eaForm.getSelectedComponents() != null) {
-					Iterator itr = eaForm.getSelectedComponents().iterator();
-					while (itr.hasNext()) {
-						Components comp = (Components) itr.next();
-						AmpComponent ampComp = null;
-						Collection col = ComponentsUtil.getComponent(comp.getTitle());
-						Iterator it = col.iterator();
-						while(it.hasNext())
-						{
-							ampComp = (AmpComponent)it.next();
-							activity.getComponents().add(ampComp);
-						}
-
-						//ampComp = DbUtil.getActivityAmpComments(comp.getComponentId());
-						// activity.getComponents().add(ampComp);
-						/*
-						AmpComponent ampComponent = new AmpComponent();
-						ampComponent.setActivity(activity);
-						if (comp.getDescription() == null
-								|| comp.getDescription().trim().length() == 0) {
-							ampComponent.setDescription(" ");
-						} else {
-							ampComponent.setDescription(comp.getDescription());
-						}
-						ampComponent.setTitle(comp.getTitle());
-						ampComponent.setComponentFundings(new HashSet());
-						*/
-
-						if (comp.getCommitments() != null
-								&& comp.getCommitments().size() > 0) {
-							Iterator itr2 = comp.getCommitments().iterator();
-							while (itr2.hasNext()) {
-								AmpComponentFunding ampCompFund = new AmpComponentFunding();
-								ampCompFund.setActivity(activity);
-								ampCompFund.setTransactionType(new Integer(
-										Constants.COMMITMENT));
-								FundingDetail fd = (FundingDetail) itr2.next();
-								Iterator tmpItr = eaForm.getCurrencies()
-										.iterator();
-								while (tmpItr.hasNext()) {
-									AmpCurrency curr = (AmpCurrency) tmpItr
-											.next();
-									if (curr.getCurrencyCode().equals(
-											fd.getCurrencyCode())) {
-										ampCompFund.setCurrency(curr);
-										break;
-									}
-								}
-								tmpItr = eaForm.getPerspectives().iterator();
-								while (tmpItr.hasNext()) {
-									AmpPerspective pers = (AmpPerspective) tmpItr
-											.next();
-									if (pers.getCode().equals(
-											fd.getPerspectiveCode())) {
-										ampCompFund.setPerspective(pers);
-										break;
-									}
-								}
-								Collection col1 = ActivityUtil.getFundingComponentActivity(ampComp.getAmpComponentId(),eaForm.getActivityId());
-								Iterator itr23 = col1.iterator();
-								while(itr23.hasNext())
-								{
-									AmpComponentFunding ampf = (AmpComponentFunding) itr23.next();
-									ampCompFund.setAmpComponentFundingId(ampf.getAmpComponentFundingId());
-
-								}
-								ampCompFund.setReportingOrganization(null);
-								ampCompFund.setTransactionAmount(new Double(
-										DecimalToText.getDouble(fd
-												.getTransactionAmount())));
-								ampCompFund.setTransactionDate(DateConversion
-										.getDate(fd.getTransactionDate()));
-								ampCompFund.setAdjustmentType(new Integer(fd
-										.getAdjustmentType()));
-								ampCompFund.setComponent(ampComp);
-								HashSet temp = new HashSet();
-								temp.add(ampCompFund);
-								tempComp.setCommitments(temp);
-							}
-						}
-
-						if (comp.getDisbursements() != null
-								&& comp.getDisbursements().size() > 0) {
-							Iterator itr2 = comp.getDisbursements().iterator();
-							while (itr2.hasNext()) {
-								AmpComponentFunding ampCompFund = new AmpComponentFunding();
-								ampCompFund.setActivity(activity);
-								ampCompFund.setTransactionType(new Integer(
-										Constants.DISBURSEMENT));
-								FundingDetail fd = (FundingDetail) itr2.next();
-								Iterator tmpItr = eaForm.getCurrencies()
-										.iterator();
-								while (tmpItr.hasNext()) {
-									AmpCurrency curr = (AmpCurrency) tmpItr
-											.next();
-									if (curr.getCurrencyCode().equals(
-											fd.getCurrencyCode())) {
-										ampCompFund.setCurrency(curr);
-										break;
-									}
-								}
-								tmpItr = eaForm.getPerspectives().iterator();
-								while (tmpItr.hasNext()) {
-									AmpPerspective pers = (AmpPerspective) tmpItr
-											.next();
-									if (pers.getCode().equals(
-											fd.getPerspectiveCode())) {
-										ampCompFund.setPerspective(pers);
-										break;
-									}
-								}
-								ampCompFund.setTransactionAmount(new Double(
-										DecimalToText.getDouble(fd
-												.getTransactionAmount())));
-								ampCompFund.setTransactionDate(DateConversion
-										.getDate(fd.getTransactionDate()));
-								ampCompFund.setAdjustmentType(new Integer(fd
-										.getAdjustmentType()));
-								ampCompFund.setComponent(ampComp);
-								HashSet temp = new HashSet();
-								temp.add(ampCompFund);
-								tempComp.setDisbursements(temp);
-							}
-						}
-
-						if (comp.getExpenditures() != null
-								&& comp.getExpenditures().size() > 0) {
-							Iterator itr2 = comp.getExpenditures().iterator();
-							while (itr2.hasNext()) {
-								AmpComponentFunding ampCompFund = new AmpComponentFunding();
-								ampCompFund.setActivity(activity);
-								ampCompFund.setTransactionType(new Integer(
-										Constants.EXPENDITURE));
-								FundingDetail fd = (FundingDetail) itr2.next();
-								Iterator tmpItr = eaForm.getCurrencies()
-										.iterator();
-								while (tmpItr.hasNext()) {
-									AmpCurrency curr = (AmpCurrency) tmpItr
-											.next();
-									if (curr.getCurrencyCode().equals(
-											fd.getCurrencyCode())) {
-										ampCompFund.setCurrency(curr);
-										break;
-									}
-								}
-								tmpItr = eaForm.getPerspectives().iterator();
-								while (tmpItr.hasNext()) {
-									AmpPerspective pers = (AmpPerspective) tmpItr
-											.next();
-									if (pers.getCode().equals(
-											fd.getPerspectiveCode())) {
-										ampCompFund.setPerspective(pers);
-										break;
-									}
-								}
-								ampCompFund.setTransactionAmount(new Double(
-										DecimalToText.getDouble(fd
-												.getTransactionAmount())));
-								ampCompFund.setTransactionDate(DateConversion
-										.getDate(fd.getTransactionDate()));
-								ampCompFund.setAdjustmentType(new Integer(fd
-										.getAdjustmentType()));
-								ampCompFund.setComponent(ampComp);
-								HashSet temp = new HashSet();
-								temp.add(ampCompFund);
-								tempComp.setExpenditures(temp);
-
-							}
-						}
-
-						// set physical progress
-						Set phyProgess = new HashSet();
-						if (comp.getPhyProgress() != null) {
-
-							Iterator itr1 = comp.getPhyProgress().iterator();
-							while (itr1.hasNext()) {
-								PhysicalProgress phyProg = (PhysicalProgress) itr1
-										.next();
-								AmpPhysicalPerformance ampPhyPerf = new AmpPhysicalPerformance();
-								if (phyProg.getDescription() == null
-										|| phyProg.getDescription().trim()
-												.length() == 0) {
-									ampPhyPerf.setDescription(new String(" "));
-								} else {
-									ampPhyPerf.setDescription(phyProg
-											.getDescription());
-								}
-								ampPhyPerf.setReportingDate(DateConversion
-										.getDate(phyProg.getReportingDate()));
-								ampPhyPerf.setTitle(phyProg.getTitle());
-								ampPhyPerf.setAmpActivityId(activity);
-								ampPhyPerf.setComponent(ampComp);
-								ampPhyPerf.setComments(" ");
-								phyProgess.add(ampPhyPerf);
-							}
-						}
-					}
-				}
+				proccessComponents(tempComp, eaForm, activity);
 
 				// set funding and funding details
 				Set fundings = new HashSet();
@@ -1630,6 +1432,196 @@ public class SaveActivity extends Action {
 			e.printStackTrace();
             throw new RuntimeException("Save Activity Error",e);
 
+		}
+	}
+
+	/**
+	 * @param tempComp
+	 * @param eaForm
+	 * @param activity
+	 */
+	private void proccessComponents(Components<AmpComponentFunding> tempComp, EditActivityForm eaForm, AmpActivity activity) {
+		activity.setComponents(new HashSet());
+		if (eaForm.getSelectedComponents() != null) {
+			Iterator<Components<FundingDetail>> itr = eaForm.getSelectedComponents().iterator();
+			while (itr.hasNext()) {
+				Components<FundingDetail> comp = itr.next();
+				AmpComponent ampComp = null;
+				Collection col = ComponentsUtil.getComponent(comp.getTitle());
+				Iterator it = col.iterator();
+				while(it.hasNext())
+				{
+					ampComp = (AmpComponent)it.next();
+					activity.getComponents().add(ampComp);
+				}
+
+				if (comp.getCommitments() != null
+						&& comp.getCommitments().size() > 0) {
+					HashSet<AmpComponentFunding> temp = new HashSet<AmpComponentFunding>();
+					Iterator<FundingDetail> commitmentsIter = comp.getCommitments().iterator();
+					while (commitmentsIter.hasNext()) {
+						FundingDetail fd = commitmentsIter.next();
+						AmpComponentFunding ampCompFund = new AmpComponentFunding();
+						ampCompFund.setActivity(activity);
+						ampCompFund.setTransactionType(new Integer(
+								Constants.COMMITMENT));						
+						Iterator tmpItr = eaForm.getCurrencies()
+								.iterator();
+						while (tmpItr.hasNext()) {
+							AmpCurrency curr = (AmpCurrency) tmpItr
+									.next();
+							if (curr.getCurrencyCode().equals(
+									fd.getCurrencyCode())) {
+								ampCompFund.setCurrency(curr);
+								break;
+							}
+						}
+						tmpItr = eaForm.getPerspectives().iterator();
+						while (tmpItr.hasNext()) {
+							AmpPerspective pers = (AmpPerspective) tmpItr
+									.next();
+							if (pers.getCode().equals(
+									fd.getPerspectiveCode())) {
+								ampCompFund.setPerspective(pers);
+								break;
+							}
+						}
+						
+						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
+						ampCompFund.setReportingOrganization(null);
+						ampCompFund.setTransactionAmount(new Double(DecimalToText.getDouble(fd.getTransactionAmount())));
+						ampCompFund.setTransactionDate(DateConversion
+								.getDate(fd.getTransactionDate()));
+						ampCompFund.setAdjustmentType(new Integer(fd
+								.getAdjustmentType()));
+						ampCompFund.setComponent(ampComp);						
+						temp.add(ampCompFund);						
+					}
+					tempComp.setCommitments(temp);
+				}
+
+				
+				if (comp.getDisbursements() != null
+						&& comp.getDisbursements().size() > 0) {
+					HashSet<AmpComponentFunding> temp = new HashSet<AmpComponentFunding>();
+					Iterator itr2 = comp.getDisbursements().iterator();
+					while (itr2.hasNext()) {
+						AmpComponentFunding ampCompFund = new AmpComponentFunding();
+						ampCompFund.setActivity(activity);
+						ampCompFund.setTransactionType(new Integer(
+								Constants.DISBURSEMENT));
+						FundingDetail fd = (FundingDetail) itr2.next();
+						Iterator tmpItr = eaForm.getCurrencies()
+								.iterator();
+						while (tmpItr.hasNext()) {
+							AmpCurrency curr = (AmpCurrency) tmpItr
+									.next();
+							if (curr.getCurrencyCode().equals(
+									fd.getCurrencyCode())) {
+								ampCompFund.setCurrency(curr);
+								break;
+							}
+						}
+						tmpItr = eaForm.getPerspectives().iterator();
+						while (tmpItr.hasNext()) {
+							AmpPerspective pers = (AmpPerspective) tmpItr
+									.next();
+							if (pers.getCode().equals(
+									fd.getPerspectiveCode())) {
+								ampCompFund.setPerspective(pers);
+								break;
+							}
+						}
+						
+						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
+						ampCompFund.setTransactionAmount(new Double(
+								DecimalToText.getDouble(fd
+										.getTransactionAmount())));
+						ampCompFund.setTransactionDate(DateConversion
+								.getDate(fd.getTransactionDate()));
+						ampCompFund.setAdjustmentType(new Integer(fd
+								.getAdjustmentType()));
+						ampCompFund.setComponent(ampComp);						
+						temp.add(ampCompFund);						
+					}
+					tempComp.setDisbursements(temp);
+				}
+
+				if (comp.getExpenditures() != null
+						&& comp.getExpenditures().size() > 0) {
+					HashSet<AmpComponentFunding> temp = new HashSet<AmpComponentFunding>();
+					Iterator itr2 = comp.getExpenditures().iterator();
+					while (itr2.hasNext()) {
+						AmpComponentFunding ampCompFund = new AmpComponentFunding();
+						ampCompFund.setActivity(activity);
+						ampCompFund.setTransactionType(new Integer(
+								Constants.EXPENDITURE));
+						FundingDetail fd = (FundingDetail) itr2.next();
+						Iterator tmpItr = eaForm.getCurrencies()
+								.iterator();
+						while (tmpItr.hasNext()) {
+							AmpCurrency curr = (AmpCurrency) tmpItr
+									.next();
+							if (curr.getCurrencyCode().equals(
+									fd.getCurrencyCode())) {
+								ampCompFund.setCurrency(curr);
+								break;
+							}
+						}
+						tmpItr = eaForm.getPerspectives().iterator();
+						while (tmpItr.hasNext()) {
+							AmpPerspective pers = (AmpPerspective) tmpItr
+									.next();
+							if (pers.getCode().equals(
+									fd.getPerspectiveCode())) {
+								ampCompFund.setPerspective(pers);
+								break;
+							}
+						}
+						
+						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
+						ampCompFund.setTransactionAmount(new Double(
+								DecimalToText.getDouble(fd
+										.getTransactionAmount())));
+						ampCompFund.setTransactionDate(DateConversion
+								.getDate(fd.getTransactionDate()));
+						ampCompFund.setAdjustmentType(new Integer(fd
+								.getAdjustmentType()));
+						ampCompFund.setComponent(ampComp);						
+						temp.add(ampCompFund);
+					}
+					tempComp.setExpenditures(temp);
+				}
+
+				// set physical progress
+				Set phyProgess = new HashSet();
+				if (comp.getPhyProgress() != null) {
+
+					Iterator itr1 = comp.getPhyProgress().iterator();
+					while (itr1.hasNext()) {
+						PhysicalProgress phyProg = (PhysicalProgress) itr1
+								.next();
+						AmpPhysicalPerformance ampPhyPerf = new AmpPhysicalPerformance();
+						if (phyProg.getDescription() == null
+								|| phyProg.getDescription().trim()
+										.length() == 0) {
+							ampPhyPerf.setDescription(new String(" "));
+						} else {
+							ampPhyPerf.setDescription(phyProg
+									.getDescription());
+						}
+						ampPhyPerf.setAmpPpId(phyProg.getPid());
+						ampPhyPerf.setReportingDate(DateConversion
+								.getDate(phyProg.getReportingDate()));
+						ampPhyPerf.setTitle(phyProg.getTitle());
+						ampPhyPerf.setAmpActivityId(activity);
+						ampPhyPerf.setComponent(ampComp);
+						ampPhyPerf.setComments(" ");
+						phyProgess.add(ampPhyPerf);								
+					}
+				}
+				tempComp.setPhyProgress(phyProgess);
+			}
 		}
 	}
 

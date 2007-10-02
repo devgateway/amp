@@ -103,7 +103,7 @@ public class ActivityUtil {
   public static Long saveActivity(AmpActivity activity, ArrayList commentsCol,
                                   boolean serializeFlag, Long field,
                                   Collection relatedLinks, Long memberId,
-                                  Components ampTempComp) {
+                                  Components<AmpComponentFunding> ampTempComp) {
     /*
      * calls saveActivity(AmpActivity activity,Long oldActivityId,boolean edit)
      * by passing null and false to the parameters oldActivityId and edit respectively
@@ -126,12 +126,12 @@ public class ActivityUtil {
    * @param edit This boolean variable represents whether to create a new
    * activity object or to update the existing activity object
    */
-  public static Long saveActivity(AmpActivity activity, Long oldActivityId,
+public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                                   boolean edit,
                                   ArrayList commentsCol, boolean serializeFlag,
                                   Long field,
                                   Collection relatedLinks, Long memberId,
-                                  Collection indicators, Components ampTempComp) {
+                                  Collection indicators, Components<AmpComponentFunding> ampTempComp) {
     logger.debug("In save activity " + activity.getName());
     Session session = null;
     Transaction tx = null;
@@ -418,28 +418,51 @@ public class ActivityUtil {
         session.saveOrUpdate(member);
       }
 
-//          to save the Component fundings
+      
+      //to save the Component fundings
+      Collection<AmpComponentFunding>  componentFundingCol = getFundingComponentActivity(activityId);
       if (ampTempComp.getCommitments() != null) {
         Iterator compItr = ampTempComp.getCommitments().iterator();
         while (compItr.hasNext()) {
           AmpComponentFunding ampComp = (AmpComponentFunding) compItr.next();
           session.saveOrUpdate(ampComp);
+          componentFundingCol.remove(ampComp);
         }
       }
+
       if (ampTempComp.getDisbursements() != null) {
         Iterator compItr = ampTempComp.getDisbursements().iterator();
         while (compItr.hasNext()) {
           AmpComponentFunding ampComp = (AmpComponentFunding) compItr.next();
           session.saveOrUpdate(ampComp);
+          componentFundingCol.remove(ampComp);
         }
       }
+      
       if (ampTempComp.getExpenditures() != null) {
         Iterator compItr = ampTempComp.getExpenditures().iterator();
         while (compItr.hasNext()) {
           AmpComponentFunding ampComp = (AmpComponentFunding) compItr.next();
           session.saveOrUpdate(ampComp);
+          componentFundingCol.remove(ampComp);
         }
       }
+      
+      if (componentFundingCol != null) {
+			Iterator<AmpComponentFunding> componentFundingColIt = componentFundingCol.iterator();
+			while (componentFundingColIt.hasNext()) {
+				session.delete(componentFundingColIt.next());
+			}
+	  }
+      
+      if (ampTempComp.getPhyProgress() != null) {
+			Iterator compItr = ampTempComp.getPhyProgress().iterator();
+			while (compItr.hasNext()) {
+				AmpPhysicalPerformance ampPhyPerf = (AmpPhysicalPerformance) compItr.next();
+				session.saveOrUpdate(ampPhyPerf);
+			}
+      }
+      
 
       /* Persists the activity */
       if (edit) {
@@ -599,7 +622,6 @@ public class ActivityUtil {
     }
     catch (Exception ex) {
       logger.error("Exception from saveActivity()  " + ex.getMessage());
-      ex.printStackTrace(System.out);
       if (tx != null) {
         try {
           tx.rollback();
@@ -1419,8 +1441,8 @@ public class ActivityUtil {
     return orgroles;
   }
 
-  public static Collection getAllComponents(Long id) {
-    Collection col = new ArrayList();
+  public static Collection<Components> getAllComponents(Long id) {
+    Collection<Components> componentsCollection = new ArrayList<Components>();
 
     Session session = null;
 
@@ -1432,7 +1454,7 @@ public class ActivityUtil {
         Iterator itr1 = comp.iterator();
         while (itr1.hasNext()) {
           AmpComponent ampComp = (AmpComponent) itr1.next();
-          Components components = new Components();
+          Components<FundingDetail> components = new Components<FundingDetail>();
           components.setComponentId(ampComp.getAmpComponentId());
           components.setDescription(ampComp.getDescription());
           components.setTitle(ampComp.getTitle());
@@ -1441,12 +1463,11 @@ public class ActivityUtil {
           components.setExpenditures(new ArrayList());
           components.setPhyProgress(new ArrayList());
 
-          Collection col1 = ActivityUtil.getFundingComponentActivity(ampComp.
+          Collection<AmpComponentFunding> componentsFunding = ActivityUtil.getFundingComponentActivity(ampComp.
               getAmpComponentId(), activity.getAmpActivityId());
-          //  Iterator itr2 = ampComp.getComponentFundings().iterator();
-          Iterator itr2 = col.iterator();
-          while (itr2.hasNext()) {
-            AmpComponentFunding cf = (AmpComponentFunding) itr2.next();
+          Iterator compFundIterator = componentsFunding.iterator();
+          while (compFundIterator.hasNext()) {
+            AmpComponentFunding cf = (AmpComponentFunding) compFundIterator.next();
             FundingDetail fd = new FundingDetail();
             fd.setAdjustmentType(cf.getAdjustmentType().intValue());
             if (fd.getAdjustmentType() == Constants.PLANNED) {
@@ -1476,12 +1497,11 @@ public class ActivityUtil {
               components.getExpenditures().add(fd);
             }
           }
-          Collection col2 = ActivityUtil.getPhysicalProgressComponentActivity(
+          Collection<AmpPhysicalPerformance> physicalProgressComponents = ActivityUtil.getPhysicalProgressComponentActivity(
               ampComp.getAmpComponentId(), activity.getAmpActivityId());
-          itr2 = col2.iterator();
-          //itr2 = ampComp.getPhysicalProgress().iterator();
-          while (itr2.hasNext()) {
-            AmpPhysicalPerformance ampPhyPerf = (AmpPhysicalPerformance) itr2.
+          Iterator<AmpPhysicalPerformance> physicalProgressIterator = physicalProgressComponents.iterator();
+          while (physicalProgressIterator.hasNext()) {
+            AmpPhysicalPerformance ampPhyPerf = (AmpPhysicalPerformance) physicalProgressIterator.
                 next();
             PhysicalProgress pp = new PhysicalProgress();
             pp.setDescription(ampPhyPerf.getDescription());
@@ -1510,14 +1530,13 @@ public class ActivityUtil {
             Collections.sort(list, FundingValidator.dateComp);
           }
           components.setExpenditures(list);
-          col.add(components);
+          componentsCollection.add(components);
         }
       }
 
     }
     catch (Exception e) {
       logger.debug("Exception in getAmpComponents() " + e.getMessage());
-      e.printStackTrace(System.out);
     }
     finally {
       if (session != null) {
@@ -1529,7 +1548,7 @@ public class ActivityUtil {
         }
       }
     }
-    return col;
+    return componentsCollection;
   }
 
   /*
@@ -1537,7 +1556,7 @@ public class ActivityUtil {
    */
   // this function is to get the fundings for the components along with the activity Id
 
-  public static Collection getFundingComponentActivity(Long id, Long actId) {
+  public static Collection<AmpComponentFunding> getFundingComponentActivity(Long id, Long actId) {
     Collection col = null;
     logger.info(" inside getting the funding.....");
     Session session = null;
@@ -1550,13 +1569,6 @@ public class ActivityUtil {
           "'";
       Query qry = session.createQuery(qryStr);
       col = qry.list();
-      //Iterator itr = qry.list().iterator();
-      /*  if (itr.hasNext()) {
-         AmpComponentFunding ampf =
-
-        }*/
-
-
     }
     catch (Exception e) {
       logger.debug("Exception in getAmpComponents() " + e.getMessage());
@@ -1575,12 +1587,46 @@ public class ActivityUtil {
     //getComponents();
     return col;
   }
+  
+  /*
+   * This function gets AmpComponentFunding of an Activity.
+   * 
+   * @param activityId Activity id
+   */
+  public static Collection<AmpComponentFunding> getFundingComponentActivity(Long activityId) {
+    Collection col = null;
+    logger.info(" inside getting the funding.....");
+    Session session = null;
+
+    try {
+      session = PersistenceManager.getSession();
+      String qryStr = "select a from " + AmpComponentFunding.class.getName() +
+          " a where activity_id = '" + activityId + "'";
+      Query qry = session.createQuery(qryStr);
+      col = qry.list();
+    }
+    catch (Exception e) {
+      logger.debug("Exception in getAmpComponents() " + e.getMessage());
+    }
+    finally {
+      if (session != null) {
+        try {
+          PersistenceManager.releaseSession(session);
+        }
+        catch (Exception ex) {
+          logger.debug("Exception while releasing session " + ex.getMessage());
+        }
+      }
+    }
+    //getComponents();
+    return col;
+  }  
 
   // function for getting fundings for components and ids ends here
 
   //function for physical progress
 
-  public static Collection getPhysicalProgressComponentActivity(Long id,
+  public static Collection<AmpPhysicalPerformance> getPhysicalProgressComponentActivity(Long id,
       Long actId) {
     Collection col = null;
     logger.info(" inside getting the Physical Progress.....");

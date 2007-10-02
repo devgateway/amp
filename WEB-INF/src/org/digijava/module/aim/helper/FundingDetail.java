@@ -25,6 +25,7 @@ public class FundingDetail implements Serializable
 	private String classification;
 	private boolean useFixedRate;
 	private Double fixedExchangeRate;
+	private Long ampComponentFundingId;
 	
 	/*
 	private Long regionId;
@@ -228,5 +229,13 @@ public class FundingDetail implements Serializable
 
 	public void setPerspectiveNameTrimmed(String perspectiveNameTrimmed) {
 		this.perspectiveNameTrimmed = perspectiveNameTrimmed;
+	}
+
+	public Long getAmpComponentFundingId() {
+		return ampComponentFundingId;
+	}
+
+	public void setAmpComponentFundingId(Long ampComponentFundingId) {
+		this.ampComponentFundingId = ampComponentFundingId;
 	}
 } 

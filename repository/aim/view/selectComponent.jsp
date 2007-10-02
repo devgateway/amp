@@ -118,7 +118,9 @@
 																 String field2 = tNameBase + "2";
 																 String field3 = tNameBase + "3";
 																 String field4 = tNameBase + "4";
-															 	 String field5 = tNameBase + "5"; %>
+															 	 String field5 = tNameBase + "5"; 
+															 	 String field6 = tNameBase + "6"; 															 	 
+															 %>
 													 		<div id="<%=divName%>">
 																<select name="<%=field1%>" class="inp-text">
 																	<c:if test="${comm.adjustmentType == 1}">
@@ -162,6 +164,7 @@
 																		</c:forEach>
 																	</select>&nbsp;
 																</logic:equal>
+																<input type="hidden" name="<%=field6%>" value="${comm.ampComponentFundingId}">
 																<input type='button' value='Delete' class='inp-text'onclick="removeCommitment('<%=divName%>')">
 															</div>
 														</c:forEach>
@@ -198,7 +201,9 @@
 												 String field2 = tNameBase + "2";
 												 String field3 = tNameBase + "3";
 												 String field4 = tNameBase + "4";
-												 String field5 = tNameBase + "5"; %>
+												 String field5 = tNameBase + "5";
+												 String field6 = tNameBase + "6";
+												%>
 												 <div id="<%=divName%>">
 												<select name="<%=field1%>" class="inp-text">
 													<c:if test="${comm.adjustmentType == 1}">
@@ -242,6 +247,7 @@
 														</c:forEach>
 													</select>&nbsp;
 												</logic:equal>
+												<input type="hidden" name="<%=field6%>" value="${comm.ampComponentFundingId}">
 												<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text'
 												onclick="removeDisbursement('<%=divName%>')"></div>
 											</c:forEach>
@@ -282,7 +288,9 @@
 												 String field2 = tNameBase + "2";
 												 String field3 = tNameBase + "3";
 												 String field4 = tNameBase + "4";
-												 String field5 = tNameBase + "5"; %>
+												 String field5 = tNameBase + "5"; 
+												 String field6 = tNameBase + "6";
+												%>
 												 <div id="<%=divName%>">
 												<select name="<%=field1%>" class="inp-text">
 													<c:if test="${comm.adjustmentType == 1}">
@@ -325,6 +333,7 @@
 														</c:forEach>
 													</select>&nbsp;
 												</logic:equal>
+												<input type="hidden" name="<%=field6%>" value="${comm.ampComponentFundingId}">
 												<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text'
 												onclick="removeExpenditure('<%=divName%>')"></div>
 											</c:forEach>
@@ -418,6 +427,7 @@ function addCommitments()
 		} %>
 	s += "</select>&nbsp;";
 	</logic:equal>
+	s += "<input type='hidden' name='comm_" + numComm + "_6' value=''>";
     <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
 	s += '<input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeCommitment("'+ divname + '")><br>';
 
@@ -482,6 +492,7 @@ function addDisbursement()
 		} %>
 	s += "</select>&nbsp;";
 	</logic:equal>
+	s += "<input type='hidden' name='disb_" + numDisb + "_6' value=''>";
 	<c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
 	s += '<input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeDisbursement("'+ divname + '")><br>';
 
@@ -546,6 +557,7 @@ function addExpenditure()
 		} %>
 	s += "</select>&nbsp;";
 	</logic:equal>
+	s += "<input type='hidden' name='expn_" + numExpn + "_6' value=''>";
 	<c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
 	s += '<input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeExpenditure("'+ divname + '")><br>';
 

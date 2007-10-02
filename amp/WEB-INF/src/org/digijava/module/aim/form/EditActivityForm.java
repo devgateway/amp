@@ -338,7 +338,7 @@ private int isPreview=0;
 	private String currencyCode;
 	private String componentRepDate;
 	private Long componentId;
-	private Collection selectedComponents;
+	private Collection<Components<FundingDetail>> selectedComponents;
 	private Long[] selComp;
 
 	private String author;
@@ -2041,13 +2041,13 @@ private int isPreview=0;
 	/**
 	 * @return Returns the selectedComponents.
 	 */
-	public Collection getSelectedComponents() {
+	public Collection<Components<FundingDetail>> getSelectedComponents() {
 		return selectedComponents;
 	}
 	/**
 	 * @param selectedComponents The selectedComponents to set.
 	 */
-	public void setSelectedComponents(Collection selectedComponents) {
+	public void setSelectedComponents(Collection<Components<FundingDetail>> selectedComponents) {
 		this.selectedComponents = selectedComponents;
 	}
 	/**

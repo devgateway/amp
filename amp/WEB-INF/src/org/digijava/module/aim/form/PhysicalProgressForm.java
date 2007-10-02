@@ -29,7 +29,7 @@ public class PhysicalProgressForm extends ActionForm
 	private String compTitle;
 	
 	private Components component;
-	private Collection components;
+	private Collection<Components> components;
 	private ArrayList issues;
 	
 	
@@ -247,13 +247,13 @@ public class PhysicalProgressForm extends ActionForm
     /**
      * @return Returns the components.
      */
-    public Collection getComponents() {
+    public Collection<Components> getComponents() {
         return components;
     }
     /**
      * @param components The components to set.
      */
-    public void setComponents(Collection components) {
+    public void setComponents(Collection<Components> components) {
         this.components = components;
     }
     /**

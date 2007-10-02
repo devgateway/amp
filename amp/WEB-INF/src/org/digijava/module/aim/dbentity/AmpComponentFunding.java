@@ -7,7 +7,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.util.Date;
 
-public class AmpComponentFunding {
+public class AmpComponentFunding{
 	
 	private Long ampComponentFundingId;
 	private AmpActivity activity;
@@ -164,6 +164,23 @@ public class AmpComponentFunding {
 	 */
 	public void setTransactionType(Integer transactionType) {
 		this.transactionType = transactionType;
+	}
+
+	@Override
+	public int hashCode() {
+		if (this.ampComponentFundingId == null)
+			return 0;
+		return ampComponentFundingId.intValue();
+	}
+	
+	public boolean equals(Object obj) {
+		if (obj == null) throw new NullPointerException();
+		if (!(obj instanceof AmpComponentFunding)) throw new ClassCastException();
+		if(this.ampComponentFundingId==null) return false;
+		
+		AmpComponentFunding comp = (AmpComponentFunding) obj;
+		return this.ampComponentFundingId.equals(comp.ampComponentFundingId);
+		
 	}
 	
 }

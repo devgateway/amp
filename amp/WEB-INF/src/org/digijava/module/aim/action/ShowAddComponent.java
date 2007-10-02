@@ -196,6 +196,11 @@ public class ShowAddComponent extends Action {
 											fd.setPerspectiveName( pers.getName() );
 										}
 									}
+									break;
+								case 6:
+									if(!"".equals(val)){
+										fd.setAmpComponentFundingId(Long.valueOf(val));
+									}									
 							}
 							comm.put( new Integer(index),fd );
 						}
@@ -255,6 +260,11 @@ public class ShowAddComponent extends Action {
 										{
 											fd.setPerspectiveName( pers.getName() );
 										}
+									}
+									break;
+								case 6:
+									if(!"".equals(val)){
+										fd.setAmpComponentFundingId(Long.valueOf(val));
 									}
 							}
 							disb.put( new Integer( index ),fd );					
@@ -316,6 +326,11 @@ public class ShowAddComponent extends Action {
 											fd.setPerspectiveName( pers.getName() );
 										}
 									}
+									break;
+								case 6:
+									if(!"".equals(val)){
+										fd.setAmpComponentFundingId(Long.valueOf(val));
+									}									
 							}
 							exp.put( new Integer( index ), fd );					
 						}					

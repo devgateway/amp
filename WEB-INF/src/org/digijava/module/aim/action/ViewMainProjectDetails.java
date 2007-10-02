@@ -63,9 +63,9 @@ public class ViewMainProjectDetails extends TilesAction {
 				formBean.setResults("");
 			else
 				formBean.setResults(ampActivity.getResults());
-			
-			formBean.setFlag(COverSubString.getCOverSubStringLength(ampActivity
-					.getDescription(), 'D'));
+			if (ampActivity.getDescription() != null)
+				formBean.setFlag(COverSubString.getCOverSubStringLength(ampActivity
+						.getDescription(), 'D'));
 			formBean.setName(ampActivity.getName());
 			formBean.setAmpId(ampActivity.getAmpId());
 			if (tabIndex == 0)

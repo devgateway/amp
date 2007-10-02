@@ -635,7 +635,8 @@ public class EditActivity
 
           eaForm.setProposedCompDate(DateConversion.ConvertDateToString(
               activity.getProposedCompletionDate()));
-          eaForm.setContractors(activity.getContractors().trim());
+          if (activity.getContractors() != null)
+        	  eaForm.setContractors(activity.getContractors().trim());
 
           Collection col = activity.getClosingDates();
           List dates = new ArrayList();
@@ -873,7 +874,8 @@ public class EditActivity
                 .setProgram(activity.getThemeId()
                             .getAmpThemeId());
           }
-          eaForm.setProgramDescription(activity
+          if (activity.getProgramDescription() != null)
+        	  eaForm.setProgramDescription(activity
                                        .getProgramDescription().trim());
 
           double totComm = 0;
@@ -1495,8 +1497,8 @@ public class EditActivity
                 getMemberId());
             activity.setActivityCreator(teamMember);
           }
-
-          eaForm.setConditions(activity.getCondition().trim());
+          if (activity.getCondition() != null)
+        	  eaForm.setConditions(activity.getCondition().trim());
 
           if (activity.getActivityCreator() != null) {
             User usr = activity.getActivityCreator().getUser();

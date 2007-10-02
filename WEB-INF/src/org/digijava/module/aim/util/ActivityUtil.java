@@ -1063,7 +1063,8 @@ public class ActivityUtil {
 
 
 //				activity.setStatus(ampAct.getStatus().getName()); // TO BE DELETED
-        activity.setStatusReason(ampAct.getStatusReason().trim());
+        if (ampAct.getStatusReason() != null)
+        	activity.setStatusReason(ampAct.getStatusReason().trim());
         activity.setBudget(ampAct.getBudget());
 
         activity.setObjective(ampAct.getObjective());

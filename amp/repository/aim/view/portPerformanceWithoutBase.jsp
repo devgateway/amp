@@ -22,7 +22,7 @@
 	Integer pg = (Integer) session.getAttribute("page");
 	
 	String actPerfChartFileName = ChartGenerator.getPortfolioPerformanceChartFileName(
-						 actId,indId,pg,session,new PrintWriter(out),600,450,"",false);
+						 actId,indId,pg,session,new PrintWriter(out),600,450,"",false,request);
 
 	String actPerfChartUrl = actPerfChartUrl = request.getContextPath() + "/aim/DisplayChart.img?filename=" + actPerfChartFileName;
 

@@ -455,13 +455,23 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 			}
 	  }
       
+      Collection<AmpPhysicalPerformance> phyProgress = DbUtil.getAmpPhysicalProgress(activityId);
+      
       if (ampTempComp.getPhyProgress() != null) {
 			Iterator compItr = ampTempComp.getPhyProgress().iterator();
 			while (compItr.hasNext()) {
 				AmpPhysicalPerformance ampPhyPerf = (AmpPhysicalPerformance) compItr.next();
 				session.saveOrUpdate(ampPhyPerf);
+				phyProgress.remove(ampPhyPerf);
 			}
       }
+      
+      if (phyProgress != null) {
+			Iterator<AmpPhysicalPerformance> phyProgressColIt = phyProgress.iterator();
+			while (phyProgressColIt.hasNext()) {
+				session.delete(phyProgressColIt.next());
+			}
+	  }
       
 
       /* Persists the activity */
@@ -1497,11 +1507,11 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
               components.getExpenditures().add(fd);
             }
           }
-          Collection<AmpPhysicalPerformance> physicalProgressComponents = ActivityUtil.getPhysicalProgressComponentActivity(
-              ampComp.getAmpComponentId(), activity.getAmpActivityId());
-          Iterator<AmpPhysicalPerformance> physicalProgressIterator = physicalProgressComponents.iterator();
-          while (physicalProgressIterator.hasNext()) {
-            AmpPhysicalPerformance ampPhyPerf = (AmpPhysicalPerformance) physicalProgressIterator.
+          Collection<AmpPhysicalPerformance> physicalPerf = ActivityUtil.getPhysicalProgressComponentActivity(
+        		  											ampComp.getAmpComponentId(), activity.getAmpActivityId());
+          Iterator<AmpPhysicalPerformance> physicalPerfIterator = physicalPerf.iterator();
+          while (physicalPerfIterator.hasNext()) {
+            AmpPhysicalPerformance ampPhyPerf = (AmpPhysicalPerformance) physicalPerfIterator.
                 next();
             PhysicalProgress pp = new PhysicalProgress();
             pp.setDescription(ampPhyPerf.getDescription());

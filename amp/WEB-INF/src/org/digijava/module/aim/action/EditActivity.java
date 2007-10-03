@@ -1512,7 +1512,7 @@ public class EditActivity
  */
 	private void getComponents(AmpActivity activity, EditActivityForm eaForm) {
 		Collection componets = activity.getComponents();
-		List<Components<FundingDetail>> comp = new ArrayList<Components<FundingDetail>>();
+		List<Components<FundingDetail>> selectedComponents = new ArrayList<Components<FundingDetail>>();
 		Iterator compItr = componets.iterator();
 		while (compItr.hasNext()) {
 			AmpComponent temp = (AmpComponent) compItr.next();
@@ -1572,12 +1572,12 @@ public class EditActivity
 				}
 			}
 
-			//Collection phyProgess = temp.getPhysicalProgress();
-			Collection phyProgess = ComponentsUtil
-					.getComponentPhysicalProgress(tempComp.getComponentId());
-			if (phyProgess != null && phyProgess.size() > 0) {
+          Collection<AmpPhysicalPerformance> phyProgress = ActivityUtil
+						.getPhysicalProgressComponentActivity(tempComp.getComponentId(), activity.getAmpActivityId());
+          
+			if (phyProgress != null && phyProgress.size() > 0) {
 				Collection physicalProgress = new ArrayList();
-				Iterator phyProgItr = phyProgess.iterator();
+				Iterator phyProgItr = phyProgress.iterator();
 				while (phyProgItr.hasNext()) {
 					AmpPhysicalPerformance phyPerf = (AmpPhysicalPerformance) phyProgItr
 							.next();
@@ -1591,12 +1591,13 @@ public class EditActivity
 				}
 				tempComp.setPhyProgress(physicalProgress);
 			}
-			comp.add(tempComp);
+			
+			selectedComponents.add(tempComp);
 		}
 
 		
 		// Sort the funding details based on Transaction date.
-		Iterator compIterator = comp.iterator();
+		Iterator compIterator = selectedComponents.iterator();
 		int index = 0;
 		while (compIterator.hasNext()) {
 			Components components = (Components) compIterator.next();
@@ -1618,9 +1619,9 @@ public class EditActivity
 				Collections.sort(list, FundingValidator.dateComp);
 			}
 			components.setExpenditures(list);
-			comp.set(index++, components);
+			selectedComponents.set(index++, components);
 		}
 
-		eaForm.setSelectedComponents(comp);
+		eaForm.setSelectedComponents(selectedComponents);
 	}
 }

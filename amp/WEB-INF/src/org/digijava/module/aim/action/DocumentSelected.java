@@ -78,6 +78,11 @@ public class DocumentSelected extends Action {
 			cmsItem.setDescription(eaForm.getDocDescription());
 		}
 		
+		if (eaForm.getDocComment() != null && eaForm.getDocComment().trim().length() != 0) 
+			cmsItem.setDocComment( eaForm.getDocComment() );
+		else
+			cmsItem.setDocComment("");
+		
 		if (eaForm.getDocDate() == null ||
 				eaForm.getDocDate().trim().length() == 0) {
 			cmsItem.setDate(" ");
@@ -91,6 +96,12 @@ public class DocumentSelected extends Action {
 		else {
 			cmsItem.setDocType( CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getDocType()) );
 		}
+		
+		if ( eaForm.getDocLang() == null ) {
+			cmsItem.setDocLanguage( null );
+		}
+		else
+			cmsItem.setDocLanguage( CategoryManagerUtil.getAmpCategoryValueFromDb( eaForm.getDocLang() ) );
 
 		if (eaForm.getDocFileOrLink().equals("file")) {
 			cmsItem.setIsFile(true);

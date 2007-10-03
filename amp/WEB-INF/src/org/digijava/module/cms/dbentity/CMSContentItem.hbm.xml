@@ -21,12 +21,13 @@
 		<property name="submissionDate" column="SUBMISSION_DATE" type="java.util.Date" />
 		<property name="published" column="PUBLISHED" type="boolean" />
 		<property name="rejected" column="REJECTED" type="boolean" />
-
+		<property name="docComment" column="COMMENTS" type="org.digijava.kernel.db.SafeClobType"/>
 
 		<many-to-one name="language" column="LANGUAGE" class="org.digijava.kernel.entity.Locale" cascade="none"/>
 		<many-to-one name="country" column="COUNTRY" class="org.digijava.kernel.dbentity.Country" cascade="none"/>
 		<many-to-one name="authorUser" column="AUTHOR_USER" class="org.digijava.kernel.user.User" cascade="none"/>
 		<many-to-one name="docType" column="DOCUMENT_TYPE" class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none" />
+		<many-to-one name="docLanguage" column="DOCUMENT_LANGUAGE" class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none" />
 
         <set name="categories" table="DG_CMS_ITEM_CATEGORY_MAP" cascade="none">
           	<key column="ID"/>

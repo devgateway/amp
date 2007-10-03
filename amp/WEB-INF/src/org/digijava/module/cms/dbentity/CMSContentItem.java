@@ -32,6 +32,7 @@ public class CMSContentItem implements Serializable
   private long id;
   private String title;
   private String description;
+  private String docComment;
   private String url;
   private String fileName;
   private String date;
@@ -48,6 +49,8 @@ public class CMSContentItem implements Serializable
   private boolean rejected;
   
   private AmpCategoryValue docType;
+  
+  private AmpCategoryValue docLanguage;
 
   	public AmpCategoryValue getDocType() {
   		return docType;
@@ -190,13 +193,27 @@ public class CMSContentItem implements Serializable
   public void setRejected(boolean rejected) {
     this.rejected = rejected;
   }
-public String getDate() {
-	return date;
-}
-public void setDate(String date) {
-	this.date = date;
-}
-public void setFile(boolean isFile) {
-	this.isFile = isFile;
-}
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) {
+		this.date = date;
+	}
+	public void setFile(boolean isFile) {
+		this.isFile = isFile;
+	}
+	public String getDocComment() {
+		return docComment;
+	}
+	public void setDocComment(String docComment) {
+		this.docComment = docComment;
+	}
+	public AmpCategoryValue getDocLanguage() {
+		return docLanguage;
+	}
+	public void setDocLanguage(AmpCategoryValue docLanguage) {
+		this.docLanguage = docLanguage;
+	}
+	
+	
 }

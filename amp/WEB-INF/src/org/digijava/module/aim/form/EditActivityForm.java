@@ -325,6 +325,8 @@ private int isPreview=0;
 	private boolean editAct;
 	private boolean firstSubmit;
 	private Long docType;
+	private Long docLang;
+	private String docComment;
 
 	// FOR ADD COMPONENTS
 	private Collection allComps;
@@ -616,6 +618,7 @@ private int isPreview=0;
 			costs=null;
 			logframeCategory=null;
 			docType=null;
+			docLang=null;
 			documents=null;
 			contractingDate = null;
 			disbursementsDate = null;
@@ -677,6 +680,7 @@ private int isPreview=0;
 			docTitle = null;
 			docDescription = null;
 			showInHomePage = false;
+			docComment		= null;
 		}
 		if (componentReset) {
 			componentTitle = null;
@@ -3848,6 +3852,14 @@ public String getPurpose() {
 		this.docType = docType;
 	}
 
+	public Long getDocLang() {
+		return docLang;
+	}
+
+	public void setDocLang(Long docLang) {
+		this.docLang = docLang;
+	}
+
 	public Collection getDocuments() {
 		return documents;
 	}
@@ -4266,6 +4278,16 @@ public String getPurpose() {
 	public void setNumProjections(int numProjections) {
 		this.numProjections = numProjections;
 	}
+
+	public String getDocComment() {
+		return docComment;
+	}
+
+	public void setDocComment(String docComment) {
+		this.docComment = docComment;
+	}
+	
+	
 
 
 }

@@ -621,7 +621,13 @@ public class DbUtil {
                     document.setUrl(cmsItem.getUrl());
                     document.setDocDescription(cmsItem.getDescription());
                     document.setDate(cmsItem.getDate());
-                    document.setDocType(cmsItem.getDocType().getValue());
+                    if (cmsItem.getDocType() != null)
+                    	document.setDocType(cmsItem.getDocType().getValue());
+                    
+                    if (cmsItem.getDocLanguage() != null)
+                    	document.setDocLanguage( cmsItem.getDocLanguage().getValue() );
+                    document.setDocComment( cmsItem.getDocComment() );
+                    
                     logger.debug("Doc Desc :" + document.getDocDescription());
                     docs.add(document);
                 }

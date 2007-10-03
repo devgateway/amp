@@ -1214,7 +1214,8 @@ public class EditActivity
               Iterator tmpItr = memLinks.iterator();
               while (tmpItr.hasNext()) {
                 Documents doc = (Documents) tmpItr.next();
-                doc.setDocType(cmsItem.getDocType().getValue());
+                if ( cmsItem.getDocType() != null)
+                		doc.setDocType(cmsItem.getDocType().getValue());
                 if (doc.getDocId().longValue() == cmsItem
                     .getId()) {
                   rl.setShowInHomePage(true);

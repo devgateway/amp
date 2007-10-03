@@ -57,6 +57,13 @@
 															<b>Desc:</b><bean:write name="selDocuments" property="description" />
 														</logic:notEmpty>
 														</field:display>
+														<field:display name="Document Comment" feature="Related Documents">
+															<logic:notEmpty name="selDocuments" property="docComment">
+															<br />
+															<b><digi:trn key="aim:addActivity:relatedDocuments:comments">Comments</digi:trn>:</b>
+															<bean:write name="selDocuments" property="docComment" />
+															</logic:notEmpty>
+														</field:display>
 														<field:display name="Document Date" feature="Related Documents">
 														<logic:notEmpty name="selDocuments" property="date">
 															<br />
@@ -68,6 +75,13 @@
 															<bean:define name="selDocuments" property="docType" id="docTypeBean" />
 															<br />
 															<b>Doc type:</b><bean:write name="docTypeBean" property="value" />
+														</logic:notEmpty>
+														</field:display>
+														<field:display name="Document Language" feature="Related Documents">
+														<logic:notEmpty name="selDocuments" property="docLanguage">
+															<bean:define name="selDocuments" property="docLanguage" id="docLangBean" />
+															<br />
+															<b><digi:trn key="aim:addActivity:relatedDocuments:doclang">Doc lang</digi:trn>:</b><bean:write name="docLangBean" property="value" />
 														</logic:notEmpty>
 														</field:display>
 													</td>

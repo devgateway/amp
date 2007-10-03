@@ -18,7 +18,7 @@
 
 <%
 	String actRiskChartFileName = ChartGenerator.getPortfolioRiskChartFileName(
-						 session,new PrintWriter(out),600,400,"");
+						 session,new PrintWriter(out),600,400,"",request);
 
 	String actRiskChartUrl = request.getContextPath() + "/aim/DisplayChart.img?filename=" + actRiskChartFileName;
 

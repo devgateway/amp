@@ -151,4 +151,21 @@ public class AmpPhysicalPerformance implements Serializable
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
+	
+	@Override
+	public int hashCode() {
+		if (this.ampPpId == null)
+			return 0;
+		return ampPpId.intValue();
+	}
+	
+	public boolean equals(Object obj) {
+		if (obj == null) throw new NullPointerException();
+		if (!(obj instanceof AmpPhysicalPerformance)) throw new ClassCastException();
+		if(this.ampPpId==null) return false;
+		
+		AmpPhysicalPerformance ampPhysicalPerformance = (AmpPhysicalPerformance) obj;
+		return this.ampPpId.equals(ampPhysicalPerformance.ampPpId);
+		
+	}	
 }	

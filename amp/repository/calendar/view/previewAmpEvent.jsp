@@ -122,13 +122,16 @@
                         <c:if test="${calendarEventForm.privateEvent}"><b>Yes</b></c:if>
                         <c:if test="${!calendarEventForm.privateEvent}"><b>No</b></c:if>
                     </td>
-                </tr>
-                <tr>
+                </tr>                
+                    <digi:secure actions="ADMIN, TRANSLATE">
+                    <tr>
                     <td>&nbsp;</td>
-                    <td>
+                     <td>
                         <input type="submit" value="Save">&nbsp;<input type="submit" value="Edit" onclick="document.getElementById('method').value = 'edit'">
                     </td>
                 </tr>
+                    </digi:secure>
+                   
             </table>
             </digi:form>
         </td>

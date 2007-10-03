@@ -13,7 +13,6 @@
 
 </script>
 
-
 <digi:instance property="aimEditActivityForm" />
 										<table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">
 											<tr>
@@ -48,6 +47,13 @@
 															<td align="left" width="367">
 																<c:out value="${selectedOrganizations.name}"/>
 															</td>
+															
+															<td align="left" width="130">
+																<html:text name="selectedOrganizations"
+																property="projectId" indexed="true"
+																styleClass="inp-text" size="15"/>
+															</td>
+															
 															
 														</td></tr>
 													</c:forEach>

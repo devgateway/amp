@@ -35,6 +35,8 @@ import org.digijava.module.aim.helper.ParisIndicator7Jrxml;
 import org.digijava.module.aim.helper.ParisIndicator9Jrxml;
 import org.digijava.module.aim.helper.ParisIndicator10aJrxml;
 import org.digijava.module.aim.helper.ParisIndicatorDataSource;
+import org.digijava.module.aim.helper.ParisIndicator5aSubJrxml;
+import org.digijava.module.aim.helper.ParisIndicator5bSubJrxml;
 
 
 /*
@@ -672,25 +674,16 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 			// xls
 			else if (type.equals("xls")) {
 
-				jasperFile = s
-						.getServletContext()
-						.getRealPath(
-								"/WEB-INF/classes/org/digijava/module/aim/reports/indicator9pdf.jasper");
+				jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator9pdf.jasper");
 
 				Map parameters = new HashMap();
-				JasperPrint jasperPrint = JasperFillManager.fillReport(
-						jasperFile, parameters, dataSource);
-				String destFile = null;
-				// s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator3pdf.xls");
+				JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile, parameters, dataSource);
+
 				ServletOutputStream outputStream = null;
 				response.setContentType("application/vnd.ms-excel");
 
-				response.setHeader("Content-Disposition",
-						"inline; filename=ParisIndicator9.xls");
-				destFile = s
-						.getServletContext()
-						.getRealPath(
-								"/WEB-INF/classes/org/digijava/module/aim/reports/indicator9pdf.xls");
+				response.setHeader("Content-Disposition","inline; filename=ParisIndicator9.xls");
+				String destFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator9pdf.xls");
 				try {
 					outputStream = response.getOutputStream();
 					JRXlsExporter exporter = new JRXlsExporter();
@@ -716,96 +709,80 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 
 		if (pId.equals("5a")) {
 			//logger.info("in the 5th report");
-			String jasperFile = null;
-			ParisIndicatorDataSource dataSource = new ParisIndicatorDataSource(
-					data2);
-			ActionServlet s = getServlet();
-			String jarFile = s.getServletContext().getRealPath(
-					"/WEB-INF/lib/jasperreports-0.6.1.jar");
-			System.setProperty("jasper.reports.compile.class.path", jarFile);
+            String jasperFile = null;
+            String subJasperFile = null;
+            ParisIndicatorDataSource dataSource = new ParisIndicatorDataSource(	data2);
+            ActionServlet s = getServlet();
+            String jarFile = s.getServletContext().getRealPath("/WEB-INF/lib/jasperreports-0.6.1.jar");
+            System.setProperty("jasper.reports.compile.class.path", jarFile);
 
-			//logger.info("coming Into the 5a report!!!!");
-			String realPathJrxml = s
-					.getServletContext()
-					.getRealPath(
-							"/WEB-INF/classes/org/digijava/module/aim/reports/indicator5apdf.jrxml");
-			ParisIndicator5aJrxml jrxml = new ParisIndicator5aJrxml();
-			//logger.info(" the type is .... "+ type);
-			jrxml.createJrxml(realPathJrxml, colCnt1, rowCnt1, type);
-			//logger.info("got back here");
-			JasperCompileManager.compileReportToFile(realPathJrxml);
-			//logger.info("is it here??");
+            //logger.info("coming Into the 5a report!!!!");
+            String realPathJrxml = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5apdf.jrxml");
+            String realPathSubJrxml = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5apdf_subreport0.jrxml");
+
+            ParisIndicator5aJrxml jrxml = new ParisIndicator5aJrxml();
+            ParisIndicator5aSubJrxml subJrxml = new ParisIndicator5aSubJrxml();
+
+            //logger.info(" the type is .... "+ type);
+            subJrxml.createJrxml(realPathSubJrxml,formBean.getDonorsCollIndc5());
+            jrxml.createJrxml(realPathJrxml, colCnt1, rowCnt1, type);
+            //logger.info("got back here");
+
+            JasperCompileManager.compileReportToFile(realPathSubJrxml);
+            JasperCompileManager.compileReportToFile(realPathJrxml);
+
+            //logger.info("is it here??");
 			byte[] bytes = null;
 			if (type.equals("pdf")) {
 				try {
-
-					jasperFile = s
-							.getServletContext()
-							.getRealPath(
-									"/WEB-INF/classes/org/digijava/module/aim/reports/indicator5apdf.jasper");
+					jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5apdf.jasper");
+                    subJasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5apdf_subreport0.jasper");
 					Map parameters = new HashMap();
-					//System.out.println(jasperFile);
-					//System.out.println(parameters);
-					bytes = JasperRunManager.runReportToPdf(jasperFile,
-							parameters, dataSource);
+
+                    parameters.put("SUBREPORT_DIR",subJasperFile);
+					bytes = JasperRunManager.runReportToPdf(jasperFile,parameters, dataSource);
 				} catch (JRException e) {
-					System.out
-							.println("Exception from MultilateralDonorDatasource = "
-									+ e);
+                    throw new RuntimeException(e);
 				}
 				if (bytes != null && bytes.length > 0) {
-					ServletOutputStream ouputStream = response
-							.getOutputStream();
-					//System.out.println("Generating PDF");
+					ServletOutputStream ouputStream = response.getOutputStream();
+
 					response.setContentType("application/pdf");
-					response.setHeader("Content-Disposition",
-							"inline; filename=ParisIndicator5a.pdf");
+					response.setHeader("Content-Disposition","inline; filename=ParisIndicator5a.pdf");
 
 					response.setContentLength(bytes.length);
 					ouputStream.write(bytes, 0, bytes.length);
 					ouputStream.flush();
 					ouputStream.close();
 				} else {
-					//System.out.println("Nothing to display");
+
 				}
 			}
 			// xls
 			else if (type.equals("xls")) {
 
-				jasperFile = s
-						.getServletContext()
-						.getRealPath(
-								"/WEB-INF/classes/org/digijava/module/aim/reports/indicator5apdf.jasper");
+				jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5apdf.jasper");
 
-				Map parameters = new HashMap();
-				JasperPrint jasperPrint = JasperFillManager.fillReport(
-						jasperFile, parameters, dataSource);
-				String destFile = null;
-				// s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator3pdf.xls");
+                Map parameters = new HashMap();
+				JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile, parameters, dataSource);
+
 				ServletOutputStream outputStream = null;
 				response.setContentType("application/vnd.ms-excel");
 
-				response.setHeader("Content-Disposition",
-						"inline; filename=ParisIndicator5a.xls");
-				destFile = s
-						.getServletContext()
-						.getRealPath(
-								"/WEB-INF/classes/org/digijava/module/aim/reports/indicator5apdf.xls");
+				response.setHeader("Content-Disposition","inline; filename=ParisIndicator5a.xls");
+				String destFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5apdf.xls");
 				try {
 					outputStream = response.getOutputStream();
 					JRXlsExporter exporter = new JRXlsExporter();
-					exporter.setParameter(JRExporterParameter.JASPER_PRINT,
-							jasperPrint);
-					exporter.setParameter(JRExporterParameter.OUTPUT_STREAM,
-							outputStream);
-					exporter.setParameter(
-							JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
-							Boolean.FALSE);
+					exporter.setParameter(JRExporterParameter.JASPER_PRINT,	jasperPrint);
+					exporter.setParameter(JRExporterParameter.OUTPUT_STREAM,outputStream);
+					exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,	Boolean.FALSE);
 					exporter.exportReport();
 				} catch (JRException e) {
-					if (outputStream != null)
-						outputStream.close();
-					//System.out.println("Exception from PI5aXls = " + e);
+					if (outputStream != null){
+                        outputStream.close();
+                    }
+                    throw new RuntimeException(e);
 				}
 			}
 		}
@@ -817,45 +794,41 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 		if (pId.equals("5b")) {
 			//logger.info("in the 5th report");
 			String jasperFile = null;
-			ParisIndicatorDataSource dataSource = new ParisIndicatorDataSource(
-					data2);
+            String subJasperFile = null;
+
+			ParisIndicatorDataSource dataSource = new ParisIndicatorDataSource(data2);
 			ActionServlet s = getServlet();
-			String jarFile = s.getServletContext().getRealPath(
-					"/WEB-INF/lib/jasperreports-0.6.1.jar");
+			String jarFile = s.getServletContext().getRealPath("/WEB-INF/lib/jasperreports-0.6.1.jar");
 			System.setProperty("jasper.reports.compile.class.path", jarFile);
-			String realPathJrxml = s
-					.getServletContext()
-					.getRealPath(
-							"/WEB-INF/classes/org/digijava/module/aim/reports/indicator5bpdf.jrxml");
+			String realPathJrxml = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5bpdf.jrxml");
+            String realPathSubJrxml = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5bpdf_subreport0.jrxml");
+
+
 			ParisIndicator5bJrxml jrxml = new ParisIndicator5bJrxml();
-			jrxml.createJrxml(realPathJrxml, colCnt1, rowCnt1, type);
-			JasperCompileManager.compileReportToFile(realPathJrxml);
+            ParisIndicator5bSubJrxml subJrxml=new ParisIndicator5bSubJrxml();
+
+            subJrxml.createJrxml(realPathSubJrxml, formBean.getDonorsCollIndc5());
+            jrxml.createJrxml(realPathJrxml, colCnt1, rowCnt1, type);
+
+            JasperCompileManager.compileReportToFile(realPathSubJrxml);
+            JasperCompileManager.compileReportToFile(realPathJrxml);
 			byte[] bytes = null;
 			if (type.equals("pdf")) {
 				try {
 
-					jasperFile = s
-							.getServletContext()
-							.getRealPath(
-									"/WEB-INF/classes/org/digijava/module/aim/reports/indicator5bpdf.jasper");
+					jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5bpdf.jasper");
+					subJasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5bpdf_subreport0.jasper");
+                    Map parameters = new HashMap();
 
-					Map parameters = new HashMap();
-					//System.out.println(jasperFile);
-					//System.out.println(parameters);
-					bytes = JasperRunManager.runReportToPdf(jasperFile,
-							parameters, dataSource);
+                    parameters.put("SUBREPORT_DIR",subJasperFile);
+					bytes = JasperRunManager.runReportToPdf(jasperFile,	parameters, dataSource);
 				} catch (JRException e) {
-					System.out
-							.println("Exception from MultilateralDonorDatasource = "
-									+ e);
+					throw new RuntimeException(e);
 				}
 				if (bytes != null && bytes.length > 0) {
-					ServletOutputStream ouputStream = response
-							.getOutputStream();
-					//System.out.println("Generating PDF");
+					ServletOutputStream ouputStream = response.getOutputStream();
 					response.setContentType("application/pdf");
-					response.setHeader("Content-Disposition",
-							"inline; filename=ParisIndicator5b.pdf");
+					response.setHeader("Content-Disposition","inline; filename=ParisIndicator5b.pdf");
 
 					response.setContentLength(bytes.length);
 					ouputStream.write(bytes, 0, bytes.length);
@@ -868,25 +841,17 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 			// xls
 			else if (type.equals("xls")) {
 
-				jasperFile = s
-						.getServletContext()
-						.getRealPath(
-								"/WEB-INF/classes/org/digijava/module/aim/reports/indicator5bpdf.jasper");
+				jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5bpdf.jasper");
 
 				Map parameters = new HashMap();
-				JasperPrint jasperPrint = JasperFillManager.fillReport(
-						jasperFile, parameters, dataSource);
+				JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile, parameters, dataSource);
 				String destFile = null;
 				// s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator3pdf.xls");
 				ServletOutputStream outputStream = null;
 				response.setContentType("application/vnd.ms-excel");
 
-				response.setHeader("Content-Disposition",
-						"inline; filename=ParisIndicator5b.xls");
-				destFile = s
-						.getServletContext()
-						.getRealPath(
-								"/WEB-INF/classes/org/digijava/module/aim/reports/indicator5bpdf.xls");
+				response.setHeader("Content-Disposition","inline; filename=ParisIndicator5b.xls");
+				destFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5bpdf.xls");
 
 				try {
 					outputStream = response.getOutputStream();

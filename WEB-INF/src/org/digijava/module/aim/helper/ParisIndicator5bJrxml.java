@@ -47,6 +47,11 @@ public class ParisIndicator5bJrxml
 				p2.println("<parameter name='nam' isForPrompting='false' class='java.lang.String'>");
 				p2.println("<defaultValueExpression ><![CDATA[\"zzzz\"]]></defaultValueExpression>");
 				p2.println("</parameter>");
+
+                p2.println("<parameter name=\"SUBREPORT_DIR\" isForPrompting=\"true\" class=\"java.lang.String\">");
+                p2.println("<defaultValueExpression ><![CDATA[\".\"]]></defaultValueExpression>");
+                p2.println("</parameter>");
+
 				p2.println("<queryString><![CDATA[$P!{qu}]]></queryString>");
 
 //							DYNAMIC CCCCCCCCC
@@ -655,7 +660,18 @@ public class ParisIndicator5bJrxml
 					p2.println("			</band>");
 					p2.println("		</pageFooter>");
 					p2.println("		<summary>");
-					p2.println("			<band height='0'  isSplitAllowed='true' >");
+					p2.println("			<band height='250'  isSplitAllowed='true' >");
+
+                    p2.println("<subreport  isUsingCache='true'>");
+                    p2.println("<reportElement");
+                    p2.println("x='185'");
+                    p2.println("y='25'");
+                    p2.println("width='356'");
+                    p2.println("height='185'");
+                    p2.println("key='subreport-1'/>");
+                    p2.println("<subreportExpression class='java.lang.String'><![CDATA[$P{SUBREPORT_DIR}]]></subreportExpression>");
+                    p2.println("</subreport>");
+
 					p2.println("			</band>");
 					p2.println("		</summary>");
 					p2.println("</jasperReport>");

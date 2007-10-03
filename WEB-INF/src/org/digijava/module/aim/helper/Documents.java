@@ -17,7 +17,10 @@ public class Documents {
 	private String activityName;
 	
 	private String docType;
-
+	
+	private String docComment;
+	
+	private String docLanguage;
 
 	public Documents() {}
 	
@@ -149,5 +152,22 @@ public class Documents {
 	public void setFile(boolean isFile) {
 		this.isFile = isFile;
 	}
+
+	public String getDocComment() {
+		return docComment;
+	}
+
+	public void setDocComment(String docComment) {
+		this.docComment = docComment;
+	}
+
+	public String getDocLanguage() {
+		return docLanguage;
+	}
+
+	public void setDocLanguage(String docLanguage) {
+		this.docLanguage = docLanguage;
+	}
+	
 	
 }

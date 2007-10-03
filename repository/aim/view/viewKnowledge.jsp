@@ -295,6 +295,15 @@ function preview(id)
 																</TD>
 															</TR>	
 															</c:if>
+															<field:display name="Document Comment" feature="Related Documents">
+															<logic:notEmpty name="document" property="docComment">
+																<TR bgcolor="#f4f4f2">
+																	<TD width="98%" align="left" colspan="2">
+																		&nbsp;&nbsp;&nbsp;<digi:trn key="aim:viewKnowledgeDocumentComments">Document comments</digi:trn>:&nbsp;<c:out value="${document.docComment}"/>
+																	</TD>
+																</TR>
+															</logic:notEmpty>
+															</field:display>
 															<logic:notEmpty name="document" property="date">
 																<TR bgcolor="#f4f4f2">
 																	<TD width="98%" align="left" colspan="2">
@@ -305,10 +314,19 @@ function preview(id)
 															<logic:notEmpty name="document" property="docType">
 																<TR bgcolor="#f4f4f2">
 																	<TD width="98%" align="left" colspan="2">
-																		&nbsp;&nbsp;&nbsp;&nbsp;Document type:&nbsp;<bean:write name="document" property="docType" />
+																		&nbsp;&nbsp;&nbsp;Document type:&nbsp;<bean:write name="document" property="docType" />
 																	</TD>
 																</TR>
 															</logic:notEmpty>
+															<field:display name="Document Language" feature="Related Documents">
+															<logic:notEmpty name="document" property="docLanguage">
+																<TR bgcolor="#f4f4f2">
+																	<TD width="98%" align="left" colspan="2">
+																		&nbsp;&nbsp;&nbsp;<digi:trn key="aim:viewKnowledgeDocumentLanguage">Document language</digi:trn>:&nbsp;<bean:write name="document" property="docLanguage" />
+																	</TD>
+																</TR>
+															</logic:notEmpty>
+															</field:display>
 															</c:if>
 															</logic:iterate>              
 														</TABLE>

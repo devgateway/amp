@@ -6,6 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
@@ -218,6 +221,20 @@
 											</a>
 										</td>
 									</tr>
+									<field:display name="Document Comment" feature="Related Documents">
+									<tr>
+										<td>
+											<a title="<digi:trn key="aim:CommentForDocument">Comments regarding the document</digi:trn>">
+											<digi:trn key="aim:comments">Comments</digi:trn>
+											</a>
+										</td>
+										<td>
+											<a title="<digi:trn key="aim:CommentForDocument">Comments regarding the document</digi:trn>">
+											<html:textarea property="docComment" rows="3" cols="50" styleClass="inp-text"/>
+											</a>
+										</td>
+									</tr>
+									</field:display>
 									<tr>
 										<td>
 											<a title="<digi:trn key="aim:selectDocumentDate">Date (dd/mm/yy)</digi:trn>">&nbsp;
@@ -257,6 +274,23 @@
 											</a>
 										</td>
 									</tr>
+									<field:display name="Document Language" feature="Related Documents">
+									<tr>
+										<td>
+											<a title="<digi:trn key="aim:languageOfTheDocumentDescription">Select document language</digi:trn>">
+											<digi:trn key="aim:langOfTheDocument">Document Language</digi:trn>
+											</a>
+										</td>
+										<td>
+											<c:set var="translation">
+													<digi:trn key="aim:addActivityDocLanguageFirstLine">Please select from below</digi:trn>
+											</c:set>
+											<a title="<digi:trn key="aim:languageOfTheDocumentDescription">Select document language</digi:trn>">
+											<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="docLang" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.DOCUMENT_LANGUAGE_KEY %>" styleClass="inp-text"/>
+											</a>
+										</td>
+									</tr>
+									</field:display>
 									<logic:equal name="aimEditActivityForm" property="docFileOrLink" value="file">
 									<tr>
 										<td>

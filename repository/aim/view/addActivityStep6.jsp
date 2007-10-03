@@ -138,7 +138,7 @@ function validate(field) {
 
 function addDocuments() {
 
-		openNewWindow(600, 270);
+		openNewWindow(600, 400);
 
 		document.aimEditActivityForm.docFileOrLink.value = "file";
 

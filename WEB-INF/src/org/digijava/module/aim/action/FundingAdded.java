@@ -181,8 +181,9 @@ public class FundingAdded extends Action {
 			Iterator itr = eaForm.getFundingMTEFProjections().iterator();
 			while (itr.hasNext()) {
 				MTEFProjection mtef = (MTEFProjection) itr.next();
-				
-				
+			
+				if ( mtef.getAmount() == null ) //This MTEFProjection has been created in AddFunding action 
+						continue;				// but if projections are disabled then the amount will be empty so this shouldn't be taken into consideration
 				String formattedAmt = CurrencyWorker.formatAmount(
 						mtef.getAmount());
 				mtef.setAmount(formattedAmt);

@@ -924,7 +924,10 @@ public class EditActivity
 	            	MTEFProjection	projection					= new MTEFProjection();
 	            	
 	            	projection.setAmount( ampProjection.getAmount() + "" );
-	            	projection.setProjected( ampProjection.getProjected().getId() );
+	            	if ( ampProjection.getProjected() != null )
+	            		projection.setProjected( ampProjection.getProjected().getId() );
+	            	else
+	            		logger.error("Projection with date " + ampProjection.getProjectionDate() + " has no type (neither projection nor pipeline) !!!!");
 	            	projection.setCurrencyCode( ampProjection.getAmpCurrency().getCurrencyCode() );
 	            	projection.setCurrencyName( ampProjection.getAmpCurrency().getCurrencyName() );
 	            	projection.setProjectionDate( DateConversion.ConvertDateToString(ampProjection.getProjectionDate()) );

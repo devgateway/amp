@@ -612,14 +612,16 @@ function disable() {
 											<c:if test="${!empty aimEditActivityForm.selectedOrganizations}">
 												<table cellSpacing=2 cellPadding=2 border=0>
 													<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.selectedOrganizations}" >
-														<tr><td>
-														<c:out value="${selectedOrganizations.name}"/><c:if test="${!empty selectedOrganizations.name}">:</c:if>
-														<c:out value="${selectedOrganizations.projectId}"/>
-															<c:if test ="${!empty selectedOrganizations.organisation.ampOrgId}">
-																	<bean:define id="selectedOrgForPopup" name="selectedOrganizations" 	type="org.digijava.module.aim.helper.OrgProjectId"  	toScope="request" />
-																	<jsp:include page="previewOrganizationPopup.jsp"/>
-															</c:if>
-													</td></tr>
+														<c:if test="${not empty selectedOrganizations}"> 
+															<tr><td>
+																<c:out value="${selectedOrganizations.name}"/>:
+																<c:out value="${selectedOrganizations.projectId}"/>
+																	<c:if test ="${!empty selectedOrganizations.organisation.ampOrgId}">
+																			<bean:define id="selectedOrgForPopup" name="selectedOrganizations" 	type="org.digijava.module.aim.helper.OrgProjectId"  	toScope="request" />
+																			<jsp:include page="previewOrganizationPopup.jsp"/>
+																	</c:if>
+															</td></tr>
+														</c:if>														
 													</c:forEach>
 												</table>
 											</c:if>

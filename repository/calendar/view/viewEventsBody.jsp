@@ -389,7 +389,7 @@
                 <tr>
                   <td align="center" style="border-top:1px solid;" width="80">
                     <div style="width:140;overflow:hidden">
-                      <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}">
+                      <digi:link href="/previewCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}">
                         <logic:iterate id="ampCalendarEventItem" name="ampCalendarGraph" property="ampCalendar.calendarPK.calendar.calendarItem">
                         ${ampCalendarEventItem.title}
                         </logic:iterate>

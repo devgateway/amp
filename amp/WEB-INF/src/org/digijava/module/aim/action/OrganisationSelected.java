@@ -76,10 +76,12 @@ public class OrganisationSelected extends Action {
 				boolean flag = false;
 				if (prevOrgs != null) {
 					for (int j = 0; j < prevOrgs.length; j++) {
-						if (prevOrgs[j].getAmpOrgId().equals(selOrgs[i])) {
-							flag = true;
-							break;
-						}
+						if(prevOrgs[j]!=null){
+							if (prevOrgs[j].getAmpOrgId().equals(selOrgs[i])) {
+								flag = true;
+								break;
+							}
+						}						
 					}
 				}
 
@@ -90,6 +92,8 @@ public class OrganisationSelected extends Action {
 						opId.setAmpOrgId(org.getAmpOrgId());
 						opId.setName(org.getName());
 						opId.setProjectId(null);
+						opId.setOrganisation(org);
+						
 						currOrgs[index++] = opId;
 					}
 				}

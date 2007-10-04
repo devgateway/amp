@@ -4,7 +4,7 @@
 <table border="2" cellpadding="5" bordercolor="#B22222" bgcolor="FFD700" style="border-collapse: collapse;">
 	<tr>
 		<td>
-			<digi:link href="/admin.do">
+			<digi:link module="aim" href="/admin.do">
 			<digi:trn key="aim:ampAdmin">AMP Admin</digi:trn></digi:link>
 		</td>
 	</tr>

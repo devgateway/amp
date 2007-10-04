@@ -53,7 +53,7 @@ function saveClicked() {
 	var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
 
 	if (appstatus == "started") {
-
+		msg+='<digi:trn key="aim:saveActivity:started">Do you want to submit this activity for approval ?</digi:trn>';
 		if (wTLFlag == "yes") {
 
 			//if (confirm("Do you want to approve this activity ?"))
@@ -62,8 +62,7 @@ function saveClicked() {
 
 		}
 
-		else if (confirm("Do you want to submit this activity for approval ?"))
-
+		else if (confirm(msg))
 				document.aimEditActivityForm.approvalStatus.value = "created";
 
 	}
@@ -79,8 +78,9 @@ function saveClicked() {
 	else if (wTLFlag == "yes") {
 
 		if (appstatus == "created" || appstatus == "edited") {
-
-			if (confirm("Do you want to approve this activity ?"))
+		
+			msg+='<digi:trn key="aim:saveActivity:approved">Do you want to approve this activity ?</digi:trn>';
+			if (confirm(msg))
 
 				document.aimEditActivityForm.approvalStatus.value = "approved";
 

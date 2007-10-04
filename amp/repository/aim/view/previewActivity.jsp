@@ -54,21 +54,24 @@ function disable() {
 	document.aimEditActivityForm.backButton.disabled = true;
 	var appstatus = document.aimEditActivityForm.approvalStatus.value;
 	var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
+	var msg='';
 	if (appstatus == "started") {
+		msg+='<digi:trn key="aim:saveActivity:started">Do you want to submit this activity for approval ?</digi:trn>';
 		if (wTLFlag == "yes") {
 			//if (confirm("Do you want to approve this activity ?"))
 				document.aimEditActivityForm.approvalStatus.value = "approved";
 		}
-		else if (confirm("Do you want to submit this activity for approval ?"))
+		else if (confirm(msg))
 				document.aimEditActivityForm.approvalStatus.value = "created";
 	}
 	if (appstatus == "approved") {
+		msg+='<digi:trn key="aim:saveActivity:approved">Do you want to approve this activity ?</digi:trn>';
 		if (wTLFlag != "yes")
 			document.aimEditActivityForm.approvalStatus.value = "edited";
 	}
 	else if (wTLFlag == "yes") {
 		if (appstatus == "created" || appstatus == "edited") {
-			if (confirm("Do you want to approve this activity ?"))
+			if (confirm(msg))
 				document.aimEditActivityForm.approvalStatus.value = "approved";
 		}
 	}

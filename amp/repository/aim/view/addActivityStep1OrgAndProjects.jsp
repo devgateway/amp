@@ -36,13 +36,12 @@
 											<td>
 												<table cellSpacing=1 cellPadding=1 border=0 width="500">
 												<c:forEach items="${aimEditActivityForm.selectedOrganizations}" var="selectedOrganizations">
-														<tr>
+													<tr>
+														<c:if test="${!empty selectedOrganizations.ampOrgId}">
 															<td align="left" width=3>
-															<c:if test="${!empty selectedOrganizations.ampOrgId}">
 																<html:multibox property="selOrgs">
 																	<c:out value="${selectedOrganizations.ampOrgId}"/>
 																</html:multibox>
-															</c:if>
 															</td>
 															<td align="left" width="367">
 																<c:out value="${selectedOrganizations.name}"/>
@@ -53,9 +52,9 @@
 																property="projectId" indexed="true"
 																styleClass="inp-text" size="15"/>
 															</td>
-															
-															
-														</td></tr>
+														</td>
+													  </c:if>	
+													</tr>
 													</c:forEach>
 													<tr><td colspan="3">
 														<table cellSpacing=2 cellPadding=2>

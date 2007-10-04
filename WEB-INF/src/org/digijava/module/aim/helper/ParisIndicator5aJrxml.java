@@ -383,9 +383,9 @@ public class ParisIndicator5aJrxml {
                 p2.println("			</band>");
                 p2.println("		</pageFooter>");
                 p2.println("		<summary>");
-                p2.println("			<band height='250'  isSplitAllowed='true' >");
+                p2.println("			<band height='450'  isSplitAllowed='true' >");
 
-                p2.println("<subreport  isUsingCache='true'>");
+                p2.println("<subreport isUsingCache='true'>");
                 p2.println("<reportElement");
                 p2.println("x='435'");
                 p2.println("y='115'");

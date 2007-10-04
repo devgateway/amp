@@ -97,6 +97,8 @@ public class ParisIndicator5aSubJrxml {
                 p.println("						y='0'");
                 p.println("						width='176'");
                 p.println("						height='26'");
+                p.println("						forecolor='#000000'");
+                p.println("						backcolor='#CCCCCC'");
                 p.println("						key='staticText-2'/>");
                 p.println("					<box topBorder='1Point' topBorderColor='#000000' leftBorder='1Point' leftBorderColor='#000000' rightBorder='1Point' rightBorderColor='#000000' bottomBorder='1Point' bottomBorderColor='#000000'/>");
                 p.println("					<textElement textAlignment='Center'>");

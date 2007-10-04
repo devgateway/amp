@@ -711,7 +711,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 			//logger.info("in the 5th report");
             String jasperFile = null;
             String subJasperFile = null;
-            ParisIndicatorDataSource dataSource = new ParisIndicatorDataSource(	data2);
+            ParisIndicatorDataSource dataSource = new ParisIndicatorDataSource(data2);
             ActionServlet s = getServlet();
             String jarFile = s.getServletContext().getRealPath("/WEB-INF/lib/jasperreports-0.6.1.jar");
             System.setProperty("jasper.reports.compile.class.path", jarFile);
@@ -760,10 +760,10 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 			}
 			// xls
 			else if (type.equals("xls")) {
-
-				jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5apdf.jasper");
-
+                jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5apdf.jasper");
+                subJasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5apdf_subreport0.jasper");
                 Map parameters = new HashMap();
+                parameters.put("SUBREPORT_DIR",subJasperFile);
 				JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile, parameters, dataSource);
 
 				ServletOutputStream outputStream = null;
@@ -841,9 +841,11 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 			// xls
 			else if (type.equals("xls")) {
 
-				jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5bpdf.jasper");
+                jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5bpdf.jasper");
+                subJasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator5bpdf_subreport0.jasper");
+                Map parameters = new HashMap();
 
-				Map parameters = new HashMap();
+                parameters.put("SUBREPORT_DIR",subJasperFile);
 				JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile, parameters, dataSource);
 				String destFile = null;
 				// s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator3pdf.xls");

@@ -220,7 +220,10 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		AmpFiscalCalendar selcal=(AmpFiscalCalendar) Util.getSelectedObject(AmpFiscalCalendar.class,filterForm.getCalendar());
 		arf.setCalendarType(selcal);
-		arf.setText(filterForm.getText());
+		if(filterForm.getText()!=null){
+			arf.setText(filterForm.getText());			
+		}
+
 		arf.setFromYear(filterForm.getFromYear()==null || filterForm.getFromYear().longValue()==-1?null:new Integer(filterForm.getFromYear().intValue()));
 		arf.setToYear(filterForm.getToYear()==null || filterForm.getToYear().longValue()==-1?null:new Integer(filterForm.getToYear().intValue()));
 		arf.setDonors(Util.getSelectedObjects(AmpOrgGroup.class,filterForm.getSelectedDonors()));

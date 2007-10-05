@@ -103,597 +103,557 @@ import org.digijava.module.aim.util.TeamUtil;
  *
  * @author Priyajith
  */
-public class SaveActivity
-    extends Action {
+public class SaveActivity extends Action {
 
-  private static Logger logger = Logger.getLogger(SaveActivity.class);
+	private static Logger logger = Logger.getLogger(SaveActivity.class);
 
-  private ServletContext ampContext = null;
+	private ServletContext ampContext = null;
 
-  public ActionForward execute(ActionMapping mapping, ActionForm form,
-                               HttpServletRequest request,
-                               HttpServletResponse response) throws Exception {
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 
-    HttpSession session = request.getSession();
-    ampContext = getServlet().getServletContext();
+		HttpSession session = request.getSession();
+		ampContext = getServlet().getServletContext();
 
-    Long actId = null;
-    Components tempComp = new Components();
-    List componentFundingIds = new ArrayList();
+		Long actId = null;
+		Components<AmpComponentFunding> tempComp = new Components<AmpComponentFunding>();
 
-    // if user has not logged in, forward him to the home page
-    if (session.getAttribute("currentMember") == null) {
-      return mapping.findForward("index");
-    }
+		// if user has not logged in, forward him to the home page
+		if (session.getAttribute("currentMember") == null) {
+			return mapping.findForward("index");
+		}
 
-    session.removeAttribute("report");
-    session.removeAttribute("reportMeta");
-    session.removeAttribute("forStep9");
+		session.removeAttribute("report");
+		session.removeAttribute("reportMeta");
+		session.removeAttribute("forStep9");
 
-    try {
+		try {
 
-      TeamMember tm = null;
-      if (session.getAttribute("currentMember") != null)
-        tm = (TeamMember) session.getAttribute("currentMember");
+			TeamMember tm = null;
+			if (session.getAttribute("currentMember") != null)
+				tm = (TeamMember) session.getAttribute("currentMember");
 
-      EditActivityForm eaForm = (EditActivityForm) form;
-      AmpActivity activity = new AmpActivity();
-      if (activity.getCategories() == null) {
-        activity.setCategories(new HashSet());
-      }
+			EditActivityForm eaForm = (EditActivityForm) form;
+			AmpActivity activity = new AmpActivity();
+			if (activity.getCategories() == null) {
+				activity.setCategories( new HashSet() );
+			}
 
-      /* Saving categories to AmpActivity */
-      CategoryManagerUtil.addCategoryToSet(eaForm.getAccessionInstrument(),
-                                           activity.getCategories());
-      CategoryManagerUtil.addCategoryToSet(eaForm.getAcChapter(),
-                                           activity.getCategories());
-      CategoryManagerUtil.addCategoryToSet(eaForm.getStatusId(),
-                                           activity.getCategories());
-      CategoryManagerUtil.addCategoryToSet(eaForm.getLevelId(),
-                                           activity.getCategories());
-      CategoryManagerUtil.addCategoryToSet(eaForm.getGbsSbs(),
-                                           activity.getCategories());
-      /* END - Saving categories to AmpActivity */
+			/* Saving categories to AmpActivity */
+			CategoryManagerUtil.addCategoryToSet(eaForm.getAccessionInstrument(), activity.getCategories() );
+			CategoryManagerUtil.addCategoryToSet(eaForm.getAcChapter(), activity.getCategories() );
+			CategoryManagerUtil.addCategoryToSet(eaForm.getStatusId(), activity.getCategories() );
+			CategoryManagerUtil.addCategoryToSet(eaForm.getLevelId(), activity.getCategories() );
+			CategoryManagerUtil.addCategoryToSet(eaForm.getGbsSbs(), activity.getCategories() );
+			/* END - Saving categories to AmpActivity */
 
-      if (eaForm.getProProjCost() == null) {
-        activity.setFunAmount(null);
-        activity.setFunDate(null);
-        activity.setCurrencyCode(null);
-      }
-      else {
-        activity.setFunAmount(eaForm.getProProjCost().getFunAmountAsDouble());
-        activity.setFunDate(eaForm.getProProjCost().getFunDate());
-        activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
-      }
+            if(eaForm.getProProjCost()==null){
+                activity.setFunAmount(null);
+                activity.setFunDate(null);
+                activity.setCurrencyCode(null);
+            }else{
+                activity.setFunAmount(eaForm.getProProjCost().getFunAmountAsDouble());
+                activity.setFunDate(eaForm.getProProjCost().getFunDate());
+                activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
+            }
 
-      if (eaForm.getActPrograms() != null &&
-          eaForm.getActPrograms().size() != 0) {
-        Set programs = new HashSet();
-        //ProgramUtil prg=new ProgramUtil();
-        ArrayList prgIds = new ArrayList();
-        ArrayList ampThemeLst = null;
-        AmpTheme theme = null;
+            if(eaForm.getActPrograms()!=null && eaForm.getActPrograms().size()!=0){
+                Set programs=new HashSet();
+                //ProgramUtil prg=new ProgramUtil();
+                ArrayList prgIds=new ArrayList();
+                ArrayList ampThemeLst=null;
+                AmpTheme theme=null;
 
-        List themeLst = eaForm.getActPrograms();
-        Iterator prgItr = themeLst.listIterator();
-        while (prgItr.hasNext()) {
-          theme = (AmpTheme) prgItr.next();
-          prgIds.add(theme.getAmpThemeId());
-        }
+                List themeLst=eaForm.getActPrograms();
+                Iterator prgItr=themeLst.listIterator();
+                while(prgItr.hasNext()){
+                    theme=(AmpTheme)prgItr.next();
+                    prgIds.add(theme.getAmpThemeId());
+                }
 
-        ampThemeLst = null;
-        if (prgIds.size() > 0)
-          ampThemeLst = ProgramUtil.getThemesByIds(prgIds);
-        if (ampThemeLst != null) {
-          programs.addAll(ampThemeLst);
-          activity.setActivityPrograms(programs);
-        }
-      }
+                ampThemeLst = null;
+                if(prgIds.size()>0)
+                	ampThemeLst=ProgramUtil.getThemesByIds(prgIds);
+                if(ampThemeLst!=null){
+                    programs.addAll(ampThemeLst);
+                    activity.setActivityPrograms(programs);
+                }
+            }
 
-      if (eaForm.getPageId() < 0 || eaForm.getPageId() > 1) {
-        return mapping.findForward("index");
-      }
+			if (eaForm.getPageId() < 0 || eaForm.getPageId() > 1) {
+				return mapping.findForward("index");
+			}
 
-      if (eaForm.isDonorFlag()) {
-        // Donor edit
+			if (eaForm.isDonorFlag()) {
+				// Donor edit
 
-        // set funding and funding details
-        Set fundings = new HashSet();
-        if (eaForm.getFundingOrganizations() != null) {
-          Iterator itr1 = eaForm.getFundingOrganizations().iterator();
-          while (itr1.hasNext()) {
-            FundingOrganization fOrg = (FundingOrganization) itr1
-                .next();
-            if (fOrg.getAmpOrgId().longValue() == eaForm
-                .getFundDonor().longValue()) {
-              // add fundings
-              if (fOrg.getFundings() != null) {
-                Iterator itr2 = fOrg.getFundings().iterator();
-                while (itr2.hasNext()) {
-                  Funding fund = (Funding) itr2.next();
-                  AmpFunding ampFunding = new AmpFunding();
-                  ampFunding.setAmpFundingId(new Long(fund
-                      .getFundingId()));
+				// set funding and funding details
+				Set fundings = new HashSet();
+				if (eaForm.getFundingOrganizations() != null) {
+					Iterator itr1 = eaForm.getFundingOrganizations().iterator();
+					while (itr1.hasNext()) {
+						FundingOrganization fOrg = (FundingOrganization) itr1
+								.next();
+						if (fOrg.getAmpOrgId().longValue() == eaForm
+								.getFundDonor().longValue()) {
+							// add fundings
+							if (fOrg.getFundings() != null) {
+								Iterator itr2 = fOrg.getFundings().iterator();
+								while (itr2.hasNext()) {
+									Funding fund = (Funding) itr2.next();
+									AmpFunding ampFunding = new AmpFunding();
+									ampFunding.setAmpFundingId(new Long(fund
+											.getFundingId()));
+									
+									
+									ampFunding.setActive(fOrg.getFundingActive());
+									ampFunding.setDelegatedCooperation(fOrg.getDelegatedCooperation());
+									ampFunding.setDelegatedPartner(fOrg.getDelegatedPartner());
 
-                  ampFunding.setActive(fOrg.getFundingActive());
-                  ampFunding.setDelegatedCooperation(fOrg.
-                      getDelegatedCooperation());
-                  ampFunding.setDelegatedPartner(fOrg.getDelegatedPartner());
+									// add funding details for each funding
+									Set fundDeatils = new HashSet();
+									if (fund.getFundingDetails() != null) {
+										Iterator itr3 = fund
+												.getFundingDetails().iterator();
+										while (itr3.hasNext()) {
+											FundingDetail fundDet = (FundingDetail) itr3
+													.next();
+											AmpFundingDetail ampFundDet = new AmpFundingDetail();
+											ampFundDet
+													.setTransactionType(new Integer(
+															fundDet
+																	.getTransactionType()));
+											ampFundDet
+													.setPerspectiveId(DbUtil
+															.getPerspective(fundDet
+																	.getPerspectiveCode()));
+											ampFundDet
+													.setAdjustmentType(new Integer(
+															fundDet
+																	.getAdjustmentType()));
+											ampFundDet
+													.setTransactionDate(DateConversion
+															.getDate(fundDet
+																	.getTransactionDate()));
+											ampFundDet.setOrgRoleCode(fundDet
+													.getPerspectiveCode());
 
-                  // add funding details for each funding
-                  Set fundDeatils = new HashSet();
-                  if (fund.getFundingDetails() != null) {
-                    Iterator itr3 = fund
-                        .getFundingDetails().iterator();
-                    while (itr3.hasNext()) {
-                      FundingDetail fundDet = (FundingDetail) itr3
-                          .next();
-                      AmpFundingDetail ampFundDet = new AmpFundingDetail();
-                      ampFundDet
-                          .setTransactionType(new Integer(
-                              fundDet
-                              .getTransactionType()));
-                      ampFundDet
-                          .setPerspectiveId(DbUtil
-                                            .getPerspective(fundDet
-                          .getPerspectiveCode()));
-                      ampFundDet
-                          .setAdjustmentType(new Integer(
-                              fundDet
-                              .getAdjustmentType()));
-                      ampFundDet
-                          .setTransactionDate(DateConversion
-                                              .getDate(fundDet
-                          .getTransactionDate()));
-                      ampFundDet.setOrgRoleCode(fundDet
-                                                .getPerspectiveCode());
 
-                      boolean useFixedRate = false;
-                      if (fundDet.getTransactionType() == Constants.COMMITMENT) {
-                        if (fundDet.isUseFixedRate() &&
-                            fundDet.getFixedExchangeRate().doubleValue() > 0
-                            &&
-                            fundDet.getFixedExchangeRate().doubleValue() != 1d) {
-                          useFixedRate = true;
-                        }
-                      }
+											boolean useFixedRate = false;
+											if (fundDet.getTransactionType() == Constants.COMMITMENT) {
+												if (fundDet.isUseFixedRate() &&
+														fundDet.getFixedExchangeRate().doubleValue() > 0
+														&& fundDet.getFixedExchangeRate().doubleValue() != 1d) {
+													useFixedRate = true;
+												}
+											}
 
-                      if (!useFixedRate) {
-                        Double transAmt = new Double(DecimalToText.getDouble(
-                            fundDet.getTransactionAmount()));
-                        ampFundDet.setTransactionAmount(transAmt);
-                        ampFundDet.setAmpCurrencyId(CurrencyUtil.
-                            getCurrencyByCode(fundDet.getCurrencyCode()));
-                        ampFundDet.setFixedExchangeRate(null);
-                      }
-                      else {
-                        // Use the fixed exchange rate
-                        double transAmt = DecimalToText.getDouble(fundDet.
-                            getTransactionAmount());
+											if (!useFixedRate) {
+												Double transAmt = new Double(DecimalToText.getDouble(fundDet.getTransactionAmount()));
+												ampFundDet.setTransactionAmount(transAmt);
+												ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
+												ampFundDet.setFixedExchangeRate(null);
+											} else {
+												// Use the fixed exchange rate
+												double transAmt = DecimalToText.getDouble(fundDet.getTransactionAmount());
 
-                        Date trDate = DateConversion.getDate(fundDet.
-                            getTransactionDate());
+												Date trDate = DateConversion.getDate(fundDet.getTransactionDate());
 //												double frmExRt = CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,trDate);
 
 //												double amt = CurrencyWorker.convert1(transAmt, frmExRt,1);
 //												amt *= fundDet.getFixedExchangeRate();
 //												ampFundDet.setTransactionAmount(new Double(amt));
-                        ampFundDet.setTransactionAmount(new Double(transAmt));
-                        ampFundDet.setFixedExchangeRate(fundDet.
-                            getFixedExchangeRate());
-                        ampFundDet.setAmpCurrencyId(CurrencyUtil.
-                            getCurrencyByCode(fundDet.getCurrencyCode()));
+												ampFundDet.setTransactionAmount(new Double(transAmt));
+												ampFundDet.setFixedExchangeRate(fundDet.getFixedExchangeRate());
+												ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
 //												ampFundDet.setRateCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getFixedExchangeCurrCode()));
-                      }
-                      ampFundDet.setAmpFundingId(ampFunding);
+											}
+											ampFundDet.setAmpFundingId(ampFunding);
+											
+											if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
+												ampFundDet.setExpCategory(
+														fundDet.getClassification());
+											}
+											fundDeatils.add(ampFundDet);
+										}
+									}
+									ampFunding.setFundingDetails(fundDeatils);
+									
+									this.saveMTEFProjections(fund, ampFunding);
+									
+									fundings.add(ampFunding);
+								}
+							}
+						}
+					}
+				}
+				ActivityUtil.saveDonorFundingInfo(eaForm.getActivityId(),
+						fundings);
+			} else {
+				// MOFED add/edit
 
-                      if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
-                        ampFundDet.setExpCategory(
-                            fundDet.getClassification());
-                      }
-                      fundDeatils.add(ampFundDet);
-                    }
-                  }
-                  ampFunding.setFundingDetails(fundDeatils);
+				String toDelete = request.getParameter("delete");
 
-                  this.saveMTEFProjections(fund, ampFunding);
+				if (toDelete == null
+						|| (!toDelete.trim().equalsIgnoreCase("true"))) {
+					if (eaForm.isEditAct() == false) {
+						AmpActivity act = ActivityUtil.getActivityByName(eaForm
+								.getTitle());
+						if (act != null) {
+							eaForm.setActivityId(act.getAmpActivityId());
+							logger.debug("Activity with the name "
+									+ eaForm.getTitle() + " already exist.");
+							return mapping.findForward("activityExist");
+						}
+					}
+				} else if (toDelete.trim().equals("true")) {
+					eaForm.setEditAct(true);
+				} else {
+					logger.debug("No duplicate found");
+				}
 
-                  fundings.add(ampFunding);
+				ActionErrors errors = new ActionErrors();
+				boolean titleFlag = false;
+				boolean statusFlag = false;
+
+				if (eaForm.getAmpId() == null) {
+					/*
+					 * The logic for geerating the AMP-ID is as follows:
+					 * 1. get default global country code
+					 * 2. Get the maximum of the ampActivityId + 1, MAX_NUM
+					 * 3. merge them
+					 */
+					String ampId =
+						FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY).toUpperCase();
+
+			/*		if (eaForm.getFundingOrganizations() != null) {
+						if (eaForm.getFundingOrganizations().size() == 1) {
+							Iterator itr = eaForm.getFundingOrganizations()
+									.iterator();
+							if (itr.hasNext()) {
+								FundingOrganization fOrg = (FundingOrganization) itr
+										.next();
+								ampId += "-"
+										+ DbUtil.getOrganisation(
+												fOrg.getAmpOrgId())
+												.getOrgCode();
+							}
+						}
+					}*/
+					long maxId = ActivityUtil.getActivityMaxId();
+					maxId++;
+					ampId += "/" + maxId;
+					eaForm.setAmpId(ampId);
+				}
+
+				if (eaForm.getTitle() != null) {
+					if (eaForm.getTitle().trim().length() == 0) {
+						errors.add("title", new ActionError(
+								"error.aim.addActivity.titleMissing"));
+						saveErrors(request, errors);
+						titleFlag = true;
+					} else if (eaForm.getTitle().length() > 255) {
+						errors.add("title", new ActionError(
+								"error.aim.addActivity.titleTooLong"));
+						saveErrors(request, errors);
+						titleFlag = true;
+					}
+				}
+
+                Long statId=eaForm.getStatusId();
+
+
+				if (statId != null && statId.equals(new Long(0))) {
+					errors.add("status", new ActionError(
+							"error.aim.addActivity.statusMissing"));
+					saveErrors(request, errors);
+					statusFlag = true;
+				}
+				if (titleFlag == true || statusFlag == true) {
+					eaForm.setStep("1");
+					return mapping.findForward("addActivity");
+				}
+
+				if (eaForm.getActivitySectors() == null
+						|| eaForm.getActivitySectors().size() < 1) {
+					errors.add("sector", new ActionError(
+							"error.aim.addActivity.sectorEmpty"));
+					saveErrors(request, errors);
+					eaForm.setStep("2");
+					return mapping.findForward("addActivity");
+				}
+
+				boolean secPer = false;
+				int percent = 0;
+				Iterator secPerItr = eaForm.getActivitySectors().iterator();
+				while (secPerItr.hasNext()) {
+					ActivitySector actSect = (ActivitySector) secPerItr.next();
+					if (null == actSect.getSectorPercentage()
+							|| "".equals(actSect.getSectorPercentage())) {
+						errors.add("sectorPercentageEmpty",
+								new ActionError("error.aim.addActivity.sectorPercentageEmpty"));
+						logger.debug("sector percentage is empty");
+						secPer = true;
+					}
+					// sector percentage is not a number
+					else {
+						try {
+							percent += actSect.getSectorPercentage().intValue();
+						}
+						catch (NumberFormatException nex) {
+							logger.debug("sector percentage is not a number : " + nex);
+							errors.add("sectorPercentageNonNumeric",
+									new ActionError("error.aim.addActivity.sectorPercentageNonNumeric"));
+							secPer = true;
+						}
+					}
+					if (secPer) {
+						saveErrors(request, errors);
+						eaForm.setStep("2");
+						return mapping.findForward("addActivityStep2");
+					}
+				}
+				// Total sector percentage is not equal to 100%
+				if (percent != 100) {
+					errors.add("sectorPercentageSumWrong",
+							new ActionError("error.aim.addActivity.sectorPercentageSumWrong"));
+					saveErrors(request, errors);
+					logger.debug("sector percentage is not equal to 100%");
+					eaForm.setStep("2");
+					return mapping.findForward("addActivityStep2");
+				}
+
+				if (eaForm.getFundingOrganizations() != null
+						&& eaForm.getFundingOrganizations().size() > 0) {
+					Iterator tempItr = eaForm.getFundingOrganizations()
+							.iterator();
+					while (tempItr.hasNext()) {
+						FundingOrganization forg = (FundingOrganization) tempItr
+								.next();
+						if (forg.getFundings() == null
+								|| forg.getFundings().size() == 0) {
+							errors
+									.add(
+											"fundings",
+											new ActionError(
+													"error.aim.addActivity.fundingsNotEntered"));
+							saveErrors(request, errors);
+							logger.info(" the funds added is null... please check");
+							eaForm.setStep("3");
+							return mapping.findForward("addActivity");
+						}
+					}
+				}
+				// end of Modified code
+
+                if(eaForm.getProProjCost()==null){
+                    activity.setFunAmount(null);
+                    activity.setFunDate(null);
+                    activity.setCurrencyCode(null);
+                }else{
+                    activity.setFunAmount(eaForm.getProProjCost().getFunAmountAsDouble());
+                    activity.setFunDate(eaForm.getProProjCost().getFunDate());
+                    activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
                 }
-              }
-            }
-          }
-        }
-        ActivityUtil.saveDonorFundingInfo(eaForm.getActivityId(),
-                                          fundings);
-      }
-      else {
-        // MOFED add/edit
+				activity.setAmpId(eaForm.getAmpId());
+				activity.setName(eaForm.getTitle());
+				if("unchecked".equals(eaForm.getBudgetCheckbox())==true)
+					activity.setBudget(new Boolean(false));
+				else activity.setBudget(new Boolean(true));
 
-        String toDelete = request.getParameter("delete");
+				/*
+				 * tanzania adds
+				 */
+				activity.setFY(eaForm.getFY());
+				activity.setVote(eaForm.getVote());
+				activity.setSubVote(eaForm.getSubVote());
+				activity.setSubProgram(eaForm.getSubProgram());
+				activity.setProjectCode(eaForm.getProjectCode());
+				activity.setGovernmentApprovalProcedures(eaForm.getGovernmentApprovalProcedures());
 
-        if (toDelete == null
-            || (!toDelete.trim().equalsIgnoreCase("true"))) {
-          if (eaForm.isEditAct() == false) {
-            AmpActivity act = ActivityUtil.getActivityByName(eaForm
-                .getTitle());
-            if (act != null) {
-              eaForm.setActivityId(act.getAmpActivityId());
-              logger.debug("Activity with the name "
-                           + eaForm.getTitle() + " already exist.");
-              return mapping.findForward("activityExist");
-            }
-          }
-        }
-        else if (toDelete.trim().equals("true")) {
-          eaForm.setEditAct(true);
-        }
-        else {
-          logger.debug("No duplicate found");
-        }
 
-        ActionErrors errors = new ActionErrors();
-        boolean titleFlag = false;
-        boolean statusFlag = false;
+				activity.setJointCriteria(eaForm.getJointCriteria());
 
-        if (eaForm.getAmpId() == null) {
-          /*
-           * The logic for geerating the AMP-ID is as follows:
-           * 1. get default global country code
-           * 2. Get the maximum of the ampActivityId + 1, MAX_NUM
-           * 3. merge them
-           */
-          String ampId =
-              FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.
-                                                 Constants.
-                                                 GLOBAL_DEFAULT_COUNTRY).
-              toUpperCase();
+				if (eaForm.getDescription() == null
+						|| eaForm.getDescription().trim().length() == 0) {
+					activity.setDescription(new String(" "));
+				} else {
+					activity.setDescription(eaForm.getDescription());
+				}
+				if (eaForm.getLessonsLearned() == null
+						|| eaForm.getLessonsLearned().trim().length() == 0) {
+					activity.setLessonsLearned(new String(" "));
+				} else {
+					activity.setLessonsLearned(eaForm.getLessonsLearned());
+				}
+				
+				if (eaForm.getEqualOpportunity() == null
+						|| eaForm.getEqualOpportunity().trim().length() == 0) {
+					activity.setEqualOpportunity(new String(" "));
+				} else {
+					activity.setEqualOpportunity(eaForm.getEqualOpportunity());
+				}
+				
+				if (eaForm.getEnvironment() == null
+						|| eaForm.getEnvironment().trim().length() == 0) {
+					activity.setEnvironment(new String(" "));
+				} else {
+					activity.setEnvironment(eaForm.getEnvironment());
+				}
+				
+				if (eaForm.getMinorities() == null
+						|| eaForm.getMinorities().trim().length() == 0) {
+					activity.setMinorities(new String(" "));
+				} else {
+					activity.setMinorities(eaForm.getMinorities());
+				}
+				
+				
+				if (eaForm.getPurpose() == null
+						|| eaForm.getPurpose().trim().length() == 0) {
+					activity.setPurpose(new String(" "));
+				} else {
+					activity.setPurpose(eaForm.getPurpose());
+				}
+				if (eaForm.getResults() == null
+						|| eaForm.getResults().trim().length() == 0) {
+					activity.setResults(new String(" "));
+				} else {
+					activity.setResults(eaForm.getResults());
+				}
+				if (eaForm.getObjectives() == null
+						|| eaForm.getObjectives().trim().length() == 0) {
+					activity.setObjective(new String(" "));
+				} else {
+					activity.setObjective(eaForm.getObjectives());
+				}
+                if(eaForm.getDocumentSpace() == null
+                   || eaForm.getDocumentSpace().trim().length() == 0) {
+                    activity.setDocumentSpace(new String(" "));
+                } else {
+                    activity.setDocumentSpace(eaForm.getDocumentSpace());
+                }
 
-          /*		if (eaForm.getFundingOrganizations() != null) {
-             if (eaForm.getFundingOrganizations().size() == 1) {
-              Iterator itr = eaForm.getFundingOrganizations()
-                .iterator();
-              if (itr.hasNext()) {
-               FundingOrganization fOrg = (FundingOrganization) itr
-                 .next();
-               ampId += "-"
-                 + DbUtil.getOrganisation(
-                   fOrg.getAmpOrgId())
-                   .getOrgCode();
-              }
-             }
-            }*/
-          long maxId = ActivityUtil.getActivityMaxId();
-          maxId++;
-          ampId += "/" + maxId;
-          eaForm.setAmpId(ampId);
-        }
+				if (eaForm.getConditions() == null
+						|| eaForm.getConditions().trim().length() == 0) {
+					activity.setCondition(" ");
+				} else {
+					activity.setCondition(eaForm.getConditions());
+				}
 
-        if (eaForm.getTitle() != null) {
-          if (eaForm.getTitle().trim().length() == 0) {
-            errors.add("title", new ActionError(
-                "error.aim.addActivity.titleMissing"));
-            saveErrors(request, errors);
-            titleFlag = true;
-          }
-          else if (eaForm.getTitle().length() > 255) {
-            errors.add("title", new ActionError(
-                "error.aim.addActivity.titleTooLong"));
-            saveErrors(request, errors);
-            titleFlag = true;
-          }
-        }
+				try {
+					activity.setLineMinRank(Integer.valueOf(eaForm.getLineMinRank()));
+					if (activity.getLineMinRank().intValue() < 1 || activity.getLineMinRank().intValue() > 5) {
+						logger.debug("Line Ministry Rank is out of permisible range (1 to 5)");
+						activity.setLineMinRank(null);
+					}
+				}
+				catch (NumberFormatException nex) {
+					logger.debug("Line Ministry Rank is not a number : " + nex);
+					activity.setLineMinRank(null);
+				}
+				try {
+					activity.setPlanMinRank(Integer.valueOf(eaForm.getPlanMinRank()));
+					if (activity.getPlanMinRank().intValue() < 1 || activity.getPlanMinRank().intValue() > 5) {
+						logger.debug("Plan Ministry Rank is out of permisible range (1 to 5)");
+						activity.setPlanMinRank(null);
+					}
+				}
+				catch (NumberFormatException nex) {
+					logger.debug("Plan Ministry Rank is not a number : " + nex);
+					activity.setPlanMinRank(null);
+				}
 
-        Long statId = eaForm.getStatusId();
+				activity.setProposedApprovalDate(DateConversion.getDate(eaForm
+						.getOriginalAppDate()));
+				activity.setActualApprovalDate(DateConversion.getDate(eaForm
+						.getRevisedAppDate()));
+				activity.setProposedStartDate(DateConversion.getDate(eaForm
+						.getOriginalStartDate()));
+				activity.setActualStartDate(DateConversion.getDate(eaForm
+						.getRevisedStartDate()));
+				activity.setActualCompletionDate(DateConversion.getDate(eaForm
+						.getCurrentCompDate()));
+				activity.setOriginalCompDate(DateConversion.getDate(eaForm
+						.getProposedCompDate()));
+				activity.setContractingDate(DateConversion.getDate(eaForm
+						.getContractingDate()));
+				activity.setDisbursmentsDate(DateConversion.getDate(eaForm
+						.getDisbursementsDate()));
+                activity.setProposedCompletionDate(DateConversion.getDate(eaForm
+						.getProposedCompDate()));
+				AmpActivityClosingDates closeDate = null;
 
-        if (statId != null && statId.equals(new Long(0))) {
-          errors.add("status", new ActionError(
-              "error.aim.addActivity.statusMissing"));
-          saveErrors(request, errors);
-          statusFlag = true;
-        }
-        if (titleFlag == true || statusFlag == true) {
-          eaForm.setStep("1");
-          return mapping.findForward("addActivity");
-        }
+				if (activity.getClosingDates() == null) {
+					activity.setClosingDates(new HashSet());
+				}
 
-        if (eaForm.getActivitySectors() == null
-            || eaForm.getActivitySectors().size() < 1) {
-          errors.add("sector", new ActionError(
-              "error.aim.addActivity.sectorEmpty"));
-          saveErrors(request, errors);
-          eaForm.setStep("2");
-          return mapping.findForward("addActivity");
-        }
+				if (!(eaForm.isEditAct())) {
+					closeDate = new AmpActivityClosingDates();
+					closeDate.setAmpActivityId(activity);
+					closeDate.setClosingDate(DateConversion.getDate(eaForm
+							.getProposedCompDate()));
+					closeDate.setComments(" ");
+					closeDate.setType(Constants.REVISED);
+					activity.getClosingDates().add(closeDate);
+				}
 
-        boolean secPer = false;
-        int percent = 0;
-        Iterator secPerItr = eaForm.getActivitySectors().iterator();
-        while (secPerItr.hasNext()) {
-          ActivitySector actSect = (ActivitySector) secPerItr.next();
-          if (null == actSect.getSectorPercentage()
-              || "".equals(actSect.getSectorPercentage())) {
-            errors.add("sectorPercentageEmpty",
-                       new ActionError(
-                "error.aim.addActivity.sectorPercentageEmpty"));
-            logger.debug("sector percentage is empty");
-            secPer = true;
-          }
-          // sector percentage is not a number
-          else {
-            try {
-              percent += actSect.getSectorPercentage().intValue();
-            }
-            catch (NumberFormatException nex) {
-              logger.debug("sector percentage is not a number : " + nex);
-              errors.add("sectorPercentageNonNumeric",
-                         new ActionError(
-                  "error.aim.addActivity.sectorPercentageNonNumeric"));
-              secPer = true;
-            }
-          }
-          if (secPer) {
-            saveErrors(request, errors);
-            eaForm.setStep("2");
-            return mapping.findForward("addActivityStep2");
-          }
-        }
-        // Total sector percentage is not equal to 100%
-        if (percent != 100) {
-          errors.add("sectorPercentageSumWrong",
-                     new ActionError(
-              "error.aim.addActivity.sectorPercentageSumWrong"));
-          saveErrors(request, errors);
-          logger.debug("sector percentage is not equal to 100%");
-          eaForm.setStep("2");
-          return mapping.findForward("addActivityStep2");
-        }
+				if (eaForm.getActivityCloseDates() != null) {
+					Iterator itr = eaForm.getActivityCloseDates().iterator();
+					while (itr.hasNext()) {
+						String date = (String) itr.next();
+						closeDate = new AmpActivityClosingDates();
+						closeDate.setAmpActivityId(activity);
+						closeDate.setClosingDate(DateConversion.getDate(date));
+						closeDate.setType(Constants.REVISED);
+						closeDate.setComments(" ");
+						activity.getClosingDates().add(closeDate);
+					}
+				}
 
-        if (eaForm.getFundingOrganizations() != null
-            && eaForm.getFundingOrganizations().size() > 0) {
-          Iterator tempItr = eaForm.getFundingOrganizations()
-              .iterator();
-          while (tempItr.hasNext()) {
-            FundingOrganization forg = (FundingOrganization) tempItr
-                .next();
-            if (forg.getFundings() == null
-                || forg.getFundings().size() == 0) {
-              errors
-                  .add(
-                      "fundings",
-                      new ActionError(
-                          "error.aim.addActivity.fundingsNotEntered"));
-              saveErrors(request, errors);
-              logger.info(" the funds added is null... please check");
-              eaForm.setStep("3");
-              return mapping.findForward("addActivity");
-            }
-          }
-        }
-        // end of Modified code
+				if (eaForm.getCurrentCompDate() != null
+						&& eaForm.getCurrentCompDate().trim().length() > 0) {
+					closeDate = new AmpActivityClosingDates();
+					closeDate.setAmpActivityId(activity);
+					closeDate.setClosingDate(DateConversion.getDate(eaForm
+							.getCurrentCompDate()));
+					closeDate.setComments(" ");
+					closeDate.setType(Constants.CURRENT);
 
-        if (eaForm.getProProjCost() == null) {
-          activity.setFunAmount(null);
-          activity.setFunDate(null);
-          activity.setCurrencyCode(null);
-        }
-        else {
-          activity.setFunAmount(eaForm.getProProjCost().getFunAmountAsDouble());
-          activity.setFunDate(eaForm.getProProjCost().getFunDate());
-          activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
-        }
-        activity.setAmpId(eaForm.getAmpId());
-        activity.setName(eaForm.getTitle());
-        if ("unchecked".equals(eaForm.getBudgetCheckbox()) == true)
-          activity.setBudget(new Boolean(false));
-        else
-          activity.setBudget(new Boolean(true));
+					Collection temp = activity.getClosingDates();
+					if (!(temp.contains(closeDate))) {
+						activity.getClosingDates().add(closeDate);
+					}
+				}
 
-        /*
-         * tanzania adds
-         */
-        activity.setFY(eaForm.getFY());
-        activity.setVote(eaForm.getVote());
-        activity.setSubVote(eaForm.getSubVote());
-        activity.setSubProgram(eaForm.getSubProgram());
-        activity.setProjectCode(eaForm.getProjectCode());
-        activity.setGovernmentApprovalProcedures(eaForm.
-            getGovernmentApprovalProcedures());
+				activity.setContFirstName(eaForm.getDnrCntFirstName());
+				activity.setContLastName(eaForm.getDnrCntLastName());
+				activity.setEmail(eaForm.getDnrCntEmail());
+				activity.setDnrCntTitle(eaForm.getDnrCntTitle());
+				activity.setDnrCntOrganization(eaForm.getDnrCntOrganization());
+				activity.setDnrCntFaxNumber(eaForm.getDnrCntFaxNumber());
+				activity.setDnrCntPhoneNumber(eaForm.getDnrCntPhoneNumber());
 
-        activity.setJointCriteria(eaForm.getJointCriteria());
 
-        if (eaForm.getDescription() == null
-            || eaForm.getDescription().trim().length() == 0) {
-          activity.setDescription(new String(" "));
-        }
-        else {
-          activity.setDescription(eaForm.getDescription());
-        }
-        if (eaForm.getLessonsLearned() == null
-            || eaForm.getLessonsLearned().trim().length() == 0) {
-          activity.setLessonsLearned(new String(" "));
-        }
-        else {
-          activity.setLessonsLearned(eaForm.getLessonsLearned());
-        }
+				activity.setMofedCntFirstName(eaForm.getMfdCntFirstName());
+				activity.setMofedCntLastName(eaForm.getMfdCntLastName());
+				activity.setMofedCntEmail(eaForm.getMfdCntEmail());
+				activity.setMfdCntTitle(eaForm.getMfdCntTitle());
+				activity.setMfdCntOrganization(eaForm.getMfdCntOrganization());
+				activity.setMfdCntFaxNumber(eaForm.getMfdCntFaxNumber());
+				activity.setMfdCntPhoneNumber(eaForm.getMfdCntPhoneNumber());
 
-        if (eaForm.getEqualOpportunity() == null
-            || eaForm.getEqualOpportunity().trim().length() == 0) {
-          activity.setEqualOpportunity(new String(" "));
-        }
-        else {
-          activity.setEqualOpportunity(eaForm.getEqualOpportunity());
-        }
+				activity.setComments(" ");
 
-        if (eaForm.getEnvironment() == null
-            || eaForm.getEnvironment().trim().length() == 0) {
-          activity.setEnvironment(new String(" "));
-        }
-        else {
-          activity.setEnvironment(eaForm.getEnvironment());
-        }
+				if (eaForm.getContractors() == null
+						|| eaForm.getContractors().trim().length() == 0) {
+					activity.setContractors(" ");
+				} else {
+					activity.setContractors(eaForm.getContractors());
+				}
 
-        if (eaForm.getMinorities() == null
-            || eaForm.getMinorities().trim().length() == 0) {
-          activity.setMinorities(new String(" "));
-        }
-        else {
-          activity.setMinorities(eaForm.getMinorities());
-        }
-
-        if (eaForm.getPurpose() == null
-            || eaForm.getPurpose().trim().length() == 0) {
-          activity.setPurpose(new String(" "));
-        }
-        else {
-          activity.setPurpose(eaForm.getPurpose());
-        }
-        if (eaForm.getResults() == null
-            || eaForm.getResults().trim().length() == 0) {
-          activity.setResults(new String(" "));
-        }
-        else {
-          activity.setResults(eaForm.getResults());
-        }
-        if (eaForm.getObjectives() == null
-            || eaForm.getObjectives().trim().length() == 0) {
-          activity.setObjective(new String(" "));
-        }
-        else {
-          activity.setObjective(eaForm.getObjectives());
-        }
-        if (eaForm.getDocumentSpace() == null
-            || eaForm.getDocumentSpace().trim().length() == 0) {
-          activity.setDocumentSpace(new String(" "));
-        }
-        else {
-          activity.setDocumentSpace(eaForm.getDocumentSpace());
-        }
-
-        if (eaForm.getConditions() == null
-            || eaForm.getConditions().trim().length() == 0) {
-          activity.setCondition(" ");
-        }
-        else {
-          activity.setCondition(eaForm.getConditions());
-        }
-
-        try {
-          activity.setLineMinRank(Integer.valueOf(eaForm.getLineMinRank()));
-          if (activity.getLineMinRank().intValue() < 1 ||
-              activity.getLineMinRank().intValue() > 5) {
-            logger.debug(
-                "Line Ministry Rank is out of permisible range (1 to 5)");
-            activity.setLineMinRank(null);
-          }
-        }
-        catch (NumberFormatException nex) {
-          logger.debug("Line Ministry Rank is not a number : " + nex);
-          activity.setLineMinRank(null);
-        }
-        try {
-          activity.setPlanMinRank(Integer.valueOf(eaForm.getPlanMinRank()));
-          if (activity.getPlanMinRank().intValue() < 1 ||
-              activity.getPlanMinRank().intValue() > 5) {
-            logger.debug(
-                "Plan Ministry Rank is out of permisible range (1 to 5)");
-            activity.setPlanMinRank(null);
-          }
-        }
-        catch (NumberFormatException nex) {
-          logger.debug("Plan Ministry Rank is not a number : " + nex);
-          activity.setPlanMinRank(null);
-        }
-
-        activity.setProposedApprovalDate(DateConversion.getDate(eaForm
-            .getOriginalAppDate()));
-        activity.setActualApprovalDate(DateConversion.getDate(eaForm
-            .getRevisedAppDate()));
-        activity.setProposedStartDate(DateConversion.getDate(eaForm
-            .getOriginalStartDate()));
-        activity.setActualStartDate(DateConversion.getDate(eaForm
-            .getRevisedStartDate()));
-        activity.setActualCompletionDate(DateConversion.getDate(eaForm
-            .getCurrentCompDate()));
-        activity.setOriginalCompDate(DateConversion.getDate(eaForm
-            .getProposedCompDate()));
-        activity.setContractingDate(DateConversion.getDate(eaForm
-            .getContractingDate()));
-        activity.setDisbursmentsDate(DateConversion.getDate(eaForm
-            .getDisbursementsDate()));
-        activity.setProposedCompletionDate(DateConversion.getDate(eaForm
-            .getProposedCompDate()));
-        AmpActivityClosingDates closeDate = null;
-
-        if (activity.getClosingDates() == null) {
-          activity.setClosingDates(new HashSet());
-        }
-
-        if (! (eaForm.isEditAct())) {
-          closeDate = new AmpActivityClosingDates();
-          closeDate.setAmpActivityId(activity);
-          closeDate.setClosingDate(DateConversion.getDate(eaForm
-              .getProposedCompDate()));
-          closeDate.setComments(" ");
-          closeDate.setType(Constants.REVISED);
-          activity.getClosingDates().add(closeDate);
-        }
-
-        if (eaForm.getActivityCloseDates() != null) {
-          Iterator itr = eaForm.getActivityCloseDates().iterator();
-          while (itr.hasNext()) {
-            String date = (String) itr.next();
-            closeDate = new AmpActivityClosingDates();
-            closeDate.setAmpActivityId(activity);
-            closeDate.setClosingDate(DateConversion.getDate(date));
-            closeDate.setType(Constants.REVISED);
-            closeDate.setComments(" ");
-            activity.getClosingDates().add(closeDate);
-          }
-        }
-
-        if (eaForm.getCurrentCompDate() != null
-            && eaForm.getCurrentCompDate().trim().length() > 0) {
-          closeDate = new AmpActivityClosingDates();
-          closeDate.setAmpActivityId(activity);
-          closeDate.setClosingDate(DateConversion.getDate(eaForm
-              .getCurrentCompDate()));
-          closeDate.setComments(" ");
-          closeDate.setType(Constants.CURRENT);
-
-          Collection temp = activity.getClosingDates();
-          if (! (temp.contains(closeDate))) {
-            activity.getClosingDates().add(closeDate);
-          }
-        }
-
-        activity.setContFirstName(eaForm.getDnrCntFirstName());
-        activity.setContLastName(eaForm.getDnrCntLastName());
-        activity.setEmail(eaForm.getDnrCntEmail());
-        activity.setDnrCntTitle(eaForm.getDnrCntTitle());
-        activity.setDnrCntOrganization(eaForm.getDnrCntOrganization());
-        activity.setDnrCntFaxNumber(eaForm.getDnrCntFaxNumber());
-        activity.setDnrCntPhoneNumber(eaForm.getDnrCntPhoneNumber());
-
-        activity.setMofedCntFirstName(eaForm.getMfdCntFirstName());
-        activity.setMofedCntLastName(eaForm.getMfdCntLastName());
-        activity.setMofedCntEmail(eaForm.getMfdCntEmail());
-        activity.setMfdCntTitle(eaForm.getMfdCntTitle());
-        activity.setMfdCntOrganization(eaForm.getMfdCntOrganization());
-        activity.setMfdCntFaxNumber(eaForm.getMfdCntFaxNumber());
-        activity.setMfdCntPhoneNumber(eaForm.getMfdCntPhoneNumber());
-
-        activity.setComments(" ");
-
-        if (eaForm.getContractors() == null
-            || eaForm.getContractors().trim().length() == 0) {
-          activity.setContractors(" ");
-        }
-        else {
-          activity.setContractors(eaForm.getContractors());
-        }
-
-        // set status of an activity
+				// set status of an activity
 //				if (eaForm.getStatusId() != null // TO BE DELETED
 //						&& eaForm.getStatus().intValue() != -1) {
 //					AmpStatus status = DbUtil.getAmpStatus(eaForm.getStatus());
@@ -701,228 +661,222 @@ public class SaveActivity
 //						activity.setStatus(status);
 //					}
 //				}
-        // set status reason
-        if (eaForm.getStatusReason() != null
-            && eaForm.getStatusReason().trim().length() != 0) {
-          activity.setStatusReason(eaForm.getStatusReason().trim());
-        }
-        else {
-          activity.setStatusReason(" ");
-        }
+				// set status reason
+				if (eaForm.getStatusReason() != null
+						&& eaForm.getStatusReason().trim().length() != 0) {
+					activity.setStatusReason(eaForm.getStatusReason().trim());
+				} else {
+					activity.setStatusReason(" ");
+				}
 
-        //save reference docs
-        //Collection<AmpActivityReferenceDoc> activityRefDocs=ActivityUtil.getReferenceDocumentsFor(eaForm.getActivityId());
-        //create map where keys are category value ids.
-        //Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=
-        //	new ActivityUtil.CategoryIdRefDocMapBuilder().createMap(activityRefDocs);
+				//save reference docs
+				//Collection<AmpActivityReferenceDoc> activityRefDocs=ActivityUtil.getReferenceDocumentsFor(eaForm.getActivityId());
+	        	//create map where keys are category value ids.
+	        	//Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=
+	        	//	new ActivityUtil.CategoryIdRefDocMapBuilder().createMap(activityRefDocs);
+				
+				List formRefDocs=eaForm.getReferenceDocs();
+	        	Set<AmpActivityReferenceDoc> resultRefDocs=new HashSet<AmpActivityReferenceDoc>();
+	        	if(formRefDocs!=null && !formRefDocs.isEmpty())
+				for (Iterator refIter = formRefDocs.iterator(); refIter.hasNext();) {
+					ReferenceDoc refDoc = (ReferenceDoc) refIter.next();
+					if(ArrayUtils.contains(eaForm.getAllReferenceDocNameIds(), refDoc.getCategoryValueId())){
+						AmpActivityReferenceDoc dbRefDoc=null;//categoryRefDocMap.get(refDoc.getCategoryValueId());
+						//if (dbRefDoc==null){
+							dbRefDoc=new AmpActivityReferenceDoc();
+							dbRefDoc.setCreated(new Date());
+							AmpCategoryValue catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(refDoc.getCategoryValueId());
+							dbRefDoc.setCategoryValue(catVal);
+							dbRefDoc.setActivity(activity);
+						//}
+						dbRefDoc.setActivity(activity);
+						dbRefDoc.setComment(refDoc.getComment());
+						dbRefDoc.setLastEdited(new Date());
+						resultRefDocs.add(dbRefDoc);
+						
+					}
+				}
+				activity.setReferenceDocs(resultRefDocs);
+				
+				
+				// set the sectors
+				if (eaForm.getActivitySectors() != null) {
+					Set sectors = new HashSet();
+					if (eaForm.getActivitySectors() != null) {
+						Iterator itr = eaForm.getActivitySectors().iterator();
+						while (itr.hasNext()) {
+							ActivitySector actSect = (ActivitySector) itr.next();
+							Long sectorId = null;
+							if (actSect.getSubsectorLevel2Id() != null
+									&& (!actSect.getSubsectorLevel2Id().equals(new Long(-1)))) {
+								sectorId = actSect.getSubsectorLevel2Id();
+							} else if (actSect.getSubsectorLevel1Id() != null
+									&& (!actSect.getSubsectorLevel1Id().equals(new Long(-1)))) {
+								sectorId = actSect.getSubsectorLevel1Id();
+							} else {
+								sectorId = actSect.getSectorId();
+							}
+							AmpActivitySector amps = new AmpActivitySector();
+							amps.setActivityId(activity);
+							if (sectorId != null && (!sectorId.equals(new Long(-1))))
+								amps.setSectorId(SectorUtil.getAmpSector(sectorId));
+							amps.setSectorPercentage(actSect.getSectorPercentage());
+							sectors.add(amps);
+						}
+					}
+					activity.setSectors(sectors);
+				}
 
-        List formRefDocs = eaForm.getReferenceDocs();
-        Set<AmpActivityReferenceDoc>
-            resultRefDocs = new HashSet<AmpActivityReferenceDoc> ();
-        if (formRefDocs != null && !formRefDocs.isEmpty())
-          for (Iterator refIter = formRefDocs.iterator(); refIter.hasNext(); ) {
-            ReferenceDoc refDoc = (ReferenceDoc) refIter.next();
-            if (ArrayUtils.contains(eaForm.getAllReferenceDocNameIds(),
-                                    refDoc.getCategoryValueId())) {
-              AmpActivityReferenceDoc dbRefDoc = null; //categoryRefDocMap.get(refDoc.getCategoryValueId());
-              //if (dbRefDoc==null){
-              dbRefDoc = new AmpActivityReferenceDoc();
-              dbRefDoc.setCreated(new Date());
-              AmpCategoryValue catVal = CategoryManagerUtil.
-                  getAmpCategoryValueFromDb(refDoc.getCategoryValueId());
-              dbRefDoc.setCategoryValue(catVal);
-              dbRefDoc.setActivity(activity);
-              //}
-              dbRefDoc.setActivity(activity);
-              dbRefDoc.setComment(refDoc.getComment());
-              dbRefDoc.setLastEdited(new Date());
-              resultRefDocs.add(dbRefDoc);
+				if (eaForm.getProgram() != null
+						&& (!eaForm.getProgram().equals(new Long(-1)))) {
+					AmpTheme theme = ProgramUtil.getThemeObject(eaForm.getProgram());
+					if (theme != null) {
+						activity.setThemeId(theme);
+					}
+				}
+				if (eaForm.getProgramDescription() != null
+						&& eaForm.getProgramDescription().trim().length() != 0) {
+					activity.setProgramDescription(eaForm
+							.getProgramDescription());
+				} else {
+					activity.setProgramDescription(" ");
+				}
 
-            }
-          }
-        activity.setReferenceDocs(resultRefDocs);
+				// set organizations role
+				Set orgRole = new HashSet();
 
-        // set the sectors
-        if (eaForm.getActivitySectors() != null) {
-          Set sectors = new HashSet();
-          if (eaForm.getActivitySectors() != null) {
-            Iterator itr = eaForm.getActivitySectors().iterator();
-            while (itr.hasNext()) {
-              ActivitySector actSect = (ActivitySector) itr.next();
-              Long sectorId = null;
-              if (actSect.getSubsectorLevel2Id() != null
-                  && (!actSect.getSubsectorLevel2Id().equals(new Long( -1)))) {
-                sectorId = actSect.getSubsectorLevel2Id();
-              }
-              else if (actSect.getSubsectorLevel1Id() != null
-                       && (!actSect.getSubsectorLevel1Id().equals(new Long( -1)))) {
-                sectorId = actSect.getSubsectorLevel1Id();
-              }
-              else {
-                sectorId = actSect.getSectorId();
-              }
-              AmpActivitySector amps = new AmpActivitySector();
-              amps.setActivityId(activity);
-              if (sectorId != null && (!sectorId.equals(new Long( -1))))
-                amps.setSectorId(SectorUtil.getAmpSector(sectorId));
-              amps.setSectorPercentage(actSect.getSectorPercentage());
-              sectors.add(amps);
-            }
-          }
-          activity.setSectors(sectors);
-        }
+				if (eaForm.getFundingOrganizations() != null) { // funding
+																// organizations
+					AmpRole role = DbUtil.getAmpRole(Constants.DONOR);
+					Iterator itr = eaForm.getFundingOrganizations().iterator();
+					while (itr.hasNext()) {
+						FundingOrganization fOrg = (FundingOrganization) itr
+								.next();
+						AmpOrganisation ampOrg = DbUtil.getOrganisation(fOrg
+								.getAmpOrgId());
+						AmpOrgRole ampOrgRole = new AmpOrgRole();
+						ampOrgRole.setActivity(activity);
+						ampOrgRole.setRole(role);
+						ampOrgRole.setOrganisation(ampOrg);
+						orgRole.add(ampOrgRole);
+					}
+				}
+				if (eaForm.getExecutingAgencies() != null) { // executing
+																// agencies
+					AmpRole role = DbUtil
+							.getAmpRole(Constants.EXECUTING_AGENCY);
+					Iterator itr = eaForm.getExecutingAgencies().iterator();
+					while (itr.hasNext()) {
+						AmpOrganisation org = (AmpOrganisation) itr.next();
+						AmpOrgRole ampOrgRole = new AmpOrgRole();
+						ampOrgRole.setActivity(activity);
+						ampOrgRole.setRole(role);
+						ampOrgRole.setOrganisation(org);
+						orgRole.add(ampOrgRole);
+					}
+				}
+				if (eaForm.getImpAgencies() != null) { // implementing agencies
+					AmpRole role = DbUtil
+							.getAmpRole(Constants.IMPLEMENTING_AGENCY);
+					Iterator itr = eaForm.getImpAgencies().iterator();
+					while (itr.hasNext()) {
+						AmpOrganisation org = (AmpOrganisation) itr.next();
+						AmpOrgRole ampOrgRole = new AmpOrgRole();
+						ampOrgRole.setActivity(activity);
+						ampOrgRole.setRole(role);
+						ampOrgRole.setOrganisation(org);
+						orgRole.add(ampOrgRole);
+					}
+				}
+				if (eaForm.getBenAgencies() != null) { // beneficiary agencies
+					AmpRole role = DbUtil
+							.getAmpRole(Constants.BENEFICIARY_AGENCY);
+					Iterator itr = eaForm.getBenAgencies().iterator();
+					while (itr.hasNext()) {
+						AmpOrganisation org = (AmpOrganisation) itr.next();
+						AmpOrgRole ampOrgRole = new AmpOrgRole();
+						ampOrgRole.setActivity(activity);
+						ampOrgRole.setRole(role);
+						ampOrgRole.setOrganisation(org);
+						orgRole.add(ampOrgRole);
+					}
+				}
+				if (eaForm.getConAgencies() != null) { // contracting agencies
+					AmpRole role = DbUtil
+							.getAmpRole(Constants.CONTRACTING_AGENCY);
+					Iterator itr = eaForm.getConAgencies().iterator();
+					while (itr.hasNext()) {
+						AmpOrganisation org = (AmpOrganisation) itr.next();
+						AmpOrgRole ampOrgRole = new AmpOrgRole();
+						ampOrgRole.setActivity(activity);
+						ampOrgRole.setRole(role);
+						ampOrgRole.setOrganisation(org);
+						orgRole.add(ampOrgRole);
+					}
+				}
+				if (eaForm.getReportingOrgs() != null) { // Reporting
+															// Organization
+					AmpRole role = DbUtil
+							.getAmpRole(Constants.REPORTING_AGENCY);
+					Iterator itr = eaForm.getReportingOrgs().iterator();
+					while (itr.hasNext()) {
+						AmpOrganisation org = (AmpOrganisation) itr.next();
+						AmpOrgRole ampOrgRole = new AmpOrgRole();
+						ampOrgRole.setActivity(activity);
+						ampOrgRole.setRole(role);
+						ampOrgRole.setOrganisation(org);
+						orgRole.add(ampOrgRole);
+					}
+				}
+				activity.setOrgrole(orgRole);
 
-        if (eaForm.getProgram() != null
-            && (!eaForm.getProgram().equals(new Long( -1)))) {
-          AmpTheme theme = ProgramUtil.getThemeObject(eaForm.getProgram());
-          if (theme != null) {
-            activity.setThemeId(theme);
-          }
-        }
-        if (eaForm.getProgramDescription() != null
-            && eaForm.getProgramDescription().trim().length() != 0) {
-          activity.setProgramDescription(eaForm
-                                         .getProgramDescription());
-        }
-        else {
-          activity.setProgramDescription(" ");
-        }
+				// set locations
+				if (eaForm.getSelectedLocs() != null) {
+					Set locations = new HashSet();
+					Iterator itr = eaForm.getSelectedLocs().iterator();
+					while (itr.hasNext()) {
+						Location loc = (Location) itr.next();
+						AmpLocation ampLoc = LocationUtil.getAmpLocation(loc
+								.getCountryId(), loc.getRegionId(), loc
+								.getZoneId(), loc.getWoredaId());
 
-        // set organizations role
-        Set orgRole = new HashSet();
+						if (ampLoc == null) {
+							ampLoc = new AmpLocation();
+							ampLoc.setCountry(loc.getCountry());
+							ampLoc.setDgCountry(DbUtil.getDgCountry(loc
+									.getCountryId()));
+							ampLoc.setRegion(loc.getRegion());
+							ampLoc.setAmpRegion(LocationUtil.getAmpRegion(loc
+									.getRegionId()));
+							ampLoc.setAmpZone(LocationUtil
+									.getAmpZone(loc.getZoneId()));
+							ampLoc.setAmpWoreda(LocationUtil.getAmpWoreda(loc
+									.getWoredaId()));
+							ampLoc.setDescription(new String(" "));
+							DbUtil.add(ampLoc);
+						}
+						locations.add(ampLoc);
+					}
+					activity.setLocations(locations);
+				}
 
-        if (eaForm.getFundingOrganizations() != null) { // funding
-          // organizations
-          AmpRole role = DbUtil.getAmpRole(Constants.DONOR);
-          Iterator itr = eaForm.getFundingOrganizations().iterator();
-          while (itr.hasNext()) {
-            FundingOrganization fOrg = (FundingOrganization) itr
-                .next();
-            AmpOrganisation ampOrg = DbUtil.getOrganisation(fOrg
-                .getAmpOrgId());
-            AmpOrgRole ampOrgRole = new AmpOrgRole();
-            ampOrgRole.setActivity(activity);
-            ampOrgRole.setRole(role);
-            ampOrgRole.setOrganisation(ampOrg);
-            orgRole.add(ampOrgRole);
-          }
-        }
-        if (eaForm.getExecutingAgencies() != null) { // executing
-          // agencies
-          AmpRole role = DbUtil
-              .getAmpRole(Constants.EXECUTING_AGENCY);
-          Iterator itr = eaForm.getExecutingAgencies().iterator();
-          while (itr.hasNext()) {
-            AmpOrganisation org = (AmpOrganisation) itr.next();
-            AmpOrgRole ampOrgRole = new AmpOrgRole();
-            ampOrgRole.setActivity(activity);
-            ampOrgRole.setRole(role);
-            ampOrgRole.setOrganisation(org);
-            orgRole.add(ampOrgRole);
-          }
-        }
-        if (eaForm.getImpAgencies() != null) { // implementing agencies
-          AmpRole role = DbUtil
-              .getAmpRole(Constants.IMPLEMENTING_AGENCY);
-          Iterator itr = eaForm.getImpAgencies().iterator();
-          while (itr.hasNext()) {
-            AmpOrganisation org = (AmpOrganisation) itr.next();
-            AmpOrgRole ampOrgRole = new AmpOrgRole();
-            ampOrgRole.setActivity(activity);
-            ampOrgRole.setRole(role);
-            ampOrgRole.setOrganisation(org);
-            orgRole.add(ampOrgRole);
-          }
-        }
-        if (eaForm.getBenAgencies() != null) { // beneficiary agencies
-          AmpRole role = DbUtil
-              .getAmpRole(Constants.BENEFICIARY_AGENCY);
-          Iterator itr = eaForm.getBenAgencies().iterator();
-          while (itr.hasNext()) {
-            AmpOrganisation org = (AmpOrganisation) itr.next();
-            AmpOrgRole ampOrgRole = new AmpOrgRole();
-            ampOrgRole.setActivity(activity);
-            ampOrgRole.setRole(role);
-            ampOrgRole.setOrganisation(org);
-            orgRole.add(ampOrgRole);
-          }
-        }
-        if (eaForm.getConAgencies() != null) { // contracting agencies
-          AmpRole role = DbUtil
-              .getAmpRole(Constants.CONTRACTING_AGENCY);
-          Iterator itr = eaForm.getConAgencies().iterator();
-          while (itr.hasNext()) {
-            AmpOrganisation org = (AmpOrganisation) itr.next();
-            AmpOrgRole ampOrgRole = new AmpOrgRole();
-            ampOrgRole.setActivity(activity);
-            ampOrgRole.setRole(role);
-            ampOrgRole.setOrganisation(org);
-            orgRole.add(ampOrgRole);
-          }
-        }
-        if (eaForm.getReportingOrgs() != null) { // Reporting
-          // Organization
-          AmpRole role = DbUtil
-              .getAmpRole(Constants.REPORTING_AGENCY);
-          Iterator itr = eaForm.getReportingOrgs().iterator();
-          while (itr.hasNext()) {
-            AmpOrganisation org = (AmpOrganisation) itr.next();
-            AmpOrgRole ampOrgRole = new AmpOrgRole();
-            ampOrgRole.setActivity(activity);
-            ampOrgRole.setRole(role);
-            ampOrgRole.setOrganisation(org);
-            orgRole.add(ampOrgRole);
-          }
-        }
-        activity.setOrgrole(orgRole);
+				if(eaForm.getCosts()!=null) {
+					Set costs=new HashSet();
+					Iterator i=eaForm.getCosts().iterator();
+					while (i.hasNext()) {
+						EUActivity element = (EUActivity) i.next();
+						element.setActivity(activity);
+						element.setId(null);
+						Iterator ii=element.getContributions().iterator();
+						while (ii.hasNext()) {
+							EUActivityContribution element2 = (EUActivityContribution) ii.next();
+							element2.setId(null);
+						}
+						costs.add(element);
+					}
+					activity.setCosts(costs);
+				}
 
-        // set locations
-        if (eaForm.getSelectedLocs() != null) {
-          Set locations = new HashSet();
-          Iterator itr = eaForm.getSelectedLocs().iterator();
-          while (itr.hasNext()) {
-            Location loc = (Location) itr.next();
-            AmpLocation ampLoc = LocationUtil.getAmpLocation(loc
-                .getCountryId(), loc.getRegionId(), loc
-                .getZoneId(), loc.getWoredaId());
-
-            if (ampLoc == null) {
-              ampLoc = new AmpLocation();
-              ampLoc.setCountry(loc.getCountry());
-              ampLoc.setDgCountry(DbUtil.getDgCountry(loc
-                  .getCountryId()));
-              ampLoc.setRegion(loc.getRegion());
-              ampLoc.setAmpRegion(LocationUtil.getAmpRegion(loc
-                  .getRegionId()));
-              ampLoc.setAmpZone(LocationUtil
-                                .getAmpZone(loc.getZoneId()));
-              ampLoc.setAmpWoreda(LocationUtil.getAmpWoreda(loc
-                  .getWoredaId()));
-              ampLoc.setDescription(new String(" "));
-              DbUtil.add(ampLoc);
-            }
-            locations.add(ampLoc);
-          }
-          activity.setLocations(locations);
-        }
-
-        if (eaForm.getCosts() != null) {
-          Set costs = new HashSet();
-          Iterator i = eaForm.getCosts().iterator();
-          while (i.hasNext()) {
-            EUActivity element = (EUActivity) i.next();
-            element.setActivity(activity);
-            element.setId(null);
-            Iterator ii = element.getContributions().iterator();
-            while (ii.hasNext()) {
-              EUActivityContribution element2 = (EUActivityContribution) ii.
-                  next();
-              element2.setId(null);
-            }
-            costs.add(element);
-          }
-          activity.setCosts(costs);
-        }
 
 //				// set level // TO BE DELETED
 //				if (eaForm.getLevel() != null) {
@@ -932,812 +886,767 @@ public class SaveActivity
 //					}
 //				}
 
-        Collection relatedLinks = new ArrayList();
-        if (eaForm.getDocumentList() != null) {
-          Iterator itr = eaForm.getDocumentList().iterator();
-          while (itr.hasNext()) {
-            RelatedLinks rl = (RelatedLinks) itr.next();
-            relatedLinks.add(rl);
-          }
-        }
-        if (eaForm.getLinksList() != null) {
-          Iterator itr = eaForm.getLinksList().iterator();
-          while (itr.hasNext()) {
-            RelatedLinks rl = (RelatedLinks) itr.next();
-            relatedLinks.add(rl);
-          }
-        }
+				Collection relatedLinks = new ArrayList();
+				if (eaForm.getDocumentList() != null) {
+					Iterator itr = eaForm.getDocumentList().iterator();
+					while (itr.hasNext()) {
+						RelatedLinks rl = (RelatedLinks) itr.next();
+						relatedLinks.add(rl);
+					}
+				}
+				if (eaForm.getLinksList() != null) {
+					Iterator itr = eaForm.getLinksList().iterator();
+					while (itr.hasNext()) {
+						RelatedLinks rl = (RelatedLinks) itr.next();
+						relatedLinks.add(rl);
+					}
+				}
 
-        // if the activity is being added from a users workspace,
-        // associate the
-        // activity with the team of the current member.
-        if (tm != null && (eaForm.isEditAct() == false)) {
-          AmpTeam team = TeamUtil.getAmpTeam(tm.getTeamId());
-          activity.setTeam(team);
-        }
-        else {
-          activity.setTeam(null);
-        }
+				// if the activity is being added from a users workspace,
+				// associate the
+				// activity with the team of the current member.
+				if (tm != null && (eaForm.isEditAct() == false)) {
+					AmpTeam team = TeamUtil.getAmpTeam(tm.getTeamId());
+					activity.setTeam(team);
+				} else {
+					activity.setTeam(null);
+				}
 
-        // set activity internal ids
-        Set internalIds = new HashSet();
-        if (eaForm.getSelectedOrganizations() != null) {
-          OrgProjectId orgProjId[] = eaForm
-              .getSelectedOrganizations();
-          for (int i = 0; i < orgProjId.length; i++) {
-            AmpActivityInternalId actInternalId = new AmpActivityInternalId();
-            if (orgProjId[i] != null) {
-              actInternalId.setOrganisation(DbUtil
-                                            .getOrganisation(orgProjId[i].
-                  getAmpOrgId()));
-              actInternalId
-                  .setInternalId(orgProjId[i].getProjectId());
-              internalIds.add(actInternalId);
-            }
-          }
-        }
-        activity.setInternalIds(internalIds);
+				// set activity internal ids
+				Set internalIds = new HashSet();
+				if (eaForm.getSelectedOrganizations() != null) {
+					OrgProjectId orgProjId[] = eaForm
+							.getSelectedOrganizations();
+					for (int i = 0; i < orgProjId.length; i++) {
+						AmpActivityInternalId actInternalId = new AmpActivityInternalId();
+						if(orgProjId[i] != null){
+						actInternalId.setOrganisation(DbUtil
+								.getOrganisation(orgProjId[i].getAmpOrgId()));
+						actInternalId
+								.setInternalId(orgProjId[i].getProjectId());
+						internalIds.add(actInternalId);
+					}
+				}
+			}
+				activity.setInternalIds(internalIds);
 
-        // set components
-        proccessComponents(tempComp, eaForm, activity, componentFundingIds);
+				// set components
+				proccessComponents(tempComp, eaForm, activity);
 
-        // set funding and funding details
-        Set fundings = new HashSet();
-        if (eaForm.getFundingOrganizations() != null) {
-          Iterator itr1 = eaForm.getFundingOrganizations().iterator();
-          while (itr1.hasNext()) {
-            FundingOrganization fOrg = (FundingOrganization) itr1
-                .next();
+				// set funding and funding details
+				Set fundings = new HashSet();
+				if (eaForm.getFundingOrganizations() != null) {
+					Iterator itr1 = eaForm.getFundingOrganizations().iterator();
+					while (itr1.hasNext()) {
+						FundingOrganization fOrg = (FundingOrganization) itr1
+								.next();
 
-            // add fundings
-            if (fOrg.getFundings() != null) {
-              Iterator itr2 = fOrg.getFundings().iterator();
-              while (itr2.hasNext()) {
-                Funding fund = (Funding) itr2.next();
-                AmpFunding ampFunding = new AmpFunding();
-
-                ampFunding.setActive(fOrg.getFundingActive());
-                if ("unchecked".equals(fOrg.getDelegatedCooperationString()) ||
-                    fOrg.getDelegatedCooperation() == null)
-                  ampFunding.setDelegatedCooperation(false);
-                else
-                  ampFunding.setDelegatedCooperation(true);
-                if ("unchecked".equals(fOrg.getDelegatedPartnerString()) ||
-                    fOrg.getDelegatedPartner() == null)
-                  ampFunding.setDelegatedPartner(false);
-                else
-                  ampFunding.setDelegatedPartner(true);
-
-                ampFunding.setAmpDonorOrgId(DbUtil
-                                            .getOrganisation(fOrg.getAmpOrgId()));
-                ampFunding.setFinancingId(fund
-                                          .getOrgFundingId());
-                /*
-                 * if (fund.getSignatureDate() != null)
-                 * ampFunding.setSignatureDate(DateConversion
-                 * .getDate(fund.getSignatureDate()));
-                 */
+						// add fundings
+						if (fOrg.getFundings() != null) {
+							Iterator itr2 = fOrg.getFundings().iterator();
+							while (itr2.hasNext()) {
+								Funding fund = (Funding) itr2.next();
+								AmpFunding ampFunding = new AmpFunding();
+								
+								
+								ampFunding.setActive(fOrg.getFundingActive());
+								if("unchecked".equals(fOrg.getDelegatedCooperationString()) || fOrg.getDelegatedCooperation()==null)
+									ampFunding.setDelegatedCooperation(false);
+								else 
+									ampFunding.setDelegatedCooperation(true);
+								if("unchecked".equals(fOrg.getDelegatedPartnerString()) || fOrg.getDelegatedPartner()==null)
+									ampFunding.setDelegatedPartner(false);
+								else 
+									ampFunding.setDelegatedPartner(true);
+								
+								ampFunding.setAmpDonorOrgId(DbUtil
+										.getOrganisation(fOrg.getAmpOrgId()));
+								ampFunding.setFinancingId(fund
+										.getOrgFundingId());
+								/*
+								 * if (fund.getSignatureDate() != null)
+								 * ampFunding.setSignatureDate(DateConversion
+								 * .getDate(fund.getSignatureDate()));
+								 */
 //								ampFunding.setModalityId(fund.getModality());
-                ampFunding.setFinancingInstrument(fund.getFinancingInstrument());
-                if (fund.getConditions() != null
-                    && fund.getConditions().trim().length() != 0) {
-                  ampFunding.setConditions(fund
-                                           .getConditions());
-                }
-                else {
-                  ampFunding.setConditions(new String(" "));
-                }
-                ampFunding.setComments(new String(" "));
-                /*								ampFunding.setAmpTermsAssistId(fund
-                          .getAmpTermsAssist());*/
-                ampFunding.setTypeOfAssistance(fund.getTypeOfAssistance());
-                ampFunding.setAmpActivityId(activity);
+								ampFunding.setFinancingInstrument(fund.getFinancingInstrument());
+								if (fund.getConditions() != null
+										&& fund.getConditions().trim().length() != 0) {
+									ampFunding.setConditions(fund
+											.getConditions());
+								} else {
+									ampFunding.setConditions(new String(" "));
+								}
+								ampFunding.setComments(new String(" "));
+/*								ampFunding.setAmpTermsAssistId(fund
+										.getAmpTermsAssist());*/
+								ampFunding.setTypeOfAssistance( fund.getTypeOfAssistance() );
+								ampFunding.setAmpActivityId(activity);
 
-                // add funding details for each funding
-                Set fundDeatils = new HashSet();
-                if (fund.getFundingDetails() != null) {
-                  Iterator itr3 = fund.getFundingDetails()
-                      .iterator();
-                  while (itr3.hasNext()) {
-                    FundingDetail fundDet = (FundingDetail) itr3
-                        .next();
-                    AmpFundingDetail ampFundDet = new AmpFundingDetail();
-                    ampFundDet
-                        .setTransactionType(new Integer(
-                            fundDet
-                            .getTransactionType()));
-                    // ampFundDet.setPerspectiveId(DbUtil.getPerspective(Constants.MOFED));
-                    ampFundDet.setPerspectiveId(DbUtil
-                                                .getPerspective(fundDet
-                        .getPerspectiveCode()));
-                    ampFundDet
-                        .setAdjustmentType(new Integer(
-                            fundDet
-                            .getAdjustmentType()));
-                    ampFundDet
-                        .setTransactionDate(DateConversion
-                                            .getDate(fundDet
-                        .getTransactionDate()));
-                    ampFundDet.setOrgRoleCode(fundDet
-                                              .getPerspectiveCode());
+								// add funding details for each funding
+								Set fundDeatils = new HashSet();
+								if (fund.getFundingDetails() != null) {
+									Iterator itr3 = fund.getFundingDetails()
+											.iterator();
+									while (itr3.hasNext()) {
+										FundingDetail fundDet = (FundingDetail) itr3
+												.next();
+										AmpFundingDetail ampFundDet = new AmpFundingDetail();
+										ampFundDet
+												.setTransactionType(new Integer(
+														fundDet
+																.getTransactionType()));
+										// ampFundDet.setPerspectiveId(DbUtil.getPerspective(Constants.MOFED));
+										ampFundDet.setPerspectiveId(DbUtil
+												.getPerspective(fundDet
+														.getPerspectiveCode()));
+										ampFundDet
+												.setAdjustmentType(new Integer(
+														fundDet
+																.getAdjustmentType()));
+										ampFundDet
+												.setTransactionDate(DateConversion
+														.getDate(fundDet
+																.getTransactionDate()));
+										ampFundDet.setOrgRoleCode(fundDet
+												.getPerspectiveCode());
 
-                    boolean useFixedRate = false;
-                    if (fundDet.getTransactionType() == Constants.COMMITMENT) {
-                      if (fundDet.isUseFixedRate() &&
-                          fundDet.getFixedExchangeRate().doubleValue() > 0
-                          && fundDet.getFixedExchangeRate().doubleValue() != 1) {
-                        useFixedRate = true;
-                      }
-                    }
+										boolean useFixedRate = false;
+										if (fundDet.getTransactionType() == Constants.COMMITMENT) {
+											if (fundDet.isUseFixedRate() &&
+													fundDet.getFixedExchangeRate().doubleValue() > 0 
+													&& fundDet.getFixedExchangeRate().doubleValue() != 1) {
+												useFixedRate = true;
+											}
+										}
 
-                    if (!useFixedRate) {
-                      Double transAmt = new Double(
-                          DecimalToText.getDouble(fundDet.getTransactionAmount()));
-                      ampFundDet.setTransactionAmount(transAmt);
-                      ampFundDet.setAmpCurrencyId(CurrencyUtil.
-                                                  getCurrencyByCode(fundDet.
-                          getCurrencyCode()));
-                      ampFundDet.setFixedExchangeRate(null);
-                    }
-                    else {
-                      // Use the fixed exchange rate
-                      double transAmt = DecimalToText.getDouble(fundDet.
-                          getTransactionAmount());
+										if (!useFixedRate) {
+											Double transAmt = new Double(
+													DecimalToText.getDouble(fundDet.getTransactionAmount()));
+											ampFundDet.setTransactionAmount(transAmt);
+											ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
+											ampFundDet.setFixedExchangeRate(null);
+										} else {
+											// Use the fixed exchange rate
+											double transAmt = DecimalToText.getDouble(fundDet.getTransactionAmount());
 
-                      Date trDate = DateConversion.getDate(fundDet.
-                          getTransactionDate());
+											Date trDate = DateConversion.getDate(fundDet.getTransactionDate());
 //											double frmExRt = CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,trDate);
 //											double amt = CurrencyWorker.convert1(transAmt, frmExRt,1);
 //											amt *= fundDet.getFixedExchangeRate();
-                      ampFundDet.setTransactionAmount(new Double(transAmt));
-                      ampFundDet.setFixedExchangeRate(fundDet.
-                          getFixedExchangeRate());
-                      ampFundDet.setAmpCurrencyId(CurrencyUtil.
-                                                  getCurrencyByCode(fundDet.
-                          getCurrencyCode()));
-                    }
-                    ampFundDet.setAmpFundingId(ampFunding);
-                    if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
-                      ampFundDet.setExpCategory(
-                          fundDet.getClassification());
-                    }
-                    fundDeatils.add(ampFundDet);
-                  }
-                }
-                ampFunding.setFundingDetails(fundDeatils);
+											ampFundDet.setTransactionAmount(new Double(transAmt));
+											ampFundDet.setFixedExchangeRate(fundDet.getFixedExchangeRate());
+											ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
+										}
+										ampFundDet.setAmpFundingId(ampFunding);
+										if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
+											ampFundDet.setExpCategory(
+													fundDet.getClassification());
+										}
+										fundDeatils.add(ampFundDet);
+									}
+								}
+								ampFunding.setFundingDetails(fundDeatils);
+								
+								this.saveMTEFProjections(fund, ampFunding);
+								
+								fundings.add(ampFunding);
+							}
+						}
+					}
+				}
+				activity.setFunding(fundings);
 
-                this.saveMTEFProjections(fund, ampFunding);
+				// set Regional fundings
+				Set regFundings = new HashSet();
+				if (eaForm.getRegionalFundings() != null
+						&& eaForm.getRegionalFundings().size() > 0) {
+					Iterator itr1 = eaForm.getRegionalFundings().iterator();
+					while (itr1.hasNext()) {
+						RegionalFunding regFund = (RegionalFunding) itr1.next();
+						if (regFund.getCommitments() != null
+								&& regFund.getCommitments().size() > 0) {
+							Iterator itr2 = regFund.getCommitments().iterator();
+							while (itr2.hasNext()) {
+								AmpRegionalFunding ampRegFund = new AmpRegionalFunding();
+								ampRegFund.setActivity(activity);
+								ampRegFund.setTransactionType(new Integer(
+										Constants.COMMITMENT));
+								FundingDetail fd = (FundingDetail) itr2.next();
+								Iterator tmpItr = eaForm.getCurrencies()
+										.iterator();
+								while (tmpItr.hasNext()) {
+									AmpCurrency curr = (AmpCurrency) tmpItr
+											.next();
+									if (curr.getCurrencyCode().equals(
+											fd.getCurrencyCode())) {
+										ampRegFund.setCurrency(curr);
+										break;
+									}
+								}
+								tmpItr = eaForm.getPerspectives().iterator();
+								while (tmpItr.hasNext()) {
+									AmpPerspective pers = (AmpPerspective) tmpItr
+											.next();
+									if (pers.getCode().equals(
+											fd.getPerspectiveCode())) {
+										ampRegFund.setPerspective(pers);
+										break;
+									}
+								}
+								tmpItr = eaForm.getFundingRegions().iterator();
+								while (tmpItr.hasNext()) {
+									AmpRegion reg = (AmpRegion) tmpItr.next();
+									if (reg.getAmpRegionId().equals(
+											regFund.getRegionId())) {
+										ampRegFund.setRegion(reg);
+										break;
+									}
+								}
+								ampRegFund.setTransactionAmount(new Double(
+										DecimalToText.getDouble(fd
+												.getTransactionAmount())));
+								ampRegFund.setTransactionDate(DateConversion
+										.getDate(fd.getTransactionDate()));
+								ampRegFund.setAdjustmentType(new Integer(fd
+										.getAdjustmentType()));
+								regFundings.add(ampRegFund);
+							}
+						}
 
-                fundings.add(ampFunding);
-              }
-            }
-          }
-        }
-        activity.setFunding(fundings);
+						if (regFund.getDisbursements() != null
+								&& regFund.getDisbursements().size() > 0) {
+							Iterator itr2 = regFund.getDisbursements()
+									.iterator();
+							while (itr2.hasNext()) {
+								AmpRegionalFunding ampRegFund = new AmpRegionalFunding();
+								ampRegFund.setActivity(activity);
+								ampRegFund.setTransactionType(new Integer(
+										Constants.DISBURSEMENT));
+								FundingDetail fd = (FundingDetail) itr2.next();
+								Iterator tmpItr = eaForm.getCurrencies()
+										.iterator();
+								while (tmpItr.hasNext()) {
+									AmpCurrency curr = (AmpCurrency) tmpItr
+											.next();
+									if (curr.getCurrencyCode().equals(
+											fd.getCurrencyCode())) {
+										ampRegFund.setCurrency(curr);
+										break;
+									}
+								}
+								tmpItr = eaForm.getPerspectives().iterator();
+								while (tmpItr.hasNext()) {
+									AmpPerspective pers = (AmpPerspective) tmpItr
+											.next();
+									if (pers.getCode().equals(
+											fd.getPerspectiveCode())) {
+										ampRegFund.setPerspective(pers);
+										break;
+									}
+								}
+								tmpItr = eaForm.getFundingRegions().iterator();
+								while (tmpItr.hasNext()) {
+									AmpRegion reg = (AmpRegion) tmpItr.next();
+									if (reg.getAmpRegionId().equals(
+											regFund.getRegionId())) {
+										ampRegFund.setRegion(reg);
+										break;
+									}
+								}
+								ampRegFund.setTransactionAmount(new Double(
+										DecimalToText.getDouble(fd
+												.getTransactionAmount())));
+								ampRegFund.setTransactionDate(DateConversion
+										.getDate(fd.getTransactionDate()));
+								ampRegFund.setAdjustmentType(new Integer(fd
+										.getAdjustmentType()));
+								regFundings.add(ampRegFund);
+							}
+						}
 
-        // set Regional fundings
-        Set regFundings = new HashSet();
-        if (eaForm.getRegionalFundings() != null
-            && eaForm.getRegionalFundings().size() > 0) {
-          Iterator itr1 = eaForm.getRegionalFundings().iterator();
-          while (itr1.hasNext()) {
-            RegionalFunding regFund = (RegionalFunding) itr1.next();
-            if (regFund.getCommitments() != null
-                && regFund.getCommitments().size() > 0) {
-              Iterator itr2 = regFund.getCommitments().iterator();
-              while (itr2.hasNext()) {
-                AmpRegionalFunding ampRegFund = new AmpRegionalFunding();
-                ampRegFund.setActivity(activity);
-                ampRegFund.setTransactionType(new Integer(
-                    Constants.COMMITMENT));
-                FundingDetail fd = (FundingDetail) itr2.next();
-                Iterator tmpItr = eaForm.getCurrencies()
-                    .iterator();
-                while (tmpItr.hasNext()) {
-                  AmpCurrency curr = (AmpCurrency) tmpItr
-                      .next();
-                  if (curr.getCurrencyCode().equals(
-                      fd.getCurrencyCode())) {
-                    ampRegFund.setCurrency(curr);
-                    break;
-                  }
-                }
-                tmpItr = eaForm.getPerspectives().iterator();
-                while (tmpItr.hasNext()) {
-                  AmpPerspective pers = (AmpPerspective) tmpItr
-                      .next();
-                  if (pers.getCode().equals(
-                      fd.getPerspectiveCode())) {
-                    ampRegFund.setPerspective(pers);
-                    break;
-                  }
-                }
-                tmpItr = eaForm.getFundingRegions().iterator();
-                while (tmpItr.hasNext()) {
-                  AmpRegion reg = (AmpRegion) tmpItr.next();
-                  if (reg.getAmpRegionId().equals(
-                      regFund.getRegionId())) {
-                    ampRegFund.setRegion(reg);
-                    break;
-                  }
-                }
-                ampRegFund.setTransactionAmount(new Double(
-                    DecimalToText.getDouble(fd
-                                            .getTransactionAmount())));
-                ampRegFund.setTransactionDate(DateConversion
-                                              .getDate(fd.getTransactionDate()));
-                ampRegFund.setAdjustmentType(new Integer(fd
-                    .getAdjustmentType()));
-                regFundings.add(ampRegFund);
-              }
-            }
+						if (regFund.getExpenditures() != null
+								&& regFund.getExpenditures().size() > 0) {
 
-            if (regFund.getDisbursements() != null
-                && regFund.getDisbursements().size() > 0) {
-              Iterator itr2 = regFund.getDisbursements()
-                  .iterator();
-              while (itr2.hasNext()) {
-                AmpRegionalFunding ampRegFund = new AmpRegionalFunding();
-                ampRegFund.setActivity(activity);
-                ampRegFund.setTransactionType(new Integer(
-                    Constants.DISBURSEMENT));
-                FundingDetail fd = (FundingDetail) itr2.next();
-                Iterator tmpItr = eaForm.getCurrencies()
-                    .iterator();
-                while (tmpItr.hasNext()) {
-                  AmpCurrency curr = (AmpCurrency) tmpItr
-                      .next();
-                  if (curr.getCurrencyCode().equals(
-                      fd.getCurrencyCode())) {
-                    ampRegFund.setCurrency(curr);
-                    break;
-                  }
-                }
-                tmpItr = eaForm.getPerspectives().iterator();
-                while (tmpItr.hasNext()) {
-                  AmpPerspective pers = (AmpPerspective) tmpItr
-                      .next();
-                  if (pers.getCode().equals(
-                      fd.getPerspectiveCode())) {
-                    ampRegFund.setPerspective(pers);
-                    break;
-                  }
-                }
-                tmpItr = eaForm.getFundingRegions().iterator();
-                while (tmpItr.hasNext()) {
-                  AmpRegion reg = (AmpRegion) tmpItr.next();
-                  if (reg.getAmpRegionId().equals(
-                      regFund.getRegionId())) {
-                    ampRegFund.setRegion(reg);
-                    break;
-                  }
-                }
-                ampRegFund.setTransactionAmount(new Double(
-                    DecimalToText.getDouble(fd
-                                            .getTransactionAmount())));
-                ampRegFund.setTransactionDate(DateConversion
-                                              .getDate(fd.getTransactionDate()));
-                ampRegFund.setAdjustmentType(new Integer(fd
-                    .getAdjustmentType()));
-                regFundings.add(ampRegFund);
-              }
-            }
+							Iterator itr2 = regFund.getExpenditures()
+									.iterator();
+							while (itr2.hasNext()) {
+								AmpRegionalFunding ampRegFund = new AmpRegionalFunding();
+								ampRegFund.setActivity(activity);
+								ampRegFund.setTransactionType(new Integer(
+										Constants.EXPENDITURE));
+								FundingDetail fd = (FundingDetail) itr2.next();
+								Iterator tmpItr = eaForm.getCurrencies()
+										.iterator();
+								while (tmpItr.hasNext()) {
+									AmpCurrency curr = (AmpCurrency) tmpItr
+											.next();
+									if (curr.getCurrencyCode().equals(
+											fd.getCurrencyCode())) {
+										ampRegFund.setCurrency(curr);
+										break;
+									}
+								}
+								tmpItr = eaForm.getPerspectives().iterator();
+								while (tmpItr.hasNext()) {
+									AmpPerspective pers = (AmpPerspective) tmpItr
+											.next();
+									if (pers.getCode().equals(
+											fd.getPerspectiveCode())) {
+										ampRegFund.setPerspective(pers);
+										break;
+									}
+								}
+								tmpItr = eaForm.getFundingRegions().iterator();
+								while (tmpItr.hasNext()) {
+									AmpRegion reg = (AmpRegion) tmpItr.next();
+									if (reg.getAmpRegionId().equals(
+											regFund.getRegionId())) {
+										ampRegFund.setRegion(reg);
+										break;
+									}
+								}
+								ampRegFund.setTransactionAmount(new Double(
+										DecimalToText.getDouble(fd
+												.getTransactionAmount())));
+								ampRegFund.setTransactionDate(DateConversion
+										.getDate(fd.getTransactionDate()));
+								ampRegFund.setAdjustmentType(new Integer(fd
+										.getAdjustmentType()));
+								regFundings.add(ampRegFund);
+							}
 
-            if (regFund.getExpenditures() != null
-                && regFund.getExpenditures().size() > 0) {
+						}
+					}
+				}
 
-              Iterator itr2 = regFund.getExpenditures()
-                  .iterator();
-              while (itr2.hasNext()) {
-                AmpRegionalFunding ampRegFund = new AmpRegionalFunding();
-                ampRegFund.setActivity(activity);
-                ampRegFund.setTransactionType(new Integer(
-                    Constants.EXPENDITURE));
-                FundingDetail fd = (FundingDetail) itr2.next();
-                Iterator tmpItr = eaForm.getCurrencies()
-                    .iterator();
-                while (tmpItr.hasNext()) {
-                  AmpCurrency curr = (AmpCurrency) tmpItr
-                      .next();
-                  if (curr.getCurrencyCode().equals(
-                      fd.getCurrencyCode())) {
-                    ampRegFund.setCurrency(curr);
-                    break;
-                  }
-                }
-                tmpItr = eaForm.getPerspectives().iterator();
-                while (tmpItr.hasNext()) {
-                  AmpPerspective pers = (AmpPerspective) tmpItr
-                      .next();
-                  if (pers.getCode().equals(
-                      fd.getPerspectiveCode())) {
-                    ampRegFund.setPerspective(pers);
-                    break;
-                  }
-                }
-                tmpItr = eaForm.getFundingRegions().iterator();
-                while (tmpItr.hasNext()) {
-                  AmpRegion reg = (AmpRegion) tmpItr.next();
-                  if (reg.getAmpRegionId().equals(
-                      regFund.getRegionId())) {
-                    ampRegFund.setRegion(reg);
-                    break;
-                  }
-                }
-                ampRegFund.setTransactionAmount(new Double(
-                    DecimalToText.getDouble(fd
-                                            .getTransactionAmount())));
-                ampRegFund.setTransactionDate(DateConversion
-                                              .getDate(fd.getTransactionDate()));
-                ampRegFund.setAdjustmentType(new Integer(fd
-                    .getAdjustmentType()));
-                regFundings.add(ampRegFund);
-              }
+				// Delete the following code
+				Iterator tmp = regFundings.iterator();
+				while (tmp.hasNext()) {
+					AmpRegionalFunding rf = (AmpRegionalFunding) tmp.next();
+					logger.debug("Regional Fundings :" + rf.getAdjustmentType()
+							+ " " + rf.getTransactionAmount());
+				}
 
-            }
-          }
-        }
+				activity.setRegionalFundings(regFundings);
 
-        // Delete the following code
-        Iterator tmp = regFundings.iterator();
-        while (tmp.hasNext()) {
-          AmpRegionalFunding rf = (AmpRegionalFunding) tmp.next();
-          logger.debug("Regional Fundings :" + rf.getAdjustmentType()
-                       + " " + rf.getTransactionAmount());
-        }
+				if (eaForm.getIssues() != null && eaForm.getIssues().size() > 0) {
+					Set issueSet = new HashSet();
+					for (int i = 0; i < eaForm.getIssues().size(); i++) {
+						Issues issue = (Issues) eaForm.getIssues().get(i);
+						AmpIssues ampIssue = new AmpIssues();
+						ampIssue.setActivity(activity);
+						ampIssue.setName(issue.getName());
+						Set measureSet = new HashSet();
+						if (issue.getMeasures() != null
+								&& issue.getMeasures().size() > 0) {
+							for (int j = 0; j < issue.getMeasures().size(); j++) {
+								Measures measure = (Measures) issue
+										.getMeasures().get(j);
+								AmpMeasure ampMeasure = new AmpMeasure();
+								ampMeasure.setIssue(ampIssue);
+								ampMeasure.setName(measure.getName());
+								Set actorSet = new HashSet();
+								if (measure.getActors() != null
+										&& measure.getActors().size() > 0) {
+									for (int k = 0; k < measure.getActors()
+											.size(); k++) {
+										AmpActor actor = (AmpActor) measure
+												.getActors().get(k);
+										actor.setAmpActorId(null);
+										actor.setMeasure(ampMeasure);
+										actorSet.add(actor);
+									}
+								}
+								ampMeasure.setActors(actorSet);
+								measureSet.add(ampMeasure);
+							}
+						}
+						ampIssue.setMeasures(measureSet);
+						issueSet.add(ampIssue);
+					}
+					activity.setIssues(issueSet);
+				}
 
-        activity.setRegionalFundings(regFundings);
+				Long field = null;
+				if (eaForm.getField() != null)
+					field = eaForm.getField().getAmpFieldId();
 
-        if (eaForm.getIssues() != null && eaForm.getIssues().size() > 0) {
-          Set issueSet = new HashSet();
-          for (int i = 0; i < eaForm.getIssues().size(); i++) {
-            Issues issue = (Issues) eaForm.getIssues().get(i);
-            AmpIssues ampIssue = new AmpIssues();
-            ampIssue.setActivity(activity);
-            ampIssue.setName(issue.getName());
-            Set measureSet = new HashSet();
-            if (issue.getMeasures() != null
-                && issue.getMeasures().size() > 0) {
-              for (int j = 0; j < issue.getMeasures().size(); j++) {
-                Measures measure = (Measures) issue
-                    .getMeasures().get(j);
-                AmpMeasure ampMeasure = new AmpMeasure();
-                ampMeasure.setIssue(ampIssue);
-                ampMeasure.setName(measure.getName());
-                Set actorSet = new HashSet();
-                if (measure.getActors() != null
-                    && measure.getActors().size() > 0) {
-                  for (int k = 0; k < measure.getActors()
-                       .size(); k++) {
-                    AmpActor actor = (AmpActor) measure
-                        .getActors().get(k);
-                    actor.setAmpActorId(null);
-                    actor.setMeasure(ampMeasure);
-                    actorSet.add(actor);
-                  }
-                }
-                ampMeasure.setActors(actorSet);
-                measureSet.add(ampMeasure);
-              }
-            }
-            ampIssue.setMeasures(measureSet);
-            issueSet.add(ampIssue);
-          }
-          activity.setIssues(issueSet);
-        }
 
-        Long field = null;
-        if (eaForm.getField() != null)
-          field = eaForm.getField().getAmpFieldId();
+				if (eaForm.isEditAct()) {
+					// Setting approval status of activity
+					activity.setApprovalStatus(eaForm.getApprovalStatus());
+                                        activity.setActivityCreator(eaForm.getCreatedBy());
+					// update an existing activity
+					//request.get
+					actId = ActivityUtil.saveActivity(activity, eaForm.getActivityId(),
+							true, eaForm.getCommentsCol(), eaForm
+									.isSerializeFlag(), field, relatedLinks, tm
+									.getMemberId(), eaForm.getIndicatorsME(),tempComp);
+					//for logging the activity
+					AuditLoggerUtil.logObject(session, request,activity,"update");
+						// remove the activity details from the edit activity list
+					if (toDelete == null
+							|| (!toDelete.trim().equalsIgnoreCase("true"))) {
+						String sessId = session.getId();
+						synchronized (ampContext) {
+							HashMap activityMap = (HashMap) ampContext
+									.getAttribute(Constants.EDIT_ACT_LIST);
+							activityMap.remove(sessId);
+							ArrayList sessList = (ArrayList) ampContext
+									.getAttribute(Constants.SESSION_LIST);
+							sessList.remove(sessId);
+							Collections.sort(sessList);
+							ampContext.setAttribute(Constants.EDIT_ACT_LIST,
+									activityMap);
+							ampContext.setAttribute(Constants.SESSION_LIST,
+									sessList);
 
-        if (eaForm.isEditAct()) {
-          // Setting approval status of activity
-          activity.setApprovalStatus(eaForm.getApprovalStatus());
-          activity.setActivityCreator(eaForm.getCreatedBy());
-          // update an existing activity
-          //request.get
-          actId = ActivityUtil.saveActivity(activity, eaForm.getActivityId(),
-                                            true, eaForm.getCommentsCol(),
-                                            eaForm
-                                            .isSerializeFlag(), field,
-                                            relatedLinks, tm
-                                            .getMemberId(),
-                                            eaForm.getIndicatorsME(), tempComp,
-                                            componentFundingIds);
-          //for logging the activity
-          AuditLoggerUtil.logObject(session, request, activity, "update");
-          // remove the activity details from the edit activity list
-          if (toDelete == null
-              || (!toDelete.trim().equalsIgnoreCase("true"))) {
-            String sessId = session.getId();
-            synchronized (ampContext) {
-              HashMap activityMap = (HashMap) ampContext
-                  .getAttribute(Constants.EDIT_ACT_LIST);
-              activityMap.remove(sessId);
-              ArrayList sessList = (ArrayList) ampContext
-                  .getAttribute(Constants.SESSION_LIST);
-              sessList.remove(sessId);
-              Collections.sort(sessList);
-              ampContext.setAttribute(Constants.EDIT_ACT_LIST,
-                                      activityMap);
-              ampContext.setAttribute(Constants.SESSION_LIST,
-                                      sessList);
+							HashMap tsList = (HashMap) ampContext
+									.getAttribute(Constants.TS_ACT_LIST);
+							if (tsList != null) {
+								tsList.remove(eaForm.getActivityId());
+							}
+							ampContext.setAttribute(Constants.TS_ACT_LIST,
+									tsList);
+							HashMap uList = (HashMap) ampContext
+									.getAttribute(Constants.USER_ACT_LIST);
+							if (uList != null) {
+								uList.remove(tm.getMemberId());
+							}
+							ampContext.setAttribute(Constants.USER_ACT_LIST,
+									uList);
 
-              HashMap tsList = (HashMap) ampContext
-                  .getAttribute(Constants.TS_ACT_LIST);
-              if (tsList != null) {
-                tsList.remove(eaForm.getActivityId());
-              }
-              ampContext.setAttribute(Constants.TS_ACT_LIST,
-                                      tsList);
-              HashMap uList = (HashMap) ampContext
-                  .getAttribute(Constants.USER_ACT_LIST);
-              if (uList != null) {
-                uList.remove(tm.getMemberId());
-              }
-              ampContext.setAttribute(Constants.USER_ACT_LIST,
-                                      uList);
-
-            }
-          }
-        }
-        else {
-          AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm
-              .getMemberId());
-          activity.setActivityCreator(teamMember);
-          Calendar cal = Calendar.getInstance();
-          activity.setCreatedDate(cal.getTime());
-          // Setting approval status of activity
-          activity.setApprovalStatus(eaForm.getApprovalStatus());
-          // create a new activity
+						}
+					}
+				} else {
+					AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm
+							.getMemberId());
+					activity.setActivityCreator(teamMember);
+					Calendar cal = Calendar.getInstance();
+					activity.setCreatedDate(cal.getTime());
+					// Setting approval status of activity
+					activity.setApprovalStatus(eaForm.getApprovalStatus());
+					// create a new activity
 
 //					actId = ActivityUtil.saveActivity(activity,
 //							eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
 //							field, relatedLinks, tm.getMemberId(), tempComp);
+					
+					actId = ActivityUtil.saveActivity(activity, null, false, eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
+	                        field, relatedLinks,tm.getMemberId() , eaForm.getIndicatorsME(), tempComp);
+					
+					
+					//for logging the activity
+					 AuditLoggerUtil.logObject(session, request,activity,"add");
 
-          actId = ActivityUtil.saveActivity(activity, null, false,
-                                            eaForm.getCommentsCol(),
-                                            eaForm.isSerializeFlag(),
-                                            field, relatedLinks, tm.getMemberId(),
-                                            eaForm.getIndicatorsME(), tempComp,
-                                            componentFundingIds);
+				}
+			}
 
-          //for logging the activity
-          AuditLoggerUtil.logObject(session, request, activity, "add");
-
-        }
-      }
-
-      if (DocumentUtil.isDMEnabled()) {
-        Site currentSite = RequestUtils.getSite(request);
-        Node spaceNode = DocumentUtil.getDocumentSpace(currentSite,
-            activity.getDocumentSpace());
-        DocumentUtil.renameNode(spaceNode, activity.getName());
-      }
-      /**
-       * @todo give name to document space
-       */
-      boolean surveyFlag = eaForm.isDonorFlag();
-
-      eaForm.setDonorFlag(false);
-      eaForm.setFundDonor(null);
-      eaForm.setStep("1");
-      eaForm.setReset(true);
-      eaForm.setDocReset(true);
-      eaForm.setLocationReset(true);
-      eaForm.setOrgPopupReset(true);
-      eaForm.setOrgSelReset(true);
-      eaForm.setComponentReset(true);
-//			eaForm.setSectorReset(true);
-      eaForm.setPhyProgReset(true);
-      // Clearing comment properties
-      eaForm.getCommentsCol().clear();
-      eaForm.setCommentFlag(false);
-      // Clearing approval process properties
-      eaForm.setWorkingTeamLeadFlag("no");
-      eaForm.setFundingRegions(null);
-      eaForm.setRegionalFundings(null);
-      eaForm.setLineMinRank(null);
-      eaForm.setPlanMinRank(null);
-
-      /* Clearing categories */
-      eaForm.setAccessionInstrument(new Long(0));
-      eaForm.setAcChapter(new Long(0));
-      eaForm.setStatusId(new Long(0));
-      eaForm.setGbsSbs(new Long(0));
-      /* END - Clearing categories */
-
-      int temp = eaForm.getPageId();
-      eaForm.setPageId( -1);
-      //UpdateDB.updateReportCache(activity.getAmpActivityId());
-      eaForm.reset(mapping, request);
-
-      if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
-
-        Collection col = (Collection) session.getAttribute(
-            Constants.AMP_PROJECTS);
-        AmpProject project = new AmpProject();
-        project.setAmpActivityId(actId);
-        col.remove(project);
-
-        Collection actIds = new ArrayList();
-        actIds.add(actId);
-        Collection dirtyActivities = DesktopUtil.getAmpProjects(actIds);
-        Iterator pItr = dirtyActivities.iterator();
-        if (pItr.hasNext()) {
-          AmpProject proj = (AmpProject) pItr.next();
-          col.add(proj);
-        }
-        session.setAttribute(Constants.AMP_PROJECTS, col);
-        session.setAttribute(Constants.DIRTY_ACTIVITY_LIST, dirtyActivities);
-        session.setAttribute(Constants.DESKTOP_SETTINGS_CHANGED, new Boolean(true));
-      }
-
-      if (tm.getTeamHead()) {
-        if (session.getAttribute(Constants.MY_TASKS) != null) {
-          session.removeAttribute(Constants.MY_TASKS);
-        }
-      }
-
-      if (temp == 0)
-        return mapping.findForward("adminHome");
-      else if (temp == 1) {
-        if (surveyFlag) { // forwarding to edit survey action for
-          // saving survey responses
-          logger.debug("forwarding to edit survey action...");
-          return mapping.findForward("saveSurvey");
-        }
-        else {
-          return mapping.findForward("viewMyDesktop");
-        }
-      }
-      else {
-        logger.info("returning null....");
-        return null;
-      }
-    }
-    catch (Exception e) {
-      e.printStackTrace();
-      throw new RuntimeException("Save Activity Error", e);
-
-    }
-  }
-
-  /**
-   * @param tempComp
-   * @param eaForm
-   * @param activity
-   */
-  private void proccessComponents(Components tempComp, EditActivityForm eaForm,
-                                  AmpActivity activity, List componentFundingIds) {
-    activity.setComponents(new HashSet());
-    if (eaForm.getSelectedComponents() != null) {
-      Iterator itr = eaForm.getSelectedComponents().iterator();
-      while (itr.hasNext()) {
-        Components comp =(Components) itr.next();
-        AmpComponent ampComp = null;
-        Collection col = ComponentsUtil.getComponent(comp.getTitle());
-        Iterator it = col.iterator();
-        while (it.hasNext()) {
-          ampComp = (AmpComponent) it.next();
-          activity.getComponents().add(ampComp);
-        }
-
-        if (comp.getCommitments() != null
-            && comp.getCommitments().size() > 0) {
-          Iterator itr2 = comp.getCommitments().iterator();
-          HashSet temp = new HashSet();
-          while (itr2.hasNext()) {
-            AmpComponentFunding ampCompFund = new AmpComponentFunding();
-            ampCompFund.setActivity(activity);
-            ampCompFund.setTransactionType(new Integer(
-                Constants.COMMITMENT));
-            FundingDetail fd = (FundingDetail) itr2.next();
-            Iterator tmpItr = eaForm.getCurrencies()
-                .iterator();
-            while (tmpItr.hasNext()) {
-              AmpCurrency curr = (AmpCurrency) tmpItr
-                  .next();
-              if (curr.getCurrencyCode().equals(
-                  fd.getCurrencyCode())) {
-                ampCompFund.setCurrency(curr);
-                break;
-              }
+            if(DocumentUtil.isDMEnabled()) {
+                Site currentSite = RequestUtils.getSite(request);
+                Node spaceNode = DocumentUtil.getDocumentSpace(currentSite,
+                    activity.getDocumentSpace());
+                DocumentUtil.renameNode(spaceNode, activity.getName());
             }
-            tmpItr = eaForm.getPerspectives().iterator();
-            while (tmpItr.hasNext()) {
-              AmpPerspective pers = (AmpPerspective) tmpItr
-                  .next();
-              if (pers.getCode().equals(
-                  fd.getPerspectiveCode())) {
-                ampCompFund.setPerspective(pers);
-                break;
-              }
-            }
-            /*Collection col1 = ActivityUtil.getFundingComponentActivity(ampComp.getAmpComponentId(),eaForm.getActivityId());
-             Iterator itr23 = col1.iterator();
-             while(itr23.hasNext())
-                                                                     {
-             AmpComponentFunding ampf = (AmpComponentFunding) itr23.next();
-             ampCompFund.setAmpComponentFundingId(ampf.getAmpComponentFundingId());
-
-                                                                     }
+            /**
+             * @todo give name to document space
              */
-            ampCompFund.setReportingOrganization(null);
-            ampCompFund.setTransactionAmount(new Double(
-                DecimalToText.getDouble(fd
-                                        .getTransactionAmount())));
-            ampCompFund.setTransactionDate(DateConversion
-                                           .getDate(fd.getTransactionDate()));
-            ampCompFund.setAdjustmentType(new Integer(fd
-                .getAdjustmentType()));
-            ampCompFund.setComponent(ampComp);
-            if (fd.getIndexId() != 0) {
-              ampCompFund.setAmpComponentFundingId(fd.getIndexId());
-              componentFundingIds.add(fd.getIndexId());
-            }
+            boolean surveyFlag = eaForm.isDonorFlag();
 
-            temp.add(ampCompFund);
-            tempComp.setCommitments(temp);
-          }
-        }
+			eaForm.setDonorFlag(false);
+			eaForm.setFundDonor(null);
+			eaForm.setStep("1");
+			eaForm.setReset(true);
+			eaForm.setDocReset(true);
+			eaForm.setLocationReset(true);
+			eaForm.setOrgPopupReset(true);
+			eaForm.setOrgSelReset(true);
+			eaForm.setComponentReset(true);
+//			eaForm.setSectorReset(true);
+			eaForm.setPhyProgReset(true);
+			// Clearing comment properties
+			eaForm.getCommentsCol().clear();
+			eaForm.setCommentFlag(false);
+			// Clearing approval process properties
+			eaForm.setWorkingTeamLeadFlag("no");
+			eaForm.setFundingRegions(null);
+			eaForm.setRegionalFundings(null);
+			eaForm.setLineMinRank(null);
+			eaForm.setPlanMinRank(null);
 
-        if (comp.getDisbursements() != null
-            && comp.getDisbursements().size() > 0) {
-          Iterator itr2 = comp.getDisbursements().iterator();
-          HashSet temp = new HashSet();
-          while (itr2.hasNext()) {
-            AmpComponentFunding ampCompFund = new AmpComponentFunding();
+			/* Clearing categories */
+			eaForm.setAccessionInstrument(new Long(0));
+			eaForm.setAcChapter(new Long(0));
+			eaForm.setStatusId(new Long(0));
+			eaForm.setGbsSbs(new Long(0));
+			/* END - Clearing categories */
 
-            ampCompFund.setActivity(activity);
-            ampCompFund.setTransactionType(new Integer(
-                Constants.DISBURSEMENT));
-            FundingDetail fd = (FundingDetail) itr2.next();
-            Iterator tmpItr = eaForm.getCurrencies()
-                .iterator();
-            while (tmpItr.hasNext()) {
-              AmpCurrency curr = (AmpCurrency) tmpItr
-                  .next();
-              if (curr.getCurrencyCode().equals(
-                  fd.getCurrencyCode())) {
-                ampCompFund.setCurrency(curr);
-                break;
-              }
-            }
-            tmpItr = eaForm.getPerspectives().iterator();
-            while (tmpItr.hasNext()) {
-              AmpPerspective pers = (AmpPerspective) tmpItr
-                  .next();
-              if (pers.getCode().equals(
-                  fd.getPerspectiveCode())) {
-                ampCompFund.setPerspective(pers);
-                break;
-              }
-            }
-            ampCompFund.setTransactionAmount(new Double(
-                DecimalToText.getDouble(fd
-                                        .getTransactionAmount())));
-            ampCompFund.setTransactionDate(DateConversion
-                                           .getDate(fd.getTransactionDate()));
-            ampCompFund.setAdjustmentType(new Integer(fd
-                .getAdjustmentType()));
-            ampCompFund.setComponent(ampComp);
-            if (fd.getIndexId() != 0) {
-              ampCompFund.
-                  setAmpComponentFundingId(fd.getIndexId());
-              componentFundingIds.add(fd.getIndexId());
-            }
-            temp.add(ampCompFund);
-            tempComp.setDisbursements(temp);
-          }
-        }
+			int temp = eaForm.getPageId();
+			eaForm.setPageId(-1);
+			//UpdateDB.updateReportCache(activity.getAmpActivityId());
+			eaForm.reset(mapping, request);
 
-        if (comp.getExpenditures() != null
-            && comp.getExpenditures().size() > 0) {
-          Iterator itr2 = comp.getExpenditures().iterator();
-          HashSet temp = new HashSet();
-          while (itr2.hasNext()) {
-            AmpComponentFunding ampCompFund = new AmpComponentFunding();
-            ampCompFund.setActivity(activity);
-            ampCompFund.setTransactionType(new Integer(
-                Constants.EXPENDITURE));
-            FundingDetail fd = (FundingDetail) itr2.next();
-            Iterator tmpItr = eaForm.getCurrencies()
-                .iterator();
-            while (tmpItr.hasNext()) {
-              AmpCurrency curr = (AmpCurrency) tmpItr
-                  .next();
-              if (curr.getCurrencyCode().equals(
-                  fd.getCurrencyCode())) {
-                ampCompFund.setCurrency(curr);
-                break;
-              }
-            }
-            tmpItr = eaForm.getPerspectives().iterator();
-            while (tmpItr.hasNext()) {
-              AmpPerspective pers = (AmpPerspective) tmpItr
-                  .next();
-              if (pers.getCode().equals(
-                  fd.getPerspectiveCode())) {
-                ampCompFund.setPerspective(pers);
-                break;
-              }
-            }
-            ampCompFund.setTransactionAmount(new Double(
-                DecimalToText.getDouble(fd
-                                        .getTransactionAmount())));
-            ampCompFund.setTransactionDate(DateConversion
-                                           .getDate(fd.getTransactionDate()));
-            ampCompFund.setAdjustmentType(new Integer(fd
-                .getAdjustmentType()));
-            ampCompFund.setComponent(ampComp);
-            if (fd.getIndexId() != 0) {
-              ampCompFund.
-                  setAmpComponentFundingId(fd.getIndexId());
-              componentFundingIds.add(fd.getIndexId());
-            }
+			if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
 
-            temp.add(ampCompFund);
-            tempComp.setExpenditures(temp);
+				Collection col = (Collection) session.getAttribute(
+						Constants.AMP_PROJECTS);
+				AmpProject project = new AmpProject();
+				project.setAmpActivityId(actId);
+				col.remove(project);
 
-          }
-        }
+				Collection actIds = new ArrayList();
+				actIds.add(actId);
+				Collection dirtyActivities = DesktopUtil.getAmpProjects(actIds);
+				Iterator pItr = dirtyActivities.iterator();
+				if (pItr.hasNext()) {
+					AmpProject proj = (AmpProject) pItr.next();
+					col.add(proj);
+				}
+				session.setAttribute(Constants.AMP_PROJECTS,col);
+				session.setAttribute(Constants.DIRTY_ACTIVITY_LIST,dirtyActivities);
+				session.setAttribute(Constants.DESKTOP_SETTINGS_CHANGED,new Boolean(true));
+			}
 
-        // set physical progress
-        Set phyProgess = new HashSet();
-        if (comp.getPhyProgress() != null) {
+			if (tm.getTeamHead()) {
+				if (session.getAttribute(Constants.MY_TASKS) != null) {
+					session.removeAttribute(Constants.MY_TASKS);
+				}
+			}
 
-          Iterator itr1 = comp.getPhyProgress().iterator();
-          while (itr1.hasNext()) {
-            PhysicalProgress phyProg = (PhysicalProgress) itr1
-                .next();
-            AmpPhysicalPerformance ampPhyPerf = new AmpPhysicalPerformance();
-            if (phyProg.getDescription() == null
-                || phyProg.getDescription().trim()
-                .length() == 0) {
-              ampPhyPerf.setDescription(new String(" "));
-            }
-            else {
-              ampPhyPerf.setDescription(phyProg
-                                        .getDescription());
-            }
-            ampPhyPerf.setAmpPpId(phyProg.getPid());
-            ampPhyPerf.setReportingDate(DateConversion
-                                        .getDate(phyProg.getReportingDate()));
-            ampPhyPerf.setTitle(phyProg.getTitle());
-            ampPhyPerf.setAmpActivityId(activity);
-            ampPhyPerf.setComponent(ampComp);
-            ampPhyPerf.setComments(" ");
-            phyProgess.add(ampPhyPerf);
-          }
-        }
-        tempComp.setPhyProgress(phyProgess);
-      }
-    }
-  }
+			if (temp == 0)
+				return mapping.findForward("adminHome");
+			else if (temp == 1) {
+				if (surveyFlag) { // forwarding to edit survey action for
+									// saving survey responses
+					logger.debug("forwarding to edit survey action...");
+					return mapping.findForward("saveSurvey");
+				} else {
+					return mapping.findForward("viewMyDesktop");
+				}
+			} else {
+				logger.info("returning null....");
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+            throw new RuntimeException("Save Activity Error",e);
 
-  private void saveMTEFProjections(Funding fund, AmpFunding ampFunding) {
-    if (ampFunding.getMtefProjections() != null) {
-      ampFunding.getMtefProjections().clear();
-    }
-    else
-      ampFunding.setMtefProjections(new HashSet<AmpFundingMTEFProjection> ());
-    if (fund.getMtefProjections() != null) {
-      Iterator mtefItr = fund.getMtefProjections().iterator();
-      while (mtefItr.hasNext()) {
-        MTEFProjection mtef = (MTEFProjection) mtefItr.next();
-        AmpFundingMTEFProjection ampmtef = new AmpFundingMTEFProjection();
-        ampmtef.setAmount(Double.valueOf(mtef.getAmount()));
-        ampmtef.setAmpFunding(ampFunding);
-        ampmtef.setAmpCurrency(CurrencyUtil.getCurrencyByCode(mtef.
-            getCurrencyCode()));
-        ampmtef.setProjected(CategoryManagerUtil.getAmpCategoryValueFromDb(mtef.
-            getProjected()));
-        ampmtef.setProjectionDate(DateConversion.getDate(mtef.getProjectionDate()));
+		}
+	}
 
-        ampFunding.getMtefProjections().add(ampmtef);
-      }
-    }
-  }
+	/**
+	 * @param tempComp
+	 * @param eaForm
+	 * @param activity
+	 */
+	private void proccessComponents(Components<AmpComponentFunding> tempComp, EditActivityForm eaForm, AmpActivity activity) {
+		activity.setComponents(new HashSet());
+		if (eaForm.getSelectedComponents() != null) {
+			Iterator<Components<FundingDetail>> itr = eaForm.getSelectedComponents().iterator();
+			while (itr.hasNext()) {
+				Components<FundingDetail> comp = itr.next();
+				AmpComponent ampComp = null;
+				Collection col = ComponentsUtil.getComponent(comp.getTitle());
+				Iterator it = col.iterator();
+				while(it.hasNext())
+				{
+					ampComp = (AmpComponent)it.next();
+					activity.getComponents().add(ampComp);
+				}
 
+				if (comp.getCommitments() != null
+						&& comp.getCommitments().size() > 0) {
+					HashSet<AmpComponentFunding> temp = new HashSet<AmpComponentFunding>();
+					Iterator<FundingDetail> commitmentsIter = comp.getCommitments().iterator();
+					while (commitmentsIter.hasNext()) {
+						FundingDetail fd = commitmentsIter.next();
+						AmpComponentFunding ampCompFund = new AmpComponentFunding();
+						ampCompFund.setActivity(activity);
+						ampCompFund.setTransactionType(new Integer(
+								Constants.COMMITMENT));						
+						Iterator tmpItr = eaForm.getCurrencies()
+								.iterator();
+						while (tmpItr.hasNext()) {
+							AmpCurrency curr = (AmpCurrency) tmpItr
+									.next();
+							if (curr.getCurrencyCode().equals(
+									fd.getCurrencyCode())) {
+								ampCompFund.setCurrency(curr);
+								break;
+							}
+						}
+						tmpItr = eaForm.getPerspectives().iterator();
+						while (tmpItr.hasNext()) {
+							AmpPerspective pers = (AmpPerspective) tmpItr
+									.next();
+							if (pers.getCode().equals(
+									fd.getPerspectiveCode())) {
+								ampCompFund.setPerspective(pers);
+								break;
+							}
+						}
+						
+						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
+						ampCompFund.setReportingOrganization(null);
+						ampCompFund.setTransactionAmount(new Double(DecimalToText.getDouble(fd.getTransactionAmount())));
+						ampCompFund.setTransactionDate(DateConversion
+								.getDate(fd.getTransactionDate()));
+						ampCompFund.setAdjustmentType(new Integer(fd
+								.getAdjustmentType()));
+						ampCompFund.setComponent(ampComp);						
+						temp.add(ampCompFund);						
+					}
+					tempComp.setCommitments(temp);
+				}
+
+				
+				if (comp.getDisbursements() != null
+						&& comp.getDisbursements().size() > 0) {
+					HashSet<AmpComponentFunding> temp = new HashSet<AmpComponentFunding>();
+					Iterator itr2 = comp.getDisbursements().iterator();
+					while (itr2.hasNext()) {
+						AmpComponentFunding ampCompFund = new AmpComponentFunding();
+						ampCompFund.setActivity(activity);
+						ampCompFund.setTransactionType(new Integer(
+								Constants.DISBURSEMENT));
+						FundingDetail fd = (FundingDetail) itr2.next();
+						Iterator tmpItr = eaForm.getCurrencies()
+								.iterator();
+						while (tmpItr.hasNext()) {
+							AmpCurrency curr = (AmpCurrency) tmpItr
+									.next();
+							if (curr.getCurrencyCode().equals(
+									fd.getCurrencyCode())) {
+								ampCompFund.setCurrency(curr);
+								break;
+							}
+						}
+						tmpItr = eaForm.getPerspectives().iterator();
+						while (tmpItr.hasNext()) {
+							AmpPerspective pers = (AmpPerspective) tmpItr
+									.next();
+							if (pers.getCode().equals(
+									fd.getPerspectiveCode())) {
+								ampCompFund.setPerspective(pers);
+								break;
+							}
+						}
+						
+						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
+						ampCompFund.setTransactionAmount(new Double(
+								DecimalToText.getDouble(fd
+										.getTransactionAmount())));
+						ampCompFund.setTransactionDate(DateConversion
+								.getDate(fd.getTransactionDate()));
+						ampCompFund.setAdjustmentType(new Integer(fd
+								.getAdjustmentType()));
+						ampCompFund.setComponent(ampComp);						
+						temp.add(ampCompFund);						
+					}
+					tempComp.setDisbursements(temp);
+				}
+
+				if (comp.getExpenditures() != null
+						&& comp.getExpenditures().size() > 0) {
+					HashSet<AmpComponentFunding> temp = new HashSet<AmpComponentFunding>();
+					Iterator itr2 = comp.getExpenditures().iterator();
+					while (itr2.hasNext()) {
+						AmpComponentFunding ampCompFund = new AmpComponentFunding();
+						ampCompFund.setActivity(activity);
+						ampCompFund.setTransactionType(new Integer(
+								Constants.EXPENDITURE));
+						FundingDetail fd = (FundingDetail) itr2.next();
+						Iterator tmpItr = eaForm.getCurrencies()
+								.iterator();
+						while (tmpItr.hasNext()) {
+							AmpCurrency curr = (AmpCurrency) tmpItr
+									.next();
+							if (curr.getCurrencyCode().equals(
+									fd.getCurrencyCode())) {
+								ampCompFund.setCurrency(curr);
+								break;
+							}
+						}
+						tmpItr = eaForm.getPerspectives().iterator();
+						while (tmpItr.hasNext()) {
+							AmpPerspective pers = (AmpPerspective) tmpItr
+									.next();
+							if (pers.getCode().equals(
+									fd.getPerspectiveCode())) {
+								ampCompFund.setPerspective(pers);
+								break;
+							}
+						}
+						
+						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
+						ampCompFund.setTransactionAmount(new Double(
+								DecimalToText.getDouble(fd
+										.getTransactionAmount())));
+						ampCompFund.setTransactionDate(DateConversion
+								.getDate(fd.getTransactionDate()));
+						ampCompFund.setAdjustmentType(new Integer(fd
+								.getAdjustmentType()));
+						ampCompFund.setComponent(ampComp);						
+						temp.add(ampCompFund);
+					}
+					tempComp.setExpenditures(temp);
+				}
+
+				// set physical progress
+				Set phyProgess = new HashSet();
+				if (comp.getPhyProgress() != null) {
+
+					Iterator itr1 = comp.getPhyProgress().iterator();
+					while (itr1.hasNext()) {
+						PhysicalProgress phyProg = (PhysicalProgress) itr1
+								.next();
+						AmpPhysicalPerformance ampPhyPerf = new AmpPhysicalPerformance();
+						if (phyProg.getDescription() == null
+								|| phyProg.getDescription().trim()
+										.length() == 0) {
+							ampPhyPerf.setDescription(new String(" "));
+						} else {
+							ampPhyPerf.setDescription(phyProg
+									.getDescription());
+						}
+						ampPhyPerf.setAmpPpId(phyProg.getPid());
+						ampPhyPerf.setReportingDate(DateConversion
+								.getDate(phyProg.getReportingDate()));
+						ampPhyPerf.setTitle(phyProg.getTitle());
+						ampPhyPerf.setAmpActivityId(activity);
+						ampPhyPerf.setComponent(ampComp);
+						ampPhyPerf.setComments(" ");
+						phyProgess.add(ampPhyPerf);								
+					}
+				}
+				tempComp.setPhyProgress(phyProgess);
+			}
+		}
+	}
+
+	private void saveMTEFProjections (Funding fund, AmpFunding ampFunding) {
+		if ( ampFunding.getMtefProjections() != null ) {
+			ampFunding.getMtefProjections().clear();
+		}
+		else
+			ampFunding.setMtefProjections(new HashSet<AmpFundingMTEFProjection> ());
+		if(fund.getMtefProjections()!=null)
+		{
+			Iterator mtefItr=fund.getMtefProjections().iterator();
+			while (mtefItr.hasNext())
+			{
+				MTEFProjection mtef=(MTEFProjection)mtefItr.next();
+				AmpFundingMTEFProjection ampmtef=new AmpFundingMTEFProjection();
+				ampmtef.setAmount(Double.valueOf(mtef.getAmount()));
+				ampmtef.setAmpFunding(ampFunding);
+				ampmtef.setAmpCurrency(CurrencyUtil.getCurrencyByCode(mtef.getCurrencyCode()));
+				ampmtef.setProjected( CategoryManagerUtil.getAmpCategoryValueFromDb(mtef.getProjected()) );
+				ampmtef.setProjectionDate( DateConversion.getDate(mtef.getProjectionDate()) );
+				
+				ampFunding.getMtefProjections().add(ampmtef);
+			}
+		}
+	}
+	
 }

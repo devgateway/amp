@@ -96,7 +96,22 @@ public class ActivityUtil {
   private static Logger logger = Logger.getLogger(ActivityUtil.class);
 
   /**
-
+   * Persists an AmpActivity object to the database
+   * This function is used to create a new activity
+   * @param activity The activity to be persisted
+   */
+  public static Long saveActivity(AmpActivity activity, ArrayList commentsCol,
+                                  boolean serializeFlag, Long field,
+                                  Collection relatedLinks, Long memberId,
+                                  Components<AmpComponentFunding> ampTempComp) {
+    /*
+     * calls saveActivity(AmpActivity activity,Long oldActivityId,boolean edit)
+     * by passing null and false to the parameters oldActivityId and edit respectively
+     * since this is creating a new activity
+     */
+    return saveActivity(activity, null, false, commentsCol, serializeFlag,
+                        field, relatedLinks, memberId, null, ampTempComp);
+  }
 
   /**
    * Persist an AmpActivity object to the database
@@ -111,14 +126,12 @@ public class ActivityUtil {
    * @param edit This boolean variable represents whether to create a new
    * activity object or to update the existing activity object
    */
-  public static Long saveActivity(AmpActivity activity, Long oldActivityId,
+public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                                   boolean edit,
                                   ArrayList commentsCol, boolean serializeFlag,
                                   Long field,
                                   Collection relatedLinks, Long memberId,
-                                  Collection indicators,
-                                  Components ampTempComp,
-      List componentFundingIds) {
+                                  Collection indicators, Components<AmpComponentFunding> ampTempComp) {
     logger.debug("In save activity " + activity.getName());
     Session session = null;
     Transaction tx = null;
@@ -217,8 +230,7 @@ public class ActivityUtil {
         if (oldActivity.getReferenceDocs() != null) {
           Iterator refItr = oldActivity.getReferenceDocs().iterator();
           while (refItr.hasNext()) {
-            AmpActivityReferenceDoc refDoc = (AmpActivityReferenceDoc) refItr.
-                next();
+            AmpActivityReferenceDoc refDoc = (AmpActivityReferenceDoc) refItr.next();
             session.delete(refDoc);
           }
         }
@@ -257,18 +269,18 @@ public class ActivityUtil {
         }
         else
           logger.debug("commentsCol is empty");
-
-        if (oldActivity.getCategories() != null) {
-          oldActivity.getCategories().clear();
+        
+        if ( oldActivity.getCategories() != null ) {
+        	oldActivity.getCategories().clear();
         }
         else
-          oldActivity.setCategories(new HashSet());
-
-        if (oldActivity.getFunding() != null) {
-          oldActivity.getFunding().clear();
+        	oldActivity.setCategories( new HashSet() );
+        
+        if ( oldActivity.getFunding() != null ) {
+        	oldActivity.getFunding().clear();
         }
         else
-          oldActivity.setFunding(new HashSet());
+        	oldActivity.setFunding( new HashSet() );
 
         oldActivity.getClosingDates().clear();
         oldActivity.getComponents().clear();
@@ -351,8 +363,8 @@ public class ActivityUtil {
         oldActivity.setFunDate(activity.getFunDate());
 
         oldActivity.setApprovalStatus(activity.getApprovalStatus());
-
-        oldActivity.getCategories().addAll(activity.getCategories());
+        
+        oldActivity.getCategories().addAll( activity.getCategories() );
 
         /*
          * tanzania ADDS
@@ -367,25 +379,6 @@ public class ActivityUtil {
         oldActivity.setSubVote(activity.getSubVote());
         oldActivity.setVote(activity.getVote());
         oldActivity.setActivityCreator(activity.getActivityCreator());
-        int componentFundingSize = componentFundingIds.size();
-        if (componentFundingIds != null && componentFundingSize > 0) {
-          Iterator fundingIdsIter = componentFundingIds.iterator();
-          String fundingIds = "(";
-          int index = 1;
-          while (fundingIdsIter.hasNext()) {
-            if (index < componentFundingSize) {
-              fundingIds += fundingIdsIter.next() + ",";
-            }
-            else {
-              fundingIds += fundingIdsIter.next() + ")";
-            }
-            index++;
-          }
-
-          session.delete("from AmpComponentFunding acf where acf.activity=" +
-                         oldActivity.getAmpActivityId() +
-                         " and acf.ampComponentFundingId not in " + fundingIds);
-        }
 
       }
 
@@ -425,70 +418,61 @@ public class ActivityUtil {
         session.saveOrUpdate(member);
       }
 
+      
       //to save the Component fundings
+      Collection<AmpComponentFunding>  componentFundingCol = getFundingComponentActivity(activityId);
       if (ampTempComp.getCommitments() != null) {
         Iterator compItr = ampTempComp.getCommitments().iterator();
         while (compItr.hasNext()) {
           AmpComponentFunding ampComp = (AmpComponentFunding) compItr.next();
-          Long componentFundinId = ampComp.getAmpComponentFundingId();
-          if (componentFundinId != null) {
-            updateComponentFunding(session, ampComp, componentFundinId);
-          }
-          else {
-            session.saveOrUpdate(ampComp);
-          }
+          session.saveOrUpdate(ampComp);
+          componentFundingCol.remove(ampComp);
         }
       }
+
       if (ampTempComp.getDisbursements() != null) {
         Iterator compItr = ampTempComp.getDisbursements().iterator();
         while (compItr.hasNext()) {
           AmpComponentFunding ampComp = (AmpComponentFunding) compItr.next();
-          Long componentFundinId = ampComp.getAmpComponentFundingId();
-          if (componentFundinId != null) {
-            updateComponentFunding(session, ampComp, componentFundinId);
-          }
-          else {
-            session.saveOrUpdate(ampComp);
-          }
-
+          session.saveOrUpdate(ampComp);
+          componentFundingCol.remove(ampComp);
         }
       }
+      
       if (ampTempComp.getExpenditures() != null) {
         Iterator compItr = ampTempComp.getExpenditures().iterator();
         while (compItr.hasNext()) {
           AmpComponentFunding ampComp = (AmpComponentFunding) compItr.next();
-          Long componentFundinId = ampComp.getAmpComponentFundingId();
-          if (componentFundinId != null) {
-            updateComponentFunding(session, ampComp, componentFundinId);
-          }
-          else {
-            session.saveOrUpdate(ampComp);
-          }
-
+          session.saveOrUpdate(ampComp);
+          componentFundingCol.remove(ampComp);
         }
       }
-
-
-      Collection<AmpPhysicalPerformance> phyProgress = DbUtil.
-          getAmpPhysicalProgress(activityId);
-
+      
+      if (componentFundingCol != null) {
+			Iterator<AmpComponentFunding> componentFundingColIt = componentFundingCol.iterator();
+			while (componentFundingColIt.hasNext()) {
+				session.delete(componentFundingColIt.next());
+			}
+	  }
+      
+      Collection<AmpPhysicalPerformance> phyProgress = DbUtil.getAmpPhysicalProgress(activityId);
+      
       if (ampTempComp.getPhyProgress() != null) {
-        Iterator compItr = ampTempComp.getPhyProgress().iterator();
-        while (compItr.hasNext()) {
-          AmpPhysicalPerformance ampPhyPerf = (AmpPhysicalPerformance) compItr.
-              next();
-          session.saveOrUpdate(ampPhyPerf);
-          phyProgress.remove(ampPhyPerf);
-        }
+			Iterator compItr = ampTempComp.getPhyProgress().iterator();
+			while (compItr.hasNext()) {
+				AmpPhysicalPerformance ampPhyPerf = (AmpPhysicalPerformance) compItr.next();
+				session.saveOrUpdate(ampPhyPerf);
+				phyProgress.remove(ampPhyPerf);
+			}
       }
-
+      
       if (phyProgress != null) {
-        Iterator<AmpPhysicalPerformance> phyProgressColIt = phyProgress.
-            iterator();
-        while (phyProgressColIt.hasNext()) {
-          session.delete(phyProgressColIt.next());
-        }
-      }
+			Iterator<AmpPhysicalPerformance> phyProgressColIt = phyProgress.iterator();
+			while (phyProgressColIt.hasNext()) {
+				session.delete(phyProgressColIt.next());
+			}
+	  }
+      
 
       /* Persists the activity */
       if (edit) {
@@ -672,63 +656,37 @@ public class ActivityUtil {
     return activityId;
   }
 
-  private static void updateComponentFunding(Session session,
-                                             AmpComponentFunding ampComp,
-                                             Long componentFundinId) throws
-      HibernateException {
-    AmpComponentFunding oldAmpComp = (AmpComponentFunding) session.load(
-        AmpComponentFunding.class, componentFundinId);
-
-    oldAmpComp.setAdjustmentType(ampComp.getAdjustmentType());
-    oldAmpComp.setCurrency(ampComp.getCurrency());
-    oldAmpComp.setExpenditureCategory(ampComp.getExpenditureCategory());
-    oldAmpComp.setPerspective(ampComp.getPerspective());
-    oldAmpComp.setReportingDate(ampComp.getReportingDate());
-    oldAmpComp.setReportingOrganization(ampComp.getReportingOrganization());
-    oldAmpComp.setTransactionAmount(ampComp.getTransactionAmount());
-    oldAmpComp.setTransactionDate(ampComp.getTransactionDate());
-    oldAmpComp.setTransactionType(ampComp.getTransactionType());
-  }
-
-
   /**
    * Return all reference documents for Activity
    * @param activityId
    * @return
    */
   @SuppressWarnings("unchecked")
-  public static Collection<AmpActivityReferenceDoc> getReferenceDocumentsFor(
-      Long activityId) throws DgException {
-    String oql = "select refdoc from " + AmpActivityReferenceDoc.class.getName() +
-        " refdoc " +
-        " where refdoc.activity.ampActivityId=:actId";
-    try {
-      Session session = PersistenceManager.getRequestDBSession();
-      Query query = session.createQuery(oql);
-      query.setLong("actId", activityId);
-      return query.list();
-    }
-    catch (Exception e) {
-      logger.error(e);
-      throw new DgException("Cannot load reference documents for activity id=" +
-                            activityId, e);
-    }
+  public static Collection<AmpActivityReferenceDoc> getReferenceDocumentsFor(Long activityId) throws DgException{
+	  String oql="select refdoc from "+AmpActivityReferenceDoc.class.getName()+" refdoc "+
+	  " where refdoc.activity.ampActivityId=:actId";
+	  try {
+		Session session=PersistenceManager.getRequestDBSession();
+		Query query=session.createQuery(oql);
+		query.setLong("actId", activityId);
+		return query.list();
+	} catch (Exception e) {
+		logger.error(e);
+		throw new DgException("Cannot load reference documents for activity id="+activityId,e);
+	}
   }
-
-  public static void updateActivity(AmpActivity activity,
-                                    Collection<AmpActivityReferenceDoc> refdocs) throws
-      DgException {
-    try {
-      Session session = PersistenceManager.getRequestDBSession();
-
-    }
-    catch (DgException e) {
-      logger.error(e);
-      throw new DgException("Cannot loat reference documents for activity id=",
-                            e);
-    }
+  
+  public static void updateActivity(AmpActivity activity,Collection<AmpActivityReferenceDoc> refdocs) throws DgException{
+	  try {
+		Session session=PersistenceManager.getRequestDBSession();
+		
+	} catch (DgException e) {
+		logger.error(e);
+		throw new DgException("Cannot loat reference documents for activity id=",e);
+	}
   }
-
+  
+  
   public static void updateActivityCreator(AmpTeamMember creator,
                                            Long activityId) {
     Session session = null;
@@ -768,43 +726,41 @@ public class ActivityUtil {
   }
 
   public static void updateActivityDocuments(Long activityId, Set documents) {
-    Session session = null;
-    Transaction tx = null;
-    AmpActivity oldActivity = null;
+		Session session = null;
+		Transaction tx = null;
+		AmpActivity oldActivity = null;
 
-    try {
-      session = PersistenceManager.getRequestDBSession();
-      tx = session.beginTransaction();
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			tx = session.beginTransaction();
 
-      oldActivity = (AmpActivity) session.load(AmpActivity.class,
-                                               activityId);
+			oldActivity = (AmpActivity) session.load(AmpActivity.class,
+					activityId);
 
-      if (oldActivity == null) {
-        logger.debug("Previous Activity is null");
-        return;
-      }
+			if (oldActivity == null) {
+				logger.debug("Previous Activity is null");
+				return;
+			}
 
-      oldActivity.setDocuments(documents);
-
-      session.update(oldActivity);
-      tx.commit();
-      logger.debug("Activity saved");
-    }
-    catch (Exception ex) {
-      logger.error("Exception from saveActivity()  " + ex.getMessage());
-      ex.printStackTrace(System.out);
-      if (tx != null) {
-        try {
-          tx.rollback();
-          logger.debug("Transaction Rollbacked");
-        }
-        catch (HibernateException e) {
-          logger.error("Rollback failed :" + e);
-        }
-      }
-    }
-  }
-
+			oldActivity.setDocuments(documents);
+			
+			session.update(oldActivity);
+			tx.commit();
+			logger.debug("Activity saved");
+		} catch (Exception ex) {
+			logger.error("Exception from saveActivity()  " + ex.getMessage());
+			ex.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+					logger.debug("Transaction Rollbacked");
+				} catch (HibernateException e) {
+					logger.error("Rollback failed :" + e);
+				}
+			}
+		}
+	}
+  
   public static Collection getComponents(Long actId) {
     Session session = null;
     Collection col = new ArrayList();
@@ -1137,9 +1093,10 @@ public class ActivityUtil {
         AmpActivity ampAct = (AmpActivity) actItr.next();
         activity.setActivityId(ampAct.getAmpActivityId());
 
+
 //				activity.setStatus(ampAct.getStatus().getName()); // TO BE DELETED
         if (ampAct.getStatusReason() != null)
-          activity.setStatusReason(ampAct.getStatusReason().trim());
+        	activity.setStatusReason(ampAct.getStatusReason().trim());
         activity.setBudget(ampAct.getBudget());
 
         activity.setObjective(ampAct.getObjective());
@@ -1173,45 +1130,39 @@ public class ActivityUtil {
         activity.setAccessionInstrument(
             CategoryManagerUtil.getStringValueOfAmpCategoryValue(
                 CategoryManagerUtil.getAmpCategoryValueFromList(
-                    CategoryConstants.ACCESSION_INSTRUMENT_NAME,
-                    ampAct.getCategories())
+            CategoryConstants.ACCESSION_INSTRUMENT_NAME, ampAct.getCategories())
             )
             );
         activity.setAcChapter(
             CategoryManagerUtil.getStringValueOfAmpCategoryValue(
                 CategoryManagerUtil.getAmpCategoryValueFromList(
-                    CategoryConstants.ACCHAPTER_NAME, ampAct.getCategories())
+            CategoryConstants.ACCHAPTER_NAME, ampAct.getCategories())
             )
             );
         activity.setStatus(
             CategoryManagerUtil.getStringValueOfAmpCategoryValue(
                 CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-                    CategoryConstants.ACTIVITY_STATUS_KEY, ampAct.getCategories())
+            CategoryConstants.ACTIVITY_STATUS_KEY, ampAct.getCategories())
             )
             );
         activity.setImpLevel(
             CategoryManagerUtil.getStringValueOfAmpCategoryValue(
                 CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-                    CategoryConstants.IMPLEMENTATION_LEVEL_KEY,
-                    ampAct.getCategories())
+            CategoryConstants.IMPLEMENTATION_LEVEL_KEY, ampAct.getCategories())
             )
             );
         /* END - Set Categories */
-
-        activity.setFinancialInstrument(CategoryManagerUtil.
-                                        getStringValueOfAmpCategoryValue(
-                                            CategoryManagerUtil.
-                                            getAmpCategoryValueFromListByKey(
-                                                CategoryConstants.
-                                                FINANCIAL_INSTRUMENT_KEY,
-                                                ampAct.getCategories())
-                                        ));
+        
+        activity.setFinancialInstrument(CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+                CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+            CategoryConstants.FINANCIAL_INSTRUMENT_KEY, ampAct.getCategories())
+            ));
         /*
          * Tanzania adds
          */
 
         activity.setFY(ampAct.getFY());
-
+       
         activity.setVote(ampAct.getVote());
         activity.setSubProgram(ampAct.getSubProgram());
         activity.setSubVote(ampAct.getSubVote());
@@ -1219,6 +1170,7 @@ public class ActivityUtil {
         activity.setGovernmentApprovalProcedures(ampAct.
                                                  isGovernmentApprovalProcedures());
         activity.setProjectCode(ampAct.getProjectCode());
+
 
         Collection col = ampAct.getClosingDates();
         List dates = new ArrayList();
@@ -1300,17 +1252,18 @@ public class ActivityUtil {
           while (orgItr.hasNext()) {
             AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
             AmpOrganisation auxOrgRel = orgRole.getOrganisation();
-            if (auxOrgRel != null) {
-              RelOrganization relOrg = new RelOrganization();
-              relOrg.setOrgName(auxOrgRel.getName());
-              relOrg.setRole(orgRole.getRole().getRoleCode());
-              relOrg.setAcronym(auxOrgRel.getAcronym());
-              relOrg.setOrgCode(auxOrgRel.getOrgCode());
-              relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
-              relOrg.setOrgTypeId(auxOrgRel.getOrgTypeId());
-              if (!relOrgs.contains(relOrg)) {
-                relOrgs.add(relOrg);
-              }
+            if(auxOrgRel!=null)
+            {
+            	RelOrganization relOrg = new RelOrganization();
+                relOrg.setOrgName(auxOrgRel.getName());
+                relOrg.setRole(orgRole.getRole().getRoleCode());
+                relOrg.setAcronym(auxOrgRel.getAcronym());
+                relOrg.setOrgCode(auxOrgRel.getOrgCode());
+                relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
+                relOrg.setOrgTypeId(auxOrgRel.getOrgTypeId());
+                if (!relOrgs.contains(relOrg)) {
+                	relOrgs.add(relOrg);
+                }
             }
           }
         }
@@ -1351,8 +1304,7 @@ public class ActivityUtil {
 
         AmpCategoryValue ampCategoryValueForStatus =
             CategoryManagerUtil.getAmpCategoryValueFromListByKey(
-                CategoryConstants.IMPLEMENTATION_LEVEL_KEY,
-                ampAct.getCategories());
+            CategoryConstants.IMPLEMENTATION_LEVEL_KEY, ampAct.getCategories());
         if (ampCategoryValueForStatus != null) {
           activity.setImpLevel(ampCategoryValueForStatus.getValue());
         }
@@ -1389,11 +1341,12 @@ public class ActivityUtil {
         while (itr.hasNext()) {
           AmpFunding fund = (AmpFunding) itr.next();
           if (fund.getFinancingInstrument() != null)
-            modalities.add(fund.getFinancingInstrument());
+        	  modalities.add( fund.getFinancingInstrument() );
         }
         activity.setModalities(modalities);
         activity.setUniqueModalities(new TreeSet(modalities));
 
+      
       }
     }
     catch (Exception e) {
@@ -1499,7 +1452,7 @@ public class ActivityUtil {
   }
 
   public static Collection<Components> getAllComponents(Long id) {
-    Collection<Components> componentsCollection = new ArrayList<Components> ();
+    Collection<Components> componentsCollection = new ArrayList<Components>();
 
     Session session = null;
 
@@ -1511,7 +1464,7 @@ public class ActivityUtil {
         Iterator itr1 = comp.iterator();
         while (itr1.hasNext()) {
           AmpComponent ampComp = (AmpComponent) itr1.next();
-          Components components = new Components();
+          Components<FundingDetail> components = new Components<FundingDetail>();
           components.setComponentId(ampComp.getAmpComponentId());
           components.setDescription(ampComp.getDescription());
           components.setTitle(ampComp.getTitle());
@@ -1520,14 +1473,11 @@ public class ActivityUtil {
           components.setExpenditures(new ArrayList());
           components.setPhyProgress(new ArrayList());
 
-          Collection<AmpComponentFunding> componentsFunding = ActivityUtil.
-              getFundingComponentActivity(ampComp.
-                                          getAmpComponentId(),
-                                          activity.getAmpActivityId());
+          Collection<AmpComponentFunding> componentsFunding = ActivityUtil.getFundingComponentActivity(ampComp.
+              getAmpComponentId(), activity.getAmpActivityId());
           Iterator compFundIterator = componentsFunding.iterator();
           while (compFundIterator.hasNext()) {
-            AmpComponentFunding cf = (AmpComponentFunding) compFundIterator.
-                next();
+            AmpComponentFunding cf = (AmpComponentFunding) compFundIterator.next();
             FundingDetail fd = new FundingDetail();
             fd.setAdjustmentType(cf.getAdjustmentType().intValue());
             if (fd.getAdjustmentType() == Constants.PLANNED) {
@@ -1557,14 +1507,11 @@ public class ActivityUtil {
               components.getExpenditures().add(fd);
             }
           }
-          Collection<AmpPhysicalPerformance> physicalPerf = ActivityUtil.
-              getPhysicalProgressComponentActivity(
-                  ampComp.getAmpComponentId(), activity.getAmpActivityId());
-          Iterator<AmpPhysicalPerformance> physicalPerfIterator = physicalPerf.
-              iterator();
+          Collection<AmpPhysicalPerformance> physicalPerf = ActivityUtil.getPhysicalProgressComponentActivity(
+        		  											ampComp.getAmpComponentId(), activity.getAmpActivityId());
+          Iterator<AmpPhysicalPerformance> physicalPerfIterator = physicalPerf.iterator();
           while (physicalPerfIterator.hasNext()) {
-            AmpPhysicalPerformance ampPhyPerf = (AmpPhysicalPerformance)
-                physicalPerfIterator.
+            AmpPhysicalPerformance ampPhyPerf = (AmpPhysicalPerformance) physicalPerfIterator.
                 next();
             PhysicalProgress pp = new PhysicalProgress();
             pp.setDescription(ampPhyPerf.getDescription());
@@ -1619,8 +1566,7 @@ public class ActivityUtil {
    */
   // this function is to get the fundings for the components along with the activity Id
 
-  public static Collection<AmpComponentFunding> getFundingComponentActivity(
-      Long id, Long actId) {
+  public static Collection<AmpComponentFunding> getFundingComponentActivity(Long id, Long actId) {
     Collection col = null;
     logger.info(" inside getting the funding.....");
     Session session = null;
@@ -1651,14 +1597,13 @@ public class ActivityUtil {
     //getComponents();
     return col;
   }
-
+  
   /*
    * This function gets AmpComponentFunding of an Activity.
-   *
+   * 
    * @param activityId Activity id
    */
-  public static Collection<AmpComponentFunding> getFundingComponentActivity(
-      Long activityId) {
+  public static Collection<AmpComponentFunding> getFundingComponentActivity(Long activityId) {
     Collection col = null;
     logger.info(" inside getting the funding.....");
     Session session = null;
@@ -1685,15 +1630,14 @@ public class ActivityUtil {
     }
     //getComponents();
     return col;
-  }
+  }  
 
   // function for getting fundings for components and ids ends here
 
   //function for physical progress
 
-  public static Collection<AmpPhysicalPerformance>
-      getPhysicalProgressComponentActivity(Long id,
-                                           Long actId) {
+  public static Collection<AmpPhysicalPerformance> getPhysicalProgressComponentActivity(Long id,
+      Long actId) {
     Collection col = null;
     logger.info(" inside getting the Physical Progress.....");
     Session session = null;
@@ -1934,9 +1878,9 @@ public class ActivityUtil {
         }
         fund.getFundingDetails().clear();
         fund.setFundingDetails(temp.getFundingDetails());
-
+        
         fund.getMtefProjections().clear();
-        fund.getMtefProjections().addAll(temp.getMtefProjections());
+        fund.getMtefProjections().addAll( temp.getMtefProjections() );
         //logger.info("Updating " + fund.getAmpFundingId());
         session.update(fund);
         //logger.info("Updated...");
@@ -2162,7 +2106,7 @@ public class ActivityUtil {
     }
     return col;
   }
-
+  
   /*
    * get the list of all the activities
    * to display in the activity manager of Admin
@@ -2195,7 +2139,7 @@ public class ActivityUtil {
       }
     }
     return col;
-  }
+  }  
 
   /* functions to DELETE an activity by Admin start here.... */
   public static void deleteActivity(Long ampActId) {
@@ -2708,8 +2652,7 @@ public class ActivityUtil {
     ActivityAmounts result = new ActivityAmounts();
 
     AmpCategoryValue statusValue = CategoryManagerUtil.
-        getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY,
-                                         act.getCategories());
+        getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY,act.getCategories());
 
     if (act != null && statusValue != null) {
       if (statusValue.getValue().equals(Constants.ACTIVITY_STATUS_PROPOSED) &&
@@ -2719,8 +2662,7 @@ public class ActivityUtil {
         if (currencyCode == null || currencyCode.trim().equals("")) {
           currencyCode = "USD";
         } //end of AMP-1403
-        tempProposed = CurrencyWorker.convert(act.getFunAmount().doubleValue(),
-                                              currencyCode);
+        tempProposed = CurrencyWorker.convert(act.getFunAmount().doubleValue(),currencyCode);
         result.setProposedAmout(tempProposed);
       }
       else {
@@ -2730,14 +2672,11 @@ public class ActivityUtil {
             AmpFunding funding = (AmpFunding) iter.next();
             Set details = funding.getFundingDetails();
             if (details != null) {
-              for (Iterator detailIterator = details.iterator();
-                   detailIterator.hasNext(); ) {
-                AmpFundingDetail detail = (AmpFundingDetail) detailIterator.
-                    next();
+              for (Iterator detailIterator = details.iterator();detailIterator.hasNext(); ) {
+                AmpFundingDetail detail = (AmpFundingDetail) detailIterator.next();
                 Integer transType = detail.getTransactionType();
 
-                Double amount = new Double(detail.getTransactionAmount().
-                                           doubleValue());
+                Double amount = new Double(detail.getTransactionAmount().doubleValue());
 
                 Integer adjastType = detail.getAdjustmentType();
 
@@ -2746,8 +2685,7 @@ public class ActivityUtil {
                 if (detail.getAmpCurrencyId() != null
                     && detail.getAmpCurrencyId().getCurrencyCode() != null
                     &&
-                    detail.getAmpCurrencyId().getCurrencyCode().trim().equals(
-                    "")) {
+                    detail.getAmpCurrencyId().getCurrencyCode().trim().equals("")) {
                   currencyCode = detail.getAmpCurrencyId().getCurrencyCode();
                 } //end of AMP-1403
 
@@ -2756,39 +2694,34 @@ public class ActivityUtil {
                     && adjastType != null && amount != null
                     && detail.getAmpCurrencyId() != null) {
 
-                  if (detail.getFixedExchangeRate() != null &&
-                      detail.getFixedExchangeRate().doubleValue() != 1d
-                      && tocode != null && tocode.trim().equals("USD")) {
-                    //in this case we use fixed exchange rates to convert to USD, see AMP-1821,
+                	if (detail.getFixedExchangeRate()!=null && detail.getFixedExchangeRate().doubleValue()!=1d 
+                			&& tocode!=null && tocode.trim().equals("USD")){
+                		//in this case we use fixed exchange rates to convert to USD, see AMP-1821,
+                		
+                		//convert to USD with fixed rate secified in the FundingDetail
+            			double tempAmount = amount.doubleValue()/detail.getFixedExchangeRate().doubleValue();
+            			//sett to correct place
+                		if (adjastType.intValue() == Constants.ACTUAL) {
+                			result.AddActual(tempAmount);
+                		}else if (adjastType.intValue() == Constants.PLANNED) {
+                			result.AddPalenned(tempAmount);
+                		}
 
-                    //convert to USD with fixed rate secified in the FundingDetail
-                    double tempAmount = amount.doubleValue() /
-                        detail.getFixedExchangeRate().doubleValue();
-                    //sett to correct place
-                    if (adjastType.intValue() == Constants.ACTUAL) {
-                      result.AddActual(tempAmount);
-                    }
-                    else if (adjastType.intValue() == Constants.PLANNED) {
-                      result.AddPalenned(tempAmount);
-                    }
+                	}else{
+                		//calculate in old way
 
-                  }
-                  else {
-                    //calculate in old way
+                		double tempAmount = CurrencyWorker.convert(amount.doubleValue(),currencyCode);
 
-                    double tempAmount = CurrencyWorker.convert(amount.
-                        doubleValue(), currencyCode);
+            			//sett to correct place
+                		if (adjastType.intValue() == Constants.ACTUAL) {
+                			result.AddActual(tempAmount);
+                		}
+                		if (adjastType.intValue() == Constants.PLANNED) {
+                			result.AddPalenned(tempAmount);
+                		}
 
-                    //sett to correct place
-                    if (adjastType.intValue() == Constants.ACTUAL) {
-                      result.AddActual(tempAmount);
-                    }
-                    if (adjastType.intValue() == Constants.PLANNED) {
-                      result.AddPalenned(tempAmount);
-                    }
-
-                  }
-
+                	}
+                	
                 }
               }
             }
@@ -2814,19 +2747,18 @@ public class ActivityUtil {
       return act1.getAmpActivityId().compareTo(act2.getAmpActivityId());
     }
   }
-
+  
   /**
-   * Creates map from {@link AmpActivityReferenceDoc} collection
-   * where each elements key is the id of {@link AmpCategoryValue} object which is asigned to the element itself
+   * Creates map from {@link AmpActivityReferenceDoc} collection 
+   * where each elements key is the id of {@link AmpCategoryValue} object which is asigned to the element itself 
    *
    */
-  public static class CategoryIdRefDocMapBuilder
-      implements AmpCollectionUtils.KeyResolver<Long, AmpActivityReferenceDoc> {
+  public static class CategoryIdRefDocMapBuilder implements AmpCollectionUtils.KeyResolver<Long, AmpActivityReferenceDoc>{
 
-    public Long resolveKey(AmpActivityReferenceDoc element) {
-      return element.getCategoryValue().getId();
-    }
-
+	public Long resolveKey(AmpActivityReferenceDoc element) {
+		return element.getCategoryValue().getId();
+	}
+	  
   }
-
+  
 } // End

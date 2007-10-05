@@ -152,7 +152,13 @@ function addDocuments() {
 
 }
 
-
+function addDocumentsDM(documentsType) {
+		openNewWindow(700, 500);
+		document.aimEditActivityForm.docFileOrLink.value = "file";
+		document.aimEditActivityForm.action = "/contentrepository/selectDocumentDM.do?documentsType="+documentsType;
+		document.aimEditActivityForm.target = popupPointer.name;
+		document.aimEditActivityForm.submit();
+}
 
 function addManagedDocuments() {
 

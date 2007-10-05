@@ -57,7 +57,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.calendar.util.AmpUtil;
+import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.Constants;
@@ -97,6 +97,10 @@ public class AddAmpActivity extends Action {
     //return mapping.findForward("publicPreview");
 
     EditActivityForm eaForm = (EditActivityForm) form;
+    
+    /*Clear eventually dirty information found in session related to DM*/
+		if ( request.getParameter("action") != null && request.getParameter("action").equals("create") )
+				SelectDocumentDM.clearContentRepositoryHashMap(request);
     
     // set Globam Settings Multi-Sector Selecting
     String multiSectorSelect = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.

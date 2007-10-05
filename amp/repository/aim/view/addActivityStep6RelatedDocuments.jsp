@@ -19,7 +19,28 @@
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
-									</td></tr>									
+									</td></tr>
+									<module:display name="Content Repository">
+										<tr>
+											<td bgColor=#f4f4f2>
+												<bean:define toScope="request" id="showRemoveButton" value="true" />
+												<bean:define toScope="request" id="documentsType" value="<%=org.digijava.module.aim.helper.ActivityDocumentsConstants.RELATED_DOCUMENTS %>" />
+												<bean:define toScope="request" id="versioningRights" value="false" />
+												<bean:define toScope="request" id="deleteRights" value="false" />
+												<bean:define toScope="request" id="crRights" value="true" />
+												<jsp:include page="/repository/contentrepository/view/showSelectedDocumentsDM.jsp"/>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<c:set var="documentsType"><%=org.digijava.module.aim.helper.ActivityDocumentsConstants.RELATED_DOCUMENTS%></c:set>
+												<html:button  styleClass="buton" property="submitButton" onclick="addDocumentsDM(&apos;${documentsType}&apos;)">
+														<digi:trn key="btn:addDocumentsFromRepository">Add Documents From Repository</digi:trn>
+												</html:button>
+											</td>
+											<br />
+										</tr>
+									</module:display>
 									<tr><td>
 										<logic:notEmpty name="aimEditActivityForm" property="documentList">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">

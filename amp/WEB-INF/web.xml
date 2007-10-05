@@ -146,7 +146,8 @@
 				     	/repository/digifeed/struts-config.xml,
 				     	/repository/syndication/struts-config.xml,
 				     		/repository/gateperm/struts-config.xml,
-				     	/repository/help/struts-config.xml
+				     	/repository/help/struts-config.xml,
+				     	/repository/contentrepository/struts-config.xml
 			</param-value>
 		</init-param>
 		<init-param>

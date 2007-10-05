@@ -292,6 +292,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         oldActivity.getReferenceDocs().clear();
         oldActivity.getSectors().clear();
         oldActivity.getCosts().clear();
+        oldActivity.getActivityDocuments().clear();
 
         oldActivity.setLineMinRank(activity.getLineMinRank());
         oldActivity.setPlanMinRank(activity.getPlanMinRank());
@@ -365,6 +366,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         oldActivity.setApprovalStatus(activity.getApprovalStatus());
         
         oldActivity.getCategories().addAll( activity.getCategories() );
+        
+        oldActivity.getActivityDocuments().addAll( activity.getActivityDocuments() );
 
         /*
          * tanzania ADDS
@@ -1042,6 +1045,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 
         /* Categories */
         activity.setCategories(ampActivity.getCategories());
+        
+        /* Content Repository */
+	    activity.setActivityDocuments( ampActivity.getActivityDocuments() );
 
         /*
          * tanzania adds

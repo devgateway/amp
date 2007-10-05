@@ -223,6 +223,19 @@ function preview(id)
 				</TD>
 
 				</TR>
+				<module:display name="Content Repository">
+				<tr>
+					<TD>
+						<bean:define id="dmWindowTitle" toScope="request">Related Documents</bean:define>
+						<bean:define toScope="request" id="documentsType" value="<%=org.digijava.module.aim.helper.ActivityDocumentsConstants.RELATED_DOCUMENTS %>" />
+						<bean:define toScope="request" id="versioningRights" value="false" />
+						<bean:define toScope="request" id="deleteRights" value="false" />
+						<bean:define toScope="request" id="crRights" value="true" />
+						<jsp:include page="/repository/contentrepository/view/showSelectedDocumentsDM.jsp"/>
+						<br />
+					</TD>
+				</tr>
+				</module:display>
 				<module:display name="Document Management">
 					<feature:display name="Related Documents" module="Document Management">
 						<TR bgColor=#f4f4f2>

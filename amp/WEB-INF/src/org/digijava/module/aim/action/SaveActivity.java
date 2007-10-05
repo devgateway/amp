@@ -34,6 +34,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
@@ -61,6 +62,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AmpProject;
 import org.digijava.module.aim.helper.CategoryConstants;
@@ -95,6 +97,7 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.contentrepository.action.SelectDocumentDM;
 
 /**
  * SaveActivity class creates a 'AmpActivity' object and populate the fields
@@ -147,6 +150,26 @@ public class SaveActivity extends Action {
 			CategoryManagerUtil.addCategoryToSet(eaForm.getLevelId(), activity.getCategories() );
 			CategoryManagerUtil.addCategoryToSet(eaForm.getGbsSbs(), activity.getCategories() );
 			/* END - Saving categories to AmpActivity */
+			
+			/* Saving related documents into AmpActivity */
+			HashSet<String>UUIDs		= SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false);
+			if (UUIDs != null && UUIDs.size() >0 ) {
+				if ( activity.getActivityDocuments() == null )
+						activity.setActivityDocuments(new HashSet<AmpActivityDocument>() );
+				else
+						activity.getActivityDocuments().clear();
+				Iterator<String> iter	= UUIDs.iterator();
+				
+				while ( iter.hasNext() ) {
+					String uuid					= iter.next();
+					AmpActivityDocument doc		= new AmpActivityDocument();
+					doc.setUuid(uuid);
+					doc.setDocumentType( ActivityDocumentsConstants.RELATED_DOCUMENTS );
+					activity.getActivityDocuments().add(doc);
+				}
+			}
+			SelectDocumentDM.clearContentRepositoryHashMap(request);
+			/* END -Saving related documents into AmpActivity */
 
             if(eaForm.getProProjCost()==null){
                 activity.setFunAmount(null);

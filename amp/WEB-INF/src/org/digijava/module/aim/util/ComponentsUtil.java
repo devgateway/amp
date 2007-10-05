@@ -147,7 +147,7 @@ public class ComponentsUtil{
 			}
 		}
 	}
-
+	
 	/*
 	 * To get the Component Fundings from the ampComponentFundings Table
 	 * parameter passed is the component id
@@ -160,8 +160,8 @@ public class ComponentsUtil{
 		Query qry = null;
 		try
 		{
-			session = PersistenceManager.getRequestDBSession();
-			queryString ="select co from "+AmpComponentFunding.class.getName()+" co where co.component.id=:id";
+			session = PersistenceManager.getSession();
+			queryString ="select co from "+AmpComponentFunding.class.getName()+" co where co.component=:id";
 			qry = session.createQuery(queryString);
 			qry.setParameter("id",id,Hibernate.LONG);
 
@@ -172,10 +172,20 @@ public class ComponentsUtil{
 			logger.error("Unable to get Component for editing from database " + ex.getMessage());
 			ex.printStackTrace(System.out);
 		}
-
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2)
+			{
+				logger.error("releaseSession() failed ");
+			}
+		}
 		return col;
 	}
-
+	
 	/*
 	 * To get the physical progress for a component from the physical progress table...
 	 * parameter passed is the amp component id
@@ -332,8 +342,8 @@ public class ComponentsUtil{
 		}
 		else return true;
 	}
-
-	public static Collection getAllComponentIndicators()
+	
+	public static Collection getAllComponentIndicators() 
 	{
 		Session session = null;
 		Query qry = null;
@@ -345,42 +355,42 @@ public class ComponentsUtil{
 			String queryString = "select i from " + AmpComponentsIndicators.class.getName() + " i";
 			qry = session.createQuery(queryString);
 			col = qry.list();
-		}
-		catch (Exception e)
+		} 
+		catch (Exception e) 
 		{
 			logger.error("Unable to get component indicators");
 			logger.debug("Exception : " + e);
-		}
-		finally
+		} 
+		finally 
 		{
-			try
+			try 
 			{
-				if (session != null)
+				if (session != null) 
 				{
 					PersistenceManager.releaseSession(session);
 				}
-			}
-			catch (Exception ex)
+			} 
+			catch (Exception ex) 
 			{
 				logger.debug("releaseSession() FAILED", ex);
 			}
 		}
 		return col;
 	}
-
-	public static void saveComponentIndicator(AmpComponentsIndicators newIndicator)
+	
+	public static void saveComponentIndicator(AmpComponentsIndicators newIndicator) 
 	{
 		Session session = null;
 		Transaction tx = null;
-
-		try
+		
+		try 
 		{
 			session = PersistenceManager.getSession();
 			tx = session.beginTransaction();
 			session.saveOrUpdate(newIndicator);
-			tx.commit();
-		}
-		catch (Exception e)
+			tx.commit();							
+		} 
+		catch (Exception e) 
 		{
 			logger.error("Exception from saveComponentIndicator() :" + e.getMessage());
 			e.printStackTrace(System.out);
@@ -401,7 +411,7 @@ public class ComponentsUtil{
 			}
 		}
 	}
-
+	
 	public static Collection getComponentIndicator(Long id){
 		Session session = null;
 		Query query = null;
@@ -427,7 +437,7 @@ public class ComponentsUtil{
 		}
 		return ampCoInd;
 	}
-
+	
 	public static void delComponentIndicator(Long indId)
 	{
 
@@ -464,19 +474,19 @@ public class ComponentsUtil{
 			}
 		}
 	}
-
+	
 	public static boolean checkDuplicateNameCode(String name,String code,Long id) {
 		Session session = null;
 		Query qry = null;
 		boolean duplicatesExist = false;
 		String queryString = null;
-
+		
 		try
 		{
 			session = PersistenceManager.getSession();
 			if (id != null && id.longValue() > 0) {
 				queryString = "select count(*) from "
-					+ AmpComponentsIndicators.class.getName() + " ami "
+					+ AmpComponentsIndicators.class.getName() + " ami " 
 					+ "where ( name=:name"
 					+ " or code=:code) and " +
 							"(ami.ampCompIndId !=:id)" ;
@@ -486,13 +496,13 @@ public class ComponentsUtil{
 				qry.setParameter("name", name.trim(), Hibernate.STRING);
 			} else {
 				queryString = "select count(*) from "
-					+ AmpComponentsIndicators.class.getName() + " ami "
+					+ AmpComponentsIndicators.class.getName() + " ami " 
 					+ "where ( name=:name"
 					+ " or code=:code)" ;
 				qry = session.createQuery(queryString);
 				qry.setParameter("code", code.trim(), Hibernate.STRING);
 				qry.setParameter("name", name.trim(), Hibernate.STRING);
-
+												
 			}
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
@@ -504,11 +514,11 @@ public class ComponentsUtil{
 		catch (Exception ex) {
 			logger.error("UNABLE to find Indicators with duplicate name.", ex);
 			ex.printStackTrace(System.out);
-		}
+		} 
 		finally {
 			try {
 				PersistenceManager.releaseSession(session);
-			}
+			} 
 			catch (Exception ex) {
 				logger.debug("releaseSession() FAILED", ex);
 			}
@@ -516,5 +526,5 @@ public class ComponentsUtil{
 		return duplicatesExist;
 	}
 
-
+	
 }

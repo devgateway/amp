@@ -9,6 +9,18 @@ CREATE TABLE  `dg_message_dup` (
   PRIMARY KEY  (`MESSAGE_KEY`,`LANG_ISO`,`SITE_ID`) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `dg_message_temp`;
+CREATE TABLE  `dg_message_dup` (
+  `MESSAGE_KEY` varchar(255) character set utf8 collate utf8_bin NOT NULL default '',
+  `LANG_ISO` char(2) character set utf8 collate utf8_bin NOT NULL default '',
+  `SITE_ID` varchar(100) character set utf8 collate utf8_bin NOT NULL default '',
+  `MESSAGE_UTF8` text character set utf8 collate utf8_bin,
+  `CREATED` datetime default NULL,
+  PRIMARY KEY  (`MESSAGE_KEY`,`LANG_ISO`,`SITE_ID`) 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+insert into dg_message_temp 
+select * from dg_message;
 
 delete from dg_message 
 where trim(message_key)='';         

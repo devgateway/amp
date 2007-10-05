@@ -1,8 +1,5 @@
 package org.digijava.module.aim.action;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,15 +10,16 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
-import org.digijava.module.aim.form.KnowledgeForm;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.util.DocumentUtil;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.request.Site;
-import java.util.ArrayList;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.form.KnowledgeForm;
+import org.digijava.module.aim.helper.ActivityDocumentsUtil;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DocumentUtil;
+import org.digijava.module.contentrepository.action.SelectDocumentDM;
 
 
 public class ViewKnowledge extends TilesAction {
@@ -57,6 +55,15 @@ public class ViewKnowledge extends TilesAction {
             formBean.setManagedDocuments(null);
 			if (id != null) {
 				formBean.setDocuments(DbUtil.getKnowledgeDocuments(id));
+				
+				/* Content Repository */
+				 AmpActivity act	 				= ActivityUtil.getAmpActivity(id);
+				 SelectDocumentDM.clearContentRepositoryHashMap(request);
+                 if (act.getActivityDocuments() != null) {
+                 	ActivityDocumentsUtil.injectActivityDocuments(request, act.getActivityDocuments() );
+                 }
+				/* END - Content Repository */
+				
                 if (DocumentUtil.isDMEnabled()) {
                     AmpActivity activity = ActivityUtil.getAmpActivity(id);
                     Site currentSite = RequestUtils.getSite(request);

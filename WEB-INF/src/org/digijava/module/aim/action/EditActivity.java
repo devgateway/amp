@@ -60,6 +60,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
+import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CategoryConstants;
@@ -97,6 +98,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
+import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.gateperm.core.GatePermConst;
 
 /**
@@ -472,6 +474,12 @@ public class EditActivity
             if (ampCategoryValue != null)
               eaForm.setGbsSbs(ampCategoryValue.getId());
         /* End - Insert Categories */
+            
+        /* Injecting documents into session */
+        SelectDocumentDM.clearContentRepositoryHashMap(request);
+        if (activity.getActivityDocuments() != null && activity.getActivityDocuments().size() > 0 )
+        		ActivityDocumentsUtil.injectActivityDocuments(request, activity.getActivityDocuments());
+        /* END - Injecting documents into session */
 
         if (tm != null && tm.getTeamType()
             .equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {

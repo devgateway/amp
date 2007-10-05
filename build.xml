@@ -22,6 +22,7 @@
     <property name="etc" location="./etc" />
     <property name="deployConfigs" location="deployConfigs"/>
 	<property name="repository" location="./repository"/>
+	<property name="jackrabbit" location="./jackrabbit"/>
 
     <!-- Path settings -->
     <property name="doc.path" value="./doc/api"/>
@@ -237,9 +238,11 @@
 		<delete file="${src}/hibernate.properties"/>
 		<delete file="${repository}/digi.xml"/>
 		<delete file="${webinf}/jboss-web.xml"/>
+		<delete file="${jackrabbit}/repository.xml"/>
 		<copy file="${deployConfigs}/${serverName}/hibernate.properties" todir="${src}"/> 
 		<copy file="${deployConfigs}/${serverName}/digi.xml" todir="${repository}"/> 				
-		<copy file="${deployConfigs}/${serverName}/jboss-web.xml" todir="${webinf}"/> 		
+		<copy file="${deployConfigs}/${serverName}/jboss-web.xml" todir="${webinf}"/> 
+		<copy file="${deployConfigs}/${serverName}/repository.xml" todir="${jackrabbit}"/>
 		
 	</target>
 

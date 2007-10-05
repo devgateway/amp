@@ -206,7 +206,32 @@ public class TeamMemberUtil {
 		return member;
 
 	}
-
+	
+	public static TeamMember getTMTeamHead(Long teamId) {
+		AmpTeamMember ampMem	= getTeamHead(teamId);
+		Long id 	= ampMem.getAmpTeamMemId();
+		User usr 	= UserUtils.getUser(ampMem.getUser().getId());
+		String name = usr.getName();
+		String role = ampMem.getAmpMemberRole().getRole();
+		AmpTeamMemberRoles ampRole = ampMem.getAmpMemberRole();
+		AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
+		TeamMember tm = new TeamMember();
+		tm.setMemberId(id);
+		tm.setTeamId(teamId);
+		tm.setMemberName(name);
+		tm.setRoleName(role);
+		tm.setEmail(usr.getEmail());
+		if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(
+				headRole.getAmpTeamMemRoleId())) {
+			tm.setTeamHead(true);
+		} else {
+			tm.setTeamHead(false);
+		}
+		
+		return tm;
+		
+	}
+	
 	public static AmpTeamMember getTeamHead(Long teamId) {
 
 		Session session = null;
@@ -301,6 +326,7 @@ public class TeamMemberUtil {
 				tm.setMemberName(name);
 				tm.setRoleName(role);
 				tm.setEmail(user.getEmail());
+				tm.setTeamId(teamId);
 				if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(
 						headRole.getAmpTeamMemRoleId())) {
 					tm.setTeamHead(true);
@@ -792,6 +818,60 @@ public class TeamMemberUtil {
 			qry = session.createQuery(queryString);
 			qry.setParameter("user",user.getId(),Hibernate.LONG);
 			col = qry.list();
+		} catch (Exception e) {
+			logger.error("Unable to get TeamMembers" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+		return col;
+	}
+	public static Collection getTMTeamMembers(String email) {
+		 User user = org.digijava.module.aim.util.DbUtil.getUser(email);
+		 if (user == null) return null;
+
+		Session session = null;
+		Query qry = null;
+		Collection col = new ArrayList();
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select tm from " + AmpTeamMember.class.getName() +
+			  " tm where (tm.user=:user)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("user",user.getId(),Hibernate.LONG);
+			Collection results	= qry.list();
+			Iterator itr		= results.iterator();
+			
+			while ( itr.hasNext() ) {
+				AmpTeamMember ampMem = (AmpTeamMember) itr.next();
+				Long id 	= ampMem.getAmpTeamMemId();
+				Long teamId	= ampMem.getAmpTeam().getAmpTeamId();
+				User usr 	= UserUtils.getUser(ampMem.getUser().getId());
+				String name = usr.getName();
+				String role = ampMem.getAmpMemberRole().getRole();
+				AmpTeamMemberRoles ampRole = ampMem.getAmpMemberRole();
+				AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
+				TeamMember tm = new TeamMember();
+				tm.setMemberId(id);
+				tm.setTeamId(teamId);
+				tm.setMemberName(name);
+				tm.setRoleName(role);
+				tm.setEmail(usr.getEmail());
+				if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(
+						headRole.getAmpTeamMemRoleId())) {
+					tm.setTeamHead(true);
+				} else {
+					tm.setTeamHead(false);
+				}
+				col.add( tm );
+			}
 		} catch (Exception e) {
 			logger.error("Unable to get TeamMembers" + e.getMessage());
 			e.printStackTrace(System.out);

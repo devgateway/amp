@@ -330,7 +330,12 @@
 			<put-item name="addEditBody" module="aim" instance="default" teaser="dummy"/>
 		</layout>
 		 <!-- END ADD/EDIT LAYOUT -->
-
+		
+		<layout name="noLayout" file="noLayout.jsp">
+			<put name="title">none</put>
+			<put-item name="body" module="aim" instance="default"/>
+		</layout>
+		
 		<!-- TRANSLATE LAYOUT -->
 		<layout name="TranslatorPortlet" extends="single">
 			<put name="title"> </put>
@@ -470,6 +475,14 @@
 				<page>aim_portPerfWithoutBase</page>
 				<page>aim_npdOptions</page>
 
+			</module>
+			<module name="contentrepository">
+				<page>amp_selectDocumentDM</page>
+			</module>
+		</page-group>
+		<page-group masterLayout="noLayout" tile="body">
+			<module name="contentrepository">
+				<page>amp_getDocumentList</page>
 			</module>
 		</page-group>
 	</site-layout>

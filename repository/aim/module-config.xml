@@ -296,6 +296,9 @@
 	<hibernate-class>
 			  org.digijava.module.aim.dbentity.AmpActivityReferenceDoc
 	</hibernate-class>
+	<hibernate-class>
+			  org.digijava.module.aim.dbentity.AmpActivityDocument
+	</hibernate-class>
 
 
 	</hibernate-classes>

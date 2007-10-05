@@ -38,6 +38,12 @@ if("On".equals(publicView)) { %>
 		<digi:link styleClass="head-menu-link" href="/viewTeamReports.do" module="aim" onclick="return quitRnot1('${message}')">
 				::: <digi:trn key="aim:reports">REPORTS</digi:trn></digi:link>
 		</LI>
+		<module:display name="Content Repository">
+		<li>
+			<digi:link styleClass="head-menu-link" href="/documentManager.do" module="contentrepository" onclick="return quitRnot()">			
+				::: <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></digi:link>
+		</li>
+		</module:display>
 
 </UL>
 </DIV>
@@ -108,6 +114,9 @@ if("On".equals(publicView)) { %>
 		    <module:display name="Scenarios">
 		    	<LI><a class="head-menu-link">::: <digi:trn key="aim:scenarios">SCENARIOS</digi:trn></a></LI>
 	    	</module:display>
+			<module:display name="Content Repository">
+			<LI><a class="head-menu-link" href="/contentrepository/documentManager.do" module="aim" onclick="return quitRnot()">::: <digi:trn key="contentrepository:documentRepositoryTitle">DOCUMENT REPOSITORY</digi:trn></a></LI>
+			</module:display>
 	    <module:display name="Calendar">
 		<LI>
 			<div id="gen" title='<digi:trn key="aim:viewPlanningCalendar">View Planning Calendar</digi:trn>'>

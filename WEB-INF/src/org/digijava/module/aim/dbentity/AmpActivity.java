@@ -133,6 +133,8 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private Integer planMinRank;
 	private Collection actRankColl;
 
+	
+	private Set<AmpActivityDocument> activityDocuments	= null;
 	/* Categories */
 	private Set categories;
 
@@ -179,6 +181,15 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setCategories(Set categories) {
 		this.categories = categories;
+	}
+	
+	
+	public Set<AmpActivityDocument> getActivityDocuments() {
+		return activityDocuments;
+	}
+
+	public void setActivityDocuments(Set<AmpActivityDocument> activityDocuments) {
+		this.activityDocuments = activityDocuments;
 	}
 	
 		

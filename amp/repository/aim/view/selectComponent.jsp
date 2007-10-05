@@ -115,15 +115,13 @@
 																String divName = "comm_" + indexC;
 																indexC++;%>
 															<% String field1 = tNameBase + "1";
-                                                                                                                        String field0 = tNameBase + "0";
 																 String field2 = tNameBase + "2";
 																 String field3 = tNameBase + "3";
 																 String field4 = tNameBase + "4";
-															 	 String field5 = tNameBase + "5";
-															 	 String field6 = tNameBase + "6";
+															 	 String field5 = tNameBase + "5"; 
+															 	 String field6 = tNameBase + "6"; 															 	 
 															 %>
 													 		<div id="<%=divName%>">
-                                                                                                                          <input type="hidden" value="${comm.indexId}" name="<%=field0%>"/>
 																<select name="<%=field1%>" class="inp-text">
 																	<c:if test="${comm.adjustmentType == 1}">
 																		<option value="1" selected="true"><digi:trn key="opt:actual">Actual</digi:trn></option>
@@ -200,7 +198,6 @@
 												indexD++;
 												%>
 												<% String field1 = tNameBase + "1";
-                                                                                                String field0 = tNameBase + "0";
 												 String field2 = tNameBase + "2";
 												 String field3 = tNameBase + "3";
 												 String field4 = tNameBase + "4";
@@ -208,7 +205,6 @@
 												 String field6 = tNameBase + "6";
 												%>
 												 <div id="<%=divName%>">
-                                                                                                   <input type="hidden" value="${comm.indexId}" name="<%=field0%>"/>
 												<select name="<%=field1%>" class="inp-text">
 													<c:if test="${comm.adjustmentType == 1}">
 														<option value="1" selected="true"><digi:trn key="opt:actual">Actual</digi:trn></option>
@@ -289,15 +285,13 @@
 												indexE++;
 												%>
 												<% String field1 = tNameBase + "1";
-                                                                                                String field0 = tNameBase + "0";
 												 String field2 = tNameBase + "2";
 												 String field3 = tNameBase + "3";
 												 String field4 = tNameBase + "4";
-												 String field5 = tNameBase + "5";
+												 String field5 = tNameBase + "5"; 
 												 String field6 = tNameBase + "6";
 												%>
 												 <div id="<%=divName%>">
-                                                                                                   <input type="hidden" value="${comm.indexId}" name="<%=field0%>"/>
 												<select name="<%=field1%>" class="inp-text">
 													<c:if test="${comm.adjustmentType == 1}">
 														<option value="1" selected="true"><digi:trn key="opt:actual">Actual</digi:trn></option>

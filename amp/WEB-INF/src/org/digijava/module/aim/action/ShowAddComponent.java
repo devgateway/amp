@@ -37,9 +37,9 @@ import org.digijava.module.aim.util.FeaturesUtil;
 
 
 public class ShowAddComponent extends Action {
-
+	
 	private static Logger logger = Logger.getLogger(ShowAddComponent.class);
-
+	
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception{
 
@@ -47,15 +47,15 @@ public class ShowAddComponent extends Action {
 		logger.debug("Action is " + action);
 
 		HttpSession session = request.getSession();
-		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
-
+		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);		
+		
 		try
 		{
 			EditActivityForm eaForm = (EditActivityForm) form;
 			eaForm.setStep("5");
-
+			
 			boolean perspectiveEnabled = FeaturesUtil.isPerspectiveEnabled();
-
+			
 			if( action != null && action.equalsIgnoreCase("show") )
 			{
 				logger.info(" in the show components..... ");
@@ -76,11 +76,11 @@ public class ShowAddComponent extends Action {
 				}else{
 					request.setAttribute("defPerspective",Constants.MOFED);
 				}
-
+				
 				String defCurr = CurrencyUtil.getCurrency(
 						tm.getAppSettings().getCurrencyId()).getCurrencyCode();
-				request.setAttribute("defCurrency",defCurr);
-
+				request.setAttribute("defCurrency",defCurr);				
+				
 				return mapping.findForward("forward");
 			}
 			else if( action != null && action.equalsIgnoreCase("showEdit") )
@@ -89,10 +89,10 @@ public class ShowAddComponent extends Action {
 				Iterator itr = eaForm.getSelectedComponents().iterator();
 				String id = request.getParameter("fundId");
 				long cId = Long.parseLong(id);
-				while (itr.hasNext())
+				while (itr.hasNext()) 
 				{
 					Components comp = (Components) itr.next();
-					if (comp.getComponentId().longValue() == cId)
+					if (comp.getComponentId().longValue() == cId) 
 					{
 						eaForm.setComponentId(comp.getComponentId());
 						eaForm.setComponentTitle(comp.getTitle());
@@ -100,7 +100,7 @@ public class ShowAddComponent extends Action {
 						break;
 					}
 				}
-
+				
 				if(perspectiveEnabled){
 					if (tm.getAppSettings().getPerspective()
 							.equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
@@ -112,16 +112,16 @@ public class ShowAddComponent extends Action {
 				}else{
 					request.setAttribute("defPerspective",Constants.MOFED);
 				}
-
+				
 				String defCurr = CurrencyUtil.getCurrency(
 						tm.getAppSettings().getCurrencyId()).getCurrencyCode();
-				request.setAttribute("defCurrency",defCurr);
+				request.setAttribute("defCurrency",defCurr);				
 				return mapping.findForward("forward");
 			}
 			else if( action != null && action.equalsIgnoreCase("update") )
 			{
 				Components compFund = new Components();
-
+			
 				if (eaForm.getComponentId() == null ||
 									 eaForm.getComponentId().longValue() == -1) {
 					compFund.setComponentId(new Long(System.currentTimeMillis()));
@@ -131,7 +131,7 @@ public class ShowAddComponent extends Action {
 				compFund.setTitle(eaForm.getComponentTitle());
 				compFund.setAmount(eaForm.getComponentAmount());
 				compFund.setDescription(eaForm.getComponentDesc());
-
+				
 				Enumeration paramNames = request.getParameterNames();
 				String param = "";
 				String val = "";
@@ -150,12 +150,12 @@ public class ShowAddComponent extends Action {
 						int index = Integer.parseInt(st.nextToken());
 						int num = Integer.parseInt(st.nextToken());
 
-						if (comm.containsKey(new Integer(index)) == false)
+						if (comm.containsKey(new Integer(index)) == false) 
 						{
-							comm.put(new Integer(index),new FundingDetail());
+							comm.put(new Integer(index),new FundingDetail());	
 						}
 						FundingDetail fd = (FundingDetail) comm.get(new Integer(index));
-
+						
 						if(!perspectiveEnabled){
 							fd.setPerspectiveName("MOFED");
 							fd.setPerspectiveCode(Constants.MOFED);
@@ -165,14 +165,13 @@ public class ShowAddComponent extends Action {
 						{
 							switch( num )
 							{
-                                                            case 0: fd.setIndexId( Long.parseLong( val ) ); break;
 								case 1:
 									fd.setAdjustmentType( Integer.parseInt(val) );
-									if ( fd.getAdjustmentType() == 1 )
+									if ( fd.getAdjustmentType() == 1 ) 
 									{
 										fd.setAdjustmentTypeName( "Actual" );
-									}
-									else if ( fd.getAdjustmentType() == 0 )
+									} 
+									else if ( fd.getAdjustmentType() == 0 ) 
 									{
 										fd.setAdjustmentTypeName( "Planned" );
 									}
@@ -189,10 +188,10 @@ public class ShowAddComponent extends Action {
 								case 5:
 									fd.setPerspectiveCode( val );
 									Iterator itr1 = eaForm.getPerspectives().iterator();
-									while( itr1.hasNext() )
+									while( itr1.hasNext() ) 
 									{
 										AmpPerspective pers = ( AmpPerspective ) itr1.next();
-										if ( pers.getCode().equals(val) )
+										if ( pers.getCode().equals(val) ) 
 										{
 											fd.setPerspectiveName( pers.getName() );
 										}
@@ -211,37 +210,33 @@ public class ShowAddComponent extends Action {
 						val = request.getParameter( param );
 						StringTokenizer st = new StringTokenizer( param,"_" );
 						st.nextToken();
-
-
-                                                int index = Integer.parseInt( st.nextToken() );
-                                                int num = Integer.parseInt( st.nextToken() );
-
-
-						if ( disb.containsKey( new Integer( index ) ) == false )
+						int index = Integer.parseInt( st.nextToken() );
+						int num = Integer.parseInt( st.nextToken() );
+					
+						if ( disb.containsKey( new Integer( index ) ) == false ) 
 						{
-							disb.put( new Integer( index ),new FundingDetail() );
+							disb.put( new Integer( index ),new FundingDetail() );	
 						}
 
 						FundingDetail fd = ( FundingDetail ) disb.get( new Integer( index ) );
-
+						
 						if(!perspectiveEnabled){
 							fd.setPerspectiveName("MOFED");
 							fd.setPerspectiveCode(Constants.MOFED);
 						}
-
-						if ( fd != null )
+						
+						if ( fd != null ) 
 						{
-							switch ( num )
+							switch ( num ) 
 							{
-                                                                case 0: fd.setIndexId( Long.parseLong( val ) ); break;
 								case 1:
 									fd.setAdjustmentType( Integer.parseInt( val ) );
 									logger.debug("Adjustment type = " + fd.getAdjustmentType());
-									if ( fd.getAdjustmentType() == 1 )
+									if ( fd.getAdjustmentType() == 1 ) 
 									{
 										fd.setAdjustmentTypeName( "Actual" );
-									}
-									else if ( fd.getAdjustmentType() == 0 )
+									} 
+									else if ( fd.getAdjustmentType() == 0 ) 
 									{
 										fd.setAdjustmentTypeName( "Planned" );
 									}
@@ -258,10 +253,10 @@ public class ShowAddComponent extends Action {
 								case 5:
 									fd.setPerspectiveCode( val );
 									Iterator itr1 = eaForm.getPerspectives().iterator();
-									while ( itr1.hasNext() )
+									while ( itr1.hasNext() ) 
 									{
 										AmpPerspective pers = ( AmpPerspective ) itr1.next();
-										if ( pers.getCode().equals( val ) )
+										if ( pers.getCode().equals( val ) ) 
 										{
 											fd.setPerspectiveName( pers.getName() );
 										}
@@ -272,42 +267,41 @@ public class ShowAddComponent extends Action {
 										fd.setAmpComponentFundingId(Long.valueOf(val));
 									}
 							}
-							disb.put( new Integer( index ),fd );
+							disb.put( new Integer( index ),fd );					
 						}
 					}
-					else if ( param.startsWith( "expn_" ) )
+					else if ( param.startsWith( "expn_" ) ) 
 					{
 						val = request.getParameter( param );
 						StringTokenizer st = new StringTokenizer( param, "_" );
 						st.nextToken();
 						int index = Integer.parseInt( st.nextToken() );
 						int num = Integer.parseInt( st.nextToken() );
-
-						if ( exp.containsKey( new Integer( index ) ) == false )
+					
+						if ( exp.containsKey( new Integer( index ) ) == false ) 
 						{
-							exp.put( new Integer( index ), new FundingDetail() );
+							exp.put( new Integer( index ), new FundingDetail() );	
 						}
 
 						FundingDetail fd = ( FundingDetail ) exp.get( new Integer( index ) );
-
+						
 						if(!perspectiveEnabled){
 							fd.setPerspectiveName("MOFED");
 							fd.setPerspectiveCode(Constants.MOFED);
 						}
-
-						if ( fd != null )
+						
+						if ( fd != null ) 
 						{
-							switch ( num )
+							switch ( num ) 
 							{
-                                                            case 0: fd.setIndexId( Long.parseLong( val ) ); break;
 								case 1:
 									fd.setAdjustmentType( Integer.parseInt( val ) );
 									logger.debug( "Adjustment type = " + fd.getAdjustmentType() );
-									if ( fd.getAdjustmentType() == 1 )
+									if ( fd.getAdjustmentType() == 1 ) 
 									{
 										fd.setAdjustmentTypeName( "Actual" );
-									}
-									else if ( fd.getAdjustmentType() == 0 )
+									} 
+									else if ( fd.getAdjustmentType() == 0 ) 
 									{
 										fd.setAdjustmentTypeName( "Planned" );
 									}
@@ -324,10 +318,10 @@ public class ShowAddComponent extends Action {
 								case 5:
 									fd.setPerspectiveCode( val );
 									Iterator itr1 = eaForm.getPerspectives().iterator();
-									while ( itr1.hasNext() )
+									while ( itr1.hasNext() ) 
 									{
 										AmpPerspective pers = ( AmpPerspective ) itr1.next();
-										if ( pers.getCode().equals( val ) )
+										if ( pers.getCode().equals( val ) ) 
 										{
 											fd.setPerspectiveName( pers.getName() );
 										}
@@ -338,52 +332,52 @@ public class ShowAddComponent extends Action {
 										fd.setAmpComponentFundingId(Long.valueOf(val));
 									}									
 							}
-							exp.put( new Integer( index ), fd );
-						}
+							exp.put( new Integer( index ), fd );					
+						}					
 					}
 				}
-
+	
 				Iterator itrS = comm.keySet().iterator();
-				while ( itrS.hasNext() )
+				while ( itrS.hasNext() ) 
 				{
 					Integer index = ( Integer ) itrS.next();
 					FundingDetail fd = ( FundingDetail ) comm.get( index );
-					if ( compFund.getCommitments() == null )
+					if ( compFund.getCommitments() == null ) 
 					{
 						compFund.setCommitments( new ArrayList() );
 					}
 					compFund.getCommitments().add( fd );
 				}
-
+			
 				itrS = disb.keySet().iterator();
-				while ( itrS.hasNext() )
+				while ( itrS.hasNext() ) 
 				{
 					Integer index = ( Integer ) itrS.next();
 					FundingDetail fd = ( FundingDetail ) disb.get( index );
-					if ( compFund.getDisbursements() == null )
+					if ( compFund.getDisbursements() == null ) 
 					{
 						compFund.setDisbursements( new ArrayList() );
 					}
 					compFund.getDisbursements().add( fd );
 				}
-
+			
 				itrS = exp.keySet().iterator();
-				while ( itrS.hasNext() )
+				while ( itrS.hasNext() ) 
 				{
 					Integer index = ( Integer ) itrS.next();
 					FundingDetail fd = ( FundingDetail ) exp.get( index );
-					if ( compFund.getExpenditures() == null )
+					if ( compFund.getExpenditures() == null ) 
 					{
 						compFund.setExpenditures( new ArrayList() );
 					}
 					compFund.getExpenditures().add( fd );
-				}
-
-				if (eaForm.getSelectedComponents() == null)
+				}			
+			
+				if (eaForm.getSelectedComponents() == null) 
 				{
 					eaForm.setSelectedComponents( new ArrayList() );
 				}
-				if ( eaForm.getSelectedComponents().contains( compFund ) )
+				if ( eaForm.getSelectedComponents().contains( compFund ) ) 
 				{
 					Iterator itr = eaForm.getSelectedComponents().iterator();
 					while (itr.hasNext()) {
@@ -394,7 +388,7 @@ public class ShowAddComponent extends Action {
 					}
 					eaForm.getSelectedComponents().remove( compFund );
 				}
-
+				
 				List list = null;
 				if (compFund.getCommitments() != null) {
 					list = new ArrayList(compFund.getCommitments());
@@ -412,13 +406,13 @@ public class ShowAddComponent extends Action {
 					list = new ArrayList(compFund.getExpenditures());
 					Collections.sort(list,FundingValidator.dateComp);
 				}
-				compFund.setExpenditures(list);
+				compFund.setExpenditures(list);				
 				eaForm.getSelectedComponents().add( compFund );
-
+			
 				return mapping.findForward("updated");
 			}
-		}
-		catch ( Exception e )
+		} 
+		catch ( Exception e ) 
 		{
 			logger.debug(e);
 		}

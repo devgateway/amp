@@ -36,8 +36,8 @@ public class RemoveSelOrganisations extends Action {
 						flag = true;
 						break;
 					}
-					flag = true;
-					break;
+					//flag = true;
+					//break;
 				 }
 				}
 				if (!flag) {

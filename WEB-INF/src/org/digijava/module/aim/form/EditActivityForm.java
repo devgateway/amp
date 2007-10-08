@@ -681,6 +681,9 @@ private int isPreview=0;
 			docDescription = null;
 			showInHomePage = false;
 			docComment		= null;
+			docDate = null;
+			docType = null;
+			docLang = null;
 		}
 		if (componentReset) {
 			componentTitle = null;

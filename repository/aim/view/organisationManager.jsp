@@ -39,6 +39,14 @@
 			 return true;
 		}
 	}
+	
+	function resetSearch(){
+		<digi:context name="searchOrg" property="context/module/moduleinstance/organisationManager.do"/>
+		url = "<%= searchOrg %>?orgSelReset=true";
+	    document.aimOrgManagerForm.action = url;
+	    document.aimOrgManagerForm.submit();
+		return true;
+	}
 
 	-->
 
@@ -111,7 +119,7 @@
                     <c:set var="trnResetBtn">
                       <digi:trn key="aim:btnReset"> Reset </digi:trn>
                     </c:set>
-                    <input type="reset" value="${trnResetBtn}" class="buton">
+                    <input type="button" value="${trnResetBtn}" class="buton" onclick="return resetSearch()">
 					</td>
 					<td width="260">
                     <c:set var="trnGoBtn">

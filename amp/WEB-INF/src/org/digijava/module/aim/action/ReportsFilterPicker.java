@@ -246,7 +246,7 @@ public class ReportsFilterPicker extends MultiAction {
 		if(filterForm.getSelectedFinancingInstruments()!=null && filterForm.getSelectedFinancingInstruments().length>0)
 				arf.setFinancingInstruments(new HashSet()); 
 		else 
-			arf.setStatuses(null);
+			arf.setFinancingInstruments(null);
 		
 		for (int i = 0; filterForm.getSelectedFinancingInstruments()!=null && i < filterForm.getSelectedFinancingInstruments().length; i++) {
 			Long id					= Long.parseLong(filterForm.getSelectedFinancingInstruments()[i]+"");

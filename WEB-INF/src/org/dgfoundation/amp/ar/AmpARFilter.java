@@ -91,7 +91,8 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		this.setAmpTeams(new TreeSet());
 		if(tm!=null){
 		    AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
-		    this.setCurrency(tempSettings.getCurrency());		    
+		    if (this.getCurrency() == null)
+		    	this.setCurrency(tempSettings.getCurrency());		    
 			this.getAmpTeams().add(TeamUtil.getAmpTeam(tm.getTeamId()));
 			this.getAmpTeams().addAll(TeamUtil.getAmpLevel0Teams(tm.getTeamId()));	
 		}

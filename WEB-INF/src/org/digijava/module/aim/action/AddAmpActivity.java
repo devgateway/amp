@@ -115,11 +115,13 @@ public class AddAmpActivity extends Action {
       session.removeAttribute("sectorSelected");
       
       Collection prevSelSectors = eaForm.getActivitySectors();
-      Iterator itr = prevSelSectors.iterator();
+      
+     
       
       boolean flag = false;
-      
-      while (itr.hasNext()) {
+      if (prevSelSectors != null) {
+    	  Iterator itr = prevSelSectors.iterator();
+    	  while (itr.hasNext()) {
         ActivitySector asec = (ActivitySector) itr.next();
         flag = false;
           if (asec.getSectorName().equals(sect.getSectorName())) {
@@ -127,7 +129,7 @@ public class AddAmpActivity extends Action {
             break;
           }
         }
-      
+      }
       if(flag != true){
     	  if (prevSelSectors != null) {
     		  if (prevSelSectors.isEmpty())

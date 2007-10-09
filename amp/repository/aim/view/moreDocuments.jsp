@@ -164,7 +164,8 @@
 																</td>
 
 																<td bgColor=#f4f4f2>	
-
+																
+																<logic:notEmpty name="relatedLink" property="fileName">
 																	<bean:define name="relatedLink" property="fileName" id="fileName"/>
 															    	<%
 																		int index2;
@@ -180,7 +181,7 @@
 																		 align="absmiddle"/>	
 																		<a href="<%=digiContext%>/cms/downloadFile.do?itemId=<bean:write name="relatedLink" property="docId" />">																
 																		<i><bean:write name="relatedLink" property="fileName" /></i></a>
-																	
+																</logic:notEmpty>		
 																</td>
 															</tr>
 															</c:if>

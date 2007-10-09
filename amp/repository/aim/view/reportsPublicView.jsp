@@ -44,11 +44,11 @@ Showing all activities...
 <div id="ajaxcontentarea" class="contentstyle">
 
 </div>
-<logic:Present name="firstReportName>
+<logic:present name="firstReportName">
 <script type="text/javascript">
 //Start Ajax tabs script for UL with id="maintab" Separate multiple ids each with a comma.
 
 startajaxtabs("PublicTabs");
 reloadTab('PublicTabs','Tab-<bean:write name="firstReportName"/>');
 </script>
-</logic:Present>
+</logic:present>

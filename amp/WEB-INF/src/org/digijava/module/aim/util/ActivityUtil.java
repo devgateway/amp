@@ -269,13 +269,13 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         }
         else
           logger.debug("commentsCol is empty");
-        
+
         if ( oldActivity.getCategories() != null ) {
         	oldActivity.getCategories().clear();
         }
         else
         	oldActivity.setCategories( new HashSet() );
-        
+
         if ( oldActivity.getFunding() != null ) {
         	oldActivity.getFunding().clear();
         }
@@ -364,9 +364,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         oldActivity.setFunDate(activity.getFunDate());
 
         oldActivity.setApprovalStatus(activity.getApprovalStatus());
-        
+
         oldActivity.getCategories().addAll( activity.getCategories() );
-        
+
         oldActivity.getActivityDocuments().addAll( activity.getActivityDocuments() );
 
         /*
@@ -421,7 +421,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         session.saveOrUpdate(member);
       }
 
-      
+
       //to save the Component fundings
       Collection<AmpComponentFunding>  componentFundingCol = getFundingComponentActivity(activityId);
       if (ampTempComp.getCommitments() != null) {
@@ -441,7 +441,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           componentFundingCol.remove(ampComp);
         }
       }
-      
+
       if (ampTempComp.getExpenditures() != null) {
         Iterator compItr = ampTempComp.getExpenditures().iterator();
         while (compItr.hasNext()) {
@@ -450,16 +450,16 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           componentFundingCol.remove(ampComp);
         }
       }
-      
+
       if (componentFundingCol != null) {
 			Iterator<AmpComponentFunding> componentFundingColIt = componentFundingCol.iterator();
 			while (componentFundingColIt.hasNext()) {
 				session.delete(componentFundingColIt.next());
 			}
 	  }
-      
+
       Collection<AmpPhysicalPerformance> phyProgress = DbUtil.getAmpPhysicalProgress(activityId);
-      
+
       if (ampTempComp.getPhyProgress() != null) {
 			Iterator compItr = ampTempComp.getPhyProgress().iterator();
 			while (compItr.hasNext()) {
@@ -468,14 +468,14 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 				phyProgress.remove(ampPhyPerf);
 			}
       }
-      
+
       if (phyProgress != null) {
 			Iterator<AmpPhysicalPerformance> phyProgressColIt = phyProgress.iterator();
 			while (phyProgressColIt.hasNext()) {
 				session.delete(phyProgressColIt.next());
 			}
 	  }
-      
+
 
       /* Persists the activity */
       if (edit) {
@@ -678,18 +678,18 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 		throw new DgException("Cannot load reference documents for activity id="+activityId,e);
 	}
   }
-  
+
   public static void updateActivity(AmpActivity activity,Collection<AmpActivityReferenceDoc> refdocs) throws DgException{
 	  try {
 		Session session=PersistenceManager.getRequestDBSession();
-		
+
 	} catch (DgException e) {
 		logger.error(e);
 		throw new DgException("Cannot loat reference documents for activity id=",e);
 	}
   }
-  
-  
+
+
   public static void updateActivityCreator(AmpTeamMember creator,
                                            Long activityId) {
     Session session = null;
@@ -746,7 +746,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 			}
 
 			oldActivity.setDocuments(documents);
-			
+
 			session.update(oldActivity);
 			tx.commit();
 			logger.debug("Activity saved");
@@ -763,7 +763,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 			}
 		}
 	}
-  
+
   public static Collection getComponents(Long actId) {
     Session session = null;
     Collection col = new ArrayList();
@@ -1045,7 +1045,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 
         /* Categories */
         activity.setCategories(ampActivity.getCategories());
-        
+
         /* Content Repository */
 	    activity.setActivityDocuments( ampActivity.getActivityDocuments() );
 
@@ -1061,6 +1061,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setSubVote(ampActivity.getSubVote());
         activity.setFY(ampActivity.getFY());
         activity.setProjectCode(ampActivity.getProjectCode());
+        activity.setEqualOpportunity(ampActivity.getEqualOpportunity());
+        activity.setEnvironment(ampActivity.getEnvironment());
+        activity.setMinorities(ampActivity.getMinorities());
         if (ampActivity.getActivityCreator() != null) {
           activity.setCreatedBy(ampActivity.getActivityCreator());
         }
@@ -1158,7 +1161,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             )
             );
         /* END - Set Categories */
-        
+
         activity.setFinancialInstrument(CategoryManagerUtil.getStringValueOfAmpCategoryValue(
                 CategoryManagerUtil.getAmpCategoryValueFromListByKey(
             CategoryConstants.FINANCIAL_INSTRUMENT_KEY, ampAct.getCategories())
@@ -1168,7 +1171,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
          */
 
         activity.setFY(ampAct.getFY());
-       
+
         activity.setVote(ampAct.getVote());
         activity.setSubProgram(ampAct.getSubProgram());
         activity.setSubVote(ampAct.getSubVote());
@@ -1352,7 +1355,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setModalities(modalities);
         activity.setUniqueModalities(new TreeSet(modalities));
 
-      
+
       }
     }
     catch (Exception e) {
@@ -1603,10 +1606,10 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     //getComponents();
     return col;
   }
-  
+
   /*
    * This function gets AmpComponentFunding of an Activity.
-   * 
+   *
    * @param activityId Activity id
    */
   public static Collection<AmpComponentFunding> getFundingComponentActivity(Long activityId) {
@@ -1636,7 +1639,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     }
     //getComponents();
     return col;
-  }  
+  }
 
   // function for getting fundings for components and ids ends here
 
@@ -1884,7 +1887,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         }
         fund.getFundingDetails().clear();
         fund.setFundingDetails(temp.getFundingDetails());
-        
+
         fund.getMtefProjections().clear();
         fund.getMtefProjections().addAll( temp.getMtefProjections() );
         //logger.info("Updating " + fund.getAmpFundingId());
@@ -2112,7 +2115,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     }
     return col;
   }
-  
+
   /*
    * get the list of all the activities
    * to display in the activity manager of Admin
@@ -2145,7 +2148,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       }
     }
     return col;
-  }  
+  }
 
   /* functions to DELETE an activity by Admin start here.... */
   public static void deleteActivity(Long ampActId) {
@@ -2700,10 +2703,10 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                     && adjastType != null && amount != null
                     && detail.getAmpCurrencyId() != null) {
 
-                	if (detail.getFixedExchangeRate()!=null && detail.getFixedExchangeRate().doubleValue()!=1d 
+                	if (detail.getFixedExchangeRate()!=null && detail.getFixedExchangeRate().doubleValue()!=1d
                 			&& tocode!=null && tocode.trim().equals("USD")){
                 		//in this case we use fixed exchange rates to convert to USD, see AMP-1821,
-                		
+
                 		//convert to USD with fixed rate secified in the FundingDetail
             			double tempAmount = amount.doubleValue()/detail.getFixedExchangeRate().doubleValue();
             			//sett to correct place
@@ -2727,7 +2730,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                 		}
 
                 	}
-                	
+
                 }
               }
             }
@@ -2753,10 +2756,10 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       return act1.getAmpActivityId().compareTo(act2.getAmpActivityId());
     }
   }
-  
+
   /**
-   * Creates map from {@link AmpActivityReferenceDoc} collection 
-   * where each elements key is the id of {@link AmpCategoryValue} object which is asigned to the element itself 
+   * Creates map from {@link AmpActivityReferenceDoc} collection
+   * where each elements key is the id of {@link AmpCategoryValue} object which is asigned to the element itself
    *
    */
   public static class CategoryIdRefDocMapBuilder implements AmpCollectionUtils.KeyResolver<Long, AmpActivityReferenceDoc>{
@@ -2764,7 +2767,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	public Long resolveKey(AmpActivityReferenceDoc element) {
 		return element.getCategoryValue().getId();
 	}
-	  
+
   }
-  
+
 } // End

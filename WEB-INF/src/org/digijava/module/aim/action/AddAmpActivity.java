@@ -106,38 +106,45 @@ public class AddAmpActivity extends Action {
     String multiSectorSelect = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.
     		GLOBALSETTINGS_MULTISECTORSELECT);
     eaForm.setMultiSectorSelecting(multiSectorSelect);    
-    //
+   
     
     // Add sectors
     if (request.getParameter("addSector") != null) {
       ActivitySector sect = (ActivitySector) session.getAttribute(
           "sectorSelected");
       session.removeAttribute("sectorSelected");
+      
       Collection prevSelSectors = eaForm.getActivitySectors();
-      if (prevSelSectors != null) {
-        if (prevSelSectors.isEmpty())
-          sect.setSectorPercentage(new Integer(100));
-        prevSelSectors.add(sect);
+      Iterator itr = prevSelSectors.iterator();
+      
+      boolean flag = false;
+      
+      while (itr.hasNext()) {
+        ActivitySector asec = (ActivitySector) itr.next();
+        flag = false;
+          if (asec.getSectorName().equals(sect.getSectorName())) {
+            flag = true;
+            break;
+          }
+        }
+      
+      if(flag != true){
+    	  if (prevSelSectors != null) {
+    		  if (prevSelSectors.isEmpty())
+    			  	sect.setSectorPercentage(new Integer(100));
+    		  		prevSelSectors.add(sect);
       }
       else {
         sect.setSectorPercentage(new Integer(100));
         prevSelSectors = new ArrayList();
         prevSelSectors.add(sect);
       }
-
-
-      /*String view = FeaturesUtil.getGlobalSettingValue(
-          "Allow Multiple Sectors");
-      if (view.equalsIgnoreCase("On")) {
-        sect.setCount(1);
-      }
-      else {
-        sect.setCount(2);
-      }*/
+     }
 
       eaForm.setActivitySectors(prevSelSectors);
       return mapping.findForward("addActivityStep2");
     }
+    
     // Remove sectors
     else
     if (request.getParameter("remSectors") != null) {

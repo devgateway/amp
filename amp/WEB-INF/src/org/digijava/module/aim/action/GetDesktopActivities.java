@@ -38,9 +38,13 @@ public class GetDesktopActivities extends Action {
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		DesktopForm dForm = (DesktopForm) form;
-		if(session.getAttribute(Constants.DEFAULT_TEAM_REPORT)==null){
+		
+		/*
+		 * Do not uncomment ---- FIX for bug AMP-2030
+		 * if(session.getAttribute(Constants.DEFAULT_TEAM_REPORT)==null){
                   session.setAttribute("filterCurrentReport",null);
                 }
+        */
 		session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
 		String risk=(String) request.getParameter("risk");
 		AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);

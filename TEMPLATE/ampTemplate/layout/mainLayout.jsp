@@ -88,8 +88,6 @@
 
 				<TD align="left" vAlign="top" bgcolor="#5a5a58" width="100%">
 
-					<DIV id="head-middle">
-
 					<TABLE cellSpacing=0 cellPadding=0 width="98%"
 
 					vAlign="center">
@@ -118,8 +116,6 @@
 						</TBODY>
 
 					</TABLE>
-
-					</DIV>
 
 				</TD>
 

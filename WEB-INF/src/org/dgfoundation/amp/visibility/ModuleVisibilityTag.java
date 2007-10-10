@@ -76,17 +76,16 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		
 		if(ampTreeVisibility!=null)
 		{
-		//String bodyText = bodyContent.getString();
-			if(!existModuleinDB(ampTreeVisibility)){
-    		//insert in db;	   
-   			   //insert(templateid, modulename);
-   			   
-   			   FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName());
-   			   
-   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
-   			   
+			if(!existModuleinDB(ampTreeVisibility))
+			{
+				if(FeaturesUtil.getModuleVisibility(name)==null)
+				{
+					FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName());
+					
+					AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+					ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+					ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+				}  
    		   	}
 			else 
 				if(!checkTypeAndParentOfModule(ampTreeVisibility)) //parent or type is not ok
@@ -100,7 +99,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		}
 		else return SKIP_BODY;
 		
-		return EVAL_BODY_BUFFERED;//super.doStartTag();
+		return EVAL_BODY_BUFFERED;
 	}
 	public int doEndTag() throws JspException 
     {
@@ -108,6 +107,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		if(bodyContent.getString()==null) return SKIP_BODY;
        String bodyText = bodyContent.getString();
        try {
+    	   
     	   ServletContext ampContext=pageContext.getServletContext();
     	   HttpSession session=pageContext.getSession();
     	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");

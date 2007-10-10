@@ -55,16 +55,18 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 	   if(ampTreeVisibility!=null)
 		   if(!existFieldinDB(ampTreeVisibility)){
-	    		//insert in db;	   
-	   			   //insert(featureId, fieldname);
+			   if(FeaturesUtil.getFieldVisibility(name)==null)
+			   {
 	   			   //TODO default has to be visibile!!!!
+			   
 	   			   FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());;
 	   			   
 	   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 	   			   //System.out.println("-------------------------------"+currentTemplate.getId());
 	   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 	   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
-	   		   }
+			  }
+	   		}
 	   		ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 	   		if(ampTreeVisibility!=null)
 	   		   if(!isFeatureTheParent(ampTreeVisibility)){

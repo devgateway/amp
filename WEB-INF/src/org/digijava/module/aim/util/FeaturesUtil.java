@@ -1603,6 +1603,83 @@ public class FeaturesUtil {
   /**
    * @author dan
    */
+  public static AmpFieldsVisibility getFieldVisibility(String fieldName) {
+
+    Session session = null;
+    Query q = null;
+    Collection c = null;
+    AmpFieldsVisibility id = null;
+
+    try {
+      session = PersistenceManager.getSession();
+      String queryString = new String();
+      queryString = "select a from " + AmpFieldsVisibility.class.getName()
+          + " a where (a.name=:fieldName) ";
+      q = session.createQuery(queryString);
+      q.setParameter("fieldName", fieldName, Hibernate.STRING);
+      c = q.list();
+      if(c.size()!=0)
+    	  id=(AmpFieldsVisibility) c.iterator().next();
+     
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    finally {
+      if (session != null) {
+        try {
+          PersistenceManager.releaseSession(session);
+        }
+        catch (Exception rsf) {
+          logger.error("Release session failed :" + rsf.getMessage());
+        }
+      }
+    }
+    return id;
+  }
+
+  /**
+   * @author dan
+   */
+  public static AmpFeaturesVisibility getFeatureVisibility(String featureName) {
+
+    Session session = null;
+    Query q = null;
+    Collection c = null;
+    AmpFeaturesVisibility id = null;
+
+    try {
+      session = PersistenceManager.getSession();
+      String queryString = new String();
+      queryString = "select a from " + AmpFeaturesVisibility.class.getName()
+          + " a where (a.name=:featureName) ";
+      q = session.createQuery(queryString);
+      q.setParameter("featureName", featureName, Hibernate.STRING);
+      c = q.list();
+      if(c.size()!=0)
+    	  id=(AmpFeaturesVisibility) c.iterator().next();
+     
+    }
+    catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    finally {
+      if (session != null) {
+        try {
+          PersistenceManager.releaseSession(session);
+        }
+        catch (Exception rsf) {
+          logger.error("Release session failed :" + rsf.getMessage());
+        }
+      }
+    }
+    return id;
+  }
+
+  
+  /**
+   * @author dan
+   */
   public static AmpModulesType getAmpModulesType(String typeName) {
 
     Session session = null;

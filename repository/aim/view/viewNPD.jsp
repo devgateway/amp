@@ -445,11 +445,11 @@
 
 		//highlight current Node
 		highlightNode(curProgNodeIndex);
-		
+
 		setNumOfPrograms (myXML);
 		addRootListener();
 		addEventListeners();
-		
+
 		createPanel("Info","<i>info</i>");
 	}
 
@@ -594,7 +594,7 @@
 		var actList=document.getElementById('activityListPlace');
 		//actList.innerHTML="<i>Loading...</i>"
 		setActivityLoading(actList);
-		var url=getActivitiesURL();	
+		var url=getActivitiesURL();
 		var async=new Asynchronous();
 		async.complete=activitiesCallBack;
 		async.call(url);
@@ -870,7 +870,7 @@
 		setupYears();
 		initTree();
 	}
-	
+
 	/**
 	*The code below is related to the DHTML panel
 	*
@@ -902,7 +902,7 @@
 	function eventFunction(e) {
 		//alert('S-a apelat eventFunction	' + this.href + '||' + getIdFromHref(this.href) );
 		showPanel(this.innerHTML, getIdFromHref(this.href), e.clientX, e.clientY);
-		
+
 	}
 	/* Extracts the id (database id of AmpTheme) from the href property */
 	function getIdFromHref( href ) {
@@ -919,20 +919,20 @@
 		//YAHOO.amp.container.panel2.setBody("This is a dynamically generated Panel.");
 		//YAHOO.amp.container.panel2.setFooter("End of Panel #2");
 		//YAHOO.amp.container.panel2.render(document.body);
-		
+
 		//YAHOO.amp.container.panel2.moveTo(50,50);
-		
-		
+
+
 		informationPanel	= new YAHOO.widget.Panel("infoPanel", { width:"300px", visible:false, draggable:false, close:true } );
 		informationPanel.setHeader(headerText);
 		informationPanel.setBody(bodyText);
 		informationPanel.render(document.body);
-		
+
 		infoPanelObj	= document.getElementById('infoPanel');
-		
+
 		YAHOO.util.Event.addListener(infoPanelObj, "mouseover", makePanelVisible);
 		YAHOO.util.Event.addListener(infoPanelObj, "mouseout", hidePanel);
-		
+
  	}
  	/* Updates the panels header, body and position and makes it visible */
  	function showPanel(headerText, id, posX, posY) {
@@ -965,30 +965,31 @@
  			panelBody += '<tr><td align="left"><b><digi:trn key="aim:NPD:Outputs">Outputs</digi:trn>:</b>&nbsp;</td><td>'+ outputs +'</td></tr>';
  			panelBody += '<tr><td align="left"><b><digi:trn key="aim:NPD:Beneficiaries">Beneficiaries</digi:trn>:</b>&nbsp;</td><td>'+ beneficiaries +'</td></tr>';
  			panelBody += '<tr><td align="left"><b><digi:trn key="aim:NPD:Environment">Environment Considerations</digi:trn>:</b>&nbsp;</td><td>'+ environmentConsiderations +'</td></tr>';
- 			panelBody += '</table>'; 
- 			
+ 			panelBody += '</table>';
+
  			themeArray[pid]	= panelBody;
- 	
+
  	}
 	window.onload=loadInitial;;
 </script>
 <script language="javascript" type="text/javascript">
 	<digi:instance property="aimNPDForm" />
-	<logic:iterate id="theme" name="aimNPDForm" property="allThemes" type="org.digijava.module.aim.dbentity.AmpTheme" >
-		addProgramInformation(	'<bean:write name="theme" property="ampThemeId" />',
-								'<bean:write name="theme" property="name" />',
-								'<bean:write name="theme" property="description" />',
-								'<bean:write name="theme" property="leadAgency" />',
-								'<bean:write name="theme" property="themeCode" />',
-								'<bean:write name="theme" property="typeCategoryValue.value" />',
-								'<bean:write name="theme" property="targetGroups" />',
-								'<bean:write name="theme" property="background" />',
-								'<bean:write name="theme" property="objectives" />',
-								'<bean:write name="theme" property="outputs" />',
-								'<bean:write name="theme" property="beneficiaries" />',
-			 					'<bean:write name="theme" property="environmentConsiderations" />'
-		);
-	</logic:iterate>
+    <c:forEach var="theme" items="${aimNPDForm.allThemes}">
+		addProgramInformation(	'${theme.ampThemeId}',
+								'${theme.name}',
+								'${theme.description}',
+								'${theme.leadAgency}',
+								'${theme.themeCode}',
+								'${theme.typeCategoryValue.value}',
+								'${theme.targetGroups}',
+								'${theme.background}',
+								'${theme.objectives}',
+								'${theme.outputs}',
+								'${theme.beneficiaries}',
+			 					'${theme.environmentConsiderations}'
+                                );
+
+    </c:forEach>
 </script>
 <input type="hidden" id="hdYears" value=""/>
 <input type="hidden" id="hdIndicators" value=""/>
@@ -1101,7 +1102,7 @@
 							<digi:trn key="aim:npd:dropDownAnyStatus">Any Status</digi:trn>
 						</c:set>
 						<category:showoptions outeronchange="filterStatus()" firstLine="${translation}" name="aimNPDForm" property="selectedStatuses"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>"  />
-					
+
 					</td>
 					<td>
 						<html:select property="selectedDonors" onchange="filterDonor()">

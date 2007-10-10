@@ -107,18 +107,34 @@ public class ComponentsUtil{
 		try
 		{
 			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			
+			// Now delete AmpComponent
 			AmpComponent ampComp = (AmpComponent) session.load(
 					AmpComponent.class,compId);
-			logger.info("here123");
-			tx = session.beginTransaction();
-			logger.info("here");
+
+			/*
+			 * Delete AmpComponentFunding items
+			 * This operation should be done on casade :(
+			 */
+			String queryString = "select co from "
+					+ AmpComponentFunding.class.getName()
+					+ " co where amp_component_id='" + compId + "'";
+			Query qry = session.createQuery(queryString);
+
+			Iterator componentFundingIterator = qry.list().iterator();
+			
+			while(componentFundingIterator.hasNext()){
+				session.delete(componentFundingIterator.next());
+			}
+			
+
 			session.delete(ampComp);
 			tx.commit();
 		}
 		catch (Exception e)
 		{
-			logger.error("Exception from deleteComponent() :" + e.getMessage());
-			e.printStackTrace(System.out);
+			logger.error("Exception from deleteComponent() : " + e);
 			if (tx != null)
 			{
 				try
@@ -161,7 +177,7 @@ public class ComponentsUtil{
 		try
 		{
 			session = PersistenceManager.getSession();
-			queryString ="select co from "+AmpComponentFunding.class.getName()+" co where co.component=:id";
+			queryString ="select co from " +AmpComponentFunding.class.getName()+" co where co.component=:id";
 			qry = session.createQuery(queryString);
 			qry.setParameter("id",id,Hibernate.LONG);
 

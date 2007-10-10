@@ -367,7 +367,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 
         oldActivity.getCategories().addAll( activity.getCategories() );
 
-        oldActivity.getActivityDocuments().addAll( activity.getActivityDocuments() );
+        if(activity.getActivityDocuments() !=null)
+        	oldActivity.getActivityDocuments().addAll( activity.getActivityDocuments() );
 
         /*
          * tanzania ADDS
@@ -2210,29 +2211,19 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           Iterator compItr = comp.iterator();
           while (compItr.hasNext()) {
             AmpComponent ampComp = (AmpComponent) compItr.next();
-            /*Set compFund = ampComp.getComponentFundings();
-                   if(compFund != null)
-                   {
-             Iterator compFundItr = compFund.iterator();
-             while(compFundItr.hasNext())
-             {
-             AmpComponentFunding ampCompFund = (AmpComponentFunding) compFundItr.next();
-              session.delete(ampCompFund);
-             }
-                   }
-                   Set phyProgress = ampComp.getPhysicalProgress();
-                   if(phyProgress != null)
-                   {
-             Iterator phyProgressItr = phyProgress.iterator();
-             while(phyProgressItr.hasNext())
-             {
-              AmpPhysicalPerformance phyPerformance = (AmpPhysicalPerformance) phyProgressItr.next();
-              session.delete(phyPerformance);
-             }
-                   }*/
             session.delete(ampComp);
           }
         }
+        
+        
+        /* delete Component Fundings */
+        Collection<AmpComponentFunding>  componentFundingCol = getFundingComponentActivity(ampActId);
+        if (componentFundingCol != null) {
+  			Iterator<AmpComponentFunding> componentFundingColIt = componentFundingCol.iterator();
+  			while (componentFundingColIt.hasNext()) {
+  				session.delete(componentFundingColIt.next());
+  			}
+	  	}
 
         /* delete org roles */
         Set orgrole = ampAct.getOrgrole();

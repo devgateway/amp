@@ -8,8 +8,8 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <logic:present name="currentMember" scope="session">
-<DIV id="menu" align="right">
-<div id="gen"
+<DIV id="menu" align="right" style="">
+<div id="gen" style="white-space:nowrap;"
 	title='<digi:trn key="aim:clickToLogoutTheSystem">Click here to logout from the system</digi:trn>'>
 <c:set var="message">
 		<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>

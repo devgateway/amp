@@ -63,7 +63,7 @@ public class UpdateWorkspace extends Action {
             String tId1 = request.getParameter("tId");
             //System.out.println("Am primit parametrul " + tId1 +" *****************************8");
             logger.debug("event : " + event + " dest : " + dest);
-            
+
             AmpCategoryValue typeCategoryValue	= null;
             String typeString					= null;
             if (uwForm.getTypeId() != null && uwForm.getTypeId().longValue() > 0) {
@@ -82,11 +82,11 @@ public class UpdateWorkspace extends Action {
                     while(itr.hasNext()) {
                         AmpTeam team 			= (AmpTeam) itr.next();
                         String teamTypeString	= null;
-                        
+
                         if (team.getType() != null) {
-                        	teamTypeString	= team.getType().getValue();		
+                        	teamTypeString	= team.getType().getValue();
                         }
-                        
+
                         if( Constants.TEAM_TYPE_BILATERAL.equals(teamTypeString) )
                             uwForm.getRelatedTeamBilatColl().add(team);
                         else if( Constants.TEAM_TYPE_MULTILATERAL.equals(teamTypeString) )
@@ -171,7 +171,7 @@ public class UpdateWorkspace extends Action {
                     newTeam.setDescription(" ");
                 }
             }
-            
+
             if(event != null && event.trim().equalsIgnoreCase("reset")) {
         		uwForm.setPopupReset(false);
                 uwForm.setTeamName("");
@@ -202,7 +202,7 @@ public class UpdateWorkspace extends Action {
                         "error.aim.updateWorkspace.noManagementChildSelected !!!!!");
                     return mapping.getInputForward();
                     }
-                	
+
                     boolean teamExist = TeamUtil.createTeam(newTeam, uwForm
                         .getChildWorkspaces());
                     if(teamExist) {
@@ -271,7 +271,7 @@ public class UpdateWorkspace extends Action {
                             tm.setTeamName(newTeam.getName());
                             session.setAttribute("currentMember", tm);
                         }
-                    }return mapping.getInputForward();
+                    }return mapping.findForward("forward");
                 }
             } else if(event != null && event.trim().equalsIgnoreCase("delete")) {
                 String tId = request.getParameter("tId");
@@ -287,8 +287,8 @@ public class UpdateWorkspace extends Action {
                 }
                 return mapping.findForward("forward");
             }
-            	
-            
+
+
             uwForm.setReset(true);
             uwForm.reset(mapping, request);
 

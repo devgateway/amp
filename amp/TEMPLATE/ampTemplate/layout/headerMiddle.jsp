@@ -23,24 +23,18 @@ if("On".equals(publicView)) { %>
 <UL>
 
 		<LI class="noLink">
-				<c:set var="message">
-			<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-		</c:set>
-			<digi:link styleClass="head-menu-link" href="/reportsPublicView.do" module="aim" onclick="return quitRnot1('${message}')">
+			<digi:link styleClass="head-menu-link" href="/reportsPublicView.do" module="aim">
 					::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
 			</digi:link>
 		</LI>
 
 		<LI class="noLink">
-		<c:set var="message">
-			<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-		</c:set>
-		<digi:link styleClass="head-menu-link" href="/viewTeamReports.do" module="aim" onclick="return quitRnot1('${message}')">
+		<digi:link styleClass="head-menu-link" href="/viewTeamReports.do" module="aim">
 				::: <digi:trn key="aim:reports">REPORTS</digi:trn></digi:link>
 		</LI>
 		<module:display name="Content Repository">
 		<li>
-			<digi:link styleClass="head-menu-link" href="/documentManager.do" module="contentrepository" onclick="return quitRnot()">			
+			<digi:link styleClass="head-menu-link" href="/documentManager.do" module="contentrepository">
 				::: <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></digi:link>
 		</li>
 		</module:display>
@@ -58,10 +52,7 @@ if("On".equals(publicView)) { %>
 		<logic:equal name="ampAdmin" value="yes">
 		<LI>
 			<div id="gen" title='<digi:trn key="aim:clickToAccessAdminTools">Click here to access admin tools</digi:trn>'>
-					<c:set var="message">
-				<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-		</c:set>
-				<digi:link styleClass="head-menu-link" href="/admin.do" module="aim" onclick="return quitRnot1('${message}')">
+				<digi:link styleClass="head-menu-link" href="/admin.do" module="aim">
 					::: <digi:trn key="aim:aminTools">ADMIN TOOLS</digi:trn>
 				</digi:link>
 			</div></LI>
@@ -70,18 +61,12 @@ if("On".equals(publicView)) { %>
 		<LI>
 			<div id="gen" title='<digi:trn key="aim:enterIntoAIM">Enter in to Aid Information Module</digi:trn>'>
 			<logic:notEmpty name="TID" scope="session">
-				<c:set var="message">
-				<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-			</c:set>
-				<digi:link styleClass="head-menu-link" href="/showDesktop.do" module="aim" onclick="return quitRnot1('${message}')">
+				<digi:link styleClass="head-menu-link" href="/showDesktop.do" module="aim">
 					::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
 				</digi:link>
 			</logic:notEmpty>
 			<logic:empty name="TID" scope="session">
-				<c:set var="message">
-				<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-			</c:set>
-				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot1('${message}')">
+				<digi:link styleClass="head-menu-link" href="/" module="aim">
 					::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
 				</digi:link>
 			</logic:empty>
@@ -90,48 +75,33 @@ if("On".equals(publicView)) { %>
 		<LI>
 			<div id="gen"  title='<digi:trn key="aim:viewPublicReports">View public team reports</digi:trn>'>
 			<logic:notEmpty name="TID" scope="session">
-				<c:set var="message">
-				<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-			</c:set>
-				<digi:link styleClass="head-menu-link" href="/viewTeamReports.do" module="aim" onclick="return quitRnot1('${message}')">
+				<digi:link styleClass="head-menu-link" href="/viewTeamReports.do" module="aim">
 				::: <digi:trn key="aim:reports">REPORTS</digi:trn></digi:link>
 			</logic:notEmpty>
 			<logic:empty name="TID" scope="session">
-				<c:set var="message">
-				<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-			</c:set>
-				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot1('${message}')">
+				<digi:link styleClass="head-menu-link" href="/" module="aim">
 				::: <digi:trn key="aim:reports">REPORTS</digi:trn></digi:link>
 			</logic:empty>
 			</div>
 		</LI>
 			<module:display name="Document Management">
-		  <c:set var="message">
-					<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-				</c:set>
-		    	<LI><a class="head-menu-link" href="/viewAllDocuments.do" module="aim" onclick="return quitRnot1('${message}')">::: <digi:trn key="aim:documentsHeader">DOCUMENTS</digi:trn></a></LI>
+		    	<LI><a class="head-menu-link" href="/viewAllDocuments.do" module="aim">::: <digi:trn key="aim:documentsHeader">DOCUMENTS</digi:trn></a></LI>
 		    </module:display>
 		    <module:display name="Scenarios">
 		    	<LI><a class="head-menu-link">::: <digi:trn key="aim:scenarios">SCENARIOS</digi:trn></a></LI>
 	    	</module:display>
 			<module:display name="Content Repository">
-			<LI><a class="head-menu-link" href="/contentrepository/documentManager.do" module="aim" onclick="return quitRnot()">::: <digi:trn key="contentrepository:documentRepositoryTitle">DOCUMENT REPOSITORY</digi:trn></a></LI>
+			<LI><a class="head-menu-link" href="/contentrepository/documentManager.do" module="aim">::: <digi:trn key="contentrepository:documentRepositoryTitle">DOCUMENT REPOSITORY</digi:trn></a></LI>
 			</module:display>
 	    <module:display name="Calendar">
 		<LI>
 			<div id="gen" title='<digi:trn key="aim:viewPlanningCalendar">View Planning Calendar</digi:trn>'>
 			<logic:notEmpty name="TID" scope="session">
-				<c:set var="message">
-				<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-			</c:set>
-				<digi:link styleClass="head-menu-link" href="/showCalendarView.do" module="calendar" onclick="return quitRnot1('${message}')">
+				<digi:link styleClass="head-menu-link" href="/showCalendarView.do" module="calendar">
 				::: <digi:trn key="aim:calendar">CALENDAR</digi:trn></digi:link>
 			</logic:notEmpty>
 			<logic:empty name="TID" scope="session">
-					<c:set var="message">
-				<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-			</c:set>
-				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot1('${message}')">
+				<digi:link styleClass="head-menu-link" href="/" module="aim">
 				::: <digi:trn key="aim:calendar">CALENDAR</digi:trn></digi:link>
 			</logic:empty>
 			</div>
@@ -141,17 +111,11 @@ if("On".equals(publicView)) { %>
     	<LI>
 			<div id="gen"  title='<digi:trn key="aim:viewMEDashboard">View M&E Dashboard</digi:trn>'>
 			<logic:notEmpty name="TID" scope="session">
-				<c:set var="message">
-				<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-			</c:set>
-				<digi:link styleClass="head-menu-link" href="/viewPortfolioDashboard.do~actId=-1~indId=-1" module="aim" onclick="return quitRnot1('${message}')">
+				<digi:link styleClass="head-menu-link" href="/viewPortfolioDashboard.do~actId=-1~indId=-1" module="aim">
 				::: <digi:trn key="aim:medashboard">M & E DASHBOARD</digi:trn></digi:link>
 			</logic:notEmpty>
 			<logic:empty name="TID" scope="session">
-				<c:set var="message">
-				<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-			</c:set>
-				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot1('${message}')">
+				<digi:link styleClass="head-menu-link" href="/" module="aim">
 				::: <digi:trn key="aim:medashboard">M & E DASHBOARD</digi:trn></digi:link>
 			</logic:empty>
 			</div>

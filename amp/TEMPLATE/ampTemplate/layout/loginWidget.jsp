@@ -11,9 +11,6 @@
 <DIV id="menu" align="right" style="">
 <div id="gen" style="white-space:nowrap;"
 	title='<digi:trn key="aim:clickToLogoutTheSystem">Click here to logout from the system</digi:trn>'>
-<c:set var="message">
-		<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-</c:set>
 
 <c:set var="quote">'</c:set>
 <c:set var="escapedQuote">\'</c:set>
@@ -23,7 +20,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 
 <digi:link styleClass="head-menu-link" href="/j_acegi_logout"
-	module="aim" onclick="return quitRnot1('${msg}')">
+	module="aim">
 	<digi:trn key="aim:logout">Logout</digi:trn>
 </digi:link></div>
 </DIV>
@@ -33,11 +30,8 @@ ${fn:replace(message,quote,escapedQuote)}
 <DIV id="menu" align="right">
 <div id="gen"
 	title='<digi:trn key="aim:aimGoToLogin">Go To Login Page</digi:trn>'>
-	<c:set var="message">
-				<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-			</c:set>
 <digi:link styleClass="head-menu-link" href="/"
-	module="aim" onclick="return quitRnot1('${message}')">
+	module="aim">
 	<digi:trn key="aim:aimGoToLogin">Go To Login Page</digi:trn>
 </digi:link></div>
 </DIV>

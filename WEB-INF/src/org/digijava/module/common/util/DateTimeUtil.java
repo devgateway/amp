@@ -96,6 +96,18 @@ public class DateTimeUtil {
 		return result;
 	}
     
+	public static String parseDateForPicker2(Date date) throws Exception{
+		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
+		String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+		if (pattern==null){
+			pattern=Constants.CALENDAR_DATE_PICKER;
+		}
+		
+		SimpleDateFormat formater=new SimpleDateFormat(pattern);
+		//if(date.contains("-")) date=date.replaceAll("-", "/");
+		String result = formater.format(date);
+		return result;
+	}
     
     
 }

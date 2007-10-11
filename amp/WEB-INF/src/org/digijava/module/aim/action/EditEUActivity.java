@@ -143,7 +143,7 @@ public class EditEUActivity extends MultiAction {
 				euaf.setTextId(element.getTextId());
 				euaf.setTotalCost(element.getTotalCost().toString());
 				euaf.setTotalCostCurrencyId(element.getTotalCostCurrency().getAmpCurrencyId());
-				euaf.setDueDate(DateTimeUtil.formatDate(element.getDueDate()));
+				euaf.setDueDate(DateTimeUtil.parseDateForPicker2(element.getDueDate()));
 				
 				euaf.getContrAmountList().clear();
 				euaf.getContrCurrIdList().clear();

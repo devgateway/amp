@@ -11,7 +11,7 @@ public class ReferenceDoc implements Serializable{
 	private String comment;
 	private boolean checked;
 	
-	public boolean isChecked() {
+	public boolean getChecked() {
 		return checked;
 	}
 	public void setChecked(boolean checked) {

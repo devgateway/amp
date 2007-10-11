@@ -705,7 +705,7 @@ public class SaveActivity extends Action {
 					ReferenceDoc refDoc = (ReferenceDoc) refIter.next();
 					if(ArrayUtils.contains(eaForm.getAllReferenceDocNameIds(), refDoc.getCategoryValueId())){
 						AmpActivityReferenceDoc dbRefDoc=null;//categoryRefDocMap.get(refDoc.getCategoryValueId());
-						//if (dbRefDoc==null){
+						if (refDoc.getChecked() == true){
 							dbRefDoc=new AmpActivityReferenceDoc();
 							dbRefDoc.setCreated(new Date());
 							AmpCategoryValue catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(refDoc.getCategoryValueId());
@@ -717,6 +717,10 @@ public class SaveActivity extends Action {
 						dbRefDoc.setLastEdited(new Date());
 						resultRefDocs.add(dbRefDoc);
 						
+					}else{
+						dbRefDoc=null;
+						resultRefDocs.add(dbRefDoc);
+						}
 					}
 				}
 				activity.setReferenceDocs(resultRefDocs);

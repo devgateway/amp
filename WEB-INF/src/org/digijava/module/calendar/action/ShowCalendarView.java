@@ -165,8 +165,8 @@ public class ShowCalendarView
     }
     filter.setEventTypes(eventTypes);
     // donors
-    Collection organisations = org.digijava.module.aim.util.DbUtil.
-        getDonors();
+   // Collection organisations = org.digijava.module.aim.util.DbUtil.getDonors();
+    Collection organisations= org.digijava.module.aim.util.DbUtil.getOrganisations();
     List donors = new ArrayList();
     Iterator it = organisations.iterator();
     while (it.hasNext()) {

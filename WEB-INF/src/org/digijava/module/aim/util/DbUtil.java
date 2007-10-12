@@ -623,11 +623,11 @@ public class DbUtil {
                     document.setDate(cmsItem.getDate());
                     if (cmsItem.getDocType() != null)
                     	document.setDocType(cmsItem.getDocType().getValue());
-                    
+
                     if (cmsItem.getDocLanguage() != null)
                     	document.setDocLanguage( cmsItem.getDocLanguage().getValue() );
                     document.setDocComment( cmsItem.getDocComment() );
-                    
+
                     logger.debug("Doc Desc :" + document.getDocDescription());
                     docs.add(document);
                 }
@@ -1293,7 +1293,7 @@ public class DbUtil {
     			+ c.size());
     	return c;
     }
-    
+
     /**
      * @author jose Returns a collection of records from amp_funding_detail
      *              based on below
@@ -1321,7 +1321,7 @@ public class DbUtil {
         if (transactionType == Constants.MTEFPROJECTION ) {
         	return getQuarterlyDataForProjections(ampFundingId, adjustmentType);
         }
-        
+
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = new String();
@@ -3429,6 +3429,27 @@ public class DbUtil {
 
     }
 
+    public static Collection getOrganisations() {
+        Session session = null;
+        Query q = null;
+        Collection donors = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = new String();
+            queryString = "select distinct org from "
+                + AmpOrganisation.class.getName() + " org  join  org.calendar  cal";
+            q = session.createQuery(queryString);
+            //logger.debug("No of Donors : " + q.list().size());
+            donors = q.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to get Donors from database", ex);
+            ex.printStackTrace();
+        }
+        return donors;
+
+    }
+
+
     public static Collection getFundingIdbyDonor(Long ampDonorOrgId) {
         Session session = null;
         Query q = null;
@@ -4371,7 +4392,7 @@ public class DbUtil {
         }
         return comments;
     }
-    
+
     public static AmpField getAmpFieldById(Long fieldId) {
         Session session = null;
         Query qry = null;

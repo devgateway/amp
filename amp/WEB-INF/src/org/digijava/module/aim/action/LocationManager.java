@@ -126,15 +126,16 @@ public class LocationManager extends Action {
 									addForm.setImpLevelValue(new Integer(3));
 									addForm.setZone(LocationUtil.getAllZonesUnderRegion(addForm.getRegionId()));
 
-									if (addForm.getZone().isEmpty()) {
+									//if (addForm.getZone().isEmpty()) {
 										// Checking whether this region is currently being referenced by some activity
 										// if yes then 'delete' link is not shown against this region by setting regionFlag='no'
-										AmpLocation ampLoc = LocationUtil.getAmpLocation(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
-								   		if (ampLoc !=null) {
+                                                                        //   AmpLocation ampLoc = LocationUtil.getAmpLocation(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
+                                                                           boolean isAssignedToActivity=LocationUtil.isAssignedToActivity(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
+								   		if (isAssignedToActivity) {
 								   			addForm.setRegionFlag("no");
 								   		} else
 								   			addForm.setRegionFlag("yes");
-									}
+									//}
 								}
 					 } else if (addForm.getLevel().equals("woreda") || addForm.getLevel().equals("nextworeda")) {
 								if (addForm.getCountry() == null || addForm.getRegion() == null
@@ -153,21 +154,22 @@ public class LocationManager extends Action {
 
 									// Checking whether this zone is currently being referenced by some activity
 									// if yes then 'delete' link is not shown against this zone by setting zoneFlag='no'
-									AmpLocation ampLoc = LocationUtil.getAmpLocation(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
-									if (addForm.getWoreda().isEmpty()) {
-										if (ampLoc != null) {
+									//AmpLocation ampLoc = LocationUtil.getAmpLocation(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
+                                                                          boolean isAssignedToActivity=LocationUtil.isAssignedToActivity(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
+									//if (addForm.getWoreda().isEmpty()) {
+										if (isAssignedToActivity) {
 								   			addForm.setZoneFlag("no");
 								   		} else
 								   			addForm.setZoneFlag("yes");
-								   	}
-									else {
+								   	//}
+									//else {
 										if (addForm.getLevel().equals("nextworeda")) {
-											if (ampLoc != null)
+											if (isAssignedToActivity)
 												addForm.setWoredaFlag("no");
 											else
 												addForm.setWoredaFlag("yes");
 								   		}
-									}
+									//}
 
 								}
 					 } else {

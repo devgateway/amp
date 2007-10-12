@@ -7,10 +7,11 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
+import java.io.*;
+import java.util.*;
 
-import org.digijava.kernel.dbentity.Country;
-import org.digijava.module.aim.util.Identifiable;
+import org.digijava.kernel.dbentity.*;
+import org.digijava.module.aim.util.*;
 
 public class AmpRegion implements Serializable, Comparable, Identifiable{
 	private Long ampRegionId;
@@ -23,12 +24,14 @@ public class AmpRegion implements Serializable, Comparable, Identifiable{
 	private String geoCode;
 	private String regionCode;
 	private Country country;
-	
-	public String toString() {
+  private Set zones;
+  private Set locations;
+
+  public String toString() {
 		return name!=null?name:"";
 	}
-	
-	
+
+
 	/**
 	 * @return Returns the ampRegionId.
 	 */
@@ -120,13 +123,30 @@ public class AmpRegion implements Serializable, Comparable, Identifiable{
 		return regionCode;
 	}
 
-	/**
+  public Set getZones() {
+    return zones;
+  }
+
+  public Set getLocations() {
+    return locations;
+  }
+
+  /**
 	 * @param string
 	 */
 	public void setRegionCode(String string) {
 		regionCode = string;
 	}
-	/* (non-Javadoc)
+
+  public void setZones(Set zones) {
+    this.zones = zones;
+  }
+
+  public void setLocations(Set locations) {
+    this.locations = locations;
+  }
+
+  /* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals(Object arg) {
@@ -146,6 +166,6 @@ public class AmpRegion implements Serializable, Comparable, Identifiable{
 	public Object getIdentifier() {
 		return this.getAmpRegionId();
 	}
-	
+
 }
- 
+

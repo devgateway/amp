@@ -19,6 +19,11 @@ import org.digijava.module.aim.dbentity.AmpWoreda;
 import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.helper.AmpLocations;
 import org.digijava.module.aim.helper.Location;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import java.util.*;
+import net.sf.hibernate.*;
+import java.sql.*;
+import org.digijava.kernel.exception.DgException;
 
 public class LocationUtil {
 
@@ -27,11 +32,11 @@ public class LocationUtil {
 	public static Collection searchForLocation(String keyword, int implevel) {
 		Session session = null;
 		Collection col = new ArrayList();
-		
+
 		//logger.info("INSIDE Search Location DBUTIL..... ");
-	
+
 		try {
-			
+
 			session = PersistenceManager.getSession();
 			int tempIncr = 0;
 			if (implevel == 2) {
@@ -45,17 +50,17 @@ public class LocationUtil {
 						+ "region where region.name like '%"
 						+ keyword
 						+ "%' and " + "country.iso = region.country";
-				
+
 				Query qry = session.createQuery(qryStr);
 				Iterator itr = qry.list().iterator();
-				
+
 				while (itr.hasNext()) {
 					Object obj[] = (Object[]) itr.next();
 					Long cId = (Long) obj[0];
 					String cName = (String) obj[1];
 					Long rId = (Long) obj[2];
 					String rName = (String) obj[3];
-					
+
 					Location loc = new Location();
 					loc.setCountry(cName);
 					loc.setCountryId(cId);
@@ -66,7 +71,7 @@ public class LocationUtil {
 				}
 			} else if (implevel == 3) {
 				//logger.info("searching zones........");
-				
+
 /*				String qryStr = "select country.countryId,country.countryName,region.ampRegionId,region.name "
 					+ "from "
 					+ Country.class.getName()
@@ -90,10 +95,10 @@ public class LocationUtil {
 					+ "%' and "
 					+ "region.ampRegionId = zone.region and "
 					+ "country.iso = zone.country";
-				
+
 				Query qry = session.createQuery(qryStr);
 				Iterator itr = qry.list().iterator();
-				
+
 				tempIncr = 0;
 				while (itr.hasNext()) {
 					Object obj[] = (Object[]) itr.next();
@@ -103,7 +108,7 @@ public class LocationUtil {
 					String rName = (String) obj[3];
 					Long zId = (Long) obj[4];
 					String zName = (String) obj[5];
-					
+
 					Location loc = new Location();
 					loc.setLocId(new Long(System.currentTimeMillis()+(tempIncr++)));
 					//logger.info("Loc id set as " + loc.getLocId());
@@ -115,10 +120,10 @@ public class LocationUtil {
 					loc.setZoneId(zId);
 					col.add(loc);
 				}
-				
+
 			} else if (implevel == 4) {
 				//logger.info("searching Woredas........");
-				
+
 				String qryStr = "select country.countryId,country.countryName,region.ampRegionId, region.name, zone.ampZoneId, zone.name, woreda.ampWoredaId, woreda.name "
 					+ "from "
 					+ Country.class.getName()
@@ -135,11 +140,11 @@ public class LocationUtil {
 					+ "region.ampRegionId = zone.region and "
 					+ "woreda.zone = zone.ampZoneId and "
 					+ "country.iso = zone.country";
-				
+
 
 				Query qry = session.createQuery(qryStr);
 				Iterator itr = qry.list().iterator();
-				
+
 				tempIncr = 0;
 				while (itr.hasNext()) {
 					Object obj[] = (Object[]) itr.next();
@@ -151,7 +156,7 @@ public class LocationUtil {
 					String zName = (String) obj[5];
 					Long wId = (Long) obj[6];
 					String wName = (String) obj[7];
-					
+
 					Location loc = new Location();
 					loc.setLocId(new Long(System.currentTimeMillis() + (tempIncr++)));
 					loc.setCountry(cName);
@@ -164,9 +169,9 @@ public class LocationUtil {
 					loc.setWoredaId(wId);
 					col.add(loc);
 				}
-				
+
 			} else {
-				
+
 				logger.info("Imp level is not selected for search....");
 				/*String queryString = "select loc from "
 						+ AmpLocation.class.getName() + " loc "
@@ -186,7 +191,7 @@ public class LocationUtil {
 		return col;
 	}
 	//End Search Location.
-	
+
 	public static AmpLocation getAmpLocation(Long countryId, Long regionId,
 			Long zoneId, Long woredaId) {
 
@@ -252,8 +257,74 @@ public class LocationUtil {
 		}
 		return loc;
 	}
+        public static boolean isAssignedToActivity(Long countryId, Long regionId,
+			Long zoneId, Long woredaId)throws DgException{
+          boolean  isAssignedToActivity=true;
+          Session session = null;
+          boolean flag = false;
+          try {
+            session = PersistenceManager.getRequestDBSession();
 
-	
+                        String queryString = "select  l from " + AmpLocation.class.getName()
+                                        + " l join l.aidlocation locs";
+                        if (countryId != null && (!(countryId.equals(new Long(-1))))) {
+                                if (!flag) {
+                                        queryString += " where";
+                                }
+                                queryString += " country_id = " + countryId;
+                                flag = true;
+                        }
+
+                        if (regionId != null && (!(regionId.equals(new Long(-1))))) {
+                                if (!flag) {
+                                        queryString += " where";
+                                } else {
+                                        queryString += " or";
+                                }
+                                queryString += " region_id = " + regionId;
+                                flag = true;
+                        }
+
+                        if (zoneId != null && (!(zoneId.equals(new Long(-1))))) {
+                                if (!flag) {
+                                        queryString += " where";
+                                } else {
+                                        queryString += " or";
+                                }
+                                queryString += " zone_id = " + zoneId;
+                        }
+
+                        if (woredaId != null && (!(woredaId.equals(new Long(-1))))) {
+                                if (!flag) {
+                                        queryString += " where";
+                                } else {
+                                        queryString += " or";
+                                }
+                                queryString += " woreda_id = " + woredaId;
+                        }
+
+                        Query qry = session.createQuery(queryString);
+                        List ampLocations=qry.list();
+                        if(ampLocations==null||ampLocations.size()==0){
+                          isAssignedToActivity=false;
+                        }
+
+
+          }
+          catch (Exception ex) {
+            logger.error("Uanble to get location :" + ex);
+            throw new DgException(ex);
+
+          }
+
+
+
+          return isAssignedToActivity;
+        }
+
+
+
+
 	public static List getAmpLocations(Long id) {
 		AmpLocation ampLocation = null;
 		ArrayList ampLocations = new ArrayList();
@@ -622,7 +693,7 @@ public class LocationUtil {
 		}
 		return region;
 	}
-	
+
 	public static Long getDgCountryWithMaxCountryId() {
 		Session session = null;
 		Long id = null;
@@ -643,13 +714,13 @@ public class LocationUtil {
 		}
 		return id;
 	}
-	
+
 	public static boolean chkDuplicateIso(String name, String iso, String iso3) {
 		boolean result = true;
 		Session session = null;
 		try {
 			session = PersistenceManager.getSession();
-			String queryString = "select c from " + Country.class.getName() 
+			String queryString = "select c from " + Country.class.getName()
 									+ " c where (c.countryName=:name) or (c.iso=:iso) or (c.iso3=:iso3)";
 			Query q = session.createQuery(queryString);
 			q.setParameter("name", name, Hibernate.STRING);

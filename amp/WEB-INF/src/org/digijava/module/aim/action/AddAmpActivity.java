@@ -122,11 +122,28 @@ public class AddAmpActivity extends Action {
       if (prevSelSectors != null) {
     	  Iterator itr = prevSelSectors.iterator();
     	  while (itr.hasNext()) {
-        ActivitySector asec = (ActivitySector) itr.next();
-        flag = false;
-          if (asec.getSectorName().equals(sect.getSectorName())) {
-            flag = true;
-            break;
+    		  ActivitySector asec = (ActivitySector) itr.next();
+    		  flag = false;
+          if (asec.getSectorName().equals(sect.getSectorName()) && asec.getSubsectorLevel1Name() != null ) {
+        	  
+        	  	if(asec.getSubsectorLevel2Name() != null && asec.getSubsectorLevel1Name().equals(sect.getSubsectorLevel1Name())){
+        	  		
+		        	  		if(asec.getSubsectorLevel2Name().equals(sect.getSubsectorLevel2Name())){
+		        	  			flag = true;
+		                        break;
+		            	 	}
+        	  	}else{
+        	  		if(asec.getSubsectorLevel1Name().equals(sect.getSubsectorLevel1Name())){
+        	  			flag = true;
+                        break;
+        	  			}
+        	  		}
+        	  	
+          }else{
+        	  if(asec.getSectorName().equals(sect.getSectorName())){
+        	  flag = true;
+              break;
+        	}
           }
         }
       }
@@ -162,12 +179,20 @@ public class AddAmpActivity extends Action {
         ActivitySector asec = (ActivitySector) itr.next();
         flag = false;
         for (int i = 0; i < selSectors.length; i++) {
-          if (asec.getSectorId().equals(selSectors[i])) {
+        	
+          if (asec.getSubsectorLevel1Id() == -1 && asec.getSectorId().equals(selSectors[i])) {
             flag = true;
             break;
           }
+          if (asec.getSubsectorLevel1Id() != -1 && asec.getSubsectorLevel2Id() == -1 && asec.getSubsectorLevel1Id().equals(selSectors[i])) {
+              flag = true;
+              break;
+            }
+          if (asec.getSubsectorLevel1Id() != -1 && asec.getSubsectorLevel2Id() != -1 && asec.getSubsectorLevel2Id().equals(selSectors[i])) {
+              flag = true;
+              break;
+            }
         }
-
         if (!flag) {
           newSectors.add(asec);
         }

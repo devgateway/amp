@@ -279,4 +279,7 @@ public class Constants
 	
 	public static final String GLOBAL_DEFAULT_SECTOR_SCHEME="Default Sector Scheme";
 	
+	public static final String ONLY_PREVIEW="onlyPreview";
+	
+	
 }	

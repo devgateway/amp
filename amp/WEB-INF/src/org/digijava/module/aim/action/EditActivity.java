@@ -406,6 +406,7 @@ public class EditActivity
             next = (Long) i.next();
           session.setAttribute("previousActivity", prev);
           session.setAttribute("nextActivity", next);
+          request.setAttribute(Constants.ONLY_PREVIEW, "true");
           logger.info("mapping does end with viewActivityPreview.do");
         }
       }

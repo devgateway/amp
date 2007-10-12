@@ -111,7 +111,17 @@
                                                                   <tr>
                                                                     <td width="3%" vAlign="center">
                                                                       <html:multibox property="selActivitySectors">
-                                                                        ${activitySectors.sectorId}
+	                                                                      <c:if test="${activitySectors.subsectorLevel1Id == -1}">
+	                                                                      ${activitySectors.sectorId}
+	                                                                      </c:if>
+	                                                                   
+	                                                                      <c:if test="${activitySectors.subsectorLevel1Id != -1 && activitySectors.subsectorLevel2Id == -1}">
+	                                                                      ${activitySectors.subsectorLevel1Id}
+	                                                                      </c:if>
+	                                                                      
+	                                                                      <c:if test="${activitySectors.subsectorLevel1Id != -1 && activitySectors.subsectorLevel2Id != -1}">
+	                                                                      ${activitySectors.subsectorLevel2Id}
+	                                                                      </c:if>
                                                                       </html:multibox>
                                                                     </td>
                                                                     <td  width="87%" vAlign="center" align="left">

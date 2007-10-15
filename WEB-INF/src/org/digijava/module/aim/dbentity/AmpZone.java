@@ -23,6 +23,7 @@ public class AmpZone implements Serializable{
 	private Country country;
 	private AmpRegion region;
   private Set woredas;
+  private Set locations;
   /**
 	 * @return Returns the ampZoneId.
 	 */
@@ -130,6 +131,10 @@ public class AmpZone implements Serializable{
     return woredas;
   }
 
+  public Set getLocations() {
+    return locations;
+  }
+
   /**
 	 * @param string
 	 */
@@ -139,5 +144,9 @@ public class AmpZone implements Serializable{
 
   public void setWoredas(Set woredas) {
     this.woredas = woredas;
+  }
+
+  public void setLocations(Set locations) {
+    this.locations = locations;
   }
 }

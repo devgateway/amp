@@ -127,6 +127,9 @@ public class GetWorkspace extends Action {
 						uwForm.setRelatedTeamFlag("set");
 					}
 				}
+				else{
+					uwForm.setRelatedTeamFlag("nil");
+				}
 			}
 			else {
 				uwForm.setRelatedTeamFlag("noedit");

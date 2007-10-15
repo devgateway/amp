@@ -7,9 +7,10 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
+import java.io.*;
+import java.util.*;
 
-import org.digijava.kernel.dbentity.Country;
+import org.digijava.kernel.dbentity.*;
 
 public class AmpWoreda implements Serializable{
 	private Long ampWoredaId;
@@ -21,7 +22,8 @@ public class AmpWoreda implements Serializable{
 	private String woredaCode;
 	private Country country;
 	private AmpZone zone;
-	/**
+  private Set locations;
+  /**
 	 * @return Returns the ampWoredaId.
 	 */
 	public Long getAmpWoredaId() {
@@ -124,11 +126,19 @@ public class AmpWoreda implements Serializable{
 		return woredaCode;
 	}
 
-	/**
+  public Set getLocations() {
+    return locations;
+  }
+
+  /**
 	 * @param string
 	 */
 	public void setWoredaCode(String string) {
 		woredaCode = string;
 	}
+
+  public void setLocations(Set locations) {
+    this.locations = locations;
+  }
 
 }

@@ -60,15 +60,15 @@
 	};
 
 </script>
-<bean:define id="translation1">
+<c:set var="translation1">
 				<digi:trn key="contentrepository:documentDeleteConfirm">Are you sure you want to delete this document ?</digi:trn>
-</bean:define>
-<bean:define id="translation2">
+</c:set>
+<c:set var="translation2">
 				<digi:trn key="contentrepository:documentWaitForDelete">Deleting document ... </digi:trn>
-</bean:define>
-<bean:define id="translation3">
+</c:set>
+<c:set var="translation3">
 				<digi:trn key="contentrepository:documentDeleteConnectionProblems">Your request has not been carried out due to connection problems. We are sorry. Please try again !</digi:trn>
-</bean:define>
+</c:set>
 <c:set var="translation_no_doc_selected">
 			<digi:trn key="contentrepository:noDocumentSelectedAlert">No document has been selected !</digi:trn>
 </c:set>
@@ -126,7 +126,7 @@ function getCallbackForDelete (row, table) {
 
 		},
 		failure: function(o) {
-			YAHOO.amp.panels[2].setBody("<div align='center'><font color='red'><%=translation3%></font></div>");
+			YAHOO.amp.panels[2].setBody("<div align='center'><font color='red'>${translation3}</font></div>");
 		}
 	}
 	return callbackForDelete;
@@ -141,7 +141,7 @@ function deleteRow(uuid, o) {
 				break;
 	}
 	if ( confirmDelete() ) {
-		var translation2				= "<%=translation2 %>";
+		var translation2				= "${translation2}";
 		YAHOO.amp.panels[2].setBody("<div align='center'>" + translation2 + "<br /> <img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0'/> </div>" );
 		YAHOO.amp.panels[2].setFooter("<div align='right'><button type='button' onClick='hidePanel(2)'>Close</button></div>");
 		showPanel(2);
@@ -151,7 +151,7 @@ function deleteRow(uuid, o) {
 	}
 }
 function confirmDelete() {
-	var ret		= confirm('<%=translation1%>');
+	var ret		= confirm('${translation1}');
 	return ret;
 }
 </script> 

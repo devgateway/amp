@@ -168,6 +168,108 @@
 -->
 </script>
 
+<style type="text/css">
+<!--
+div.fileinputs {
+	height:25px;
+	position:relative;
+	width:450px;
+}
+input.file {
+	margin:0px;
+	size:10px;
+	width:400px;
+}
+input.file.hidden {
+	opacity:0;
+	position:relative;
+	text-align:right;
+	width:370px;
+	z-index:2;
+}
+input.button {
+	background-color:#ECF3FD;
+	border-color:#FFFFFF rgb(0, 51, 153) rgb(0, 51, 153) rgb(255, 255, 255);
+	border-style:solid;
+	border-width:1px;
+	color:#000000;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	font-size:11px;
+	font-weight:bold;
+	left:400px;
+	position:absolute;
+	text-decoration:none;
+	top:0px;
+	width:120px;
+}
+div.fakefile {
+	left:0px;
+	line-height:90%;
+	margin:0pt;
+	padding:0pt;
+	position:absolute;
+	top:0px;
+	width:300px;
+	z-index:1;
+}
+div.fakefile input {
+	margin-bottom:0px;
+	margin-left:0px;
+	width:300px;
+}
+div.fakefile2 {
+	left:300px;
+	line-height:90%;
+	margin:0pt;
+	padding:0pt;
+	position:absolute;
+	top:0px;
+	width:100px;
+	z-index:1;
+}
+div.fakefile2 input {
+	width:80px;
+}
+-->
+</style>
+
+<script type="text/javascript">
+	var W3CDOM = (document.createElement && document.getElementsByTagName);
+
+	function initFileUploads() {
+		if (!W3CDOM) return;
+		var fakeFileUpload = document.createElement('div');
+		fakeFileUpload.className = 'fakefile';
+		fakeFileUpload.appendChild(document.createElement('input'));
+
+		var fakeFileUpload2 = document.createElement('div');
+		fakeFileUpload2.className = 'fakefile2';
+
+
+		var button = document.createElement('input');
+		button.type = 'button';
+
+		button.value = '<digi:trn key="aim:browse">Browse...</digi:trn>';
+		fakeFileUpload2.appendChild(button);
+
+		fakeFileUpload.appendChild(fakeFileUpload2);
+		var x = document.getElementsByTagName('input');
+		for (var i=0;i<x.length;i++) {
+			if (x[i].type != 'file') continue;
+			if (x[i].parentNode.className != 'fileinputs') continue;
+			x[i].className = 'file hidden';
+			var clone = fakeFileUpload.cloneNode(true);
+			x[i].parentNode.appendChild(clone);
+			x[i].relatedElement = clone.getElementsByTagName('input')[0];
+
+ 			x[i].onchange = x[i].onmouseout = function () {
+				this.relatedElement.value = this.value;
+			}
+		}
+	}
+</script>
+
+
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/documentSelected.do" method="post" enctype="multipart/form-data" onsubmit="return false;">
 <html:hidden property="docFileOrLink" />
@@ -300,7 +402,9 @@
 										</td>
 										<td>
 											<a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
-											<html:file name="aimEditActivityForm" property="docFile" size="50"/>
+												<div class="fileinputs">  <!-- We must use this trick so we can translate the Browse button. AMP-1786 -->
+													<input id="docFile" name="docFile" type="file" class="file"/>
+												</div>
 											</a>
 										</td>
 									</tr>
@@ -368,3 +472,8 @@
 	</td></tr>
 </table>
 </digi:form>
+
+<script type="text/javascript">
+	initFileUploads();
+</script>
+

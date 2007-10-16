@@ -317,10 +317,8 @@ function checkUncheckAll2() {
 																					<tr height=10><td></td></tr>
 																					<TR bgcolor="#eeeeee">
 																						<td align="center" class=box-title>
-																						  <digi:trn key="aim:reportBuilder:NomeasuresAdd">
-																											No measures available to add
-																						  </digi:trn>
-																					<digi:trn key="aim:reportBuilder:SelectedMeasur">
+																						 
+																						<digi:trn key="aim:reportBuilder:SelectedMeasur">
 																							Selected Measures
 																						  </digi:trn>
 

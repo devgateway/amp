@@ -88,7 +88,7 @@ div.fakefile2 input{
 		var button = document.createElement('input');
 		button.type = 'button';
 
-		button.value = '<digi:trn key="aim:browse">Browse..."</digi:trn>';
+		button.value = '<digi:trn key="aim:browse">Browse...</digi:trn>';
 		fakeFileUpload2.appendChild(button);
 
 		fakeFileUpload.appendChild(fakeFileUpload2);

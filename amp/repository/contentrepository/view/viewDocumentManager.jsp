@@ -147,14 +147,14 @@
 
 					%>
 							<logic:equal name="documentData" property="isPublic" value="true">
-								<bean:define id="makePublicCommand">
+								<c:set var="makePublicCommand">
 									<digi:trn key="contentrepository:republish">Republish</digi:trn>
-								</bean:define>
+								</c:set>
 							</logic:equal>
 							<logic:equal name="documentData" property="isPublic" value="false">
-								<bean:define id="makePublicCommand">
+								<c:set var="makePublicCommand">
 									<digi:trn key="contentrepository:makePublic">Make Public</digi:trn>
-								</bean:define>
+								</c:set>>
 							</logic:equal>
 							<tr>
 								<td>
@@ -209,7 +209,7 @@
 								<logic:equal name="documentData" property="hasMakePublicRights" value="true">
 									<a style="cursor:pointer; text-decoration:underline; color: blue"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true);"
-									title="${translation}"> [<bean:write name="makePublicCommand"/>] </a>
+									title="${translation}"> [<c:out value="${makePublicCommand}" />] </a>
 								</logic:equal>
 								<br />
 								

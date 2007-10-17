@@ -54,9 +54,9 @@ public class YearlyInfoWorker {
 					}
 					if (qf.getActualAmount() != null && (!qf.getActualAmount().equals("0"))) {
 						aa = DecimalToText.removeCommas(qf.getActualAmount());
-                        if(StringUtils.isNumeric(aa)){
+                        //if(StringUtils.isNumeric(aa)){
                             tempActual += Double.parseDouble(aa);
-                        }
+                        //}
 					}
 				}
 				i++;

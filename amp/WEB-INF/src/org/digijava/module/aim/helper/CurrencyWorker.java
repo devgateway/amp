@@ -134,7 +134,7 @@ public class CurrencyWorker {
 			//text = "" ;
 			for (int i = 0 ; i < tmp.length() ; i++ )
 			{
-				if ( arr[i] >= '0' && arr[i]<='9' )
+				if ( arr[i] >= '0' && arr[i]<='9' || arr[i] == '.')
 					text += arr[i] ;
 			}
 		}

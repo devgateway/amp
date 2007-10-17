@@ -38,7 +38,7 @@ public class DecimalToText
 	
 	public static String removeCommas(String s)
 	{
-		if (s != null) {	  
+		if (s != null) {
 			return removeCharsFromDouble(s);//s.replaceAll(",","");
 		} else {
 			return "0";
@@ -75,7 +75,7 @@ public class DecimalToText
 			//text = "" ;
 			for (int i = 0 ; i < tmp.length() ; i++ )
 			{
-				if ( arr[i] >= '0' && arr[i]<='9' )
+				if ( arr[i] >= '0' && arr[i]<='9' || arr[i]=='.')
 					text += arr[i] ;
 			}
 		}

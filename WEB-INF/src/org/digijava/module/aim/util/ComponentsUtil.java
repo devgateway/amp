@@ -542,5 +542,42 @@ public class ComponentsUtil{
 		return duplicatesExist;
 	}
 
+	public static AmpSISINProyect getSisinProyect(Long ampActivityId, Long componentId)
+	{
+		Collection col = null;
+		String queryString=null;
+		Session session = null;
+		Query qry = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			queryString ="select sp from " +AmpSISINProyect.class.getName()+" sp where sp.ampActivityId=:ampActivityId and sp.componentId=:componentId";
+			qry = session.createQuery(queryString);
+			qry.setParameter("ampActivityId",ampActivityId,Hibernate.LONG);
+			qry.setParameter("componentId",componentId,Hibernate.LONG);
+
+			col = qry.list();
+			if (col == null || col.isEmpty())
+				return null;
+			return (AmpSISINProyect) col.iterator().next();
+		}
+		catch(Exception ex)
+		{
+			logger.error("Unable to get AmpSISINProyect for editing from database " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2)
+			{
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return null;
+	}
 	
 }

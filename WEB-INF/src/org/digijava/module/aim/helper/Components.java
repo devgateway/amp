@@ -7,6 +7,8 @@ package org.digijava.module.aim.helper;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.digijava.module.aim.dbentity.AmpSISINProyect;
+
 
 public class Components<T> implements Comparable , Serializable{
 	
@@ -20,6 +22,7 @@ public class Components<T> implements Comparable , Serializable{
 	private String reportingDate;	
 	private String currencyCode;
 	private Collection<PhysicalProgress> phyProgress;
+	private AmpSISINProyect SisinProyect;
 	
 	public Components() {}
 	
@@ -171,4 +174,15 @@ public class Components<T> implements Comparable , Serializable{
 		if (temp.componentId == null) return false;
 		return this.componentId.equals(temp.componentId);
 	}
+
+	public void setSisinProyect(AmpSISINProyect sisinProyect) {
+		SisinProyect = sisinProyect;
+	}
+
+	public AmpSISINProyect getSisinProyect() {
+		return SisinProyect;
+	}
+
+
+
 }

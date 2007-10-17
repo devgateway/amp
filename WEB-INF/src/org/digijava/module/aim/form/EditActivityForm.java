@@ -334,6 +334,7 @@ private int isPreview=0;
 	private String componentTitle;
 	private String componentDesc;
 	private String componentAmount;
+	private AmpSISINProyect sisinProyect;
 	////////////////////
 	private double compTotalDisb;
 
@@ -4294,6 +4295,14 @@ public String getPurpose() {
 
 	public void setDocComment(String docComment) {
 		this.docComment = docComment;
+	}
+
+	public void setSisinProyect(AmpSISINProyect sisinProyect) {
+		this.sisinProyect = sisinProyect;
+	}
+
+	public AmpSISINProyect getSisinProyect() {
+		return sisinProyect;
 	}
 
 

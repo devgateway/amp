@@ -61,6 +61,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
+import org.digijava.module.aim.dbentity.AmpSISINProyect;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -120,7 +121,7 @@ public class SaveActivity extends Action {
 		ampContext = getServlet().getServletContext();
 
 		Long actId = null;
-		Components<AmpComponentFunding> tempComp = new Components<AmpComponentFunding>();
+		Set<Components<AmpComponentFunding>> tempComp = new HashSet<Components<AmpComponentFunding>>();
 
 		// if user has not logged in, forward him to the home page
 		if (session.getAttribute("currentMember") == null) {
@@ -1467,19 +1468,26 @@ public class SaveActivity extends Action {
 	 * @param eaForm
 	 * @param activity
 	 */
-	private void proccessComponents(Components<AmpComponentFunding> tempComp, EditActivityForm eaForm, AmpActivity activity) {
+	private void proccessComponents(Collection<Components<AmpComponentFunding>> tempComps, EditActivityForm eaForm, AmpActivity activity) {
 		activity.setComponents(new HashSet());
 		if (eaForm.getSelectedComponents() != null) {
 			Iterator<Components<FundingDetail>> itr = eaForm.getSelectedComponents().iterator();
 			while (itr.hasNext()) {
 				Components<FundingDetail> comp = itr.next();
+				Components<AmpComponentFunding> tempComp = new Components<AmpComponentFunding>();
+				
 				AmpComponent ampComp = null;
 				Collection col = ComponentsUtil.getComponent(comp.getTitle());
 				Iterator it = col.iterator();
-				while(it.hasNext())
-				{
+				if(it.hasNext()){
 					ampComp = (AmpComponent)it.next();
 					activity.getComponents().add(ampComp);
+				}
+				
+				if (comp.getSisinProyect() != null){
+					AmpSISINProyect sisinProyect = comp.getSisinProyect();
+					sisinProyect.setComponentId(ampComp.getAmpComponentId());
+					tempComp.setSisinProyect(sisinProyect);
 				}
 
 				if (comp.getCommitments() != null
@@ -1621,9 +1629,9 @@ public class SaveActivity extends Action {
 				}
 
 				// set physical progress
-				Set phyProgess = new HashSet();
+				
 				if (comp.getPhyProgress() != null) {
-
+					Set phyProgess = new HashSet();
 					Iterator itr1 = comp.getPhyProgress().iterator();
 					while (itr1.hasNext()) {
 						PhysicalProgress phyProg = (PhysicalProgress) itr1
@@ -1646,8 +1654,10 @@ public class SaveActivity extends Action {
 						ampPhyPerf.setComments(" ");
 						phyProgess.add(ampPhyPerf);								
 					}
+					tempComp.setPhyProgress(phyProgess);
 				}
-				tempComp.setPhyProgress(phyProgess);
+				
+				tempComps.add(tempComp);
 			}
 		}
 	}

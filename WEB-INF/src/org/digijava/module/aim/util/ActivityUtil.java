@@ -1607,7 +1607,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
    */
   // this function is to get the fundings for the components along with the activity Id
 
-  public static Collection<AmpComponentFunding> getFundingComponentActivity(Long id, Long actId) {
+  public static Collection<AmpComponentFunding> getFundingComponentActivity(Long componentId, Long activityId) {
     Collection col = null;
     logger.info(" inside getting the funding.....");
     Session session = null;
@@ -1616,7 +1616,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       session = PersistenceManager.getSession();
       String qryStr = "select a from " + AmpComponentFunding.class.getName() +
           " a " +
-          "where amp_component_id = '" + id + "' and activity_id = '" + actId +
+          "where amp_component_id = '" + componentId + "' and activity_id = '" + activityId +
           "'";
       Query qry = session.createQuery(qryStr);
       col = qry.list();

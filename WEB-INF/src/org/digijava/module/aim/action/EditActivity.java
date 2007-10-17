@@ -1549,19 +1549,12 @@ public class EditActivity
 			tempComp.setSisinProyect(sisinProyect);	
 			
 			
-			Iterator cItr = ComponentsUtil.getComponentFunding(
-					tempComp.getComponentId()).iterator();
+			Iterator cItr = ActivityUtil.getFundingComponentActivity(
+					tempComp.getComponentId(), activity.getAmpActivityId()).iterator();
 			while (cItr.hasNext()) {
 				AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr
 						.next();
 
-				/**
-				 * If the funding wasn't created for this activity it should be ignored.
-				 */
-				if (ampCompFund.getActivity().getAmpActivityId().longValue() != activity
-						.getAmpActivityId().longValue()) {
-					continue;
-				}
 				double disb = 0;
 				if (ampCompFund.getAdjustmentType().intValue() == 1
 					&& ampCompFund.getTransactionType().intValue() == 1)

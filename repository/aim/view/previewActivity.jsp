@@ -1773,13 +1773,83 @@ function disable() {
 															<tr><td><b>
 																<c:out value="${comp.title}"/></b>
 															</td></tr>
+															
 															<tr><td>
 `x																<i>
 																<digi:trn key="aim:description">Description</digi:trn> :</i>
 																<c:out value="${comp.description}"/>
 															</td></tr>
+															
+															<!-- START SISIN Fields -->
+															<feature:display name="SISIN" module="Components"> 
+																<field:display name="SISIN Code" feature="SISIN"> 
+																	<tr>
+																		<td width="50">
+																			<i>
+																			<digi:trn key="aim:sisincode">SISIN Code</digi:trn> :</i>
+																			<c:out value="${comp.sisinProyect.sisincode}"/>
+																		</td>
+																	</tr>
+																</field:display>
+																<field:display name="Localization" feature="SISIN"> 
+																	<tr>
+																		<td width="50">
+																			<i>
+																			<digi:trn key="aim:localization">Localization</digi:trn> :</i>
+																			<c:out value="${comp.sisinProyect.localization}"/>
+																		</td>
+																	</tr>
+																</field:display>
+																<field:display name="SISIN Sector" feature="SISIN"> 
+																	<tr>
+																		<td width="50">
+																			<i>
+																			<digi:trn key="aim:sisinsector">SISIN Sector</digi:trn> :</i>
+																			<c:out value="${comp.sisinProyect.sisinsector}"/>
+																		</td>
+																	</tr>
+																</field:display>
+																<field:display name="Financing Source" feature="SISIN">
+																	<tr>
+																		<td width="50">
+																			<i>
+																			<digi:trn key="financingsource">Financing Source</digi:trn> :</i>
+																			<c:out value="${comp.sisinProyect.financingsource}"/>
+																		</td>
+																	</tr>
+																</field:display>
+																<field:display name="Agency Source" feature="SISIN">
+																	<tr>
+																		<td width="50">
+																			<i>
+																			<digi:trn key="agencysource">Agency Source</digi:trn> :</i>
+																			<c:out value="${comp.sisinProyect.agencysource}"/>
+																		</td>
+																	</tr>
+																</field:display>
+																<field:display name="Stage" feature="SISIN">
+																	<tr>
+																		<td width="50">
+																			<i>
+																			<digi:trn key="stage">Stage</digi:trn> :</i>											 
+																			<c:out value="${comp.sisinProyect.stage}"/>
+																		</td>
+																	</tr>
+																</field:display>
+																<field:display name="Classification Program Code" feature="SISIN">
+																	<tr>
+																		<td width="50">
+																			<i>
+																			<digi:trn key="classifprogramcode">Classification Program Code</digi:trn> :</i>
+																			<c:out value="${comp.sisinProyect.programcode}"/>
+																		</td>
+																	</tr>
+																</field:display>
+															</feature:display>																																																															
+															<!-- END SISIN Fields -->															
+															
 															<tr><td bgcolor="#f4f4f2">
-																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>
+																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>																
 															</td></tr>
 															<c:if test="${!empty comp.commitments}">
 																<tr><td bgcolor="#ffffff">

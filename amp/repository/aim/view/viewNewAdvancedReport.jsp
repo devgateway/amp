@@ -26,7 +26,7 @@
 				<digi:trn key="rep:pop:Close">Close</digi:trn>
 			</b>
 		</a>
-		 -->
+		-->
 </div>
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>

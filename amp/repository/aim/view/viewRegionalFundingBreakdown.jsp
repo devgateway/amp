@@ -70,7 +70,7 @@ function projectFiche(id)
 													<c:set target="${url}" property="ampActivityId">
 														<bean:write name="aimRegionalFundingForm" property="ampActivityId"/>
 													</c:set>
-													<c:set target="${url}" property="tabIndex" value="4"/>
+													<c:set target="${url}" property="tabIndex" value="5"/>
 													<c:set var="translation">
 															<digi:trn key="aim:clickToViewRegionalFunding">Click here to view regional funding</digi:trn>
 													</c:set>

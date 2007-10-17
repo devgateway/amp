@@ -33,6 +33,7 @@
     <form-bean name="aimParisIndicatorReportForm" type="org.digijava.module.aim.form.ParisIndicatorReportForm" />
     <form-bean name="aimMainProjectDetailsForm" type="org.digijava.module.aim.form.MainProjectDetailsForm" />
     <form-bean name="aimChannelOverviewForm" type="org.digijava.module.aim.form.ChannelOverviewForm" />
+    <form-bean name="aimReferenceForm" type="org.digijava.module.aim.form.ReferenceForm" />
     <form-bean name="aimViewIndicatorForm" type="org.digijava.module.aim.form.ViewIndicatorForm" />
     <!--<form-bean name="aimChannelOverviewDescriptionForm" type="org.digijava.module.aim.form.ChannelOverviewDescriptionForm" />-->
     <form-bean name="aimChannelOverviewObjectiveForm" type="org.digijava.module.aim.form.ChannelOverviewObjectiveForm" />
@@ -227,6 +228,7 @@
     <action forward="/showLayout.do?layout=layoutFinancingBreakdownFilter" path="/aim/viewFinancingBreakdownFilter" />
     <action forward="/showLayout.do?layout=layoutActivityDashboard" name="aimActivityDashboardForm" path="/aim/viewActivityDashboard" />
     <action forward="/showLayout.do?layout=layoutChannelOverview" path="/aim/viewChannelOverview" />
+    <action forward="/showLayout.do?layout=layoutReferences" path="/aim/viewReferences" />
     <action forward="/showLayout.do?layout=layoutIndicatorValues" name="aimViewIndicatorForm" path="/aim/viewIndicatorValues" />
     <action forward="/showLayout.do?layout=layoutChannelOverviewObjective" path="/aim/viewChannelOverviewObjective" />
     <action forward="/showLayout.do?layout=layoutPhysicalProgress" path="/aim/viewPhysicalProgress" />
@@ -280,6 +282,7 @@
     <action name="aimYearlyDiscrepancyAllForm" path="/aim/yearlyDiscrepancyAllFilter" scope="request" type="org.digijava.module.aim.action.YearlyDiscrepancyAllFilter" validate="false" />
     <action name="aimViewIndicatorForm" path="/aim/meIndicatorValues" scope="request" type="org.digijava.module.aim.action.ViewIndicatorValues" validate="false" />
     <action name="aimChannelOverviewForm" path="/aim/channelOverview" scope="request" type="org.digijava.module.aim.action.ViewChannelOverview" validate="false" />
+    <action name="aimReferenceForm" path="/aim/reference" scope="request" type="org.digijava.module.aim.action.ViewReferences" validate="false" />
     <action name="aimChannelOverviewObjectiveForm" path="/aim/channelOverviewObjective" scope="request" type="org.digijava.module.aim.action.ViewChannelOverviewObjective" validate="false" />
     <action name="aimPhysicalProgressForm" path="/aim/physicalProgress" scope="session" type="org.digijava.module.aim.action.ViewPhysicalProgress" validate="false" />
     <action name="aimPhysicalProgressForm" path="/aim/componentDescription" scope="request" type="org.digijava.module.aim.action.ViewComponentDescription" validate="false" />

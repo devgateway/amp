@@ -803,6 +803,27 @@ function disable() {
 										</td>
 									</tr>
 									</field:display>
+									
+									<tr>
+									<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+									References
+									</td>
+									<td bgcolor="#ffffff">
+									<c:forEach items="${aimEditActivityForm.referenceDocs}" var="refDoc" varStatus="loopstatus">
+										<table border="0">
+											<tr>
+												<td>
+												${refDoc.categoryValue} : 
+												</td>
+												<td>
+												${refDoc.comment}
+												</td>
+											</tr>
+										</table>
+									</c:forEach>
+									</td>
+									</tr>
+									
 									<field:display name="Implementation Location" feature="Location">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">

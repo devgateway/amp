@@ -71,10 +71,12 @@
 	
 	function clearDisplay(editBox, clearLink){ //Display the clear link or not ?
 		var clr = document.getElementById(clearLink);
-		if (editBox.value != "")
-			clr.style.display="inline";
-		else
-			clr.style.display="none";
+		if (editBox != undefined){
+			if (editBox.value != "")
+				clr.style.display="inline";
+			else
+				clr.style.display="none";
+		}
 	}
 	function clearDate(editBox, clearLink){	//The clear link has been pressed
 		var clr = document.getElementById(clearLink);

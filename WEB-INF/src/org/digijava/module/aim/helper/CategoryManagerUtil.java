@@ -556,6 +556,18 @@ public class CategoryManagerUtil {
 		}
 		return "";
 	}
+	
+	
+	public static boolean isCategoryKeyInUse(String key) {
+		try {
+			CategoryManagerUtil.loadAmpCategoryClassByKey(key);
+			return true;
+		} catch (NoCategoryClassException e) {
+			// TODO Auto-generated catch block
+			logger.info("Category key '" + key + "' was not found in database.");
+			return false;
+		}
+	}
 	/**
 	 *
 	 * @author Alex Gartner

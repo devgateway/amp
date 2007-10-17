@@ -7,6 +7,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
@@ -55,7 +58,7 @@
 							<td align="center" bgcolor=#ECF3FD>
 								<table cellSpacing=2 cellPadding=2>
 									<tr>
-										<td>
+										<td width="50">
 											<FONT color=red>*</FONT>
 											<a title="<digi:trn key="aim:TitleforComponent">Title of the project component specified</digi:trn>">
 											<digi:trn key="aim:title">Title</digi:trn>
@@ -66,23 +69,83 @@
 												<html:option value="-1"><digi:trn key="aim:selectComponent">Select Component</digi:trn></html:option>
 												<html:optionsCollection name="aimEditActivityForm" property="allComps" value="title" label="title" />
 											</html:select>
-											<%--<a title="<digi:trn key="aim:TitleforComponent">Title of the project component specified</digi:trn>">
-											<html:text property="componentTitle" styleClass="inp-text" tabindex="1"/>
-											</a>--%>
 										</td>
 									</tr>
-									<%--<tr>
-										<td>
-										<a title="<digi:trn key="aim:ComponentDescribe">Descriptive text as to the component objectives and tasks</digi:trn>">
-										<digi:trn key="aim:description">Description</digi:trn>
-										</a>
-										</td>
-										<td>
-											<a title="<digi:trn key="aim:ComponentDescribe">Descriptive text as to the component objectives and tasks</digi:trn>">
-											<html:textarea property="componentDesc" cols="50" rows="4" styleClass="inp-text" tabindex="2"/>
-											</a>
-										</td>
-									</tr>--%>
+									<!-- START SISIN Fields -->
+									<feature:display name="SISIN" module="Components"> 
+										<field:display name="SISIN Code" feature="SISIN"> 
+											<tr>
+												<td width="50">
+													<digi:trn key="aim:sisincode">SISIN Code</digi:trn>
+												</td>
+												<td>
+													<html:text property="sisinProyect.sisincode" size="65" maxlength="120" styleClass="amt"> </html:text> &nbsp;
+												</td>
+											</tr>
+										</field:display>
+										<field:display name="Localization" feature="SISIN"> 
+											<tr>
+												<td width="50">
+													<digi:trn key="aim:localization">Localization</digi:trn>
+												</td>
+												<td>
+													<html:text property="sisinProyect.localization"  size="65" maxlength="120" styleClass="amt"> </html:text> &nbsp;
+												</td>
+											</tr>
+										</field:display>
+										<field:display name="SISIN Sector" feature="SISIN"> 
+											<tr>
+												<td width="50">
+													<digi:trn key="aim:sisinsector">SISIN Sector</digi:trn>
+												</td>
+												<td>
+													<html:text property="sisinProyect.sisinsector"  size="65" maxlength="120" styleClass="amt"> </html:text> &nbsp;
+												</td>
+											</tr>
+										</field:display>
+										<field:display name="Financing Source" feature="SISIN">
+											<tr>
+												<td width="50">
+													<digi:trn key="financingsource">Financing Source</digi:trn>
+												</td>
+												<td>
+													<html:text property="sisinProyect.financingsource"  size="65" maxlength="120" styleClass="amt"> </html:text> &nbsp;
+												</td>
+											</tr>
+										</field:display>
+										<field:display name="Agency Source" feature="SISIN">
+											<tr>
+												<td width="50">
+													<digi:trn key="agencysource">Agency Source</digi:trn>
+												</td>
+												<td>
+													<html:text property="sisinProyect.agencysource"  size="65" maxlength="120" styleClass="amt"> </html:text> &nbsp;
+												</td>
+											</tr>
+										</field:display>
+										<field:display name="Stage" feature="SISIN">
+											<tr>
+												<td width="50">
+													<digi:trn key="stage">Stage</digi:trn>											 
+												</td>
+												<td>
+													<html:text property="sisinProyect.stage" size="65" maxlength="120" styleClass="amt"> </html:text> &nbsp;
+												</td>
+											</tr>
+										</field:display>
+										<field:display name="Classification Program Code" feature="SISIN">
+											<tr>
+												<td width="50">
+													<digi:trn key="classifprogramcode">Classification Program Code</digi:trn>
+												</td>
+												<td>
+													<html:text property="sisinProyect.programcode"  size="65" maxlength="120" styleClass="amt"> </html:text> &nbsp;
+												</td>
+											</tr>
+										</field:display>
+									</feature:display>																																																															
+									<!-- END SISIN Fields -->
+									
 									<tr><td colspan=2>
 										<FONT color=blue><BIG>*</BIG>
 											<digi:trn key="aim:pleaseEnterTheAmountInThousands">

@@ -85,8 +85,15 @@ public class CategoryManager extends Action {
 		if (myForm.getAddNewCategory() != null && myForm.getAddNewCategory().booleanValue()) {
 			boolean saved	= this.saveCategoryToDatabase(myForm, errors);
 			if (!saved) {
-				AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClass( myForm.getEditedCategoryId() );
-				this.populateForm(ampCategoryClass, myForm);
+				try{
+					AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClass( myForm.getEditedCategoryId() );
+					this.populateForm(ampCategoryClass, myForm);
+				}
+				catch (Exception e) {
+					// TODO: handle exception
+					logger.info(e.getMessage());
+					e.printStackTrace();
+				}
 				this.saveErrors(request, errors);
 				return mapping.findForward("createOrEditCategory");
 			}
@@ -256,7 +263,7 @@ public class CategoryManager extends Action {
 		try {
 			/* Testing if entered category key is not already used */
 			if ( myForm.getEditedCategoryId() == null && 
-					CategoryManagerUtil.loadAmpCategoryClassByKey( myForm.getKeyName() ) != null ) 
+					CategoryManagerUtil.isCategoryKeyInUse( myForm.getKeyName() )  ) 
 			{
 				ActionError duplicateKeyError	= new ActionError("error.aim.categoryManager.duplicateKey");
 				errors.add("title",duplicateKeyError);

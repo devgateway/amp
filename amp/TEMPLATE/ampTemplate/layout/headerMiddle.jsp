@@ -111,7 +111,7 @@ if("On".equals(publicView)) { %>
 		    	<LI><a class="head-menu-link">::: <digi:trn key="aim:scenarios">SCENARIOS</digi:trn></a></LI>
 	    	</module:display>
 			<module:display name="Content Repository">
-			<LI><a class="head-menu-link" href="/contentrepository/documentManager.do" module="aim" onclick="return quitRnot1('${message}')">::: <digi:trn key="contentrepository:documentRepositoryTitle">DOCUMENT REPOSITORY</digi:trn></a></LI>
+			<LI><a class="head-menu-link" href="/contentrepository/documentManager.do" module="aim" onclick="return quitRnot1('${message}')">::: <digi:trn key="contentrepository:contentRepositoryTitle">CONTENT REPOSITORY</digi:trn></a></LI>
 			</module:display>
 	    <module:display name="Calendar">
 		<LI>

@@ -148,14 +148,30 @@
 						</LI>
 						</logic:notEqual>
 						</module:display>
+						<module:display name="References">
+						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="1">
+					   <LI class="selected">
+							:: <digi:trn key="aim:references">References</digi:trn>
+						</LI>
+						 </logic:equal>
+						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="1">
+						<c:set target="${urlTabs}" property="tabIndex" value="1"/>
+						<LI>
+						<div id="gen" title='<digi:trn key="aim:clickToViewReferences">Click here to view References</digi:trn>'>
+						<digi:link href="/viewReferences.do" name="urlTabs">
+							:: <digi:trn key="aim:references">references</digi:trn>
+						</digi:link></div>
+						</LI>
+						</logic:notEqual>
+						</module:display>
 						<module:display name="Financial Progress">
-							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="1">
+							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="2">
 					   <LI class="selected">
 							:: <digi:trn key="aim:financialProgress">Financial Progress</digi:trn>								
 						</LI>
 						</logic:equal>
-						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="1">
-     					<c:set target="${urlTabs}" property="tabIndex" value="1"/>
+						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="2">
+     					<c:set target="${urlTabs}" property="tabIndex" value="2"/>
 						<LI>
 						<div id="gen" title='<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>'>
               		<digi:link href="/viewFinancingBreakdown.do" name="urlTabs">
@@ -167,13 +183,13 @@
 						
 						<module:display name="Funding">
 						<feature:display name="Funding Organizations" module="Funding">
-						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="2">
+						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="3">
 					   <LI class="selected">
 							:: <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>  
 						</LI>
 						</logic:equal>
-						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="2">
-                  <c:set target="${urlTabs}" property="tabIndex" value="2"/>
+						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="3">
+                  <c:set target="${urlTabs}" property="tabIndex" value="3"/>
 						<LI>
 						<div id="gen" title='<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>'>
                  	<digi:link href="/viewPhysicalProgress.do" name="urlTabs">
@@ -185,13 +201,13 @@
 						</module:display>
 						
 						<module:display name="Document Management">
-						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="3">
+						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
 					   <LI class="selected">
 							:: <digi:trn key="aim:documents">Documents</digi:trn>
 						</logic:equal>
 						</LI>
-						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="3">
-     					<c:set target="${urlTabs}" property="tabIndex" value="3"/>
+						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="4">
+     					<c:set target="${urlTabs}" property="tabIndex" value="4"/>
 						<LI>
 						<div id="gen" title='<digi:trn key="aim:clickToViewDocuments">Click here to view Documents</digi:trn>'>
            			<digi:link href="/viewKnowledge.do" name="urlTabs">
@@ -202,13 +218,13 @@
 						</module:display>
 					<module:display name="Funding">
 						<feature:display name="Regional Funding" module="Funding">
-						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
+						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
 					   <LI class="selected">
 							:: <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
 						</LI>
 						</logic:equal>
-						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="4">
-						<c:set target="${urlTabs}" property="tabIndex" value="4"/>
+						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="5">
+						<c:set target="${urlTabs}" property="tabIndex" value="5"/>
 						<c:set target="${urlTabs}" property="regionId" value="-1"/>
 						<LI>
 						<div id="gen" title='<digi:trn key="aim:clickToViewRegionalFundings">Click here to view regional funding</digi:trn>'>
@@ -227,17 +243,17 @@
 					</feature:display>
 						</module:display>
 						<module:display name="Paris Indicators">
-						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
+						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
 						   <LI class="selected">						
 							:: <digi:trn key="aim:parisIndicators">Paris Indicators</digi:trn>
 							</LI>
 						</logic:equal>
-						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="5">
+						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="6">
            			<jsp:useBean id="survey" type="java.util.Map" class="java.util.HashMap" />
 						<c:set target="${survey}" property="ampActivityId">
 							<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
 						</c:set>
-						<c:set target="${survey}" property="tabIndex" value="5"/>
+						<c:set target="${survey}" property="tabIndex" value="6"/>
 						<LI>	
 						<div id="gen" 
 						title='<digi:trn key="aim:clickToViewAidEffectIndicators">Click here to view Aid Effectiveness Indicators</digi:trn>'>
@@ -249,13 +265,13 @@
 						</module:display>
 						
 						<module:display name="National Planning Dashboard">
-						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
+						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="7">
 							<LI class="selected">
 							:: <digi:trn key="aim:activityDashboard">Dashboard</digi:trn>
 							</LI>
 						</logic:equal>
-						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="6">
-						<c:set target="${urlTabs}" property="tabIndex" value="6"/>
+						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="7">
+						<c:set target="${urlTabs}" property="tabIndex" value="7"/>
 						<LI>
 						<div id="gen" title='<digi:trn key="aim:clickToViewActivityDashboard">Click here to view activity dashboard</digi:trn>'>
 						<digi:link href="/viewActivityDashboard.do" name="urlTabs">
@@ -267,14 +283,14 @@
 						
 						
 						<module:display name="Activity Costing">
-						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="7">
+						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="8">
 					   <LI class="selected">
 							:: <digi:trn key="aim:projectCosting">Costing</digi:trn>								
 						</LI>
 						</logic:equal>
-						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="7">
+						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="8">
 							
-								<c:set target="${urlTabs}" property="tabIndex" value="7"/>
+								<c:set target="${urlTabs}" property="tabIndex" value="8"/>
 								<LI>
 								<div id="gen" title='<digi:trn key="aim:clickToViewCosting">Click here to view Costing</digi:trn>'>
 		              		<digi:link href="/viewProjectCostsBreakdown.do" name="urlTabs">

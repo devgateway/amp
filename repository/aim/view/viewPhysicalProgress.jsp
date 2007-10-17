@@ -76,7 +76,7 @@ method="post">
 										<c:set target="${urlPhysicalProgress}" property="ampActivityId">
 											<bean:write name="aimPhysicalProgressForm" property="ampActivityId"/>
 										</c:set>
-										<c:set target="${urlPhysicalProgress}" property="tabIndex" value="2"/>
+										<c:set target="${urlPhysicalProgress}" property="tabIndex" value="3"/>
 										<c:set var="translation">
 											<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>
 										</c:set>

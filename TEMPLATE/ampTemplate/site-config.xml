@@ -210,6 +210,12 @@
         <put-item name="tabBody" module="aim" instance="default"
 			teaser="channelOverview"/>
        </layout>
+	  
+	   <layout name="layoutReferences" extends="tabLayout">
+        <put name="title">Activity - References</put>
+        <put-item name="tabBody" module="aim" instance="default"
+			teaser="reference"/>
+       </layout>
 
 	   <layout name="layoutChannelOverviewObjective" extends="tabLayout">
         <put name="title">Activity - Channel Overview Objective </put>

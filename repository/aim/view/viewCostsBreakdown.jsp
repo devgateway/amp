@@ -69,7 +69,7 @@ function projectFiche(id)
 									target="${urlCostsBreakdown}" property="ampActivityId">
 									<bean:write name="ampActivityId" />
 								</c:set> <c:set target="${urlCostsBreakdown}"
-									property="tabIndex" value="7" /> <c:set var="translation">
+									property="tabIndex" value="8" /> <c:set var="translation">
 									<digi:trn key="aim:clickToViewCosts">Click here to view Costing</digi:trn>
 								</c:set> <digi:link href="/viewProjectCostsBreakdown.do"
 									name="urlCostsBreakdown" styleClass="comment"
@@ -116,11 +116,6 @@ function projectFiche(id)
 						</TABLE>
 						</TD>
 					</TR>
-
-
-
-
-
 					<TR>
 						<TD width="750" bgcolor="#F4F4F2" height="17">
 						<TABLE border="0" cellpadding="0" cellspacing="0"

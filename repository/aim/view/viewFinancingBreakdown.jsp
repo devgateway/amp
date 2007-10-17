@@ -94,7 +94,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 													<c:set target="${urlFinancingBreakdown}" property="ampActivityId">
 														<bean:write name="aimFinancingBreakdownForm" property="ampActivityId"/>
 													</c:set>
-													<c:set target="${urlFinancingBreakdown}" property="tabIndex" value="1"/>
+													<c:set target="${urlFinancingBreakdown}" property="tabIndex" value="2"/>
 													<c:set var="translation">
 														<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>
 													</c:set>

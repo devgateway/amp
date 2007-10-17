@@ -26,22 +26,22 @@ import org.digijava.module.aim.util.CurrencyUtil;
 
 
 public class UpdateCurrencyRate extends Action {
-	
-	private static final long SEVEN_DAYS = 604800000; // in miliseconds 
+
+	private static final long SEVEN_DAYS = 604800000; // in miliseconds
 	// 7 * 24 * 60 * 60 * 1000
-	
+
 	private static Logger logger = Logger.getLogger(UpdateCurrencyRate.class);
-	
+
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
-		
+
 		CurrencyRateForm crForm = (CurrencyRateForm) form;
 		CurrencyRates currencyRates = null;
 		Collection col = new ArrayList();
-		
+
 		logger.debug("Reset :" + crForm.isReset());
-		
-		/*	
+
+		/*
 		 * 	Starts here
 		 * 	Reads the data from the uploaded CSV file
 		 * 	the data should be in the following format
@@ -53,14 +53,14 @@ public class UpdateCurrencyRate extends Action {
 		 *	....goes on
 		 */
 		if (crForm.getDoAction() == null ||
-				crForm.getDoAction().equals("file")) 
+				crForm.getDoAction().equals("file"))
 		{
 			FormFile f = crForm.getCurrRateFile();
 			InputStream is = f.getInputStream();
 			BufferedReader in = new BufferedReader(new InputStreamReader(is));
 			String line = null;
 			StringTokenizer st = null;
-			
+
 			while ((line = in.readLine()) != null)
 			{
 				st = new StringTokenizer(line,",");
@@ -69,66 +69,75 @@ public class UpdateCurrencyRate extends Action {
 					String code = st.nextToken().trim();
 					double rate = Double.parseDouble(st.nextToken().trim());
 					String date = st.nextToken().trim();
-					
+
 					currencyRates = new CurrencyRates();
 					currencyRates.setCurrencyCode(code);
 					currencyRates.setExchangeRate(new Double(rate));
 					currencyRates.setExchangeRateDate(date);
-					
+
 					col.add(currencyRates);
 				}
 			}
 			CurrencyUtil.saveCurrencyRates(col);
-			
+
 			Date toDate = DateConversion.getDate(crForm.getFilterByDateFrom());
 			long stDt = toDate.getTime();
 			stDt -= SEVEN_DAYS;
-			Date fromDate = new Date(stDt); 
+			Date fromDate = new Date(stDt);
 			crForm.setAllRates(CurrencyUtil.getActiveRates(fromDate,toDate));
 
-			return mapping.findForward("fileload");
+			//return mapping.findForward("fileload");
 		}
-		/*	
-		 * 	Ends here
-		 */
-		if (crForm.getDoAction() == null ||
-				crForm.getDoAction().equals("showRates")) {
-			if (crForm.getUpdateCRateCode() != null && 
-					crForm.getUpdateCRateDate() != null) {
-				Date date = DateConversion.getDate(crForm.getUpdateCRateDate());
-				crForm.setUpdateCRateAmount(CurrencyUtil.getExchangeRate(
-						crForm.getUpdateCRateCode(),date).toString());
-				crForm.setReset(false);
-			} else {
-				crForm.setUpdateCRateAmount(null);
-			}
-			if (crForm.getCurrencyCodes() == null) {
-				crForm.setCurrencyCodes(CurrencyUtil.getAmpCurrency());
-				crForm.setUpdateCRateCode(null);
-				crForm.setUpdateCRateDate(null);
-				crForm.setUpdateCRateId(null);				
-			}
 
-		} else {
-			AmpCurrencyRate cRate = new AmpCurrencyRate();
-            if(crForm.getUpdateCRateAmount()!=null){
-                Double rate = new Double(Double.parseDouble(crForm.getUpdateCRateAmount()));
-			cRate.setExchangeRate(rate);
-            }
-            if(crForm.getUpdateCRateDate()!=null){
-                cRate.setExchangeRateDate(DateConversion.getDate(crForm.getUpdateCRateDate()));
-            }
+                  /*
+                   * 	Ends here
+                   */
+                  else{
+                    if (crForm.getDoAction() == null ||
+                        crForm.getDoAction().equals("showRates")) {
+                      if (crForm.getUpdateCRateCode() != null &&
+                          crForm.getUpdateCRateDate() != null) {
+                        Date date = DateConversion.getDate(crForm.
+                                                           getUpdateCRateDate());
+                        crForm.setUpdateCRateAmount(CurrencyUtil.getExchangeRate(
+                            crForm.getUpdateCRateCode(), date).toString());
+                        crForm.setReset(false);
+                      }
+                      else {
+                        crForm.setUpdateCRateAmount(null);
+                      }
+                      if (crForm.getCurrencyCodes() == null) {
+                        crForm.setCurrencyCodes(CurrencyUtil.getAmpCurrency());
+                        crForm.setUpdateCRateCode(null);
+                        crForm.setUpdateCRateDate(null);
+                        crForm.setUpdateCRateId(null);
+                      }
 
-			cRate.setToCurrencyCode(crForm.getUpdateCRateCode());
-			CurrencyUtil.saveCurrencyRate(cRate);
-			
-			crForm.setAllRates(null);
-			crForm.setUpdateCRateAmount(null);
-			crForm.setUpdateCRateCode(null);
-			crForm.setUpdateCRateDate(null);
-			crForm.setUpdateCRateId(null);
-			crForm.setDoAction(null);
-		}
+                    }
+                    else {
+                      AmpCurrencyRate cRate = new AmpCurrencyRate();
+                      if (crForm.getUpdateCRateAmount() != null) {
+                        Double rate = new Double(Double.parseDouble(crForm.
+                                                                    getUpdateCRateAmount()));
+                        cRate.setExchangeRate(rate);
+                      }
+                      if (crForm.getUpdateCRateDate() != null) {
+                        cRate.setExchangeRateDate(DateConversion.getDate(crForm.
+                            getUpdateCRateDate()));
+                      }
+
+                      cRate.setToCurrencyCode(crForm.getUpdateCRateCode());
+                      CurrencyUtil.saveCurrencyRate(cRate);
+
+                      crForm.setAllRates(null);
+                      crForm.setUpdateCRateAmount(null);
+                      crForm.setUpdateCRateCode(null);
+                      crForm.setUpdateCRateDate(null);
+                      crForm.setUpdateCRateId(null);
+                      crForm.setDoAction(null);
+                    }
+                  }
 		return mapping.findForward("forward");
 	}
+
 }

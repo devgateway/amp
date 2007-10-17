@@ -301,7 +301,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 			                     </TR>
 			                    </logic:empty>
 			                    <logic:notEmpty name="aimFinancingBreakdownForm" property="financingBreakdown">
-														<logic:iterate name="aimFinancingBreakdownForm" property="financingBreakdown" id="breakdown" 
+								<logic:iterate name="aimFinancingBreakdownForm" property="financingBreakdown" id="breakdown" 
 			  	                   type="org.digijava.module.aim.helper.FinancingBreakdown">
 															<TR valign="top" bgcolor="#f4f4f2"> 
 												<field:display name="Funding Organization Id" feature="Funding Organizations">
@@ -321,15 +321,14 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 																		<digi:trn key="aim:clickToViewFinancialOverview">
 																		Click here to view Financial Overview</digi:trn>
 																	</c:set>
-						                  		<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" 
-																	title="${translation}" >
+						                  							<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" 
+																		title="${translation}" >
 																		<bean:write name="breakdown" property="financingId" /> 
 																	</digi:link>
 																</TD>
 												</field:display>
-															<bean:define id="breakdown" name="breakdown"
-															type="org.digijava.module.aim.helper.FinancingBreakdown"
-															toScope="request" />
+											<bean:define id="breakdown" name="breakdown" type="org.digijava.module.aim.helper.FinancingBreakdown" toScope="request" />
+
 											<field:display name="Funding Organization" feature="Funding Organizations">
 						                  		<TD><jsp:include page="previewFinancingOrganizationPopup.jsp"/></TD>
 						                  	</field:display>

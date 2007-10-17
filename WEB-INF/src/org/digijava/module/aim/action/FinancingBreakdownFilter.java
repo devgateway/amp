@@ -50,7 +50,6 @@ public class FinancingBreakdownFilter extends TilesAction	{
 		formBean.setPerspectivePresent(ff.isPerspectivePresent());
 		formBean.setYearRangePresent(ff.isYearRangePresent());
 		formBean.setGoButtonPresent(ff.isGoButtonPresent());
-		
 		FilterParams fp = (FilterParams)session.getAttribute("filterParams");
 		ApplicationSettings apps = null;
 		if ( teamMember != null )	{
@@ -58,7 +57,9 @@ public class FinancingBreakdownFilter extends TilesAction	{
 		}
 
 		if ( formBean.getCurrency() != null )
+		{
 			fp.setCurrencyCode(formBean.getCurrency());
+		}
 		else	{
 			Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
 			fp.setCurrencyCode(curr.getCurrencyCode());

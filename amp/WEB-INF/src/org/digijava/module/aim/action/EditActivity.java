@@ -55,6 +55,7 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.AmpSISINProyect;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -1540,7 +1541,14 @@ public class EditActivity
 			tempComp.setDisbursements(new ArrayList<FundingDetail>());
 			tempComp.setExpenditures(new ArrayList<FundingDetail>());
 
-			//Iterator cItr = temp.getComponentFundings().iterator();
+			AmpSISINProyect sisinProyect = ComponentsUtil.getSisinProyect(
+					activity.getAmpActivityId(), temp.getAmpComponentId());
+			if (sisinProyect == null) {
+				sisinProyect = new AmpSISINProyect();
+			}
+			tempComp.setSisinProyect(sisinProyect);	
+			
+			
 			Iterator cItr = ComponentsUtil.getComponentFunding(
 					tempComp.getComponentId()).iterator();
 			while (cItr.hasNext()) {

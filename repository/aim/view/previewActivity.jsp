@@ -813,10 +813,9 @@ function disable() {
 										<table border="0">
 											<tr>
 												<td>
-												${refDoc.categoryValue} : 
-												</td>
-												<td>
-												${refDoc.comment}
+													<c:if test="${!empty refDoc.comment}">
+													${refDoc.categoryValue}
+													</c:if> 
 												</td>
 											</tr>
 										</table>

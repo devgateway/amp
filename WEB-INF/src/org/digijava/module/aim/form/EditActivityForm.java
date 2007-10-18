@@ -640,7 +640,24 @@ private int isPreview=0;
                         minorities=null;
                         accessionInstrument=new Long(0);
                         acChapter=new Long(0);
-
+                        
+            /* Indicator values reset */
+                        baseVal					= 0;
+                        baseValComments			= "";
+                        baseValDate				= "";
+                        targetVal				= 0;
+                        targetValComments		= "";
+                        targetValDate			= "";
+                        revTargetVal				= 0;
+                        revTargetValComments		= "";
+                        revTargetValDate			= "";
+                        currentVal					= 0;
+                        currValComments				= "";
+                        currValDate					= "";
+                        logframeCategory			= new Long(0);
+                        indicatorRisk				= new Long(-1);
+                        expIndicatorId				= new Long(0);
+            /* END - Indicator values reset */
 		}
 
 		if (orgSelReset) {

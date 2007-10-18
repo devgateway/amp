@@ -8,7 +8,9 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<module:display name="Desktop Sections">
 <TABLE align=center border=0 cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
+<feature:display name="My Tasks" module="Desktop Sections">
 	<TR>
 		<TD class=r-dotted-lg-buttom vAlign=top>
 			<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
@@ -57,8 +59,8 @@
 			</TABLE>	
 		</TD>
 	</TR>
-	
-	<module:display name="My Messages">
+</feature:display>
+<feature:display name="My Messages" module="Desktop Sections">
 	<TR>
 		<TD class=r-dotted-lg-buttom vAlign=top>
 			<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
@@ -106,5 +108,6 @@
 			</TABLE>
 		</TD>
 	</TR>	
-	</module:display>
+</feature:display>
 </TABLE>
+</module:display>

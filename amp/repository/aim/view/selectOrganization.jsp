@@ -105,6 +105,12 @@
 		return true;
 	}
 
+	function resetForm() {
+		document.aimEditActivityForm.ampOrgTypeId.value=-1;
+		document.aimEditActivityForm.keyword.value="";
+		document.aimEditActivityForm.tempNumResults.value=10;
+	}
+
 	function selectOrganizationPages(page) {
 	   <digi:context name="searchOrg" property="context/module/moduleinstance/selectOrganization.do?edit=true&orgSelReset=false&page=" />
 	   var val = "<%=searchOrg%>";
@@ -240,9 +246,9 @@
 												<digi:trn key="btn:search">Search</digi:trn> 
 											</html:button>
 											&nbsp;
-											<html:reset  styleClass="dr-menu" property="submitButton">
+											<html:button  styleClass="dr-menu" property="resetButton" onclick="resetForm()">
 												<digi:trn key="btn:clear">Clear</digi:trn> 
-											</html:reset>
+											</html:button>
 											&nbsp;
 											<html:button  styleClass="dr-menu" property="submitButton" onclick="closeWindow()">
 												<digi:trn key="btn:close">Close</digi:trn> 

@@ -61,7 +61,7 @@
 												</td>
 												<td bgcolor="#ffffff">
 													<table cellPadding=0 cellSpacing=0>
-														clearLink<tr>
+														<tr>
 															<td>
 																<a title="<digi:trn key="aim:planMinistryRank">Ministry of Planning Rank</digi:trn>">
 																	<html:select property="planMinRank" styleClass="inp-text">

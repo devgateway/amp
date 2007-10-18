@@ -351,7 +351,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         oldActivity.setRegionalFundings(activity.getRegionalFundings());
 
         oldActivity.setInternalIds(activity.getInternalIds());
-       oldActivity.setLocations(activity.getLocations());
+        oldActivity.setLocations(activity.getLocations());
         oldActivity.setOrgrole(activity.getOrgrole());
         oldActivity.setReferenceDocs(activity.getReferenceDocs());
         oldActivity.setSectors(activity.getSectors());
@@ -483,36 +483,42 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       Iterator<Components<AmpComponentFunding>> componentsFundingIt = componentsFunding.iterator();
       while(componentsFundingIt.hasNext()){
     	  Components<AmpComponentFunding> ampTempComp = componentsFundingIt.next();
-
+    	  
 	      //to save the Component fundings
 	      if (ampTempComp.getCommitments() != null) {
 	        Iterator compItr = ampTempComp.getCommitments().iterator();
 	        while (compItr.hasNext()) {
 	          AmpComponentFunding ampComp = (AmpComponentFunding) compItr.next();
 	          session.saveOrUpdate(ampComp);
-	          componentFundingCol.remove(ampComp);
+	          if (componentFundingCol != null) {
+	        	  componentFundingCol.remove(ampComp);
+	          }
 	        }
 	      }
-
+	
 	      if (ampTempComp.getDisbursements() != null) {
 	        Iterator compItr = ampTempComp.getDisbursements().iterator();
 	        while (compItr.hasNext()) {
 	          AmpComponentFunding ampComp = (AmpComponentFunding) compItr.next();
 	          session.saveOrUpdate(ampComp);
-	          componentFundingCol.remove(ampComp);
+	          if (componentFundingCol != null) {
+	        	  componentFundingCol.remove(ampComp);
+	          }
 	        }
 	      }
-
+	
 	      if (ampTempComp.getExpenditures() != null) {
 	        Iterator compItr = ampTempComp.getExpenditures().iterator();
 	        while (compItr.hasNext()) {
 	          AmpComponentFunding ampComp = (AmpComponentFunding) compItr.next();
 	          session.saveOrUpdate(ampComp);
-	          componentFundingCol.remove(ampComp);
+	          if (componentFundingCol != null) {
+	        	  componentFundingCol.remove(ampComp);
+			  }
 	        }
 	      }
-
-
+	      
+	      
 	      if (ampTempComp.getSisinProyect() != null) {
 			AmpSISINProyect sisinProyect = ampTempComp
 					.getSisinProyect();
@@ -530,16 +536,16 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 				sisinProyectOld.setSisincode(sisinProyectOld.getSisincode());
 				sisinProyectOld.setSisinsector(sisinProyectOld.getSisinsector());
 				sisinProyectOld.setStage(sisinProyectOld.getStage());
-
+				
 				session.saveOrUpdate(sisinProyectOld);
 			}
 		  }
-
-
-
+	
+	      
+	
 	      /*
 	      Collection<AmpPhysicalPerformance> phyProgress = DbUtil.getAmpPhysicalProgress(activityId);
-
+	
 	      if (ampTempComp.getPhyProgress() != null) {
 				Iterator compItr = ampTempComp.getPhyProgress().iterator();
 				while (compItr.hasNext()) {
@@ -548,7 +554,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 					phyProgress.remove(ampPhyPerf);
 				}
 	      }
-
+	
 	      if (phyProgress != null) {
 				Iterator<AmpPhysicalPerformance> phyProgressColIt = phyProgress.iterator();
 				while (phyProgressColIt.hasNext()) {
@@ -563,7 +569,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 				session.delete(componentFundingColIt.next());
 			}
 	  }
-
+      
       /* Persists comments, of type AmpComments, related to the activity */
       if (commentsCol != null && !commentsCol.isEmpty()) {
         logger.debug("commentsCol.size() [Inside Persisting]: " +
@@ -666,7 +672,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       logger.debug("Activity saved");
     }
     catch (Exception ex) {
-      logger.error("Exception from saveActivity()  " + ex.getMessage());
+      logger.error("Exception from saveActivity()",ex);
       if (tx != null) {
         try {
           tx.rollback();
@@ -2245,8 +2251,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             session.delete(ampComp);
           }
         }
-
-
+        
+        
         /* delete Component Fundings */
         Collection<AmpComponentFunding>  componentFundingCol = getFundingComponentActivity(ampActId);
         if (componentFundingCol != null) {

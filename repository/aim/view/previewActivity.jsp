@@ -1774,7 +1774,7 @@ function disable() {
 															</td></tr>
 															
 															<tr><td>
-`x																<i>
+																<i>
 																<digi:trn key="aim:description">Description</digi:trn> :</i>
 																<c:out value="${comp.description}"/>
 															</td></tr>

@@ -54,13 +54,13 @@ function fnEditProject(id)
 
    document.aimKnowledgeForm.action = "<%=addUrl%>~pageId=1~step=6~action=edit~surveyFlag=true~activityId=" + id;
 
-	document.aimKnowledgeForm.target = "_self";    
+	document.aimKnowledgeForm.target = "_self";
 
    document.aimKnowledgeForm.submit();
 
 }
 
-	
+
 function previewLogframe(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
@@ -163,8 +163,9 @@ function preview(id)
 
 											<digi:trn key="aim:knowledge">Knowledge</digi:trn>
 
-										</digi:link> &gt; Overview &gt; <bean:write name="aimKnowledgeForm"
-											property="perspective" /> Perspective </SPAN></TD>
+										</digi:link> &gt; <digi:trn key="aim:docOverview">Overview</digi:trn> &gt;
+                                        <bean:write name="aimKnowledgeForm"	property="perspective" />
+                                        <digi:trn key="aim:docPerspective">Perspective</digi:trn> </SPAN></TD>
 
 										<TD align=right><module:display name="Previews">
 											<feature:display name="Preview Activity" module="Previews">
@@ -276,16 +277,16 @@ function preview(id)
 																	</c:set>
 																	<c:set target="${docParams}" property="actId">
 																		<c:out value="${document.activityId}"/>
-																	</c:set>		
+																	</c:set>
 																	<c:set target="${docParams}" property="pageId" value="0"/>
 																	<c:set target="${docParams}" property="reset" value="true"/>
 																	<c:set var="translation">
 																		<digi:trn key="aim:clickToViewDocumentDetails">Click here to view Document Details</digi:trn>
 																	</c:set>
-																	<digi:link href="/getDocumentDetails.do" name="docParams" 
+																	<digi:link href="/getDocumentDetails.do" name="docParams"
 																	title="${translation}" >
 																		<bean:write name="document" property="title"/>
-																	</digi:link> - 															
+																	</digi:link> -
 																	--%> <b> <bean:write name="document"
 																			property="title" /></b> - <i>File : <a
 																			href="<%=digiContext%>/cms/downloadFile.do?itemId=
@@ -394,16 +395,16 @@ function preview(id)
 																	</c:set>
 																	<c:set target="${docParams}" property="actId">
 																		<c:out value="${document.activityId}"/>
-																	</c:set>		
+																	</c:set>
 																	<c:set target="${docParams}" property="pageId" value="0"/>
 																	<c:set target="${docParams}" property="reset" value="true"/>
 																	<c:set var="translation">
 																		<digi:trn key="aim:clickToViewDocumentDetails">Click here to view Document Details</digi:trn>
 																	</c:set>
-																	<digi:link href="/getDocumentDetails.do" name="docParams" 
+																	<digi:link href="/getDocumentDetails.do" name="docParams"
 																	title="Click here to view Document Details" >
 																		<bean:write name="document" property="title"/>
-																	</digi:link> - 															
+																	</digi:link> -
 																	--%> <b> <bean:write name="document"
 																			property="title" /></b> - <i>URL : <a
 																			href="<c:out value="${document.url}"/>"

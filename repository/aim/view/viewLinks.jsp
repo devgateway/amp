@@ -30,7 +30,7 @@
 								</c:set>
 								<digi:link href="/viewMyDesktop.do" styleClass="comment"  title="${translation}">
 									<digi:trn key="aim:portfolio">Portfolio</digi:trn>
-								</digi:link>&nbsp;&gt;&nbsp;								
+								</digi:link>&nbsp;&gt;&nbsp;
 								<digi:trn key="aim:relatedLinks">Related Links</digi:trn>
 								</span>
 							</td>
@@ -41,7 +41,7 @@
 					<digi:errors/>
 				</td></tr>
 				<tr><td>
-					<table width="700" cellPadding=4 cellSpacing=1 bgcolor="#aaaaaa">		
+					<table width="700" cellPadding=4 cellSpacing=1 bgcolor="#aaaaaa">
 						<tr>
 							<td align="center" class="textalb">
 								<digi:trn key="aim:relatedLinks">Related Links</digi:trn>
@@ -51,7 +51,7 @@
 							<td>
 								<bean:size id="linksCount" name="myLinks" scope="session" />
 								<c:if test="${linksCount == 0}">
-									<b>No Links</b>								
+									<b>No Links</b>
 								</c:if>
 								<c:if test="${linksCount > 0}">
 
@@ -61,27 +61,28 @@
 										<tr bgcolor="#f4f4f2">
 											<td>
 
-												Title: <b><c:out value="${document.title}"/></b> <br>
+												<digi:trn key="aim:lnkTitle">Title:</digi:trn> <b><c:out value="${document.title}"/></b> <br>
 												<c:if test="${!empty document.docDescription}">
-													Description: <c:out value="${document.docDescription}"/><br>
+                                                  <digi:trn key="aim:lnkDescription">Description:</digi:trn>
+                                                  <c:out value="${document.docDescription}"/><br>
 												</c:if>
 												<c:if test="${document.isFile == false}">
-													<i>URL :
+													<i><digi:trn key="aim:lnkURL">URL :</digi:trn>
 													<a href="<c:out value="${document.url}"/>" target="_blank">
-													<c:out value="${document.url}"/></a></i>												
+													<c:out value="${document.url}"/></a></i>
 												</c:if>
 												<c:if test="${document.isFile == true}">
-													<i>File :
+													<i><digi:trn key="aim:lnkFile">File :</digi:trn>
 													<a href="<%=digiContext%>/cms/downloadFile.do?itemId=<c:out value="${document.docId}"/>">
 													<c:out value="${document.fileName}"/></i></a>
-												</c:if>		
+												</c:if>
 
 												<br>
 
-												
 
-												<a href="/deleteMemberLink.do?id=<c:out value="${document.docId}"/>">Delete</a>
-											</td>	
+
+												<a href="/deleteMemberLink.do?id=${document.docId}"><digi:trn key="aim:lnkDelete">Delete</digi:trn></a>
+											</td>
 										</tr>
 									</c:forEach>
 

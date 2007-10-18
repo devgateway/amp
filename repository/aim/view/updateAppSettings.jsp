@@ -8,7 +8,7 @@
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
-<c:set target="${bcparams}" property="dest" value="teamLead"/>			
+<c:set target="${bcparams}" property="dest" value="teamLead"/>
 
 <digi:errors/>
 <digi:instance property="aimUpdateAppSettingsForm" />
@@ -17,7 +17,7 @@
 <html:hidden property="type" />
 <html:hidden property="appSettingsId" />
 
-<!-- Start include of reportDescriptionSheet.jsp  --> 
+<!-- Start include of reportDescriptionSheet.jsp  -->
 	<%@include file="reportDescriptionSheet.jsp"%>
 <!-- END include of reportDescriptionSheet.jsp  -->
 
@@ -47,7 +47,7 @@
 						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:teamWorkspaceSetup">
 						Team Workspace Setup
-						</digi:trn>						
+						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<digi:trn key="aim:customizeTeamSettings">
 						Customize Team Settings
@@ -60,7 +60,7 @@
 				</tr>
 				<tr>
 					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%" 
+						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%"
 						valign="top" align="left">
 							<tr bgColor=#3754a1>
 								<td vAlign="top" width="100%">
@@ -75,10 +75,10 @@
 							<tr bgColor=#f4f4f2>
 								<td><digi:errors/>
 								</td>
-							</tr>							
+							</tr>
 							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="97%">	
+									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="97%">
 										<tr bgColor=#f4f4f2>
 											<td bgColor=#f4f4f2>
 												<table cellPadding=0 cellSpacing=0 width=100%>
@@ -106,12 +106,12 @@
 															</digi:trn>
 															</font></b>
 														</td>
-													</tr>	
+													</tr>
 													</logic:equal>
 													<tr>
 														<td bgcolor="#f4f4f2" align="right" width="50%">
 															<digi:trn key="aim:defaultRecordPerPage">
-															Number of records per page</digi:trn>	
+															Number of records per page</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:text property="defRecsPerPage" size="5"  styleClass="inp-text"/>
@@ -120,11 +120,11 @@
 													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">
 															<digi:trn key="aim:defLanguage">
-															Language</digi:trn>	
+															Language</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:select property="language" styleClass="inp-text">
-										                <bean:define id="languages" name="aimUpdateAppSettingsForm" 
+										                <bean:define id="languages" name="aimUpdateAppSettingsForm"
 															 property="languages" type="java.util.Collection" />
 										                <html:options collection="languages" property="code" labelProperty="name" />
 															</html:select>
@@ -134,7 +134,7 @@
 													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">
 															<digi:trn key="aim:defPerspective">
-															Perspective</digi:trn>	
+															Perspective</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:select property="defPerspective" styleClass="inp-text">
@@ -147,57 +147,63 @@
 													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">
 															<digi:trn key="aim:defCurrency">
-															Currency</digi:trn>	
+															Currency</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:select property="currencyId" styleClass="inp-text">
 															<html:option value="">------ Select Currency ------</html:option>
-															<html:optionsCollection name="aimUpdateAppSettingsForm" 
+															<html:optionsCollection name="aimUpdateAppSettingsForm"
 															property="currencies" value="ampCurrencyId" label="currencyCode" />
 															</html:select>
 														</td>
 													</tr>
 													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">
-															<digi:trn key="aim:defFisCalendar">Fiscal Calendar</digi:trn>	
+															<digi:trn key="aim:defFisCalendar">Fiscal Calendar</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:select property="fisCalendarId" styleClass="inp-text">
 															<html:option value="">------ Select Fiscal Calendar ------</html:option>
-															<html:optionsCollection name="aimUpdateAppSettingsForm" 
+															<html:optionsCollection name="aimUpdateAppSettingsForm"
 															property="fisCalendars" value="ampFiscalCalId" label="name" />
 															</html:select>
 														</td>
-													</tr>	
+													</tr>
 													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">
-															<digi:trn key="aim:defaultTeamReport">Default Team Report</digi:trn>	
+															<digi:trn key="aim:defaultTeamReport">Default Team Report</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:select property="defaultReportForTeamId" styleClass="inp-text" onchange="changePanel()" styleId="defaultReport">
 															<html:option value="0">------ Select Default Team Report ------</html:option>
-															<html:optionsCollection name="aimUpdateAppSettingsForm" 
+															<html:optionsCollection name="aimUpdateAppSettingsForm"
 															property="reports" value="ampReportId" label="name" />
 															</html:select>
 															&nbsp;
 															<a style="cursor:pointer;color:#006699" onClick="showMyPanel()"><digi:trn key="aim:defaultTeamReportDetailsMessage">Click here for details</digi:trn></a>
 														</td>
-													</tr>	
+													</tr>
 													<tr>
 														<td colspan="2" align="center" bgcolor="#ffffff">
 															<table cellspacing="10">
 																<tr>
 																	<td align="right">
-																		<html:submit value="Save" property="save" styleClass="dr-menu"/>
+                                                                      <c:set var="caption">
+                                                                        <digi:trn key="aim:btnSave">Save</digi:trn>
+                                                                      </c:set>
+                                                                      <html:submit value="${caption}" property="save" styleClass="dr-menu"/>
 																	</td>
 																	<td align="left">
-																		<html:reset value="Cancel" styleClass="dr-menu" onclick="javascript:history.go(-1)"/>
+								                                       <c:set var="caption">
+                                                                        <digi:trn key="aim:btnCancel">Cancel</digi:trn>
+                                                                      </c:set>
+                                                                      <html:reset value="${caption}" styleClass="dr-menu" onclick="javascript:history.go(-1)"/>
 																	</td>
 																</tr>
 															</table>
 														</td>
 													</tr>
-												</table>		
+												</table>
 											</td>
 										</tr>
 									</table>
@@ -206,7 +212,7 @@
 							<tr><td bgColor=#f4f4f2>
 								&nbsp;
 							</td></tr>
-						</table>			
+						</table>
 					</td>
 				</tr>
 			</table>

@@ -23,7 +23,7 @@
 function fnEditProject(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-   document.location.href="<%=addUrl%>?pageId=1&action=edit&step=1_5&surveyFlag=true&activityId=" + id;
+   document.location.href="<%=addUrl%>?pageId=1&action=edit&step=1&surveyFlag=true&activityId=" + id;
 
 }
 
@@ -147,7 +147,7 @@ function login()
 											bgcolor="#F4F4F2" height="17">
 											<TR bgcolor="#F4F4F2" height="17">
 												<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;<digi:trn
-													key="aim:details">Details</digi:trn></TD>
+													key="aim:references">References</digi:trn></TD>
 												<TD><IMG src="../ampTemplate/images/corner-r.gif" width="17"
 													height="17"></TD>
 											</TR>
@@ -155,31 +155,28 @@ function login()
 										</TD>
 									</TR>
 										<tr bgcolor="#ffffff">
-												<td>
+												<td width="750" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
 													<table border="0" width="100%">
+													<tr valign="top" bgcolor="#DDDDDB" >
+															<td >
+																&nbsp;
+																</td>
+																<td>&nbsp;&nbsp;</td>
+																<td>
+																&nbsp;
+																</td>
+															</tr>
 														<c:forEach items="${aimReferenceForm.referenceDocs}" var="refDoc" varStatus="loopstatus">
 															<tr valign="top">
-																<td>
-																	<html:hidden name="aimReferenceForm" property="referenceDocs[${loopstatus.index}].checked" value="${refDoc.checked}"/>
-																	<html:multibox styleId="refCheck${loopstatus.index}" name="aimReferenceForm" property="allReferenceDocNameIds" value="${refDoc.categoryValueId}"/>
-																</td>
-																<td>
+															<c:if test="${!empty refDoc.comment}">	
+																<td width="50%">
 																	${refDoc.categoryValue}
 																</td>
 																<td>&nbsp;&nbsp;</td>
-																<td width="100%">
-																	<c:if test="${refDoc.checked}">
-																		<div Id="refComment${loopstatus.index}" >
-																			<html:textarea rows="4" cols="80" name="aimReferenceForm" property="referenceDocs[${loopstatus.index}].comment" />
-																		</div>
-																	</c:if>
-																	<c:if test="${!refDoc.checked}">
-																		<div Id="refComment${loopstatus.index}" style="display: none;" >
-																			<html:textarea rows="4" cols="80" name="aimReferenceForm" property="referenceDocs[${loopstatus.index}].comment" />
-																		</div>
-																	</c:if>
-
+																<td width="50%">
+																	${refDoc.comment}
 																</td>
+																</c:if>
 															</tr>
 														</c:forEach>
 													</table>

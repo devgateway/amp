@@ -79,7 +79,7 @@
 													<digi:trn key="aim:sisincode">SISIN Code</digi:trn>
 												</td>
 												<td>
-													<html:text property="sisinProyect.sisincode" size="65" maxlength="120" styleClass="amt"> </html:text> &nbsp;
+													<html:text property="sisinProyect.sisincode" size="65" maxlength="120"> </html:text> &nbsp;
 												</td>
 											</tr>
 										</field:display>
@@ -89,7 +89,7 @@
 													<digi:trn key="aim:localization">Localization</digi:trn>
 												</td>
 												<td>
-													<html:text property="sisinProyect.localization"  size="65" maxlength="120" styleClass="amt"> </html:text> &nbsp;
+													<html:text property="sisinProyect.localization"  size="65" maxlength="120"> </html:text> &nbsp;
 												</td>
 											</tr>
 										</field:display>
@@ -99,7 +99,7 @@
 													<digi:trn key="aim:sisinsector">SISIN Sector</digi:trn>
 												</td>
 												<td>
-													<html:text property="sisinProyect.sisinsector"  size="65" maxlength="120" styleClass="amt"> </html:text> &nbsp;
+													<html:text property="sisinProyect.sisinsector"  size="65" maxlength="120"> </html:text> &nbsp;
 												</td>
 											</tr>
 										</field:display>
@@ -109,7 +109,7 @@
 													<digi:trn key="financingsource">Financing Source</digi:trn>
 												</td>
 												<td>
-													<html:text property="sisinProyect.financingsource"  size="65" maxlength="120" styleClass="amt"> </html:text> &nbsp;
+													<html:text property="sisinProyect.financingsource"  size="65" maxlength="120"> </html:text> &nbsp;
 												</td>
 											</tr>
 										</field:display>
@@ -119,7 +119,7 @@
 													<digi:trn key="agencysource">Agency Source</digi:trn>
 												</td>
 												<td>
-													<html:text property="sisinProyect.agencysource"  size="65" maxlength="120" styleClass="amt"> </html:text> &nbsp;
+													<html:text property="sisinProyect.agencysource"  size="65" maxlength="120"> </html:text> &nbsp;
 												</td>
 											</tr>
 										</field:display>
@@ -129,7 +129,7 @@
 													<digi:trn key="stage">Stage</digi:trn>											 
 												</td>
 												<td>
-													<html:text property="sisinProyect.stage" size="65" maxlength="120" styleClass="amt"> </html:text> &nbsp;
+													<html:text property="sisinProyect.stage" size="65" maxlength="120"> </html:text> &nbsp;
 												</td>
 											</tr>
 										</field:display>
@@ -139,7 +139,7 @@
 													<digi:trn key="classifprogramcode">Classification Program Code</digi:trn>
 												</td>
 												<td>
-													<html:text property="sisinProyect.programcode"  size="65" maxlength="120" styleClass="amt"> </html:text> &nbsp;
+													<html:text property="sisinProyect.programcode"  size="65" maxlength="120"> </html:text> &nbsp;
 												</td>
 											</tr>
 										</field:display>

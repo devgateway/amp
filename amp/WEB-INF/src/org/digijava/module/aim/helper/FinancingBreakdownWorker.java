@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
  
 public class FinancingBreakdownWorker
 {
@@ -44,11 +45,20 @@ public class FinancingBreakdownWorker
 		Collection c = YearlyInfoWorker.getYearlyInfo(fp);
 		if ( c.size() != 0 )	{
 			Iterator iter = c.iterator();
+
+			/* this is for bolivia - they do not count totals, but enter it manually */
+			String totalsSetting=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_INCLUDE_PLANNED);
+			boolean includeTotals=(totalsSetting!=null) && (totalsSetting.trim().equals("On"));
 		
 			while ( iter.hasNext() )	{
 				YearlyInfo yf = (YearlyInfo)iter.next();
 				if ( yf.getActualAmount() != null && (!yf.getActualAmount().equals("NA")) )	{
 					double temp = DecimalToText.getDouble(yf.getActualAmount());
+					total += temp;
+				}
+				
+				if (includeTotals && yf.getPlannedAmount()!=null && !yf.getPlannedAmount().equals("NA")){
+					double temp = DecimalToText.getDouble(yf.getPlannedAmount());
 					total += temp;
 				}
 			}

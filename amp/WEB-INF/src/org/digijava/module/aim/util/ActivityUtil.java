@@ -288,7 +288,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         oldActivity.getDocuments().clear();
         oldActivity.getFunding().clear();
         oldActivity.getInternalIds().clear();
-        oldActivity.getLocations().clear();
+       // oldActivity.getLocations().clear();
         oldActivity.getOrgrole().clear();
         oldActivity.getReferenceDocs().clear();
         oldActivity.getSectors().clear();
@@ -351,7 +351,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         oldActivity.setRegionalFundings(activity.getRegionalFundings());
 
         oldActivity.setInternalIds(activity.getInternalIds());
-        oldActivity.setLocations(activity.getLocations());
+       oldActivity.setLocations(activity.getLocations());
         oldActivity.setOrgrole(activity.getOrgrole());
         oldActivity.setReferenceDocs(activity.getReferenceDocs());
         oldActivity.setSectors(activity.getSectors());
@@ -483,7 +483,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       Iterator<Components<AmpComponentFunding>> componentsFundingIt = componentsFunding.iterator();
       while(componentsFundingIt.hasNext()){
     	  Components<AmpComponentFunding> ampTempComp = componentsFundingIt.next();
-    	  
+
 	      //to save the Component fundings
 	      if (ampTempComp.getCommitments() != null) {
 	        Iterator compItr = ampTempComp.getCommitments().iterator();
@@ -493,7 +493,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	          componentFundingCol.remove(ampComp);
 	        }
 	      }
-	
+
 	      if (ampTempComp.getDisbursements() != null) {
 	        Iterator compItr = ampTempComp.getDisbursements().iterator();
 	        while (compItr.hasNext()) {
@@ -502,7 +502,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	          componentFundingCol.remove(ampComp);
 	        }
 	      }
-	
+
 	      if (ampTempComp.getExpenditures() != null) {
 	        Iterator compItr = ampTempComp.getExpenditures().iterator();
 	        while (compItr.hasNext()) {
@@ -511,8 +511,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	          componentFundingCol.remove(ampComp);
 	        }
 	      }
-	      
-	      
+
+
 	      if (ampTempComp.getSisinProyect() != null) {
 			AmpSISINProyect sisinProyect = ampTempComp
 					.getSisinProyect();
@@ -530,16 +530,16 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 				sisinProyectOld.setSisincode(sisinProyectOld.getSisincode());
 				sisinProyectOld.setSisinsector(sisinProyectOld.getSisinsector());
 				sisinProyectOld.setStage(sisinProyectOld.getStage());
-				
+
 				session.saveOrUpdate(sisinProyectOld);
 			}
 		  }
-	
-	      
-	
+
+
+
 	      /*
 	      Collection<AmpPhysicalPerformance> phyProgress = DbUtil.getAmpPhysicalProgress(activityId);
-	
+
 	      if (ampTempComp.getPhyProgress() != null) {
 				Iterator compItr = ampTempComp.getPhyProgress().iterator();
 				while (compItr.hasNext()) {
@@ -548,7 +548,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 					phyProgress.remove(ampPhyPerf);
 				}
 	      }
-	
+
 	      if (phyProgress != null) {
 				Iterator<AmpPhysicalPerformance> phyProgressColIt = phyProgress.iterator();
 				while (phyProgressColIt.hasNext()) {
@@ -563,7 +563,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 				session.delete(componentFundingColIt.next());
 			}
 	  }
-      
+
       /* Persists comments, of type AmpComments, related to the activity */
       if (commentsCol != null && !commentsCol.isEmpty()) {
         logger.debug("commentsCol.size() [Inside Persisting]: " +
@@ -2245,8 +2245,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             session.delete(ampComp);
           }
         }
-        
-        
+
+
         /* delete Component Fundings */
         Collection<AmpComponentFunding>  componentFundingCol = getFundingComponentActivity(ampActId);
         if (componentFundingCol != null) {

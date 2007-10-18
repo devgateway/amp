@@ -125,9 +125,9 @@ public class EditActivity
     AmpActivity activity = null;
     String computeTotals = FeaturesUtil.getGlobalSettingValue(Constants.
         GLOBALSETTINGS_COMPUTE_TOTALS);
-    
-    
-    
+
+
+
     //if("true".compareTo(request.getParameter("public"))!=0)
     //return mapping.findForward("forward");
 
@@ -147,7 +147,7 @@ public class EditActivity
     // set Globam Settings Multi-Sector Selecting
     String multiSectorSelect = FeaturesUtil.getGlobalSettingValue(Constants.
     		GLOBALSETTINGS_MULTISECTORSELECT);
-    eaForm.setMultiSectorSelecting(multiSectorSelect);    
+    eaForm.setMultiSectorSelecting(multiSectorSelect);
     //
     String errorMsgKey = "";
 
@@ -160,11 +160,11 @@ public class EditActivity
         scope.put(GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
 		gatePermEditAllowed = activity.canDo(GatePermConst.Actions.EDIT, scope);
     }
-    
-    
+
+
     //old permission checking - this will be replaced by a global gateperm stuff
     // Checking whether the user have write access to the activity
-    
+
     if(!gatePermEditAllowed) {
 	    if (!mapping.getPath().trim().endsWith("viewActivityPreview")) {
 	      if (! ("Team".equalsIgnoreCase(tm.getTeamAccessType()))) {
@@ -178,12 +178,12 @@ public class EditActivity
 	      Collection euActs = EUActivityUtil.getEUActivities(activityId);
 	      request.setAttribute("costs", euActs);
 	    }
-	
+
 	    if (errorMsgKey.trim().length() > 0) {
 	      errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 	          errorMsgKey));
 	      saveErrors(request, errors);
-	
+
 	      errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
 	      String url = "/aim/viewChannelOverview.do?ampActivityId="
 	          + activityId + "&tabIndex=0";
@@ -191,11 +191,11 @@ public class EditActivity
 	          .getRequestDispatcher(url);
 	      rd.forward(request, response);
 	      return null;
-	
+
 	    }
 	    else if (tm != null && tm.getWrite() == false)
 	      errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
-	
+
 	    if (errorMsgKey.trim().length() > 0) {
 	      errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 	          errorMsgKey));
@@ -447,8 +447,8 @@ public class EditActivity
       eaForm.setPerspectives(DbUtil.getAmpPerspective());
 
       if (activityId != null) {
-        
-        
+
+
         /* Insert Categories */
         AmpCategoryValue ampCategoryValue = CategoryManagerUtil.
             getAmpCategoryValueFromList(CategoryConstants.ACCHAPTER_NAME,
@@ -470,13 +470,19 @@ public class EditActivity
             CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());
         if (ampCategoryValue != null)
           eaForm.setLevelId(ampCategoryValue.getId());
-        
+
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                 CategoryConstants.FINANCIAL_INSTRUMENT_KEY, activity.getCategories());
             if (ampCategoryValue != null)
               eaForm.setGbsSbs(ampCategoryValue.getId());
+
+            ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+                CategoryConstants.IMPLEMENTATION_LOCATION_KEY, activity.getCategories());
+            if (ampCategoryValue != null)
+              eaForm.setImplemLocationLevel(ampCategoryValue.getId());
+
         /* End - Insert Categories */
-            
+
         /* Injecting documents into session */
         SelectDocumentDM.clearContentRepositoryHashMap(request);
         if (activity.getActivityDocuments() != null && activity.getActivityDocuments().size() > 0 )
@@ -561,14 +567,14 @@ public class EditActivity
 
           if (activity.getDescription() != null)
             eaForm.setDescription(activity.getDescription().trim());
-          
+
           if (activity.getEqualOpportunity() != null)
               eaForm.setEqualOpportunity(activity.getEqualOpportunity().trim());
           if (activity.getEnvironment() != null)
               eaForm.setEnvironment(activity.getEnvironment().trim());
           if (activity.getMinorities() != null)
               eaForm.setMinorities(activity.getMinorities().trim());
-            
+
           if (activity.getLessonsLearned()!=null)
         	eaForm.setLessonsLearned(activity.getLessonsLearned().trim());
           if (activity.getObjective() != null)
@@ -774,7 +780,7 @@ public class EditActivity
             eaForm.setSelectedLocs(locs);
           }
 
-          if (impLevel >= 0) {
+         /* if (impLevel >= 0) {
             eaForm.setImplemLocationLevel(
                 CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.
                 IMPLEMENTATION_LEVEL_KEY,
@@ -787,6 +793,7 @@ public class EditActivity
                 IMPLEMENTATION_LEVEL_KEY,
                 new Long(0)).getId()
                 );
+          */
 
           /*switch(impLevel) {
               case 0:
@@ -805,13 +812,13 @@ public class EditActivity
                   eaForm.setImplementationLevel("country");
                                }*/
 
-          
-          
+
+
 //          eaForm.setRefDocComments(null);
           eaForm.setAllReferenceDocNameIds(null);
           eaForm.setReferenceDocs(null);
-          
-          
+
+
           Collection sectors = activity.getSectors();
 
           if (sectors != null && sectors.size() > 0) {
@@ -878,7 +885,7 @@ public class EditActivity
 
             eaForm.setActivitySectors(activitySectors);
           }
-       
+
           if (activity.getThemeId() != null) {
             eaForm
                 .setProgram(activity.getThemeId()
@@ -902,11 +909,11 @@ public class EditActivity
                         FundingOrganization fundOrg = new FundingOrganization();
                         fundOrg.setAmpOrgId(org.getAmpOrgId());
                         fundOrg.setOrgName(org.getName());
-                        
+
                         fundOrg.setFundingActive(ampFunding.getActive());
                         fundOrg.setDelegatedCooperation(ampFunding.getDelegatedCooperation());
                         fundOrg.setDelegatedPartner(ampFunding.getDelegatedPartner());
-                        
+
                         int index = fundingOrgs.indexOf(fundOrg);
                         //logger.info("Getting the index as " + index
                         //	+ " for fundorg " + fundOrg.getOrgName());
@@ -915,7 +922,7 @@ public class EditActivity
                                 .get(index);
                         }
 
-                      
+
             Funding fund = new Funding();
             //fund.setAmpTermsAssist(ampFunding.getAmpTermsAssistId());
             fund.setTypeOfAssistance(ampFunding.getTypeOfAssistance());
@@ -924,7 +931,7 @@ public class EditActivity
             fund.setOrgFundingId(ampFunding.getFinancingId());
             fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
             fund.setConditions(ampFunding.getConditions());
-            
+
             /* Get MTEF Projections */
             ArrayList<MTEFProjection> MTEFProjections	= new ArrayList<MTEFProjection>();
             if (ampFunding.getMtefProjections() != null) {
@@ -932,7 +939,7 @@ public class EditActivity
             	while ( iterMtef.hasNext() ) {
 	            	AmpFundingMTEFProjection ampProjection		= iterMtef.next();
 	            	MTEFProjection	projection					= new MTEFProjection();
-	            	
+
 	            	projection.setAmount( ampProjection.getAmount() + "" );
 	            	if ( ampProjection.getProjected() != null )
 	            		projection.setProjected( ampProjection.getProjected().getId() );
@@ -945,12 +952,12 @@ public class EditActivity
 	            	projection.setAmpFunding( ampProjection.getAmpFunding() );
 	            	MTEFProjections.add(projection);
             	}
-            	
+
             }
             Collections.sort(MTEFProjections);
             fund.setMtefProjections(MTEFProjections);
             /* END - Get MTEF Projections */
-            
+
             Collection fundDetails = ampFunding.getFundingDetails();
             if (fundDetails != null && fundDetails.size() > 0) {
               Iterator fundDetItr = fundDetails.iterator();
@@ -1062,7 +1069,7 @@ public class EditActivity
                                                  .getTransactionType().intValue());
                 fundDetail.add(fundingDetail);
               }
-              
+
               if (fundDetail != null)
                 Collections.sort(fundDetail,
                                  FundingValidator.dateComp);
@@ -1434,7 +1441,7 @@ public class EditActivity
 
       // load all the perspectives
       eaForm.setPerspectives(DbUtil.getAmpPerspective());
-      
+
       //load the possible projection values
       eaForm.setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));
 
@@ -1546,9 +1553,9 @@ public class EditActivity
 			if (sisinProyect == null) {
 				sisinProyect = new AmpSISINProyect();
 			}
-			tempComp.setSisinProyect(sisinProyect);	
-			
-			
+			tempComp.setSisinProyect(sisinProyect);
+
+
 			Iterator cItr = ActivityUtil.getFundingComponentActivity(
 					tempComp.getComponentId(), activity.getAmpActivityId()).iterator();
 			while (cItr.hasNext()) {
@@ -1587,7 +1594,7 @@ public class EditActivity
 
           Collection<AmpPhysicalPerformance> phyProgress = ActivityUtil
 						.getPhysicalProgressComponentActivity(tempComp.getComponentId(), activity.getAmpActivityId());
-          
+
 			if (phyProgress != null && phyProgress.size() > 0) {
 				Collection physicalProgress = new ArrayList();
 				Iterator phyProgItr = phyProgress.iterator();
@@ -1604,11 +1611,11 @@ public class EditActivity
 				}
 				tempComp.setPhyProgress(physicalProgress);
 			}
-			
+
 			selectedComponents.add(tempComp);
 		}
 
-		
+
 		// Sort the funding details based on Transaction date.
 		Iterator compIterator = selectedComponents.iterator();
 		int index = 0;

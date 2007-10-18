@@ -261,7 +261,7 @@
 											</td></tr>	
 											</field:display>
 											
-											<field:display name="AC Chapter" feature="Identification">
+											<field:display name="A.C. Chapter" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:DescriptionofACChapter">A.C. Chapter of the project</digi:trn>">
 												<digi:trn key="aim:acChapter">

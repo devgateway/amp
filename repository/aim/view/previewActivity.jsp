@@ -88,7 +88,7 @@ function disable() {
 	String url = "/aim/viewIndicatorValues.do?ampActivityId="+actId+"&tabIndex=6";
 
 	String actPerfChartFileName = ChartGenerator.getActivityPerformanceChartFileName(
-						 actId,session,new PrintWriter(out),370,450,url,true);
+						 actId,session,new PrintWriter(out),370,450,url,true,request);
 
 	String actPerfChartUrl = null;
 	if (actPerfChartFileName != null) {
@@ -97,7 +97,7 @@ function disable() {
 
 
 	String actRiskChartFileName = ChartGenerator.getActivityRiskChartFileName(
-						 actId,session,new PrintWriter(out),370,350,url);
+						 actId,session,new PrintWriter(out),370,350,url,request);
 
 	String actRiskChartUrl = null;
 

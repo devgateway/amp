@@ -150,8 +150,9 @@ public class SaveActivity extends Action {
 			CategoryManagerUtil.addCategoryToSet(eaForm.getStatusId(), activity.getCategories() );
 			CategoryManagerUtil.addCategoryToSet(eaForm.getLevelId(), activity.getCategories() );
 			CategoryManagerUtil.addCategoryToSet(eaForm.getGbsSbs(), activity.getCategories() );
+                        CategoryManagerUtil.addCategoryToSet(eaForm.getImplemLocationLevel(), activity.getCategories() );
 			/* END - Saving categories to AmpActivity */
-			
+
 			/* Saving related documents into AmpActivity */
 			HashSet<String>UUIDs		= SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false);
 			if (UUIDs != null && UUIDs.size() >0 ) {
@@ -160,7 +161,7 @@ public class SaveActivity extends Action {
 				else
 						activity.getActivityDocuments().clear();
 				Iterator<String> iter	= UUIDs.iterator();
-				
+
 				while ( iter.hasNext() ) {
 					String uuid					= iter.next();
 					AmpActivityDocument doc		= new AmpActivityDocument();
@@ -229,8 +230,8 @@ public class SaveActivity extends Action {
 									AmpFunding ampFunding = new AmpFunding();
 									ampFunding.setAmpFundingId(new Long(fund
 											.getFundingId()));
-									
-									
+
+
 									ampFunding.setActive(fOrg.getFundingActive());
 									ampFunding.setDelegatedCooperation(fOrg.getDelegatedCooperation());
 									ampFunding.setDelegatedPartner(fOrg.getDelegatedPartner());
@@ -294,7 +295,7 @@ public class SaveActivity extends Action {
 //												ampFundDet.setRateCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getFixedExchangeCurrCode()));
 											}
 											ampFundDet.setAmpFundingId(ampFunding);
-											
+
 											if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
 												ampFundDet.setExpCategory(
 														fundDet.getClassification());
@@ -303,9 +304,9 @@ public class SaveActivity extends Action {
 										}
 									}
 									ampFunding.setFundingDetails(fundDeatils);
-									
+
 									this.saveMTEFProjections(fund, ampFunding);
-									
+
 									fundings.add(ampFunding);
 								}
 							}
@@ -511,29 +512,29 @@ public class SaveActivity extends Action {
 				} else {
 					activity.setLessonsLearned(eaForm.getLessonsLearned());
 				}
-				
+
 				if (eaForm.getEqualOpportunity() == null
 						|| eaForm.getEqualOpportunity().trim().length() == 0) {
 					activity.setEqualOpportunity(new String(" "));
 				} else {
 					activity.setEqualOpportunity(eaForm.getEqualOpportunity());
 				}
-				
+
 				if (eaForm.getEnvironment() == null
 						|| eaForm.getEnvironment().trim().length() == 0) {
 					activity.setEnvironment(new String(" "));
 				} else {
 					activity.setEnvironment(eaForm.getEnvironment());
 				}
-				
+
 				if (eaForm.getMinorities() == null
 						|| eaForm.getMinorities().trim().length() == 0) {
 					activity.setMinorities(new String(" "));
 				} else {
 					activity.setMinorities(eaForm.getMinorities());
 				}
-				
-				
+
+
 				if (eaForm.getPurpose() == null
 						|| eaForm.getPurpose().trim().length() == 0) {
 					activity.setPurpose(new String(" "));
@@ -698,7 +699,7 @@ public class SaveActivity extends Action {
 	        	//create map where keys are category value ids.
 	        	//Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=
 	        	//	new ActivityUtil.CategoryIdRefDocMapBuilder().createMap(activityRefDocs);
-				
+
 				List formRefDocs=eaForm.getReferenceDocs();
 	        	Set<AmpActivityReferenceDoc> resultRefDocs=new HashSet<AmpActivityReferenceDoc>();
 	        	if(formRefDocs!=null && !formRefDocs.isEmpty())
@@ -717,7 +718,7 @@ public class SaveActivity extends Action {
 						dbRefDoc.setComment(refDoc.getComment());
 						dbRefDoc.setLastEdited(new Date());
 						resultRefDocs.add(dbRefDoc);
-						
+
 					}else{
 						dbRefDoc=null;
 						resultRefDocs.add(dbRefDoc);
@@ -725,8 +726,8 @@ public class SaveActivity extends Action {
 					}
 				}
 				activity.setReferenceDocs(resultRefDocs);
-				
-				
+
+
 				// set the sectors
 				if (eaForm.getActivitySectors() != null) {
 					Set sectors = new HashSet();
@@ -975,18 +976,18 @@ public class SaveActivity extends Action {
 							while (itr2.hasNext()) {
 								Funding fund = (Funding) itr2.next();
 								AmpFunding ampFunding = new AmpFunding();
-								
-								
+
+
 								ampFunding.setActive(fOrg.getFundingActive());
 								if("unchecked".equals(fOrg.getDelegatedCooperationString()) || fOrg.getDelegatedCooperation()==null)
 									ampFunding.setDelegatedCooperation(false);
-								else 
+								else
 									ampFunding.setDelegatedCooperation(true);
 								if("unchecked".equals(fOrg.getDelegatedPartnerString()) || fOrg.getDelegatedPartner()==null)
 									ampFunding.setDelegatedPartner(false);
-								else 
+								else
 									ampFunding.setDelegatedPartner(true);
-								
+
 								ampFunding.setAmpDonorOrgId(DbUtil
 										.getOrganisation(fOrg.getAmpOrgId()));
 								ampFunding.setFinancingId(fund
@@ -1042,7 +1043,7 @@ public class SaveActivity extends Action {
 										boolean useFixedRate = false;
 										if (fundDet.getTransactionType() == Constants.COMMITMENT) {
 											if (fundDet.isUseFixedRate() &&
-													fundDet.getFixedExchangeRate().doubleValue() > 0 
+													fundDet.getFixedExchangeRate().doubleValue() > 0
 													&& fundDet.getFixedExchangeRate().doubleValue() != 1) {
 												useFixedRate = true;
 											}
@@ -1075,9 +1076,9 @@ public class SaveActivity extends Action {
 									}
 								}
 								ampFunding.setFundingDetails(fundDeatils);
-								
+
 								this.saveMTEFProjections(fund, ampFunding);
-								
+
 								fundings.add(ampFunding);
 							}
 						}
@@ -1360,11 +1361,11 @@ public class SaveActivity extends Action {
 //					actId = ActivityUtil.saveActivity(activity,
 //							eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
 //							field, relatedLinks, tm.getMemberId(), tempComp);
-					
+
 					actId = ActivityUtil.saveActivity(activity, null, false, eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
 	                        field, relatedLinks,tm.getMemberId() , eaForm.getIndicatorsME(), tempComp);
-					
-					
+
+
 					//for logging the activity
 					 AuditLoggerUtil.logObject(session, request,activity,"add");
 
@@ -1475,7 +1476,7 @@ public class SaveActivity extends Action {
 			while (itr.hasNext()) {
 				Components<FundingDetail> comp = itr.next();
 				Components<AmpComponentFunding> tempComp = new Components<AmpComponentFunding>();
-				
+
 				AmpComponent ampComp = null;
 				Collection col = ComponentsUtil.getComponent(comp.getTitle());
 				Iterator it = col.iterator();
@@ -1483,7 +1484,7 @@ public class SaveActivity extends Action {
 					ampComp = (AmpComponent)it.next();
 					activity.getComponents().add(ampComp);
 				}
-				
+
 				if (comp.getSisinProyect() != null){
 					AmpSISINProyect sisinProyect = comp.getSisinProyect();
 					sisinProyect.setComponentId(ampComp.getAmpComponentId());
@@ -1499,7 +1500,7 @@ public class SaveActivity extends Action {
 						AmpComponentFunding ampCompFund = new AmpComponentFunding();
 						ampCompFund.setActivity(activity);
 						ampCompFund.setTransactionType(new Integer(
-								Constants.COMMITMENT));						
+								Constants.COMMITMENT));
 						Iterator tmpItr = eaForm.getCurrencies()
 								.iterator();
 						while (tmpItr.hasNext()) {
@@ -1521,7 +1522,7 @@ public class SaveActivity extends Action {
 								break;
 							}
 						}
-						
+
 						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
 						ampCompFund.setReportingOrganization(null);
 						ampCompFund.setTransactionAmount(new Double(DecimalToText.getDouble(fd.getTransactionAmount())));
@@ -1529,13 +1530,13 @@ public class SaveActivity extends Action {
 								.getDate(fd.getTransactionDate()));
 						ampCompFund.setAdjustmentType(new Integer(fd
 								.getAdjustmentType()));
-						ampCompFund.setComponent(ampComp);						
-						temp.add(ampCompFund);						
+						ampCompFund.setComponent(ampComp);
+						temp.add(ampCompFund);
 					}
 					tempComp.setCommitments(temp);
 				}
 
-				
+
 				if (comp.getDisbursements() != null
 						&& comp.getDisbursements().size() > 0) {
 					HashSet<AmpComponentFunding> temp = new HashSet<AmpComponentFunding>();
@@ -1567,7 +1568,7 @@ public class SaveActivity extends Action {
 								break;
 							}
 						}
-						
+
 						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
 						ampCompFund.setTransactionAmount(new Double(
 								DecimalToText.getDouble(fd
@@ -1576,8 +1577,8 @@ public class SaveActivity extends Action {
 								.getDate(fd.getTransactionDate()));
 						ampCompFund.setAdjustmentType(new Integer(fd
 								.getAdjustmentType()));
-						ampCompFund.setComponent(ampComp);						
-						temp.add(ampCompFund);						
+						ampCompFund.setComponent(ampComp);
+						temp.add(ampCompFund);
 					}
 					tempComp.setDisbursements(temp);
 				}
@@ -1613,7 +1614,7 @@ public class SaveActivity extends Action {
 								break;
 							}
 						}
-						
+
 						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
 						ampCompFund.setTransactionAmount(new Double(
 								DecimalToText.getDouble(fd
@@ -1622,14 +1623,14 @@ public class SaveActivity extends Action {
 								.getDate(fd.getTransactionDate()));
 						ampCompFund.setAdjustmentType(new Integer(fd
 								.getAdjustmentType()));
-						ampCompFund.setComponent(ampComp);						
+						ampCompFund.setComponent(ampComp);
 						temp.add(ampCompFund);
 					}
 					tempComp.setExpenditures(temp);
 				}
 
 				// set physical progress
-				
+
 				if (comp.getPhyProgress() != null) {
 					Set phyProgess = new HashSet();
 					Iterator itr1 = comp.getPhyProgress().iterator();
@@ -1652,11 +1653,11 @@ public class SaveActivity extends Action {
 						ampPhyPerf.setAmpActivityId(activity);
 						ampPhyPerf.setComponent(ampComp);
 						ampPhyPerf.setComments(" ");
-						phyProgess.add(ampPhyPerf);								
+						phyProgess.add(ampPhyPerf);
 					}
 					tempComp.setPhyProgress(phyProgess);
 				}
-				
+
 				tempComps.add(tempComp);
 			}
 		}
@@ -1680,10 +1681,10 @@ public class SaveActivity extends Action {
 				ampmtef.setAmpCurrency(CurrencyUtil.getCurrencyByCode(mtef.getCurrencyCode()));
 				ampmtef.setProjected( CategoryManagerUtil.getAmpCategoryValueFromDb(mtef.getProjected()) );
 				ampmtef.setProjectionDate( DateConversion.getDate(mtef.getProjectionDate()) );
-				
+
 				ampFunding.getMtefProjections().add(ampmtef);
 			}
 		}
 	}
-	
+
 }

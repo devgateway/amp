@@ -439,6 +439,7 @@ function checkUncheckAll2() {
 																							</digi:trn>
 																							</b>
 																						</html:checkbox>
+																						<input type="hidden" value="hidden" name="wasSelectMeasuresStep"/>
 																					</td>
 																				</tr>
 

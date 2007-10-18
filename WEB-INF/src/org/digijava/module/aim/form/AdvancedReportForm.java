@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.action.AdvancedReport;
 import org.digijava.module.aim.helper.AmpFund;
 
 public class AdvancedReportForm extends ActionForm 
@@ -1488,6 +1490,15 @@ private int yrDiff;
 	}
 	public String getDuplicatedReportOwner() {
 		return duplicatedReportOwner;
+	}
+	
+	public void reset (ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {
+		String wasSelectMeasuresStep	= request.getParameter("wasSelectMeasuresStep");
+		if (wasSelectMeasuresStep != null ){
+			this.setPublicReport(false);
+			this.setDrilldownTab(false);
+			this.setHideActivities(false);
+		}
 	}
 
 } //		End of Class

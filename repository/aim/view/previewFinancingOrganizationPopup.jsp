@@ -6,29 +6,29 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 
-<bean:define id="org" name="breakdown" 
+<bean:define id="org" name="breakdown"
 	type="org.digijava.module.aim.helper.FinancingBreakdown" scope="request" toScope="page" />
-	
-<div style='position:relative;display:none;' id='org-<bean:write name="org" property="organisation.ampOrgId"/>'> 
+
+<div style='position:relative;display:none;' id='org-<bean:write name="org" property="organisation.ampOrgId"/>'>
 <ul>
 <c:if test="${!empty org.organisation.name}">
-	<li>Organization Name: <bean:write name="org" property="organisation.name"/></li>
+	<li><digi:trn key="aim:organizationName">Organization Name</digi:trn>: <bean:write name="org" property="organisation.name"/></li>
 </c:if>
 <c:if test="${!empty org.organisation.acronym}">
-	<li>Organization Acronym: <bean:write name="org" property="organisation.acronym"/></li>
+	<li><digi:trn key="aim:organizationAcronym">Organization Acronym</digi:trn>: <bean:write name="org" property="organisation.acronym"/></li>
 </c:if>
 <c:if test="${!empty org.organisation.orgTypeId}">
 	<c:if test="${!empty org.organisation.orgTypeId.orgType}">
-		<li>Organization Type: <bean:write name="org" property="organisation.orgTypeId.orgType"/></li>
+		<li><digi:trn key="aim:organizationType">Organization Type</digi:trn>: <bean:write name="org" property="organisation.orgTypeId.orgType"/></li>
 	</c:if>
 </c:if>
 <c:if test="${!empty org.organisation.orgGrpId}">
 	<c:if test="${!empty org.organisation.orgGrpId.orgGrpName}">
-		<li>Organization Group: <bean:write name="org" property="organisation.orgGrpId.orgGrpName"/></li>
+		<li><digi:trn key="aim:organizationGroup">Organization Group</digi:trn>: <bean:write name="org" property="organisation.orgGrpId.orgGrpName"/></li>
 	</c:if>
 </c:if>
 <c:if test="${!empty org.organisation.orgCode}">
-	<li>Organization Code: <bean:write name="org" property="organisation.orgCode"/></li>
+	<li><digi:trn key="aim:organizationCode">Organization Code</digi:trn>: <bean:write name="org" property="organisation.orgCode"/></li>
 </c:if>
 
 </ul>

@@ -119,12 +119,20 @@
 																			<digi:trn key="aim:clickToEditFiscalCalendar">Click here to Edit Fiscal Calendar</digi:trn>
 																		</c:set>
 																		  <digi:link href="/editFiscalCalendar.do" name="urlParams" title="${translation}" >
+
 																			<bean:write name="fiscalCal" property="name"/>
 																		  </digi:link>
 																		</td>
 																		<td width="117">
                                                                   			<%--<c:set value="${fiscalCal.startMonthNum}" var="monthIndex"/>--%>
-                                                                  			<c:out value="${aimFiscalCalendarForm.month[monthIndex]}" />
+                                                                                        <c:set var="startMonth">
+                                                                                        <digi:trn key="calendar:${aimFiscalCalendarForm.month[monthIndex]}">
+                                                                                        ${aimFiscalCalendarForm.month[monthIndex]}
+                                                                                        </digi:trn>
+                                                                                         </c:set>
+
+
+                                                                  			<c:out value="${startMonth}" />
 		                                                                  	<c:set value="${monthIndex + 1}" var="monthIndex"/>
                                                               			</td>
 																		<td width="105">

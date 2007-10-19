@@ -72,8 +72,8 @@
 										</td>
 									</tr>
 									<!-- START SISIN Fields -->
-									<feature:display name="SISIN" module="Components"> 
-										<field:display name="SISIN Code" feature="SISIN"> 
+									<feature:display name="SISIN" module="Components">
+										<field:display name="SISIN Code" feature="SISIN">
 											<tr>
 												<td width="50">
 													<digi:trn key="aim:sisincode">SISIN Code</digi:trn>
@@ -83,7 +83,7 @@
 												</td>
 											</tr>
 										</field:display>
-										<field:display name="Localization" feature="SISIN"> 
+										<field:display name="Localization" feature="SISIN">
 											<tr>
 												<td width="50">
 													<digi:trn key="aim:localization">Localization</digi:trn>
@@ -93,7 +93,7 @@
 												</td>
 											</tr>
 										</field:display>
-										<field:display name="SISIN Sector" feature="SISIN"> 
+										<field:display name="SISIN Sector" feature="SISIN">
 											<tr>
 												<td width="50">
 													<digi:trn key="aim:sisinsector">SISIN Sector</digi:trn>
@@ -126,7 +126,7 @@
 										<field:display name="Stage" feature="SISIN">
 											<tr>
 												<td width="50">
-													<digi:trn key="stage">Stage</digi:trn>											 
+													<digi:trn key="stage">Stage</digi:trn>
 												</td>
 												<td>
 													<html:text property="sisinProyect.stage" size="65" maxlength="120"> </html:text> &nbsp;
@@ -143,9 +143,9 @@
 												</td>
 											</tr>
 										</field:display>
-									</feature:display>																																																															
+									</feature:display>
 									<!-- END SISIN Fields -->
-									
+
 									<tr><td colspan=2>
 										<FONT color=blue><BIG>*</BIG>
 											<digi:trn key="aim:pleaseEnterTheAmountInThousands">
@@ -181,18 +181,18 @@
 																 String field2 = tNameBase + "2";
 																 String field3 = tNameBase + "3";
 																 String field4 = tNameBase + "4";
-															 	 String field5 = tNameBase + "5"; 
-															 	 String field6 = tNameBase + "6"; 															 	 
+															 	 String field5 = tNameBase + "5";
+															 	 String field6 = tNameBase + "6";
 															 %>
 													 		<div id="<%=divName%>">
 																<select name="<%=field1%>" class="inp-text">
 																	<c:if test="${comm.adjustmentType == 1}">
-																		<option value="1" selected="true"><digi:trn key="opt:actual">Actual</digi:trn></option>
-																		<option value="0"><digi:trn key="opt:planned">Planned</digi:trn></option>
+																		<option value="1" selected="true"><digi:trn key="aim:actual">Actual</digi:trn></option>
+																		<option value="0"><digi:trn key="aim:planned">Planned</digi:trn></option>
 																	</c:if>
 																	<c:if test="${comm.adjustmentType == 0}">
-																		<option value="1"><digi:trn key="opt:actual">Actual</digi:trn></option>
-																		<option value="0" selected="true"><digi:trn key="opt:planned">Planned</digi:trn></option>
+																		<option value="1"><digi:trn key="aim:actual">Actual</digi:trn></option>
+																		<option value="0" selected="true"><digi:trn key="aim:planned">Planned</digi:trn></option>
 																	</c:if>
 																</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 																<input type="text" name="<%=field2%>"value="<c:out value="${comm.transactionAmount}"/>" size="15"  class='amt'>&nbsp;
@@ -270,12 +270,12 @@
 												 <div id="<%=divName%>">
 												<select name="<%=field1%>" class="inp-text">
 													<c:if test="${comm.adjustmentType == 1}">
-														<option value="1" selected="true"><digi:trn key="opt:actual">Actual</digi:trn></option>
-														<option value="0"><digi:trn key="opt:planned">Planned</digi:trn></option>
+														<option value="1" selected="true"><digi:trn key="aim:actual">Actual</digi:trn></option>
+														<option value="0"><digi:trn key="aim:planned">Planned</digi:trn></option>
 													</c:if>
 													<c:if test="${comm.adjustmentType == 0}">
-														<option value="1"><digi:trn key="opt:actual">Actual</digi:trn></option>
-														<option value="0" selected="true"><digi:trn key="opt:planned">Planned</digi:trn></option>
+														<option value="1"><digi:trn key="aim:actual">Actual</digi:trn></option>
+														<option value="0" selected="true"><digi:trn key="aim:planned">Planned</digi:trn></option>
 													</c:if>
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>"
 												value="<c:out value="${comm.transactionAmount}"/>" size="15"  class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
@@ -351,18 +351,18 @@
 												 String field2 = tNameBase + "2";
 												 String field3 = tNameBase + "3";
 												 String field4 = tNameBase + "4";
-												 String field5 = tNameBase + "5"; 
+												 String field5 = tNameBase + "5";
 												 String field6 = tNameBase + "6";
 												%>
 												 <div id="<%=divName%>">
 												<select name="<%=field1%>" class="inp-text">
 													<c:if test="${comm.adjustmentType == 1}">
-														<option value="1" selected="true"><digi:trn key="opt:actual">Actual</digi:trn></option>
-														<option value="0"><digi:trn key="opt:planned">Planned</digi:trn></option>
+														<option value="1" selected="true"><digi:trn key="aim:actual">Actual</digi:trn></option>
+														<option value="0"><digi:trn key="aim:planned">Planned</digi:trn></option>
 													</c:if>
 													<c:if test="${comm.adjustmentType == 0}">
-														<option value="1"><digi:trn key="opt:actual">Actual</digi:trn></option>
-														<option value="0" selected="true"><digi:trn key="opt:planned">Planned</digi:trn></option>
+														<option value="1"><digi:trn key="aim:actual">Actual</digi:trn></option>
+														<option value="0" selected="true"><digi:trn key="aim:planned">Planned</digi:trn></option>
 													</c:if>
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>"
 												value="<c:out value="${comm.transactionAmount}"/>" size="15"  class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
@@ -450,8 +450,8 @@ function addCommitments()
 	var newdiv = document.createElement('div');
 	newdiv.setAttribute("id",divname);
 	var s = "<select name='comm_" + numComm + "_1' class='inp-text'>";
-	s += "<option value='1'>Actual</option>";
-	s += "<option value='0'>Planned</option>";
+	s += "<option value='1'><digi:trn key='aim:actual'>Actual</digi:trn></option>";
+	s += "<option value='0'><digi:trn key='aim:planned'>Planned</digi:trn></option>";
 	s += "</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	s += "<input type='text' name='comm_" + numComm + "_2' size='15' class='amt'>&nbsp;";
 	s += "<select name='comm_" + numComm + "_3' class='inp-text'>&nbsp;";
@@ -515,8 +515,8 @@ function addDisbursement()
 	var newdiv = document.createElement('div');
 	newdiv.setAttribute("id",divname);
 	var s = "<select name='disb_" + numDisb + "_1' class='inp-text'>";
-	s += "<option value='1'>Actual</option>";
-	s += "<option value='0'>Planned</option>";
+	s += "<option value='1'><digi:trn key='aim:actual'>Actual</digi:trn></option>";
+	s += "<option value='0'><digi:trn key='aim:planned'>Planned</digi:trn></option>";
 	s += "</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	s += "<input type='text' name='disb_" + numDisb + "_2' size='15'  class='amt'>&nbsp;";
 	s += "<select name='disb_" + numDisb + "_3' class='inp-text'>&nbsp;";
@@ -581,8 +581,8 @@ function addExpenditure()
 	var newdiv = document.createElement('div');
 	newdiv.setAttribute("id",divname);
 	var s = "<select name='expn_" + numExpn + "_1' class='inp-text'>";
-	s += "<option value='1'>Actual</option>";
-	s += "<option value='0'>Planned</option>";
+	s += "<option value='1'><digi:trn key='aim:actual'>Actual</digi:trn></option>";
+	s += "<option value='0'><digi:trn key='aim:planned'>Planned</digi:trn></option>";
 	s += "</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	s += "<input type='text' name='expn_" + numExpn + "_2' size='15' class='amt'>&nbsp;";
 	s += "<select name='expn_" + numExpn + "_3' class='inp-text'>&nbsp;";

@@ -15,13 +15,13 @@
 								<table width="95%" bgcolor="#f4f4f2">
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-										<a title="<digi:trn key="aim:ComponentofProject">A smaller sub project of a donor approved project</digi:trn>">										
+										<a title="<digi:trn key="aim:ComponentofProject">A smaller sub project of a donor approved project</digi:trn>">
 										<b><digi:trn key="aim:components">Components</digi:trn></b></a>
 									</td></tr>
 									<tr><td>
 										&nbsp;
 									</td></tr>
-								
+
 									<tr><td align="left">
 										<table width="100%" cellSpacing=5 cellPadding=0 border=0 class="box-border-nopadding">
 
@@ -30,17 +30,17 @@
 																		<b><field:display name="Grand Total Commitments" feature="Components">
 																		&nbsp;&nbsp;
 																			<digi:trn key="aim:commitments">Commitments</digi:trn> - (
-																			<digi:trn key="aim:grantTotalActualAllocation">Grand Total actual 
-																			allocation</digi:trn> = 
-																			<c:out value="${aimEditActivityForm.totalCommitments}"/> 
-																			<c:out value="${aimEditActivityForm.currCode}"/>)															
+																			<digi:trn key="aim:grantTotalActualAllocation">Grand Total actual
+																			allocation</digi:trn> =
+																			<c:out value="${aimEditActivityForm.totalCommitments}"/>
+																			<c:out value="${aimEditActivityForm.currCode}"/>)
 																		<br/></field:display>
 																		<field:display name="Grand Total Disbursements" feature="Components">
-																				&nbsp;&nbsp;															
+																				&nbsp;&nbsp;
 																			<digi:trn key="aim:disbursements">Disbursements</digi:trn> - (
 																			<digi:trn key="aim:totalActualToDate">Total actual to date
-																			</digi:trn> = 
-																			<c:out value="${aimEditActivityForm.totalDisbursements}"/> 
+																			</digi:trn> =
+																			<c:out value="${aimEditActivityForm.totalDisbursements}"/>
 																			<c:out value="${aimEditActivityForm.currCode}"/>)
 																		<br/>
 																		</field:display>
@@ -48,13 +48,13 @@
 																		&nbsp;&nbsp;
 																			<digi:trn key="aim:expenditures">Expenditures</digi:trn> - (
 																			<digi:trn key="aim:totalActualToDate">Total actual to date
-																			</digi:trn> = 
-																			<c:out value="${aimEditActivityForm.totalExpenditures}"/> 
+																			</digi:trn> =
+																			<c:out value="${aimEditActivityForm.totalExpenditures}"/>
 																			<c:out value="${aimEditActivityForm.currCode}"/>)
 																		<br/>
 																		</field:display>
 																		&nbsp;&nbsp;
-																		
+
 																		<font
 																		<c:if test="${aimEditActivityForm.totalCommitments < aimEditActivityForm.compTotalDisb }">
 																		 color="RED"
@@ -62,13 +62,13 @@
 																		>
 																		<digi:trn key="aim:totalComponentActualDisbursement">Component Grand Total Actual Disbursements</digi:trn>=
 																		<c:out value="${aimEditActivityForm.compTotalDisb}"/>
-																		<c:out value="${aimEditActivityForm.currCode}"/>																			
+																		<c:out value="${aimEditActivityForm.currCode}"/>
 																		</font>
 																		</b></td></tr>
-										
+
 											<logic:iterate name="aimEditActivityForm" property="selectedComponents"
 											id="selComponents" type="org.digijava.module.aim.helper.Components">
-										
+
 												<tr><td align="center">
 													<table width="98%" cellSpacing=1 cellPadding=4 vAlign="top" align="center" border=0
 													class="box-border-nopadding">
@@ -77,27 +77,27 @@
 																<html:multibox property="selComp">
 																	<c:out value="${selComponents.componentId}"/>
 																</html:multibox>
-																<a title="<digi:trn key="aim:TitleofComponent">Title of the project component specified</digi:trn>">											<b>					
+																<a title="<digi:trn key="aim:TitleofComponent">Title of the project component specified</digi:trn>">											<b>
 																<digi:trn key="aim:TitleofComponent">Component Title</digi:trn></a> :
 																<c:out value="${selComponents.title}"/></b>
 																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-																<a href="javascript:editFunding('<bean:write name="selComponents" 
-																property="componentId"/>')">Edit</a><br>
+																<a href="javascript:editFunding('<bean:write name="selComponents"
+																property="componentId"/>')"><digi:trn key="aim:edit">Edit</digi:trn></a><br>
 																<digi:trn key="aim:description">Description</digi:trn>:&nbsp;<c:out value="${selComponents.description}"/>
 																<br>
 																<!-- START SISIN Fields -->
-																<feature:display name="SISIN" module="Components"> 
-																	<field:display name="SISIN Code" feature="SISIN"> 
+																<feature:display name="SISIN" module="Components">
+																	<field:display name="SISIN Code" feature="SISIN">
 																				<digi:trn key="aim:sisincode">SISIN Code</digi:trn>:&nbsp;
 																				<c:out value="${selComponents.sisinProyect.sisincode}" /> &nbsp;
 																		<br>
 																	</field:display>
-																	<field:display name="Localization" feature="SISIN"> 
+																	<field:display name="Localization" feature="SISIN">
 																				<digi:trn key="aim:localization">Localization</digi:trn>:&nbsp;
 																				<c:out value="${selComponents.sisinProyect.localization}"  /> &nbsp;
 																		<br>
 																	</field:display>
-																	<field:display name="SISIN Sector" feature="SISIN"> 
+																	<field:display name="SISIN Sector" feature="SISIN">
 																				<digi:trn key="aim:sisinsector">SISIN Sector</digi:trn>:&nbsp;
 																				<c:out value="${selComponents.sisinProyect.sisinsector}" /> &nbsp;
 																		<br>
@@ -122,14 +122,14 @@
 																				<c:out value="${selComponents.sisinProyect.programcode}" /> &nbsp;
 																		<br>
 																	</field:display>
-																</feature:display>																																																															
+																</feature:display>
 																<!-- END SISIN Fields -->
 															</td>
-														</tr>		
+														</tr>
 
 																<tr><td>
 																<!-- Component funding details -->
-																	<table width="100%" cellSpacing=1 cellPadding=3 border=0 
+																	<table width="100%" cellSpacing=1 cellPadding=3 border=0
 																	bgcolor="#d7eafd">
 																		<logic:notEmpty name="selComponents" property="commitments">
 																		<tr><td>
@@ -139,23 +139,23 @@
 																		</field:display>
 																		</b></td></tr>
 																		<tr><td bgcolor=#ffffff>
-																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
+																			<table width="100%" cellSpacing=1 cellPadding=3 border=0
 																			bgcolor="#eeeeee">
 																				<tr>
-																					<field:display name="Actual/Planned Commitments" feature="Components"><td>Actual/Planned</td></field:display>
-																					<field:display name="Total Amount Commitments" feature="Components"><td>Total Amount</td></field:display>
-																					<field:display name="Currency Commitments" feature="Components"><td>Currency</td></field:display>
-																					<field:display name="Date Commitments" feature="Components"><td>Date</td></field:display>
+																					<field:display name="Actual/Planned Commitments" feature="Components"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
+																					<field:display name="Total Amount Commitments" feature="Components"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
+																					<field:display name="Currency Commitments" feature="Components"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
+																					<field:display name="Date Commitments" feature="Components"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																					<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																						<field:display name="Perspective Commitments" feature="Components"><td>Perspective</td></field:display>
+																						<field:display name="Perspective Commitments" feature="Components"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
 																					</logic:equal>
 																				</tr>
-																				<logic:iterate name="selComponents" property="commitments" 
-																				id="commitment" 
+																				<logic:iterate name="selComponents" property="commitments"
+																				id="commitment"
 																				type="org.digijava.module.aim.helper.FundingDetail"> 																						           <!-- L2 START-->
 																					<tr bgcolor="#ffffff">
 																						<field:display name="Actual/Planned Commitments" feature="Components"><td>
-																							<c:out value="${commitment.adjustmentTypeName}"/></td></field:display>
+																							<digi:trn key="aim:${commitment.adjustmentTypeName}"><c:out value="${commitment.adjustmentTypeName}"/></digi:trn></td></field:display>
 																						<field:display name="Total Amount Commitments" feature="Components"><td align="right">
 																							<FONT color=blue>*</FONT>
 																							<c:out value="${commitment.transactionAmount}"/>
@@ -172,28 +172,29 @@
 																								<td>
 																									<digi:trn key='<%="aim:"+commitment.getPerspectiveNameTrimmed() %>'>
 																											<bean:write name="commitment" property="perspectiveName"/>
-																									</digi:trn>																								
+																									</digi:trn>
 																								</td>
 																							</field:display>
 																						</logic:equal>
-																					</tr>																			
+																					</tr>
 																				</logic:iterate>	<!-- L2 END-->
-																			</table>	
+																			</table>
 																		</td></tr>
 																	</logic:notEmpty>
 																	<logic:notEmpty name="selComponents" property="disbursements">
 																	<tr>
 																	<td>
 																	<field:display name="Grand Total Disbursements" feature="Components">
-																				&nbsp;&nbsp;															
+																				&nbsp;&nbsp;
 																		<b>	<digi:trn key="aim:disbursements">Disbursements</digi:trn> </b>
-																		
+
 																	</field:display>
 																	</td></tr>
 																		<tr><td bgcolor=#ffffff>
-																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
+																			<table width="100%" cellSpacing=1 cellPadding=3 border=0
 																			bgcolor="#eeeeee">
 																				<tr>
+
 																					<field:display name="Actual/Planned Disbursements" feature="Components"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
 																					<field:display name="Total Amount Disbursements" feature="Components"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
 																					<field:display name="Currency Disbursements" feature="Components"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
@@ -202,13 +203,13 @@
 																						<field:display name="Perspective Disbursements" feature="Components"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
 																					</logic:equal>
 																				</tr>
-																				<logic:iterate name="selComponents" property="disbursements" 
-																				id="disbursement" 
+																				<logic:iterate name="selComponents" property="disbursements"
+																				id="disbursement"
 																				type="org.digijava.module.aim.helper.FundingDetail">
 																				<!-- L3 START-->
 																					<tr bgcolor="#ffffff">
 																						<field:display name="Actual/Planned Disbursements" feature="Components"><td>
-																							<c:out value="${disbursement.adjustmentTypeName}"/>
+																							<digi:trn key="aim:${disbursement.adjustmentTypeName}"><c:out value="${disbursement.adjustmentTypeName}"/></digi:trn>
 																						</td></field:display>
 																						<field:display name="Total Amount Disbursements" feature="Components"><td align="right">
 																							<FONT color=blue>*</FONT>
@@ -226,14 +227,14 @@
 																							<td>
 																								<digi:trn key='<%="aim:"+disbursement.getPerspectiveNameTrimmed() %>'>
 																									<bean:write name="disbursement" property="perspectiveName"/>
-																								</digi:trn>																								
+																								</digi:trn>
 																							</td></field:display>
 																						</logic:equal>
-																					</tr>																			
-																				</logic:iterate>	
+																					</tr>
+																				</logic:iterate>
 																				<!-- L3 END-->
-																			</table>																		
-																		</td></tr>				
+																			</table>
+																		</td></tr>
 
 																	</logic:notEmpty>
 																	<logic:notEmpty name="selComponents" property="expenditures">
@@ -242,24 +243,24 @@
 																	</b>
 																		</td></tr>
 																		<tr><td bgcolor=#ffffff>
-																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
+																			<table width="100%" cellSpacing=1 cellPadding=3 border=0
 																			bgcolor="#eeeeee">
 																				<tr>
-																					<field:display name="Actual/Planned Expenditures" feature="Components"><td>Actual/Planned</td></field:display>
-																					<field:display name="Total Amount Expenditures" feature="Components"><td>Total Amount</td></field:display>
-																					<field:display name="Currency Expenditures" feature="Components"><td>Currency</td></field:display>
-																					<field:display name="Date Expenditures" feature="Components"><td>Date</td></field:display>
+																					<field:display name="Actual/Planned Expenditures" feature="Components"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
+																					<field:display name="Total Amount Expenditures" feature="Components"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
+																					<field:display name="Currency Expenditures" feature="Components"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
+																					<field:display name="Date Expenditures" feature="Components"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																					<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																						<field:display name="Perspective Expenditures" feature="Components"><td>Perspective</td></field:display>
+																						<field:display name="Perspective Expenditures" feature="Components"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
 																					</logic:equal>
 																				</tr>
-																				<logic:iterate name="selComponents" property="expenditures" 
-																				id="expenditure" 
+																				<logic:iterate name="selComponents" property="expenditures"
+																				id="expenditure"
 																				type="org.digijava.module.aim.helper.FundingDetail">
 																				<!-- L4 START-->
 																				<tr bgcolor="#ffffff">
 																					<field:display name="Actual/Planned Expenditures" feature="Components"><td>
-																						<c:out value="${expenditure.adjustmentTypeName}"/>
+																						<digi:trn key="aim:${expenditure.adjustmentTypeName}"><c:out value="${expenditure.adjustmentTypeName}"/></digi:trn>
 																					</td></field:display>
 																					<field:display name="Total Amount Expenditures" feature="Components">
 																					<td align="right">
@@ -283,42 +284,42 @@
 																						</td></field:display>
 																					</logic:equal>
 																				</tr>
-																			</logic:iterate>	
+																			</logic:iterate>
 																			<!-- L4 END-->
 																		</table>
 																	</td></tr>
-																	
+
 																</logic:notEmpty>
-																
+
 															</table>
 															<logic:notEmpty name="selComponents" property="commitments">
 															<TR><TD>
 																<FONT color=blue>*
-																	<digi:trn key="aim:allTheAmountsInThousands">	
+																	<digi:trn key="aim:allTheAmountsInThousands">
 																		All the amounts are in thousands (000)
 				  													</digi:trn>
-																</FONT>								
-															</TD></TR>															
+																</FONT>
+															</TD></TR>
 															</logic:notEmpty>
 														</td></tr>
-													</tr>	
+													</tr>
 													<tr>
 														<td colspan="2">
-															<table width="100%" cellPadding=1 cellSpacing=1 vAlign="top" border=0 
+															<table width="100%" cellPadding=1 cellSpacing=1 vAlign="top" border=0
 															class="box-border-nopadding">
 															<tr><td width="100%" bgcolor="#dddddd" height="15">
-																<a title="<digi:trn key="aim:physicalProgressTitleDesc">Measurable task done on a 
+																<a title="<digi:trn key="aim:physicalProgressTitleDesc">Measurable task done on a
 																project to achieve component objectives</digi:trn>">
 																	<digi:trn key="aim:physicalProgres">Physical Progress</digi:trn>
 																</a>
-															</td></tr>														
+															</td></tr>
 															<c:if test="${empty selComponents.phyProgress}">
 																<tr><td colspan="2"><b>
 																	<a href="javascript:
 																	addPhyProgess(-1,<c:out value="${selComponents.componentId}"/>)">
 																	<digi:trn key="aim:addPhysicalProgress">Add Physical Progress</digi:trn></a>
 																	</b>
-																</td></tr>															
+																</td></tr>
 															</c:if>
 															<c:if test="${!empty selComponents.phyProgress}">
 															<c:forEach var="phyProg" items="${selComponents.phyProgress}">
@@ -326,23 +327,23 @@
 																	<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
 																		<tr>
 																		<td vAlign="center" align="left" width="95%">
-																			<a href="javascript:addPhyProgess(<bean:write name="phyProg" 
+																			<a href="javascript:addPhyProgess(<bean:write name="phyProg"
 																			property="pid" />,<c:out value="${selComponents.componentId}"/>)">
-																				<bean:write name="phyProg" property="title" /> - 
+																				<bean:write name="phyProg" property="title" /> -
 																				<bean:write name="phyProg" property="reportingDate" />
 																			</a>
 																		</td>
 																		<td align="right">
 																			<bean:define id="id" property="pid" name="phyProg"/>
 																			<bean:define id="compId" property="componentId" name="selComponents"/>
-																			<% String url1 = 
+																			<% String url1 =
 																			"/removeSelPhyProg.do~edit=true~pid="+id+"~cid="+compId;%>
 																			<digi:link href="<%=url1%>">
-																				<digi:img src="module/cms/images/deleteIcon.gif" border="0" 
+																				<digi:img src="module/cms/images/deleteIcon.gif" border="0"
 																				alt="Delete this physical progress"/>
 																			</digi:link>
-																		</td>																																								  </tr>	
-																	</table>	
+																		</td>																																								  </tr>
+																	</table>
 																</td></tr>
 															</c:forEach>
 																<tr><td>
@@ -354,14 +355,14 @@
 																				<digi:trn key="aim:addPhysicalProgress">Add Physical Progress</digi:trn></a>
 																			</b>
 																		</td></tr>
-																	</table>																
+																	</table>
 																</td></tr>
 															</c:if>
-															</table>													
+															</table>
 														</td></tr>
-													</table>	
-												</td></tr>	
-											</logic:iterate>	
+													</table>
+												</td></tr>
+											</logic:iterate>
 											<tr><td align="center">
 												<table cellSpacing=2 cellPadding=2>
 													<tr><td>
@@ -376,7 +377,7 @@
 													</td></tr>
 												</table>
 											</td></tr>
-										</table>												
+										</table>
 									</logic:notEmpty>
 									<logic:empty name="aimEditActivityForm" property="selectedComponents">
 										<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">

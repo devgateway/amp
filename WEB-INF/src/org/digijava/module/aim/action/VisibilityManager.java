@@ -258,7 +258,6 @@ public class VisibilityManager extends MultiAction {
 					{
 						modules.add(treeNode.getRoot());
 					}
-			System.out.println("	root*****"+treeNode.getRoot().getName()+"::id->"+treeNode.getRoot().getId());
 			displayRecTreeForDebug(treeNode,modules,features,fields,request);
 		}
 		

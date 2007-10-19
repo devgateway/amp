@@ -132,7 +132,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														Step 2
 													</digi:trn>
 												</digi:link>&nbsp;&gt;&nbsp;
-												
+
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAddActivityStep3">
 														Click here to goto Add Activity Step 3</digi:trn>
@@ -320,7 +320,11 @@ ${fn:replace(message,quote,escapedQuote)}
 																								type="org.digijava.module.aim.helper.FundingDetail">
 																								<!-- L2 START-->
 																								<tr bgcolor="#ffffff">
-																									<field:display name="Actual/Planned Commitments" feature="Regional Funding"><td><c:out value="${commitment.adjustmentTypeName}"/></td></field:display>
+																									<field:display name="Actual/Planned Commitments" feature="Regional Funding">
+
+
+                                                                                                                                                                                                          <td><digi:trn key="aim:${commitment.adjustmentTypeName}"><c:out value="${commitment.adjustmentTypeName}"/></digi:trn></td>
+                                                                                                                                                                                                        </field:display>
 																									<field:display name="Total Amount Commitments" feature="Regional Funding"><td align="right">
 																									<FONT color=blue>*</FONT>
 																									<c:out value="${commitment.transactionAmount}"/></td></field:display>
@@ -331,7 +335,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																											<td>
 																												<digi:trn key='<%="aim:"+commitment.getPerspectiveNameTrimmed() %>'>
 																													<bean:write name="commitment" property="perspectiveName"/>
-																												</digi:trn>																									
+																												</digi:trn>
 																											</td>
 																										</field:display>
 																									</logic:equal>

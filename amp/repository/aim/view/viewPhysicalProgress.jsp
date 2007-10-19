@@ -214,7 +214,7 @@ method="post">
 													<TABLE width="100%" cellPadding="2" cellSpacing="1" vAlign="top" align="left"
 													bgcolor="#ffffff">
 														<TR bgcolor="#dfdfdf"><TD>
-															<font color="#0000ff"><digi:trn key="aim:ppIssue">Issue:</digi:trn> </font><bean:write name="issue" property="name"/>
+															<font color="#0000ff"><digi:trn key="aim:issue">Issue:</digi:trn> </font><bean:write name="issue" property="name"/>
 														</TD></TR>
 														<logic:empty name="issue" property="measures">
 															<TR><TD align="center">
@@ -230,7 +230,7 @@ method="post">
 																	<TABLE width="95%" cellPadding="2" cellSpacing="1" vAlign="top"
 																	align="center" bgcolor="#dddddd">
 																		<TR bgcolor="#f6f6f6"><TD>
-																			<font color="#0000ff">Measure: </font>
+																			<font color="#0000ff"><digi:trn key="aim:measure">Measure</digi:trn>: </font>
 																			<bean:write name="measure" property="name"/>
 																		</TD></TR>
 																		<logic:empty name="measure" property="actors">
@@ -247,7 +247,7 @@ method="post">
 																					<logic:iterate name="measure" property="actors" id="actor"
 																					type="org.digijava.module.aim.dbentity.AmpActor">
 																						<TR bgcolor="#ffffff"><TD>
-														</TD></TR>									<font color="#0000ff">Actor: </font>
+														</TD></TR>									<font color="#0000ff"><digi:trn key="aim:actor">Actor</digi:trn>: </font>
 																							<bean:write name="actor" property="name"/>
 																						</TD></TR>
 																					</logic:iterate>

@@ -374,7 +374,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																								type="org.digijava.module.aim.helper.FundingDetail">
 																								<!-- L3 START-->
 																								<tr bgcolor="#ffffff">
-																									<field:display name="Actual/Planned Disbursements" feature="Regional Funding"><td><c:out value="${disbursement.adjustmentTypeName}"/>
+																									<field:display name="Actual/Planned Disbursements" feature="Regional Funding"><td><digi:trn key="aim:${disbursement.adjustmentTypeName}"><c:out value="${disbursement.adjustmentTypeName}"/></digi:trn>
 																									</td></field:display>
 																									<field:display name="Total Amount Disbursements" feature="Regional Funding"><td align="right">
 																									<FONT color=blue>*</FONT>
@@ -424,7 +424,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																								type="org.digijava.module.aim.helper.FundingDetail">
 																								<!-- L4 START-->
 																								<tr bgcolor="#ffffff">
-																									<field:display name="Actual/Planned Expenditures" feature="Regional Funding"><td><c:out value="${expenditure.adjustmentTypeName}"/>
+																									<field:display name="Actual/Planned Expenditures" feature="Regional Funding"><td><digi:trn key="aim:${expenditure.adjustmentTypeName}"><c:out value="${expenditure.adjustmentTypeName}"/></digi:trn>
 																									</td></field:display>
 																									<field:display name="Total Amount Expenditures" feature="Regional Funding"><td align="right">
 																									<FONT color=blue>*</FONT>

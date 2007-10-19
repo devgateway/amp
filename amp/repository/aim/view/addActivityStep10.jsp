@@ -78,8 +78,8 @@
 			return false;
 		}
 */
-		if (isEmpty(document.aimEditActivityForm.currValDate.value) == true) {
-			alert("Current value date not entered");
+		if (isEmpty(document.aimEditActivityForm.currValDate.value) == true ^ isEmpty(document.aimEditActivityForm.currentVal.value) == true) {
+			alert("Please fill Current Value and Current Value Date");
 			document.aimEditActivityForm.currValDate.focus();
 			return false;
 		}

@@ -548,13 +548,7 @@ public class AddAmpActivity extends Action {
               CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.
               IMPLEMENTATION_LOCATION_KEY, new Long(0)).getId()
               );
-
-        
-        if (eaForm.getReferenceDocs()==null){
-        	
-        }
-        
-
+      
       	//get all possible refdoc names from categories
       	Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
       	
@@ -762,7 +756,6 @@ public class AddAmpActivity extends Action {
            }
                }*/
 
-
           long maxId = ActivityUtil.getActivityMaxId();
           maxId++;
           ampId += "/" + maxId;
@@ -782,6 +775,7 @@ public class AddAmpActivity extends Action {
               eaForm.setActAthLastName(usr.getLastName());
               eaForm.setActAthEmail(usr.getEmail());
               eaForm.setActAthAgencySource(usr.getOrganizationName());
+              
             }
           }
 
@@ -794,10 +788,10 @@ public class AddAmpActivity extends Action {
           	Long ampActivityId=Long.parseLong(request.getParameter("ampActivityId"));
           	
           }
-
           
-          
-          if (activity.getActivityCreator() != null) {
+	
+ 
+    	if (activity.getActivityCreator() != null) {
             eaForm.setActAthFirstName(activity.getActivityCreator().getUser().
                                       getFirstNames());
             eaForm.setActAthLastName(activity.getActivityCreator().getUser().
@@ -809,6 +803,61 @@ public class AddAmpActivity extends Action {
           }
           eaForm.setIsPreview(0);
         }
+        
+        
+        
+Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
+      	
+    	if (catValues!=null && eaForm.getReferenceDocs()==null){
+        	List<ReferenceDoc> refDocs=new ArrayList<ReferenceDoc>();
+    		Collection<AmpActivityReferenceDoc> activityRefDocs=null;
+    		Map<Long, AmpActivityReferenceDoc> categoryRefDocMap=null;
+
+    		if (eaForm.getActivityId()!=null){
+        		//get list of ref docs for activity
+    			activityRefDocs=ActivityUtil.getReferenceDocumentsFor(eaForm.getActivityId());
+            	//create map where keys are category value ids.
+    			categoryRefDocMap = AmpCollectionUtils.createMap(
+    					activityRefDocs, 
+    					new ActivityUtil.CategoryIdRefDocMapBuilder());
+    		}
+        	
+        	//create arrays, number of elements as much as category values
+        	Long[] refdocIds=new Long[catValues.size()];
+        	String[] refdocComments=new String[catValues.size()];
+        	
+        	int c=0;
+        	int selectedIds=0;
+        	for(AmpCategoryValue catVal: catValues){
+        		AmpActivityReferenceDoc refDoc=(categoryRefDocMap==null)?null:categoryRefDocMap.get(catVal.getId());
+        		ReferenceDoc doc=new ReferenceDoc();
+        		doc.setCategoryValueId(catVal.getId());
+        		doc.setCategoryValue(catVal.getValue());
+        		if (refDoc==null){
+        			refdocComments[c]="";
+        			doc.setComment("");
+        			doc.setChecked(false);
+        		}else{
+        			refdocIds[selectedIds++]=refDoc.getCategoryValue().getId();
+        			refdocComments[c]=refDoc.getComment();
+        			doc.setComment(refDoc.getComment());
+        			doc.setRefDocId(refDoc.getId());
+        			doc.setChecked(true);
+        		}
+        		refDocs.add(doc);
+        		c++;
+        	}
+        	
+        	//set selected ids
+        	eaForm.setAllReferenceDocNameIds(refdocIds);
+        	//set all comments, some are empty
+//        	eaForm.setRefDocComments(refdocComments);
+        	
+        	eaForm.setReferenceDocs(refDocs);
+    		
+    	}
+        
+        
 
         Collection euActs = EUActivityUtil.getEUActivities(eaForm.getActivityId());
         // EUActivities = same as Costs

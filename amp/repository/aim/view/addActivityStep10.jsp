@@ -35,7 +35,7 @@
 
 	function validateEntryByLeader() {
 
-		if (containsValidNumericValue(document.aimEditActivityForm.baseVal) == false) {
+		if (containsValidNumericValueZeroIncluded(document.aimEditActivityForm.baseVal) == false) {
 			alert("Invalid Base value or Base value not entered");
 			document.aimEditActivityForm.baseVal.focus();
 			return false;
@@ -45,7 +45,7 @@
 			document.aimEditActivityForm.baseValDate.focus();
 			return false;
 		}
-		if (containsValidNumericValue(document.aimEditActivityForm.targetVal) == false) {
+		if (containsValidNumericValueZeroIncluded(document.aimEditActivityForm.targetVal) == false) {
 			alert("Invalid Target value or Target value not entered");
 			document.aimEditActivityForm.targetVal.focus();
 			return false;

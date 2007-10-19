@@ -12,7 +12,6 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <module:display name="Project ID and Planning"></module:display>
-<module:display name="testing module"></module:display>
 <module:display name="National Planning Dashboard"></module:display>
 <module:display name="Reports"></module:display>
 <module:display name="Funding"></module:display>

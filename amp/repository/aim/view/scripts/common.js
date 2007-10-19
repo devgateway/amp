@@ -206,6 +206,14 @@ function containsValidNumericValue(objName) {
 	}
 }
 
+function containsValidNumericValueZeroIncluded(objName) {
+	if (chkNumeric(objName) == true) {
+			return true;
+	} else {
+		return false;
+	}
+}
+
 function chkNumeric(objName)
 {
 	var checkOK = "0123456789.";

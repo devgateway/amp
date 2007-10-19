@@ -6,9 +6,12 @@
 package org.dgfoundation.amp.visibility;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.Permissible;
 
 /**
@@ -90,6 +93,13 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	public Object getIdentifier() {
 	    return id; 
 	}
-
+	
+	public TreeSet getSortedAlphaItems()
+	{
+		 TreeSet mySet=new TreeSet(FeaturesUtil.ALPHA_ORDER);
+		 mySet.addAll(this.getItems());
+		 return mySet;
+	}
+	
 	
 }

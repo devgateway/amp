@@ -7,11 +7,14 @@ package org.dgfoundation.amp.visibility;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.TreeMap;
 
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * @author dan
@@ -30,6 +33,12 @@ public class AmpTreeVisibility {
 	
 	
 	public HashMap getItems() {
+	/*	TreeMap mySet=new TreeMap(FeaturesUtil.ALPHA_AMP_TREE_ORDER);
+		mySet.putAll(this.getItems());
+		LinkedHashMap sortedItems=new LinkedHashMap();
+		sortedItems.putAll(mySet);
+		return sortedItems;
+		*/
 		return items;
 	}
 
@@ -55,7 +64,7 @@ public class AmpTreeVisibility {
 	public boolean buildAmpTreeVisibilityMultiLevel(AmpObjectVisibility ampObjVis)
 	{
 		this.root=ampObjVis;
-		this.setItems(new HashMap());
+		this.setItems(new LinkedHashMap());
 		boolean existSubmodules=false;
 		for(Iterator it=ampObjVis.getAllItems().iterator();it.hasNext();)
 		{
@@ -66,6 +75,7 @@ public class AmpTreeVisibility {
 			if(module.getParent()==null)
 				{
 					moduleNode.setRoot(module);
+					moduleNode.setItems(new LinkedHashMap());
 					getModuleTree(moduleNode);
 					notEmpty=true;
 				}
@@ -83,12 +93,13 @@ public class AmpTreeVisibility {
 		AmpModulesVisibility module=(AmpModulesVisibility) moduleNode.getRoot();
 		if(module.getSubmodules().isEmpty()) 
 		{
-			for(Iterator jt=module.getItems().iterator();jt.hasNext();)
+			for(Iterator jt=module.getSortedAlphaItems().iterator();jt.hasNext();) //getItems
 			{
 				AmpFeaturesVisibility feature= (AmpFeaturesVisibility)jt.next();
 				AmpTreeVisibility  featureNode=new AmpTreeVisibility();
 				featureNode.setRoot(feature);
-				for(Iterator kt=feature.getItems().iterator();kt.hasNext();)
+				featureNode.setItems(new LinkedHashMap());
+				for(Iterator kt=feature.getSortedAlphaItems().iterator();kt.hasNext();)//getItems
 				{
 					AmpFieldsVisibility field= (AmpFieldsVisibility)kt.next();
 					AmpTreeVisibility  fieldNode=new AmpTreeVisibility();

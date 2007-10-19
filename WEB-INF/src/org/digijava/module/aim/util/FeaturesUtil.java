@@ -3,6 +3,7 @@ package org.digijava.module.aim.util;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -18,6 +19,7 @@ import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumnsOrder;
@@ -1327,8 +1329,9 @@ public class FeaturesUtil {
 
     List list = session.createQuery("from " +
                                     AmpModulesVisibility.class.getName()).list();
-    ft.setAllItems(new TreeSet(list));
-
+    TreeSet mySet=new TreeSet(FeaturesUtil.ALPHA_ORDER);
+    mySet.addAll(list);
+    ft.setAllItems(mySet);
     return ft;
   }
 
@@ -2247,9 +2250,11 @@ public class FeaturesUtil {
       ft = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
                                                  id);
       List list = session.createQuery("from " +
-                                      AmpModulesVisibility.class.getName()).
-          list();
-      ft.setAllItems(new TreeSet(list));
+                                      AmpModulesVisibility.class.getName() ). list();
+      
+      TreeSet mySet=new TreeSet(FeaturesUtil.ALPHA_ORDER);
+      mySet.addAll(list);
+      ft.setAllItems(mySet);
     }
     catch (Exception ex) {
       logger.error("Exception : " + ex.getMessage());
@@ -2361,5 +2366,28 @@ public class FeaturesUtil {
     }
     return defaultCountryIso;
   }
+
+  
+	public static final Comparator ALPHA_ORDER = new Comparator()
+    {
+        public int compare(Object a, Object b)
+        {
+            AmpObjectVisibility pairA = (AmpObjectVisibility)a;
+            AmpObjectVisibility pairB = (AmpObjectVisibility)b;
+ 
+            return pairA.getName().compareTo(pairB.getName());
+        }
+    };
+
+	public static final Comparator ALPHA_AMP_TREE_ORDER = new Comparator()
+    {
+        public int compare(Object a, Object b)
+        {
+            AmpTreeVisibility pairA = (AmpTreeVisibility)a;
+            AmpTreeVisibility pairB = (AmpTreeVisibility)b;
+ 
+            return pairA.getRoot().getName().compareTo(pairB.getRoot().getName());
+        }
+    };
 
 }

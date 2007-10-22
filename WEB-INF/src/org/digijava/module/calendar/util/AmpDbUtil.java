@@ -249,9 +249,10 @@ public class AmpDbUtil {
                                           boolean showPublicEvents,
                                           String instanceId, String siteId) throws
       CalendarException {
-    try {
+	  	String queryString = null;
+	  try {
       Session session = PersistenceManager.getRequestDBSession();
-      String queryString = "select ac from " +
+      queryString = "select ac from " +
           AmpCalendar.class.getName() + " ac join  ac.eventType et join ac.donors don, "+ Calendar.class.getName()   +" c ";
       /*String queryString = "select ac from " +
           AmpCalendar.class.getName() + " ac, " +
@@ -346,7 +347,7 @@ public class AmpDbUtil {
       return events;
     }
     catch (Exception ex) {
-      logger.debug("Unable to get amp calendar events", ex);
+      logger.debug("Unable to get amp calendar events SQL " + queryString, ex);
       throw new CalendarException("Unable to get amp calendar events", ex);
     }
   }

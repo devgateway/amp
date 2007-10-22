@@ -25,7 +25,9 @@
 	myCalendarModel.setLanguageCode('<bean:write name="lang" />'); 
 	var calendarObjForForm = new DHTMLSuite.calendar({callbackFunctionOnDayClick:'getDateFromCalendar',isDragable:false,displayTimeBar:false}); 
 	calendarObjForForm.setCalendarModelReference(myCalendarModel);
-		
+	
+	var dateFormat = '<%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT) %>';
+	
 	function getDateFromCalendar(inputArray)
 	{
 		var references = calendarObjForForm.getHtmlElementReferences(); // Get back reference to form field.
@@ -38,7 +40,7 @@
 		var butt = document.getElementById(buttonObj);
 		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
 		calendarObjForForm.setCalendarPositionByHTMLElement(butt,0,intY+butt.offsetHeight-80);	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,'dd/mm/yyyy');	// Specify that the calendar should set it's initial date from the value of the input field.
+		calendarObjForForm.setInitialDateFromInput(inputObject,dateFormat);	// Specify that the calendar should set it's initial date from the value of the input field.
 		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
 		
 		if(calendarObjForForm.isVisible()){
@@ -55,7 +57,7 @@
 		var clr = document.getElementById(clearObj);
 		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
 		calendarObjForForm.setCalendarPositionByHTMLElement(butt,0,intY+butt.offsetHeight-80);	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,'dd/mm/yyyy');	// Specify that the calendar should set it's initial date from the value of the input field.
+		calendarObjForForm.setInitialDateFromInput(inputObject,dateFormat);	// Specify that the calendar should set it's initial date from the value of the input field.
 		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
 		
 		if(calendarObjForForm.isVisible()){
@@ -92,7 +94,7 @@
 		var inputObject = inputObjects[0];
 		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
 		calendarObjForForm.setCalendarPositionByHTMLElement(butt,-160,intY+butt.offsetHeight-80);	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,'dd/mm/yyyy');	// Specify that the calendar should set it's initial date from the value of the input field.
+		calendarObjForForm.setInitialDateFromInput(inputObject,dateFormat);	// Specify that the calendar should set it's initial date from the value of the input field.
 		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
 		
 		if(calendarObjForForm.isVisible()){
@@ -109,7 +111,7 @@
 		var inputObject = document.getElementById(objectId);
 		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
 		calendarObjForForm.setCalendarPositionByHTMLElement(butt,-160,intY+butt.offsetHeight-80);	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,'dd/mm/yyyy');	// Specify that the calendar should set it's initial date from the value of the input field.
+		calendarObjForForm.setInitialDateFromInput(inputObject,dateFormat);	// Specify that the calendar should set it's initial date from the value of the input field.
 		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
 		
 		if(calendarObjForForm.isVisible()){
@@ -125,7 +127,7 @@
 		var butt = document.getElementById(buttonObj);
 		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
 		calendarObjForForm.setCalendarPositionByHTMLElement(butt,-160,intY+butt.offsetHeight-40);	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,'dd/mm/yyyy');	// Specify that the calendar should set it's initial date from the value of the input field.
+		calendarObjForForm.setInitialDateFromInput(inputObject,dateFormat);	// Specify that the calendar should set it's initial date from the value of the input field.
 		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
 		
 		if(calendarObjForForm.isVisible()){
@@ -133,7 +135,8 @@
 		}else{
 			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
 			calendarObjForForm.display();
-		}		
+		}		var dateFormat = "mm/dd/yyyy";
+	
 	}
 	function pickDateByIdDxDy(buttonObj,objectId,dx,dy)
 	{
@@ -141,7 +144,7 @@
 		var inputObject = document.getElementById(objectId);
 		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
 		calendarObjForForm.setCalendarPositionByHTMLElement(butt,-dx,intY+butt.offsetHeight-dy);	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,'dd/mm/yyyy');	// Specify that the calendar should set it's initial date from the value of the input field.
+		calendarObjForForm.setInitialDateFromInput(inputObject,dateFormat);	// Specify that the calendar should set it's initial date from the value of the input field.
 		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
 		
 		if(calendarObjForForm.isVisible()){

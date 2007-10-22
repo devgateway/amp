@@ -347,8 +347,8 @@ public class AmpDbUtil {
       return events;
     }
     catch (Exception ex) {
-      logger.debug("Unable to get amp calendar events SQL " + queryString, ex);
-      throw new CalendarException("Unable to get amp calendar events", ex);
+      logger.debug("Unable to get amp calendar events SQL:" + queryString, ex);
+      throw new CalendarException("Unable to get amp calendar events SQL:" + queryString, ex);
     }
   }
 }

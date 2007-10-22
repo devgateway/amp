@@ -306,7 +306,7 @@ public class AmpDbUtil {
       if (siteId != null) {
         queryString += " and c.siteId = :siteId";
       }
-      queryString +=" group by c.id";
+      //queryString +=" group by c.id";
       Query query = session.createQuery(queryString);
       query.setCalendar("startDate", startDate);
       query.setCalendar("endDate", endDate);

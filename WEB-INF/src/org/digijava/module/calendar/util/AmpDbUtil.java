@@ -268,10 +268,13 @@ public class AmpDbUtil {
       }
       */
 
-      queryString += " where c.id=ac.calendarPK.calendar.id and " +
-          "(:startDate <= c.startDate and c.startDate <= :endDate or " +
-          ":startDate <= c.endDate and c.endDate <= :endDate or " +
-          "c.startDate <= :startDate and :endDate <= c.endDate)";
+      queryString += " where c.id=ac.calendarPK.calendar.id ";
+
+//      queryString += " where c.id=ac.calendarPK.calendar.id and " +
+//          "(:startDate <= c.startDate and c.startDate <= :endDate or " +
+//          ":startDate <= c.endDate and c.endDate <= :endDate or " +
+//          "c.startDate <= :startDate and :endDate <= c.endDate)";
+
       if (!showPublicEvents) {
         queryString += " and ac.privateEvent=true";
       }
@@ -282,15 +285,15 @@ public class AmpDbUtil {
            ":startDate <= c.endDate and c.endDate <= :endDate or " +
            "c.startDate <= :startDate and :endDate <= c.endDate)";
        */
-      if (selectedEventTypeIds != null) {
-        queryString += " and et.id in (:selectedEventTypes)";
-      }
-      else {
-        queryString += " and 0 = 1";
-      }
-      if (selectedDonorIds != null) {
-        queryString += " and don.id in (:selectedDonorIds)";
-      }
+//      if (selectedEventTypeIds != null) {
+//        queryString += " and et.id in (:selectedEventTypes)";
+//      }
+//      else {
+//        queryString += " and 0 = 1";
+//      }
+//      if (selectedDonorIds != null) {
+//        queryString += " and don.id in (:selectedDonorIds)";
+//      }
 
       /* if(userId != null && !showPublicEvents) {
            queryString += " and ac.user.id = t1.user.id" +
@@ -300,35 +303,35 @@ public class AmpDbUtil {
            queryString += " and ac.privateEvent = false";
        }
        */
-      if (instanceId != null) {
-        queryString += " and c.instanceId = :instanceId";
-      }
-      if (siteId != null) {
-        queryString += " and c.siteId = :siteId";
-      }
-      //queryString +=" group by c.id";
+//      if (instanceId != null) {
+//        queryString += " and c.instanceId = :instanceId";
+//      }
+//      if (siteId != null) {
+//        queryString += " and c.siteId = :siteId";
+//      }
+      queryString +=" group by c.id";
       Query query = session.createQuery(queryString);
-      query.setCalendar("startDate", startDate);
-      query.setCalendar("endDate", endDate);
-      if (selectedEventTypeIds != null) {
-        query.setParameterList("selectedEventTypes",
-                               selectedEventTypeIds);
-      }
-      if (selectedEventTypeIds != null) {
-        query.setParameterList("selectedDonorIds",
-                               selectedDonorIds);
-      }
+//      query.setCalendar("startDate", startDate);
+//      query.setCalendar("endDate", endDate);
+//      if (selectedEventTypeIds != null) {
+//        query.setParameterList("selectedEventTypes",
+//                               selectedEventTypeIds);
+//      }
+//      if (selectedEventTypeIds != null) {
+//        query.setParameterList("selectedDonorIds",
+//                               selectedDonorIds);
+//      }
 
       /*   if(userId != null && !showPublicEvents) {
              query.setLong("userId", userId.longValue());
          }
        */
-      if (instanceId != null) {
-        query.setString("instanceId", instanceId);
-      }
-      if (siteId != null) {
-        query.setString("siteId", siteId);
-      }
+//      if (instanceId != null) {
+//        query.setString("instanceId", instanceId);
+//      }
+//      if (siteId != null) {
+//        query.setString("siteId", siteId);
+//      }
       List events = query.list();
       /*if(events != null && !events.isEmpty() && selectedDonorIds != null &&
          selectedDonorIds.length != 0) {

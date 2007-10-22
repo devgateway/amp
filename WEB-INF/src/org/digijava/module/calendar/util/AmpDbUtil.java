@@ -249,10 +249,9 @@ public class AmpDbUtil {
                                           boolean showPublicEvents,
                                           String instanceId, String siteId) throws
       CalendarException {
-	  	String queryString = null;
-	  try {
+    try {
       Session session = PersistenceManager.getRequestDBSession();
-      queryString = "select ac from " +
+      String queryString = "select ac from " +
           AmpCalendar.class.getName() + " ac join  ac.eventType et join ac.donors don, "+ Calendar.class.getName()   +" c ";
       /*String queryString = "select ac from " +
           AmpCalendar.class.getName() + " ac, " +
@@ -268,13 +267,10 @@ public class AmpDbUtil {
       }
       */
 
-      queryString += " where c.id=ac.calendarPK.calendar.id ";
-
-//      queryString += " where c.id=ac.calendarPK.calendar.id and " +
-//          "(:startDate <= c.startDate and c.startDate <= :endDate or " +
-//          ":startDate <= c.endDate and c.endDate <= :endDate or " +
-//          "c.startDate <= :startDate and :endDate <= c.endDate)";
-
+      queryString += " where c.id=ac.calendarPK.calendar.id and " +
+          "(:startDate <= c.startDate and c.startDate <= :endDate or " +
+          ":startDate <= c.endDate and c.endDate <= :endDate or " +
+          "c.startDate <= :startDate and :endDate <= c.endDate)";
       if (!showPublicEvents) {
         queryString += " and ac.privateEvent=true";
       }
@@ -285,15 +281,15 @@ public class AmpDbUtil {
            ":startDate <= c.endDate and c.endDate <= :endDate or " +
            "c.startDate <= :startDate and :endDate <= c.endDate)";
        */
-//      if (selectedEventTypeIds != null) {
-//        queryString += " and et.id in (:selectedEventTypes)";
-//      }
-//      else {
-//        queryString += " and 0 = 1";
-//      }
-//      if (selectedDonorIds != null) {
-//        queryString += " and don.id in (:selectedDonorIds)";
-//      }
+      if (selectedEventTypeIds != null) {
+        queryString += " and et.id in (:selectedEventTypes)";
+      }
+      else {
+        queryString += " and 0 = 1";
+      }
+      if (selectedDonorIds != null) {
+        queryString += " and don.id in (:selectedDonorIds)";
+      }
 
       /* if(userId != null && !showPublicEvents) {
            queryString += " and ac.user.id = t1.user.id" +
@@ -303,35 +299,35 @@ public class AmpDbUtil {
            queryString += " and ac.privateEvent = false";
        }
        */
-//      if (instanceId != null) {
-//        queryString += " and c.instanceId = :instanceId";
-//      }
-//      if (siteId != null) {
-//        queryString += " and c.siteId = :siteId";
-//      }
+      if (instanceId != null) {
+        queryString += " and c.instanceId = :instanceId";
+      }
+      if (siteId != null) {
+        queryString += " and c.siteId = :siteId";
+      }
       queryString +=" group by c.id";
       Query query = session.createQuery(queryString);
-//      query.setCalendar("startDate", startDate);
-//      query.setCalendar("endDate", endDate);
-//      if (selectedEventTypeIds != null) {
-//        query.setParameterList("selectedEventTypes",
-//                               selectedEventTypeIds);
-//      }
-//      if (selectedEventTypeIds != null) {
-//        query.setParameterList("selectedDonorIds",
-//                               selectedDonorIds);
-//      }
+      query.setCalendar("startDate", startDate);
+      query.setCalendar("endDate", endDate);
+      if (selectedEventTypeIds != null) {
+        query.setParameterList("selectedEventTypes",
+                               selectedEventTypeIds);
+      }
+      if (selectedDonorIds != null) {
+        query.setParameterList("selectedDonorIds",
+                               selectedDonorIds);
+      }
 
       /*   if(userId != null && !showPublicEvents) {
              query.setLong("userId", userId.longValue());
          }
        */
-//      if (instanceId != null) {
-//        query.setString("instanceId", instanceId);
-//      }
-//      if (siteId != null) {
-//        query.setString("siteId", siteId);
-//      }
+      if (instanceId != null) {
+        query.setString("instanceId", instanceId);
+      }
+      if (siteId != null) {
+        query.setString("siteId", siteId);
+      }
       List events = query.list();
       /*if(events != null && !events.isEmpty() && selectedDonorIds != null &&
          selectedDonorIds.length != 0) {
@@ -350,8 +346,8 @@ public class AmpDbUtil {
       return events;
     }
     catch (Exception ex) {
-      logger.debug("Unable to get amp calendar events SQL:" + queryString, ex);
-      throw new CalendarException("Unable to get amp calendar events SQL:" + queryString, ex);
+      logger.debug("Unable to get amp calendar events", ex);
+      throw new CalendarException("Unable to get amp calendar events", ex);
     }
   }
 }

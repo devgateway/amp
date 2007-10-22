@@ -287,9 +287,9 @@ public class AmpDbUtil {
       else {
         queryString += " and 0 = 1";
       }
-//      if (selectedDonorIds != null) {
-//        queryString += " and don.id in (:selectedDonorIds)";
-//      }
+      if (selectedDonorIds != null && selectedDonorIds.length != 0) {
+        queryString += " and don.id in (:selectedDonorIds)";
+      }
 
       /* if(userId != null && !showPublicEvents) {
            queryString += " and ac.user.id = t1.user.id" +
@@ -313,10 +313,10 @@ public class AmpDbUtil {
         query.setParameterList("selectedEventTypes",
                                selectedEventTypeIds);
       }
-//      if (selectedDonorIds != null) {
-//        query.setParameterList("selectedDonorIds",
-//                               selectedDonorIds);
-//      }
+      if (selectedDonorIds != null && selectedDonorIds.length != 0 ) {
+        query.setParameterList("selectedDonorIds",
+                               selectedDonorIds);
+      }
 
       /*   if(userId != null && !showPublicEvents) {
              query.setLong("userId", userId.longValue());

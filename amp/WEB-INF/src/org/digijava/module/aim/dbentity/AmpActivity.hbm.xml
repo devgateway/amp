@@ -20,13 +20,13 @@
 		<property name="language" column="language" type="java.lang.String"/>
 	    <property name="budget" column="budget" type="java.lang.Boolean"/>
 		<property name="version" column="version" type="java.lang.String"/>
-		
+
 		<property name="equalOpportunity" column="equalOpportunity" type="java.lang.String"/>
 		<property name="environment" column="environment" type="java.lang.String"/>
 		<property name="minorities" column="minorities" type="java.lang.String"/>
-		
-		
-		
+
+
+
 		<property name="calType" column="cal_type" type="java.lang.String"/>
 		<property name="activityApprovalDate" column="activity_approval_date" type="java.util.Date" />		<!-- defunct -->
 		<property name="activityStartDate" column="activity_start_date" type="java.util.Date" /> 			<!-- defunct -->
@@ -81,7 +81,7 @@
 		<property name="funDate" column="proj_cost_date" type="java.lang.String" />
 		<property name="currencyCode" column="proj_cost_currcode" type="java.lang.String" />
 
-<!-- 
+<!--
 tanzania adds
  -->
  <property name="FY" column="FY" type="java.lang.String"/>
@@ -92,7 +92,7 @@ tanzania adds
   <property name="gbsSbs" column="gbsSbs" type="java.lang.Long"/>
     <property name="governmentApprovalProcedures" column="governmentApprovalProcedures" type="java.lang.Boolean"/>
     <property name="jointCriteria" column="jointCriteria" type="java.lang.Boolean"/>
-  
+
 		<many-to-one name="themeId" column="amp_theme_id" class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none"/>
 		<!-- <many-to-one name="modality" column="amp_modality_id" class="org.digijava.module.aim.dbentity.AmpModality" cascade="none"/>  -->
 		<many-to-one name="modality" column="amp_categ_val_modality_id" class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none"/>
@@ -144,7 +144,7 @@ tanzania adds
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpTheme" column="amp_theme_id"/>
 		</set>
 
-		<set name="locations" table="AMP_ACTIVITY_LOCATION" lazy="true" cascade="all">
+		<set name="locations" table="AMP_ACTIVITY_LOCATION" lazy="true">
 			<cache usage="read-write"/>
 			<key column="amp_activity_id"/>
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpLocation" column="amp_location_id"/>
@@ -177,6 +177,7 @@ tanzania adds
 			<key column="amp_activity_id"/>
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpComponent" column="amp_component_id"/>
  		</set>
+
 
  		<set name="documents" table="AMP_ACTIVITY_KM_DOCUMENTS" lazy="true" cascade="none">
   	            <cache usage="read-write"/>

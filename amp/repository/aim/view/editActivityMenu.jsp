@@ -55,12 +55,14 @@ function saveClicked() {
 		else if (confirm(msg))
 				document.aimEditActivityForm.approvalStatus.value = "created";
 	}
+
 	if (appstatus == "approved") {
-		msg+='<digi:trn key="aim:saveActivity:approved">Do you want to approve this activity ?</digi:trn>';
 		if (wTLFlag != "yes")
-			document.aimEditActivityForm.approvalStatus.value = "edited";
+                  document.aimEditActivityForm.approvalStatus.value = "edited";
+
 	}
-	else if (wTLFlag == "yes") {
+        else if (wTLFlag == "yes") {
+             msg+='<digi:trn key="aim:saveActivity:approved">Do you want to approve this activity ?</digi:trn>';
 		if (appstatus == "created" || appstatus == "edited") {
 			if (confirm(msg))
 				document.aimEditActivityForm.approvalStatus.value = "approved";
@@ -94,7 +96,7 @@ function gotoStep(value) {
 <tr><td width="209" height="10" background="module/aim/images/top.gif">
 </td></tr>
 <tr><td>
-<table width="209" cellSpacing=4 cellPadding=2 vAlign="top" align="left" 
+<table width="209" cellSpacing=4 cellPadding=2 vAlign="top" align="left"
 bgcolor="#006699">
 <module:display name="Project ID and Planning">
 </module:display>
@@ -566,7 +568,7 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	</module:display>
-	
+
 	<module:display name="Trend Analysis and Forecasting">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 10}">
@@ -603,7 +605,7 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	</module:display>
-	
+
 	<!-- EU Costs -->
 	<module:display name="Activity Costing">
 	<feature:display name="Costing" module="Activity Costing">
@@ -628,7 +630,7 @@ bgcolor="#006699">
 					<td bgcolor="#3399ff" height="19">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<span class="textalb">
-				<digi:trn key="aim:costing">Costing</digi:trn>			
+				<digi:trn key="aim:costing">Costing</digi:trn>
 			</span>
 					</td>
 					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
@@ -640,8 +642,8 @@ bgcolor="#006699">
 	</tr>
 	</feature:display>
 	</module:display>
-	
-	
+
+
 	<tr>
 		<td align="center">
 		</td>

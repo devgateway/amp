@@ -8002,7 +8002,12 @@ return true;
 ,
 setInitialDateFromInput : function(inputReference,format)
 {
+
 if(inputReference.value.length>0){
+if(format.indexOf('MMM') != -1){
+alert("MAD");
+}
+else
 if(!format.match(/^[0-9]*?$/gi)){
 var items = inputReference.value.split(/[^0-9]/gi);
 var positionArray = new Array();

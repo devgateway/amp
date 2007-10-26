@@ -400,7 +400,7 @@ public class SaveActivity extends Action {
 					return mapping.findForward("addActivity");
 				}
 
-                if(!eaForm.getDraft().booleanValue()){
+                if(eaForm.getDraft()==null || !eaForm.getDraft().booleanValue()){
                     if (statusFlag) {
                         eaForm.setStep("1");
                         return mapping.findForward("addActivity");

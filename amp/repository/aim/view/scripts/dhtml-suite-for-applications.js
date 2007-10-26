@@ -14870,6 +14870,7 @@ DHTMLSuite.calendarModel.prototype =
 			if (format.indexOf('MMM') != -1){
 				//We must treat this case !!!!!
 				//Arty AMP-2097
+				
 				var monthPos = format.indexOf('MMM');
 				this.tempMonth = inputReference.value.substr(monthPos,3);
 				this.initialMonth = 0; //to be set	

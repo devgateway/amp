@@ -5488,7 +5488,9 @@ public class DbUtil {
                 logger.debug("No donor found from amp_ahsurvey table.");
         } catch (Exception ex) {
             logger.debug("Unable to get donors from survey : " + ex);
-            ex.printStackTrace(System.out);
+            //throw
+            System.out.println("Error");
+            ex.printStackTrace();
         }
         //logger.debug("responses.size[getAidSurveyReportByIndicator()] : " + responses.size());
         return responses;

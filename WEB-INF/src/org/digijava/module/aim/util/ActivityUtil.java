@@ -384,6 +384,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         oldActivity.setSubVote(activity.getSubVote());
         oldActivity.setVote(activity.getVote());
         oldActivity.setActivityCreator(activity.getActivityCreator());
+        oldActivity.setDraft(activity.getDraft());
 
       }
 
@@ -483,7 +484,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       Iterator<Components<AmpComponentFunding>> componentsFundingIt = componentsFunding.iterator();
       while(componentsFundingIt.hasNext()){
     	  Components<AmpComponentFunding> ampTempComp = componentsFundingIt.next();
-    	  
+
 	      //to save the Component fundings
 	      if (ampTempComp.getCommitments() != null) {
 	        Iterator compItr = ampTempComp.getCommitments().iterator();
@@ -495,7 +496,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	          }
 	        }
 	      }
-	
+
 	      if (ampTempComp.getDisbursements() != null) {
 	        Iterator compItr = ampTempComp.getDisbursements().iterator();
 	        while (compItr.hasNext()) {
@@ -506,7 +507,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	          }
 	        }
 	      }
-	
+
 	      if (ampTempComp.getExpenditures() != null) {
 	        Iterator compItr = ampTempComp.getExpenditures().iterator();
 	        while (compItr.hasNext()) {
@@ -517,8 +518,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 			  }
 	        }
 	      }
-	      
-	      
+
+
 	      if (ampTempComp.getSisinProyect() != null) {
 			AmpSISINProyect sisinProyect = ampTempComp
 					.getSisinProyect();
@@ -536,16 +537,16 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 				sisinProyectOld.setSisincode(sisinProyectOld.getSisincode());
 				sisinProyectOld.setSisinsector(sisinProyectOld.getSisinsector());
 				sisinProyectOld.setStage(sisinProyectOld.getStage());
-				
+
 				session.saveOrUpdate(sisinProyectOld);
 			}
 		  }
-	
-	      
-	
+
+
+
 	      /*
 	      Collection<AmpPhysicalPerformance> phyProgress = DbUtil.getAmpPhysicalProgress(activityId);
-	
+
 	      if (ampTempComp.getPhyProgress() != null) {
 				Iterator compItr = ampTempComp.getPhyProgress().iterator();
 				while (compItr.hasNext()) {
@@ -554,7 +555,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 					phyProgress.remove(ampPhyPerf);
 				}
 	      }
-	
+
 	      if (phyProgress != null) {
 				Iterator<AmpPhysicalPerformance> phyProgressColIt = phyProgress.iterator();
 				while (phyProgressColIt.hasNext()) {
@@ -569,7 +570,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 				session.delete(componentFundingColIt.next());
 			}
 	  }
-      
+
       /* Persists comments, of type AmpComments, related to the activity */
       if (commentsCol != null && !commentsCol.isEmpty()) {
         logger.debug("commentsCol.size() [Inside Persisting]: " +
@@ -716,17 +717,6 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 		throw new DgException("Cannot load reference documents for activity id="+activityId,e);
 	}
   }
-
-  public static void updateActivity(AmpActivity activity,Collection<AmpActivityReferenceDoc> refdocs) throws DgException{
-	  try {
-		Session session=PersistenceManager.getRequestDBSession();
-
-	} catch (DgException e) {
-		logger.error(e);
-		throw new DgException("Cannot loat reference documents for activity id=",e);
-	}
-  }
-
 
   public static void updateActivityCreator(AmpTeamMember creator,
                                            Long activityId) {
@@ -2251,8 +2241,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             session.delete(ampComp);
           }
         }
-        
-        
+
+
         /* delete Component Fundings */
         Collection<AmpComponentFunding>  componentFundingCol = getFundingComponentActivity(ampActId);
         if (componentFundingCol != null) {

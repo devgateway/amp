@@ -523,7 +523,7 @@ public class FeaturesUtil {
     try {
       session = PersistenceManager.getRequestDBSession();
       qryStr = "select c from " + Country.class.getName() +
-          " c order by c.countryName asc";
+          " c  "; //order by c.countryName asc";
       qry = session.createQuery(qryStr);
       col = qry.list();
     }catch (Exception ex) {
@@ -1288,7 +1288,7 @@ public class FeaturesUtil {
     return ft.getName();
   }
 
-  
+
   /**
    * @author dan
    */
@@ -1315,8 +1315,8 @@ public class FeaturesUtil {
     }
     return ft;
   }
-  
-  
+
+
   /**
    * @author dan
    * @param session
@@ -1585,7 +1585,7 @@ public class FeaturesUtil {
       c = q.list();
       if(c.size()!=0)
     	  id=(AmpModulesVisibility) c.iterator().next();
-     
+
     }
     catch (Exception ex) {
       ex.printStackTrace();
@@ -1623,7 +1623,7 @@ public class FeaturesUtil {
       c = q.list();
       if(c.size()!=0)
     	  id=(AmpFieldsVisibility) c.iterator().next();
-     
+
     }
     catch (Exception ex) {
       ex.printStackTrace();
@@ -1661,7 +1661,7 @@ public class FeaturesUtil {
       c = q.list();
       if(c.size()!=0)
     	  id=(AmpFeaturesVisibility) c.iterator().next();
-     
+
     }
     catch (Exception ex) {
       ex.printStackTrace();
@@ -1679,7 +1679,7 @@ public class FeaturesUtil {
     return id;
   }
 
-  
+
   /**
    * @author dan
    */
@@ -1699,7 +1699,7 @@ public class FeaturesUtil {
       c = q.list();
       if(c.size()!=0)
     	  id=(AmpModulesType) c.iterator().next();
-     
+
     }
     catch (Exception ex) {
     	ex.printStackTrace();
@@ -1717,7 +1717,7 @@ public class FeaturesUtil {
     return id;
   }
 
-  
+
   /**
    * @author dan
    */
@@ -2150,7 +2150,7 @@ public class FeaturesUtil {
     return;
   }
 
-  
+
   /**
    * @author dan
    */
@@ -2251,7 +2251,7 @@ public class FeaturesUtil {
                                                  id);
       List list = session.createQuery("from " +
                                       AmpModulesVisibility.class.getName() ). list();
-      
+
       TreeSet mySet=new TreeSet(FeaturesUtil.ALPHA_ORDER);
       mySet.addAll(list);
       ft.setAllItems(mySet);
@@ -2367,14 +2367,14 @@ public class FeaturesUtil {
     return defaultCountryIso;
   }
 
-  
+
 	public static final Comparator ALPHA_ORDER = new Comparator()
     {
         public int compare(Object a, Object b)
         {
             AmpObjectVisibility pairA = (AmpObjectVisibility)a;
             AmpObjectVisibility pairB = (AmpObjectVisibility)b;
- 
+
             return pairA.getName().compareTo(pairB.getName());
         }
     };
@@ -2385,7 +2385,7 @@ public class FeaturesUtil {
         {
             AmpTreeVisibility pairA = (AmpTreeVisibility)a;
             AmpTreeVisibility pairB = (AmpTreeVisibility)b;
- 
+
             return pairA.getRoot().getName().compareTo(pairB.getRoot().getName());
         }
     };

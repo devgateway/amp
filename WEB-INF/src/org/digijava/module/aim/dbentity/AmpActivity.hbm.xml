@@ -25,7 +25,7 @@
 		<property name="environment" column="environment" type="java.lang.String"/>
 		<property name="minorities" column="minorities" type="java.lang.String"/>
 
-
+        <property name="draft" column="draft" type="java.lang.Boolean"/>
 
 		<property name="calType" column="cal_type" type="java.lang.String"/>
 		<property name="activityApprovalDate" column="activity_approval_date" type="java.util.Date" />		<!-- defunct -->

@@ -5,14 +5,28 @@
 
 package org.digijava.module.aim.form;
 
-import java.io.*;
-import java.util.*;
-import javax.servlet.http.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.TreeSet;
+import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.*;
-import org.apache.struts.upload.*;
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.helper.*;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.upload.FormFile;
+import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpSISINProyect;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.helper.Components;
+import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.MTEFProjection;
+import org.digijava.module.aim.helper.OrgProjectId;
+import org.digijava.module.aim.helper.ReferenceDoc;
 
 public class EditActivityForm extends ActionForm implements Serializable{
 
@@ -31,6 +45,7 @@ private int isPreview=0;
 	private String condition = null;
 	private Long statusId = null;
 	private String status=null;
+    private Boolean draft;
 	private String statusReason = null;
 	private Collection financingBreakdown=null;
 	//private Collection statusCollection = null;
@@ -640,7 +655,7 @@ private int isPreview=0;
                         minorities=null;
                         accessionInstrument=new Long(0);
                         acChapter=new Long(0);
-                        
+
             /* Indicator values reset */
                         baseVal					= 0;
                         baseValComments			= "";
@@ -4318,12 +4333,17 @@ public String getPurpose() {
 		this.sisinProyect = sisinProyect;
 	}
 
-	public AmpSISINProyect getSisinProyect() {
+    public void setDraft(Boolean draft) {
+        this.draft = draft;
+    }
+
+    public AmpSISINProyect getSisinProyect() {
 		return sisinProyect;
 	}
 
-
-
+    public Boolean getDraft() {
+        return draft;
+    }
 
 }
 

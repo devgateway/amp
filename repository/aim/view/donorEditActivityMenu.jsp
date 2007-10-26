@@ -21,105 +21,77 @@
 <!--
 
 function previewClicked() {
-
 	document.aimEditActivityForm.step.value = "9";
-
 	document.aimEditActivityForm.pageId.value = "1";
-
 	<digi:context name="preview" property="context/module/moduleinstance/previewActivity.do?edit=true" />
-
 	document.aimEditActivityForm.action = "<%= preview %>";
-
-	document.aimEditActivityForm.target = "_self";	
-
+	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
-
 }
-
 
 
 function saveClicked() {
+  var draftStatus=document.getElementById("draftFlag");
+  if(draftStatus!=null){
+    draftStatus.value=false;
+  }
+  save();
+}
 
-	document.aimEditActivityForm.saveButton.disabled = true;	
+function saveAsDraftClicked() {
+  var draftStatus=document.getElementById("draftFlag");
+  if(draftStatus!=null){
+    draftStatus.value=true;
+  }
+  save();
+}
 
+function save() {
+	document.aimEditActivityForm.saveButton.disabled = true;
+    document.aimEditActivityForm.saveAsDraftButton.disabled = true;
 	<digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
-
 	document.aimEditActivityForm.action = "<%= save %>";
-
 	document.aimEditActivityForm.target = "_self";
-
 	var appstatus = document.aimEditActivityForm.approvalStatus.value;
-
 	var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
-
 	if (appstatus == "started") {
 		msg+='<digi:trn key="aim:saveActivity:started">Do you want to submit this activity for approval ?</digi:trn>';
 		if (wTLFlag == "yes") {
-
 			//if (confirm("Do you want to approve this activity ?"))
-
 				document.aimEditActivityForm.approvalStatus.value = "approved";
-
-		}
-
-		else if (confirm(msg))
+		}else if (confirm(msg))
 				document.aimEditActivityForm.approvalStatus.value = "created";
-
 	}
 
 	if (appstatus == "approved") {
-
 		if (wTLFlag != "yes")
-
 			document.aimEditActivityForm.approvalStatus.value = "edited";
-
-	}
-
-	else if (wTLFlag == "yes") {
-
+	}else if (wTLFlag == "yes") {
 		if (appstatus == "created" || appstatus == "edited") {
-		
 			msg+='<digi:trn key="aim:saveActivity:approved">Do you want to approve this activity ?</digi:trn>';
 			if (confirm(msg))
-
 				document.aimEditActivityForm.approvalStatus.value = "approved";
-
 		}
-
 	}
-
 	document.aimEditActivityForm.submit();
-
 }
 
 
-
 function gotoStep(value) {
-
 	document.aimEditActivityForm.step.value = value;
-
 	<digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
-
 	document.aimEditActivityForm.action = "<%= step %>";
-
 	document.aimEditActivityForm.target = "_self";
-
 	document.aimEditActivityForm.submit();
-
 }
 
 
 
 function fnGetSurvey() {
-
 	<digi:context name="step" property="context/module/moduleinstance/editSurveyList.do?edit=true" />
-
 	document.aimEditActivityForm.action = "<%= step %>";
-
 	document.aimEditActivityForm.target = "_self";
-
 	document.aimEditActivityForm.submit();
-
 }
 
 
@@ -135,6 +107,7 @@ function fnGetSurvey() {
 <html:hidden property="approvalStatus" />
 
 <html:hidden property="workingTeamLeadFlag" />
+<html:hidden property="draft" styleId="draftFlag" />
 
 <input type="hidden" name="edit" value="true">
 
@@ -152,7 +125,7 @@ function fnGetSurvey() {
 
 <tr><td>
 
-<table width="209" cellSpacing=4 cellPadding=2 vAlign="top" align="left" 
+<table width="209" cellSpacing=4 cellPadding=2 vAlign="top" align="left"
 
 bgcolor="#006699">
 
@@ -180,13 +153,13 @@ bgcolor="#006699">
 
 		</td>
 
-		</c:if>	
+		</c:if>
 
 		<c:if test="${aimEditActivityForm.step == '3'}">
 
 		<td>
 
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 
 				<tr>
 
@@ -216,9 +189,9 @@ bgcolor="#006699">
 
 			</table>
 
-		</td>			
+		</td>
 
-		</c:if>				
+		</c:if>
 
 	</tr>
 
@@ -226,7 +199,7 @@ bgcolor="#006699">
 
 		<c:if test="${aimEditActivityForm.step != '17'}">
 
-		<td>		
+		<td>
 
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 
@@ -250,7 +223,7 @@ bgcolor="#006699">
 
 		<td>
 
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 
 				<tr>
 
@@ -278,7 +251,7 @@ bgcolor="#006699">
 
 			</table>
 
-		</td>			
+		</td>
 
 		</c:if>
 
@@ -290,32 +263,34 @@ bgcolor="#006699">
 
 		</td>
 
-	</tr>	
+	</tr>
 
 	<tr>
 
 		<td align="center">
 
 			<html:button  styleClass="dr-menu" property="submitButton" onclick="previewClicked()">
-				<digi:trn key="btn:preview">Preview</digi:trn> 
+				<digi:trn key="btn:preview">Preview</digi:trn>
 			</html:button>
 
 		</td>
 
-	</tr>	
+	</tr>
 
 	<tr>
-
 		<td align="center">
-
 			<html:button  styleClass="dr-menu" property="saveButton"  onclick="saveClicked()">
-				<digi:trn key="btn:save">Save</digi:trn> 
+				<digi:trn key="btn:save">Save</digi:trn>
 			</html:button>
-
 		</td>
-
-	</tr>		
-
+	</tr>
+	<tr>
+		<td align="center">
+			<html:button  styleClass="dr-menu" property="saveAsDraftButton"  onclick="saveAsDraftClicked()">
+				<digi:trn key="btn:saveAsDraft">Save as draft</digi:trn>
+			</html:button>
+		</td>
+	</tr>
 </table>
 
 </td></tr>

@@ -395,81 +395,88 @@ public class SaveActivity extends Action {
 					saveErrors(request, errors);
 					statusFlag = true;
 				}
-				if (titleFlag == true || statusFlag == true) {
+				if (titleFlag) {
 					eaForm.setStep("1");
 					return mapping.findForward("addActivity");
 				}
 
-				if (eaForm.getActivitySectors() == null
-						|| eaForm.getActivitySectors().size() < 1) {
-					errors.add("sector", new ActionError(
-							"error.aim.addActivity.sectorEmpty"));
-					saveErrors(request, errors);
-					eaForm.setStep("2");
-					return mapping.findForward("addActivity");
-				}
+                if(!eaForm.getDraft().booleanValue()){
+                    if (statusFlag) {
+                        eaForm.setStep("1");
+                        return mapping.findForward("addActivity");
+                    }
 
-				boolean secPer = false;
-				int percent = 0;
-				Iterator secPerItr = eaForm.getActivitySectors().iterator();
-				while (secPerItr.hasNext()) {
-					ActivitySector actSect = (ActivitySector) secPerItr.next();
-					if (null == actSect.getSectorPercentage()
-							|| "".equals(actSect.getSectorPercentage())) {
-						errors.add("sectorPercentageEmpty",
-								new ActionError("error.aim.addActivity.sectorPercentageEmpty"));
-						logger.debug("sector percentage is empty");
-						secPer = true;
-					}
-					// sector percentage is not a number
-					else {
-						try {
-							percent += actSect.getSectorPercentage().intValue();
-						}
-						catch (NumberFormatException nex) {
-							logger.debug("sector percentage is not a number : " + nex);
-							errors.add("sectorPercentageNonNumeric",
-									new ActionError("error.aim.addActivity.sectorPercentageNonNumeric"));
-							secPer = true;
-						}
-					}
-					if (secPer) {
-						saveErrors(request, errors);
-						eaForm.setStep("2");
-						return mapping.findForward("addActivityStep2");
-					}
-				}
-				// Total sector percentage is not equal to 100%
-				if (percent != 100) {
-					errors.add("sectorPercentageSumWrong",
-							new ActionError("error.aim.addActivity.sectorPercentageSumWrong"));
-					saveErrors(request, errors);
-					logger.debug("sector percentage is not equal to 100%");
-					eaForm.setStep("2");
-					return mapping.findForward("addActivityStep2");
-				}
+                    if (eaForm.getActivitySectors() == null
+                        || eaForm.getActivitySectors().size() < 1) {
+                        errors.add("sector", new ActionError(
+                            "error.aim.addActivity.sectorEmpty"));
+                        saveErrors(request, errors);
+                        eaForm.setStep("2");
+                        return mapping.findForward("addActivity");
+                    }
 
-				if (eaForm.getFundingOrganizations() != null
-						&& eaForm.getFundingOrganizations().size() > 0) {
-					Iterator tempItr = eaForm.getFundingOrganizations()
-							.iterator();
-					while (tempItr.hasNext()) {
-						FundingOrganization forg = (FundingOrganization) tempItr
-								.next();
-						if (forg.getFundings() == null
-								|| forg.getFundings().size() == 0) {
-							errors
-									.add(
-											"fundings",
-											new ActionError(
-													"error.aim.addActivity.fundingsNotEntered"));
-							saveErrors(request, errors);
-							logger.info(" the funds added is null... please check");
-							eaForm.setStep("3");
-							return mapping.findForward("addActivity");
-						}
-					}
-				}
+                    boolean secPer = false;
+                    int percent = 0;
+                    Iterator secPerItr = eaForm.getActivitySectors().iterator();
+                    while (secPerItr.hasNext()) {
+                        ActivitySector actSect = (ActivitySector) secPerItr.next();
+                        if (null == actSect.getSectorPercentage()
+                            || "".equals(actSect.getSectorPercentage())) {
+                            errors.add("sectorPercentageEmpty",
+                                       new ActionError("error.aim.addActivity.sectorPercentageEmpty"));
+                            logger.debug("sector percentage is empty");
+                            secPer = true;
+                        }
+                        // sector percentage is not a number
+                        else {
+                            try {
+                                percent += actSect.getSectorPercentage().intValue();
+                            } catch (NumberFormatException nex) {
+                                logger.debug("sector percentage is not a number : " + nex);
+                                errors.add("sectorPercentageNonNumeric",
+                                           new ActionError("error.aim.addActivity.sectorPercentageNonNumeric"));
+                                secPer = true;
+                            }
+                        }
+                        if (secPer) {
+                            saveErrors(request, errors);
+                            eaForm.setStep("2");
+                            return mapping.findForward("addActivityStep2");
+                        }
+                    }
+
+                    // Total sector percentage is not equal to 100%
+                    if (percent != 100) {
+                        errors.add("sectorPercentageSumWrong",
+                                   new ActionError("error.aim.addActivity.sectorPercentageSumWrong"));
+                        saveErrors(request, errors);
+                        logger.debug("sector percentage is not equal to 100%");
+                        eaForm.setStep("2");
+                        return mapping.findForward("addActivityStep2");
+                    }
+
+                    if (eaForm.getFundingOrganizations() != null
+                        && eaForm.getFundingOrganizations().size() > 0) {
+                        Iterator tempItr = eaForm.getFundingOrganizations()
+                            .iterator();
+                        while (tempItr.hasNext()) {
+                            FundingOrganization forg = (FundingOrganization) tempItr
+                                .next();
+                            if (forg.getFundings() == null
+                                || forg.getFundings().size() == 0) {
+                                errors
+                                    .add(
+                                        "fundings",
+                                        new ActionError(
+                                            "error.aim.addActivity.fundingsNotEntered"));
+                                saveErrors(request, errors);
+                                logger.info(" the funds added is null... please check");
+                                eaForm.setStep("3");
+                                return mapping.findForward("addActivity");
+                            }
+                        }
+                    }
+                }
 				// end of Modified code
 
                 if(eaForm.getProProjCost()==null){
@@ -668,6 +675,8 @@ public class SaveActivity extends Action {
 				activity.setMfdCntOrganization(eaForm.getMfdCntOrganization());
 				activity.setMfdCntFaxNumber(eaForm.getMfdCntFaxNumber());
 				activity.setMfdCntPhoneNumber(eaForm.getMfdCntPhoneNumber());
+
+                activity.setDraft(eaForm.getDraft());
 
 				activity.setComments(" ");
 
@@ -1409,6 +1418,7 @@ public class SaveActivity extends Action {
 			eaForm.setAcChapter(new Long(0));
 			eaForm.setStatusId(new Long(0));
 			eaForm.setGbsSbs(new Long(0));
+            eaForm.setDraft(null);
 			/* END - Clearing categories */
 
 			int temp = eaForm.getPageId();

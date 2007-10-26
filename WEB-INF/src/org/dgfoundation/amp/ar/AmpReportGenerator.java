@@ -53,11 +53,17 @@ public class AmpReportGenerator extends ReportGenerator {
 		List ret = new ArrayList();
 		if (ArConstants.COLUMN_FUNDING.equals(columnName)) {
 			boolean annual = true;
+			boolean monthly = false;
 			if ("Q".equals(reportMetadata.getOptions()))
 				annual = false;
+			
+			if ("M".equals(reportMetadata.getOptions()))
+				monthly = true;
+			
 			ret.add(ArConstants.YEAR);
 			if (!annual)
 				ret.add(ArConstants.QUARTER);
+			if(monthly) ret.add(ArConstants.MONTH);
 
 			if(reportMetadata.getType().intValue()!=4)
 				ret.add(ArConstants.FUNDING_TYPE); else {

@@ -26,6 +26,7 @@
 	}
 
 	function check() {
+        var msg='';
 
         var sm=document.aimAddFiscalCalForm.startMonthNum.value;
         var sd=document.aimAddFiscalCalForm.startDayNum.value;
@@ -34,37 +35,45 @@
         var str = document.aimAddFiscalCalForm.fiscalCalName.value;
         str = trim(str);
 		if (str.length == 0 || str == null) {
-			alert("Please enter name for this Fiscal Calenedar");
+                   msg='<digi:trn key="aim:enterNameFiscalCalendar">Please enter name for this Fiscal Calenedar</digi:trn>'
+                   alert(msg);
+
 			document.aimAddFiscalCalForm.fiscalCalName.focus();
             return false;
         }
 
         if(sm.match("[^0-9]") || sm.length == 0){
-          alert("Invalid Start Month value");
+          msg='<digi:trn key="aim:invalidStartMonth">Invalid Start Month value</digi:trn>'
+          alert(msg);
           document.aimAddFiscalCalForm.startMonthNum.focus();
           return false;
         }else if(sm>12 || sm<1){
-          alert("Invalid Start Month value");
+           msg='<digi:trn key="aim:invalidStartMonth">Invalid Start Month value</digi:trn>'
+          alert(msg);
           document.aimAddFiscalCalForm.startMonthNum.focus();
           return false;
         }
 
         if(sd.match("[^0-9]") || sd.length == 0){
-          alert("Invalid Start Day value");
+          msg='<digi:trn key="aim:invalidStartDay">Invalid Start Day value</digi:trn>'
+          alert(msg);
           document.aimAddFiscalCalForm.startDayNum.focus();
           return false;
         }else if(sd>31){
-          alert("Invalid Start Day value");
+          msg='<digi:trn key="aim:invalidStartDay">Invalid Start Day value</digi:trn>'
+          alert(msg);
           document.aimAddFiscalCalForm.startDayNum.focus();
           return false;
         }
 
         if(yr.match("[^0-9,-]") || yr.length == 0){
-          alert("Invalid Year Offset value");
+          msg='<digi:trn key="aim:invalidYearOffset">Invalid Year Offset value</digi:trn>'
+          alert(msg);
           document.aimAddFiscalCalForm.yearOffset.focus();
           return false;
         }else if(yr>0){
-          alert("Invalid Year Offset value");
+          msg='<digi:trn key="aim:invalidYearOffset">Invalid Year Offset value</digi:trn>'
+          alert(msg);
           document.aimAddFiscalCalForm.yearOffset.focus();
           return false;
         }

@@ -15,16 +15,16 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 		LoggerIdentifiable {
 
 	private static String [] IMPLEMENTED_ACTIONS=new String[]{GatePermConst.Actions.EDIT};
-	
+
 	private AmpTeamMember createdBy;
 
     private Boolean budget;
-    
-    @PermissibleProperty(type=Permissible.PermissibleProperty.PROPERTY_TYPE_ID)        
+
+    @PermissibleProperty(type=Permissible.PermissibleProperty.PROPERTY_TYPE_ID)
     private Long ampActivityId ;
-    
+
 	private String ampId ;
-	
+
 	@PermissibleProperty(type=Permissible.PermissibleProperty.PROPERTY_TYPE_LABEL)
 	private String name ;
 	private String description ;
@@ -33,11 +33,13 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private String purpose;
 	private String results;
     private String documentSpace;
-    
+
+    private Boolean draft;
+
     private String equalOpportunity;
     private String environment;
     private String minorities;
-    
+
 //	private AmpStatus status ; // TO BE DELETED
 	private String language ;
 	private String version ;
@@ -133,7 +135,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private Integer planMinRank;
 	private Collection actRankColl;
 
-	
+
 	private Set<AmpActivityDocument> activityDocuments	= null;
 	/* Categories */
 	private Set categories;
@@ -182,8 +184,8 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	public void setCategories(Set categories) {
 		this.categories = categories;
 	}
-	
-	
+
+
 	public Set<AmpActivityDocument> getActivityDocuments() {
 		return activityDocuments;
 	}
@@ -191,8 +193,8 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	public void setActivityDocuments(Set<AmpActivityDocument> activityDocuments) {
 		this.activityDocuments = activityDocuments;
 	}
-	
-		
+
+
 	public AmpCategoryValue getModality() {
 		return modality;
 	}
@@ -872,9 +874,9 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 /*
 	 * public boolean equals(Object obj) { if (obj == null) throw new
 	 * NullPointerException();
-	 * 
+	 *
 	 * if (!(obj instanceof AmpActivity)) throw new ClassCastException();
-	 * 
+	 *
 	 * AmpActivity act = (AmpActivity) obj; return
 	 * this.ampActivityId.equals(act.getAmpActivityId()); }
     */
@@ -1220,9 +1222,16 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 		return referenceDocs;
 	}
 
-	public void setReferenceDocs(Set referenceDocs) {
+    public Boolean getDraft() {
+        return draft;
+    }
+
+    public void setReferenceDocs(Set referenceDocs) {
 		this.referenceDocs = referenceDocs;
 	}
-	
+
+    public void setDraft(Boolean draft) {
+        this.draft = draft;
+    }
 
 }

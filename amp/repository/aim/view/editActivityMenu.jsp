@@ -37,50 +37,69 @@ function previewLogFrameClicked() {
 }
 
 function saveClicked() {
-	var flag = validateForm();
-	if (flag == true) {
-	document.aimEditActivityForm.saveButton.disabled = true;
-	<digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
-	document.aimEditActivityForm.action = "<%= save %>?edit=true";
-	document.aimEditActivityForm.target = "_self";
-	var appstatus = document.aimEditActivityForm.approvalStatus.value;
-	var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
-	var msg='';
-	if (appstatus == "started") {
-		msg+='<digi:trn key="aim:saveActivity:started">Do you want to submit this activity for approval ?</digi:trn>';
-		if (wTLFlag == "yes") {
-			//if (confirm("Do you want to approve this activity ?"))
-				document.aimEditActivityForm.approvalStatus.value = "approved";
-		}
-		else if (confirm(msg))
-				document.aimEditActivityForm.approvalStatus.value = "created";
-	}
-
-	if (appstatus == "approved") {
-		if (wTLFlag != "yes")
-                  document.aimEditActivityForm.approvalStatus.value = "edited";
-
-	}
-        else if (wTLFlag == "yes") {
-             msg+='<digi:trn key="aim:saveActivity:approved">Do you want to approve this activity ?</digi:trn>';
-		if (appstatus == "created" || appstatus == "edited") {
-			if (confirm(msg))
-				document.aimEditActivityForm.approvalStatus.value = "approved";
-		}
-	}
-	document.aimEditActivityForm.submit();
+  var draftStatus=document.getElementById("draftFlag");
+  if(draftStatus!=null){
+    draftStatus.value=false;
+  }
+  save();
 }
+
+function saveAsDraftClicked() {
+  var draftStatus=document.getElementById("draftFlag");
+  if(draftStatus!=null){
+    draftStatus.value=true;
+  }
+  save();
+}
+
+function save() {
+  var flag = validateForm();
+  if (flag == true) {
+    document.aimEditActivityForm.saveButton.disabled = true;
+    <digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
+    document.aimEditActivityForm.action = "<%= save %>?edit=true";
+    document.aimEditActivityForm.target = "_self";
+    var appstatus = document.aimEditActivityForm.approvalStatus.value;
+    var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
+    var msg='';
+    if (appstatus == "started") {
+      msg+='<digi:trn key="aim:saveActivity:started">Do you want to submit this activity for approval ?</digi:trn>';
+      if (wTLFlag == "yes") {
+        //if (confirm("Do you want to approve this activity ?"))
+        document.aimEditActivityForm.approvalStatus.value = "approved";
+      }
+      else if (confirm(msg))
+      document.aimEditActivityForm.approvalStatus.value = "created";
+    }
+
+    if (appstatus == "approved") {
+      if (wTLFlag != "yes")
+      document.aimEditActivityForm.approvalStatus.value = "edited";
+
+    }
+    else if (wTLFlag == "yes") {
+      msg+='<digi:trn key="aim:saveActivity:approved">Do you want to approve this activity ?</digi:trn>';
+      if (appstatus == "created" || appstatus == "edited") {
+        if (confirm(msg))
+        document.aimEditActivityForm.approvalStatus.value = "approved";
+      }
+    }
+    document.aimEditActivityForm.submit();
+  }
 }
 
 function gotoStep(value) {
-	var flag = validateForm();
-	if (flag == true) {
-		document.aimEditActivityForm.step.value = value;
-		<digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
-		document.aimEditActivityForm.action = "<%= step %>";
-		document.aimEditActivityForm.target = "_self";
-		document.aimEditActivityForm.submit();
-	}
+  var draftStatus=document.getElementById("draftFlag");
+  if(draftStatus!=null && draftStatus==false){
+    var flag = validateForm();
+    if (flag == true) {
+      document.aimEditActivityForm.step.value = value;
+      <digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
+      document.aimEditActivityForm.action = "<%= step %>";
+      document.aimEditActivityForm.target = "_self";
+      document.aimEditActivityForm.submit();
+    }
+  }
 }
 
 -->
@@ -91,6 +110,7 @@ function gotoStep(value) {
 <html:hidden property="workingTeamLeadFlag" />
 <html:hidden property="pageId" />
 <html:hidden property="currentValDate" />
+<html:hidden property="draft" styleId="draftFlag" />
 
 <table width="209" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
 <tr><td width="209" height="10" background="module/aim/images/top.gif">
@@ -676,6 +696,11 @@ bgcolor="#006699">
 	<tr>
 		<td align="center">
 			<input type="button" value='<digi:trn key="aim:save">Save</digi:trn>' name="saveButton" class="buton" onclick="saveClicked()">
+		</td>
+	</tr>
+	<tr>
+		<td align="center">
+			<input type="button" value='<digi:trn key="aim:saveAsDraft">Save as draft</digi:trn>' name="saveAsDraftButton" class="buton" onclick="saveAsDraftClicked()">
 		</td>
 	</tr>
 </table>

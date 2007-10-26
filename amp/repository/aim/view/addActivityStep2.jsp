@@ -129,13 +129,17 @@ function validateForm(){
   Please add sectors
   </digi:trn>
   </c:set>
-  if (document.aimEditActivityForm.selActivitySectors == null) {
-    alert("${errMsgAddSector}")
-    document.aimEditActivityForm.addSec.focus();
+  var draftStatus=document.getElementById("draftFlag");
+  if(draftStatus!=null && draftStatus.value==false){
+
+    if (document.aimEditActivityForm.selActivitySectors == null) {
+      alert("${errMsgAddSector}")
+      document.aimEditActivityForm.addSec.focus();
+      return false;
+    }
+    if (!validateSectorPercentage())
     return false;
   }
-  if (!validateSectorPercentage())
-  return false;
 
   document.aimEditActivityForm.step.value="3";
   return true;
@@ -404,7 +408,7 @@ function fnChk(frmContrl){
 				                                    </td>
 				                                  </tr>
 			                                	</table>
-			                              </td>	
+			                              </td>
 			                            </tr>
 			                            <feature:display name="Location" module="Project ID and Planning">
 			                              <tr>
@@ -423,7 +427,7 @@ function fnChk(frmContrl){
 			                            &nbsp;
 			                            </feature:display>
 			                            <jsp:include page="addActivityStep2Sector.jsp"/>
-			
+
 			                            <tr>
 			                              <td>
 			                              &nbsp;
@@ -444,7 +448,7 @@ function fnChk(frmContrl){
 			                            		</td>
 			                            	</tr>
 										</feature:display>
-			                            
+
 			                            <!--
 			                            <tr>
 			                              <td bgColor=#f4f4f2 align="center">
@@ -479,10 +483,10 @@ function fnChk(frmContrl){
 					              <jsp:include page="editActivityMenu.jsp" flush="true" />
 					              <!-- end of activity form menu -->
 				           	 	</td>
-                          	
+
                           	</tr>
-                             
-                            
+
+
                           </table>
                           <!-- end contents -->
                         </td>
@@ -492,7 +496,7 @@ function fnChk(frmContrl){
                 </tr>
               </table>
             </td>
-            
+
           </tr>
         </table>
       </td>

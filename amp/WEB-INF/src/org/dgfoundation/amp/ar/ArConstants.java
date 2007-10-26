@@ -41,6 +41,8 @@ public final class ArConstants {
 	public final static String FINANCING_INSTRUMENT="Financing Instrument";	
 	public final static String YEAR="Year";
 	public final static String QUARTER="Quarter";
+	public final static String MONTH="Month";
+	
 	public final static String PERSPECTIVE="Perspective";
 
 	//report types

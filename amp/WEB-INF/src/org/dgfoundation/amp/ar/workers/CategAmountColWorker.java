@@ -8,7 +8,9 @@ package org.dgfoundation.amp.ar.workers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormatSymbols;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Set;
 
@@ -210,11 +212,15 @@ public class CategAmountColWorker extends ColumnWorker {
 		GregorianCalendar calendar = new GregorianCalendar();
 		if (td!=null) calendar.setTime(td); else 
 			logger.error("MISSING DATE FOR FUNDING id ="+id+ " of activity id ="+ ownerId);
-
+		DateFormatSymbols dfs=new DateFormatSymbols();
+		
 		String quarter=null;
+		String month=null;
 		Integer year=null;
 		
 		if(filter.getCalendarType()==null || filter.getCalendarType().getAmpFiscalCalId().equals(Constants.GREGORIAN)) {
+			int monthId=calendar.get(Calendar.MONTH);
+			month=Integer.toString(monthId)+"-"+dfs.getMonths()[monthId];
 			quarter= "Q"+ new Integer(calendar.get(Calendar.MONTH) / 4 + 1);
 			year=new Integer(calendar.get(Calendar.YEAR));
 		} else
@@ -226,11 +232,13 @@ public class CategAmountColWorker extends ColumnWorker {
 			{
 				year=new Integer(ec.ethFiscalYear);
 				quarter=new String("Q"+ec.ethFiscalQrt);
+				month=Integer.toString(ec.ethMonth)+"-"+ec.ethMonthName;
 			}
 			if(filter.getCalendarType().getAmpFiscalCalId().equals(Constants.ETH_CAL))
 			{
 				year=new Integer(ec.ethYear);
 				quarter=new String("Q"+ec.ethQtr);
+				month=Integer.toString(ec.ethMonth)+"-"+ec.ethMonthName;
 			}
 		}
 
@@ -247,6 +255,7 @@ public class CategAmountColWorker extends ColumnWorker {
 
 		
 		MetaInfo qMs = new MetaInfo(ArConstants.QUARTER,quarter);
+		MetaInfo mMs = new MetaInfo(ArConstants.MONTH,month);
 		MetaInfo aMs = new MetaInfo(ArConstants.YEAR, year);
 
 		
@@ -254,6 +263,7 @@ public class CategAmountColWorker extends ColumnWorker {
 	
 		acc.getMetaData().add(aMs);
 		acc.getMetaData().add(qMs);
+		acc.getMetaData().add(mMs);		
 		acc.getMetaData().add(headMeta);
 		
 		//set the showable flag, based on selected measures - THIS NEEDS TO BE MOVED OUT

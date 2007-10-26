@@ -14870,7 +14870,8 @@ DHTMLSuite.calendarModel.prototype =
 			if (format.indexOf('MMM') != -1){
 				//We must treat this case !!!!!
 				//Arty AMP-2097
-				
+				var empty = "blank";
+				empty = "nt";
 			}
 			else		
 			if(!format.match(/^[0-9]*?$/gi)){

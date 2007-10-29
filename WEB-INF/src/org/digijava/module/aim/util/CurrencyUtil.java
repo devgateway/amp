@@ -253,9 +253,11 @@ public class CurrencyUtil {
 				// if the currency rate already exist update the rate
 				AmpCurrencyRate actRate = (AmpCurrencyRate) itr.next();
 				actRate.setExchangeRate(cRate.getExchangeRate());
+				System.out.println("updating......................");
 				session.update(actRate);
 			} else {
 				// add the currency rate object if it does not exist
+				System.out.println("saving......................");
 				session.save(cRate);
 			}
 

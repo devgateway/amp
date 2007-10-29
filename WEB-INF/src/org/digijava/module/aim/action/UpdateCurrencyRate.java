@@ -22,6 +22,7 @@ import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.form.CurrencyRateForm;
 import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.util.CurrencyUtil;
 
 
@@ -117,8 +118,9 @@ public class UpdateCurrencyRate extends Action {
                     else {
                       AmpCurrencyRate cRate = new AmpCurrencyRate();
                       if (crForm.getUpdateCRateAmount() != null) {
-                        Double rate = new Double(Double.parseDouble(crForm.
-                                                                    getUpdateCRateAmount()));
+                    	String amountRate=DecimalToText.removeCommas(crForm.getUpdateCRateAmount());
+                        //Double rate = new Double(Double.parseDouble(crForm.getUpdateCRateAmount()));
+                    	Double rate = new Double(1/Double.parseDouble(amountRate));
                         cRate.setExchangeRate(rate);
                       }
                       if (crForm.getUpdateCRateDate() != null) {
@@ -127,7 +129,8 @@ public class UpdateCurrencyRate extends Action {
                       }
 
                       cRate.setToCurrencyCode(crForm.getUpdateCRateCode());
-                      CurrencyUtil.saveCurrencyRate(cRate);
+                      if(cRate.getExchangeRate()!=null && cRate.getExchangeRateDate()!=null)
+                    	  CurrencyUtil.saveCurrencyRate(cRate);
 
                       crForm.setAllRates(null);
                       crForm.setUpdateCRateAmount(null);

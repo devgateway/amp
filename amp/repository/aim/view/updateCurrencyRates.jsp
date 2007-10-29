@@ -118,13 +118,20 @@ function closePopup() {
 							<tr bgcolor="#f4f4f2">
 								<td align="right" valign="middle" width="50%">
 									<FONT color=red>*</FONT>
-									<digi:trn key="aim:exchangeRateFor1USD">Exchange rate (for 1 USD)</digi:trn>&nbsp;
+									<digi:trn key="aim:exchangeRateFor1Currency">Exchange rate (for 1 selected currency): </digi:trn>&nbsp;
 								</td>
 								<td align="left" valign="middle">
 									<html:text property="updateCRateAmount" styleClass="amt" size="7"/>
 									<FONT color=red>
 									<digi:trn key="aim:USD">USD</digi:trn></FONT>
 								</td>
+							</tr>
+							<tr bgcolor="#f4f4f2">
+								<td align="right" valign="middle" colspan="2">
+									<FONT color=red>*</FONT>
+									<digi:trn key="aim:exchangeRateFor1Hint"> How many USD for the selected currency </digi:trn>&nbsp;
+								</td>
+								
 							</tr>
 							<tr bgcolor="#ffffff">
 								<td colspan="2">

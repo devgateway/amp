@@ -130,15 +130,15 @@ function validateForm(){
   </digi:trn>
   </c:set>
   var draftStatus=document.getElementById("draftFlag");
-  if(draftStatus!=null && draftStatus.value==false){
-
+  if(draftStatus!=null && draftStatus.value!=true){
     if (document.aimEditActivityForm.selActivitySectors == null) {
-      alert("${errMsgAddSector}")
+      alert("${errMsgAddSector}");
       document.aimEditActivityForm.addSec.focus();
       return false;
     }
-    if (!validateSectorPercentage())
-    return false;
+    if (!validateSectorPercentage()){
+      return false;
+    }
   }
 
   document.aimEditActivityForm.step.value="3";

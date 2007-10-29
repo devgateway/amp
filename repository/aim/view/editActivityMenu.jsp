@@ -90,7 +90,7 @@ function save() {
 
 function gotoStep(value) {
   var draftStatus=document.getElementById("draftFlag");
-  if(draftStatus!=null && draftStatus==false){
+  if(draftStatus!=null && draftStatus.value!=true){
     var flag = validateForm();
     if (flag == true) {
       document.aimEditActivityForm.step.value = value;

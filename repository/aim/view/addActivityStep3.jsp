@@ -356,7 +356,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                   <tr>
                                     <td>
                                     	<bean:define name="aimEditActivityForm" id="myForm" type="org.digijava.module.aim.form.EditActivityForm"/>
-                             	  	<feature:display name="Proposed Project Cost" module="Funding">
+                             	  	<feature:display name="Proposed Project Cost" module="National Planning Dashboard">
                                         <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing=0 cellPadding=0>
                                           <tr>
                                             <td>

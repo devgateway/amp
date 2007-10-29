@@ -50,7 +50,7 @@ public class ShowCalendarEvent
 
             // calendar type
             List calendarTypesList = DateNavigator.getCalendarTypes();
-            
+
             Collection defCnISO=FeaturesUtil.getDefaultCountryISO();
             if(defCnISO!=null){
                 AmpGlobalSettings sett=(AmpGlobalSettings)defCnISO.iterator().next();
@@ -78,6 +78,8 @@ public class ShowCalendarEvent
                     selectedCalendarType);
             }
             // populate values from database if in edit mode
+
+
             Long ampCalendarId = calendarEventForm.getAmpCalendarId();
             ModuleInstance moduleInstance = RequestUtils.getRealModuleInstance(
                 request);
@@ -85,7 +87,53 @@ public class ShowCalendarEvent
             String siteId = moduleInstance.getSite().getSiteId();
             AmpCalendar ampCalendar = AmpDbUtil.getAmpCalendar(ampCalendarId,
                 instanceId, siteId);
+
             if(ampCalendar != null) {
+              if(calendarEventForm.getMethod()!=null&&calendarEventForm.getMethod().equals("preview")){
+                List attendeeGuests = new ArrayList();
+                List attendeeUsers = new ArrayList();
+                List<String> selUsersId=new ArrayList<String>();
+                List selUsers = new ArrayList();
+                Set attendees = ampCalendar.getAttendees();
+                if (attendees != null) {
+                  LabelValueBean lvb = null;
+                  LabelValueBean lvbs = null;
+                  Iterator it = attendees.iterator();
+                  while (it.hasNext()) {
+                    AmpCalendarAttendee attendee = (AmpCalendarAttendee) it.
+                        next();
+                    User user = attendee.getUser();
+
+                    String guest = attendee.getGuest();
+                    if (guest != null) {
+                      lvb = new LabelValueBean(guest, guest);
+                      lvbs = new LabelValueBean(guest,
+                                                "g:" + guest);
+                      attendeeGuests.add(lvb);
+                    }
+                    else {
+                      if (user != null) {
+                        String userId = user.getId().toString();
+                        selUsersId.add("u:"+userId);
+                        lvb = new LabelValueBean(user.getFirstNames() + " " +
+                                                 user.getLastName(), userId);
+                        lvbs = new LabelValueBean(user.getFirstNames() + " " +
+                                                  user.getLastName(),
+                                                  "u:" + userId);
+                        attendeeUsers.add(lvb);
+                      }
+                    }
+                    selUsers.add(lvbs);
+                  }
+                }
+                String[] selUsr=selUsersId.toArray(new String[0]);
+                calendarEventForm.setSelectedUsers(selUsr);
+                calendarEventForm.setAttendeeUsers(attendeeUsers);
+                calendarEventForm.setAttendeeGuests(attendeeGuests);
+                calendarEventForm.setSelectedUsersList(selUsers);
+                calendarEventForm.setSelectedEventTypeName(ampCalendar.
+                    getEventType().
+                    getName());
                 Calendar calendar = ampCalendar.getCalendarPK().getCalendar();
                 // title
                 calendarEventForm.setEventTitle(calendar.getFirstCalendarItem().
@@ -93,9 +141,12 @@ public class ShowCalendarEvent
                 // selected event type
                 calendarEventForm.setSelectedEventTypeId(ampCalendar.
                     getEventType().getId());
+                // private event
+                    calendarEventForm.setPrivateEvent(ampCalendar.isPrivateEvent());
                 // selected donors
-                if(calendarEventForm.getDonors()==null){
-                    calendarEventForm.setDonors(new ArrayList());
+               // if(calendarEventForm.getDonors()==null){
+                  calendarEventForm.setDonors(new ArrayList());
+               // }
                     if(ampCalendar.getDonors() != null) {
                         Iterator it = ampCalendar.getDonors().iterator();
                         while(it.hasNext()) {
@@ -113,7 +164,7 @@ public class ShowCalendarEvent
 //                    }
 //                    calendarEventForm.setSelectedDonors(donorIds);
                     }
-                }
+
                 // selected start date
                 GregorianCalendar startDate = new GregorianCalendar();
                 startDate.setTime(calendar.getStartDate());
@@ -132,8 +183,13 @@ public class ShowCalendarEvent
                     formatDateString());
                 calendarEventForm.setSelectedEndTime(endDateBreakDown.
                     formatTimeString());
+                 return mapping.findForward("preview");
+
+              }
+
+
                 // attendee users
-                if(calendarEventForm.getMethod()==null) {
+              if(calendarEventForm.getMethod()==null) {
                     Set attendees = ampCalendar.getAttendees();
                     Set selectedAttendeeUsers = new HashSet();
                     Set selectedAttendeeGuests = new HashSet();
@@ -257,6 +313,7 @@ public class ShowCalendarEvent
 
             calendarEventForm.setMethod(null);
         } catch(Exception ex) {
+          ex.printStackTrace();
             throw new RuntimeException(ex);
         }
         return mapping.findForward("success");

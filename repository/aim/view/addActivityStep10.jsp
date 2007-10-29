@@ -619,7 +619,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															<tr>
 																<td><b>
 																	<digi:trn key="aim:meCurrentValue">Current Value</digi:trn>
-																	<font color="red">*</font>
+																	
 																</b></td>
 																<td>
 																	<html:text property="currentVal" size="10" maxlength="10"/>
@@ -631,7 +631,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
 																	<digi:trn key="aim:meDate">Date</digi:trn>
-																	<font color="red">*</font>
+																	
 																</td>
 																<td align="left">
 																	<input type="text" name="currValDate"

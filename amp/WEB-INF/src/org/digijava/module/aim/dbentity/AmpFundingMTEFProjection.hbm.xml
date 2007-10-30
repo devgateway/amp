@@ -14,7 +14,7 @@
 		<property name="amount" column="amount"  type="java.lang.Double"/>
 		
 		<many-to-one name="ampCurrency" column="amp_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>
-		<many-to-one name="ampFunding" column="amp_funding_id" class="org.digijava.module.aim.dbentity.AmpFunding" not-null="true"/>
+		<many-to-one name="ampFunding" column="amp_funding_id" class="org.digijava.module.aim.dbentity.AmpFunding"/>
 		<many-to-one name="projected" column="amp_projected_categoryvalue_id" class="org.digijava.module.aim.dbentity.AmpCategoryValue"/>
 	</class>
 </hibernate-mapping>

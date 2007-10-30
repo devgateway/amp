@@ -1276,7 +1276,7 @@ public class DbUtil {
     		session = PersistenceManager.getRequestDBSession();
     		String queryString = new String();
     		queryString = "select p.amount,"
-    			+ "p.projectionDate, p.ampCurrency from "
+    			+ "p.projectionDate, p.ampCurrency, p.projected from "
     			+ AmpFundingMTEFProjection.class.getName()
     			+ " p where (p.ampFunding=:ampFundingId) "
     			+ " and (p.projected=:adjType) order by p.projectionDate ";

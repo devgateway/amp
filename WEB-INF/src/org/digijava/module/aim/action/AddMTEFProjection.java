@@ -51,11 +51,13 @@ public class AddMTEFProjection extends Action{
 		}*/		
 		long index = formBean.getTransIndexId();
 		String subEvent = event.substring(0,3);
+		
+		boolean afterFiscalYearStart	= AddFunding.isAfterFiscalYearStart();
 		MTEFProjection mp = null;
 		if (subEvent.equalsIgnoreCase("del") || subEvent.equalsIgnoreCase("add")) {
 			if (formBean.getFundingMTEFProjections() == null) {
 				mtefProjections = new ArrayList();
-				mp = AddFunding.getMTEFProjection(request.getSession(), 0);
+				mp = AddFunding.getMTEFProjection(request.getSession(), 0, afterFiscalYearStart);
 				mtefProjections.add(mp);		
 			} else {
 				mtefProjections = formBean.getFundingMTEFProjections();
@@ -75,7 +77,7 @@ public class AddMTEFProjection extends Action{
 					temp.setIndexId(index);
 					mtefProjections.remove(temp);					
 				} else {
-					mp = AddFunding.getMTEFProjection(request.getSession(), mtefProjections.size() );
+					mp = AddFunding.getMTEFProjection(request.getSession(), mtefProjections.size(), afterFiscalYearStart );
 					mtefProjections.add(mp);							
 				}
 			}

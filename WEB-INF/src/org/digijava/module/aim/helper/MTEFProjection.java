@@ -8,6 +8,8 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 
 public class MTEFProjection implements Serializable, Comparable<MTEFProjection>{
+	public final static String TYPE_PROJECTION	= "projection";
+	public final static String TYPE_PIPELINE	= "pipeline";
 	
 	private long indexId;
 	private Long projected; 
@@ -20,6 +22,7 @@ public class MTEFProjection implements Serializable, Comparable<MTEFProjection>{
 	private Long reportingOrganizationId;
 	
 	private String projectionDate;
+	private String projectionDateLabel;
 	private AmpFunding  ampFunding;
 	
 	
@@ -52,6 +55,12 @@ public class MTEFProjection implements Serializable, Comparable<MTEFProjection>{
 
 		public void setProjectionDate(String projectionDate) {
 			this.projectionDate = projectionDate;
+			
+			String [] dateElements	= projectionDate.split("/");
+			int year				= Integer.parseInt( dateElements[2] );
+			String label			= year + "/" + (year+1);
+			
+			this.setProjectionDateLabel( label );
 		}
 
 		public String getAmount() {
@@ -135,6 +144,14 @@ public class MTEFProjection implements Serializable, Comparable<MTEFProjection>{
 			Date d2 = DateConversion.getDate(o.projectionDate);
 			
 			return d1.compareTo(d2);
+		}
+
+		public String getProjectionDateLabel() {
+			return projectionDateLabel;
+		}
+
+		public void setProjectionDateLabel(String projectionDateLabel) {
+			this.projectionDateLabel = projectionDateLabel;
 		}
 
 

@@ -353,5 +353,12 @@ public final class Util {
 		
 		return false;
 	}
+	
+	public static int getSystemYear() {
+		GregorianCalendar gc			= new GregorianCalendar();
+		return gc.get(Calendar.YEAR);
+	}
+
+	
 
 }

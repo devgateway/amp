@@ -329,7 +329,8 @@
 							<table cellPadding=0 cellSpacing=0>
 							<tr>
 								<td>
-								<html:text name="mtefProjection" indexed="true" property="projectionDate" readonly="true" size="10"/>
+								<html:hidden name="mtefProjection" indexed="true" property="projectionDate"/>
+								<html:text name="mtefProjection" indexed="true" property="projectionDateLabel" readonly="true" size="10"/>
 								<%--
 								<% tempIndexStr = "" + tempIndex; tempIndex++;%>
 								<html:text name="mtefProjection" indexed="true" property="projectionDate"

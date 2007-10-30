@@ -275,7 +275,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 						                
 						                <feature:display module="Funding" name="MTEF Projections">
 											<field:display feature="MTEF Projections" name="MTEFProjections">
-											<td><digi:trn key="aim:financialProgress:totalProjections">Total Projections (Projection&Pipeline)</digi:trn></td>
+											<td><digi:trn key="aim:financialProgress:totalProjections_projection">Total Projections</digi:trn></td>
 											</field:display>
 										</feature:display>
 						                

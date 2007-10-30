@@ -120,19 +120,19 @@ tanzania adds
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityDocument"  />
 		</set>
 
-		<set name="referenceDocs" cascade="all" inverse="true">
+		<set name="referenceDocs" cascade="all-delete-orphan">
 			<cache usage="read-write" />
 			<key column="activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityReferenceDoc"/>
  		</set>
 
-		<set name="orgrole" cascade="all">
+		<set name="orgrole" cascade="all-delete-orphan">
 			<cache usage="read-write" />
 			<key column="activity"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrgRole"/>
  		</set>
 
-		<set name="sectors" cascade="all" inverse="true">
+		<set name="sectors" cascade="all-delete-orphan">
 			<cache usage="read-write"/>
 			<key column="amp_activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivitySector" />
@@ -150,14 +150,14 @@ tanzania adds
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpLocation" column="amp_location_id"/>
 		</set>
 
-		<set name="costs" cascade="all" inverse="false">
+		<set name="costs" cascade="all-delete-orphan" inverse="true">
 			<cache usage="read-write"/>
 			<key column="amp_activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.EUActivity"/>
 		</set>
 
 
-		<set name="internalIds" table="AMP_ACTIVITY_INTERNAL_ID">
+		<set name="internalIds" table="AMP_ACTIVITY_INTERNAL_ID" >
 			<key column="amp_activity_id"/>
 			<composite-element class="org.digijava.module.aim.dbentity.AmpActivityInternalId">
 				<many-to-one name="organisation" class="org.digijava.module.aim.dbentity.AmpOrganisation"
@@ -166,7 +166,7 @@ tanzania adds
 			</composite-element>
 		</set>
 
-		<set name="funding" cascade="all" inverse="true">
+		<set name="funding" cascade="all-delete-orphan" inverse="true">
 		<cache usage="read-write" />
 			<key column="amp_activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFunding"/>
@@ -196,19 +196,19 @@ tanzania adds
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpNotes"/>
 		</set>
 
-		<set name="closingDates" cascade="all" inverse="true" order-by="closing_date desc">
+		<set name="closingDates" cascade="all-delete-orphan" order-by="closing_date desc">
 		<cache usage="read-write" />
 			<key column="amp_activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityClosingDates" />
 		</set>
 
-		<set name="issues" cascade="all" inverse="true" order-by="amp_issue_id asc">
+		<set name="issues" cascade="all-delete-orphan" order-by="amp_issue_id asc">
 		<cache usage="read-write" />
 			<key column="amp_activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpIssues"/>
  		</set>
 
-		<set name="regionalFundings" cascade="all" inverse="true">
+		<set name="regionalFundings" cascade="all-delete-orphan">
 		<cache usage="read-write" />
 			<key column="activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpRegionalFunding"/>

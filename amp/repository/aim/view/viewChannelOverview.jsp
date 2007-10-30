@@ -844,10 +844,14 @@ function commentWin(val) {
 																					<TR>
 																						<TD bgcolor="#ffffff"><c:if
 																							test="${!empty activity.relOrgs}">
-																							<c:forEach var="relOrgs"
+																							<c:forEach var="relOrg"
 																								items="${activity.relOrgs}">
-																								<c:if test="${relOrgs.role == 'EA'}">
-																									<li><c:out value="${relOrgs.orgName}" /><br>
+																								<c:if test="${relOrg.role == 'EA'}">
+																									<%-- <li><c:out value="${relOrg.orgName}" /></li><br> --%>
+																									<bean:define id="currentOrg" name="relOrg"
+																											type="org.digijava.module.aim.helper.RelOrganization"
+																											toScope="request" />
+																											<jsp:include page="organizationPopup.jsp"/>
 																								</c:if>
 																							</c:forEach>
 																						</c:if></TD>

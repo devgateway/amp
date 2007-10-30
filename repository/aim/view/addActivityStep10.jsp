@@ -469,7 +469,10 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<input type="text" name="baseValDate"
 																	value="<bean:write name="indicator" property="baseValDate" />"
 																	class="inp-text" size="10" readonly="true" id="baseValDate">&nbsp;&nbsp;
-																	<a id="date1" href='javascript:pickDate("date1",document.aimEditActivityForm.baseValDate)'>
+																	<a id="clear1" href="javascript:clearDate(document.aimEditActivityForm.baseValDate, 'clear1')">
+																	 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																	</a>
+																	<a id="date1" href='javascript:pickDateWithClear("date1",document.aimEditActivityForm.baseValDate,"clear1")'>
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
@@ -504,7 +507,10 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<input type="text" name="targetValDate"
 																	value="<bean:write name="indicator" property="targetValDate" />"
 																	class="inp-text" size="10" readonly="true" id="targetValDate">&nbsp;&nbsp;
-																	<a id="date2" href='javascript:pickDate("date2",document.aimEditActivityForm.targetValDate)'>
+																	<a id="clear2" href="javascript:clearDate(document.aimEditActivityForm.targetValDate, 'clear2')">
+																	 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																	</a>
+																	<a id="date2" href='javascript:pickDateWithClear("date2",document.aimEditActivityForm.targetValDate,"clear2")'>
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
@@ -560,7 +566,11 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<input type="text" name="revTargetValDate"
 																	value="<bean:write name="indicator" property="revisedTargetValDate" />"
 																	class="inp-text" size="10" readonly="true" id="revisedTargetValDate">&nbsp;&nbsp;
-																	<a id="date3" href='javascript:pickDate("date3",document.aimEditActivityForm.revTargetValDate)'>
+
+																	<a id="clear3" href="javascript:clearDate(document.aimEditActivityForm.revTargetValDate, 'clear3')">
+																	 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																	</a>
+																	<a id="date3" href='javascript:pickDateWithClear("date3",document.aimEditActivityForm.revTargetValDate,"clear3")'>
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
@@ -637,7 +647,11 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<input type="text" name="currValDate"
 																	value="<bean:write name="indicator" property="currentValDate" />"
 																	class="inp-text" size="10" readonly="true" id="currValDate">&nbsp;&nbsp;
-																	<a id="date4" href='javascript:pickDate("date4",document.aimEditActivityForm.currValDate)'>
+
+																	<a id="clear4" href="javascript:clearDate(document.aimEditActivityForm.currValDate, 'clear4')">
+																	 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																	</a>
+																	<a id="date4" href='javascript:pickDateWithClear("date4",document.aimEditActivityForm.currValDate,"clear4")'>
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
@@ -756,3 +770,10 @@ ${fn:replace(message,quote,escapedQuote)}
 </td></tr>
 </table>
 </digi:form>
+
+<script language="JavaScript">
+	clearDisplay(document.aimEditActivityForm.baseValDate, "clear1");
+	clearDisplay(document.aimEditActivityForm.targetValDate, "clear2");
+	clearDisplay(document.aimEditActivityForm.revTargetValDate, "clear3");
+	clearDisplay(document.aimEditActivityForm.currValDate, "clear4");
+</script>

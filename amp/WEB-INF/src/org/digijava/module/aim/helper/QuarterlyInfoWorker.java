@@ -53,7 +53,7 @@ public class QuarterlyInfoWorker {
 	}
 
 	
-	public static ArrayList getQuarterlyForProjections(FilterParams fp) {
+	public static ArrayList getQuarterlyForProjections(FilterParams fp, boolean showOnlyProjection) {
 		
 		Collection<AmpCategoryValue> mtefProjectionTypes	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY);
 		Iterator<AmpCategoryValue> iter						= mtefProjectionTypes.iterator();
@@ -67,25 +67,30 @@ public class QuarterlyInfoWorker {
 			while( colIter.hasNext() ) {
 				Object [] row				= (Object [])colIter.next();
 				
-				Double transactionAmount 	= (Double) row[0];
+				AmpCategoryValue type		= (AmpCategoryValue) row[3];
 				
-				Date transactionDate 		= (Date) row[1];
+				if ( type.getValue().equals( MTEFProjection.TYPE_PROJECTION ) ) {
 				
-				/*Checking Date Filter*/
-				Date startDate				=  DateConversion.getDate( "01/01/" + fp.getFromYear() );
-				Date endDate				=  DateConversion.getDate( "01/01/" + fp.getToYear() );
-				
-				if ( ! Util.checkYearFilter(transactionDate, startDate, endDate, fp.getFiscalCalId()) )
-					continue;
-				/*END - Checking Date Filter*/
-				
-				AmpCurrency currencyObject	= (AmpCurrency)row[2];
-				double fromCurrencyRatio	= Util.getExchange(currencyObject.getCurrencyCode(), new java.sql.Date(transactionDate.getTime()) );
-				double toCurrencyRatio	= Util.getExchange(fp.getCurrencyCode(), new java.sql.Date(transactionDate.getTime()) );
-				
-				Double convertedAmt = CurrencyWorker.convertToDouble(transactionAmount, fromCurrencyRatio,toCurrencyRatio);
-				
-				amounts.add(convertedAmt);
+					Double transactionAmount 	= (Double) row[0];
+					
+					Date transactionDate 		= (Date) row[1];
+					
+					/*Checking Date Filter*/
+					Date startDate				=  DateConversion.getDate( "01/01/" + fp.getFromYear() );
+					Date endDate				=  DateConversion.getDate( "01/01/" + fp.getToYear() );
+					
+					if ( !Util.checkYearFilter(transactionDate, startDate, endDate, fp.getFiscalCalId()) )
+							continue;
+					/*END - Checking Date Filter*/
+					
+					AmpCurrency currencyObject	= (AmpCurrency)row[2];
+					double fromCurrencyRatio	= Util.getExchange(currencyObject.getCurrencyCode(), new java.sql.Date(transactionDate.getTime()) );
+					double toCurrencyRatio	= Util.getExchange(fp.getCurrencyCode(), new java.sql.Date(transactionDate.getTime()) );
+					
+					Double convertedAmt = CurrencyWorker.convertToDouble(transactionAmount, fromCurrencyRatio,toCurrencyRatio);
+					
+					amounts.add(convertedAmt);
+				}
 			}
 		}
 		return amounts;

@@ -139,12 +139,14 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     AmpActivity oldActivity = null;
 
     Long activityId = null;
+    Set fundSet		= null;
 
     try {
       session = PersistenceManager.getSession();
+      tx = session.beginTransaction();
+      
       AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,
           memberId);
-      tx = session.beginTransaction();
 
       if (edit) { /* edit an existing activity */
         oldActivity = (AmpActivity) session.load(AmpActivity.class,
@@ -159,12 +161,12 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         }
 
         // delete previos fundings and funding details
-        Set fundSet = oldActivity.getFunding();
-        if (fundSet != null) {
+        /*Set fundSet = oldActivity.getFunding();
+        /*if (fundSet != null) {
           Iterator fundSetItr = fundSet.iterator();
           while (fundSetItr.hasNext()) {
             AmpFunding fund = (AmpFunding) fundSetItr.next();
-            /*
+            
                    Set fundDetSet = fund.getFundingDetails();
                    if (fundDetSet != null) {
              Iterator fundDetItr = fundDetSet.iterator();
@@ -172,20 +174,21 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
              AmpFundingDetail ampFundingDetail = (AmpFundingDetail) fundDetItr.next();
               session.delete(ampFundingDetail);
              }
-                   }*/
+                   }
             session.delete(fund);
           }
-        }
+        }*/
 
         // delete previous regional fundings
-        fundSet = oldActivity.getRegionalFundings();
+        oldActivity.getRegionalFundings().clear();
+        /*fundSet = oldActivity.getRegionalFundings();
         if (fundSet != null) {
           Iterator fundSetItr = fundSet.iterator();
           while (fundSetItr.hasNext()) {
             AmpRegionalFunding regFund = (AmpRegionalFunding) fundSetItr.next();
             session.delete(regFund);
           }
-        }
+        }*/
 
         // delete all previous components
         /*Set comp = oldActivity.getComponents();
@@ -198,62 +201,68 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
              }*/
 
         // delete all previous org roles
-        Set orgrole = oldActivity.getOrgrole();
+        oldActivity.getOrgrole().clear();
+       /* Set orgrole = oldActivity.getOrgrole();
         if (orgrole != null) {
           Iterator orgroleItr = orgrole.iterator();
           while (orgroleItr.hasNext()) {
             AmpOrgRole ampOrgrole = (AmpOrgRole) orgroleItr.next();
             session.delete(ampOrgrole);
           }
-        }
+        }*/
 
         // delete all previous closing dates
-        Set closeDates = oldActivity.getClosingDates();
+        oldActivity.getClosingDates().clear();
+        /*Set closeDates = oldActivity.getClosingDates();
         if (closeDates != null) {
           Iterator dtItr = closeDates.iterator();
           while (dtItr.hasNext()) {
             AmpActivityClosingDates date = (AmpActivityClosingDates) dtItr.next();
             session.delete(date);
           }
-        }
+        }*/
 
         // delete all previous issues
-        Set issues = oldActivity.getIssues();
+        oldActivity.getIssues().clear();
+/*        Set issues = oldActivity.getIssues();
         if (issues != null) {
           Iterator iItr = issues.iterator();
           while (iItr.hasNext()) {
             AmpIssues issue = (AmpIssues) iItr.next();
             session.delete(issue);
           }
-        }
+        }*/
 
         // delete all previous Reference Docs
-        if (oldActivity.getReferenceDocs() != null) {
+        oldActivity.getReferenceDocs().clear();
+        /*if (oldActivity.getReferenceDocs() != null) {
           Iterator refItr = oldActivity.getReferenceDocs().iterator();
           while (refItr.hasNext()) {
             AmpActivityReferenceDoc refDoc = (AmpActivityReferenceDoc) refItr.next();
             session.delete(refDoc);
           }
-        }
+        }*/
 
         // delete all previous sectors
-        if (oldActivity.getSectors() != null) {
+        oldActivity.getSectors().clear();
+       /* if (oldActivity.getSectors() != null) {
           Iterator iItr = oldActivity.getSectors().iterator();
           while (iItr.hasNext()) {
             AmpActivitySector sec = (AmpActivitySector) iItr.next();
             session.delete(sec);
           }
-        }
+        }*/
 
 //				 delete all previous costs
-        if (oldActivity.getCosts() != null) {
+        oldActivity.getCosts().clear();
+        /*if (oldActivity.getCosts() != null) {
           Iterator iItr = oldActivity.getCosts().iterator();
           while (iItr.hasNext()) {
             EUActivity eu = (EUActivity) iItr.next();
             session.delete(eu);
           }
         }
-
+*/
         // delete all previous comments
         if (commentsCol != null && commentsCol.isEmpty()) {
           ArrayList col = org.digijava.module.aim.util.DbUtil.
@@ -282,18 +291,18 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         }
         else
         	oldActivity.setFunding( new HashSet() );
-
+        	
         oldActivity.getClosingDates().clear();
         oldActivity.getComponents().clear();
         oldActivity.getDocuments().clear();
-        oldActivity.getFunding().clear();
         oldActivity.getInternalIds().clear();
-       // oldActivity.getLocations().clear();
-        oldActivity.getOrgrole().clear();
-        oldActivity.getReferenceDocs().clear();
-        oldActivity.getSectors().clear();
-        oldActivity.getCosts().clear();
+        oldActivity.getLocations().clear();
+       // oldActivity.getOrgrole().clear();
+       // oldActivity.getReferenceDocs().clear();
+       // oldActivity.getSectors().clear();
+       // oldActivity.getCosts().clear();
         oldActivity.getActivityDocuments().clear();
+        oldActivity.getActivityPrograms().clear();
 
         oldActivity.setLineMinRank(activity.getLineMinRank());
         oldActivity.setPlanMinRank(activity.getPlanMinRank());
@@ -340,36 +349,48 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                                               getProposedCompletionDate());
         oldActivity.setContractingDate(activity.getContractingDate());
         oldActivity.setDisbursmentsDate(activity.getDisbursmentsDate());
-//				oldActivity.setStatus(activity.getStatus()); // TO BE DELETED
+
         oldActivity.setStatusReason(activity.getStatusReason());
         oldActivity.setThemeId(activity.getThemeId());
         oldActivity.setUpdatedDate(activity.getUpdatedDate());
-        oldActivity.setClosingDates(activity.getClosingDates());
-        oldActivity.setComponents(activity.getComponents());
+        if (activity.getClosingDates() != null)
+        	oldActivity.getClosingDates().addAll(activity.getClosingDates());
+        if (activity.getComponents() != null)
+        	oldActivity.getComponents().addAll(activity.getComponents());
         //oldActivity.setDocuments(activity.getDocuments());
-        oldActivity.getFunding().addAll(activity.getFunding());
-        oldActivity.setRegionalFundings(activity.getRegionalFundings());
+        if (activity.getFunding() != null)
+        	oldActivity.getFunding().addAll(activity.getFunding());
+        if (activity.getRegionalFundings() != null)
+        	oldActivity.getRegionalFundings().addAll(activity.getRegionalFundings());
+        if (activity.getInternalIds() != null)
+        	oldActivity.getInternalIds().addAll(activity.getInternalIds());
+        if (activity.getLocations() != null)
+        	oldActivity.getLocations().addAll(activity.getLocations());
+        if (activity.getOrgrole() != null)
+        	oldActivity.getOrgrole().addAll(activity.getOrgrole());
+        if (activity.getReferenceDocs() != null)
+        	oldActivity.getReferenceDocs().addAll(activity.getReferenceDocs());
+        if (activity.getSectors() != null)
+        	oldActivity.getSectors().addAll(activity.getSectors());
+        if (activity.getIssues() != null)
+        	oldActivity.getIssues().addAll(activity.getIssues());
+        if (activity.getCosts() != null)
+        	oldActivity.getCosts().addAll(activity.getCosts());
+        if (activity.getActivityPrograms() != null)
+        	oldActivity.getActivityPrograms().addAll(activity.getActivityPrograms());
+        
+        if (activity.getCategories() != null)
+        	oldActivity.getCategories().addAll( activity.getCategories() );
 
-        oldActivity.setInternalIds(activity.getInternalIds());
-        oldActivity.setLocations(activity.getLocations());
-        oldActivity.setOrgrole(activity.getOrgrole());
-        oldActivity.setReferenceDocs(activity.getReferenceDocs());
-        oldActivity.setSectors(activity.getSectors());
-        oldActivity.setIssues(activity.getIssues());
-
-        oldActivity.setCosts(activity.getCosts());
-
-        oldActivity.setActivityPrograms(activity.getActivityPrograms());
+        if(activity.getActivityDocuments() !=null)
+        	oldActivity.getActivityDocuments().addAll( activity.getActivityDocuments() );
+        
         oldActivity.setFunAmount(activity.getFunAmount());
         oldActivity.setCurrencyCode(activity.getCurrencyCode());
         oldActivity.setFunDate(activity.getFunDate());
 
         oldActivity.setApprovalStatus(activity.getApprovalStatus());
 
-        oldActivity.getCategories().addAll( activity.getCategories() );
-
-        if(activity.getActivityDocuments() !=null)
-        	oldActivity.getActivityDocuments().addAll( activity.getActivityDocuments() );
 
         /*
          * tanzania ADDS

@@ -603,7 +603,7 @@ ${fn:replace(message,quote,escapedQuote)}
 	                                                                                 		<bean:write name="projection" property="currencyCode" />
 	                                                                                 	</td>
 	                                                                                 	<td>
-	                                                                                 		<bean:write name="projection" property="projectionDate" />
+	                                                                                 		<bean:write name="projection" property="projectionDateLabel" />
 	                                                                                 	</td>
 	                                                                                 	<td>&nbsp;</td>
 	                                                                                 </tr>

@@ -27,7 +27,7 @@ public class FinancingBreakdownWorker
 	}
 	
 	public static String getTotalProjections(FilterParams fp) {
-		Collection amounts	= QuarterlyInfoWorker.getQuarterlyForProjections(fp);
+		Collection amounts	= QuarterlyInfoWorker.getQuarterlyForProjections(fp, true);
 		double totals		= 0;
 		Iterator iter		= amounts.iterator();
 		while (iter.hasNext()) {

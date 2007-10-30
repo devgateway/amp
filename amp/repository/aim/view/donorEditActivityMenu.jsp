@@ -79,15 +79,18 @@ function save() {
 
 function gotoStep(value) {
   var draftStatus=document.getElementById("draftFlag");
-  if(draftStatus!=null && draftStatus.value!=true){
-    var flag = validateForm();
-    if (flag == true) {
-      document.aimEditActivityForm.step.value = value;
-      <digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
-      document.aimEditActivityForm.action = "<%= step %>";
-      document.aimEditActivityForm.target = "_self";
-      document.aimEditActivityForm.submit();
-    }
+  var flag;
+  if(draftStatus!=null && draftStatus.value!="true"){
+    flag=validateForm();
+  }else{
+    flag=true;
+  }
+  if (flag == true) {
+    document.aimEditActivityForm.step.value = value;
+    <digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
+    document.aimEditActivityForm.action = "<%= step %>";
+    document.aimEditActivityForm.target = "_self";
+    document.aimEditActivityForm.submit();
   }
 }
 

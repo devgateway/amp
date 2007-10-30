@@ -14875,6 +14875,7 @@ DHTMLSuite.calendarModel.prototype =
 			}
 			else		
 			if(!format.match(/^[0-9]*?$/gi)){
+				var tmpDay;
 				var items = inputReference.value.split(/[^0-9]/gi);
 				var positionArray = new Array();
 				positionArray['m'] = format.indexOf('mm');

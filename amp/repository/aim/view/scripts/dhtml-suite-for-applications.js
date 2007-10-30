@@ -14866,6 +14866,8 @@ DHTMLSuite.calendarModel.prototype =
      */		
 	setInitialDateFromInput : function(inputReference,format)
 	{		
+		var tmpDay;
+		
 		if(inputReference.value.length>0){	
 			if (format.indexOf('MMM') != -1){
 				//We must treat this case !!!!!
@@ -14875,7 +14877,6 @@ DHTMLSuite.calendarModel.prototype =
 			}
 			else		
 			if(!format.match(/^[0-9]*?$/gi)){
-				var tmpDay;
 				var items = inputReference.value.split(/[^0-9]/gi);
 				var positionArray = new Array();
 				positionArray['m'] = format.indexOf('mm');

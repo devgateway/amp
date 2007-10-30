@@ -32,6 +32,6 @@
 		<!--<many-to-one name="ampFundingId" column="AMP_FUNDING_ID" class="org.digijava.module.aim.dbentity.AmpFunding" cascade="none"/>-->
 
 		<many-to-one name="ampCurrencyId" column="amp_currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>
-		<many-to-one name="ampFundingId" column="amp_funding_id" class="org.digijava.module.aim.dbentity.AmpFunding" not-null="true"/>
+		<many-to-one name="ampFundingId" column="amp_funding_id" class="org.digijava.module.aim.dbentity.AmpFunding"/>
 	</class>
 </hibernate-mapping>

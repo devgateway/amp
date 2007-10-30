@@ -126,7 +126,7 @@ function validateForm() {
   var stId=document.getElementsByName("statusId");
 
   var draftStatus=document.getElementById("draftFlag");
-  if(draftStatus!=null && draftStatus.value!=true){
+  if(draftStatus!=null && draftStatus.value!="true"){
     if(stId==null || stId[0]==null || stId[0].value==0){
       <c:set var="message">
       <digi:trn key="aim:pleaseSelectStatus">Please select status!</digi:trn>
@@ -135,17 +135,16 @@ function validateForm() {
       return false;
     }
   }
-
-/*	if (document.aimEditActivityForm.status.value == "-1") {
-		alert("Please select status");
-		document.aimEditActivityForm.status.focus();
-		return false;
-	}*/
-	document.aimEditActivityForm.step.value="2";
-	<digi:context name="commentUrl" property="context/module/moduleinstance/addActivity.do?edit=true" />
-	url = "<%=commentUrl %>?comment=" + "ccd" + "&edit=" + "true";
-	document.aimEditActivityForm.action = url;
-	return true;
+  /*	if (document.aimEditActivityForm.status.value == "-1") {
+    alert("Please select status");
+    document.aimEditActivityForm.status.focus();
+    return false;
+  }*/
+  document.aimEditActivityForm.step.value="2";
+  <digi:context name="commentUrl" property="context/module/moduleinstance/addActivity.do?edit=true" />
+  url = "<%=commentUrl %>?comment=" + "ccd" + "&edit=" + "true";
+  document.aimEditActivityForm.action = url;
+  return true;
 }
 
 function goNextStep(){

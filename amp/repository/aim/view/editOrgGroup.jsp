@@ -11,25 +11,26 @@
 <script language="JavaScript">
 
 	function msg() {
-		if (confirm("Are you sure about deleting this Organization Group ?")) {
+          var msg='<digi:trn key="aim:deleteOrganizationGroup">Are you sure about deleting this Organization Group ?</digi:trn>'
+		if (confirm(msg)) {
 			document.aimAddOrgGroupForm.action.value = "delete";
 			document.aimAddOrgGroupForm.submit();
 		}
 		else
 			return false;
 	}
-	
+
 	function move() {
 		<digi:context name="selectLoc" property="context/module/moduleinstance/orgGroupManager.do" />
 		url = "<%= selectLoc %>";
 		document.location.href = url;
 	}
-	
+
 	function check() {
 		var str = document.aimAddOrgGroupForm.orgGrpName.value;
 		var type = trim(document.aimAddOrgGroupForm.orgTypeId.value);
 		str = trim(str);
-		
+
 		if (str == null || str.length == 0) {
 			alert("Please enter name for this Group");
 			document.aimAddOrgGroupForm.orgGrpName.focus();
@@ -45,7 +46,7 @@
 			document.aimAddOrgGroupForm.submit();
 		}
 	}
-	
+
 	function trim ( inputStringTrim ) {
 		fixedTrim = "";
 		lastCh = " ";
@@ -80,7 +81,7 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-	
+
 						<digi:link href="/admin.do" styleClass="comment">
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
@@ -92,12 +93,12 @@
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<logic:equal name="aimAddOrgGroupForm" property="action" value="create" >
-							<digi:trn key="aim:addOrgGroup">Add Organization Group</digi:trn>	
+							<digi:trn key="aim:addOrgGroup">Add Organization Group</digi:trn>
 						</logic:equal>
 						<logic:equal name="aimAddOrgGroupForm" property="action" value="edit" >
-							<digi:trn key="aim:editOrgGroup">Edit Organization Group</digi:trn>	
+							<digi:trn key="aim:editOrgGroup">Edit Organization Group</digi:trn>
 						</logic:equal>
-                      </span>	
+                      </span>
 					</td>
 					<!-- End navigation -->
 				</tr>
@@ -124,23 +125,23 @@
 								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
-										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>	
+										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
 											<tr>
 												<td bgColor=#ffffff class=box-border>
 													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
 														<tr bgColor=#dddddb>
 															<td bgColor=#dddddb height="20" align="center" colspan="5">
 																<logic:equal name="aimAddOrgGroupForm" property="action" value="create" >
-																	<b><digi:trn key="aim:addOrgGroup">Add Organization Group</digi:trn></b>	
+																	<b><digi:trn key="aim:addOrgGroup">Add Organization Group</digi:trn></b>
 																</logic:equal>
 																<logic:equal name="aimAddOrgGroupForm" property="action" value="edit" >
-																	<b><digi:trn key="aim:editOrgGroup">Edit Organization Group</digi:trn></b>	
+																	<b><digi:trn key="aim:editOrgGroup">Edit Organization Group</digi:trn></b>
 																</logic:equal>
 															</td>
 														</tr>
 														<!-- Page Logic -->
 														<tr>
-															<td width="100%">	
+															<td width="100%">
 																<table width="100%" border=0	 bgColor=#f4f4f2>
 																	<tr>
 																		<td width="30%" align="right">
@@ -169,7 +170,7 @@
 																				</c:set>
 																	    		<html:option value="-1">-- ${translation} --</html:option>
 																	    		<logic:notEmpty name="aimAddOrgGroupForm" property="orgTypeColl">
-																					<html:optionsCollection name="aimAddOrgGroupForm" property="orgTypeColl" 
+																					<html:optionsCollection name="aimAddOrgGroupForm" property="orgTypeColl"
 																		   									value="ampOrgTypeId" label="orgType" />
 																		   		</logic:notEmpty>
 																			</html:select>
@@ -184,7 +185,7 @@
 																	          <html:select property="levelId">
 																	    		<html:option value="-1">-- Select Level --</html:option>
 																	    		<logic:notEmpty name="aimAddOrgGroupForm" property="level">
-																					<html:optionsCollection name="aimAddOrgGroupForm" property="level" 
+																					<html:optionsCollection name="aimAddOrgGroupForm" property="level"
 																		   				value="ampLevelId" label="name" />
 																		   		</logic:notEmpty>
 																			</html:select>
@@ -196,17 +197,17 @@
 																				<tr>
 																					<td width="45%" align="right">
 																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="check()">
-																							<digi:trn key="btn:save">Save</digi:trn> 
+																							<digi:trn key="btn:save">Save</digi:trn>
 																						</html:button>
 																					</td>
 																					<td width="8%" align="left">
 																						<html:reset  styleClass="dr-menu" property="submitButton">
-																							<digi:trn key="btn:reset">Reset</digi:trn> 
+																							<digi:trn key="btn:reset">Reset</digi:trn>
 																						</html:reset>
 																					</td>
 																					<td width="45%" align="left">
 																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="move()">
-																							<digi:trn key="btn:cancel">Cancel</digi:trn> 
+																							<digi:trn key="btn:cancel">Cancel</digi:trn>
 																						</html:button>
 																					</td>
 																				</tr>
@@ -217,7 +218,7 @@
 																		<tr>
 																			<td colspan="2" width="60%"  align="center">
 																				<html:button  styleClass="dr-menu" property="submitButton"  onclick="msg()">
-																					<digi:trn key="btn:deleteThisGroup">Delete this Group</digi:trn> 
+																					<digi:trn key="btn:deleteThisGroup">Delete this Group</digi:trn>
 																				</html:button>
 																			</td>
 																		</tr>
@@ -232,14 +233,14 @@
 																			</td>
 																		</tr>
 																	</logic:equal>
-																</table>	
+																</table>
 															</td>
 														</tr>
 													<!-- end page logic -->
 													</table>
 												</td>
 											</tr>
-											
+
 										</table>
 									</td>
 								</tr>

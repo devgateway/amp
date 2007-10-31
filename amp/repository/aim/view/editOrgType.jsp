@@ -11,25 +11,26 @@
 <script language="JavaScript">
 
 	function msg() {
-		if (confirm("Are you sure about deleting this Organization Type ?")) {
+          var msg='<digi:trn key="aim:deleteOrganizationType">Are you sure about deleting this Organization Type ?</digi:trn>'
+		if (confirm(msg)) {
 			document.aimAddOrgTypeForm.action.value = "delete";
 			document.aimAddOrgTypeForm.submit();
 		}
 		else
 			return false;
 	}
-	
+
 	function move() {
 		<digi:context name="selectLoc" property="context/module/moduleinstance/orgTypeManager.do" />
 		url = "<%= selectLoc %>";
 		document.location.href = url;
 	}
-	
+
 	function check() {
 		var str = document.aimAddOrgTypeForm.orgType.value;
 		var code = trim(document.aimAddOrgTypeForm.orgTypeCode.value);
 		str = trim(str);
-		
+
 		if (str == null || str.length == 0) {
 			alert("Please enter name for this Type");
 			document.aimAddOrgTypeForm.orgType.focus();
@@ -45,7 +46,7 @@
 			document.aimAddOrgTypeForm.submit();
 		}
 	}
-	
+
 	function trim ( inputStringTrim ) {
 		fixedTrim = "";
 		lastCh = " ";
@@ -80,7 +81,7 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-	
+
 						<digi:link href="/admin.do" styleClass="comment">
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
@@ -92,12 +93,12 @@
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<logic:equal name="aimAddOrgTypeForm" property="action" value="create" >
-							<digi:trn key="aim:addOrgType">Add Organization Type</digi:trn>	
+							<digi:trn key="aim:addOrgType">Add Organization Type</digi:trn>
 						</logic:equal>
 						<logic:equal name="aimAddOrgTypeForm" property="action" value="edit" >
-							<digi:trn key="aim:editOrgType">Edit Organization Type</digi:trn>	
+							<digi:trn key="aim:editOrgType">Edit Organization Type</digi:trn>
 						</logic:equal>
-                      </span>	
+                      </span>
 					</td>
 					<!-- End navigation -->
 				</tr>
@@ -124,23 +125,23 @@
 								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
-										<table bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>	
+										<table bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
 											<tr>
 												<td bgColor=#ffffff class=box-border>
 													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
 														<tr bgColor=#dddddb>
 															<td bgColor=#dddddb height="20" align="center" colspan="5">
 																<logic:equal name="aimAddOrgTypeForm" property="action" value="create" >
-																	<b><digi:trn key="aim:addOrgType">Add Organization Type</digi:trn></b>	
+																	<b><digi:trn key="aim:addOrgType">Add Organization Type</digi:trn></b>
 																</logic:equal>
 																<logic:equal name="aimAddOrgTypeForm" property="action" value="edit" >
-																	<b><digi:trn key="aim:editOrgType">Edit Organization Type</digi:trn></b>	
+																	<b><digi:trn key="aim:editOrgType">Edit Organization Type</digi:trn></b>
 																</logic:equal>
 															</td>
 														</tr>
 														<!-- Page Logic -->
 														<tr>
-															<td width="100%">	
+															<td width="100%">
 																<table width="100%" cellPadding=3 cellSpacing=3 border=0 bgColor=#f4f4f2>
 																	<tr>
 																		<td width="30%" align="right">
@@ -177,7 +178,7 @@
 																					<td width="45%" align="left">
 																						<c:set var="translation">
 																							<digi:trn key="aim:btnCancel">Cancel</digi:trn>
-																						</c:set>																					
+																						</c:set>
 																						<input type="button" value="${translation}" class="dr-menu" onclick="move()">
 																					</td>
 																				</tr>
@@ -189,7 +190,7 @@
 																			<td colspan="2" width="60%"  align="center">
 																				<c:set var="translation">
 																					<digi:trn key="aim:btnDeleteThisType">Delete this Type</digi:trn>
-																				</c:set>																			
+																				</c:set>
 																				<input type="button" value="${translation}" class="dr-menu" onclick="msg()">
 																			</td>
 																		</tr>
@@ -204,14 +205,14 @@
 																			</td>
 																		</tr>
 																	</logic:equal>
-																</table>	
+																</table>
 															</td>
 														</tr>
 													<!-- end page logic -->
 													</table>
 												</td>
 											</tr>
-											
+
 										</table>
 									</td>
 								</tr>

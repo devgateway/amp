@@ -35,12 +35,15 @@
           document.aimIndicatorForm.addBtn.disabled = true;   
           <digi:context name="addInd" property="context/module/moduleinstance/addIndicator.do" />
           document.forms[0].action = "<%=addInd%>";
-          document.forms[0].target = "_self";
+          document.forms[0].target = window.opener.name;
           document.forms[0].submit();
-
-		}
+		  window.close();
+		}			
+    	
 		return temp;
+		
 	}
+
 
 	function load(){
 		if (document.aimIndicatorForm.errorFlag.value == "false") {

@@ -117,7 +117,7 @@ public class AddIndicator extends Action {
 					indForm.setSameIndicatorName("false");
 				}
 				indForm.setErrorFlag(false);
-				return mapping.findForward("forward");
+				return mapping.findForward("save");
 			}
 		}
 		return null;

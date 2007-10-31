@@ -16,7 +16,7 @@
 
 	function validate() {
 		if(isEmpty(document.aimEditActivityForm.measure.value) == true) {
-			alert("Please enter the measure");			
+			alert("Please enter the measure");
 			document.aimEditActivityForm.measure.focus();
 			return false;
 		}
@@ -76,19 +76,19 @@
 												<html:textarea property="measure" styleClass="inp-text" rows="3" cols="60"/>
 											 </a>
 										</td>
-									</tr>								
+									</tr>
 									<tr>
 										<td align="center" colspan=2>
 											<table cellPadding=5>
 												<tr>
 													<td>
-														<input type="button" value="Add" class="dr-menu" onclick="return addMeasure()">
+														<input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu" onclick="return addMeasure()">
 													</td>
 													<td>
-														<input type="reset" value="Clear" class="dr-menu">
+														<input type="reset" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu">
 													</td>
 													<td>
-														<input type="button" value="Close" class="dr-menu" onclick="window.close()">
+														<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="window.close()">
 													</td>
 												</tr>
 											</table>
@@ -96,7 +96,7 @@
 									</tr>
 								</table>
 							</td>
-						</tr>					
+						</tr>
 					</table>
 				</td>
 			</tr>

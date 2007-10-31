@@ -10,32 +10,32 @@
 		var flag = confirm("Delete this Scheme?");
 		return flag;
 	}
-	function validate() 
+	function validate()
 	{
-		if ((document.aimUpdateComponentsForm.compTitle.value).length == 0) 
+		if ((document.aimUpdateComponentsForm.compTitle.value).length == 0)
 		{
 			alert("Please enter component title name");
 			document.aimUpdateComponentsForm.compTitle.focus();
 			return false;
-		}	
-		if ((document.aimUpdateComponentsForm.compCode.value).length == 0) 
+		}
+		if ((document.aimUpdateComponentsForm.compCode.value).length == 0)
 		{
 			alert("Please enter component code");
 			document.aimUpdateComponentsForm.compCode.focus();
 			return false;
-		}			
+		}
 		return true;
-	}	
+	}
 	function updateScheme(id) {
 		var temp = validate();
-		if (temp == true) 
-		{		
+		if (temp == true)
+		{
 				<digi:context name="updateComponent" property="context/module/moduleinstance/updateComponents.do?event=saveEditComp" />
 				document.aimUpdateComponentsForm.action = "<%= updateComponent%>&componentId="+id;
 				document.aimUpdateComponentsForm.target = "_self";
 				document.aimUpdateComponentsForm.submit();
 		}
-		return temp;	
+		return temp;
 	}
 	function onload(){
 		if(document.aimUpdateComponentsForm.check.value=="save"){
@@ -45,7 +45,7 @@
 			document.aimUpdateComponentsForm.submit();
 			window.close();
 		}
-	}		
+	}
 </script>
 <digi:errors />
 <digi:instance property="aimUpdateComponentsForm" />
@@ -125,10 +125,10 @@
 															<table width="100%" cellspacing="5">
 																<tr>
 																	<td width="50%" align="right"><input type="button"
-																		name="addBtn" value="Save"
+																		name="addBtn" value="<digi:trn key='btn:save'>Save</digi:trn>"
 																		onclick="updateScheme('<bean:write name="aimUpdateComponentsForm" property="id" />');">
 																	</td>
-																	<td width="50%" align="left"><html:reset value="Cancel"
+																	<td width="50%" align="left"><input type="button" value="<digi:trn key='btn:cancel'>Cancel</digi:trn>"
 																		styleClass="dr-menu" onclick="window.close();" /></td>
 																</tr>
 															</table>

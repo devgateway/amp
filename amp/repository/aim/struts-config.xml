@@ -901,6 +901,7 @@
 		</action>
     <action input="/showLayout.do?layout=aim_addMEIndicator" name="aimIndicatorForm" path="/aim/addIndicator" scope="session" type="org.digijava.module.aim.action.AddIndicator" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_addMEIndicator" />
+       <forward name="save" path="/aim/indicatorManager.do" />
     </action>
     <action name="aimIndicatorForm" path="/aim/saveIndicator" scope="request" type="org.digijava.module.aim.action.SaveIndicator" validate="false">
       <forward name="forward" path="/aim/indicatorManager.do" />

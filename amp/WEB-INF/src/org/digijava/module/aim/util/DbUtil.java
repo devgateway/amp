@@ -1,4 +1,5 @@
 
+
 package org.digijava.module.aim.util;
 
 import java.text.Collator;
@@ -6045,60 +6046,25 @@ public class DbUtil {
     }
 
     public static Collection<CountryBean> getTranlatedCountries(HttpServletRequest request) {
-        Session session = null;
         Collection<CountryBean> trnCnCol = null;
-        Collection msgCol = null;
-        Query qry = null;
-
         org.digijava.kernel.entity.Locale navLang = RequestUtils.getNavigationLanguage(request);
-        Site site=RequestUtils.getSite(request);
 
         try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select msg " +
-               " from "+Message.class.getName()+" msg" +
-               " where (msg.key like ('cn:%')) and (msg.siteId=:siteId) and (msg.locale=:locale)";
+            trnCnCol = new ArrayList<CountryBean>();
+            Collection<Country> cnCol=FeaturesUtil.getAllDgCountries();
+            if(cnCol!=null && cnCol.size()!=0){
+                for (Iterator cnIter = cnCol.iterator(); cnIter.hasNext(); ) {
+                    Country cn = (Country) cnIter.next();
+                    cn=getTranlatedCountry(request,cn);
 
-            qry = session.createQuery(queryString);
-            qry.setParameter("siteId", site.getId(), Hibernate.LONG);
-            qry.setParameter("locale", navLang.getCode(), Hibernate.STRING);
+                    CountryBean trnCn=new CountryBean();
+                    trnCn.setId(cn.getCountryId());
+                    trnCn.setIso(cn.getIso());
+                    trnCn.setIso3(cn.getIso3());
+                    trnCn.setName(cn.getCountryName());
+                    trnCnCol.add(trnCn);
+                }
 
-            msgCol = qry.list();
-            if(msgCol!=null && msgCol.size()!=0){
-                trnCnCol = new ArrayList<CountryBean>();
-                for (Iterator msgIter = msgCol.iterator(); msgIter.hasNext(); ) {
-                    Message msg = (Message) msgIter.next();
-                    if(msg!=null){
-                        String cnIso=msg.getKey().substring(3);
-                        if(cnIso!=null){
-                            Country cn=getDgCountry(cnIso);
-                            if(cn!=null){
-                                CountryBean trnCn=new CountryBean();
-                                trnCn.setId(cn.getCountryId());
-                                trnCn.setIso(cnIso);
-                                trnCn.setIso3(cn.getIso3());
-                                trnCn.setName(msg.getMessage());
-                                trnCnCol.add(trnCn);
-                            }
-                        }
-                    }
-                }
-            }else{
-                trnCnCol = new ArrayList<CountryBean>();
-                Collection<Country> cnCol=FeaturesUtil.getAllDgCountries();
-                if(cnCol!=null && cnCol.size()!=0){
-                    for (Iterator cnIter = cnCol.iterator(); cnIter.hasNext(); ) {
-                        Country cn = (Country) cnIter.next();
-                        if(cn!=null){
-                            CountryBean trnCn=new CountryBean();
-                            trnCn.setId(cn.getCountryId());
-                            trnCn.setIso(cn.getIso());
-                            trnCn.setIso3(cn.getIso3());
-                            trnCn.setName(cn.getCountryName());
-                            trnCnCol.add(trnCn);
-                        }
-                    }
-                }
             }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
@@ -6121,25 +6087,24 @@ public class DbUtil {
         Site site = RequestUtils.getSite(request);
 
         try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select msg " +
-                " from " + Message.class.getName() + " msg" +
-                " where (msg.key like ('cn:%')) and (msg.siteId=:siteId) and (msg.locale=:locale)";
-
-            qry = session.createQuery(queryString);
-            qry.setParameter("siteId", site.getId(), Hibernate.LONG);
-            qry.setParameter("locale", navLang.getCode(), Hibernate.STRING);
-            msgCol = qry.list();
-
             if (country != null) {
+                session = PersistenceManager.getRequestDBSession();
+                String queryString = "select msg " +
+                    " from " + Message.class.getName() + " msg" +
+                    " where (msg.key=:msgLangKey) and (msg.siteId=:siteId) and (msg.locale=:locale)";
+
+                qry = session.createQuery(queryString);
+                qry.setParameter("siteId", site.getId(), Hibernate.LONG);
+                qry.setParameter("locale", navLang.getCode(), Hibernate.STRING);
+                qry.setParameter("msgLangKey", country.getMessageLangKey(), Hibernate.STRING);
+                msgCol = qry.list();
+
                 if (msgCol != null && msgCol.size() != 0) {
                     for (Iterator msgIter = msgCol.iterator(); msgIter.hasNext(); ) {
                         Message msg = (Message) msgIter.next();
                         if (msg != null) {
-                            if (msg.getKey().equals(country.getMessageLangKey())) {
-                                country.setCountryName(msg.getMessage());
-                                break;
-                            }
+                            country.setCountryName(msg.getMessage());
+                            break;
                         }
                     }
                 }

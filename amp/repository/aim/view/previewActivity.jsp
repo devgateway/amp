@@ -803,7 +803,7 @@ function disable() {
 										</td>
 									</tr>
 									</field:display>
-									
+									<feature:display name="References" module="References">
 									<tr>
 									<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 									References
@@ -822,7 +822,7 @@ function disable() {
 									</c:forEach>
 									</td>
 									</tr>
-									
+									</feature:display>
 									<field:display name="Implementation Location" feature="Location">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -2211,6 +2211,7 @@ function disable() {
 											<c:out value="${aimEditActivityForm.actAthEmail}"/>
 										</td>
 									</tr>
+									<field:display feature="Contact Information" name="Data Source Preview">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:dataSource">
@@ -2220,6 +2221,7 @@ function disable() {
 											<c:out value="${aimEditActivityForm.actAthAgencySource}"/>
 										</td>
 									</tr>
+									</field:display>
 									<logic:notEmpty name="aimEditActivityForm" property="updatedDate">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -2258,6 +2260,7 @@ function disable() {
 
 									</logic:notEmpty>
 									<logic:notEmpty name="aimEditActivityForm" property="team">
+									<field:display name="Date Team Leader Preview" feature="Contact Information">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:activityTeamLeader">
@@ -2270,6 +2273,7 @@ function disable() {
 
 										</td>
 									</tr>
+									</field:display>
 									</logic:notEmpty>
 									<c:if test="${aimEditActivityForm.pageId == 1}">
 									<tr><td bgColor=#ffffff align="center" colspan=2>

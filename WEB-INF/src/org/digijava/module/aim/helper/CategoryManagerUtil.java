@@ -474,7 +474,7 @@ public class CategoryManagerUtil {
 		String translationKey			= "aim:category" + ampCategoryValue.getAmpCategoryClass().getId() +
 										"_" + ampCategoryValue.getAmpCategoryClass().getName() + "_" +
 										filteredValue;
-		return translationKey;
+		return translationKey.toLowerCase();
 	}
 	/**
 	 *

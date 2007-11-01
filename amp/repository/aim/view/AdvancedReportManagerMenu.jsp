@@ -5,10 +5,14 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+
+<digi:instance property="aimAdvancedReportForm" />
 <script type="text/javascript" language="JavaScript">
 function menuA(val){
-    if (!check())
+	if(${aimAdvancedReportForm.reportEdit}== 'false'){
+		if (!check())
     	return false;
+	}    
 	<digi:context name="base" property="context/module/moduleinstance/advancedReportManager.do?check=" />
 	href = "<%= base %>";
 	switch (val){
@@ -43,7 +47,7 @@ function nope(){
 }
 </script>
 
-<digi:instance property="aimAdvancedReportForm" />
+
 								<tr width="100%" valign="top">
 									<td height="20">
 										<table bgcolor="#f4f4f4" align="left" valign="bottom" cellPadding=0 cellspacing=1 height="20">
@@ -52,9 +56,16 @@ function nope(){
 													<c:set var="translation">
 														<digi:trn key="aim:clickToSelectReportType">Click here to Select Report Type</digi:trn>
 													</c:set>
-													<a class="sub-nav" style="cursor:pointer;" title="${translation}"  onclick="return menuA(0)">
-													1 :   <digi:trn key="aim:SelectReportType2">Select Report Type</digi:trn>
-													</a>
+													<c:if test="${aimAdvancedReportForm.reportEdit==true}">
+														<a class="sub-nav" style="cursor:pointer;" title="${translation}"  onclick="return menuA(0)">
+														1 :   <digi:trn key="aim:SelectedReportType2">Report Type</digi:trn>
+														</a>
+													 </c:if>
+													 <c:if test="${aimAdvancedReportForm.reportEdit==false}">
+														<a class="sub-nav" style="cursor:pointer;" title="${translation}"  onclick="return menuA(0)">
+														1 :   <digi:trn key="aim:SelectReportType2">Select Report Type</digi:trn>
+														</a>
+													 </c:if>													
 												</td>
 											<!--ends here-->
 												<td noWrap align=left> 

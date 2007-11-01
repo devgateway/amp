@@ -64,7 +64,7 @@ function confirmFunc() {
 				</tr>
         		<tr>
         			<td title='<digi:trn key="aim:createReport">Create Report</digi:trn>' align="left">
-						<digi:link href="/advancedReportManager.do?clear=true">
+						<digi:link href="/advancedReportManager.do?clear=true&reportEdit=false">
 							<b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
 						</digi:link>
 					</td>
@@ -247,7 +247,7 @@ function confirmFunc() {
 																	[ <digi:link href="/deleteAllReports.do" name="urlParams" title="${translation}" onclick="return confirmFunc()" >
 																		<digi:trn key="aim:reportDelete">Delete</digi:trn>
 																	</digi:link> ]
-																	[ <digi:link href="/editReport.do" name="urlParams" title="${translation}" >
+																	[ <digi:link href="/editReport.do?reportEdit=true" name="urlParams" title="${translation}" >
 																		<digi:trn key="aim:reportEdit">Edit</digi:trn>
 																	</digi:link> ]
 																</logic:equal>

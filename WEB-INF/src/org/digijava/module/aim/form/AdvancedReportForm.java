@@ -26,6 +26,8 @@ public class AdvancedReportForm extends ActionForm
 	}
 
 	
+	private Boolean reportEdit=null;
+	
 	private String levelPicked=null;
 	private String levelSorter=null;
 	private String levelSortOrder=null;
@@ -1499,6 +1501,12 @@ private int yrDiff;
 			this.setDrilldownTab(false);
 			this.setHideActivities(false);
 		}
+	}
+	public Boolean getReportEdit() {
+		return reportEdit;
+	}
+	public void setReportEdit(Boolean reportEdit) {
+		this.reportEdit = reportEdit;
 	}
 
 } //		End of Class

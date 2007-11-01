@@ -4,7 +4,9 @@ import org.apache.struts.action.*;
 import java.util.Collection;
 
 public class ReportsForm extends ActionForm {
-
+	
+		  private Boolean reportEdit=null;
+		  
 		  private Collection reports = null;
 		  private Long reportId = null;
 		  private String name = null;
@@ -122,4 +124,12 @@ public class ReportsForm extends ActionForm {
 		  public void setDescription(String description) {
 					this.description = description;
 		  }
+
+		public Boolean getReportEdit() {
+			return reportEdit;
+		}
+
+		public void setReportEdit(Boolean reportEdit) {
+			this.reportEdit = reportEdit;
+		}
 }

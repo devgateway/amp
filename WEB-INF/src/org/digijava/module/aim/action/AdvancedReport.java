@@ -1112,6 +1112,7 @@ public class AdvancedReport extends Action {
 							formBean.setPublicReport(null);
 							formBean.setReportType(null);		
 							formBean.setReportOption(null);
+							formBean.setReportEdit(null);
 			            }
 					
 				}

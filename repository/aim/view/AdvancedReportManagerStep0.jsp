@@ -9,6 +9,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<digi:instance property="aimAdvancedReportForm" />
+<digi:form action="/advancedReportManager.do" method="post">
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/advanceReportManager.js"/>"></script>
 
@@ -28,8 +30,10 @@ function check(){
   return true;
 }
 function gotoStep() {
-  if (!check())
-  return false;
+	if(${aimAdvancedReportForm.reportEdit}== 'false'){
+		if (!check())
+  		return false;
+	}  
   <digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SelectCols" />
   document.aimAdvancedReportForm.action = "<%= step %>";
   document.aimAdvancedReportForm.target = "_self";
@@ -40,8 +44,7 @@ function gotoStep() {
 
 </script>
 
-<digi:instance property="aimAdvancedReportForm" />
-<digi:form action="/advancedReportManager.do" method="post">
+
 
 
   <html:hidden property="moveColumn"/>
@@ -77,9 +80,16 @@ function gotoStep() {
                             Portfolio
                             </digi:trn>
                           </digi:link>&nbsp;&gt;&nbsp;
-                          <digi:trn key="aim:reportBuilder:selectReportType">
-                          Report Builder : Select Report Type
-                          </digi:trn>
+                          <c:if test="${aimAdvancedReportForm.reportEdit==false}">
+                          	<digi:trn key="aim:reportBuilder:selectReportType">
+                          		Report Builder : Select Report Type
+                          	</digi:trn>
+                          </c:if>
+                          <c:if test="${aimAdvancedReportForm.reportEdit==true}">
+                          	<digi:trn key="aim:reportBuilder:selectedReportType">
+                          		Report Builder :  Report Type
+                          	</digi:trn>
+                          </c:if>
                           &gt;</span>
                         </td>
                       </tr>
@@ -90,16 +100,30 @@ function gotoStep() {
 
                   <td height=16 vAlign=right align=center>
                     <span class=subtitle-blue>
-                      <digi:trn key="aim:reportBuilder:selectReportType">
-                      Report Builder : Select Report Type
-                      </digi:trn>
+                      <<c:if test="${aimAdvancedReportForm.reportEdit==false}">
+                          	<digi:trn key="aim:reportBuilder:selectReportType">
+                          		Report Builder : Select Report Type
+                          	</digi:trn>
+                          </c:if>
+                          <c:if test="${aimAdvancedReportForm.reportEdit==true}">
+                          	<digi:trn key="aim:reportBuilder:selectedReportType">
+                          		Report Builder :  Report Type
+                          	</digi:trn>
+                          </c:if>
                     </span>
                   </td>
                 </tr>
                 <tr colspan="2">
                   <td class=box-title align="right" valign="top">
-                    <img src="module/aim/images/arrow-014E86.gif"><digi:trn key="aim:reportBuilder:reportTypePleaseSelect">Report Type : Please Select</digi:trn>
-                      <td>
+                  	<c:if test="${aimAdvancedReportForm.reportEdit==true}">
+                  		<img src="module/aim/images/arrow-014E86.gif"><digi:trn key="aim:report:Type">Report Type :</digi:trn>
+                  		<bean:write name="aimAdvancedReportForm" property="arReportType"/>
+                  	</c:if>
+                  	<c:if test="${aimAdvancedReportForm.reportEdit==false}">
+                  		<img src="module/aim/images/arrow-014E86.gif">
+                  		<digi:trn key="aim:reportBuilder:reportTypePleaseSelect">Report Type : Please Select</digi:trn>
+                  	</c:if>                    
+                 <td>
                 </tr>
                 <TR>
                   <TD vAlign="top" align="center">
@@ -124,57 +148,69 @@ function gotoStep() {
                                       <!-- Radios -->
 
                                       <table cellPadding=0 cellSpacing=0 vAlign="top" align="center" width="400" bgColor=#f4f4f2 border="0">
-                                        <tr height="120">
-                                          <td>&nbsp;&nbsp;&nbsp;
-                                          </td>
-                                          <td>
-
-                                            <table cellPadding=0 cellSpacing=1 bgColor=#f4f4f2 border="0">
-                                              <tr>
-                                                <td>
-                                                  <html:radio property="reportType" value="donor" >
-                                                    <digi:trn key="aim:donorReport">
-                                                    Donor Report (Donor Funding)
-                                                    </digi:trn>
-                                                  </html:radio>
-                                                </td>
-                                              </tr>
-                                              <tr>
-                                                <td>
-                                                  <html:radio property="reportType" value="regional" >
-                                                    <digi:trn key="aim:regionalReport">
-                                                    Regional Report (Regional Funding)
-                                                    </digi:trn>
-                                                  </html:radio>
-                                                </td>
-                                              </tr>
-                                              <tr>
-                                                <td>
-                                                  <html:radio property="reportType" value="component" >
-                                                    <digi:trn key="aim:componentReport">
-                                                    Component Report (Component Funding)
-                                                    </digi:trn>
-                                                  </html:radio>
-                                                </td>
-                                              </tr>
-                                              <module:display name="Reports">
-                                                <feature:display module="Reports" name="Contribution Report">
-                                                  <tr>
-                                                    <td>
-                                                      <html:radio property="reportType" value="contribution" >
-                                                        <digi:trn key="aim:contributionReport">
-                                                        Contribution Report (Activity Contributions)
-                                                        </digi:trn>
-                                                      </html:radio>
-                                                    </td>
-                                                  </tr>
-                                                </feature:display>
-                                              </module:display>
-                                            </table>
-                                          </td>
-                                        </tr>
-                                      </table>
-
+                                        <c:if test="${aimAdvancedReportForm.reportEdit==false}">
+                                        	<tr height="120">
+                                          		<td>&nbsp;&nbsp;&nbsp;
+                                          		</td>
+                                          		<td align="left">
+                                          			<table cellPadding=0 cellSpacing=1 bgColor=#f4f4f2 border="0">
+			                                              <tr>
+			                                                <td>
+			                                                  <html:radio property="reportType" value="donor" >
+			                                                    <digi:trn key="aim:donorReport">
+			                                                    Donor Report (Donor Funding)
+			                                                    </digi:trn>
+			                                                  </html:radio>
+			                                                </td>
+			                                              </tr>
+			                                              <tr>
+			                                                <td>
+			                                                  <html:radio property="reportType" value="regional" >
+			                                                    <digi:trn key="aim:regionalReport">
+			                                                    Regional Report (Regional Funding)
+			                                                    </digi:trn>
+			                                                  </html:radio>
+			                                                </td>
+			                                              </tr>
+			                                              <tr>
+			                                                <td>
+			                                                  <html:radio property="reportType" value="component" >
+			                                                    <digi:trn key="aim:componentReport">
+			                                                    Component Report (Component Funding)
+			                                                    </digi:trn>
+			                                                  </html:radio>
+			                                                </td>
+			                                              </tr>
+			                                              <module:display name="Reports">
+			                                                <feature:display module="Reports" name="Contribution Report">
+			                                                  <tr>
+			                                                    <td>
+			                                                      <html:radio property="reportType" value="contribution" >
+			                                                        <digi:trn key="aim:contributionReport">
+			                                                        Contribution Report (Activity Contributions)
+			                                                        </digi:trn>
+			                                                      </html:radio>
+			                                                    </td>
+			                                                  </tr>
+			                                                </feature:display>
+			                                              </module:display>
+			                                            </table>
+			                                          </td>
+			                                        </tr>
+			                                      </table>
+                                          		</td>
+		                                	</tr>
+                                        </c:if>
+                                        <c:if test="${aimAdvancedReportForm.reportEdit==true}">												
+		                                              <tr height="100%" align="left">
+		                                                <td width="100%" align="left">		                                        			
+		                                        			<img src="module/aim/images/arrow-014E86.gif">
+		                                        			<bean:write name="aimAdvancedReportForm" property="arReportType"/>		                                        				                                        			
+		                                                </td>
+		                                              </tr>		                                        												
+											</c:if>                                       
+		                              </table>
+											
                                       <p>&nbsp;</p>
                                       <p>&nbsp;</p>
                                     </TD>

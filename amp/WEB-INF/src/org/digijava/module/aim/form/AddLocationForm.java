@@ -17,7 +17,7 @@ public class AddLocationForm extends ValidatorForm {
 		  private Collection region;
 		  private Collection zone;
 		  private Collection woreda;
-		  
+
 		  private Long id;
 		  private String name = null;
 		  private String iso;
@@ -31,15 +31,15 @@ public class AddLocationForm extends ValidatorForm {
 		  private Long regionId;
 		  private Long zoneId;
 		  private Long woredaId;
-		  
+
 		  private String level = null;
 		  private Integer impLevelValue;
 		  private boolean start;
-		  
+
 //		  private String edLevel = null;
 		  private Long categoryLevel	= null;
 		  private String edAction 	= null;
-		  
+
 		  /** 'yes'- location created, edited-II, deleted
 		   *  'on'- edited-II
 		   *  'off'- save button clicked in addLocation screen
@@ -49,7 +49,7 @@ public class AddLocationForm extends ValidatorForm {
 		  private String regionFlag = null;
 		  private String zoneFlag = null;
 		  private String woredaFlag = null;
-		  
+
 		  public void reset(ActionMapping mapping, HttpServletRequest request) {
 			  regionFlag = null;
 			  zoneFlag = null;
@@ -57,7 +57,7 @@ public class AddLocationForm extends ValidatorForm {
 			  if (start) {
 				level = "country";
 				impLevelValue = new Integer(1);
-				countryId = "";
+				countryId = null;
 				regionId = new Long(-1);
 				zoneId = new Long(-1);
 				woredaId = new Long(-1);
@@ -76,7 +76,7 @@ public class AddLocationForm extends ValidatorForm {
   			 	iso3 = null;
 			}
 	  	}
-		
+
 		public ActionErrors validate(ActionMapping mapping, HttpServletRequest req) {
 			ActionErrors errors = new ActionErrors();
 			if ("cancl".equalsIgnoreCase(edFlag)) {
@@ -112,7 +112,7 @@ public class AddLocationForm extends ValidatorForm {
 			}
 			return (errors.isEmpty())? null : errors;
 		}
-		  
+
 		  public String getRegionFlag() {
 			return regionFlag;
 		  }
@@ -120,7 +120,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setRegionFlag(String regionFlag) {
 			this.regionFlag = regionFlag;
 		  }
-		  
+
 		  public String getZoneFlag() {
 			return zoneFlag;
 		  }
@@ -128,7 +128,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setZoneFlag(String zoneFlag) {
 			this.zoneFlag = zoneFlag;
 		  }
-		  
+
 		  public String getWoredaFlag() {
 			return woredaFlag;
 		  }
@@ -136,7 +136,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setWoredaFlag(String woredaFlag) {
 			this.woredaFlag = woredaFlag;
 		  }
-		  
+
 		  public String getEdFlag() {
 			return edFlag;
 		  }
@@ -144,8 +144,8 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setEdFlag(String edFlag) {
 			this.edFlag = edFlag;
 		  }
-		  
-		  
+
+
 		  public String getEdAction() {
 			return edAction;
 		  }
@@ -153,7 +153,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setEdAction(String edAction) {
 			this.edAction = edAction;
 		  }
-		  
+
 		  public String getLevel() {
 			return level;
 		  }
@@ -161,7 +161,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setLevel(String level) {
 			this.level = level;
 		  }
-		  
+
 		  public boolean isStart() {
 			return start;
 		  }
@@ -169,7 +169,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setStart(boolean start) {
 			this.start = start;
 		  }
-		  		  
+
 		  public Integer getImpLevelValue() {
 			return impLevelValue;
 		  }
@@ -177,7 +177,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setImpLevelValue(Integer impLevelValue) {
 			this.impLevelValue = impLevelValue;
 		  }
-		  		  
+
 		  public Collection getCountry() {
 					 return (this.country);
 		  }
@@ -185,7 +185,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setCountry(Collection country) {
 					 this.country = country;
 		  }
-		  
+
 		  public Collection getRegion() {
 			 return region;
 		  }
@@ -193,7 +193,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setRegion(Collection region) {
 			 this.region = region;
 		  }
-		  
+
 		  public Collection getZone() {
 			 return zone;
 		  }
@@ -201,7 +201,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setZone(Collection zone) {
 			 this.zone = zone;
 		  }
-		  
+
 		  public Collection getWoreda() {
 			 return woreda;
 		  }
@@ -209,7 +209,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setWoreda(Collection woreda) {
 			 this.woreda = woreda;
 		  }
-		  
+
 		  public Long getId() {
 			 return id;
  }
@@ -225,7 +225,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setName(String name) {
 		  	this.name = name;
 		  }
-		  
+
 		  public String getCountryId() {
 			 return countryId;
 		  }
@@ -233,15 +233,15 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setCountryId(String countryId) {
 			 this.countryId = countryId;
 		  }
-		  
+
 		  public String getCode() {
 			 return code;
 		  }
 
 		  public void setCode(String code) {
-		  	this.code = code; 
+		  	this.code = code;
 		  }
-		  
+
 		  public String getDescription() {
 			 return description;
 		  }
@@ -249,7 +249,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setDescription(String description) {
 			 this.description = description;
 		  }
-		  
+
 		  public String getGsLat() {
 			 return gsLat;
 		  }
@@ -257,7 +257,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setGsLat(String gsLat) {
 		  	this.gsLat = gsLat;
 		  }
-		  
+
 		  public String getGsLong() {
 			 return gsLong;
 		  }
@@ -265,7 +265,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setGsLong(String gsLong) {
 		  		this.gsLong = gsLong;
 		  }
-		  
+
 		  public String getGeoCode() {
 			 return geoCode;
 		  }
@@ -273,7 +273,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setGeoCode(String geoCode) {
 		  	this.geoCode = geoCode;
 		  }
-		  
+
 		  public Long getRegionId() {
 			 return regionId;
 		  }
@@ -281,7 +281,7 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setRegionId(Long regionId) {
 			 this.regionId = regionId;
 		  }
-		  
+
 		  public Long getZoneId() {
 			 return zoneId;
 		  }
@@ -289,14 +289,14 @@ public class AddLocationForm extends ValidatorForm {
 		  public void setZoneId(Long zoneId) {
 			 this.zoneId = zoneId;
 		  }
-		  
+
 		  public Long getWoredaId() {
 			 return woredaId;
 		  }
 
 		  public void setWoredaId(Long woredaId) {
 			 this.woredaId = woredaId;
-		  } 
+		  }
 
 		public String getIso() {
 			return iso;
@@ -305,7 +305,7 @@ public class AddLocationForm extends ValidatorForm {
 		public void setIso(String iso) {
 			this.iso = iso;
 		}
-			
+
 		public String getIso3() {
 			return iso3;
 		}

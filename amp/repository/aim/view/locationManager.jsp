@@ -164,7 +164,7 @@ function delet1(val1, val2) {
 															</td>
 															<td  align="left" width="539" valign="top" height="19">
 																<html:select property="countryId" onchange="countryChanged()"	>
-																	<html:option value="">
+																	<html:option value="Select">
 																		--
 																		<digi:trn key="aim:AmpSelectLocation">
 																			Select

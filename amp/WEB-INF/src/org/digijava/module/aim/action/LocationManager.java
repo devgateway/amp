@@ -78,7 +78,7 @@ public class LocationManager extends Action {
 					 if (edFlag || edLevelFlag) {
 					 	if (addForm.getLevel().equals("country") || addForm.getLevel().equals("region")) {
 					 		addForm.setRegionId(new Long(-1));
-					 		addForm.setZoneId(new Long(-1));
+                            addForm.setZoneId(new Long(-1));
 					 		addForm.setWoredaId(new Long(-1));
 					 		addForm.setImpLevelValue(new Integer(1));
 					 		addForm.setRegion(null);
@@ -105,7 +105,7 @@ public class LocationManager extends Action {
 								if (addForm.getCountry() == null) {
 									return mapping.findForward("index");
 								}
-								if (addForm.getCountryId().equals("") || addForm.getCountryId().length() == 0) {
+								if (addForm.getCountryId()!=null && (addForm.getCountryId().equals("") || addForm.getCountryId().length() == 0)) {
 									addForm.setImpLevelValue(new Integer(1));
 								}
 								else {

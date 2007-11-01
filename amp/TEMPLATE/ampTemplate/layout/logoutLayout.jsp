@@ -116,12 +116,13 @@
 						<TD width=1 align="right"><digi:img src="images/feedback.gif"/></TD>
 
 						<TD align=left vAlign="center" class="feedbk">
-
+  <a href='<digi:site property="url"/>/aim/feedback.do' class="head-menu-link">
 							<digi:trn key="aim:feedBackOrContact">
 
 								FEEDBACK / CONTACT
 
 							</digi:trn>
+                                                        </a>
 
 						</TD>
 

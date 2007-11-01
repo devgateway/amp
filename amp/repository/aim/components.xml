@@ -159,7 +159,7 @@
 	<page name="addActivityStep7" title=" - Add Activity - Related Organizations" />
 	<page name="addActivityStep8" title=" - Add Activity - Contact Details | Conditions" />
 	<page name="addActivityStep10" title=" - Add Activity - Monitoring and Evaluation" />
-	<page name="addActivityStep11" title=" - Add Activity - Project Costs" />	
+	<page name="addActivityStep11" title=" - Add Activity - Project Costs" />
 	<page name="activityExist" title=" - Add Activity - Activity Already Exist" />
 	<page name="locationManager" title=" - Region Manager" />
 <!--	<page name="locationManager" title=" - Location Manager" />
@@ -172,7 +172,7 @@
 	<page page="selectLocation" name="aim_locPopupLayout" title="AMP - Select Location" />
 	<page page="selectOrganization" name="aim_orgPopupLayout" title="AMP - Select Organization" />
 	<page page="addFunding" name="aim_fundingPopupLayout" title="AMP - Add Funding" />
-	<page page="editEUActivity" name="aim_editEUActivity" title="AMP - Edit Activity" />	
+	<page page="editEUActivity" name="aim_editEUActivity" title="AMP - Edit Activity" />
 	<page page="addRegionalFunding" name="aim_addRegionalFunding" title="AMP - Add Regional Funding" />
 	<page page="selectSector" name="aim_selSectorPopupLayout" title="AMP - Select Sector" />
 	<page page="addActivityProgram" name="aim_addActivityProgram" title="AMP - Add Activity Program" />
@@ -196,21 +196,21 @@
 
 	<!-- global settings-->
 	<page name="viewGlobalSettings"  title ="- Global Settings " />
-	
+
 	<!-- category manager  -->
 	<page name="viewCategoryManager"  title ="- Category Manager " />
 	<page name="createOrEditCategory" title= "- Category Manager - Create or Edit Category " />
-		
+
 	<!-- translation manager-->
 	<page name="viewTranslatorManager"  title ="- Translator Manager " />
-	
+
 	<!-- costs -->
-	<page page="euActivityDetails" name="aim_euActivityDetails" title=" - Activity Details" />	
+	<page page="euActivityDetails" name="aim_euActivityDetails" title=" - Activity Details" />
 
 	<!-- program Manager-->
 	<page name="viewProgramTypeManager" title=" : Program Type Manager" />
 	<page name="addProgramType" title=" : Add Program Type" />
-	<page name="editProgramType" title=" : Edit Program Type" />	
+	<page name="editProgramType" title=" : Edit Program Type" />
 	<!-- sector manager with schemes -->
 	<page name="viewSectorSchemes" title=": View Sector Scheme" />
 	<page name="viewSectorSchemeLevel1" title=": View Sector Level 1" />
@@ -232,13 +232,13 @@
 	<page page="selectPhysicalProgress" name="aim_addPhyProgPopupLayout" title="AMP - Add Physical Progress" />
 	<page page="selectComponent" name="aim_addCompPopupLayout" title="AMP - Add Components" />
 	<page page="selectDocument" name="aim_selectDocument" title="AMP - Add Documents and Links" />
-	<page page="editableTasks" name="aim_editableTasks" title="AMP - Editable Tasks" />	
+	<page page="editableTasks" name="aim_editableTasks" title="AMP - Editable Tasks" />
 	<page page="reviseCompDate" name="aim_reviseCloseDate" title="AMP - Revise Completion Date" />
 	<page page="addChildWorkspaces" name="aim_addChildWorkspaces" title="AMP - Select Child Workspaces" />
 	<page page="viewUserProfile" name="aim_viewUserProfile" title="AMP - User Profile" />
 	<page name="previewActivity" title=" - Preview Activity" />
 	<page name="previewLogframe" title=" - Preview Logframe Activity" />
-	<page page="previewActivity" name="aim_publicActivityPreview" title=" - Public Activity Preview" />	
+	<page page="previewActivity" name="aim_publicActivityPreview" title=" - Public Activity Preview" />
 	<page name="viewRelatedLinks" title=" - Related Documents and Links" />
 	<page name="viewDocument" title=" - Document Details" />
 	<page name="teamDocument" title=" - Document Details" />
@@ -301,11 +301,11 @@
 	<page name="AdvancedReportManagerStep2Hierarchyn" title=" : Reports" />
 
 	<page name="featureManager" title=" - Feature Manager" />
-	
+
 	<page name="visibilityManager" title=" - Visibility Manager" />
-	
+
 	<page name="auditLoggerManager" title=" - Audit Logger Manager" />
-	
+
 	<page page="ar/filterPicker" name="aim_filterPicker" title="AMP - Reports Filter Picker" />
 
 	<page page="printableActivityPerformance" name="aim_printActPerf" title="AMP - Activity-Performance" />
@@ -343,7 +343,8 @@
 
 	<!-- tab Views -->
 	<page page="myTabs" name="aim_myTabs" title="My Tabs" />
-	
+        <page page="feedback" name="feedback" title="Feedback/Contact" />
+
 
 </secondary-pages>
 
@@ -363,8 +364,8 @@
 	<teaser name="myReports" action="getDesktopReports.do">
 		myReports.jsp
 	</teaser>
-	
-	
+
+
 	<teaser name="myTabs" action="getDesktopReports.do">
 		myTabs.jsp
 	</teaser>
@@ -470,7 +471,7 @@
 	<teaser name="channelOverview" action="channelOverview.do">
                 viewChannelOverview.jsp
     </teaser>
-	
+
 	<teaser name="reference" action="reference.do">
                 viewReferences.jsp
     </teaser>

@@ -132,6 +132,7 @@
     <forward name="index" path="/aim/index.do" />
   </global-forwards>
   <action-mappings>
+    <action path="/aim/feedback" forward="/showLayout.do?layout=feedback" />
     <action name="aimUserDetailForm" path="/aim/userProfile" scope="request" type="org.digijava.module.aim.action.ViewUserProfile" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_viewUserProfile" />
     </action>
@@ -1307,11 +1308,11 @@
     <action name="aimEditActivityForm" path="/aim/addFundingDetail" scope="session" type="org.digijava.module.aim.action.AddFundingDetail">
       <forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout" />
     </action>
-    
+
     <action name="aimEditActivityForm" path="/aim/addMTEFProjection" scope="session" type="org.digijava.module.aim.action.AddMTEFProjection">
       <forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout" />
     </action>
-    
+
     <action name="aimEditActivityForm" path="/aim/remSelFundOrgs" scope="session" type="org.digijava.module.aim.action.RemoveSelFundingOrgs">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
     </action>

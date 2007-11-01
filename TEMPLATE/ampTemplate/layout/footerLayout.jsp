@@ -15,9 +15,11 @@
 					<TR>
 						<TD width=1 align="right"><digi:img src="images/feedback.gif"/></TD>
 						<TD align=left vAlign="center" class="feedbk">
+                                                <a href='<digi:site property="url"/>/aim/feedback.do' class="head-menu-link">
 							<digi:trn key="aim:feedBackOrContact">
 								FEEDBACK / CONTACT
 							</digi:trn>
+                                                   </a>
 						</TD>
           			<TD align=right>
 							<FONT color="#FFFFFF">
@@ -40,8 +42,8 @@
 									<digi:insert attribute="transmode"/>
 							 	</TD>
 							</digi:secure>
-						</logic:notEmpty>				
-						<logic:notEmpty name="currentMember" scope="session">						
+						</logic:notEmpty>
+						<logic:notEmpty name="currentMember" scope="session">
 							<digi:secure actions="ADMIN">
 		  			     		<TD valign=top>
 									<TABLE width="98%" border="0" cellpadding="0" cellspacing="0">
@@ -66,17 +68,17 @@
 											</TD>
 							      	</TR>
 								   </TABLE>
-	 							</TD>						
-								</digi:secure>								
+	 							</TD>
+								</digi:secure>
 							</logic:notEmpty>
-						
+
 							<% if (session.getAttribute("ampAdmin") != null && session.getAttribute("ampAdmin").equals("yes")) { %>
 			  	        		<TD align=center vAlign="top">
 									<digi:insert attribute="ampAdminLink"/>
 								</TD>
 							<% } %>
 					</TR>
-				</TABLE>			
+				</TABLE>
 			</TD></TR>
 		</TABLE>
 		<%--
@@ -85,7 +87,7 @@
 	<TR><TD align="center">
 		<digi:insert attribute="flatLangSwitch" >
 			<tiles:put name="redirectToRoot" value="True" />
-		</digi:insert>	
+		</digi:insert>
 	</TD></TR>
 
 </TABLE>

@@ -8,7 +8,7 @@
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
-<c:set target="${bcparams}" property="dest" value="teamLead"/>			
+<c:set target="${bcparams}" property="dest" value="teamLead"/>
 
 <digi:instance property="aimTeamPagesForm" />
 
@@ -41,8 +41,8 @@
 						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="${translation}">
 						<digi:trn key="aim:teamWorkspaceSetup">
 						Team Workspace Setup
-						</digi:trn>						
-						</digi:link>&nbsp;&gt;&nbsp;						
+						</digi:trn>
+						</digi:link>&nbsp;&gt;&nbsp;
 						<c:set var="translation">
 							<digi:trn key="aim:clickToConfigureTeamPages">Click here to Configure Team Pages</digi:trn>
 						</c:set>
@@ -50,8 +50,8 @@
 						<digi:trn key="aim:teamPagesConfigure">
 						Configure Team Pages
 						</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;						
-						<bean:write name="aimTeamPagesForm" property="pageName" />						
+						</digi:link>&nbsp;&gt;&nbsp;
+						<bean:write name="aimTeamPagesForm" property="pageName" />
 					</td>
 				</tr>
 				<tr>
@@ -60,11 +60,11 @@
 				</tr>
 				<tr>
 					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%" 
+						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%"
 						valign="top" align="left">
 							<tr bgColor=#3754a1>
 								<td vAlign="top" width="100%">
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />								
+									<jsp:include page="teamSetupMenu.jsp" flush="true" />
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>
@@ -73,7 +73,7 @@
 							</tr>
 							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">	
+									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">
 										<tr>
 											<td bgColor=#ffffff class=box-border>
 												<table border=0 cellPadding=3 cellSpacing=1 class=box-border width="100%" >
@@ -81,7 +81,7 @@
 														<td bgColor=#dddddb align="center" height="20" colspan="2">
 															<b>
 															<digi:trn key="aim:configureFiltersFor">
-															Configure Filters for 
+															Configure Filters for
 															</digi:trn> <bean:write name="aimTeamPagesForm" property="pageName" /></b>
 														</td>
 													</tr>
@@ -93,11 +93,11 @@
 																Update to AMP complete
 															</digi:trn></b></font>
 														</td>
-													</tr>													
+													</tr>
 													</logic:equal>
-													
+
 														<logic:notEmpty name="aimTeamPagesForm" property="filters">
-															<logic:iterate name="aimTeamPagesForm" id="filters" property="filters" 
+															<logic:iterate name="aimTeamPagesForm" id="filters" property="filters"
 															type="org.digijava.module.aim.dbentity.AmpFilters">
 															<tr bgColor=#f4f4f2>
 																<td width="3%">
@@ -106,12 +106,14 @@
 																	</html:multibox>
 																</td>
 																<td height="20" width="97%">
+                                                                                                                                <digi:trn key="aim:${filters.filterName}">
 																	<bean:write name="filters" property="filterName" />
+                                                                                                                                        </digi:trn>
 																</td>
 															</tr>
 															</logic:iterate>
 
-															<tr><td colspan="2" align="center"> 
+															<tr><td colspan="2" align="center">
 																<table cellPadding="3" cellPadding="3">
 																	<tr>
 																		<td>
@@ -124,7 +126,7 @@
 																</table>
 															</td></tr>
 														</logic:notEmpty>
-													</tr>							
+													</tr>
 												</table>
 											</td>
 										</tr>
@@ -135,7 +137,7 @@
 							<tr><td bgColor=#f4f4f2>
 								&nbsp;
 							</td></tr>
-						</table>			
+						</table>
 					</td>
 				</tr>
 			</table>

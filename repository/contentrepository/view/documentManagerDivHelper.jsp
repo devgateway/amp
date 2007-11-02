@@ -7,7 +7,7 @@
 </div>
 
 <div id="tableTemplate" style="display:none">
-	<table name="framingTable" border="1" cellPadding=5 cellSpacing=0 width="56%"
+	<table name="framingTable" border="1" cellPadding=5 cellSpacing=0 width="95%"
 			style="position: relative; left: 20px; font-size: x-small">
 			<tr>
 				<td bgcolor="#006699" class="textalb">

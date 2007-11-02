@@ -93,7 +93,8 @@ public class SetAttributes extends Action {
 			query.setString("uuid", uuid);
 			
 			CrDocumentNodeAttributes docNodeAtt			= (CrDocumentNodeAttributes)query.uniqueResult();
-			hbSession.delete(docNodeAtt);
+			if (docNodeAtt != null )
+				hbSession.delete(docNodeAtt);
 			hbSession.flush();
 						
 		} catch (Exception e) {

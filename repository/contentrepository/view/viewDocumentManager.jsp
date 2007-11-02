@@ -7,6 +7,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ page import="java.util.List"%>
 
+<jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
+
 <%@include file="addDocumentPanel.jsp" %>
 
 <html:errors />
@@ -22,14 +24,12 @@
 
 <%@include file="documentManagerJsHelper.jsp" %>
 
-<!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="90%"
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="75%"
 	class="box-border-nopadding">
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left class=r-dotted-lg vAlign=top>
 		<!-- 
 		<digi:form action="/documentManager.do" method="post"
 			enctype="multipart/form-data">
@@ -99,7 +99,7 @@
 		<br />
 		<br /> --%>
 		<%-- Table for "My Documents" --%>
-				<table border="1" cellPadding=5 cellSpacing=0 width="56%"
+				<table border="1" cellPadding=5 cellSpacing=0 width="95%"
 			style="position: relative; left: 20px">
 			<tr>
 				<td bgcolor="#006699" class="textalb">
@@ -148,12 +148,12 @@
 					%>
 							<logic:equal name="documentData" property="isPublic" value="true">
 								<c:set var="makePublicCommand">
-									<digi:trn key="contentrepository:republish">Republish</digi:trn>
+									<digi:trn key="contentrepository:republish">Rep</digi:trn>
 								</c:set>
 							</logic:equal>
 							<logic:equal name="documentData" property="isPublic" value="false">
 								<c:set var="makePublicCommand">
-									<digi:trn key="contentrepository:makePublic">Make Public</digi:trn>
+									<digi:trn key="contentrepository:makePublic">Pub</digi:trn>
 								</c:set>>
 							</logic:equal>
 							<tr>
@@ -182,8 +182,8 @@
 								<a style="cursor:pointer; text-decoration:underline; color: blue"
 								onClick="window.location='/contentrepository/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />'"
 								href="/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />"
-								title="${translation}"> [<digi:trn key="contentrepository:documentManagerDownload">Download</digi:trn>] </a>
-								<br />
+								title="${translation}">[<digi:trn key="contentrepository:documentManagerDownload">D</digi:trn>]</a>
+								
 
 								<c:set var="translation">
 									<digi:trn key="contentrepository:documentManagerAddVersionHint">Click here to add a new version of this document</digi:trn>
@@ -191,8 +191,8 @@
 								<logic:equal name="documentData" property="hasVersioningRights" value="true">
 								<a style="cursor:pointer; text-decoration:underline; color: blue"
 								onClick="setType('version'); configPanel(0,'<%=documentData.getTitle() %>','<%=documentData.getDescription() %>','<%=documentData.getUuid() %>');showMyPanel(0, 'addDocumentDiv');"
-								title="${translation}"> [<digi:trn key="contentrepository:documentManagerAddVersion">Add Version</digi:trn>] </a>
-								<br />
+								title="${translation}">[<digi:trn key="contentrepository:documentManagerAddVersion">+</digi:trn>]</a>
+								
 								</logic:equal>
 								
 								<c:set var="translation">
@@ -200,8 +200,8 @@
 								</c:set> 
 								<a style="cursor:pointer; text-decoration:underline; color: blue"
 								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>');"
-								title="${translation}"> [<digi:trn key="contentrepository:documentManagerVersions">Version History</digi:trn>] </a>
-								<br />
+								title="${translation}">[<digi:trn key="contentrepository:documentManagerVersions">H</digi:trn>]</a>
+								
 								
 								<c:set var="translation">
 									<digi:trn key="contentrepository:documentManagerMakePublicHint">Click here to make this document public</digi:trn>
@@ -209,9 +209,9 @@
 								<logic:equal name="documentData" property="hasMakePublicRights" value="true">
 									<a style="cursor:pointer; text-decoration:underline; color: blue"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true);"
-									title="${translation}"> [<c:out value="${makePublicCommand}" />] </a>
+									title="${translation}">[<c:out value="${makePublicCommand}" />]</a>
 								</logic:equal>
-								<br />
+								
 								
 								<logic:equal name="documentData" property="isPublic" value="true">
 								<c:set var="translation">
@@ -220,9 +220,9 @@
 								<logic:equal name="documentData" property="hasDeleteRightsOnPublicVersion" value="true">
 									<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.UNPUBLISH %>', '<%=documentData.getUuid() %>');"
-									title="${translation}"> [<digi:trn key="contentrepository:documentManagerUnpublish">Unpublish</digi:trn>] </a>
+									title="${translation}">[<digi:trn key="contentrepository:documentManagerUnpublish">Priv</digi:trn>]</a>
 								</logic:equal>
-								<br />
+								
 								</logic:equal>
 								
 								<c:set var="translation">
@@ -231,7 +231,7 @@
 								<logic:equal name="documentData" property="hasDeleteRights" value="true">
 									<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
 									onClick="deleteRow('<%=documentData.getUuid() %>');"
-									title="${translation}"> [<digi:trn key="contentrepository:documentManagerDelete">Delete</digi:trn>] </a>
+									title="${translation}">[<digi:trn key="contentrepository:documentManagerDelete">Del</digi:trn>]</a>
 								</logic:equal>
 								</td>
 							</tr>
@@ -248,7 +248,7 @@
 		<br />
 		<br />
 		
-		<table border="1" cellPadding=5 cellSpacing=0 width="56%"
+		<table border="1" cellPadding=5 cellSpacing=0 width="95%"
 			style="position: relative; left: 20px">
 			<tr>
 				<td bgcolor="#006699" class="textalb">
@@ -297,12 +297,12 @@
 					%>
 							<logic:equal name="documentData" property="isPublic" value="true">
 								<bean:define id="makePublicCommand">
-									<digi:trn key="contentrepository:republish">Republish</digi:trn>
+									<digi:trn key="contentrepository:republish">Rep</digi:trn>
 								</bean:define>
 							</logic:equal>
 							<logic:equal name="documentData" property="isPublic" value="false">
 								<bean:define id="makePublicCommand">
-									<digi:trn key="contentrepository:makePublic">Make Public</digi:trn>
+									<digi:trn key="contentrepository:makePublic">Pub</digi:trn>
 								</bean:define>
 							</logic:equal>
 							<tr>
@@ -331,8 +331,7 @@
 								<a style="cursor:pointer; text-decoration:underline; color: blue"
 								onClick="window.location='/contentrepository/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />'"
 								href="/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />"
-								title="${translation}"> [<digi:trn key="contentrepository:documentManagerDownload">Download</digi:trn>] </a>
-								<br />
+								title="${translation}">[<digi:trn key="contentrepository:documentManagerDownload">D</digi:trn>]</a>
 
 								<c:set var="translation">
 									<digi:trn key="contentrepository:documentManagerAddVersionHint">Click here to add a new version of this document</digi:trn>
@@ -340,8 +339,8 @@
 								<logic:equal name="documentData" property="hasVersioningRights" value="true">
 								<a style="cursor:pointer; text-decoration:underline; color: blue"
 								onClick="setType('version'); configPanel(0,'<%=documentData.getTitle() %>','<%=documentData.getDescription() %>','<%=documentData.getUuid() %>');showMyPanel(0, 'addDocumentDiv');"
-								title="${translation }"> [<digi:trn key="contentrepository:documentManagerAddVersion">Add Version</digi:trn>] </a>
-								<br />
+								title="${translation }">[<digi:trn key="contentrepository:documentManagerAddVersion">+</digi:trn>]</a>
+		
 								</logic:equal>
 								
 								<c:set var="translation">
@@ -349,8 +348,7 @@
 								</c:set> 
 								<a style="cursor:pointer; text-decoration:underline; color: blue"
 								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>');"
-								title="${translation }"> [<digi:trn key="contentrepository:documentManagerVersions">Version History</digi:trn>] </a>
-								<br />
+								title="${translation }">[<digi:trn key="contentrepository:documentManagerVersions">H</digi:trn>]</a> 
 								
 								<c:set var="translation">
 									<digi:trn key="contentrepository:documentManagerMakePublicHint">Click here to make this document public</digi:trn>
@@ -358,9 +356,9 @@
 								<logic:equal name="documentData" property="hasMakePublicRights" value="true">
 									<a style="cursor:pointer; text-decoration:underline; color: blue"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true);"
-									title="${translation}"> [<bean:write name="makePublicCommand"/>] </a>
+									title="${translation}">[<bean:write name="makePublicCommand"/>]</a>
 								</logic:equal>
-								<br />
+
 								
 								<logic:equal name="documentData" property="isPublic" value="true">
 								<c:set var="translation">
@@ -369,9 +367,9 @@
 								<logic:equal name="documentData" property="hasDeleteRightsOnPublicVersion" value="true">
 									<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.UNPUBLISH %>', '<%=documentData.getUuid() %>');"
-									title="${translation }"> [<digi:trn key="contentrepository:documentManagerUnpublish">Unpublish</digi:trn>] </a>
+									title="${translation }">[<digi:trn key="contentrepository:documentManagerUnpublish">Priv</digi:trn>]</a>
 								</logic:equal>
-								<br />
+
 								</logic:equal>
 								
 								<c:set var="translation">
@@ -380,7 +378,7 @@
 								<logic:equal name="documentData" property="hasDeleteRights" value="true">
 									<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
 									onClick="deleteRow('<%=documentData.getUuid() %>');"
-									title="${translation }"> [<digi:trn key="contentrepository:documentManagerDelete">Delete</digi:trn>] </a>
+									title="${translation }">[<digi:trn key="contentrepository:documentManagerDelete">Del</digi:trn>]</a>
 								</logic:equal>
 								</td>
 							</tr>
@@ -397,8 +395,13 @@
 		</table>
 		<br />
 		<br />
+		<c:set var="translation">
+			<digi:trn key="contentrepository:newWindowExplanation">Click here to open a new document window</digi:trn>
+		</c:set>
 		<div id="otherDocumentsDiv"></div>
-		&nbsp;&nbsp;<a style="cursor:pointer; text-decoration:underline; color: blue" onClick="newWindow('Select Documents', true,'otherDocumentsDiv')" /> Click here to add a new window</a>
+		&nbsp;&nbsp;<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue" onClick="newWindow('Select Documents', true,'otherDocumentsDiv')" />
+			<digi:trn key="contentrepository:newWindow">New window</digi:trn>
+			</a>
 		</td>
 	</tr>
 </table>
@@ -439,6 +442,6 @@
 
 <script type="text/javascript">
 YAHOO.namespace("YAHOO.amp.table");
-YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("team_markup");
+YAHOO.amp.table.mytable	= YAHOO.amp.table.enhanceMarkup("team_markup");
 YAHOO.amp.table.mytable	= YAHOO.amp.table.enhanceMarkup("my_markup");
 </script>

@@ -153,7 +153,7 @@ function addDocuments() {
 }
 
 function addDocumentsDM(documentsType) {
-		openNewWindow(700, 500);
+		openNewWindow(900, 300);
 		document.aimEditActivityForm.docFileOrLink.value = "file";
 		document.aimEditActivityForm.action = "/contentrepository/selectDocumentDM.do?documentsType="+documentsType;
 		document.aimEditActivityForm.target = popupPointer.name;

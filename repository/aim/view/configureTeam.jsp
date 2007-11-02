@@ -82,7 +82,7 @@
 															<b>
 															<digi:trn key="aim:configureFiltersFor">
 															Configure Filters for
-															</digi:trn> <bean:write name="aimTeamPagesForm" property="pageName" /></b>
+															</digi:trn><digi:trn key="aim:${aimTeamPagesForm.pageName}"> <bean:write name="aimTeamPagesForm" property="pageName" /></digi:trn></b>
 														</td>
 													</tr>
 

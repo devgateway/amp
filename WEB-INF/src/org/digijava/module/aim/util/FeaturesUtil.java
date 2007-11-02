@@ -35,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.FeatureTemplates;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
+import org.digijava.kernel.exception.DgException;
 
 public class FeaturesUtil {
 
@@ -1977,7 +1978,7 @@ public class FeaturesUtil {
    * @author dan
    */
   public static void insertFieldWithFeatureVisibility(Long templateId,
-      Long featureId, String fieldName) {
+      Long featureId, String fieldName) throws DgException{
     Session session = null;
     AmpFeaturesVisibility feature = new AmpFeaturesVisibility();
     AmpFieldsVisibility field = new AmpFieldsVisibility();
@@ -2011,6 +2012,7 @@ public class FeaturesUtil {
       }
       logger.error("Exception : " + ex.getMessage());
       ex.printStackTrace();
+      throw new DgException(ex);
     }
     finally {
       if (session != null) {
@@ -2029,7 +2031,7 @@ public class FeaturesUtil {
    * @author dan
    */
   public static void insertFeatureWithModuleVisibility(Long templateId,
-      Long moduleId, String featureName) {
+      Long moduleId, String featureName) throws DgException {
     Session session = null;
     AmpModulesVisibility module = new AmpModulesVisibility();
     AmpFeaturesVisibility feature = new AmpFeaturesVisibility();
@@ -2056,6 +2058,7 @@ public class FeaturesUtil {
     catch (Exception ex) {
       logger.error("Exception : " + ex.getMessage());
       ex.printStackTrace();
+      throw new DgException(ex);
     }
     finally {
       if (session != null) {

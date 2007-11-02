@@ -9,15 +9,28 @@
 
 <digi:instance property="crDocumentManagerForm" />
 
+<jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
+
 <%@include file="addDocumentPanel.jsp" %>
+
+<html:errors />
 
 <%@include file="documentManagerJsHelper.jsp" %>
 
 <%@include file="documentManagerDivHelper.jsp" %>
 
-<br />
-<div id="otherDocumentsDiv"></div>
-<br />
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="75%"
+	class="box-border-nopadding">
+	<tr>
+		<td class=r-dotted-lg width=14>&nbsp;</td>
+		<td align=left class=r-dotted-lg vAlign=top>
+
+			<br />
+			<div id="otherDocumentsDiv"></div>
+			<br />
+		</td>
+	</tr>
+</table>
 
 <script type="text/javascript">
 	windowController	= newWindow( 'Public Documents', false, 'otherDocumentsDiv');

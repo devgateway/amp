@@ -31,8 +31,11 @@
 <button onclick="saveSelectedDocuments()" type="button">Submit</button> 
 <br /><br />
 &nbsp;&nbsp;
-<a style="cursor:pointer; text-decoration:underline; color: blue; font-size: x-small" onClick="newWindow('Select Documents', true, 'otherDocumentsDiv')" /> 
-	Click here to add a new window
+	<c:set var="translation">
+			<digi:trn key="contentrepository:newWindowExplanation">Click here to open a new document window</digi:trn>
+	</c:set>
+<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue; font-size: x-small" onClick="newWindow('Select Documents', true, 'otherDocumentsDiv')" /> 
+	<digi:trn key="contentrepository:newWindow">New window</digi:trn>
 </a>
 
 <script type="text/javascript">

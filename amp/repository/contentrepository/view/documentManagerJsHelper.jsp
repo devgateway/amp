@@ -1,14 +1,21 @@
 <style type="text/css">
 .all_markup
-{margin:1em;} 
+{margin:1em} 
 .all_markup table
-{border-collapse:collapse;} 
+{border-collapse:collapse; width: 90%} 
 .all_markup th
-{border:1px solid #000;padding:.25em;background-color:#fff;color:Black; font-size:x-small}
+{border:1px solid #000;padding:.25em;background-color:#fff;color:Black; font-size:small; color: #666666}
+.all_markup th a
+{font-size:small; text-decoration: none}
 .all_markup td
 {border-bottom:1px solid #000;padding:.25em;font-size:x-small}
 .all_markup .yui-dt-odd {background-color:#eee;} /*light gray*/ 
 .all_markup .yui-dt-selected {background-color:#97C0A5;} /*green*/ 
+.all_markup .yui-dt-sortedbyasc, .all_markup .yui-dt-sortedbydesc {background-color:#eee;}
+
+.all_markup .yui-dt-headtext {margin-right:5px;padding-right:15px;}
+.all_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_up.gif') no-repeat right;}/*arrow up*/
+.all_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_dn.gif') no-repeat right;}/*arrow down*/
 
 #versions_markup {margin:1em;} 
 #versions_markup table {border-collapse:collapse;} 
@@ -102,7 +109,17 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
     this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
 
     var markup	 				= YAHOO.util.Dom.get(markupName);
-	var dataTable 				= new YAHOO.widget.DataTable(markup,this.columnSet);
+    //var datasource				= YAHOO.util.DataSource(markup);
+    var options					= {paginated:true, 
+	                				 
+	                    				rowsPerPage: 10,
+	                    				pageCurrent: 1,
+	                    				startRecordIndex: 1,
+								        pageLinksLength: 2
+	                    			
+	                			};
+    
+	var dataTable 				= new YAHOO.widget.DataTable(markupName, this.columnSet, null, options);
     
     return dataTable;
 };
@@ -126,7 +143,8 @@ function getCallbackForDelete (row, table) {
 
 		},
 		failure: function(o) {
-			YAHOO.amp.panels[2].setBody("<div align='center'><font color='red'>${translation3}</font></div>");
+			//YAHOO.amp.panels[2].setBody("<div align='center'><font color='red'>${translation3}</font></div>");
+			alert('${translation3}');
 		}
 	}
 	return callbackForDelete;
@@ -141,10 +159,10 @@ function deleteRow(uuid, o) {
 				break;
 	}
 	if ( confirmDelete() ) {
-		var translation2				= "${translation2}";
-		YAHOO.amp.panels[2].setBody("<div align='center'>" + translation2 + "<br /> <img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0'/> </div>" );
-		YAHOO.amp.panels[2].setFooter("<div align='right'><button type='button' onClick='hidePanel(2)'>Close</button></div>");
-		showPanel(2);
+		//var translation2				= "${translation2}";
+		//YAHOO.amp.panels[2].setBody("<div align='center'>" + translation2 + "<br /> <img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0'/> </div>" );
+		//YAHOO.amp.panels[2].setFooter("<div align='right'><button type='button' onClick='hidePanel(2)'>Close</button></div>");
+		//showPanel(2);
 		//YAHOO.amp.table.dataTable.deleteRow(possibleRow);
 		YAHOO.util.Connect.asyncRequest('GET', '/contentrepository/deleteForDocumentManager.do?uuid='+uuid, getCallbackForDelete(possibleRow, YAHOO.amp.table.dataTable));
 		
@@ -493,7 +511,7 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 	return menu;
 
 }
-/* Toggle the view for body of window
+/* 	 the view for body of window
 elementId	- html id of the html element that should be hidden/unhidden
 iconId		- html id of the html plus/minus image 
 isMinus 	- true if body is hidden right now
@@ -524,6 +542,7 @@ function configPanel(panelNum, title, description, uuid) {
 	myForm.docTitle.value		= title;
 	myForm.docDescription.value	= description;
 	myForm.uuid.value			= uuid;
+	myForm.fileData.value		= null;
 }
 
 

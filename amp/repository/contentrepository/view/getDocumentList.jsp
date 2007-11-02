@@ -68,8 +68,7 @@
 								<a style="cursor:pointer; text-decoration:underline; color: blue"
 								onClick="window.location='/contentrepository/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />'"
 								href="/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />"
-								title="${translation }"> [<digi:trn key="contentrepository:documentManagerDownload">Download</digi:trn>] </a>
-								<br />
+								title="${translation }">[<digi:trn key="contentrepository:documentManagerDownload">D</digi:trn>]</a>
 
 								<c:set var="translation">
 									<digi:trn key="contentrepository:documentManagerAddVersionHint">Click here to add a new version of this document</digi:trn>
@@ -77,8 +76,7 @@
 								<logic:equal name="documentData" property="hasVersioningRights" value="true">
 								<a style="cursor:pointer; text-decoration:underline; color: blue"
 								onClick="setType('version'); configPanel(0,'<%=documentData.getTitle() %>','<%=documentData.getDescription() %>','<%=documentData.getUuid() %>');showMyPanel(0, 'addDocumentDiv');"
-								title="${translation }"> [<digi:trn key="contentrepository:documentManagerAddVersion">Add Version</digi:trn>] </a>
-								<br />
+								title="${translation }">[<digi:trn key="contentrepository:documentManagerAddVersion">+</digi:trn>]</a>
 								</logic:equal>
 								
 								<logic:equal name="documentData" property="showVersionHistory" value="true">
@@ -87,8 +85,7 @@
 								</c:set>
 								<a style="cursor:pointer; text-decoration:underline; color: blue"
 								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>');"
-								title="${translation }"> [<digi:trn key="contentrepository:documentManagerVersions">Version History</digi:trn>] </a>
-								<br />
+								title="${translation }">[<digi:trn key="contentrepository:documentManagerVersions">H</digi:trn>]</a>
 								</logic:equal>
 								
 								<c:set var="translation">
@@ -97,7 +94,7 @@
 								<logic:equal name="documentData" property="hasDeleteRights" value="true">
 									<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
 									onClick="deleteRow('<%=documentData.getUuid() %>');"
-									title="${translation }"> [<digi:trn key="contentrepository:documentManagerDelete">Delete</digi:trn>] </a>
+									title="${translation }">[<digi:trn key="contentrepository:documentManagerDelete">Del</digi:trn>]</a>
 								</logic:equal>
 								
 								</td>

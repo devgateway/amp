@@ -1,7 +1,7 @@
 /**
  * @author dan
  *
- * 
+ *
  */
 package org.dgfoundation.amp.visibility;
 
@@ -18,6 +18,7 @@ import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.kernel.exception.*;
 
 
 /**
@@ -25,16 +26,16 @@ import org.digijava.module.aim.util.FeaturesUtil;
  *
  */
 public class FieldVisibilityTag extends BodyTagSupport {
-	
+
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -7009665621191882475L;
 	private String name;
 	private String feature;
 	private String enabled;
-	
+
 	public String getName() {
 		return name;
 	}
@@ -42,29 +43,57 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		this.name = name;
 	}
 	/**
-	 * 
+	 *
 	 */
 	public FieldVisibilityTag() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 		public int doStartTag() throws JspException {
-	
+
  	   ServletContext ampContext=pageContext.getServletContext();
- 	   
+
 	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 	   if(ampTreeVisibility!=null)
 		   if(!existFieldinDB(ampTreeVisibility)){
 			   if(FeaturesUtil.getFieldVisibility(name)==null)
 			   {
 	   			   //TODO default has to be visibile!!!!
-			   
-	   			   FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());;
-	   			   
-	   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-	   			   //System.out.println("-------------------------------"+currentTemplate.getId());
-	   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-	   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+
+                                      AmpFeaturesVisibility featureByNameFromRoot = ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature());
+                                      Long id=null;
+                                      if(featureByNameFromRoot!=null){
+                                        id = featureByNameFromRoot.getId();
+
+                                        try {
+                                          FeaturesUtil.
+                                              insertFieldWithFeatureVisibility(
+                                                  ampTreeVisibility.getRoot().
+                                                  getId(),
+                                                  id, this.getName());
+                                          AmpTemplatesVisibility
+                                              currentTemplate = (
+                                                  AmpTemplatesVisibility)
+                                              FeaturesUtil.getTemplateById(
+                                                  ampTreeVisibility.getRoot().
+                                                  getId());
+                                          //System.out.println("-------------------------------"+currentTemplate.getId());
+                                          ampTreeVisibility.
+                                              buildAmpTreeVisibility(
+                                                  currentTemplate);
+                                          ampContext.setAttribute(
+                                              "ampTreeVisibility",
+                                              ampTreeVisibility);
+
+                                        }
+                                        catch (DgException ex) {
+                                          throw new JspException(ex);
+                                        }
+                                      }else{
+                                        return EVAL_BODY_BUFFERED;
+                                      }
+
+
 			  }
 	   		}
 	   		ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
@@ -81,68 +110,68 @@ public class FieldVisibilityTag extends BodyTagSupport {
 			   }
 	   		return EVAL_BODY_BUFFERED;//super.doStartTag();
 	}
-	
-	public int doEndTag() throws JspException 
+
+	public int doEndTag() throws JspException
     {
 		if (bodyContent==null) return  EVAL_PAGE;//SKIP_BODY;
 		if(bodyContent.getString()==null) return EVAL_PAGE;
 		String bodyText = bodyContent.getString();
-       
+
        try {
     	   ServletContext ampContext=pageContext.getServletContext();
     	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
-    	   
+
     	   /* name, feature, enable
-    	    * 
+    	    *
     	    * if feature is not in the db, error! it has to be already added this feature
-    	    * 
+    	    *
     	    *if field is not in db insert it with feature as parent
     	    *
     	    * is this feature the correct parent? if not -> error!
-    	    * 
+    	    *
     	    * if field is active then display the content
     	    */
-    	   
+
    		   if(ampTreeVisibility!=null)
    		   {
-   			if(! existFeature(ampTreeVisibility)) 
+   			if(! existFeature(ampTreeVisibility))
  			   return SKIP_BODY;
-   			
+
  		    AmpFieldsVisibility ampFieldFromTree=ampTreeVisibility.getFieldByNameFromRoot(getName());
    			HashMap<String, HttpSession> sessionMap=new HashMap<String, HttpSession>();
    			sessionMap.put("session", pageContext.getSession());
-   			//if(ampFieldFromTree.canDo("view", sessionMap))   
+   			//if(ampFieldFromTree.canDo("view", sessionMap))
    				if(isFieldActive (ampTreeVisibility)){
    				   pageContext.getOut().print(bodyText);
    			    }
    			    else return SKIP_BODY;//the field is not active!!!
 //   			else return SKIP_BODY;
-   			   
+
    		   }
-    	   
+
        }
        catch (Exception e) {
     	   e.printStackTrace();
        	throw new JspTagException(e.getMessage());
        }
-       return EVAL_PAGE;//SKIP_BODY 
+       return EVAL_PAGE;//SKIP_BODY
     }
-	
+
 	public boolean isFieldActive(AmpTreeVisibility atv)
 	{
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) atv.getRoot();
 		for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
 		{
 			AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
-			if(field.getName().compareTo(this.getName())==0) 
+			if(field.getName().compareTo(this.getName())==0)
 			{
 				return true;
 			}
-			
+
 		}
 		return false;
 	}
-	
+
 	public boolean existFeature(AmpTreeVisibility atv)
 	{
 
@@ -150,7 +179,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		if(featureByNameFromRoot==null) return false;
 		return true;
 	}
-	
+
 	public boolean existFieldinDB(AmpTreeVisibility atv)
 	{
 
@@ -158,7 +187,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		if(fieldByNameFromRoot==null) return false;
 		return true;
 	}
-	
+
 	public boolean isFeatureTheParent(AmpTreeVisibility atv)
 	{
 		AmpTreeVisibility featureByNameFromRoot = atv.getFeatureTreeByNameFromRoot(this.getFeature());
@@ -166,7 +195,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		if(featureByNameFromRoot.getItems().containsKey(this.getName())) return true;
 		return false;
 	}
-	
+
 	public String getEnabled() {
 		return enabled;
 	}

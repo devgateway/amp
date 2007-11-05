@@ -73,17 +73,28 @@ public class ParisIndicator5bSubJrxml {
         p.println("					<graphicElement stretchType='NoStretch' pen='Thin'/>");
         p.println("				</line>");
         int i = 6;
-        int top=39;
+        int top=40;
         for (ListIterator dnIter = data.listIterator(); dnIter.hasNext(); ) {
             String[] dn = (String[]) dnIter.next();
             if (dnIter.nextIndex() == 1) {
                 p.println("				<staticText>");
                 p.println("					<reportElement");
+
+                p.println("						mode='Opaque'");
                 p.println("						x='0'");
                 p.println("						y='0'");
-                p.println("						width='132'");
+                p.println("						width='131'");
                 p.println("						height='40'");
-                p.println("						key='staticText-1'/>");
+                p.println("						forecolor='#000000'");
+                p.println("						backcolor='#CCCCCC'");
+                p.println("						key='staticText-1'");
+                p.println("						stretchType='NoStretch'");
+                p.println("						positionType='FixRelativeToTop'");
+                p.println("						isPrintRepeatedValues='true'");
+                p.println("						isRemoveLineWhenBlank='false'");
+                p.println("						isPrintInFirstWholeBand='false'");
+                p.println("						isPrintWhenDetailOverflows='false'/>");
+
                 p.println("					<box topBorder='1Point' topBorderColor='#000000' leftBorder='1Point' leftBorderColor='#000000' rightBorder='1Point' rightBorderColor='#000000' bottomBorder='1Point' bottomBorderColor='#000000'/>");
                 p.println("					<textElement textAlignment='Center'>");
                 p.println("						<font/>");
@@ -92,11 +103,22 @@ public class ParisIndicator5bSubJrxml {
                 p.println("				</staticText>");
                 p.println("				<staticText>");
                 p.println("					<reportElement");
+
+                p.println("						mode='Opaque'");
                 p.println("						x='131'");
                 p.println("						y='0'");
                 p.println("						width='176'");
                 p.println("						height='26'");
-                p.println("						key='staticText-2'/>");
+                p.println("						forecolor='#000000'");
+                p.println("						backcolor='#CCCCCC'");
+                p.println("						key='staticText-2'");
+                p.println("						stretchType='NoStretch'");
+                p.println("						positionType='FixRelativeToTop'");
+                p.println("						isPrintRepeatedValues='true'");
+                p.println("						isRemoveLineWhenBlank='false'");
+                p.println("						isPrintInFirstWholeBand='false'");
+                p.println("						isPrintWhenDetailOverflows='false'/>");
+
                 p.println("					<box topBorder='1Point' topBorderColor='#000000' leftBorder='1Point' leftBorderColor='#000000' rightBorder='1Point' rightBorderColor='#000000' bottomBorder='1Point' bottomBorderColor='#000000'/>");
                 p.println("					<textElement textAlignment='Center'>");
                 p.println("						<font/>");
@@ -105,12 +127,22 @@ public class ParisIndicator5bSubJrxml {
                 p.println("				</staticText>");
                 p.println("				<staticText>");
                 p.println("					<reportElement");
+
                 p.println("						mode='Opaque'");
                 p.println("						x='131'");
                 p.println("						y='26'");
                 p.println("						width='59'");
                 p.println("						height='13'");
-                p.println("						key='staticText-3'/>");
+                p.println("						forecolor='#000000'");
+                p.println("						backcolor='#CCCCCC'");
+                p.println("						key='staticText-3'");
+                p.println("						stretchType='NoStretch'");
+                p.println("						positionType='FixRelativeToTop'");
+                p.println("						isPrintRepeatedValues='true'");
+                p.println("						isRemoveLineWhenBlank='false'");
+                p.println("						isPrintInFirstWholeBand='false'");
+                p.println("						isPrintWhenDetailOverflows='false'/>");
+
                 p.println("					<box topBorder='1Point' topBorderColor='#000000' leftBorder='1Point' leftBorderColor='#000000' rightBorder='1Point' rightBorderColor='#000000' bottomBorder='1Point' bottomBorderColor='#000000'/>");
                 p.println("					<textElement textAlignment='Center'>");
                 p.println("						<font isBold='true'/>");
@@ -119,12 +151,22 @@ public class ParisIndicator5bSubJrxml {
                 p.println("				</staticText>");
                 p.println("				<staticText>");
                 p.println("					<reportElement");
+
                 p.println("						mode='Opaque'");
                 p.println("						x='190'");
                 p.println("						y='26'");
                 p.println("						width='60'");
                 p.println("						height='13'");
-                p.println("						key='staticText-4'/>");
+                p.println("						forecolor='#000000'");
+                p.println("						backcolor='#CCCCCC'");
+                p.println("						key='staticText-4'");
+                p.println("						stretchType='NoStretch'");
+                p.println("						positionType='FixRelativeToTop'");
+                p.println("						isPrintRepeatedValues='true'");
+                p.println("						isRemoveLineWhenBlank='false'");
+                p.println("						isPrintInFirstWholeBand='false'");
+                p.println("						isPrintWhenDetailOverflows='false'/>");
+
                 p.println("					<box topBorder='1Point' topBorderColor='#000000' leftBorder='1Point' leftBorderColor='#000000' rightBorder='1Point' rightBorderColor='#000000' bottomBorder='1Point' bottomBorderColor='#000000'/>");
                 p.println("					<textElement textAlignment='Center'>");
                 p.println("						<font isBold='true'/>");
@@ -133,12 +175,22 @@ public class ParisIndicator5bSubJrxml {
                 p.println("				</staticText>");
                 p.println("				<staticText>");
                 p.println("					<reportElement");
+
                 p.println("						mode='Opaque'");
                 p.println("						x='250'");
                 p.println("						y='26'");
                 p.println("						width='57'");
                 p.println("						height='13'");
-                p.println("						key='staticText-5'/>");
+                p.println("						forecolor='#000000'");
+                p.println("						backcolor='#CCCCCC'");
+                p.println("						key='staticText-5'");
+                p.println("						stretchType='NoStretch'");
+                p.println("						positionType='FixRelativeToTop'");
+                p.println("						isPrintRepeatedValues='true'");
+                p.println("						isRemoveLineWhenBlank='false'");
+                p.println("						isPrintInFirstWholeBand='false'");
+                p.println("						isPrintWhenDetailOverflows='false'/>");
+
                 p.println("					<box topBorder='1Point' topBorderColor='#000000' leftBorder='1Point' leftBorderColor='#000000' rightBorder='1Point' rightBorderColor='#000000' bottomBorder='1Point' bottomBorderColor='#000000'/>");
                 p.println("					<textElement textAlignment='Center'>");
                 p.println("						<font isBold='true'/>");
@@ -149,11 +201,13 @@ public class ParisIndicator5bSubJrxml {
             } else if(dnIter.nextIndex() > 1){
                 p.println("				<staticText>");
                 p.println("					<reportElement");
+
                 p.println("						x='0'");
                 p.println("						y='"+top+"'");
                 p.println("						width='131'");
                 p.println("						height='16'");
                 p.println("						key='staticText-" + i + "'/>");
+
                 i++;
                 p.println("					<box topBorder='1Point' topBorderColor='#000000' leftBorder='1Point' leftBorderColor='#000000' rightBorder='1Point' rightBorderColor='#000000' bottomBorder='1Point' bottomBorderColor='#000000'/>");
                 p.println("					<textElement textAlignment='Center'>");
@@ -192,7 +246,7 @@ public class ParisIndicator5bSubJrxml {
                 p.println("				<staticText>");
                 p.println("					<reportElement");
                 p.println("						x='250'");
-                p.println("						y='"+top+"'");top+=15;
+                p.println("						y='"+top+"'");top+=16;
                 p.println("						width='57'");
                 p.println("						height='16'");
                 p.println("						key='staticText-" + i + "'/>");

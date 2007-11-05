@@ -883,7 +883,7 @@ public class DbUtil {
         return component;
     }
 
-    public static ArrayList getAmpPhysicalProgress(Long ampActivityId) {
+    public static ArrayList getAmpPhysicalProgress(Long ampActivityId,Long componentId) {
         ArrayList progress = new ArrayList();
         Query q = null;
         Session session = null;
@@ -895,8 +895,14 @@ public class DbUtil {
             queryString = " select Progress from "
                 + AmpPhysicalPerformance.class.getName()
                 + " Progress where (Progress.ampActivityId=:ampActivityId )";
+                if(componentId!=null){
+              queryString+= " and (Progress.component=:componentId) ";
+            }
             q = session.createQuery(queryString);
             q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
+                if(componentId!=null){
+                  q.setLong("componentId", componentId);
+                }
             iter = q.list().iterator();
 
             while (iter.hasNext()) {

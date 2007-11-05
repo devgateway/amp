@@ -1,6 +1,6 @@
 package org.digijava.module.aim.helper ;
 
-import java.io.Serializable;
+import java.io.*;
 
 public class PhysicalProgress implements Comparable, Serializable
 {
@@ -8,13 +8,13 @@ public class PhysicalProgress implements Comparable, Serializable
 	private String reportingDate ;
 	private Long pid;
 	private String description;
-	
-	public PhysicalProgress() {}
-	
+        private boolean newProgress;
+  public PhysicalProgress() {}
+
 	public PhysicalProgress(Long id) {
 		pid = id;
 	}
-	
+
 	/**
 	 * @return
 	 */
@@ -37,7 +37,11 @@ public class PhysicalProgress implements Comparable, Serializable
 		return pid;
 	}
 
-	/**
+        public boolean isNewProgress() {
+          return newProgress;
+        }
+
+  /**
 	 * @param string
 	 */
 	public void setReportingDate(String string) {
@@ -54,31 +58,35 @@ public class PhysicalProgress implements Comparable, Serializable
 	public void setTitle(String string) {
 		title = string;
 	}
-	
+
 	public void setPid(Long string) {
 		pid = string;
 	}
 
-	public boolean equals(Object obj) {
+        public void setNewProgress(boolean newProgress) {
+          this.newProgress = newProgress;
+        }
+
+  public boolean equals(Object obj) {
 		if (obj == null) return false;
 		if (!(obj instanceof PhysicalProgress)) throw new ClassCastException();
-		
+
 		PhysicalProgress pp = (PhysicalProgress) obj;
 
 		if (this.pid == null) return false;
 		if (pp.pid == null) return false;
 		return this.pid.equals(pp.pid);
-		
-		
+
+
 	}
-	
+
 	public int compareTo(Object obj) {
 		if (obj == null) throw new NullPointerException();
-		
+
 		if (!(obj instanceof PhysicalProgress)) {
 			throw new ClassCastException();
 		}
-		
+
 		PhysicalProgress pp = (PhysicalProgress) obj;
 		return (this.pid.compareTo(pp.pid));
 	}

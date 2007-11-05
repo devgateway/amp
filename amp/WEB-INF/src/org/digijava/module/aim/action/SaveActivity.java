@@ -1656,7 +1656,10 @@ public class SaveActivity extends Action {
 							ampPhyPerf.setDescription(phyProg
 									.getDescription());
 						}
-						ampPhyPerf.setAmpPpId(phyProg.getPid());
+                                                if(!phyProg.isNewProgress()){
+                                                  ampPhyPerf.setAmpPpId(phyProg.
+                                                      getPid());
+                                                }
 						ampPhyPerf.setReportingDate(DateConversion
 								.getDate(phyProg.getReportingDate()));
 						ampPhyPerf.setTitle(phyProg.getTitle());
@@ -1667,7 +1670,7 @@ public class SaveActivity extends Action {
 					}
 					tempComp.setPhyProgress(phyProgess);
 				}
-
+                                tempComp.setComponentId(comp.getComponentId());
 				tempComps.add(tempComp);
 			}
 		}

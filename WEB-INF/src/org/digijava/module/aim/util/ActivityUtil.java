@@ -144,7 +144,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     try {
       session = PersistenceManager.getSession();
       tx = session.beginTransaction();
-      
+
       AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,
           memberId);
 
@@ -166,7 +166,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           Iterator fundSetItr = fundSet.iterator();
           while (fundSetItr.hasNext()) {
             AmpFunding fund = (AmpFunding) fundSetItr.next();
-            
+
                    Set fundDetSet = fund.getFundingDetails();
                    if (fundDetSet != null) {
              Iterator fundDetItr = fundDetSet.iterator();
@@ -291,7 +291,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         }
         else
         	oldActivity.setFunding( new HashSet() );
-        	
+
         oldActivity.getClosingDates().clear();
         oldActivity.getComponents().clear();
         oldActivity.getDocuments().clear();
@@ -378,13 +378,13 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         	oldActivity.getCosts().addAll(activity.getCosts());
         if (activity.getActivityPrograms() != null)
         	oldActivity.getActivityPrograms().addAll(activity.getActivityPrograms());
-        
+
         if (activity.getCategories() != null)
         	oldActivity.getCategories().addAll( activity.getCategories() );
 
         if(activity.getActivityDocuments() !=null)
         	oldActivity.getActivityDocuments().addAll( activity.getActivityDocuments() );
-        
+
         oldActivity.setFunAmount(activity.getFunAmount());
         oldActivity.setCurrencyCode(activity.getCurrencyCode());
         oldActivity.setFunDate(activity.getFunDate());
@@ -565,8 +565,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 
 
 
-	      /*
-	      Collection<AmpPhysicalPerformance> phyProgress = DbUtil.getAmpPhysicalProgress(activityId);
+
+	      Collection<AmpPhysicalPerformance> phyProgress = DbUtil.getAmpPhysicalProgress(activityId,ampTempComp.getComponentId());
 
 	      if (ampTempComp.getPhyProgress() != null) {
 				Iterator compItr = ampTempComp.getPhyProgress().iterator();
@@ -577,13 +577,13 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 				}
 	      }
 
-	      if (phyProgress != null) {
+	      if (phyProgress != null&&ampTempComp.getComponentId()!=null) {
 				Iterator<AmpPhysicalPerformance> phyProgressColIt = phyProgress.iterator();
 				while (phyProgressColIt.hasNext()) {
 					session.delete(phyProgressColIt.next());
 				}
 		  }
-	      */
+
       }
       if (componentFundingCol != null) {
 			Iterator<AmpComponentFunding> componentFundingColIt = componentFundingCol.iterator();

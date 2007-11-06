@@ -100,7 +100,7 @@ function gotoStep() {
 
                   <td height=16 vAlign=right align=center>
                     <span class=subtitle-blue>
-                      <<c:if test="${aimAdvancedReportForm.reportEdit==false}">
+                      <c:if test="${aimAdvancedReportForm.reportEdit==false}">
                           	<digi:trn key="aim:reportBuilder:selectReportType">
                           		Report Builder : Select Report Type
                           	</digi:trn>

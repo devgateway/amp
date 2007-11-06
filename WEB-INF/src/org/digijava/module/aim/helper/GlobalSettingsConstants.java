@@ -14,4 +14,6 @@ public class GlobalSettingsConstants {
 	public static final String CURRENT_SYSTEM_YEAR				= "Current Fiscal Year";
 	public static final String FISCAL_YEAR_END_DATE			= "Fiscal Year End Date";
 	public static final String SYSTEM_YEAR						= "system";
+	
+	public static final String CR_MAX_FILE_SIZE				= "Maximum File Size";
 }

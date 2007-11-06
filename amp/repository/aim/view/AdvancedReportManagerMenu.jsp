@@ -188,24 +188,24 @@ function nope(){
 											<digi:trn key="aim:clickToViewReportDetails">Click here to view Report Details</digi:trn>
 										</c:set>
 										<logic:greaterEqual name="aimAdvancedReportForm" property="maxStep" value="3">
-											<c:if test="${aimAdvancedReportForm.currentTabName=='4'}">
+											<c:if test="${aimAdvancedReportForm.currentTabName=='ReportDetails'}">
 												<a class="sub-navSelected" style="cursor:pointer;" title="${translation}"  onclick="return menuA(4)">
 													5 : <digi:trn key="aim:ReportDetails">Report Details</digi:trn>
 												</a>	
 											</c:if>
-											<c:if test="${aimAdvancedReportForm.currentTabName!='4'}">
+											<c:if test="${aimAdvancedReportForm.currentTabName!='ReportDetails'}">
 												<a class="sub-nav" style="cursor:pointer;" title="${translation}"  onclick="return menuA(4)">
 													5 : <digi:trn key="aim:ReportDetails">Report Details</digi:trn>
 												</a>	
 											</c:if>									
 										</logic:greaterEqual>
 										<logic:lessThan name="aimAdvancedReportForm" property="maxStep" value="3">
-											<c:if test="${aimAdvancedReportForm.currentTabName=='4'}">
+											<c:if test="${aimAdvancedReportForm.currentTabName=='ReportDetails'}">
 												<a class="sub-navSelected" style="cursor:move;" title="${translation}"  onclick="return nope()">
 													5 : <digi:trn key="aim:ReportDetails">Report Details</digi:trn>
 												</a>	
 											</c:if>
-											<c:if test="${aimAdvancedReportForm.currentTabName!='4'}">
+											<c:if test="${aimAdvancedReportForm.currentTabName!='ReportDetails'}">
 												<a class="sub-nav" style="cursor:move;" title="${translation}"  onclick="return nope()">
 													5 : <digi:trn key="aim:ReportDetails">Report Details</digi:trn>
 												</a>	

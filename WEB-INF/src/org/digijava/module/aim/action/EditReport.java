@@ -127,7 +127,7 @@ public class EditReport extends Action {
 			else{
 				logger.error("Couldn't find rid" + strReportId + "parameter in request.");
 			}
-			
+			formBean.setCurrentTabName("forward"); //this is for highlighting tabs
 			return mapping.findForward("forward");
 	}
 	

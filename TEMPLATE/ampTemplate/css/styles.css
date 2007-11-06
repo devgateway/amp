@@ -205,6 +205,23 @@ A.sub-nav
 	TEXT-DECORATION: none
 }
 
+A.sub-navSelected 
+{
+	PADDING-RIGHT: 3px; 
+	PADDING-LEFT: 10px; 
+	FONT-WEIGHT: normal; 
+	FONT-SIZE: 11px; 
+	PADDING-BOTTOM: 3px; 
+	TEXT-TRANSFORM: uppercase; 
+	COLOR: #f4f4f2; 
+	PADDING-TOP: 3px; 
+	WHITE-SPACE: nowrap; 
+	LETTER-SPACING: 0px; 
+	HEIGHT: 20px; 
+	BACKGROUND-COLOR: #222e5d; 
+	TEXT-DECORATION: none
+}
+
 A.sub-navGov 
 {
 	PADDING-RIGHT: 3px; 

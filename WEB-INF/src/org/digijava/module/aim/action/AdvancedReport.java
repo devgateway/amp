@@ -84,7 +84,7 @@ public class AdvancedReport extends Action {
 		TeamMember teamMember=(TeamMember)httpSession.getAttribute("currentMember");
 		//logger.info(teamMember.getMemberId());
 		if(teamMember==null)
-			return mapping.findForward("index");
+			return goTo("index",formBean,mapping);
 		Long ampTeamId=teamMember.getTeamId();
 		logger.debug("Team Id: " + ampTeamId);
 		String perspective = "DN";
@@ -191,8 +191,8 @@ public class AdvancedReport extends Action {
 				HashMap ampTreeColumns=this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnList(), formBean.getArReportType());
 				//TODO
 				//System.out.println("ssssssssssssssssssss"+formBean.getArReportType());
-				formBean.setAmpTreeColumns(ampTreeColumns);
-				return mapping.findForward("SelectCols");
+				formBean.setAmpTreeColumns(ampTreeColumns);				
+				return goTo("SelectCols",formBean,mapping);
 			}
 			// add columns that are available
 			if(request.getParameter("check") != null && request.getParameter("check").equals("add"))
@@ -203,7 +203,7 @@ public class AdvancedReport extends Action {
 				formBean.setSelectedColumns(null);
 				if (formBean.getMaxStep().intValue() < 1)
 					formBean.setMaxStep(new Integer(1));
-				return mapping.findForward("SelectCols");
+				return goTo("SelectCols",formBean,mapping);
 			}
 			// Remove the columns selected
 			if(request.getParameter("check") != null && request.getParameter("check").equals("delete"))
@@ -214,7 +214,7 @@ public class AdvancedReport extends Action {
 				formBean.setRemoveColumns(null);
 				if (formBean.getMaxStep().intValue() < 1)
 					formBean.setMaxStep(new Integer(1));
-				return mapping.findForward("SelectCols");
+				return goTo("SelectCols",formBean,mapping);
 			}
 			
 			// Add the columns selected : Step 2
@@ -225,7 +225,7 @@ public class AdvancedReport extends Action {
 				formBean.setSelectedColumns(null);
 				if (formBean.getMaxStep().intValue() < 2)
 					formBean.setMaxStep(new Integer(2));
-				return mapping.findForward("SelectRows");
+				return goTo("SelectRows",formBean,mapping);				
 			}
 			// Remove the columns selected : Step 2
 			if(request.getParameter("check") != null && request.getParameter("check").equals("Step2DeleteRows"))
@@ -236,7 +236,7 @@ public class AdvancedReport extends Action {
 				formBean.setRemoveColumns(null);
 				if (formBean.getMaxStep().intValue() < 2)
 					formBean.setMaxStep(new Integer(2));
-				return mapping.findForward("SelectRows");
+				return goTo("SelectRows",formBean,mapping);
 			}
 			// Step 3 : Select Measures
 			if(request.getParameter("check") != null && request.getParameter("check").equals("AddMeasure"))
@@ -247,7 +247,7 @@ public class AdvancedReport extends Action {
 				formBean.setSelectedColumns(null);
 				if (formBean.getMaxStep().intValue() < 3)
 					formBean.setMaxStep(new Integer(3));
-				return mapping.findForward("SelectMeasures");
+				return goTo("SelectMeasures",formBean,mapping);				
 			}
 			
 			// Remove the columns selected
@@ -259,7 +259,7 @@ public class AdvancedReport extends Action {
 				formBean.setRemoveColumns(null);
 				if (formBean.getMaxStep().intValue() < 3)
 					formBean.setMaxStep(new Integer(3));
-				return mapping.findForward("SelectMeasures");
+				return goTo("SelectMeasures",formBean,mapping);
 			}
 
 			/*
@@ -300,8 +300,8 @@ public class AdvancedReport extends Action {
 				if(found!=null)
 				{ 
 					formBean.setDuplicatedReportName(true);
-					formBean.setDuplicatedReportOwner(teamMember.getMemberName() + " - " + teamMember.getTeamName());					
-					return mapping.findForward("MissingReportDetails");
+					formBean.setDuplicatedReportOwner(teamMember.getMemberName() + " - " + teamMember.getTeamName());
+					return goTo("MissingReportDetails",formBean,mapping);					
 				}else{
 					formBean.setDuplicatedReportName(false);
 					formBean.setDuplicatedReportOwner(null);
@@ -783,8 +783,8 @@ public class AdvancedReport extends Action {
 
 				}
 			//	logger.info("###----------------------------------------------------------------------#####");
-
-				return mapping.findForward("GenerateReport");
+				return goTo("GenerateReport",formBean,mapping);
+				
 			}
 					
 			
@@ -795,18 +795,19 @@ public class AdvancedReport extends Action {
 				//logger.info("In here  Getting Report Details..........");
 				if (formBean.getMaxStep().intValue() < 4)
 					formBean.setMaxStep(new Integer(4));
-
-				return mapping.findForward("ReportDetails");
+				return goTo("ReportDetails",formBean,mapping);				
 			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectColumn"))
-				return mapping.findForward("forward");
+				return goTo("forward",formBean,mapping);
+				
 			
 			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectRows"))
-				return mapping.findForward("SelectRows");
+				return goTo("SelectRows",formBean,mapping);
+				
 
 
 			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectMeasures"))
-				return mapping.findForward("SelectMeasures");
+				return goTo("SelectMeasures",formBean,mapping);
 
 
 			// step 3 : 
@@ -892,8 +893,8 @@ public class AdvancedReport extends Action {
 				//String barchartname=createBarChart(chart_coll);
 				//logger.info("@@@@@@@@@@IMAGE FILE NAME:"+piechartname);
 				//formBean.setBarImageUrl(barchartname);
-
-				return mapping.findForward("GenerateChart");
+				return goTo("GenerateChart",formBean,mapping);
+				
 			}
 
 
@@ -901,51 +902,52 @@ public class AdvancedReport extends Action {
 			if(request.getParameter("check") != null && request.getParameter("check").equals("4"))
 			{
 				//logger.info("In here  Getting Report Details..........");
-				return mapping.findForward("ReportDetails");
+				return goTo("ReportDetails",formBean,mapping);
 			}
 			
 			// Move the selected column Up : Step 1 ie Select Columns
 			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveUp")){
 				moveColumns(formBean, "MoveUp");
-				return mapping.findForward("SelectCols");
+				return goTo("SelectCols",formBean,mapping);				
 			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("Step2MoveUp"))
 			{
 				moveColumns(formBean, "Step2MoveUp");
-				return mapping.findForward("SelectRows");
+				return goTo("SelectRows",formBean,mapping);
+				
 			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveUpMeasure"))
 			{
 				moveColumns(formBean, "MoveUpMeasure");
-				return mapping.findForward("SelectMeasures");
+				return goTo("SelectMeasures",formBean,mapping);				
 			}
 
 			// Move the selected column Down : Step 1 ie Select Columns
 			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveDown")){
 				moveColumns(formBean, "MoveDown");
-				return mapping.findForward("SelectCols");
+				return goTo("SelectCols",formBean,mapping);
 			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("Step2MoveDown"))
 			{
 				moveColumns(formBean, "Step2MoveDown");
-				return mapping.findForward("SelectRows");
+				return goTo("SelectRows",formBean,mapping);
 			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveDownMeasure"))
 			{
 				moveColumns(formBean, "MoveDownMeasure");
-				return mapping.findForward("SelectMeasures");
+				return goTo("SelectMeasures",formBean,mapping);
 			}
 			
 			
 			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveUpAdjustType"))
 			{
 				moveColumns(formBean, "MoveUpAdjustType");
-				return mapping.findForward("SelectMeasures");
+				return goTo("SelectMeasures",formBean,mapping);
 			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveDownAdjustType"))
 			{
 				moveColumns(formBean, "MoveDownAdjustType");
-				return mapping.findForward("SelectMeasures");
+				return goTo("SelectMeasures",formBean,mapping);
 			}
 			
 			// save Report
@@ -961,7 +963,7 @@ public class AdvancedReport extends Action {
 							errors.add("title", new ActionError("error.aim.reportManager.ReportNameAbsent"));
 							saveErrors(request, errors);
 							flag = true;
-							return mapping.findForward("MissingReportDetails");
+							return goTo("MissingReportDetails",formBean,mapping);							
 					}
 				}
 				
@@ -980,7 +982,7 @@ public class AdvancedReport extends Action {
 						{ 
 							formBean.setDuplicatedReportName(true);
 							formBean.setDuplicatedReportOwner(teamMember.getMemberName() + " - " + teamMember.getTeamName());
-							return mapping.findForward("MissingReportDetails");
+							return goTo("MissingReportDetails",formBean,mapping);
 						}else{
 							formBean.setDuplicatedReportName(false);
 							formBean.setDuplicatedReportOwner(null);
@@ -1116,8 +1118,7 @@ public class AdvancedReport extends Action {
 			            }
 					
 				}
-				
-				return mapping.findForward("viewMyDesktop");
+				return goTo("viewMyDesktop",formBean,mapping);				
 			}
 
 		}
@@ -1126,7 +1127,7 @@ public class AdvancedReport extends Action {
 			logger.info("-------------Inside Catch-----------");
 			e.printStackTrace(System.out);
 		}
-		return mapping.findForward("forward");
+		return goTo("forward",formBean,mapping);		
 	}// end of function execute
 	
 // Function for Pie Chart
@@ -1725,5 +1726,10 @@ public class AdvancedReport extends Action {
 			}
 		}
 	}
+
 	
+	private ActionForward goTo(String forwardName, AdvancedReportForm form, ActionMapping mapping ){
+		form.setCurrentTabName(forwardName);
+		return mapping.findForward(forwardName);	
+	}
 }

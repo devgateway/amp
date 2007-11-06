@@ -129,7 +129,7 @@ return false;
 
 	        		<TR><TD title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
 
-						<digi:link href="/advancedReportManager.do?clear=true">
+						<digi:link href="/advancedReportManager.do?clear=true&reportEdit=false">
 
 							<b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
 

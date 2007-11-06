@@ -201,16 +201,60 @@ function gotoStep() {
                                           		</td>
 		                                	</tr>
                                         </c:if>
-                                        <c:if test="${aimAdvancedReportForm.reportEdit==true}">												
-		                                              <tr height="100%" align="left">
-		                                                <td width="100%" align="left">		                                        			
-		                                        			<img src="module/aim/images/arrow-014E86.gif">
-		                                        			<bean:write name="aimAdvancedReportForm" property="arReportType"/>		                                        				                                        			
-		                                                </td>
-		                                              </tr>		                                        												
-											</c:if>                                       
-		                              </table>
-											
+                                        <c:if test="${aimAdvancedReportForm.reportEdit==true}">
+											<tr height="120">
+                                          		<td>&nbsp;&nbsp;&nbsp;
+                                          		</td>
+                                          		<td align="left">
+                                          			<table cellPadding=0 cellSpacing=1 bgColor=#f4f4f2 border="0">
+			                                              <tr>
+			                                                <td>
+			                                                  <html:radio property="reportType" value="donor" disabled="true">
+			                                                    <digi:trn key="aim:donorReport">
+			                                                    Donor Report (Donor Funding)
+			                                                    </digi:trn>
+			                                                  </html:radio>
+			                                                </td>
+			                                              </tr>
+			                                              <tr>
+			                                                <td>
+			                                                  <html:radio property="reportType" value="regional" disabled="true">
+			                                                    <digi:trn key="aim:regionalReport">
+			                                                    Regional Report (Regional Funding)
+			                                                    </digi:trn>
+			                                                  </html:radio>
+			                                                </td>
+			                                              </tr>
+			                                              <tr>
+			                                                <td>
+			                                                  <html:radio property="reportType" value="component" disabled="true">
+			                                                    <digi:trn key="aim:componentReport">
+			                                                    Component Report (Component Funding)
+			                                                    </digi:trn>
+			                                                  </html:radio>
+			                                                </td>
+			                                              </tr>
+			                                              <module:display name="Reports">
+			                                                <feature:display module="Reports" name="Contribution Report">
+			                                                  <tr>
+			                                                    <td>
+			                                                      <html:radio property="reportType" value="contribution" disabled="true">
+			                                                        <digi:trn key="aim:contributionReport">
+			                                                        Contribution Report (Activity Contributions)
+			                                                        </digi:trn>
+			                                                      </html:radio>
+			                                                    </td>
+			                                                  </tr>
+			                                                </feature:display>
+			                                              </module:display>
+			                                            </table>
+			                                          </td>
+			                                        </tr>
+			                                      </table>
+                                          		</td>
+		                                	</tr> 
+		                                	</c:if>                                    
+		                              </table>											
                                       <p>&nbsp;</p>
                                       <p>&nbsp;</p>
                                     </TD>

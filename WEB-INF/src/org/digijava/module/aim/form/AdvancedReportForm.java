@@ -27,6 +27,8 @@ public class AdvancedReportForm extends ActionForm
 
 	
 	private Boolean reportEdit=null;
+	private String currentTabName;
+	
 	
 	private String levelPicked=null;
 	private String levelSorter=null;
@@ -1508,6 +1510,14 @@ private int yrDiff;
 	public void setReportEdit(Boolean reportEdit) {
 		this.reportEdit = reportEdit;
 	}
+	public String getCurrentTabName() {
+		return currentTabName;
+	}
+	public void setCurrentTabName(String currentTabName) {
+		this.currentTabName = currentTabName;
+	}
+
+
 
 } //		End of Class
 

@@ -84,7 +84,7 @@ public class ParisIndicator5aSubJrxml {
                 p.println("						mode='Opaque'");
                 p.println("						x='0'");
                 p.println("						y='0'");
-                p.println("						width='132'");
+                p.println("						width='131'");
                 p.println("						height='40'");
                 p.println("						forecolor='#000000'");
                 p.println("						backcolor='#CCCCCC'");

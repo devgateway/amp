@@ -84,9 +84,9 @@ public class ParisIndicator6Jrxml
 					p2.println("				<staticText>");
 					p2.println("					<reportElement");
 					p2.println("						mode='Opaque'");
-					p2.println("						x='141'");
+					p2.println("						x='50'");
 					p2.println("						y='0'");
-					p2.println("						width='300'");
+					p2.println("						width='450'");
 					p2.println("						height='22'");
 					p2.println("						forecolor='#000000'");
 					p2.println("						backcolor='#FFFFFF'");
@@ -100,7 +100,7 @@ public class ParisIndicator6Jrxml
 					p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 					p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='18' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 					p2.println("					</textElement>");
-					p2.println("				<text><![CDATA[Paris Indicator 6 Report]]></text>");
+					p2.println("				<text><![CDATA[Paris Indicator 6: Number of parallel PIUs]]></text>");
 					p2.println("				</staticText>");
 					p2.println("			</band>");
 					p2.println("		</title>");

@@ -29,7 +29,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
@@ -298,9 +300,24 @@ public class DocumentManager extends Action {
 	
 	private boolean addFileNode(Session jcrWriteSession, Node parentNode, FormFile formFile, boolean isANewVersion, boolean isLink, String uuid) {
 		if (formFile == null) {
-				logger.error("No file was transmitted to the server");
-				return false;
+			logger.error("No file was transmitted to the server");
+			return false;
 		}
+		int maxFileSizeInBytes		= Integer.MAX_VALUE;
+		int maxFileSizeInMBytes	= Integer.MAX_VALUE;
+		String maxFileSizeGS		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE); // File size in MB
+		if (maxFileSizeGS != null) {
+				maxFileSizeInMBytes		= Integer.parseInt( maxFileSizeGS );
+				maxFileSizeInBytes		= 1024 * 1024 * maxFileSizeInMBytes; 
+		}
+		int test	= formFile.getFileSize();
+		if ( formFile.getFileSize() > maxFileSizeInBytes) {
+			errors.add("title", 
+					new ActionError("error.contentrepository.addFile.fileTooLarge", maxFileSizeInMBytes + "")
+					);
+			return false;
+		}
+			
 		try {
 			TeamMember teamMember		= (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
 			Node newNode 	= null;

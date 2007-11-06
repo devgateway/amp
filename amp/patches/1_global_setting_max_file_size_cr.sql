@@ -1,0 +1,1 @@
+insert into amp_global_settings (settingsName, settingsValue, possibleValues, description) values ('Maximum File Size', '2','t_Integer','Maximum file size accepted in Content Repository');

@@ -17,7 +17,7 @@
 <script language="JavaScript">
 <!--
 
-	function addPhysicalProgress() 
+	function addPhysicalProgress()
 	{
 		var titleFlag = isEmpty(document.aimEditActivityForm.phyProgTitle.value);
 		var dateFlag = isEmpty(document.aimEditActivityForm.phyProgRepDate.value);
@@ -47,10 +47,10 @@
 		   document.aimEditActivityForm.submit();
 			window.close();
 		}
-	}	
+	}
 
 	function load() {
-		document.aimEditActivityForm.phyProgTitle.focus();		  
+		document.aimEditActivityForm.phyProgTitle.focus();
 	}
 
 	function unload() {
@@ -99,10 +99,10 @@
 										</td>
 										<td>
 											<a title="<digi:trn key="aim:TitleForPhysicalActivity">Title of the physical activity</digi:trn>">
-											<html:textarea property="phyProgTitle" cols="50" rows="1" styleClass="inp-text" tabindex="1"/>		
+											<html:textarea property="phyProgTitle" cols="50" rows="1" styleClass="inp-text" tabindex="1"/>
 											</a>
 										</td>
-									</tr>								
+									</tr>
 									<tr>
 										<td>
 										<a title="<digi:trn key="aim:ComponentDescribe">Descriptive text as to the component objectives and tasks</digi:trn>">
@@ -114,7 +114,7 @@
 											<html:textarea property="phyProgDesc" cols="50" rows="4" styleClass="inp-text" tabindex="2"/>
 											</a>
 										</td>
-									</tr>								
+									</tr>
 									<tr>
 										<td>
 											<FONT color=red>*</FONT>
@@ -125,7 +125,7 @@
 											<table cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
 												<tr>
 													<td>
-														<html:text property="phyProgRepDate" readonly="true" size="10" styleClass="inp-text" 
+														<html:text property="phyProgRepDate" readonly="true" size="10" styleClass="inp-text"
 														tabindex="7" styleId="phyProgRepDate"/>
 													</td>
 													<td>
@@ -133,9 +133,9 @@
 														<a id="date1" href='javascript:pickDate("date1",document.aimEditActivityForm.phyProgRepDate)'>
 															<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 														</a>
-													</td>													
+													</td>
 												</tr>
-											</table>										
+											</table>
 										</td>
 									</tr>
 									<tr>
@@ -143,14 +143,14 @@
 											<table cellPadding=5>
 												<tr>
 													<td>
-														<input type="button" value="Add" class="dr-menu" onclick="addPhysicalProgress()"
+														<input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu" onclick="addPhysicalProgress()"
 														tabindex="4">
 													</td>
 													<td>
-														<input type="reset" value="Clear" class="dr-menu" tabindex="5">
+														<input type="reset" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu" tabindex="5">
 													</td>
 													<td>
-														<input type="button" value="Close" class="dr-menu" onclick="closeWindow()"
+														<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()"
 														tabindex="6">
 													</td>
 												</tr>
@@ -159,7 +159,7 @@
 									</tr>
 								</table>
 							</td>
-						</tr>					
+						</tr>
 					</table>
 				</td>
 			</tr>

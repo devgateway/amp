@@ -8,7 +8,7 @@
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${bcparams}" property="tId" value="-1"/>
-<c:set target="${bcparams}" property="dest" value="teamLead"/>			
+<c:set target="${bcparams}" property="dest" value="teamLead"/>
 
 <digi:instance property="aimRelatedLinksForm" />
 <digi:form action="/relatedLinksList.do" method="post">
@@ -40,7 +40,7 @@
 						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="${translation}" >
 							<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
 						</digi:link>
-						&nbsp;&gt;&nbsp;						
+						&nbsp;&gt;&nbsp;
 						<digi:trn key="aim:relatedLinksList">
 						Related Links List
 						</digi:trn>
@@ -55,7 +55,7 @@
 						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
 							<tr bgColor=#3754a1>
 								<td vAlign="top" width="100%">
-									<c:set var="selectedTab" value="3" scope="request"/>								
+									<c:set var="selectedTab" value="3" scope="request"/>
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
 								</td>
 							</tr>
@@ -65,7 +65,7 @@
 							</tr>
 							<tr bgColor=#f4f4f2>
 								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>	
+									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
 										<tr><td>
 											<digi:errors />
 										</td></tr>
@@ -84,7 +84,7 @@
 												</table>
 											</td>
 										</tr>
-										
+
 										<tr>
 											<td bgColor=#ffffff class="box-border" valign="top">
 
@@ -117,27 +117,29 @@
 															No documents present
 															</digi:trn>
 														</td>
-													</tr>	
+													</tr>
 													</logic:empty>
 													--%>
 
 													<logic:notEmpty name="aimRelatedLinksForm" property="relatedLinks">
-													<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" indexId="idx" 
+													<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" indexId="idx"
 													type="org.digijava.module.aim.helper.Documents">
+
 
 													<c:if test="${relatedLink.isFile == true}">
 													<tr>
-														<td bgColor=#f4f4f2 width="50%">	
+														<td bgColor=#f4f4f2 width="50%">
 
 															<input type="checkbox" name="deleteLinks" value='<bean:write name="idx"/>'>
-															<jsp:useBean id="docParams" type="java.util.Map" class="java.util.HashMap"/>			
-															<c:set target="${docParams}" property="docId">	
+                                                                                                                        <jsp:useBean id="docParams" type="java.util.Map" class="java.util.HashMap"/>
+
+															<c:set target="${docParams}" property="docId">
 																<c:out value="${relatedLink.docId}"/>
-															</c:set>											
+															</c:set>
 															<c:set target="${docParams}" property="actId">
 																<c:out value="${relatedLink.activityId}"/>
-															</c:set>																							
-															<c:set target="${docParams}" property="pageId" value="1"/>				
+															</c:set>
+															<c:set target="${docParams}" property="pageId" value="1"/>
 															<c:set var="translation">
 																<digi:trn key="aim:clickToViewDocumentDetails">Click here to view Document Details</digi:trn>
 															</c:set>
@@ -150,15 +152,15 @@
 													    	<%
 																int index2;
 																String extension = "";
-																index2 = ((String)fileName).lastIndexOf(".");	
+																index2 = ((String)fileName).lastIndexOf(".");
 																if( index2 >= 0 ) {
-																   extension = "module/cms/images/extensions/" + 
+																   extension = "module/cms/images/extensions/" +
 																	((String)fileName).substring(
 																				index2 + 1,((String)fileName).length()) + ".gif";
 																}
-														    %>															
-													    	<digi:img skipBody="true" src="<%=extension%>" border="0" 
-															 align="absmiddle"/>																 
+														    %>
+													    	<digi:img skipBody="true" src="<%=extension%>" border="0"
+															 align="absmiddle"/>
 															</logic:notEmpty>
 															<a href="<%=digiContext%>/cms/downloadFile.do?itemId=<bean:write name="relatedLink" property="docId" />">
 																<i><bean:write name="relatedLink" property="fileName" /></i></a>
@@ -174,11 +176,11 @@
 														</td>
 													</tr>
 													</c:if>
-													
+
 													</logic:iterate>
 													</logic:notEmpty>
 												</table>
-											
+
 											</td></tr>
 											<tr><td bgColor=#ffffff valign="top">
 
@@ -208,31 +210,31 @@
 															No links present
 															</digi:trn>
 														</td>
-													</tr>	
+													</tr>
 													</logic:empty>
 													--%>
-							
+
 													<logic:notEmpty name="aimRelatedLinksForm" property="relatedLinks">
-													<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" indexId="idx" 
+													<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" indexId="idx"
 													type="org.digijava.module.aim.helper.Documents">
 
 													<c:if test="${relatedLink.isFile == false}">
 													<tr>
-														<td bgColor=#f4f4f2 width="50%">	
+														<td bgColor=#f4f4f2 width="50%">
 
 															<input type="checkbox" name="deleteLinks" value='<bean:write name="idx"/>'>
-
-															<c:set target="${docParams}" property="docId">	
+                                                                                                                        <jsp:useBean id="docPars" type="java.util.Map" class="java.util.HashMap"/>
+															<c:set target="${docPars}" property="docId">
 																<c:out value="${relatedLink.docId}"/>
-															</c:set>											
-															<c:set target="${docParams}" property="actId">
+															</c:set>
+															<c:set target="${docPars}" property="actId">
 																<c:out value="${relatedLink.activityId}"/>
-															</c:set>																							
-															<c:set target="${docParams}" property="pageId" value="1"/>				
+															</c:set>
+															<c:set target="${docPars}" property="pageId" value="1"/>
 															<c:set var="translation">
 																<digi:trn key="aim:clickToViewDocumentDetails">Click here to view Document Details</digi:trn>
 															</c:set>
-															<digi:link href="/getDocumentDetails.do" name="docParams" title="${translation}" >
+															<digi:link href="/getDocumentDetails.do" name="docPars" title="${translation}" >
 															<bean:write name="relatedLink" property="title" /></digi:link>
 															&nbsp; :
 															<c:if test="${relatedLink.isFile == true}">
@@ -240,15 +242,15 @@
 													    	<%
 																int index2;
 																String extension = "";
-																index2 = ((String)fileName).lastIndexOf(".");	
+																index2 = ((String)fileName).lastIndexOf(".");
 																if( index2 >= 0 ) {
-																   extension = "module/cms/images/extensions/" + 
+																   extension = "module/cms/images/extensions/" +
 																	((String)fileName).substring(
 																				index2 + 1,((String)fileName).length()) + ".gif";
 																}
 														    %>
-														    	<digi:img skipBody="true" src="<%=extension%>" border="0" 
-																 align="absmiddle"/>	
+														    	<digi:img skipBody="true" src="<%=extension%>" border="0"
+																 align="absmiddle"/>
 																<a href="<%=digiContext%>/cms/downloadFile.do?itemId=<bean:write name="relatedLink" property="docId" />">
 																<i><bean:write name="relatedLink" property="fileName" /></i></a>
 															</c:if>
@@ -265,9 +267,9 @@
 													</c:if>
 													</logic:iterate>
 													</logic:notEmpty>
-												</table>											
-											
-											</td></tr>			
+												</table>
+
+											</td></tr>
 
 												<tr>
 
@@ -277,12 +279,12 @@
 
 													</td>
 
-												</tr>								
+												</tr>
 												<tr>
 
 													<td align="right">
 
-														<html:submit styleClass="buton" property="removeFields"><digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn></html:submit>				
+														<html:submit styleClass="buton" property="removeFields"><digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn></html:submit>
 
 													</td>
 
@@ -290,7 +292,7 @@
 											</table>
 
 											</td>
-										</tr>										
+										</tr>
 
 										<%--
 										<logic:notEmpty name="aimRelatedLinksForm" property="pages">
@@ -299,14 +301,14 @@
 													<digi:trn key="aim:relLinksPages">
 														Pages
 													</digi:trn> :
-													<logic:iterate name="aimRelatedLinksForm" property="pages" id="pages" 
+													<logic:iterate name="aimRelatedLinksForm" property="pages" id="pages"
 													type="java.lang.Integer">
 														<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 														<c:set target="${urlParams1}" property="page">
 															<%=pages%>
 														</c:set>
 														<c:set target="${urlParams1}" property="reset" value="false" />
-																			    
+
 														<c:if test="${aimRelatedLinksForm.currentPage == pages}">
 															<%=pages%>
 														</c:if>
@@ -319,7 +321,7 @@
 															</digi:link>
 														</c:if>
 
-														|&nbsp; 
+														|&nbsp;
 													</logic:iterate>
 												</td>
 											</tr>
@@ -332,7 +334,7 @@
 							<tr><td bgColor=#f4f4f2>
 								&nbsp;
 							</td></tr>
-						</table>			
+						</table>
 					</td>
 
 				</tr>

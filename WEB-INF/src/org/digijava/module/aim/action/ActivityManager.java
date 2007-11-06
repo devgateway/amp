@@ -51,19 +51,19 @@ public class ActivityManager extends Action {
 			searchActivities(actForm, request);
 		} else if (action.equals("reset")) {
 			reset(actForm, request);
-		} 
-		
+		}
+
 		doPagination(actForm, request);
-		
+
 		return mapping.findForward("forward");
 	}
 
 	private void reset(ActivityForm actForm, HttpServletRequest request) {
 		actForm.setAllActivityList(ActivityUtil.getAllActivitiesList());
-		actForm.setKeyword(null);			
+		actForm.setKeyword(null);
 		actForm.setSortByColumn(null);
 		actForm.setPage(0);
-	} 
+	}
 
 	private void doPagination(ActivityForm actForm, HttpServletRequest request) {
 		List<AmpActivity> allActivities = actForm.getAllActivityList();
@@ -76,26 +76,26 @@ public class ActivityManager extends Action {
 
 		pageList.clear();
 		int i = 0;
-		
-		
+
+
 		int idx = 0;
-		
+
 		if(actForm.getPage() * actForm.getPageSize() < allActivities.size()){
 			idx =  actForm.getPage() * actForm.getPageSize();
 		}else{
 			idx = 0;
 			actForm.setPage(0);
 		}
-					
-		for (Iterator<AmpActivity> iterator = allActivities.listIterator(idx); 
+
+		for (Iterator<AmpActivity> iterator = allActivities.listIterator(idx);
 				iterator.hasNext() && i < pageSize; i++) {
 			pageList.add(iterator.next());
 		}
+                Double totalPages=Math.ceil(1.0*allActivities.size() / actForm.getPageSize());
 
-		actForm.setTotalPages(allActivities.size() / actForm.getPageSize()
-				+ (pageList.size() % actForm.getPageSize() == 0 ? 0 : 1));
+		actForm.setTotalPages(totalPages.intValue());
 	}
- 
+
 	private void searchActivities(ActivityForm actForm, HttpServletRequest request) {
 		List<AmpActivity> activities = ActivityUtil.getAllActivitiesByName(actForm.getKeyword());
 		actForm.setAllActivityList(activities);
@@ -103,43 +103,43 @@ public class ActivityManager extends Action {
 	}
 
 	private void sortActivities(ActivityForm actForm, HttpServletRequest request) {
-		List<AmpActivity> activities = actForm.getAllActivityList();		
-		
+		List<AmpActivity> activities = actForm.getAllActivityList();
+
 		int sortBy = 0;
 		if("activityName".equals(actForm.getSortByColumn())){
 			sortBy = 1;
 		}else if("activityId".equals(actForm.getSortByColumn())){
 			sortBy = 2;
-		}		
-		
+		}
+
 		switch (sortBy) {
 		case 1:
 			Collections.sort(activities, new Comparator<AmpActivity>(){
 				public int compare(AmpActivity a1, AmpActivity a2) {
 					return a1.getName().compareTo(a2.getName());
-				}				
+				}
 			});
 			break;
 		case 2:
 			Collections.sort(activities, new Comparator<AmpActivity>(){
 				public int compare(AmpActivity a1, AmpActivity a2) {
 					return a1.getAmpId().compareTo(a2.getAmpId());
-				}				
+				}
 			});
-			break;			
+			break;
 		default:
 			Collections.sort(activities, new Comparator<AmpActivity>(){
 				public int compare(AmpActivity a1, AmpActivity a2) {
 					return a1.getName().compareTo(a2.getName());
-				}				
-			});			
+				}
+			});
 			break;
 		}
 	}
 
 	/**
-	 * @param actForm 
-	 * @param actForm 
+	 * @param actForm
+	 * @param actForm
 	 * @param request
 	 * @param session
 	 */

@@ -31,8 +31,8 @@ function check(){
 }
 function gotoStep() {
 	if(${aimAdvancedReportForm.reportEdit}== 'false'){
-		if (!check())
-  		return false;
+  if (!check())
+  return false;
 	}  
   <digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SelectCols" />
   document.aimAdvancedReportForm.action = "<%= step %>";
@@ -43,7 +43,6 @@ function gotoStep() {
 }
 
 </script>
-
 
 
 
@@ -81,9 +80,9 @@ function gotoStep() {
                             </digi:trn>
                           </digi:link>&nbsp;&gt;&nbsp;
                           <c:if test="${aimAdvancedReportForm.reportEdit==false}">
-                          	<digi:trn key="aim:reportBuilder:selectReportType">
-                          		Report Builder : Select Report Type
-                          	</digi:trn>
+                          <digi:trn key="aim:reportBuilder:selectReportType">
+                          Report Builder : Select Report Type
+                          </digi:trn>
                           </c:if>
                           <c:if test="${aimAdvancedReportForm.reportEdit==true}">
                           	<digi:trn key="aim:reportBuilder:selectedReportType">
@@ -101,9 +100,9 @@ function gotoStep() {
                   <td height=16 vAlign=right align=center>
                     <span class=subtitle-blue>
                       <c:if test="${aimAdvancedReportForm.reportEdit==false}">
-                          	<digi:trn key="aim:reportBuilder:selectReportType">
-                          		Report Builder : Select Report Type
-                          	</digi:trn>
+                      <digi:trn key="aim:reportBuilder:selectReportType">
+                      Report Builder : Select Report Type
+                      </digi:trn>
                           </c:if>
                           <c:if test="${aimAdvancedReportForm.reportEdit==true}">
                           	<digi:trn key="aim:reportBuilder:selectedReportType">
@@ -123,7 +122,7 @@ function gotoStep() {
                   		<img src="module/aim/images/arrow-014E86.gif">
                   		<digi:trn key="aim:reportBuilder:reportTypePleaseSelect">Report Type : Please Select</digi:trn>
                   	</c:if>                    
-                 <td>
+                      <td>
                 </tr>
                 <TR>
                   <TD vAlign="top" align="center">
@@ -149,62 +148,60 @@ function gotoStep() {
 
                                       <table cellPadding=0 cellSpacing=0 vAlign="top" align="center" width="400" bgColor=#f4f4f2 border="0">
                                         <c:if test="${aimAdvancedReportForm.reportEdit==false}">
-                                        	<tr height="120">
-                                          		<td>&nbsp;&nbsp;&nbsp;
-                                          		</td>
+                                        <tr height="120">
+                                          <td>&nbsp;&nbsp;&nbsp;
+                                          </td>
                                           		<td align="left">
-                                          			<table cellPadding=0 cellSpacing=1 bgColor=#f4f4f2 border="0">
-			                                              <tr>
-			                                                <td>
-			                                                  <html:radio property="reportType" value="donor" >
-			                                                    <digi:trn key="aim:donorReport">
-			                                                    Donor Report (Donor Funding)
-			                                                    </digi:trn>
-			                                                  </html:radio>
-			                                                </td>
-			                                              </tr>
-			                                              <tr>
-			                                                <td>
-			                                                  <html:radio property="reportType" value="regional" >
-			                                                    <digi:trn key="aim:regionalReport">
-			                                                    Regional Report (Regional Funding)
-			                                                    </digi:trn>
-			                                                  </html:radio>
-			                                                </td>
-			                                              </tr>
-			                                              <tr>
-			                                                <td>
-			                                                  <html:radio property="reportType" value="component" >
-			                                                    <digi:trn key="aim:componentReport">
-			                                                    Component Report (Component Funding)
-			                                                    </digi:trn>
-			                                                  </html:radio>
-			                                                </td>
-			                                              </tr>
-			                                              <module:display name="Reports">
-			                                                <feature:display module="Reports" name="Contribution Report">
-			                                                  <tr>
-			                                                    <td>
-			                                                      <html:radio property="reportType" value="contribution" >
-			                                                        <digi:trn key="aim:contributionReport">
-			                                                        Contribution Report (Activity Contributions)
-			                                                        </digi:trn>
-			                                                      </html:radio>
-			                                                    </td>
-			                                                  </tr>
-			                                                </feature:display>
-			                                              </module:display>
-			                                            </table>
-			                                          </td>
-			                                        </tr>
-			                                      </table>
+                                            <table cellPadding=0 cellSpacing=1 bgColor=#f4f4f2 border="0">
+                                              <tr>
+                                                <td>
+                                                  <html:radio property="reportType" value="donor" >
+                                                    <digi:trn key="aim:donorReport">
+                                                    Donor Report (Donor Funding)
+                                                    </digi:trn>
+                                                  </html:radio>
+                                                </td>
+                                              </tr>
+                                              <tr>
+                                                <td>
+                                                  <html:radio property="reportType" value="regional" >
+                                                    <digi:trn key="aim:regionalReport">
+                                                    Regional Report (Regional Funding)
+                                                    </digi:trn>
+                                                  </html:radio>
+                                                </td>
+                                              </tr>
+                                              <tr>
+                                                <td>
+                                                  <html:radio property="reportType" value="component" >
+                                                    <digi:trn key="aim:componentReport">
+                                                    Component Report (Component Funding)
+                                                    </digi:trn>
+                                                  </html:radio>
+                                                </td>
+                                              </tr>
+                                                <feature:display module="Reports" name="Contribution Report">
+                                                  <tr>
+                                                    <td>
+                                                      <html:radio property="reportType" value="contribution" >
+                                                        <digi:trn key="aim:contributionReport">
+                                                        Contribution Report (Activity Contributions)
+                                                        </digi:trn>
+                                                      </html:radio>
+                                                    </td>
+                                                  </tr>
+                                                </feature:display>
+                                            </table>
+                                          </td>
+                                        </tr>
+                                      </table>
                                           		</td>
 		                                	</tr>
                                         </c:if>
-                                        <c:if test="${aimAdvancedReportForm.reportEdit==true}">
+                                        <c:if test="${aimAdvancedReportForm.reportEdit==true}">												
 											<tr height="120">
                                           		<td>&nbsp;&nbsp;&nbsp;
-                                          		</td>
+		                                                </td>
                                           		<td align="left">
                                           			<table cellPadding=0 cellSpacing=1 bgColor=#f4f4f2 border="0">
 			                                              <tr>
@@ -215,7 +212,7 @@ function gotoStep() {
 			                                                    </digi:trn>
 			                                                  </html:radio>
 			                                                </td>
-			                                              </tr>
+		                                              </tr>		                                        												
 			                                              <tr>
 			                                                <td>
 			                                                  <html:radio property="reportType" value="regional" disabled="true">
@@ -234,7 +231,7 @@ function gotoStep() {
 			                                                  </html:radio>
 			                                                </td>
 			                                              </tr>
-			                                              <module:display name="Reports">
+			                                              <module:display name="Reports" parentModule="REPORTING">
 			                                                <feature:display module="Reports" name="Contribution Report">
 			                                                  <tr>
 			                                                    <td>
@@ -253,8 +250,9 @@ function gotoStep() {
 			                                      </table>
                                           		</td>
 		                                	</tr> 
-		                                	</c:if>                                    
-		                              </table>											
+											</c:if>                                       
+		                              </table>
+
                                       <p>&nbsp;</p>
                                       <p>&nbsp;</p>
                                     </TD>

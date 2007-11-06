@@ -114,7 +114,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 
 
 											<TD align="right">
-											<module:display name="Previews">
+											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Preview Activity" module="Previews">
 													<field:display feature="Preview Activity" name="Preview Button">
 														<input type="button" value="<digi:trn key='btn:preview'>Preview</digi:trn>" class="dr-menu"
@@ -122,7 +122,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 													</field:display>
 												</feature:display>
 											</module:display>
-											<module:display name="Previews">
+											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Edit Activity" module="Previews">
 													<field:display feature="Edit Activity" name="Edit Activity Button">
 														<input type="button" value="<digi:trn key='btn:edit'>Edit</digi:trn>" class="dr-menu"
@@ -131,14 +131,14 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 													</field:display>
 												</feature:display>
 											</module:display>
-											<module:display name="Previews">
+											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Logframe" module="Previews">
 													<field:display name="Logframe Preview Button" feature="Logframe" >
 														<input type="button" value="Preview Logframe" class="dr-menu"	onclick="previewLogframe(<c:out value="${aimFinancingBreakdownForm.ampActivityId}"/>)">
 													</field:display>
 												</feature:display>
 											</module:display>
-											<module:display name="Previews">
+											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Project Fiche" module="Previews">
 													<field:display name="Project Fiche Button" feature="Project Fiche" >
 														<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu'
@@ -154,7 +154,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 									</TABLE>										
 								</TD>
 							</TR>
-							<module:display name="Calendar">
+							<module:display name="Calendar" parentModule="PROJECT MANAGEMENT">
 							<logic:equal name="aimFinancingBreakdownForm" property="goButtonPresent" value="true">
 								<TR bgColor=#f4f4f2>
 									<TD vAlign="top" align="left" width="750">

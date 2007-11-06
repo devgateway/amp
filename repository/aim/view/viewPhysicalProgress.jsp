@@ -90,7 +90,7 @@ method="post">
 									</SPAN>
 								</TD>
 								<TD align=right>
-											<module:display name="Previews">
+											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Preview Activity" module="Previews">
 													<field:display feature="Preview Activity" name="Preview Button">
 														<input type="button" value="<digi:trn key="aim:physical:preview">Preview</digi:trn>" class="dr-menu"
@@ -98,7 +98,7 @@ method="post">
 													</field:display>
 												</feature:display>
 											</module:display>
-											<module:display name="Previews">
+											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Edit Activity" module="Previews">
 													<field:display feature="Edit Activity" name="Edit Activity Button">
 														<input type="button" value="<digi:trn key="aim:physical:edit">Edit</digi:trn>" class="dr-menu"
@@ -106,7 +106,7 @@ method="post">
 													</field:display>
 												</feature:display>
 											</module:display>
-										<module:display name="Previews">
+										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Logframe" module="Previews">
 													<field:display name="Logframe Preview Button" feature="Logframe" >
 														<input type="button" value='<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>' class="dr-menu"
@@ -114,7 +114,7 @@ method="post">
 													</field:display>
 												</feature:display>
 										</module:display>
-										<module:display name="Previews">
+										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Project Fiche" module="Previews">
 													<field:display name="Project Fiche Button" feature="Project Fiche" >
 														<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu'
@@ -130,7 +130,7 @@ method="post">
 					</TD>
 					</TR>
 
-					<module:display name="Components">
+					<module:display name="Components" parentModule="PROJECT MANAGEMENT">
 					<feature:display name="Components" module="Components">
 					<TR bgColor=#f4f4f2><TD vAlign="top" align="center" width="100%">
 						<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
@@ -182,7 +182,7 @@ method="post">
 					</feature:display>
 					</module:display>
 				</TABLE></TD></TR>
-				<module:display name="Issues">
+				<module:display name="Issues" parentModule="PROJECT MANAGEMENT">
 				<feature:display name="Issues" module="Issues">
 				<TR><TD bgcolor="#F4F4F2" vAlign="bottom" align="center" width="100%">
 					<!-- issues -->

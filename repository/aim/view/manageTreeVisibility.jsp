@@ -57,9 +57,7 @@
 						<jsp:include page="generateTreeXLevelVisibility.jsp" />
 					</logic:equal>
 					<logic:equal name="aimVisibilityManagerForm" property="existSubmodules" value="true">
-						<logic:notEmpty name="size">
 							<jsp:include page="generateTreeXLevelVisibility.jsp" />
-						</logic:notEmpty>
 					</logic:equal>
 				</logic:iterate>
 				

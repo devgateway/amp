@@ -221,11 +221,9 @@ ${fn:replace(message,quote,escapedQuote)}
 								<!-- contents -->
 
 								<table width="95%" bgcolor="#f4f4f2" border=0>
-								<module:display name="Project ID and Planning">
 									<feature:display name="Identification" module="Project ID and Planning">
 									&nbsp;
 									</feature:display>
-								</module:display>
 									<tr>
 										<td>
 											<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>

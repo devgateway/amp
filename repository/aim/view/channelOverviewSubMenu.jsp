@@ -83,14 +83,14 @@
 					<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
 
-					<module:display name="Physical Progress">
+					<feature:display name="Physical Progress" module="Physical Progress">
                   <c:set target="${urlTabs}" property="tabIndex" value="2"/>
 					
 						<div id="gen" title='<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>'>
                  	<digi:link href="/viewPhysicalProgress.do" name="urlTabs" styleClass="leftNavItem">
                  		 <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
                  	</digi:link></div>
-					</module:display>
+					</feature:display>
 					
 					</td></tr>		
 					<TR><TD bgcolor="#f7f9e3">
@@ -141,7 +141,6 @@
 					</DIV>
 					</TD></TR>
 					
-					<module:display name="National Planning Dashboard">
 			  		<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
 						<c:set target="${urlTabs}" property="tabIndex" value="6"/>
@@ -151,7 +150,6 @@
 						</digi:link></div>
 					</DIV>
 					</TD></TR>
-					</module:display>
 			  	<TR><TD bgcolor="#f7f9e3">
 				<DIV id="leftNav">
 					

@@ -11,21 +11,40 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<module:display name="Project ID and Planning"></module:display>
-<module:display name="National Planning Dashboard"></module:display>
-<module:display name="Reports"></module:display>
-<module:display name="Funding"></module:display>
-<module:display name="Issues"></module:display>
-<module:display name="Contact Information"></module:display>
-<module:display name="Trend Analysis and Forecasting"></module:display>
-<module:display name="Activity Costing"></module:display>
-<module:display name="Paris Indicators"></module:display>
-<module:display name="Physical Progress"></module:display>
-<module:display name="Components"></module:display>
-<module:display name="Document Management"></module:display>
-<module:display name="Organizations"></module:display>
-<module:display name="My Messages"></module:display>
-<module:display name="Previews"></module:display>
-<module:display name="Financial Progress"></module:display>
-<module:display name="Channel Overview"></module:display>
- 
+<module:display name="PROJECT MANAGEMENT"></module:display>
+<module:display name="NATIONAL PLAN DASHBOARD"></module:display>
+<module:display name="DOCUMENTS MANAGEMENT"></module:display>
+<module:display name="REPORTING"></module:display>
+<module:display name="TREND ANALYSIS"></module:display>
+<module:display name="MONITORING AND EVALUATING"></module:display>
+
+<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Components" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Organizations" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Contact Information" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="M&E" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Desktop Sections" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Channel Overview" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Financial Progress"  parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Physical Progress" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Calendar" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display>
+
+<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD"></module:display>
+
+<module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display>
+
+<module:display name="Reports" parentModule="REPORTING"></module:display>
+
+<module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
+
+

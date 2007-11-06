@@ -413,7 +413,6 @@ function disable() {
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td align="center" vAlign="top" bgcolor="#ffffff">
 								<table width="100%" cellSpacing=1 cellpadding=3 bgcolor="#dddddd">
-								<module:display name="Project ID and Planning">
 									<feature:display name="Identification" module="Project ID and Planning">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
@@ -434,8 +433,8 @@ function disable() {
 											<c:out value="${aimEditActivityForm.title}"/>
 										</td>
 									</tr>
-								</field:display>
-								<field:display feature="Identification" name="Objectives">
+									</field:display>
+									<field:display feature="Identification" name="Objectives">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:objectives">
@@ -889,7 +888,7 @@ function disable() {
 									</tr>
 									</feature:display>
 									</module:display>
-									<module:display name="National Planning Dashboard">
+									<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
 									<feature:display name="NPD Programs " module="National Planning Dashboard">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -988,9 +987,8 @@ function disable() {
 										</td>
 									</tr>
 									</feature:display>
-									</module:display>
 								<logic:present name="currentMember" scope="session">
-									<module:display name="Funding">
+									<module:display name="Funding" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:funding">
@@ -1705,7 +1703,7 @@ function disable() {
 										</td>
 									</tr>
 									</feature:display>
-									<module:display name="Organizations">
+									<module:display name="Organizations" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:relatedOrganizations">
@@ -1756,7 +1754,7 @@ function disable() {
 										</td>
 									</tr>
 									</module:display>
-									<module:display name="Components">
+									<module:display name="Components" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:components">
@@ -1991,7 +1989,7 @@ function disable() {
 										</td>
 									</tr>
 									</module:display>
-									<module:display name="Issues">
+									<module:display name="Issues" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:issues">
@@ -2024,7 +2022,7 @@ function disable() {
 										</td>
 									</tr>
 									</module:display>
-									<module:display name="Document Management">
+									<module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT">
 									<feature:display name="Related Documents" module="Document Management">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -2142,7 +2140,7 @@ function disable() {
 									</tr>
 									</feature:display>
 
-									<module:display name="Contact Information">
+									<module:display name="Contact Information" parentModule="PROJECT MANAGEMENT">
 									<feature:display name="Donor Contact Information" module="Contact Information">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">

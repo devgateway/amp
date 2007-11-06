@@ -105,7 +105,8 @@
                                           </table>
                                         </td>
                                       </tr>
-                                      <field:display name="Description of Program" feature="NPD Programs">
+
+                                      <field:display name="Program Description" feature="Program">
                                       <tr>
                                         <td>
                                           <a title="<digi:trn key="aim:ProgramDesc">Description of program, objectives, or associated projects</digi:trn>">

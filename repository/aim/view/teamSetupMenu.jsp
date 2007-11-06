@@ -184,7 +184,7 @@
 							</LI>
 						</c:if>
 
-						<module:display name="Trend Analysis and Forecasting">
+						<module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS">
 						
 							<c:if test="${selectedTab == '8'}">
 								<LI class="selected">

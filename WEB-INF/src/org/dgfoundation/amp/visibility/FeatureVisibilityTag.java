@@ -1,7 +1,7 @@
 /**
  * @author dan
  *
- *
+ * 
  */
 package org.dgfoundation.amp.visibility;
 
@@ -27,13 +27,13 @@ import org.digijava.kernel.exception.*;
 public class FeatureVisibilityTag extends BodyTagSupport {
 
 	/**
-	 *
+	 * 
 	 */
 	private static final long serialVersionUID = 1296936554150626082L;
 	private String name;
 	private String module;
 	private String enabled;
-
+	
 	public String getName() {
 		return name;
 	}
@@ -41,13 +41,13 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 		this.name = name;
 	}
 	/**
-	 *
+	 * 
 	 */
 	public FeatureVisibilityTag() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	public int doStartTag() throws JspException {
 		// TODO Auto-generated method stub
 		ServletContext ampContext=pageContext.getServletContext();
@@ -75,10 +75,10 @@ public class FeatureVisibilityTag extends BodyTagSupport {
                                   ampContext.setAttribute("ampTreeVisibility",
                                       ampTreeVisibility);
 
-                                }
+ 		   }
                                 catch (DgException ex) {
                                   throw new JspException(ex);
-                                }
+ 	   }
                               }
                               else{
                                 return EVAL_BODY_BUFFERED;
@@ -90,7 +90,7 @@ public class FeatureVisibilityTag extends BodyTagSupport {
    		   if(!isModuleTheParent(ampTreeVisibility)){
    			   //update(featureId, fieldname);
 			   //System.out.println("error!!!! module "+this.getModule()+" is not the parent");
-
+			   
 			   FeaturesUtil.updateFeatureWithModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getModule()).getId(),this.getName());
 			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
    			   //System.out.println("-------------------------------update the parent of the feature");
@@ -104,10 +104,10 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 		  return SKIP_BODY;
 	   }
 
-
+	   
 		return EVAL_BODY_BUFFERED;//super.doStartTag();
 	}
-	public int doEndTag() throws JspException
+	public int doEndTag() throws JspException 
     {
 	   if (bodyContent==null) return  SKIP_BODY;
 	   if(bodyContent.getString()==null) return SKIP_BODY;
@@ -116,16 +116,16 @@ public class FeatureVisibilityTag extends BodyTagSupport {
     	   ServletContext ampContext=pageContext.getServletContext();
     	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
     	   /* name, feature, enable
-    	    *
+    	    * 
     	    * if feature is not in the db, error! it has to be already added this feature
-    	    *
+    	    * 
     	    *if field is not in db insert it with feature as parent
     	    *
     	    * is this feature the correct parent? if not -> error!
-    	    *
+    	    * 
     	    * if field is active then display the content
     	    */
-
+   		   
    		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
    		   if(ampTreeVisibility!=null)
    		   if(isFeatureActive(ampTreeVisibility)){
@@ -135,30 +135,30 @@ public class FeatureVisibilityTag extends BodyTagSupport {
    			//System.out.println("Field MANAGER!!!! ffeature "+this.getName()+" is not ACTIVE");
    			   //the field is not active!!!
    		   }
-
+    	   
        }
        catch (Exception e) {
     	   e.printStackTrace();
        	throw new JspTagException(e.getMessage());
        }
-       return EVAL_PAGE;//SKIP_BODY
+       return EVAL_PAGE;//SKIP_BODY 
     }
-
+	
 	public boolean isFeatureActive(AmpTreeVisibility atv)
 	{
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) atv.getRoot();
 		for(Iterator it=currentTemplate.getFeatures().iterator();it.hasNext();)
 		{
 			AmpFeaturesVisibility feature=(AmpFeaturesVisibility) it.next();
-			if(feature.getName().compareTo(this.getName())==0)
+			if(feature.getName().compareTo(this.getName())==0) 
 			{
 				return true;
 			}
-
+			
 		}
 		return false;
 	}
-
+	
 	public boolean existModule(AmpTreeVisibility atv)
 	{
 
@@ -166,14 +166,14 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 		if(moduleByNameFromRoot==null) return false;
 		return true;
 	}
-
+	
 	public boolean existFeatureinDB(AmpTreeVisibility atv)
 	{
 		AmpFeaturesVisibility featureByNameFromRoot = atv.getFeatureByNameFromRoot(this.getName());
 		if(featureByNameFromRoot==null) return false;
 		return true;
 	}
-
+	
 	public boolean isModuleTheParent(AmpTreeVisibility atv)
 	{
 		AmpTreeVisibility moduleByNameFromRoot = atv.getModuleTreeByNameFromRoot(this.getModule());
@@ -181,8 +181,8 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 		if(moduleByNameFromRoot.getItems().containsKey(this.getName())) return true;
 		return false;
 	}
-
-
+	
+	
 	public String getEnabled() {
 		return enabled;
 	}

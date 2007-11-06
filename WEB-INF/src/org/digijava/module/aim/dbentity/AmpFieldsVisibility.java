@@ -46,6 +46,7 @@ public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializ
 	public boolean isFieldActive(AmpTreeVisibility atv)
 	{
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) atv.getRoot();
+		
 		for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
 		{
 			AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();

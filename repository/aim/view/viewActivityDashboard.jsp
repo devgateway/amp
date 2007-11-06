@@ -171,7 +171,7 @@ method="post">
 
 		<TD align=right>
 
-										<module:display name="Previews">
+										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Preview Activity" module="Previews">
 												<field:display feature="Preview Activity" name="Preview Button">
 	                                          		<html:button style="dr-menu" onclick="preview('${actId}')" property="previewBtn">
@@ -182,7 +182,7 @@ method="post">
 											</feature:display>
 										</module:display>
 
-										<module:display name="Previews">
+										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Edit Activity" module="Previews">
 												<field:display feature="Edit Activity" name="Edit Activity Button">
 													<html:button style="dr-menu" onclick="fnEditProject('${actId}')" property="editBtn">
@@ -193,7 +193,7 @@ method="post">
 											</feature:display>
 										</module:display>
 
-										<module:display name="Previews">
+										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Logframe" module="Previews">
 													<field:display name="Logframe Preview Button" feature="Logframe" >
 														<html:button property="logframe" style="dr-menu" onclick="previewLogframe(${actId})">
@@ -203,7 +203,7 @@ method="post">
 													</field:display>
 												</feature:display>
 										</module:display>
-										<module:display name="Previews">
+										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Project Fiche" module="Previews">
 													<field:display name="Project Fiche Button" feature="Project Fiche" >
 														<html:button  style="dr-menu" onclick='projectFiche(${actId})' property="projectFiche">

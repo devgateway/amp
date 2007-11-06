@@ -80,20 +80,20 @@ function projectFiche(id)
 								</TD>
 								<TD align="right">
 								
-											<module:display name="Previews">
+											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Preview Activity" module="Previews">
 													<field:display feature="Preview Activity" name="Preview Button">
 														<input type="button" value="Preview" class="dr-menu" onclick='preview(<c:out value="${ampActivityId}"/>)'>
 													</field:display>
 												</feature:display>
 											</module:display>
-											<module:display name="Previews">
+											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Edit Activity" module="Previews">
 													<field:display feature="Edit Activity" name="Edit Activity Button">
 														<input type="button" value="Edit" class="dr-menu" onclick='fnEditProject(<c:out value="${ampActivityId}"/>)'>													</field:display>
 												</feature:display>
 											</module:display>
-											<module:display name="Previews">
+											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Logframe" module="Previews">
 													<field:display name="Logframe Preview Button" feature="Logframe" >
 															<input type="button" value="Preview Logframe" class="dr-menu" onclick="previewLogframe(<c:out value="${ampActivityId}"/>)">
@@ -101,7 +101,7 @@ function projectFiche(id)
 												</feature:display>
 											</module:display>
 											
-											<module:display name="Previews">
+											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Project Fiche" module="Previews">
 													<field:display name="Project Fiche Button" feature="Project Fiche" >
 														<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu' onclick='projectFiche(<c:out value="${ampActivityId}"/>)'>

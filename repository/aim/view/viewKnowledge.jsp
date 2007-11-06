@@ -18,6 +18,7 @@
 	src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript">
 
+
 function login()
 
 {
@@ -167,7 +168,7 @@ function preview(id)
                                         <bean:write name="aimKnowledgeForm"	property="perspective" />
                                         <digi:trn key="aim:docPerspective">Perspective</digi:trn> </SPAN></TD>
 
-										<TD align=right><module:display name="Previews">
+										<TD align=right><module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Preview Activity" module="Previews">
 												<field:display feature="Preview Activity"
 													name="Preview Button">
@@ -177,7 +178,7 @@ function preview(id)
 														onclick="preview(<c:out value="${aimKnowledgeForm.id}"/>)">
 												</field:display>
 											</feature:display>
-										</module:display> <module:display name="Previews">
+										</module:display> <module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Edit Activity" module="Previews">
 												<field:display feature="Edit Activity"
 													name="Edit Activity Button">
@@ -187,7 +188,7 @@ function preview(id)
 														onclick="fnEditProject(<c:out value="${aimKnowledgeForm.id}"/>)">
 												</field:display>
 											</feature:display>
-										</module:display> &nbsp; <module:display name="Previews">
+										</module:display> &nbsp; <module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Logframe" module="Previews">
 												<field:display name="Logframe Preview Button"
 													feature="Logframe">
@@ -196,7 +197,8 @@ function preview(id)
 														onclick="previewLogframe(<c:out value="${aimKnowledgeForm.id}"/>)">
 												</field:display>
 											</feature:display>
-										</module:display> <module:display name="Previews">
+										</module:display> 
+										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Project Fiche" module="Previews">
 												<field:display name="Project Fiche Button"
 													feature="Project Fiche">
@@ -215,7 +217,7 @@ function preview(id)
 								</TD>
 
 							</TR>
-							<module:display name="Content Repository">
+							<feature:display name="Content Repository" module="Document Management">
 								<tr>
 									<TD><bean:define id="dmWindowTitle" toScope="request">Related Documents</bean:define>
 									<bean:define toScope="request" id="documentsType"
@@ -228,10 +230,9 @@ function preview(id)
 									<br />
 									</TD>
 								</tr>
-							</module:display>
-							<module:display name="Document Management">
-								<feature:display name="Related Documents"
-									module="Document Management">
+							</feature:display>
+							<module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT">
+								<feature:display name="Related Documents" module="Document Management">
 									<TR bgColor=#f4f4f2>
 										<TD vAlign="top" align="center" width="100%">
 										<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top"

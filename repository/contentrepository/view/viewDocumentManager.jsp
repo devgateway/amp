@@ -443,5 +443,5 @@
 <script type="text/javascript">
 YAHOO.namespace("YAHOO.amp.table");
 YAHOO.amp.table.mytable	= YAHOO.amp.table.enhanceMarkup("team_markup");
-YAHOO.amp.table.mytable	= YAHOO.amp.table.enhanceMarkup("my_markup");
+YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("my_markup");
 </script>

@@ -98,7 +98,7 @@ public class ParisIndicator5aSubJrxml {
 
                 p.println("					<box topBorder='1Point' topBorderColor='#000000' leftBorder='1Point' leftBorderColor='#000000' rightBorder='1Point' rightBorderColor='#000000' bottomBorder='1Point' bottomBorderColor='#000000'/>");
                 p.println("					<textElement textAlignment='Center'>");
-                p.println("						<font/>");
+                p.println("						<font isBold='true'/>");
                 p.println("					</textElement>");
                 p.println("				<text><![CDATA["+dn[0]+"]]></text>");
                 p.println("				</staticText>");
@@ -122,7 +122,7 @@ public class ParisIndicator5aSubJrxml {
 
                 p.println("					<box topBorder='1Point' topBorderColor='#000000' leftBorder='1Point' leftBorderColor='#000000' rightBorder='1Point' rightBorderColor='#000000' bottomBorder='1Point' bottomBorderColor='#000000'/>");
                 p.println("					<textElement textAlignment='Center'>");
-                p.println("						<font/>");
+                p.println("						<font isBold='true'/>");
                 p.println("					</textElement>");
                 p.println("				<text><![CDATA[Percent of donors that use all three partner's PFM procedures]]></text>");
                 p.println("				</staticText>");
@@ -135,7 +135,6 @@ public class ParisIndicator5aSubJrxml {
                 p.println("						width='59'");
                 p.println("						height='14'");
                 p.println("						forecolor='#000000'");
-                p.println("						backcolor='#CCCCCC'");
                 p.println("						key='staticText-3'");
                 p.println("						stretchType='NoStretch'");
                 p.println("						positionType='FixRelativeToTop'");
@@ -159,7 +158,6 @@ public class ParisIndicator5aSubJrxml {
                 p.println("						width='60'");
                 p.println("						height='14'");
                 p.println("						forecolor='#000000'");
-                p.println("						backcolor='#CCCCCC'");
                 p.println("						key='staticText-4'");
                 p.println("						stretchType='NoStretch'");
                 p.println("						positionType='FixRelativeToTop'");
@@ -183,7 +181,6 @@ public class ParisIndicator5aSubJrxml {
                 p.println("						width='57'");
                 p.println("						height='14'");
                 p.println("						forecolor='#000000'");
-                p.println("						backcolor='#CCCCCC'");
                 p.println("						key='staticText-5'");
                 p.println("						stretchType='NoStretch'");
                 p.println("						positionType='FixRelativeToTop'");

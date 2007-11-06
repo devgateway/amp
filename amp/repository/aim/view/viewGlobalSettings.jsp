@@ -191,30 +191,26 @@ function createDateString(monthId, dayId) {
                                 <b>
                                   <bean:define id="thisForm" name="aimGlobalSettingsForm" type="org.digijava.module.aim.form.GlobalSettingsForm" />
                                   <%
-                                  Map dictionary	= thisForm.getPossibleValuesDictionary(globalSett.getGlobalSettingsName());
+                                  Map dictionary		= thisForm.getPossibleValuesDictionary(globalSett.getGlobalSettingsName());
+                                  String currentValue	= globalSett.getGlobalSettingsValue();
                                   if (dictionary != null) {
-                                    String dictionaryValue	=  (String)dictionary.get(globalSett.getGlobalSettingsValue());
-                                    if ( dictionaryValue == null )
-                                    dictionaryValue	= "n/a";
-                                    %>
-                                    <c:set var="dic">
-                                      <%out.write(dictionaryValue);%>
-                                    </c:set>
-                                    <digi:trn key='aim:globalSettings:${fn:replace(dic, " ", "_")}'>
-                                      <%out.write(dictionaryValue);%>
+                                    currentValue		=  (String)dictionary.get( currentValue );
+                                    if ( currentValue == null )
+                                    	currentValue	= "n/a";
+                                  }
+                                  String key			= "aim:globalSettings:" + globalSett.getGlobalSettingsName() + ":" + currentValue;
+                                  %>
+                                  	<c:set var="newKey"><%out.write( key );%></c:set>
+                                    <digi:trn key='${fn:replace(newKey, " ", "_")}'>
+                                      <%out.write(currentValue);%>
                                     </digi:trn>
 
-                                    <%}else{%>
-                                    <digi:trn key='aim:globalSettings:${fn:replace(globalSett.globalSettingsValue, " ", "_")}'>
-                                      <%=globalSett.getGlobalSettingsValue()%>
-                                    </digi:trn>
-                                    <%}%>
                                 </b>
                               </td>
 
 
                               <digi:form action="/GlobalSettings.do" method="post" >
-                                <td bgcolor="#f4f4f2" >
+                                <td bgcolor="#ffffff" >
                                   <html:hidden property="globalId" name="globalSett"/>
                                   <html:hidden property="globalSettingsName" name="globalSett"/>
 
@@ -234,12 +230,11 @@ function createDateString(monthId, dayId) {
                                     </html:select>
                                     <%}else { %>
                                     <html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
-                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
-                                      	<c:set var="valueOfSetting">
-                                      		<%= globalSett.getGlobalSettingsPossibleValues()%>
-                                      	</c:set>
+                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global" type="org.digijava.module.aim.helper.KeyValue">
+                                      	<% String key2	= "aim:globalSettings:" + globalSett.getGlobalSettingsName() + ":" + global.getValue(); %>
+                                      	<c:set var="newKey"><%= key2 %></c:set>
                                         <c:set var="globSettings">
-                                          <digi:trn key='aim:globalSettings:${fn:replace(global.value, " ", "_")}'>${global.value}</digi:trn>
+                                          <digi:trn key='${fn:replace(newKey, " ", "_")}'>${global.value}</digi:trn>
                                         </c:set>
 
                                         <html:option value="${global.key}">${globSettings}</html:option>

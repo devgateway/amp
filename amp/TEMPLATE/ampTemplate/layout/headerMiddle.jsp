@@ -39,12 +39,12 @@ if("On".equals(publicView)) { %>
 		<digi:link styleClass="head-menu-link" href="/viewTeamReports.do" module="aim" onclick="return quitRnot1('${message}')">
 				::: <digi:trn key="aim:reports">REPORTS</digi:trn></digi:link>
 		</LI>
-		<module:display name="Content Repository">
+		<feature:display name="Content Repository" module="Document Management">
 		<li>
 			<digi:link styleClass="head-menu-link" href="/documentManager.do" module="contentrepository" onclick="return quitRnot()">			
 				::: <digi:trn key="contentrepository:publicDocuments">Public Documents</digi:trn></digi:link>
 		</li>
-		</module:display>
+		</feature:display>
 
 </UL>
 </DIV>
@@ -107,13 +107,13 @@ if("On".equals(publicView)) { %>
 			<feature:display name="Documents Tab" module="Document Management">
 		    	<LI><a class="head-menu-link" href="/viewAllDocuments.do" module="aim" onclick="return quitRnot1('${message}')">::: <digi:trn key="aim:documentsHeader">DOCUMENTS</digi:trn></a></LI>
 		    </feature:display>
-		    <module:display name="Scenarios">
+		    <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT">
 		    	<LI><a class="head-menu-link">::: <digi:trn key="aim:scenarios">SCENARIOS</digi:trn></a></LI>
 	    	</module:display>
-			<module:display name="Content Repository">
+			<feature:display name="Content Repository" module="Document Management">
 			<LI><a class="head-menu-link" href="/contentrepository/documentManager.do" module="aim" onclick="return quitRnot1('${message}')">::: <digi:trn key="contentrepository:contentRepositoryTitle">CONTENT REPOSITORY</digi:trn></a></LI>
-			</module:display>
-	    <module:display name="Calendar">
+			</feature:display>
+	    <module:display name="Calendar" parentModule="PROJECT MANAGEMENT">
 		<LI>
 			<div id="gen" title='<digi:trn key="aim:viewPlanningCalendar">View Planning Calendar</digi:trn>'>
 			<logic:notEmpty name="TID" scope="session">
@@ -127,7 +127,7 @@ if("On".equals(publicView)) { %>
 			</div>
 		</LI>
 		</module:display>
-		<module:display name="National Planning Dashboard">
+		<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
     	<LI>
 			<div id="gen"  title='<digi:trn key="aim:viewMEDashboard">View M&E Dashboard</digi:trn>'>
 			<logic:notEmpty name="TID" scope="session">

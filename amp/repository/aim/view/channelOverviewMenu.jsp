@@ -159,7 +159,7 @@
 					</DIV>
 					</TD></TR>
 					</feature:display>
-					<module:display name="Paris Indicators">
+					<feature:display name="Paris Indicators" module="Paris Indicators">
 				  	<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
 						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
@@ -183,9 +183,9 @@
 						</logic:notEqual>
 						</DIV>
 					</TD></TR>
-					</module:display>
+					</feature:display>
 					
-					<module:display name="National Planning Dashboard">
+					<feature:display name="NPD Programs" module="National Planning Dashboard>
 			  		<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
 						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
@@ -204,7 +204,7 @@
 						</logic:notEqual>
 					</DIV>
 					</TD></TR>
-					</module:display>
+					</feature:display>
 			  	<TR><TD bgcolor="#f7f9e3">
 				<DIV id="leftNav">
 					

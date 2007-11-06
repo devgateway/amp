@@ -121,8 +121,7 @@ function gotoStep(value) {
 <tr><td>
 <table width="209" cellSpacing=4 cellPadding=2 vAlign="top" align="left"
 bgcolor="#006699">
-<module:display name="Project ID and Planning">
-</module:display>
+
 	<feature:display name="Identification" module="Project ID and Planning">
 	</feature:display>
 	<tr>
@@ -194,7 +193,7 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-	<module:display name="References">
+
 	<feature:display name="References" module="References">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != '1_5'}">
@@ -228,7 +227,6 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	</feature:display>
-	</module:display>
 
 
 	<feature:display name="Location" module="Project ID and Planning">
@@ -303,8 +301,7 @@ bgcolor="#006699">
 	</tr>
 
 
-	<module:display name="National Planning Dashboard">
-	<feature:display name="NPD Programs" module="National Planning Dashboard">
+	<feature:display name="Program" module="Program">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 2}">
 		<td nowrap="nowrap">
@@ -339,8 +336,7 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	</feature:display>
-	</module:display>
-	<module:display name="Funding">
+
 	<feature:display name="Funding Organizations"  module="Funding">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 3}">
@@ -411,8 +407,6 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	</feature:display>
-	</module:display>
-	<module:display name="Components">
 	<feature:display name="Components" module="Components">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 5}">
@@ -448,8 +442,6 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	</feature:display>
-	</module:display>
-	<module:display name="Issues">
 	<feature:display name="Issues" module="Issues">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 5}">
@@ -485,8 +477,6 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	</feature:display>
-	</module:display>
-	<module:display name="Document Management">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 6}">
 		<td nowrap="nowrap">
@@ -520,8 +510,6 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-	</module:display>
-	<module:display name="Organizations">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 7}">
 		<td nowrap="nowrap">
@@ -555,8 +543,6 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-	</module:display>
-	<module:display name="Contact Information">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 8}">
 		<td nowrap="nowrap">
@@ -590,9 +576,7 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-	</module:display>
 
-	<module:display name="Trend Analysis and Forecasting">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 10}">
 		<td nowrap="nowrap">
@@ -627,10 +611,8 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-	</module:display>
 
 	<!-- EU Costs -->
-	<module:display name="Activity Costing">
 	<feature:display name="Costing" module="Activity Costing">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 11}">
@@ -664,14 +646,12 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	</feature:display>
-	</module:display>
 
 
 	<tr>
 		<td align="center">
 		</td>
 	</tr>
-	<module:display name="Previews">
 		<feature:display name="Logframe" module="Previews">
 			<field:display name="Logframe Preview Button" feature="Logframe" >
 				<tr>
@@ -683,8 +663,6 @@ bgcolor="#006699">
 				</tr>
 			</field:display>
 		</feature:display>
-	</module:display>
-	<module:display name="Previews">
 		<feature:display name="Preview Activity" module="Previews">
 			<field:display feature="Preview Activity" name="Preview Button">
 				<tr>
@@ -694,7 +672,6 @@ bgcolor="#006699">
 				</tr>
 			</field:display>
 		</feature:display>
-	</module:display>
 
 	<tr>
 		<td align="center">

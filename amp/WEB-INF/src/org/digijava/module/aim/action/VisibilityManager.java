@@ -126,11 +126,14 @@ public class VisibilityManager extends MultiAction {
 		String templateName=FeaturesUtil.getTemplateNameVisibility(templateId);
 		session.setAttribute("templateName", templateName);
 		session.setAttribute("templateId",templateId);
-		AmpTemplatesVisibility templateVisibility = FeaturesUtil.getTemplateVisibility(templateId, hbsession);
+		//AmpTemplatesVisibility templateVisibility = FeaturesUtil.getTemplateVisibility(templateId, hbsession);
+		AmpTemplatesVisibility templateVisibility = FeaturesUtil.getTemplateById(templateId);
 		AmpTreeVisibility ampTreeVisibility=new AmpTreeVisibility();
 		AmpTreeVisibility ampTreeVisibilityAux=new AmpTreeVisibility();
 		ampTreeVisibility.buildAmpTreeVisibility(templateVisibility);
 		String existSubmodules;
+		//ampContext=this.getServlet().getServletContext();
+    	//ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
 		if( ampTreeVisibilityAux.buildAmpTreeVisibilityMultiLevel(templateVisibility) )
 			existSubmodules="true";
 		else existSubmodules="false";

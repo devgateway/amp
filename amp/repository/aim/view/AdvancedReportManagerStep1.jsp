@@ -228,7 +228,6 @@ function checkUncheckAll2() {
 																	<input type="checkbox" name="checkall" onclick="checkUncheckAll();"/>
 																	</td>
 																	</tr>
-											<module:display name="Project ID and Planning"></module:display>
 											<feature:display name="Identification" module="Project ID and Planning">
 												<field:display name="Actual Approval Date" feature="Identification" >&nbsp;</field:display>
 												<field:display name="Actual Completion Date" feature="Identification">&nbsp;</field:display>
@@ -257,7 +256,6 @@ function checkUncheckAll2() {
 												<field:display name="Sector" feature="Location">&nbsp;</field:display>
 												<field:display name="Sub-Sector" feature="Location">&nbsp;</field:display>
 											</feature:display>
-											<module:display name="Funding"></module:display>
 											<feature:display  name="Funding Organizations" module="Funding">
 												<field:display name="Cumulative Commitment" feature="Funding Organizations">&nbsp;</field:display>
 												<field:display name="Cumulative Disbursement" feature="Funding Organizations">&nbsp;</field:display>
@@ -267,7 +265,6 @@ function checkUncheckAll2() {
 												<field:display name="Financing Instrument" feature="Funding Organizations">&nbsp;</field:display>
 												<field:display name="Type Of Assistance" feature="Funding Organizations">&nbsp;</field:display>
 											</feature:display>
-											<module:display name="Issues"></module:display>
 											<feature:display name="Issues" module="Issues">
 												<field:display name="Actors" feature="Issues">&nbsp;</field:display>
 												<field:display name="Component description" feature="Issues">&nbsp;</field:display>
@@ -278,11 +275,9 @@ function checkUncheckAll2() {
 												<field:display name="Physical progress description" feature="Issues">&nbsp;</field:display>
 												<field:display name="Physical progress title" feature="Issues">&nbsp;</field:display>
 											</feature:display>
-											<module:display name="Contact Information"></module:display>
 											<feature:display name="Contact Information" module="Contact Information">
 												<field:display name="Contact Name" feature="Contact Information">&nbsp;</field:display>
 											</feature:display>
-											<module:display name="Trend Analysis and Forecasting"></module:display>
 											<feature:display name="M & E" module="Trend Analysis and Forecasting">
 												<field:display name="Indicator Base Value" feature="M & E">&nbsp;</field:display>
 												<field:display name="Indicator Current Value" feature="M & E">&nbsp;</field:display>
@@ -291,7 +286,6 @@ function checkUncheckAll2() {
 												<field:display name="Indicator ID" feature="M & E">&nbsp;</field:display>
 												<field:display name="Indicator Name" feature="M & E"></field:display>
 											</feature:display>
-											<module:display name="Activity Costing"></module:display>
 											<feature:display name="Costing" module="Activity Costing">
 												<field:display name="Costing Donor" feature="Costing"></field:display>
 												<field:display name="Total Costs" feature="Costing"></field:display>

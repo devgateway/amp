@@ -20,7 +20,7 @@
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
 									</td></tr>
-									<module:display name="Content Repository">
+									<feature:display name="Content Repository" module="Document Management">
 										<tr>
 											<td bgColor=#f4f4f2>
 												<bean:define toScope="request" id="showRemoveButton" value="true" />
@@ -40,7 +40,7 @@
 											</td>
 											<br />
 										</tr>
-									</module:display>
+									</feature:display>
 									<tr><td>
 										<logic:notEmpty name="aimEditActivityForm" property="documentList">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">

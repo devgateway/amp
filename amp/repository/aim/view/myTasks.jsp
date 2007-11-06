@@ -8,7 +8,6 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<module:display name="Desktop Sections">
 <TABLE align=center border=0 cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
 <feature:display name="My Tasks" module="Desktop Sections">
 	<TR>
@@ -110,4 +109,3 @@
 	</TR>	
 </feature:display>
 </TABLE>
-</module:display>

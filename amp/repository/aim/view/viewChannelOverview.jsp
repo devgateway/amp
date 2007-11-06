@@ -159,7 +159,7 @@ function commentWin(val) {
 										&nbsp;
 										<digi:trn key="aim:perspective">Perspective</digi:trn> </SPAN></TD>
 										<TD align="right" nowrap="nowrap">
-										<module:display name="Previews">
+										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Preview Activity" module="Previews">
 												<field:display feature="Preview Activity" name="Preview Button">
 													<html:button style="dr-menu" onclick="preview(${activity.activityId})" property="previewBtn">
@@ -171,7 +171,7 @@ function commentWin(val) {
 										</module:display>
 
 
-										<module:display name="Previews">
+										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Edit Activity" module="Previews">
 												<field:display feature="Edit Activity" name="Edit Activity Button">
 												<html:button style="dr-menu" onclick="fnEditProject(${activity.activityId})" property="editBtn">
@@ -182,7 +182,7 @@ function commentWin(val) {
 											</feature:display>
 										</module:display>
 
-										<module:display name="Previews">
+										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Logframe" module="Previews">
 													<field:display name="Logframe Preview Button" feature="Logframe" >
 														<html:button  style="dr-menu" onclick="previewLogframe(${activity.activityId})" property="logframeBtn">
@@ -200,7 +200,7 @@ function commentWin(val) {
 											<input type="button" value='<digi:trn key="aim:approvalAwaited">Approval Awaited</digi:trn>' class="dr-menu"
 												disabled>
 										</c:if>
-										<module:display name="Previews">
+										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Project Fiche" module="Previews">
 													<field:display name="Project Fiche Button" feature="Project Fiche" >
 														<html:button style="dr-menu" onclick='projectFiche(${activity.activityId})' property="projectFicheBtn">
@@ -292,7 +292,7 @@ function commentWin(val) {
 														</TABLE>
 														</TD>
 													</TR>
-													<module:display name="Project ID and Planning">
+													<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
 														<feature:display name="Planning" module="Project ID and Planning">
 															<field:display name="Status" feature="Planning">
 																<TR>
@@ -401,11 +401,11 @@ function commentWin(val) {
 																				<tr>
 																					<td>
 																					<digi:trn key="aim:actGovernmentApprovalProcedures">
-																					Government Approval Procedures
+																					Government Approval Procedures 
 																					</digi:trn>:
 																					<c:if test="${activity.governmentApprovalProcedures==true}">
 																						<c:out value="Yes"/>
-																					</c:if>
+																					</c:if>	
 																					<c:if test="${activity.governmentApprovalProcedures==false || activity.governmentApprovalProcedures==''}">
 																						<c:out value="No"/>
 																					</c:if>
@@ -420,7 +420,7 @@ function commentWin(val) {
 																					</digi:trn>:
 																					<c:if test="${activity.jointCriteria==true}">
 																						<c:out value="Yes"/>
-																					</c:if>
+																					</c:if>	
 																					<c:if test="${activity.jointCriteria==false || activity.jointCriteria==''}">
 																						<c:out value="No"/>
 																					</c:if>
@@ -665,7 +665,7 @@ function commentWin(val) {
 														</feature:display>
 													</module:display>
 
-													<module:display name="Contact Information">
+													<module:display name="Contact Information" parentModule="PROJECT MANAGEMENT">
 														<feature:display name="Donor Contact Information" module="Contact Information">
 															<TR>
 																<TD>
@@ -798,7 +798,7 @@ function commentWin(val) {
 																<TD bgcolor="#fffff">
 																<TABLE width="100%" cellSpacing="2" cellPadding="2"
 																	vAlign="top" align="center" bgcolor="#ffffff">
-																	<module:display name="Funding">
+																	<module:display name="Funding" parentModule="PROJECT MANAGEMENT">
 																		<feature:display module="Funding" name="Funding Organizations">
 																			<TR>
 																				<TD>
@@ -829,7 +829,7 @@ function commentWin(val) {
 																			</TR>
 																		</feature:display>
 																	</module:display>
-																	<module:display name="Organizations">
+																	<module:display name="Organizations" parentModule="PROJECT MANAGEMENT">
 																		<feature:display module="Organizations" name="Executing Agency">
 																			<TR>
 																				<TD>
@@ -950,7 +950,7 @@ function commentWin(val) {
 														</TABLE>
 														</TD>
 													</TR>
-													<module:display name="Project ID and Planning">
+													<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
 														<feature:display module="Project ID and Planning" name="Planning">
 															<TR>
 																<TD>
@@ -1050,7 +1050,7 @@ function commentWin(val) {
 														</feature:display>
 													</module:display>
 
-													<module:display name="Funding">
+													<module:display name="Funding" parentModule="PROJECT MANAGEMENT">
 														<feature:display name="Funding Organizations" module="Funding">
 															<field:display feature="Funding Organizations" name="Type Of Assistance">
 																<TR>
@@ -1077,7 +1077,7 @@ function commentWin(val) {
 															</field:display>
 														</feature:display>
 													</module:display>
-													<module:display name="Funding">
+													<module:display name="Funding" parentModule="PROJECT MANAGEMENT">
 														<feature:display name="Funding Organizations" module="Funding">
 															<field:display name="Financing Instrument" feature="Funding Organizations">
 																<TR>

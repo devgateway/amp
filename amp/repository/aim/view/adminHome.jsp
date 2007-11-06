@@ -10,6 +10,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
+<jsp:include page="allVisibilityTags.jsp" />
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=757 align="left">
   <tr>
     <td class=r-dotted-lg width=5>&nbsp;</td>
@@ -281,7 +282,7 @@
                             </td>
                           </tr>
 
-						<module:display name="National Planning Dashboard">
+						<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

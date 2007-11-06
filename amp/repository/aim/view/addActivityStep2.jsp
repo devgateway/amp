@@ -433,7 +433,7 @@ function fnChk(frmContrl){
 			                              &nbsp;
 			                              </td>
 			                            </tr>
-			                            <feature:display name="NPD Programs" module="National Planning Dashboard">
+			                            <feature:display name="Program" module="Program">
 			                              <jsp:include page="addActivityStep2Program.jsp"/>
 			                            </feature:display>
 			                            <tr>

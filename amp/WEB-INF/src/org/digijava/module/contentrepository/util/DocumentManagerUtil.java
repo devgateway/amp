@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.jcr.InvalidItemStateException;
 import javax.jcr.NamespaceException;
 import javax.jcr.NamespaceRegistry;
 import javax.jcr.Node;
@@ -76,6 +77,17 @@ public class DocumentManagerUtil {
 				return null;
 			}
 		}
+		
+		try {
+			jcrSession.getRootNode().refresh(false);
+		} catch (InvalidItemStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return jcrSession;
 	}
 	public static Session getWriteSession(HttpServletRequest request) {
@@ -94,8 +106,15 @@ public class DocumentManagerUtil {
 				
 				SimpleCredentials creden	= new SimpleCredentials(userName, userName.toCharArray());
 				
-				jcrSession	= getJCRRepository(request).login( creden );
+				Repository rep				= getJCRRepository(request); 
+				
+				jcrSession					= rep.login( creden );
+				
+				jcrSession.save();
+				
 				httpSession.setAttribute(CrConstants.JCR_WRITE_SESSION, jcrSession);
+				
+				registerNamespace(jcrSession, "ampdoc", "http://amp-demo.code.ro/ampdoc");
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -103,7 +122,16 @@ public class DocumentManagerUtil {
 				return null;
 			}
 		}
-		registerNamespace(jcrSession, "ampdoc", "http://amp-demo.code.ro/ampdoc");
+		
+		try {
+			jcrSession.getRootNode().refresh(false);
+		} catch (InvalidItemStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return jcrSession;
 	}
@@ -111,8 +139,8 @@ public class DocumentManagerUtil {
 	public static Node getReadNode (String uuid, HttpServletRequest request) {
 		Session session	= getReadSession(request);
 		try {
-			session.getRootNode().refresh(false);
-			session.refresh(false);
+			//session.getRootNode().refresh(false);
+			//session.refresh(false);
 			return session.getNodeByUUID(uuid);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -123,6 +151,8 @@ public class DocumentManagerUtil {
 	public static Node getWriteNode (String uuid, HttpServletRequest request) {
 		Session session	= getWriteSession(request);
 		try {
+			//session.getRootNode().refresh(false);
+			//session.refresh(false);
 			return session.getNodeByUUID(uuid);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -231,7 +261,10 @@ public class DocumentManagerUtil {
 		if (uuid != null) {
 			Node node		= DocumentManagerUtil.getWriteNode(uuid, request);
 			try {
+				Node parent		= node.getParent();
 				node.remove();
+				parent.save();
+				
 				SetAttributes.unpublish(uuid);
 				return true;
 			} catch (Exception e) {

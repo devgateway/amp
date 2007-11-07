@@ -59,6 +59,7 @@ function save() {
     <digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
     document.aimEditActivityForm.action = "<%= save %>?edit=true";
     document.aimEditActivityForm.target = "_self";
+    /* ===========   	 AMP-2143  
     var appstatus = document.aimEditActivityForm.approvalStatus.value;
     var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
     var msg='';
@@ -71,11 +72,9 @@ function save() {
       else if (confirm(msg))
       document.aimEditActivityForm.approvalStatus.value = "created";
     }
-
     if (appstatus == "approved") {
       if (wTLFlag != "yes")
       document.aimEditActivityForm.approvalStatus.value = "edited";
-
     }
     else if (wTLFlag == "yes") {
       msg+='<digi:trn key="aim:saveActivity:approved">Do you want to approve this activity ?</digi:trn>';
@@ -84,6 +83,7 @@ function save() {
         document.aimEditActivityForm.approvalStatus.value = "approved";
       }
     }
+    */
     document.aimEditActivityForm.submit();
   }
 }

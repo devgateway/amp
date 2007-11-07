@@ -47,4 +47,4 @@
 
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 
-
+<module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display>

@@ -76,25 +76,28 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		
 		if(ampTreeVisibility!=null)
 		{
-			if(!existModuleinDB(ampTreeVisibility))
+			if(!existModuleinDB(ampTreeVisibility) && FeaturesUtil.getModuleVisibility(name)==null)
 			{
-				if(FeaturesUtil.getModuleVisibility(name)==null)
-				{
 					FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName());
 					
 					AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 					ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 					ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
-				}  
    		   	}
 			else 
-				if(!checkTypeAndParentOfModule(ampTreeVisibility)) //parent or type is not ok
-					{
-						FeaturesUtil.updateModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId(), parentModule, type);
-						AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-			   			ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-			   			ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
-					}
+					if(!checkTypeAndParentOfModule(ampTreeVisibility) || !checkTypeAndParentOfModule2(FeaturesUtil.getModuleVisibility(name))) //parent or type is not ok
+						{
+							try{
+								FeaturesUtil.updateModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId(), parentModule, type);
+							}
+							catch(Exception e)
+							{
+								e.printStackTrace();
+							}
+							AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+							ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+							ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+						}
 				
 		}
 		else return SKIP_BODY;
@@ -185,5 +188,22 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		return typeOK && parentOK;
 	}
 
+	public boolean checkTypeAndParentOfModule2(AmpModulesVisibility atv)
+	{
+		AmpModulesVisibility moduleByNameFromRoot=null;
+		boolean typeOK=false;
+		boolean parentOK=false;
+		if(atv!=null)
+			moduleByNameFromRoot = atv;
+		else return typeOK && parentOK;
+		if(this.getType()!=null && moduleByNameFromRoot.getType()!=null)
+			if(moduleByNameFromRoot.getType().getName().compareTo(this.getType())==0)
+				 typeOK=true;//return true; //they are identical
+		if(this.getParentModule()!=null && moduleByNameFromRoot.getParent()!=null)
+			if(moduleByNameFromRoot.getParent().getName().compareTo(this.getParentModule())==0)
+				parentOK=true;
+		//if(moduleByNameFromRoot==null) return false;
+		return typeOK && parentOK;
+	}
 	
 }

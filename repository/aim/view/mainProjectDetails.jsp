@@ -146,7 +146,7 @@
 							</logic:notEqual>
 						</feature:display>
 						
-						<feature:display name="References" module="REFERENCES">
+						<feature:display name="References" module="References">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="1">
 							   <LI class="selected">
 									:: <digi:trn key="aim:references">References</digi:trn>
@@ -163,7 +163,7 @@
 							</logic:notEqual>
 						</feature:display>
 						
-						<feature:display name="Financial Progress" module="Financial Progress">
+						<module:display name="Financial Progress" parentModule="PROJECT MANAGEMENT">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="2">
 							   <LI class="selected">
 									:: <digi:trn key="aim:financialProgress">Financial Progress</digi:trn>								
@@ -178,7 +178,7 @@
 								</digi:link></div>
 								</LI>
 							</logic:notEqual>
-						</feature:display>
+						</module:display>
 						
 							<feature:display name="Funding Organizations" module="Funding">
 								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="3">
@@ -197,7 +197,7 @@
 								</logic:notEqual>
 							</feature:display>
 						
-						<feature:display name="Document Management" module="Document Management">
+						<module:display name="Document Management" module="DOCUMENTS MANAGEMENT">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
 							   <LI class="selected">
 									:: <digi:trn key="aim:documents">Documents</digi:trn>
@@ -212,7 +212,7 @@
 							</digi:link></div>
 							</LI>
 							</logic:notEqual>
-						</feature:display>
+						</module:display>
 					</UL>
 				</DIV>
 				</TD></TR>
@@ -258,7 +258,7 @@
 								</LI>
 							</logic:notEqual>
 						</feature:display>
-						<module:display name="NATIONAL PLANNING DASHBOARD">
+						<module:display name="NATIONAL PLAN DASHBOARD">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="7">
 									<LI class="selected">
 									:: <digi:trn key="aim:activityDashboard">Dashboard</digi:trn>

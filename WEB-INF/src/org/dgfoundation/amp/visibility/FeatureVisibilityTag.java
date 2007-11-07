@@ -178,7 +178,13 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 	{
 		AmpTreeVisibility moduleByNameFromRoot = atv.getModuleTreeByNameFromRoot(this.getModule());
 		//AmpFeaturesVisibility f=(AmpFeaturesVisibility) featureByNameFromRoot.getRoot();
-		if(moduleByNameFromRoot.getItems().containsKey(this.getName())) return true;
+		if(moduleByNameFromRoot!=null)
+			if(moduleByNameFromRoot.getItems()!=null)
+				{
+				if(moduleByNameFromRoot.getItems().containsKey(this.getName())) return true;
+				}
+			else System.out.println("errror in FM"+this.getModule());
+		else System.out.println("errror in FM"+this.getModule());		
 		return false;
 	}
 	

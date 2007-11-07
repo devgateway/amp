@@ -192,7 +192,13 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	{
 		AmpTreeVisibility featureByNameFromRoot = atv.getFeatureTreeByNameFromRoot(this.getFeature());
 		//AmpFeaturesVisibility f=(AmpFeaturesVisibility) featureByNameFromRoot.getRoot();
-		if(featureByNameFromRoot.getItems().containsKey(this.getName())) return true;
+		if(featureByNameFromRoot!=null)
+			if(featureByNameFromRoot.getItems()!=null)
+				{
+					if(featureByNameFromRoot.getItems().containsKey(this.getName())) return true;
+				}
+			else System.out.println("errror in FM"+this.getFeature());
+		else System.out.println("errror in FM"+this.getFeature());
 		return false;
 	}
 	

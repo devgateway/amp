@@ -79,6 +79,7 @@ public class AmpTreeVisibility {
 					getModuleTree(moduleNode);
 					notEmpty=true;
 				}
+			
 			else {
 				existSubmodules=true;
 				;//System.out.println("	si NU are submodule:::"+module.getName());

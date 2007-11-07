@@ -12,7 +12,6 @@
 		
 		
 	 <set name="items" table="AMP_FEATURES_VISIBILITY" cascade="all">
-      	   <cache usage="read-write" />
            <key column="parent"/>
            <one-to-many class="org.digijava.module.aim.dbentity.AmpFeaturesVisibility"/>
      </set>
@@ -22,13 +21,11 @@
      <many-to-one name="type" column="type" class="org.digijava.module.aim.dbentity.AmpModulesType"/>
      
      <set name="submodules" cascade="all" inverse="true">
-      	   <cache usage="read-write" />
            <key column="parent"/>
            <one-to-many class="org.digijava.module.aim.dbentity.AmpModulesVisibility"/>
      </set>
      
     <set name="templates" table="amp_modules_templates" inverse="true">
-		   <cache usage="read-write" />
            <key column="module"/>
            <many-to-many column="template" class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility"/>
      </set>

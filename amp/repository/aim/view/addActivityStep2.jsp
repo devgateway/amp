@@ -182,7 +182,7 @@ function validateSectorPercentage(){
   while (i < cnt) {
     str   = "activitySectors[" + i + "].sectorPercentage";
     val   = (document.aimEditActivityForm.elements)[str].value;
-    if (val == "" || val == null) {
+    if (val == "" || val == null || val == "0") {
       alert("${errMsgAddPercentage}");
       flag = true;
       break;

@@ -45,6 +45,7 @@ public class GetDesktopActivities extends Action {
                   session.setAttribute("filterCurrentReport",null);
                 }
         */
+
 		session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
 		String risk=(String) request.getParameter("risk");
 		AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
@@ -81,13 +82,17 @@ public class GetDesktopActivities extends Action {
 		}
 		dForm.setTeamId(tm.getTeamId());
 		dForm.setTeamHead(tm.getTeamHead());
-
+		
 
 		// load activities
 		/*
 		 * The activities of the user is stored in a session scoped varible 'ampProjects' declared in the class
 		 * org.digijava.module.aim.helper.Constants.
 		 */
+
+		
+		/* Do not uncomment this too. This load is not useful, just uses 100% CPU and high memory and db load.
+
 		Collection col = (Collection) session.getAttribute(Constants.AMP_PROJECTS);
 		//if (col == null) {
 			col = DesktopUtil.getDesktopActivities(tm.getTeamId(),tm.getMemberId(),
@@ -98,7 +103,8 @@ public class GetDesktopActivities extends Action {
 		dForm.setSearchKey(null);
 		Collection col1 = (Collection) session.getAttribute(Constants.AMP_PROJECTS);
 		dForm.setActivities(new ArrayList(col1));
-
+		*/
+		
 		return mapping.findForward("forward");
 	}
 }

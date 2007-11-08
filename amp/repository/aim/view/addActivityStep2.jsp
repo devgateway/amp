@@ -173,6 +173,11 @@ function validateSectorPercentage(){
   Sum of sector percentages should be 100
   </digi:trn>
   </c:set>
+  <c:set var="errMsgZeroPercentage">
+  <digi:trn key="aim:addzeroPercentageErrorMessage">
+  A sector percentage cannot be equal to 0
+  </digi:trn>
+  </c:set>
   var str = null;
   var val = null;
   var i = 0;
@@ -182,11 +187,17 @@ function validateSectorPercentage(){
   while (i < cnt) {
     str   = "activitySectors[" + i + "].sectorPercentage";
     val   = (document.aimEditActivityForm.elements)[str].value;
-    if (val == "" || val == null || val == "0") {
+    if (val == "" || val == null) {
       alert("${errMsgAddPercentage}");
       flag = true;
       break;
     }
+    if (val == "0"){
+    alert("${errMsgZeroPercentage}");
+    flag = true;
+      break;
+    }
+    
     sum = sum + parseFloat(val);
     i = i + 1;
   }

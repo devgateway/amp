@@ -18,6 +18,7 @@
 	<many-to-one name="parent" column="parent" class="org.digijava.module.aim.dbentity.AmpModulesVisibility"/>
 	
 	<set name="templates" table="amp_features_templates" inverse="true">
+		   <cache usage="read-write" />
            <key column="feature"/>
            <many-to-many column="template" class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility"/>
      </set>

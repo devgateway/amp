@@ -413,6 +413,7 @@ function disable() {
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td align="center" vAlign="top" bgcolor="#ffffff">
 								<table width="100%" cellSpacing=1 cellpadding=3 bgcolor="#dddddd">
+								
 									<feature:display name="Identification" module="Project ID and Planning">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
@@ -471,7 +472,6 @@ function disable() {
                                         		</logic:iterate>
                                         	</logic:equal>
 										</logic:iterate>
-
 										</td>
 									</tr>
 									</logic:present>
@@ -886,9 +886,9 @@ function disable() {
 											</c:if>
 										</td>
 									</tr>
-									</feature:display>
-									</module:display>
+									</feature:display>									
 									<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+									
 									<feature:display name="NPD Programs " module="National Planning Dashboard">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -968,12 +968,12 @@ function disable() {
 											<digi:trn key="aim:meActivityRisk">
 											Activity - Risk</digi:trn>
 										</td>
-										<td bgcolor="#ffffff">
+										<td bgcolor="#ffffff"> 
 											<% if (actRiskChartUrl != null) { %>
 												<bean:define id="riskColor" name="riskColor" scope="request" toScope="page" type="java.lang.String"/>
 												<bean:define id="riskName" name="overallRisk" scope="request" toScope="page" type="java.lang.String"/>
 												<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>:
-												<font color="<bean:write name="riskColor" />">
+												<font color="${riskColor}"/>
 
 												<b><digi:trn key="<%=riskName%>"><%=riskName%></digi:trn></b>
 
@@ -987,6 +987,7 @@ function disable() {
 										</td>
 									</tr>
 									</feature:display>
+									</module:display>
 								<logic:present name="currentMember" scope="session">
 									<module:display name="Funding" parentModule="PROJECT MANAGEMENT">
 									<tr>
@@ -1087,8 +1088,9 @@ function disable() {
                                                                               <tr bgcolor="#ffffff">
                                                                                 <td colspan="4"><b>
                                                                                   <a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>">
-                                                                                  <digi:trn key="aim:commitments">Commitments </digi:trn></b>
+                                                                                  <digi:trn key="aim:commitments">Commitments </digi:trn>
                                                                                   </a>
+                                                                                  </b>
                                                                                 </td>
                                                                                 <td width="25%"><b>
                                                                                 <digi:trn key="aim:exchange">Exchange Rate</digi:trn></b>
@@ -1714,7 +1716,7 @@ function disable() {
 											<feature:display name="Implementing Agency" module="Organizations">
 											<b><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="impAgencies">
-												<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="impAgencies"
 													id="impAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
@@ -1727,7 +1729,7 @@ function disable() {
 											<feature:display name="Beneficiary Agency" module="Organizations">
 											<b><digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="benAgencies">
-												<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="benAgencies"
 													id="benAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
@@ -1741,7 +1743,7 @@ function disable() {
 											<feature:display name="Contracting Agency" module="Organizations">
 											<b><digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="conAgencies">
-												<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="conAgencies"
 													id="conAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
@@ -1997,7 +1999,7 @@ function disable() {
 										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.issues}">
-												<table width="100%" cellSpacing="2" cellPadding="2" border=0>
+												<table width="100%" cellSpacing="2" cellPadding="2" border="0">
 												<c:forEach var="issue" items="${aimEditActivityForm.issues}">
 													<tr><td valign="top">
 														<li class="level1"><b><c:out value="${issue.name}"/></b></li>
@@ -2274,7 +2276,7 @@ function disable() {
 									</field:display>
 									</logic:notEmpty>
 									<c:if test="${aimEditActivityForm.pageId == 1}">
-									<tr><td bgColor=#ffffff align="center" colspan=2>
+									<tr><td bgColor="#ffffff" align="center" colspan="2">
 										<table cellPadding=3>
 											<tr>
 												<c:if test="${aimEditActivityForm.donorFlag == true}">
@@ -2298,7 +2300,7 @@ function disable() {
 									</td></tr>
 									</c:if>
 									<c:if test="${aimEditActivityForm.pageId > 2}">
-									<tr><td bgColor=#ffffff align="center" colspan=2>
+									<tr><td bgColor="#ffffff" align="center" colspan="2">
 										<input type="button" class="dr-menu" onclick="javascript:history.go(-1)" value='<digi:trn key="btn:back">Back</digi:trn>' />
 									</td></tr>
 									</c:if>

@@ -48,8 +48,8 @@ function preview(id)
 
   <digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
   var urlToGo = "<%=addUrl%>~pageId=2~activityId=" + id;
-    document.location.href = urlToGo; 
-   
+    document.location.href = urlToGo;
+
 }
 
 
@@ -63,8 +63,8 @@ function login()
 
 
 <digi:form action="/viewReferences.do" 	name="aimReferenceForm" type="org.digijava.module.aim.form.ReferenceForm" method="post">
-	
-	
+
+
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
 	<TR>
 		<TD vAlign="top" align="center">
@@ -78,7 +78,7 @@ function login()
 									<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top" border="0">
 										<TR>
 											<TD align="left">
-								<SPAN class=crumb>					
+								<SPAN class=crumb>
 									<jsp:useBean id="urlReference" type="java.util.Map" class="java.util.HashMap"/>
 									<c:set target="${urlReference}" property="ampActivityId">
 										<bean:write name="aimReferenceForm" property="ampActivityId"/>
@@ -90,7 +90,7 @@ function login()
 									<digi:link href="/viewReferences.do" name="urlReference" styleClass="comment" title="${translation}" >
 										<digi:trn key="aim:reference">Reference</digi:trn>
 									</digi:link>
-									&gt; Overview &gt; <bean:write name="aimReferenceForm" property="perspective"/> Perspective
+									&gt; Overview &gt;<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true"> <bean:write name="aimReferenceForm" property="perspective"/> Perspective</logic:equal>
 								</SPAN>
 							</TD>
 											<TD align="right">
@@ -129,12 +129,12 @@ function login()
 													</field:display>
 												</feature:display>
 											</module:display>
-												
+
 											</TD>
 
 
 										</TR>
-									</TABLE>										
+									</TABLE>
 								</TD>
 							</TR>
 							<TR bgColor=#f4f4f2>
@@ -168,7 +168,7 @@ function login()
 															</tr>
 														<c:forEach items="${aimReferenceForm.referenceDocs}" var="refDoc" varStatus="loopstatus">
 															<tr valign="top">
-															<c:if test="${!empty refDoc.comment}">	
+															<c:if test="${!empty refDoc.comment}">
 																<td width="50%">
 																	${refDoc.categoryValue}
 																</td>
@@ -192,7 +192,7 @@ function login()
 			</TR>
 		</TABLE>
 		</TD>
-		</TR></TABLE></TD></TR></TABLE>							
+		</TR></TABLE></TD></TR></TABLE>
 </digi:form>
 
 

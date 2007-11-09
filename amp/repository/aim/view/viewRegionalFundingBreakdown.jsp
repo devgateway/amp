@@ -10,12 +10,12 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript">
-	
+
 function fnEditProject(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
    document.aimRegionalFundingForm.action = "<%=addUrl%>~pageId=1~step=4~action=edit~surveyFlag=true~activityId=" + id;
-	document.aimRegionalFundingForm.target = "_self";    
+	document.aimRegionalFundingForm.target = "_self";
    document.aimRegionalFundingForm.submit();
 }
 
@@ -65,7 +65,7 @@ function projectFiche(id)
 									<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
 										<TR>
 											<TD align="left">
-												<SPAN class=crumb>					
+												<SPAN class=crumb>
 													<jsp:useBean id="url" type="java.util.Map" class="java.util.HashMap"/>
 													<c:set target="${url}" property="ampActivityId">
 														<bean:write name="aimRegionalFundingForm" property="ampActivityId"/>
@@ -74,16 +74,16 @@ function projectFiche(id)
 													<c:set var="translation">
 															<digi:trn key="aim:clickToViewRegionalFunding">Click here to view regional funding</digi:trn>
 													</c:set>
-													<digi:link href="/viewRegionalFundingBreakdown.do" name="url" 
+													<digi:link href="/viewRegionalFundingBreakdown.do" name="url"
 													styleClass="comment" title="${translation}" >
 													<digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
-													<digi:trn key="aim:actOverview">Overview</digi:trn>&nbsp;&gt;&nbsp;
-													<bean:write name="aimRegionalFundingForm" property="perspective"/>
+													<digi:trn key="aim:actOverview">Overview</digi:trn><logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&nbsp;&gt;&nbsp;
+
 													<bean:define id="perspectiveNameTrimedLocal" name="aimRegionalFundingForm" property="perspectiveNameLocaly" type="java.lang.String"/>
-													<digi:trn key='<%="aim:"+ perspectiveNameTrimedLocal %>'>	
-														<bean:write name="aimRegionalFundingForm" property="perspective"/></digi:trn>
-												</SPAN>											
+													<digi:trn key='<%="aim:"+ perspectiveNameTrimedLocal %>'>
+														<bean:write name="aimRegionalFundingForm" property="perspective"/></digi:trn></logic:equal>
+												</SPAN>
 											</TD>
 											<TD align="right">
 												&nbsp;
@@ -97,7 +97,7 @@ function projectFiche(id)
 													</field:display>
 												</feature:display>
 											</module:display>
-											
+
 											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Edit Activity" module="Previews">
 													<field:display feature="Edit Activity" name="Edit Activity Button">
@@ -106,7 +106,7 @@ function projectFiche(id)
 													</field:display>
 												</feature:display>
 											</module:display>
-												
+
 												<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 													<feature:display name="Logframe" module="Previews">
 														<field:display name="Logframe Preview Button" feature="Logframe" >
@@ -114,7 +114,7 @@ function projectFiche(id)
 														</field:display>
 													</feature:display>
 												</module:display>
-												
+
 												<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 													<feature:display name="Project Fiche" module="Previews">
 														<field:display name="Project Fiche Button" feature="Project Fiche" >
@@ -125,7 +125,7 @@ function projectFiche(id)
 												</module:display>
 											</TD>
 										</TR>
-									</TABLE>										
+									</TABLE>
 								</TD>
 							</TR>
 
@@ -138,45 +138,45 @@ function projectFiche(id)
 												<c:if test="${aimRegionalFundingForm.currFilter == true}">
 												Currency :
 												<html:select property="currFilterValue" styleClass="dr-menu">
-  		       		        					<html:optionsCollection name="aimRegionalFundingForm" 
+  		       		        					<html:optionsCollection name="aimRegionalFundingForm"
 													property="currencies" value="currencyCode" label="currencyName"/>
 												</html:select>&nbsp;&nbsp;&nbsp;
 												</c:if>
 												<c:if test="${aimRegionalFundingForm.calFilter == true}">
 												Calendar :
 												<html:select property="calFilterValue" styleClass="dr-menu">
-				  		       		        	<html:optionsCollection name="aimRegionalFundingForm" 
+				  		       		        	<html:optionsCollection name="aimRegionalFundingForm"
 													property="fiscalCalendars" value="ampFiscalCalId" label="name"/>
-												</html:select>												
+												</html:select>
 												</c:if>
 												<html:submit value="GO!" styleClass="dr-menu"/>
 											</TD>
 										</TR>
-									</TABLE>										
+									</TABLE>
 								</TD>
-							</TR>							
+							</TR>
 							</c:if>
-							
+
 							<TR bgColor=#f4f4f2>
 								<TD vAlign="top" align="center" width="750">
 									<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
 										<TR>
 											<TD width="750" bgcolor="#F4F4F2">
 												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2">
-                						        	<TR bgcolor="#F4F4F2"> 
+                						        	<TR bgcolor="#F4F4F2">
               							            	<TD bgcolor="#C9C9C7" class="box-title" height="17">&nbsp;&nbsp;
 															<digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
 														</TD>
 	         						                    <TD background="module/aim/images/corner-r.gif" height=17 width=17>
 														</TD>
 													</TR>
-												</TABLE>									
+												</TABLE>
 											</TD>
 										</TR>
 										<TR>
 											<TD width="750" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
 												<TABLE width="750"  border="0" cellpadding="4" cellspacing="1">
-				                 					<TR bgcolor="#DDDDDB" > 
+				                 					<TR bgcolor="#DDDDDB" >
 	            						            	<TD>
 	            						            		<digi:trn key="aim:region">Region</digi:trn>
 	            						            	</TD>
@@ -207,9 +207,9 @@ function projectFiche(id)
 														</field:display>
 													</TR>
 			                    					<logic:notEmpty name="aimRegionalFundingForm" property="regionalFundings">
-														<logic:iterate name="aimRegionalFundingForm" property="regionalFundings" id="fd" 
+														<logic:iterate name="aimRegionalFundingForm" property="regionalFundings" id="fd"
 			  	                   							type="org.digijava.module.aim.helper.RegionalFunding">
-															<TR valign="top" bgcolor="#f4f4f2"> 
+															<TR valign="top" bgcolor="#f4f4f2">
 					    	           							<TD>
 																	<c:set target="${url}" property="regionId">
 																		<bean:write name="fd" property="regionId"/>
@@ -245,7 +245,7 @@ function projectFiche(id)
 															</TR>
 														</logic:iterate>
 													</logic:notEmpty>
-		                  							<TR valign="top" class="note"> 
+		                  							<TR valign="top" class="note">
 														<TD>
 															<digi:trn key="aim:total">Total</digi:trn>
 														</TD>
@@ -281,11 +281,11 @@ function projectFiche(id)
 										<TR>
 											<TD>
 												<FONT color=blue>*
-													<digi:trn key="aim:allTheAmountsInThousands">	
+													<digi:trn key="aim:allTheAmountsInThousands">
 														All the amounts are in thousands (000)
 													</digi:trn>
-													
-												</FONT>								
+
+												</FONT>
 											</TD>
 										</TR>
 									</TABLE>
@@ -297,7 +297,7 @@ function projectFiche(id)
 			</TABLE>
 		</TD>
 	</TR>
-	<TR><TD>&nbsp;</TD></TR>	
+	<TR><TD>&nbsp;</TD></TR>
 </TABLE>
 </digi:form>
 

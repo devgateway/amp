@@ -12,7 +12,7 @@
 <%@ page import="org.digijava.module.aim.form.FinancingBreakdownForm" %>
 
 <script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>	
+	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -27,12 +27,12 @@ function projectFiche(id)
 	<digi:context name="ficheUrl" property="context/module/moduleinstance/projectFicheExport.do" />
 	window.open ( "<%=ficheUrl%>~ampActivityId=" + id,"<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>");
 }
-	
+
 function fnEditProject(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
    document.aimFinancingBreakdownForm.action = "<%=addUrl%>?pageId=1&action=edit&step=3&surveyFlag=true&activityId=" + id;
-	document.aimFinancingBreakdownForm.target = "_self";    
+	document.aimFinancingBreakdownForm.target = "_self";
    document.aimFinancingBreakdownForm.submit();
 }
 
@@ -68,7 +68,7 @@ function preview(id)
 
 <logic:equal name="aimFinancingBreakdownForm" property="sessionExpired" value="false">
 
-<digi:form action="/viewFinancingBreakdownFilter.do" name="aimFinancingBreakdownForm" 
+<digi:form action="/viewFinancingBreakdownFilter.do" name="aimFinancingBreakdownForm"
 type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 
 <html:hidden property="ampActivityId" />
@@ -89,7 +89,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 									<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
 										<TR>
 											<TD align="left">
-												<SPAN class=crumb>					
+												<SPAN class=crumb>
 													<jsp:useBean id="urlFinancingBreakdown" type="java.util.Map" class="java.util.HashMap"/>
 													<c:set target="${urlFinancingBreakdown}" property="ampActivityId">
 														<bean:write name="aimFinancingBreakdownForm" property="ampActivityId"/>
@@ -98,14 +98,16 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 													<c:set var="translation">
 														<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>
 													</c:set>
-													<digi:link href="/viewFinancingBreakdown.do" name="urlFinancingBreakdown" 
+													<digi:link href="/viewFinancingBreakdown.do" name="urlFinancingBreakdown"
 													styleClass="comment" title="${translation}" >
 													<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
-													<digi:trn key="aim:actOverview">Overview</digi:trn>&nbsp;&gt;&nbsp;
+													<digi:trn key="aim:actOverview">Overview</digi:trn><logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&nbsp;&gt;&nbsp;
+
 													<bean:define id="perspectiveNameTrimedLocal" name="aimFinancingBreakdownForm" property="perpsectiveNameTrimmed" type="java.lang.String"/>
-													<digi:trn key='<%="aim:"+ perspectiveNameTrimedLocal %>'>	
+													<digi:trn key='<%="aim:"+ perspectiveNameTrimedLocal %>'>
 														<bean:write name="aimFinancingBreakdownForm" property="perpsectiveName"/></digi:trn>
+                                                                                                                </logic:equal>
 												</SPAN>
 											</TD>
 											<TD align="right">
@@ -146,12 +148,12 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 													</field:display>
 												</feature:display>
 											</module:display>
-												
+
 											</TD>
 
 
 										</TR>
-									</TABLE>										
+									</TABLE>
 								</TD>
 							</TR>
 							<module:display name="Calendar" parentModule="PROJECT MANAGEMENT">
@@ -162,7 +164,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 											<TR>
 												<logic:equal name="aimFinancingBreakdownForm" property="perspectivePresent" value="true">
 												<TD align="center">
-													<STRONG>	
+													<STRONG>
 														<digi:trn key="aim:perspective">Perspective</digi:trn>
 													</STRONG>
 												</TD>
@@ -178,14 +180,14 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 												<TD align="center">
 													<STRONG>
 														<digi:trn key="aim:calendarType">Calendar Type</digi:trn>
-													</STRONG>					
+													</STRONG>
 												</TD>
 												</logic:equal>
 			               				<logic:equal name="aimFinancingBreakdownForm" property="yearRangePresent" value="true">
 													<TD align="center">
 														<STRONG>
              											<digi:trn key="aim:year">Year</digi:trn>
-														</STRONG>								
+														</STRONG>
 													</TD>
 												</logic:equal>
 												<TD width="5">
@@ -198,17 +200,17 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 													<html:select property="perspective" styleClass="dr-menu">
 														<logic:iterate id="persp" name="aimFinancingBreakdownForm" property="perspectives">
 															<bean:define id="code" name="persp" property="code" />
-															<bean:define id="name" name="persp" property="name" />																		
+															<bean:define id="name" name="persp" property="name" />
 															<option value="<%=code %>"  <logic:equal name="aimFinancingBreakdownForm" property="perspective" value="<%=(String)code%>">selected</logic:equal> ><digi:trn key="<%="aim:persp:"+code %>"><%=name %></digi:trn></option>
 														</logic:iterate>
-														
+
 													</html:select>
 												</TD>
 											</logic:equal>
 			               			<logic:equal name="aimFinancingBreakdownForm" property="currencyPresent" value="true">
 												<TD>
                          					<html:select property="currency" styleClass="dr-menu">
-                       							<html:optionsCollection name="aimFinancingBreakdownForm" property="currencies" value="currencyCode" 
+                       							<html:optionsCollection name="aimFinancingBreakdownForm" property="currencies" value="currencyCode"
 														label="currencyName"/>
 													</html:select>
 												</TD>
@@ -216,8 +218,8 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 											<logic:equal name="aimFinancingBreakdownForm" property="calendarPresent" value="true">
 												<TD>
 													<html:select property="fiscalCalId" styleClass="dr-menu">
-														<html:optionsCollection name="aimFinancingBreakdownForm" 
-														property="fiscalYears" value="ampFiscalCalId" label="name"/> 
+														<html:optionsCollection name="aimFinancingBreakdownForm"
+														property="fiscalYears" value="ampFiscalCalId" label="name"/>
 													</html:select>
 												</TD>
 											</logic:equal>
@@ -225,12 +227,12 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 												<TD>
    	                 						<STRONG><digi:trn key="aim:financeprg:from">From</digi:trn></STRONG>&nbsp;
 								      				<html:select property="fromYear" styleClass="dr-menu">
-								      					<html:optionsCollection name="aimFinancingBreakdownForm" 
+								      					<html:optionsCollection name="aimFinancingBreakdownForm"
 															property="years" value="year" label="year"/>
 														</html:select>&nbsp;&nbsp;
 								      			<STRONG><digi:trn key="aim:financeprg:to">To</digi:trn></STRONG>&nbsp;
 														<html:select property="toYear" styleClass="dr-menu">
-															<html:optionsCollection name="aimFinancingBreakdownForm" 
+															<html:optionsCollection name="aimFinancingBreakdownForm"
 															property="years" value="year" label="year"/>
 														</html:select>
 												</TD>
@@ -238,7 +240,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 												<TD width="5">
 													<input type="submit" value="<digi:trn key="aim:go">GO</digi:trn>" styleClass="dr-menu"/>
 												</TD>
-											</TR>							
+											</TR>
 										</TABLE>
 									</TD>
 								</TR>
@@ -250,35 +252,35 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 										<TR>
 											<TD width="750" bgcolor="#F4F4F2" height="17">
 												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
-                        	<TR bgcolor="#F4F4F2" height="17"> 
+                        	<TR bgcolor="#F4F4F2" height="17">
                           	<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
 															<digi:trn key="aim:financingOverviewOfActivity">Financing Overview of Activity</digi:trn>
 														</TD>
-	                          <TD background="module/aim/images/corner-r.gif" 
+	                          <TD background="module/aim/images/corner-r.gif"
 											height=17 width=17>
 														</TD>
 													</TR>
-												</TABLE>									
+												</TABLE>
 											</TD>
 										</TR>
 										<TR>
 											<TD width="750" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
 												<TABLE width="750"  border="0" cellpadding="4" cellspacing="1">
                  					<TR bgcolor="#DDDDDB" >
-                 					 
+
 		    	                    	<field:display name="Funding Organization Id" feature="Funding Organizations">
 		    	                    		<TD><digi:trn key="aim:orgFundingId">Org Funding ID</digi:trn></TD>
 		    	                    	</field:display>
 		    	                    	<field:display name="Funding Organization" feature="Funding Organizations">
 						                    <TD width="20"><digi:trn key="aim:organization">Organization</digi:trn></TD>
 						                </field:display>
-						                
+
 						                <feature:display module="Funding" name="MTEF Projections">
 											<field:display feature="MTEF Projections" name="MTEFProjections">
 											<td><digi:trn key="aim:financialProgress:totalProjections_projection">Total Projections</digi:trn></td>
 											</field:display>
 										</feature:display>
-						                
+
 						                <field:display name="Total Committed" feature="Funding Organizations">
 											<TD><digi:trn key="aim:totalCommitted">Total Committed</digi:trn></TD>
 										</field:display>
@@ -295,20 +297,20 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 											<TD><digi:trn key="aim:unExpendedFunds">Unexpended Funds</digi:trn></TD>
 										</field:display>
 									</TR>
-													<logic:empty name="aimFinancingBreakdownForm" property="financingBreakdown"> 
-			                    	<TR valign="top"> 
+													<logic:empty name="aimFinancingBreakdownForm" property="financingBreakdown">
+			                    	<TR valign="top">
 															<TD align="center" colspan="7"><span class="note"> No records !! </span></TD>
 			                     </TR>
 			                    </logic:empty>
 			                    <logic:notEmpty name="aimFinancingBreakdownForm" property="financingBreakdown">
-								<logic:iterate name="aimFinancingBreakdownForm" property="financingBreakdown" id="breakdown" 
+								<logic:iterate name="aimFinancingBreakdownForm" property="financingBreakdown" id="breakdown"
 			  	                   type="org.digijava.module.aim.helper.FinancingBreakdown">
-															<TR valign="top" bgcolor="#f4f4f2"> 
+															<TR valign="top" bgcolor="#f4f4f2">
 												<field:display name="Funding Organization Id" feature="Funding Organizations">
 					    	           			<TD>
 						               				<jsp:useBean id="urlFinancialOverview" type="java.util.Map" class="java.util.HashMap"/>
 																	<c:set target="${urlFinancialOverview}" property="ampActivityId">
-																	
+
 																		<bean:write name="aimFinancingBreakdownForm" property="ampActivityId"/>
 																	</c:set>
 																	<c:set target="${urlFinancialOverview}" property="ampFundingId">
@@ -321,9 +323,9 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 																		<digi:trn key="aim:clickToViewFinancialOverview">
 																		Click here to view Financial Overview</digi:trn>
 																	</c:set>
-						                  							<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" 
+						                  							<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview"
 																		title="${translation}" >
-																		<bean:write name="breakdown" property="financingId" /> 
+																		<bean:write name="breakdown" property="financingId" />
 																	</digi:link>
 																</TD>
 												</field:display>
@@ -332,11 +334,11 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 											<field:display name="Funding Organization" feature="Funding Organizations">
 						                  		<TD><jsp:include page="previewFinancingOrganizationPopup.jsp"/></TD>
 						                  	</field:display>
-						                  	
+
 											<field:display feature="MTEF Projections" name="MTEFProjections">
 												<TD align="right"><bean:write name="breakdown" property="totalProjection"/></TD>
 											</field:display>
-						                  	
+
 						                  	<field:display name="Total Committed" feature="Funding Organizations">
 							                  <TD align="right"><bean:write name="breakdown" property="totalCommitted"/></TD>
 							                </field:display>
@@ -355,7 +357,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 															</TR>
 														</logic:iterate>
 													</logic:notEmpty>
-				                  <TR valign="top" class="note"> 
+				                  <TR valign="top" class="note">
 														<TD><digi:trn key="aim:total">Total</digi:trn></TD>
 				                    <TD>&nbsp;</TD>
 				                    					<field:display feature="MTEF Projections" name="MTEFProjections"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalProjections"/></TD></field:display>
@@ -371,10 +373,10 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 										<TR>
 											<TD>
 												<FONT color=blue>*
-													<digi:trn key="aim:allTheAmountsInThousands">	
+													<digi:trn key="aim:allTheAmountsInThousands">
 													All the amounts are in thousands (000)</digi:trn>
 													<bean:write name="aimFinancingBreakdownForm" property="selectedCurrency"/>
-												</FONT>								
+												</FONT>
 											</TD>
 										</TR>
 									</TABLE>
@@ -386,7 +388,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 			</TABLE>
 		</TD>
 	</TR>
-	<TR><TD>&nbsp;</TD></TR>	
+	<TR><TD>&nbsp;</TD></TR>
 </TABLE>
 </digi:form>
 </logic:equal>

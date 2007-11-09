@@ -84,9 +84,9 @@ method="post">
 										title="${translation}" >
 											<digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
 										</digi:link>
-										&gt; <digi:trn key="aim:ppOverview">Overview</digi:trn> &gt;
+										&gt; <digi:trn key="aim:ppOverview">Overview</digi:trn> <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&gt;
 										<bean:write name="aimPhysicalProgressForm" property="perspective"/>
-										<digi:trn key="aim:ppPerspective">Perspective</digi:trn>
+										<digi:trn key="aim:ppPerspective">Perspective</digi:trn> </logic:equal>
 									</SPAN>
 								</TD>
 								<TD align=right>

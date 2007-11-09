@@ -12,6 +12,7 @@
 		
 		
 	 <set name="items" table="AMP_FEATURES_VISIBILITY" cascade="all">
+      	   <cache usage="read-write" />
            <key column="parent"/>
            <one-to-many class="org.digijava.module.aim.dbentity.AmpFeaturesVisibility"/>
      </set>

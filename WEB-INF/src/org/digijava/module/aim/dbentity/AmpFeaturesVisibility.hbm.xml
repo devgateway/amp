@@ -11,6 +11,7 @@
 		<property name="name" column="name" type="java.lang.String" />
 		
     <set name="items" table="AMP_FIELDS_VISIBILITY" inverse="true" cascade="all-delete-orphan">
+   		   <cache usage="read-write" />
            <key column="parent"/>
            <one-to-many class="org.digijava.module.aim.dbentity.AmpFieldsVisibility"/>
      </set>

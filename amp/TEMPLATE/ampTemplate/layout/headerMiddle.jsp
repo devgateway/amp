@@ -104,7 +104,7 @@ if("On".equals(publicView)) { %>
 			</logic:empty>
 			</div>
 		</LI>
-			<feature:display name="Documents Tab" module="Document Management">
+			<feature:display name="Documents Tab" module="Document">
 		    	<LI><a class="head-menu-link" href="/viewAllDocuments.do" module="aim" onclick="return quitRnot1('${message}')">::: <digi:trn key="aim:documentsHeader">DOCUMENTS</digi:trn></a></LI>
 		    </feature:display>
 		    <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT">

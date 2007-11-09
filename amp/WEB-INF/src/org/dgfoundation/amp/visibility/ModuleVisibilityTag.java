@@ -173,7 +173,8 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 	public boolean checkTypeAndParentOfModule(AmpTreeVisibility atv)
 	{
 		AmpModulesVisibility moduleByNameFromRoot=null;
-		boolean typeOK=false;
+		//boolean typeOK=false;
+		boolean typeOK=true;
 		boolean parentOK=false;
 		if(atv!=null)
 			moduleByNameFromRoot = atv.getModuleByNameFromRoot(this.getName());
@@ -191,7 +192,8 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 	public boolean checkTypeAndParentOfModule2(AmpModulesVisibility atv)
 	{
 		AmpModulesVisibility moduleByNameFromRoot=null;
-		boolean typeOK=false;
+		//boolean typeOK=false;
+		boolean typeOK=true;
 		boolean parentOK=false;
 		if(atv!=null)
 			moduleByNameFromRoot = atv;

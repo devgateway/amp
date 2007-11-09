@@ -149,7 +149,7 @@ function commentWin(val) {
 											name="urlChannelOverview" styleClass="comment"
 											title="${translation}">
 											<digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
-										</digi:link> &nbsp;&gt;&nbsp;<digi:trn key="aim:overview">Overview</digi:trn>&nbsp;&gt;&nbsp;
+										</digi:link> &nbsp;&gt;&nbsp;<digi:trn key="aim:overview">Overview</digi:trn><logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&nbsp;&gt;&nbsp;
 										<bean:define id="perspectiveNameLocal" name="aimChannelOverviewForm" property="perspective"
 										type="java.lang.String"/>
 											<logic:notEmpty name="aimChannelOverviewForm" property="perspective">
@@ -157,7 +157,7 @@ function commentWin(val) {
 													<bean:write name="aimChannelOverviewForm" property="perspective"/></digi:trn>
 											</logic:notEmpty>
 										&nbsp;
-										<digi:trn key="aim:perspective">Perspective</digi:trn> </SPAN></TD>
+										<digi:trn key="aim:perspective">Perspective</digi:trn></logic:equal> </SPAN></TD>
 										<TD align="right" nowrap="nowrap">
 										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Preview Activity" module="Previews">
@@ -401,11 +401,11 @@ function commentWin(val) {
 																				<tr>
 																					<td>
 																					<digi:trn key="aim:actGovernmentApprovalProcedures">
-																					Government Approval Procedures 
+																					Government Approval Procedures
 																					</digi:trn>:
 																					<c:if test="${activity.governmentApprovalProcedures==true}">
 																						<c:out value="Yes"/>
-																					</c:if>	
+																					</c:if>
 																					<c:if test="${activity.governmentApprovalProcedures==false || activity.governmentApprovalProcedures==''}">
 																						<c:out value="No"/>
 																					</c:if>
@@ -420,7 +420,7 @@ function commentWin(val) {
 																					</digi:trn>:
 																					<c:if test="${activity.jointCriteria==true}">
 																						<c:out value="Yes"/>
-																					</c:if>	
+																					</c:if>
 																					<c:if test="${activity.jointCriteria==false || activity.jointCriteria==''}">
 																						<c:out value="No"/>
 																					</c:if>

@@ -164,9 +164,9 @@ function preview(id)
 
 											<digi:trn key="aim:knowledge">Knowledge</digi:trn>
 
-										</digi:link> &gt; <digi:trn key="aim:docOverview">Overview</digi:trn> &gt;
+										</digi:link> &gt; <digi:trn key="aim:docOverview">Overview</digi:trn> <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&gt;
                                         <bean:write name="aimKnowledgeForm"	property="perspective" />
-                                        <digi:trn key="aim:docPerspective">Perspective</digi:trn> </SPAN></TD>
+                                        <digi:trn key="aim:docPerspective">Perspective</digi:trn></logic:equal> </SPAN></TD>
 
 										<TD align=right><module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Preview Activity" module="Previews">
@@ -197,7 +197,7 @@ function preview(id)
 														onclick="previewLogframe(<c:out value="${aimKnowledgeForm.id}"/>)">
 												</field:display>
 											</feature:display>
-										</module:display> 
+										</module:display>
 										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Project Fiche" module="Previews">
 												<field:display name="Project Fiche Button"

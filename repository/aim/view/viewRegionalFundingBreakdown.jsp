@@ -82,7 +82,7 @@ function projectFiche(id)
 
 													<bean:define id="perspectiveNameTrimedLocal" name="aimRegionalFundingForm" property="perspectiveNameLocaly" type="java.lang.String"/>
 													<digi:trn key='<%="aim:"+ perspectiveNameTrimedLocal %>'>
-														<bean:write name="aimRegionalFundingForm" property="perspective"/></digi:trn></logic:equal>
+														<bean:write name="aimRegionalFundingForm" property="perspective"/></digi:trn> <digi:trn key="aim:perspective">Perspective</digi:trn></logic:equal>
 												</SPAN>
 											</TD>
 											<TD align="right">

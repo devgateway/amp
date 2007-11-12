@@ -10,16 +10,17 @@
 		</id>
 
 		<property name="defaultRecordsPerPage" column="def_rec_per_page" type="java.lang.Integer"/>
+                <property name="defaultReportsPerPage" column="def_rep_per_page" type="java.lang.Integer"/>
 		<property name="language" column="language" type="java.lang.String"/>
 		<property name="defaultPerspective" column="def_perspective"  type="java.lang.String"/>
 		<property name="useDefault" column="use_default" type="java.lang.Boolean" />
-		
+
 		<many-to-one name="defaultTeamReport" column="default_team_ampreport_id" class="org.digijava.module.aim.dbentity.AmpReports" cascade="none" />
 		<many-to-one name="team" column="team_id" class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none"/>
 		<many-to-one name="currency" column="currency_id" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>
 		<many-to-one name="fiscalCalendar" column="fis_cal_id" class="org.digijava.module.aim.dbentity.AmpFiscalCalendar" cascade="none"/>
 		<many-to-one name="member" column="member" class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none"/>
-		<many-to-one name="perspectiveId" column="perspective_id" class="org.digijava.module.aim.dbentity.AmpPerspective" cascade="none"/>		
+		<many-to-one name="perspectiveId" column="perspective_id" class="org.digijava.module.aim.dbentity.AmpPerspective" cascade="none"/>
 
 	</class>
 </hibernate-mapping>

@@ -1,7 +1,8 @@
 package org.digijava.module.aim.form;
 
-import org.apache.struts.action.*;
 import java.util.*;
+
+import org.apache.struts.action.*;
 
 public class UpdateAppSettingsForm extends ActionForm {
 
@@ -37,16 +38,17 @@ public class UpdateAppSettingsForm extends ActionForm {
 	private boolean updateFlag = false;
 
 	private boolean updated = false;
-	
+
 	private Long defaultReportForTeamId	= new Long(0);
 
 	private List languages;
-	
+
 	private Collection reports;
 
-	private boolean perspectiveEnabled; 
+	private boolean perspectiveEnabled;
+        private int defReportsPerPage;
 
-	public Collection getReports() {
+  public Collection getReports() {
 		return reports;
 	}
 
@@ -198,10 +200,16 @@ public class UpdateAppSettingsForm extends ActionForm {
 		this.perspectiveEnabled = perspectiveEnabled;
 	}
 
-	public boolean isPerspectiveEnabled() {
+        public void setDefReportsPerPage(int defReportsPerPage) {
+          this.defReportsPerPage = defReportsPerPage;
+        }
+
+  public boolean isPerspectiveEnabled() {
 		return perspectiveEnabled;
 	}
 
+        public int getDefReportsPerPage() {
+          return defReportsPerPage;
+        }
 
-	
 }

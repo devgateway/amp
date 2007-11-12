@@ -68,7 +68,7 @@ function confirmFunc() {
 							<b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
 						</digi:link>
 					</td>
-				</tr>				
+				</tr>
 				<tr>
 					<td noWrap width=650 vAlign="top">
 						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
@@ -136,6 +136,7 @@ function confirmFunc() {
 														<% } %>
 													</tr>
 
+
 													<logic:iterate name="aimTeamReportsForm"  property="reports" id="report" indexId="idx"
 														type="org.digijava.module.aim.dbentity.AmpReports">
 														<TR bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>">
@@ -159,7 +160,7 @@ function confirmFunc() {
 															 	</p>
 														 	</logic:present>
 															</TD>
-														 	
+
 														 	<td>
 														 		<p style="white-space: nowrap">
 														 		<logic:present name="report" property="ownerId">
@@ -168,7 +169,7 @@ function confirmFunc() {
 														 			 <bean:write name="report" property="ownerId.ampTeam.name" />
 														 		</logic:present>
 														 		</p>
-														 	</td>	
+														 	</td>
 														 	<td>
 														 		<p style="white-space: nowrap">
 														 			<logic:present name="report" property="updatedDate">
@@ -205,7 +206,7 @@ function confirmFunc() {
 																 				}
 																 				else
 																 					if (report.getType().equals(new Long(4))){
-																 		%> 			
+																 		%>
 																	 					<li>
 																	 						<digi:trn key="aim:contributionType">contribution</digi:trn>
 																			 			</li>
@@ -258,7 +259,29 @@ function confirmFunc() {
 														</TR>
 
 													</logic:iterate>
+
 												</table>
+                                                                                                <table>
+                                                                                                <tr>
+                                                                                                  <c:forEach var="page" begin="1" end="${aimTeamReportsForm.totalPages}">
+                                                                                                    <td>
+                                                                                                    <c:if test="${aimTeamReportsForm.currentPage==page}">
+
+                                                                                                         <c:out value="${page}"/>
+
+                                                                                                    </c:if>
+                                                                                                      <c:if test="${aimTeamReportsForm.currentPage!=page}">
+                                                                                                     <digi:link href="/viewTeamReports.do?currentPage=${page}" >
+                                                                                                         <c:out value="${page}"/>
+                                                                                                          </digi:link>
+                                                                                                          </c:if>
+
+                                                                                                          </td>
+                                                                                                        </c:forEach>
+
+                                                                                                        </tr>
+                                                                                                </table>
+
 											</td>
 										</tr>
 									</table>

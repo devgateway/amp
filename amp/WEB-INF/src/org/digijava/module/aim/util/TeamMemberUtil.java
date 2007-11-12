@@ -206,7 +206,7 @@ public class TeamMemberUtil {
 		return member;
 
 	}
-	
+
 	public static TeamMember getTMTeamHead(Long teamId) {
 		AmpTeamMember ampMem	= getTeamHead(teamId);
 		Long id 	= ampMem.getAmpTeamMemId();
@@ -227,11 +227,11 @@ public class TeamMemberUtil {
 		} else {
 			tm.setTeamHead(false);
 		}
-		
+
 		return tm;
-		
+
 	}
-	
+
 	public static AmpTeamMember getTeamHead(Long teamId) {
 
 		Session session = null;
@@ -470,7 +470,7 @@ public class TeamMemberUtil {
 							donors += orgRole.getOrganisation().getName();
 						}
 					}
-					
+
 				}
 				act.setDonors(donors);
 				col.add(act);
@@ -569,6 +569,55 @@ public class TeamMemberUtil {
 		}
 		return col;
 	}
+
+        public static List getAllMemberReports(Long id, int currentPage, int reportPerPage) {
+                Session session = null;
+                List col = new ArrayList();
+
+                try {
+
+                        session = PersistenceManager.getRequestDBSession();
+                        // modified by Priyajith
+                        // Desc: removed the usage of session.load and used the select query
+                        // start
+
+                        String queryString = "select r from "
+					+ AmpTeamMember.class.getName() + " t  inner join  t.reports r "
+                            + "  where (t.ampTeamMemId=:teamId) order by r.name limit " + currentPage + ", " +
+                            reportPerPage;
+                        Query qry = session.createQuery(queryString);
+                        qry.setLong("teamId", id);
+                        col = qry.list();
+                } catch (Exception e) {
+                        logger.error("Exception from getAllMemberReports()");
+                        logger.error(e.toString());
+                        e.printStackTrace(System.out);
+                }
+                return col;
+        }
+
+        public static Integer getAllMemberReportsCount(Long id) {
+             Session session = null;
+             Integer count = 0;
+
+             try {
+
+                     session = PersistenceManager.getRequestDBSession();
+                     String queryString = "select r from "
+                                     + AmpTeamMember.class.getName() + " t  inner join  t.reports r "
+                         + "  where (t.ampTeamMemId=:id)";
+                     Query qry = session.createQuery(queryString);
+                     qry.setLong("id", id);
+                     count=qry.list().size();
+             } catch (Exception e) {
+                     logger.error("Exception from getAllMemberReports()");
+                     logger.error(e.toString());
+                     e.printStackTrace(System.out);
+             }
+             return  count;
+     }
+
+
 
 	public static AmpTeamMember getAmpTeamMember(User user) {
 		Session session = null;
@@ -848,7 +897,7 @@ public class TeamMemberUtil {
 			qry.setParameter("user",user.getId(),Hibernate.LONG);
 			Collection results	= qry.list();
 			Iterator itr		= results.iterator();
-			
+
 			while ( itr.hasNext() ) {
 				AmpTeamMember ampMem = (AmpTeamMember) itr.next();
 				Long id 	= ampMem.getAmpTeamMemId();

@@ -62,14 +62,14 @@ public class UpdateAppSettings extends Action {
 		}
 
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		
+
 		if (request.getParameter("updated") != null &&
 				request.getParameter("updated").equals("true")) {
 			uForm.setUpdated(true);
 		} else {
 			uForm.setUpdated(false);
-		}		
-		
+		}
+
 		uForm.setPerspectiveEnabled(FeaturesUtil.isPerspectiveEnabled());
 
 		if (uForm.getType() == null
@@ -95,13 +95,19 @@ public class UpdateAppSettings extends Action {
 				uForm.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
 				uForm.setDefRecsPerPage(ampAppSettings
 						.getDefaultRecordsPerPage().intValue());
+
+                                Integer reportsPerPage = ampAppSettings.getDefaultReportsPerPage();
+                                if(reportsPerPage==null){
+                                  reportsPerPage=0;
+                                }
+                                uForm.setDefReportsPerPage(reportsPerPage);
 				uForm.setLanguage(ampAppSettings.getLanguage());
 				uForm.setDefPerspective(ampAppSettings.getDefaultPerspective());
 				uForm.setCurrencyId(ampAppSettings.getCurrency()
 						.getAmpCurrencyId());
 				uForm.setFisCalendarId(ampAppSettings.getFiscalCalendar()
 						.getAmpFiscalCalId());
-				
+
 				if ( ampAppSettings.getDefaultTeamReport() != null )
 					uForm.setDefaultReportForTeamId( ampAppSettings.getDefaultTeamReport().getAmpReportId() );
 				else
@@ -118,11 +124,11 @@ public class UpdateAppSettings extends Action {
 						}
 				}
 			}
-			
+
 			uForm.setReports( reports );
 			uForm.setCurrencies(CurrencyUtil.getAllCurrencies(1));
 			uForm.setFisCalendars(DbUtil.getAllFisCalenders());
-			
+
 			// set Navigation languages
 			Set languages = SiteUtils.getUserLanguages(RequestUtils
 					.getSite(request));
@@ -143,11 +149,11 @@ public class UpdateAppSettings extends Action {
 			}
 			Collections.sort(sortedLanguages, TrnUtil.localeNameComparator);
 			uForm.setLanguages(sortedLanguages);
-			
+
 			logger.info("TYpe =" + uForm.getType());
 			if (uForm.getType().equalsIgnoreCase("userSpecific")) {
 				logger.info("mapping to showUserSettings");
-				return mapping.findForward("showUserSettings");				
+				return mapping.findForward("showUserSettings");
 			} else {
 				return mapping.findForward("showDefaultSettings");
 			}
@@ -159,6 +165,7 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings.setAmpAppSettingsId(uForm.getAppSettingsId());
 				ampAppSettings.setDefaultRecordsPerPage(new Integer(uForm
 						.getDefRecsPerPage()));
+                                ampAppSettings.setDefaultReportsPerPage(uForm.getDefReportsPerPage());
 				ampAppSettings.setCurrency(CurrencyUtil.getAmpcurrency(uForm
 						.getCurrencyId()));
 				ampAppSettings.setFiscalCalendar(DbUtil
@@ -166,24 +173,24 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings.setLanguage(uForm.getLanguage());
 				ampAppSettings.setDefaultPerspective(FeaturesUtil.isPerspectiveEnabled() ? uForm.getDefPerspective() : Constants.DEF_MFD_PERSPECTIVE);
 				ampAppSettings.setTeam(TeamUtil.getAmpTeam(tm.getTeamId()));
-				
+
 				AmpReports ampReport			= DbUtil.getAmpReports(uForm.getDefaultReportForTeamId());
 				HttpSession	httpSession			= request.getSession();
 				AmpReports defaultAmpReport		= (AmpReports)httpSession.getAttribute(Constants.DEFAULT_TEAM_REPORT);
 				/**
-				 * Just checking whether defaultTeamReport has changed 
+				 * Just checking whether defaultTeamReport has changed
 				 */
-				if ( (defaultAmpReport==null && ampReport!=null) || 
-						(defaultAmpReport!=null && ampReport==null) || 
+				if ( (defaultAmpReport==null && ampReport!=null) ||
+						(defaultAmpReport!=null && ampReport==null) ||
 						(defaultAmpReport!=null && ampReport!=null && defaultAmpReport.getAmpReportId().longValue()!=ampReport.getAmpReportId().longValue()) )
 				{
 					ampAppSettings.setDefaultTeamReport(ampReport);
-					
+
 					httpSession.setAttribute(Constants.DEFAULT_TEAM_REPORT, ampAppSettings.getDefaultTeamReport() );
-					
+
 					//this.updateAllTeamMembersDefaultReport( tm.getTeamId(), ampReport);
 				}
-				
+
 				if (uForm.getType().equals("userSpecific")) {
 					ampAppSettings.setMember(TeamMemberUtil.getAmpTeamMember(tm
 							.getMemberId()));
@@ -197,10 +204,10 @@ public class UpdateAppSettings extends Action {
 						TeamMember member = (TeamMember) itr.next();
 						AmpApplicationSettings memSettings = DbUtil
 								.getMemberAppSettings(member.getMemberId());
-						
+
 						if (memSettings!=null)
 						if (memSettings.getUseDefault().booleanValue() == true) {
-							
+
 							AmpTeamMember ampMember = TeamMemberUtil
 									.getAmpTeamMember(member.getMemberId());
 							restoreApplicationSettings(memSettings,
@@ -239,27 +246,27 @@ public class UpdateAppSettings extends Action {
 				session.removeAttribute(Constants.CURRENT_MEMBER);
 				session.setAttribute(Constants.CURRENT_MEMBER, tm);
 			}
-			
+
 			AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
 			if (arf != null) {
 				arf.selectPerspective(tm);
 			}
-			
+
 			logger.debug("settings updated");
 
 			session.setAttribute(Constants.DESKTOP_SETTINGS_CHANGED,new Boolean(true));
-			
+
 			uForm.setUpdateFlag(false);
 			SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
-			
+
 			String context = SiteUtils.getSiteURL(currentDomain, request.getScheme(),
                             request.getServerPort(),
-                            request.getContextPath());					
+                            request.getContextPath());
 			if (uForm.getType().equals("default")) {
 				uForm.setType(null);
 				String url = context + "/translation/switchLanguage.do?code=" +
 				ampAppSettings.getLanguage() +"&rfr="+context+"/aim/defaultSettings.do~updated="+uForm.getUpdated();
-				response.sendRedirect(url);					
+				response.sendRedirect(url);
 				logger.debug("redirecting " + url + " ....");
 				//return mapping.findForward("default");
 				return null;
@@ -267,7 +274,7 @@ public class UpdateAppSettings extends Action {
 				uForm.setType(null);
 				String url = context + "/translation/switchLanguage.do?code=" +
 				ampAppSettings.getLanguage() +"&rfr="+context+"/aim/customizeSettings.do~updated="+uForm.getUpdated();
-				response.sendRedirect(url);					
+				response.sendRedirect(url);
 				logger.debug("redirecting " + url + " ....");
 				//return mapping.findForward("userSpecific");
 				return null;
@@ -286,6 +293,7 @@ public class UpdateAppSettings extends Action {
 		/* set all values except id from oldSettings to newSettings */
 		oldSettings.setDefaultRecordsPerPage(newSettings
 				.getDefaultRecordsPerPage());
+                oldSettings.setDefaultReportsPerPage(newSettings.getDefaultReportsPerPage());
 		oldSettings.setCurrency(newSettings.getCurrency());
 		oldSettings.setFiscalCalendar(newSettings.getFiscalCalendar());
 		oldSettings.setLanguage(newSettings.getLanguage());
@@ -304,37 +312,38 @@ public class UpdateAppSettings extends Action {
 		appSettings.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
 		appSettings.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage()
 				.intValue());
+                appSettings.setDefReportsPerPage(ampAppSettings.getDefaultReportsPerPage());
 		appSettings.setCurrencyId(ampAppSettings.getCurrency()
 				.getAmpCurrencyId());
 		appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()
 				.getAmpFiscalCalId());
 		appSettings.setLanguage(ampAppSettings.getLanguage());
 		appSettings.setPerspective(ampAppSettings.getDefaultPerspective());
-		
+
 		appSettings.setDefaultAmpReport( ampAppSettings.getDefaultTeamReport() );
 		return appSettings;
 	}
-	
+
 	private void updateAllTeamMembersDefaultReport (Long teamId, AmpReports ampReport) {
 		Session session		= null;
 		try{
 			session					= PersistenceManager.getSession();
 			Transaction tx			= session.beginTransaction();
-			String queryString		= "SELECT a FROM " + AmpApplicationSettings.class.getName() + " a WHERE  " + 
+			String queryString		= "SELECT a FROM " + AmpApplicationSettings.class.getName() + " a WHERE  " +
 					 "a.team=:teamId";
 			Query query				= session.createQuery(queryString);
 			query.setParameter("teamId", teamId, Hibernate.LONG);
 			Collection reports		= query.list();
 			Iterator iterator		= reports.iterator();
-			
+
 			while( iterator.hasNext() ) {
 				AmpApplicationSettings setting	= (AmpApplicationSettings) iterator.next();
 				setting.setDefaultTeamReport( ampReport );
 			}
-			
+
 			tx.commit();
 			session.flush();
-			
+
 		} catch (Exception ex) {
 			logger.error("Unable to get fundingDetails :" + ex);
 		} finally {
@@ -344,6 +353,6 @@ public class UpdateAppSettings extends Action {
 				logger.error("releaseSession() failed :" + ex2);
 			}
 		}
-		
+
 	}
 }

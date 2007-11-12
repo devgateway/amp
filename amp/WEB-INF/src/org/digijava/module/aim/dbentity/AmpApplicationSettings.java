@@ -6,7 +6,7 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
+import java.io.*;
 
 public class AmpApplicationSettings implements Serializable {
 
@@ -32,10 +32,11 @@ public class AmpApplicationSettings implements Serializable {
 								 */
 
 	private AmpPerspective perspectiveId;
-	
-	private AmpReports defaultTeamReport;
 
-	public AmpReports getDefaultTeamReport() {
+	private AmpReports defaultTeamReport;
+        private Integer defaultReportsPerPage;
+
+  public AmpReports getDefaultTeamReport() {
 		return defaultTeamReport;
 	}
 
@@ -122,11 +123,19 @@ public class AmpApplicationSettings implements Serializable {
 		return perspectiveId;
 	}
 
-	/**
+        public Integer getDefaultReportsPerPage() {
+          return defaultReportsPerPage;
+        }
+
+  /**
 	 * @param perspectiveId
 	 *            The perspectiveId to set.
 	 */
 	public void setPerspectiveId(AmpPerspective perspectiveId) {
 		this.perspectiveId = perspectiveId;
 	}
+
+        public void setDefaultReportsPerPage(Integer  defaultReportsPerPage) {
+          this.defaultReportsPerPage = defaultReportsPerPage;
+        }
 }

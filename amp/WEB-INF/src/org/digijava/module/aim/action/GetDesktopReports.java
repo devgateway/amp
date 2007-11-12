@@ -36,28 +36,36 @@ public class GetDesktopReports extends TilesAction {
 					reports = TeamUtil.getAllTeamReports(tm.getTeamId());
 				} else {
 					reports = TeamMemberUtil.getAllMemberReports(tm.getMemberId());
-					
+
 				}
+                                Integer reportsPerPage=0;
 				session.setAttribute(Constants.MY_REPORTS,reports);
 				session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
-				
+                                session.setAttribute(Constants.MY_REPORTS_PER_PAGE,reportsPerPage);
+
+
 				/* Setting default_team_report in session*/
 				ApplicationSettings appSettings	= tm.getAppSettings();
 				if ( appSettings != null ) {
 					if ( appSettings.getDefaultAmpReport() != null ) {
 						AmpReports default_report	=  appSettings.getDefaultAmpReport();
 						session.setAttribute(Constants.DEFAULT_TEAM_REPORT, default_report);
-						if (reports == null) 
+						if (reports == null)
 							reports	= new ArrayList();
 						this.addReportToCollection(default_report, reports);
 					}
 					else
 						logger.info("The default team report is null");
+                                              reportsPerPage=appSettings.getDefReportsPerPage();
+                                              if(reportsPerPage==null){
+                                                reportsPerPage=0;
+                                              }
+                                              session.setAttribute(Constants.MY_REPORTS_PER_PAGE,reportsPerPage);
 				}
 				else
 					logger.info("Application settings is null");
 				/*END - Setting default_team_report in session*/
-				
+
 				if(tm.getTeamHead()) session.setAttribute(Constants.TEAM_Head,"yes");
 					else session.setAttribute(Constants.TEAM_Head,"no");
 		} else {
@@ -66,7 +74,7 @@ public class GetDesktopReports extends TilesAction {
 		}
 		return null;
 	}
-	
+
 	private void addReportToCollection(AmpReports report, Collection col) {
 		Iterator iterator	= col.iterator();
 		while (iterator.hasNext()) {
@@ -74,7 +82,7 @@ public class GetDesktopReports extends TilesAction {
 			if ( colReport.getAmpReportId().longValue() == report.getAmpReportId().longValue() )
 				return;
 		}
-		
+
 		col.add(report);
 	}
 }

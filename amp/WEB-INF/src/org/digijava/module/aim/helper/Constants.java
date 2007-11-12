@@ -3,18 +3,18 @@ package org.digijava.module.aim.helper ;
 import java.awt.Color;
 
 
-	 
+
 
 public class Constants
 {
-	
-	public static class GlobalSettings { 
+
+	public static class GlobalSettings {
 		public static final String YEAR_RANGE_START			= "Year Range Start";
 		public static final String NUMBER_OF_YEARS_IN_RANGE	= "Number of Years in Range";
 		public static final String START_YEAR_DEFAULT_VALUE	= "Start Year Default Value";
 		public static final String END_YEAR_DEFAULT_VALUE		= "End Year Default Value";
 	};
-	
+
 	public static final int COMMITMENT = 0 ;
 	public static final int DISBURSEMENT = 1 ;
 	public static final int EXPENDITURE = 2 ;
@@ -81,33 +81,33 @@ public class Constants
 	public static final String PROJECT_SUPPORT = "3" ;
 	public static final String OTHER_AID = "4" ;
 	public static final Long STATUS_PLANNED = new Long(5) ;
-	
+
 	public static final Integer ORIGINAL = new Integer(0);
-	public static final Integer REVISED = new Integer(1);	
+	public static final Integer REVISED = new Integer(1);
 	public static final Integer CURRENT = new Integer(2);
-	
+
 	//Removed by Govind
 	//public static  String COUNTRY_ISO = "";
 	//public static  String COUNTRY = "";
-	
+
 	public static final String GLOBALSETTINGS_DATEFORMAT="Default Date Format";
 	public static final String GLOBALSETTINGS_COMPUTE_TOTALS="Compute Totals for Activities";
 	public static final String GLOBALSETTINGS_MULTISECTORSELECT="Multi-Sector Selecting";
 	public static final String GLOBALSETTINGS_INCLUDE_PLANNED="Totals include planned";
-	
+
 	public static final String CURRENCY_RATE_DEAFULT_START_DATE = "25/04/2005";
 	public static final String CURRENCY_RATE_DEAFULT_END_DATE = "01/05/2005";
-	
+
 	//public static final String CALENDAR_DATE_FORMAT = "dd/mm/yyyy";
 	public static final String CALENDAR_DATE_FORMAT = "dd/MM/yyyy"; //error at finding month amp-1754
 	//"yyyy-MM-dd"
 	public static final String CALENDAR_DATE_PICKER = "yyyy-MM-dd"; //error at finding month amp-1754
 	public static final String SIMPLE_DATE_TIME_FORMAT = "dd MMMMM, yyyy hh:mm aaa";
-	
+
 	public static final int FROM_YEAR_RANGE = 22;
 	public static final int TO_YEAR_RANGE = 5;
 
-	public static final Long STATUS_NAME = new Long(1) ;	
+	public static final Long STATUS_NAME = new Long(1) ;
 	public static final Long DONOR_NAME = new Long(2) ;
 	public static final Long ACTUAL_START_DATE = new Long(3) ;
 	public static final Long ACTIVITY_NAME = new Long(4) ;
@@ -125,8 +125,8 @@ public class Constants
 	public static final Long TOTAL_DISBURSEMENT = new Long(16) ;
 	//humbly added by Mihai
 	public static final Long COMPONENT_NAME = new Long(17);
-	
-	
+
+
 	public static final String REGIONAL_FUNDING_PAGE_CODE = "RFS";
 	public static final String CALENDAR_FILTER = "Calendar";
 	public static final String CURRENCY_FILTER = "Currency";
@@ -134,14 +134,14 @@ public class Constants
 	public static final String REGION_FILTER = "Region";
 	public static final String SECTOR_FILTER = "Sector";
 	public static final String STATUS_FILTER = "Status";
-	public static final String PERSPECTIVE_FILTER = "Perspective";	
+	public static final String PERSPECTIVE_FILTER = "Perspective";
 	public static final String ACTIVITY_RISK_FILTER = "Activity Risk";
 
 	public static final String ANNUAL = "A" ;
 	public static final String QUARTERLY = "Q" ;
-	
+
 	public static final String APPROVED_STATUS = "approved";
-	
+
 	//proudly added by Alex Gartner
 	public static final String ACTIVITY_STATUS_PLANNED			= "Planned";
 	public static final String ACTIVITY_STATUS_ONGOING			= "Ongoing";
@@ -149,48 +149,48 @@ public class Constants
 	public static final String ACTIVITY_STATUS_CANCELLED		= "Cancelled / Suspended";
 	public static final String ACTIVITY_STATUS_PROPOSED			= "Proposed";
 	public static final String ACTIVITY_STATUS_CONSIDERED		= "Considered";
-	
+
 	/* Team types */
 	public static final String TEAM_TYPE_MULTILATERAL			= "Multilateral";
 	public static final String TEAM_TYPE_BILATERAL				= "Bilateral";
 	/* END - Team types */
-	
+
 	//humbly added by Mihai
 	public static final Long DONOR_FUNDING = new Long(1);
 	public static final Long COMPONENT_FUNDING = new Long(2);
 	public static final Long REGION_FUNDING = new Long(3);
-	
+
 	public static final String TEAM_ID = "TID";
-	
+
 	public static final String TEAM_Lead = "teamLead";
 	public static final String TEAM_Head = "teamHead";
-	
+
 	public static final String SESSION_LIST	= "sessionList";
 	public static final String EDIT_ACT_LIST = "editActivityList";
 	public static final String USER_ACT_LIST = "userActivityList";
 	public static final String TS_ACT_LIST = "timestampActivityList";
-	
+
 	public static final long MAX_TIME_LIMIT = 3600000;
-	
+
 	public static final String ME_IND_VAL_BASE_ID = "base";
 	public static final String ME_IND_VAL_ACTUAL_ID = "actual";
 	public static final String ME_IND_VAL_TARGET_ID = "target";
-	
+
 	public static final String ACTIVITY_PERFORMANCE_CHART_TITLE = "Activity - Performance";
 	public static final String ACTIVITY_RISK_CHART_TITLE = "Activity - Risk";
 	public static final String PORTFOLIO_PERFORMANCE_CHART_TITLE = "Portfolio - Performance";
-	public static final String PORTFOLIO_RISK_CHART_TITLE = "Portfolio - Risk";	
-	
-	
+	public static final String PORTFOLIO_RISK_CHART_TITLE = "Portfolio - Risk";
+
+
 	public static final int CHART_HEIGHT = 350;
 	public static final int CHART_WIDTH = 400;
-	
+
 	public static final int PORTFOLIO_CHART_HEIGHT = 400;
-	public static final int PORFOLIO_CHART_WIDTH = 730;	
-	
+	public static final int PORFOLIO_CHART_WIDTH = 730;
+
 	public static final String ACCESS_TYPE_TEAM = "Team";
 	public static final String ACCESS_TYPE_MNGMT = "Management";
-	
+
 	// M&E Indicator Risk Ratings
 	public static final byte HIGHLY_SATISFACTORY = 3;
 	public static final byte VERY_SATISFACTORY = 2;
@@ -198,24 +198,24 @@ public class Constants
 	public static final byte UNSATISFACTORY = -1;
 	public static final byte VERY_UNSATISFACTORY = -2;
 	public static final byte HIGHLY_UNSATISFACTORY = -3;
-	
+
 	// Risk chart colors for risk ratings
 	public static final Color HIGHLY_SATISFACTORY_CLR = Color.GREEN;
 	public static final Color VERY_SATISFACTORY_CLR = Color.BLUE;
 	public static final Color SATISFACTORY_CLR = Color.CYAN;
 	public static final Color UNSATISFACTORY_CLR = new Color(0,0,83); // dark blue
 	public static final Color VERY_UNSATISFACTORY_CLR = Color.ORANGE;
-	public static final Color HIGHLY_UNSATISFACTORY_CLR = Color.RED;	
-	
+	public static final Color HIGHLY_UNSATISFACTORY_CLR = Color.RED;
+
 	// Performance chart colors
 	public static final Color BASE_VAL_CLR = Color.BLUE;
 	public static final Color ACTUAL_VAL_CLR = Color.GREEN;
 	public static final Color TARGET_VAL_CLR = Color.RED;
-	
+
 	// For AMP feature turn ON/OFF, following are the feature codes.
 	public static final String ME_FEATURE = "ME"; //* M & E Feature code*
 	public static final String PI_FEATURE = "PI"; //* Paris Indicators feature code
-	public static final String AA_FEATURE = "AA"; //* Activity Approval feature code 
+	public static final String AA_FEATURE = "AA"; //* Activity Approval feature code
 	public static final String CL_FEATURE = "CL"; //* Calendar feature code
 	public static final String DC_FEATURE = "DC"; // Documents feature code
 	public static final String SC_FEATURE = "SC"; // Scenarios feature code
@@ -223,51 +223,51 @@ public class Constants
 	public static final String AC_FEATURE = "AC"; // Activity Costing feature code
 	public static final String LB_FEATURE = "LB"; //* Logframe Builder code
 	public static final String SA_FEATURE = "SA"; //* Standard AMP Form Fields code
-	
-	
-	public static final String DEF_FLAG_EXIST = "defFlagExist"; 	
+
+
+	public static final String DEF_FLAG_EXIST = "defFlagExist";
 	public static final String DSKTP_FLTR_CHANGED = "dsktpFltrChanged";
-	
-	
+
+
 	//	 Application attributes names
 	public static final String GLOBAL_SETTINGS = "globalSettings";
-	
+
 	// Session attributes names
 	public static final String CURRENT_MEMBER = "currentMember";
 	public static final String FILTER_PARAMS = "filterParams";
-	
-	
-	
+
+
+
 	public static final String AMP_PROJECTS = "ampProjects";
 	public static final String DIRTY_ACTIVITY_LIST = "dirtyActivityList";
 	public static final String TYPE_MNGMT = "Management";
 	public static final String TYPE_TEAM = "Team";
-	
+
 	public static final String DEFAULT_TEAM_REPORT	= "defaultTeamReport";
 	public static final String MY_REPORTS = "myReports";
 	public static final String MY_TASKS = "myTasks";
 	public static final String MY_MESSAGES = "myMessages";
 	public static final String MY_LINKS = "myLinks";
 	public static final String MY_TEAM_MEMBERS = "myTeamMembers";
-	
+
 	public static final String INDICATOR_NAMES = "indicatorNames";
-	
+
 	public static final byte SORT_FIELD_PROJECT = 1;
 	public static final byte SORT_FIELD_AMPID = 2;
 	public static final byte SORT_FIELD_DONOR = 3;
 	public static final byte SORT_FIELD_AMOUNT = 4;
-	
+
 	public static final boolean SORT_ORDER_ASC = true;
-	
+
 	public static final String DESKTOP_SETTINGS_CHANGED = "desktopSettingsChanged";
-	
+
 	public static final String AIM_MODULE_KEY = "aim";
-	
+
 	public static final String EVENT_EDIT = "edit";
 	public static final String EVENT_ADD = "add";
 	public static final String EVENT_SHOW_ADD = "showAdd";
 	public static final String EVENT_SHOW_EDIT = "showEdit";
-	
+
 	public static final String DESKTOP_PG_CODE = "DTP";
 	public static final String FINANCIAL_PG_CODE = "FP";
 
@@ -276,11 +276,12 @@ public class Constants
 	public static final String GLOBAL_PUBLIC_VIEW = "Public View";
 	public static final String GLOBAL_DEFAULT_COUNTRY = "Default Country";
 	public static final String GLOBAL_PERSPECTIVE = "Perspective";
-	
-	
+
+
 	public static final String GLOBAL_DEFAULT_SECTOR_SCHEME="Default Sector Scheme";
-	
+
 	public static final String ONLY_PREVIEW="onlyPreview";
-	
-	
-}	
+        public static final String MY_REPORTS_PER_PAGE = "myReportsPerPage";
+
+
+}

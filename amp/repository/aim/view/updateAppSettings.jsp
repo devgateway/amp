@@ -110,11 +110,21 @@
 													</logic:equal>
 													<tr>
 														<td bgcolor="#f4f4f2" align="right" width="50%">
-															<digi:trn key="aim:defaultRecordPerPage">
-															Number of records per page</digi:trn>
+															<digi:trn key="aim:numberactivitiesprojectsperpage">
+															Number of activities/projects per page</digi:trn>
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:text property="defRecsPerPage" size="5"  styleClass="inp-text"/>
+														</td>
+													</tr>
+
+                                                                                                        <tr>
+														<td bgcolor="#f4f4f2" align="right" width="50%">
+															<digi:trn key="aim:numberreportsperpage">
+															Number of reports per page</digi:trn>
+														</td>
+														<td align="left" width="50%" bgcolor="#f4f4f2">
+															<html:text property="defReportsPerPage" size="5"  styleClass="inp-text"/>
 														</td>
 													</tr>
 													<tr>

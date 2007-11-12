@@ -48,6 +48,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
 import net.sf.hibernate.ObjectNotFoundException;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * Persister class for all Team/Workspaces related Objects
@@ -1775,6 +1776,72 @@ public class TeamUtil {
         }
         return col;
     }
+
+    public static List getAllTeamReports(Long teamId, int currentPage, int reportPerPage) {
+       Session session = null;
+       List col = new ArrayList();
+       try {
+           session = PersistenceManager.getRequestDBSession();
+           AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
+
+           String queryString = null;
+           Query qry = null;
+
+           if(team.getAccessType().equalsIgnoreCase(
+               Constants.ACCESS_TYPE_MNGMT)) {
+               queryString = "select r from " + AmpReports.class.getName()
+                   + " r " + " order by r.name limit "+currentPage+ ", "+reportPerPage;
+               qry = session.createQuery(queryString);
+               col = qry.list();
+           } else {
+               queryString = "select r from "
+                   + AmpTeamReports.class.getName()+" tr inner join  tr.report r "
+                   + "  where (tr.team=:teamId) order by r.name limit "+currentPage+ ", "+reportPerPage;
+               qry = session.createQuery(queryString);
+               qry.setParameter("teamId", teamId, Hibernate.LONG);
+               col = qry.list();
+           }
+       } catch(Exception e) {
+           logger.debug("Exception from getAllTeamReports()");
+           logger.error(e.toString());
+           throw new RuntimeException(e);
+       }
+       return col;
+   }
+
+   public static int getAllTeamReportsCount(Long teamId) {
+       Session session = null;
+       int count=0;
+       try {
+           session = PersistenceManager.getRequestDBSession();
+           AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
+
+           String queryString = null;
+           Query qry = null;
+
+           if(team.getAccessType().equalsIgnoreCase(
+               Constants.ACCESS_TYPE_MNGMT)) {
+               queryString = "select r from " + AmpReports.class.getName()
+                   + " r " + " order by r.name ";
+               qry = session.createQuery(queryString);
+               count=(Integer)qry.uniqueResult();
+           } else {
+               queryString = "select r from "
+                   + AmpTeamReports.class.getName()+" tr inner join tr.report r "
+                   + "  where (tr.team=:teamId) ";
+               qry = session.createQuery(queryString);
+               qry.setParameter("teamId", teamId, Hibernate.LONG);
+              count=qry.list().size();
+           }
+       } catch(Exception e) {
+           logger.debug("Exception from getAllTeamReports()");
+           logger.error(e.toString());
+           throw new RuntimeException(e);
+       }
+       return count;
+   }
+
+
 
     public static AmpTeamReports getAmpTeamReport(Long teamId, Long reportId) {
         Session session = null;

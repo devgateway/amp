@@ -38,7 +38,7 @@
 
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amp");
-	
+
 	function showMyPanel(panelNum, elementId) {
 		setPanelBody(panelNum, elementId);
 		showPanel(panelNum);
@@ -51,6 +51,7 @@
 	function setPanelBody(panelNum, elementId){
 		var element				= document.getElementById(elementId);
 		element.style.display	= "inline";
+		element.parentNode.removeChild(element);
 		YAHOO.amp.panels[panelNum].setBody(element);
 	}
 	function setPanelBodyCopy(panelNum, elementId){

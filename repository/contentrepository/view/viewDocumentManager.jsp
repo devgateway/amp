@@ -176,6 +176,7 @@
 									<bean:write name="documentData" property="description" />
 								</td>
 								<td> 
+								<a style="display:none" id="fake1" href="http://www.yahoo.com">FOR_SILK</a>
 								<c:set var="translation">
 									<digi:trn key="contentrepository:documentManagerDownloadHint">Click here to download document</digi:trn>
 								</c:set> 
@@ -328,6 +329,8 @@
 								<c:set var="translation">
 									<digi:trn key="contentrepository:documentManagerDownloadHint">Click here to download document</digi:trn>
 								</c:set> 
+								<a style="display:none" id="fake2" href="http://www.yahoo.com">FOR_SILK</a>
+								
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="D<bean:write name='documentData' property='uuid' />"
 								onClick="window.location='/contentrepository/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />'"
 								

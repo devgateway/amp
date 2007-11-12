@@ -54,7 +54,7 @@ return false;
 
 							</TD>
 
-                    	<TD background="module/aim/images/corner-r.gif" 
+                    	<TD background="module/aim/images/corner-r.gif"
 
 							height=17 width=17></TD>
 
@@ -70,7 +70,7 @@ return false;
 
 					<digi:trn key="aim:clickToViewReport">Click here to view Report</digi:trn>
 
-				</c:set>				
+				</c:set>
 
 				<logic:notEmpty name="myReports" scope="session">
 
@@ -78,23 +78,23 @@ return false;
 
 					<TABLE border=0 cellPadding=1 cellSpacing=1 width="100%" >
 
-					<logic:iterate name="myReports" id="report" scope="session" 
+					<logic:iterate name="myReports" id="report" scope="session"
 
-					type="org.digijava.module.aim.dbentity.AmpReports"> 
+					type="org.digijava.module.aim.dbentity.AmpReports" length="myReportsPerPage">
 
-						<% if (rCount < 5) { rCount ++; %>
+
 
 						<TR><TD title='${translation}'>
 
 							<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
 
 							<digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');">
-								<bean:write name="report" property="name"/>												
-							</digi:link> 
+								<bean:write name="report" property="name"/>
+							</digi:link>
 
 						</TD></TR>
 
-						<% } %>
+
 
 					</logic:iterate>
 
@@ -106,7 +106,7 @@ return false;
 
 								<digi:trn key="aim:more">..more</digi:trn>
 
-							</digi:link>							
+							</digi:link>
 
 						</TD></TR>
 
@@ -143,7 +143,7 @@ return false;
 
 					</TD></TR>
 
-			
+
 
 				<!-- Paris Indicators Reports Starts Here -->
 
@@ -163,7 +163,7 @@ return false;
 
 				</logic:present>
 
-			</TABLE>	
+			</TABLE>
 
 		</TD>
 

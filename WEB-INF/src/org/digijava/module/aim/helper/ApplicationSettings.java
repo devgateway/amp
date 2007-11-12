@@ -1,7 +1,7 @@
 
 package org.digijava.module.aim.helper;
 
-import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.*;
 
 public class ApplicationSettings {
 
@@ -11,12 +11,11 @@ public class ApplicationSettings {
 		  private String perspective;
 		  private Long currencyId;
 		  private Long fisCalId;
-		  
+
 		  private AmpReports defaultAmpReport;
+                  private int defReportsPerPage;
 
-		  
-
-		  public Long getAppSettingsId() {
+  public Long getAppSettingsId() {
 					 return this.appSettingsId;
 		  }
 
@@ -68,7 +67,15 @@ public class ApplicationSettings {
 			return defaultAmpReport;
 		}
 
-		public void setDefaultAmpReport(AmpReports defaultAmpReport) {
+                public int getDefReportsPerPage() {
+                  return defReportsPerPage;
+                }
+
+  public void setDefaultAmpReport(AmpReports defaultAmpReport) {
 			this.defaultAmpReport = defaultAmpReport;
 		}
+
+                public void setDefReportsPerPage(int defReportsPerPage) {
+                  this.defReportsPerPage = defReportsPerPage;
+                }
 }

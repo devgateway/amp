@@ -237,6 +237,7 @@ public class ViewAmp
 
                 appSettings.setDefRecsPerPage(ampAppSettings
                         .getDefaultRecordsPerPage().intValue());
+                appSettings.setDefReportsPerPage(ampAppSettings.getDefaultReportsPerPage());
                 appSettings.setCurrencyId(ampAppSettings.getCurrency()
                         .getAmpCurrencyId());
                 appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()
@@ -253,10 +254,10 @@ public class ViewAmp
 
             appSettings.setLanguage(langCode);
 
-            appSettings.setPerspective(FeaturesUtil.isPerspectiveEnabled() 
+            appSettings.setPerspective(FeaturesUtil.isPerspectiveEnabled()
             							? ampAppSettings.getDefaultPerspective()
             							: Constants.DEF_MFD_PERSPECTIVE);
-             
+
 
             tm.setMemberId(member.getAmpTeamMemId());
             tm.setMemberName(member.getUser().getName());

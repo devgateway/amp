@@ -179,7 +179,7 @@
 								<c:set var="translation">
 									<digi:trn key="contentrepository:documentManagerDownloadHint">Click here to download document</digi:trn>
 								</c:set> 
-								<a style="cursor:pointer; text-decoration:underline; color: blue"
+								<a style="cursor:pointer; text-decoration:underline; color: blue" id="D<bean:write name='documentData' property='uuid' />"
 								onClick="window.location='/contentrepository/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />'"
 								href="/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />"
 								title="${translation}">[<digi:trn key="contentrepository:documentManagerDownload">D</digi:trn>]</a>
@@ -189,7 +189,7 @@
 									<digi:trn key="contentrepository:documentManagerAddVersionHint">Click here to add a new version of this document</digi:trn>
 								</c:set>
 								<logic:equal name="documentData" property="hasVersioningRights" value="true">
-								<a style="cursor:pointer; text-decoration:underline; color: blue"
+								<a style="cursor:pointer; text-decoration:underline; color: blue" id="plus<bean:write name='documentData' property='uuid' />"
 								onClick="setType('version'); configPanel(0,'<%=documentData.getTitle() %>','<%=documentData.getDescription() %>','<%=documentData.getUuid() %>');showMyPanel(0, 'addDocumentDiv');"
 								title="${translation}">[<digi:trn key="contentrepository:documentManagerAddVersion">+</digi:trn>]</a>
 								
@@ -198,7 +198,7 @@
 								<c:set var="translation">
 									<digi:trn key="contentrepository:documentManagerVersionsHint">Click here to see a list of versions for this document</digi:trn>
 								</c:set> 
-								<a style="cursor:pointer; text-decoration:underline; color: blue"
+								<a style="cursor:pointer; text-decoration:underline; color: blue" id="H<bean:write name='documentData' property='uuid' />"
 								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>');"
 								title="${translation}">[<digi:trn key="contentrepository:documentManagerVersions">H</digi:trn>]</a>
 								
@@ -207,7 +207,7 @@
 									<digi:trn key="contentrepository:documentManagerMakePublicHint">Click here to make this document public</digi:trn>
 								</c:set>
 								<logic:equal name="documentData" property="hasMakePublicRights" value="true">
-									<a style="cursor:pointer; text-decoration:underline; color: blue"
+									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Pub<bean:write name='documentData' property='uuid' />"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true);"
 									title="${translation}">[<c:out value="${makePublicCommand}" />]</a>
 								</logic:equal>
@@ -218,7 +218,7 @@
 									<digi:trn key="contentrepository:documentManagerUnpublishHint">Click here to unpublish this document</digi:trn>
 								</c:set>
 								<logic:equal name="documentData" property="hasDeleteRightsOnPublicVersion" value="true">
-									<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
+									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Priv<bean:write name='documentData' property='uuid' />"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.UNPUBLISH %>', '<%=documentData.getUuid() %>');"
 									title="${translation}">[<digi:trn key="contentrepository:documentManagerUnpublish">Priv</digi:trn>]</a>
 								</logic:equal>
@@ -328,7 +328,7 @@
 								<c:set var="translation">
 									<digi:trn key="contentrepository:documentManagerDownloadHint">Click here to download document</digi:trn>
 								</c:set> 
-								<a style="cursor:pointer; text-decoration:underline; color: blue"
+								<a style="cursor:pointer; text-decoration:underline; color: blue" id="D<bean:write name='documentData' property='uuid' />"
 								onClick="window.location='/contentrepository/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />'"
 								href="/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />"
 								title="${translation}">[<digi:trn key="contentrepository:documentManagerDownload">D</digi:trn>]</a>
@@ -337,7 +337,7 @@
 									<digi:trn key="contentrepository:documentManagerAddVersionHint">Click here to add a new version of this document</digi:trn>
 								</c:set>
 								<logic:equal name="documentData" property="hasVersioningRights" value="true">
-								<a style="cursor:pointer; text-decoration:underline; color: blue"
+								<a style="cursor:pointer; text-decoration:underline; color: blue" id="Plus<bean:write name='documentData' property='uuid' />"
 								onClick="setType('version'); configPanel(0,'<%=documentData.getTitle() %>','<%=documentData.getDescription() %>','<%=documentData.getUuid() %>');showMyPanel(0, 'addDocumentDiv');"
 								title="${translation }">[<digi:trn key="contentrepository:documentManagerAddVersion">+</digi:trn>]</a>
 		
@@ -346,7 +346,7 @@
 								<c:set var="translation">
 									<digi:trn key="contentrepository:documentManagerVersionsHint">Click here to see a list of versions for this document</digi:trn>
 								</c:set> 
-								<a style="cursor:pointer; text-decoration:underline; color: blue"
+								<a style="cursor:pointer; text-decoration:underline; color: blue" id="H<bean:write name='documentData' property='uuid' />"
 								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>');"
 								title="${translation }">[<digi:trn key="contentrepository:documentManagerVersions">H</digi:trn>]</a> 
 								
@@ -354,7 +354,7 @@
 									<digi:trn key="contentrepository:documentManagerMakePublicHint">Click here to make this document public</digi:trn>
 								</c:set>
 								<logic:equal name="documentData" property="hasMakePublicRights" value="true">
-									<a style="cursor:pointer; text-decoration:underline; color: blue"
+									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Pub<bean:write name='documentData' property='uuid' />"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true);"
 									title="${translation}">[<bean:write name="makePublicCommand"/>]</a>
 								</logic:equal>
@@ -365,7 +365,7 @@
 									<digi:trn key="contentrepository:documentManagerUnpublishHint">Click here to unpublish this document</digi:trn>
 								</c:set>
 								<logic:equal name="documentData" property="hasDeleteRightsOnPublicVersion" value="true">
-									<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
+									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Priv<bean:write name='documentData' property='uuid' />"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.UNPUBLISH %>', '<%=documentData.getUuid() %>');"
 									title="${translation }">[<digi:trn key="contentrepository:documentManagerUnpublish">Priv</digi:trn>]</a>
 								</logic:equal>

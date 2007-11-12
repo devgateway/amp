@@ -4,9 +4,9 @@
 .all_markup table
 {border-collapse:collapse; width: 90%} 
 .all_markup th
-{border:1px solid #000;padding:.25em;background-color:#fff;color:Black; font-size:small; color: #666666}
-.all_markup th a
-{font-size:small; text-decoration: none}
+{border:1px solid #000;padding:.25em;background-color:#fff; font-size:small; color: #666666}
+.all_markup th a, .all_markup th a:hover
+{font-size:small; text-decoration: none;}
 .all_markup td
 {border-bottom:1px solid #000;padding:.25em;font-size:x-small}
 .all_markup .yui-dt-odd {background-color:#eee;} /*light gray*/ 

@@ -206,7 +206,7 @@
       <forward name="forward" path="/showLayout.do?layout=donorDataImport" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimMainProjectDetailsForm" path="/aim/viewProjectDetails" scope="request" type="org.digijava.module.aim.action.ViewProjectDetails" validate="false">
+    <action name="aimMainProjectDetailsForm" path="/aim/viewProjectDetails" scope="session" type="org.digijava.module.aim.action.ViewProjectDetails" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_projectDetails" />
     </action>
     <action path="/aim/viewEUActivityDetails" scope="request" type="org.digijava.module.aim.action.ViewEUActivity" validate="false">
@@ -257,7 +257,7 @@
     <action forward="/showLayout.do?layout=layoutYearlyDiscrepancyAllFilter" path="/aim/viewYearlyDiscrepancyAllFilter" />
     <action forward="/showLayout.do?layout=logoutLayout" path="/aim/logout" />
     <action path="/aim/logoutAction" scope="request" type="org.digijava.module.aim.action.Logout" validate="false" />
-    <action name="aimMainProjectDetailsForm" path="/aim/mainProjectDetails" scope="request" type="org.digijava.module.aim.action.ViewMainProjectDetails" validate="false" />
+    <action name="aimMainProjectDetailsForm" path="/aim/mainProjectDetails" scope="session" type="org.digijava.module.aim.action.ViewMainProjectDetails" validate="false" />
     <action name="aimFinancingBreakdownForm" path="/aim/financingBreakdown" scope="request" type="org.digijava.module.aim.action.ViewFinancingBreakdown" validate="false" />
     <action path="/aim/projectCostsBreakdown" scope="request" type="org.digijava.module.aim.action.ProjectCostsBreakdown" validate="false" />
     <action name="aimActivityDashboardForm" path="/aim/activityDashboard" scope="request" type="org.digijava.module.aim.action.ViewActivityDashboard" validate="false" />

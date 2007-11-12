@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import org.digijava.module.aim.helper.COverSubString;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.EUActivityUtil;
 
 public class ViewMainProjectDetails extends TilesAction {
 	private static Logger logger = Logger.getLogger(ViewMainProjectDetails.class);
@@ -37,7 +39,10 @@ public class ViewMainProjectDetails extends TilesAction {
 		} else {
 			formBean.setSessionExpired(false);
 			Long id = new Long(formBean.getAmpActivityId());
-
+			if(request.getAttribute("costs")==null){
+				Collection euActs = EUActivityUtil.getEUActivities(id);
+			    request.setAttribute("costs", euActs);
+			}			
 			int tabIndex = formBean.getTabIndex();
 			String channelOverviewTabColor = Constants.INACTIVE_MAIN_TAB_CLASS;
 			String financialProgressTabColor = Constants.INACTIVE_MAIN_TAB_CLASS;
@@ -46,36 +51,43 @@ public class ViewMainProjectDetails extends TilesAction {
 			formBean.setAmpActivityId(id.longValue());
 			formBean.setTabIndex(tabIndex);
 			AmpActivity ampActivity = ActivityUtil.getProjectChannelOverview(id);
-			if (ampActivity.getDescription() == null)
-				formBean.setDescription("");
-			else {
-				formBean.setDescription(ampActivity.getDescription());
+			if(ampActivity!=null){
+				if (ampActivity.getDescription() == null)
+					formBean.setDescription("");
+				else {
+					formBean.setDescription(ampActivity.getDescription());
+				}
+				if (ampActivity.getObjective() == null)
+					formBean.setObjectives("");
+				else
+					formBean.setObjectives(ampActivity.getObjective());
+				if (ampActivity.getPurpose() == null)
+					formBean.setPurpose("");
+				else
+					formBean.setPurpose(ampActivity.getPurpose());
+				if (ampActivity.getResults() == null)
+					formBean.setResults("");
+				else
+					formBean.setResults(ampActivity.getResults());
+				if (ampActivity.getDescription() != null)
+					formBean.setFlag(COverSubString.getCOverSubStringLength(ampActivity
+							.getDescription(), 'D'));
+				formBean.setName(ampActivity.getName());
+				formBean.setAmpId(ampActivity.getAmpId());
 			}
-			if (ampActivity.getObjective() == null)
-				formBean.setObjectives("");
-			else
-				formBean.setObjectives(ampActivity.getObjective());
-			if (ampActivity.getPurpose() == null)
-				formBean.setPurpose("");
-			else
-				formBean.setPurpose(ampActivity.getPurpose());
-			if (ampActivity.getResults() == null)
-				formBean.setResults("");
-			else
-				formBean.setResults(ampActivity.getResults());
-			if (ampActivity.getDescription() != null)
-				formBean.setFlag(COverSubString.getCOverSubStringLength(ampActivity
-						.getDescription(), 'D'));
-			formBean.setName(ampActivity.getName());
-			formBean.setAmpId(ampActivity.getAmpId());
-			if (tabIndex == 0)
+			
+			if (tabIndex == 0) {
 				channelOverviewTabColor = Constants.ACTIVE_MAIN_TAB_CLASS;
-			else if (tabIndex == 1)
+			}				
+			else if (tabIndex == 1) {
 				financialProgressTabColor = Constants.ACTIVE_MAIN_TAB_CLASS;
-			else if (tabIndex == 2)
+			}				
+			else if (tabIndex == 2) {
 				physicalProgressTabColor = Constants.ACTIVE_MAIN_TAB_CLASS;
-			else if (tabIndex == 3)
+			}			
+			else if (tabIndex == 3) {
 				documentsTabColor = Constants.ACTIVE_MAIN_TAB_CLASS;
+			}				
 			formBean.setChannelOverviewTabColor(channelOverviewTabColor);
 			formBean.setFinancialProgressTabColor(financialProgressTabColor);
 			formBean.setPhysicalProgressTabColor(physicalProgressTabColor);

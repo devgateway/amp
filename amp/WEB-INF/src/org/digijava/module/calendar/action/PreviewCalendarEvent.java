@@ -26,6 +26,7 @@ public class PreviewCalendarEvent
 
         CalendarEventForm calendarEventForm = (CalendarEventForm) form;
         try {
+        	calendarEventForm.setPrivateEvent(calendarEventForm.isPrivateEvent());        	
             // calendar type
             calendarEventForm.setSelectedCalendarTypeName(CalendarOptions.
                 CALENDAR_TYPE_NAME[calendarEventForm.getSelectedCalendarTypeId()]);

@@ -143,6 +143,7 @@ public class ShowCalendarEvent
                     getEventType().getId());
                 // private event
                     calendarEventForm.setPrivateEvent(ampCalendar.isPrivateEvent());
+                   
                 // selected donors
                // if(calendarEventForm.getDonors()==null){
                   calendarEventForm.setDonors(new ArrayList());
@@ -320,7 +321,8 @@ public class ShowCalendarEvent
     }
 
     private CalendarEventForm resetForm(CalendarEventForm calendarEventForm) {
-        calendarEventForm.setAttendeeGuests(null);
+    	calendarEventForm.setPrivateEvent(true);
+    	calendarEventForm.setAttendeeGuests(null);
         calendarEventForm.setAttendeeUsers(null);
         calendarEventForm.setCalendarTypes(null);
         calendarEventForm.setDonors(null);

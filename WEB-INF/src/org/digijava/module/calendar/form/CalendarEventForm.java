@@ -37,9 +37,10 @@ public class CalendarEventForm
     private String[] selectedAttendeeUsers;
     private String[] selectedAttendeeGuests;
     private String[] selectedUsers;
-    private boolean privateEvent;
+    private boolean privateEvent=true;
+   
 
-    public List getCalendarTypes() {
+	public List getCalendarTypes() {
         return calendarTypes;
     }
 

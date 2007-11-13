@@ -19,6 +19,19 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
 <script language="JavaScript" type="text/javascript">
 
+function makePublic(){
+
+var showPrivateEvents = document.getElementById('PrivateEvents');
+
+    if (showPrivateEvents.checked==true) {
+    document.getElementsByName('privateEvent')[0].value=true;
+    }
+    if (showPrivateEvents.checked==false){
+    document.getElementsByName('privateEvent')[0].value=false;      
+        
+    }
+}
+
 function addOrganisation(orgId, orgName){
     var list = document.getElementById('organizationList');
     if (list == null || orgId == "" || orgName == "") {
@@ -190,6 +203,8 @@ function delSubmit(){
   }
 }
 </script>
+
+
 
 <table border="0" width="100%" cellPadding=0 cellSpacing=0>
         <tr>
@@ -576,13 +591,15 @@ function delSubmit(){
                 </tr>
                 <tr>
                     <td nowrap="nowrap" valign="top">&nbsp;</td>
-                    <td>
-                        <html:checkbox name="calendarEventForm" property="privateEvent"/><digi:trn key="calendar:eventIsPrivate">&nbsp;Event is private</digi:trn>
+                                        
+                    <td> 
+                    	<html:hidden name="calendarEventForm" property="privateEvent"/>                   	
+                        <html:checkbox styleId="PrivateEvents" name="calendarEventForm" property="privateEvent"  onchange="javascript:makePublic();" /><digi:trn key="calendar:eventIsPrivate">&nbsp;Event is private</digi:trn>
                     </td>
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
-                    <td>
+                    <td>                    	
                         <input type="submit" onclick="return preSubmit();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
                     </td>
                 </tr>

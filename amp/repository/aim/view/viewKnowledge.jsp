@@ -165,7 +165,7 @@ function preview(id)
 											<digi:trn key="aim:knowledge">Knowledge</digi:trn>
 
 										</digi:link> &gt; <digi:trn key="aim:docOverview">Overview</digi:trn> <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&gt;
-                                        <bean:write name="aimKnowledgeForm"	property="perspective" />
+                                       <digi:trn key="aim:${aimKnowledgeForm.perspective}"> <bean:write name="aimKnowledgeForm"	property="perspective" /></digi:trn>
                                         <digi:trn key="aim:docPerspective">Perspective</digi:trn></logic:equal> </SPAN></TD>
 
 										<TD align=right><module:display name="Previews" parentModule="PROJECT MANAGEMENT">

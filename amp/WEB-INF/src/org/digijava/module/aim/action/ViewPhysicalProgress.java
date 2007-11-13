@@ -17,14 +17,15 @@ import org.digijava.module.aim.form.PhysicalProgressForm;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.helper.ApplicationSettings;
 
 public class ViewPhysicalProgress extends TilesAction {
-    
+
 	public ActionForward execute(ComponentContext context,
 			ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
-	    
-	    
+
+
 		HttpSession session = request.getSession();
 		TeamMember teamMember = (TeamMember) session
 				.getAttribute("currentMember");
@@ -35,8 +36,20 @@ public class ViewPhysicalProgress extends TilesAction {
 			formBean.setValidLogin(false);
 		} else {
 		    formBean.setValidLogin(true);
-		    
-		    String compId = request.getParameter("compId"); 
+                    String perspective = null;
+                    if (teamMember.getAppSettings() != null) {
+                      ApplicationSettings appSettings = teamMember.
+                          getAppSettings();
+                      if (appSettings.getPerspective() != null) {
+                        perspective = appSettings.getPerspective();
+                      }
+                      else {
+                        perspective = "MOFED";
+                      }
+                    }
+                    formBean.setPerspective(perspective);
+
+		    String compId = request.getParameter("compId");
 		    if (compId != null) {
 		        long cId = Long.parseLong(compId);
 		        Iterator itr = formBean.getComponents().iterator();
@@ -47,10 +60,10 @@ public class ViewPhysicalProgress extends TilesAction {
 		                break;
 		            }
 		        }
-		        return null; 
+		        return null;
 		    }
 			Long ampActivityId = new Long(request.getParameter("ampActivityId"));
-			formBean.setComponents(ActivityUtil.getAllComponents(ampActivityId));			
+			formBean.setComponents(ActivityUtil.getAllComponents(ampActivityId));
 			formBean.setIssues(ActivityUtil.getIssues(ampActivityId));
 		}
 		return null;

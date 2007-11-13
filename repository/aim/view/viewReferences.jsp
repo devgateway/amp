@@ -90,7 +90,7 @@ function login()
 									<digi:link href="/viewReferences.do" name="urlReference" styleClass="comment" title="${translation}" >
 										<digi:trn key="aim:reference">Reference</digi:trn>
 									</digi:link>
-									&gt; Overview <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&gt; <bean:write name="aimReferenceForm" property="perspective"/> Perspective</logic:equal>
+									&gt; Overview <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&gt;<digi:trn key="aim:${aimReferenceForm.perspective}"> <bean:write name="aimReferenceForm" property="perspective"/></digi:trn>&nbsp;<digi:trn key="aim:perspective"> Perspective</digi:trn></logic:equal>
 								</SPAN>
 							</TD>
 											<TD align="right">

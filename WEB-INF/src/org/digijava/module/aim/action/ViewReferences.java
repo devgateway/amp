@@ -63,6 +63,7 @@ public class ViewReferences extends TilesAction {
 		if (teamMember == null) {
 			formBean.setValidLogin(false);
 		} else {
+
 			formBean.setValidLogin(true);
 			Long id = null;
 			if (request.getParameter("ampActivityId") != null) {
@@ -71,24 +72,24 @@ public class ViewReferences extends TilesAction {
 			else {
 				id = formBean.getId();
 			}
-			
+
 			try {
 				activityRefDocs=ActivityUtil.getReferenceDocumentsFor(id);
 			} catch (DgException e) {
 				// TODO Auto-generated catch block
-				throw new ServletException("can't get reference doc", e); 
+				throw new ServletException("can't get reference doc", e);
 				//e.printStackTrace();
 			}
-			
-			
-			
+
+
+
 			categoryRefDocMap = AmpCollectionUtils.createMap(activityRefDocs, new ActivityUtil.CategoryIdRefDocMapBuilder());
-			
-			
+
+
 			//create arrays, number of elements as much as category values
         	Long[] refdocIds=new Long[catValues.size()];
         	String[] refdocComments=new String[catValues.size()];
-        	
+
         	int c=0;
         	int selectedIds=0;
         	for(AmpCategoryValue catVal: catValues){
@@ -110,18 +111,30 @@ public class ViewReferences extends TilesAction {
         		refDocs.add(doc);
         		c++;
         	}
-        	
-        	
+
+
         	//set selected ids
         	formBean.setAllReferenceDocNameIds(refdocIds);
         	//set all comments, some are empty
 //        	eaForm.setRefDocComments(refdocComments);
-        	
+        	String perspective =null;
         	formBean.setReferenceDocs(refDocs);
-        	
-    		
-			
-			
+                if (teamMember.getAppSettings() != null) {
+                    ApplicationSettings appSettings = teamMember.
+                        getAppSettings();
+                    if (appSettings.getPerspective() != null) {
+                      perspective = appSettings.getPerspective();
+                    }
+                    else {
+                      perspective = "MOFED";
+                    }
+                  }
+                  formBean.setPerspective(perspective);
+
+
+
+
+
 		}
 		return null;
 	}

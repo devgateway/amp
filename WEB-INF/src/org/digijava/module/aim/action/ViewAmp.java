@@ -237,7 +237,13 @@ public class ViewAmp
 
                 appSettings.setDefRecsPerPage(ampAppSettings
                         .getDefaultRecordsPerPage().intValue());
-                appSettings.setDefReportsPerPage(ampAppSettings.getDefaultReportsPerPage());
+                if(ampAppSettings.getDefaultReportsPerPage()!=null){
+                  appSettings.setDefReportsPerPage(ampAppSettings.
+                      getDefaultReportsPerPage());
+                }
+                else{
+                  appSettings.setDefReportsPerPage(0);
+                }
                 appSettings.setCurrencyId(ampAppSettings.getCurrency()
                         .getAmpCurrencyId());
                 appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()

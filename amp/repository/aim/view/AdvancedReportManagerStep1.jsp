@@ -228,19 +228,20 @@ function checkUncheckAll2() {
 																	<input type="checkbox" name="checkall" onclick="checkUncheckAll();"/>
 																	</td>
 																	</tr>
-											<feature:display name="Identification" module="Project ID and Planning">
-												<field:display name="Actual Approval Date" feature="Identification" >&nbsp;</field:display>
-												<field:display name="Actual Completion Date" feature="Identification">&nbsp;</field:display>
-												<field:display name="Actual Start Date" feature="Identification">&nbsp;</field:display>
+											<feature:display name="Identification" module="Project ID and Planning"></feature:display>
+											<feature:display name="Planning" module="Project ID and Planning"></feature:display>
+												<field:display name="Actual Approval Date" feature="Planning" >&nbsp;</field:display>
+												<field:display name="Actual Completion Date" feature="Planning">&nbsp;</field:display>
+												<field:display name="Actual Start Date" feature="Planning">&nbsp;</field:display>
 												<field:display name="Description" feature="Identification">&nbsp;</field:display>
-												<field:display name="Objective" feature="Identification">&nbsp;</field:display>
+												<field:display name="Objectives" feature="Identification">&nbsp;</field:display>
 												<field:display name="Project Id" feature="Identification">&nbsp;</field:display>
 												<field:display name="Project Title" feature="Identification">&nbsp;</field:display>
 												<field:display name="Status" feature="Identification">&nbsp;</field:display>
 												<field:display name="Team" feature="Identification">&nbsp;</field:display>
 												<field:display name="A.C. Chapter" feature="Identification">&nbsp;</field:display>
 												<field:display name="Accession Instrument" feature="Identification">&nbsp;</field:display>
-											</feature:display>
+											
 
 
 

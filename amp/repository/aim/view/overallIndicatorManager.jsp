@@ -139,7 +139,7 @@
 																				src="/TEMPLATE/ampTemplate/module/aim/images/tab-right1.gif"
 																				width="20" height="19" />
 																		</td>
-																		<feature:display name="NPD Programs" module="National Planning Dashboard">
+																		<feature:display name="NPD Dashboard" module="National Planning Dashboard">
 																		<td noWrap height=17>
 																		<c:set var="ProgramIndicators">
 																				<digi:trn key="aim:viewMultiProgramIndicators">Click here to view Multi Program Indicators</digi:trn>

@@ -15,7 +15,10 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -33,7 +36,9 @@
 <digi:trn key="aim:risk:verylow">Very Low</digi:trn>
 <digi:trn key="aim:performance:actual">Actual</digi:trn>
 <digi:trn key="aim:performance:target">Target</digi:trn>
-
+	<feature:display name="Activity" module="M&E"></feature:display>
+	<feature:display name="Dashboard" module="M&E"></feature:display>
+	<feature:display name="Admin" module="M&E"></feature:display>
 
 </div>
 
@@ -222,10 +227,14 @@
 													<br><br>
 
 													<div align="center">
+													<field:display name="Printer Friendly Button Performance" feature="Dashboard">
 													<input type="button" class="buton" value="<digi:trn key='btn:printerfriendly'>Printer Friendly</digi:trn>"
 													onclick="javascript:showPrinterFriendlyPortPerf()">
+													</field:display>
+													<field:display name="Without Baseline Button Performance" feature="Dashboard">
 													<input type="button" class="buton" value="<digi:trn key='btn:withoutBaseline'>Without Baseline</digi:trn>"
 													onclick="javascript:portPerfWithoutBaseline()">
+													</field:display>													
 													</div>
 												<% } else { %>
 
@@ -271,10 +280,11 @@
 													<br><br>
 
 													<div align="center">
-
+													<field:display name="Printer Friendly Button Risk" feature="Dashboard">
 													<input type="button" class="buton" value="<digi:trn key='btn:printerfriendly'>Printer Friendly</digi:trn>"
 
 													onclick="javascript:showPrinterFriendlyPortRisk()">
+													</field:display>
 
 													</div>
 

@@ -907,7 +907,7 @@ function disable() {
 										</td>
                                     </tr>
 									</feature:display>
-									<feature:display name="Proposed Project Cost" module="National Planning Dashboard">
+									<feature:display name="Proposed Project Cost" module="Funding">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn>
@@ -2024,8 +2024,7 @@ function disable() {
 										</td>
 									</tr>
 									</module:display>
-									<module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT">
-									<feature:display name="Related Documents" module="Document Management">
+									<feature:display name="Related Documents" module="Document">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:relatedDocuments">
@@ -2090,7 +2089,6 @@ function disable() {
 										</td>
 									</tr>
 									</feature:display>
-									</module:display>
 									<feature:display name="Executing Agency" module="Organizations">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">

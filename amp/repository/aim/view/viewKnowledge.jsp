@@ -231,8 +231,7 @@ function preview(id)
 									</TD>
 								</tr>
 							</feature:display>
-							<module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT">
-								<feature:display name="Related Documents" module="Document Management">
+								<feature:display name="Related Documents" module="Document">
 									<TR bgColor=#f4f4f2>
 										<TD vAlign="top" align="center" width="100%">
 										<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top"
@@ -349,8 +348,7 @@ function preview(id)
 										</TD>
 									</TR>
 								</feature:display>
-								<feature:display name="Web Resources"
-									module="Document Management">
+								<feature:display name="Web Resources" module="Document">
 									<TR bgColor=#f4f4f2>
 										<TD vAlign="top" align="center" width="100%">
 										<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top"
@@ -431,7 +429,6 @@ function preview(id)
 										</TD>
 									</TR>
 								</feature:display>
-							</module:display>
 
 							<c:if
 								test="${aimKnowledgeForm.managedDocuments != null && !empty aimKnowledgeForm.managedDocuments}">

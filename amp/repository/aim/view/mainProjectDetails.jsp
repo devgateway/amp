@@ -94,7 +94,7 @@
 									<digi:trn key="aim:viewDescription">View Description</digi:trn></a></div>
 									&nbsp;&nbsp;
 									</field:display>
-									<field:display name="Objective" feature="Identification">
+									<field:display name="Objectives" feature="Identification">
 									<div id="gen" title='<digi:trn key="aim:clickToViewProjectObjectives">Click here to View Project Objectives</digi:trn>'>
 									<a href="javascript:viewProjectDetails('Obj','<c:out value="${aimMainProjectDetailsForm.objectives}"/>')" 
 									class="comment">

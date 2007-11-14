@@ -575,7 +575,7 @@ function commentWin(val) {
 																			key="aim:programDescription">Description</digi:trn></b></i>:
 																		<digi:edit key="${activity.description}" /><br/>
 																		</field:display>
-																		<field:display feature="Identification" name="Objective">
+																		<field:display feature="Identification" name="Objectives">
 																		<i><b><digi:trn
 																			key="aim:programObjective">Objective</digi:trn></b></i>:
 																		<digi:edit key="${activity.objective}"/>

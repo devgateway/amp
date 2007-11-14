@@ -259,6 +259,7 @@ function closeWindow() 
 				</tr>
 				</field:display>
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
+				<field:display name="National Planning Indicator" feature="Admin">
 				<tr bgcolor=#ffffff>
 				<td height="20" align="right"><b>
 					<digi:trn key="aim:nationalplan">National Planning Indicator</digi:trn></b>&nbsp;
@@ -267,7 +268,9 @@ function closeWindow() 
 					<html:checkbox name="aimThemeForm" property="npIndicator" title="Tick to mark this indicator as an National Planning Indicator"/>
 				</td>
 				</tr>
+				</field:display>
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
+				<field:display name="Description" feature="Admin">
 				<tr bgColor=#ffffff>
 				<td height="20" align="right"><b>
 						<digi:trn key="aim:IndDescription">
@@ -278,6 +281,7 @@ function closeWindow() 
 						<html:textarea property="indicatorDescription" cols="35" rows="2" styleClass="inp-text"/>
 				</td>
 				</tr>
+				</field:display>
 				<% int calIndex = 0; %>
 				<% String calIdIndex = ""; %>
 				<c:if test="${ !empty aimThemeForm.prgIndValues}">
@@ -285,20 +289,27 @@ function closeWindow() 
 				<td bgColor=#dddddb height="25" align="center" colspan="4">
 						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class=box-border-nopadding>
 								<tr bgcolor="#003366" class="textalb">
-									<td align="center" valign="middle" width="75">
+									<field:display name="Value Type" feature="Admin" >
+									<td align="center" valign="middle" width="25%">
 										<b><font color="white"><digi:trn key="aim:actl">Actual</digi:trn>/<br><digi:trn key="aim:Plan">Planned</digi:trn></font></b>
 									</td>
-									<td align="center" valign="middle" width="120">
+									</field:display>
+									<field:display name="Value" feature="Admin">
+									<td align="center" valign="middle" width="40%">
 										<b><font color="white"><digi:trn key="aim:value">Value</digi:trn></font></b>
 									</td>
-									<td align="center" valign="middle" width="120">
+									</field:display>
+									<field:display name="Creation Date" feature="Admin">
+									<td align="center" valign="middle" width="65%">
 										<b><font color="white"><digi:trn key="aim:creationdate">Creation Date</digi:trn></font></b>
 									</td>
+									</field:display>
 								</tr>
 								<c:set var="index" value="-1"/>
 							 	<c:forEach var="prgIndValues" items="${aimThemeForm.prgIndValues}">
 										<tr>
-											<td valign="bottom">
+										<field:display name="Value Type" feature="Admin" >
+										<td align="center" valign="middle" width="25%">
 												<c:set var="index" value="${index+1}"/>
 												<html:select name="prgIndValues" indexed="true" property="valueType" styleClass="inp-text">
 													<html:option value="1"><digi:trn key="aim:mulprgmana:actual">Actual</digi:trn></html:option>	
@@ -306,10 +317,14 @@ function closeWindow() 
 													<html:option value="0"><digi:trn key="aim:mulprgmana:target">Target</digi:trn></html:option>
 												</html:select>
 											</td>
-											<td valign="bottom">
+										</field:display>
+										<field:display name="Value" feature="Admin">
+										<td align="center" valign="middle" width="40%">
 												<html:text name="prgIndValues" indexed="true" property="valAmount" size="17" styleClass="amt"/>
 											</td>
-											<td vAlign="bottom">
+										</field:display>
+										<field:display name="Creation Date" feature="Admin">
+										<td align="center" valign="middle" width="65%">
 												<table cellPadding=0 cellSpacing=0>
 													<tr>
 														<td>
@@ -324,18 +339,21 @@ function closeWindow() 
 														</td>
 													</tr>
 												</table>
-											</td>																
+											</td>
+										</field:display>																
 										</tr>	
 								</c:forEach>
 						</table>
 				</td>
 				</tr>
 				</c:if>
+				<field:display name="Add Indicator Values" feature="Admin">
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="25" align="center" colspan="4">
 						<input styleClass="dr-menu" type="button" name="addValBtn" value="<digi:trn key="aim:eddidicatoes">Add Indicator Values</digi:trn>" onclick="return addIndVal('<bean:write name="aimThemeForm" property="themeId"/>')">&nbsp;&nbsp;
 				</td>
 				</tr>
+				</field:display>
 				<tr bgcolor=#ffffff><td height="15" colspan="4"></td></tr>
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="25" align="center" colspan="4">
@@ -356,18 +374,27 @@ function closeWindow() 
 											<td width="9" height="15" bgcolor="#ffffff">
 												&nbsp;
 											</td>
+											<field:display name="Indicator Code" feature="Admin">
 											<td width="50" bgcolor="#dddddb">
 												<digi:trn key="aim:code">Code</digi:trn>
 											</td>
+											</field:display>
+											<field:display name="Indicator Name" feature="Admin">
 											<td align="left" bgcolor="#dddddb">
 												<digi:trn key="aim:name">Name</digi:trn>
 											</td>
+											</field:display>
+											<field:display name="Creation Date" feature="Admin">
 											<td align="left" width="60" bgcolor="#dddddb">
 												<digi:trn key="aim:creation">Creation</digi:trn>
 											</td>
+											</field:display>
+											<field:display name="Value" feature="Admin">
 											<td align="center" bgcolor="#dddddb">
 												<digi:trn key="aim:values">Values</digi:trn>
-											</td><%--
+											</td>
+											</field:display>
+											<%--
 											<td width="25" height="15" bgcolor="#ffffff">
 												&nbsp;
 											</td>--%>
@@ -377,32 +404,46 @@ function closeWindow() 
 														<td width="9" height="15" bgcolor="#ffffff">
 																<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
 														</td>
+														<field:display name="Indicator Code" feature="Admin">
 														<td bgcolor="#f4f4f2" width="50">
 																<bean:write name="prgIndicators" property="code"/>
 														</td>
+														</field:display>
+														<field:display name="Indicator Name" feature="Admin">
 														<td align="left" bgcolor="#f4f4f2"><b>
 																<bean:write name="prgIndicators" property="name"/></b>
 														</td>
+														</field:display>
+														<field:display name="Creation Date" feature="Admin">
 														<td align="left" width="60" bgcolor="#f4f4f2">
 																<bean:write name="prgIndicators" property="creationDate"/>
 														</td>
+														</field:display>
 														<td align="center" bgcolor="#f4f4f2">
 																<logic:notEmpty name="prgIndicators" property="prgIndicatorValues">
 																		<table width="100%" bgColor="#d7eafd" cellPadding=3 cellSpacing=1 align="center">
 																				<tr bgcolor="#66FFFF">
+																						<field:display name="Value Type" feature="Admin">	
 																						<td width="50" bgcolor="#66FFFF">
 																								<digi:trn key="aim:act">Actual</digi:trn>/<digi:trn key="aim:target">Target</digi:trn>
 																						</td>
+																						</field:display>
+																						<field:display name="Value" feature="Admin">
 																						<td align="left" bgcolor="#66FFFF">
 																								<digi:trn key="aim:value">Value</digi:trn>
 																						</td>
+																						</field:display>
+																						<field:display name="Creation Date" feature="Admin">
 																						<td align="left" width="70" bgcolor="#66FFFF">
 																								<digi:trn key="aim:date">Date</digi:trn>
 																						</td>
+																						</field:display>
 																				</tr>
 																				<logic:iterate name="prgIndicators" property="prgIndicatorValues" id="prgIndicatorValues" type="org.digijava.module.aim.helper.AmpPrgIndicatorValue">
 																						<tr bgcolor="#ffffff">
+																						<field:display name="Value Type" feature="Admin">	
 																								<td width="50" bgcolor="#f4f4f2">
+																								
 																									<c:if test="${prgIndicatorValues.valueType=='0'}">
 																											<digi:trn key="aim:target">Target</digi:trn>
 																									</c:if>
@@ -413,12 +454,17 @@ function closeWindow() 
 																										    <digi:trn key="aim:base">Base</digi:trn>
 																									</c:if>
 																								</td>
+																						</field:display>
+																						<field:display name="Value" feature="Admin">																						
 																								<td align="left" bgcolor="#f4f4f2"><b>
 																										<bean:write name="prgIndicatorValues" property="valAmount"/></b>
 																								</td>
+																						</field:display>
+																						<field:display name="Creation Date" feature="Admin">
 																								<td align="left" width="70" bgcolor="#f4f4f2">
 																										<bean:write name="prgIndicatorValues" property="creationDate"/>
 																								</td>
+																						</field:display>
 																						</tr>
 																				</logic:iterate>
 																		</table>

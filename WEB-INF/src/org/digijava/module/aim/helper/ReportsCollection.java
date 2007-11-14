@@ -12,6 +12,11 @@ public class ReportsCollection implements Comparable {
 					 report = null;
 					 teamView = false;
 		  }
+                  public ReportsCollection(AmpReports report,boolean teamView) {
+                                        this.report = report;
+                                        this.teamView =teamView;
+                 }
+
 
 		  public void setReport(AmpReports report) {
 					 this.report = report;
@@ -32,5 +37,5 @@ public class ReportsCollection implements Comparable {
 			ReportsCollection rc = (ReportsCollection) obj;
 			return report.compareTo(rc.getReport());
 		}
-		  
+
 }

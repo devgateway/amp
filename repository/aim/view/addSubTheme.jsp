@@ -148,14 +148,14 @@
 											</td></tr>
 											<tr><td>
 														<logic:notEmpty name="aimThemeForm" property="subPrograms">
-														<field:display name="Sub Program Level 1" feature="NPD Programs"> </field:display>
-														<field:display name="Sub Program Level 2" feature="NPD Programs"> </field:display>
-														<field:display name="Sub Program Level 3" feature="NPD Programs"> </field:display>
-														<field:display name="Sub Program Level 4" feature="NPD Programs"> </field:display>
-														<field:display name="Sub Program Level 5" feature="NPD Programs"> </field:display>
-														<field:display name="Sub Program Level 6" feature="NPD Programs"> </field:display>
-														<field:display name="Sub Program Level 7" feature="NPD Programs"> </field:display>
-														<field:display name="Sub Program Level 8" feature="NPD Programs"> </field:display>
+														<field:display name="Sub Program Level 1" feature="NPD Dashboard"> </field:display>
+														<field:display name="Sub Program Level 2" feature="NPD Dashboard"> </field:display>
+														<field:display name="Sub Program Level 3" feature="NPD Dashboard"> </field:display>
+														<field:display name="Sub Program Level 4" feature="NPD Dashboard"> </field:display>
+														<field:display name="Sub Program Level 5" feature="NPD Dashboard"> </field:display>
+														<field:display name="Sub Program Level 6" feature="NPD Dashboard"> </field:display>
+														<field:display name="Sub Program Level 7" feature="NPD Dashboard"> </field:display>
+														<field:display name="Sub Program Level 8" feature="NPD Dashboard"> </field:display>
 														<%
 								                          ServletContext x=session.getServletContext();
 								                          	org.dgfoundation.amp.visibility.AmpTreeVisibility atv=(org.dgfoundation.amp.visibility.AmpTreeVisibility)x.getAttribute("ampTreeVisibility");

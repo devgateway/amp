@@ -136,15 +136,13 @@
 <html:hidden property="indicatorValId" />
 <html:hidden property="activityId" />
 <input type="hidden" name="edit" value="true">
-	<feature:display name="M & E" module="Trend Analysis and Forecasting"></feature:display>
-	<field:display name="Indicator Base Value" feature="M & E"></field:display>
-	<field:display name="Indicator Current Value" feature="M & E"></field:display>
-	<field:display name="Indicator Target Value" feature="M & E"></field:display>
-	<field:display name="Indicator Description" feature="M & E"></field:display>
-	<field:display name="Indicator ID" feature="M & E"></field:display>
-	<field:display name="Indicator Name" feature="M & E"></field:display>
 
 
+	<feature:display name="Activity" module="M&E"></feature:display>
+	<feature:display name="Dashboard" module="M&E"></feature:display>
+	<feature:display name="Admin" module="M&E"></feature:display>
+	
+	
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
@@ -351,14 +349,14 @@ ${fn:replace(message,quote,escapedQuote)}
 															<img src= "../ampTemplate/images/arrow_right.gif" border=0>
 														</digi:link>
 													</c:if>&nbsp;&nbsp;&nbsp;<b>
-													<field:display name="Indicator Name" feature="M & E">
+													<field:display name="Indicator Name" feature="Activity">
 														<bean:define id="indName">
 															<bean:write name="indicator" property="indicatorName"/>
 														</bean:define>
 														<digi:trn key="<%=indName%>"><%=indName%></digi:trn></b> -
 													</field:display>
 
-													<field:display name="Indicator ID" feature="M & E">
+													<field:display name="Indicator ID" feature="Activity">
 														<bean:write name="indicator" property="indicatorCode" />
 													</field:display>
 
@@ -381,6 +379,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														</field:display>
 														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='no'}">
 															<tr>
+																<field:display name="Base Value" feature="Activity"></field:display>
 																<td><b>
 																	<digi:trn key="aim:meBaseValue">Base Value</digi:trn></b>
 																</td>
@@ -388,6 +387,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<bean:write name="indicator" property="baseVal"/>
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
+																<field:display name="Date Base Value" feature="Activity"></field:display>
 																<td align="right">
 																	<digi:trn key="aim:meDate">Date</digi:trn>
 																</td>
@@ -395,6 +395,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<bean:write name="indicator" property="baseValDate" />
 																</td>
 															</tr>
+															<field:display name="Comments Base Value" feature="Activity"></field:display>
 															<tr>
 																<td><digi:trn key="aim:meBaseValueComments">Comments</digi:trn>
 																</td>
@@ -403,6 +404,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</td>
 															</tr>
 															<tr>
+																<field:display name="Target Value" feature="Activity"></field:display>
 																<td><b>
 																	<digi:trn key="aim:meTargetValue">Target Value</digi:trn></b>
 																</td>
@@ -410,6 +412,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<bean:write name="indicator" property="targetVal" />
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
+																<field:display name="Date Target Value" feature="Activity"></field:display>
 																<td align="right">
 																	<digi:trn key="aim:meDate">Date</digi:trn>
 																</td>
@@ -417,6 +420,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<bean:write name="indicator" property="targetValDate" />
 																</td>
 															</tr>
+															<field:display name="Comments Target Value" feature="Activity"></field:display>
 															<tr>
 																<td><digi:trn key="aim:meTargetValComments">Comments</digi:trn>
 																</td>
@@ -424,7 +428,9 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<bean:write name="indicator" property="targetValComments" />
 																</td>
 															</tr>
+															
 															<tr>
+																<field:display name="Revised Target Value" feature="Activity"></field:display>
 																<td><b>
 																	<digi:trn key="aim:meRevisedTargetValue">Revised Target Value</digi:trn></b>
 																</td>
@@ -432,6 +438,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<bean:write name="indicator" property="revisedTargetVal" />
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
+																<field:display name="Date Revised Target Value" feature="Activity"></field:display>
 																<td align="right">
 																	<digi:trn key="aim:meDate">Date</digi:trn>
 																</td>
@@ -439,7 +446,9 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<bean:write name="indicator" property="revisedTargetValDate" />
 																</td>
 															</tr>
+															<field:display name="Comments Revised Target Value" feature="Activity"></field:display>
 															<tr>
+															
 																<td><digi:trn key="aim:meRevisedTargetValComments">Comments</digi:trn>
 																</td>
 																<td colspan="4">
@@ -450,6 +459,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='yes'}">
 															<tr>
+																<field:display name="Base Value" feature="Activity"></field:display>
 																<td><b>
 																	<digi:trn key="aim:meBaseValue">Base Value</digi:trn></b>
 																	<font color="red">*</font></td>
@@ -461,6 +471,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	-->
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
+																<field:display name="Date Base Value" feature="Activity"></field:display>
 																<td align="right">
 																	<digi:trn key="aim:meDate">Date</digi:trn>
 																	<font color="red">*</font>
@@ -477,6 +488,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	</a>
 																</td>
 															</tr>
+															<field:display name="Comments Base Value" feature="Activity"></field:display>
 															<tr>
 																<td><digi:trn key="aim:meBaseValueComments">Comments</digi:trn>
 																</td>
@@ -486,11 +498,13 @@ ${fn:replace(message,quote,escapedQuote)}
 																</td>
 															</tr>
 															<tr>
+															<field:display name="Target Value" feature="Activity"></field:display>
 																<td><b>
 																	<digi:trn key="aim:meTargetValue">Target Value</digi:trn>
 																	</b><font color="red">*</font>
 																</td>
 																<c:if test="${indicator.targetValDate == null}">
+																
 																<td>
 																<html:text property="targetVal" size="10" maxlength="10"/>
 																	<!-- <input type="text" name="targetVal"
@@ -627,6 +641,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														<logic:notEmpty name="indicator" property="baseValDate">
 														--%>
 															<tr>
+																<field:display name="Current Value" feature="Activity">
 																<td><b>
 																	<digi:trn key="aim:meCurrentValue">Current Value</digi:trn>
 																	
@@ -639,6 +654,8 @@ ${fn:replace(message,quote,escapedQuote)}
 																-->
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
+																</field:display>
+																<field:display name="Date Current Value" feature="Activity">
 																<td align="right">
 																	<digi:trn key="aim:meDate">Date</digi:trn>
 																	
@@ -655,7 +672,9 @@ ${fn:replace(message,quote,escapedQuote)}
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
+																</field:display>
 															</tr>
+															<field:display name="Comments Current Value" feature="Activity">
 															<tr>
 																<td><digi:trn key="aim:meCurrentValComments">Comments</digi:trn>
 																</td>
@@ -667,6 +686,8 @@ ${fn:replace(message,quote,escapedQuote)}
 																 -->
 																</td>
 															</tr>
+															</field:display>
+															<field:display name="Risk" feature="Activity">
 														<tr>
 															<%--
 															<td><b>
@@ -686,6 +707,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</html:select>
 															</td>
 														</tr>
+														</field:display>
 														<tr><td>&nbsp;</td></tr>
 														<tr>
 															<td>&nbsp;</td>
@@ -710,11 +732,13 @@ ${fn:replace(message,quote,escapedQuote)}
 													&nbsp;
 												</td>
 											</tr>
+											<field:display name="Add Indicator Button" feature="Activity">
 											<tr>
 												<td width="32%" align="center" colspan="2">
 													<input type="button" value="<digi:trn key='btn:addIndicator'>Add Indicator</digi:trn>"  class="dr-menu" onclick="addIndicator()">
 												</td>
 											</tr>
+											</field:display>
 											<tr>
 												<td width="32%" align="center" colspan="2">
 													&nbsp;

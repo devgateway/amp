@@ -125,11 +125,11 @@
                           <bean:define id="crtVisibleProgram" value="0"/>
                           <bean:define id="nxtVisibleProgram" value="0"/>
                           
-                          <field:display name="Sub Program Level ${varSt.count}" feature="NPD Programs">
+                          <field:display name="Sub Program Level ${varSt.count}" feature="NPD Dashboard">
                           	<bean:define id="crtVisibleProgram" value="1"/>
                           </field:display>
                           <logic:lessEqual name="varSt" property="count" value="7">
-                              <field:display name="Sub Program Level ${varSt.count+1}" feature="NPD Programs">
+                              <field:display name="Sub Program Level ${varSt.count+1}" feature="NPD Dashboard">
                           	  </field:display>
                           </logic:lessEqual>
                           <%

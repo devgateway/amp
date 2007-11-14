@@ -600,7 +600,7 @@ ${fn:replace(message,quote,escapedQuote)}
 							<tr><td width="100%" bgcolor="#f4f4f2">
 
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
-							<feature:display name="Related Documents" module="Document Management">
+							<feature:display name="Related Documents" module="Document">
 
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 
@@ -616,7 +616,7 @@ ${fn:replace(message,quote,escapedQuote)}
 										&nbsp;
 
 									</td></tr>
-							<feature:display name="Web Resources" module="Document Management">
+							<feature:display name="Web Resources" module="Document">
 
 							<jsp:include page="addActivityStep6WebResources.jsp"/>
 							</feature:display>

@@ -86,11 +86,11 @@
                                                         </c:if>
                                                         <tr>
                                                           <td>
-                                                          <field:display name="Add Program Button" feature="NPD Programs">
+                                                          <field:display name="Add Program Button" feature="NPD Dashboard">
                                                             <input type="button" value='<digi:trn key="btn:addPrograms">Add Programs</digi:trn>' onclick="addProgram();" class="buton">
                                                             </field:display>
                                                             <c:if test="${!empty aimEditActivityForm.actPrograms}">
-                                                            <field:display name="Remove Program Button" feature="NPD Programs">
+                                                            <field:display name="Remove Program Button" feature="NPD Dashboard">
                                                               <input type="button" value='<digi:trn key="btn:removeProgram">Remove program</digi:trn>' onclick="remProgram();" class="buton">
                                                               </field:display>
                                                             </c:if>

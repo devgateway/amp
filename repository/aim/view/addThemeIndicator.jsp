@@ -5,6 +5,10 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
@@ -170,7 +174,9 @@ function closeWindow() 
   	}
 	-->
 </script>
-
+	<feature:display name="Activity" module="M&E"></feature:display>
+	<feature:display name="Dashboard" module="M&E"></feature:display>
+	<feature:display name="Admin" module="M&E"></feature:display>
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 <digi:form action="/addThemeIndicator.do" method="post">
 <digi:context name="digiContext" property="context"/>
@@ -183,6 +189,7 @@ function closeWindow() 
 				</tr>
 				<tr bgColor=#ffffff><td height="10" colspan="4"></td></tr>
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
+				<field:display name="Indicator Name" feature="Admin"></field:display>
 				<tr bgColor=#ffffff>
 				<td height="20" align="right">
 						<b><digi:trn key="aim:indname">Indicator Name</digi:trn></b><font color="red">*</font>&nbsp;
@@ -192,6 +199,7 @@ function closeWindow() 
 				</td>
 				</tr>
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
+				<field:display name="Indicator Code" feature="Admin"></field:display>
 				<tr bgColor=#ffffff>
 				<td height="20" align="right">
 						<b><digi:trn key="aim:indcode">Indicator Code</digi:trn></b><font color="red">*</font>&nbsp;
@@ -201,6 +209,7 @@ function closeWindow() 
 				</td>
 				</tr>
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
+				<field:display name="Indicator Type" feature="Admin"></field:display>
 				<tr bgColor=#ffffff>
 				<td height="20" align="right">
 						<b><digi:trn key="aim:indtype">Indicator Type</digi:trn></b><font color="red">*</font>&nbsp;
@@ -213,6 +222,7 @@ function closeWindow() 
 				</td>
 				</tr>
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
+				<field:display name="Creation Date" feature="Admin"></field:display>
 				<tr bgColor=#ffffff>
 				<td height="20" align="right">
 						<b><digi:trn key="aim:cratedate">Creation Date</digi:trn></b><font color="red">*</font>&nbsp;
@@ -233,6 +243,7 @@ function closeWindow() 
 				</td>
 				</tr>
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
+				<field:display name="Category" feature="Admin">
 				<tr bgcolor=#ffffff>
 				<td height="20" align="right">
 					<b><digi:trn key="aim:crategory">Category</digi:trn></b>&nbsp;
@@ -246,6 +257,7 @@ function closeWindow() 
 					</html:select>&nbsp;&nbsp;
 				</td>
 				</tr>
+				</field:display>
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
 				<tr bgcolor=#ffffff>
 				<td height="20" align="right"><b>

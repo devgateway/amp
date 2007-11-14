@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.digijava.module.aim.action;
 
@@ -36,21 +36,22 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.aim.exception.*;
 
 /**
  * @author mihai
- * 
+ *
  */
 public class EditEUActivity extends MultiAction {
 
 	/**
-	 * 
+	 *
 	 */
 	public EditEUActivity() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public boolean hasUnselectedItems(List items) {
 		Iterator i=items.iterator();
 		while (i.hasNext()) {
@@ -59,8 +60,8 @@ public class EditEUActivity extends MultiAction {
 		}
 		return false;
 	}
-	
-	
+
+
 	public boolean hasInvalidAmounts(List items) {
 		Iterator i=items.iterator();
 		while (i.hasNext()) {
@@ -76,7 +77,7 @@ public class EditEUActivity extends MultiAction {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.dgfoundation.amp.utils.MultiAction#modePrepare(org.apache.struts.action.ActionMapping,
 	 *      org.apache.struts.action.ActionForm,
 	 *      javax.servlet.http.HttpServletRequest,
@@ -90,50 +91,50 @@ public class EditEUActivity extends MultiAction {
 		eaf.setDonors(DbUtil.getAllOrganisation());
 		eaf.setFinTypes(DbUtil.getAllAssistanceTypesFromCM());
 		eaf.setFinInstrs(DbUtil.getAllFinancingInstruments());
-		
+
 		eaf.getContrAmountList().clear();
 		eaf.getContrCurrIdList().clear();
 		eaf.getContrDonorIdList().clear();
 		eaf.getContrFinInstrIdList().clear();
 		eaf.getContrFinTypeIdList().clear();
-		
+
 		if(eaf.getContrAmount()!=null) {
 			eaf.getContrAmountList().addAll(Arrays.asList(eaf.getContrAmount()));
 			eaf.getContrCurrIdList().addAll(Arrays.asList(eaf.getContrCurrId()));
 			eaf.getContrDonorIdList().addAll(Arrays.asList(eaf.getContrDonorId()));
-			eaf.getContrFinInstrIdList().addAll(Arrays.asList(eaf.getContrFinInstrId()));		
+			eaf.getContrFinInstrIdList().addAll(Arrays.asList(eaf.getContrFinInstrId()));
 			eaf.getContrFinTypeIdList().addAll(Arrays.asList(eaf.getContrFinTypeId()));
 		}
-		
+
 
 		return modeSelect(mapping, form, request, response);
 	}
 
-	
+
 	public ActionForward modeDelete(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
+
 		HttpSession session=request.getSession();
 		EditActivityForm eaf=(EditActivityForm) session.getAttribute("eaf");
 		Integer IndexId=new Integer(request.getParameter("indexId"));
 		eaf.getCosts().remove(IndexId.intValue());
-		
+
 		request.setAttribute("close", "close");
 		return modeFinalize(mapping, form, request, response);
 	}
-	
-	
+
+
 	public ActionForward modeEdit(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
+
 		HttpSession session=request.getSession();
 
 		EditActivityForm eaf=(EditActivityForm) session.getAttribute("eaf");
-		EUActivityForm euaf = (EUActivityForm) form;		
-		
+		EUActivityForm euaf = (EUActivityForm) form;
+
 		Integer IndexId=new Integer(request.getParameter("indexId"));
 		euaf.setEditingIndexId(IndexId);
-		
+
 		EUActivity element=(EUActivity) eaf.getCosts().get(IndexId.intValue());
 				euaf.setId(element.getId());
 				euaf.setAssumptions(element.getAssumptions());
@@ -144,7 +145,7 @@ public class EditEUActivity extends MultiAction {
 				euaf.setTotalCost(element.getTotalCost().toString());
 				euaf.setTotalCostCurrencyId(element.getTotalCostCurrency().getAmpCurrencyId());
 				euaf.setDueDate(DateTimeUtil.parseDateForPicker2(element.getDueDate()));
-				
+
 				euaf.getContrAmountList().clear();
 				euaf.getContrCurrIdList().clear();
 				euaf.getContrDonorIdList().clear();
@@ -161,12 +162,12 @@ public class EditEUActivity extends MultiAction {
 				}
 		return modeFinalize(mapping,form,request,response);
 	}
-	
-	
-	
+
+
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.dgfoundation.amp.utils.MultiAction#modeSelect(org.apache.struts.action.ActionMapping,
 	 *      org.apache.struts.action.ActionForm,
 	 *      javax.servlet.http.HttpServletRequest,
@@ -176,17 +177,17 @@ public class EditEUActivity extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		if (request.getParameter("editEU") != null)
-			return modeEdit(mapping, form, request, response);	
+			return modeEdit(mapping, form, request, response);
 		if (request.getParameter("new") != null)
 			return modeNew(mapping, form, request, response);
 		if (request.getParameter("save") != null)
 			return modeValidateSave(mapping, form, request, response);
 		if (request.getParameter("addFields") != null)
-			return modeAddFields(mapping, form, request, response);		
+			return modeAddFields(mapping, form, request, response);
 		if (request.getParameter("removeFields") != null)
-			return modeRemoveFields(mapping, form, request, response);		
+			return modeRemoveFields(mapping, form, request, response);
 		if (request.getParameter("deleteEU") != null)
-			return modeDelete(mapping, form, request, response);				
+			return modeDelete(mapping, form, request, response);
 		return modeFinalize(mapping, form, request, response);
 	}
 
@@ -201,29 +202,68 @@ public class EditEUActivity extends MultiAction {
 		eaf.setTotalCostCurrencyId(currencyId);
 		eaf.getContrCurrIdList().set(0,currencyId);
 		eaf.getContrDonorIdList().set(0,new Long(11));
-	
+
 		return modeFinalize(mapping, form, request, response);
 	}
 
 	public ActionForward modeValidateSave(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
+                      HttpSession session=request.getSession();
 		ActionErrors errors = new ActionErrors();
+                TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		Long currencyId = tm.getAppSettings().getCurrencyId();
+                String defaultCurCode="";
+                String defaultCurName="";
+                if(currencyId!=null){
+                  AmpCurrency defcurr=CurrencyUtil.getAmpcurrency(currencyId);
+                  defaultCurCode=defcurr.getCurrencyCode();
+                  defaultCurName=defcurr.getCurrencyName();
+                }
 		EUActivityForm eaf = (EUActivityForm) form;
+                Long totalCostCurrId=eaf.getTotalCostCurrencyId();
+                AmpCurrency  totalCostCurr=CurrencyUtil.getAmpcurrency(totalCostCurrId);
+                double totalCostExRate = CurrencyUtil.getExchangeRate(
+                          totalCostCurr.getCurrencyCode());
+                if(totalCostExRate==1.0&&!totalCostCurr.getCurrencyCode().equals(defaultCurCode)){
+                  errors.add("title", new ActionError(
+                      "error.aim.addActivity.noExchangeRateIsDefined",
+                      totalCostCurr.getCurrencyName(), defaultCurName));
+                }
+                   else{
+                     Object[] currencies = eaf.getContrCurrId();
+                     if (currencies != null) {
+                       for (int i = 0; i < currencies.length; i++) {
+                         Long id = Long.parseLong( (String) currencies[i]);
+                         AmpCurrency curr = CurrencyUtil.getAmpcurrency(id);
+                         String currCode = curr.getCurrencyCode();
+                         double exchangeRate = CurrencyUtil.getExchangeRate(
+                             currCode);
+                         if (exchangeRate == 1.0 &&
+                             !currCode.equals(defaultCurCode)) {
+                           errors.add("title", new ActionError(
+                               "error.aim.addActivity.noExchangeRateIsDefined",
+                               curr.getCurrencyName(), defaultCurName));
+                           break;
+                         }
+
+                       }
+                     }
+                   }
 		try {
 			Double.parseDouble(eaf.getTotalCost());
-		} catch (NumberFormatException e) {			
+		} catch (NumberFormatException e) {
 			errors.add("title", new ActionError(
-					"error.aim.euactivity.invalidAmountFormat"));						
+					"error.aim.euactivity.invalidAmountFormat"));
 		}
-		
+
 		try {
 			DateTimeUtil.parseDateForPicker(eaf.getDueDate());
-		} catch (ParseException e) {			
+		} catch (ParseException e) {
 			errors.add("title", new ActionError(
-					"error.aim.euactivity.dueDate"));						
+					"error.aim.euactivity.dueDate"));
 		}
-		
+
 		if(hasInvalidAmounts(eaf.getContrAmountList())) errors.add("title", new ActionError(
 		"error.aim.euactivity.invalidAmountFormat"));
 		if(hasUnselectedItems(eaf.getContrDonorIdList())) errors.add("title", new ActionError(
@@ -234,16 +274,18 @@ public class EditEUActivity extends MultiAction {
 		"error.aim.euactivity.contrFinInstr"));
 		if(hasUnselectedItems(eaf.getContrFinTypeIdList())) errors.add("title", new ActionError(
 		"error.aim.euactivity.contrFinType"));
-		
+
+
+
 		saveErrors(request, errors);
-		
-		if(!errors.isEmpty()) return modeFinalize(mapping, form, request, response); 
-		
+
+		if(!errors.isEmpty()) return modeFinalize(mapping, form, request, response);
+
 		return modeSave(mapping, form, request, response);
 
 	}
 
-	
+
 	public ActionForward modeFinalize(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 	throws Exception {
@@ -255,7 +297,7 @@ public class EditEUActivity extends MultiAction {
 		eaf.setContrFinTypeId(eaf.getContrFinTypeIdList().toArray());
 		return mapping.findForward("forward");
 	}
-	
+
 	public ActionForward modeAddFields(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -263,13 +305,13 @@ public class EditEUActivity extends MultiAction {
 		HttpSession session=request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		Long currencyId = tm.getAppSettings().getCurrencyId();
-	
+
 		eaf.getContrAmountList().add(new String("Amount"));
 		eaf.getContrCurrIdList().add(currencyId);
-		eaf.getContrDonorIdList().add(new Long(11));		
+		eaf.getContrDonorIdList().add(new Long(11));
 		eaf.getContrFinInstrIdList().add(new String("-1"));
 		eaf.getContrFinTypeIdList().add(new String("-1"));
-		
+
 		return modeFinalize(mapping, form, 			request, response);
 	}
 
@@ -284,7 +326,7 @@ public class EditEUActivity extends MultiAction {
 			eaf.getContrFinInstrIdList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
 			eaf.getContrFinTypeIdList().set(Integer.parseInt(eaf.getDeleteContrib()[i]),null);
 		}
-		
+
 		for(int i=0;i<eaf.getContrAmountList().size();i++) {
 			if(eaf.getContrAmountList().get(i)==null) {
 				eaf.getContrAmountList().remove(i);
@@ -294,12 +336,12 @@ public class EditEUActivity extends MultiAction {
 				eaf.getContrFinTypeIdList().remove(i);
 			}
 		}
-		
-		
+
+
 		return modeFinalize(mapping, form, request, response);
 	}
 
-	
+
 	public ActionForward modeSave(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -309,13 +351,13 @@ public class EditEUActivity extends MultiAction {
 		EUActivityForm euaf = (EUActivityForm) form;
 		EditActivityForm eaf=(EditActivityForm) httpSess.getAttribute("eaf");
 		EUActivity eua =null ;
-		
+
 		eua=new EUActivity();
-		if(euaf.getEditingIndexId()!=null) 
-			eaf.getCosts().set(euaf.getEditingIndexId().intValue(),eua); 
-		
-		
-		
+		if(euaf.getEditingIndexId()!=null)
+			eaf.getCosts().set(euaf.getEditingIndexId().intValue(),eua);
+
+
+
 		eua.setAssumptions(euaf.getAssumptions());
 		eua.setDueDate(DateTimeUtil.parseDateForPicker(euaf.getDueDate()));
 		eua.setInputs(euaf.getInputs());
@@ -326,13 +368,13 @@ public class EditEUActivity extends MultiAction {
 		eua.setTotalCostCurrency((AmpCurrency) sess.load(AmpCurrency.class, euaf
 				.getTotalCostCurrencyId()));
 		eua.setTransactionDate(new Date(System.currentTimeMillis()));
-		
+
 		// create the contribution objects:
 		eua.getContributions().clear();
 		for (int i = 0; i < euaf.getContrAmountList().size(); i++) {
 			Long financingInstrumentId	= new Long ( (String)euaf.getContrFinInstrIdList().get(i) );
 			Long typeOfAssistanceId		= new Long( (String) euaf.getContrFinTypeIdList().get(i) );
-			
+
 			EUActivityContribution eac=new EUActivityContribution();
 			eac.setEuActivity(eua);
 			eac.setAmount(new Double((String) euaf.getContrAmountList().get(i)));
@@ -342,14 +384,14 @@ public class EditEUActivity extends MultiAction {
 			eac.setFinancingInstr( CategoryManagerUtil.getAmpCategoryValueFromDb(financingInstrumentId) );
 			eac.setFinancingTypeCategVal( CategoryManagerUtil.getAmpCategoryValueFromDb(typeOfAssistanceId) );
 			eac.setTransactionDate(new Date(System.currentTimeMillis()));
-			
+
 			eua.getContributions().add(eac);
 		}
-		
-		
+
+
 		if(eaf.getCosts()==null) eaf.setCosts(new ArrayList());
 		if(euaf.getEditingIndexId()==null) eaf.getCosts().add(eua);
-			
+
 		sess.close();
 		request.setAttribute("close", "close");
 		return modeFinalize(mapping, form, request, response);

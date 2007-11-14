@@ -20,13 +20,14 @@ import org.digijava.module.aim.util.TeamUtil;
 public class GetTeamReports extends Action {
 
 	private static Logger logger = Logger.getLogger(GetTeamReports.class);
+        private final static int FIRST_PAGE	= 1;
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
 
 		logger.debug("In get reports activities");
-		
+
 		boolean permitted = false;
 		HttpSession session = request.getSession();
 		if (session.getAttribute("ampAdmin") != null) {
@@ -37,18 +38,23 @@ public class GetTeamReports extends Action {
 				if (session.getAttribute("teamLeadFlag") != null) {
 					key = (String) session.getAttribute("teamLeadFlag");
 					if (key.equalsIgnoreCase("true")) {
-						permitted = true;	
+						permitted = true;
 					}
 				}
 			}
 		}
 		if (!permitted) {
 			return mapping.findForward("index");
-		}		
+		}
 
 		ReportsForm raForm = (ReportsForm) form;
+                if (raForm.getCurrentPage() == 0) {
+                  raForm.setCurrentPage(FIRST_PAGE);
+                }
+
 
 		Long id = null;
+                int defReportsPerPage=0;
 
 		if (request.getParameter("id") != null) {
 			id = new Long(Long.parseLong(request.getParameter("id")));
@@ -57,11 +63,31 @@ public class GetTeamReports extends Action {
 		} else if (session.getAttribute("currentMember") != null) {
 			TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 			id = tm.getTeamId();
+                        if(tm.getAppSettings()!=null&&tm.getAppSettings().getDefReportsPerPage()!=0){
+                        defReportsPerPage=tm.getAppSettings().getDefReportsPerPage();
+
+                        }
 		}
 
 		if (id != null) {
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(id);
-			Collection col = TeamUtil.getTeamReportsCollection(id);
+                        Double totalPages=null;
+                        Collection col =null;
+                        if(defReportsPerPage!=0){
+                          int curPage=raForm.getCurrentPage()-1;
+                          col= TeamUtil.getTeamReportsCollection(id,curPage*defReportsPerPage,defReportsPerPage);
+                          int size=TeamUtil.getTeamReportsCollectionSize(id);
+                          totalPages=Math.ceil(1.0*size/defReportsPerPage);
+
+                        }
+                        else{
+                           col= TeamUtil.getTeamReportsCollection(id);
+                           totalPages=new Double(FIRST_PAGE);
+                        }
+
+
+
+                        raForm.setTotalPages(totalPages.intValue());
 			raForm.setReports(col);
 			raForm.setTeamId(id);
 			raForm.setTeamName(ampTeam.getName());

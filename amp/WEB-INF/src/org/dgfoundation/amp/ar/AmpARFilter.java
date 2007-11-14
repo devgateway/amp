@@ -249,6 +249,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	/**
 	 * @return Returns the ampTeams.
 	 */
+	@PropertyListableIgnore
 	public Set getAmpTeams() {
 		return ampTeams;
 	}

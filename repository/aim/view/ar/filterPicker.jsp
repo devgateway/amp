@@ -6,6 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <bean:define id="reportMeta" name="reportMeta"
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
@@ -159,23 +162,32 @@
 			</td>
 		</tr>
 </logic:notEqual>
-	<tr>
-		<td colspan="4"><digi:trn key="rep:filter:govAppProc"> Government Approval Procedures </digi:trn></td>
-		</tr>
-	<tr>
-		<td colspan="4" valign="top" align="left">
-					<digi:trn key="rep:filter:yes">Yes</digi:trn><html:radio property="governmentApprovalProcedures" value="true"/> &nbsp;&nbsp;<digi:trn key="rep:filter:no"> No</digi:trn><html:radio property="governmentApprovalProcedures" value="false"/>
-									</td></tr>
 
-	<tr>
-		<td colspan="4"><digi:trn key="rep:filter:jointCriteria"> Joint Criteria</digi:trn></td>
+	<field:display name="Government Approval Procedures" feature="Budget">
+		<tr>
+			<td colspan="4">
+				<digi:trn key="rep:filter:govAppProc"> Government Approval Procedures </digi:trn>
+			</td>
 		</tr>
-	<tr>
-		<td colspan="4" valign="top" align="left">
-					<digi:trn key="rep:filter:yes">Yes</digi:trn><html:radio property="jointCriteria" value="true"/> &nbsp;&nbsp;<digi:trn key="rep:filter:no"> No</digi:trn><html:radio property="jointCriteria" value="false"/>
-		</td>
-	</tr>
+		<tr>
+			<td colspan="4" valign="top" align="left">
+				<digi:trn key="rep:filter:yes">Yes</digi:trn><html:radio property="governmentApprovalProcedures" value="true"/> &nbsp;&nbsp;<digi:trn key="rep:filter:no"> No</digi:trn><html:radio property="governmentApprovalProcedures" value="false"/>
+			</td>
+		</tr>
+	</field:display>
 
+	<field:display name="Joint Criteria" feature="Budget">
+		<tr>
+			<td colspan="4">
+				<digi:trn key="rep:filter:jointCriteria"> Joint Criteria</digi:trn>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4" valign="top" align="left">
+				<digi:trn key="rep:filter:yes">Yes</digi:trn><html:radio property="jointCriteria" value="true"/> &nbsp;&nbsp;<digi:trn key="rep:filter:no"> No</digi:trn><html:radio property="jointCriteria" value="false"/>
+			</td>
+		</tr>
+	</field:display>
 	<tr>
 	<td>&nbsp;</td>
 	</tr>

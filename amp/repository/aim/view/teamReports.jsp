@@ -183,6 +183,7 @@
 														<td>
 															<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
 															bgcolor="#dddddd">
+
 															<logic:iterate name="aimTeamReportsForm" property="reports" id="reports"
 															type="org.digijava.module.aim.helper.ReportsCollection">
 																<bean:define id="ampReports" name="reports" property="report"
@@ -241,8 +242,33 @@
 																</tr>
 															</logic:iterate>
 															</table>
-														</td>
+                                                                                                                        	</td>
 													</tr>
+                                                                                                        <tr>
+                                                                                                        <td>
+                                                                                                <table>
+                                                                                                <tr>
+                                                                                                  <c:forEach var="page" begin="1" end="${aimTeamReportsForm.totalPages}">
+                                                                                                    <td>
+                                                                                                    <c:if test="${aimTeamReportsForm.currentPage==page}">
+
+                                                                                                         <c:out value="${page}"/>
+
+                                                                                                    </c:if>
+                                                                                                      <c:if test="${aimTeamReportsForm.currentPage!=page}">
+                                                                                                     <digi:link href="/teamReportList.do?currentPage=${page}" >
+                                                                                                         <c:out value="${page}"/>
+                                                                                                          </digi:link>
+                                                                                                          </c:if>
+
+                                                                                                          </td>
+                                                                                                        </c:forEach>
+
+                                                                                                        </tr>
+                                                                                                </table>
+                                                                                                </td>
+                                                                                                </tr>
+
 													<tr>
 														<td align="left">
 															<table cellspacing="5" width="100%">

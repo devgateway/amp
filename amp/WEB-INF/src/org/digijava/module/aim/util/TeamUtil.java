@@ -1717,6 +1717,50 @@ public class TeamUtil {
         }
         return col;
     }
+    public static List getTeamReportsCollection(Long teamId,int currentPage, int recordPerPage) {
+        Session session = null;
+        List col = new ArrayList<ReportsCollection>();
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select new "+ReportsCollection.class.getName()+"(r, tr.teamView) from "
+                + AmpTeamReports.class.getName()
+                + " tr inner join tr.report r where (tr.team=:teamId) order by tr.report limit "+currentPage+", "+recordPerPage;
+            Query qry = session.createQuery(queryString);
+            qry.setLong("teamId", teamId);
+
+            col=qry.list();
+
+
+        } catch(Exception e) {
+            logger.debug("Exception from getTeamReportsCollection");
+            logger.debug(e.toString());
+            throw new RuntimeException(e);
+        }
+        return col;
+    }
+
+    public static int getTeamReportsCollectionSize(Long teamId) {
+       Session session = null;
+       List col =new ArrayList();
+       int size=0;
+       try {
+           session = PersistenceManager.getRequestDBSession();
+           String queryString = "select r, tr.teamView from "
+               + AmpTeamReports.class.getName()
+               + " tr inner join tr.report r where (tr.team=:teamId) order by tr.report";
+           Query qry = session.createQuery(queryString);
+           qry.setLong("teamId", teamId);
+           col = qry.list();
+           size=col.size();
+       } catch(Exception e) {
+           logger.debug("Exception from getTeamReportsCollection");
+           logger.debug(e.toString());
+           throw new RuntimeException(e);
+       }
+       return size;
+   }
+
+
 
     public static Collection getAllTeamReports(Long teamId) {
         Session session = null;

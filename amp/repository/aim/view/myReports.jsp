@@ -80,7 +80,7 @@ return false;
 
 					<logic:iterate name="myReports" id="report" scope="session"
 
-					type="org.digijava.module.aim.dbentity.AmpReports" length="myReportsPerPage">
+					type="org.digijava.module.aim.dbentity.AmpReports" length="5">
 
 
 

@@ -234,6 +234,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<logic:notEmpty name="aimEditActivityForm" property="costs">
 																<bean:define id="costs" name="aimEditActivityForm" property="costs" toScope="request"/>
 																<bean:define id="mode" value="form" type="java.lang.String" toScope="request"/>
+                                                                                                                                <digi:trn key="aim:amountsinthousands">Amounts in thousands (000) -</digi:trn><c:out value="${aimEditActivityForm.currCode}"/>
 																<jsp:include page="viewCostsSummary.jsp"/>
 				                                               </logic:notEmpty>
 

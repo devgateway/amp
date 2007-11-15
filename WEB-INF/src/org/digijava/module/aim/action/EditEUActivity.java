@@ -223,9 +223,10 @@ public class EditEUActivity extends MultiAction {
 		EUActivityForm eaf = (EUActivityForm) form;
                 Long totalCostCurrId=eaf.getTotalCostCurrencyId();
                 AmpCurrency  totalCostCurr=CurrencyUtil.getAmpcurrency(totalCostCurrId);
+                String totalCurCode = totalCostCurr.getCurrencyCode();
                 double totalCostExRate = CurrencyUtil.getExchangeRate(
-                          totalCostCurr.getCurrencyCode());
-                if(totalCostExRate==1.0&&!totalCostCurr.getCurrencyCode().equals(defaultCurCode)){
+                          totalCurCode);
+                if (totalCostExRate == 1.0 && !totalCurCode.equals("USD")) {
                   errors.add("title", new ActionError(
                       "error.aim.addActivity.noExchangeRateIsDefined",
                       totalCostCurr.getCurrencyName(), defaultCurName));
@@ -239,8 +240,7 @@ public class EditEUActivity extends MultiAction {
                          String currCode = curr.getCurrencyCode();
                          double exchangeRate = CurrencyUtil.getExchangeRate(
                              currCode);
-                         if (exchangeRate == 1.0 &&
-                             !currCode.equals(defaultCurCode)) {
+                         if (exchangeRate == 1.0 &&!currCode.equals("USD")) {
                            errors.add("title", new ActionError(
                                "error.aim.addActivity.noExchangeRateIsDefined",
                                curr.getCurrencyName(), defaultCurName));

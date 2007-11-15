@@ -78,6 +78,7 @@
 	<page name="overallIndicatorManager" title=" - Indicator Manager" />
 	<page page="editAllIndicator" name="aim_editAllIndicator" title="AMP - Edit Indicator"/>
 	<page page="assignThemeIndicator" name="aim_assignThemeIndicator" title="AMP - Assign Indicator"/>
+	<page page="assignFieldPermissions" name="aim_assignFieldPermissions" title="AMP - Assign Field Permissions"/>
 	<page name="fiscalCalendarManager" title=" - Fiscal Calendar Manager" />
 	<page name="addFiscalCalendar" title=" - Fiscal Calendar Manager" />
 	<page name="organisationManager" title=" - Organization Manager" />

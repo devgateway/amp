@@ -27,6 +27,12 @@ public class CompositePermission extends Permission {
 
 	public CompositePermission() {
 		permissions=new TreeSet<Permission>();
+		dedicated=false;
+	}
+	
+	public CompositePermission(boolean dedicated) {
+	    super(dedicated);
+	    permissions=new TreeSet<Permission>();
 	}
 	
 	/** @see org.digijava.module.gateperm.core.Permission#getAllowedActions()

@@ -114,6 +114,7 @@ public class VisibilityManager extends MultiAction {
 		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
 		Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
 		vForm.setTemplates(templates);
+		hbsession.close();
 		return mapping.findForward("forward");
 	}
 	
@@ -150,6 +151,7 @@ public class VisibilityManager extends MultiAction {
 			Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
 			vForm.setTemplates(templates);
 		}
+		hbsession.close();
 		return mapping.findForward("forward");
 	}
 	
@@ -184,7 +186,7 @@ public class VisibilityManager extends MultiAction {
 	 	errors.add("title", new ActionError("error.aim.visibility.updatedTemplate"));
 	 	saveErrors(request, errors);
 
-		
+	 	
 		return mapping.findForward("forward");
 	}
 	
@@ -201,6 +203,7 @@ public class VisibilityManager extends MultiAction {
 		ActionErrors errors = new ActionErrors();
 	 	errors.add("title", new ActionError("error.aim.visibility.deletedTemplate"));
 	 	saveErrors(request, errors);
+	 	hbsession.close();
 		return mapping.findForward("forward");
 	}
 	
@@ -282,6 +285,8 @@ public class VisibilityManager extends MultiAction {
     	
     	ampContext=this.getServlet().getServletContext();
     	ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
+    	
+    	hbsession.close();
     	
 		return modeEditTemplate(mapping,form,request,response);
 	}

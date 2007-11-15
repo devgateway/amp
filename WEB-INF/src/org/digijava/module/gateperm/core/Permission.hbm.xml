@@ -23,6 +23,7 @@
 				class="org.digijava.module.gateperm.core.PermissionMap" />
 		</set>
 		<property name="name" column="name" type="java.lang.String" />
+		<property name="dedicated" column="dedicated" type="java.lang.Boolean" />
 		<property name="description" column="description" length="2000"
 			type="java.lang.String" />
 		<joined-subclass
@@ -37,8 +38,7 @@
 				<index column="index_column" />
 				<element column="parameter" type="string" />
 			</list>
-			<set name="actions" table="PERM_GATE_ACTION"
-				cascade="all">
+			<set name="actions" table="PERM_GATE_ACTION" cascade="all">
 				<key column="perm_id" />
 				<element column="action_name" type="string" />
 			</set>

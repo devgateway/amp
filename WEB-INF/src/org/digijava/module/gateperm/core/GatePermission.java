@@ -4,6 +4,7 @@
 package org.digijava.module.gateperm.core;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -34,7 +35,42 @@ public class GatePermission extends Permission {
 
     protected String	  gateTypeName;
 
+    /**
+     * Checks if the specified parameter is present in the gate parameter list
+     * @param parameter
+     * @return true if the parameter is present
+     */
+    public boolean hasParameter(String parameter) {
+	Iterator i=gateParameters.iterator();
+	while (i.hasNext()) {
+	    String element = (String) i.next();
+	    if(element.equals(parameter)) return true;
+	}
+	return false;
+    }
+    
+    /**
+     * Checks if the specified action is present in the gate action list
+     * @param action
+     * @return true if the action is present. This does NOT mean the action can be executed!
+     */
+    public boolean hasAction(String action) {
+	Iterator i=actions.iterator();
+	while (i.hasNext()) {
+	    String element = (String) i.next();
+	    if(element.equals(action)) return true;
+	}
+	return false;
+    }
+    
     public GatePermission() {
+	gateParameters = new ArrayList<String>();
+	actions = new TreeSet<String>();
+	dedicated=false;
+    }
+    
+    public GatePermission(boolean dedicated) {
+	super(dedicated);
 	gateParameters = new ArrayList<String>();
 	actions = new TreeSet<String>();
     }

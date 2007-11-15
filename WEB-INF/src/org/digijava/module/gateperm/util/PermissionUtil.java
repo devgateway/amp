@@ -13,13 +13,14 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -40,6 +41,33 @@ public final class PermissionUtil {
     
 	private static final String gateDefLocation="/classes/org/digijava/module/gateperm/gates";
 	private static final String gateDefPackage="org.digijava.module.gateperm.gates";
+
+	public static Map getScope(HttpSession session) {
+	    Map scope = (Map) session.getAttribute(GatePermConst.SCOPE);
+	    if(scope==null) return resetScope(session);
+	    return scope;
+	}
+	
+	public static Map resetScope(HttpSession session) {
+	    Map scope = (Map) session.getAttribute(GatePermConst.SCOPE);
+	    if(scope==null) {
+		scope=new HashMap();
+		session.setAttribute(GatePermConst.SCOPE, scope); 
+	    } else scope.clear();
+	    return scope;
+	}
+	
+	public static void putInScope(HttpSession session ,MetaInfo key, Object value) { 
+	    Map scope=getScope(session);
+	    scope.put(key, value);
+	}
+	
+	public static Object getFromScope(HttpSession session,MetaInfo key) {
+	    Map scope=getScope(session);
+	  return  scope.get(key);	    
+	}
+	
+	
 	
 	/**
 	 * list here all the available gates in the system. Since subclass search
@@ -74,8 +102,9 @@ public final class PermissionUtil {
 		return GatePermConst.availableGatesSingleton;
 	}
     
+ 
     public static List<Permission> getAllPermissions() {
-	Session session;
+	Session session = null;
 
 	try {
 	    session = PersistenceManager.getSession();
@@ -89,12 +118,22 @@ public final class PermissionUtil {
 	} catch (SQLException e) {
 	    logger.error(e);
 	    throw new RuntimeException("SQLException Exception encountered", e);
+	} finally { 
+	    try {
+		PersistenceManager.releaseSession(session);
+	    } catch (HibernateException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "HibernateException Exception encountered", e);
+	    } catch (SQLException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "SQLException Exception encountered", e);
+	    }
 	}
 
     }
 
     public static Map<Long, PermissionMap> getAllPermissionMapsForPermissibleClass(Class permClass) {
-	Session session;
+	Session session = null;
 	try {
 	    session = PersistenceManager.getSession();
 
@@ -116,6 +155,16 @@ public final class PermissionUtil {
 	    logger.error(e);
 	    // TODO Auto-generated catch block
 	    throw new RuntimeException("SQLException Exception encountered", e);
+	} finally { 
+	    try {
+		PersistenceManager.releaseSession(session);
+	    } catch (HibernateException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "HibernateException Exception encountered", e);
+	    } catch (SQLException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "SQLException Exception encountered", e);
+	    }
 	}
 
     }
@@ -123,8 +172,9 @@ public final class PermissionUtil {
    
     
     public static Long getGlobalPermissionMapIdForPermissibleClass(Class permClass) {
+	Session session = null;
 	  try {
-	    Session session = PersistenceManager.getSession();
+	    session = PersistenceManager.getSession();
 	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
 		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier is null");
 	    query.setParameter("categoryName", permClass.getSimpleName());
@@ -139,14 +189,26 @@ public final class PermissionUtil {
 	} catch (SQLException e) {
 	    logger.error(e);
 	    throw new RuntimeException( "SQLException Exception encountered", e);
-	}	  
+	} finally { 
+	    try {
+		PersistenceManager.releaseSession(session);
+	    } catch (HibernateException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "HibernateException Exception encountered", e);
+	    } catch (SQLException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "SQLException Exception encountered", e);
+	    }
+	    
+	}
 	  
     }
 
     
     public static Permission getGlobalPermissionForPermissibleClass(Class permClass) {
+	Session session = null;
   	  try {
-  	    Session session = PersistenceManager.getSession();
+	    session = PersistenceManager.getSession();
   	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
   		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier is null");
   	    query.setParameter("categoryName", permClass.getSimpleName());
@@ -161,13 +223,72 @@ public final class PermissionUtil {
   	} catch (SQLException e) {
   	    logger.error(e);
   	    throw new RuntimeException( "SQLException Exception encountered", e);
-  	}	  
+  	} finally { 
+  	    try {
+		PersistenceManager.releaseSession(session);
+	    } catch (HibernateException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "HibernateException Exception encountered", e);
+	    } catch (SQLException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "SQLException Exception encountered", e);
+	    }
+  	    
+  	}
   	  
       }
 
+    
+    /**
+     * Gets the permission map assigned to the given permissible. Ignores any global permission, if any
+     * @param obj
+     * @return the permission map assigned
+     */
+    public static PermissionMap getOwnPermissionMapForPermissible(Permissible obj) {
+	Session session = null;
+	try {
+	    session = PersistenceManager.getSession();
 
+	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
+		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier=:objectId ORDER BY p.objectIdentifier");
+	    query.setParameter("objectId", obj.getIdentifier());
+	    query.setParameter("categoryName", obj.getPermissibleCategory().getSimpleName());
+	    List col = query.list();
+
+	    if (col.size() == 0)
+		return null;
+
+	    return (PermissionMap) col.get(0);
+	
+	} catch (HibernateException e) {
+	    logger.error(e);
+	    throw new RuntimeException("HibernateException Exception encountered", e);
+	} catch (SQLException e) {
+	    logger.error(e);
+	    throw new RuntimeException("SQLException Exception encountered", e);
+	} finally {
+	    try {
+		PersistenceManager.releaseSession(session);
+	    } catch (HibernateException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "HibernateException Exception encountered", e);
+	    } catch (SQLException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "SQLException Exception encountered", e);
+	    }
+	}
+
+    }
+
+
+    /**
+     * Gets the permission map assigned to the given permissible. If no permission map is assigned to it specifically, the global permission map
+     * assigned to its class is returned (if any).
+     * @param obj
+     * @return the permission map assigned
+     */
     public static PermissionMap getPermissionMapForPermissible(Permissible obj) {
-	Session session;
+	Session session = null;
 	try {
 	    session = PersistenceManager.getSession();
 
@@ -197,13 +318,23 @@ public final class PermissionUtil {
 	} catch (SQLException e) {
 	    logger.error(e);
 	    throw new RuntimeException("SQLException Exception encountered", e);
+	} finally { 
+	    try {
+		PersistenceManager.releaseSession(session);
+	    } catch (HibernateException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "HibernateException Exception encountered", e);
+	    } catch (SQLException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "SQLException Exception encountered", e);
+	    }
 	}
 
     }
 
 
     public static PermissionMap getPermissionMapForPermissible(Object permissibleIdentifier,Class permissibleClass) {
-	Session session;
+	Session session = null;
 	try {
 	    session = PersistenceManager.getSession();
 
@@ -233,6 +364,16 @@ public final class PermissionUtil {
 	} catch (SQLException e) {
 	    logger.error(e);
 	    throw new RuntimeException("SQLException Exception encountered", e);
+	} finally  {
+	    try {
+		PersistenceManager.releaseSession(session);
+	    } catch (HibernateException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "HibernateException Exception encountered", e);
+	    } catch (SQLException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "SQLException Exception encountered", e);
+	    }
 	}
 
     }

@@ -406,6 +406,10 @@
 				<page>aim_filterPicker</page>						
 				<page>aim_euActivityDetails</page>			
 				<page>aim_orgPopupLayout</page>
+				<page>aim_assignFieldPermissions</page>
+				<!-- New Org Selector -->
+				<page>aim_orgSelectorSearchForm</page>				
+				
 				<page>previewLogframe</page>
 				<page>aim_fundingPopupLayout</page>
 				<page>aim_editEUActivity</page>				
@@ -417,7 +421,7 @@
 				<page>aim_selSectorPopupLayout</page>
 				<page>aim_addActivityProgram</page>
 				<page>aim_addPhyProgPopupLayout</page>
-	  		<page>aim_selectDocument</page>
+	  			<page>aim_selectDocument</page>
 				<page>aim_addlocPopupLayout</page>
 				<page>aim_addCompPopupLayout</page>
 				<page>aim_addComponents</page>

@@ -24,12 +24,22 @@ public abstract class Permission extends PropertyListable implements Serializabl
 
     protected String	  description;
     
+    protected boolean dedicated;
+    
     protected Set<PermissionMap> permissibleObjects;
     
     protected Set<CompositePermission> compositeLinkedPermissions;
 
 
     protected Long	    id;
+    
+
+    public Permission() {	
+    }
+    
+    public Permission(Boolean dedicated) {
+	this.dedicated=dedicated;
+    }
 
     public int compareTo(Object o) {
 	Permission p = (Permission) o;
@@ -90,4 +100,13 @@ public abstract class Permission extends PropertyListable implements Serializabl
         this.permissibleObjects = permissibles;
     }
 
+    public boolean isDedicated() {
+        return dedicated;
+    }
+
+    public void setDedicated(boolean dedicated) {
+        this.dedicated = dedicated;
+    }
+
+    
 }

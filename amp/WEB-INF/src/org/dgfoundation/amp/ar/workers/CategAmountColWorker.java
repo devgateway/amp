@@ -100,7 +100,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		int adj_type = -1;
 		double tr_amount = rs.getDouble("transaction_amount");
 		java.sql.Date td = rs.getDate("transaction_date");
-		double exchangeRate=rs.getDouble("exchange_rate");
+		//double exchangeRate=rs.getDouble("exchange_rate");
 		String currencyCode=rs.getString("currency_code");
 		String perspectiveCode=null; 
 		double fixedExchangeRate=1;
@@ -174,7 +174,12 @@ public class CategAmountColWorker extends ColumnWorker {
 		//use fixed exchange rate only if it has been entered. Else use 
 		if(fixedExchangeRate!=1 && fixedExchangeRate!=0)
 			acc.setFromExchangeRate(fixedExchangeRate); else
-		acc.setFromExchangeRate(exchangeRate);
+			
+			//new and fast - cached
+			acc.setFromExchangeRate(Util.getExchange(currencyCode,td));
+			    
+			//OLD AND SLOW - db based
+			//acc.setFromExchangeRate(exchangeRate);
 		
 		acc.setCurrencyDate(td);
 		acc.setCurrencyCode(currencyCode);
@@ -271,9 +276,13 @@ public class CategAmountColWorker extends ColumnWorker {
 		acc.setShow(isShowable(acc));
 		acc.setCummulativeShow(isCummulativeShowable(acc));
 		
+		
+		
 		//UGLY get exchage rate if cross-rates are needed (if we need to convert from X to USD and then to Y)
-		if(filter.getCurrency()!=null && !"USD".equals(filter.getCurrency().getCurrencyCode())) 
+		if(filter.getCurrency()!=null && !"USD".equals(filter.getCurrency().getCurrencyCode()))  
 			acc.setToExchangeRate(Util.getExchange(filter.getCurrency().getCurrencyCode(),td));
+						
+		
 		
 		return acc;
 	}

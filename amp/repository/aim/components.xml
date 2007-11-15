@@ -344,8 +344,9 @@
 
 	<!-- tab Views -->
 	<page page="myTabs" name="aim_myTabs" title="My Tabs" />
-        <page page="feedback" name="feedback" title="Feedback/Contact" />
+    <page page="feedback" name="feedback" title="Feedback/Contact" />
 
+	<page name="showActivityLog" title="AMP - Activity Log" />
 
 </secondary-pages>
 

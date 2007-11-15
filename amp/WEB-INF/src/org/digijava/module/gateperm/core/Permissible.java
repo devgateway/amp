@@ -63,6 +63,22 @@ public abstract class Permissible implements Identifiable {
 	public abstract String[] getImplementedActions();
 
 	/**
+	 * Retruns the permission object associated with this permissible object.
+	 * @param own if true, it will only return the permission associated with this specific object or null if none existing. Otherwise
+	 * it returns the permission associated with this object, or, if null, the global permission associated with the object class
+	 * @return the permission object
+	 */
+	public Permission getPermission(boolean own) {
+	    PermissionMap pm;
+	    if(own)
+		pm=PermissionUtil.getOwnPermissionMapForPermissible(this);
+	    else
+		pm=PermissionUtil.getPermissionMapForPermissible(this);
+	    if(pm==null) return null;
+	    return pm.getPermission();
+	}
+		
+	/**
 	 * @return the object category to identify specific permission objects. This
 	 *         is usually a constant stored in Permissible and it usually
 	 *         represents its Class.
@@ -104,8 +120,8 @@ public abstract class Permissible implements Identifiable {
 		if(permissionMapForPermissible!=null && permissionMapForPermissible.getPermission()!=null) {
 			Set<String> allowedActions = permissionMapForPermissible.getPermission().getAllowedActions(scope);
 			if(allowedActions!=null) actions.addAll(allowedActions);
-			logger.info("Actions allowed for object " + permissionMapForPermissible.getObjectIdentifier()
-					+ " of type " + permissionMapForPermissible.getPermissibleCategory() + " are "
+			logger.info("Actions allowed for object "+ permissionMapForPermissible.getObjectLabel() + " (id="+permissionMapForPermissible.getObjectIdentifier()
+					+ ") of type " + permissionMapForPermissible.getPermissibleCategory() + " are "
 					+ actions); }
 		return actions;
 	}

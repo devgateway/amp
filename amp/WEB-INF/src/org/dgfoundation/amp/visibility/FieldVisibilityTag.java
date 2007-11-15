@@ -7,6 +7,7 @@ package org.dgfoundation.amp.visibility;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -14,11 +15,13 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.kernel.exception.*;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 
 
 /**
@@ -133,15 +136,16 @@ public class FieldVisibilityTag extends BodyTagSupport {
  			   return SKIP_BODY;
    			
  		    AmpFieldsVisibility ampFieldFromTree=ampTreeVisibility.getFieldByNameFromRoot(getName());
+ 		    
    			HashMap<String, HttpSession> sessionMap=new HashMap<String, HttpSession>();
    			sessionMap.put("session", pageContext.getSession());
-   			//if(ampFieldFromTree.canDo("view", sessionMap))   
-   				if(isFieldActive (ampTreeVisibility)){
-   				   pageContext.getOut().print(bodyText);
-   			    }
-   			    else return SKIP_BODY;//the field is not active!!!
-//   			else return SKIP_BODY;
-   			   
+   			
+   			Map scope=PermissionUtil.getScope(pageContext.getSession());   				    
+   			if(isFieldActive (ampTreeVisibility) ) {
+   			   if(ampFieldFromTree.getPermission(true)!=null && !ampFieldFromTree.canDo(GatePermConst.Actions.VIEW,scope))
+   			       return SKIP_BODY;
+   			   pageContext.getOut().print(bodyText);   			    
+   			} else return SKIP_BODY;//the field is not active!!!
    		   }
     	   
        }

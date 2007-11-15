@@ -6,8 +6,14 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<digi:instance property="aimVisibilityManagerForm" />
+<script type="text/javascript">
+function openFieldPermissionsPopup(fieldId) {
+			<digi:context name="assignFieldPermissionsURL" property="context/module/moduleinstance/assignFieldPermissions.do?fieldId=" />
+			openURLinWindow("<%=assignFieldPermissionsURL%>"+fieldId,280, 190);
+}
+</script>
 
+<digi:instance property="aimVisibilityManagerForm" />
 
 <bean:define name="currentTemplate" id="currentTemplate" type="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" scope="request" toScope="page"/>
 <bean:define id="moduleAux" name="moduleAux" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="request" toScope="page"/>
@@ -88,6 +94,8 @@
 												<a id="field:<bean:write name="fieldAux" property="root.id"/>">
 													<digi:trn key="<%="viz:"+fieldAux.getRoot().getNameTrimmed() %>"><bean:write name="fieldAux" property="root.name"/></digi:trn>
 												</a>
+												<a style="cursor:pointer;color:#006699;text-decoration:underline" title="Click to edit field based permissions" onClick='openFieldPermissionsPopup(<bean:write name="fieldAux" property="root.id"/>)'>Edit Permissions</a>
+
 											</li>	
 										</logic:iterate>
 									</ul>

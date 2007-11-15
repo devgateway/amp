@@ -1319,6 +1319,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                 relOrg.setOrgCode(auxOrgRel.getOrgCode());
                 relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
                 relOrg.setOrgTypeId(auxOrgRel.getOrgTypeId());
+                relOrg.setOrgId(auxOrgRel.getAmpOrgId());
                 if (!relOrgs.contains(relOrg)) {
                 	relOrgs.add(relOrg);
                 }

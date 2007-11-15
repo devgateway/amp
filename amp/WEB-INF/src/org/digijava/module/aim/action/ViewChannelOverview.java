@@ -34,6 +34,8 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 
 public class ViewChannelOverview extends TilesAction {
 
@@ -45,6 +47,8 @@ public class ViewChannelOverview extends TilesAction {
 
 		HttpSession session = request.getSession();
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
+		PermissionUtil.resetScope(session);
+		PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
 		ChannelOverviewForm formBean = (ChannelOverviewForm) form;
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
 
@@ -61,6 +65,7 @@ public class ViewChannelOverview extends TilesAction {
 			}
 
 			Activity activity = ActivityUtil.getChannelOverview(id);
+			PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.ACTIVITY,activity);
 			ArrayList colAux=new ArrayList();
 			Collection ampFields=DbUtil.getAmpFields();
 			HashMap allComments=new HashMap();

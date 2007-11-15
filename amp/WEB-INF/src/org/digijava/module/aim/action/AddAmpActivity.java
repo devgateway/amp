@@ -61,6 +61,8 @@ import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.Constants;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 
 /**
  * Used to capture the activity details to the form bean of type org.digijava.module.aim.form.EditActivityForm
@@ -86,10 +88,16 @@ public class AddAmpActivity extends Action {
     HttpSession session = request.getSession();
 
     ampContext = getServlet().getServletContext();
+    
+    
 
     TeamMember teamMember = new TeamMember();
+  
     // Get the current member who has logged in from the session
     teamMember = (TeamMember) session.getAttribute("currentMember");
+    
+    PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
+    
     // if user is not logged in, forward him to the home page
     //if (session.getAttribute("currentMember") == null)
     //return mapping.findForward("index");

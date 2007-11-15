@@ -1,5 +1,6 @@
 package org.digijava.module.aim.action;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -26,6 +27,7 @@ import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.VisibilityManagerForm;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.autopatcher.exceptions.InvalidPatchRepositoryException;
  
 public class VisibilityManager extends MultiAction {
 	
@@ -39,6 +41,7 @@ public class VisibilityManager extends MultiAction {
 		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
 		vForm.setTemplates(templates);
 		vForm.setMode("manageTemplates");
+		getAllPatchesFiles("/");
 		return  modeSelect(mapping, form, request, response);
 	}
 
@@ -310,5 +313,28 @@ public class VisibilityManager extends MultiAction {
 		}
 	}
 	
+	 public Collection<File> getAllPatchesFiles(String abstractPatchesLocation)
+	    throws InvalidPatchRepositoryException {
+		 System.out.println("*******************"+this.getServlet().getServletContext().getRealPath(abstractPatchesLocation));
+		
+	   File dir = new File(abstractPatchesLocation);
+	   System.out.println("******************* "+dir.listFiles().length);
+	   /*
+	   Set<File> patchFiles = new TreeSet<File>();
+	   if (!dir.isDirectory())
+	    throw new InvalidPatchRepositoryException(
+	      "Patches repository needs to be a dir!");
+	   String[] files = dir.list();
+	   for (int i = 0; i < files.length; i++) {
+	    File f = new File(dir, files[i]);
+	    if (f.isDirectory() && !f.getName().equals("CVS"))
+	     patchFiles.addAll(getAllPatchesFiles(f.getAbsolutePath()));
+	    if(!f.isDirectory())
+	     patchFiles.add(f);
+	   }
+	   return patchFiles;
+	   */
+		 return null;
+	  }
 
 }

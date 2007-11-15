@@ -87,6 +87,17 @@ function toggleGroup(group_id){
 	$(strId).toggle('fast');
 }
 
+function viewChanges()
+
+{
+	openNewWindow(650,200);
+
+	<digi:context name="showLog" property="context/module/moduleinstance/showActivityLog.do" />
+
+	popupPointer.document.location.href = "<%= showLog %>?activityId=${aimEditActivityForm.activityId}";
+
+}
+
 
 -->
 
@@ -2245,7 +2256,10 @@ function toggleGroup(group_id){
 											Activity updated on</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.updatedDate}"/>
+											<c:out value="${aimEditActivityForm.updatedDate}"/> 
+											<html:button  styleClass="buton" property="submitButton" onclick="viewChanges()">
+												<digi:trn key="btn:last5changestoactivity">Last 5 changes to Activity</digi:trn>
+											</html:button>											
 										</td>
 									</tr>
 									</logic:notEmpty>

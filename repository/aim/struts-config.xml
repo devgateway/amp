@@ -1418,7 +1418,6 @@
     <action name="aimDesktopForm" path="/aim/previewPrintMyDesktop" scope="session" type="org.digijava.module.aim.action.PreviewPrintDesktop" validate="false">
       <forward name="forward" path="/showLayout.do?layout=printMyDesktop" />
     </action>
-
     <action name="aimNPDForm" path="/aim/nationalPlaningDashboard" scope="request" type="org.digijava.module.aim.action.ViewNPD" validate="false">
       <forward name="forward" path="/showLayout.do?layout=amp_viewNPD" />
     </action>
@@ -1429,7 +1428,6 @@
       <forward name="forward" path="/showLayout.do?layout=amp_viewNPDgrid" />
     </action>
     <action name="aimNPDForm" parameter="actionMethod" path="/aim/exportIndicators2xsl" scope="request" type="org.digijava.module.aim.action.ExportIndicators2XSLAction" validate="false" />
-
     <action name="aimEditActivityForm" path="/aim/addProgram" scope="session" type="org.digijava.module.aim.action.AddProgram" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_addActivityProgram" />
       <forward name="added" path="/aim/addActivity.do?edit=true" />
@@ -1437,18 +1435,15 @@
     <action name="aimEditActivityForm" path="/aim/remProgram" scope="session" type="org.digijava.module.aim.action.RemProgram" validate="false">
       <forward name="forward" path="/aim/addActivity.do?edit=true" />
     </action>
-    <!--<action name="aimProgramTypeForm" path="/aim/programTypeManager" scope="request" type="org.digijava.module.aim.action.ProgramTypeManager" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=viewProgramTypeManager" />
-      <forward name="add" path="/showLayout.do?layout=addProgramType" />
-      <forward name="edit" path="/showLayout.do?layout=editProgramType" />
-    </action> -->
     <action name="aimTranslatorManagerForm" path="/aim/translationManager" scope="session" type="org.digijava.module.aim.action.TranslatorManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewTranslatorManager" />
     </action>
-
     <action input="/showLayout.do?layout=viewNpdSettings" name="npdSettingsForm" scope="request" path="/aim/npdSettingsAction" parameter="actionType" type="org.digijava.module.aim.action.NpdSettingsAction" validate="false">
 		<forward name="forward" path="/showLayout.do?layout=viewNpdSettings"/>
-	</action>
-  </action-mappings>
+	</action>	
+	<action name="aimAuditLoggerManagerForm" path="/aim/showActivityLog" scope="request" type="org.digijava.module.aim.action.ShowActivityLog">
+      <forward name="forward" path="/showLayout.do?layout=showActivityLog"/>
+    </action>    
+  </action-mappings>  
 </struts-config>
 

@@ -484,7 +484,7 @@
 				<page>aim_actPerfWithoutBase</page>
 				<page>aim_portPerfWithoutBase</page>
 				<page>aim_npdOptions</page>
-
+				<page>showActivityLog</page>
 			</module>
 			<module name="contentrepository">
 				<page>amp_selectDocumentDM</page>

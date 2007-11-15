@@ -8,6 +8,7 @@ package org.digijava.module.aim.util;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -168,8 +169,6 @@ public class AuditLoggerUtil {
 			qryStr = "select f from " + className + " f where f.id="+id;
 			if(className.contains("AmpReports")) {
 				qryStr = "select f from " + className + " f where f.ampReportId="+id;
-				//System.out.println("aaaaaaaaaaa"+qryStr);
-				
 			}
 			qry = session.createQuery(qryStr);
 			col = qry.list();
@@ -186,6 +185,36 @@ public class AuditLoggerUtil {
 			}
 		}
 		return o;
+	}
+
+	public static List<AmpAuditLogger> getActivityLogObjects(String activityId) {
+		Session session = null;
+		List<AmpAuditLogger> col = new ArrayList<AmpAuditLogger>();
+		String qryStr = null;
+		Query qry = null;
+		
+		try {
+			session = PersistenceManager.getSession();
+			
+			qryStr = "select f from "
+					+ AmpAuditLogger.class.getName()
+					+ " f where f.objectType=:objectType and f.objectId=:objectId order by f.modifyDate desc";
+			qry = session.createQuery(qryStr);
+			qry.setParameter("objectType", AmpActivity.class.getCanonicalName(), Hibernate.STRING);
+			qry.setParameter("objectId", activityId, Hibernate.STRING);
+			col = qry.list();
+		} catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return col;
 	}
 
 	

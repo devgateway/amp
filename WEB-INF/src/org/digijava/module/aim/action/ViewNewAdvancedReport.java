@@ -54,7 +54,7 @@ public class ViewNewAdvancedReport extends Action {
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 			{
 		AdvancedReportForm arf=(AdvancedReportForm) form;
-		HttpSession hs = request.getSession();
+		HttpSession httpSession = request.getSession();
 
 		String widget=request.getParameter("widget");
 		request.setAttribute("widget",widget);
@@ -67,20 +67,22 @@ public class ViewNewAdvancedReport extends Action {
 			if(tm!=null)
 			ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 		
-		if(ampAppSettings!=null)
-			request.setAttribute("recordsPerPage", ampAppSettings.getDefaultRecordsPerPage());
-		else request.setAttribute("recordsPerPage", new Integer(25));
+		if (ampAppSettings != null)
+			request.setAttribute("recordsPerPage", ampAppSettings
+					.getDefaultRecordsPerPage());
+		else
+			request.setAttribute("recordsPerPage", new Integer(25));
 		
 		
 		//check currency code:
-		if(hs.getAttribute("reportCurrencyCode")==null) hs.setAttribute("reportCurrencyCode",Constants.DEFAULT_CURRENCY);
+		if(httpSession.getAttribute("reportCurrencyCode")==null) httpSession.setAttribute("reportCurrencyCode",Constants.DEFAULT_CURRENCY);
 		
-		if(hs.getAttribute("reportSorters")==null) hs.setAttribute("reportSorters",new HashMap());
-		Map sorters=(Map) hs.getAttribute("reportSorters");
+		if(httpSession.getAttribute("reportSorters")==null) httpSession.setAttribute("reportSorters",new HashMap());
+		Map sorters=(Map) httpSession.getAttribute("reportSorters");
 		String ampReportId = request.getParameter("ampReportId");
 		
-		GroupReportData rd=(GroupReportData) hs.getAttribute("report");
-		AmpReports ar=(AmpReports) hs.getAttribute("reportMeta");
+		GroupReportData rd=(GroupReportData) httpSession.getAttribute("report");
+		AmpReports ar=(AmpReports) httpSession.getAttribute("reportMeta");
 		Session session = PersistenceManager.getSession();
 		String sortBy=request.getParameter("sortBy");
 		String applySorter = request.getParameter("applySorter");
@@ -88,10 +90,10 @@ public class ViewNewAdvancedReport extends Action {
 		Long reportId=new Long(ampReportId);
 		request.setAttribute("ampReportId",ampReportId);				
 		
-		AmpARFilter filter = (AmpARFilter) hs.getAttribute(ArConstants.REPORTS_FILTER);
+		AmpARFilter filter = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
 		if(filter==null || !reportId.equals(filter.getAmpReportId())) {
 			filter=new AmpARFilter();
-			hs.setAttribute(ArConstants.REPORTS_FILTER,filter);
+			httpSession.setAttribute(ArConstants.REPORTS_FILTER,filter);
 			filter.readRequestData(request);
 		}
 		
@@ -108,9 +110,7 @@ public class ViewNewAdvancedReport extends Action {
 			if(request.getParameter("levelPicked")!=null && request.getParameter("levelSorter")!=null)
 				sorters.put(request.getParameter("levelPicked"),new MetaInfo(request.getParameter("levelSorter"),request.getParameter("levelSortOrder")));
 			else 	
-			sorters.put(arf.getLevelPicked(),new MetaInfo(arf.getLevelSorter(),arf.getLevelSortOrder()));
-			
-		
+				sorters.put(arf.getLevelPicked(),new MetaInfo(arf.getLevelSorter(),arf.getLevelSortOrder()));
 			
 			rd.importLevelSorters(sorters,ar.getHierarchies().size());
 			rd.applyLevelSorter();
@@ -120,28 +120,28 @@ public class ViewNewAdvancedReport extends Action {
 		// test if the request was for column sorting purposes:
 		
 		if(sortBy!=null) {
-			hs.setAttribute("sortBy",sortBy);
+			httpSession.setAttribute("sortBy",sortBy);
 			rd.setSorterColumn(sortBy);
 		
 		}
 		
-				if (rd==null) return mapping.findForward("index");
-				rd.setGlobalHeadingsDisplayed(new Boolean(false));
-				
-				String viewFormat=request.getParameter("viewFormat");
-				if(viewFormat==null) viewFormat=GenericViews.HTML;
-				request.setAttribute("viewFormat",viewFormat);
-			
-				
-			
-				request.setAttribute("extraTitle",ar.getName());
-				rd.setCurrentView(viewFormat);
-				hs.setAttribute("report",rd);
-				hs.setAttribute("reportMeta",ar);
-				
-				session.close();
-				
-				return mapping.findForward("forward");
-			}
+		if (rd==null) return mapping.findForward("index");
+		rd.setGlobalHeadingsDisplayed(new Boolean(false));
+		
+		String viewFormat=request.getParameter("viewFormat");
+		if(viewFormat==null) viewFormat=GenericViews.HTML;
+		request.setAttribute("viewFormat",viewFormat);
+	
+		
+	
+		request.setAttribute("extraTitle",ar.getName());
+		rd.setCurrentView(viewFormat);
+		httpSession.setAttribute("report",rd);
+		httpSession.setAttribute("reportMeta",ar);
+		
+		session.close();
+		
+		return mapping.findForward("forward");
+	}
 	
 }

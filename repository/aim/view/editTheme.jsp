@@ -6,6 +6,10 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <c:set var="translation_progname">
@@ -18,7 +22,7 @@
 	<digi:trn key="aim:addTheme:PlsSelectProgramType">Please select Program Type</digi:trn>
 </c:set>
 
-
+<feature:display name="Admin NPD" module="National Planning Dashboard"></feature:display>
 <script language="JavaScript">
 <!--
 	function validate() 
@@ -90,7 +94,7 @@
 				</td>
 				</tr>
 				<tr bgColor=#ffffff><td height="10" colspan="2"></td></tr>
-
+				<field:display name="Program Name" feature="Admin NPD"></field:display>
 				<tr bgColor=#ffffff>
 						<td height="10" align="center">
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -102,6 +106,7 @@
 								<html:text property="programName" size="20"/>
 						</td>
 				</tr>
+				<field:display name="Program Description" feature="Admin NPD">
 				<tr bgcolor=#ffffff><td height="5"></td></tr>
 				<tr bgColor=#ffffff>
 				<td height="20" align="center">
@@ -113,6 +118,8 @@
 						<html:textarea property="programDescription" cols="35" rows="2" styleClass="inp-text"/>
 				</td>
 				</tr>
+				</field:display>
+				<field:display name="Program Lead Agency" feature="Admin NPD">
 				<tr bgColor=#ffffff>
 					<td height="20" align="center">
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
@@ -123,6 +130,8 @@
 					<td align="left"><html:textarea property="programLeadAgency"
 						cols="35" rows="2" styleClass="inp-text" /></td>
 				</tr>
+				</field:display>
+				<field:display name="Program Code" feature="Admin NPD"></field:display>
 				<tr bgColor=#ffffff>
 				<td height="20" align="center">
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -135,6 +144,7 @@
 					
 				</td>
 				</tr>
+				<field:display name="Program Type" feature="Admin NPD"></field:display>
 				<tr bgColor=#ffffff>
 				<td height="20" align="center">
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -150,6 +160,7 @@
 						keyName="<%= org.digijava.module.aim.helper.CategoryConstants.PROGRAM_TYPE_KEY %>" styleClass="inp-text" />
 				</td>
 				</tr>
+				<field:display name="Program Target Groups" feature="Admin NPD">
 				<tr bgColor=#ffffff>
 					<td height="20" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<digi:trn key="aim:programTargetGroups">
@@ -160,6 +171,8 @@
 						<html:textarea property="programTargetGroups" cols="35" rows="2" styleClass="inp-text"/>
 					</td>
 				</tr>
+				</field:display>
+				<field:display name="Program Background" feature="Admin NPD">
 				<tr bgColor=#ffffff>
 					<td height="20" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<digi:trn key="aim:programBackground">
@@ -170,6 +183,8 @@
 						<html:textarea property="programBackground" cols="35" rows="2" styleClass="inp-text"/>
 					</td>
 				</tr>
+				</field:display>
+				<field:display name="Program Objectives" feature="Admin NPD">
 				<tr bgColor=#ffffff>
 					<td height="20" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<digi:trn key="aim:programObjectives">
@@ -180,6 +195,7 @@
 						<html:textarea property="programObjectives" cols="35" rows="2" styleClass="inp-text"/>
 					</td>
 				</tr>
+				<field:display name="Program Outputs" feature="Admin NPD">
 				<tr bgColor=#ffffff>
 					<td height="20" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <digi:trn
 						key="aim:programOutputs">
@@ -188,6 +204,8 @@
 					<td align="left"><html:textarea property="programOutputs" cols="35"
 						rows="2" styleClass="inp-text" /></td>
 				</tr>
+				</field:display>
+				<field:display name="Program Beneficiaries" feature="Admin NPD">
 				<tr bgColor=#ffffff>
 					<td height="20" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <digi:trn
 						key="aim:programBeneficiaries">
@@ -196,6 +214,8 @@
 					<td align="left"><html:textarea property="programBeneficiaries"
 						cols="35" rows="2" styleClass="inp-text" /></td>
 				</tr>
+				</field:display>
+				<field:display name="Program Environment Considerations" feature="Admin NPD">
 				<tr bgColor=#ffffff>
 					<td height="20" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <digi:trn
 						key="aim:programEnvironmentConsiderations">
@@ -205,6 +225,7 @@
 						property="programEnvironmentConsiderations" cols="35" rows="2"
 						styleClass="inp-text" /></td>
 				</tr>
+				</field:display>
 				<tr bgcolor=#ffffff><td height="5"></td></tr>	
 				<tr bgColor=#ffffff><td height="30" colspan="2"></td></tr>
 				<tr bgColor=#dddddb>

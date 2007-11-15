@@ -85,15 +85,10 @@ public class FieldVisibilityTag extends BodyTagSupport {
                                               "ampTreeVisibility",
                                               ampTreeVisibility);
 
-			  }
-                                        catch (DgException ex) {
-                                          throw new JspException(ex);
-	   		}
-                                      }else{
-                                        return EVAL_BODY_BUFFERED;
+                                        	}
+                                        catch (DgException ex) {throw new JspException(ex);	}
                                       }
-
-
+                                      else return EVAL_BODY_BUFFERED;
 			  }
 	   		}
 	   		ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");

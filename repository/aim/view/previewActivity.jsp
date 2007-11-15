@@ -78,6 +78,16 @@ function disable() {
 	document.aimEditActivityForm.submit();
 	return true;
 }
+
+function toggleGroup(group_id){
+	var strId='#'+group_id;
+	$(strId+'_minus').toggle();
+	$(strId+'_plus').toggle();
+	$(strId+'_dots').toggle();
+	$(strId).toggle('fast');
+}
+
+
 -->
 
 </script>
@@ -634,11 +644,14 @@ function disable() {
 
 									<feature:display module="Project ID and Planning" name="Planning">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<digi:trn key="aim:planning">
-											Planning</digi:trn>
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2" valign="top">
+											<img id="group_planning_plus"  onclick="toggleGroup('group_planning')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+											<img id="group_planning_minus" onclick="toggleGroup('group_planning')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display : none"/>
+											<digi:trn key="aim:planning">Planning</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
+											<div id="group_planning_dots">...</div>
+											<div id="group_planning" style="display: none;">
 											<table width="100%" cellSpacing=2 cellPadding=1>
 												<field:display feature="Planning" name="Line Ministry Rank">
 												<tr>
@@ -784,6 +797,7 @@ function disable() {
 												</tr>
 												</field:display>
 											</table>
+											</div>
 										</td>
 									</tr>
 									</feature:display>
@@ -991,12 +1005,15 @@ function disable() {
 								<logic:present name="currentMember" scope="session">
 									<module:display name="Funding" parentModule="PROJECT MANAGEMENT">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<digi:trn key="aim:funding">
-											Funding</digi:trn>
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2" valign="top">
+											<img id="group_funding_plus"  onclick="toggleGroup('group_funding')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+											<img id="group_funding_minus" onclick="toggleGroup('group_funding')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display : none"/>
+											<digi:trn key="aim:funding">Funding</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-										                                            <table width="95%" cellSpacing=1 cellPadding=0 border=0 align="center">
+											<div id="group_funding_dots">...</div>
+											<div id="group_funding" style="display: none;">
+										    <table width="95%" cellSpacing=1 cellPadding=0 border=0 align="center">
                                               <tr>
                                                 <td>
                                                   <table cellSpacing=8 cellPadding=0 border=0 width="100%" class="box-border-nopadding">
@@ -1485,6 +1502,7 @@ function disable() {
 														</td>
 													</tr>
 												</table>
+												</div>
 										<!--
 											<table  border="0" cellpadding="4" cellspacing="1">
 				                 					<TR bgcolor="#DDDDDB" >

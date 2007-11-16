@@ -17,8 +17,6 @@
 
 <%@include file="documentManagerJsHelper.jsp" %>
 
-<%@include file="documentManagerDivHelper.jsp" %>
-
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="75%"
 	class="box-border-nopadding">
 	<tr>
@@ -33,6 +31,11 @@
 </table>
 
 <script type="text/javascript">
-	windowController	= newWindow( 'Public Documents', false, 'otherDocumentsDiv');
-	windowController.populateWithPublicDocs();
+	function afterPageLoad(e) {
+		windowController	= newWindow( 'Public Documents', false, 'otherDocumentsDiv');
+		windowController.populateWithPublicDocs();
+	}
+	YAHOO.util.Event.on(window, "load", afterPageLoad); 
 </script>	
+
+<%@include file="documentManagerDivHelper.jsp" %>

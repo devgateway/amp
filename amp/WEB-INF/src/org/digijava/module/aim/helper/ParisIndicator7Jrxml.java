@@ -5,7 +5,7 @@ import java.lang.Math;
 
 public class ParisIndicator7Jrxml
 {
-	public void createJrxml(String filePath, int cols, int rows,String type)
+	public void createJrxml(String filePath, String reportName, int cols, int rows,String type)
 	throws IOException
 	{
 		try
@@ -27,7 +27,7 @@ public class ParisIndicator7Jrxml
 				p2.println("<!-- Created with iReport - A designer for JasperReports -->");
 				p2.println("<!DOCTYPE jasperReport PUBLIC '//JasperReports//DTD Report Design//EN' 'http://jasperreports.sourceforge.net/dtds/jasperreport.dtd'>");
 				p2.println("<jasperReport");
-				p2.println("		 name='indicator7pdf'");
+				p2.println("		 name='"+reportName+"'");
 				p2.println("		 columnCount='1'");
 				p2.println("		 printOrder='Vertical'");
 				p2.println("		 orientation='Portrait'");

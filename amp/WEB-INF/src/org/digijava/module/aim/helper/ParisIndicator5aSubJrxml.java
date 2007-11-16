@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.*;
 
 public class ParisIndicator5aSubJrxml {
-    public void createJrxml(String filePath, List data) throws IOException {
+    public void createJrxml(String filePath,String reportName, List data) throws IOException {
 
         FileOutputStream out = new FileOutputStream(filePath);
         PrintStream p = new PrintStream(out);
@@ -15,7 +15,7 @@ public class ParisIndicator5aSubJrxml {
         p.println("<!-- Created with iReport - A designer for JasperReports -->");
         p.println("<!DOCTYPE jasperReport PUBLIC '//JasperReports//DTD Report Design//EN' 'http://jasperreports.sourceforge.net/dtds/jasperreport.dtd'>");
         p.println("<jasperReport");
-        p.println("		 name='indicator5apdf_subreport0'");
+        p.println("		 name='"+reportName+"_sub'");
         p.println("		 columnCount='1'");
         p.println("		 printOrder='Vertical'");
         p.println("		 orientation='Portrait'");

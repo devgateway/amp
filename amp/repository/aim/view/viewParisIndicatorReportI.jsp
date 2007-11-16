@@ -1471,13 +1471,18 @@
 
 												<c:if test="${flag == false}">
 													<td align="center">
-														<% String rowValTrn = ((String)rowVal).toLowerCase().replaceAll(" ", "").replaceAll("%",""); %>
-														<strong>
-														<digi:trn key="aim:${rowValTrn}">
-															${rowVal}
-														</digi:trn>
-														</strong>
-													</td>
+                                                      <c:set var="rowValTrn">
+                                                      ${fn:replace(rowVal, " ", "_")}
+                                                      </c:set>
+                                                      <c:set var="rowValTrn">
+                                                      ${fn:replace(rowValTrn, "%", "")}
+                                                      </c:set>
+                                                      <strong>
+                                                      <digi:trn key="aim:${rowValTrn}">
+                                                      ${rowVal}
+                                                      </digi:trn>
+                                                      </strong>
+                                                    </td>
 												</c:if>
 
 												<c:if test="${flag == true}">

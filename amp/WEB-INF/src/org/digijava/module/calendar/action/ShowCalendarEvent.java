@@ -40,9 +40,25 @@ public class ShowCalendarEvent
         CalendarEventForm calendarEventForm = (CalendarEventForm) form;
 
         try {
-
             if(calendarEventForm.getMethod()==null){
-                calendarEventForm=resetForm(calendarEventForm);
+            	if(calendarEventForm.getIspreview()==0){
+            		calendarEventForm=resetForm(calendarEventForm);
+            		
+            	}  else if(calendarEventForm.getIspreview()==1){
+            		String[] donorIds = calendarEventForm.getSelectedDonors();
+                    List donors = new ArrayList();
+                    if(donorIds != null && donorIds.length > 0) {
+                        for(int i = 0; i < donorIds.length; i++) {
+                            AmpOrganisation donor = org.digijava.module.aim.util.DbUtil.
+                                getOrganisation(Long.valueOf(donorIds[i]));
+                            LabelValueBean lvb = new LabelValueBean(donor.getName(),
+                                donorIds[i]);
+                            donors.add(lvb);
+                        }
+                    }
+                    calendarEventForm.setDonors(donors);
+                    calendarEventForm.setIspreview(0);
+            	}
             }else if(calendarEventForm.getMethod().equalsIgnoreCase("new")){
                 calendarEventForm=resetForm(calendarEventForm);
                 calendarEventForm.setAmpCalendarId(new Long(0));
@@ -322,6 +338,7 @@ public class ShowCalendarEvent
 
     private CalendarEventForm resetForm(CalendarEventForm calendarEventForm) {
     	calendarEventForm.setPrivateEvent(true);
+    	calendarEventForm.setIspreview(0);
     	calendarEventForm.setAttendeeGuests(null);
         calendarEventForm.setAttendeeUsers(null);
         calendarEventForm.setCalendarTypes(null);

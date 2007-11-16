@@ -47,6 +47,7 @@ function preSubmit(){
   if(!check()){
     return false;
   }
+  document.getElementsByName('ispreview')[0].value=1;
   selectUsers();
 }
 
@@ -599,7 +600,8 @@ function delSubmit(){
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
-                    <td>                    	
+                    <td>   
+                    	<html:hidden name="calendarEventForm" property="ispreview"/>                 	
                         <input type="submit" onclick="return preSubmit();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
                     </td>
                 </tr>

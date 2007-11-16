@@ -38,7 +38,16 @@ public class CalendarEventForm
     private String[] selectedAttendeeGuests;
     private String[] selectedUsers;
     private boolean privateEvent=true;
+    private int ispreview=0;
    
+
+	public int getIspreview() {
+		return ispreview;
+	}
+
+	public void setIspreview(int ispreview) {
+		this.ispreview = ispreview;
+	}
 
 	public List getCalendarTypes() {
         return calendarTypes;

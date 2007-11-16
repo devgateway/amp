@@ -126,7 +126,9 @@
     <form-bean name="aimActiityListForm" type="org.digijava.module.aim.form.ActivitiesForm" />
     <form-bean name="aimNPDgraphForm" type="org.digijava.module.aim.form.NpdGraphForm" />
 	<form-bean name="npdSettingsForm" type="org.digijava.module.aim.form.NpdSettingsForm"/>
-  </form-beans>
+	<form-bean name="aimViewIndicatorsForm" type="org.digijava.module.aim.form.ViewIndicatorsForm" />
+    <form-bean name="aimNewIndicatorForm" type="org.digijava.module.aim.form.NewIndicatorForm"/>  
+</form-beans>
 
   <global-forwards>
     <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" />
@@ -323,6 +325,9 @@
       <forward name="forward" path="/aim/relatedLinksList.do" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    	 <action name="aimThemeForm" path="/aim/addNewTheme" scope="request" type="org.digijava.module.aim.action.AddNewTheme" validate="false">
+   	<forward name="forward" path="/showLayout.do?layout=addNewTheme"/>
+    </action>
     <action name="aimRelatedLinksForm" path="/aim/getDocumentDetails" scope="session" type="org.digijava.module.aim.action.GetDocumentDetails" validate="false">
       <forward name="forward1" path="/showLayout.do?layout=viewDocument" />
       <forward name="forward2" path="/showLayout.do?layout=teamDocument" />
@@ -384,12 +389,12 @@
       <forward name="forward" path="/showLayout.do?layout=aim_addProgram" />
     </action>
     <action name="aimThemeForm" path="/aim/addSubTheme" scope="request" type="org.digijava.module.aim.action.AddSubTheme" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=addSubTheme" />
+      <forward name="forward" path="/aim/themeManager.do" redirect="true" />
       <forward name="addProgram" path="/showLayout.do?layout=aim_addProgram" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimThemeForm" path="/aim/addSubPrgInd" scope="request" type="org.digijava.module.aim.action.AddSubPrgIndicator" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=addSubTheme" />
+      <forward name="forward" path="/aim/themeManager.do" redirect="true" />
       <forward name="addProgram" path="/showLayout.do?layout=aim_addProgram" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
@@ -418,6 +423,7 @@
     <action name="aimThemeForm" path="/aim/editAllIndicator" scope="request" type="org.digijava.module.aim.action.EditAllIndicators" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_editAllIndicator" />
       <forward name="saving" path="/aim/overallIndicatorManager.do" redirect="true" />
+      <forward name="deleted" path="/aim/viewIndicators.do" />
       <forward name="assign" path="/showLayout.do?layout=aim_assignThemeIndicator" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
@@ -1027,6 +1033,10 @@
       <forward name="forward" path="/showLayout.do?layout=aim_printerFriendlyPreview" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimEditActivityForm" path="/aim/searchSectorsforind" scope="session" type="org.digijava.module.aim.action.SearchSectorsForInd" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=aim_searchSectorPopupLayout" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
     <action name="aimEditActivityForm" path="/aim/removeSelOrganisations" scope="session" type="org.digijava.module.aim.action.RemoveSelOrganisations">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
@@ -1067,6 +1077,10 @@
       <forward name="forward" path="/showLayout.do?layout=aim_searchSectorPopupLayout"/>
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimEditActivityForm" path="/aim/addSelectedSectorsForind" scope="session" type="org.digijava.module.aim.action.AddSelectedSectorsForInd" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=addNewIndicator" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
     <action name="aimEditActivityForm" path="/aim/searchOrganisation" scope="session" type="org.digijava.module.aim.action.SearchOrganisation">
       <forward name="forward" path="/showLayout.do?layout=aim_orgPopupLayout" />
       <forward name="index" path="/aim/index.do" redirect="true" />
@@ -1086,12 +1100,28 @@
       <forward name="forward" path="/showLayout.do?layout=aim_selSectorPopupLayout"/>
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+	<action name="aimNewIndicatorForm" path="/aim/selectSectorForind" scope="session" type="org.digijava.module.aim.action.SelectSectorsForInd">
+      <forward name="forward" path="/showLayout.do?layout=aim_selectSectorForind" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+     <action name="aimNewIndicatorForm" path="/aim/editSectorForind" scope="session" type="org.digijava.module.aim.action.EditSectorsForInd">
+      <forward name="forward" path="/showLayout.do?layout=aim_selectSectorForindEdit" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
     <action name="aimEditActivityForm" path="/aim/sectorSelected" scope="session" type="org.digijava.module.aim.action.SectorSelected">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimEditActivityForm" path="/aim/removeSelSectors" scope="session" type="org.digijava.module.aim.action.RemoveSelSectors">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+ 	<action name="aimNewIndicatorForm" path="/aim/removeIndicatorSelSectors" scope="session" type="org.digijava.module.aim.action.RemoveIndicatorSelSectors">
+      <forward name="forward" path="/showLayout.do?layout=addNewIndicator" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+    <action name="aimEditActivityForm" path="/aim/removeIndicatorEditSectors" scope="session" type="org.digijava.module.aim.action.RemoveIndicatorEditSectors">
+      <forward name="forward" path="/showLayout.do?layout=viewEditIndicator" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimEditActivityForm" path="/aim/showAddComponent" scope="session" type="org.digijava.module.aim.action.ShowAddComponent">
@@ -1418,6 +1448,7 @@
     <action name="aimDesktopForm" path="/aim/previewPrintMyDesktop" scope="session" type="org.digijava.module.aim.action.PreviewPrintDesktop" validate="false">
       <forward name="forward" path="/showLayout.do?layout=printMyDesktop" />
     </action>
+
     <action name="aimNPDForm" path="/aim/nationalPlaningDashboard" scope="request" type="org.digijava.module.aim.action.ViewNPD" validate="false">
       <forward name="forward" path="/showLayout.do?layout=amp_viewNPD" />
     </action>
@@ -1428,6 +1459,7 @@
       <forward name="forward" path="/showLayout.do?layout=amp_viewNPDgrid" />
     </action>
     <action name="aimNPDForm" parameter="actionMethod" path="/aim/exportIndicators2xsl" scope="request" type="org.digijava.module.aim.action.ExportIndicators2XSLAction" validate="false" />
+
     <action name="aimEditActivityForm" path="/aim/addProgram" scope="session" type="org.digijava.module.aim.action.AddProgram" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_addActivityProgram" />
       <forward name="added" path="/aim/addActivity.do?edit=true" />
@@ -1435,15 +1467,56 @@
     <action name="aimEditActivityForm" path="/aim/remProgram" scope="session" type="org.digijava.module.aim.action.RemProgram" validate="false">
       <forward name="forward" path="/aim/addActivity.do?edit=true" />
     </action>
+    <!--<action name="aimProgramTypeForm" path="/aim/programTypeManager" scope="request" type="org.digijava.module.aim.action.ProgramTypeManager" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=viewProgramTypeManager" />
+      <forward name="add" path="/showLayout.do?layout=addProgramType" />
+      <forward name="edit" path="/showLayout.do?layout=editProgramType" />
+    </action> -->
     <action name="aimTranslatorManagerForm" path="/aim/translationManager" scope="session" type="org.digijava.module.aim.action.TranslatorManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewTranslatorManager" />
     </action>
+	<action name="aimThemeForm" path="/aim/searchindicators" scope="session" type="org.digijava.module.aim.action.Searchindicators" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=assignNewIndicator" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+   <action name="aimThemeForm" path="/aim/assignNewIndicator" scope="session" type="org.digijava.module.aim.action.AssignNewIndicator" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=assignNewIndicator" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+    <action name="aimThemeForm" path="/aim/addEditData" scope="session" type="org.digijava.module.aim.action.AddEditData" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=addEditData" />
+    </action>
+    <action name="aimNewIndicatorForm" path="/aim/viewEditIndicator" scope="session" type="org.digijava.module.aim.action.ViewEditIndicator" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=viewEditIndicator" />
+    </action>
     <action input="/showLayout.do?layout=viewNpdSettings" name="npdSettingsForm" scope="request" path="/aim/npdSettingsAction" parameter="actionType" type="org.digijava.module.aim.action.NpdSettingsAction" validate="false">
 		<forward name="forward" path="/showLayout.do?layout=viewNpdSettings"/>
-	</action>	
-	<action name="aimAuditLoggerManagerForm" path="/aim/showActivityLog" scope="request" type="org.digijava.module.aim.action.ShowActivityLog">
+	</action>
+    <action name="aimThemeForm" path="/aim/selectLocationForIndicatorValue" scope="session" type="org.digijava.module.aim.action.SelectLocationForIndicatorValue" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=selectLocationForIndicatorValue" />
+    </action>
+    <action name="aimViewIndicatorsForm" path="/aim/viewIndicators" scope="session" type="org.digijava.module.aim.action.ViewIndicators" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=viewIndicators" />
+    </action>
+	<action name="aimNewIndicatorForm" path="/aim/addNewIndicator" scope="session" type="org.digijava.module.aim.action.AddNewIndicator" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=addNewIndicator" />
+    </action>
+    <action name="aimNewIndicatorForm" path="/aim/selectProgramForIndicator" scope="session" type="org.digijava.module.aim.action.SelectProgramForIndicator" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=selectProgramForIndicator" />
+      <forward name="add" path="/showLayout.do?layout=addNewIndicator" />
+    </action>
+    <action name="aimNewIndicatorForm" path="/aim/sectorSelectedForind" scope="session" type="org.digijava.module.aim.action.SectorSelectedForIndicator">
+	<forward name="forward" path="/showLayout.do?layout=addNewIndicator" />
+    </action>
+    <action name="aimNewIndicatorForm" path="/aim/sectorSelectedForindEdit" scope="session" type="org.digijava.module.aim.action.SectorSelectedForIndicator">
+	<forward name="forward" path="/showLayout.do?layout=viewEditIndicator" />
+    </action>
+    <action name="aimNewIndicatorForm" path="/aim/viewEditIndicator" scope="session" type="org.digijava.module.aim.action.ViewEditIndicator" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=viewEditIndicator" />
+    </action>
+    <action name="aimAuditLoggerManagerForm" path="/aim/showActivityLog" scope="request" type="org.digijava.module.aim.action.ShowActivityLog">
       <forward name="forward" path="/showLayout.do?layout=showActivityLog"/>
-    </action>    
-  </action-mappings>  
+    </action>
+  </action-mappings>
 </struts-config>
 

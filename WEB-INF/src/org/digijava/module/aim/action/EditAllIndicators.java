@@ -63,16 +63,22 @@ public class EditAllIndicators extends Action {
 			indThemeForm.setIndicatorId(id);
 			return mapping.findForward("assign");
 		}
-		if(type.equalsIgnoreCase("deletePrg"))
+		if(type.equalsIgnoreCase("deleteProgram"))
 		{
 			ProgramUtil.deletePrgIndicator(id);
-			return mapping.findForward("saving");
+			return mapping.findForward("deleted");
 		}
-		if(type.equalsIgnoreCase("deleteProj"))
+		if(type.equalsIgnoreCase("deleteGlobal"))
 		{
 			MEIndicatorsUtil.deleteProjIndicator(id);
-			return mapping.findForward("saving");
+			return mapping.findForward("deleted");
 		}
+		if(type.equalsIgnoreCase("deleteProject"))
+		{
+			MEIndicatorsUtil.deleteProjIndicator(id);
+			return mapping.findForward("deleted");
+		}
+		
 		return mapping.findForward("forward");
 	}
 }

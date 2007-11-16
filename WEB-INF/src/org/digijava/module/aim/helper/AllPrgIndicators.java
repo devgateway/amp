@@ -15,7 +15,9 @@ public class AllPrgIndicators implements Serializable
 	private int category;
 	private boolean npIndicator;
 	private Collection themeIndValues;
-	
+	private Collection themes;
+	private Collection sector;
+	private String sectorName;
 	/**
 	 * @return Returns the category.
 	 */
@@ -130,10 +132,29 @@ public class AllPrgIndicators implements Serializable
 	public Collection getThemeIndValues() {
 		return themeIndValues;
 	}
-	/**
+    public Collection getThemes() {
+        return themes;
+    }
+
+    /**
 	 * @param themeIndValues The themeIndValues to set.
 	 */
 	public void setThemeIndValues(Collection themeIndValues) {
 		this.themeIndValues = themeIndValues;
+	}
+    public void setThemes(Collection themes) {
+        this.themes = themes;
+    }
+	public Collection getSector() {
+		return sector;
+	}
+	public void setSector(Collection sector) {
+		this.sector = sector;
+	}
+	public String getSectorName() {
+		return sectorName;
+	}
+	public void setSectorName(String sectorName) {
+		this.sectorName = sectorName;
 	}
 }

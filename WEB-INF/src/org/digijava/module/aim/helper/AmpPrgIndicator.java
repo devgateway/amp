@@ -1,6 +1,7 @@
 package org.digijava.module.aim.helper;
 
 import java.util.Collection;
+import java.util.Set;
 
 public class AmpPrgIndicator
 {
@@ -12,7 +13,10 @@ public class AmpPrgIndicator
 	private int category;
 	private boolean npIndicator;
 	private String description;
-	private Collection prgIndicatorValues;
+	private Collection<AmpPrgIndicatorValue> prgIndicatorValues;
+	private Long sector[];
+	private Set sectors;
+	private Collection<AmpIndSectors> indSectores;
 	/**
 	 * @return Returns the category.
 	 */
@@ -120,5 +124,23 @@ public class AmpPrgIndicator
 	 */
 	public void setCreationDate(String creationDate) {
 		this.creationDate = creationDate;
+	}
+	public Long getSector()[] {
+		return sector;
+	}
+	public void setSector(Long sector[]) {
+		this.sector = sector;
+	}
+	public Set getSectors() {
+		return sectors;
+	}
+	public void setSectors(Set sectors) {
+		this.sectors = sectors;
+	}
+	public Collection<AmpIndSectors> getIndSectores() {
+		return indSectores;
+	}
+	public void setIndSectores(Collection<AmpIndSectors> indSectores) {
+		this.indSectores = indSectores;
 	}
 }

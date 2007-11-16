@@ -87,6 +87,7 @@ private int isPreview=0;
 	private String currentValDate;
 	private String currentValComments;
 	private String programDescription;
+	private boolean sectorReset;
 
 	private List costs;
 
@@ -122,7 +123,7 @@ private int isPreview=0;
 	private String visibleProgram=null;
 
 	private Collection activitySectors; // sectors related to the activity
-	private Long selActivitySectors[];
+	
 
 	private Collection cols = null;
 	private Collection colsAlpha = null;
@@ -263,7 +264,7 @@ private int isPreview=0;
 	private List fundingDetails; //Collection of FundingDetail objects
 	private List<MTEFProjection> fundingMTEFProjections; //collection of funding mtefprojections objects
 	private Collection projections; //the values in the category manager for the projections
-
+	private Long selSectors[] = null; // sectors selected by user to be added in activity after searching
 
 	private boolean dupFunding;
 	private boolean editFunding;
@@ -315,6 +316,16 @@ private int isPreview=0;
 	private String country;
 
 	// FOR SELECT SECTOR POPUP
+	private Long sector;
+	private Long subsectorLevel1;
+	private Long subsectorLevel2;
+	private Long sectorScheme;
+	private Collection sectorSchemes;
+	private Collection parentSectors;
+	private Collection childSectorsLevel1;
+	private Collection childSectorsLevel2;
+	private Long selActivitySectors[];
+    private Collection orderedFundingOrganizations;
 
 	// FOR ADD PHYSICAL PROGRESS POPUP
 	private boolean phyProgReset;
@@ -4344,6 +4355,95 @@ public String getPurpose() {
     public Boolean getDraft() {
         return draft;
     }
+
+	public boolean isSectorReset() {
+		return sectorReset;
+	}
+
+	public void setSectorReset(boolean sectorReset) {
+		this.sectorReset = sectorReset;
+	}
+
+	public Long[] getSelSectors() {
+		return selSectors;
+	}
+
+	public void setSelSectors(Long[] selSectors) {
+		this.selSectors = selSectors;
+	}
+
+	public Long getSector() {
+		return sector;
+	}
+
+	public void setSector(Long sector) {
+		this.sector = sector;
+	}
+
+	public Long getSubsectorLevel1() {
+		return subsectorLevel1;
+	}
+
+	public void setSubsectorLevel1(Long subsectorLevel1) {
+		this.subsectorLevel1 = subsectorLevel1;
+	}
+
+	public Long getSubsectorLevel2() {
+		return subsectorLevel2;
+	}
+
+	public void setSubsectorLevel2(Long subsectorLevel2) {
+		this.subsectorLevel2 = subsectorLevel2;
+	}
+
+	public Long getSectorScheme() {
+		return sectorScheme;
+	}
+
+	public void setSectorScheme(Long sectorScheme) {
+		this.sectorScheme = sectorScheme;
+	}
+
+	public Collection getSectorSchemes() {
+		return sectorSchemes;
+	}
+
+	public void setSectorSchemes(Collection sectorSchemes) {
+		this.sectorSchemes = sectorSchemes;
+	}
+
+	public Collection getParentSectors() {
+		return parentSectors;
+	}
+
+	public void setParentSectors(Collection parentSectors) {
+		this.parentSectors = parentSectors;
+	}
+
+	public Collection getChildSectorsLevel1() {
+		return childSectorsLevel1;
+	}
+
+	public void setChildSectorsLevel1(Collection childSectorsLevel1) {
+		this.childSectorsLevel1 = childSectorsLevel1;
+	}
+
+	public Collection getChildSectorsLevel2() {
+		return childSectorsLevel2;
+	}
+
+	public void setChildSectorsLevel2(Collection childSectorsLevel2) {
+		this.childSectorsLevel2 = childSectorsLevel2;
+	}
+
+	public Collection getOrderedFundingOrganizations() {
+		return orderedFundingOrganizations;
+	}
+
+	public void setOrderedFundingOrganizations(
+			Collection orderedFundingOrganizations) {
+		this.orderedFundingOrganizations = orderedFundingOrganizations;
+	}
 
 }
 

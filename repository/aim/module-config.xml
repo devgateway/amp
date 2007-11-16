@@ -303,6 +303,9 @@
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpSISINProyect
 		</hibernate-class>
+	<hibernate-class>
+			  org.digijava.module.aim.dbentity.AmpIndicatorSector
+	</hibernate-class>
 
 
 	</hibernate-classes>

@@ -746,4 +746,12 @@ public class LocationUtil {
 		return result;
 	}
 
+    public static class HelperAmpRegionNameComparator
+        implements Comparator {
+        public int compare(Object obj1, Object obj2) {
+            AmpRegion indic1 = (AmpRegion) obj1;
+            AmpRegion indic2 = (AmpRegion) obj2;
+            return indic1.getName().compareTo(indic2.getName());
+        }
+        }
 }

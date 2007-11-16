@@ -237,6 +237,23 @@ public class SectorUtil {
 		return col;
 	}
 
+	public static Collection getAllSectors() {
+		Session session = null;
+		Collection col = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select sc from " + AmpSector.class.getName()
+					+ " sc order by sc.name";
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+
+		} catch (Exception e) {
+			logger.error("Cannot get sectors, " + e);
+		} 
+		return col;
+	}
+	
 	public static Collection getAllChildSectors(Long parSecId) {
 		Session session = null;
 		Collection col = null;

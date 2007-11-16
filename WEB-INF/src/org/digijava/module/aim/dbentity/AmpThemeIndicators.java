@@ -18,6 +18,7 @@ public class AmpThemeIndicators implements Serializable, Comparable
 	private String description;
 	private Set themes;
 	private Set indicatorValues;
+	private Set sectors;
 	
 	public AmpThemeIndicators() {}
 
@@ -158,6 +159,13 @@ public class AmpThemeIndicators implements Serializable, Comparable
 
 	public void setIndicatorValues(Set indicatorValues) {
 		this.indicatorValues = indicatorValues;
+	}
+	public Set getSectors() {
+		return sectors;
+	}
+
+	public void setSectors(Set sectors) {
+		this.sectors = sectors;
 	}
 	
 }

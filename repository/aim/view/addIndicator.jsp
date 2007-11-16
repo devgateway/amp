@@ -36,8 +36,7 @@
           <digi:context name="addInd" property="context/module/moduleinstance/addIndicator.do" />
           document.forms[0].action = "<%=addInd%>";
           document.forms[0].target = window.opener.name;
-          document.forms[0].submit();
-		  window.close();
+          document.forms[0].submit();		 
 		}			
     	
 		return temp;

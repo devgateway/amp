@@ -24,10 +24,15 @@
 	
 <%@include file="documentManagerJsHelper.jsp" %>
 
-<%@include file="documentManagerDivHelper.jsp" %>
+<script type="text/javascript">
+	function afterPageLoad(e) {
+		newWindow( 'Select Documents',true,'otherDocumentsDiv');
+	}
+	YAHOO.util.Event.on(window, "load", afterPageLoad); 
+</script>	
 
 <br />
-<div id="otherDocumentsDiv"></div>
+<div id="otherDocumentsDiv">&nbsp;</div>
 <button onclick="saveSelectedDocuments()" type="button">Submit</button> 
 <br /><br />
 &nbsp;&nbsp;
@@ -38,8 +43,5 @@
 	<digi:trn key="contentrepository:newWindow">New window</digi:trn>
 </a>
 
-<script type="text/javascript">
-	newWindow( 'Select Documents',true,'otherDocumentsDiv');
-</script>	
-	
+<%@include file="documentManagerDivHelper.jsp" %>
 	

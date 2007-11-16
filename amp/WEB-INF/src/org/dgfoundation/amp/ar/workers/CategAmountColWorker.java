@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Set;
 
@@ -36,6 +35,9 @@ import org.digijava.module.aim.helper.EthiopianCalendar;
  */
 public class CategAmountColWorker extends ColumnWorker {
 
+    	protected GregorianCalendar calendar;
+    	protected EthiopianCalendar ethcalendar;
+    	protected DateFormatSymbols dfs;
 	/**
 	 * @param condition
 	 * @param viewName
@@ -44,7 +46,9 @@ public class CategAmountColWorker extends ColumnWorker {
 	public CategAmountColWorker(String condition, String viewName,
 			String columnName,ReportGenerator generator) {
 		super(condition, viewName, columnName,generator);
-		// TODO Auto-generated constructor stub
+		calendar=new GregorianCalendar();
+		dfs=new DateFormatSymbols();
+		ethcalendar=new EthiopianCalendar();
 	}
 
 	/**filter.getFromYear()!=null
@@ -214,10 +218,10 @@ public class CategAmountColWorker extends ColumnWorker {
 		}	
 		//Date handling..
 		
-		GregorianCalendar calendar = new GregorianCalendar();
+		
 		if (td!=null) calendar.setTime(td); else 
 			logger.error("MISSING DATE FOR FUNDING id ="+id+ " of activity id ="+ ownerId);
-		DateFormatSymbols dfs=new DateFormatSymbols();
+		
 		
 		String quarter=null;
 		String month=null;
@@ -229,10 +233,8 @@ public class CategAmountColWorker extends ColumnWorker {
 			quarter= "Q"+ new Integer(calendar.get(Calendar.MONTH) / 4 + 1);
 			year=new Integer(calendar.get(Calendar.YEAR));
 		} else
-		if(filter.getCalendarType().getAmpFiscalCalId().equals(Constants.ETH_CAL) || filter.getCalendarType().getAmpFiscalCalId().equals(Constants.ETH_FY)) {
-			EthiopianCalendar ec=new EthiopianCalendar();
-			EthiopianCalendar tempDate=new EthiopianCalendar();
-			ec=tempDate.getEthiopianDate(calendar);
+		if(filter.getCalendarType().getAmpFiscalCalId().equals(Constants.ETH_CAL) || filter.getCalendarType().getAmpFiscalCalId().equals(Constants.ETH_FY)) {		    	
+			EthiopianCalendar ec = ethcalendar.getEthiopianDate(calendar);
 			if(filter.getCalendarType().getAmpFiscalCalId().equals(Constants.ETH_FY))
 			{
 				year=new Integer(ec.ethFiscalYear);

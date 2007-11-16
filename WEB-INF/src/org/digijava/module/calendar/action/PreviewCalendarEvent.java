@@ -24,7 +24,8 @@ public class PreviewCalendarEvent
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        CalendarEventForm calendarEventForm = (CalendarEventForm) form;
+
+    	CalendarEventForm calendarEventForm = (CalendarEventForm) form;
         try {
         	calendarEventForm.setPrivateEvent(calendarEventForm.isPrivateEvent());        	
             // calendar type
@@ -78,7 +79,7 @@ public class PreviewCalendarEvent
             calendarEventForm.setAttendeeUsers(attendeeUsers);
             calendarEventForm.setAttendeeGuests(attendeeGuests);
             calendarEventForm.setSelectedUsersList(selUsers);
-
+            calendarEventForm.setIspreview(0);
         } catch(Exception ex) {
             return mapping.findForward("failure");
         }

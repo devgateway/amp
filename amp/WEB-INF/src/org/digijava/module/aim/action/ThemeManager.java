@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator; 
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
@@ -50,12 +52,28 @@ public class ThemeManager extends Action {
 			if(viewPreference.equals("multiprogram"))
 			{
 				Collection themes = new ArrayList();
+				Collection Subthemes = new LinkedList();
+				Subthemes  = new ArrayList();
+				
+				
+				
 				ThemeForm themeForm = (ThemeForm) form;
 
 				themes = ProgramUtil.getParentThemes();
 				//themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
 				
 				themeForm.setThemes(themes);
+				
+				for(Iterator itr=themeForm.getThemes().iterator();itr.hasNext();)
+				{
+					AmpTheme item=(AmpTheme)itr.next();
+					Long id = item.getAmpThemeId();
+					Subthemes.addAll(ProgramUtil.getAllSubThemes(id));
+				}
+	
+				
+				themeForm.setSubPrograms(Subthemes);
+				
 				return mapping.findForward("forward");
 			}
 			else if(viewPreference.equals("indicators"))
@@ -69,6 +87,8 @@ public class ThemeManager extends Action {
 		}
 		
 		Collection themes = new ArrayList();
+		Collection Subthemes = new LinkedList();
+		Subthemes  = new ArrayList();
 		ThemeForm themeForm = (ThemeForm) form;
 		String event = request.getParameter("event");
 		
@@ -113,8 +133,27 @@ public class ThemeManager extends Action {
 			
 		}
 		themes = ProgramUtil.getParentThemes();
+//		for(Iterator itr=themeForm.getThemes().iterator();itr.hasNext();){
+//			AmpTheme item=(AmpTheme)itr.next();
+//		Long id = item.getAmpThemeId();
+//		
+//		themeForm.setSubPrograms(ProgramUtil.getAllSubThemes(id));
+//	}
+		
 		themeForm.setThemes(themes);
+		for(Iterator itr=themeForm.getThemes().iterator();itr.hasNext();)
+		{
+			AmpTheme item=(AmpTheme)itr.next();
+			Long id = item.getAmpThemeId();
+			Subthemes.addAll(ProgramUtil.getAllSubThemes(id));
+			
+		
+			
+		}
+		themeForm.setSubPrograms(Subthemes);
 		//themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
+		
+		
 		return mapping.findForward("forward");
 	}
 }

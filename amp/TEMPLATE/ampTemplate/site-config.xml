@@ -419,6 +419,8 @@
 				<page>aim_selectCreateIndicatorForStep9</page>
 				<page>aim_selectCMSCategoryPopupLayout</page>
 				<page>aim_selSectorPopupLayout</page>
+				<page>aim_selectSectorForind</page>
+				<page>aim_selectSectorForindEdit</page>
 				<page>aim_addActivityProgram</page>
 				<page>aim_addPhyProgPopupLayout</page>
 	  			<page>aim_selectDocument</page>
@@ -440,6 +442,7 @@
 				<page>aim_searchlocPopupLayout</page>
 				<page>aim_addExchangeRate</page>
 				<page>aim_updateCurrency</page>
+				<page>addNewTheme</page>
 				<page>aim_searchSectorPopupLayout</page>
 				<page>aim_printerFriendlyPreview</page>
 				<page>aim_viewActivityDetails</page>
@@ -450,7 +453,7 @@
 				<page>aim_deleteIndicator</page>
 				<page>aim_addProgram</page>
 				<page>aim_editTheme</page>
-				<page>aim_addPrgIndicator</page>
+				<!-- <page>aim_addPrgIndicator</page> -->
 				<page>aim_editAllIndicator</page>
 				<page>aim_assignThemeIndicator</page>
 				<page>aim_printActPerf</page>
@@ -484,6 +487,12 @@
 				<page>aim_actPerfWithoutBase</page>
 				<page>aim_portPerfWithoutBase</page>
 				<page>aim_npdOptions</page>
+				<page>addNewIndicator</page>
+			    <page>selectProgramForIndicator</page>
+				<page>selectLocationForIndicatorValue</page>				
+				<page>viewEditIndicator</page>
+				<page>addEditData</page>				
+				<page>assignNewIndicator</page>
 				<page>showActivityLog</page>
 			</module>
 			<module name="contentrepository">

@@ -281,8 +281,33 @@
                               </digi:link>
                             </td>
                           </tr>
+						 <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+                          <tr>
+                          <td class=f-names noWrap>
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn key="aim:clickToViewcomponentsManager">Click here to view Components Manager</digi:trn>
+                              </c:set>
+                              <digi:link href="/themeManager.do~view=multiprogram" title="${translation}" >
+                                <digi:trn key="aim:multManager">Multi Program Manager</digi:trn>
+                              </digi:link>
+                            </td>
+                          </tr>
+                           <tr>
+                          <tr>
+                          <td class=f-names noWrap>
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn key="aim:clickToViewcomponentsManager">Click here to view Components Manager</digi:trn>
+                              </c:set>
+                              <digi:link href="/viewIndicators.do" title="${translation}" >
+                                <digi:trn key="aim:indManager">Indicator Manager</digi:trn>
+                              </digi:link>
+                            </td>
+                          </tr>
+						</module:display>
 
-						<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+<!--
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -296,8 +321,7 @@
                               </digi:link>
                             </td>
                           </tr>
-                          </module:display>
-                          <%-- <tr>
+                          <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="translation">
@@ -309,8 +333,8 @@
                                 </digi:trn>
                               </digi:link>
                             </td>
-                          </tr> --%>
-
+                          </tr>
+-->
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

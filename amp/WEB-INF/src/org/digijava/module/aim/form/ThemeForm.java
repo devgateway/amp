@@ -1,8 +1,15 @@
 package org.digijava.module.aim.form;
 
 import org.apache.struts.action.*;
+import org.apache.struts.util.LabelValueBean;
+import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpRegion;
+import org.digijava.module.aim.helper.IndicatorsBean;
+
+
 import java.util.Collection;
 import java.util.List;
+
 
 public class ThemeForm extends ActionForm {
 
@@ -11,6 +18,7 @@ public class ThemeForm extends ActionForm {
 		  private Collection prgIndicators;
 		  private Long themeId;
 		  private String programName;
+		  private String sectorName;
 		  private String programCode;
 		  private String programDescription;
 		  //private String programType; replaced by programTypeCategValId which uses Category Manager
@@ -25,18 +33,26 @@ public class ThemeForm extends ActionForm {
 		  private Long indicatorId;
 		  private String code;
 		  private String name;
+		  private String themeName;
 		  private String encodeName;
 		  private String type;
 		  private String indicatorDescription;
 		  private int category;
 		  private boolean npIndicator;
 		  private List prgIndValues;
-		  private int valueType;
-		  private String creationDate;
+		  private int valueType[];
+		  private String creationDate[];
 		  private String flag; 
 		  //private Collection programTypeNames; No longer needed, program type is in category manager
 		  private Long selectTheme;
   		  private String indType;
+  		  private Long indicatorsId[];
+  		  private AmpLocation location;
+  		  private Collection<AmpRegion> locationsCol;
+  		  private Collection<LabelValueBean> selectedlocations;
+  		  private String keyword;
+  		  private Long selectedLocationId;
+  		  private String indame;
 		  
 		  private String programLeadAgency;
 		  private String programTargetGroups;
@@ -45,6 +61,40 @@ public class ThemeForm extends ActionForm {
 		  private String programOutputs;
 		  private String programBeneficiaries;
 		  private String programEnvironmentConsiderations;
+		  private Float programExternalFinancing;
+		  private Float programInernalFinancing;
+		  private Float programTotalFinancing;
+		  
+		 
+		  private boolean reset;
+		  private boolean indPopupReset;
+          private int tempNumResults;
+          private Collection<IndicatorsBean> allIndicators;
+          private int numResults;
+          private Integer currentPage;
+      	  private String currentAlpha;
+      	  private boolean startAlphaFlag;
+      	  private Collection cols = null;
+      	  private Collection colsAlpha = null;
+       	  private int item;
+       	  private Integer selectedindicatorFromPages;
+      	  private String step = null;
+      	  private Collection  allSectors;
+      	  private Collection pagedCol;
+      	  private Long parentId;
+      	  private Double valAmount[];
+      	  private Long indid[]; // list of ind selected from
+      	  private Long parentIndex;
+      	  private String action;
+      	  
+      	  
+          
+          
+          
+       // pop-up organisation selector window
+      	private Collection pages;
+      	private String[] alphaPages;
+          
 				
 		public String getFlag() {
 			return flag;
@@ -362,11 +412,11 @@ public class ThemeForm extends ActionForm {
 			return prgIndValues;
 		}
 
-    public int getValueType() {
+    public int[] getValueType() {
         return valueType;
     }
 
-    public String getCreationDate() {
+    public String[] getCreationDate() {
         return creationDate;
     }
 
@@ -374,11 +424,11 @@ public class ThemeForm extends ActionForm {
 			this.prgIndValues = prgIndValues;
 		}
 
-    public void setValueType(int valueType) {
+    public void setValueType(int valueType[]) {
         this.valueType = valueType;
     }
 
-    public void setCreationDate(String creationDate) {
+    public void setCreationDate(String creationDate[]) {
         this.creationDate = creationDate;
     }
 	
@@ -472,5 +522,277 @@ public class ThemeForm extends ActionForm {
 
 	public void setEncodeName(String encodeName) {
 		this.encodeName = encodeName;
+	}
+
+	public Float getProgramExternalFinancing() {
+		return programExternalFinancing;
+	}
+
+	public void setProgramExternalFinancing(Float programExternalFinancing) {
+		this.programExternalFinancing = programExternalFinancing;
+	}
+
+	public Float getProgramInernalFinancing() {
+		return programInernalFinancing;
+	}
+
+	public void setProgramInernalFinancing(Float programInernalFinancing) {
+		this.programInernalFinancing = programInernalFinancing;
+	}
+
+	public Float getProgramTotalFinancing() {
+		return programTotalFinancing;
+	}
+
+	public void setProgramTotalFinancing(Float programTotalFinancing) {
+		this.programTotalFinancing = programTotalFinancing;
+	}
+
+	public String getThemeName() {
+		return themeName;
+	}
+
+	public void setThemeName(String themeName) {
+		this.themeName = themeName;
+	}
+
+	public Long[] getIndicatorsId() {
+		return indicatorsId;
+	}
+
+	public void setIndicatorsId(Long[] indicatorsId) {
+		this.indicatorsId = indicatorsId;
+	}
+
+	public AmpLocation getLocation() {
+		return location;
+	}
+
+	public void setLocation(AmpLocation location) {
+		this.location = location;
+	}
+
+	public Collection<AmpRegion> getLocationsCol() {
+		return locationsCol;
+	}
+
+	public void setLocationsCol(Collection<AmpRegion> locationsCol) {
+		this.locationsCol = locationsCol;
+	}
+
+	public Collection<LabelValueBean> getSelectedlocations() {
+		return selectedlocations;
+	}
+
+	public void setSelectedlocations(Collection<LabelValueBean> selectedlocations) {
+		this.selectedlocations = selectedlocations;
+	}
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+	public Long getSelectedLocationId() {
+		return selectedLocationId;
+	}
+
+	public void setSelectedLocationId(Long selectedLocationId) {
+		this.selectedLocationId = selectedLocationId;
+	}
+
+	public String getSectorName() {
+		return sectorName;
+	}
+
+	public void setSectorName(String sectorName) {
+		this.sectorName = sectorName;
+	}
+
+	public boolean isReset() {
+		return reset;
+	}
+
+	public void setReset(boolean reset) {
+		this.reset = reset;
+	}
+
+	public boolean isIndPopupReset() {
+		return indPopupReset;
+	}
+
+	public void setIndPopupReset(boolean indPopupReset) {
+		this.indPopupReset = indPopupReset;
+	}
+
+	public int getTempNumResults() {
+		return tempNumResults;
+	}
+
+	public void setTempNumResults(int tempNumResults) {
+		this.tempNumResults = tempNumResults;
+	}
+
+	public Collection<IndicatorsBean> getAllIndicators() {
+		return allIndicators;
+	}
+
+	public void setAllIndicators(Collection<IndicatorsBean> allIndicators) {
+		this.allIndicators = allIndicators;
+	}
+
+	public int getNumResults() {
+		return numResults;
+	}
+
+	public void setNumResults(int numResults) {
+		this.numResults = numResults;
+	}
+
+	public Integer getCurrentPage() {
+		return currentPage;
+	}
+
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
+	}
+
+	public String getCurrentAlpha() {
+		return currentAlpha;
+	}
+
+	public void setCurrentAlpha(String currentAlpha) {
+		this.currentAlpha = currentAlpha;
+	}
+
+	public boolean isStartAlphaFlag() {
+		return startAlphaFlag;
+	}
+
+	public void setStartAlphaFlag(boolean startAlphaFlag) {
+		this.startAlphaFlag = startAlphaFlag;
+	}
+
+	public Collection getCols() {
+		return cols;
+	}
+
+	public void setCols(Collection cols) {
+		this.cols = cols;
+	}
+
+	public Collection getColsAlpha() {
+		return colsAlpha;
+	}
+
+	public void setColsAlpha(Collection colsAlpha) {
+		this.colsAlpha = colsAlpha;
+	}
+
+	public int getItem() {
+		return item;
+	}
+
+	public void setItem(int item) {
+		this.item = item;
+	}
+
+	public Integer getSelectedindicatorFromPages() {
+		return selectedindicatorFromPages;
+	}
+
+	public void setSelectedindicatorFromPages(Integer selectedindicatorFromPages) {
+		this.selectedindicatorFromPages = selectedindicatorFromPages;
+	}
+
+	public String getStep() {
+		return step;
+	}
+
+	public void setStep(String step) {
+		this.step = step;
+	}
+
+	public Collection getAllSectors() {
+		return allSectors;
+	}
+
+	public void setAllSectors(Collection allSectors) {
+		this.allSectors = allSectors;
+	}
+
+	public Collection getPages() {
+		return pages;
+	}
+
+	public void setPages(Collection pages) {
+		this.pages = pages;
+	}
+
+	public String[] getAlphaPages() {
+		return alphaPages;
+	}
+
+	public void setAlphaPages(String[] alphaPages) {
+		this.alphaPages = alphaPages;
+	}
+
+	public Collection getPagedCol() {
+		return pagedCol;
+	}
+
+	public void setPagedCol(Collection pagedCol) {
+		this.pagedCol = pagedCol;
+	}
+
+	public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
+
+	public Double[] getValAmount() {
+		return valAmount;
+	}
+
+	public void setValAmount(Double[] valAmount) {
+		this.valAmount = valAmount;
+	}
+
+	public Long[] getIndid() {
+		return indid;
+	}
+
+	public void setIndid(Long[] indid) {
+		this.indid = indid;
+	}
+
+	public String getIndame() {
+		return indame;
+	}
+
+	public void setIndame(String indame) {
+		this.indame = indame;
+	}
+
+	public Long getParentIndex() {
+		return parentIndex;
+	}
+
+	public void setParentIndex(Long parentIndex) {
+		this.parentIndex = parentIndex;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
 	}
 }

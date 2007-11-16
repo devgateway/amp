@@ -35,6 +35,10 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 		return cummulativeShow;
 	}
 
+	public Cell newInstance() {
+		return new CategAmountCell();
+	}
+	
 	/**
 	 * @param cummulativeShow The cummulativeShow to set.
 	 */
@@ -103,7 +107,7 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	}
 
 public Cell filter(Cell metaCell,Set ids) {
-		CategAmountCell ret=(CategAmountCell) super.filter(metaCell,ids);
+    	CategAmountCell ret = (CategAmountCell) super.filter(metaCell,ids);    
 		if(ret==null) return null;
 		if(metaCell.getColumn().getName().equals(ArConstants.DONOR)) {
 				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.DONOR)))

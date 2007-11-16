@@ -251,7 +251,9 @@ public class AmountCell extends Cell {
 		 AmountCell ret=(AmountCell) super.filter(metaCell,ids);
 		 if(ret==null || ret.getMergedCells().size()==0) return ret;
 		 //we need to filter the merged cells too...
-		 AmountCell realRet=new AmountCell(ret.getOwnerId());
+		 AmountCell realRet=(AmountCell) this.newInstance();
+		 realRet.setOwnerId(ret.getOwnerId());
+		 //AmountCell realRet=new AmountCell(ret.getOwnerId());
 		 Iterator i=ret.getMergedCells().iterator();
 		 while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();

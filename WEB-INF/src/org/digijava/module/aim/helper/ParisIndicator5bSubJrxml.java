@@ -6,16 +6,17 @@ import java.io.PrintStream;
 import java.util.Collection;
 import java.util.*;
 
-public class ParisIndicator5bSubJrxml {
-    public void createJrxml(String filePath, String reportName, List data) throws IOException {
+public class ParisIndicator5bSubJrxml extends ParisIndicatorJrxml {
+    public synchronized void createSubJrxml(String filePath, String reportName, List data) throws IOException {
 
         FileOutputStream out = new FileOutputStream(filePath);
         PrintStream p = new PrintStream(out);
+
         p.println("<?xml version=\"1.0\" encoding=\"UTF-8\"  ?>");
         p.println("<!-- Created with iReport - A designer for JasperReports -->");
         p.println("<!DOCTYPE jasperReport PUBLIC '//JasperReports//DTD Report Design//EN' 'http://jasperreports.sourceforge.net/dtds/jasperreport.dtd'>");
         p.println("<jasperReport");
-        p.println("		 name='"+reportName+"_sub'");
+        p.println("		 name='" + reportName + "_sub'");
         p.println("		 columnCount='1'");
         p.println("		 printOrder='Vertical'");
         p.println("		 orientation='Portrait'");
@@ -48,7 +49,7 @@ public class ParisIndicator5bSubJrxml {
         p.println("			</band>");
         p.println("		</pageHeader>");
         p.println("		<columnHeader>");
-        p.println("			<band height='"+(data.size()*16+40)+"' isSplitAllowed='true' >");
+        p.println("			<band height='" + (data.size() * 16 + 40) + "' isSplitAllowed='true' >");
         p.println("				<rectangle radius='0' >");
         p.println("					<reportElement");
         p.println("						mode='Opaque'");
@@ -73,7 +74,7 @@ public class ParisIndicator5bSubJrxml {
         p.println("					<graphicElement stretchType='NoStretch' pen='Thin'/>");
         p.println("				</line>");
         int i = 6;
-        int top=40;
+        int top = 40;
         for (ListIterator dnIter = data.listIterator(); dnIter.hasNext(); ) {
             String[] dn = (String[]) dnIter.next();
             if (dnIter.nextIndex() == 1) {
@@ -99,7 +100,7 @@ public class ParisIndicator5bSubJrxml {
                 p.println("					<textElement textAlignment='Center'>");
                 p.println("						<font isBold='true'/>");
                 p.println("					</textElement>");
-                p.println("				<text><![CDATA["+dn[0]+"]]></text>");
+                p.println("				<text><![CDATA[" + dn[0] + "]]></text>");
                 p.println("				</staticText>");
                 p.println("				<staticText>");
                 p.println("					<reportElement");
@@ -146,7 +147,7 @@ public class ParisIndicator5bSubJrxml {
                 p.println("					<textElement textAlignment='Center'>");
                 p.println("						<font isBold='true'/>");
                 p.println("					</textElement>");
-                p.println("				<text><![CDATA["+dn[1]+"]]></text>");
+                p.println("				<text><![CDATA[" + dn[1] + "]]></text>");
                 p.println("				</staticText>");
                 p.println("				<staticText>");
                 p.println("					<reportElement");
@@ -169,7 +170,7 @@ public class ParisIndicator5bSubJrxml {
                 p.println("					<textElement textAlignment='Center'>");
                 p.println("						<font isBold='true'/>");
                 p.println("					</textElement>");
-                p.println("				<text><![CDATA["+dn[2]+"]]></text>");
+                p.println("				<text><![CDATA[" + dn[2] + "]]></text>");
                 p.println("				</staticText>");
                 p.println("				<staticText>");
                 p.println("					<reportElement");
@@ -192,15 +193,15 @@ public class ParisIndicator5bSubJrxml {
                 p.println("					<textElement textAlignment='Center'>");
                 p.println("						<font isBold='true'/>");
                 p.println("					</textElement>");
-                p.println("				<text><![CDATA["+dn[3]+"]]></text>");
+                p.println("				<text><![CDATA[" + dn[3] + "]]></text>");
                 p.println("				</staticText>");
 
-            } else if(dnIter.nextIndex() > 1){
+            } else if (dnIter.nextIndex() > 1) {
                 p.println("				<staticText>");
                 p.println("					<reportElement");
 
                 p.println("						x='0'");
-                p.println("						y='"+top+"'");
+                p.println("						y='" + top + "'");
                 p.println("						width='131'");
                 p.println("						height='16'");
                 p.println("						key='staticText-" + i + "'/>");
@@ -215,7 +216,7 @@ public class ParisIndicator5bSubJrxml {
                 p.println("				<staticText>");
                 p.println("					<reportElement");
                 p.println("						x='131'");
-                p.println("						y='"+top+"'");
+                p.println("						y='" + top + "'");
                 p.println("						width='59'");
                 p.println("						height='16'");
                 p.println("						key='staticText-" + i + "'/>");
@@ -229,7 +230,7 @@ public class ParisIndicator5bSubJrxml {
                 p.println("				<staticText>");
                 p.println("					<reportElement");
                 p.println("						x='190'");
-                p.println("						y='"+top+"'");
+                p.println("						y='" + top + "'");
                 p.println("						width='60'");
                 p.println("						height='16'");
                 p.println("						key='staticText-" + i + "'/>");
@@ -243,7 +244,8 @@ public class ParisIndicator5bSubJrxml {
                 p.println("				<staticText>");
                 p.println("					<reportElement");
                 p.println("						x='250'");
-                p.println("						y='"+top+"'");top+=16;
+                p.println("						y='" + top + "'");
+                top += 16;
                 p.println("						width='57'");
                 p.println("						height='16'");
                 p.println("						key='staticText-" + i + "'/>");

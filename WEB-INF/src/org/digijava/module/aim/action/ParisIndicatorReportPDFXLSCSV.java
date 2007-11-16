@@ -38,6 +38,7 @@ import org.digijava.module.aim.helper.ParisIndicatorDataSource;
 import org.digijava.module.aim.helper.ParisIndicator5aSubJrxml;
 import org.digijava.module.aim.helper.ParisIndicator5bSubJrxml;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
+import org.digijava.module.aim.helper.ParisIndicatorJrxml;
 
 /*
  *@author Govind G Dalwani
@@ -228,48 +229,49 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
             String realPathJrxml = reportPath + ".jrxml";
             String realPathSubJrxml = null;
 
+            ParisIndicatorJrxml jrxml=null;
             if (pId.equals("3")) {
-                Parisindicator3Jrxml jrxml = new Parisindicator3Jrxml();
-                jrxml.createJrxml(realPathJrxml, reportName, colCnt1, rowCnt1, type);
+                jrxml = new Parisindicator3Jrxml();
 
             } else if (pId.equals("4")) {
-                ParisIndicator4Jrxml jrxml = new ParisIndicator4Jrxml();
-                jrxml.createJrxml(realPathJrxml, reportName, colCnt1, rowCnt1, type);
+                jrxml = new ParisIndicator4Jrxml();
 
             } else if (pId.equals("5a")) {
                 realPathSubJrxml = reportPath + "_sub.jrxml";
 
                 ParisIndicator5aSubJrxml subJrxml = new ParisIndicator5aSubJrxml();
-                subJrxml.createJrxml(realPathSubJrxml, reportName, formBean.getDonorsCollIndc5());
+                subJrxml.createSubJrxml(realPathSubJrxml, reportName, formBean.getDonorsCollIndc5());
 
-                ParisIndicator5aJrxml jrxml = new ParisIndicator5aJrxml();
-                jrxml.createJrxml(realPathJrxml, reportName, colCnt1, rowCnt1, type);
+                jrxml = new ParisIndicator5aJrxml();
 
             } else if (pId.equals("5b")) {
                 realPathSubJrxml = reportPath + "_sub.jrxml";
 
                 ParisIndicator5bSubJrxml subJrxml = new ParisIndicator5bSubJrxml();
-                subJrxml.createJrxml(realPathSubJrxml, reportName, formBean.getDonorsCollIndc5());
+                subJrxml.createSubJrxml(realPathSubJrxml, reportName, formBean.getDonorsCollIndc5());
 
-                ParisIndicator5bJrxml jrxml = new ParisIndicator5bJrxml();
-                jrxml.createJrxml(realPathJrxml, reportName, colCnt1, rowCnt1, type);
+                jrxml = new ParisIndicator5bJrxml();
 
             } else if (pId.equals("6")) {
-                ParisIndicator6Jrxml jrxml = new ParisIndicator6Jrxml();
-                jrxml.createJrxml(realPathJrxml, reportName, colCnt1, rowCnt1, type);
+                jrxml = new ParisIndicator6Jrxml();
 
             } else if (pId.equals("7")) {
-                ParisIndicator7Jrxml jrxml = new ParisIndicator7Jrxml();
-                jrxml.createJrxml(realPathJrxml, reportName, colCnt1, rowCnt1, type);
+                jrxml = new ParisIndicator7Jrxml();
 
             } else if (pId.equals("9")) {
-                ParisIndicator9Jrxml jrxml = new ParisIndicator9Jrxml();
-                jrxml.createJrxml(realPathJrxml, reportName, colCnt1, rowCnt1, type);
+                jrxml = new ParisIndicator9Jrxml();
 
             } else if (pId.equals("10a")) {
-                ParisIndicator10aJrxml jrxml = new ParisIndicator10aJrxml();
-                jrxml.createJrxml(realPathJrxml, reportName, colCnt1, rowCnt1, type);
+                jrxml = new ParisIndicator10aJrxml();
 
+            }else{
+                return null;
+            }
+
+            if(jrxml!=null){
+                jrxml.createJrxml(realPathJrxml, reportName, colCnt1, rowCnt1, type);
+            }else{
+                return null;
             }
 
             String jasperFile = reportPath + ".jasper";

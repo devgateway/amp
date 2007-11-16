@@ -21,8 +21,11 @@
 										&nbsp;
 									</td></tr>
 									<feature:display name="Content Repository" module="Document Management">
+									<tr>
+										<td>
+										<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 										<tr>
-											<td bgColor=#f4f4f2>
+											<td>
 												<bean:define toScope="request" id="showRemoveButton" value="true" />
 												<bean:define toScope="request" id="documentsType" value="<%=org.digijava.module.aim.helper.ActivityDocumentsConstants.RELATED_DOCUMENTS %>" />
 												<bean:define toScope="request" id="versioningRights" value="false" />
@@ -38,8 +41,11 @@
 														<digi:trn key="btn:addDocumentsFromRepository">Add Documents From Repository</digi:trn>
 												</html:button>
 											</td>
-											<br />
 										</tr>
+										</table>
+										</td>
+									</tr>
+									<tr><td>&nbsp;</td></tr>
 									</feature:display>
 									<tr><td>
 										<logic:notEmpty name="aimEditActivityForm" property="documentList">

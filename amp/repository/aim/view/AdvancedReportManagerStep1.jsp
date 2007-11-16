@@ -241,6 +241,7 @@ function checkUncheckAll2() {
 												<field:display name="Team" feature="Identification">&nbsp;</field:display>
 												<field:display name="A.C. Chapter" feature="Identification">&nbsp;</field:display>
 												<field:display name="Accession Instrument" feature="Identification">&nbsp;</field:display>
+												<field:display name="Draft" feature="Identification">&nbsp;</field:display>
 											
 
 

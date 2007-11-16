@@ -68,6 +68,8 @@ public class MetaInfo implements Comparable {
 		Iterator i = metaData.iterator();
 		while (i.hasNext()) {
 			MetaInfo element = (MetaInfo) i.next();
+			if (element == null)
+				continue;
 			if (element.getCategory().equals(category))
 				return element;
 		}

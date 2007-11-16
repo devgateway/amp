@@ -28,7 +28,7 @@ import org.digijava.module.aim.helper.OrgProjectId;
 import java.util.HashSet;
 import java.util.Arrays;
 
-public class Searchindicators extends Action {
+public class SearchAmpIndicators extends Action {
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			javax.servlet.http.HttpServletRequest request,

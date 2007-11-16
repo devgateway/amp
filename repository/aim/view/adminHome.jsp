@@ -305,6 +305,17 @@
                               </digi:link>
                             </td>
                           </tr>
+                              <tr>
+                          <td class=f-names noWrap>
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn key="aim:ClickToViewMultiProgramConfigurationPage">Click here to view Multi Program Configuration Page</digi:trn>
+                              </c:set>
+                              <digi:link href="/programConfigurationPage.do" title="${translation}" >
+                                <digi:trn key="aim:multManagerConfiguration">Multi Program Configuration</digi:trn>
+                              </digi:link>
+                            </td>
+                          </tr>
 						</module:display>
 
 <!--

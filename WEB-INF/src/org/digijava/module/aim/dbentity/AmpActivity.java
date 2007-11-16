@@ -159,6 +159,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private Boolean governmentApprovalProcedures;
 
 	private Boolean jointCriteria;
+        private Set actPrograms;
 
 	public Boolean isGovernmentApprovalProcedures() {
 		return governmentApprovalProcedures;
@@ -1226,12 +1227,20 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
         return draft;
     }
 
-    public void setReferenceDocs(Set referenceDocs) {
+        public Set getActPrograms() {
+                return actPrograms;
+        }
+
+        public void setReferenceDocs(Set referenceDocs) {
 		this.referenceDocs = referenceDocs;
 	}
 
     public void setDraft(Boolean draft) {
         this.draft = draft;
     }
+
+        public void setActPrograms(Set actPrograms) {
+                this.actPrograms = actPrograms;
+        }
 
 }

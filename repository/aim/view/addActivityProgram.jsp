@@ -5,9 +5,8 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
-<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
+
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -45,11 +44,8 @@
       return true;
     }
 
-    function reloadProgram(selectedProgram,reload) {
-
-    	if(reload==1)
-    	 {
-		<digi:context name="selProgram" property="context/module/moduleinstance/addProgram.do?edit=true"/>
+    function reloadProgram(selectedProgram) {
+       	<digi:context name="selProgram" property="context/module/moduleinstance/addProgram.do?edit=true"/>
 
         var prgSels=document.getElementsByName("selPrograms");
         var flag=false;
@@ -59,7 +55,7 @@
           for(i=0;i<prgSels.length;i++){
             if(prgSels[i].value==-1){
               urlParams="<%=selProgram%>&themeid="+prgSels[i].value+"&selPrgLevel="+(i+1);
-              flag=true;
+              flag=true
               break;
             }
           }
@@ -71,7 +67,6 @@
 
         document.aimEditActivityForm.action = urlParams;
         document.aimEditActivityForm.submit();
-        }
 
       }
 
@@ -90,6 +85,19 @@
 
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addProgram.do" method="post">
+<c:set var="noDefaultProgram">
+<digi:trn key="aim:noDefaultProgram">
+Default program is not selected
+</digi:trn>
+</c:set>
+<c:set var="defaultProgram">
+<digi:trn key="aim:defaultProgram">
+Default Program
+</digi:trn>
+</c:set>
+
+
+
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
   <tr>
     <td vAlign="top">
@@ -99,79 +107,101 @@
             <table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding id="tblSlo">
               <tr bgcolor="#006699">
                 <td vAlign="center" width="100%" align ="center" class="textalb" height="20">
-                  <digi:trn key="aim:selectActivityProgram">Select Program</digi:trn>
+                  Select Program
                 </td>
               </tr>
               <tr>
                 <td align="center" bgcolor=#ECF3FD>
                   <table cellSpacing=2 cellPadding=2>
+                  <tr>
+                  <td colspan="2" align="center">
+                    <c:choose>
+                      <c:when test="${aimEditActivityForm.programType==1}">
+                        <c:choose>
+                          <c:when test="${aimEditActivityForm.nationalSetting.defaultHierarchy!=null}">
+                              <c:out value="${defaultProgram}"/>:&nbsp;<c:out value="${aimEditActivityForm.nationalSetting.defaultHierarchy.name}"/>
+                          </c:when>
+                          <c:otherwise>
+                            <c:out value="${noDefaultProgram}"/>
+                          </c:otherwise>
+                        </c:choose>
+
+                      </c:when>
+
+                      <c:when test="${aimEditActivityForm.programType==2}">
+
+                        <c:choose>
+                          <c:when test="${aimEditActivityForm.primarySetting.defaultHierarchy!=null}">
+                               <c:out value="${defaultProgram}"/>:&nbsp;<c:out value="${aimEditActivityForm.primarySetting.defaultHierarchy.name}"/>
+                          </c:when>
+                          <c:otherwise>
+                            <c:out value="${noDefaultProgram}"/>
+                          </c:otherwise>
+                        </c:choose>
+
+                      </c:when>
+
+
+                      <c:otherwise>
+
+                        <c:choose>
+                          <c:when test="${aimEditActivityForm.secondarySetting.defaultHierarchy!=null}">
+                               <c:out value="${defaultProgram}"/>:&nbsp;<c:out value="${aimEditActivityForm.secondarySetting.defaultHierarchy.name}"/>
+                          </c:when>
+                          <c:otherwise>
+                            <c:out value="${noDefaultProgram}"/>
+                          </c:otherwise>
+                        </c:choose>
+
+                      </c:otherwise>
+                    </c:choose>
+                  </td>
+                  </tr>
                     <c:if test="${!empty aimEditActivityForm.programLevels}">
-                    <% int i=0; %>
                       <c:forEach var="prgLevels" varStatus="varSt" items="${aimEditActivityForm.programLevels}">
-                      <%i++; %>
                         <tr>
                           <td width="120" align="right">
                             <c:if test="${varSt.count==1}">
-                            <digi:trn key="aim:programScheme">Program scheme</digi:trn>
+                            Program scheme
                             </c:if>
                             <c:if test="${varSt.count!=1}">
-                            <digi:trn key="aim:subProgramLevel">Sub program level</digi:trn> ${varSt.count-1}
+                            Sub program level ${varSt.count-1}
                             </c:if>
-                            
-                            <html:hidden name="aimEditActivityForm" property="visibleProgram" value="aaa"/>
-                            
                           </td>
-                          
-                          <bean:define id="crtVisibleProgram" value="0"/>
-                          <bean:define id="nxtVisibleProgram" value="0"/>
-                          
-                          <field:display name="Sub Program Level ${varSt.count}" feature="NPD Dashboard">
-                          	<bean:define id="crtVisibleProgram" value="1"/>
-                          </field:display>
-                          <logic:lessEqual name="varSt" property="count" value="7">
-                              <field:display name="Sub Program Level ${varSt.count+1}" feature="NPD Dashboard">
-                          	  </field:display>
-                          </logic:lessEqual>
-                          <%
-                          ServletContext x=session.getServletContext();
-                          	org.dgfoundation.amp.visibility.AmpTreeVisibility atv=(org.dgfoundation.amp.visibility.AmpTreeVisibility)x.getAttribute("ampTreeVisibility");
-                          	org.digijava.module.aim.dbentity.AmpFieldsVisibility field=(org.digijava.module.aim.dbentity.AmpFieldsVisibility)atv.getFieldByNameFromRoot("Sub Program Level "+i);
-                          if(field!=null)	
-                          if(field.isFieldActive(atv))
-                        	  {%><bean:define id="nxtVisibleProgram" value="1"/>
-                        	  <%}
-                          else {%><bean:define id="nxtVisibleProgram" value="0"/>
-                          <%} %>
-							<td id="slo${varSt.count}">
-                            <html:select property="selPrograms" onchange="reloadProgram(this,${nxtVisibleProgram})" styleClass="inp-text">
-                              <option value="-1">-<digi:trn key="aim:selectProgram">Select Program</digi:trn>-</option>
+                          <td id="slo${varSt.count}">
+                            <html:select property="selPrograms" onchange="reloadProgram(this)" styleClass="inp-text">
+                              <option value="-1">-Select Program-</option>
                               <html:optionsCollection name="prgLevels" value="ampThemeId" label="name" />
-                           	</html:select>
-                          	</td>
+                           </html:select>
+                          </td>
                         </tr>
                       </c:forEach>
-                    </c:if>
+
+
                     <tr>
                       <td align="center" colspan=2>
                         <table cellPadding=5>
                           <tr>
                             <td>
-                              <input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu" onclick="addProgram()">
+                              <input type="button" value="Add" class="dr-menu" onclick="addProgram()">
                             </td>
                             <td>
-                              <input type="button" value="<digi:trn key='btn:reset'>Reset</digi:trn>" class="dr-menu" onclick="resetResults()">
+                              <input type="button" value="Reset" class="dr-menu" onclick="resetResults()">
                             </td>
                             <td>
-                              <input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()">
+                              <input type="button" value="Close" class="dr-menu" onclick="closeWindow()">
                             </td>
                           </tr>
                         </table>
                       </td>
                     </tr>
+                      </c:if>
                   </table>
                 </td>
               </tr>
+
             </table>
+
           </td>
         </tr>
       </table>

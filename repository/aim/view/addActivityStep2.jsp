@@ -90,20 +90,6 @@ function addSectors() {
   document.aimEditActivityForm.submit();
 }
 
-function addProgram() {
-  openNewRsWindow(750, 550);
-  <digi:context name="taddProgram" property="context/module/moduleinstance/addProgram.do?edit=true" />
-  document.aimEditActivityForm.action = "<%= taddProgram %>";
-  document.aimEditActivityForm.target = popupPointer.name;
-  document.aimEditActivityForm.submit();
-}
-
-function remProgram() {
-  <digi:context name="tremProgram" property="context/module/moduleinstance/remProgram.do?edit=true" />
-  document.aimEditActivityForm.action = "<%= tremProgram %>";
-
-  document.aimEditActivityForm.submit();
-}
 
 function resetAll(){
   <digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
@@ -197,7 +183,7 @@ function validateSectorPercentage(){
     flag = true;
       break;
     }
-    
+
     sum = sum + parseFloat(val);
     i = i + 1;
   }
@@ -236,6 +222,35 @@ function fnChk(frmContrl){
     return false;
   }
   return true;
+}
+
+function addProgram(programType) {
+
+		openNewRsWindow(750, 550);
+		<digi:context name="taddProgram" property="context/module/moduleinstance/addProgram.do?edit=true"/>
+
+                var url="<%= taddProgram %>&programType="+programType;
+	  	document.aimEditActivityForm.action =url ;
+
+		document.aimEditActivityForm.target = popupPointer.name;
+
+		document.aimEditActivityForm.submit();
+
+}
+
+
+
+function remProgram(programType) {
+
+		<digi:context name="tremProgram" property="context/module/moduleinstance/remProgram.do?edit=true" />
+                var url="<%=tremProgram %>&programType="+programType;
+	  	document.aimEditActivityForm.action = url;
+               document.aimEditActivityForm.target = "_self"
+
+
+		document.aimEditActivityForm.submit();
+                return true;
+
 }
 -->
 </script>

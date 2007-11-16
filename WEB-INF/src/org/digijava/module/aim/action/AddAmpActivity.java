@@ -105,27 +105,41 @@ public class AddAmpActivity extends Action {
     //return mapping.findForward("publicPreview");
 
     EditActivityForm eaForm = (EditActivityForm) form;
-    
+
     /*Clear eventually dirty information found in session related to DM*/
-		if ( request.getParameter("action") != null && request.getParameter("action").equals("create") )
-				SelectDocumentDM.clearContentRepositoryHashMap(request);
-    
+		if ( request.getParameter("action") != null && request.getParameter("action").equals("create") ){
+                        SelectDocumentDM.clearContentRepositoryHashMap(request);
+                        eaForm.setActPrograms(null);
+                        if (ProgramUtil.getAmpActivityProgramSettingsList() != null) {
+                                eaForm.setNationalSetting(ProgramUtil.
+                                                          getAmpActivityProgramSettings(
+                                                              ProgramUtil.
+                                                              NATIONAL_PLAN_OBJECTIVE));
+                                eaForm.setPrimarySetting(ProgramUtil.
+                                                         getAmpActivityProgramSettings(
+                                                             ProgramUtil.PRIMARY_PROGRAM));
+                                eaForm.setSecondarySetting(ProgramUtil.
+                                                           getAmpActivityProgramSettings(
+                                                               ProgramUtil.SECONDARY_PROGRAM));
+               }
+
+                }
     // set Globam Settings Multi-Sector Selecting
     String multiSectorSelect = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.
     		GLOBALSETTINGS_MULTISECTORSELECT);
-    eaForm.setMultiSectorSelecting(multiSectorSelect);    
-   
-    
+    eaForm.setMultiSectorSelecting(multiSectorSelect);
+
+
     // Add sectors
     if (request.getParameter("addSector") != null) {
       ActivitySector sect = (ActivitySector) session.getAttribute(
           "sectorSelected");
       session.removeAttribute("sectorSelected");
-      
+
       Collection prevSelSectors = eaForm.getActivitySectors();
-      
-     
-      
+
+
+
       boolean flag = false;
       if (prevSelSectors != null) {
     	  Iterator itr = prevSelSectors.iterator();
@@ -133,9 +147,9 @@ public class AddAmpActivity extends Action {
     		  ActivitySector asec = (ActivitySector) itr.next();
     		  flag = false;
           if (asec.getSectorName().equals(sect.getSectorName()) && asec.getSubsectorLevel1Name() != null ) {
-        	  
+
         	  	if(asec.getSubsectorLevel2Name() != null && asec.getSubsectorLevel1Name().equals(sect.getSubsectorLevel1Name())){
-        	  		
+
 		        	  		if(asec.getSubsectorLevel2Name().equals(sect.getSubsectorLevel2Name())){
 		        	  			flag = true;
 		                        break;
@@ -146,7 +160,7 @@ public class AddAmpActivity extends Action {
                         break;
         	  			}
         	  		}
-        	  	
+
           }else{
         	  if(asec.getSectorName().equals(sect.getSectorName())){
         	  flag = true;
@@ -171,7 +185,7 @@ public class AddAmpActivity extends Action {
       eaForm.setActivitySectors(prevSelSectors);
       return mapping.findForward("addActivityStep2");
     }
-    
+
     // Remove sectors
     else
     if (request.getParameter("remSectors") != null) {
@@ -187,7 +201,7 @@ public class AddAmpActivity extends Action {
         ActivitySector asec = (ActivitySector) itr.next();
         flag = false;
         for (int i = 0; i < selSectors.length; i++) {
-        	
+
           if (asec.getSubsectorLevel1Id() == -1 && asec.getSectorId().equals(selSectors[i])) {
             flag = true;
             break;
@@ -408,7 +422,7 @@ public class AddAmpActivity extends Action {
           ed.setGroupName(Constants.GROUP_OTHER);
           org.digijava.module.editor.util.DbUtil.saveEditor(ed);
         }
-   
+
         if (eaForm.getResults() == null ||
             eaForm.getResults().trim().length() == 0) {
           eaForm.setResults("aim-results-" + teamMember.getMemberId() + "-" +
@@ -556,10 +570,10 @@ public class AddAmpActivity extends Action {
               CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.
               IMPLEMENTATION_LOCATION_KEY, new Long(0)).getId()
               );
-      
+
       	//get all possible refdoc names from categories
       	Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
-      	
+
     	if (catValues!=null && eaForm.getReferenceDocs()==null){
         	List<ReferenceDoc> refDocs=new ArrayList<ReferenceDoc>();
     		Collection<AmpActivityReferenceDoc> activityRefDocs=null;
@@ -570,14 +584,14 @@ public class AddAmpActivity extends Action {
     			activityRefDocs=ActivityUtil.getReferenceDocumentsFor(eaForm.getActivityId());
             	//create map where keys are category value ids.
     			categoryRefDocMap = AmpCollectionUtils.createMap(
-    					activityRefDocs, 
+    					activityRefDocs,
     					new ActivityUtil.CategoryIdRefDocMapBuilder());
     		}
-        	
+
         	//create arrays, number of elements as much as category values
         	Long[] refdocIds=new Long[catValues.size()];
         	String[] refdocComments=new String[catValues.size()];
-        	
+
         	int c=0;
         	int selectedIds=0;
         	for(AmpCategoryValue catVal: catValues){
@@ -599,22 +613,22 @@ public class AddAmpActivity extends Action {
         		refDocs.add(doc);
         		c++;
         	}
-        	
+
         	//set selected ids
         	eaForm.setAllReferenceDocNameIds(refdocIds);
         	//set all comments, some are empty
 //        	eaForm.setRefDocComments(refdocComments);
-        	
+
         	eaForm.setReferenceDocs(refDocs);
-    		
+
     	}
-      	
-          
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
         // load the modalities from the database
         /*if (eaForm.getModalityCollection() == null) { // no longer necessary since they are in Category Manager
          modalColl = DbUtil.getAmpModality();
@@ -696,7 +710,7 @@ public class AddAmpActivity extends Action {
                                                 request.getContextPath());
               eaForm.setContext(url);
             }
-    	  
+
     	  if (eaForm.getEqualOpportunity() == null ||
     	            eaForm.getEqualOpportunity().trim().length() == 0) {
     	          eaForm.setEqualOpportunity("aim-eo-" + teamMember.getMemberId() + "-" +
@@ -715,7 +729,7 @@ public class AddAmpActivity extends Action {
   	                               System.currentTimeMillis());
   	          setEditorKey(eaForm.getMinorities(), request);
   	        }
-    	  
+
         return mapping.findForward("addActivityStep2");
       }
       else if (eaForm.getStep().equals("3")) { // show the step 3 page.
@@ -783,7 +797,7 @@ public class AddAmpActivity extends Action {
               eaForm.setActAthLastName(usr.getLastName());
               eaForm.setActAthEmail(usr.getEmail());
               eaForm.setActAthAgencySource(usr.getOrganizationName());
-              
+
             }
           }
 
@@ -794,11 +808,11 @@ public class AddAmpActivity extends Action {
           if("edit".equals(action)) {
           	//check if we have edit permissin for this activity
           	Long ampActivityId=Long.parseLong(request.getParameter("ampActivityId"));
-          	
+
           }
-          
-	
- 
+
+
+
     	if (activity.getActivityCreator() != null) {
             eaForm.setActAthFirstName(activity.getActivityCreator().getUser().
                                       getFirstNames());
@@ -811,11 +825,11 @@ public class AddAmpActivity extends Action {
           }
           eaForm.setIsPreview(0);
         }
-        
-        
-        
+
+
+
 Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
-      	
+
     	if (catValues!=null && eaForm.getReferenceDocs()==null){
         	List<ReferenceDoc> refDocs=new ArrayList<ReferenceDoc>();
     		Collection<AmpActivityReferenceDoc> activityRefDocs=null;
@@ -826,14 +840,14 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
     			activityRefDocs=ActivityUtil.getReferenceDocumentsFor(eaForm.getActivityId());
             	//create map where keys are category value ids.
     			categoryRefDocMap = AmpCollectionUtils.createMap(
-    					activityRefDocs, 
+    					activityRefDocs,
     					new ActivityUtil.CategoryIdRefDocMapBuilder());
     		}
-        	
+
         	//create arrays, number of elements as much as category values
         	Long[] refdocIds=new Long[catValues.size()];
         	String[] refdocComments=new String[catValues.size()];
-        	
+
         	int c=0;
         	int selectedIds=0;
         	for(AmpCategoryValue catVal: catValues){
@@ -855,17 +869,17 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
         		refDocs.add(doc);
         		c++;
         	}
-        	
+
         	//set selected ids
         	eaForm.setAllReferenceDocNameIds(refdocIds);
         	//set all comments, some are empty
 //        	eaForm.setRefDocComments(refdocComments);
-        	
+
         	eaForm.setReferenceDocs(refDocs);
-    		
+
     	}
-        
-        
+
+
 
         Collection euActs = EUActivityUtil.getEUActivities(eaForm.getActivityId());
         // EUActivities = same as Costs
@@ -916,8 +930,8 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
         Set keySet = null;
         if (unsavedComments != null)
         	keySet = unsavedComments.keySet();
-        
-        
+
+
         if (teamMember == null)
           return mapping.findForward("publicPreview");
         else {
@@ -952,7 +966,7 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
             //
             allComments.put(field.getFieldName(), colAux);
           }
-          
+
           eaForm.setAllComments(allComments);
           eaForm.setCommentsCol(colAux);
 
@@ -978,7 +992,7 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
             }
 
             //get the levels of risks
-            
+
             Long defaultCurrency=teamMember.getAppSettings().getCurrencyId();
 	        double allCosts=0;
             for(Iterator it=eaForm.getCosts().iterator();it.hasNext();)
@@ -1031,7 +1045,7 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
     }
     return null;
   }
-  
+
   public void setEditorKey(String s, HttpServletRequest request)
   {
 	  User user = RequestUtils.getUser(request);

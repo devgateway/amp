@@ -249,8 +249,14 @@ public class EditActivity
           eaForm.setProProjCost(null);
         }
       }
+      List nationalPlanObjectivePrograms=new ArrayList();
+      List primaryPrograms=new ArrayList();
+      List secondaryPrograms=new ArrayList();
+      eaForm.setNationalPlanObjectivePrograms(nationalPlanObjectivePrograms);
+      eaForm.setPrimaryPrograms(primaryPrograms);
+      eaForm.setSecondaryPrograms(secondaryPrograms);
 
-      List prLst = new ArrayList();
+      /*List prLst = new ArrayList();
       if (eaForm.getActPrograms() == null) {
         eaForm.setActPrograms(prLst);
       }
@@ -258,7 +264,8 @@ public class EditActivity
         prLst = eaForm.getActPrograms();
         prLst.clear();
         eaForm.setActPrograms(prLst);
-      }
+      }*/
+
 
       if (tm != null && tm.getTeamType()
           .equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
@@ -512,7 +519,21 @@ public class EditActivity
           pg.setFunDate(activity.getFunDate());
           eaForm.setProProjCost(pg);
 
-          try {
+          //load programs by type
+          if(ProgramUtil.getAmpActivityProgramSettingsList()!=null){
+                       List activityNPO=ActivityUtil.getActivityProgramsByProgramType(activityId,ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
+                       List activityPP=ActivityUtil.getActivityProgramsByProgramType(activityId,ProgramUtil.PRIMARY_PROGRAM);
+                       List activitySP=ActivityUtil.getActivityProgramsByProgramType(activityId,ProgramUtil.SECONDARY_PROGRAM);
+                       eaForm.setNationalPlanObjectivePrograms(activityNPO);
+                       eaForm.setPrimaryPrograms(activityPP);
+                       eaForm.setSecondaryPrograms(activitySP);
+                       eaForm.setNationalSetting(ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE));
+                       eaForm.setPrimarySetting(ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM));
+                       eaForm.setSecondarySetting(ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM));
+            }
+
+
+         /* try {
             List actPrgs = new ArrayList();
             Set prgSet = activity.getActivityPrograms();
             if (prgSet != null) {
@@ -527,9 +548,11 @@ public class EditActivity
 
             eaForm.setActPrograms(actPrgs);
           }
+
           catch (Exception ex) {
             ex.printStackTrace();
           }
+          */
           eaForm.setTitle(activity.getName().trim());
           eaForm.setCosts(new ArrayList(activity.getCosts()));
           eaForm.setTeam(activity.getTeam());

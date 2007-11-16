@@ -70,8 +70,8 @@ function edit(key) {
                                                     <td>
                                                       <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="40%">
                                                         <tr>
-															<td>
-																Equal Opportunity:&nbsp;&nbsp;
+															<td><digi:trn key="aim:equalOportunity">Equal Opportunity:</digi:trn>
+																&nbsp;&nbsp;
 																<bean:define id="eqOppKey">
 																	<c:out value="${aimEditActivityForm.equalOpportunity}"/>
 																</bean:define>
@@ -85,7 +85,7 @@ function edit(key) {
 															</td>
 														</tr>
                                                         <tr>
-															<td>Environment:&nbsp;&nbsp;
+															<td><digi:trn key="aim:environment"> Environment:</digi:trn>&nbsp;&nbsp;
 																<bean:define id="envKey">
 																	<c:out value="${aimEditActivityForm.environment}"/>
 																</bean:define>
@@ -99,7 +99,7 @@ function edit(key) {
 															</td>
 														</tr>
                                                         <tr>
-															<td>Minorities:&nbsp;&nbsp;
+															<td><digi:trn key="aim:monitories"> Minorities:</digi:trn> &nbsp;&nbsp;
 																<bean:define id="minKey">
 																	<c:out value="${aimEditActivityForm.minorities}"/>
 																</bean:define>

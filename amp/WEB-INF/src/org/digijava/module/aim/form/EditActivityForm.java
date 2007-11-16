@@ -27,6 +27,7 @@ import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.ReferenceDoc;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 
 public class EditActivityForm extends ActionForm implements Serializable{
 
@@ -123,7 +124,7 @@ private int isPreview=0;
 	private String visibleProgram=null;
 
 	private Collection activitySectors; // sectors related to the activity
-	
+
 
 	private Collection cols = null;
 	private Collection colsAlpha = null;
@@ -454,6 +455,18 @@ private int isPreview=0;
 	 private Boolean governmentApprovalProcedures;
 	 private Boolean jointCriteria;
   private boolean defaultCountryIsSet;
+       // program settings
+         private List primaryPrograms;
+         private List secondaryPrograms;
+         private List nationalPlanObjectivePrograms;
+         private int programType;
+         private Long[] selectedNPOPrograms;
+         private Long[] selectedPPrograms;
+         private Long[] selectedSPrograms;
+         private AmpActivityProgramSettings nationalSetting;
+         private AmpActivityProgramSettings primarySetting;
+         private AmpActivityProgramSettings secondarySetting;
+
 
 
 	public Boolean getGovernmentApprovalProcedures() {
@@ -684,6 +697,13 @@ private int isPreview=0;
                         indicatorRisk				= new Long(-1);
                         expIndicatorId				= new Long(0);
             /* END - Indicator values reset */
+                      nationalPlanObjectivePrograms=null;
+                      primaryPrograms=null;
+                      secondaryPrograms=null;
+                      selectedSPrograms=null;
+                      selectedPPrograms=null;
+                      selectedNPOPrograms=null;
+
 		}
 
 		if (orgSelReset) {
@@ -3742,6 +3762,52 @@ private int isPreview=0;
         this.selProgramId = selProgramId;
     }
 
+    // program settings
+    public void setSecondaryPrograms(List secondaryPrograms) {
+                this.secondaryPrograms = secondaryPrograms;
+        }
+
+        public void setSecondarySetting(AmpActivityProgramSettings
+                                        secondarySetting) {
+                this.secondarySetting = secondarySetting;
+        }
+
+        public void setSelectedNPOPrograms(Long[] selectedNPOPrograms) {
+                this.selectedNPOPrograms = selectedNPOPrograms;
+        }
+
+        public void setSelectedPPrograms(Long[] selectedPPrograms) {
+                this.selectedPPrograms = selectedPPrograms;
+        }
+
+        public void setSelectedSPrograms(Long[] selectedSPrograms) {
+                this.selectedSPrograms = selectedSPrograms;
+        }
+
+        public void setNationalSetting(AmpActivityProgramSettings
+                                       nationalSetting) {
+                this.nationalSetting = nationalSetting;
+        }
+
+        public void setNationalPlanObjectivePrograms(List
+            nationalPlanObjectivePrograms) {
+                this.nationalPlanObjectivePrograms =
+                    nationalPlanObjectivePrograms;
+        }
+
+        public void setPrimarySetting(AmpActivityProgramSettings primarySetting) {
+                this.primarySetting = primarySetting;
+        }
+
+        public void setPrimaryPrograms(List primaryPrograms) {
+                this.primaryPrograms = primaryPrograms;
+        }
+
+        public void setProgramType(int programType) {
+                this.programType = programType;
+        }
+
+
 	public Boolean getBudget() {
 		return budget;
 	}
@@ -4444,6 +4510,47 @@ public String getPurpose() {
 			Collection orderedFundingOrganizations) {
 		this.orderedFundingOrganizations = orderedFundingOrganizations;
 	}
+        // program settings
+        public List getSecondaryPrograms() {
+               return secondaryPrograms;
+       }
+
+       public AmpActivityProgramSettings getSecondarySetting() {
+               return secondarySetting;
+       }
+
+       public Long[] getSelectedNPOPrograms() {
+               return selectedNPOPrograms;
+       }
+
+       public Long[] getSelectedPPrograms() {
+               return selectedPPrograms;
+       }
+
+       public Long[] getSelectedSPrograms() {
+               return selectedSPrograms;
+       }
+
+       public AmpActivityProgramSettings getNationalSetting() {
+               return nationalSetting;
+       }
+
+       public List getNationalPlanObjectivePrograms() {
+               return nationalPlanObjectivePrograms;
+       }
+
+       public AmpActivityProgramSettings getPrimarySetting() {
+               return primarySetting;
+       }
+
+       public List getPrimaryPrograms() {
+               return primaryPrograms;
+       }
+
+       public int getProgramType() {
+               return programType;
+       }
+
 
 }
 

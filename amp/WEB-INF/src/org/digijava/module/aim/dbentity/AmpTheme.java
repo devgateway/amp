@@ -1,8 +1,6 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +28,8 @@ public class AmpTheme implements Serializable
 	private String beneficiaries;
 	private String environmentConsiderations;
 	private String programviewname;
-			
+        private Set programSettings;
+
 	public Set getActivities() {
 		return activities;
 	}
@@ -42,8 +41,8 @@ public class AmpTheme implements Serializable
 	public AmpTheme()
 	{
 		activities=new HashSet();
-	}	
-	
+	}
+
 	/**
 	 * @return
 	 */
@@ -186,15 +185,15 @@ public class AmpTheme implements Serializable
         AmpTheme theme = (AmpTheme) obj;
         return (theme.getAmpThemeId().equals(ampThemeId));
 	}
-    
-    
+
+
     public void setLeadAgency (String leadAgency) {
 		this.leadAgency	= leadAgency;
 	}
 	public String getLeadAgency () {
 		return this.leadAgency;
 	}
-	
+
 	public void setTargetGroups (String targetGroups) {
 		this.targetGroups	= targetGroups;
 	}
@@ -202,35 +201,35 @@ public class AmpTheme implements Serializable
 		return this.targetGroups;
 	}
 
-	
+
 	public void setBackground (String background) {
 		this.background	= background;
 	}
 	public String getBackground () {
 		return this.background;
 	}
-	
+
 	public void setObjectives (String objectives) {
 		this.objectives	= objectives;
 	}
 	public String getObjectives() {
 		return this.objectives;
 	}
-	
+
 	public void setOutputs (String outputs) {
 		this.outputs	= outputs;
 	}
 	public String getOutputs () {
 		return this.outputs;
 	}
-	
+
 	public void setBeneficiaries (String beneficiaries) {
 		this.beneficiaries	= beneficiaries;
 	}
 	public String getBeneficiaries () {
 		return this.beneficiaries;
 	}
-	
+
 	public void setEnvironmentConsiderations (String environmentConsiderations) {
 		this.environmentConsiderations	= environmentConsiderations;
 	}
@@ -254,18 +253,26 @@ public class AmpTheme implements Serializable
 		this.typeCategoryValue = typeCategoryValue;
 	}
 
-	public String getEncodeName() {		
+	public String getEncodeName() {
 		if(name != null) {
 				encodeName = name.replace("'", "\\'");
 				encodeName = encodeName.replace("\"", "\\'");
 				System.out.println(encodeName);
-			
+
 		}
 		return encodeName;
 	}
 
-	public void setEncodeName(String encodeName) {
+        public Set getProgramSettings() {
+                return programSettings;
+        }
+
+        public void setEncodeName(String encodeName) {
 		this.encodeName = encodeName;
 	}
-	
+
+        public void setProgramSettings(Set programSettings) {
+                this.programSettings = programSettings;
+        }
+
 }

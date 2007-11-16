@@ -46,12 +46,22 @@ import org.digijava.module.aim.helper.IndicatorsBean;
 import org.digijava.module.aim.helper.TreeItem;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 
 
 public class ProgramUtil {
 
 		private static Logger logger = Logger.getLogger(ProgramUtil.class);
 		public static final int YAERS_LIST_START = 2000;
+                public static final String NATIONAL_PLAN_OBJECTIVE =
+                    "National Plan Objective";
+                public static final String PRIMARY_PROGRAM = "Primary Program";
+                public static final String SECONDARY_PROGRAM = "Secondary Program";
+                public static final int NATIONAL_PLAN_OBJECTIVE_KEY = 1;
+                public static final int PRIMARY_PROGRAM_KEY = 2;
+                public static final int SECONDARY_PROGRAM_KEY = 3;
+
 
 
 
@@ -213,7 +223,7 @@ public class ProgramUtil {
             }
             return themes;
         }
-        
+
         public static Collection searchForindicators(String keyword,String sectorname) {
     		Session session = null;
     		Collection col = null;
@@ -253,7 +263,7 @@ public class ProgramUtil {
     			}
     		return col;
     	}
-        
+
         public static ArrayList getAmpThemeIndicators() {
     		Session session = null;
     		Query q = null;
@@ -332,7 +342,7 @@ public class ProgramUtil {
 	    }
 
         // New function added for the program Indicator Manager by pcsingh
-	    
+
         public static Collection getAllThemesIndicators() throws AimException
 	    {
 	    	Collection colThInd = new ArrayList();
@@ -365,7 +375,7 @@ public class ProgramUtil {
 	    	}
 	    	return colThInd;
 	    }
-	    
+
         // New function added for the program Indicator Manager by pcsingh
 	    public static Collection getAllMainPrograms() throws AimException
         {
@@ -397,7 +407,7 @@ public class ProgramUtil {
         	return mainProgram;
         }
 
-	    
+
         public static Collection getAllPrograms() throws AimException
         {
         	Session session = null;
@@ -471,8 +481,8 @@ public class ProgramUtil {
 	        }
 	        return ampTheme;
 		}
-		
-		
+
+
 		public static String getHierarchyName(AmpTheme prog){
 			String result="";
 			List<AmpTheme> progs=new ArrayList<AmpTheme>();
@@ -482,26 +492,26 @@ public class ProgramUtil {
 				progs.add(curProg);
 			}
 
-			
+
 			Collections.reverse(progs);
-			
+
 			for (ListIterator<AmpTheme> iterator = progs.listIterator(); iterator.hasNext();) {
 				AmpTheme p = (AmpTheme) iterator.next();
 				result += p.getName() + " > ";
 			}
-			
+
 			result += prog.getName();
 			return result;
 		}
-		
-		
-		
+
+
+
 	/* Commemted by pcsingh
 	 * due to some doubt abt assignment of indicator from one theme to other
-	 * doubt are like what should be default values, same indicator can be 
+	 * doubt are like what should be default values, same indicator can be
 	 * assign to mant theme or not etc.
 	 * Note: same functions are written twice for future use
-		
+
 		public static void assignThemeInd(Long indId, Long themeId){
 			Session session = null;
 			Transaction tx = null;
@@ -519,7 +529,7 @@ public class ProgramUtil {
 							"tmpAmpTheme.getName="+tmpAmpTheme.getName());
 				}
 				logger.info("\n\n\n");
-				
+
 				logger.info("Current theme name:::="+ampTh.getName());
 				Iterator itr = ampTh.getIndicators().iterator();
 				while(itr.hasNext()){
@@ -528,7 +538,7 @@ public class ProgramUtil {
 							+"tmpAmpThemeIndicators.getName="+tmpAmpThemeInd.getName());
 				}
 				logger.info("\n\n\n");
-				
+
 			}catch(Exception ex){
 				logger.error("Exception from assignThemeIndicator  "+ex.getMessage());
 				ex.printStackTrace(System.out);
@@ -537,7 +547,7 @@ public class ProgramUtil {
 */
 		public static void assignThemeInd(Long indId, Long themeId)
 		{
-			
+
 			logger.info("\n\nInside program Util\n"+indId+"      "+themeId);
 			Session session = null;
 			Transaction tx = null;
@@ -573,7 +583,7 @@ public class ProgramUtil {
 				logger.info(tempTh.isEmpty());
 				//ampThInd.setThemes(ampThInd);
 				ampThInd.setThemes(tempTh);
-				
+
 				tmpTest.add(ampThInd);
 				ampTh.setIndicators(tmpTest);
 				tx = session.beginTransaction();
@@ -586,7 +596,7 @@ public class ProgramUtil {
 			}
 		}
  //Comment over pcsing
-		
+
 		public static Collection getThemeIndicators(Long ampThemeId)
 		{
 			Session session = null;
@@ -1416,6 +1426,164 @@ public class ProgramUtil {
             return result;
         }
 
+        public static AmpActivityProgramSettings getAmpActivityProgramSettings(String name) throws DgException {
+            Session session = null;
+            AmpActivityProgramSettings programSettings=null;
+
+            try {
+                    session = PersistenceManager.getRequestDBSession();
+                    String queryString = "select ap from "
+                                    + AmpActivityProgramSettings.class.getName()+ " ap "
+                                    + "where ap.name=:name";
+                    Query qry = session.createQuery(queryString);
+                    qry.setString("name", name);
+                    programSettings=(AmpActivityProgramSettings)qry.uniqueResult();
+
+
+            } catch (Exception ex) {
+                    logger.debug("Unable to search " + ex);
+                    throw new DgException(ex);
+                    }
+            return programSettings;
+    }
+
+
+      public static List getAmpActivityProgramSettingsList() throws DgException {
+            Session session = null;
+            List programSettings=null;
+
+            try {
+                    session = PersistenceManager.getRequestDBSession();
+                    String queryString = "select ap from "
+                                    + AmpActivityProgramSettings.class.getName()+ " ap ";
+
+                    Query qry = session.createQuery(queryString);
+                    programSettings=qry.list();
+                    if( programSettings==null|| programSettings.size()==0){
+               programSettings=createDefaultAmpActivityProgramSettingsList();
+               }
+
+
+            } catch (Exception ex) {
+                    logger.debug("Unable to search " + ex);
+                    throw new DgException(ex);
+                    }
+            return programSettings;
+    }
+
+
+    public static List createDefaultAmpActivityProgramSettingsList() throws DgException {
+        Session session = null;
+        List programSettings=null;
+        Transaction tx = null;
+
+
+        try {
+                session = PersistenceManager.getRequestDBSession();
+                tx = session.beginTransaction();
+                AmpActivityProgramSettings settingNPO=new AmpActivityProgramSettings("National Plan Objective");
+                AmpActivityProgramSettings settingPP=new AmpActivityProgramSettings("Primary Program");
+                AmpActivityProgramSettings settingSP=new AmpActivityProgramSettings("Secondary Program");
+                session.save(settingNPO);
+                session.save(settingPP);
+                session.save(settingSP);
+                tx.commit();
+                programSettings=new ArrayList();
+                programSettings.add(settingNPO);
+                programSettings.add(settingPP);
+                programSettings.add(settingSP);
+
+
+             } catch (Exception ex) {
+              logger.error("Unable to create Default program Settings List  " + ex);
+                        if (tx != null)
+                          {
+                                  try
+                                  {
+                                          tx.rollback();
+                                  }
+                                  catch (Exception extx)
+                                  {
+                                          logger.error("Transaction roll back failed : "+extx.getMessage());
+
+                                  }
+                          }
+
+
+                    throw new DgException(ex);
+                    }
+
+        return programSettings;
+}
+
+
+    public static String printHierarchyNames(AmpTheme child) {
+            String names = "";
+            AmpTheme parent = child.getParentThemeId();
+            if (parent == null) {
+                    return names;
+            }
+            else {
+                    names = printHierarchyNames(parent);
+                    names += "[" + parent.getName() + "] ";
+            }
+
+            return names;
+
+    }
+
+    //save new settings
+    public static void saveAmpActivityProgramSettings(List settings) throws
+        DgException {
+            Session session = null;
+            Transaction tx = null;
+
+            try {
+                    session = PersistenceManager.getRequestDBSession();
+                    if (settings != null) {
+                            Iterator settingsIter = settings.iterator();
+                            tx = session.beginTransaction();
+                            while (settingsIter.hasNext()) {
+                                    AmpActivityProgramSettings setting = (
+                                        AmpActivityProgramSettings)
+                                        settingsIter.next();
+                                    AmpActivityProgramSettings oldSetting = (
+                                        AmpActivityProgramSettings) session.
+                                        get(AmpActivityProgramSettings.class,
+                                            setting.getAmpProgramSettingsId());
+                                    oldSetting.setAllowMultiple(setting.
+                                        isAllowMultiple());
+                                    oldSetting.setDefaultHierarchy(setting.
+                                        getDefaultHierarchy());
+                                    session.update(oldSetting);
+
+                            }
+                            tx.commit();
+
+                    }
+
+            }
+            catch (Exception ex) {
+                    logger.error("Unable to save program Setting  " + ex);
+                    if (tx != null) {
+                            try {
+                                    tx.rollback();
+                            }
+                            catch (Exception extx) {
+                                    logger.error(
+                                        "Transaction roll back failed : " +
+                                        extx.getMessage());
+
+                            }
+                    }
+
+                    throw new DgException(ex);
+            }
+
+    }
+
+
+
         /**
          * Hierarchy member factory.
          * Used to create XML enabled members.
@@ -1462,7 +1630,7 @@ public class ProgramUtil {
 
         /**
          * Added by Govind
-         * 
+         *
          * @deprecated Use Category Manager functions instead
          */
 

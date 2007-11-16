@@ -11,6 +11,11 @@ import org.digijava.module.aim.form.EditActivityForm;
 import java.util.List;
 import java.util.Iterator;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.ProgramUtil;
+import java.util.ArrayList;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import java.util.HashSet;
+import java.util.Set;
 
 public class RemProgram extends Action
 {
@@ -21,18 +26,46 @@ public class RemProgram extends Action
             throws java.lang.Exception
     {
         EditActivityForm eaform=(EditActivityForm)form;
-        List prgLst=eaform.getActPrograms();
-        Iterator itr=prgLst.listIterator();
-        AmpTheme theme=null;
-        Long prgIds[]=eaform.getSelectedPrograms();
-        while(itr.hasNext()){
-            theme=(AmpTheme)itr.next();
-            for(int i = 0; i < prgIds.length; i++) {
-                if(theme.getAmpThemeId().equals(prgIds[i])){
-                    itr.remove();
-                }
-            }
-        }
+        int settingsId = eaform.getProgramType();
+         List prgLst=new ArrayList();
+         Long prgIds[]=null;
+         switch (settingsId) {
+           case ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY:
+             prgLst = eaform.getNationalPlanObjectivePrograms();
+             prgIds=eaform.getSelectedNPOPrograms();
+             eaform.setNationalPlanObjectivePrograms(removePrograms(prgLst, prgIds));
+             eaform.setSelectedNPOPrograms(null);
+             break;
+           case ProgramUtil.PRIMARY_PROGRAM_KEY:
+             prgLst = eaform.getPrimaryPrograms();
+             prgIds=eaform.getSelectedPPrograms();
+             eaform.setPrimaryPrograms(removePrograms(prgLst, prgIds));
+             eaform.setSelectedPPrograms(null);
+             break;
+           case ProgramUtil.SECONDARY_PROGRAM_KEY:
+             prgLst = eaform.getSecondaryPrograms();
+             prgIds=eaform.getSelectedSPrograms();
+             eaform.setSecondaryPrograms(removePrograms(prgLst, prgIds));
+             eaform.setSelectedSPrograms(null);
+             break;
+         }
+        eaform.setStep("2");
         return mapping.findForward("forward");
+    }
+
+    private List removePrograms(List prgLst, Long[] prgIds) {
+      Iterator itr = prgLst.listIterator();
+      AmpActivityProgram ampActivityProgram = null;
+      Set newPrograms = new HashSet();
+      while (itr.hasNext()) {
+        ampActivityProgram = (AmpActivityProgram) itr.next();
+        for (int i = 0; i < prgIds.length; i++) {
+          if (ampActivityProgram.getProgram().getAmpThemeId().equals(prgIds[i])) {
+            newPrograms.add(ampActivityProgram);
+          }
+        }
+      }
+      prgLst.removeAll(newPrograms);
+      return prgLst;
     }
 }

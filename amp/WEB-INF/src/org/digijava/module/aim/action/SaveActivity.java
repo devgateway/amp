@@ -183,7 +183,7 @@ public class SaveActivity extends Action {
                 activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
             }
 
-            if(eaForm.getActPrograms()!=null && eaForm.getActPrograms().size()!=0){
+          /*  if(eaForm.getActPrograms()!=null && eaForm.getActPrograms().size()!=0){
                 Set programs=new HashSet();
                 //ProgramUtil prg=new ProgramUtil();
                 ArrayList prgIds=new ArrayList();
@@ -204,7 +204,22 @@ public class SaveActivity extends Action {
                     programs.addAll(ampThemeLst);
                     activity.setActivityPrograms(programs);
                 }
-            }
+            }*/
+          Set programs = new HashSet();
+          List activityNPO = eaForm.getNationalPlanObjectivePrograms();
+          List activityPP = eaForm.getPrimaryPrograms();
+          List activitySP = eaForm.getSecondaryPrograms();
+          if (activityNPO != null) {
+                  programs.addAll(activityNPO);
+          }
+          if (activityPP != null) {
+                  programs.addAll(activityPP);
+          }
+          if (activitySP != null) {
+                  programs.addAll(activitySP);
+          }
+          activity.setActPrograms(programs);
+
 
 			if (eaForm.getPageId() < 0 || eaForm.getPageId() > 1) {
 				return mapping.findForward("index");

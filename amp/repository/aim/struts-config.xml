@@ -10,7 +10,7 @@
       <form-property name="templateFeatures" type="java.util.Collection" />
       <form-property name="templateFeaturesNotActive" type="java.util.Collection" />
     </form-bean>
-    <form-bean name="aimFieldPermissionsForm" type="org.digijava.module.aim.form.FieldPermissionsForm" />      
+    <form-bean name="aimFieldPermissionsForm" type="org.digijava.module.aim.form.FieldPermissionsForm" />
     <form-bean name="aimEUActivityForm" type="org.digijava.module.aim.form.EUActivityForm" />
     <form-bean name="aimVisibilityManagerForm" type="org.digijava.module.aim.form.VisibilityManagerForm" />
     <form-bean name="aimAuditLoggerManagerForm" type="org.digijava.module.aim.form.AuditLoggerManagerForm" />
@@ -127,7 +127,8 @@
     <form-bean name="aimNPDgraphForm" type="org.digijava.module.aim.form.NpdGraphForm" />
 	<form-bean name="npdSettingsForm" type="org.digijava.module.aim.form.NpdSettingsForm"/>
 	<form-bean name="aimViewIndicatorsForm" type="org.digijava.module.aim.form.ViewIndicatorsForm" />
-    <form-bean name="aimNewIndicatorForm" type="org.digijava.module.aim.form.NewIndicatorForm"/>  
+    <form-bean name="aimNewIndicatorForm" type="org.digijava.module.aim.form.NewIndicatorForm"/>
+    <form-bean name="aimActivityProgramSettingsForm" type="org.digijava.module.aim.form.AmpActivityProgramSettingsForm"/>
 </form-beans>
 
   <global-forwards>
@@ -188,12 +189,12 @@
       <forward name="reportView" path="/aim/viewNewAdvancedReport.do?reload=true" />
     </action>
 
-  <action name="aimFieldPermissionsForm"                                                                                
-    path="/aim/assignFieldPermissions" scope="request"                                                                    
-    type="org.digijava.module.aim.action.AssignFieldPermissions"                                                          
-    input="/showLayout.do?layout=aim_assignFieldPermissions">                                                             
-    </action>                                                                                                             
-    
+  <action name="aimFieldPermissionsForm"
+    path="/aim/assignFieldPermissions" scope="request"
+    type="org.digijava.module.aim.action.AssignFieldPermissions"
+    input="/showLayout.do?layout=aim_assignFieldPermissions">
+    </action>
+
 
     <action name="aimViewQuickLinksForm" path="/aim/viewQuickLinks" scope="request" type="org.digijava.module.aim.action.ViewQuickLinks" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewLinks" />
@@ -1465,7 +1466,7 @@
       <forward name="added" path="/aim/addActivity.do?edit=true" />
     </action>
     <action name="aimEditActivityForm" path="/aim/remProgram" scope="session" type="org.digijava.module.aim.action.RemProgram" validate="false">
-      <forward name="forward" path="/aim/addActivity.do?edit=true" />
+      <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
     </action>
     <!--<action name="aimProgramTypeForm" path="/aim/programTypeManager" scope="request" type="org.digijava.module.aim.action.ProgramTypeManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewProgramTypeManager" />
@@ -1517,6 +1518,9 @@
     <action name="aimAuditLoggerManagerForm" path="/aim/showActivityLog" scope="request" type="org.digijava.module.aim.action.ShowActivityLog">
       <forward name="forward" path="/showLayout.do?layout=showActivityLog"/>
     </action>
+     <action name="aimActivityProgramSettingsForm" path="/aim/programConfigurationPage" scope="session" type="org.digijava.module.aim.action.AmpActivityProgramSettingsAction" validate="false">
+          <forward name="forward" path="/showLayout.do?layout=programConfigurationPage" />
+        </action>
   </action-mappings>
 </struts-config>
 

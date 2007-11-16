@@ -85,6 +85,7 @@ import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.cms.dbentity.CMSContentItem;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
 
 /**
  * ActivityUtil is the persister class for all activity related
@@ -391,6 +392,80 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 
         oldActivity.setApprovalStatus(activity.getApprovalStatus());
 
+        Set programs = activity.getActPrograms();
+        Set oldPrograms = oldActivity.getActPrograms();
+        Set deletedPrograms = new HashSet();
+        Set newPrograms = new HashSet();
+        if (oldPrograms != null && oldPrograms.size() > 0) {
+                Iterator iterOldProgram = oldPrograms.iterator();
+                while (iterOldProgram.hasNext()) {
+                        AmpActivityProgram oldProgram = (AmpActivityProgram)
+                            iterOldProgram.next();
+                        boolean delete = true;
+                        if (programs != null) {
+                                Iterator iterProgram = programs.iterator();
+                                while (iterProgram.hasNext()) {
+                                        AmpActivityProgram program = (
+                                            AmpActivityProgram)
+                                            iterProgram.next();
+                                        if (program.getAmpActivityProgramId() == null) {
+                                                program.setActivity(oldActivity);
+                                                newPrograms.add(program);
+                                        }
+                                        else {
+                                                if (oldProgram.
+                                                    getAmpActivityProgramId().
+                                                    equals(
+                                                    program.
+                                                    getAmpActivityProgramId())) {
+                                                        oldProgram.
+                                                            setProgramPercentage(
+                                                            program.
+                                                            getProgramPercentage());
+                                                        delete = false;
+                                                        break;
+
+                                                }
+
+                                        }
+
+                                }
+                                if (delete) {
+                                        deletedPrograms.add(oldProgram);
+                                }
+
+                        }
+                }
+                oldActivity.getActPrograms().removeAll(deletedPrograms);
+                oldActivity.getActPrograms().addAll(newPrograms);
+                if (deletedPrograms.size() > 0) {
+                        Iterator delProgramIter = deletedPrograms.
+                            iterator();
+                        while (delProgramIter.hasNext()) {
+                                AmpActivityProgram delProgram = (
+                                    AmpActivityProgram) delProgramIter.
+                                    next();
+                                //  delProgram.setActivity(null);
+                                session.delete(delProgram);
+                        }
+                }
+                oldActivity.setActPrograms(oldPrograms);
+
+        }
+        else {
+                if (programs != null) {
+                        Iterator iterProgram = programs.iterator();
+                        while (iterProgram.hasNext()) {
+                                AmpActivityProgram program = (
+                                    AmpActivityProgram) iterProgram.next();
+                                program.setActivity(oldActivity);
+                        }
+
+                }
+                oldActivity.setActPrograms(programs);
+        }
+
+
 
         /*
          * tanzania ADDS
@@ -484,7 +559,18 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         // create the activity
         logger.debug("creating ....");
         if (activity.getMember() == null) {
-          activity.setMember(new HashSet());
+                activity.setMember(new HashSet());
+                Set programs = activity.getActPrograms();
+                if (programs != null) {
+                        Iterator iterProgram = programs.iterator();
+                        while (iterProgram.hasNext()) {
+                                AmpActivityProgram program = (
+                                    AmpActivityProgram) iterProgram.next();
+                                program.setActivity(activity);
+                        }
+
+                }
+
         }
 
         activity.getMember().add(activity.getActivityCreator());
@@ -2781,6 +2867,26 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     }
     return result;
   }
+
+  public static List getActivityProgramsByProgramType(Long actId, String settingName) {
+                Session session = null;
+                List col = new ArrayList();
+                logger.info("load programs....");
+                try {
+                       session = PersistenceManager.getRequestDBSession();
+                       String queryString = "select ap from " +AmpActivityProgram.class.getName() +
+                       " ap join ap.programSetting s where (ap.activity=:actId) and (s.name=:settingName)";
+                       Query qry = session.createQuery(queryString);
+                       qry.setLong("actId",actId);
+                       qry.setString("settingName",settingName);
+                       col = qry.list();
+                } catch (Exception e) {
+                       logger.error("Unable to get all components");
+                       logger.error(e.getMessage());
+                }
+                return col;
+       }
+
 
   /**
    * Comparator for AmpActivity class.

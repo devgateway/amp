@@ -12,7 +12,11 @@
 <% String display=reportData.getLevelDepth()>2?"display:none":"";%>
 <!-- generate total row -->
 <tr id='<bean:write name="reportData" property="absoluteReportName"/>' title='<bean:write name="reportData" property="levelDepth"/>@<bean:write name="reportData" property="relativeRowNo"/>' style="<%=display%>">
-	<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#dddddd" colspan='<bean:write name="reportData" property="sourceColsCount"/>' class="reportsBorderTD" nowrap>
+	<% if (reportData.getLevelDepth() < 3) { %>
+		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#d1fff1" colspan='<bean:write name="reportData" property="sourceColsCount"/>' class="reportsBorderTD" nowrap>
+	<% } else { %>	
+		<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#dddddd" colspan='<bean:write name="reportData" property="sourceColsCount"/>' class="reportsBorderTD" nowrap>
+	<% } %>
 <c:if test="${!(reportData.name == reportMeta.name)}">
 		<img id="toggleImage" name="<bean:write name="reportData" property="absoluteReportName"/>" style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif" alt='hidden' onclick='toggleRows(this,"<bean:write name="reportData" property="absoluteReportName"/>")' title="<bean:write name="reportData" property="levelDepth"/>@<bean:write name="reportData" property="relativeRowNo"/>" border="0"/>
 </c:if>		
@@ -31,7 +35,12 @@
 </b>
 	</td>
 	<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
+	<% if (reportData.getLevelDepth() < 3) { %>
+		<td style="background-color:#d1fff1" class="reportsBorderTD">
+	<% } else { %>	
 		<td style="background-color:#dddddd" class="reportsBorderTD">
+	<% } %>
+		
 		<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="caller" name="reportData" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="request" />			
 		<jsp:include page="<%=viewable.getViewerPath()%>"/>	

@@ -297,8 +297,8 @@ public class CategAmountColWorker extends ColumnWorker {
 		return null;
 	}
 
-	public CellColumn newColumnInstance() {
-		return new AmountCellColumn(columnName);
+	public CellColumn newColumnInstance(int initialCapacity) {
+		return new AmountCellColumn(columnName,initialCapacity);
 	}
 
 	public Cell newCellInstance() {

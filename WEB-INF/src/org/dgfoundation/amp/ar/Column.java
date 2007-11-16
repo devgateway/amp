@@ -142,6 +142,13 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 		this.name = name;
 	}
 
+	public Column(String name,int initialCapacity) {
+		super();
+		items = new ArrayList(initialCapacity);
+		this.name = name;
+	}
+
+	
 	public Column() {
 		super();
 		items = new ArrayList();
@@ -337,6 +344,10 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	 */
 	public void setMaxNameDisplayLength(int maxNameDisplayLength) {
 		this.maxNameDisplayLength = maxNameDisplayLength;
+	}
+
+	public void setItems(List items) {
+	    this.items = items;
 	}
 	
 

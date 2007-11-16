@@ -66,6 +66,12 @@ public class AmountCell extends Cell {
 		// TODO Auto-generated constructor stub
 	}
 
+	public AmountCell(int ensureCapacity) {
+		super();
+		mergedCells = new HashSet(ensureCapacity);
+	}
+
+	
 	/**
 	 * @param id
 	 */
@@ -130,19 +136,20 @@ public class AmountCell extends Cell {
 	 * @see org.dgfoundation.amp.ar.cell.Cell#merge(org.dgfoundation.amp.ar.cell.Cell)
 	 */
 	public Cell merge(Cell c) {
-		AmountCell ret = new AmountCell();
 		AmountCell ac = (AmountCell) c;
+		//AmountCell ret=new AmountCell(ac.getMergedCells().size()+this.getMergedCells().size());
+		AmountCell ret=this;
 		ret.setOwnerId(c.getOwnerId());
 		if (ac.getId() == null)
 			ret.getMergedCells().addAll(ac.getMergedCells());
 		else
 			ret.getMergedCells().add(ac);
 
-		if (this.getId() == null)
+		/*if (this.getId() == null)
 			ret.getMergedCells().addAll(this.getMergedCells());
 		else
 			ret.getMergedCells().add(this);
-
+		*/
 		return ret;
 	}
 

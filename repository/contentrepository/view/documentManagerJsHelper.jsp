@@ -4,11 +4,11 @@
 .all_markup table
 {border-collapse:collapse; width: 90%} 
 .all_markup th
-{border:1px solid #000;padding:.25em;background-color:#fff; font-size:small; color: #666666}
+{border:1px solid #000;padding:.25em;background-color:#fff; font-size:12px; color: #666666}
 .all_markup th a, .all_markup th a:hover
-{font-size:small; text-decoration: none;}
+{font-size:13px; text-decoration: none;}
 .all_markup td
-{border-bottom:1px solid #000;padding:.25em;font-size:x-small}
+{border-bottom:1px solid #000;padding:.25em;font-size:11px}
 .all_markup .yui-dt-odd {background-color:#eee;} /*light gray*/ 
 .all_markup .yui-dt-selected {background-color:#97C0A5;} /*green*/ 
 .all_markup .yui-dt-sortedbyasc, .all_markup .yui-dt-sortedbydesc {background-color:#eee;}
@@ -17,7 +17,7 @@
 .all_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_up.gif') no-repeat right;}/*arrow up*/
 .all_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_dn.gif') no-repeat right;}/*arrow down*/
 
-#versions_markup {margin:1em;} 
+#versions_markup {margin:1em; overflow: auto; } 
 #versions_markup table {border-collapse:collapse;} 
 #versions_markup th {border:1px solid #000;padding:.25em;background-color:#fff;color:Black; font-size:x-small}
 #versions_markup td {border-bottom:1px solid #000;padding:.25em;} 
@@ -40,6 +40,7 @@
 	var callbackForVersions	= {
 		success: function (o) {
 			YAHOO.amp.panels[1].setBody(o.responseText);
+			setHeightOfDiv("versions_markup", 250, 250);
 			YAHOO.amp.table.enhanceVersionsMarkup();
 		},
 		failure: function () {
@@ -260,6 +261,7 @@ function newWindow(title, showSelectButton, otherDocumentsDiv) {
 	newDiv.innerHTML				= tableTemplateElement.innerHTML + "<br />" + "<br />";
 	
 	var otherDocumentsDivElement	= document.getElementById(otherDocumentsDiv);
+
 	
 	otherDocumentsDivElement.appendChild(newDiv);
 	
@@ -569,6 +571,13 @@ function validateAddDocument() {
 	if (msg.length == 0)
 			return true;
 	return false;	
+}
+
+function setHeightOfDiv(divId, maxLimit, value ){
+	var obj	= document.getElementById(divId);
+	if (obj.offsetHeight > maxLimit)  {
+		obj.style.height	= value;
+	}
 }
 
 function setAttributeOnNode(action, uuid, doReload) {

@@ -67,7 +67,7 @@
 								</c:set>
 								<a style="cursor:pointer; text-decoration:underline; color: blue"
 								onClick="window.location='/contentrepository/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />'"
-								href="/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />"
+
 								title="${translation }">[<digi:trn key="contentrepository:documentManagerDownload">D</digi:trn>]</a>
 
 								<c:set var="translation">

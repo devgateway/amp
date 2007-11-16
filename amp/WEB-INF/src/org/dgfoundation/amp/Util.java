@@ -252,6 +252,7 @@ public final class Util {
 		Connection conn = null;
 		double ret = 1;
 
+		if("USD".equals(currency)) return 1;
 		// we try the digi cache:
 		ObjectCache ratesCache = DigiCacheManager.getInstance().getCache(
 				"EXCHANGE_RATES_CACHE");

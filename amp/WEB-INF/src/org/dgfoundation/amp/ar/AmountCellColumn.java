@@ -39,6 +39,11 @@ public class AmountCellColumn extends CellColumn {
 		// TODO Auto-generated constructor stub
 	}
 
+	public AmountCellColumn(String name,int initialCapacity) {
+		super(name,initialCapacity);
+	}
+
+	
 	/**
 	 * @param source
 	 */
@@ -83,7 +88,8 @@ public class AmountCellColumn extends CellColumn {
 		Iterator i=items.iterator();
 		while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();
-			ac=ac.merge(element);			
+			//logger.info("Merging cell for owner "+element.getOwnerId()+" containing "+element.getMergedCells().size()+" merged cells");
+			ac.merge(element);			
 		}
 		ac.setColumn(this);
 		ar.add(ac);

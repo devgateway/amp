@@ -36,6 +36,12 @@ public class CellColumn extends Column {
 		super(name);
 		itemsMap=new HashMap();
 	}
+	
+	public CellColumn(String name,int initialCapacity) {
+		super(name,initialCapacity);
+		itemsMap=new HashMap(initialCapacity);
+	}
+
 
 	public CellColumn(Column source) {
 		super(source.getParent(),source.getName());
@@ -233,6 +239,14 @@ public class CellColumn extends Column {
 	public boolean hasTrailCells() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public HashMap getItemsMap() {
+	    return itemsMap;
+	}
+
+	public void setItemsMap(HashMap itemsMap) {
+	    this.itemsMap = itemsMap;
 	}
 
 }

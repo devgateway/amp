@@ -44,8 +44,8 @@ public class CummulativeColWorker extends ColumnWorker {
 	}
 
 
-	public CellColumn newColumnInstance() {
-		TotalAmountColumn cc=new TotalAmountColumn(columnName,false);
+	public CellColumn newColumnInstance(int initialCapacity) {
+		TotalAmountColumn cc=new TotalAmountColumn(columnName,false,initialCapacity);
 		return cc;
 	}
 	

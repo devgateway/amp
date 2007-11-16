@@ -43,6 +43,12 @@ public class TotalAmountColumn extends AmountCellColumn {
         super(name);
         this.filterShowable=filterShowable;
     }
+    
+
+    public TotalAmountColumn(String name,boolean filterShowable,int initialCapacity) {
+        super(name,initialCapacity);
+        this.filterShowable=filterShowable;
+    }
 
     
     public TotalAmountColumn(Column parent, String name) {

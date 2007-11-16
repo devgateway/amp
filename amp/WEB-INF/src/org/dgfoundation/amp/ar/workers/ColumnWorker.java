@@ -78,16 +78,18 @@ public abstract class ColumnWorker {
 	/**
 	 * Returns the column intance to be used by the ColumnWorker. By default, this is the regular CellColumn. Override
 	 * this in subclasses if u need a different Column instance.
+	 * @param initialCapacity TODO
 	 * @return the new instantiated column instance. The column name is taken from the ColumnWorker's columnName property.
 	 */
-	public CellColumn newColumnInstance() {
-		return new CellColumn(columnName);
+	public CellColumn newColumnInstance(int initialCapacity) {
+		return new CellColumn(columnName,initialCapacity);
 	}
 	
 	protected Column generateCellColumn() {
         CellColumn dest=null;
-        dest=newColumnInstance();
+        
         Column sourceCol=sourceGroup.getColumn(sourceName);
+        dest=newColumnInstance(sourceCol.getItems().size());        
 		Iterator i=sourceCol.iterator();
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
@@ -98,9 +100,10 @@ public abstract class ColumnWorker {
 	}
 	
 	protected Column extractCellColumn() {
-		CellColumn cc=newColumnInstance();
+		
 		Session sess=null;
 		Connection conn=null;
+		CellColumn cc=null;
 		try {
 			sess= PersistenceManager.getSession();
 			conn=sess.connection();
@@ -120,6 +123,11 @@ public abstract class ColumnWorker {
 
 			ResultSet rs = ps.executeQuery();
 			rsmd=rs.getMetaData();
+			
+			rs.last();
+			int rsSize=rs.getRow();
+			rs.beforeFirst();
+			cc = newColumnInstance(rsSize+1);	
 			
 			
 			while (rs.next()) {

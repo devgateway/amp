@@ -2,6 +2,7 @@ package org.digijava.module.aim.form ;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import org.digijava.module.aim.helper.Activity;
 
@@ -42,10 +43,14 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private Collection modal;
 	private boolean canView;
 	private HashMap allComments;
-	
+
 	private Activity activity;
-	
+
 	private String buttonText;  // added by Akash for activity approval
+        private List primaryPrograms;
+        private List secondaryPrograms;
+        private List nationalPlanObjectivePrograms;
+
 
 	public Integer getPageNo() {
 			  return pageNo;
@@ -64,199 +69,199 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	public void setAdd(boolean flag) {
 			  add = flag;
 	}
-	
+
 	public Long getId()
 	{
-		return id ;	
+		return id ;
 	}
-	
+
 	/*
-	public String getAmpId() 
+	public String getAmpId()
 	{
 		return ampId;
 	}*/
 
-	public String getLanguage() 
+	public String getLanguage()
 	{
 		return language;
 	}
 
-	public String getObjective() 
+	public String getObjective()
 	{
 		return objective;
 	}
 
-	public String getStatus() 
+	public String getStatus()
 	{
 		return status;
 	}
 
-	public String getVersion() 
+	public String getVersion()
 	{
 		return version;
 	}
-	
-	public String getLevel() 
+
+	public String getLevel()
 	{
 		return level;
 	}
 
-	public boolean getWrite() 
+	public boolean getWrite()
 	{
 		return write;
 	}
 
-	public boolean getDelete() 
+	public boolean getDelete()
 	{
 		return delete;
 	}
 
-	public boolean getValidLogin() 
+	public boolean getValidLogin()
 	{
 		return validLogin;
 	}
 
-	public int getFlag() 
+	public int getFlag()
 	{
 		return flag;
 	}
 
-	public int getFlago() 
+	public int getFlago()
 	{
 		return flago;
 	}
 
-	public String getActivityStartDate() 
+	public String getActivityStartDate()
 	{
 		return activityStartDate;
 	}
 
-	public String getActivityCloseDate() 
+	public String getActivityCloseDate()
 	{
 		return activityCloseDate;
 	}
 
-	public String getCondition() 
+	public String getCondition()
 	{
 		return condition;
 	}
 
-	public String getGrandTotal() 
+	public String getGrandTotal()
 	{
 		return grandTotal;
 	}
-	
-	public Collection getAssistance() 
+
+	public Collection getAssistance()
 	{
 		return assistance;
 	}
 
-	public String getPerspective() 
+	public String getPerspective()
 	{
 		return perspective;
 	}
 
-	public void setId(Long id) 
+	public void setId(Long id)
 	{
 		this.id = id ;
 	}
 
-	public void setLanguage(String language) 
+	public void setLanguage(String language)
 	{
 		this.language = language;
 	}
 
-	public void setObjective(String objective) 
+	public void setObjective(String objective)
 	{
 		this.objective = objective ;
 	}
 
-	public void setStatus(String status) 
+	public void setStatus(String status)
 	{
 		this.status = status ;
 	}
 
-	public void setVersion(String version) 
+	public void setVersion(String version)
 	{
 		this.version = version ;
 	}
 
-	public void setActivityStartDate(String string) 
+	public void setActivityStartDate(String string)
 	{
 		this.activityStartDate = string ;
 	}
 
-	public void setActivityCloseDate(String string) 
+	public void setActivityCloseDate(String string)
 	{
 		this.activityCloseDate = string ;
 	}
 
-	public void setCondition(String string) 
+	public void setCondition(String string)
 	{
 		this.condition = string ;
 	}
 
-	public void setGrandTotal(String string) 
+	public void setGrandTotal(String string)
 	{
 		this.grandTotal = string ;
 	}
 
-	public void setWrite(boolean bool) 
+	public void setWrite(boolean bool)
 	{
 		this.write = bool ;
 	}
 
-	public void setDelete(boolean bool) 
+	public void setDelete(boolean bool)
 	{
 		this.delete = bool ;
 	}
 
-	public void setValidLogin(boolean bool) 
+	public void setValidLogin(boolean bool)
 	{
 		this.validLogin = bool ;
 	}
 
-	public Collection getSectors() 
+	public Collection getSectors()
 	{
 		return sectors;
 	}
 
-	
-	public void setSectors(Collection sectors) 
+
+	public void setSectors(Collection sectors)
 	{
 		this.sectors = sectors ;
 	}
 
-	
-	public Collection getSubSectors() 
+
+	public Collection getSubSectors()
 	{
 		return subSectors;
 	}
 
-	
-	public void setSubSectors(Collection collection) 
+
+	public void setSubSectors(Collection collection)
 	{
 		subSectors = collection;
 	}
 
-	public String getCountry() 
+	public String getCountry()
 	{
 		return country;
 	}
 
-	public void setCountry(String country) 
+	public void setCountry(String country)
 	{
-	
+
 		this.country = country;
 	}
-	public Collection getLocations() 
+	public Collection getLocations()
 	{
 		return locations;
 	}
 
-	public void setLocations(Collection locations) 
+	public void setLocations(Collection locations)
 	{
-	
+
 		this.locations = locations;
 	}
 	public String getFundingagency()
@@ -356,12 +361,12 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 		theme = string;
 	}
 
-	public void setAssistance(Collection c) 
+	public void setAssistance(Collection c)
 	{
 		assistance = c ;
 	}
-	
-	public void setPerspective(String perspective) 
+
+	public void setPerspective(String perspective)
 	{
 		this.perspective = perspective ;
 	}
@@ -434,7 +439,33 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 		return allComments;
 	}
 
-	public void setAllComments(HashMap allComments) {
+        public List getSecondaryPrograms() {
+                return secondaryPrograms;
+        }
+
+        public List getPrimaryPrograms() {
+                return primaryPrograms;
+        }
+
+        public List getNationalPlanObjectivePrograms() {
+                return nationalPlanObjectivePrograms;
+        }
+
+        public void setAllComments(HashMap allComments) {
 		this.allComments = allComments;
 	}
+
+        public void setSecondaryPrograms(List secondaryPrograms) {
+                this.secondaryPrograms = secondaryPrograms;
+        }
+
+        public void setPrimaryPrograms(List primaryPrograms) {
+                this.primaryPrograms = primaryPrograms;
+        }
+
+        public void setNationalPlanObjectivePrograms(List
+            nationalPlanObjectivePrograms) {
+                this.nationalPlanObjectivePrograms =
+                    nationalPlanObjectivePrograms;
+        }
 }

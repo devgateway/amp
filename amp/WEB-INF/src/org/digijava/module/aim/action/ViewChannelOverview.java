@@ -36,6 +36,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
+import org.digijava.module.aim.util.ProgramUtil;
 
 public class ViewChannelOverview extends TilesAction {
 
@@ -127,14 +128,14 @@ public class ViewChannelOverview extends TilesAction {
 				String totalsSetting=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_INCLUDE_PLANNED);
 				boolean includeTotals=(totalsSetting!=null) && (totalsSetting.trim().equals("On"));
 
-				
+
 				if (activity.getStatus().equalsIgnoreCase("Planned")) {
 					logger.debug("Planned");
 					formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
 							new Integer(0),new Integer(0),perspective,currCode)));
 				} else {
 					logger.debug("Not planned");
-					
+
 					if (includeTotals){
 						// again this is for Bolivia. But may be usefull for other countries too. AMP-1774
 						double actual = DbUtil.getAmpFundingAmount(activity.getActivityId(),new Integer(0),new Integer(1),perspective,currCode);
@@ -145,7 +146,7 @@ public class ViewChannelOverview extends TilesAction {
 								new Integer(0),new Integer(1),perspective,currCode)));
 					}
 				}
-				
+
 			}
 
 			AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
@@ -156,6 +157,26 @@ public class ViewChannelOverview extends TilesAction {
 
 			formBean.setActivity(activity);
 			formBean.setCanView(true);
+
+                        //set programs by setting name
+
+                        formBean.setNationalPlanObjectivePrograms(ActivityUtil.
+                            getActivityProgramsByProgramType
+                            (activity.getActivityId(),
+                             ProgramUtil.NATIONAL_PLAN_OBJECTIVE));
+
+                        formBean.setPrimaryPrograms(ActivityUtil.
+                            getActivityProgramsByProgramType
+                            (activity.getActivityId(),
+                             ProgramUtil.PRIMARY_PROGRAM));
+
+                        formBean.setSecondaryPrograms(ActivityUtil.
+                            getActivityProgramsByProgramType
+                            (activity.getActivityId(),
+                             ProgramUtil.SECONDARY_PROGRAM));
+
+
+
 			// end $1
 
 

@@ -434,7 +434,7 @@ function viewChanges()
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td align="center" vAlign="top" bgcolor="#ffffff">
 								<table width="100%" cellSpacing=1 cellpadding=3 bgcolor="#dddddd">
-								
+
 									<feature:display name="Identification" module="Project ID and Planning">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
@@ -635,7 +635,7 @@ function viewChanges()
 											<c:if test="${!empty aimEditActivityForm.selectedOrganizations}">
 												<table cellSpacing=2 cellPadding=2 border=0>
 													<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.selectedOrganizations}" >
-														<c:if test="${not empty selectedOrganizations}"> 
+														<c:if test="${not empty selectedOrganizations}">
 															<tr><td>
 																<c:out value="${selectedOrganizations.name}"/>:
 																<c:out value="${selectedOrganizations.projectId}"/>
@@ -644,7 +644,7 @@ function viewChanges()
 																			<jsp:include page="previewOrganizationPopup.jsp"/>
 																	</c:if>
 															</td></tr>
-														</c:if>														
+														</c:if>
 													</c:forEach>
 												</table>
 											</c:if>
@@ -839,7 +839,7 @@ function viewChanges()
 												<td>
 													<c:if test="${!empty refDoc.comment}">
 													${refDoc.categoryValue}
-													</c:if> 
+													</c:if>
 												</td>
 											</tr>
 										</table>
@@ -911,26 +911,42 @@ function viewChanges()
 											</c:if>
 										</td>
 									</tr>
-									</feature:display>									
+									</feature:display>
 									<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
-									
+
 									<feature:display name="NPD Programs " module="National Planning Dashboard">
-									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<digi:trn key="aim:program">Program</digi:trn>
-										</td>
-										<td bgcolor="#ffffff">
-                                          <c:if test="${aimEditActivityForm.actPrograms!=null}">
-                                            <c:if test="${!empty aimEditActivityForm.actPrograms}">
-                                              <c:forEach var="tempPgm" items="${aimEditActivityForm.actPrograms}">
-                                                <c:if test="${tempPgm!=null}">
-                                                  *&nbsp;&nbsp;<c:out value="${tempPgm.programviewname}"/> <br>
-                                                </c:if>
-                                              </c:forEach>
-                                            </c:if>
-                                          </c:if>
-										</td>
-                                    </tr>
+									<TR>
+																		<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+																		<b><digi:trn key="aim:national Plan Objective">National Plan Objective</digi:trn></b></TD>
+
+																		<TD bgcolor="#ffffff">
+                                                                                                                                                  <c:forEach var="program" items="${aimEditActivityForm.nationalPlanObjectivePrograms}">
+                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+                                                                                                                                                  </c:forEach>
+																		</TD>
+																	</TR>
+                                                                                                                                        <TR>
+																		<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+																		<b><digi:trn key="aim:primary Programs">Primary Programs</digi:trn></b></TD>
+
+																		<TD bgcolor="#ffffff">
+                                                                                                                                                  <c:forEach var="program" items="${aimEditActivityForm.primaryPrograms}">
+                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+                                                                                                                                                  </c:forEach>
+																		</TD>
+																	</TR>
+                                                                                                                                        <TR>
+																		<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+																		<b><digi:trn key="aim:secondary Programs">Secondary Programs</digi:trn></b></TD>
+
+																		<TD bgcolor="#ffffff">
+
+                                                                                                                                                  <c:forEach var="program" items="${aimEditActivityForm.secondaryPrograms}">
+                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+                                                                                                                                                  </c:forEach>
+																		</TD>
+																	</TR>
+
 									</feature:display>
 									<feature:display name="Proposed Project Cost" module="Funding">
 									<tr>
@@ -993,7 +1009,7 @@ function viewChanges()
 											<digi:trn key="aim:meActivityRisk">
 											Activity - Risk</digi:trn>
 										</td>
-										<td bgcolor="#ffffff"> 
+										<td bgcolor="#ffffff">
 											<% if (actRiskChartUrl != null) { %>
 												<bean:define id="riskColor" name="riskColor" scope="request" toScope="page" type="java.lang.String"/>
 												<bean:define id="riskName" name="overallRisk" scope="request" toScope="page" type="java.lang.String"/>
@@ -1801,16 +1817,16 @@ function viewChanges()
 															<tr><td><b>
 																<c:out value="${comp.title}"/></b>
 															</td></tr>
-															
+
 															<tr><td>
 																<i>
 																<digi:trn key="aim:description">Description</digi:trn> :</i>
 																<c:out value="${comp.description}"/>
 															</td></tr>
-															
+
 															<!-- START SISIN Fields -->
-															<feature:display name="SISIN" module="Components"> 
-																<field:display name="SISIN Code" feature="SISIN"> 
+															<feature:display name="SISIN" module="Components">
+																<field:display name="SISIN Code" feature="SISIN">
 																	<tr>
 																		<td width="50">
 																			<i>
@@ -1819,7 +1835,7 @@ function viewChanges()
 																		</td>
 																	</tr>
 																</field:display>
-																<field:display name="Localization" feature="SISIN"> 
+																<field:display name="Localization" feature="SISIN">
 																	<tr>
 																		<td width="50">
 																			<i>
@@ -1828,7 +1844,7 @@ function viewChanges()
 																		</td>
 																	</tr>
 																</field:display>
-																<field:display name="SISIN Sector" feature="SISIN"> 
+																<field:display name="SISIN Sector" feature="SISIN">
 																	<tr>
 																		<td width="50">
 																			<i>
@@ -1859,7 +1875,7 @@ function viewChanges()
 																	<tr>
 																		<td width="50">
 																			<i>
-																			<digi:trn key="stage">Stage</digi:trn> :</i>											 
+																			<digi:trn key="stage">Stage</digi:trn> :</i>
 																			<c:out value="${comp.sisinProyect.stage}"/>
 																		</td>
 																	</tr>
@@ -1873,11 +1889,11 @@ function viewChanges()
 																		</td>
 																	</tr>
 																</field:display>
-															</feature:display>																																																															
-															<!-- END SISIN Fields -->															
-															
+															</feature:display>
+															<!-- END SISIN Fields -->
+
 															<tr><td bgcolor="#f4f4f2">
-																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>																
+																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>
 															</td></tr>
 															<c:if test="${!empty comp.commitments}">
 																<tr><td bgcolor="#ffffff">
@@ -2256,10 +2272,10 @@ function viewChanges()
 											Activity updated on</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.updatedDate}"/> 
+											<c:out value="${aimEditActivityForm.updatedDate}"/>
 											<html:button  styleClass="buton" property="submitButton" onclick="viewChanges()">
 												<digi:trn key="btn:last5changestoactivity">Last 5 changes to Activity</digi:trn>
-											</html:button>											
+											</html:button>
 										</td>
 									</tr>
 									</logic:notEmpty>

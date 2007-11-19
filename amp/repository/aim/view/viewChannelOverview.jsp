@@ -562,10 +562,37 @@ function commentWin(val) {
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
 																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																		<b><digi:trn key="aim:program">Program</digi:trn></b></TD>
+																		<b><digi:trn key="aim:national Plan Objective">National Plan Objective</digi:trn></b></TD>
 																	</TR>
 																	<TR>
-																		<TD bgcolor="#ffffff"><c:out value="${activity.program}" />
+																		<TD bgcolor="#ffffff">
+                                                                                                                                                  <c:forEach var="program" items="${aimChannelOverviewForm.nationalPlanObjectivePrograms}">
+                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%
+                                                                                                                                                  </c:forEach>
+																		</TD>
+																	</TR>
+                                                                                                                                        <TR>
+																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																		<b><digi:trn key="aim:primary Programs">Primary Programs</digi:trn></b></TD>
+																	</TR>
+																	<TR>
+																		<TD bgcolor="#ffffff">
+                                                                                                                                                  <c:forEach var="program" items="${aimChannelOverviewForm.primaryPrograms}">
+                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%
+                                                                                                                                                  </c:forEach>
+																		</TD>
+																	</TR>
+                                                                                                                                        <TR>
+																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																		<b><digi:trn key="aim:secondary Programs">Secondary Programs</digi:trn></b></TD>
+																	</TR>
+																	<TR>
+																		<TD bgcolor="#ffffff">
+                                                                                                                                                  <c:forEach var="program" items="${aimChannelOverviewForm.secondaryPrograms}">
+                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%
+                                                                                                                                                  </c:forEach>
 																		</TD>
 																	</TR>
 																	<TR>

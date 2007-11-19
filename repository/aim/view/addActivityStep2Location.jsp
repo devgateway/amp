@@ -114,6 +114,7 @@
                                               <td bgcolor="#ffffff" width="100%">
                                                 <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
                                                   <logic:empty name="aimEditActivityForm" property="selectedLocs">
+                                                  <field:display name="Add Location" feature="Location">
                                                     <tr>
                                                     <td bgcolor="#ffffff"><html:button
 														styleClass="buton" property="submitButton"
@@ -121,6 +122,7 @@
 														<digi:trn key="btn:addLocation">Add Location</digi:trn>
 													</html:button></td>
                                                     </tr>
+                                                    </field:display>
                                                   </logic:empty>
                                                   <logic:notEmpty name="aimEditActivityForm" property="selectedLocs">
                                                     <tr>
@@ -159,6 +161,7 @@
                                                             <td>
                                                               <table cellSpacing=2 cellPadding=2>
                                                                 <tr>
+                                                                <field:display name="Add Location" feature="Location">
                                                                   <td>
                                                                     <html:button styleClass="buton"
 																		property="submitButton"
@@ -166,6 +169,8 @@
 																		<digi:trn key="btn:addLocation">Add Location</digi:trn>
 																	</html:button>
                                                                   </td>
+                                                                  </field:display>
+																<field:display  name="Remove Location" feature="Location">
                                                                   <td>
                                                                     <html:button styleClass="buton"
 																		property="submitButton"
@@ -173,6 +178,7 @@
 																		<digi:trn key="btn:removeLocation">Remove Location</digi:trn>
 																	</html:button>
                                                                   </td>
+                                                                 </field:display>
                                                                 </tr>
                                                               </table>
                                                             </td>

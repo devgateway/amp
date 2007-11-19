@@ -5,6 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script language="JavaScript">
 	function load() {
@@ -154,7 +157,8 @@
 													<td align="left">
                                           ${aimEditActivityForm.revisedStartDate}
 													</td>
-												</tr>												
+												</tr>
+												<field:display name="Current Completion Date" feature="Planning">												
 												<tr>
 													<td width="32%"><digi:trn key="aim:currentCompletionDate">
 													Current Completion Date</digi:trn></td>
@@ -162,7 +166,8 @@
 													<td align="left">
                                             ${aimEditActivityForm.currentCompDate}
 													</td>
-												</tr>															
+												</tr>	
+												</field:display>														
 												<c:if test="${!empty aimEditActivityForm.activityCloseDates}">
 												<tr>
 													<td width="32%" valign=top><digi:trn key="aim:proposedCompletionDates">
@@ -1050,7 +1055,8 @@
                                     ${aimEditActivityForm.mfdCntEmail}
 											&nbsp;	
 										</td>
-									</tr>										
+									</tr>
+									<field:display name="Activity Created By" feature="Identification">										
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
@@ -1065,6 +1071,8 @@
 											&nbsp;	
 										</td>
 									</tr>		
+									</field:display>
+									<field:display name="Activity Created On" feature="Identification">
                                   <c:if test="${!empty aimEditActivityForm.createdDate}">
 									<tr>
 										<td  width="30%" align="right" bgcolor="#ffffff"><b>
@@ -1076,6 +1084,7 @@
 										</td>
 									</tr>									
                                   </c:if>
+                                  </field:display>
 								</table>
 </td>
                             </tr>

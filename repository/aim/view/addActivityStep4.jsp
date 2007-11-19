@@ -281,9 +281,11 @@ ${fn:replace(message,quote,escapedQuote)}
 																					</html:multibox>
 																					<bean:write name="regionalFunding" property="regionName"/>
 																					&nbsp;
+																					<field:display name="Edit Funding Link" feature="Regional Funding">
 																					<a href="javascript:editFunding('
 																						<bean:write name="regionalFunding" property="regionId"/>
 																					')"><digi:trn key="aim:editThisFunding">Edit this funding</digi:trn></a>
+																					</field:display>
 																				</td></tr>
 																				<tr><td>
 																					<!-- Regional funding details -->
@@ -321,10 +323,8 @@ ${fn:replace(message,quote,escapedQuote)}
 																								<!-- L2 START-->
 																								<tr bgcolor="#ffffff">
 																									<field:display name="Actual/Planned Commitments" feature="Regional Funding">
-
-
-                                                                                                                                                                                                          <td><digi:trn key="aim:${commitment.adjustmentTypeName}"><c:out value="${commitment.adjustmentTypeName}"/></digi:trn></td>
-                                                                                                                                                                                                        </field:display>
+                                                                                                   		<td><digi:trn key="aim:${commitment.adjustmentTypeName}"><c:out value="${commitment.adjustmentTypeName}"/></digi:trn></td>
+                                                                                                    </field:display>
 																									<field:display name="Total Amount Commitments" feature="Regional Funding"><td align="right">
 																									<FONT color=blue>*</FONT>
 																									<c:out value="${commitment.transactionAmount}"/></td></field:display>
@@ -366,7 +366,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																									<field:display name="Currency Disbursements" feature="Regional Funding"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
 																									<field:display name="Date Disbursements" feature="Regional Funding"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																										<field:display name="Perspective Disbursements" feature="Regional Funding"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
+																										<field:display name="Regional Funding Perspective Disbursements" feature="Regional Funding"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
 																									</logic:equal>
 																								</tr>
 																								<logic:iterate name="regionalFunding"
@@ -383,7 +383,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																									<field:display name="Currency Disbursements" feature="Regional Funding"><td><c:out value="${disbursement.currencyCode}"/></td></field:display>
 																									<field:display name="Date Disbursements" feature="Regional Funding"><td><c:out value="${disbursement.transactionDate}"/></td></field:display>
 																									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																										<field:display name="Perspective Disbursements" feature="Regional Funding"><td>
+																										<field:display name="Regional Funding Perspective Disbursements" feature="Regional Funding"><td>
 																											<digi:trn key='<%="aim:"+disbursement.getPerspectiveNameTrimmed() %>'>
 																												<bean:write name="disbursement" property="perspectiveName"/>
 																											</digi:trn>
@@ -416,7 +416,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																									<field:display name="Currency Expenditures" feature="Regional Funding"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
 																									<field:display name="Date Expenditures" feature="Regional Funding"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																										<field:display name="Perspective Expenditures" feature="Regional Funding"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
+																										<field:display name="Regional Funding Perspective Expenditures" feature="Regional Funding"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
 																									</logic:equal>
 																								</tr>
 																								<logic:iterate name="regionalFunding"
@@ -433,7 +433,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																									<field:display name="Currency Expenditures" feature="Regional Funding"><td><c:out value="${expenditure.currencyCode}"/></td></field:display>
 																									<field:display name="Date Expenditures" feature="Regional Funding"><td><c:out value="${expenditure.transactionDate}"/></td></field:display>
 																									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																										<field:display name="Perspective Expenditures" feature="Regional Funding"><td>
+																										<field:display name="Regional Funding Perspective Expenditures" feature="Regional Funding"><td>
 																											<digi:trn key='<%="aim:"+expenditure.getPerspectiveNameTrimmed() %>'>
 																												<bean:write name="expenditure" property="perspectiveName"/>
 																											</digi:trn>
@@ -458,27 +458,33 @@ ${fn:replace(message,quote,escapedQuote)}
 																			<logic:notEmpty name="aimEditActivityForm" property="fundingRegions">
 																			<logic:empty name="aimEditActivityForm" property="regionalFundings">
 																				<!-- No fundings -->
+																				<field:display name="Add Regional Fundings" feature="Regional Funding">
 																				<tr><td>
 																					<html:button  styleClass="dr-menu" property="submitButton" onclick="addRegionalFunding()">
 																							<digi:trn key="btn:addFundings">Add Fundings</digi:trn>
 																					</html:button>
 
 																				</td></tr>
+																				</field:display>
 																			</logic:empty>
 																			<logic:notEmpty name="aimEditActivityForm" property="regionalFundings">
 																				<tr><td bgcolor=#ffffff>
 																					<table cellSpacing=2 cellPadding=2>
 																						<tr>
+																						<field:display name="Add Regional Fundings" feature="Regional Funding">
 																							<td>
 																								<html:button  styleClass="dr-menu" property="submitButton" onclick="addRegionalFunding()">
 																									<digi:trn key="btn:addFundings">Add Fundings</digi:trn>
 																								</html:button>
 																							</td>
+																						</field:display>
+																						<field:display name="Remove Fundings" feature="Regional Funding">
 																							<td>
 																								<html:button  styleClass="dr-menu" property="submitButton" onclick="removeRegFundings()">
 																									<digi:trn key="btn:removeFundings">Remove Fundings</digi:trn>
 																								</html:button>
 																							</td>
+																						</field:display>
 																						</tr>
 																					</table>
 																				</td></tr>

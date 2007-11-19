@@ -231,13 +231,13 @@ function checkUncheckAll2() {
 											<feature:display name="Identification" module="Project ID and Planning"></feature:display>
 											<feature:display name="Planning" module="Project ID and Planning"></feature:display>
 												<field:display name="Actual Approval Date" feature="Planning" >&nbsp;</field:display>
-												<field:display name="Actual Completion Date" feature="Planning">&nbsp;</field:display>
+												<field:display name="Current Completion Date" feature="Planning">&nbsp;</field:display>
 												<field:display name="Actual Start Date" feature="Planning">&nbsp;</field:display>
 												<field:display name="Description" feature="Identification">&nbsp;</field:display>
 												<field:display name="Objectives" feature="Identification">&nbsp;</field:display>
 												<field:display name="Project Id" feature="Identification">&nbsp;</field:display>
 												<field:display name="Project Title" feature="Identification">&nbsp;</field:display>
-												<field:display name="Status" feature="Identification">&nbsp;</field:display>
+												<field:display name="Status" feature="Planning">&nbsp;</field:display>
 												<field:display name="Team" feature="Identification">&nbsp;</field:display>
 												<field:display name="A.C. Chapter" feature="Identification">&nbsp;</field:display>
 												<field:display name="Accession Instrument" feature="Identification">&nbsp;</field:display>
@@ -280,13 +280,13 @@ function checkUncheckAll2() {
 											<feature:display name="Contact Information" module="Contact Information">
 												<field:display name="Contact Name" feature="Contact Information">&nbsp;</field:display>
 											</feature:display>
-											<feature:display name="M&E" module="Trend Analysis and Forecasting">
-												<field:display name="Indicator Base Value" feature="M&E">&nbsp;</field:display>
-												<field:display name="Indicator Current Value" feature="M&E">&nbsp;</field:display>
-												<field:display name="Indicator Target Value" feature="M&E">&nbsp;</field:display>
-												<field:display name="Indicator Description" feature="M&E">&nbsp;</field:display>
-												<field:display name="Indicator ID" feature="M&E">&nbsp;</field:display>
-												<field:display name="Indicator Name" feature="M&E"></field:display>
+											<feature:display name="Activity" module="M&E">
+												<field:display name="Indicator Base Value" feature="Activity">&nbsp;</field:display>
+												<field:display name="Indicator Current Value" feature="Activity">&nbsp;</field:display>
+												<field:display name="Indicator Target Value" feature="Activity">&nbsp;</field:display>
+												<field:display name="Indicator Description" feature="Activity">&nbsp;</field:display>
+												<field:display name="Indicator ID" feature="Activity">&nbsp;</field:display>
+												<field:display name="Indicator Name" feature="Activity"></field:display>
 											</feature:display>
 											<feature:display name="Costing" module="Activity Costing">
 												<field:display name="Costing Donor" feature="Costing"></field:display>

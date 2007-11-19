@@ -382,26 +382,34 @@ ${fn:replace(message,quote,escapedQuote)}
                                                           <c:if test="${not empty aimEditActivityForm.proProjCost && aimEditActivityForm.proProjCost!=''}">
                                                             <table cellSpacing=1 cellPadding="1" bgcolor="#dddddd" width="100%">
                                                               <tr bgcolor="#ffffff">
+                                                              	<field:display name="Proposed Project Planned" feature="Proposed Project Cost">
                                                                 <td bgcolor="#FFFFFF" align="left" width="30">
                                                                 <digi:trn key="aim:AvtivityFundingPlanned">
                                                   					Planned
                                                   				</digi:trn>
                                                                 </td>
+                                                                </field:display>
+                                                                <field:display name="Proposed Project Amount" feature="Proposed Project Cost">
                                                                 <td bgcolor="#FFFFFF" align="left" width="10">
                                                                   <c:if test="${not empty aimEditActivityForm.proProjCost.funAmount && aimEditActivityForm.proProjCost.funAmount!=''}">
                                                                   ${aimEditActivityForm.proProjCost.funAmount}
                                                                   </c:if>
                                                                 </td>
+                                                                </field:display>
+                                                                <field:display name="Proposed Project Currency" feature="Proposed Project Cost">
                                                                 <td bgcolor="#FFFFFF" align="left" width="10">
                                                                   <c:if test="${not empty aimEditActivityForm.proProjCost.currencyCode && aimEditActivityForm.proProjCost.currencyCode!=''}">
                                                                   ${aimEditActivityForm.proProjCost.currencyCode}
                                                                   </c:if>
                                                                 </td>
+                                                                </field:display>
+                                                                <field:display name="Proposed Project Date" feature="Proposed Project Cost">
                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
                                                                   <c:if test="${not empty aimEditActivityForm.proProjCost.funDate && aimEditActivityForm.proProjCost.funDate!=''}">
                                                                   ${aimEditActivityForm.proProjCost.funDate}
                                                                   </c:if>
                                                                 </td>
+                                                                </field:display>
                                                               </tr>
                                                             </table>
                                                           </c:if>
@@ -409,21 +417,29 @@ ${fn:replace(message,quote,escapedQuote)}
                                                       </tr>
                                                       <tr>
                                                         <td>
+
                                                           <c:if test="${aimEditActivityForm.proProjCost==null}">
                                                           	<c:set var="translation">
                                                             	<digi:trn key="btn:addFundings">Add Fundings</digi:trn>
                                                             </c:set>
+                                                           <field:display name="Add Funding Button - Proposed Project Cost" feature="Proposed Project Cost">
                                                             <input type="button" value="${translation}" class="buton" onclick="addPropFunding()">
+                                                           </field:display>
                                                           </c:if>
+                                                          
                                                           <c:if test="${aimEditActivityForm.proProjCost!=null}">
                                                           	<c:set var="translation">
                                                             	<digi:trn key="btn:editFundings">Edit Funding</digi:trn>
                                                             </c:set>
+                                                            <field:display name="Edit Funding Button- Proposed Project Cost" feature="Proposed Project Cost">
                                                             <input type="Button" value="${translation}" class="buton" onclick="addPropFunding()">
+                                                            </field:display>
                                                           	<c:set var="translation">
                                                             	<digi:trn key="btn:removeFundings">Remove Funding</digi:trn>
                                                             </c:set>
-                                                            <input type="Button" value="${translation}" class="buton" onclick="delPropFunding()">
+                                                            <field:display name="Remove Funding Button - Proposed Project Cost" feature="Proposed Project Cost">
+	                                                            <input type="Button" value="${translation}" class="buton" onclick="delPropFunding()">
+	                                                        </field:display>
                                                           </c:if>
                                                         </td>
                                                       </tr>
@@ -501,6 +517,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                             </field:display>
                                                           </td>
                                                         </tr>
+                                                        
                                                         <logic:notEmpty name="fundingOrganization" property="fundings">
                                                           <logic:iterate name="fundingOrganization" indexId="index" property="fundings" id="funding" type="org.digijava.module.aim.helper.Funding">
                                                             <tr>
@@ -584,7 +601,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                             <table width="100%" border="0" cellSpacing="1" cellPadding="1" bgcolor="#dddddd">
                                                                               <%-- Rendering projections --%>
                                                                               	<feature:display module="Funding" name="MTEF Projections">
-																			  	<field:display feature="MTEF Projections" name="MTEFProjections">
+																			  	
 	                                                                              	<tr bgcolor="#ffffff">
 	                                                                                 <td colspan="5">
 	                                                                                 <b><digi:trn key="aim:funding:projections">Projections</digi:trn></b>
@@ -593,24 +610,31 @@ ${fn:replace(message,quote,escapedQuote)}
 	                                                                                 <logic:notEmpty name="funding" property="mtefProjections">
 	                                                                                 <logic:iterate name="funding" property="mtefProjections" id="projection">
 	                                                                                 <tr bgcolor="#ffffff">
+	                                                                                 	<field:display name="Projection Name" feature="MTEF Projections">
 	                                                                                 	<td width="50">
 	                                                                                 		<category:getoptionvalue categoryValueId="${projection.projected}" />
 	                                                                                 	</td>
+	                                                                                 	</field:display>
+	                                                                                 	<field:display name="Projection Amount" feature="MTEF Projections">
 	                                                                                 	<td width="120" align="right">
 	                                                                                 		<FONT color="blue">*</FONT>
 	                                                                                 		<bean:write name="projection" property="amount" />
 	                                                                                 	</td>
+	                                                                                 	</field:display>
+	                                                                                 	<field:display name="Projection Currency Code" feature="MTEF Projections">
 	                                                                                 	<td>
 	                                                                                 		<bean:write name="projection" property="currencyCode" />
 	                                                                                 	</td>
+	                                                                                 	</field:display>
+	                                                                                 	<field:display name="Projection Date" feature	="MTEF Projections">
 	                                                                                 	<td>
 	                                                                                 		<bean:write name="projection" property="projectionDateLabel" />
 	                                                                                 	</td>
+	                                                                                 	</field:display>
 	                                                                                 	<td>&nbsp;</td>
 	                                                                                 </tr>
 	                                                                                 </logic:iterate>
 	                                                                                 </logic:notEmpty>
-																				</field:display>
 																				</feature:display>
 																			  <%-- Rendering projections --%>
                                                                              <tr bgcolor="#ffffff">

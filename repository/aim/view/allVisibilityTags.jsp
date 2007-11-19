@@ -81,7 +81,6 @@
 <feature:display name="Issues" module="Issues"></feature:display>
 <feature:display name="Location" module="Project ID and Planning"></feature:display>
 <feature:display name="Logframe" module="Previews"></feature:display>
-<feature:display name="M&E" module="Trend Analysis and Forecasting"></feature:display>
 <feature:display name="Mofed Contact Information" module="Contact Information"></feature:display>
 <feature:display name="My Messages" module="Desktop Sections"></feature:display>
 <feature:display name="My Tasks" module="Desktop Sections"></feature:display>
@@ -102,7 +101,7 @@
 <feature:display name="SISIN" module="Components"></feature:display>
 <feature:display name="Sectors" module="Project ID and Planning"></feature:display>
 <feature:display name="Web Resources" module="Document"></feature:display>
-<field:display feature="Contact Information" name="Data Source Preview"></field:display>
+<field:display feature="Identification" name="Data Source"></field:display>
 <field:display feature="Donor Contact Information" name="Donor Email"></field:display>
 <field:display feature="Donor Contact Information" name="Donor First Name"></field:display>
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display>
@@ -128,8 +127,7 @@
 <field:display name="Activity Budget" feature="Identification"></field:display>
 <field:display name="Actors" feature="Issues"></field:display>
 <field:display name="Actual Approval Date" feature="Planning" ></field:display>
-<field:display name="Actual Approval Date" feature="Planning"></field:display>
-<field:display name="Actual Completion Date" feature="Planning"></field:display>
+<field:display name="Current Completion Date" feature="Planning"></field:display>
 <field:display name="Actual Start Date" feature="Planning"></field:display>
 <field:display name="Actual/Planned Commitments" feature="Components"></field:display>
 <field:display name="Actual/Planned Commitments" feature="Regional Funding"></field:display>
@@ -229,23 +227,20 @@
 <field:display name="Funding Organization Id" feature="Funding Organizations"></field:display>
 <field:display name="Funding Organization Name" feature="Funding Organizations"></field:display>
 <field:display name="Funding Organization" feature="Funding Organizations"></field:display>
-<field:display name="GBS/SBS" feature="Budget"></field:display>
+<field:display name="Financial Instrument" feature="Budget"></field:display>
 <field:display name="Government Approval Procedures" feature="Budget"></field:display>
 <field:display name="Grand Total Commitments" feature="Components"></field:display>
 <field:display name="Grand Total Disbursements" feature="Components"></field:display>
 <field:display name="Grand Total Expenditures" feature="Components"></field:display>
 <field:display name="Implementation Level" feature="Location"></field:display>
 <field:display name="Implementation Location" feature="Location"></field:display>
-<field:display name="Indicator Base Value" feature="M&E"></field:display>
+<field:display name="Indicator Base Value" feature="Activity"></field:display>
 <field:display name="Indicator Code" feature="Admin"></field:display>
-<field:display name="Indicator Current Value" feature="M&E"></field:display>
-<field:display name="Indicator Description" feature="M&E"></field:display>
+<field:display name="Indicator Current Value" feature="Activity"></field:display>
+<field:display name="Indicator Description" feature="Activity"></field:display>
 <field:display name="Indicator ID" feature="Activity"></field:display>
-<field:display name="Indicator ID" feature="M&E"></field:display>
 <field:display name="Indicator Name" feature="Activity"></field:display>
-<field:display name="Indicator Name" feature="Admin"></field:display>
-<field:display name="Indicator Name" feature="M&E"></field:display>
-<field:display name="Indicator Target Value" feature="M&E"></field:display>
+<field:display name="Indicator Target Value" feature="Activity"></field:display>
 <field:display name="Indicator Type" feature="Admin"></field:display>
 <field:display name="Issues" feature="Issues"></field:display>
 <field:display name="Joint Criteria" feature="Budget"></field:display>
@@ -277,11 +272,11 @@
 <field:display name="Perspective Commitments" feature="Components"></field:display>
 <field:display name="Perspective Commitments" feature="Regional Funding"></field:display>
 <field:display name="Perspective Disbursement" feature="Funding Organizations"></field:display>
-<field:display name="Perspective Disbursements" feature="Components"></field:display>
-<field:display name="Perspective Disbursements" feature="Regional Funding"></field:display>
+<field:display name="Components Perspective Disbursements" feature="Components"></field:display>
+<field:display name="Regional Funding Perspective Disbursements" feature="Regional Funding"></field:display>
 <field:display name="Perspective Expenditure" feature="Funding Organizations"></field:display>
-<field:display name="Perspective Expenditures" feature="Components"></field:display>
-<field:display name="Perspective Expenditures" feature="Regional Funding"></field:display>
+<field:display name="Components Perspective Expenditures" feature="Components"></field:display>
+<field:display name="Regional Funding Perspective Expenditures" feature="Regional Funding"></field:display>
 <field:display name="Physical Progress" feature="Issues"></field:display>
 <field:display name="Physical progress description" feature="Issues"></field:display>
 <field:display name="Physical progress title" feature="Issues"></field:display>
@@ -323,7 +318,6 @@
 <field:display name="SISIN Sector" feature="SISIN"></field:display>
 <field:display name="Sector" feature="Location"></field:display>
 <field:display name="Stage" feature="SISIN"></field:display>
-<field:display name="Status" feature="Identification"></field:display>
 <field:display name="Status" feature="Planning"></field:display>
 <field:display name="Sub Program Level 1" feature="NPD Dashboard"></field:display>
 <field:display name="Sub Program Level 2" feature="NPD Dashboard"></field:display>
@@ -345,20 +339,20 @@
 <field:display name="Total Amount Expenditures" feature="Components"></field:display>
 <field:display name="Total Amount Expenditures" feature="Regional Funding"></field:display>
 <field:display name="Total Committed" feature="Funding Organizations"></field:display>
-<field:display name="Total Committed" feature="Related Documents"></field:display>
+<field:display name="Total Committed" feature="Funding Organizations"></field:display>
 <field:display name="Total Costs" feature="Costing"></field:display>
 <field:display name="Total Disbursed" feature="Funding Organizations"></field:display>
-<field:display name="Total Disbursed" feature="Related Documents"></field:display>
+<field:display name="Total Disbursed" feature="Funding Organizations"></field:display>
 <field:display name="Total Donor Commitments" feature="Regional Funding"></field:display>
 <field:display name="Total Donor Disbursements" feature="Regional Funding"></field:display>
 <field:display name="Total Donor Expenditures" feature="Regional Funding"></field:display>
 <field:display name="Total Expended" feature="Funding Organizations"></field:display>
-<field:display name="Total Expended" feature="Related Documents"></field:display>
+<field:display name="Total Expended" feature="Funding Organizations"></field:display>
 <field:display name="Type Of Assistance" feature="Funding Organizations"></field:display>
 <field:display name="Undisbursed Funds" feature="Funding Organizations"></field:display>
-<field:display name="Undisbursed Funds" feature="Related Documents"></field:display>
+<field:display name="Undisbursed Funds" feature="Funding Organizations"></field:display>
 <field:display name="Unexpended Funds" feature="Funding Organizations"></field:display>
-<field:display name="Unexpended Funds" feature="Related Documents"></field:display>
+<field:display name="Unexpended Funds" feature="Funding Organizations"></field:display>
 <field:display name="Value Type" feature="Admin" ></field:display>
 <field:display name="Value Type" feature="Admin"></field:display>
 <field:display name="Value" feature="Admin"></field:display>

@@ -2242,7 +2242,7 @@ function viewChanges()
 									</tr>
 									</field:display>
 
-
+									<field:display name="Activity Created By" feature="Identification">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:activityCreatedBy">
@@ -2254,7 +2254,8 @@ function viewChanges()
 											<c:out value="${aimEditActivityForm.actAthEmail}"/>
 										</td>
 									</tr>
-									<field:display feature="Contact Information" name="Data Source Preview">
+									</field:display>
+									<field:display feature="Identification" name="Data Source">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:dataSource">
@@ -2265,6 +2266,7 @@ function viewChanges()
 										</td>
 									</tr>
 									</field:display>
+									<field:display name="Activity Updated On" feature="Identification">
 									<logic:notEmpty name="aimEditActivityForm" property="updatedDate">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -2279,6 +2281,8 @@ function viewChanges()
 										</td>
 									</tr>
 									</logic:notEmpty>
+									</field:display>
+									<field:display name="Activity Updated By" feature="Identification">
 									<logic:notEmpty name="aimEditActivityForm" property="updatedBy">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -2292,7 +2296,8 @@ function viewChanges()
 										</td>
 									</tr>
 									</logic:notEmpty>
-
+									</field:display>
+									<field:display name="Activity Created On" feature="Identification">
 									<logic:notEmpty name="aimEditActivityForm" property="createdDate">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -2303,10 +2308,10 @@ function viewChanges()
 											<c:out value="${aimEditActivityForm.createdDate}"/>
 										</td>
 									</tr>
-
 									</logic:notEmpty>
+									</field:display>
 									<logic:notEmpty name="aimEditActivityForm" property="team">
-									<field:display name="Date Team Leader Preview" feature="Contact Information">
+									<field:display name="Date Team Leader" feature="Identification">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:activityTeamLeader">

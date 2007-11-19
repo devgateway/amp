@@ -1,9 +1,12 @@
 package org.digijava.module.aim.action;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Scanner;
 import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
@@ -27,7 +30,6 @@ import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.VisibilityManagerForm;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.autopatcher.exceptions.InvalidPatchRepositoryException;
  
 public class VisibilityManager extends MultiAction {
 	
@@ -41,7 +43,8 @@ public class VisibilityManager extends MultiAction {
 		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
 		vForm.setTemplates(templates);
 		vForm.setMode("manageTemplates");
-		getAllPatchesFiles("/");
+		//generateAllFieldsInFile();
+		
 		return  modeSelect(mapping, form, request, response);
 	}
 
@@ -318,28 +321,98 @@ public class VisibilityManager extends MultiAction {
 		}
 	}
 	
-	 public Collection<File> getAllPatchesFiles(String abstractPatchesLocation)
-	    throws InvalidPatchRepositoryException {
-		 System.out.println("*******************"+this.getServlet().getServletContext().getRealPath(abstractPatchesLocation));
-		
-	   File dir = new File(abstractPatchesLocation);
-	   System.out.println("******************* "+dir.listFiles().length);
-	   /*
-	   Set<File> patchFiles = new TreeSet<File>();
-	   if (!dir.isDirectory())
-	    throw new InvalidPatchRepositoryException(
-	      "Patches repository needs to be a dir!");
-	   String[] files = dir.list();
-	   for (int i = 0; i < files.length; i++) {
-	    File f = new File(dir, files[i]);
-	    if (f.isDirectory() && !f.getName().equals("CVS"))
-	     patchFiles.addAll(getAllPatchesFiles(f.getAbsolutePath()));
-	    if(!f.isDirectory())
-	     patchFiles.add(f);
-	   }
-	   return patchFiles;
-	   */
-		 return null;
+	 public int getAllPatchesFiles(String abstractPatchesLocation, TreeSet<String> modules, TreeSet<String> features, TreeSet<String> fields)
+	    {
+		String path=abstractPatchesLocation;
+		File dir = new File(path);
+		   String[] files = dir.list();
+		   if(files!=null)
+			   if(files.length>0)
+		   try {
+			   	for (int i = 0; i < files.length; i++) {
+			   		File f = new File(dir, files[i]);
+		    
+			   		if (f.isDirectory())
+			   		{
+			   			getAllPatchesFiles(f.getAbsolutePath(), modules,features,fields);
+			   		}
+			   		if(!f.isDirectory() && f.getName().contains(".jsp"))
+			   		{
+			   			Scanner scanner = new Scanner(f);
+			   			scanner.useDelimiter (System.getProperty("line.separator"));
+			   			while(scanner.hasNext()) {
+			   				String s=scanner.next();
+			   				if(s.indexOf("<module:display")>=0)
+			   				{
+			   					String aux="";
+			   					if(s.indexOf(">",(s.indexOf("<module:display"))+1)<0)
+			   						{
+			   							aux=scanner.next();
+			   						}
+			   					String module="";
+			   					if("".equals(aux)) module=s.substring(s.indexOf("<module:display"), s.indexOf(">",(s.indexOf("<module:display"))+1)+1);
+			   						else module=s.substring(s.indexOf("<module:display"), s.length()-1)+aux;
+			   					modules.add(module+"</module:display>\n");
+			   				}
+			   				if(s.indexOf("<field:display")>=0)
+			   				{
+			   					String aux="";
+			   					if(s.indexOf(">",(s.indexOf("<field:display"))+1)<0)
+			   						{
+			   							aux=scanner.next();
+			   						}
+			   					String module="";
+			   					if("".equals(aux)) module=s.substring(s.indexOf("<field:display"), s.indexOf(">",(s.indexOf("<field:display"))+1)+1);
+			   						else module=s.substring(s.indexOf("<field:display"), s.length()-1)+aux;
+			   					fields.add(module+"</field:display>\n");
+			   				}
+			   				
+			   				if(s.indexOf("<feature:display")>=0)
+			   				{
+			   					String aux="";
+			   					if(s.indexOf(">",(s.indexOf("<field:display"))+1)<0)
+			   						{
+			   							aux=scanner.next();
+			   						}
+			   					String module="";
+			   					if("".equals(aux)) module=s.substring(s.indexOf("<feature:display"), s.indexOf(">",(s.indexOf("<feature:display"))+1)+1);
+			   						else module=s.substring(s.indexOf("<feature:display"), s.length()-1)+aux;
+			   					features.add(module+"</feature:display>\n");
+			   				}
+
+			   			}
+			   			scanner.close();
+			   		}
+			   	}
+		   }catch(Exception e){ e.printStackTrace(); }
+	   return 1;
 	  }
 
+	 private void generateAllFieldsInFile(){
+		 TreeSet modules=new TreeSet();
+		 TreeSet features=new TreeSet();
+		 TreeSet fields=new TreeSet();
+			getAllPatchesFiles(this.getServlet().getServletContext().getRealPath("/"),modules, features, fields);
+			int i=0;
+			try{
+			    FileWriter fstream = new FileWriter(this.getServlet().getServletContext().getRealPath("/")+"/out.txt");
+			        BufferedWriter out = new BufferedWriter(fstream);
+			        for (Iterator iter = modules.iterator(); iter.hasNext();) {
+						String s = (String) iter.next();
+						out.append(s);
+					}
+			        for (Iterator iter = features.iterator(); iter.hasNext();) {
+						String s = (String) iter.next();
+						out.append(s);
+					}
+			        for (Iterator iter = fields.iterator(); iter.hasNext();) {
+						String s = (String) iter.next();
+						out.append(s);
+					}
+			    out.close();
+			    }catch (Exception e){//Catch exception if any
+			      System.err.println("Error: " + e.getMessage());
+			    }
+			
+	 }
 }

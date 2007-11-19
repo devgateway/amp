@@ -280,13 +280,13 @@ function checkUncheckAll2() {
 											<feature:display name="Contact Information" module="Contact Information">
 												<field:display name="Contact Name" feature="Contact Information">&nbsp;</field:display>
 											</feature:display>
-											<feature:display name="M & E" module="Trend Analysis and Forecasting">
-												<field:display name="Indicator Base Value" feature="M & E">&nbsp;</field:display>
-												<field:display name="Indicator Current Value" feature="M & E">&nbsp;</field:display>
-												<field:display name="Indicator Target Value" feature="M & E">&nbsp;</field:display>
-												<field:display name="Indicator Description" feature="M & E">&nbsp;</field:display>
-												<field:display name="Indicator ID" feature="M & E">&nbsp;</field:display>
-												<field:display name="Indicator Name" feature="M & E"></field:display>
+											<feature:display name="M&E" module="Trend Analysis and Forecasting">
+												<field:display name="Indicator Base Value" feature="M&E">&nbsp;</field:display>
+												<field:display name="Indicator Current Value" feature="M&E">&nbsp;</field:display>
+												<field:display name="Indicator Target Value" feature="M&E">&nbsp;</field:display>
+												<field:display name="Indicator Description" feature="M&E">&nbsp;</field:display>
+												<field:display name="Indicator ID" feature="M&E">&nbsp;</field:display>
+												<field:display name="Indicator Name" feature="M&E"></field:display>
 											</feature:display>
 											<feature:display name="Costing" module="Activity Costing">
 												<field:display name="Costing Donor" feature="Costing"></field:display>

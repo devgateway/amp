@@ -43,6 +43,8 @@ public class VisibilityManager extends MultiAction {
 		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
 		vForm.setTemplates(templates);
 		vForm.setMode("manageTemplates");
+		//this function generate a file containing all the fields, features and modules from 
+		//all the .jsp files from AMP
 		//generateAllFieldsInFile();
 		
 		return  modeSelect(mapping, form, request, response);

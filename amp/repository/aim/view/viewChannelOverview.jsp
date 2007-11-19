@@ -386,7 +386,7 @@ function commentWin(val) {
 																					</td>
 																				</tr>
 																				</field:display>
-																				<field:display name="GBS/SBS" feature="Budget">
+																				<field:display name="Financial Instrument" feature="Budget">
 																				<tr>
 																					<td>
 																					<digi:trn key="aim:actGBS">
@@ -1162,6 +1162,7 @@ function commentWin(val) {
 																<TD bgcolor="#ffffff"><i><digi:trn key="aim:createdDate">Created date</digi:trn></i>:
 																<c:out value="${activity.createdDate}" />&nbsp;</TD>
 															</TR>
+															<field:display name="Activity Updated By" feature="Identification">
 															<c:if test="${!empty activity.updatedBy}">
 															<TR>
 																<TD bgcolor="#ffffff">
@@ -1174,6 +1175,8 @@ function commentWin(val) {
 
 															</TR>
 															</c:if>
+															</field:display>
+															<field:display name="Activity Updated On" feature="Identification">
 															<c:if test="${!empty activity.updatedDate}">
 															<TR>
 																<TD bgcolor="#ffffff"><i><digi:trn key="aim:activityUpdatedOn">
@@ -1182,7 +1185,8 @@ function commentWin(val) {
 															&nbsp;</TD>
 															</TR>
 															</c:if>
-
+															</field:display>
+															<field:display name="Data Source" feature="Identification">
 															<c:if test="${!empty activity.actAthAgencySource}">
 															<TR>
 																<TD bgcolor="#ffffff"><i><digi:trn key="aim:dataSource">
@@ -1191,7 +1195,7 @@ function commentWin(val) {
 															&nbsp;</TD>
 															</TR>
 															</c:if>
-
+															</field:display>
 														</TABLE>
 														</TD>
 													</TR>

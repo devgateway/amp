@@ -621,10 +621,12 @@
 									<input class="buton" type="button" name="xx1" value="Delete Commitments"
 									onclick="this.form.event.value='delCommitments';addFundingDetail();">
 								</td> --%>
+								<field:display name="Add Commitment Button" feature="Funding Organizations">
 								<td>
 									<input class="buton" type="button" name="xx1" value="<digi:trn key='aim:addCommitment'>Add Commitment</digi:trn>"
 								   onclick="addFundingDetail(0)">
 								</td>
+								</field:display>
 							</tr>
 						</table>
 					</td>
@@ -816,11 +818,14 @@
 									<input class="buton" type="button" name="xx1" value="Delete Disbursements"
 								   onclick="this.form.event.value='delDisbursements';addFundingDetail();">
 								</td>--%>
+								<field:display name="Add Disbursement Button" feature="Funding Organizations">
 								<td>
 									<input class="buton" type="button" name="xx1" value="<digi:trn key='aim:addDisbursement'>Add Disbursement</digi:trn>"
 								   onclick="addFundingDetail(1)">
 								</td>
+								</field:display>
 							</tr>
+							
 						</table>
 					</td>
 				</tr>
@@ -1030,8 +1035,10 @@
 						<table cellPadding=3>
 							<tr>
 								<td>
+								<field:display name="Add Expenditure Button" feature="Funding Organizations">
 									<input class="buton" type="button" name="xx1" value="<digi:trn key='aim:addExpediture'>Add Expenditure</digi:trn>"
 				   				onclick="addFundingDetail(2)">
+				   				</field:display>
 								</td>
 							</tr>
 						</table>

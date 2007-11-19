@@ -180,27 +180,27 @@ function projectFiche(id)
 	            						            	<TD>
 	            						            		<digi:trn key="aim:region">Region</digi:trn>
 	            						            	</TD>
-	            						            	<field:display name="Total Committed" feature="Related Documents">
+	            						            	<field:display name="Total Committed" feature="Funding Organizations">
 															<TD>
 																<digi:trn key="aim:totalCommitted">Total Committed</digi:trn>
 															</TD>
 														</field:display>
-														<field:display name="Total Disbursed" feature="Related Documents">
+														<field:display name="Total Disbursed" feature="Funding Organizations">
 								                         	<TD>
 								                         		<digi:trn key="aim:totalDisbursed">Total Disbursed</digi:trn>
 								                         	</TD>
 														</field:display>
-														<field:display name="Undisbursed Funds" feature="Related Documents">
+														<field:display name="Undisbursed Funds" feature="Funding Organizations">
 															<TD>
 																<digi:trn key="aim:unDisbursedFunds">Undisbursed Funds</digi:trn>
 															</TD>
 														</field:display>
-														<field:display name="Total Expended" feature="Related Documents">
+														<field:display name="Total Expended" feature="Funding Organizations">
 								                         	<TD>
 								                         		<digi:trn key="aim:totalExpended">Total Expended</digi:trn>
 								                         	</TD>
 														</field:display>
-														<field:display name="Unexpended Funds" feature="Related Documents">
+														<field:display name="Unexpended Funds" feature="Funding Organizations">
 															<TD>
 																<digi:trn key="aim:unExpendedFunds">Unexpended Funds</digi:trn>
 															</TD>
@@ -217,27 +217,27 @@ function projectFiche(id)
 																	<digi:link href="/viewRegFundDetails.do" name="url">
 																	<bean:write name="fd" property="regionName"/></digi:link>
 																</TD>
-																<field:display name="Total Committed" feature="Related Documents">
+																<field:display name="Total Committed" feature="Funding Organizations">
 													                <TD align="right">
 													                	<bean:write name="fd" property="totCommitments"/>
 													                </TD>
 													            </field:display>
-																<field:display name="Total Disbursed" feature="Related Documents">
+																<field:display name="Total Disbursed" feature="Funding Organizations">
 													                <TD align="right">
 													                	<bean:write name="fd" property="totDisbursements"/>
 													                </TD>
 													            </field:display>
-																<field:display name="Undisbursed Funds" feature="Related Documents">
+																<field:display name="Undisbursed Funds" feature="Funding Organizations">
 											      			        <TD align="right">
 											      			        	<bean:write name="fd" property="totUnDisbursed"/>
 											      			        </TD>
 											      			    </field:display>
-																<field:display name="Total Expended" feature="Related Documents">
+																<field:display name="Total Expended" feature="Funding Organizations">
 														            <TD align="right">
 														            	<bean:write name="fd" property="totExpenditures"/>
 														            </TD>
 														        </field:display>
-																<field:display name="Unexpended Funds" feature="Related Documents">
+																<field:display name="Unexpended Funds" feature="Funding Organizations">
 											            		    <TD align="right">
 											            		    	<bean:write name="fd" property="totUnExpended"/>
 											            		    </TD>
@@ -249,27 +249,27 @@ function projectFiche(id)
 														<TD>
 															<digi:trn key="aim:total">Total</digi:trn>
 														</TD>
-														<field:display name="Total Committed" feature="Related Documents">
+														<field:display name="Total Committed" feature="Funding Organizations">
 															<TD align="right">
 																<bean:write name="aimRegionalFundingForm" property="totCommitments"/>
 															</TD>
 														</field:display>
-														<field:display name="Total Disbursed" feature="Related Documents">
+														<field:display name="Total Disbursed" feature="Funding Organizations">
 															<TD align="right">
 																<bean:write name="aimRegionalFundingForm" property="totDisbursements"/>
 															</TD>
 														</field:display>
-														<field:display name="Undisbursed Funds" feature="Related Documents">
+														<field:display name="Undisbursed Funds" feature="Funding Organizations">
 															<TD align="right">
 																<bean:write name="aimRegionalFundingForm" property="totUnDisbursed"/>
 															</TD>
 														</field:display>
-														<field:display name="Total Expended" feature="Related Documents">
+														<field:display name="Total Expended" feature="Funding Organizations">
 															<TD align="right">
 																<bean:write name="aimRegionalFundingForm" property="totExpenditures"/>
 															</TD>
 														</field:display>
-														<field:display name="Unexpended Funds" feature="Related Documents">
+														<field:display name="Unexpended Funds" feature="Funding Organizations">
 															<TD align="right">
 																<bean:write name="aimRegionalFundingForm" property="totUnExpended"/>
 															</TD>

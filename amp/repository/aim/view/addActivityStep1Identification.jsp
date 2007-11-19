@@ -370,7 +370,7 @@
 								</td></tr>		
 								
 								
-								<field:display name="GBS/SBS" feature="Budget">
+								<field:display name="Financial Instrument" feature="Budget">
 										<tr bgcolor="#ffffff" id="financial"><td valign="top" align="left" >
 											<a title="<digi:trn key="aim:GBS">Financial Instrument</digi:trn>">
 											<digi:trn key="aim:actGBS">

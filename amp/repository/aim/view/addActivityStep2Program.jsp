@@ -13,7 +13,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
 
@@ -111,10 +113,14 @@
 
 
                                                           <c:if test="${aimEditActivityForm.nationalSetting.allowMultiple||empty aimEditActivityForm.nationalPlanObjectivePrograms}">
+                                                          <field:display name="Add Programs Button - National Plan Objective" feature="Program">
                                                             <input type="button" value='<digi:trn key="btn:addPrograms">Add Programs</digi:trn>' onclick="addProgram(1);" class="buton">
+                                                          </field:display>
                                                             </c:if>
                                                             <c:if test="${!empty aimEditActivityForm.nationalPlanObjectivePrograms}">
+                                                            <field:display name="Remove Program Button - National Plan Objective" feature="Program">
                                                               <input type="button" value='<digi:trn key="btn:removeProgram">Remove program</digi:trn>' onclick="remProgram(1);" class="buton">
+                                                              </field:display>
                                                             </c:if>
                                                           </td>
                                                         </tr>
@@ -182,11 +188,14 @@
                                                         <tr>
                                                           <td>
                                                             <c:if test="${aimEditActivityForm.primarySetting.allowMultiple||empty aimEditActivityForm.primaryPrograms}">
+                                                            <field:display name="Add Programs Button - Primary Programs" feature="Program">
                                                             <input type="button" value='<digi:trn key="btn:addPrograms">Add Programs</digi:trn>' onclick="addProgram(2);" class="buton">
+                                                            </field:display>
                                                             </c:if>
                                                             <c:if test="${!empty aimEditActivityForm.primaryPrograms}">
-
+																<field:display name="Remove Programs Button - Primary Programs" feature="Program">		
                                                               <input type="button" value='<digi:trn key="btn:removeProgram">Remove program</digi:trn>' onclick="remProgram(2);" class="buton">
+                                                              </field:display>
                                                             </c:if>
                                                           </td>
                                                         </tr>
@@ -254,10 +263,14 @@
                                                         <tr>
                                                           <td>
                                                             <c:if test="${aimEditActivityForm.secondarySetting.allowMultiple||empty aimEditActivityForm.secondaryPrograms}">
+                                                            <field:display name="Add Programs Button - Secondary Programs" feature="Program">
                                                             <input type="button" value='<digi:trn key="btn:addPrograms">Add Programs</digi:trn>' onclick="addProgram(3);" class="buton">
+                                                            </field:display>
                                                             </c:if>
                                                             <c:if test="${!empty aimEditActivityForm.secondaryPrograms}">
+                                                            <field:display name="Add Programs Button - Secondary Programs" feature="Program">
                                                               <input type="button" value='<digi:trn key="btn:removeProgram">Remove program</digi:trn>' onclick="remProgram(3);" class="buton">
+                                                              </field:display>
                                                             </c:if>
                                                           </td>
                                                         </tr>
@@ -273,7 +286,7 @@
 
 
 
-
+										<field:display name="Program Description" feature="Program">
                                       <tr>
                                         <td>
                                           <a title="<digi:trn key="aim:ProgramDesc">Description of program, objectives, or associated projects</digi:trn>">
@@ -287,3 +300,4 @@
 </a>
                                         </td>
                                       </tr>
+										</field:display>

@@ -6,17 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.lang.*;
 import javax.servlet.ServletOutputStream;
-
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperRunManager;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -26,19 +16,26 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionServlet;
 import org.digijava.module.aim.form.ParisIndicatorReportForm;
 import org.digijava.module.aim.helper.ParisIndicator;
-import org.digijava.module.aim.helper.Parisindicator3Jrxml;
+import org.digijava.module.aim.helper.ParisIndicator10aJrxml;
 import org.digijava.module.aim.helper.ParisIndicator4Jrxml;
 import org.digijava.module.aim.helper.ParisIndicator5aJrxml;
+import org.digijava.module.aim.helper.ParisIndicator5aSubJrxml;
 import org.digijava.module.aim.helper.ParisIndicator5bJrxml;
+import org.digijava.module.aim.helper.ParisIndicator5bSubJrxml;
 import org.digijava.module.aim.helper.ParisIndicator6Jrxml;
 import org.digijava.module.aim.helper.ParisIndicator7Jrxml;
 import org.digijava.module.aim.helper.ParisIndicator9Jrxml;
-import org.digijava.module.aim.helper.ParisIndicator10aJrxml;
 import org.digijava.module.aim.helper.ParisIndicatorDataSource;
-import org.digijava.module.aim.helper.ParisIndicator5aSubJrxml;
-import org.digijava.module.aim.helper.ParisIndicator5bSubJrxml;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
 import org.digijava.module.aim.helper.ParisIndicatorJrxml;
+import org.digijava.module.aim.helper.Parisindicator3Jrxml;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
 /*
  *@author Govind G Dalwani
@@ -211,7 +208,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
         }
         logger.info(" this is the 6th ka count " + colCnt1);
 
-        if (!isEmpty(pId)) {
+        if (!isEmpty(pId) && !isEmpty(type)) {
             ActionServlet s = getServlet();
             String reportsFolderPath = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports");
             java.io.File reportsFolder = new java.io.File(reportsFolderPath);
@@ -305,7 +302,6 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
                 } catch (JRException e) {
                     throw new RuntimeException(e);
                 }
-
             } else if (type.equals("xls")) {
                 response.setContentType("application/vnd.ms-excel");
                 try {

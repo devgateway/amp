@@ -996,12 +996,21 @@
 				<c:if test="${aimParisIndicatorReportForm.indicatorCode != '6'}">
 
 					<tr><td><font color="blue">* <digi:trn key="aim:allTheAmounts">All the amounts are in thousands (000)</digi:trn>
-																	<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>">
-																		<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-																		<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>">
-																			<%=selCurrency %>
-																		</digi:trn>
-																	</logic:present>
+                                                                    <c:set var="selCurrency">
+                                                                      ${aimParisIndicatorReportForm.currency}
+                                                                    </c:set>
+													               <c:set var="selCurrency">
+                                                                      ${fn:replace(selCurrency," ","")}
+                                                                    </c:set>
+                                                                    <c:set var="selCurrency">
+                                                                      ${fn:replace(selCurrency,"%","")}
+                                                                    </c:set>
+                                                                    <c:set var="selCurrency">
+                                                                      ${fn:toLowerCase(selCurrency)}
+                                                                    </c:set>
+                                                                    <digi:trn key="aim:currency:${selCurrency}">
+                                                                      ${selCurrency}
+                                                                    </digi:trn>
 							</font></td></tr>
 
 				</c:if>

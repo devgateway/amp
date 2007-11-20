@@ -202,7 +202,7 @@ public class DocumentManagerUtil {
 	}
 	
 	public static Node getNodeOfLastVersion(String currentUUID, HttpServletRequest request) throws CrException, RepositoryException {
-		List<Version> versions	= getVersions(currentUUID, request);
+		List<Version> versions	= getVersions(currentUUID, request, true);
 		
 		if (versions == null || versions.size() == 0) 
 				throw new NoVersionsFoundException("No versions were found for node with UUID: " + currentUUID);
@@ -218,10 +218,19 @@ public class DocumentManagerUtil {
 		return niter.nextNode();		
 	}
 	
-	public static List getVersions(String uuid, HttpServletRequest request) {
+	public static int getNextVersionNumber(String uuid, HttpServletRequest request) {
+		List versions	= getVersions(uuid, request, false);
+		return versions.size() + 1;
+	}
+	
+	public static List getVersions(String uuid, HttpServletRequest request, boolean needWriteSession) {
 		if (uuid != null) {
+			Node node;
 			ArrayList versions		= new ArrayList();
-			Node node				= DocumentManagerUtil.getWriteNode(uuid, request);
+			if (needWriteSession)
+				node				= DocumentManagerUtil.getWriteNode(uuid, request);
+			else
+				node				= DocumentManagerUtil.getReadNode(uuid, request);
 			VersionHistory history;
 			try {
 				history 						= node.getVersionHistory();

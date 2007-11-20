@@ -12,7 +12,9 @@
       <forward name="forwardDM" path="/showLayout.do?layout=amp_selectDocumentDM" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-	<action path="/contentrepository/getVersionsForDocumentManager" type="org.digijava.module.contentrepository.action.GetVersionsForDocumentManager" validate="false" />
+	<action name="crDocumentManagerForm" scope="request" path="/contentrepository/getVersionsForDocumentManager" type="org.digijava.module.contentrepository.action.GetVersionsForDocumentManager" validate="false">
+		<forward name="forward" path="/showLayout.do?layout=amp_getDocumentVersionList" />
+	</action>
     <action path="/contentrepository/deleteForDocumentManager" type="org.digijava.module.contentrepository.action.DeleteForDocumentManager" validate="false" />
     <action path="/contentrepository/downloadFile" type="org.digijava.module.contentrepository.action.DownloadFile" validate="false" />
     <action path="/contentrepository/getDocumentList" type="org.digijava.module.contentrepository.action.GetDocumentList" validate="false" name="aimDocumentManagerListForm">

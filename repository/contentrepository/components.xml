@@ -3,8 +3,9 @@
 <config>
 <secondary-pages>
 <!-- document manager  -->
-	<page name="viewDocumentManager" page="viewDocumentManager" title ="- Document Manager " />
+	<page name="viewDocumentManager" page="viewDocumentManager" title ="- Content Repository " />
 	<page name="amp_getDocumentList" page="getDocumentList"/>
+	<page name="amp_getDocumentVersionList" page="getDocumentVersionList"/>
 	<page name="amp_selectDocumentDM" page="selectDocumentDM"/>
 	<page name="documentManagerJsHelper" page="documentManagerJsHelper"/>
 	<page name="documentManagerDivHelper" page="documentManagerDivHelper"/>

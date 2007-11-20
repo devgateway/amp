@@ -3,6 +3,7 @@
  */
 package org.digijava.module.contentrepository.action;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -297,7 +298,16 @@ public class DocumentManager extends Action {
 			return null;
 		}*/
 	}
-	
+	/**
+	 * 
+	 * @param jcrWriteSession
+	 * @param parentNode
+	 * @param formFile
+	 * @param isANewVersion
+	 * @param isLink true if this will be a link to another document from Jackrabbit
+	 * @param uuid if isLink==true then the new document will be a link which points to the document with this uuid
+	 * @return
+	 */
 	private boolean addFileNode(Session jcrWriteSession, Node parentNode, FormFile formFile, boolean isANewVersion, boolean isLink, String uuid) {
 		if (formFile == null) {
 			logger.error("No file was transmitted to the server");
@@ -333,12 +343,22 @@ public class DocumentManager extends Action {
 				newNode.setProperty("ampdoc:link", uuid);
 			else
 				newNode.setProperty("ampdoc:data", formFile.getInputStream());
-			newNode.setProperty("ampdoc:name", formFile.getFileName());
-			newNode.setProperty("ampdoc:title", myForm.getDocTitle());
-			newNode.setProperty("ampdoc:description", myForm.getDocDescription());
-			newNode.setProperty("ampdoc:contentType", formFile.getContentType());
-			newNode.setProperty("ampdoc:addingDate", Calendar.getInstance());
-			newNode.setProperty("ampdoc:creator", teamMember.getEmail() );
+			
+			if (isANewVersion){
+				int vernum	= DocumentManagerUtil.getNextVersionNumber( newNode.getUUID(), myRequest);
+				newNode.setProperty("ampdoc:versionNumber", (double)vernum);
+			}
+			else{
+				newNode.setProperty("ampdoc:versionNumber", (double)1.0);
+			}
+			
+			newNode.setProperty( "ampdoc:name", formFile.getFileName());
+			newNode.setProperty( "ampdoc:title", myForm.getDocTitle());
+			newNode.setProperty( "ampdoc:description", myForm.getDocDescription());
+			newNode.setProperty( "ampdoc:notes", myForm.getDocNotes());
+			newNode.setProperty( "ampdoc:contentType", formFile.getContentType());
+			newNode.setProperty( "ampdoc:addingDate", Calendar.getInstance());
+			newNode.setProperty( "ampdoc:creator", teamMember.getEmail() );
 			
 			jcrWriteSession.save();
 			newNode.checkin();
@@ -418,8 +438,10 @@ public class DocumentManager extends Action {
 				Property name			= null;
 				Property title			= null;
 				Property description	= null;
+				Property notes			= null;
 				Property calendar		= null;
 				Property contentType	= null;
+				Property versionNumber	= null;
 				
 				Boolean hasViewRights			= false;
 				Boolean hasVersioningRights		= false;
@@ -430,8 +452,9 @@ public class DocumentManager extends Action {
 				String uuid						= documentNode.getUUID();
 				boolean isPublicVersion		= uuidMapVer.containsKey(uuid);
 				
-				if ( isPublicVersion )
+				if ( isPublicVersion ) { // This document is public and exactly this version is the public one
 						hasViewRights			= true;
+				}
 				else
 						hasViewRights			= DocumentManagerRights.hasViewRights(documentNode, myRequest);
 				
@@ -440,33 +463,45 @@ public class DocumentManager extends Action {
 				}
 				
 				try{
-					name		= documentNode.getProperty("ampdoc:name");
+					name			= documentNode.getProperty("ampdoc:name");
 				}
 				catch(PathNotFoundException E) {
 					continue;
 				}
 				try{
-					title		= documentNode.getProperty("ampdoc:title");
+					title			= documentNode.getProperty("ampdoc:title");
 				}
 				catch(PathNotFoundException E) {
 					;
 				}
 				try{
-					description	= documentNode.getProperty("ampdoc:description");
+					description		= documentNode.getProperty("ampdoc:description");
 				}
 				catch(PathNotFoundException E) {
 					;
 				}
 				try{
-					calendar	= documentNode.getProperty("ampdoc:addingDate");
+					notes		= documentNode.getProperty("ampdoc:notes");
 				}
 				catch(PathNotFoundException E) {
 					;
 				}
 				try{
-					contentType	= documentNode.getProperty("ampdoc:contentType");
+					calendar		= documentNode.getProperty("ampdoc:addingDate");
 				}
 				catch(PathNotFoundException E) {
+					;
+				}
+				try{
+					contentType		= documentNode.getProperty("ampdoc:contentType");
+				}
+				catch(PathNotFoundException E) {
+					;
+				}
+				try{
+					versionNumber	= documentNode.getProperty("ampdoc:versionNumber");
+				}
+				catch (PathNotFoundException E) {
 					;
 				}
 				
@@ -481,12 +516,22 @@ public class DocumentManager extends Action {
 					if (description != null) {
 						documentData.setDescription( description.getString() );
 					}
+					if (notes != null) {
+						documentData.setNotes( notes.getString() ) ;
+					}
 					if (calendar != null) {
 						Calendar cal 	=  calendar.getDate() ;
 						documentData.setCalendar(DocumentManagerUtil.calendarToString(cal));
 					}
 					if (contentType != null) {
 						documentData.setContentType( contentType.getString() );
+					}
+					if (versionNumber != null) {
+						documentData.setVersionNumber( (float)versionNumber.getDouble() );
+					}
+					else {
+						int verNum	= DocumentManagerUtil.getVersions(uuid, myRequest, false).size();
+						documentData.setVersionNumber( verNum );
 					}
 					
 	//				Boolean hasViewRights			= DocumentManagerRights.hasViewRights(documentNode, myRequest); 
@@ -513,13 +558,24 @@ public class DocumentManager extends Action {
 							documentData.setHasDeleteRightsOnPublicVersion( hasDeleteRightsOnPublicVersion.booleanValue() );
 						}
 						
-						if ( uuidMapOrg.containsKey(uuid) )
+						if ( uuidMapOrg.containsKey(uuid) ) {
 								documentData.setIsPublic(true);
+								
+								//Verify if the last (current) version is the public one.
+								Node lastVersion	= DocumentManagerUtil.getNodeOfLastVersion(uuid, myRequest);
+								String lastVerUUID	= lastVersion.getUUID();
+								if ( uuidMapVer.containsKey(lastVerUUID) ) {
+									documentData.setLastVersionIsPublic( true );
+								}
+								
+						}
 						else
 								documentData.setIsPublic(false);
-					
 						
+												
 					}
+					// This is not the actual document node. It is the node of the public version. That's why one shouldn't have 
+					// the above rights.
 					else {
 						documentData.showVersionHistory			= false; 
 					}
@@ -549,13 +605,17 @@ public class DocumentManager extends Action {
 	}
 	
 	public class DocumentData {
-		String name;
-		String uuid;
-		String title;
-		String description;
-		String calendar;
-		String contentType;
+		String name				= null;
+		String uuid				= null;
+		String title			= null;
+		String description		= null;
+		String notes			= null;
+		String calendar			= null;
+		String contentType		= null;
 		
+		String iconPath			= null;
+		
+		float versionNumber;
 		
 		boolean hasDeleteRights			= false;
 		boolean hasViewRights				= false;
@@ -564,6 +624,7 @@ public class DocumentManager extends Action {
 		boolean hasDeleteRightsOnPublicVersion	= false;
 		
 		boolean isPublic					= false;
+		boolean lastVersionIsPublic		= false;
 		
 		boolean showVersionHistory		= true;
 		
@@ -633,6 +694,13 @@ public class DocumentManager extends Action {
 		public void setIsPublic(boolean isPublic) {
 			this.isPublic = isPublic;
 		}
+				
+		public boolean isLastVersionIsPublic() {
+			return lastVersionIsPublic;
+		}
+		public void setLastVersionIsPublic(boolean lastVersionIsPublic) {
+			this.lastVersionIsPublic = lastVersionIsPublic;
+		}
 		public boolean isHasDeleteRightsOnPublicVersion() {
 			return hasDeleteRightsOnPublicVersion;
 		}
@@ -645,9 +713,49 @@ public class DocumentManager extends Action {
 		public void setShowVersionHistory(boolean showVersionHistory) {
 			this.showVersionHistory = showVersionHistory;
 		}
+		public float getVersionNumber() {
+			return versionNumber;
+		}
+		public void setVersionNumber(float versionNumber) {
+			this.versionNumber = versionNumber;
+		}
+		public String getNotes() {
+			return notes;
+		}
+		public void setNotes(String notes) {
+			this.notes = notes;
+		}
+		public String getIconPath() {
+			return iconPath;
+		}
+		public void setIconPath(String iconPath) {
+			this.iconPath = iconPath;
+		}
 		
 		
-		
+		public void computeIconPath( boolean forDigiImgTag ) {
+			if ( name == null )  {
+				iconPath = null;
+				return;
+			}
+			String iconPath = "";
+			int index = name.lastIndexOf(".");
+			if (index >= 0) {
+				if (forDigiImgTag) {
+					iconPath = "module/cms/images/extensions/"
+							+ name.substring(index + 1,	name.length())
+							+ ".gif";
+				}
+				else
+					iconPath = "/repository/cms/view/images/extensions/"
+						+ name.substring(index + 1,	name.length())
+						+ ".gif";
+			}
+			
+			this.iconPath	= iconPath;
+			
+			
+		}
 		
 	}
 }

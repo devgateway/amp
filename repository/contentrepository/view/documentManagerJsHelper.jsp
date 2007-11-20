@@ -17,10 +17,16 @@
 .all_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_up.gif') no-repeat right;}/*arrow up*/
 .all_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_dn.gif') no-repeat right;}/*arrow down*/
 
-#versions_markup {margin:1em; overflow: auto; } 
-#versions_markup table {border-collapse:collapse;} 
-#versions_markup th {border:1px solid #000;padding:.25em;background-color:#fff;color:Black; font-size:x-small}
-#versions_markup td {border-bottom:1px solid #000;padding:.25em;} 
+.versions_markup {margin:1em; overflow: auto; } 
+.versions_markup table {border-collapse:collapse; overflow: auto;} 
+.versions_markup th {border:1px solid #000;padding:.25em;background-color:#fff;color:#666666; font-size:11px}
+.versions_markup th a, .versions_markup th a:hover {font-size:11px; text-decoration: none;}
+.versions_markup td {border-bottom:1px solid #000;padding:.25em;} 
+.versions_markup .yui-dt-headtext {margin-right:5px; padding-right:15px;}
+.versions_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_up.gif') no-repeat right;}/*arrow up*/
+.versions_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_dn.gif') no-repeat right;}/*arrow down*/
+.versions_markup .yui-dt-sortedbyasc, .versions_markup .yui-dt-sortedbydesc {background-color:#eee;}
+.versions_markup .yui-dt-pagelinks {font-size: 10px;}
 </style>
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/datatable/assets/datatable.css'/>"> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/fonts/fonts.css'/>"> 
@@ -32,6 +38,11 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/dom-min.js'/>" > .</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/menu/menu-min.js'/>" > .</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/container/container-core-min.js'/>" > .</script>
+
+<c:set var="translation_public_ver_msg">
+		<digi:trn key="contentrepository:publicVersionMsg">The marked version is currently public</digi:trn>
+</c:set>
+
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amp");
 	YAHOO.namespace("YAHOO.amp.table");
@@ -39,9 +50,10 @@
 	/* AJAX Callback object for showing versions*/
 	var callbackForVersions	= {
 		success: function (o) {
-			YAHOO.amp.panels[1].setBody(o.responseText);
-			setHeightOfDiv("versions_markup", 250, 250);
+			YAHOO.amp.panels[1].setBody( "<div class='versions_markup' align='center' id='versions_div'>" + o.responseText + "</div>");
+			setHeightOfDiv("versions_div", 250, 250);
 			YAHOO.amp.table.enhanceVersionsMarkup();
+			YAHOO.amp.panels[1].setFooter("* ${translation_public_ver_msg}");
 		},
 		failure: function () {
 			YAHOO.amp.panels[1].setBody("<div align='center'><font color='red'>We are sorry but your request cannot be processed at this time</font></div>");
@@ -55,16 +67,26 @@
 	/* Function for creating YAHOO datatable for versions */
 	YAHOO.amp.table.enhanceVersionsMarkup = function() {
 		    this.columnHeadersForVersions = [
+			    {key:"v_ver_num",text:"Version",sortable:true},
+			    {key:"v_type",text:"Type",sortable:true},
 		        {key:"v_file_name",text:"File Name",sortable:true},
-		        {key:"v_resource_title",text:"Resource Title",sortable:true},
+
 		        {key:"v_date",text:"Date",type:"date",sortable:true},
-		        {key:"v_description",text:"Description",sortable:false},
+		        {key:"v_notes",text:"Notes",sortable:false},
 		        {key:"v_actions",text:"Actions",sortable:false}
 		    ];
 		    this.columnSetForVersions = new YAHOO.widget.ColumnSet(this.columnHeadersForVersions);
+	      var options					= {paginated:true, 
+	                				 
+	                    				rowsPerPage: 7,
+	                    				pageCurrent: 1,
+	                    				startRecordIndex: 1,
+								        pageLinksLength: 2
+	                    			
+	                			};
 		
-		    var versionsMarkup = YAHOO.util.Dom.get("versions_markup");
-		    YAHOO.amp.table.dataTableForVersions = new YAHOO.widget.DataTable(versionsMarkup,this.columnSetForVersions	);
+		    var versionsDiv = YAHOO.util.Dom.get("versions_div");
+		    YAHOO.amp.table.dataTableForVersions = new YAHOO.widget.DataTable(versionsDiv,this.columnSetForVersions, null, options	);
 	};
 
 </script>
@@ -91,6 +113,16 @@
 </c:set>
 <c:set var="translation_validation_filedata">
 			<digi:trn key="contentrepository:plsSpecifyPath">Please specify a file path !</digi:trn>
+</c:set>
+
+<c:set var="translation_mandatory_fields">
+			<digi:trn key="contentrepository:mandatoryFieldsMsg">The marked fields are mandatory</digi:trn>
+</c:set>
+<c:set var="translation_add_new_content">
+			<digi:trn key="contentrepository:addNewContentTitle">Add new content</digi:trn>
+</c:set>
+<c:set var="translation_add_new_version">
+			<digi:trn key="contentrepository:addNewVersionTitle">Add new version</digi:trn>
 </c:set>
 <script type="text/javascript">
 YAHOO.namespace("YAHOO.amp");
@@ -543,8 +575,35 @@ function configPanel(panelNum, title, description, uuid) {
 	
 	myForm.docTitle.value		= title;
 	myForm.docDescription.value	= description;
+	myForm.docNotes.value		= '';
 	myForm.uuid.value			= uuid;
 	myForm.fileData.value		= null;
+	
+	if (uuid != null && uuid.length > 0) {
+		myForm.docTitle.readOnly					= true;
+		myForm.docTitle.style.background			= "#eeeeee";
+		myForm.docTitle.style.color					= "darkgray";
+		
+		myForm.docDescription.readOnly				= true;
+		myForm.docDescription.style.backgroundColor	= "#eeeeee";
+		myForm.docDescription.style.color			= "darkgray";
+		
+		setPanelHeader(0, "${translation_add_new_version}");
+	}
+	else {
+		myForm.docTitle.readOnly					= false;
+		myForm.docTitle.style.backgroundColor		= "";
+		myForm.docTitle.style.color					= "";
+		
+		myForm.docDescription.readOnly				= false;
+		myForm.docDescription.style.backgroundColor	= "";
+		myForm.docDescription.style.color			= "";
+		
+		setPanelHeader(0, "${translation_add_new_content}");
+	}
+	
+	setPanelFooter(0, "* ${translation_mandatory_fields}");
+	
 }
 
 
@@ -575,8 +634,11 @@ function validateAddDocument() {
 
 function setHeightOfDiv(divId, maxLimit, value ){
 	var obj	= document.getElementById(divId);
+	obj.style.width		= "480px";
+	obj.style.overflow	= "auto";
 	if (obj.offsetHeight > maxLimit)  {
 		obj.style.height	= value;
+		obj.style.overflow	= "scroll";
 	}
 }
 

@@ -84,7 +84,7 @@
 									<digi:trn key="contentrepository:documentManagerVersionsHint">Click here to see a list of versions for this document</digi:trn>
 								</c:set>
 								<a style="cursor:pointer; text-decoration:underline; color: blue"
-								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>');"
+								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>'); setPanelHeader(1, '${translationForWindowTitle}' +' - '+ '<%= documentData.getTitle() %>');"
 								title="${translation }">[<digi:trn key="contentrepository:documentManagerVersions">H</digi:trn>]</a>
 								</logic:equal>
 								

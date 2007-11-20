@@ -502,6 +502,7 @@
 		<page-group masterLayout="noLayout" tile="body">
 			<module name="contentrepository">
 				<page>amp_getDocumentList</page>
+				<page>amp_getDocumentVersionList</page>
 			</module>
 		</page-group>
 	</site-layout>

@@ -12,7 +12,7 @@
 	function initPanel() {
 		for (counter=0; counter<YAHOO.amp.panelCounter; counter++) {
 			YAHOO.amp.panels[counter]		= new YAHOO.widget.Panel("aPanel"+counter, {
-					width:"400px", 
+					width:"500px", 
 					fixedcenter: true, 
 					constraintoviewport: true, 
 					underlay:"shadow", 
@@ -38,6 +38,13 @@
 
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amp");
+
+	function setPanelHeader(panelNum, title) {
+		YAHOO.amp.panels[panelNum].setHeader(title);
+	}
+	function setPanelFooter(panelNum, title) {
+		YAHOO.amp.panels[panelNum].setFooter(title);
+	}
 
 	function showMyPanel(panelNum, elementId) {
 		setPanelBody(panelNum, elementId);

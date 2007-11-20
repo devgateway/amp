@@ -196,11 +196,14 @@
 								
 								</logic:equal>
 								
+								<c:set var="translationForWindowTitle">
+									<digi:trn key="contentrepository:versionHistoryWindowTitle">Version History</digi:trn>
+								</c:set> 
 								<c:set var="translation">
 									<digi:trn key="contentrepository:documentManagerVersionsHint">Click here to see a list of versions for this document</digi:trn>
 								</c:set> 
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="H<bean:write name='documentData' property='uuid' />"
-								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>');"
+								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>'); setPanelHeader(1, '${translationForWindowTitle}' +' - '+ '<%= documentData.getTitle() %>');"
 								title="${translation}">[<digi:trn key="contentrepository:documentManagerVersions">H</digi:trn>]</a>
 								
 								
@@ -208,9 +211,11 @@
 									<digi:trn key="contentrepository:documentManagerMakePublicHint">Click here to make this document public</digi:trn>
 								</c:set>
 								<logic:equal name="documentData" property="hasMakePublicRights" value="true">
+									<c:if test="${ (!documentData.isPublic)||(!documentData.lastVersionIsPublic) }">
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Pub<bean:write name='documentData' property='uuid' />"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true);"
 									title="${translation}">[<c:out value="${makePublicCommand}" />]</a>
+									</c:if>
 								</logic:equal>
 								
 								
@@ -350,16 +355,18 @@
 									<digi:trn key="contentrepository:documentManagerVersionsHint">Click here to see a list of versions for this document</digi:trn>
 								</c:set> 
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="H<bean:write name='documentData' property='uuid' />"
-								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>');"
+								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>'); setPanelHeader(1, '${translationForWindowTitle}' +' - '+ '<%= documentData.getTitle() %>');"
 								title="${translation }">[<digi:trn key="contentrepository:documentManagerVersions">H</digi:trn>]</a> 
 								
 								<c:set var="translation">
 									<digi:trn key="contentrepository:documentManagerMakePublicHint">Click here to make this document public</digi:trn>
 								</c:set>
 								<logic:equal name="documentData" property="hasMakePublicRights" value="true">
+									<c:if test="${ (!documentData.isPublic)||(!documentData.lastVersionIsPublic) }">
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Pub<bean:write name='documentData' property='uuid' />"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true);"
 									title="${translation}">[<bean:write name="makePublicCommand"/>]</a>
+									</c:if>
 								</logic:equal>
 
 								
@@ -411,19 +418,23 @@
 
 <div id="addDocumentDiv" style="display: none">
 	<div align="center">
-	<div id="addDocumentErrorHolderDiv" style="font-size:small; color: red"></div>
+	<div id="addDocumentErrorHolderDiv" style="font-size:11px; color: red"></div>
 	<digi:form action="/documentManager.do" method="post" enctype="multipart/form-data" >
 		<input type="hidden" name="type" id="typeId"/>
 		<input type="hidden" name="uuid" id="nodeUUID"/>
 		<table cellpadding="3" cellspacing="3" border="0">
 			<tr>
 			<td><strong>Title:</strong><font color="red">*</font></td>
-			<td><html:text property="docTitle" /></td>
+			<td><html:text property="docTitle" size="30" /></td>
 			</tr>
 			<tr>
 			<td><strong>Description:</strong></td>
-			<td><html:textarea property="docDescription" /></td>
+			<td><html:textarea property="docDescription" cols="28"/></td>
 			</tr>
+			<tr>
+			<td><strong>Notes:</strong></td>
+			<td><html:textarea property="docNotes" cols="28" /></td>
+			
 			<tr>
 			<td><strong>Path:<font color="red">*</font></strong></td>
 			<td><html:file property="fileData" /></td>

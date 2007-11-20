@@ -17,8 +17,9 @@ public class DocumentManagerForm extends ActionForm {
 	
 	private String type						= null;
 	private String docTitle					= null;
-	private String docDescription			= null;
-	private FormFile fileData				= null;
+	private String docDescription				= null;
+	private String docNotes					= null;
+	private FormFile fileData					= null;
 	private String uuid						= null;
 	private Collection myPersonalDocuments	= null;
 	private Collection myTeamDocuments		= null;
@@ -154,6 +155,14 @@ public class DocumentManagerForm extends ActionForm {
 
 	public void setDocListInSession(String docListInSession) {
 		this.docListInSession = docListInSession;
+	}
+
+	public String getDocNotes() {
+		return docNotes;
+	}
+
+	public void setDocNotes(String docNotes) {
+		this.docNotes = docNotes;
 	}
 
 

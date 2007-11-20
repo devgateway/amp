@@ -1,0 +1,1 @@
+update dg_message set CREATED='1121-08-12' where CREATED is NULL;

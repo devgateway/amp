@@ -1848,7 +1848,7 @@ function viewChanges()
 																		</td>
 																	</tr>
 																</field:display>
-																<field:display name="Localization" feature="SISIN">
+																<field:display name="Components Localization" feature="SISIN">
 																	<tr>
 																		<td width="50">
 																			<i>
@@ -1866,7 +1866,7 @@ function viewChanges()
 																		</td>
 																	</tr>
 																</field:display>
-																<field:display name="Financing Source" feature="SISIN">
+																<field:display name="Components Financing Source" feature="SISIN">
 																	<tr>
 																		<td width="50">
 																			<i>
@@ -1875,7 +1875,7 @@ function viewChanges()
 																		</td>
 																	</tr>
 																</field:display>
-																<field:display name="Agency Source" feature="SISIN">
+																<field:display name="Components Agency Source" feature="SISIN">
 																	<tr>
 																		<td width="50">
 																			<i>
@@ -1884,7 +1884,7 @@ function viewChanges()
 																		</td>
 																	</tr>
 																</field:display>
-																<field:display name="Stage" feature="SISIN">
+																<field:display name="Components Stage" feature="SISIN">
 																	<tr>
 																		<td width="50">
 																			<i>
@@ -1893,7 +1893,7 @@ function viewChanges()
 																		</td>
 																	</tr>
 																</field:display>
-																<field:display name="Classification Program Code" feature="SISIN">
+																<field:display name="Components Classification Program Code" feature="SISIN">
 																	<tr>
 																		<td width="50">
 																			<i>
@@ -1920,22 +1920,32 @@ function viewChanges()
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${comp.commitments}">
 																						<tr>
+																							<field:display name="Components Actual/Planned Commitments" feature="Components">
 																							<td width="50" bgcolor="#ffffff">
 																								<c:out value="${fd.adjustmentTypeName}"/>
 																							</td>
+																							</field:display>
+																							<field:display name="Components Total Amount Commitments" feature="Components">
 																							<td align="right" width="100" bgcolor="#ffffff">
 																								<FONT color=blue>*</FONT>
 																								<c:out value="${fd.transactionAmount}"/>
 																							</td>
+																							</field:display>
+																							<field:display name="Components Currency Commitments" feature="Components">
 																							<td bgcolor="#ffffff">
 																								<c:out value="${fd.currencyCode}"/>
 																							</td>
+																							</field:display>
+																							<field:display name="Components Date Commitments" feature="Components">
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>
 																							</td>
+																							</field:display>
+																							<field:display name="Components Perspective Commitments" feature="Components">
 																							<td bgcolor="#ffffff">
 																								<c:out value="${fd.perspectiveName}"/>
 																							</td>
+																							</field:display>
 																						</tr>
 																					</c:forEach>
 																				</table>
@@ -1956,22 +1966,32 @@ function viewChanges()
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${comp.disbursements}">
 																						<tr>
+																							<field:display name="Components Actual/Planned Disbursements" feature="Components">
 																							<td width="50" bgcolor="#ffffff">
 																								<c:out value="${fd.adjustmentTypeName}"/>
 																							</td>
+																							</field:display>
+																							<field:display name="Components Total Amount Disbursements" feature="Components">
 																							<td align="right" width="100" bgcolor="#ffffff">
 																								<FONT color=blue>*</FONT>
 																								<c:out value="${fd.transactionAmount}"/>
 																							</td>
+																							</field:display>
+																							<field:display name="Components Currency Disbursements" feature="Components">
 																							<td bgcolor="#ffffff">
 																								<c:out value="${fd.currencyCode}"/>
 																							</td>
+																							</field:display>
+																							<field:display name="Components Date Disbursements" feature="Components">
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>
 																							</td>
+																							</field:display>
+																							<field:display name="Components Perspective Disbursements" feature="Components">
 																							<td bgcolor="#ffffff">
 																								<c:out value="${fd.perspectiveName}"/>
 																							</td>
+																							</field:display>
 																						</tr>
 																					</c:forEach>
 																				</table>
@@ -1992,22 +2012,32 @@ function viewChanges()
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${comp.expenditures}">
 																						<tr bgcolor="#ffffff">
+																							<field:display name="Components Actual/Planned Expenditures" feature="Components">
 																							<td width="50">
 																								<c:out value="${fd.adjustmentTypeName}"/>
 																							</td>
+																							</field:display>
+																							<field:display name="Components Total Amount Expenditures" feature="Components">
 																							<td align="right">
 																								<FONT color=blue>*</FONT>
 																								<c:out value="${fd.transactionAmount}"/>
 																							</td>
+																							</field:display>
+																							<field:display name="Components Currency Expenditures" feature="Components">
 																							<td>
 																								<c:out value="${fd.currencyCode}"/>
 																							</td>
+																							</field:display>
+																							<field:display name="Components Date Expenditures" feature="Components">
 																							<td width="70">
 																								<c:out value="${fd.transactionDate}"/>
 																							</td>
+																							</field:display>
+																							<field:display name="Components Perspective Expenditures" feature="Components">
 																							<td>
 																								<c:out value="${fd.perspectiveName}"/>
 																							</td>
+																							</field:display>
 																						</tr>
 																					</c:forEach>
 																				</table>
@@ -2023,6 +2053,7 @@ function viewChanges()
 		  															</digi:trn>
 																</FONT>
 															</td></tr>
+															<field:display name="Components Psysical Progress" feature="Components">
 															<tr><td bgcolor="#f4f4f2">
 																<b><digi:trn key="aim:physicalProgressOfTheComponent">
 																Physical progress of the component</digi:trn></b>
@@ -2041,6 +2072,7 @@ function viewChanges()
 																	</td></tr>
 																</c:forEach>
 															</c:if>
+															</field:display>
 														</table>
 													</td></tr>
 													</table>

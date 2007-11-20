@@ -95,7 +95,7 @@
 																				<c:out value="${selComponents.sisinProyect.sisincode}" /> &nbsp;
 																		<br>
 																	</field:display>
-																	<field:display name="Localization" feature="SISIN">
+																	<field:display name="Components Localization" feature="SISIN">
 																				<digi:trn key="aim:localization">Localization</digi:trn>:&nbsp;
 																				<c:out value="${selComponents.sisinProyect.localization}"  /> &nbsp;
 																		<br>
@@ -105,22 +105,22 @@
 																				<c:out value="${selComponents.sisinProyect.sisinsector}" /> &nbsp;
 																		<br>
 																	</field:display>
-																	<field:display name="Financing Source" feature="SISIN">
+																	<field:display name="Components Financing Source" feature="SISIN">
 																				<digi:trn key="financingsource">Financing Source</digi:trn>:&nbsp;
 																				<c:out value="${selComponents.sisinProyect.financingsource}" /> &nbsp;
 																		<br>
 																	</field:display>
-																	<field:display name="Agency Source" feature="SISIN">
+																	<field:display name="Components Agency Source" feature="SISIN">
 																				<digi:trn key="agencysource">Agency Source</digi:trn>:&nbsp;
 																				<c:out value="${selComponents.sisinProyect.agencysource}" /> &nbsp;
 																		<br>
 																	</field:display>
-																	<field:display name="Stage" feature="SISIN">
+																	<field:display name="Components Stage" feature="SISIN">
 																				<digi:trn key="stage">Stage</digi:trn>:&nbsp;
 																				<c:out value="${selComponents.sisinProyect.stage}" /> &nbsp;
 																		<br>
 																	</field:display>
-																	<field:display name="Classification Program Code" feature="SISIN">
+																	<field:display name="Components Classification Program Code" feature="SISIN">
 																				<digi:trn key="classifprogramcode">Classification Program Code</digi:trn>:&nbsp;
 																				<c:out value="${selComponents.sisinProyect.programcode}" /> &nbsp;
 																		<br>
@@ -145,33 +145,33 @@
 																			<table width="100%" cellSpacing=1 cellPadding=3 border=0
 																			bgcolor="#eeeeee">
 																				<tr>
-																					<field:display name="Actual/Planned Commitments" feature="Components"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
-																					<field:display name="Total Amount Commitments" feature="Components"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
-																					<field:display name="Currency Commitments" feature="Components"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
-																					<field:display name="Date Commitments" feature="Components"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
+																					<field:display name="Components Actual/Planned Commitments" feature="Components"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
+																					<field:display name="Components Total Amount Commitments" feature="Components"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
+																					<field:display name="Components Currency Commitments" feature="Components"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
+																					<field:display name="Components Date Commitments" feature="Components"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																					<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																						<field:display name="Perspective Commitments" feature="Components"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
+																						<field:display name="Components Perspective Commitments" feature="Components"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
 																					</logic:equal>
 																				</tr>
 																				<logic:iterate name="selComponents" property="commitments"
 																				id="commitment"
 																				type="org.digijava.module.aim.helper.FundingDetail"> 																						           <!-- L2 START-->
 																					<tr bgcolor="#ffffff">
-																						<field:display name="Actual/Planned Commitments" feature="Components"><td>
+																						<field:display name="Components Actual/Planned Commitments" feature="Components"><td>
 																							<digi:trn key="aim:${commitment.adjustmentTypeName}"><c:out value="${commitment.adjustmentTypeName}"/></digi:trn></td></field:display>
-																						<field:display name="Total Amount Commitments" feature="Components"><td align="right">
+																						<field:display name="Components Total Amount Commitments" feature="Components"><td align="right">
 																							<FONT color=blue>*</FONT>
 																							<c:out value="${commitment.transactionAmount}"/>
 																						</td></field:display>
-																						<field:display name="Currency Commitments" feature="Components"><td>
+																						<field:display name="Components Currency Commitments" feature="Components"><td>
 																							<c:out value="${commitment.currencyCode}"/>
 																						</td></field:display>
-																						<field:display name="Date Commitments" feature="Components">
+																						<field:display name="Components Date Commitments" feature="Components">
 																						<td>
 																							<c:out value="${commitment.transactionDate}"/>
 																						</td></field:display>
 																						<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																							<field:display name="Perspective Commitments" feature="Components">
+																							<field:display name="Components Perspective Commitments" feature="Components">
 																								<td>
 																									<digi:trn key='<%="aim:"+commitment.getPerspectiveNameTrimmed() %>'>
 																											<bean:write name="commitment" property="perspectiveName"/>
@@ -198,10 +198,10 @@
 																			bgcolor="#eeeeee">
 																				<tr>
 
-																					<field:display name="Actual/Planned Disbursements" feature="Components"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
-																					<field:display name="Total Amount Disbursements" feature="Components"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
-																					<field:display name="Currency Disbursements" feature="Components"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
-																					<field:display name="Date Disbursements" feature="Components"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
+																					<field:display name="Components Actual/Planned Disbursements" feature="Components"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
+																					<field:display name="Components Total Amount Disbursements" feature="Components"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
+																					<field:display name="Components Currency Disbursements" feature="Components"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
+																					<field:display name="Components Date Disbursements" feature="Components"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																					<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 																						<field:display name="Components Perspective Disbursements" feature="Components"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
 																					</logic:equal>
@@ -211,17 +211,17 @@
 																				type="org.digijava.module.aim.helper.FundingDetail">
 																				<!-- L3 START-->
 																					<tr bgcolor="#ffffff">
-																						<field:display name="Actual/Planned Disbursements" feature="Components"><td>
+																						<field:display name="Components Actual/Planned Disbursements" feature="Components"><td>
 																							<digi:trn key="aim:${disbursement.adjustmentTypeName}"><c:out value="${disbursement.adjustmentTypeName}"/></digi:trn>
 																						</td></field:display>
-																						<field:display name="Total Amount Disbursements" feature="Components"><td align="right">
+																						<field:display name="Components Total Amount Disbursements" feature="Components"><td align="right">
 																							<FONT color=blue>*</FONT>
 																							<c:out value="${disbursement.transactionAmount}"/>
 																						</td></field:display>
-																						<field:display name="Currency Disbursements" feature="Components"><td>
+																						<field:display name="Components Currency Disbursements" feature="Components"><td>
 																							<c:out value="${disbursement.currencyCode}"/>
 																						</td></field:display>
-																						<field:display name="Date Disbursements" feature="Components">
+																						<field:display name="Components Date Disbursements" feature="Components">
 																						<td>
 																							<c:out value="${disbursement.transactionDate}"/>
 																						</td></field:display>
@@ -249,10 +249,10 @@
 																			<table width="100%" cellSpacing=1 cellPadding=3 border=0
 																			bgcolor="#eeeeee">
 																				<tr>
-																					<field:display name="Actual/Planned Expenditures" feature="Components"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
-																					<field:display name="Total Amount Expenditures" feature="Components"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
-																					<field:display name="Currency Expenditures" feature="Components"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
-																					<field:display name="Date Expenditures" feature="Components"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
+																					<field:display name="Components Actual/Planned Expenditures" feature="Components"><td><digi:trn key="aim:actual/planned">Actual/Planned</digi:trn></td></field:display>
+																					<field:display name="Components Total Amount Expenditures" feature="Components"><td><digi:trn key="aim:totalAmount">Total Amount</digi:trn></td></field:display>
+																					<field:display name="Components Currency Expenditures" feature="Components"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
+																					<field:display name="Components Date Expenditures" feature="Components"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																					<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 																						<field:display name="Components Perspective Expenditures" feature="Components"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
 																					</logic:equal>
@@ -262,19 +262,19 @@
 																				type="org.digijava.module.aim.helper.FundingDetail">
 																				<!-- L4 START-->
 																				<tr bgcolor="#ffffff">
-																					<field:display name="Actual/Planned Expenditures" feature="Components"><td>
+																					<field:display name="Components Actual/Planned Expenditures" feature="Components"><td>
 																						<digi:trn key="aim:${expenditure.adjustmentTypeName}"><c:out value="${expenditure.adjustmentTypeName}"/></digi:trn>
 																					</td></field:display>
-																					<field:display name="Total Amount Expenditures" feature="Components">
+																					<field:display name="Components Total Amount Expenditures" feature="Components">
 																					<td align="right">
 																						<FONT color=blue>*</FONT>
 																						<c:out value="${expenditure.transactionAmount}"/>
 																					</td></field:display>
-																					<field:display name="Currency Expenditures" feature="Components">
+																					<field:display name="Components Currency Expenditures" feature="Components">
 																					<td>
 																						<c:out value="${expenditure.currencyCode}"/>
 																					</td></field:display>
-																					<field:display name="Date Expenditures" feature="Components">
+																					<field:display name="Components Date Expenditures" feature="Components">
 																					<td>
 																						<c:out value="${expenditure.transactionDate}"/>
 																					</td></field:display>
@@ -369,20 +369,24 @@
 											<tr><td align="center">
 												<table cellSpacing=2 cellPadding=2>
 													<tr><td>
+														<field:display name="Add Components Button" feature="Components">
 														<html:button  styleClass="buton" property="submitButton" onclick="addComponents()">
 															<digi:trn key="btn:addComponents">Add Components</digi:trn>
 														</html:button>
+														</field:display>
 														 &nbsp;&nbsp;&nbsp;
+														 <field:display name="Remove Components Button" feature="Components">
 														<html:button  styleClass="buton" property="submitButton" onclick="removeSelComponents()">
 															<digi:trn key="btn:removeComponents">Remove Components</digi:trn>
 														</html:button>
-
+														</field:display>
 													</td></tr>
 												</table>
 											</td></tr>
 										</table>
 									</logic:notEmpty>
 									<logic:empty name="aimEditActivityForm" property="selectedComponents">
+									<field:display name="Add Components Button" feature="Components">
 										<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 											<tr><td>
 												<html:button  styleClass="buton" property="submitButton" onclick="addComponents()">
@@ -390,4 +394,5 @@
 												</html:button>
 											</td></tr>
 										</table>
+									</field:display>
 									</logic:empty>

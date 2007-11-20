@@ -83,7 +83,7 @@
 												</td>
 											</tr>
 										</field:display>
-										<field:display name="Localization" feature="SISIN">
+										<field:display name="Components Localization" feature="SISIN">
 											<tr>
 												<td width="50">
 													<digi:trn key="aim:localization">Localization</digi:trn>
@@ -103,7 +103,7 @@
 												</td>
 											</tr>
 										</field:display>
-										<field:display name="Financing Source" feature="SISIN">
+										<field:display name="Components Financing Source" feature="SISIN">
 											<tr>
 												<td width="50">
 													<digi:trn key="financingsource">Financing Source</digi:trn>
@@ -113,7 +113,7 @@
 												</td>
 											</tr>
 										</field:display>
-										<field:display name="Agency Source" feature="SISIN">
+										<field:display name="Components Agency Source" feature="SISIN">
 											<tr>
 												<td width="50">
 													<digi:trn key="agencysource">Agency Source</digi:trn>
@@ -123,7 +123,7 @@
 												</td>
 											</tr>
 										</field:display>
-										<field:display name="Stage" feature="SISIN">
+										<field:display name="Components Stage" feature="SISIN">
 											<tr>
 												<td width="50">
 													<digi:trn key="stage">Stage</digi:trn>
@@ -133,7 +133,7 @@
 												</td>
 											</tr>
 										</field:display>
-										<field:display name="Classification Program Code" feature="SISIN">
+										<field:display name="Components Classification Program Code" feature="SISIN">
 											<tr>
 												<td width="50">
 													<digi:trn key="classifprogramcode">Classification Program Code</digi:trn>

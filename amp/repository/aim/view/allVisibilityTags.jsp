@@ -129,11 +129,11 @@
 <field:display name="Actual Approval Date" feature="Planning" ></field:display>
 <field:display name="Current Completion Date" feature="Planning"></field:display>
 <field:display name="Actual Start Date" feature="Planning"></field:display>
-<field:display name="Actual/Planned Commitments" feature="Components"></field:display>
+<field:display name="Components Actual/Planned Commitments" feature="Components"></field:display>
 <field:display name="Actual/Planned Commitments" feature="Regional Funding"></field:display>
-<field:display name="Actual/Planned Disbursements" feature="Components"></field:display>
+<field:display name="Components Actual/Planned Disbursements" feature="Components"></field:display>
 <field:display name="Actual/Planned Disbursements" feature="Regional Funding"></field:display>
-<field:display name="Actual/Planned Expenditures" feature="Components"></field:display>
+<field:display name="Components Actual/Planned Expenditures" feature="Components"></field:display>
 <field:display name="Actual/Planned Expenditures" feature="Regional Funding"></field:display>
 <field:display name="Add Actors Link" feature="Issues"></field:display>
 <field:display name="Add Documents Button" feature="Related Documents"></field:display>
@@ -152,14 +152,14 @@
 <field:display name="Adjustment Type Commitment" feature="Funding Organizations"></field:display>
 <field:display name="Adjustment Type Disbursement" feature="Funding Organizations"></field:display>
 <field:display name="Adjustment Type Expenditure" feature="Funding Organizations"></field:display>
-<field:display name="Agency Source" feature="SISIN"></field:display>
+<field:display name="Components Agency Source" feature="SISIN"></field:display>
 <field:display name="Amount Commitment" feature="Funding Organizations"></field:display>
 <field:display name="Amount Disbursement" feature="Funding Organizations"></field:display>
 <field:display name="Amount Expenditure" feature="Funding Organizations"></field:display>
 <field:display name="Base Value" feature="Activity"></field:display>
 <field:display name="Category" feature="Admin"></field:display>
 <field:display name="Classification Expenditure" feature="Funding Organizations"></field:display>
-<field:display name="Classification Program Code" feature="SISIN"></field:display>
+<field:display name="Components Classification Program Code" feature="SISIN"></field:display>
 <field:display name="Comments Base Value" feature="Activity"></field:display>
 <field:display name="Comments Current Value" feature="Activity"></field:display>
 <field:display name="Comments Revised Target Value" feature="Activity"></field:display>
@@ -173,26 +173,26 @@
 <field:display name="Cumulative Commitment" feature="Funding Organizations"></field:display>
 <field:display name="Cumulative Disbursement" feature="Funding Organizations"></field:display>
 <field:display name="Currency Commitment" feature="Funding Organizations"></field:display>
-<field:display name="Currency Commitments" feature="Components"></field:display>
+<field:display name="Components Currency Commitments" feature="Components"></field:display>
 <field:display name="Currency Commitments" feature="Regional Funding"></field:display>
 <field:display name="Currency Disbursement" feature="Funding Organizations"></field:display>
-<field:display name="Currency Disbursements" feature="Components"></field:display>
+<field:display name="Components Currency Disbursements" feature="Components"></field:display>
 <field:display name="Currency Disbursements" feature="Regional Funding"></field:display>
 <field:display name="Currency Expenditure" feature="Funding Organizations"></field:display>
-<field:display name="Currency Expenditures" feature="Components"></field:display>
+<field:display name="Components Currency Expenditures" feature="Components"></field:display>
 <field:display name="Currency Expenditures" feature="Regional Funding"></field:display>
 <field:display name="Current Completion Date" feature="Planning"></field:display>
 <field:display name="Current Value" feature="Activity"></field:display>
 <field:display name="Date Base Value" feature="Activity"></field:display>
 <field:display name="Date Commitment" feature="Funding Organizations"></field:display>
-<field:display name="Date Commitments" feature="Components"></field:display>
+<field:display name="Components Date Commitments" feature="Components"></field:display>
 <field:display name="Date Commitments" feature="Regional Funding"></field:display>
 <field:display name="Date Current Value" feature="Activity"></field:display>
 <field:display name="Date Disbursement" feature="Funding Organizations"></field:display>
-<field:display name="Date Disbursements" feature="Components"></field:display>
+<field:display name="Components Date Disbursements" feature="Components"></field:display>
 <field:display name="Date Disbursements" feature="Regional Funding"></field:display>
 <field:display name="Date Expenditure" feature="Funding Organizations"></field:display>
-<field:display name="Date Expenditures" feature="Components"></field:display>
+<field:display name="Components Date Expenditures" feature="Components"></field:display>
 <field:display name="Date Expenditures" feature="Regional Funding"></field:display>
 <field:display name="Date Revised Target Value" feature="Activity"></field:display>
 <field:display name="Date Target Value" feature="Activity"></field:display>
@@ -223,7 +223,7 @@
 <field:display name="Final Date for Contracting" feature="Planning"></field:display>
 <field:display name="Final Date for Disbursements" feature="Planning"></field:display>
 <field:display name="Financing Instrument" feature="Funding Organizations"></field:display>
-<field:display name="Financing Source" feature="SISIN"></field:display>
+<field:display name="Components Financing Source" feature="SISIN"></field:display>
 <field:display name="Funding Organization Id" feature="Funding Organizations"></field:display>
 <field:display name="Funding Organization Name" feature="Funding Organizations"></field:display>
 <field:display name="Funding Organization" feature="Funding Organizations"></field:display>
@@ -249,7 +249,7 @@
 <field:display name="Level 2 Sectors List" feature="Sectors"></field:display>
 <field:display name="Level 3 Sectors List" feature="Sectors"></field:display>
 <field:display name="Line Ministry Rank" feature="Planning"></field:display>
-<field:display name="Localization" feature="SISIN"></field:display>
+<field:display name="Components Localization" feature="SISIN"></field:display>
 <field:display name="Logframe Category" feature="Logframe"></field:display>
 <field:display name="Logframe Preview Button" feature="Logframe"></field:display>
 <field:display name="Logframe Preview Button" feature="Logframe" ></field:display>
@@ -269,7 +269,7 @@
 <field:display name="Overall Contribution" feature="Planning"></field:display>
 <field:display name="Overall Cost" feature="Planning"></field:display>
 <field:display name="Perspective Commitment" feature="Funding Organizations"></field:display>
-<field:display name="Perspective Commitments" feature="Components"></field:display>
+<field:display name="Components Perspective Commitments" feature="Components"></field:display>
 <field:display name="Perspective Commitments" feature="Regional Funding"></field:display>
 <field:display name="Perspective Disbursement" feature="Funding Organizations"></field:display>
 <field:display name="Components Perspective Disbursements" feature="Components"></field:display>
@@ -317,7 +317,7 @@
 <field:display name="SISIN Code" feature="SISIN"></field:display>
 <field:display name="SISIN Sector" feature="SISIN"></field:display>
 <field:display name="Sector" feature="Location"></field:display>
-<field:display name="Stage" feature="SISIN"></field:display>
+<field:display name="Components Stage" feature="SISIN"></field:display>
 <field:display name="Status" feature="Planning"></field:display>
 <field:display name="Sub Program Level 1" feature="NPD Dashboard"></field:display>
 <field:display name="Sub Program Level 2" feature="NPD Dashboard"></field:display>
@@ -332,11 +332,11 @@
 <field:display name="Sub-Vote" feature="Budget"></field:display>
 <field:display name="Target Value" feature="Activity"></field:display>
 <field:display name="Team" feature="Identification"></field:display>
-<field:display name="Total Amount Commitments" feature="Components"></field:display>
+<field:display name="Components Total Amount Commitments" feature="Components"></field:display>
 <field:display name="Total Amount Commitments" feature="Regional Funding"></field:display>
-<field:display name="Total Amount Disbursements" feature="Components"></field:display>
+<field:display name="Components Total Amount Disbursements" feature="Components"></field:display>
 <field:display name="Total Amount Disbursements" feature="Regional Funding"></field:display>
-<field:display name="Total Amount Expenditures" feature="Components"></field:display>
+<field:display name="Components Total Amount Expenditures" feature="Components"></field:display>
 <field:display name="Total Amount Expenditures" feature="Regional Funding"></field:display>
 <field:display name="Total Committed" feature="Funding Organizations"></field:display>
 <field:display name="Total Committed" feature="Funding Organizations"></field:display>

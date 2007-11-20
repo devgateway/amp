@@ -66,14 +66,12 @@ public class OrganisationManager
 
     }
     String alpha = eaForm.getAlpha(); //request.getParameter("alpha");
-
-    eaForm.setNumResults(eaForm.getTempNumResults());
-
     if (alpha == null || alpha.trim().length() == 0) {
-      col = new ArrayList();
-//			eaForm.setNumResults(eaForm.getTempNumResults());
-      eaForm.setOrgTypes(DbUtil.getAllOrgTypes()); //
-      if (eaForm.getAlphaPages() != null) //
+    	eaForm.setOrgTypes(DbUtil.getAllOrgTypes()); 
+    }
+    eaForm.setNumResults(eaForm.getTempNumResults());
+    col = new ArrayList();
+    if (eaForm.getAlphaPages() != null) //
         eaForm.setAlphaPages(null); //
 
       if (eaForm.getAmpOrgTypeId() != null &&
@@ -98,97 +96,98 @@ public class OrganisationManager
         // get all organisations since keyword field is blank and org type field has 'ALL'.
         col = DbUtil.getAmpOrganisations();
       }
-
+      
       if (col != null && col.size() > 0) {
-        List temp = (List) col;
-        Collections.sort(temp);
-        col = (Collection) temp;
+          List temp = (List) col;
+          Collections.sort(temp);
+          col = (Collection) temp;
 
-        if (eaForm.getCurrentAlpha() != null) {
-          eaForm.setCurrentAlpha(null);
+          if(alpha == null || alpha.trim().length() == 0){
+        	  if (eaForm.getCurrentAlpha() != null) {
+                  eaForm.setCurrentAlpha(null);
+                } 
+          }else {
+        	  eaForm.setCurrentAlpha(alpha);
+          }
+          
+          eaForm.setStartAlphaFlag(true);
+
+          String[] alphaArray = new String[26];
+          int i = 0;
+          for (char c = 'A'; c <= 'Z'; c++) {
+            Iterator itr = col.iterator();
+            while (itr.hasNext()) {
+              AmpOrganisation org = (AmpOrganisation) itr.next();
+              if (org.getName().toUpperCase().indexOf(c) == 0) {
+                alphaArray[i++] = String.valueOf(c);
+                break;
+              }
+            }
+          }
+          eaForm.setAlphaPages(alphaArray);
         }
-        eaForm.setStartAlphaFlag(true);
-
-        String[] alphaArray = new String[26];
-        int i = 0;
-        for (char c = 'A'; c <= 'Z'; c++) {
+        else {
+          eaForm.setAlphaPages(null);
+        }
+    
+      if (alpha!=null && !alpha.equals("viewAll")) {
+          eaForm.setStartAlphaFlag(false);
+          colAlpha = new ArrayList();
           Iterator itr = col.iterator();
           while (itr.hasNext()) {
             AmpOrganisation org = (AmpOrganisation) itr.next();
-            if (org.getName().toUpperCase().indexOf(c) == 0) {
-              alphaArray[i++] = String.valueOf(c);
-              break;
+            if (org.getName().toUpperCase().startsWith(alpha)) {
+              colAlpha.add(org);
             }
           }
+          eaForm.setColsAlpha(colAlpha); 
         }
-        eaForm.setAlphaPages(alphaArray);
-      }
-      else {
-        eaForm.setAlphaPages(null);
-      }
+        else
+          eaForm.setStartAlphaFlag(true);
+      int stIndex = 1;
+      int edIndex = eaForm.getNumResults();
 
-    }
-    else {
-      col = eaForm.getCols();
-      eaForm.setCurrentAlpha(alpha);
-      if (!alpha.equals("viewAll")) {
-        eaForm.setStartAlphaFlag(false);
-        colAlpha = new ArrayList();
-        Iterator itr = col.iterator();
-        while (itr.hasNext()) {
-          AmpOrganisation org = (AmpOrganisation) itr.next();
-          if (org.getName().toUpperCase().startsWith(alpha)) {
-            colAlpha.add(org);
-          }
-        }
-        eaForm.setColsAlpha(colAlpha);
-      }
-      else
-        eaForm.setStartAlphaFlag(true);
-    }
-
-    int stIndex = 1;
-    int edIndex = eaForm.getNumResults();
-
-    //If ALL was selected in pagination dropdown
-    if (edIndex < 0) {
-      edIndex = col.size();
-    }
-
-    Vector vect = new Vector();
-    int numPages;
-
-    if (alpha == null || alpha.trim().length() == 0 || alpha.equals("viewAll")) {
-      if (edIndex > col.size()) {
+      //If ALL was selected in pagination dropdown
+      if (edIndex < 0) {
         edIndex = col.size();
       }
-      vect.addAll(col);
-      numPages = col.size() / eaForm.getNumResults();
-      numPages += (col.size() % eaForm.getNumResults() != 0) ? 1 : 0;
-    }
-    else {
-      if (edIndex > colAlpha.size()) {
-        edIndex = colAlpha.size();
+
+      Vector vect = new Vector();
+      int numPages;
+
+      if (alpha == null || alpha.trim().length() == 0 || alpha.equals("viewAll")) {
+        if (edIndex > col.size()) {
+          edIndex = col.size();
+        }
+        vect.addAll(col);
+        numPages = col.size() / eaForm.getNumResults();
+        numPages += (col.size() % eaForm.getNumResults() != 0) ? 1 : 0;
       }
-      vect.addAll(colAlpha);
-      numPages = colAlpha.size() / eaForm.getNumResults();
-      numPages += (colAlpha.size() % eaForm.getNumResults() != 0) ? 1 : 0;
-    }
-
-    Collection tempCol = new ArrayList();
-    for (int i = (stIndex - 1); i < edIndex; i++) {
-      tempCol.add(vect.get(i));
-    }
-
-    Collection pages = null;
-
-    if (numPages > 1) {
-      pages = new ArrayList();
-      for (int i = 0; i < numPages; i++) {
-        Integer pageNum = new Integer(i + 1);
-        pages.add(pageNum);
+      else {
+        if (edIndex > colAlpha.size()) {
+          edIndex = colAlpha.size();
+        }
+        vect.addAll(colAlpha);
+        numPages = colAlpha.size() / eaForm.getNumResults();
+        numPages += (colAlpha.size() % eaForm.getNumResults() != 0) ? 1 : 0;
       }
-    }
+
+      Collection tempCol = new ArrayList();
+      for (int i = (stIndex - 1); i < edIndex; i++) {
+        tempCol.add(vect.get(i));
+      }
+
+      Collection pages = null;
+
+      if (numPages > 1) {
+        pages = new ArrayList();
+        for (int i = 0; i < numPages; i++) {
+          Integer pageNum = new Integer(i + 1);
+          pages.add(pageNum);
+        }
+      }
+
+    
     eaForm.setCols(col);
     eaForm.setPagedCol(tempCol);
     eaForm.setPages(pages);

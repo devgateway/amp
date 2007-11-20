@@ -1337,10 +1337,9 @@
 
 									aimParisIndicatorReportForm.indicatorCode != '10b'}">
 
-					<tr><td><font color="blue">* <digi:trn key="aim:allTheAmounts">All the amounts are in thousands (000)</digi:trn>
-																	<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>">
+					<tr><td><font color="blue">* <digi:trn key="aim:allTheAmounts">All the amounts are in thousands (000) </digi:trn>
                                                                     <c:set var="selCurrency">
-                                                                      <%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>
+                                                                      ${aimParisIndicatorReportForm.currency}
                                                                     </c:set>
 													               <c:set var="selCurrency">
                                                                       ${fn:replace(selCurrency," ","")}
@@ -1351,11 +1350,10 @@
                                                                     <c:set var="selCurrency">
                                                                       ${fn:toLowerCase(selCurrency)}
                                                                     </c:set>
+                                                                    <digi:trn key="aim:currency:${selCurrency}">
+                                                                      ${selCurrency}
+                                                                    </digi:trn>
 
-																		<digi:trn key="aim:currency:${selCurrency}">
-																			${selCurrency}
-																		</digi:trn>
-																	</logic:present>
 							</font>
 					</td></tr>
 

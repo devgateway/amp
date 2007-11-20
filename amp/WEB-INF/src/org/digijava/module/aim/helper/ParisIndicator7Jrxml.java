@@ -4,7 +4,7 @@ import java.io.*;
 import java.lang.Math;
 
 public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
-    public synchronized void createJrxml(String filePath, String reportName, int cols, int rows, String type) throws IOException {
+    public synchronized void createJrxml(String filePath, String reportName,String selCurr, int cols, int rows, String type) throws IOException {
         try {
 
             int a = (cols / 4) * 270 + 80;
@@ -570,7 +570,7 @@ public class ParisIndicator7Jrxml extends ParisIndicatorJrxml {
             p2.println("<textElement textAlignment='Left' verticalAlignment='Top' rotation='None' lineSpacing='Single'>");
             p2.println("<font fontName='Times-Roman' pdfFontName='Times-Roman' size='12' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
             p2.println("</textElement>");
-            p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\" * All the amounts are in thousands (000) \"]]></textFieldExpression>");
+            p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\" * All the amounts are in thousands (000) "+selCurr+"\"]]></textFieldExpression>");
             p2.println("</textField>");
             p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
             p2.println("mode='Transparent'");

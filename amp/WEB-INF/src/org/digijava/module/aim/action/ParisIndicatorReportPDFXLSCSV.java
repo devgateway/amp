@@ -266,7 +266,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
             }
 
             if(jrxml!=null){
-                jrxml.createJrxml(realPathJrxml, reportName, colCnt1, rowCnt1, type);
+                jrxml.createJrxml(realPathJrxml, reportName, formBean.getCurrency(), colCnt1, rowCnt1, type);
             }else{
                 return null;
             }

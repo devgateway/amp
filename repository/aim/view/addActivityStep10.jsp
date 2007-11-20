@@ -687,7 +687,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</td>
 															</tr>
 															</field:display>
-															<field:display name="Risk" feature="Activity">
+														<field:display name="Risk" feature="Activity">															
 														<tr>
 															<%--
 															<td><b>
@@ -701,9 +701,9 @@ ${fn:replace(message,quote,escapedQuote)}
 															<td><b>Risk</b></td>
 															<td>
 																<html:select property="indicatorRisk" styleClass="inp-text">
-																<option value="-1">Select Risk</option>
-																	<html:optionsCollection name="aimEditActivityForm" property="riskCollection"
-																	value="ampIndRiskRatingsId" label="ratingName" />
+																<option value="-1"><digi:trn key="help:selectRisk">Select Risk</digi:trn></option>
+																	<html:optionsCollection name="aimEditActivityForm" property="translatedRiskCollection"
+																	value="value" label="label" />
 																</html:select>
 															</td>
 														</tr>

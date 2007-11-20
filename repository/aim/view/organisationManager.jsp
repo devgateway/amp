@@ -18,6 +18,7 @@
 			  document.aimOrgManagerForm.tempNumResults.focus();
 			  return false;
 		} else {
+			
 			 <digi:context name="searchOrg" property="context/module/moduleinstance/organisationManager.do"/>
 		     url = "<%= searchOrg %>?orgSelReset=false";
 		     document.aimOrgManagerForm.action = url;
@@ -121,7 +122,7 @@
                     </c:set>
                     <input type="button" value="${trnResetBtn}" class="buton" onclick="return resetSearch()">
 					</td>
-					<td width="260">
+					<td width="260">					
                     <c:set var="trnGoBtn">
                       <digi:trn key="aim:btnGo"> GO </digi:trn>
                     </c:set>
@@ -270,11 +271,18 @@
 													<table width="90%">
 														<tr>
 														    <td>
-															<c:set var="trnViewAllLink">
-																<digi:trn key="aim:clickToViewAllSearchPages">Click here to view all search pages</digi:trn>
-															</c:set>
-															<a href="javascript:searchAlpha('viewAll')" title="${trnViewAllLink}">
-																	<digi:trn key="aim:viewAllLink">viewAll</digi:trn></a>
+														    <c:if test="${not empty aimOrgManagerForm.currentAlpha}">
+														    	<c:if test="${aimOrgManagerForm.currentAlpha!='viewAll'}">
+															    	<c:if test="${aimOrgManagerForm.currentAlpha!=''}">														    	
+																    	<c:set var="trnViewAllLink">
+																			<digi:trn key="aim:clickToViewAllSearchPages">Click here to view all search pages</digi:trn>
+																		</c:set>
+																		<a href="javascript:searchAlpha('viewAll')" title="${trnViewAllLink}">
+																				<digi:trn key="aim:viewAllLink">viewAll</digi:trn></a>
+																	</c:if>
+																</c:if>
+														    </c:if>
+															
 															<logic:iterate name="aimOrgManagerForm" property="alphaPages" id="alphaPages" type="java.lang.String">
 															<c:if test="${alphaPages != null}">
 																<c:if test="${aimOrgManagerForm.currentAlpha == alphaPages}">

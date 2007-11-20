@@ -1758,6 +1758,19 @@ function viewChanges()
 										</td>
 
 										<td bgcolor="#ffffff">
+                                                                                <feature:display name="Executing Agency" module="Organizations">
+											<b><digi:trn key="aim:executingAgency">Executing Agency</digi:trn></b><br/>
+											<logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
+												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+													<tr><td>
+													<logic:iterate name="aimEditActivityForm" property="executingAgencies"
+													id="execAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+															<ul><li> <bean:write name="execAgencies" property="name" /></li></ul>
+													</logic:iterate>
+													</td></tr>
+												</table>
+											</logic:notEmpty><br/></feature:display>
+
 											<feature:display name="Implementing Agency" module="Organizations">
 											<b><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="impAgencies">
@@ -2134,58 +2147,7 @@ function viewChanges()
 										</td>
 									</tr>
 									</feature:display>
-									<feature:display name="Executing Agency" module="Organizations">
-									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<digi:trn key="aim:executingAgencies">
-											Executing Agencies</digi:trn>
-										</td>
-										<td bgcolor="#ffffff">
-											<c:if test="${!empty aimEditActivityForm.executingAgencies}">
-												<table width="100%" cellpadding="2" cellspacing="2" valign="top" align="left">
-													<c:forEach var="exAgency" items="${aimEditActivityForm.executingAgencies}">
-														<tr><td>
-															<c:out value="${exAgency.name}"/>
-														</td></tr>
-													</c:forEach>
-												</table>
-											</c:if>
-										</td>
-									</tr>
-									</feature:display>
-
-									<feature:display name="Implementing Agency" module="Organizations">
-									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<digi:trn key="aim:implementingAgencies">
-											Implementing Agencies</digi:trn>
-										</td>
-										<td bgcolor="#ffffff">
-											<c:if test="${!empty aimEditActivityForm.impAgencies}">
-												<table width="100%" cellpadding="2" cellspacing="2" valign="top" align="left">
-													<c:forEach var="impAgency" items="${aimEditActivityForm.impAgencies}">
-														<tr><td>
-															<c:out value="${impAgency.name}"/>
-														</td></tr>
-													</c:forEach>
-												</table>
-											</c:if>
-										</td>
-									</tr>
-									</feature:display>
-									<feature:display name="Contracting Agency" module="Organizations">
-									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<digi:trn key="aim:contractors">
-											Contractors</digi:trn>
-										</td>
-										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.contractors}"/>
-										</td>
-									</tr>
-									</feature:display>
-
-									<module:display name="Contact Information" parentModule="PROJECT MANAGEMENT">
+													<module:display name="Contact Information" parentModule="PROJECT MANAGEMENT">
 									<feature:display name="Donor Contact Information" module="Contact Information">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">

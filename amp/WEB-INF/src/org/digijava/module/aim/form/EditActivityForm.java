@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpSISINProyect;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -421,6 +422,8 @@ private int isPreview=0;
 	private float revisedTargetVal;
 
 	private Collection riskCollection;
+	private List <LabelValueBean> translatedRiskCollection;
+	
 	private Long indicatorRisk;
 	private Collection indHistory;
 	private Collection updateIndValues;
@@ -4550,6 +4553,17 @@ public String getPurpose() {
        public int getProgramType() {
                return programType;
        }
+
+	public List<LabelValueBean> getTranslatedRiskCollection() {
+		return translatedRiskCollection;
+	}
+
+	public void setTranslatedRiskCollection(
+			List<LabelValueBean> translatedRiskCollection) {
+		this.translatedRiskCollection = translatedRiskCollection;
+	}
+
+	
 
 
 }

@@ -406,20 +406,20 @@ private int isPreview=0;
 	private Long indicatorId;
 	private Long indicatorValId;
 	private Long expIndicatorId;
-	private float baseVal;
+	private Float baseVal;
 	private String baseValDate;
 	private String baseValComments;
-	private float targetVal;
+	private Float targetVal;
 	private String targetValDate;
 	private String targetValComments;
-	private float revTargetVal;
+	private Float revTargetVal;
 	private String revTargetValDate;
 	private String revTargetValComments;
-	private float currentVal;
+	private String currentVal; //  this is string because Float has problems with struts: Amp-1390  
 	private String currValDate;
 	private String currValComments;
 	private String comments;
-	private float revisedTargetVal;
+	private Float revisedTargetVal;
 
 	private Collection riskCollection;
 	private List <LabelValueBean> translatedRiskCollection;
@@ -526,7 +526,9 @@ private int isPreview=0;
 	}
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
-
+		
+		currentVal					= null;
+		
 		if (reset) {
 			donorFlag = false;
 			fundDonor = null;
@@ -684,16 +686,16 @@ private int isPreview=0;
                         acChapter=new Long(0);
 
             /* Indicator values reset */
-                        baseVal					= 0;
+                        baseVal					= null;
                         baseValComments			= "";
                         baseValDate				= "";
-                        targetVal				= 0;
+                        targetVal				= null;
                         targetValComments		= "";
                         targetValDate			= "";
-                        revTargetVal				= 0;
+                        revTargetVal				= null;
                         revTargetValComments		= "";
                         revTargetValDate			= "";
-                        currentVal					= 0;
+                        currentVal					= null;
                         currValComments				= "";
                         currValDate					= "";
                         logframeCategory			= new Long(0);
@@ -3270,14 +3272,14 @@ private int isPreview=0;
 	/**
 	 * @return Returns the baseVal.
 	 */
-	public float getBaseVal() {
+	public Float getBaseVal() {
 		return baseVal;
 	}
 
 	/**
 	 * @param baseVal The baseVal to set.
 	 */
-	public void setBaseVal(float baseVal) {
+	public void setBaseVal(Float baseVal) {
 		this.baseVal = baseVal;
 	}
 
@@ -3298,14 +3300,14 @@ private int isPreview=0;
 	/**
 	 * @return Returns the targetVal.
 	 */
-	public float getTargetVal() {
+	public Float getTargetVal() {
 		return targetVal;
 	}
 
 	/**
 	 * @param targetVal The targetVal to set.
 	 */
-	public void setTargetVal(float targetVal) {
+	public void setTargetVal(Float targetVal) {
 		this.targetVal = targetVal;
 	}
 
@@ -3341,14 +3343,19 @@ private int isPreview=0;
 	/**
 	 * @return Returns the currentVal.
 	 */
-	public float getCurrentVal() {
+	public String getCurrentVal() {
+		
+		if(currentVal != null && currentVal.length() <= 0) {
+			return null;
+		}
+		
 		return currentVal;
 	}
 
 	/**
 	 * @param currentVal The currentVal to set.
 	 */
-	public void setCurrentVal(float currentVal) {
+	public void setCurrentVal(String currentVal) {
 		this.currentVal = currentVal;
 	}
 
@@ -3521,14 +3528,14 @@ private int isPreview=0;
 	/**
 	 * @return Returns the revTargetVal.
 	 */
-	public float getRevTargetVal() {
+	public Float getRevTargetVal() {
 		return revTargetVal;
 	}
 
 	/**
 	 * @param revTargetVal The revTargetVal to set.
 	 */
-	public void setRevTargetVal(float revTargetVal) {
+	public void setRevTargetVal(Float revTargetVal) {
 		this.revTargetVal = revTargetVal;
 	}
 
@@ -3998,11 +4005,11 @@ public String getPurpose() {
 		this.allComments = allComments;
 	}
 
-	public float getRevisedTargetVal() {
+	public Float getRevisedTargetVal() {
 		return revisedTargetVal;
 	}
 
-	public void setRevisedTargetVal(float revisedTargetVal) {
+	public void setRevisedTargetVal(Float revisedTargetVal) {
 		this.revisedTargetVal = revisedTargetVal;
 	}
 

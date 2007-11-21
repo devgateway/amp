@@ -1281,10 +1281,10 @@ public class MEIndicatorsUtil
 				AmpMEIndicatorValue ampMEIndValnew = new AmpMEIndicatorValue();
 				ampMEIndValnew.setActivityId(act);
 				ampMEIndValnew.setMeIndicatorId(newIndicator);
-				ampMEIndValnew.setBaseVal(0);
-				ampMEIndValnew.setTargetVal(0);
-				ampMEIndValnew.setActualVal(0);
-				ampMEIndValnew.setRevisedTargetVal(0);				
+				ampMEIndValnew.setBaseVal(null);
+				ampMEIndValnew.setTargetVal(null);
+				ampMEIndValnew.setActualVal(null);
+				ampMEIndValnew.setRevisedTargetVal(null);				
 				ampMEIndValnew.setBaseValDate(null);
 				ampMEIndValnew.setTargetValDate(null);
 				ampMEIndValnew.setActualValDate(null);

@@ -978,14 +978,14 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
               eaForm.setIndicatorId(null);
               eaForm.setIndicatorValId(null);
               eaForm.setExpIndicatorId(null);
-              eaForm.setBaseVal(0);
+              eaForm.setBaseVal(null);
               eaForm.setBaseValDate(null);
-              eaForm.setTargetVal(0);
+              eaForm.setTargetVal(null);
               eaForm.setTargetValDate(null);
-              eaForm.setRevTargetVal(0);
+              eaForm.setRevTargetVal(null);
               eaForm.setRevTargetValDate(null);
               eaForm.setIndicatorPriorValues(null);
-              eaForm.setCurrentVal(0);
+              eaForm.setCurrentVal(null);
               eaForm.setCurrentValDate(null);
               eaForm.setIndicatorRisk(null);
 
@@ -1017,14 +1017,14 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
           eaForm.setIndicatorId(null);
           eaForm.setIndicatorValId(null);
           eaForm.setExpIndicatorId(null);
-          eaForm.setBaseVal(0);
+          eaForm.setBaseVal(null);
           eaForm.setBaseValDate(null);
-          eaForm.setTargetVal(0);
+          eaForm.setTargetVal(null);
           eaForm.setTargetValDate(null);
-          eaForm.setRevTargetVal(0);
+          eaForm.setRevTargetVal(null);
           eaForm.setRevTargetValDate(null);
           eaForm.setIndicatorPriorValues(null);
-          eaForm.setCurrentVal(0);
+          eaForm.setCurrentVal(null);
           eaForm.setCurrentValDate(null);
           eaForm.setIndicatorRisk(null);
         }

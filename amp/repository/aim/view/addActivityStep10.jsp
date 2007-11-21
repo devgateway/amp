@@ -35,7 +35,7 @@
 
 	function validateEntryByLeader() {
 
-		if (containsValidNumericValueZeroIncluded(document.aimEditActivityForm.baseVal) == false) {
+		if (isEmpty(document.aimEditActivityForm.baseVal.value) == true) {
 			alert("Invalid Base value or Base value not entered");
 			document.aimEditActivityForm.baseVal.focus();
 			return false;
@@ -57,13 +57,13 @@
 		}
 
 		if (document.aimEditActivityForm.revTargetValDate != null) {
-/*
-			if (containsValidNumericValue(document.aimEditActivityForm.currentVal) == false) {
+
+			if (isEmpty(document.aimEditActivityForm.currentVal.value) == true) {
 				alert("Invalid Revised target value or Revised target value not entered");
 				document.aimEditActivityForm.currentVal.focus();
 				return false;
 			}
-	*/
+
 			if (isEmpty(document.aimEditActivityForm.revTargetValDate.value) == true) {
 				alert("Revised target value date not entered");
 				document.aimEditActivityForm.revTargetValDate.focus();
@@ -77,27 +77,32 @@
 			document.aimEditActivityForm.currentVal.focus();
 			return false;
 		}
-*/
+
 		if (isEmpty(document.aimEditActivityForm.currValDate.value) == true ^ isEmpty(document.aimEditActivityForm.currentVal.value) == true) {
 			alert("Please fill Current Value and Current Value Date");
 			document.aimEditActivityForm.currValDate.focus();
 			return false;
 		}
+		*/
 		return true;
 	}
 
 	function validateEntryByMember() {
+		/*
 		if (containsValidNumericValue(document.aimEditActivityForm.currentVal) == false) {
 			alert("Invalid Current value or Current value not entered");
 			document.aimEditActivityForm.currentVal.focus();
 			return false;
 		}
+		
 		if (isEmpty(document.aimEditActivityForm.currValDate.value) == true) {
 			alert("Current value date not entered");
 			document.aimEditActivityForm.currValDate.focus();
 			return false;
 		}
+		*/
 		return true;
+	
 	}
 
 	function setValues(val) {

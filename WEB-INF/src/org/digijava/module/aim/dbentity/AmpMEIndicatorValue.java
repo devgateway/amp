@@ -7,16 +7,16 @@ public class AmpMEIndicatorValue {
 	private Long ampMeIndValId;
 	private AmpActivity activityId;
 	private AmpMEIndicators meIndicatorId;
-	private float baseVal;  // BASE
+	private Float baseVal;  // BASE
 	private Date baseValDate;
 	private String baseValComments;
-	private float actualVal;  // ACTUAL
+	private Float actualVal;  // ACTUAL
 	private Date actualValDate;
 	private String actualValComments;
-	private float targetVal; // TARGET
+	private Float targetVal; // TARGET
 	private Date targetValDate;
 	private String targetValComments;
-	private float revisedTargetVal; // Revised TARGET
+	private Float revisedTargetVal; // Revised TARGET
 	private String revisedTargetValComments;
 	private Date revisedTargetValDate;
 	private String comments;
@@ -100,25 +100,25 @@ public class AmpMEIndicatorValue {
 	/**
 	 * @return Returns the baseVal.
 	 */
-	public float getBaseVal() {
+	public Float getBaseVal() {
 		return baseVal;
 	}
 	/**
 	 * @param baseVal The baseVal to set.
 	 */
-	public void setBaseVal(float baseVal) {
+	public void setBaseVal(Float baseVal) {
 		this.baseVal = baseVal;
 	}
 	/**
 	 * @return Returns the targetVal.
 	 */
-	public float getTargetVal() {
+	public Float getTargetVal() {
 		return targetVal;
 	}
 	/**
 	 * @param targetVal The targetVal to set.
 	 */
-	public void setTargetVal(float targetVal) {
+	public void setTargetVal(Float targetVal) {
 		this.targetVal = targetVal;
 	}
 	public String getComments() {
@@ -130,13 +130,13 @@ public class AmpMEIndicatorValue {
 	/**
 	 * @return Returns the actualVal.
 	 */
-	public float getActualVal() {
+	public Float getActualVal() {
 		return actualVal;
 	}
 	/**
 	 * @param actualVal The actualVal to set.
 	 */
-	public void setActualVal(float actualVal) {
+	public void setActualVal(Float actualVal) {
 		this.actualVal = actualVal;
 	}
 	/**
@@ -154,13 +154,13 @@ public class AmpMEIndicatorValue {
 	/**
 	 * @return Returns the revisedTargetVal.
 	 */
-	public float getRevisedTargetVal() {
+	public Float getRevisedTargetVal() {
 		return revisedTargetVal;
 	}
 	/**
 	 * @param revisedTargetVal The revisedTargetVal to set.
 	 */
-	public void setRevisedTargetVal(float revisedTargetVal) {
+	public void setRevisedTargetVal(Float revisedTargetVal) {
 		this.revisedTargetVal = revisedTargetVal;
 	}
 	/**

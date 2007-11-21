@@ -11,10 +11,10 @@ public class ActivityIndicator {
 	
 	private Long indicatorId;
 	private Long indicatorValId;
-	private float baseVal;
-	private float targetVal;
-	private float revisedTargetVal;
-	private float actualVal;
+	private Float baseVal;
+	private Float targetVal;
+	private Float revisedTargetVal;
+	private Float actualVal;
 	private String baseValDate;
 	private String targetValDate;
 	private String revisedTargetValDate;
@@ -31,7 +31,7 @@ public class ActivityIndicator {
 	
 	private String indicatorName;
 	private String indicatorCode;
-	private float currentVal;
+	private Float currentVal;
 	private String currentValDate;
 	private String currentValComments;
 	//private String comments;
@@ -49,13 +49,13 @@ public class ActivityIndicator {
 	/**
 	 * @return Returns the baseVal.
 	 */
-	public float getBaseVal() {
+	public Float getBaseVal() {
 		return baseVal;
 	}
 	/**
 	 * @param baseVal The baseVal to set.
 	 */
-	public void setBaseVal(float baseVal) {
+	public void setBaseVal(Float baseVal) {
 		this.baseVal = baseVal;
 	}
 	/**
@@ -97,13 +97,13 @@ public class ActivityIndicator {
 	/**
 	 * @return Returns the targetVal.
 	 */
-	public float getTargetVal() {
+	public Float getTargetVal() {
 		return targetVal;
 	}
 	/**
 	 * @param targetVal The targetVal to set.
 	 */
-	public void setTargetVal(float targetVal) {
+	public void setTargetVal(Float targetVal) {
 		this.targetVal = targetVal;
 	}
 	/**
@@ -145,13 +145,13 @@ public class ActivityIndicator {
 	/**
 	 * @return Returns the currentVal.
 	 */
-	public float getCurrentVal() {
+	public Float getCurrentVal() {
 		return currentVal;
 	}
 	/**
 	 * @param currentVal The currentVal to set.
 	 */
-	public void setCurrentVal(float currentVal) {
+	public void setCurrentVal(Float currentVal) {
 		this.currentVal = currentVal;
 	}
 	/**
@@ -202,13 +202,13 @@ public class ActivityIndicator {
 	/**
 	 * @return Returns the actualVal.
 	 */
-	public float getActualVal() {
+	public Float getActualVal() {
 		return actualVal;
 	}
 	/**
 	 * @param actualVal The actualVal to set.
 	 */
-	public void setActualVal(float actualVal) {
+	public void setActualVal(Float actualVal) {
 		this.actualVal = actualVal;
 	}
 	/**
@@ -274,13 +274,13 @@ public class ActivityIndicator {
 	/**
 	 * @return Returns the revisedTargetVal.
 	 */
-	public float getRevisedTargetVal() {
+	public Float getRevisedTargetVal() {
 		return revisedTargetVal;
 	}
 	/**
 	 * @param revisedTargetVal The revisedTargetVal to set.
 	 */
-	public void setRevisedTargetVal(float revisedTargetVal) {
+	public void setRevisedTargetVal(Float revisedTargetVal) {
 		this.revisedTargetVal = revisedTargetVal;
 	}
 	/**

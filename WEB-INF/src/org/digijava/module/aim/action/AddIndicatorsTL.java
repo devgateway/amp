@@ -48,9 +48,9 @@ public class AddIndicatorsTL extends Action {
 					ampMEIndbox.setCode(MEIndicatorsUtil.getMEIndicator(selectedIndicators[i]).getCode());
 					ampMEIndValbox.setActivityId(ampAct);
 					ampMEIndValbox.setMeIndicatorId(ampMEIndbox);
-					ampMEIndValbox.setBaseVal(0);
-					ampMEIndValbox.setTargetVal(0);
-					ampMEIndValbox.setActualVal(0);
+					ampMEIndValbox.setBaseVal(null);
+					ampMEIndValbox.setTargetVal(null);
+					ampMEIndValbox.setActualVal(null);
 					ampMEIndValbox.setBaseValDate(null);
 					ampMEIndValbox.setTargetValDate(null);
 					ampMEIndValbox.setActualValDate(null);
@@ -74,9 +74,9 @@ public class AddIndicatorsTL extends Action {
 					ampMEIndsearch.setAmpMEIndId(selIndicators[i]);
 					ampMEIndValsearch.setActivityId(ampAct);
 					ampMEIndValsearch.setMeIndicatorId(ampMEIndsearch);
-					ampMEIndValsearch.setBaseVal(0);
-					ampMEIndValsearch.setTargetVal(0);
-					ampMEIndValsearch.setActualVal(0);
+					ampMEIndValsearch.setBaseVal(null);
+					ampMEIndValsearch.setTargetVal(null);
+					ampMEIndValsearch.setActualVal(null);
 					ampMEIndValsearch.setBaseValDate(null);
 					ampMEIndValsearch.setTargetValDate(null);
 					ampMEIndValsearch.setActualValDate(null);

@@ -36,7 +36,9 @@ public class SaveIndicatorValues extends Action
 					if(eaForm.getWorkingTeamLeadFlag().equalsIgnoreCase("no"))
 					{
 						if (eaForm.getCurrentValDate() != null) {
-							temp.setCurrentVal(eaForm.getCurrentVal());
+							if( eaForm.getCurrentVal() != null) {
+								temp.setCurrentVal(Float.parseFloat(eaForm.getCurrentVal()));
+							}
 							temp.setCurrentValDate(eaForm.getCurrValDate());
 							temp.setCurrentValComments(eaForm.getCurrentValComments());
 						}
@@ -65,7 +67,11 @@ public class SaveIndicatorValues extends Action
 
 						if (eaForm.getCurrentValDate() != null) {
 							logger.info("Setting currValComments :" + eaForm.getCurrentValComments());
-							temp.setCurrentVal(eaForm.getCurrentVal());
+							if( eaForm.getCurrentVal() != null) {
+								temp.setCurrentVal(Float.parseFloat(eaForm.getCurrentVal()));
+							}
+							//temp.setCurrentVal(eaForm.getCurrentVal());
+							
 							temp.setCurrentValDate(eaForm.getCurrValDate());
 							temp.setCurrentValComments(eaForm.getCurrentValComments());
 						}

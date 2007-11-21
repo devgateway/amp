@@ -70,7 +70,9 @@ public class GetActivityIndicatorValues extends Action
 							eaForm.setRevTargetVal(actInd.getRevisedTargetVal());
 							eaForm.setRevTargetValDate(actInd.getRevisedTargetValDate());
 							eaForm.setRevTargetValComments(actInd.getRevisedTargetValComments());
-							eaForm.setCurrentVal(actInd.getCurrentVal());
+							if(actInd.getCurrentVal() != null) {
+								eaForm.setCurrentVal(actInd.getCurrentVal().toString());
+							}
 							eaForm.setCurrentValDate(actInd.getCurrentValDate());
 							eaForm.setCurrentValComments(actInd.getCurrentValComments());
 							eaForm.setIndicatorRisk(actInd.getRisk());

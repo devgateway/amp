@@ -58,7 +58,7 @@
 
 		if (document.aimEditActivityForm.revTargetValDate != null) {
 
-			if (isEmpty(document.aimEditActivityForm.currentVal.value) == true) {
+			if (isEmpty(document.aimEditActivityForm.revTargetVal.value) == true) {
 				alert("Invalid Revised target value or Revised target value not entered");
 				document.aimEditActivityForm.currentVal.focus();
 				return false;

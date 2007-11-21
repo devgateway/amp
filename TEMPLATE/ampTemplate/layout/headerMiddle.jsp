@@ -113,7 +113,7 @@ if("On".equals(publicView)) { %>
 			<feature:display name="Content Repository" module="Document Management">
 			<LI><a class="head-menu-link" href="/contentrepository/documentManager.do" module="aim" onclick="return quitRnot1('${message}')">::: <digi:trn key="contentrepository:contentRepositoryTitle">CONTENT REPOSITORY</digi:trn></a></LI>
 			</feature:display>
-	    <module:display name="Calendar" parentModule="PROJECT MANAGEMENT">
+	    <feature:display name="Calendar" module="Calendar">
 		<LI>
 			<div id="gen" title='<digi:trn key="aim:viewPlanningCalendar">View Planning Calendar</digi:trn>'>
 			<logic:notEmpty name="TID" scope="session">
@@ -126,7 +126,7 @@ if("On".equals(publicView)) { %>
 			</logic:empty>
 			</div>
 		</LI>
-		</module:display>
+		</feature:display>
 		<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
     	<LI>
 			<div id="gen"  title='<digi:trn key="aim:viewMEDashboard">View M&E Dashboard</digi:trn>'>

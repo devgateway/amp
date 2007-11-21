@@ -58,8 +58,9 @@
 														<html:multibox property="selDocs">
 															<bean:write name="selDocuments" property="id" />
 														</html:multibox>
-														<bean:write name="selDocuments" property="title" /> - 
-
+														<field:display name="Document Title" feature="Related Documents">
+															<bean:write name="selDocuments" property="title" /> - 
+														</field:display>
 														<c:if test="${!empty selDocuments.fileName}">
 							   							<bean:define id="fileName" name="selDocuments" 
 															property="fileName" />
@@ -78,7 +79,10 @@
 															 <%}%>
 														</c:if>
 															<i>
-														<bean:write name="selDocuments" property="fileName" /></i>	<br>
+														<field:display name="Document FileName" feature="Related Documents">
+															<bean:write name="selDocuments" property="fileName" />
+														</field:display>
+														</i>	<br>
 														<field:display name="Document Description" feature="Related Documents">
 														<logic:notEmpty name="selDocuments" property="description">
 															<b>Desc:</b><bean:write name="selDocuments" property="description" />
@@ -86,9 +90,9 @@
 														</field:display>
 														<field:display name="Document Comment" feature="Related Documents">
 															<logic:notEmpty name="selDocuments" property="docComment">
-															<br />
-															<b><digi:trn key="aim:addActivity:relatedDocuments:comments">Comments</digi:trn>:</b>
-															<bean:write name="selDocuments" property="docComment" />
+																<br />
+																<b><digi:trn key="aim:addActivity:relatedDocuments:comments">Comments</digi:trn>:</b>
+																<bean:write name="selDocuments" property="docComment" />
 															</logic:notEmpty>
 														</field:display>
 														<field:display name="Document Date" feature="Related Documents">

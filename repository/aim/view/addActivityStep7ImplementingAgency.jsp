@@ -5,6 +5,11 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+
 
 <digi:instance property="aimEditActivityForm" />
 									<tr><td>
@@ -39,16 +44,18 @@
 													<table cellSpacing=1 cellPadding=1>
 														<tr>
 															<td>
-
+																<field:display name="Implementing Agency Add Organizations Button" feature="Implementing Agency">
 																<html:button  styleClass="buton" property="submitButton" onclick="addOrgs(2)">
 																	<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
 																</html:button>
-
+																</field:display>
 															</td>
 															<td>
+																<field:display name="Implementing Agency Remove Organizations Button" feature="Implementing Agency">															
 																<html:button  styleClass="buton" property="submitButton" onclick="return removeSelOrgs(2)">
 																	<digi:trn key="btn:removeSelectedOrganizations">Remove Selected Organizations</digi:trn>
 																</html:button>
+																</field:display>
 															</td>
 														</tr>
 													</table>
@@ -60,9 +67,11 @@
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
+													<field:display name="Implementing Agency Add Organizations Button" feature="Implementing Agency">
 														<html:button  styleClass="buton" property="submitButton" onclick="addOrgs(2)">
 																<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn>
 														</html:button>
+													</field:display>
 													</td>
 												</tr>
 											</table>

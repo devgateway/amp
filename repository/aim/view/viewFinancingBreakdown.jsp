@@ -156,7 +156,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 									</TABLE>
 								</TD>
 							</TR>
-							<module:display name="Calendar" parentModule="PROJECT MANAGEMENT">
+							<feature:display name="Calendar" module="Calendar">
 							<logic:equal name="aimFinancingBreakdownForm" property="goButtonPresent" value="true">
 								<TR bgColor=#f4f4f2>
 									<TD vAlign="top" align="left" width="750">
@@ -245,7 +245,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 									</TD>
 								</TR>
 							</logic:equal>
-							</module:display>
+							</feature:display>
 							<TR bgColor=#f4f4f2>
 								<TD vAlign="top" align="center" width="750">
 									<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>

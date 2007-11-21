@@ -29,9 +29,13 @@
 														<html:multibox property="selLinks">
 															<bean:write name="selWebLinks" property="id" />
 														</html:multibox>
-														<bean:write name="selWebLinks" property="title" /> - 
+														<field:display name="Web Resources Title" feature="Web Resources">
+														<bean:write name="selWebLinks" property="title" />
+														 - </field:display>
+														 <field:display name="Web Resources Url" feature="Web Resources">
 														<a href="<bean:write name="selWebLinks" property="url" />" target="_blank">
 														<bean:write name="selWebLinks" property="url" /></a><br>
+														</field:display>
 														<field:display name="Web Resource Description" feature="Web Resources">
 													<b>Desc:</b><bean:write name="selWebLinks" property="description" />
 													</field:display>

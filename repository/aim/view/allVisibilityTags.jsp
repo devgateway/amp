@@ -108,7 +108,7 @@
 <feature:display name="Regional Funding Tab" module="Funding"></feature:display>
 <feature:display name="Regional Funding" module="Funding"></feature:display>
 <feature:display name="Related Documents" module="Document"></feature:display>
-<feature:display name="Related Documents" module="Documents"></feature:display>
+<feature:display name="Related Documents" module="Document"></feature:display>
 <feature:display name="Reports Contact Information" module="Contact Information"></feature:display>
 <feature:display name="SISIN" module="Components"></feature:display>
 <feature:display name="Sectors" module="Project ID and Planning"></feature:display>

@@ -47,7 +47,7 @@
 									</tr>
 									<tr><td>&nbsp;</td></tr>
 									</feature:display>
-									<feature:display name="Related Documents" module="Documents"></feature:display>
+									<feature:display name="Related Documents" module="Document"></feature:display>
 									
 									<tr><td>
 										<logic:notEmpty name="aimEditActivityForm" property="documentList">

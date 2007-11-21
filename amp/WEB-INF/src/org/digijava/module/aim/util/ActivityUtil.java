@@ -2871,7 +2871,6 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
   public static List getActivityProgramsByProgramType(Long actId, String settingName) {
                 Session session = null;
                 List col = new ArrayList();
-                logger.info("load programs....");
                 try {
                        session = PersistenceManager.getRequestDBSession();
                        String queryString = "select ap from " +AmpActivityProgram.class.getName() +

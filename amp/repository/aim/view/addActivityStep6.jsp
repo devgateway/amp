@@ -627,7 +627,9 @@ ${fn:replace(message,quote,escapedQuote)}
 									</td></tr>
 
 									<!-- Managed Documents -->
+									<feature:display name="Managed Documents" module="Document">
 										<jsp:include page="addActivityStep6ManagedDocuments.jsp"/>
+									</feature:display>
 									<tr><td>
 
 										&nbsp;

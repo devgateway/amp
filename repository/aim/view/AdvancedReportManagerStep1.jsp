@@ -277,8 +277,8 @@ function checkUncheckAll2() {
 												<field:display name="Physical progress description" feature="Issues">&nbsp;</field:display>
 												<field:display name="Physical progress title" feature="Issues">&nbsp;</field:display>
 											</feature:display>
-											<feature:display name="Contact Information" module="Contact Information">
-												<field:display name="Contact Name" feature="Contact Information">&nbsp;</field:display>
+											<feature:display name="Reports Contact Information" module="Contact Information">
+												<field:display name="Contact Name" feature="Reports Contact Information">&nbsp;</field:display>
 											</feature:display>
 											<feature:display name="Activity" module="M&E">
 												<field:display name="Indicator Base Value" feature="Activity">&nbsp;</field:display>

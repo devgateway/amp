@@ -47,6 +47,8 @@
 									</tr>
 									<tr><td>&nbsp;</td></tr>
 									</feature:display>
+									<feature:display name="Related Documents" module="Documents"></feature:display>
+									
 									<tr><td>
 										<logic:notEmpty name="aimEditActivityForm" property="documentList">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">

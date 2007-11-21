@@ -306,6 +306,7 @@
 															</logic:notEmpty>
 														</td></tr>
 													</tr>
+													<feature:display name="Physical Progress" module="Components">
 													<tr>
 														<td colspan="2">
 															<table width="100%" cellPadding=1 cellSpacing=1 vAlign="top" border=0
@@ -316,6 +317,7 @@
 																	<digi:trn key="aim:physicalProgres">Physical Progress</digi:trn>
 																</a>
 															</td></tr>
+															<field:display name="Components Add Physical Progress Link" feature="Physical Progress">
 															<c:if test="${empty selComponents.phyProgress}">
 																<tr><td colspan="2"><b>
 																	<a href="javascript:
@@ -324,11 +326,13 @@
 																	</b>
 																</td></tr>
 															</c:if>
+															</field:display>
 															<c:if test="${!empty selComponents.phyProgress}">
 															<c:forEach var="phyProg" items="${selComponents.phyProgress}">
 																<tr><td>
 																	<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
 																		<tr>
+																		<field:display name="Components Add Physical Progress Link" feature="Physical Progress">
 																		<td vAlign="center" align="left" width="95%">
 																			<a href="javascript:addPhyProgess(<bean:write name="phyProg"
 																			property="pid" />,<c:out value="${selComponents.componentId}"/>)">
@@ -336,6 +340,8 @@
 																				<bean:write name="phyProg" property="reportingDate" />
 																			</a>
 																		</td>
+																		</field:display>
+																		<field:display name="Components Remove Physical Progress Link" feature="Physical Progress">
 																		<td align="right">
 																			<bean:define id="id" property="pid" name="phyProg"/>
 																			<bean:define id="compId" property="componentId" name="selComponents"/>
@@ -345,11 +351,15 @@
 																				<digi:img src="module/cms/images/deleteIcon.gif" border="0"
 																				alt="Delete this physical progress"/>
 																			</digi:link>
-																		</td>																																								  </tr>
+																		</td>																			
+																		</field:display>
+																		</tr>
 																	</table>
 																</td></tr>
 															</c:forEach>
+															<field:display name="Components Add Physical Progress Link" feature="Physical Progress">
 																<tr><td>
+																
 																	<table cellSpacing=2 cellPadding=2>
 																		<tr><td>
 																			<b>
@@ -360,9 +370,11 @@
 																		</td></tr>
 																	</table>
 																</td></tr>
+																</field:display>
 															</c:if>
 															</table>
 														</td></tr>
+														</feature:display>
 													</table>
 												</td></tr>
 											</logic:iterate>

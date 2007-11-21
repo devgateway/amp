@@ -146,7 +146,7 @@
 							</logic:notEqual>
 						</feature:display>
 						
-						<feature:display name="References" module="References">
+						<feature:display name="References Tab" module="References">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="1">
 							   <LI class="selected">
 									:: <digi:trn key="aim:references">References</digi:trn>
@@ -163,7 +163,8 @@
 							</logic:notEqual>
 						</feature:display>
 						
-						<module:display name="Financial Progress" parentModule="PROJECT MANAGEMENT">
+						<module:display name="Financial Progress" parentModule="PROJECT MANAGEMENT"></module:display>
+						<feature:display name="Financial Progress Tab" module="Financial Progress">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="2">
 							   <LI class="selected">
 									:: <digi:trn key="aim:financialProgress">Financial Progress</digi:trn>								
@@ -178,9 +179,10 @@
 								</digi:link></div>
 								</LI>
 							</logic:notEqual>
-						</module:display>
+						</feature:display>
 						
-							<feature:display name="Funding Organizations" module="Funding">
+							<feature:display name="Funding Organizations" module="Funding"></feature:display>
+							<feature:display name="Funding Organizations Tab" module="Funding">
 								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="3">
 								   <LI class="selected">
 										:: <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>  
@@ -196,8 +198,9 @@
 									</LI>
 								</logic:notEqual>
 							</feature:display>
-						
-						<module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT">
+							
+						<module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display>
+						<feature:display name="Documents Tab" module="Document Management">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
 							   <LI class="selected">
 									:: <digi:trn key="aim:documents">Documents</digi:trn>
@@ -212,14 +215,15 @@
 							</digi:link></div>
 							</LI>
 							</logic:notEqual>
-						</module:display>
+						</feature:display>
 					</UL>
 				</DIV>
 				</TD></TR>
 			  	<TR><TD bgcolor="#3754a1" >
 				<DIV id="navlinks">
 					<UL>
-							<feature:display name="Regional Funding" module="Funding">
+							<feature:display name="Regional Funding" module="Funding"></feature:display>
+							<feature:display name="Regional Funding Tab" module="Funding">
 								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
 								   <LI class="selected">
 										:: <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
@@ -235,9 +239,9 @@
 									</digi:link></div>
 									</LI>
 								</logic:notEqual>
-							</feature:display>
-						
-						<feature:display name="Paris Indicators" module="Paris Indicators">
+						</feature:display>
+						<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display>
+						<feature:display name="Paris Indicators Tab" module="Paris Indicators">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
 								   <LI class="selected">						
 									:: <digi:trn key="aim:parisIndicators">Paris Indicators</digi:trn>
@@ -258,7 +262,7 @@
 								</LI>
 							</logic:notEqual>
 						</feature:display>
-						<module:display name="NATIONAL PLAN DASHBOARD">
+						<feature:display name="Dashboard Tab" module="M&E">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="7">
 									<LI class="selected">
 									:: <digi:trn key="aim:activityDashboard">Dashboard</digi:trn>
@@ -273,10 +277,10 @@
 								</digi:link></div>
 								</LI>
 							</logic:notEqual>
-						</module:display>						
+						</feature:display>						
 						
-						
-						<feature:display name="Costing" module="Activity Costing">
+						<feature:display name="Costing" module="Activity Costing"></feature:display>
+						<feature:display name="Costing Tab" module="Activity Costing">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="8">
 							   <LI class="selected">
 									:: <digi:trn key="aim:projectCosting">Costing</digi:trn>								

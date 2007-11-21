@@ -8,6 +8,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -211,7 +214,8 @@ ${fn:replace(message,quote,escapedQuote)}
 													</table>
 												</td>
 											</tr>
-
+											
+											<feature:display name="Costing" module="Activity Costing">
 											<tr valign="top">
 												<td width="100%" bgcolor="#f4f4f2">
 													<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left"
@@ -274,12 +278,15 @@ ${fn:replace(message,quote,escapedQuote)}
 																		</table>
 																	</td></tr>
 	-->
+	
 																</table>
 															</td>
 														</tr>
+														
 													</table>
 												</td>
 											</tr>
+											</feature:display>
 										</table>
 									</td>
 									<td width="25%" vAlign="top" align="right">

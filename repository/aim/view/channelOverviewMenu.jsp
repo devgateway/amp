@@ -185,7 +185,7 @@
 					</TD></TR>
 					</feature:display>
 					
-					<feature:display name="NPD Dashboard" module="National Planning Dashboard>
+					<feature:display name="NPD Dashboard" module="National Planning Dashboard">
 			  		<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
 						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">

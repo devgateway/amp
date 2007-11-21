@@ -127,7 +127,6 @@ tanzania adds
  		</set>
 
 		<set name="orgrole" cascade="all-delete-orphan">
-			<cache usage="read-write" />
 			<key column="activity"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrgRole"/>
  		</set>

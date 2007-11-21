@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpSession;
 
@@ -28,13 +29,14 @@ public class ShowTeamReports extends Action {
 			javax.servlet.http.HttpServletRequest request,
 			javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
-		List dbReturnSet = null;
+		List dbReturnSet = null;		
 		HttpSession session = request.getSession();
                 int reportsPerPage=0;
                 int startReport=0;
                 boolean appSettingSet=false;
 
 		ReportsForm rf = (ReportsForm) form;
+		rf.setCurrentMemberId(null);
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
                 if(rf.getCurrentPage()==0){
                   rf.setCurrentPage(FIRST_PAGE);
@@ -45,6 +47,7 @@ public class ShowTeamReports extends Action {
 			rf.setReports(reports);
                         rf.setTotalPages(FIRST_PAGE);
 		} else {
+					rf.setCurrentMemberId(tm.getMemberId());
                      ApplicationSettings appSettings = tm.getAppSettings();
                      if(appSettings == null||appSettings.getDefReportsPerPage()==0){
                        rf.setTotalPages(FIRST_PAGE);
@@ -91,10 +94,7 @@ public class ShowTeamReports extends Action {
                           }
                         }
 			rf.setReports(dbReturnSet);
-
-
-
-
+			
 		}
 
 		return mapping.findForward("forward");

@@ -244,17 +244,29 @@ function confirmFunc() {
 																	<bean:write name="report" property="ampReportId" />
 																</c:set>
 																<c:set target="${urlParams}" property="event" value="edit" />
-																<logic:equal name="teamLeadFlag" scope="session" value="true">
+																<logic:equal name="teamLeadFlag" scope="session" value="true"> 
 																	[ <digi:link href="/deleteAllReports.do" name="urlParams" title="${translation}" onclick="return confirmFunc()" >
 																		<digi:trn key="aim:reportDelete">Delete</digi:trn>
 																	</digi:link> ]
 																	[ <digi:link href="/editReport.do?reportEdit=true" name="urlParams" title="${translation}" >
 																		<digi:trn key="aim:reportEdit">Edit</digi:trn>
 																	</digi:link> ]
-																</logic:equal>
+																</logic:equal>														
+																<logic:equal name="teamLeadFlag" scope="session" value="false">
+																	<logic:present name="report" property="ownerId">
+																		<logic:equal  name="report" property="ownerId.ampTeamMemId" value="${aimTeamReportsForm.currentMemberId}"> 
+																			[ <digi:link href="/deleteAllReports.do" name="urlParams" title="${translation}" onclick="return confirmFunc()" >
+																				<digi:trn key="aim:reportDelete">Delete</digi:trn>
+																			</digi:link> ]
+																			[ <digi:link href="/editReport.do?reportEdit=true" name="urlParams" title="${translation}" >
+																				<digi:trn key="aim:reportEdit">Edit</digi:trn>
+																			</digi:link> ]
+																		</logic:equal>		
+																	</logic:present>																																																
+																</logic:equal>															
 																</p>
 															</td>
-															<% } %>
+															<% } %>														
 
 														</TR>
 

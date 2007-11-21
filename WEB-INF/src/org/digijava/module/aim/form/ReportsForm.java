@@ -7,6 +7,7 @@ import org.apache.struts.action.*;
 public class ReportsForm extends ActionForm {
 
 		  private Boolean reportEdit=null;
+		  private Long currentMemberId=null;;
 
 		  private Collection reports = null;
 		  private Long reportId = null;
@@ -23,6 +24,7 @@ public class ReportsForm extends ActionForm {
 		  private String memberName = null;
                   private int currentPage;
                   private int totalPages;
+                  
 
   public Long getMemberId() {
 					 return this.memberId;
@@ -150,5 +152,15 @@ public class ReportsForm extends ActionForm {
 
                 public void setTotalPages(int totalPages) {
                   this.totalPages = totalPages;
-                }
+               }
+
+				public Long getCurrentMemberId() {
+					return currentMemberId;
+				}
+
+				public void setCurrentMemberId(Long currentMemberId) {
+					this.currentMemberId = currentMemberId;
+				}			
+			
+				
 }

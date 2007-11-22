@@ -1,5 +1,6 @@
 package org.digijava.module.um.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -139,6 +140,12 @@ public class ViewEditUser extends Action {
                 uForm.setName(user.getName());
                 uForm.setUrl(user.getUrl());
                 uForm.setAssignedOrgId(user.getAssignedOrgId());
+                if(user.getAssignedOrgId()!=null) {
+                    uForm.setOrgs(new ArrayList<AmpOrganisation>());
+                    uForm.getOrgs().add(org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId()));
+                
+                }
+                
 
                 Locale language = null;
                 if (langPref == null) {

@@ -13,7 +13,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 
 <%@ taglib uri="/taglib/category" prefix="category" %>

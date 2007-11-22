@@ -643,9 +643,7 @@
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="sectorColl">
 
-														<html:optionsCollection name="aimParisIndicatorReportForm" property="sectorColl"
-
-																				value="ampSectorId" label="name"  />
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="sectorColl" value="ampSectorId" label="name"  />
 
 													</logic:notEmpty>
 

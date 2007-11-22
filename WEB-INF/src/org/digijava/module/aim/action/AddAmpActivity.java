@@ -926,6 +926,11 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
         }
 
 //      patch for comments that were not saved yet
+        boolean currentlyEditing	= false;
+        if( request.getParameter("currentlyEditing")!=null && request.getParameter("currentlyEditing").equals("true")) {
+        	currentlyEditing		= true;
+        }
+        
         HashMap unsavedComments = (HashMap) session.getAttribute("commentColInSession");
         Set keySet = null;
         if (unsavedComments != null)
@@ -935,15 +940,23 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
         if (teamMember == null)
           return mapping.findForward("publicPreview");
         else {
-          ArrayList colAux = new ArrayList();
-          Collection ampFields = DbUtil.getAmpFields();
-          HashMap allComments = new HashMap();
+          ArrayList<AmpComments> colAux	= null;
+          Collection ampFields 			= DbUtil.getAmpFields();
+          HashMap allComments 			= new HashMap();
+          
           for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
             AmpField field = (AmpField) itAux.next();
-            colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),
+            if ( currentlyEditing && keySet!=null && keySet.contains(field.getAmpFieldId()) ) {
+            	colAux							= new ArrayList<AmpComments>();
+            	Collection<AmpComments> toAdd 	= (Collection) unsavedComments.get(field.getAmpFieldId());
+            	colAux.addAll( toAdd );
+            }
+            else {
+            	colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),
                                                   eaForm.getActivityId());
+            }
             // patch for comments that were not saved yet
-            if (keySet != null && keySet.contains(field.getAmpFieldId())){
+            /*if (keySet != null && keySet.contains(field.getAmpFieldId())){
             	Collection toAdd = (Collection) unsavedComments.get(field.getAmpFieldId());
             	Iterator i = toAdd.iterator();
             	while (i.hasNext()) {
@@ -962,13 +975,13 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
 					}
 					colAux.add(e1);
 				}
-            }
+            }*/
             //
             allComments.put(field.getFieldName(), colAux);
           }
 
           eaForm.setAllComments(allComments);
-          eaForm.setCommentsCol(colAux);
+          //eaForm.setCommentsCol(colAux);
 
           if (request.getParameter("logframe") != null ||
               logframepr.compareTo("true") == 0) {

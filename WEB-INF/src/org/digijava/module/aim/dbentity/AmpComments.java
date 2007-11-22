@@ -4,8 +4,14 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.util.Date;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import org.digijava.module.aim.util.DbUtil;
 
 public class AmpComments implements Serializable {
 	
@@ -87,5 +93,39 @@ public class AmpComments implements Serializable {
 	 */
 	public void setMemberId(AmpTeamMember memberId) {
 		this.memberId = memberId;
+	}
+	
+	/**
+	 * 
+	 * @param list will be populated with all AmpComments for activity with id 'activityId'
+	 * @param hashMap is a map of lists. Each list contains the AmpComments for a specific field. So the keys are the fields' ids.
+	 * This map will probably be (or already is) saved as the session attribute ("commentColInSession") which is still needed by previewLogframe 
+	 * @param activityId
+	 */
+	
+	public static void populateWithComments(List<AmpComments> list, HashMap<Long, List<AmpComments>> hashMap, Long activityId) {
+		
+		List<AmpComments> tempList	= DbUtil.getAllCommentsByActivityId(activityId);
+		
+		Iterator<AmpComments> iter	= tempList.iterator();
+		
+		while (iter.hasNext()) {
+			AmpComments ampComment	= iter.next();
+			list.add(ampComment);
+			if (ampComment.getAmpFieldId() != null) {
+				Long fieldId			= ampComment.getAmpFieldId().getAmpFieldId();
+				
+				List<AmpComments> fromHashMapList	= hashMap.get( fieldId );
+				if ( fromHashMapList == null ) {
+					fromHashMapList		= new ArrayList<AmpComments>();
+					hashMap.put(fieldId, fromHashMapList);
+				}
+				fromHashMapList.add( ampComment );
+			}
+			else
+				throw new RuntimeException("AmpComment with id " + ampComment.getAmpCommentId() + " and text '" 
+						+ ampComment.getComment() + "' has NO attached field object");
+		}
+		
 	}
 }

@@ -42,6 +42,7 @@ import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -419,14 +420,7 @@ public class EditActivity
         }
       }
 
-      // Clearing comment properties
-      String action = request.getParameter("action");
-      if (action != null && action.trim().length() != 0) {
-        if ("edit".equals(action)) {
-          eaForm.getCommentsCol().clear();
-          eaForm.setCommentFlag(false);
-        }
-      }
+      
       logger.debug("step [before IF] : " + eaForm.getStep());
       if (eaForm.isDonorFlag()) {
         eaForm.setStep("3");
@@ -495,6 +489,35 @@ public class EditActivity
         if (activity.getActivityDocuments() != null && activity.getActivityDocuments().size() > 0 )
         		ActivityDocumentsUtil.injectActivityDocuments(request, activity.getActivityDocuments());
         /* END - Injecting documents into session */
+        
+        /* Clearing session information about comments */
+        String action = request.getParameter("action");
+        if (action != null && action.trim().length() != 0) {
+          if ("edit".equals(action)) {
+        	if (eaForm.getCommentsCol() != null)
+        			eaForm.getCommentsCol().clear();
+        	else
+        		eaForm.setCommentsCol(new ArrayList<AmpComments>());
+            eaForm.setCommentFlag(false);
+            /**
+             * The commentColInSession session attribute is a map of lists.
+             * Each list contains the AmpComments for a specific field. So the keys are the fields' ids.
+             * It isn't really needed anymore except for compatibility with previewLogframe which
+             * still uses this map. 
+             */
+            HashMap<Long, List<AmpComments>> commentColInSession	= (HashMap)request.getSession().getAttribute("commentColInSession");
+            if ( commentColInSession != null ) {
+            	commentColInSession.clear();
+            }
+            else {
+            	commentColInSession		= new HashMap<Long, List<AmpComments>>();
+            	request.getSession().setAttribute("commentColInSession", commentColInSession );
+            }
+            AmpComments.populateWithComments( eaForm.getCommentsCol(), commentColInSession, 
+            					activityId);
+          }
+        }
+        /* END - Clearing session information about comments */
 
         if (tm != null && tm.getTeamType()
             .equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {

@@ -265,10 +265,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         }
 */
         // delete all previous comments
-        if (commentsCol != null && commentsCol.isEmpty()) {
+        
           ArrayList col = org.digijava.module.aim.util.DbUtil.
-              getAllCommentsByField(field, oldActivity.getAmpActivityId());
-          logger.debug("col.size() [Inside deleting]: " + col.size());
+              getAllCommentsByActivityId( oldActivity.getAmpActivityId() );
           if (col != null) {
             Iterator itr = col.iterator();
             while (itr.hasNext()) {
@@ -276,10 +275,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
               session.delete(comObj);
             }
           }
-          logger.debug("comments deleted");
-        }
-        else
-          logger.debug("commentsCol is empty");
+        
+        
 
         if ( oldActivity.getCategories() != null ) {
         	oldActivity.getCategories().clear();

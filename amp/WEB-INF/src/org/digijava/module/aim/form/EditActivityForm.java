@@ -9,13 +9,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.TreeSet;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpSISINProyect;
@@ -28,7 +31,6 @@ import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.ReferenceDoc;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 
 public class EditActivityForm extends ActionForm implements Serializable{
 
@@ -222,9 +224,14 @@ private int isPreview=0;
 	private Long ampCommentId;
 	private String fieldName;
 	private AmpField field = null;
+	
+	/* All AmpComments objects are kept in this List while going through the Add/Edit Activity wizard.
+	 * This List is used when saving the activity (and thus the comments) to the database.
+	 * So be careful when modifying this. 
+	 * */
 	private ArrayList commentsCol = new ArrayList();
 	private HashMap allComments=new HashMap();
-
+	
 	// For activity approval process
 	private String approvalStatus;
 	private String workingTeamLeadFlag;
@@ -526,7 +533,7 @@ private int isPreview=0;
 	}
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
-		
+
 		currentVal					= null;
 		
 		if (reset) {
@@ -708,6 +715,7 @@ private int isPreview=0;
                       selectedSPrograms=null;
                       selectedPPrograms=null;
                       selectedNPOPrograms=null;
+                      
 
 		}
 
@@ -4560,19 +4568,14 @@ public String getPurpose() {
        public int getProgramType() {
                return programType;
        }
-
-	public List<LabelValueBean> getTranslatedRiskCollection() {
-		return translatedRiskCollection;
-	}
-
-	public void setTranslatedRiskCollection(
-			List<LabelValueBean> translatedRiskCollection) {
-		this.translatedRiskCollection = translatedRiskCollection;
-	}
-
-	
-
-
+       public List<LabelValueBean> getTranslatedRiskCollection() {
+    	   return translatedRiskCollection;
+       }
+       public void setTranslatedRiskCollection(
+    		   List<LabelValueBean> translatedRiskCollection) {
+    	   this.translatedRiskCollection = translatedRiskCollection;
+       }
 }
+
 
 

@@ -6,6 +6,7 @@ package org.digijava.module.aim.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -294,5 +295,16 @@ public final class AdvancedReportUtil {
 		return teamMember;
 	}
 
-	
+	/**
+	 * compares AmpReports with primary key
+	 * @author dare
+	 *
+	 */
+	public static class AmpReportIdComparator implements Comparator<AmpReports>{
+
+		public int compare(AmpReports r1, AmpReports r2) {			
+			return r1.getAmpReportId().compareTo(r2.getAmpReportId());
+		}
+		
+	}
 }

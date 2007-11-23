@@ -349,7 +349,8 @@ public class TeamMemberUtil {
 		}
 		logger.debug("returning members");
 		return members;
-	}
+	}	
+	
 
     public static Collection<User> getAllTeamMemberUsers() {
         Session session = null;
@@ -595,6 +596,35 @@ public class TeamMemberUtil {
                 }
                 return col;
         }
+        
+        public static List<AmpReports> getAllTeamMembersReports(Long teamId,Integer currentPage,Integer reportPerPage){
+    		Session session=null;
+    		Query qry=null;
+    		List<AmpReports> result=null;    		
+    		try {
+    			session = PersistenceManager.getRequestDBSession();
+    			result=new ArrayList<AmpReports>();
+    			String oql= "select r from "
+                    + AmpTeamMember.class.getName() + " t  inner join  t.reports r "
+                    + "  where (t.ampTeam=:id)";    			
+				qry=session.createQuery(oql);
+				qry.setParameter("id", teamId,Hibernate.LONG);
+				if (currentPage !=null){
+	            	   qry.setFirstResult(currentPage);
+	               }
+	               if(reportPerPage!=null){
+	            	   qry.setMaxResults(reportPerPage);
+	               }
+				result=qry.list();
+    			
+    		} catch (Exception e) {
+    			logger.error("Exception from getAllMemberReports()");
+                logger.error(e.toString());
+                e.printStackTrace(System.out);
+    		}
+    		return result;
+    	}
+
 
         public static Integer getAllMemberReportsCount(Long id) {
              Session session = null;
@@ -1473,7 +1503,8 @@ public class TeamMemberUtil {
 		logger.debug("returning members");
 		return members;
 	}
-
+	
+	
 	public static void removeTeamMembers(Long id[],Long groupId) {
 		Session session = null;
 		Transaction tx = null;

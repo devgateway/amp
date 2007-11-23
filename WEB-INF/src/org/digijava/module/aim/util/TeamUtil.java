@@ -1761,7 +1761,12 @@ public class TeamUtil {
    }
 
 
-
+    /**
+     * Ugly!
+     * @param teamId
+     * @return
+     * @deprecated please use {@link #getAllTeamReports(Long, Integer, Integer)} 
+     */
     public static Collection getAllTeamReports(Long teamId) {
         Session session = null;
         Collection col = new ArrayList();
@@ -1821,7 +1826,16 @@ public class TeamUtil {
         return col;
     }
 
-    public static List getAllTeamReports(Long teamId, int currentPage, int reportPerPage) {
+    /**
+     * Returns TeamLeader Reports.
+     * Returns all reports from amp_team_reports table for specified team, or all reaports if team is managment team.
+     * @param teamId db id of the team
+     * @param currentPage page start - can be null
+     * @param reportPerPage number of reports on page - can be null
+     * @return list of {@link AmpReports} objects
+     * @author Dare
+     */
+    public static List getAllTeamReports(Long teamId, Integer currentPage, Integer reportPerPage) {
        Session session = null;
        List col = new ArrayList();
        try {
@@ -1834,15 +1848,27 @@ public class TeamUtil {
            if(team.getAccessType().equalsIgnoreCase(
                Constants.ACCESS_TYPE_MNGMT)) {
                queryString = "select r from " + AmpReports.class.getName()
-                   + " r " + " order by r.name limit "+currentPage+ ", "+reportPerPage;
+                   + " r " + " order by r.name ";
                qry = session.createQuery(queryString);
+               if (currentPage !=null){
+            	   qry.setFirstResult(currentPage);
+               }
+               if(reportPerPage!=null && reportPerPage.intValue()>0){
+            	   qry.setMaxResults(reportPerPage);
+               }
                col = qry.list();
            } else {
                queryString = "select r from "
                    + AmpTeamReports.class.getName()+" tr inner join  tr.report r "
-                   + "  where (tr.team=:teamId) order by r.name limit "+currentPage+ ", "+reportPerPage;
+                   + "  where (tr.team=:teamId) order by r.name ";
                qry = session.createQuery(queryString);
-               qry.setParameter("teamId", teamId, Hibernate.LONG);
+               qry.setLong("teamId", teamId);
+               if (currentPage !=null){
+            	   qry.setFirstResult(currentPage);
+               }
+               if(reportPerPage!=null && reportPerPage.intValue()>0){
+            	   qry.setMaxResults(reportPerPage);
+               }
                col = qry.list();
            }
        } catch(Exception e) {

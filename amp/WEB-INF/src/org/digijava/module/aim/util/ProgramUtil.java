@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.JDBCException;
 import net.sf.hibernate.Query;
@@ -1583,6 +1585,95 @@ public class ProgramUtil {
     }
 
 
+    
+	 public static String renderLevel(Collection themes,int level,HttpServletRequest request) {
+		if (themes == null || themes.size() == 0)
+			return "<center><b>No Programs</b></<center>";
+		String retVal;
+		retVal = "<table width=\"100%\" cellPadding=\"0\" cellSpacing=\"1\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n";
+		Iterator iter = themes.iterator();
+		while (iter.hasNext()) {
+			TreeItem item = (TreeItem) iter.next();
+			AmpTheme theme = (AmpTheme) item.getMember();
+			retVal += "<tr><td>&nbsp;</td><td width=\"100%\">\n";
+
+			
+			// visible div start
+			retVal += "<div>";// id=\"div_theme_"+theme.getAmpThemeId()+"\"";
+			retVal += " <table width=\"100%\"  border=\"1\" style=\"border-collapse: collapse;border-color: #ffffff\">";
+			if (level == 1){
+			retVal += "<tr bgcolor=\"#ffcccc\" width=\"100%\">";
+			}else{
+			retVal += "<tr bgcolor=\"#f4f4f2\">";
+			}
+			retVal += "   <td width=\"1%\" >";
+			retVal += "     <img id=\"img_" + theme.getAmpThemeId()+ "\" onclick=\"expandProgram(" + theme.getAmpThemeId()+ ")\" src=\"../ampTemplate/images/arrow_right.gif\"/>\n";
+			retVal += "     <img id=\"imgh_"+ theme.getAmpThemeId()+ "\" onclick=\"collapseProgram("+ theme.getAmpThemeId()+ ")\" src=\"../ampTemplate/images/arrow_down.gif\"  style=\"display : none;\"/>\n";
+			retVal += "   </td>";
+			if (level>1){
+				retVal += "   <td width=\"1%\">";
+				retVal += "     <img src=\"../ampTemplate/images/link_out_bot.gif\"/>\n";
+				retVal += "   </td>";
+				retVal += "   <td width=\"1%\">";
+				retVal += "     <img src=\""+getLevelImage(level)+"\" />\n";
+				retVal += "   </td>";
+			}
+			retVal += "   <td  class=\"progName\">";
+			retVal += "    <a href=\"javascript:editProgram("+ theme.getAmpThemeId()+ ")\">"+getTrn("aim:admin:themeTree:theme_name",((AmpTheme) item.getMember()).getName(), request)+"</a>\n";
+			retVal += "   </td>";
+			retVal += "   <td class=\"progCode\"  width=\"45%\" nowrap=\"nowrap\">("+ ((AmpTheme) item.getMember()).getThemeCode() + ")</td>";
+			retVal += "   <td nowrap=\"nowrap\" width=\"10%\">";
+			retVal += "     <a href=\"javascript:addSubProgram('5','"+theme.getAmpThemeId() +"','"+level+"','"+theme.getName()+"')\">"+getTrn("aim:admin:themeTree:add_sub_prog", "Add Sub Program", request)+"</a> |\n";
+			retVal += "   </td>";
+			retVal += "   <td nowrap=\"nowrap\" width=\"10%\">";
+			retVal += "     <a href=\"javascript:assignIndicators('"+theme.getAmpThemeId() +"','"+theme.getName()+"')\">"+getTrn("aim:admin:themeTree:manage_indicators", "Manage Indicators", request)+"</a>\n";
+			retVal += "   </td>";
+			retVal += "   <td width=\"12\">";
+			retVal += "     <a href=\"/aim/themeManager.do~event=delete~themeId="+theme.getAmpThemeId()+"\" onclick=\"return deleteProgram()\"><img src=\"../ampTemplate/images/trash_12.gif\" border=\"0\"></a>";
+			retVal += "   </td>";
+			retVal += " </tr></table>";
+			retVal += "</div>\n";
+	
+			// hidden div start
+			retVal += "<div id=\"div_theme_" + theme.getAmpThemeId()+ "\" style=\"display : none;\">\n";
+			if (item.getChildren() != null || item.getChildren().size() > 0) {
+				retVal += renderLevel(item.getChildren(), level+1,request);
+			}
+			retVal += "</div>\n";
+
+			retVal += "</td></tr>\n";
+		}
+		retVal += "</table>\n";
+		return retVal;
+	}
+
+	 public static String getTrn(String key, String defResult, HttpServletRequest request){
+		 return defResult;
+	 }
+	 
+    public static String getLevelImage(int level){
+    	switch (level) {
+		case 0:
+			return "../ampTemplate/images/arrow_right.gif";
+		case 1:
+			return "../ampTemplate/images/arrow_right.gif";
+		case 2:
+			return "../ampTemplate/images/square1.gif";
+		case 3:
+			return "../ampTemplate/images/square2.gif";
+		case 4:
+			return "../ampTemplate/images/square3.gif";
+		case 5:
+			return "../ampTemplate/images/square4.gif";
+		case 6:
+			return "../ampTemplate/images/square5.gif";
+		case 7:
+			return "../ampTemplate/images/square6.gif";
+		case 8:
+			return "../ampTemplate/images/square7.gif";
+		}
+    	return "../ampTemplate/images/arrow_right.gif";
+    }
 
         /**
          * Hierarchy member factory.
@@ -1790,12 +1881,10 @@ public class ProgramUtil {
             }
         }
 
-        public static class ThemeIdComparator implements Comparator{
+        public static class ThemeIdComparator implements Comparator<AmpTheme>{
 
-			public int compare(Object obj1, Object obj2) {
-				AmpTheme p1=(AmpTheme)obj1;
-				AmpTheme p2=(AmpTheme)obj2;
-				return p1.getAmpThemeId().compareTo(p2.getAmpThemeId());
+			public int compare(AmpTheme thm1, AmpTheme thm2) {
+				return thm1.getAmpThemeId().compareTo(thm2.getAmpThemeId());
 			}
 
         }

@@ -79,8 +79,9 @@
 </script>
 
 <digi:instance property="aimThemeForm" />
-<digi:form action="/themeManager.do" method="post">
 <digi:context name="digiContext" property="context" />
+
+<digi:form action="/themeManager.do" method="post">
 <input type="hidden" name="event">
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" align="center" border="0">
 	<tr>
@@ -195,6 +196,7 @@
 						<html:textarea property="programObjectives" cols="35" rows="2" styleClass="inp-text"/>
 					</td>
 				</tr>
+				</field:display>
 				<field:display name="Program Outputs" feature="Admin NPD">
 				<tr bgColor=#ffffff>
 					<td height="20" align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <digi:trn

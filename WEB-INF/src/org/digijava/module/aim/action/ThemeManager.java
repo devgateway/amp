@@ -6,8 +6,7 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator; 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,11 +19,13 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.ProgramUtil.ProgramHierarchyDefinition;
+import org.digijava.module.aim.util.ProgramUtil.XMLtreeItemFactory;
 
 
 public class ThemeManager extends Action {
@@ -47,32 +48,51 @@ public class ThemeManager extends Action {
 		//added for the indicator
 		
 		String viewPreference = request.getParameter("view");
+		String flag = request.getParameter("flag");
 		if(viewPreference!=null)
 		{
 			if(viewPreference.equals("multiprogram"))
 			{
-				Collection themes = new ArrayList();
-				Collection Subthemes = new LinkedList();
-				Subthemes  = new ArrayList();
-				
-				
-				
 				ThemeForm themeForm = (ThemeForm) form;
-
-				themes = ProgramUtil.getParentThemes();
-				//themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
-				
-				themeForm.setThemes(themes);
-				
-				for(Iterator itr=themeForm.getThemes().iterator();itr.hasNext();)
-				{
-					AmpTheme item=(AmpTheme)itr.next();
-					Long id = item.getAmpThemeId();
-					Subthemes.addAll(ProgramUtil.getAllSubThemes(id));
+				if(flag != null){
+					themeForm.setFlag("error");
 				}
-	
+
+				/**
+				 * New Code, AMP-
+				 */
+			      // get All themes from DB
+			    List allThemes = ProgramUtil.getAllThemes(true);
+//				Collection themeFlatTree = CollectionUtils.getFlatHierarchy(
+//						allThemes, 
+//						true,
+//						new ProgramHierarchyDefinition(),
+//						new ProgramUtil.ThemeIdComparator(),
+//						new XMLtreeItemFactory());
+
+				Collection themeFlatTree = CollectionUtils.getHierarchy(
+						allThemes, 
+						new ProgramHierarchyDefinition(),
+						new XMLtreeItemFactory());
 				
-				themeForm.setSubPrograms(Subthemes);
+				themeForm.setThemes(themeFlatTree);
+				
+				/**
+				 * Old Code
+				 */
+//					Collection themes = new ArrayList();
+//					Collection Subthemes = new LinkedList();
+//					Subthemes  = new ArrayList();
+//				themes = ProgramUtil.getParentThemes();
+//				//themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
+//				themeForm.setThemes(themes);
+//				for(Iterator itr=themeForm.getThemes().iterator();itr.hasNext();)
+//				{
+//					AmpTheme item=(AmpTheme)itr.next();
+//					Long id = item.getAmpThemeId();
+//					Subthemes.addAll(ProgramUtil.getAllSubThemes(id));
+//				}
+//				themeForm.setSubPrograms(Subthemes);
 				
 				return mapping.findForward("forward");
 			}

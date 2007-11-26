@@ -1,5 +1,7 @@
 package org.digijava.module.aim.action;
 
+import java.util.Iterator;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -59,6 +61,14 @@ public class AddSubPrgIndicator extends Action
 		//String indname = request.getParameter("indname");
 		//themeForm.setName(indname);
 		
+		themeForm.setSubPrograms(ProgramUtil.getAllSubThemes(id));
+		for(Iterator itr = themeForm.getSubPrograms().iterator(); itr.hasNext();){
+			AmpTheme itm = (AmpTheme)itr.next();
+			if(itm.getName().equalsIgnoreCase(themeForm.getProgramName())){
+				
+				return mapping.findForward("notadd");
+			}
+		}
 		
 		
 		if(event != null && event.equals("addSubProgram"))	
@@ -82,7 +92,7 @@ public class AddSubPrgIndicator extends Action
 			ampTheme.setName(themeForm.getProgramName());
 			ampTheme.setThemeCode(themeForm.getProgramCode());
 			ampTheme.setDescription(themeForm.getProgramDescription());
-			ampTheme.setTypeCategoryValue( CategoryManagerUtil.getAmpCategoryValueFromDb(themeForm.getProgramTypeCategValId()) );
+			ampTheme.setTypeCategoryValue( CategoryManagerUtil.getAmpCategoryValueFromDb(themeForm.getProgramTypeCategValId()));
 			ampTheme.setParentThemeId(ProgramUtil.getThemeObject(id));
 			ampTheme.setIndlevel(new Integer(level));
 			ampTheme.setLanguage(null);

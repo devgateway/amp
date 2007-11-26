@@ -774,6 +774,9 @@ private int isPreview=0;
 			componentAmount = null;
 			currencyCode = null;
 			componentRepDate = null;
+		}		
+		if ( request.getParameter("budgetCheckbox") != null ) {
+			budget		= false;
 		}
 	}
 

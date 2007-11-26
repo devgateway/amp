@@ -52,7 +52,7 @@ public class ManagePermissionMap extends MultiAction {
 	if (pf.getPermissionMaps() == null)
 	    pf.clear();
 
-	List<Permission> allPermissions = PermissionUtil.getAllPermissions();
+	List<Permission> allPermissions = PermissionUtil.getAllUnDedicatedPermissions();
 	pf.set_availablePermissions(allPermissions);
 
 	List<Class> availablePermissibleCategories = Arrays.asList(GatePermConst.availablePermissibles);

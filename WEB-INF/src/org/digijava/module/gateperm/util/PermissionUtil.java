@@ -102,6 +102,9 @@ public final class PermissionUtil {
 		return GatePermConst.availableGatesSingleton;
 	}
     
+	
+	
+	
  
     public static List<Permission> getAllPermissions() {
 	Session session = null;
@@ -132,6 +135,39 @@ public final class PermissionUtil {
 
     }
 
+    
+    
+    public static List<Permission> getAllUnDedicatedPermissions() {
+	Session session = null;
+
+	try {
+	    session = PersistenceManager.getSession();
+	    Query query = session.createQuery(" from " + Permission.class.getName() +" p WHERE p.dedicated=false");
+	    List list = query.list();
+
+	    return list;
+	} catch (HibernateException e) {
+	    logger.error(e);
+	    throw new RuntimeException("HibernateException Exception encountered", e);
+	} catch (SQLException e) {
+	    logger.error(e);
+	    throw new RuntimeException("SQLException Exception encountered", e);
+	} finally { 
+	    try {
+		PersistenceManager.releaseSession(session);
+	    } catch (HibernateException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "HibernateException Exception encountered", e);
+	    } catch (SQLException e) {
+		// TODO Auto-generated catch block
+		throw new RuntimeException( "SQLException Exception encountered", e);
+	    }
+	}
+
+    }
+
+    
+    
     public static Map<Long, PermissionMap> getAllPermissionMapsForPermissibleClass(Class permClass) {
 	Session session = null;
 	try {

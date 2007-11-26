@@ -6,9 +6,12 @@ package org.digijava.module.aim.action;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import net.sf.hibernate.Session;
 
@@ -43,7 +46,9 @@ public class AssignFieldPermissions extends Action {
 	FieldPermissionsForm fpf=(FieldPermissionsForm) form;
 	Long fieldId=Long.parseLong(request.getParameter("fieldId"));
 	
+	
 	Session session = PersistenceManager.getSession();
+	Map permScope= PermissionUtil.resetScope(request.getSession());
 	AmpFieldsVisibility afv=(AmpFieldsVisibility) session.get(AmpFieldsVisibility.class, fieldId);
 	fpf.setFieldName(afv.getName());
 
@@ -98,10 +103,17 @@ public class AssignFieldPermissions extends Action {
 		iaGate.getGateParameters().add("IA");
 		iaGate.setGateTypeName(OrgRoleGate.class.getName());
 		
+		GatePermission faGate=new GatePermission(true);
+		faGate.setName(afv.getName()+ " - Funding Agency Permission");
+		faGate.getGateParameters().add("DN");
+		faGate.setGateTypeName(OrgRoleGate.class.getName());
+		
+		
 		HashSet baActions=new HashSet();
 		HashSet caActions=new HashSet();
 		HashSet eaActions=new HashSet();
 		HashSet iaActions=new HashSet();
+		HashSet faActions=new HashSet();
 		
 		if("on".equals(fpf.getBaEdit())) baActions.add(GatePermConst.Actions.EDIT);
 		if("on".equals(fpf.getBaRead())) baActions.add(GatePermConst.Actions.VIEW);
@@ -115,20 +127,26 @@ public class AssignFieldPermissions extends Action {
 		if("on".equals(fpf.getIaEdit())) iaActions.add(GatePermConst.Actions.EDIT);
 		if("on".equals(fpf.getIaRead())) iaActions.add(GatePermConst.Actions.VIEW);
 	
+		if("on".equals(fpf.getFaEdit())) faActions.add(GatePermConst.Actions.EDIT);
+		if("on".equals(fpf.getFaRead())) faActions.add(GatePermConst.Actions.VIEW);
+	
 		baGate.setActions(baActions);
 		caGate.setActions(caActions);
 		eaGate.setActions(eaActions);
 		iaGate.setActions(iaActions);
+		faGate.setActions(faActions);
 		
 		if(baGate.getActions().size()>0)  session.save(baGate);
 		if(caGate.getActions().size()>0)  session.save(caGate);
 		if(eaGate.getActions().size()>0)  session.save(eaGate);
-		if(iaGate.getActions().size()>0)  session.save(iaGate);		
+		if(iaGate.getActions().size()>0)  session.save(iaGate);
+		if(faGate.getActions().size()>0)  session.save(faGate);		
 		
 		if(baGate.getActions().size()>0)  cp.getPermissions().add(baGate);
 		if(caGate.getActions().size()>0)  cp.getPermissions().add(caGate);
 		if(eaGate.getActions().size()>0)  cp.getPermissions().add(eaGate);
 		if(iaGate.getActions().size()>0)  cp.getPermissions().add(iaGate);
+		if(faGate.getActions().size()>0)  cp.getPermissions().add(faGate);		
 		
 		session.save(cp);
 		
@@ -161,8 +179,32 @@ public class AssignFieldPermissions extends Action {
 			if(agencyPerm.hasAction(GatePermConst.Actions.EDIT)) fpf.setIaEdit("on");
 			if(agencyPerm.hasAction(GatePermConst.Actions.VIEW)) fpf.setIaRead("on");			
 		    }
+		    if(agencyPerm.hasParameter("DN")) {
+			if(agencyPerm.hasAction(GatePermConst.Actions.EDIT)) fpf.setFaEdit("on");
+			if(agencyPerm.hasAction(GatePermConst.Actions.VIEW)) fpf.setFaRead("on");			
+		    }
 		    
 		}
+	    } else { 
+		//get the global for the fields:
+		Permission globalPermissionForPermissibleClass = PermissionUtil.getGlobalPermissionForPermissibleClass(AmpFieldsVisibility.class);
+		Set<String> allowedActions = globalPermissionForPermissibleClass.getAllowedActions(permScope);
+		if(allowedActions.contains(GatePermConst.Actions.EDIT)) {
+		    fpf.setBaEdit("on");
+		    fpf.setCaEdit("on");
+		    fpf.setEaEdit("on");
+		    fpf.setIaEdit("on");
+		    fpf.setFaEdit("on");
+		}
+		if(allowedActions.contains(GatePermConst.Actions.VIEW)) {
+		    fpf.setBaRead("on");
+		    fpf.setCaRead("on");
+		    fpf.setEaRead("on");
+		    fpf.setIaRead("on");
+		    fpf.setFaRead("on");
+		}
+		
+		
 	    }
 	}
 	session.flush();

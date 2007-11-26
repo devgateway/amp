@@ -21,6 +21,11 @@ public class PermissionMap implements Serializable,Comparable {
 	protected Long objectIdentifier;
 	protected Permission permission;
 	
+	public boolean getDedicated() {
+	    if(permission==null) return false;
+	    return permission.isDedicated();
+	}
+	
 	//this is a helper property and never persisted:
 	protected Long permissionId;
 	

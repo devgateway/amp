@@ -6,6 +6,7 @@ package org.digijava.module.gateperm.gates;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 
 import net.sf.hibernate.Session;
 
@@ -13,6 +14,7 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Activity;
@@ -96,8 +98,10 @@ public class OrgRoleGate extends Gate {
 
 	String paramRoleCode = parameters.poll().trim();
 
+	
+	
 	// iterate the assigned orgs:
-	if (ampa != null) {
+	if (ampa != null) {	    
 	    if (ampa.getOrgrole() == null)
 		return false;
 	    Iterator i = ampa.getOrgrole().iterator();
@@ -108,6 +112,8 @@ public class OrgRoleGate extends Gate {
 			&& element.getOrganisation().getAmpOrgId().equals(user.getAssignedOrgId()))
 		    return true;
 	    }
+	    
+
 	}
 	if (a != null) {
 	    if (a.getRelOrgs() == null)
@@ -121,6 +127,7 @@ public class OrgRoleGate extends Gate {
 
 	    }
 	}
+	
 
 	return false;
     }

@@ -62,7 +62,7 @@ public class ManagePermission extends MultiAction {
 
 	pf.set_availableActions(actions);
 
-	List<Permission> permissions = PermissionUtil.getAllPermissions();
+	List<Permission> permissions = PermissionUtil.getAllUnDedicatedPermissions();
 	pf.set_availablePermissions(permissions);
 
 	return modeSelect(mapping, form, request, response);
@@ -126,7 +126,7 @@ public class ManagePermission extends MultiAction {
     private ActionForward modeListExisting(ActionMapping mapping, PermissionForm pf, HttpServletRequest request,
 	    HttpServletResponse response) throws Exception {
 
-	request.setAttribute("allPermissions", PermissionUtil.getAllPermissions());
+	request.setAttribute("allPermissions", PermissionUtil.getAllUnDedicatedPermissions());
 
 	return mapping.findForward("list");
     }
@@ -229,7 +229,7 @@ public class ManagePermission extends MultiAction {
 		p = new GatePermission();
 	    GatePermission gp = (GatePermission) p;
 	    gp.getActions().clear();
-	    gp.getActions().addAll(Arrays.asList(pf.getActions()));
+	    if(pf.getActions()!=null && pf.getActions().length>0) gp.getActions().addAll(Arrays.asList(pf.getActions()));
 
 	    gp.setGateTypeName(pf.getGateTypeName());
 	    gp.getGateParameters().clear();

@@ -4,6 +4,13 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
+<script type="text/javascript">
+showHideUnDedicated(checkBox,id) {
+	if(checkBox.checked==true) document.getElementById(id)
+}
+
+</script>
+
 <digi:form action="/managePermMap.do">
 <script type="text/javascript">
 function submitForm(mode) {
@@ -53,10 +60,21 @@ function submitForm(mode) {
 <tr>
 <td><bean:write name="permissionMap" property="objectLabel"/></td>
 <td>
+
+<logic:equal name="permissionMap" property="dedicated" value="true">
+<b>dedicated</b>
+<input type="checkbox" onchange="javascript:showHideUnDedicated(this,'obj-<bean:write name="permissionMap" property="objectIdentifier"/>')"/>
+<div id="obj-<bean:write name="permissionMap" property="objectIdentifier"/>" style='position:relative;display:none;'>
+</logic:equal>
 <html:select name="permissionMap" property="permissionId" indexed="true">
 <html:option value="0">--Global--</html:option>
 <html:optionsCollection property="_availablePermissions" value="id" label="name"/>
 </html:select>
+
+<logic:equal name="permissionMap" property="dedicated" value="true">
+</div>
+</logic:equal>
+
 </td>
 </tr>
 </logic:iterate>

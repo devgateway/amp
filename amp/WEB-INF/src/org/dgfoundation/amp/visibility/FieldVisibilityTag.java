@@ -142,7 +142,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
    			
    			Map scope=PermissionUtil.getScope(pageContext.getSession());   				    
    			if(isFieldActive (ampTreeVisibility) ) {
-   			   if(ampFieldFromTree.getPermission(true)!=null && !ampFieldFromTree.canDo(GatePermConst.Actions.VIEW,scope))
+   			   if(!ampFieldFromTree.canDo(GatePermConst.Actions.VIEW,scope))
    			       return SKIP_BODY;
    			   pageContext.getOut().print(bodyText);   			    
    			} else return SKIP_BODY;//the field is not active!!!

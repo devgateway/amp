@@ -182,7 +182,7 @@
 			
 				<tr>
 					<td noWrap width=100% vAlign="top">
-					<body onload="preload()">
+					
 					<table width="100%" cellspacing=0 cellSpacing=0 border="0">
 					<tr><td noWrap width=600 vAlign="top">
 						<table bgColor=#d7eafd cellPadding=0 cellSpacing=0 width="100%" valign="top">

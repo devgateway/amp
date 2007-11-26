@@ -959,6 +959,18 @@ public class EditActivity
                         fundOrg.setFundingActive(ampFunding.getActive());
                         fundOrg.setDelegatedCooperation(ampFunding.getDelegatedCooperation());
                         fundOrg.setDelegatedPartner(ampFunding.getDelegatedPartner());
+                        
+                        if ( fundOrg.getDelegatedCooperation()!=null && fundOrg.getDelegatedCooperation() ) {
+                        	fundOrg.setDelegatedCooperationString("checked");
+                        }
+                        else
+                        	fundOrg.setDelegatedCooperationString("unchecked");
+                        
+                        if ( fundOrg.getDelegatedPartner()!=null && fundOrg.getDelegatedPartner() ) {
+                        	fundOrg.setDelegatedPartnerString("checked");
+                        }
+                        else
+                        	fundOrg.setDelegatedPartnerString("unchecked");
 
                         int index = fundingOrgs.indexOf(fundOrg);
                         //logger.info("Getting the index as " + index
@@ -969,173 +981,173 @@ public class EditActivity
                         }
 
 
-            Funding fund = new Funding();
-            //fund.setAmpTermsAssist(ampFunding.getAmpTermsAssistId());
-            fund.setTypeOfAssistance(ampFunding.getTypeOfAssistance());
-            fund.setFundingId(ampFunding.getAmpFundingId().
-                              longValue());
-            fund.setOrgFundingId(ampFunding.getFinancingId());
-            fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
-            fund.setConditions(ampFunding.getConditions());
-
-            /* Get MTEF Projections */
-            ArrayList<MTEFProjection> MTEFProjections	= new ArrayList<MTEFProjection>();
-            if (ampFunding.getMtefProjections() != null) {
-            	Iterator<AmpFundingMTEFProjection> iterMtef	= ampFunding.getMtefProjections().iterator();
-            	while ( iterMtef.hasNext() ) {
-	            	AmpFundingMTEFProjection ampProjection		= iterMtef.next();
-	            	MTEFProjection	projection					= new MTEFProjection();
-
-	            	projection.setAmount( ampProjection.getAmount() + "" );
-	            	if ( ampProjection.getProjected() != null )
-	            		projection.setProjected( ampProjection.getProjected().getId() );
-	            	else
-	            		logger.error("Projection with date " + ampProjection.getProjectionDate() + " has no type (neither projection nor pipeline) !!!!");
-	            	projection.setCurrencyCode( ampProjection.getAmpCurrency().getCurrencyCode() );
-	            	projection.setCurrencyName( ampProjection.getAmpCurrency().getCurrencyName() );
-	            	projection.setProjectionDate( DateConversion.ConvertDateToString(ampProjection.getProjectionDate()) );
-	            	//projection.setIndex();
-	            	projection.setAmpFunding( ampProjection.getAmpFunding() );
-	            	MTEFProjections.add(projection);
-            	}
-
-            }
-            Collections.sort(MTEFProjections);
-            fund.setMtefProjections(MTEFProjections);
-            /* END - Get MTEF Projections */
-
-            Collection fundDetails = ampFunding.getFundingDetails();
-            if (fundDetails != null && fundDetails.size() > 0) {
-              Iterator fundDetItr = fundDetails.iterator();
-              List fundDetail = new ArrayList();
-
-              long indexId = System.currentTimeMillis();
-              while (fundDetItr.hasNext()) {
-                AmpFundingDetail fundDet = (AmpFundingDetail)
-                    fundDetItr
-                    .next();
-                FundingDetail fundingDetail = new FundingDetail();
-                if (fundDet.getFixedExchangeRate() != null &&
-                    fundDet.getFixedExchangeRate().doubleValue() != 1) {
-                  fundingDetail.setFixedExchangeRate(fundDet.
-                      getFixedExchangeRate());
-                  fundingDetail.setUseFixedRate(true);
-                }
-                fundingDetail.setIndexId(indexId++);
-                int adjType = fundDet.getAdjustmentType()
-                    .intValue();
-                fundingDetail.setAdjustmentType(adjType);
-                if (adjType == Constants.PLANNED) {
-                  fundingDetail
-                      .setAdjustmentTypeName("Planned");
-                }
-                else if (adjType == Constants.ACTUAL) {
-                  fundingDetail
-                      .setAdjustmentTypeName("Actual");
-                  Date dt = fundDet.getTransactionDate();
-                  double frmExRt = CurrencyUtil.
-                      getExchangeRate(
-                          fundDet.getAmpCurrencyId()
-                          .getCurrencyCode(), 1, dt);
-                  String toCurrCode = Constants.DEFAULT_CURRENCY;
-                  if (tm != null)
-                    toCurrCode = CurrencyUtil.
-                        getAmpcurrency(
-                            tm.getAppSettings()
-                            .getCurrencyId()).getCurrencyCode();
-                  double toExRt = CurrencyUtil.
-                      getExchangeRate(toCurrCode, 1, dt);
-                  double amt = CurrencyWorker.convert1(
-                      fundDet.getTransactionAmount()
-                      .doubleValue(), frmExRt,
-                      toExRt);
-
-                  eaForm.setCurrCode(toCurrCode);
-                  if (fundDet.getTransactionType().intValue() ==
-                      Constants.COMMITMENT) {
-                    totComm += amt;
-                  }
-                  else if (fundDet.getTransactionType()
-                           .intValue() ==
-                           Constants.DISBURSEMENT) {
-                    totDisb += amt;
-                  }
-                  else if (fundDet.getTransactionType()
-                           .intValue() ==
-                           Constants.EXPENDITURE) {
-                    totExp += amt;
-                  }
-                }
-                if (fundDet.getTransactionType().intValue() ==
-                    Constants.EXPENDITURE) {
-                  fundingDetail.setClassification(fundDet
-                                                  .getExpCategory());
-                }
-                fundingDetail.setCurrencyCode(fundDet
-                                              .getAmpCurrencyId().
-                                              getCurrencyCode());
-                fundingDetail.setCurrencyName(fundDet
-                                              .getAmpCurrencyId().
-                                              getCountryName());
-
-                fundingDetail
-                    .setTransactionAmount(CurrencyWorker
-                                          .convert(fundDet
-                    .getTransactionAmount()
-                    .doubleValue(), 1, 1));
-                fundingDetail.setTransactionDate(DateConversion
-                                                 .ConvertDateToString(fundDet
-                    .getTransactionDate()));
-
-                fundingDetail.setPerspectiveCode(fundDet.
-                                                 getPerspectiveId().getCode());
-                fundingDetail.setPerspectiveName(fundDet.
-                                                 getPerspectiveId().getName());
-
-                /*
-                 fundingDetail.setPerspectiveCode(fundDet
-                  .getOrgRoleCode());
-
-                 Iterator itr1 = eaForm.getPerspectives()
-                  .iterator();
-                         while (itr1.hasNext()) {
-                 AmpPerspective pers = (AmpPerspective) itr1
-                   .next();
-                 if (pers.getCode().equals(
-                   fundDet.getOrgRoleCode())) {
-                  fundingDetail.setPerspectiveName(pers
-                    .getName());
-                 }
-                         }
-                 */
-
-
-
-                fundingDetail.setTransactionType(fundDet
-                                                 .getTransactionType().intValue());
-                fundDetail.add(fundingDetail);
-              }
-
-              if (fundDetail != null)
-                Collections.sort(fundDetail,
-                                 FundingValidator.dateComp);
-              fund.setFundingDetails(fundDetail);
-              // funding.add(fund);
-            }
-            if (fundOrg.getFundings() == null)
-              fundOrg.setFundings(new ArrayList());
-            fundOrg.getFundings().add(fund);
-
-            if (index > -1) {
-              fundingOrgs.set(index, fundOrg);
-              //	logger
-              //		.info("Setting the fund org obj to the index :"
-              //			+ index);
-            }
-            else {
-              fundingOrgs.add(fundOrg);
-              //	logger.info("Adding new fund org object");
-            }
+			            Funding fund = new Funding();
+			            //fund.setAmpTermsAssist(ampFunding.getAmpTermsAssistId());
+			            fund.setTypeOfAssistance(ampFunding.getTypeOfAssistance());
+			            fund.setFundingId(ampFunding.getAmpFundingId().
+			                              longValue());
+			            fund.setOrgFundingId(ampFunding.getFinancingId());
+			            fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
+			            fund.setConditions(ampFunding.getConditions());
+			
+			            /* Get MTEF Projections */
+			            ArrayList<MTEFProjection> MTEFProjections	= new ArrayList<MTEFProjection>();
+			            if (ampFunding.getMtefProjections() != null) {
+			            	Iterator<AmpFundingMTEFProjection> iterMtef	= ampFunding.getMtefProjections().iterator();
+			            	while ( iterMtef.hasNext() ) {
+				            	AmpFundingMTEFProjection ampProjection		= iterMtef.next();
+				            	MTEFProjection	projection					= new MTEFProjection();
+			
+				            	projection.setAmount( ampProjection.getAmount() + "" );
+				            	if ( ampProjection.getProjected() != null )
+				            		projection.setProjected( ampProjection.getProjected().getId() );
+				            	else
+				            		logger.error("Projection with date " + ampProjection.getProjectionDate() + " has no type (neither projection nor pipeline) !!!!");
+				            	projection.setCurrencyCode( ampProjection.getAmpCurrency().getCurrencyCode() );
+				            	projection.setCurrencyName( ampProjection.getAmpCurrency().getCurrencyName() );
+				            	projection.setProjectionDate( DateConversion.ConvertDateToString(ampProjection.getProjectionDate()) );
+				            	//projection.setIndex();
+				            	projection.setAmpFunding( ampProjection.getAmpFunding() );
+				            	MTEFProjections.add(projection);
+			            	}
+			
+			            }
+			            Collections.sort(MTEFProjections);
+			            fund.setMtefProjections(MTEFProjections);
+			            /* END - Get MTEF Projections */
+			
+			            Collection fundDetails = ampFunding.getFundingDetails();
+			            if (fundDetails != null && fundDetails.size() > 0) {
+			              Iterator fundDetItr = fundDetails.iterator();
+			              List fundDetail = new ArrayList();
+			
+			              long indexId = System.currentTimeMillis();
+			              while (fundDetItr.hasNext()) {
+			                AmpFundingDetail fundDet = (AmpFundingDetail)
+			                    fundDetItr
+			                    .next();
+			                FundingDetail fundingDetail = new FundingDetail();
+			                if (fundDet.getFixedExchangeRate() != null &&
+			                    fundDet.getFixedExchangeRate().doubleValue() != 1) {
+			                  fundingDetail.setFixedExchangeRate(fundDet.
+			                      getFixedExchangeRate());
+			                  fundingDetail.setUseFixedRate(true);
+			                }
+			                fundingDetail.setIndexId(indexId++);
+			                int adjType = fundDet.getAdjustmentType()
+			                    .intValue();
+			                fundingDetail.setAdjustmentType(adjType);
+			                if (adjType == Constants.PLANNED) {
+			                  fundingDetail
+			                      .setAdjustmentTypeName("Planned");
+			                }
+			                else if (adjType == Constants.ACTUAL) {
+			                  fundingDetail
+			                      .setAdjustmentTypeName("Actual");
+			                  Date dt = fundDet.getTransactionDate();
+			                  double frmExRt = CurrencyUtil.
+			                      getExchangeRate(
+			                          fundDet.getAmpCurrencyId()
+			                          .getCurrencyCode(), 1, dt);
+			                  String toCurrCode = Constants.DEFAULT_CURRENCY;
+			                  if (tm != null)
+			                    toCurrCode = CurrencyUtil.
+			                        getAmpcurrency(
+			                            tm.getAppSettings()
+			                            .getCurrencyId()).getCurrencyCode();
+			                  double toExRt = CurrencyUtil.
+			                      getExchangeRate(toCurrCode, 1, dt);
+			                  double amt = CurrencyWorker.convert1(
+			                      fundDet.getTransactionAmount()
+			                      .doubleValue(), frmExRt,
+			                      toExRt);
+			
+			                  eaForm.setCurrCode(toCurrCode);
+			                  if (fundDet.getTransactionType().intValue() ==
+			                      Constants.COMMITMENT) {
+			                    totComm += amt;
+			                  }
+			                  else if (fundDet.getTransactionType()
+			                           .intValue() ==
+			                           Constants.DISBURSEMENT) {
+			                    totDisb += amt;
+			                  }
+			                  else if (fundDet.getTransactionType()
+			                           .intValue() ==
+			                           Constants.EXPENDITURE) {
+			                    totExp += amt;
+			                  }
+			                }
+			                if (fundDet.getTransactionType().intValue() ==
+			                    Constants.EXPENDITURE) {
+			                  fundingDetail.setClassification(fundDet
+			                                                  .getExpCategory());
+			                }
+			                fundingDetail.setCurrencyCode(fundDet
+			                                              .getAmpCurrencyId().
+			                                              getCurrencyCode());
+			                fundingDetail.setCurrencyName(fundDet
+			                                              .getAmpCurrencyId().
+			                                              getCountryName());
+			
+			                fundingDetail
+			                    .setTransactionAmount(CurrencyWorker
+			                                          .convert(fundDet
+			                    .getTransactionAmount()
+			                    .doubleValue(), 1, 1));
+			                fundingDetail.setTransactionDate(DateConversion
+			                                                 .ConvertDateToString(fundDet
+			                    .getTransactionDate()));
+			
+			                fundingDetail.setPerspectiveCode(fundDet.
+			                                                 getPerspectiveId().getCode());
+			                fundingDetail.setPerspectiveName(fundDet.
+			                                                 getPerspectiveId().getName());
+			
+			                /*
+			                 fundingDetail.setPerspectiveCode(fundDet
+			                  .getOrgRoleCode());
+			
+			                 Iterator itr1 = eaForm.getPerspectives()
+			                  .iterator();
+			                         while (itr1.hasNext()) {
+			                 AmpPerspective pers = (AmpPerspective) itr1
+			                   .next();
+			                 if (pers.getCode().equals(
+			                   fundDet.getOrgRoleCode())) {
+			                  fundingDetail.setPerspectiveName(pers
+			                    .getName());
+			                 }
+			                         }
+			                 */
+			
+			
+			
+			                fundingDetail.setTransactionType(fundDet
+			                                                 .getTransactionType().intValue());
+			                fundDetail.add(fundingDetail);
+			              }
+			
+			              if (fundDetail != null)
+			                Collections.sort(fundDetail,
+			                                 FundingValidator.dateComp);
+			              fund.setFundingDetails(fundDetail);
+			              // funding.add(fund);
+			            }
+			            if (fundOrg.getFundings() == null)
+			              fundOrg.setFundings(new ArrayList());
+			            fundOrg.getFundings().add(fund);
+			
+			            if (index > -1) {
+			              fundingOrgs.set(index, fundOrg);
+			              //	logger
+			              //		.info("Setting the fund org obj to the index :"
+			              //			+ index);
+			            }
+			            else {
+			              fundingOrgs.add(fundOrg);
+			              //	logger.info("Adding new fund org object");
+			            }
           }
           //logger.info("size = " + fundingOrgs);
           eaForm.setFundingOrganizations(fundingOrgs);

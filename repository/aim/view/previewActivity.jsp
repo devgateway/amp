@@ -445,7 +445,7 @@ function viewChanges()
 											<c:out value="${aimEditActivityForm.ampId}"/>
 										</td>
 									</tr>
-									<field:display feature="Identification" name="Title">
+									<field:display feature="Identification" name="Project Title">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:projectTitle">

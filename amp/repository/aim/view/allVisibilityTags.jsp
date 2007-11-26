@@ -125,7 +125,7 @@
 <field:display feature="Identification" name="Organizations and Project ID"></field:display>
 <field:display feature="Identification" name="Purpose"></field:display>
 <field:display feature="Identification" name="Results"></field:display>
-<field:display feature="Identification" name="Title"></field:display>
+<field:display feature="Identification" name="Project Title"></field:display>
 <field:display feature="MTEF Projections" name="MTEFProjections"></field:display>
 <field:display feature="Mofed Contact Information" name="Mofed Email"></field:display>
 <field:display feature="Mofed Contact Information" name="Mofed First Name"></field:display>

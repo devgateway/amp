@@ -42,7 +42,7 @@
 
 
 <digi:instance property="aimEditActivityForm" />
-										<table width="100%" bgcolor="#cccccc" cellPadding=5 cellSpacing=1 onload="budgetCheckboxClick();">
+										<table width="100%" bgcolor="#cccccc" cellPadding=5 cellSpacing=1>
 											
 											<field:display name="Project Title" feature="Identification">
 											&nbsp;

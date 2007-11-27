@@ -8,7 +8,9 @@
 		padding:0px;
 	}
 	
-	
+	a{
+	text-decoration: none;
+	}
 	a.alinkblue{
 		font-size: 12px;
 		color: #0e69b3;
@@ -42,3 +44,7 @@
 		font-size: 12px;
 		padding-left:2px;
 	}
+	a{
+	text-decoration: none;
+	}
+	

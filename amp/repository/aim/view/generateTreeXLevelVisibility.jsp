@@ -35,7 +35,7 @@ function openFieldPermissionsPopup(fieldId) {
 						<%= moduleAux2.isVisibleTemplateObj(currentTemplate)?"checked":"" %>
 					/>
 					</logic:equal>
-							<a href="#" id="module:<bean:write name="moduleAux" property="root.id"/>" class="alinkblue">
+							<a href="#" id="module:<bean:write name="moduleAux" property="root.id"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
 								<digi:trn key="<%="viz:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.properName"/></digi:trn>
 							</a>
 						<ul>
@@ -70,7 +70,7 @@ function openFieldPermissionsPopup(fieldId) {
 												<%= featureAux2.isVisibleTemplateObj(currentTemplate)?"checked":"" %>
 											/>
 										</logic:equal>
-									<a href="#" id="feature:<bean:write name="featureAux" property="root.id"/>" class="alinkblue">
+									<a href="#" id="feature:<bean:write name="featureAux" property="root.id"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
 										<digi:trn key="<%="viz:"+featureAux.getRoot().getNameTrimmed() %>"><bean:write name="featureAux" property="root.name"/></digi:trn>
 									</a>
 									<ul>
@@ -91,11 +91,11 @@ function openFieldPermissionsPopup(fieldId) {
 													<%= fieldAux2.isVisibleTemplateObj(currentTemplate)?"checked":"" %>
 												/>
 												</logic:equal>
-												<a id="field:<bean:write name="fieldAux" property="root.id"/>" class="alinkblue">
+												<a id="field:<bean:write name="fieldAux" property="root.id"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
 													<digi:trn key="<%="viz:"+fieldAux.getRoot().getNameTrimmed() %>"><bean:write name="fieldAux" property="root.name"/></digi:trn>
 												</a>
 												<a style="cursor:pointer;color:#006699;text-decoration:underline" title="Click to edit field based permissions" onClick='openFieldPermissionsPopup(<bean:write name="fieldAux" property="root.id"/>)'>Edit Permissions</a>
-
+												
 											</li>	
 										</logic:iterate>
 									</ul>

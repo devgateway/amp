@@ -10,15 +10,15 @@
 	}
 	
 	a{
-		color:black;
-		font-family:arial;
-		text-decoration:none;
+		font-size: 10px;
+		color: #0e69b3;
+		text-decoration: none;
 	}
 	
 	a:hover	{
-		color:black;
-		font-family:arial;
-		text-decoration:none;
+		font-size: 10px;
+		color: #0e69b3;
+		text-decoration: none;
 	}
 	
 	.dhtmlgoodies_tree ul{	/* Sub menu groups */

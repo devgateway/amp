@@ -66,10 +66,10 @@
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="trnFeatureManager">
-                                <digi:trn key="aim:clickToAccessVisibilityManager">Click here to access Visibility Manager</digi:trn>
+                                <digi:trn key="aim:clickToAccessFeatureManager">Click here to access Feature Manager</digi:trn>
                               </c:set>
                               <digi:link href="/visibilityManager.do" title="${trnFeatureManager}" >
-                                <digi:trn key="aim:fieldManagerVisibility">Field/Features/Module/Templates Manager</digi:trn>
+                                <digi:trn key="aim:featureManager">Feature Manager</digi:trn>
                               </digi:link>
                             </td>
                           </tr>

@@ -2053,7 +2053,7 @@ function viewChanges()
 		  															</digi:trn>
 																</FONT>
 															</td></tr>
-															<field:display name="Components Psysical Progress" feature="Components">
+															<field:display name="Components Physical Progress" feature="Components">
 															<tr><td bgcolor="#f4f4f2">
 																<b><digi:trn key="aim:physicalProgressOfTheComponent">
 																Physical progress of the component</digi:trn></b>

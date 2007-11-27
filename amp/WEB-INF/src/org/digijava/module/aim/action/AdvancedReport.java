@@ -1442,9 +1442,20 @@ public class AdvancedReport extends Action {
 			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 			Collection ampAllFields= FeaturesUtil.getAMPFieldsVisibility();
 			Collection allAmpColumns=formColumns;
+			Collection allAmpColumnsPrefixed=new ArrayList(); // put a "REPORTS " prefix
 			TreeSet ampThemes=new TreeSet();
 			TreeSet ampThemesOrdered=new TreeSet();
 			ArrayList ampColumnsOrder =(ArrayList) ampContext.getAttribute("ampColumnsOrder");
+			/*
+			for(Iterator it=allAmpColumns.iterator();it.hasNext();)
+			{
+				AmpColumns ampColumn=(AmpColumns) it.next();
+				ampColumn.setColumnName("REPORTS "+ampColumn.getColumnName());
+				allAmpColumnsPrefixed.add(ampColumn);
+			}
+			allAmpColumns.clear();
+			allAmpColumns.addAll(allAmpColumnsPrefixed);
+			*/
 			for(Iterator it=allAmpColumns.iterator();it.hasNext();)
 			{
 				AmpColumns ampColumn=(AmpColumns) it.next();

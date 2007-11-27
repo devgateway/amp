@@ -54,6 +54,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -1003,12 +1004,17 @@ public class AdvancedReport extends Action {
 						ampReports.setReportDescription(formBean.getReportDescription());
 						ampReports.setName(formBean.getReportTitle().trim());
 						AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
-						ampReports.setOwnerId(ampTeamMember);
+						//ampReports.setOwnerId(ampTeamMember);
 						ampReports.setUpdatedDate(new Date(System.currentTimeMillis()));
-						if ( formBean.getInEditingMode() )
-								ampReports.setAmpReportId( new Long(formBean.getDbReportId()) );
-						else 
-								ampReports.setAmpReportId(new Long("0"));
+						if ( formBean.getInEditingMode() ){
+							ampReports.setAmpReportId( new Long(formBean.getDbReportId()) );
+							ampReports.setOwnerId(DbUtil.getAmpReport(formBean.getDbReportId()).getOwnerId());
+						}								
+						else {
+							ampReports.setAmpReportId(null);
+							ampReports.setOwnerId(ampTeamMember);
+						}
+							
 						if(formBean.getReportOption()==null)
 								  ampReports.setOptions(Constants.ANNUAL);
 						else
@@ -1083,8 +1089,9 @@ public class AdvancedReport extends Action {
 							
 							if ( formBean.getInEditingMode() ) { // Editing an exisiting report
 //								logger.info ("Updating report.." );
-								pmsession.update( ampReports );
-								pmsession.flush();
+								AdvancedReportUtil.saveReport(ampReports,teamMember.getTeamId(),teamMember.getMemberId(),teamMember.getTeamHead());
+								//pmsession.update( ampReports );
+								//pmsession.flush();
 //								log the update action for a reportSaveReport
 								AuditLoggerUtil.logObject(httpSession,request,ampReports,"update");
 								

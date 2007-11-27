@@ -50,30 +50,47 @@ public final class AdvancedReportUtil {
 		try {
 			session = PersistenceManager.getSession();
 			tx = session.beginTransaction();
-			session.save(ampReports);
+			//session.save(ampReports);
+			session.saveOrUpdate(ampReports);
 			//ampReports.setDescription("/viewAdvancedReport.do?view=reset&ampReportId="+ampReports.getAmpReportId());
-			session.update(ampReports);
+			//session.update(ampReports);
+			
+			if (ampReports.getMembers()==null){
+				ampReports.setMembers(new HashSet());
+			}
+				
+			
 			AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, ampTeamId);
 			
-			if(teamLead == true)
+			
+			if(teamLead == true&&(ampReports.getOwnerId()==null||(ampReports.getOwnerId().getAmpTeamMemId().equals(ampReports.getOwnerId().getAmpTeam().getTeamLead().getAmpTeamMemId()))))
 			{
 				//logger.info(teamMember.getMemberName() + " is Team Leader ");
 				AmpTeamReports ampTeamReports = new AmpTeamReports();
-				ampTeamReports.setTeamView(true);
 				
+				ampTeamReports.setTeamView(true);				
 				ampTeamReports.setTeam(ampTeam);
 				ampTeamReports.setReport(ampReports);
 				session.save(ampTeamReports);
+				
 			}
 			else
 			{
 				//logger.info(teamMember.getMemberName() + " is Team Memeber ");
 				//Long lg = teamMember.getMemberId();
-				AmpTeamMember ampTeamMember = (AmpTeamMember) session.get(AmpTeamMember.class, ampMemberId);
+				AmpTeamMember ampTeamMember =null;
+				if(ampReports.getOwnerId()!=null){
+					ampTeamMember=(AmpTeamMember) session.get(AmpTeamMember.class, ampReports.getOwnerId().getAmpTeamMemId());	
+				}else {
+					ampTeamMember = (AmpTeamMember) session.get(AmpTeamMember.class, ampMemberId);	
+				}					
 				Set reportSet = ampTeamMember.getReports();
+				
 				reportSet.add(ampReports);
 				ampTeamMember.setReports(reportSet);
-				session.save(ampTeamMember);
+				ampReports.getMembers().add(ampTeamMember);
+				session.saveOrUpdate(ampTeamMember);
+				//session.save(ampTeamMember);
 			}
 
 			queryString = "select filters from " + AmpFilters.class.getName() + " filters ";
@@ -110,6 +127,7 @@ public final class AdvancedReportUtil {
 			ampPages.setAmpTeamId(ampTeamId);
 			session.save(ampPages);
 			
+			
 			pageFilters = ampPages.getFilters();
 			Iterator itr = pageFilters.iterator();
 			while (itr.hasNext()) {
@@ -119,6 +137,7 @@ public final class AdvancedReportUtil {
 				tpf.setTeam(ampTeam);
 				tpf.setPage(ampPages);
 				session.save(tpf);
+			
 			}
 			
 			queryString = "select t from " + AmpTeam.class.getName() + " t " +
@@ -136,6 +155,7 @@ public final class AdvancedReportUtil {
 					tpf.setTeam(t);
 					tpf.setPage(ampPages);
 					session.save(tpf);
+			
 				}
 			}
 			

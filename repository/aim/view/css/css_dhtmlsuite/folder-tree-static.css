@@ -21,6 +21,13 @@
 		text-decoration: none;
 	}
 	
+	
+	.alinkblue{
+		font-size: 10px;
+		color: #0e69b3;
+		text-decoration: none;
+	}
+	
 	.dhtmlgoodies_tree ul{	/* Sub menu groups */
 		margin-left:20px;	/* Left spacing */
 		padding-left:0px;

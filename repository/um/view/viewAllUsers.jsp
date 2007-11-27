@@ -102,10 +102,10 @@ function banUser(txt) {
             </td>
           </tr>
           <tr>
-            <td noWrap width=867 vAlign="top" colspan="7">
+            <td noWrap width=967 vAlign="top" colspan="7">
               <table width="100%" cellspacing=1 cellSpacing=1>
 					<tr>
-						<td noWrap width=600 vAlign="top">
+						<td noWrap width=700 vAlign="top">
 							<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
 								<tr bgColor=#f4f4f2>
 									<td vAlign="top" width="100%">
@@ -128,7 +128,7 @@ function banUser(txt) {
 														</tr>		
  														<tr>
 															<td width="100%">
-																<table width="634" border="0"	bgColor="#f4f4f2">
+																<table width="734" border="0"  bgColor="#f4f4f2">
 																	<c:if test="${empty umViewAllUsersForm.users}">
 								                                         <tr>
 																			<td colspan="5">
@@ -148,7 +148,7 @@ function banUser(txt) {
 																			<td height="30" width="220"><b>
 																				<digi:trn key="um:viewAllUsers:UserWorkspace">Workspace</digi:trn></b>
 																			</td>
-																			<td height="30"width="147" colspan="3"><b>
+																			<td height="30"width="150" colspan="3"><b>
 																				<digi:trn key="aim:viewAllUsers:action">Actions</digi:trn></b>
 																			</td>																		
 																		</tr>
@@ -172,7 +172,7 @@ function banUser(txt) {
 								                                                  </c:if>
 								                                                </div>
 																			</td>
-																			<td height="30">
+																			<td height="30" >
 																				<c:set var="translation">
 								                                                  <digi:trn key="um:viewAllUsers:EditUserLink">Edit user</digi:trn>
 								                                                </c:set>

@@ -2,20 +2,25 @@
 		font-family:arial;
 		
 	}
-	a{
-		color:#000;
-		font-family:arial;
-		font-size:0.8em;
-	}
-	a:hover	{
-		color:#000;
-		font-family:arial;
-		font-size:0.8em;
-	}
+	
+	
 	.dhtmlgoodies_tree{
 		margin:0px;
 		padding:0px;
 	}
+	
+	a{
+		color:black;
+		font-family:arial;
+		text-decoration:none;
+	}
+	
+	a:hover	{
+		color:black;
+		font-family:arial;
+		text-decoration:none;
+	}
+	
 	.dhtmlgoodies_tree ul{	/* Sub menu groups */
 		margin-left:20px;	/* Left spacing */
 		padding-left:0px;

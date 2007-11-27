@@ -30,8 +30,7 @@
 		</set>
 
 
-		<set name="reports" table="AMP_MEMBER_REPORTS" lazy="true">
-  	            <cache usage="read-write"/>
+		<set name="reports" table="AMP_MEMBER_REPORTS" lazy="true" cascade="save-update">
 				<key column="amp_member_id"/>
 				<many-to-many class="org.digijava.module.aim.dbentity.AmpReports" column="amp_report_id"/>
 	 	</set>

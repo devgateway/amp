@@ -36,7 +36,7 @@ function openFieldPermissionsPopup(fieldId) {
 					/>
 					</logic:equal>
 							<a href="#" id="module:<bean:write name="moduleAux" property="root.id"/>">
-								<digi:trn key="<%="viz:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.name"/></digi:trn>
+								<digi:trn key="<%="viz:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.properName"/></digi:trn>
 							</a>
 						<ul>
 							<bean:define id="size" name="moduleAux2" property="submodules"/>

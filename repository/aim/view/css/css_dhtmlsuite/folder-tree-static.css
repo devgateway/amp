@@ -8,7 +8,9 @@
 		font-size:0.8em;
 	}
 	a:hover	{
-	text-decoration: none;
+		color:#000;
+		font-family:arial;
+		font-size:0.8em;
 	}
 	.dhtmlgoodies_tree{
 		margin:0px;

@@ -193,7 +193,7 @@
                                                             </field:display>
                                                             </c:if>
                                                             <c:if test="${!empty aimEditActivityForm.primaryPrograms}">
-																<field:display name="Remove Programs Button - Primary Programs" feature="Program">		
+																<field:display name="Remove Program Button - Primary Programs" feature="Program">		
                                                               <input type="button" value='<digi:trn key="btn:removeProgram">Remove program</digi:trn>' onclick="remProgram(2);" class="buton">
                                                               </field:display>
                                                             </c:if>
@@ -268,7 +268,7 @@
                                                             </field:display>
                                                             </c:if>
                                                             <c:if test="${!empty aimEditActivityForm.secondaryPrograms}">
-                                                            <field:display name="Add Programs Button - Secondary Programs" feature="Program">
+                                                            <field:display name="Remove Program Button - Secondary Programs" feature="Program">
                                                               <input type="button" value='<digi:trn key="btn:removeProgram">Remove program</digi:trn>' onclick="remProgram(3);" class="buton">
                                                               </field:display>
                                                             </c:if>

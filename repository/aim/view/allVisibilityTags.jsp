@@ -205,7 +205,7 @@
 <field:display name="Components Perspective Commitments" feature="Components"></field:display>
 <field:display name="Components Perspective Disbursements" feature="Components"></field:display>
 <field:display name="Components Perspective Expenditures" feature="Components"></field:display>
-<field:display name="Components Psysical Progress" feature="Components"></field:display>
+<field:display name="Components Physical Progress" feature="Components"></field:display>
 <field:display name="Components Remove Managed Documents Button" feature="Managed Documents"></field:display>
 <field:display name="Components Remove Physical Progress Link" feature="Physical Progress"></field:display>
 <field:display name="Components Stage" feature="SISIN"></field:display>
@@ -371,7 +371,7 @@
 <field:display name="Remove Issues Button" feature="Issues"></field:display>
 <field:display name="Remove Measures Button" feature="Issues"></field:display>
 <field:display name="Remove Program Button - National Plan Objective" feature="Program"></field:display>
-<field:display name="Remove Programs Button - Primary Programs" feature="Program"></field:display>
+<field:display name="Remove Program Button - Primary Programs" feature="Program"></field:display>
 <field:display name="Remove Sectors Button" feature="Sectors"></field:display>
 <field:display name="Remove Web Resource Button" feature="Web Resources"></field:display>
 <field:display name="Results" feature="Identification"></field:display>

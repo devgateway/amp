@@ -5,6 +5,7 @@
  */
 package org.dgfoundation.amp.visibility;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Set;
@@ -29,6 +30,7 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	protected Set items;
 	protected Set allItems;
 	protected String nameTrimmed;
+	protected String properName;
 
 	public void setNameTrimmed(String nameTrimmed) {
 		this.nameTrimmed = nameTrimmed;
@@ -100,6 +102,14 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 		 mySet.addAll(this.getItems());
 		 return mySet;
 	}
+
+	public String getProperName() throws IOException {
+		return FeaturesUtil.makeProperString(this.getName());
+	}
+
+	public void setProperName(String properName) {
+		this.properName = properName;
+	}
 	
-	
+		
 }

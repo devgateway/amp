@@ -66,7 +66,7 @@
 		</font>
 	</ul>
 	<c:set var="translation">
-		<digi:trn key="aim:treeVisibilitiSaveTree">Save Tree Visibility</digi:trn>
+		<digi:trn key="aim:treeVisibilitiSaveChanges">Save Changes</digi:trn>
 	</c:set>
 	<html:submit style="dr-menu" value="${translation}" property="saveTreeVisibility"/>
 		</td>

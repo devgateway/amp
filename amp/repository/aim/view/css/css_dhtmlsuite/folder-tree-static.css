@@ -14,15 +14,28 @@
 		color: #0e69b3;
 		text-decoration: none;
 	}
-	
+	a:link{
+		font-size: 10px;
+		color: #0e69b3;
+		text-decoration: none;
+	}
 	a:hover	{
 		font-size: 10px;
 		color: #0e69b3;
 		text-decoration: none;
 	}
 	
-	
-	.alinkblue{
+	a.alinkblue{
+		font-size: 10px;
+		color: #0e69b3;
+		text-decoration: none;
+	}
+	a.alinkblue:link{
+		font-size: 10px;
+		color: #0e69b3;
+		text-decoration: none;
+	}
+	a.alinkblue:hover	{
 		font-size: 10px;
 		color: #0e69b3;
 		text-decoration: none;

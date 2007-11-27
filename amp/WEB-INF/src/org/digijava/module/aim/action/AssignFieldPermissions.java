@@ -188,7 +188,7 @@ public class AssignFieldPermissions extends Action {
 	    } else { 
 		//get the global for the fields:
 		Permission globalPermissionForPermissibleClass = PermissionUtil.getGlobalPermissionForPermissibleClass(AmpFieldsVisibility.class);
-		Set<String> allowedActions = globalPermissionForPermissibleClass.getAllowedActions(permScope);
+		if(globalPermissionForPermissibleClass!=null) {Set<String> allowedActions = globalPermissionForPermissibleClass.getAllowedActions(permScope);
 		if(allowedActions.contains(GatePermConst.Actions.EDIT)) {
 		    fpf.setBaEdit("on");
 		    fpf.setCaEdit("on");
@@ -202,6 +202,7 @@ public class AssignFieldPermissions extends Action {
 		    fpf.setEaRead("on");
 		    fpf.setIaRead("on");
 		    fpf.setFaRead("on");
+		}
 		}
 		
 		

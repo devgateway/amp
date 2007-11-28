@@ -22,7 +22,7 @@ function saveIndicator(){
     return false;
   }
   
-  if(document.aimNewIndicatorForm.selActivitySector == null){
+  if(document.aimNewIndicatorForm.selActivitySector.value == ""){
 		alert("Please add sectors");
 		 return false;
 	}else{

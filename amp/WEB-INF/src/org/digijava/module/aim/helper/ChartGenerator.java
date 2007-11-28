@@ -181,7 +181,6 @@ public class ChartGenerator {
             item.setType(msg);
         }
 
-
 		ChartParams cp = new ChartParams();
 		cp.setChartHeight(chartHeight);
 		cp.setChartWidth(chartWidth);
@@ -273,7 +272,7 @@ public class ChartGenerator {
 				DefaultCategoryDataset ds = new DefaultCategoryDataset();
 				while (itr.hasNext()) {
 					MEIndicatorValue meIndVal = (MEIndicatorValue) itr.next();
-					ds.addValue(meIndVal.getValue(),meIndVal.getType(),meIndVal.getIndicatorName());
+					ds.addValue(meIndVal.getValue(),meIndVal.getType(),meIndVal);
 				}
 
 				JFreeChart chart = ChartFactory.createStackedBarChart(
@@ -284,7 +283,7 @@ public class ChartGenerator {
 						PlotOrientation.VERTICAL,	// Orientation
 						true,	// show legend
 						false,	// show tooltips
-						false);	// show urls
+						true);	// show urls
 				chart.setBackgroundPaint(Color.WHITE);
 
 				CategoryPlot plot = (CategoryPlot) chart.getPlot();
@@ -305,7 +304,7 @@ public class ChartGenerator {
 
 				String url = cp.getUrl();
 				if (url != null && url.trim().length() > 0) {
-					CategoryURLGenerator cUrl1 = new StandardCategoryURLGenerator(url,"series","ind");
+					CategoryURLGenerator cUrl1 = new CategoryUrlGen(url);
 					r1.setItemURLGenerator(cUrl1);
 				}
 

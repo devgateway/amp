@@ -22,15 +22,6 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
 	 */
 	private Set templates;
 	private Set submodules;
-	private AmpModulesType type;
-	
-	public AmpModulesType getType() {
-		return type;
-	}
-
-	public void setType(AmpModulesType type) {
-		this.type = type;
-	}
 
 	public Set getTemplates() {
 		return templates;

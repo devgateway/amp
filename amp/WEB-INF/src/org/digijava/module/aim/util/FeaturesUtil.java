@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumnsOrder;
 import org.digijava.module.aim.dbentity.AmpFeature;
@@ -28,14 +29,12 @@ import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpModulesType;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.FeatureTemplates;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
-import org.digijava.kernel.exception.DgException;
 
 public class FeaturesUtil {
 
@@ -1681,43 +1680,7 @@ public class FeaturesUtil {
   }
 
 
-  /**
-   * @author dan
-   */
-  public static AmpModulesType getAmpModulesType(String typeName) {
-
-    Session session = null;
-    Query q = null;
-    Collection c = null;
-    AmpModulesType id = null;
-    try {
-      session = PersistenceManager.getSession();
-      String queryString = new String();
-      queryString = "select a from " + AmpModulesType.class.getName()
-          + " a where (a.name=:typeName) ";
-      q = session.createQuery(queryString);
-      q.setParameter("typeName", typeName, Hibernate.STRING);
-      c = q.list();
-      if(c.size()!=0)
-    	  id=(AmpModulesType) c.iterator().next();
-
-    }
-    catch (Exception ex) {
-    	ex.printStackTrace();
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception rsf) {
-          logger.error("Release session failed :" + rsf.getMessage());
-        }
-      }
-    }
-    return id;
-  }
-
+  
 
   /**
    * @author dan
@@ -2116,20 +2079,17 @@ public class FeaturesUtil {
   /**
    * @author dan
    */
-  public static void updateModuleVisibility(Long id, String moduleParentName, String type) {
+  public static void updateModuleVisibility(Long id, String moduleParentName) {
     Session session = null;
     AmpModulesVisibility module ;//= new AmpModulesVisibility();
     AmpModulesVisibility moduleParent;
-    AmpModulesType ampType;
     Transaction tx;
     try {
       session = PersistenceManager.getSession();
       tx = session.beginTransaction();
       module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,id);
       moduleParent = getModuleVisibility(moduleParentName);
-      ampType=getAmpModulesType(type);
       module.setParent(moduleParent);
-      module.setType(ampType);
       session.save(module);
       tx.commit();
       //session.saveOrUpdate(template);
@@ -2371,7 +2331,7 @@ public class FeaturesUtil {
   }
 
   public static String makeProperString(String theString) throws java.io.IOException{
-		 
+
 		java.io.StringReader in = new java.io.StringReader(theString.toLowerCase());
 		 boolean precededBySpace = true;
 		 StringBuffer properCase = new StringBuffer();    
@@ -2418,5 +2378,4 @@ public class FeaturesUtil {
         }
     };
 
-    
 }

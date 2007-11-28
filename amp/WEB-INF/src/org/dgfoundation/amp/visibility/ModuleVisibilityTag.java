@@ -34,7 +34,6 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 	private static final long serialVersionUID = 3079619271981032373L;
 	private String name;
 	private String enabled;
-	private String type;
 	private String parentModule;
 	
 	public String getParentModule() {
@@ -42,12 +41,6 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 	}
 	public void setParentModule(String parentModule) {
 		this.parentModule = parentModule;
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
 	}
 	public String getEnabled() {
 		return enabled;
@@ -73,22 +66,25 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		
 		ServletContext ampContext=pageContext.getServletContext();
 		AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
-		
-		if(ampTreeVisibility!=null)
+		try
 		{
-			if(!existModuleinDB(ampTreeVisibility) && FeaturesUtil.getModuleVisibility(name)==null)
+			if(ampTreeVisibility!=null)
 			{
-					FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName());
-					
-					AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-					ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-					ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
-   		   	}
-			else 
-					if(!checkTypeAndParentOfModule(ampTreeVisibility) || !checkTypeAndParentOfModule2(FeaturesUtil.getModuleVisibility(name))) //parent or type is not ok
-						{
-							try{
-								FeaturesUtil.updateModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId(), parentModule, type);
+			//	if(!existModuleinDB(ampTreeVisibility) && FeaturesUtil.getModuleVisibility(name)==null) //for concurent users...
+				if(!existModuleinDB(ampTreeVisibility))
+				{
+						FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName());
+						
+						AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+						ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+						ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+   		   		}
+				else 
+					//if(!checkTypeAndParentOfModule(ampTreeVisibility) || !checkTypeAndParentOfModule2(FeaturesUtil.getModuleVisibility(name))) //parent or type is not ok
+					if(!checkTypeAndParentOfModule(ampTreeVisibility)) 
+					{
+						try{
+								FeaturesUtil.updateModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId(), parentModule);
 							}
 							catch(Exception e)
 							{
@@ -97,11 +93,14 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 							AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 							ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 							ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
-						}
+					}
 				
+			}
+			else return SKIP_BODY;
+		}catch(Exception e)
+		{
+			e.printStackTrace();
 		}
-		else return SKIP_BODY;
-		
 		return EVAL_BODY_BUFFERED;
 	}
 	public int doEndTag() throws JspException 
@@ -131,11 +130,10 @@ public class ModuleVisibilityTag extends BodyTagSupport {
    			   
    			pageContext.getOut().print(bodyText);
    		   }
-   		   else{
+   		   else{;
    			//System.out.println("Field MANAGER!!!! module "+this.getName()+" is not ACTIVE");
    			   //the field is not active!!!
    		   }
-   		   session.setAttribute("currentModuleTag",null);
        }
        catch (Exception e) {
     	   e.printStackTrace();
@@ -179,9 +177,9 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		if(atv!=null)
 			moduleByNameFromRoot = atv.getModuleByNameFromRoot(this.getName());
 		else return typeOK && parentOK;
-		if(this.getType()!=null && moduleByNameFromRoot.getType()!=null)
-			if(moduleByNameFromRoot.getType().getName().compareTo(this.getType())==0)
-				 typeOK=true;//return true; //they are identical
+		//if(this.getType()!=null && moduleByNameFromRoot.getType()!=null)
+			//if(moduleByNameFromRoot.getType().getName().compareTo(this.getType())==0)
+				// typeOK=true;//return true; //they are identical
 		if(this.getParentModule()!=null && moduleByNameFromRoot.getParent()!=null)
 			if(moduleByNameFromRoot.getParent().getName().compareTo(this.getParentModule())==0)
 				parentOK=true;
@@ -198,9 +196,6 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		if(atv!=null)
 			moduleByNameFromRoot = atv;
 		else return typeOK && parentOK;
-		if(this.getType()!=null && moduleByNameFromRoot.getType()!=null)
-			if(moduleByNameFromRoot.getType().getName().compareTo(this.getType())==0)
-				 typeOK=true;//return true; //they are identical
 		if(this.getParentModule()!=null && moduleByNameFromRoot.getParent()!=null)
 			if(moduleByNameFromRoot.getParent().getName().compareTo(this.getParentModule())==0)
 				parentOK=true;

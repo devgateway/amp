@@ -52,36 +52,26 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 		// TODO Auto-generated method stub
 		ServletContext ampContext=pageContext.getServletContext();
  	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+ try{
  	   if(ampTreeVisibility!=null)
- 	   if(!existFeatureinDB(ampTreeVisibility)){
- 		   if(FeaturesUtil.getFeatureVisibility(name)==null)
- 		   {
-                              AmpModulesVisibility moduleByNameFromRoot = ampTreeVisibility.getModuleByNameFromRoot(this.getModule());
-                              Long id=null;
-                              if(moduleByNameFromRoot!=null){
-                                id = moduleByNameFromRoot.getId();
-
-                                try {
-                                  FeaturesUtil.
-                                      insertFeatureWithModuleVisibility(
-                                          ampTreeVisibility.getRoot().getId(),
-                                          id, this.getName());
-                                  AmpTemplatesVisibility currentTemplate = (
-                                      AmpTemplatesVisibility)
-                                      FeaturesUtil.getTemplateById(
-                                      ampTreeVisibility.getRoot().getId());
-                                  ampTreeVisibility.buildAmpTreeVisibility(
-                                      currentTemplate);
-                                  ampContext.setAttribute("ampTreeVisibility",
-                                      ampTreeVisibility);
-
-                                	}
-                                	catch (DgException ex) {throw new JspException(ex);}
-                              }
-                              else return EVAL_BODY_BUFFERED;
-                              
+ 		   if(!existFeatureinDB(ampTreeVisibility)){
+ 			   //if(FeaturesUtil.getFeatureVisibility(name)==null)
+ 			   //{
+                    AmpModulesVisibility moduleByNameFromRoot = ampTreeVisibility.getModuleByNameFromRoot(this.getModule());
+                    Long id=null;
+                    if(moduleByNameFromRoot!=null){
+                       id = moduleByNameFromRoot.getId();
+                       try {
+                            FeaturesUtil.insertFeatureWithModuleVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName());
+                                  AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+                                  ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+                                  ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
+                           	}
+                           	catch (DgException ex) {throw new JspException(ex);}
+                     }
+                    else return EVAL_BODY_BUFFERED;
+ 			   //}
  		   }
- 	   }
 	   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 	   if(ampTreeVisibility!=null)
    		   if(!isModuleTheParent(ampTreeVisibility)){
@@ -100,7 +90,7 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 		  //System.out.println("error!!!! module "+this.getModule()+" doesn't exist");
 		  return SKIP_BODY;
 	   }
-
+ }catch (Exception e) {e.printStackTrace();}
 	   
 		return EVAL_BODY_BUFFERED;//super.doStartTag();
 	}

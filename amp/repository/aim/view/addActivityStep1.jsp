@@ -16,7 +16,8 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery-latest.pack.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery.disable.text.select.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
@@ -316,8 +317,10 @@ ${fn:replace(message,quote,escapedQuote)}
 
 									</td></tr>
 									<tr><td>&nbsp;</td></tr>
+									
 									<tr><td><jsp:include page="addActivityStep1Identification.jsp"/>
 									</td></tr>
+									
 
 									<tr><td>
 										&nbsp;

@@ -24,7 +24,8 @@
 <module:display name="Financial Progress"  parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Financial Progress" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="Help"></module:display>
+<module:display name="HELP"></module:display>
+<module:display name="Help" parentModule="HELP"></module:display>
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="M&E" parentModule="MONITORING AND EVALUATING"></module:display>
 <module:display name="MONITORING AND EVALUATING"></module:display>

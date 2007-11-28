@@ -1123,7 +1123,7 @@
       <forward name="forward" path="/showLayout.do?layout=addNewIndicator" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimEditActivityForm" path="/aim/removeIndicatorEditSectors" scope="session" type="org.digijava.module.aim.action.RemoveIndicatorEditSectors">
+    <action name="aimNewIndicatorForm" path="/aim/removeIndicatorEditSectors" scope="session" type="org.digijava.module.aim.action.RemoveIndicatorEditSectors">
       <forward name="forward" path="/showLayout.do?layout=viewEditIndicator" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
@@ -1505,6 +1505,7 @@
       <forward name="forward" path="/showLayout.do?layout=addNewIndicator" />
     </action>
     <action name="aimNewIndicatorForm" path="/aim/selectProgramForIndicator" scope="session" type="org.digijava.module.aim.action.SelectProgramForIndicator" validate="false">
+      <forward name="edit" path="/showLayout.do?layout=viewEditIndicator" />
       <forward name="forward" path="/showLayout.do?layout=selectProgramForIndicator" />
       <forward name="add" path="/showLayout.do?layout=addNewIndicator" />
     </action>

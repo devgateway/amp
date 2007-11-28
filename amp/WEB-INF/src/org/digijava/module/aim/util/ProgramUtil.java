@@ -36,9 +36,11 @@ import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AllMEIndicators;
 import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AllThemes;
+import org.digijava.module.aim.helper.AmpIndSectors;
 import org.digijava.module.aim.helper.EditProgram;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
@@ -598,6 +600,38 @@ public class ProgramUtil {
 			}
 		}
  //Comment over pcsing
+		
+		public static Collection getSectorIndicator(Long themeIndicatorId)
+		{
+			Session session = null;
+			Collection col = new ArrayList();
+			try
+			{
+				session = PersistenceManager.getRequestDBSession();
+				String queryString = "select SectInd from "
+									+ AmpIndicatorSector.class.getName()
+									+ " SectInd where (SectInd.themeIndicatorId=:themeIndicatorId)";
+				Query qry = session.createQuery(queryString);
+				qry.setParameter("themeIndicatorId",themeIndicatorId,Hibernate.LONG);
+				Iterator indItr = qry.list().iterator();
+				while(indItr.hasNext())
+				{
+					AmpIndicatorSector IndSector = (AmpIndicatorSector) indItr.next();
+					AmpIndSectors Indsectors = new AmpIndSectors();
+					Indsectors.setAmpIndicatorSectorId(IndSector.getAmpIndicatorSectorId());
+					Indsectors.setSectorId(IndSector.getSectorId());
+					Indsectors.setThemeIndicatorId(IndSector.getThemeIndicatorId());
+					col.add(Indsectors);
+
+				}
+			}
+			catch(Exception e1) {
+				logger.error("Error in retrieving the values for indicator with ID : "+themeIndicatorId);
+				logger.debug("Exception : "+e1);
+                e1.printStackTrace();
+			}
+			return col;
+		}
 
 		public static Collection getThemeIndicators(Long ampThemeId)
 		{
@@ -619,8 +653,9 @@ public class ProgramUtil {
 					tempPrgInd.setIndicatorId(ampThemeIndId);
 					tempPrgInd.setName(tempThemeInd.getName());
 					tempPrgInd.setCode(tempThemeInd.getCode());
-					tempPrgInd.setCreationDate(DateConversion.ConvertDateToString(tempThemeInd.getCreationDate()));
+                    tempPrgInd.setCreationDate(DateConversion.ConvertDateToString(tempThemeInd.getCreationDate()));
 					tempPrgInd.setPrgIndicatorValues(getThemeIndicatorValues(ampThemeIndId));
+					tempPrgInd.setIndSectores(getSectorIndicator(ampThemeIndId));
 					themeInd.add(tempPrgInd);
 				}
 			}
@@ -1025,15 +1060,24 @@ public class ProgramUtil {
 				ampThemeInd.setCategory(tempPrgInd.getCategory());
 				ampThemeInd.setNpIndicator(tempPrgInd.isNpIndicator());
 				ampThemeInd.setDescription(tempPrgInd.getDescription());
+				
 			    Long sectorIds[]= tempPrgInd.getSector();
                	Set sectors = new HashSet();
-                   if(sectorIds!=null){
+                   if(sectorIds!=null  && !sectorIds.equals(0)){
                 	   for(int i=0;i<sectorIds.length;i++){
                 		   Long sectorId=sectorIds[i];
                 		   AmpIndicatorSector amps = new AmpIndicatorSector();
        					   amps.setThemeIndicatorId(ampThemeInd);
-       					if (sectorId != null && (!sectorId.equals(new Long(-1))))
+       					if (sectorId != null && (!sectorId.equals(new Long(-1)) && !sectorId.equals(0)))
        						amps.setSectorId(SectorUtil.getAmpSector(sectorId));
+       					     if (sectorId == 0){
+       					    	
+       					    	for(Iterator itr = tempPrgInd.getIndSectores().iterator();itr.hasNext();){
+          					    	 ActivitySector themesectors = (ActivitySector) itr.next();
+          					    	 amps.setSectorId(SectorUtil.getAmpSector(themesectors.getSectorId()));
+          					    	 
+          					    }   	 
+       					    }
        					sectors.add(amps);
 
                 	   }
@@ -1118,11 +1162,11 @@ public class ProgramUtil {
 			Session session = null;
 			AllPrgIndicators tempPrgInd = new AllPrgIndicators();
 
-			try
-			{
-				session = PersistenceManager.getSession();
+			try{
+				session = PersistenceManager.getRequestDBSession();
 				AmpThemeIndicators tempInd = (AmpThemeIndicators) session.load(AmpThemeIndicators.class,indId);
 				tempPrgInd.setIndicatorId(tempInd.getAmpThemeIndId());
+
 				tempPrgInd.setName(tempInd.getName());
 				tempPrgInd.setCode(tempInd.getCode());
 				tempPrgInd.setType(tempInd.getType());
@@ -1130,26 +1174,13 @@ public class ProgramUtil {
 				tempPrgInd.setCreationDate(DateConversion.ConvertDateToString(tempInd.getCreationDate()));
 				tempPrgInd.setCategory(tempInd.getCategory());
 				tempPrgInd.setNpIndicator(tempInd.isNpIndicator());
-				session.flush();
+                tempPrgInd.setThemes(tempInd.getThemes());
+                tempPrgInd.setSector(getSectorIndicator(indId)); 
+                session.flush();
 			}
-			catch(Exception e)
-			{
+			catch(Exception e){
 				logger.error("Unable to get the specified Indicator");
 				logger.debug("Exception : "+e);
-			}
-			finally
-			{
-				try
-				{
-					if(session != null)
-					{
-						PersistenceManager.releaseSession(session);
-					}
-				}
-				catch(Exception ex)
-				{
-					logger.error("releaseSession() failed");
-				}
 			}
 			return tempPrgInd;
 		}

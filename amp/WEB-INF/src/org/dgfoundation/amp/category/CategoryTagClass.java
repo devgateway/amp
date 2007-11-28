@@ -31,9 +31,9 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 	
 	boolean listView	= true;
 	
-	String name;
-	String keyName;
-	String property;
+	String name			= null;
+	String keyName		= null;
+	String property		= null;
 	String styleClass	= null;
 	
 	Long categoryId		= null;

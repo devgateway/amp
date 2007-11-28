@@ -783,13 +783,19 @@ public class MEIndicatorsUtil
 					float progress = 0;
 					float baseVal = meIndValue.getBaseVal();
 					float targetVal = meIndValue.getRevisedTargetVal();
-					float actVal = meIndValue.getActualVal();
+					Float actVal = meIndValue.getActualVal();
 
 					if (targetVal == baseVal) {
 						progress = 100;
 					} else {
-						progress = (actVal - baseVal)/(targetVal - baseVal);
-						progress = (progress < 0) ? 0 : progress;
+                                                if(actVal!=null){
+                                                        progress = (actVal -
+                                                            baseVal) /
+                                                            (targetVal -
+                                                            baseVal);
+                                                        progress = (progress <
+                                                            0) ? 0 : progress;
+                                                }
 					}
 
 					actInd.setProgress(df.format(progress));
@@ -1012,7 +1018,7 @@ public class MEIndicatorsUtil
 				while (rs.next()) {
 					long id = rs.getLong(1);
 					double baseVal = rs.getDouble(2);
-					double actVal = rs.getDouble(3);
+					Double actVal = rs.getDouble(3);
 					double tarVal = rs.getDouble(4);
 					String key = rs.getString(5);
 
@@ -1024,7 +1030,7 @@ public class MEIndicatorsUtil
 						trnKey = trnKey.replaceAll(" ", "");
 						String msg = CategoryManagerUtil.translate(trnKey, request, Constants.ME_IND_VAL_ACTUAL_ID);
 						actIndVal.setType(msg);
-						if (tarVal > 0) {
+						if (actVal!=null&&tarVal > 0) {
 							actIndVal.setValue((actVal - baseVal)/(tarVal - baseVal));
 							col.add(actIndVal);
 						}
@@ -1036,7 +1042,7 @@ public class MEIndicatorsUtil
 						trnKey = trnKey.replaceAll(" ", "");
 						String msg = CategoryManagerUtil.translate(trnKey, request, Constants.ME_IND_VAL_ACTUAL_ID);
 						actIndVal.setType(msg);
-						if (tarVal > 0) {
+						if (actVal!=null&&tarVal > 0) {
 							actIndVal.setValue(actVal/tarVal);
 							col.add(actIndVal);
 						}
@@ -1095,8 +1101,8 @@ public class MEIndicatorsUtil
 					actIndVal.setIndicatorName(meInd.getName());
 					actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
 					float bVal = meIndValue.getBaseVal();
-					float aVal = meIndValue.getActualVal();
-					if (tarVal > 0) {
+					Float aVal = meIndValue.getActualVal();
+					if (aVal!=null&&tarVal > 0) {
 						actIndVal.setValue((aVal-bVal)/(tarVal-bVal));
 						col.add(actIndVal);
 					}
@@ -1106,8 +1112,8 @@ public class MEIndicatorsUtil
 					actIndVal.setIndicatorName(meInd.getName());
 					actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
 					float bVal = meIndValue.getBaseVal();
-					float aVal = meIndValue.getActualVal();
-					if (tarVal > 0) {
+					Float aVal = meIndValue.getActualVal();
+					if (aVal!=null&&tarVal > 0) {
 						actIndVal.setValue(aVal/tarVal);
 						col.add(actIndVal);
 					}

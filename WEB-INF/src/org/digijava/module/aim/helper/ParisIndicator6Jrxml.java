@@ -361,7 +361,7 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
             p2.println("mode='Transparent'");
             p2.println("x='2'");
             p2.println("y='4'");
-            p2.println("width='250'");
+            p2.println("width='350'");
             p2.println("height='16'");
             p2.println("forecolor='#3333FF'");
             p2.println("backcolor='#FFFFFF'");

@@ -286,6 +286,12 @@ function createDateString(monthId, dayId) {
 	                                    			%>
 	                                    		</select>
 	                                    	</c:when>
+	                                    	<c:when test='${type == "t_Boolean"}'>
+	                                    		<html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
+	                                    			<html:option value="true">true</html:option>
+	                                    			<html:option value="false">false</html:option>
+	                                    		</html:select>
+	                                    	</c:when>
 	                                    	<c:otherwise>
 	                                      		<html:text property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>' />
 	                                      	</c:otherwise>

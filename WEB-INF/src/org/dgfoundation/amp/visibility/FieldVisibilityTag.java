@@ -55,44 +55,27 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		public int doStartTag() throws JspException {
 	
  	   ServletContext ampContext=pageContext.getServletContext();
- 	   
+ try{
 	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 	   if(ampTreeVisibility!=null)
 		   if(!existFieldinDB(ampTreeVisibility)){
-			   if(FeaturesUtil.getFieldVisibility(name)==null)
-			   {
-	   			   //TODO default has to be visibile!!!!
-			
-                                      AmpFeaturesVisibility featureByNameFromRoot = ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature());
-                                      Long id=null;
-                                      if(featureByNameFromRoot!=null){
-                                        id = featureByNameFromRoot.getId();
-	   			   
-                                        try {
-                                          FeaturesUtil.
-                                              insertFieldWithFeatureVisibility(
-                                                  ampTreeVisibility.getRoot().
-                                                  getId(),
-                                                  id, this.getName());
-                                          AmpTemplatesVisibility
-                                              currentTemplate = (
-                                                  AmpTemplatesVisibility)
-                                              FeaturesUtil.getTemplateById(
-                                                  ampTreeVisibility.getRoot().
-                                                  getId());
-	   			   //System.out.println("-------------------------------"+currentTemplate.getId());
-                                          ampTreeVisibility.
-                                              buildAmpTreeVisibility(
-                                                  currentTemplate);
-                                          ampContext.setAttribute(
-                                              "ampTreeVisibility",
-                                              ampTreeVisibility);
-
-                                        	}
-                                        catch (DgException ex) {throw new JspException(ex);	}
-                                      }
-                                      else return EVAL_BODY_BUFFERED;
-			  }
+			   //if(FeaturesUtil.getFieldVisibility(name)==null)
+			   //{
+                    AmpFeaturesVisibility featureByNameFromRoot = ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature());
+                    Long id=null;
+                    if(featureByNameFromRoot!=null)
+                    {
+                        id = featureByNameFromRoot.getId();
+	   			        try {
+                             FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName());
+                             AmpTemplatesVisibility  currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+                             ampTreeVisibility. buildAmpTreeVisibility(currentTemplate);
+                             ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+                           	}
+                         catch (DgException ex) {throw new JspException(ex);	}
+                     }
+                     else return EVAL_BODY_BUFFERED;
+			  //}
 	   		}
 	   		ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 	   		if(ampTreeVisibility!=null)
@@ -106,7 +89,10 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 
 			   }
-	   		return EVAL_BODY_BUFFERED;//super.doStartTag();
+ }catch (Exception e) {e.printStackTrace();}
+	   	
+ 	return EVAL_BODY_BUFFERED;//super.doStartTag();
+	
 	}
 	
 	public int doEndTag() throws JspException 

@@ -37,6 +37,42 @@
 		 	}
 	}
 
+function disableSelection(element) {
+
+alert("asd");
+    element.onselectstart = function() {
+      return false;
+    };
+    element.unselectable = "on";
+    element.style.MozUserSelect = "none";
+    element.style.cursor = "default";
+}
+
+
+function disableSelection1(target){
+
+	for (i=0;i<target.childNodes.length;i++){
+			//alert("ad "+i);
+			nownode=target.childNodes[i];
+			alert("ad "+i+" ::"+nownode);
+			if (typeof nownode.onselectstart!="undefined") //IE route
+				nownode.onselectstart=function(){return false}
+			else if (typeof nownode.style.MozUserSelect!="undefined") //Firefox route
+					nownode.style.MozUserSelect="none"
+				else //All other route (ie: Opera)
+			nownode.onmousedown=function(){return false}
+			
+	}
+
+if (typeof target.onselectstart!="undefined") //IE route
+	target.onselectstart=function(){return false}
+else if (typeof target.style.MozUserSelect!="undefined") //Firefox route
+	target.style.MozUserSelect="none"
+else //All other route (ie: Opera)
+	target.onmousedown=function(){return false}
+	//alert("Ad");
+target.style.cursor = "default"
+}
 
 </script>
 
@@ -47,12 +83,17 @@
 											<field:display name="Project Title" feature="Identification">
 											&nbsp;
 											</field:display>
+											<div onclick="disableSelection1(this)">
+											sdgsgsgsa
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
+											
 												<FONT color=red>*</FONT>
 												<a title="<digi:trn key="aim:TitleInDonorsOrMoFEDInternalSystems">Title used in donors or MoFED internal systems</digi:trn>">
 												<digi:trn key="aim:projectTitle">Project Title</digi:trn>
 												</a>
+											
 											</td>
+											
 											<td valign="top" align="left">
 												<a title="<digi:trn key="aim:TitleInDonorsOrMoFEDInternalSystems">
 												Title used in donors or MoFED internal systems
@@ -60,7 +101,7 @@
 												<html:textarea property="title" cols="60" rows="2" styleClass="inp-text"/>
 												</a>
 											</td></tr>
-											
+											</div>
 											<field:display name="Objectives" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:ObjectivesAndComponentsofProject">The key objectives and main components of the project</digi:trn>">

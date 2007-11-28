@@ -141,7 +141,7 @@ if("On".equals(publicView)) { %>
 			</div>
 		</LI>
 		</module:display>
-		<module:display name="Help">
+		<module:display name="Help" parentModule="HELP">
 		<LI>
 			<div id="gen"  title='<digi:trn key="help:viewHelpPage">View Help</digi:trn>'>
 				<digi:link styleClass="head-menu-link" href="/help.do?blankPage=true" module="help">

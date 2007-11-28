@@ -40,11 +40,21 @@
 	function deletePrgIndicator(){
 					return confirm("Do you want to delete the Indicator ? Please check whether the indicator is being used by some Program.");
 			}
+			
+	function viewall(){
+	    <digi:context name="viewIndicators" property="context/module/moduleinstance/viewIndicators.do?sector=viewall" />
+	    document.aimViewIndicatorsForm.action = "<%= viewIndicators %>";
+	    document.aimViewIndicatorsForm.submit();
+	  
+	}
 </script>
 <digi:instance property="aimViewIndicatorsForm" />
 
 <digi:form action="/viewIndicators.do" method="post">
   <html:hidden property="sortBy" styleId="sortBy"/>
+ 
+  
+  
   
   <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
     <tr>
@@ -114,6 +124,10 @@
                                     </td>
                                     <td>
                                       <input type="submit" value="Go" style="font-family:verdana;font-size:11px;" />
+                                    </td>
+                                    <td>
+                                      <input type="submit"  value="View All" onclick="viewall();" style="font-family:verdana;font-size:11px;" />
+                                      
                                     </td>
                                   </tr>
                                   <tr>

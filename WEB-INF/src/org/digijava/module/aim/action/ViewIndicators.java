@@ -10,7 +10,6 @@ import org.apache.struts.action.*;
 import org.digijava.module.aim.form.*;
 import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.util.*;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.*;
 
 import org.digijava.module.aim.dbentity.AmpSectorIndicator;
@@ -19,10 +18,19 @@ public class ViewIndicators
     extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
-
+    	
         List<IndicatorsBean> allInds = new ArrayList();
+      
         ViewIndicatorsForm allIndForm = (ViewIndicatorsForm) form;
+        
+        String view = request.getParameter("sector");
+        if(view!=null){
+        if(view.equalsIgnoreCase("viewall")){
+        	allIndForm.setSectorId(new Long(-1));
+        }
+        }
        
+        
         if(allIndForm.getCategory()==-1 ||
            allIndForm.getCategory()==0) {
             Collection<AllThemes> themeCol = ProgramUtil.getAllThemeIndicators();
@@ -209,7 +217,7 @@ public class ViewIndicators
         }
 
         allIndForm.setAllIndicators(allInds);
-
+        
         return mapping.findForward("forward");
     }
 }

@@ -69,6 +69,7 @@ function edit(key) {
                                                   <tr>
                                                     <td>
                                                       <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="40%">
+                                                      <field:display name="Equal Opportunity" feature="Cross Cutting Issues">
                                                         <tr>
 															<td><digi:trn key="aim:equalOportunity">Equal Opportunity:</digi:trn>
 																&nbsp;&nbsp;
@@ -84,6 +85,8 @@ function edit(key) {
 																</a>
 															</td>
 														</tr>
+														</field:display>
+														<field:display name="Environment" feature="Cross Cutting Issues">
                                                         <tr>
 															<td><digi:trn key="aim:environment"> Environment:</digi:trn>&nbsp;&nbsp;
 																<bean:define id="envKey">
@@ -98,6 +101,8 @@ function edit(key) {
 																</a>
 															</td>
 														</tr>
+														</field:display>
+														<field:display name="Minorities" feature="Cross Cutting Issues">
                                                         <tr>
 															<td><digi:trn key="aim:monitories"> Minorities:</digi:trn> &nbsp;&nbsp;
 																<bean:define id="minKey">
@@ -112,7 +117,7 @@ function edit(key) {
 																</a>
 															</td>
 														</tr>
-
+														</field:display>
                                                       </table>
                                                     </td>
                                                   </tr>

@@ -317,7 +317,7 @@
 																	<digi:trn key="aim:physicalProgres">Physical Progress</digi:trn>
 																</a>
 															</td></tr>
-															<field:display name="Components Add Physical Progress Link" feature="Physical Progress">
+															<field:display name="Add Physical Progress Link" feature="Physical Progress">
 															<c:if test="${empty selComponents.phyProgress}">
 																<tr><td colspan="2"><b>
 																	<a href="javascript:
@@ -332,7 +332,7 @@
 																<tr><td>
 																	<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
 																		<tr>
-																		<field:display name="Components Add Physical Progress Link" feature="Physical Progress">
+																		<field:display name="Add Physical Progress Link" feature="Physical Progress">
 																		<td vAlign="center" align="left" width="95%">
 																			<a href="javascript:addPhyProgess(<bean:write name="phyProg"
 																			property="pid" />,<c:out value="${selComponents.componentId}"/>)">
@@ -341,7 +341,7 @@
 																			</a>
 																		</td>
 																		</field:display>
-																		<field:display name="Components Remove Physical Progress Link" feature="Physical Progress">
+																		<field:display name="Remove Physical Progress Link" feature="Physical Progress">
 																		<td align="right">
 																			<bean:define id="id" property="pid" name="phyProg"/>
 																			<bean:define id="compId" property="componentId" name="selComponents"/>
@@ -357,7 +357,7 @@
 																	</table>
 																</td></tr>
 															</c:forEach>
-															<field:display name="Components Add Physical Progress Link" feature="Physical Progress">
+															<field:display name="Add Physical Progress Link" feature="Physical Progress">
 																<tr><td>
 																
 																	<table cellSpacing=2 cellPadding=2>

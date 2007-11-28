@@ -34,7 +34,7 @@
 
 			<TR><TD bgcolor="#f4f4f4">
 
-			
+
 
 			<TABLE width="100%" cellSpacing=1 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">
 
@@ -48,7 +48,7 @@
 
 								<TD align="left">
 
-									<SPAN class=crumb>					
+									<SPAN class=crumb>
 
 									<jsp:useBean id="url" type="java.util.Map" class="java.util.HashMap"/>
 
@@ -66,7 +66,7 @@
 
 									</c:set>
 
-									<digi:link href="/viewActivityDashboard.do" name="url" styleClass="comment" 
+									<digi:link href="/viewActivityDashboard.do" name="url" styleClass="comment"
 
 									title="${translation}" >
 
@@ -76,7 +76,7 @@
 
 									<digi:trn key="aim:indicatorValues">Indicator Values</digi:trn>
 
-									</SPAN>												
+									</SPAN>
 
 								</TD>
 
@@ -100,7 +100,7 @@
 
 									<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
 
-                           	<TR bgcolor="#F4F4F2" height="17"> 
+                           	<TR bgcolor="#F4F4F2" height="17">
 
 				                 		<TD bgColor=#c9c9c7 class=box-title width=150>
 
@@ -112,7 +112,7 @@
 
    	                        </TR>
 
-      	                  </TABLE>									
+      	                  </TABLE>
 
 								</TD>
 
@@ -120,7 +120,7 @@
 
 							<TR>
 
-								<TD width="100%" bgcolor="#F4F4F2" align="left"> 
+								<TD width="100%" bgcolor="#F4F4F2" align="left">
 
 
 
@@ -130,11 +130,11 @@
 
 						<logic:notEmpty name="aimViewIndicatorForm" property="indicators">
 
-							<logic:iterate name="aimViewIndicatorForm" property="indicators" 
+							<logic:iterate name="aimViewIndicatorForm" property="indicators"
 
 							id="indicator">
 
-								<TR><TD>	
+								<TR><TD>
 
 									<TABLE cellPadding=5 cellSpacing=1 border=0>
 
@@ -150,9 +150,9 @@
 
 												<b><bean:write name="indicator" property="indicatorCode" /></b>
 
-											</TD>											
+											</TD>
 
-										</TR>									
+										</TR>
 
 										<TR bgcolor="#ffffff">
 
@@ -164,7 +164,7 @@
 
 											<TD width="125">
 
-												<bean:write name="indicator" property="baseVal" />	
+												<bean:write name="indicator" property="baseVal" />
 
 											</TD>
 
@@ -176,9 +176,9 @@
 
 											<TD width="125">
 
-												<bean:write name="indicator" property="baseValDate" />	
+												<bean:write name="indicator" property="baseValDate" />
 
-											</TD>											
+											</TD>
 
 										</TR>
 
@@ -196,7 +196,7 @@
 
 											</TD>
 
-										</TR>										
+										</TR>
 
 										<TR bgcolor="#ffffff">
 
@@ -220,42 +220,42 @@
 
 											<TD>
 
-												<bean:write name="indicator" property="targetValDate" />	
+												<bean:write name="indicator" property="targetValDate" />
 
-											</TD>											
+											</TD>
 
 										</TR>
 
 										<TR bgcolor="#ffffff">
 
-											<TD width="125"> 
+											<TD width="125">
 
 												<b><digi:trn key="aim:meTargetValueComments">Comments</digi:trn></b>
 
 											</TD>
 
-											<TD colspan="3">  
+											<TD colspan="3">
 
 												<bean:write name="indicator" property="revisedTargetValComments" />
 
 											</TD>
 
-										</TR>										
+										</TR>
 
 										<TR bgcolor="#ffffff">
 											<TD>
 												<b><digi:trn key="aim:meActualValue">Actual Value</digi:trn></b>
 											</TD>
 											<TD>
-												<bean:write name="indicator" property="actualVal" />	
+												<bean:write name="indicator" property="actualVal" />
 											</TD>
 											<TD>
 												<b><digi:trn key="aim:meDate">Date</digi:trn></b>
 											</TD>
 											<TD>
-												<bean:write name="indicator" property="actualValDate" />	
-											</TD>											
-										</TR>	
+												<bean:write name="indicator" property="actualValDate" />
+											</TD>
+										</TR>
 										<TR bgcolor="#ffffff">
 											<TD width="125">
 												<b><digi:trn key="aim:meActualValueComments">Comments</digi:trn></b>
@@ -263,7 +263,7 @@
 											<TD colspan="3">
 												<bean:write name="indicator" property="actualValComments" />
 											</TD>
-										</TR>										
+										</TR>
 
 										<logic:notEmpty name="indicator" property="priorValues">
 
@@ -275,7 +275,7 @@
 
 											</TD>
 
-										</TR>											
+										</TR>
 
 										<logic:iterate name="indicator" property="priorValues"
 
@@ -303,7 +303,7 @@
 
 											<TD>
 
-												<bean:write name="pValue" property="currValDate" />	
+												<bean:write name="pValue" property="currValDate" />
 
 											</TD>
 
@@ -323,13 +323,13 @@
 
 											</TD>
 
-										</TR>										
+										</TR>
 
 										</logic:iterate>
 
 										</logic:notEmpty>
 
-										
+
 
 										<TR bgcolor="#ffffff">
 
@@ -341,23 +341,21 @@
 
 											<TD colspan="3">
 
-												<bean:define id="riskName" name="indicator" property="riskName" 
 
-												type="java.lang.String" />
+												<c:if test="${!empty indicator.riskName}">
 
-												
-
-												<digi:trn key='<%="aim:" + riskName%>'><%=riskName%></digi:trn>
+												<digi:trn key="aim:${indicator.riskName}"><c:out value="${indicator.riskName}"/></digi:trn>
+                                                                                                </c:if>
 
 												<%--
 
-												<bean:write name="indicator" property="riskName" />													
+												<bean:write name="indicator" property="riskName" />
 
 												--%>
 
 											</TD>
 
-										</TR>		
+										</TR>
 
 										<TR bgcolor="#ffffff">
 
@@ -373,7 +371,7 @@
 
 											</TD>
 
-										</TR>											
+										</TR>
 
 									</TABLE>
 
@@ -387,7 +385,7 @@
 
 
 
-									
+
 
 								</TD>
 
@@ -397,7 +395,7 @@
 
 					</TD>
 
-				</TR>	
+				</TR>
 
 				<TR><TD>&nbsp;</TD></TR>
 
@@ -409,7 +407,7 @@
 
 			</TD></TR>
 
-			
+
 
 			</TABLE>
 

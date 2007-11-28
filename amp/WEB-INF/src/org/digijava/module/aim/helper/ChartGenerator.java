@@ -272,7 +272,7 @@ public class ChartGenerator {
 				DefaultCategoryDataset ds = new DefaultCategoryDataset();
 				while (itr.hasNext()) {
 					MEIndicatorValue meIndVal = (MEIndicatorValue) itr.next();
-					ds.addValue(meIndVal.getValue(),meIndVal.getType(),meIndVal);
+					ds.addValue(meIndVal.getValue(),meIndVal.getType(), meIndVal.getIndicatorName());
 				}
 
 				JFreeChart chart = ChartFactory.createStackedBarChart(

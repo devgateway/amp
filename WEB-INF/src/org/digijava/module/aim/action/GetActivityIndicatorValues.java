@@ -27,8 +27,7 @@ public class GetActivityIndicatorValues extends Action
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception
 	{
-		EditActivityForm eaForm = (EditActivityForm) form;
-		eaForm.setTranslatedRiskCollection(null);
+		EditActivityForm eaForm = (EditActivityForm) form;		
 		Long indValId = new Long(-1);
 		String temp = request.getParameter("indValId");
 		
@@ -38,18 +37,12 @@ public class GetActivityIndicatorValues extends Action
 			{
 				indValId = new Long(Long.parseLong(temp));
 				if(eaForm.getRiskCollection()!=null){
-					String locale=RequestUtils.getNavigationLanguage(request).getCode();
-				    String siteId = RequestUtils.getSite(request).getSiteId();
 					Iterator iter=eaForm.getRiskCollection().iterator();
 	            	 while (iter.hasNext()){
 	    	       		 AmpIndicatorRiskRatings ampIndRisc=(AmpIndicatorRiskRatings) iter.next();
-	    	       		 LabelValueBean lvb=new LabelValueBean(TranslatorWorker.translate("aim:risk:"+ampIndRisc.getRatingName().replace(" ",""),locale,siteId),ampIndRisc.getAmpIndRiskRatingsId().toString());
-	    	       		 if( eaForm.getTranslatedRiskCollection()==null) {
-	    	       			 eaForm.setTranslatedRiskCollection(new ArrayList());
-	    	       		 }
-	    	       		 eaForm.getTranslatedRiskCollection().add(lvb);
+	    	       		 ampIndRisc.setTranslatedRatingName(ampIndRisc.getRatingName().replace(" ",""));
 	    	       	 }
-				}
+				} 
 				if (eaForm.getIndicatorsME() != null) 
 				{
 					Iterator itr = eaForm.getIndicatorsME().iterator();

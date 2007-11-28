@@ -5,6 +5,7 @@ import org.digijava.module.aim.util.Identifiable;
 public class AmpIndicatorRiskRatings implements Identifiable {
 	private Long ampIndRiskRatingsId;
 	private String ratingName;
+	private String translatedRatingName;
 	private int ratingValue;
 	
 	public Long getAmpIndRiskRatingsId() {
@@ -31,5 +32,11 @@ public class AmpIndicatorRiskRatings implements Identifiable {
 
 	public String toString() {
 		return ratingName;
+	}
+	public String getTranslatedRatingName() {
+		return translatedRatingName;
+	}
+	public void setTranslatedRatingName(String translatedRatingName) {
+		this.translatedRatingName = translatedRatingName;
 	}
 }

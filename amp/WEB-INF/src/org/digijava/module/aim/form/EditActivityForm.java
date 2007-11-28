@@ -429,7 +429,6 @@ private int isPreview=0;
 	private Float revisedTargetVal;
 
 	private Collection riskCollection;
-	private List <LabelValueBean> translatedRiskCollection;
 	
 	private Long indicatorRisk;
 	private Collection indHistory;
@@ -4570,13 +4569,6 @@ public String getPurpose() {
 
        public int getProgramType() {
                return programType;
-       }
-       public List<LabelValueBean> getTranslatedRiskCollection() {
-    	   return translatedRiskCollection;
-       }
-       public void setTranslatedRiskCollection(
-    		   List<LabelValueBean> translatedRiskCollection) {
-    	   this.translatedRiskCollection = translatedRiskCollection;
        }
 }
 

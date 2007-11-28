@@ -12,7 +12,7 @@
 <script language="javascript">
 
 function validate(field) {
-
+    alert(field);
 	if (field == 2) { // validate sector
 		if (document.aimNewIndicatorForm.selActivitySector.checked != null) {
 			if (document.aimNewIndicatorForm.selActivitySector.checked == false) {
@@ -89,7 +89,6 @@ function addSectors() {
 }
 
 function removeSelSectors() {
-		  
 		  var flag = validate(2);
 		  if (flag == false) return false;
 		  

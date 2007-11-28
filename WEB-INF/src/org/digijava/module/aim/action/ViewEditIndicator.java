@@ -5,15 +5,20 @@ import org.digijava.module.aim.form.NewIndicatorForm;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AllMEIndicators;
 import org.digijava.module.aim.helper.AllActivities;
+import org.digijava.module.aim.helper.AmpIndSectors;
+
 import java.util.List;
 import java.util.Iterator;
 import java.util.Collection;
 import java.util.ArrayList;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
 import java.util.*;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -23,6 +28,9 @@ public class ViewEditIndicator
     extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                              HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+    	ActivitySector activitySector = new ActivitySector();
+    	Collection Sectors = new ArrayList();
+    	
         NewIndicatorForm existIndForm = (NewIndicatorForm) form;
 
         String action=request.getParameter("action");
@@ -45,6 +53,7 @@ public class ViewEditIndicator
                     newInd.setName(existIndForm.getName());
                     newInd.setType(existIndForm.getType());
                     newInd.setSector(existIndForm.getSelActivitySector());
+                    newInd.setIndSectores(existIndForm.getActivitySectors());
 
                     ProgramUtil.saveThemeIndicators(newInd, existIndForm.getSelectedProgramId());
 
@@ -105,7 +114,16 @@ public class ViewEditIndicator
             	existIndForm.setCategory(ind.getCategory());
             	existIndForm.setId(ind.getIndicatorId());
             	existIndForm.setIndType(0);
+            	for(Iterator sectId = ind.getSector().iterator(); sectId.hasNext();){
+            		AmpIndSectors sect = (AmpIndSectors) sectId.next(); 
             	
+            	AmpSector sec = SectorUtil.getAmpSector(sect.getSectorId().getAmpSectorId());
+            	activitySector.setSectorName(sec.getName());
+            	activitySector.setSectorId(sec.getAmpSectorId());
+            	activitySector.setSubsectorLevel1Id(new Long(-1));
+            	Sectors.add(activitySector);
+            	existIndForm.setActivitySectors(Sectors);
+            	}
 
                 if(ind.getThemes() != null) {
                     Collection<LabelValueBean> prgCol=new ArrayList<LabelValueBean>();

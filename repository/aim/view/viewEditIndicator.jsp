@@ -22,11 +22,11 @@ function saveIndicator(){
     return false;
   }
   
-  if(document.aimNewIndicatorForm.selActivitySectors == null){
+  if(document.aimNewIndicatorForm.selActivitySector == null){
 		alert("Please add sectors");
 		 return false;
 	}else{
-		var Sector = document.aimNewIndicatorForm.selActivitySectors.value;
+		var Sector = document.aimNewIndicatorForm.selActivitySector.value;
 		document.getElementById("hdnselActivitySectors").value = Sector;
 	}
   
@@ -39,7 +39,7 @@ function saveIndicator(){
 }
 
 function selectProgram(){
-  <digi:context name="selPrg" property="context/module/moduleinstance/selectProgramForIndicator.do" />
+  <digi:context name="selPrg" property="context/module/moduleinstance/selectProgramForIndicator.do?action=edit" />
   openURLinWindow("<%= selPrg %>",700, 500);
 }
 
@@ -104,17 +104,18 @@ function changeIndType(type){
 }
 
 function validate(field) {
+
 	if (field == 2){  // validate sector
-		if (document.aimNewIndicatorForm.selActivitySectors.checked != null) {
-			if (document.aimNewIndicatorForm.selActivitySectors.checked == false) {
+		if (document.aimNewIndicatorForm.selActivitySector.checked != null) {
+			if (document.aimNewIndicatorForm.selActivitySector.checked == false) {
 				alert("Please choose a sector to remove");
 				return false;
 			}
 		} else {
-			var length = document.aimNewIndicatorForm.selActivitySectors.length;
+			var length = document.aimNewIndicatorForm.selActivitySector.length;
 			var flag = 0;
 			for (i = 0;i < length;i ++) {
-				if (document.aimNewIndicatorForm.selActivitySectors[i].checked == true) {
+				if (document.aimNewIndicatorForm.selActivitySector[i].checked == true) {
 					flag = 1;
 					break;
 				}

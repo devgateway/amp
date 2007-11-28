@@ -15,6 +15,9 @@ public class SelectProgramForIndicator
     extends Action {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+    	
+    	String edit = request.getParameter("edit");
+    	
         NewIndicatorForm newIndForm=(NewIndicatorForm)form;
 
         Long id[]=newIndForm.getSelActivitySector();
@@ -39,7 +42,11 @@ public class SelectProgramForIndicator
                 newIndForm.setSelectedActivityId(null);
             }
             newIndForm.setAction(null);
-            return mapping.findForward("add");
+            if(edit == null){
+            	return mapping.findForward("add");
+            }else{
+            	return mapping.findForward("edit");
+            }
         }
 
         Collection<AmpTheme> prgCol = ProgramUtil.getAllPrograms();

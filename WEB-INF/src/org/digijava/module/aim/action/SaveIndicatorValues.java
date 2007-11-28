@@ -15,17 +15,17 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 
-public class SaveIndicatorValues extends Action 
+public class SaveIndicatorValues extends Action
 {
 	private static Logger logger = Logger.getLogger(SaveIndicatorValues.class);
-	
+
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
-			HttpServletRequest request,HttpServletResponse response) throws Exception 
+			HttpServletRequest request,HttpServletResponse response) throws Exception
 	{
-		
+
 		EditActivityForm eaForm = (EditActivityForm) form;
 
-		if (eaForm.getIndicatorsME() != null && 
+		if (eaForm.getIndicatorsME() != null &&
 				eaForm.getIndicatorsME().size() > 0) {
 			ActivityIndicator actInd = new ActivityIndicator();
 			actInd.setIndicatorId(eaForm.getIndicatorId());
@@ -60,6 +60,7 @@ public class SaveIndicatorValues extends Action
 							temp.setRevisedTargetValDate(eaForm.getRevTargetValDate());
 							temp.setRevisedTargetValComments(eaForm.getRevTargetValComments());
 						} else {
+                                                        eaForm.setRevTargetVal(eaForm.getTargetVal());
 							temp.setRevisedTargetVal(eaForm.getTargetVal());
 							temp.setRevisedTargetValDate(eaForm.getTargetValDate());
 							temp.setRevisedTargetValComments(eaForm.getTargetValComments());
@@ -71,7 +72,7 @@ public class SaveIndicatorValues extends Action
 								temp.setCurrentVal(Float.parseFloat(eaForm.getCurrentVal()));
 							}
 							//temp.setCurrentVal(eaForm.getCurrentVal());
-							
+
 							temp.setCurrentValDate(eaForm.getCurrValDate());
 							temp.setCurrentValComments(eaForm.getCurrentValComments());
 						}

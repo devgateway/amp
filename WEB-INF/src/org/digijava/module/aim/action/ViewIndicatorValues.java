@@ -3,7 +3,6 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,39 +17,42 @@ import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 public class ViewIndicatorValues extends TilesAction {
-	
+
 	private static Logger logger = Logger.getLogger(ViewIndicatorValues.class);
-	
+
 	public ActionForward execute(ComponentContext ctx,ActionMapping mapping,
 			ActionForm form,HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
 		ViewIndicatorForm viForm = (ViewIndicatorForm) form;
 		viForm.setIndicators(new ArrayList());
-		
-		String ind = request.getParameter("ind");
+
+		String ind =request.getParameter("ind");
 		String risk = request.getParameter("risk");
-		
+
 		Collection col = MEIndicatorsUtil.getIndicatorsForActivity(new Long(
 				viForm.getAmpActivityId()));
+
 		Iterator itr = col.iterator();
 		if (ind != null) {
 			while (itr.hasNext()) {
 				ActivityIndicator ai = (ActivityIndicator) itr.next();
-				if (ind.equalsIgnoreCase(ai.getIndicatorName())) {
+				if (Long.parseLong(ind)==ai.getIndicatorId()) {
 					viForm.getIndicators().add(ai);
 					break;
 				}
 			}
+
+
 		} else if (risk != null) {
 			while (itr.hasNext()) {
 				ActivityIndicator ai = (ActivityIndicator) itr.next();
 				if (risk.equalsIgnoreCase(ai.getRiskName())) {
 					viForm.getIndicators().add(ai);
 				}
-			}			
+			}
 		}
-		
+
 		return null;
 	}
 }

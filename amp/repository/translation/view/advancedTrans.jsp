@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <script language=JavaScript type=text/javascript>
+<digi:context name="updateMsg" property="context/module/moduleinstance/updateMessage.do" />
 
 function fnOnSearch() {
 	<digi:context name="searchMsg" property="context/module/moduleinstance/showAdvancedTranslation.do" />
@@ -27,8 +28,43 @@ function onChangeList(paramName, paramValue) {
 
 }
 
+function saveAll() {
+	
+	var form   		= document.forms['advancedTranslationForm'];
+	var targetValue = '';
+	var targetObj 	= null;
+	var pageId 		= new Number(getPageId());
+	var start		= 1;
+	var offset		= 25;
+
+	if (pageId > 1) {
+		start = 25 * (pageId-1) + 1;
+		offset = start + 24;
+	}
+
+	for (var i=start; i<=offset; i++) {
+
+		targetObj = form['message['+i+'].targetValue'];
+
+		if (targetObj != 'undefined' && targetObj && targetObj.value) {
+			if (form['messageOrig['+i+'].targetValue']) {
+				var origValue   = form['messageOrig['+i+'].targetValue'].value;
+				var targetValue = targetObj.value;
+				if (origValue == targetValue) {
+					form['message['+i+'].key'].value = '';
+				}
+			}
+		}
+
+	}
+	
+	form.action = getFormActionURL(form);
+	return true;
+	
+}
+
+
 function fnOnUpdateMessage(transId) {
-	<digi:context name="updateMsg" property="context/module/moduleinstance/updateMessage.do" />
 
 	if (!transId) {
 		transId = '';
@@ -99,8 +135,7 @@ function expireKeys() {
 
 }
 
-function getFormAction(form, key) {
-
+function getFormActionURL(form){
 	var path  = document.location.href;
     var param = '';
 
@@ -116,8 +151,15 @@ function getFormAction(form, key) {
 		param = 'd-1338053-p=1';
 	}
 
-	return "<%=updateMsg%>?key="+key+"&"+param+"&showExpired="+form.showExpired.checked;
+	return "<%=updateMsg%>?"+param+"&showExpired="+form.showExpired.checked;
 
+}
+
+
+function getFormAction(form, key) {
+
+	return getFormActionURL(form) + "&key="+key;
+	
 }
 
 function getPageId() {
@@ -275,39 +317,38 @@ function cleanUpAddKeyFields() {
 	form.messageText.value = '';
 }
 
-function saveAll() {
-	
-	var form   		= document.forms['advancedTranslationForm'];
-	var targetValue = '';
-	var targetObj 	= null;
-	var pageId 		= new Number(getPageId());
-	var start		= 1;
-	var offset		= 25;
 
-	if (pageId > 1) {
-		start = 25 * (pageId-1) + 1;
-		offset = start + 24;
-	}
+	<%-- flag for indicating changes in textareas--%>
+	var textChanged = false;
 
-	for (var i=start; i<=offset; i++) {
+	$(document).ready(function(){
 
-		targetObj = form['message['+i+'].targetValue'];
-
-		if (targetObj != 'undefined' && targetObj && targetObj.value) {
-			if (form['messageOrig['+i+'].targetValue']) {
-				var origValue   = form['messageOrig['+i+'].targetValue'].value;
-				var targetValue = targetObj.value;
-				if (origValue == targetValue) {
-					form['message['+i+'].key'].value = '';
+		<%-- set change handler for all textareas --%>
+		$("textarea").bind('keypress',function(){
+			textChanged=true;
+		});
+		
+		<%-- set click handler for document --%>
+		$(document).bind('click',function(e){
+			var myEvent=e;
+			if (myEvent==null) myEvent=event;
+			var target=myEvent.target;
+			<%-- check if link was clicked --%>
+			var tagName=target.tagName.toLowerCase();
+			if (tagName=='a' || (tagName!='a' && target.parentNode.tagName.toLowerCase()=='a')){ <%-- || (target.tagName.toLowerCase()=='input' && (target.type.toLowerCase()=='button' || target.type.toLowerCase()=='submit'))){ --%>
+				<%-- if any textarea has been changed then ask user --%>
+				if (textChanged==true){
+					var exitWithoutSave=confirm('One or more translations has been changed, do you want to leave page without saving?');
+					if (exitWithoutSave) return true;
+					return false;
 				}
 			}
-		}
+		    return true;
+		  });
+		
+	});
 
-	}
-	
-	return true;
-	
-}
+
 
 </script>
 

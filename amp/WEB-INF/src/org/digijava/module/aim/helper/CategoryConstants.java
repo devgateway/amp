@@ -42,5 +42,8 @@ public class CategoryConstants {
 	public static final String MTEF_PROJECTION_NAME="MTEF Projection";
 	public static final String MTEF_PROJECTION_KEY="mtef_projection";
 	
+	public static final String ACTIVITY_LEVEL_NAME="Activity Level";
+	public static final String ACTIVITY_LEVEL_KEY="activity_level";
+	
 }
 

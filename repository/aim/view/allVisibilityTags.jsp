@@ -26,7 +26,7 @@
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Help"></module:display>
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="M&E" parentModule="MONITORING AND EVALUATING"></module:display>
+<module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display>
 <module:display name="MONITORING AND EVALUATING"></module:display>
 <module:display name="NATIONAL PLAN DASHBOARD"></module:display>
 <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD"></module:display>
@@ -57,9 +57,9 @@
 <feature:display module="Project ID and Planning" name="Planning"></feature:display>
 <feature:display module="Project ID and Planning" name="Sectors"></feature:display>
 <feature:display module="Reports" name="Contribution Report"></feature:display>
-<feature:display name="Activity" module="M&E"></feature:display>
+<feature:display name="Activity" module="M & E"></feature:display>
 <feature:display name="Admin NPD" module="National Planning Dashboard"></feature:display>
-<feature:display name="Admin" module="M&E"></feature:display>
+<feature:display name="Admin" module="M & E"></feature:display>
 <feature:display name="Beneficiary Agency" module="Organizations"></feature:display>
 <feature:display name="Budget" module="Project ID and Planning"></feature:display>
 <feature:display name="Calendar" module="Calendar"></feature:display>
@@ -70,8 +70,8 @@
 <feature:display name="Costing Tab" module="Activity Costing"></feature:display>
 <feature:display name="Costing" module="Activity Costing"></feature:display>
 <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues"></feature:display>
-<feature:display name="Dashboard Tab" module="M&E"></feature:display>
-<feature:display name="Dashboard" module="M&E"></feature:display>
+<feature:display name="Dashboard Tab" module="M & E"></feature:display>
+<feature:display name="Dashboard" module="M & E"></feature:display>
 <feature:display name="Documents Tab" module="Document Management"></feature:display>
 <feature:display name="Documents Tab" module="Document"></feature:display>
 <feature:display name="Donor Contact Information" module="Contact Information"></feature:display>

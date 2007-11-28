@@ -27,7 +27,7 @@
 <module:display name="HELP"></module:display>
 <module:display name="Help" parentModule="HELP"></module:display>
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="M&E" parentModule="MONITORING AND EVALUATING"></module:display>
+<module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display>
 <module:display name="MONITORING AND EVALUATING"></module:display>
 <module:display name="NATIONAL PLAN DASHBOARD"></module:display>
 <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD"></module:display>

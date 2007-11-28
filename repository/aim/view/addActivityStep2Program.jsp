@@ -55,6 +55,8 @@
                                           </digi:trn>
                                         </td>
                                       </tr>
+                                      
+                                      <field:display name="National Planning Objectives" feature="Program">
                                       <tr>
                                         <td>
                                           <table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">
@@ -133,9 +135,9 @@
                                           </table>
                                         </td>
                                       </tr>
-
-
-
+									  </field:display>
+									
+									  <field:display name="Primary Program" feature="Program">
                                        <tr>
                                         <td>
                                           <table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">
@@ -208,9 +210,9 @@
                                           </table>
                                         </td>
                                       </tr>
+									  </field:display>
 
-
-
+									  <field:display name="Secondary Program" feature="Program">
                                        <tr>
                                         <td>
                                           <table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">
@@ -283,7 +285,7 @@
                                           </table>
                                         </td>
                                       </tr>
-
+									  </field:display>
 
 
 										<field:display name="Program Description" feature="Program">

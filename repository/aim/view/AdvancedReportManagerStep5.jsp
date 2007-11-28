@@ -205,7 +205,7 @@ function deleteColumn()
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'donor' }">
 																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
 
-																							<c:if test="${addedColumns.columnName == 'Donor' || addedColumns.columnName == 'Donor Group' || addedColumns.columnName == 'Donor Agency' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Type Of Assistance' || addedColumns.columnName == 'Financing Instrument' || addedColumns.columnName == 'Project Title' || addedColumns.columnName == 'Team'}">
+																							<c:if test="${addedColumns.columnName == 'Donor' || addedColumns.columnName == 'Donor Group' || addedColumns.columnName == 'Donor Agency' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Type Of Assistance' || addedColumns.columnName == 'Financing Instrument' || addedColumns.columnName == 'Project Title' || addedColumns.columnName == 'Team' || addedColumns.columnName == 'National Planning Objectives' || addedColumns.columnName == 'Primary Program' || addedColumns.columnName == 'Secondary Program'}">
 																								<TR bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
 																									<digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>

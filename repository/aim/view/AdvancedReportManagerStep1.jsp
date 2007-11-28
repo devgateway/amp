@@ -291,7 +291,12 @@ function checkUncheckAll2() {
 											<feature:display name="Costing" module="Activity Costing">
 												<field:display name="Costing Donor" feature="Costing"></field:display>
 												<field:display name="Total Costs" feature="Costing"></field:display>
-											</feature:display>
+											</feature:display>	
+				                            <feature:display name="Program" module="Program">
+				                            	<field:display name="National Planning Objectives" feature="Program">&nbsp;</field:display>
+				                            	<field:display name="Primary Program" feature="Program">&nbsp;</field:display>
+												<field:display name="Secondary Program" feature="Program">&nbsp;</field:display>
+				                            </feature:display>																				
 																	<TR>
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>

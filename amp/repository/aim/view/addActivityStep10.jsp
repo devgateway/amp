@@ -94,7 +94,7 @@
 			document.aimEditActivityForm.currentVal.focus();
 			return false;
 		}
-
+		
 		if (isEmpty(document.aimEditActivityForm.currValDate.value) == true) {
 			alert("Current value date not entered");
 			document.aimEditActivityForm.currValDate.focus();
@@ -102,7 +102,7 @@
 		}
 		*/
 		return true;
-
+	
 	}
 
 	function setValues(val) {
@@ -143,11 +143,11 @@
 <input type="hidden" name="edit" value="true">
 
 
-	<feature:display name="Activity" module="M&E"></feature:display>
-	<feature:display name="Dashboard" module="M&E"></feature:display>
-	<feature:display name="Admin" module="M&E"></feature:display>
-
-
+	<feature:display name="Activity" module="M & E"></feature:display>
+	<feature:display name="Dashboard" module="M & E"></feature:display>
+	<feature:display name="Admin" module="M & E"></feature:display>
+	
+	
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
@@ -433,7 +433,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<bean:write name="indicator" property="targetValComments" />
 																</td>
 															</tr>
-
+															
 															<tr>
 																<field:display name="Revised Target Value" feature="Activity"></field:display>
 																<td><b>
@@ -453,7 +453,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</tr>
 															<field:display name="Comments Revised Target Value" feature="Activity"></field:display>
 															<tr>
-
+															
 																<td><digi:trn key="aim:meRevisedTargetValComments">Comments</digi:trn>
 																</td>
 																<td colspan="4">
@@ -509,7 +509,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	</b><font color="red">*</font>
 																</td>
 																<c:if test="${indicator.targetValDate == null}">
-
+																
 																<td>
 																<html:text property="targetVal" size="10" maxlength="10"/>
 																	<!-- <input type="text" name="targetVal"
@@ -649,7 +649,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<field:display name="Current Value" feature="Activity">
 																<td><b>
 																	<digi:trn key="aim:meCurrentValue">Current Value</digi:trn>
-
+																	
 																</b></td>
 																<td>
 																	<html:text property="currentVal" size="10" maxlength="10"/>
@@ -663,7 +663,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<field:display name="Date Current Value" feature="Activity">
 																<td align="right">
 																	<digi:trn key="aim:meDate">Date</digi:trn>
-
+																	
 																</td>
 																<td align="left">
 																	<input type="text" name="currValDate"
@@ -692,7 +692,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</td>
 															</tr>
 															</field:display>
-														<field:display name="Risk" feature="Activity">
+														<field:display name="Risk" feature="Activity">															
 														<tr>
 															<%--
 															<td><b>

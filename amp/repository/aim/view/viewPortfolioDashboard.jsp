@@ -36,9 +36,9 @@
 <digi:trn key="aim:risk:verylow">Very Low</digi:trn>
 <digi:trn key="aim:performance:actual">Actual</digi:trn>
 <digi:trn key="aim:performance:target">Target</digi:trn>
-	<feature:display name="Activity" module="M&E"></feature:display>
-	<feature:display name="Dashboard" module="M&E"></feature:display>
-	<feature:display name="Admin" module="M&E"></feature:display>
+	<feature:display name="Activity" module="M & E"></feature:display>
+	<feature:display name="Dashboard" module="M & E"></feature:display>
+	<feature:display name="Admin" module="M & E"></feature:display>
 
 </div>
 

@@ -262,7 +262,7 @@
 								</LI>
 							</logic:notEqual>
 						</feature:display>
-						<feature:display name="Dashboard Tab" module="M&E">
+						<feature:display name="Dashboard Tab" module="M & E">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="7">
 									<LI class="selected">
 									:: <digi:trn key="aim:activityDashboard">Dashboard</digi:trn>

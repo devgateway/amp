@@ -86,7 +86,6 @@
 <feature:display name="Issues" module="Issues"></feature:display>
 <feature:display name="Location" module="Project ID and Planning"></feature:display>
 <feature:display name="Logframe" module="Previews"></feature:display>
-<feature:display name="Managed Documents" module="Document"></feature:display>
 <feature:display name="Mofed Contact Information" module="Contact Information"></feature:display>
 <feature:display name="My Messages" module="Desktop Sections"></feature:display>
 <feature:display name="My Tasks" module="Desktop Sections"></feature:display>
@@ -187,8 +186,7 @@
 <field:display name="Components Actual/Planned Commitments" feature="Components"></field:display>
 <field:display name="Components Actual/Planned Disbursements" feature="Components"></field:display>
 <field:display name="Components Actual/Planned Expenditures" feature="Components"></field:display>
-<field:display name="Components Add Managed Documents Button" feature="Managed Documents"></field:display>
-<field:display name="Components Add Physical Progress Link" feature="Physical Progress"></field:display>
+<field:display name="Add Physical Progress Link" feature="Physical Progress"></field:display>
 <field:display name="Components Agency Source" feature="SISIN"></field:display>
 <field:display name="Components Classification Program Code" feature="SISIN"></field:display>
 <field:display name="Components Currency Commitments" feature="Components"></field:display>
@@ -207,7 +205,7 @@
 <field:display name="Components Perspective Expenditures" feature="Components"></field:display>
 <field:display name="Components Physical Progress" feature="Components"></field:display>
 <field:display name="Components Remove Managed Documents Button" feature="Managed Documents"></field:display>
-<field:display name="Components Remove Physical Progress Link" feature="Physical Progress"></field:display>
+<field:display name="Remove Physical Progress Link" feature="Physical Progress"></field:display>
 <field:display name="Components Stage" feature="SISIN"></field:display>
 <field:display name="Components Total Amount Commitments" feature="Components"></field:display>
 <field:display name="Components Total Amount Disbursements" feature="Components"></field:display>
@@ -306,9 +304,6 @@
 <field:display name="Line Ministry Rank" feature="Planning"></field:display>
 <field:display name="Logframe Category" feature="Logframe"></field:display>
 <field:display name="Logframe Preview Button" feature="Logframe" ></field:display>
-<field:display name="Managed Documents Description" feature="Managed Documents"></field:display>
-<field:display name="Managed Documents File Name" feature="Managed Documents"></field:display>
-<field:display name="Managed Documents Name" feature="Managed Documents"></field:display>
 <field:display name="Measures Taken" feature="Issues"></field:display>
 <field:display name="Ministry of Planning Rank" feature="Planning"></field:display>
 <field:display name="Mofed Email" feature="Mofed Contact Information"></field:display>
@@ -379,7 +374,7 @@
 <field:display name="Risk" feature="Activity"></field:display>
 <field:display name="SISIN Code" feature="SISIN"></field:display>
 <field:display name="SISIN Sector" feature="SISIN"></field:display>
-<field:display name="Sector" feature="Location"></field:display>
+<field:display name="Sector" feature="Sectos"></field:display>
 <field:display name="Status" feature="Planning"></field:display>
 <field:display name="Sub Program Level 1" feature="NPD Dashboard"></field:display>
 <field:display name="Sub Program Level 2" feature="NPD Dashboard"></field:display>
@@ -390,7 +385,7 @@
 <field:display name="Sub Program Level 7" feature="NPD Dashboard"></field:display>
 <field:display name="Sub Program Level 8" feature="NPD Dashboard"></field:display>
 <field:display name="Sub-Program" feature="Budget"></field:display>
-<field:display name="Sub-Sector" feature="Location"></field:display>
+<field:display name="Sub-Sector" feature="Sectors"></field:display>
 <field:display name="Sub-Vote" feature="Budget"></field:display>
 <field:display name="Target Value" feature="Activity"></field:display>
 <field:display name="Team" feature="Identification"></field:display>

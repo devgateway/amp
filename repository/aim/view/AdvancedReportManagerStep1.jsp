@@ -251,12 +251,13 @@ function checkUncheckAll2() {
 
 
 
-
+											<feature:display name="Sectors" module="Project ID and Planning"></feature:display>
+											<field:display name="Sector" feature="Sectos">&nbsp;</field:display>
+											<field:display name="Sub-Sector" feature="Sectors">&nbsp;</field:display>
+											
 											<feature:display name="Location" module="Project ID and Planning">
 												<field:display name="Implementation Level" feature="Location">&nbsp;</field:display>
 												<field:display name="Region" feature="Location">&nbsp;</field:display>
-												<field:display name="Sector" feature="Location">&nbsp;</field:display>
-												<field:display name="Sub-Sector" feature="Location">&nbsp;</field:display>
 											</feature:display>
 											<feature:display  name="Funding Organizations" module="Funding">
 												<field:display name="Cumulative Commitment" feature="Funding Organizations">&nbsp;</field:display>
@@ -269,13 +270,17 @@ function checkUncheckAll2() {
 											</feature:display>
 											<feature:display name="Issues" module="Issues">
 												<field:display name="Actors" feature="Issues">&nbsp;</field:display>
-												<field:display name="Component description" feature="Issues">&nbsp;</field:display>
-												<field:display name="Component Name" feature="Issues">&nbsp;</field:display>
 												<field:display name="Issues" feature="Issues">&nbsp;</field:display>
 												<field:display name="Measures Taken" feature="Issues">&nbsp;</field:display>
-												<field:display name="Physical Progress" feature="Issues">&nbsp;</field:display>
-												<field:display name="Physical progress description" feature="Issues">&nbsp;</field:display>
-												<field:display name="Physical progress title" feature="Issues">&nbsp;</field:display>
+											</feature:display>
+											<feature:display name="Components" module="Components"></feature:display>
+												<field:display name="Component description" feature="Components">&nbsp;</field:display>
+												<field:display name="Component Name" feature="Components">&nbsp;</field:display>
+											
+											<feature:display name="Physical Progress" module="Components">
+												<field:display name="Physical Progress" feature="Physical Progress">&nbsp;</field:display>
+												<field:display name="Physical progress description" feature="Physical Progress">&nbsp;</field:display>
+												<field:display name="Physical progress title" feature="Physical Progress">&nbsp;</field:display>
 											</feature:display>
 											<feature:display name="Reports Contact Information" module="Contact Information">
 												<field:display name="Contact Name" feature="Reports Contact Information">&nbsp;</field:display>
@@ -291,7 +296,7 @@ function checkUncheckAll2() {
 											<feature:display name="Costing" module="Activity Costing">
 												<field:display name="Costing Donor" feature="Costing"></field:display>
 												<field:display name="Total Costs" feature="Costing"></field:display>
-											</feature:display>	
+											</feature:display>
 				                            <feature:display name="Program" module="Program">
 				                            	<field:display name="National Planning Objectives" feature="Program">&nbsp;</field:display>
 				                            	<field:display name="Primary Program" feature="Program">&nbsp;</field:display>

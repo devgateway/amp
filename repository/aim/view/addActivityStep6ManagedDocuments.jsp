@@ -31,9 +31,7 @@
 														<html:multibox property="selManagedDocs">
 															<bean:write name="selManagedDocuments" property="id" />
 														</html:multibox>
-														<field:display name="Managed Documents Name" feature="Managed Documents">
 														<bean:write name="selManagedDocuments" property="name" /> - 
-														</field:display>
 														<c:if test="${!empty selManagedDocuments.fileName}">
 							   							<bean:define id="fileName" name="selManagedDocuments" 
 															property="fileName" />
@@ -50,14 +48,10 @@
 														    <digi:img skipBody="true" src="<%=extension%>" border="0" 
 															 align="absmiddle"/>	
 														</c:if>
-														<field:display name="Managed Documents File Name" feature="Managed Documents">
 															<i>
 														<bean:write name="selManagedDocuments" property="fileName" /></i>
 															<br>
-															</field:display>
-													<field:display name="Managed Documents Description" feature="Managed Documents">
 														<b>Desc:</b><bean:write name="selManagedDocuments" property="description" />
-														</field:display>
 													</td>
 												</tr>
 												</logic:iterate>
@@ -65,18 +59,14 @@
 													<table cellSpacing=2 cellPadding=2>
 														<tr>
 															<td>
-															<field:display name="Components Add Managed Documents Button" feature="Managed Documents">
 																<html:button  styleClass="buton" property="submitButton" onclick="addManagedDocuments()">
 																	<digi:trn key="btn:addManagedDocuments">Add Managed Documents</digi:trn>
 																</html:button>
-															</field:display>
 															</td>
 															<td>
-															<field:display name="Components Remove Managed Documents Button" feature="Managed Documents">
 																<html:button  styleClass="buton" property="submitButton" onclick="return removeSelManagedDocuments()">
 																	<digi:trn key="btn:removeDocuments">Remove Documents</digi:trn>
 																</html:button>
-															</field:display>
 															</td>
 														</tr>
 													</table>
@@ -85,7 +75,6 @@
 										</logic:notEmpty>
 										
 										<logic:empty name="aimEditActivityForm" property="managedDocumentList">
-										<field:display name="Components Add Managed Documents Button" feature="Managed Documents">
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
@@ -95,7 +84,6 @@
 													</td>
 												</tr>
 											</table>
-										</field:display>
 										</logic:empty>										
 									</td></tr>
 									</c:if>

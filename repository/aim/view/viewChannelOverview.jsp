@@ -567,7 +567,7 @@ function commentWin(val) {
 																	<TR>
 																		<TD bgcolor="#ffffff">
                                                                                                                                                   <c:forEach var="program" items="${aimChannelOverviewForm.nationalPlanObjectivePrograms}">
-                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%
+                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
                                                                                                                                                   </c:forEach>
 																		</TD>
 																	</TR>
@@ -579,7 +579,7 @@ function commentWin(val) {
 																	<TR>
 																		<TD bgcolor="#ffffff">
                                                                                                                                                   <c:forEach var="program" items="${aimChannelOverviewForm.primaryPrograms}">
-                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%
+                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
                                                                                                                                                   </c:forEach>
 																		</TD>
 																	</TR>
@@ -591,7 +591,7 @@ function commentWin(val) {
 																	<TR>
 																		<TD bgcolor="#ffffff">
                                                                                                                                                   <c:forEach var="program" items="${aimChannelOverviewForm.secondaryPrograms}">
-                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%
+                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
                                                                                                                                                   </c:forEach>
 																		</TD>
 																	</TR>

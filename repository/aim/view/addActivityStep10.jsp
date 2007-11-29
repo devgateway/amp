@@ -706,10 +706,10 @@ ${fn:replace(message,quote,escapedQuote)}
 															<td><b>Risk</b></td>
 															<td>
 																<html:select property="indicatorRisk" styleClass="inp-text">
-																<option value="0"><digi:trn key="help:selectRisk">Select Risk</digi:trn></option>
+																<option value="-1"><digi:trn key="help:selectRisk">Select Risk</digi:trn></option>
 																	<logic:iterate id="currRisk" name="aimEditActivityForm" property="riskCollection">																		
 																		<c:set var="trn"><digi:trn key="aim:risk:${currRisk.translatedRatingName}">${currRisk.ratingName}</digi:trn></c:set>
-																		<html:option value="${currRisk.ratingValue}">${trn}</html:option>																		
+																		<html:option value="${currRisk.ampIndRiskRatingsId}">${trn}</html:option>																		
 																	</logic:iterate>
 																</html:select>															
 															</td>

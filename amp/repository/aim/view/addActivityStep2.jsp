@@ -122,7 +122,13 @@ function validateForm(){
       document.aimEditActivityForm.addSec.focus();
       return false;
     }
-    if (!validateSectorPercentage()){
+    var npoSize = document.aimEditActivityForm.sizeNPOPrograms.value;
+    var ppSize = document.aimEditActivityForm.sizePPrograms.value;
+    var spSize = document.aimEditActivityForm.sizeSPrograms.value;
+    if (!validateSectorPercentage()||
+    !validateProgramsPercentage(npoSize,"nationalPlanObjectivePrograms") ||
+    !validateProgramsPercentage(ppSize,"primaryPrograms") ||
+    !validateProgramsPercentage(spSize,"secondaryPrograms")  ){
       return false;
     }
   }
@@ -199,6 +205,56 @@ function validateSectorPercentage(){
   return true;
 }
 
+function validateProgramsPercentage(cnt,prefix){
+  <c:set var="errMsgAddPercentage">
+  <digi:trn key="aim:addProgramPercentageErrorMessage">
+  Please add Program percentage
+  </digi:trn>
+  </c:set>
+  <c:set var="errMsgSumPercentage">
+  <digi:trn key="aim:addProgramSumPercentageErrorMessage">
+  Sum of programs percentages should be 100
+  </digi:trn>
+  </c:set>
+  <c:set var="errMsgZeroPercentage">
+  <digi:trn key="aim:addzeroPercentageErrorMessage">
+  A programs percentage cannot be equal to 0
+  </digi:trn>
+  </c:set>
+  var str = null;
+  var val = null;
+  var i = 0;
+  var flag = false;
+  var sum = 0;
+  while (i < cnt) {
+    str   = prefix+"[" + i + "].programPercentage";
+    val   = (document.aimEditActivityForm.elements)[str].value;
+    if (val == "" || val == null) {
+      alert("${errMsgAddPercentage}");
+      flag = true;
+      break;
+    }
+    if (val == "0"){
+    alert("${errMsgZeroPercentage}");
+    flag = true;
+      break;
+    }
+
+    sum = sum + parseFloat(val);
+    i = i + 1;
+  }
+  if (flag == true) {
+    (document.aimEditActivityForm.elements)[str].focus();
+    return false;
+  }
+  else if (cnt>0&&sum != 100) {
+    alert("${errMsgSumPercentage}");
+    (document.aimEditActivityForm.elements)[str].focus();
+    return false;
+  }
+  return true;
+}
+
 function fnChk(frmContrl){
   <c:set var="errMsgAddSectorNumericValue">
   <digi:trn key="aim:addSecorNumericValueErrorMessage">
@@ -268,6 +324,28 @@ function remProgram(programType) {
   <input type="hidden" name="edit" value="true">
 
 
+  <c:if test="${empty aimEditActivityForm.nationalPlanObjectivePrograms}">
+    <input type="hidden" name="sizeNPOPrograms" value="0">
+  </c:if>
+  <c:if test="${!empty aimEditActivityForm.nationalPlanObjectivePrograms}">
+    <input type="hidden" name="sizeNPOPrograms" value="${fn:length(aimEditActivityForm.nationalPlanObjectivePrograms)}">
+  </c:if>
+
+   <c:if test="${empty aimEditActivityForm.primaryPrograms}">
+    <input type="hidden" name="sizePPrograms" value="0">
+  </c:if>
+  <c:if test="${!empty aimEditActivityForm.primaryPrograms}">
+    <input type="hidden" name="sizePPrograms" value="${fn:length(aimEditActivityForm.primaryPrograms)}">
+  </c:if>
+
+   <c:if test="${empty aimEditActivityForm.secondaryPrograms}">
+    <input type="hidden" name="sizeSPrograms" value="0">
+  </c:if>
+  <c:if test="${!empty aimEditActivityForm.secondaryPrograms}">
+    <input type="hidden" name="sizeSPrograms" value="${fn:length(aimEditActivityForm.secondaryPrograms)}">
+  </c:if>
+
+
   <c:if test="${empty aimEditActivityForm.activitySectors}">
     <input type="hidden" name="sizeActSectors" value="0">
   </c:if>
@@ -275,6 +353,8 @@ function remProgram(programType) {
     <bean:size id ="actSectSize" name="aimEditActivityForm" property="activitySectors" />
     <input type="hidden" name="sizeActSectors" value="${actSectSize}">
   </c:if>
+
+
 
   <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
     <tr>

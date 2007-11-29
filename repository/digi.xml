@@ -52,7 +52,7 @@
 		<hibernate-class>org.digijava.kernel.entity.Image</hibernate-class>
 		<hibernate-class>org.digijava.kernel.user.Group</hibernate-class>
 		<hibernate-class>org.digijava.kernel.user.GroupPermission</hibernate-class>
-		<hibernate-class precache="true">org.digijava.kernel.entity.Locale</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.Locale</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.UserPreferences</hibernate-class>
 		<hibernate-class>org.digijava.kernel.dbentity.Country</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.OrganizationType</hibernate-class>

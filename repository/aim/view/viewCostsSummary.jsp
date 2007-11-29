@@ -131,7 +131,7 @@ function openEUActivityDetails(euActivityId) {
 	
 	<tr bgcolor="#FFFFFF">
 		<td align="right"><b><digi:trn key="aim:viewcostssummary:totals">Totals:</digi:trn></b></td>
-		<field:display name="Costing Grand Total Cost" feature="Costing">
+		<field:display name="Total Costs" feature="Costing">
 		<td align="right"><fmt:formatNumber var="grandCostFormatted"
 			pattern="###,###,###" value="<%=grandCost%>" />
 		${grandCostFormatted}</td>

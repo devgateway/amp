@@ -372,7 +372,7 @@ ${fn:replace(message,quote,escapedQuote)}
 											<tr>
 												<td colspan="2">
 													<table cellspacing="0" cellpadding="3" valign="top" align="center" width="90%">
-														<field:display name="Logframe Category" feature="Logframe">
+														<field:display name="Logframe Category" feature="Activity">
 															<tr>
 																<td >
 																	Logframe Category

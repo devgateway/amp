@@ -63,7 +63,7 @@
 <feature:display name="Beneficiary Agency" module="Organizations"></feature:display>
 <feature:display name="Budget" module="Project ID and Planning"></feature:display>
 <feature:display name="Calendar" module="Calendar"></feature:display>
-<feature:display name="Channel Overview" module="Channel Overview"></feature:display>
+<feature:display name="Channel Overview Tab" module="Channel Overview"></feature:display>
 <feature:display name="Components" module="Components"></feature:display>
 <feature:display name="Content Repository" module="Document Management"></feature:display>
 <feature:display name="Contracting Agency" module="Organizations"></feature:display>
@@ -86,7 +86,7 @@
 <feature:display name="Issues" module="Issues"></feature:display>
 <feature:display name="Location" module="Project ID and Planning"></feature:display>
 <feature:display name="Logframe" module="Previews"></feature:display>
-<feature:display name="Mofed Contact Information" module="Contact Information"></feature:display>
+<feature:display name="Government Contact Information" module="Contact Information"></feature:display>
 <feature:display name="My Messages" module="Desktop Sections"></feature:display>
 <feature:display name="My Tasks" module="Desktop Sections"></feature:display>
 <feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display>
@@ -94,7 +94,7 @@
 <feature:display name="Paris Indicators Tab" module="Paris Indicators"></feature:display>
 <feature:display name="Paris Indicators" module="Paris Indicators"></feature:display>
 <feature:display name="Physical Progress" module="Components"></feature:display>
-<feature:display name="Physical Progress" module="Physical Progress"></feature:display>
+<feature:display name="Physical Progress Tab" module="Physical Progress"></feature:display>
 <feature:display name="Planning" module="Project ID and Planning"></feature:display>
 <feature:display name="Preview Activity" module="Previews"></feature:display>
 <feature:display name="Program" module="Program"></feature:display>
@@ -220,7 +220,7 @@
 <field:display name="Costing Donor" feature="Costing"></field:display>
 <field:display name="Costing Due Date" feature="Costing"></field:display>
 <field:display name="Costing Grand Total Contribution" feature="Costing"></field:display>
-<field:display name="Costing Grand Total Cost" feature="Costing"></field:display>
+<field:display name="Total Costs" feature="Costing"></field:display>
 <field:display name="Costing Inputs" feature="Costing"></field:display>
 <field:display name="Costing Progress" feature="Costing"></field:display>
 <field:display name="Costing Total Contribution" feature="Costing"></field:display>
@@ -302,36 +302,36 @@
 <field:display name="Level 2 Sectors List" feature="Sectors"></field:display>
 <field:display name="Level 3 Sectors List" feature="Sectors"></field:display>
 <field:display name="Line Ministry Rank" feature="Planning"></field:display>
-<field:display name="Logframe Category" feature="Logframe"></field:display>
+<field:display name="Logframe Category" feature="Activity"></field:display>
 <field:display name="Logframe Preview Button" feature="Logframe" ></field:display>
 <field:display name="Measures Taken" feature="Issues"></field:display>
 <field:display name="Ministry of Planning Rank" feature="Planning"></field:display>
-<field:display name="Mofed Email" feature="Mofed Contact Information"></field:display>
-<field:display name="Mofed Fax Number" feature="Mofed Contact Information"></field:display>
-<field:display name="Mofed First Name" feature="Mofed Contact Information"></field:display>
-<field:display name="Mofed Last Name" feature="Mofed Contact Information"></field:display>
-<field:display name="Mofed Organization" feature="Mofed Contact Information"></field:display>
-<field:display name="Mofed Phone Number" feature="Mofed Contact Information"></field:display>
-<field:display name="Mofed Title" feature="Mofed Contact Information"></field:display>
+<field:display name="Government Email" feature="Mofed Contact Information"></field:display>
+<field:display name="Government Fax Number" feature="Mofed Contact Information"></field:display>
+<field:display name="Government First Name" feature="Mofed Contact Information"></field:display>
+<field:display name="Government Last Name" feature="Mofed Contact Information"></field:display>
+<field:display name="Government Organization" feature="Mofed Contact Information"></field:display>
+<field:display name="Government Phone Number" feature="Mofed Contact Information"></field:display>
+<field:display name="Government Title" feature="Mofed Contact Information"></field:display>
 <field:display name="Objectives" feature="Identification"></field:display>
 <field:display name="Organizations Selector" feature="Funding Organizations"></field:display>
 <field:display name="Organizations and Project ID" feature="Identification"></field:display>
 <field:display name="Overall Contribution" feature="Planning"></field:display>
 <field:display name="Overall Cost" feature="Planning"></field:display>
 <field:display name="Perspective Commitment" feature="Funding Organizations"></field:display>
-<field:display name="Perspective Commitments" feature="Regional Funding"></field:display>
+<field:display name="Regional Funding Perspective Commitments" feature="Regional Funding"></field:display>
 <field:display name="Perspective Disbursement" feature="Funding Organizations"></field:display>
 <field:display name="Perspective Expenditure" feature="Funding Organizations"></field:display>
-<field:display name="Physical Progress" feature="Issues"></field:display>
-<field:display name="Physical progress description" feature="Issues"></field:display>
-<field:display name="Physical progress title" feature="Issues"></field:display>
+<field:display name="Physical Progress" feature="Physical Progress"></field:display>
+<field:display name="Physical progress description" feature="Physical Progress"></field:display>
+<field:display name="Physical progress title" feature="Physical Progress"></field:display>
 <field:display name="Printer Friendly Button Performance" feature="Dashboard"></field:display>
 <field:display name="Printer Friendly Button Risk" feature="Dashboard"></field:display>
 <field:display name="Program Background" feature="Admin NPD"></field:display>
 <field:display name="Program Beneficiaries" feature="Admin NPD"></field:display>
 <field:display name="Program Code" feature="Admin NPD"></field:display>
 <field:display name="Program Description" feature="Admin NPD"></field:display>
-<field:display name="Program Description" feature="Program"></field:display>
+<field:display name="NPD Program Description" feature="Program"></field:display>
 <field:display name="Program Environment Considerations" feature="Admin NPD"></field:display>
 <field:display name="Program Lead Agency" feature="Admin NPD"></field:display>
 <field:display name="Program Name" feature="Admin NPD"></field:display>

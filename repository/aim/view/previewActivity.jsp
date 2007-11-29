@@ -2214,7 +2214,7 @@ function viewChanges()
 										</td>
 									</tr>
 									</feature:display>
-									<feature:display name="Mofed Contact Information" module="Contact Information">
+									<feature:display name="Government Contact Information" module="Contact Information">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:mofedContactInformation">

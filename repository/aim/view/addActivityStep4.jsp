@@ -314,7 +314,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																									<field:display name="Currency Commitments" feature="Regional Funding"><td><digi:trn key="aim:currency">Currency</digi:trn></td></field:display>
 																									<field:display name="Date Commitments" feature="Regional Funding"><td><digi:trn key="aim:date">Date</digi:trn></td></field:display>
 																									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																										<field:display name="Perspective Commitments" feature="Regional Funding"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
+																										<field:display name="Regional Funding Perspective Commitments" feature="Regional Funding"><td><digi:trn key="aim:perspective">Perspective</digi:trn></td></field:display>
 																									</logic:equal>
 																								</tr>
 																								<logic:iterate name="regionalFunding"
@@ -331,7 +331,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																									<field:display name="Currency Commitments" feature="Regional Funding"><td><c:out value="${commitment.currencyCode}"/></td></field:display>
 																									<field:display name="Date Commitments" feature="Regional Funding"><td><c:out value="${commitment.transactionDate}"/></td></field:display>
 																									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																										<field:display name="Perspective Commitments" feature="Regional Funding">
+																										<field:display name="Regional Funding Perspective Commitments" feature="Regional Funding">
 																											<td>
 																												<digi:trn key='<%="aim:"+commitment.getPerspectiveNameTrimmed() %>'>
 																													<bean:write name="commitment" property="perspectiveName"/>

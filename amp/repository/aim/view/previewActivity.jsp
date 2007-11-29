@@ -492,6 +492,13 @@ function viewChanges()
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
+                                        	<logic:equal name="comments" property="key" value="Objective Objectively Verifiable Indicators">
+												<logic:iterate name="comments" id="comment" property="value"
+													type="org.digijava.module.aim.dbentity.AmpComments"><b>
+													<digi:trn key="aim:objectivelyVerificationIndicators">Objective Objectively Verifiable Indicators</digi:trn>:</b>
+													<bean:write name="comment" property="comment"/><br/>
+                                        		</logic:iterate>
+                                        	</logic:equal>
 										</logic:iterate>
 										</td>
 									</tr>
@@ -547,6 +554,13 @@ function viewChanges()
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
+                                        	<logic:equal name="comments" property="key" value="Purpose Objectively Verifiable Indicators">
+												<logic:iterate name="comments" id="comment" property="value"
+													type="org.digijava.module.aim.dbentity.AmpComments"><b>
+													<digi:trn key="aim:purposeObjectivelyVerifiableIndicators">Purpose Objectively Verifiable Indicators</digi:trn>:</b>
+													<bean:write name="comment" property="comment"/><br/>
+                                        		</logic:iterate>
+                                        	</logic:equal>
 										</logic:iterate>
 
 										</td>
@@ -586,6 +600,13 @@ function viewChanges()
 												<logic:iterate name="comments" id="comment" property="value"
 													type="org.digijava.module.aim.dbentity.AmpComments"><b>
 													<digi:trn key="aim:resultsVerification">Results Verification</digi:trn>:</b>
+													<bean:write name="comment" property="comment"/><br/>
+                                        		</logic:iterate>
+                                        	</logic:equal>
+                                        	<logic:equal name="comments" property="key" value="Results Objectively Verifiable Indicators">
+												<logic:iterate name="comments" id="comment" property="value"
+													type="org.digijava.module.aim.dbentity.AmpComments"><b>
+													<digi:trn key="aim:resultsObjectivelyVerifiableIndicators">Results Objectively Verifiable Indicators</digi:trn>:</b>
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>

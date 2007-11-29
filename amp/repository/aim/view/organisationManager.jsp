@@ -311,9 +311,15 @@
 								</tr>
 								<tr>
 									<td bgColor=#f4f4f2>
-										<digi:trn key="aim:organMan:alphaFilterNote">
-											 Click on viewAll to see all existing organizations.
-										</digi:trn>
+										<c:if test="${not empty aimOrgManagerForm.currentAlpha}">
+											<c:if test="${aimOrgManagerForm.currentAlpha!='viewAll'}">
+											   	<c:if test="${aimOrgManagerForm.currentAlpha!=''}">														    	
+											    	<digi:trn key="aim:organMan:alphaFilterNote">
+														Click on viewAll to see all existing organizations.
+													</digi:trn>
+												</c:if>
+											</c:if>
+										</c:if>										
 									</td>
 								</tr>
 							</table>

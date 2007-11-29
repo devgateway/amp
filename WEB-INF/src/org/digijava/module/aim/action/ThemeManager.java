@@ -135,6 +135,7 @@ public class ThemeManager extends Action {
 					Long id = new Long(Long.parseLong(request.getParameter("themeId")));
 					
 					ProgramUtil.deleteTheme(id);
+					
 					return mapping.findForward("delete");
 				}
 			/*Iterator itr = DbUtil.getActivityThemeFromAAT(themeForm.getThemeId()).iterator();
@@ -160,18 +161,27 @@ public class ThemeManager extends Action {
 //		themeForm.setSubPrograms(ProgramUtil.getAllSubThemes(id));
 //	}
 		
-		themeForm.setThemes(themes);
-		for(Iterator itr=themeForm.getThemes().iterator();itr.hasNext();)
-		{
-			AmpTheme item=(AmpTheme)itr.next();
-			Long id = item.getAmpThemeId();
-			Subthemes.addAll(ProgramUtil.getAllSubThemes(id));
-			
-		
-			
-		}
-		themeForm.setSubPrograms(Subthemes);
+//		themeForm.setThemes(themes);
+//		for(Iterator itr=themeForm.getThemes().iterator();itr.hasNext();)
+//		{
+//			AmpTheme item=(AmpTheme)itr.next();
+//			Long id = item.getAmpThemeId();
+//			Subthemes.addAll(ProgramUtil.getAllSubThemes(id));
+//			
+//		
+//			
+//		}
+//		themeForm.setSubPrograms(Subthemes);
 		//themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
+		 List allThemes = ProgramUtil.getAllThemes(true);
+
+
+			Collection themeFlatTree = CollectionUtils.getHierarchy(
+					allThemes, 
+					new ProgramHierarchyDefinition(),
+					new XMLtreeItemFactory());
+			
+			themeForm.setThemes(themeFlatTree);
 		
 		
 		return mapping.findForward("forward");

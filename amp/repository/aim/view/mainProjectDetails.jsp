@@ -130,7 +130,7 @@
 			  	<TR><TD bgcolor="#3754a1">
 				<DIV id="navlinks">
 					<UL>
-						<feature:display name="Channel Overview" module="Channel Overview">
+						<feature:display name="Channel Overview Tab" module="Channel Overview">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="0">
 							   <LI class="selected">
 									:: <digi:trn key="aim:channelOverview">Channel Overview</digi:trn>

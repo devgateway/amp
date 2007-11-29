@@ -83,7 +83,7 @@
 					<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
 
-					<feature:display name="Physical Progress" module="Physical Progress">
+					<feature:display name="Physical Progress Tab" module="Physical Progress">
                   <c:set target="${urlTabs}" property="tabIndex" value="2"/>
 					
 						<div id="gen" title='<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>'>

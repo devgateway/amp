@@ -2883,6 +2883,14 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                 return col;
        }
 
+  public static class HelperAmpActivityNameComparator
+        implements Comparator {
+        public int compare(Object obj1, Object obj2) {
+            AmpActivity act1 = (AmpActivity) obj1;
+            AmpActivity act2 = (AmpActivity) obj2;
+            return act1.getName().compareTo(act2.getName());
+        }
+    }
 
   /**
    * Comparator for AmpActivity class.

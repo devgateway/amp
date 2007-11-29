@@ -1515,6 +1515,10 @@
     <action name="aimNewIndicatorForm" path="/aim/sectorSelectedForindEdit" scope="session" type="org.digijava.module.aim.action.SectorSelectedForIndicator">
 	<forward name="forward" path="/showLayout.do?layout=viewEditIndicator" />
     </action>
+    <action name="aimNewIndicatorForm" path="/aim/selectActivityForIndicator" scope="session" type="org.digijava.module.aim.action.SelectActivityForIndicator" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=selectActivityForIndicator" />
+      <forward name="add" path="/showLayout.do?layout=addNewIndicator" />
+    </action>
     <action name="aimNewIndicatorForm" path="/aim/viewEditIndicator" scope="session" type="org.digijava.module.aim.action.ViewEditIndicator" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewEditIndicator" />
     </action>

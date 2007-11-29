@@ -52,7 +52,8 @@ public class SearchAmpIndicators extends Action {
 				if (eaForm.getKeyword().trim().length() != 0) {
 					// serach for indicators based on the keyword and the
 					// organisation type
-					col = ProgramUtil.searchForindicators(eaForm.getKeyword().trim(),eaForm.getSectorName());
+					//col = ProgramUtil.searchForindicators(eaForm.getKeyword().trim(),eaForm.getSectorName());
+					col = ProgramUtil.searchForindicator(eaForm.getKeyword());
 				} else {
 					// search for indicators based on organisation type only
 					col = ProgramUtil.searchForindicator(eaForm.getSectorName());

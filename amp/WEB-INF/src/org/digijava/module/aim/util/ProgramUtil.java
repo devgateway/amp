@@ -228,25 +228,25 @@ public class ProgramUtil {
             return themes;
         }
 
-        public static Collection searchForindicators(String keyword,String sectorname) {
-    		Session session = null;
-    		Collection col = null;
-
-    		try {
-    			session = PersistenceManager.getRequestDBSession();
-    			String queryString = "select t from "
-    					+ AmpThemeIndicators.class.getName() + " t "
-    					+ "where t.ampThemeIndId in (select t1.themeIndicatorId from " +
-    					AmpIndicatorSector.class.getName() + " t1 join t1.sectorId si "+
-    					"where si.name = '"+sectorname+"')" +
-    					"and t.name like '%" + keyword + "%'";
-    			Query qry = session.createQuery(queryString);
-    			col = qry.list();
-    		} catch (Exception ex) {
-    			logger.debug("Unable to search " + ex);
-    			}
-    		return col;
-    	}
+//        public static Collection searchForindicators(String keyword,String sectorname) {
+//    		Session session = null;
+//    		Collection col = null;
+//
+//    		try {
+//    			session = PersistenceManager.getRequestDBSession();
+//    			String queryString = "select t from "
+//    					+ AmpThemeIndicators.class.getName() + " t "
+//    					+ "where t.ampThemeIndId in (select t1.themeIndicatorId from " +
+//    					AmpIndicatorSector.class.getName() + " t1 join t1.sectorId si "+
+//    					"where si.name = '"+sectorname+"')" +
+//    					"and t.name like '%" + keyword + "%'";
+//    			Query qry = session.createQuery(queryString);
+//    			col = qry.list();
+//    		} catch (Exception ex) {
+//    			logger.debug("Unable to search " + ex);
+//    			}
+//    		return col;
+//    	}
 
 
         public static Collection searchForindicator(String sectorname) {
@@ -259,7 +259,7 @@ public class ProgramUtil {
     					+ AmpThemeIndicators.class.getName() + " t "
     					+ "where t.ampThemeIndId in (select t1.themeIndicatorId from " +
     					AmpIndicatorSector.class.getName() + " t1 join t1.sectorId si "+
-    					  "where si.name = '"+sectorname+"')";
+    					  "where upper(si.name) like '"+sectorname.toUpperCase()+"')";
     			Query qry = session.createQuery(queryString);
     			col = qry.list();
     		} catch (Exception ex) {

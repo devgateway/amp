@@ -489,7 +489,8 @@
 				<page>aim_npdOptions</page>
 				<page>addNewIndicator</page>
 			    <page>selectProgramForIndicator</page>
-				<page>selectLocationForIndicatorValue</page>				
+				<page>selectLocationForIndicatorValue</page>
+                <page>selectActivityForIndicator</page>				
 				<page>viewEditIndicator</page>
 				<page>addEditData</page>				
 				<page>assignNewIndicator</page>

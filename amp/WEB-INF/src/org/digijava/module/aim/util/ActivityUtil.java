@@ -1171,6 +1171,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setInternalIds(new HashSet(ampActivity.getInternalIds()));
         activity.setLocations(new HashSet(ampActivity.getLocations()));
         activity.setSectors(new HashSet(ampActivity.getSectors()));
+        activity.setComponentSectors(new HashSet(ampActivity.getComponentSectors())); // yes but why??? 
         activity.setOrgrole(new HashSet(ampActivity.getOrgrole()));
         activity.setIssues(new HashSet(ampActivity.getIssues()));
         activity.setCosts(new HashSet(ampActivity.getCosts()));

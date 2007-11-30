@@ -137,6 +137,13 @@ tanzania adds
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivitySector" />
 		</set>
 
+		<set name="componentSectors" table="AMP_ACTIVITY_COMPSECTOR" cascade="none">
+			<key column="amp_activity_id"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpSector" column="amp_sector_id" />
+		</set>
+
+
+
 		<set name="activityPrograms" table="AMP_ACTIVITY_THEME" cascade="none">
 			<cache usage="read-write"/>
 			<key column="amp_activity_id"/>

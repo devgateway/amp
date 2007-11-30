@@ -94,7 +94,7 @@ public class AddAmpActivity extends Action {
     TeamMember teamMember = new TeamMember();
   
     // Get the current member who has logged in from the session
-    teamMember = (TeamMember) session.getAttribute("currentMember");
+    teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
     
     PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
     
@@ -136,55 +136,58 @@ public class AddAmpActivity extends Action {
 
     // Add sectors
     if (request.getParameter("addSector") != null) {
-      ActivitySector sect = (ActivitySector) session.getAttribute(
+      ActivitySector selectedSector = (ActivitySector) session.getAttribute(
           "sectorSelected");
       session.removeAttribute("sectorSelected");
 
-      Collection prevSelSectors = eaForm.getActivitySectors();
+      Collection<ActivitySector> prevSelSectors = eaForm.getActivitySectors();
 
 
 
-      boolean flag = false;
+      boolean addSector = true;
       if (prevSelSectors != null) {
-    	  Iterator itr = prevSelSectors.iterator();
+    	  Iterator<ActivitySector> itr = prevSelSectors.iterator();
     	  while (itr.hasNext()) {
     		  ActivitySector asec = (ActivitySector) itr.next();
-    		  flag = false;
-          if (asec.getSectorName().equals(sect.getSectorName()) && asec.getSubsectorLevel1Name() != null ) {
-
-        	  	if(asec.getSubsectorLevel2Name() != null && asec.getSubsectorLevel1Name().equals(sect.getSubsectorLevel1Name())){
-
-		        	  		if(asec.getSubsectorLevel2Name().equals(sect.getSubsectorLevel2Name())){
-		        	  			flag = true;
-		                        break;
-		            	 	}
-        	  	}else{
-        	  		if(asec.getSubsectorLevel1Name().equals(sect.getSubsectorLevel1Name())){
-        	  			flag = true;
-                        break;
-        	  			}
-        	  		}
-
-          }else{
-        	  if(asec.getSectorName().equals(sect.getSectorName())){
-        	  flag = true;
-              break;
-        	}
-          }
-        }
+	          if (asec.getSectorName().equals(selectedSector.getSectorName())){
+	        	  if (selectedSector.getSubsectorLevel1Name() == null) {
+						addSector = false;
+						break;
+	        	  }
+	        	  if(asec.getSubsectorLevel1Name() != null ) {
+						if(asec.getSubsectorLevel1Name().equals(selectedSector.getSubsectorLevel1Name())){
+							if(selectedSector.getSubsectorLevel2Name() == null){
+				        		  addSector = false;
+							      break;									
+							}					
+							if(asec.getSubsectorLevel2Name() != null){
+								if(asec.getSubsectorLevel2Name().equals(selectedSector.getSubsectorLevel2Name())){
+									addSector = false;
+							        break;
+							 	}
+							}else{
+								addSector = false;
+						        break;
+							}								
+						}
+		          }else{
+						addSector = false;
+						break;
+		          }
+	          }
+    	  }
       }
-      if(flag != true){
-    	  if (prevSelSectors != null) {
-    		  if (prevSelSectors.isEmpty())
-    			  	sect.setSectorPercentage(new Integer(100));
-    		  		prevSelSectors.add(sect);
+      if (addSector) {
+			if (prevSelSectors != null) {
+				if (prevSelSectors.isEmpty())
+					selectedSector.setSectorPercentage(new Integer(100));
+				prevSelSectors.add(selectedSector);
+			} else {
+				selectedSector.setSectorPercentage(new Integer(100));
+				prevSelSectors = new ArrayList<ActivitySector>();
+				prevSelSectors.add(selectedSector);
+			}
       }
-      else {
-        sect.setSectorPercentage(new Integer(100));
-        prevSelSectors = new ArrayList();
-        prevSelSectors.add(sect);
-      }
-     }
 
       eaForm.setActivitySectors(prevSelSectors);
       return mapping.findForward("addActivityStep2");
@@ -194,10 +197,10 @@ public class AddAmpActivity extends Action {
     else
     if (request.getParameter("remSectors") != null) {
       Long selSectors[] = eaForm.getSelActivitySectors();
-      Collection prevSelSectors = eaForm.getActivitySectors();
+      Collection<ActivitySector> prevSelSectors = eaForm.getActivitySectors();
       Collection newSectors = new ArrayList();
 
-      Iterator itr = prevSelSectors.iterator();
+      Iterator<ActivitySector> itr = prevSelSectors.iterator();
 
       boolean flag = false;
 

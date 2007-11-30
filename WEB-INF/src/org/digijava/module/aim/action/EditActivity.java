@@ -864,7 +864,8 @@ public class EditActivity
           eaForm.setAllReferenceDocNameIds(null);
           eaForm.setReferenceDocs(null);
 
-
+          setCompSectorsToForm(eaForm, activity);
+          
           Collection sectors = activity.getSectors();
 
           if (sectors != null && sectors.size() > 0) {
@@ -1582,6 +1583,12 @@ public class EditActivity
 
     return mapping.findForward("forward");
   }
+  
+  private void setCompSectorsToForm(EditActivityForm form,AmpActivity activity){
+	  Collection dbSectors=activity.getComponentSectors();
+	  form.setComponentSectors(dbSectors);
+  }
+  
 
 /**
  * @param activity

@@ -52,6 +52,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private Date contractingDate;
 	private Date disbursmentsDate;
 	private Set sectors ;
+	private Set componentSectors; //for bolivia;
 	private Set locations ;
 	private Set orgrole;
 //	private AmpLevel level ; //TO BE DELETED
@@ -1242,5 +1243,13 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
         public void setActPrograms(Set actPrograms) {
                 this.actPrograms = actPrograms;
         }
+
+		public Set getComponentSectors() {
+			return componentSectors;
+		}
+
+		public void setComponentSectors(Set componentSectors) {
+			this.componentSectors = componentSectors;
+		}
 
 }

@@ -1,8 +1,12 @@
 package org.digijava.module.aim.helper ;
 import java.util.Collection;
 
+import org.digijava.module.aim.dbentity.AmpSector;
+
 public class AmpSectors
 {
+	private Long id;
+	private String sectorCode;
 	private String sectorName;
 	private Collection donors;
 	private Collection totalSectorTermAssistFund;
@@ -12,6 +16,16 @@ public class AmpSectors
 	private String sectorUnDisbAmount;
 	private String sectorPlannedDisbAmount;
 	private String sectorExpAmount;
+	
+	public AmpSectors(){
+		
+	}
+	
+	public AmpSectors(AmpSector dbSector){
+		id=dbSector.getAmpSectorId();
+		sectorCode=dbSector.getSectorCode();
+		sectorName=dbSector.getName();
+	}
 	
 	public String getSectorName() 
 	{
@@ -100,5 +114,21 @@ public class AmpSectors
 	public void setSectorExpAmount(String s) 
 	{
 		sectorExpAmount = s;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getSectorCode() {
+		return sectorCode;
+	}
+
+	public void setSectorCode(String sectorCode) {
+		this.sectorCode = sectorCode;
 	}
 }	

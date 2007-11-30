@@ -34,7 +34,7 @@ import org.digijava.module.aim.helper.ReferenceDoc;
 
 public class EditActivityForm extends ActionForm implements Serializable{
 
-private int isPreview=0;
+	private int isPreview=0;
 	private Long activityId = null;
 	private String ampId = null;
 	private String title = null;
@@ -127,6 +127,8 @@ private int isPreview=0;
 	private String visibleProgram=null;
 
 	private Collection activitySectors; // sectors related to the activity
+	private Collection componentSectors;
+	private Long[] selCompSectors;
 
 
 	private Collection cols = null;
@@ -4570,6 +4572,22 @@ public String getPurpose() {
        public int getProgramType() {
                return programType;
        }
+
+	public Collection getComponentSectors() {
+		return componentSectors;
+	}
+
+	public void setComponentSectors(Collection componentSectors) {
+		this.componentSectors = componentSectors;
+	}
+
+	public Long[] getSelCompSectors() {
+		return selCompSectors;
+	}
+
+	public void setSelCompSectors(Long[] selCompSectors) {
+		this.selCompSectors = selCompSectors;
+	}
 }
 
 

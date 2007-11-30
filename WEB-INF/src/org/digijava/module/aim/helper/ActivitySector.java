@@ -8,6 +8,9 @@ package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
 
+import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpSector;
+
 public class ActivitySector implements Serializable{
 
 	private Long id;

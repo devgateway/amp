@@ -29,26 +29,43 @@
 			<th>Edit</th>
 		</tr>
 		<tr>
+			<td>Everyone</td>
+			<td align="center"><html:checkbox property="evRead" /></td>
+			<td align="center"><html:checkbox property="evEdit" /></td>
+		</tr>
+		<tr>
+			<td>Guest</td>
+			<td align="center"><html:checkbox property="guRead" /></td>
+			<td align="center"><html:checkbox property="guEdit" /></td>
+		</tr>
+		<tr>
 			<td>Beneficiary Agency</td>
 			<td align="center"><html:checkbox property="baRead" /></td>
 			<td align="center"><html:checkbox property="baEdit" /></td>
+		</tr>			
 		<tr>
 			<td>Contracting Agency</td>
 			<td align="center"><html:checkbox property="caRead" /></td>
 			<td align="center"><html:checkbox property="caEdit" /></td>
+		</tr>			
 		<tr>
 			<td>Executing Agency</td>
 			<td align="center"><html:checkbox property="eaRead" /></td>
 			<td align="center"><html:checkbox property="eaEdit" /></td>
+		</tr>			
 		<tr>
 			<td>Funding Agency</td>
 			<td align="center"><html:checkbox property="faRead" /></td>
 			<td align="center"><html:checkbox property="faEdit" /></td>
+		</tr>			
 		<tr>
 			<td>Implementing Agency</td>
 			<td align="center"><html:checkbox property="iaRead" /></td>
 			<td align="center"><html:checkbox property="iaEdit" /></td>
+		</tr>			
 		<tr>
 			<td align="center" colspan="3"><html:submit styleClass="buton" property="save">Save</html:submit>&nbsp;&nbsp;<html:button property="cancel" styleClass="buton" onclick="javascript:window.close()">Cancel</html:button>
+			</td>			
+		</tr>			
 	</table>
 </digi:form>

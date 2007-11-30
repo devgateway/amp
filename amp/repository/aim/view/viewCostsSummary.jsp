@@ -60,11 +60,11 @@ function openEUActivityDetails(euActivityId) {
 
 		<tr bgcolor="#FFFFFF" align="right">
 			<td align="left"><b>
-			
+
 			<logic:equal name="mode" value="form">
 			<c:set var="translation"><digi:trn key="aim:viewcostsummary:remove">Remove</digi:trn>
 			</c:set>
-			
+
 			<a style="cursor:pointer;color:#006699"
 				title="Click to edit the activity"
 				onClick='editEUActivity(<bean:write name="idx"/>)'> <bean:write
@@ -87,11 +87,11 @@ function openEUActivityDetails(euActivityId) {
 				</td>
 				<field:display name="Costing Total Cost" feature="Costing">
 			<td><bean:write name="euActivity" property="totalCostConverted"
-				format="###,###,###" /></td>
+				format="###,###,###.##" /></td>
 				</field:display>
 				<field:display name="Costing Total Contribution" feature="Costing">
 			<td><bean:write name="euActivity"
-				property="totalContributionsConverted" format="###,###,###" /></td>
+				property="totalContributionsConverted" format="###,###,###.##" /></td>
 	</field:display>
 
 		</tr>
@@ -128,17 +128,17 @@ function openEUActivityDetails(euActivityId) {
 		<hr />
 		</td>
 	</tr>
-	
+
 	<tr bgcolor="#FFFFFF">
 		<td align="right"><b><digi:trn key="aim:viewcostssummary:totals">Totals:</digi:trn></b></td>
 		<field:display name="Total Costs" feature="Costing">
 		<td align="right"><fmt:formatNumber var="grandCostFormatted"
-			pattern="###,###,###" value="<%=grandCost%>" />
+			pattern="###,###,###.##" value="<%=grandCost%>" />
 		${grandCostFormatted}</td>
 		</field:display>
 		<field:display name="Costing Grand Total Contribution" feature="Costing">
 		<td align="right"><fmt:formatNumber var="grandContributionFormatted"
-			pattern="###,###,###" value="<%=grandContribution%>" />
+			pattern="###,###,###.##" value="<%=grandContribution%>" />
 		${grandContributionFormatted}</td>
 		</field:display>
 	</tr>
@@ -146,7 +146,7 @@ function openEUActivityDetails(euActivityId) {
 	<tr bgcolor="#FFFFFF">
 		<td align="right"><b><digi:trn key="aim:viewcostssummary:contributionGap">Contribution Gap:</digi:trn></b></td>
 		<td align="right"><b> <fmt:formatNumber var="contributionGap"
-			pattern="###,###,###" value="<%=new Double(grandCost.doubleValue()-grandContribution.doubleValue())%>" />
+			pattern="###,###,###.##" value="<%=new Double(grandCost.doubleValue()-grandContribution.doubleValue())%>" />
 		${contributionGap} </b></td>
 		<td align="right">&nbsp;</td>
 	</tr>

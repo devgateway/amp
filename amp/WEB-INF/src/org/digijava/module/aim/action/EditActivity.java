@@ -102,6 +102,7 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 
 /**
  * Loads the activity details of the activity specified in the form bean
@@ -256,6 +257,19 @@ public class EditActivity
       eaForm.setNationalPlanObjectivePrograms(nationalPlanObjectivePrograms);
       eaForm.setPrimaryPrograms(primaryPrograms);
       eaForm.setSecondaryPrograms(secondaryPrograms);
+
+      if (tm != null && tm.getAppSettings() != null && tm.getAppSettings()
+          .getCurrencyId() != null) {
+              String currCode="";
+              AmpCurrency curr=CurrencyUtil.
+                  getAmpcurrency(
+                      tm.getAppSettings()
+                      .getCurrencyId());
+              if(curr!=null){
+                      currCode = curr.getCurrencyCode();
+              }
+              eaForm.setCurrCode(currCode);
+      }
 
       /*List prLst = new ArrayList();
       if (eaForm.getActPrograms() == null) {
@@ -420,7 +434,7 @@ public class EditActivity
         }
       }
 
-      
+
       logger.debug("step [before IF] : " + eaForm.getStep());
       if (eaForm.isDonorFlag()) {
         eaForm.setStep("3");
@@ -489,7 +503,7 @@ public class EditActivity
         if (activity.getActivityDocuments() != null && activity.getActivityDocuments().size() > 0 )
         		ActivityDocumentsUtil.injectActivityDocuments(request, activity.getActivityDocuments());
         /* END - Injecting documents into session */
-        
+
         /* Clearing session information about comments */
         String action = request.getParameter("action");
         if (action != null && action.trim().length() != 0) {
@@ -503,7 +517,7 @@ public class EditActivity
              * The commentColInSession session attribute is a map of lists.
              * Each list contains the AmpComments for a specific field. So the keys are the fields' ids.
              * It isn't really needed anymore except for compatibility with previewLogframe which
-             * still uses this map. 
+             * still uses this map.
              */
             HashMap<Long, List<AmpComments>> commentColInSession	= (HashMap)request.getSession().getAttribute("commentColInSession");
             if ( commentColInSession != null ) {
@@ -513,7 +527,7 @@ public class EditActivity
             	commentColInSession		= new HashMap<Long, List<AmpComments>>();
             	request.getSession().setAttribute("commentColInSession", commentColInSession );
             }
-            AmpComments.populateWithComments( eaForm.getCommentsCol(), commentColInSession, 
+            AmpComments.populateWithComments( eaForm.getCommentsCol(), commentColInSession,
             					activityId);
           }
         }
@@ -960,13 +974,13 @@ public class EditActivity
                         fundOrg.setFundingActive(ampFunding.getActive());
                         fundOrg.setDelegatedCooperation(ampFunding.getDelegatedCooperation());
                         fundOrg.setDelegatedPartner(ampFunding.getDelegatedPartner());
-                        
+
                         if ( fundOrg.getDelegatedCooperation()!=null && fundOrg.getDelegatedCooperation() ) {
                         	fundOrg.setDelegatedCooperationString("checked");
                         }
                         else
                         	fundOrg.setDelegatedCooperationString("unchecked");
-                        
+
                         if ( fundOrg.getDelegatedPartner()!=null && fundOrg.getDelegatedPartner() ) {
                         	fundOrg.setDelegatedPartnerString("checked");
                         }
@@ -990,7 +1004,7 @@ public class EditActivity
 			            fund.setOrgFundingId(ampFunding.getFinancingId());
 			            fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
 			            fund.setConditions(ampFunding.getConditions());
-			
+
 			            /* Get MTEF Projections */
 			            ArrayList<MTEFProjection> MTEFProjections	= new ArrayList<MTEFProjection>();
 			            if (ampFunding.getMtefProjections() != null) {
@@ -998,7 +1012,7 @@ public class EditActivity
 			            	while ( iterMtef.hasNext() ) {
 				            	AmpFundingMTEFProjection ampProjection		= iterMtef.next();
 				            	MTEFProjection	projection					= new MTEFProjection();
-			
+
 				            	projection.setAmount( ampProjection.getAmount() + "" );
 				            	if ( ampProjection.getProjected() != null )
 				            		projection.setProjected( ampProjection.getProjected().getId() );
@@ -1011,17 +1025,17 @@ public class EditActivity
 				            	projection.setAmpFunding( ampProjection.getAmpFunding() );
 				            	MTEFProjections.add(projection);
 			            	}
-			
+
 			            }
 			            Collections.sort(MTEFProjections);
 			            fund.setMtefProjections(MTEFProjections);
 			            /* END - Get MTEF Projections */
-			
+
 			            Collection fundDetails = ampFunding.getFundingDetails();
 			            if (fundDetails != null && fundDetails.size() > 0) {
 			              Iterator fundDetItr = fundDetails.iterator();
 			              List fundDetail = new ArrayList();
-			
+
 			              long indexId = System.currentTimeMillis();
 			              while (fundDetItr.hasNext()) {
 			                AmpFundingDetail fundDet = (AmpFundingDetail)
@@ -1062,7 +1076,7 @@ public class EditActivity
 			                      fundDet.getTransactionAmount()
 			                      .doubleValue(), frmExRt,
 			                      toExRt);
-			
+
 			                  eaForm.setCurrCode(toCurrCode);
 			                  if (fundDet.getTransactionType().intValue() ==
 			                      Constants.COMMITMENT) {
@@ -1090,7 +1104,7 @@ public class EditActivity
 			                fundingDetail.setCurrencyName(fundDet
 			                                              .getAmpCurrencyId().
 			                                              getCountryName());
-			
+
 			                fundingDetail
 			                    .setTransactionAmount(CurrencyWorker
 			                                          .convert(fundDet
@@ -1099,16 +1113,16 @@ public class EditActivity
 			                fundingDetail.setTransactionDate(DateConversion
 			                                                 .ConvertDateToString(fundDet
 			                    .getTransactionDate()));
-			
+
 			                fundingDetail.setPerspectiveCode(fundDet.
 			                                                 getPerspectiveId().getCode());
 			                fundingDetail.setPerspectiveName(fundDet.
 			                                                 getPerspectiveId().getName());
-			
+
 			                /*
 			                 fundingDetail.setPerspectiveCode(fundDet
 			                  .getOrgRoleCode());
-			
+
 			                 Iterator itr1 = eaForm.getPerspectives()
 			                  .iterator();
 			                         while (itr1.hasNext()) {
@@ -1121,14 +1135,14 @@ public class EditActivity
 			                 }
 			                         }
 			                 */
-			
-			
-			
+
+
+
 			                fundingDetail.setTransactionType(fundDet
 			                                                 .getTransactionType().intValue());
 			                fundDetail.add(fundingDetail);
 			              }
-			
+
 			              if (fundDetail != null)
 			                Collections.sort(fundDetail,
 			                                 FundingValidator.dateComp);
@@ -1138,7 +1152,7 @@ public class EditActivity
 			            if (fundOrg.getFundings() == null)
 			              fundOrg.setFundings(new ArrayList());
 			            fundOrg.getFundings().add(fund);
-			
+
 			            if (index > -1) {
 			              fundingOrgs.set(index, fundOrg);
 			              //	logger

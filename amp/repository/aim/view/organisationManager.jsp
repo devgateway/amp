@@ -309,19 +309,21 @@
 										</table>
 									</td>
 								</tr>
-								<tr>
-									<td bgColor=#f4f4f2>
-										<c:if test="${not empty aimOrgManagerForm.currentAlpha}">
-											<c:if test="${aimOrgManagerForm.currentAlpha!='viewAll'}">
-											   	<c:if test="${aimOrgManagerForm.currentAlpha!=''}">														    	
-											    	<digi:trn key="aim:organMan:alphaFilterNote">
-														Click on viewAll to see all existing organizations.
-													</digi:trn>
+								<logic:notEmpty name="aimOrgManagerForm" property="alphaPages">
+									<tr>
+										<td bgColor=#f4f4f2>
+											<c:if test="${not empty aimOrgManagerForm.currentAlpha}">
+												<c:if test="${aimOrgManagerForm.currentAlpha!='viewAll'}">
+											   		<c:if test="${aimOrgManagerForm.currentAlpha!=''}">														    	
+											    		<digi:trn key="aim:organMan:alphaFilterNote">
+															Click on viewAll to see all existing organizations.
+														</digi:trn>
+													</c:if>
 												</c:if>
-											</c:if>
-										</c:if>										
-									</td>
-								</tr>
+											</c:if>										
+										</td>
+									</tr>
+								</logic:notEmpty>														
 							</table>
 						</td>
 						<td noWrap width=100% vAlign="top">

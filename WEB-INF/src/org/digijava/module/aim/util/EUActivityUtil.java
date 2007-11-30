@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.digijava.module.aim.util;
 
@@ -17,10 +17,11 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.EUActivity;
+import org.digijava.module.aim.exception.AimException;
 
 /**
  * @author mihai
- * 
+ *
  */
 public final class EUActivityUtil {
 	private static Logger logger = Logger.getLogger(EUActivityUtil.class);
@@ -43,7 +44,7 @@ public final class EUActivityUtil {
 		} catch(Exception ex) {
 			logger.error("Unable to get EUActivities for activityid="+actId +" "+ ex);
 			ex.printStackTrace();
-		} 
+		}
 //		finally {
 //			try {
 //				PersistenceManager.releaseSession(session);
@@ -53,27 +54,39 @@ public final class EUActivityUtil {
 //		}
 		return euActivities;
 	}
-	
+
 	public static Double getTotalCostConverted(Collection euActivities,Long desktopCurrencyId) {
 		double ret=0;
 		Iterator i = euActivities.iterator();
 		while (i.hasNext()) {
 			EUActivity element = (EUActivity) i.next();
 			element.setDesktopCurrencyId(desktopCurrencyId);
-			ret+=element.getTotalCostConverted();
+                        try {
+                                ret += element.getTotalCostConverted();
+                        }
+                        catch (AimException ex) {
+                                logger.error(
+                                    "Unable to get total converted cost=" + ex);
+                        }
 		}
-		return new Double(ret);		
+		return new Double(ret);
 	}
-	
+
 	public static Double getTotalContributionsConverted(Collection euActivities,Long desktopCurrencyId) {
 		double ret=0;
 		Iterator i = euActivities.iterator();
 		while (i.hasNext()) {
 			EUActivity element = (EUActivity) i.next();
 			element.setDesktopCurrencyId(desktopCurrencyId);
-			ret+=element.getTotalContributionsConverted();
+                        try {
+                                ret += element.getTotalContributionsConverted();
+                        }
+                        catch (AimException ex) {
+                                logger.error("Unable to get total converted cost contribution" + ex);
+                        }
+
 		}
-		return new Double(ret);		
+		return new Double(ret);
 	}
-	
+
 }

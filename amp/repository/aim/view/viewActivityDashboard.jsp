@@ -234,7 +234,7 @@ method="post">
 
 						<TR>
 
-							<feature:display name="Project Performance" module="National Planning Dashboard">
+							<field:display name="Project Performance"  feature="Dashboard">
 							<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
 
 								<digi:trn key="aim:meActivityPerformance">
@@ -243,7 +243,7 @@ method="post">
 
 							</TD>
 							</feature:display>
-							<feature:display name="Project Performance" module="National Planning Dashboard">
+							<field:display name="Project Performance"  feature="Dashboard">
 
 							<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
 
@@ -252,12 +252,12 @@ method="post">
 								Activity - Risk</digi:trn>
 
 							</TD>
-							</feature:display>
+							</field:display>
 
 						</TR>
 
 						<TR>
-							<feature:display name="Project Performance" module="National Planning Dashboard">
+							<field:display name="Project Performance"  feature="Dashboard">
 
 							<TD width="50%">
 
@@ -287,8 +287,8 @@ method="post">
 								<% } %>
 
 							</TD>
-							</feature:display>
-							<feature:display name="Project Performance" module="National Planning Dashboard">
+							</field:display>
+							<field:display name="Project Performance"  feature="Dashboard">
 
 							<TD width="50%" valign="top">
 
@@ -331,7 +331,7 @@ method="post">
 								<% } %>
 
 							</TD>
-							</feature:display>
+							</field:display>
 
 						</TR>
 

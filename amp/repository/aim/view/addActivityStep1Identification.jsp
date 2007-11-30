@@ -39,7 +39,7 @@
 
 function disableSelection(element) {
 
-alert("asd");
+//alert("asd");
     element.onselectstart = function() {
       return false;
     };
@@ -83,8 +83,6 @@ target.style.cursor = "default"
 											<field:display name="Project Title" feature="Identification">
 											&nbsp;
 											</field:display>
-											<div onclick="disableSelection1(this)">
-											sdgsgsgsa
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 											
 												<FONT color=red>*</FONT>
@@ -101,7 +99,6 @@ target.style.cursor = "default"
 												<html:textarea property="title" cols="60" rows="2" styleClass="inp-text"/>
 												</a>
 											</td></tr>
-											</div>
 											<field:display name="Objectives" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:ObjectivesAndComponentsofProject">The key objectives and main components of the project</digi:trn>">

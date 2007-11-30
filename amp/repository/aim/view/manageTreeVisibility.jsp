@@ -5,6 +5,18 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
+
+<script language="JavaScript">
+
+	function changeLevel(id) {
+	// alert("aaaaaaaaaaa "+id);
+		<digi:context name="urlVal" property="context/module/moduleinstance/visibilityManager.do" />			  
+		document.aimVisibilityManagerForm.action = "<%= urlVal %>?changeLevel=true&action=edit&templateId="+id;
+		document.aimVisibilityManagerForm.submit();		
+	}
+
+</script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <!-- dynamic tooltip -->
@@ -38,13 +50,20 @@
 	</tr>
 	<tr>
 		<td>
-		
-	
-	<p><digi:trn key="aim:newFeatureTemplateNameBbl">Template Name:</digi:trn> <input type="text" name="templateName" size="30" value="<%=session.getAttribute("templateName")%>"/></p>
-	<ul id="dhtmlgoodies_tree" class="dhtmlgoodies_tree">
 	<bean:define name="aimVisibilityManagerForm" property="ampTreeVisibility" id="template" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page"/>
 	<bean:define name="template" property="items" id="modules" type="java.util.Map"  toScope="page"/>
 	<bean:define name="template" property="root" id="currentTemplate" type="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" scope="page" toScope="request"/>
+		
+	 <c:set var="translation">
+         <digi:trn key="aim:addNoLevel">No Level</digi:trn>
+        </c:set>
+	<p><digi:trn key="aim:newFeatureTemplateNameBbl">Template Name:</digi:trn> <input type="text" name="templateName" size="30" value="<%=session.getAttribute("templateName")%>"/>
+	<c:set var="templateId">
+		<bean:write name="template" property="root.id"/>
+	</c:set>
+	<category:showoptions name="aimVisibilityManagerForm" firstLine="${translation}" outeronchange="javascript:changeLevel('${templateId}')" property="levelCategory"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_LEVEL_KEY %>" styleClass="inp-text" />
+	</p>
+	<ul id="dhtmlgoodies_tree" class="dhtmlgoodies_tree">
 	<li><a href="#" id="<bean:write name="template" property="root.id"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none" ><bean:write name="template" property="root.name"/></a>
 			<ul>
 				<logic:iterate name="modules" id="module" type="java.util.Map.Entry" >

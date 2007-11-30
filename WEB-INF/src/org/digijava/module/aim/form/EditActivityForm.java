@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -19,7 +18,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpSISINProyect;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -34,7 +32,8 @@ import org.digijava.module.aim.helper.ReferenceDoc;
 
 public class EditActivityForm extends ActionForm implements Serializable{
 
-	private int isPreview=0;
+    	private Long activityLevel;
+    	private int isPreview=0;
 	private Long activityId = null;
 	private String ampId = null;
 	private String title = null;
@@ -45,11 +44,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Double overallCost = null;
 	private Double overallContribution=null;
 	private String objectives = null;
-    private String documentSpace = null;
+	private String documentSpace = null;
 	private String condition = null;
 	private Long statusId = null;
 	private String status=null;
-    private Boolean draft;
+	private Boolean draft;
 	private String statusReason = null;
 	private Collection financingBreakdown=null;
 	//private Collection statusCollection = null;
@@ -157,8 +156,15 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	//private Collection contractors;
 	private Long selContractors[];
 	private Collection reportingOrgs;
-	private Long selReportingOrgs[];
-
+	private Long selReportingOrgs[];	
+	
+	private Collection regGroups;
+	private Long selRegGroups[];
+	
+	private Collection sectGroups;
+	private Long selSectGroups[];
+	
+	
 	// Beneficiary Agency
 	private Collection benAgencies;
 	private Long selBenAgencies[];
@@ -615,9 +621,13 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			impAgencies = null;
 			benAgencies = null;
 			conAgencies = null;
+			sectGroups=null;
+			regGroups=null;
 			contractors = null;
 			reportingOrgs = null;
 			selReportingOrgs = null;
+			selSectGroups=null;
+			selRegGroups=null;
 			selExAgencies = null;
 			selImpAgencies = null;
 			selBenAgencies = null;
@@ -4440,154 +4450,195 @@ public String getPurpose() {
 		return sisinProyect;
 	}
 
+    public Long getActivityLevel() {
+        return activityLevel;
+    }
+
+    public void setActivityLevel(Long activityLevel) {
+        this.activityLevel = activityLevel;
+    }
+
+    public Collection getChildSectorsLevel1() {
+        return childSectorsLevel1;
+    }
+
+    public void setChildSectorsLevel1(Collection childSectorsLevel1) {
+        this.childSectorsLevel1 = childSectorsLevel1;
+    }
+
+    public Collection getChildSectorsLevel2() {
+        return childSectorsLevel2;
+    }
+
+    public void setChildSectorsLevel2(Collection childSectorsLevel2) {
+        this.childSectorsLevel2 = childSectorsLevel2;
+    }
+
+    public Collection getComponentSectors() {
+        return componentSectors;
+    }
+
+    public void setComponentSectors(Collection componentSectors) {
+        this.componentSectors = componentSectors;
+    }
+
+    public Collection getOrderedFundingOrganizations() {
+        return orderedFundingOrganizations;
+    }
+
+    public void setOrderedFundingOrganizations(Collection orderedFundingOrganizations) {
+        this.orderedFundingOrganizations = orderedFundingOrganizations;
+    }
+
+    public Collection getParentSectors() {
+        return parentSectors;
+    }
+
+    public void setParentSectors(Collection parentSectors) {
+        this.parentSectors = parentSectors;
+    }
+
+    public Collection getRegGroups() {
+        return regGroups;
+    }
+
+    public void setRegGroups(Collection regGroups) {
+        this.regGroups = regGroups;
+    }
+
+    public Collection getSectGroups() {
+        return sectGroups;
+    }
+
+    public void setSectGroups(Collection sectGroups) {
+        this.sectGroups = sectGroups;
+    }
+
+    public Long getSector() {
+        return sector;
+    }
+
+    public void setSector(Long sector) {
+        this.sector = sector;
+    }
+
+    public boolean isSectorReset() {
+        return sectorReset;
+    }
+
+    public void setSectorReset(boolean sectorReset) {
+        this.sectorReset = sectorReset;
+    }
+
+    public Long getSectorScheme() {
+        return sectorScheme;
+    }
+
+    public void setSectorScheme(Long sectorScheme) {
+        this.sectorScheme = sectorScheme;
+    }
+
+    public Collection getSectorSchemes() {
+        return sectorSchemes;
+    }
+
+    public void setSectorSchemes(Collection sectorSchemes) {
+        this.sectorSchemes = sectorSchemes;
+    }
+
+    public Long[] getSelCompSectors() {
+        return selCompSectors;
+    }
+
+    public void setSelCompSectors(Long[] selCompSectors) {
+        this.selCompSectors = selCompSectors;
+    }
+
+    public Long[] getSelRegGroups() {
+        return selRegGroups;
+    }
+
+    public void setSelRegGroups(Long[] selRegGroups) {
+        this.selRegGroups = selRegGroups;
+    }
+
+    public Long[] getSelSectGroups() {
+        return selSectGroups;
+    }
+
+    public void setSelSectGroups(Long[] selSectGroups) {
+        this.selSectGroups = selSectGroups;
+    }
+
+    public Long[] getSelSectors() {
+        return selSectors;
+    }
+
+    public void setSelSectors(Long[] selSectors) {
+        this.selSectors = selSectors;
+    }
+
+    public Long getSubsectorLevel1() {
+        return subsectorLevel1;
+    }
+
+    public void setSubsectorLevel1(Long subsectorLevel1) {
+        this.subsectorLevel1 = subsectorLevel1;
+    }
+
+    public Long getSubsectorLevel2() {
+        return subsectorLevel2;
+    }
+
+    public void setSubsectorLevel2(Long subsectorLevel2) {
+        this.subsectorLevel2 = subsectorLevel2;
+    }
+
     public Boolean getDraft() {
         return draft;
     }
 
-	public boolean isSectorReset() {
-		return sectorReset;
-	}
+    public List getNationalPlanObjectivePrograms() {
+        return nationalPlanObjectivePrograms;
+    }
 
-	public void setSectorReset(boolean sectorReset) {
-		this.sectorReset = sectorReset;
-	}
+    public AmpActivityProgramSettings getNationalSetting() {
+        return nationalSetting;
+    }
 
-	public Long[] getSelSectors() {
-		return selSectors;
-	}
+    public List getPrimaryPrograms() {
+        return primaryPrograms;
+    }
 
-	public void setSelSectors(Long[] selSectors) {
-		this.selSectors = selSectors;
-	}
+    public AmpActivityProgramSettings getPrimarySetting() {
+        return primarySetting;
+    }
 
-	public Long getSector() {
-		return sector;
-	}
+    public int getProgramType() {
+        return programType;
+    }
 
-	public void setSector(Long sector) {
-		this.sector = sector;
-	}
+    public List getSecondaryPrograms() {
+        return secondaryPrograms;
+    }
 
-	public Long getSubsectorLevel1() {
-		return subsectorLevel1;
-	}
+    public AmpActivityProgramSettings getSecondarySetting() {
+        return secondarySetting;
+    }
 
-	public void setSubsectorLevel1(Long subsectorLevel1) {
-		this.subsectorLevel1 = subsectorLevel1;
-	}
+    public Long[] getSelectedNPOPrograms() {
+        return selectedNPOPrograms;
+    }
 
-	public Long getSubsectorLevel2() {
-		return subsectorLevel2;
-	}
+    public Long[] getSelectedPPrograms() {
+        return selectedPPrograms;
+    }
 
-	public void setSubsectorLevel2(Long subsectorLevel2) {
-		this.subsectorLevel2 = subsectorLevel2;
-	}
+    public Long[] getSelectedSPrograms() {
+        return selectedSPrograms;
+    }
 
-	public Long getSectorScheme() {
-		return sectorScheme;
-	}
-
-	public void setSectorScheme(Long sectorScheme) {
-		this.sectorScheme = sectorScheme;
-	}
-
-	public Collection getSectorSchemes() {
-		return sectorSchemes;
-	}
-
-	public void setSectorSchemes(Collection sectorSchemes) {
-		this.sectorSchemes = sectorSchemes;
-	}
-
-	public Collection getParentSectors() {
-		return parentSectors;
-	}
-
-	public void setParentSectors(Collection parentSectors) {
-		this.parentSectors = parentSectors;
-	}
-
-	public Collection getChildSectorsLevel1() {
-		return childSectorsLevel1;
-	}
-
-	public void setChildSectorsLevel1(Collection childSectorsLevel1) {
-		this.childSectorsLevel1 = childSectorsLevel1;
-	}
-
-	public Collection getChildSectorsLevel2() {
-		return childSectorsLevel2;
-	}
-
-	public void setChildSectorsLevel2(Collection childSectorsLevel2) {
-		this.childSectorsLevel2 = childSectorsLevel2;
-	}
-
-	public Collection getOrderedFundingOrganizations() {
-		return orderedFundingOrganizations;
-	}
-
-	public void setOrderedFundingOrganizations(
-			Collection orderedFundingOrganizations) {
-		this.orderedFundingOrganizations = orderedFundingOrganizations;
-	}
-        // program settings
-        public List getSecondaryPrograms() {
-               return secondaryPrograms;
-       }
-
-       public AmpActivityProgramSettings getSecondarySetting() {
-               return secondarySetting;
-       }
-
-       public Long[] getSelectedNPOPrograms() {
-               return selectedNPOPrograms;
-       }
-
-       public Long[] getSelectedPPrograms() {
-               return selectedPPrograms;
-       }
-
-       public Long[] getSelectedSPrograms() {
-               return selectedSPrograms;
-       }
-
-       public AmpActivityProgramSettings getNationalSetting() {
-               return nationalSetting;
-       }
-
-       public List getNationalPlanObjectivePrograms() {
-               return nationalPlanObjectivePrograms;
-       }
-
-       public AmpActivityProgramSettings getPrimarySetting() {
-               return primarySetting;
-       }
-
-       public List getPrimaryPrograms() {
-               return primaryPrograms;
-       }
-
-       public int getProgramType() {
-               return programType;
-       }
-
-	public Collection getComponentSectors() {
-		return componentSectors;
-	}
-
-	public void setComponentSectors(Collection componentSectors) {
-		this.componentSectors = componentSectors;
-	}
-
-	public Long[] getSelCompSectors() {
-		return selCompSectors;
-	}
-
-	public void setSelCompSectors(Long[] selCompSectors) {
-		this.selCompSectors = selCompSectors;
-	}
+ 
 }
 
 

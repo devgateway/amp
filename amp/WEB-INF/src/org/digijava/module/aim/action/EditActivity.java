@@ -487,6 +487,12 @@ public class EditActivity
           eaForm.setLevelId(ampCategoryValue.getId());
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
+                CategoryConstants.ACTIVITY_LEVEL_KEY, activity.getCategories());
+            if (ampCategoryValue != null)
+              eaForm.setActivityLevel(ampCategoryValue.getId());
+
+        
+        ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                 CategoryConstants.FINANCIAL_INSTRUMENT_KEY, activity.getCategories());
             if (ampCategoryValue != null)
               eaForm.setGbsSbs(ampCategoryValue.getId());
@@ -1337,6 +1343,9 @@ public class EditActivity
           eaForm.setBenAgencies(new ArrayList());
           eaForm.setConAgencies(new ArrayList());
           eaForm.setReportingOrgs(new ArrayList());
+          eaForm.setSectGroups(new ArrayList());
+          eaForm.setRegGroups(new ArrayList());
+          
           Set relOrgs = activity.getOrgrole();
           if (relOrgs != null) {
             Iterator relOrgsItr = relOrgs.iterator();
@@ -1377,7 +1386,20 @@ public class EditActivity
                            orgRole.getOrganisation()))) {
                 eaForm.getReportingOrgs().add(
                     orgRole.getOrganisation());
-              }
+              } else if (orgRole.getRole().getRoleCode().equals(
+                      Constants.SECTOR_GROUP)
+                      && (!eaForm.getSectGroups().contains(
+                          orgRole.getOrganisation()))) {
+               eaForm.getSectGroups().add(
+                   orgRole.getOrganisation());
+             } else if (orgRole.getRole().getRoleCode().equals(
+                     Constants.REGIONAL_GROUP)
+                     && (!eaForm.getRegGroups().contains(
+                         orgRole.getOrganisation()))) {
+              eaForm.getRegGroups().add(
+                  orgRole.getOrganisation());
+            }
+              
             }
           }
 

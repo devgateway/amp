@@ -12,7 +12,9 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 
 public class GetDesktopTeamMembers extends TilesAction {
@@ -22,6 +24,10 @@ public class GetDesktopTeamMembers extends TilesAction {
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
 
 		HttpSession session = request.getSession();
+		
+		String settingValue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ACTIVITY_LEVEL);								
+		if("true".equals(settingValue)) request.setAttribute("activity_level", "true");
+		
 		if (session.getAttribute(Constants.MY_TEAM_MEMBERS) == null) {
 			TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 			if (tm != null) {

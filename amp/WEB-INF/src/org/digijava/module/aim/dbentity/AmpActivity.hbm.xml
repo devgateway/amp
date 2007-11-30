@@ -16,6 +16,8 @@
 		<property name="results" column="results"  type="org.digijava.kernel.db.SafeClobType"/>
 		<property name="purpose" column="purpose" type="org.digijava.kernel.db.SafeClobType"/>
 
+        <property name="activityLevel" column="activity_level_id" type="java.lang.Long"/>
+
         <property name="documentSpace" column="document_space" type="java.lang.String"/>
 		<property name="language" column="language" type="java.lang.String"/>
 	    <property name="budget" column="budget" type="java.lang.Boolean"/>

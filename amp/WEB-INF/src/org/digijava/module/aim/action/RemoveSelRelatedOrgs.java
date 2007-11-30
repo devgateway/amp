@@ -99,6 +99,29 @@ public class RemoveSelRelatedOrgs extends Action {
 							}
 						}
 					}
+					else
+						if (eaForm.getItem() == 7) {
+							Long selOrgs[] = eaForm.getSelRegGroups();
+							if (selOrgs != null) {
+								for (int i = 0;i < selOrgs.length;i ++) {
+									AmpOrganisation org = new AmpOrganisation();
+									org.setAmpOrgId(selOrgs[i]);
+									eaForm.getRegGroups().remove(org);
+							}
+						}
+					}
+						else
+							if (eaForm.getItem() == 8) {
+								Long selOrgs[] = eaForm.getSelSectGroups();
+								if (selOrgs != null) {
+									for (int i = 0;i < selOrgs.length;i ++) {
+										AmpOrganisation org = new AmpOrganisation();
+										org.setAmpOrgId(selOrgs[i]);
+										eaForm.getSectGroups().remove(org);
+								}
+							}
+						}		
+			
 		}
 		return mapping.findForward("forward");
 	}

@@ -859,8 +859,6 @@ function displayStaticMessage(messageContent,cssClass)
 	messageObj.setSource(false);	// no html source since we want to use a static message here.
 	messageObj.setShadowDivVisible(false);	// Disable shadow for these boxes
 	messageObj.display();
-
-
 }
 
 function closeMessage()

@@ -105,6 +105,10 @@ public class AddAmpActivity extends Action {
     //return mapping.findForward("publicPreview");
 
     EditActivityForm eaForm = (EditActivityForm) form;
+    
+    //set the level, if available
+    String levelTxt=request.getParameter("activityLevelId");
+    if(levelTxt!=null) eaForm.setActivityLevel(Long.parseLong(levelTxt));
 
     /*Clear eventually dirty information found in session related to DM*/
 		if ( request.getParameter("action") != null && request.getParameter("action").equals("create") ){

@@ -45,6 +45,8 @@ public class Constants
 	public static final String IMPLEMENTING_AGENCY = "IA" ;
 	public static final String BENEFICIARY_AGENCY = "BA" ;
 	public static final String CONTRACTING_AGENCY = "CA" ;
+	public static final String REGIONAL_GROUP = "RG" ;	
+	public static final String SECTOR_GROUP = "SG" ;	
 	public static final String EXECUTING_AGENCY = "EA";
 	public static final String CONTRACTOR = "CT";
 	public static final String RELATED_INSTITUTIONS = "RL" ;

@@ -186,6 +186,13 @@ public class AssignFieldPermissions extends Action {
 		    
 		}
 	    } else { 
+		//initialize everyone + guest
+		fpf.setEvEdit(null);
+		fpf.setGuEdit(null);
+		fpf.setEvRead("on");
+		fpf.setGuRead("on");
+		
+		
 		//get the global for the fields:
 		Permission globalPermissionForPermissibleClass = PermissionUtil.getGlobalPermissionForPermissibleClass(AmpFieldsVisibility.class);
 		if(globalPermissionForPermissibleClass!=null) {Set<String> allowedActions = globalPermissionForPermissibleClass.getAllowedActions(permScope);

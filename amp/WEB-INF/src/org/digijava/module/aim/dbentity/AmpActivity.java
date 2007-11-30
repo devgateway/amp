@@ -40,7 +40,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
     private String environment;
     private String minorities;
 
-//	private AmpStatus status ; // TO BE DELETED
+    	private Long activityLevel;
 	private String language ;
 	private String version ;
 	private String calType; 	// values GREGORIAN, ETH_CAL, ETH_FISCAL_CAL
@@ -1244,12 +1244,28 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
                 this.actPrograms = actPrograms;
         }
 
-		public Set getComponentSectors() {
-			return componentSectors;
-		}
+	public Long getActivityLevel() {
+	    return activityLevel;
+	}
 
-		public void setComponentSectors(Set componentSectors) {
-			this.componentSectors = componentSectors;
-		}
+	public void setActivityLevel(Long activityLevel) {
+	    this.activityLevel = activityLevel;
+	}
+
+	public Set getComponentSectors() {
+	    return componentSectors;
+	}
+
+	public void setComponentSectors(Set componentSectors) {
+	    this.componentSectors = componentSectors;
+	}
+
+	public Boolean getGovernmentApprovalProcedures() {
+	    return governmentApprovalProcedures;
+	}
+
+	public Boolean getJointCriteria() {
+	    return jointCriteria;
+	}
 
 }

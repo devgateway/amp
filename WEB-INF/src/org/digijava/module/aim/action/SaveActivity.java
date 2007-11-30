@@ -151,6 +151,7 @@ public class SaveActivity extends Action {
 			CategoryManagerUtil.addCategoryToSet(eaForm.getLevelId(), activity.getCategories() );
 			CategoryManagerUtil.addCategoryToSet(eaForm.getGbsSbs(), activity.getCategories() );
                         CategoryManagerUtil.addCategoryToSet(eaForm.getImplemLocationLevel(), activity.getCategories() );
+                        CategoryManagerUtil.addCategoryToSet(eaForm.getActivityLevel(), activity.getCategories());                        
 			/* END - Saving categories to AmpActivity */
 
 			/* Saving related documents into AmpActivity */
@@ -858,6 +859,32 @@ public class SaveActivity extends Action {
 					AmpRole role = DbUtil
 							.getAmpRole(Constants.CONTRACTING_AGENCY);
 					Iterator itr = eaForm.getConAgencies().iterator();
+					while (itr.hasNext()) {
+						AmpOrganisation org = (AmpOrganisation) itr.next();
+						AmpOrgRole ampOrgRole = new AmpOrgRole();
+						ampOrgRole.setActivity(activity);
+						ampOrgRole.setRole(role);
+						ampOrgRole.setOrganisation(org);
+						orgRole.add(ampOrgRole);
+					}
+				}
+				if (eaForm.getRegGroups() != null) { // regional groups
+					AmpRole role = DbUtil
+							.getAmpRole(Constants.REGIONAL_GROUP);
+					Iterator itr = eaForm.getRegGroups().iterator();
+					while (itr.hasNext()) {
+						AmpOrganisation org = (AmpOrganisation) itr.next();
+						AmpOrgRole ampOrgRole = new AmpOrgRole();
+						ampOrgRole.setActivity(activity);
+						ampOrgRole.setRole(role);
+						ampOrgRole.setOrganisation(org);
+						orgRole.add(ampOrgRole);
+					}
+				}
+				if (eaForm.getSectGroups() != null) { // sector groups
+					AmpRole role = DbUtil
+							.getAmpRole(Constants.SECTOR_GROUP);
+					Iterator itr = eaForm.getSectGroups().iterator();
 					while (itr.hasNext()) {
 						AmpOrganisation org = (AmpOrganisation) itr.next();
 						AmpOrgRole ampOrgRole = new AmpOrgRole();

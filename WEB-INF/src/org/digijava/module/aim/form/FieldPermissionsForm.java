@@ -16,6 +16,15 @@ import org.apache.struts.action.ActionForm;
 public class FieldPermissionsForm extends ActionForm {
     
     private Integer fieldId;
+  
+    //everyone
+    private String evRead;
+    private String evEdit;
+  
+    //guest
+    private String guRead;
+    private String guEdit;
+  
     
     private String baRead;
     private String baEdit;
@@ -105,6 +114,30 @@ public class FieldPermissionsForm extends ActionForm {
     }
     public void setFieldId(Integer fieldId) {
         this.fieldId = fieldId;
+    }
+    public String getEvEdit() {
+        return evEdit;
+    }
+    public void setEvEdit(String evEdit) {
+        this.evEdit = evEdit;
+    }
+    public String getEvRead() {
+        return evRead;
+    }
+    public void setEvRead(String evRead) {
+        this.evRead = evRead;
+    }
+    public String getGuEdit() {
+        return guEdit;
+    }
+    public void setGuEdit(String guEdit) {
+        this.guEdit = guEdit;
+    }
+    public String getGuRead() {
+        return guRead;
+    }
+    public void setGuRead(String guRead) {
+        this.guRead = guRead;
     }
  
 }

@@ -128,6 +128,7 @@ public class ResetAll extends Action
 	    		eaForm.setMinorities(null); 
 	    		eaForm.setEnvironment(null);
 	    		eaForm.setLevelId(new Long(0));
+	    		eaForm.setActivityLevel(new Long(0));
 //	    		eaForm.setImplementationLevel(null);
 	    		eaForm.setImplemLocationLevel( 
 	    				CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.IMPLEMENTATION_LOCATION_KEY, new Long(0)).getId() 
@@ -628,7 +629,17 @@ public class ResetAll extends Action
 						{
 							eaForm.getReportingOrgs().add(orgRole.getOrganisation());
 						}
-					}
+						else if (orgRole.getRole().getRoleCode().equals(
+							Constants.SECTOR_GROUP) && (!eaForm.getSectGroups().contains(orgRole.getOrganisation())))
+						{
+						    eaForm.getSectGroups().add(orgRole.getOrganisation());
+						}					
+					else if (orgRole.getRole().getRoleCode().equals(
+						Constants.REGIONAL_GROUP) && (!eaForm.getRegGroups().contains(orgRole.getOrganisation())))
+				{
+					eaForm.getRegGroups().add(orgRole.getOrganisation());
+				}
+				}
 					eaForm.setContractors(activity.getContractors().trim());
 				}
 		    }

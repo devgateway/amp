@@ -4,11 +4,13 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <script language="JavaScript">
 	function addActivity() {
-		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create";	
+		levelObj=document.getElementById('activityLevel');
+		selectedLevelId=levelObj.options[levelObj.selectedIndex].value;
+		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create~activityLevelId="+selectedLevelId;	
 	}
 	
 	function teamWorkspaceSetup(a) {
@@ -61,6 +63,17 @@
 							<div title="${trnClickToAddNewActivit}" align="left">
 								<input type="button" class="dr-menu" onclick="return addActivity()" 
 								value="<digi:trn key="btn:addActivity">Add Activity</digi:trn>" name="addActivity"/>
+								
+							<c:set var="translation">
+								<digi:trn key="aim:addActivitySelectLevel">Select Level</digi:trn>
+							</c:set>
+
+
+							<logic:present name="activity_level" scope="request">
+							<category:showoptions firstLine="${translation}" name="xx" outerId="activityLevel"
+							property="activityLevel"  styleClass="inp-text" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_LEVEL_KEY%>"/>
+							</logic:present>
+							
 							</div>
 						</c:if>
 					</c:if>

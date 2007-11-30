@@ -270,6 +270,59 @@ public class OrganisationSelected extends Action {
 								eaForm.setConAgencies(col);						
 							}
 						}
+						else
+							if (item == 7) {
+								if (eaForm.getRegGroups()!= null) {
+									for (int i = 0;i < temp.size();i ++) {
+										AmpOrganisation newOrg = (AmpOrganisation) temp.get(i);
+										if (newOrg != null) {
+											boolean flag = false;
+											Iterator itr = eaForm.getRegGroups().iterator();
+											while (itr.hasNext()) {
+												AmpOrganisation org = (AmpOrganisation) itr.next();
+												if (org.getAmpOrgId().equals(newOrg.getAmpOrgId())) {
+													flag = true;
+													break;
+												}
+											}
+											if (!flag) {
+												eaForm.getRegGroups().add(newOrg);
+											}
+										}
+									}
+								} else {
+									Collection col = new ArrayList();
+									col.addAll(temp);
+									eaForm.setRegGroups(col);						
+								}
+							}
+				
+							else
+								if (item == 8) {
+									if (eaForm.getSectGroups()!= null) {
+										for (int i = 0;i < temp.size();i ++) {
+											AmpOrganisation newOrg = (AmpOrganisation) temp.get(i);
+											if (newOrg != null) {
+												boolean flag = false;
+												Iterator itr = eaForm.getSectGroups().iterator();
+												while (itr.hasNext()) {
+													AmpOrganisation org = (AmpOrganisation) itr.next();
+													if (org.getAmpOrgId().equals(newOrg.getAmpOrgId())) {
+														flag = true;
+														break;
+													}
+												}
+												if (!flag) {
+													eaForm.getSectGroups().add(newOrg);
+												}
+											}
+										}
+									} else {
+										Collection col = new ArrayList();
+										col.addAll(temp);
+										eaForm.setSectGroups(col);						
+									}
+								}
 				
 			}
 			return mapping.findForward("step6");

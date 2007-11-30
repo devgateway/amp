@@ -993,6 +993,66 @@ function commentWin(val) {
 																				</TD>
 																			</TR>
 																		</feature:display>
+																		
+																		<feature:display module="Organizations" name="Regional Group">
+																			<TR>
+																				<TD>
+																				<TABLE width="100%" cellSpacing="1" cellPadding="2"
+																					vAlign="top" align="left" bgcolor="#dddddd">
+																					<TR>
+																						<TD bgcolor="#ffffff"><b><digi:trn
+																							key="aim:regionalGroup">Regional Group</digi:trn></b></TD>
+																					</TR>
+																					<TR>
+																						<TD bgcolor="#ffffff"><c:if
+																							test="${!empty activity.relOrgs}">
+																							<c:forEach var="relOrg"
+																								items="${activity.relOrgs}">
+																								<c:if test="${relOrg.role == 'RG'}">
+																									<bean:define id="currentOrg" name="relOrg"
+																											type="org.digijava.module.aim.helper.RelOrganization"
+																											toScope="request" />
+																											<jsp:include page="organizationPopup.jsp"/>
+																								</c:if>
+																							</c:forEach>
+																						</c:if></TD>
+																					</TR>
+																				</TABLE>
+																				</TD>
+																			</TR>
+																		</feature:display>
+																		
+																		
+																		<feature:display module="Organizations" name="Sector Group">
+																			<TR>
+																				<TD>
+																				<TABLE width="100%" cellSpacing="1" cellPadding="2"
+																					vAlign="top" align="left" bgcolor="#dddddd">
+																					<TR>
+																						<TD bgcolor="#ffffff"><b><digi:trn
+																							key="aim:sectorGroup">Sector Group</digi:trn></b></TD>
+																					</TR>
+																					<TR>
+																						<TD bgcolor="#ffffff"><c:if
+																							test="${!empty activity.relOrgs}">
+																							<c:forEach var="relOrg"
+																								items="${activity.relOrgs}">
+																								<c:if test="${relOrg.role == 'SG'}">
+																									<bean:define id="currentOrg" name="relOrg"
+																											type="org.digijava.module.aim.helper.RelOrganization"
+																											toScope="request" />
+																											<jsp:include page="organizationPopup.jsp"/>
+																								</c:if>
+																							</c:forEach>
+																						</c:if></TD>
+																					</TR>
+																				</TABLE>
+																				</TD>
+																			</TR>
+																		</feature:display>
+																		
+																		
+																		
 																	</module:display>
 														</TABLE>
 														</TD>

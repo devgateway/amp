@@ -1837,6 +1837,35 @@ function viewChanges()
 												</table>
 											</logic:notEmpty><br/>
 											</feature:display>
+
+
+											<feature:display name="Sector Group" module="Organizations">
+											<b><digi:trn key="aim:sectorGroup">Sector Group</digi:trn></b><br/>
+											<logic:notEmpty name="aimEditActivityForm" property="sectGroups">
+												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+													<tr><td>
+													<logic:iterate name="aimEditActivityForm" property="sectGroups"
+													id="sectGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+														<ul><li> <bean:write name="sectGroup" property="name" /></li></ul>
+													</logic:iterate>
+													</td></tr>
+												</table>
+											</logic:notEmpty><br/>
+											</feature:display>
+											
+											<feature:display name="Regional Group" module="Organizations">
+											<b><digi:trn key="aim:regionalGroup">Regional Group</digi:trn></b><br/>
+											<logic:notEmpty name="aimEditActivityForm" property="regGroups">
+												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+													<tr><td>
+													<logic:iterate name="aimEditActivityForm" property="regGroups"
+													id="regGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+														<ul><li> <bean:write name="regGroup" property="name" /></li></ul>
+													</logic:iterate>
+													</td></tr>
+												</table>
+											</logic:notEmpty><br/>
+											</feature:display>
 										</td>
 									</tr>
 									</module:display>

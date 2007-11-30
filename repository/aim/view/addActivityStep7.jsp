@@ -253,6 +253,20 @@ ${fn:replace(message,quote,escapedQuote)}
 
 									<!-- /Contracting Agency -->
 
+									<!-- Regional Group  -->
+									<feature:display name="Regional Group" module="Organizations">
+										<jsp:include page="addActivityStep7RegionalGroup.jsp"/>
+									</feature:display>
+
+									<!-- /Regional Group -->
+									
+									<!-- Sector Group  -->
+									<feature:display name="Sector Group" module="Organizations">
+										<jsp:include page="addActivityStep7SectorGroup.jsp"/>
+									</feature:display>
+									<!-- /Sector Group  -->
+
+
 <!--
 
 									<tr><td>

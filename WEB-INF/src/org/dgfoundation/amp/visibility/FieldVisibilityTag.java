@@ -182,8 +182,8 @@ public class FieldVisibilityTag extends BodyTagSupport {
 				{
 					if(featureByNameFromRoot.getItems().containsKey(this.getName())) return true;
 				}
-			else System.out.println("errror in FM"+this.getFeature());
-		else System.out.println("errror in FM"+this.getFeature());
+			else System.out.println("errror in FM - field: "+this.getFeature());
+		else System.out.println("errror in FM - field: "+this.getFeature());
 		return false;
 	}
 	

@@ -56,7 +56,10 @@ public class VisibilityManager extends MultiAction {
 			{
 				if(request.getParameter("action").compareTo("add")==0) return modeAddTemplate(mapping, form, request, response);
 				if(request.getParameter("action").compareTo("viewFields")==0) return modeViewFields(mapping, form, request, response);
-				if(request.getParameter("action").compareTo("edit")==0) return modeEditTemplate(mapping, form, request, response);
+				if(request.getParameter("action").compareTo("edit")==0) {
+					
+					return modeEditTemplate(mapping, form, request, response);
+				}
 				if(request.getParameter("action").compareTo("delete")==0) return modeDeleteTemplate(mapping, form, request, response);				
 				if(request.getParameter("action").compareTo("deleteFFM")==0) return modeDeleteFFM(mapping, form, request, response);
 				if(request.getParameter("action").compareTo("manageTemplates")==0) return modeManageTemplates(mapping, form, request, response);
@@ -124,6 +127,7 @@ public class VisibilityManager extends MultiAction {
 	}
 	
 	public ActionForward modeEditTemplate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		if(request.getParameter("changeLevel")!=null) System.out.println("o daaaaaaaaaaaaaaaaaaaaaaaaa");
 		VisibilityManagerForm vForm = (VisibilityManagerForm) form;
 		Long templateId=null;
 		Session hbsession = this.createSession();

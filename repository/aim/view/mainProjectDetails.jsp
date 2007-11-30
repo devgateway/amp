@@ -200,7 +200,7 @@
 							</feature:display>
 							
 						<module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display>
-						<feature:display name="Documents Tab" module="Document Management">
+						<feature:display name="Documents" module="Document Management">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
 							   <LI class="selected">
 									:: <digi:trn key="aim:documents">Documents</digi:trn>
@@ -240,8 +240,7 @@
 									</LI>
 								</logic:notEqual>
 						</feature:display>
-						<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display>
-						<feature:display name="Paris Indicators Tab" module="Paris Indicators">
+						<field:display name="Paris Survey" feature="Paris Indicators">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
 								   <LI class="selected">						
 									:: <digi:trn key="aim:parisIndicators">Paris Indicators</digi:trn>
@@ -261,8 +260,8 @@
 								</digi:link></div>
 								</LI>
 							</logic:notEqual>
-						</feature:display>
-						<feature:display name="Dashboard Tab" module="M & E">
+						</field:display>
+						<feature:display name="Dashboard" module="M & E">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="7">
 									<LI class="selected">
 									:: <digi:trn key="aim:activityDashboard">Dashboard</digi:trn>

@@ -70,9 +70,8 @@
 <feature:display name="Costing Tab" module="Activity Costing"></feature:display>
 <feature:display name="Costing" module="Activity Costing"></feature:display>
 <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues"></feature:display>
-<feature:display name="Dashboard Tab" module="M & E"></feature:display>
 <feature:display name="Dashboard" module="M & E"></feature:display>
-<feature:display name="Documents Tab" module="Document Management"></feature:display>
+<feature:display name="Documents" module="Document Management"></feature:display>
 <feature:display name="Documents Tab" module="Document"></feature:display>
 <feature:display name="Donor Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Edit Activity" module="Previews"></feature:display>
@@ -90,8 +89,7 @@
 <feature:display name="My Messages" module="Desktop Sections"></feature:display>
 <feature:display name="My Tasks" module="Desktop Sections"></feature:display>
 <feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display>
-<feature:display name="NPD Programs " module="National Planning Dashboard"></feature:display>
-<feature:display name="Paris Indicators Tab" module="Paris Indicators"></feature:display>
+<feature:display name="NPD Programs" module="National Planning Dashboard"></feature:display>
 <feature:display name="Paris Indicators" module="Paris Indicators"></feature:display>
 <feature:display name="Physical Progress" module="Components"></feature:display>
 <feature:display name="Physical Progress Tab" module="Physical Progress"></feature:display>
@@ -99,8 +97,8 @@
 <feature:display name="Preview Activity" module="Previews"></feature:display>
 <feature:display name="Program" module="Program"></feature:display>
 <feature:display name="Project Fiche" module="Previews"></feature:display>
-<feature:display name="Project Performance" module="National Planning Dashboard"></feature:display>
-<feature:display name="Project Risk" module="National Planning Dashboard"></feature:display>
+<field:display name="Project Performance"  feature="Dashboard"></field:display>
+<field:display name="Project Risk" feature="Dashboard"></field:display>
 <feature:display name="Proposed Project Cost" module="Funding"></feature:display>
 <feature:display name="References Tab" module="References"></feature:display>
 <feature:display name="References" module="References"></feature:display>
@@ -112,6 +110,7 @@
 <feature:display name="SISIN" module="Components"></feature:display>
 <feature:display name="Sectors" module="Project ID and Planning"></feature:display>
 <feature:display name="Web Resources" module="Document"></feature:display>
+<field:display name="Paris Survey" feature="Paris Indicators"></field:display>
 <field:display  name="Remove Location" feature="Location"></field:display>
 <field:display feature="Donor Contact Information" name="Donor Email"></field:display>
 <field:display feature="Donor Contact Information" name="Donor First Name"></field:display>
@@ -374,7 +373,7 @@
 <field:display name="Risk" feature="Activity"></field:display>
 <field:display name="SISIN Code" feature="SISIN"></field:display>
 <field:display name="SISIN Sector" feature="SISIN"></field:display>
-<field:display name="Sector" feature="Sectos"></field:display>
+<field:display name="Sector" feature="Sectors"></field:display>
 <field:display name="Status" feature="Planning"></field:display>
 <field:display name="Sub Program Level 1" feature="NPD Dashboard"></field:display>
 <field:display name="Sub Program Level 2" feature="NPD Dashboard"></field:display>

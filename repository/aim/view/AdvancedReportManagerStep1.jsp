@@ -252,7 +252,7 @@ function checkUncheckAll2() {
 
 
 											<feature:display name="Sectors" module="Project ID and Planning"></feature:display>
-											<field:display name="Sector" feature="Sectos">&nbsp;</field:display>
+											<field:display name="Sector" feature="Sectors">&nbsp;</field:display>
 											<field:display name="Sub-Sector" feature="Sectors">&nbsp;</field:display>
 											
 											<feature:display name="Location" module="Project ID and Planning">
@@ -327,7 +327,7 @@ function checkUncheckAll2() {
 																											onclick="checkUncheckAll3();"
 
 																								/>
-																							<a id="1"><digi:trn key="aim:report:AMP">AMP</digi:trn></a>
+																							<a id="1"><digi:trn key="aim:report:AMP" style="font-size: 12px;color:#0e69b3;text-decoration:none">AMP</digi:trn></a>
 																								<ul>
 																							<logic:iterate name="ampTreeColumns" id="ampTreeColumn" type="java.util.Map.Entry" >
 																								<bean:define id="themeColumn" name="ampTreeColumn" property="key" type="java.lang.String" scope="page"/>
@@ -341,7 +341,7 @@ function checkUncheckAll2() {
 																											onclick="toggleChildrenVisibility('limodule:<bean:write name="themeColumn"/>')"
 
 																								/>
-																								<a id="module:<bean:write name="themeColumn"/>">
+																								<a id="module:<bean:write name="themeColumn"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
 																								<digi:trn key="aim:report:${themeColumn}"><bean:write name="themeColumn"/></digi:trn>
 																								</a>
 																								<ul>
@@ -351,7 +351,7 @@ function checkUncheckAll2() {
 																											name="selectedColumns"
 																											value="<bean:write name="ampColumnFromTree" property="columnId"/>"
 																										/>
-																										<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>" >
+																										<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
 																											<digi:trn key="aim:report:${ampColumnFromTree.columnName}"><bean:write name="ampColumnFromTree" property="columnName"/></digi:trn>
 																										</a>
 																									</li>

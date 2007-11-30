@@ -149,13 +149,13 @@ return false;
 
 				<%-- <c:if var="teamType" test="${currentMember.teamType == 'DONOR'}" scope="session"> --%>
 
-					<feature:display name="Paris Indicators" module="Paris Indicators">
+					<field:display name="Paris Survey" module="Paris Indicators">
 		      			<TR><TD title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
 							<digi:link href="/parisIndicatorReport.do">
 								<b><digi:trn key="aim:parisIndicatorReports">Paris Indicator Reports</digi:trn></b>
 							</digi:link>
 						</TD></TR>
-					</feature:display>
+					</field:display>
 
 				<%-- </c:if>  --%>
 

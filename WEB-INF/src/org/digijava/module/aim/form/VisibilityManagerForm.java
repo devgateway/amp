@@ -26,6 +26,7 @@ public class VisibilityManagerForm extends ActionForm implements Serializable{
 	private Long fieldId;
 	private String templateName;
 	private AmpTreeVisibility ampTreeVisibility;
+	private Long levelCategory;
 	
 	private String existSubmodules;
 	
@@ -140,6 +141,12 @@ public class VisibilityManagerForm extends ActionForm implements Serializable{
 	}
 	public void setExistSubmodules(String existSubmodules) {
 		this.existSubmodules = existSubmodules;
+	}
+	public Long getLevelCategory() {
+		return levelCategory;
+	}
+	public void setLevelCategory(Long levelCategory) {
+		this.levelCategory = levelCategory;
 	}
 	
 

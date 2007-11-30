@@ -935,7 +935,8 @@ function viewChanges()
 									</feature:display>
 									<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
 
-									<feature:display name="NPD Programs " module="National Planning Dashboard">
+									<feature:display name="NPD Programs" module="National Planning Dashboard">
+									<field:display name="National Plan Objective" feature="NPD Programs">
 									<TR>
 																		<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 																		<b><digi:trn key="aim:national Plan Objective">National Plan Objective</digi:trn></b></TD>
@@ -946,7 +947,9 @@ function viewChanges()
                                                                                                                                                   </c:forEach>
 																		</TD>
 																	</TR>
-                                                                                                                                        <TR>
+                                      </field:display> 
+                                      <field:display name="Primary Program" feature="NPD Programs">
+                                           <TR>
 																		<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 																		<b><digi:trn key="aim:primary Programs">Primary Programs</digi:trn></b></TD>
 
@@ -956,6 +959,8 @@ function viewChanges()
                                                                                                                                                   </c:forEach>
 																		</TD>
 																	</TR>
+										</field:display>
+										<field:display name="Secondary Program" feature="NPD Programs">
                                                                                                                                         <TR>
 																		<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 																		<b><digi:trn key="aim:secondary Programs">Secondary Programs</digi:trn></b></TD>
@@ -967,6 +972,7 @@ function viewChanges()
                                                                                                                                                   </c:forEach>
 																		</TD>
 																	</TR>
+										</field:display>
 
 									</feature:display>
 									<feature:display name="Proposed Project Cost" module="Funding">
@@ -1007,7 +1013,7 @@ function viewChanges()
 
 									</tr>
 									</feature:display>
-									<feature:display name="Project Performance" module="National Planning Dashboard">
+									<field:display name="Project Performance"  feature="Dashboard">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:meActivityPerformance">
@@ -1023,8 +1029,8 @@ function viewChanges()
 											<% } %>
 										</td>
 									</tr>
-									</feature:display>
-									<feature:display name="Project Risk" module="National Planning Dashboard">
+									</field:display>
+									<field:display name="Project Risk" module="Dashboard">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:meActivityRisk">
@@ -1048,8 +1054,7 @@ function viewChanges()
 											<% } %>
 										</td>
 									</tr>
-									</feature:display>
-									</module:display>
+									</field:display>
 								<logic:present name="currentMember" scope="session">
 									<module:display name="Funding" parentModule="PROJECT MANAGEMENT">
 									<tr>
@@ -2214,7 +2219,7 @@ function viewChanges()
 										</td>
 									</tr>
 									</feature:display>
-									<feature:display name="Mofed Contact Information" module="Contact Information">
+									<feature:display name="Government Contact Information" module="Contact Information">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:mofedContactInformation">

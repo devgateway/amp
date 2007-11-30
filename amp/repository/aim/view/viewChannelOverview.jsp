@@ -158,58 +158,81 @@ function commentWin(val) {
 											</logic:notEmpty>
 										&nbsp;
 										<digi:trn key="aim:perspective">Perspective</digi:trn></logic:equal> </SPAN></TD>
-										<TD align="right" nowrap="nowrap">
-										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
-											<feature:display name="Preview Activity" module="Previews">
-												<field:display feature="Preview Activity" name="Preview Button">
-													<html:button style="dr-menu" onclick="preview(${activity.activityId})" property="previewBtn">
-		                                          		<digi:trn key="btn:preview">Preview</digi:trn>
-													</html:button>
-	                                          		&nbsp;
-												</field:display>
-											</feature:display>
-										</module:display>
-
-
-										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
-											<feature:display name="Edit Activity" module="Previews">
-												<field:display feature="Edit Activity" name="Edit Activity Button">
-												<html:button style="dr-menu" onclick="fnEditProject(${activity.activityId})" property="editBtn">
-														<digi:trn key="btn:edit">Edit</digi:trn>
-												</html:button>
-												&nbsp;
-												</field:display>
-											</feature:display>
-										</module:display>
-
-										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
-												<feature:display name="Logframe" module="Previews">
-													<field:display name="Logframe Preview Button" feature="Logframe" >
-														<html:button  style="dr-menu" onclick="previewLogframe(${activity.activityId})" property="logframeBtn">
-															<digi:trn key="btn:previewLogframe">Preview Logframe</digi:trn>
-														</html:button>
-													</field:display>
-												</feature:display>
-										</module:display>
-
-                                        <c:if test="${aimChannelOverviewForm.buttonText == 'validate'}">
-											<input type="button" value='<digi:trn key="aim:validate">Validate</digi:trn>' class="dr-menu"
-												onclick="fnEditProject(<c:out value="${activity.activityId}"/>)">
-										</c:if>
-                                        <c:if test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
-											<input type="button" value='<digi:trn key="aim:approvalAwaited">Approval Awaited</digi:trn>' class="dr-menu"
-												disabled>
-										</c:if>
-										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
-												<feature:display name="Project Fiche" module="Previews">
-													<field:display name="Project Fiche Button" feature="Project Fiche" >
-														<html:button style="dr-menu" onclick='projectFiche(${activity.activityId})' property="projectFicheBtn">
-																<digi:trn key="btn:projectFiche">Project Fiche</digi:trn>
-														</html:button>
-													</field:display>
-												</feature:display>
-										</module:display>
-										</TD>
+										<TD align="right">
+											<table width="65%">
+												<tr >													
+														<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+															<feature:display name="Preview Activity" module="Previews">
+																<field:display feature="Preview Activity" name="Preview Button">
+																	<td>
+																		<html:button style="dr-menu;width:100%" onclick="preview(${activity.activityId})" property="previewBtn">
+						                                          			<digi:trn key="btn:preview">Preview</digi:trn>
+																		</html:button>
+																	</td>
+																			                                          	
+																</field:display>
+															</feature:display>
+														</module:display>									
+														<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+															<feature:display name="Edit Activity" module="Previews">
+																<field:display feature="Edit Activity" name="Edit Activity Button">																
+																<td>
+																	<html:button style="dr-menu;width:100%"  onclick="fnEditProject(${activity.activityId})" property="editBtn">
+																		<digi:trn key="btn:edit">Edit</digi:trn>
+																	</html:button>
+																</td>
+																
+																</field:display>
+															</feature:display>
+														</module:display>																										
+													
+														<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+															<feature:display name="Logframe" module="Previews">
+																<field:display name="Logframe Preview Button" feature="Logframe" >																	
+																	<td >
+																		<html:button  style="dr-menu;width:100%" onclick="previewLogframe(${activity.activityId})" property="logframeBtn">
+																			<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn>
+																		</html:button>
+																	</td>
+																	
+																</field:display>
+															</feature:display>
+														</module:display>													
+													
+														<c:if test="${aimChannelOverviewForm.buttonText == 'validate'}">
+															<td >
+																<html:button  style="dr-menu;width:100%" onclick="fnEditProject(${activity.activityId})" property="validateBtn">
+																	<digi:trn key="aim:validate">Validate</digi:trn>
+																</html:button>	
+															</td>
+																													
+														</c:if>
+				                                        <c:if test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
+				                                        	<td >
+				                                        		<html:button  style="dr-menu;width:100%" disabled="true" property="validateBtn">
+																	<digi:trn key="aim:approvalAwaited">Approval Awaited</digi:trn>
+																</html:button>
+				                                        	</td>
+				                                        																
+														</c:if>													
+																																						
+														<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+															<feature:display name="Project Fiche" module="Previews">
+																<field:display name="Project Fiche Button" feature="Project Fiche" >
+																	
+																	<td>
+																		<html:button style="dr-menu;width:100%" onclick='projectFiche(${activity.activityId})' property="projectFicheBtn">
+																			<digi:trn key="btn:projectFiche">Project Fiche</digi:trn>
+																		</html:button>
+																	</td>
+																																																		
+																</field:display>
+															</feature:display>
+														</module:display>
+																																							
+												</tr>
+											</table>									
+										</TD>										
 									</TR>
 								</TABLE>
 								</TD>

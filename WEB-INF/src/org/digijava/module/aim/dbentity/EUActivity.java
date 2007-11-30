@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.digijava.module.aim.dbentity;
 
@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.exception.AimException;
 
 /**
  * @author mihai
@@ -19,7 +20,7 @@ import org.digijava.module.aim.util.Identifiable;
 public class EUActivity implements Serializable, Identifiable {
 	private static final long serialVersionUID = 7061222006441976421L;
 
-	
+
 	private Long id;
 	private Date transactionDate;
 	private String name;
@@ -32,34 +33,34 @@ public class EUActivity implements Serializable, Identifiable {
 	private String progress;
 	private Date dueDate;
 	private AmpActivity activity;
-	
+
 	private Long desktopCurrencyId;
-	
-		
+
+
 	public void setDesktopCurrencyId(Long desktopCurrencyId) {
 		this.desktopCurrencyId = desktopCurrencyId;
 	}
 
 
-	public double getTotalContributionsConverted() {
+	public double getTotalContributionsConverted() throws AimException  {
 		double res=0;
 		Iterator i=contributions.iterator();
 		while (i.hasNext()) {
 			EUActivityContribution element = (EUActivityContribution) i.next();
 			double val=CurrencyWorker.convertToUSD(element.getAmount().doubleValue(),element.getAmountCurrency().getCurrencyCode());
-			res+=val;	
+			res+=val;
 		}
 		double finalRes=CurrencyWorker.convertFromUSD(res,desktopCurrencyId);
 		return finalRes;
 	}
-	
-	
-	public double getTotalCostConverted() {
+
+
+	public double getTotalCostConverted() throws AimException {
 		double usdAmount = CurrencyWorker.convertToUSD(totalCost.doubleValue(),totalCostCurrency.getCurrencyCode());
 		double finalAmount=CurrencyWorker.convertFromUSD(usdAmount,desktopCurrencyId);
 		return finalAmount;
 	}
-	
+
 	public AmpActivity getActivity() {
 		return activity;
 	}
@@ -71,7 +72,7 @@ public class EUActivity implements Serializable, Identifiable {
 
 
 	/**
-	 * 
+	 *
 	 */
 	public EUActivity() {
 		super();
@@ -199,7 +200,7 @@ public class EUActivity implements Serializable, Identifiable {
 	}
 
 
-	
-	
+
+
 
 }

@@ -231,6 +231,10 @@
 		<taglib-location>/WEB-INF/category.tld</taglib-location>
 	</taglib>
 	<taglib>
+		<taglib-uri>/taglib/globalsettings</taglib-uri>
+		<taglib-location>/WEB-INF/globalsettings.tld</taglib-location>
+	</taglib>
+	<taglib>
 		<taglib-uri>/taglib/moduleVisibility</taglib-uri>
 		<taglib-location>/WEB-INF/moduleVisibility.tld</taglib-location>
 	</taglib>

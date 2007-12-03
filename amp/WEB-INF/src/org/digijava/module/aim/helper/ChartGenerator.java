@@ -66,7 +66,7 @@ public class ChartGenerator {
         for (Iterator valIter = col.iterator(); valIter.hasNext(); ) {
             MEIndicatorRisk item = (MEIndicatorRisk) valIter.next();
             String value = item.getRisk();
-            String key = "aim:portfolioRiskChart:" + value.toLowerCase();
+            String key = "aim:risk:" + value.toLowerCase();
             key = key.replaceAll(" ", "");
             String msg = CategoryManagerUtil.translate(key, request, value);
             item.setRisk(msg);

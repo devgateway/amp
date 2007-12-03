@@ -38,7 +38,14 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	private String name;
 	private String feature;
 	private String enabled;
+	private String hasLevel;
 	
+	public String getHasLevel() {
+		return hasLevel;
+	}
+	public void setHasLevel(String hasLevel) {
+		this.hasLevel = hasLevel;
+	}
 	public String getName() {
 		return name;
 	}
@@ -67,7 +74,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
                     {
                         id = featureByNameFromRoot.getId();
 	   			        try {
-                             FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName());
+                             FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName(),this.getHasLevel());
                              AmpTemplatesVisibility  currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
                              ampTreeVisibility. buildAmpTreeVisibility(currentTemplate);
                              ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);

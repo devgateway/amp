@@ -158,7 +158,7 @@
                                           ${aimEditActivityForm.revisedStartDate}
 													</td>
 												</tr>
-												<field:display name="Current Completion Date" feature="Planning">												
+												<field:display name="Actual Completion Date" feature="Planning">												
 												<tr>
 													<td width="32%"><digi:trn key="aim:currentCompletionDate">
 													Current Completion Date</digi:trn></td>

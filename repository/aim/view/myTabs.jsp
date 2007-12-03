@@ -35,11 +35,13 @@
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 
 <ul id="MyTabs" class="shadeTabs">
+<logic:present name="myReports" scope="session">
 	<logic:iterate name="myReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
 				<logic:equal name="report" property="drilldownTab" value="true">
 				<li><a id='Tab-${report.name}' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true" rel="ajaxcontentarea"><digi:trn key="aim:clickreport:tabs:${report.nameTrn}">${report.name}</digi:trn></a></li>
 				</logic:equal>
 	</logic:iterate>
+</logic:present>
 <!-- 
 <logic:empty name="myReports" scope="session">
 	<logic:notEmpty name="defaultTeamReport" scope="session">

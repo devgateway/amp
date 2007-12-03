@@ -99,7 +99,7 @@ target.style.cursor = "default"
 												<html:textarea property="title" cols="60" rows="2" styleClass="inp-text"/>
 												</a>
 											</td></tr>
-											<field:display name="Objectives" feature="Identification">
+											<field:display name="Objective" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:ObjectivesAndComponentsofProject">The key objectives and main components of the project</digi:trn>">
 												<digi:trn key="aim:objective">Objective</digi:trn>

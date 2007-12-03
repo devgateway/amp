@@ -1120,7 +1120,7 @@ function commentWin(val) {
 																			value="${activity.disbursmentsDate}" /></TD>
 																	</TR>
 																	</field:display>
-																	<field:display name="Current Completion Date" feature="Planning">
+																	<field:display name="Actual Completion Date" feature="Planning">
 																	<TR>
 																		<TD bgcolor="#ffffff"><digi:trn
 																			key="aim:currentCompletionDate">

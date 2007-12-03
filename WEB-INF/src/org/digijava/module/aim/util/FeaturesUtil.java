@@ -1941,7 +1941,7 @@ public class FeaturesUtil {
    * @author dan
    */
   public static void insertFieldWithFeatureVisibility(Long templateId,
-      Long featureId, String fieldName) throws DgException{
+      Long featureId, String fieldName, String hasLevel) throws DgException{
     Session session = null;
     AmpFeaturesVisibility feature = new AmpFeaturesVisibility();
     AmpFieldsVisibility field = new AmpFieldsVisibility();
@@ -1954,6 +1954,9 @@ public class FeaturesUtil {
           featureId);
       field.setParent(feature);
       field.setName(fieldName);
+      if(hasLevel!=null && "no".compareTo(hasLevel)==0)
+    	  field.setHasLevel(false);
+      else field.setHasLevel(false);
       session.save(field);
       tx.commit();
       tx = session.beginTransaction();
@@ -1994,7 +1997,7 @@ public class FeaturesUtil {
    * @author dan
    */
   public static void insertFeatureWithModuleVisibility(Long templateId,
-      Long moduleId, String featureName) throws DgException {
+      Long moduleId, String featureName, String hasLevel) throws DgException {
     Session session = null;
     AmpModulesVisibility module = new AmpModulesVisibility();
     AmpFeaturesVisibility feature = new AmpFeaturesVisibility();
@@ -2007,6 +2010,9 @@ public class FeaturesUtil {
           moduleId);
       feature.setParent(module);
       feature.setName(featureName);
+      if(hasLevel!=null && "no".compareTo(hasLevel)==0)
+    	  feature.setHasLevel(false);
+      else feature.setHasLevel(true);
       session.save(feature);
       tx.commit();
       tx = session.beginTransaction();
@@ -2039,7 +2045,7 @@ public class FeaturesUtil {
   /**
    * @author dan
    */
-  public static void insertModuleVisibility(Long templateId, String moduleName) {
+  public static void insertModuleVisibility(Long templateId, String moduleName, String hasLevel) {
     Session session = null;
     AmpModulesVisibility module = new AmpModulesVisibility();
     AmpTemplatesVisibility template = null;
@@ -2048,6 +2054,9 @@ public class FeaturesUtil {
       session = PersistenceManager.getSession();
       tx = session.beginTransaction();
       module.setName(moduleName);
+      if(hasLevel!=null && "no".compareTo(hasLevel)==0)
+    	  module.setHasLevel(false);
+      else module.setHasLevel(true);
       session.save(module);
       tx.commit();
       tx = session.beginTransaction();

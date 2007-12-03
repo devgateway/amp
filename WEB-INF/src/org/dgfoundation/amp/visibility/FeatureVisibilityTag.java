@@ -33,7 +33,14 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 	private String name;
 	private String module;
 	private String enabled;
+	private String hasLevel;
 	
+	public String getHasLevel() {
+		return hasLevel;
+	}
+	public void setHasLevel(String hasLevel) {
+		this.hasLevel = hasLevel;
+	}
 	public String getName() {
 		return name;
 	}
@@ -62,7 +69,7 @@ public class FeatureVisibilityTag extends BodyTagSupport {
                     if(moduleByNameFromRoot!=null){
                        id = moduleByNameFromRoot.getId();
                        try {
-                            FeaturesUtil.insertFeatureWithModuleVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName());
+                            FeaturesUtil.insertFeatureWithModuleVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName(), this.getHasLevel());
                                   AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
                                   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
                                   ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);

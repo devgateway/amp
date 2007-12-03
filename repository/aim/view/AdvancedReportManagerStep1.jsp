@@ -228,80 +228,66 @@ function checkUncheckAll2() {
 																	<input type="checkbox" name="checkall" onclick="checkUncheckAll();"/>
 																	</td>
 																	</tr>
+											<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
+											
 											<feature:display name="Identification" module="Project ID and Planning"></feature:display>
 											<feature:display name="Planning" module="Project ID and Planning"></feature:display>
-												<field:display name="Actual Approval Date" feature="Planning" >&nbsp;</field:display>
-												<field:display name="Current Completion Date" feature="Planning">&nbsp;</field:display>
-												<field:display name="Actual Start Date" feature="Planning">&nbsp;</field:display>
-												<field:display name="Description" feature="Identification">&nbsp;</field:display>
-												<field:display name="Objectives" feature="Identification">&nbsp;</field:display>
-												<field:display name="Project Id" feature="Identification">&nbsp;</field:display>
-												<field:display name="Project Title" feature="Identification">&nbsp;</field:display>
-												<field:display name="Status" feature="Planning">&nbsp;</field:display>
-												<field:display name="Team" feature="Identification">&nbsp;</field:display>
-												<field:display name="A.C. Chapter" feature="Identification">&nbsp;</field:display>
-												<field:display name="Accession Instrument" feature="Identification">&nbsp;</field:display>
-												<field:display name="Draft" feature="Identification">&nbsp;</field:display>
-											
-
-
-
-
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
-
-
-
-											<feature:display name="Sectors" module="Project ID and Planning"></feature:display>
-											<field:display name="Sector" feature="Sectors">&nbsp;</field:display>
-											<field:display name="Sub-Sector" feature="Sectors">&nbsp;</field:display>
-											
-											<feature:display name="Location" module="Project ID and Planning">
-												<field:display name="Implementation Level" feature="Location">&nbsp;</field:display>
-												<field:display name="Region" feature="Location">&nbsp;</field:display>
-											</feature:display>
-											<feature:display  name="Funding Organizations" module="Funding">
-												<field:display name="Cumulative Commitment" feature="Funding Organizations">&nbsp;</field:display>
-												<field:display name="Cumulative Disbursement" feature="Funding Organizations">&nbsp;</field:display>
-												<field:display name="Donor Agency" feature="Funding Organizations">&nbsp;</field:display>
-												<field:display name="Donor Commitment Date" feature="Funding Organizations">&nbsp;</field:display>
-												<field:display name="Donor Group" feature="Funding Organizations">&nbsp;</field:display>
-												<field:display name="Financing Instrument" feature="Funding Organizations">&nbsp;</field:display>
-												<field:display name="Type Of Assistance" feature="Funding Organizations">&nbsp;</field:display>
-											</feature:display>
-											<feature:display name="Issues" module="Issues">
-												<field:display name="Actors" feature="Issues">&nbsp;</field:display>
-												<field:display name="Issues" feature="Issues">&nbsp;</field:display>
-												<field:display name="Measures Taken" feature="Issues">&nbsp;</field:display>
-											</feature:display>
+											<feature:display name="Location" module="Project ID and Planning"></feature:display>
+											<feature:display  name="Funding Organizations" module="Funding"></feature:display>
+											<feature:display name="Issues" module="Issues"></feature:display>
+											<feature:display name="Reports Contact Information" module="Contact Information"></feature:display>
+											<feature:display name="Activity" module="M & E"></feature:display>
+											<feature:display name="Costing" module="Activity Costing"></feature:display>
+				                            <feature:display name="Program" module="Program"></feature:display>
+											<feature:display name="Sectors" module="Project ID and Planning"></feature:display>												
 											<feature:display name="Components" module="Components"></feature:display>
-												<field:display name="Component description" feature="Components">&nbsp;</field:display>
-												<field:display name="Component Name" feature="Components">&nbsp;</field:display>
+											<feature:display name="Physical Progress" module="Components"></feature:display>
 											
-											<feature:display name="Physical Progress" module="Components">
-												<field:display name="Physical Progress" feature="Physical Progress">&nbsp;</field:display>
-												<field:display name="Physical progress description" feature="Physical Progress">&nbsp;</field:display>
-												<field:display name="Physical progress title" feature="Physical Progress">&nbsp;</field:display>
-											</feature:display>
-											<feature:display name="Reports Contact Information" module="Contact Information">
-												<field:display name="Contact Name" feature="Reports Contact Information">&nbsp;</field:display>
-											</feature:display>
-											<feature:display name="Activity" module="M & E">
-												<field:display name="Indicator Base Value" feature="Activity">&nbsp;</field:display>
-												<field:display name="Indicator Current Value" feature="Activity">&nbsp;</field:display>
-												<field:display name="Indicator Target Value" feature="Activity">&nbsp;</field:display>
-												<field:display name="Indicator Description" feature="Activity">&nbsp;</field:display>
-												<field:display name="Indicator ID" feature="Activity">&nbsp;</field:display>
-												<field:display name="Indicator Name" feature="Activity"></field:display>
-											</feature:display>
-											<feature:display name="Costing" module="Activity Costing">
-												<field:display name="Costing Donor" feature="Costing"></field:display>
-												<field:display name="Total Costs" feature="Costing"></field:display>
-											</feature:display>
-				                            <feature:display name="Program" module="Program">
-				                            	<field:display name="National Planning Objectives" feature="Program">&nbsp;</field:display>
-				                            	<field:display name="Primary Program" feature="Program">&nbsp;</field:display>
-												<field:display name="Secondary Program" feature="Program">&nbsp;</field:display>
-				                            </feature:display>																				
+											<field:display name="Status" feature="Planning">&nbsp;</field:display>
+											<field:display name="Donor Agency" feature="Funding Organizations">&nbsp;</field:display>
+											<field:display name="Actual Start Date" feature="Planning">&nbsp;</field:display>
+											<field:display name="Project Title" feature="Identification">&nbsp;</field:display>
+											<field:display name="Type Of Assistance" feature="Funding Organizations">&nbsp;</field:display>
+											<field:display name="Implementation Level" feature="Location">&nbsp;</field:display>
+											<field:display name="Actual Completion Date" feature="Planning">&nbsp;</field:display>
+											<field:display name="Sector" feature="Sectors">&nbsp;</field:display>
+											<field:display name="Region" feature="Location">&nbsp;</field:display>
+											<field:display name="Financing Instrument" feature="Funding Organizations">&nbsp;</field:display>
+											<field:display name="Objective" feature="Identification">&nbsp;</field:display>
+											<field:display name="Project Id" feature="Identification">&nbsp;</field:display>
+											<field:display name="Contact Name" feature="Reports Contact Information">&nbsp;</field:display>
+											<field:display name="Description" feature="Identification">&nbsp;</field:display>
+											<field:display name="Cumulative Commitment" feature="Funding Organizations">&nbsp;</field:display>
+											<field:display name="Cumulative Disbursement" feature="Funding Organizations">&nbsp;</field:display>
+											<field:display name="Component Name" feature="Components">&nbsp;</field:display>
+											<field:display name="Team" feature="Identification">&nbsp;</field:display>
+											<field:display name="Issues" feature="Issues">&nbsp;</field:display>
+											<field:display name="Measures Taken" feature="Issues">&nbsp;</field:display>
+											<field:display name="Actors" feature="Issues">&nbsp;</field:display>
+											<field:display name="Actual Approval Date" feature="Planning" >&nbsp;</field:display>
+											<field:display name="Donor Commitment Date" feature="Funding Organizations">&nbsp;</field:display>
+											<field:display name="Physical Progress" feature="Physical Progress">&nbsp;</field:display>
+											<field:display name="Total Costs" feature="Costing"></field:display>
+											<field:display name="A.C. Chapter" feature="Identification">&nbsp;</field:display>
+											<field:display name="Accession Instrument" feature="Identification">&nbsp;</field:display>
+											<field:display name="Costing Donor" feature="Costing"></field:display>
+											<field:display name="Donor Group" feature="Funding Organizations">&nbsp;</field:display>
+											<field:display name="Component description" feature="Components">&nbsp;</field:display>
+											<field:display name="Physical progress title" feature="Physical Progress">&nbsp;</field:display>
+											<field:display name="Physical progress description" feature="Physical Progress">&nbsp;</field:display>
+											<field:display name="Indicator Name" feature="Activity"></field:display>
+											<field:display name="Indicator Description" feature="Activity">&nbsp;</field:display>
+											<field:display name="Indicator ID" feature="Activity">&nbsp;</field:display>
+											<field:display name="Indicator Current Value" feature="Activity">&nbsp;</field:display>
+											<field:display name="Indicator Base Value" feature="Activity">&nbsp;</field:display>
+											<field:display name="Indicator Target Value" feature="Activity">&nbsp;</field:display>
+											<field:display name="Sub-Sector" feature="Sectors">&nbsp;</field:display>
+			                            	<field:display name="National Planning Objectives" feature="Program">&nbsp;</field:display>
+			                            	<field:display name="Primary Program" feature="Program">&nbsp;</field:display>
+											<field:display name="Secondary Program" feature="Program">&nbsp;</field:display>
+											
+											<field:display name="Draft" feature="Identification">&nbsp;</field:display>
+
 																	<TR>
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
@@ -327,7 +313,7 @@ function checkUncheckAll2() {
 																											onclick="checkUncheckAll3();"
 
 																								/>
-																							<a id="1"><digi:trn key="aim:report:AMP" style="font-size: 12px;color:#0e69b3;text-decoration:none">AMP</digi:trn></a>
+																							<a id="1" style="font-size: 12px;color:#0e69b3;text-decoration:none"><digi:trn key="aim:report:AMP" >AMP</digi:trn></a>
 																								<ul>
 																							<logic:iterate name="ampTreeColumns" id="ampTreeColumn" type="java.util.Map.Entry" >
 																								<bean:define id="themeColumn" name="ampTreeColumn" property="key" type="java.lang.String" scope="page"/>

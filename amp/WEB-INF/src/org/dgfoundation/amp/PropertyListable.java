@@ -68,7 +68,9 @@ public abstract class PropertyListable implements Cloneable {
 		Method m = propertyDescriptors[i].getReadMethod();
 		if(m.isAnnotationPresent(PropertyListableIgnore.class))continue;
 		Object object = m.invoke(this, new Object[] {});
-		if (object == null ) continue;
+		
+		if ((object == null) || (object instanceof String)
+						&& ("".equalsIgnoreCase((String) object))) continue;
 		ret.put(propertyDescriptors[i].getName(), object instanceof Collection ? Util.toCSString(
 			(Collection) object, false) : object);
 	    }

@@ -658,7 +658,8 @@ public class ParisIndicator5bJrxml extends ParisIndicatorJrxml {
             p2.println("		</summary>");
             p2.println("</jasperReport>");
 
-            //System.out.println("hyup");
+            p2.close();
+            out.close();
         }
 
         catch (Exception e) {

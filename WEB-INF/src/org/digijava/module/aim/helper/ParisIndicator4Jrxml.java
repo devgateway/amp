@@ -626,9 +626,8 @@ public class ParisIndicator4Jrxml extends ParisIndicatorJrxml {
 
             /***************/
 
-
-
-            //System.out.println("hyup");
+            p2.close();
+            out.close();
         }
 
         catch (Exception e) {

@@ -192,10 +192,9 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
                         double test[] = (double[]) ans.get(i);
                         for (int j = 0; j < test.length; j++) {
                             col++;
-                            double val = test[j];
                             data2[row][col] = "" + yr;
                             col++;
-                            data2[row][col] = "" + val;
+                            data2[row][col] = "" + (long)test[j];
                             yr = yr + 1;
 
                             logger.info(" this is the 6th report " + b1 + "  data  " + data2[row][col]);

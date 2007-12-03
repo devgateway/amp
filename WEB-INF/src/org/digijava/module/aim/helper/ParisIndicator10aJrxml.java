@@ -4,7 +4,7 @@ import java.io.*;
 
 public class ParisIndicator10aJrxml extends ParisIndicatorJrxml {
 
-    public synchronized void createJrxml(String filePath, String reportName, int cols, int rows, String type) throws IOException {
+    public synchronized void createJrxml(String filePath, String reportName,String selCurr, int cols, int rows, String type) throws IOException {
         try {
             FileOutputStream out; // declare a file output object
             PrintStream p2; // declare a print stream object
@@ -582,11 +582,13 @@ public class ParisIndicator10aJrxml extends ParisIndicatorJrxml {
             p2.println("		</summary>");
             p2.println("</jasperReport>");
 
+            p2.close();
+            out.close();
             //System.out.println("hyup");
         }
 
         catch (Exception e) {
-
+            throw new RuntimeException(e);
         }
     }
 }

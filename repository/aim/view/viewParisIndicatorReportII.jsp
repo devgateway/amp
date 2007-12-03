@@ -922,8 +922,7 @@
 													<td>
 
 														<div align="center">
-
-															<fmt:formatNumber value="${rowVal}" type="number" maxFractionDigits="0"/>
+                                                            <fmt:formatNumber type="number" value="${rowVal}" pattern="###" maxFractionDigits="0" />
 
 														</div>
 
@@ -943,17 +942,15 @@
 
 																	<c:if test="${rowVal == -1}">n.a.</c:if>
 
-																	<c:if test="${rowVal != -1}">
-
-																		<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />%
+                                                                    <c:if test="${rowVal != -1}">
+																		<fmt:formatNumber type="number" value="${rowVal}" pattern="###" maxFractionDigits="0" />%
 
 																	</c:if>
 
 																</c:if>
 
 																<c:if test="${index1 != index2}">
-
-																	<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />
+                                                                    <fmt:formatNumber type="number" value="${rowVal}" pattern="###" maxFractionDigits="0" />
 
 																</c:if>
 

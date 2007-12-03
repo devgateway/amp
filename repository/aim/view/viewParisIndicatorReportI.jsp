@@ -1245,7 +1245,6 @@
 											<div align="center">
 
 												<c:if test="${index == 1}">
-
 													<fmt:formatNumber type="number" value="${rowVal}" pattern="####" maxFractionDigits="0" />
 
 												</c:if>
@@ -1255,8 +1254,7 @@
 													<c:choose>
 
 														<c:when test="${index < (numCols-1)}">
-
-															<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />
+															<fmt:formatNumber type="number" value="${rowVal}" pattern="###" maxFractionDigits="0" />
 
 														</c:when>
 
@@ -1277,7 +1275,8 @@
 																</c:when>
 
 																<c:otherwise >
-																	<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />
+
+																	<fmt:formatNumber type="number" value="${rowVal}" pattern="###" maxFractionDigits="0" />
 
 																</c:otherwise>
 

@@ -11,13 +11,20 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
+
+<module:display name="DOCUMENTS MANAGEMENT"></module:display>
+<module:display name="TREND ANALYSIS"></module:display>
+<module:display name="MONITORING AND EVALUATING"></module:display>
+<module:display name="REPORTING"></module:display>
+<module:display name="PROJECT MANAGEMENT"></module:display>
+<module:display name="NATIONAL PLAN DASHBOARD"></module:display>
+
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Calendar" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Channel Overview" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Components" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="DOCUMENTS MANAGEMENT"></module:display>
 <module:display name="Desktop Sections" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display>
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -25,23 +32,18 @@
 <module:display name="Financial Progress" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Help"></module:display>
-<module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display>
-<module:display name="MONITORING AND EVALUATING"></module:display>
-<module:display name="NATIONAL PLAN DASHBOARD"></module:display>
+<module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD"></module:display>
 <module:display name="Organizations" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="PROJECT MANAGEMENT"></module:display>
 <module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Physical Progress" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Previews" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Program" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="REPORTING"></module:display>
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Reports" parentModule="REPORTING"></module:display>
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display>
-<module:display name="TREND ANALYSIS"></module:display>
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 
 <feature:display  name="Funding Organizations" module="Funding"></feature:display>
@@ -232,7 +234,7 @@
 <field:display name="Currency Disbursements" feature="Regional Funding"></field:display>
 <field:display name="Currency Expenditure" feature="Funding Organizations"></field:display>
 <field:display name="Currency Expenditures" feature="Regional Funding"></field:display>
-<field:display name="Current Completion Date" feature="Planning"></field:display>
+<field:display name="Actual Completion Date" feature="Planning"></field:display>
 <field:display name="Current Value" feature="Activity"></field:display>
 <field:display name="Data Source" feature="Identification"></field:display>
 <field:display name="Date Base Value" feature="Activity"></field:display>
@@ -312,7 +314,7 @@
 <field:display name="Government Organization" feature="Mofed Contact Information"></field:display>
 <field:display name="Government Phone Number" feature="Mofed Contact Information"></field:display>
 <field:display name="Government Title" feature="Mofed Contact Information"></field:display>
-<field:display name="Objectives" feature="Identification"></field:display>
+<field:display name="Objective" feature="Identification"></field:display>
 <field:display name="Organizations Selector" feature="Funding Organizations"></field:display>
 <field:display name="Organizations and Project ID" feature="Identification"></field:display>
 <field:display name="Overall Contribution" feature="Planning"></field:display>

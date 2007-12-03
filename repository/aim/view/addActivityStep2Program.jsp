@@ -55,7 +55,7 @@
                                           </digi:trn>
                                         </td>
                                       </tr>
-                                      
+
                                       <field:display name="National Planning Objectives" feature="Program">
                                       <tr>
                                         <td>
@@ -114,7 +114,7 @@
 
 
 
-                                                          <c:if test="${aimEditActivityForm.nationalSetting.allowMultiple||empty aimEditActivityForm.nationalPlanObjectivePrograms}">
+                                                          <c:if test="${!empty aimEditActivityForm.nationalSetting.defaultHierarchy && (aimEditActivityForm.nationalSetting.allowMultiple||empty aimEditActivityForm.nationalPlanObjectivePrograms)}">
                                                           <field:display name="Add Programs Button - National Plan Objective" feature="Program">
                                                             <input type="button" value='<digi:trn key="btn:addPrograms">Add Programs</digi:trn>' onclick="addProgram(1);" class="buton">
                                                           </field:display>
@@ -136,7 +136,7 @@
                                         </td>
                                       </tr>
 									  </field:display>
-									
+
 									  <field:display name="Primary Program" feature="Program">
                                        <tr>
                                         <td>
@@ -189,13 +189,13 @@
                                                         </c:if>
                                                         <tr>
                                                           <td>
-                                                            <c:if test="${aimEditActivityForm.primarySetting.allowMultiple||empty aimEditActivityForm.primaryPrograms}">
+                                                            <c:if test="${!empty aimEditActivityForm.primarySetting.defaultHierarchy&&(aimEditActivityForm.primarySetting.allowMultiple||empty aimEditActivityForm.primaryPrograms)}">
                                                             <field:display name="Add Programs Button - Primary Programs" feature="Program">
                                                             <input type="button" value='<digi:trn key="btn:addPrograms">Add Programs</digi:trn>' onclick="addProgram(2);" class="buton">
                                                             </field:display>
                                                             </c:if>
                                                             <c:if test="${!empty aimEditActivityForm.primaryPrograms}">
-																<field:display name="Remove Program Button - Primary Programs" feature="Program">		
+																<field:display name="Remove Program Button - Primary Programs" feature="Program">
                                                               <input type="button" value='<digi:trn key="btn:removeProgram">Remove program</digi:trn>' onclick="remProgram(2);" class="buton">
                                                               </field:display>
                                                             </c:if>
@@ -264,7 +264,7 @@
                                                         </c:if>
                                                         <tr>
                                                           <td>
-                                                            <c:if test="${aimEditActivityForm.secondarySetting.allowMultiple||empty aimEditActivityForm.secondaryPrograms}">
+                                                            <c:if test="${!empty aimEditActivityForm.secondarySetting.defaultHierarchy&&(aimEditActivityForm.secondarySetting.allowMultiple||empty aimEditActivityForm.secondaryPrograms)}">
                                                             <field:display name="Add Programs Button - Secondary Programs" feature="Program">
                                                             <input type="button" value='<digi:trn key="btn:addPrograms">Add Programs</digi:trn>' onclick="addProgram(3);" class="buton">
                                                             </field:display>

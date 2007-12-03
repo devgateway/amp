@@ -184,28 +184,7 @@ public class SaveActivity extends Action {
                 activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
             }
 
-          /*  if(eaForm.getActPrograms()!=null && eaForm.getActPrograms().size()!=0){
-                Set programs=new HashSet();
-                //ProgramUtil prg=new ProgramUtil();
-                ArrayList prgIds=new ArrayList();
-                ArrayList ampThemeLst=null;
-                AmpTheme theme=null;
 
-                List themeLst=eaForm.getActPrograms();
-                Iterator prgItr=themeLst.listIterator();
-                while(prgItr.hasNext()){
-                    theme=(AmpTheme)prgItr.next();
-                    prgIds.add(theme.getAmpThemeId());
-                }
-
-                ampThemeLst = null;
-                if(prgIds.size()>0)
-                	ampThemeLst=ProgramUtil.getThemesByIds(prgIds);
-                if(ampThemeLst!=null){
-                    programs.addAll(ampThemeLst);
-                    activity.setActivityPrograms(programs);
-                }
-            }*/
           Set programs = new HashSet();
           List activityNPO = eaForm.getNationalPlanObjectivePrograms();
           List activityPP = eaForm.getPrimaryPrograms();
@@ -1357,15 +1336,20 @@ public class SaveActivity extends Action {
 					// Setting approval status of activity
 					activity.setApprovalStatus(eaForm.getApprovalStatus());
                                         activity.setActivityCreator(eaForm.getCreatedBy());
+                    
+                    List<String> auditTrail = AuditLoggerUtil.generateLogs(
+												activity, eaForm.getActivityId());
 					// update an existing activity
-					//request.get
 					actId = ActivityUtil.saveActivity(activity, eaForm.getActivityId(),
 							true, eaForm.getCommentsCol(), eaForm
 									.isSerializeFlag(), field, relatedLinks, tm
 									.getMemberId(), eaForm.getIndicatorsME(),tempComp);
+					
 					//for logging the activity
-					AuditLoggerUtil.logObject(session, request,activity,"update");
-						// remove the activity details from the edit activity list
+					AuditLoggerUtil.logActivityUpdate(session, request,
+												activity, auditTrail);
+					
+					// remove the activity details from the edit activity list
 					if (toDelete == null
 							|| (!toDelete.trim().equalsIgnoreCase("true"))) {
 						String sessId = session.getId();
@@ -1407,19 +1391,13 @@ public class SaveActivity extends Action {
 					activity.setCreatedDate(cal.getTime());
 					// Setting approval status of activity
 					activity.setApprovalStatus(eaForm.getApprovalStatus());
+					
 					// create a new activity
-
-//					actId = ActivityUtil.saveActivity(activity,
-//							eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
-//							field, relatedLinks, tm.getMemberId(), tempComp);
-
 					actId = ActivityUtil.saveActivity(activity, null, false, eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
 	                        field, relatedLinks,tm.getMemberId() , eaForm.getIndicatorsME(), tempComp);
 
-
 					//for logging the activity
-					 AuditLoggerUtil.logObject(session, request,activity,"add");
-
+					AuditLoggerUtil.logObject(session, request,activity,"add");
 				}
 			}
 

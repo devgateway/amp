@@ -84,7 +84,7 @@
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="10" align="center" colspan="2"><h4>
-						<digi:trn key="aim:editProgram">
+						<digi:trn key="aim:addnewprogram">
 									Add New Program
 						</digi:trn> </h4>
 				</td>

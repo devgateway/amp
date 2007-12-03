@@ -31,12 +31,14 @@
 								<td align="center"><strong><digi:trn key="showactivitylog_editorname">Editor Name</digi:trn></strong></td>
 								<td align="center"><strong><digi:trn key="showactivitylog_changedate">Change Date</digi:trn></strong></td>
 								<td align="center"><strong><digi:trn key="showactivitylog_action">Action</digi:trn></strong></td>
+								<td align="center"><strong><digi:trn key="showactivitylog_detail">Detail</digi:trn></strong></td>
 							</tr>
 							<logic:iterate name="aimAuditLoggerManagerForm" property="logs" id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
 								<tr height="20">
 									<td align="center">&nbsp;<bean:write name="log" property="editorName"/>&nbsp;</td>
 									<td align="center">&nbsp;<bean:write name="log" property="modifyDate"/>&nbsp;</td>
 									<td align="center">&nbsp;<bean:write name="log" property="action"/>&nbsp;</td>
+									<td align="center">&nbsp;<bean:write name="log" property="detail"/>&nbsp;</td>
 								</tr>
 							</logic:iterate>							
 						</table>

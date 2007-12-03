@@ -777,14 +777,14 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       logger.debug("Activity saved");
     }
     catch (Exception ex) {
-      logger.error("Exception from saveActivity()",ex);
+      logger.error("Exception from saveActivity().", ex);
       if (tx != null) {
         try {
           tx.rollback();
           logger.debug("Transaction Rollbacked");
         }
         catch (HibernateException e) {
-          logger.error("Rollback failed :" + e);
+          logger.error("Rollback failed", e);
         }
       }
     }
@@ -794,7 +794,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           PersistenceManager.releaseSession(session);
         }
         catch (Exception e) {
-          logger.error("Release session faliled :" + e);
+          logger.error("Release session faliled.", e);
         }
       }
     }

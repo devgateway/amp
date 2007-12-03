@@ -36,6 +36,7 @@ public class AmpAuditLogger implements Serializable {
 	private String objectType;
 	private String objectTypeTrimmed;
 	private String objectName;
+	private String detail;
 	
 	
 	public String getObjectName() {
@@ -142,4 +143,11 @@ public class AmpAuditLogger implements Serializable {
 	public void setObjectTypeTrimmed(String objectTypeTrimmed) {
 		this.objectTypeTrimmed = objectTypeTrimmed;
 	}
+	public void setDetail(String detail) {
+		this.detail = detail;
+	}
+	public String getDetail() {
+		return detail;
+	}
+
 }

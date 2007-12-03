@@ -59,7 +59,7 @@ function save() {
     <digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
     document.aimEditActivityForm.action = "<%= save %>?edit=true";
     document.aimEditActivityForm.target = "_self";
-    /* ===========   	 AMP-2143  
+    /* ===========   	 AMP-2143
     var appstatus = document.aimEditActivityForm.approvalStatus.value;
     var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
     var msg='';
@@ -91,7 +91,8 @@ function save() {
 function gotoStep(value) {
   var draftStatus=document.getElementById("draftFlag");
   var flag;
-  if(draftStatus!=null && draftStatus.value!="true"){
+  if(draftStatus!=null && draftStatus.value!="true"
+  && document.aimEditActivityForm.step.value<value){
     flag=validateForm();
   }else{
     flag=true;

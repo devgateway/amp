@@ -95,7 +95,7 @@ public class ParisIndicator9Jrxml extends ParisIndicatorJrxml {
             p2.println("			</band>");
             p2.println("		</title>");
             p2.println("		<pageHeader>");
-            p2.println("			<band height='49'  isSplitAllowed='true' >");
+            p2.println("			<band height='50'  isSplitAllowed='true' >");
             p2.println("			</band>");
             p2.println("		</pageHeader>");
             p2.println("		<columnHeader>");
@@ -616,7 +616,7 @@ public class ParisIndicator9Jrxml extends ParisIndicatorJrxml {
             p2.println("<textElement textAlignment='Left' verticalAlignment='Top' rotation='None' lineSpacing='Single'>");
             p2.println("<font fontName='Times-Roman' pdfFontName='Times-Roman' size='12' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
             p2.println("</textElement>");
-            p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\" * All the amounts are in thousands (000) "+selCurr+"\"]]></textFieldExpression>");
+            p2.println("<textFieldExpression class='java.lang.String'><![CDATA[\" * All the amounts are in thousands (000) "+selCurr+"\"]]></textFieldExpression>");
             p2.println("</textField>");
             p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
             p2.println("mode='Transparent'");
@@ -668,7 +668,8 @@ public class ParisIndicator9Jrxml extends ParisIndicatorJrxml {
 
             /********/
 
-
+            p2.close();
+            out.close();
 
             //System.out.println("hyup");
         }

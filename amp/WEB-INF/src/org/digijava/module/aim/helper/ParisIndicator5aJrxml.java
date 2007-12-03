@@ -373,25 +373,83 @@ public class ParisIndicator5aJrxml extends ParisIndicatorJrxml {
                 p2.println("			<band height='0'  isSplitAllowed='true' >");
                 p2.println("			</band>");
                 p2.println("		</columnFooter>");
-                p2.println("		<pageFooter>");
-                p2.println("			<band height='0'  isSplitAllowed='true' >");
-                p2.println("			</band>");
-                p2.println("		</pageFooter>");
-                p2.println("		<summary>");
-                p2.println("			<band height='450'  isSplitAllowed='true' >");
-
-                p2.println("<subreport isUsingCache='true'>");
+                p2.println("<pageFooter>");
+                p2.println("<band height='22'  isSplitAllowed='true' >");
+                p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
+                p2.println("mode='Transparent'");
+                p2.println("x='2'");
+                p2.println("y='4'");
+                p2.println("width='350'");
+                p2.println("height='16'");
+                p2.println("forecolor='#3333FF'");
+                p2.println("backcolor='#FFFFFF'");
+                p2.println("key='textField-4'");
+                p2.println("stretchType='NoStretch'");
+                p2.println("positionType='FixRelativeToTop'");
+                p2.println("isPrintRepeatedValues='true'");
+                p2.println("isRemoveLineWhenBlank='false'");
+                p2.println("isPrintInFirstWholeBand='false'");
+                p2.println("isPrintWhenDetailOverflows='false'/>");
+                p2.println("<textElement textAlignment='Left' verticalAlignment='Top' rotation='None' lineSpacing='Single'>");
+                p2.println("<font fontName='Times-Roman' pdfFontName='Times-Roman' size='12' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
+                p2.println("</textElement>");
+                p2.println("<textFieldExpression class='java.lang.String'><![CDATA[\" * All the amounts are in thousands (000) "+selCurr+"\"]]></textFieldExpression>");
+                p2.println("</textField>");
+                p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
+                p2.println("mode='Transparent'");
+                p2.println("x='464'");
+                p2.println("y='4'");
+                p2.println("width='174'");
+                p2.println("height='14'");
+                p2.println("forecolor='#000000'");
+                p2.println("backcolor='#FFFFFF'");
+                p2.println("key='textField-5'");
+                p2.println("stretchType='NoStretch'");
+                p2.println("positionType='FixRelativeToTop'");
+                p2.println("isPrintRepeatedValues='true'");
+                p2.println("isRemoveLineWhenBlank='false'");
+                p2.println("isPrintInFirstWholeBand='false'");
+                p2.println("isPrintWhenDetailOverflows='false'/>");
+                p2.println("<textElement textAlignment='Right' verticalAlignment='Top' rotation='None' lineSpacing='Single'>");
+                p2.println("<font fontName='Helvetica' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
+                p2.println("</textElement>");
+                p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\"Page \" + $V{PAGE_NUMBER} + \" of \"]]></textFieldExpression>");
+                p2.println("</textField>");
+                p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Report' hyperlinkType='None' >					<reportElement");
+                p2.println("mode='Transparent'");
+                p2.println("x='641'");
+                p2.println("y='4'");
+                p2.println("width='36'");
+                p2.println("height='14'");
+                p2.println("forecolor='#000000'");
+                p2.println("backcolor='#FFFFFF'");
+                p2.println("key='textField-6'");
+                p2.println("stretchType='NoStretch'");
+                p2.println("positionType='FixRelativeToTop'");
+                p2.println("isPrintRepeatedValues='true'");
+                p2.println("isRemoveLineWhenBlank='false'");
+                p2.println("isPrintInFirstWholeBand='false'");
+                p2.println("isPrintWhenDetailOverflows='false'/>");
+                p2.println("<textElement textAlignment='Left' verticalAlignment='Top' rotation='None' lineSpacing='Single'>");
+                p2.println("<font fontName='Helvetica' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
+                p2.println("</textElement>");
+                p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\"\"+$V{PAGE_NUMBER}]]></textFieldExpression>");
+                p2.println("</textField>");
+                p2.println("</band>");
+                p2.println("</pageFooter>");
+                p2.println("<summary>");
+                p2.println("<band height='250'  isSplitAllowed='true' >");
+                p2.println("<subreport  isUsingCache='true'>");
                 p2.println("<reportElement");
-                p2.println("x='435'");
-                p2.println("y='115'");
+                p2.println("x='409'");
+                p2.println("y='25'");
                 p2.println("width='356'");
                 p2.println("height='185'");
                 p2.println("key='subreport-1'/>");
                 p2.println("<subreportExpression class='java.lang.String'><![CDATA[$P{SUBREPORT_DIR}]]></subreportExpression>");
                 p2.println("</subreport>");
-
-                p2.println("			</band>");
-                p2.println("		</summary>");
+                p2.println("</band>");
+                p2.println("</summary>");
                 p2.println("</jasperReport>");
             }
 
@@ -817,7 +875,7 @@ public class ParisIndicator5aJrxml extends ParisIndicatorJrxml {
                 p2.println("<textElement textAlignment='Left' verticalAlignment='Top' rotation='None' lineSpacing='Single'>");
                 p2.println("<font fontName='Times-Roman' pdfFontName='Times-Roman' size='12' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
                 p2.println("</textElement>");
-                p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\" * All the amounts are in thousands (000) "+selCurr+"\"]]></textFieldExpression>");
+                p2.println("<textFieldExpression class='java.lang.String'><![CDATA[\" * All the amounts are in thousands (000) "+selCurr+"\"]]></textFieldExpression>");
                 p2.println("</textField>");
                 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
                 p2.println("mode='Transparent'");
@@ -861,9 +919,8 @@ public class ParisIndicator5aJrxml extends ParisIndicatorJrxml {
                 p2.println("</textField>");
                 p2.println("</band>");
                 p2.println("</pageFooter>");
-                p2.println("		<summary>");
-                p2.println("			<band height='250'  isSplitAllowed='true' >");
-
+                p2.println("<summary>");
+                p2.println("<band height='250'  isSplitAllowed='true' >");
                 p2.println("<subreport  isUsingCache='true'>");
                 p2.println("<reportElement");
                 p2.println("x='409'");
@@ -873,12 +930,13 @@ public class ParisIndicator5aJrxml extends ParisIndicatorJrxml {
                 p2.println("key='subreport-1'/>");
                 p2.println("<subreportExpression class='java.lang.String'><![CDATA[$P{SUBREPORT_DIR}]]></subreportExpression>");
                 p2.println("</subreport>");
-
-                p2.println("			</band>");
-                p2.println("		</summary>");
+                p2.println("</band>");
+                p2.println("</summary>");
                 p2.println("</jasperReport>");
             }
 
+            p2.close();
+            out.close();
             //System.out.println("hyup");
         }
 

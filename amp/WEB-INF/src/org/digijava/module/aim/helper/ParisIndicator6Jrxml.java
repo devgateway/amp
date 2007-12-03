@@ -103,9 +103,9 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
             p2.println("				<staticText>");
             p2.println("					<reportElement");
             p2.println("						mode='Opaque'");
-            p2.println("						x='2'");
+            p2.println("						x='0'");
             p2.println("						y='0'");
-            p2.println("						width='80'");
+            p2.println("						width='81'");
             p2.println("						height='30'");
             p2.println("						forecolor='#000000'");
             p2.println("						backcolor='#CCCCCC'");
@@ -123,7 +123,7 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
             p2.println("				</staticText>");
 
             String ctextkey;
-            int x = 80;
+            int x = 81;
             int add = 0;
             for (int j = 2; j <= cols; j += 2) {
                 add++;
@@ -156,7 +156,7 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
                 p2.println("				<line direction='TopDown'>");
                 p2.println("					<reportElement");
                 p2.println("						mode='Opaque'");
-                p2.println("						x='1'");
+                p2.println("						x='0'");
                 p2.println("						y='0'");
                 p2.println("						width='0'");
                 p2.println("						height='30'");
@@ -172,7 +172,7 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
                 p2.println("					<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
                 p2.println("				</line>");
 
-                x = 80;
+                x = 81;
                 add = 0;
                 for (int j = 1; j <= cols; j += 2) {
                     p2.println("				<line direction='TopDown'>");
@@ -241,9 +241,9 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
             p2.println("				<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >");
             p2.println("					<reportElement");
             p2.println("						mode='Opaque'");
-            p2.println("						x='1'");
+            p2.println("						x='0'");
             p2.println("						y='0'");
-            p2.println("						width='80'");
+            p2.println("						width='81'");
             p2.println("						height='30'");
             p2.println("						forecolor='#000000'");
             p2.println("						backcolor='#FFFFFF'");
@@ -260,7 +260,7 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
             p2.println("				<textFieldExpression   class='java.lang.String'><![CDATA[$F{m1}]]></textFieldExpression>");
             p2.println("				</textField>");
 
-            x = 80;
+            x = 81;
             for (int j = 3; j <= cols; j += 2) {
                 add++;
                 ctextkey = "m" + j;
@@ -289,7 +289,7 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
 
             }
             if (type.equals("pdf")) {
-                x = 80;
+                x = 81;
                 for (int j = 1; j <= cols; j += 2) {
                     p2.println("				<line direction='TopDown'>");
                     p2.println("					<reportElement");
@@ -357,26 +357,28 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
             p2.println("		</columnFooter>");
             p2.println("<pageFooter>");
             p2.println("<band height='22'  isSplitAllowed='true' >");
-            p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
-            p2.println("mode='Transparent'");
-            p2.println("x='2'");
-            p2.println("y='4'");
-            p2.println("width='350'");
-            p2.println("height='16'");
-            p2.println("forecolor='#3333FF'");
-            p2.println("backcolor='#FFFFFF'");
-            p2.println("key='textField-4'");
-            p2.println("stretchType='NoStretch'");
-            p2.println("positionType='FixRelativeToTop'");
-            p2.println("isPrintRepeatedValues='true'");
-            p2.println("isRemoveLineWhenBlank='false'");
-            p2.println("isPrintInFirstWholeBand='false'");
-            p2.println("isPrintWhenDetailOverflows='false'/>");
-            p2.println("<textElement textAlignment='Left' verticalAlignment='Top' rotation='None' lineSpacing='Single'>");
-            p2.println("<font fontName='Times-Roman' pdfFontName='Times-Roman' size='12' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
-            p2.println("</textElement>");
-            p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\" * All the amounts are in thousands (000) "+selCurr+"\"]]></textFieldExpression>");
-            p2.println("</textField>");
+
+//            p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
+//            p2.println("mode='Transparent'");
+//            p2.println("x='2'");
+//            p2.println("y='4'");
+//            p2.println("width='350'");
+//            p2.println("height='16'");
+//            p2.println("forecolor='#3333FF'");
+//            p2.println("backcolor='#FFFFFF'");
+//            p2.println("key='textField-4'");
+//            p2.println("stretchType='NoStretch'");
+//            p2.println("positionType='FixRelativeToTop'");
+//            p2.println("isPrintRepeatedValues='true'");
+//            p2.println("isRemoveLineWhenBlank='false'");
+//            p2.println("isPrintInFirstWholeBand='false'");
+//            p2.println("isPrintWhenDetailOverflows='false'/>");
+//            p2.println("<textElement textAlignment='Left' verticalAlignment='Top' rotation='None' lineSpacing='Single'>");
+//            p2.println("<font fontName='Times-Roman' pdfFontName='Times-Roman' size='12' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='CP1252' isStrikeThrough='false' />");
+//            p2.println("</textElement>");
+//            p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\" * All the amounts are in thousands (000) "+selCurr+"\"]]></textFieldExpression>");
+//            p2.println("</textField>");
+
             p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
             p2.println("mode='Transparent'");
             p2.println("x='464'");
@@ -425,7 +427,8 @@ public class ParisIndicator6Jrxml extends ParisIndicatorJrxml {
             p2.println("		</summary>");
             p2.println("</jasperReport>");
 
-            //System.out.println("hyup");
+            p2.close();
+            out.close();
         }
 
         catch (Exception e) {

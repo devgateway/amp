@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <script language="JavaScript">
 
@@ -61,7 +62,9 @@
 	<c:set var="templateId">
 		<bean:write name="template" property="root.id"/>
 	</c:set>
-	<category:showoptions name="aimVisibilityManagerForm" firstLine="${translation}" outeronchange="javascript:changeLevel('${templateId}')" property="levelCategory"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_LEVEL_KEY %>" styleClass="inp-text" />
+	 <gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="true">
+		<category:showoptions name="aimVisibilityManagerForm" firstLine="${translation}" outeronchange="javascript:changeLevel('${templateId}')" property="levelCategory"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_LEVEL_KEY %>" styleClass="inp-text" />
+	</gs:test>
 	</p>
 	<ul id="dhtmlgoodies_tree" class="dhtmlgoodies_tree">
 	<li><a href="#" id="<bean:write name="template" property="root.id"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none" ><bean:write name="template" property="root.name"/></a>

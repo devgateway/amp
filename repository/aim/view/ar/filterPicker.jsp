@@ -195,7 +195,9 @@
 	<tr>
 	<td align="center"  colspan="4">
 	<html:submit styleClass="buton" property="apply"><digi:trn key="rep:filer:Apply">Apply</digi:trn></html:submit>&nbsp;
-	<html:reset styleClass="buton" property="reset"><digi:trn key="rep:filer:Reset">Reset</digi:trn></html:reset>
+	<html:button  onclick="resetFilter();" styleClass="buton"  property="reset"><digi:trn key="rep:filer:Reset">Reset</digi:trn></html:button>
+	<html:hidden  property="defaultCurrency"/>
+		
 	 
 	</td>
 

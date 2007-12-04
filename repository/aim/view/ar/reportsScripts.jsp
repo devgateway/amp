@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 
+<%@page import="org.digijava.module.aim.form.ReportsFilterPickerForm"%>
 <link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>" />
 <link rel="stylesheet" href="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.css"/>" />
 
@@ -204,8 +205,28 @@ background-color: yellow;
 	function hideSorter() {
 		myPanel2.hide();
 	}
+	
+	//Scritp for reset the filters form
+	function resetFilter(arrFields){
+		
+		aimReportsFilterPickerForm.text.value="";
+		aimReportsFilterPickerForm.currency.value=aimReportsFilterPickerForm.defaultCurrency.value;
+		aimReportsFilterPickerForm.fromYear.selectedIndex=0;
+		aimReportsFilterPickerForm.toYear.selectedIndex=0
+		aimReportsFilterPickerForm.selectedSectors.selectedIndex=-1;
+		aimReportsFilterPickerForm.selectedDonors.selectedIndex=-1;
+		aimReportsFilterPickerForm.selectedRisks.selectedIndex=-1;
+		aimReportsFilterPickerForm.lineMinRank.selectedIndex=0;
+		aimReportsFilterPickerForm.planMinRank.selectedIndex=0;
+		aimReportsFilterPickerForm.selectedFinancingInstruments.selectedIndex=-1;
+		aimReportsFilterPickerForm.selectedStatuses.selectedIndex=-1;
+	}
+	
+	
+	
 	window.onload=initScripts;
 </script>
+
 
 <style type="text/css">
 .mask {

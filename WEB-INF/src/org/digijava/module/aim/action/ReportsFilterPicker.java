@@ -72,6 +72,9 @@ public class ReportsFilterPicker extends MultiAction {
 		ampSectors = SectorUtil.getAllSectorsFromScheme(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_SECTOR_SCHEME));
 		
 		AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+		
+		filterForm.setDefaultCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
+			
 		if (filterForm.getCurrency() == null){
 			filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
 		}

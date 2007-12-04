@@ -46,6 +46,10 @@
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 
+
+<feature:display name="Donor Report" module="Reports"></feature:display>
+<feature:display name="Regional Report" module="Reports"></feature:display>
+<feature:display name="Component Report" module="Reports"></feature:display>
 <feature:display  name="Funding Organizations" module="Funding"></feature:display>
 <feature:display module="Contact Information" name="Mofed Contact Information"></feature:display>
 <feature:display module="Funding" name="Funding Organizations"></feature:display>

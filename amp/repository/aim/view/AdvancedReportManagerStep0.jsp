@@ -153,6 +153,7 @@ function gotoStep() {
                                           </td>
                                           		<td align="left">
                                             <table cellPadding=0 cellSpacing=1 bgColor=#f4f4f2 border="0">
+                                            <feature:display name="Donor Report" module="Reports">
                                               <tr>
                                                 <td>
                                                   <html:radio property="reportType" value="donor" >
@@ -162,6 +163,8 @@ function gotoStep() {
                                                   </html:radio>
                                                 </td>
                                               </tr>
+                                              </feature:display>
+                                              <feature:display name="Regional Report" module="Reports">										
                                               <tr>
                                                 <td>
                                                   <html:radio property="reportType" value="regional" >
@@ -171,6 +174,8 @@ function gotoStep() {
                                                   </html:radio>
                                                 </td>
                                               </tr>
+                                              </feature:display>
+                                              <feature:display name="Component Report" module="Reports">
                                               <tr>
                                                 <td>
                                                   <html:radio property="reportType" value="component" >
@@ -180,6 +185,7 @@ function gotoStep() {
                                                   </html:radio>
                                                 </td>
                                               </tr>
+                                              </feature:display>
                                                 <feature:display module="Reports" name="Contribution Report">
                                                   <tr>
                                                     <td>
@@ -204,6 +210,7 @@ function gotoStep() {
 		                                                </td>
                                           		<td align="left">
                                           			<table cellPadding=0 cellSpacing=1 bgColor=#f4f4f2 border="0">
+                                          			<feature:display name="Donor Report" module="Reports">
 			                                              <tr>
 			                                                <td>
 			                                                  <html:radio property="reportType" value="donor" disabled="true">
@@ -212,7 +219,9 @@ function gotoStep() {
 			                                                    </digi:trn>
 			                                                  </html:radio>
 			                                                </td>
-		                                              </tr>		                                        												
+		                                              </tr>
+		                                              </feature:display>
+		                                             <feature:display name="Regional Report" module="Reports">										
 			                                              <tr>
 			                                                <td>
 			                                                  <html:radio property="reportType" value="regional" disabled="true">
@@ -222,6 +231,8 @@ function gotoStep() {
 			                                                  </html:radio>
 			                                                </td>
 			                                              </tr>
+			                                          </feature:display>
+			                                          <feature:display name="Component Report" module="Reports">										
 			                                              <tr>
 			                                                <td>
 			                                                  <html:radio property="reportType" value="component" disabled="true">
@@ -231,8 +242,8 @@ function gotoStep() {
 			                                                  </html:radio>
 			                                                </td>
 			                                              </tr>
-			                                              <module:display name="Reports" parentModule="REPORTING">
-			                                                <feature:display module="Reports" name="Contribution Report">
+	                                              </feature:display>
+	                                                <feature:display module="Reports" name="Contribution Report">
 			                                                  <tr>
 			                                                    <td>
 			                                                      <html:radio property="reportType" value="contribution" disabled="true">
@@ -242,8 +253,7 @@ function gotoStep() {
 			                                                      </html:radio>
 			                                                    </td>
 			                                                  </tr>
-			                                                </feature:display>
-			                                              </module:display>
+	                                                </feature:display>
 			                                            </table>
 			                                          </td>
 			                                        </tr>

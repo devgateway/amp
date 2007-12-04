@@ -417,7 +417,7 @@ function delSubmit(){
                     </c:if>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span><digi:trn key="calendar:to">To&nbsp;&nbsp;</digi:trn></td>
+                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span><digi:trn key="calendar:to">To&nbsp;&nbsp;&nbsp;</digi:trn></td>
                     <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
 
                         <td nowrap="nowrap">
@@ -425,11 +425,13 @@ function delSubmit(){
                                 <td nowrap="nowrap">
                                     <html:text styleId="selectedEndDate" readonly="true" name="calendarEventForm" property="selectedEndDate" style="width:80px"/>
                                 </td>
+                                <td>&nbsp;</td>
                                 <td>
                                 <a id="clear2" href="javascript:clearDate(selectedEndDate,'clear2')">
 									 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 									</a>
                                 </td>
+                                <td>&nbsp;</td>
                                 <td>
                       				<a id="date2" href='javascript:pickDateById("date2","selectedEndDate","clear2")'>
 										<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>

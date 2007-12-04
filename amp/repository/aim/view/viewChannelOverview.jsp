@@ -149,7 +149,7 @@ function commentWin(val) {
 											name="urlChannelOverview" styleClass="comment"
 											title="${translation}">
 											<digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
-										</digi:link> &nbsp;&gt;&nbsp;<digi:trn key="aim:overview">Overview</digi:trn><logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&nbsp;&gt;&nbsp;
+										</digi:link>&nbsp;&gt;&nbsp;<digi:trn key="aim:actOverview">Overview</digi:trn><logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&nbsp;&gt;&nbsp;
 										<bean:define id="perspectiveNameLocal" name="aimChannelOverviewForm" property="perspective"
 										type="java.lang.String"/>
 											<logic:notEmpty name="aimChannelOverviewForm" property="perspective">
@@ -160,7 +160,7 @@ function commentWin(val) {
 										<digi:trn key="aim:perspective">Perspective</digi:trn></logic:equal> </SPAN></TD>
 										<TD align="right">
 											<table width="65%">
-												<tr >													
+												<tr >
 														<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 															<feature:display name="Preview Activity" module="Previews">
 																<field:display feature="Preview Activity" name="Preview Button">
@@ -169,43 +169,43 @@ function commentWin(val) {
 						                                          			<digi:trn key="btn:preview">Preview</digi:trn>
 																		</html:button>
 																	</td>
-																			                                          	
+
 																</field:display>
 															</feature:display>
-														</module:display>									
+														</module:display>
 														<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 															<feature:display name="Edit Activity" module="Previews">
-																<field:display feature="Edit Activity" name="Edit Activity Button">																
+																<field:display feature="Edit Activity" name="Edit Activity Button">
 																<td>
 																	<html:button style="dr-menu;width:100%"  onclick="fnEditProject(${activity.activityId})" property="editBtn">
 																		<digi:trn key="btn:edit">Edit</digi:trn>
 																	</html:button>
 																</td>
-																
+
 																</field:display>
 															</feature:display>
-														</module:display>																										
-													
+														</module:display>
+
 														<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 															<feature:display name="Logframe" module="Previews">
-																<field:display name="Logframe Preview Button" feature="Logframe" >																	
+																<field:display name="Logframe Preview Button" feature="Logframe" >
 																	<td >
 																		<html:button  style="dr-menu;width:100%" onclick="previewLogframe(${activity.activityId})" property="logframeBtn">
 																			<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn>
 																		</html:button>
 																	</td>
-																	
+
 																</field:display>
 															</feature:display>
-														</module:display>													
-													
+														</module:display>
+
 														<c:if test="${aimChannelOverviewForm.buttonText == 'validate'}">
 															<td >
 																<html:button  style="dr-menu;width:100%" onclick="fnEditProject(${activity.activityId})" property="validateBtn">
 																	<digi:trn key="aim:validate">Validate</digi:trn>
-																</html:button>	
+																</html:button>
 															</td>
-																													
+
 														</c:if>
 				                                        <c:if test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
 				                                        	<td >
@@ -213,26 +213,26 @@ function commentWin(val) {
 																	<digi:trn key="aim:approvalAwaited">Approval Awaited</digi:trn>
 																</html:button>
 				                                        	</td>
-				                                        																
-														</c:if>													
-																																						
+
+														</c:if>
+
 														<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 															<feature:display name="Project Fiche" module="Previews">
 																<field:display name="Project Fiche Button" feature="Project Fiche" >
-																	
+
 																	<td>
 																		<html:button style="dr-menu;width:100%" onclick='projectFiche(${activity.activityId})' property="projectFicheBtn">
 																			<digi:trn key="btn:projectFiche">Project Fiche</digi:trn>
 																		</html:button>
 																	</td>
-																																																		
+
 																</field:display>
 															</feature:display>
 														</module:display>
-																																							
+
 												</tr>
-											</table>									
-										</TD>										
+											</table>
+										</TD>
 									</TR>
 								</TABLE>
 								</TD>
@@ -993,7 +993,7 @@ function commentWin(val) {
 																				</TD>
 																			</TR>
 																		</feature:display>
-																		
+
 																		<feature:display module="Organizations" name="Regional Group">
 																			<TR>
 																				<TD>
@@ -1021,8 +1021,8 @@ function commentWin(val) {
 																				</TD>
 																			</TR>
 																		</feature:display>
-																		
-																		
+
+
 																		<feature:display module="Organizations" name="Sector Group">
 																			<TR>
 																				<TD>
@@ -1050,9 +1050,9 @@ function commentWin(val) {
 																				</TD>
 																			</TR>
 																		</feature:display>
-																		
-																		
-																		
+
+
+
 																	</module:display>
 														</TABLE>
 														</TD>

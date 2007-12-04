@@ -75,7 +75,7 @@ function login()
 						<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border="0">
 							<TR bgColor=#f4f4f2>
       	      					<TD align=left>
-									<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top" border="0">
+									<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
 										<TR>
 											<TD align="left">
 								<SPAN class=crumb>
@@ -88,9 +88,10 @@ function login()
 										<digi:trn key="aim:clickToViewReference">Click here to view Reference</digi:trn>
 									</c:set>
 									<digi:link href="/viewReferences.do" name="urlReference" styleClass="comment" title="${translation}" >
-										<digi:trn key="aim:reference">Reference</digi:trn>
+										<digi:trn key="aim:references">References</digi:trn>
 									</digi:link>
-									&gt; Overview <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&gt;<digi:trn key="aim:${aimReferenceForm.perspective}"> <bean:write name="aimReferenceForm" property="perspective"/></digi:trn>&nbsp;<digi:trn key="aim:perspective"> Perspective</digi:trn></logic:equal>
+									&nbsp;&gt;&nbsp;Overview<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&nbsp;&gt;&nbsp;<digi:trn key="aim:${aimReferenceForm.perspective}"><bean:write name="aimReferenceForm" property="perspective"/></digi:trn>
+                                                                          <digi:trn key="aim:perspective">Perspective</digi:trn></logic:equal>
 								</SPAN>
 							</TD>
 											<TD align="right">

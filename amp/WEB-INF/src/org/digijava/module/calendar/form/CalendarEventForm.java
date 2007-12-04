@@ -39,7 +39,16 @@ public class CalendarEventForm
     private String[] selectedUsers;
     private boolean privateEvent=true;
     private int ispreview=0;
+    private boolean reset=false;
    
+
+	public boolean isReset() {
+		return reset;
+	}
+
+	public void setReset(boolean reset) {
+		this.reset = reset;
+	}
 
 	public int getIspreview() {
 		return ispreview;

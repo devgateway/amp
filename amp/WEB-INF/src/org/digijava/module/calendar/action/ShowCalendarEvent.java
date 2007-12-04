@@ -15,9 +15,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
+import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.entity.ModuleInstance;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -40,6 +42,9 @@ public class ShowCalendarEvent
         CalendarEventForm calendarEventForm = (CalendarEventForm) form;
 
         try {
+        	if(calendarEventForm.isReset()==true){
+        		calendarEventForm=resetForm(calendarEventForm);
+        	}
             if(calendarEventForm.getMethod()==null){
             	if(calendarEventForm.getIspreview()==0){
             		calendarEventForm=resetForm(calendarEventForm);
@@ -56,6 +61,7 @@ public class ShowCalendarEvent
                             donors.add(lvb);
                         }
                     }
+
                     calendarEventForm.setDonors(donors);
                     calendarEventForm.setIspreview(0);
             	}
@@ -211,7 +217,7 @@ public class ShowCalendarEvent
                     Set selectedAttendeeUsers = new HashSet();
                     Set selectedAttendeeGuests = new HashSet();
                     Set selectedUsers = new HashSet();
-                    if(attendees != null) {
+                    if(attendees != null) {  
                         Iterator it = attendees.iterator();
                         while(it.hasNext()) {
                             AmpCalendarAttendee attendee = (AmpCalendarAttendee) it.
@@ -228,6 +234,16 @@ public class ShowCalendarEvent
                                 continue;
                             }
                         }
+                    } if(calendarEventForm.getSelectedUsers()!=null){
+                    	String[] selUsers = calendarEventForm.getSelectedUsers();
+                    	for (int i = 0; i < selUsers.length; i++) {
+                   		 if(selUsers[i].substring(0,2).equals("g:")){
+                   				selectedUsers.add(selUsers[i]);
+                            }   else if(selUsers[i].substring(0,2).equals("u:")){
+                            	selectedUsers.add(new String(selUsers[i].toString()));
+                            }
+                   	 }
+                   	        
                     }
                     // selected attendee users
                     calendarEventForm.setSelectedAttendeeUsers((String[]) selectedAttendeeUsers.toArray(new String[0]));
@@ -288,7 +304,7 @@ public class ShowCalendarEvent
             List selectedUsersList=new ArrayList();
             List ampUsers=AmpDbUtil.getUsers();
             if (ampUsers != null && ampUsers.size() != 0) {
-                Iterator userIt = AmpDbUtil.getUsers().iterator();
+                Iterator userIt = ampUsers.iterator();
                 List attendeeUsers = new ArrayList();
                 while (userIt.hasNext()) {
                     User user = (User) userIt.next();
@@ -297,7 +313,7 @@ public class ShowCalendarEvent
                             " " + user.getLastName(), user.getId().toString());
                         attendeeUsers.add(lvb);
 
-                        String[] selUsers = calendarEventForm.getSelectedUsers();
+                        String[] selUsers = calendarEventForm.getSelectedUsers(); 
                         if (selUsers != null) {
                             for (int i = 0; i < selUsers.length; i++) {
                                 String uid = "u:" + user.getId().toString();
@@ -315,16 +331,39 @@ public class ShowCalendarEvent
 
             // attendee guests
             List attendeeGuests = new ArrayList();
-            if(calendarEventForm.getSelectedAttendeeGuests() != null) {
-                String[] guests = calendarEventForm.getSelectedAttendeeGuests();
-                for(int i = 0; i < guests.length; i++) {
-                    LabelValueBean lvb = new LabelValueBean(guests[i], guests[i]);
-                    attendeeGuests.add(lvb);
-                    LabelValueBean lvbs = new LabelValueBean(guests[i],new String("g:"+guests[i]));
-                    selectedUsersList.add(lvbs);
-                }
-                calendarEventForm.setSelectedAttendeeGuests(null);
-            }
+			Set guestsList = new HashSet();
+			if(calendarEventForm.getMethod()!=null){
+				if (calendarEventForm.getSelectedAttendeeGuests() != null
+						&& calendarEventForm.getSelectedAttendeeGuests().length > 0) {
+					String[] guests = calendarEventForm.getSelectedAttendeeGuests();
+					for (int i = 0; i < guests.length; i++) {
+						LabelValueBean lvb = new LabelValueBean(guests[i],
+								guests[i]);
+						attendeeGuests.add(lvb);
+						LabelValueBean lvbs = new LabelValueBean(guests[i],
+								new String("g:" + guests[i]));
+						guestsList.add(lvbs);
+					}
+					calendarEventForm.setSelectedAttendeeGuests(null);
+				}
+			}else {
+				if (calendarEventForm.getSelectedUsers() != null) {
+					String[] selUsers = calendarEventForm.getSelectedUsers();
+					for (int i = 0; i < selUsers.length; i++) {
+						if (selUsers[i].substring(0, 2).equals("g:")) {
+							String user = new String(selUsers[i].substring(2,
+									selUsers[i].length()));
+							LabelValueBean lvbs = new LabelValueBean(user,
+									selUsers[i]);
+							guestsList.add(lvbs);
+						}
+					}
+
+				}
+			}
+
+           	 selectedUsersList.addAll(guestsList);        
+
             calendarEventForm.setSelectedUsersList(selectedUsersList);
             calendarEventForm.setAttendeeGuests(attendeeGuests);
 
@@ -336,9 +375,11 @@ public class ShowCalendarEvent
         return mapping.findForward("success");
     }
 
+    
     private CalendarEventForm resetForm(CalendarEventForm calendarEventForm) {
     	calendarEventForm.setPrivateEvent(true);
     	calendarEventForm.setIspreview(0);
+    	calendarEventForm.setReset(false);
     	calendarEventForm.setAttendeeGuests(null);
         calendarEventForm.setAttendeeUsers(null);
         calendarEventForm.setCalendarTypes(null);

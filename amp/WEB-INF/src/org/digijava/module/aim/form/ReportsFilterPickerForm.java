@@ -43,6 +43,17 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Boolean governmentApprovalProcedures;
 	private Boolean jointCriteria;
 	
+	//to keep the default currency after user changues 
+	private Long defaultCurrency;
+	
+	public Long getDefaultCurrency() {
+		return defaultCurrency;
+	}
+
+	public void setDefaultCurrency(Long defaultCurrency) {
+		this.defaultCurrency = defaultCurrency;
+	}
+
 	public String getText() {
 		return text;
 	}

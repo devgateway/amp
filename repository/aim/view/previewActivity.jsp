@@ -834,7 +834,7 @@ function viewChanges()
 									</tr>
 									</feature:display>
 
-									<feature:display name="Location" module="Project ID and Planning">
+									<feature:display name="Location" module="Project ID and Planning"></feature:display>
 									<field:display name="Implementation Level" feature="Location">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -898,7 +898,7 @@ function viewChanges()
 										</td>
 									</tr>
 									</field:display>
-									</feature:display>
+									
 
 									<feature:display name="Sectors" module="Project ID and Planning">
 									<tr>
@@ -1030,7 +1030,7 @@ function viewChanges()
 										</td>
 									</tr>
 									</field:display>
-									<field:display name="Project Risk" module="Dashboard">
+									<field:display name="Project Risk" feature="Dashboard">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:meActivityRisk">
@@ -1055,6 +1055,7 @@ function viewChanges()
 										</td>
 									</tr>
 									</field:display>
+									</module:display>
 								<logic:present name="currentMember" scope="session">
 									<module:display name="Funding" parentModule="PROJECT MANAGEMENT">
 									<tr>

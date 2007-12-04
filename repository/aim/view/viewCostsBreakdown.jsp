@@ -15,7 +15,7 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript">
-	
+
 function fnEditProject(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
@@ -28,7 +28,7 @@ function preview(id)
    document.location.href = "<%=addUrl%>~pageId=2~activityId=" + id;
 }
 
-	
+
 function previewLogframe(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
@@ -68,7 +68,7 @@ function projectFiche(id)
 							<TR>
 								<TD align="left"><SPAN class="crumb"> <jsp:useBean
 									id="urlCostsBreakdown" type="java.util.Map"
-									class="java.util.HashMap" /> <c:set 
+									class="java.util.HashMap" /> <c:set
 									target="${urlCostsBreakdown}" property="ampActivityId">
 									<bean:write name="aimMainProjectDetailsForm" property="ampActivityId" />
 								</c:set> <c:set target="${urlCostsBreakdown}"
@@ -78,11 +78,10 @@ function projectFiche(id)
 									name="urlCostsBreakdown" styleClass="comment"
 									title="${translation}">
 									<digi:trn key="aim:projectCosting">Project Costing</digi:trn>
-								</digi:link>&nbsp;&gt;&nbsp; <digi:trn key="aim:actOverview">Overview</digi:trn>&nbsp;&gt;&nbsp;
-								<digi:trn key="aim:viewCostsBreakdown">Costing</digi:trn> </SPAN>
+								</digi:link>&nbsp;&gt;&nbsp;<digi:trn key="aim:actOverview">Overview</digi:trn></SPAN>
 								</TD>
 								<TD align="right">
-								
+
 											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Preview Activity" module="Previews">
 													<field:display feature="Preview Activity" name="Preview Button">
@@ -103,14 +102,14 @@ function projectFiche(id)
 													</field:display>
 												</feature:display>
 											</module:display>
-											
+
 											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Project Fiche" module="Previews">
 													<field:display name="Project Fiche Button" feature="Project Fiche" >
 														<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu' onclick='projectFiche(${aimMainProjectDetailsForm.ampActivityId})'>
 													</field:display>
 												</feature:display>
-											</module:display>												
+											</module:display>
 
 								</TD>
 

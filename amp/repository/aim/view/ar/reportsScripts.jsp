@@ -205,8 +205,7 @@ background-color: yellow;
 	function hideSorter() {
 		myPanel2.hide();
 	}
-	/*
-	//Scritp for reset the filters form
+	
 	function resetFilter(){
 		if (aimReportsFilterPickerForm.text)
 			aimReportsFilterPickerForm.text.value="";
@@ -246,53 +245,7 @@ background-color: yellow;
 			aimReportsFilterPickerForm.jointCriteria[1].checked=false;
 		}
 
-		if (governmentApprovalProcedures.jointCriteria){
-			aimReportsFilterPickerForm.governmentApprovalProcedures[0].checked=false;
-			aimReportsFilterPickerForm.governmentApprovalProcedures[1].checked=false;
-		}
-		
-	
-	}*/
-		function resetFilter(){
-		if (aimReportsFilterPickerForm.text)
-			aimReportsFilterPickerForm.text.value="";
-		
-		if (aimReportsFilterPickerForm.currency)
-			aimReportsFilterPickerForm.currency.value=aimReportsFilterPickerForm.defaultCurrency.value;
-		
-		if (aimReportsFilterPickerForm.fromYear)		
-			aimReportsFilterPickerForm.fromYear.selectedIndex=0;
-		
-		if (aimReportsFilterPickerForm.toYear)
-			aimReportsFilterPickerForm.toYear.selectedIndex=0
-		
-		if (aimReportsFilterPickerForm.selectedSectors)
-			aimReportsFilterPickerForm.selectedSectors.selectedIndex=-1;
-		
-		if (aimReportsFilterPickerForm.selectedDonors)
-			aimReportsFilterPickerForm.selectedDonors.selectedIndex=-1;
-		
-		if (aimReportsFilterPickerForm.selectedRisks)
-			aimReportsFilterPickerForm.selectedRisks.selectedIndex=-1;
-		
-		if (aimReportsFilterPickerForm.lineMinRank)
-			aimReportsFilterPickerForm.lineMinRank.selectedIndex=0;
-
-		if (aimReportsFilterPickerForm.planMinRank)
-			aimReportsFilterPickerForm.planMinRank.selectedIndex=0;
-		
-		if (aimReportsFilterPickerForm.selectedStatuses)
-			aimReportsFilterPickerForm.selectedStatuses.selectedIndex=-1;
-		
-		if (aimReportsFilterPickerForm.selectedFinancingInstruments)
-			aimReportsFilterPickerForm.selectedFinancingInstruments.selectedIndex=-1;
-		
-		if (aimReportsFilterPickerForm.jointCriteria){
-			aimReportsFilterPickerForm.jointCriteria[0].checked=false;
-			aimReportsFilterPickerForm.jointCriteria[1].checked=false;
-		}
-
-		if (governmentApprovalProcedures.jointCriteria){
+		if (aimReportsFilterPickerForm.governmentApprovalProcedures){
 			aimReportsFilterPickerForm.governmentApprovalProcedures[0].checked=false;
 			aimReportsFilterPickerForm.governmentApprovalProcedures[1].checked=false;
 		}

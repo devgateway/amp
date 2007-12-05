@@ -905,6 +905,7 @@ function viewChanges()
 									</tr>
 									</field:display>
 									
+									<c:if test="${not empty aimEditActivityForm.componentSectors}">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<img id="component_sector_plus"  onclick="toggleGroup('component_sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
@@ -926,7 +927,7 @@ function viewChanges()
 											</table>
 										</td>
 									</tr>
-									
+									</c:if>
 
 									<feature:display name="Sectors" module="Project ID and Planning">
 									<tr>

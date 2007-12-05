@@ -192,7 +192,8 @@
 													</tr>
 													</logic:notEmpty>	
 													<tr bgcolor="#ffffff">
-														<td colspan="2" align="center">
+														<td colspan="2" align="center">		
+															<html:hidden name="aimTeamActivitiesForm" property="teamId"/>												
 															<input type="submit" value="Remove" class="dr-menu" onclick="return confirmDelete()">
 														</td>
 													</tr>																										

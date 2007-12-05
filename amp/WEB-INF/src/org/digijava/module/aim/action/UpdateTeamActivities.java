@@ -78,7 +78,7 @@ public class UpdateTeamActivities extends Action {
 	        	if (tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
 	        		TeamUtil.removeActivitiesFromDonor(tm.getTeamId(),taForm.getSelActivities());
 	        	} else {
-	        		TeamUtil.removeActivitiesFromTeam(taForm.getSelActivities());	
+	        		TeamUtil.removeActivitiesFromTeam(taForm.getSelActivities(),taForm.getTeamId());	
 	        	}
 	            
 	        }

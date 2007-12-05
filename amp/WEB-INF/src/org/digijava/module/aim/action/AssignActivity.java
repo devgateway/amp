@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -59,6 +60,10 @@ public class AssignActivity extends Action {
 							.getProjectChannelOverview(actId);
 					AmpTeam ampTeam = TeamUtil.getAmpTeam(aForm.getTeamId());
 					activity.setTeam(ampTeam);
+					if(ampTeam.getActivityList()==null){
+						ampTeam.setActivityList(new HashSet());
+					}
+					ampTeam.getActivityList().add(activity);
 					DbUtil.update(activity);
 				//UpdateDB.updateReportCache(actId);
 				}

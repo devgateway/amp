@@ -691,20 +691,12 @@ public class TeamUtil {
         AmpTeam team = null;
 
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
             team = (AmpTeam) session.load(AmpTeam.class, id);
         } catch(Exception e) {
             throw new RuntimeException(e);
 
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-            }
-        }
+        } 
         return team;
     }
 
@@ -891,19 +883,23 @@ public class TeamUtil {
         }
     }
 
-    public static void removeActivitiesFromTeam(Long activities[]) {
+    public static void removeActivitiesFromTeam(Long activities[],Long teamId) {
         Session session = null;
         Transaction tx = null;
         AmpTeamMember member = null;
 
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
             tx = session.beginTransaction();
 
             for(int i = 0; i < activities.length; i++) {
                 AmpActivity activity = (AmpActivity) session.load(
-                    AmpActivity.class, activities[i]);
-                activity.setTeam(null);
+                    AmpActivity.class, activities[i]);                
+                activity.setTeam(null); 
+                if(teamId!=null){
+                	AmpTeam ampTeam=(AmpTeam)session.load(AmpTeam.class,teamId);
+                    ampTeam.getActivityList().remove(activity);
+                }                
                 Iterator membersItr = activity.getMember().iterator();
                 while(membersItr.hasNext()) {
                     member = (AmpTeamMember) membersItr.next();
@@ -911,8 +907,8 @@ public class TeamUtil {
                     session.update(member);
                 }
                 activity.setMember(null);
-                session.update(activity);
-                session.flush();
+                session.update(activity);               
+               // session.flush();
                 // UpdateDB.updateReportCache(activities[i]);
             }
 
@@ -928,15 +924,8 @@ public class TeamUtil {
                 }
             }
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-            }
         }
+
     }
 
     public static Collection getAllDonorsToDesktop(Long teamId) {
@@ -1128,7 +1117,7 @@ public class TeamUtil {
         Session session = null;
 
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
 
             AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
             Iterator itr = team.getActivityList().iterator();
@@ -1175,14 +1164,6 @@ public class TeamUtil {
         } catch(Exception e) {
             logger.error("Unable to getDonorTeamActivities" + e.getMessage());
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-            }
         }
         return col;
     }
@@ -1956,7 +1937,7 @@ public class TeamUtil {
 
         try {
             col = DbUtil.getAllReports();
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
 
             String queryString = "select tr from "
                 + AmpTeamReports.class.getName()
@@ -2002,15 +1983,8 @@ public class TeamUtil {
             logger.debug("Exceptiion from getAllUnassignedTeamReports()");
             logger.debug("Exceptiion " + e);
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-            }
-        }
+        } 
+
         return col;
     }
 

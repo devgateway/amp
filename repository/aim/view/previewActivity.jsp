@@ -907,10 +907,14 @@ function viewChanges()
 									
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+											<img id="component_sector_plus"  onclick="toggleGroup('component_sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+											<img id="component_sector_minus" onclick="toggleGroup('component_sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
 											<digi:trn key="aim:preview:component_Sector">Components</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
 											<table>
+												<div id="component_sector_dots">...</div>
+												<div id="component_sector" style="display: none;">
 												<c:forEach var="comSec" items="${aimEditActivityForm.componentSectors}">
 													<tr>
 														<td>
@@ -918,6 +922,7 @@ function viewChanges()
 														</td>
 													</tr>
 												</c:forEach>
+												</div>
 											</table>
 										</td>
 									</tr>

@@ -31,6 +31,7 @@ import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.kernel.util.collections.HierarchyMemberFactory;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
@@ -1041,7 +1042,7 @@ public class ProgramUtil {
 				}
 			}
 		}
-
+		
 		public static void saveThemeIndicators(AmpPrgIndicator tempPrgInd, Long ampThemeId)
 		{
 			Session session = null;
@@ -1051,8 +1052,12 @@ public class ProgramUtil {
 				session = PersistenceManager.getRequestDBSession();
 				AmpTheme tempAmpTheme = null;
 				tempAmpTheme = (AmpTheme) session.load(AmpTheme.class,ampThemeId);
-				AmpThemeIndicators ampThemeInd = new AmpThemeIndicators();
-				ampThemeInd.setAmpThemeIndId(tempPrgInd.getIndicatorId());
+				AmpThemeIndicators ampThemeInd=null;
+				if(tempPrgInd.getIndicatorId()!=null){
+					ampThemeInd=(AmpThemeIndicators)session.load(AmpThemeIndicators.class,tempPrgInd.getIndicatorId());
+				}else{
+				ampThemeInd = new AmpThemeIndicators();
+				}
 				ampThemeInd.setName(tempPrgInd.getName());
 				ampThemeInd.setCode(tempPrgInd.getCode());
 				ampThemeInd.setType(tempPrgInd.getType());
@@ -1060,30 +1065,59 @@ public class ProgramUtil {
 				ampThemeInd.setCategory(tempPrgInd.getCategory());
 				ampThemeInd.setNpIndicator(tempPrgInd.isNpIndicator());
 				ampThemeInd.setDescription(tempPrgInd.getDescription());
+				if(ampThemeInd.getSectors()==null){
+					ampThemeInd.setSectors(new HashSet());
+				}
 				
-			    Long sectorIds[]= tempPrgInd.getSector();
-               	Set sectors = new HashSet();
-                   if(sectorIds!=null  && !sectorIds.equals(0)){
-                	   for(int i=0;i<sectorIds.length;i++){
-                		   Long sectorId=sectorIds[i];
-                		   AmpIndicatorSector amps = new AmpIndicatorSector();
+				    Long sectorIds[]= tempPrgInd.getSector();
+	               	Set sectors = new HashSet();
+	               Collection sect=tempPrgInd.getIndSectores();
+	               if(sect!=null&&sect.size()>0){
+	            	 Iterator <ActivitySector> sectIter=sect.iterator();
+	            	  while(sectIter.hasNext()){
+	            		  ActivitySector sector=sectIter.next();
+	            		  if(tempPrgInd.getIndicatorId()==null||!SectorUtil.getIndIcatorSector(tempPrgInd.getIndicatorId(), sector.getSectorId())){
+	            		  AmpIndicatorSector amps = new AmpIndicatorSector();
+	           			   amps.setThemeIndicatorId(ampThemeInd);
+	           			   amps.setSectorId(SectorUtil.getAmpSector(sector.getSectorId()));
+	           			   ampThemeInd.getSectors().add(amps);
+	            		  }
+	            		   
+	            	   }
+	            	   
+	               }
+	            
+                		   
+                		   
+                		  /* AmpIndicatorSector amps = new AmpIndicatorSector();
        					   amps.setThemeIndicatorId(ampThemeInd);
        					if (sectorId != null && (!sectorId.equals(new Long(-1)) && !sectorId.equals(0)))
        						amps.setSectorId(SectorUtil.getAmpSector(sectorId));
        					     if (sectorId == 0){
+       					    	 
+       					    	
        					    	
        					    	for(Iterator itr = tempPrgInd.getIndSectores().iterator();itr.hasNext();){
           					    	 ActivitySector themesectors = (ActivitySector) itr.next();
-          					    	 amps.setSectorId(SectorUtil.getAmpSector(themesectors.getSectorId()));
           					    	 
-          					    }   	 
-       					    }
-       					sectors.add(amps);
+          					    	 AmpIndicatorSector ind = SectorUtil.getIndIcatorSector(tempPrgInd.getIndicatorId());
+           					    	   if (ind.getSectorId().getAmpSectorId().equals(themesectors.getSectorId())){
+           					    		amps.setAmpIndicatorSectorId(new Long(0));
+           					    		amps.setThemeIndicatorId(null);
+           					    	
+           					    		
+           					    	  }else{
+          					    	     amps.setSectorId(SectorUtil.getAmpSector(themesectors.getSectorId()));
+           					    	  }
+          					    }   */	 
+       					
+       					//sectors.add(amps);
 
-                	   }
+                	   //}
 
-                   }
-                   ampThemeInd.setSectors(sectors);
+                  
+		
+               
 				Set ampThemeSet = new HashSet();
 				ampThemeSet.add(tempAmpTheme);
 				ampThemeInd.setThemes(ampThemeSet);

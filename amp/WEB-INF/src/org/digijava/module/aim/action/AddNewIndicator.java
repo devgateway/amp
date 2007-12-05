@@ -100,6 +100,7 @@ public class AddNewIndicator
                     newInd.setName(newIndForm.getName());
                     newInd.setType(newIndForm.getType());
                     newInd.setSector(newIndForm.getSelActivitySector());
+                    newInd.setIndSectores(newIndForm.getActivitySectors());
                     
                     ProgramUtil.saveThemeIndicators(newInd, newIndForm.getSelectedProgramId());
 

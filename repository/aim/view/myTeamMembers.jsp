@@ -8,9 +8,11 @@
 
 <script language="JavaScript">
 	function addActivity() {
-		levelObj=document.getElementById('activityLevel');
-		if(levelObj==null) selectedLevelId=0; else
-		selectedLevelId=levelObj.options[levelObj.selectedIndex].value;
+		//levelObj=document.getElementById('activityLevel');
+		//if(levelObj==null) 
+		selectedLevelId=0; 
+		//else
+		//selectedLevelId=levelObj.options[levelObj.selectedIndex].value;
 		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create~activityLevelId="+selectedLevelId;	
 	}
 	

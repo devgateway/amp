@@ -899,6 +899,23 @@ function viewChanges()
 									</tr>
 									</field:display>
 									
+									<tr>
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+											<digi:trn key="aim:preview:component_Sector">Components</digi:trn>
+										</td>
+										<td bgcolor="#ffffff">
+											<table>
+												<c:forEach var="comSec" items="${aimEditActivityForm.componentSectors}">
+													<tr>
+														<td>
+															${comSec.name}
+														</td>
+													</tr>
+												</c:forEach>
+											</table>
+										</td>
+									</tr>
+									
 
 									<feature:display name="Sectors" module="Project ID and Planning">
 									<tr>

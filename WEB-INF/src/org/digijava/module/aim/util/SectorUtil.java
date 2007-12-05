@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpIndicatorSector;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
@@ -424,6 +425,67 @@ public class SectorUtil {
 		return sec;
 	}
 
+	public static AmpIndicatorSector getIndIcatorSector(Long indicatorId){
+		
+		Session session = null;
+		Query qry = null;
+		AmpIndicatorSector indSectorId = null;
+		Iterator itr = null;
+		
+		
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = new String();
+			queryString = "select s from " + AmpIndicatorSector.class.getName()
+			+ " s where (s.themeIndicatorId=:themeIndicatorId)";
+			
+			qry = session.createQuery(queryString);
+			qry.setParameter("themeIndicatorId", indicatorId, Hibernate.LONG);
+			itr = qry.list().iterator();
+
+			if (itr.hasNext()) {
+				indSectorId = (AmpIndicatorSector) itr.next();
+			}
+			
+		} catch (Exception e) {
+			logger.error("Unable to get sector");
+			logger.debug("Exceptiion " + e);
+		}
+		
+		return indSectorId;
+	}
+	
+	public static boolean getIndIcatorSector(Long indicatorId,Long sectorId){
+		
+		Session session = null;
+		Query qry = null;
+		List <AmpIndicatorSector> indSectors = null;
+		boolean exist=false;
+		
+		
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = new String();
+			queryString = "select s from " + AmpIndicatorSector.class.getName()
+			+ " s where (s.themeIndicatorId=:themeIndicatorId) and s.sectorId=:sectorId";
+			
+			qry = session.createQuery(queryString);
+			qry.setParameter("themeIndicatorId", indicatorId, Hibernate.LONG);
+			qry.setLong("sectorId", sectorId);
+			indSectors = qry.list();
+			if(indSectors!=null&&indSectors.size()>0){
+				exist=true;
+			}
+
+			
+		} catch (Exception e) {
+			logger.error("Unable to get sector");
+			logger.debug("Exceptiion " + e);
+		}
+		
+		return exist;
+	}
+	
 	public static AmpSector getAmpSector(Long id) {
 
 		Session session = null;

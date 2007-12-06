@@ -47,9 +47,6 @@
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 
 
-<feature:display name="Donor Report" module="Reports"></feature:display>
-<feature:display name="Regional Report" module="Reports"></feature:display>
-<feature:display name="Component Report" module="Reports"></feature:display>
 <feature:display  name="Funding Organizations" module="Funding"></feature:display>
 <feature:display module="Contact Information" name="Mofed Contact Information"></feature:display>
 <feature:display module="Funding" name="Funding Organizations"></feature:display>
@@ -58,6 +55,8 @@
 <feature:display module="Organizations" name="Contracting Agency"></feature:display>
 <feature:display module="Organizations" name="Executing Agency"></feature:display>
 <feature:display module="Organizations" name="Implementing Agency"></feature:display>
+<feature:display module="Organizations" name="Regional Group"></feature:display>
+<feature:display module="Organizations" name="Sector Group"></feature:display>
 <feature:display module="Project ID and Planning" name="Identification"></feature:display>
 <feature:display module="Project ID and Planning" name="Location"></feature:display>
 <feature:display module="Project ID and Planning" name="Planning"></feature:display>
@@ -70,6 +69,7 @@
 <feature:display name="Budget" module="Project ID and Planning"></feature:display>
 <feature:display name="Calendar" module="Calendar"></feature:display>
 <feature:display name="Channel Overview Tab" module="Channel Overview"></feature:display>
+<feature:display name="Component Report" module="Reports"></feature:display>
 <feature:display name="Components" module="Components"></feature:display>
 <feature:display name="Content Repository" module="Document Management"></feature:display>
 <feature:display name="Contracting Agency" module="Organizations"></feature:display>
@@ -77,46 +77,45 @@
 <feature:display name="Costing" module="Activity Costing"></feature:display>
 <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues"></feature:display>
 <feature:display name="Dashboard" module="M & E"></feature:display>
-<feature:display name="Documents" module="Document Management"></feature:display>
 <feature:display name="Documents Tab" module="Document"></feature:display>
+<feature:display name="Documents" module="Document Management"></feature:display>
 <feature:display name="Donor Contact Information" module="Contact Information"></feature:display>
+<feature:display name="Donor Report" module="Reports"></feature:display>
 <feature:display name="Edit Activity" module="Previews"></feature:display>
 <feature:display name="Executing Agency" module="Organizations"></feature:display>
 <feature:display name="Financial Progress Tab" module="Financial Progress"></feature:display>
 <feature:display name="Funding Organizations Tab" module="Funding"></feature:display>
 <feature:display name="Funding Organizations"  module="Funding"></feature:display>
 <feature:display name="Funding Organizations" module="Funding"></feature:display>
+<feature:display name="Government Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Identification" module="Project ID and Planning"></feature:display>
 <feature:display name="Implementing Agency" module="Organizations"></feature:display>
 <feature:display name="Issues" module="Issues"></feature:display>
 <feature:display name="Location" module="Project ID and Planning"></feature:display>
 <feature:display name="Logframe" module="Previews"></feature:display>
-<feature:display name="Government Contact Information" module="Contact Information"></feature:display>
 <feature:display name="My Messages" module="Desktop Sections"></feature:display>
 <feature:display name="My Tasks" module="Desktop Sections"></feature:display>
 <feature:display name="NPD Dashboard" module="National Planning Dashboard"></feature:display>
 <feature:display name="NPD Programs" module="National Planning Dashboard"></feature:display>
-<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display>
-<feature:display name="Physical Progress" module="Components"></feature:display>
 <feature:display name="Physical Progress Tab" module="Physical Progress"></feature:display>
+<feature:display name="Physical Progress" module="Components"></feature:display>
 <feature:display name="Planning" module="Project ID and Planning"></feature:display>
 <feature:display name="Preview Activity" module="Previews"></feature:display>
 <feature:display name="Program" module="Program"></feature:display>
 <feature:display name="Project Fiche" module="Previews"></feature:display>
-<field:display name="Project Performance"  feature="Dashboard"></field:display>
-<field:display name="Project Risk" feature="Dashboard"></field:display>
 <feature:display name="Proposed Project Cost" module="Funding"></feature:display>
 <feature:display name="References Tab" module="References"></feature:display>
 <feature:display name="References" module="References"></feature:display>
 <feature:display name="Regional Funding Tab" module="Funding"></feature:display>
 <feature:display name="Regional Funding" module="Funding"></feature:display>
-<feature:display name="Related Documents" module="Document"></feature:display>
+<feature:display name="Regional Group" module="Organizations"></feature:display>
+<feature:display name="Regional Report" module="Reports"></feature:display>
 <feature:display name="Related Documents" module="Document"></feature:display>
 <feature:display name="Reports Contact Information" module="Contact Information"></feature:display>
 <feature:display name="SISIN" module="Components"></feature:display>
+<feature:display name="Sector Group" module="Organizations"></feature:display>
 <feature:display name="Sectors" module="Project ID and Planning"></feature:display>
 <feature:display name="Web Resources" module="Document"></feature:display>
-<field:display name="Paris Survey" feature="Paris Indicators"></field:display>
 <field:display  name="Remove Location" feature="Location"></field:display>
 <field:display feature="Donor Contact Information" name="Donor Email"></field:display>
 <field:display feature="Donor Contact Information" name="Donor First Name"></field:display>
@@ -127,9 +126,9 @@
 <field:display feature="Identification" name="Description"></field:display>
 <field:display feature="Identification" name="Objectives"></field:display>
 <field:display feature="Identification" name="Organizations and Project ID"></field:display>
+<field:display feature="Identification" name="Project Title"></field:display>
 <field:display feature="Identification" name="Purpose"></field:display>
 <field:display feature="Identification" name="Results"></field:display>
-<field:display feature="Identification" name="Project Title"></field:display>
 <field:display feature="MTEF Projections" name="MTEFProjections"></field:display>
 <field:display feature="Mofed Contact Information" name="Mofed Email"></field:display>
 <field:display feature="Mofed Contact Information" name="Mofed First Name"></field:display>
@@ -147,6 +146,7 @@
 <field:display name="Actors" feature="Issues"></field:display>
 <field:display name="Actual Approval Date" feature="Planning" ></field:display>
 <field:display name="Actual Approval Date" feature="Planning"></field:display>
+<field:display name="Actual Completion Date" feature="Planning"></field:display>
 <field:display name="Actual Start Date" feature="Planning"></field:display>
 <field:display name="Actual/Planned Commitments" feature="Regional Funding"></field:display>
 <field:display name="Actual/Planned Disbursements" feature="Regional Funding"></field:display>
@@ -162,6 +162,7 @@
 <field:display name="Add Issues Button" feature="Issues"></field:display>
 <field:display name="Add Location" feature="Location"></field:display>
 <field:display name="Add Measures Link" feature="Issues"></field:display>
+<field:display name="Add Physical Progress Link" feature="Physical Progress"></field:display>
 <field:display name="Add Programs Button - National Plan Objective" feature="Program"></field:display>
 <field:display name="Add Programs Button - Primary Programs" feature="Program"></field:display>
 <field:display name="Add Programs Button - Secondary Programs" feature="Program"></field:display>
@@ -186,12 +187,11 @@
 <field:display name="Comments Current Value" feature="Activity"></field:display>
 <field:display name="Comments Revised Target Value" feature="Activity"></field:display>
 <field:display name="Comments Target Value" feature="Activity"></field:display>
-<field:display name="Component Name" feature="Issues"></field:display>
-<field:display name="Component description" feature="Issues"></field:display>
+<field:display name="Component Name" feature="Components"></field:display>
+<field:display name="Component description" feature="Components"></field:display>
 <field:display name="Components Actual/Planned Commitments" feature="Components"></field:display>
 <field:display name="Components Actual/Planned Disbursements" feature="Components"></field:display>
 <field:display name="Components Actual/Planned Expenditures" feature="Components"></field:display>
-<field:display name="Add Physical Progress Link" feature="Physical Progress"></field:display>
 <field:display name="Components Agency Source" feature="SISIN"></field:display>
 <field:display name="Components Classification Program Code" feature="SISIN"></field:display>
 <field:display name="Components Currency Commitments" feature="Components"></field:display>
@@ -209,8 +209,6 @@
 <field:display name="Components Perspective Disbursements" feature="Components"></field:display>
 <field:display name="Components Perspective Expenditures" feature="Components"></field:display>
 <field:display name="Components Physical Progress" feature="Components"></field:display>
-<field:display name="Components Remove Managed Documents Button" feature="Managed Documents"></field:display>
-<field:display name="Remove Physical Progress Link" feature="Physical Progress"></field:display>
 <field:display name="Components Stage" feature="SISIN"></field:display>
 <field:display name="Components Total Amount Commitments" feature="Components"></field:display>
 <field:display name="Components Total Amount Disbursements" feature="Components"></field:display>
@@ -225,7 +223,6 @@
 <field:display name="Costing Donor" feature="Costing"></field:display>
 <field:display name="Costing Due Date" feature="Costing"></field:display>
 <field:display name="Costing Grand Total Contribution" feature="Costing"></field:display>
-<field:display name="Total Costs" feature="Costing"></field:display>
 <field:display name="Costing Inputs" feature="Costing"></field:display>
 <field:display name="Costing Progress" feature="Costing"></field:display>
 <field:display name="Costing Total Contribution" feature="Costing"></field:display>
@@ -238,7 +235,6 @@
 <field:display name="Currency Disbursements" feature="Regional Funding"></field:display>
 <field:display name="Currency Expenditure" feature="Funding Organizations"></field:display>
 <field:display name="Currency Expenditures" feature="Regional Funding"></field:display>
-<field:display name="Actual Completion Date" feature="Planning"></field:display>
 <field:display name="Current Value" feature="Activity"></field:display>
 <field:display name="Data Source" feature="Identification"></field:display>
 <field:display name="Date Base Value" feature="Activity"></field:display>
@@ -276,6 +272,8 @@
 <field:display name="Edit Components Link" feature="Components"></field:display>
 <field:display name="Edit Funding Button- Proposed Project Cost" feature="Proposed Project Cost"></field:display>
 <field:display name="Edit Funding Link" feature="Regional Funding"></field:display>
+<field:display name="Environment" feature="Cross Cutting Issues"></field:display>
+<field:display name="Equal Opportunity" feature="Cross Cutting Issues"></field:display>
 <field:display name="Exchange Rate" feature="Funding Organizations"></field:display>
 <field:display name="Executing Agency Add Organizations Button" feature="Executing Agency"></field:display>
 <field:display name="Executing Agency Remove Organizations Button" feature="Executing Agency"></field:display>
@@ -288,6 +286,13 @@
 <field:display name="Funding Organization Name" feature="Funding Organizations"></field:display>
 <field:display name="Funding Organization" feature="Funding Organizations"></field:display>
 <field:display name="Government Approval Procedures" feature="Budget"></field:display>
+<field:display name="Government Email" feature="Mofed Contact Information"></field:display>
+<field:display name="Government Fax Number" feature="Mofed Contact Information"></field:display>
+<field:display name="Government First Name" feature="Mofed Contact Information"></field:display>
+<field:display name="Government Last Name" feature="Mofed Contact Information"></field:display>
+<field:display name="Government Organization" feature="Mofed Contact Information"></field:display>
+<field:display name="Government Phone Number" feature="Mofed Contact Information"></field:display>
+<field:display name="Government Title" feature="Mofed Contact Information"></field:display>
 <field:display name="Grand Total Commitments" feature="Components"></field:display>
 <field:display name="Grand Total Disbursements" feature="Components"></field:display>
 <field:display name="Implementation Level" feature="Location"></field:display>
@@ -311,32 +316,30 @@
 <field:display name="Logframe Preview Button" feature="Logframe" ></field:display>
 <field:display name="Measures Taken" feature="Issues"></field:display>
 <field:display name="Ministry of Planning Rank" feature="Planning"></field:display>
-<field:display name="Government Email" feature="Mofed Contact Information"></field:display>
-<field:display name="Government Fax Number" feature="Mofed Contact Information"></field:display>
-<field:display name="Government First Name" feature="Mofed Contact Information"></field:display>
-<field:display name="Government Last Name" feature="Mofed Contact Information"></field:display>
-<field:display name="Government Organization" feature="Mofed Contact Information"></field:display>
-<field:display name="Government Phone Number" feature="Mofed Contact Information"></field:display>
-<field:display name="Government Title" feature="Mofed Contact Information"></field:display>
+<field:display name="Minorities" feature="Cross Cutting Issues"></field:display>
+<field:display name="NPD Program Description" feature="Program"></field:display>
+<field:display name="National Plan Objective" feature="NPD Programs"></field:display>
+<field:display name="National Planning Objectives" feature="Program"></field:display>
 <field:display name="Objective" feature="Identification"></field:display>
 <field:display name="Organizations Selector" feature="Funding Organizations"></field:display>
 <field:display name="Organizations and Project ID" feature="Identification"></field:display>
 <field:display name="Overall Contribution" feature="Planning"></field:display>
 <field:display name="Overall Cost" feature="Planning"></field:display>
+<field:display name="Paris Survey" feature="Paris Indicators"></field:display>
 <field:display name="Perspective Commitment" feature="Funding Organizations"></field:display>
-<field:display name="Regional Funding Perspective Commitments" feature="Regional Funding"></field:display>
 <field:display name="Perspective Disbursement" feature="Funding Organizations"></field:display>
 <field:display name="Perspective Expenditure" feature="Funding Organizations"></field:display>
 <field:display name="Physical Progress" feature="Physical Progress"></field:display>
 <field:display name="Physical progress description" feature="Physical Progress"></field:display>
 <field:display name="Physical progress title" feature="Physical Progress"></field:display>
+<field:display name="Primary Program" feature="NPD Programs"></field:display>
+<field:display name="Primary Program" feature="Program"></field:display>
 <field:display name="Printer Friendly Button Performance" feature="Dashboard"></field:display>
 <field:display name="Printer Friendly Button Risk" feature="Dashboard"></field:display>
 <field:display name="Program Background" feature="Admin NPD"></field:display>
 <field:display name="Program Beneficiaries" feature="Admin NPD"></field:display>
 <field:display name="Program Code" feature="Admin NPD"></field:display>
 <field:display name="Program Description" feature="Admin NPD"></field:display>
-<field:display name="NPD Program Description" feature="Program"></field:display>
 <field:display name="Program Environment Considerations" feature="Admin NPD"></field:display>
 <field:display name="Program Lead Agency" feature="Admin NPD"></field:display>
 <field:display name="Program Name" feature="Admin NPD"></field:display>
@@ -347,6 +350,8 @@
 <field:display name="Project Code" feature="Budget"></field:display>
 <field:display name="Project Fiche Button" feature="Project Fiche" ></field:display>
 <field:display name="Project Id" feature="Identification"></field:display>
+<field:display name="Project Performance"  feature="Dashboard"></field:display>
+<field:display name="Project Risk" feature="Dashboard"></field:display>
 <field:display name="Project Title" feature="Identification"></field:display>
 <field:display name="Projection Amount" feature="MTEF Projections"></field:display>
 <field:display name="Projection Currency Code" feature="MTEF Projections"></field:display>
@@ -361,8 +366,11 @@
 <field:display name="Proposed Start Date" feature="Planning"></field:display>
 <field:display name="Purpose" feature="Identification"></field:display>
 <field:display name="Region" feature="Location"></field:display>
+<field:display name="Regional Funding Perspective Commitments" feature="Regional Funding"></field:display>
 <field:display name="Regional Funding Perspective Disbursements" feature="Regional Funding"></field:display>
 <field:display name="Regional Funding Perspective Expenditures" feature="Regional Funding"></field:display>
+<field:display name="Regional Group Add Organizations Button" feature="Regional Group"></field:display>
+<field:display name="Regional Group Remove Organizations Button" feature="Regional Group"></field:display>
 <field:display name="Remove Actors Button" feature="Issues"></field:display>
 <field:display name="Remove Components Button" feature="Components"></field:display>
 <field:display name="Remove Documents Button" feature="Related Documents"></field:display>
@@ -370,8 +378,10 @@
 <field:display name="Remove Fundings" feature="Regional Funding"></field:display>
 <field:display name="Remove Issues Button" feature="Issues"></field:display>
 <field:display name="Remove Measures Button" feature="Issues"></field:display>
+<field:display name="Remove Physical Progress Link" feature="Physical Progress"></field:display>
 <field:display name="Remove Program Button - National Plan Objective" feature="Program"></field:display>
 <field:display name="Remove Program Button - Primary Programs" feature="Program"></field:display>
+<field:display name="Remove Program Button - Secondary Programs" feature="Program"></field:display>
 <field:display name="Remove Sectors Button" feature="Sectors"></field:display>
 <field:display name="Remove Web Resource Button" feature="Web Resources"></field:display>
 <field:display name="Results" feature="Identification"></field:display>
@@ -379,6 +389,10 @@
 <field:display name="Risk" feature="Activity"></field:display>
 <field:display name="SISIN Code" feature="SISIN"></field:display>
 <field:display name="SISIN Sector" feature="SISIN"></field:display>
+<field:display name="Secondary Program" feature="NPD Programs"></field:display>
+<field:display name="Secondary Program" feature="Program"></field:display>
+<field:display name="Sector Group Add Organizations Button" feature="Sector Group"></field:display>
+<field:display name="Sector Group Remove Organizations Button" feature="Sector Group"></field:display>
 <field:display name="Sector" feature="Sectors"></field:display>
 <field:display name="Status" feature="Planning"></field:display>
 <field:display name="Sub Program Level 1" feature="NPD Dashboard"></field:display>

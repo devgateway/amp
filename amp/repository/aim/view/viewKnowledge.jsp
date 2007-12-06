@@ -170,8 +170,7 @@ function preview(id)
 
 										<TD align=right><module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Preview Activity" module="Previews">
-												<field:display feature="Preview Activity"
-													name="Preview Button">
+												<field:display feature="Preview Activity" name="Preview Button">
 													<input type="button"
 														value="<digi:trn key="aim:physical:preview">Preview</digi:trn>"
 														class="dr-menu"
@@ -180,8 +179,7 @@ function preview(id)
 											</feature:display>
 										</module:display> <module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Edit Activity" module="Previews">
-												<field:display feature="Edit Activity"
-													name="Edit Activity Button">
+												<field:display feature="Edit Activity" name="Edit Activity Button">
 													<input type="button"
 														value="<digi:trn key="aim:physical:edit">Edit</digi:trn>"
 														class="dr-menu"
@@ -190,8 +188,7 @@ function preview(id)
 											</feature:display>
 										</module:display> &nbsp; <module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Logframe" module="Previews">
-												<field:display name="Logframe Preview Button"
-													feature="Logframe">
+												<field:display name="Logframe Preview Button" feature="Logframe">
 													<input type="button" value="Preview Logframe"
 														class="dr-menu"
 														onclick="previewLogframe(<c:out value="${aimKnowledgeForm.id}"/>)">
@@ -200,8 +197,7 @@ function preview(id)
 										</module:display>
 										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Project Fiche" module="Previews">
-												<field:display name="Project Fiche Button"
-													feature="Project Fiche">
+												<field:display name="Project Fiche Button" feature="Project Fiche">
 													<input type='button'
 														value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>'
 														class='dr-menu'
@@ -300,8 +296,7 @@ function preview(id)
 																				value="${document.docDescription}" /></TD>
 																		</TR>
 																	</c:if>
-																	<field:display name="Document Comment"
-																		feature="Related Documents">
+																	<field:display name="Document Comment" feature="Related Documents">
 																		<logic:notEmpty name="document" property="docComment">
 																			<TR bgcolor="#f4f4f2">
 																				<TD width="98%" align="left" colspan="2">
@@ -325,8 +320,7 @@ function preview(id)
 																				name="document" property="docType" /></TD>
 																		</TR>
 																	</logic:notEmpty>
-																	<field:display name="Document Language"
-																		feature="Related Documents">
+																	<field:display name="Document Language" feature="Related Documents">
 																		<logic:notEmpty name="document" property="docLanguage">
 																			<TR bgcolor="#f4f4f2">
 																				<TD width="98%" align="left" colspan="2">

@@ -285,9 +285,7 @@ function gotoStep() {
                               </TD>
                             </TR>
                           </TABLE>
-                        </TD>
-                      </TR>
-                    </TABLE>
+                        
                   </TD>
                 </TR>
               </table>

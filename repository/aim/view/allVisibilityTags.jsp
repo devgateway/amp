@@ -332,7 +332,7 @@
 <field:display name="Physical Progress" feature="Physical Progress"></field:display>
 <field:display name="Physical progress description" feature="Physical Progress"></field:display>
 <field:display name="Physical progress title" feature="Physical Progress"></field:display>
-<field:display name="Primary Program" feature="NPD Programs"></field:display>
+<field:display name="Primary Program" feature="Program"></field:display>
 <field:display name="Primary Program" feature="Program"></field:display>
 <field:display name="Printer Friendly Button Performance" feature="Dashboard"></field:display>
 <field:display name="Printer Friendly Button Risk" feature="Dashboard"></field:display>
@@ -390,7 +390,7 @@
 <field:display name="SISIN Code" feature="SISIN"></field:display>
 <field:display name="SISIN Sector" feature="SISIN"></field:display>
 <field:display name="Secondary Program" feature="NPD Programs"></field:display>
-<field:display name="Secondary Program" feature="Program"></field:display>
+<field:display name="Secondary Program" feature="NPD Programs"></field:display>
 <field:display name="Sector Group Add Organizations Button" feature="Sector Group"></field:display>
 <field:display name="Sector Group Remove Organizations Button" feature="Sector Group"></field:display>
 <field:display name="Sector" feature="Sectors"></field:display>

@@ -174,7 +174,7 @@ method="post">
 										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Preview Activity" module="Previews">
 												<field:display feature="Preview Activity" name="Preview Button">
-	                                          		<html:button style="dr-menu" onclick="preview('${actId}')" property="previewBtn">
+	                                          		<html:button style="FONT-SIZE: 11px; COLOR: #313131" onclick="preview('${actId}')" property="previewBtn">
 		                                          		<digi:trn key="btn:preview">Preview</digi:trn>
 	                                          		</html:button>
 															&nbsp;
@@ -185,7 +185,7 @@ method="post">
 										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Edit Activity" module="Previews">
 												<field:display feature="Edit Activity" name="Edit Activity Button">
-													<html:button style="dr-menu" onclick="fnEditProject('${actId}')" property="editBtn">
+													<html:button style="FONT-SIZE: 11px; COLOR: #313131"" onclick="fnEditProject('${actId}')" property="editBtn">
 														<digi:trn key="btn:edit">Edit</digi:trn>
 													</html:button>
 												&nbsp;

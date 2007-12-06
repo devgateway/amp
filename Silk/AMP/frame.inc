@@ -34,7 +34,7 @@
 			[ ] "Sign In"
 			[ ] "$submitButton"
 [ ] 
-[-] window BrowserChild AMPShowAmpEvent  // After clicking create new event
+[+] window BrowserChild AMPShowAmpEvent  // After clicking create new event
 	[ ] tag "AMP Show Amp Event"
 	[ ] parent Browser
 	[+] HtmlTextField EventTitle
@@ -87,7 +87,7 @@
 	[+] HtmlPushButton Delete
 		[ ] tag "Delete"
 [ ] 
-[+] window BrowserChild AMPCalendar
+[-] window BrowserChild AMPCalendar
 	[ ] tag "AMP View Events"
 	[ ] parent Browser
 	[+] HtmlLink CreateNewEvent 

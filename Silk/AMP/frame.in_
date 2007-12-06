@@ -34,7 +34,7 @@
 			[ ] "Sign In"
 			[ ] "$submitButton"
 [ ] 
-[+] window BrowserChild AMPShowAmpEvent  // After clicking create new event
+[-] window BrowserChild AMPShowAmpEvent  // After clicking create new event
 	[ ] tag "AMP Show Amp Event"
 	[ ] parent Browser
 	[+] HtmlTextField EventTitle
@@ -45,7 +45,7 @@
 		[-] multitag "&name='selectedEventTypeId"
 			[ ] "Event Type"
 			[ ] "$selectedEventTypeId"
-	[-] HtmlLink AddOrganizations
+	[+] HtmlLink AddOrganizations
 		[-] multitag "Add Organizations"
 			[ ] "$?calendar?selectOrganization.do?orgSelReset=true?edit=true"
 	[+] HtmlTextField fromDate
@@ -62,7 +62,7 @@
 		[ ] tag "&id='selectedEndMinute'"
 	[+] HtmlPushButton Preview
 		[ ] tag "Preview"
-	[+] HtmlList Gregorian
+	[-] HtmlList Gregorian
 		[ ] tag "Gregorian"
 	[+] HtmlListBox Users
 		[-] multitag "&id='usersList'"
@@ -87,7 +87,7 @@
 	[+] HtmlPushButton Delete
 		[ ] tag "Delete"
 [ ] 
-[-] window BrowserChild AMPCalendar
+[+] window BrowserChild AMPCalendar
 	[ ] tag "AMP View Events"
 	[ ] parent Browser
 	[+] HtmlLink CreateNewEvent 
@@ -107,11 +107,11 @@
 			[ ] 
 	[+] HtmlPushButton Show
 		[ ] tag "Show"
-	[-] HtmlLink NewEventForTest
+	[+] HtmlLink NewEventForTest
 		[-] multitag "New Event for Test[1]"
 			[ ] "$?calendar?showCalendarEvent.do"
 	[+] HtmlCheckBox ShowPublicEvents
-		[-] multitag "&id='showPublicEvents';name='filter.showPublicEvents'"
+		[+] multitag "&id='showPublicEvents';name='filter.showPublicEvents'"
 			[ ] "Show public events"
 			[ ] "$filter.showPublicEvents"
 	[+] HtmlTable View
@@ -119,7 +119,7 @@
 			[ ] "$tbl"
 		[+] HtmlColumn Yearly
 			[ ] tag "Yearly View"
-			[+] HtmlLink View
+			[-] HtmlLink View
 				[-] multitag "Yearly View"
 					[ ] "$http:??amp-demo.code.ro?TEMPLATE?ampTemplate?#"
 		[+] HtmlColumn Monthly
@@ -305,7 +305,7 @@
 		[-] multitag "&name='fileData'"
 			[ ] "$fileData"
 [ ] 
-[-] window BrowserChild AMPAddActivityStep1
+[+] window BrowserChild AMPAddActivityStep1
 	[ ] tag "AMP - Add Activity - Identification*"
 	[ ] parent Browser
 	[+] HtmlTextField ProjectTitle

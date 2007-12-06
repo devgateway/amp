@@ -318,8 +318,8 @@
 <field:display name="Ministry of Planning Rank" feature="Planning"></field:display>
 <field:display name="Minorities" feature="Cross Cutting Issues"></field:display>
 <field:display name="NPD Program Description" feature="Program"></field:display>
-<field:display name="National Plan Objective" feature="NPD Programs"></field:display>
-<field:display name="National Planning Objectives" feature="Program"></field:display>
+<field:display name="National Plan Objective" feature="Program"></field:display>
+<field:display name="National Planning Objectives" feature="NPD Programs"></field:display>
 <field:display name="Objective" feature="Identification"></field:display>
 <field:display name="Organizations Selector" feature="Funding Organizations"></field:display>
 <field:display name="Organizations and Project ID" feature="Identification"></field:display>
@@ -332,8 +332,7 @@
 <field:display name="Physical Progress" feature="Physical Progress"></field:display>
 <field:display name="Physical progress description" feature="Physical Progress"></field:display>
 <field:display name="Physical progress title" feature="Physical Progress"></field:display>
-<field:display name="Primary Program" feature="Program"></field:display>
-<field:display name="Primary Program" feature="Program"></field:display>
+<field:display name="Primary Program" feature="NPD Programs"></field:display>
 <field:display name="Printer Friendly Button Performance" feature="Dashboard"></field:display>
 <field:display name="Printer Friendly Button Risk" feature="Dashboard"></field:display>
 <field:display name="Program Background" feature="Admin NPD"></field:display>

@@ -242,7 +242,7 @@ method="post">
 								Activity - Performance</digi:trn>
 
 							</TD>
-							</feature:display>
+							</field:display>
 							<field:display name="Project Performance"  feature="Dashboard">
 
 							<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">

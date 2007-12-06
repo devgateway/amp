@@ -175,7 +175,7 @@ public class HelpActions extends DispatchAction {
 		form.setFirstLevelTopics(new ArrayList<HelpTopic>());
 		for (HelpTopic helpTopic : parentTopics) {	
 			if(!helpTopic.getHelpTopicId().equals(topic.getHelpTopicId())){
-				helpTopic.setTitleTrnKey(TranslatorWorker.translate(helpTopic.getTitleTrnKey(), locale, siteId)); 			
+				//helpTopic.setTitleTrnKey(TranslatorWorker.translate(helpTopic.getTitleTrnKey(), locale, siteId)); 			
 				form.getFirstLevelTopics().add(helpTopic);
 			}		
 			

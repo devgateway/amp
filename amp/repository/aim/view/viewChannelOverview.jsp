@@ -165,9 +165,8 @@ function commentWin(val) {
 															<feature:display name="Preview Activity" module="Previews">
 																<field:display feature="Preview Activity" name="Preview Button">
 																	<td>
-																		<html:button style="dr-menu" onclick="preview(${activity.activityId})" property="previewBtn">
-						                                          			<digi:trn key="btn:preview">Preview</digi:trn>
-																		</html:button>
+																		<input type="button" value="<digi:trn key='btn:preview'>Preview</digi:trn>" class="dr-menu"
+																			onclick="preview(${activity.activityId})" >
 																	</td>
 
 																</field:display>
@@ -177,9 +176,9 @@ function commentWin(val) {
 															<feature:display name="Edit Activity" module="Previews">
 																<field:display feature="Edit Activity" name="Edit Activity Button">
 																<td>
-																	<html:button style="dr-menu"  onclick="fnEditProject(${activity.activityId})" property="editBtn">
-																		<digi:trn key="btn:edit">Edit</digi:trn>
-																	</html:button>
+																	<input type="button" value="<digi:trn key='btn:edit'>Edit</digi:trn>" class="dr-menu"
+																		onclick="fnEditProject(${activity.activityId})">
+																	&nbsp;
 																</td>
 
 																</field:display>
@@ -190,9 +189,7 @@ function commentWin(val) {
 															<feature:display name="Logframe" module="Previews">
 																<field:display name="Logframe Preview Button" feature="Logframe" >
 																	<td >
-																		<html:button  style="dr-menu" onclick="previewLogframe(${activity.activityId})" property="logframeBtn">
-																			<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn>
-																		</html:button>
+																		<input type="button" value="<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn>" class="dr-menu"	onclick="previewLogframe(${activity.activityId})">
 																	</td>
 
 																</field:display>
@@ -209,7 +206,7 @@ function commentWin(val) {
 														</c:if>
 				                                        <c:if test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
 				                                        	<td >
-				                                        		<html:button  style="dr-menu" disabled="true" property="validateBtn">
+				                                        		<html:button  style="FONT-SIZE: 11px; COLOR: #313131" disabled="true" property="validateBtn">
 																	<digi:trn key="aim:approvalAwaited">Approval Awaited</digi:trn>
 																</html:button>
 				                                        	</td>
@@ -221,9 +218,8 @@ function commentWin(val) {
 																<field:display name="Project Fiche Button" feature="Project Fiche" >
 
 																	<td>
-																		<html:button style="dr-menu" onclick='projectFiche(${activity.activityId})' property="projectFicheBtn">
-																			<digi:trn key="btn:projectFiche">Project Fiche</digi:trn>
-																		</html:button>
+																		<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu'
+																			onclick='projectFiche(${activity.activityId})'>
 																	</td>
 
 																</field:display>

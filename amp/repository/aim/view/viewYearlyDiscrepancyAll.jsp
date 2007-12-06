@@ -22,7 +22,9 @@
 <c:set target="${urlSubTabs}" property="ampFundingId">
 	<bean:write name="aimYearlyDiscrepancyAllForm" property="ampFundingId"/>
 </c:set>
-<c:set target="${urlSubTabs}" property="tabIndex" value="1"/>
+<c:set target="${urlSubTabs}" property="tabIndex">
+	<bean:write name="aimYearlyDiscrepancyAllForm" property="tabIndex"/>
+</c:set>
 <c:set target="${urlSubTabs}" property="transactionType" value="0"/>
 
 <jsp:useBean id="urlFinancialOverview" type="java.util.Map" class="java.util.HashMap"/>
@@ -40,13 +42,17 @@
 <c:set target="${urlAll}" property="ampActivityId">
 	<bean:write name="aimYearlyDiscrepancyAllForm" property="ampActivityId"/>
 </c:set>
-<c:set target="${urlAll}" property="tabIndex" value="1"/>
+<c:set target="${urlAll}" property="tabIndex">
+	<bean:write name="aimYearlyDiscrepancyAllForm" property="tabIndex"/>
+</c:set>
 
 <jsp:useBean id="urlDiscrepancy" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${urlDiscrepancy}" property="ampActivityId">
 	<bean:write name="aimYearlyDiscrepancyAllForm" property="ampActivityId"/>
 </c:set>
-<c:set target="${urlDiscrepancy}" property="tabIndex" value="1"/>
+<c:set target="${urlDiscrepancy}" property="tabIndex" >
+	<bean:write name="aimYearlyDiscrepancyAllForm" property="tabIndex"/>
+</c:set>
 <c:set target="${urlDiscrepancy}" property="transactionType" value="0"/>
 
 <digi:form action="/viewYearlyDiscrepancyAllFilter.do" name="aimYearlyDiscrepancyAllForm" type="org.digijava.module.aim.form.YearlyDiscrepancyAllForm" method="post">
@@ -54,8 +60,8 @@
 			        <td width="100%" nowrap >
 			        	<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding">
 							<tr bgcolor="#222E5D"> 
-						  		<td style="color: #C9C9C7">&nbsp; &nbsp; &nbsp;
-						<c:set var="translation">
+						  		<td height="20" style="color: #C9C9C7">&nbsp; &nbsp; &nbsp;
+					  <c:set var="translation">
 							<digi:trn key="aim:clickToViewFinancialOverview">Click here to view Financial Overview</digi:trn>
 						</c:set>
 						  			<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" styleClass="sub-nav2" title="${translation}" >
@@ -97,7 +103,7 @@
 					  					<digi:trn key="aim:discrepancyAll">DISCREPANCY ALL</digi:trn>
 					  				</span>
 								</td>
-			    			</tr>
+		    			  </tr>
 			    		</table>
 			    	</td>		
 				</tr>		
@@ -107,7 +113,9 @@
 					<c:set target="${urlFinancingBreakdown}" property="ampActivityId">
 					<bean:write name="aimYearlyDiscrepancyAllForm" property="ampActivityId"/>
 					</c:set>
-					<c:set target="${urlFinancingBreakdown}" property="tabIndex" value="1"/>
+					<c:set target="${urlFinancingBreakdown}" property="tabIndex" >
+						<bean:write name="aimYearlyDiscrepancyAllForm" property="tabIndex"/>
+					</c:set>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>
 					</c:set>

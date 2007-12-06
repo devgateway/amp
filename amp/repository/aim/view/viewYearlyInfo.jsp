@@ -44,7 +44,9 @@
 
 </c:set>
 
-<c:set target="${urlSubTabs}" property="tabIndex" value="1"/>
+<c:set target="${urlSubTabs}" property="tabIndex">
+	<bean:write name="aimYearlyInfoForm" property="tabIndex"/>
+</c:set>
 
 <c:set target="${urlSubTabs}" property="transactionType" value="0"/>
 
@@ -70,7 +72,9 @@
 
 </c:set>
 
-<c:set target="${urlFinancialOverview}" property="tabIndex" value="1"/>
+<c:set target="${urlFinancialOverview}" property="tabIndex">
+	<bean:write name="aimYearlyInfoForm" property="tabIndex"/>
+</c:set>
 
 
 
@@ -88,7 +92,9 @@
 
 </c:set>
 
-<c:set target="${urlAll}" property="tabIndex" value="1"/>
+<c:set target="${urlAll}" property="tabIndex">
+	<bean:write name="aimYearlyInfoForm" property="tabIndex"/>
+</c:set>
 
 
 
@@ -106,6 +112,9 @@
 
 </c:set>
 
+<c:set target="${urlDiscrepancy}" property="tabIndex">
+	<bean:write name="aimYearlyInfoForm" property="tabIndex"/>
+</c:set>
 
 
 <digi:form action="/viewYearlyInfoFilter.do" name="aimYearlyInfoForm" type="org.digijava.module.aim.form.YearlyInfoForm" method="post">
@@ -278,7 +287,9 @@
 
 							</c:set>
 
-							<c:set target="${urlFinancingBreakdown}" property="tabIndex" value="1"/>
+							<c:set target="${urlFinancingBreakdown}" property="tabIndex">
+								<bean:write name="aimYearlyInfoForm" property="tabIndex"/>
+							</c:set>
 
 							<c:set var="translation">
 

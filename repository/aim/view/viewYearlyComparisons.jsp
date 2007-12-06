@@ -48,7 +48,9 @@
 
 </c:set>
 
-<c:set target="${urlSubTabs}" property="tabIndex" value="1"/>
+<c:set target="${urlSubTabs}" property="tabIndex" >
+	<bean:write name="aimYearlyComparisonsForm" property="tabIndex"/>
+</c:set>
 
 <c:set target="${urlSubTabs}" property="transactionType" value="0"/>
 
@@ -86,7 +88,10 @@
 
 </c:set>
 
-<c:set target="${urlDiscrepancy}" property="tabIndex" value="1"/>
+<c:set target="${urlDiscrepancy}" property="tabIndex"  >
+	<bean:write name="aimYearlyComparisonsForm" property="tabIndex"/>
+</c:set>
+
 
 <c:set target="${urlDiscrepancy}" property="transactionType" value="0"/>
 
@@ -216,7 +221,10 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 							</c:set>
 
-							<c:set target="${urlFinancingBreakdown}" property="tabIndex" value="1"/>
+							<c:set target="${urlFinancingBreakdown}" property="tabIndex"  >
+									<bean:write name="aimYearlyComparisonsForm" property="tabIndex"/>
+							</c:set>
+
 
 							<c:set var="translation">
 
@@ -1062,7 +1070,11 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																</c:set>																
 
-																<c:set target="${urlShowQuarterly}" property="tabIndex" value="1"/>
+																<c:set target="${urlShowQuarterly}" property="tabIndex"  >
+																	<bean:write name="aimYearlyComparisonsForm" property="tabIndex"/>
+																</c:set>
+
+
 
 							<c:set var="translation">
 

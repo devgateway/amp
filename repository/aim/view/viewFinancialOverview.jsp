@@ -16,6 +16,7 @@
 </logic:equal>
 
 <logic:equal name="aimFinancialOverviewForm" property="sessionExpired" value="false">
+
 <jsp:useBean id="urlSubTabs" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${urlSubTabs}" property="ampActivityId">
 	<bean:write name="aimFinancialOverviewForm" property="ampActivityId"/>
@@ -23,7 +24,9 @@
 <c:set target="${urlSubTabs}" property="ampFundingId">
 	<bean:write name="aimFinancialOverviewForm" property="ampFundingId"/>
 </c:set>
-<c:set target="${urlSubTabs}" property="tabIndex" value="1"/>
+<c:set target="${urlSubTabs}" property="tabIndex"  >
+	<bean:write name="aimFinancialOverviewForm" property="tabIndex"/>
+</c:set>
 <c:set target="${urlSubTabs}" property="transactionType" value="0"/>
 
 <jsp:useBean id="urlAll" type="java.util.Map" class="java.util.HashMap"/>
@@ -33,13 +36,18 @@
 <c:set target="${urlAll}" property="ampFundingId">
 	<bean:write name="aimFinancialOverviewForm" property="ampFundingId"/>
 </c:set>
-<c:set target="${urlAll}" property="tabIndex" value="1"/>
+<c:set target="${urlAll}" property="tabIndex">
+	<bean:write name="aimFinancialOverviewForm" property="tabIndex"/>
+</c:set>
 
 <jsp:useBean id="urlDiscrepancy" type="java.util.Map" class="java.util.HashMap"/>
 <c:set target="${urlDiscrepancy}" property="ampActivityId">
 	<bean:write name="aimFinancialOverviewForm" property="ampActivityId"/>
 </c:set>
-<c:set target="${urlDiscrepancy}" property="tabIndex" value="1"/>
+<c:set target="${urlDiscrepancy}" property="tabIndex">
+	<bean:write name="aimFinancialOverviewForm" property="tabIndex"/>
+</c:set>
+
 <c:set target="${urlDiscrepancy}" property="transactionType" value="0"/>
 
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
@@ -85,7 +93,7 @@
 					</digi:link>	
 				</TD></TR>			
 				<TR bgColor=#f4f4f2>
-            	<TD align=left>
+            	<TD align=left><html:hidden property="tabIndex" />
 						<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
 							<TR>
 								<TD align="left">
@@ -94,7 +102,9 @@
 										<c:set target="${urlFinancingBreakdown}" property="ampActivityId">
 											<bean:write name="aimFinancialOverviewForm" property="ampActivityId"/>
 										</c:set>
-										<c:set target="${urlFinancingBreakdown}" property="tabIndex" value="1"/>
+										<c:set target="${urlFinancingBreakdown}" property="tabIndex" >
+											<bean:write name="aimFinancialOverviewForm" property="tabIndex"/>
+										</c:set>
 										<c:set var="translation">
 											<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>
 										</c:set>

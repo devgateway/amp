@@ -185,7 +185,7 @@ method="post">
 										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Edit Activity" module="Previews">
 												<field:display feature="Edit Activity" name="Edit Activity Button">
-													<html:button style="FONT-SIZE: 11px; COLOR: #313131"" onclick="fnEditProject('${actId}')" property="editBtn">
+													<html:button style="FONT-SIZE: 11px; COLOR: #313131" onclick="fnEditProject('${actId}')" property="editBtn">
 														<digi:trn key="btn:edit">Edit</digi:trn>
 													</html:button>
 												&nbsp;
@@ -196,7 +196,7 @@ method="post">
 										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Logframe" module="Previews">
 													<field:display name="Logframe Preview Button" feature="Logframe" >
-														<html:button property="logframe" style="dr-menu" onclick="previewLogframe(${actId})">
+														<html:button property="logframe" style="FONT-SIZE: 11px; COLOR: #313131" onclick="previewLogframe(${actId})">
 															<digi:trn key="btn:previewLogframe">Preview Logframe</digi:trn>
 														</html:button>
 															&nbsp;
@@ -206,7 +206,7 @@ method="post">
 										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Project Fiche" module="Previews">
 													<field:display name="Project Fiche Button" feature="Project Fiche" >
-														<html:button  style="dr-menu" onclick='projectFiche(${actId})' property="projectFiche">
+														<html:button  style="FONT-SIZE: 11px; COLOR: #313131" onclick='projectFiche(${actId})' property="projectFiche">
 															<digi:trn key="btn:projectFiche">Project Fiche</digi:trn>
 														</html:button>
 													</field:display>

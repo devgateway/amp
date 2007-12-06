@@ -176,12 +176,14 @@
 	[ ] AMPShowAmpEvent.Delete.Click ()
 	[ ] BrowserMessage.SetActive ()
 	[ ] BrowserMessage.OK.Click()
+	[ ] sleep(3)
 	[+] AMPCalendar.CreateNewEvent.VerifyProperties ({...})
 		[ ] ""
 		[-] {...}
 			[ ] {"Enabled",              TRUE}
 			[ ] {"Exists",               TRUE}
 			[ ] {"Text",                 "Create New Event"}
+	[ ] sleep(1)
 	[-] AMPCalendar.NewEventForTest.VerifyProperties ({...})
 		[ ] ""
 		[-] {...}

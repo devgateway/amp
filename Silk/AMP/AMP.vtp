@@ -21,6 +21,7 @@ Source=calendar.t
 Source=dmm.t
 EndFolder=TRUE
 [ProjectPlan]
+Source=testplan1.pln
 EndFolder=TRUE
 [ProjectResults]
 EndFolder=TRUE

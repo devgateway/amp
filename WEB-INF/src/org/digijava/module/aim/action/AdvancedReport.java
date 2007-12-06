@@ -1499,7 +1499,7 @@ public class AdvancedReport extends Action {
 						if("donor".compareTo(reportType)==0)
 						{
 							aux.add(acv.getAmpColumn());
-							System.out.println(++jjj+". "+acv.getAmpColumn().getColumnName());
+							//System.out.println(++jjj+". "+acv.getAmpColumn().getColumnName());
 							added=true;
 						}
 						//the contribution report doesn't have access to columns 33-38 from amp_columns
@@ -1508,7 +1508,7 @@ public class AdvancedReport extends Action {
 							if(acv.getAmpColumn().getColumnId().intValue()<33 || acv.getAmpColumn().getColumnId().intValue()>38) 
 								{
 									aux.add(acv.getAmpColumn());
-									System.out.println(++jjj+". "+acv.getAmpColumn().getColumnName());
+								//	System.out.println(++jjj+". "+acv.getAmpColumn().getColumnName());
 									added=true;
 								}
 						}
@@ -1520,7 +1520,7 @@ public class AdvancedReport extends Action {
 							if((acv.getAmpColumn().getColumnId().intValue()<33 || acv.getAmpColumn().getColumnId().intValue()>38) && acv.getAmpColumn().getColumnId().intValue()!=5) 
 							{
 								aux.add(acv.getAmpColumn());
-								System.out.println(++jjj+". "+acv.getAmpColumn().getColumnName());
+						//		System.out.println(++jjj+". "+acv.getAmpColumn().getColumnName());
 								added=true;
 							}
 						}

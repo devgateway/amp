@@ -106,10 +106,15 @@
 																					<td align="right"><digi:trn key="help:selectGroup">Select group</digi:trn></td>
 																					<td align="left">
 																						<c:if test="${not empty helpForm.firstLevelTopics}">
-																							<html:select property="parentId" name="helpForm">
+																							<html:select property="parentId" name="helpForm" styleClass="inp-text">
 																								<html:option value=""><digi:trn key="help:noGroup">No group</digi:trn></html:option>
-																								<html:optionsCollection name="helpForm" property="firstLevelTopics" value="helpTopicId" label="titleTrnKey" />
-																							</html:select>
+																									<logic:iterate id="firstLevTopic" name="helpForm" property="firstLevelTopics">																		
+																										<c:set var="trn">
+																											<digi:trn key="${firstLevTopic.titleTrnKey}">${firstLevTopic.titleTrnKey}</digi:trn>
+																										</c:set>
+																										<html:option value="${firstLevTopic.helpTopicId}">${trn}</html:option>																		
+																									</logic:iterate>
+																							</html:select>	
 																						</c:if>
 																					</td>
 																				</tr>
@@ -304,10 +309,15 @@
 																					<td align="right"><digi:trn key="help:selectGroup">Select group</digi:trn></td>
 																					<td align="left">
 																						<c:if test="${not empty helpForm.firstLevelTopics}">
-																							<html:select property="parentId" name="helpForm">
+																							<html:select property="parentId" name="helpForm" styleClass="inp-text">
 																								<html:option value=""><digi:trn key="help:noGroup">No group</digi:trn></html:option>
-																								<html:optionsCollection name="helpForm" property="firstLevelTopics" value="helpTopicId" label="titleTrnKey" />
-																							</html:select>
+																									<logic:iterate id="firstLevTopic" name="helpForm" property="firstLevelTopics">																		
+																										<c:set var="trn">
+																											<digi:trn key="${firstLevTopic.titleTrnKey}">${firstLevTopic.titleTrnKey}</digi:trn>
+																										</c:set>
+																										<html:option value="${firstLevTopic.helpTopicId}">${trn}</html:option>																		
+																									</logic:iterate>
+																							</html:select>	
 																						</c:if>
 																					</td>
 																				</tr>

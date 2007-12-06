@@ -151,9 +151,12 @@
                               <c:set var="translation">
                                 <digi:trn key="aim:activityImportExportManager">Click here to view Activity import/export Manager</digi:trn>
                               </c:set>
-                              <digi:link module="ampharvester" href="/ieManager.do?actionType=load">
+                              
+                              <digi:link module="ampharvester" href="/ieManager.do?actionType=load" title="${translation}">
                                 <digi:trn key="aim:importExportManager">Activity import/export Manager</digi:trn>
                               </digi:link>
+                            
+                            
                             </td>
                           </tr>
                           <tr>
@@ -162,7 +165,7 @@
                               <c:set var="translation">
                                 <digi:trn key="aim:tipUserManager">Click here to view User Manager</digi:trn>
                               </c:set>
-                              <digi:link module="um" href="/viewAllUsers.do">
+                              <digi:link module="um" href="/viewAllUsers.do" title="${translation}">
                                 <digi:trn key="aim:UsertManager">User Manager</digi:trn>
                               </digi:link>
                             </td>

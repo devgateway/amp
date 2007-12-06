@@ -966,7 +966,7 @@ function viewChanges()
 										</td>
 									</tr>
 									</feature:display>
-									<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+									<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD"></module:display>
 									<feature:display name="NPD Programs" module="National Planning Dashboard">
 									<field:display name="National Plan Objective" feature="NPD Programs">
 										<TR>
@@ -984,7 +984,7 @@ function viewChanges()
 												</TD>
 										</TR>
                                       </field:display> 
-                                      <field:display name="Primary Program" feature="NPD Programs">
+                                     <field:display name="Secondary Program" feature="NPD Programs">
                                            <TR>
 												<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 													<img id="npd_primaryprog_plus"  onclick="toggleGroup('npd_primaryprog')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
@@ -1090,7 +1090,6 @@ function viewChanges()
 										</td>
 									</tr>
 									</field:display>
-									</module:display>
 								<logic:present name="currentMember" scope="session">
 									<module:display name="Funding" parentModule="PROJECT MANAGEMENT">
 									<tr>

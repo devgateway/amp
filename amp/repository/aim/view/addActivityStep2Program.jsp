@@ -137,7 +137,7 @@
                                       </tr>
 									  </field:display>
 
-									  <field:display name="Primary Program" feature="Program">
+									 <field:display name="Secondary Program" feature="NPD Programs">
                                        <tr>
                                         <td>
                                           <table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">
@@ -212,7 +212,7 @@
                                       </tr>
 									  </field:display>
 
-									  <field:display name="Secondary Program" feature="Program">
+									  <field:display name="Secondary Program" feature="NPD Programs">
                                        <tr>
                                         <td>
                                           <table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">

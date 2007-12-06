@@ -142,7 +142,10 @@ public class ViewEditUser extends Action {
                 uForm.setAssignedOrgId(user.getAssignedOrgId());
                 if(user.getAssignedOrgId()!=null) {
                     uForm.setOrgs(new ArrayList<AmpOrganisation>());
-                    uForm.getOrgs().add(org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId()));
+                    AmpOrganisation organization = org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId());
+                    if(organization != null){ 
+                    	uForm.getOrgs().add(organization);
+                    }
                 
                 }
                 

@@ -209,7 +209,7 @@ public class EditOrganisation
         editForm.setOrgGroupColl(sortedCol);
       }
     }
-    Collection orgGroup = new ArrayList();
+    Collection orgGroup = DbUtil.getAllOrgGroups();
     editForm.setOrgGroup(orgGroup);
 
     //Collection country = DbUtil.getAllCountries();
@@ -239,9 +239,10 @@ public class EditOrganisation
          editForm.setOrgGroup(orgGroup);
          if ("edit".equals(action))
           editForm.setFlag("delete");
-                 } */
-        //orgGroup = DbUtil.getAllOrgGroupByType(editForm.getAmpOrgTypeId());
-        //editForm.setOrgGroup(orgGroup);
+                 }*/ 
+        
+//        orgGroup = DbUtil.getAllOrgGroupByType(editForm.getAmpOrgTypeId());
+//        editForm.setOrgGroup(orgGroup);
         Iterator itr = editForm.getOrgGroupColl().iterator();
         while (itr.hasNext()) {
           AmpOrgGroup og = (AmpOrgGroup) itr.next();

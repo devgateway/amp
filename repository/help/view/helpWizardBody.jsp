@@ -105,20 +105,18 @@
 																				<tr>
 																					<td align="right"><digi:trn key="help:selectGroup">Select group</digi:trn></td>
 																					<td align="left">
-																						<c:if test="${not empty helpForm.firstLevelTopics}">
 																							<html:select property="parentId" name="helpForm" styleClass="inp-text">
 																								<html:option value=""><digi:trn key="help:noGroup">No group</digi:trn></html:option>
 																									<logic:iterate id="firstLevTopic" name="helpForm" property="firstLevelTopics">	
-																										<c:set var="trn">
-																											<digi:trn key="help:firstLeveltopics:${firstLevTopic.helpTopicId}">${firstLevTopic.titleTrnKey}</digi:trn>
+																										<c:set var="trn2">
+																											<digi:trn key="${firstLevTopic.titleTrnKey}">${firstLevTopic.titleTrnKey}</digi:trn>
 																										</c:set>
-																										<html:option value="${firstLevTopic.helpTopicId}">${trn}</html:option>																		
+																										<html:option value="${firstLevTopic.helpTopicId}">${trn2}</html:option>																		
 																									</logic:iterate>
-																							</html:select>	
-																						</c:if>
+																							</html:select>																							
 																					</td>
 																				</tr>
-																				</c:if>																				
+																				</c:if>																																		
 																				<tr>
 																					<td colspan="2">
 																						<table width="100%">
@@ -309,13 +307,14 @@
 																					<td align="right"><digi:trn key="help:selectGroup">Select group</digi:trn></td>
 																					<td align="left">
 																						<c:if test="${not empty helpForm.firstLevelTopics}">
+
 																							<html:select property="parentId" name="helpForm" styleClass="inp-text">
 																								<html:option value=""><digi:trn key="help:noGroup">No group</digi:trn></html:option>
 																									<logic:iterate id="firstLevTopic" name="helpForm" property="firstLevelTopics">																		
-																										<c:set var="trn">
-																											<digi:trn key="help:firstLeveltopics:${firstLevTopic.helpTopicId}">${firstLevTopic.titleTrnKey}</digi:trn>
+																										<c:set var="trn1">
+																											<digi:trn key="${firstLevTopic.titleTrnKey}">${firstLevTopic.titleTrnKey}</digi:trn>
 																										</c:set>
-																										<html:option value="${firstLevTopic.helpTopicId}">${trn}</html:option>																		
+																										<html:option value="${firstLevTopic.helpTopicId}">${trn1}</html:option>																		
 																									</logic:iterate>
 																							</html:select>	
 																						</c:if>

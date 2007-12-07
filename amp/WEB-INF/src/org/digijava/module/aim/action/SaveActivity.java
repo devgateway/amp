@@ -151,7 +151,7 @@ public class SaveActivity extends Action {
 			CategoryManagerUtil.addCategoryToSet(eaForm.getLevelId(), activity.getCategories() );
 			CategoryManagerUtil.addCategoryToSet(eaForm.getGbsSbs(), activity.getCategories() );
                         CategoryManagerUtil.addCategoryToSet(eaForm.getImplemLocationLevel(), activity.getCategories() );
-                        CategoryManagerUtil.addCategoryToSet(eaForm.getActivityLevel(), activity.getCategories());                        
+                        CategoryManagerUtil.addCategoryToSet(eaForm.getActivityLevel(), activity.getCategories());
 			/* END - Saving categories to AmpActivity */
 
 			/* Saving related documents into AmpActivity */
@@ -215,8 +215,9 @@ public class SaveActivity extends Action {
 					while (itr1.hasNext()) {
 						FundingOrganization fOrg = (FundingOrganization) itr1
 								.next();
-						if (fOrg.getAmpOrgId().longValue() == eaForm
-								.getFundDonor().longValue()) {
+                            if (fOrg.getAmpOrgId()!=null &&
+								eaForm.getFundDonor()!=null &&
+                                fOrg.getAmpOrgId().longValue() == eaForm.getFundDonor().longValue()) {
 							// add fundings
 							if (fOrg.getFundings() != null) {
 								Iterator itr2 = fOrg.getFundings().iterator();
@@ -1336,7 +1337,7 @@ public class SaveActivity extends Action {
 					// Setting approval status of activity
 					activity.setApprovalStatus(eaForm.getApprovalStatus());
                                         activity.setActivityCreator(eaForm.getCreatedBy());
-                    
+
                     List<String> auditTrail = AuditLoggerUtil.generateLogs(
 												activity, eaForm.getActivityId());
 					// update an existing activity
@@ -1344,11 +1345,11 @@ public class SaveActivity extends Action {
 							true, eaForm.getCommentsCol(), eaForm
 									.isSerializeFlag(), field, relatedLinks, tm
 									.getMemberId(), eaForm.getIndicatorsME(),tempComp);
-					
+
 					//for logging the activity
 					AuditLoggerUtil.logActivityUpdate(session, request,
 												activity, auditTrail);
-					
+
 					// remove the activity details from the edit activity list
 					if (toDelete == null
 							|| (!toDelete.trim().equalsIgnoreCase("true"))) {
@@ -1391,7 +1392,7 @@ public class SaveActivity extends Action {
 					activity.setCreatedDate(cal.getTime());
 					// Setting approval status of activity
 					activity.setApprovalStatus(eaForm.getApprovalStatus());
-					
+
 					// create a new activity
 					actId = ActivityUtil.saveActivity(activity, null, false, eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
 	                        field, relatedLinks,tm.getMemberId() , eaForm.getIndicatorsME(), tempComp);

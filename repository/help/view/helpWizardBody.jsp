@@ -313,7 +313,7 @@
 																								<html:option value=""><digi:trn key="help:noGroup">No group</digi:trn></html:option>
 																									<logic:iterate id="firstLevTopic" name="helpForm" property="firstLevelTopics">																		
 																										<c:set var="trn">
-																											<digi:trn key="${firstLevTopic.titleTrnKey}">${firstLevTopic.titleTrnKey}</digi:trn>
+																											<digi:trn key="help:firstLeveltopics:${firstLevTopic.helpTopicId}">${firstLevTopic.titleTrnKey}</digi:trn>
 																										</c:set>
 																										<html:option value="${firstLevTopic.helpTopicId}">${trn}</html:option>																		
 																									</logic:iterate>

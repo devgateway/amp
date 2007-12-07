@@ -37,7 +37,7 @@ public class SearchAmpIndicators extends Action {
 
 		ThemeForm eaForm = (ThemeForm) form;
 
-		if(eaForm.getAction().equals("clear")){
+		if(eaForm.getAction()!=null && eaForm.getAction().equals("clear")){
 
 			eaForm.setSectorName("-1");
 			eaForm.setKeyword("");

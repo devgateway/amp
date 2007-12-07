@@ -22,6 +22,13 @@ public class AssignNewIndicator
         
         Collection allSectors = SectorUtil.getAllSectors();
         allIndForm.setAllSectors(allSectors);
+        allIndForm.setTempNumResults(10);
+        allIndForm.setSectorName("");
+        allIndForm.setKeyword("");
+        allIndForm.setPagedCol(null);
+        
+        
+        
      
         return mapping.findForward("forward");
     }

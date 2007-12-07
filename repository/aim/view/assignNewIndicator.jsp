@@ -179,6 +179,12 @@ function searchAlpha(val) {
 			  return true;
 		}
 	}
+	
+	function clearform(){
+	 <digi:context name="searchInd" property="context/module/moduleinstance/searchindicators.do?action=clear"/>
+	  document.aimThemeForm.action = "<%= searchInd %>";
+	  document.aimThemeForm.submit();
+	}
 
 function closeWindow() 
 	{
@@ -251,9 +257,10 @@ function closeWindow()
 											<html:button  styleClass="dr-menu" property="submitButton" onclick="return searchindicators()">
 												<digi:trn key="btn:search">Search</digi:trn> 
 											</html:button>
-											<html:reset  styleClass="dr-menu" property="submitButton">
+											&nbsp;
+											<html:button  styleClass="dr-menu" property="submitButton" onclick="clearform()" >
 												<digi:trn key="btn:clear">Clear</digi:trn> 
-											</html:reset>
+											</html:button>
 											&nbsp;
 											<html:button  styleClass="dr-menu" property="submitButton" onclick="closeWindow()">
 												<digi:trn key="btn:close">Close</digi:trn> 

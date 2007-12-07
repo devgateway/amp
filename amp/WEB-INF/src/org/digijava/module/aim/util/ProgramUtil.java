@@ -31,6 +31,7 @@ import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.kernel.util.collections.HierarchyMemberFactory;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
@@ -137,6 +138,31 @@ public class ProgramUtil {
 			return theme;
 		}
 
+		/**
+         * Returns AmpThemeIndicators.
+         * @param keyword String -
+         * @return Coll AmpThemeIndicators
+         */
+	
+		public static Collection getThemeindicators(String keyword) {
+			Session session = null;
+			Query qry = null;
+			Collection ThemeIndicators = new ArrayList();
+			keyword=keyword.toLowerCase();
+
+			try {
+				  session = PersistenceManager.getRequestDBSession();
+				String queryString = "select t from " + AmpThemeIndicators.class.getName()
+						+ " t where lower(name) like '%"+keyword+"%'";
+				qry = session.createQuery(queryString);
+				ThemeIndicators = qry.list();
+			} catch (Exception e) {
+				logger.error("Unable to get all themes : "+e);
+				logger.debug("Exceptiion " + e);
+			} 
+			return ThemeIndicators;
+		}
+		
         public static AmpTheme getThemeById(Long ampThemeId) {
             Session session = null;
             AmpTheme theme = null;

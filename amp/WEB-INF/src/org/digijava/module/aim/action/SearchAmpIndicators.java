@@ -35,10 +35,20 @@ public class SearchAmpIndicators extends Action {
 			javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
 
-		ThemeForm eaForm = (ThemeForm) form;  
+		ThemeForm eaForm = (ThemeForm) form;
+
+		if(eaForm.getAction().equals("clear")){
+
+			eaForm.setSectorName("-1");
+			eaForm.setKeyword("");
+			eaForm.setCols(null);
+			eaForm.setPagedCol(null);
+			eaForm.setAction("");
+			
+		}
 		eaForm.setReset(false);
 		eaForm.setIndPopupReset(false);
-
+		
         String alpha = request.getParameter("alpha");
 		Collection col = null;
 		Collection colAlpha = null;
@@ -54,9 +64,21 @@ public class SearchAmpIndicators extends Action {
 					// organisation type
 					//col = ProgramUtil.searchForindicators(eaForm.getKeyword().trim(),eaForm.getSectorName());
 					col = ProgramUtil.searchForindicator(eaForm.getKeyword());
+						if(col.size()==0 ){
+							
+							col = ProgramUtil.getThemeindicators(eaForm.getKeyword().trim());
+							
+						}
 				} else {
 					// search for indicators based on organisation type only
 					col = ProgramUtil.searchForindicator(eaForm.getSectorName());
+					
+					if(col.size()==0 ){
+						
+						col = ProgramUtil.getThemeindicators(eaForm.getSectorName());
+						
+					}
+					
 				}
 			} else if (eaForm.getKeyword().trim().length() != 0) {
 				// search based on the given keyword only.

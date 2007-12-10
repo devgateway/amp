@@ -236,7 +236,7 @@ FCKConfig.ToolbarSets["AMP"] = [
 
 	['Source','Cut','Copy','Paste','-','Print'],
 
-	['Undo','Redo','-','SelectAll','RemoveFormat'],
+	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
 
 
 	'/',
@@ -249,11 +249,15 @@ FCKConfig.ToolbarSets["AMP"] = [
 
         ['Link','Unlink'],
 
+        ['Image','Table','Rule','SpecialChar','PageBreak'],
+
 	'/',
 
 	['FontFormat','FontName','FontSize'],
 
 	['TextColor','BGColor'],
+
+        ['FitWindow','ShowBlocks','-','About']
 
 		// No comma for the last row.
 

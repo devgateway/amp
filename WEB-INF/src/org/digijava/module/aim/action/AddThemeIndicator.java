@@ -208,7 +208,12 @@ public class AddThemeIndicator extends Action
 		themeForm.setNpIndicator(false);
 		themeForm.setPrgIndValues(null);
 		themeForm.setIndid(null);
-
+		themeForm.setFlag("");
+		
+		if(flag == false){
+		themeForm.setFlag("error");
+		}
+		
         List prgInds = new ArrayList(ProgramUtil.getThemeIndicators(id));
         Collections.sort(prgInds, new ProgramUtil.HelperAmpIndicatorNameComparator());
         themeForm.setPrgIndicators(prgInds);

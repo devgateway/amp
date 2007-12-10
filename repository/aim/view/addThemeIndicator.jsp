@@ -284,6 +284,7 @@ function closeWindow() 
 
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
+<body onload="preload()">
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772 border="0">
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
@@ -324,20 +325,32 @@ function closeWindow() 
 						<html:errors />
 					</td>
 				</tr>
-	<body onload="preload()">
-		<table  width=772 cellPadding=4 cellSpacing=1 valign=top align=left bgcolor="#ffffff" border="0">
+	
+		<table  width=772 cellPadding=1 cellSpacing=1 valign=top align=left bgcolor="#ffffff" border="0">
 				<tr>
 					 <td bgColor="#d7eafd" class="box-title" height="10" align="center">
 						<digi:trn key="aim:manageindicators">Manage Indicators</digi:trn>: ${aimThemeForm.themeName}
 					 </td>
 				 </tr>
+					 <tr>
+						 <td align="center">
+						 <c:if test="${aimThemeForm.flag == 'error'}">
+												<font color="red">
+												<b><digi:trn key="aim:cannotasigne">
+													indicator with this name already assign 
+												</digi:trn></b>
+											   </font>
+							</c:if>
+						 </td>
+					 </tr>
 				<logic:notEmpty name="aimThemeForm" property="prgIndicators">
 				 <tr>
 					<td>
 						<table  bgColor="#d7eafd" cellPadding=5 cellSpacing=1 border="0" align="center" width=772>
-							<c:forEach var="prgIndicatorItr" varStatus="rIndex" items="${aimThemeForm.prgIndicators}">
+						 	<c:forEach var="prgIndicatorItr" varStatus="rIndex" items="${aimThemeForm.prgIndicators}">
 								<tr>
 									<td width="1" bgcolor="white" colspan="7">
+									
 									</td>
 								</tr>
 						    	<tr>

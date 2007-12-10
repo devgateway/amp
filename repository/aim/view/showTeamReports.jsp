@@ -275,26 +275,21 @@ function confirmFunc() {
 												</table>
                                                                                                 <table>
                                                                                                 <tr>
-                                                                                                  <c:forEach var="page" begin="1" end="${aimTeamReportsForm.totalPages}">
-                                                                                                    <td>
-                                                                                                    <c:if test="${aimTeamReportsForm.currentPage==page}">
-
-                                                                                                         <c:out value="${page}"/>
-
-                                                                                                    </c:if>
-                                                                                                      <c:if test="${aimTeamReportsForm.currentPage!=page}">
-                                                                                                     <digi:link href="/viewTeamReports.do?currentPage=${page}" >
-                                                                                                         <c:out value="${page}"/>
-                                                                                                          </digi:link>
-                                                                                                          </c:if>
-
+                                                                                                	<c:if test="${aimTeamReportsForm.totalPages > 0}">
+                                                                                                		<c:forEach var="page" begin="1" end="${aimTeamReportsForm.totalPages}">
+                                                                                                    		<td>
+                                                                                                    			<c:if test="${aimTeamReportsForm.currentPage==page}">
+                                                                                                    				<c:out value="${page}"/>
+			                                                                                                    </c:if>
+            			                                                                                        <c:if test="${aimTeamReportsForm.currentPage!=page}">
+                        			                                                                            	<digi:link href="/viewTeamReports.do?currentPage=${page}" > <c:out value="${page}"/> </digi:link>
+                                                                                                          		</c:if>
                                                                                                           </td>
                                                                                                         </c:forEach>
-
-                                                                                                        </tr>
+                                                                                                	</c:if>
+		                                                                                          </tr>
                                                                                                 </table>
-
-											</td>
+										</td>
 										</tr>
 									</table>
 								</td>

@@ -86,11 +86,8 @@ public class AddAmpActivity extends Action {
       Exception {
 
     HttpSession session = request.getSession();
-    if(ampContext==null){
     	ampContext = getServlet().getServletContext();
-    }    
-    
-    
+
 
     TeamMember teamMember = new TeamMember();
   

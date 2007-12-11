@@ -25,8 +25,7 @@
 		var check = checkSectorEmpty();
 		if(check)
 		{
-		
-		// <digi:context name="selSector" property="context/module/moduleinstance/sectorSelected.do?edit=true"/>
+ // <digi:context name="selSector" property="context/module/moduleinstance/sectorSelected.do?edit=true"/>
 	    // document.aimSelectSectorForm.action = "<%= selSector %>";
 		// document.aimSelectSectorForm.target = window.opener.name;
 	    document.aimSelectSectorForm.submit();
@@ -154,7 +153,7 @@ function checkNumeric(objName,comma,period,hyphen)
 </script>
 
 <digi:instance property="aimSelectSectorForm" />
-<digi:form action="/selectSectors.do" method="post">
+<digi:form action="/selectSectors.do?edit=${param.edit}" method="post">
 
 <html:hidden property="sectorReset" value="false"/>
 
@@ -251,8 +250,8 @@ function checkNumeric(objName,comma,period,hyphen)
 										<td align="center" colspan=2>
 											<table cellPadding=5>
 												<tr>
-													<td>
-														<html:submit styleClass="dr-menu" property="addButton" >
+													<td> 
+														<html:submit styleClass="dr-menu"  property="addButton" >
 															<digi:trn key="btn:add">Add</digi:trn> 
 														</html:submit>
 														

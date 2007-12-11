@@ -14,9 +14,9 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
-	function addSector()
+	function addSector(param)
 	{
-		<digi:context name="addSec" property="context/addActivity.do?addSector=true" />
+		<digi:context name="addSec" property="context/addActivity.do?addSector=true&edit=param" />
 	    document.aimEditActivityForm.action = "<%= addSec %>";
 		document.aimEditActivityForm.target = "_self";
 		document.aimEditActivityForm.submit();
@@ -154,7 +154,8 @@
 																<logic:equal name="aimEditActivityForm" property="multiSectorSelecting" value="On">
 																	<field:display name="Add Sectors Button" feature="Sectors">&nbsp;
     		                                                            <td>
-            		                                                        <input type="button" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' class="buton"  onclick="addSectors();">
+    		                                                            <html:hidden name="aimEditActivityForm" property="editAct"/>
+    		                                                                 <input type="button" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' class="buton"  onclick="addSectors(${aimEditActivityForm.editAct});">
                     	                                                </td>
                                                                     </field:display>                                                          
 																</logic:equal>      

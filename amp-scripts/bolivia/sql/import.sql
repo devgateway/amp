@@ -1,4 +1,4 @@
-use amp_bolivia;
+use amp_testing;
 
 /* set up variables */
 SET @import_time:=unix_timestamp();
@@ -400,25 +400,6 @@ AND c.codage=org.old_id AND ta.nomdato='cvecoop'
 AND ta.valdato=c.cvecoop AND catval.category_value=ta.interp 
 AND catval.amp_category_class_id=10;
 
-/* mapping planned funding details(amounts) to fundings 
-INSERT INTO AMP_FUNDING_DETAIL (
-adjustment_type,transaction_type, transaction_date, transaction_amount,org_role_code,perspective_id,AMP_FUNDING_ID,amp_currency_id
-)
-SELECT 
-@funding_adjusment_planned,@funding_transaction_type , c.fechtipcam, c.montorig,@org_role_code,@funding_perspective,f.amp_funding_id,@funding_currency_id 
-FROM bolivian_db.`conv` as c, AMP_ACTIVITY as a, AMP_FUNDING as f
-WHERE a.old_id=c.numconv and a.amp_activity_id=f.amp_activity_id;
-
-/* mapping actual funding details(amounts) to fundings 
-INSERT INTO AMP_FUNDING_DETAIL (
-adjustment_type,transaction_type, transaction_date, transaction_amount,org_role_code,perspective_id,AMP_FUNDING_ID,amp_currency_id
-)
-SELECT 
-@funding_adjusment_actual,@funding_transaction_type , c.fechtipcam, c.montous,@org_role_code, @funding_perspective,f.amp_funding_id,@funding_currency_id 
-FROM bolivian_db.`conv` as c, AMP_ACTIVITY as a, AMP_FUNDING as f
-WHERE a.old_id=c.numconv and a.amp_activity_id=f.amp_activity_id;
-*/
-
 /* importing planned fundings */
 select 'importing planned (initial) fundings';
 
@@ -618,19 +599,6 @@ AND act.old_id=con.numconv
 AND con.cvecred=cla.valdato
 AND fnd.amp_activity_id=act.amp_activity_id;
 
-/*
-INSERT INTO amp_funding
-(financing_instr_category_value_id)
-SELECT catval.id 
-FROM amp_activity AS act, bolivian_db.`conv` AS con, amp_category_value AS catval, amp_category_class AS catclass, bolivian_db.`claves` AS cla, amp_funding AS fnd  
-WHERE cla.nomdato='cvecred' 
-AND catclass.keyName='financing_instrument' 
-AND cla.interp=catval.category_value 
-AND act.old_id=con.numconv 
-AND con.cvecred=cla.valdato
-AND fnd.amp_activity_id=act.amp_activity_id;
-*/
-
 /* ==Regions==*/
 select 'importin regions';
 
@@ -663,14 +631,6 @@ and reg.region_code=c.valdato
 and c.nomdato='cvedep'
 and condep.cvedep=c.valdato;
 
-/*
-insert into amp_currency_rate
-(to_currency_code,exchange_rate,exchange_rate_date)
-select cu.currency_code, enm.tipcam, enm.fechvigenm  
-from bolivian_db.`enm` as enm, amp_currency as cu 
-where enm.cvemonorig=cu.currency_code and enm.cvemonorig !='USD';
-/*
-
 
 /*  mapping components (sectors) */
 
@@ -694,11 +654,14 @@ select act.amp_activity_id, prog.amp_theme_id
 from  amp_activity as act, amp_theme as prog, bolivian_db.`conv` as acto 
 where act.old_id=acto.numconv and prog.theme_code = concat('EBRP', substring(acto.Cod_EBRP,2));
 
-/*
+insert INTO amp_activity_program
+(amp_activity_id,amp_program_id,program_percentage,program_setting)
+select  act.amp_activity_id, prog.amp_theme_id, 100, progset.amp_program_settings_id 
+from amp_activity as act, amp_theme as prog, amp_program_settings as progset, bolivian_db.`conv` as con  
+where act.amp_id=con.numconv
+and prog.theme_code = concat('EBRP', substring(con.Cod_EBRP,2))
+and progset.name like 'National Plan Objective';
 
-from amp_activity as act, amp_theme as prog, bolivian_db.`conv` as acto 
-where acto.numconv=act.old_id and (concat(@subprogram_prefix, substring(acto.Cod_EBRP,2)) = prog.theme_code); 
-*/
 
 COMMIT;
 
@@ -733,8 +696,8 @@ DROP COLUMN old_id;
 
 ALTER TABLE AMP_ACTIVITY
 DROP COLUMN old_status_id,
-DROP COLUMN old_id,
-DROP COLUMN amp_id;
+DROP COLUMN old_id;
+
 
 ALTER TABLE AMP_LEVEL
 DROP COLUMN old_id;

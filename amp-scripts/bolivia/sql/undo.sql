@@ -1,4 +1,4 @@
-use amp_bolivia;
+use amp_testing;
 
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
@@ -8,17 +8,27 @@ truncate amp_activities_categoryvalues;
 where not exists (select a.amp_activity_id from amp_activity  as a where a.amp_activity_id=ac.amp_activity_id and  exists (SELECT c.codage FROM bolivian_db.`conv` as c where c.codage=a.amp_id));
 */
 
-/*  delete mappings with sectors (which are colled components) and activities */ 
+/*  delete mappings with sectors (which are colled components) and activities  
 delete cs FROM amp_activity_compsector as cs
 where EXISTS (SELECT * FROM amp_activity AS act, bolivian_db.`conv` AS con WHERE con.numconv=act.amp_id AND act.amp_activity_id=cs.amp_activity_id);
+*/
+truncate amp_activity_compsector;
 
-delete cs FROM amp_activity_program as cs
-where EXISTS (SELECT * FROM amp_activity AS act, bolivian_db.`conv` AS con WHERE con.numconv=act.amp_id AND act.amp_activity_id=cs.amp_activity_id);
+truncate amp_activity_program;
+/*delete cs FROM amp_activity_program as cs
+where EXISTS (SELECT act.* FROM amp_activity AS act, bolivian_db.`conv` AS con WHERE con.numconv=act.amp_id AND act.amp_activity_id=cs.amp_activity_id);
+*/
 
-/* truncate amp_activity; */
-delete act from AMP_ACTIVITY AS act 
+truncate amp_activity_location_persent;
+/*
+delete actloc from amp_activity_location_persent as actloc
+where exists (select * from amp_activity act, bolivian_db.`conv` c  where c.numconv=act.amp_id and act.amp_activity_id=actloc.amp_activity_id );
+*/
+
+ truncate amp_activity;
+/*delete act from AMP_ACTIVITY AS act 
 where  EXISTS (SELECT c.numconv FROM bolivian_db.`conv` c where c.numconv=act.amp_id);
-
+*/
 /*delete from amp_currency_rate 
 where to_currency_code != 'USD';*/
 
@@ -60,8 +70,7 @@ where amp_activity_id not in (select a.amp_activity_id from amp_activity a);
 delete from AMP_FUNDING_DETAIL 
 where AMP_FUNDING_ID not in ( select f.amp_funding_id FROM  AMP_FUNDING as f );
 
-delete from amp_activity_theme
-where amp_activity_id not in (select a.amp_activity_id from amp_activity a); 
+delete from amp_activity_theme; /* this table is not used anymore, so deleteing everithing here. */  
 
 delete from amp_ahsurvey
 where (
@@ -114,10 +123,10 @@ delete from AMP_SECTOR_SCHEME
 where sec_scheme_code='BOL_COMPO_IMP';
 
 
-delete from AMP_ORGANISATION
+delete ignore from AMP_ORGANISATION
 where  org_code in (select a.codage from bolivian_db.age a);
 
-delete from AMP_ORGANISATION
+delete ignore from AMP_ORGANISATION
 where  org_code in (select e.codent from bolivian_db.ent e);
 
 delete loc from amp_location as loc, amp_region as ar,  bolivian_db.`claves` as c
@@ -127,9 +136,6 @@ delete ar from  amp_region as ar,  bolivian_db.`claves` as c
 where c.nomdato='cvedep'  and ar.country_id='bo' and ar.region_code=c.valdato and ar.region_code is not null;
 
 delete actloc from amp_activity_location as actloc
-where not exists (select * from amp_activity act where act.amp_activity_id=actloc.amp_activity_id );
-
-delete actloc from amp_activity_location_persent as actloc
 where not exists (select * from amp_activity act where act.amp_activity_id=actloc.amp_activity_id );
 
 DELETE catval FROM amp_category_value AS catval, amp_category_class AS catclass

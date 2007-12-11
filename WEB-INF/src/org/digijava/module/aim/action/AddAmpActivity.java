@@ -86,8 +86,9 @@ public class AddAmpActivity extends Action {
       Exception {
 
     HttpSession session = request.getSession();
-
-    ampContext = getServlet().getServletContext();
+    if(ampContext==null){
+    	ampContext = getServlet().getServletContext();
+    }    
     
     
 
@@ -104,7 +105,7 @@ public class AddAmpActivity extends Action {
 
     //return mapping.findForward("publicPreview");
 
-    EditActivityForm eaForm = (EditActivityForm) form;
+    EditActivityForm eaForm = (EditActivityForm) form; 
     
     //set the level, if available
     String levelTxt=request.getParameter("activityLevelId");

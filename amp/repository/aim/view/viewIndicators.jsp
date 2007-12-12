@@ -104,7 +104,7 @@
                                 <table style="font-family:verdana;font-size:11px;" border="0">
                                   <tr>
                                     <td>
-                                      <b>Sector:</b>
+                                      <b><digi:trn key="aim:indsector">Sector</digi:trn>:</b>
                                     </td>
                                     <td>
                                       
@@ -116,18 +116,23 @@
 												</c:if>
 									</html:select>
                                     </td>
-                                	<td>
-                                      <b>Keyword:</b>
+                                	<td nowrap="nowrap">
+                                      <b><digi:trn key="aim:indsearchkey">Keyword</digi:trn>:</b>
                                     </td>
                                     <td>
                                       <html:text property="keyword" style="width:120px;font-family:verdana;font-size:11px;" />
                                     </td>
                                     <td>
-                                      <input type="submit" value="Go" style="font-family:verdana;font-size:11px;" />
+                                    <c:set var="trngo">
+                    					  <digi:trn key="aim:searchindbykey">Go</digi:trn>
+                    				 </c:set>
+                                      <input type="submit" value="${trngo}" class="buton"/>
                                     </td>
                                     <td>
-                                      <input type="submit"  value="View All" onclick="viewall();" style="font-family:verdana;font-size:11px;" />
-                                      
+                                     <c:set var="trnviewall">
+                    					  <digi:trn key="aim:viewallind">View All</digi:trn>
+                    				 </c:set>
+                                      <input type="submit" value="${trnviewall}" onclick="viewall();" class="buton" />
                                     </td>
                                   </tr>
                                   <tr>
@@ -136,21 +141,25 @@
                                         <tr style="background-color:Silver;height:19px;">
                                           <td style="width:50%;">
                                             <c:if test="${aimViewIndicatorsForm.sortBy=='0'}">
-                                              <b>Indicator Name</b><!-- <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />-->
+                                              <b><digi:trn key="aim:indicator">Indicator Name
+                                                </digi:trn></b><!-- <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />-->
                                             </c:if>
                                             <c:if test="${aimViewIndicatorsForm.sortBy!='0'}">
                                               <a href="javascript:sortByVal('0')">
-                                                <b>Indicator Name</b> <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />
+                                                <b><digi:trn key="aim:indicator">Indicator Name
+                                                </digi:trn></b> <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />
                                               </a>
                                             </c:if>
                                           </td>
                                           <td style="width:10%;" align="center">
                                             <c:if test="${aimViewIndicatorsForm.sortBy=='1'}">
-                                              <b>Sector</b><!-- <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />-->
+                                              <b><digi:trn key="aim:indsector">Sector
+                                                </digi:trn></b><!-- <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />-->
                                             </c:if>
                                             <c:if test="${aimViewIndicatorsForm.sortBy!='1'}">
                                               <a href="javascript:sortByVal('1')">
-                                                <b>Sector</b> <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />
+                                                <b><digi:trn key="aim:indsector">Sector
+                                                </digi:trn></b> <img alt="" src="../ampTemplate/images/arrow_up_down.gif" border="0" height="10" />
                                               </a>
                                             </c:if>
                                           </td>
@@ -178,7 +187,7 @@
                                               </td>
                                                <td nowrap="nowrap">
 	                                                <c:forEach var="indItrsec" items="${indItr.sector}">
-	                                            		<b>${indItrsec.sectorId}</b>
+	                                            		<b>${indItrsec.sectorId} </b>| &nbsp;
 	                                            	</c:forEach>
 	                                            	
                                               </td>

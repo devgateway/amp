@@ -18,6 +18,7 @@ import org.digijava.module.aim.dbentity.AmpIndicatorSector;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Sector;
 
@@ -1134,9 +1135,40 @@ public class SectorUtil {
                                       }
 		}
 
-
-
-
+         
+                
+                public static void deleteIndSector(Long sectorid,Long indid){
+	        	
+        	    logger.info(" deleting the indsectors");
+	   			Session session = null;
+	   			Transaction tx = null;
+	   			AmpThemeIndicators ampThemeInd=null;
+        	   
+        	   try {
+        		   session = PersistenceManager.getRequestDBSession();
+        		   tx = session.beginTransaction();
+        		   ampThemeInd=(AmpThemeIndicators)session.load(AmpThemeIndicators.class,indid);
+        		   Iterator itr=ampThemeInd.getSectors().iterator();
+        		   while(itr.hasNext()){
+        			   AmpIndicatorSector ind=(AmpIndicatorSector)itr.next();
+        			   if(ind.getSectorId().getAmpSectorId().equals(sectorid)){
+        				   itr.remove();
+        				   session.delete(ind);
+        				     
+        			   }
+        		   }
+        		   session.update(ampThemeInd);
+        		   tx.commit();
+        		   session.flush();
+        		   
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+				logger.error("Exception from deleteIndSectors:" + e.getMessage());
+				e.printStackTrace(System.out);
+			}
+        	   
+           }
 	/*
 	 * this is to delete a sector
 

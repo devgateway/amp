@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 //import java.io.Serializable;
 
-public class AmpColumns  implements Serializable
+public class AmpColumns  implements Serializable,Comparable
 {
 
 	private Long columnId ;
@@ -70,4 +70,13 @@ public class AmpColumns  implements Serializable
 	public void setColumnNameTrimmed(String columnNameTrimmed) {
 		this.columnNameTrimmed = columnNameTrimmed;
 	}
+	
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		if (!(o instanceof AmpColumns))
+			return -1;
+		AmpColumns auxColumn=(AmpColumns) o;
+		return this.getColumnName().compareTo(auxColumn.getColumnName());
+	}
+
 }

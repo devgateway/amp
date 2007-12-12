@@ -1258,7 +1258,7 @@ public class AdvancedReport extends Action {
 				return;
 		}
 		Iterator iter;
-		Collection coll = new ArrayList();
+		Collection coll = new TreeSet();
 		Collection temp = new ArrayList();
 		Collection  dup= new ArrayList();
 		AmpColumns ampColumns;

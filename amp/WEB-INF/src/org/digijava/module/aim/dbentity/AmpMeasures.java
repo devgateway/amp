@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 
-public class AmpMeasures  implements Serializable
+public class AmpMeasures  implements Serializable, Comparable
 {
 
 	private Long measureId ;
@@ -44,5 +44,13 @@ public class AmpMeasures  implements Serializable
 	}
 	public void setReports(Set reports) {
 		this.reports = reports;
+	}
+	
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		if (!(o instanceof AmpMeasures))
+			return -1;
+		AmpMeasures auxColumn=(AmpMeasures) o;
+		return this.getMeasureName().compareTo(auxColumn.getMeasureName());
 	}
 }

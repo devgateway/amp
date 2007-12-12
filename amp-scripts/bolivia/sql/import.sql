@@ -223,30 +223,6 @@ FROM  bolivian_db.`conv` as c ;
 /* where c.STATCONV!='D' and c.STATCONV!='C' and c.STATCONV!='A' and c.STATCONV!='5'; */  
 
 
-/* correcting dates */
-select 'correcting 0000-00-00 dates in activities';
-
-update amp_activity
-set actual_start_date=null
-where actual_start_date='0000-00-00 00:00:00'; 
-
-update amp_activity
-set proposed_start_date=null
-where proposed_start_date='0000-00-00 00:00:00';  
-
-update amp_activity
-set proposed_approval_date=null
-where proposed_approval_date='0000-00-00 00:00:00';  
-
-update amp_activity
-set actual_approval_date=null
-where actual_approval_date='0000-00-00 00:00:00'; 
-
-update amp_activity
-set actual_completion_date=null
-where actual_completion_date='0000-00-00 00:00:00'; 
-
-
 /* mapping contacts */
 select 'mapping contacts';
 
@@ -513,14 +489,6 @@ and enm.numenm>0
 and enm.montorig!=0 
 and enm.fechvigenm is not null;
 
-
-select 'correcting invalid dates in fundings';
-
-update amp_funding_detail 
-set transaction_date=null
-where transaction_date is null or transaction_date like '0000-00-00%';
-
-
 select 'importing actual disbursments';
 INSERT INTO AMP_FUNDING_DETAIL 
 (
@@ -579,6 +547,41 @@ WHERE  a.old_id=dsm.numconv
 and a.amp_activity_id=f.amp_activity_id 
 and dsm.cvemonorig=cu.currency_code
 and lower(dsm.tipdesem)='p'; 
+
+
+
+
+select 'correcting invalid dates in fundings';
+
+update amp_funding_detail 
+set transaction_date='2011-01-01 01:01:01'
+where transaction_date is null or transaction_date like '0000-00-00%';
+
+
+
+/* correcting activity dates */
+select 'correcting 0000-00-00 dates in activities';
+
+update amp_activity
+set actual_start_date=null
+where actual_start_date='0000-00-00 00:00:00'; 
+
+update amp_activity
+set proposed_start_date=null
+where proposed_start_date='0000-00-00 00:00:00';  
+
+update amp_activity
+set proposed_approval_date=null
+where proposed_approval_date='0000-00-00 00:00:00';  
+
+update amp_activity
+set actual_approval_date=null
+where actual_approval_date='0000-00-00 00:00:00'; 
+
+update amp_activity
+set actual_completion_date=null
+where actual_completion_date='0000-00-00 00:00:00'; 
+
 
 /*  ==Type of credit==  - maps to  Financing Instrument in funding.*/
 
@@ -648,8 +651,8 @@ and condep.cvedep=c.valdato;
 /*  mapping components (sectors) */
 
 select ' mapping components (sectors)';
-INSERT INTO amp_activity_compsector (amp_activity_id, amp_sector_id)
-SELECT act.amp_activity_id, sec.amp_sector_id 
+INSERT INTO amp_activity_componente (amp_activity_id, amp_sector_id, percentage)
+SELECT act.amp_activity_id, sec.amp_sector_id, bcomp.porccomp 
 FROM amp_sector AS sec, amp_sector_scheme AS sch, bolivian_db.comp AS bcomp, bolivian_db.`conv` AS con, amp_activity AS act
 WHERE sec.amp_sec_scheme_id=sch.amp_sec_scheme_id  
 AND sch.sec_scheme_code='BOL_COMPO_IMP'  

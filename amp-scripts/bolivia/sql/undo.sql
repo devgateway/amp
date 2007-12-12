@@ -3,10 +3,14 @@ use amp_testing;
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
 
-truncate amp_activities_categoryvalues;
-/*delete ac from amp_activities_categoryvalues as ac 
-where not exists (select a.amp_activity_id from amp_activity  as a where a.amp_activity_id=ac.amp_activity_id and  exists (SELECT c.codage FROM bolivian_db.`conv` as c where c.codage=a.amp_id));
-*/
+/*truncate amp_activities_categoryvalues;*/
+delete ac from amp_activities_categoryvalues as ac
+where exists (select * from amp_activity as act, bolivian_db.`conv` AS con where con.numconv=act.amp_id and ac.amp_activity_id=act.amp_activity_id);
+
+
+/* truncate amp_activity_componente; */
+delete ac from amp_activity_componente as ac
+where exists (select * from amp_activity as act, bolivian_db.`conv` AS con where con.numconv=act.amp_id and ac.amp_activity_id=act.amp_activity_id);
 
 /*  delete mappings with sectors (which are colled components) and activities  
 delete cs FROM amp_activity_compsector as cs
@@ -14,10 +18,10 @@ where EXISTS (SELECT * FROM amp_activity AS act, bolivian_db.`conv` AS con WHERE
 */
 truncate amp_activity_compsector;
 
-truncate amp_activity_program;
-/*delete cs FROM amp_activity_program as cs
+/*truncate amp_activity_program;*/
+delete cs FROM amp_activity_program as cs
 where EXISTS (SELECT act.* FROM amp_activity AS act, bolivian_db.`conv` AS con WHERE con.numconv=act.amp_id AND act.amp_activity_id=cs.amp_activity_id);
-*/
+
 
 truncate amp_activity_location_persent;
 /*
@@ -25,10 +29,11 @@ delete actloc from amp_activity_location_persent as actloc
 where exists (select * from amp_activity act, bolivian_db.`conv` c  where c.numconv=act.amp_id and act.amp_activity_id=actloc.amp_activity_id );
 */
 
- truncate amp_activity;
-/*delete act from AMP_ACTIVITY AS act 
+ /*truncate amp_activity;*/
+delete act from AMP_ACTIVITY AS act 
 where  EXISTS (SELECT c.numconv FROM bolivian_db.`conv` c where c.numconv=act.amp_id);
-*/
+
+
 /*delete from amp_currency_rate 
 where to_currency_code != 'USD';*/
 

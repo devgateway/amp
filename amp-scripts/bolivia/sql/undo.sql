@@ -32,6 +32,10 @@ where  EXISTS (SELECT c.numconv FROM bolivian_db.`conv` c where c.numconv=act.am
 /*delete from amp_currency_rate 
 where to_currency_code != 'USD';*/
 
+delete from amp_currency
+where currency_code in (select sigla_mda from bolivian_db.clasif_moneda);
+
+
 delete from AMP_LEVEL
 where level_code='N'  or  level_code='M'  or  level_code='D' ;
 

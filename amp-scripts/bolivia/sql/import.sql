@@ -400,6 +400,19 @@ AND c.codage=org.old_id AND ta.nomdato='cvecoop'
 AND ta.valdato=c.cvecoop AND catval.category_value=ta.interp 
 AND catval.amp_category_class_id=10;
 
+
+/* importing currencies */
+select 'importing currencies (initial) fundings';
+INSERT INTO amp_currency(
+currency_code,
+country_name,
+currency_name,
+active_flag)
+SELECT sigla_mda, moneda, pais, 1
+FROM bolivian_db.clasif_moneda
+where sigla_mda not in (select currency_code from amp_currency);
+
+
 /* importing planned fundings */
 select 'importing planned (initial) fundings';
 

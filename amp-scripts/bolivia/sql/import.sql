@@ -72,6 +72,9 @@ select 'importing sector shceme';
 insert into AMP_SECTOR_SCHEME (sec_scheme_code, sec_scheme_name)
 Values ('BOL_IMP', 'Bolivia Import');
 
+update AMP_GLOBAL_SETTINGS set settingsValue =  LAST_INSERT_ID()
+where settingsName = 'Default Sector Scheme';
+
 select 'importing sectors'; 
 
 insert into AMP_SECTOR (amp_sec_scheme_id,  sector_code,   name,   old_id)

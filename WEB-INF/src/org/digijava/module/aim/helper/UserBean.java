@@ -11,8 +11,8 @@ public class UserBean {
   private String email;
   private Collection<AmpTeam> teams;
   private boolean ban;
-
-  public UserBean() {
+  
+public UserBean() {
   }
 
   public String getEmail() {

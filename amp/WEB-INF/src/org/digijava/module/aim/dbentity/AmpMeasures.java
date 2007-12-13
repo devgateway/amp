@@ -3,11 +3,14 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.digijava.module.aim.annotations.reports.Identificator;
+
 
 public class AmpMeasures  implements Serializable, Comparable
 {
-
+	@Identificator
 	private Long measureId ;
+	
 	private String measureName ;
 	private String aliasName;
 	private String type;

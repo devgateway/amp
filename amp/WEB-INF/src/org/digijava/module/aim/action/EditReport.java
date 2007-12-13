@@ -2,8 +2,11 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,14 +22,22 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.annotations.reports.ColumnLike;
+import org.digijava.module.aim.annotations.reports.Identificator;
+import org.digijava.module.aim.annotations.reports.Level;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
+import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.exception.reports.ReportException;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.AdvancedReportUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class EditReport extends Action {
 	private static Logger logger 			= Logger.getLogger(EditReport.class);
@@ -35,10 +46,13 @@ public class EditReport extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
-		
+			boolean isXLevelEnabled		= Boolean.parseBoolean( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ACTIVITY_LEVEL) );
 			AdvancedReportForm formBean = (AdvancedReportForm) form;
 			formBean.setMaxStep(new Integer(6));
 			String strReportId	= request.getParameter("rid");
+			
+			
+			
 			if (strReportId.compareTo("") != 0) {
 				Session session = PersistenceManager.getSession();
 				AmpReports ampreport	= (AmpReports) session.get(AmpReports.class, new Long(strReportId));
@@ -59,25 +73,37 @@ public class EditReport extends Action {
 					formBean.setReportDescription ( ampreport.getReportDescription() );
 					
 					//formBean.setAddedColumns( ampreport.getColumns() );
-					Set addedColumns			= ampreport.getColumns();
-					Iterator iterator			= addedColumns.iterator();
-					Collection collColumns		= new ArrayList();
-					while ( iterator.hasNext() ) {
-						AmpReportColumn ampReportColumn		= (AmpReportColumn) iterator.next();
-						AmpColumns ampColumns				= ampReportColumn.getColumn();
-						collColumns.add( ampColumns );
+					if ( isXLevelEnabled ) {
+						formBean.setColumnsSelection( new ArrayList<AmpReportColumn>( ampreport.getColumns() ) );
+						Collections.sort( formBean.getColumnsSelection() );
 					}
-					formBean.setAddedColumns( collColumns );
+					else {
+						Set addedColumns			= ampreport.getColumns();
+						Iterator iterator			= addedColumns.iterator();
+						Collection collColumns		= new ArrayList();
+						while ( iterator.hasNext() ) {
+							AmpReportColumn ampReportColumn		= (AmpReportColumn) iterator.next();
+							AmpColumns ampColumns				= ampReportColumn.getColumn();
+							collColumns.add( ampColumns );
+						}
+						formBean.setAddedColumns( collColumns );
+					}
 					
 					//formBean.setAddedMeasures( ampreport.getMeasures() );
-					Set addedMeasures			= ampreport.getMeasures();
-					iterator					= addedMeasures.iterator();
-					Collection collMeasures		= new ArrayList();
-					while ( iterator.hasNext() ) {
-						AmpMeasures ampMeasures		= (AmpMeasures) iterator.next();
-						collMeasures.add( ampMeasures );
+					if ( isXLevelEnabled ) {
+						formBean.setMeasuresSelection( new ArrayList<AmpReportMeasures>( ampreport.getReportMeasures() ) );
+						Collections.sort( formBean.getMeasuresSelection() );
 					}
-					formBean.setAddedMeasures( collMeasures);
+					else {
+						Set addedMeasures			= ampreport.getMeasures();
+						Iterator iterator			= addedMeasures.iterator();
+						Collection collMeasures		= new ArrayList();
+						while ( iterator.hasNext() ) {
+							AmpMeasures ampMeasures		= (AmpMeasures) iterator.next();
+							collMeasures.add( ampMeasures );
+						}
+						formBean.setAddedMeasures( collMeasures);
+					}
 					
 					Long longReportType	= ampreport.getType();
 					if (longReportType.longValue() > reportTypes.length || longReportType.longValue() < 1) {
@@ -99,21 +125,40 @@ public class EditReport extends Action {
 					formBean.setPublicReport( ampreport.getPublicReport() );
 					formBean.setDrilldownTab( ampreport.getDrilldownTab() );
 					
-//					 Getting Column Hierarchies 
-					Set dbHierarchies				= ampreport.getHierarchies();
-					Iterator dbHierarchiesIterator	= dbHierarchies.iterator();
-					Collection collHierarchies 		= new ArrayList();
-					while ( dbHierarchiesIterator.hasNext() ) {
-						Object next								= dbHierarchiesIterator.next();
-//						logger.info( "Object in Hierarchie collection is:" + next.getClass() );
-						AmpReportHierarchy ampReportHierarchie	= (AmpReportHierarchy) next;
-						collHierarchies.add ( ampReportHierarchie.getColumn() );
+//					 Getting Column Hierarchies
+					if ( isXLevelEnabled ) {
+						formBean.setHierarchiesSelection( new ArrayList<AmpReportHierarchy>(ampreport.getHierarchies()) );
+						Collections.sort( formBean.getHierarchiesSelection() );
 					}
-					formBean.setColumnHierarchie( collHierarchies );
-//					 Getting Column Hierarchies 
-					
-					this.removeAddedColumnsFromPossibleColumns(formBean);
-					this.removeAddedMeasuresFromPossibleMeasures(formBean);
+					else {
+						Set dbHierarchies				= ampreport.getHierarchies();
+						Iterator dbHierarchiesIterator	= dbHierarchies.iterator();
+						Collection collHierarchies 		= new ArrayList();
+						while ( dbHierarchiesIterator.hasNext() ) {
+							Object next								= dbHierarchiesIterator.next();
+	//						logger.info( "Object in Hierarchie collection is:" + next.getClass() );
+							AmpReportHierarchy ampReportHierarchie	= (AmpReportHierarchy) next;
+							collHierarchies.add ( ampReportHierarchie.getColumn() );
+						}
+						formBean.setColumnHierarchie( collHierarchies );
+					}
+//					 END - Getting Column Hierarchies 
+					if (isXLevelEnabled){
+						formBean.setActivityLevel( ampreport.getActivityLevel().getId() );
+						
+						formBean.setColumnToLevel( new HashMap<Long, Collection<AmpCategoryValue>>() );
+						formBean.setMeasureToLevel( new HashMap<Long, Collection<AmpCategoryValue>>() );
+						AdvancedReport.populateLevelHashMap( formBean.getAmpColumns(), formBean.getColumnToLevel(), false );
+						AdvancedReport.populateLevelHashMap( formBean.getAmpMeasures(), formBean.getMeasureToLevel(), false );
+						
+						removeSelectedLevels(formBean.getColumnToLevel(), formBean.getColumnsSelection() );
+						removeSelectedLevels(formBean.getColumnToLevel(), formBean.getHierarchiesSelection() );
+						removeSelectedLevels(formBean.getMeasureToLevel(), formBean.getMeasuresSelection() );
+					}
+					else{
+						this.removeAddedColumnsFromPossibleColumns(formBean);
+						this.removeAddedMeasuresFromPossibleMeasures(formBean);
+					}
 					
 					formBean.setInEditingMode( true );
 					
@@ -200,6 +245,32 @@ public class EditReport extends Action {
 					removableMeasures.add( possibleAmpMeasure );
 			}
 			possibleMeasures.removeAll( removableMeasures );
+		}
+	}
+	public static void removeSelectedLevels (HashMap<Long, Collection<AmpCategoryValue>> columnToLevel, List reportToColLikeList) {
+		try{
+			if (columnToLevel == null) {
+				throw new ReportException("Could not remove already added levels because level container is null");
+			}
+			if (reportToColLikeList == null) {
+				throw new ReportException("Could not remove already added levels because added level container is null");
+			}
+		
+			Iterator iter	= reportToColLikeList.iterator();
+			
+			while ( iter.hasNext() ) {
+				Object reportToColLike	= iter.next();
+				Object level			= AdvancedReport.invokeGetterForBeanPropertyWithAnnotation(reportToColLike, Level.class, new Object[0]);
+				Object colLikeObj		= AdvancedReport.invokeGetterForBeanPropertyWithAnnotation(reportToColLike, ColumnLike.class, new Object[0]);
+				Long colLikeObjId		= (Long)AdvancedReport.invokeGetterForBeanPropertyWithAnnotation(colLikeObj, Identificator.class, new Object[0]);
+				
+				Collection<AmpCategoryValue> levelCollection	= columnToLevel.get(colLikeObjId);
+				levelCollection.remove(level);
+			}
+		}
+		catch(Exception E) {
+			E.printStackTrace();
+			return;
 		}
 	}
 	

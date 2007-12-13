@@ -5,6 +5,8 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
@@ -145,15 +147,26 @@ function gotoStep() {
                                       <br>
                                       <br>
                                       <!-- Radios -->
-
+										
                                       <table cellPadding=0 cellSpacing=0 vAlign="top" align="center" width="400" bgColor=#f4f4f2 border="0">
                                         <c:if test="${aimAdvancedReportForm.reportEdit==false}">
                                         <tr height="120">
                                           <td>&nbsp;&nbsp;&nbsp;
                                           </td>
                                           		<td align="left">
+                                          	<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="true">
+                                          	<table cellPadding=0 cellSpacing=1 bgColor=#f4f4f2 border="0">
+                                          		<tr>
+                                          			<td>
+                                          			<category:showoptions listView="false" name="aimAdvancedReportForm" property="activityLevel" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_LEVEL_KEY %>" styleClass="inp-text"  />
+                                          			</td>
+                                          		</tr>
+                                          	</table>
+                                          	<hr />
+                                          	</gs:test>
+                                          	
                                             <table cellPadding=0 cellSpacing=1 bgColor=#f4f4f2 border="0">
-                                            <feature:display name="Donor Report" module="Reports">
+                                              <feature:display name="Donor Report" module="Reports">
                                               <tr>
                                                 <td>
                                                   <html:radio property="reportType" value="donor" >
@@ -210,6 +223,15 @@ function gotoStep() {
 		                                                </td>
                                           		<td align="left">
                                           			<table cellPadding=0 cellSpacing=1 bgColor=#f4f4f2 border="0">
+                                          			<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="true">
+		                                          		<tr>
+		                                          			<td>
+		                                          			<category:showoptions listView="false" name="aimAdvancedReportForm" property="activityLevel" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_LEVEL_KEY %>" 
+		                                          			styleClass="inp-text" innerdisabled="true"  />
+		                                          			<hr />		                                          			
+		                                          			</td>
+		                                          		</tr>
+		                                          	</gs:test>
                                           			<feature:display name="Donor Report" module="Reports">
 			                                              <tr>
 			                                                <td>
@@ -219,7 +241,7 @@ function gotoStep() {
 			                                                    </digi:trn>
 			                                                  </html:radio>
 			                                                </td>
-		                                              </tr>
+		                                              </tr>		                                        												
 		                                              </feature:display>
 		                                             <feature:display name="Regional Report" module="Reports">										
 			                                              <tr>
@@ -243,7 +265,7 @@ function gotoStep() {
 			                                                </td>
 			                                              </tr>
 	                                              </feature:display>
-	                                                <feature:display module="Reports" name="Contribution Report">
+			                                                <feature:display module="Reports" name="Contribution Report">
 			                                                  <tr>
 			                                                    <td>
 			                                                      <html:radio property="reportType" value="contribution" disabled="true">
@@ -253,7 +275,7 @@ function gotoStep() {
 			                                                      </html:radio>
 			                                                    </td>
 			                                                  </tr>
-	                                                </feature:display>
+			                                                </feature:display>
 			                                            </table>
 			                                          </td>
 			                                        </tr>
@@ -285,9 +307,8 @@ function gotoStep() {
                               </TD>
                             </TR>
                           </TABLE>
-                        
-                  </TD>
-                </TR>
+                        </TD>
+                      </TR>
               </table>
                       </td>
                       <td class=r-dotted-lg align=left vAlign=top >	&nbsp;</td>

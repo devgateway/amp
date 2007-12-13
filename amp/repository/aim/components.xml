@@ -294,6 +294,7 @@
 	<page name="AdvancedReportManagerStep4" title=" - Report Generator Step 4 : Report Details " />
 	<page name="AdvancedReportManagerStep3" title=" - Report Generator Step 3 : Generate Charts " />
 	<page name="AdvancedReportManagerStep5" title=" - Report Generator Step  :  Select Rows/Hierarchies" />
+	<page name="AdvancedReportManagerStep5New" title=" - Report Generator Step  :  Select Rows/Hierarchies" />
 	<page name="AdvancedReportManagerStep6" title=" - Report Generator Step  :  Select Measures" />
 	<page name="viewAdvancedReport" title=" : Reports" />
 	<page name="viewNewAdvancedReport" title=" : Reports" />

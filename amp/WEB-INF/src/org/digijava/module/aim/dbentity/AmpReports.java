@@ -45,6 +45,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	private List orderedColumns;
 	private Set hierarchies;
 	private Set measures;
+	private Set reportMeasures;
 	private AmpTeamMember ownerId;	// the member that created the report
 	private Date updatedDate;		// last date when the report was modified
 	
@@ -52,6 +53,8 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	//to be set in order to get information for translation purposes in pdf and excel reports 
 	private String siteId;
 	private String locale;
+	
+	private AmpCategoryValue activityLevel;
 	
 	//public static final String NOTE="NOTE: All shown funding items are in USD currency. All calendaristic date cells are shown using DD/MM/YYYY format. All amounts are in thousands.";
 //	private static SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
@@ -296,4 +299,22 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	public void setNameTrn(String nameTrn) {
 		this.nameTrn = nameTrn;
 	}
+
+	public Set getReportMeasures() {
+		return reportMeasures;
+	}
+
+	public void setReportMeasures(Set reportMeasures) {
+		this.reportMeasures = reportMeasures;
+	}
+
+	public AmpCategoryValue getActivityLevel() {
+		return activityLevel;
+	}
+
+	public void setActivityLevel(AmpCategoryValue activityLevel) {
+		this.activityLevel = activityLevel;
+	}
+	
+	
 }

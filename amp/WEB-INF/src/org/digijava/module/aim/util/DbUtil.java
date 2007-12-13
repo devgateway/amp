@@ -6131,6 +6131,18 @@ public class DbUtil {
             return user1.getName().compareTo(user2.getName());
         }
     }
+    /**
+     * //for sorting users by Email
+     * @author dare
+     *
+     */    
+    public static class HelperEmailComparator implements Comparator {
+        public int compare(Object obj1, Object obj2) {
+            User user1 = (User) obj1;
+            User user2 = (User) obj2;
+            return user1.getEmail().compareTo(user2.getEmail());
+        }
+    }
 
     public static class HelperTrnCountryNameComparator implements Comparator<CountryBean> {
         Locale locale;

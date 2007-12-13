@@ -14,6 +14,14 @@ function banUser(txt) {
   var ban=confirm("Do you really want to"+txt);
   return ban;
   }
+  
+  
+  function searchAlpha(val) {
+		     document.umViewAllUsersForm.action = "/um/viewAllUsers.do?currentAlpha="+val;
+		     document.umViewAllUsersForm.submit();
+			 return true;		
+	}
+	
 
 </script>
 
@@ -61,44 +69,55 @@ function banUser(txt) {
             </td>
           </tr>
           <tr style="width:50%;">
-            <td height=16 vAlign="center">
-              <digi:trn key="um:viewAllUsers:filter">
-              Filter by:
-              </digi:trn>
-              <html:select property="type" style="font-family:verdana;font-size:11px;">
-                <c:set var="translation">
-                  <digi:trn key="um:viewAllUsers:all">
-                  -All-
-                  </digi:trn>
-                </c:set>
-                <html:option value="-1">${translation}</html:option>
-
-                <c:set var="translation">
-                  <digi:trn key="um:viewAllUsers:regisetred">
-                  Registered
-                  </digi:trn>
-                </c:set>
-                <html:option value="0">${translation}</html:option>
-
-                <c:set var="translation">
-                  <digi:trn key="um:viewAllUsers:teamMembers">
-                  Team members
-                  </digi:trn>
-                </c:set>
-                <html:option value="1">${translation}</html:option>
-              </html:select>
-
-              <digi:trn key="um:viewAllUsers:keyword">
-              keyword:
-              </digi:trn>
-              <html:text property="keyword" style="font-family:verdana;font-size:11px;"/>
-
-              <c:set var="translation">
-                <digi:trn key="um:viewAllUsers:showButton">
-                Show
-                </digi:trn>
-              </c:set>
-              <input type="submit" value="${translation}"  class="buton" style="font-family:verdana;font-size:11px;" />
+            <td width="201">
+	              <digi:trn key="um:viewAllUsers:filter">
+	              Filter by:
+	              </digi:trn>
+	              <html:select property="type" style="font-family:verdana;font-size:11px;">
+	                <c:set var="translation">
+	                  <digi:trn key="um:viewAllUsers:all">
+	                  -All-
+	                  </digi:trn>
+	                </c:set>
+	                <html:option value="-1">${translation}</html:option>
+	
+	                <c:set var="translation">
+	                  <digi:trn key="um:viewAllUsers:regisetred">
+	                  Registered
+	                  </digi:trn>
+	                </c:set>
+	                <html:option value="0">${translation}</html:option>
+	
+	                <c:set var="translation">
+	                  <digi:trn key="um:viewAllUsers:teamMembers">
+	                  Team members
+	                  </digi:trn>
+	                </c:set>
+	                <html:option value="1">${translation}</html:option>	                
+	              </html:select>
+              </td>
+              <td width="195">
+	              <digi:trn key="um:viewAllUsers:keyword">
+	              keyword:
+	              </digi:trn>
+	              <html:text property="keyword" style="font-family:verdana;font-size:11px;"/>
+              </td>
+              <td>
+              	<digi:trn key="aim:results">Results</digi:trn>&nbsp;
+				<html:select property="tempNumResults" styleClass="inp-text">
+					<html:option value="10">10</html:option>
+					<html:option value="20">20</html:option>
+					<html:option value="50">50</html:option>
+					<html:option value="-1">ALL</html:option>
+				</html:select>
+              </td>
+			  <td>
+	              <c:set var="translation">
+	                <digi:trn key="um:viewAllUsers:showButton">
+	                Show
+	                </digi:trn>
+	              </c:set>
+	              <input type="submit" value="${translation}"  class="buton" style="font-family:verdana;font-size:11px;" />
             </td>
           </tr>
           <tr>
@@ -129,7 +148,7 @@ function banUser(txt) {
  														<tr>
 															<td width="100%">
 																<table width="734" border="0"  bgColor="#f4f4f2">
-																	<c:if test="${empty umViewAllUsersForm.users}">
+																	<c:if test="${empty umViewAllUsersForm.pagedUsers}">
 								                                         <tr>
 																			<td colspan="5">
 				                                                   				<b><digi:trn key="um:viewAllUsers:NoUsers">No users present</digi:trn>
@@ -137,22 +156,26 @@ function banUser(txt) {
 																			</td>
 																		</tr>
 							                                        </c:if>
-																	<c:if test="${not empty umViewAllUsersForm.users}">
+																	<c:if test="${not empty umViewAllUsersForm.pagedUsers}">
 																		<tr>
-																			<td height="30" width="220"><b>
-																				<digi:trn key="um:viewAllUsers:UsersNames">Name</digi:trn></b>
+																			<td height="30" width="220">
+																				<digi:link href="/viewAllUsers.do?sortBy=name"><b>
+																					<digi:trn key="um:viewAllUsers:UsersNames">Name</digi:trn></b>
+																				</digi:link>
 																			</td>	
-																			<td height="30" width="220"><b>
-																				<digi:trn key="um:viewAllUsers:UsersEmails">Email</digi:trn></b>
+																			<td height="30" width="220">
+																				<digi:link href="/viewAllUsers.do?sortBy=email"><b>
+																					<digi:trn key="um:viewAllUsers:UsersEmails">Email</digi:trn></b>
+																				</digi:link>
 																			</td>																	
 																			<td height="30" width="220"><b>
-																				<digi:trn key="um:viewAllUsers:UserWorkspace">Workspace</digi:trn></b>
+																					<digi:trn key="um:viewAllUsers:UserWorkspace">Workspace</digi:trn></b>
 																			</td>
 																			<td height="30"width="150" colspan="3"><b>
 																				<digi:trn key="aim:viewAllUsers:action">Actions</digi:trn></b>
 																			</td>																		
 																		</tr>
-																	<c:forEach var="us" items="${umViewAllUsersForm.users}">
+																	<c:forEach var="us" items="${umViewAllUsersForm.pagedUsers}">
 	                                                           			<tr>
 		                                                           			<td height="30">
 																			  ${us.firstNames}&nbsp;${us.lastName}
@@ -205,9 +228,89 @@ function banUser(txt) {
 														</td>
 													</tr>
 												 <!-- end page logic -->
+												 
+												 <!-- page logic for pagination -->
+												<logic:notEmpty name="umViewAllUsersForm" property="pages">
+												<tr>
+													<td colspan="4">
+														<digi:trn key="um:userPages">
+														Pages :</digi:trn>
+														<logic:iterate name="umViewAllUsersForm" property="pages" id="pages" type="java.lang.Integer">	
+																												
+															<c:if test="${umViewAllUsersForm.currentPage == pages}">
+																<font color="#FF0000"><%=pages%></font>
+															</c:if>
+															<c:if test="${umViewAllUsersForm.currentPage != pages}">
+																<c:set var="translation">
+																	<digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
+																</c:set>
+																<digi:link href="/userSearch.do?page=${pages}"  title="${translation}" >
+																	<%=pages%>
+																</digi:link>
+															</c:if>
+														|&nbsp; </logic:iterate>
+													</td>
+												</tr>
+												</logic:notEmpty>
+												 <logic:notEmpty name="umViewAllUsersForm" property="alphaPages">
+											<tr>
+												<td align="center" colspan="4">
+													<table width="90%">
+														<tr>
+														    <td>
+														    <c:if test="${not empty umViewAllUsersForm.currentAlpha}">
+														    	<c:if test="${umViewAllUsersForm.currentAlpha!='viewAll'}">
+															    	<c:if test="${umViewAllUsersForm.currentAlpha!=''}">														    	
+																    	<c:set var="trnViewAllLink">
+																			<digi:trn key="aim:clickToViewAllSearchPages">Click here to view all search pages</digi:trn>
+																		</c:set>
+																		<a href="javascript:searchAlpha('viewAll')" title="${trnViewAllLink}">
+																				<digi:trn key="aim:viewAllLink">viewAll</digi:trn></a>
+																	</c:if>
+																</c:if>
+														    </c:if>
+															
+															<logic:iterate name="umViewAllUsersForm" property="alphaPages" id="alphaPages" type="java.lang.String">
+															<c:if test="${alphaPages != null}">
+																<c:if test="${umViewAllUsersForm.currentAlpha == alphaPages}">
+																	<font color="#FF0000"><%=alphaPages %></font>
+																</c:if>
+																<c:if test="${umViewAllUsersForm.currentAlpha != alphaPages}">
+																	<c:set var="translation">
+																		<digi:trn key="aim:clickToGoToNext">Click here to go to next page</digi:trn>
+																	</c:set>
+																	<a href="javascript:searchAlpha('<%=alphaPages%>')" title="${translation}" >
+																		<%=alphaPages %></a>
+																</c:if>
+															|&nbsp;
+															</c:if>
+															</logic:iterate>
+												   </td>
+												 </tr>
+
+												</table>
+											</td>
+										</tr>
+										</logic:notEmpty>									
+										<logic:notEmpty name="umViewAllUsersForm" property="alphaPages">
+											<tr>
+												<td bgColor=#f4f4f2>
+													<c:if test="${not empty umViewAllUsersForm.currentAlpha}">
+														<c:if test="${umViewAllUsersForm.currentAlpha!='viewAll'}">
+													   		<c:if test="${umViewAllUsersForm.currentAlpha!=''}">														    	
+													    		<digi:trn key="um:UserMan:alphaFilterNote">
+																	Click on viewAll to see all existing Users.
+																</digi:trn>
+															</c:if>
+														</c:if>
+													</c:if>										
+												</td>
+											</tr>
+										</logic:notEmpty>	
 					                         </table>
 										</td>
 									</tr>
+									
 								</table>
 							</td>
 						</tr>

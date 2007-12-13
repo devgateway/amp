@@ -140,5 +140,9 @@
       <forward name="forward" path="/showLayout.do?layout=umViewEditUser" />
       <forward name="saved" path="/um/viewAllUsers.do" />
     </action>
+    <action name="umViewAllUsersForm" path="/um/userSearch" scope="session" type="org.digijava.module.um.action.UserSearch">
+   		<forward name="index" path="/aim/index.do" redirect="true" />
+   		<forward name="forward" path="/showLayout.do?layout=umViewAllUsers" /> 
+    </action>
   </action-mappings>
 </struts-config>

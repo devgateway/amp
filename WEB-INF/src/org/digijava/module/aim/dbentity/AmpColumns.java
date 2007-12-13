@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.util.Set;
 //import java.io.Serializable;
 
-public class AmpColumns  implements Serializable,Comparable
-{
+import org.digijava.module.aim.annotations.reports.Identificator;
 
+public class AmpColumns  implements Serializable, Comparable
+{
+	@Identificator
 	private Long columnId ;
 	private String columnName ;
 	private String columnNameTrimmed;
@@ -78,5 +80,4 @@ public class AmpColumns  implements Serializable,Comparable
 		AmpColumns auxColumn=(AmpColumns) o;
 		return this.getColumnName().compareTo(auxColumn.getColumnName());
 	}
-
 }

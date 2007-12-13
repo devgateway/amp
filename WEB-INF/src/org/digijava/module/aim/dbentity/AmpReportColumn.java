@@ -2,11 +2,19 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 
+import org.digijava.module.aim.annotations.reports.ColumnLike;
+import org.digijava.module.aim.annotations.reports.Level;
+import org.digijava.module.aim.annotations.reports.Order;
 
-public class AmpReportColumn  implements Serializable
+
+public class AmpReportColumn  implements Serializable, Comparable
 {
+	@ColumnLike
 	private AmpColumns column;
+	@Order
 	private String orderId;
+	@Level
+	private AmpCategoryValue level;
 
 	public AmpColumns getColumn() {
 		return column;
@@ -20,4 +28,23 @@ public class AmpReportColumn  implements Serializable
 	public void setOrderId(String orderId) {
 		this.orderId = orderId;
 	}
+	public AmpCategoryValue getLevel() {
+		return level;
+	}
+	public void setLevel(AmpCategoryValue level) {
+		this.level = level;
+	}
+	public int compareTo(Object o) {
+		try {
+			int myOrder	= Integer.parseInt(orderId);
+			int oOrder	= Integer.parseInt( ((AmpReportColumn)o).getOrderId() );
+			return myOrder-oOrder;
+		}
+		catch (NumberFormatException e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+	
+	
 }

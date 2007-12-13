@@ -5,6 +5,8 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/advanceReportManager.js"/>"></script>
 <script language="JavaScript">
@@ -95,23 +97,42 @@ function backStep() {
 
 function addColumn()
 {
+	var items	= document.aimAdvancedReportForm.selectedColumns;
+	var ok		= false;
+	for (i=0; i<items.length; i++) {
+		if ( items[i].checked ) {
+			ok	= true;
+			break;
+		}
+	}
+	if (ok) {
 		<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=AddMeasure" />
 		document.aimAdvancedReportForm.action = "<%= advReport %>";
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
+	}
+	else 
+		alert(" Please select columns to add");
 }
 
 function deleteColumn()
 {
-	if(document.aimAdvancedReportForm.removeColumns == null)
-		alert(" Please select columns to remove");
-	else
-	{
+	var items	= document.aimAdvancedReportForm.removeColumns;
+	var ok		= false;
+	for (i=0; i<items.length; i++) {
+		if ( items[i].checked ) {
+			ok	= true;
+			break;
+		}
+	}
+	if (ok) {
 		<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=DeleteMeasure" />
 		document.aimAdvancedReportForm.action = "<%= advReport %>";
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
 	}
+	else 
+		alert(" Please select columns to remove");
 }
 
 function addAdjustType()
@@ -142,9 +163,12 @@ function checkUncheckAll() {
 }
 
 function checkUncheckAll2() {
-     var items=document.aimAdvancedReportForm.removeColumns;
+	var items	= document.aimAdvancedReportForm.removeReportColumnsLevel;
+	if (items == null) {
+		items	= document.aimAdvancedReportForm.removeColumns;
+	}
 		for(i=0; i<items.length; i++){
-			document.aimAdvancedReportForm.removeColumns[i].checked = document.aimAdvancedReportForm.checkall2.checked;
+			items[i].checked = document.aimAdvancedReportForm.checkall2.checked;
 		}
 }
 
@@ -152,6 +176,7 @@ function checkUncheckAll2() {
 
 <digi:instance property="aimAdvancedReportForm" />
 <digi:form action="/advancedReportManager.do" method="post">
+<bean:define name="aimAdvancedReportForm" id="myForm" type="org.digijava.module.aim.form.AdvancedReportForm"/>
 
 
 <html:hidden property="moveColumn"/>
@@ -275,12 +300,13 @@ function checkUncheckAll2() {
 																							align="top" bgcolor="#aaaaaa" border=0>
 																								<c:if test="${!empty aimAdvancedReportForm.ampMeasures}">
 																								<logic:iterate name="aimAdvancedReportForm" id="ampMeasures"
-																								property="ampMeasures" >
+																								property="ampMeasures" type="org.digijava.module.aim.dbentity.AmpMeasures">
+																								<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="false">
 																								<TR bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
 																									<digi:trn key="aim:reportBuilder:${ampMeasures.aliasName}">
 																										<c:out value="${ampMeasures.aliasName}"/>
-																									 </digi:trn>
+																									</digi:trn>
 																									</td>
 																									<td align="right">
 																										<html:multibox property="selectedColumns">
@@ -288,6 +314,45 @@ function checkUncheckAll2() {
 																									    </html:multibox>
 																									</td>
 																								</tr>
+																								</gs:test>
+																								<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="true">
+																								<%
+																									Long myId	= ampMeasures.getMeasureId();
+																									java.util.HashMap<Long, java.util.Collection<org.digijava.module.aim.dbentity.AmpCategoryValue>> measureToLevelHM	
+																										= myForm.getMeasureToLevel();
+																									java.util.Collection<org.digijava.module.aim.dbentity.AmpCategoryValue> levelsCollection	
+																										= (java.util.Collection<org.digijava.module.aim.dbentity.AmpCategoryValue>)measureToLevelHM.get(myId);
+																									pageContext.setAttribute("levelsCollection", levelsCollection, PageContext.PAGE_SCOPE);
+																								%>
+																								<logic:notEmpty name="levelsCollection">
+																								<tr bgcolor="#ffffff">
+																									<td align="left" width="68%" valign=top>
+																									<digi:trn key="aim:reportBuilder:${ampMeasures.aliasName}">
+																										<c:out value="${ampMeasures.aliasName}"/>
+																									</digi:trn>
+																									</td>
+																									<td align="left" width="30%" valign=top>
+																									<select name="selectedMeasureToLevel(${ampMeasures.measureId})" style="font-size: 10px">
+																									<logic:iterate name="levelsCollection" id="categoryLevel" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
+																										<c:choose>
+																											<c:when test="${categoryLevel.id == aimAdvancedReportForm.activityLevel}">
+																												<option value="${categoryLevel.id}" selected="selected">${categoryLevel.value}</option>
+																											</c:when>
+																											<c:otherwise>
+																												<option value="${categoryLevel.id}">${categoryLevel.value}</option>
+																											</c:otherwise>
+																										</c:choose>
+																									</logic:iterate>
+																									</select>
+																									</td>
+																									<td align="right">
+																										<html:multibox property="selectedColumns">
+																										<c:out value="${ampMeasures.measureId}"/>
+																									    </html:multibox>
+																									</td>
+																								</tr>
+																								</logic:notEmpty>
+																								</gs:test>
 																								</logic:iterate>
 																								</c:if>
 																							</TABLE>
@@ -334,18 +399,19 @@ function checkUncheckAll2() {
 																						</td>
 																					</tr>
 																					<TR>
-																						<c:if test="${!empty aimAdvancedReportForm.addedMeasures}">
+																						<c:if test="${(!empty aimAdvancedReportForm.addedMeasures) || (!empty aimAdvancedReportForm.measuresSelection)}">
 																						<TD>
 																						<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top"
 																						align="top" bgcolor="#aaaaaa" border=0>
-																							<c:if test="${!empty aimAdvancedReportForm.addedMeasures}">
+																							
+																							<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="false">
 																							<logic:iterate name="aimAdvancedReportForm" id="addedMeasures"
-																							property="addedMeasures" >
+																							property="addedMeasures" type="org.digijava.module.aim.dbentity.AmpMeasures">
 																							<tr bgcolor=#ffffff>
 																								<td align="left" width="98%">
 																								<digi:trn key="aim:reportBuilder:${addedMeasures.aliasName}">
 																										<c:out value="${addedMeasures.aliasName}"/>
-																							 </digi:trn>
+																								 </digi:trn>
 																								</td>
 																								<td align="right">
 																									<html:multibox property="removeColumns" >
@@ -362,12 +428,49 @@ function checkUncheckAll2() {
 																								</td>
 																							</tr>
 																							</logic:iterate>
-																							</c:if>
+																							</gs:test>
+																							<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="true">
+																							<%
+																							java.util.Collection <org.digijava.module.aim.dbentity.AmpReportMeasures> reportMeasureCollection	
+																								= myForm.getMeasuresSelection();
+																							pageContext.setAttribute("reportMeasureCollection", reportMeasureCollection, PageContext.PAGE_SCOPE);
+																							%>
+																								<logic:notEmpty name="reportMeasureCollection">
+																								<logic:iterate name="reportMeasureCollection" id="reportMeasure" type="org.digijava.module.aim.dbentity.AmpReportMeasures" indexId="counter" >
+																								<bean:define name="reportMeasure" property="measure" type="org.digijava.module.aim.dbentity.AmpMeasures" id="addedMeasures" />
+																								<bean:define name="reportMeasure" property="level" type="org.digijava.module.aim.dbentity.AmpCategoryValue" id="level" />
+																								<tr bgcolor=#ffffff>
+																									<td align="left" width="98%">
+																									<digi:trn key="aim:reportBuilder:${addedMeasures.aliasName}">
+																											<c:out value="${addedMeasures.aliasName}"/>
+																									 </digi:trn> - 
+																									 <category:getoptionvalue categoryValueId="${level.id}"/>
+																									</td>
+																									<td align="right">
+																										<html:multibox property="removeReportColumnsLevel" >
+																											<bean:write name="counter" />
+																										</html:multibox>
+																										<input type="hidden" name="removeColumns" value="-1" />
+																									</td>
+																									<td align="right">
+																										<IMG alt="Move Up"  height=10
+																										src="../ampTemplate/images/up-arrow.jpg" width=10
+																										onclick="moveUp(<c:out value='${counter}' />)">
+																										<IMG alt="Move Down" styleClass="test" height=10
+																										src="../ampTemplate/images/down-arrow.jpg" width=10
+																										onclick="moveDown(<c:out value='${counter}' />)">
+																									</td>
+																								</tr>
+																								</logic:iterate>
+							  																	</logic:notEmpty>
+																							
+																							</gs:test>
+																							
 																						</TABLE>
 																						</TD>
 																						</c:if>
 
-																						<c:if test="${empty aimAdvancedReportForm.addedMeasures}">
+																						<c:if test="${empty aimAdvancedReportForm.addedMeasures} && ${empty aimAdvancedReportForm.measuresSelection}">
 																						<td >
 																							<TABLE width="100%" height="100" cellPadding=2 cellSpacing=0
 																							vAlign="top" align="center" bgcolor="#f4f4f2">

@@ -1,6 +1,10 @@
 package org.digijava.module.aim.action;
 
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,6 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -32,6 +37,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.annotations.reports.ColumnLike;
+import org.digijava.module.aim.annotations.reports.Identificator;
+import org.digijava.module.aim.annotations.reports.Level;
+import org.digijava.module.aim.annotations.reports.Order;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpColumnsOrder;
 import org.digijava.module.aim.dbentity.AmpColumnsVisibility;
@@ -41,13 +51,18 @@ import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
+import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.exception.reports.ReportException;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.AmpFund;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Column;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DecimalToText;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Report;
 import org.digijava.module.aim.helper.ReportSelectionCriteria;
 import org.digijava.module.aim.helper.TeamMember;
@@ -62,15 +77,22 @@ import org.digijava.module.aim.util.TeamUtil;
 public class AdvancedReport extends Action {
 
 	private static Logger logger = Logger.getLogger(Login.class);
-	private String str="";
+	private String str=""; 
+	
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
 		//logger.info("###---------------------------------------------------------------------->>>>>>>>");
 		
+		boolean isXLevelEnabled		= Boolean.parseBoolean( FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.ACTIVITY_LEVEL) );
+		String selectRowsStepName	= null;
+		if (isXLevelEnabled) {
+			selectRowsStepName		= "SelectRowsXLevel";
+		}
+		else
+			selectRowsStepName		= "SelectRows";
 		AdvancedReportForm formBean = (AdvancedReportForm) form;
-		
 		
 		HttpSession httpSession = request.getSession();
 		Query query;
@@ -150,6 +172,16 @@ public class AdvancedReport extends Action {
 				formBean.setMaxStep(new Integer(0));				
 				formBean.setDuplicatedReportName(false);
 				formBean.setDuplicatedReportOwner(null);
+				formBean.setSelectedColumns(new Long[0]);
+				formBean.setRemoveColumns(new Long[0]);
+				
+				formBean.setReportType(null);
+				
+				formBean.setColumnToLevel(null);
+				formBean.setColumnsSelection(null);
+				formBean.setMeasureToLevel(null);
+				formBean.setMeasuresSelection(null);
+				
 			} 
 			
 			
@@ -174,6 +206,17 @@ public class AdvancedReport extends Action {
 		//	else
 		//		logger.info(" AmpColumns is not NULL........");
 			
+			
+			if ( formBean.getColumnToLevel() == null ) {
+				formBean.setActivityLevel(null);
+				formBean.setColumnToLevel( new HashMap<Long, Collection<AmpCategoryValue>>() );
+				formBean.setColumnsSelection( new ArrayList<AmpReportColumn>() );
+				formBean.setMeasureToLevel( new HashMap<Long, Collection<AmpCategoryValue>>() );
+				formBean.setMeasuresSelection( new ArrayList<AmpReportMeasures>() );
+				formBean.setHierarchiesSelection( new ArrayList<AmpReportHierarchy>() );
+				populateLevelHashMap( formBean.getAmpColumns(), formBean.getColumnToLevel(), false );
+				populateLevelHashMap( formBean.getAmpMeasures(), formBean.getMeasureToLevel(), false );
+			}
 			// Add the columns selected : Step 2
 			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectCols"))
 			{
@@ -200,10 +243,16 @@ public class AdvancedReport extends Action {
 			{
 				str = request.getParameter("check");
 				//logger.info( "Operation is : " + str);
-				updateData(formBean.getAmpColumns(), formBean.getAddedColumns(), formBean.getSelectedColumns(), formBean);
+				if (isXLevelEnabled) {
+					this.addLevels(formBean.getSelectedColumns(), formBean.getAmpColumns(), formBean.getColumnToLevel(), 
+							AmpReportColumn.class, formBean.getColumnsSelection(),formBean.getSelectedColumnToLevelHM() );
+				}
+				else
+					updateData(formBean.getAmpColumns(), formBean.getAddedColumns(), formBean.getSelectedColumns(), formBean);
 				formBean.setSelectedColumns(null);
 				if (formBean.getMaxStep().intValue() < 1)
 					formBean.setMaxStep(new Integer(1));
+				
 				return goTo("SelectCols",formBean,mapping);
 			}
 			// Remove the columns selected
@@ -211,8 +260,14 @@ public class AdvancedReport extends Action {
 			{
 				str = request.getParameter("check");
 				//logger.info( "Operation is : " + str);
-				updateData(formBean.getAddedColumns(), formBean.getAmpColumns() , formBean.getRemoveColumns(), formBean);
-				formBean.setRemoveColumns(null);
+				if ( !isXLevelEnabled ) {
+					updateData(formBean.getAddedColumns(), formBean.getAmpColumns() , formBean.getRemoveColumns(), formBean);
+					formBean.setRemoveColumns(null);
+				}
+				else {
+					this.removeLevels(formBean.getRemoveReportColumnsLevel(), formBean.getColumnToLevel() ,
+							formBean.getColumnsSelection() );
+				}
 				if (formBean.getMaxStep().intValue() < 1)
 					formBean.setMaxStep(new Integer(1));
 				return goTo("SelectCols",formBean,mapping);
@@ -222,30 +277,44 @@ public class AdvancedReport extends Action {
 			if(request.getParameter("check") != null && request.getParameter("check").equals("Step2AddRows"))
 			{
 				str = request.getParameter("check");
-				updateData(formBean.getAddedColumns(), formBean.getColumnHierarchie(), formBean.getSelectedColumns(), formBean);
-				formBean.setSelectedColumns(null);
+				if ( !isXLevelEnabled) {
+					updateData(formBean.getAddedColumns(), formBean.getColumnHierarchie(), formBean.getSelectedColumns(), formBean);
+					formBean.setSelectedColumns(null);
+				}
+				else
+					moveReportObjectsToList(formBean.getSelectedColumns(), formBean.getColumnsSelection(), AmpReportHierarchy.class, formBean.getHierarchiesSelection());
 				if (formBean.getMaxStep().intValue() < 2)
 					formBean.setMaxStep(new Integer(2));
-				return goTo("SelectRows",formBean,mapping);				
+				return goTo(selectRowsStepName,formBean,mapping);				
 			}
 			// Remove the columns selected : Step 2
 			if(request.getParameter("check") != null && request.getParameter("check").equals("Step2DeleteRows"))
 			{
 				str = request.getParameter("check");
 				//logger.info( "Operation is : " + str);
-				updateData(formBean.getColumnHierarchie(), formBean.getAddedColumns(), formBean.getRemoveColumns(), formBean);
-				formBean.setRemoveColumns(null);
+				if ( !isXLevelEnabled ) {
+					updateData(formBean.getColumnHierarchie(), formBean.getAddedColumns(), formBean.getRemoveColumns(), formBean);
+					formBean.setRemoveColumns(null);
+				}
+				else 
+					moveReportObjectsToList(formBean.getRemoveColumns(), formBean.getHierarchiesSelection(), AmpReportColumn.class, formBean.getMeasuresSelection());
 				if (formBean.getMaxStep().intValue() < 2)
 					formBean.setMaxStep(new Integer(2));
-				return goTo("SelectRows",formBean,mapping);
+				return goTo(selectRowsStepName,formBean,mapping);
 			}
 			// Step 3 : Select Measures
 			if(request.getParameter("check") != null && request.getParameter("check").equals("AddMeasure"))
 			{
-				str = request.getParameter("check");
-				//logger.info( "Operation is : " + str);
-				updateData(formBean.getAmpMeasures(), formBean.getAddedMeasures(), formBean.getSelectedColumns(), formBean);
-				formBean.setSelectedColumns(null);
+				if (isXLevelEnabled) {
+					this.addLevels(formBean.getSelectedColumns(), formBean.getAmpMeasures(), formBean.getMeasureToLevel(), 
+							AmpReportMeasures.class, formBean.getMeasuresSelection(), formBean.getSelectedMeasureToLevelHM() );
+				}
+				else {
+					str = request.getParameter("check");
+					//logger.info( "Operation is : " + str);
+					updateData(formBean.getAmpMeasures(), formBean.getAddedMeasures(), formBean.getSelectedColumns(), formBean);
+					formBean.setSelectedColumns(null);
+				}
 				if (formBean.getMaxStep().intValue() < 3)
 					formBean.setMaxStep(new Integer(3));
 				return goTo("SelectMeasures",formBean,mapping);				
@@ -254,10 +323,16 @@ public class AdvancedReport extends Action {
 			// Remove the columns selected
 			if(request.getParameter("check") != null && request.getParameter("check").equals("DeleteMeasure"))
 			{
-				str = request.getParameter("check");
-				//logger.info( "Operation is : " + str);
-				updateData(formBean.getAddedMeasures(), formBean.getAmpMeasures() , formBean.getRemoveColumns(), formBean);
-				formBean.setRemoveColumns(null);
+				if (isXLevelEnabled) {
+					this.removeLevels(formBean.getRemoveReportColumnsLevel(), formBean.getMeasureToLevel(), 
+							formBean.getMeasuresSelection() );
+				}
+				else{
+					str = request.getParameter("check");
+					//logger.info( "Operation is : " + str);
+					updateData(formBean.getAddedMeasures(), formBean.getAmpMeasures() , formBean.getRemoveColumns(), formBean);
+					formBean.setRemoveColumns(null);
+				}
 				if (formBean.getMaxStep().intValue() < 3)
 					formBean.setMaxStep(new Integer(3));
 				return goTo("SelectMeasures",formBean,mapping);
@@ -803,7 +878,7 @@ public class AdvancedReport extends Action {
 				
 			
 			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectRows"))
-				return goTo("SelectRows",formBean,mapping);
+				return goTo(selectRowsStepName,formBean,mapping);
 				
 
 
@@ -908,34 +983,56 @@ public class AdvancedReport extends Action {
 			
 			// Move the selected column Up : Step 1 ie Select Columns
 			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveUp")){
-				moveColumns(formBean, "MoveUp");
+				if (isXLevelEnabled) {
+					moveUpOrDown(Integer.parseInt(formBean.getMoveColumn()), formBean.getColumnsSelection(), true);
+				}
+				else
+					moveColumns(formBean, "MoveUp");
 				return goTo("SelectCols",formBean,mapping);				
 			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("Step2MoveUp"))
 			{
-				moveColumns(formBean, "Step2MoveUp");
-				return goTo("SelectRows",formBean,mapping);
+				if (isXLevelEnabled) {
+					moveUpOrDown(Integer.parseInt(formBean.getMoveColumn()), formBean.getHierarchiesSelection(), true);
+				}
+				else
+					moveColumns(formBean, "Step2MoveUp");
+				return goTo(selectRowsStepName,formBean,mapping);
 				
 			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveUpMeasure"))
 			{
-				moveColumns(formBean, "MoveUpMeasure");
+				if (isXLevelEnabled)
+					moveUpOrDown(Integer.parseInt(formBean.getMoveColumn()), formBean.getMeasuresSelection(), true);
+				else
+					moveColumns(formBean, "MoveUpMeasure");
 				return goTo("SelectMeasures",formBean,mapping);				
 			}
 
 			// Move the selected column Down : Step 1 ie Select Columns
 			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveDown")){
-				moveColumns(formBean, "MoveDown");
+				if (isXLevelEnabled) {
+					moveUpOrDown(Integer.parseInt(formBean.getMoveColumn()), formBean.getColumnsSelection(), false);
+				}
+				else
+					moveColumns(formBean, "MoveDown");
 				return goTo("SelectCols",formBean,mapping);
 			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("Step2MoveDown"))
 			{
-				moveColumns(formBean, "Step2MoveDown");
-				return goTo("SelectRows",formBean,mapping);
+				if (isXLevelEnabled) {
+					moveUpOrDown(Integer.parseInt(formBean.getMoveColumn()), formBean.getHierarchiesSelection(), false);
+				}
+				else
+					moveColumns(formBean, "Step2MoveDown");
+				return goTo(selectRowsStepName,formBean,mapping);
 			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveDownMeasure"))
 			{
-				moveColumns(formBean, "MoveDownMeasure");
+				if (isXLevelEnabled)
+					moveUpOrDown(Integer.parseInt(formBean.getMoveColumn()), formBean.getMeasuresSelection(), false);
+				else
+					moveColumns(formBean, "MoveDownMeasure");
 				return goTo("SelectMeasures",formBean,mapping);
 			}
 			
@@ -1021,27 +1118,34 @@ public class AdvancedReport extends Action {
 								ampReports.setOptions(formBean.getReportOption());
 						
 						// saving the selected columns for the report
-						Set columns = new HashSet();
-						if(formBean.getAddedColumns() != null)
-						{
-							iter = formBean.getAddedColumns().iterator();
-							i = 1;
-							while(iter.hasNext())
+						if ( !isXLevelEnabled ) {
+							ampReports.setActivityLevel( CategoryManagerUtil.getAmpCategoryValueFromDb(formBean.getActivityLevel()) );
+							Set columns = new HashSet();
+							if(formBean.getAddedColumns() != null)
 							{
-								AmpColumns cols = (AmpColumns)iter.next();
-
-									AmpReportColumn	temp = new AmpReportColumn();
-									temp.setColumn(cols);
-									temp.setOrderId(""+i);
-									columns.add(temp);
-									i = i + 1;
-								}
-								ampReports.setColumns(columns);
+								iter = formBean.getAddedColumns().iterator();
+								i = 1;
+								while(iter.hasNext())
+								{
+									AmpColumns cols = (AmpColumns)iter.next();
+	
+										AmpReportColumn	temp = new AmpReportColumn();
+										temp.setColumn(cols);
+										temp.setOrderId(""+i);
+										columns.add(temp);
+										i = i + 1;
+									}
+									ampReports.setColumns(columns);
 							}
-						
+						}
+						else {
+							addOrderToReportObjects( formBean.getColumnsSelection() );
+							ampReports.setColumns( new HashSet(formBean.getColumnsSelection()) );
+						}
+						//	saving the column hierarchies in step2
+						if ( !isXLevelEnabled ) {
 							if(formBean.getColumnHierarchie() != null)
 							{
-								// saving the column hierarchies in step2 
 								Set hierarchies = new HashSet();
 								iter  = formBean.getColumnHierarchie().iterator();
 								i = 1;
@@ -1057,8 +1161,13 @@ public class AdvancedReport extends Action {
 								}
 								ampReports.setHierarchies(hierarchies);
 							}
-						
-							// saving the AMp Report Measures
+						}
+						else {
+							addOrderToReportObjects( formBean.getHierarchiesSelection() );
+							ampReports.setHierarchies( new HashSet(formBean.getHierarchiesSelection()) );
+						}
+							// saving the AMP Report Measures
+						if ( !isXLevelEnabled ) {
 							Set measures = new HashSet();
 							if(formBean.getAddedMeasures() != null)
 							{
@@ -1083,6 +1192,11 @@ public class AdvancedReport extends Action {
 								}
 							}
 							ampReports.setMeasures(measures);
+						}
+						else {
+							addOrderToReportObjects( formBean.getMeasuresSelection() );
+							ampReports.setReportMeasures( new HashSet(formBean.getMeasuresSelection()) );
+						}
 							ampReports.setHideActivities(formBean.getHideActivities());
 							ampReports.setDrilldownTab(formBean.getDrilldownTab());
 							ampReports.setPublicReport(formBean.getPublicReport());
@@ -1753,5 +1867,367 @@ public class AdvancedReport extends Action {
 	private ActionForward goTo(String forwardName, AdvancedReportForm form, ActionMapping mapping ){
 		form.setCurrentTabName(forwardName);
 		return mapping.findForward(forwardName);	
+	}
+	
+	/**
+	 * 
+	 * @param src - collection of objects that can have levels assigned (AmpColumns, AmpMeasures)
+	 * @param columnToLevel - the hashmap to populate, where key will be the ids of objects from src and the values will be collection of levels(AmpCategoryValue)
+	 * @param emptyCollections - true, if you DON'T want the collections filled with AmpCategoryValue levels 
+	 */
+	public static void populateLevelHashMap(Collection<Object> src,HashMap<Long, Collection<AmpCategoryValue>> columnToLevel, boolean emptyCollections) {
+		Collection<AmpCategoryValue> activityLevels	= 
+			CategoryManagerUtil.getAmpCategoryValueCollectionByKey( CategoryConstants.ACTIVITY_LEVEL_KEY );
+		
+		Iterator<Object> colIter	= src.iterator();
+		
+		while ( colIter.hasNext() ){
+			Object columnOrMeasure				= colIter.next();
+			Long id								= getHibernateId(columnOrMeasure); 
+			ArrayList<AmpCategoryValue> levels	= new ArrayList<AmpCategoryValue>( activityLevels.size() );
+			
+			if ( !emptyCollections )
+					levels.addAll( activityLevels );
+			
+			columnToLevel.put(id, levels);
+		}
+	}
+	
+	public static Long getHibernateId (Object o) {
+		if (o == null) return null;
+		if (o instanceof AmpColumns) {
+			return ((AmpColumns)o).getColumnId(); 
+		}
+		if (o instanceof AmpMeasures) {
+			return ((AmpMeasures)o).getMeasureId(); 
+		}
+		return null;
+	}
+	/**
+	 * Objects must have properties annontated with ColumnLike and Level. The comparisons are made 
+	 * based on these properties.
+	 * @param obj - object to search for
+	 * @param collection - collection to search in
+	 * @return true if obj in collection
+	 */
+	private static boolean checkIfReportObjectInCollection( Object obj, Collection collection ) {
+		try{
+			Object colLikeObj	= invokeGetterForBeanPropertyWithAnnotation(obj, ColumnLike.class, new Object[0]);
+			Object levelObj		= invokeGetterForBeanPropertyWithAnnotation(obj, Level.class, new Object[0]);
+			if ( colLikeObj == null ) {
+				throw new ReportException("ColumnLike property of ReportObject is null");
+			}
+			if ( levelObj == null ) {
+				throw new ReportException("Level property of ReportObject is null");
+			}
+			Iterator iterator	= collection.iterator();
+			while ( iterator.hasNext() ) {
+				Object reportObj		= iterator.next();
+				Object colLikeObjTemp	= invokeGetterForBeanPropertyWithAnnotation(reportObj, ColumnLike.class, new Object[0]);
+				Object levelObjTemp		= invokeGetterForBeanPropertyWithAnnotation(reportObj, Level.class, new Object[0]);
+				if ( colLikeObj.equals(colLikeObjTemp) && levelObj.equals(levelObjTemp) ) {
+					return true;
+				}
+			}
+		}
+		catch (Exception E) {
+			E.printStackTrace();
+		}
+		return false;
+	} 
+	/**
+	 * 
+	 * Moves objects from one reportsToColumnLike Collection (like collections of AmpReportColumns, AmpReportHierarchy or
+	 *  AmpReportMeasure) to another reportsToColumnLike Collection. 
+	 *  When moving another object is created but the ColumnLike and Level properties are copied from the old object to the new one.
+	 * 
+	 * @param srcIds - ids of reportToColumnLike objects to be copied
+	 * @param srcList - source List
+	 * @param destClass - the class of the object that will be created on copy
+	 * @param destList - destination List
+	 * @throws Exception
+	 */
+	private static void moveReportObjectsToList(Long [] srcIds, List srcList, 
+											Class destClass,  List destList) throws Exception {
+		
+		Collection removedObjects	= new ArrayList();
+		
+		for (int i=0; i<srcIds.length; i++) {
+		
+			Object obj 		= srcList.get( srcIds[i].intValue() );
+			
+			removedObjects.add(obj);
+			
+			Constructor destinationClassConstructor	= destClass.getConstructor(new Class[0]);
+			Object reportToColLikeMapping			= destinationClassConstructor.newInstance(new Object[0]);
+			
+			Object [] params1						= new Object[1];
+			params1[0]								= invokeGetterForBeanPropertyWithAnnotation(obj, ColumnLike.class, new Object[0]);
+			invokeSetterForBeanPropertyWithAnnotation(reportToColLikeMapping, ColumnLike.class, params1);
+			
+			Object [] params2						= new Object[1];
+			params2[0]								= invokeGetterForBeanPropertyWithAnnotation(obj, Level.class, new Object[0]);
+			invokeSetterForBeanPropertyWithAnnotation(reportToColLikeMapping, Level.class, params2);
+			
+			if ( !checkIfReportObjectInCollection(reportToColLikeMapping, destList) ) {
+				destList.add(reportToColLikeMapping);
+			}
+			srcIds[i]		= new Long(-1);
+		}
+		
+		srcList.removeAll( removedObjects );
+	}
+	/**
+	 * For changing the order of column, measures, hierarchies
+	 * @param index
+	 * @param list
+	 * @param moveUp if true we move it up, otherwise we move it down
+	 */
+	private static void moveUpOrDown(int index, List list, boolean moveUp) {
+		if ( moveUp && index==0 )
+			return;
+		if ( !moveUp && index==list.size()-1 )
+			return;
+		if ( index < 0 )
+			throw new RuntimeException("Index of List should not be < 0");
+		if ( index > list.size()-1 )
+			throw new RuntimeException("Index of List should not be > list.size()-1");
+		
+		Object obj		= list.remove(index);
+		if (moveUp) 
+			list.add(index-1, obj);
+		else
+			list.add(index+1, obj);
+		
+	}
+	/**
+	 * 
+	 * @param selectedLevel id of an AmpCategoryValue level 
+	 * @param availableLevels AmpCategoryValue with id=selectedLevel will be removed from this collection
+	 */
+	private static void removeSelectedLevel(Long selectedLevel, Collection<AmpCategoryValue> availableLevels ) {
+		/*Long selectedLevel								= myForm.getSelectedColumnToLevel(colOrMeasureId);
+		Collection<AmpCategoryValue> availableLevels	= myForm.getColumnToLevel().get(colOrMeasureId);*/
+		
+		Iterator<AmpCategoryValue> iter					= availableLevels.iterator();
+		
+		while (iter.hasNext()) {
+			AmpCategoryValue level	= iter.next();
+			if ( level.getId().equals( selectedLevel ) ) {
+				iter.remove();
+			}
+		}
+		
+	}
+	
+	private static void addSelectedLevel(Long selectedLevel, Collection<AmpCategoryValue> availableLevels ) {
+		/*Long selectedLevel								= myForm.getSelectedColumnToLevel(colOrMeasureId);
+		Collection<AmpCategoryValue> availableLevels	= myForm.getColumnToLevel().get(colOrMeasureId);*/
+		
+		AmpCategoryValue level							= CategoryManagerUtil.getAmpCategoryValueFromDb(selectedLevel);
+		
+		if ( !availableLevels.contains(level) ) {
+			availableLevels.add( level );
+		}
+		
+	}
+	/**
+	 * 
+	 * @param ids indexes in sourceList that need to be removed
+	 * @param destinationHM map of columnLikeObjectsIds to available levels
+	 * @param sourceList list of reportToColumnLike objects 
+	 * @throws Exception
+	 */
+	private static void removeLevels(Integer [] ids,  
+			HashMap<Long, Collection<AmpCategoryValue> > destinationHM, 
+			List sourceList) 
+			throws Exception{
+		
+		Collection removedObjects		= new ArrayList(); 
+			
+		for (int i=0; i<ids.length; i++) {
+			Collection<AmpCategoryValue> availableLevels	= null;
+			
+			//Long colOrMeasureId					= Long.parseLong( pairOfIds[0] );
+			//Long levelId						= Long.parseLong( pairOfIds[1] );
+			
+			
+			
+			Object reportToColLikeMapping 	= sourceList.get(ids[i]);
+			
+			removedObjects.add(reportToColLikeMapping);
+			
+			Object colLikeObj				= invokeGetterForBeanPropertyWithAnnotation(
+											reportToColLikeMapping, ColumnLike.class, new Object[0]
+											);
+			Long colLikeId					= (Long)invokeGetterForBeanPropertyWithAnnotation(
+											colLikeObj, Identificator.class, new Object[0]
+												);
+			AmpCategoryValue level			= (AmpCategoryValue) invokeGetterForBeanPropertyWithAnnotation(
+											reportToColLikeMapping, Level.class, new Object[0]
+											);  
+			
+			availableLevels					= destinationHM.get( colLikeId );
+			if ( !availableLevels.contains(level) ) {
+				availableLevels.add(level);
+			}
+			
+			/*while (iter.hasNext()) {
+				Object reportToColLikeMapping	= iter.next();
+				Object colLikeObj				= invokeGetterForBeanPropertyWithAnnotation(
+												reportToColLikeMapping, ColumnLike.class, new Object[0]
+												);
+				Long colLikeId					= (Long)invokeGetterForBeanPropertyWithAnnotation(
+												colLikeObj, Identificator.class, new Object[0]
+		                 						);
+				AmpCategoryValue level			= (AmpCategoryValue) invokeGetterForBeanPropertyWithAnnotation(
+												reportToColLikeMapping, Level.class, new Object[0]
+												);  
+				if ( colOrMeasureId.equals(colLikeId) && levelId.equals(level.getId()) ) {
+					iter.remove();
+					if ( ! availableLevels.contains(level) ) {
+						availableLevels.add(level);
+					}
+					break;
+				}
+			}*/
+				
+	
+			//this.addSelectedLevel(levelId, availableLevels);
+			ids[i]			= -1;
+		}
+		Iterator iter		= removedObjects.iterator();
+		while ( iter.hasNext() ) {
+			sourceList.remove( iter.next() );
+		}
+		//return colIds;
+	}
+	/**
+	 * 
+	 * @param ids  ids of colLike objects (AmpColumns, AmpMeasures) in sourceHM selected by the users
+	 * @param colLikeCollection  available collike objects
+	 * @param sourceHM  map of colLike Object ids to available levels
+	 * @param destinationClass  reportToColumnLike class (AmpReportColumn, AmpReportMeasures, AmpReportHierarchy)
+	 * @param destinationCollection collection of objects of type destinationClass
+	 * @param userLevelSelectionMap contains the selected levels for the selected colLike objects
+	 * @throws Exception
+	 */
+	private static void addLevels(Long [] ids, Collection colLikeCollection, 
+			HashMap<Long, Collection<AmpCategoryValue> > sourceHM, 
+			Class destinationClass, Collection destinationCollection, HashMap<String, Long> userLevelSelectionMap) 
+			throws Exception{
+		
+				
+		for (int i=0; i< ids.length; i++) {
+			Collection<AmpCategoryValue> availableLevels	= null;
+			Long selectedLevel								= null;
+			
+			availableLevels					= sourceHM.get( ids[i] );
+			selectedLevel					= userLevelSelectionMap.get( ids[i] + "" );
+			
+			Object colLike;
+			try {
+				colLike = AdvancedReport.getObjectByIdFromCollection(ids[i], colLikeCollection);
+			} catch (Exception e) {
+				e.printStackTrace();
+				continue;
+			}
+			//AmpReportColumn reportColumn	= new AmpReportColumn();
+			Constructor destinationClassConstructor	= destinationClass.getConstructor(new Class[0]);
+			Object reportToColLikeMapping			= destinationClassConstructor.newInstance(new Object[0]);
+			
+			Object [] params1						= new Object[1];
+			params1[0]								= colLike;
+			invokeSetterForBeanPropertyWithAnnotation(reportToColLikeMapping, ColumnLike.class, params1);
+			
+			Object [] params2						= new Object[1];
+			params2[0]								= CategoryManagerUtil.getAmpCategoryValueFromDb(selectedLevel);
+			invokeSetterForBeanPropertyWithAnnotation(reportToColLikeMapping, Level.class, params2);
+				
+			if ( invokeGetterForBeanPropertyWithAnnotation(reportToColLikeMapping, ColumnLike.class, new Object[0]) == null && 
+					invokeGetterForBeanPropertyWithAnnotation(reportToColLikeMapping, Level.class, new Object[0]) == null) {
+				throw new RuntimeException("Object of type " + reportToColLikeMapping.getClass() + " was not populated with " + 
+						colLike.getClass() + " and level id " + selectedLevel );
+			}
+			
+			if ( !checkIfReportObjectInCollection(reportToColLikeMapping, destinationCollection) )
+					destinationCollection.add( reportToColLikeMapping );
+			
+			removeSelectedLevel(selectedLevel, availableLevels);
+			
+			ids[i]	= new Long(-1);
+		}
+	}
+	
+	
+	private static Object getObjectByIdFromCollection(Long id, Collection col) throws Exception {
+		Iterator iterator	= col.iterator();
+		while (iterator.hasNext()) {
+			Object o		= iterator.next();
+			Class myClass	= o.getClass();
+			Field[] fields	= myClass.getDeclaredFields();
+			
+			Long tempId		= (Long) invokeGetterForBeanPropertyWithAnnotation(o, Identificator.class, new Object[0]);
+			if ( tempId.equals(id) )
+				return o;
+		}
+		return null;
+	}
+	
+	public static void invokeSetterForBeanPropertyWithAnnotation (Object beanObj, Class annotationClass, Object [] params ) throws Exception {
+		Class myClass		= beanObj.getClass();
+		Field[] fields		= myClass.getDeclaredFields();
+		for (int i=0; i<fields.length; i++) {
+			if ( fields[i].getAnnotation(annotationClass) != null) {
+				PropertyDescriptor beanProperty	= new PropertyDescriptor(fields[i].getName(), myClass);
+				beanProperty.getWriteMethod().invoke(beanObj, params);
+				return;
+			}
+		}
+		throw new IntrospectionException("No property was found in bean of class '" + myClass.getCanonicalName() + 
+				"' with annotation '" + annotationClass.getCanonicalName() 
+				+ "'");
+	}
+	
+	public static Object invokeGetterForBeanPropertyWithAnnotation (Object beanObj, Class annotationClass, Object [] params ) throws Exception {
+		Class myClass		= beanObj.getClass();
+		Field[] fields		= myClass.getDeclaredFields();
+		for (int i=0; i<fields.length; i++) {
+			if ( fields[i].getAnnotation(annotationClass) != null) {
+				PropertyDescriptor beanProperty	= new PropertyDescriptor(fields[i].getName(), myClass);
+				return beanProperty.getReadMethod().invoke(beanObj, params);
+			}
+		}
+		throw new IntrospectionException("No property was found in bean of class '" + myClass.getCanonicalName() + 
+				"' with annotation '" + annotationClass.getCanonicalName() 
+				+ "'");
+	}
+	private static void addOrderToReportObjects(List list) throws Exception {
+		int i=0;
+		Iterator iter		= list.iterator();
+		while ( iter.hasNext() ) {
+			Object [] params	= new Object[1];
+			params[0]			= i+"";
+			invokeSetterForBeanPropertyWithAnnotation(iter.next(), Order.class, params);
+			i++;
+		}
+	}
+	public static List getDifferentColLikeObjects(Collection reportToColLikeCollection) {
+		ArrayList returnList	= new ArrayList();
+		
+		Iterator iter			= reportToColLikeCollection.iterator();
+		
+		while( iter.hasNext() ) {
+			try {
+				Object colLikeObj	= invokeGetterForBeanPropertyWithAnnotation(iter.next(), ColumnLike.class, new Object[0]);
+				if ( !returnList.contains(colLikeObj) ) {
+					returnList.add(colLikeObj);
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return returnList;
 	}
 }

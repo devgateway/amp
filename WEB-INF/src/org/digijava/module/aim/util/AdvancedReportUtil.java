@@ -86,8 +86,9 @@ public final class AdvancedReportUtil {
 				}					
 				Set reportSet = ampTeamMember.getReports();
 				
-				reportSet.add(ampReports);
-				ampTeamMember.setReports(reportSet);
+				//reportSet.add(ampReports);  // Not needed because it is set from ampReports object
+				
+				
 				ampReports.getMembers().add(ampTeamMember);
 				session.saveOrUpdate(ampTeamMember);
 				//session.save(ampTeamMember);

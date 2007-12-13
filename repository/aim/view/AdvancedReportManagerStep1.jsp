@@ -5,6 +5,8 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
@@ -50,7 +52,7 @@ function moveDown(val)
 	}
 }
 function check(){
-	if(document.aimAdvancedReportForm.removeColumns == null){
+	if(document.aimAdvancedReportForm.removeColumns == null && document.aimAdvancedReportForm.removeColumnsLevel == null){
 		alert(" Please select columns to generate report ");
 		return false;
 	}
@@ -78,25 +80,43 @@ function backStep() {
 
 function addColumn()
 {
-	<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=add" />
-	document.aimAdvancedReportForm.action = "<%= advReport %>";
-	document.aimAdvancedReportForm.target = "_self";
-	document.aimAdvancedReportForm.submit();
+	var items	= document.aimAdvancedReportForm.selectedColumns;
+	var ok		= false;
+	for (i=0; i<items.length; i++) {
+		if ( items[i].checked ) {
+			ok	= true;
+			break;
+		}
+	}
+	if (ok) {
+		<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=add" />
+		document.aimAdvancedReportForm.action = "<%= advReport %>";
+		document.aimAdvancedReportForm.target = "_self";
+		document.aimAdvancedReportForm.submit();
+	}
+	else 
+		alert(" Please select columns to add");
 }
 
 function deleteColumn()
 {
-	if(document.aimAdvancedReportForm.removeColumns == null)
-		alert(" Please select columns to remove");
-	else
-	{
+	var items	= document.aimAdvancedReportForm.removeColumns;
+	var ok		= false;
+	for (i=0; i<items.length; i++) {
+		if ( items[i].checked ) {
+			ok	= true;
+			break;
+		}
+	}
+	if (ok) {
 		<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=delete" />
 		document.aimAdvancedReportForm.action = "<%= advReport %>";
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
 	}
+	else 
+		alert(" Please select columns to remove");
 }
-
 function checkUncheckAll() {
      var items=document.aimAdvancedReportForm.selectedColumns;
 		for(i=0; i<items.length; i++){
@@ -122,15 +142,20 @@ function checkUncheckAll3() {
 }
 
 function checkUncheckAll2() {
-     var items=document.aimAdvancedReportForm.removeColumns;
-		for(i=0; i<items.length; i++){
-			document.aimAdvancedReportForm.removeColumns[i].checked = document.aimAdvancedReportForm.checkall2.checked;
-		}
+	var items	= document.aimAdvancedReportForm.removeReportColumnsLevel;
+	if (items == null) {
+		items	= document.aimAdvancedReportForm.removeColumns;
+	}
+	
+	for(i=0; i<items.length; i++){
+		items[i].checked = document.aimAdvancedReportForm.checkall2.checked;
+	}
 }
 
 </script>
 
 <digi:instance property="aimAdvancedReportForm" />
+<bean:define name="aimAdvancedReportForm" id="myForm" type="org.digijava.module.aim.form.AdvancedReportForm"/>
 <digi:form action="/advancedReportManager.do" method="post">
 
 
@@ -154,7 +179,7 @@ function checkUncheckAll2() {
 
 	<td class=r-dotted-lg align=left vAlign=top >	&nbsp;</td>
 	<td>
-		<table>
+		<table width="80%">
 			<tr>
 				<td>
 					<table cellPadding=5 cellSpacing=0 width="100%">
@@ -245,42 +270,42 @@ function checkUncheckAll2() {
 											
 											<field:display name="Status" feature="Planning">&nbsp;</field:display>
 											<field:display name="Donor Agency" feature="Funding Organizations">&nbsp;</field:display>
-											<field:display name="Actual Start Date" feature="Planning">&nbsp;</field:display>
-											<field:display name="Project Title" feature="Identification">&nbsp;</field:display>
+												<field:display name="Actual Start Date" feature="Planning">&nbsp;</field:display>
+												<field:display name="Project Title" feature="Identification">&nbsp;</field:display>
 											<field:display name="Type Of Assistance" feature="Funding Organizations">&nbsp;</field:display>
-											<field:display name="Implementation Level" feature="Location">&nbsp;</field:display>
+												<field:display name="Implementation Level" feature="Location">&nbsp;</field:display>
 											<field:display name="Actual Completion Date" feature="Planning">&nbsp;</field:display>
 											<field:display name="Sector" feature="Sectors">&nbsp;</field:display>
-											<field:display name="Region" feature="Location">&nbsp;</field:display>
+												<field:display name="Region" feature="Location">&nbsp;</field:display>
 											<field:display name="Financing Instrument" feature="Funding Organizations">&nbsp;</field:display>
 											<field:display name="Objective" feature="Identification">&nbsp;</field:display>
 											<field:display name="Project Id" feature="Identification">&nbsp;</field:display>
 											<field:display name="Contact Name" feature="Reports Contact Information">&nbsp;</field:display>
 											<field:display name="Description" feature="Identification">&nbsp;</field:display>
-											<field:display name="Cumulative Commitment" feature="Funding Organizations">&nbsp;</field:display>
-											<field:display name="Cumulative Disbursement" feature="Funding Organizations">&nbsp;</field:display>
+												<field:display name="Cumulative Commitment" feature="Funding Organizations">&nbsp;</field:display>
+												<field:display name="Cumulative Disbursement" feature="Funding Organizations">&nbsp;</field:display>
 											<field:display name="Component Name" feature="Components">&nbsp;</field:display>
 											<field:display name="Team" feature="Identification">&nbsp;</field:display>
 											<field:display name="Issues" feature="Issues">&nbsp;</field:display>
 											<field:display name="Measures Taken" feature="Issues">&nbsp;</field:display>
 											<field:display name="Actors" feature="Issues">&nbsp;</field:display>
 											<field:display name="Actual Approval Date" feature="Planning" >&nbsp;</field:display>
-											<field:display name="Donor Commitment Date" feature="Funding Organizations">&nbsp;</field:display>
+												<field:display name="Donor Commitment Date" feature="Funding Organizations">&nbsp;</field:display>
 											<field:display name="Physical Progress" feature="Physical Progress">&nbsp;</field:display>
 											<field:display name="Total Costs" feature="Costing"></field:display>
 											<field:display name="A.C. Chapter" feature="Identification">&nbsp;</field:display>
 											<field:display name="Accession Instrument" feature="Identification">&nbsp;</field:display>
 											<field:display name="Costing Donor" feature="Costing"></field:display>
-											<field:display name="Donor Group" feature="Funding Organizations">&nbsp;</field:display>
-											<field:display name="Component description" feature="Components">&nbsp;</field:display>
+												<field:display name="Donor Group" feature="Funding Organizations">&nbsp;</field:display>
+												<field:display name="Component description" feature="Components">&nbsp;</field:display>
 											<field:display name="Physical progress title" feature="Physical Progress">&nbsp;</field:display>
-											<field:display name="Physical progress description" feature="Physical Progress">&nbsp;</field:display>
+												<field:display name="Physical progress description" feature="Physical Progress">&nbsp;</field:display>
 											<field:display name="Indicator Name" feature="Activity"></field:display>
 											<field:display name="Indicator Description" feature="Activity">&nbsp;</field:display>
 											<field:display name="Indicator ID" feature="Activity">&nbsp;</field:display>
 											<field:display name="Indicator Current Value" feature="Activity">&nbsp;</field:display>
-											<field:display name="Indicator Base Value" feature="Activity">&nbsp;</field:display>
-											<field:display name="Indicator Target Value" feature="Activity">&nbsp;</field:display>
+												<field:display name="Indicator Base Value" feature="Activity">&nbsp;</field:display>
+												<field:display name="Indicator Target Value" feature="Activity">&nbsp;</field:display>
 											<field:display name="Sub-Sector" feature="Sectors">&nbsp;</field:display>
 			                            	<field:display name="National Planning Objectives" feature="NPD Programs">&nbsp;</field:display>
 			                            	<field:display name="Primary Program" feature="NPD Programs">&nbsp;</field:display>
@@ -333,6 +358,7 @@ function checkUncheckAll2() {
 																								<ul>
 																								<logic:iterate name="columnCollection" id="ampColumnFromTree" type="org.digijava.module.aim.dbentity.AmpColumns">
 																									<li class="dhtmlgoodies_sheet.gif" noDrag="true">
+																									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="false">
 																										<input type=checkbox id="fieldVis:<bean:write name="ampColumnFromTree" property="columnId"/>"
 																											name="selectedColumns"
 																											value="<bean:write name="ampColumnFromTree" property="columnId"/>"
@@ -340,6 +366,48 @@ function checkUncheckAll2() {
 																										<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
 																											<digi:trn key="aim:report:${ampColumnFromTree.columnName}"><bean:write name="ampColumnFromTree" property="columnName"/></digi:trn>
 																										</a>
+																									</gs:test>
+																									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="true">
+																										
+																										<%
+																											Long myId	= ampColumnFromTree.getColumnId();
+																											java.util.HashMap<Long, java.util.Collection<org.digijava.module.aim.dbentity.AmpCategoryValue>> columnToLevelHM	
+																												= myForm.getColumnToLevel();
+																											java.util.Collection<org.digijava.module.aim.dbentity.AmpCategoryValue> levelsCollection	
+																												= (java.util.Collection<org.digijava.module.aim.dbentity.AmpCategoryValue>)columnToLevelHM.get(myId);
+																											pageContext.setAttribute("levelsCollection", levelsCollection, PageContext.PAGE_SCOPE);
+																										%>
+																										<logic:empty name="levelsCollection">
+																											<input type=checkbox id="fieldVis:<bean:write name="ampColumnFromTree" property="columnId"/>"
+																											name="selectedColumns" disabled="disabled"
+																											value="<bean:write name="ampColumnFromTree" property="columnId"/>"
+																											/>
+																											<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
+																												<digi:trn key="aim:report:${ampColumnFromTree.columnName}"><bean:write name="ampColumnFromTree" property="columnName"/></digi:trn>
+																											</a>
+																										</logic:empty>					
+																										<logic:notEmpty name="levelsCollection">
+																										<input type=checkbox id="fieldVis:<bean:write name="ampColumnFromTree" property="columnId"/>"
+																											name="selectedColumns"
+																											value="<bean:write name="ampColumnFromTree" property="columnId"/>"
+																										/>
+																										<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
+																											<digi:trn key="aim:report:${ampColumnFromTree.columnName}"><bean:write name="ampColumnFromTree" property="columnName"/></digi:trn>
+																										</a>
+																										<select name="selectedColumnToLevel(${ampColumnFromTree.columnId})" style="font-size: 10px">
+																											<logic:iterate name="levelsCollection" id="categoryLevel" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
+																												<c:choose>
+																												<c:when test="${categoryLevel.id == aimAdvancedReportForm.activityLevel}">
+																													<option value="${categoryLevel.id}" selected="selected">${categoryLevel.value}</option>
+																												</c:when>
+																												<c:otherwise>
+																													<option value="${categoryLevel.id}">${categoryLevel.value}</option>
+																												</c:otherwise>
+																												</c:choose>
+																											</logic:iterate>
+																										</select>
+																										</logic:notEmpty>
+																									</gs:test>
 																									</li>
 																								</logic:iterate>
 																								</ul>
@@ -472,39 +540,73 @@ function checkUncheckAll2() {
 																	</tr>
 																	<tr height=10>	<td>	</td>	</tr>
 																	<TR>
-																		<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
+																		<c:if test="${!empty aimAdvancedReportForm.addedColumns || !empty aimAdvancedReportForm.columnsSelection }">
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
-																				<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
-
+																				<c:if test="${!empty aimAdvancedReportForm.addedColumns || !empty aimAdvancedReportForm.columnsSelection}" >
+																					<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="false">
 																					<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+																						
 																						<tr bgcolor=#ffffff>
-																						<td align="left" width="98%">
-
-																					 <digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>
-
-																						</td>
-
-																						<td align="right">
-
-																							<html:multibox property="removeColumns" >
-																							<c:out value="${addedColumns.columnId}"/>
-					  																	    </html:multibox>
-
-																						</td>
+																							<td align="left" width="98%">
+	
+																							 <digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>
+	
+																							</td>
+	
+																							<td align="right">
+																							
+																								<html:multibox property="removeColumns" >
+																								<c:out value="${addedColumns.columnId}"/>
+						  																	    </html:multibox>
+						  																	
+																							</td>
 																							<td align="right">
 																								<IMG alt="Move Up"  height=10 src="../ampTemplate/images/up-arrow.jpg" width=10 onclick="moveUp(<c:out value='${addedColumns.columnId}' />)">
 																								<IMG alt="Move Down" styleClass="test" height=10 src="../ampTemplate/images/down-arrow.jpg" width=10 onclick="moveDown(<c:out value='${addedColumns.columnId}' />)">
 																							</td>
 																						</tr>
 																					</logic:iterate>
+																					</gs:test>
+																					<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="true">
+																						<%
+																							java.util.Collection <org.digijava.module.aim.dbentity.AmpReportColumn> reportColumnCollection	
+																								= myForm.getColumnsSelection();
+																							pageContext.setAttribute("reportColumnCollection", reportColumnCollection, PageContext.PAGE_SCOPE);
+																						%>
+																						<logic:notEmpty name="reportColumnCollection">
+																						<logic:iterate name="reportColumnCollection" id="reportColumn" type="org.digijava.module.aim.dbentity.AmpReportColumn" indexId="counter" >
+																						<bean:define name="reportColumn" property="column" type="org.digijava.module.aim.dbentity.AmpColumns" id="addedColumns" />
+																						<bean:define name="reportColumn" property="level" type="org.digijava.module.aim.dbentity.AmpCategoryValue" id="level" />
+																						<tr bgcolor=#ffffff>
+																						<td align="left" width="98%">
 
+																					 <digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn> - 
+																					 <category:getoptionvalue categoryValueId="${level.id}"/>
+
+																						</td>
+
+																						<td align="right">
+																						
+																							<html:multibox property="removeReportColumnsLevel" >
+																							<bean:write name="counter" />
+					  																	    </html:multibox>
+					  																		<input type="hidden" name="removeColumns" value="-1" />
+																						</td>
+																							<td align="right">
+																								<IMG alt="Move Up"  height=10 src="../ampTemplate/images/up-arrow.jpg" width=10 onclick="moveUp(<c:out value='${counter}' />)">
+																								<IMG alt="Move Down" styleClass="test" height=10 src="../ampTemplate/images/down-arrow.jpg" width=10 onclick="moveDown(<c:out value='${counter}' />)">
+																							</td>
+																						</tr>
+																						</logic:iterate>
+					  																	</logic:notEmpty>
+																					</gs:test>
 																				</c:if>
 																			</TABLE>
 																		</TD>
 																		</c:if>
 
-																		<c:if test="${empty aimAdvancedReportForm.addedColumns}">
+																		<c:if test="${empty aimAdvancedReportForm.addedColumns && empty aimAdvancedReportForm.columnsSelection}">
 																			<td >
 																				<TABLE width="100%" height="200" cellPadding=2 cellSpacing=0 vAlign="top" align="center" bgcolor="#f4f4f2">
 																					<tr bgcolor="#eeeeee">	<td class=box-title align=center>

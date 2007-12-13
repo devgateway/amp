@@ -1,11 +1,16 @@
 package org.digijava.module.aim.form ;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.action.AdvancedReport;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.dbentity.AmpReportColumn;
+import org.digijava.module.aim.dbentity.AmpReportHierarchy;
+import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.helper.AmpFund;
 
 public class AdvancedReportForm extends ActionForm 
@@ -89,6 +94,19 @@ public class AdvancedReportForm extends ActionForm
 	
 	private boolean duplicatedReportName;
 	private String duplicatedReportOwner;
+	
+	/* For X-Level architecture */
+	private Long activityLevel;
+	private HashMap<Long, Collection<AmpCategoryValue> > columnToLevel	= new HashMap<Long, Collection<AmpCategoryValue>>();
+	private HashMap<Long, Collection<AmpCategoryValue> > measureToLevel	= new HashMap<Long, Collection<AmpCategoryValue>>();
+	private List<AmpReportColumn> columnsSelection						= new ArrayList<AmpReportColumn>();
+	private List<AmpReportMeasures> measuresSelection					= new ArrayList<AmpReportMeasures>();
+	private List<AmpReportHierarchy> hierarchiesSelection				= new ArrayList<AmpReportHierarchy>();
+	private HashMap<String, Long> selectedColumnToLevel					= new HashMap<String, Long> ();
+	private HashMap<String, Long> selectedMeasureToLevel					= new HashMap<String, Long> ();
+	
+	private Integer [] removeReportColumnsLevel									= null;
+	/* END - For X-Level architecture */
 	
 	public HashMap getAmpTreeColumns() {
 		return ampTreeColumns;
@@ -190,8 +208,7 @@ public class AdvancedReportForm extends ActionForm
 
 	private int measureCount = 0;  
 	private int quarterColumns;
-	
-	
+		
 	public int getMeasureCount() {
 		return measureCount;
 	}
@@ -1516,8 +1533,80 @@ private int yrDiff;
 	public void setCurrentTabName(String currentTabName) {
 		this.currentTabName = currentTabName;
 	}
+	public Long getActivityLevel() {
+		return activityLevel;
+	}
+	public void setActivityLevel(Long activityLevel) {
+		this.activityLevel = activityLevel;
+	}
+	public HashMap<Long, Collection<AmpCategoryValue>> getColumnToLevel() {
+		return columnToLevel;
+	}
+	public void setColumnToLevel(
+			HashMap<Long, Collection<AmpCategoryValue>> columnToLevel) {
+		this.columnToLevel = columnToLevel;
+	}
+	
 
-
-
+	public HashMap<Long, Collection<AmpCategoryValue>> getMeasureToLevel() {
+		return measureToLevel;
+	}
+	public void setMeasureToLevel(
+			HashMap<Long, Collection<AmpCategoryValue>> measureToLevel) {
+		this.measureToLevel = measureToLevel;
+	}
+	
+	
+	
+	
+	
+	public Integer[] getRemoveReportColumnsLevel() {
+		return removeReportColumnsLevel;
+	}
+	public void setRemoveReportColumnsLevel(Integer[] removeReportColumnsLevel) {
+		this.removeReportColumnsLevel = removeReportColumnsLevel;
+	}
+	public List<AmpReportColumn> getColumnsSelection() {
+		return columnsSelection;
+	}
+	public void setColumnsSelection(List<AmpReportColumn> columnsSelection) {
+		this.columnsSelection = columnsSelection;
+	}
+	public List<AmpReportMeasures> getMeasuresSelection() {
+		return measuresSelection;
+	}
+	public void setMeasuresSelection(List<AmpReportMeasures> measuresSelection) {
+		this.measuresSelection = measuresSelection;
+	}
+	
+		
+	public List<AmpReportHierarchy> getHierarchiesSelection() {
+		return hierarchiesSelection;
+	}
+	public void setHierarchiesSelection(
+			List<AmpReportHierarchy> hierarchiesSelection) {
+		this.hierarchiesSelection = hierarchiesSelection;
+	}
+	public HashMap<String,Long> getSelectedColumnToLevelHM() {
+		return selectedColumnToLevel;
+	}
+	public Long getSelectedColumnToLevel(String columnId) {
+		return selectedColumnToLevel.get(columnId);
+	}
+	public void setSelectedColumnToLevel(String columnId, Long levelId) {
+		selectedColumnToLevel.put(columnId, levelId);
+	}
+	
+	public HashMap<String,Long> getSelectedMeasureToLevelHM() {
+		return selectedMeasureToLevel;
+	}
+	public Long getSelectedMeasureToLevel(String measureId) {
+		return selectedMeasureToLevel.get(measureId);
+	}
+	public void setSelectedMeasureToLevel(String measureId, Long levelId) {
+		selectedMeasureToLevel.put(measureId, levelId);
+	}
+	
+	
 } //		End of Class
 

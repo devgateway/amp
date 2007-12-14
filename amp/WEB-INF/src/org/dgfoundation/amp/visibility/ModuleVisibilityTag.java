@@ -77,8 +77,8 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		{
 			if(ampTreeVisibility!=null)
 			{
-			//	if(!existModuleinDB(ampTreeVisibility) && FeaturesUtil.getModuleVisibility(name)==null) //for concurent users...
-				if(!existModuleinDB(ampTreeVisibility))
+				if(!existModuleinDB(ampTreeVisibility) && FeaturesUtil.getModuleVisibility(name)==null) //for concurent users...
+				//if(!existModuleinDB(ampTreeVisibility))
 				{
 						FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName(),this.getHasLevel());
 						

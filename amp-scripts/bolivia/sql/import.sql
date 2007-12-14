@@ -635,7 +635,7 @@ where c.nomdato='cvedep' and r.region_code=c.valdato;
 
 select 'mapping locations to activities';
 
-insert into amp_activity_location_persent
+insert into amp_activity_location
 (amp_activity_id, amp_location_id,location_percentage)
 select act.amp_activity_id, loc.amp_location_id, condep.porcdep 
 from amp_activity as act, 
@@ -644,7 +644,7 @@ amp_region as reg,
 bolivian_db.`claves` as c, 
 bolivian_db.`conv_dep` as condep
 where 
-act.old_id=condep.numconv 
+act.amp_id=condep.numconv 
 and loc.region_id=reg.amp_region_id 
 and reg.region_code=c.valdato
 and c.nomdato='cvedep'

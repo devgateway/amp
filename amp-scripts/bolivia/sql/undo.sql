@@ -23,7 +23,7 @@ delete cs FROM amp_activity_program as cs
 where EXISTS (SELECT act.* FROM amp_activity AS act, bolivian_db.`conv` AS con WHERE con.numconv=act.amp_id AND act.amp_activity_id=cs.amp_activity_id);
 
 
-truncate amp_activity_location_persent;
+truncate amp_activity_location;
 /*
 delete actloc from amp_activity_location_persent as actloc
 where exists (select * from amp_activity act, bolivian_db.`conv` c  where c.numconv=act.amp_id and act.amp_activity_id=actloc.amp_activity_id );

@@ -66,8 +66,10 @@
 										</td>
 										<td>
 											<html:select property="componentTitle" styleClass="inp-text">
-												<html:option value="-1"><digi:trn key="aim:selectComponent">Select Component</digi:trn></html:option>
-												<html:optionsCollection name="aimEditActivityForm" property="allComps" value="title" label="title" />
+												<option value="-1"><digi:trn key="aim:selectComponent">Select Component</digi:trn></option>
+													<logic:iterate id="comp" name="aimEditActivityForm" property="allComps">
+														<option value="${comp.name}" title="${comp.name}">${comp.shortName}</option>	
+													</logic:iterate>												
 											</html:select>
 										</td>
 									</tr>

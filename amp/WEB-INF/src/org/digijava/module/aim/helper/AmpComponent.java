@@ -15,6 +15,8 @@ public class AmpComponent
 	private String acExpenditure;
 	private String acBalance;
 	private Collection responsibleActor;
+	//used in selectComponent.jsp
+	private String ShortName;
 
 	private int count;
 
@@ -126,6 +128,14 @@ public class AmpComponent
 	public void setPlannedCompletionDate(String s) 
 	{
 		plannedCompletionDate = s;
+	}
+
+	public String getShortName() {
+		return ShortName;
+	}
+
+	public void setShortName(String shortName) {
+		ShortName = shortName;
 	}
 	
 	

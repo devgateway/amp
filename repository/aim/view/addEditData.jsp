@@ -10,6 +10,12 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
 
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+
+
+
 <script language="JavaScript">
 function addData(){
   <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=addIndValue" />
@@ -82,10 +88,12 @@ function selectLocation(index){
           </td>
 
           <td bgColor=#d7eafd  height="10" align="center" nowrap="nowrap">
-            <html:text name="ind" property="creationDate" styleId="txtDate${index.count-1}" readonly="true" style="width:80px;"/>
-            <a href='javascript:calendar("txtDate${index.count-1}")'>
-              <img src="../ampTemplate/images/show-calendar.gif" border="1" alt="" />
-            </a>
+            <html:text name="ind" property="creationDate" styleId="txtDate${index.count-1}" readonly="true" style="width:80px;" />
+
+			<a id="date1" href='javascript:pickDateById("date1","txtDate${index.count-1}")'>
+				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0> 
+			</a> 
+			
           </td>
 
           <td bgColor=#d7eafd width="100%">

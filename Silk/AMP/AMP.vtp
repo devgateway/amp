@@ -19,8 +19,11 @@ EndFolder=TRUE
 Source=activity.t
 Source=calendar.t
 Source=dmm.t
+Source=mdea.t
+Source=t.t
 EndFolder=TRUE
 [ProjectPlan]
+Source=Calendar.pln
 Source=testplan1.pln
 EndFolder=TRUE
 [ProjectResults]

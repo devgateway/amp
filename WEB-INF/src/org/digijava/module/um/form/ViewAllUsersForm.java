@@ -29,15 +29,29 @@ public class ViewAllUsersForm
     private Collection pages = null;
     //this field is used to sort user by name,email or workspace
     private String sortBy;
+    private String reset;
    
+	
+
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
           //pages = null;
           // currentAlpha = null;        
           //pagedUsers = null;
-          keyword = null;         
-          setTempNumResults(10);
-        
+		if(reset!=null && reset.equals("true")){
+			keyword = null;       
+	        setReset("false");
+	       
+		}	
+		 setTempNumResults(10);
       }
+	
+	public String getReset() {
+		return reset;
+	}
+
+	public void setReset(String reset) {
+		this.reset = reset;
+	}
 
     public Collection getPages() {
 		return pages;

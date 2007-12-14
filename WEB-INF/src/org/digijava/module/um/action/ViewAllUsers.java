@@ -30,10 +30,11 @@
 	    	
 	    	ViewAllUsersForm vwForm = (ViewAllUsersForm) form;
 	    	
-	    	if(request.getParameter("reset")!=null && request.getParameter("reset").equals(true)){
+	    	if(request.getParameter("reset")!=null && request.getParameter("reset").equals("true")){
 	    		vwForm.reset(mapping, request);    		
 	    	}
 	        
+	    	vwForm.setReset("false");
 	    	vwForm.setNumResults(vwForm.getTempNumResults());
 	        Collection ubCol = getUsers(vwForm,request);
 	        vwForm.setSelectedNoLetter(true);

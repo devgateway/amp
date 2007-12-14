@@ -69,7 +69,7 @@ function banUser(txt) {
             </td>
           </tr>
           <tr style="width:50%;">
-            <td width="201">
+            <td width="160">
 	              <digi:trn key="um:viewAllUsers:filter">
 	              Filter by:
 	              </digi:trn>
@@ -96,13 +96,13 @@ function banUser(txt) {
 	                <html:option value="1">${translation}</html:option>	                
 	              </html:select>
               </td>
-              <td width="195">
+              <td width="200">
 	              <digi:trn key="um:viewAllUsers:keyword">
 	              keyword:
 	              </digi:trn>
 	              <html:text property="keyword" style="font-family:verdana;font-size:11px;"/>
               </td>
-              <td>
+              <td width="100">
               	<digi:trn key="aim:results">Results</digi:trn>&nbsp;
 				<html:select property="tempNumResults" styleClass="inp-text">
 					<html:option value="10">10</html:option>
@@ -111,7 +111,7 @@ function banUser(txt) {
 					<html:option value="-1">ALL</html:option>
 				</html:select>
               </td>
-			  <td>
+			  <td width="260">
 	              <c:set var="translation">
 	                <digi:trn key="um:viewAllUsers:showButton">
 	                Show
@@ -159,12 +159,12 @@ function banUser(txt) {
 																	<c:if test="${not empty umViewAllUsersForm.pagedUsers}">
 																		<tr>
 																			<td height="30" width="220">
-																				<digi:link href="/viewAllUsers.do?sortBy=name"><b>
+																				<digi:link href="/viewAllUsers.do?sortBy=name&reset=false"><b>
 																					<digi:trn key="um:viewAllUsers:UsersNames">Name</digi:trn></b>
 																				</digi:link>
 																			</td>	
 																			<td height="30" width="220">
-																				<digi:link href="/viewAllUsers.do?sortBy=email"><b>
+																				<digi:link href="/viewAllUsers.do?sortBy=email&reset=false"><b>
 																					<digi:trn key="um:viewAllUsers:UsersEmails">Email</digi:trn></b>
 																				</digi:link>
 																			</td>																	

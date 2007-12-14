@@ -10,7 +10,7 @@
       <form-property name="templateFeatures" type="java.util.Collection" />
       <form-property name="templateFeaturesNotActive" type="java.util.Collection" />
     </form-bean>
-    <form-bean name="aimFieldPermissionsForm" type="org.digijava.module.aim.form.FieldPermissionsForm" />      
+    <form-bean name="aimFieldPermissionsForm" type="org.digijava.module.aim.form.FieldPermissionsForm" />
     <form-bean name="aimEUActivityForm" type="org.digijava.module.aim.form.EUActivityForm" />
     <form-bean name="aimVisibilityManagerForm" type="org.digijava.module.aim.form.VisibilityManagerForm" />
     <form-bean name="aimAuditLoggerManagerForm" type="org.digijava.module.aim.form.AuditLoggerManagerForm" />
@@ -189,12 +189,12 @@
       <forward name="reportView" path="/aim/viewNewAdvancedReport.do?reload=true" />
     </action>
 
-  <action name="aimFieldPermissionsForm"                                                                                
-    path="/aim/assignFieldPermissions" scope="request"                                                                    
-    type="org.digijava.module.aim.action.AssignFieldPermissions"                                                          
-    input="/showLayout.do?layout=aim_assignFieldPermissions">                                                             
-    </action>                                                                                                             
-    
+  <action name="aimFieldPermissionsForm"
+    path="/aim/assignFieldPermissions" scope="request"
+    type="org.digijava.module.aim.action.AssignFieldPermissions"
+    input="/showLayout.do?layout=aim_assignFieldPermissions">
+    </action>
+
 
     <action name="aimViewQuickLinksForm" path="/aim/viewQuickLinks" scope="request" type="org.digijava.module.aim.action.ViewQuickLinks" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewLinks" />
@@ -1351,6 +1351,11 @@
 
     <action name="aimEditActivityForm" path="/aim/addMTEFProjection" scope="session" type="org.digijava.module.aim.action.AddMTEFProjection">
       <forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout" />
+    </action>
+
+    <action name="aimEditActivityForm" path="/aim/addDisbOrderToDisb" scope="session" type="org.digijava.module.aim.action.AddDisbOrderToDisb">
+      <forward name="forward" path="/showLayout.do?layout=aim_addDisbOrderToDisbPopupLayout" />
+       <forward name="save" path="/showLayout.do?layout=aim_fundingPopupLayout"/>
     </action>
 
     <action name="aimEditActivityForm" path="/aim/remSelFundOrgs" scope="session" type="org.digijava.module.aim.action.RemoveSelFundingOrgs">

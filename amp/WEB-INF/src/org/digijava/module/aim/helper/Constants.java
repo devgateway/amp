@@ -18,6 +18,7 @@ public class Constants
 	public static final int COMMITMENT = 0 ;
 	public static final int DISBURSEMENT = 1 ;
 	public static final int EXPENDITURE = 2 ;
+        public static final int DISBURSEMENT_ORDER = 4 ;
 	public static final int MTEFPROJECTION = 3 ;
 	public static final int PLANNED = 0 ;
 	public static final int ACTUAL = 1 ;
@@ -45,8 +46,8 @@ public class Constants
 	public static final String IMPLEMENTING_AGENCY = "IA" ;
 	public static final String BENEFICIARY_AGENCY = "BA" ;
 	public static final String CONTRACTING_AGENCY = "CA" ;
-	public static final String REGIONAL_GROUP = "RG" ;	
-	public static final String SECTOR_GROUP = "SG" ;	
+	public static final String REGIONAL_GROUP = "RG" ;
+	public static final String SECTOR_GROUP = "SG" ;
 	public static final String EXECUTING_AGENCY = "EA";
 	public static final String CONTRACTOR = "CT";
 	public static final String RELATED_INSTITUTIONS = "RL" ;
@@ -130,6 +131,7 @@ public class Constants
 
 
 	public static final String REGIONAL_FUNDING_PAGE_CODE = "RFS";
+        public static final String COSTING_PAGE_CODE = "Cost";
 	public static final String CALENDAR_FILTER = "Calendar";
 	public static final String CURRENCY_FILTER = "Currency";
 	public static final String DONOR_FILTER = "Donor";
@@ -138,6 +140,8 @@ public class Constants
 	public static final String STATUS_FILTER = "Status";
 	public static final String PERSPECTIVE_FILTER = "Perspective";
 	public static final String ACTIVITY_RISK_FILTER = "Activity Risk";
+        public static final String YEAR_RANGE_FILTER = "Year Range";
+
 
 	public static final String ANNUAL = "A" ;
 	public static final String QUARTERLY = "Q" ;
@@ -272,6 +276,11 @@ public class Constants
 
 	public static final String DESKTOP_PG_CODE = "DTP";
 	public static final String FINANCIAL_PG_CODE = "FP";
+        public static final String FINANCING_INSTRUMENT_FILTER = "Financing Instrument";
+        public static final String TYPE_ASSISTANCE_FILTER = "Type of Assistance";
+        public static final String ORGANIZATION_FILTER = "Organization";
+
+
 
 	//global settings
 	public static final String GLOBAL_BUDGET_FILTER = "Public View Budget Filter";

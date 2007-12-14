@@ -1,17 +1,14 @@
 package org.digijava.module.aim.dbentity;
 
-import java.util.Date ; 
 import java.io.Serializable;
-import org.digijava.module.aim.dbentity.AmpCurrency ;
-import org.digijava.module.aim.dbentity.AmpOrganisation ;
-import org.digijava.module.aim.dbentity.AmpFunding ;
+import java.util.Date;
 
 public class AmpFundingDetail implements Serializable
 {
 	private Long ampFundDetailId ;
 	private Integer fiscalYear ;
 	private Integer fiscalQuarter;
-	private Integer transactionType ; 
+	private Integer transactionType ;
 	private Integer adjustmentType ;
 	private Date transactionDate ;
 	private Date transactionDate2 ;
@@ -25,14 +22,13 @@ public class AmpFundingDetail implements Serializable
 	private AmpOrganisation reportingOrgId;
 	private AmpFunding  ampFundingId;
 	private Double fixedExchangeRate;
-	
-	
+
+
 	private AmpPerspective perspectiveId;
 	private String expCategory;
-	
-	
+        private String disbOrderId;
 
-		/**
+        /**
 		 * @return
 		 */
 		public Integer getAdjustmentType() {
@@ -165,16 +161,16 @@ public class AmpFundingDetail implements Serializable
 		public void setTransactionType(Integer i) {
 			transactionType = i;
 		}
-		
+
 	public String getLanguage() {
 		return language;
 	}
-		
+
 	public String getVersion() {
 		return version;
 	}
 
-	
+
 	public void setLanguage(String string) {
 		language = string;
 	}
@@ -183,7 +179,7 @@ public class AmpFundingDetail implements Serializable
 		version = string;
 	}
 
-	
+
 	/**reportingOrgId
 	 * @return
 	 */
@@ -197,7 +193,7 @@ public class AmpFundingDetail implements Serializable
 	public void setAmpCurrencyId(AmpCurrency ampCurrencyId) {
 		this.ampCurrencyId = ampCurrencyId;
 	}
-	
+
 	public AmpOrganisation getReportingOrgId() {
 		return reportingOrgId;
 	}
@@ -212,12 +208,12 @@ public class AmpFundingDetail implements Serializable
 	public AmpFunding getAmpFundingId() {
 		return ampFundingId;
 	}
-	
+
 	public void setAmpFundingId(AmpFunding f ) {
 		this.ampFundingId = f;
 	}
-	
-	
+
+
 	/**
 	 * @return
 	 */
@@ -275,13 +271,22 @@ public class AmpFundingDetail implements Serializable
 		return fixedExchangeRate;
 	}
 
-	public void setFixedExchangeRate(Double fixedExchangeRate) {
+
+        public String getDisbOrderId() {
+                return disbOrderId;
+        }
+
+        public void setFixedExchangeRate(Double fixedExchangeRate) {
 		this.fixedExchangeRate = fixedExchangeRate;
 	}
 
-	
+
+        public void setDisbOrderId(String disbOrderId) {
+                this.disbOrderId = disbOrderId;
+        }
+
 }
-	
-	
-	
-	
+
+
+
+

@@ -45,7 +45,7 @@
 	}
 
 	function addFunding(orgId) {
-			openNewWindow(650, 500);
+			openNewWindow(900, 500);
 			<digi:context name="addFunding" property="context/module/moduleinstance/addFunding.do" />
 			document.aimEditActivityForm.orgId.value = orgId;
 			document.aimEditActivityForm.action = "<%= addFunding %>?orgId" + orgId+"&edit=true";
@@ -81,7 +81,7 @@
 	}
 
 	function fnOnEditItem(index, orgId,fundId)	{
-			openNewWindow(650, 500);
+			openNewWindow(900, 500);
 			<digi:context name="editItem" property="context/module/moduleinstance/editFunding.do"/>
 			document.aimEditActivityForm.action = "<%= editItem %>?orgId=" + orgId + "&offset=" + index+"&edit=true";
 			document.aimEditActivityForm.prevOrg.value = orgId;
@@ -426,7 +426,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                             <input type="button" value="${translation}" class="buton" onclick="addPropFunding()">
                                                            </field:display>
                                                           </c:if>
-                                                          
+
                                                           <c:if test="${aimEditActivityForm.proProjCost!=null}">
                                                           	<c:set var="translation">
                                                             	<digi:trn key="btn:editFundings">Edit Funding</digi:trn>
@@ -517,7 +517,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                             </field:display>
                                                           </td>
                                                         </tr>
-                                                        
+
                                                         <logic:notEmpty name="fundingOrganization" property="fundings">
                                                           <logic:iterate name="fundingOrganization" indexId="index" property="fundings" id="funding" type="org.digijava.module.aim.helper.Funding">
                                                             <tr>
@@ -601,7 +601,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                             <table width="100%" border="0" cellSpacing="1" cellPadding="1" bgcolor="#dddddd">
                                                                               <%-- Rendering projections --%>
                                                                               	<feature:display module="Funding" name="MTEF Projections">
-																			  	
+
 	                                                                              	<tr bgcolor="#ffffff">
 	                                                                                 <td colspan="5">
 	                                                                                 <b><digi:trn key="aim:funding:projections">Projections</digi:trn></b>
@@ -773,6 +773,63 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                 </logic:equal>
                                                                               </logic:iterate>
                                                                               </c:if>
+
+                                                                              <!--Disbursement order-->
+                                                                               <feature:display module="Funding" name="Disbursement Orders">
+                                                                              <tr bgcolor="#ffffff">
+                                                                                <td colspan="5">&nbsp;</td>
+                                                                              </tr>
+                                                                              <tr bgcolor="#ffffff">
+                                                                                 <td colspan="5">
+                                                                                	<b>
+                                                                                  	<a title="<digi:trn key="aim:disbursementOrdersMade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>" >
+                                                                                  		<digi:trn key="aim:disbursementOrders">	Disbursement Orders </digi:trn></b>
+																					</a>
+                                                                                </td>
+                                                                              </tr>
+                                                                              <c:if test="${!empty funding.fundingDetails}">
+                                                                                <logic:iterate name="funding" property="fundingDetails" id="fundingDetail"     type="org.digijava.module.aim.helper.FundingDetail">
+                                                                                <logic:equal name="fundingDetail" property="transactionType" value="4">
+
+
+                                                                                      <tr bgcolor="#ffffff">
+
+
+                                                                                    <td width="50">
+	                                                                                    <field:display name="Adjustment Type Disbursement Orders" feature="Disbursement Orders">
+    	                                                                                	<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+                                                                                                <bean:write name="fundingDetail" property="adjustmentTypeName"/>
+                                                                                                </digi:trn>
+                                                                                              </field:display>
+                                                                                    </td>
+
+
+                                                                                    <td width="120" align="right">
+                                                                                      <field:display name="Amount Disbursement Orders" feature="Disbursement Orders">
+                                                                                      	<FONT color=blue>*</FONT>
+                                                                                      	<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
+                                                                                      </field:display>
+                                                                                    </td>
+
+                                                                                    <td width="150">
+	                                                                                    <field:display name="Currency Disbursement Orders" feature="Disbursement Orders">
+    	                                                                                  <bean:write name="fundingDetail" property="currencyCode"/>
+        	                                                                             </field:display>
+                                                                                    </td>
+                                                                                    <td width="70">
+                                                                                    	<field:display name="Date Disbursement Orders" feature="Disbursement Orders">
+		                                                                                      <bean:write name="fundingDetail" property="transactionDate"/>
+	                                                                                    </field:display>
+                                                                                    </td>
+                                                                                      <td>&nbsp;</td>
+
+                                                                                      </tr>
+
+                                                                                </logic:equal>
+                                                                              </logic:iterate>
+                                                                              </c:if>
+                                                                            </feature:display>
+
                                                                               <tr bgcolor="#ffffff">
                                                                                 <td colspan="5">&nbsp;</td>
                                                                               </tr>
@@ -1018,7 +1075,8 @@ ${fn:replace(message,quote,escapedQuote)}
 																							</c:if>
 																							<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
 																								<tr bgcolor="#ffffff">
-																																																<td width="50">
+
+                                                                                                                                                                                                <td width="50">
 																								<field:display name="Adjustment Type Expenditure" feature="Funding Organizations">
 																									<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>

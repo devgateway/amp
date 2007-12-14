@@ -65,9 +65,23 @@
 		} else if (type == 2) {
 			document.aimEditActivityForm.event.value = "addExpenditures";
 		}
+                else if (type == 4) {
+			document.aimEditActivityForm.event.value = "addDisbursementOrders";
+		}
+                document.aimEditActivityForm.target = "_self";
 	 	document.aimEditActivityForm.action="/addFundingDetail.do";
 	 	document.aimEditActivityForm.submit();
 	}
+
+        function addDisbOrderToDisb(indexId) {
+          openNewWindow(400, 100);
+          document.aimEditActivityForm.action= "/addDisbOrderToDisb.do";
+          document.aimEditActivityForm.transIndexId.value = indexId;
+          document.aimEditActivityForm.target =  popupPointer.name;
+          document.aimEditActivityForm.submit();
+
+	}
+
 
 	function addMTEFProjection() {
 
@@ -93,6 +107,9 @@
 				document.aimEditActivityForm.event.value = "delDisbursements";
 			} else if (type == 2) {
 				document.aimEditActivityForm.event.value = "delExpenditures";
+			}
+                         else if (type == 4) {
+				document.aimEditActivityForm.event.value = "delDisbursementOrders";
 			}
 			document.aimEditActivityForm.transIndexId.value=index;
 		 	document.aimEditActivityForm.action="/addFundingDetail.do";
@@ -160,6 +177,7 @@
 <html:hidden property="numComm"/>
 <html:hidden property="numDisb"/>
 <html:hidden property="numExp"/>
+<html:hidden property="numDisbOrder"/>
 <html:hidden property="numProjections"/>
 <html:hidden property="editAct"/>
 <html:hidden property="firstSubmit"/>
@@ -638,6 +656,161 @@
 		</td>
 	</tr>
 
+
+
+        <!-- disbursement orders -->
+        <feature:display module="Funding" name="Disbursement Orders">
+	<tr>
+		<td width="100%" vAlign="top">
+
+			<table width="100%" cellpadding=0 cellspacing=1 vAlign="top" align="left" bgcolor="#006699">
+			<tr><td>
+			<table width="100%" cellpadding=0 cellspacing=0>
+				<tr>
+					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
+					<a title="<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>"><digi:trn key="DisbursementOrdes">Disbursement Orders</digi:trn></a>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class=box-border-nopadding>
+							<tr bgcolor="#003366" class="textalb">
+								<td align="center" valign="middle" width="75">
+									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn></font></b>
+								</td>
+								<td align="center" valign="middle" width="120">
+									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
+									<b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b></a>
+								</td>
+								<td align="center" valign="middle" width="170">
+									<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">
+									<b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
+								</td>
+								<td align="center" valign="middle" width="120">
+								<a title="<digi:trn key="aim:DateofDisbursementOrder">Date of actual international transfer of financial resources</digi:trn>">
+								<b><font color="white">
+                                  <digi:trn key="aim:DisbursementOrderDateFIE">Planned/Actual Disbursement Order Date</digi:trn></font></b></a>
+								</td>
+                                                                <td align="center" valign="middle">
+
+									<b><font color="white"><digi:trn key="aim:DisbursementOrderIDFIE">Disbursement Order ID</digi:trn></font></b>
+								</td>
+                                                                <td align="center" valign="middle">
+
+									&nbsp;
+								</td>
+
+							</tr>
+							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
+							<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}">
+						 	<c:if test="${fundingDetail.transactionType==4}">
+
+
+										<tr>
+
+											<td valign="bottom">
+                                                                                         <field:display name="Amount of Disbursement Order" feature="Disbursement Orders">
+												<c:set var="index" value="${index+1}"/>
+
+
+
+												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
+													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
+
+												</html:select>
+
+												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
+                                                                                                   </field:display>
+											</td>
+
+
+											<td valign="bottom">
+                                                                                        <field:display name="Amount of Disbursement Order" feature="Disbursement Orders">
+												<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
+                                                                                                </field:display>
+											</td>
+
+
+											<td valign="bottom">
+                                                                                        <field:display name="Currency of Disbursement Order " feature="Disbursement Orders">
+												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
+													<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode"
+													label="currencyName"/>
+												</html:select>
+                                                                                                </field:display>
+											</td>
+
+											<td valign="bottom">
+                                                                                         <field:display name="Date of Disbursement Order" feature="Disbursement Orders">
+												<table cellPadding=0 cellSpacing=0>
+													<tr>
+
+														<td>
+															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
+															<html:text name="fundingDetail" indexed="true" property="transactionDate" readonly="true"
+															styleId="<%=tempIndexStr%>" size="10"/>
+														</td>
+														<td align="left" vAlign="center">&nbsp;
+															<a id="trans4Date<%=tempIndexStr%>" href='javascript:pickDateById("trans4Date<%=tempIndexStr%>",<%=tempIndexStr%>)'>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+															</a>
+														</td>
+
+													</tr>
+												</table>
+                                                                                                </field:display>
+											</td>
+
+                                                                                        <td>
+                                                                                        <field:display name="Disbursement Order Number" feature="Disbursement Orders">
+												<html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
+                                                                                                  </field:display>
+											</td>
+
+
+											<td>
+												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,4)">
+												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+												</a>
+											</td>
+										</tr>
+
+								</c:if>
+
+
+						 	</c:forEach>
+						 	</c:if>
+						</table>
+					</td>
+				</tr>
+				<tr bgcolor="#ffffff">
+					<td align="center">
+						<table cellPadding=3>
+							<tr>
+
+
+								<td>
+                                                                <field:display name="Add Disbursement Order Button" feature="Disbursement Orders">
+									<input class="buton" type="button" name="xx1" value="<digi:trn key='aim:addDisbursementOrder'>Add Disbursement Order</digi:trn>"
+								   onclick="addFundingDetail(4)">
+                                                                   </field:display>
+								</td>
+
+							</tr>
+
+						</table>
+					</td>
+				</tr>
+			</table>
+			</td></tr>
+			</table>
+		</td>
+	</tr>
+         </feature:display>
+
+
+
+
 	<!-- disbursements -->
 	<tr>
 		<td width="100%" vAlign="top">
@@ -670,12 +843,19 @@
 								<b><font color="white">
                                   <digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:DisbursementDateFIE">Disbursement Date</digi:trn></font></b></a>
 								</td>
-								<td align="center" valign="middle" colspan="2">
+
+								<td align="center" valign="middle" >
 									<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 										<a title="<digi:trn key="aim:PerpectiveofUser">Select perspective (Donor/ MoFED / implementing agency) of user entering the information</digi:trn>">
 										<b><font color="white"><digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn></font></b></a>
 									</logic:equal>
 								</td>
+                                                                 <td align="center" valign="middle" colspan="3" >
+                                                                <b><font color="white"><digi:trn key="aim:DisbursementOrderIDFIE">Disbursement Order ID</digi:trn></font></b>
+                                                                </td>
+
+
+
 							</tr>
 							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
 							<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}">
@@ -734,6 +914,13 @@
 													</html:select>
 												</logic:equal>
 											</td>
+                                                                                        <td>
+                                                                                        <html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                        <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
+
+											</td>
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
 												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
@@ -786,6 +973,7 @@
 													</tr>
 												</table>
 											</td>
+
 											<td valign="bottom">
 												<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 													<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
@@ -794,6 +982,13 @@
 														<html:option value="MA"><digi:trn key="aim:PerspectiveOp2">Goverment</digi:trn></html:option>
 													</html:select>
 												</logic:equal>
+											</td>
+                                                                                         <td>
+                                                                                        <html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
+                                                                                        </td>
+                                                                                         <td>
+                                                                                        <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
+
 											</td>
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
@@ -825,7 +1020,7 @@
 								</td>
 								</field:display>
 							</tr>
-							
+
 						</table>
 					</td>
 				</tr>

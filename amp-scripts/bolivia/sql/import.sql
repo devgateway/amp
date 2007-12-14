@@ -134,7 +134,6 @@ UPDATE AMP_ORGANISATION AS org, bolivian_db.`age` AS o, AMP_ORG_GROUP AS aog
 SET org.org_grp_id=aog.amp_org_grp_id
 WHERE org.old_id=o.codage and aog.org_grp_code = o.cveorg;
 
-
 select 'importing executing Agencies';
 
 INSERT INTO AMP_ORGANISATION
@@ -427,7 +426,7 @@ enm.tipcam
 FROM bolivian_db.`enm` as enm, AMP_ACTIVITY as a, AMP_FUNDING as f, amp_currency as cu
 WHERE  a.old_id=enm.numconv 
 and a.amp_activity_id=f.amp_activity_id 
-and enm.correct_currency=cu.currency_code 
+and enm.cvemonorig=cu.currency_code 
 and enm.numenm=0 
 and enm.fechvigenm is not null;
 
@@ -459,7 +458,7 @@ WHERE  a.old_id=enm.numconv
 and a.actual_start_date not like '0000-00-00%'  
 and a.actual_start_date is not null 
 and a.amp_activity_id=f.amp_activity_id 
-and enm.correct_currency=cu.currency_code 
+and enm.cvemonorig=cu.currency_code 
 and enm.numenm=0 
 and enm.fechvigenm is null;
 /*  THIS IS TEMPORARY WORKAROUND becaue some activity-funding pairs have empty values */
@@ -494,7 +493,7 @@ enm.tipcam
 FROM bolivian_db.`enm` as enm, AMP_ACTIVITY as a, AMP_FUNDING as f, amp_currency as cu
 WHERE  a.old_id=enm.numconv 
 and a.amp_activity_id=f.amp_activity_id 
-and enm.correct_currency=cu.currency_code 
+and enm.cvemonorig=cu.currency_code 
 and enm.numenm>0 
 and enm.montorig!=0 
 and enm.fechvigenm is not null;

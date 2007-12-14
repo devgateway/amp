@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpSISINProyect;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.AmpComponent;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
@@ -53,6 +54,7 @@ public class ShowAddComponent extends Action {
 		try
 		{
 			EditActivityForm eaForm = (EditActivityForm) form;
+			List<org.digijava.module.aim.dbentity.AmpComponent> ampComponents=new ArrayList<org.digijava.module.aim.dbentity.AmpComponent>();
 			eaForm.setStep("5");
 			
 			boolean perspectiveEnabled = FeaturesUtil.isPerspectiveEnabled();
@@ -61,7 +63,22 @@ public class ShowAddComponent extends Action {
 			{
 				logger.info(" in the show components..... ");
 				//eaForm.setAllComps(ActivityUtil.getAllComponentNames());
-				eaForm.setAllComps(ComponentsUtil.getAmpComponents());
+				List<AmpComponent> componentsList=new ArrayList<AmpComponent>();
+				ampComponents=(ArrayList<org.digijava.module.aim.dbentity.AmpComponent>)ComponentsUtil.getAmpComponents();
+				if(ampComponents!=null){					
+					Iterator<org.digijava.module.aim.dbentity.AmpComponent> iter=ampComponents.iterator();
+					while (iter.hasNext()){
+						org.digijava.module.aim.dbentity.AmpComponent comp=iter.next();
+						AmpComponent helperComponent=new AmpComponent();
+						helperComponent.setAmpComponentId(comp.getAmpComponentId());
+						helperComponent.setName(comp.getTitle());
+						helperComponent.setShortName(comp.getTitle().length()>60?comp.getTitle().substring(0,60):comp.getTitle());
+						componentsList.add(helperComponent);
+					}
+				}			
+				
+				
+				eaForm.setAllComps(componentsList);
 				logger.debug("Forwarding to forward");
 				eaForm.setComponentId(new Long(-1));
 				eaForm.setComponentTitle(null);
@@ -87,8 +104,22 @@ public class ShowAddComponent extends Action {
 				return mapping.findForward("forward");
 			}
 			else if( action != null && action.equalsIgnoreCase("showEdit") )
-			{
-				eaForm.setAllComps(ComponentsUtil.getAmpComponents());
+			{	
+				List<AmpComponent> componentsList=new ArrayList<AmpComponent>();
+				ampComponents=(ArrayList<org.digijava.module.aim.dbentity.AmpComponent>)ComponentsUtil.getAmpComponents();
+				if(ampComponents!=null){					
+					Iterator<org.digijava.module.aim.dbentity.AmpComponent> iter=ampComponents.iterator();
+					while (iter.hasNext()){
+						org.digijava.module.aim.dbentity.AmpComponent comp=iter.next();
+						AmpComponent helperComponent=new AmpComponent();
+						helperComponent.setAmpComponentId(comp.getAmpComponentId());
+						helperComponent.setName(comp.getTitle());
+						helperComponent.setShortName(comp.getTitle().length()>60?comp.getTitle().substring(0,60):comp.getTitle());
+						componentsList.add(helperComponent);
+					}
+				}			
+				
+				eaForm.setAllComps(componentsList);
 				Iterator itr = eaForm.getSelectedComponents().iterator();
 				String id = request.getParameter("fundId");
 				long cId = Long.parseLong(id);

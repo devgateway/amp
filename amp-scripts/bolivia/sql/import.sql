@@ -112,7 +112,7 @@ SELECT
 codage,
 nomage,
 codage,
-cveorg
+codage
 FROM bolivian_db.`age` as o;
 
 /* setting up organization types */
@@ -127,6 +127,13 @@ select 'update AMP_ORGANISATION BIL';
 UPDATE AMP_ORGANISATION AS org, bolivian_db.`age` AS o, AMP_ORG_TYPE AS t 
 SET org.org_type_id=t.amp_org_type_id
 WHERE org.old_id=o.codage AND o.cvebimulti='B' AND t.org_type_code='BIL';
+
+select 'update AMP_ORGANISATION GROUP'; 
+
+UPDATE AMP_ORGANISATION AS org, bolivian_db.`age` AS o, AMP_ORG_GROUP AS aog
+SET org.org_grp_id=aog.amp_org_grp_id
+WHERE org.old_id=o.codage and aog.org_grp_code = o.cveorg;
+
 
 select 'importing executing Agencies';
 

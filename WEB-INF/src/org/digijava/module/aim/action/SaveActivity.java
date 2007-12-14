@@ -1049,63 +1049,72 @@ public class SaveActivity extends Action {
 									Iterator itr3 = fund.getFundingDetails()
 											.iterator();
 									while (itr3.hasNext()) {
-										FundingDetail fundDet = (FundingDetail) itr3
-												.next();
-										AmpFundingDetail ampFundDet = new AmpFundingDetail();
-										ampFundDet
-												.setTransactionType(new Integer(
-														fundDet
-																.getTransactionType()));
-										// ampFundDet.setPerspectiveId(DbUtil.getPerspective(Constants.MOFED));
-										ampFundDet.setPerspectiveId(DbUtil
-												.getPerspective(fundDet
-														.getPerspectiveCode()));
-										ampFundDet
-												.setAdjustmentType(new Integer(
-														fundDet
-																.getAdjustmentType()));
-										ampFundDet
-												.setTransactionDate(DateConversion
-														.getDate(fundDet
-																.getTransactionDate()));
-										ampFundDet.setOrgRoleCode(fundDet
-												.getPerspectiveCode());
+                                                                          FundingDetail fundDet = (FundingDetail) itr3
+                                                                              .next();
 
-										boolean useFixedRate = false;
-										if (fundDet.getTransactionType() == Constants.COMMITMENT) {
-											if (fundDet.isUseFixedRate() &&
-													fundDet.getFixedExchangeRate().doubleValue() > 0
-													&& fundDet.getFixedExchangeRate().doubleValue() != 1) {
-												useFixedRate = true;
-											}
-										}
 
-										if (!useFixedRate) {
-											Double transAmt = new Double(
-													DecimalToText.getDouble(fundDet.getTransactionAmount()));
-											ampFundDet.setTransactionAmount(transAmt);
-											ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
-											ampFundDet.setFixedExchangeRate(null);
-										} else {
-											// Use the fixed exchange rate
-											double transAmt = DecimalToText.getDouble(fundDet.getTransactionAmount());
+                                                                            AmpFundingDetail ampFundDet = new AmpFundingDetail();
+                                                                            ampFundDet
+                                                                                .setTransactionType(new Integer(
+                                                                                    fundDet
+                                                                                    .getTransactionType()));
+                                                                            // ampFundDet.setPerspectiveId(DbUtil.getPerspective(Constants.MOFED));
+                                                                            ampFundDet.setPerspectiveId(DbUtil
+                                                                                                        .getPerspective(fundDet
+                                                                                                                        .getPerspectiveCode()));
 
-											Date trDate = DateConversion.getDate(fundDet.getTransactionDate());
-//											double frmExRt = CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,trDate);
-//											double amt = CurrencyWorker.convert1(transAmt, frmExRt,1);
-//											amt *= fundDet.getFixedExchangeRate();
-											ampFundDet.setTransactionAmount(new Double(transAmt));
-											ampFundDet.setFixedExchangeRate(fundDet.getFixedExchangeRate());
-											ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
-										}
-										ampFundDet.setAmpFundingId(ampFunding);
-										if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
-											ampFundDet.setExpCategory(
-													fundDet.getClassification());
-										}
-										fundDeatils.add(ampFundDet);
-									}
+                                                                            ampFundDet
+                                                                                .setAdjustmentType(new Integer(
+                                                                                    fundDet
+                                                                                    .getAdjustmentType()));
+                                                                            ampFundDet
+                                                                                .setTransactionDate(DateConversion
+                                                                                                    .getDate(fundDet
+                                                                                                             .getTransactionDate()));
+                                                                            ampFundDet.setOrgRoleCode(fundDet
+                                                                                                      .getPerspectiveCode());
+
+                                                                            boolean useFixedRate = false;
+                                                                            if (fundDet.getTransactionType() == Constants.COMMITMENT) {
+                                                                              if (fundDet.isUseFixedRate() &&
+                                                                                  fundDet.getFixedExchangeRate().doubleValue() > 0
+                                                                                  && fundDet.getFixedExchangeRate().doubleValue() != 1) {
+                                                                                useFixedRate = true;
+                                                                              }
+                                                                            }
+
+                                                                            if (!useFixedRate) {
+                                                                              Double transAmt = new Double(
+                                                                                  DecimalToText.getDouble(fundDet.getTransactionAmount()));
+                                                                              ampFundDet.setTransactionAmount(transAmt);
+                                                                              ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.
+                                                                                  getCurrencyCode()));
+                                                                              ampFundDet.setFixedExchangeRate(null);
+                                                                            }
+                                                                            else {
+                                                                              // Use the fixed exchange rate
+                                                                              double transAmt = DecimalToText.getDouble(fundDet.getTransactionAmount());
+
+                                                                              Date trDate = DateConversion.getDate(fundDet.getTransactionDate());
+                                                                        //											double frmExRt = CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,trDate);
+                                                                        //											double amt = CurrencyWorker.convert1(transAmt, frmExRt,1);
+                                                                        //											amt *= fundDet.getFixedExchangeRate();
+                                                                              ampFundDet.setTransactionAmount(new Double(transAmt));
+                                                                              ampFundDet.setFixedExchangeRate(fundDet.getFixedExchangeRate());
+                                                                              ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.
+                                                                                  getCurrencyCode()));
+                                                                            }
+                                                                            ampFundDet.setAmpFundingId(ampFunding);
+                                                                            if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
+                                                                              ampFundDet.setExpCategory(
+                                                                                  fundDet.getClassification());
+                                                                            }
+                                                                            ampFundDet.setDisbOrderId(fundDet.getDisbOrderId());
+                                                                            fundDeatils.add(ampFundDet);
+                                                                          }
+
 								}
+
 								ampFunding.setFundingDetails(fundDeatils);
 
 								this.saveMTEFProjections(fund, ampFunding);

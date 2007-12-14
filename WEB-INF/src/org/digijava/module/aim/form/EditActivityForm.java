@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
@@ -156,15 +155,15 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	//private Collection contractors;
 	private Long selContractors[];
 	private Collection reportingOrgs;
-	private Long selReportingOrgs[];	
-	
+	private Long selReportingOrgs[];
+
 	private Collection regGroups;
 	private Long selRegGroups[];
-	
+
 	private Collection sectGroups;
 	private Long selSectGroups[];
-	
-	
+
+
 	// Beneficiary Agency
 	private Collection benAgencies;
 	private Long selBenAgencies[];
@@ -232,14 +231,14 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long ampCommentId;
 	private String fieldName;
 	private AmpField field = null;
-	
+
 	/* All AmpComments objects are kept in this List while going through the Add/Edit Activity wizard.
 	 * This List is used when saving the activity (and thus the comments) to the database.
-	 * So be careful when modifying this. 
+	 * So be careful when modifying this.
 	 * */
 	private ArrayList commentsCol = new ArrayList();
 	private HashMap allComments=new HashMap();
-	
+
 	// For activity approval process
 	private String approvalStatus;
 	private String workingTeamLeadFlag;
@@ -430,14 +429,14 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Float revTargetVal;
 	private String revTargetValDate;
 	private String revTargetValComments;
-	private String currentVal; //  this is string because Float has problems with struts: Amp-1390  
+	private String currentVal; //  this is string because Float has problems with struts: Amp-1390
 	private String currValDate;
 	private String currValComments;
 	private String comments;
 	private Float revisedTargetVal;
 
 	private Collection riskCollection;
-	
+
 	private Long indicatorRisk;
 	private Collection indHistory;
 	private Collection updateIndValues;
@@ -483,10 +482,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
          private AmpActivityProgramSettings nationalSetting;
          private AmpActivityProgramSettings primarySetting;
          private AmpActivityProgramSettings secondarySetting;
+        private int numDisbOrder;
+        private String disbOrderId;
 
 
-
-	public Boolean getGovernmentApprovalProcedures() {
+        public Boolean getGovernmentApprovalProcedures() {
 		return governmentApprovalProcedures;
 	}
 
@@ -542,7 +542,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 
 		currentVal					= null;
-		
+
 		if (reset) {
 			donorFlag = false;
 			fundDonor = null;
@@ -726,7 +726,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
                       selectedSPrograms=null;
                       selectedPPrograms=null;
                       selectedNPOPrograms=null;
-                      
+
 
 		}
 
@@ -785,7 +785,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			componentAmount = null;
 			currencyCode = null;
 			componentRepDate = null;
-		}		
+		}
 		if ( request.getParameter("budgetCheckbox") != null ) {
 			budget		= false;
 		}
@@ -3366,11 +3366,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 * @return Returns the currentVal.
 	 */
 	public String getCurrentVal() {
-		
+
 		if(currentVal != null && currentVal.length() <= 0) {
 			return null;
 		}
-		
+
 		return currentVal;
 	}
 
@@ -4594,7 +4594,16 @@ public String getPurpose() {
         this.subsectorLevel2 = subsectorLevel2;
     }
 
-    public Boolean getDraft() {
+        public void setNumDisbOrder(int numDisbOrder) {
+                this.numDisbOrder = numDisbOrder;
+        }
+
+        public void setDisbOrderId(String disbOrderId) {
+                this.disbOrderId = disbOrderId;
+        }
+
+
+        public Boolean getDraft() {
         return draft;
     }
 
@@ -4638,7 +4647,16 @@ public String getPurpose() {
         return selectedSPrograms;
     }
 
- 
+        public int getNumDisbOrder() {
+                return numDisbOrder;
+        }
+
+        public String getDisbOrderId() {
+                return disbOrderId;
+        }
+
+
+
 }
 
 

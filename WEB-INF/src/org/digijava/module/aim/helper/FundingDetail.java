@@ -3,7 +3,7 @@ package org.digijava.module.aim.helper;
 import java.io.Serializable;
 /**
  * @author jose
- *  
+ *
  */
 public class FundingDetail implements Serializable
 {
@@ -26,19 +26,21 @@ public class FundingDetail implements Serializable
 	private boolean useFixedRate;
 	private Double fixedExchangeRate;
 	private Long ampComponentFundingId;
-	
-	/*
+        private Long fundDetId;
+        private String disbOrderId;
+
+        /*
 	private Long regionId;
 	private String regionName;
 	*/
-	
+
 	public FundingDetail() {}
 
 	public FundingDetail(long id) {
 		this.indexId = id;
 	}
 
-	
+
 	public int getAdjustmentType() {
 		return adjustmentType;
 	}
@@ -130,7 +132,7 @@ public class FundingDetail implements Serializable
 	public String getAdjustmentTypeName() {
 		return adjustmentTypeName;
 	}
-	
+
 	public String getAdjustmentTypeNameTrimmed(){
 		return adjustmentTypeName.replaceAll(" ","");
 	}
@@ -174,11 +176,11 @@ public class FundingDetail implements Serializable
 	public void setIndexId(long indexId) {
 		this.indexId = indexId;
 	}
-	
+
 	public boolean equals(Object obj) {
 		if (obj == null) throw new NullPointerException();
 		if (!(obj instanceof FundingDetail)) throw new ClassCastException();
-		
+
 		FundingDetail fd = (FundingDetail) obj;
 		return (this.indexId == fd.indexId);
 	}
@@ -235,7 +237,24 @@ public class FundingDetail implements Serializable
 		return ampComponentFundingId;
 	}
 
-	public void setAmpComponentFundingId(Long ampComponentFundingId) {
+
+        public Long getFundDetId() {
+                return fundDetId;
+        }
+
+        public String getDisbOrderId() {
+                return disbOrderId;
+        }
+
+        public void setAmpComponentFundingId(Long ampComponentFundingId) {
 		this.ampComponentFundingId = ampComponentFundingId;
 	}
-} 
+
+        public void setFundDetId(Long fundDetId) {
+                this.fundDetId = fundDetId;
+        }
+
+        public void setDisbOrderId(String disbOrderId) {
+                this.disbOrderId = disbOrderId;
+        }
+}

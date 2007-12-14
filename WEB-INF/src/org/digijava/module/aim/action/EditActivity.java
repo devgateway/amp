@@ -491,7 +491,7 @@ public class EditActivity
             if (ampCategoryValue != null)
               eaForm.setActivityLevel(ampCategoryValue.getId());
 
-        
+
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                 CategoryConstants.FINANCIAL_INSTRUMENT_KEY, activity.getCategories());
             if (ampCategoryValue != null)
@@ -885,7 +885,7 @@ public class EditActivity
           eaForm.setReferenceDocs(null);
 
           setCompSectorsToForm(eaForm, activity);
-          
+
           Collection sectors = activity.getSectors();
 
           if (sectors != null && sectors.size() > 0) {
@@ -1041,114 +1041,122 @@ public class EditActivity
 			            if (fundDetails != null && fundDetails.size() > 0) {
 			              Iterator fundDetItr = fundDetails.iterator();
 			              List fundDetail = new ArrayList();
+                                      Iterator fundDetDisbOrderItr =fundDetails.iterator();
 
 			              long indexId = System.currentTimeMillis();
+
+
 			              while (fundDetItr.hasNext()) {
-			                AmpFundingDetail fundDet = (AmpFundingDetail)
-			                    fundDetItr
-			                    .next();
-			                FundingDetail fundingDetail = new FundingDetail();
-			                if (fundDet.getFixedExchangeRate() != null &&
-			                    fundDet.getFixedExchangeRate().doubleValue() != 1) {
-			                  fundingDetail.setFixedExchangeRate(fundDet.
-			                      getFixedExchangeRate());
-			                  fundingDetail.setUseFixedRate(true);
-			                }
-			                fundingDetail.setIndexId(indexId++);
-			                int adjType = fundDet.getAdjustmentType()
-			                    .intValue();
-			                fundingDetail.setAdjustmentType(adjType);
-			                if (adjType == Constants.PLANNED) {
-			                  fundingDetail
-			                      .setAdjustmentTypeName("Planned");
-			                }
-			                else if (adjType == Constants.ACTUAL) {
-			                  fundingDetail
-			                      .setAdjustmentTypeName("Actual");
-			                  Date dt = fundDet.getTransactionDate();
-			                  double frmExRt = CurrencyUtil.
-			                      getExchangeRate(
-			                          fundDet.getAmpCurrencyId()
-			                          .getCurrencyCode(), 1, dt);
-			                  String toCurrCode = Constants.DEFAULT_CURRENCY;
-			                  if (tm != null)
-			                    toCurrCode = CurrencyUtil.
-			                        getAmpcurrency(
-			                            tm.getAppSettings()
-			                            .getCurrencyId()).getCurrencyCode();
-			                  double toExRt = CurrencyUtil.
-			                      getExchangeRate(toCurrCode, 1, dt);
-			                  double amt = CurrencyWorker.convert1(
-			                      fundDet.getTransactionAmount()
-			                      .doubleValue(), frmExRt,
-			                      toExRt);
+                                        AmpFundingDetail fundDet = (AmpFundingDetail)
+                                            fundDetItr
+                                            .next();
 
-			                  eaForm.setCurrCode(toCurrCode);
-			                  if (fundDet.getTransactionType().intValue() ==
-			                      Constants.COMMITMENT) {
-			                    totComm += amt;
-			                  }
-			                  else if (fundDet.getTransactionType()
-			                           .intValue() ==
-			                           Constants.DISBURSEMENT) {
-			                    totDisb += amt;
-			                  }
-			                  else if (fundDet.getTransactionType()
-			                           .intValue() ==
-			                           Constants.EXPENDITURE) {
-			                    totExp += amt;
-			                  }
-			                }
-			                if (fundDet.getTransactionType().intValue() ==
-			                    Constants.EXPENDITURE) {
-			                  fundingDetail.setClassification(fundDet
-			                                                  .getExpCategory());
-			                }
-			                fundingDetail.setCurrencyCode(fundDet
-			                                              .getAmpCurrencyId().
-			                                              getCurrencyCode());
-			                fundingDetail.setCurrencyName(fundDet
-			                                              .getAmpCurrencyId().
-			                                              getCountryName());
-
-			                fundingDetail
-			                    .setTransactionAmount(CurrencyWorker
-			                                          .convert(fundDet
-			                    .getTransactionAmount()
-			                    .doubleValue(), 1, 1));
-			                fundingDetail.setTransactionDate(DateConversion
-			                                                 .ConvertDateToString(fundDet
-			                    .getTransactionDate()));
-
-			                fundingDetail.setPerspectiveCode(fundDet.
-			                                                 getPerspectiveId().getCode());
-			                fundingDetail.setPerspectiveName(fundDet.
-			                                                 getPerspectiveId().getName());
-
-			                /*
-			                 fundingDetail.setPerspectiveCode(fundDet
-			                  .getOrgRoleCode());
-
-			                 Iterator itr1 = eaForm.getPerspectives()
-			                  .iterator();
-			                         while (itr1.hasNext()) {
-			                 AmpPerspective pers = (AmpPerspective) itr1
-			                   .next();
-			                 if (pers.getCode().equals(
-			                   fundDet.getOrgRoleCode())) {
-			                  fundingDetail.setPerspectiveName(pers
-			                    .getName());
-			                 }
-			                         }
-			                 */
+                                          FundingDetail fundingDetail = new FundingDetail();
+                                          fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
+                                          if (fundDet.getFixedExchangeRate() != null &&
+                                              fundDet.getFixedExchangeRate().doubleValue() != 1) {
+                                            fundingDetail.setFixedExchangeRate(fundDet.
+                                                                               getFixedExchangeRate());
+                                            fundingDetail.setUseFixedRate(true);
+                                          }
+                                          fundingDetail.setIndexId(indexId++);
+                                          int adjType = fundDet.getAdjustmentType()
+                                              .intValue();
+                                          fundingDetail.setAdjustmentType(adjType);
+                                          if (adjType == Constants.PLANNED) {
+                                            fundingDetail
+                                                .setAdjustmentTypeName("Planned");
+                                          }
+                                          else if (adjType == Constants.ACTUAL) {
+                                            fundingDetail
+                                                .setAdjustmentTypeName("Actual");
+                                            Date dt = fundDet.getTransactionDate();
+                                            double frmExRt = CurrencyUtil.
+                                                getExchangeRate(
+                                                    fundDet.getAmpCurrencyId()
+                                                    .getCurrencyCode(), 1, dt);
+                                            String toCurrCode = Constants.DEFAULT_CURRENCY;
+                                            if (tm != null)
+                                              toCurrCode = CurrencyUtil.
+                                                  getAmpcurrency(
+                                                      tm.getAppSettings()
+                                                      .getCurrencyId()).getCurrencyCode();
 
 
+                                            double toExRt = CurrencyUtil.
+                                                getExchangeRate(toCurrCode, 1, dt);
+                                            double amt = CurrencyWorker.convert1(
+                                                fundDet.getTransactionAmount()
+                                                .doubleValue(), frmExRt,
+                                                toExRt);
 
-			                fundingDetail.setTransactionType(fundDet
-			                                                 .getTransactionType().intValue());
-			                fundDetail.add(fundingDetail);
-			              }
+                                            eaForm.setCurrCode(toCurrCode);
+                                            if (fundDet.getTransactionType().intValue() ==
+                                                Constants.COMMITMENT) {
+                                              totComm += amt;
+                                            }
+                                            else if (fundDet.getTransactionType()
+                                                     .intValue() ==
+                                                     Constants.DISBURSEMENT) {
+                                              totDisb += amt;
+                                            }
+                                            else if (fundDet.getTransactionType()
+                                                     .intValue() ==
+                                                     Constants.EXPENDITURE) {
+                                              totExp += amt;
+                                            }
+                                          }
+                                          if (fundDet.getTransactionType().intValue() ==
+                                              Constants.EXPENDITURE) {
+                                            fundingDetail.setClassification(fundDet
+                                                                            .getExpCategory());
+                                          }
+                                          fundingDetail.setCurrencyCode(fundDet
+                                                                        .getAmpCurrencyId().
+                                                                        getCurrencyCode());
+                                          fundingDetail.setCurrencyName(fundDet
+                                                                        .getAmpCurrencyId().
+                                                                        getCountryName());
 
+                                          fundingDetail
+                                              .setTransactionAmount(CurrencyWorker
+                                                                    .convert(fundDet
+                                                                             .getTransactionAmount()
+                                                                             .doubleValue(), 1, 1));
+                                          fundingDetail.setTransactionDate(DateConversion
+                                                                           .ConvertDateToString(fundDet
+                                              .getTransactionDate()));
+
+                                          fundingDetail.setPerspectiveCode(fundDet.
+                                                                           getPerspectiveId().getCode());
+                                          fundingDetail.setPerspectiveName(fundDet.
+                                                                           getPerspectiveId().getName());
+
+                                          /*
+                                           fundingDetail.setPerspectiveCode(fundDet
+                                            .getOrgRoleCode());
+
+                                           Iterator itr1 = eaForm.getPerspectives()
+                                            .iterator();
+                                                   while (itr1.hasNext()) {
+                                           AmpPerspective pers = (AmpPerspective) itr1
+                                             .next();
+                                           if (pers.getCode().equals(
+                                             fundDet.getOrgRoleCode())) {
+                                            fundingDetail.setPerspectiveName(pers
+                                              .getName());
+                                           }
+                                                   }
+                                           */
+
+
+
+                                          fundingDetail.setTransactionType(fundDet
+                                                                           .getTransactionType().intValue());
+                                          fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
+                                          fundDetail.add(fundingDetail);
+
+                                      }
 			              if (fundDetail != null)
 			                Collections.sort(fundDetail,
 			                                 FundingValidator.dateComp);
@@ -1345,7 +1353,7 @@ public class EditActivity
           eaForm.setReportingOrgs(new ArrayList());
           eaForm.setSectGroups(new ArrayList());
           eaForm.setRegGroups(new ArrayList());
-          
+
           Set relOrgs = activity.getOrgrole();
           if (relOrgs != null) {
             Iterator relOrgsItr = relOrgs.iterator();
@@ -1399,7 +1407,7 @@ public class EditActivity
               eaForm.getRegGroups().add(
                   orgRole.getOrganisation());
             }
-              
+
             }
           }
 
@@ -1619,12 +1627,12 @@ public class EditActivity
 
     return mapping.findForward("forward");
   }
-  
+
   private void setCompSectorsToForm(EditActivityForm form,AmpActivity activity){
 	  Collection dbSectors=activity.getComponentSectors();
 	  form.setComponentSectors(dbSectors);
   }
-  
+
 
 /**
  * @param activity

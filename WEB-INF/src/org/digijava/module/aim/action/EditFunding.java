@@ -36,6 +36,7 @@ public class EditFunding extends Action {
 		int offset = formBean.getOffset();
 		int numComm = 0;
 		int numDisb = 0;
+                int numDisbOrder=0;
 		int numExp = 0;
 		formBean.setAssistanceType(null);
 		formBean.setOrgFundingId("");
@@ -62,9 +63,9 @@ public class EditFunding extends Action {
 								if (funding.getFinancingInstrument() != null)
 									formBean.setModality(funding.getFinancingInstrument().getId());
 								formBean.setFundingConditions(funding.getConditions());
-								
+
 								formBean.setFundingMTEFProjections( new ArrayList<MTEFProjection> (funding.getMtefProjections()) );
-								
+
 								formBean.setFundingDetails(new ArrayList(funding.getFundingDetails()));
 								if (funding.getFundingDetails() != null) {
 									Iterator itr = funding.getFundingDetails().iterator();
@@ -77,6 +78,10 @@ public class EditFunding extends Action {
 										} else if (fd.getTransactionType() == 2) {
 											numExp ++;
 										}
+                                                                                else if (fd.getTransactionType() == 4) {
+                                                                                        numDisbOrder ++;
+                                                                                }
+
 									}
 								}
 							}
@@ -92,6 +97,7 @@ public class EditFunding extends Action {
 		formBean.setNumComm(numComm);
 		formBean.setNumDisb(numDisb);
 		formBean.setNumExp(numExp);
+                formBean.setNumDisbOrder(numDisbOrder);
 		//formBean.setAssistanceTypes(c);
 		formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 		formBean.setProjections(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.MTEF_PROJECTION_KEY, false));

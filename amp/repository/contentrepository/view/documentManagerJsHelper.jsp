@@ -146,6 +146,29 @@
 <c:set var="translation_add_new_version">
 			<digi:trn key="contentrepository:addNewVersionTitle">Add new version</digi:trn>
 </c:set>
+
+
+<c:set var="trans_headerFileName">
+	 <digi:trn key="contentrepository:TableHeader:FileName">File Name</digi:trn>  
+</c:set>
+<c:set var="trans_headerResourceTitle">
+	 <digi:trn key="contentrepository:TableHeader:ResourceTitle">Resource Title</digi:trn>  
+</c:set>
+<c:set var="trans_headerDate">
+	 <digi:trn key="contentrepository:TableHeader:Date">Date</digi:trn>
+</c:set>
+<c:set var="trans_headerContentType">
+	<digi:trn key="contentrepository:TableHeader:ContentType">Content Type</digi:trn>  
+</c:set>
+
+<c:set var="trans_headerDescription">
+	 <digi:trn key="contentrepository:TableHeader:Description">Description</digi:trn>
+</c:set>
+
+<c:set var="trans_headerActions">
+	<digi:trn key="contentrepository:TableHeader:Actions">Actions</digi:trn>
+</c:set>
+
 <script type="text/javascript">
 YAHOO.namespace("YAHOO.amp");
 YAHOO.namespace("YAHOO.amp.table");
@@ -154,12 +177,12 @@ YAHOO.namespace("YAHOO.amp.table");
 YAHOO.amp.table.enhanceMarkup = function(markupName) {
 
     this.columnHeaders = [
-        {key:"file_name",text:"File Name",sortable:true},
-        {key:"resource_title",text:"Resource Title",sortable:true},
-        {key:"date",text:"Date",type:"date",sortable:true},
-        {key:"content_type",text:"Content Type",sortable:true},
-        {key:"description",text:"Description",sortable:false},
-        {key:"actions",text:"Actions",sortable:false}
+        {key:"file_name",text:"${trans_headerFileName}",sortable:true},
+        {key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true},
+        {key:"date",text:"Date",type:"${trans_headerDate}",sortable:true},
+        {key:"content_type",text:"${trans_headerContentType}",sortable:true},
+        {key:"description",text:"${trans_headerDescription}",sortable:false},
+        {key:"actions",text:"${trans_headerActions}",sortable:false}
     ];
     this.columnSet 	= new YAHOO.widget.ColumnSet(this.columnHeaders);
 

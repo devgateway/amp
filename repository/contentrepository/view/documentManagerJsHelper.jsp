@@ -43,6 +43,30 @@
 		<digi:trn key="contentrepository:publicVersionMsg">The marked version is currently public</digi:trn>
 </c:set>
 
+<c:set var="headerVersion">
+				<digi:trn key="contentrepository:versionhistory:header:version">Version</digi:trn>
+</c:set>
+<c:set var="headerType">
+				<digi:trn key="contentrepository:versionhistory:header:type">Type</digi:trn>
+</c:set>
+
+<c:set var="headerFileName">
+	<digi:trn key="contentrepository:versionhistory:header:filename">File Name</digi:trn>
+</c:set>
+
+<c:set var="headerDate">
+				<digi:trn key="contentrepository:versionhistory:header:date">Date</digi:trn>
+</c:set>
+
+<c:set var="headerNotes">
+				<digi:trn key="contentrepository:versionhistory:header:notes">Notes</digi:trn>
+</c:set>
+
+<c:set var="headerAction">
+				<digi:trn key="contentrepository:versionhistory:header:actions">Actions</digi:trn>
+</c:set>
+
+
 <script type="text/javascript">
 	YAHOO.namespace("YAHOO.amp");
 	YAHOO.namespace("YAHOO.amp.table");
@@ -67,13 +91,13 @@
 	/* Function for creating YAHOO datatable for versions */
 	YAHOO.amp.table.enhanceVersionsMarkup = function() {
 		    this.columnHeadersForVersions = [
-			    {key:"v_ver_num",text:"Version",sortable:true},
-			    {key:"v_type",text:"Type",sortable:true},
-		        {key:"v_file_name",text:"File Name",sortable:true},
+			    {key:"v_ver_num",text:"${headerVersion}",sortable:true},
+			    {key:"v_type",text:"${headerType}",sortable:true},
+		        {key:"v_file_name",text:"${headerFileName}",sortable:true},
 
-		        {key:"v_date",text:"Date",type:"date",sortable:true},
-		        {key:"v_notes",text:"Notes",sortable:false},
-		        {key:"v_actions",text:"Actions",sortable:false}
+		        {key:"v_date",text:"${headerDate}",type:"date",sortable:true},
+		        {key:"v_notes",text:"${headerNotes}",sortable:false},
+		        {key:"v_actions",text:"${headerAction}",sortable:false}
 		    ];
 		    this.columnSetForVersions = new YAHOO.widget.ColumnSet(this.columnHeadersForVersions);
 	      var options					= {paginated:true, 
@@ -90,9 +114,7 @@
 	};
 
 </script>
-<c:set var="translation1">
-				<digi:trn key="contentrepository:documentDeleteConfirm">Are you sure you want to delete this document ?</digi:trn>
-</c:set>
+
 <c:set var="translation2">
 				<digi:trn key="contentrepository:documentWaitForDelete">Deleting document ... </digi:trn>
 </c:set>

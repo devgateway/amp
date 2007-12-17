@@ -14867,11 +14867,37 @@ DHTMLSuite.calendarModel.prototype =
 	setInitialDateFromInput : function(inputReference,format)
 	{		
 		var tmpDay;
-		
 		if(inputReference.value.length>0){	
 			if (format.indexOf('MMM') != -1){
-				//We must treat this case !!!!!
-				//Arty AMP-2097
+				var monthPos = format.indexOf('MMM');
+				var monthName = inputReference.value.substr(monthPos,3);
+				
+				var pos = -1;
+				var k;
+				for (k = 0; k < 12; k++)
+					if (this.languageModel.monthArrayShort[k].toLowerCase() == monthName.toLowerCase()){
+						pos = k + 1;
+						break;
+					}
+					
+				var yearPos = format.indexOf('yyyy');
+				this.initialYear = inputReference.value.substr(yearPos,4);		
+				var dayPos = format.indexOf('dd');
+				tmpDay = inputReference.value.substr(dayPos,2);		
+				this.initialDay = tmpDay;
+
+				if (pos == -1){
+					monthName = inputReference.value.substr(monthPos,2);
+					pos = monthName / 1;
+					
+					this.initialYear = inputReference.value.substr(yearPos-1,4);		
+					tmpDay = inputReference.value.substr(dayPos-1,2);		
+					this.initialDay = tmpDay;
+				}
+
+				this.initialMonth = pos;
+				
+				
 				var empty = "blank";
 				empty = "nt";
 			}

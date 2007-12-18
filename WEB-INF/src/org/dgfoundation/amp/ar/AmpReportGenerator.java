@@ -18,10 +18,6 @@ import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
-import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
@@ -274,6 +270,23 @@ public class AmpReportGenerator extends ReportGenerator {
 			newcol.getItems().add(tac);
 		}
 
+		//we create the total commitments column
+		
+		if (ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,reportMetadata.getMeasures())) {
+
+			TotalCommitmentsAmountColumn tac = new TotalCommitmentsAmountColumn(
+					ArConstants.TOTAL_COMMITMENTS);
+			Iterator i=funding.iterator();
+			while (i.hasNext()) {
+				AmountCell element = (AmountCell) i.next();
+				//we do not care here about filtering commitments, that is done at UndisbursedAmountCell level
+				tac.addCell(element);
+			}
+
+			newcol.getItems().add(tac);
+		}
+
+		
 		newcol.setName(reportMetadata.getType().intValue()==4?ArConstants.COLUMN_CONTRIBUTION_TOTAL:ArConstants.COLUMN_TOTAL);
 
 		rawColumns.addColumn(newcol);

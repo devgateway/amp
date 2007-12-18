@@ -40,7 +40,15 @@ public class DateColWorker extends ColumnWorker {
 	protected Cell getCellFromRow(ResultSet rs)
 			throws SQLException {
 		Long id=new Long(rs.getLong(1));
-		Date value=rs.getDate(2);
+		String strValue=rs.getString(2);
+		Date value=null;
+		try {
+		    value=sdf.parse(strValue);
+		} catch (Exception e1) {
+		    logger.error(e1);
+		    logger.info("Exception encountered parsing a transaction date!", e1);
+		}
+		
 		DateCell ret=new DateCell(id);
 		
 		//checking the filter calendar

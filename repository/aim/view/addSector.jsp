@@ -1,5 +1,3 @@
-
-
 <%@ page pageEncoding="UTF-8" %>
 
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
@@ -62,11 +60,11 @@
 
 	}
 	//href="/getSectorSchemes.do"
-	function cancel(){
-	<digi:context name="cancel" property="context/module/moduleinstance/getSectorSchemes.do" />
-
-	window.location="<%= cancel%>";
-	return true;
+	function cancel(id){
+		<digi:context name="cancel" property="/aim/updateSectorSchemes.do" />
+		dest="<%=request.getHeader("REFERER")%>";
+		window.location=dest
+		return true;
 	}
 
 </script>

@@ -127,18 +127,18 @@
                                                   <logic:notEmpty name="aimEditActivityForm" property="selectedLocs">
                                                     <tr>
                                                       <td>
-                                                        <table cellSpacing=0 cellPadding=0 border=0	bgcolor="#ffffff" width="100%">
+                                                        <table cellSpacing="0" cellPadding="0" border="0"	bgcolor="#ffffff" width="100%">
                                                           <logic:iterate name="aimEditActivityForm"	property="selectedLocs" id="selectedLocs" type="org.digijava.module.aim.helper.Location">
                                                             <tr>
                                                               <td width="100%">
-                                                                <table width="100%" cellSpacing=1 cellPadding=1	vAlign="top" align="left">
+                                                                <table width="100%" cellSpacing="1" cellPadding="1"	vAlign="top" align="left">
                                                                   <tr>
                                                                     <td width="3" vAlign="center">
                                                                     <html:multibox property="selLocs">
                                                                       <bean:write name="selectedLocs" property="locId" />
                                                                     </html:multibox>
                                                                     </td>
-                                                                    <td vAlign="center" align="left">
+                                                                    <td vAlign="center" align="left" width="100%">
                                                                       <c:if test="${!empty selectedLocs.country}">
                                                                         [<bean:write name="selectedLocs" property="country" />]
                                                                       </c:if>
@@ -151,6 +151,11 @@
                                                                       <c:if test="${!empty selectedLocs.woreda}">
                                                                         [<bean:write name="selectedLocs" property="woreda"/>]
                                                                       </c:if>
+                                                                    </td>
+                                                                    <td align="right" nowrap="nowrap">
+                                                                    		<FONT color="red">*</FONT><digi:trn key="aim:editActivity:location_percentage">Percentage</digi:trn>:&nbsp;
+                                                                      		<html:text name="selectedLocs" property="percent"
+                                                                      			 size="2" maxlength="3" onkeyup="fnChk(this)"/>
                                                                     </td>
                                                                   </tr>
                                                                 </table>

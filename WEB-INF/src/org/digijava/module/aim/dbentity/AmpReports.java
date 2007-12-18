@@ -53,6 +53,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	//to be set in order to get information for translation purposes in pdf and excel reports 
 	private String siteId;
 	private String locale;
+	private AmpPages ampPage;
 	
 	private AmpCategoryValue activityLevel;
 	
@@ -314,6 +315,15 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 
 	public void setActivityLevel(AmpCategoryValue activityLevel) {
 		this.activityLevel = activityLevel;
+	}
+	
+	
+	public void setAmpPage(AmpPages ampPage) {
+		this.ampPage = ampPage;
+	}
+
+	public AmpPages getAmpPage() {
+		return ampPage;
 	}
 	
 	

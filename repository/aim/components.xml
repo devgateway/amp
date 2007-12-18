@@ -162,6 +162,7 @@
 	<page name="addActivityStep8" title=" - Add Activity - Contact Details | Conditions" />
 	<page name="addActivityStep10" title=" - Add Activity - Monitoring and Evaluation" />
 	<page name="addActivityStep11" title=" - Add Activity - Project Costs" />
+	<page name="addActivityStep12" title=" - Add Activity - Level Linker" />	
 	<page name="activityExist" title=" - Add Activity - Activity Already Exist" />
 	<page name="locationManager" title=" - Region Manager" />
 <!--	<page name="locationManager" title=" - Location Manager" />

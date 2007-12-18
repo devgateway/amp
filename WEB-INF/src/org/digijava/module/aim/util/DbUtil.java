@@ -105,7 +105,7 @@ import org.digijava.module.aim.helper.CountryBean;
 import java.text.DateFormat;
 
 public class DbUtil {
-    private static Logger logger = Logger.getLogger(DbUtil.class);
+	private static Logger logger = Logger.getLogger(DbUtil.class);
 
 
 	public static String getDescParsed(String str)
@@ -445,105 +445,6 @@ public class DbUtil {
             logger.error("Unable to get Activity Internal Id :" + ex);
         }
         return internalId;
-    }
-
-    /*
-     * this is to delete a report completely by a team lead
-     */
-    public static boolean deleteReportsCompletely(Long qid) {
-        Session session = null;
-        Transaction tx = null;
-        String queryString = null;
-        Query qry = null;
-        Collection col = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
-            AmpReports ampReports = null;
-            // loading the 3 tables from where the deletion has to be done
-            try {
-                logger.info(" this is the utils's qid " + qid);
-                ampReports = (AmpReports) session.load(AmpReports.class, qid);
-                AmpTeamReports ampTeamReports = null;
-                AmpReportSector ampReportSector = null;
-                queryString = "select tr from " + AmpTeamReports.class.getName() + " tr " +
-                    "where tr.report=:qid ";
-                qry = session.createQuery(queryString);
-                qry.setParameter("qid", qid, Hibernate.LONG);
-                Iterator itr = qry.list().iterator();
-                col = new ArrayList();
-                while (itr.hasNext()) {
-                    ampTeamReports = (AmpTeamReports) itr.next();
-                    session.delete(ampTeamReports);
-                }
-
-//				queryString = "select tr from " + AmpReportSector.class.getName() + " tr " +
-//				"where (tr.report=:qid) ";
-//					qry = session.createQuery(queryString);
-//					qry.setParameter("qid", qid, Hibernate.LONG);
-//					Iterator itr1 = qry.list().iterator();
-//					col = new ArrayList();
-//					while (itr1.hasNext()) {
-//						ampReportSector = (AmpReportSector) itr.next();
-//					session.delete(ampReportSector);
-//					}
-                session.delete(ampReports);
-                tx.commit();
-                return true;
-            } catch (net.sf.hibernate.ObjectNotFoundException onfe) {
-                logger.error("Exception from deleteQuestion() :" + onfe.getMessage());
-                if (tx != null) {
-                    try {
-                        tx.rollback();
-                    } catch (Exception trbf) {
-                        logger.error("Transaction roll back failed ");
-                        onfe.printStackTrace(System.out);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            logger.error("Exception from deleteQuestion() :" + e.getMessage());
-            e.printStackTrace(System.out);
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                } catch (Exception trbf) {
-                    logger.error("Transaction roll back failed ");
-                    e.printStackTrace(System.out);
-                }
-            }
-        }
-        return false;
-    }
-
-    public static boolean deleteReportsForOwner(Long qid) {
-        Session session = null;
-        Transaction tx = null;
-        String queryString = null;
-        Query qry = null;
-        Collection col = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            try {
-                queryString = "select rep from " + AmpReports.class.getName() + " rep " +
-                    "where rep.ownerId=:oId ";
-                qry = session.createQuery(queryString);
-                qry.setParameter("oId", qid, Hibernate.LONG);
-                Iterator itr = qry.list().iterator();
-                col = new ArrayList();
-                while (itr.hasNext()) {
-                    AmpReports rep = (AmpReports) itr.next();
-                    session.delete(rep);
-                }
-                return true;
-            } catch (net.sf.hibernate.ObjectNotFoundException onfe) {
-                logger.error("Exception from deleteQuestion() :" + onfe.getMessage());
-            }
-        } catch (Exception e) {
-            logger.error("Exception from deleteQuestion() :" + e.getMessage());
-            e.printStackTrace(System.out);
-        }
-        return false;
     }
 
     public static Collection getOrganizations(Long actId, String orgCode) {

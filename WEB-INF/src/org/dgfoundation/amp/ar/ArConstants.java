@@ -66,12 +66,17 @@ public final class ArConstants {
 
 	public final static String COLUMN_FUNDING="Funding";
 	
+	//additional measures
 	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";
+	public final static String TOTAL_COMMITMENTS="Total Commitments";
 	
 	//maldives only:
 	public final static String SECTOR_PERCENTAGE="Sector Percentage";
+	//bolivia:
+	public final static String LOCATION_PERCENTAGE="Location Percentage";
+	public final static String COMPONENTE_PERCENTAGE="Componente Percentage";
 	
-
+	
 	//hierarchysorter
 	public final static String HIERARCHY_SORTER_TITLE="Title";
 	

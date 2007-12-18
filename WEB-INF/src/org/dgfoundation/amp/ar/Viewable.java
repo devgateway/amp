@@ -22,6 +22,16 @@ import java.util.Hashtable;
  */
 public abstract class Viewable implements Cloneable {
 	
+
+    
+    	/**
+    	 * required by : pagination
+    	 * implemented by each subclass to return the number of rows that are displayed for this item.
+    	 * example. each amount cell should display one row. a groupReportData would display more rows - the title of the hierarchy + the totals row = 2 rows
+    	 * @return the number of rows actively used on the screen to render this object
+    	 */
+    	public abstract int getVisibleRows();
+    
 	//thread safe cached viewerPath
 	protected static Hashtable viewerPaths=new Hashtable();
 	

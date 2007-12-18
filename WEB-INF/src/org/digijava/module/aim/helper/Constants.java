@@ -107,7 +107,7 @@ public class Constants
 	public static final String CALENDAR_DATE_PICKER = "yyyy-MM-dd"; //error at finding month amp-1754
 	public static final String SIMPLE_DATE_TIME_FORMAT = "dd MMMMM, yyyy hh:mm aaa";
 
-	public static final int FROM_YEAR_RANGE = 22;
+	public static final int FROM_YEAR_RANGE = 40;//22;
 	public static final int TO_YEAR_RANGE = 5;
 
 	public static final Long STATUS_NAME = new Long(1) ;
@@ -176,7 +176,7 @@ public class Constants
 	public static final String USER_ACT_LIST = "userActivityList";
 	public static final String TS_ACT_LIST = "timestampActivityList";
 
-	public static final long MAX_TIME_LIMIT = 3600000;
+	public static final long MAX_TIME_LIMIT = 30*60*1000;
 
 	public static final String ME_IND_VAL_BASE_ID = "base";
 	public static final String ME_IND_VAL_ACTUAL_ID = "actual";

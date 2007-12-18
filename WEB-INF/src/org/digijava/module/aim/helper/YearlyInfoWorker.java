@@ -1,19 +1,19 @@
 package org.digijava.module.aim.helper;
 
-import org.apache.log4j.Logger;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.ArrayList;
-import org.apache.commons.lang.StringUtils;
+
+import org.apache.log4j.Logger;
 
 public class YearlyInfoWorker {
 
 	private static Logger logger = Logger.getLogger(YearlyInfoWorker.class);
 
-	public static Collection getYearlyInfo(FilterParams fp) {
+	public static Collection<YearlyInfo> getYearlyInfo(FilterParams fp) {
 
-		Collection yo = new ArrayList();
-		Collection qo = QuarterlyInfoWorker.getQuarterlyInfo(fp);
+		Collection<YearlyInfo> yo = new ArrayList<YearlyInfo>();
+		Collection<QuarterlyInfo> qo = QuarterlyInfoWorker.getQuarterlyInfo(fp);
 		if ( qo.size() != 0 )
 			yo = getYearlySum(qo);
 
@@ -23,15 +23,14 @@ public class YearlyInfoWorker {
 		return yo;
 	}
 
-	public static Collection getYearlySum(Collection qi) {
+	public static Collection<YearlyInfo> getYearlySum(Collection<QuarterlyInfo> qi) {
 
-		if ( logger.isDebugEnabled() )
-			logger.debug("GETYEARLYSUM() PASSED A COLLECTION OF SIZE : " + qi.size());
+		logger.debug("GETYEARLYSUM() PASSED A COLLECTION OF SIZE : " + qi.size());
 
-		ArrayList yo = new ArrayList();
+		ArrayList<YearlyInfo> yo = new ArrayList<YearlyInfo>();
 		if ( qi.size() != 0 )	{
 
-			ArrayList qo = new ArrayList(qi);
+			ArrayList<QuarterlyInfo> qo = new ArrayList<QuarterlyInfo>(qi);
 
 			double tempPlanned = 0.0;
 			double tempActual = 0.0;
@@ -41,7 +40,7 @@ public class YearlyInfoWorker {
 			String aa = "";
 
 			int i = 0;
-			qf = (QuarterlyInfo) qo.get(i);
+			qf =  qo.get(i);
 
 			while ( i < qo.size() ) {
 
@@ -95,22 +94,20 @@ public class YearlyInfoWorker {
 				tempActual = 0.0;
 			}
 		}
-		if ( logger.isDebugEnabled() )
-			logger.debug("GETYEARLYSUM() RETURNING A COLLECTION OF SIZE : " + yo.size());
+		logger.debug("GETYEARLYSUM() RETURNING A COLLECTION OF SIZE : " + yo.size());
 		return yo;
 	}
 
-	public static String getTotalYearly(Collection yearlyInfo, int type)	{
-		if ( logger.isDebugEnabled() )
-			logger.debug("getTotalYearly() passed a collection of size" + yearlyInfo.size() );
-		Iterator iter = yearlyInfo.iterator() ;
+	public static String getTotalYearly(Collection<YearlyInfo> yearlyInfo, int type)	{
+		logger.debug("getTotalYearly() passed a collection of size" + yearlyInfo.size() );
+		Iterator<YearlyInfo> iter = yearlyInfo.iterator() ;
 		YearlyInfo y = null ;
 		double total = 0.0 ;
 		String s1 = "" ;
 		String s2 = "" ;
 
 		while ( iter.hasNext() )	{
-			y = (YearlyInfo) iter.next();
+			y =  iter.next();
 			if ( type == Constants.PLANNED )	{
 				s1 = y.getPlannedAmount();
 				s2 = DecimalToText.removeCommas(s1);
@@ -123,8 +120,7 @@ public class YearlyInfoWorker {
 			}
 		}
 		String strTotal = CurrencyWorker.mf.format(total);
-		if ( logger.isDebugEnabled() )
-			logger.debug("getTotalYearly() returns total=" + strTotal );
+		logger.debug("getTotalYearly() returns total=" + strTotal );
 		return strTotal;
 	}
 

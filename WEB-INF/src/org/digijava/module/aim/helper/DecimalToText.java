@@ -75,7 +75,7 @@ public class DecimalToText
 			//text = "" ;
 			for (int i = 0 ; i < tmp.length() ; i++ )
 			{
-				if ( arr[i] >= '0' && arr[i]<='9' || arr[i]=='.')
+				if ( arr[i] >= '0' && arr[i]<='9' || arr[i]=='.' || arr[i]=='-')
 					text += arr[i] ;
 			}
 		}
@@ -102,7 +102,7 @@ public class DecimalToText
 			//text = "" ;
 			for (int i = 0 ; i < tmp.length() ; i++ )
 			{
-				if ( arr[i] >= '0' && arr[i]<='9' || arr[i]=='.' )
+				if ( arr[i] >= '0' && arr[i]<='9' || arr[i]=='.' || arr[i]=='-')
 					text += arr[i] ;
 			}
 		}

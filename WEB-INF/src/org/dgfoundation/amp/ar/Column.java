@@ -35,6 +35,9 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 
 	protected int rowSpan;
 	
+
+	
+	
 	
 	protected String contentCategory;
 	

@@ -125,7 +125,10 @@
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:text property="defReportsPerPage" size="5"  styleClass="inp-text"/>
-														</td>
+														    
+                                                            <a style="cursor:pointer;color:#006699" onclick="showHelpPanel()">
+														    	<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0>
+                                                            </a></td>
 													</tr>
 													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">
@@ -219,8 +222,8 @@
 									</table>
 								</td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
+							<tr><td bgColor=#f4f4f2>&nbsp;
+								
 							</td></tr>
 						</table>
 					</td>

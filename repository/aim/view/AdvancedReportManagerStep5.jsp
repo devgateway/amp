@@ -205,7 +205,12 @@ function deleteColumn()
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'donor' }">
 																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
 
-																							<c:if test="${addedColumns.columnName == 'Donor' || addedColumns.columnName == 'Donor Group' || addedColumns.columnName == 'Donor Agency' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Type Of Assistance' || addedColumns.columnName == 'Financing Instrument' || addedColumns.columnName == 'Project Title' || addedColumns.columnName == 'Team' || addedColumns.columnName == 'National Planning Objectives' || addedColumns.columnName == 'Primary Program' || addedColumns.columnName == 'Secondary Program'}">
+																							<c:if test="${addedColumns.columnName == 'A.C. Chapter' || addedColumns.columnName == 'Sub-Sector' || addedColumns.columnName == 'Implementation Level' || addedColumns.columnName == 'Accession Instrument' || 
+																							addedColumns.columnName == 'Executing Agency' || addedColumns.columnName == 'Donor' || addedColumns.columnName == 'Donor Group' || 
+																							addedColumns.columnName == 'Donor Agency' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Region' || 
+																							addedColumns.columnName == 'Type Of Assistance' || addedColumns.columnName == 'Financing Instrument' || addedColumns.columnName == 'Project Title' || 
+																							addedColumns.columnName == 'National Planning Objectives' || addedColumns.columnName == 'Primary Program' || addedColumns.columnName == 'Componente' || 
+																							addedColumns.columnName == 'Secondary Program'}">
 																								<TR bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
 																									<digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>
@@ -227,7 +232,12 @@ function deleteColumn()
 																						<!-- Regional Funding -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional' }">
 																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-																							<c:if test="${addedColumns.columnName == 'Status' || addedColumns.columnName == 'Donor Group' || addedColumns.columnName == 'Donor Agency' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Region' || addedColumns.columnName == 'Project Title'}">
+																							<c:if test="${addedColumns.columnName == 'Status' || 
+																							addedColumns.columnName == 'A.C. Chapter' || addedColumns.columnName == 'Accession Instrument' || addedColumns.columnName == 'Financing Instrument' || 
+																							addedColumns.columnName == 'Implementation Level' || addedColumns.columnName == 'National Planning Objectives' || addedColumns.columnName == 'Primary Program' || 
+																							addedColumns.columnName == 'Secondary Program' || addedColumns.columnName == 'Sub-Sector' || addedColumns.columnName == 'Type Of Assistance' || 
+																							addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Region' || 
+																							addedColumns.columnName == 'Project Title'}">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
 																									<digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>
@@ -246,7 +256,12 @@ function deleteColumn()
 																						<!-- Component Funding -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'component' }">
 																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-																							<c:if test="${addedColumns.columnName == 'Status' || addedColumns.columnName == 'Donor Group' || addedColumns.columnName == 'Donor Agency' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Project Title' || addedColumns.columnName == 'Component Name'}">
+																							<c:if test="${addedColumns.columnName == 'Status' ||
+																							addedColumns.columnName == 'A.C. Chapter' || addedColumns.columnName == 'Accession Instrument' || addedColumns.columnName == 'Financing Instrument' || 
+																							addedColumns.columnName == 'Implementation Level' || addedColumns.columnName == 'National Planning Objectives' || addedColumns.columnName == 'Primary Program' || 
+																							addedColumns.columnName == 'Secondary Program' || addedColumns.columnName == 'Sub-Sector' || addedColumns.columnName == 'Type Of Assistance' || 
+																							addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Project Title' || 
+																							addedColumns.columnName == 'Component Name'}">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
 																									  	<digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>
@@ -262,10 +277,13 @@ function deleteColumn()
 																						</c:if>
 
 
-																							<!-- Component Funding -->
+																							<!-- Contribution Funding -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'contribution' }">
 																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-																							<c:if test="${addedColumns.columnName == 'Donor Group' || addedColumns.columnName == 'Donor Agency' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'A.C. Chapter' || addedColumns.columnName == 'Accession Instrument' || addedColumns.columnName == 'Donor'}">
+																							<c:if test="${addedColumns.columnName == 'Costing Donor' || addedColumns.columnName == 'National Planning Objectives' || addedColumns.columnName == 'Primary Program' || 
+																							addedColumns.columnName == 'Project Title' || addedColumns.columnName == 'Secondary Program' || addedColumns.columnName == 'Sub-Sector' || 
+																							 addedColumns.columnName == 'Status' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'A.C. Chapter' || 
+																							 addedColumns.columnName == 'Accession Instrument' || addedColumns.columnName == 'Donor'}">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
 																										<digi:trn key="aim:report:${addedColumns.columnName}"> <c:out value="${addedColumns.columnId}"/></digi:trn>

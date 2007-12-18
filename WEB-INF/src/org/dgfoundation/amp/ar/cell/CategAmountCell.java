@@ -113,10 +113,16 @@ public Cell filter(Cell metaCell,Set ids) {
 				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.DONOR)))
 			return null;
 		}
+		
+		//TODO: find a solution so Regional filtering and Regional percentage work at the same time! right now only one can be used 
+		//at the same time. the matacell is REGION regardles if i am making regional reports or im filtering regional percentage in
+		// a regional hierarchy. so we need to differentiate somehow, maybe using reportsMeta
+		/*
 		if(metaCell.getColumn().getName().equals(ArConstants.REGION)) {
 				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.REGION)))
 			return null;
 		}
+		*/
 
 		if(metaCell.getColumn().getName().equals("Type Of Assistance")) {
 				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.TERMS_OF_ASSISTANCE)))
@@ -141,10 +147,32 @@ public Cell filter(Cell metaCell,Set ids) {
 				ret.setPercentage(percentage.intValue());			
 				}
 			}
+			
+			if(metaCell.getColumn().getName().equals("Region")) {
+				//we need to get the location percentage, it is stored in the MetaText of related to the owner of the current cell
+				CellColumn c=(CellColumn) metaCell.getColumn();
+				MetaTextCell relatedLocation=(MetaTextCell) c.getByOwnerAndValue(this.getOwnerId(),metaCell.getValue());
+				if(relatedLocation!=null) { 
+				MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedLocation.getMetaData(),ArConstants.LOCATION_PERCENTAGE);
+				Double percentage=(Double) percentMeta.getValue();
+				ret.setPercentage(percentage.doubleValue());			
+				}
+			}
+			
+			if(metaCell.getColumn().getName().equals("Componente")) {
+				//we need to get the componente percentage, it is stored in the MetaText of related to the owner of the current cell
+				CellColumn c=(CellColumn) metaCell.getColumn();
+				MetaTextCell relatedComponente=(MetaTextCell) c.getByOwnerAndValue(this.getOwnerId(),metaCell.getValue());
+				if(relatedComponente!=null) { 
+				MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedComponente.getMetaData(),ArConstants.COMPONENTE_PERCENTAGE);
+				Double percentage=(Double) percentMeta.getValue();
+				ret.setPercentage(percentage.doubleValue());			
+				}
+			}
 		}
 		
-		if(ret.getMergedCells().size()>0) 
-			logger.info(ret.getMergedCells());
+		//if(ret.getMergedCells().size()>0) 
+			//logger.info(ret.getMergedCells());
 		return ret;
 	}	/*
 		 * (non-Javadoc)

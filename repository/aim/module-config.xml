@@ -307,8 +307,16 @@
 			  org.digijava.module.aim.dbentity.AmpActivityProgramSettings
 	</hibernate-class>
 
-        <hibernate-class>
+    <hibernate-class>
 			 org.digijava.module.aim.dbentity.AmpActivityProgram
+	</hibernate-class>
+
+    <hibernate-class>
+			 org.digijava.module.aim.dbentity.AmpActivityLocation
+	</hibernate-class>
+
+    <hibernate-class>
+			 org.digijava.module.aim.dbentity.AmpActivityComponente
 	</hibernate-class>
 
 

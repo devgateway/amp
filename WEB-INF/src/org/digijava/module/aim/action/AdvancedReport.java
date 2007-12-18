@@ -1372,6 +1372,7 @@ public class AdvancedReport extends Action {
 				return;
 		}
 		Iterator iter;
+		//Collection coll = new ArrayList();
 		Collection coll = new TreeSet();
 		Collection temp = new ArrayList();
 		Collection  dup= new ArrayList();
@@ -1619,7 +1620,7 @@ public class AdvancedReport extends Action {
 						//the contribution report doesn't have access to columns 33-38 from amp_columns
 						if("contribution".compareTo(reportType)==0 )
 						{
-							if(acv.getAmpColumn().getColumnId().intValue()<33 || acv.getAmpColumn().getColumnId().intValue()>38) 
+							//if(acv.getAmpColumn().getColumnId().intValue()<33 || acv.getAmpColumn().getColumnId().intValue()>38) 
 								{
 									aux.add(acv.getAmpColumn());
 								//	System.out.println(++jjj+". "+acv.getAmpColumn().getColumnName());
@@ -1631,7 +1632,7 @@ public class AdvancedReport extends Action {
 						if("regional".compareTo(reportType)==0)
 						{
 							
-							if((acv.getAmpColumn().getColumnId().intValue()<33 || acv.getAmpColumn().getColumnId().intValue()>38) && acv.getAmpColumn().getColumnId().intValue()!=5) 
+							//if((acv.getAmpColumn().getColumnId().intValue()<33 || acv.getAmpColumn().getColumnId().intValue()>38) && acv.getAmpColumn().getColumnId().intValue()!=5) 
 							{
 								aux.add(acv.getAmpColumn());
 						//		System.out.println(++jjj+". "+acv.getAmpColumn().getColumnName());
@@ -1641,7 +1642,7 @@ public class AdvancedReport extends Action {
 						
 						if("component".compareTo(reportType)==0)
 						{
-							if(acv.getAmpColumn().getColumnId().intValue()!=5)
+							//if(acv.getAmpColumn().getColumnId().intValue()!=5)
 							{
 								aux.add(acv.getAmpColumn());
 								added=true;

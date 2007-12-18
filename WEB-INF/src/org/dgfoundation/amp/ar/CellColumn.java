@@ -25,6 +25,11 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  */
 public class CellColumn extends Column {
 
+    	@Override
+	public int getVisibleRows() {
+	    return items.size();
+	}
+    
 	protected HashMap itemsMap; 
 	
 	public CellColumn(ColumnWorker worker) {

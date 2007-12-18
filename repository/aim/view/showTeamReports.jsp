@@ -272,30 +272,47 @@ function confirmFunc() {
 
 													</logic:iterate>
 
-												</table>
-                                                                                                <table>
-                                                                                                <tr>
-                                                                                                	<c:if test="${aimTeamReportsForm.totalPages > 0}">
-                                                                                                		<c:forEach var="page" begin="1" end="${aimTeamReportsForm.totalPages}">
-                                                                                                    		<td>
-                                                                                                    			<c:if test="${aimTeamReportsForm.currentPage==page}">
-                                                                                                    				<c:out value="${page}"/>
-			                                                                                                    </c:if>
-            			                                                                                        <c:if test="${aimTeamReportsForm.currentPage!=page}">
-                        			                                                                            	<digi:link href="/viewTeamReports.do?currentPage=${page}" > <c:out value="${page}"/> </digi:link>
-                                                                                                          		</c:if>
-                                                                                                          </td>
-                                                                                                        </c:forEach>
-                                                                                                	</c:if>
-		                                                                                          </tr>
-                                                                                                </table>
-										</td>
+                            						    </table>
+                                <table>
+                                <tr>
+                                <td>	
+                                
+                                    <digi:trn key="aim:pages">
+                                                Pages :
+                                    </digi:trn>
+                                   	<c:set var="translation">
+        
+                                            <digi:trn key="aim:clickToViewThisPage">Click here to show this page</digi:trn>
+
+									</c:set>
+                                  <c:forEach var="page" begin="1" end="${aimTeamReportsForm.totalPages}">
+                                            <c:if test="${aimTeamReportsForm.currentPage==page}">
+                                                <font color="#ff0000">
+                                                 <c:out value="${page}"/>
+                                                </font>
+                                            </c:if>
+                                        <c:if test="${aimTeamReportsForm.currentPage!=page}">
+                                            <digi:link title="${translation}" href="/viewTeamReports.do?currentPage=${page}" style="text-decoration:none;color:#000000">
+                                            
+                                                <c:out value="${page}"/>
+                                          </digi:link>
+                                          </c:if>
+                                          
+                                          <c:if test="${page < aimTeamReportsForm.totalPages}">
+                                                        |&nbsp; 
+                                         </c:if>
+                                        </c:forEach>
+                                        </td>
+                                        </tr>
+                                </table>
+
+											</td>
 										</tr>
 									</table>
 								</td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
+							<tr><td bgColor=#f4f4f2>&nbsp;
+								
 							</td></tr>
 						</table>
 					</td>

@@ -1,6 +1,7 @@
 package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 /**
  * @author jose
  *
@@ -257,4 +258,15 @@ public class FundingDetail implements Serializable
         public void setDisbOrderId(String disbOrderId) {
                 this.disbOrderId = disbOrderId;
         }
+        
+        
+        public String getFormattedRate(){
+	 String returnValue=null;
+	 if (getFixedExchangeRate()!=null){
+		 DecimalFormat decFor=new DecimalFormat();
+		 returnValue=decFor.format(getFixedExchangeRate());
+	 }
+	 return returnValue;
+ }
+        
 }

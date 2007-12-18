@@ -5,7 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <div id="mySorter" style="display: none">
 		<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
@@ -48,6 +48,8 @@
 </div>
  -->
 
+
+<c:set var="rowIdx" value="<%=new Integer(0)%>" scope="request"/>
 
 
 <div align="center">
@@ -181,27 +183,31 @@
 				&nbsp;
 			</td>
 		</tr>
-		<logic:notEmpty name="totalPages" scope="request">
+		
 			<tr>
 			<td>
 				<digi:trn key="aim:pages">Pages :</digi:trn>&nbsp;
-				<bean:define id="totalPages" name="totalPages" type="java.lang.Integer" scope="request" toScope="page"/>
-				<c:forEach var="i" begin="0" end="${totalPages - 1}">
-					<c:if  test="${i eq pageNumber}">
-						<font color="#FF0000"><c:out value="${i + 1}" /></font>
-					</c:if>
-					<c:if  test="${i ne pageNumber}">
-							<a  style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~pageNumber=<c:out value="${i}" />');">
-								<c:out value="${i + 1}" />
+				<c:forEach var="i" begin="1" end="${report.visibleRows}" step="${recordsPerPage}">
+					<logic:equal name="viewFormat" value="html">
+							<a  style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage}"/>';">
+					</logic:equal>
+					<logic:equal name="viewFormat" value="foldable">
+						<a  style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage}"/>');">	
+					</logic:equal>
+							<c:choose>							
+								<c:when  test="${i eq report.startRow}">
+									<font color="#FF0000"><fmt:formatNumber value="${(i-1)/recordsPerPage + 1}" maxFractionDigits="0"/></font>
+								</c:when>
+								<c:otherwise>
+									<fmt:formatNumber value="${(i-1)/recordsPerPage + 1}" maxFractionDigits="0"/>
+								</c:otherwise>								
+							</c:choose>
 							</a>
-					</c:if>
-					<c:if  test="${i < totalPages - 1}">
-						|&nbsp
-					</c:if>
+				|&nbsp
 				</c:forEach>
 			</td>
 			</tr>
-		</logic:notEmpty>
+		
 
 	</logic:notEqual>
 	<logic:equal name="report" property="totalUniqueRows" value="0">

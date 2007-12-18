@@ -439,43 +439,36 @@ function viewChanges()
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:ampId">
-											AMP ID</digi:trn>
-										</td>
+											AMP ID</digi:trn>										</td>
 										<td class="v-name" bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.ampId}"/>
-										</td>
+											<c:out value="${aimEditActivityForm.ampId}"/>										</td>
 									</tr>
 									<field:display feature="Identification" name="Project Title">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:projectTitle">
-											Project title</digi:trn>
-										</td>
+											Project title</digi:trn>										</td>
 										<td class="v-name"  bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.title}"/>
-										</td>
+											<c:out value="${aimEditActivityForm.title}"/>										</td>
 									</tr>
 									</field:display>
 									<field:display feature="Identification" name="Objectives">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:objectives">
-											Objectives</digi:trn>
-										</td>
+											Objectives</digi:trn>										</td>
 										<td bgcolor="#ffffff">
                                           <c:if test="${aimEditActivityForm.objectives!=null}">
 											<c:set var="objKey" value="${aimEditActivityForm.objectives}" />
 											<digi:edit key="${objKey}"></digi:edit>
-                                         </c:if>
-										</td>
+                                         </c:if>										</td>
 									</tr>
 
 									<logic:present name="currentMember" scope="session">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:objectiveComments">
-											Objective Comments</digi:trn>
-										</td>
+											Objective Comments</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
 										 	<logic:equal name="comments" property="key" value="Objective Assumption">
@@ -499,8 +492,7 @@ function viewChanges()
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
-										</logic:iterate>
-										</td>
+										</logic:iterate>										</td>
 									</tr>
 									</logic:present>
 									</field:display>
@@ -508,14 +500,12 @@ function viewChanges()
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:description">
-											Description</digi:trn>
-										</td>
+											Description</digi:trn>										</td>
 										<td bgcolor="#ffffff">
                                         <c:if test="${aimEditActivityForm.description!=null}">
 											<c:set var="descKey" value="${aimEditActivityForm.description}" />
 											<digi:edit key="${descKey}"></digi:edit>
-                                            </c:if>
-										</td>
+                                            </c:if>										</td>
 									</tr>
 									</field:display>
 
@@ -523,21 +513,18 @@ function viewChanges()
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:purpose">
-											Purpose</digi:trn>
-										</td>
+											Purpose</digi:trn>										</td>
 										<td bgcolor="#ffffff">
                                           <c:if test="${aimEditActivityForm.purpose!=null}">
 											<c:set var="objKey" value="${aimEditActivityForm.purpose}" />
 											<digi:edit key="${objKey}"></digi:edit>
-                                         </c:if>
-										</td>
+                                         </c:if>										</td>
 									</tr>
 									<logic:present name="aimEditActivityForm" property="allComments">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:purposeComments">
-											Purpose Comments</digi:trn>
-										</td>
+											Purpose Comments</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
 										 	<logic:equal name="comments" property="key" value="Purpose Assumption">
@@ -561,9 +548,7 @@ function viewChanges()
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
-										</logic:iterate>
-
-										</td>
+										</logic:iterate>										</td>
 									</tr>
 									</logic:present>
 									</field:display>
@@ -572,21 +557,18 @@ function viewChanges()
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:results">
-											Results</digi:trn>
-										</td>
+											Results</digi:trn>										</td>
 										<td bgcolor="#ffffff">
                                           <c:if test="${aimEditActivityForm.results!=null}">
 											<c:set var="objKey" value="${aimEditActivityForm.results}" />
 											<digi:edit key="${objKey}"></digi:edit>
-                                         </c:if>
-										</td>
+                                         </c:if>										</td>
 									</tr>
 									<logic:present name="aimEditActivityForm" property="allComments">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:resultsComments">
-											Results Comments</digi:trn>
-										</td>
+											Results Comments</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
 										 	<logic:equal name="comments" property="key" value="Results Assumption">
@@ -610,38 +592,30 @@ function viewChanges()
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
-										</logic:iterate>
-
-										</td>
+										</logic:iterate>										</td>
 									</tr>
 									</logic:present>
 									</field:display>
 									<field:display name="Activity Budget" feature="Identification">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
-											<digi:trn key="aim:actBudget">Budget</digi:trn>
-										</td>
+											<digi:trn key="aim:actBudget">Budget</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 
 										<logic:equal name="aimEditActivityForm" property="budget" value="true">
 										<digi:trn key="aim:actBudgeton">
-												Activity is On Budget
-										</digi:trn>
+												Activity is On Budget										</digi:trn>
 										</logic:equal>
 
 										<logic:equal name="aimEditActivityForm" property="budget" value="false">
 										<digi:trn key="aim:actBudgetoff">
-												Activity is Off Budget
-										</digi:trn>
+												Activity is Off Budget										</digi:trn>
 										</logic:equal>
 
 										<logic:equal name="aimEditActivityForm" property="budget" value="">
 										<digi:trn key="aim:actBudgetoff">
-												Activity is Off Budget
-										</digi:trn>
-										</logic:equal>
-
-										</td>
+												Activity is Off Budget										</digi:trn>
+										</logic:equal>										</td>
 									</tr>
 									</field:display>
 
@@ -649,9 +623,7 @@ function viewChanges()
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:orgsAndProjectIds">
-											Organizations and Project IDs
-											</digi:trn>
-										</td>
+											Organizations and Project IDs											</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.selectedOrganizations}">
 												<table cellSpacing=2 cellPadding=2 border=0>
@@ -668,8 +640,7 @@ function viewChanges()
 														</c:if>
 													</c:forEach>
 												</table>
-											</c:if>
-										</td>
+											</c:if>										</td>
 									</tr>
 									</field:display>
 									</feature:display>
@@ -679,9 +650,7 @@ function viewChanges()
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2" valign="top">
 											<img id="group_planning_plus"  onclick="toggleGroup('group_planning')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
 											<img id="group_planning_minus" onclick="toggleGroup('group_planning')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display : none"/>
-											<digi:trn key="aim:planning">Planning</digi:trn>
-										</td>
-										<td bgcolor="#ffffff">
+											<digi:trn key="aim:planning">Planning</digi:trn>										</td><td bgcolor="#ffffff">
 											<div id="group_planning_dots">...</div>
 											<div id="group_planning" style="display: none;">
 											<table width="100%" cellSpacing=2 cellPadding=1>
@@ -691,13 +660,9 @@ function viewChanges()
 													Line Ministry Rank</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-													<c:if test="${aimEditActivityForm.lineMinRank == -1}">
-
-													</c:if>
+													<c:if test="${aimEditActivityForm.lineMinRank == -1}">													</c:if>
 													<c:if test="${aimEditActivityForm.lineMinRank != -1}">
-													${aimEditActivityForm.lineMinRank}
-													</c:if>
-													</td>
+													${aimEditActivityForm.lineMinRank}													</c:if>													</td>
 												</tr>
 												</field:display>
 												<field:display name="Ministry of Planning Rank" feature="Planning">
@@ -706,13 +671,9 @@ function viewChanges()
 													Ministry of Planning Rank</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-													<c:if test="${aimEditActivityForm.planMinRank == -1}">
-
-													</c:if>
+													<c:if test="${aimEditActivityForm.planMinRank == -1}">													</c:if>
 													<c:if test="${aimEditActivityForm.planMinRank != -1}">
-													${aimEditActivityForm.planMinRank}
-													</c:if>
-													</td>
+													${aimEditActivityForm.planMinRank}													</c:if>													</td>
 												</tr>
 												</field:display>
 
@@ -722,8 +683,7 @@ function viewChanges()
 													Original Approval Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														${aimEditActivityForm.originalAppDate}
-													</td>
+														${aimEditActivityForm.originalAppDate}													</td>
 												</tr>
 												</field:display>
 												<field:display name="Actual Approval Date" feature="Planning">
@@ -731,8 +691,7 @@ function viewChanges()
 													<td width="32%"><digi:trn key="aim:revisedApprovalDate">Revised Approval Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														${aimEditActivityForm.revisedAppDate}
-													</td>
+														${aimEditActivityForm.revisedAppDate}													</td>
 												</tr>
 												</field:display>
 												<field:display name="Proposed Start Date" feature="Planning">
@@ -740,8 +699,7 @@ function viewChanges()
 													<td width="32%"><digi:trn key="aim:originalStartDate">Original Start Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														${aimEditActivityForm.originalStartDate}
-													</td>
+														${aimEditActivityForm.originalStartDate}													</td>
 												</tr>
 												</field:display>
 												<field:display name="Final Date for Contracting" feature="Planning">
@@ -750,8 +708,7 @@ function viewChanges()
 													<digi:trn key="aim:ContractingDateofProject1">Final Date for Contracting</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														<c:out value="${aimEditActivityForm.contractingDate}"/>
-													</td>
+														<c:out value="${aimEditActivityForm.contractingDate}"/>													</td>
 												</tr>
 												</field:display>
 												<field:display name="Final Date for Disbursements" feature="Planning">
@@ -759,8 +716,7 @@ function viewChanges()
 													<td width="32%"><digi:trn key="aim:DisbursementsDateofProject1">Final Date for Disbursements</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														<c:out value="${aimEditActivityForm.disbursementsDate}"/>
-													</td>
+														<c:out value="${aimEditActivityForm.disbursementsDate}"/>													</td>
 												</tr>
 												</field:display>
 												<field:display name="Actual Start Date" feature="Planning">
@@ -768,8 +724,7 @@ function viewChanges()
 													<td width="32%"><digi:trn key="aim:revisedStartDate">Revised Start Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														${aimEditActivityForm.revisedStartDate}
-													</td>
+														${aimEditActivityForm.revisedStartDate}													</td>
 												</tr>
 												</field:display>
 												<field:display name="Proposed Completion Date" feature="Planning">
@@ -779,8 +734,7 @@ function viewChanges()
 													Proposed Completion Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														${aimEditActivityForm.proposedCompDate}
-													</td>
+														${aimEditActivityForm.proposedCompDate}													</td>
 												</tr>
 												</c:if>
 												</field:display>
@@ -790,8 +744,7 @@ function viewChanges()
 													Current Completion Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-														<c:out value="${aimEditActivityForm.currentCompDate}"/>
-													</td>
+														<c:out value="${aimEditActivityForm.currentCompDate}"/>													</td>
 												</tr>
 												</field:display>
 												<c:if test="${aimEditActivityForm.editAct}">
@@ -805,28 +758,34 @@ function viewChanges()
 															<c:forEach var="closeDate" items="${aimEditActivityForm.activityCloseDates}">
 															<tr>
 																<td>
-																	<c:out value="${closeDate}"/>
-																</td>
+																	<c:out value="${closeDate}"/>																</td>
 															</tr>
 															</c:forEach>
-														</table>
-													</td>
+														</table>													</td>
 												</tr>
 												</c:if>
 												<tr>
 													<td colspan="3">&nbsp;</td>
 												</tr>
 												</c:if>
+											</table>
+											</div>										</td>
+									</tr>
+									</feature:display>
 
+									<feature:display name="Location" module="Project ID and Planning"></feature:display>
 
 												<field:display name="Status" feature="Planning">
 												<tr>
-													<td colspan="3"><digi:trn key="aim:status">Status</digi:trn> :
+                                            	  <td align="right"  class="t-name" bgcolor="#f4f4f2" >
+                                                  	<digi:trn key="aim:status">Status</digi:trn>                                       	      </td>
+                                            	  <td bgcolor="#FFFFFF">
 														<category:getoptionvalue categoryValueId="${aimEditActivityForm.statusId}"/>
-													</td>
+                                              <td>
 												</tr>
 												<tr>
-													<td colspan="3"><c:out value="${aimEditActivityForm.statusReason}"/></td>
+                                             		<td bgcolor="#f4f4f2"></td>
+                                              		<td bgcolor="#ffffff" ><c:out value="${aimEditActivityForm.statusReason}"/></td>
 												</tr>
 												</field:display>
 											</table>
@@ -840,33 +799,27 @@ function viewChanges()
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:level">
-											Level</digi:trn>
-										</td>
+											Level</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.levelId>0}" >
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.levelId}"/>
-											</c:if>
-										</td>
+											</c:if>										</td>
 									</tr>
 									</field:display>
 									<feature:display name="References" module="References">
 									<tr>
 									<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-									References
-									</td>
+									References									</td>
 									<td bgcolor="#ffffff">
 									<c:forEach items="${aimEditActivityForm.referenceDocs}" var="refDoc" varStatus="loopstatus">
 										<table border="0">
 											<tr>
 												<td>
 													<c:if test="${!empty refDoc.comment}">
-													${refDoc.categoryValue}
-													</c:if>
-												</td>
+													${refDoc.categoryValue}													</c:if>												</td>
 											</tr>
 										</table>
-									</c:forEach>
-									</td>
+									</c:forEach>									</td>
 									</tr>
 									</feature:display>
 									<field:display name="Implementation Location" feature="Location">
@@ -875,28 +828,26 @@ function viewChanges()
 											<img id="location_plus"  onclick="toggleGroup('location')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
 											<img id="location_minus" onclick="toggleGroup('location')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
 											<digi:trn key="aim:location">
-											Location</digi:trn>
-										</td>
+											Location</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<div id="location_dots">...</div>
 											<div id="location" style="display: none;">
 												<c:if test="${!empty aimEditActivityForm.selectedLocs}">
 													<table width="100%" cellSpacing="2" cellPadding="1">
 													<c:forEach var="locations" items="${aimEditActivityForm.selectedLocs}">
-														<tr><td>
+													<tr>
+													<td>
 														<c:if test="${!empty locations.country}">
-															[<c:out value="${locations.country}"/>]
-														</c:if>
+														[<c:out value="${locations.country}"/>]													</c:if>
 														<c:if test="${!empty locations.region}">
-															[<c:out value="${locations.region}"/>]
-														</c:if>
+														[<c:out value="${locations.region}"/>]													</c:if>
 														<c:if test="${!empty locations.zone}">
-															[<c:out value="${locations.zone}"/>]
-														</c:if>
+														[<c:out value="${locations.zone}"/>]													</c:if>
 														<c:if test="${!empty locations.woreda}">
-															[<c:out value="${locations.woreda}"/>]
-														</c:if>
-														</td></tr>
+														[<c:out value="${locations.woreda}"/>]													</c:if>													</td>
+													<td align="right">
+														${locations.percent}%													</td>
+													</tr>
 													</c:forEach>
 													</table>
 												</c:if>
@@ -948,14 +899,12 @@ function viewChanges()
 																				</c:if>&nbsp;&nbsp; <c:if
 																					test="${sector.sectorPercentage!=''}">
 																					<c:if test="${sector.sectorPercentage!='0'}">
-																				(<c:out value="${sectors.sectorPercentage}" />)%
-																				</c:if>
+																			(<c:out value="${sectors.sectorPercentage}" />)%																			</c:if>
 																				</c:if> <c:if test="${!empty sectors.subsectorLevel1Name}">
 															[<c:out value="${sectors.subsectorLevel1Name}"/>]
 														</c:if>
 														<c:if test="${!empty sectors.subsectorLevel2Name}">
-															[<c:out value="${sectors.subsectorLevel2Name}"/>]
-														</c:if>
+														[<c:out value="${sectors.subsectorLevel2Name}"/>]													</c:if>
 														</td>
 	
 														</tr>
@@ -1018,11 +967,11 @@ function viewChanges()
 										</field:display>
 
 									</feature:display>
+                                   </module:display>
 									<feature:display name="Proposed Project Cost" module="Funding">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn>
-										</td>
+											<digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.proProjCost!=null}">
                                                   <table cellSpacing=1 cellPadding="3" bgcolor="#aaaaaa" width="100%">
@@ -1039,9 +988,7 @@ function viewChanges()
 															<td>Proposed Completion Date  </td>
                                                         	<td bgcolor="#FFFFFF" align="left" width="150">
                                                           		<c:if test="${aimEditActivityForm.proProjCost.funDate!=null}">
-                                                             		${aimEditActivityForm.proProjCost.funDate}
-                                                          		</c:if>
-                                                        	</td>
+                                                             ${aimEditActivityForm.proProjCost.funDate}                                                          </c:if>                                                        </td>
                                                       </tr>
                                                     </table>
                                              </c:if>
@@ -1052,8 +999,7 @@ function viewChanges()
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:meActivityPerformance">
-											Activity - Performance</digi:trn>
-										</td>
+											Activity - Performance</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<% if (actPerfChartUrl != null) { %>
 												<img src="<%= actPerfChartUrl %>" width="370" height="450" border="0" usemap="#<%= actPerfChartFileName %>"><br><br>
@@ -1061,16 +1007,14 @@ function viewChanges()
 												<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
 											    <digi:trn key="aim:activityPerformanceChart">Activity-Performance chart</digi:trn>
 											    </span><br><br>
-											<% } %>
-										</td>
+											<% } %>										</td>
 									</tr>
 									</field:display>
 									<field:display name="Project Risk" feature="Dashboard">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:meActivityRisk">
-											Activity - Risk</digi:trn>
-										</td>
+											Activity - Risk</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<% if (actRiskChartUrl != null) { %>
 												<bean:define id="riskColor" name="riskColor" scope="request" toScope="page" type="java.lang.String"/>
@@ -1086,8 +1030,7 @@ function viewChanges()
 												<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
 										  	    <digi:trn key="aim:activityRiskChart">Activity-Risk chart</digi:trn>
 											    </span><br><br>
-											<% } %>
-										</td>
+											<% } %>										</td>
 									</tr>
 									</field:display>
 								<logic:present name="currentMember" scope="session">
@@ -1096,10 +1039,9 @@ function viewChanges()
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2" valign="top">
 											<img id="group_funding_plus"  onclick="toggleGroup('group_funding')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
 											<img id="group_funding_minus" onclick="toggleGroup('group_funding')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display : none"/>
-											<digi:trn key="aim:funding">Funding</digi:trn>
-										</td>
+											<digi:trn key="aim:funding">Funding</digi:trn>										</td>
 										<td bgcolor="#ffffff">
-											<div id="group_funding_dots">...</div>
+											<div id="group_funding_dots"><bean:write name="aimEditActivityForm" property="totalCommitted"/>&nbsp;USD&nbsp; ...</div>
 											<div id="group_funding" style="display: none;">
 										    <table width="95%" cellSpacing=1 cellPadding=0 border=0 align="center">
                                               <tr>
@@ -1123,12 +1065,10 @@ function viewChanges()
                                                                               <tr>
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
                                                                                   <a title="<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>">																																<digi:trn key="aim:fundingOrgId">
-                                                                                    Funding Organization Id</digi:trn></a>
-                                                                                </td>
+                                                                                    Funding Organization Id</digi:trn></a>                                                                                </td>
                                                                                 <td width="1">:</td>
                                                                                 <td bgcolor="#FFFFFF" align="left">
-                                                                                  <bean:write name="funding"	property="orgFundingId"/>
-                                                                                </td>
+                                                                                  <bean:write name="funding"	property="orgFundingId"/>                                                                                </td>
                                                                               </tr>
                                                                              </field:display>
                                                                              <field:display name="Funding Organization Name" feature="Funding Organizations">
@@ -1137,12 +1077,10 @@ function viewChanges()
 
                                                                                   <a title="<digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>">
                                                                                   	<digi:trn key="aim:fundOrgName">Funding Organization Name</digi:trn>
-                                                                                  </a>
-                                                                                </td>
+                                                                                  </a>                                                                                </td>
                                                                                 <td width="1">:</td>
                                                                                 <td bgcolor="#FFFFFF" align="left">
-                                                                                  ${fundingOrganization.orgName}
-                                                                                </td>
+                                                                                  ${fundingOrganization.orgName}                                                                                </td>
                                                                               </tr>
                                                                              </field:display>
 
@@ -1153,14 +1091,12 @@ function viewChanges()
                                                                                   <a title="<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>">
                                                                                   <digi:trn key="aim:typeOfAssist">
                                                                                     Type of Assistance </digi:trn>
-																					</a>
-                                                                                </td>
+																					</a>                                                                                </td>
                                                                                 <td width="1">:</td>
                                                                                 <td bgcolor="#FFFFFF" align="left">
                                                                                   <logic:notEmpty name="funding" property="typeOfAssistance">
                                                                                     <bean:write name="funding"	property="typeOfAssistance.value"/>
-                                                                                  </logic:notEmpty>
-                                                                                </td>
+                                                                                  </logic:notEmpty>                                                                                </td>
                                                                               </tr>
 																			</field:display>
 																			<field:display name="Type Of Assistance" feature="Funding Organizations">
@@ -1168,21 +1104,17 @@ function viewChanges()
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
                                                                                   <a title="<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>">
                                                                                  	 <digi:trn key="aim:financialInst">Financial Instrument</digi:trn>
-																				  </a>
-                                                                                </td>
+																				  </a>                                                                                </td>
                                                                                 <td width="1">:</td>
                                                                                 <td bgcolor="#FFFFFF" align="left">
                                                                                   <logic:notEmpty name="funding" property="financingInstrument">
                                                                                     <bean:write name="funding"	property="financingInstrument.value"/>
-                                                                                  </logic:notEmpty>
-                                                                                </td>
+                                                                                  </logic:notEmpty>                                                                                </td>
                                                                               </tr>
 																			</field:display>
-				                                                            </table>
-                                          </td>
+				                                                            </table>                                          </td>
                                                                         </tr>
-                                                                      </table>
-                                    </td>
+                                                                      </table>                                    </td>
                                                                   </tr>
                                                                   <tr>
                                                                     <td>
@@ -1195,11 +1127,9 @@ function viewChanges()
                                                                                   <a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>">
                                                                                   <digi:trn key="aim:commitments">Commitments </digi:trn>
                                                                                   </a>
-                                                                                  </b>
-                                                                                </td>
+                                                                                  </b>                                                                                </td>
                                                                                 <td width="25%"><b>
-                                                                                <digi:trn key="aim:exchange">Exchange Rate</digi:trn></b>
-                                                                                </td>
+                                                                                <digi:trn key="aim:exchange">Exchange Rate</digi:trn></b>                                                                                </td>
                                                                               </tr>
                                                                               <c:if test="${!empty funding.fundingDetails}">
                                                                               <logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
@@ -1207,44 +1137,35 @@ function viewChanges()
 
                                                                                   <c:if test="${aimEditActivityForm.donorFlag == true}">
                                                                                     <c:if test="${fundingDetail.perspectiveCode == 'DN'}">
-                                                                                      <tr bgcolor="#FFFF00">
-                                                                                    </c:if>
+                                                                                      <tr bgcolor="#FFFF00">                                                                                    </c:if>
                                                                                     <c:if test="${fundingDetail.perspectiveCode != 'DN'}">
-                                                                                      <tr bgcolor="#ffffff">
-                                                                                    </c:if>
+                                                                                      <tr bgcolor="#ffffff">                                                                                    </c:if>
 
                                                                                     <td width="50">
 	                                                                                    <field:display name="Adjustment Type Commitment" feature="Funding Organizations">
-    	                                                                                	<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+    	                                                                                	<digi:trn key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																							</digi:trn>
-																						</field:display>
-                                                                                    </td>
+																						</field:display>                                                                                    </td>
 
 
                                                                                     <td width="120" align="right">
                                                                                       <field:display name="Amount Commitment" feature="Funding Organizations">
                                                                                       	<FONT color=blue>*</FONT>
-                                                                                      	<bean:write name="fundingDetail" property="transactionAmount" format="###,###,###,###,###"/>&nbsp;
-                                                                                      </field:display>
-                                                                                    </td>
+                                                                                      	<bean:write name="fundingDetail" property="transactionAmount" format="###,###,###,###,###"/>&nbsp;                                                                                      </field:display>                                                                                    </td>
 
                                                                                     <td width="150">
 	                                                                                    <field:display name="Currency Commitment" feature="Funding Organizations">
     	                                                                                  <bean:write name="fundingDetail" property="currencyCode"/>
-        	                                                                             </field:display>
-                                                                                    </td>
+        	                                                                             </field:display>                                                                                    </td>
                                                                                     <td width="70">
                                                                                     	<field:display name="Date Commitment" feature="Funding Organizations">
 		                                                                                      <bean:write name="fundingDetail" property="transactionDate"/>
-	                                                                                    </field:display>
-                                                                                    </td>
+	                                                                                    </field:display>                                                                                    </td>
                                                                                     <td>
                                                                                     	<field:display name="Exchange Rate" feature="Funding Organizations">
-   																									<bean:write name="fundingDetail" property="fixedExchangeRate"/>
-																							</field:display>
-
-                                                                                    </td>
+   																									<bean:write name="fundingDetail" property="formattedRate" format="###.##"/>
+																							</field:display>                                                                                    </td>
                                                                                       </tr>
 
                                                                                   </c:if>
@@ -1254,64 +1175,52 @@ function viewChanges()
                                                                                       <tr bgcolor="#ffffff">
                                                                                         <td width="50">
                                                                                         <field:display name="Adjustment Type Commitment" feature="Funding Organizations">
-                                                                                          <digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+                                                                                          <digi:trn key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																							</digi:trn>
-																							</field:display>
-                                                                                        </td>
+																							</field:display>                                                                                        </td>
                                                                                         <td width="120" align="right">
                                                                                         <field:display name="Amount Commitment" feature="Funding Organizations">
                                                                                           <FONT color=blue>*</FONT>
-                                                                                          <bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-                                                                                          </field:display>
-                                                                                        </td>
+                                                                                          <bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;                                                                                          </field:display>                                                                                        </td>
                                                                                         <td width="150">
                                                                                         <field:display name="Currency Commitment" feature="Funding Organizations">
                                                                                           <bean:write name="fundingDetail" property="currencyCode"/>
-                                                                                          </field:display>
-                                                                                        </td>
+                                                                                          </field:display>                                                                                        </td>
                                                                                         <td width="70">
                                                                                        	 	<field:display name="Date Commitment" feature="Funding Organizations">
                                                                                           		<bean:write name="fundingDetail" property="transactionDate"/>
-                                                                                          	</field:display>
-                                                                                        </td>
+                                                                                          	</field:display>                                                                                        </td>
                                                                                         <td>
 	                                                                                        <field:display name="Exchange Rate" feature="Funding Organizations">
-   																									<bean:write name="fundingDetail" property="fixedExchangeRate"/>
-																							</field:display>
-                                                                                        </td>
+   																									<bean:write name="fundingDetail" property="formattedRate" format="###.##"/>
+																							</field:display>                                                                                        </td>
                                                                                       </tr>
                                                                                     </c:if>
                                                                                      <c:if test="${fundingDetail.perspectiveCode == 'DN'}">
                                                                                       <tr bgcolor="#ffffff">
                                                                                         <td width="50">
                                                                                         <field:display name="Adjustment Type Commitment" feature="Funding Organizations">
-                                                                                          <digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+                                                                                          <digi:trn key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																							</digi:trn>
-																						</field:display>
-                                                                                        </td>
+																						</field:display>                                                                                        </td>
                                                                                         <td width="120" align="right">
 	                                                                                        <field:display name="Amount Commitment" feature="Funding Organizations">
     	                                                                                      <FONT color=blue>*</FONT>
-        	                                                                                  <bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-        	                                                                                 </field:display>
-                                                                                        </td>
+        	                                                                                  <bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;        	                                                                                 </field:display>                                                                                        </td>
                                                                                         <td width="150">
 	                                                                                        <field:display name="Currency Commitment" feature="Funding Organizations">
     	                                                                                      <bean:write name="fundingDetail" property="currencyCode"/>
-    	                                                                                    </field:display>
-                                                                                        </td>
+    	                                                                                    </field:display>                                                                                        </td>
                                                                                         <td width="70">
 	                                                                                        <field:display name="Date Commitment" feature="Funding Organizations">
     	                                                                                      <bean:write name="fundingDetail" property="transactionDate"/>
-    	                                                                                    </field:display>
-                                                                                        </td>
+    	                                                                                    </field:display>                                                                                        </td>
                                                                                         <td>
    																							<field:display name="Exchange Rate" feature="Funding Organizations">
-   																									<bean:write name="fundingDetail" property="fixedExchangeRate"/>
-																							</field:display>
-																						</td>
+   																									<bean:write name="fundingDetail" property="formattedRate"/>
+																							</field:display>																						</td>
                                                                                       </tr>
                                                                                     </c:if>
                                                                                   </c:if>
@@ -1330,9 +1239,8 @@ function viewChanges()
                                                                               </tr>
                                                                               <tr bgcolor="#ffffff">
                                                                                 <td colspan="5">
-                                                                                  <a title="<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>"><b> <digi:trn key="aim:disbursements">			Disbursements </digi:trn></b>
-																				</a>
-                                                                                </td>
+                                                                                  <a title="<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>">
+                                                                                   <b><digi:trn key="aim:disbursements">Disbursements </digi:trn></b>																				  </a>                                                                                </td>
                                                                               </tr>
                                                                               <c:if test="${!empty funding.fundingDetails}">
                                                                               <logic:iterate name="funding" property="fundingDetails"
@@ -1342,34 +1250,27 @@ function viewChanges()
 
                                                                                 <c:if test="${aimEditActivityForm.donorFlag == true}">
                                                                                   <c:if test="${fundingDetail.perspectiveCode == 'DN'}">
-                                                                                    <tr bgcolor="#FFFF00">
-                                                                                  </c:if>
+                                                                                    <tr bgcolor="#FFFF00">                                                                                  </c:if>
                                                                                   <c:if test="${fundingDetail.perspectiveCode != 'DN'}">
-																						<tr bgcolor="#ffffff">
-																						</c:if>
+																						<tr bgcolor="#ffffff">																						</c:if>
 																							<td width="50">
 																								<field:display name="Adjustment Type Disbursement" feature="Funding Organizations">
-																									<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+																									<digi:trn key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																									</digi:trn>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 																							<td width="120" align="right">
 																								<field:display name="Amount Disbursement" feature="Funding Organizations">
 																									<FONT color=blue>*</FONT>
-																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-																								</field:display>
-																							</td>
+																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;																								</field:display>																							</td>
 																							<td width="150">
 																								<field:display name="Currency Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="currencyCode"/>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 																							<td width="70">
 																								<field:display name="Date Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 
 																						</tr>
 																						</c:if>
@@ -1379,70 +1280,63 @@ function viewChanges()
 																						<tr bgcolor="#ffffff">
 																							<td width="50">
 																								<field:display name="Adjustment Type Disbursement" feature="Funding Organizations">
-																									<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+																									<digi:trn key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																									</digi:trn>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 																							<td width="120" align="right">
 																								<field:display name="Amount Disbursement" feature="Funding Organizations">
 																									<FONT color=blue>*</FONT>
-																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-																								</field:display>
-																							</td>
+																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;																								</field:display>																							</td>
 																							<td width="150">
 																								<field:display name="Currency Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="currencyCode"/>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 																							<td width="70" colspan="2">
 																								<field:display name="Date Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 																						</tr>
 																						</c:if>
 																						<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
 																						<tr bgcolor="#ffffff">
 																							<td width="50">
 																								<field:display name="Adjustment Type Disbursement" feature="Funding Organizations">
-																									<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+																									<digi:trn key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																									</digi:trn>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 																							<td width="120" align="right">
 																								<field:display name="Amount Disbursement" feature="Funding Organizations">
 																									<FONT color=blue>*</FONT>
-																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-																								</field:display>
-																							</td>
+																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;																								</field:display>																							</td>
 																							<td width="150">
 																								<field:display name="Currency Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="currencyCode"/>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 																							<td width="70" colspan="2">
 																								<field:display name="Date Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
-																								</field:display>
-																							</td>
-
+																								</field:display>																							</td>
 																						</tr>
 																						</c:if>
 																						</c:if>
 
 																						</logic:equal>
 																						</logic:iterate>
+			                                                                                <tr>
+			                                                                                <td><digi:trn key='aim:totaldisbursement'>
+			                                                                                TOTAL:
+			                                                                                </digi:trn></td>
+			                                                                                      <TD  colspan="4" align="right"><bean:write name="aimEditActivityForm" property="totalDisbursed"/>&nbsp;USD</TD>
+			                                                                                </tr>																						
                                                                                         </c:if>
 																						<tr bgcolor="#ffffff">
 																							<td colspan="5">&nbsp;</td>
 																						</tr>
 																						<tr bgcolor="#ffffff">
 																							<td colspan="5">
-																							<a title="<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>">	<b><digi:trn key="aim:expenditures"> Expenditures </digi:trn></b>
-																							</a>
-																							</td>
+																							<a title="<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>">	<b><digi:trn key="aim:expenditures"> Expenditures </digi:trn></b>																							</a>																							</td>
 																						</tr>
                                                                                         <c:if test="${!empty funding.fundingDetails}">
 																						<logic:iterate name="funding" property="fundingDetails"
@@ -1452,42 +1346,34 @@ function viewChanges()
 
 																						<c:if test="${aimEditActivityForm.donorFlag == true}">
 																						<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
-																						<tr bgcolor="#FFFF00">
-																						</c:if>
+																						<tr bgcolor="#FFFF00">																						</c:if>
 																						<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
-																						<tr bgcolor="#ffffff">
-																						</c:if>
+																						<tr bgcolor="#ffffff">																						</c:if>
 																							<td width="50">
 																								<field:display name="Adjustment Type Expenditure" feature="Funding Organizations">
-																									<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+																									<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																									</digi:trn>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 																							<td width="120" align="right">
 																								<field:display name="Amount Expenditure" feature="Funding Organizations">
 																									<FONT color=blue>*</FONT>
-																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-																								</field:display>
-																							</td>
+																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;																								</field:display>																							</td>
 																							<td width="150">
 																								<field:display name="Currency Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="currencyCode"/>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 																							<td width="70" colspan="2">
 																								<field:display name="Date Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 
 																						</tr>
 																						<tr>
 																							<td colspan=5 bgcolor="#ffffff">&nbsp;&nbsp;
 																								<field:display name="Classification Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="classification"/>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 																						</tr>
 																						</c:if>
 
@@ -1496,98 +1382,78 @@ function viewChanges()
 																								<tr bgcolor="#ffffff">
 																									<td width="50">
 																								<field:display name="Adjustment Type Expenditure" feature="Funding Organizations">
-																									<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+																									<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																									</digi:trn>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 																							<td width="120" align="right">
 																								<field:display name="Amount Expenditure" feature="Funding Organizations">
 																									<FONT color=blue>*</FONT>
-																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-																								</field:display>
-																							</td>
+																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;																								</field:display>																							</td>
 																							<td width="150">
 																								<field:display name="Currency Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="currencyCode"/>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 																							<td width="70" colspan="2">
 																								<field:display name="Date Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
-																								</field:display>
-																							</td>
-
+																								</field:display>																							</td>
 																						</tr>
 																						<tr>
 																							<td colspan=5 bgcolor="#ffffff">&nbsp;&nbsp;
 																								<field:display name="Classification Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="classification"/>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 																						</tr>
 																							</c:if>
 																							<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
 																								<tr bgcolor="#ffffff">
 																								<td width="50">
 																								<field:display name="Adjustment Type Expenditure" feature="Funding Organizations">
-																									<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+																									<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																									</digi:trn>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 																							<td width="120" align="right">
 																								<field:display name="Amount Expenditure" feature="Funding Organizations">
 																									<FONT color=blue>*</FONT>
-																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-																								</field:display>
-																							</td>
+																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;																								</field:display>																							</td>
 																							<td width="150">
 																								<field:display name="Currency Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="currencyCode"/>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 																							<td width="70">
 																								<field:display name="Date Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
-																								</field:display>
-																							</td>
-
+																								</field:display>																							</td>
 																						</tr>
 																						<tr>
 																							<td colspan=5 bgcolor="#ffffff">&nbsp;&nbsp;
 																								<field:display name="Classification Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="classification"/>
-																								</field:display>
-																							</td>
+																								</field:display>																							</td>
 																						</tr>
 																							</c:if>
 																						</c:if>
 																						</logic:equal>
 																						</logic:iterate>
                                                                                         </c:if>
-																					</table>
-																				</td>
+																					</table>																				</td>
 																			</tr>
-																		</table>
-
-																	</td></tr>
+																		</table>																	</td></tr>
 																	<tr><td bgcolor="#ffffff">
 																		<FONT color=blue>*
 																			<digi:trn key="aim:theAmountEnteredAreInThousands">
-																				The amount entered are in thousands (000)
-		  																	</digi:trn>
+																				The amount entered are in thousands (000)		  																	</digi:trn>
 																		</FONT>
 																	</td></tr>
-																	</table>
-																	</td></tr>
+																	</table>																	</td></tr>
 																	</logic:iterate>
 																	</logic:notEmpty>
 																</logic:iterate>
 																<tr><td>&nbsp;</td></tr>
 																</logic:notEmpty>
-															</table>
-														</td>
+															</table>														</td>
 													</tr>
 												</table>
 												</div>
@@ -1646,8 +1512,7 @@ function viewChanges()
 													</TR>
 
 											</table>
-											-->
-										</td>
+											-->										</td>
 									</tr>
 									</module:display>
 									</logic:present>
@@ -1657,20 +1522,16 @@ function viewChanges()
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:costing">
-											Costing</digi:trn>
-										</td>
+											Costing</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											&nbsp;&nbsp;&nbsp;
 											<table width="100%">
 												<tr>
 													<td>
 														<bean:define id="mode" value="preview" type="java.lang.String" toScope="request" />
-														<jsp:include page="viewCostsSummary.jsp" flush="" />
-													</td>
+														<jsp:include page="viewCostsSummary.jsp" flush="" />													</td>
 												</tr>
-											</table>
-
-										</td>
+											</table>										</td>
 									</tr>
 									</feature:display>
 									<!-- End Costing -->
@@ -1679,8 +1540,7 @@ function viewChanges()
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:regionalFunding">
-											Regional Funding</digi:trn>
-										</td>
+											Regional Funding</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.regionalFundings}">
 												<table width="100%" cellSpacing="1" cellPadding="3" bgcolor="#aaaaaa">
@@ -1696,32 +1556,25 @@ function viewChanges()
 																		<tr>
 																			<td valign="top" width="100" bgcolor="#ffffff">
 																				<digi:trn key="aim:commitments">
-																				Commitments</digi:trn>
-																			</td>
+																				Commitments</digi:trn>																			</td>
 																			<td bgcolor="#ffffff">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${regFunds.commitments}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
-																								<c:out value="${fd.adjustmentTypeName}"/>
-																							</td>
+																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
 																							<FONT color=blue>*</FONT>
-																								<c:out value="${fd.transactionAmount}"/>
-																							</td>
+																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.currencyCode}"/>
-																							</td>
+																								<c:out value="${fd.currencyCode}"/>																							</td>
 																							<td bgcolor="#ffffff" width="70">
-																								<c:out value="${fd.transactionDate}"/>
-																							</td>
+																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.perspectiveName}"/>
-																							</td>
+																								<c:out value="${fd.perspectiveName}"/>																							</td>
 																						</tr>
 																					</c:forEach>
-																				</table>
-																			</td>
+																				</table>																			</td>
 																		</tr>
 																	</table>
 																</td></tr>
@@ -1732,32 +1585,25 @@ function viewChanges()
 																		<tr>
 																			<td valign="top" width="100" bgcolor="#ffffff">
 																				<digi:trn key="aim:disbursements">
-																				Disbursements</digi:trn>
-																			</td>
+																				Disbursements</digi:trn>																			</td>
 																			<td bgcolor="#ffffff">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${regFunds.disbursements}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
-																								<c:out value="${fd.adjustmentTypeName}"/>
-																							</td>
+																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
 																							<FONT color=blue>*</FONT>
-																								<c:out value="${fd.transactionAmount}"/>
-																							</td>
+																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.currencyCode}"/>
-																							</td>
+																								<c:out value="${fd.currencyCode}"/>																							</td>
 																							<td bgcolor="#ffffff" width="70">
-																								<c:out value="${fd.transactionDate}"/>
-																							</td>
+																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.perspectiveName}"/>
-																							</td>
+																								<c:out value="${fd.perspectiveName}"/>																							</td>
 																						</tr>
 																					</c:forEach>
-																				</table>
-																			</td>
+																				</table>																			</td>
 																		</tr>
 																	</table>
 																</td></tr>
@@ -1768,32 +1614,25 @@ function viewChanges()
 																		<tr>
 																			<td valign="top" width="100" bgcolor="#ffffff">
 																				<digi:trn key="aim:expenditures">
-																				Expenditures</digi:trn>
-																			</td>
+																				Expenditures</digi:trn>																			</td>
 																			<td bgcolor="#ffffff">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${regFunds.expenditures}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
-																								<c:out value="${fd.adjustmentTypeName}"/>
-																							</td>
+																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
 																							<FONT color=blue>*</FONT>
-																								<c:out value="${fd.transactionAmount}"/>
-																							</td>
+																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.currencyCode}"/>
-																							</td>
+																								<c:out value="${fd.currencyCode}"/>																							</td>
 																							<td bgcolor="#ffffff" width="70">
-																								<c:out value="${fd.transactionDate}"/>
-																							</td>
+																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.perspectiveName}"/>
-																							</td>
+																								<c:out value="${fd.perspectiveName}"/>																							</td>
 																						</tr>
 																					</c:forEach>
-																				</table>
-																			</td>
+																				</table>																			</td>
 																		</tr>
 																	</table>
 																</td></tr>
@@ -1807,16 +1646,14 @@ function viewChanges()
 													The amount entered are in thousands (000)</digi:trn></FONT>
 												</td></tr>
 												</table>
-											</c:if>
-										</td>
+											</c:if>										</td>
 									</tr>
 									</feature:display>
 									<module:display name="Organizations" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:relatedOrganizations">
-											Related Organizations</digi:trn>
-										</td>
+											Related Organizations</digi:trn>										</td>
 
 										<td bgcolor="#ffffff">
                                            <feature:display name="Executing Agency" module="Organizations">
@@ -1889,7 +1726,8 @@ function viewChanges()
 											</feature:display>
 
 
-											<feature:display name="Sector Group" module="Organizations">
+											<feature:display name="Sector Group" module="Organizations"></feature:display>
+											<field:display name="Sector Group" feature="Sector Group">
 											<b><digi:trn key="aim:sectorGroup">Sector Group</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="sectGroups">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
@@ -1901,9 +1739,9 @@ function viewChanges()
 													</td></tr>
 												</table>
 											</logic:notEmpty><br/>
-											</feature:display>
-											
-											<feature:display name="Regional Group" module="Organizations">
+											</field:display>
+											<feature:display name="Regional Group" module="Organizations"></feature:display>
+											<field:display name="Regional Group" feature="Regional Group">
 											<b><digi:trn key="aim:regionalGroup">Regional Group</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="regGroups">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
@@ -1915,8 +1753,7 @@ function viewChanges()
 													</td></tr>
 												</table>
 											</logic:notEmpty><br/>
-											</feature:display>
-										</td>
+											</field:display>										</td>
 									</tr>
 									</module:display>
 									<module:display name="Components" parentModule="PROJECT MANAGEMENT">
@@ -1925,8 +1762,7 @@ function viewChanges()
 											<img id="components_plus"  onclick="toggleGroup('components')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
 											<img id="components_minus" onclick="toggleGroup('components')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
 											<digi:trn key="aim:components">
-											Components</digi:trn>
-										</td>
+											Components</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<div id="components_dots">...</div>
 											<div id="components" style="display: none;">
@@ -1953,8 +1789,7 @@ function viewChanges()
 																		<td width="50">
 																			<i>
 																			<digi:trn key="aim:sisincode">SISIN Code</digi:trn> :</i>
-																			<c:out value="${comp.sisinProyect.sisincode}"/>
-																		</td>
+																			<c:out value="${comp.sisinProyect.sisincode}"/>																		</td>
 																	</tr>
 																</field:display>
 																<field:display name="Components Localization" feature="SISIN">
@@ -1962,8 +1797,7 @@ function viewChanges()
 																		<td width="50">
 																			<i>
 																			<digi:trn key="aim:localization">Localization</digi:trn> :</i>
-																			<c:out value="${comp.sisinProyect.localization}"/>
-																		</td>
+																			<c:out value="${comp.sisinProyect.localization}"/>																		</td>
 																	</tr>
 																</field:display>
 																<field:display name="SISIN Sector" feature="SISIN">
@@ -1971,8 +1805,7 @@ function viewChanges()
 																		<td width="50">
 																			<i>
 																			<digi:trn key="aim:sisinsector">SISIN Sector</digi:trn> :</i>
-																			<c:out value="${comp.sisinProyect.sisinsector}"/>
-																		</td>
+																			<c:out value="${comp.sisinProyect.sisinsector}"/>																		</td>
 																	</tr>
 																</field:display>
 																<field:display name="Components Financing Source" feature="SISIN">
@@ -1980,8 +1813,7 @@ function viewChanges()
 																		<td width="50">
 																			<i>
 																			<digi:trn key="financingsource">Financing Source</digi:trn> :</i>
-																			<c:out value="${comp.sisinProyect.financingsource}"/>
-																		</td>
+																			<c:out value="${comp.sisinProyect.financingsource}"/>																		</td>
 																	</tr>
 																</field:display>
 																<field:display name="Components Agency Source" feature="SISIN">
@@ -1989,8 +1821,7 @@ function viewChanges()
 																		<td width="50">
 																			<i>
 																			<digi:trn key="agencysource">Agency Source</digi:trn> :</i>
-																			<c:out value="${comp.sisinProyect.agencysource}"/>
-																		</td>
+																			<c:out value="${comp.sisinProyect.agencysource}"/>																		</td>
 																	</tr>
 																</field:display>
 																<field:display name="Components Stage" feature="SISIN">
@@ -1998,8 +1829,7 @@ function viewChanges()
 																		<td width="50">
 																			<i>
 																			<digi:trn key="stage">Stage</digi:trn> :</i>
-																			<c:out value="${comp.sisinProyect.stage}"/>
-																		</td>
+																			<c:out value="${comp.sisinProyect.stage}"/>																		</td>
 																	</tr>
 																</field:display>
 																<field:display name="Components Classification Program Code" feature="SISIN">
@@ -2007,8 +1837,7 @@ function viewChanges()
 																		<td width="50">
 																			<i>
 																			<digi:trn key="classifprogramcode">Classification Program Code</digi:trn> :</i>
-																			<c:out value="${comp.sisinProyect.programcode}"/>
-																		</td>
+																			<c:out value="${comp.sisinProyect.programcode}"/>																		</td>
 																	</tr>
 																</field:display>
 															</feature:display>
@@ -2023,16 +1852,14 @@ function viewChanges()
 																		<tr>
 																			<td valign="top" width="100" bgcolor="#ffffff">
 																				<digi:trn key="aim:commitments">
-																				Commitments</digi:trn>
-																			</td>
+																				Commitments</digi:trn>																			</td>
 																			<td bgcolor="#ffffff">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${comp.commitments}">
 																						<tr>
 																							<field:display name="Components Actual/Planned Commitments" feature="Components">
 																							<td width="50" bgcolor="#ffffff">
-																								<c:out value="${fd.adjustmentTypeName}"/>
-																							</td>
+																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Total Amount Commitments" feature="Components">
 																							<td align="right" width="100" bgcolor="#ffffff">
@@ -2042,23 +1869,19 @@ function viewChanges()
 																							</field:display>
 																							<field:display name="Components Currency Commitments" feature="Components">
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.currencyCode}"/>
-																							</td>
+																								<c:out value="${fd.currencyCode}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Date Commitments" feature="Components">
 																							<td bgcolor="#ffffff" width="70">
-																								<c:out value="${fd.transactionDate}"/>
-																							</td>
+																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Perspective Commitments" feature="Components">
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.perspectiveName}"/>
-																							</td>
+																								<c:out value="${fd.perspectiveName}"/>																							</td>
 																							</field:display>
 																						</tr>
 																					</c:forEach>
-																				</table>
-																			</td>
+																				</table>																			</td>
 																		</tr>
 																	</table>
 																</td></tr>
@@ -2069,16 +1892,14 @@ function viewChanges()
 																		<tr>
 																			<td valign="top" width="100" bgcolor="#ffffff">
 																				<digi:trn key="aim:disbursements">
-																				Disbursements</digi:trn>
-																			</td>
+																				Disbursements</digi:trn>																			</td>
 																			<td bgcolor="#ffffff">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${comp.disbursements}">
 																						<tr>
 																							<field:display name="Components Actual/Planned Disbursements" feature="Components">
 																							<td width="50" bgcolor="#ffffff">
-																								<c:out value="${fd.adjustmentTypeName}"/>
-																							</td>
+																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Total Amount Disbursements" feature="Components">
 																							<td align="right" width="100" bgcolor="#ffffff">
@@ -2088,23 +1909,19 @@ function viewChanges()
 																							</field:display>
 																							<field:display name="Components Currency Disbursements" feature="Components">
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.currencyCode}"/>
-																							</td>
+																								<c:out value="${fd.currencyCode}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Date Disbursements" feature="Components">
 																							<td bgcolor="#ffffff" width="70">
-																								<c:out value="${fd.transactionDate}"/>
-																							</td>
+																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Perspective Disbursements" feature="Components">
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.perspectiveName}"/>
-																							</td>
+																								<c:out value="${fd.perspectiveName}"/>																							</td>
 																							</field:display>
 																						</tr>
 																					</c:forEach>
-																				</table>
-																			</td>
+																				</table>																			</td>
 																		</tr>
 																	</table>
 																</td></tr>
@@ -2115,42 +1932,35 @@ function viewChanges()
 																		<tr>
 																			<td valign="top" width="100" bgcolor="#ffffff">
 																				<digi:trn key="aim:expenditures">
-																				Expenditures</digi:trn>
-																			</td>
+																				Expenditures</digi:trn>																			</td>
 																			<td bgcolor="#ffffff">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${comp.expenditures}">
 																						<tr bgcolor="#ffffff">
 																							<field:display name="Components Actual/Planned Expenditures" feature="Components">
 																							<td width="50">
-																								<c:out value="${fd.adjustmentTypeName}"/>
-																							</td>
+																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Total Amount Expenditures" feature="Components">
 																							<td align="right">
 																								<FONT color=blue>*</FONT>
-																								<c:out value="${fd.transactionAmount}"/>
-																							</td>
+																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Currency Expenditures" feature="Components">
 																							<td>
-																								<c:out value="${fd.currencyCode}"/>
-																							</td>
+																								<c:out value="${fd.currencyCode}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Date Expenditures" feature="Components">
 																							<td width="70">
-																								<c:out value="${fd.transactionDate}"/>
-																							</td>
+																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Perspective Expenditures" feature="Components">
 																							<td>
-																								<c:out value="${fd.perspectiveName}"/>
-																							</td>
+																								<c:out value="${fd.perspectiveName}"/>																							</td>
 																							</field:display>
 																						</tr>
 																					</c:forEach>
-																				</table>
-																			</td>
+																				</table>																			</td>
 																		</tr>
 																	</table>
 																</td></tr>
@@ -2158,8 +1968,7 @@ function viewChanges()
 															<tr><td bgcolor="#ffffff">
 																<FONT color="blue">*
 																	<digi:trn key="aim:theAmountEnteredAreInThousands">
-																		The amount entered are in thousands (000)
-		  															</digi:trn>
+																		The amount entered are in thousands (000)		  															</digi:trn>
 																</FONT>
 															</td></tr>
 															<field:display name="Components Physical Progress" feature="Components">
@@ -2197,8 +2006,7 @@ function viewChanges()
 											<img id="issues_plus"  onclick="toggleGroup('issues')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
 											<img id="issues_minus" onclick="toggleGroup('issues')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
 											<digi:trn key="aim:issues">
-											Issues</digi:trn>
-										</td>
+											Issues</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<div id="issues_dots">...</div>
 											<div id="issues" style="display: none;">
@@ -2235,8 +2043,7 @@ function viewChanges()
 											<img id="related_documents_plus"  onclick="toggleGroup('related_documents')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
 											<img id="related_documents_minus" onclick="toggleGroup('related_documents')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
 											<digi:trn key="aim:relatedDocuments">
-											Related Documents</digi:trn>
-										</td>
+											Related Documents</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<div id="related_documents_dots">...</div>
 											<div id="related_documents" style="display: none;">
@@ -2263,8 +2070,7 @@ function viewChanges()
 																	<br />&nbsp;
 																	<b>Document Type:</b>&nbsp;
 																	<bean:write name="docs" property="docType"/>
-																</logic:notEmpty>
-															</td>
+																</logic:notEmpty>															</td>
 														</tr>
 													 </table>
 													</td></tr>
@@ -2280,15 +2086,13 @@ function viewChanges()
 														<table width="100%" class="box-border-nopadding">
 															<tr>
 																<td width="2">
-																	<digi:img src="module/aim/images/web-page.gif"/>
-																</td>
+																	<digi:img src="module/aim/images/web-page.gif"/>																</td>
 																<td align="left" vAlign="center">&nbsp;
 																	<b><c:out value="${links.title}"/></b> -
 																	&nbsp;&nbsp;&nbsp;<i><a href="<c:out value="${links.url}"/>">
 																	<c:out value="${links.url}"/></a></i>
 																	<br>&nbsp;
-																	<b>Desc:</b>&nbsp;<c:out value="${links.description}"/>
-																</td>
+																	<b>Desc:</b>&nbsp;<c:out value="${links.description}"/>																</td>
 															</tr>
 														</table>
 													</td></tr>
@@ -2304,26 +2108,22 @@ function viewChanges()
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:donorFundingContactInformation">
-											Donor funding contact information</digi:trn>
-										</td>
+											Donor funding contact information</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.dnrCntFirstName}"/>
 											<c:out value="${aimEditActivityForm.dnrCntLastName}"/> -
-											<c:out value="${aimEditActivityForm.dnrCntEmail}"/>
-										</td>
+											<c:out value="${aimEditActivityForm.dnrCntEmail}"/>										</td>
 									</tr>
 									</feature:display>
 									<feature:display name="Government Contact Information" module="Contact Information">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:mofedContactInformation">
-											MOFED contact information</digi:trn>
-										</td>
+											MOFED contact information</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.mfdCntFirstName}"/>
 											<c:out value="${aimEditActivityForm.mfdCntLastName}"/> -
-											<c:out value="${aimEditActivityForm.mfdCntEmail}"/>
-										</td>
+											<c:out value="${aimEditActivityForm.mfdCntEmail}"/>										</td>
 									</tr>
 									</feature:display>
 									</module:display>
@@ -2332,27 +2132,23 @@ function viewChanges()
 									<field:display name="Accession Instrument" feature="Identification">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>
-										</td>
+											<digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.accessionInstrument > 0}">
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.accessionInstrument}"/>
 											</c:if>
-											&nbsp;
-										</td>
+&nbsp;										</td>
 									</tr>
 									</field:display>
 									<field:display name="A.C. Chapter" feature="Identification">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<digi:trn key="aim:acChapter"> A.C. Chapter</digi:trn>
-										</td>
+											<digi:trn key="aim:acChapter"> A.C. Chapter</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.acChapter > 0}">
 												<category:getoptionvalue categoryValueId="${aimEditActivityForm.acChapter}"/>
 											</c:if>
-											&nbsp;
-										</td>
+&nbsp;										</td>
 									</tr>
 									</field:display>
 
@@ -2360,24 +2156,20 @@ function viewChanges()
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:activityCreatedBy">
-											Activity created by</digi:trn>
-										</td>
+											Activity created by</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.actAthFirstName}"/>
 											<c:out value="${aimEditActivityForm.actAthLastName}"/> -
-											<c:out value="${aimEditActivityForm.actAthEmail}"/>
-										</td>
+											<c:out value="${aimEditActivityForm.actAthEmail}"/>										</td>
 									</tr>
 									</field:display>
 									<field:display feature="Identification" name="Data Source">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:dataSource">
-											Data Source</digi:trn>
-										</td>
+											Data Source</digi:trn>										</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.actAthAgencySource}"/>
-										</td>
+											<c:out value="${aimEditActivityForm.actAthAgencySource}"/>										</td>
 									</tr>
 									</field:display>
 									<field:display name="Activity Updated On" feature="Identification">
@@ -2385,14 +2177,12 @@ function viewChanges()
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:activityUpdatedOn">
-											Activity updated on</digi:trn>
-										</td>
+											Activity updated on</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.updatedDate}"/>
 											<html:button  styleClass="buton" property="submitButton" onclick="viewChanges()">
 												<digi:trn key="btn:last5changestoactivity">Last 5 changes to Activity</digi:trn>
-											</html:button>
-										</td>
+											</html:button>										</td>
 									</tr>
 									</logic:notEmpty>
 									</field:display>
@@ -2401,13 +2191,11 @@ function viewChanges()
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:activityUpdatedBy">
-											Activity updated by</digi:trn>
-										</td>
+											Activity updated by</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.updatedBy.user.firstNames}"/>
 											<c:out value="${aimEditActivityForm.updatedBy.user.lastName}"/>	-
-											<c:out value="${aimEditActivityForm.updatedBy.user.email}"/>
-										</td>
+											<c:out value="${aimEditActivityForm.updatedBy.user.email}"/>										</td>
 									</tr>
 									</logic:notEmpty>
 									</field:display>
@@ -2416,11 +2204,9 @@ function viewChanges()
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:activityCreatedOn">
-											Activity created on</digi:trn>
-										</td>
+											Activity created on</digi:trn>										</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.createdDate}"/>
-										</td>
+											<c:out value="${aimEditActivityForm.createdDate}"/>										</td>
 									</tr>
 									</logic:notEmpty>
 									</field:display>
@@ -2429,14 +2215,11 @@ function viewChanges()
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:activityTeamLeader">
-											Data Team Leader</digi:trn>
-										</td>
+											Data Team Leader</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.team.teamLead.user.firstNames}"/>
 											<c:out value="${aimEditActivityForm.team.teamLead.user.lastName}"/>	-
-											<c:out value="${aimEditActivityForm.team.teamLead.user.email}"/>
-
-										</td>
+											<c:out value="${aimEditActivityForm.team.teamLead.user.email}"/>										</td>
 									</tr>
 									</field:display>
 									</logic:notEmpty>
@@ -2446,20 +2229,14 @@ function viewChanges()
 											<tr>
 												<c:if test="${aimEditActivityForm.donorFlag == true}">
 												<td>
-													<input type="button" class="dr-menu" onclick="javascript:history.go(-1)" value='<< <digi:trn key="btn:back">Back</digi:trn>'name="backButton"/>
-
-
-												</td>
+													<input type="button" class="dr-menu" onclick="javascript:history.go(-1)" value='<< <digi:trn key="btn:back">Back</digi:trn>'name="backButton"/>												</td>
 												</c:if>
 												<c:if test="${aimEditActivityForm.donorFlag == false}">
 												<td>
-													<input type="button" class="dr-menu" onclick="javascript:history.go(-1)" value='<< <digi:trn key="btn:back">Back</digi:trn>'name="backButton"/>
-												</td>
+													<input type="button" class="dr-menu" onclick="javascript:history.go(-1)" value='<< <digi:trn key="btn:back">Back</digi:trn>'name="backButton"/>												</td>
 												</c:if>
 												<td>
-													<input type="button" class="dr-menu" onclick="disable()" value='<digi:trn key="btn:saveActivity">Save Activity</digi:trn>' name="submitButton"/>
-
-												</td>
+													<input type="button" class="dr-menu" onclick="disable()" value='<digi:trn key="btn:saveActivity">Save Activity</digi:trn>' name="submitButton"/>												</td>
 											</tr>
 										</table>
 									</td></tr>
@@ -2495,8 +2272,8 @@ function viewChanges()
 						</td></tr>
 					</table>
 				</td></tr>
-				<tr><td>
-					&nbsp;
+				<tr><td>&nbsp;
+					
 				</td></tr>
 			</table>
 		</td>

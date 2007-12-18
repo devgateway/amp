@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.ReportsForm;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -66,7 +67,7 @@ public class DeleteAllReports extends Action {
 								 //AmpReports aReportForLog=DbUtil.getAmpReport(ampReportForm.getReportId());
 								 AuditLoggerUtil.logObject(session,request,ampReport,"delete");
 								 DbUtil.updateAppSettingsReportDeleted(ampReportForm.getReportId());
-								 boolean deleted	= DbUtil.deleteReportsCompletely(ampReportForm.getReportId());										 
+								 boolean deleted = AdvancedReportUtil.deleteReportsCompletely(ampReportForm.getReportId());										 
 										 if (deleted) {
 											errors.add("title", new ActionError(
 													"error.aim.deleteReports.reportDeleted"));

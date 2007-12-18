@@ -126,7 +126,12 @@ public class AddAmpActivity extends Action {
                }
 
                 }
-    // set Globam Settings Multi-Sector Selecting
+		
+		
+	//===============Sectors START===========================
+		
+		
+    // set Global Settings Multi-Sector Selecting
     String multiSectorSelect = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.
     		GLOBALSETTINGS_MULTISECTORSELECT);
     eaForm.setMultiSectorSelecting(multiSectorSelect);
@@ -239,7 +244,117 @@ public class AddAmpActivity extends Action {
       eaForm.setStep("9");
       eaForm.setPageId(1);
     }
+    //===============Sectors END=============================
 
+    
+    //===============Componentes START=======================
+    
+    
+    // Add componente
+    if (request.getParameter("addComponente") != null) {
+      ActivitySector selectedComponente = (ActivitySector) session.getAttribute(
+          "addComponente");
+      session.removeAttribute("componenteSelected");
+
+      Collection<ActivitySector> prevSelComponentes = eaForm.getActivityComponentes();
+
+
+
+      boolean addComponente = true;
+      if (prevSelComponentes != null) {
+    	  Iterator<ActivitySector> itr = prevSelComponentes.iterator();
+    	  while (itr.hasNext()) {
+    		  ActivitySector asec =  itr.next();
+	          if (asec.getSectorName().equals(selectedComponente.getSectorName())){
+	        	  if (selectedComponente.getSubsectorLevel1Name() == null) {
+	        		  addComponente = false;
+						break;
+	        	  }
+	        	  if(asec.getSubsectorLevel1Name() != null ) {
+						if(asec.getSubsectorLevel1Name().equals(selectedComponente.getSubsectorLevel1Name())){
+							if(selectedComponente.getSubsectorLevel2Name() == null){
+								addComponente = false;
+							      break;									
+							}					
+							if(asec.getSubsectorLevel2Name() != null){
+								if(asec.getSubsectorLevel2Name().equals(selectedComponente.getSubsectorLevel2Name())){
+									addComponente = false;
+							        break;
+							 	}
+							}else{
+								addComponente = false;
+						        break;
+							}								
+						}
+		          }else{
+		        	  addComponente = false;
+						break;
+		          }
+	          }
+    	  }
+      }
+      if (addComponente) {
+			if (prevSelComponentes != null) {
+				if (prevSelComponentes.isEmpty())
+					selectedComponente.setSectorPercentage(new Integer(100));
+				prevSelComponentes.add(selectedComponente);
+			} else {
+				selectedComponente.setSectorPercentage(new Integer(100));
+				prevSelComponentes = new ArrayList<ActivitySector>();
+				prevSelComponentes.add(selectedComponente);
+			}
+      }
+
+      eaForm.setActivityComponentes(prevSelComponentes);
+      return mapping.findForward("addActivityStep2");
+    }
+
+    // Remove componentes
+    else
+    if (request.getParameter("remComponentes") != null) {
+      Long selComponentes[] = eaForm.getSelActivityComponentes();
+      Collection<ActivitySector> prevSelComponentes = eaForm.getActivityComponentes();
+      Collection newComponentes = new ArrayList();
+
+      Iterator<ActivitySector> itr = prevSelComponentes.iterator();
+
+      boolean flag = false;
+
+      while (itr.hasNext()) {
+        ActivitySector asec =  itr.next();
+        flag = false;
+        for (int i = 0; i < selComponentes.length; i++) {
+
+          if (asec.getSubsectorLevel1Id() == -1 && asec.getSectorId().equals(selComponentes[i])) {
+            flag = true;
+            break;
+          }
+          if (asec.getSubsectorLevel1Id() != -1 && asec.getSubsectorLevel2Id() == -1 && asec.getSubsectorLevel1Id().equals(selComponentes[i])) {
+              flag = true;
+              break;
+            }
+          if (asec.getSubsectorLevel1Id() != -1 && asec.getSubsectorLevel2Id() != -1 && asec.getSubsectorLevel2Id().equals(selComponentes[i])) {
+              flag = true;
+              break;
+            }
+        }
+        if (!flag) {
+        	newComponentes.add(asec);
+        }
+      }
+
+      eaForm.setActivitySectors(newComponentes);
+      return mapping.findForward("addActivityStep2");
+    }
+    
+    //===============Componentes END=========================
+    
+    
+    
+    
+    
+    
+    
     //eaForm.setAllComps(ActivityUtil.getAllComponentNames());
     ProposedProjCost propProjCost = null;
     if (eaForm.getProProjCost() != null) {
@@ -758,6 +873,9 @@ public class AddAmpActivity extends Action {
       else if (eaForm.getStep().equals("11")) { // show the step 11 page.
         return mapping.findForward("addActivityStep11");
       }
+      else if (eaForm.getStep().equals("12")) { // show the step 12 page.
+	        return mapping.findForward("addActivityStep12");
+	      }
       else if (eaForm.getStep().equals("9")) { // show the preview page.
 
         if (eaForm.getAmpId() == null) { // if AMP-ID is not generated, generate the AMP-ID

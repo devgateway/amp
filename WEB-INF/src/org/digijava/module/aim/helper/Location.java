@@ -19,6 +19,7 @@ public class Location implements Serializable, Comparable
 	private String zone;
 	private Long woredaId;
 	private String woreda;
+	private Float percent;//AMP-2250 
 	
 	public Location() {
 		locId = new Long(-1);
@@ -189,5 +190,13 @@ public class Location implements Serializable, Comparable
 						  else return 0;  
 				  else return 0; 
 		else return -1;			
+	}
+
+	public Float getPercent() {
+		return percent;
+	}
+
+	public void setPercent(Float percent) {
+		this.percent = percent;
 	}
 }

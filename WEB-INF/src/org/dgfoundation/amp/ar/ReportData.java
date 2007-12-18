@@ -28,7 +28,82 @@ public abstract class ReportData extends Viewable {
 	
 	protected static Logger logger = Logger.getLogger(ReportData.class);
 	
+	public boolean getCanDisplayRow() {	    
+    	    int startRow=getStartRow();
+	    int endRow=getEndRow();
+	    int rowNum = getCurrentRowNumber();
+	    incCurrentRowNumberBy(1);
+	    if(startRow==0 && endRow==0) return true;
+	    if(startRow<=rowNum && endRow>=rowNum) return true;
+	    return false;
+    	}
+    	
+	
+	
+	public boolean getRenderBody() {
+	    int startRow=getStartRow();
+	    int endRow=getEndRow();
+	    if(startRow==0 && endRow==0) return true;
+	    int visibleRows=this.getVisibleRows();
+	    int rowNum = getCurrentRowNumber();
+	    //if the object is before the page window, or after the page window, ignore it
+	    if(rowNum+visibleRows<startRow || rowNum>endRow) {
+		incCurrentRowNumberBy(visibleRows);
+		return false;
+	    }
+	    return true;	    
+	}
+	
+	protected int startRow;
+	protected int endRow;
+	
+	public int getStartRow() {
+		if(this.getParent()!=null) return this.getParent().getStartRow();
+		return this.startRow;
+	}
+	
+	public int getEndRow() {
+		if(this.getParent()!=null) return this.getParent().getEndRow();
+		return this.endRow;
+	}
+	
 	protected Boolean globalHeadingsDisplayed;
+	
+	public int getCurrentRowNumber() {
+		if(this.getParent()!=null) return this.getParent().getCurrentRowNumber();
+		return this.currentRowNumber;
+	}
+
+	public void setCurrentRowNumber(int rowNumber) {
+		if(this.getParent()!=null) this.getParent().setCurrentRowNumber(rowNumber);
+		this.currentRowNumber=rowNumber;
+	}
+
+	public void setStartRow(int rowNumber) {
+		if(this.getParent()!=null) this.getParent().setStartRow(rowNumber);
+		this.startRow=rowNumber;
+	}
+
+	public void setEndRow(int rowNumber) {
+		if(this.getParent()!=null) this.getParent().setEndRow(rowNumber);
+		this.endRow=rowNumber;
+	}
+
+	
+	
+	public void incCurrentRowNumberBy(int amount) {
+		if(this.getParent()!=null) this.getParent().incCurrentRowNumberBy(amount);
+		this.currentRowNumber+=amount;
+	}
+
+	public void incCurrentRowNumberBy(Viewable object) {
+		if(this.getParent()!=null) this.getParent().incCurrentRowNumberBy(object.getVisibleRows());
+		this.currentRowNumber+=object.getVisibleRows();
+	}
+
+	
+	
+	protected int currentRowNumber;
 	
 	protected String name;
 	
@@ -245,6 +320,9 @@ public abstract class ReportData extends Viewable {
 		if (v==3) return "#8FBCFF";
 		return "ffffff";
 	}
+	
+	
+
 	
 	
 	

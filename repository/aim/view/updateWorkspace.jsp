@@ -45,34 +45,105 @@ function removeChildWorkspace(id) {
 	document.aimUpdateWorkspaceForm.target = "_self";
 	document.aimUpdateWorkspaceForm.addFlag.value = false;
 	document.aimUpdateWorkspaceForm.submit();
-}
+	}
 }
 
+function chekingWorkspaceTypeAndCatValue(action){
+	if(action!="reset") {
+		var index1  = document.aimUpdateWorkspaceForm.category.selectedIndex;
+		var index2  = document.aimUpdateWorkspaceForm.workspaceType.selectedIndex;
+		var val1    = document.aimUpdateWorkspaceForm.category.options[index1].value;
+		var val2    = document.aimUpdateWorkspaceForm.workspaceType.options[index2].value;
+		var msg='';
+		if(val1 == "DONOR" && (val2 == "Team"|| val2=="Management")){
+			msg+='<digi:trn key="aim:workspaceManager:selectDonorType">if you choose Donor Team Category, you must choose Donor workspace type and vice versa</digi:trn>';
+			alert(msg);
+			return false;
+		}else if(val1 == "GOVERNMENT" && val2 == "Donor"){
+			msg+='<digi:trn key="aim:workspaceManager:selectGivernmentType">if you choose Government Team Category, you must choose Team or Management workspace type and vice versa</digi:trn>';
+			alert(msg);
+			return false;
+		} else return true;
+	}
+	return true;
+}
 
 function update(action) {
-
-	var index1  = document.aimUpdateWorkspaceForm.category.selectedIndex;
-	var index2  = document.aimUpdateWorkspaceForm.workspaceType.selectedIndex;
-	var val1    = document.aimUpdateWorkspaceForm.category.options[index1].value;
-	var val2    = document.aimUpdateWorkspaceForm.workspaceType.options[index2].value;
-	var msg='';
-	if(val1 == "DONOR" && (val2 == "Team"|| val2=="Management")){
-		msg+='<digi:trn key="aim:workspaceManager:selectDonorType">if you choose Donor Team Category, you must choose Donor workspace type and vice versa</digi:trn>';
-		alert(msg);
-	}else if(val1 == "GOVERNMENT" && val2 == "Donor"){
-		msg+='<digi:trn key="aim:workspaceManager:selectGivernmentType">if you choose Government Team Category, you must choose Team or Management workspace type and vice versa</digi:trn>';
-		alert(msg);
-	}else {
+	if(chekingWorkspaceTypeAndCatValue(action)==true){		
 		var event	= document.aimUpdateWorkspaceForm.actionEvent.value;
-	var relFlag = document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
-	if (event == "edit" && relFlag == "noedit") {
-		var name = trim(document.aimUpdateWorkspaceForm.teamName.value);
-		if (name == "" || name.length == 0) {
-			alert("Team name is required");
-			document.aimUpdateWorkspaceForm.teamName.focus();
-			return false;
+		var relFlag = document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
+		if (event == "edit" && relFlag == "noedit") {
+			var name = trim(document.aimUpdateWorkspaceForm.teamName.value);
+			if (name == "" || name.length == 0) {
+				alert("Team name is required");
+				document.aimUpdateWorkspaceForm.teamName.focus();
+				return false;
+			}
+			else {
+				document.aimUpdateWorkspaceForm.relatedTeamFlag.value = "no";
+				document.aimUpdateWorkspaceForm.addFlag.value = false;
+				<digi:context name="update" property="context/module/moduleinstance/updateWorkspace.do" />
+				document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=admin&event="+action;
+				document.aimUpdateWorkspaceForm.target = "_self";
+				document.aimUpdateWorkspaceForm.submit();
+			}
 		}
-		else {
+		else
+		if (action != "reset"){
+			if (!validateAimUpdateWorkspaceForm(document.aimUpdateWorkspaceForm))
+				return false;
+	
+		    if (action != "reset"){
+			if (event == "add" || event == "edit") {
+				if (relFlag == "set") {
+					var index1  = document.aimUpdateWorkspaceForm.category.selectedIndex;
+					var index2  = document.aimUpdateWorkspaceForm.workspaceType.selectedIndex;
+					var index3  = document.aimUpdateWorkspaceForm.relatedTeam.selectedIndex;
+					var index4  = document.aimUpdateWorkspaceForm.typeId.selectedIndex;
+					var val1    = document.aimUpdateWorkspaceForm.category.options[index1].value;
+					var val2    = document.aimUpdateWorkspaceForm.workspaceType.options[index2].value;
+					var val3    = document.aimUpdateWorkspaceForm.relatedTeam.options[index3].value;
+					var val4	= document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
+					var val5	= document.aimUpdateWorkspaceForm.typeId.options[index4].value;
+					var lab5	= document.aimUpdateWorkspaceForm.typeId.options[index4].text;
+					var bsize	= parseInt(document.aimUpdateWorkspaceForm.relatedTeamBilatCollSize.value, 10);
+					var val6	= document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
+	
+					if (val1 == "DONOR" && val2 == "Donor") {
+						if (val5 == "0") {
+								alert("Please select team type");
+								document.aimUpdateWorkspaceForm.typeId.focus();
+								return false;
+							}
+							else if (val3 == "-1") {
+								alert("Please select a related team");
+								document.aimUpdateWorkspaceForm.relatedTeam.focus();
+								return false;
+							}
+							else {
+								if (lab5 == "<%= org.digijava.module.aim.helper.Constants.TEAM_TYPE_BILATERAL %>") {
+									if (bsize != 0) {
+										if (index3 > bsize) {
+											alert("Please select a Bilateral team");
+											document.aimUpdateWorkspaceForm.relatedTeam.focus();
+											return false;
+										}
+									}
+								}
+								if (lab5 == "<%= org.digijava.module.aim.helper.Constants.TEAM_TYPE_MULTILATERAL %>") {
+									if (bsize != 0) {
+										if (index3 <= bsize) {
+											alert("Please select a Multilateral team");
+											document.aimUpdateWorkspaceForm.relatedTeam.focus();
+											return false;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 			document.aimUpdateWorkspaceForm.relatedTeamFlag.value = "no";
 			document.aimUpdateWorkspaceForm.addFlag.value = false;
 			<digi:context name="update" property="context/module/moduleinstance/updateWorkspace.do" />
@@ -80,73 +151,8 @@ function update(action) {
 			document.aimUpdateWorkspaceForm.target = "_self";
 			document.aimUpdateWorkspaceForm.submit();
 		}
-	}
-	else
-	if (action != "reset"){
-		if (!validateAimUpdateWorkspaceForm(document.aimUpdateWorkspaceForm))
-			return false;
-
-	    if (action != "reset"){
-		if (event == "add" || event == "edit") {
-			if (relFlag == "set") {
-				var index1  = document.aimUpdateWorkspaceForm.category.selectedIndex;
-				var index2  = document.aimUpdateWorkspaceForm.workspaceType.selectedIndex;
-				var index3  = document.aimUpdateWorkspaceForm.relatedTeam.selectedIndex;
-				var index4  = document.aimUpdateWorkspaceForm.typeId.selectedIndex;
-				var val1    = document.aimUpdateWorkspaceForm.category.options[index1].value;
-				var val2    = document.aimUpdateWorkspaceForm.workspaceType.options[index2].value;
-				var val3    = document.aimUpdateWorkspaceForm.relatedTeam.options[index3].value;
-				var val4	= document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
-				var val5	= document.aimUpdateWorkspaceForm.typeId.options[index4].value;
-				var lab5	= document.aimUpdateWorkspaceForm.typeId.options[index4].text;
-				var bsize	= parseInt(document.aimUpdateWorkspaceForm.relatedTeamBilatCollSize.value, 10);
-				var val6	= document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
-
-				if (val1 == "DONOR" && val2 == "Donor") {
-					if (val5 == "0") {
-							alert("Please select team type");
-							document.aimUpdateWorkspaceForm.typeId.focus();
-							return false;
-						}
-						else if (val3 == "-1") {
-							alert("Please select a related team");
-							document.aimUpdateWorkspaceForm.relatedTeam.focus();
-							return false;
-						}
-						else {
-							if (lab5 == "<%= org.digijava.module.aim.helper.Constants.TEAM_TYPE_BILATERAL %>") {
-								if (bsize != 0) {
-									if (index3 > bsize) {
-										alert("Please select a Bilateral team");
-										document.aimUpdateWorkspaceForm.relatedTeam.focus();
-										return false;
-									}
-								}
-							}
-							if (lab5 == "<%= org.digijava.module.aim.helper.Constants.TEAM_TYPE_MULTILATERAL %>") {
-								if (bsize != 0) {
-									if (index3 <= bsize) {
-										alert("Please select a Multilateral team");
-										document.aimUpdateWorkspaceForm.relatedTeam.focus();
-										return false;
-									}
-								}
-							}
-						}
-				}
-			}
-		}
-		}
-		document.aimUpdateWorkspaceForm.relatedTeamFlag.value = "no";
-		document.aimUpdateWorkspaceForm.addFlag.value = false;
-		<digi:context name="update" property="context/module/moduleinstance/updateWorkspace.do" />
-		document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=admin&event="+action;
-		document.aimUpdateWorkspaceForm.target = "_self";
-		document.aimUpdateWorkspaceForm.submit();
-	}
-	}
-
-	
+		
+	}	
 }
 
 function relTeam() {

@@ -45,7 +45,10 @@ import java.util.*;
 public class ChartGenerator {
 
 	private static Logger logger = Logger.getLogger(ChartGenerator.class);
-
+	
+	public static final String KEY_RISK_PREFIX="aim:risk:";
+	public static final String KEY_PERFORMANCE_PREFIX="aim:performance:";
+	
 	public static String getPortfolioRiskChartFileName(HttpSession session,PrintWriter pw,
 			int chartWidth,int chartHeight,String url, HttpServletRequest request) throws WorkerException {
 
@@ -66,7 +69,7 @@ public class ChartGenerator {
         for (Iterator valIter = col.iterator(); valIter.hasNext(); ) {
             MEIndicatorRisk item = (MEIndicatorRisk) valIter.next();
             String value = item.getRisk();
-            String key = "aim:risk:" + value.toLowerCase();
+            String key = KEY_RISK_PREFIX + value.toLowerCase();
             key = key.replaceAll(" ", "");
             String msg = CategoryManagerUtil.translate(key, request, value);
             item.setRisk(msg);
@@ -94,7 +97,7 @@ public class ChartGenerator {
         for (Iterator valIter = meRisks.iterator(); valIter.hasNext(); ) {
             MEIndicatorRisk item = (MEIndicatorRisk) valIter.next();
             String value = item.getRisk();
-            String key = "aim:activityRiskChart:" + value.toLowerCase();
+            String key = KEY_RISK_PREFIX + value.toLowerCase();
             key = key.replaceAll(" ", "");
             String msg = CategoryManagerUtil.translate(key, request, value);
             item.setRisk(msg);
@@ -149,7 +152,7 @@ public class ChartGenerator {
         for (Iterator valIter = col.iterator(); valIter.hasNext(); ) {
             MEIndicatorValue item = (MEIndicatorValue) valIter.next();
             String value = item.getType();
-            String key = "aim:portfolioPerformanceChart:" + value.toLowerCase();
+            String key = KEY_PERFORMANCE_PREFIX + value.toLowerCase();
             key = key.replaceAll(" ", "");
             String msg = CategoryManagerUtil.translate(key, request, value);
             item.setType(msg);
@@ -175,7 +178,7 @@ public class ChartGenerator {
         for (Iterator valIter = meIndValues.iterator(); valIter.hasNext(); ) {
             MEIndicatorValue item = (MEIndicatorValue) valIter.next();
             String value = item.getType();
-            String key = "aim:activityPerformanceChart:" + value.toLowerCase();
+            String key = KEY_PERFORMANCE_PREFIX+ value.toLowerCase();
             key = key.replaceAll(" ", "");
             String msg = CategoryManagerUtil.translate(key, request, value);
             item.setType(msg);
@@ -324,7 +327,6 @@ public class ChartGenerator {
 
 		} catch (Exception e) {
 			logger.error("Exception from generatePerformanceChart() :" + e.getMessage());
-			e.printStackTrace(System.out);
 		}
  		return fileName;
 	}

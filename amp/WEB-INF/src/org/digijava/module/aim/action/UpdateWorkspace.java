@@ -109,7 +109,7 @@ public class UpdateWorkspace extends Action {
             // from bilateral teams only.
             if("set".equalsIgnoreCase(uwForm.getRelatedTeamFlag())) {
                 if("DONOR".equalsIgnoreCase(uwForm.getCategory())
-                   && "Team".equalsIgnoreCase(uwForm.getWorkspaceType())) {
+                   && "Donor".equalsIgnoreCase(uwForm.getWorkspaceType())) {
                     String type = typeString;
                     Iterator itr1 = uwForm.getRelatedTeamBilatColl().iterator();
                     Iterator itr2 = uwForm.getRelatedTeamMutilatColl()
@@ -236,7 +236,7 @@ public class UpdateWorkspace extends Action {
                     }
                 	if (tId1==null)	newTeam.setAmpTeamId(uwForm.getTeamId());
                 	else newTeam.setAmpTeamId(new Long(Long.parseLong(tId1)));
-                    if(newTeam.getAccessType().equalsIgnoreCase("Team")
+                    if((newTeam.getAccessType().equalsIgnoreCase("Team")||newTeam.getAccessType().equalsIgnoreCase("Donor"))
                        && (uwForm.getChildWorkspaces() != null && uwForm
                            .getChildWorkspaces().size() > 0)) {
                         errors

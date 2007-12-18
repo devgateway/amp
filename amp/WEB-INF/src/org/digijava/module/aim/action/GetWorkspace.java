@@ -97,7 +97,7 @@ public class GetWorkspace extends Action {
 			
 			uwForm.setRelatedTeam(workspace.getRelatedTeam());
 			if (null == uwForm.getRelatedTeam()) {
-				if ("DONOR".equalsIgnoreCase(uwForm.getCategory()) && "Team".equalsIgnoreCase(uwForm.getWorkspaceType())) {
+				if ("DONOR".equalsIgnoreCase(uwForm.getCategory()) && "Donor".equalsIgnoreCase(uwForm.getWorkspaceType())) {
 					//Collection col = TeamUtil.getAllRelatedTeamsByType(uwForm.getType());
 					Collection col = TeamUtil.getAllRelatedTeams();
 					if (col.size() < 1)

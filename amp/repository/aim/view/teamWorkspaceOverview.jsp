@@ -37,11 +37,27 @@ function removeChildWorkspace(id) {
 }
 
 function update(action) {
-	var id = document.aimUpdateWorkspaceForm.teamId.value;
-	<digi:context name="update" property="context/module/moduleinstance/updateWorkspaceForTeam.do" />
-	document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&event="+action+"&tId="+id;
-	document.aimUpdateWorkspaceForm.target = "_self";
-	document.aimUpdateWorkspaceForm.submit();
+	var index1  = document.aimUpdateWorkspaceForm.category.selectedIndex;
+	var index2  = document.aimUpdateWorkspaceForm.workspaceType.selectedIndex;
+	var val1    = document.aimUpdateWorkspaceForm.category.options[index1].value;
+	var val2    = document.aimUpdateWorkspaceForm.workspaceType.options[index2].value;
+	var msg='';
+	if(val1 == "DONOR" && (val2 == "Team"|| val2=="Management")){
+		msg+='<digi:trn key="aim:workspaceManager:selectDonorType">if you choose Donor Team Category, you must choose Donor workspace type and vice versa</digi:trn>';
+		alert(msg);
+		return false;
+	}else if(val1 == "GOVERNMENT" && val2 == "Donor"){
+		msg+='<digi:trn key="aim:workspaceManager:selectGivernmentType">if you choose Government Team Category, you must choose Team or Management workspace type and vice versa</digi:trn>';
+		alert(msg);
+		return false;
+	}else {
+		var id = document.aimUpdateWorkspaceForm.teamId.value;
+		<digi:context name="update" property="context/module/moduleinstance/updateWorkspaceForTeam.do" />
+		document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&event="+action+"&tId="+id;
+		document.aimUpdateWorkspaceForm.target = "_self";
+		document.aimUpdateWorkspaceForm.submit();
+	}
+	
 }
 
 -->
@@ -183,10 +199,27 @@ function update(action) {
 
 													<tr bgcolor="#f4f4f2">
 														<td align="right" width="30%">
-															<digi:trn key="aim:teamCategory">Team Category</digi:trn>
+															<digi:trn key="aim:teamType">Team Type</digi:trn>
 														</td>
 														<td align="left">
 															<category:showoptions name="aimUpdateWorkspaceForm" property="typeId" styleClass="inp-text" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>"/>
+														</td>
+													</tr>
+													<tr bgcolor="#f4f4f2">
+														<td align="right" width="30%">
+															<digi:trn key="aim:teamCategory">Team Category</digi:trn>
+														</td>
+														<td align="left">
+															<html:select property="category" styleClass="inp-text" >
+																	<html:option value="-1">--
+																		<digi:trn key="aim:createWorkspaceSelectCategFirstLine">
+																			Select Category
+																		</digi:trn>
+																		--
+																	</html:option>
+																	<html:option value="GOVERNMENT"><digi:trn key="aim:GOVERNMENT">Government</digi:trn></html:option>
+																	<html:option value="DONOR"><digi:trn key="aim:DONOR">Donor</digi:trn></html:option>
+																</html:select>
 														</td>
 													</tr>
 													<tr bgcolor="#f4f4f2">
@@ -196,8 +229,9 @@ function update(action) {
 														<td align="left">
 															<html:select property="workspaceType" styleClass="inp-text">
 																<html:option value="">-- Select Type --</html:option>
-																<html:option value="Management">Management</html:option>
-																<html:option value="Team">Team</html:option>
+																<html:option value="Donor"><digi:trn key="aim:Donor">Donor</digi:trn></html:option>
+																<html:option value="Management"><digi:trn key="aim:management">Management</digi:trn></html:option>
+																<html:option value="Team"><digi:trn key="aim:team">Team</digi:trn></html:option>
 															</html:select>
 														</td>
 													</tr>
@@ -255,8 +289,8 @@ function update(action) {
 															<digi:trn key="btn:teamWorkspaceUpdate">Update</digi:trn>
 														</c:set>
 														<td colspan="2" align="center">
-															<html:submit styleClass="dr-menu" value=" ${translation} " onclick="update('edit')"/>
-														</td>
+															<input type="button" class="dr-menu" value=" ${translation} " onclick="update('edit')"/>
+														</td>																	
 													</tr>
 												</table>
 											</td>

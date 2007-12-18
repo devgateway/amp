@@ -51,7 +51,19 @@ function removeChildWorkspace(id) {
 
 function update(action) {
 
-	var event	= document.aimUpdateWorkspaceForm.actionEvent.value;
+	var index1  = document.aimUpdateWorkspaceForm.category.selectedIndex;
+	var index2  = document.aimUpdateWorkspaceForm.workspaceType.selectedIndex;
+	var val1    = document.aimUpdateWorkspaceForm.category.options[index1].value;
+	var val2    = document.aimUpdateWorkspaceForm.workspaceType.options[index2].value;
+	var msg='';
+	if(val1 == "DONOR" && (val2 == "Team"|| val2=="Management")){
+		msg+='<digi:trn key="aim:workspaceManager:selectDonorType">if you choose Donor Team Category, you must choose Donor workspace type and vice versa</digi:trn>';
+		alert(msg);
+	}else if(val1 == "GOVERNMENT" && val2 == "Donor"){
+		msg+='<digi:trn key="aim:workspaceManager:selectGivernmentType">if you choose Government Team Category, you must choose Team or Management workspace type and vice versa</digi:trn>';
+		alert(msg);
+	}else {
+		var event	= document.aimUpdateWorkspaceForm.actionEvent.value;
 	var relFlag = document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
 	if (event == "edit" && relFlag == "noedit") {
 		var name = trim(document.aimUpdateWorkspaceForm.teamName.value);
@@ -90,7 +102,7 @@ function update(action) {
 				var bsize	= parseInt(document.aimUpdateWorkspaceForm.relatedTeamBilatCollSize.value, 10);
 				var val6	= document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
 
-				if (val1 == "DONOR" && val2 == "Team") {
+				if (val1 == "DONOR" && val2 == "Donor") {
 					if (val5 == "0") {
 							alert("Please select team type");
 							document.aimUpdateWorkspaceForm.typeId.focus();
@@ -132,6 +144,9 @@ function update(action) {
 		document.aimUpdateWorkspaceForm.target = "_self";
 		document.aimUpdateWorkspaceForm.submit();
 	}
+	}
+
+	
 }
 
 function relTeam() {
@@ -143,7 +158,7 @@ function relTeam() {
 	var val3    = document.aimUpdateWorkspaceForm.typeId.options[index3].value;
 	var val4	= document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
 
-	if (val1 == "DONOR" && val2 == "Team") {
+	if (val1 == "DONOR" && val2 == "Donor") {
 		if (val4 == "no") {
 			if (val3 != "0") {
 				document.aimUpdateWorkspaceForm.relatedTeamFlag.value = "yes";
@@ -325,7 +340,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																	<c:otherwise>
 																		<html:select property="category" styleClass="inp-text" onchange="relTeam()">
 																			<html:option value="-1">-- Select Category --</html:option>
-																			<html:option value="MOFED"><digi:trn key="aim:MOFED">Mofed</digi:trn></html:option>
+																			<html:option value="GOVERNMENT"><digi:trn key="aim:GOVERNMENT">Government</digi:trn></html:option>
 																			<html:option value="DONOR">Donor</html:option>
 																		</html:select>
 																	</c:otherwise>
@@ -339,7 +354,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																		</digi:trn>
 																		--
 																	</html:option>
-																	<html:option value="MOFED"><digi:trn key="aim:MOFED">Mofed</digi:trn></html:option>
+																	<html:option value="GOVERNMENT"><digi:trn key="aim:GOVERNMENT">Government</digi:trn></html:option>
 																	<html:option value="DONOR"><digi:trn key="aim:DONOR">Donor</digi:trn></html:option>
 																</html:select>
 															</logic:equal>
@@ -403,6 +418,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 														<td align="left" bgcolor="#f4f4f2">
 															<html:select property="workspaceType" styleClass="inp-text" onchange="relTeam()">
 																<html:option value="-1"><digi:trn key="aim:selectWorkspace">-- Select Workspace --</digi:trn></html:option>
+																<html:option value="Donor"><digi:trn key="aim:Donor">Donor</digi:trn></html:option>
 																<html:option value="Management"><digi:trn key="aim:management">Management</digi:trn></html:option>
 																<html:option value="Team"><digi:trn key="aim:team">Team</digi:trn></html:option>
 															</html:select>
@@ -417,8 +433,9 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																			<b><bean:write name="aimUpdateWorkspaceForm" property="workspaceType" /></b>
 																		</c:when>
 																		<c:otherwise>
-																			<html:select property="workspaceType" styleClass="inp-text" onchange="relTeam()">
+																			<html:select property="workspaceType" styleClass="inp-text" onchange="relTeam()" >
 																				<html:option value="-1"><digi:trn key="aim:selectWorkspace">-- Select Workspace --</digi:trn></html:option>
+																				<html:option value="Donor"><digi:trn key="aim:Donor">Donor</digi:trn></html:option>
 																				<html:option value="Management"><digi:trn key="aim:management">Management</digi:trn></html:option>
 																				<html:option value="Team"><digi:trn key="aim:team">Team</digi:trn></html:option>
 																			</html:select>
@@ -434,7 +451,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 													</tr>
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
 														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'no'}">
-															<tr id="relTeamRow">
+															<tr  id="relTeamRow">
 																<td align="right" bgcolor="#f4f4f2">
 																	<digi:trn key="aim:relatedTeam">Related Team</digi:trn>
 																</td>
@@ -466,7 +483,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 														</c:if>
 													</c:if>
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'add'}">
-														<c:if test="${aimUpdateWorkspaceForm.category == 'DONOR' && aimUpdateWorkspaceForm.workspaceType == 'Team'}">
+														<c:if test="${aimUpdateWorkspaceForm.category == 'DONOR' && aimUpdateWorkspaceForm.workspaceType == 'Donor'}">
 															<tr id="relTeamRow">
 																<td align="right" bgcolor="#f4f4f2">
 																	<digi:trn key="aim:relatedTeam">Related Team</digi:trn>

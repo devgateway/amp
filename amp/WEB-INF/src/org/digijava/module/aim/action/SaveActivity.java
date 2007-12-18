@@ -34,8 +34,10 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
+import org.digijava.module.aim.dbentity.AmpActivityComponente;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
@@ -761,6 +763,35 @@ public class SaveActivity extends Action {
 					activity.setSectors(sectors);
 				}
 
+				// set the sectors
+				if (eaForm.getActivityComponentes() != null) {
+					Set componentes = new HashSet();
+					if (eaForm.getActivityComponentes() != null) {
+						Iterator itr = eaForm.getActivityComponentes().iterator();
+						while (itr.hasNext()) {
+							ActivitySector actSect = (ActivitySector) itr.next();
+							Long sectorId = null;
+							if (actSect.getSubsectorLevel2Id() != null
+									&& (!actSect.getSubsectorLevel2Id().equals(new Long(-1)))) {
+								sectorId = actSect.getSubsectorLevel2Id();
+							} else if (actSect.getSubsectorLevel1Id() != null
+									&& (!actSect.getSubsectorLevel1Id().equals(new Long(-1)))) {
+								sectorId = actSect.getSubsectorLevel1Id();
+							} else {
+								sectorId = actSect.getSectorId();
+							}
+							AmpActivityComponente ampc = new AmpActivityComponente();
+							ampc.setActivity(activity);
+							if (sectorId != null && (!sectorId.equals(new Long(-1))))
+								ampc.setSector(SectorUtil.getAmpSector(sectorId));
+							ampc.setPercentage(new Float(actSect.getSectorPercentage()));
+							componentes.add(ampc);
+						}
+					}
+					activity.setComponentes(componentes);
+				}
+				
+
 				if (eaForm.getProgram() != null
 						&& (!eaForm.getProgram().equals(new Long(-1)))) {
 					AmpTheme theme = ProgramUtil.getThemeObject(eaForm.getProgram());
@@ -892,30 +923,32 @@ public class SaveActivity extends Action {
 
 				// set locations
 				if (eaForm.getSelectedLocs() != null) {
-					Set locations = new HashSet();
-					Iterator itr = eaForm.getSelectedLocs().iterator();
+					Set<AmpActivityLocation> locations = new HashSet<AmpActivityLocation>();
+					Iterator<Location> itr = eaForm.getSelectedLocs().iterator();
 					while (itr.hasNext()) {
-						Location loc = (Location) itr.next();
-						AmpLocation ampLoc = LocationUtil.getAmpLocation(loc
-								.getCountryId(), loc.getRegionId(), loc
-								.getZoneId(), loc.getWoredaId());
+						Location loc = itr.next();
+						AmpLocation ampLoc = LocationUtil.getAmpLocation(loc.getCountryId(), loc.getRegionId(), loc.getZoneId(), loc.getWoredaId());
 
 						if (ampLoc == null) {
 							ampLoc = new AmpLocation();
 							ampLoc.setCountry(loc.getCountry());
-							ampLoc.setDgCountry(DbUtil.getDgCountry(loc
-									.getCountryId()));
+							ampLoc.setDgCountry(DbUtil.getDgCountry(loc.getCountryId()));
 							ampLoc.setRegion(loc.getRegion());
-							ampLoc.setAmpRegion(LocationUtil.getAmpRegion(loc
-									.getRegionId()));
-							ampLoc.setAmpZone(LocationUtil
-									.getAmpZone(loc.getZoneId()));
-							ampLoc.setAmpWoreda(LocationUtil.getAmpWoreda(loc
-									.getWoredaId()));
+							ampLoc.setAmpRegion(LocationUtil.getAmpRegion(loc.getRegionId()));
+							ampLoc.setAmpZone(LocationUtil.getAmpZone(loc.getZoneId()));
+							ampLoc.setAmpWoreda(LocationUtil.getAmpWoreda(loc.getWoredaId()));
 							ampLoc.setDescription(new String(" "));
 							DbUtil.add(ampLoc);
 						}
-						locations.add(ampLoc);
+						//AMP-2250
+						AmpActivityLocation actLoc=new AmpActivityLocation();
+						actLoc.setActivity(new AmpActivity());//activity);
+						actLoc.getActivity().setAmpActivityId(eaForm.getActivityId());
+						actLoc.setLocation(ampLoc);
+						actLoc.setLocationPercentage(loc.getPercent());
+						locations.add(actLoc);
+						//locations.add(ampLoc);
+						//AMP-2250
 					}
 					activity.setLocations(locations);
 				}

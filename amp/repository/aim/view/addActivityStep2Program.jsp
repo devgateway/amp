@@ -93,10 +93,12 @@
 
                                                                       ${nationalPlanObjectivePrograms.hierarchyNames}
                                                                     </td>
-                                                                      <td width="5%" vAlign="center" align="right">
-                                                                    	<FONT color="red">*</FONT>Percentage:&nbsp;</td>
+                                                                      <td width="5%" align="right" vAlign="center" nowrap="nowrap">
+                                                                    	<FONT color="red">*</FONT>
+                                                                        
+                                                                   	<digi:trn key="aim:editActivity:program_percentage">Percentage</digi:trn></td>
 
-                                                                     <td width="5%" vAlign="center" align="left">
+                                                                    <td width="5%" vAlign="center" align="left">
 
                                                                       <html:text name="nationalPlanObjectivePrograms" indexed="true" property="programPercentage"
                                                                       			 size="2" maxlength="3"  onkeyup="fnChk(this)"/>
@@ -171,15 +173,12 @@
                                                                     <td>
                                                                       <html:multibox property="selectedPPrograms" value="${program.ampThemeId}"/>
 
-                                                                      ${primaryPrograms.hierarchyNames}
-                                                                    </td>
-                                                                      <td width="5%" vAlign="center" align="right">
-                                                                    	<FONT color="red">*</FONT>Percentage:&nbsp;</td>
+                                                                      ${primaryPrograms.hierarchyNames}                                                                    </td>
+                                                                      <td width="5%" align="right" valign="center" nowrap="nowrap"><font color="red">*</font>
+                                                                          <digi:trn key="aim:editActivity:program_percentage">Percentage</digi:trn></td>
                                                                      <td width="5%" vAlign="center" align="left">
                                                                       <html:text name="primaryPrograms" indexed="true" property="programPercentage"
-                                                                      			 size="2" maxlength="3" onkeyup="fnChk(this)"/>
-
-                                                                    </td>
+                                                                      			 size="2" maxlength="3" onkeyup="fnChk(this)"/>                                                                    </td>
                                                                   </tr>
                                                                 </table>
                                                               </td>
@@ -246,15 +245,14 @@
                                                                     <td>
                                                                       <html:multibox property="selectedSPrograms" value="${program.ampThemeId}"/>
 
-                                                                      ${secondaryPrograms.hierarchyNames}
-                                                                    </td>
-                                                                      <td width="5%" vAlign="center" align="right">
-                                                                    	<FONT color="red">*</FONT>Percentage:&nbsp;</td>
+                                                                      ${secondaryPrograms.hierarchyNames}                                                                    </td>
+                                                                      <td width="5%" align="right" valign="center" nowrap="nowrap">
+                                                                      
+                                                                      <font color="red">*</font>
+                                                                          <digi:trn key="aim:editActivity:program_percentage">Percentage</digi:trn></td>
                                                                      <td width="5%" vAlign="center" align="left">
                                                                       <html:text name="secondaryPrograms" indexed="true" property="programPercentage"
-                                                                      			 size="2" maxlength="3" onkeyup="fnChk(this)"/>
-
-                                                                    </td>
+                                                                      			 size="2" maxlength="3" onkeyup="fnChk(this)"/>                                                                    </td>
                                                                   </tr>
                                                                 </table>
                                                               </td>

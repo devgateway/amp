@@ -1816,7 +1816,122 @@ public class TeamUtil {
      * @return list of {@link AmpReports} objects
      * @author Dare
      */
+
+    public static List getAllTeamReports(Long teamId, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId) {
+    
+    	   Session session = null;
+           List col = new ArrayList();
+           try {
+               session = PersistenceManager.getRequestDBSession();
+               AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
+
+               String queryString = null;
+               Query qry = null;
+
+               if(team.getAccessType().equalsIgnoreCase(
+                   Constants.ACCESS_TYPE_MNGMT)) {
+                   queryString = "select r from " + AmpReports.class.getName()
+                       + " r " + " order by r.name ";
+                   qry = session.createQuery(queryString);
+                   if (currentPage !=null){
+                	   qry.setFirstResult(currentPage);
+                   }
+                   if(reportPerPage!=null && reportPerPage.intValue()>0){
+                	   qry.setMaxResults(reportPerPage);
+                   }
+                   col = qry.list();
+               } else if (!inlcludeMemberReport){
+                   queryString = "select r from "
+                       + AmpTeamReports.class.getName()+" tr inner join  tr.report r "
+                       + "  where (tr.team=:teamId) order by r.name ";
+                   qry = session.createQuery(queryString);
+                   qry.setLong("teamId", teamId);
+                   if (currentPage !=null){
+                	   qry.setFirstResult(currentPage);
+                   }
+                   if(reportPerPage!=null && reportPerPage.intValue()>0){
+                	   qry.setMaxResults(reportPerPage);
+                   }
+                   col = qry.list();
+               }else if(inlcludeMemberReport){
+            	   queryString="select r from " + AmpReports.class.getName()+
+   				"  r left join r.members m where (m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+ 
+				" or r.id in (select r2.id from "+ AmpTeamReports.class.getName() + 
+				" tr inner join  tr.report r2 where tr.team=:teamId)";
+            	  qry = session.createQuery(queryString); 
+            	  qry.setLong("ampTeamMemId", memberId);
+             	  qry.setLong("teamId", teamId);
+            	  if (currentPage !=null){
+               	   qry.setFirstResult(currentPage);
+                  }
+                  if(reportPerPage!=null && reportPerPage.intValue()>0){
+               	   qry.setMaxResults(reportPerPage);
+                  }
+                  col = qry.list();
+
+               }
+               
+           } catch(Exception e) {
+               logger.debug("Exception from getAllTeamReports()");
+               logger.error(e.toString());
+               throw new RuntimeException(e);
+           }
+           return col;	
+    	
+    }
+
     public static List getAllTeamReports(Long teamId, Integer currentPage, Integer reportPerPage) {
+    	return getAllTeamReports( teamId,  currentPage,  reportPerPage, false,null);
+    }
+ 
+    public static int getAllTeamReportsCount(Long teamId,Boolean inlcludeMemberReport, Long memberId) {
+        Session session = null;
+        int count=0;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
+
+            String queryString = null;
+            Query qry = null;
+
+            if(team.getAccessType().equalsIgnoreCase(
+                Constants.ACCESS_TYPE_MNGMT)) {
+                queryString = "select r from " + AmpReports.class.getName()
+                    + " r " + " order by r.name ";
+                qry = session.createQuery(queryString);
+                count=(Integer)qry.uniqueResult();
+            } else if (!inlcludeMemberReport){
+                queryString = "select r from "
+                    + AmpTeamReports.class.getName()+" tr inner join tr.report r "
+                    + "  where (tr.team=:teamId) ";
+                qry = session.createQuery(queryString);
+                qry.setParameter("teamId", teamId, Hibernate.LONG);
+               count=qry.list().size();
+            }else if(inlcludeMemberReport){
+         	   queryString="select  from " + AmpReports.class.getName()+
+  				"  r left join r.members m where (m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+ 
+				" or r.id in (select r2.id from "+ AmpTeamReports.class.getName() + 
+				" tr inner join  tr.report r2 where tr.team=:teamId)";
+           	  qry = session.createQuery(queryString); 
+           	  qry.setLong("ampTeamMemId", memberId);
+           	  qry.setLong("teamId", teamId);
+           	  count=qry.list().size();
+            }
+        } catch(Exception e) {
+            logger.debug("Exception from getAllTeamReports()");
+            logger.error(e.toString());
+            throw new RuntimeException(e);
+        }
+        return count;
+    }
+    
+   
+    public static int getAllTeamReportsCount(Long teamId) {
+	   return getAllTeamReportsCount(teamId, false,  null);
+   }
+
+
+   public static List getAllTeamAndMemberReports(Long teamId, Integer currentPage, Integer reportPerPage) {
        Session session = null;
        List col = new ArrayList();
        try {
@@ -1860,39 +1975,9 @@ public class TeamUtil {
        return col;
    }
 
-   public static int getAllTeamReportsCount(Long teamId) {
-       Session session = null;
-       int count=0;
-       try {
-           session = PersistenceManager.getRequestDBSession();
-           AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
-
-           String queryString = null;
-           Query qry = null;
-
-           if(team.getAccessType().equalsIgnoreCase(
-               Constants.ACCESS_TYPE_MNGMT)) {
-               queryString = "select r from " + AmpReports.class.getName()
-                   + " r " + " order by r.name ";
-               qry = session.createQuery(queryString);
-               count=(Integer)qry.uniqueResult();
-           } else {
-               queryString = "select r from "
-                   + AmpTeamReports.class.getName()+" tr inner join tr.report r "
-                   + "  where (tr.team=:teamId) ";
-               qry = session.createQuery(queryString);
-               qry.setParameter("teamId", teamId, Hibernate.LONG);
-              count=qry.list().size();
-           }
-       } catch(Exception e) {
-           logger.debug("Exception from getAllTeamReports()");
-           logger.error(e.toString());
-           throw new RuntimeException(e);
-       }
-       return count;
-   }
-
-
+    
+    
+    
 
     public static AmpTeamReports getAmpTeamReport(Long teamId, Long reportId) {
         Session session = null;

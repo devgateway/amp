@@ -41,6 +41,12 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 		}
 	}
 	
+	@Override
+	public int getVisibleRows() {
+	    return 1;
+	}
+
+	
 	protected Comparator sorter; 
 	
 	protected Long ownerId;

@@ -88,7 +88,15 @@ public class ViewNewAdvancedReport extends Action {
 		String applySorter = request.getParameter("applySorter");
 		if(ampReportId==null) ampReportId=ar.getAmpReportId().toString();
 		Long reportId=new Long(ampReportId);
-		request.setAttribute("ampReportId",ampReportId);				
+		request.setAttribute("ampReportId",ampReportId);
+		
+		String startRow=request.getParameter("startRow");
+		String endRow=request.getParameter("endRow");
+		String cachedStr=request.getParameter("cached");
+		
+		
+		boolean cached=false;
+		if(cachedStr!=null) cached=Boolean.parseBoolean(cachedStr);
 		
 		AmpARFilter filter = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
 		if(filter==null || !reportId.equals(filter.getAmpReportId())) {
@@ -98,12 +106,13 @@ public class ViewNewAdvancedReport extends Action {
 		}
 		
 		
-		if( (applySorter==null && sortBy==null ) || ar==null || (arf.getCreatedReportId() == null) || (ampReportId!=null && !ampReportId.equals(arf.getCreatedReportId().toString())))
+		if( !cached && ((applySorter==null && sortBy==null ) || ar==null || (arf.getCreatedReportId() == null) || (ampReportId!=null && !ampReportId.equals(arf.getCreatedReportId().toString()))))
 		{
 			rd=ARUtil.generateReport(mapping,form,request,response);
 	
 			ar = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));	
 		}
+		
 		
 		//test if the request was for hierarchy sorting purposes:
 		if(applySorter!=null) {
@@ -132,6 +141,15 @@ public class ViewNewAdvancedReport extends Action {
 		if(viewFormat==null) viewFormat=GenericViews.HTML;
 		request.setAttribute("viewFormat",viewFormat);
 	
+		if(startRow==null && endRow==null) {
+		    startRow="1";
+		    endRow=((Integer) request.getAttribute("recordsPerPage")).toString();
+		}
+		
+//		apply pagination if exists
+		if(startRow!=null) rd.setStartRow(Integer.parseInt(startRow));
+		if(endRow!=null) rd.setEndRow(Integer.parseInt(endRow));
+		rd.setCurrentRowNumber(0);
 		
 	
 		request.setAttribute("extraTitle",ar.getName());

@@ -125,7 +125,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String visibleProgram=null;
 
 	private Collection activitySectors; // sectors related to the activity
-	private Collection componentSectors;
+	private Collection activityComponentes;
 	private Long[] selCompSectors;
 
 
@@ -341,6 +341,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Collection childSectorsLevel1;
 	private Collection childSectorsLevel2;
 	private Long selActivitySectors[];
+	private Long selActivityComponentes[];
     private Collection orderedFundingOrganizations;
 
 	// FOR ADD PHYSICAL PROGRESS POPUP
@@ -4474,12 +4475,12 @@ public String getPurpose() {
         this.childSectorsLevel2 = childSectorsLevel2;
     }
 
-    public Collection getComponentSectors() {
-        return componentSectors;
+    public Collection getActivityComponentes() {
+		return activityComponentes;
     }
 
-    public void setComponentSectors(Collection componentSectors) {
-        this.componentSectors = componentSectors;
+	public void setActivityComponentes(Collection activityComponentes) {
+		this.activityComponentes = activityComponentes;
     }
 
     public Collection getOrderedFundingOrganizations() {
@@ -4654,6 +4655,14 @@ public String getPurpose() {
         public String getDisbOrderId() {
                 return disbOrderId;
         }
+
+	public Long[] getSelActivityComponentes() {
+	    return selActivityComponentes;
+	}
+
+	public void setSelActivityComponentes(Long[] selActivityComponentes) {
+	    this.selActivityComponentes = selActivityComponentes;
+	}
 
 
 

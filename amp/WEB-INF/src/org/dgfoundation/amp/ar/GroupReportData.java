@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
@@ -29,6 +28,18 @@ import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
  */
 public class GroupReportData extends ReportData {
 
+    
+	@Override
+	public int getVisibleRows() {
+    	    Iterator i=items.iterator();
+    	    int ret=1;
+    	    while (i.hasNext()) {
+		ReportData element = (ReportData) i.next();
+		ret+=element.getVisibleRows();
+	    }
+    	    return ret;
+	}
+    
 	/**
 	 * GroupReportData comparator class. This class implements reportData comparison. 
 	 * Comparison is based on the level of this ReportData and the chosen sorter for that particular level

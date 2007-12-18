@@ -4,13 +4,8 @@
 		 <host>gnyan.ncb.ernet.in</host>
 		 <from>system@digijava.org</from>
 	</smtp>
-	
-    <logon-site id="dglogin" host="amp-login.code.ro">http://localhost:8080/login</logon-site>
 
-<!-- 
-
-    <logon-site id="dglogin" host="amp-login.code.ro">http://amp-bolivia:8080/login</logon-site>
-     -->
+    <logon-site id="dglogin" host="amp-login.code.ro">http://amp-testing.code.ro/login</logon-site>
     
     
 	<server-type prefix="">development</server-type>
@@ -61,7 +56,7 @@
 		<hibernate-class>org.digijava.kernel.entity.UserLangPreferences</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.Interests</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.ContentAlert</hibernate-class>
-		<!-- <hibernate-class>org.digijava.kernel.dbentity.SignOn</hibernate-class>  -->
+		<!-- <hibernate-class>org.digijava.kernel.dbentity.SignOn</hibernate-class> -->
 		<hibernate-class>org.digijava.kernel.entity.OracleLocale</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.PrincipalPermission</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.PrincipalPermissionParameter</hibernate-class>
@@ -75,12 +70,6 @@
 	 <service id="digiFeedService" class="org.digijava.module.digifeed.core.DigifeedService">
             <description>Digi's feed publishing service</description>
      </service>
-
-	 <service id="digiAutoPatcherService" class="org.digijava.module.autopatcher.core.AutopatcherService">
-            <description>Advanced Database Patcher Module</description>
-            <property name="patchesDir">patches</property>
-     </service>
-
 	
 	
 	

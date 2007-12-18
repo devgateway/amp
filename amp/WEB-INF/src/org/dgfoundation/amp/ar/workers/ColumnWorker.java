@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
 import net.sf.hibernate.HibernateException;
@@ -24,12 +25,19 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.persistence.PersistenceManager;
 
+import com.sun.rowset.CachedRowSetImpl;
+
+
+
 /**
  * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * @since Jun 9, 2006 
  */
 public abstract class ColumnWorker {
+    
+    	public static SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+    
 	protected String viewName;
 	
 	protected String columnName;
@@ -125,32 +133,41 @@ public abstract class ColumnWorker {
 			rsmd=rs.getMetaData();
 			
 			rs.last();
-			int rsSize=rs.getRow();
+			int rsSize=rs.getRow();			
+			cc = newColumnInstance(rsSize+1);
+			//rs.absolute(rsSize-500);	
 			rs.beforeFirst();
-			cc = newColumnInstance(rsSize+1);	
+			
+			CachedRowSetImpl crs=new CachedRowSetImpl();
+			
+			crs.populate(rs);
+			
+			rs.close();
 			
 			
-			while (rs.next()) {
-				Cell c=getCellFromRow(rs);
-				//logger.info("Added cell for ownerId="+c.getOwnerId());
+			
+			while (crs.next()) {
+				Cell c=getCellFromRow(crs);
 				if(c!=null) cc.addCell(c);				
 			}
 			
-			rs.close();
-			try {
-				sess.close();
-			} catch (HibernateException e) {
-				logger.error(e);
-				e.printStackTrace();
-			}
+			crs.close();
+			
 
 		} catch (SQLException e) {
 			logger.error("Unable to complete extraction for column "+columnName+". Master query was "+query);
 			logger.error(e);
 			e.printStackTrace();
 		} 
+		finally {
+		    try {
+			sess.close();
+		} catch (HibernateException e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+		}
 		return cc;
-
 	}
 
 	protected abstract Cell getCellFromRow(ResultSet rs) throws SQLException;

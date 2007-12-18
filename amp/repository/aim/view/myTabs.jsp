@@ -56,7 +56,11 @@
 Click on one of the tabs to display activities. You can create more tabs by using the Advanced Reports Manager.
 </digi:trn>
 </div>
+<c:set var="loadstatustext">
+	<digi:trn key="aim:loadstatustext">Requesting Content</digi:trn>
+</c:set>
 <script type="text/javascript">
+	loadstatustext='<img src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /> <%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%>';
 	//Start Ajax tabs script for UL with id="maintab" Separate multiple ids each with a comma.
 	startajaxtabs("MyTabs");
 	reloadTab("MyTabs",tabName);

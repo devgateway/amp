@@ -19,6 +19,8 @@
 <module:display name="PROJECT MANAGEMENT"></module:display>
 <module:display name="NATIONAL PLAN DASHBOARD"></module:display>
 
+
+<module:display name="Activity Levels" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Calendar" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Channel Overview" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -426,4 +428,11 @@
 <field:display name="Web Resources Title" feature="Web Resources"></field:display>
 <field:display name="Web Resources Url" feature="Web Resources"></field:display>
 <field:display name="Without Baseline Button Performance" feature="Dashboard"></field:display>
-	
+<field:display name="Executing Agency" feature="Executing Agency"></field:display>
+<field:display name="Percentage" feature="Sectors"></field:display>
+<field:display name="Implementing Agency" feature="Implementing Agency"></field:display>
+<field:display name="Contracting Agency" feature="Contracting Agency"></field:display>
+<field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display>
+<field:display name="Regional Group" feature="Regional Group"></field:display>
+<field:display name="Sector Group" feature="Sector Group"></field:display>
+<field:display name="Componente" feature="Sectors">&nbsp;</field:display>		

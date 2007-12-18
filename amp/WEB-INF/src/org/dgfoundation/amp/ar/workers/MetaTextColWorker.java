@@ -36,6 +36,12 @@ public class MetaTextColWorker extends TextColWorker {
 		MetaTextCell mtc=new MetaTextCell(tc);
 		if(columnName.equals("Sector")) 
 			mtc.getMetaData().add(new MetaInfo(ArConstants.SECTOR_PERCENTAGE,new Integer(rs.getInt(4))));
+		if(columnName.equals("Region")) 
+			mtc.getMetaData().add(new MetaInfo(ArConstants.LOCATION_PERCENTAGE,new Double(rs.getDouble(4))));
+		if(columnName.equals("Componente")) 
+			mtc.getMetaData().add(new MetaInfo(ArConstants.COMPONENTE_PERCENTAGE,new Double(rs.getDouble(4))));
+
+		
 		return mtc;
 	}
 

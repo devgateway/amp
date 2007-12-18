@@ -165,7 +165,7 @@
                               <c:set var="translation">
                                 <digi:trn key="aim:tipUserManager">Click here to view User Manager</digi:trn>
                               </c:set>
-                              <digi:link module="um" href="/viewAllUsers.do?currentAlpha=viewAll&reset=true&sortBy=name" title="${translation}">
+                              <digi:link module="um" href="/viewAllUsers.do" title="${translation}">
                                 <digi:trn key="aim:UsertManager">User Manager</digi:trn>
                               </digi:link>
                             </td>

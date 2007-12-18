@@ -26,6 +26,18 @@ import org.digijava.module.aim.dbentity.AmpReports;
  */
 public class GroupColumn extends Column {
 
+    	@Override
+	public int getVisibleRows() {
+    	 Iterator i=items.iterator();
+ 	    int ret=0;
+ 	    while (i.hasNext()) {
+		Column element = (Column) i.next();
+		int visCol=element.getVisibleRows();
+		if(visCol>ret) ret=visCol;
+	    }
+ 	    return ret+1; //one is for the title
+	}
+    
 	public int getWidth() {
 		int ret=0;
 		Iterator i=items.iterator();
@@ -152,7 +164,7 @@ public class GroupColumn extends Column {
     	   Iterator ii=measures.iterator();
     	   while (ii.hasNext()) {
 			AmpMeasures element = (AmpMeasures) ii.next();
-			if(element.getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE)) continue;
+			if(element.getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE) || element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS)) continue;
 			metaSet.add(new MetaInfo(ArConstants.FUNDING_TYPE,new FundingTypeSortedString(element.getMeasureName())));
 		}
     	   

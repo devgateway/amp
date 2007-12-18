@@ -22,11 +22,11 @@
 <html:hidden property="ampReportId"/>
 	<table>
 		<tr>
-			<td colspan="4"><b><digi:trn key="rep:filter:keywords">Keywords</digi:trn> </b></td>
+			<td colspan="4"><b><digi:trn key="rep:filter:projectid">Project ID</digi:trn> </b></td>
 		</tr>
 		<tr>
 			<td colspan="4">
-			<html:text property="text" style="width: 400px" styleClass="inp-text"/>
+			<html:text  property="text" style="width: 400px" styleClass="inp-text"/>
 			</td>
 		</tr>
 

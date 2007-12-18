@@ -25,7 +25,7 @@ public class AmountCell extends Cell {
 
 	protected double amount;
 	
-	protected int percentage=100;
+	protected double percentage=100;
 
 	protected Set mergedCells;
 
@@ -136,20 +136,19 @@ public class AmountCell extends Cell {
 	 * @see org.dgfoundation.amp.ar.cell.Cell#merge(org.dgfoundation.amp.ar.cell.Cell)
 	 */
 	public Cell merge(Cell c) {
+		AmountCell ret = new AmountCell();
 		AmountCell ac = (AmountCell) c;
-		//AmountCell ret=new AmountCell(ac.getMergedCells().size()+this.getMergedCells().size());
-		AmountCell ret=this;
 		ret.setOwnerId(c.getOwnerId());
 		if (ac.getId() == null)
 			ret.getMergedCells().addAll(ac.getMergedCells());
 		else
 			ret.getMergedCells().add(ac);
 
-		/*if (this.getId() == null)
+		if (this.getId() == null)
 			ret.getMergedCells().addAll(this.getMergedCells());
 		else
 			ret.getMergedCells().add(this);
-		*/
+
 		return ret;
 	}
 
@@ -165,8 +164,7 @@ public class AmountCell extends Cell {
 			AmountCell element = (AmountCell) i.next();
 			ret += element.getAmount();
 			//logger.info("amount++"+element.getAmount());
-		}
-		
+		}		
 		//logger.info("******total amount for owner "+this.getOwnerId()+"="+ret);
 		return ret;
 	}
@@ -271,12 +269,14 @@ public class AmountCell extends Cell {
 		return new Double(getAmount());
 	}
 
-	public int getPercentage() {
+	public double getPercentage() {
 		return percentage;
 	}
 
-	public void setPercentage(int percentage) {
+	public void setPercentage(double percentage) {
 		this.percentage = percentage;
 	}
+
+	
 	
 }

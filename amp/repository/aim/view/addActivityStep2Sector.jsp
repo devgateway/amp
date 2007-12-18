@@ -136,6 +136,7 @@
                                                                       </c:if>
                                                                     </td>
                                                                     <td width="5%" vAlign="center" align="right">
+                                                                    <field:display name="Sectors Percentage" feature="Sectors"></field:display>
                                                                     	<FONT color="red">*</FONT><digi:trn key="aim:percentage">Percentage</digi:trn>:&nbsp;</td>
                                                                     <td width="5%" vAlign="center" align="left">
                                                                       <html:text name="activitySectors" indexed="true" property="sectorPercentage"

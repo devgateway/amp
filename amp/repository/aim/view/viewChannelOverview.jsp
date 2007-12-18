@@ -276,7 +276,8 @@ function commentWin(val) {
 										</TABLE>
 										</TD>
 									</TR>
-									<TR>
+									
+                                    <TR>
 										<TD width="100%" bgcolor="#F4F4F2" align="center">
 										<TABLE width="100%" cellPadding="2" cellSpacing="2"
 											vAlign="top" align="center" bgColor=#f4f4f2
@@ -285,10 +286,23 @@ function commentWin(val) {
 												<TD width="50%" vAlign="top" align="left">
 												<TABLE width="100%" cellPadding="3" cellSpacing="1"
 													vAlign="top" align="left">
-													<TR>
+														<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
+														<feature:display name="Planning" module="Project ID and Planning">
+                                                    <TR>
 														<TD>
 														<TABLE width="100%" cellPadding=2 cellSpacing=1
 															vAlign="top" align="top" bgcolor="#aaaaaa">
+															<TR>
+																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
+																	src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																	<b><digi:trn key="aim:ampId">AMP ID</digi:trn></b>
+																</TD>
+															</TR>	
+															<TR>
+																<TD bgcolor="#ffffff">
+																	&nbsp;&nbsp;&nbsp;<c:out value="${activity.ampId}" />
+																</TD> 
+															</TR>
 															<TR>
 																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
 																	src="../ampTemplate/images/arrow-014E86.gif" width=15>
@@ -311,8 +325,7 @@ function commentWin(val) {
 														</TABLE>
 														</TD>
 													</TR>
-													<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
-														<feature:display name="Planning" module="Project ID and Planning">
+												
 															<field:display name="Status" feature="Planning">
 																<TR>
 																	<TD>
@@ -508,6 +521,7 @@ function commentWin(val) {
 
 															</field:display>
 														</feature:display>
+                                                      
 														<feature:display module="Project ID and Planning" name="Location">
 																<TR>
 																	<TD>
@@ -572,13 +586,16 @@ function commentWin(val) {
 																		</TD>
 																	</TR>
 														</feature:display>
-
-														<feature:display name="Identification" module="Project ID and Planning">
+  													</module:display>
+													
 															<TR>
 																<TD>
 																<TABLE width="100%" cellPadding=3 cellSpacing=1
 																	vAlign="top" align="left" bgcolor="#aaaaaa">
-																	<TR>
+																	<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+																	<feature:display name="NPD Programs" module="National Planning Dashboard">
+                                                                    <field:display name="National Plan Objective" feature="NPD Programs">
+                                                                    <TR>
 																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
 																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																		<b><digi:trn key="aim:national Plan Objective">National Plan Objective</digi:trn></b></TD>
@@ -590,7 +607,9 @@ function commentWin(val) {
                                                                                                                                                   </c:forEach>
 																		</TD>
 																	</TR>
-                                                                                                                                        <TR>
+                                                              </field:display>
+                                                               <field:display name="Primary Program" feature="NPD Programs">
+                                                              <TR>
 																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
 																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																		<b><digi:trn key="aim:primary Programs">Primary Programs</digi:trn></b></TD>
@@ -602,11 +621,15 @@ function commentWin(val) {
                                                                                                                                                   </c:forEach>
 																		</TD>
 																	</TR>
-                                                                                                                                        <TR>
+											</field:display>
+                                            
+                                            <field:display name="Secondary Program" feature="NPD Programs">
+                                            <TR>
 																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
 																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																		<b><digi:trn key="aim:secondary Programs">Secondary Programs</digi:trn></b></TD>
 																	</TR>
+                                                                    </field:display>
 																	<TR>
 																		<TD bgcolor="#ffffff">
                                                                                                                                                   <c:forEach var="program" items="${aimChannelOverviewForm.secondaryPrograms}">
@@ -614,7 +637,11 @@ function commentWin(val) {
                                                                                                                                                   </c:forEach>
 																		</TD>
 																	</TR>
-																	<TR>
+                                                                    </feature:display>
+																	 </module:display>
+                                                                    <module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
+                                                                    	<feature:display name="Identification" module="Project ID and Planning">
+                                                                    <TR>
 																		<TD bgcolor="#ffffff">
 																		<field:display name="Description" feature="Identification">
 																		<i><b><digi:trn
@@ -704,12 +731,14 @@ function commentWin(val) {
 																		</field:display>
 																		</TD>
 																	</TR>
-																</TABLE>
+                                                                    </feature:display>
+																</module:display>
+                                                                </TABLE>
 																</TD>
 															</TR>
 
-														</feature:display>
-													</module:display>
+														
+													
 
 													<module:display name="Contact Information" parentModule="PROJECT MANAGEMENT">
 														<feature:display name="Donor Contact Information" module="Contact Information">

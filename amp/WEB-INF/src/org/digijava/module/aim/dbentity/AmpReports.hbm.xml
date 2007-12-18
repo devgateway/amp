@@ -22,6 +22,8 @@
 		<many-to-one name="ownerId" column="ownerId" class="org.digijava.module.aim.dbentity.AmpTeamMember" />
 		<many-to-one name="activityLevel" column="cv_activity_level" class="org.digijava.module.aim.dbentity.AmpCategoryValue" />
 		<property name="updatedDate" column="updated_date" type="java.util.Date" />
+		
+		<many-to-one name="ampPage" column="ampPageId" class="org.digijava.module.aim.dbentity.AmpPages" />
 				
 		<!--<many-to-one name="ampReportsOptions" column="amp_option_id" class="org.digijava.module.aim.dbentity.AmpReportsOptions" not-null="true"/>
 		-->

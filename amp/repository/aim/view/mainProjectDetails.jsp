@@ -240,6 +240,7 @@
 									</LI>
 								</logic:notEqual>
 						</feature:display>
+						<feature:display name="Paris Indicators" module="Paris Indicators"></feature:display>
 						<field:display name="Paris Survey" feature="Paris Indicators">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
 								   <LI class="selected">						

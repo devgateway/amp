@@ -152,11 +152,13 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		{
 			if("".equals(text.trim())==false)
 			{
-				String TEXT_FILTER = "SELECT a.amp_activity_id FROM amp_activity a WHERE a.name LIKE '%"+text+"%'" +
+			String TEXT_FILTER="SELECT a.amp_activity_id from amp_activity a WHERE a.amp_id="+text;
+/*				String TEXT_FILTER = "SELECT a.amp_activity_id FROM amp_activity a WHERE a.name LIKE '%"+text+"%'" +
 				" UNION SELECT b.amp_activity_id FROM amp_activity b, dg_editor e where b.description = e.editor_key AND e.body LIKE '%"+text+"%'"+
 				" UNION SELECT b.amp_activity_id FROM amp_activity b, dg_editor e where b.objectives = e.editor_key AND e.body LIKE '%"+text+"%'"+
 				" UNION SELECT b.amp_activity_id FROM amp_activity b, dg_editor e where b.purpose = e.editor_key AND e.body LIKE '%"+text+"%'"+
 				" UNION SELECT b.amp_activity_id FROM amp_activity b, dg_editor e where b.results = e.editor_key AND e.body LIKE '%"+text+"%'";
+*/				
 				queryAppend(TEXT_FILTER);
 			}
 		}
@@ -185,7 +187,6 @@ public class AmpARFilter extends PropertyListable implements Filter {
 			String JOINT_CRITERIA_FILTER="SELECT a.amp_activity_id from amp_activity a where jointCriteria="+jointCriteria.toString();
 			queryAppend(JOINT_CRITERIA_FILTER);
 		}
-
 	}
 
 	

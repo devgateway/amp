@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -30,23 +31,21 @@ public class QuarterlyInfoWorker {
 	 *            'USD','ETB' fiscalCalId 1,2 ....
 	 * @return Collection
 	 */
-	public static Collection getQuarterlyInfo(FilterParams fp) {
-		ArrayList arrayList = getQuarterly(fp);
-		ArrayList ethArrList = null;
-		ArrayList filterArrList = null;
+	public static Collection<QuarterlyInfo> getQuarterlyInfo(FilterParams fp) {
+		List<QuarterlyInfo> arrayList = getQuarterly(fp);
+		List<QuarterlyInfo> ethArrList = null;
+		List<QuarterlyInfo> filterArrList = null;
 		
 		if (fp.getFiscalCalId().longValue() == Constants.ETH_CAL.longValue()
 				|| fp.getFiscalCalId().longValue() == Constants.ETH_FY.longValue()) {
 			if (fp.getFromYear() != 0 && fp.getToYear() != 0) {
-				filterArrList = filterByYearRange(arrayList, fp.getFromYear(),
-						fp.getToYear(), fp.getFiscalCalId());
+				filterArrList = filterByYearRange(arrayList, fp.getFromYear(),fp.getToYear(), fp.getFiscalCalId());
 				return filterArrList;
 			}
 		}
 
 		if (fp.getFromYear() != 0 && fp.getToYear() != 0) {
-			filterArrList = filterByYearRange(arrayList, fp.getFromYear(), fp
-					.getToYear(), fp.getFiscalCalId());
+			filterArrList = filterByYearRange(arrayList, fp.getFromYear(), fp.getToYear(), fp.getFiscalCalId());
 			return filterArrList;
 		}
 		return arrayList;
@@ -96,14 +95,14 @@ public class QuarterlyInfoWorker {
 		return amounts;
 	}
 	
-	public static ArrayList getQuarterly(FilterParams fp) {
+	public static List<QuarterlyInfo> getQuarterly(FilterParams fp) {
 
 	//	if (logger.isDebugEnabled())
 			//logger.debug("GETQUARTERLY() WITH AMPFUNDINGID : "+ fp.getAmpFundingId());
 		Collection c = null;
 		Collection c1 = null;
-		ArrayList arrayList = new ArrayList();
-		ArrayList arrayList1 = new ArrayList();
+		ArrayList<QuarterlyInfo> arrayList = new ArrayList<QuarterlyInfo>();
+		ArrayList<QuarterlyInfo> arrayList1 = new ArrayList<QuarterlyInfo>();
 		ArrayList arrayList2 = null;
 		ArrayList ethArrList = null;
 		Iterator iter = null;
@@ -424,7 +423,7 @@ public class QuarterlyInfoWorker {
 	 *            by calendar year(transactionDate)
 	 * @return
 	 */
-	public static ArrayList filterByYearRange(ArrayList arrList, int fromYear,
+	public static List filterByYearRange(List arrList, int fromYear,
 			int toYear, Long fiscalCalId) {
 
 		ArrayList a = new ArrayList();

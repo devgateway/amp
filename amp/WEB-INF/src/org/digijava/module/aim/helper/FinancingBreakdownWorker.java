@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -42,31 +43,31 @@ public class FinancingBreakdownWorker
 		if ( logger.isDebugEnabled() )
 			logger.debug("getTotalDonorFund() with FilterParams " +						 " transactionType=" + fp.getTransactionType() +						 " ampFunding=" + fp.getAmpFundingId() );
 		double total = 0.0;
-		Collection c = YearlyInfoWorker.getYearlyInfo(fp);
+		Collection<YearlyInfo> c = YearlyInfoWorker.getYearlyInfo(fp);
 		if ( c.size() != 0 )	{
-			Iterator iter = c.iterator();
+			Iterator<YearlyInfo> iter = c.iterator();
 
-			/* this is for bolivia - they do not count totals, but enter it manually */
-			String totalsSetting=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_INCLUDE_PLANNED);
-			boolean includeTotals=(totalsSetting!=null) && (totalsSetting.trim().equals("On"));
+			/* please do not remove these commented lines, I am sure we will need them again */
+			//String totalsSetting=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_INCLUDE_PLANNED);
+			//boolean includePlannedInTotals=(totalsSetting!=null) && (totalsSetting.trim().equals("On"));
 		
 			while ( iter.hasNext() )	{
-				YearlyInfo yf = (YearlyInfo)iter.next();
+				YearlyInfo yf = iter.next();
+				
 				if ( yf.getActualAmount() != null && (!yf.getActualAmount().equals("NA")) )	{
 					double temp = DecimalToText.getDouble(yf.getActualAmount());
 					total += temp;
 				}
 				
-				if (includeTotals && yf.getPlannedAmount()!=null && !yf.getPlannedAmount().equals("NA")){
+				//if (includePlannedInTotals && yf.getPlannedAmount()!=null && !yf.getPlannedAmount().equals("NA") && fp.getTransactionType() != Constants.DISBURSEMENT){
+				if (yf.getPlannedAmount()!=null && !yf.getPlannedAmount().equals("NA") && fp.getTransactionType() != Constants.DISBURSEMENT){
 					double temp = DecimalToText.getDouble(yf.getPlannedAmount());
 					total += temp;
 				}
 			}
 		}
 		
-		if ( logger.isDebugEnabled() )
-			logger.debug("getTotalDonorFund() returning " + 
-			DecimalToText.getString(total));
+			logger.debug("getTotalDonorFund() returning " +DecimalToText.getString(total));
 			
 		return DecimalToText.getString(total);
 	}
@@ -144,26 +145,30 @@ public class FinancingBreakdownWorker
 		return strTotal ;	
 	}
 	
-	public static Collection getFinancingBreakdownList(Long ampActivityId,
-													   Collection ampFundings,
+	public static Collection<FinancingBreakdown> getFinancingBreakdownList(Long ampActivityId,
+													   Collection<AmpFunding> ampFundings,
 													   FilterParams fp)	{
 		if ( logger.isDebugEnabled() )
 			logger.debug("GETFINANCINGBREAKDOWNLIST() PASSED AMPACTIVITYID : " + ampActivityId);
 			
-		Iterator iter = null;
 		String actualStartDate = "";
 		String actualCompletionDate = "";
-		ArrayList temp = new ArrayList();
+		List<FinancingBreakdown> temp = new ArrayList<FinancingBreakdown>();
 		
 		if ( ampFundings != null )	{
-			iter = ampFundings.iterator();
- 			while ( iter.hasNext() )	{
-				FinancingBreakdown financingBreakdown = new FinancingBreakdown();
+			Iterator<AmpFunding> iter = ampFundings.iterator();
+ 			while ( iter.hasNext() )	{ 				
+				
+				
 				AmpFunding ampFunding = (AmpFunding) iter.next();
+				
+				FinancingBreakdown financingBreakdown = new FinancingBreakdown();				
 				financingBreakdown.setAmpFundingId(ampFunding.getAmpFundingId().longValue());
 				financingBreakdown.setFinancingId(ampFunding.getFinancingId());
+				
 				String donor = FinancingBreakdownWorker.getDonor(ampFunding);
 				financingBreakdown.setDonor(donor);
+				
 				AmpOrganisation ampOrg = ampFunding.getAmpDonorOrgId();
 				String goeId = DbUtil.getGoeId(ampActivityId);
 				financingBreakdown.setGoeId(goeId);

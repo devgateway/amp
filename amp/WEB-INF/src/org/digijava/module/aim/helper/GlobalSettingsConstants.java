@@ -6,6 +6,9 @@ public class GlobalSettingsConstants {
 	public static final String FEATURE_TEMPLATE		= "Feature Template";
 	public static final String YEAR_RANGE_START		= "Year Range Start";
 	
+	
+	public static final String MAX_INACTIVE_SESSION_INTERVAL = "Max Inactive Session Interval";
+	
 	public static final String NUMBER_OF_YEARS_IN_RANGE		= "Number of Years in Range";
 	
 	public static final String PUBLIC_VIEW_BIDGET_FILTER		= "Public View Budget Filter";

@@ -124,9 +124,9 @@ public class ViewChannelOverview extends TilesAction {
 					perspective = Constants.DONOR;
 				}
 
-				/* this is for bolivia - they do not count totals, but enter it manually */
-				String totalsSetting=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_INCLUDE_PLANNED);
-				boolean includeTotals=(totalsSetting!=null) && (totalsSetting.trim().equals("On"));
+				/* please do not remove these commented lines, I am sure we will need them again */
+				//String totalsSetting=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_INCLUDE_PLANNED);
+				//boolean includePlannedInTotals=(totalsSetting!=null) && (totalsSetting.trim().equals("On"));
 
 
 				if (activity.getStatus().equalsIgnoreCase("Planned")) {
@@ -136,15 +136,15 @@ public class ViewChannelOverview extends TilesAction {
 				} else {
 					logger.debug("Not planned");
 
-					if (includeTotals){
+					//if (includePlannedInTotals){
 						// again this is for Bolivia. But may be usefull for other countries too. AMP-1774
 						double actual = DbUtil.getAmpFundingAmount(activity.getActivityId(),new Integer(0),new Integer(1),perspective,currCode);
 						double planned = DbUtil.getAmpFundingAmount(activity.getActivityId(),new Integer(0),new Integer(0),perspective,currCode);
 						formBean.setGrandTotal(mf.format(actual+planned));
-					}else{
-						formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
-								new Integer(0),new Integer(1),perspective,currCode)));
-					}
+					//}else{
+					//	formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
+					//			new Integer(0),new Integer(1),perspective,currCode)));
+					//}
 				}
 
 			}

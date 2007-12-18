@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <script language="JavaScript">
 	function load() {
@@ -92,17 +93,13 @@
 										<td  align="center" colspan="2">
 											<b>
 											<digi:trn key="aim:activityDetail">
-												Activity Details	
-											</digi:trn></b>
-										</td>
+											Activity Details											</digi:trn></b>										</td>
 									</tr>								
 									<tr>
 										<td width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:orgsAndProjectIds">
-											Organizations and Project IDs
-											</digi:trn></b>
-										</td>
+											Organizations and Project IDs											</digi:trn></b>										</td>
 										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.selectedOrganizations}">
 												<table cellSpacing=2 cellPadding=2 border=0>
@@ -110,23 +107,19 @@
                                             <tr>
                                               <td>
                                               ${selectedOrganizations.name} :
-                                              ${selectedOrganizations.projectId}
-                                              </td>
+                                              ${selectedOrganizations.projectId}                                              </td>
                                             </tr>
 													</c:forEach>
 												</table>
 											</c:if>
 											<c:if test="${empty aimEditActivityForm.selectedOrganizations}">
-												&nbsp;
-											</c:if>
-										</td>
+&nbsp;											</c:if>										</td>
 									</tr>
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:planning">
-											Planning</digi:trn></b>
-										</td>
+											Planning</digi:trn></b>										</td>
 										<td bgcolor="#ffffff" >
 											<table width="100%" cellSpacing=2 cellPadding=1>
 												<tr>
@@ -134,29 +127,25 @@
 													Original Approval Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-                                            ${aimEditActivityForm.originalAppDate}
-													</td>
+                                            ${aimEditActivityForm.originalAppDate}													</td>
 												</tr>
 												<tr>
 													<td width="32%"><digi:trn key="aim:revisedApprovalDate">Revised Approval Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-                                          ${aimEditActivityForm.revisedAppDate}
-													</td>
+                                          ${aimEditActivityForm.revisedAppDate}													</td>
 												</tr>
 												<tr>
 													<td width="32%"><digi:trn key="aim:originalStartDate">Original Start Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-                                          ${aimEditActivityForm.originalStartDate}
-													</td>
+                                          ${aimEditActivityForm.originalStartDate}													</td>
 												</tr>
 												<tr>
 													<td width="32%"><digi:trn key="aim:revisedStartDate">Revised Start Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-                                          ${aimEditActivityForm.revisedStartDate}
-													</td>
+                                          ${aimEditActivityForm.revisedStartDate}													</td>
 												</tr>
 												<field:display name="Actual Completion Date" feature="Planning">												
 												<tr>
@@ -164,8 +153,7 @@
 													Current Completion Date</digi:trn></td>
 													<td width="1">:</td>
 													<td align="left">
-                                            ${aimEditActivityForm.currentCompDate}
-													</td>
+                                            ${aimEditActivityForm.currentCompDate}													</td>
 												</tr>	
 												</field:display>														
 												<c:if test="${!empty aimEditActivityForm.activityCloseDates}">
@@ -178,38 +166,56 @@
 															<c:forEach var="closeDate" items="${aimEditActivityForm.activityCloseDates}">
 															<tr>
 																<td>
-                                                      ${closeDate}
-																</td>
+                                                      ${closeDate}																</td>
 															</tr>
 															</c:forEach>
-														</table>
-													</td>
+														</table>													</td>
 												</tr>
-												</c:if>												
+												</c:if>
 												<tr>
-													<td colspan="3">&nbsp;</td>
-												</tr>
-												<tr>
-													<td colspan="3"><digi:trn key="aim:status">Status</digi:trn> :
-														<c:if test="${!empty aimEditActivityForm.status}">
-															${aimEditActivityForm.status}
-														</c:if>
-													</td>
+													<td colspan="3"><digi:trn key="aim:status">Status</digi:trn>
+													:
+														<c:if test="${!empty aimEditActivityForm.statusId}">
+															  <category:getoptionvalue categoryValueId="${aimEditActivityForm.statusId}"/>
+														</c:if>													</td>
 												</tr>																								
 												<tr>
-                                          <td colspan="3">${aimEditActivityForm.statusReason}</td>
+                                        		  <td colspan="3">${aimEditActivityForm.statusReason}</td>
 												</tr>
-											</table>
-										</td>
+											</table>									  </td>
 									</tr>		
+									<tr>
+									  <td align="right" bgcolor="#ffffff"><strong><digi:trn key="aim:printerFriendly:componentes">Componentes</digi:trn></strong></td>
+									  <td bgcolor="#ffffff" >
+                                      <c:if test="${not empty aimEditActivityForm.activityComponentes}">
+											<table>
+												<c:forEach var="comSec" items="${aimEditActivityForm.activityComponentes}">
+													<tr>
+														<td width="100%">
+															${comSec.sectorName}
+														</td>
+														<td align="right">
+															${comSec.sectorPercentage}%
+														</td>
+													</tr>
+												</c:forEach>
+												</div>
+											</table>
+									
+									</c:if>
+								  </tr>
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:level">
 											Level</digi:trn>
-											</b>
-										</td>
+											</b>										</td>
 										<td bgcolor="#ffffff" >
+											<c:if test="${aimEditActivityForm.levelId>0}" >
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.levelId}"/>
+											</c:if>
+											<%
+											/* 
 											<c:if test="${!empty aimEditActivityForm.levelCollection}">
 												<c:forEach var="tempLevel" items="${aimEditActivityForm.levelCollection}">
 													<c:if test="${tempLevel.ampLevelId == aimEditActivityForm.levelId}">												
@@ -220,95 +226,79 @@
 											</c:if>										
 											<c:if test="${empty aimEditActivityForm.levelCollection}">
 												&nbsp;
-											</c:if>										
-										</td>
+											</c:if>
+											*/%>										</td>
 									</tr>																											
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:location">
-											Location</digi:trn></b>
-										</td>
+											Location</digi:trn></b>										</td>
 										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.selectedLocs}">
 												<table width="100%" cellSpacing="2" cellPadding="1">
 												<c:forEach var="locations" items="${aimEditActivityForm.selectedLocs}">
                                             <tr>
-                                              <td>
+                                              <td width="100%">
 													<c:if test="${!empty locations.country}">
-                                                [${locations.country}]
-													</c:if>
+                                                [${locations.country}]													</c:if>
 													<c:if test="${!empty locations.region}">
-                                                [${locations.region}]
-													</c:if>
+                                                [${locations.region}]													</c:if>
 													<c:if test="${!empty locations.zone}">
-                                                [${locations.zone}]
-													</c:if>
+                                                [${locations.zone}]													</c:if>
 													<c:if test="${!empty locations.woreda}">
-                                                [${locations.woreda}]
-													</c:if>
-                                              </td>
+                                                [${locations.woreda}]													</c:if>
+                                               </td>
+                                               <td align="right">
+                                               		${locations.percent}%
+                                               </td>
                                             </tr>
 												</c:forEach>
 												</table>
 											</c:if>
 											<c:if test="${empty aimEditActivityForm.selectedLocs}">
-												&nbsp;
-											</c:if>
-										</td>
+&nbsp;											</c:if>										</td>
 									</tr>		
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:sector">
-											Sector</digi:trn></b>
-										</td>
+											Sector</digi:trn></b>										</td>
 										<td bgcolor="#ffffff" >
+                                        
 											<c:if test="${!empty aimEditActivityForm.activitySectors}">
 												<table width="100%" cellSpacing="2" cellPadding="1">
 												<c:forEach var="sectors" items="${aimEditActivityForm.activitySectors}">
                                             <tr>
                                               <td>
 													<c:if test="${!empty sectors.sectorName}">
-                                                [${sectors.sectorName}]
-													</c:if>
+                                                [${sectors.sectorName}]													</c:if>
 													<c:if test="${!empty sectors.subsectorLevel1Name}">
-                                                [${sectors.subsectorLevel1Name}]
-													</c:if>
+                                                [${sectors.subsectorLevel1Name}]													</c:if>
 													<c:if test="${!empty sectors.subsectorLevel2Name}">
-                                                [${sectors.subsectorLevel2Name}]
-													</c:if>
-                                              </td>
+                                                [${sectors.subsectorLevel2Name}]													</c:if>                                              </td>
                                             </tr>
 												</c:forEach>
 												</table>
-											</c:if>
-										</td>
+											</c:if>										</td>
 									</tr>		
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
-											<b><digi:trn key="aim:program">Program</digi:trn></b>
-										</td>
+											<b><digi:trn key="aim:program">Program</digi:trn></b></td>
 										<td bgcolor="#ffffff" >
-											<c:if test="${!empty aimEditActivityForm.programCollection}">
-												<c:forEach var="tempPgm" items="${aimEditActivityForm.programCollection}">
-													<c:if test="${tempPgm.ampThemeId == aimEditActivityForm.program}">
-                                          ${tempPgm.name}
-													</c:if>
-												</c:forEach>
-											</c:if>
-											<c:if test="${empty aimEditActivityForm.programCollection}">											
-												&nbsp;
-											</c:if>											
-										</td>
+                                        
+						                 <c:forEach var="program" items="${aimEditActivityForm.nationalPlanObjectivePrograms}">
+                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+                                                                                                                                                  </c:forEach>
+                                                     	</div>	</td>
 									</tr>		
 									
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:funding">
-											Funding</digi:trn></b>
-										</td>
+											Funding</digi:trn>
+											</b></td>
 										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.fundingOrganizations}">
 												<table width="100%" cellSpacing="1" cellPadding="3" bgcolor="#dddddd">
@@ -318,8 +308,7 @@
 														<table width="100%" cellSpacing="1" cellPadding="1">
                                                   <tr>
                                                     <td bgcolor="#ffffff"><b>
-                                                      ${fundOrgs.orgName}</b>
-                                                    </td>
+                                                      ${fundOrgs.orgName}</b>                                                    </td>
                                                   </tr>
 															<c:if test="${!empty fundOrgs.fundings}">
 																<c:forEach var="fund" items="${fundOrgs.fundings}">
@@ -328,189 +317,258 @@
 																		<table width="100%" cellSpacing="1" cellPadding="1" class="box-border">
 																			<tr>
 																				<td width="35%">
-																					<digi:trn key="aim:fundingOrgId">
-																					Funding Organization Id</digi:trn>
-																				</td>
+																					<digi:trn key="aim:fundingOrgId">Funding Organization Id</digi:trn>																				</td>
 																				<td width="1">:</td>
-																				<td align="left">
-                                                              ${fund.orgFundingId}
-																				</td>
-																			</tr>																		
-																			<tr>
-																				<td width="35%">
-																					<digi:trn key="aim:typeOfAssistance">
-																					Type of Assistance</digi:trn>
-																				</td>
-																				<td width="1">:</td>
-																				<td align="left">
-                                                              ${fund.typeOfAssistance}
-																				</td>
+																				<td align="left">${fund.orgFundingId}																				</td>
 																			</tr>
-																				<%-- <tr>
+																			
+																			<tr>
+																				<td width="35%"><digi:trn key="aim:typeOfAssistance">Type of Assistance</digi:trn></td>
+																				<td width="1">:</td>
+																				<td align="left">
+                							                                              ${fund.typeOfAssistance}																				</td>
+																			</tr>
+																				<tr>
 																				<td width="35%">
 																					<digi:trn key="aim:financingInstrument">
-																					Financing Instrument</digi:trn>
-																				</td>
-																				<td width="1">:</td>
-																				<td align="left">
-																					<c:if test="${!empty aimEditActivityForm.modalityCollection}">
-																						<c:forEach var="tempModality" 
-																						items="${aimEditActivityForm.modalityCollection}">
-																						<c:if test="${tempModality.ampModalityId == fund.modality.ampModalityId}">
-                                                                  ${tempModality.name}
-																						</c:if>
-																						</c:forEach>
-																					</c:if>
-																				</td>
-																			</tr>	 --%>
+																					Financing Instrument</digi:trn>																				</td><td>:</td>
+																				<td >${fund.financingInstrument.value}</td>
+																			</tr>	
 																			<c:if test="${!empty fund.fundingDetails}">
                                                               <tr>
                                                                 <td colspan="3">
-																			<table width="100%" cellSpacing=1 cellPadding=1 bordercolor="#dddddd"
-																			border=1  style="border-collapse: collapse">
+																			<table width="100%"
+																			border=1 cellPadding=1 cellSpacing=1 bordercolor="#dddddd"  style="border-collapse: collapse">
                                                                   <tr>
-                                                                    <td valign="top" width="100" bgcolor="#ffffff">
+                                                                    <td width="100" valign="top" nowrap="nowrap" bgcolor="#ffffff">
 																					<digi:trn key="aim:commitments">
-																					Commitments</digi:trn>
-																				</td>
-																				<td bgcolor="#ffffff">
+																	  Commitments</digi:trn></td>
+																				<td nowrap="nowrap" bgcolor="#ffffff">
                                                                       <c:if test="${!empty fund.fundingDetails}">
-																					<c:forEach var="fundDet" items="${fund.fundingDetails}">
-																					<table width="100%" cellSpacing="1" cellPadding="2">
-																						<c:if test="${fundDet.transactionType == 0}">
-																						<tr>
-																							<td width="50" bgcolor="#ffffff">
-                                                                                ${fundDet.adjustmentTypeName}
-																							</td>
-																							<td align="right" width="140" bgcolor="#ffffff">
-                                                                                * ${fundDet.transactionAmount}
-																							</td>
+																  <table width="100%" cellPadding="2" cellSpacing="1">
+                                                                                  <c:forEach var="fundDet" items="${fund.fundingDetails}">
+																					  <c:if test="${fundDet.transactionType == 0}">
+<!-- HEADER-->
+<c:if test="${! showtotalCommittment}">
+	<tr>
+		<td bgcolor="#ffffff"><a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>">
+                                                                                  <b><digi:trn key="aim:commitments">Commitments </digi:trn></b> 
+                                                                                  </a></td>
+																						  <td nowrap="nowrap" bgcolor="#ffffff">&nbsp;</td>
+																						  <td align="left" nowrap="nowrap" bgcolor="#ffffff">&nbsp;</td>
+																						  <td align="center" nowrap="nowrap" bgcolor="#ffffff">
+                                                                                          <b><digi:trn key="aim:exchange">Exchange Rate</digi:trn></b>
+                                                                                          </td>
+																						  <td nowrap="nowrap" bgcolor="#ffffff">&nbsp;</td>
+																						  <td nowrap="nowrap" bgcolor="#ffffff">&nbsp;</td>
+																					    </tr>
+</c:if>
+<!-- END HEADER-->
+                                                                                
+                                                                                		<c:set var="showtotalCommittment" value="true"></c:set>
+                                                                                		<tr>
 																							<td bgcolor="#ffffff">
-                                                                                ${fundDet.currencyCode}
-																							</td>
-																							<td bgcolor="#ffffff" width="70">
-                                                                                ${fundDet.transactionDate}
-																							</td>
-																							<td bgcolor="#ffffff">
-                                                                                ${fundDet.perspectiveName}
-																							</td>
+																						  <digi:trn key="aim:commitments:${fundDet.adjustmentTypeName}">${fundDet.adjustmentTypeName}</digi:trn>																						  </td>
+																						  <td nowrap="nowrap" bgcolor="#ffffff">
+                                                                                * ${fundDet.transactionAmount}																							</td>
+																						
+                                                                                          <td width="30" align="left" nowrap="nowrap" bgcolor="#ffffff">${fundDet.currencyCode}</td>
+                                                                                          <td width="30" align="center" nowrap="nowrap" bgcolor="#ffffff">
+                                                                                          	  <c:if test="${fundDet.fixedExchangeRate!=null}">
+                                                              									<bean:write name="fundDet" property="formattedRate" format="###.##"/>                                                                                         	  </c:if>
+                                                                                            <c:if test="${fundDet.fixedExchangeRate==null}">
+                                                                                            -                                                                                         	  </c:if>                                                                                          </td>
+                                                                                          
+                                                                                          
+																						  
+																						  <td nowrap="nowrap" bgcolor="#ffffff">
+                                                                                ${fundDet.transactionDate}																							</td>
+																						  <td nowrap="nowrap" bgcolor="#ffffff">
+                                                                                          	<digi:trn key="aim:commitments:${fundDet.perspectiveName}">                                                                           		 		  		${fundDet.perspectiveName}                                                                                        	</digi:trn>                                                                                        </td>
 																						</tr>
-																						</c:if>																						
-																					</table>
-																				   </c:forEach>
-                                                                      </c:if>
-                                                                    </td>
+																					  </c:if>																						
+																	      </c:forEach>
+																	      
+																	      <c:if test="${showtotalCommittment}">
+																	      
+																	      
+                                                                            <tr>
+                                                                              <td nowrap="nowrap" ><strong>
+                                                                                <digi:trn key='aim:totalcommittment'>
+                                                                                  TOTAL:                                                                                </digi:trn>
+                                                                              </strong></td>
+                                                                              <TD  colspan="6" align="right"><strong>
+                                                                                <bean:write name="aimEditActivityForm" property="totalCommitted"/>
+&nbsp;USD</strong></TD>
                                                                   </tr>
-																			</table>
-                                                                </td>
+                                                                  </c:if>
+                                                                          </table>
+                                                                      </c:if>                                                                    </td>
+                                                                  </tr>
+																  </table>                                                                </td>
                                                               </tr>
                                                               <tr>
                                                                 <td colspan="3">
-																			<table width="100%" cellSpacing=1 cellPadding=1 bordercolor="#dddddd"
-																			border=1  style="border-collapse: collapse">
+																			<table width="100%"
+																			border=1 cellPadding=1 cellSpacing=1 bordercolor="#dddddd"  style="border-collapse: collapse">
                                                                   <tr>
-                                                                    <td valign="top" width="100" bgcolor="#ffffff">
-																					<digi:trn key="aim:disbursements">
-																					Disbursements</digi:trn>
-																				</td>
-																				<td bgcolor="#ffffff">
+                                                                    <td width="100" valign="top" nowrap="nowrap" bgcolor="#ffffff">
+			          <digi:trn key="aim:disbursements">
+																					Disbursements</digi:trn></td>
+																	  <td bgcolor="#ffffff">
                                                                       <c:if test="${!empty fund.fundingDetails}">
-																					<c:forEach var="fundDet" items="${fund.fundingDetails}">
-																					<table width="100%" cellSpacing="1" cellPadding="2">
-																						<c:if test="${fundDet.transactionType == 1}">
-																						<tr>
-																							<td width="50" bgcolor="#ffffff">
-                                                                                ${fundDet.adjustmentTypeName}
-																							</td>
-																							<td align="right" width="140" bgcolor="#ffffff">
-                                                                                * ${fundDet.transactionAmount}
-																							</td>
-																							<td bgcolor="#ffffff">
-                                                                                ${fundDet.currencyCode}
-																							</td>
-																							<td bgcolor="#ffffff" width="70">
-                                                                                ${fundDet.transactionDate}
-																							</td>
-																							<td bgcolor="#ffffff">
-                                                                                ${fundDet.perspectiveName}
-																							</td>
+																					
+																					<table width="100%" cellPadding="2" cellSpacing="1">
+																				<c:forEach var="fundDet" items="${fund.fundingDetails}">
+                                                                                     
+                                                                                      <c:if test="${fundDet.transactionType == 1}">
+<!-- HEADER-->
+<c:if test="${! showtotalDisbursements}">
+	<tr>
+		<td bgcolor="#ffffff"><a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>">
+                                                                                  <b><digi:trn key="aim:commitments">Commitments </digi:trn></b> 
+                                                                                  </a></td>
+																						  <td nowrap="nowrap" bgcolor="#ffffff">&nbsp;</td>
+																						  <td align="left" nowrap="nowrap" bgcolor="#ffffff">&nbsp;</td>
+																						  <td align="center" nowrap="nowrap" bgcolor="#ffffff">
+                                                                                          <b><digi:trn key="aim:exchange">Exchange Rate</digi:trn></b>
+                                                                                          </td>
+																						  <td nowrap="nowrap" bgcolor="#ffffff">&nbsp;</td>
+																						  <td nowrap="nowrap" bgcolor="#ffffff">&nbsp;</td>
+																					    </tr>
+</c:if>
+<!-- END HEADER-->                                                                                                                                                               		<c:set var="showtotalDisbursements" value="true"></c:set>						
+                                                                                                                                                                    																<tr>
+																							<td nowrap="nowrap" bgcolor="#ffffff">
+                                                                                <digi:trn key="aim:disbursements:${fundDet.adjustmentTypeName}">${fundDet.adjustmentTypeName}</digi:trn>																						  </td>
+																						  <td align="right" nowrap="nowrap" bgcolor="#ffffff">
+                                                                                * ${fundDet.transactionAmount}																							</td>
+																						 	            <td width="30" align="left" nowrap="nowrap" bgcolor="#ffffff">${fundDet.currencyCode}</td>
+																						 	            <td width="30" align="center" nowrap="nowrap" bgcolor="#ffffff">
+                                                                                          	  <c:if test="${fundDet.fixedExchangeRate!=null}">
+                                                                                              <bean:write name="fundDet" property="formattedRate" format="###.##"/>                                                                                         	  </c:if>
+                                                                                               <c:if test="${fundDet.fixedExchangeRate==null}">
+                                                                                              -                                                                                         	  </c:if>                                                                                          </td>
+                                                                                          
+																						
+																						  <td nowrap="nowrap" bgcolor="#ffffff">
+                                                                                ${fundDet.transactionDate}																							</td>
+																						  <td nowrap="nowrap" bgcolor="#ffffff">
+                                                                                <digi:trn key="aim:disbursements:${fundDet.perspectiveName}">
+                                                                          	      	${fundDet.perspectiveName}                                                                                 </digi:trn>																					</td>
 																						</tr>
-																						</c:if>																						
-																					</table>
-																				   </c:forEach>
-                                                                      </c:if>
-                                                                    </td>
+                                                                                      <tr>                                                                                      </c:if>																						
+																					 </c:forEach>                                  
+                                                                    <c:if test="${showtotalDisbursements}">                 
+                                                                    <tr><td ><strong>
+                                                                      <digi:trn key='aim:totalcommittment'>
+                                                                        TOTAL:                                                                      </digi:trn>
+                                                                    </strong></td>
+                                                                    <TD  colspan="6" align="right"><strong>
+                                                                      <bean:write name="aimEditActivityForm" property="totalDisbursed"/>
+&nbsp;USD</strong></TD>
                                                                   </tr>
-																			</table>
-                                                                </td>
+                                                                  </c:if>
+                                                                          </table>
+                                                                      </c:if>                                                                    </td>
+                                                                  </tr>
+																			</table>                                                                </td>
                                                               </tr>
                                                               <tr>
                                                                 <td colspan="3">
-																			<table width="100%" cellSpacing=1 cellPadding=1 bordercolor="#dddddd"
-																			border=1  style="border-collapse: collapse">
+																			<table width="100%"
+																			border=1 cellPadding=1 cellSpacing=1 bordercolor="#dddddd"  style="border-collapse: collapse">
                                                                   <tr>
-                                                                    <td valign="top" width="100" bgcolor="#ffffff">
-                                                                      <digi:trn key="aim:expenditures">
-																					Expenditures</digi:trn>
-																				</td>
-																				<td bgcolor="#ffffff">
-                                                                      <c:if test="${!empty fund.fundingDetails}">
-																					<c:forEach var="fundDet" items="${fund.fundingDetails}">
-																					<table width="100%" cellSpacing="1" cellPadding="2">
-																						<c:if test="${fundDet.transactionType == 2}">
+                                                                    <td width="100" valign="top" nowrap="nowrap" bgcolor="#ffffff">
+                                                  <digi:trn key="aim:expenditures">
+																					Expenditures</digi:trn></td>
+																	  <td bgcolor="#ffffff">
+                                                  <c:if test="${!empty fund.fundingDetails}">
+																					
+<table width="100%" cellSpacing="1" cellPadding="2">
+<c:forEach var="fundDet" items="${fund.fundingDetails}">
+<c:if test="${fundDet.transactionType == 2}">
+
+<!-- HEADER-->
+<c:if test="${! showtotalExpenditures}">
+	<tr>
+		<td bgcolor="#ffffff"><a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>">
+                                                                                  <b><digi:trn key="aim:commitments">Commitments </digi:trn></b> 
+                                                                                  </a></td>
+																						  <td nowrap="nowrap" bgcolor="#ffffff">&nbsp;</td>
+																						  <td align="left" nowrap="nowrap" bgcolor="#ffffff">&nbsp;</td>
+																						  <td align="center" nowrap="nowrap" bgcolor="#ffffff">
+                                                                                          <b><digi:trn key="aim:exchange">Exchange Rate</digi:trn></b>
+                                                                                          </td>
+																						  <td nowrap="nowrap" bgcolor="#ffffff">&nbsp;</td>
+																						  <td nowrap="nowrap" bgcolor="#ffffff">&nbsp;</td>
+																					    </tr>
+</c:if>
+<!-- END HEADER-->
+                                                                                     
+  <c:set var="showtotalExpenditures" value="true"></c:set>                                                                                      
+                                                                                        
 																						<tr>
-																							<td width="50" bgcolor="#ffffff">
-                                                                                ${fundDet.adjustmentTypeName}
-																							</td>
-																							<td align="right" width="140" bgcolor="#ffffff">
-                                                                                * ${fundDet.transactionAmount}
-																							</td>
-																							<td bgcolor="#ffffff">
-                                                                                ${fundDet.currencyCode}
-																							</td>
-																							<td bgcolor="#ffffff" width="70">
-                                                                                ${fundDet.transactionDate}
-																							</td>
-																							<td bgcolor="#ffffff">
-                                                                                ${fundDet.perspectiveName}
-																							</td>
+																							<td width="50" nowrap="nowrap" bgcolor="#ffffff">
+                                                                                															<digi:trn key="aim:expenditures:${fundDet.adjustmentTypeName}">${fundDet.adjustmentTypeName}</digi:trn></td>
+																						  <td width="140" align="right" nowrap="nowrap" bgcolor="#ffffff">
+                                                                                * ${fundDet.transactionAmount}																							</td>
+			                                                                              <td width="30" align="left" nowrap="nowrap" bgcolor="#ffffff">${fundDet.currencyCode} </td>
+		                                                                                <td width="30" nowrap="nowrap" bgcolor="#ffffff">
+                                                                                          	  <c:if test="${fundDet.fixedExchangeRate!=null}">
+                                                                                              <bean:write name="fundDet" property="formattedRate" format="###.##"/>                                                                                         	  </c:if>
+                                                                                               <c:if test="${fundDet.fixedExchangeRate==null}">
+                                                                                              -                                                                                         	  </c:if>                                                                                          </td>
+                                                                                          
+																						  
+																						  <td width="70" nowrap="nowrap" bgcolor="#ffffff">
+                                                                                ${fundDet.transactionDate}																							</td>
+																						  <td nowrap="nowrap" bgcolor="#ffffff">
+                                                                                  	<digi:trn key="aim:expenditures:${fundDet.perspectiveName}">
+                                                                                		${fundDet.perspectiveName}                                                                                    </digi:trn>																							</td>
 																						</tr>
-																						</c:if>																						
+																					  </c:if>
+                                                                                     </c:forEach> 		
+                                                                                      
+                                                                                      <c:if test="${showtotalExpenditures}">
+                                                                                      
+                                                                                      
+                                                                                      <tr><td ><strong>
+                                                                      <digi:trn key='aim:totalcommittment'>
+                                                                        TOTAL:                                                                      </digi:trn>
+                                                                    </strong></td>
+                                                                    <TD  colspan="6" align="right"><strong>
+                                                                      <bean:write name="aimEditActivityForm" property="totalExpenditures"/>
+&nbsp;USD</strong></TD>
+                                                                  </tr>			
+                                                                  </c:if>															
 																					</table>
-																				   </c:forEach>
-                                                                      </c:if>
-                                                                    </td>
+                                                                      </c:if>                                                                    </td>
                                                                   </tr>
-																			</table>
-                                                                </td>
+																			</table>                                                                </td>
                                                               </tr>
 																			</c:if>
-																		</table>
-</td>
+																		</table></td>
                                                       </tr>
 																</c:forEach>
 															</c:if>
-														</table>
-</td>
+														</table></td>
                                             </tr>
 												</c:forEach>
                                           <tr>
                                             <td bgcolor="#ffffff"> *
 													<digi:trn key="aim:theAmountEnteredAreInThousands">	
-													The amount entered are in thousands (000)</digi:trn>
-                                            </td>
+													The amount entered are in thousands (000)</digi:trn>                                            </td>
                                           </tr>
 												</table>
 											</c:if>
-											&nbsp;
-										</td>
+&nbsp;										</td>
 									</tr>		
 
 									<tr>
 										<td width="30%" align="right" bgcolor="#ffffff">
 											<b><digi:trn key="aim:regionalFunding">
-											Regional Funding</digi:trn></b>
-										</td>
+											Regional Funding</digi:trn></b>										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.regionalFundings}">
 												<table width="100%" cellSpacing="1" cellPadding="3" bgcolor="#aaaaaa">
@@ -520,8 +578,7 @@
 														<table width="100%" cellSpacing="1" cellPadding="1">
                                                   <tr>
                                                     <td bgcolor="#ffffff"><b>
-                                                      ${regFunds.regionName}</b>
-                                                    </td>
+                                                      ${regFunds.regionName}</b>                                                    </td>
                                                   </tr>
 															<c:if test="${!empty regFunds.commitments}">
                                                     <tr>
@@ -531,34 +588,26 @@
 																		<tr>
 																			<td valign="top" width="100" bgcolor="#ffffff">
 																				<digi:trn key="aim:commitments">
-																				Commitments</digi:trn>
-																			</td>
+																				Commitments</digi:trn>																			</td>
 																			<td bgcolor="#ffffff">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#ffffff">
 																					<c:forEach var="fd" items="${regFunds.commitments}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
-                                                                  ${fd.adjustmentTypeName}
-																							</td>
+                                                                  ${fd.adjustmentTypeName}																							</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
-                                                                  * ${fd.transactionAmount}
-																							</td>
+                                                                  * ${fd.transactionAmount}																							</td>
 																							<td bgcolor="#ffffff">
-                                                                  ${fd.currencyCode}
-																							</td>
+                                                                  ${fd.currencyCode}																							</td>
 																							<td bgcolor="#ffffff" width="70">
-                                                                  ${fd.transactionDate}
-																							</td>
+                                                                  ${fd.transactionDate}																							</td>
 																							<td bgcolor="#ffffff">
-                                                                  ${fd.perspectiveName}
-																							</td>
+                                                                  ${fd.perspectiveName}																							</td>
 																						</tr>
 																					</c:forEach>
-																				</table>
-																			</td>
+																				</table>																			</td>
 																		</tr>
-																	</table>
-                                                      </td>
+																	</table>                                                      </td>
                                                     </tr>
 															</c:if>
 															<c:if test="${!empty regFunds.disbursements}">
@@ -569,34 +618,26 @@
 																		<tr>
 																			<td valign="top" width="100" bgcolor="#ffffff">
 																				<digi:trn key="aim:disbursements">
-																				Disbursements</digi:trn>
-																			</td>
+																				Disbursements</digi:trn>																			</td>
 																			<td bgcolor="#ffffff">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#ffffff">
 																					<c:forEach var="fd" items="${regFunds.disbursements}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
-                                                                  ${fd.adjustmentTypeName}
-																							</td>
+                                                                  ${fd.adjustmentTypeName}																							</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
-                                                                  * ${fd.transactionAmount}
-																							</td>
+                                                                  * ${fd.transactionAmount}																							</td>
 																							<td bgcolor="#ffffff">
-                                                                  ${fd.currencyCode}
-																							</td>
+                                                                  ${fd.currencyCode}																							</td>
 																							<td bgcolor="#ffffff" width="70">
-                                                                  ${fd.transactionDate}
-																							</td>
+                                                                  ${fd.transactionDate}																							</td>
 																							<td bgcolor="#ffffff">
-                                                                  ${fd.perspectiveName}
-																							</td>
+                                                                  ${fd.perspectiveName}																							</td>
 																						</tr>
 																					</c:forEach>
-																				</table>
-																			</td>
+																				</table>																			</td>
 																		</tr>
-																	</table>
-                                                      </td>
+																	</table>                                                      </td>
                                                     </tr>
 															</c:if>
 															<c:if test="${!empty regFunds.expenditures}">
@@ -607,92 +648,75 @@
 																		<tr>
 																			<td valign="top" width="100" bgcolor="#ffffff">
 																				<digi:trn key="aim:expenditures">
-																				Expenditures</digi:trn>
-																			</td>
+																				Expenditures</digi:trn>																			</td>
 																			<td bgcolor="#ffffff">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#ffffff">
 																					<c:forEach var="fd" items="${regFunds.expenditures}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
-                                                                  ${fd.adjustmentTypeName}
-																							</td>
+                                                                  ${fd.adjustmentTypeName}																							</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
-                                                                  * ${fd.transactionAmount}
-																							</td>
+                                                                  * ${fd.transactionAmount}																							</td>
 																							<td bgcolor="#ffffff">
-                                                                  ${fd.currencyCode}
-																							</td>
+                                                                  ${fd.currencyCode}																							</td>
 																							<td bgcolor="#ffffff" width="70">
-                                                                  ${fd.transactionDate}
-																							</td>
+                                                                  ${fd.transactionDate}																							</td>
 																							<td bgcolor="#ffffff">
-                                                                  ${fd.perspectiveName}
-																							</td>
+                                                                  ${fd.perspectiveName}																							</td>
 																						</tr>
 																					</c:forEach>
-																				</table>
-																			</td>
+																				</table>																			</td>
 																		</tr>
-																	</table>
-                                                      </td>
+																	</table>                                                      </td>
                                                     </tr>
 															</c:if>															
-														</table>
-                                              </td>
+														</table>                                              </td>
                                             </tr>
 												</c:forEach>
                                           <tr>
                                             <td bgcolor="#ffffff">
 													* <digi:trn key="aim:theAmountEnteredAreInThousands">	
-													The amount entered are in thousands (000)</digi:trn>
-                                            </td>
+													The amount entered are in thousands (000)</digi:trn>                                            </td>
                                           </tr>
 												</table>
-											</c:if>
-										</td>
+											</c:if>										</td>
 									</tr>										
-									
+									<c:if test="${!empty aimEditActivityForm.selectedComponents}">
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:components">
-											Components</digi:trn></b>
-										</td>
+											Components</digi:trn></b>										</td>
 										<td bgcolor="#ffffff" >
 											<c:if test="${empty aimEditActivityForm.selectedComponents}">
-												&nbsp;
-											</c:if>
+&nbsp;											 </c:if>
 
-											<c:if test="${!empty aimEditActivityForm.selectedComponents}">
-												<c:forEach var="comp" items="${aimEditActivityForm.selectedComponents}">
+											
+													
+                                        		<c:forEach var="comp" items="${aimEditActivityForm.selectedComponents}">
 													<table width="100%" cellSpacing="1" cellPadding="1" bordercolor="#dddddd"
 														border=1 style="border-collapse: collapse">
-                                          <tr>
-                                            <td>
+                                                      <tr>
+                                                        <td>
 														<table width="100%" cellSpacing="2" cellPadding="1" >
-
-                                                <tr>
-                                                  <td>
+										
+                                                        <tr>
+                                                        <td>
                                                     <b>
-                                                      ${comp.title}</b>
-                                                  </td>
+                                                      ${comp.title}</b>                                                  </td>
                                                 </tr>
                                                 <tr>
                                                   <td>
 																<i>
 																<digi:trn key="aim:description">Description</digi:trn> :</i>
-                                                      ${comp.description}
-                                                  </td>
+                                                      ${comp.description}                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td bgcolor="#ffffff">&nbsp;                                                  </td>
                                                 </tr>
                                                 <tr>
                                                   <td bgcolor="#ffffff">
-																&nbsp;
-                                                  </td>
-                                                </tr>
-                                                <tr>
-                                                  <td bgcolor="#ffffff">
-																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>
-                                                  </td>
+																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>                                                  </td>
                                                 </tr>
 															<c:if test="${!empty comp.commitments}">
                                                   <tr>
@@ -702,36 +726,28 @@
 																		<tr>
 																			<td valign="top" width="100" bgcolor="#ffffff">
 																				<digi:trn key="aim:commitments">
-																				Commitments</digi:trn>
-																			</td>
+																				Commitments</digi:trn>																			</td>
 																			<td bgcolor="#ffffff">
 																				<table width="100%" cellSpacing="1" cellPadding="1" 
 																				bordercolor="#dddddd" border=1  style="border-collapse: collapse">
 																					<c:forEach var="fd" items="${comp.commitments}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
-                                                              ${fd.adjustmentTypeName}
-																							</td>
+                                                              ${fd.adjustmentTypeName}																							</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
 																								<FONT color=blue>*</FONT>
-                                                                ${fd.transactionAmount}
-																							</td>
+                                                                ${fd.transactionAmount}																							</td>
 																							<td bgcolor="#ffffff">
-                                                              ${fd.currencyCode}
-																							</td>
+                                                              ${fd.currencyCode}																							</td>
 																							<td bgcolor="#ffffff" width="70">
-                                                              ${fd.transactionDate}
-																							</td>
+                                                              ${fd.transactionDate}																							</td>
 																							<td bgcolor="#ffffff">
-                                                              ${fd.perspectiveName}
-																							</td>
+                                                              ${fd.perspectiveName}																							</td>
 																						</tr>
 																					</c:forEach>
-																				</table>
-																			</td>
+																				</table>																			</td>
 																		</tr>
-																	</table>
-                                                    </td>
+																	</table>                                                    </td>
                                                   </tr>
 															</c:if>
 															<c:if test="${!empty comp.disbursements}">
@@ -742,36 +758,28 @@
 																		<tr>
 																			<td valign="top" width="100" bgcolor="#ffffff">
 																				<digi:trn key="aim:disbursements">
-																				Disbursements</digi:trn>
-																			</td>
+																				Disbursements</digi:trn>																			</td>
 																			<td bgcolor="#ffffff">
 																				<table width="100%" cellSpacing="1" cellPadding="1" 
 																				bordercolor="#dddddd" border=1  style="border-collapse: collapse">
 																					<c:forEach var="fd" items="${comp.disbursements}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
-                                                              ${fd.adjustmentTypeName}
-																							</td>
+                                                              ${fd.adjustmentTypeName}																							</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
 																								<FONT color=blue>*</FONT>
-                                                                ${fd.transactionAmount}
-																							</td>
+                                                                ${fd.transactionAmount}																							</td>
 																							<td bgcolor="#ffffff">
-                                                              ${fd.currencyCode}
-																							</td>
+                                                              ${fd.currencyCode}																							</td>
 																							<td bgcolor="#ffffff" width="70">
-                                                              ${fd.transactionDate}
-																							</td>
+                                                              ${fd.transactionDate}																							</td>
 																							<td bgcolor="#ffffff">
-                                                              ${fd.perspectiveName}
-																							</td>
+                                                              ${fd.perspectiveName}																							</td>
 																						</tr>
 																					</c:forEach>
-																				</table>
-																			</td>
+																				</table>																			</td>
 																		</tr>
-																	</table>
-                                                    </td>
+																	</table>                                                    </td>
                                                   </tr>
 															</c:if>
 															<c:if test="${!empty comp.expenditures}">
@@ -782,48 +790,37 @@
 																		<tr>
 																			<td valign="top" width="100" bgcolor="#ffffff">
 																				<digi:trn key="aim:expenditures">
-																				Expenditures</digi:trn>
-																			</td>
+																				Expenditures</digi:trn>																			</td>
 																			<td bgcolor="#ffffff">
 																				<table width="100%" cellSpacing="1" cellPadding="1" 
 																				bordercolor="#dddddd" border=1  style="border-collapse: collapse">
 																					<c:forEach var="fd" items="${comp.expenditures}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
-                                                              ${fd.adjustmentTypeName}
-																							</td>
+                                                              ${fd.adjustmentTypeName}																							</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
 																								<FONT color=blue>*</FONT>
-                                                                ${fd.transactionAmount}
-																							</td>
+                                                                ${fd.transactionAmount}																							</td>
 																							<td bgcolor="#ffffff">
-                                                              ${fd.currencyCode}
-																							</td>
+                                                              ${fd.currencyCode}																							</td>
 																							<td bgcolor="#ffffff" width="70">
-                                                              ${fd.transactionDate}
-																							</td>
+                                                              ${fd.transactionDate}																							</td>
 																							<td bgcolor="#ffffff">
-                                                              ${fd.perspectiveName}
-																							</td>
+                                                              ${fd.perspectiveName}																							</td>
 																						</tr>
 																					</c:forEach>
-																				</table>	
-																			</td>
+																				</table>																			</td>
 																		</tr>
-																	</table>
-                                                    </td>
+																	</table>                                                    </td>
                                                   </tr>
 															</c:if>
                                                 <tr>
-                                                  <td bgcolor="#ffffff">
-																&nbsp;
-                                                  </td>
+                                                  <td bgcolor="#ffffff">&nbsp;                                                  </td>
                                                 </tr>
                                                 <tr>
                                                   <td bgcolor="#ffffff">
 																<b><digi:trn key="aim:physicalProgressOfTheComponent">
-																Physical progress of the component</digi:trn></b>
-                                                  </td>
+																Physical progress of the component</digi:trn></b>                                                  </td>
                                                 </tr>
 															<c:if test="${!empty comp.phyProgress}">
 																<c:forEach var="phyProg" items="${comp.phyProgress}">
@@ -831,57 +828,49 @@
                                                       <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 																		<b>
                                                           ${phyProg.title}</b> -
-                                                          ${phyProg.reportingDate}
-                                                      </td>
+                                                          ${phyProg.reportingDate}                                                      </td>
                                                     </tr>
                                                     <tr>
                                                       <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 																		<i>
 																		<digi:trn key="aim:description">Description</digi:trn> :</i>
-                                                          ${phyProg.description}
-                                                      </td>
+                                                          ${phyProg.description}                                                      </td>
                                                     </tr>
 																</c:forEach>
 															</c:if>
-														</table>
-                                            </td>
+														</table>                                            </td>
                                           </tr>
 													</table>
 												</c:forEach>
-											</c:if>
-										</td>
+																				</td>
 									</tr>	
+                                    </c:if>	
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:issues">
-											Issues</digi:trn></b>
-										</td>
+											Issues</digi:trn></b>										</td>
 										<td bgcolor="#ffffff" >
 											<c:if test="${empty aimEditActivityForm.issues}">
-												&nbsp;
-											</c:if>
+&nbsp;											</c:if>
 											<c:if test="${!empty aimEditActivityForm.issues}">
 												<table width="100%" cellSpacing="2" cellPadding="2" border=0>
 												<c:forEach var="issue" items="${aimEditActivityForm.issues}">
                                             <tr>
                                               <td valign="top">
-                                                <li class="level1"><b>${issue.name}</b></li>
-                                              </td>
+                                                <li class="level1"><b>${issue.name}</b></li>                                              </td>
                                             </tr>
 													<c:if test="${!empty issue.measures}">
 														<c:forEach var="measure" items="${issue.measures}">
                                                 <tr>
                                                   <td>
-                                                    <li class="level2"><i>${measure.name}</i></li>
-                                                  </td>
+                                                    <li class="level2"><i>${measure.name}</i></li>                                                  </td>
                                                 </tr>
 															<c:if test="${!empty measure.actors}">
 																<c:forEach var="actor" items="${measure.actors}">
                                                     <tr>
                                                       <td>
-                                                        <li class="level3">${actor.name}</li>
-                                                      </td>
+                                                        <li class="level3">${actor.name}</li>                                                      </td>
                                                     </tr>
 																</c:forEach>
 															</c:if>															
@@ -889,19 +878,16 @@
 													</c:if>
 												</c:forEach>
 												</table>
-											</c:if>
-										</td>
+											</c:if>										</td>
 									</tr>									
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:relatedDocuments">
-											Related Documents</digi:trn></b>
-										</td>
+											Related Documents</digi:trn></b>										</td>
 										<td bgcolor="#ffffff" >
 											<c:if test="${empty aimEditActivityForm.documentList}">
-												&nbsp;
-											</c:if>										
+&nbsp;											</c:if>										
 											<c:if test="${!empty aimEditActivityForm.documentList}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
 												<c:forEach var="relLinks" items="${aimEditActivityForm.documentList}">
@@ -924,17 +910,14 @@
 													 <table width="100%" cellPadding=0 cellSpacing=1>
 													 	<tr>
 															<td width="2">
-																<digi:img skipBody="true" src="<%=extension%>" border="0" align="absmiddle"/>
-															</td>
+																<digi:img skipBody="true" src="<%=extension%>" border="0" align="absmiddle"/>															</td>
 															<td vAlign="center" align="left">
                                                     ${docs.title} -
                                                     ${docs.fileName}
 																<br>
-                                                    <b>Desc:</b>${docs.description}
-															</td>
+                                                    <b>Desc:</b>${docs.description}															</td>
 														</tr>
-													 </table>
-                                              </td>
+													 </table>                                              </td>
                                             </tr>
 												</c:forEach>
 												</table>
@@ -948,84 +931,68 @@
 														<table width="100%" cellPadding=1 cellSpacing=1>
 															<tr>
 																<td width="2">
-																	<digi:img src="module/aim/images/web-page.gif"/>
-																</td>
+																	<digi:img src="module/aim/images/web-page.gif"/>																</td>
 																<td align="left" vAlign="center">
                                                     ${links.title} -
                                                     <a href="${links.url}">
                                                       ${links.url}</a>
 																	<br>
-                                                      <b>Desc:</b>${links.description}
-																</td>
+                                                      <b>Desc:</b>${links.description}																</td>
 															</tr>
-														</table>
-                                              </td>
+														</table>                                              </td>
                                             </tr>
 												</c:forEach>
 												</table>
-											</c:if>											
-										</td>
+											</c:if>										</td>
 									</tr>
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:executingAgencies">
-                                          Executing Agencies
-                                        </digi:trn>
-                                      </b>
-										</td>
+                                          Executing Agencies                                        </digi:trn>
+                                      </b>										</td>
 										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.executingAgencies}">
 												<table width="100%" cellpadding="2" cellspacing="2" valign="top" align="left">
 													<c:forEach var="exAgency" items="${aimEditActivityForm.executingAgencies}"> 
                                             <tr>
                                               <td>
-                                              ${exAgency.name}
-                                              </td>
+                                              ${exAgency.name}                                              </td>
                                             </tr>
 													</c:forEach>
 												</table>
 											</c:if>
 											<c:if test="${empty aimEditActivityForm.executingAgencies}">
-												&nbsp;
-											</c:if>
-										</td>
+&nbsp;											</c:if>										</td>
 									</tr>
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:implementingAgencies">
-                                          Implementing Agencies
-                                        </digi:trn>
-                                      </b>
-										</td>
+                                          Implementing Agencies                                        </digi:trn>
+                                      </b>										</td>
 										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.impAgencies}">
 												<table width="100%" cellpadding="2" cellspacing="2" valign="top" align="left">
 													<c:forEach var="impAgency" items="${aimEditActivityForm.impAgencies}"> 
                                             <tr>
                                               <td>
-                                              ${impAgency.name}
-                                              </td>
+                                              ${impAgency.name}                                              </td>
                                             </tr>
 													</c:forEach>
 												</table>
 											</c:if>
 											<c:if test="${empty aimEditActivityForm.impAgencies}">											
-												&nbsp;
-											</c:if>											
-										</td>
+&nbsp;											</c:if>										</td>
 									</tr>
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:contractors">
-											Contractors</digi:trn></b>
-										</td>
+											Contractors</digi:trn></b>										</td>
 										<td bgcolor="#ffffff" >
                                     ${aimEditActivityForm.contractors}
-											&nbsp;
-										</td>
+&nbsp;										</td>
 									</tr>	
 
 									<tr>
@@ -1033,28 +1000,24 @@
 											<b>
 											<digi:trn key="aim:donorFundingContactInformation">
 											Donor funding contact information</digi:trn>
-											</b>
-										</td>
+											</b>										</td>
 										<td bgcolor="#ffffff" >
                                     ${aimEditActivityForm.dnrCntFirstName}
                                     ${aimEditActivityForm.dnrCntLastName} -
                                     ${aimEditActivityForm.dnrCntEmail}
-											&nbsp;	
-										</td>
+&nbsp;										</td>
 									</tr>	
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:mofedContactInformation">
 											MOFED contact information</digi:trn>
-											</b>
-										</td>
+											</b>										</td>
 										<td bgcolor="#ffffff" >
                                     ${aimEditActivityForm.mfdCntFirstName}
                                     ${aimEditActivityForm.mfdCntLastName} -
                                     ${aimEditActivityForm.mfdCntEmail}
-											&nbsp;	
-										</td>
+&nbsp;										</td>
 									</tr>
 									<field:display name="Activity Created By" feature="Identification">										
 									<tr>
@@ -1062,14 +1025,12 @@
 											<b>
 											<digi:trn key="aim:activityCreatedBy">
 											Activity created by</digi:trn>
-											</b>
-										</td>
+											</b>										</td>
 										<td bgcolor="#ffffff" >
                                     ${aimEditActivityForm.actAthFirstName}
                                     ${aimEditActivityForm.actAthLastName} -
                                     ${aimEditActivityForm.actAthEmail}
-											&nbsp;	
-										</td>
+&nbsp;										</td>
 									</tr>		
 									</field:display>
 									<field:display name="Activity Created On" feature="Identification">
@@ -1077,11 +1038,9 @@
 									<tr>
 										<td  width="30%" align="right" bgcolor="#ffffff"><b>
 											<digi:trn key="aim:activityCreatedOn">
-											Activity created on</digi:trn></b>
-										</td>
+											Activity created on</digi:trn></b>										</td>
 										<td bgcolor="#ffffff" >
-                                      ${aimEditActivityForm.createdDate}
-										</td>
+                                      ${aimEditActivityForm.createdDate}										</td>
 									</tr>									
                                   </c:if>
                                   </field:display>

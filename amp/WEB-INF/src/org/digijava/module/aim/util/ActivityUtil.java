@@ -30,6 +30,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
@@ -244,6 +245,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           }
         }*/
 
+        oldActivity.getComponentes().clear();
+        
         // delete all previous sectors
         oldActivity.getSectors().clear();
        /* if (oldActivity.getSectors() != null) {
@@ -362,14 +365,22 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         	oldActivity.getRegionalFundings().addAll(activity.getRegionalFundings());
         if (activity.getInternalIds() != null)
         	oldActivity.getInternalIds().addAll(activity.getInternalIds());
-        if (activity.getLocations() != null)
+        if (activity.getLocations() != null){
+        	for (Iterator locIter = col.iterator(); locIter.hasNext();) {
+				AmpActivityLocation actLoc = (AmpActivityLocation) locIter.next();
+				actLoc.setActivity(oldActivity);
+				session.save(actLoc);
+			}
         	oldActivity.getLocations().addAll(activity.getLocations());
+        }
         if (activity.getOrgrole() != null)
         	oldActivity.getOrgrole().addAll(activity.getOrgrole());
         if (activity.getReferenceDocs() != null)
         	oldActivity.getReferenceDocs().addAll(activity.getReferenceDocs());
         if (activity.getSectors() != null)
         	oldActivity.getSectors().addAll(activity.getSectors());
+        if (activity.getComponentes() != null)
+        	oldActivity.getComponentes().addAll(activity.getComponentes());
         if (activity.getIssues() != null)
         	oldActivity.getIssues().addAll(activity.getIssues());
         if (activity.getCosts() != null)
@@ -1171,7 +1182,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setInternalIds(new HashSet(ampActivity.getInternalIds()));
         activity.setLocations(new HashSet(ampActivity.getLocations()));
         activity.setSectors(new HashSet(ampActivity.getSectors()));
-        activity.setComponentSectors(new HashSet(ampActivity.getComponentSectors())); // yes but why??? 
+        activity.setComponentes(new HashSet(ampActivity.getComponentes())); // yes but why??? 
         activity.setOrgrole(new HashSet(ampActivity.getOrgrole()));
         activity.setIssues(new HashSet(ampActivity.getIssues()));
         activity.setCosts(new HashSet(ampActivity.getCosts()));
@@ -1234,6 +1245,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity = new Activity();
         AmpActivity ampAct = (AmpActivity) actItr.next();
         activity.setActivityId(ampAct.getAmpActivityId());
+        activity.setAmpId(ampAct.getAmpId());
 
 
 //				activity.setStatus(ampAct.getStatus().getName()); // TO BE DELETED
@@ -1456,7 +1468,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         if (ampAct.getLocations() != null) {
           Iterator locItr = ampAct.getLocations().iterator();
           while (locItr.hasNext()) {
-            AmpLocation ampLoc = (AmpLocation) locItr.next();
+            AmpActivityLocation actLoc = (AmpActivityLocation) locItr.next();
+            AmpLocation ampLoc = actLoc.getLocation();
             Location loc = new Location();
             if (ampLoc.getAmpRegion() != null) {
               loc.setRegion(ampLoc.getAmpRegion().getName());
@@ -1467,6 +1480,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             if (ampLoc.getAmpWoreda() != null) {
               loc.setWoreda(ampLoc.getAmpWoreda().getName());
             }
+            loc.setPercent(actLoc.getLocationPercentage());
             locColl.add(loc);
           }
         }

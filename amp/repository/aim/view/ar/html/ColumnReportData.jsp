@@ -25,18 +25,21 @@
 
 <logic:notEqual name="reportMeta" property="hideActivities" value="true">
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
+<logic:equal name="columnReport" property="canDisplayRow" value="true">
 <%rowIdx++;	%>
 <tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#FFFF00');">
 	<logic:iterate name="columnReport" property="items" id="column" scope="page">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
-		<jsp:include page="<%=viewable.getViewerPath()%>"/>	
+		<jsp:include page="<%=viewable.getViewerPath()%>"/>
 	</logic:iterate>
 </tr>
+</logic:equal>
 </logic:iterate>
 </logic:notEqual>
 
-
 <!-- generate total row -->
+<logic:equal name="columnReport" property="canDisplayRow" value="true">
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.ColumnReportData" scope="page" toScope="request"/>
 <jsp:include page="TrailCells.jsp"/>
+</logic:equal>

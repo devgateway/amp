@@ -6,11 +6,14 @@
  */
 package org.dgfoundation.amp.ar.workers;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.dgfoundation.amp.Util;
@@ -35,9 +38,27 @@ import org.digijava.module.aim.helper.EthiopianCalendar;
  */
 public class CategAmountColWorker extends ColumnWorker {
 
+	
+    	
+    
+	
     	protected GregorianCalendar calendar;
     	protected EthiopianCalendar ethcalendar;
     	protected DateFormatSymbols dfs;
+    	protected Map metaInfoCache;
+    	protected MetaInfo getCachedMetaInfo(String category, Comparable value) {	    
+	    Map valuesMap=(Map) metaInfoCache.get(category);
+	    if(valuesMap==null) { 
+		valuesMap=new HashMap();
+		metaInfoCache.put(category, valuesMap);
+	    }
+	    MetaInfo mi=(MetaInfo) valuesMap.get(value);
+	    if(mi!=null) return mi;
+	    mi=new MetaInfo(category,value);
+	    valuesMap.put(value, mi);
+	    return mi;	    
+	}
+    	
 	/**
 	 * @param condition
 	 * @param viewName
@@ -49,6 +70,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		calendar=new GregorianCalendar();
 		dfs=new DateFormatSymbols();
 		ethcalendar=new EthiopianCalendar();
+		this.metaInfoCache=new HashMap();
 	}
 
 	/**filter.getFromYear()!=null
@@ -91,8 +113,8 @@ public class CategAmountColWorker extends ColumnWorker {
 	 *      java.lang.String)
 	 */
 	protected Cell getCellFromRow(ResultSet rs) throws SQLException {
-		Long ownerId = new Long(rs.getLong(1));
-		Long id = new Long(rs.getLong(3));
+		Long ownerId = rs.getLong(1);
+		Long id = rs.getLong(3);
 		CategAmountCell acc = new CategAmountCell(ownerId);
 
 		acc.setId(id);
@@ -103,7 +125,15 @@ public class CategAmountColWorker extends ColumnWorker {
 		int tr_type = -1;
 		int adj_type = -1;
 		double tr_amount = rs.getDouble("transaction_amount");
-		java.sql.Date td = rs.getDate("transaction_date");
+		String tds = rs.getString("transaction_date");
+		 
+		java.sql.Date td=null;
+		try {
+		    td = new Date(sdf.parse(tds).getTime());
+		} catch (Exception e1) {
+		    logger.error(e1);
+		    logger.info("Exception encountered parsing a transaction date!", e1);
+		}
 		//double exchangeRate=rs.getDouble("exchange_rate");
 		String currencyCode=rs.getString("currency_code");
 		String perspectiveCode=null; 
@@ -139,7 +169,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		try {
 			String termsAssist = rs.getString("terms_assist_name");
-			MetaInfo termsAssistMeta = new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,
+			MetaInfo termsAssistMeta = this.getCachedMetaInfo(ArConstants.TERMS_OF_ASSISTANCE,
 					termsAssist);
 			acc.getMetaData().add(termsAssistMeta);
 		} catch (SQLException e) {
@@ -148,7 +178,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		try {
 			String financingInstrument = rs.getString("financing_instrument_name");
-			MetaInfo termsAssistMeta = new MetaInfo(ArConstants.FINANCING_INSTRUMENT,
+			MetaInfo termsAssistMeta = this.getCachedMetaInfo(ArConstants.FINANCING_INSTRUMENT,
 					financingInstrument);
 			acc.getMetaData().add(termsAssistMeta);
 		} catch (SQLException e) {
@@ -160,17 +190,17 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		if("region_name".equals(headMetaName)){
 			String regionName = rs.getString("region_name");
-			headMeta= new MetaInfo(ArConstants.REGION, regionName);			
+			headMeta= this.getCachedMetaInfo(ArConstants.REGION, regionName);			
 		} else
 		
 		if("component_name".equals(headMetaName)){
 			String componentName = rs.getString("component_name");
-			headMeta= new MetaInfo(ArConstants.COMPONENT, componentName);			
+			headMeta= this.getCachedMetaInfo(ArConstants.COMPONENT, componentName);			
 		} else
 	
 		if("donor_name".equals(headMetaName)){
 			String donorName = rs.getString("donor_name");
-			headMeta= new MetaInfo(ArConstants.DONOR, donorName);			
+			headMeta= this.getCachedMetaInfo(ArConstants.DONOR, donorName);			
 		}
 
 		acc.setAmount(tr_amount);
@@ -180,6 +210,7 @@ public class CategAmountColWorker extends ColumnWorker {
 			acc.setFromExchangeRate(fixedExchangeRate); else
 			
 			//new and fast - cached
+			//acc.setFromExchangeRate(1);
 			acc.setFromExchangeRate(Util.getExchange(currencyCode,td));
 			    
 			//OLD AND SLOW - db based
@@ -191,7 +222,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		acc.setToExchangeRate(1);
 		
 		
-		MetaInfo adjMs = new MetaInfo(ArConstants.ADJUSTMENT_TYPE,
+		MetaInfo adjMs = this.getCachedMetaInfo(ArConstants.ADJUSTMENT_TYPE,
 				adj_type == 0 ? ArConstants.PLANNED : ArConstants.ACTUAL);
 		String trStr = null;
 
@@ -208,8 +239,8 @@ public class CategAmountColWorker extends ColumnWorker {
 		}
 
 		if(trStr!=null) {
-		MetaInfo trMs = new MetaInfo(ArConstants.TRANSACTION_TYPE, trStr);
-		MetaInfo fundMs = new MetaInfo(ArConstants.FUNDING_TYPE, new FundingTypeSortedString((String) adjMs
+		MetaInfo trMs = this.getCachedMetaInfo(ArConstants.TRANSACTION_TYPE, trStr);
+		MetaInfo fundMs = this.getCachedMetaInfo(ArConstants.FUNDING_TYPE, new FundingTypeSortedString((String) adjMs
 				.getValue()
 				+ " " + (String) trMs.getValue()));
 		acc.getMetaData().add(trMs);
@@ -254,16 +285,16 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		if(perspectiveCode!=null) {
 //			we eliminate the perspective items that do not match the filter one
-			MetaInfo perspMs=new MetaInfo(ArConstants.PERSPECTIVE,perspectiveCode);
+			MetaInfo perspMs=this.getCachedMetaInfo(ArConstants.PERSPECTIVE,perspectiveCode);
 			if(!filter.getPerspective().getCode().equals(perspMs.getValue())) return null;
 			
 		acc.getMetaData().add(perspMs);
 		}
 
 		
-		MetaInfo qMs = new MetaInfo(ArConstants.QUARTER,quarter);
-		MetaInfo mMs = new MetaInfo(ArConstants.MONTH,month);
-		MetaInfo aMs = new MetaInfo(ArConstants.YEAR, year);
+		MetaInfo qMs = this.getCachedMetaInfo(ArConstants.QUARTER,quarter);
+		MetaInfo mMs = this.getCachedMetaInfo(ArConstants.MONTH,month);
+		MetaInfo aMs = this.getCachedMetaInfo(ArConstants.YEAR, year);
 
 		
 		//add the newly created metainfo objects to the virtual funding object

@@ -1854,7 +1854,7 @@ public class TeamUtil {
                    }
                    col = qry.list();
                }else if(inlcludeMemberReport){
-            	   queryString="select r from " + AmpReports.class.getName()+
+            	   queryString="select distinct r from " + AmpReports.class.getName()+
    				"  r left join r.members m where (m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+ 
 				" or r.id in (select r2.id from "+ AmpTeamReports.class.getName() + 
 				" tr inner join  tr.report r2 where tr.team=:teamId)";
@@ -1908,7 +1908,7 @@ public class TeamUtil {
                 qry.setParameter("teamId", teamId, Hibernate.LONG);
                count=qry.list().size();
             }else if(inlcludeMemberReport){
-         	   queryString="select  from " + AmpReports.class.getName()+
+         	   queryString="select distinct r from " + AmpReports.class.getName()+
   				"  r left join r.members m where (m.ampTeamMemId is not null and m.ampTeamMemId=:ampTeamMemId)"+ 
 				" or r.id in (select r2.id from "+ AmpTeamReports.class.getName() + 
 				" tr inner join  tr.report r2 where tr.team=:teamId)";

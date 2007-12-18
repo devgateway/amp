@@ -406,7 +406,13 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 		if ("no".equals(relatedTeamFlag)) {
 			errors = super.validate(mapping, request);
 			
-			if ("DONOR".equalsIgnoreCase(category) && "Team".equalsIgnoreCase(workspaceType)) {
+			if(("DONOR".equalsIgnoreCase(category) &&("Team".equalsIgnoreCase(workspaceType)|| "Management".equalsIgnoreCase(workspaceType)))
+					||("GOVERNMENT".equalsIgnoreCase(category) &&(!"Team".equalsIgnoreCase(workspaceType)&& !"Management".equalsIgnoreCase(workspaceType))) ){
+				ActionError error = new ActionError("error.aim.updateWorkspace.incorrectWorkspaceType");
+				errors.add("workspaceType", error);
+			}
+			
+			if ("DONOR".equalsIgnoreCase(category) && "Donor".equalsIgnoreCase(workspaceType)) {
 				if ("edit".equalsIgnoreCase(actionEvent)) {
 					if (typeCategoryValue!=null && Constants.TEAM_TYPE_BILATERAL.equals( typeCategoryValue.getValue() )) {
 						if (relatedTeamBilatColl.size() > 0 )

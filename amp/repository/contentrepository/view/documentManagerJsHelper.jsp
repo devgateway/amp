@@ -10,7 +10,7 @@
 .all_markup td
 {border-bottom:1px solid #000;padding:.25em;font-size:11px}
 .all_markup .yui-dt-even {background-color:white;} 
-.all_markup .yui-dt-odd {background-color:#d7eafd;} 
+.all_markup .yui-dt-odd {background-color:#d7eafd;} /* a light blue color */ 
 .all_markup .yui-dt-selected {background-color:#97C0A5;} /*green*/ 
 .all_markup .yui-dt-sortedbyasc, .all_markup .yui-dt-sortedbydesc {background-color:#eee;}
 

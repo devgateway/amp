@@ -11,7 +11,12 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
 <tr><td>
-<i><bean:write name="columnReport" property="name"/></i>
+<i>
+	<digi:trn key="rep:popu:${columnReport.columnIdTrn}">${columnReport.columnId}</digi:trn>
+	<% if (!("".equals(columnReport.getRepName()))){ %>
+		: <digi:trn key="rep:pop:${columnReport.repNameTrn}">${columnReport.repName}</digi:trn>
+	<% } %>
+</i>
 </td></tr>
 
 
@@ -24,29 +29,31 @@
 </td></tr>
 <tr><td align="left" valign="top"> 
 	<table cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
-	<logic:iterate name="columnReport" property="items" id="column" scope="page">
-	<logic:equal name="column" property="name" value="Total">
-	<tr><td>
-	<br/>
-	</td></tr>	
-	</logic:equal>
+	
+		<logic:iterate name="columnReport" property="items" id="column" scope="page">
+		<logic:equal name="column" property="name" value="Total">
+			<tr><td><br/></td></tr>	
+		</logic:equal>
+	
 	<logic:notEqual name="column" property="name" value="Funding">
-	<tr><td>
+	<tr>
+	<td>
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
-		<jsp:include page="<%=viewable.getViewerPath()%>"/>			
-	</td></tr>
-	</logic:notEqual>
+			<jsp:include page="<%=viewable.getViewerPath()%>"/>
+			</td></tr>
+		</logic:notEqual>
 	</logic:iterate>
 	</table>
-</td><td align="left" valign="top">
+	</td><td align="left" valign="top">
 	<table cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
 	<logic:iterate name="columnReport" property="items" id="column" scope="page">
 	<logic:equal name="column" property="name" value="Funding">
 	<tr><td>
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
-		<jsp:include page="<%=viewable.getViewerPath()%>"/>			
+		<jsp:include page="<%=viewable.getViewerPath()%>"/>	
+				
 	</td></tr>
 	</logic:equal>
 	</logic:iterate>

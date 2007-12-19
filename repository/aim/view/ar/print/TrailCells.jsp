@@ -13,7 +13,11 @@
 <table border="1" width="700" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
 	<!-- generate total row -->
 	<tr>
-		<td align="center" colspan="2"><b>TOTALS FOR <bean:write name="reportData" property="name" /></b></div>
+		<td align="center" colspan="2"><b><digi:trn key="rep:popup:totalsFor">TOTALS FOR</digi:trn> 
+		<digi:trn key="rep:popu:${reportData.columnIdTrn}">${reportData.columnId}</digi:trn>
+		<% if (!("".equals(reportData.getRepName()))){ %>
+			: <digi:trn key="rep:pop:${reportData.repNameTrn}">${reportData.repName}</digi:trn>
+		<% } %></b></div>
 		</td>
 
 		<logic:iterate name="reportData" property="trailCells" id="cell"

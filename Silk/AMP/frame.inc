@@ -647,7 +647,7 @@
 	[ ] 
 	[ ] 
 [ ] 
-[-] window BrowserChild AMPAddActivityStep5
+[+] window BrowserChild AMPAddActivityStep5
 	[ ] tag "AMP - Add Activity - Components"
 	[ ] parent Browser
 	[+] HtmlPushButton AddComponent
@@ -655,8 +655,36 @@
 			[ ] "Add Component"
 			[ ] "$submitButton[1]"
 	[ ] 
+	[+] HtmlLink AddPhysicalProgress
+		[-] multitag "Add Physical Progress"
+			[ ] "$javascript:addPhyProgess(-1,1197642794828)"
+	[+] HtmlPushButton AddIssues
+		[-] multitag "&name='submitButton'"
+			[ ] "Add Issues"
+			[ ] "$submitButton[3]"
+	[+] HtmlLink AddMeasures
+		[-] multitag "Add Measures"
+			[ ] "$javascript:addMeasures('1197643686688')"
+	[+] HtmlLink RelatedDocuments
+		[-] multitag "Related Documents"
+			[ ] "$javascript:gotoStep(6)"
 [ ] 
-[-] window BrowserChild AMPAddComponents
+[+] window BrowserChild AMPAddPhysicalProgress
+	[ ] tag "AMP - Add Physical Progress"
+	[ ] parent Browser
+	[+] HtmlTextField Title
+		[-] multitag "&name='phyProgTitle'"
+			[ ] "Title"
+			[ ] "$phyProgTitle"
+	[+] HtmlTextField Description
+		[-] multitag "&name='phyProgDesc'"
+			[ ] "Description"
+			[ ] "$phyProgDesc"
+	[+] HtmlPushButton Add
+		[ ] tag "Add"
+	[ ] 
+[ ] 
+[+] window BrowserChild AMPAddComponents
 	[ ] tag "AMP - Add Components"
 	[ ] parent Browser
 	[+] HtmlPopupList Component
@@ -712,6 +740,29 @@
 		[ ] tag "Save"
 	[ ] 
 	[ ] 
+[ ] 
+[+] window BrowserChild AMPAddIssue
+	[ ] tag "AMP - Add Issue"
+	[ ] parent Browser
+	[+] HtmlTextField Issue
+		[-] multitag "&name='issue'"
+			[ ] "Issue"
+			[ ] "$issue"
+	[+] HtmlPushButton Add
+		[ ] tag "Add"
+	[ ] 
+[ ] 
+[+] window BrowserChild AMPAddMeasure
+	[ ] tag "AMP - Add Measure"
+	[ ] parent Browser
+	[+] HtmlTextField Measure
+		[-] multitag "&name='measure'"
+			[ ] "Measure"
+			[ ] "$measure"
+	[+] HtmlPushButton Add
+		[ ] tag "Add"
+	[ ] 
+[ ] 
 [+] window BrowserChild AMPDesktopLinks
 	[ ] tag "AMP*" //should be generized
 	[ ] parent Browser
@@ -731,258 +782,6 @@
 			[ ] 
 		[+] HtmlLink Help
 			[ ] 
-	[+] HtmlLink References
-		[-] multitag "References"
-			[ ] "$javascript:gotoStep('1_5')"
-	[+] HtmlLink Location
-		[-] multitag "Location"
-			[ ] "$javascript:gotoStep(2)[1]"
-	[+] HtmlPopupList SelectTheAppropriateRegion
-		[-] multitag "&name='implemLocationLevel'"
-			[ ] "Select the appropriate Region, Zone or Woreda as needed."
-			[ ] "$implemLocationLevel"
-	[+] HtmlPushButton Close
-		[ ] tag "Close"
-	[+] HtmlPopupList ImplementationLevel
-		[-] multitag "&name='levelId'"
-			[ ] "Implementation Level"
-			[ ] "$levelId"
-	[+] HtmlPushButton AddLocation
-		[-] multitag "&name='submitButton'"
-			[ ] "Add Location"
-			[ ] "$submitButton"
-	[+] HtmlPopupList Bolivia
-		[-] multitag "&name='impRegion'"
-			[ ] "Bolivia"
-			[ ] "$impRegion"
-	[+] HtmlListBox District
-		[-] multitag "&name='impMultiWoreda'"
-			[ ] "District"
-			[ ] "$impMultiWoreda"
-	[+] HtmlPopupList Region
-		[-] multitag "&name='impRegion'"
-			[ ] "askldalsd"
-			[ ] "$impRegion"
-	[+] HtmlPushButton Add
-		[ ] tag "Add"
-	[+] HtmlPushButton AddSectors
-		[ ] tag "Add Sectors"
-	[+] HtmlTextField Description
-		[-] multitag "&name='programDescription'"
-			[ ] "Description"
-			[ ] "$programDescription"
-	[+] HtmlTable CrossCuttingIssues
-		[ ] tag "Cross Cutting Issues"
-		[-] HtmlColumn Edit
-			[ ] tag "Edit"
-			[+] HtmlLink Edit1
-				[-] multitag "Edit[1]"
-					[ ] "$javascript:edit('aim-eo-58-1197469370844')"
-			[+] HtmlLink Edit2
-				[-] multitag "Edit[2]"
-					[ ] "$javascript:edit('aim-env-58-1197469370844')"
-			[+] HtmlLink Edit3
-				[-] multitag "Edit[3]"
-					[ ] "$javascript:edit('aim-min-58-1197469370844')"
-			[ ] 
-	[+] HtmlPushButton AddFunding
-		[ ] tag "Add Funding"
-	[+] HtmlPushButton AddOrganizations
-		[-] multitag "&name='submitButton'"
-			[ ] "Add Organizations"
-			[ ] "$submitButton[1]"
-	[+] HtmlPushButton AddFunding2
-		[ ] tag "Add Funding[2]"
-	[+] HtmlCheckBox DelegatedPartner2
-		[-] multitag "&name='fundingOrganization?1?.delegatedCooperation'"
-			[ ] "Delegated Partner[2]"
-			[ ] "$fundingOrganization?1?.delegatedCooperation"
-	[+] HtmlCheckBox Identification
-		[-] multitag "&name='fundingOrganization?1?.delegatedPartner'"
-			[ ] "Identification"
-			[ ] "$fundingOrganization?1?.delegatedPartner"
-	[+] HtmlTextField FundingOrganizationId
-		[-] multitag "&name='orgFundingId'"
-			[ ] "Funding Organization Id"
-			[ ] "$orgFundingId"
-	[+] HtmlPushButton AddProjection
-		[-] multitag "&name='addMTEFProj'"
-			[ ] "Add Projection"
-			[ ] "$addMTEFProj"
-	[+] HtmlTextField Pipeline1
-		[-] multitag "&name='mtefProjection?0?.amount'"
-			[ ] "pipeline[1]"
-			[ ] "$mtefProjection?0?.amount"
-	[+] HtmlTable HtmlTable1
-		[ ] tag "#1"
-		[+] HtmlColumn Commitments
-			[ ] tag "Commitments"
-			[+] HtmlPushButton AddCommitment
-				[-] multitag "&name='xx1'"
-					[ ] "Add Commitment"
-					[ ] "$xx1"
-			[+] HtmlTextField Planned
-				[-] multitag "&name='fundingDetail?0?.transactionAmount'"
-					[ ] "Planned"
-					[ ] "$fundingDetail?0?.transactionAmount"
-			[+] HtmlPopupList Currency
-				[-] multitag "&name='fundingDetail?0?.currencyCode'"
-					[ ] "Currency"
-					[ ] "$fundingDetail?0?.currencyCode"
-			[+] HtmlImage ClickToViewCalendar
-				[-] multitag "Click to View Calendar"
-					[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho"
-		[+] HtmlColumn Fri
-			[ ] tag "Fri"
-			[-] HtmlText N7
-				[ ] tag "7"
-		[+] HtmlColumn Thu
-			[ ] tag "Thu"
-			[+] HtmlText N6
-				[ ] tag "6"
-			[-] HtmlText N13
-				[ ] tag "13"
-		[+] HtmlColumn Wed
-			[ ] tag "Wed"
-			[+] HtmlText N5
-				[ ] tag "5"
-			[-] HtmlText N12
-				[ ] tag "12"
-	[+] HtmlTable Today
-		[ ] tag "Today"
-		[+] HtmlColumn Thu
-			[ ] tag "Thu"
-			[+] HtmlText N6
-				[ ] tag "6"
-			[+] HtmlText N20
-				[ ] tag "20"
-			[-] HtmlText N13
-				[ ] tag "13"
-		[+] HtmlColumn Wed
-			[ ] tag "Wed"
-			[-] HtmlText N12
-				[ ] tag "12"
-		[+] HtmlColumn Fri
-			[ ] tag "Fri"
-			[-] HtmlText N7
-				[ ] tag "7"
-		[+] HtmlColumn Tue
-			[ ] tag "Tue"
-			[+] HtmlText N11
-				[ ] tag "11"
-			[-] HtmlText N4
-				[ ] tag "4"
-		[+] HtmlColumn Sat
-			[ ] tag "Sat"
-			[-] HtmlText N8
-				[ ] tag "8"
-		[+] HtmlColumn Sun
-			[ ] tag "Sun"
-			[-] HtmlText N16
-				[ ] tag "16"
-	[+] HtmlPushButton AddDisbursement
-		[-] multitag "&name='xx1'"
-			[ ] "Add Disbursement"
-			[ ] "$xx1"
-	[+] HtmlTextField Planned
-		[-] multitag "&name='fundingDetail?1?.transactionAmount'"
-			[ ] "Planned"
-			[ ] "$fundingDetail?1?.transactionAmount"
-	[+] HtmlImage ClickToViewCalendar
-		[-] multitag "Click to View Calendar"
-			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho"
-	[+] HtmlTable HtmlTable2
-		[ ] tag "#2"
-		[+] HtmlColumn Expenditures
-			[ ] tag "Expenditures"
-			[+] HtmlPushButton AddExpenditure
-				[-] multitag "&name='xx1'"
-					[ ] "Add Expenditure"
-					[ ] "$xx1"
-			[+] HtmlTextField Planned
-				[-] multitag "&name='fundingDetail?2?.transactionAmount'"
-					[ ] "Planned"
-					[ ] "$fundingDetail?2?.transactionAmount"
-			[+] HtmlPopupList Currency
-				[-] multitag "&name='fundingDetail?2?.currencyCode'"
-					[ ] "Currency"
-					[ ] "$fundingDetail?2?.currencyCode"
-			[-] HtmlImage ClickToViewCalendar
-				[-] multitag "Click to View Calendar"
-					[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho"
-		[+] HtmlColumn Fri
-			[ ] tag "Fri"
-			[-] HtmlText N7
-				[ ] tag "7"
-		[+] HtmlColumn Thu
-			[ ] tag "Thu"
-			[-] HtmlText N13
-				[ ] tag "13"
-	[+] HtmlTable December
-		[ ] tag "December"
-		[+] HtmlColumn Expenditures
-			[ ] tag "Expenditures"
-			[-] HtmlTextField Classification
-				[-] multitag "&name='fundingDetail?2?.classification'"
-					[ ] "Classification"
-					[ ] "$fundingDetail?2?.classification"
-	[+] HtmlTextField Conditions
-		[-] multitag "&name='fundingConditions'"
-			[ ] "Conditions"
-			[ ] "$fundingConditions"
-	[+] HtmlPushButton Save
-		[ ] tag "Save"
-	[+] HtmlLink RegionalFunding
-		[-] multitag "Regional Funding"
-			[ ] "$javascript:gotoStep(4)"
-	[+] HtmlText NoRegionsSelected
-		[ ] tag "No regions selected"
-	[+] HtmlLink Add1
-		[-] multitag "Add[1]"
-			[ ] "$javascript:addCommitments()"
-	[+] HtmlLink Add3
-		[-] multitag "Add[3]"
-			[ ] "$javascript:addDisbursement()"
-	[+] HtmlTextField Planned2
-		[-] multitag "&name='disb_0_2'"
-			[ ] "Planned[2]"
-			[ ] "$disb_0_2"
-	[+] HtmlImage ClickToViewCalendar2
-		[-] multitag "Click to View Calendar[2]"
-			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[2]"
-	[+] HtmlLink Add4
-		[-] multitag "Add[4]"
-			[ ] "$javascript:addExpenditure()"
-	[+] HtmlTextField Planned3
-		[-] multitag "&name='expn_0_2'"
-			[ ] "Planned[3]"
-			[ ] "$expn_0_2"
-	[+] HtmlImage ClickToViewCalendar3
-		[-] multitag "Click to View Calendar[3]"
-			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[3]"
-	[+] HtmlLink AddPhysicalProgress
-		[-] multitag "Add Physical Progress"
-			[ ] "$javascript:addPhyProgess(-1,1197564805094)"
-	[+] HtmlTextField Title
-		[-] multitag "&name='phyProgTitle'"
-			[ ] "Title"
-			[ ] "$phyProgTitle"
-	[+] HtmlPushButton AddIssues
-		[-] multitag "&name='submitButton'"
-			[ ] "Add Issues"
-			[ ] "$submitButton[3]"
-	[+] HtmlTextField Issue
-		[-] multitag "&name='issue'"
-			[ ] "Issue"
-			[ ] "$issue"
-	[+] HtmlPopupList PlannedActualPlannedActu
-		[-] multitag "&name='comm_0_1'"
-			[ ] "Planned?Actual    Planned?Actual    Amount                 Currency                        Date"
-			[ ] "$comm_0_1"
-	[+] HtmlPopupList CommitmentsTotalActualAl
-		[-] multitag "&name='comm_0_3'"
-			[ ] "Commitments - (Total Actual Allocation 0.0 null )"
-			[ ] "$comm_0_3"
 [ ] 
 [+] window BrowserChild AMPAddFunding
 	[ ] tag "AMP - Add Funding"
@@ -1075,14 +874,313 @@
 	[ ] 
 	[ ] 
 [ ] 
+[+] window BrowserChild AMPAddActivityStep6
+	[ ] tag "AMP - Add Activity - Related Documents"
+	[ ] parent Browser
+	[+] HtmlPushButton AddDocumentsFromRepository
+		[-] multitag "&name='submitButton'"
+			[ ] "Add Documents From Repository"
+			[ ] "$submitButton[1]"
+	[+] HtmlPushButton AddDocuments
+		[-] multitag "&name='submitButton'"
+			[ ] "Add Documents"
+			[ ] "$submitButton[2]"
+	[+] HtmlPushButton AddWebResources
+		[-] multitag "&name='submitButton'"
+			[ ] "Add Web Resources"
+			[ ] "$submitButton[4]"
+	[+] HtmlLink RelatedOrganizations
+		[-] multitag "Related Organizations"
+			[ ] "$javascript:gotoStep(7)"
+	[ ] 
+[ ] 
+[+] window BrowserChild AMPAddDocuments
+	[ ] tag "AMP - Add Documents and Links"
+	[ ] parent Browser
+	[+] HtmlTextField Title
+		[-] multitag "&name='docTitle'"
+			[ ] "Title"
+			[ ] "$docTitle"
+	[+] HtmlTextField Description
+		[-] multitag "&name='docDescription'"
+			[ ] "Description"
+			[ ] "$docDescription"
+	[+] HtmlTextField Comments
+		[-] multitag "&name='docComment'"
+			[ ] "Comments"
+			[ ] "$docComment"
+	[+] HtmlImage ClickToViewCalendar
+		[-] multitag "Click to View Calendar"
+			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho"
+	[+] HtmlTable Today
+		[ ] tag "Today"
+		[+] HtmlColumn Tue
+			[ ] tag "Tue"
+			[-] HtmlText N11
+				[ ] tag "11"
+		[+] HtmlColumn Wed
+			[ ] tag "Wed"
+			[+] HtmlText N12
+				[ ] tag "12"
+			[-] HtmlText N5
+				[ ] tag "5"
+		[+] HtmlColumn Fri
+			[ ] tag "Fri"
+			[+] HtmlText N7
+				[ ] tag "7"
+			[-] HtmlText N14
+				[ ] tag "14"
+		[+] HtmlColumn Sat
+			[ ] tag "Sat"
+			[-] HtmlText N15
+				[ ] tag "15"
+	[+] HtmlPushButton Add
+		[ ] tag "Add"
+	[-] HtmlPushButton Browse
+		[-] multitag "&name='&id='docFile';name='docFile''"
+			[ ] "Browse*"
+			[ ] "$docFile"
+	[+] HtmlTextField WebResources
+		[-] multitag "&name='docWebResource'"
+			[ ] "Web resources"
+			[ ] "$docWebResource"
+[ ] 
+[+] window BrowserChild AMPAddDocumentsFromRepository
+	[ ] tag "Popup"
+	[ ] parent Browser
+	[+] HtmlTable HtmlTable1
+		[ ] tag "&name='framingTable'"
+		[+] HtmlColumn SelectSelectDocumen
+			[ ] tag "Select          Select Documents"
+			[+] HtmlPushButton Select
+				[-] multitag "&id='otherDocumentsMenu0';name='otherDocumentsButton'"
+					[ ] "Select"
+					[ ] "$otherDocumentsButton"
+			[+] HtmlText Examen_krDoc
+				[-] multitag "&id='yui-dt0-bdrow0-cell0'"
+					[ ] "*"
+					[ ] "$yui-dt0-bdrow0-cell0"
+	[+] HtmlList Empty
+		[ ] tag "Empty"
+		[-] HtmlLink TeamDocuments
+			[+] multitag "Team Documents"
+				[ ] "$?TEMPLATE?ampTemplate?#[2]"
+	[+] HtmlPushButton Submit
+		[ ] tag "Submit"
+	[ ] 
+[ ] 
+[+] window BrowserChild AMPAddActivityStep7
+	[ ] tag "AMP - Add Activity - Related Organizations"
+	[ ] parent Browser
+	[+] HtmlPushButton AddOrganizations1
+		[-] multitag "&name='submitButton'"
+			[ ] "Add Organizations[1]"
+			[ ] "$submitButton[1]"
+	[+] HtmlPushButton AddOrganizations2
+		[-] multitag "&name='submitButton'"
+			[ ] "Add Organizations[2]"
+			[ ] "$submitButton[3]"
+	[+] HtmlPushButton AddOrganizations3
+		[-] multitag "&name='submitButton'"
+			[ ] "Add Organizations[3]"
+			[ ] "$submitButton[5]"
+	[+] HtmlPushButton AddOrganizations4
+		[-] multitag "&name='submitButton'"
+			[ ] "Add Organizations[4]"
+			[ ] "$submitButton[7]"
+	[+] HtmlPushButton AddOrganizations5
+		[-] multitag "&name='submitButton'"
+			[ ] "Add Organizations[5]"
+			[ ] "$submitButton[9]"
+	[+] HtmlPushButton AddOrganizations6
+		[-] multitag "&name='submitButton'"
+			[ ] "Add Organizations[6]"
+			[ ] "$submitButton[11]"
+	[+] HtmlLink RelatedOrganizations
+		[-] multitag "Contact Information"
+			[ ] "$javascript:gotoStep(8)"
+	[ ] 
+[ ] 
+[+] window BrowserChild AMPAddActivityStep9
+	[ ] tag "AMP - Add Activity - Contact Details*"
+	[ ] parent Browser
+	[+] HtmlTextField FirstName1
+		[-] multitag "&name='dnrCntFirstName'"
+			[ ] "First Name[1]"
+			[ ] "$dnrCntFirstName"
+	[+] HtmlTextField LastName1
+		[-] multitag "&name='dnrCntLastName'"
+			[ ] "Last Name[1]"
+			[ ] "$dnrCntLastName"
+	[+] HtmlTextField Email1
+		[-] multitag "&name='dnrCntEmail'"
+			[ ] "Email[1]"
+			[ ] "$dnrCntEmail"
+	[+] HtmlTextField Title1
+		[-] multitag "&name='dnrCntTitle'"
+			[ ] "Title[1]"
+			[ ] "$dnrCntTitle"
+	[+] HtmlTextField Organization1
+		[-] multitag "&name='dnrCntOrganization'"
+			[ ] "Organization[1]"
+			[ ] "$dnrCntOrganization"
+	[+] HtmlTextField PhoneNumber1
+		[-] multitag "&name='dnrCntPhoneNumber'"
+			[ ] "Phone Number[1]"
+			[ ] "$dnrCntPhoneNumber"
+	[+] HtmlTextField FaxNumber1
+		[-] multitag "&name='dnrCntFaxNumber'"
+			[ ] "Fax Number[1]"
+			[ ] "$dnrCntFaxNumber"
+	[+] HtmlTextField FirstName2
+		[-] multitag "&name='mfdCntFirstName'"
+			[ ] "First Name[2]"
+			[ ] "$mfdCntFirstName"
+	[+] HtmlTextField LastName2
+		[-] multitag "&name='mfdCntLastName'"
+			[ ] "Last Name[2]"
+			[ ] "$mfdCntLastName"
+	[+] HtmlTextField Email2
+		[-] multitag "&name='mfdCntEmail'"
+			[ ] "Email[2]"
+			[ ] "$mfdCntEmail"
+	[+] HtmlTextField Title2
+		[-] multitag "&name='mfdCntTitle'"
+			[ ] "Title[2]"
+			[ ] "$mfdCntTitle"
+	[+] HtmlTextField Organization2
+		[-] multitag "&name='mfdCntOrganization'"
+			[ ] "Organization[2]"
+			[ ] "$mfdCntOrganization"
+	[+] HtmlTextField PhoneNumber2
+		[-] multitag "&name='mfdCntPhoneNumber'"
+			[ ] "Phone Number[2]"
+			[ ] "$mfdCntPhoneNumber"
+	[+] HtmlTextField FaxNumber2
+		[-] multitag "&name='mfdCntFaxNumber'"
+			[ ] "Fax Number[2]"
+			[ ] "$mfdCntFaxNumber"
+	[+] HtmlLink ME
+		[-] multitag "M & E"
+			[ ] "$javascript:gotoStep(10)"
+	[ ] 
+[ ] 
+[+] window BrowserChild AMPAddActivityStep10
+	[ ] tag "AMP - Add Activity - Monitoring and Evaluation"
+	[ ] parent Browser
+	[+] HtmlImage IND004
+		[-] multitag "- IND004"
+			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?arr[5]"
+	[+] HtmlTextField BaseValue
+		[-] multitag "&name='baseVal'"
+			[ ] "?[1]"
+			[ ] "$baseVal"
+	[+] HtmlTextField Comments1
+		[-] multitag "&name='baseValComments'"
+			[ ] "Comments[1]"
+			[ ] "$baseValComments"
+	[+] HtmlTextField TargetVal
+		[-] multitag "&name='targetVal'"
+			[ ] "?[3]"
+			[ ] "$targetVal"
+	[+] HtmlTextField Comments2
+		[-] multitag "&name='targetValComments'"
+			[ ] "Comments[2]"
+			[ ] "$targetValComments"
+	[+] HtmlTextField CurrentValue
+		[-] multitag "&name='currentVal'"
+			[ ] "Current Value"
+			[ ] "$currentVal"
+	[+] HtmlTextField Comments3
+		[-] multitag "&name='currentValComments'"
+			[ ] "Comments[3]"
+			[ ] "$currentValComments"
+	[+] HtmlPushButton SetValues
+		[ ] tag "Set Values"
+	[+] HtmlLink Costing
+		[-] multitag "Costing"
+			[ ] "$javascript:gotoStep(11)"
+	[ ] 
+[ ] 
+[+] window BrowserChild AMPAddActivityStep11
+	[ ] tag "AMP - Add Activity - Project Costs"
+	[ ] parent Browser
+	[-] HtmlPushButton AddActivity
+		[ ] tag "Add Activity"
+[ ] 
+[+] window BrowserChild AMPAddEditActivity
+	[ ] tag "AMP - Edit Activity"
+	[ ] parent Browser
+	[+] HtmlTextField ActivityName
+		[-] multitag "&name='name'"
+			[ ] "Activity name:"
+			[ ] "$name"
+	[+] HtmlTextField ActivityID
+		[-] multitag "&name='textId'"
+			[ ] "Activity ID:"
+			[ ] "$textId"
+	[+] HtmlTextField Inputs
+		[-] multitag "&name='inputs'"
+			[ ] "Inputs:"
+			[ ] "$inputs"
+	[+] HtmlTextField TotalCost
+		[-] multitag "&name='totalCost'"
+			[ ] "Total Cost:"
+			[ ] "$totalCost"
+	[+] HtmlPopupList ActivityID1
+		[-] multitag "&name='totalCostCurrencyId'"
+			[ ] "Activity ID:"
+			[ ] "$totalCostCurrencyId"
+	[+] HtmlTextField Contributions
+		[-] multitag "&name='contrAmount'"
+			[ ] "Contributions"
+			[ ] "$contrAmount"
+	[+] HtmlPopupList Pop1
+		[-] multitag "&name='contrCurrId'"
+			[ ] "*"
+			[ ] "$contrCurrId"
+	[+] HtmlPopupList Pop2
+		[-] multitag "&name='contrFinInstrId'"
+			[ ] "*"
+			[ ] "$contrFinInstrId"
+	[+] HtmlPopupList Pop3
+		[-] multitag "&name='contrDonorId'"
+			[ ] "*"
+			[ ] "$contrDonorId"
+	[+] HtmlPopupList Pop4
+		[-] multitag "&name='contrFinTypeId'"
+			[ ] "*"
+			[ ] "$contrFinTypeId"
+	[+] HtmlPushButton AddContribution
+		[-] multitag "&name='addFields'"
+			[ ] "Add Contribution"
+			[ ] "$addFields"
+	[+] HtmlTextField Assumptions
+		[-] multitag "&name='assumptions'"
+			[ ] "Assumptions:"
+			[ ] "$assumptions"
+	[+] HtmlTextField Progress
+		[-] multitag "&name='progress'"
+			[ ] "Progress:"
+			[ ] "$progress"
+	[+] HtmlPushButton PickDate
+		[ ] tag "Pick date"
+	[+] HtmlPushButton OK
+		[-] multitag "&name='save'"
+			[ ] "OK"
+			[ ] "$save"
+[ ] 
 [+] window DialogBox ChooseFile
 	[ ] tag "Choose file"
 	[ ] parent Browser
-	[-] PushButton MyDocuments
+	[+] PushButton MyDocuments
 		[-] multitag "My Documents"
 			[ ] "$41062"
-	[-] ListView ListView1
+	[+] ListView ListView1
 		[-] multitag "#1"
+			[ ] "$1"
+	[+] PushButton Open
+		[-] multitag "Open"
 			[ ] "$1"
 [+] window BrowserChild EditData
 	[ ] tag "Edit Data"
@@ -1137,3 +1235,22 @@
 		[ ] 
 [+] window DialogBox MozillaFirefox
 	[ ] tag "Mozilla Firefox"
+[+] window BrowserChild Popup
+	[ ] tag "Popup"
+	[ ] parent Browser
+	[-] HtmlTable HtmlTable1
+		[ ] tag "&name='framingTable'"
+		[+] HtmlColumn SelectSelectDocumen
+			[ ] tag "Select          Select Documents"
+			[+] HtmlPushButton Select
+				[-] multitag "&id='otherDocumentsMenu0';name='otherDocumentsButton'"
+					[ ] "Select"
+					[ ] "$otherDocumentsButton"
+			[-] HtmlText Examen_krDoc
+				[-] multitag "&id='yui-dt0-bdrow0-cell0'"
+					[ ] "examen_kr.doc"
+					[ ] "$yui-dt0-bdrow0-cell0"
+	[-] HtmlList PleaseWaitAMoment
+		[ ] tag "Please wait a moment"
+	[+] HtmlPushButton Submit
+		[ ] tag "Submit"

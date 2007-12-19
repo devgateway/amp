@@ -709,7 +709,7 @@
 										<tr>
 
 											<td valign="bottom">
-                                                                                         <field:display name="Amount of Disbursement Order" feature="Disbursement Orders">
+                                                                                         <field:display name="Adjustment Type Disbursement Orders" feature="Disbursement Orders">
 												<c:set var="index" value="${index+1}"/>
 
 

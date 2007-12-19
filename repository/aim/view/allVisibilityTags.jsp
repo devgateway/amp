@@ -118,6 +118,7 @@
 <feature:display name="Sector Group" module="Organizations"></feature:display>
 <feature:display name="Sectors" module="Project ID and Planning"></feature:display>
 <feature:display name="Web Resources" module="Document"></feature:display>
+<feature:display module="Funding" name="Disbursement Orders"></feature:display>
 <field:display  name="Remove Location" feature="Location"></field:display>
 <field:display feature="Donor Contact Information" name="Donor Email"></field:display>
 <field:display feature="Donor Contact Information" name="Donor First Name"></field:display>
@@ -435,4 +436,12 @@
 <field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display>
 <field:display name="Regional Group" feature="Regional Group"></field:display>
 <field:display name="Sector Group" feature="Sector Group"></field:display>
-<field:display name="Componente" feature="Sectors">&nbsp;</field:display>		
+<field:display name="Componente" feature="Sectors">&nbsp;</field:display>
+<field:display name="Adjustment Type Disbursement Orders" feature="Disbursement Orders"></field:display>
+<field:display name="Currency Disbursement Orders" feature="Disbursement Orders"></field:display>
+<field:display name="Date Disbursement Orders" feature="Disbursement Orders"></field:display>
+<field:display name="Disbursement Order Number" feature="Disbursement Orders"></field:display>
+<field:display name="Disbursement Orders Tab" feature="Disbursement Orders"></field:display>
+<field:display name="Actual Disbursement Orders" feature="Disbursement Orders"></field:display>
+<field:display name="Total Ordered" feature="Disbursement Orders"></field:display>
+<field:display name="Add Disbursement Order Button" feature="Disbursement Orders"></field:display>

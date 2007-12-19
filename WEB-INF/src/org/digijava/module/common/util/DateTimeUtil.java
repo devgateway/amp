@@ -63,6 +63,7 @@ public class DateTimeUtil {
 	public static String formatDate(Date date){
 		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
 		String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+		pattern = pattern.replace('m', 'M');
 		if (pattern==null){
 			pattern=Constants.CALENDAR_DATE_FORMAT;
 		}

@@ -9,7 +9,8 @@ public class YearlyComparison
 	private String actualDisbursement ;
 	private String plannedExpenditure ;
 	private String actualExpenditure ;
-	
+        private String disbOrders ;
+
 	/**
 	 * @return
 	 */
@@ -59,7 +60,11 @@ public class YearlyComparison
 		return plannedExpenditure;
 	}
 
-	/**
+        public String getDisbOrders() {
+                return disbOrders;
+        }
+
+        /**
 	 * @param string
 	 */
 	public void setActualCommitment(String string) {
@@ -107,5 +112,9 @@ public class YearlyComparison
 	public void setPlannedExpenditure(String string) {
 		plannedExpenditure = string;
 	}
+
+        public void setDisbOrders(String disbOrders) {
+                this.disbOrders = disbOrders;
+        }
 
 }

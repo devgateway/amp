@@ -5,6 +5,7 @@ public class AllTotals {
 	private String totalPlannedDisbursement;
 	private String totalActualDisbursement;
 	private String totalActualExpenditure;
+        private String totalDisbOrder;
 	/**
 	 * @return
 	 */
@@ -33,7 +34,11 @@ public class AllTotals {
 		return totalPlannedDisbursement;
 	}
 
-	/**
+        public String getTotalDisbOrder() {
+                return totalDisbOrder;
+        }
+
+        /**
 	 * @param string
 	 */
 	public void setTotalActualCommitment(String string) {
@@ -61,4 +66,8 @@ public class AllTotals {
 		totalPlannedDisbursement = string;
 	}
 
-}	
+        public void setTotalDisbOrder(String totalDisbOrder) {
+                this.totalDisbOrder = totalDisbOrder;
+        }
+
+}

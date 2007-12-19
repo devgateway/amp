@@ -284,6 +284,9 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 						                <field:display name="Total Committed" feature="Funding Organizations">
 											<TD><digi:trn key="aim:totalCommitted">Total Committed</digi:trn></TD>
 										</field:display>
+                                                                              <field:display name="Total Ordered" feature="Disbursement Orders">
+			                	         	<TD><digi:trn key="aim:totalOrdered">Total Ordered</digi:trn></TD>
+			                	        </field:display>
 										<field:display name="Total Disbursed" feature="Funding Organizations">
 			                	         	<TD><digi:trn key="aim:totalDisbursed">Total Disbursed</digi:trn></TD>
 			                	        </field:display>
@@ -342,6 +345,9 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 						                  	<field:display name="Total Committed" feature="Funding Organizations">
 							                  <TD align="right"><bean:write name="breakdown" property="totalCommitted"/></TD>
 							                </field:display>
+                                                                          <field:display name="Total Ordered" feature="Disbursement Orders">
+							                  <TD align="right"><bean:write name="breakdown" property="totalDisbOrdered"/></TD>
+							                </field:display>
 							                <field:display name="Total Disbursed" feature="Funding Organizations">
 							                  <TD align="right"><bean:write name="breakdown" property="totalDisbursed"/></TD>
 							                </field:display>
@@ -362,6 +368,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 				                    <TD>&nbsp;</TD>
 				                    					<field:display feature="MTEF Projections" name="MTEFProjections"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalProjections"/></TD></field:display>
 														<field:display name="Total Committed" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalCommitted"/></TD></field:display>
+                                                                                                                <field:display name="Total Ordered" feature="Disbursement Orders"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalDisbOrdered"/></TD></field:display>
 														<field:display name="Total Disbursed" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalDisbursed"/></TD></field:display>
 														<field:display name="Undisbursed Funds" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalUnDisbursed"/></TD></field:display>
 														<field:display name="Total Expended" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalExpended"/></TD></field:display>

@@ -10,7 +10,8 @@ public class QuarterlyComparison
 	private String actualDisbursement ;
 	private String plannedExpenditure ;
 	private String actualExpenditure ;
-	
+        private String actualDisbOrder ;
+
 	/**
 	 * @return
 	 */
@@ -116,11 +117,19 @@ public class QuarterlyComparison
 		return fiscalQuarter;
 	}
 
-	/**
+        public String getActualDisbOrder() {
+                return actualDisbOrder;
+        }
+
+        /**
 	 * @param i
 	 */
 	public void setFiscalQuarter(int i) {
 		fiscalQuarter = i;
 	}
+
+        public void setActualDisbOrder(String actualDisbOrder) {
+                this.actualDisbOrder = actualDisbOrder;
+        }
 
 }

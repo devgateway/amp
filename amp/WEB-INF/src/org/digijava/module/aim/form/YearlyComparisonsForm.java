@@ -1,7 +1,6 @@
 package org.digijava.module.aim.form ;
 
 import java.util.Collection;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionErrors;
@@ -13,10 +12,11 @@ public class YearlyComparisonsForm extends DetailedInfoForm	{
 	private String totalPlannedDisbursement;
 	private String totalActualDisbursement;
 	private String totalActualExpenditure;
+        private String totalDisbOrder;
 	private Collection yearlyDiscrepanciesAll;
 	private Collection fiscalYears;
 	private long fiscalCalId;
-		
+
 	/**
 	 * @return
 	 */
@@ -30,12 +30,12 @@ public class YearlyComparisonsForm extends DetailedInfoForm	{
 	public void setYearlyComparisons(Collection collection) {
 		yearlyComparisons = collection;
 	}
-	
+
 	public ActionErrors validate(ActionMapping actionMapping,
 									 HttpServletRequest httpServletRequest) {
 			ActionErrors errors = super.validate(actionMapping, httpServletRequest);
 			return errors;
-	}	
+	}
 
 	/**
 	 * @return
@@ -96,12 +96,12 @@ public class YearlyComparisonsForm extends DetailedInfoForm	{
 	public Collection getYearlyDiscrepanciesAll() {
 		return yearlyDiscrepanciesAll;
 	}
-	
+
 	public void setYearlyDiscrepanciesAll(Collection yearlyDiscrepanciesAll) {
 		this.yearlyDiscrepanciesAll = yearlyDiscrepanciesAll;
 	}
-	
-	public long getFiscalCalId() {	
+
+	public long getFiscalCalId() {
 		return fiscalCalId;
 	}
 
@@ -117,8 +117,16 @@ public class YearlyComparisonsForm extends DetailedInfoForm	{
 		fiscalYears=c;
 	}
 
-	public Collection getFiscalYears()
+        public void setTotalDisbOrder(String totalDisbOrder) {
+                this.totalDisbOrder = totalDisbOrder;
+        }
+
+        public Collection getFiscalYears()
 	{
 		return fiscalYears;
 	}
+
+        public String getTotalDisbOrder() {
+                return totalDisbOrder;
+        }
 }

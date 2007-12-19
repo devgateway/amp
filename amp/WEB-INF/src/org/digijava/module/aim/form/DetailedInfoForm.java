@@ -15,8 +15,9 @@ public class DetailedInfoForm extends MainProjectDetailsForm
 	private String totalRemaining ;
 	private String totalDisbursed ;
 	private String totalUnExpended ;
+        private String totalDisbOrdered ;
 	private String currCode;
-	
+
 	/**
 	 * @return
 	 */
@@ -133,17 +134,26 @@ public class DetailedInfoForm extends MainProjectDetailsForm
 									 HttpServletRequest httpServletRequest) {
 			ActionErrors errors = super.validate(actionMapping, httpServletRequest);
 			return errors;
-	}	
+	}
 	/**
 	 * @return Returns the currCode.
 	 */
 	public String getCurrCode() {
 		return currCode;
 	}
-	/**
+
+        public String getTotalDisbOrdered() {
+                return totalDisbOrdered;
+        }
+
+        /**
 	 * @param currCode The currCode to set.
 	 */
 	public void setCurrCode(String currCode) {
 		this.currCode = currCode;
 	}
+
+        public void setTotalDisbOrdered(String totalDisbOrdered) {
+                this.totalDisbOrdered = totalDisbOrdered;
+        }
 }

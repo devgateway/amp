@@ -34,16 +34,16 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class YearlyInfoFilter extends TilesAction {
-	
+
 	private static Logger logger = Logger.getLogger(YearlyInfoFilter.class);
-	
+
 	public ActionForward execute(ComponentContext context,
-								 ActionMapping mapping, 
+								 ActionMapping mapping,
 								 ActionForm form,
-								 HttpServletRequest request, 
-								 HttpServletResponse response) 
+								 HttpServletRequest request,
+								 HttpServletResponse response)
 								 throws java.lang.Exception   {
-								 	
+
 		YearlyInfoForm formBean = (YearlyInfoForm) form;
 		HttpSession session = request.getSession();
 
@@ -61,25 +61,25 @@ public class YearlyInfoFilter extends TilesAction {
 			formBean.setGoButtonPresent(ff.isGoButtonPresent());
 			FilterParams fp = (FilterParams)session.getAttribute("filterParams");
 			fp.setTransactionType(formBean.getTransactionType());
-			
+
 			ApplicationSettings apps = null;
 			if ( teamMember != null )	{
 				apps = teamMember.getAppSettings();
 			}
-	
+
 			if ( formBean.getCurrency() != null )
 				fp.setCurrencyCode(formBean.getCurrency());
 			else	{
 				Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
 				fp.setCurrencyCode(curr.getCurrencyCode());
 			}
-	
+
 			if ( formBean.getFiscalCalId() != 0 )
 				fp.setFiscalCalId(new Long( formBean.getFiscalCalId() ));
 			else	{
 				fp.setFiscalCalId(apps.getFisCalId());
 			}
-	
+
 			if ( formBean.getPerspective() != null )
 				fp.setPerspective(formBean.getPerspective());
 			else	{
@@ -87,7 +87,7 @@ public class YearlyInfoFilter extends TilesAction {
 				fp.setPerspective(perspective);
 			}
 			formBean.setPerpsectiveName(DbUtil.getPerspective(fp.getPerspective()).getName());
-	
+
 			if ( formBean.getFromYear()==0 || formBean.getToYear()==0 )	{
 				int year = new GregorianCalendar().get(Calendar.YEAR);
 				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
@@ -102,7 +102,7 @@ public class YearlyInfoFilter extends TilesAction {
 			formBean.setCommitmentTabColor(tc.getCommitmentTabColor());
 			formBean.setDisbursementTabColor(tc.getDisbursementTabColor());
 			formBean.setExpenditureTabColor(tc.getExpenditureTabColor());
-			
+
 			if ( fp.getPerspective().equals(Constants.DISCREPANCY) )	{
 				Collection discrepancies = YearlyDiscrepancyWorker.getYearlyDiscrepancy(fp);
 				formBean.setDiscrepancies(discrepancies);
@@ -111,13 +111,14 @@ public class YearlyInfoFilter extends TilesAction {
 				Collection yearlyInfo = YearlyInfoWorker.getYearlyInfo(fp);
 				if ( yearlyInfo.size() != 0 )	{
 					formBean.setYearlyInfo(yearlyInfo);
-		
+
 					TotalsQuarterly tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode());
 					formBean.setTotalCommitted(tq.getTotalCommitted());
-					formBean.setTotalDisbursed(tq.getTotalDisbursed());														  	
-					formBean.setTotalUnExpended(tq.getTotalUnExpended());																							
+					formBean.setTotalDisbursed(tq.getTotalDisbursed());
+                                        formBean.setTotalDisbOrdered(tq.getTotalDisbOrdered());
+					formBean.setTotalUnExpended(tq.getTotalUnExpended());
 					formBean.setTotalRemaining(tq.getTotalRemaining());
-		
+
 					String strTotalPlanned = YearlyInfoWorker.getTotalYearly(yearlyInfo,Constants.PLANNED);
 					formBean.setTotalPlanned(strTotalPlanned);
 					String strTotalActual = YearlyInfoWorker.getTotalYearly(yearlyInfo,Constants.ACTUAL);

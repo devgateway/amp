@@ -11,6 +11,10 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
 
 
 
@@ -92,7 +96,7 @@
 
 
 
-<digi:form action="/viewQuarterlyComparisonsFilter.do" name="aimQuarterlyComparisonsForm" 
+<digi:form action="/viewQuarterlyComparisonsFilter.do" name="aimQuarterlyComparisonsForm"
 
 type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
@@ -122,11 +126,11 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 			<TR><TD bgcolor="#f4f4f4">
 
-			
+
 
 			<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border=0>
 
-				<TR bgColor=#222e5d height="20"><TD style="COLOR: #c9c9c7" height="20"> 	
+				<TR bgColor=#222e5d height="20"><TD style="COLOR: #c9c9c7" height="20">
 
 				&nbsp;&nbsp;&nbsp;
 
@@ -138,9 +142,9 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 			  			<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" styleClass="sub-nav2" title="${translation}" >
 
-			  				<digi:trn key="aim:overview">OVERVIEW</digi:trn> 
+			  				<digi:trn key="aim:overview">OVERVIEW</digi:trn>
 
-			  			</digi:link> | 
+			  			</digi:link> |
 
 			<c:set var="translation">
 
@@ -152,7 +156,23 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 			  				<digi:trn key="aim:commitments">COMMITMENTS</digi:trn>
 
-			  			</digi:link> | 
+			  			</digi:link> |
+                                                    <field:display name="Disbursement Orders Tab" feature="Disbursement Orders">
+
+                                                <c:set target="${urlSubTabs}" property="transactionType" value="4"/>
+
+			<c:set var="translation">
+
+				<digi:trn key="aim:clickToViewDisbursementsOrders">Click here to view Disbursement Orders</digi:trn>
+
+			</c:set>
+
+			  			<digi:link href="/viewQuarterlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+
+			  					<digi:trn key="aim:disbursementOrders">DISBURSEMENTS ORDERS</digi:trn>
+
+			  			</digi:link> |
+                                                </field:display>
 
 			  			<c:set target="${urlSubTabs}" property="transactionType" value="1"/>
 
@@ -180,7 +200,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 		  					<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 
-		  				</digi:link> | 
+		  				</digi:link> |
 
 		  				<digi:link href="/viewYearlyDiscrepancy.do" name="urlDiscrepancy" styleClass="sub-nav2" title="${translation}" >
 
@@ -194,7 +214,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 		  				</span>
 
-				</TD></TR>			
+				</TD></TR>
 
 				<TR bgColor=#f4f4f2>
 
@@ -206,7 +226,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 								<TD align="left">
 
-						<SPAN class=crumb>					
+						<SPAN class=crumb>
 
 		              	<jsp:useBean id="urlFinancingBreakdown" type="java.util.Map" class="java.util.HashMap"/>
 
@@ -228,13 +248,13 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 									<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
 
-								</digi:link> &gt; 
+								</digi:link> &gt;
 
-								<digi:trn key="aim:quarterlyAll">Quarterly All</digi:trn> 							
+								<digi:trn key="aim:quarterlyAll">Quarterly All</digi:trn>
 
 								&gt;
 
-								<bean:write name="aimQuarterlyComparisonsForm" property="perpsectiveName" />							
+								<bean:write name="aimQuarterlyComparisonsForm" property="perpsectiveName" />
 
 						</SPAN>
 
@@ -248,7 +268,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 							</TR>
 
-						</TABLE>						
+						</TABLE>
 
 					</TD>
 
@@ -274,7 +294,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2">
 
-         			               		<TR bgcolor="#F4F4F2"> 
+         			               		<TR bgcolor="#F4F4F2">
 
                   			        			<TD nowrap bgcolor="#C9C9C7" class="box-title">&nbsp;
 
@@ -288,7 +308,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
          			               		</TR>
 
-                  			    		</TABLE>																			
+                  			    		</TABLE>
 
 											</TD>
 
@@ -310,19 +330,19 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 															<html:select property="perspective" styleClass="dr-menu">
 
-																<html:optionsCollection name="aimQuarterlyComparisonsForm" 
+																<html:optionsCollection name="aimQuarterlyComparisonsForm"
 
 																property="perspectives" value="code" label="name"/>
 
 															</html:select>
 
-														</TD>								
+														</TD>
 
 													</TR>
 
 												</TABLE>
 
-												</logic:equal>											
+												</logic:equal>
 
 											</TD>
 
@@ -338,7 +358,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 								<TD bgColor=#ffffff class=box-border width="100%" vAlign="top" align="left">
 
-             					<TABLE cellSpacing=2 cellPadding=0 border=0 bgColor="#ffffff" width="100%" vAlign="top" align="left" 
+             					<TABLE cellSpacing=2 cellPadding=0 border=0 bgColor="#ffffff" width="100%" vAlign="top" align="left"
 
 									bgColor="#ffffff">
 
@@ -350,13 +370,13 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 											<TABLE cellSpacing=1 cellPadding=0 border=0 bgColor=#ffffff vAlign="top" align="left">
 
-   		              				<TR> 
+   		              				<TR>
 
 												<logic:equal name="aimQuarterlyComparisonsForm" property="currencyPresent" value="true">
 
       	    	       					<TD>
 
-													<TABLE cellSpacing=2 cellPadding=0>	
+													<TABLE cellSpacing=2 cellPadding=0>
 
 														<TR>
 
@@ -366,11 +386,11 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 		                           	 				<html:select property="currency" styleClass="dr-menu">
 
-	   			                        	 			<html:optionsCollection name="aimQuarterlyComparisonsForm" property="currencies" 
+	   			                        	 			<html:optionsCollection name="aimQuarterlyComparisonsForm" property="currencies"
 
 																	value="currencyCode" label="currencyName"/>
 
-																</html:select>															
+																</html:select>
 
 															</TD>
 
@@ -386,7 +406,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
       	                    			<TD>
 
-													<TABLE cellSpacing=2 cellPadding=0>	
+													<TABLE cellSpacing=2 cellPadding=0>
 
 														<TR>
 
@@ -396,9 +416,9 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 																<html:select property="fiscalCalId" styleClass="dr-menu">
 
-																	<html:optionsCollection name="aimQuarterlyComparisonsForm" property="fiscalYears" 
+																	<html:optionsCollection name="aimQuarterlyComparisonsForm" property="fiscalYears"
 
-																	value="ampFiscalCalId" label="name"/> 
+																	value="ampFiscalCalId" label="name"/>
 
 																</html:select>
 
@@ -416,7 +436,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
       	                    			<TD>
 
-													<TABLE cellSpacing=2 cellPadding=0>	
+													<TABLE cellSpacing=2 cellPadding=0>
 
 														<TR>
 
@@ -428,7 +448,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 							                      		<html:select property="fromYear" styleClass="dr-menu">
 
-									                      	<html:optionsCollection name="aimQuarterlyComparisonsForm" property="years" 
+									                      	<html:optionsCollection name="aimQuarterlyComparisonsForm" property="years"
 
 																	value="year" label="year"/>
 
@@ -442,19 +462,19 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 						   	                     	<html:select property="toYear" styleClass="dr-menu">
 
-																	<html:optionsCollection name="aimQuarterlyComparisonsForm" property="years" 
+																	<html:optionsCollection name="aimQuarterlyComparisonsForm" property="years"
 
 																	value="year" label="year"/>
 
 																</html:select>
 
-															</TD>															
+															</TD>
 
 														</TR>
 
 													</TABLE>
 
-                  	        			</TD>												
+                  	        			</TD>
 
                	           			</logic:equal>
 
@@ -480,31 +500,41 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 											<TABLE cellSpacing=0 cellPadding=0 border=0 bgColor=#ffffff width="100%" vAlign="top" align="left">
 
-	   	                     		<TR> 
+	   	                     		<TR>
 
-         	      	           			<TD width="100%" valign="middle"> 
+         	      	           			<TD width="100%" valign="middle">
 
             	      		        			<SPAN class="note">
 
 				                      				<logic:equal name="aimQuarterlyComparisonsForm" property="transactionType" value="1">
 
-                     									<digi:trn key="aim:totalCommitted">Total Committed</digi:trn>: 
+                     									<digi:trn key="aim:totalCommitted">Total Committed</digi:trn>:
 
-								     								<bean:write name="aimQuarterlyComparisonsForm" property="totalCommitted"/> USD 
+								     								<bean:write name="aimQuarterlyComparisonsForm" property="totalCommitted"/> USD
 
-							     								<digi:trn key="aim:totalRemaining">Total Remaining</digi:trn>: 
+							     								<digi:trn key="aim:totalRemaining">Total Remaining</digi:trn>:
 
 				     											<bean:write name="aimQuarterlyComparisonsForm" property="totalRemaining"/> USD
 
 				     										</logic:equal>
+                                                                                                                	     							<logic:equal name="aimQuarterlyComparisonsForm" property="transactionType" value="2">
+
+         		          								<digi:trn key="aim:totalDisbOrdered">Total Ordered</digi:trn>:
+
+				   				  								<bean:write name="aimQuarterlyComparisonsForm" property="totalDisbOrdered"/> USD
+
+
+
+
+							     							</logic:equal>
 
 							     							<logic:equal name="aimQuarterlyComparisonsForm" property="transactionType" value="2">
 
-         		          								<digi:trn key="aim:totalDisbursed">Total Disbursed</digi:trn>: 
+         		          								<digi:trn key="aim:totalDisbursed">Total Disbursed</digi:trn>:
 
-				   				  								<bean:write name="aimQuarterlyComparisonsForm" property="totalDisbursed"/> USD 
+				   				  								<bean:write name="aimQuarterlyComparisonsForm" property="totalDisbursed"/> USD
 
-				     											<digi:trn key="aim:totalUnExpended">Total Un-Expended</digi:trn>: 
+				     											<digi:trn key="aim:totalUnExpended">Total Un-Expended</digi:trn>:
 
 				     											<bean:write name="aimQuarterlyComparisonsForm" property="totalUnExpended"/> USD
 
@@ -518,7 +548,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 											</TABLE>
 
-	                          		</logic:notEqual>										
+	                          		</logic:notEqual>
 
 										</TD></TR>
 
@@ -528,19 +558,19 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 												<TR><TD>
 
-			                       	
+
 
                           					<logic:notEqual name="aimQuarterlyComparisonsForm" property="perspective" value="DI">
 
 				                          		<table width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding">
 
-            				                		<tr bgcolor="#DDDDDB"> 
+            				                		<tr bgcolor="#DDDDDB">
 
 			                              			<td bgcolor="#DDDDDB">
 
          			                     				<div align="center">
 
-                  			            					<digi:trn key="aim:year">Year</digi:trn> 
+                  			            					<digi:trn key="aim:year">Year</digi:trn>
 
                            			   				</div>
 
@@ -567,12 +597,27 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
                                							</div>
 
 			                              			</td>
+                                                                            <field:display name="Disbursement Orders Tab" feature="Disbursement Orders">
+
+                                                                        <td bgcolor="#DDDDDB">
+
+                  			            				<div align="center">
+
+																		<FONT color="blue">*</FONT>
+
+                           			   					<digi:trn key="aim:actualDisbOrdres">Actual Disbursements Orders</digi:trn>
+
+                               							</div>
+
+			                              			</td>
+                                                                        </field:display>
+
 
                   			            			<td bgcolor="#DDDDDB">
 
          			         		        				<div align="center">
 
-																		<FONT color="blue">*</FONT>																	
+																		<FONT color="blue">*</FONT>
 
                               							<digi:trn key="aim:plannedDisbursements">Planned Disbursements</digi:trn>
 
@@ -584,7 +629,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
                   			            				<div align="center">
 
-																		<FONT color="blue">*</FONT>																	
+																		<FONT color="blue">*</FONT>
 
                            		   						<digi:trn key="aim:actualDisbursements">Actual Disbursements</digi:trn>
 
@@ -596,7 +641,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
                   			            				<div align="center">
 
-																		<FONT color="blue">*</FONT>																	
+																		<FONT color="blue">*</FONT>
 
                            			   					<digi:trn key="aim:actualExpenditures">Actual Expenditures</digi:trn>
 
@@ -608,7 +653,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
             				                		<logic:empty name="aimQuarterlyComparisonsForm" property="quarterlyComparisons" >
 
-			               			         		<tr valign="top"> 
+			               			         		<tr valign="top">
 
 			                        			  			<td colspan="6" align="center"><span class="note">No records!</td>
 
@@ -618,11 +663,11 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 			   				                     <logic:notEmpty name="aimQuarterlyComparisonsForm" property="quarterlyComparisons" >
 
-                        				    			<logic:iterate name="aimQuarterlyComparisonsForm" property="quarterlyComparisons" 
+                        				    			<logic:iterate name="aimQuarterlyComparisonsForm" property="quarterlyComparisons"
 
 				                            			id="quarterlyComparison" type="org.digijava.module.aim.helper.QuarterlyComparison">
 
-																	<tr valign="top"> 
+																	<tr valign="top">
 
 			                  					      		<td bgcolor="#F8F8F5">
 
@@ -665,6 +710,20 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 																			</div>
 
 																		</td>
+                                                                                                                                                <td bgcolor="#F8F8F5">
+                                                                                                                                                <field:display name="Actual Disbursement Orders" feature="Disbursement Orders">
+
+																			<div align="right">
+
+																				<bean:write name="quarterlyComparison" property="actualDisbOrder" />
+
+																			</div>
+                                                                                                                                                            </field:display >
+
+
+																		</td>
+
+
 
 																		<td bgcolor="#F8F8F5">
 
@@ -710,13 +769,13 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 												<TR><TD>
 
-												
+
 
 				                       		<logic:equal name="aimQuarterlyComparisonsForm" property="perspective" value="DI">
 
 														<table width="100%"  border="0" cellpadding="0" cellspacing="1" class="box-border">
 
-															<tr bgcolor="#DDDDDB" > 
+															<tr bgcolor="#DDDDDB" >
 
 																<td height="30" bgcolor="#DDDDDB">
 
@@ -740,9 +799,9 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 																<td bgcolor="#DDDDDB" colspan="3">
 
-																	<div align="center"> 
+																	<div align="center">
 
-																		<FONT color="blue">*</FONT>																	
+																		<FONT color="blue">*</FONT>
 
 																		<p><digi:trn key="aim:discrepancyCommitments">Commitments</digi:trn></p>
 
@@ -754,7 +813,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 																	<div align="center">
 
-																		<FONT color="blue">*</FONT>																	
+																		<FONT color="blue">*</FONT>
 
 																		<digi:trn key="aim:discrepancyDisbursements">Disbursements</digi:trn>
 
@@ -766,7 +825,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 																	<div align="center">
 
-																		<FONT color="blue">*</FONT>																	
+																		<FONT color="blue">*</FONT>
 
 																		<digi:trn key="aim:discrepancyExpenditures">Expenditures</digi:trn>
 
@@ -776,7 +835,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 															</tr>
 
-															<tr bgcolor="#DDDDDB" > 
+															<tr bgcolor="#DDDDDB" >
 
 																<td height="30" bgcolor="#DDDDDB"></td>
 
@@ -784,9 +843,9 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 							              					<td bgcolor="#DDDDDB">
 
-							              						<div align="center"> 
+							              						<div align="center">
 
-																		<FONT color="blue">*</FONT>																	
+																		<FONT color="blue">*</FONT>
 
 							                  					<p><digi:trn key="aim:donorActuals">Donor Actuals</digi:trn></p>
 
@@ -798,7 +857,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 																	<div align="center">
 
-																		<FONT color="blue">*</FONT>																	
+																		<FONT color="blue">*</FONT>
 
 																		Impl. Agency Actuals
 
@@ -810,7 +869,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 																	<div align="center">
 
-																		<FONT color="blue">*</FONT>																	
+																		<FONT color="blue">*</FONT>
 
 																		<digi:trn key="aim:mofedActuals">MOFED Actuals</digi:trn>
 
@@ -820,9 +879,9 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 																<td bgcolor="#DDDDDB">
 
-																	<div align="center"> 
+																	<div align="center">
 
-																		<FONT color="blue">*</FONT>																	
+																		<FONT color="blue">*</FONT>
 
 							                  					<p><digi:trn key="aim:donorActuals">Donor Actuals</digi:trn></p>
 
@@ -834,7 +893,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 																	<div align="center">
 
-																		<FONT color="blue">*</FONT>																	
+																		<FONT color="blue">*</FONT>
 
 							              							Impl. Agency Actuals
 
@@ -846,7 +905,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 							              						<div align="center">
 
-																		<FONT color="blue">*</FONT>																	
+																		<FONT color="blue">*</FONT>
 
 							              							<digi:trn key="aim:mofedActuals">MOFED Actuals</digi:trn>
 
@@ -856,9 +915,9 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 							              					<td bgcolor="#DDDDDB">
 
-							              						<div align="center"> 
+							              						<div align="center">
 
-																		<FONT color="blue">*</FONT>																	
+																		<FONT color="blue">*</FONT>
 
 																		<p><digi:trn key="aim:donorActuals">Donor Actuals</digi:trn></p>
 
@@ -870,7 +929,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 							              						<div align="center">
 
-																		<FONT color="blue">*</FONT>																	
+																		<FONT color="blue">*</FONT>
 
 							              							Impl. Agency Actuals
 
@@ -882,7 +941,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 							              						<div align="center">
 
-																		<FONT color="blue">*</FONT>																	
+																		<FONT color="blue">*</FONT>
 
 							              							<digi:trn key="aim:mofedActuals">MOFED Actuals</digi:trn>
 
@@ -894,7 +953,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 				            							<logic:empty name="aimQuarterlyComparisonsForm" property="quarterlyDiscrepanciesAll" >
 
-			                        					<tr valign="top"> 
+			                        					<tr valign="top">
 
 			                          						<td colspan="8" align="center">
 
@@ -908,11 +967,11 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 				            							<logic:notEmpty name="aimQuarterlyComparisonsForm" property="quarterlyDiscrepanciesAll">
 
-																<logic:iterate name="aimQuarterlyComparisonsForm" property="quarterlyDiscrepanciesAll" 
+																<logic:iterate name="aimQuarterlyComparisonsForm" property="quarterlyDiscrepanciesAll"
 
 																id="discrepancy" type="org.digijava.module.aim.helper.QuarterlyDiscrepancyAll">
 
-							            						<tr valign="top"> 
+							            						<tr valign="top">
 
 							              							<td height="30" bgcolor="#F8F8F5">
 
@@ -986,7 +1045,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 							              							<td bgcolor="#F8F8F5">
 
-														              	<div align="right"> 
+														              	<div align="right">
 
 														                  <bean:write name="discrepancy" property="commitmentMofedActual"/>
 
@@ -1000,7 +1059,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 														              		<bean:write name="discrepancy" property="disbursementDonorActual"/>
 
-														              	</div>	
+														              	</div>
 
 														            </td>
 
@@ -1016,7 +1075,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 							              							<td bgcolor="#F8F8F5">
 
-							              								<div align="right"> 
+							              								<div align="right">
 
 														                  <bean:write name="discrepancy" property="disbursementMofedActual"/>
 
@@ -1046,7 +1105,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 							              							<td bgcolor="#F8F8F5">
 
-							              								<div align="right"> 
+							              								<div align="right">
 
 							                  							<bean:write name="discrepancy" property="expenditureMofedActual"/>
 
@@ -1102,15 +1161,15 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 							</c:set>
 
-							                        	<digi:link href="/viewYearlyComparisons.do" name="urlShowQuarterly" title="${translation}" >	
+							                        	<digi:link href="/viewYearlyComparisons.do" name="urlShowQuarterly" title="${translation}" >
 
 				      	  										<STRONG>
 
-																		Show Yearly 
+																		Show Yearly
 
 																	</STRONG>
 
-						   		     						</digi:link>															
+						   		     						</digi:link>
 
 															</TD>
 
@@ -1124,12 +1183,12 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 													<FONT color=blue>*
 
-													<digi:trn key="aim:allTheAmountsInThousands">	
+													<digi:trn key="aim:allTheAmountsInThousands">
 
 													All the amounts are in thousands (000)</digi:trn>
 													</FONT>
 
-												</TD></TR>												
+												</TD></TR>
 
 											</TABLE>
 
@@ -1171,7 +1230,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 </digi:form>
 
-</logic:equal>	
+</logic:equal>
 
 
 

@@ -63,8 +63,9 @@ public class ViewFinancingBreakdown extends TilesAction {
 			String overallTotalUnDisbursed = "";
 			String overallTotalExpenditure = "";
 			String overallTotalUnExpended = "";
+                        String overallTotalDibsOrders="";
 			double fromExchangeRate = 0.0;
-			
+
 			Collection ampFundings = DbUtil.getAmpFunding(id);
 			FilterParams fp = (FilterParams) session
 					.getAttribute(Constants.FILTER_PARAMS);
@@ -72,11 +73,11 @@ public class ViewFinancingBreakdown extends TilesAction {
 			if (fp == null) {
 				fp = new FilterParams();
 			}
-			
+
 			ApplicationSettings apps = null;
 			apps = teamMember.getAppSettings();
 
-			if (fp.getCurrencyCode() == null) 
+			if (fp.getCurrencyCode() == null)
 			{
 				Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
 				if (curr != null) {
@@ -87,7 +88,7 @@ public class ViewFinancingBreakdown extends TilesAction {
 			if (fp.getFiscalCalId() == null) {
 				fp.setFiscalCalId(apps.getFisCalId());
 			}
-			
+
 			String perspective = CommonWorker.getPerspective(apps.getPerspective());
 			fp.setPerspective(perspective);
 
@@ -112,7 +113,7 @@ public class ViewFinancingBreakdown extends TilesAction {
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 			formBean.setPerspectives(DbUtil.getAmpPerspective());
-			
+
 			overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(
 					fb, Constants.COMMITMENT);
 			formBean.setTotalCommitted(overallTotalCommitted);
@@ -128,7 +129,10 @@ public class ViewFinancingBreakdown extends TilesAction {
 			overallTotalUnExpended = DecimalToText.getDifference(
 					overallTotalDisbursed, overallTotalExpenditure);
 			formBean.setTotalUnExpended(overallTotalUnExpended);
-			
+                        overallTotalDibsOrders= FinancingBreakdownWorker.getOverallTotal(
+					fb, Constants.DISBURSEMENT_ORDER);
+                        formBean.setTotalDisbOrdered(overallTotalDibsOrders);
+
 			formBean.setTotalProjections( FinancingBreakdownWorker.getOverallTotal(fb, Constants.MTEFPROJECTION) );
 		}
 		return null;

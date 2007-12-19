@@ -6,21 +6,23 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
- 
+
 public class QuarterlyComparisonsWorker	{
-	
+
 	private static Logger logger = Logger.getLogger(QuarterlyComparisonsWorker.class);
 	private static ArrayList arrList;
 	private static Iterator iter;
-	
+
 	public static Collection getQuarterlyComparisons(FilterParams fp)	{
 		if ( logger.isDebugEnabled() )
 			logger.debug("getQuarterlyComparisons() passed filter parameters " +
 						" ampFundingId=" +	fp.getAmpFundingId());
-	
+
 		fp.setTransactionType(Constants.COMMITMENT);
 		Collection commitments = QuarterlyInfoWorker.getQuarterlyInfo(fp);
-		fp.setTransactionType(Constants.DISBURSEMENT);
+                fp.setTransactionType(Constants.DISBURSEMENT_ORDER);
+                Collection disbursementOrders = QuarterlyInfoWorker.getQuarterlyInfo(fp);
+                fp.setTransactionType(Constants.DISBURSEMENT);
 		Collection disbursements = QuarterlyInfoWorker.getQuarterlyInfo(fp);
 		fp.setTransactionType(Constants.EXPENDITURE);
 		Collection expenditure = QuarterlyInfoWorker.getQuarterlyInfo(fp);
@@ -31,6 +33,8 @@ public class QuarterlyComparisonsWorker	{
 			QuarterlyInfo qi = (QuarterlyInfo) iter.next();
 			fillAdd(qc,qi,Constants.COMMITMENT);
 		}
+                iter=disbursementOrders.iterator();
+                merge(Constants.DISBURSEMENT_ORDER);
 		iter = disbursements.iterator();
 		merge(Constants.DISBURSEMENT);
 		iter = expenditure.iterator();
@@ -47,40 +51,49 @@ public class QuarterlyComparisonsWorker	{
 		if (logger.isDebugEnabled() )
 			logger.debug("merge() < transactionType="+transactionType);
 		boolean b = false ;
-			
+
 		while ( iter.hasNext() )	{
 			b = false;
 			QuarterlyInfo qi = (QuarterlyInfo) iter.next();
 			if ( qi.getAggregate()==0)	{
 				int fy = qi.getFiscalYear();
 				int fq = qi.getFiscalQuarter();
-			
+
 				for ( int i = 0 ; i < arrList.size() ; i++ )	{
 					QuarterlyComparison qc = (QuarterlyComparison) arrList.get(i);
 					if ( fy == qc.getFiscalYear() && fq == qc.getFiscalQuarter() )	{
 						String pm = qi.getPlannedAmount();
 						String am = qi.getActualAmount();
-		
+
+                                                if ( transactionType == Constants.DISBURSEMENT_ORDER)	{
+                                                        if ( qc.getActualDisbOrder() == null ) {
+                                                                qc.setActualDisbOrder(am);
+                                                                b = true;
+                                                        }
+                                                }
+
+
+
 						if ( transactionType == Constants.DISBURSEMENT)	{
-							if ( qc.getPlannedDisbursement() == null 
+							if ( qc.getPlannedDisbursement() == null
 								&& qc.getActualDisbursement()== null) {
 								qc.setPlannedDisbursement(pm);
 								qc.setActualDisbursement(am);
-								b = true;	
+								b = true;
 							}
 						}
-		
+
 						if ( transactionType == Constants.EXPENDITURE)	{
-							if ( qc.getPlannedExpenditure() == null 
+							if ( qc.getPlannedExpenditure() == null
 								&& qc.getActualExpenditure() == null ) {
 								qc.setPlannedExpenditure(pm);
 								qc.setActualExpenditure(am);
-								b = true;	
+								b = true;
 							}
-			
+
 						}
 						if ( b )
-							break;	
+							break;
 					}
 				}
 				if ( !b )	{
@@ -88,13 +101,13 @@ public class QuarterlyComparisonsWorker	{
 					fillAdd(qc,qi,transactionType);
 				}
 			}
-			
+
 		}
 		if (logger.isDebugEnabled() )
 			logger.debug("merge() > transactionType="+transactionType);
 	}
-	
-	public static void fillAdd(QuarterlyComparison qc, 
+
+	public static void fillAdd(QuarterlyComparison qc,
 							   QuarterlyInfo qi,
 							   int transactionType)	{
 		if ( qi.getAggregate()==0)	{
@@ -102,7 +115,7 @@ public class QuarterlyComparisonsWorker	{
 			qc.setFiscalQuarter(qi.getFiscalQuarter());
 			if ( transactionType == Constants.COMMITMENT ) {
 				qc.setPlannedCommitment(qi.getPlannedAmount());
-				qc.setActualCommitment(qi.getActualAmount());	
+				qc.setActualCommitment(qi.getActualAmount());
 			}
 			if ( transactionType == Constants.DISBURSEMENT)	{
 				qc.setPlannedDisbursement(qi.getPlannedAmount());
@@ -114,5 +127,5 @@ public class QuarterlyComparisonsWorker	{
 			}
 			arrList.add(qc);
 		}
-	}	
+	}
 }

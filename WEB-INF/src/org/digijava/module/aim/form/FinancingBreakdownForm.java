@@ -1,7 +1,6 @@
 package org.digijava.module.aim.form ;
 
 import java.util.Collection;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -13,21 +12,23 @@ import org.digijava.module.aim.util.CurrencyUtil;
 public class FinancingBreakdownForm extends MainProjectDetailsForm
 {
 	public static Logger logger = Logger.getLogger(FinancingBreakdownForm.class);
-	
+
 	private Collection financingBreakdown ;
 	private String totalCommitted ;
 	private String totalDisbursed ;
 	private String totalUnDisbursed ;
 	private String totalExpended ;
 	private String totalUnExpended ;
-	
+        private String totalDisbOrdered ;
+
+
 	/*For projection*/
 	private String totalProjections ;
-	
+
 	private Collection fiscalYears;
 	private long fiscalCalId;
 	private String perpsectiveNameTrimmed;
-		
+
 	public String getTotalProjections() {
 		return totalProjections;
 	}
@@ -47,12 +48,12 @@ public class FinancingBreakdownForm extends MainProjectDetailsForm
 		return financingBreakdown;
 	}
 
-	
-	
+
+
 	/**
 	 * @return
 	 */
-	
+
 	public String getTotalCommitted() {
 		return totalCommitted;
 	}
@@ -67,7 +68,7 @@ public class FinancingBreakdownForm extends MainProjectDetailsForm
 	public String getTotalUnDisbursed() {
 		return totalUnDisbursed;
 	}
-	
+
 	/**
 	 * @return
 	 */
@@ -135,7 +136,7 @@ public class FinancingBreakdownForm extends MainProjectDetailsForm
 	{
 		return fiscalYears;
 	}
-	
+
 	public ActionErrors validate(ActionMapping actionMapping,
 					 			 HttpServletRequest httpServletRequest) {
 		ActionErrors errors = super.validate(actionMapping, httpServletRequest);
@@ -148,15 +149,21 @@ public class FinancingBreakdownForm extends MainProjectDetailsForm
 		return super.getPerpsectiveName().replaceAll(" ","");
 	}
 
+        public String getTotalDisbOrdered() {
+                return totalDisbOrdered;
+        }
 
-
-	public void setPerpsectiveNameTrimmed(String perpsectiveNameTrimmed) {
+        public void setPerpsectiveNameTrimmed(String perpsectiveNameTrimmed) {
 		this.perpsectiveNameTrimmed = perpsectiveNameTrimmed;
-	}	
-	
-	public String getSelectedCurrency(){
+	}
+
+        public void setTotalDisbOrdered(String totalDisbOrdered) {
+                this.totalDisbOrdered = totalDisbOrdered;
+        }
+
+        public String getSelectedCurrency(){
 		AmpCurrency c = CurrencyUtil.getCurrencyByCode(this.getCurrency());
 		return c.getCurrencyName();
 	}
 }
-	
+

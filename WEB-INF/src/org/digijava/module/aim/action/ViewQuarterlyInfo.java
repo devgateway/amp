@@ -34,15 +34,15 @@ import org.digijava.module.aim.util.DbUtil;
 
 public class ViewQuarterlyInfo extends TilesAction	{
 	private static Logger logger = Logger.getLogger(ViewQuarterlyInfo.class);
-	
+
 	public ActionForward execute(ComponentContext context,
-								 ActionMapping mapping, 
+								 ActionMapping mapping,
 								 ActionForm form,
-								 HttpServletRequest request, 
-								 HttpServletResponse response) 
+								 HttpServletRequest request,
+								 HttpServletResponse response)
 								 throws java.lang.Exception 	{
 		HttpSession session = request.getSession();
-		TeamMember teamMember=(TeamMember)session.getAttribute("currentMember");						 	
+		TeamMember teamMember=(TeamMember)session.getAttribute("currentMember");
 		QuarterlyInfoForm formBean = (QuarterlyInfoForm)form;
 		if (session.getAttribute("currentMember") == null) {
 			formBean.setSessionExpired(true);
@@ -54,28 +54,28 @@ public class ViewQuarterlyInfo extends TilesAction	{
 			formBean.setCurrencyPresent(ff.isCurrencyPresent());
 			formBean.setPerspectivePresent(ff.isPerspectivePresent());
 			formBean.setYearRangePresent(ff.isYearRangePresent());
-			formBean.setGoButtonPresent(ff.isGoButtonPresent());	
+			formBean.setGoButtonPresent(ff.isGoButtonPresent());
 			FilterParams fp = (FilterParams)session.getAttribute("filterParams");
 			fp.setTransactionType(formBean.getTransactionType());
 			ApplicationSettings apps = null;
 			if ( teamMember != null )	{
 				apps = teamMember.getAppSettings();
 			}
-	
+
 			if ( fp.getCurrencyCode() == null )	{
 				Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
 				fp.setCurrencyCode(curr.getCurrencyCode());
 			}
-	
+
 			if ( fp.getFiscalCalId() == null )	{
 				fp.setFiscalCalId(apps.getFisCalId());
 			}
-	
+
 			if ( fp.getPerspective() == null )	{
 				String perspective = CommonWorker.getPerspective(apps.getPerspective());
 				fp.setPerspective(perspective);
 			}
-	
+
 			if ( fp.getFromYear()==0 || fp.getToYear()==0 )	{
 				int year = new GregorianCalendar().get(Calendar.YEAR);
 				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
@@ -87,19 +87,19 @@ public class ViewQuarterlyInfo extends TilesAction	{
 			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
 			formBean.setFromYear(fp.getFromYear());
 			formBean.setToYear(fp.getToYear());
-			session.setAttribute("filterParams",fp);	
-			
+			session.setAttribute("filterParams",fp);
+
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 			formBean.setPerspectives(DbUtil.getAmpPerspective());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
-			
+
 			TabColors tc = PresentationUtil.setTabColors(fp.getTransactionType());
 			formBean.setCommitmentTabColor(tc.getCommitmentTabColor());
 			formBean.setDisbursementTabColor(tc.getDisbursementTabColor());
 			formBean.setExpenditureTabColor(tc.getExpenditureTabColor());
-			
+
 			if ( formBean.getPerspective().equals("DI") ) 	{
 				Collection c = QuarterlyDiscrepancyWorker.getDiscrepancy(fp);
 				formBean.setDiscrepancies(c);
@@ -108,11 +108,12 @@ public class ViewQuarterlyInfo extends TilesAction	{
 				Collection c = QuarterlyInfoWorker.getQuarterlyInfo(fp);
 				if ( c.size() != 0 )	{
 					formBean.setQuarterlyInfo(c);
-					
+
 					TotalsQuarterly tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode());
 					formBean.setTotalCommitted(tq.getTotalCommitted());
-					formBean.setTotalDisbursed(tq.getTotalDisbursed());														  	
-					formBean.setTotalUnExpended(tq.getTotalUnExpended());																							
+					formBean.setTotalDisbursed(tq.getTotalDisbursed());
+                                        formBean.setTotalDisbOrdered(tq.getTotalDisbOrdered());
+					formBean.setTotalUnExpended(tq.getTotalUnExpended());
 					formBean.setTotalRemaining(tq.getTotalRemaining());
 				}
 			}

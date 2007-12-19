@@ -36,22 +36,22 @@ import org.digijava.module.aim.util.DbUtil;
 public class ViewYearlyComparisons extends TilesAction
 {
 	private static Logger logger = Logger.getLogger(ViewYearlyComparisons.class) ;
-	
+
 	public ActionForward execute(ComponentContext context,
-								ActionMapping mapping, 
+								ActionMapping mapping,
 								ActionForm form,
-								HttpServletRequest request, 
-								HttpServletResponse response) 
+								HttpServletRequest request,
+								HttpServletResponse response)
 								throws IOException,ServletException 	{
 		HttpSession session = request.getSession();
-			
+
 		YearlyComparisonsForm formBean = (YearlyComparisonsForm) form;
 		if (session.getAttribute("currentMember") == null) {
 			formBean.setSessionExpired(true);
 		}
 		else	{
 			formBean.setSessionExpired(false);
-			TeamMember teamMember=(TeamMember)session.getAttribute("currentMember");	
+			TeamMember teamMember=(TeamMember)session.getAttribute("currentMember");
 			FinancialFilters ff = CommonWorker.getFilters(teamMember.getTeamId(),"FP");
 			formBean.setCalendarPresent(ff.isCalendarPresent());
 			formBean.setCurrencyPresent(ff.isCurrencyPresent());
@@ -64,21 +64,21 @@ public class ViewYearlyComparisons extends TilesAction
 			if ( teamMember != null )	{
 				apps = teamMember.getAppSettings();
 			}
-	
+
 			if ( fp.getCurrencyCode() == null )	{
 				Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
 				fp.setCurrencyCode(curr.getCurrencyCode());
 			}
-	
+
 			if ( fp.getFiscalCalId() == null )	{
 				fp.setFiscalCalId(apps.getFisCalId());
 			}
-	        
+
 			if ( fp.getPerspective() == null )	{
 				String perspective = CommonWorker.getPerspective(apps.getPerspective());
 				fp.setPerspective(perspective);
 			}
-	
+
 			if ( fp.getFromYear()==0 || fp.getToYear()==0 )	{
 				int year = new GregorianCalendar().get(Calendar.YEAR);
 				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
@@ -90,8 +90,8 @@ public class ViewYearlyComparisons extends TilesAction
 			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
 			formBean.setFromYear(fp.getFromYear());
 			formBean.setToYear(fp.getToYear());
-			session.setAttribute("filterParams",fp);	
-				
+			session.setAttribute("filterParams",fp);
+
 			formBean.setYears(YearUtil.getYears());
 			if ( formBean.getPerspective().equals("DI") )	{
 				Collection c  = YearlyDiscrepancyAllWorker.getDiscrepancy(fp);
@@ -105,6 +105,7 @@ public class ViewYearlyComparisons extends TilesAction
 					formBean.setTotalPlannedDisbursement(allTotals.getTotalPlannedDisbursement());
 					formBean.setTotalActualDisbursement(allTotals.getTotalActualDisbursement());
 					formBean.setTotalActualExpenditure(allTotals.getTotalActualExpenditure());
+                                        formBean.setTotalDisbOrder(allTotals.getTotalDisbOrder());
 				}
 				formBean.setYearlyComparisons(c);
 			}

@@ -11,6 +11,10 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
 
 
 
@@ -145,11 +149,11 @@
 
 			<TR><TD bgcolor="#f4f4f4">
 
-			
+
 
 			<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border=0>
 
-				<TR bgColor=#222e5d height="20"><TD style="COLOR: #c9c9c7" height="20"> 	
+				<TR bgColor=#222e5d height="20"><TD style="COLOR: #c9c9c7" height="20">
 
 				&nbsp;&nbsp;&nbsp;
 
@@ -161,9 +165,9 @@
 
 					<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" styleClass="sub-nav2" title="${translation}" >
 
-              		<digi:trn key="aim:overview">OVERVIEW</digi:trn> 
+              		<digi:trn key="aim:overview">OVERVIEW</digi:trn>
 
-					</digi:link>| 
+					</digi:link>|
 
               	<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="0">
 
@@ -189,7 +193,36 @@
 
 	              	</span>
 
-              	</logic:equal> | 
+              	</logic:equal> |
+                 <field:display name="Disbursement Orders Tab" feature="Disbursement Orders">
+                	<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="4">
+
+              		<c:set target="${urlSubTabs}" property="transactionType" value="4"/>
+
+						<c:set var="translation">
+
+							<digi:trn key="aim:clickToViewDisbursementOrderss">Click here view Disbursement Orders</digi:trn>
+
+						</c:set>
+
+			  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+
+			  				<digi:trn key="aim:disbursementOrdersTab">DISBURSEMENT ORDERS</digi:trn>
+
+			  			</digi:link>
+
+              	</logic:notEqual>
+
+              	<logic:equal name="aimYearlyInfoForm" property="transactionType" value="4">
+
+	            	<span class="sub-nav2-selected">
+
+	              		<digi:trn key="aim:disbursementOrdersTab">DISBURSEMENT ORDERS</digi:trn>
+
+	              	</span>
+
+              	</logic:equal>|
+                </field:display>
 
               	<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="1">
 
@@ -219,7 +252,7 @@
 
               	</logic:equal>|
 
-              	<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="2"> 
+              	<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="2">
 
                	<c:set target="${urlSubTabs}" property="transactionType" value="2"/>
 
@@ -245,7 +278,7 @@
 
 	              	</span>
 
-              	</logic:equal>	| 
+              	</logic:equal>	|
 
 								<digi:link href="/viewYearlyDiscrepancy.do" name="urlDiscrepancy" styleClass="sub-nav2" title="${translation}" >
 
@@ -265,7 +298,7 @@
 
 					</digi:link>
 
-				</TD></TR>			
+				</TD></TR>
 
 				<TR bgColor=#f4f4f2>
 
@@ -277,7 +310,7 @@
 
 								<TD align="left">
 
-						<SPAN class=crumb>					
+						<SPAN class=crumb>
 
               			<jsp:useBean id="urlFinancingBreakdown" type="java.util.Map" class="java.util.HashMap"/>
 
@@ -295,7 +328,7 @@
 
 								<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>
 
-							</c:set>						
+							</c:set>
 
 							<digi:link href="/viewFinancingBreakdown.do" name="urlFinancingBreakdown" styleClass="comment" title="<%translation%>" >
 
@@ -303,13 +336,19 @@
 
 							</digi:link>
 
-              			 &gt; 
+              			 &gt;
 
 							<logic:equal name="aimYearlyInfoForm" property="transactionType" value="0">
 
                      	<digi:trn key="aim:yearlyCommitments">Yearly Commitments</digi:trn>
 
 							</logic:equal>
+                                                        <logic:equal name="aimYearlyInfoForm" property="transactionType" value="4">
+
+                  	  	<digi:trn key="aim:yearlyDisbursementsOrders">Yearly Disbursement Orders</digi:trn>
+
+							</logic:equal>
+
 
 							<logic:equal name="aimYearlyInfoForm" property="transactionType" value="1">
 
@@ -326,7 +365,7 @@
 							&gt;
 
 							<bean:define id="perspectiveNameTrimedLocal" name="aimYearlyInfoForm" property="perpsectiveNameTrimmed" type="java.lang.String"/>
-								<digi:trn key='<%="aim:"+ perspectiveNameTrimedLocal %>'>	
+								<digi:trn key='<%="aim:"+ perspectiveNameTrimedLocal %>'>
 									<bean:write name="aimYearlyInfoForm" property="perpsectiveName"/></digi:trn>
 
 
@@ -342,7 +381,7 @@
 
 							</TR>
 
-						</TABLE>										
+						</TABLE>
 
 					</TD>
 
@@ -370,7 +409,7 @@
 
 												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2">
 
-         			               		<TR bgcolor="#F4F4F2"> 
+         			               		<TR bgcolor="#F4F4F2">
 
                   			        			<TD nowrap bgcolor="#C9C9C7" class="box-title">&nbsp;
 
@@ -379,6 +418,14 @@
                             							<digi:trn key="aim:yearlyCommitments">Yearly Commitments</digi:trn>
 
 															</logic:equal>
+
+                                                                                                                        	<logic:equal name="aimYearlyInfoForm" property="transactionType" value="4">
+
+                  			          				<digi:trn key="aim:yearlyDisbursementOrders">Yearly Disbursement Orders</digi:trn>
+
+															</logic:equal>
+
+
 
 															<logic:equal name="aimYearlyInfoForm" property="transactionType" value="1">
 
@@ -400,7 +447,7 @@
 
          			               		</TR>
 
-                  			    		</TABLE>																			
+                  			    		</TABLE>
 
 											</TD>
 
@@ -425,18 +472,18 @@
 																<bean:define name="perspectiveId" property="name" id="perspectiveName"/>
 																	<html:option value="${perspectiveId.code}">
 																		<digi:trn key='<%="aim:"+perspectiveName %>' >
-																			<bean:write name="perspectiveId" property="name"/></digi:trn> 
+																			<bean:write name="perspectiveId" property="name"/></digi:trn>
 																	</html:option>
 																</logic:iterate>
 															</html:select>
 
-														</TD>								
+														</TD>
 
 													</TR>
 
 												</TABLE>
 
-												</logic:equal>											
+												</logic:equal>
 
 											</TD>
 
@@ -452,7 +499,7 @@
 
 								<TD bgColor=#ffffff class=box-border width="100%" vAlign="top" align="left">
 
-             					<TABLE cellSpacing=2 cellPadding=0 border=0 bgColor="#ffffff" width="100%" vAlign="top" align="left" 
+             					<TABLE cellSpacing=2 cellPadding=0 border=0 bgColor="#ffffff" width="100%" vAlign="top" align="left"
 
 									bgColor="#ffffff">
 
@@ -462,13 +509,13 @@
 
 											<TABLE cellSpacing=2 cellPadding=0 border=0 bgColor=#ffffff vAlign="top" align="left">
 
-   		              				<TR> 
+   		              				<TR>
 
 												<logic:equal name="aimYearlyInfoForm" property="currencyPresent" value="true">
 
       	    	       					<TD>
 
-													<TABLE cellSpacing=2 cellPadding=0>	
+													<TABLE cellSpacing=2 cellPadding=0>
 
 														<TR>
 
@@ -478,11 +525,11 @@
 
 		                           	 				<html:select property="currency" styleClass="dr-menu">
 
-	   			                        	 			<html:optionsCollection name="aimYearlyInfoForm" property="currencies" 
+	   			                        	 			<html:optionsCollection name="aimYearlyInfoForm" property="currencies"
 
 																	value="currencyCode" label="currencyName"/>
 
-																</html:select>															
+																</html:select>
 
 															</TD>
 
@@ -498,7 +545,7 @@
 
       	                    			<TD>
 
-													<TABLE cellSpacing=2 cellPadding=0>	
+													<TABLE cellSpacing=2 cellPadding=0>
 
 														<TR>
 
@@ -508,9 +555,9 @@
 
 																<html:select property="fiscalCalId" styleClass="dr-menu">
 
-																	<html:optionsCollection name="aimYearlyInfoForm" property="fiscalYears" 
+																	<html:optionsCollection name="aimYearlyInfoForm" property="fiscalYears"
 
-																	value="ampFiscalCalId" label="name"/> 
+																	value="ampFiscalCalId" label="name"/>
 
 																</html:select>
 
@@ -528,7 +575,7 @@
 
       	                    			<TD>
 
-													<TABLE cellSpacing=2 cellPadding=0>	
+													<TABLE cellSpacing=2 cellPadding=0>
 
 														<TR>
 
@@ -540,7 +587,7 @@
 
 							                      		<html:select property="fromYear" styleClass="dr-menu">
 
-									                      	<html:optionsCollection name="aimYearlyInfoForm" property="years" 
+									                      	<html:optionsCollection name="aimYearlyInfoForm" property="years"
 
 																	value="year" label="year"/>
 
@@ -554,19 +601,19 @@
 
 						   	                     	<html:select property="toYear" styleClass="dr-menu">
 
-																	<html:optionsCollection name="aimYearlyInfoForm" property="years" 
+																	<html:optionsCollection name="aimYearlyInfoForm" property="years"
 
 																	value="year" label="year"/>
 
 																</html:select>
 
-															</TD>															
+															</TD>
 
 														</TR>
 
 													</TABLE>
 
-                  	        			</TD>												
+                  	        			</TD>
 
                	           			</logic:equal>
 
@@ -582,7 +629,7 @@
 
 											</logic:equal>
 
-											
+
 
 										</TD></TR>
 
@@ -594,43 +641,56 @@
 
 											<TABLE cellSpacing=0 cellPadding=0 border=0 bgColor=#ffffff width="100%" vAlign="top" align="left">
 
-	   	                     		<TR> 
+	   	                     		<TR>
 
-         	      	           			<TD width="100%" valign="middle"> 
+         	      	           			<TD width="100%" valign="middle">
 
             	      		        			<SPAN class="note">
 
                	         	  					<logic:equal name="aimYearlyInfoForm" property="transactionType" value="1">
 
-                     								<digi:trn key="aim:totalCommitted">Total Committed</digi:trn>: 
+                     								<digi:trn key="aim:totalCommitted">Total Committed</digi:trn>:
 
-						     								<bean:write name="aimYearlyInfoForm" property="totalCommitted"/> 
+						     								<bean:write name="aimYearlyInfoForm" property="totalCommitted"/>
 
-															<bean:write name="aimYearlyInfoForm" property="currency"/> 
+															<bean:write name="aimYearlyInfoForm" property="currency"/>
 
-						     								<digi:trn key="aim:totalRemaining">Total Remaining</digi:trn>: 
+						     								<digi:trn key="aim:totalRemaining">Total Remaining</digi:trn>:
 
-						     								<bean:write name="aimYearlyInfoForm" property="totalRemaining"/> 
+						     								<bean:write name="aimYearlyInfoForm" property="totalRemaining"/>
 
-															<bean:write name="aimYearlyInfoForm" property="currency"/> 
+															<bean:write name="aimYearlyInfoForm" property="currency"/>
 
 				     										</logic:equal>
 
+                                                                                                                	<logic:equal name="aimYearlyInfoForm" property="transactionType" value="4">
+
+         		            						<digi:trn key="aim:totalDisbOrdered">Total Ordered</digi:trn>:
+
+				   		  								<bean:write name="aimYearlyInfoForm" property="totalDisbOrdered"/>
+
+															<bean:write name="aimYearlyInfoForm" property="currency"/>
+
+                                                                                                                    </logic:equal>
+
+
+
+
 							     							<logic:equal name="aimYearlyInfoForm" property="transactionType" value="2">
 
-         		            						<digi:trn key="aim:totalDisbursed">Total Disbursed</digi:trn>: 
+         		            						<digi:trn key="aim:totalDisbursed">Total Disbursed</digi:trn>:
 
-				   		  								<bean:write name="aimYearlyInfoForm" property="totalDisbursed"/> 
+				   		  								<bean:write name="aimYearlyInfoForm" property="totalDisbursed"/>
 
-															<bean:write name="aimYearlyInfoForm" property="currency"/> 
+															<bean:write name="aimYearlyInfoForm" property="currency"/>
 
-				     										<digi:trn key="aim:totalUnExpended">Total Un-Expended</digi:trn>: 
+				     										<digi:trn key="aim:totalUnExpended">Total Un-Expended</digi:trn>:
 
-				     										<bean:write name="aimYearlyInfoForm" property="totalUnExpended"/> 
+				     										<bean:write name="aimYearlyInfoForm" property="totalUnExpended"/>
 
-															<bean:write name="aimYearlyInfoForm" property="currency"/> 
+															<bean:write name="aimYearlyInfoForm" property="currency"/>
 
-							     							</logic:equal> 
+							     							</logic:equal>
 
          			                 			</SPAN>
 
@@ -640,7 +700,7 @@
 
 											</TABLE>
 
-	                          		</logic:notEqual>										
+	                          		</logic:notEqual>
 
 										</TD></TR>
 
@@ -654,7 +714,7 @@
 
                       							<TABLE width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding">
 
-					                        		<tr bgcolor="#DDDDDB" > 
+					                        		<tr bgcolor="#DDDDDB" >
 
                					           			<td bgcolor="#DDDDDB">
 
@@ -670,7 +730,7 @@
 
 				   					                     <div align="center">
 
-															  		<digi:trn key="aim:plannedAmount">Planned Amount</digi:trn> 
+															  		<digi:trn key="aim:plannedAmount">Planned Amount</digi:trn>
 
 																	</div>
 
@@ -692,11 +752,11 @@
 
 				   					           		<logic:notEmpty name="aimYearlyInfoForm" property="yearlyInfo">
 
-															<logic:iterate name="aimYearlyInfoForm" property="yearlyInfo" id="yearlyInfo" 
+															<logic:iterate name="aimYearlyInfoForm" property="yearlyInfo" id="yearlyInfo"
 
 															type="org.digijava.module.aim.helper.YearlyInfo">
 
-															<tr valign="top" bgcolor="#F8F8F5"> 
+															<tr valign="top" bgcolor="#F8F8F5">
 
 				   					              		<td bgcolor="#F8F8F5">
 
@@ -714,7 +774,7 @@
 
 		                        					    	<div align="right">
 
-																		<bean:write name="yearlyInfo" property="plannedAmount" /> 
+																		<bean:write name="yearlyInfo" property="plannedAmount" />
 
 																	</div>
 
@@ -724,7 +784,7 @@
 
 										                    	<div align="right">
 
-																		<bean:write name="yearlyInfo" property="actualAmount" /> 
+																		<bean:write name="yearlyInfo" property="actualAmount" />
 
 																	</div>
 
@@ -738,7 +798,7 @@
 
 															<logic:empty name="aimYearlyInfoForm" property="yearlyInfo">
 
-															<tr valign="top" bgcolor="#F8F8F5"> 
+															<tr valign="top" bgcolor="#F8F8F5">
 
 									                  	<td bgcolor="#F8F8F5" colspan="3">
 
@@ -754,7 +814,7 @@
 
 															</logic:empty>
 
-															<tr valign="top" class="note"> 
+															<tr valign="top" class="note">
 
 				         					         	<td>
 
@@ -766,7 +826,7 @@
 
 									                     	<div align="right">
 
-																		<bean:write name="aimYearlyInfoForm" property="totalPlanned" /> 
+																		<bean:write name="aimYearlyInfoForm" property="totalPlanned" />
 
 																	</div>
 
@@ -776,7 +836,7 @@
 
 				   					                   	<div align="right">
 
-																		<bean:write name="aimYearlyInfoForm" property="totalActual" /> 
+																		<bean:write name="aimYearlyInfoForm" property="totalActual" />
 
 																	</div>
 
@@ -786,7 +846,7 @@
 
 					                       		</TABLE>
 
-													</logic:notEqual>													
+													</logic:notEqual>
 
 												</TD></TR>
 
@@ -796,13 +856,13 @@
 
 									<table width="100%"  border="0" cellpadding="3" cellspacing="1" class="box-border">
 
-										<tr bgcolor="#DDDDDB" > 
+										<tr bgcolor="#DDDDDB" >
 
 											<td height="30" bgcolor="#DDDDDB">
 
 												<div align="center">
 
-				              					Year 
+				              					Year
 
 				              				</div>
 
@@ -810,7 +870,7 @@
 
 							            <td bgcolor="#DDDDDB">
 
-												<div align="center"> 
+												<div align="center">
 
 							               	<p>Donor Planned</p>
 
@@ -828,7 +888,7 @@
 
 							            	<div align="center">
 
-							              		<digi:trn key="aim:MOFED">Mofed</digi:trn> Planned 
+							              		<digi:trn key="aim:MOFED">Mofed</digi:trn> Planned
 
 							             	</div>
 
@@ -854,7 +914,7 @@
 
 							            	<div align="center">
 
-							              		<digi:trn key="aim:MOFED">Mofed</digi:trn> Actuals 
+							              		<digi:trn key="aim:MOFED">Mofed</digi:trn> Actuals
 
 							            	</div>
 
@@ -864,7 +924,7 @@
 
 				            		<logic:empty name="aimYearlyInfoForm" property="discrepancies">
 
-                        		<tr valign="top"> 
+                        		<tr valign="top">
 
                          			<td colspan="8" align="center"><span class="note"><digi:trn key="aim:noRecords">No records</digi:trn>!</td>
 
@@ -874,11 +934,11 @@
 
 				            		<logic:notEmpty name="aimYearlyInfoForm" property="discrepancies">
 
-										<logic:iterate name="aimYearlyInfoForm" property="discrepancies" id="discrepancy" 
+										<logic:iterate name="aimYearlyInfoForm" property="discrepancies" id="discrepancy"
 
 										type="org.digijava.module.aim.helper.YearlyDiscrepancy">
 
-							         <tr valign="top"> 
+							         <tr valign="top">
 
 							         	<td height="30">
 
@@ -914,7 +974,7 @@
 
 							            <td>
 
-							            	<div align="right"> 
+							            	<div align="right">
 
 							                  <bean:write name="discrepancy" property="mofedPlanned"/>
 
@@ -942,7 +1002,7 @@
 
 							            <td>
 
-							              	<div align="right"> 
+							              	<div align="right">
 
 							                  <bean:write name="discrepancy" property="mofedActual"/>
 
@@ -960,7 +1020,7 @@
 
                      	</logic:equal>
 
-												
+
 
 												</TD></TR>
 
@@ -1000,7 +1060,7 @@
 
 																	</STRONG>
 
-						   		     						</digi:link>															
+						   		     						</digi:link>
 
 															</TD>
 
@@ -1016,7 +1076,7 @@
 
 													<FONT color=blue>*
 
-													<digi:trn key="aim:allTheAmountsInThousands">	
+													<digi:trn key="aim:allTheAmountsInThousands">
 
 													All the amounts are in thousands (000)</digi:trn>
 													</FONT>
@@ -1033,7 +1093,7 @@
 
 							</TR>
 
-											
+
 
 						</TABLE>
 

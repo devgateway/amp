@@ -5,9 +5,10 @@ public class TotalsQuarterly
 	private String totalCommitted ;
 	private String totalRemaining ;
 	private String totalDisbursed ;
-	private String totalUnExpended ;	
+        private String totalDisbOrdered ;
+	private String totalUnExpended ;
 	private String currencyCode;
-	
+
 	/**
 	 * @return
 	 */
@@ -69,10 +70,19 @@ public class TotalsQuarterly
 	public String getCurrencyCode() {
 		return currencyCode;
 	}
-	/**
+
+        public String getTotalDisbOrdered() {
+                return totalDisbOrdered;
+        }
+
+        /**
 	 * @param currencyCode The currencyCode to set.
 	 */
 	public void setCurrencyCode(String currencyCode) {
 		this.currencyCode = currencyCode;
 	}
+
+        public void setTotalDisbOrdered(String totalDisbOrdered) {
+                this.totalDisbOrdered = totalDisbOrdered;
+        }
 }

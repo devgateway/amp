@@ -88,6 +88,17 @@
           <tr>
             <td height=16 vAlign="center" width="571">
               <html:errors />
+             
+            
+              <c:if test="${!empty aimViewIndicatorsForm.themeName}">
+                This indicator assigned to <span style="color:Red;">${aimViewIndicatorsForm.themeName}</span> 
+                <c:if test="${aimViewIndicatorsForm.flag == 'project'}">
+                 Activity
+                </c:if>
+                <c:if test="${aimViewIndicatorsForm.flag != 'project'}">
+                 Program
+                </c:if>
+              </c:if>
             </td>
           </tr>
           <tr>
@@ -138,7 +149,7 @@
                                   <tr>
                                     <td colspan="10" width="100%" align="center">
                                       <table width="100%" align="center"  border="0" style="font-family:verdana;font-size:11px;">
-                                        <tr style="background-color:Silver;height:19px;">
+                                        <tr bgColor="#d7eafd">
                                           <td style="width:50%;">
                                             <c:if test="${aimViewIndicatorsForm.sortBy=='0'}">
                                               <b><digi:trn key="aim:indicator">Indicator Name
@@ -170,7 +181,7 @@
                                         </tr>
                                         <c:if test="${!empty aimViewIndicatorsForm.allIndicators}">
                                           <c:forEach var="indItr" items="${aimViewIndicatorsForm.allIndicators}">
-                                            <tr>
+                                            <tr onmouseover="style.backgroundColor='silver';" onmouseout="style.backgroundColor='white'">
                                               <td>
                                                 <c:set var="tIndType">
                                                   <c:if test="${indItr.type=='0'}">
@@ -202,7 +213,7 @@
 																 Click here to Delete Indicator
 														</digi:trn>
 													</c:set>
-														<digi:link href="/editAllIndicator.do~indicator=delete${tIndType}" name="urlParams" title="${translation}" onclick="return deletePrgIndicator()">
+														<digi:link href="/viewIndicators.do~indicator=delete${tIndType}" name="urlParams" title="${translation}" onclick="return deletePrgIndicator()">
 															<img src= "../ampTemplate/images/trash_12.gif" border=0>
 														</digi:link>
 											</td>

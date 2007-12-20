@@ -335,14 +335,15 @@ function closeWindow() 
 					 <tr>
 						 <td align="center">
 						 <c:if test="${aimThemeForm.flag == 'error'}">
-												<font color="red">
+									<font color="red">
 												<b><digi:trn key="aim:cannotasigne">
 													indicator with this name already assign 
 												</digi:trn></b>
-											   </font>
+								  </font>
 							</c:if>
 						 </td>
 					 </tr>
+					 
 				<logic:notEmpty name="aimThemeForm" property="prgIndicators">
 				 <tr>
 					<td>

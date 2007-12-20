@@ -34,6 +34,9 @@ function selectActivity(){
     </tr>
     <tr>
       <td colspan="10">
+      <c:if test="${aimNewIndicatorForm.action == 'edit'}">
+      <html:hidden property="forward" value="edit"/>
+      </c:if>
         &nbsp;
       </td>
     </tr>

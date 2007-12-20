@@ -19,7 +19,8 @@ public class NewIndicatorForm
     private String date;
     private Integer category;
     private String type;
-    private int indType=0;
+    private int indType;
+    private int indicatorType;
     private String action;
     private String keyword;
 
@@ -199,7 +200,8 @@ public class NewIndicatorForm
         this.date=null;
         this.category=null;
         this.type=null;
-        //this.indType=0;
+        this.indType=2;
+        this.indicatorType=0;
         this.action=null;
         this.keyword=null;
         this.programsCol=null;
@@ -302,6 +304,14 @@ public class NewIndicatorForm
 
 	public void setActivitySectors(Collection activitySectors) {
 		this.activitySectors = activitySectors;
+	}
+
+	public int getIndicatorType() {
+		return indicatorType;
+	}
+
+	public void setIndicatorType(int indicatorType) {
+		this.indicatorType = indicatorType;
 	}
 
 	

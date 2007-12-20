@@ -16,8 +16,11 @@ public class SelectActivityForIndicator
         extends Action{
         public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+        	
             NewIndicatorForm newIndForm=(NewIndicatorForm)form;
 
+            String forward=request.getParameter("forward");
+            
             if(newIndForm.getAction()!=null && newIndForm.getAction().equalsIgnoreCase("add")){
                 Collection<LabelValueBean> actCol=new ArrayList<LabelValueBean>();
 
@@ -38,8 +41,15 @@ public class SelectActivityForIndicator
                     newIndForm.setSelectedPrograms(null);
                     newIndForm.setSelectedProgramId(null);
                 }
-                newIndForm.setAction(null);
-                return mapping.findForward("add");
+                
+                if(forward != null){
+                	newIndForm.setAction(null);
+                	return mapping.findForward("edit");
+                	
+                }else{
+                	newIndForm.setAction(null);
+                    return mapping.findForward("add");
+                }
             }
             Collection<AmpActivity> actCol = ActivityUtil.getAllActivitiesList();
             if(actCol != null) {

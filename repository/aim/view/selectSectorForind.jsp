@@ -25,21 +25,25 @@
 		window.close();
 		}
 	}	
-
+  
 	function reloadSector(value) {
-		document.aimNewIndicatorForm.subsectorLevel1.disabled=false;
-		document.aimNewIndicatorForm.subsectorLevel2.disabled=false;
+		//document.aimNewIndicatorForm.subsectorLevel1.disabled=false;
+		//document.aimNewIndicatorForm.subsectorLevel2.disabled=false;
 		if (value == 1) {
 			document.aimNewIndicatorForm.sector.value = -1;
+		}
+	/*
 		} else if (value == 2) {
 			document.aimNewIndicatorForm.subsectorLevel1.value = -1;
 		} else if (value == 3) {
 			document.aimNewIndicatorForm.subsectorLevel2.value = -1;
 		}
+	*/
 		<digi:context name="selSector" property="context/module/moduleinstance/selectSectorForind.do?edit=true"/>
 	    document.aimNewIndicatorForm.action = "<%= selSector %>";
   		document.aimNewIndicatorForm.submit();									
 	}	
+	
 	function checkSectorEmpty()
 	{
 		var sectorFlag = true;
@@ -191,7 +195,7 @@ function checkNumeric(objName,comma,period,hyphen)
 											</html:select>
 										</td>
 									</tr>								
-									<tr>
+									<!--<tr>
 										<td>
 											<digi:trn key="aim:subSectorLevel1">
 											Sub-Sector Level 1</digi:trn>
@@ -220,7 +224,7 @@ function checkNumeric(objName,comma,period,hyphen)
 												</logic:notEmpty>													
 											</html:select>
 										</td>
-									</tr>									
+									</tr>-->									
 									<tr>
 										<td align="center" colspan=2>
 											<table cellPadding=5>

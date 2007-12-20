@@ -29,6 +29,8 @@ import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.VisibilityManagerForm;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
  
 public class VisibilityManager extends MultiAction {
@@ -286,8 +288,14 @@ public class VisibilityManager extends MultiAction {
 		FeaturesUtil.updateAmpFieldsTreeVisibility(fields, templateId, hbsession);
 		request.setAttribute("templateId", templateId);
 		ActionErrors errors = new ActionErrors();
-	 	errors.add("title", new ActionError("error.aim.visibility.visibilityTreeUpdated"));
-	 	saveErrors(request, errors);
+	 	
+		
+		String trnKey = "aim:ampfeaturemanager:visibilitytreeupdated";
+		String msg = CategoryManagerUtil.translate(trnKey, request, Constants.FEATURE_MANAGER_VISIBILITY_TREE_UPDATED);
+
+		errors.add("title", new ActionError("error.aim.visibility.visibilityTreeUpdated",msg));
+
+		saveErrors(request, errors);
 
     	AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),hbsession);
     	ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);

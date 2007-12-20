@@ -292,7 +292,8 @@ public class Constants
 	public static final String GLOBAL_DEFAULT_SECTOR_SCHEME="Default Sector Scheme";
 
 	public static final String ONLY_PREVIEW="onlyPreview";
-        public static final String MY_REPORTS_PER_PAGE = "myReportsPerPage";
+	public static final String MY_REPORTS_PER_PAGE = "myReportsPerPage";
 
-
+       
+    public static final String   FEATURE_MANAGER_VISIBILITY_TREE_UPDATED="The visibility tree was updated." ;
 }

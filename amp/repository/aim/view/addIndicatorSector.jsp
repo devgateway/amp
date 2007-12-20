@@ -19,11 +19,11 @@
  <digi:instance property="aimNewIndicatorForm" />
                                    <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
 											<tr>
-                                              <td bgcolor="#ffffff" width="100%">
+                                              <td bgcolor="#ECF3FD" width="100%">
                                                 <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
                                                   <c:if test="${empty aimNewIndicatorForm.activitySectors}">
                                                     <tr>
-                                                      <td bgcolor="#ffffff">
+                                                      <td bgcolor="#ECF3FD">
                                                         <input type="button" class="buton" onclick="addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
                                                       </td>
                                                     </tr>
@@ -36,7 +36,7 @@
                                                             <tr>
                                                               <td>
                                                                 <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
-                                                                  <tr>
+                                                                  <tr bgcolor="#ECF3FD">
                                                                     <td width="3%" vAlign="center">
                                                                       <html:multibox property="selActivitySector">
 	                                                                     <c:if test="${activitySectors.subsectorLevel1Id == -1}">
@@ -66,7 +66,7 @@
                                                               </td>
                                                             </tr>
                                                           </c:forEach>
-                                                          <tr>
+                                                          <tr bgcolor="#ECF3FD">
                                                             <td>
                                                               <table cellSpacing=2 cellPadding=2>
                                                                 <tr>
@@ -75,7 +75,7 @@
                                                                       <input type="button" value="Add Sectors" class="buton"  onclick="addSectors();">
                                                                     </td>
                                                                   </logic:notEmpty>
-                                                                  <td>
+                                                                  <td >
 																	<input type="button" class="buton" onclick="return removeSelSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
                                                                   </td>
                                                                 </tr>

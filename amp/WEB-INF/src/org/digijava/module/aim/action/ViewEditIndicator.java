@@ -40,9 +40,9 @@ public class ViewEditIndicator
            existIndForm.getCode() != null){
             switch(existIndForm.getIndType()) {
                 case 0: {
-                    if(existIndForm.getSelectedProgramId() == null) {
-                        return mapping.findForward("forward");
-                    }
+//                    if(existIndForm.getSelectedProgramId() == null) {
+//                        return mapping.findForward("forward");
+//                    }
 
                     AmpPrgIndicator newInd = new AmpPrgIndicator();
                     newInd.setIndicatorId(existIndForm.getId());
@@ -54,6 +54,7 @@ public class ViewEditIndicator
                     newInd.setType(existIndForm.getType());
                     newInd.setSector(existIndForm.getSelActivitySector());
                     newInd.setIndSectores(existIndForm.getActivitySectors());
+                    existIndForm.setSelectedProgramId(new Long(1));
 
                     ProgramUtil.saveThemeIndicators(newInd, existIndForm.getSelectedProgramId());
 

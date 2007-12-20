@@ -22,6 +22,7 @@ function saveIndicator(){
     return false;
   }
   
+  /*
   if(document.aimNewIndicatorForm.selActivitySector.value == ""){
 		alert("Please add sectors");
 		 return false;
@@ -29,7 +30,7 @@ function saveIndicator(){
 		var Sector = document.aimNewIndicatorForm.selActivitySector.value;
 		document.getElementById("hdnselActivitySectors").value = Sector;
 	}
-  
+  */
   
   <digi:context name="addInd" property="context/module/moduleinstance/viewEditIndicator.do?action=save" />
   document.forms[0].action="<%=addInd%>";
@@ -44,24 +45,26 @@ function selectProgram(){
 }
 
 function selectActivity(){
-  <digi:context name="selAct" property="context/module/moduleinstance/selectActivityForIndicator.do" />
+
+  <digi:context name="selAct" property="context/module/moduleinstance/selectActivityForIndicator.do?action=edit" />
   openURLinWindow("<%= selAct %>",700, 500);
 }
 
 function radiosStatus(type){
   if(type=="0"){
     document.getElementById("radioProgramIndicator").checked=true;
+    document.getElementById("radioProjectIndicator").checked=false;
   }else if(type=="1"){
+    document.getElementById("radioProgramIndicator").checked=false;
     document.getElementById("radioProjectIndicator").checked=true;
-    document.getElementById("radioGlobal").checked=true;
   }else if(type=="2"){
-    document.getElementById("radioProjectIndicator").checked=true;
+    document.getElementById("radioProgramIndicator").checked=false;
     document.getElementById("radioProjectSpecific").checked=true;
   }
 }
 
 function changeIndType(type){
-  document.getElementById("hdnIndType").value=type;
+   document.getElementById("hdnIndType").value=type;
   if(type=="0"){
     document.getElementById("trType").style.display="";
     document.getElementById("trCategory").style.display="";
@@ -69,18 +72,20 @@ function changeIndType(type){
 
     document.getElementById("trCreationDate").style.display="";
 
+     document.getElementById("Sectors").style.display="";
     document.getElementById("tTypes").style.display="none";
-
-    document.getElementById("spnSelectProgram").style.display="";
+    document.getElementById("radioProjectIndicatore").style.display="";
+    //document.getElementById("spnSelectProgram").style.display="";
     document.getElementById("spnSelectProject").style.display="none"
   }else if(type=="1"){
     document.getElementById("trType").style.display="none";
     document.getElementById("trCategory").style.display="none";
     document.getElementById("trCreationDate").style.display="none";
 
-    document.getElementById("tTypes").style.display="";
-
-    document.getElementById("spnSelectProgram").style.display="none";
+document.getElementById("trType").style.display="none";
+    document.getElementById("tTypes").style.display="none";
+    document.getElementById("radioProjectIndicatore").style.display="";
+    //document.getElementById("spnSelectProgram").style.display="none";
     if(document.getElementById("radioProjectSpecific").checked){
       document.getElementById("spnSelectProject").style.display="";
       document.getElementById("trDescription").style.display="";
@@ -89,15 +94,16 @@ function changeIndType(type){
       document.getElementById("trDescription").style.display="none";
     }
   }else if(type=="2"){
+    
     document.getElementById("trType").style.display="none";
     document.getElementById("trCategory").style.display="none";
     document.getElementById("trCreationDate").style.display="none";
     document.getElementById("trDescription").style.display="";
-
+     document.getElementById("Sectors").style.display="none";
     document.getElementById("tTypes").style.display="";
-
+    document.getElementById("radioProjectIndicator").style.display="none";
     document.getElementById("spnSelectProject").style.display="";
-    document.getElementById("spnSelectProgram").style.display="none";
+    
   }
    
   
@@ -148,24 +154,23 @@ function addSectors() {
 		document.aimNewIndicatorForm.submit();
 }
  
+function closeWindow() {
+		window.close();
+	}
+
 </script>
 <digi:form action="/viewEditIndicator.do" method="post">
   <html:hidden property="indType" styleId="hdnIndType" />
   <html:hidden name="aimNewIndicatorForm" property="themeId" styleId="hdnThemeId" />
    <html:hidden property="selActivitySector" styleId="hdnselActivitySectors" />
 
-  <table width="100%" align="center">
-    <tr style="background-color:Silver;">
-      <td colspan="2" align="center" style="font-size:14px;height:30px;">
+  <table width="100%" align="center" border="0" class=box-border-nopadding>
+    <tr bgcolor="#006699" class=r-dotted-lg >
+      <td colspan="1" align="center" class="textalb">
       <b>View/Edit Indicator</b>
       </td>
     </tr>
-    <tr>
-      <td>
-      &nbsp;
-      </td>
-    </tr>
-    <tr align="center">
+    <tr align="center" bgcolor="#ECF3FD">
       <td>
         <table>
           <tr id="trName">
@@ -193,66 +198,12 @@ function addSectors() {
             </td>
           </tr>
           <tr id="trType">
-            <td>
-            Indicator type:
-            </td>
-            <td>
-              <html:select property="type" styleId="comboType" style="width:200px;font-family:verdana;font-size:11px;">
-                <html:option value="-1">
-                  <digi:trn key="aim:IndicatorCategoryAll">
-                  -- All --
-                  </digi:trn>
-                </html:option>
-                <html:option value="0">
-                  <digi:trn key="aim:IndicatorCategoryInput">
-                  Input
-                  </digi:trn>
-                </html:option>
-                <html:option value="1">
-                  <digi:trn key="aim:IndicatorCategoryOutput">
-                  Output
-                  </digi:trn>
-                </html:option>
-                <html:option value="2">
-                  <digi:trn key="aim:IndicatorCategoryProcess">
-                  Process
-                  </digi:trn>
-                </html:option>
-                <html:option value="3">
-                  <digi:trn key="aim:IndicatorCategoryOutcomes">
-                  Outcomes
-                  </digi:trn>
-                </html:option>
-              </html:select>
-            </td>
           </tr>
           <tr id="trCategory">
-            <td>
-            Indicator category:
-            </td>
-            <td>
-              <html:select property="category" styleId="comboCategory" style="width:200px;font-family:verdana;font-size:11px;">
-                <html:option value="-1">
-                  <digi:trn key="aim:IndicatorTypeAll">
-                  -- All --
-                  </digi:trn>
-                </html:option>
-                <html:option value="0">
-                  <digi:trn key="aim:IndicatorTypeProgram">
-                  Program
-                  </digi:trn>
-                </html:option>
-                <html:option value="1">
-                  <digi:trn key="aim:IndicatorTypeProject">
-                  Project
-                  </digi:trn>
-                </html:option>
-              </html:select>
-            </td>
           </tr>
-          <tr>
-          <td>Sectors:</td>
-            <td>
+          <tr id="Sectors" style="display:none;">
+            <td>Sectors:</td>
+             <td>
               <jsp:include page="addIndicatorSector.jsp"/>
             </td>
           </tr>  
@@ -262,44 +213,56 @@ function addSectors() {
             </td>
             <td>
                <html:text property="date" styleId="date" readonly="true" style="font-family:verdana;font-size:11px;width:80px;"/>
-            <a href="javascript:calendar('date')">
+                  <a href="javascript:calendar('date')">
               <img src="../ampTemplate/images/show-calendar.gif" border="1" alt="" />
             </a>
             </td>
           </tr>
           <tr>
-            <td>
-            &nbsp;
-            </td>
-          </tr>
-          <tr>
             <td colspan="10" nowrap="nowrap">
-              <input type="radio" name="indTypeRadio" id="radioProgramIndicator" disabled="disabled" onclick="changeIndType('0')" checked="checked" /> &nbsp;Program indicator&nbsp;
-              <span id="spnSelectProgram" style="">[<a href="javascript:selectProgram();">Select program</a>]<c:if test="${!empty aimNewIndicatorForm.selectedPrograms}"><c:forEach var="prog" items="${aimNewIndicatorForm.selectedPrograms}">[${prog.label}]</c:forEach></c:if><c:if test="${empty aimNewIndicatorForm.selectedPrograms}">[<span style="color:Red;">Program is not selected</span>]</c:if></span>
+              <input type="checkbox" name="indTypeRadio" id="radioProgramIndicator" disabled="disabled" onclick="changeIndType('0')" checked="checked" /> &nbsp;Program indicator&nbsp;
+              <!--<span id="spnSelectProgram" style="">[<a href="javascript:selectProgram();">Select program</a>]<c:if test="${!empty aimNewIndicatorForm.selectedPrograms}"><c:forEach var="prog" items="${aimNewIndicatorForm.selectedPrograms}">[${prog.label}]</c:forEach></c:if><c:if test="${empty aimNewIndicatorForm.selectedPrograms}">[<span style="color:Red;">Program is not selected</span>]</c:if></span> -->
               <br />
-              <input type="radio" name="indTypeRadio" id="radioProjectIndicator" disabled="disabled" onclick="changeIndType('1')" /> &nbsp;Project indicator
+              <span id="radioProjectIndicatore" style="display:none;">
+              <input type="checkbox" name="indTypeRadio" id="radioProjectIndicator" disabled="disabled" onclick="changeIndType('1')" /> &nbsp;Project indicator
               <br />
+              </span>
               <span id="tTypes" style="display:none;">
-                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="radio" name="tradio" id="radioGlobal" checked="checked" disabled="disabled" onclick="changeIndType('1')" /> &nbsp;Global
-                   <br />
-                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                   <input type="radio" name="tradio" id="radioProjectSpecific" disabled="disabled" onclick="changeIndType('2')" /> &nbsp;Project specific&nbsp;
+                   <input type="hidden" name="tradio" id="radioGlobal" checked="checked" disabled="disabled"/>
+                   <!--<input type="checkbox" name="tradio" id="radioGlobal" checked="checked" disabled="disabled" onclick="changeIndType('1')" /> &nbsp;Global  -->
+                   <input type="checkbox" name="tradio" id="radioProjectSpecific" disabled="disabled" value="" onclick="changeIndType('2')" /> &nbsp;Project specific&nbsp;
                    <span id="spnSelectProject" style="display:none;">[<a href="javascript:selectActivity();">Select project</a>]<c:if test="${!empty aimNewIndicatorForm.selectedActivities}"><c:forEach var="act" items="${aimNewIndicatorForm.selectedActivities}">[${act.label}]</c:forEach></c:if><c:if test="${empty aimNewIndicatorForm.selectedActivities}">[<span style="color:Red;">Activity is not selected</span>]</c:if></span>
+              
               </span>
             </td>
           </tr>
         </table>
       </td>
     </tr>
-    <tr>
+    
+    <tr align="center" bgcolor="#ECF3FD">
+    
       <td>
-        &nbsp;
+      <c:forEach var="act" items="${aimNewIndicatorForm.selectedActivities}">
+      
+      <html:hidden property="selectedActivityId"  value="${act.value}"/>
+      </c:forEach>
+      
+      
+      <html:button  styleClass="dr-menu" property="submitButton"  onclick="saveIndicator();">
+			<digi:trn key="btn:Edit">Edit</digi:trn> 
+	     </html:button>
+         <html:reset  styleClass="dr-menu" property="submitButton">
+		   <digi:trn key="btn:clear">Clear</digi:trn> 
+	     </html:reset>											
+ 	     <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow()">
+			<digi:trn key="btn:close">Close</digi:trn> 
+	     </html:button>
       </td>
     </tr>
-    <tr align="center">
-      <td>
-        <input type="button" value="Edit" onclick="saveIndicator();" style="width:110px;font-family:verdana;font-size:11px;"/>
+    <tr>
+      <td bgcolor="#006699">
+       
       </td>
     </tr>
   </table>

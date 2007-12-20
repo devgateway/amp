@@ -222,8 +222,10 @@ public class MEIndicatorsUtil
 		try
 		{
 			session = PersistenceManager.getSession();
-			AmpMEIndicators tempMEInd = null;
+			AmpMEIndicators tempMEInd = new AmpMEIndicators();
+			if(allMEInd.getAmpMEIndId()!=null){
 			tempMEInd = (AmpMEIndicators) session.load(AmpMEIndicators.class,allMEInd.getAmpMEIndId());
+			}
 			tempMEInd.setName(allMEInd.getName());
 			tempMEInd.setCode(allMEInd.getCode());
 			tx = session.beginTransaction();
@@ -1802,5 +1804,5 @@ public class MEIndicatorsUtil
 		} catch (JDBCException e) {
 			logger.error(e);
 	}
-}
+  }
 }

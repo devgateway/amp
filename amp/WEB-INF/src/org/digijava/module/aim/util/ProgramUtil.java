@@ -647,7 +647,7 @@ public class ProgramUtil {
 					AmpIndSectors Indsectors = new AmpIndSectors();
 					Indsectors.setAmpIndicatorSectorId(IndSector.getAmpIndicatorSectorId());
 					Indsectors.setSectorId(IndSector.getSectorId());
-					Indsectors.setThemeIndicatorId(IndSector.getThemeIndicatorId());
+					//Indsectors.setThemeIndicatorId(IndSector.getThemeIndicatorId());
 					col.add(Indsectors);
 
 				}
@@ -1069,7 +1069,7 @@ public class ProgramUtil {
 			}
 		}
 		
-		public static void saveThemeIndicators(AmpPrgIndicator tempPrgInd, Long ampThemeId)
+		public static void saveThemeIndicators(AmpPrgIndicator tempPrgInd,Long ampThemeId)
 		{
 			Session session = null;
 			Transaction tx = null;
@@ -1092,7 +1092,7 @@ public class ProgramUtil {
 				ampThemeInd.setNpIndicator(tempPrgInd.isNpIndicator());
 				ampThemeInd.setDescription(tempPrgInd.getDescription());
 				if(ampThemeInd.getSectors()==null){
-					ampThemeInd.setSectors(new HashSet());
+				   ampThemeInd.setSectors(new HashSet());
 				}
 				
 				    Long sectorIds[]= tempPrgInd.getSector();
@@ -1108,49 +1108,21 @@ public class ProgramUtil {
 	           			   amps.setSectorId(SectorUtil.getAmpSector(sector.getSectorId()));
 	           			   ampThemeInd.getSectors().add(amps);
 	            		  }
-	            		   
 	            	   }
-	            	   
 	               }
-	            
-                		   
-                		   
-                		  /* AmpIndicatorSector amps = new AmpIndicatorSector();
-       					   amps.setThemeIndicatorId(ampThemeInd);
-       					if (sectorId != null && (!sectorId.equals(new Long(-1)) && !sectorId.equals(0)))
-       						amps.setSectorId(SectorUtil.getAmpSector(sectorId));
-       					     if (sectorId == 0){
-       					    	 
-       					    	
-       					    	
-       					    	for(Iterator itr = tempPrgInd.getIndSectores().iterator();itr.hasNext();){
-          					    	 ActivitySector themesectors = (ActivitySector) itr.next();
-          					    	 
-          					    	 AmpIndicatorSector ind = SectorUtil.getIndIcatorSector(tempPrgInd.getIndicatorId());
-           					    	   if (ind.getSectorId().getAmpSectorId().equals(themesectors.getSectorId())){
-           					    		amps.setAmpIndicatorSectorId(new Long(0));
-           					    		amps.setThemeIndicatorId(null);
-           					    	
-           					    		
-           					    	  }else{
-          					    	     amps.setSectorId(SectorUtil.getAmpSector(themesectors.getSectorId()));
-           					    	  }
-          					    }   */	 
-       					
-       					//sectors.add(amps);
-
-                	   //}
-
-                  
-		
-               
+	          
 				Set ampThemeSet = new HashSet();
 				ampThemeSet.add(tempAmpTheme);
 				ampThemeInd.setThemes(ampThemeSet);
 				tx = session.beginTransaction();
+				Iterator itr = ampThemeInd.getThemes().iterator();
+				while(itr.hasNext()){
+				AmpTheme theme = (AmpTheme)itr.next();
+					itr.remove();
+				}
 				session.saveOrUpdate(ampThemeInd);
-				tempAmpTheme.getIndicators().add(ampThemeInd);
-				session.saveOrUpdate(tempAmpTheme);
+				//tempAmpTheme.getIndicators().add(ampThemeInd);
+				//session.saveOrUpdate(tempAmpTheme);
 
                 if(tempPrgInd.getPrgIndicatorValues()!=null && tempPrgInd.getPrgIndicatorValues().size()!=0){
                     Iterator indItr = tempPrgInd.getPrgIndicatorValues().iterator();
@@ -1319,6 +1291,21 @@ public class ProgramUtil {
 			}
 		}
 
+		public static void deleteProgramIndicator(Long indId){
+			Session session = null;
+			Transaction tx = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			tx = session.beginTransaction();
+			AmpThemeIndicators tempThemeInd = (AmpThemeIndicators) session.load(AmpThemeIndicators.class,indId);
+			session.delete(tempThemeInd);
+			tx.commit();
+		} catch (Exception e) {
+			logger.error("Unable to delete the themes");
+			logger.debug("Exception : "+e);
+		}
+	}
+		
 		/**
 		 * Deletes indicator with its values
 		 * @param indId db ID of the indicator

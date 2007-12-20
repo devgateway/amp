@@ -238,7 +238,7 @@ function closeWindow()
 											Enter a keyword</digi:trn>
 										</td>
 										<td>
-										<html:text property="keyword" style="width:120px;font-family:verdana;font-size:11px;" />
+										<html:text property="keyword" style="width:140px;font-family:verdana;font-size:11px;" />
 										</td>
 									</tr>
 									<tr>

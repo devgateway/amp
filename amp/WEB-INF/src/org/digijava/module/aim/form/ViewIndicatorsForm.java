@@ -18,7 +18,8 @@ public class ViewIndicatorsForm
     private Long themeid;
     private String event;
     private Collection  Sectors;
-    
+    private String themeName;
+    private String flag; 
     
 
     private Collection<IndicatorsBean> allIndicators;
@@ -104,5 +105,21 @@ public class ViewIndicatorsForm
 
 	public void setSectorId(Long sectorId) {
 		this.sectorId = sectorId;
+	}
+
+	public String getThemeName() {
+		return themeName;
+	}
+
+	public void setThemeName(String themeName) {
+		this.themeName = themeName;
+	}
+
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
 	}
 }

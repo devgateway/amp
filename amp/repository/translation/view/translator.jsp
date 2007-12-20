@@ -68,10 +68,23 @@
   </tr>
   <tr>
      <td align="right">
-	     <html:submit value="Save Translation" />
+     	<c:set var="translate">
+     		<digi:trn key="translation:savetranslation">
+     			Save Translation
+     		</digi:trn>
+     	</c:set>
+		    
+	     <html:submit value="${translate}" />
+    
      </td>
      <td align="left">
-             <html:submit property="deleteTranslation" value="Delete Translation" />
+		<c:set var="translate">
+     		<digi:trn key="translation:deletetranslation">
+     			Delete Translation
+     		</digi:trn>
+     	</c:set>
+     	
+             <html:submit property="deleteTranslation" value="${translate}" />
      </td>
   </tr>
   <tr><td>&nbsp;</td></tr>

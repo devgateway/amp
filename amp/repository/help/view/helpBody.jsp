@@ -57,7 +57,7 @@
 															<c:if test="${not empty helpForm.topicKey}">
 																<c:if test="${helpForm.topicKey!=''}">
 																	<b>
-																		<digi:trn key="${helpForm.titleTrnKey}" linkAlwaysVisible="true"></digi:trn>
+																		<digi:trn key="${helpForm.titleTrnKey}" ></digi:trn>
 																	</b>
 																</c:if>
 															</c:if>

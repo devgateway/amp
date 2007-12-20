@@ -437,9 +437,9 @@
 <field:display name="Regional Group" feature="Regional Group"></field:display>
 <field:display name="Sector Group" feature="Sector Group"></field:display>
 <field:display name="Componente" feature="Sectors">&nbsp;</field:display>
-<field:display name="Adjustment Type Disbursement Order" feature="Disbursement Orders"></field:display>
-<field:display name="Currency Disbursement Order" feature="Disbursement Orders"></field:display>
-<field:display name="Date Disbursement Order" feature="Disbursement Orders"></field:display>
+<field:display name="Adjustment of Type Disbursement Order" feature="Disbursement Orders"></field:display>
+<field:display name="Currency of Disbursement Order" feature="Disbursement Orders"></field:display>
+<field:display name="Date of Disbursement Order" feature="Disbursement Orders"></field:display>
 <field:display name="Disbursement Order Number" feature="Disbursement Orders"></field:display>
 <field:display name="Disbursement Orders Tab" feature="Disbursement Orders"></field:display>
 <field:display name="Actual Disbursement Orders" feature="Disbursement Orders"></field:display>

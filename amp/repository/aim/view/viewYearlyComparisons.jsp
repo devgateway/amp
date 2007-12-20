@@ -639,7 +639,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 
                                                                                                                               <td bgcolor="#F8F8F5">
-                                                                                                                              <field:display name="Disbursement Order Ammount" feature="Disbursement Orders">
+                                                                                                                              <field:display name="Amount of Disbursement Order" feature="Disbursement Orders">
 
 																	<div align="right">
 

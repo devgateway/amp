@@ -53,8 +53,8 @@ public class DateTimeUtil {
 
         return date;
     }
-    
-    
+
+
 	/**
 	 * Formats date using pattern from global settings
 	 * @param date
@@ -63,13 +63,13 @@ public class DateTimeUtil {
 	public static String formatDate(Date date){
 		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
 		String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
-		pattern = pattern.replace('m', 'M');
 		if (pattern==null){
 			pattern=Constants.CALENDAR_DATE_FORMAT;
 		}
+                pattern = pattern.replace('m', 'M');
 		SimpleDateFormat formater=new SimpleDateFormat(pattern);
 		String result = formater.format(date);
-	
+
 		return result;
 	}
 
@@ -83,32 +83,32 @@ public class DateTimeUtil {
 		Date result = formater.parse(date);
 		return result;
 	}
-	
+
 	public static Date parseDateForPicker(String date) throws Exception{
 		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
 		String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
 		if (pattern==null){
 			pattern=Constants.CALENDAR_DATE_PICKER;
 		}
-		
+
 		SimpleDateFormat formater=new SimpleDateFormat(pattern);
 		//if(date.contains("-")) date=date.replaceAll("-", "/");
 		Date result = formater.parse(date);
 		return result;
 	}
-    
+
 	public static String parseDateForPicker2(Date date) throws Exception{
 		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
 		String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
 		if (pattern==null){
 			pattern=Constants.CALENDAR_DATE_PICKER;
 		}
-		
+
 		SimpleDateFormat formater=new SimpleDateFormat(pattern);
 		//if(date.contains("-")) date=date.replaceAll("-", "/");
 		String result = formater.format(date);
 		return result;
 	}
-    
-    
+
+
 }

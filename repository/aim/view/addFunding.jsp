@@ -709,7 +709,7 @@
 										<tr>
 
 											<td valign="bottom">
-                                                                                         <field:display name="Adjustment Type Disbursement Orders" feature="Disbursement Orders">
+                                                                                         <field:display name="Adjustment Type of Disbursement Order" feature="Disbursement Orders">
 												<c:set var="index" value="${index+1}"/>
 
 
@@ -732,7 +732,7 @@
 
 
 											<td valign="bottom">
-                                                                                        <field:display name="Currency of Disbursement Order " feature="Disbursement Orders">
+                                                                                        <field:display name="Currency of Disbursement Order" feature="Disbursement Orders">
 												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
 													<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode"
 													label="currencyName"/>

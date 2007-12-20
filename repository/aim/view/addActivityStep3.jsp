@@ -796,7 +796,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 
                                                                                     <td width="50">
-	                                                                                    <field:display name="Adjustment Type Disbursement Orders" feature="Disbursement Orders">
+	                                                                                    <field:display name="Adjustment Type of Disbursement Order" feature="Disbursement Orders">
     	                                                                                	<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
                                                                                                 <bean:write name="fundingDetail" property="adjustmentTypeName"/>
                                                                                                 </digi:trn>
@@ -805,19 +805,19 @@ ${fn:replace(message,quote,escapedQuote)}
 
 
                                                                                     <td width="120" align="right">
-                                                                                      <field:display name="Amount Disbursement Orders" feature="Disbursement Orders">
+                                                                                      <field:display name="Amount of Disbursement Order" feature="Disbursement Orders">
                                                                                       	<FONT color=blue>*</FONT>
                                                                                       	<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
                                                                                       </field:display>
                                                                                     </td>
 
                                                                                     <td width="150">
-	                                                                                    <field:display name="Currency Disbursement Orders" feature="Disbursement Orders">
+	                                                                                    <field:display name="Currency of Disbursement Order" feature="Disbursement Orders">
     	                                                                                  <bean:write name="fundingDetail" property="currencyCode"/>
         	                                                                             </field:display>
                                                                                     </td>
                                                                                     <td width="70">
-                                                                                    	<field:display name="Date Disbursement Orders" feature="Disbursement Orders">
+                                                                                    	<field:display name="Date of Disbursement Order" feature="Disbursement Orders">
 		                                                                                      <bean:write name="fundingDetail" property="transactionDate"/>
 	                                                                                    </field:display>
                                                                                     </td>

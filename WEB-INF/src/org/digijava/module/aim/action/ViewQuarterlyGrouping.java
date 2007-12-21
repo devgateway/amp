@@ -35,15 +35,15 @@ import org.digijava.module.aim.util.DbUtil;
 
 public class ViewQuarterlyGrouping extends TilesAction	{
 	private static Logger logger = Logger.getLogger(ViewQuarterlyGrouping.class);
-	
+
 	public ActionForward execute(ComponentContext context,
-								 ActionMapping mapping, 
+								 ActionMapping mapping,
 								 ActionForm form,
-								 HttpServletRequest request, 
-								 HttpServletResponse response) 
+								 HttpServletRequest request,
+								 HttpServletResponse response)
 								 throws java.lang.Exception 	{
 		HttpSession session = request.getSession();
-		
+
 		QuarterlyInfoForm formBean = (QuarterlyInfoForm)form;
 		if (session.getAttribute("currentMember") == null) {
 			formBean.setSessionExpired(true);
@@ -64,29 +64,29 @@ public class ViewQuarterlyGrouping extends TilesAction	{
 			if ( teamMember != null )	{
 				apps = teamMember.getAppSettings();
 			}
-	
+
 			if ( fp.getCurrencyCode() == null )	{
 				Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
 				fp.setCurrencyCode(curr.getCurrencyCode());
 			}
-	
+
 			if ( fp.getFiscalCalId() == null )	{
 				fp.setFiscalCalId(apps.getFisCalId());
 			}
-	
+
 			if ( fp.getPerspective() == null )	{
 				String perspective = CommonWorker.getPerspective(apps.getPerspective());
 				fp.setPerspective(perspective);
 			}
-	
+
 			if ( fp.getFromYear()==0 || fp.getToYear()==0 )	{
 				int year = new GregorianCalendar().get(Calendar.YEAR);
 				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
 				fp.setToYear(year+Constants.TO_YEAR_RANGE);
 			}
-			
+
 			formBean.setPerspective(fp.getPerspective());
-			formBean.setPerpsectiveName(DbUtil.getPerspective(fp.getPerspective()).getName());			
+			formBean.setPerpsectiveName(apps.getPerspective());
 			formBean.setCurrency(fp.getCurrencyCode());
 			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
 			formBean.setFromYear(fp.getFromYear());
@@ -95,15 +95,15 @@ public class ViewQuarterlyGrouping extends TilesAction	{
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 			formBean.setPerspectives(DbUtil.getAmpPerspective());
-			
+
 			formBean.setFiscalYears(new ArrayList());
-			formBean.setFiscalYears(DbUtil.getAllFisCalenders());			
-			
+			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
+
 			TabColors tc = PresentationUtil.setTabColors(fp.getTransactionType());
 			formBean.setCommitmentTabColor(tc.getCommitmentTabColor());
 			formBean.setDisbursementTabColor(tc.getDisbursementTabColor());
 			formBean.setExpenditureTabColor(tc.getExpenditureTabColor());
-	
+
 			Collection c = QuarterlyInfoWorker.getQuarterlyInfo(fp);
 			QuarterlyGrouping qg = new QuarterlyGrouping();
 			String clicked = formBean.getClicked();
@@ -125,9 +125,9 @@ public class ViewQuarterlyGrouping extends TilesAction	{
 				qg.setFiscalQuarter(formBean.getFiscalQtrGrp());
 				qg.setState(state);
 				qtrGroup.add(qg);
-				session.setAttribute("qtrGroup",qtrGroup); 
+				session.setAttribute("qtrGroup",qtrGroup);
 			}
-		
+
 			if ( c.size() != 0 )	{
 				ArrayList arrList = new ArrayList(c);
 				for ( int i = 0 ; i < qtrGroup.size() ; i++)	{
@@ -146,21 +146,21 @@ public class ViewQuarterlyGrouping extends TilesAction	{
 								}
 							}
 							else if ( qi.getAggregate()==0)	{
-								if ( qgp.getState().equals("minus") )	
+								if ( qgp.getState().equals("minus") )
 									qi.setPlus(false);
-								else if (qgp.getState().equals("plus") )	
+								else if (qgp.getState().equals("plus") )
 									qi.setPlus(true);
-							}	
+							}
 						}
 					}
 				}
-					
+
 				formBean.setQuarterlyInfo(arrList);
-				
+
 				TotalsQuarterly tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode());
 				formBean.setTotalCommitted(tq.getTotalCommitted());
-				formBean.setTotalDisbursed(tq.getTotalDisbursed());														  	
-				formBean.setTotalUnExpended(tq.getTotalUnExpended());																							
+				formBean.setTotalDisbursed(tq.getTotalDisbursed());
+				formBean.setTotalUnExpended(tq.getTotalUnExpended());
 				formBean.setTotalRemaining(tq.getTotalRemaining());
 			}
 		}

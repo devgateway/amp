@@ -104,9 +104,10 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 													</digi:link>&nbsp;&gt;&nbsp;
 													<digi:trn key="aim:actOverview">Overview</digi:trn><logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&nbsp;&gt;&nbsp;
 
-													<bean:define id="perspectiveNameTrimedLocal" name="aimFinancingBreakdownForm" property="perpsectiveNameTrimmed" type="java.lang.String"/>
-													<digi:trn key='<%="aim:"+ perspectiveNameTrimedLocal %>'>
-														<bean:write name="aimFinancingBreakdownForm" property="perpsectiveName"/></digi:trn>
+
+													<digi:trn key="aim:${aimFinancingBreakdownForm.perpsectiveName}">
+														<bean:write name="aimFinancingBreakdownForm" property="perpsectiveName"/></digi:trn>&nbsp;
+										<digi:trn key="aim:perspective">Perspective</digi:trn>
                                                                                                                 </logic:equal>
 												</SPAN>
 											</TD>

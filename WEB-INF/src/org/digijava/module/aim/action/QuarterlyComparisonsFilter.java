@@ -29,15 +29,15 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class QuarterlyComparisonsFilter extends Action	{
-	
+
 	private static Logger logger = Logger.getLogger(QuarterlyComparisonsFilter.class);
-	
-	public ActionForward execute(ActionMapping mapping, 
+
+	public ActionForward execute(ActionMapping mapping,
 								 ActionForm form,
-								 HttpServletRequest request, 
-								 HttpServletResponse response) 
+								 HttpServletRequest request,
+								 HttpServletResponse response)
 								 throws java.lang.Exception 	{
-								 	
+
 		QuarterlyComparisonsForm formBean = (QuarterlyComparisonsForm) form;
 		HttpSession session = request.getSession();
 		if (session.getAttribute("currentMember") == null) {
@@ -52,35 +52,35 @@ public class QuarterlyComparisonsFilter extends Action	{
 			formBean.setPerspectivePresent(ff.isPerspectivePresent());
 			formBean.setYearRangePresent(ff.isYearRangePresent());
 			formBean.setGoButtonPresent(ff.isGoButtonPresent());
-			
+
 			FilterParams fp = (FilterParams)session.getAttribute("filterParams");
 			fp.setTransactionType(formBean.getTransactionType());
-			
+
 			ApplicationSettings apps = null;
 			if ( teamMember != null )	{
 				apps = teamMember.getAppSettings();
 			}
-	
+
 			if ( formBean.getCurrency() != null )
 				fp.setCurrencyCode(formBean.getCurrency());
 			else	{
 				Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
 				fp.setCurrencyCode(curr.getCurrencyCode());
 			}
-	
+
 			if ( formBean.getFiscalCalId() != 0 )
 				fp.setFiscalCalId(new Long( formBean.getFiscalCalId() ));
 			else	{
 				fp.setFiscalCalId(apps.getFisCalId());
 			}
-	
+
 			if ( formBean.getPerspective() != null )
 				fp.setPerspective(formBean.getPerspective());
 			else	{
 				String perspective = CommonWorker.getPerspective(apps.getPerspective());
 				fp.setPerspective(perspective);
 			}
-	
+
 			if ( formBean.getFromYear()==0 || formBean.getToYear()==0 )	{
 				int year = new GregorianCalendar().get(Calendar.YEAR);
 				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
@@ -91,13 +91,13 @@ public class QuarterlyComparisonsFilter extends Action	{
 				fp.setFromYear(formBean.getFromYear());
 			}
 			session.setAttribute("filterParams",fp);
-			formBean.setPerpsectiveName(DbUtil.getPerspective(fp.getPerspective()).getName());
+			formBean.setPerpsectiveName(apps.getPerspective());
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 			formBean.setPerspectives(DbUtil.getAmpPerspective());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
-			
+
 			if ( fp.getPerspective().equals("DI") )	{
 				Collection c = QuarterlyDiscrepancyAllWorker.getDiscrepancy(fp);
 				formBean.setQuarterlyDiscrepanciesAll(c);

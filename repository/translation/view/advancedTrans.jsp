@@ -425,15 +425,25 @@ table.trnrow {
 <table bgcolor="#EBEBEB" border="0" width="100%">
   <tr>
     <td  width="27%" align="center"><digi:trn key="translation:sourceLang">Source language</digi:trn>:
-		<html:select property="selectedLangSource"  onchange="onChangeList('LangSource', this.value)">
-		<bean:define id="lid" name="advancedTranslationForm" property="languages" type="java.util.List"/>
-		<html:options collection="lid" property="code" labelProperty="name"/></html:select>
-    </td>
+    	<html:select property="selectedLangSource"  onchange="onChangeList('LangSource', this.value)">
+			<c:forEach var="lng" items="${advancedTranslationForm.languages}">
+				<c:set var="trn">
+					<digi:trn key="translation:sourceLanguage:${lng.name}">${lng.name}</digi:trn>
+				</c:set>
+				<html:option value="${lng.code}">${trn}</html:option>
+			</c:forEach>
+		</html:select>		
+    </td> 
     <td width="46%" >&nbsp;</td>
     <td width="27%" align="center"><digi:trn key="translation:targetLang">Target language</digi:trn>:
 		<html:select property="selectedLangTarget" onchange="onChangeList('LangTarget', this.value)">
-		<bean:define id="lid" name="advancedTranslationForm" property="dstLanguages" type="java.util.List"/>
-		<html:options collection="lid" property="code" labelProperty="name"/></html:select>
+			<c:forEach var="lng" items="${advancedTranslationForm.dstLanguages}">
+				<c:set var="trn">
+					<digi:trn key="translation:targetLanguage:${lng.name}">${lng.name}</digi:trn>
+				</c:set>
+				<html:option value="${lng.code}">${trn}</html:option>
+			</c:forEach>
+		</html:select>		
     </td>
   </tr>
 </table>

@@ -13,8 +13,9 @@
 	type="org.digijava.module.contentrepository.form.DocumentManagerForm" />
 	
 	<logic:notEmpty name="crDocumentManagerForm" property="otherDocuments">
-	
-	<table id="team_table">
+	<bean:define name="crDocumentManagerForm" property="otherDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
+	<jsp:include flush="true" page="documentTable.jsp" />
+	<%-- <table id="team_table">
 						<thead>
 							<tr>
 								<th>File Name</th>
@@ -100,7 +101,7 @@
 								</td>
 							</tr>
 						</logic:iterate>
-					</table>
+					</table> --%>
 					</div>
 					<br />
 				</logic:notEmpty>

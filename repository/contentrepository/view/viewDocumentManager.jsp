@@ -30,15 +30,7 @@
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg vAlign=top>
-		<!-- 
-		<digi:form action="/documentManager.do" method="post"
-			enctype="multipart/form-data">
-			<html:file property="fileData" />
-			<html:submit>Submit</html:submit>
-		</digi:form>
 
-		<hr />
-		 -->
 		
 		<span class=subtitle-blue> &nbsp;&nbsp; <digi:trn key="contentrepository:documentManager">
 							Document Manager
@@ -99,38 +91,41 @@
 		<br />
 		<br /> --%>
 		<%-- Table for "My Documents" --%>
-				<table border="1" cellPadding=5 cellSpacing=0 width="95%"
+				<table border="0" cellPadding=5 cellSpacing=0 width="95%"
 			style="position: relative; left: 20px">
 			<tr>
-				<td bgcolor="#006699" class="textalb">
+				<td style="background-image:url(/repository/contentrepository/view/images/left-side.gif); background-repeat: no-repeat; background-position: top right" 
+				width="13" height="20"> </td>
+				<td bgcolor="#006699" class="textalb" height="20" width="97%" valign="middle" style="font-size: 11px; padding-bottom: 1px; padding-top: 1px">
 				<a style="cursor:pointer"  onclick="isMinusPrivate=toggleView('myDocumentstr', 'clipIcon', isMinusPrivate)">
 				<img
 					border="0" align="absmiddle"
 					src="/repository/contentrepository/view/images/dhtmlgoodies_minus.gif" id="clipIcon" />
-				<digi:img skipBody="true"
+				<digi:img skipBody="true" height="16"
 					border="0" align="absmiddle"
 					src="module/contentrepository/images/folder_folder.gif" />
 				</a>
 					<digi:trn key="contentrepository:documentManagerMyDocuments">My Documents</digi:trn>
 				</td>
+				<td background="/repository/contentrepository/view/images/right-side.gif" width="13" height="20" 
+				style="background-image:url(/repository/contentrepository/view/images/right-side.gif); background-repeat: no-repeat; background-position: top left"> </td>
 			</tr>
 			<tr style="display: table-row" id="myDocumentstr">
-				<td colspan="2"><logic:notEmpty name="crDocumentManagerForm"
+				<td colspan="3" bgcolor="#f4f4f2"><logic:notEmpty name="crDocumentManagerForm"
 					property="myPersonalDocuments">
 					<br />
 					<div id="my_markup" align="center" class="all_markup">
-					<table id="my_table">
+					<bean:define name="crDocumentManagerForm" property="myPersonalDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
+					<jsp:include page="documentTable.jsp" flush="true" />
+					<%-- <table id="my_table">
 						<thead>
 							<tr>
-								<th>
-                                <digi:trn key="contentrepository:TableHeader:FileName">File Name</digi:trn>   
-                                </th>
-								<th><digi:trn key="contentrepository:TableHeader:ResourceTitle">Resource Title</digi:trn></th>
-								<th><digi:trn key="contentrepository:TableHeader:Date">Date</digi:trn></th>
-								<th><digi:trn key="contentrepository:TableHeader:ContentType">Content Type</digi:trn></th>
-								<th><digi:trn key="contentrepository:TableHeader:Description">Description</digi:trn></th>
-								<th><digi:trn key="contentrepository:TableHeader:Actions">Actions</digi:trn></th>
-                             
+								<th>File Name</th>
+								<th>Resource Title</th>
+								<th>Date</th>
+								<th>Content Type</th>
+								<th>Description</th>
+								<th>Actions</th>
 							</tr>
 						</thead>
 						<logic:iterate name="crDocumentManagerForm"
@@ -245,15 +240,11 @@
 								</td>
 							</tr>
 						</logic:iterate>
-					</table>
+					</table>--%>
 					</div>
 					<br />
 				</logic:notEmpty>
-				<button type="button" onClick="setType('private');configPanel(0,'','',''); showMyPanel(0, 'addDocumentDiv'); ">
-	               <digi:trn key="contentrepository:addFile">
-	 	    	       Add File ...
-    				</digi:trn>            
-                </button>
+				<button type="button" class="buton" onClick="setType('private');configPanel(0,'','',''); showMyPanel(0, 'addDocumentDiv'); ">Add File ...</button>
 				</td>
 			</tr>
 		</table>
@@ -261,35 +252,41 @@
 		<br />
 		<br />
 		
-		<table border="1" cellPadding=5 cellSpacing=0 width="95%"
-			style="position: relative; left: 20px">
+		<table border="0" cellPadding=5 cellSpacing=0 width="95%"
+			style="position: relative; left: 20px" >
 			<tr>
-				<td bgcolor="#006699" class="textalb">
+				<td style="background-image:url(/repository/contentrepository/view/images/left-side.gif); background-repeat: no-repeat; background-position: top right" 
+				width="13" height="20"> </td>
+				<td bgcolor="#006699" class="textalb" height="20" width="97%" valign="middle" style="font-size: 11px; padding-bottom: 1px; padding-top: 1px">
 				<a style="cursor:pointer"  onclick="isMinusTeam=toggleView('teamDocumentstr', 'clipIconTD', isMinusTeam)">
 				<img
 					border="0" align="absmiddle"
 					src="/repository/contentrepository/view/images/dhtmlgoodies_minus.gif" id="clipIconTD" />
-				<digi:img skipBody="true"
+				<digi:img skipBody="true" height="16"
 					border="0" align="absmiddle"
 					src="module/contentrepository/images/folder_folder.gif" />
 				</a>
 					<digi:trn key="contentrepository:documentManagerTeamDocuments">Team Documents</digi:trn>
 				</td>
+				<td style="background-image:url(/repository/contentrepository/view/images/right-side.gif); background-repeat: no-repeat; background-position: top left" 
+				width="13" height="20"> </td>
 			</tr>
 			<tr style="display: table-row" id="teamDocumentstr">
-				<td colspan="2"><logic:notEmpty name="crDocumentManagerForm"
+				<td colspan="3" bgcolor="#f4f4f2"><logic:notEmpty name="crDocumentManagerForm"
 					property="myTeamDocuments">
 					<br />
 					<div id="team_markup" align="center" class="all_markup">
-					<table id="team_table">
+					<bean:define name="crDocumentManagerForm" property="myTeamDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
+					<jsp:include page="documentTable.jsp" flush="true" />
+					<%-- <table id="team_table">
 						<thead>
 							<tr>
-							  <th> <digi:trn key="contentrepository:TableHeader:FileName">File Name</digi:trn></th>
-							  <th><digi:trn key="contentrepository:TableHeader:ResourceTitle">Resource Title</digi:trn></th>
-							  <th><digi:trn key="contentrepository:TableHeader:Date">Date</digi:trn></th>
-							  <th><digi:trn key="contentrepository:TableHeader:ContentType">Content Type</digi:trn></th>
-							  <th><digi:trn key="contentrepository:TableHeader:Description">Description</digi:trn></th>
-								<th><digi:trn key="contentrepository:TableHeader:Actions">Actions</digi:trn></th>
+								<th>File Name</th>
+								<th>Resource Title</th>
+								<th>Date</th>
+								<th>Content Type</th>
+								<th>Description</th>
+								<th>Actions</th>
 							</tr>
 						</thead>
 						<logic:iterate name="crDocumentManagerForm"
@@ -322,15 +319,21 @@
 								<td>
 									 <bean:write name="documentData" property="name" />
 									 <digi:img skipBody="true" src="<%=iconPath%>" border="0"
-									align="absmiddle" />								</td>
+									align="absmiddle" />
+								</td>
 								<td>
-									<bean:write name="documentData" property="title" />								</td>
+									<bean:write name="documentData" property="title" />
+								</td>
 								<td>
-									<bean:write name="documentData" property="calendar" />								</td>
+									<bean:write name="documentData" property="calendar" />
+								</td>
 								<td>
-									<bean:write name="documentData" property="contentType" />								</td>
+									<bean:write name="documentData" property="contentType" />
+									
+								</td>
 								<td>
-									<bean:write name="documentData" property="description" />								</td>
+									<bean:write name="documentData" property="description" />
+								</td>
 								<td> 
 								<c:set var="translation">
 									<digi:trn key="contentrepository:documentManagerDownloadHint">Click here to download document</digi:trn>
@@ -348,7 +351,9 @@
 								<logic:equal name="documentData" property="hasVersioningRights" value="true">
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="Plus<bean:write name='documentData' property='uuid' />"
 								onClick="setType('version'); configPanel(0,'<%=documentData.getTitle() %>','<%=documentData.getDescription() %>','<%=documentData.getUuid() %>');showMyPanel(0, 'addDocumentDiv');"
-								title="${translation }">[<digi:trn key="contentrepository:documentManagerAddVersion">+</digi:trn>]</a>								</logic:equal>
+								title="${translation }">[<digi:trn key="contentrepository:documentManagerAddVersion">+</digi:trn>]</a>
+		
+								</logic:equal>
 								
 								<c:set var="translation">
 									<digi:trn key="contentrepository:documentManagerVersionsHint">Click here to see a list of versions for this document</digi:trn>
@@ -364,7 +369,8 @@
 									<c:if test="${ (!documentData.isPublic)||(!documentData.lastVersionIsPublic) }">
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Pub<bean:write name='documentData' property='uuid' />"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true);"
-									title="${translation}">[<bean:write name="makePublicCommand"/>]</a>									</c:if>
+									title="${translation}">[<bean:write name="makePublicCommand"/>]</a>
+									</c:if>
 								</logic:equal>
 
 								
@@ -375,7 +381,9 @@
 								<logic:equal name="documentData" property="hasDeleteRightsOnPublicVersion" value="true">
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Priv<bean:write name='documentData' property='uuid' />"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.UNPUBLISH %>', '<%=documentData.getUuid() %>');"
-									title="${translation }">[<digi:trn key="contentrepository:documentManagerUnpublish">Priv</digi:trn>]</a>								</logic:equal>
+									title="${translation }">[<digi:trn key="contentrepository:documentManagerUnpublish">Priv</digi:trn>]</a>
+								</logic:equal>
+
 								</logic:equal>
 								
 								<c:set var="translation">
@@ -384,19 +392,17 @@
 								<logic:equal name="documentData" property="hasDeleteRights" value="true">
 									<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
 									onClick="deleteRow('<%=documentData.getUuid() %>');"
-									title="${translation }">[<digi:trn key="contentrepository:documentManagerDelete">Del</digi:trn>]</a>								</logic:equal>								</td>
+									title="${translation }">[<digi:trn key="contentrepository:documentManagerDelete">Del</digi:trn>]</a>
+								</logic:equal>
+								</td>
 							</tr>
 						</logic:iterate>
-					</table>
-				  </div>
+					</table> --%>
+					</div>
 					<br />
 				</logic:notEmpty>
 				<c:if test="${isTeamLeader}">
-							<button type="button" onClick="setType('team'); configPanel(0,'','','');showMyPanel(0, 'addDocumentDiv');">						
-                            	<digi:trn key="contentrepository:addFile">
-	 	    	       				Add File ...
-    							</digi:trn>            
-					</button>
+							<button type="button" class="buton" onClick="setType('team'); configPanel(0,'','','');showMyPanel(0, 'addDocumentDiv');">Add File ...</button>
 				</c:if>
 				</td>
 			</tr>
@@ -422,27 +428,27 @@
 		<input type="hidden" name="uuid" id="nodeUUID"/>
 		<table cellpadding="3" cellspacing="3" border="0">
 			<tr>
-			<td><strong><digi:trn key="contentrepository:addEdit:Title">Title:</digi:trn></strong><font color="red">*</font></td>
+			<td><strong>Title:</strong><font color="red">*</font></td>
 			<td><html:text property="docTitle" size="30" /></td>
 			</tr>
 			<tr>
-			<td><strong><digi:trn key="contentrepository:addEdit:Description">Description:</digi:trn></strong></td>
+			<td><strong>Description:</strong></td>
 			<td><html:textarea property="docDescription" cols="28"/></td>
 			</tr>
 			<tr>
-			<td><strong><digi:trn key="contentrepository:addEdit:Notes">Notes:</digi:trn></strong></td>
+			<td><strong>Notes:</strong></td>
 			<td><html:textarea property="docNotes" cols="28" /></td>
 			
 			<tr>
-			<td><strong><digi:trn key="contentrepository:addEdit:Path">Path:</digi:trn><font color="red">*</font></strong></td>
+			<td><strong>Path:<font color="red">*</font></strong></td>
 			<td><html:file property="fileData" /></td>
 			</tr>
 			<tr>
 				<td align="right">
-					<html:submit onclick="return validateAddDocument()"><digi:trn key="contentrepository:addEdit:Submit">Submit</digi:trn></html:submit>&nbsp;
+					<html:submit onclick="return validateAddDocument()">Submit</html:submit>&nbsp;
 				</td>
 				<td align="left">
-					&nbsp;<button style="font-size: xx-small" type="button" onClick="hidePanel(0)">Cancel</button>
+					&nbsp;<button class="buton" style="font-size: xx-small" type="button" onClick="hidePanel(0)">Cancel</button>
 				</td>
 			</tr>
 		</table>

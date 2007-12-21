@@ -1752,7 +1752,7 @@ public class SaveActivity extends Action {
 			{
 				MTEFProjection mtef=(MTEFProjection)mtefItr.next();
 				AmpFundingMTEFProjection ampmtef=new AmpFundingMTEFProjection();
-				ampmtef.setAmount(Double.valueOf(mtef.getAmount()));
+				ampmtef.setAmount(DecimalToText.getDouble(mtef.getAmount()));
 				ampmtef.setAmpFunding(ampFunding);
 				ampmtef.setAmpCurrency(CurrencyUtil.getCurrencyByCode(mtef.getCurrencyCode()));
 				ampmtef.setProjected( CategoryManagerUtil.getAmpCategoryValueFromDb(mtef.getProjected()) );

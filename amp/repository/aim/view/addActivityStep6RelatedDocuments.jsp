@@ -23,7 +23,7 @@
 									<feature:display name="Content Repository" module="Document Management">
 									<tr>
 										<td>
-										<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+										<table width="100%" cellSpacing=1 cellPadding=5 border="0" bgcolor="white">
 										<tr>
 											<td>
 												<bean:define toScope="request" id="showRemoveButton" value="true" />

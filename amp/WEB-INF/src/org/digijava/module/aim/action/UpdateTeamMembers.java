@@ -63,9 +63,15 @@ public class UpdateTeamMembers extends Action {
 			if (upForm.getAction() != null
 					&& upForm.getAction().trim().equals("edit")) {
 				logger.debug("In edit team member");
+				AmpTeamMember ampMember=null;
 
-				AmpTeamMember ampMember = new AmpTeamMember();
-				ampMember.setAmpTeamMemId(upForm.getTeamMemberId());
+				if(upForm.getTeamMemberId()!=null){
+					ampMember=TeamUtil.getAmpTeamMember(upForm.getTeamMemberId());
+				}else {
+					ampMember = new AmpTeamMember();
+				}
+				 
+				//ampMember.setAmpTeamMemId(upForm.getTeamMemberId());
 				AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(upForm
 						.getRole());
 				AmpTeamMemberRoles teamLead = TeamMemberUtil.getAmpTeamHeadRole();

@@ -712,19 +712,10 @@ public class TeamUtil {
         AmpTeamMember member = null;
 
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
             member = (AmpTeamMember) session.load(AmpTeamMember.class, id);
         } catch(Exception e) {
             throw new RuntimeException(e);
-
-        } finally {
-            try {
-                if(session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch(Exception ex) {
-                logger.error("releaseSession() failed");
-            }
         }
         return member;
     }

@@ -362,12 +362,14 @@
 
 							</logic:equal>
 
-							&gt;
 
-							<bean:define id="perspectiveNameTrimedLocal" name="aimYearlyInfoForm" property="perpsectiveNameTrimmed" type="java.lang.String"/>
-								<digi:trn key='<%="aim:"+ perspectiveNameTrimedLocal %>'>
-									<bean:write name="aimYearlyInfoForm" property="perpsectiveName"/></digi:trn>
+<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+&gt;
 
+								<digi:trn key="aim:${aimYearlyInfoForm.perpsectiveName}">
+                                                                <bean:write name="aimYearlyInfoForm" property="perpsectiveName"/></digi:trn>&nbsp;
+                                                                <digi:trn key="aim:perspective">Perspective</digi:trn>
+                                                                </logic:equal>
 
 						</SPAN>
 

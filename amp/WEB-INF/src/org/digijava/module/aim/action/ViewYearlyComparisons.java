@@ -85,7 +85,7 @@ public class ViewYearlyComparisons extends TilesAction
 				fp.setToYear(year+Constants.TO_YEAR_RANGE);
 			}
 			formBean.setPerspective(fp.getPerspective());
-			formBean.setPerpsectiveName(DbUtil.getPerspective(fp.getPerspective()).getName());
+			formBean.setPerpsectiveName(apps.getPerspective());
 			formBean.setCurrency(fp.getCurrencyCode());
 			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
 			formBean.setFromYear(fp.getFromYear());

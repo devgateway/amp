@@ -252,9 +252,15 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 								<digi:trn key="aim:quarterlyAll">Quarterly All</digi:trn>
 
-								&gt;
 
-								<bean:write name="aimQuarterlyComparisonsForm" property="perpsectiveName" />
+                                                                <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+&gt;
+								<digi:trn key="aim:${aimQuarterlyComparisonsForm.perpsectiveName}">
+                                                                <bean:write name="aimQuarterlyComparisonsForm" property="perpsectiveName"/></digi:trn>&nbsp;
+                                                            <digi:trn key="aim:perspective">Perspective</digi:trn>
+
+                                                             </logic:equal >
+
 
 						</SPAN>
 

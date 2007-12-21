@@ -374,11 +374,13 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
                      	<digi:trn key="aim:quarterlyExpenditures">Quarterly Expenditures</digi:trn>
 
 							</logic:equal>
+<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 
 							&gt;
-
-							<bean:write name="aimQuarterlyInfoForm" property="perpsectiveName" />
-
+                                                        <digi:trn key="aim:${aimQuarterlyInfoForm.perpsectiveName}">
+                                                                <bean:write name="aimQuarterlyInfoForm" property="perpsectiveName"/></digi:trn>&nbsp;
+                                                            <digi:trn key="aim:perspective">Perspective</digi:trn>
+</logic:equal>
 						</SPAN>
 
 								</TD>

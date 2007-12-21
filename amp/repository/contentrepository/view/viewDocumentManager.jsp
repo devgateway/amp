@@ -120,12 +120,15 @@
 					<%-- <table id="my_table">
 						<thead>
 							<tr>
-								<th>File Name</th>
-								<th>Resource Title</th>
-								<th>Date</th>
-								<th>Content Type</th>
-								<th>Description</th>
-								<th>Actions</th>
+								<th>
+                                <digi:trn key="contentrepository:TableHeader:FileName">File Name</digi:trn>   
+                                </th>
+								<th><digi:trn key="contentrepository:TableHeader:ResourceTitle">Resource Title</digi:trn></th>
+								<th><digi:trn key="contentrepository:TableHeader:Date">Date</digi:trn></th>
+								<th><digi:trn key="contentrepository:TableHeader:ContentType">Content Type</digi:trn></th>
+								<th><digi:trn key="contentrepository:TableHeader:Description">Description</digi:trn></th>
+								<th><digi:trn key="contentrepository:TableHeader:Actions">Actions</digi:trn></th>
+                             
 							</tr>
 						</thead>
 						<logic:iterate name="crDocumentManagerForm"
@@ -244,7 +247,11 @@
 					</div>
 					<br />
 				</logic:notEmpty>
-				<button type="button" class="buton" onClick="setType('private');configPanel(0,'','',''); showMyPanel(0, 'addDocumentDiv'); ">Add File ...</button>
+				<button type="button" class="buton" onClick="setType('private');configPanel(0,'','',''); showMyPanel(0, 'addDocumentDiv'); ">
+	               <digi:trn key="contentrepository:addFile">
+	 	    	       Add File ...
+    				</digi:trn>            
+                </button>
 				</td>
 			</tr>
 		</table>
@@ -281,12 +288,12 @@
 					<%-- <table id="team_table">
 						<thead>
 							<tr>
-								<th>File Name</th>
-								<th>Resource Title</th>
-								<th>Date</th>
-								<th>Content Type</th>
-								<th>Description</th>
-								<th>Actions</th>
+							  <th> <digi:trn key="contentrepository:TableHeader:FileName">File Name</digi:trn></th>
+							  <th><digi:trn key="contentrepository:TableHeader:ResourceTitle">Resource Title</digi:trn></th>
+							  <th><digi:trn key="contentrepository:TableHeader:Date">Date</digi:trn></th>
+							  <th><digi:trn key="contentrepository:TableHeader:ContentType">Content Type</digi:trn></th>
+							  <th><digi:trn key="contentrepository:TableHeader:Description">Description</digi:trn></th>
+								<th><digi:trn key="contentrepository:TableHeader:Actions">Actions</digi:trn></th>
 							</tr>
 						</thead>
 						<logic:iterate name="crDocumentManagerForm"
@@ -402,7 +409,11 @@
 					<br />
 				</logic:notEmpty>
 				<c:if test="${isTeamLeader}">
-							<button type="button" class="buton" onClick="setType('team'); configPanel(0,'','','');showMyPanel(0, 'addDocumentDiv');">Add File ...</button>
+					<button class="buton" type="button" onClick="setType('team'); configPanel(0,'','','');showMyPanel(0, 'addDocumentDiv');">						
+                            	<digi:trn key="contentrepository:addFile">
+	 	    	       				Add File ...
+    							</digi:trn>            
+					</button>
 				</c:if>
 				</td>
 			</tr>
@@ -428,24 +439,24 @@
 		<input type="hidden" name="uuid" id="nodeUUID"/>
 		<table cellpadding="3" cellspacing="3" border="0">
 			<tr>
-			<td><strong>Title:</strong><font color="red">*</font></td>
+			<td><strong><digi:trn key="contentrepository:addEdit:Title">Title:</digi:trn></strong><font color="red">*</font></td>
 			<td><html:text property="docTitle" size="30" /></td>
 			</tr>
 			<tr>
-			<td><strong>Description:</strong></td>
+			<td><strong><digi:trn key="contentrepository:addEdit:Description">Description:</digi:trn></strong></td>
 			<td><html:textarea property="docDescription" cols="28"/></td>
 			</tr>
 			<tr>
-			<td><strong>Notes:</strong></td>
+			<td><strong><digi:trn key="contentrepository:addEdit:Notes">Notes:</digi:trn></strong></td>
 			<td><html:textarea property="docNotes" cols="28" /></td>
 			
 			<tr>
-			<td><strong>Path:<font color="red">*</font></strong></td>
+			<td><strong><digi:trn key="contentrepository:addEdit:Path">Path:</digi:trn><font color="red">*</font></strong></td>
 			<td><html:file property="fileData" /></td>
 			</tr>
 			<tr>
 				<td align="right">
-					<html:submit onclick="return validateAddDocument()">Submit</html:submit>&nbsp;
+					<html:submit styleClass="buton" onclick="return validateAddDocument()"><digi:trn key="contentrepository:addEdit:Submit">Submit</digi:trn></html:submit>&nbsp;
 				</td>
 				<td align="left">
 					&nbsp;<button class="buton" style="font-size: xx-small" type="button" onClick="hidePanel(0)">Cancel</button>

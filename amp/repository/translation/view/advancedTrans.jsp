@@ -526,7 +526,10 @@ table.trnrow {
      <html:text name="advancedTranslationForm" property="searchTarget" size="20" />
    </td>
    <td align="right">
-     <input type="button" value="Search" onclick="fnOnSearch()" />
+   	<c:set var="trn">
+   		<digi:trn key="translation:search">Search</digi:trn>
+   	</c:set>
+     <input type="button" value="${trn}" onclick="fnOnSearch()" />
    </td>
   </tr>
 </table>
@@ -549,8 +552,11 @@ table.trnrow {
 	  </c:if>
   </td>
   <td align="right" colspan="5">
-   <c:if test="${advancedTranslationForm.permitted}" >
-     <html:submit value="   Update all   " onclick="return saveAll()" />
+  <c:if test="${advancedTranslationForm.permitted}" >
+  	<c:set var="trn">
+  		<digi:trn key="translation:updateAll">Update all</digi:trn>
+  	</c:set> 	
+     <html:submit value="${trn}" onclick="return saveAll()" />
    </c:if>
    <c:if test="${!advancedTranslationForm.permitted}" >
      &nbsp;
@@ -630,7 +636,10 @@ table.trnrow {
 	   </c:if>
    </display:column>
    <display:column align="center">
-      <input type="submit" value="Update" onClick="return fnOnUpdateMessage(<c:out value="${message_rowNum}" />)">
+   	<c:set var="trn">
+   		<digi:trn key="translation:update">Update </digi:trn>
+   	</c:set>
+      <input type="submit" value="${trn}" onClick="return fnOnUpdateMessage(<c:out value="${message_rowNum}" />)">
    </display:column>
   </c:if>
   <c:if test="${!advancedTranslationForm.permitted}" >
@@ -657,7 +666,10 @@ table.trnrow {
   </td>
    <td colspan="5" align="right">
    <c:if test="${advancedTranslationForm.permitted}" >
-     <html:submit value="   Update all   " onclick="return saveAll()" />
+   	<c:set var="trn">
+   		<digi:trn key="translation:updateAll">Update all</digi:trn>
+   	</c:set>
+     <html:submit value="   ${trn}   " onclick="return saveAll()" />
    </c:if>
    </td>
   </tr>

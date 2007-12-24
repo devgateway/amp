@@ -89,13 +89,14 @@ public class DocumentSelected extends Action {
 		} else {
 			cmsItem.setDate(eaForm.getDocDate());
 		}
-		
-		if(eaForm.getDocType() == null) {
-			cmsItem.setDocType(null);
-		}
-		else {
-			cmsItem.setDocType( CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getDocType()) );
-		}
+		if(!eaForm.getDocFileOrLink().equals("link")){
+			if(eaForm.getDocType() == null) {
+				cmsItem.setDocType(null);
+			}
+			else {
+				cmsItem.setDocType( CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getDocType()) );
+			}
+		}		
 		
 		if ( eaForm.getDocLang() == null ) {
 			cmsItem.setDocLanguage( null );

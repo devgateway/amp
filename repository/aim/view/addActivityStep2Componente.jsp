@@ -47,9 +47,6 @@
                                         <td>
                                           <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
                                           <b>
-                                            <FONT color="red">
-                                            *
-                                            </FONT>
                                             <digi:trn key="aim:componente">
                                             Componente
                                             </digi:trn>
@@ -61,9 +58,6 @@
                                       </tr>
                                       <tr>
                                         <td>
-                                          <FONT color=red>
-                                          *
-                                          </FONT>
                                           <digi:trn	key="aim:chooseComponente">
                                           Choose the componente.
                                           </digi:trn>

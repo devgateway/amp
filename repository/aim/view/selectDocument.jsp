@@ -361,21 +361,24 @@ div.fakefile2 input {
 											</table>
 										</td>
 									</tr>
-									<tr>
-										<td>
-											<a title="<digi:trn key="aim:typeOfTheDocumentDescription">Select type of document</digi:trn>">
-											<digi:trn key="aim:typeOfTheDocument">Document type</digi:trn>
-											</a>
-										</td>
-										<td>
-											<c:set var="translation">
+									<logic:notEqual name="aimEditActivityForm" property="docFileOrLink" value="link">
+										<tr>
+											<td>
+												<a title="<digi:trn key="aim:typeOfTheDocumentDescription">Select type of document</digi:trn>">
+													<digi:trn key="aim:typeOfTheDocument">Document type</digi:trn>
+												</a>
+											</td>
+											<td>
+												<c:set var="translation">
 													<digi:trn key="aim:addActivityDocTypeFirstLine">Please select from below</digi:trn>
-											</c:set>
-											<a title="<digi:trn key="aim:typeOfTheDocumentDescription">Select type of document</digi:trn>">
-											<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="docType" categoryName="<%=org.digijava.module.aim.helper.CategoryConstants.DOCUMENT_TYPE_NAME %>" styleClass="inp-text"/>
-											</a>
-										</td>
-									</tr>
+												</c:set>
+												<a title="<digi:trn key="aim:typeOfTheDocumentDescription">Select type of document</digi:trn>">
+													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="docType" categoryName="<%=org.digijava.module.aim.helper.CategoryConstants.DOCUMENT_TYPE_NAME %>" styleClass="inp-text"/>
+												</a>
+											</td>
+										</tr>
+									</logic:notEqual>
+									
 									<field:display name="Document Language" feature="Related Documents">
 									<tr>
 										<td>

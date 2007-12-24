@@ -73,12 +73,12 @@ public class QuarterlyInfoWorker {
 					Double transactionAmount 	= (Double) row[0];
 					
 					Date transactionDate 		= (Date) row[1];
-					
+				
 					/*Checking Date Filter*/
 					Date startDate				=  DateConversion.getDate( "01/01/" + fp.getFromYear() );
 					Date endDate				=  DateConversion.getDate( "01/01/" + fp.getToYear() );
 					
-					if ( !Util.checkYearFilter(transactionDate, startDate, endDate, fp.getFiscalCalId()) )
+					if ( startDate!=null&& endDate!=null&&!Util.checkYearFilter(transactionDate, startDate, endDate, fp.getFiscalCalId()) )
 							continue;
 					/*END - Checking Date Filter*/
 					

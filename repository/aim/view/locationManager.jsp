@@ -185,6 +185,7 @@ function delet1(val1, val2) {
 																		<digi:trn key="aim:AmpAddALocation">Add a</digi:trn>
 																		 ${country}
 																	</a>
+                                                                                                                                         
 																<%--
 																<logic:notEqual name="aimAddLocationForm" property="countryId" value="">
 																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10" />
@@ -192,6 +193,13 @@ function delet1(val1, val2) {
 																		<digi:trn key="aim:AmpEditCountry">Edit this country</digi:trn></a>
 																</logic:notEqual>
 																--%>
+                                                                                                                                 <c:if test="${aimAddLocationForm.countryFlag}">
+																			<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+																			<a href="javascript:delet(0,'delete', '${countryId}' )">
+																				<digi:trn key="aim:AmpDeleteThisLocation">Delete this</digi:trn>
+																				${country}
+																			</a>
+                                                                                                                                   </c:if>
 															</td>
 														</tr>
 													</logic:greaterEqual>

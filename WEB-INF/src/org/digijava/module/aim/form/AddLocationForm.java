@@ -49,11 +49,21 @@ public class AddLocationForm extends ValidatorForm {
 		  private String regionFlag = null;
 		  private String zoneFlag = null;
 		  private String woredaFlag = null;
+                  private boolean countryFlag ;
+
+                    public void setCountryFlag(boolean countryFlag) {
+                        this.countryFlag = countryFlag;
+                    }
+
+                    public boolean getCountryFlag() {
+                        return countryFlag;
+                    }
 
 		  public void reset(ActionMapping mapping, HttpServletRequest request) {
 			  regionFlag = null;
 			  zoneFlag = null;
 			  woredaFlag = null;
+                          countryFlag=false;
 			  if (start) {
 				level = "country";
 				impLevelValue = new Integer(1);

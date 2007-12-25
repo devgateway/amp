@@ -19,15 +19,92 @@ import org.digijava.module.aim.dbentity.AmpWoreda;
 import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.helper.AmpLocations;
 import org.digijava.module.aim.helper.Location;
-import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import java.util.*;
 import net.sf.hibernate.*;
 import java.sql.*;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSiteFlag;
+import org.digijava.module.cms.dbentity.CMSContentItem;
+import org.digijava.module.syndication.dbentity.PublicationFeed;
 
 public class LocationUtil {
 
 	private static Logger logger = Logger.getLogger(LocationUtil.class);
+        
+         private static boolean countryHasFlag(String iso) throws HibernateException, DgException {
+        boolean show = true;
+        Collection<Country> countries = FeaturesUtil.getDefaultCountry(iso);
+        Iterator<Country> iter = countries.iterator();
+        while (iter.hasNext()) {
+            Country country = iter.next();
+
+            Session session = PersistenceManager.getRequestDBSession();
+            String qryStr = "select flg from " + AmpSiteFlag.class.getName() + " flg  where flg.countryId=" + country.getCountryId();
+            Query qry = session.createQuery(qryStr);
+            List flags = qry.list();
+            if (flags != null && flags.size() > 0) {
+                show = false;
+                break;
+            }
+        }
+
+        return show;
+    }
+
+    public static boolean countryHasRef(String iso) {
+        Session session = null;
+        List col = new ArrayList();
+        String qryStr = null;
+        Query qry = null;
+        boolean show = true;
+        Class[] classNames =
+                {
+            AmpActivity.class, User.class, AmpRegion.class, AmpWoreda.class, AmpZone.class,
+            PublicationFeed.class, CMSContentItem.class, AmpCurrency.class, AmpLocation.class, AmpOrganisation.class
+        ,
+              };
+            String subQryStr="cls.country";
+
+        try {
+            if (iso == null || iso.equals("Select") || FeaturesUtil.getDefaultCountryIso().equals(iso)) {
+                show = false;
+                return show;
+            }
+            session = PersistenceManager.getRequestDBSession();
+            for (int i = 0; i < classNames.length; i++) {
+                if (classNames[i].equals(AmpOrganisation.class) || classNames[i].equals(AmpCurrency.class)) {
+                    subQryStr = "cls.countryId";
+                } else {
+                    if (classNames[i].equals(AmpLocation.class)) {
+                        subQryStr = "cls.dgCountry";
+                    }
+                }
+                qryStr = "select c from " + classNames[i].getName() +
+                        " cls inner join " + subQryStr + " c where c.iso=:iso";
+                qry = session.createQuery(qryStr);
+                qry.setString("iso", iso);
+                List contries = qry.list();
+                if (contries != null && contries.size() > 0) {
+                    col.add(contries);
+                }
+            }
+            if (col.size() > 0) {
+                show = false;
+            } else {
+                show = countryHasFlag(iso);
+            }
+        } catch (Exception ex) {
+            show = false;
+            throw new RuntimeException(ex);
+        }
+        return show;
+    }
+
+
+
 
 	public static Collection searchForLocation(String keyword, int implevel) {
 		Session session = null;

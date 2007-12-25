@@ -81,21 +81,23 @@ public class AddThemeIndicator extends Action
 			
 			for (int j = 0; j < selInds.length; j++) {
 				
-				for(Iterator itr=indi.iterator(); itr.hasNext();){
-					
-					AllThemes item=(AllThemes)itr.next();
-					 Collection<AllPrgIndicators> themeassignind = item.getAllPrgIndicators();
-				 	  List<AllPrgIndicators> allprgindlist = new ArrayList<AllPrgIndicators>(themeassignind);
-				 	   	for(Iterator Itrind = allprgindlist.iterator(); Itrind.hasNext();){
-				 	   		AllPrgIndicators tInd = (AllPrgIndicators) Itrind.next();
-				 	   	
-				 	   		if(tInd.getIndicatorId().equals(selInds[j])){
-						 	   	
-				 	   					flag = false;
-							   			break;
-				 	   			 }
-				 	   		  }
-				 	   	  }
+				// improvement 2217 changed 3 time :( assigne or not
+				
+//				for(Iterator itr=indi.iterator(); itr.hasNext();){
+//					
+//					AllThemes item=(AllThemes)itr.next();
+//					 Collection<AllPrgIndicators> themeassignind = item.getAllPrgIndicators();
+//				 	  List<AllPrgIndicators> allprgindlist = new ArrayList<AllPrgIndicators>(themeassignind);
+//				 	   	for(Iterator Itrind = allprgindlist.iterator(); Itrind.hasNext();){
+//				 	   		AllPrgIndicators tInd = (AllPrgIndicators) Itrind.next();
+//				 	   	
+//				 	   		if(tInd.getIndicatorId().equals(selInds[j])){
+//						 	   	
+//				 	   					flag = false;
+//							   			break;
+//				 	   			 }
+//				 	   		  }
+//				 	   	  }
 								if(flag == true){
 						
 								ProgramUtil.assignThemeInd(selInds[j],new Long(id )); 

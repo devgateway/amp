@@ -20,7 +20,7 @@ public class AssignNewIndicator
         List<IndicatorsBean> allInds = new ArrayList();
         ThemeForm allIndForm = (ThemeForm) form;
         
-        Collection allSectors = SectorUtil.getAllSectors();
+        Collection allSectors = SectorUtil.getAllParentSectors();
         allIndForm.setAllSectors(allSectors);
         allIndForm.setTempNumResults(10);
         allIndForm.setSectorName("");

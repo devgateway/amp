@@ -214,6 +214,33 @@ public class SectorUtil {
 		return col;
 	}
 	
+	public static Collection getAllParentSectors() {
+		Session session = null;
+		Collection col = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select s from " + AmpSector.class.getName()
+					+ " s "	+ " where parent_sector_id is null " + "order by s.name";
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+
+		} catch (Exception e) {
+			logger.error("Cannot get parent sectors, " + e);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		return col;
+	}
+	
+	
+	
 	public static List getAllSectorsFromScheme(Long secSchemeId) {
 		Session session = null;
 		List col = null;

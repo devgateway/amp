@@ -13,13 +13,11 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.form.AddLocationForm;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LocationUtil;
-import org.digijava.kernel.translator.util.TrnCountry;
 import java.util.Collection;
 import org.digijava.module.aim.helper.CountryBean;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class LocationManager extends Action {
 
@@ -101,6 +99,8 @@ public class LocationManager extends Action {
 					 			addForm.setImpLevelValue(new Integer(1));
                                 Collection<CountryBean> countries = org.digijava.module.aim.util.DbUtil.getTranlatedCountries(request);
 					 			addForm.setCountry(countries);
+                                                              
+                               
 					 } else if (addForm.getLevel().equals("region")) {
 								if (addForm.getCountry() == null) {
 									return mapping.findForward("index");
@@ -175,7 +175,7 @@ public class LocationManager extends Action {
 					 } else {
 								return mapping.findForward("index");
 					 }
-
+                                           addForm.setCountryFlag(LocationUtil.countryHasRef(addForm.getCountryId()));
 					 return mapping.findForward("forward");
 			}
 

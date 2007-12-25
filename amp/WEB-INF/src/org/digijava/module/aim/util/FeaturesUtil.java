@@ -531,7 +531,7 @@ public class FeaturesUtil {
     }
     return col;
   }
-
+ 
   public static Collection getAllCountryFlags() {
     Session session = null;
     Collection col = new ArrayList();

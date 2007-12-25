@@ -18,7 +18,9 @@ import org.digijava.module.aim.form.AddLocationForm;
 import javax.servlet.http.*;
 import org.digijava.kernel.translator.util.TrnCountry;
 import java.util.Collection;
+import org.digijava.kernel.util.CountryUtil;
 import org.digijava.module.aim.helper.CountryBean;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class AddLocation extends Action
 {
@@ -326,6 +328,19 @@ public class AddLocation extends Action
    				DbUtil.delete(obj);
    			}
    		}
+                if ( categoryLevel.longValue() == 0 ){ //is country
+   			Country obj = null;
+   			if (addForm.getCountryId() != null) {
+                            Collection <Country>countries=FeaturesUtil.getDefaultCountry(addForm.getCountryId());
+                            if(countries!=null&&countries.size()>0){
+   				obj=countries.iterator().next();
+                            }
+   			DbUtil.delete(obj);
+                        addForm.setStart(true);
+   			}
+   		}
+                
+                
 
 	 	addForm.setEdFlag("yes");
    		return mapping.findForward("added");

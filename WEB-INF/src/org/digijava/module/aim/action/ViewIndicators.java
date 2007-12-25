@@ -48,7 +48,9 @@ public class ViewIndicators
            allIndForm.getCategory()==0) {
             //Collection<AllThemes> themeCol = ProgramUtil.getAllThemeIndicators();
             Collection indsectors = ProgramUtil.getAmpThemeIndicators();
-            Collection allSectors = SectorUtil.getAllSectors();
+            Collection allSectors = SectorUtil.getAllParentSectors();
+           
+            
             allIndForm.setSectors(allSectors);
             for(Iterator itr = indsectors.iterator(); itr.hasNext();){
             	AmpThemeIndicators  indicat = (AmpThemeIndicators) itr.next();
@@ -106,8 +108,9 @@ public class ViewIndicators
                         List<AllMEIndicators> prjIndsList = new ArrayList<AllMEIndicators>(prjIndsCol);
                         for(Iterator indItr = prjIndsList.iterator(); indItr.hasNext(); ) {
                             AllMEIndicators tInd = (AllMEIndicators) indItr.next();
-
+                            
                             IndicatorsBean ind = new IndicatorsBean(tInd);
+                         
                             ind.setCategory(Integer.valueOf(-1));
                             ind.setType("1");
                             ind.setSectorName("Z");
@@ -223,7 +226,7 @@ public class ViewIndicators
 			{
 				 AmpThemeIndicators tempInd = new AmpThemeIndicators();
 				  tempInd = ProgramUtil.getThemeIndicatorById(new Long(id));
-				  if(tempInd.getThemes().size() != 0){
+				  if(tempInd.getThemes()!=null && tempInd.getThemes().size() != 0){
 					  Iterator itr=tempInd.getThemes().iterator();
 					  while (itr.hasNext()) {
 						AmpTheme insect = (AmpTheme) itr.next();

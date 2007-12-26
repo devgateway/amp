@@ -186,6 +186,12 @@ function searchAlpha(val) {
 	  document.aimThemeForm.submit();
 	}
 
+	 function viewall(){
+	  <digi:context name="searchInd" property="context/module/moduleinstance/searchindicators.do?action=viewall"/>
+	  document.aimThemeForm.action = "<%= searchInd %>";
+	  document.aimThemeForm.submit();
+      }
+
 function closeWindow() 
 	{
 		window.close();
@@ -264,6 +270,10 @@ function closeWindow()
 											&nbsp;
 											<html:button  styleClass="dr-menu" property="submitButton" onclick="closeWindow()">
 												<digi:trn key="btn:close">Close</digi:trn> 
+											</html:button>
+											&nbsp;
+											<html:button  styleClass="dr-menu" property="submitButton" onclick="viewall()">
+												<digi:trn key="btn:viewall">View all</digi:trn>
 											</html:button>
 										</td>
 									</tr>

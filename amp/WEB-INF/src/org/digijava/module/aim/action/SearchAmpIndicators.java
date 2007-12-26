@@ -46,6 +46,7 @@ public class SearchAmpIndicators extends Action {
 			eaForm.setAction("");
 			
 		}
+		
 		eaForm.setReset(false);
 		eaForm.setIndPopupReset(false);
 		
@@ -58,28 +59,22 @@ public class SearchAmpIndicators extends Action {
 			col = new ArrayList();
 			eaForm.setNumResults(eaForm.getTempNumResults());
 
-			if (!eaForm.getSectorName().equalsIgnoreCase("all")) {
+			if (!eaForm.getAction().equals("viewall")) {
 				if (eaForm.getKeyword().trim().length() != 0) {
 					// serach for indicators based on the keyword and the
 					// organisation type
 					//col = ProgramUtil.searchForindicators(eaForm.getKeyword().trim(),eaForm.getSectorName());
 					col = ProgramUtil.searchForindicator(eaForm.getKeyword());
 						if(col.size()==0 ){
-							
 							col = ProgramUtil.getThemeindicators(eaForm.getKeyword().trim());
-							
-						}
+					 	 }
 				} else {
 					// search for indicators based on organisation type only
 					col = ProgramUtil.searchForindicator(eaForm.getSectorName());
-					
-					if(col.size()==0 ){
-						
-						col = ProgramUtil.getThemeindicators(eaForm.getSectorName());
-						
+				 	if(col.size()==0 ){
+				     	col = ProgramUtil.getThemeindicators(eaForm.getSectorName());
 					}
-					
-				}
+	  			 }
 			} else if (eaForm.getKeyword().trim().length() != 0) {
 				// search based on the given keyword only.
 				col = ProgramUtil.searchForindicator(eaForm.getKeyword().trim());
@@ -91,25 +86,25 @@ public class SearchAmpIndicators extends Action {
 		         * Returns All project indicator.
 		         */		
 				
-				coll =  MEIndicatorsUtil.getAllActivityIds();
-				 
-				 for(Iterator itr = coll.iterator(); itr.hasNext(); ) {
-					 	AllActivities act = (AllActivities) itr.next();
-					 		Collection<AllMEIndicators> prjIndsCol = act.getAllMEIndicators();
-					 			 if(prjIndsCol != null){
-					 				List<AllMEIndicators> prjIndsList = new ArrayList<AllMEIndicators>(prjIndsCol);
-					 				 for(Iterator indItr = prjIndsList.iterator(); indItr.hasNext(); ) {
-					 					AllMEIndicators tInd = (AllMEIndicators) indItr.next();
-					 					AmpThemeIndicators ind = new AmpThemeIndicators();
-					 					
-					 					ind.setAmpThemeIndId(tInd.getAmpMEIndId());
-					 					ind.setName(tInd.getName());
-					 					
-					 					col.add(ind);
-					 				 }
-									 
-							 }
-					  }
+//				coll =  MEIndicatorsUtil.getAllActivityIds();
+//				 
+//				 for(Iterator itr = coll.iterator(); itr.hasNext(); ) {
+//					 	AllActivities act = (AllActivities) itr.next();
+//					 		Collection<AllMEIndicators> prjIndsCol = act.getAllMEIndicators();
+//					 			 if(prjIndsCol != null){
+//					 				List<AllMEIndicators> prjIndsList = new ArrayList<AllMEIndicators>(prjIndsCol);
+//					 				 for(Iterator indItr = prjIndsList.iterator(); indItr.hasNext(); ) {
+//					 					AllMEIndicators tInd = (AllMEIndicators) indItr.next();
+//					 					AmpThemeIndicators ind = new AmpThemeIndicators();
+//					 					
+//					 					ind.setAmpThemeIndId(tInd.getAmpMEIndId());
+//					 					ind.setName(tInd.getName());
+//					 					
+//					 					col.add(ind);
+//					 				 }
+//									 
+//							 }
+//					  }
 				 
 			}
 			if (col != null && col.size() > 0) {
@@ -206,7 +201,7 @@ public class SearchAmpIndicators extends Action {
 		
 		eaForm.setPages(pages);
 		eaForm.setCurrentPage(new Integer(1));
-	
+	    eaForm.setAction("");
     	return mapping.findForward("forward");
 	}
 }

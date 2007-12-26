@@ -131,14 +131,18 @@ public class EditTag
             if (getEditorBody() != null) {
                 editTag = getEditorBody() + "<a href=\"" +
                     DgUtil.getSiteUrl(RequestUtils.getSite(request), request) +
-                    "/editor/showEditText.do?id=" + getKey() +
+                    "/editor/showEditText.do?id=" + getKey() +"&lang="+RequestUtils.
+                        getNavigationLanguage(request).
+                        getCode()+
                     "&referrer=" + refUrl +
                     "\">E</a>";
             }
             else {
                 editTag = body.getString() + "<a href=\"" +
                     DgUtil.getSiteUrl(RequestUtils.getSite(request), request) +
-                    "/editor/showEditText.do?id=" + getKey() +
+                    "/editor/showEditText.do?id=" + getKey() +"&lang="+RequestUtils.
+                        getNavigationLanguage(request).
+                        getCode()+
                     "&body=" + body.getString() +
                     "&referrer=" + refUrl +
                     "\">E</a>";

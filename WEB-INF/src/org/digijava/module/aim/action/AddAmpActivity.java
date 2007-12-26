@@ -805,7 +805,9 @@ public class AddAmpActivity extends Action {
       else if (eaForm.getStep().equals("1.1")) { // shows the edit page of the editor module
         eaForm.setStep("1");
         // When the contents are saved the editor module redirects to the url specified in the 'referrer' parameter
-        String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() +
+        String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() +"&lang="+RequestUtils.
+                        getNavigationLanguage(request).
+                        getCode()+
             "&referrer=" + eaForm.getContext() +
             "/aim/addActivity.do?edit=true";
         response.sendRedirect(eaForm.getContext() + url);
@@ -816,7 +818,9 @@ public class AddAmpActivity extends Action {
       else if (eaForm.getStep().equals("2.2")) { // shows the edit page of the editor module
           eaForm.setStep("2");
           // When the contents are saved the editor module redirects to the url specified in the 'referrer' parameter
-          String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() +
+          String url = "/editor/showEditText.do?id=" + eaForm.getEditKey() +"&lang="+RequestUtils.
+                        getNavigationLanguage(request).
+                        getCode()+
               "&referrer=" + eaForm.getContext() +
               "/aim/addActivity.do?edit=true";
           response.sendRedirect(eaForm.getContext() + url);

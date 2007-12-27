@@ -1,8 +1,8 @@
 /*
  * Created on 1/03/2006
- * 
+ *
  * @author akashs
- * 
+ *
  */
 package org.digijava.module.aim.dbentity;
 
@@ -11,14 +11,15 @@ import java.util.Set;
 public class AmpAhsurvey {
 
 	private Long ampAHSurveyId;
-	
+
 	//private AmpFunding ampFundingId;
 	//private Integer surveyYear;
-	
+	//point of delivery donor
 	private AmpActivity ampActivityId;
 	private AmpOrganisation ampDonorOrgId;
+    private AmpOrganisation pointOfDeliveryDonor;
 	private Set responses;
-	
+
 	/**
 	 * @return Returns the ampAHSurveyId.
 	 */
@@ -61,10 +62,19 @@ public class AmpAhsurvey {
 	public AmpOrganisation getAmpDonorOrgId() {
 		return ampDonorOrgId;
 	}
-	/**
+
+    public AmpOrganisation getPointOfDeliveryDonor() {
+        return pointOfDeliveryDonor;
+    }
+
+    /**
 	 * @param ampDonorOrgId The ampDonorOrgId to set.
 	 */
 	public void setAmpDonorOrgId(AmpOrganisation ampDonorOrgId) {
 		this.ampDonorOrgId = ampDonorOrgId;
 	}
+
+    public void setPointOfDeliveryDonor(AmpOrganisation pointOfDeliveryDonor) {
+        this.pointOfDeliveryDonor = pointOfDeliveryDonor;
+    }
 }

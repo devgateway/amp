@@ -195,10 +195,15 @@
     input="/showLayout.do?layout=aim_assignFieldPermissions">
     </action>
 
+    <action name="aimEditActivityForm" path="/aim/selectOrganisationForAhsurvey" scope="session" type="org.digijava.module.aim.action.SelectOrganisationForAhsurvey" validate="false">
+      <forward name="finish" path="/aim/editSurvey.do?edit=true" />
+      <forward name="forward" path="/showLayout.do?layout=selectOrganisationForAhsurvey"/>
+    </action>
 
     <action name="aimViewQuickLinksForm" path="/aim/viewQuickLinks" scope="request" type="org.digijava.module.aim.action.ViewQuickLinks" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewLinks" />
     </action>
+
     <action name="aimQuickLinkForm" path="/aim/addQuickLink" scope="request" type="org.digijava.module.aim.action.AddQuickLink" validate="false">
       <forward name="addRelLink" path="/showLayout.do?layout=addQuickLink" />
     </action>

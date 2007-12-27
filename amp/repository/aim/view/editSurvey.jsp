@@ -17,14 +17,18 @@
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 
 <script language="Javascript">
 
 <!--
 
-
+	function openSelOrgPopup() {
+      openNewWindow(600, 450);
+      <digi:context name="url" property="context/module/moduleinstance/selectOrganisationForAhsurvey.do?edit=true&svAction=searsh" />
+      openURLinWindow("<%=url%>",600, 450)
+    }
 
 	function move(pg) {
 
@@ -269,6 +273,31 @@
 								<!-- Indicator Table starts here -->
 
 
+                                <table width="100%" cellPadding=3>
+                                  <tr>
+
+                                    <td bgcolor=#ECF3FD width="100%">
+
+                                      <b><digi:trn key="aim:piFirstQuestion">If different of the funding agency, please specify the point of delivery donor?</digi:trn></b>
+
+                                    </td>
+                                  </tr>
+
+                                  <TR bgcolor="#f4f4f2">
+                                    <TD colspan="2" width="90%">
+                                      <TABLE width="90%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgcolor="#ffffff">
+                                        <tr>
+                                          <td>
+                                          ${aimEditActivityForm.ahsurvey.pointOfDeliveryDonor.name}
+                                          </td>
+                                          <td align="right">
+                                            <input type="button" value="Select organization" onclick="openSelOrgPopup();" style="font-family:tahoma;font-size:8pt;" />
+                                          </td>
+                                        </tr>
+                                      </TABLE>
+                                     </td>
+                                   </tr>
+                                </table>
 
 										<logic:notEmpty name="aimEditActivityForm" property="indicators">
 

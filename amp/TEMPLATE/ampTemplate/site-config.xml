@@ -489,6 +489,7 @@
 				<page>aim_npdOptions</page>
 				<page>addNewIndicator</page>
 			    <page>selectProgramForIndicator</page>
+                <page>selectOrganisationForAhsurvey</page>
 				<page>selectLocationForIndicatorValue</page>
                 <page>selectActivityForIndicator</page>
 				<page>viewEditIndicator</page>

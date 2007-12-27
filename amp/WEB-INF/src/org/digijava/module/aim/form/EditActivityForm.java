@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpSISINProyect;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -30,9 +31,10 @@ import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.ReferenceDoc;
 
 public class EditActivityForm extends ActionForm implements Serializable{
-
-    	private Long activityLevel;
-    	private int isPreview=0;
+    private String svAction;
+    private Long surveyOrgId;
+    private Long activityLevel;
+    private int isPreview=0;
 	private Long activityId = null;
 	private String ampId = null;
 	private String title = null;
@@ -58,7 +60,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String createdDate;
 	private String updatedDate;
 	private AmpTeamMember updatedBy;
-        private AmpTeamMember createdBy;
+    private AmpTeamMember createdBy;
 	private Collection perspectives;
 	private Boolean budget=true;
 	private String budgetCheckbox;
@@ -471,53 +473,55 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	 private Boolean governmentApprovalProcedures;
 	 private Boolean jointCriteria;
-  private boolean defaultCountryIsSet;
-       // program settings
-         private List primaryPrograms;
-         private List secondaryPrograms;
-         private List nationalPlanObjectivePrograms;
-         private int programType;
-         private Long[] selectedNPOPrograms;
-         private Long[] selectedPPrograms;
-         private Long[] selectedSPrograms;
-         private AmpActivityProgramSettings nationalSetting;
-         private AmpActivityProgramSettings primarySetting;
-         private AmpActivityProgramSettings secondarySetting;
-        private int numDisbOrder;
-        private String disbOrderId;
+     private boolean defaultCountryIsSet;
+     // program settings
+     private List primaryPrograms;
+     private List secondaryPrograms;
+     private List nationalPlanObjectivePrograms;
+     private int programType;
+     private Long[] selectedNPOPrograms;
+     private Long[] selectedPPrograms;
+     private Long[] selectedSPrograms;
+     private AmpActivityProgramSettings nationalSetting;
+     private AmpActivityProgramSettings primarySetting;
+     private AmpActivityProgramSettings secondarySetting;
+     private int numDisbOrder;
+     private String disbOrderId;
+
+     private AmpAhsurvey ahsurvey;
 
 
-        public Boolean getGovernmentApprovalProcedures() {
-		return governmentApprovalProcedures;
-	}
+     public Boolean getGovernmentApprovalProcedures() {
+         return governmentApprovalProcedures;
+     }
 
-	public void setGovernmentApprovalProcedures(Boolean governmentApprovalProcedures) {
-		this.governmentApprovalProcedures = governmentApprovalProcedures;
-	}
+     public void setGovernmentApprovalProcedures(Boolean governmentApprovalProcedures) {
+         this.governmentApprovalProcedures = governmentApprovalProcedures;
+     }
 
-	public Boolean getJointCriteria() {
-		return jointCriteria;
-	}
+     public Boolean getJointCriteria() {
+         return jointCriteria;
+     }
 
-	public void setJointCriteria(Boolean jointCriteria) {
-		this.jointCriteria = jointCriteria;
-	}
+     public void setJointCriteria(Boolean jointCriteria) {
+         this.jointCriteria = jointCriteria;
+     }
 
-	public Collection getSearchedSectors() {
-		return searchedSectors;
-	}
+     public Collection getSearchedSectors() {
+         return searchedSectors;
+     }
 
-	public void setSearchedSectors(Collection searchedSectors) {
-		this.searchedSectors = searchedSectors;
-	}
+     public void setSearchedSectors(Collection searchedSectors) {
+         this.searchedSectors = searchedSectors;
+     }
 
-	public Long getAcChapter() {
-		return acChapter;
-	}
+     public Long getAcChapter() {
+         return acChapter;
+     }
 
-	public void setAcChapter(Long acChapter) {
-		this.acChapter = acChapter;
-	}
+     public void setAcChapter(Long acChapter) {
+         this.acChapter = acChapter;
+     }
 
 	public EditActivityForm() {
 		step = "1";
@@ -3881,7 +3885,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		this.actAthAgencySource = actAthAgencySource;
 	}
 
-public String getPurpose() {
+    public String getPurpose() {
 		return purpose;
 	}
 
@@ -4267,35 +4271,35 @@ public String getPurpose() {
 		return budgetCheckbox;
 	}
 
-  public AmpTeamMember getCreatedBy() {
-    return createdBy;
-  }
+    public AmpTeamMember getCreatedBy() {
+        return createdBy;
+    }
 
-  public void setBudgetCheckbox(String budgetCheckbox) {
-		this.budgetCheckbox = budgetCheckbox;
-	}
+    public void setBudgetCheckbox(String budgetCheckbox) {
+        this.budgetCheckbox = budgetCheckbox;
+    }
 
 
-	public void setCreatedBy(AmpTeamMember createdBy) {
-    this.createdBy = createdBy;
-  }
+    public void setCreatedBy(AmpTeamMember createdBy) {
+        this.createdBy = createdBy;
+    }
 
 	public Collection getFundingOrganizations() {
 		return fundingOrganizations;
 	}
 
-	public int getIsPreview() {
-    return isPreview;
+    public int getIsPreview() {
+        return isPreview;
+    }
+
+  public void setIsPreview(int isPreview) {
+      this.isPreview = isPreview;
   }
 
-   public void setIsPreview(int isPreview) {
-    this.isPreview = isPreview;
+
+  public String getMultiSectorSelecting() {
+      return multiSectorSelecting;
   }
-
-
-	public String getMultiSectorSelecting() {
-	return multiSectorSelecting;
-}
 
 	public void setMultiSectorSelecting(String multiSectorSelecting) {
 		this.multiSectorSelecting = multiSectorSelecting;
@@ -4595,16 +4599,16 @@ public String getPurpose() {
         this.subsectorLevel2 = subsectorLevel2;
     }
 
-        public void setNumDisbOrder(int numDisbOrder) {
-                this.numDisbOrder = numDisbOrder;
-        }
+    public void setNumDisbOrder(int numDisbOrder) {
+        this.numDisbOrder = numDisbOrder;
+    }
 
-        public void setDisbOrderId(String disbOrderId) {
-                this.disbOrderId = disbOrderId;
-        }
+    public void setDisbOrderId(String disbOrderId) {
+        this.disbOrderId = disbOrderId;
+    }
 
 
-        public Boolean getDraft() {
+    public Boolean getDraft() {
         return draft;
     }
 
@@ -4648,23 +4652,45 @@ public String getPurpose() {
         return selectedSPrograms;
     }
 
-        public int getNumDisbOrder() {
-                return numDisbOrder;
-        }
+    public int getNumDisbOrder() {
+        return numDisbOrder;
+    }
 
-        public String getDisbOrderId() {
-                return disbOrderId;
-        }
+    public String getDisbOrderId() {
+        return disbOrderId;
+    }
 
 	public Long[] getSelActivityComponentes() {
 	    return selActivityComponentes;
 	}
 
-	public void setSelActivityComponentes(Long[] selActivityComponentes) {
+    public AmpAhsurvey getAhsurvey() {
+        return ahsurvey;
+    }
+
+    public String getSvAction() {
+        return svAction;
+    }
+
+    public Long getSurveyOrgId() {
+        return surveyOrgId;
+    }
+
+    public void setSelActivityComponentes(Long[] selActivityComponentes) {
 	    this.selActivityComponentes = selActivityComponentes;
 	}
 
+    public void setAhsurvey(AmpAhsurvey ahsurvey) {
+        this.ahsurvey = ahsurvey;
+    }
 
+    public void setSvAction(String svAction) {
+        this.svAction = svAction;
+    }
+
+    public void setSurveyOrgId(Long surveyOrgId) {
+        this.surveyOrgId = surveyOrgId;
+    }
 
 }
 

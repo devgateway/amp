@@ -2183,6 +2183,33 @@ public class DbUtil {
         return organisation;
     }
 
+    public static ArrayList getBilMulOrganisations() {
+        Session session = null;
+        Query q = null;
+        AmpOrganisation ampOrganisation = null;
+        ArrayList organisation = new ArrayList();
+        String queryString = null;
+        Iterator iter = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            queryString = " select org from " + AmpOrganisation.class.getName()
+                + " org where org.orgTypeCode='MUL' or org.orgTypeCode='BIL' order by org.name";
+            q = session.createQuery(queryString);
+            iter = q.list().iterator();
+
+            while (iter.hasNext()) {
+                ampOrganisation = (AmpOrganisation) iter.next();
+                organisation.add(ampOrganisation);
+            }
+
+        } catch (Exception ex) {
+            logger.error("Unable to get Amp organisation names  from database "
+                         + ex.getMessage());
+        }
+        return organisation;
+    }
+
     public static Collection getFundingDetWithCurrId(Long currId) {
         Session sess = null;
         Collection col = null;
@@ -4329,7 +4356,7 @@ public class DbUtil {
         Collection colAux = new ArrayList();
 
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
             String queryString = "select o from " + AmpField.class.getName()
                 + " o ";
             qry = session.createQuery(queryString);
@@ -4339,18 +4366,9 @@ public class DbUtil {
                 AmpField af = (AmpField) itr.next();
                 colAux.add(af);
             }
-            session.close();
         } catch (Exception e) {
             logger.error("Unable to get all comments");
             logger.debug("Exceptiion " + e);
-        } finally {
-            try {
-                if (session != null) {
-                    PersistenceManager.releaseSession(session);
-                }
-            } catch (Exception ex) {
-                logger.error("releaseSession() failed");
-            }
         }
         return colAux;
     }
@@ -4735,6 +4753,14 @@ public class DbUtil {
                     }
                     flag2 = true;
                 }
+
+                iter2 = surveySet.iterator();
+                while (iter2.hasNext()) {
+                    AmpAhsurvey ahs = (AmpAhsurvey) iter2.next();
+                    if (ahs.getPointOfDeliveryDonor() == null) {
+                        ahs.setPointOfDeliveryDonor(ahs.getAmpDonorOrgId());
+                    }
+                }
                 session.update(activity);
                 tx.commit();
 
@@ -4907,6 +4933,35 @@ public class DbUtil {
             ex.printStackTrace(System.out);
         }
         return survey;
+    }
+
+    public static void updateSurvey(AmpAhsurvey survey) {
+        Session session = null;
+        Transaction tx = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            tx = session.beginTransaction();
+
+            AmpAhsurvey oldSurvey = (AmpAhsurvey) session.load(AmpAhsurvey.class, survey.getAmpAHSurveyId());
+            oldSurvey.setAmpActivityId(survey.getAmpActivityId());
+            oldSurvey.setAmpDonorOrgId(survey.getAmpDonorOrgId());
+            oldSurvey.setPointOfDeliveryDonor(survey.getPointOfDeliveryDonor());
+            oldSurvey.setResponses(survey.getResponses());
+
+            session.update(oldSurvey);
+            tx.commit();
+        } catch (Exception ex) {
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (HibernateException e) {
+                    logger.debug("rollback() failed : " + e.getMessage());
+                }
+            }
+            logger.debug("Unable to save survey response : " + ex.getMessage());
+            ex.printStackTrace(System.out);
+        }
     }
 
     public static void saveSurveyResponses(Long surveyId, Collection indicator) {
@@ -6036,7 +6091,7 @@ public class DbUtil {
      * //for sorting users by Email
      * @author dare
      *
-     */    
+     */
     public static class HelperEmailComparator implements Comparator {
         public int compare(Object obj1, Object obj2) {
             User user1 = (User) obj1;

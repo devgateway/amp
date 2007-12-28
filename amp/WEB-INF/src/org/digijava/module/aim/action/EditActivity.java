@@ -465,7 +465,16 @@ public class EditActivity
       eaForm.setPerspectives(DbUtil.getAmpPerspective());
 
       if (activityId != null) {
-
+    	  /* Clearing Tanzania Adds */
+    	  eaForm.setVote(null);
+    	  eaForm.setSubVote(null);
+    	  eaForm.setFY(null);
+    	  eaForm.setSubProgram(null);
+    	  eaForm.setProjectCode(null);
+    	  eaForm.setGbsSbs(null);
+    	  eaForm.setGovernmentApprovalProcedures(new Boolean(false));
+    	  eaForm.setJointCriteria(new Boolean(false));
+    	  /* END - Clearing Tanzania Adds */
 
         /* Insert Categories */
         AmpCategoryValue ampCategoryValue = CategoryManagerUtil.

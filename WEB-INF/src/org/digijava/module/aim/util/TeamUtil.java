@@ -4,6 +4,7 @@
 
 package org.digijava.module.aim.util;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -730,8 +731,10 @@ public class TeamUtil {
             tx = session.beginTransaction();
             session.save(member);
             session.save(appSettings);
+            
+            
             if(member.getAmpMemberRole().getTeamHead().booleanValue() == true) {
-                AmpTeam team = member.getAmpTeam();
+                AmpTeam team = (AmpTeam) session.load(AmpTeam.class, (Serializable) member.getAmpTeam().getIdentifier());
                 team.setTeamLead(member);
                 session.update(team);
             }

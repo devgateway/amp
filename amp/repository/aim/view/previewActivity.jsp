@@ -431,9 +431,8 @@ function viewChanges()
 								</td>
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
-							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
-							<tr><td align="center" vAlign="top" bgcolor="#ffffff">
-								<table width="100%" cellSpacing=1 cellpadding=3 bgcolor="#dddddd">
+							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="white">
+		
 
 									<feature:display name="Identification" module="Project ID and Planning">
 									<tr>
@@ -788,11 +787,8 @@ function viewChanges()
                                               		<td bgcolor="#ffffff" ><c:out value="${aimEditActivityForm.statusReason}"/></td>
 												</tr>
 												</field:display>
-											</table>
-											</div>
-										</td>
-									</tr>
 									</feature:display>
+											
 
 									<feature:display name="Location" module="Project ID and Planning"></feature:display>
 									<field:display name="Implementation Level" feature="Location">
@@ -826,7 +822,7 @@ function viewChanges()
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<img id="location_plus"  onclick="toggleGroup('location')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="location_minus" onclick="toggleGroup('location')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+											<img id="location_minus" onclick="toggleGroup('location')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display: none"/>
 											<digi:trn key="aim:location">
 											Location</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -856,6 +852,7 @@ function viewChanges()
 									</tr>
 									</field:display>
 									
+									<%-- 
 									<c:if test="${not empty aimEditActivityForm.componentSectors}">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -879,6 +876,7 @@ function viewChanges()
 										</td>
 									</tr>
 									</c:if>
+									--%>
 
 									<feature:display name="Sectors" module="Project ID and Planning">
 									<tr>

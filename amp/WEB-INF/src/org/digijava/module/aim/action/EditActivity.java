@@ -786,6 +786,8 @@ public class EditActivity
             boolean maxLevel = false;
             while (locIter.hasNext()) {
             	AmpActivityLocation actLoc = (AmpActivityLocation) locIter.next();	//AMP-2250
+            	if (actLoc == null)
+            		continue;
             	AmpLocation loc=actLoc.getLocation();								//AMP-2250
               if (!maxLevel) {
                 if (loc.getAmpWoreda() != null) {

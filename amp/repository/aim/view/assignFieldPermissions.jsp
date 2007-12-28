@@ -62,6 +62,16 @@
 			<td>Implementing Agency</td>
 			<td align="center"><html:checkbox property="iaRead" /></td>
 			<td align="center"><html:checkbox property="iaEdit" /></td>
+		</tr>	
+		<tr>
+			<td>Regional Group</td>
+			<td align="center"><html:checkbox property="rgRead" /></td>
+			<td align="center"><html:checkbox property="rgEdit" /></td>
+		</tr>			
+		<tr>
+			<td>Sector Group</td>
+			<td align="center"><html:checkbox property="sgRead" /></td>
+			<td align="center"><html:checkbox property="sgEdit" /></td>
 		</tr>			
 		<tr>
 			<td align="center" colspan="3"><html:submit styleClass="buton" property="save">Save</html:submit>&nbsp;&nbsp;<html:button property="cancel" styleClass="buton" onclick="javascript:window.close()">Cancel</html:button>

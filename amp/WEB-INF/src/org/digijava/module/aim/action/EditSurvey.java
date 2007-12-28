@@ -82,8 +82,9 @@ public class EditSurvey extends Action {
 
 				// saving survey responses & removing form-bean from session
 				if (null != request.getParameter("action") && "save".equalsIgnoreCase(request.getParameter("action"))) {
-					DbUtil.saveSurveyResponses(svForm.getAmpSurveyId(), svForm.getIndicators());
                     DbUtil.updateSurvey(svForm.getAhsurvey());
+                    DbUtil.saveSurveyResponses(svForm.getAmpSurveyId(), svForm.getIndicators());
+
 					//svForm.getSurvey().clear();
 					//svForm.getIndicators().clear();
 					//svForm.setAmpSurveyId(null);

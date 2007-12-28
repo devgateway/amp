@@ -172,7 +172,7 @@ public class EditActivity
 
     if(!gatePermEditAllowed) {
 	    if (!mapping.getPath().trim().endsWith("viewActivityPreview")) {
-	      if (! ("Team".equalsIgnoreCase(tm.getTeamAccessType()))) {
+	    	 if (! ("Team".equalsIgnoreCase(tm.getTeamAccessType()))&& !("Donor".equalsIgnoreCase(tm.getTeamAccessType()))) {
 	        errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
 	      }
 	      else if (tm.getWrite() == false) {

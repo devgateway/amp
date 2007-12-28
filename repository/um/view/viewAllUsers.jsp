@@ -349,6 +349,17 @@ function banUser(txt) {
 																</digi:link>
 															</td>
 														</tr>
+														<tr>
+															<td>
+																<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
+															<td>
+																<digi:link  module="aim" href="/workspaceManager.do~page=1">
+																<digi:trn key="aim:WorkspaceManager">
+																Workspace Manager
+																</digi:trn>
+																</digi:link>
+															</td>
+														</tr>
 														<!-- end of other links -->
 													</table>
 												</td>

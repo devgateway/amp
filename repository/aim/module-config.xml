@@ -28,6 +28,9 @@
 			org.digijava.module.aim.dbentity.AmpActivity
 		</hibernate-class>
 		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpActivityInternalId
+		</hibernate-class>
+		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpStatus
 		</hibernate-class>
 		<hibernate-class>

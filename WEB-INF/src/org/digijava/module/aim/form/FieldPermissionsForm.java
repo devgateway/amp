@@ -41,6 +41,12 @@ public class FieldPermissionsForm extends ActionForm {
     private String iaRead;
     private String iaEdit;
     
+    private String rgRead;
+    private String rgEdit;
+    
+    private String sgRead;
+    private String sgEdit;
+    
     private String fieldName;
     
     public String getFieldName() {
@@ -139,5 +145,29 @@ public class FieldPermissionsForm extends ActionForm {
     public void setGuRead(String guRead) {
         this.guRead = guRead;
     }
+	public String getRgRead() {
+		return rgRead;
+	}
+	public void setRgRead(String rgRead) {
+		this.rgRead = rgRead;
+	}
+	public String getRgEdit() {
+		return rgEdit;
+	}
+	public void setRgEdit(String rgEdit) {
+		this.rgEdit = rgEdit;
+	}
+	public String getSgRead() {
+		return sgRead;
+	}
+	public void setSgRead(String sgRead) {
+		this.sgRead = sgRead;
+	}
+	public String getSgEdit() {
+		return sgEdit;
+	}
+	public void setSgEdit(String sgEdit) {
+		this.sgEdit = sgEdit;
+	}
  
 }

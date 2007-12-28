@@ -108,12 +108,24 @@ public class AssignFieldPermissions extends Action {
 		faGate.getGateParameters().add("DN");
 		faGate.setGateTypeName(OrgRoleGate.class.getName());
 		
+		GatePermission rgGate=new GatePermission(true);
+		rgGate.setName(afv.getName()+ " - Regional Group Permission");
+		rgGate.getGateParameters().add("RG");
+		rgGate.setGateTypeName(OrgRoleGate.class.getName());
+		
+		GatePermission sgGate=new GatePermission(true);
+		sgGate.setName(afv.getName()+ " - Sector Group Permission");
+		sgGate.getGateParameters().add("SG");
+		sgGate.setGateTypeName(OrgRoleGate.class.getName());
+		
 		
 		HashSet baActions=new HashSet();
 		HashSet caActions=new HashSet();
 		HashSet eaActions=new HashSet();
 		HashSet iaActions=new HashSet();
 		HashSet faActions=new HashSet();
+		HashSet rgActions=new HashSet();
+		HashSet sgActions=new HashSet();
 		
 		if("on".equals(fpf.getBaEdit())) baActions.add(GatePermConst.Actions.EDIT);
 		if("on".equals(fpf.getBaRead())) baActions.add(GatePermConst.Actions.VIEW);
@@ -129,24 +141,40 @@ public class AssignFieldPermissions extends Action {
 	
 		if("on".equals(fpf.getFaEdit())) faActions.add(GatePermConst.Actions.EDIT);
 		if("on".equals(fpf.getFaRead())) faActions.add(GatePermConst.Actions.VIEW);
-	
+
+		if("on".equals(fpf.getRgEdit())) rgActions.add(GatePermConst.Actions.EDIT);
+		if("on".equals(fpf.getRgRead())) rgActions.add(GatePermConst.Actions.VIEW);
+
+		if("on".equals(fpf.getSgEdit())) sgActions.add(GatePermConst.Actions.EDIT);
+		if("on".equals(fpf.getSgRead())) sgActions.add(GatePermConst.Actions.VIEW);
+
+		
 		baGate.setActions(baActions);
 		caGate.setActions(caActions);
 		eaGate.setActions(eaActions);
 		iaGate.setActions(iaActions);
 		faGate.setActions(faActions);
+		rgGate.setActions(rgActions);
+		sgGate.setActions(sgActions);
+		
 		
 		if(baGate.getActions().size()>0)  session.save(baGate);
 		if(caGate.getActions().size()>0)  session.save(caGate);
 		if(eaGate.getActions().size()>0)  session.save(eaGate);
 		if(iaGate.getActions().size()>0)  session.save(iaGate);
 		if(faGate.getActions().size()>0)  session.save(faGate);		
+		if(rgGate.getActions().size()>0)  session.save(rgGate);
+		if(sgGate.getActions().size()>0)  session.save(sgGate);		
+		
 		
 		if(baGate.getActions().size()>0)  cp.getPermissions().add(baGate);
 		if(caGate.getActions().size()>0)  cp.getPermissions().add(caGate);
 		if(eaGate.getActions().size()>0)  cp.getPermissions().add(eaGate);
 		if(iaGate.getActions().size()>0)  cp.getPermissions().add(iaGate);
 		if(faGate.getActions().size()>0)  cp.getPermissions().add(faGate);		
+		if(rgGate.getActions().size()>0)  cp.getPermissions().add(rgGate);
+		if(sgGate.getActions().size()>0)  cp.getPermissions().add(sgGate);		
+	
 		
 		session.save(cp);
 		
@@ -183,7 +211,14 @@ public class AssignFieldPermissions extends Action {
 			if(agencyPerm.hasAction(GatePermConst.Actions.EDIT)) fpf.setFaEdit("on");
 			if(agencyPerm.hasAction(GatePermConst.Actions.VIEW)) fpf.setFaRead("on");			
 		    }
-		    
+		    if(agencyPerm.hasParameter("SG")) {
+				if(agencyPerm.hasAction(GatePermConst.Actions.EDIT)) fpf.setSgEdit("on");
+				if(agencyPerm.hasAction(GatePermConst.Actions.VIEW)) fpf.setSgRead("on");			
+			}
+		    if(agencyPerm.hasParameter("RG")) {
+				if(agencyPerm.hasAction(GatePermConst.Actions.EDIT)) fpf.setRgEdit("on");
+				if(agencyPerm.hasAction(GatePermConst.Actions.VIEW)) fpf.setRgRead("on");			
+			}    
 		}
 	    } else { 
 		//initialize everyone + guest
@@ -202,6 +237,8 @@ public class AssignFieldPermissions extends Action {
 		    fpf.setEaEdit("on");
 		    fpf.setIaEdit("on");
 		    fpf.setFaEdit("on");
+		    fpf.setRgEdit("on");
+		    fpf.setSgEdit("on");
 		}
 		if(allowedActions.contains(GatePermConst.Actions.VIEW)) {
 		    fpf.setBaRead("on");
@@ -209,6 +246,8 @@ public class AssignFieldPermissions extends Action {
 		    fpf.setEaRead("on");
 		    fpf.setIaRead("on");
 		    fpf.setFaRead("on");
+		    fpf.setRgRead("on");
+		    fpf.setSgRead("on");
 		}
 		}
 		

@@ -102,10 +102,14 @@ function deleteColumn()
 {
 	var items	= document.aimAdvancedReportForm.removeColumns;
 	var ok		= false;
-	for (i=0; i<items.length; i++) {
-		if ( items[i].checked ) {
-			ok	= true;
-			break;
+	if ( document.aimAdvancedReportForm.removeColumns.checked != null && document.aimAdvancedReportForm.removeColumns.checked) 
+			ok = true;
+	if (!ok) {		
+		for (i=0; i<items.length; i++) {
+			if ( items[i].checked ) {
+				ok	= true;
+				break;
+			}
 		}
 	}
 	if (ok) {

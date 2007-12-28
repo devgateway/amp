@@ -773,7 +773,7 @@ function viewChanges()
 									</tr>
 									</feature:display>
 
-									<feature:display name="Location" module="Project ID and Planning"></feature:display>
+									<feature:display name="Location" module="Project ID and Planning">
 
 												<field:display name="Status" feature="Planning">
 												<tr>
@@ -915,7 +915,7 @@ function viewChanges()
 										</td>
 									</tr>
 									</feature:display>
-									<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD"></module:display>
+									<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
 									<feature:display name="NPD Programs" module="National Planning Dashboard">
 									<field:display name="National Plan Objective" feature="NPD Programs">
 										<TR>

@@ -1,6 +1,11 @@
 package org.digijava.module.aim.form;
 
+import java.util.Collection;
+import java.util.Vector;
+
 import org.apache.struts.action.*;
+import org.digijava.module.aim.helper.BaseCalendar;
+
 import javax.servlet.http.HttpServletRequest;
 
 public class AddFiscalCalendarForm extends ActionForm {
@@ -13,7 +18,14 @@ public class AddFiscalCalendarForm extends ActionForm {
 	private int yearOffset = 0;
 	private String flag = null;
 	private String action = null;
-
+	private String baseCalendar = null;
+	
+	
+	
+	public Collection<BaseCalendar> getBaseCalendarList() {
+		return BaseCalendar.calendarList;
+	}
+	
 
 	public Long getFiscalCalId() {
 			  return (this.fiscalCalId);
@@ -115,5 +127,16 @@ public class AddFiscalCalendarForm extends ActionForm {
 
 		return (errors);
 	}
+
+	public String getBaseCalendar() {
+		return baseCalendar;
+	}
+
+	public void setBaseCalendar(String baseCalendar) {
+		this.baseCalendar = baseCalendar;
+	}
+
+
+
 
 }

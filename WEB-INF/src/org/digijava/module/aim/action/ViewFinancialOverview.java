@@ -63,7 +63,8 @@ public class ViewFinancialOverview extends TilesAction {
 			Date tempDate = null;
 
 			formBean.setCurrency(Constants.DEFAULT_CURRENCY);
-			formBean.setFiscalCalId(Constants.GREGORIAN.longValue());
+			//AMP-2212
+			formBean.setFiscalCalId(DbUtil.getGregorianCalendar().getAmpFiscalCalId());
 			if (teamMember != null) {
 				String str = teamMember.getAppSettings().getPerspective();
 				formBean.setPerspective(CommonWorker.getPerspective(str));

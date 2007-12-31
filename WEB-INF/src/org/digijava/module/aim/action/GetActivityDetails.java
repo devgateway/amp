@@ -236,7 +236,8 @@ public class GetActivityDetails extends Action {
 		if (appSettings.getFisCalId() != null) {
 			fiscalCalId = appSettings.getFisCalId();
 		} else {
-			fiscalCalId = Constants.GREGORIAN;
+		    //AMP-2212
+			fiscalCalId = DbUtil.getGregorianCalendar().getAmpFiscalCalId();
 		}
 		if (appSettings.getPerspective() != null) {
 			perspective = appSettings.getPerspective();

@@ -13,8 +13,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 
 /**
  * Helper class for RegionalFundings manipulation
@@ -59,8 +61,11 @@ public class RegionalFundingsHelper {
 			fd.setTransactionAmount(DecimalToText.getString(regFund.getTransactionAmount().doubleValue()));
 			
 			String tsDate = DateConversion.ConvertDateToString(regFund.getTransactionDate());
-			if (calCode == Constants.ETH_CAL.longValue() || 
-					calCode == Constants.ETH_FY.longValue()) {
+			
+			AmpFiscalCalendar fiscalCal=FiscalCalendarUtil.getAmpFiscalCalendar(calCode);
+			//AMP-2212
+			if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) || 
+				fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) {
 				// Ethiopian Calendar or Ethiopian Fiscal Year
 				fd.setTransactionDate(EthDateWorker.getEthDate(tsDate));
 			} else {

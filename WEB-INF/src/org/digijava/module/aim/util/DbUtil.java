@@ -84,6 +84,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.AmpProjectBySector;
 import org.digijava.module.aim.helper.Assistance;
+import org.digijava.module.aim.helper.BaseCalendar;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
@@ -1316,7 +1317,25 @@ public class DbUtil {
         }
         return fid;
     }
+    public static AmpFiscalCalendar getGregorianCalendar() {
+	Session session = null;
+	Query qry = null;
+	AmpFiscalCalendar calendar = null;
 
+	try {
+	    session = PersistenceManager.getRequestDBSession();
+	    String queryString = "select f from " + AmpFiscalCalendar.class.getName() + " f " +
+	    		"where f.baseCal=:baseCalParam order by f.name";
+	    qry = session.createQuery(queryString);
+	    qry.setParameter("baseCalParam", BaseCalendar.BASE_GREGORIAN.getValue(),Hibernate.STRING);
+
+	    if (qry.list() != null)
+		calendar = ((AmpFiscalCalendar) qry.list().get(0));
+	} catch (Exception ex) {
+	    logger.error("Unable to get fiscal calendar" + ex);
+	}
+	return calendar;
+    }
     public static Collection getAllActivities() {
         Session session = null;
         Query qry = null;
@@ -5193,9 +5212,12 @@ public class DbUtil {
                             answersRow = new double[NUM_ANSWER_COLUMNS];
                             answersRow[0] = (startYear + i);
                         }
+                        AmpFiscalCalendar fCalendar=FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(calendar));
+                    
+                        
                         if (startDates[i] == null || endDates[i] == null) {
-                            if (! (calendar.equals(Constants.ETH_CAL.toString()) ||
-                                   calendar.equals(Constants.ETH_FY.toString()))) {
+                            if (! (fCalendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) ||
+                        	    fCalendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue()))) {
                                 startDates[i] = FiscalCalendarUtil.getCalendarStartDate(new Long(calendar), startYear + i);
                                 endDates[i] = FiscalCalendarUtil.getCalendarEndDate(new Long(calendar), startYear + i);
                             }

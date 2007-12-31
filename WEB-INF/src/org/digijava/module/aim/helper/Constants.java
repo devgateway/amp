@@ -31,9 +31,9 @@ public class Constants
 	public static final String DISCREPANCY = "DI";
 	public static final Long MOFED_ORG_ID= new Long(12);
 	public static final String DEFAULT_CURRENCY = "USD" ;
-	public static final Long ETH_FY = new Long(1) ;
-	public static final Long ETH_CAL = new Long(5) ;
-	public static final Long GREGORIAN = new Long(4) ;
+	//public static final Long ETH_FY = new Long(1) ;
+	//public static final Long ETH_CAL = new Long(5) ;
+	//public static final Long GREGORIAN = new Long(4) ;
 	public static final double USD = 1.0 ;
 	public static final String ACTIVE_TAB_COLOR = "white" ;
 	public static final String INACTIVE_TAB_COLOR = "aqua" ;

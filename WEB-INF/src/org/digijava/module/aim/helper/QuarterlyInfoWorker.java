@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
@@ -36,8 +37,10 @@ public class QuarterlyInfoWorker {
 		List<QuarterlyInfo> ethArrList = null;
 		List<QuarterlyInfo> filterArrList = null;
 		
-		if (fp.getFiscalCalId().longValue() == Constants.ETH_CAL.longValue()
-				|| fp.getFiscalCalId().longValue() == Constants.ETH_FY.longValue()) {
+		AmpFiscalCalendar fiscalCal=FiscalCalendarUtil.getAmpFiscalCalendar(fp.getFiscalCalId());
+		
+		if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) 
+				|| fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) {
 			if (fp.getFromYear() != 0 && fp.getToYear() != 0) {
 				filterArrList = filterByYearRange(arrayList, fp.getFromYear(),fp.getToYear(), fp.getFiscalCalId());
 				return filterArrList;
@@ -164,8 +167,10 @@ public class QuarterlyInfoWorker {
 		if (arrayList.size() > 0 || c1.size() > 0) {
 			//here it is !!!!!
 			arrayList1 = merge(arrayList, c1, fromCurrency, selCurrency,fp.getFiscalCalId());
-			if (fp.getFiscalCalId().longValue() == Constants.ETH_CAL.longValue()
-					|| fp.getFiscalCalId().longValue() == Constants.ETH_FY.longValue()) {
+		//AMP-2212
+			AmpFiscalCalendar fiscalCal=FiscalCalendarUtil.getAmpFiscalCalendar(fp.getFiscalCalId());
+			if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) 
+					|| fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) {
 				//ethArrList = convertToEth(arrayList1);
 				ethArrList = convertToEth(arrayList,fp.getFiscalCalId().longValue());
 				arrayList2 = aggregate(ethArrList);
@@ -379,13 +384,23 @@ public class QuarterlyInfoWorker {
 				Date trsDate = DateConversion.getDate(strTrsDate);
 				//	logger.debug("date parsed out "+trsDate);
 				FiscalDO fdo = null;
-				if (fiscalCalId == Constants.ETH_CAL.longValue()) {
+				//AMP-2212
+				/*
+				if ( == Constants.ETH_CAL.longValue()) {
 					fdo = FiscalCalendarWorker.getFiscalYrQtr(trsDate,
 							Constants.ETH_CAL);					
 				} else {
 					fdo = FiscalCalendarWorker.getFiscalYrQtr(trsDate,
 							Constants.ETH_FY);
+				}*/
+//				AMP-2212
+				AmpFiscalCalendar fiscalCal=FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalId);
+				if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) 
+						|| fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) {
+				    fdo = FiscalCalendarWorker.getFiscalYrQtr(trsDate,
+					    fiscalCal.getAmpFiscalCalId());
 				}
+				
 				qf.setFiscalYear(fdo.getFiscalYear());
 				qf.setFiscalQuarter(fdo.getFiscalQuarter());
 				//		logger.debug("Ethiopian fiscal year"+fdo.getFiscalYear()+
@@ -434,12 +449,17 @@ public class QuarterlyInfoWorker {
 
 			QuarterlyInfo qf = (QuarterlyInfo) arrList.get(i);
 			if (qf.getAggregate() == 1) {
-				if (fiscalCalId.longValue() == Constants.ETH_FY.longValue()) {
+			    
+				AmpFiscalCalendar fiscalCal=FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalId);
+				if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) 
+				//if (fiscalCalId.longValue() == Constants.ETH_FY.longValue())
+				{
 					yr = qf.getFiscalYear();
 				} else { // Filter by calendar type greg or eth
 					String ds = qf.getDateDisbursed();
 					if (ds != null) {
-						if (fiscalCalId.longValue() == Constants.ETH_CAL.longValue()) {
+						//if (fiscalCalId.longValue() == Constants.ETH_CAL.longValue()) 
+					    	if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())){
 							yr = DateConversion.getYear(ds);
 						} else {
 							yr = FiscalCalendarUtil.getYear(fiscalCalId,ds);

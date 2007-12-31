@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<%@page import="org.digijava.module.aim.helper.BaseCalendar"%>
 <digi:errors/>
 <digi:instance property="aimFiscalCalendarForm" />
 <digi:context name="digiContext" property="context" />
@@ -51,8 +52,8 @@
 						<td noWrap width=600 vAlign="top">
 							<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
 								<tr bgColor=#f4f4f2>
-									<td vAlign="top" width="100%">
-										&nbsp;
+									<td vAlign="top" width="100%">&nbsp;
+										
 									</td>
 								</tr>
 								<tr bgColor=#f4f4f2>
@@ -63,11 +64,10 @@
 													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
 														<tr bgColor=#dddddb>
 															<!-- header -->
-															<td bgColor=#dddddb height="20" 			align="center" colspan="5"><B>
+															<td bgColor=#dddddb height="20" 			align="center" colspan="6"><B>
 																<digi:trn key="aim:fiscalCalendars">Fiscal Calendars</digi:trn>
                                                               </b>
-															</td>
-															<!-- end header -->
+														  </td><!-- end header -->
 														</tr>
 													<!-- Page Logic -->
 
@@ -82,12 +82,17 @@
 														<logic:notEmpty name="aimFiscalCalendarForm" 	property="fiscalCal">
 														<tr>
 															<td width="100%">
-																<table width="533" border=0	 bgColor=#f4f4f2>
+																<table width="533" border=0 cellspacing="4"	 bgColor=#f4f4f2>
 																	<tr>
-																		<td width="144"><b>
+																	  <td width="144"><b>
 																			<digi:trn key="aim:nameFiscalCalendar">Name
 																			</digi:trn></b>
-																		</td>
+																	  </td>
+                                                                        <td nowrap="nowrap" ><b>
+                                                                        
+                                                                        	<digi:trn key="aim:BaseCalendarFiscalCalendar">Base Calendar
+																			</digi:trn></b>
+																	  </td>
 																		<td width="117"><b>
 																			<digi:trn key="aim:startMonthFiscalCalendar">Start Month
 																			</digi:trn></b>
@@ -109,7 +114,7 @@
                                                               			</td>
 																	</tr>
 																	<tr>
-																		<td height=20 width="144">
+																	  <td height=20 width="144">
 																		  <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																		  <c:set target="${urlParams}" property="fiscalCalId">
 																			<bean:write name="fiscalCal" property="ampFiscalCalId" />
@@ -122,14 +127,25 @@
 
 																			<bean:write name="fiscalCal" property="name"/>
 																		  </digi:link>
-																		</td>
+																	  </td>
+                                                                          <td nowrap="nowrap">
+                                                                        	<c:set scope="page" var="baseName">
+                                                                        		<bean:write name="fiscalCal" property="baseCal"/>
+                                                                        	</c:set>
+                                                                        	<c:set var="key">
+                                                                        		<%=BaseCalendar.getBaseCalendar((String)pageContext.getAttribute("baseName")).getTrnName()%>
+                                                                            </c:set>
+                                                                            <digi:trn key="${key}">
+                                                                            <%=BaseCalendar.getBaseCalendar((String)pageContext.getAttribute("baseName")).getName()%>
+                                                                            </digi:trn>
+																	  </td>
 																		<td width="117">
                                                                   			<%--<c:set value="${fiscalCal.startMonthNum}" var="monthIndex"/>--%>
                                                                                         <c:set var="startMonth">
                                                                                         <digi:trn key="calendar:${aimFiscalCalendarForm.month[monthIndex]}">
                                                                                         ${aimFiscalCalendarForm.month[monthIndex]}
                                                                                         </digi:trn>
-                                                                                         </c:set>
+                                                                          </c:set>
 
 
                                                                   			<c:out value="${startMonth}" />
@@ -142,8 +158,8 @@
                                                                  			<bean:write name="fiscalCal" property="yearOffset"/>
 																		</td>
 																	</tr>
-																	</logic:iterate>
-																</table>
+																  </logic:iterate>
+															  </table>
 															</td>
 														</tr>
 														</logic:notEmpty>
@@ -175,8 +191,8 @@
 									</td>
 								</tr>
 								<tr>
-									<td bgColor=#f4f4f2>
-										&nbsp;
+									<td bgColor=#f4f4f2>&nbsp;
+										
 									</td>
 								</tr>
 							</table>
@@ -193,8 +209,8 @@
 													Other links
 													</digi:trn>
 												</td>
-												<td background="module/aim/images/corner-r.gif" 	height="17" width=17>
-												&nbsp;
+												<td background="module/aim/images/corner-r.gif" 	height="17" width=17>&nbsp;
+												
 												</td>
 											</tr>
 										</table>

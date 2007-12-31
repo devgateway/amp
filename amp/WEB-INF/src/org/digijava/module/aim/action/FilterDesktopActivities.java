@@ -6,10 +6,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
-import org.digijava.module.aim.util.DbUtil;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -23,16 +20,18 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.DesktopForm;
 import org.digijava.module.aim.helper.AmpProject;
 import org.digijava.module.aim.helper.AmpProjectDonor;
+import org.digijava.module.aim.helper.BaseCalendar;
 import org.digijava.module.aim.helper.Commitments;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.helper.Sector;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DesktopUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
@@ -57,15 +56,17 @@ public class FilterDesktopActivities extends Action {
 
 			activities = new ArrayList(temp);
 			long calId = dForm.getFltrCalendar();
-
+			//AMP-2212
+			AmpFiscalCalendar fiscalCal=FiscalCalendarUtil.getAmpFiscalCalendar(calId);
+			
 			if (dForm.getFltrFrmYear() > 0 ||
 					dForm.getFltrToYear() > 0) {
 
 				int fromYear = (dForm.getFltrFrmYear() > 0) ? dForm.getFltrFrmYear() : 0;
 				int toYear = (dForm.getFltrToYear() > 0) ? dForm.getFltrToYear() : 9999;
 
-				if (calId == Constants.ETH_CAL.longValue() ||
-						calId == Constants.ETH_FY.longValue()) {
+				if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) ||
+					fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) {
 
 					for (int i = 0;i < activities.size();i ++) {
 						AmpProject proj = (AmpProject) activities.get(i);

@@ -29,8 +29,9 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.BaseCalendar;
 import org.digijava.module.aim.helper.EthiopianCalendar;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.editor.exception.EditorException;
 import org.springframework.beans.BeanWrapperImpl;
@@ -328,14 +329,15 @@ public final class Util {
 		ec								= ec.getEthiopianDate( currentTime );
 		
 		Integer year					= currentTime.get(Calendar.YEAR);
-		
-		if(calendarTypeId.equals(Constants.ETH_FY))
+		//AMP-2212
+		AmpFiscalCalendar calendar=FiscalCalendarUtil.getAmpFiscalCalendar(calendarTypeId);
+		if(calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue()))
 		{
 			year	= new Integer(ec.ethFiscalYear);
 			
 			//quarter=new String("Q"+ec.ethFiscalQrt);
 		}
-		if(calendarTypeId.equals(Constants.ETH_CAL))
+		if(calendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()))
 		{
 			year	=	new Integer(ec.ethYear);
 		}

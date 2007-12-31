@@ -2,12 +2,20 @@ package org.digijava.module.aim.action ;
 
 import java.util.Iterator;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
-import org.apache.struts.action.*;
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.util.DbUtil;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.form.AddFiscalCalendarForm;
-import javax.servlet.http.*;
+import org.digijava.module.aim.helper.BaseCalendar;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 
 
 public class EditFiscalCalendar extends Action {
@@ -50,7 +58,7 @@ public class EditFiscalCalendar extends Action {
 							ampFisCal.setStartDayNum(new Integer(editForm.getStartDayNum()));
 							ampFisCal.setYearOffset(new Integer(editForm.getYearOffset()));
 							ampFisCal.setName(editForm.getFiscalCalName());
-							
+							ampFisCal.setBaseCal(editForm.getBaseCalendar());
 							if (editForm.getDescription() == null
 												 || editForm.getDescription().trim().equals("")) {
 									  ampFisCal.setDescription(new String(" "));
@@ -65,7 +73,7 @@ public class EditFiscalCalendar extends Action {
 				 
 						} else if ("edit".equals(action)){
 							editForm.setFiscalCalId(new Long(Integer.parseInt(request.getParameter("fiscalCalId"))));
-							AmpFiscalCalendar ampFisCal = DbUtil.getAmpFiscalCalendar(editForm.getFiscalCalId());
+							AmpFiscalCalendar ampFisCal = FiscalCalendarUtil.getAmpFiscalCalendar(editForm.getFiscalCalId());
 							if (ampFisCal == null) {
 								if (session.getAttribute("ampFisCal") != null) {
 									session.removeAttribute("ampFisCal");
@@ -92,6 +100,11 @@ public class EditFiscalCalendar extends Action {
 								if (ampFisCal.getYearOffset() != null)
 									editForm.setYearOffset(ampFisCal.getYearOffset().intValue());
 								
+								if (ampFisCal.getBaseCal()!=null){
+									editForm.setBaseCalendar(ampFisCal.getBaseCal());
+								}else{
+									editForm.setBaseCalendar(BaseCalendar.BASE_GREGORIAN.getValue());
+								}
 								return mapping.findForward("forward");
 							 }
 							 else {
@@ -103,6 +116,7 @@ public class EditFiscalCalendar extends Action {
 								ampFisCal.setStartDayNum(new Integer(editForm.getStartDayNum()));
 								ampFisCal.setYearOffset(new Integer(editForm.getYearOffset()));
 								ampFisCal.setName(editForm.getFiscalCalName());
+								ampFisCal.setBaseCal(editForm.getBaseCalendar());
 								
 								if (editForm.getDescription() == null
 													 || editForm.getDescription().trim().equals("")) {

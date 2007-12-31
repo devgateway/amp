@@ -27,8 +27,11 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.helper.BaseCalendar;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.EthiopianCalendar;
+import org.digijava.module.aim.util.DbUtil;
 
 /**
  * 
@@ -258,21 +261,25 @@ public class CategAmountColWorker extends ColumnWorker {
 		String month=null;
 		Integer year=null;
 		
-		if(filter.getCalendarType()==null || filter.getCalendarType().getAmpFiscalCalId().equals(Constants.GREGORIAN)) {
+//		AMP-2212
+		if(filter.getCalendarType()==null || filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_GREGORIAN.getValue())) {
 			int monthId=calendar.get(Calendar.MONTH);
 			month=Integer.toString(monthId)+"-"+dfs.getMonths()[monthId];
 			quarter= "Q"+ new Integer(calendar.get(Calendar.MONTH) / 4 + 1);
 			year=new Integer(calendar.get(Calendar.YEAR));
 		} else
-		if(filter.getCalendarType().getAmpFiscalCalId().equals(Constants.ETH_CAL) || filter.getCalendarType().getAmpFiscalCalId().equals(Constants.ETH_FY)) {		    	
+		    //AMP-2212
+		if(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) || 
+			filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) {		    	
 			EthiopianCalendar ec = ethcalendar.getEthiopianDate(calendar);
-			if(filter.getCalendarType().getAmpFiscalCalId().equals(Constants.ETH_FY))
+			//AMP-2212
+			if(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue()))
 			{
 				year=new Integer(ec.ethFiscalYear);
 				quarter=new String("Q"+ec.ethFiscalQrt);
 				month=Integer.toString(ec.ethMonth)+"-"+ec.ethMonthName;
-			}
-			if(filter.getCalendarType().getAmpFiscalCalId().equals(Constants.ETH_CAL))
+			}//AMP-2212
+			if(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()))
 			{
 				year=new Integer(ec.ethYear);
 				quarter=new String("Q"+ec.ethQtr);

@@ -1,17 +1,11 @@
 package org.digijava.module.aim.helper ;
 
-import org.apache.log4j.Logger;
-
 import java.text.DecimalFormat;
-import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.helper.FiscalCalendar;
-import org.digijava.module.aim.helper.FiscalDO;
-import org.digijava.module.aim.helper.EthiopianCalendar;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 
 public class FiscalCalendarWorker
@@ -30,11 +24,12 @@ public class FiscalCalendarWorker
 		AmpFiscalCalendar fc = null;
 		
 		//logger.info("fiscal cal id = " + fiscalCalId);
-		
+		//AMP-2212
+		fc = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalId);
 		if ( d != null )	{
 			//If not Ethiopian calendar
-			if ( fiscalCalId.longValue() != Constants.ETH_FY.longValue())
-				fc = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalId);
+			//if ( !fCalendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue()))
+		    	//	fc = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalId);
 			
 			
 			EthiopianCalendar ec = new EthiopianCalendar() ;
@@ -44,15 +39,15 @@ public class FiscalCalendarWorker
 			GregorianCalendar gc = new GregorianCalendar() ;
 			gc.setTime(d) ;
 			//target date
-			//Ethiopian calendar
-			if ( fiscalCalId.longValue() == Constants.ETH_FY.longValue() )
+			//Ethiopian calendar //AMP-2212
+			if ( fc.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue()))
 			{
 				//logger.info("Setting year and quarter for Ethiopian Fiscal Year");				
 				ec1 = ec.getEthiopianDate(gc) ;
 				fdo.setFiscalYear(ec1.ethFiscalYear) ;
 				fdo.setFiscalQuarter(ec1.ethFiscalQrt) ;
 				//logger.info("Year :" + fdo.getFiscalYear() + ",Qtr : " + fdo.getFiscalQuarter());
-			} else if (fiscalCalId.longValue() == Constants.ETH_CAL.longValue()) {
+			} else if (fc.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())) {
 				//logger.info("Setting year and quarter for Ethiopian Calendar");
 				ec1 = ec.getEthiopianDate(gc) ;
 				fdo.setFiscalYear(ec1.ethYear) ;

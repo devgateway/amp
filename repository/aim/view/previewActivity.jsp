@@ -431,12 +431,13 @@ function viewChanges()
 								</td>
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
-							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="white">
-		
+							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
+							<tr><td align="center" vAlign="top" bgcolor="#ffffff">
+								<table width="100%" cellSpacing=1 cellpadding=3 bgcolor="#dddddd">
 
 									<feature:display name="Identification" module="Project ID and Planning">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:ampId">
 											AMP ID</digi:trn>										</td>
 										<td class="v-name" bgcolor="#ffffff">
@@ -444,16 +445,163 @@ function viewChanges()
 									</tr>
 									<field:display feature="Identification" name="Project Title">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:projectTitle">
 											Project title</digi:trn>										</td>
 										<td class="v-name"  bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.title}"/>										</td>
 									</tr>
 									</field:display>
-									<field:display feature="Identification" name="Objectives">
+																		<field:display feature="Identification" name="Organizations and Project ID">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
+											<digi:trn key="aim:orgsAndProjectIds">
+											Organizations and Project IDs											</digi:trn>										</td>
+										<td bgcolor="#ffffff">
+											<c:if test="${!empty aimEditActivityForm.selectedOrganizations}">
+												<table cellSpacing=2 cellPadding=2 border=0>
+													<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.selectedOrganizations}" >
+														<c:if test="${not empty selectedOrganizations}">
+															<tr><td>
+																<c:out value="${selectedOrganizations.name}"/>:
+																<c:out value="${selectedOrganizations.projectId}"/>
+																	<c:if test ="${!empty selectedOrganizations.organisation.ampOrgId}">
+																			<bean:define id="selectedOrgForPopup" name="selectedOrganizations" 	type="org.digijava.module.aim.helper.OrgProjectId"  	toScope="request" />
+																			<jsp:include page="previewOrganizationPopup.jsp"/>
+																	</c:if>
+															</td></tr>
+														</c:if>
+													</c:forEach>
+												</table>
+											</c:if>										</td>
+									</tr>
+									</field:display>
+                                    	<field:display name="Status" feature="Planning">
+										
+											
+                                            <tr>
+                                            	  <td align="right" valign="top" bgcolor="#f4f4f2"  class="t-name" >
+                                           	  <digi:trn key="aim:status">Status</digi:trn>                                       	      </td>
+                               	     <td bgcolor="#FFFFFF">
+												   <category:getoptionvalue categoryValueId="${aimEditActivityForm.statusId}"/>
+                                              <td>
+                                            </tr>
+                                          
+                                            	 <tr>
+                                             		<td valign="top" bgcolor="#f4f4f2"></td>
+                                           		   <td bgcolor="#ffffff" ><c:out value="${aimEditActivityForm.statusReason}"/></td>
+												</tr>
+									</field:display>
+                                    <field:display name="Activity Budget" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
+											<digi:trn key="aim:actBudget">Budget</digi:trn>										</td>
+										<td bgcolor="#ffffff">
+
+										<logic:equal name="aimEditActivityForm" property="budget" value="true">
+										<digi:trn key="aim:actBudgeton">
+												Activity is On Budget										</digi:trn>
+										</logic:equal>
+
+										<logic:equal name="aimEditActivityForm" property="budget" value="false">
+										<digi:trn key="aim:actBudgetoff">
+												Activity is Off Budget										</digi:trn>
+										</logic:equal>
+
+										<logic:equal name="aimEditActivityForm" property="budget" value="">
+										<digi:trn key="aim:actBudgetoff">
+												Activity is Off Budget										</digi:trn>
+										</logic:equal>										</td>
+									</tr>
+									</field:display>
+                                    </feature:display>
+                                    
+                                    
+                                    <feature:display name="Sectors" module="Project ID and Planning">
+									<tr>
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
+											<img id="sector_plus"  onclick="toggleGroup('sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+											<img id="sector_minus" onclick="toggleGroup('sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+											<digi:trn key="aim:sector">	Sector</digi:trn>										</td>
+										<td bgcolor="#ffffff">
+											<div id="sector_dots">...</div>
+											<div id="sector" style="display: none;">
+											<c:if test="${!empty aimEditActivityForm.activitySectors}">
+												<table width="100%" cellSpacing="2" cellPadding="1">
+												<c:forEach var="sectors" items="${aimEditActivityForm.activitySectors}">
+													<tr><td>
+													<c:if test="${!empty sectors.sectorName}">
+																				<c:out value="${sectors.sectorName}" />
+																			</c:if>&nbsp;&nbsp; <c:if
+																				test="${sector.sectorPercentage!=''}">
+																				<c:if test="${sector.sectorPercentage!='0'}">
+																			(<c:out value="${sectors.sectorPercentage}" />)%																			</c:if>
+																			</c:if> <c:if test="${!empty sectors.subsectorLevel1Name}">
+														[<c:out value="${sectors.subsectorLevel1Name}"/>]
+													</c:if>
+													<c:if test="${!empty sectors.subsectorLevel2Name}">
+														[<c:out value="${sectors.subsectorLevel2Name}"/>]													</c:if>
+													</td>
+													</tr>
+												</c:forEach>
+												</table>
+											</c:if>
+											</div>										</td>
+									</tr>
+									</feature:display>
+                               
+                                 <feature:display name="Location" module="Project ID and Planning">
+                               		<field:display name="Implementation Location" feature="Location">
+									<tr>
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
+											<img id="location_plus"  onclick="toggleGroup('location')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+											<img id="location_minus" onclick="toggleGroup('location')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+											<digi:trn key="aim:location">
+											Location</digi:trn>										</td>
+										<td bgcolor="#ffffff">
+											<div id="location_dots">...</div>
+											<div id="location" style="display: none;">
+											<c:if test="${!empty aimEditActivityForm.selectedLocs}">
+												<table width="100%" cellSpacing="2" cellPadding="1">
+												<c:forEach var="locations" items="${aimEditActivityForm.selectedLocs}">
+													<tr>
+													<td>
+													<c:if test="${!empty locations.country}">
+														[<c:out value="${locations.country}"/>]													</c:if>
+													<c:if test="${!empty locations.region}">
+														[<c:out value="${locations.region}"/>]													</c:if>
+													<c:if test="${!empty locations.zone}">
+														[<c:out value="${locations.zone}"/>]													</c:if>
+													<c:if test="${!empty locations.woreda}">
+														[<c:out value="${locations.woreda}"/>]													</c:if>													</td>
+													<td align="right">
+														${locations.percent}%													</td>
+													</tr>
+												</c:forEach>
+												</table>
+											</c:if>
+											</div>										</td>
+									</tr>
+									</field:display>
+                                    
+                                    <field:display name="Implementation Level" feature="Location">	  
+									<tr>
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
+											<digi:trn key="aim:level">
+											Level</digi:trn>										</td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.levelId>0}" >
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.levelId}"/>
+											</c:if>										</td>
+									</tr>
+									</field:display>
+                            </feature:display>   
+                                    
+                         <feature:display name="Identification" module="Project ID and Planning">
+                                               
+                                    <field:display feature="Identification" name="Objectives">
+									<tr>
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:objectives">
 											Objectives</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -465,7 +613,7 @@ function viewChanges()
 
 									<logic:present name="currentMember" scope="session">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:objectiveComments">
 											Objective Comments</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -495,9 +643,68 @@ function viewChanges()
 									</tr>
 									</logic:present>
 									</field:display>
+                                    
+                                    <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+								
+                                	<feature:display name="NPD Programs" module="National Planning Dashboard">
+									<field:display name="National Plan Objective" feature="NPD Programs">
+									<TR>
+																		<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
+												<img id="npo_plus"  onclick="toggleGroup('npo')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+												<img id="npo_minus" onclick="toggleGroup('npo')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+																		<b>
+												  <digi:trn key="aim:national Plan Objective">National Plan Objective</digi:trn></b></TD>
+
+									  <TD bgcolor="#ffffff">
+														<div id="npo_dots">...</div>
+														<div id="npo" style="display: none;">
+                                                                                                                                                  <c:forEach var="program" items="${aimEditActivityForm.nationalPlanObjectivePrograms}">
+                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+                                                                                                                                                  </c:forEach>
+                                                     	</div>																		</TD>
+																	</TR>
+                                      </field:display> 
+                                     <field:display name="Primary Program" feature="NPD Programs">
+                                           <TR>
+																		<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
+													<img id="npd_primaryprog_plus"  onclick="toggleGroup('npd_primaryprog')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+													<img id="npd_primaryprog_minus" onclick="toggleGroup('npd_primaryprog')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+																		<b>
+												  <digi:trn key="aim:primary Programs">Primary Programs</digi:trn></b></TD>
+
+						  <TD bgcolor="#ffffff">
+															<div id="npd_primaryprog_dots">...</div>
+															<div id="npd_primaryprog" style="display: none;">
+                                                                                                                                                  <c:forEach var="program" items="${aimEditActivityForm.primaryPrograms}">
+                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+                                                                                                                                                  </c:forEach>
+                                        	                 </div>																		</TD>
+																	</TR>
+										</field:display>
+										<field:display name="Secondary Program" feature="NPD Programs">
+                                                                                                                                        <TR>
+																		<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
+													<img id="npd_secondprog_plus"  onclick="toggleGroup('npd_secondprog')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+													<img id="npd_secondprog_minus" onclick="toggleGroup('npd_secondprog')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+																		<b>
+																		<digi:trn key="aim:secondary Programs">Secondary Programs</digi:trn></b></TD>
+
+																		<TD bgcolor="#ffffff">
+															<div id="npd_secondprog_dots">...</div>
+															<div id="npd_secondprog" style="display: none;">
+                                                                                                                                                  <c:forEach var="program" items="${aimEditActivityForm.secondaryPrograms}">
+                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+                                                                                                                                                  </c:forEach>
+                                                            </div>																		</TD>
+																	</TR>
+										</field:display>
+									</feature:display>
+                                   </module:display>
+                                    
+                                    
 									<field:display feature="Identification" name="Description">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:description">
 											Description</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -510,7 +717,7 @@ function viewChanges()
 
 									<field:display feature="Identification" name="Purpose">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:purpose">
 											Purpose</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -521,7 +728,7 @@ function viewChanges()
 									</tr>
 									<logic:present name="aimEditActivityForm" property="allComments">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:purposeComments">
 											Purpose Comments</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -554,7 +761,7 @@ function viewChanges()
 
 									<field:display feature="Identification" name="Results">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:results">
 											Results</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -565,7 +772,7 @@ function viewChanges()
 									</tr>
 									<logic:present name="aimEditActivityForm" property="allComments">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:resultsComments">
 											Results Comments</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -595,58 +802,162 @@ function viewChanges()
 									</tr>
 									</logic:present>
 									</field:display>
-									<field:display name="Activity Budget" feature="Identification">
-									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
-											<digi:trn key="aim:actBudget">Budget</digi:trn>										</td>
-										<td bgcolor="#ffffff">
+									
 
-										<logic:equal name="aimEditActivityForm" property="budget" value="true">
-										<digi:trn key="aim:actBudgeton">
-												Activity is On Budget										</digi:trn>
-										</logic:equal>
 
-										<logic:equal name="aimEditActivityForm" property="budget" value="false">
-										<digi:trn key="aim:actBudgetoff">
-												Activity is Off Budget										</digi:trn>
-										</logic:equal>
-
-										<logic:equal name="aimEditActivityForm" property="budget" value="">
-										<digi:trn key="aim:actBudgetoff">
-												Activity is Off Budget										</digi:trn>
-										</logic:equal>										</td>
-									</tr>
-									</field:display>
-
-									<field:display feature="Identification" name="Organizations and Project ID">
-									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<digi:trn key="aim:orgsAndProjectIds">
-											Organizations and Project IDs											</digi:trn>										</td>
-										<td bgcolor="#ffffff">
-											<c:if test="${!empty aimEditActivityForm.selectedOrganizations}">
-												<table cellSpacing=2 cellPadding=2 border=0>
-													<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.selectedOrganizations}" >
-														<c:if test="${not empty selectedOrganizations}">
-															<tr><td>
-																<c:out value="${selectedOrganizations.name}"/>:
-																<c:out value="${selectedOrganizations.projectId}"/>
-																	<c:if test ="${!empty selectedOrganizations.organisation.ampOrgId}">
-																			<bean:define id="selectedOrgForPopup" name="selectedOrganizations" 	type="org.digijava.module.aim.helper.OrgProjectId"  	toScope="request" />
-																			<jsp:include page="previewOrganizationPopup.jsp"/>
-																	</c:if>
-															</td></tr>
-														</c:if>
-													</c:forEach>
-												</table>
-											</c:if>										</td>
-									</tr>
-									</field:display>
 									</feature:display>
+<module:display name="Organizations" parentModule="PROJECT MANAGEMENT">
+									<tr>
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
+											<digi:trn key="aim:relatedOrganizations">
+											Related Organizations</digi:trn>										</td>
 
+										<td bgcolor="#ffffff">
+                                           <feature:display name="Executing Agency" module="Organizations">
+                                            <logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
+												<img id="executing_agency_plus"  onclick="toggleGroup('executing_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+                                            	<img id="executing_agency_minus" onclick="toggleGroup('executing_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display : none"/>
+											</logic:notEmpty>
+											<b><digi:trn key="aim:executingAgency">Executing Agency</digi:trn></b><br/>
+											<logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
+												<div id="executing_agency_dots">...</div>
+												<div id="executing_agency" style="display: none;">
+												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+													<tr><td>
+													<logic:iterate name="aimEditActivityForm" property="executingAgencies"
+													id="execAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+															<ul><li> <bean:write name="execAgencies" property="name" /></li></ul>
+													</logic:iterate>
+													</td></tr>
+												</table>
+												</div>
+											</logic:notEmpty>
+											<br/>
+											</feature:display>
+
+											<feature:display name="Implementing Agency" module="Organizations">
+											<logic:notEmpty name="aimEditActivityForm" property="impAgencies">
+												<img id="implementing_agency_plus"  onclick="toggleGroup('implementing_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+                                            	<img id="implementing_agency_minus" onclick="toggleGroup('implementing_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+											</logic:notEmpty>
+											<b><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></b><br/>
+											<logic:notEmpty name="aimEditActivityForm" property="impAgencies">
+												<div id="implementing_agency_dots">...</div>
+												<div id="implementing_agency" style="display: none;">
+												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+													<tr><td>
+													<logic:iterate name="aimEditActivityForm" property="impAgencies"
+													id="impAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+															<ul><li> <bean:write name="impAgencies" property="name" /></li></ul>
+													</logic:iterate>
+													</td></tr>
+												</table>
+												</div>
+											</logic:notEmpty><br/></feature:display>
+
+											<feature:display name="Beneficiary Agency" module="Organizations">
+											
+											<logic:notEmpty name="aimEditActivityForm" property="benAgencies">
+												<img id="benAgencies_agency_plus"  onclick="toggleGroup('benAgencies_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+                                            	<img id="benAgencies_agency_minus" onclick="toggleGroup('benAgencies_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+											</logic:notEmpty>
+									
+											
+											<b><digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn></b><br/>
+									
+											<logic:notEmpty name="aimEditActivityForm" property="benAgencies">
+												<div id="benAgencies_dots">...</div>
+												<div id="benAgencies_agency" style="display: none;">
+													<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+														<tr><td>
+														<logic:iterate name="aimEditActivityForm" property="benAgencies"
+														id="benAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+																<ul><li> <bean:write name="benAgency" property="name" /></li></ul>
+														</logic:iterate>
+														</td></tr>
+													</table>
+												</div>
+											</logic:notEmpty><br/>
+											</feature:display>
+
+											<feature:display name="Contracting Agency" module="Organizations">
+											<logic:notEmpty name="aimEditActivityForm" property="conAgencies">
+												<img id="contracting_agency_plus"  onclick="toggleGroup('contracting_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+												<img id="contracting_agency_minus" onclick="toggleGroup('contracting_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+											</logic:notEmpty>
+											<b><digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn></b><br/>
+											<logic:notEmpty name="aimEditActivityForm" property="conAgencies">
+												<div id="contracting_agency_dots">...</div>
+												<div id="contracting_agency" style="display: none;">
+												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+													<tr><td>
+													<logic:iterate name="aimEditActivityForm" property="conAgencies"
+													id="conAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+														<ul><li> <bean:write name="conAgencies" property="name" /></li></ul>
+													</logic:iterate>
+													</td></tr>
+												</table>
+												</div>
+											</logic:notEmpty><br/>
+											</feature:display>
+
+
+											<feature:display name="Sector Group" module="Organizations"></feature:display>
+											
+											<logic:notEmpty name="aimEditActivityForm" property="sectGroups">
+												<img id="sectGroups_agency_plus"  onclick="toggleGroup('sectGroups_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+												<img id="sectGroups_agency_minus" onclick="toggleGroup('sectGroups_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+											</logic:notEmpty>
+											
+											<field:display name="Sector Group" feature="Sector Group">
+											<b><digi:trn key="aim:sectorGroup">Sector Group</digi:trn></b><br/>
+											<logic:notEmpty name="aimEditActivityForm" property="sectGroups">
+												<div id="sectGroups_dots">...</div>
+												<div id="sectGroups_agency" style="display: none;">
+													<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+														<tr><td>
+														<logic:iterate name="aimEditActivityForm" property="sectGroups"
+														id="sectGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+															<ul><li> <bean:write name="sectGroup" property="name" /></li></ul>
+														</logic:iterate>
+														</td></tr>
+													</table>
+												</div>
+											</logic:notEmpty><br/>
+											</field:display>
+		
+        									<feature:display name="Regional Group" module="Organizations">
+											
+											<logic:notEmpty name="aimEditActivityForm" property="sectGroups">
+												<img id="regGroups_agency_plus"  onclick="toggleGroup('regGroups_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+												<img id="regGroups_agency_minus" onclick="toggleGroup('regGroups_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+											</logic:notEmpty>
+											
+											
+											<field:display name="Regional Group" feature="Regional Group">
+											<b><digi:trn key="aim:regionalGroup">Regional Group</digi:trn></b><br/>
+											<logic:notEmpty name="aimEditActivityForm" property="regGroups">
+											<div id="regGroups_dots">...</div>
+												<div id="regGroups_agency" style="display: none;">
+												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+													<tr><td>
+													<logic:iterate name="aimEditActivityForm" property="regGroups"
+													id="regGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+														<ul><li> <bean:write name="regGroup" property="name" /></li></ul>
+													</logic:iterate>
+													</td></tr>
+												</table>
+												</div>
+											</logic:notEmpty><br/>
+											</field:display>
+                                  	</feature:display>
+                                           </td>
+									</tr>
+								
+									</module:display>
 									<feature:display module="Project ID and Planning" name="Planning">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2" valign="top">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<img id="group_planning_plus"  onclick="toggleGroup('group_planning')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
 											<img id="group_planning_minus" onclick="toggleGroup('group_planning')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display : none"/>
 											<digi:trn key="aim:planning">Planning</digi:trn>										</td><td bgcolor="#ffffff">
@@ -772,39 +1083,12 @@ function viewChanges()
 									</tr>
 									</feature:display>
 
-									<feature:display name="Location" module="Project ID and Planning">
-
-												<field:display name="Status" feature="Planning">
-												<tr>
-                                            	  <td align="right"  class="t-name" bgcolor="#f4f4f2" >
-                                                  	<digi:trn key="aim:status">Status</digi:trn>                                       	      </td>
-                                            	  <td bgcolor="#FFFFFF">
-														<category:getoptionvalue categoryValueId="${aimEditActivityForm.statusId}"/>
-                                              <td>
-												</tr>
-												<tr>
-                                             		<td bgcolor="#f4f4f2"></td>
-                                              		<td bgcolor="#ffffff" ><c:out value="${aimEditActivityForm.statusReason}"/></td>
-												</tr>
-												</field:display>
-									</feature:display>
-											
-
-									<feature:display name="Location" module="Project ID and Planning"></feature:display>
-									<field:display name="Implementation Level" feature="Location">
+									
+									 
+									
+                                        <feature:display name="References" module="References">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<digi:trn key="aim:level">
-											Level</digi:trn>										</td>
-										<td bgcolor="#ffffff">
-											<c:if test="${aimEditActivityForm.levelId>0}" >
-												<category:getoptionvalue categoryValueId="${aimEditActivityForm.levelId}"/>
-											</c:if>										</td>
-									</tr>
-									</field:display>
-									<feature:display name="References" module="References">
-									<tr>
-									<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+									<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 									References									</td>
 									<td bgcolor="#ffffff">
 									<c:forEach items="${aimEditActivityForm.referenceDocs}" var="refDoc" varStatus="loopstatus">
@@ -818,184 +1102,61 @@ function viewChanges()
 									</c:forEach>									</td>
 									</tr>
 									</feature:display>
-									<field:display name="Implementation Location" feature="Location">
-									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<img id="location_plus"  onclick="toggleGroup('location')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="location_minus" onclick="toggleGroup('location')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display: none"/>
-											<digi:trn key="aim:location">
-											Location</digi:trn>										</td>
-										<td bgcolor="#ffffff">
-											<div id="location_dots">...</div>
-											<div id="location" style="display: none;">
-												<c:if test="${!empty aimEditActivityForm.selectedLocs}">
-													<table width="100%" cellSpacing="2" cellPadding="1">
-													<c:forEach var="locations" items="${aimEditActivityForm.selectedLocs}">
-													<tr>
-													<td>
-														<c:if test="${!empty locations.country}">
-														[<c:out value="${locations.country}"/>]													</c:if>
-														<c:if test="${!empty locations.region}">
-														[<c:out value="${locations.region}"/>]													</c:if>
-														<c:if test="${!empty locations.zone}">
-														[<c:out value="${locations.zone}"/>]													</c:if>
-														<c:if test="${!empty locations.woreda}">
-														[<c:out value="${locations.woreda}"/>]													</c:if>													</td>
-													<td align="right">
-														${locations.percent}%													</td>
-													</tr>
-													</c:forEach>
-													</table>
-												</c:if>
-											</div>
-										</td>
-									</tr>
-									</field:display>
+							
 									
-									<%-- 
-									<c:if test="${not empty aimEditActivityForm.componentSectors}">
+
+									<c:if test="${not empty aimEditActivityForm.activityComponentes}">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<img id="component_sector_plus"  onclick="toggleGroup('component_sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
 											<img id="component_sector_minus" onclick="toggleGroup('component_sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
-											<digi:trn key="aim:preview:component_Sector">Components</digi:trn>
-										</td>
+											<digi:trn key="aim:preview:component_Sector">Components</digi:trn>										</td>
 										<td bgcolor="#ffffff">
-											<table>
-												<div id="component_sector_dots">...</div>
-												<div id="component_sector" style="display: none;">
-												<c:forEach var="comSec" items="${aimEditActivityForm.componentSectors}">
+											<div id="component_sector_dots">...</div>
+											<div id="component_sector" style="display: none;">
+												<table>
+													<c:forEach var="compo" items="${aimEditActivityForm.activityComponentes}">
 													<tr>
-														<td>
-															${comSec.name}
-														</td>
+														<td width="100%">
+															${compo.sectorName}														</td>
+														<td align="right">
+															${compo.sectorPercentage}%														</td>
 													</tr>
-												</c:forEach>
-												</div>
-											</table>
-										</td>
+													</c:forEach>
+												</table>
+											</div>										</td>
 									</tr>
 									</c:if>
-									--%>
 
-									<feature:display name="Sectors" module="Project ID and Planning">
-									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<img id="sector_plus"  onclick="toggleGroup('sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="sector_minus" onclick="toggleGroup('sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
-											<digi:trn key="aim:sector">	Sector</digi:trn>
-										</td>
-										<td bgcolor="#ffffff">
-											<div id="sector_dots">...</div>
-											<div id="sector" style="display: none;">
-												<c:if test="${!empty aimEditActivityForm.activitySectors}">
-													<table width="100%" cellSpacing="2" cellPadding="1">
-													<c:forEach var="sectors" items="${aimEditActivityForm.activitySectors}">
-														<tr><td>
-														<c:if test="${!empty sectors.sectorName}">
-																					<c:out value="${sectors.sectorName}" />
-																				</c:if>&nbsp;&nbsp; <c:if
-																					test="${sector.sectorPercentage!=''}">
-																					<c:if test="${sector.sectorPercentage!='0'}">
-																			(<c:out value="${sectors.sectorPercentage}" />)%																			</c:if>
-																				</c:if> <c:if test="${!empty sectors.subsectorLevel1Name}">
-															[<c:out value="${sectors.subsectorLevel1Name}"/>]
-														</c:if>
-														<c:if test="${!empty sectors.subsectorLevel2Name}">
-														[<c:out value="${sectors.subsectorLevel2Name}"/>]													</c:if>
-														</td>
-	
-														</tr>
-													</c:forEach>
-													</table>
-												</c:if>
-											</div>
-										</td>
-									</tr>
-									</feature:display>
-									<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
-									<feature:display name="NPD Programs" module="National Planning Dashboard">
-									<field:display name="National Plan Objective" feature="NPD Programs">
-										<TR>
-											<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-												<img id="npo_plus"  onclick="toggleGroup('npo')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-												<img id="npo_minus" onclick="toggleGroup('npo')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
-												<b><digi:trn key="aim:national Plan Objective">National Plan Objective</digi:trn></b></TD>
-													<TD bgcolor="#ffffff">
-														<div id="npo_dots">...</div>
-														<div id="npo" style="display: none;">
-	                   										<c:forEach var="program" items="${aimEditActivityForm.nationalPlanObjectivePrograms}">
-		                                                       	<c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
-	                                                        </c:forEach>
-                                                     	</div>
-												</TD>
-										</TR>
-                                      </field:display> 
-                                     <field:display name="Secondary Program" feature="NPD Programs">
-                                           <TR>
-												<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-													<img id="npd_primaryprog_plus"  onclick="toggleGroup('npd_primaryprog')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-													<img id="npd_primaryprog_minus" onclick="toggleGroup('npd_primaryprog')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
-													<b><digi:trn key="aim:primary Programs">Primary Programs</digi:trn></b></TD>
-														<TD bgcolor="#ffffff">
-															<div id="npd_primaryprog_dots">...</div>
-															<div id="npd_primaryprog" style="display: none;">
-		                                                        <c:forEach var="program" items="${aimEditActivityForm.primaryPrograms}">
-	    	                                                        <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
-	                                        	                 </c:forEach>
-                                        	                 </div>
-														</TD>
-											</TR>
-										</field:display>
-										<field:display name="Secondary Program" feature="NPD Programs">
-                                             <TR>
-												<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-													<img id="npd_secondprog_plus"  onclick="toggleGroup('npd_secondprog')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-													<img id="npd_secondprog_minus" onclick="toggleGroup('npd_secondprog')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
-													<b><digi:trn key="aim:secondary Programs">Secondary Programs</digi:trn></b></TD>
-														<TD bgcolor="#ffffff">
-															<div id="npd_secondprog_dots">...</div>
-															<div id="npd_secondprog" style="display: none;">
-		                                                        <c:forEach var="program" items="${aimEditActivityForm.secondaryPrograms}">
-			                                                        <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
-	                                                              </c:forEach>
-                                                            </div>  
-													</TD>
-											</TR>
-										</field:display>
-
-									</feature:display>
-                                   </module:display>
+									
+									
 									<feature:display name="Proposed Project Cost" module="Funding">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.proProjCost!=null}">
                                                   <table cellSpacing=1 cellPadding="3" bgcolor="#aaaaaa" width="100%">
                                                       <tr bgcolor="#ffffff">
 															<td>Cost</td>
-                                                        	<td bgcolor="#FFFFFF" align="left" >
-                                                          		<c:if test="${aimEditActivityForm.proProjCost.funAmount!=null}">
-																 	<FONT color=blue>*</FONT> ${aimEditActivityForm.proProjCost.funAmount}
-                                                          		</c:if>&nbsp;
-																<c:if test="${aimEditActivityForm.proProjCost.currencyCode!=null}"> ${aimEditActivityForm.proProjCost.currencyCode} </c:if>
-                                                        	</td>
-														</tr>
-														<tr bgcolor="#ffffff">
+                                                        <td bgcolor="#FFFFFF" align="left" >
+                                                          <c:if test="${aimEditActivityForm.proProjCost.funAmount!=null}">
+																 	<FONT color=blue>*</FONT> ${aimEditActivityForm.proProjCost.funAmount}                                                          </c:if>&nbsp;
+																<c:if test="${aimEditActivityForm.proProjCost.currencyCode!=null}"> ${aimEditActivityForm.proProjCost.currencyCode} </c:if>                                                        </td>
+																		  </tr>
+																		  <tr bgcolor="#ffffff">
 															<td>Proposed Completion Date  </td>
-                                                        	<td bgcolor="#FFFFFF" align="left" width="150">
-                                                          		<c:if test="${aimEditActivityForm.proProjCost.funDate!=null}">
+                                                        <td bgcolor="#FFFFFF" align="left" width="150">
+                                                          <c:if test="${aimEditActivityForm.proProjCost.funDate!=null}">
                                                              ${aimEditActivityForm.proProjCost.funDate}                                                          </c:if>                                                        </td>
                                                       </tr>
                                                     </table>
-                                             </c:if>
-										</td>
+                                             </c:if>										</td>
 									</tr>
 									</feature:display>
 									<field:display name="Project Performance"  feature="Dashboard">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:meActivityPerformance">
 											Activity - Performance</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -1010,7 +1171,7 @@ function viewChanges()
 									</field:display>
 									<field:display name="Project Risk" feature="Dashboard">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:meActivityRisk">
 											Activity - Risk</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -1034,7 +1195,7 @@ function viewChanges()
 								<logic:present name="currentMember" scope="session">
 									<module:display name="Funding" parentModule="PROJECT MANAGEMENT">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2" valign="top">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<img id="group_funding_plus"  onclick="toggleGroup('group_funding')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
 											<img id="group_funding_minus" onclick="toggleGroup('group_funding')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display : none"/>
 											<digi:trn key="aim:funding">Funding</digi:trn>										</td>
@@ -1123,7 +1284,7 @@ function viewChanges()
                                                                               <tr bgcolor="#ffffff">
                                                                                 <td colspan="4"><b>
                                                                                   <a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>">
-                                                                                  <digi:trn key="aim:commitments">Commitments </digi:trn>
+                                                                                  <digi:trn key="aim:commitments">Commitments </digi:trn> 
                                                                                   </a>
                                                                                   </b>                                                                                </td>
                                                                                 <td width="25%"><b>
@@ -1140,7 +1301,7 @@ function viewChanges()
                                                                                       <tr bgcolor="#ffffff">                                                                                    </c:if>
 
                                                                                     <td width="50">
-	                                                                                    <field:display name="Adjustment Type Commitment" feature="Funding Organizations">
+	                                                                                    <field:display name="Adjustment Type Commitment" feature="Funding Organizations">																						
     	                                                                                	<digi:trn key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																							</digi:trn>
@@ -1165,7 +1326,6 @@ function viewChanges()
    																									<bean:write name="fundingDetail" property="formattedRate" format="###.##"/>
 																							</field:display>                                                                                    </td>
                                                                                       </tr>
-
                                                                                   </c:if>
 
                                                                                   <c:if test="${aimEditActivityForm.donorFlag == false}">
@@ -1222,7 +1382,6 @@ function viewChanges()
                                                                                       </tr>
                                                                                     </c:if>
                                                                                   </c:if>
-
                                                                                 </logic:equal>
                                                                               </logic:iterate>
                                                                                 <tr>
@@ -1319,7 +1478,6 @@ function viewChanges()
 																						</tr>
 																						</c:if>
 																						</c:if>
-
 																						</logic:equal>
 																						</logic:iterate>
 			                                                                                <tr>
@@ -1518,7 +1676,7 @@ function viewChanges()
 									<!-- Costing -->
 									<feature:display name="Costing" module="Activity Costing">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:costing">
 											Costing</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -1536,7 +1694,7 @@ function viewChanges()
 									</logic:present>
 									<feature:display name="Regional Funding" module="Funding">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:regionalFunding">
 											Regional Funding</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -1647,116 +1805,10 @@ function viewChanges()
 											</c:if>										</td>
 									</tr>
 									</feature:display>
-									<module:display name="Organizations" parentModule="PROJECT MANAGEMENT">
-									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<digi:trn key="aim:relatedOrganizations">
-											Related Organizations</digi:trn>										</td>
-
-										<td bgcolor="#ffffff">
-                                           <feature:display name="Executing Agency" module="Organizations">
-                                            <img id="executing_agency_plus"  onclick="toggleGroup('executing_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-                                            <img id="executing_agency_minus" onclick="toggleGroup('executing_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
-											<b><digi:trn key="aim:executingAgency">Executing Agency</digi:trn></b><br/>
-											<logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
-												<div id="executing_agency_dots">...</div>
-												<div id="executing_agency" style="display: none;">
-												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
-													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="executingAgencies"
-													id="execAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> <bean:write name="execAgencies" property="name" /></li></ul>
-													</logic:iterate>
-													</td></tr>
-												</table>
-												</div>
-											</logic:notEmpty><br/></feature:display>
-
-											<feature:display name="Implementing Agency" module="Organizations">
-											 <img id="implementing_agency_plus"  onclick="toggleGroup('implementing_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-                                            <img id="implementing_agency_minus" onclick="toggleGroup('implementing_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
-											<b><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></b><br/>
-											<logic:notEmpty name="aimEditActivityForm" property="impAgencies">
-												<div id="implementing_agency_dots">...</div>
-												<div id="implementing_agency" style="display: none;">
-												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
-													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="impAgencies"
-													id="impAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> <bean:write name="impAgencies" property="name" /></li></ul>
-													</logic:iterate>
-													</td></tr>
-												</table>
-												</div>
-											</logic:notEmpty><br/></feature:display>
-
-											<feature:display name="Beneficiary Agency" module="Organizations">
-											<b><digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn></b><br/>
-											<logic:notEmpty name="aimEditActivityForm" property="benAgencies">
-												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
-													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="benAgencies"
-													id="benAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> <bean:write name="benAgency" property="name" /></li></ul>
-													</logic:iterate>
-													</td></tr>
-												</table>
-											</logic:notEmpty><br/>
-											</feature:display>
-
-											<feature:display name="Contracting Agency" module="Organizations">
-											<img id="contracting_agency_plus"  onclick="toggleGroup('contracting_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="contracting_agency_minus" onclick="toggleGroup('contracting_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
-											<b><digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn></b><br/>
-											<logic:notEmpty name="aimEditActivityForm" property="conAgencies">
-												<div id="contracting_agency_dots">...</div>
-												<div id="contracting_agency" style="display: none;">
-													<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
-														<tr><td>
-														<logic:iterate name="aimEditActivityForm" property="conAgencies"
-														id="conAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> <bean:write name="conAgencies" property="name" /></li></ul>
-														</logic:iterate>
-														</td></tr>
-													</table>
-												</div>
-											</logic:notEmpty><br/>
-											</feature:display>
-
-
-											<feature:display name="Sector Group" module="Organizations"></feature:display>
-											<field:display name="Sector Group" feature="Sector Group">
-											<b><digi:trn key="aim:sectorGroup">Sector Group</digi:trn></b><br/>
-											<logic:notEmpty name="aimEditActivityForm" property="sectGroups">
-												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
-													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="sectGroups"
-													id="sectGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-														<ul><li> <bean:write name="sectGroup" property="name" /></li></ul>
-													</logic:iterate>
-													</td></tr>
-												</table>
-											</logic:notEmpty><br/>
-											</field:display>
-											<feature:display name="Regional Group" module="Organizations"></feature:display>
-											<field:display name="Regional Group" feature="Regional Group">
-											<b><digi:trn key="aim:regionalGroup">Regional Group</digi:trn></b><br/>
-											<logic:notEmpty name="aimEditActivityForm" property="regGroups">
-												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
-													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="regGroups"
-													id="regGroup" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-														<ul><li> <bean:write name="regGroup" property="name" /></li></ul>
-													</logic:iterate>
-													</td></tr>
-												</table>
-											</logic:notEmpty><br/>
-											</field:display>										</td>
-									</tr>
-									</module:display>
+									
 									<module:display name="Components" parentModule="PROJECT MANAGEMENT">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<img id="components_plus"  onclick="toggleGroup('components')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
 											<img id="components_minus" onclick="toggleGroup('components')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
 											<digi:trn key="aim:components">
@@ -1764,7 +1816,7 @@ function viewChanges()
 										<td bgcolor="#ffffff">
 											<div id="components_dots">...</div>
 											<div id="components" style="display: none;">
-												<c:if test="${!empty aimEditActivityForm.selectedComponents}">
+											<c:if test="${!empty aimEditActivityForm.selectedComponents}">
 												<c:forEach var="comp" items="${aimEditActivityForm.selectedComponents}">
 													<table width="100%" cellSpacing="1" cellPadding="1">
 													<tr><td>
@@ -1862,8 +1914,7 @@ function viewChanges()
 																							<field:display name="Components Total Amount Commitments" feature="Components">
 																							<td align="right" width="100" bgcolor="#ffffff">
 																								<FONT color="blue">*</FONT>
-																								<c:out value="${fd.transactionAmount}"/>
-																							</td>
+																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Currency Commitments" feature="Components">
 																							<td bgcolor="#ffffff">
@@ -1902,8 +1953,7 @@ function viewChanges()
 																							<field:display name="Components Total Amount Disbursements" feature="Components">
 																							<td align="right" width="100" bgcolor="#ffffff">
 																								<FONT color="blue">*</FONT>
-																								<c:out value="${fd.transactionAmount}"/>
-																							</td>
+																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Currency Disbursements" feature="Components">
 																							<td bgcolor="#ffffff">
@@ -1994,13 +2044,12 @@ function viewChanges()
 													</table>
 												</c:forEach>
 											</c:if>
-											</div>
-										</td>
+											</div>										</td>
 									</tr>
 									</module:display>
 									<module:display name="Issues" parentModule="PROJECT MANAGEMENT">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<img id="issues_plus"  onclick="toggleGroup('issues')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
 											<img id="issues_minus" onclick="toggleGroup('issues')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
 											<digi:trn key="aim:issues">
@@ -2031,13 +2080,12 @@ function viewChanges()
 												</c:forEach>
 												</table>
 											</c:if>
-										</div>
-										</td>
+										</div>										</td>
 									</tr>
 									</module:display>
 									<feature:display name="Related Documents" module="Document">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<img id="related_documents_plus"  onclick="toggleGroup('related_documents')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
 											<img id="related_documents_minus" onclick="toggleGroup('related_documents')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
 											<digi:trn key="aim:relatedDocuments">
@@ -2045,7 +2093,7 @@ function viewChanges()
 										<td bgcolor="#ffffff">
 											<div id="related_documents_dots">...</div>
 											<div id="related_documents" style="display: none;">
-												<c:if test="${!empty aimEditActivityForm.documentList}">
+											<c:if test="${!empty aimEditActivityForm.documentList}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
 												 <logic:iterate name="aimEditActivityForm"  property="documents"
 													id="docs" type="org.digijava.module.aim.helper.Documents">
@@ -2097,14 +2145,13 @@ function viewChanges()
 												</c:forEach>
 												</table>
 											</c:if>
-											</div>
-										</td>
+											</div>										</td>
 									</tr>
 									</feature:display>
 													<module:display name="Contact Information" parentModule="PROJECT MANAGEMENT">
 									<feature:display name="Donor Contact Information" module="Contact Information">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:donorFundingContactInformation">
 											Donor funding contact information</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -2115,7 +2162,7 @@ function viewChanges()
 									</feature:display>
 									<feature:display name="Government Contact Information" module="Contact Information">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:mofedContactInformation">
 											MOFED contact information</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -2129,7 +2176,7 @@ function viewChanges()
 
 									<field:display name="Accession Instrument" feature="Identification">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.accessionInstrument > 0}">
@@ -2140,7 +2187,7 @@ function viewChanges()
 									</field:display>
 									<field:display name="A.C. Chapter" feature="Identification">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:acChapter"> A.C. Chapter</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.acChapter > 0}">
@@ -2152,7 +2199,7 @@ function viewChanges()
 
 									<field:display name="Activity Created By" feature="Identification">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:activityCreatedBy">
 											Activity created by</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -2163,7 +2210,7 @@ function viewChanges()
 									</field:display>
 									<field:display feature="Identification" name="Data Source">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:dataSource">
 											Data Source</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -2173,7 +2220,7 @@ function viewChanges()
 									<field:display name="Activity Updated On" feature="Identification">
 									<logic:notEmpty name="aimEditActivityForm" property="updatedDate">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:activityUpdatedOn">
 											Activity updated on</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -2187,7 +2234,7 @@ function viewChanges()
 									<field:display name="Activity Updated By" feature="Identification">
 									<logic:notEmpty name="aimEditActivityForm" property="updatedBy">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:activityUpdatedBy">
 											Activity updated by</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -2200,7 +2247,7 @@ function viewChanges()
 									<field:display name="Activity Created On" feature="Identification">
 									<logic:notEmpty name="aimEditActivityForm" property="createdDate">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:activityCreatedOn">
 											Activity created on</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -2211,7 +2258,7 @@ function viewChanges()
 									<logic:notEmpty name="aimEditActivityForm" property="team">
 									<field:display name="Date Team Leader" feature="Identification">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:activityTeamLeader">
 											Data Team Leader</digi:trn>										</td>
 										<td bgcolor="#ffffff">

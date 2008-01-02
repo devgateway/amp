@@ -156,6 +156,7 @@ public Cell filter(Cell metaCell,Set ids) {
 		 applyMetaFilter("Sector", ArConstants.SECTOR_PERCENTAGE, metaCell, ret);
 		 applyMetaFilter("Region", ArConstants.LOCATION_PERCENTAGE, metaCell, ret);
 		 applyMetaFilter("Componente", ArConstants.COMPONENTE_PERCENTAGE, metaCell, ret);
+		 applyMetaFilter("National Planning Objectives", ArConstants.NPO_PERCENTAGE, metaCell, ret);
 		}
 		
 		//if(ret.getMergedCells().size()>0) 

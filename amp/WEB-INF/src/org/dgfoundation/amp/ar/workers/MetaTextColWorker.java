@@ -34,12 +34,14 @@ public class MetaTextColWorker extends TextColWorker {
 	protected Cell getCellFromRow(ResultSet rs) throws SQLException {
 		TextCell tc=(TextCell) super.getCellFromRow(rs);
 		MetaTextCell mtc=new MetaTextCell(tc);
+		if(columnName.equals("Project Title"))
+			mtc.getMetaData().add(new MetaInfo(ArConstants.DRAFT,rs.getBoolean(3))); else
 		if(columnName.equals("Sector")) 
-			mtc.getMetaData().add(new MetaInfo(ArConstants.SECTOR_PERCENTAGE,new Integer(rs.getInt(4))));
+			mtc.getMetaData().add(new MetaInfo(ArConstants.SECTOR_PERCENTAGE,rs.getInt(4))); else
 		if(columnName.equals("Region")) 
-			mtc.getMetaData().add(new MetaInfo(ArConstants.LOCATION_PERCENTAGE,new Double(rs.getDouble(4))));
+			mtc.getMetaData().add(new MetaInfo(ArConstants.LOCATION_PERCENTAGE,rs.getDouble(4))); else
 		if(columnName.equals("Componente")) 
-			mtc.getMetaData().add(new MetaInfo(ArConstants.COMPONENTE_PERCENTAGE,new Double(rs.getDouble(4))));
+			mtc.getMetaData().add(new MetaInfo(ArConstants.COMPONENTE_PERCENTAGE,rs.getDouble(4))); 
 
 		
 		return mtc;

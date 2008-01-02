@@ -31,7 +31,8 @@ public class OrgManagerForm
   private boolean viewAll;
   private String alpha;
   private Boolean added;
-
+  private int pagesToShow;
+  private int pagesSize;
   public OrgManagerForm() {
     reset = false;
     orgPopupReset = true;
@@ -110,6 +111,22 @@ public class OrgManagerForm
    */
   public String getCurrentAlpha() {
     return currentAlpha;
+  }
+  
+  /**
+   * 
+   * @param Alpha
+   * @return
+   */
+  public int getAlphaPosition(String Alpha){
+	  int alphaPosition=1;
+	  for (int i = 0; i < alphaPages.length; i++) {
+		if(alphaPages[i].equalsIgnoreCase(alpha)){
+			alphaPosition = i;
+			break;
+		}
+	  }
+	  return alphaPosition;
   }
 
   /**
@@ -195,12 +212,21 @@ public class OrgManagerForm
   public Collection getPages() {
     return pages;
   }
+ 
+  public int getPagesSize() {
+	return pagesSize;
+}
 
-  /**
-   * @param pages The pages to set.
-   */
-  public void setPages(Collection pages) {
+public void setPagesSize(int pagesSize) {
+	this.pagesSize = pagesSize;
+}
+
+public void setPages(Collection pages) {
     this.pages = pages;
+    if(pages!=null)
+    {    
+    	this.pagesSize=pages.size();
+    }
   }
 
   /**
@@ -324,4 +350,12 @@ public class OrgManagerForm
   public void setAdded(Boolean added) {
     this.added = added;
   }
+
+public int getPagesToShow() {
+	return pagesToShow;
+}
+
+public void setPagesToShow(int pagesToShow) {
+	this.pagesToShow = pagesToShow;
+}
 }

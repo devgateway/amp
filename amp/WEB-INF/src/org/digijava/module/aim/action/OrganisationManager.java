@@ -147,6 +147,7 @@ public class OrganisationManager
       int stIndex = 1;
       int edIndex = eaForm.getNumResults();
 
+      eaForm.setPagesToShow(10);
       //If ALL was selected in pagination dropdown
       if (edIndex < 0) {
         edIndex = col.size();

@@ -106,6 +106,22 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 		return null;
 	}
 
+	
+public void applyMetaFilter(String columnName,String metaName,Cell metaCell,CategAmountCell ret) {
+	if(metaCell.getColumn().getName().equals(columnName)) {
+		//we need to get the location percentage, it is stored in the MetaText of related to the owner of the current cell
+		CellColumn c=(CellColumn) metaCell.getColumn();
+		MetaTextCell relatedLocation=(MetaTextCell) c.getByOwnerAndValue(this.getOwnerId(),metaCell.getValue());
+		if(relatedLocation!=null) { 
+		MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedLocation.getMetaData(),metaName);
+		Double percentage=(Double) percentMeta.getValue();
+		ret.setPercentage(percentage.doubleValue());			
+		}
+	}
+	
+}
+	
+	
 public Cell filter(Cell metaCell,Set ids) {
     	CategAmountCell ret = (CategAmountCell) super.filter(metaCell,ids);    
 		if(ret==null) return null;
@@ -137,38 +153,9 @@ public Cell filter(Cell metaCell,Set ids) {
 		//apply metatext filters
 		if(metaCell instanceof MetaTextCell) {
 			//apply metatext filters for column Sector
-			if(metaCell.getColumn().getName().equals("Sector")) {
-				//we need to get the sector percentage, it is stored in the MetaText of related to the owner of the current cell
-				CellColumn c=(CellColumn) metaCell.getColumn();
-				MetaTextCell relatedSector=(MetaTextCell) c.getByOwnerAndValue(this.getOwnerId(),metaCell.getValue());
-				if(relatedSector!=null) { 
-				MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedSector.getMetaData(),ArConstants.SECTOR_PERCENTAGE);
-				Integer percentage=(Integer) percentMeta.getValue();
-				ret.setPercentage(percentage.intValue());			
-				}
-			}
-			
-			if(metaCell.getColumn().getName().equals("Region")) {
-				//we need to get the location percentage, it is stored in the MetaText of related to the owner of the current cell
-				CellColumn c=(CellColumn) metaCell.getColumn();
-				MetaTextCell relatedLocation=(MetaTextCell) c.getByOwnerAndValue(this.getOwnerId(),metaCell.getValue());
-				if(relatedLocation!=null) { 
-				MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedLocation.getMetaData(),ArConstants.LOCATION_PERCENTAGE);
-				Double percentage=(Double) percentMeta.getValue();
-				ret.setPercentage(percentage.doubleValue());			
-				}
-			}
-			
-			if(metaCell.getColumn().getName().equals("Componente")) {
-				//we need to get the componente percentage, it is stored in the MetaText of related to the owner of the current cell
-				CellColumn c=(CellColumn) metaCell.getColumn();
-				MetaTextCell relatedComponente=(MetaTextCell) c.getByOwnerAndValue(this.getOwnerId(),metaCell.getValue());
-				if(relatedComponente!=null) { 
-				MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedComponente.getMetaData(),ArConstants.COMPONENTE_PERCENTAGE);
-				Double percentage=(Double) percentMeta.getValue();
-				ret.setPercentage(percentage.doubleValue());			
-				}
-			}
+		 applyMetaFilter("Sector", ArConstants.SECTOR_PERCENTAGE, metaCell, ret);
+		 applyMetaFilter("Region", ArConstants.LOCATION_PERCENTAGE, metaCell, ret);
+		 applyMetaFilter("Componente", ArConstants.COMPONENTE_PERCENTAGE, metaCell, ret);
 		}
 		
 		//if(ret.getMergedCells().size()>0) 

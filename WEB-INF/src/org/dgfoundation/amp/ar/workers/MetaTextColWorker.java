@@ -34,8 +34,8 @@ public class MetaTextColWorker extends TextColWorker {
 	protected Cell getCellFromRow(ResultSet rs) throws SQLException {
 		TextCell tc=(TextCell) super.getCellFromRow(rs);
 		MetaTextCell mtc=new MetaTextCell(tc);
-		if(columnName.equals("Project Title"))
-			mtc.getMetaData().add(new MetaInfo(ArConstants.DRAFT,rs.getBoolean(3))); else
+		if(columnName.equals("National Planning Objectives")) 
+			mtc.getMetaData().add(new MetaInfo(ArConstants.NPO_PERCENTAGE,new Double(rs.getDouble(4)))); else
 		if(columnName.equals("Sector")) 
 			mtc.getMetaData().add(new MetaInfo(ArConstants.SECTOR_PERCENTAGE,rs.getInt(4))); else
 		if(columnName.equals("Region")) 

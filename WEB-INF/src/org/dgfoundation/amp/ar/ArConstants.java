@@ -76,7 +76,7 @@ public final class ArConstants {
 	public final static String LOCATION_PERCENTAGE="Location Percentage";
 	public final static String COMPONENTE_PERCENTAGE="Componente Percentage";
 	
-	
+	public final static String NPO_PERCENTAGE="National Planning Objectives Percentage";
 	//hierarchysorter
 	public final static String HIERARCHY_SORTER_TITLE="Title";
 	

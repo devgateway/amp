@@ -806,6 +806,110 @@ function viewChanges()
 
 
 									</feature:display>
+                                    	<module:display name="Issues" parentModule="PROJECT MANAGEMENT">
+									<tr>
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
+											<img id="issues_plus"  onclick="toggleGroup('issues')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+											<img id="issues_minus" onclick="toggleGroup('issues')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+											<digi:trn key="aim:issues">
+											Issues</digi:trn>										</td>
+										<td bgcolor="#ffffff">
+											<div id="issues_dots">...</div>
+											<div id="issues" style="display: none;">
+											<c:if test="${!empty aimEditActivityForm.issues}">
+												<table width="100%" cellSpacing="2" cellPadding="2" border="0">
+												<c:forEach var="issue" items="${aimEditActivityForm.issues}">
+													<tr><td valign="top">
+														<li class="level1"><b><c:out value="${issue.name}"/></b></li>
+													</td></tr>
+													<c:if test="${!empty issue.measures}">
+														<c:forEach var="measure" items="${issue.measures}">
+															<tr><td>
+																<li class="level2"><i><c:out value="${measure.name}"/></i></li>
+															</td></tr>
+															<c:if test="${!empty measure.actors}">
+																<c:forEach var="actor" items="${measure.actors}">
+																	<tr><td>
+																		<li class="level3"><c:out value="${actor.name}"/></li>
+																	</td></tr>
+																</c:forEach>
+															</c:if>
+														</c:forEach>
+													</c:if>
+												</c:forEach>
+												</table>
+											</c:if>
+										</div>										</td>
+									</tr>
+									</module:display>
+                             <module:display name="Document" parentModule="PROJECT MANAGEMENT">       
+                                   	<feature:display name="Related Documents" module="Document">
+									<tr>
+										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
+											<img id="related_documents_plus"  onclick="toggleGroup('related_documents')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+											<img id="related_documents_minus" onclick="toggleGroup('related_documents')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+											<digi:trn key="aim:relatedDocuments">
+											Related Documents</digi:trn>										</td>
+										<td bgcolor="#ffffff">
+											<div id="related_documents_dots">...</div>
+											<div id="related_documents" style="display: none;">
+											<c:if test="${!empty aimEditActivityForm.documentList}">
+												<table width="100%" cellSpacing="0" cellPadding="0">
+												 <logic:iterate name="aimEditActivityForm"  property="documents"
+													id="docs" type="org.digijava.module.aim.helper.Documents">
+													<c:if test="${docs.isFile == true}">
+													<tr><td>
+													 <table width="100%" class="box-border-nopadding">
+													 	<tr bgcolor="#ffffff">
+															<td vAlign="center" align="left">
+																&nbsp;<b><c:out value="${docs.title}"/></b> -
+																&nbsp;&nbsp;&nbsp;<i><c:out value="${docs.fileName}"/></i>
+																<logic:notEqual name="docs" property="docDescription" value=" ">
+																	<br />&nbsp;
+																	<b>Description:</b>&nbsp;<bean:write name="docs" property="docDescription" />
+																</logic:notEqual>
+																<logic:notEmpty name="docs" property="date">
+																	<br />&nbsp;
+																	<b>Date:</b>&nbsp;<c:out value="${docs.date}"/>
+																</logic:notEmpty>
+																<logic:notEmpty name="docs" property="docType">
+																	<br />&nbsp;
+																	<b>Document Type:</b>&nbsp;
+																	<bean:write name="docs" property="docType"/>
+																</logic:notEmpty>															</td>
+														</tr>
+													 </table>
+													</td></tr>
+													</c:if>
+													</logic:iterate>
+												</table>
+											</c:if>
+											<c:if test="${!empty aimEditActivityForm.linksList}">
+												<table width="100%" cellSpacing="0" cellPadding="0">
+												<c:forEach var="docList" items="${aimEditActivityForm.linksList}">
+					   							<bean:define id="links" name="docList" property="relLink" />
+													<tr><td>
+														<table width="100%" class="box-border-nopadding">
+															<tr>
+																<td width="2">
+																	<digi:img src="module/aim/images/web-page.gif"/>																</td>
+																<td align="left" vAlign="center">&nbsp;
+																	<b><c:out value="${links.title}"/></b> -
+																	&nbsp;&nbsp;&nbsp;<i><a href="<c:out value="${links.url}"/>">
+																	<c:out value="${links.url}"/></a></i>
+																	<br>&nbsp;
+																	<b>Desc:</b>&nbsp;<c:out value="${links.description}"/>																</td>
+															</tr>
+														</table>
+													</td></tr>
+												</c:forEach>
+												</table>
+											</c:if>
+											</div>										</td>
+									</tr>
+									</feature:display>
+                                 </module:display>   
+                                     
 <module:display name="Organizations" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
@@ -1435,8 +1539,8 @@ function viewChanges()
                                                                                  <bean:write name="fundingDetail" property="transactionDate"/>
                                                                                  </field:display>
                                                                                 </td>
-                                                                                <td>
-                                                                                &nbsp;
+                                                                                <td>&nbsp;
+                                                                                
                                                                                 </td>
 
                                                                                 </tr>
@@ -2106,107 +2210,8 @@ function viewChanges()
 											</div>										</td>
 									</tr>
 									</module:display>
-									<module:display name="Issues" parentModule="PROJECT MANAGEMENT">
-									<tr>
-										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
-											<img id="issues_plus"  onclick="toggleGroup('issues')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="issues_minus" onclick="toggleGroup('issues')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
-											<digi:trn key="aim:issues">
-											Issues</digi:trn>										</td>
-										<td bgcolor="#ffffff">
-											<div id="issues_dots">...</div>
-											<div id="issues" style="display: none;">
-											<c:if test="${!empty aimEditActivityForm.issues}">
-												<table width="100%" cellSpacing="2" cellPadding="2" border="0">
-												<c:forEach var="issue" items="${aimEditActivityForm.issues}">
-													<tr><td valign="top">
-														<li class="level1"><b><c:out value="${issue.name}"/></b></li>
-													</td></tr>
-													<c:if test="${!empty issue.measures}">
-														<c:forEach var="measure" items="${issue.measures}">
-															<tr><td>
-																<li class="level2"><i><c:out value="${measure.name}"/></i></li>
-															</td></tr>
-															<c:if test="${!empty measure.actors}">
-																<c:forEach var="actor" items="${measure.actors}">
-																	<tr><td>
-																		<li class="level3"><c:out value="${actor.name}"/></li>
-																	</td></tr>
-																</c:forEach>
-															</c:if>
-														</c:forEach>
-													</c:if>
-												</c:forEach>
-												</table>
-											</c:if>
-										</div>										</td>
-									</tr>
-									</module:display>
-									<feature:display name="Related Documents" module="Document">
-									<tr>
-										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
-											<img id="related_documents_plus"  onclick="toggleGroup('related_documents')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="related_documents_minus" onclick="toggleGroup('related_documents')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
-											<digi:trn key="aim:relatedDocuments">
-											Related Documents</digi:trn>										</td>
-										<td bgcolor="#ffffff">
-											<div id="related_documents_dots">...</div>
-											<div id="related_documents" style="display: none;">
-											<c:if test="${!empty aimEditActivityForm.documentList}">
-												<table width="100%" cellSpacing="0" cellPadding="0">
-												 <logic:iterate name="aimEditActivityForm"  property="documents"
-													id="docs" type="org.digijava.module.aim.helper.Documents">
-													<c:if test="${docs.isFile == true}">
-													<tr><td>
-													 <table width="100%" class="box-border-nopadding">
-													 	<tr bgcolor="#ffffff">
-															<td vAlign="center" align="left">
-																&nbsp;<b><c:out value="${docs.title}"/></b> -
-																&nbsp;&nbsp;&nbsp;<i><c:out value="${docs.fileName}"/></i>
-																<logic:notEqual name="docs" property="docDescription" value=" ">
-																	<br />&nbsp;
-																	<b>Description:</b>&nbsp;<bean:write name="docs" property="docDescription" />
-																</logic:notEqual>
-																<logic:notEmpty name="docs" property="date">
-																	<br />&nbsp;
-																	<b>Date:</b>&nbsp;<c:out value="${docs.date}"/>
-																</logic:notEmpty>
-																<logic:notEmpty name="docs" property="docType">
-																	<br />&nbsp;
-																	<b>Document Type:</b>&nbsp;
-																	<bean:write name="docs" property="docType"/>
-																</logic:notEmpty>															</td>
-														</tr>
-													 </table>
-													</td></tr>
-													</c:if>
-													</logic:iterate>
-												</table>
-											</c:if>
-											<c:if test="${!empty aimEditActivityForm.linksList}">
-												<table width="100%" cellSpacing="0" cellPadding="0">
-												<c:forEach var="docList" items="${aimEditActivityForm.linksList}">
-					   							<bean:define id="links" name="docList" property="relLink" />
-													<tr><td>
-														<table width="100%" class="box-border-nopadding">
-															<tr>
-																<td width="2">
-																	<digi:img src="module/aim/images/web-page.gif"/>																</td>
-																<td align="left" vAlign="center">&nbsp;
-																	<b><c:out value="${links.title}"/></b> -
-																	&nbsp;&nbsp;&nbsp;<i><a href="<c:out value="${links.url}"/>">
-																	<c:out value="${links.url}"/></a></i>
-																	<br>&nbsp;
-																	<b>Desc:</b>&nbsp;<c:out value="${links.description}"/>																</td>
-															</tr>
-														</table>
-													</td></tr>
-												</c:forEach>
-												</table>
-											</c:if>
-											</div>										</td>
-									</tr>
-									</feature:display>
+								
+								
 													<module:display name="Contact Information" parentModule="PROJECT MANAGEMENT">
 									<feature:display name="Donor Contact Information" module="Contact Information">
 									<tr>

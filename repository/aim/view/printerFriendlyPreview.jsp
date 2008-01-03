@@ -183,53 +183,31 @@
                                         		  <td colspan="3">${aimEditActivityForm.statusReason}</td>
 												</tr>
 											</table>									  </td>
-									</tr>		
-									<tr>
-									  <td align="right" bgcolor="#ffffff"><strong><digi:trn key="aim:printerFriendly:componentes">Componentes</digi:trn></strong></td>
-									  <td bgcolor="#ffffff" >
-                                      <c:if test="${not empty aimEditActivityForm.activityComponentes}">
-											<table>
-												<c:forEach var="comSec" items="${aimEditActivityForm.activityComponentes}">
-													<tr>
-														<td width="100%">
-															${comSec.sectorName}
-														</td>
-														<td align="right">
-															${comSec.sectorPercentage}%
-														</td>
-													</tr>
-												</c:forEach>
-												</div>
-											</table>
-									
-									</c:if>
-								  </tr>
-									<tr>
+									</tr>
+                                    <tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
-											<digi:trn key="aim:level">
-											Level</digi:trn>
-											</b>										</td>
+											<digi:trn key="aim:sector">
+											Sector</digi:trn></b>										</td>
 										<td bgcolor="#ffffff" >
-											<c:if test="${aimEditActivityForm.levelId>0}" >
-												<category:getoptionvalue categoryValueId="${aimEditActivityForm.levelId}"/>
-											</c:if>
-											<%
-											/* 
-											<c:if test="${!empty aimEditActivityForm.levelCollection}">
-												<c:forEach var="tempLevel" items="${aimEditActivityForm.levelCollection}">
-													<c:if test="${tempLevel.ampLevelId == aimEditActivityForm.levelId}">												
-                                          ${tempLevel.name}
-													</c:if>
+                                        
+											<c:if test="${!empty aimEditActivityForm.activitySectors}">
+												<table width="100%" cellSpacing="2" cellPadding="1">
+												<c:forEach var="sectors" items="${aimEditActivityForm.activitySectors}">
+                                            <tr>
+                                              <td>
+													<c:if test="${!empty sectors.sectorName}">
+                                                [${sectors.sectorName}]													</c:if>
+													<c:if test="${!empty sectors.subsectorLevel1Name}">
+                                                [${sectors.subsectorLevel1Name}]													</c:if>
+													<c:if test="${!empty sectors.subsectorLevel2Name}">
+                                                [${sectors.subsectorLevel2Name}]													</c:if>                                              </td>
+                                            </tr>
 												</c:forEach>
-												&nbsp;
-											</c:if>										
-											<c:if test="${empty aimEditActivityForm.levelCollection}">
-												&nbsp;
-											</c:if>
-											*/%>										</td>
-									</tr>																											
-									<tr>
+												</table>
+											</c:if>										</td>
+									</tr>			
+							<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:location">
@@ -258,30 +236,54 @@
 											</c:if>
 											<c:if test="${empty aimEditActivityForm.selectedLocs}">
 &nbsp;											</c:if>										</td>
-									</tr>		
+									</tr>
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
-											<digi:trn key="aim:sector">
-											Sector</digi:trn></b>										</td>
+											<digi:trn key="aim:level">
+											Level</digi:trn>
+											</b>										</td>
 										<td bgcolor="#ffffff" >
-                                        
-											<c:if test="${!empty aimEditActivityForm.activitySectors}">
-												<table width="100%" cellSpacing="2" cellPadding="1">
-												<c:forEach var="sectors" items="${aimEditActivityForm.activitySectors}">
-                                            <tr>
-                                              <td>
-													<c:if test="${!empty sectors.sectorName}">
-                                                [${sectors.sectorName}]													</c:if>
-													<c:if test="${!empty sectors.subsectorLevel1Name}">
-                                                [${sectors.subsectorLevel1Name}]													</c:if>
-													<c:if test="${!empty sectors.subsectorLevel2Name}">
-                                                [${sectors.subsectorLevel2Name}]													</c:if>                                              </td>
-                                            </tr>
+											<c:if test="${aimEditActivityForm.levelId>0}" >
+												<category:getoptionvalue categoryValueId="${aimEditActivityForm.levelId}"/>
+											</c:if>
+											<%
+											/* 
+											<c:if test="${!empty aimEditActivityForm.levelCollection}">
+												<c:forEach var="tempLevel" items="${aimEditActivityForm.levelCollection}">
+													<c:if test="${tempLevel.ampLevelId == aimEditActivityForm.levelId}">												
+                                          ${tempLevel.name}
+													</c:if>
 												</c:forEach>
-												</table>
-											</c:if>										</td>
-									</tr>		
+												&nbsp;
+											</c:if>										
+											<c:if test="${empty aimEditActivityForm.levelCollection}">
+												&nbsp;
+											</c:if>
+											*/%>										</td>
+									</tr>																											
+									   <c:if test="${not empty aimEditActivityForm.activityComponentes}">	
+											<tr>
+									  <td align="right" bgcolor="#ffffff"><strong><digi:trn key="aim:printerFriendly:componentes">Componentes</digi:trn></strong></td>
+									  <td bgcolor="#ffffff" >
+                                      <c:if test="${not empty aimEditActivityForm.activityComponentes}">
+											<table>
+												<c:forEach var="comSec" items="${aimEditActivityForm.activityComponentes}">
+													<tr>
+														<td width="100%">
+															${comSec.sectorName}
+														</td>
+														<td align="right">
+															${comSec.sectorPercentage}%
+														</td>
+													</tr>
+												</c:forEach>
+												</div>
+											</table>
+									
+									</c:if>
+								  </tr>	
+                                  	</c:if>
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b><digi:trn key="aim:program">Program</digi:trn></b></td>

@@ -121,6 +121,9 @@ public class QuarterlyComparisonsWorker	{
 				qc.setPlannedDisbursement(qi.getPlannedAmount());
 				qc.setActualDisbursement(qi.getActualAmount());
 			}
+                        if ( transactionType == Constants.DISBURSEMENT_ORDER)	{
+				qc.setActualDisbOrder(qi.getActualAmount());
+			}
 			if ( transactionType == Constants.EXPENDITURE)	{
 				qc.setPlannedExpenditure(qi.getPlannedAmount());
 				qc.setActualExpenditure(qi.getActualAmount());

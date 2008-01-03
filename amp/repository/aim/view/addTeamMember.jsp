@@ -100,7 +100,13 @@ function clearForms()
 			<digi:trn key="aim:userId">User Id</digi:trn>&nbsp;
 		</td>
 		<td align="left">
-			<html:text property="email" size="30" styleClass="inp-text"/>
+			<html:select property="email" >
+			<c:forEach items="${aimTeamMemberForm.allMembers}" var="members">
+				<html:option value="${members.email}">
+				<c:out value="${members.email}"/>
+				</html:option>
+			</c:forEach>
+			</html:select>
 		</td>
 	</tr>
 	<tr bgcolor="#ffffff">

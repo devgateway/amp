@@ -5,6 +5,7 @@ import org.apache.struts.action.ActionForm;
 
 public class TeamMemberForm extends ActionForm {
 
+	private Collection allMembers;
 	private Collection teamMembers;
 	private Long teamMemberId;
 	private String action;
@@ -240,5 +241,11 @@ public class TeamMemberForm extends ActionForm {
 	 */
 	public void setWritePerms(String writePerms) {
 		this.writePerms = writePerms;
+	}
+	public Collection getAllMembers() {
+		return allMembers;
+	}
+	public void setAllMembers(Collection allMembers) {
+		this.allMembers = allMembers;
 	}
 }

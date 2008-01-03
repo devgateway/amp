@@ -24,7 +24,7 @@ public class CurrencyWorker {
 		if (logger.isDebugEnabled())
 			logger.debug("convert passed amt=" + amt + " ,fromExchangeRate="
 					+ fromExchangeRate + ",toExchangeRate" + toExchangeRate);
-		if (fromExchangeRate != toExchangeRate) {
+		if (fromExchangeRate != toExchangeRate&&fromExchangeRate!=0) {
 			double inter = 1 / fromExchangeRate;
 			inter = inter * amt;
 			resultDbl = inter * toExchangeRate;

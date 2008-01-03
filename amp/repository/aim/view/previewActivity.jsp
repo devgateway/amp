@@ -1391,6 +1391,65 @@ function viewChanges()
                                                                                       <TD  colspan="4" align="right"><bean:write name="aimEditActivityForm" property="totalCommitted"/>&nbsp;USD</TD>
                                                                                 </tr>
                                                                               </c:if>
+                                                                           
+                                                                                    <!-- Disbursement orders-->
+                                                                              <feature:display module="Funding" name="Disbursement orders">
+
+                                                                                <tr bgcolor="#ffffff">
+                                                                                <td colspan="5">&nbsp;</td>
+                                                                              </tr>
+                                                                              <tr bgcolor="#ffffff">
+                                                                                <td colspan="5">
+                                                                                  <a title="<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>"><b> <digi:trn key="aim:disbursementOrders">Disbursements Orders</digi:trn></b>
+																				</a>
+                                                                                </td>
+                                                                              </tr>
+
+                                                                                <c:if test="${!empty funding.fundingDetails}">
+                                                                              <logic:iterate name="funding" property="fundingDetails"
+                                                                              id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+                                                                              <logic:equal name="fundingDetail" property="transactionType" value="4">
+
+                                                                                 <tr bgcolor="#ffffff">
+
+                                                                                 <td width="50">
+                                                                                 <field:display name="Adjustment Type of Disbursement Order" feature="Disbursement Orders">
+                                                                                 <digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+                                                                                 <bean:write name="fundingDetail" property="adjustmentTypeName"/>
+                                                                                 </digi:trn>
+                                                                                 </field:display>
+                                                                                 </td>
+                                                                                 <td width="120" align="right">
+                                                                                 <field:display name="Amount of Disbursement Order" feature="Disbursement Orders">
+                                                                                 <FONT color=blue>*</FONT>
+                                                                                 <bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
+                                                                                 </field:display>
+                                                                                 </td>
+                                                                                 <td width="150">
+                                                                                 <field:display name="Currency of Disbursement Order" feature="Disbursement Orders">
+                                                                                 <bean:write name="fundingDetail" property="currencyCode"/>
+                                                                                 </field:display>
+                                                                                 </td>
+                                                                                 <td width="70">
+                                                                                 <field:display name="Date of Disbursement Order" feature="Disbursement Orders">
+                                                                                 <bean:write name="fundingDetail" property="transactionDate"/>
+                                                                                 </field:display>
+                                                                                </td>
+                                                                                <td>
+                                                                                &nbsp;
+                                                                                </td>
+
+                                                                                </tr>
+                                                                                </logic:equal>
+                                                                                </logic:iterate>
+                                                                                </c:if>
+                                                                                 <tr>
+                                                                                <td><digi:trn key='aim:totalDisbursementOrder'>
+                                                                                TOTAL:
+                                                                                </digi:trn></td>
+                                                                                      <TD  colspan="4" align="right"><bean:write name="aimEditActivityForm" property="totalDisbOrder"/>&nbsp;USD</TD>
+                                                                                </tr>
+                                                                                </feature:display>
                                                                               <tr bgcolor="#ffffff">
                                                                                 <td colspan="5">&nbsp;</td>
                                                                               </tr>

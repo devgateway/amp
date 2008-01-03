@@ -47,8 +47,7 @@ public class YearlyComparisonsWorker	{
                         if ( !flag  )	{
                                 YearlyComparison yearlyComparison = new YearlyComparison();
                                 yearlyComparison.setFiscalYear(yearlyInfo.getFiscalYear());
-                                yearlyComparison.setPlannedDisbursement(yearlyInfo.getPlannedAmount());
-                                yearlyComparison.setActualDisbursement(yearlyInfo.getActualAmount());
+                                yearlyComparison.setDisbOrders(yearlyInfo.getActualAmount());
                                 arrList.add(yearlyComparison);
                         }
               }

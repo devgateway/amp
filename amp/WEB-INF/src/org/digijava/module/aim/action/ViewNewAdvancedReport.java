@@ -142,7 +142,7 @@ public class ViewNewAdvancedReport extends Action {
 		request.setAttribute("viewFormat",viewFormat);
 	
 		if(startRow==null && endRow==null) {
-		    startRow="1";
+		    startRow="0";
 		    endRow=((Integer) request.getAttribute("recordsPerPage")).toString();
 		}
 		

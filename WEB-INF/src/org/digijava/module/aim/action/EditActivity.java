@@ -1555,6 +1555,7 @@ public class EditActivity
       String overallTotalUnDisbursed = "";
       String overallTotalExpenditure = "";
       String overallTotalUnExpended = "";
+      String overallTotalDisburOrder = "";
       overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(
           fb, Constants.COMMITMENT);
 
@@ -1562,6 +1563,8 @@ public class EditActivity
 
       overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(
           fb, Constants.DISBURSEMENT);
+      overallTotalDisburOrder=FinancingBreakdownWorker.getOverallTotal(
+          fb, Constants.DISBURSEMENT_ORDER);
 
       eaForm.setTotalDisbursed(overallTotalDisbursed);
       overallTotalUnDisbursed = DecimalToText.getDifference(
@@ -1574,6 +1577,7 @@ public class EditActivity
       overallTotalUnExpended = DecimalToText.getDifference(
           overallTotalDisbursed, overallTotalExpenditure);
       eaForm.setTotalUnExpended(overallTotalUnExpended);
+      eaForm.setTotalDisbOrder(overallTotalDisburOrder);
     }
 
     return mapping.findForward("forward");

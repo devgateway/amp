@@ -261,6 +261,15 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String totalExpenditure = "";
 	private String totalUnExpended = "";
 	private String totalExpended="";
+        private String totalDisbOrder="";
+
+    public String getTotalDisbOrder() {
+        return totalDisbOrder;
+    }
+
+    public void setTotalDisbOrder(String totalDisbOrder) {
+        this.totalDisbOrder = totalDisbOrder;
+    }
 
 
 	/* START FINANCIAL EDIT */

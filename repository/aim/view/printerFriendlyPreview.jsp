@@ -226,7 +226,9 @@
 									</field:display>
                             </feature:display>   
                                     
-                         <feature:display name="Identification" module="Project ID and Planning">
+                         <feature:display name="Identification" module="Project ID and Planning"></feature:display>                         	                                          
+                                    <field:display feature="Identification" name="Objectives">
+                                    	
                                     <tr>
 										<td width="30%" align="right" valign="top" bgcolor="#ffffff">
 											<b><digi:trn key="aim:objectives">
@@ -236,9 +238,7 @@
 											<c:set var="objKey" value="${aimEditActivityForm.objectives}" />
 											<digi:edit key="${objKey}"></digi:edit>
                                          </c:if>										</td>
-									</tr>
-                                               
-                                    <field:display feature="Identification" name="Objectives">
+									</tr>    
 										<logic:present name="currentMember" scope="session">
 										<tr>
 											<td width="30%" align="right"  bgcolor="#ffffff" >
@@ -271,6 +271,7 @@
 										</tr>
 										</logic:present>
 									</field:display>
+									
                                     
                                     <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
 								
@@ -314,7 +315,8 @@
 										</field:display>
 									</feature:display>
                                    </module:display>
-                                                                        
+                                   
+                                    <feature:display name="Identification" module="Project ID and Planning">                                     
 									<field:display feature="Identification" name="Description">
 									<tr>
 										<td width="30%" align="right" valign="top" bgcolor="#ffffff" >

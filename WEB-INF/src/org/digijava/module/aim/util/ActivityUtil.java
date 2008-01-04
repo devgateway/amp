@@ -1469,19 +1469,22 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           Iterator locItr = ampAct.getLocations().iterator();
           while (locItr.hasNext()) {
             AmpActivityLocation actLoc = (AmpActivityLocation) locItr.next();
-            AmpLocation ampLoc = actLoc.getLocation();
-            Location loc = new Location();
-            if (ampLoc.getAmpRegion() != null) {
-              loc.setRegion(ampLoc.getAmpRegion().getName());
+            if(actLoc!=null){
+            	AmpLocation ampLoc = actLoc.getLocation();
+                Location loc = new Location();
+                if (ampLoc.getAmpRegion() != null) {
+                  loc.setRegion(ampLoc.getAmpRegion().getName());
+                }
+                if (ampLoc.getAmpZone() != null) {
+                  loc.setZone(ampLoc.getAmpZone().getName());
+                }
+                if (ampLoc.getAmpWoreda() != null) {
+                  loc.setWoreda(ampLoc.getAmpWoreda().getName());
+                }
+                loc.setPercent(actLoc.getLocationPercentage());
+                locColl.add(loc);
             }
-            if (ampLoc.getAmpZone() != null) {
-              loc.setZone(ampLoc.getAmpZone().getName());
-            }
-            if (ampLoc.getAmpWoreda() != null) {
-              loc.setWoreda(ampLoc.getAmpWoreda().getName());
-            }
-            loc.setPercent(actLoc.getLocationPercentage());
-            locColl.add(loc);
+            
           }
         }
         activity.setLocations(locColl);

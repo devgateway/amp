@@ -101,7 +101,7 @@ function clearForms()
 		</td>
 		<td align="left">
 			<html:select property="email" >
-			<c:forEach items="${aimTeamMemberForm.allMembers}" var="members">
+			<c:forEach items="${aimTeamMemberForm.allUser}" var="members">
 				<html:option value="${members.email}">
 				<c:out value="${members.email}"/>
 				</html:option>

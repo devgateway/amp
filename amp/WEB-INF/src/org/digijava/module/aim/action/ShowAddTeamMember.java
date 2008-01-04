@@ -16,6 +16,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.TeamMemberForm;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.um.util.AmpUserUtil;
 
 public class ShowAddTeamMember extends Action {
 	
@@ -40,7 +41,7 @@ public class ShowAddTeamMember extends Action {
 				upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 				upMemForm.setPermissions("default");
 				upMemForm.setFromPage(frmPage);
-				upMemForm.setAllMembers(TeamMemberUtil.getAllTeamMemberUsers());
+				upMemForm.setallUser(AmpUserUtil.getAllUsers());
 				if (frmPage == 1) {
 					return mapping.findForward("showAddFromAdmin");	
 				} else {

@@ -33,6 +33,7 @@ public class OrgManagerForm
   private Boolean added;
   private int pagesToShow;
   private int pagesSize;
+  private int offset;
   public OrgManagerForm() {
     reset = false;
     orgPopupReset = true;
@@ -357,5 +358,21 @@ public int getPagesToShow() {
 
 public void setPagesToShow(int pagesToShow) {
 	this.pagesToShow = pagesToShow;
+}
+
+public int getOffset() {
+	int value;
+	if (getCurrentPage()> (this.getPagesToShow()/2)){
+		value = (this.getCurrentPage() - (this.getPagesToShow()/2))-1;
+	}
+	else {
+		value = 0;
+	}
+	setOffset(value);
+	return offset;
+}
+
+public void setOffset(int offset) {
+	this.offset = offset;
 }
 }

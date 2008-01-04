@@ -181,8 +181,10 @@ background-color: yellow;
 		myPanel1.setHeader(msg);
 		myPanel1.setBody("Empty");
 		myPanel1.render(document.body);
-	
-		myPanel2.setHeader("Please select hierarchy sorter criteria");
+		
+		var msgP2='\n<digi:trn key="rep:filter:selectsorter">Please select hierarchy sorter criteria</digi:trn>';
+;
+		myPanel2.setHeader(msgP2);
 		myPanel2.setBody("Empty");
 		myPanel2.render(document.body);
 	}

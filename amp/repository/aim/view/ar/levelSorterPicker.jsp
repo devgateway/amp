@@ -17,35 +17,38 @@
 	<table width="400px">
 		
 		<tr>
-			<td align="right">Hierarchy Level:</td>
-			<td><html:select property="levelPicked">
+			<td align="right"><digi:trn key="aim:popsort:hierarchy:level">Hierarchy Level:</digi:trn></td>
+			<td>
+				<html:select property="levelPicked">
 				<html:optionsCollection name="reportMeta" property="hierarchies"
 					value="levelId" label="column.columnName" />
-			</html:select></td>
+				</html:select>
+			</td>
 		</tr>
 		<tr>
-			<td align="right">Sort by:</td>
+			<td align="right"><digi:trn key="aim:popsort:hierarchy:sortby">Sort by:</digi:trn></td>
 			<td><html:select property="levelSorter">
-				<html:option value="Title">Hierarchy Title</html:option>
+				<html:option value="Title">
+					<digi:trn key="aim:popsort:hierarchy:title">Hierarchy Title</digi:trn>
+				</html:option>
 				<html:optionsCollection name="report" property="trailCells"
 					value="column.absoluteColumnName" label="column.absoluteColumnName" />
 			</html:select></td>
 		</tr>
 		<tr>
-			<td align="right">Sort Order:</td>
+			<td align="right"><digi:trn key="aim:popsort:hierarchy:sortorder">Sort Order:</digi:trn></td>
 			<td><html:select property="levelSortOrder">
-				<html:option value="ascending">Ascending</html:option>
-				<html:option value="descending">Descending</html:option>				
+				<html:option value="ascending"><digi:trn key="aim:popsort:ascending">Ascending</digi:trn></html:option>
+				<html:option value="descending"><digi:trn key="aim:popsort:descending">Descending</digi:trn></html:option>				
 			</html:select></td>
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
 			<logic:notEqual name="widget" scope="request" value="true">
-			<td><html:submit property="applySorter">Apply Sorting</html:submit></td>
+			<td><html:submit property="applySorter"><digi:trn key="aim:popsort:apply">Apply Sorting</digi:trn></html:submit></td>
 			</logic:notEqual>
 			<logic:equal name="widget" scope="request" value="true">			
-			<td><input type="button" name="applySorter" value="Apply Sorting" 
-			onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~applySorter=true~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~levelPicked='+levelPicked.options[levelPicked.selectedIndex].value+'~levelSorter='+levelSorter.options[levelSorter.selectedIndex].value+'~levelSortOrder='+levelSortOrder.options[levelSortOrder.selectedIndex].value);closeMessage();"/>
+			<td><input type="button" name="applySorter" value='<digi:trn key="aim:popsort:hierarchy:apply">Apply Sorting</digi:trn>'			onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~applySorter=true~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~levelPicked='+levelPicked.options[levelPicked.selectedIndex].value+'~levelSorter='+levelSorter.options[levelSorter.selectedIndex].value+'~levelSortOrder='+levelSortOrder.options[levelSortOrder.selectedIndex].value);closeMessage();"/>
 			</td>
 			</logic:equal>
 		</tr>

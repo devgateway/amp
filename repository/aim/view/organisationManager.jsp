@@ -249,7 +249,7 @@
 														<c:set target="${urlParamsFirst}" property="page" value="1"/>
 														<c:set target="${urlParamsFirst}" property="orgSelReset" value="false"/>
 														<c:set var="translation">
-															<digi:trn key="aim:firstpage">first Page</digi:trn>
+															<digi:trn key="aim:firstpage">First Page</digi:trn>
 														</c:set>
 														
 														<digi:link href="/organisationSearch.do"  style="text-decoration=none" name="urlParamsFirst" title="${translation}"  >
@@ -266,32 +266,34 @@
 															&lt;
 														</digi:link>
 														</c:if>
-													<c:set var="length" value="${aimOrgManagerForm.pagesToShow+1}"></c:set>
-													<logic:iterate name="aimOrgManagerForm" 	property="pages" id="pages" type="java.lang.Integer" offset="${aimOrgManagerForm.currentPage - 1}" length="${length}">
-													
-													<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
-													<c:set target="${urlParams1}" property="page"><%=pages%>
-													</c:set>
-													<c:set target="${urlParams1}" property="orgSelReset" value="false"/>
-													<c:if test="${aimOrgManagerForm.currentPage == pages}">
-														<font color="#FF0000"><%=pages%></font>
-													</c:if>
-													<c:if test="${aimOrgManagerForm.currentPage != pages}">
-														<c:set var="translation">
-															<digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
+														<c:set var="length" value="${aimOrgManagerForm.pagesToShow}"></c:set>
+														<c:set var="start" value="${aimOrgManagerForm.offset}"/>
+														
+														<logic:iterate name="aimOrgManagerForm" property="pages" id="pages" type="java.lang.Integer" offset="${start}" length="${length}">	
+														<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
+														<c:set target="${urlParams1}" property="page"><%=pages%>
 														</c:set>
-														<digi:link href="/organisationSearch.do" name="urlParams1" title="${translation}" >
-															<%=pages%>
-														</digi:link>
-													</c:if>
-													|&nbsp;
-													</logic:iterate>
-													<c:if test="${aimOrgManagerForm.currentPage != aimOrgManagerForm.pagesSize}">
+														<c:set target="${urlParams1}" property="orgSelReset" value="false"/>
+														<c:if test="${aimOrgManagerForm.currentPage == pages}">
+															<font color="#FF0000"><%=pages%></font>
+														</c:if>
+														<c:if test="${aimOrgManagerForm.currentPage != pages}">
+															<c:set var="translation">
+															<digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
+															</c:set>
+															<digi:link href="/organisationSearch.do" name="urlParams1" title="${translation}" >
+																<%=pages%>
+															</digi:link>
+														</c:if>
+														|&nbsp;
+														</logic:iterate>
+														
+														<c:if test="${aimOrgManagerForm.currentPage != aimOrgManagerForm.pagesSize}">
 														<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
 														<c:set target="${urlParamsNext}" property="page" value="${aimOrgManagerForm.currentPage+1}"/>
 														<c:set target="${urlParamsNext}" property="orgSelReset" value="false"/>
 														<c:set var="translation">
-															<digi:trn key="aim:nextpage">next Page</digi:trn>
+															<digi:trn key="aim:nextpage">Next Page</digi:trn>
 														</c:set>
 														<digi:link href="/organisationSearch.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
 															&gt;

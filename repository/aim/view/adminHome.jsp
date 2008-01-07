@@ -289,7 +289,7 @@
                           <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="translation">
-                                <digi:trn key="aim:clickToViewcomponentsManager">Click here to view Components Manager</digi:trn>
+                                <digi:trn key="aim:clickToViewmultiProgrammanager">Click here to view Multi Program Manager</digi:trn>
                               </c:set>
                               <digi:link href="/themeManager.do~view=multiprogram" title="${translation}" >
                                 <digi:trn key="aim:multManager">Multi Program Manager</digi:trn>
@@ -301,7 +301,7 @@
                           <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="translation">
-                                <digi:trn key="aim:clickToViewcomponentsManager">Click here to view Components Manager</digi:trn>
+                                <digi:trn key="aim:clickToViewindicatormanager">Click here to view Indicator Manager</digi:trn>
                               </c:set>
                               <digi:link href="/viewIndicators.do" title="${translation}" >
                                 <digi:trn key="aim:indManager">Indicator Manager</digi:trn>

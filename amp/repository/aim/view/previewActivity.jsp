@@ -1497,7 +1497,7 @@ function viewChanges()
                                                                               </c:if>
                                                                            
                                                                                     <!-- Disbursement orders-->
-                                                                              <feature:display module="Funding" name="Disbursement orders">
+                                                                              <feature:display module="Funding" name="Disbursement Orders">
 
                                                                                 <tr bgcolor="#ffffff">
                                                                                 <td colspan="5">&nbsp;</td>

@@ -64,7 +64,7 @@ public class AmountCellXLS extends XLSExporter {
 		if (tempAm == 0)
 			cell.setCellValue("");
 		else
-			cell.setCellValue(mf.format(tempAm));
+		    	cell.setCellValue(Double.parseDouble(mf.format(tempAm)));
 		colId.inc();
 	}
 

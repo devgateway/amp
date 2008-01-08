@@ -99,7 +99,7 @@ public class ShowActivityPrintPreview
         if(actId != null) {
             HttpSession session = request.getSession();
             TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-            AmpActivity activity = ActivityUtil.getAmpActivity(Long.valueOf(actId));
+            AmpActivity activity = ActivityUtil.getAmpActivity(actId);
             if(activity != null){
             	
             	
@@ -160,6 +160,24 @@ public class ShowActivityPrintPreview
                                             trim());
                 }
                 eaForm.setAmpId(activity.getAmpId());
+                if (eaForm.getAmpId() == null) { // if AMP-ID is not generated, generate the AMP-ID
+                    /*
+                     * The logic for geerating the AMP-ID is as follows:
+                     * 1. get default global country code
+                     * 2. Get the maximum of the ampActivityId + 1, MAX_NUM
+                     * 3. merge them
+                     */
+                    String ampId =
+                        FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.
+                                                           Constants.
+                                                           GLOBAL_DEFAULT_COUNTRY).
+                        toUpperCase();
+                    long maxId = ActivityUtil.getActivityMaxId();
+                    maxId++;
+                    ampId += "/" + maxId;
+                    eaForm.setAmpId(ampId);
+                  }
+
                 //String actApprovalStatus = DbUtil.getActivityApprovalStatus(id);
                 eaForm.setStatus(DbUtil.getActivityApprovalStatus(new Long(actId)));
                 
@@ -211,7 +229,10 @@ public class ShowActivityPrintPreview
                         		getDisbursmentsDate()));
 
                 eaForm.setProposedCompDate(DateConversion.ConvertDateToString(activity.getProposedCompletionDate()));
-                eaForm.setContractors(activity.getContractors().trim());
+                if(activity.getContractors()!=null){
+                	eaForm.setContractors(activity.getContractors().trim());
+                }
+                
 
                 Collection col = activity.getClosingDates();
                 List dates = new ArrayList();
@@ -436,8 +457,10 @@ public class ShowActivityPrintPreview
                         .setProgram(activity.getThemeId()
                                     .getAmpThemeId());
                 }
-                eaForm.setProgramDescription(activity
-                                             .getProgramDescription().trim());
+                if(activity.getProgramDescription()!=null){
+                	 eaForm.setProgramDescription(activity.getProgramDescription().trim()); 	
+                }
+               
 
                 double totComm = 0;
                 double totDisb = 0;
@@ -1000,8 +1023,10 @@ public class ShowActivityPrintPreview
                 eaForm.setMfdCntOrganization(activity.getMfdCntOrganization());
                 eaForm.setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
                 eaForm.setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
-
-                eaForm.setConditions(activity.getCondition().trim());
+                if(activity.getCondition()!=null){
+                	 eaForm.setConditions(activity.getCondition().trim());
+                }
+               
                 
                 AmpCategoryValue ampCategoryValue = CategoryManagerUtil.
                 getAmpCategoryValueFromList(CategoryConstants.ACCHAPTER_NAME,

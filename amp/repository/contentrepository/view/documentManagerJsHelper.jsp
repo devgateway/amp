@@ -668,9 +668,9 @@ function validateAddDocument() {
 	//alert( document.forms['crDocumentManagerForm'].fileData.value );
 	var msg	= '';
 	if (document.forms['crDocumentManagerForm'].docTitle.value == '')
-		msg = msg + '${translation_validation_title}' ;
+		msg = msg + "${translation_validation_title}" ;
 	if (document.forms['crDocumentManagerForm'].fileData.value == '')
-		msg = msg + '${translation_validation_filedata}' ;
+		msg = msg + "${translation_validation_filedata}" ;
 	
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML	= msg;
 	if (msg.length == 0)

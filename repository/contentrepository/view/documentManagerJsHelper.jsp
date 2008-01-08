@@ -223,7 +223,7 @@ function getCallbackForDelete (row, table) {
 		},
 		failure: function(o) {
 			//YAHOO.amp.panels[2].setBody("<div align='center'><font color='red'>${translation3}</font></div>");
-			alert('${translation3}');
+			alert("${translation3}");
 		}
 	}
 	return callbackForDelete;
@@ -455,7 +455,7 @@ function doSelectedDocuments(action) {
 									window.location.replace(window.location.href);						
 								},
 						failure:function(o){
-									alert('${translation_remove_failed}');
+									alert("${translation_remove_failed}");
 								}
 						}
 	}
@@ -668,9 +668,9 @@ function validateAddDocument() {
 	//alert( document.forms['crDocumentManagerForm'].fileData.value );
 	var msg	= '';
 	if (document.forms['crDocumentManagerForm'].docTitle.value == '')
-		msg = msg + '${translation_validation_title}  ' ;
+		msg = msg + "${translation_validation_title}" ;
 	if (document.forms['crDocumentManagerForm'].fileData.value == '')
-		msg = msg + '${translation_validation_filedata}' ;
+		msg = msg + "${translation_validation_filedata}" ;
 	
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML	= msg;
 	if (msg.length == 0)

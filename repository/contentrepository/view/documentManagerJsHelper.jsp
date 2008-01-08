@@ -433,7 +433,7 @@ function removeSelectedDocuments() {
 function doSelectedDocuments(action) {
 	selectedDocs	= getAllSelectedDocuments();
 	if (selectedDocs.length == 0) {
-		alert('${translation_no_doc_selected}');
+		alert("${translation_no_doc_selected}");
 		return;
 	}
 	

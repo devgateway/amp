@@ -113,6 +113,7 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	}
 
 	public String getProperName() throws IOException {
+		//System.out.println("-----------------------"+FeaturesUtil.makeProperString(this.getName()));
 		return FeaturesUtil.makeProperString(this.getName());
 	}
 

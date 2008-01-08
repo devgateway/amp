@@ -720,7 +720,8 @@
 
 																<tr><td valign="center" align="center" bgcolor="#dddddd" height="20">
 
-																	<input class="buton" type="button" name="addIndicator" value="Add Indicators"
+																	
+																	<input class="buton" type="button" name="addIndicator" value="<digi:trn key="aim:addIndicator">Add Indicator 2</digi:trn>"
 
 																	property="activityId"
 

@@ -342,7 +342,7 @@ function banUser(txt) {
 															<td>
 																<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
 															<td>
-																<digi:link href="/admin.do">
+																<digi:link module="aim"  href="/admin.do">
 																<digi:trn key="aim:AmpAdminHome">
 																Admin Home
 																</digi:trn>

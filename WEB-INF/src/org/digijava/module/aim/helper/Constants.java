@@ -295,5 +295,5 @@ public class Constants
 	public static final String MY_REPORTS_PER_PAGE = "myReportsPerPage";
 
        
-    public static final String   FEATURE_MANAGER_VISIBILITY_TREE_UPDATED="The visibility tree was updated." ;
+    public static final String   FEATURE_MANAGER_VISIBILITY_TREE_UPDATED="Your changes have been saved." ;
 }

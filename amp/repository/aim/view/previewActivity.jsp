@@ -84,7 +84,7 @@ function toggleGroup(group_id){
 	$(strId+'_minus').toggle();
 	$(strId+'_plus').toggle();
 	$(strId+'_dots').toggle();
-	$(strId).toggle('fast');
+	$('#act_'+group_id).toggle('fast');
 }
 
 function viewChanges()
@@ -98,7 +98,21 @@ function viewChanges()
 
 }
 
+function expandAll() {
+   
+	$("img[@id$='_minus']").show();
+	$("img[@id$='_plus']").hide();	
+	$("div[@id$='_dots']").hide();
+	$("div[@id^='act_']").show('fast');
+}
 
+function collapseAll() {
+
+	$("img[@id$='_minus']").hide();
+	$("img[@id$='_plus']").show();	
+	$("div[@id$='_dots']").show();
+	$("div[@id^='act_']").hide();
+}
 -->
 
 </script>
@@ -382,7 +396,7 @@ function viewChanges()
 												<digi:trn key="aim:editActivity">
 													Edit Activity
 												</digi:trn>
-											</c:if></span>
+											</c:if></span>											
 										</td>
 									</tr>
 								</table>
@@ -392,6 +406,10 @@ function viewChanges()
 							<td width="50%" align="right">
 								<table cellSpacing="1" cellPadding="1" vAlign="bottom" border=0>
 									<tr>
+										<td>
+										<input type="button" class="button" onclick="javascript:expandAll()" value="expand all"/>
+										<input type="button" class="button" onclick="javascript:collapseAll()" value="collapse all"/>
+										</td>
 										<td height=16 vAlign=bottom align="right">
 											<digi:img src="module/aim/images/print_icon.gif"/>
 										</td>
@@ -434,8 +452,7 @@ function viewChanges()
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td align="center" vAlign="top" bgcolor="#ffffff">
 								<table width="100%" cellSpacing=1 cellpadding=3 bgcolor="#dddddd">
-
-									<feature:display name="Identification" module="Project ID and Planning">
+																<feature:display name="Identification" module="Project ID and Planning">
 									<tr>
 										<td width="30%" align="right" valign="top" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:ampId">
@@ -525,7 +542,7 @@ function viewChanges()
 											<digi:trn key="aim:sector">	Sector</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<div id="sector_dots">...</div>
-											<div id="sector" style="display: none;">
+											<div id="act_sector" style="display: none;">
 											<c:if test="${!empty aimEditActivityForm.activitySectors}">
 												<table width="100%" cellSpacing="2" cellPadding="1">
 												<c:forEach var="sectors" items="${aimEditActivityForm.activitySectors}">
@@ -560,7 +577,7 @@ function viewChanges()
 											Location</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<div id="location_dots">...</div>
-											<div id="location" style="display: none;">
+											<div id="act_location" style="display: none;">
 											<c:if test="${!empty aimEditActivityForm.selectedLocs}">
 												<table width="100%" cellSpacing="2" cellPadding="1">
 												<c:forEach var="locations" items="${aimEditActivityForm.selectedLocs}">
@@ -815,7 +832,7 @@ function viewChanges()
 											Issues</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<div id="issues_dots">...</div>
-											<div id="issues" style="display: none;">
+											<div id="act_issues" style="display: none;">
 											<c:if test="${!empty aimEditActivityForm.issues}">
 												<table width="100%" cellSpacing="2" cellPadding="2" border="0">
 												<c:forEach var="issue" items="${aimEditActivityForm.issues}">
@@ -852,7 +869,7 @@ function viewChanges()
 											Related Documents</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<div id="related_documents_dots">...</div>
-											<div id="related_documents" style="display: none;">
+											<div id="act_related_documents" style="display: none;">
 											<c:if test="${!empty aimEditActivityForm.documentList}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
 												 <logic:iterate name="aimEditActivityForm"  property="documents"
@@ -925,7 +942,7 @@ function viewChanges()
 											<b><digi:trn key="aim:executingAgency">Executing Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
 												<div id="executing_agency_dots">...</div>
-												<div id="executing_agency" style="display: none;">
+												<div id="act_executing_agency" style="display: none;">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="executingAgencies"
@@ -947,7 +964,7 @@ function viewChanges()
 											<b><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="impAgencies">
 												<div id="implementing_agency_dots">...</div>
-												<div id="implementing_agency" style="display: none;">
+												<div id="act_implementing_agency" style="display: none;">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="impAgencies"
@@ -971,7 +988,7 @@ function viewChanges()
 									
 											<logic:notEmpty name="aimEditActivityForm" property="benAgencies">
 												<div id="benAgencies_dots">...</div>
-												<div id="benAgencies_agency" style="display: none;">
+												<div id="act_benAgencies_agency" style="display: none;">
 													<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 														<tr><td>
 														<logic:iterate name="aimEditActivityForm" property="benAgencies"
@@ -992,7 +1009,7 @@ function viewChanges()
 											<b><digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="conAgencies">
 												<div id="contracting_agency_dots">...</div>
-												<div id="contracting_agency" style="display: none;">
+												<div id="act_contracting_agency" style="display: none;">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="conAgencies"
@@ -1017,7 +1034,7 @@ function viewChanges()
 											<b><digi:trn key="aim:sectorGroup">Sector Group</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="sectGroups">
 												<div id="sectGroups_dots">...</div>
-												<div id="sectGroups_agency" style="display: none;">
+												<div id="act_sectGroups_agency" style="display: none;">
 													<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 														<tr><td>
 														<logic:iterate name="aimEditActivityForm" property="sectGroups"
@@ -1042,7 +1059,7 @@ function viewChanges()
 											<b><digi:trn key="aim:regionalGroup">Regional Group</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="regGroups">
 											<div id="regGroups_dots">...</div>
-												<div id="regGroups_agency" style="display: none;">
+												<div id="act_regGroups_agency" style="display: none;">
 												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
 													<tr><td>
 													<logic:iterate name="aimEditActivityForm" property="regGroups"
@@ -1066,7 +1083,7 @@ function viewChanges()
 											<img id="group_planning_minus" onclick="toggleGroup('group_planning')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display : none"/>
 											<digi:trn key="aim:planning">Planning</digi:trn>										</td><td bgcolor="#ffffff">
 											<div id="group_planning_dots">...</div>
-											<div id="group_planning" style="display: none;">
+											<div id="act_group_planning" style="display: none;">
 											<table width="100%" cellSpacing=2 cellPadding=1>
 												<field:display feature="Planning" name="Line Ministry Rank">
 												<tr>
@@ -1217,7 +1234,7 @@ function viewChanges()
 											<digi:trn key="aim:preview:component_Sector">Components</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<div id="component_sector_dots">...</div>
-											<div id="component_sector" style="display: none;">
+											<div id="act_component_sector" style="display: none;">
 												<table>
 													<c:forEach var="compo" items="${aimEditActivityForm.activityComponentes}">
 													<tr>
@@ -1305,7 +1322,7 @@ function viewChanges()
 											<digi:trn key="aim:funding">Funding</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<div id="group_funding_dots"><bean:write name="aimEditActivityForm" property="totalCommitted"/>&nbsp;USD&nbsp; ...</div>
-											<div id="group_funding" style="display: none;">
+											<div id="act_group_funding" style="display: none;">
 										    <table width="95%" cellSpacing=1 cellPadding=0 border=0 align="center">
                                               <tr>
                                                 <td>
@@ -1978,7 +1995,7 @@ function viewChanges()
 											Components</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<div id="components_dots">...</div>
-											<div id="components" style="display: none;">
+											<div id="act_components" style="display: none;">
 											<c:if test="${!empty aimEditActivityForm.selectedComponents}">
 												<c:forEach var="comp" items="${aimEditActivityForm.selectedComponents}">
 													<table width="100%" cellSpacing="1" cellPadding="1">

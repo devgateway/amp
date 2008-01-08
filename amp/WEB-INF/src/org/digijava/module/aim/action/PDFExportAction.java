@@ -38,14 +38,17 @@ import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.ExceptionConverter;
 import com.lowagie.text.Font;
+import com.lowagie.text.HeaderFooter;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPageEvent;
+import com.lowagie.text.pdf.PdfTable;
 import com.lowagie.text.pdf.PdfWriter;
 
 /**
@@ -159,12 +162,26 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		table.addCell(pdfc);
 		
 		
-		
 		GroupReportDataPDF grdp=new GroupReportDataPDF(table,rd,null);
 		grdp.setMetadata(r);
 		
 		//generate a PDF output of the report structure:
 		grdp.generate();		
+		
+		if (r.getFormatedUpdatedDate()!=null){
+		pdfc = new PdfPCell(new Paragraph(TranslatorWorker.translate("rep:print:lastupdate",locale,siteId)+
+					" " + r.getFormatedUpdatedDate()+ " " + 
+					TranslatorWorker.translate("rep:print:user",locale,siteId) + " " + r.getUser()));
+		}
+		else{
+			pdfc = new PdfPCell(new Paragraph(TranslatorWorker.translate("rep:print:lastupdate",locale,siteId)+
+					" " + 
+					TranslatorWorker.translate("rep:print:user",locale,siteId) + " " + r.getUser()));	
+		}
+			
+		pdfc.setColspan(rd.getTotalDepth());
+		table.addCell(pdfc);
+		
 		this.onEndPage(writer,document);
 		document.add(table);
 		document.setMargins(5,5,5,5);
@@ -204,6 +221,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 
 	public void onEndPage(PdfWriter writer, Document document) {
 		try {
+			
             Rectangle page = document.getPageSize();
                      
             BaseFont helv = BaseFont.createFont("Helvetica", BaseFont.WINANSI, false);

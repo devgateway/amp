@@ -8,7 +8,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <div id="mySorter" style="display: none">
-		<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
+	<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
         <!--
 		<a href='#' onclick='hideSorter();return false'>
 			<b>
@@ -180,13 +180,28 @@
 		</tr>
 		<tr>
 			<td>
+				<logic:equal name="viewFormat" value="print">
+				<u><digi:trn key="rep:print:lastupdate">Last Update :</digi:trn></u>
 				&nbsp;
+				<c:if test="${reportMeta.updatedDate != null}">
+					<bean:write scope="session" name="reportMeta" property="updatedDate"/>
+				</c:if>
+				&nbsp;
+				<u><digi:trn key="rep:print:user">User :</digi:trn></u>
+				<c:if test="${reportMeta.user != null}">
+					<bean:write scope="session" name="reportMeta" property="user"/>
+				</c:if>
+				</logic:equal>
+			<BR>
 			</td>
 		</tr>
 		
 			<tr>
-			<td>
-				<digi:trn key="aim:pages">Pages :</digi:trn>&nbsp;
+			 <td>
+				<logic:notEqual name="viewFormat" value="print">
+				<digi:trn key="aim:pages">Pages :
+				
+				</digi:trn>&nbsp;
 				<c:forEach var="i" begin="1" end="${report.visibleRows}" step="${recordsPerPage}">
 					<logic:equal name="viewFormat" value="html">
 							<a  style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage}"/>';">
@@ -205,9 +220,10 @@
 							</a>
 				|&nbsp
 				</c:forEach>
+				</logic:notEqual>
 			</td>
 			</tr>
-		
+			
 
 	</logic:notEqual>
 	<logic:equal name="report" property="totalUniqueRows" value="0">

@@ -841,6 +841,21 @@ A.menu:hover
 	border-left-width: 1px
 }
 
+.button 
+{  
+	font-family: Verdana, Arial, Helvetica, sans-serif; 
+	font-size: 9px; 
+	color: #000000; 
+	text-decoration: none; 
+	background-color: #ECF3FD; 
+	border-color: #FFFFFF #003399 #003399 #FFFFFF; 
+	border-style: solid; 
+	border-top-width: 1px; 
+	border-right-width: 1px; 
+	border-bottom-width: 1px; 
+	border-left-width: 1px
+}
+
 .text_search 
 {
 		  font-family: Verdana, Arial, Helvetica, sans-serif; 

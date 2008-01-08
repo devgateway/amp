@@ -741,7 +741,7 @@
 		[-] multitag "Add Actors"
 			[ ] "$javascript:addActors('1198264844266','1198264883141')"
 [ ] 
-[+] window BrowserChild AMPAddPhysicalProgress
+[-] window BrowserChild AMPAddPhysicalProgress
 	[ ] tag "AMP - Add Physical Progress"
 	[ ] parent Browser
 	[+] HtmlTextField Title
@@ -782,7 +782,7 @@
 			[-] HtmlText N22
 				[ ] tag "22"
 [ ] 
-[+] window BrowserChild AMPAddComponents
+[-] window BrowserChild AMPAddComponents
 	[ ] tag "AMP - Add Components"
 	[ ] parent Browser
 	[+] HtmlPopupList Component
@@ -906,7 +906,7 @@
 			[ ] "Actor"
 			[ ] "$actor"
 [ ] 
-[+] window BrowserChild AMPAddFunding
+[-] window BrowserChild AMPAddFunding
 	[ ] tag "AMP - Add Funding"
 	[ ] parent Browser
 	[+] HtmlPopupList AssistanceType
@@ -998,7 +998,7 @@
 			[ ] "$fundingConditions"
 	[+] HtmlPushButton Save
 		[ ] tag "Save"
-	[+] HtmlTable HtmlTable1
+	[-] HtmlTable HtmlTable1
 		[ ] tag "#1"
 		[+] HtmlColumn Commitments
 			[ ] tag "Commitments"
@@ -1017,7 +1017,7 @@
 			[-] HtmlImage ClickToViewCalendar
 				[-] multitag "Click to View Calendar"
 					[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho"
-	[+] HtmlTable Today
+	[-] HtmlTable Today
 		[ ] tag "Today"
 		[+] HtmlColumn Fri
 			[ ] tag "Fri"
@@ -1040,7 +1040,7 @@
 		[-] multitag "Components"
 			[ ] "$javascript:gotoStep(5)[1]"
 [ ] 
-[+] window BrowserChild AMPAddRegionalFunding
+[-] window BrowserChild AMPAddRegionalFunding
 	[ ] tag "AMP - Add Regional Funding"
 	[ ] parent Browser
 	[+] HtmlPopupList Region
@@ -1360,7 +1360,7 @@
 	[-] HtmlPushButton AddActivity
 		[ ] tag "Add Activity"
 [ ] 
-[+] window BrowserChild AMPAddEditActivity
+[-] window BrowserChild AMPAddEditActivity
 	[ ] tag "AMP - Edit Activity"
 	[ ] parent Browser
 	[+] HtmlTextField ActivityName
@@ -1411,7 +1411,7 @@
 		[-] multitag "&name='assumptions'"
 			[ ] "Assumptions:"
 			[ ] "$assumptions"
-	[+] HtmlTextField DueDate
+	[-] HtmlTextField DueDate
 		[-] multitag "&name='dueDate'"
 			[ ] "Due Date*"
 			[ ] "$dueDate"
@@ -1511,21 +1511,21 @@
 		[ ] tag "Please wait a moment"
 	[+] HtmlPushButton Submit
 		[ ] tag "Submit"
-[+] window BrowserChild ProposedProjectCost
+[-] window BrowserChild ProposedProjectCost
 	[ ] tag "Proposed Project Cost"
 	[ ] parent Browser
-	[+] HtmlTextField Planned
+	[-] HtmlTextField Planned
 		[-] multitag "&id='funAmount';name='proProjCost.funAmount'"
 			[ ] "Planned"
 			[ ] "$proProjCost.funAmount"
-	[+] HtmlPopupList Currency
+	[-] HtmlPopupList Currency
 		[-] multitag "&name='proProjCost.currencyCode'"
 			[ ] "Currency"
 			[ ] "$proProjCost.currencyCode"
-	[+] HtmlImage ClickToViewCalendar
+	[-] HtmlImage ClickToViewCalendar
 		[-] multitag "Click to View Calendar"
 			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho"
-	[+] HtmlTable Today
+	[-] HtmlTable Today
 		[ ] tag "Today"
 		[+] HtmlColumn Sun
 			[ ] tag "Sun"

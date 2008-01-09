@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+	<hibernate-mapping>
+		<class name="org.digijava.module.aim.dbentity.AmpIndicator" table="AMP_INDICATORS">
+			<id name="indicatorId" column="indicator_id">
+			  <generator class="native"/>
+			</id>
+
+			<property name="name" column="name" type="java.lang.String"/>
+			<property name="code" column="code" type="java.lang.String"/>
+			<property name="description" column="description" type="org.digijava.kernel.db.SafeClobType"/>
+			<property name="type" column="type" type="java.lang.String"/>
+			<property name="creationDate" column="creation_date" type="java.util.Date"/>
+			<property name="defaultInd" column="default_ind" type="java.lang.Boolean"/>
+			
+		<set name="themes" table="AMP_THEME_INDICATOR" lazy="true" inverse="true" cascade="none">
+			<cache usage="read-write"/>
+			<key column="indicator_id"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpTheme" column="amp_theme_id"/>
+		</set>
+			
+		<set name="sectors" table="AMP_INDICATOR_SECTORS" lazy="true" inverse="true" cascade="all">
+			<cache usage="read-write"/>
+			<key column="indicator_id"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpSector" column="amp_sector_id"/>
+		</set>
+			
+		<set name="activity" table="AMP_INDICATOR_PROJECT" lazy="true" inverse="true" cascade="all">
+			<cache usage="read-write"/>
+			<key column="indicator_id"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivity" column="amp_activity_id"/>
+		</set>
+					
+	</class>
+</hibernate-mapping>

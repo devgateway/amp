@@ -16,7 +16,9 @@ import org.apache.struts.action.ActionMapping;
 
 import org.digijava.module.aim.form.IndicatorForm;
 import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 public class SelectCreateIndicators extends Action {
@@ -36,14 +38,14 @@ public class SelectCreateIndicators extends Action {
 		
 		IndicatorForm indForm = (IndicatorForm) form;
 
-		nonDefaultInd = MEIndicatorsUtil.getAllNonDefaultIndicators();
-		activityInd = MEIndicatorsUtil.getActivityIndicatorsList(indForm
+		nonDefaultInd = IndicatorUtil.getAllNonDefaultIndicators();
+		activityInd = IndicatorUtil.getActivityIndicatorsList(indForm
 				.getActivityId());
 
 		Iterator nonDefaultItr = nonDefaultInd.iterator();
 
 		while (nonDefaultItr.hasNext()) {
-			AmpMEIndicators tempNonDefaultInd = (AmpMEIndicators) nonDefaultItr
+			AmpIndicator tempNonDefaultInd = (AmpIndicator) nonDefaultItr
 					.next();
 			Iterator activityIndItr = activityInd.iterator();
 			sameIndicator = false;
@@ -51,7 +53,7 @@ public class SelectCreateIndicators extends Action {
 				ActivityIndicator tempActInd = (ActivityIndicator) activityIndItr
 						.next();
 
-				if (tempNonDefaultInd.getAmpMEIndId().equals(
+				if (tempNonDefaultInd.getIndicatorId().equals(
 						tempActInd.getIndicatorId()))
 					sameIndicator = true;
 			}

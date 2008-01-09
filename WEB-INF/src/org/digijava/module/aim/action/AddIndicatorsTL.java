@@ -16,6 +16,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 public class AddIndicatorsTL extends Action {
@@ -44,8 +45,8 @@ public class AddIndicatorsTL extends Action {
 					ampMEIndValbox = new AmpMEIndicatorValue();
 					ampMEIndbox = new AmpMEIndicators();
 					ampMEIndbox.setAmpMEIndId(selectedIndicators[i]);
-					ampMEIndbox.setName(MEIndicatorsUtil.getMEIndicatorName(selectedIndicators[i]));
-					ampMEIndbox.setCode(MEIndicatorsUtil.getMEIndicator(selectedIndicators[i]).getCode());
+					ampMEIndbox.setName(IndicatorUtil.getIndicatorName(selectedIndicators[i]));
+					ampMEIndbox.setCode(IndicatorUtil.getIndicatorCode(selectedIndicators[i]));
 					ampMEIndValbox.setActivityId(ampAct);
 					ampMEIndValbox.setMeIndicatorId(ampMEIndbox);
 					ampMEIndValbox.setBaseVal(null);

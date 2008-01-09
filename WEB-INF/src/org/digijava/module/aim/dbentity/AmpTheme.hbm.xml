@@ -30,23 +30,20 @@
 
         <many-to-one name="activityId" column="amp_activity_id" class="org.digijava.module.aim.dbentity.AmpActivity"
 					 cascade="none" not-null="false" />
-
 		<set name="activities" table="AMP_ACTIVITY_THEME" lazy="true" cascade="none" inverse="true">
 			<cache usage="read-write"/>
 			<key column="amp_theme_id"/>
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivity" column="amp_activity_id"/>
 		</set>
-
         <set name="indicators" table="AMP_THEME_INDICATOR" lazy="true" cascade="none">
 			<cache usage="read-write"/>
 			<key column="amp_theme_id"/>
-			<many-to-many class="org.digijava.module.aim.dbentity.AmpThemeIndicators" column="amp_theme_ind_id"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpIndicator" column="indicator_id"/>
 		</set>
-
-                  <set name="programSettings" lazy="false">
+       <set name="programSettings" lazy="false">
 			<cache usage="read-write"/>
 			<key column="default_hierarchy" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityProgramSettings"  />
-                  </set>
+       </set>
 	</class>
 </hibernate-mapping>

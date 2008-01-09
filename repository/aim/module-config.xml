@@ -306,6 +306,9 @@
 	<hibernate-class>
 			  org.digijava.module.aim.dbentity.AmpIndicatorSector
 	</hibernate-class>
+	<hibernate-class>
+			  org.digijava.module.aim.dbentity.AmpIndicator
+	</hibernate-class>
         <hibernate-class>
 			  org.digijava.module.aim.dbentity.AmpActivityProgramSettings
 	</hibernate-class>

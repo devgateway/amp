@@ -68,7 +68,7 @@ if(!document.aimNewIndicatorForm.IndType.checked && !document.aimNewIndicatorFor
          document.getElementById("IndTypChecke").value = valind;
       }
  
- 
+ /*
 	var length = document.aimNewIndicatorForm.selActivitySector.length;
 	var Sector;
 	
@@ -81,7 +81,7 @@ if(!document.aimNewIndicatorForm.IndType.checked && !document.aimNewIndicatorFor
 			document.getElementById("hdnselActivitySectors").value = Sector;
 		}
 	}
-
+*/
   <digi:context name="addInd" property="context/module/moduleinstance/addNewIndicator.do?action=add" />
   document.forms[0].action="<%=addInd%>";
   document.forms[0].submit();

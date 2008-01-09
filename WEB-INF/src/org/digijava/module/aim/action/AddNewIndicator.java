@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.digijava.module.aim.form.NewIndicatorForm;
 import org.digijava.module.aim.form.ThemeForm;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
@@ -88,7 +89,7 @@ public class AddNewIndicator
              newIndForm.getName() != null &&  
              newIndForm.getCode() != null){
         	
-        	if(newIndForm.getIndicatorType() == 0){
+        	if(newIndForm.getIndicatorType() == 0 || newIndForm.getIndType() == 2){
         		 AmpPrgIndicator newInd = new AmpPrgIndicator();
                  newInd.setCategory(newIndForm.getCategory());
                  newInd.setCode(newIndForm.getCode());
@@ -98,15 +99,18 @@ public class AddNewIndicator
                  newInd.setType(newIndForm.getType());
                  newInd.setSector(newIndForm.getSelActivitySector());
                  newInd.setIndSectores(newIndForm.getActivitySectors());
-                 newIndForm.setSelectedProgramId(new Long(1));
-               
-                 ProgramUtil.saveThemeIndicators(newInd, newIndForm.getSelectedProgramId());
-
+	                 if(newIndForm.getSelectedActivityId() == null && 
+	                	newIndForm.getActivitySectors() == null ){
+	                	   newInd.setDefaultInd(true);
+	                      }
+                 newInd.setSelectedActivityId(newIndForm.getSelectedActivityId());
+                 IndicatorUtil.saveIndicators(newInd);
+//                 ProgramUtil.saveThemeIndicators(newInd, newIndForm.getSelectedProgramId());
                  //newIndForm.reset();
-        		
         		
         	}
         	
+/*
         	if(newIndForm.getIndType() ==2 && newIndForm.getSelectedActivityId() == null ){
         		
         		 AllMEIndicators newInd = new AllMEIndicators();
@@ -130,7 +134,7 @@ public class AddNewIndicator
                  MEIndicatorsUtil.saveMEIndicator(newInd, newIndForm.getSelectedActivityId(), true);
                  newIndForm.reset();
         		
-        	}
+        	}*/
         }
         	
 //            switch(newIndForm.getIndType()) {

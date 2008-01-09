@@ -304,11 +304,11 @@ function closeWindow()
                                     </tr>
                               <logic:notEmpty name="aimThemeForm" property="pagedCol">  
                                     <logic:iterate name="aimThemeForm" id="indicators" property="pagedCol"
-									type="org.digijava.module.aim.dbentity.AmpThemeIndicators">
+									type="org.digijava.module.aim.dbentity.AmpIndicator">
 										<tr>
 											<td bgcolor=#ECF3FD width="10%">
 											<html:multibox property="indid">
-													<bean:write name="indicators" property="ampThemeIndId" />
+													<bean:write name="indicators" property="indicatorId" />
 											</html:multibox>
 											</td>
 											<td bgcolor=#ECF3FD width="90%">

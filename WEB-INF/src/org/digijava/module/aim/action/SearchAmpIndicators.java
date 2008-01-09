@@ -7,8 +7,10 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
@@ -58,7 +60,12 @@ public class SearchAmpIndicators extends Action {
 		if (alpha == null || alpha.trim().length() == 0) {
 			col = new ArrayList();
 			eaForm.setNumResults(eaForm.getTempNumResults());
-
+			
+			if(eaForm.getAction() == null){
+				eaForm.setAction("selected");
+				
+			}
+			
 			if (!eaForm.getAction().equals("viewall")) {
 				if (eaForm.getKeyword().trim().length() != 0) {
 					// serach for indicators based on the keyword and the
@@ -80,7 +87,7 @@ public class SearchAmpIndicators extends Action {
 				col = ProgramUtil.searchForindicator(eaForm.getKeyword().trim());
 			} else  {
 				// get all indicators since keyword field is blank and ind type field has 'ALL'.
-				col = ProgramUtil.getAmpThemeIndicators();
+				col = IndicatorUtil.getAmpIndicator();
 				
 				/**
 		         * Returns All project indicator.
@@ -123,7 +130,7 @@ public class SearchAmpIndicators extends Action {
 				for(char c = 'A'; c <= 'Z'; c++) {
 					Iterator itr = col.iterator();
 					while(itr.hasNext()) {
-						AmpThemeIndicators org = (AmpThemeIndicators) itr.next();
+						AmpIndicator org = (AmpIndicator) itr.next();
 						if (org.getName().toUpperCase().indexOf(c) == 0) {
 							alphaArray[i++] = String.valueOf(c);
 							break;
@@ -143,7 +150,7 @@ public class SearchAmpIndicators extends Action {
 				colAlpha = new ArrayList();
 				Iterator itr = col.iterator();
 				while(itr.hasNext()) {
-					AmpThemeIndicators org = (AmpThemeIndicators) itr.next();
+					AmpIndicator org = (AmpIndicator) itr.next();
 					if (org.getName().toUpperCase().startsWith(alpha)) {
 						colAlpha.add(org);
 					}

@@ -185,9 +185,8 @@ public class UpdateAppSettings extends Action {
 						(defaultAmpReport!=null && ampReport!=null && defaultAmpReport.getAmpReportId().longValue()!=ampReport.getAmpReportId().longValue()) )
 				{
 					ampAppSettings.setDefaultTeamReport(ampReport);
-
 					httpSession.setAttribute(Constants.DEFAULT_TEAM_REPORT, ampAppSettings.getDefaultTeamReport() );
-
+					httpSession.setAttribute("filterCurrentReport", ampAppSettings.getDefaultTeamReport() );
 					//this.updateAllTeamMembersDefaultReport( tm.getTeamId(), ampReport);
 				}
 

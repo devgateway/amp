@@ -68,18 +68,18 @@ public class TotalAmountColumn extends AmountCellColumn {
         AmountCell ac=(AmountCell) c;
         if(filterShowable && !ac.isShow()) return; 
         Iterator i=items.iterator();
-        Cell freshc=null;
+        Cell freshc=new AmountCell();
         while (i.hasNext()) {
             AmountCell element = (AmountCell) i.next();            
             if(element.getOwnerId().equals(ac.getOwnerId())) {
-                freshc=element.merge(ac);
-                freshc.setOwnerId(element.getOwnerId());
+        	freshc.setOwnerId(element.getOwnerId());
+        	freshc.merge(ac,element);
                 i.remove();
                 break;                
             }
         }
-        if(freshc==null)
-			super.addCell(ac);
+        if(freshc.getOwnerId()==null)
+		super.addCell(ac);
         else 
         	super.addCell(freshc);
         	

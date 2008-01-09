@@ -81,5 +81,10 @@ public class TextCell extends Cell {
 	public Comparable comparableToken() {
 		return value;
 	}
+
+	@Override
+	public void merge(Cell c1, Cell c2) {
+		this.setValue((this.equals(c1)?"":c1.getValue()+(String)(this.equals(c2)?"":c2.getValue())));
+	}
 	
 }

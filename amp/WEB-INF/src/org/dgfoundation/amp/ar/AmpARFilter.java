@@ -48,6 +48,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Set regions=null;
 	private Set risks=null;
 	
+	
 	private Set financingInstruments=null;
 	//private Long ampModalityId=null;
 	
@@ -62,6 +63,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Integer planMinRank;
 	private Integer fromYear;
 	private Integer toYear;	
+	private Long regionSelected=null;
 	
 	private Boolean governmentApprovalProcedures;
 	private Boolean jointCriteria;
@@ -147,6 +149,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		String FINANCING_INSTR_FILTER="SELECT amp_activity_id FROM v_financing_instrument WHERE amp_modality_id IN ("+Util.toCSString(financingInstruments, true)+")";
 		String LINE_MIN_RANK_FILTER="SELECT amp_activity_id FROM amp_activity WHERE line_min_rank="+lineMinRank;
 		String PLAN_MIN_RANK_FILTER="SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank="+planMinRank;
+		String REGION_SELECTED_FILTER="SELECT amp_activity_id FROM v_regions WHERE region_id ="+regionSelected;
 		
 		if(text!=null)
 		{
@@ -176,6 +179,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		if(risks!=null && risks.size()>0) queryAppend(RISK_FILTER);
 		if(lineMinRank!=null) queryAppend(LINE_MIN_RANK_FILTER);
 		if(planMinRank!=null) queryAppend(PLAN_MIN_RANK_FILTER);
+		if(regionSelected!=null) queryAppend(REGION_SELECTED_FILTER);
 		
 		if(governmentApprovalProcedures!=null)
 		{
@@ -505,5 +509,15 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	@Override
 	public String getBeanName() {
 		return null;
-	} 
+	}
+
+	public Long getRegionSelected() {
+		return regionSelected;
+	}
+
+	public void setRegionSelected(Long regionSelected) {
+		this.regionSelected = regionSelected;
+	}
+
+	
 }

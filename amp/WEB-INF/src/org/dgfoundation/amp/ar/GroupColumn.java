@@ -200,17 +200,7 @@ public class GroupColumn extends Column {
         	Iterator ii=src.iterator();
         	while (ii.hasNext()) {
 				AmountCell element = (AmountCell) ii.next();
-				AmountCell clone = null;
-				try {
-					clone = (AmountCell) element.clone();
-				} catch (CloneNotSupportedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					logger.error(e);
-				}
-				clone.setAmount(0);
-				clone.getMergedCells().clear();
-				acc.addCell(clone);
+				acc.addCell(element);
 			}
         	ret=acc;
         	

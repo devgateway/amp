@@ -160,5 +160,18 @@ public class ListCell extends Cell {
 	public Comparable comparableToken() {
 		return getCell(0).comparableToken();
 	}
+
+
+	@Override
+	public void merge(Cell c1, Cell c2) {
+		try {
+			if(!this.equals(c1)) this.addCells((Collection) c1.getValue());
+			if(!this.equals(c2)) this.addCells((Collection) c2.getValue());
+			
+		} catch (IncompatibleCellException e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+	}
 	
 }

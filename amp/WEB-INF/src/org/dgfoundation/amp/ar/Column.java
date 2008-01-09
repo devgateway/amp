@@ -218,7 +218,12 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	 */
 
 	public String getCurrentView() {
+	    try { 
 		return parent.getCurrentView();
+	    } catch (Exception e) {
+		e.printStackTrace();
+		return null;
+	    }
 	}
 
 	/**

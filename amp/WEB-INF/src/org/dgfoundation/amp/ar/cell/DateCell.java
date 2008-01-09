@@ -120,5 +120,11 @@ public class DateCell extends Cell {
 	public Comparable comparableToken() {
 		return value;
 	}
+
+
+	@Override
+	public void merge(Cell c, Cell dest) {
+	    throw new UnsupportedOperationException("DateCellS do not support merging");	    
+	}
 	
 }

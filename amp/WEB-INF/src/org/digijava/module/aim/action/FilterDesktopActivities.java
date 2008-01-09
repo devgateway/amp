@@ -36,6 +36,14 @@ import org.digijava.module.aim.util.DesktopUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 
+/**
+ * @deprecated
+* FilterDesktopActivities.java
+* TODO description here
+* @author mihai
+* @package org.digijava.module.aim.action
+* @since 19.12.2007
+ */
 public class FilterDesktopActivities extends Action {
 
 	private static Logger logger = Logger.getLogger(FilterDesktopActivities.class);

@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.AmpARVRegions;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -41,6 +42,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.springframework.beans.BeanWrapperImpl;
@@ -89,7 +91,8 @@ public class ReportsFilterPicker extends MultiAction {
 //		donors = DbUtil.getAllOrgGroups();
 		donors = DbUtil.getAllOrgGrpBeeingUsed();
 		Collection allIndicatorRisks = MEIndicatorsUtil.getAllIndicatorRisks();
-		
+		//Collection regions=LocationUtil.getAmpLocationsForDefaultCountry();
+		Collection regions=LocationUtil.getAllVRegions();
 		filterForm.setCurrencies(currency);
 		filterForm.setCalendars(allFisCalenders);
 		filterForm.setDonors(donors);
@@ -98,8 +101,9 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setFromYears(new ArrayList());
 		filterForm.setToYears(new ArrayList());
 		filterForm.setPageSizes(pageSizes);
+		filterForm.setRegionSelectedCollection(regions);
 		
-		// loading Activity Rank collection
+				// loading Activity Rank collection
 		if (null == filterForm.getActRankCollection()) {
 			filterForm.setActRankCollection(new ArrayList());
 			for (int i = 1; i < 6; i++)
@@ -122,6 +126,7 @@ public class ReportsFilterPicker extends MultiAction {
 		if (ampReportId != null){
 			
 			AmpReports rep = (AmpReports) DbUtil.getAmpReports(new Long(ampReportId));
+			
 			httpSession.setAttribute("filterCurrentReport", rep);
 		}
 		
@@ -150,6 +155,8 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setPageSize(null);
 		filterForm.setGovernmentApprovalProcedures(null);
 		filterForm.setJointCriteria(null);
+		filterForm.setRegionSelected(null);
+		//filterForm.setRegions(null);
 	
 		return modeApply(mapping,form,request,response);
 	}
@@ -240,6 +247,7 @@ public class ReportsFilterPicker extends MultiAction {
 		Integer all=new Integer(-1);
 		if(!all.equals(filterForm.getLineMinRank())) arf.setLineMinRank(filterForm.getLineMinRank());
 		if(!all.equals(filterForm.getPlanMinRank())) arf.setPlanMinRank(filterForm.getPlanMinRank());
+		if(!all.equals(filterForm.getRegionSelected())) arf.setRegionSelected(filterForm.getRegionSelected()==null ||filterForm.getRegionSelected()==-1?null:filterForm.getRegionSelected() );
 		
 		if(filterForm.getSelectedStatuses()!=null && filterForm.getSelectedStatuses().length>0)
 		arf.setStatuses(new HashSet()); else arf.setStatuses(null);

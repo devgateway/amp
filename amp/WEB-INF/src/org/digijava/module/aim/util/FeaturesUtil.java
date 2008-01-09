@@ -1588,6 +1588,7 @@ public class FeaturesUtil {
 
     }
     catch (Exception ex) {
+    	logger.error("ERROR amp modules visibility" + moduleName);
       ex.printStackTrace();
     }
     finally {

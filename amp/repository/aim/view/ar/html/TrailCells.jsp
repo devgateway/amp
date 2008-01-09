@@ -34,7 +34,7 @@
 	</logic:present> -->
 	</td>
 	<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
-		<td>
+		<td>  
 		<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="caller" name="reportData" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="request" />			
 		<jsp:include page="<%=viewable.getViewerPath()%>"/>	

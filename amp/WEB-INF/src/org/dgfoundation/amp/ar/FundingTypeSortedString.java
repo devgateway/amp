@@ -33,6 +33,7 @@ public class FundingTypeSortedString extends SortedString {
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.SortedString#getOrder()
 	 */
+	@Override
 	public int getOrder() {
 		int max=0;
 		for(int i=0;i<order.length;i++) {

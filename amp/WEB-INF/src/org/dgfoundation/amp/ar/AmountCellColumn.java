@@ -71,7 +71,7 @@ public class AmountCellColumn extends CellColumn {
 				Iterator ii=((ListCell)element).iterator();
 				while (ii.hasNext()) {
 					AmountCell ac = (AmountCell) ii.next();
-					repl=repl.merge(ac);
+					repl.merge(ac,repl);
 				}
 				res.replaceCell(element,repl);				
 			}		
@@ -89,7 +89,7 @@ public class AmountCellColumn extends CellColumn {
 		while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();
 			//logger.info("Merging cell for owner "+element.getOwnerId()+" containing "+element.getMergedCells().size()+" merged cells");
-			ac.merge(element);			
+			ac.merge(element,ac);			
 		}
 		ac.setColumn(this);
 		ar.add(ac);

@@ -195,6 +195,16 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 	public abstract Cell merge(Cell c);
 	
 	/**
+	 * This merge method will perform the operation without instantiating a third Cell.
+	 * It is assumed 
+	 * @see merge(Cell c)
+	 * @param c
+	 * @param dest the destination cell - already instantiated
+	 * 
+	 */
+	public abstract void merge(Cell c, Cell dest);
+	
+	/**
 	 * Provides direct approach to instantiate new CellS using inheritance based constructor.
 	 * @return a new instantiated Cell, with default values.
 	 */

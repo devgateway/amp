@@ -23,7 +23,7 @@ public class AmpLogoutHandler
                        HttpServletResponse httpServletResponse,
                        Authentication authentication) {
         HttpSession session = httpServletRequest.getSession();
-
+        /*
         if(session.getAttribute("currentMember") != null) {
             session.removeAttribute("currentMember");
         }
@@ -60,5 +60,7 @@ public class AmpLogoutHandler
         if (session.getAttribute(Constants.DSKTP_FLTR_CHANGED) != null) {
         	session.removeAttribute(Constants.DSKTP_FLTR_CHANGED);
         }
+        */
+        session.invalidate();
     }
 }

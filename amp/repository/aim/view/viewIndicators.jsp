@@ -7,9 +7,48 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
+
+
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
+<style type="text/css">
+
+a.itr:hover {
+	border-width: 0; /* IE */
+}
+
+.itr {
+	position: relative;
+	text-decoration: none;
+	
+}
+
+.itr:hover .bpop 
+{
+	display: block;
+	position: absolute;
+	width: 100px;
+	background-color: white;
+	padding: 3px 5px 4px 5px;
+	border: 1px Silver solid;
+	
+	left: 8em;
+	top: 0.6em;
+}
+.itr {
+	display: inline-block;
+	top: 0.15em;
+	line-height: 1.05;
+}
+.bpop {
+	display: none;
+}
+</style>
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="javascript">
+
+
+
 
    function setOverImg(index){
 	  document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-righthover1.gif"
@@ -32,9 +71,9 @@
 	  openURLinWindow("<%= addIndicator %>",500, 300);
 	}
 	
-	function editIndicator(id,type){
+	function editIndicator(id){
 	  <digi:context name="viewEditIndicator" property="context/module/moduleinstance/viewEditIndicator.do" />
-	  openURLinWindow("<%= viewEditIndicator %>?id="+id+"&type="+type,500, 300);
+	  openURLinWindow("<%= viewEditIndicator %>?id="+id,500, 300);
 	}
 	
 	function deletePrgIndicator(){
@@ -52,10 +91,6 @@
 
 <digi:form action="/viewIndicators.do" method="post">
   <html:hidden property="sortBy" styleId="sortBy"/>
- 
-  
-  
-  
   <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
     <tr>
       <td class=r-dotted-lg width=14>&nbsp;</td>
@@ -88,8 +123,6 @@
           <tr>
             <td height=16 vAlign="center" width="571">
               <html:errors />
-             
-            
               <c:if test="${!empty aimViewIndicatorsForm.themeName}">
                 This indicator assigned to <span style="color:Red;">${aimViewIndicatorsForm.themeName}</span> 
                 <c:if test="${aimViewIndicatorsForm.flag == 'project'}">
@@ -118,14 +151,13 @@
                                       <b><digi:trn key="aim:indsector">Sector</digi:trn>:</b>
                                     </td>
                                     <td>
-                                      
                                       <html:select property="sectorId" styleClass="inp-text">
                                       			<html:option value="-1">-Select sector-</html:option>
 												<c:if test="${!empty aimViewIndicatorsForm.sectors}">
 														<html:optionsCollection name="aimViewIndicatorsForm" property="sectors" 
 													value="ampSectorId" label="name" />						
 												</c:if>
-									</html:select>
+									 </html:select>
                                     </td>
                                 	<td nowrap="nowrap">
                                       <b><digi:trn key="aim:indsearchkey">Keyword</digi:trn>:</b>
@@ -174,34 +206,24 @@
                                               </a>
                                             </c:if>
                                           </td>
-                                          
                                           <td>
                                           &nbsp;
                                           </td>
                                         </tr>
                                         <c:if test="${!empty aimViewIndicatorsForm.allIndicators}">
                                           <c:forEach var="indItr" items="${aimViewIndicatorsForm.allIndicators}">
-                                            <tr onmouseover="style.backgroundColor='silver';" onmouseout="style.backgroundColor='white'">
-                                              <td>
-                                                <c:set var="tIndType">
-                                                  <c:if test="${indItr.type=='0'}">
-                                                  Program
-                                                  </c:if>
-                                                  <c:if test="${indItr.type=='1'}">
-                                                  Project
-                                                  </c:if>
-                                                  <c:if test="${indItr.type=='2'}">
-                                                  Global
-                                                  </c:if>
-                                                </c:set>
-                                                <a href="javascript:editIndicator('${indItr.id}','${tIndType}');">${indItr.name}</a>
-                                              </td>
+                                            <tr onmouseover="style.backgroundColor='#dddddd';" onmouseout="style.backgroundColor='white'">
+                                              <td id="">
+	                                            <a class="itr" href="javascript:editIndicator('${indItr.id}');">
+                                                <span class="bpop"><b>Indicator Type is:</b><br> <c:if test="${indItr.sectorName == 'Z'}">Global</c:if>
+                                                 <c:if test="${indItr.sectorName != 'Z'}">Program/Project</c:if>
+                                                </span>${indItr.name}</a>
+                                               </td>
                                                <td nowrap="nowrap">
-	                                                <c:forEach var="indItrsec" items="${indItr.sector}">
-	                                            		<b>${indItrsec.sectorId} </b>| &nbsp;
-	                                            	</c:forEach>
-	                                            	
-                                              </td>
+	                                                <c:if test="${indItr.sectorName != 'Z'}">
+	                                            		<b>${indItr.sectorName} </b>&nbsp;
+	                                            	</c:if>
+	                                          </td>
                                               <td style="width:10%;">
                                               <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 														<c:set target="${urlParams}" property="indicatorId">
@@ -225,7 +247,6 @@
                                             <input type="button" value="Add Indicators" id="addBtn" onclick="addIndicator();" style="font-family:verdana;font-size:11px;"/>
                                           </td>
                                         </tr>
-                                        
                                       </table>
                                     </td>
                                   </tr>

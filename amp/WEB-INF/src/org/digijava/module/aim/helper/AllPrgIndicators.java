@@ -17,6 +17,7 @@ public class AllPrgIndicators implements Serializable
 	private Collection themeIndValues;
 	private Collection themes;
 	private Collection sector;
+	private Collection activity;
 	private String sectorName;
 	/**
 	 * @return Returns the category.
@@ -156,5 +157,11 @@ public class AllPrgIndicators implements Serializable
 	}
 	public void setSectorName(String sectorName) {
 		this.sectorName = sectorName;
+	}
+	public Collection getActivity() {
+		return activity;
+	}
+	public void setActivity(Collection activity) {
+		this.activity = activity;
 	}
 }

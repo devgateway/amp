@@ -17,6 +17,9 @@ public class AmpPrgIndicator
 	private Long sector[];
 	private Set sectors;
 	private Collection<AmpIndSectors> indSectores;
+	private Set activity;
+	private Long selectedActivityId;
+    private boolean defaultInd;
 	/**
 	 * @return Returns the category.
 	 */
@@ -134,6 +137,7 @@ public class AmpPrgIndicator
 	public Set getSectors() {
 		return sectors;
 	}
+	
 	public void setSectors(Set sectors) {
 		this.sectors = sectors;
 	}
@@ -142,5 +146,23 @@ public class AmpPrgIndicator
 	}
 	public void setIndSectores(Collection<AmpIndSectors> indSectores) {
 		this.indSectores = indSectores;
+	}
+	public Set getActivity() {
+		return activity;
+	}
+	public void setActivity(Set activity) {
+		this.activity = activity;
+	}
+	public Long getSelectedActivityId() {
+		return selectedActivityId;
+	}
+	public void setSelectedActivityId(Long selectedActivityId) {
+		this.selectedActivityId = selectedActivityId;
+	}
+	public boolean isDefaultInd() {
+		return defaultInd;
+	}
+	public void setDefaultInd(boolean defaultInd) {
+		this.defaultInd = defaultInd;
 	}
 }

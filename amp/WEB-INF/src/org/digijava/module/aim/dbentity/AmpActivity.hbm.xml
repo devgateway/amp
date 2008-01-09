@@ -188,8 +188,6 @@ tanzania adds
 			<key column="amp_activity_id"/>
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpComponent" column="amp_component_id"/>
  		</set>
-
-
  		<set name="documents" table="AMP_ACTIVITY_KM_DOCUMENTS" lazy="true" cascade="none">
   	            <cache usage="read-write"/>
 				<key column="amp_activity_id"/>
@@ -230,11 +228,17 @@ tanzania adds
 			<key column="amp_activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurvey"/>
 		</set>
-                 <set name="actPrograms" cascade="all" inverse="true">
+            <set name="actPrograms" cascade="all" inverse="true">
 			<cache usage="read-write"/>
 			<key column="amp_activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityProgram"/>
-              </set>
+       </set>
+      
+      <set name="indicators" table="AMP_INDICATOR_PROJECT" lazy="true" cascade="none">
+			<cache usage="read-write"/> 
+			<key column="amp_activity_id"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpIndicator" column="indicator_id"/>
+	  </set>
 
 	</class>
 </hibernate-mapping>

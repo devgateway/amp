@@ -135,7 +135,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private Integer lineMinRank;
 	private Integer planMinRank;
 	private Collection actRankColl;
-
+    private Set indicators;
 
 	private Set<AmpActivityDocument> activityDocuments	= null;
 	/* Categories */
@@ -1266,6 +1266,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public Boolean getJointCriteria() {
 	    return jointCriteria;
+	}
+
+	public Set getIndicators() {
+		return indicators;
+	}
+
+	public void setIndicators(Set indicators) {
+		this.indicators = indicators;
 	}
 
 }

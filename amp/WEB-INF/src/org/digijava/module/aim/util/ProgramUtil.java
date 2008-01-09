@@ -30,6 +30,7 @@ import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.kernel.util.collections.HierarchyMemberFactory;
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -285,7 +286,7 @@ public class ProgramUtil {
     			String queryString = "select t from "
     					+ AmpThemeIndicators.class.getName() + " t "
     					+ "where t.ampThemeIndId in (select t1.themeIndicatorId from " +
-    					AmpIndicatorSector.class.getName() + " t1 join t1.sectorId si "+
+    					AmpIndicatorSector.class.getName() + " t1 join t1.ampSectorId si "+
     					  "where upper(si.name) like '"+sectorname.toUpperCase()+"')";
     			Query qry = session.createQuery(queryString);
     			col = qry.list();
@@ -582,20 +583,20 @@ public class ProgramUtil {
 			logger.info("\n\nInside program Util\n"+indId+"      "+themeId);
 			Session session = null;
 			Transaction tx = null;
-			AmpThemeIndicators ampThInd = null;
+			AmpIndicator ampThInd = null;
 			AmpTheme ampTh = getThemeObject(themeId);
 			logger.info(ampTh.getName());
 			Set tmp1 = ampTh.getIndicators();
 			Iterator itr1 = tmp1.iterator();
 			while(itr1.hasNext()){
-				AmpThemeIndicators ampTmp = (AmpThemeIndicators)itr1.next();
+				AmpIndicator ampTmp = (AmpIndicator)itr1.next();
 				logger.info(ampTmp.getName());
 			}
 			Set tmpTest = ampTh.getIndicators();
 			try
 			{
 				session = PersistenceManager.getRequestDBSession();
-				ampThInd = (AmpThemeIndicators) session.load(AmpThemeIndicators.class, indId);
+				ampThInd = (AmpIndicator) session.load(AmpIndicator.class, indId);
 				logger.info(ampThInd.getName());
 				Set tempTh = ampThInd.getThemes();
 				Iterator itr = tempTh.iterator();

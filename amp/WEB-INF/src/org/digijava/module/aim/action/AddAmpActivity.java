@@ -43,6 +43,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
+import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
@@ -54,6 +55,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -1112,8 +1114,8 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
 
           if (request.getParameter("logframe") != null ||
               logframepr.compareTo("true") == 0) {
-            eaForm.setIndicatorsME(
-                MEIndicatorsUtil.getActivityIndicators(eaForm.getActivityId()));
+            eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorsList(eaForm.getActivityId())
+                );
             if (!eaForm.isEditAct()) {
               eaForm.setIndicatorId(null);
               eaForm.setIndicatorValId(null);
@@ -1151,8 +1153,12 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
       }
       else if (eaForm.getStep().equals("10")) { // show step 9 - M&E page
 
-        eaForm.setIndicatorsME(
-            MEIndicatorsUtil.getActivityIndicators(eaForm.getActivityId()));
+        eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorsList(eaForm.getActivityId()));
+       
+        for(Iterator itr = IndicatorUtil.getAllDefaultIndicators().iterator(); itr.hasNext();){
+        	ActivityIndicator actInd = (ActivityIndicator) itr.next();
+           eaForm.getIndicatorsME().add(actInd); 	
+        }
         if (!eaForm.isEditAct()) {
           eaForm.setIndicatorId(null);
           eaForm.setIndicatorValId(null);

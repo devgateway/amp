@@ -19,7 +19,7 @@ public class AmpSector implements Serializable, Comparable, Identifiable
 	private String language ;
 	private String version ;
 	private Set aidlist ;
-
+    private Set indicators;
 	
 	private String segmentCode;
 	
@@ -203,6 +203,14 @@ public void setAmpOrgId(AmpOrganisation org) {
 
 	public Object getIdentifier() {
 		return this.getAmpSectorId();
+	}
+
+	public Set getIndicators() {
+		return indicators;
+	}
+
+	public void setIndicators(Set indicators) {
+		this.indicators = indicators;
 	}
 	
 }

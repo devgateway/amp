@@ -24,6 +24,7 @@ import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import java.util.Collections;
 import org.digijava.module.aim.helper.AllActivities;
@@ -72,7 +73,7 @@ public class AddThemeIndicator extends Action
 		
 		
 		
-		Collection indi = ProgramUtil.getAllThemesIndicators();
+		//Collection indi = ProgramUtil.getAllThemesIndicators();
 		
 		
 		//if(request.getParameter("resetIndicatorId")!=null) themeForm.setIndicatorId(null);
@@ -215,8 +216,8 @@ public class AddThemeIndicator extends Action
 		if(flag == false){
 		themeForm.setFlag("error");
 		}
-		
-        List prgInds = new ArrayList(ProgramUtil.getThemeIndicators(id));
+
+		List prgInds = new ArrayList(IndicatorUtil.getAllIndicators(id));
         Collections.sort(prgInds, new ProgramUtil.HelperAmpIndicatorNameComparator());
         themeForm.setPrgIndicators(prgInds);
 

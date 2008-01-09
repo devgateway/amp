@@ -177,7 +177,7 @@
 																					--%>
 																					<logic:notEmpty name="aimIndicatorForm" property="nondefaultindicators">
 																						<html:optionsCollection name="aimIndicatorForm" 
-																						property="nondefaultindicators" value="ampMEIndId" label="name"/>
+																						property="nondefaultindicators" value="indicatorId" label="name"/>
 																					</logic:notEmpty>
 																				</html:select>
 																			</td>

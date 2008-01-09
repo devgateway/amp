@@ -57,7 +57,7 @@ private static Logger logger = Logger.getLogger(AddIndicatorForStepNine.class);
 			actInd.setCurrentValDate("");
 			actInd.setCurrentValComments("");
 			actInd.setRisk(new Long(-1));
-			actInd.setIndicatorId((MEIndicatorsUtil.findIndicatorId(name, code)).getAmpMEIndId());
+			actInd.setIndicatorId(tmpObj.getMeIndicatorId().getAmpMEIndId());
 			tmpActivityIndicator.add(actInd);
 		}
 		eaForm.setIndicatorsME(tmpActivityIndicator);

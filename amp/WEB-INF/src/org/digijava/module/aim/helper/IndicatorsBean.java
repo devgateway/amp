@@ -3,6 +3,8 @@ package org.digijava.module.aim.helper;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
+
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 
 public class IndicatorsBean {
@@ -63,7 +65,18 @@ public class IndicatorsBean {
         
         
     }
-    
+
+
+    public IndicatorsBean(AmpIndicator ind) {
+ 
+    	this.id=ind.getIndicatorId();
+        this.name=ind.getName();
+        this.category=Integer.valueOf(ind.getCategory());
+        this.code=ind.getCode();
+        this.sector = ind.getSectors();
+        this.description=ind.getDescription();
+        
+    }
     
     public IndicatorsBean(AmpMEIndicatorList ind) {
         this.id=ind.getAmpMEIndId();

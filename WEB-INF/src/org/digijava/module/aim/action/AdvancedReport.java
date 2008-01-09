@@ -72,6 +72,8 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 
 
 public class AdvancedReport extends Action {
@@ -105,6 +107,7 @@ public class AdvancedReport extends Action {
 		Collection coll = new ArrayList();
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
 		TeamMember teamMember=(TeamMember)httpSession.getAttribute("currentMember");
+		PermissionUtil.putInScope(httpSession, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
 		//logger.info(teamMember.getMemberId());
 		if(teamMember==null)
 			return goTo("index",formBean,mapping);

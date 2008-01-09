@@ -15,6 +15,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
+import org.apache.log4j.Logger;
+import org.digijava.module.aim.action.EditActivity;
 import org.digijava.module.aim.dbentity.AmpFeature;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
@@ -36,6 +38,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 	private String enabled;
 	private String parentModule;
 	private String hasLevel;
+	private static Logger logger = Logger.getLogger(ModuleVisibilityTag.class);
 	
 	public String getHasLevel() {
 		return hasLevel;
@@ -81,7 +84,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 			//	if(!existModuleinDB(ampTreeVisibility))
 				{
 						FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName(),this.getHasLevel());
-						
+						logger.info("Inserting module: " + this.getName());
 						AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
 						ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 						ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
@@ -91,7 +94,8 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 					if(!checkTypeAndParentOfModule(ampTreeVisibility)) 
 					{
 						try{
-								FeaturesUtil.updateModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId(), parentModule);
+							logger.info("Updating module: "+this.getName() +" and his parent "+parentModule);
+							FeaturesUtil.updateModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId(), parentModule);
 							}
 							catch(Exception e)
 							{

@@ -23,12 +23,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection toYears;
 	private Collection actRankCollection;
 	private Collection pageSizes; //A0,A1,A2,A3,A4 
+	private Long regionSelected;
 	
 	private Object[] selectedSectors;
 	private Object[] selectedStatuses;
 	private Object[] selectedDonors;
 	private Object[] selectedRisks;
-	private Object[] selectedFinancingInstruments;;
+	private Object[] selectedFinancingInstruments;
+	private Collection regionSelectedCollection;
 	
 	private Long fromYear;
 	private Long toYear;
@@ -238,6 +240,22 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setJointCriteria(Boolean jointCriteria) {
 		this.jointCriteria = jointCriteria;
+	}
+
+	public Collection getRegionSelectedCollection() {
+		return regionSelectedCollection;
+	}
+
+	public void setRegionSelectedCollection(Collection regionSelectedCollection) {
+		this.regionSelectedCollection = regionSelectedCollection;
+	}
+
+	public Long getRegionSelected() {
+		return regionSelected;
+	}
+
+	public void setRegionSelected(Long regionSelected) {
+		this.regionSelected = regionSelected;
 	}
 	
 	

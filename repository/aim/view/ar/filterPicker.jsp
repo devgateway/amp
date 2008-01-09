@@ -108,45 +108,67 @@
 
 		<tr>
 			<td><b><digi:trn key="rep:filer:Status">Status</digi:trn></b></td>
+			<field:display name="Risk" feature="Activity">
 			<td><b><digi:trn key="rep:filer:Risks">Risks</digi:trn></b></td>
+			</field:display>
+			<field:display  name="Line Ministry Rank" feature="Planning">
 			<td>
 			<b><digi:trn key="rep:filer:LineMinRank">Line Min. Rank</digi:trn></b>
 			</td>
+			</field:display>
+			<field:display  name="Planning Ministry Rank" feature="Planning">
 			<td>
 			<b><digi:trn key="rep:filer:PlanningMinRank">Planning Min. Rank</digi:trn></b>
 			</td>
-
+			</field:display>
 		</tr>
 		<tr>
 			<td valign="top" >
 					<category:showoptions outerstyle="width: 190px" styleClass="inp-text" property="selectedStatuses" size="3" name="aimReportsFilterPickerForm" multiselect="true" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY%>"/>
 			</td>
+			<field:display name="Risk" feature="Activity">
 			<td valign="top" >
 			<html:select multiple="true" property="selectedRisks" size="3" styleClass="inp-text">
 				<html:optionsCollection property="risks"
 					value="ampIndRiskRatingsId" label="ratingName" />
 			</html:select>
 			</td>
+			</field:display>
+			<field:display  name="Line Ministry Rank" feature="Planning">
 			<td valign="top" >
 			<html:select property="lineMinRank" style="width: 50px" styleClass="inp-text">
 				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>
 				<html:optionsCollection property="actRankCollection" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
 			</td>
+			</field:display>
+			<field:display  name="Planning Ministry Rank" feature="Planning">
 			<td valign="top" >
 			<html:select property="planMinRank" style="width: 50px" styleClass="inp-text">
 				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>
 				<html:optionsCollection property="actRankCollection" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
 			</td>
+			</field:display>
 
+		</tr>
+		<tr>
+			<td colspan="4"><b><digi:trn key="rep:filter:Location">Region</digi:trn></b></td>
+		</tr>
+		<tr>
+			<td colspan="4">
+			<html:select property="regionSelected" style="width: 400px" styleClass="inp-text">
+				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>
+				<html:optionsCollection property="regionSelectedCollection" label="region" value="regionId" />
+			</html:select>
+			</td>
 		</tr>
 		<tr>
 			<td colspan="4"><b><digi:trn key="rep:filer:financingInstrument">Financing Instrument</digi:trn></b></td>
 		</tr>
 		<tr>
 			<td colspan="4">
-			<category:showoptions size="3" outerstyle="width: 400px" styleClass="inp-text" name="aimReportsFilterPickerForm" property="selectedFinancingInstruments" multiselect="true" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>"/>
+			<category:showoptions size="3" outerstyle="width: 250px" styleClass="inp-text" name="aimReportsFilterPickerForm" property="selectedFinancingInstruments" multiselect="true" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>"/>
 			</td>
 		</tr>
 	<logic:notEqual name="widget" value="true" scope="request">

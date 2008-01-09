@@ -10,6 +10,7 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARVRegions;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -22,6 +23,7 @@ import org.digijava.module.aim.helper.Location;
 import java.util.*;
 import net.sf.hibernate.*;
 import java.sql.*;
+
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -455,6 +457,67 @@ public class LocationUtil {
 		return ampLocations;
 	}
 
+	public static List getAllVRegions() {
+		ArrayList ampRegions = new ArrayList();
+		Session session = null;
+		Iterator iter = null;
+		try {
+			session = PersistenceManager.getSession();
+			Connection connection = PersistenceManager.getSession().connection();
+			String queryString = "select distinct region_id, region from v_regions;";
+			Statement stmt = connection.createStatement();
+			ResultSet rs = stmt.executeQuery(queryString);
+
+
+		    while (rs.next()) {
+
+		        // get current row values
+		    	AmpARVRegions region=new AmpARVRegions();
+		    	Long rId = rs.getLong(1);
+		    	//Long rId = rs.getLong(2);
+		    	String reg = rs.getString(2);
+				//region.setActivityId(aId);
+				region.setRegion(reg);
+				region.setRegionId(rId);
+				ampRegions.add(region);
+
+		        // print values
+		        }
+
+		    // close statement and connection
+		    stmt.close();
+		    //con.close();
+			/*Query qry = session.createQuery(queryString);
+			iter = qry.list().iterator();
+			while(iter.hasNext())
+			{
+				Object obj[] = (Object[]) iter.next();
+				AmpARVRegions region=new AmpARVRegions();
+				Long aId = (Long) obj[0];
+				String reg=(String)obj[1];
+				Long rId=(Long)obj[2];
+				region.setActivityId(aId);
+				region.setRegion(reg);
+				region.setRegionId(rId);
+				ampRegions.add(region);
+			}
+			*/
+			
+		} catch (Exception ex) {
+			logger.error("Unable to get amp Regions :" + ex.getMessage());
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		return ampRegions;
+	}
+	
+	
 	public static Collection getAllLocations(Long id) {
 		AmpLocation ampLocation = null;
 		ArrayList ampLocations = new ArrayList();

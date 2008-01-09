@@ -48,19 +48,36 @@ public class GetDesktopReports extends TilesAction {
 				ApplicationSettings appSettings	= tm.getAppSettings();
 				if ( appSettings != null ) {
 					if ( appSettings.getDefaultAmpReport() != null ) {
-						AmpReports default_report	=  appSettings.getDefaultAmpReport();
-						session.setAttribute(Constants.DEFAULT_TEAM_REPORT, default_report);
+						
+						AmpReports default_report	=  null;//appSettings.getDefaultAmpReport();
+						if(session.getAttribute(Constants.DEFAULT_TEAM_REPORT)!=null)
+							default_report=(AmpReports) session.getAttribute(Constants.DEFAULT_TEAM_REPORT);
+						else {
+							default_report	=  appSettings.getDefaultAmpReport();
+							session.setAttribute(Constants.DEFAULT_TEAM_REPORT, default_report);
+						}
 						if (reports == null)
 							reports	= new ArrayList();
 						this.addReportToCollection(default_report, reports);
 					}
 					else
-						logger.info("The default team report is null");
+						if(session.getAttribute(Constants.DEFAULT_TEAM_REPORT)!=null)
+						{
+							AmpReports default_report=(AmpReports) session.getAttribute(Constants.DEFAULT_TEAM_REPORT);
+							if (reports == null)
+								reports	= new ArrayList();
+							this.addReportToCollection(default_report, reports);
+						}
+						else{
+							
+						
+						logger.info("!!!!!!!!!!!! The default team report is null");
                                               reportsPerPage=appSettings.getDefReportsPerPage();
                                               if(reportsPerPage==null){
                                                 reportsPerPage=0;
                                               }
                                               session.setAttribute(Constants.MY_REPORTS_PER_PAGE,reportsPerPage);
+						}
 				}
 				else
 					logger.info("Application settings is null");

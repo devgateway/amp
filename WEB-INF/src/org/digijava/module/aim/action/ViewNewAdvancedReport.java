@@ -58,6 +58,10 @@ public class ViewNewAdvancedReport extends Action {
 
 		String widget=request.getParameter("widget");
 		request.setAttribute("widget",widget);
+
+		String debug=request.getParameter("debug");
+		request.setAttribute("debug",debug);
+
 		
 		TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");				
 		AmpApplicationSettings ampAppSettings = null;				

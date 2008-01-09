@@ -81,7 +81,7 @@ public class TotalCommitmentsAmountColumn extends TotalAmountColumn {
 		Iterator i=items.iterator();
 		while (i.hasNext()) {
 		    TotalCommitmentsAmountCell element = (TotalCommitmentsAmountCell) i.next();
-			ac=ac.merge(element);			
+			ac.merge(element,ac);			
 		}
 		ac.setColumn(this);
 		ar.add(ac);

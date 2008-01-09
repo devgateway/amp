@@ -9,11 +9,13 @@ package org.dgfoundation.amp.ar.cell;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.workers.MetaTextColWorker;
 
 /**
  * @author mihai
- * a text cell that also adds a percentage peroperty. this percentage applied to amounts in hierarchies created by the text cell here 
+ * a text cell that also adds a percentage property. this percentage applied to amounts in hierarchies created by the text cell here 
  */
 public class MetaTextCell extends TextCell {
 
@@ -21,6 +23,20 @@ public class MetaTextCell extends TextCell {
 	
 	public Set getMetaData() {
 		return metaData;
+	}
+	
+	public MetaInfo getFirstMetaInfo() {
+		return (MetaInfo) metaData.iterator().next();
+	}
+	
+	public boolean getDraftFlag() {
+		MetaInfo metaInfo = getMetaInfo(ArConstants.DRAFT);
+		if(metaInfo!=null) return (Boolean) metaInfo.getValue();
+		return false;
+	}
+	
+	public MetaInfo getMetaInfo(String category) {
+		return MetaInfo.getMetaInfo(metaData, category);
 	}
 
 	public Class getWorker() {

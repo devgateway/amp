@@ -152,15 +152,17 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	public boolean isFieldActive(AmpTreeVisibility atv)
 	{
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) atv.getRoot();
-		for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
-		{
-			AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
-			if(field.getName().compareTo(this.getName())==0) 
-			{
-				return true;
-			}
+		if(currentTemplate!=null)
+			if(currentTemplate.getFeatures()!=null)
+				for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
+				{
+					AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
+					if(field.getName().compareTo(this.getName())==0) 
+					{	
+						return true;
+					}
 			
-		}
+				}
 		return false;
 	}
 	

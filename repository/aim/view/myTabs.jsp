@@ -16,7 +16,6 @@
 	}
 	
 	var tabName	= "Tab-By Project";
-
 	<logic:empty name="filterCurrentReport" scope="session">
 	<logic:notEmpty name="defaultTeamReport" scope="session">
 			tabName	= 'Tab-<bean:write name="defaultTeamReport" scope="session" property="name"/>';
@@ -42,13 +41,7 @@
 				</logic:equal>
 	</logic:iterate>
 </logic:present>
-<!-- 
-<logic:empty name="myReports" scope="session">
-	<logic:notEmpty name="defaultTeamReport" scope="session">
-		<li><a id='Tab-<bean:write name="defaultTeamReport" scope="session" property="name"/>' href="/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="defaultTeamReport" scope="session" property="ampReportId"/>~widget=true" rel="ajaxcontentarea"><bean:write name="defaultTeamReport" scope="session" property="name"/></a></li>
-	</logic:notEmpty>
-</logic:empty>
- -->
+
 </ul>
 <div id="ajaxcontentarea" class="contentstyle">
 <digi:trn key="aim:clickOnATab">

@@ -81,7 +81,7 @@ public class UndisbursedTotalAmountColumn extends TotalAmountColumn {
 		Iterator i=items.iterator();
 		while (i.hasNext()) {
 			UndisbursedAmountCell element = (UndisbursedAmountCell) i.next();
-			ac=ac.merge(element);			
+			ac.merge(element,ac);			
 		}
 		ac.setColumn(this);
 		ar.add(ac);

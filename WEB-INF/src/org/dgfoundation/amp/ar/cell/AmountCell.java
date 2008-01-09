@@ -167,6 +167,13 @@ public class AmountCell extends Cell {
 		}		
 		//logger.info("******total amount for owner "+this.getOwnerId()+"="+ret);
 		return ret;
+    }
+
+    public String getWrappedAmount() {
+	if (id != null)
+	    return mf.format(convert() * percentage / 100);
+	else
+	    return "";
 	}
 
 	/**
@@ -278,5 +285,28 @@ public class AmountCell extends Cell {
 	}
 
 	
-	
+	 @Override
+	    public void merge(Cell c1, Cell c2) {
+		AmountCell ac1 = (AmountCell) c1;
+		AmountCell ac2 = (AmountCell) c2;
+		if (this.getOwnerId() == null)
+		    this.setOwnerId(ac1.getOwnerId());
+		
+		//merge with c1 only if this is different than c1
+		if (!this.equals(c1)) {
+		    if (ac1.getId() == null)
+			this.getMergedCells().addAll(ac1.getMergedCells());
+		    else
+			this.getMergedCells().add(ac1);
+		}
+
+		//merge with c2 only if this is different than c2
+		if (!this.equals(c2)) {
+		    if (ac2.getId() == null)
+			this.getMergedCells().addAll(ac2.getMergedCells());
+		    else
+			this.getMergedCells().add(ac2);
+		}
+
+	    }
 }

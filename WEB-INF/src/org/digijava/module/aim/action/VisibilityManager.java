@@ -290,7 +290,7 @@ public class VisibilityManager extends MultiAction {
 		ActionErrors errors = new ActionErrors();
 	 	
 		
-		String trnKey = "aim:ampfeaturemanager:visibilitytreeupdated";
+		String trnKey = "aim:ampfeaturemanager:featuremanagerupdated";
 		String msg = CategoryManagerUtil.translate(trnKey, request, Constants.FEATURE_MANAGER_VISIBILITY_TREE_UPDATED);
 
 		errors.add("title", new ActionError("error.aim.visibility.visibilityTreeUpdated",msg));

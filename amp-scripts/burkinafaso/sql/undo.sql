@@ -19,6 +19,13 @@ truncate amp_activities_categoryvalues;
 truncate amp_member_activities;
 truncate amp_activity_km_documents;
 truncate amp_activity_theme;
+truncate amp_activity_program;
+truncate amp_activity_componente;
+truncate amp_activity_compsector;
+truncate amp_activity_closing_dates;
+truncate amp_me_indicator_value;
+truncate amp_ahsurvey;
+truncate AMP_ISSUES;
 
 truncate  AMP_ACTIVITY  ;
 

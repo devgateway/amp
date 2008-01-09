@@ -28,7 +28,8 @@ truncate  AMP_ACTIVITY  ;
 delete from amp_activity_sector
 where amp_sector_id in (select s.amp_sector_id from AMP_SECTOR_SCHEME sc, AMP_SECTOR s where s.amp_sec_scheme_id=sc.amp_sec_scheme_id and sc.sec_scheme_code='BURKINA_IMP' );
 
-
+delete mtef from amp_funding_mtef_projection mtef
+inner join AMP_FUNDING f on mtef.amp_funding_id=f.amp_funding_id;
 
 delete from AMP_FUNDING 
 where amp_activity_id not in (select a.amp_activity_id from amp_activity a);

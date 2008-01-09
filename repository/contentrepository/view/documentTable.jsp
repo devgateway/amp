@@ -64,7 +64,7 @@
 									<bean:write name="documentData" property="description" />
 									<a name="aDocumentUUID" style="display: none"><bean:write name="documentData" property="uuid" /></a>
 								</td>
-								<td> 
+								<td nowrap="nowrap"> 
 								<a style="display:none" id="fake1" href="http://www.yahoo.com">FOR_SILK</a>
 								<c:set var="translation">
 									<digi:trn key="contentrepository:documentManagerDownloadHint">Click here to download document</digi:trn>

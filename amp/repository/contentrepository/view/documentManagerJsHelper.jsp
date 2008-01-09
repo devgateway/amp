@@ -115,6 +115,9 @@
 	};
 
 </script>
+<c:set var="translation1">
+	<digi:trn key="contentrepository:documentdeleteconfirm">Are you sure you want to delete this document ?</digi:trn>
+</c:set>
 
 <c:set var="translation2">
 				<digi:trn key="contentrepository:documentWaitForDelete">Deleting document ... </digi:trn>

@@ -326,8 +326,13 @@ public class DocumentManager extends Action {
 					new ActionError("error.contentrepository.addFile.fileTooLarge", maxFileSizeInMBytes + "")
 					);
 			return false;
-		}
-			
+			}
+		if (formFile.getFileSize()<1){
+			ActionError	error	= new ActionError("error.contentrepository.addFile.badPath");
+			errors.add("title", error);
+			return false;
+		}	
+		
 		try {
 			TeamMember teamMember		= (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
 			Node newNode 	= null;

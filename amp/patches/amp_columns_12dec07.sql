@@ -46,7 +46,7 @@ INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView)
 INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (37,'Indicator Base Value','indicatorBaseValue','org.dgfoundation.amp.ar.cell.TextCell','v_indicator_basevalue');
 INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (38,'Indicator Target Value','indicatorTargetValue','org.dgfoundation.amp.ar.cell.TextCell','v_indicator_targetvalue');
 INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (40,'Sub-Sector',null,'org.dgfoundation.amp.ar.cell.TextCell','v_sub_sectors');
-INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (41,'National Planning Objectives','nationalojectives','org.dgfoundation.amp.ar.cell.TextCell','v_nationalojectives');
+INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (41,'National Planning Objectives','nationalojectives','org.dgfoundation.amp.ar.cell.MetaTextCell','v_nationalojectives');
 INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (42,'Primary Program','primaryprogram','org.dgfoundation.amp.ar.cell.TextCell','v_primaryprogram');
 INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (43,'Secondary Program','secondaryprogram','org.dgfoundation.amp.ar.cell.TextCell','v_secondaryprogram');
 INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (44,'Executing Agency','executing_agency','org.dgfoundation.amp.ar.cell.TextCell','v_executing_agency');

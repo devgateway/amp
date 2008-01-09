@@ -114,7 +114,7 @@ public void applyMetaFilter(String columnName,String metaName,Cell metaCell,Cate
 		MetaTextCell relatedLocation=(MetaTextCell) c.getByOwnerAndValue(this.getOwnerId(),metaCell.getValue());
 		if(relatedLocation!=null) { 
 		MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedLocation.getMetaData(),metaName);
-		Double percentage=new Double((Integer)percentMeta.getValue()) ;
+		Double percentage=(Double) percentMeta.getValue() ;
 		ret.setPercentage(percentage.doubleValue());			
 		}
 	}

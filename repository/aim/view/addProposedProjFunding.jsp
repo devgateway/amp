@@ -66,7 +66,7 @@
               <table width="100%" cellpadding=0 cellspacing=0>
                 <tr>
                   <td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
-                    <a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>">Commitments</a>
+                    <a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>"><digi:trn key="aim:commitments">Commitments</digi:trn></a>
                   </td>
                 </tr>
                 <tr>
@@ -74,21 +74,21 @@
                     <table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class=box-border-nopadding>
                       <tr bgcolor="#003366" class="textalb">
                         <td align="center" valign="middle" width="75">
-                          <b><font color="white">Planned</font></b>
+                          <b><font color="white"><digi:trn key="aim:PlannedFIE">Planned</digi:trn></font></b>
                         </td>
                         <td align="center" valign="middle" width="100">
-                          <b><font color="white">Amount</font></b>
+                          <b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b>
                         </td>
                         <td align="center" valign="middle" width="100">
-                          <b><font color="white">Currency</font></b>
+                          <b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b>
                         </td>
                         <td align="center" valign="middle" width="120" colspan="2">
-                          <b><font color="white">Planned<br>Commitment Date</font></b>
+                          <b><font color="white"><digi:trn key="aim:PlannedFIE">Planned</digi:trn><br><digi:trn key="aim:commitments">Commitment</digi:trn> <digi:trn key="aim:DateFIE">Date</digi:trn></font></b>
                         </td>
                       </tr>
                       <tr>
                         <td valign="center" align="center">
-                        Planned
+                        <digi:trn key="aim:PlannedFIE">Planned</digi:trn>
                         </td>
                         <td valign="center" align="center">
                           <html:text property="proProjCost.funAmount" styleId="funAmount" style="width:100px;"/>
@@ -124,13 +124,16 @@
             <table cellPadding=3>
               <tr>
                 <td>
-                  <input type="button" value="Save" class="inp-text" onclick="addPropFunding();">
+                <c:set var="translationSave"><digi:trn key="btn:addRegionalFundingSave">Save</digi:trn></c:set>
+				<c:set var="translationReset"><digi:trn key="btn:addRegionalFundingReset">Reset</digi:trn></c:set>
+				<c:set var="translationClose"><digi:trn key="btn:addRegionalFundingClose">Close</digi:trn></c:set>
+                  <input type="button" value="${translationSave}" class="inp-text" onclick="addPropFunding();">
                 </td>
                 <td>
-                  <input type="reset" value="Reset" class="inp-text">
+                  <input type="reset" value="${translationReset}" class="inp-text">
                 </td>
                 <td>
-                  <input type="button" value="Close" class="inp-text" onclick="window.close();">
+                  <input type="button" value="${translationClose}" class="inp-text" onclick="window.close();">
                 </td>
               </tr>
             </table>

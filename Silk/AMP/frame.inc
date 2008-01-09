@@ -611,6 +611,33 @@
 		[ ] tag "Add"
 	[ ] 
 [ ] 
+[+] window BrowserChild AMPAddActor
+	[ ] tag "AMP - Add Actor"
+	[ ] parent Browser
+	[+] HtmlList TopMenu
+		[ ] tag "Aid Management Platform (AMP)"
+		[+] HtmlLink Calendar
+			[-] multitag "::: CALENDAR"
+				[ ] "$?calendar?showCalendarView.do"
+		[+] HtmlLink Reports
+			[ ] 
+		[+] HtmlLink Documents
+			[ ] 
+		[+] HtmlLink ContentRepository
+			[-] multitag "::: CONTENT REPOSITORY"
+				[ ] "$?contentrepository?documentManager.do"
+		[+] HtmlLink MEDashboard
+			[ ] 
+		[+] HtmlLink Help
+			[ ] 
+	[+] HtmlPushButton Add1
+		[ ] tag "Add"
+	[+] HtmlTextField Actor
+		[-] multitag "&name='actor'"
+			[ ] "Actor"
+			[ ] "$actor"
+	[ ] 
+[ ] 
 [+] window BrowserChild AMPAddSectors
 	[ ] tag "AMP - Select Sector"
 	[ ] parent Browser
@@ -649,16 +676,42 @@
 			[ ] tag "Sat"
 			[+] HtmlText N1
 				[ ] tag "1"
-			[-] HtmlText N8
+			[+] HtmlText N8
 				[ ] tag "8"
+			[+] HtmlText N19
+				[ ] tag "19"
+			[+] HtmlText N12
+				[ ] tag "12"
+			[-] HtmlText N5
+				[ ] tag "5"
 		[+] HtmlColumn Fri
 			[ ] tag "Fri"
 			[-] HtmlText N21
 				[ ] tag "21"
 		[+] HtmlColumn Sun
 			[ ] tag "Sun"
-			[-] HtmlText N2
+			[+] HtmlText N2
 				[ ] tag "2"
+			[-] HtmlText N20
+				[ ] tag "20"
+		[+] HtmlColumn Wed
+			[ ] tag "Wed"
+			[-] HtmlText N9
+				[ ] tag "9"
+		[+] HtmlColumn Thu
+			[ ] tag "Thu"
+			[+] HtmlText N17
+				[ ] tag "17"
+			[-] HtmlText N10
+				[ ] tag "10"
+	[+] HtmlCheckBox Currency2
+		[-] multitag "&name='deleteContrib'"
+			[ ] "Currency[2]"
+			[ ] "$deleteContrib[2]"
+	[-] HtmlPushButton DeleteSelected
+		[-] multitag "&name='removeFields'"
+			[ ] "Delete Selected"
+			[ ] "$removeFields"
 [ ] 
 [+] window BrowserChild AMPAddActivityStep4
 	[ ] tag "AMP - Add Activity - Funding"
@@ -755,32 +808,6 @@
 	[+] HtmlPushButton Add
 		[ ] tag "Add"
 	[ ] 
-	[-] HtmlTable Today
-		[ ] tag "Today"
-		[+] HtmlColumn Tue
-			[ ] tag "Tue"
-			[+] HtmlText N4
-				[ ] tag "4"
-			[-] HtmlText N11
-				[ ] tag "11"
-		[+] HtmlColumn Wed
-			[ ] tag "Wed"
-			[-] HtmlText N12
-				[ ] tag "12"
-		[+] HtmlColumn Thu
-			[ ] tag "Thu"
-			[-] HtmlText N13
-				[ ] tag "13"
-		[+] HtmlColumn Fri
-			[ ] tag "Fri"
-			[-] HtmlText N21
-				[ ] tag "21"
-		[+] HtmlColumn Sat
-			[ ] tag "Sat"
-			[+] HtmlText N29
-				[ ] tag "29"
-			[-] HtmlText N22
-				[ ] tag "22"
 [ ] 
 [+] window BrowserChild AMPAddComponents
 	[ ] tag "AMP - Add Components"
@@ -901,12 +928,17 @@
 			[ ] 
 	[+] HtmlPushButton Add1
 		[ ] tag "Add"
-	[-] HtmlTextField Actor
+	[+] HtmlTextField Actor
 		[-] multitag "&name='actor'"
 			[ ] "Actor"
 			[ ] "$actor"
+	[+] HtmlPushButton Save
+		[-] multitag "&name='saveButton'"
+			[ ] "Save"
+			[ ] "$saveButton"
+	[ ] 
 [ ] 
-[+] window BrowserChild AMPAddFunding
+[-] window BrowserChild AMPAddFunding
 	[ ] tag "AMP - Add Funding"
 	[ ] parent Browser
 	[+] HtmlPopupList AssistanceType
@@ -1145,6 +1177,9 @@
 		[-] multitag "Related Organizations"
 			[ ] "$javascript:gotoStep(7)"
 	[ ] 
+	[-] HtmlLink ME
+		[-] multitag "M  E"
+			[ ] "$javascript:gotoStep(10)"
 [ ] 
 [+] window BrowserChild AMPAddDocuments
 	[ ] tag "AMP - Add Documents and Links"
@@ -1188,7 +1223,7 @@
 				[ ] tag "15"
 	[+] HtmlPushButton Add
 		[ ] tag "Add"
-	[-] HtmlPushButton Browse
+	[+] HtmlPushButton Browse
 		[-] multitag "&name='&id='docFile';name='docFile''"
 			[ ] "Browse*"
 			[ ] "$docFile"
@@ -1196,6 +1231,10 @@
 		[-] multitag "&name='docWebResource'"
 			[ ] "Web resources"
 			[ ] "$docWebResource"
+	[-] HtmlTextField File2
+		[-] multitag "&id='docFile';name='docFile'"
+			[ ] "File[2]"
+			[ ] "$docFile"
 [ ] 
 [+] window BrowserChild AMPAddDocumentsFromRepository
 	[ ] tag "Popup"
@@ -1353,11 +1392,38 @@
 		[-] multitag "Costing"
 			[ ] "$javascript:gotoStep(11)"
 	[ ] 
+	[+] HtmlText IND0041
+		[ ] tag "- IND004"
+	[+] HtmlImage ClickToViewCalendar1
+		[-] multitag "Click to View Calendar[1]"
+			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[1]"
+	[+] HtmlTable HtmlTable1
+		[ ] tag "#1"
+		[+] HtmlColumn Mon
+			[ ] tag "Mon"
+			[-] HtmlText N7
+				[ ] tag "7"
+		[+] HtmlColumn Wed
+			[ ] tag "Wed"
+			[-] HtmlText N9
+				[ ] tag "9"
+	[+] HtmlImage ClickToViewCalendar2
+		[-] multitag "Click to View Calendar[2]"
+			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[2]"
+	[-] HtmlTable Today
+		[ ] tag "Today"
+		[+] HtmlColumn Wed
+			[ ] tag "Wed"
+			[-] HtmlText N9
+				[ ] tag "9"
+	[-] HtmlImage ClickToViewCalendar3
+		[-] multitag "Click to View Calendar[3]"
+			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[3]"
 [ ] 
 [+] window BrowserChild AMPAddActivityStep11
 	[ ] tag "AMP - Add Activity - Project Costs"
 	[ ] parent Browser
-	[-] HtmlPushButton AddActivity
+	[+] HtmlPushButton AddActivity
 		[ ] tag "Add Activity"
 [ ] 
 [+] window BrowserChild AMPAddEditActivity
@@ -1439,6 +1505,9 @@
 	[+] PushButton Open
 		[-] multitag "Open"
 			[ ] "$1"
+	[-] PushButton Desktop
+		[-] multitag "Desktop"
+			[ ] "$41061"
 [+] window BrowserChild EditData
 	[ ] tag "Edit Data"
 	[ ] parent Browser
@@ -1555,3 +1624,14 @@
 				[ ] tag "20"
 	[-] HtmlPushButton Save
 		[ ] tag "Save"
+[+] window DialogBox StartMenu
+	[ ] tag "Start Menu"
+	[ ] parent Taskbar
+[-] window DialogBox MyDocuments
+	[ ] tag "My Documents"
+	[+] ListView ListView1
+		[-] multitag "#1"
+			[ ] "$1"
+		[-] TextField TextField1
+			[-] multitag "#1"
+				[ ] "$1"

@@ -72,7 +72,7 @@
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="D<bean:write name='documentData' property='uuid' />"
 								onClick="window.location='/contentrepository/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />'"
 
-								title="${translation}">[<digi:trn key="contentrepository:documentManagerDownload">D</digi:trn>]</a>
+								title="${translation}"><img src= "../ampTemplate/images/check_out.gif" border=0></a>
 								
 
 								<c:set var="translation">
@@ -81,7 +81,7 @@
 								<logic:equal name="documentData" property="hasVersioningRights" value="true">
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="plus<bean:write name='documentData' property='uuid' />"
 								onClick="setType('version'); configPanel(0,'<%=documentData.getTitle() %>','<%=documentData.getDescription() %>','<%=documentData.getUuid() %>');showMyPanel(0, 'addDocumentDiv');"
-								title="${translation}">[<digi:trn key="contentrepository:documentManagerAddVersion">+</digi:trn>]</a>
+								title="${translation}"><img src= "../ampTemplate/images/update.gif" border=0></a>
 								
 								</logic:equal>
 								
@@ -93,7 +93,7 @@
 								</c:set> 
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="H<bean:write name='documentData' property='uuid' />"
 								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>'); setPanelHeader(1, '${translationForWindowTitle}' +' - '+ '<%= documentData.getTitle() %>');"
-								title="${translation}">[<digi:trn key="contentrepository:documentManagerVersions">H</digi:trn>]</a>
+								title="${translation}"><img src= "../ampTemplate/images/version_history.gif" border=0></a>
 								
 								
 								<c:set var="translation">
@@ -103,7 +103,7 @@
 									<c:if test="${ (!documentData.isPublic)||(!documentData.lastVersionIsPublic) }">
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Pub<bean:write name='documentData' property='uuid' />"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true);"
-									title="${translation}">[<c:out value="${makePublicCommand}" />]</a>
+									title="${translation}"><img src= "../ampTemplate/images/make_public.gif" border=0></a>
 									</c:if>
 								</logic:equal>
 								
@@ -115,7 +115,7 @@
 								<logic:equal name="documentData" property="hasDeleteRightsOnPublicVersion" value="true">
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Priv<bean:write name='documentData' property='uuid' />"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.UNPUBLISH %>', '<%=documentData.getUuid() %>');"
-									title="${translation}">[<digi:trn key="contentrepository:documentManagerUnpublish">Priv</digi:trn>]</a>
+									title="${translation}"><img src= "../ampTemplate/images/make_private.gif" border=0></a>
 								</logic:equal>
 								
 								</logic:equal>
@@ -126,7 +126,7 @@
 								<logic:equal name="documentData" property="hasDeleteRights" value="true">
 									<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
 									onClick="deleteRow('<%=documentData.getUuid() %>');"
-									title="${translation}">[<digi:trn key="contentrepository:documentManagerDelete">Del</digi:trn>]</a>
+									title="${translation}"><img src= "../ampTemplate/images/trash_12.gif" border=0></a>
 								</logic:equal>
 								</td>
 							</tr>

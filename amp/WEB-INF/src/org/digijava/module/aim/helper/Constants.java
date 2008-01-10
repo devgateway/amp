@@ -155,6 +155,8 @@ public class Constants
 	public static final String ACTIVITY_STATUS_CANCELLED		= "Cancelled / Suspended";
 	public static final String ACTIVITY_STATUS_PROPOSED			= "Proposed";
 	public static final String ACTIVITY_STATUS_CONSIDERED		= "Considered";
+	
+	public static final String ACTIVITY_NEEDS_APPROVAL_STATUS	= "'created', 'started', 'edited'";
 
 	/* Team types */
 	public static final String TEAM_TYPE_MULTILATERAL			= "Multilateral";

@@ -7,6 +7,7 @@
 package org.dgfoundation.amp.ar;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -323,6 +324,21 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 		else return this.name;
 	}
 
+	
+    /**
+     * @see Column.getAbsoluteColumnName
+     * Useful for translating the column names
+     * @return the absolute column name as a collection, starting with the topmost parent (root) and ending with the self name
+     */
+	public Collection getAbsoluteColumnNameAsList(){
+		List names=new ArrayList();
+		if (parent!=null && parent instanceof Column) 
+			names.addAll(((Column)parent).getAbsoluteColumnNameAsList()) ;
+		names.add(this.name);
+		return names;
+	}
+
+	
 	/**
 	 * @param contentCategory The contentCategory to set.
 	 */

@@ -29,6 +29,11 @@ public class CurrencyForm extends ActionForm {
 	private String doAction;
 	private String closeFlag;
     private Collection errors;
+    
+    private int pagesToShow;
+    private int pagesSize;
+    private int offset;
+    
 	/**
 	 * @return Returns the allCurrencies.
 	 */
@@ -64,6 +69,10 @@ public class CurrencyForm extends ActionForm {
 	 */
 	public void setPages(Collection pages) {
 		this.pages = pages;
+		if(pages!=null)
+	    {    
+	    	this.pagesSize=pages.size();
+	    }
 	}
 	/**
 	 * @return Returns the numRecords.
@@ -252,5 +261,59 @@ public class CurrencyForm extends ActionForm {
     public void setErrors(Collection errors) {
         this.errors = errors;
     }
-
+    /**
+     * 
+     * @return pagesToShow
+     */
+    public int getPagesToShow() {
+    	return pagesToShow;
+    }
+    
+    /**
+     * 
+     * @param pagesToShow
+     */
+    
+    public void setPagesToShow(int pagesToShow) {
+    	this.pagesToShow = pagesToShow;
+    }
+    /**
+     * 
+     * @return value of pagination star
+     */
+    public int getOffset() {
+    	int value;
+    	if (getCurrentPage()> (this.getPagesToShow()/2)){
+    		value = (this.getCurrentPage() - (this.getPagesToShow()/2))-1;
+    	}
+    	else {
+    		value = 0;
+    	}
+    	setOffset(value);
+    	return offset;
+    }
+    
+    /**
+     * 
+     * @param offset
+     */
+    public void setOffset(int offset) {
+    	this.offset = offset;
+    }
+    /***
+     * 
+     * @return pagesSize
+     */
+    
+    public int getPagesSize() {
+		return pagesSize;
+	}
+    
+    /**
+     * 
+     * @param pagesSize
+     */
+	public void setPagesSize(int pagesSize) {
+		this.pagesSize = pagesSize;
+	}
 }

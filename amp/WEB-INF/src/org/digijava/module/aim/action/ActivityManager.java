@@ -52,7 +52,16 @@ public class ActivityManager extends Action {
 		} else if (action.equals("reset")) {
 			reset(actForm, request);
 		}
-
+		
+		int page = 0;
+		if (request.getParameter("page") == null) {
+			page = 0;
+		} else {
+			page = Integer.parseInt(request.getParameter("page"));
+		}
+		actForm.setCurrentPage(new Integer (page));
+		actForm.setPagesToShow(10);
+		
 		doPagination(actForm, request);
 
 		return mapping.findForward("forward");

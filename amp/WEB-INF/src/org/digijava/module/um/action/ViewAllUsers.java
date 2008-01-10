@@ -34,6 +34,7 @@
 	    		vwForm.reset(mapping, request);    		
 	    	}
 	        
+	    	vwForm.setPagesToShow(10);
 	    	vwForm.setReset("false");
 	    	vwForm.setNumResults(vwForm.getTempNumResults());
 	        Collection ubCol = getUsers(vwForm,request);

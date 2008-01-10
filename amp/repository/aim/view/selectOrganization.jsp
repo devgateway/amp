@@ -315,9 +315,35 @@
 								<td align="center">
 									<table width="90%">
 									<tr><td>
-									<digi:trn key="aim:pages">
-									Pages</digi:trn>
-									<logic:iterate name="aimEditActivityForm" property="pages" id="pages" type="java.lang.Integer">
+									<digi:trn key="aim:pages">Pages</digi:trn>
+										<c:if test="${aimEditActivityForm.currentPage > 1}">
+											<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
+											<c:set target="${urlParamsFirst}" property="edit" value="true"/>
+											<c:set target="${urlParamsFirst}" property="orgSelReset" value="false"/>
+											<c:set target="${urlParamsFirst}" property="page" value="1"/>																			
+											<c:set var="translation">
+												<digi:trn key="aim:firstpage">First Page</digi:trn>
+											</c:set>
+														
+											<digi:link href="/selectOrganization.do"  style="text-decoration=none" name="urlParamsFirst" title="${translation}"  >
+												&lt;&lt;
+											</digi:link>
+													
+											<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
+											<c:set target="${urlParamsPrevious}" property="edit" value="true"/>
+											<c:set target="${urlParamsPrevious}" property="orgSelReset" value="false"/>
+											<c:set target="${urlParamsPrevious}" property="page" value="${aimEditActivityForm.currentPage -1}"/>																						
+
+											<c:set var="translation">
+												<digi:trn key="aim:previouspage">Previous Page</digi:trn>
+											</c:set>
+											<digi:link href="/selectOrganization.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
+												&lt;
+											</digi:link>
+										</c:if>
+										<c:set var="length" value="${aimEditActivityForm.pagesToShow}"></c:set>
+										<c:set var="start" value="${aimEditActivityForm.startPage}"/>
+										<logic:iterate name="aimEditActivityForm" property="pages" id="pages" type="java.lang.Integer" offset="start" length="length">
 										<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 										<c:set target="${urlParams1}" property="page">
 											<%=pages%>
@@ -332,12 +358,45 @@
 											<c:set var="translation">
 												<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
 											</c:set>
-
-											<a href="javascript:selectOrganizationPages(<%=pages%>);"><%=pages %></a>
+										<a href="javascript:selectOrganizationPages(<%=pages%>);"><%=pages%></a>
 										</c:if>
 										|&nbsp;
 									</logic:iterate>
-									</td></tr>
+									
+									<c:if test="${aimEditActivityForm.currentPage != aimEditActivityForm.pagesSize}">
+										<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
+										<c:set target="${urlParamsNext}" property="edit" value="true"/>
+										<c:set target="${urlParamsNext}" property="orgSelReset" value="false"/>
+										<c:set target="${urlParamsNext}" property="page" value="${aimEditActivityForm.currentPage + 1}"/>
+										<c:set var="translation">
+										<digi:trn key="aim:nextpage">Next Page</digi:trn>
+											</c:set>
+										<digi:link href="/selectOrganization.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
+											&gt;
+										</digi:link>
+										<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
+										<c:if test="${aimEditActivityForm.pagesSize < aimEditActivityForm.pagesToShow}">
+											<c:set target="${urlParamsLast}" property="edit" value="true"/>
+											<c:set target="${urlParamsLast}" property="orgSelReset" value="false"/>
+											<c:set target="${urlParamsLast}" property="page" value="${aimEditActivityForm.pagesSize-aimEditActivityForm.pagesToShow}"/>
+										</c:if>
+										<c:if test="${aimEditActivityForm.pagesSize > aimEditActivityForm.pagesToShow}">
+											<c:set target="${urlParamsLast}" property="edit" value="true"/>
+											<c:set target="${urlParamsLast}" property="orgSelReset" value="false"/>
+											<c:set target="${urlParamsLast}" property="page" value="${aimEditActivityForm.pagesSize}"/>
+										</c:if>
+										<c:set target="${urlParamsLast}" property="orgSelReset" value="false"/>
+										<c:set var="translation">
+										<digi:trn key="aim:lastpage">Last Page</digi:trn>
+										</c:set>
+										<digi:link href="/selectOrganization.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}"  >
+											&gt;&gt;  
+										</digi:link>
+										&nbsp;&nbsp;
+										</c:if>
+										<c:out value="${aimEditActivityForm.currentPage}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimEditActivityForm.pagesSize}"></c:out>
+									</td>
+									</tr>
 									</table>
 								</td>
 							</tr>

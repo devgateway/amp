@@ -254,8 +254,7 @@ public class AddAmpActivity extends Action {
     
     // Add componente
     if (request.getParameter("addComponente") != null) {
-      ActivitySector selectedComponente = (ActivitySector) session.getAttribute(
-          "addComponente");
+      ActivitySector selectedComponente = (ActivitySector) session.getAttribute("addComponente");
       if(selectedComponente==null) selectedComponente=new ActivitySector();
       session.removeAttribute("componenteSelected");
 

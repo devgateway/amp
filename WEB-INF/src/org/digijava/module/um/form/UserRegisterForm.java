@@ -420,7 +420,24 @@ public class UserRegisterForm
         errors=new ActionErrors();
 
 
+     /*   if ( (this.getSelectedCountryResidence() == null) ||
+                (this.getSelectedCountryResidence().trim().length() <= 0) ||
+                this.getSelectedCountryResidence().trim().equals("-1")) {
+                ActionError error = new ActionError(
+                    "error.registration.noresidence");
+                errors.add(null, error);
+                }
 
+
+                if (this.selectedOrganizationType != null &&
+                    this.selectedOrganizationType.equals("other") &&
+                    (this.organizationTypeOther == null ||
+                     this.organizationTypeOther.trim().length() <= 0)) {
+
+                    ActionError error = new ActionError(
+                        "error.registration.enterorganizationother");
+                    errors.add(null, error);
+                }*/
         /*        if ( (this.getEmail() == null) || this.getEmail().trim().length() == 0) {
              ActionError error = new ActionError("error.registration.noemail");
                     errors.add(null, error);
@@ -499,21 +516,9 @@ public class UserRegisterForm
                     "error.registration.NoPasswordMatch");
                 errors.add(null, error);
             }
-        }
-        
-        if ( (this.getSelectedCountryResidence() == null) ||
-                (this.getSelectedCountryResidence().trim().length() <= 0)) {
-            ActionError error = new ActionError("error.registration.noresidence");
-                       errors.add(null, error);
-                   }
-        
-        if  (this.organizationTypeOther == null ||
-                 this.organizationTypeOther.trim().length() <= 0) {
-
-                ActionError error = new ActionError(
-                    "error.registration.enterorganizationother");
-                errors.add(null, error);
-            }
+        }      
+       
+       
         
         if (null == this.getOrgGrp() || this.getOrgGrp().trim().length() < 1) {
         	ActionError error = new ActionError("error.registration.NoOrgGroup");

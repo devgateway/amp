@@ -279,7 +279,7 @@
 													</digi:link>
 													&nbsp;&nbsp; 
 												</c:if>
-												<c:out value="${aimActivityForm.currentPage}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimActivityForm.totalPages}"></c:out>
+												<c:out value="${aimActivityForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimActivityForm.totalPages}"></c:out>
 											</td>											
 										</tr>
 										<tr bgcolor="#ffffff">

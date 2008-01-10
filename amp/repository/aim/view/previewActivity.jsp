@@ -405,10 +405,13 @@ function collapseAll() {
 							<logic:present name="currentMember" scope="session">
 							<td width="50%" align="right">
 								<table cellSpacing="1" cellPadding="1" vAlign="bottom" border=0>
+								
 									<tr>
 										<td>
-										<input type="button" class="buton" onclick="javascript:expandAll()" value="expand all"/>
-										<input type="button" class="buton" onclick="javascript:collapseAll()" value="collapse all"/>
+										<c:set var="tran"><digi:trn key="aim:previe:expandAll">Expand all</digi:trn> </c:set>
+										<input type="button" class="buton" onclick="javascript:expandAll()" value="${tran}"/>
+										<c:set var="tran"><digi:trn key="aim:previe:collapseAll">Collapse all</digi:trn> </c:set>
+										<input type="button" class="buton" onclick="javascript:collapseAll()" value="${tran}"/>
 										</td>
 										<td height=16 vAlign=bottom align="right">
 											<digi:img src="module/aim/images/print_icon.gif"/>

@@ -94,7 +94,8 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 					if(!checkTypeAndParentOfModule(ampTreeVisibility)) 
 					{
 						try{
-							logger.info("Updating module: "+this.getName() +" and his parent "+parentModule);
+							//logger.info("Updating module: "+this.getName() +" with  id:"+ ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId() +"and his parent "+parentModule);
+							logger.info("Updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
 							FeaturesUtil.updateModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId(), parentModule);
 							}
 							catch(Exception e)

@@ -24,7 +24,7 @@ public class AmpApplicationSettings implements Serializable {
 
 	private String language;
 
-	private String defaultPerspective; // defunct
+	private String defaultPerspective; // defunct // still used though...if this is null in db report generator will not work
 
 	private Boolean useDefault; /*
 								 * use customized settings or use default team

@@ -277,9 +277,9 @@
 													<digi:link href="/activityManager.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}"  >
 														&gt;&gt; 
 													</digi:link>
-													&nbsp; 
+													&nbsp;&nbsp; 
 												</c:if>
-												
+												<c:out value="${aimActivityForm.currentPage}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimActivityForm.totalPages}"></c:out>
 											</td>											
 										</tr>
 										<tr bgcolor="#ffffff">

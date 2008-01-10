@@ -407,8 +407,8 @@ function collapseAll() {
 								<table cellSpacing="1" cellPadding="1" vAlign="bottom" border=0>
 									<tr>
 										<td>
-										<input type="button" class="button" onclick="javascript:expandAll()" value="expand all"/>
-										<input type="button" class="button" onclick="javascript:collapseAll()" value="collapse all"/>
+										<input type="buton" class="button" onclick="javascript:expandAll()" value="expand all"/>
+										<input type="buton" class="button" onclick="javascript:collapseAll()" value="collapse all"/>
 										</td>
 										<td height=16 vAlign=bottom align="right">
 											<digi:img src="module/aim/images/print_icon.gif"/>

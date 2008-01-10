@@ -361,7 +361,7 @@ function sortSubmit(value){
 												</digi:link>
 												<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
 												<c:if test="${aimCurrencyForm.pagesSize > aimCurrencyForm.pagesToShow}">
-													<c:set target="${urlParamsLast}" property="page" value="${aimCurrencyForm.pagesSize-aimCurrencyForm.pagesToShow}"/>
+													<c:set target="${urlParamsLast}" property="page" value="${aimCurrencyForm.pagesSize-1}"/>
 												</c:if>
 												<c:if test="${aimCurrencyForm.pagesSize < aimCurrencyForm.pagesToShow}">
 													<c:set target="${urlParamsLast}" property="page" value="${aimCurrencyForm.pagesSize}"/>

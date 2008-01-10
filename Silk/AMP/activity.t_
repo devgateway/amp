@@ -1,5 +1,5 @@
 ﻿[ ] 
-[-] testcase Test1 () appstate DefaultBaseState
+[-] testcase Test1() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
 	[ ] AMPMyDesktop.AddActivity.Click()
 	[ ] AMPAddActivityStep1.ProjectTitle.SetText("Full Activity Silk Test")
@@ -352,11 +352,9 @@
 	[ ] AMPAddEditActivity.Pop4.Select (2)
 	[ ] AMPAddEditActivity.Assumptions.TypeKeys ("asumptions")
 	[ ] AMPAddEditActivity.Progress.TypeKeys ("progress")
-	[ ] AMPAddEditActivity.PickDate.Click ()
-	[ ] AMPAddEditActivity.OK.Click ()
 	[ ] 
 	[ ] 
-[-] testcase Test2() appstate DefaultBaseState
+[+] testcase Test2() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
 	[ ] AMPMyDesktop.AddActivity.Click ()
 	[ ] AMPAddActivityStep1.ProjectTitle.SetText("Silk test partial scenario 2.1")
@@ -380,6 +378,7 @@
 	[ ] sleep(3)
 	[ ] AMPAddSectors.Sector.Select (2)
 	[ ] AMPAddSectors.Add.Click ()
+	[ ] sleep(3)
 	[ ] AMPAddActivityStep3.Funding.Click ()
 	[ ] AMPAddActivityStep4.AddFundings.Click ()
 	[ ] ProposedProjectCost.SetActive( )
@@ -417,7 +416,7 @@
 	[ ] AMPAddFunding.HtmlTable1.Commitments.AddCommitment.Click()
 	[ ] AMPAddFunding.HtmlTable1.Commitments.Planned.SetText("qwert")
 	[ ] AMPAddFunding.HtmlTable1.Commitments.Currency.Select(1)
-	[ ] BrowserPage.ExecLine('document.getElementById("trans3Date0").value = "'+date1+'"', TRUE)
+	[ ] BrowserPage.ExecLine('document.getElementsByName("fundingDetail[0].transactionDate")[0].value = "'+date1+'"', TRUE)
 	[ ] AMPAddFunding.Save.Click ()
 	[ ] BrowserMessage.SetActive ()
 	[ ] BrowserMessage.OK.Click ()
@@ -425,7 +424,7 @@
 	[ ] AMPAddFunding.AddDisbursement.Click ()
 	[ ] AMPAddFunding.Planned2.SetText("qwert")
 	[ ] AMPAddFunding.Currency3.Select(1)
-	[ ] BrowserPage.ExecLine('document.getElementById("transDate1").value = "'+date1+'"', TRUE)
+	[ ] BrowserPage.ExecLine('document.getElementsByName("fundingDetail[1].transactionDate")[0].value = "'+date1+'"', TRUE)
 	[ ] AMPAddFunding.Save.Click ()
 	[ ] BrowserMessage.SetActive ()
 	[ ] BrowserMessage.OK.Click ()
@@ -433,13 +432,14 @@
 	[ ] AMPAddFunding.Save.Click ()
 	[ ] AMPAddActivityStep4.RegionalFunding.Click ()
 	[ ] AMPRegionalFunding.AddFundings.Click ()
+	[ ] AMPAddRegionalFunding.SetActive()
 	[ ] AMPAddRegionalFunding.Region.Select (2)
 	[ ] AMPAddRegionalFunding.Add1.Click ()
 	[ ] //expenditure mai sus
 	[ ] AMPAddRegionalFunding.PlannedActualAmount.Select (1)
 	[ ] AMPAddRegionalFunding.Planned.SetText("qwert")
 	[ ] AMPAddRegionalFunding.CommitmentsTotalActualA.Select (1)
-	[ ] BrowserPage.ExecLine('document.getElementById("date1comm_0_4").value = "'+date1+'"', TRUE)
+	[ ] BrowserPage.ExecLine('document.getElementById("comm_0_4").value = "'+date1+'"', TRUE)
 	[ ] 
 	[ ] AMPAddRegionalFunding.Save.Click ()
 	[ ] BrowserMessage.SetActive ()
@@ -451,7 +451,7 @@
 	[ ] AMPAddRegionalFunding.PlannedActualAmount1.Select (1)
 	[ ] AMPAddRegionalFunding.Planned2.SetText("qwert")
 	[ ] AMPAddRegionalFunding.DisbursementTotalActual.Select (1)
-	[ ] BrowserPage.ExecLine('document.getElementById("date1disb_0_4").value = "'+date1+'"', TRUE)
+	[ ] BrowserPage.ExecLine('document.getElementById("disb_0_4").value = "'+date1+'"', TRUE)
 	[ ] AMPAddRegionalFunding.Save.Click ()
 	[ ] BrowserMessage.SetActive ()
 	[ ] BrowserMessage.OK.Click ()
@@ -462,7 +462,7 @@
 	[ ] AMPAddRegionalFunding.PlannedActualAmount2.Select (1)
 	[ ] AMPAddRegionalFunding.Planned3.SetText("zxcvb")
 	[ ] AMPAddRegionalFunding.ExpenditureTotalActualT.Select (1)
-	[ ] BrowserPage.ExecLine('document.getElementById("date1expn_0_4").value = "'+date1+'"', TRUE)
+	[ ] BrowserPage.ExecLine('document.getElementById("expn_0_4").value = "'+date1+'"', TRUE)
 	[ ] AMPAddRegionalFunding.Save.Click ()
 	[ ] BrowserMessage.SetActive ()
 	[ ] BrowserMessage.OK.Click ()
@@ -477,7 +477,7 @@
 	[ ] AMPAddComponents.PlannedActual1.Select (1)
 	[ ] AMPAddComponents.Planned.SetText("asdfg")
 	[ ] AMPAddComponents.Currency.Select (1)
-	[ ] BrowserPage.ExecLine('document.getElementById("date1comm_0_4").value = "'+date1+'"', TRUE)
+	[ ] BrowserPage.ExecLine('document.getElementById("comm_0_4").value = "'+date1+'"', TRUE)
 	[ ] 
 	[ ] AMPAddComponents.Save.Click ()
 	[ ] BrowserMessage.SetActive ()
@@ -492,7 +492,7 @@
 	[ ] AMPAddComponents.PlannedActual1.Select (1)
 	[ ] AMPAddComponents.Planned2.SetText("zxcvb")
 	[ ] AMPAddComponents.Currency2.Select (1)
-	[ ] BrowserPage.ExecLine('document.getElementById("date1disb_0_4").value = "'+date1+'"', TRUE)
+	[ ] BrowserPage.ExecLine('document.getElementById("disb_0_4").value = "'+date1+'"', TRUE)
 	[ ] 
 	[ ] AMPAddComponents.Save.Click ()
 	[ ] BrowserMessage.SetActive ()
@@ -506,7 +506,7 @@
 	[ ] AMPAddComponents.PlannedActual1.Select (1)
 	[ ] AMPAddComponents.Planned3.SetText("vbnmc")
 	[ ] AMPAddComponents.Currency3.Select (1)
-	[ ] BrowserPage.ExecLine('document.getElementById("date1expn_0_4").value = "'+date1+'"', TRUE)
+	[ ] BrowserPage.ExecLine('document.getElementById("expn_0_4").value = "'+date1+'"', TRUE)
 	[ ] 
 	[ ] AMPAddComponents.Save.Click ()
 	[ ] BrowserMessage.SetActive ()
@@ -514,7 +514,8 @@
 	[ ] AMPAddComponents.SetActive( )
 	[ ] AMPAddComponents.Planned3.SetText("23467")
 	[ ] AMPAddComponents.Save.Click ()
-	[ ] AMPAddActivityStep10.Costing.Click()
+	[ ] 
+	[ ] AMPDesktopLinks.Costing.Click()
 	[ ] AMPAddActivityStep11.AddActivity.Click ()
 	[ ] AMPAddEditActivity.SetActive( )
 	[ ] AMPAddEditActivity.ActivityName.SetText("silk test")
@@ -533,12 +534,13 @@
 	[ ] STRING date2
 	[ ] today = GetDateTime()
 	[ ] date2 = FormatDateTime(today,"yyyy-mm-dd")
-	[ ] AMPAddEditActivity.DueDate.SetText(date2)
+	[ ] AMPAddEditActivity.SetActive()
+	[ ] BrowserPage.ExecLine('document.getElementsByName("dueDate")[0].value = "'+date1+'"', TRUE)
 	[ ] AMPAddEditActivity.OK.Click ()
 	[ ] AMPAddEditActivity.TotalCost.SetText("23456")
 	[ ] AMPAddEditActivity.Contributions.SetText("12345")
 	[ ] AMPAddEditActivity.OK.Click ()
-	[ ] 
+	[ ] AMPDesktopLinks.Save.Click()
 	[ ] 
 [+] testcase Test3() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")

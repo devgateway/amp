@@ -305,14 +305,14 @@
 		[-] multitag "&name='fileData'"
 			[ ] "$fileData"
 [ ] 
-[+] window BrowserChild AMPAddActivityStep1
+[-] window BrowserChild AMPAddActivityStep1
 	[ ] tag "AMP - Add Activity - Identification*"
 	[ ] parent Browser
 	[+] HtmlTextField ProjectTitle
 		[-] multitag "&name='title'"
 			[ ] "Project Title"
 			[ ] "$title"
-	[+] HtmlLink Objective
+	[-] HtmlLink Objective
 		[ ] tag "$javascript:edit('aim-obj-*"
 	[+] HtmlLink Description
 		[ ] tag "$javascript:edit('aim-desc-*"
@@ -618,7 +618,7 @@
 			[ ] "$javascript:gotoStep(3)"
 	[ ] 
 [ ] 
-[-] window BrowserChild AMPSelectLocation
+[+] window BrowserChild AMPSelectLocation
 	[ ] tag "AMP - Select Location"
 	[ ] parent Browser
 	[+] HtmlPopupList Region
@@ -1683,7 +1683,7 @@
 		[ ] tag "Please wait a moment"
 	[+] HtmlPushButton Submit
 		[ ] tag "Submit"
-[-] window BrowserChild ProposedProjectCost
+[+] window BrowserChild ProposedProjectCost
 	[ ] tag "Proposed Project Cost"
 	[ ] parent Browser
 	[+] HtmlTextField Planned
@@ -1775,5 +1775,9 @@
 		[-] multitag "&name='saveButton'"
 			[ ] "Save"
 			[ ] "$saveButton"
+	[+] HtmlLink Costing
+		[-] multitag "Costing"
+			[ ] "$javascript:gotoStep(11)"
+	[ ] 
 	[ ] 
 [ ] 

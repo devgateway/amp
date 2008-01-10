@@ -256,6 +256,7 @@ public class AddAmpActivity extends Action {
     if (request.getParameter("addComponente") != null) {
       ActivitySector selectedComponente = (ActivitySector) session.getAttribute(
           "addComponente");
+      if(selectedComponente==null) selectedComponente=new ActivitySector();
       session.removeAttribute("componenteSelected");
 
       Collection<ActivitySector> prevSelComponentes = eaForm.getActivityComponentes();

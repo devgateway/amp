@@ -41,10 +41,8 @@ public class CurrencyManager extends Action {
 		}
 
 		CurrencyForm crForm = (CurrencyForm) form;
-
+			crForm.setPagesToShow(10);
 		try {
-
-
 			int page = crForm.getPage();
 			if (page < 1) page = 1;
 			String reload = request.getParameter("reload");

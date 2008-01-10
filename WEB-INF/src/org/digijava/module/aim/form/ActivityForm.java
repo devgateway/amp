@@ -1,5 +1,6 @@
 package org.digijava.module.aim.form;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.struts.action.*;
@@ -25,6 +26,11 @@ public class ActivityForm extends ActionForm implements Serializable {
 	
 	private int totalPages;
 
+    private int pagesToShow;
+    private int offset;
+    private Integer currentPage;
+    private Collection pages = null;
+    
 	/**
 	 * @return Returns the activityList.
 	 */
@@ -88,6 +94,65 @@ public class ActivityForm extends ActionForm implements Serializable {
 	public int getTotalPages() {
 		return totalPages;
 	}
-
+    /**
+     * 
+     * @return pagesToShow
+     */
+    public int getPagesToShow() {
+    	return pagesToShow;
+    }
+    
+    /**
+     * 
+     * @param pagesToShow
+     */
+    
+    public void setPagesToShow(int pagesToShow) {
+    	this.pagesToShow = pagesToShow;
+    }
+    /**
+     * 
+     * @return value of pagination star
+     */
+    public int getOffset() {
+    	int value;
+    	if (getCurrentPage()> (this.getPagesToShow()/2)){
+    		value = (this.getCurrentPage() - (this.getPagesToShow()/2))-1;
+    	}
+    	else {
+    		value = 0;
+    	}
+    	setOffset(value);
+    	return offset;
+    }
+    
+    /**
+     * 
+     * @param offset
+     */
+    public void setOffset(int offset) {
+    	this.offset = offset;
+    }
+    
+    /**
+	 * @return Returns the currentPage.
+	 */
+	public Integer getCurrentPage() {
+		return currentPage;
+	}
+	/**
+	 * @param currentPage The currentPage to set.
+	 */
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
+	}
+	
+	public Collection getPages() {
+	   return pages;
+	}
+	  
+	public void setPages(Collection pages) {
+	    this.pages = pages;
+	  }
 
 }

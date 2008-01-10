@@ -233,6 +233,10 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long ampCommentId;
 	private String fieldName;
 	private AmpField field = null;
+	
+	  private int pagesToShow;
+	  private int pagesSize;
+	  private int startPage;
 
 	/* All AmpComments objects are kept in this List while going through the Add/Edit Activity wizard.
 	 * This List is used when saving the activity (and thus the comments) to the database.
@@ -1410,6 +1414,10 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setPages(Collection pages) {
 		this.pages = pages;
+		  if(pages!=null)
+		  {    
+			  this.pagesSize=pages.size();
+		  }
 	}
 
 	/**
@@ -4701,6 +4709,41 @@ public class EditActivityForm extends ActionForm implements Serializable{
         this.surveyOrgId = surveyOrgId;
     }
 
+    public int getPagesToShow() {
+    	return pagesToShow;
+    }
+
+    public void setPagesToShow(int pagesToShow) {
+    	this.pagesToShow = pagesToShow;
+    }
+
+    public int getStartPage() {
+    	int value;
+    	if (getCurrentPage()> (this.getPagesToShow()/2)){
+    		value = (this.getCurrentPage() - (this.getPagesToShow()/2))-1;
+    	}
+    	else {
+    		value = 0;
+    	}
+    	this.startPage = value;
+    	return startPage;
+    }
+
+    public void setstartPage(int offset) {
+    	this.offset = offset;
+    }
+    
+    public int getPagesSize() {
+    	return pagesSize;
+    }
+
+    public void setPagesSize(int pagesSize) {
+    	this.pagesSize = pagesSize;
+    }
+
+	public void setStartPage(int startPage) {
+		this.startPage = startPage;
+	}
 }
 
 

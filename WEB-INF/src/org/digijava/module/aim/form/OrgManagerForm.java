@@ -213,7 +213,15 @@ public class OrgManagerForm
   public Collection getPages() {
     return pages;
   }
- 
+
+  public void setPages(Collection pages) {
+	  this.pages = pages;
+	  if(pages!=null)
+	  {    
+		  this.pagesSize=pages.size();
+	  }
+  }
+  
   public int getPagesSize() {
 	return pagesSize;
 }
@@ -221,14 +229,6 @@ public class OrgManagerForm
 public void setPagesSize(int pagesSize) {
 	this.pagesSize = pagesSize;
 }
-
-public void setPages(Collection pages) {
-    this.pages = pages;
-    if(pages!=null)
-    {    
-    	this.pagesSize=pages.size();
-    }
-  }
 
   /**
    * @return Returns the startAlphaFlag.

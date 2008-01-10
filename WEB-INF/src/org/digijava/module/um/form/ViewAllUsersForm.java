@@ -31,8 +31,9 @@ public class ViewAllUsersForm
     private String sortBy;
     private String reset;
    
-	
-
+    private int pagesToShow;
+    private int offset;
+    private int pagesSize;
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
           //pages = null;
           // currentAlpha = null;        
@@ -59,6 +60,10 @@ public class ViewAllUsersForm
 
 	public void setPages(Collection pages) {
 		this.pages = pages;
+		if(pages!=null)
+	    {    
+	    	this.pagesSize=pages.size();
+	    }
 	}
 
 	public int getTempNumResults() {
@@ -159,4 +164,37 @@ public class ViewAllUsersForm
 	public void setSortBy(String sortBy) {
 		this.sortBy = sortBy;
 	}
+	
+	public int getPagesToShow() {
+		return pagesToShow;
+	}
+
+	public void setPagesToShow(int pagesToShow) {
+		this.pagesToShow = pagesToShow;
+	}
+
+	public int getOffset() {
+		int value;
+		if (getCurrentPage()> (this.getPagesToShow()/2)){
+			value = (this.getCurrentPage() - (this.getPagesToShow()/2))-1;
+		}
+		else {
+			value = 0;
+		}
+		setOffset(value);
+		return offset;
+	}
+
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
+	
+	public int getPagesSize() {
+		return pagesSize;
+	}
+
+	public void setPagesSize(int pagesSize) {
+		this.pagesSize = pagesSize;
+	}
+
 }

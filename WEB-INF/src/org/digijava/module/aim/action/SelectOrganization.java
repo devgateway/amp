@@ -27,7 +27,7 @@ public class SelectOrganization extends Action {
 			eaForm.setPagedCol(null);
 			eaForm.reset(mapping, request);
 		}
-
+		eaForm.setPagesToShow(10);
 		int page = 0;
 		if (request.getParameter("page") == null) {
 			page = 1;

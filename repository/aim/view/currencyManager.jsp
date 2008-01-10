@@ -291,11 +291,7 @@ function sortSubmit(value){
 									</tr>
 									<tr>
 										<td width="200" align="left">
-											<c:if test="${!empty aimCurrencyForm.pages}">
-											<bean:size name="aimCurrencyForm" property="pages" id="totpages"/>
-											Page <u><c:out value="${aimCurrencyForm.currentPage}"/></u> of
-											<u><c:out value="${totpages}"/></u>
-											</c:if>
+											
 										</td>
 										<td align="right" width="184">
 											<table cellSpacing="1" cellPadding="2" vAlign="top" align="left">
@@ -315,20 +311,71 @@ function sortSubmit(value){
 									<tr>
 										<td colspan="2" align="left">
 											Pages :
-											<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-											<c:forEach var="currPage" items="${aimCurrencyForm.pages}">
-												<c:if test="${currPage == aimCurrencyForm.currentPage}">
-													<c:out value="${currPage}"/>
+											<c:if test="${aimCurrencyForm.currentPage > 1}">
+												<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
+												<c:set target="${urlParamsFirst}" property="page" value="1"/>
+												<c:set var="translation">
+													<digi:trn key="aim:firstpage">First Page</digi:trn>
+												</c:set>
+												<digi:link href="/currencyManager.do"  style="text-decoration=none"  name="urlParamsFirst" title="${translation}">
+													&lt;&lt;
+												</digi:link>
+												<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
+												<c:set target="${urlParamsPrevious}" property="page" value="${aimCurrencyForm.currentPage -1}"/>
+												<c:set var="translation">
+													<digi:trn key="aim:previouspage">Previous Page</digi:trn>
+												</c:set>
+												<digi:link  href="/currencyManager.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
+													&lt;
+												</digi:link>
+											</c:if>
+											
+											<c:set var="length" value="${aimCurrencyForm.pagesToShow}"></c:set>
+											<c:set var="start" value="${aimCurrencyForm.offset}"/>
+											<logic:iterate name="aimCurrencyForm" property="pages" id="pages" type="java.lang.Integer" offset="${start}" length="${length}">	
+												<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
+												<c:set target="${urlParams1}" property="page"><%=pages%></c:set>
+												<c:set target="${urlParams1}" property="orgSelReset" value="false"/>
+												<c:if test="${aimCurrencyForm.currentPage == pages}">
+													<font color="#FF0000"><%=pages%></font>
 												</c:if>
-												<c:if test="${currPage != aimCurrencyForm.currentPage}">
-													<c:set target="${urlParams}" property="page">
-														<c:out value="${currPage}"/>
+												<c:if test="${aimCurrencyForm.currentPage != pages}">
+													<c:set var="translation">
+														<digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
 													</c:set>
-													<digi:link href="/currencyManager.do" name="urlParams">
-													<c:out value="${currPage}"/></digi:link>
+													<digi:link href="/currencyManager.do" name="urlParams1" title="${translation}" >
+														<%=pages%>
+													</digi:link>
 												</c:if>
-												|
-											</c:forEach>
+												|&nbsp;
+											</logic:iterate>
+											<c:if test="${aimCurrencyForm.currentPage != aimCurrencyForm.pagesSize}">
+												<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
+												<c:set target="${urlParamsNext}" property="page" value="${aimCurrencyForm.currentPage+1}"/>
+												<c:set target="${urlParamsNext}" property="orgSelReset" value="false"/>
+												<c:set var="translation">
+													<digi:trn key="aim:nextpage">Next Page</digi:trn>
+												</c:set>
+												<digi:link href="/currencyManager.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
+													&gt;
+												</digi:link>
+												<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
+												<c:if test="${aimCurrencyForm.pagesSize > aimCurrencyForm.pagesToShow}">
+													<c:set target="${urlParamsLast}" property="page" value="${aimCurrencyForm.pagesSize-aimCurrencyForm.pagesToShow}"/>
+												</c:if>
+												<c:if test="${aimCurrencyForm.pagesSize < aimCurrencyForm.pagesToShow}">
+													<c:set target="${urlParamsLast}" property="page" value="${aimCurrencyForm.pagesSize}"/>
+												</c:if>
+												<c:set target="${urlParamsLast}" property="orgSelReset" value="false"/>
+												<c:set var="translation">
+													<digi:trn key="aim:lastpage">Last Page</digi:trn>
+												</c:set>
+												<digi:link href="/currencyManager.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}"  >
+													&gt;&gt; 
+												</digi:link>
+												&nbsp; 
+												<c:out value="${aimCurrencyForm.currentPage}"></c:out> of <c:out value="${aimCurrencyForm.pagesSize}"></c:out>
+											</c:if>
 										</td>
 									</tr>
 									</c:if>

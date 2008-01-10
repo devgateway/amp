@@ -167,6 +167,7 @@
 																	<td width="100">
 																		<bean:write name="activities" property="ampId"/>
 																	</td>
+																	
 																	<td align="left" width="12">
 																		<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																		<c:set target="${urlParams}" property="id">
@@ -215,7 +216,32 @@
 												<jsp:useBean id="urlParamsPagination" type="java.util.Map" class="java.util.HashMap"/>
 												<c:set target="${urlParamsPagination}" property="action" value="getPage"/>
 												<digi:trn key="aim:pages">Pages :</digi:trn>&nbsp;
-												<logic:iterate name="pagelist" id="pageidx" type="java.lang.Integer">
+												<c:if test="${aimActivityForm.currentPage >0}">
+													<jsp:useBean id="urlParamsFirst" type="java.util.Map" class="java.util.HashMap"/>
+													<c:set target="${urlParamsFirst}" property="page" value="0"/>
+													<c:set target="${urlParamsFirst}" property="action" value="getPage"/>
+													<c:set var="translation">
+														<digi:trn key="aim:firstpage">First Page</digi:trn>
+													</c:set>
+													<digi:link href="/activityManager.do"  style="text-decoration=none" name="urlParamsFirst" title="${translation}"  >
+														&lt;&lt;
+													</digi:link>
+													
+													<jsp:useBean id="urlParamsPrevious" type="java.util.Map" class="java.util.HashMap"/>
+													<c:set target="${urlParamsPrevious}" property="page" value="${aimActivityForm.currentPage -1}"/>
+													<c:set target="${urlParamsPrevious}" property="action" value="getPage"/>
+													<c:set var="translation">
+														<digi:trn key="aim:previouspage">Previous Page</digi:trn>
+													</c:set>
+													<digi:link href="/activityManager.do" name="urlParamsPrevious" style="text-decoration=none" title="${translation}" >
+														&lt;
+													</digi:link>
+												</c:if>
+												
+												<c:set var="length" value="${aimActivityForm.pagesToShow}"></c:set>
+												<c:set var="start" value="${aimActivityForm.offset}"/>
+												
+												<logic:iterate name="pagelist" id="pageidx" type="java.lang.Integer" offset="${start}" length="${length}">
 													<c:set target="${urlParamsPagination}" property="page" value="${pageidx - 1}"/>													
 														<c:if test="${(pageidx - 1) eq actualPage}"> 
 																<bean:write name="pageidx"/>
@@ -227,6 +253,33 @@
 													 	</c:if>
 													<c:if test="${pageidx < maxpages}"> | </c:if>
 												</logic:iterate>
+												<c:if test="${aimActivityForm.currentPage+1 != aimActivityForm.totalPages}">
+													<jsp:useBean id="urlParamsNext" type="java.util.Map" class="java.util.HashMap"/>
+													<c:set target="${urlParamsNext}" property="page" value="${aimActivityForm.currentPage+1}"/>
+													<c:set target="${urlParamsNext}" property="action" value="getPage"/>
+													<c:set var="translation">
+														<digi:trn key="aim:nextpage">Next Page</digi:trn>
+													</c:set>
+													<digi:link href="/activityManager.do"  style="text-decoration=none" name="urlParamsNext" title="${translation}"  >
+														&gt;
+													</digi:link>
+													<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
+													<c:if test="${aimActivityForm.totalPages  > aimActivityForm.pagesToShow}">
+														<c:set target="${urlParamsLast}" property="page" value="${aimActivityForm.totalPages-aimOrgManagerForm.pagesToShow}"/>
+														</c:if>
+													<c:if test="${aimActivityForm.totalPages < aimActivityForm.pagesToShow}">
+														<c:set target="${urlParamsLast}" property="page" value="${aimActivityForm.totalPages-1}"/>
+													</c:if>
+													<c:set target="${urlParamsLast}" property="action" value="getPage"/>
+													<c:set var="translation">
+														<digi:trn key="aim:lastpage">Last Page</digi:trn>
+													</c:set>
+													<digi:link href="/activityManager.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}"  >
+														&gt;&gt; 
+													</digi:link>
+													&nbsp; 
+												</c:if>
+												
 											</td>											
 										</tr>
 										<tr bgcolor="#ffffff">

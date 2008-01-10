@@ -416,26 +416,10 @@ public class UserRegisterForm
     public ActionErrors validate(ActionMapping actionMapping,
                                  HttpServletRequest httpServletRequest) {
 
-        ActionErrors errors = super.validate(actionMapping, httpServletRequest);
-
-/*       if ( (this.getSelectedCountryResidence() == null) ||
-            (this.getSelectedCountryResidence().trim().length() <= 0) ||
-            this.getSelectedCountryResidence().trim().equals("-1")) {
-            ActionError error = new ActionError(
-                "error.registration.noresidence");
-            errors.add(null, error);
-            }
+        ActionErrors errors = null;
+        errors=new ActionErrors();
 
 
-            if (this.selectedOrganizationType != null &&
-                this.selectedOrganizationType.equals("other") &&
-                (this.organizationTypeOther == null ||
-                 this.organizationTypeOther.trim().length() <= 0)) {
-
-                ActionError error = new ActionError(
-                    "error.registration.enterorganizationother");
-                errors.add(null, error);
-            }*/
 
         /*        if ( (this.getEmail() == null) || this.getEmail().trim().length() == 0) {
              ActionError error = new ActionError("error.registration.noemail");
@@ -474,6 +458,31 @@ public class UserRegisterForm
                         "error.registration.NoPasswordMatch");
                     errors.add(null, error);
                 }*/
+        
+        
+        if ( (this.getFirstNames() == null) ||
+                this.getFirstNames().trim().length() == 0) {
+                ActionError error = new ActionError(
+                    "error.registration.FirstNameBlank");
+                errors.add(null, error);
+            }
+            if ( (this.getLastName() == null) ||
+                this.getLastName().trim().length() == 0) {
+                ActionError error = new ActionError(
+                    "error.registration.LastNameBlank");
+                errors.add(null, error);
+            }
+            if ( (this.getEmail() == null) || this.getEmail().trim().length() == 0) {
+                ActionError error = new ActionError("error.registration.noemail");
+                       errors.add(null, error);
+                   }
+            if ( (this.getPassword() == null) ||
+                    this.getPassword().trim().length() == 0) {
+                    ActionError error = new ActionError(
+                        "error.registration.passwordBlank");
+                    errors.add(null, error);
+                }            
+            
 
         if ( (this.getEmail() != null) && this.getEmail().trim().length() != 0) {
             if (! (this.getEmail().equals(this.getEmailConfirmation()))) {
@@ -491,6 +500,20 @@ public class UserRegisterForm
                 errors.add(null, error);
             }
         }
+        
+        if ( (this.getSelectedCountryResidence() == null) ||
+                (this.getSelectedCountryResidence().trim().length() <= 0)) {
+            ActionError error = new ActionError("error.registration.noresidence");
+                       errors.add(null, error);
+                   }
+        
+        if  (this.organizationTypeOther == null ||
+                 this.organizationTypeOther.trim().length() <= 0) {
+
+                ActionError error = new ActionError(
+                    "error.registration.enterorganizationother");
+                errors.add(null, error);
+            }
         
         if (null == this.getOrgGrp() || this.getOrgGrp().trim().length() < 1) {
         	ActionError error = new ActionError("error.registration.NoOrgGroup");

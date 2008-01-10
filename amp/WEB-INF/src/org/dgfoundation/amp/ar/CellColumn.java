@@ -107,12 +107,18 @@ public class CellColumn extends Column {
 	 * @see org.dgfoundation.amp.ar.Column#process()
 	 */
 	public Column postProcess() {
-		CellColumn dest = (CellColumn) this.newInstance();
+	  	CellColumn dest = (CellColumn) this.newInstance();
 		ListCell lc = new ListCell();
 		Iterator i = this.iterator();
 		while (i.hasNext()) {
-			Cell element = (Cell) i.next();
-			try {
+		    try {
+			Object objelement = i.next();
+			//If type total column do nothing
+			if (!( objelement instanceof Column)) {
+			
+			
+			    Cell element = (Cell) objelement;
+			
 				// if we don't have items in the cell list, just add the cell
 				if (lc.size() == 0)
 					lc.addCell(element);
@@ -134,18 +140,22 @@ public class CellColumn extends Column {
 					lc = new ListCell();
 					lc.addCell(element);
 				}
+			}	
 			} catch (IncompatibleCellException e) {
 				logger.error(e);
 				e.printStackTrace();
-			}
+			} 
+			
+			
 		}
 
 		if (lc.size() == 1)
 			dest.addCell(lc.getCell(0));
 		if (lc.size() > 1)
 			dest.addCell(lc);
-
+	    
 		return dest;
+	    
 
 	}
 

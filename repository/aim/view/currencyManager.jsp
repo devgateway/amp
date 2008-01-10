@@ -373,9 +373,9 @@ function sortSubmit(value){
 												<digi:link href="/currencyManager.do"  style="text-decoration=none" name="urlParamsLast" title="${translation}"  >
 													&gt;&gt; 
 												</digi:link>
-												&nbsp; 
-												<c:out value="${aimCurrencyForm.currentPage}"></c:out> of <c:out value="${aimCurrencyForm.pagesSize}"></c:out>
+												&nbsp;&nbsp;
 											</c:if>
+											<c:out value="${aimCurrencyForm.currentPage}"></c:out> of <c:out value="${aimCurrencyForm.pagesSize}"></c:out>
 										</td>
 									</tr>
 									</c:if>

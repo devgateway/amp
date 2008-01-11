@@ -56,8 +56,8 @@
 								</c:set>
 								
 								<a style="cursor:pointer; text-decoration:underline; color: blue"
-								onClick="window.location='/contentrepository/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />'"
-								title="${translation }">[<digi:trn key="contentrepository:documentManagerDownload">D</digi:trn>]</a>
+								onClick="window.location='/contentrepository/downloadFile.do?uuid=<bean:write name='crDocumentManagerForm' property='uuid' />'"
+								title="${translation }"><img src= "../ampTemplate/images/check_out.gif" border=0></a>
 								
 								</td>
 							</tr>

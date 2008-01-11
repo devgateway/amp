@@ -27,8 +27,21 @@
 				toScope="request" />
 			<logic:notEqual name="viewable" property="amount" value="0">
 				<tr>
-					<td width="75%"><b><bean:write name="viewable"
-						property="column.absoluteColumnName" /></b></td>
+				<td width="75%"><b>
+				<bean:define id="col" name="viewable" property="column"
+				type="org.dgfoundation.amp.ar.Column" scope="request"
+				toScope="request" />
+				
+					<logic:iterate id="name" name="col"  property="absoluteColumnNameAsList">
+						<c:set var="key">
+							aim:reportbuilder:${name}
+						</c:set>
+						
+						<digi:trn key="${key}">
+							<c:out value="${name}"></c:out>
+						</digi:trn>
+					</logic:iterate>
+					</b></td>
 					<td width="25%"><jsp:include page="<%=viewable.getViewerPath()%>" /></td>
 				</tr>
 			</logic:notEqual>

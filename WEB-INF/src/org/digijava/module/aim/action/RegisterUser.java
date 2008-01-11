@@ -25,8 +25,15 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpUserExtension;
+import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
+import org.digijava.module.aim.form.OrgManagerForm;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.um.form.UserRegisterForm;
+import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 
 public class RegisterUser extends Action {
@@ -112,12 +119,22 @@ public class RegisterUser extends Action {
 					.getNavigationLanguage(request));
 			user.setUserLangPreferences(userLangPreferences);
 
+			// ===== start user extension setup =====
+			AmpUserExtension userExt=new AmpUserExtension();
+			// org type
+			AmpOrgType orgType=org.digijava.module.aim.util.DbUtil.getAmpOrgType(userRegisterForm.getSelectedOrgType());
+			userExt.setOrgType(orgType);
+			AmpOrgGroup orgGroup=org.digijava.module.aim.util.DbUtil.getAmpOrgGroup(userRegisterForm.getSelectedOrgGroup());
+			userExt.setOrgGroup(orgGroup);
+			AmpOrganisation organ = org.digijava.module.aim.util.DbUtil.getOrganisation(userRegisterForm.getSelectedOrganizationId());
+			userExt.setOrganization(organ);
+			// ===== end user extension setup =====
+			
 			// if email register get error message
 
 			if (DbUtil.isRegisteredEmail(user.getEmail())) {
 				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						"error.registration.emailexits"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.registration.emailexits"));
 				saveErrors(request, errors);
 				//return (new ActionForward(mapping.getInput()));
 				return (mapping.getInputForward());
@@ -128,7 +145,14 @@ public class RegisterUser extends Action {
 				Long uid[] = new Long[1];
 				uid[0] = user.getId();
 				org.digijava.module.admin.util.DbUtil.addUsersToGroup(memberGroup.getId(),uid);
+				
+				//save amp user extensions;
+				AmpUserExtensionPK extPK=new AmpUserExtensionPK(user);
+				userExt.setAmpUserExtId(extPK);
+				AmpUserUtil.saveAmpUserExtension(userExt);
 			}
+			
+			
 
 		} catch (Exception e) {
 			logger.error("Exception from RegisterUser :" + e);

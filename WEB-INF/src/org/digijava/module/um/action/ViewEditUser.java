@@ -29,9 +29,12 @@ import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpUserExtension;
+import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.um.form.ViewEditUserForm;
+import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 
 public class ViewEditUser extends Action {
@@ -127,6 +130,7 @@ public class ViewEditUser extends Action {
 
             if (user != null) {
                 uForm.setMailingAddress(user.getAddress());
+                AmpUserExtension userExt = AmpUserUtil.getAmpUserExtension(user);
 
                 if (user.getCountry() != null) {
                     uForm.setSelectedCountryIso(user.getCountry().getIso());
@@ -159,50 +163,79 @@ public class ViewEditUser extends Action {
 
                 uForm.setSelectedLanguageCode(language.getCode());
                 uForm.setSelectedOrgName(user.getOrganizationName());
+                
+                if (userExt!=null){
+                	if (userExt.getOrgGroup()!=null){
+                		uForm.setSelectedOrgGroupId(userExt.getOrgGroup().getAmpOrgGrpId());
+                	}
+                	if (userExt.getOrgType()!=null){
+                		uForm.setSelectedOrgTypeId(userExt.getOrgType().getAmpOrgTypeId().toString());
+                	}
+                	if (userExt.getOrganization()!=null){
+                		uForm.setSelectedOrgName(userExt.getOrganization().getName());
+                		uForm.setSelectedOrgId(userExt.getOrganization().getAmpOrgId());
+                	}
+                	
+                }
 
-                if (user.getOrganizationName() != null &&
-                    user.getOrganizationName().length() != 0) {
-                    Collection<AmpOrganisation> orgCol = org.digijava.module.aim.util.DbUtil.getAllOrganisation();
-
-                    AmpOrganisation orgnisation = null;
-                    if (orgCol != null) {
-                        for (Iterator iter = orgCol.iterator(); iter.hasNext(); ) {
-                            orgnisation = (AmpOrganisation) iter.next();
-                            if (orgnisation.getName().equals(uForm.getSelectedOrgName())) {
-                                break;
-                            }
-                        }
-                    }
-
-                    Collection<AmpOrgGroup> orgGrpCol = DbUtil.getAllOrgGroup();
-                    AmpOrgGroup orgGroup = null;
-                    if (orgGrpCol != null && orgnisation != null) {
-                        for (Iterator orgGroupIter = orgGrpCol.iterator();
-                             orgGroupIter.hasNext(); ) {
-                            orgGroup = (AmpOrgGroup) orgGroupIter.next();
-                            if (orgGroup != null && orgnisation.getOrgGrpId() != null &&
-                                orgGroup.getAmpOrgGrpId().equals(orgnisation.getOrgGrpId().getAmpOrgGrpId())) {
-
-                                uForm.setSelectedOrgGroupId(orgGroup.getAmpOrgGrpId());
-                                if (orgGroup.getOrgType() != null) {
-                                    uForm.setSelectedOrgTypeId(orgGroup.getOrgType().getAmpOrgTypeId().toString());
-                                }
-                                break;
-                            }
-                        }
-                    }
-
+//                if (user.getOrganizationName() != null &&
+//                    user.getOrganizationName().length() != 0) {
+//                    Collection<AmpOrganisation> orgCol = org.digijava.module.aim.util.DbUtil.getAllOrganisation();
+//
+//                    AmpOrganisation orgnisation = null;
+//                    if (orgCol != null) {
+//                        for (Iterator iter = orgCol.iterator(); iter.hasNext(); ) {
+//                            orgnisation = (AmpOrganisation) iter.next();
+//                            if (orgnisation.getName().equals(uForm.getSelectedOrgName())) {
+//                                break;
+//                            }
+//                        }
+//                    }
+//
+//                    Collection<AmpOrgGroup> orgGrpCol = DbUtil.getAllOrgGroup();
+//                    AmpOrgGroup orgGroup = null;
+//                    if (orgGrpCol != null && orgnisation != null) {
+//                        for (Iterator orgGroupIter = orgGrpCol.iterator();
+//                             orgGroupIter.hasNext(); ) {
+//                            orgGroup = (AmpOrgGroup) orgGroupIter.next();
+//                            if (orgGroup != null && orgnisation.getOrgGrpId() != null &&
+//                                orgGroup.getAmpOrgGrpId().equals(orgnisation.getOrgGrpId().getAmpOrgGrpId())) {
+//
+//                                uForm.setSelectedOrgGroupId(orgGroup.getAmpOrgGrpId());
+//                                if (orgGroup.getOrgType() != null) {
+//                                    uForm.setSelectedOrgTypeId(orgGroup.getOrgType().getAmpOrgTypeId().toString());
+//                                }
+//                                break;
+//                            }
+//                        }
+//                    }
+//
                     uForm.setOrgTypes(DbUtil.getAllOrgTypes());
                     if (uForm.getSelectedOrgTypeId() != null) {
                         uForm.setOrgGroups(DbUtil.getOrgGroupByType(Long.valueOf(uForm.getSelectedOrgTypeId())));
                     }
                     uForm.setOrgs(DbUtil.getOrgByGroup(uForm.getSelectedOrgGroupId()));
-                }
+//                }
             }
         } else {
             if (uForm.getEvent().equalsIgnoreCase("save")) {
                 if (user != null) {
-                	
+                	// TODO ideally, user, userLangPreferences, and userExtension should be saved in one transaction.
+                	AmpUserExtension userExt=AmpUserUtil.getAmpUserExtension(user);
+                	if (userExt==null){
+                		userExt=new AmpUserExtension(new AmpUserExtensionPK(user));
+                	}
+
+                    if (userExt!=null){
+            			AmpOrgType orgType=org.digijava.module.aim.util.DbUtil.getAmpOrgType(new Long(uForm.getSelectedOrgTypeId()));
+            			userExt.setOrgType(orgType);
+            			AmpOrgGroup orgGroup=org.digijava.module.aim.util.DbUtil.getAmpOrgGroup(uForm.getSelectedOrgGroupId());
+            			userExt.setOrgGroup(orgGroup);
+            			AmpOrganisation organ = org.digijava.module.aim.util.DbUtil.getOrganisation(uForm.getSelectedOrgId());
+            			userExt.setOrganization(organ);
+            			AmpUserUtil.saveAmpUserExtension(userExt);
+                    }
+
                     user.setCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(uForm.getSelectedCountryIso()));
                     user.setEmail(uForm.getEmail());
                     user.setFirstNames(uForm.getFirstNames());
@@ -234,6 +267,8 @@ public class ViewEditUser extends Action {
                     langPref.setNavigationLanguage(language);
                     UserUtils.saveUserLangPreferences(langPref);
 
+                    
+                    
                     DbUtil.updateUser(user);
 
                     resetViewEditUserForm(uForm);

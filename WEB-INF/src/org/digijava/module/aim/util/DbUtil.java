@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -81,6 +82,8 @@ import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.AmpUserExtension;
+import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.AmpProjectBySector;
 import org.digijava.module.aim.helper.Assistance;
@@ -1443,7 +1446,7 @@ public class DbUtil {
         }
         return user;
     }
-
+    
     /**
      * @author Arty
      * @param reportId

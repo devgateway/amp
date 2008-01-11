@@ -71,6 +71,7 @@ public class UserRegisterForm
     private String selectedLanguage;
     private String[] contentSelectedLanguages;
     private String organizationTypeOther;
+    private Long selectedOrganizationId;
 
 //FocusBoxes
     private String[] selectedItems = {};
@@ -548,4 +549,12 @@ public class UserRegisterForm
     public void setOrganizationTypeOther(String organizationTypeOther) {
         this.organizationTypeOther = organizationTypeOther;
     }
+
+	public Long getSelectedOrganizationId() {
+		return selectedOrganizationId;
+	}
+
+	public void setSelectedOrganizationId(Long selectedOrganizationId) {
+		this.selectedOrganizationId = selectedOrganizationId;
+	}
 }

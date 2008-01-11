@@ -443,14 +443,15 @@
 					</td>
 
 					<td align="left">
+						<html:hidden property="organizationName" value="-1"/>
 
-						<html:select property="organizationName" styleClass="inp-text" >
+						<html:select property="selectedOrganizationId" styleClass="inp-text" >
 
 							<html:option value="-1">-- <digi:trn key="um:selectOrganization">Select an organization</digi:trn> --</html:option>
 
 							<logic:notEmpty name="aimUserRegisterForm" property="orgColl" >
 
-								<html:optionsCollection name="aimUserRegisterForm" property="orgColl" value="name" label="name" />
+								<html:optionsCollection name="aimUserRegisterForm" property="orgColl" value="ampOrgId" label="name" />
 
 							</logic:notEmpty>
 

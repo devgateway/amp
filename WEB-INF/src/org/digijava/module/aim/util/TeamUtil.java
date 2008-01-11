@@ -1890,10 +1890,8 @@ public class TeamUtil {
 
             if(team.getAccessType().equalsIgnoreCase(
                 Constants.ACCESS_TYPE_MNGMT)) {
-                queryString = "select r from " + AmpReports.class.getName()
-                    + " r " + " order by r.name ";
-                qry = session.createQuery(queryString);
-                count=(Integer)qry.uniqueResult();
+                count=(Integer) session.createQuery("select count(*) from "+ AmpReports.class.getName()
+                    + " r ").uniqueResult();
             } else if (!inlcludeMemberReport){
                 queryString = "select r from "
                     + AmpTeamReports.class.getName()+" tr inner join tr.report r "

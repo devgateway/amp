@@ -1,246 +1,254 @@
 package org.digijava.module.um.form;
 
-import java.util.*;
+import java.util.Collection;
 
-import org.apache.struts.action.*;
-import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.CountryBean;
 
-public class ViewEditUserForm
-    extends ActionForm {
+public class ViewEditUserForm extends ActionForm {
 
-  private Long id;
-  private String email;
-  private String contacts;
-  private String firstNames;
-  private String lastName;
-  private String name;
-  private String url;
-  private String mailingAddress;
+	private static final long serialVersionUID = 1L;
+	private Long id;
+	private String email;
+	private String contacts;
+	private String firstNames;
+	private String lastName;
+	private String name;
+	private String url;
+	private String mailingAddress;
 
-  private Long selectedOrgGroupId;
-  private Collection<AmpOrgGroup> orgGroups;
+	private Long selectedOrgGroupId;
+	private Collection<AmpOrgGroup> orgGroups;
 
-  private String selectedOrgTypeId;
-  private Collection<AmpOrgType> orgTypes;
+	private String selectedOrgTypeId;
+	private Collection<AmpOrgType> orgTypes;
 
-  private String selectedOrgName;
-  private Collection<AmpOrganisation> orgs;
-  
-  /* this is the attached org related with gateperm OrgRoleGate*/
-  private Long assignedOrgId;
+	private String selectedOrgName;
+	private Long selectedOrgId;
+	private Collection<AmpOrganisation> orgs;
 
-  private String selectedCountryIso;
-  private Collection<CountryBean> countries;
+	/* this is the attached org related with gateperm OrgRoleGate */
+	private Long assignedOrgId;
 
-  private String selectedLanguageCode;
-  private Collection languages;
+	private String selectedCountryIso;
+	private Collection<CountryBean> countries;
 
-  private String event;
-  private Boolean ban;
-  private String confirmNewPassword;
-  private String newPassword;
-  private Boolean displaySuccessMessage;
-  public ViewEditUserForm() {
+	private String selectedLanguageCode;
+	private Collection languages;
 
-  }
+	private String event;
+	private Boolean ban;
+	private String confirmNewPassword;
+	private String newPassword;
+	private Boolean displaySuccessMessage;
 
-  public String getContacts() {
-    return contacts;
-  }
+	public ViewEditUserForm() {
 
-  public Collection<CountryBean> getCountries() {
-    return countries;
-  }
+	}
 
-  public String getEmail() {
-    return email;
-  }
+	public String getContacts() {
+		return contacts;
+	}
 
-  public String getEvent() {
-    return event;
-  }
+	public Collection<CountryBean> getCountries() {
+		return countries;
+	}
 
-  public String getFirstNames() {
-    return firstNames;
-  }
+	public String getEmail() {
+		return email;
+	}
 
-  public Long getId() {
-    return id;
-  }
+	public String getEvent() {
+		return event;
+	}
 
-  public Collection getLanguages() {
-    return languages;
-  }
+	public String getFirstNames() {
+		return firstNames;
+	}
 
-  public String getLastName() {
-    return lastName;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  public String getMailingAddress() {
-    return mailingAddress;
-  }
+	public Collection getLanguages() {
+		return languages;
+	}
 
-  public String getName() {
-    return name;
-  }
+	public String getLastName() {
+		return lastName;
+	}
 
-  public Collection<AmpOrgGroup> getOrgGroups() {
-    return orgGroups;
-  }
+	public String getMailingAddress() {
+		return mailingAddress;
+	}
 
-  public Collection<AmpOrganisation> getOrgs() {
-    return orgs;
-  }
+	public String getName() {
+		return name;
+	}
 
-  public Collection<AmpOrgType> getOrgTypes() {
-    return orgTypes;
-  }
+	public Collection<AmpOrgGroup> getOrgGroups() {
+		return orgGroups;
+	}
 
-  public String getSelectedCountryIso() {
-    return selectedCountryIso;
-  }
+	public Collection<AmpOrganisation> getOrgs() {
+		return orgs;
+	}
 
-  public String getSelectedLanguageCode() {
-    return selectedLanguageCode;
-  }
+	public Collection<AmpOrgType> getOrgTypes() {
+		return orgTypes;
+	}
 
-  public Long getSelectedOrgGroupId() {
-    return selectedOrgGroupId;
-  }
+	public String getSelectedCountryIso() {
+		return selectedCountryIso;
+	}
 
-  public String getSelectedOrgName() {
-    return selectedOrgName;
-  }
+	public String getSelectedLanguageCode() {
+		return selectedLanguageCode;
+	}
 
-  public String getSelectedOrgTypeId() {
-    return selectedOrgTypeId;
-  }
+	public Long getSelectedOrgGroupId() {
+		return selectedOrgGroupId;
+	}
 
-  public String getUrl() {
-    return url;
-  }
+	public String getSelectedOrgName() {
+		return selectedOrgName;
+	}
 
-  public Boolean getBan() {
-    return ban;
-  }
+	public String getSelectedOrgTypeId() {
+		return selectedOrgTypeId;
+	}
 
-  public String getConfirmNewPassword() {
+	public String getUrl() {
+		return url;
+	}
 
-    return confirmNewPassword;
-  }
+	public Boolean getBan() {
+		return ban;
+	}
 
-  public String getNewPassword() {
-    return newPassword;
-  }
+	public String getConfirmNewPassword() {
 
-  public Boolean getDisplaySuccessMessage() {
-    return displaySuccessMessage;
-  }
+		return confirmNewPassword;
+	}
 
-  public void setUrl(String url) {
-    this.url = url;
-  }
+	public String getNewPassword() {
+		return newPassword;
+	}
 
-  public void setSelectedOrgTypeId(String selectedOrgTypeId) {
-    this.selectedOrgTypeId = selectedOrgTypeId;
-  }
+	public Boolean getDisplaySuccessMessage() {
+		return displaySuccessMessage;
+	}
 
-  public void setSelectedOrgName(String selectedOrgName) {
-    this.selectedOrgName = selectedOrgName;
-  }
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-  public void setSelectedOrgGroupId(Long selectedOrgGroupId) {
-    this.selectedOrgGroupId = selectedOrgGroupId;
-  }
+	public void setSelectedOrgTypeId(String selectedOrgTypeId) {
+		this.selectedOrgTypeId = selectedOrgTypeId;
+	}
 
-  public void setSelectedLanguageCode(String selectedLanguageCode) {
-    this.selectedLanguageCode = selectedLanguageCode;
-  }
+	public void setSelectedOrgName(String selectedOrgName) {
+		this.selectedOrgName = selectedOrgName;
+	}
 
-  public void setSelectedCountryIso(String selectedCountryIso) {
-    this.selectedCountryIso = selectedCountryIso;
-  }
+	public void setSelectedOrgGroupId(Long selectedOrgGroupId) {
+		this.selectedOrgGroupId = selectedOrgGroupId;
+	}
 
-  public void setOrgTypes(Collection<AmpOrgType> orgTypes) {
-    this.orgTypes = orgTypes;
-  }
+	public void setSelectedLanguageCode(String selectedLanguageCode) {
+		this.selectedLanguageCode = selectedLanguageCode;
+	}
 
-  public void setOrgs(Collection<AmpOrganisation> orgs) {
-    this.orgs = orgs;
-  }
+	public void setSelectedCountryIso(String selectedCountryIso) {
+		this.selectedCountryIso = selectedCountryIso;
+	}
 
-  public void setOrgGroups(Collection<AmpOrgGroup> orgGroups) {
-    this.orgGroups = orgGroups;
-  }
+	public void setOrgTypes(Collection<AmpOrgType> orgTypes) {
+		this.orgTypes = orgTypes;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	public void setOrgs(Collection<AmpOrganisation> orgs) {
+		this.orgs = orgs;
+	}
 
-  public void setMailingAddress(String mailingAddress) {
-    this.mailingAddress = mailingAddress;
-  }
+	public void setOrgGroups(Collection<AmpOrgGroup> orgGroups) {
+		this.orgGroups = orgGroups;
+	}
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  public void setLanguages(Collection languages) {
-    this.languages = languages;
-  }
+	public void setMailingAddress(String mailingAddress) {
+		this.mailingAddress = mailingAddress;
+	}
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-  public void setFirstNames(String firstNames) {
-    this.firstNames = firstNames;
-  }
+	public void setLanguages(Collection languages) {
+		this.languages = languages;
+	}
 
-  public void setEvent(String event) {
-    this.event = event;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+	public void setFirstNames(String firstNames) {
+		this.firstNames = firstNames;
+	}
 
-  public void setCountries(Collection<CountryBean> countries) {
-    this.countries = countries;
-  }
+	public void setEvent(String event) {
+		this.event = event;
+	}
 
-  public void setContacts(String contacts) {
-    this.contacts = contacts;
-  }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-  public void setBan(Boolean ban) {
-    this.ban = ban;
-  }
+	public void setCountries(Collection<CountryBean> countries) {
+		this.countries = countries;
+	}
 
-  public void setConfirmNewPassword(String confirmNewPassword) {
+	public void setContacts(String contacts) {
+		this.contacts = contacts;
+	}
 
-    this.confirmNewPassword = confirmNewPassword;
-  }
+	public void setBan(Boolean ban) {
+		this.ban = ban;
+	}
 
-  public void setNewPassword(String newPassword) {
-    this.newPassword = newPassword;
-  }
+	public void setConfirmNewPassword(String confirmNewPassword) {
 
-  public void setDisplaySuccessMessage(Boolean displaySuccessMessage) {
-    this.displaySuccessMessage = displaySuccessMessage;
-  }
+		this.confirmNewPassword = confirmNewPassword;
+	}
 
-public Long getAssignedOrgId() {
-	return assignedOrgId;
-}
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
 
-public void setAssignedOrgId(Long assignedOrgId) {
-	this.assignedOrgId = assignedOrgId;
-}
+	public void setDisplaySuccessMessage(Boolean displaySuccessMessage) {
+		this.displaySuccessMessage = displaySuccessMessage;
+	}
 
+	public Long getAssignedOrgId() {
+		return assignedOrgId;
+	}
 
+	public void setAssignedOrgId(Long assignedOrgId) {
+		this.assignedOrgId = assignedOrgId;
+	}
+
+	public Long getSelectedOrgId() {
+		return selectedOrgId;
+	}
+
+	public void setSelectedOrgId(Long selectedOrgId) {
+		this.selectedOrgId = selectedOrgId;
+	}
 
 }

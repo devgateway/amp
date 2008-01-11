@@ -223,7 +223,7 @@ function validate(str,value){
                                                                    			<digi:trn key="aim:viewEditUser:organisationName">Organisation name</digi:trn>
 																		</td>
 																	    <td width="380" height="30" colspan="2">
-                                                                    		<html:select name="umViewEditUserForm" property="selectedOrgName" style="font-family:verdana;font-size:11px;width:180px;">
+                                                                    		<html:select name="umViewEditUserForm" property="selectedOrgId" style="font-family:verdana;font-size:11px;width:180px;">
 																                <c:set var="translation">
 																                  <digi:trn key="aim:viewEditUser:selectOrganisation">
 																                  --Select organisation--
@@ -231,7 +231,7 @@ function validate(str,value){
 																                </c:set>
 																                <html:option value="-1">${translation}</html:option>
 																                <c:if test="${!empty umViewEditUserForm.orgs}">
-																                  <html:optionsCollection name="umViewEditUserForm" property="orgs" value="name" label="name"/>
+																                  <html:optionsCollection name="umViewEditUserForm" property="orgs" value="ampOrgId" label="name"/>
 																                </c:if>
 																             </html:select>
                                                                			</td>

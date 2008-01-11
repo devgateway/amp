@@ -325,6 +325,9 @@
 			 org.digijava.module.aim.dbentity.AmpActivityComponente
 	</hibernate-class>
 
+    <hibernate-class>
+			 org.digijava.module.aim.dbentity.AmpUserExtension
+	</hibernate-class>
 
 	</hibernate-classes>
         <!-- highlights classes End-->

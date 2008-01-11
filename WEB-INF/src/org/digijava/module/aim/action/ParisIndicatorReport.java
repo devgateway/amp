@@ -1,7 +1,8 @@
+
 /*
  * Created on 12/05/2006
  * @author akashs
- * 
+ *
  */
 package org.digijava.module.aim.action;
 
@@ -30,45 +31,47 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.SectorUtil;
 
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import java.util.Collection;
+import java.util.*;
 
 
 public class ParisIndicatorReport extends Action {
 
 	private static Logger logger = Logger.getLogger(ParisIndicatorReport.class);
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 								 HttpServletRequest request, HttpServletResponse response) {
-		
+
 		// if user is not logged in, forward him to the home page
 		if (request.getSession().getAttribute("currentMember") == null)
 			return mapping.findForward("index");
 
 		TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");
-		
+
 		// if user is not a DONOR then forward him to his portfolio
-		//if (!tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) 
+		//if (!tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE))
 			//return mapping.findForward("viewMyDesktop");
-		
+
 		logger.debug("In paris-indicator survey report action");
-		
+
 		if (form != null) {
 			ParisIndicatorReportForm svForm = (ParisIndicatorReportForm) form;
-			
+
 			if (null == svForm.getIndicatorsColl() || svForm.getIndicatorsColl().size() < 1) {
 				svForm.setIndicatorsColl(DbUtil.getAllAhSurveyIndicators());
 				return mapping.findForward("menu");
 			}
-			
+
 			if (svForm.getReset().booleanValue()) {
 				//svForm.setReset(Boolean.TRUE);
 				svForm.reset(mapping, request);
 			}
-			
+
 			String indcId = request.getParameter("indcId");
-			
+
 			// Populating indicator-report filters here
 			if ((null != indcId && indcId.trim().length() > 0) || svForm.getFilterFlag().booleanValue()) {
-				
+
 				if (!svForm.getFilterFlag().booleanValue()) {
 					ApplicationSettings apps = null;
 					if (null != tm) {
@@ -112,31 +115,31 @@ public class ParisIndicatorReport extends Action {
 							ampSector.setName(temp);
 						}
 						svForm.getSectorColl().add(ampSector);
-							
-						Iterator iter1 = SectorUtil.getAmpSubSectors(ampSector.getAmpSectorId()).iterator(); 
+
+						Iterator iter1 = SectorUtil.getAmpSubSectors(ampSector.getAmpSectorId()).iterator();
 						while(iter1.hasNext()) {
 							AmpSector ampSubSector = (AmpSector) iter1.next();
 							if(ampSubSector.getName().length() > 35) {
 								ampSubSector.setName("--" + ampSubSector.getName().substring(0,35) + "...");
 							} else {
-								ampSubSector.setName("--" + ampSubSector.getName());	
+								ampSubSector.setName("--" + ampSubSector.getName());
 							}
 							svForm.getSectorColl().add(ampSubSector);
-							
+
 							Iterator iter2 = SectorUtil.getAmpSubSectors(ampSubSector.getAmpSectorId()).iterator();
 							while(iter2.hasNext()) {
 								AmpSector ampSubSubSector = (AmpSector) iter2.next();
 								if(ampSubSubSector.getName().length() > 35) {
 									ampSubSubSector.setName("----" + ampSubSubSector.getName().substring(0,35) + "...");
 								} else {
-									ampSubSubSector.setName("----" + ampSubSubSector.getName());	
+									ampSubSubSector.setName("----" + ampSubSubSector.getName());
 								}
 								svForm.getSectorColl().add(ampSubSubSector);
 							}
 						}
 					}
 				}
-				
+
 				try {
 					AmpAhsurveyIndicator indc = DbUtil.getIndicatorById(Long.valueOf(indcId));
 					svForm.setIndicatorId(indcId);
@@ -147,15 +150,16 @@ public class ParisIndicatorReport extends Action {
 						svForm.setNumColsCalculated("4");
 					}
 					if ("10a".equalsIgnoreCase(svForm.getIndicatorCode())) {
-						svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator10a(svForm.getOrgGroup(), svForm.getDonor(), 
+						svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator10a(svForm.getOrgGroup(), svForm.getDonor(),
 								svForm.getStartYear().intValue(),svForm.getCloseYear().intValue()));
+                        svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(),0));
 						return mapping.findForward("report1");
 					}
 					if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()))
 						svForm.setNumColsCalculated("8");
 					else if ("9".equalsIgnoreCase(svForm.getIndicatorCode()))
 						svForm.setNumColsCalculated("5");
-					
+
 					/* Added by Alex Gartner for category manager compatibility.
 					 * Getting the AmpCategoryValue object for the financingInstrument ID*/
 					AmpCategoryValue financingInstrument	= CategoryManagerUtil.getAmpCategoryValueFromDb(svForm.getFinancingInstrument());
@@ -165,7 +169,7 @@ public class ParisIndicatorReport extends Action {
 							svForm.getOrgGroup(), status, svForm.getStartYear().intValue(),svForm.getCloseYear().intValue(),
 							svForm.getCurrency(),svForm.getTermAssist(),financingInstrument,
 							svForm.getPerspective(),svForm.getSector(),svForm.getCalendar()));
-					
+
 					if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()) || "5b".equalsIgnoreCase(svForm.getIndicatorCode())) {
 						if (!svForm.getDonorsColl().isEmpty()) {
 							int dnSize = svForm.getDonorsColl().size() - 1;
@@ -179,20 +183,20 @@ public class ParisIndicatorReport extends Action {
 							double val = 0.0;
 							Iterator itr1 = null;
 							Iterator itr2 = null;
-							
+
 							svForm.setDonorsCollIndc5(new ArrayList());
 							dnIndc5Row = new String[numCols + 1];
-							
+
 							// creating header row
 							if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()))
 								dnIndc5Row[0] = "Percent of ODA using all three partner's PFM procedures";
 							else
 								dnIndc5Row[0] = "Percent of ODA using national procurement systems";
-							
+
 							for(; j < numCols; j++)
 								dnIndc5Row[j + 1] = Integer.toString(svForm.getStartYear().intValue() + j);
 							svForm.getDonorsCollIndc5().add(dnIndc5Row);
-							
+
 							for (int cntr = 0; cntr < donor.length; cntr++) {
 								dnIndc5Row = new String[numCols + 1];
 								dnIndc5Row[0] = donor[cntr];
@@ -242,11 +246,15 @@ public class ParisIndicatorReport extends Action {
 					logger.debug(ex);
 					ex.printStackTrace(System.out);
 				}
-				if ("7".equalsIgnoreCase(svForm.getIndicatorCode()) 
-						|| "6".equalsIgnoreCase(svForm.getIndicatorCode()))
+				if ("7".equalsIgnoreCase(svForm.getIndicatorCode()) ||
+                    "6".equalsIgnoreCase(svForm.getIndicatorCode())){
+
+                    svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(),0));
 					return mapping.findForward("report2");
-				else
-					return mapping.findForward("report1");
+				}else{
+                    svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(),1));
+                    return mapping.findForward("report1");
+                }
 			}
 			return mapping.findForward("menu");
 		}
@@ -255,5 +263,52 @@ public class ParisIndicatorReport extends Action {
 			return mapping.findForward("viewMyDesktop");
 		}
 	}
+
+    private List filterDonors(Collection donorsCol,int st){
+
+        List filteredDonorsCol=new ArrayList();
+        List donorsLst=new ArrayList(donorsCol);
+
+        boolean flag;
+        for (ListIterator dIter = donorsLst.listIterator(); dIter.hasNext(); ) {
+            ParisIndicator donor = (ParisIndicator) dIter.next();
+
+            flag=true;
+            for (Iterator fdIter = filteredDonorsCol.iterator(); fdIter.hasNext(); ) {
+                ParisIndicator fDonor = (ParisIndicator) fdIter.next();
+
+                if(fDonor.getDonor().equals(donor.getDonor())){
+                    flag=false;
+                    break;
+                }
+            }
+            if(flag){
+                dIter.remove();
+                filteredDonorsCol.add(donor);
+            }
+        }
+
+        for (ListIterator dIter = filteredDonorsCol.listIterator(); dIter.hasNext(); ) {
+            ParisIndicator donor = (ParisIndicator) dIter.next();
+
+            for (Iterator fdIter = donorsLst.iterator(); fdIter.hasNext(); ) {
+                ParisIndicator fDonor = (ParisIndicator) fdIter.next();
+                if(fDonor.getDonor().equals(donor.getDonor())){
+                    ArrayList answ1=fDonor.getAnswers();
+                    ArrayList answ2=donor.getAnswers();
+
+                    for(int i=0;i<answ1.size();i++){
+                        double ans1[] = (double[]) answ1.get(i);
+                        double ans2[] = (double[]) answ2.get(i);
+                        for(int j=st;j<ans1.length;j++){
+                            ans2[j]+=ans1[j];
+                        }
+                    }
+                }
+            }
+        }
+
+        return filteredDonorsCol;
+    }
 }
 

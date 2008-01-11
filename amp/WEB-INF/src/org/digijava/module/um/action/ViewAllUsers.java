@@ -67,8 +67,8 @@
 	                UserBean ub = (UserBean) ubIter.next();
 	
 	                String firstAndLastName = ub.getFirstNames() + ub.getLastName();
-	                if(ub.getEmail().indexOf(vwForm.getKeyword()) == -1 &&
-	                   firstAndLastName.indexOf(vwForm.getKeyword()) == -1 ) {
+	                if(ub.getEmail().toLowerCase().indexOf(vwForm.getKeyword().toLowerCase()) == -1 &&
+	                   firstAndLastName.toLowerCase().indexOf(vwForm.getKeyword().toLowerCase()) == -1 ) {
 	                	
 	                    ubIter.remove();
 	                }

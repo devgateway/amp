@@ -19,6 +19,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
@@ -135,6 +136,10 @@ public class FieldVisibilityTag extends BodyTagSupport {
    			
    			Map scope=PermissionUtil.getScope(pageContext.getSession());   				    
    			if(isFieldActive (ampTreeVisibility) ) {
+   				HttpSession session		= pageContext.getSession();
+   				TeamMember teamMember 	= (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+   			    
+   			    PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
    			   if(ampFieldFromTree.getPermission(false)!=null && !ampFieldFromTree.canDo(GatePermConst.Actions.VIEW,scope))
    			       return SKIP_BODY;
    			   pageContext.getOut().print(bodyText);   			    

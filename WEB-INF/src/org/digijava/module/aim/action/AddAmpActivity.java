@@ -884,18 +884,18 @@ public class AddAmpActivity extends Action {
 	      }
       else if (eaForm.getStep().equals("9")) { // show the preview page.
 
-        if (eaForm.getAmpId() == null) { // if AMP-ID is not generated, generate the AMP-ID
+ //       if (eaForm.getAmpId() == null ) { // if AMP-ID is not generated, generate the AMP-ID
           /*
            * The logic for geerating the AMP-ID is as follows:
            * 1. get default global country code
            * 2. Get the maximum of the ampActivityId + 1, MAX_NUM
            * 3. merge them
            */
-          String ampId =
-              FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.
-                                                 Constants.
-                                                 GLOBAL_DEFAULT_COUNTRY).
-              toUpperCase();
+//          String ampId =
+//              FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.
+//                                                 Constants.
+//                                                 GLOBAL_DEFAULT_COUNTRY).
+//              toUpperCase();
           /*if (eaForm.getFundingOrganizations() != null) {
            if (eaForm.getFundingOrganizations().size() == 1) {
             Iterator itr = eaForm.getFundingOrganizations().iterator();
@@ -907,11 +907,18 @@ public class AddAmpActivity extends Action {
            }
                }*/
 
-          long maxId = ActivityUtil.getActivityMaxId();
-          maxId++;
-          ampId += "/" + maxId;
-          eaForm.setAmpId(ampId);
-        }
+//          long maxId = ActivityUtil.getActivityMaxId();
+//          maxId++;
+//          ampId += "/" + maxId;
+//          eaForm.setAmpId(ampId);      	
+//        	User user= RequestUtils.getUser(request);
+//        	if(eaForm.getActivityId()!=null){
+//        		eaForm.setAmpId(ActivityUtil.generateAmpId(user,eaForm.getActivityId()));
+//        	}else {
+//        		eaForm.setAmpId(ActivityUtil.generateAmpId(user,ActivityUtil.getActivityMaxId()+1));
+//        	}        	
+//        	
+//        }
 
         /*
          * If the mode is 'Add', set the Activity Creator as the current logged in user

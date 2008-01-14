@@ -536,6 +536,10 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         oldActivity.setUpdatedDate(new Date(System.currentTimeMillis()));
         oldActivity.setUpdatedBy(member);
         session.saveOrUpdate(oldActivity);
+        activityId = oldActivity.getAmpActivityId();
+        String ampId=generateAmpId(member.getUser(),activityId );
+        oldActivity.setAmpId(ampId);
+        session.update(oldActivity);
         activity = oldActivity;
         /*
                 // added by Akash
@@ -592,6 +596,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
          */
         session.save(activity);
         activityId = activity.getAmpActivityId();
+        String ampId=generateAmpId(member.getUser(),activityId );
+        activity.setAmpId(ampId);
+        session.update(activity);
         //session.saveOrUpdate(member);
       }
 
@@ -2937,5 +2944,57 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	}
 
   }
+  
+  /**
+   * generates ampId
+   * @param user,actId
+   * @return ampId
+   * @author dare
+   */
+  public static String generateAmpId(User user,Long actId) {
+		String retValue=null;		
+		String globSetting="numeric";// TODO This should come from global settings
+		if(globSetting.equals("numeric")){
+			retValue=numericAmpId(user,actId);
+		}else if(globSetting.equals("text")){
+			retValue=combinedAmpId(actId);
+		}
+		return retValue;
+	}
+/**
+ * combines countryId, current member id and last activityId+1 and makes ampId
+ * @param user,actId
+ * @return 
+ * @author dare
+ */
+	private static String numericAmpId(User user,Long actId){
+		String retVal=null;
+		String countryCode=FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY);
+		String userId=user.getId().toString();
+		String countryId=DbUtil.getDgCountry(countryCode).getCountryId().toString();
+		String lastId=null;
+		if(actId!=null){
+			 lastId = actId.toString();	
+		}		
+		retVal=userId+countryId+lastId;
+		return retVal;
+	}
+	
+	/**
+	 * combines countryIso and last activityId+1 and makes ampId
+	 * @param actId
+	 * @return 
+	 * @author dare
+	 */
+	private static String combinedAmpId(Long actId){
+		String retVal=null;
+		String countryCode=FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY);
+		String lastId=null;
+		if(actId!=null){
+			 lastId = actId.toString();	
+		}	
+		retVal=countryCode.toUpperCase()+"/"+lastId;		
+		return retVal;
+	}
 
 } // End

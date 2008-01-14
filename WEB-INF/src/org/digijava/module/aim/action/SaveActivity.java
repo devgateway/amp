@@ -31,6 +31,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
@@ -340,15 +341,15 @@ public class SaveActivity extends Action {
 				boolean titleFlag = false;
 				boolean statusFlag = false;
 
-				if (eaForm.getAmpId() == null) {
+//				if (eaForm.getAmpId() == null) {
 					/*
 					 * The logic for geerating the AMP-ID is as follows:
 					 * 1. get default global country code
 					 * 2. Get the maximum of the ampActivityId + 1, MAX_NUM
 					 * 3. merge them
 					 */
-					String ampId =
-						FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY).toUpperCase();
+//					String ampId =
+//						FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY).toUpperCase();
 
 			/*		if (eaForm.getFundingOrganizations() != null) {
 						if (eaForm.getFundingOrganizations().size() == 1) {
@@ -364,11 +365,13 @@ public class SaveActivity extends Action {
 							}
 						}
 					}*/
-					long maxId = ActivityUtil.getActivityMaxId();
-					maxId++;
-					ampId += "/" + maxId;
-					eaForm.setAmpId(ampId);
-				}
+//					long maxId = ActivityUtil.getActivityMaxId();
+//					maxId++;
+//					ampId += "/" + maxId;
+//					eaForm.setAmpId(ampId);
+//					User user=RequestUtils.getUser(request);
+//					eaForm.setAmpId(ActivityUtil.generateAmpId(user,eaForm.getActivityId()));
+//				}
 
 				if (eaForm.getTitle() != null) {
 					if (eaForm.getTitle().trim().length() == 0) {

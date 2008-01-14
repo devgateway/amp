@@ -176,11 +176,35 @@ function commentWin(val) {
 															<feature:display name="Edit Activity" module="Previews">
 																<field:display feature="Edit Activity" name="Edit Activity Button">
 																<td>
+																	<c:if test="${aimChannelOverviewForm.buttonText != 'validate'}">
 																	<input type="button" value="<digi:trn key='btn:edit'>Edit</digi:trn>" class="dr-menu"
 																		onclick="fnEditProject(${activity.activityId})">
+																	</c:if>
 																	&nbsp;
 																</td>
 
+																</field:display>
+															</feature:display>
+														</module:display>
+														<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+															<feature:display name="Edit Activity" module="Previews">
+																<field:display feature="Edit Activity" name="Validate Activity Button">
+																	<c:if test="${aimChannelOverviewForm.buttonText == 'validate'}">
+																		<td >
+																			<html:button  styleClass="dr-menu" onclick="fnEditProject(${activity.activityId})" property="validateBtn" >
+																				<digi:trn key="aim:validate">Validate</digi:trn>
+																			</html:button>
+																		</td>
+			
+																	</c:if>
+							                                        <c:if test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
+							                                        	<td >
+							                                        		<html:button  styleClass="FONT-SIZE: 11px; COLOR: #313131" disabled="true" property="validateBtn">
+																				<digi:trn key="aim:approvalAwaited">Approval Awaited</digi:trn>
+																			</html:button>
+							                                        	</td>
+			
+																	</c:if>
 																</field:display>
 															</feature:display>
 														</module:display>
@@ -195,23 +219,6 @@ function commentWin(val) {
 																</field:display>
 															</feature:display>
 														</module:display>
-
-														<c:if test="${aimChannelOverviewForm.buttonText == 'validate'}">
-															<td >
-																<html:button  style="dr-menu" onclick="fnEditProject(${activity.activityId})" property="validateBtn">
-																	<digi:trn key="aim:validate">Validate</digi:trn>
-																</html:button>
-															</td>
-
-														</c:if>
-				                                        <c:if test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
-				                                        	<td >
-				                                        		<html:button  style="FONT-SIZE: 11px; COLOR: #313131" disabled="true" property="validateBtn">
-																	<digi:trn key="aim:approvalAwaited">Approval Awaited</digi:trn>
-																</html:button>
-				                                        	</td>
-
-														</c:if>
 
 														<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 															<feature:display name="Project Fiche" module="Previews">

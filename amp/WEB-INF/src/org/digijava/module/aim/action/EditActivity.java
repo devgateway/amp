@@ -418,23 +418,25 @@ public class EditActivity
           eaForm.setEditAct(true);
         }
         else {
-          GroupReportData r = (GroupReportData) session.getAttribute("report");
-          TreeSet l = (TreeSet) r.getOwnerIds();
-          Iterator i = l.iterator();
-          Long prev = null, next = null;
-          while (i.hasNext()) {
-            Long e = (Long) i.next();
-            if (e.compareTo(activityId) == 0)
-              break;
-            else
-              prev = e;
-          }
-          if (i.hasNext())
-            next = (Long) i.next();
-          session.setAttribute("previousActivity", prev);
-          session.setAttribute("nextActivity", next);
-          request.setAttribute(Constants.ONLY_PREVIEW, "true");
-          logger.info("mapping does end with viewActivityPreview.do");
+        	if(session.getAttribute("report")!=null){
+        		GroupReportData r = (GroupReportData) session.getAttribute("report");
+        		TreeSet l = (TreeSet) r.getOwnerIds();
+        		Iterator i = l.iterator();
+        		Long prev = null, next = null;
+        		while (i.hasNext()) {
+        			Long e = (Long) i.next();
+        			if (e.compareTo(activityId) == 0)
+        				break;
+        			else
+        				prev = e;
+        		}
+        		if (i.hasNext())
+        			next = (Long) i.next();
+        		session.setAttribute("previousActivity", prev);
+        		session.setAttribute("nextActivity", next);
+        		request.setAttribute(Constants.ONLY_PREVIEW, "true");
+        		logger.info("mapping does end with viewActivityPreview.do");
+        	}
         }
       }
 

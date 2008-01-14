@@ -305,7 +305,7 @@
 		[-] multitag "&name='fileData'"
 			[ ] "$fileData"
 [ ] 
-[-] window BrowserChild AMPAddActivityStep1
+[+] window BrowserChild AMPAddActivityStep1
 	[ ] tag "AMP - Add Activity - Identification*"
 	[ ] parent Browser
 	[+] HtmlTextField ProjectTitle
@@ -1455,7 +1455,7 @@
 			[ ] "$javascript:gotoStep(10)"
 	[ ] 
 [ ] 
-[+] window BrowserChild AMPAddActivityStep10
+[-] window BrowserChild AMPAddActivityStep10
 	[ ] tag "AMP - Add Activity - Monitoring and Evaluation"
 	[ ] parent Browser
 	[+] HtmlImage IND004
@@ -1618,29 +1618,29 @@
 	[-] HtmlTextField Text
 		[ ] tag "$content"
 	[ ] 
-	[-] HtmlPushButton SaveNow
+	[+] HtmlPushButton SaveNow
 		[ ] tag "Save now"
 	[ ] 
 	[ ] 
-	[-] HtmlTextField Title11
+	[+] HtmlTextField Title11
 		[-] multitag "Title:[1]"
 			[ ] "$title"
 			[ ] "&name='title'"
-	[-] HtmlTextField Title21
+	[+] HtmlTextField Title21
 		[-] multitag "Title:[2]"
 			[ ] "$content"
 			[ ] "&name='content'"
 	[ ] 
-	[-] BrowserChild Bla
+	[+] BrowserChild Bla
 		[-] multitag "Edit Data - Windows Internet Explorer"
 			[ ] "&id='_content_editor'"
 		[ ] 
-		[-] HtmlTextField test
+		[+] HtmlTextField test
 			[ ] tag "#1"
 		[ ] 
 	[ ] 
 	[ ] 
-	[-] BrowserChild Title
+	[+] BrowserChild Title
 		[+] multitag "&id='_content_editor'"
 			[ ] "Title:"
 		[-] HtmlTextField Title21

@@ -48,8 +48,8 @@ public class ViewChannelOverview extends TilesAction {
 
 		HttpSession session = request.getSession();
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
-		PermissionUtil.resetScope(session);
-		PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
+		//PermissionUtil.resetScope(session);
+		//PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
 		ChannelOverviewForm formBean = (ChannelOverviewForm) form;
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
 

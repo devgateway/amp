@@ -16,6 +16,7 @@
 		<many-to-one name="teamLead" column="team_lead_id" class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none"/>
 		
 		<many-to-one name="type" column="type_categoryvalue_id" class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none"/>
+		<many-to-one name="role" column="role_id" class="org.digijava.module.aim.dbentity.AmpRole" cascade="none"/>
 		
 		<many-to-one name="parentTeamId" column="parent_team_id" class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none"/>
 		

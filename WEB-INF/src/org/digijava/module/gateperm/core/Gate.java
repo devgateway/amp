@@ -93,16 +93,17 @@ public abstract class Gate extends PropertyListable {
 		for (int i = 0; mandatoryScopeKeys() != null
 				&& i < mandatoryScopeKeys().length; i++) {
 			Object object =  scope.get(mandatoryScopeKeys()[i]);
-			if (object == null)
+			
+			if (!scope.containsKey(mandatoryScopeKeys()[i]))
 				throw new NotBoundGateInputException(
 						"Mandatory scope parameter '" + mandatoryScopeKeys()[i]
 								+ "' missing for Gate " + this.getClass());
-			state.put(mandatoryScopeKeys()[i].getCategory(), object.toString());
+			if(object!=null) state.put(mandatoryScopeKeys()[i].getCategory(), object.toString());
 		}
 
 		try {
 		     	boolean b=logic();
-		     	logger.info("Gate "+this.getClass().getSimpleName()+" "+(b?"approves":"rejects")+" access");
+		     	logger.info("Gate "+this.getClass().getSimpleName()+" "+(b?"approves":"rejects")+" access. Gate state is: "+state);
 			return b;
 		} catch (Exception e) {
 			logger.error("Gate "+this.getClass().getName()+" logic has thrown an exception: ", e);

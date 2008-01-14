@@ -96,7 +96,7 @@ public class AddAmpActivity extends Action {
     // Get the current member who has logged in from the session
     teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
     
-    PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
+    //PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
     
     // if user is not logged in, forward him to the home page
     //if (session.getAttribute("currentMember") == null)

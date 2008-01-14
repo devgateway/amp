@@ -18,13 +18,17 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.UpdateWorkspaceForm;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 
 public class UpdateWorkspace extends Action {
 
@@ -157,6 +161,7 @@ public class UpdateWorkspace extends Action {
                 newTeam.setTeamCategory(uwForm.getCategory());
                 newTeam.setAccessType(uwForm.getWorkspaceType());
                 newTeam.setType(typeCategoryValue);
+                if(uwForm.getSelectedRoleId()!=null) newTeam.setRole((AmpRole) DbUtil.get(AmpRole.class, uwForm.getSelectedRoleId()));
                 if(null == uwForm.getRelatedTeam()
                    || "-1".equals(uwForm.getRelatedTeam().toString()
                                   .trim()))
@@ -247,6 +252,7 @@ public class UpdateWorkspace extends Action {
                         saveErrors(request, errors);
                         return mapping.getInputForward();
                     }
+                    if(uwForm.getSelectedRoleId()!=null) newTeam.setRole((AmpRole) DbUtil.get(AmpRole.class, uwForm.getSelectedRoleId()));
                     boolean teamExist = TeamUtil.updateTeam(newTeam, uwForm
                         .getChildWorkspaces());
                     if(teamExist) {
@@ -270,6 +276,7 @@ public class UpdateWorkspace extends Action {
                             session.removeAttribute("currentMember");
                             tm.setTeamName(newTeam.getName());
                             session.setAttribute("currentMember", tm);
+                            PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
                         }
                     }return mapping.findForward("forward");
                 }

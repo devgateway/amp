@@ -34,6 +34,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 
 
 /**
@@ -300,7 +302,8 @@ public class Login extends Action {
 						tm.setTranslator(false);
 					}
 					session.setAttribute("currentMember", tm);
-
+					PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
+					
 					// Set the session infinite. i.e. session never timeouts
 					session.setMaxInactiveInterval(-1);
 					lForm.setLogin(true);

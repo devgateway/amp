@@ -44,6 +44,8 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
@@ -224,6 +226,7 @@ public class AmpAuthenticationFilter
                 tm.setMemberId(usr.getId());
                 tm.setTeamName("AMP Administrator");
                 session.setAttribute("currentMember", tm);
+                PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
                 // show the index page with the admin toolbar at the bottom
 
                 return forwardSuccess;

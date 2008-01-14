@@ -155,7 +155,7 @@ function update(action) {
 	}	
 }
 
-function relTeam() {
+function relTeam() { 
 	var index1  = document.aimUpdateWorkspaceForm.category.selectedIndex;
 	var index2  = document.aimUpdateWorkspaceForm.workspaceType.selectedIndex;
 	var index3  = document.aimUpdateWorkspaceForm.typeId.selectedIndex;
@@ -164,6 +164,7 @@ function relTeam() {
 	var val3    = document.aimUpdateWorkspaceForm.typeId.options[index3].value;
 	var val4	= document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
 
+	
 	if (val1 == "DONOR" && val2 == "Donor") {
 		if (val4 == "no") {
 			if (val3 != "0") {
@@ -427,6 +428,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																<html:option value="Donor"><digi:trn key="aim:Donor">Donor</digi:trn></html:option>
 																<html:option value="Management"><digi:trn key="aim:management">Management</digi:trn></html:option>
 																<html:option value="Team"><digi:trn key="aim:team">Team</digi:trn></html:option>
+																<html:option value="Computed"><digi:trn key="aim:computedWorkspaceType">Computed</digi:trn></html:option>
 															</html:select>
 														</td>
 														</c:if>
@@ -454,6 +456,20 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 															</c:choose>
 														</td>
 														</c:if>
+													</tr>
+													
+													<tr>
+													<tr>
+														<td align="right" bgcolor="#f4f4f2">
+															<font color="red"><b>*</b></font>
+															<digi:trn key="aim:workspaceRole">Workspace Role</digi:trn>
+														</td>
+														
+														<td align="left" bgcolor="#f4f4f2">
+															<html:select property="selectedRoleId" styleClass="inp-text" onchange="relTeam()">
+																<html:optionsCollection name="aimUpdateWorkspaceForm" property="roles" value="ampRoleId" label="name" />
+															</html:select>
+														</td>
 													</tr>
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
 														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'no'}">

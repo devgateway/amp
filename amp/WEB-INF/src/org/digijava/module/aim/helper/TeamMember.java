@@ -237,4 +237,8 @@ public class TeamMember {
 	public void setTeamAccessType(String teamAccessType) {
 		this.teamAccessType = teamAccessType;
 	}
+	
+	public String toString() {
+		return memberName;
+	}
 }

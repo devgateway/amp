@@ -19,6 +19,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.gateperm.core.GatePermConst;
+import org.digijava.module.gateperm.util.PermissionUtil;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.util.RequestUtils;
@@ -129,6 +131,7 @@ public class SelectTeam extends Action {
                 tm.setTranslator(false);
             }
             session.setAttribute("currentMember", tm);
+            PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
             session.setMaxInactiveInterval(-1);
             lForm.setLogin(true);
         } catch (Exception e) {

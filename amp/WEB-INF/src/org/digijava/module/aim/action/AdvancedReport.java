@@ -107,7 +107,7 @@ public class AdvancedReport extends Action {
 		Collection coll = new ArrayList();
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
 		TeamMember teamMember=(TeamMember)httpSession.getAttribute("currentMember");
-		PermissionUtil.putInScope(httpSession, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
+		//PermissionUtil.putInScope(httpSession, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
 		//logger.info(teamMember.getMemberId());
 		if(teamMember==null)
 			return goTo("index",formBean,mapping);

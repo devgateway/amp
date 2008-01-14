@@ -11,8 +11,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
 import org.apache.struts.action.Action;
@@ -28,6 +28,7 @@ import org.digijava.module.gateperm.core.GatePermission;
 import org.digijava.module.gateperm.core.Permission;
 import org.digijava.module.gateperm.core.PermissionMap;
 import org.digijava.module.gateperm.gates.OrgRoleGate;
+import org.digijava.module.gateperm.gates.UserLevelGate;
 import org.digijava.module.gateperm.util.PermissionUtil;
 
 /**
@@ -39,6 +40,22 @@ import org.digijava.module.gateperm.util.PermissionUtil;
  */
 public class AssignFieldPermissions extends Action {
 
+	
+	private void initializeAndSaveGatePermission(Session session,CompositePermission cp,String permissionName,String parameter, Class gate,String readFlag,String editFlag) throws HibernateException {
+		GatePermission baGate=new GatePermission(true);
+		baGate.setName(permissionName);
+		baGate.getGateParameters().add(parameter);
+		baGate.setGateTypeName(gate.getName());
+		HashSet baActions=new HashSet();
+		if("on".equals(editFlag)) baActions.add(GatePermConst.Actions.EDIT);
+		if("on".equals(readFlag)) baActions.add(GatePermConst.Actions.VIEW);
+		baGate.setActions(baActions);
+		if(baGate.getActions().size()>0) { 
+			session.save(baGate);
+			cp.getPermissions().add(baGate);
+		}
+	}
+	
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws java.lang.Exception {
@@ -83,99 +100,15 @@ public class AssignFieldPermissions extends Action {
 		
 		cp.setName(afv.getName()+" - Composite Permission");
 		
-		GatePermission baGate=new GatePermission(true);
-		baGate.setName(afv.getName()+ " - Beneficiary Agency Permission");
-		baGate.getGateParameters().add("BA");
-		baGate.setGateTypeName(OrgRoleGate.class.getName());
-		
-		GatePermission caGate=new GatePermission(true);
-		caGate.setName(afv.getName()+ " - Contracting Agency Permission");
-		caGate.getGateParameters().add("CA");
-		caGate.setGateTypeName(OrgRoleGate.class.getName());
-		
-		GatePermission eaGate=new GatePermission(true);
-		eaGate.setName(afv.getName()+ " - Executing Agency Permission");
-		eaGate.getGateParameters().add("EA");
-		eaGate.setGateTypeName(OrgRoleGate.class.getName());
-		
-		GatePermission iaGate=new GatePermission(true);
-		iaGate.setName(afv.getName()+ " - Implementing Agency Permission");
-		iaGate.getGateParameters().add("IA");
-		iaGate.setGateTypeName(OrgRoleGate.class.getName());
-		
-		GatePermission faGate=new GatePermission(true);
-		faGate.setName(afv.getName()+ " - Funding Agency Permission");
-		faGate.getGateParameters().add("DN");
-		faGate.setGateTypeName(OrgRoleGate.class.getName());
-		
-		GatePermission rgGate=new GatePermission(true);
-		rgGate.setName(afv.getName()+ " - Regional Group Permission");
-		rgGate.getGateParameters().add("RG");
-		rgGate.setGateTypeName(OrgRoleGate.class.getName());
-		
-		GatePermission sgGate=new GatePermission(true);
-		sgGate.setName(afv.getName()+ " - Sector Group Permission");
-		sgGate.getGateParameters().add("SG");
-		sgGate.setGateTypeName(OrgRoleGate.class.getName());
-		
-		
-		HashSet baActions=new HashSet();
-		HashSet caActions=new HashSet();
-		HashSet eaActions=new HashSet();
-		HashSet iaActions=new HashSet();
-		HashSet faActions=new HashSet();
-		HashSet rgActions=new HashSet();
-		HashSet sgActions=new HashSet();
-		
-		if("on".equals(fpf.getBaEdit())) baActions.add(GatePermConst.Actions.EDIT);
-		if("on".equals(fpf.getBaRead())) baActions.add(GatePermConst.Actions.VIEW);
-		
-		if("on".equals(fpf.getCaEdit())) caActions.add(GatePermConst.Actions.EDIT);
-		if("on".equals(fpf.getCaRead())) caActions.add(GatePermConst.Actions.VIEW);
-		
-		if("on".equals(fpf.getEaEdit())) eaActions.add(GatePermConst.Actions.EDIT);
-		if("on".equals(fpf.getEaRead())) eaActions.add(GatePermConst.Actions.VIEW);
-	
-		if("on".equals(fpf.getIaEdit())) iaActions.add(GatePermConst.Actions.EDIT);
-		if("on".equals(fpf.getIaRead())) iaActions.add(GatePermConst.Actions.VIEW);
-	
-		if("on".equals(fpf.getFaEdit())) faActions.add(GatePermConst.Actions.EDIT);
-		if("on".equals(fpf.getFaRead())) faActions.add(GatePermConst.Actions.VIEW);
-
-		if("on".equals(fpf.getRgEdit())) rgActions.add(GatePermConst.Actions.EDIT);
-		if("on".equals(fpf.getRgRead())) rgActions.add(GatePermConst.Actions.VIEW);
-
-		if("on".equals(fpf.getSgEdit())) sgActions.add(GatePermConst.Actions.EDIT);
-		if("on".equals(fpf.getSgRead())) sgActions.add(GatePermConst.Actions.VIEW);
-
-		
-		baGate.setActions(baActions);
-		caGate.setActions(caActions);
-		eaGate.setActions(eaActions);
-		iaGate.setActions(iaActions);
-		faGate.setActions(faActions);
-		rgGate.setActions(rgActions);
-		sgGate.setActions(sgActions);
-		
-		
-		if(baGate.getActions().size()>0)  session.save(baGate);
-		if(caGate.getActions().size()>0)  session.save(caGate);
-		if(eaGate.getActions().size()>0)  session.save(eaGate);
-		if(iaGate.getActions().size()>0)  session.save(iaGate);
-		if(faGate.getActions().size()>0)  session.save(faGate);		
-		if(rgGate.getActions().size()>0)  session.save(rgGate);
-		if(sgGate.getActions().size()>0)  session.save(sgGate);		
-		
-		
-		if(baGate.getActions().size()>0)  cp.getPermissions().add(baGate);
-		if(caGate.getActions().size()>0)  cp.getPermissions().add(caGate);
-		if(eaGate.getActions().size()>0)  cp.getPermissions().add(eaGate);
-		if(iaGate.getActions().size()>0)  cp.getPermissions().add(iaGate);
-		if(faGate.getActions().size()>0)  cp.getPermissions().add(faGate);		
-		if(rgGate.getActions().size()>0)  cp.getPermissions().add(rgGate);
-		if(sgGate.getActions().size()>0)  cp.getPermissions().add(sgGate);		
-	
-		
+		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Beneficiary Agency Permission","BA",OrgRoleGate.class,fpf.getBaRead(),fpf.getBaEdit());
+		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Contracting Agency Permission","CA",OrgRoleGate.class,fpf.getCaRead(),fpf.getCaEdit());		
+		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Executing Agency Permission","EA",OrgRoleGate.class,fpf.getEaRead(),fpf.getEaEdit());
+		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Implementing Agency Permission","IA",OrgRoleGate.class,fpf.getIaRead(),fpf.getIaEdit());
+		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Funding Agency Permission","DN",OrgRoleGate.class,fpf.getFaRead(),fpf.getFaEdit());		
+		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Regional Group Permission","RG",OrgRoleGate.class,fpf.getRgRead(),fpf.getRgEdit());	
+		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Sector Group Permission","SG",OrgRoleGate.class,fpf.getSgRead(),fpf.getSgEdit());
+		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Everyone Permission",UserLevelGate.PARAM_EVERYONE,UserLevelGate.class,fpf.getEvRead(),fpf.getEvEdit());
+		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Guest Permission",UserLevelGate.PARAM_GUEST,UserLevelGate.class,fpf.getGuRead(),fpf.getGuEdit());		
 		session.save(cp);
 		
 		permissionMap.setPermission(cp);
@@ -219,6 +152,17 @@ public class AssignFieldPermissions extends Action {
 				if(agencyPerm.hasAction(GatePermConst.Actions.EDIT)) fpf.setRgEdit("on");
 				if(agencyPerm.hasAction(GatePermConst.Actions.VIEW)) fpf.setRgRead("on");			
 			}    
+		    if(agencyPerm.hasParameter(UserLevelGate.PARAM_EVERYONE)) {
+				if(agencyPerm.hasAction(GatePermConst.Actions.EDIT)) fpf.setEvEdit("on");
+				if(agencyPerm.hasAction(GatePermConst.Actions.VIEW)) fpf.setEvRead("on");			
+			}    
+
+		    
+		    if(agencyPerm.hasParameter(UserLevelGate.PARAM_GUEST)) {
+				if(agencyPerm.hasAction(GatePermConst.Actions.EDIT)) fpf.setGuEdit("on");
+				if(agencyPerm.hasAction(GatePermConst.Actions.VIEW)) fpf.setGuRead("on");			
+			}    
+
 		}
 	    } else { 
 		//initialize everyone + guest

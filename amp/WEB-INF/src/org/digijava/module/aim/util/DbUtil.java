@@ -1852,6 +1852,23 @@ public class DbUtil {
     		CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY, null);
     }
 
+    public static Collection getAll(Class object) {
+        Session session = null;
+        Collection col = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select from " + object.getName();                
+            Query qry = session.createQuery(queryString);
+            col = qry.list();
+        } catch (Exception e) {
+            logger.debug("Exception from getAll()");
+            e.printStackTrace();
+        }
+        return col;
+    }
+    
+    
     public static Collection getAllCountries() {
         Session session = null;
         Collection col = null;

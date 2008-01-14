@@ -17,6 +17,8 @@ import org.digijava.module.aim.dbentity.AmpCategoryValue;
 
 public class UpdateWorkspaceForm extends ValidatorForm {
 
+	private Long selectedRoleId;
+	private Collection roles;
 	private String id = null;
 	private String teamName = null;
 	private String description = null;
@@ -407,7 +409,7 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 			errors = super.validate(mapping, request);
 			
 			if(("DONOR".equalsIgnoreCase(category) &&("Team".equalsIgnoreCase(workspaceType)|| "Management".equalsIgnoreCase(workspaceType)))
-					||("GOVERNMENT".equalsIgnoreCase(category) &&(!"Team".equalsIgnoreCase(workspaceType)&& !"Management".equalsIgnoreCase(workspaceType))) ){
+					||("GOVERNMENT".equalsIgnoreCase(category) && ("Donor".equals(workspaceType))) ){
 				ActionError error = new ActionError("error.aim.updateWorkspace.incorrectWorkspaceType");
 				errors.add("workspaceType", error);
 			}
@@ -475,5 +477,21 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 
 	public void setChildTeamTypeId(Long childTeamTypeId) {
 		this.childTeamTypeId = childTeamTypeId;
+	}
+
+	public Long getSelectedRoleId() {
+		return selectedRoleId;
+	}
+
+	public void setSelectedRoleId(Long selectedRoleId) {
+		this.selectedRoleId = selectedRoleId;
+	}
+
+	public Collection getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Collection roles) {
+		this.roles = roles;
 	}
 }

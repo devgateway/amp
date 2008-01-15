@@ -2976,7 +2976,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 		if(actId!=null){
 			 lastId = actId.toString();	
 		}		
-		retVal=userId+countryId+lastId;
+		retVal=countryId+userId+lastId;
 		return retVal;
 	}
 	

@@ -22,4 +22,12 @@ public class GlobalSettingsConstants {
 	public static final String ACTIVITY_LEVEL					= "Activity Levels";
 	
 	public static final String DEFAULT_CALENDAR					= "Default Calendar";
+
+	public static final String NUMBER_FORMAT                 = "Default Number Format";
+
+	public static final String DECIMAL_SEPARATOR             = "Default Decimal Separator";
+
+	public static final String GROUP_SEPARATOR               = "Default Grouping Separator";
+	    
 }
+

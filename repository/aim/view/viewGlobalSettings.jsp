@@ -11,11 +11,19 @@
 
 <script langauage="JavaScript"><!--
 function saveClicked() {
+
   <digi:context name="preview" property="context/module/moduleinstance/GlobalSettings.do?action=save" />
   document.aimGlobalSettingsForm.action = "<%= preview %>";
   document.aimGlobalSettingsForm.target = "_self";
   document.aimGlobalSettingsForm.submit();
 
+}
+function validateCustomFields(form){
+	if (form.gsfValue.value==''){
+		alert('<digi:trn key="aim:Global:validation">You must provide a value for the current setting</digi:trn>')	
+		return false;
+	}
+	return true;
 }
 
 function populateWithDays(monthId, targetId) {
@@ -195,6 +203,11 @@ function createDateString(monthId, dayId) {
                                   String currentValue	= globalSett.getGlobalSettingsValue();
                                   if (dictionary != null) {
                                     currentValue		=  (String)dictionary.get( currentValue );
+                                    //if not  the value is into dictionary set current for custom value fields 
+                                    if (currentValue==null && globalSett.getGlobalSettingsValue()!=null){
+                                		currentValue=globalSett.getGlobalSettingsValue();
+                                     }
+                                    
                                     if ( currentValue == null )
                                     	currentValue	= "n/a";
                                   }
@@ -209,7 +222,7 @@ function createDateString(monthId, dayId) {
                               </td>
 
 
-                              <digi:form action="/GlobalSettings.do" method="post" >
+                              <digi:form action="/GlobalSettings.do" method="post" onsubmit="return validateCustomFields(this)" >
                                 <td bgcolor="#ffffff" >
                                   <html:hidden property="globalId" name="globalSett"/>
                                   <html:hidden property="globalSettingsName" name="globalSett"/>
@@ -222,12 +235,25 @@ function createDateString(monthId, dayId) {
 
                                   <logic:notEmpty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
 
-                                    <%if (globalSett.getGlobalSettingsName().trim().equals("Default Country".trim())) { %>
+                                    <%if (globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Default Country".trim())) { %>
                                     <html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
                                       <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
                                         <html:option value="${global.key}">${global.value}</html:option>
                                       </logic:iterate>
                                     </html:select>
+                                    <%}else if(globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Default Number Format".trim())) {%>
+                                  	
+                                  	<select name="options"  onchange="if(this.value!='noselection'){gsfValue.value=this.value}" styleClass="inp-text" 
+                                  	value='<%= globalSett.getGlobalSettingsValue()%>'>
+                                      <option value="noselection"><digi:trn key="aim:gloablSetting:selectFormat">(Select Format)</digi:trn> </option>
+                                      <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
+                                        <option value="${global.key}">${global.value}</option>
+                                      </logic:iterate>
+                                    </select>
+                                    <digi:trn key="aim:gloablSetting:predefinedFormat">(Predefined Format)</digi:trn> <br>
+                                    
+                                    <html:text property="gsfValue" value="<%= globalSett.getGlobalSettingsValue()%>"></html:text> 
+                                    <digi:trn key="aim:gloablSetting:customFormat">(Custom Format)</digi:trn> 	
                                     <%}else { %>
                                     <html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
                                       <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global" type="org.digijava.module.aim.helper.KeyValue">
@@ -242,6 +268,7 @@ function createDateString(monthId, dayId) {
                                     </html:select>
                                     <%} %>										
                                     </logic:notEmpty>
+                                    
                                     <logic:empty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
                                     	<c:set var="type" value="<%=gsType %>" />
                                     	<c:choose>

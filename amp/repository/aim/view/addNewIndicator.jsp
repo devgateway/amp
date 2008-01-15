@@ -53,7 +53,7 @@ function addNewIndicator(){
 
  
 if(!document.aimNewIndicatorForm.IndType.checked && !document.aimNewIndicatorForm.IndicatorType.checked){
-	   alert("Please chouse type of indicator!");
+	   alert("Please select indicator type(s).!");
 	   return false;
 	   
  }
@@ -173,7 +173,7 @@ function closeWindow() {
           <tr id="trCategory">
           </tr>
           <tr id="trSector">
-          <td>Sectors<span style="color:Red;"></td>
+          <td>Sectors<span style="color:Red;">*</td>
             <td >
               <jsp:include page="addIndicatorSector.jsp"/>
              </td>

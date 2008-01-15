@@ -16,19 +16,24 @@ function selectActivity(){
   window.close();
 
 
+
 //  document.getElementById("indAction").value="add";
  // document.forms[0].submit();
  // window.opener.document.forms[0].submit();
   //window.close();
  
 }
+
+function closeWindow() {
+		window.close();
+	}
 </script>
 <digi:instance property="aimNewIndicatorForm" />
 <digi:form action="/selectActivityForIndicator.do" method="post">
   <html:hidden property="action" styleId="indAction" value=""/>
-  <table align="center" width="100%">
-    <tr style="background-color:Silver;">
-      <td colspan="10" align="center" style="font-size:14px;height:30px;">
+  <table align="center" width="100%" border="0" bgcolor="white">
+    <tr bgcolor="#006699" class=r-dotted-lg>
+      <td colspan="10" align="center" style="font-size:14px;height:30px;color:white">
         <b>Select activity</b>
       </td>
     </tr>
@@ -40,7 +45,6 @@ function selectActivity(){
         &nbsp;
       </td>
     </tr>
-    <c:if test="${!empty aimNewIndicatorForm.activitiesCol}">
       <tr align="center">
         <td>
           Keyword: <html:text property="keyword"/>
@@ -54,15 +58,16 @@ function selectActivity(){
       </tr>
       <tr>
         <td colspan="10">
-          <table align="center" width="100%" style="margin:0px 3px 3px 3px;padding:0px 3px 3px 3px;">
+          <c:if test="${!empty aimNewIndicatorForm.activitiesCol}">
+          <table align="center" width="100%" style="margin:0px 3px 3px 3px;padding:0px 3px 3px 3px;"  bgcolor="#ECF3FD">
             <c:forEach var="act" items="${aimNewIndicatorForm.activitiesCol}">
               <tr>
                 <td colspan="10">
                 &nbsp;
                 </td>
               </tr>
-              <tr style="background-color:#EFFAF0;">
-                <td valign="middle" style="margin:5px 1px 5px 5px;padding:5px 1px 5px 5px;width:5px;" >
+              <tr onmouseover="style.backgroundColor='#dddddd';" onmouseout="style.backgroundColor='#ECF3FD'">
+                <td valign="middle" style="margin:5px 1px 5px 5px;padding:1px 1px 1px 1px;width:1px;">
                   <html:radio property="selectedActivityId" value="${act.ampActivityId}"/>
                 </td>
                 <td>
@@ -70,7 +75,16 @@ function selectActivity(){
                 </td>
               </tr>
             </c:forEach>
+           
           </table>
+        </c:if>
+        <c:if test="${empty aimNewIndicatorForm.activitiesCol}">
+	          <tr align="center">
+	            <td>
+		       <b>No Activities</b>
+		        </td>
+	        </tr>
+	      </c:if>
         </td>
       </tr>
       <tr>
@@ -80,16 +94,14 @@ function selectActivity(){
       </tr>
       <tr align="center">
         <td>
-          <input type="button" value="Select" onclick="selectActivity();"/>
+        <c:if test="${!empty aimNewIndicatorForm.activitiesCol}">
+         <input type="button" value="Select" onclick="selectActivity();"/>
+        </c:if>
+         <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow();">
+			<digi:trn key="btn:close">Close</digi:trn> 
+	    </html:button>
         </td>
       </tr>
-    </c:if>
-    <c:if test="${empty aimNewIndicatorForm.activitiesCol}">
-      <tr align="center">
-        <td>
-        No Activities
-        </td>
-      </tr>
-    </c:if>
+    
   </table>
 </digi:form>

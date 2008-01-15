@@ -71,20 +71,20 @@ public class SearchAmpIndicators extends Action {
 					// serach for indicators based on the keyword and the
 					// organisation type
 					//col = ProgramUtil.searchForindicators(eaForm.getKeyword().trim(),eaForm.getSectorName());
-					col = ProgramUtil.searchForindicator(eaForm.getKeyword());
-						if(col.size()==0 ){
-							col = ProgramUtil.getThemeindicators(eaForm.getKeyword().trim());
-					 	 }
+					col = IndicatorUtil.searchForindicator(eaForm.getKeyword());
+//						if(col.size()==0 ){
+//							col = ProgramUtil.getThemeindicators(eaForm.getKeyword().trim());
+//					 	 }
 				} else {
 					// search for indicators based on organisation type only
-					col = ProgramUtil.searchForindicator(eaForm.getSectorName());
-				 	if(col.size()==0 ){
-				     	col = ProgramUtil.getThemeindicators(eaForm.getSectorName());
-					}
+					col = IndicatorUtil.searchForindicator(eaForm.getSectorName());
+//				 	if(col.size()==0 ){
+//				     	col = ProgramUtil.getThemeindicators(eaForm.getSectorName());
+//					}
 	  			 }
 			} else if (eaForm.getKeyword().trim().length() != 0) {
 				// search based on the given keyword only.
-				col = ProgramUtil.searchForindicator(eaForm.getKeyword().trim());
+				col = IndicatorUtil.searchForindicator(eaForm.getKeyword().trim());
 			} else  {
 				// get all indicators since keyword field is blank and ind type field has 'ALL'.
 				col = IndicatorUtil.getAmpIndicator();

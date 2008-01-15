@@ -55,19 +55,21 @@
                 <tr>
                   <td width="100%" vAlign="top">
 						<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left" border=0>
-                      <tr>
-                        <td width="100%">
-								<table width="98%" cellSpacing=1 cellpadding=0>
-									<tr>
-										<td class="head1-name" width="100%" align="left" bgcolor="#ffffff">
-                                <c:if test="${aimEditActivityForm.ampId!=null}">
-                                ${aimEditActivityForm.ampId}
-                                </c:if>
-										</td>
-									</tr>		
-								</table>														
-                        </td>
-                      </tr>
+						<feature:display name="Identification" module="Project ID and Planning">
+	                      <tr>
+	                        <td width="100%">
+									<table width="98%" cellSpacing=1 cellpadding=0>
+										<tr>
+											<td class="head1-name" width="100%" align="left" bgcolor="#ffffff">
+	                                <c:if test="${aimEditActivityForm.ampId!=null}">
+	                                ${aimEditActivityForm.ampId}
+	                                </c:if>
+											</td>
+										</tr>		
+									</table>														
+	                        </td>
+	                      </tr>
+                      </feature:display>
                       <tr>
                         <td width="100%">
 								<table width="98%" cellSpacing=1 cellpadding=2>
@@ -569,25 +571,32 @@
 										</td>
 									</tr>
 									</feature:display>
+									
+									 <feature:display name="Sectors" module="Project ID and Planning">
+			                            &nbsp;
+			                            </feature:display>			                          
+			                            	<field:display name="Componente" feature="Sectors"> 
+			                            		 <c:if test="${not empty aimEditActivityForm.activityComponentes}">
+														<tr>
+															<td width="27%" align="right" valign="top" nowrap="nowrap">
+														  <digi:trn key="aim:preview:component_Sector"><strong> Components</strong></digi:trn>										</td>
+															<td bgcolor="#ffffff">
+																	<table>
+																		<c:forEach var="compo" items="${aimEditActivityForm.activityComponentes}">
+																		<tr>
+																			<td width="100%">
+																				${compo.sectorName}														</td>
+																			<td align="right">
+																				${compo.sectorPercentage}%														</td>
+																		</tr>
+																		</c:forEach>
+																	</table>
+														  </td>
+														</tr>
+													  </c:if>
+			                            	</field:display>	                            
                                           
-                                  <c:if test="${not empty aimEditActivityForm.activityComponentes}">
-									<tr>
-										<td width="27%" align="right" valign="top" nowrap="nowrap">
-									  <digi:trn key="aim:preview:component_Sector"><strong> Components</strong></digi:trn>										</td>
-<td bgcolor="#ffffff">
-												<table>
-													<c:forEach var="compo" items="${aimEditActivityForm.activityComponentes}">
-													<tr>
-														<td width="100%">
-															${compo.sectorName}														</td>
-														<td align="right">
-															${compo.sectorPercentage}%														</td>
-													</tr>
-													</c:forEach>
-												</table>
-									  </td>
-									</tr>
-								  </c:if>
+                                 
 									
                                     
                                   <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">

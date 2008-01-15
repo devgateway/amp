@@ -915,27 +915,34 @@ function collapseAll() {
                                             </field:display>
                                     </feature:display>
                                     
-                                    <c:if test="${not empty aimEditActivityForm.activityComponentes}">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="component_sector_plus"  onclick="toggleGroup('component_sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="component_sector_minus" onclick="toggleGroup('component_sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
-											<digi:trn key="aim:preview:component_Sector">Components</digi:trn>										</td>
-										<td bgcolor="#ffffff">
-											<div id="component_sector_dots">...</div>
-											<div id="act_component_sector" style="display: none;">
-												<table>
-													<c:forEach var="compo" items="${aimEditActivityForm.activityComponentes}">
+                                    <feature:display name="Sectors" module="Project ID and Planning">
+			                            &nbsp;
+			                            </feature:display>			                          
+			                            	<field:display name="Componente" feature="Sectors"> 
+			                            		 <c:if test="${not empty aimEditActivityForm.activityComponentes}">
 													<tr>
-														<td width="100%">
-															${compo.sectorName}														</td>
-														<td align="right">
-															${compo.sectorPercentage}%														</td>
-													</tr>
-													</c:forEach>
-												</table>
-											</div>										</td>
-									</tr>
-									</c:if>
+														<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="component_sector_plus"  onclick="toggleGroup('component_sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+															<img id="component_sector_minus" onclick="toggleGroup('component_sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+															<digi:trn key="aim:preview:component_Sector">Components</digi:trn>										</td>
+														<td bgcolor="#ffffff">
+															<div id="component_sector_dots">...</div>
+															<div id="act_component_sector" style="display: none;">
+																<table>
+																	<c:forEach var="compo" items="${aimEditActivityForm.activityComponentes}">
+																	<tr>
+																		<td width="100%">
+																			${compo.sectorName}														</td>
+																		<td align="right">
+																			${compo.sectorPercentage}%														</td>
+																	</tr>
+																	</c:forEach>
+																</table>
+															</div>										</td>
+														</tr>
+													</c:if>													
+			                            	</field:display>	    
+                                    
+                                    
                                     
                                     <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
 								

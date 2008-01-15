@@ -220,8 +220,8 @@ a.itr:hover {
                                                 </span>${indItr.name}</a>
                                                </td>
                                                <td nowrap="nowrap">
-	                                                <c:if test="${indItr.sectorName != 'Z'}">
-	                                            		<b>${indItr.sectorName} </b>&nbsp;
+	                                                <c:if test="${!empty indItr.sector}">
+	                                            	<b>${indItr.sector} </b>
 	                                            	</c:if>
 	                                          </td>
                                               <td style="width:10%;">

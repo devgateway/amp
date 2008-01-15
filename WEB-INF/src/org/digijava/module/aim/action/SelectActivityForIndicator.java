@@ -64,6 +64,9 @@ public class SelectActivityForIndicator
                 }
                 Collections.sort(actList, new ActivityUtil.HelperAmpActivityNameComparator());
                 newIndForm.setActivitiesCol(actList);
+                newIndForm.setKeyword(null);
+               	
+              
             }
             return mapping.findForward("forward");
     }

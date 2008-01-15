@@ -7,6 +7,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.NewIndicatorForm;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.SectorUtil;
 
 import java.util.Iterator;
@@ -38,7 +39,9 @@ public class RemoveIndicatorEditSectors extends Action {
 					Long sectorid = asec.getSectorId();
 					Long indid = eaForm.getId();
 					
-					SectorUtil.deleteIndSector(sectorid,indid);
+					
+					//SectorUtil.deleteIndSector(sectorid,indid);
+					IndicatorUtil.deleteIndsector(sectorid,indid);
 					
 					flag=true;
                     break;

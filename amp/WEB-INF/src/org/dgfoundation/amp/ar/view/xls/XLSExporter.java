@@ -102,7 +102,7 @@ public abstract class XLSExporter extends Exporter {
 			HSSFDataFormat df = wb.createDataFormat();
 			cs.setDataFormat(df.getFormat("General"));
 			//cs.setDataFormat(df.getFormat("_(*###,###,###,###);_(*###,###,###,###.##)"));
-			
+		
 			cs.setFont(font);
 			cs.setWrapText(true);
 			cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);

@@ -5,6 +5,7 @@ package org.digijava.module.aim.action;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,7 +63,8 @@ public class GlobalSettings extends Action {
 					return mapping.findForward("index");
 				}
 			}
-
+		
+		
 		GlobalSettingsForm gsForm = (GlobalSettingsForm) form;
 		if(request.getParameter("save")!=null){
 			String save = request.getParameter("save");

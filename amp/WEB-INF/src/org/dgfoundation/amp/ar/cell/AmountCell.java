@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.MetaInfo;
+import org.digijava.module.aim.helper.FormatHelper;
 
 /**
  * 
@@ -21,7 +22,7 @@ import org.dgfoundation.amp.ar.MetaInfo;
  * 
  */
 public class AmountCell extends Cell {
-	public static DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
+	//public static DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
 
 	protected double amount;
 	
@@ -93,12 +94,12 @@ public class AmountCell extends Cell {
 	 * @see org.dgfoundation.amp.ar.cell.Cell#toString()
 	 */
 	public String toString() {
-		mf.setMaximumFractionDigits(2);
+		//mf.setMaximumFractionDigits(2);
 		double am = getAmount();
 		if (am == 0)
 			return "";
 		else
-			return mf.format(getAmount());
+			return FormatHelper.formatNumber(getAmount());
 	}
 
 	/*
@@ -171,7 +172,7 @@ public class AmountCell extends Cell {
 
     public String getWrappedAmount() {
 	if (id != null)
-	    return mf.format(convert() * percentage / 100);
+	    return FormatHelper.formatNumber(convert() * percentage / 100);
 	else
 	    return "";
 	}

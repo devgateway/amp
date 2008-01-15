@@ -57,14 +57,14 @@ public class AmountCellXLS extends XLSExporter {
 		HSSFCell cell=this.getCell(getAmountStyle());
 		
 		cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
-		
-		DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
-		mf.setMaximumFractionDigits(2);
+
+		//DecimalFormat mf = new DecimalFormat("###,###,###,###.##");
+		//mf.setMaximumFractionDigits(2);
 		double tempAm = ac.getAmount();
 		if (tempAm == 0)
 			cell.setCellValue("");
 		else
-		    	cell.setCellValue(Double.parseDouble(mf.format(tempAm)));
+		    	cell.setCellValue(new Double(tempAm));
 		colId.inc();
 	}
 

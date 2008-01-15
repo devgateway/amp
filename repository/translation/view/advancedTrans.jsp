@@ -572,10 +572,31 @@ table.trnrow {
   <bean:define id="trnForm" name="advancedTranslationForm" scope="page" type="org.digijava.module.translation.form.AdvancedTranslationForm"/>
   <digi:context name="pagination" property="context/module/moduleinstance/showAdvancedTranslation.do" />
   
+  				<c:set var="banerFirst">&nbsp;<span class="pagelinks">[<digi:trn key="displayTag:first">First</digi:trn>/<digi:trn key="displayTag:prev">Prev</digi:trn>] {0} [<a href="{3}"><digi:trn key="displayTag:next">Next</digi:trn></a>/<a href="{4}"><digi:trn key="displayTag:last">Last</digi:trn></a>]</span></c:set>
+				<c:set var="banerFull">&nbsp;<span class="pagelinks">[<a href="{1}"><digi:trn key="displayTag:first">First</digi:trn></a>/<a href="{2}"><digi:trn key="displayTag:prev">Prev</digi:trn></a>] {0} [<a href="{3}"><digi:trn key="displayTag:next">Next</digi:trn></a>/<a href="{4}"><digi:trn key="displayTag:last">Last</digi:trn></a>]</span></c:set>
+				<c:set var="banerLast">&nbsp;<span class="pagelinks">[<a href="{1}"><digi:trn key="displayTag:first">First</digi:trn></a>/<a href="{2}"><digi:trn key="displayTag:prev">Prev</digi:trn></a></a>] {0} [<digi:trn key="displayTag:next">Next</digi:trn>/<digi:trn key="displayTag:last">Last</digi:trn>]</span></c:set>
+				<c:set var="banerOnePage">&nbsp;<span class="pagelinks">{0}</span></c:set>
+				
+				<c:set var="banerOneItem">&nbsp;<span class="pagebanner"><digi:trn key="displayTag:oneItemFound">One item found</digi:trn>.</span></c:set>
+				<c:set var="banerAllItems">&nbsp;<span class="pagebanner">{0} <digi:trn key="displayTag:itemsFound">items found</digi:trn>, <digi:trn key="displayTag:displaingAll">displaying all items</digi:trn>.</span></c:set>
+				<c:set var="banerSomeItems">&nbsp;<span class="pagebanner">{0} <digi:trn key="displayTag:itemsFound">items found</digi:trn>, <digi:trn key="displayTag:displaing">displaying</digi:trn> {2} <digi:trn key="displayTag:to">to</digi:trn> {3}.</span></c:set>
+  
+  
   <display:table class="trnrow" list="<%= trns %>" id="message" pagesize="25"
       requestURI="<%= pagination + trnForm.getParameters() %>"
       excludedParams="*" style="width:100%">
   <display:setProperty name="paging.banner.placement" value="both" />
+  
+  					<display:setProperty name="paging.banner.full" value="${banerFull}"/>
+					<display:setProperty name="paging.banner.first" value="${banerFirst}"/>
+					<display:setProperty name="paging.banner.last" value="${banerLast}"/>
+					<display:setProperty name="paging.banner.onepage" value="${banerOnePage}"/>
+					
+					<display:setProperty name="paging.banner.one_item_found" value="${banerOneItem}"/>
+					<display:setProperty name="paging.banner.all_items_found" value="${banerAllItems}"/>
+					<display:setProperty name="paging.banner.some_items_found" value="${banerSomeItems}"/>
+  
+  
    <c:if test="${!empty globalAdminAccount}" >
     <display:column align="center" width="15">
        <html:multibox property="selectedKeys"><c:out value="${message.key}" escapeXml="false" /></html:multibox>

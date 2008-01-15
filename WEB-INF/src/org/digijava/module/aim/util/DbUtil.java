@@ -1,5 +1,7 @@
 
 
+
+
 package org.digijava.module.aim.util;
 
 import java.text.Collator;
@@ -1066,7 +1068,7 @@ public class DbUtil {
                 + " and (act.approvalStatus in ("+ Constants.ACTIVITY_NEEDS_APPROVAL_STATUS +") )";
             q = session.createQuery(queryString);
             q.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
-            
+
             actList = q.list();
 
         } catch (Exception ex) {
@@ -1446,7 +1448,7 @@ public class DbUtil {
         }
         return user;
     }
-    
+
     /**
      * @author Arty
      * @param reportId
@@ -1858,7 +1860,7 @@ public class DbUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String queryString = "select from " + object.getName();                
+            String queryString = "select from " + object.getName();
             Query qry = session.createQuery(queryString);
             col = qry.list();
         } catch (Exception e) {
@@ -1867,8 +1869,8 @@ public class DbUtil {
         }
         return col;
     }
-    
-    
+
+
     public static Collection getAllCountries() {
         Session session = null;
         Collection col = null;
@@ -4741,6 +4743,20 @@ public class DbUtil {
         return donorString;
     }
 
+    public static Collection getAllAhSurveys() {
+        Session session = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String qry = "select svy from " + AmpAhsurvey.class.getName() + " svy";
+            Query q = session.createQuery(qry);
+            return q.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to get survey : " + ex.getMessage());
+            ex.printStackTrace(System.out);
+        }
+        return null;
+    }
     public static Collection getAllSurveysByActivity(Long activityId) {
         ArrayList survey = new ArrayList();
         Set fundingSet = new HashSet();
@@ -5137,7 +5153,7 @@ public class DbUtil {
         try {
             //logger.debug("indcCode[inside getAidSurveyReportByIndicator] : " + indcCode);
             session = PersistenceManager.getRequestDBSession();
-            String qry = "select distinct dn.ampDonorOrgId from " + AmpAhsurvey.class.getName() + " dn";
+            String qry = "select distinct dn.pointOfDeliveryDonor from " + AmpAhsurvey.class.getName() + " dn";
             surveyDonors.addAll(session.createQuery(qry).list());
             //logger.debug("total donors from AmpOrganisation[surveyDonors] : " + surveyDonors.size());
             if (surveyDonors.size() > 0) {
@@ -5233,8 +5249,8 @@ public class DbUtil {
                             answersRow[0] = (startYear + i);
                         }
                         AmpFiscalCalendar fCalendar=FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(calendar));
-                    
-                        
+
+
                         if (startDates[i] == null || endDates[i] == null) {
                             if (! (fCalendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) ||
                         	    fCalendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue()))) {

@@ -165,10 +165,14 @@ public class ParisIndicatorReport extends Action {
 					AmpCategoryValue financingInstrument	= CategoryManagerUtil.getAmpCategoryValueFromDb(svForm.getFinancingInstrument());
 					AmpCategoryValue status					= CategoryManagerUtil.getAmpCategoryValueFromDb(svForm.getStatus());
 					/* End by Alex Gartner*/
-					svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator(svForm.getIndicatorCode(),svForm.getDonor(),
-							svForm.getOrgGroup(), status, svForm.getStartYear().intValue(),svForm.getCloseYear().intValue(),
-							svForm.getCurrency(),svForm.getTermAssist(),financingInstrument,
-							svForm.getPerspective(),svForm.getSector(),svForm.getCalendar()));
+                    Collection spCol=DbUtil.getAidSurveyReportByIndicator(svForm.getIndicatorCode(),svForm.getDonor(),
+                            svForm.getOrgGroup(), status, svForm.getStartYear().intValue(),svForm.getCloseYear().intValue(),
+                            svForm.getCurrency(),svForm.getTermAssist(),financingInstrument,
+                            svForm.getPerspective(),svForm.getSector(),svForm.getCalendar());
+
+					svForm.setDonorsColl(spCol);
+
+
 
 					if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()) || "5b".equalsIgnoreCase(svForm.getIndicatorCode())) {
 						if (!svForm.getDonorsColl().isEmpty()) {

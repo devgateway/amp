@@ -313,16 +313,16 @@ ${fn:replace(message,quote,escapedQuote)}
 										</a>
 									</td></tr>
 									<tr><td>
-										<table width="100%" cellSpacing=2 cellPadding=2 vAlign=top align=left class="box-border-nopadding" border=0>
+										<table width="100%" cellSpacing=2 cellPadding=2 vAlign=top align=left class="box-border-nopadding" border="0">
 											<tr>
-												<td width="32%" align="center" colspan="2"><b>
+												<td width="32%" align="center" colspan="3"  bgColor="#d7eafd"><b>
 													<digi:trn key="aim:meIndicators">Indicators</digi:trn>
 													</b>
 												</td>
 											</tr>
 											<logic:empty name="aimEditActivityForm" property="indicatorsME">
 											<tr>
-												<td width="32%" bgcolor=#f4f4f2 align="center" colspan="2"><font color="red"><b>
+												<td width="32%" bgcolor=#f4f4f2 align="center" colspan="3"><font color="red"><b>
 													<digi:trn key="aim:meNoActivityGlobalIndicators">
 													No Activity specific Indicators & No Global Indicators present
 													</digi:trn>
@@ -336,6 +336,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 											<tr>
 												<td bgcolor=#f4f4f2 align="left" colspan="2">&nbsp;&nbsp;
+													<!--
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 													<c:if test="${aimEditActivityForm.expIndicatorId==indicator.indicatorId}">
 														<digi:link href="/nondetailedIndicator.do~edit=true">
@@ -354,17 +355,31 @@ ${fn:replace(message,quote,escapedQuote)}
 															<img src= "../ampTemplate/images/arrow_right.gif" border=0>
 														</digi:link>
 													</c:if>&nbsp;&nbsp;&nbsp;<b>
+													-->
 													<field:display name="Indicator Name" feature="Activity">
 														<bean:define id="indName">
-															<bean:write name="indicator" property="indicatorName"/>
+														<digi:link href="/addActivity.do?step=10&edit=true">
+												 ${indicator.indicatorName}
+												</digi:link>
+															   
 														</bean:define>
 														<digi:trn key="<%=indName%>"><%=indName%></digi:trn></b> -
-													</field:display>
+													   </field:display>
 
 													<field:display name="Indicator ID" feature="Activity">
 														<bean:write name="indicator" property="indicatorCode" />
 													</field:display>
 
+												</td>
+												<td bgcolor=#f4f4f2 width="16%" >
+												<digi:link href="/addActivity.do?step=10&edit=true">
+												 
+												<digi:trn key="aim:addeditdata">Add/Edit data</digi:trn>
+												</digi:link>
+												 
+												 <html:multibox property="indicatorId">
+									                   ${indicator.indicatorId}
+									              </html:multibox>
 												</td>
 											</tr>
 
@@ -745,14 +760,15 @@ ${fn:replace(message,quote,escapedQuote)}
 											</tr>
 											<field:display name="Add Indicator Button" feature="Activity">
 											<tr>
-												<td width="32%" align="center" colspan="2">
+												<td width="32%" align="center" colspan="3">
 													<input type="button" value="<digi:trn key='btn:addIndicator'>Add Indicator</digi:trn>"  class="dr-menu" onclick="addIndicator()">
+												<input type="button" value="<digi:trn key='btn:removeind'>Remove Selected</digi:trn>" class="dr-menu">
 												</td>
 											</tr>
 											</field:display>
 											<tr>
-												<td width="32%" align="center" colspan="2">
-													&nbsp;
+												<td width="32%" align="center" colspan="3">
+													
 												</td>
 											</tr>
 										</table>

@@ -483,6 +483,7 @@ public class TeamUtil {
                 updTeam.setAccessType(team.getAccessType());
                 updTeam.setType(team.getType());
                 updTeam.setRelatedTeamId(team.getRelatedTeamId());
+                updTeam.setRole(team.getRole());
                 session.saveOrUpdate(updTeam);
 
                 qryStr = "select t from " + AmpTeam.class.getName() + " t "

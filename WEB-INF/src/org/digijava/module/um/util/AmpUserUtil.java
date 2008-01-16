@@ -33,12 +33,13 @@ public class AmpUserUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select u from " + User.class.getName() + " u"
-					+ " where u.banned=0";
+					+ " where u.banned=0 order by u.email";
 			qry = session.createQuery(queryString);
 			users = qry.list();
 		} catch (Exception e) {
 			logger.error("Unable to get user");
-			logger.debug("Exceptiion " + e);
+			logger.error("Exception " + e);
+			e.printStackTrace();
 		}
 		return users;
 	}

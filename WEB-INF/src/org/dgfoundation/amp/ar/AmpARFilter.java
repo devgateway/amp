@@ -12,20 +12,28 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
@@ -48,6 +56,8 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Set regions=null;
 	private Set risks=null;
 	
+	private Long teamRoleId;
+	private Long userAssignedOrgId;
 	
 	private Set financingInstruments=null;
 	//private Long ampModalityId=null;
@@ -87,15 +97,34 @@ public class AmpARFilter extends PropertyListable implements Filter {
 				Constants.CURRENT_MEMBER);
 
 		selectPerspective(tm);
-
 		
+		//set the computed workspaces properties
+		AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
+		if("Computed".equals(ampTeam.getAccessType())) {
+			if(ampTeam.getRole()!=null) this.setTeamRoleId(ampTeam.getRole().getAmpRoleId());
+			Session session;
+			try {
+				session = PersistenceManager.getSession();
+				AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
+				PersistenceManager.releaseSession(session);
+				User u=atm.getUser();
+				if(u.getAssignedOrgId()!=null) this.setUserAssignedOrgId(u.getAssignedOrgId());
+			} catch (HibernateException e) {
+				logger.error(e);
+				e.printStackTrace();
+			} catch (SQLException e) {
+				logger.error(e);
+				e.printStackTrace();
+			}
+			
+		}
 		
 		this.setAmpTeams(new TreeSet());
 		if(tm!=null){
 		    AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
 		    if (this.getCurrency() == null)
 		    	this.setCurrency(tempSettings.getCurrency());		    
-			this.getAmpTeams().add(TeamUtil.getAmpTeam(tm.getTeamId()));
+			this.getAmpTeams().add(ampTeam);
 			this.getAmpTeams().addAll(TeamUtil.getAmpLevel0Teams(tm.getTeamId()));	
 		}
 		
@@ -140,9 +169,17 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	
 	public void generateFilterQuery() {
 		String BUDGET_FILTER="SELECT amp_activity_id FROM amp_activity WHERE budget="+(budget!=null?budget.toString():"null")+(budget!=null && budget.booleanValue()==false?" OR budget is null":"");
-		String TEAM_FILTER="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IN ("+Util.toCSString(ampTeams,true)+") OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("+Util.toCSString(ampTeams,true)+") )";
+		String TEAM_FILTER="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IN ("+Util.toCSString(ampTeams,true)+") " +
+				"OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("+Util.toCSString(ampTeams,true)+") )";
+		
+		//computed workspace filter -- append it to the team filter so normal team activities are also possible 
+		if(teamRoleId!=null && userAssignedOrgId!=null) 
+			TEAM_FILTER+=" OR amp_activity_id IN (SELECT DISTINCT(activity) FROM amp_org_role WHERE role="+teamRoleId+" AND organisation="+userAssignedOrgId+")";
+			
+			
+		
 		String STATUS_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("+Util.toCSString(statuses,true)+")";
-		//String ORG_FILTER = "SELECT amp_activity_id FROM v_donors WHERE amp_donor_org_id IN ("+Util.toCSString(donors,true)+")";
+	
 		String ORG_FILTER = "SELECT amp_activity_id FROM v_donor_groups WHERE amp_org_grp_id IN ("+Util.toCSString(donors,true)+")";
 		String SECTOR_FILTER="SELECT amp_activity_id FROM v_sectors WHERE amp_sector_id IN ("+Util.toCSString(sectors,true)+")";
 		String REGION_FILTER="SELECT amp_activity_id FROM v_regions WHERE name IN ("+Util.toCSString(regions,true)+")";
@@ -156,20 +193,13 @@ public class AmpARFilter extends PropertyListable implements Filter {
 			if("".equals(text.trim())==false)
 			{
 			String TEXT_FILTER="SELECT a.amp_activity_id from amp_activity a WHERE a.amp_id="+text;
-/*				String TEXT_FILTER = "SELECT a.amp_activity_id FROM amp_activity a WHERE a.name LIKE '%"+text+"%'" +
-				" UNION SELECT b.amp_activity_id FROM amp_activity b, dg_editor e where b.description = e.editor_key AND e.body LIKE '%"+text+"%'"+
-				" UNION SELECT b.amp_activity_id FROM amp_activity b, dg_editor e where b.objectives = e.editor_key AND e.body LIKE '%"+text+"%'"+
-				" UNION SELECT b.amp_activity_id FROM amp_activity b, dg_editor e where b.purpose = e.editor_key AND e.body LIKE '%"+text+"%'"+
-				" UNION SELECT b.amp_activity_id FROM amp_activity b, dg_editor e where b.results = e.editor_key AND e.body LIKE '%"+text+"%'";
-*/				
-				queryAppend(TEXT_FILTER);
+			queryAppend(TEXT_FILTER);
 			}
 		}
 		
 		String RISK_FILTER="SELECT v.activity_id from AMP_ME_INDICATOR_VALUE v, AMP_INDICATOR_RISK_RATINGS r where v.risk=r.amp_ind_risk_ratings_id and r.amp_ind_risk_ratings_id in ("+Util.toCSString(risks,true)+")";
 		
-		
-		if(budget!=null) queryAppend(BUDGET_FILTER);
+	if(budget!=null) queryAppend(BUDGET_FILTER);
 		if(ampTeams!=null && ampTeams.size()>0) queryAppend(TEAM_FILTER);
 		if(statuses!=null && statuses.size()>0) queryAppend(STATUS_FILTER);
 		if(donors!=null && donors.size()>0) queryAppend(ORG_FILTER);
@@ -517,6 +547,24 @@ public class AmpARFilter extends PropertyListable implements Filter {
 
 	public void setRegionSelected(Long regionSelected) {
 		this.regionSelected = regionSelected;
+	}
+
+
+
+	public Long getUserAssignedOrgId() {
+		return userAssignedOrgId;
+	}
+
+	public void setUserAssignedOrgId(Long userAssignedOrgId) {
+		this.userAssignedOrgId = userAssignedOrgId;
+	}
+
+	public Long getTeamRoleId() {
+		return teamRoleId;
+	}
+
+	public void setTeamRoleId(Long teamRoleId) {
+		this.teamRoleId = teamRoleId;
 	}
 
 	

@@ -10,7 +10,6 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript">
 <!--
-
 function addChildWorkspaces() {
 		if (document.aimUpdateWorkspaceForm.workspaceType.value != "Team") {
 			if (document.aimUpdateWorkspaceForm.category.value == "-1") {
@@ -446,6 +445,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																				<html:option value="Donor"><digi:trn key="aim:Donor">Donor</digi:trn></html:option>
 																				<html:option value="Management"><digi:trn key="aim:management">Management</digi:trn></html:option>
 																				<html:option value="Team"><digi:trn key="aim:team">Team</digi:trn></html:option>
+																				<html:option value="Computed"><digi:trn key="aim:computedWorkspaceType">Computed</digi:trn></html:option>
 																			</html:select>
 																		</c:otherwise>
 																	</c:choose>

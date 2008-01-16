@@ -13,17 +13,17 @@
 
 <script language="JavaScript">
 
-<!-- 
+<!--
 function overwrite() {
-	document.aimEditActivityForm.target = "_self";		
+	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
 }
 
 function cancel() {
-	document.aimEditActivityForm.step.value = "9";
-	<digi:context name="preview" property="context/module/moduleinstance/previewActivity.do?edit=true" />
-	document.aimEditActivityForm.action = "<%= preview %>";
-	document.aimEditActivityForm.target = "_self";	
+	//document.aimEditActivityForm.step.value = "9";
+	<digi:context name="action" property="context/module/moduleinstance/addActivity.do?edit=true" />
+	document.aimEditActivityForm.action = "<%= action %>";
+	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
 }
 -->
@@ -32,7 +32,7 @@ function cancel() {
 
 <digi:form action="/saveActivity.do" method="post">
 <html:hidden property="step" />
-<html:hidden property="activityId" />
+<!-- <html:hidden property="activityId" />-->
 <input type="hidden" name="delete" value="true">
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
@@ -63,7 +63,7 @@ function cancel() {
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
-								<c:if test="${aimEditActivityForm.pageId == 1}">								
+								<c:if test="${aimEditActivityForm.pageId == 1}">
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 									</c:set>
@@ -71,8 +71,8 @@ function cancel() {
 										<digi:trn key="aim:portfolio">
 											Portfolio
 										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;								
-								</c:if>	
+									</digi:link>&nbsp;&gt;&nbsp;
+								</c:if>
 
 								<c:if test="${aimEditActivityForm.pageId == 2}">
 									<c:set var="translation">
@@ -82,8 +82,8 @@ function cancel() {
 										<digi:trn key="aim:portfolio">
 											Portfolio
 										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;	
-									
+									</digi:link>&nbsp;&gt;&nbsp;
+
 									<jsp:useBean id="urlParam" type="java.util.Map" class="java.util.HashMap"/>
 									<c:set target="${urlParam}" property="ampActivityId">
 										<c:out value="${aimEditActivityForm.activityId}"/>
@@ -94,16 +94,16 @@ function cancel() {
 									</c:set>
 									<digi:link href="/viewChannelOverview.do" styleClass="comment" name="urlParam" title="${translation}" >
 										<digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;	
-								</c:if>									
-								
+									</digi:link>&nbsp;&gt;&nbsp;
+								</c:if>
+
 								<c:if test="${aimEditActivityForm.pageId != 2}">
-								
+
 								<c:set var="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to goto Add Activity Step 1</digi:trn>
 								</c:set>
 								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="${translation}" >
-								
+
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivityStep1">
 										Edit Activity - Step 1
@@ -113,48 +113,48 @@ function cancel() {
 									<digi:trn key="aim:addActivityStep1">
 										Add Activity - Step 1
 									</digi:trn>
-								</c:if>																
-								</digi:link>&nbsp;&gt;&nbsp;						
+								</c:if>
+								</digi:link>&nbsp;&gt;&nbsp;
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep2">Click here to goto Add Activity Step 2</digi:trn>
 									</c:set>
-									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="${translation}" >						
+									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="${translation}" >
 									<digi:trn key="aim:addActivityStep2">
 									Step 2
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;			
+									</digi:link>&nbsp;&gt;&nbsp;
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep3">Click here to goto Add Activity Step 3</digi:trn>
 									</c:set>
-									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="${translation}" >						
+									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="${translation}" >
 									<digi:trn key="aim:addActivityStep3">
 									Step 3
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;							
+									</digi:link>&nbsp;&gt;&nbsp;
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep4">Click here to goto Add Activity Step 4</digi:trn>
 									</c:set>
-									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="${translation}" >						
+									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="${translation}" >
 									<digi:trn key="aim:addActivityStep4">
 									Step 4
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;			
+									</digi:link>&nbsp;&gt;&nbsp;
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep5">Click here to goto Add Activity Step 5</digi:trn>
 									</c:set>
-									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment" title="${translation}" >												
+									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment" title="${translation}" >
 									<digi:trn key="aim:addActivityStep5">
 									Step 5
-									</digi:trn>						
-									</digi:link>&nbsp;&gt;&nbsp;	
+									</digi:trn>
+									</digi:link>&nbsp;&gt;&nbsp;
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep6">Click here to goto Add Activity Step 6</digi:trn>
 									</c:set>
-									<digi:link href="/addActivity.do?step=6&edit=true" styleClass="comment" title="${translation}" >						
+									<digi:link href="/addActivity.do?step=6&edit=true" styleClass="comment" title="${translation}" >
 									<digi:trn key="aim:addActivityStep6">
 									Step 6
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;			
+									</digi:link>&nbsp;&gt;&nbsp;
 									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep7">Click here to goto Add Activity Step 7</digi:trn>
 									</c:set>
@@ -170,49 +170,49 @@ function cancel() {
 									<digi:trn key="aim:addActivityStep8">
 									Step 8
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;									
+									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
 								<digi:trn key="aim:saveActivity">
 								Save Activity
-								</digi:trn>							
+								</digi:trn>
 								</span>
 							</td>
 						</tr>
 					</table>
-				</td></tr>			
+				</td></tr>
 				<tr><td>
 					<table width="100%">
 						<tr><td>
 							<span class=subtitle-blue>
 									<digi:trn key="aim:addNewActivity">Add New Activity</digi:trn>
 							</span>
-						</td></tr>					
+						</td></tr>
 						<tr><td>
 							&nbsp;
-						</td></tr>	
+						</td></tr>
 						<tr><td align="center" class="v-name">
 							<digi:trn key="aim:activityAlreadyExist">The activity with the given name already exist
 							</digi:trn>
 						</td></tr>
 						<tr><td>
 							&nbsp;
-						</td></tr>	
+						</td></tr>
 						<tr><td>
 							&nbsp;
-						</td></tr>							
+						</td></tr>
 						<tr><td align="center" class="v-name">
 							<digi:trn key="aim:overwriteTheActivity">Overwrite the activity?
 							</digi:trn>
 						</td></tr>
 						<tr><td>
 							&nbsp;
-						</td></tr>													
+						</td></tr>
 						<tr><td align="center">
 							<input type="button" value="Overwrite" class="dr-menu" onclick="overwrite()"
 							name="backButton">
 							<input type="button" value="Cancel" class="dr-menu" onclick="cancel()"
 							name="submitButton">
-						</td></tr>						
+						</td></tr>
 					</table>
 				</td></tr>
 				<tr><td>

@@ -14905,7 +14905,8 @@ DHTMLSuite.calendarModel.prototype =
 			if(!format.match(/^[0-9]*?$/gi)){
 				var items = inputReference.value.split(/[^0-9]/gi);
 				var positionArray = new Array();
-				positionArray['m'] = format.indexOf('mm');
+				//AMP-2480 path to make it compatible with java date formats 
+				positionArray['m'] = (format.indexOf('mm')==-1)?format.indexOf('MM'):format.indexOf('mm');
 				if(positionArray['m']==-1)positionArray['m'] = format.indexOf('m');
 				positionArray['d'] = format.indexOf('dd');
 				if(positionArray['d']==-1)positionArray['d'] = format.indexOf('d');
@@ -14954,7 +14955,9 @@ DHTMLSuite.calendarModel.prototype =
 				tmpDay = tmpDay / 1;
 				this.initialDay = tmpDay;
 			}else{		
-				var monthPos = format.indexOf('mm');
+				//AMP-2480 path to make it compatible with java date formats 
+				var monthPos = (format.indexOf('mm')==-1)?format.indexOf('MM'):format.indexOf('mm');
+				//format.indexOf('mm');
 				this.initialMonth = inputReference.value.substr(monthPos,2)/1;	
 				var yearPos = format.indexOf('yyyy');
 				this.initialYear = inputReference.value.substr(yearPos,4);		

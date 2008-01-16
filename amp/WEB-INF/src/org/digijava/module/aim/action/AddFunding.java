@@ -98,7 +98,7 @@ public class AddFunding extends Action {
 		return mapping.findForward("forward");
 	}
 	public static String getFYDate(Integer numOfAddedYears, Integer year) {
-		try {
+
 			if ( year == null ) {
 				String yearGS			= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.CURRENT_SYSTEM_YEAR );
 				
@@ -109,19 +109,20 @@ public class AddFunding extends Action {
 			}
 			year			+= numOfAddedYears;
 			// String date		= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.FISCAL_YEAR_END_DATE ) + "/" + year;
+			String date;
+			try {
+				String fiscalCalendarId		= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.DEFAULT_CALENDAR );
+				AmpFiscalCalendar fiscalCal	= DbUtil.getAmpFiscalCalendar( Long.parseLong(fiscalCalendarId) );
 			
-			String fiscalCalendarId		= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.DEFAULT_CALENDAR );
-			AmpFiscalCalendar fiscalCal	= DbUtil.getAmpFiscalCalendar( Long.parseLong(fiscalCalendarId) );
-			
-			String date					= fiscalCal.getStartDayNum() + "/" + fiscalCal.getStartMonthNum() + "/" + year;
-
+				date						= fiscalCal.getStartDayNum() + "/" + fiscalCal.getStartMonthNum() + "/" + year;
+			}
+			catch (Exception E) {
+				E.printStackTrace();
+				logger.error("Information about fiscal year start NOT retrievable. Using 01 January.");
+				date						= "01/01/" + year; 
+			}
 			return date;
-		}
-		catch(Exception E) {
-			logger.error("Error getting Fiscal Year global settings");
-			E.printStackTrace();
-			return null;
-		}
+
 	}
 	public static boolean isAfterFiscalYearStart(String fyDate) {
 		if ( fyDate == null )

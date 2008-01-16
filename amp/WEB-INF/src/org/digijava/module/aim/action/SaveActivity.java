@@ -321,16 +321,16 @@ public class SaveActivity extends Action {
 
 				if (toDelete == null
 						|| (!toDelete.trim().equalsIgnoreCase("true"))) {
-					if (eaForm.isEditAct() == false) {
-						AmpActivity act = ActivityUtil.getActivityByName(eaForm
-								.getTitle());
-						if (act != null) {
-							eaForm.setActivityId(act.getAmpActivityId());
-							logger.debug("Activity with the name "
-									+ eaForm.getTitle() + " already exist.");
-							return mapping.findForward("activityExist");
-						}
-					}
+					if (eaForm.isEditAct() == false || eaForm.getActivityId()==null) {
+                        AmpActivity act = ActivityUtil.getActivityByName(eaForm.getTitle());
+                        if (act != null) {
+                            eaForm.setActivityId(null);
+                            logger.debug("Activity with the name " + eaForm.getTitle() + " already exist.");
+                            return mapping.findForward("activityExist");
+                        }
+                    }
+
+
 				} else if (toDelete.trim().equals("true")) {
 					eaForm.setEditAct(true);
 				} else {
@@ -793,7 +793,7 @@ public class SaveActivity extends Action {
 					}
 					activity.setComponentes(componentes);
 				}
-				
+
 
 				if (eaForm.getProgram() != null
 						&& (!eaForm.getProgram().equals(new Long(-1)))) {
@@ -1389,7 +1389,7 @@ public class SaveActivity extends Action {
 					actId = ActivityUtil.saveActivity(activity, eaForm.getActivityId(),
 							true, eaForm.getCommentsCol(), eaForm
 									.isSerializeFlag(), field, relatedLinks, tm
-									.getMemberId(), eaForm.getIndicatorsME(),tempComp); 
+									.getMemberId(), eaForm.getIndicatorsME(),tempComp);
 
 					//for logging the activity
 					AuditLoggerUtil.logActivityUpdate(session, request,

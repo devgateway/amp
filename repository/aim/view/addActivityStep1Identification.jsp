@@ -120,11 +120,10 @@ target.style.cursor = "default"
 															<%--
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=objKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
 															--%>
-															<digi:secure actions="ADMIN, TRANSLATE">
 																<a href="javascript:edit('<%=objKey%>')">
 																<digi:trn key="aim:edit">Edit</digi:trn></a>	
 																&nbsp;
-															</digi:secure>
+															
 														
 															<a href="javascript:commentWin('objObjVerIndicators')" id="CommentObjObjVerIndicators"><digi:trn key="aim:addEditObjVerIndicators">Add/Edit Objectively Verifiable Indicators</digi:trn></a>
 															&nbsp;
@@ -160,11 +159,9 @@ target.style.cursor = "default"
 														<td>
 															<%--
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
-															--%>
-															<digi:secure actions="ADMIN, TRANSLATE">
+															--%>														
 																<a href="javascript:edit('<%=descKey%>')">
-																<digi:trn key="aim:edit">Edit</digi:trn></a>
-															</digi:secure>
+																<digi:trn key="aim:edit">Edit</digi:trn></a>														
 															
 														</td>
 													</tr>

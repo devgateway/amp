@@ -128,8 +128,8 @@
                                                     <tr>
                                                       <td>
                                                         <table cellSpacing="0" cellPadding="0" border="0"	bgcolor="#ffffff" width="100%">
-                                                          <logic:iterate name="aimEditActivityForm"	property="selectedLocs" id="selectedLocs" type="org.digijava.module.aim.helper.Location">
-                                                            <tr>
+                                                        <c:forEach var="selectedLocs" items="${aimEditActivityForm.selectedLocs}">
+                                                          <tr>
                                                               <td width="100%">
                                                                 <table width="100%" cellSpacing="1" cellPadding="1"	vAlign="top" align="left">
                                                                   <tr>
@@ -154,14 +154,13 @@
                                                                     </td>
                                                                     <td align="right" nowrap="nowrap">
                                                                     		<FONT color="red">*</FONT><digi:trn key="aim:editActivity:location_percentage">Percentage</digi:trn>:&nbsp;
-                                                                      		<html:text name="selectedLocs" property="percent"
-                                                                      			 size="2" maxlength="3" onkeyup="fnChk(this)"/>
+                                                                      		<html:text name="selectedLocs" indexed="true" property="percent" size="2"  maxlength="3" onkeyup="fnChk(this)"/>
                                                                     </td>
                                                                   </tr>
                                                                 </table>
                                                               </td>
                                                             </tr>
-                                                          </logic:iterate>
+                                                          </c:forEach>
                                                           <tr>
                                                             <td>
                                                               <table cellSpacing=2 cellPadding=2>

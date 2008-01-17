@@ -224,7 +224,7 @@ public class LocationSelected extends Action {
 				if (!present) eaForm.getSelectedLocs().add(location[i]);				
 			}
 		} else {
-			eaForm.setSelectedLocs(new TreeSet());
+			eaForm.setSelectedLocs(new ArrayList<Location>());
 			for (int i = 0;i < location.length;i ++) {
 				eaForm.getSelectedLocs().add(location[i]);
 			}

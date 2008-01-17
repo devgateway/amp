@@ -1,5 +1,6 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeSet;
@@ -23,7 +24,7 @@ public class RemoveSelLocations extends Action {
 
 				Long selLocs[] = eaForm.getSelLocs();
 				Collection prevSelLocs = eaForm.getSelectedLocs(); 
-				Collection locs = new TreeSet();
+				Collection locs = new ArrayList<Location>();
 
 				Iterator itr = prevSelLocs.iterator();
 

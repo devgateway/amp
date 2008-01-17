@@ -46,10 +46,10 @@ public class TotalCommitmentsAmountCell extends AmountCell {
 		Iterator i = mergedCells.iterator();
 		while (i.hasNext()) {
 			CategAmountCell element = (CategAmountCell) i.next();
-			if(element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equals(ArConstants.DISBURSEMENT)) continue;
+			if( ArConstants.DISBURSEMENT.equals(element.getMetaValueString(ArConstants.TRANSACTION_TYPE)) ) continue;
 			
-			 if(element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equals(ArConstants.ACTUAL) || 
-			element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equals(ArConstants.PLANNED) )
+			 if( ArConstants.ACTUAL.equals(element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE)) || 
+					 ArConstants.PLANNED.equals(element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE)) )
 			ret += element.getAmount();
 		}
 		return ret;

@@ -127,7 +127,7 @@
                     <tr>
                     <td>&nbsp;</td>
                      <td>
-                        <input type="submit" value="Save">&nbsp;<input type="submit" value="Edit" onclick="document.getElementById('method').value = 'edit'">
+                        <input type="submit" value="<digi:trn key="calendar:savebutton">Save</digi:trn>">&nbsp;<input type="submit" value="<digi:trn key="calendar:editbutton">Edit</digi:trn>" onclick="document.getElementById('method').value = 'edit'">
                     </td>
                 </tr>
                     </digi:secure>

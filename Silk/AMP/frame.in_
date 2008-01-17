@@ -107,7 +107,7 @@
 			[ ] 
 	[+] HtmlPushButton Show
 		[ ] tag "Show"
-	[+] HtmlLink NewEventForTest
+	[-] HtmlLink NewEventForTest
 		[-] multitag "New Event for Test[1]"
 			[ ] "$?calendar?showCalendarEvent.do"
 	[+] HtmlCheckBox ShowPublicEvents
@@ -216,7 +216,7 @@
 				[-] multitag "&id='Pub*"
 					[ ] "?Pub?[1]"
 					[ ] "$Pub*"
-			[-] HtmlText Priv1
+			[+] HtmlText Priv1
 				[-] multitag "&id='Priv*"
 					[ ] "?Priv?[1]"
 					[ ] "$Priv*"
@@ -232,6 +232,10 @@
 				[-] multitag "&id='yui-dt0-bdrow0-cell0'"
 					[ ] "test.doc"
 					[ ] "$yui-dt0-bdrow0-cell0"
+	[-] HtmlText TestDoc
+		[-] multitag "$yui-dt0*"
+			[ ] "test.txt"
+	[ ] 
 	[+] HtmlPushButton Browse
 		[-] multitag "&name='fileData'"
 			[ ] "Browse"
@@ -254,7 +258,7 @@
 			[ ] tag "Team Documents"
 			[-] HtmlPushButton AddFile
 				[ ] tag "Add File"
-	[-] HtmlTable Empty
+	[+] HtmlTable Empty
 		[ ] tag "Empty"
 		[-] HtmlColumn TeamDocuments
 			[ ] tag "Team Documents"
@@ -297,13 +301,15 @@
 			[ ] "Please specify a file path !"
 			[ ] "$addDocumentErrorHolderDiv"
 	[ ] 
-	[-] HtmlText PleaseSpecifyATitlePleas
+	[+] HtmlText PleaseSpecifyATitlePleas
 		[-] multitag "&id='addDocumentErrorHolderDiv'"
 			[ ] "Please specify a title ! Please specify a file path !"
 			[ ] "$addDocumentErrorHolderDiv"
-	[-] HtmlTextField Path
+	[+] HtmlTextField Path
 		[-] multitag "&name='fileData'"
 			[ ] "$fileData"
+	[+] HtmlPushButton AddFile1
+		[ ] tag "Add File[1]"
 [ ] 
 [+] window BrowserChild AMPAddActivityStep1
 	[ ] tag "AMP - Add Activity - Identification*"
@@ -312,7 +318,7 @@
 		[-] multitag "&name='title'"
 			[ ] "Project Title"
 			[ ] "$title"
-	[-] HtmlLink Objective
+	[+] HtmlLink Objective
 		[ ] tag "$javascript:edit('aim-obj-*"
 	[+] HtmlLink Description
 		[ ] tag "$javascript:edit('aim-desc-*"
@@ -507,7 +513,7 @@
 		[-] multitag "&name='addActivity'"
 			[ ] "Add Activity"
 			[ ] "$addActivity[1]"
-	[-] HtmlTable CurrentlySelectedFiltersU
+	[+] HtmlTable CurrentlySelectedFiltersU
 		[-] multitag "&id='reportTable'"
 			[ ] "Currently Selected Filters:  USD  false"
 			[ ] "$reportTable"
@@ -672,9 +678,8 @@
 [+] window BrowserChild AMPAddSectors
 	[ ] tag "AMP - Select Sector"
 	[ ] parent Browser
-	[+] HtmlPopupList SelectSectors
+	[-] HtmlPopupList SelectSectors
 		[-] multitag "&name='sectorScheme'"
-			[ ] "Sector Scheme"
 			[ ] "$sectorScheme"
 	[+] HtmlPopupList Sector
 		[-] multitag "&name='sector'"
@@ -787,7 +792,7 @@
 		[-] multitag "&name='mtefProjection?0?.currencyCode'"
 			[ ] "*"
 			[ ] "$mtefProjection?0?.currencyCode"
-	[+] HtmlLink Components
+	[-] HtmlLink Components
 		[-] multitag "Components"
 			[ ] "$javascript:gotoStep(5)"
 	[ ] 
@@ -806,7 +811,7 @@
 [+] window BrowserChild AMPAddActivityStep5
 	[ ] tag "AMP - Add Activity - Components"
 	[ ] parent Browser
-	[+] HtmlPushButton AddComponent
+	[-] HtmlPushButton AddComponent
 		[-] multitag "&name='submitButton'"
 			[ ] "Add Component"
 			[ ] "$submitButton[1]"
@@ -830,7 +835,7 @@
 	[+] HtmlLink AddActors
 		[-] multitag "Add Actors"
 			[ ] "$javascript:addActors('1198264844266','1198264883141')"
-	[-] HtmlLink ME
+	[+] HtmlLink ME
 		[-] multitag "M  E"
 			[ ] "$javascript:gotoStep(10)"
 [ ] 
@@ -875,13 +880,13 @@
 		[-] multitag "&name='componentTitle'"
 			[ ] "Add Component"
 			[ ] "$componentTitle"
-	[-] HtmlLink AddCommitments
+	[+] HtmlLink AddCommitments
 		[-] multitag "Add[1]"
 			[ ] "$javascript:addCommitments()"
-	[-] HtmlLink AddExpenditure
+	[+] HtmlLink AddExpenditure
 		[-] multitag "Add*"
 			[ ] "$javascript:addExpenditure()"
-	[-] HtmlLink AddDisbursement
+	[+] HtmlLink AddDisbursement
 		[-] multitag "Add*"
 			[ ] "$javascript:addDisbursement()"
 	[+] HtmlPopupList PlannedActual1
@@ -1003,7 +1008,6 @@
 			[ ] "$mtefProjection?0?.amount"
 	[+] HtmlPopupList Currency
 		[-] multitag "&name='mtefProjection?0?.currencyCode'"
-			[ ] "*"
 			[ ] "$mtefProjection?0?.currencyCode"
 	[+] HtmlPopupList ProjectedPipeline
 		[-] multitag "&name='mtefProjection?0?.projected'"
@@ -1017,7 +1021,7 @@
 		[-] multitag "&name='fundingDetail?0?.adjustmentType'"
 			[ ] "Planned?Actual*"
 			[ ] "$fundingDetail?0?.adjustmentType"
-	[-] HtmlTextField Planned
+	[+] HtmlTextField Planned
 		[-] multitag "&name='fundingDetail?0?.transactionAmount'"
 			[ ] "Planned"
 			[ ] "$fundingDetail?0?.transactionAmount"
@@ -1032,7 +1036,7 @@
 		[-] multitag "&name='xx1'"
 			[ ] "Add Disbursement"
 			[ ] "$xx1"
-	[-] HtmlTextField Planned2
+	[+] HtmlTextField Planned2
 		[-] multitag "&name='fundingDetail?1?.transactionAmount'"
 			[ ] "Planned"
 			[ ] "$fundingDetail?1?.transactionAmount"
@@ -1072,8 +1076,8 @@
 		[ ] tag "Save"
 	[+] HtmlTable HtmlTable1
 		[ ] tag "#1"
-		[+] HtmlColumn Commitments
-			[ ] tag "Commitments"
+		[-] HtmlColumn Commitments
+			[ ] tag "*"
 			[+] HtmlPushButton AddCommitment
 				[-] multitag "&name='xx1'"
 					[ ] "Add Commitment"
@@ -1086,7 +1090,7 @@
 				[-] multitag "&name='fundingDetail?0?.currencyCode'"
 					[ ] "Currency"
 					[ ] "$fundingDetail?0?.currencyCode"
-			[-] HtmlImage ClickToViewCalendar
+			[+] HtmlImage ClickToViewCalendar
 				[-] multitag "Click to View Calendar"
 					[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho"
 	[+] HtmlTable Today
@@ -1127,7 +1131,7 @@
 				[ ] tag "2"
 	[+] HtmlTable HtmlTable2
 		[ ] tag "#2"
-		[+] HtmlColumn Expenditures
+		[-] HtmlColumn Expenditures
 			[ ] tag "Expenditures"
 			[+] HtmlPushButton AddExpenditure
 				[-] multitag "&name='xx1'"
@@ -1141,7 +1145,7 @@
 				[-] multitag "&name='fundingDetail?2?.currencyCode'"
 					[ ] "Currency"
 					[ ] "$fundingDetail?2?.currencyCode"
-			[-] HtmlImage ClickToViewCalendar
+			[+] HtmlImage ClickToViewCalendar
 				[-] multitag "Click to View Calendar"
 					[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho"
 [ ] 
@@ -1276,7 +1280,7 @@
 		[-] multitag "Related Organizations"
 			[ ] "$javascript:gotoStep(7)"
 	[ ] 
-	[-] HtmlLink ME
+	[+] HtmlLink ME
 		[-] multitag "M  E"
 			[ ] "$javascript:gotoStep(10)"
 [ ] 
@@ -1455,7 +1459,7 @@
 			[ ] "$javascript:gotoStep(10)"
 	[ ] 
 [ ] 
-[-] window BrowserChild AMPAddActivityStep10
+[+] window BrowserChild AMPAddActivityStep10
 	[ ] tag "AMP - Add Activity - Monitoring and Evaluation"
 	[ ] parent Browser
 	[+] HtmlImage IND004
@@ -1509,7 +1513,7 @@
 	[+] HtmlImage ClickToViewCalendar2
 		[-] multitag "Click to View Calendar[2]"
 			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[2]"
-	[-] HtmlTable Today
+	[+] HtmlTable Today
 		[ ] tag "Today"
 		[+] HtmlColumn Wed
 			[ ] tag "Wed"
@@ -1519,7 +1523,7 @@
 			[ ] tag "Tue"
 			[-] HtmlText N8
 				[ ] tag "8"
-	[-] HtmlImage ClickToViewCalendar3
+	[+] HtmlImage ClickToViewCalendar3
 		[-] multitag "Click to View Calendar[3]"
 			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[3]"
 [ ] 
@@ -1595,6 +1599,139 @@
 		[-] multitag "&name='save'"
 			[ ] "OK"
 			[ ] "$save"
+[ ] 
+[+] window BrowserChild AMPPublicTeamReports
+	[ ] tag "AMP - Public Team Reports"
+	[ ] parent Browser
+	[-] HtmlLink ReportGenerator
+		[-] multitag "Report Generator"
+			[ ] "$http:??amp-staging.code.ro:8080?aim?advancedReportManager.do~cl"
+[ ] 
+[+] window BrowserChild AMPReportGeneratorStep1
+	[ ] tag "AMP - Report Generator Step 0*"
+	[ ] parent Browser
+	[+] HtmlRadioList N5ReportDetails
+		[-] multitag "&name='reportType'"
+			[ ] "5 : Report Details"
+			[ ] "$reportType"
+	[+] HtmlPushButton Next
+		[-] multitag "&name='submitButton'"
+			[ ] "Next"
+			[ ] "$submitButton[2]"
+[ ] 
+[+] window BrowserChild AMPReportGeneratorStep2
+	[ ] tag "AMP - Report Generator Step 1*"
+	[ ] parent Browser
+	[+] HtmlCheckBox AMP
+		[-] multitag "&name='checkall'"
+			[ ] "AMP"
+			[ ] "$checkall"
+	[+] HtmlPushButton Add
+		[-] multitag "&name='submitButton'"
+			[ ] "Add >>"
+			[ ] "$submitButton[1]"
+	[+] HtmlPushButton Next1
+		[-] multitag "&name='submitButton'"
+			[ ] "Next >>"
+			[ ] "$submitButton[5]"
+	[+] HtmlList SelectAll
+		[-] multitag "&id='dhtmlgoodies_tree'"
+			[ ] "Select All"
+			[ ] "$dhtmlgoodies_tree"
+		[+] HtmlList AMP
+			[+] multitag "&id='tree_ul_0'"
+				[ ] "AMP"
+				[ ] "$tree_ul_0"
+			[-] HtmlCheckBox Identification
+				[-] multitag "&id='moduleVis:Identification';name='selectedThemes'"
+					[ ] "Identification"
+					[ ] "$selectedThemes[1]"
+			[-] HtmlList Location
+				[-] multitag "&id='tree_ul_3'"
+					[ ] "Location"
+					[ ] "$tree_ul_3"
+				[-] HtmlCheckBox ImplementationLevel
+					[-] multitag "&id='fieldVis:6';name='selectedColumns'"
+						[ ] "Implementation Level"
+						[ ] "$selectedColumns[1]"
+	[+] HtmlPushButton Remove
+		[-] multitag "&name='submitButton'"
+			[ ] "<< Remove"
+			[ ] "$submitButton[2]"
+[ ] 
+[-] window BrowserChild AMPReportGeneratorStep3
+	[ ] tag "AMP - Report Generator Step : Select Rows*"
+	[ ] parent Browser
+	[+] HtmlCheckBox CheckBox1
+		[-] multitag "&name='selectedColumns'"
+			[ ] "$selectedColumns[1]"
+	[+] HtmlCheckBox CheckBox2
+		[-] multitag "&name='selectedColumns'"
+			[ ] "$selectedColumns[2]"
+	[+] HtmlCheckBox CheckBox3
+		[-] multitag "&name='selectedColumns'"
+			[ ] "$selectedColumns[3]"
+	[ ] 
+	[+] HtmlPushButton Add
+		[-] multitag "&name='submitButton'"
+			[ ] "Add >>"
+			[ ] "$submitButton[1]"
+	[+] HtmlPushButton Next
+		[-] multitag "&name='submitButton'"
+			[ ] "Next >>"
+			[ ] "$submitButton[5]"
+	[+] HtmlImage MoveUp2
+		[-] multitag "Move Up[2]"
+			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?up-[2]"
+	[+] HtmlCheckBox ProjectTitle
+		[-] multitag "&name='removeColumns'"
+			[ ] "Project Title"
+			[ ] "$removeColumns[1]"
+	[+] HtmlPushButton Remove
+		[-] multitag "&name='submitButton'"
+			[ ] "<< Remove"
+			[ ] "$submitButton[2]"
+[ ] 
+[-] window BrowserChild AMPReportGeneratorStep4
+	[ ] tag "AMP - Report Generator Step : Select Measures*"
+	[ ] parent Browser
+	[+] HtmlCheckBox CheckAll
+		[+] multitag "&name='checkall'"
+			[ ] "$checkall"
+	[+] HtmlPushButton Add
+		[ ] tag "Add >>"
+	[+] HtmlPushButton Next
+		[ ] tag "Next >>"
+	[+] HtmlCheckBox CheckBox1
+		[-] multitag "&name='selectedColumns'"
+			[ ] "$selectedColumns[1]"
+	[+] HtmlCheckBox CheckBox2
+		[-] multitag "&name='selectedColumns'"
+			[ ] "$selectedColumns[2]"
+	[+] HtmlPushButton Remove
+		[-] multitag "&name='submitButton'"
+			[ ] "<< Remove"
+			[ ] "$submitButton[2]"
+	[+] HtmlCheckBox ActualDisbursements
+		[-] multitag "&name='removeColumns'"
+			[ ] "Actual Disbursements"
+			[ ] "$removeColumns[1]"
+[ ] 
+[+] window BrowserChild AMPReportGeneratorStep5
+	[ ] tag "AMP - Report Generator Step 4 : Report Details"
+	[ ] parent Browser
+	[+] HtmlTable N5ReportDetails1
+		[ ] tag "5 : Report Details"
+		[+] HtmlColumn ReportTitle
+			[ ] tag "? Report Title"
+			[-] HtmlTextField HtmlTextField1
+				[-] multitag "&name='reportTitle'"
+					[ ] "?"
+					[ ] "$reportTitle"
+	[+] HtmlPushButton SaveReport
+		[-] multitag "&name='submitButton'"
+			[ ] "Save Report"
+			[ ] "$submitButton[3]"
 [ ] 
 [+] window DialogBox ChooseFile
 	[ ] tag "Choose file"
@@ -1765,6 +1902,9 @@
 			[ ] 
 		[+] HtmlLink Help
 			[ ] 
+		[-] HtmlLink REPORTS
+			[-] multitag "::: REPORTS"
+				[ ] "$http:??amp-staging.code.ro:8080?aim?viewTeamReports.do"
 	[+] HtmlPushButton Add1
 		[ ] tag "Add"
 	[+] HtmlTextField Actor
@@ -1775,9 +1915,46 @@
 		[-] multitag "&name='saveButton'"
 			[ ] "Save"
 			[ ] "$saveButton"
+	[+] HtmlLink Location
+		[-] multitag "Location"
+			[ ] "$javascript:gotoStep(2)[1]"
+	[+] HtmlLink References
+		[-] multitag "References"
+			[ ] "$javascript:gotoStep('1_5')"
+	[+] HtmlLink Funding
+		[-] multitag "Funding"
+			[ ] "$javascript:gotoStep(3)"
+	[+] HtmlLink Components
+		[-] multitag "Components"
+			[ ] "$javascript:gotoStep(5)"
+	[+] HtmlLink ME
+		[-] multitag "M  E"
+			[ ] "$javascript:gotoStep(10)"
+	[+] HtmlLink RelatedOrganizations
+		[-] multitag "Related Organizations"
+			[ ] "$javascript:gotoStep(7)"
 	[+] HtmlLink Costing
 		[-] multitag "Costing"
 			[ ] "$javascript:gotoStep(11)"
 	[ ] 
 	[ ] 
+	[ ] 
+	[ ] 
+	[ ] 
+	[-] HtmlCheckBox AccessionInstrument
+		[-] multitag "&name='selectedColumns'"
+			[ ] "Accession Instrument"
+			[ ] "$selectedColumns[1]"
+	[+] HtmlCheckBox DonorAgency
+		[-] multitag "&name='selectedColumns'"
+			[ ] "Donor Agency"
+			[ ] "$selectedColumns[2]"
+	[+] HtmlCheckBox DonorGroup
+		[-] multitag "&name='selectedColumns'"
+			[ ] "Donor Group"
+			[ ] "$selectedColumns[3]"
+	[+] HtmlCheckBox ActualCommitments
+		[-] multitag "&name='checkall'"
+			[ ] "Actual Commitments"
+			[ ] "$checkall"
 [ ] 

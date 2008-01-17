@@ -33,7 +33,7 @@
 	[ ] AMPShowAmpEvent.endMinute.Select("10")
 	[ ] Agent.SetOption(OPT_VERIFY_ENABLED,  true)
 	[ ] AMPShowAmpEvent.Preview.Click()
-	[-] AMPShowAmpEvent.Gregorian.VerifyProperties({...})
+	[+] AMPShowAmpEvent.Gregorian.VerifyProperties({...})
 		[ ] ""
 		[-] {...}
 			[-] {"$Contents",            [LIST OF STRING] {...}}

@@ -2,22 +2,30 @@
 [-] testcase Test1My () appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
 	[ ] AMPDesktopLinks.TopMenu.ContentRepository.Click()
-	[ ] AMPDocumentManager.DM.MyDocuments.AddFile.Click()
-	[ ] AMPDocumentManager.Browse.Click()
-	[ ] ChooseFile.SetActive ()
-	[ ] ChooseFile.MyDocuments.Click ()
-	[ ] ChooseFile.ListView1.DoubleSelect ("test.doc")
+	[ ] //AMPDocumentManager.DM.MyDocuments.AddFile.Click()
+	[ ] AMPDocumentManager.AddFile1.Click ()
+	[ ] 
+	[ ] //AMPDocumentManager.Browse.Click()
+	[ ] //ChooseFile.SetActive ()
+	[ ] //ChooseFile.MyDocuments.Click ()
+	[ ] //ChooseFile.ListView1.DoubleSelect ("test.txt")
+	[ ] AMPDocumentManager.Path.SetText("C:\Documents and Settings\Administrator\My Documents\test.txt")
 	[ ] AMPDocumentManager.SetActive( )
 	[ ] AMPDocumentManager.Title.SetText("Test Title")
 	[ ] AMPDocumentManager.Description.SetText("Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description ")
 	[ ] 
 	[ ] AMPDocumentManager.Submit.Click ()
 	[ ] 
-	[-] AMPDocumentManager.DM.MyDocuments.TestDoc.VerifyProperties ({...})
+	[-] //AMPDocumentManager.DM.MyDocuments.TestDoc.VerifyProperties ({...})
+		[ ] //""
+		[-] //{...}
+			[ ] //{"Exists",               TRUE}
+			[ ] //{"Text",                 "test.doc"}
+	[+] AMPDocumentManager.TestDoc.VerifyProperties ({...})
 		[ ] ""
 		[-] {...}
 			[ ] {"Exists",               TRUE}
-			[ ] {"Text",                 "test.doc"}
+			[ ] {"Text",                 "test.txt"}
 	[ ] 
 [-] testcase Test1Team () appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
@@ -214,3 +222,7 @@
 	[ ] 
 [ ] 
 [ ] 
+[-] testcase Test1 () appstate none
+	[-] recording
+		[ ] AMPDocumentManager.SetActive( )
+		[ ] AMPDocumentManager.AddFile1.Click ()

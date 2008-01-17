@@ -666,9 +666,9 @@ function addComponents()
 
 function validate()
 {
-  var msgEnterAmount='<digi:trn key="aim:selectComponent:errmsg:enterAmount">Amount not entered.</digi:trn>';
-  var msgInvalidAmount='<digi:trn key="aim:selectComponent:errmsg:invalidAmount">Invalid amount entered.</digi:trn>';
-   var msgEnterDate='<digi:trn key="aim:selectComponent:errmsg:enterDate">Date not entered.</digi:trn>';
+  var msgEnterAmount="<digi:trn key="aim:selectComponent:errmsg:enterAmount">Amount not entered.</digi:trn>";
+  var msgInvalidAmount="<digi:trn key="aim:selectComponent:errmsg:invalidAmount">Invalid amount entered.</digi:trn>";
+  var msgEnterDate="<digi:trn key="aim:selectComponent:errmsg:enterDate">Date not entered.</digi:trn>";
 
 	var titleFlag = isEmpty(document.aimEditActivityForm.componentTitle.value);
 	if(titleFlag == true) {

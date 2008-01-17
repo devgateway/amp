@@ -98,29 +98,30 @@ public class AmpARFilter extends PropertyListable implements Filter {
 
 		selectPerspective(tm);
 		
-		//set the computed workspaces properties
-		AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
-		if("Computed".equals(ampTeam.getAccessType())) {
-			if(ampTeam.getRole()!=null) this.setTeamRoleId(ampTeam.getRole().getAmpRoleId());
-			Session session;
-			try {
-				session = PersistenceManager.getSession();
-				AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
-				PersistenceManager.releaseSession(session);
-				User u=atm.getUser();
-				if(u.getAssignedOrgId()!=null) this.setUserAssignedOrgId(u.getAssignedOrgId());
-			} catch (HibernateException e) {
-				logger.error(e);
-				e.printStackTrace();
-			} catch (SQLException e) {
-				logger.error(e);
-				e.printStackTrace();
-			}
-			
-		}
-		
+				
 		this.setAmpTeams(new TreeSet());
 		if(tm!=null){
+//			set the computed workspaces properties
+			AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
+			if("Computed".equals(ampTeam.getAccessType())) {
+				if(ampTeam.getRole()!=null) this.setTeamRoleId(ampTeam.getRole().getAmpRoleId());
+				Session session;
+				try {
+					session = PersistenceManager.getSession();
+					AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
+					PersistenceManager.releaseSession(session);
+					User u=atm.getUser();
+					if(u.getAssignedOrgId()!=null) this.setUserAssignedOrgId(u.getAssignedOrgId());
+				} catch (HibernateException e) {
+					logger.error(e);
+					e.printStackTrace();
+				} catch (SQLException e) {
+					logger.error(e);
+					e.printStackTrace();
+				}
+				
+			}
+			
 		    AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
 		    if (this.getCurrency() == null)
 		    	this.setCurrency(tempSettings.getCurrency());		    

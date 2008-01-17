@@ -93,9 +93,16 @@ public class CummulativeColWorker extends ColumnWorker {
 		if(!c.isCummulativeShow() && columnName.equalsIgnoreCase("Cumulative Disbursement")) return null;
 		if(columnName.equalsIgnoreCase("Cumulative Commitment")) trStr=ArConstants.COMMITMENT;
 		if(columnName.equalsIgnoreCase("Cumulative Disbursement")) trStr=ArConstants.DISBURSEMENT;
-			
-		if(MetaInfo.getMetaInfo(c.getMetaData(),ArConstants.TRANSACTION_TYPE).getValue().equals(trStr) && MetaInfo.getMetaInfo(c.getMetaData(),ArConstants.ADJUSTMENT_TYPE).getValue().equals(ArConstants.ACTUAL)) return src;
-		else return null;	
+		
+		try{
+			if(MetaInfo.getMetaInfo(c.getMetaData(),ArConstants.TRANSACTION_TYPE).getValue().equals(trStr) && MetaInfo.getMetaInfo(c.getMetaData(),ArConstants.ADJUSTMENT_TYPE).getValue().equals(ArConstants.ACTUAL)) return src;
+			else return null;	
+		}
+		catch (NullPointerException E) {
+			logger.error(E.getMessage()) ;
+			E.printStackTrace();
+			return null;
+		}
 	}
 
 	public Cell newCellInstance() {

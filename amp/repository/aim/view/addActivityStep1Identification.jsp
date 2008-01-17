@@ -120,9 +120,12 @@ target.style.cursor = "default"
 															<%--
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=objKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
 															--%>
-															<a href="javascript:edit('<%=objKey%>')">
-															<digi:trn key="aim:edit">Edit</digi:trn></a>	
-															&nbsp;
+															<digi:secure actions="ADMIN, TRANSLATE">
+																<a href="javascript:edit('<%=objKey%>')">
+																<digi:trn key="aim:edit">Edit</digi:trn></a>	
+																&nbsp;
+															</digi:secure>
+														
 															<a href="javascript:commentWin('objObjVerIndicators')" id="CommentObjObjVerIndicators"><digi:trn key="aim:addEditObjVerIndicators">Add/Edit Objectively Verifiable Indicators</digi:trn></a>
 															&nbsp;
 															<a href="javascript:commentWin('objAssumption')" id="CommentObjAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
@@ -158,8 +161,11 @@ target.style.cursor = "default"
 															<%--
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
 															--%>
-															<a href="javascript:edit('<%=descKey%>')">
-															<digi:trn key="aim:edit">Edit</digi:trn></a>
+															<digi:secure actions="ADMIN, TRANSLATE">
+																<a href="javascript:edit('<%=descKey%>')">
+																<digi:trn key="aim:edit">Edit</digi:trn></a>
+															</digi:secure>
+															
 														</td>
 													</tr>
 												</table>

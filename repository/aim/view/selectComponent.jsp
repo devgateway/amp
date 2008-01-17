@@ -66,10 +66,10 @@
 										</td>
 										<td>
 											<html:select property="componentTitle" styleClass="inp-text">
-												<option value="-1"><digi:trn key="aim:selectComponent">Select Component</digi:trn></option>
-													<logic:iterate id="comp" name="aimEditActivityForm" property="allComps">
-														<option value="${comp.name}" title="${comp.name}">${comp.shortName}</option>	
-													</logic:iterate>												
+                                                <html:option value="-1"><digi:trn key="aim:selectComponent">-Select Component-</digi:trn></html:option>
+                                                <c:forEach var="comp" items="${aimEditActivityForm.allComps}">
+                                                  <html:option value="${comp.name}">${comp.shortName}</html:option>
+                                                </c:forEach>
 											</html:select>
 										</td>
 									</tr>

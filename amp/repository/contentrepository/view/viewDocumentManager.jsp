@@ -424,8 +424,9 @@
 			<digi:trn key="contentrepository:newWindowExplanation">Click here to open a new document window</digi:trn>
 		</c:set>
 		<div id="otherDocumentsDiv"></div>
-		&nbsp;&nbsp;<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue" onClick="newWindow('Select Documents', true,'otherDocumentsDiv')" />
+		&nbsp;&nbsp;<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue" onClick="newWindow('<digi:trn key="contentrepository:SelectDocuments">Select Documents</digi:trn>', true,'otherDocumentsDiv')" />
 			<digi:trn key="contentrepository:newWindow">New window</digi:trn>
+			
 			</a>
 		</td>
 	</tr>
@@ -459,7 +460,7 @@
 					<html:submit styleClass="buton" onclick="return validateAddDocument()"><digi:trn key="contentrepository:addEdit:Submit">Submit</digi:trn></html:submit>&nbsp;
 				</td>
 				<td align="left">
-					&nbsp;<button class="buton" style="font-size: xx-small" type="button" onClick="hidePanel(0)">Cancel</button>
+					&nbsp;<button class="buton" style="font-size: xx-small" type="button" onClick="hidePanel(0)"><digi:trn key="contentrepository:addEdit:Cancel">Cancel</digi:trn></button>
 				</td>
 			</tr>
 		</table>

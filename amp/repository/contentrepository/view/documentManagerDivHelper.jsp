@@ -21,7 +21,7 @@
 							border="0" align="absmiddle"
 							src="module/contentrepository/images/folder_folder.gif" />
 					</a>
-					<button class="buton" type="button" name="otherDocumentsButton" >Select</button>
+					<button class="buton" type="button" name="otherDocumentsButton" ><digi:trn key="contentrepository:SelectButton">Select</digi:trn></button>
 					
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>&nbsp;</span>
 				</td>
@@ -29,7 +29,7 @@
 				width="13" height="20"> </td>
 			</tr>
 			<tr style="display: table-row" name="otherDocumentsTr" bgcolor="#f4f4f2">
-				<td colspan="3" name="otherDocumentsTd">Empty<a name="otherDocumentsDiv">&nbsp;</a></td>
+				<td colspan="3" name="otherDocumentsTd"><digi:trn key="contentrepository:Empty">Empty</digi:trn><a name="otherDocumentsDiv">&nbsp;</a></td>
 			</tr>
 	</table>
 </div>

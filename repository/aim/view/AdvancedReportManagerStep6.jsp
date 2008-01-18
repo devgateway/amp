@@ -14,7 +14,7 @@
 function moveUp(val)
 {
 	if(document.aimAdvancedReportForm.removeColumns.length == undefined)
-		alert('<digi:trn key="aim:reportBuilder:ReportColumnMoveUpValidation">Cannot move the column Up!<digi:trn>');
+		alert('<digi:trn key="aim:reportBuilder:ReportColumnMoveUpValidation">Cannot move the column Up!</digi:trn>');
 	else
 	{
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveUpMeasure" />
@@ -29,7 +29,7 @@ function moveUp(val)
 function moveDown(val)
 {
 	if(document.aimAdvancedReportForm.removeColumns.length == undefined)
-		alert('<digi:trn key="aim:reportBuilder:ReportColumnMoveDownValidation">Cannot move the column Down!<digi:trn>');
+		alert('<digi:trn key="aim:reportBuilder:ReportColumnMoveDownValidation">Cannot move the column Down!</digi:trn>');
 	else
 	{
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveDownMeasure" />
@@ -43,7 +43,7 @@ function moveDown(val)
 function moveUpAdjType(val)
 {
 	if(document.aimAdvancedReportForm.removeAdjustType.length == undefined)
-		alert('<digi:trn key="aim:reportBuilder:ReportColumnMoveUpValidation">Cannot move the column Up!<digi:trn>');
+		alert('<digi:trn key="aim:reportBuilder:ReportColumnMoveUpValidation">Cannot move the column Up!</digi:trn>');
 	else
 	{
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveUpAdjustType" />
@@ -57,7 +57,7 @@ function moveUpAdjType(val)
 function moveDownAdjType(val)
 {
 	if(document.aimAdvancedReportForm.removeAdjustType.length == undefined)
-		alert('<digi:trn key="aim:reportBuilder:ReportColumnMoveDownValidation">Cannot move the column Down!<digi:trn>');
+		alert('<digi:trn key="aim:reportBuilder:ReportColumnMoveDownValidation">Cannot move the column Down!</digi:trn>');
 	else
 	{
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveDownAdjustType" />
@@ -70,7 +70,7 @@ function moveDownAdjType(val)
 }
 function check(){
 	if(document.aimAdvancedReportForm.removeColumns == null){
-		alert('<digi:trn key="aim:reportBuilder:ReportSelMeasureValidation">Please select a Measure to generate report <digi:trn>');
+		alert('<digi:trn key="aim:reportBuilder:ReportSelMeasureValidation">Please select a Measure to generate report </digi:trn>');
 		return false
 	}
 	return true;
@@ -111,7 +111,7 @@ function addColumn()
 		document.aimAdvancedReportForm.submit();
 	}
 	else 
-		alert('<digi:trn key="aim:reportBuilder:ReportSelAddValidation">Please select columns to add<digi:trn>');
+		alert('<digi:trn key="aim:reportBuilder:ReportSelAddValidation">Please select columns to add</digi:trn>');
 }
 
 function deleteColumn()
@@ -135,7 +135,7 @@ function deleteColumn()
 		document.aimAdvancedReportForm.submit();
 	}
 	else 
-		alert('<digi:trn key="aim:reportBuilder:ReportSelRemoveValidation">Please select columns to remove<digi:trn>');
+		alert('<digi:trn key="aim:reportBuilder:ReportSelRemoveValidation">Please select columns to remove</digi:trn>');
 }
 
 function addAdjustType()
@@ -148,7 +148,7 @@ function addAdjustType()
 function deleteAdjustType()
 {
 	if(document.aimAdvancedReportForm.removeAdjustType == null)
-		alert('<digi:trn key="aim:reportBuilder:ReportSelRemoveValidation">Please select columns to remove<digi:trn>');
+		alert('<digi:trn key="aim:reportBuilder:ReportSelRemoveValidation">Please select columns to remove</digi:trn>');
 	else
 	{
 		<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=DeleteAdjustType" />

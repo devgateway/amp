@@ -11,7 +11,7 @@
 <script language="JavaScript">
 	function saveReport()
 	{
-		alert('<digi:trn key="aim:reportBuilder:ReportSavingValidation">Your report is being saved<digi:trn>');
+		alert('<digi:trn key="aim:reportBuilder:ReportSavingValidation">Your report is being saved</digi:trn>');
 		
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SaveReport" />
 		document.aimAdvancedReportForm.action = "<%= step %>";

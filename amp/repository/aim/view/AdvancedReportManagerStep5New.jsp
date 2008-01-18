@@ -13,7 +13,7 @@
 function moveUp(val)
 {
 	if(document.aimAdvancedReportForm.removeColumns.length == undefined)
-		alert("Cannot move the column Up ");
+		alert('<digi:trn key="aim:reportBuilder:ReportColumnMoveUpValidation">Cannot move the column Up!<digi:trn>');
 	else
 	{
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=Step2MoveUp" />
@@ -27,7 +27,7 @@ function moveUp(val)
 function moveDown(val)
 {
 	if(document.aimAdvancedReportForm.removeColumns.length == undefined)
-		alert("Cannot move the column Down");
+		alert('<digi:trn key="aim:reportBuilder:ReportColumnMoveDownValidation">Cannot move the column Down!<digi:trn>');
 	else
 	{
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=Step2MoveDown" />
@@ -48,6 +48,7 @@ function gotoStep() {
 		document.aimAdvancedReportForm.submit();
 	}
 }
+
 /*added here*/
 function backStep() {
 	if (check()){
@@ -72,8 +73,7 @@ function addColumn()
 	}
 	if(count>3 )
 	{
-		alert("Please select three or less hierarchies ");
-
+		alert('<digi:trn key="aim:reportBuilder:ReportSelHierarchiesValidation">Please select three or less hierarchies <digi:trn>');
 	}
 	else
 	{
@@ -87,7 +87,7 @@ function addColumn()
 function deleteColumn()
 {
 	if(document.aimAdvancedReportForm.removeColumns == null)
-		alert(" Please select columns to remove");
+		alert('<digi:trn key="aim:reportBuilder:ReportSelRemoveValidation">Please select columns to remove<digi:trn>');
 	else
 	{
 		<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=Step2DeleteRows" />

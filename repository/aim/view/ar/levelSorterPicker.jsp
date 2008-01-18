@@ -20,8 +20,14 @@
 			<td align="right"><digi:trn key="aim:popsort:hierarchy:level">Hierarchy Level:</digi:trn></td>
 			<td>
 				<html:select property="levelPicked">
-				<html:optionsCollection name="reportMeta" property="hierarchies"
-					value="levelId" label="column.columnName" />
+					<logic:iterate name="reportMeta" property="hierarchies"  id="iter">
+						<c:set var="key" value="aim:popsort:hierarchy:${iter.column.columnName}"/>
+						<html:option value="${iter.levelId}">
+							<digi:trn key="${key}">
+							${iter.column.columnName}
+						</digi:trn>
+						</html:option>
+					</logic:iterate>
 				</html:select>
 			</td>
 		</tr>

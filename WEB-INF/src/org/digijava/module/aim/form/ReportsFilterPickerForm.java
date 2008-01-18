@@ -9,18 +9,23 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.springframework.beans.BeanWrapperImpl;
 
 /**
  * @author mihai
  **/
 public class ReportsFilterPickerForm extends ActionForm {
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -8336313984510706274L;
 	private Collection currencies;
 	private Collection calendars;
 	private Collection sectors;
 	private Collection donors;
 	private Collection risks;
-	private Collection fromYears;
-	private Collection toYears;
+	private Collection<BeanWrapperImpl> fromYears;
+	private Collection<BeanWrapperImpl> toYears;
 	private Collection actRankCollection;
 	private Collection pageSizes; //A0,A1,A2,A3,A4 
 	private Long regionSelected;
@@ -104,10 +109,10 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setFromYear(Long fromYear) {
 		this.fromYear = fromYear;
 	}
-	public Collection getFromYears() {
+	public Collection<BeanWrapperImpl> getFromYears() {
 		return fromYears;
 	}
-	public void setFromYears(Collection fromYears) {
+	public void setFromYears(Collection<BeanWrapperImpl> fromYears) {
 		this.fromYears = fromYears;
 	}
 	public Long getToYear() {
@@ -116,10 +121,10 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setToYear(Long toYear) {
 		this.toYear = toYear;
 	}
-	public Collection getToYears() {
+	public Collection<BeanWrapperImpl> getToYears() {
 		return toYears;
 	}
-	public void setToYears(Collection toYears) {
+	public void setToYears(Collection<BeanWrapperImpl> toYears) {
 		this.toYears = toYears;
 	}
 	public Collection getCalendars() {

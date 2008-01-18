@@ -26,7 +26,7 @@ function check(){
     }
   }
   if (option == -1){
-    alert('<digi:trn key="aim:reportBuilder:ReportTypeValidation">You must choose a report type!<digi:trn>')
+    alert('<digi:trn key="aim:reportBuilder:ReportTypeValidation">You must choose a report type!</digi:trn>')
     return false;
   }
   return true;

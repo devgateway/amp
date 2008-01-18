@@ -29,7 +29,7 @@
 function moveUp(val)
 {
 	if(document.aimAdvancedReportForm.removeColumns.length == undefined)
-		alert('<digi:trn key="aim:reportBuilder:ReportColumnMoveUpValidation">Cannot move the column Up!<digi:trn>');
+		alert('<digi:trn key="aim:reportBuilder:ReportColumnMoveUpValidation">Cannot move the column Up!</digi:trn>');
 	else
 	{
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveUp" />
@@ -43,7 +43,7 @@ function moveUp(val)
 function moveDown(val)
 {
 	if(document.aimAdvancedReportForm.removeColumns.length == undefined)
-		alert('<digi:trn key="aim:reportBuilder:ReportColumnMoveDownValidation">Cannot move the column Down!<digi:trn>');
+		alert('<digi:trn key="aim:reportBuilder:ReportColumnMoveDownValidation">Cannot move the column Down!</digi:trn>');
 	else
 	{
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveDown" />
@@ -55,7 +55,7 @@ function moveDown(val)
 }
 function check(){
 	if(document.aimAdvancedReportForm.removeColumns == null && document.aimAdvancedReportForm.removeColumnsLevel == null){
-		alert('<digi:trn key="aim:reportBuilder:ReportSelColValidation">Please select columns to generate report<digi:trn>');
+		alert('<digi:trn key="aim:reportBuilder:ReportSelColValidation">Please select columns to generate report</digi:trn>');
 		return false;
 	}
 	return true;
@@ -97,7 +97,7 @@ function addColumn()
 		document.aimAdvancedReportForm.submit();
 	}
 	else 
-		alert('<digi:trn key="aim:reportBuilder:ReportSelAddValidation">Please select columns to add<digi:trn>');
+		alert('<digi:trn key="aim:reportBuilder:ReportSelAddValidation">Please select columns to add</digi:trn>');
 }
 
 function deleteColumn()
@@ -121,7 +121,7 @@ function deleteColumn()
 		document.aimAdvancedReportForm.submit();
 	}
 	else 
-		alert('<digi:trn key="aim:reportBuilder:ReportSelRemoveValidation">Please select columns to remove<digi:trn>');
+		alert('<digi:trn key="aim:reportBuilder:ReportSelRemoveValidation">Please select columns to remove</digi:trn>');
 }
 function checkUncheckAll() {
      var items=document.aimAdvancedReportForm.selectedColumns;

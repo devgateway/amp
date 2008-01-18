@@ -1,8 +1,7 @@
 
 DROP TABLE  IF EXISTS tmp_location_table;
 
-CREATE TEMPORARY TABLE tmp_location_table
-select * from amp_activity_location;
+CREATE TEMPORARY TABLE tmp_location_table select * from amp_activity_location;
 
 DROP TABLE amp_activity_location;
 
@@ -21,16 +20,6 @@ CREATE TABLE `amp_activity_location` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 
-INSERT INTO amp_activity_location
-(amp_activity_id,amp_location_id,amp_activity_location_id)
-select amp_activity_id,amp_location_id,amp_activity_location_id
-from tmp_location_table;
-
-
-
-
-
-
-
-
+INSERT INTO amp_activity_location (`amp_activity_id`,`amp_location_id`,`amp_activity_location_id`)
+select 	`amp_activity_id`,`amp_location_id`,`amp_activity_location_id` from tmp_location_table;
 

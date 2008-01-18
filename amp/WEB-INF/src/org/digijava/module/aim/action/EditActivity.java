@@ -792,7 +792,7 @@ public class EditActivity
           Collection ampLocs = activity.getLocations();
 
           if (ampLocs != null && ampLocs.size() > 0) {
-            Collection locs = new TreeSet();
+            Collection locs = new ArrayList();
 
             Iterator locIter = ampLocs.iterator();
             boolean maxLevel = false;
@@ -831,6 +831,7 @@ public class EditActivity
                 Country cntry = DbUtil.getDgCountry(ISO);
                 location.setCountryId(cntry.getCountryId());
                 location.setCountry(cntry.getCountryName());
+                location.setNewCountryId(cntry.getIso());
                 if (loc.getAmpRegion() != null) {
                   location.setRegion(loc.getAmpRegion()
                                      .getName());

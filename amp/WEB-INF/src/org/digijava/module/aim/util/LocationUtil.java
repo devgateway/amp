@@ -271,7 +271,7 @@ public class LocationUtil {
 	}
 	//End Search Location.
 
-	public static AmpLocation getAmpLocation(Long countryId, Long regionId,
+	public static AmpLocation getAmpLocation(String countryId, Long regionId,
 			Long zoneId, Long woredaId) {
 
 		Session session = null;
@@ -287,7 +287,7 @@ public class LocationUtil {
 				if (!flag) {
 					queryString += " where";
 				}
-				queryString += " country_id = " + countryId;
+				queryString += " country_id like '" + countryId+"'";
 				flag = true;
 			}
 

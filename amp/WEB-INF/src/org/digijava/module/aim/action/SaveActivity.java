@@ -930,7 +930,7 @@ public class SaveActivity extends Action {
 					Iterator<Location> itr = eaForm.getSelectedLocs().iterator();
 					while (itr.hasNext()) {
 						Location loc = itr.next();
-						AmpLocation ampLoc = LocationUtil.getAmpLocation(loc.getCountryId(), loc.getRegionId(), loc.getZoneId(), loc.getWoredaId());
+						AmpLocation ampLoc = LocationUtil.getAmpLocation(loc.getNewCountryId(), loc.getRegionId(), loc.getZoneId(), loc.getWoredaId());
 
 						if (ampLoc == null) {
 							ampLoc = new AmpLocation();
@@ -945,7 +945,7 @@ public class SaveActivity extends Action {
 						}
 						//AMP-2250
 						AmpActivityLocation actLoc=new AmpActivityLocation();
-						actLoc.setActivity(new AmpActivity());//activity);
+						actLoc.setActivity(activity);//activity);
 						actLoc.getActivity().setAmpActivityId(eaForm.getActivityId());
 						actLoc.setLocation(ampLoc);
 						actLoc.setLocationPercentage(loc.getPercent());

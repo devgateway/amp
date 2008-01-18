@@ -12,6 +12,8 @@ public class Location implements Serializable, Comparable
 	
 	private Long locId;
 	private Long countryId;
+	//now ID is the ISO value countryId hold the COUNTRY  ID and newCountryId hold Country ISO
+	private String newCountryId;
 	private String country;
 	private Long regionId;
 	private String region;
@@ -199,4 +201,12 @@ public class Location implements Serializable, Comparable
 	public void setPercent(Float percent) {
 		this.percent = percent;
 	}
+
+	public String getNewCountryId() {
+            return newCountryId;
+        }
+
+	public void setNewCountryId(String newCountryId) {
+            this.newCountryId = newCountryId;
+        }
 }

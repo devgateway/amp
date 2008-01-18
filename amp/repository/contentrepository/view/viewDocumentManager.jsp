@@ -460,7 +460,7 @@
 					<html:submit styleClass="buton" onclick="return validateAddDocument()"><digi:trn key="contentrepository:addEdit:Submit">Submit</digi:trn></html:submit>&nbsp;
 				</td>
 				<td align="left">
-					&nbsp;<button class="buton" style="font-size: xx-small" type="button" onClick="hidePanel(0)"><digi:trn key="contentrepository:addEdit:Cancel">Cancel</digi:trn></button>
+					&nbsp;<button class="buton" style="font-size: x-small" type="button" onClick="hidePanel(0)"><digi:trn key="contentrepository:addEdit:Cancel">Cancel</digi:trn></button>
 				</td>
 			</tr>
 		</table>

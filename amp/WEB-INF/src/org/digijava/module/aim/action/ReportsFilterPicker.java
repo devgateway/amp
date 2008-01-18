@@ -21,7 +21,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.AmpARVRegions;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -31,7 +30,6 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
@@ -52,7 +50,7 @@ import org.springframework.beans.BeanWrapperImpl;
  *
  */
 public class ReportsFilterPicker extends MultiAction {
-	 
+	final String KEY_RISK_PREFIX="aim:risk:";
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		ReportsFilterPickerForm filterForm=(ReportsFilterPickerForm) form;
@@ -90,7 +88,18 @@ public class ReportsFilterPicker extends MultiAction {
 		//if(ampTeamId!=null) donors=DbUtil.getAmpDonorsByFunding(ampTeamId); else donors=new ArrayList();
 //		donors = DbUtil.getAllOrgGroups();
 		donors = DbUtil.getAllOrgGrpBeeingUsed();
-		Collection allIndicatorRisks = MEIndicatorsUtil.getAllIndicatorRisks();
+		
+		Collection meRisks = MEIndicatorsUtil.getAllIndicatorRisks();
+		for (Iterator iter = meRisks.iterator(); iter.hasNext();) {
+			AmpIndicatorRiskRatings element = (AmpIndicatorRiskRatings) iter.next();
+            String value = element.getRatingName();
+            String key = KEY_RISK_PREFIX + value.toLowerCase();
+            key = key.replaceAll(" ", "");
+            String msg = CategoryManagerUtil.translate(key, request, value);
+            element.setRatingName(msg);
+           }
+        
+		Collection allIndicatorRisks = meRisks;
 		//Collection regions=LocationUtil.getAmpLocationsForDefaultCountry();
 		Collection regions=LocationUtil.getAllVRegions();
 		filterForm.setCurrencies(currency);

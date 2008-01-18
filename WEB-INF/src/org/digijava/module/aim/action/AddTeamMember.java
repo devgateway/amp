@@ -149,6 +149,8 @@ public class AddTeamMember extends Action {
 			newAppSettings.setLanguage(ampAppSettings.getLanguage());
 			newAppSettings.setDefaultPerspective(ampAppSettings
 					.getDefaultPerspective());
+			newAppSettings.setPerspectiveId( ampAppSettings
+					.getPerspectiveId() );
 			newAppSettings.setUseDefault(new Boolean(true));
 
 			Site site = RequestUtils.getSite(request);

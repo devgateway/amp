@@ -1,3 +1,4 @@
+
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -37,13 +38,14 @@ function check(){
 
 	if(trim(temp) == "")
 	{
-		alert(" Please enter report title");
+		alert('<digi:trn key="aim:reportBuilder:ReportSavingValidation">Your report is being saved<digi:trn>');
 		document.aimAdvancedReportForm.reportTitle.value = "";
 		flag = 1;
 	}
 	else if(!(isNaN(a)))
 	{
-		alert("Report Title cannot start with a numeric value");
+		
+		alert('<digi:trn key="aim:reportBuilder:ReportNumericTittleValidation">Report Title cannot start with a numeric value<digi:trn>');
 		flag=1;
 	}
 	else
@@ -52,7 +54,7 @@ function check(){
 		{
 			if (iChars.indexOf(temp.charAt(i)) != -1)
 			{
-				alert(" Please do not enter special characters in the Report Title");
+				alert('<digi:trn key="aim:reportBuilder:ReportSpecialChrTittleValidation">Please do not enter special characters in the Report Title<digi:trn>');
 				flag=1;
 				break;
 			}
@@ -60,7 +62,7 @@ function check(){
 	}
 	if(temp.length > 30)
 	{
-		alert("Report title should not be greater than 30 characters including spaces.");
+		alert('<digi:trn key="aim:reportBuilder:ReportMaxTittleValidation">Report title should not be greater than 30 characters including spaces.<digi:trn>');
 		flag=1;
 	}
 	if (flag == 0)
@@ -93,7 +95,6 @@ function backStep() {
 }
 /*ended here*/
 </script>
-
 <digi:instance property="aimAdvancedReportForm" />
 <digi:form action="/advancedReportManager.do" method="post">
 <input type="hidden" name="isAdd" >

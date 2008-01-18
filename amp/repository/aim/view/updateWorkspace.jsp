@@ -346,8 +346,12 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																	<c:otherwise>
 																		<html:select property="category" styleClass="inp-text" onchange="relTeam()">
 																			<html:option value="-1">-- Select Category --</html:option>
-																			<html:option value="GOVERNMENT"><digi:trn key="aim:GOVERNMENT">Government</digi:trn></html:option>
-																			<html:option value="DONOR">Donor</html:option>
+																			<html:option value="<%= org.digijava.module.aim.helper.Constants.DEF_GOV_PERSPECTIVE %>">
+																					<digi:trn key="aim::teamCategory:GOVERNMENT">Government</digi:trn>
+																			</html:option>
+																			<html:option value="<%= org.digijava.module.aim.helper.Constants.DEF_DNR_PERSPECTIVE %>">
+																				<digi:trn key="aim:teamCategory:DONOR">Donor</digi:trn>
+																			</html:option>
 																		</html:select>
 																	</c:otherwise>
 																</c:choose>

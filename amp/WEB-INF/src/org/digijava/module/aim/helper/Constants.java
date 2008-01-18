@@ -28,6 +28,7 @@ public class Constants
 	public static final String MOFED = "MA" ;
 	public static final String DEF_DNR_PERSPECTIVE = "DONOR" ;
 	public static final String DEF_MFD_PERSPECTIVE = "MOFED" ;
+	public static final String DEF_GOV_PERSPECTIVE = "GOVERNMENT" ;
 	public static final String DISCREPANCY = "DI";
 	public static final Long MOFED_ORG_ID= new Long(12);
 	public static final String DEFAULT_CURRENCY = "USD" ;

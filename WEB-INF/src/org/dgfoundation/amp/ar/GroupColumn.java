@@ -105,8 +105,12 @@ public class GroupColumn extends Column {
     		while (i.hasNext()) {
 				Column element = (Column) i.next();
 				Column splitted=verticalSplitByCateg(element,category,ids,generateTotalCols,reportMetadata);
-				splitted.setContentCategory(category);
-				if(splitted!=null) dest.addColumn(splitted); else dest.addColumn(element);
+				
+				if(splitted!=null) {
+					dest.addColumn(splitted);
+					splitted.setContentCategory(category);
+				}
+				else dest.addColumn(element);
 			}
     		return dest;
     	}

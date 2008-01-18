@@ -319,7 +319,7 @@ function delSubmit(){
                 	       			<a id="clear1" href="javascript:clearDate(selectedStartDate, 'clear1')">
 									 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 									</a>
-                       				 <a id="date1" href='javascript:pickDateById("date1","selectedStartDate","clear1")'>
+                       				 <a id="date1" href='javascript:pickDateById("date1","selectedStartDate","dd/mm/yyyy","clear1")'>
 										<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 									</a>
                                 </td>
@@ -433,7 +433,7 @@ function delSubmit(){
                                 </td>
                                 <td>&nbsp;</td>
                                 <td>
-                      				<a id="date2" href='javascript:pickDateById("date2","selectedEndDate","clear2")'>
+                      				<a id="date2" href='javascript:pickDateById("date2","selectedEndDate","dd/mm/yyyy","clear2")'>
 										<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 									</a>
                                 </td>

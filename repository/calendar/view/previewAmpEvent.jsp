@@ -116,7 +116,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">&nbsp;Event is private&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap"><digi:trn key="calendar:eventIsPrivate">&nbsp;Event is private</digi:trn></td>
                     <td>
                         <html:hidden name="calendarEventForm" property="privateEvent" value="${calendarEventForm.privateEvent}"/>
                         <c:if test="${calendarEventForm.privateEvent}"><b>Yes</b></c:if>

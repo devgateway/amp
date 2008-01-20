@@ -10,4 +10,17 @@ public class CrConstants {
 	
 	/*  */
 	public static final String GET_PUBLIC_DOCUMENTS					= "getPublicDocuments";
+	
+	public static final String PROPERTY_NAME						= "ampdoc:name";
+	public static final String PROPERTY_TITLE						= "ampdoc:title";
+	public static final String PROPERTY_DESCRIPTION					= "ampdoc:description";
+	public static final String PROPERTY_NOTES						= "ampdoc:notes";
+	public static final String PROPERTY_CONTENT_TYPE				= "ampdoc:contentType";
+	public static final String PROPERTY_ADDING_DATE					= "ampdoc:addingDate";
+	public static final String PROPERTY_CREATOR						= "ampdoc:creator";
+	public static final String PROPERTY_VERSION_NUMBER				= "ampdoc:versionNumber";
+	public static final String PROPERTY_DATA						= "ampdoc:data";
+	public static final String PROPERTY_LINK						= "ampdoc:link";
+	public static final String PROPERTY_FILE_SIZE					= "ampdoc:fileSize";
+	
 }

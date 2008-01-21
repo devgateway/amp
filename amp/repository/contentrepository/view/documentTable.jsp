@@ -9,19 +9,21 @@
 			<table id="team_table" bgcolor="white">
 						<thead>
 							<tr>
+								<th><digi:trn key="contentrepository:TableHeader:Type">Type</digi:trn></th>
 								<th>
-                                <digi:trn key="contentrepository:TableHeader:FileName">File Name</digi:trn>   
+                                	<digi:trn key="contentrepository:TableHeader:FileName">File Name</digi:trn>   
                                 </th>
 								<th><digi:trn key="contentrepository:TableHeader:ResourceTitle">Resource Title</digi:trn></th>
 								<th><digi:trn key="contentrepository:TableHeader:Date">Date</digi:trn></th>
-								<th><digi:trn key="contentrepository:TableHeader:ContentType">Content Type</digi:trn></th>
+								<th><digi:trn key="contentrepository:TableHeader:Size">Size (MB)</digi:trn></th>
+								<%-- <th><digi:trn key="contentrepository:TableHeader:ContentType">Content Type</digi:trn></th> --%>
 								<th><digi:trn key="contentrepository:TableHeader:Description">Description</digi:trn></th>
 								<th><digi:trn key="contentrepository:TableHeader:Actions">Actions</digi:trn></th>
 							</tr>
 						</thead>
 						<logic:iterate name="documentDataCollection" id="documentData"
 							type="org.digijava.module.contentrepository.action.DocumentManager.DocumentData">
-							<%
+							<%--
 					int index2;
 					String documentName = documentData.getName();
 					String iconPath = "";
@@ -33,7 +35,7 @@
 								+ ".gif";
 					}
 
-					%>
+					--%>
 							<logic:equal name="documentData" property="isPublic" value="true">
 								<c:set var="makePublicCommand">
 									<digi:trn key="contentrepository:republish">Rep</digi:trn>
@@ -46,9 +48,11 @@
 							</logic:equal>
 							<tr>
 								<td>
+									<digi:img skipBody="true" src="${documentData.iconPath}" border="0" alt="${ documentData.contentType }" align="absmiddle"/>
+									&nbsp;
+								</td>
+								<td>
 									 <bean:write name="documentData" property="name" />
-									 <digi:img skipBody="true" src="<%=iconPath%>" border="0"
-									align="absmiddle" />
 								</td>
 								<td>
 									<bean:write name="documentData" property="title" />
@@ -57,9 +61,12 @@
 									<bean:write name="documentData" property="calendar" />
 								</td>
 								<td>
+									<bean:write name="documentData" property="fileSize" />
+								</td>
+								<%-- <td>
 									<bean:write name="documentData" property="contentType" />
 									
-								</td>
+								</td> --%>
 								<td>
 									<bean:write name="documentData" property="description" />
 									<a name="aDocumentUUID" style="display: none"><bean:write name="documentData" property="uuid" /></a>

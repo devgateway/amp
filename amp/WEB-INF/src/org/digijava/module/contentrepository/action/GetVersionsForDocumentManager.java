@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.contentrepository.action.DocumentManager.DocumentData;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
+import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 
@@ -64,7 +65,7 @@ public class GetVersionsForDocumentManager extends Action {
 					
 					this.generateDocumentData(n, counter+1, docData);
 					docData.computeIconPath( false );
-					docs.add( docData );
+					docs.add(0, docData );
 				}
 				counter++;
 			}
@@ -81,52 +82,63 @@ public class GetVersionsForDocumentManager extends Action {
 		String contentType	= "";
 		String notes		= "";
 		
+		double size			= 0;
+		
 		float version		= 0;
 		
 		try{
-			name		= n.getProperty("ampdoc:name").getString();
+			name		= n.getProperty(CrConstants.PROPERTY_NAME).getString();
 			docData.setName( name );
 		}
 		catch(Exception E) {
 			return;
 		}
 		try{
-			title		= n.getProperty("ampdoc:title").getString();
+			title		= n.getProperty(CrConstants.PROPERTY_TITLE).getString();
 			docData.setTitle( title );
 		}
 		catch(Exception E) {
 			;
 		}
 		try{
-			description	= n.getProperty("ampdoc:description").getString();
+			description	= n.getProperty(CrConstants.PROPERTY_DESCRIPTION).getString();
 			docData.setDescription( description );
 		}
 		catch(Exception E) {
 			;
 		}
 		try{
-			contentType	= n.getProperty("ampdoc:contentType").getString();
+			contentType	= n.getProperty(CrConstants.PROPERTY_CONTENT_TYPE).getString();
 			docData.setContentType( contentType );
 		}
 		catch(Exception E) {
 			;
 		}
 		try{
-			notes		= n.getProperty("ampdoc:notes").getString();
+			notes		= n.getProperty(CrConstants.PROPERTY_NOTES).getString();
 			docData.setNotes( notes );
 		}
 		catch(Exception E) {
 			;
 		}
 		try{
-			date	= DocumentManagerUtil.calendarToString( n.getProperty("ampdoc:addingDate").getDate() );
+			date	= DocumentManagerUtil.calendarToString( n.getProperty(CrConstants.PROPERTY_ADDING_DATE).getDate() );
 			docData.setCalendar( date );
 		}
 		catch(Exception E) {
 			;
 		}
 		try{
-			version	= (float) n.getProperty("ampdoc:versionNumber").getDouble();
+			size		= n.getProperty(CrConstants.PROPERTY_FILE_SIZE).getDouble()/(1024 * 1024);
+			int temp	= (int)(size * 1000);
+			size		= ( (double)temp ) / 1000; 
+			docData.setFileSize(size);
+		}
+		catch(Exception E) {
+			docData.setFileSize( 0 );
+		}
+		try{
+			version	= (float) n.getProperty(CrConstants.PROPERTY_VERSION_NUMBER).getDouble();
 			docData.setVersionNumber( version );
 		}
 		catch(Exception E) {

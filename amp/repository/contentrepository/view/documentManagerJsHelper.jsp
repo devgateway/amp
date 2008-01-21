@@ -2,31 +2,33 @@
 .all_markup
 {margin:1em} 
 .all_markup table
-{border-collapse:collapse; width: 90%} 
+{border-collapse:collapse;border: 1px solid #d7eafd;  width: 90%} 
 .all_markup th
-{border:1px solid #000;padding:.25em;background-color:#fff; font-size:12px; color: #666666}
+{padding:.25em;background-color:#d7eafd; font-size:12px; color: #666666}
 .all_markup th a, .all_markup th a:hover
 {font-size:13px; text-decoration: none;}
 .all_markup td
-{border-bottom:1px solid #000;padding:.25em;font-size:11px}
+{padding:.25em;font-size:11px}
 .all_markup .yui-dt-even {background-color:white;} 
-.all_markup .yui-dt-odd {background-color:#d7eafd;} /* a light blue color */ 
+.all_markup .yui-dt-odd {background-color:#eeeeee} /* a light grey color */ 
 .all_markup .yui-dt-selected {background-color:#97C0A5;} /*green*/ 
-.all_markup .yui-dt-sortedbyasc, .all_markup .yui-dt-sortedbydesc {background-color:#eee;}
+.all_markup .yui-dt-sortedbyasc, .all_markup .yui-dt-sortedbydesc {background-color:#dddddb;}
 
 .all_markup .yui-dt-headtext {margin-right:5px;padding-right:15px;}
 .all_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_up.gif') no-repeat right;}/*arrow up*/
 .all_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_dn.gif') no-repeat right;}/*arrow down*/
 
 .versions_markup {margin:1em; overflow: auto; } 
-.versions_markup table {border-collapse:collapse; overflow: auto;} 
-.versions_markup th {border:1px solid #000;padding:.25em;background-color:#fff;color:#666666; font-size:11px}
+.versions_markup table {border-collapse:collapse; overflow: auto;border: 1px solid #d7eafd;} 
+.versions_markup th {padding:.25em;background-color:#d7eafd;color:#666666; font-size:11px}
 .versions_markup th a, .versions_markup th a:hover {font-size:11px; text-decoration: none;}
-.versions_markup td {border-bottom:1px solid #000;padding:.25em;} 
+.versions_markup td {padding:.25em;} 
+.versions_markup .yui-dt-odd {background-color:#eeeeee} /* a light grey color */ 
+.versions_markup .yui-dt-selected {background-color:#97C0A5;} /*green*/ 
 .versions_markup .yui-dt-headtext {margin-right:5px; padding-right:15px;}
 .versions_markup .yui-dt-sortedbyasc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_up.gif') no-repeat right;}/*arrow up*/
 .versions_markup .yui-dt-sortedbydesc .yui-dt-headcontainer {background: url('/repository/contentrepository/view/images/arrow_dn.gif') no-repeat right;}/*arrow down*/
-.versions_markup .yui-dt-sortedbyasc, .versions_markup .yui-dt-sortedbydesc {background-color:#eee;}
+.versions_markup .yui-dt-sortedbyasc, .versions_markup .yui-dt-sortedbydesc {background-color:#dddddb;}
 .versions_markup .yui-dt-pagelinks {font-size: 10px;}
 </style>
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/datatable/assets/datatable.css'/>"> 
@@ -57,6 +59,10 @@
 
 <c:set var="headerDate">
 				<digi:trn key="contentrepository:versionhistory:header:date">Date</digi:trn>
+</c:set>
+
+<c:set var="headerFileSize">
+				<digi:trn key="contentrepository:TableHeader:Size">Size (MB)</digi:trn>
 </c:set>
 
 <c:set var="headerNotes">
@@ -92,11 +98,12 @@
 	/* Function for creating YAHOO datatable for versions */
 	YAHOO.amp.table.enhanceVersionsMarkup = function() {
 		    this.columnHeadersForVersions = [
-			    {key:"v_ver_num",text:"${headerVersion}",sortable:true},
+			    {key:"v_ver_num",type:"number", text:"${headerVersion}",sortable:true},
 			    {key:"v_type",text:"${headerType}",sortable:true},
 		        {key:"v_file_name",text:"${headerFileName}",sortable:true},
 
 		        {key:"v_date",text:"${headerDate}",type:"date",sortable:true},
+		        {key:"size",type:"number",text:"${headerFileSize}",sortable:true},
 		        {key:"v_notes",text:"${headerNotes}",sortable:false},
 		        {key:"v_actions",text:"${headerAction}",sortable:false}
 		    ];
@@ -151,7 +158,9 @@
 			<digi:trn key="contentrepository:addNewVersionTitle">Add new version</digi:trn>
 </c:set>
 
-
+<c:set var="trans_headerType">
+	 <digi:trn key="contentrepository:TableHeader:Type">Type</digi:trn>  
+</c:set>
 <c:set var="trans_headerFileName">
 	 <digi:trn key="contentrepository:TableHeader:FileName">File Name</digi:trn>  
 </c:set>
@@ -160,6 +169,9 @@
 </c:set>
 <c:set var="trans_headerDate">
 	 <digi:trn key="contentrepository:TableHeader:Date">Date</digi:trn>
+</c:set>
+<c:set var="trans_fileSize">
+	 <digi:trn key="contentrepository:TableHeader:Size">Size (MB)</digi:trn>
 </c:set>
 <c:set var="trans_headerContentType">
 	<digi:trn key="contentrepository:TableHeader:ContentType">Content Type</digi:trn>  
@@ -181,10 +193,12 @@ YAHOO.namespace("YAHOO.amp.table");
 YAHOO.amp.table.enhanceMarkup = function(markupName) {
 
     this.columnHeaders = [
+	    {key:"type",text:"${trans_headerType}",sortable:true},
         {key:"file_name",text:"${trans_headerFileName}",sortable:true},
         {key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true},
-        {key:"date",text:"Date",type:"${trans_headerDate}",sortable:true},
-        {key:"content_type",text:"${trans_headerContentType}",sortable:true},
+        {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
+        {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
+        
         {key:"description",text:"${trans_headerDescription}",sortable:false},
         {key:"actions",text:"${trans_headerActions}",sortable:false}
     ];

@@ -12,6 +12,7 @@ import javax.jcr.NamespaceRegistry;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.PathNotFoundException;
+import javax.jcr.Property;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -283,6 +284,18 @@ public class DocumentManagerUtil {
 		return false;
 	}
 	
+	public static Property getPropertyFromNode(Node n, String propertyName) {
+		try {
+			return n.getProperty(propertyName);
+		} catch (PathNotFoundException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		} catch (RepositoryException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+		return null;
+	}
 	
 	public static TeamInformationBeanDM getTeamInformationBeanDM (HttpSession session) {
 		TeamInformationBeanDM teamInfo	= new TeamInformationBeanDM();

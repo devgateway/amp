@@ -21,6 +21,7 @@
 								<th><digi:trn key="contentrepository:typeTableHead">Type</digi:trn></th>
 								<th><digi:trn key="contentrepository:fileNameTableHead">File Name</digi:trn></th>
 								<th><digi:trn key="contentrepository:dateTableHead">Date</digi:trn></th>
+								<th><digi:trn key="contentrepository:TableHeader:Size">Size (MB)</digi:trn></th>
 								<th><digi:trn key="contentrepository:notesTableHead">Notes</digi:trn></th>
 								<th><digi:trn key="contentrepository:actionsTableHead">Actions</digi:trn></th>
 							</tr>
@@ -45,6 +46,9 @@
 								</td>
 								<td>
 									<bean:write name="documentData" property="calendar" />
+								</td>
+								<td>
+									<bean:write name="documentData" property="fileSize" />
 								</td>
 								<td>
 									<bean:write name="documentData" property="notes" />

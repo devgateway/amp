@@ -320,7 +320,7 @@ public class DocumentManager extends Action {
 				maxFileSizeInMBytes		= Integer.parseInt( maxFileSizeGS );
 				maxFileSizeInBytes		= 1024 * 1024 * maxFileSizeInMBytes; 
 		}
-		int test	= formFile.getFileSize();
+		int uploadedFileSize	= formFile.getFileSize(); // This is in bytes
 		if ( formFile.getFileSize() > maxFileSizeInBytes) {
 			errors.add("title", 
 					new ActionError("error.contentrepository.addFile.fileTooLarge", maxFileSizeInMBytes + "")
@@ -345,25 +345,26 @@ public class DocumentManager extends Action {
 				newNode.addMixin("mix:versionable");
 			}
 			if (isLink)
-				newNode.setProperty("ampdoc:link", uuid);
+				newNode.setProperty(CrConstants.PROPERTY_LINK, uuid);
 			else
-				newNode.setProperty("ampdoc:data", formFile.getInputStream());
+				newNode.setProperty(CrConstants.PROPERTY_DATA, formFile.getInputStream());
 			
 			if (isANewVersion){
 				int vernum	= DocumentManagerUtil.getNextVersionNumber( newNode.getUUID(), myRequest);
-				newNode.setProperty("ampdoc:versionNumber", (double)vernum);
+				newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)vernum);
 			}
 			else{
-				newNode.setProperty("ampdoc:versionNumber", (double)1.0);
+				newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)1.0);
 			}
 			
-			newNode.setProperty( "ampdoc:name", formFile.getFileName());
-			newNode.setProperty( "ampdoc:title", myForm.getDocTitle());
-			newNode.setProperty( "ampdoc:description", myForm.getDocDescription());
-			newNode.setProperty( "ampdoc:notes", myForm.getDocNotes());
-			newNode.setProperty( "ampdoc:contentType", formFile.getContentType());
-			newNode.setProperty( "ampdoc:addingDate", Calendar.getInstance());
-			newNode.setProperty( "ampdoc:creator", teamMember.getEmail() );
+			newNode.setProperty( CrConstants.PROPERTY_NAME, formFile.getFileName());
+			newNode.setProperty( CrConstants.PROPERTY_TITLE, myForm.getDocTitle());
+			newNode.setProperty( CrConstants.PROPERTY_DESCRIPTION, myForm.getDocDescription());
+			newNode.setProperty( CrConstants.PROPERTY_NOTES, myForm.getDocNotes());
+			newNode.setProperty( CrConstants.PROPERTY_CONTENT_TYPE, formFile.getContentType());
+			newNode.setProperty( CrConstants.PROPERTY_ADDING_DATE, Calendar.getInstance());
+			newNode.setProperty( CrConstants.PROPERTY_CREATOR, teamMember.getEmail() );
+			newNode.setProperty( CrConstants.PROPERTY_FILE_SIZE, uploadedFileSize);
 			
 			jcrWriteSession.save();
 			newNode.checkin();
@@ -447,6 +448,7 @@ public class DocumentManager extends Action {
 				Property calendar		= null;
 				Property contentType	= null;
 				Property versionNumber	= null;
+				Property fileSize		= null;
 				
 				Boolean hasViewRights			= false;
 				Boolean hasVersioningRights		= false;
@@ -467,48 +469,18 @@ public class DocumentManager extends Action {
 					continue;
 				}
 				
-				try{
-					name			= documentNode.getProperty("ampdoc:name");
-				}
-				catch(PathNotFoundException E) {
-					continue;
-				}
-				try{
-					title			= documentNode.getProperty("ampdoc:title");
-				}
-				catch(PathNotFoundException E) {
-					;
-				}
-				try{
-					description		= documentNode.getProperty("ampdoc:description");
-				}
-				catch(PathNotFoundException E) {
-					;
-				}
-				try{
-					notes		= documentNode.getProperty("ampdoc:notes");
-				}
-				catch(PathNotFoundException E) {
-					;
-				}
-				try{
-					calendar		= documentNode.getProperty("ampdoc:addingDate");
-				}
-				catch(PathNotFoundException E) {
-					;
-				}
-				try{
-					contentType		= documentNode.getProperty("ampdoc:contentType");
-				}
-				catch(PathNotFoundException E) {
-					;
-				}
-				try{
-					versionNumber	= documentNode.getProperty("ampdoc:versionNumber");
-				}
-				catch (PathNotFoundException E) {
-					;
-				}
+				name		= DocumentManagerUtil.getPropertyFromNode(documentNode, CrConstants.PROPERTY_NAME);
+				if ( name == null )
+						continue;
+				
+				title			= DocumentManagerUtil.getPropertyFromNode(documentNode, CrConstants.PROPERTY_TITLE);
+				description		= DocumentManagerUtil.getPropertyFromNode(documentNode, CrConstants.PROPERTY_DESCRIPTION);
+				notes			= DocumentManagerUtil.getPropertyFromNode(documentNode, CrConstants.PROPERTY_NOTES);
+				calendar		= DocumentManagerUtil.getPropertyFromNode(documentNode, CrConstants.PROPERTY_ADDING_DATE);
+				contentType		= DocumentManagerUtil.getPropertyFromNode(documentNode, CrConstants.PROPERTY_CONTENT_TYPE);
+				versionNumber	= DocumentManagerUtil.getPropertyFromNode(documentNode, CrConstants.PROPERTY_VERSION_NUMBER);
+				fileSize		= DocumentManagerUtil.getPropertyFromNode(documentNode, CrConstants.PROPERTY_FILE_SIZE);
+				
 				
 				if (name != null) {
 					DocumentData documentData	= new DocumentData();
@@ -538,6 +510,17 @@ public class DocumentManager extends Action {
 						int verNum	= DocumentManagerUtil.getVersions(uuid, myRequest, false).size();
 						documentData.setVersionNumber( verNum );
 					}
+					if (fileSize != null) {
+						double size	= fileSize.getDouble() / (1024*1024);
+						int temp	= (int)(size * 1000);
+						size		= ( (double)temp ) / 1000;
+						documentData.setFileSize( size );
+					}
+					else {
+						documentData.setFileSize( 0 );
+					}
+					
+					documentData.computeIconPath(true);
 					
 	//				Boolean hasViewRights			= DocumentManagerRights.hasViewRights(documentNode, myRequest); 
 	//				if ( hasViewRights != null ) {
@@ -617,6 +600,7 @@ public class DocumentManager extends Action {
 		String notes			= null;
 		String calendar			= null;
 		String contentType		= null;
+		double fileSize			= 0;
 		
 		String iconPath			= null;
 		
@@ -738,6 +722,12 @@ public class DocumentManager extends Action {
 		}
 		
 		
+		public double getFileSize() {
+			return fileSize;
+		}
+		public void setFileSize(double fileSize) {
+			this.fileSize = fileSize;
+		}
 		public void computeIconPath( boolean forDigiImgTag ) {
 			if ( name == null )  {
 				iconPath = null;

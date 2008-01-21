@@ -29,11 +29,24 @@
 	class="box-border-nopadding">
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
+		<td valign="bottom" class="crumb" >
+			&nbsp;&nbsp;&nbsp;
+			<c:set var="translation">
+					<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
+			</c:set>
+			<digi:link href="/../aim/viewMyDesktop.do" styleClass="comment" title="${translation}" >
+               	<digi:trn key="aim:MyDesktop">My Desktop</digi:trn>
+               </digi:link> &gt; <digi:trn key="contentrepository:contentRepository">Content Repository</digi:trn>
+			<br />
+			<br />
+		</td>
+	</tr>
+	<tr>
+		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg vAlign=top>
-
-		
-		<span class=subtitle-blue> &nbsp;&nbsp; <digi:trn key="contentrepository:documentManager">
-							Document Manager
+				
+		<span class=subtitle-blue> &nbsp;&nbsp; <digi:trn key="contentrepository:contentRepository">
+							Content Repository
 	</digi:trn> </span> <br />
 		<br />
 		<%--

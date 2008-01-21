@@ -22,6 +22,7 @@
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpTheme" column="amp_theme_id"/>
 		</set>
 		 -->
+		
 		<set name="sectors" cascade="all" inverse="true">
 			<cache usage="read-write"/>
 			<key column="amp_theme_ind_id"/>

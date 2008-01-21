@@ -42,7 +42,7 @@
 									<div>&nbsp;</div>
 								</td>
 								<td>
-									 <bean:write name="documentData" property="name" />
+									 <bean:write name="documentData" property="name" />&nbsp;
 								</td>
 								<td>
 									<bean:write name="documentData" property="calendar" />

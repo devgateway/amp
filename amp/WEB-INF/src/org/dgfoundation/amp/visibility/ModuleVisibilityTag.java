@@ -5,8 +5,6 @@
  */
 package org.dgfoundation.amp.visibility;
 
-import java.io.IOException;
-import java.util.Collection;
 import java.util.Iterator;
 
 import javax.servlet.ServletContext;
@@ -16,9 +14,6 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.log4j.Logger;
-import org.digijava.module.aim.action.EditActivity;
-import org.digijava.module.aim.dbentity.AmpFeature;
-import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -96,7 +91,9 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 						try{
 							//logger.info("Updating module: "+this.getName() +" with  id:"+ ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId() +"and his parent "+parentModule);
 							logger.info("Updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
-							FeaturesUtil.updateModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId(), parentModule);
+							AmpModulesVisibility moduleAux= ampTreeVisibility.getModuleByNameFromRoot(this.getName());
+							if(moduleAux!=null)
+								FeaturesUtil.updateModuleVisibility(moduleAux.getId(), parentModule);
 							}
 							catch(Exception e)
 							{
@@ -188,14 +185,18 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		boolean parentOK=false;
 		if(atv!=null)
 			moduleByNameFromRoot = atv.getModuleByNameFromRoot(this.getName());
-		else return typeOK && parentOK;
-		//if(this.getType()!=null && moduleByNameFromRoot.getType()!=null)
-			//if(moduleByNameFromRoot.getType().getName().compareTo(this.getType())==0)
-				// typeOK=true;//return true; //they are identical
+		else {
+			return typeOK && parentOK;
+		}
+
+		if(moduleByNameFromRoot==null) {
+			return false;
+		}
 		if(this.getParentModule()!=null && moduleByNameFromRoot.getParent()!=null)
 			if(moduleByNameFromRoot.getParent().getName().compareTo(this.getParentModule())==0)
 				parentOK=true;
-		//if(moduleByNameFromRoot==null) return false;
+		if(this.getParentModule()==null && moduleByNameFromRoot.getParent()==null)
+			parentOK=true;
 		return typeOK && parentOK;
 	}
 
@@ -208,10 +209,13 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		if(atv!=null)
 			moduleByNameFromRoot = atv;
 		else return typeOK && parentOK;
+		
 		if(this.getParentModule()!=null && moduleByNameFromRoot.getParent()!=null)
 			if(moduleByNameFromRoot.getParent().getName().compareTo(this.getParentModule())==0)
 				parentOK=true;
 		//if(moduleByNameFromRoot==null) return false;
+		if(this.getParentModule()==null && moduleByNameFromRoot.getParent().getName()==null)
+			parentOK=true;
 		return typeOK && parentOK;
 	}
 	

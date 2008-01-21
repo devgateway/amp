@@ -20,11 +20,9 @@
                 <tr>
                     <td valign="top"><jsp:include page="viewEventsFilter.jsp" flush="true"/></td>
                 </tr>
-                <digi:secure actions="ADMIN, TRANSLATE">
                 	<tr>
                     <td valign="top"><jsp:include page="viewEventsCreateNewEvent.jsp" flush="true"/></td>
                 </tr>
-                </digi:secure>                
             </table>
             </digi:form>
         </td>

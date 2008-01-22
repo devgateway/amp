@@ -64,7 +64,8 @@ public class ViewIndicators
         	indbean.setName(indicat.getName().toLowerCase());
          	indbean.setType("0");
          	indbean.setCategory(Integer.valueOf(indbean.getCategory()));
-         	indbean.setSectorName("Z");
+            indbean.setSectorName("Z");
+         	
          	
          	Collection indSector=indbean.getSector();
          	
@@ -72,7 +73,10 @@ public class ViewIndicators
          	if(indSector != null){
 				for(Iterator sectItr=indSector.iterator();sectItr.hasNext();){
         	        AmpSector sect=(AmpSector)sectItr.next();
-        			indbean.setSectorName(sect.getName());
+        	        indbean.getSectorNames().add(sect.getName());
+        	        indbean.setSectorName(sect.getName());
+        			
+        			
 				 }
 			  }
           	

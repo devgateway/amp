@@ -26,8 +26,9 @@
 		</tr>
 		<tr>
 			<td colspan="4">
-			<html:text  property="text" style="width: 400px" styleClass="inp-text"/>
+			<html:text  property="text" style="width: 400px" styleClass="inp-text" onchange="checkProjectId(this)"/>
 			</td>
+			<td colspan="1"><font color="red">*<digi:trn key="aim:chanheFilters:numericAmpId">Amp Id must contain only numbers</digi:trn></font></td>
 		</tr>
 
 		<tr>

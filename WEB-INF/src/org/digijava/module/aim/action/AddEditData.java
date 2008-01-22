@@ -15,9 +15,12 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
+import org.digijava.module.aim.helper.Indicator;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
 public class AddEditData
@@ -74,8 +77,10 @@ public class AddEditData
             String index=request.getParameter("index");
             if(indValues!=null){
                 AmpPrgIndicatorValue prgIndVal=indValues.get(Integer.valueOf(index).intValue());
-                if(prgIndVal.getIndicatorValueId()==null){
+                if(prgIndVal.getIndicatorValueId()!=null){
                     indValues.remove(Integer.valueOf(index).intValue());
+                    ProgramUtil.deletePrgIndicatorValueById(new Long(themeForm.getParentId()),new Long(prgIndVal.getIndicatorValueId()));
+                    
                 }else{
                     prgIndVal.setIndicatorValueId(-prgIndVal.getIndicatorValueId());
                 }
@@ -86,13 +91,16 @@ public class AddEditData
                 for(Iterator indValIter = indValues.iterator(); indValIter.hasNext();) {
                     AmpPrgIndicatorValue indVal = (AmpPrgIndicatorValue) indValIter.next();
                     if(indVal.getIndicatorValueId()!=null && (indVal.getIndicatorValueId().longValue()<0)){
-                        ProgramUtil.deletePrgIndicatorValueById(themeForm.getParentId(),-indVal.getIndicatorValueId());
+                        ProgramUtil.deletePrgIndicatorValueById(themeForm.getParentId(),indVal.getIndicatorValueId());
                     }
                 }
             }
 
-            AmpThemeIndicators themeInd=ProgramUtil.getThemeIndicatorById(themeForm.getParentId());
-            ProgramUtil.saveEditPrgIndValues(indValues,themeInd);
+            //AmpThemeIndicators themeInd=ProgramUtil.getThemeIndicatorById(themeForm.getParentId());
+            AmpIndicator indId = IndicatorUtil.getIndicatorById(themeForm.getParentId());
+          //  ProgramUtil.saveEditPrgIndValues(indValues,themeInd);
+            
+            IndicatorUtil.saveEditPrgIndValues(indValues, indId);
         }
         return mapping.findForward("forward");
     }

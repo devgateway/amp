@@ -577,6 +577,7 @@ public class ProgramUtil {
 			}
 		}
 */
+	
 		public static void assignThemeInd(Long indId, Long themeId)
 		{
 
@@ -703,9 +704,9 @@ public class ProgramUtil {
 				session = PersistenceManager.getRequestDBSession();
 				String queryString = "select thIndValId from "
 									+ AmpThemeIndicatorValue.class.getName()
-									+ " thIndValId where (thIndValId.themeIndicatorId=:themeIndicatorId)";
+									+ " thIndValId where (thIndValId.indicatorId=:indicatorId)";
 				Query qry = session.createQuery(queryString);
-				qry.setParameter("themeIndicatorId",themeIndicatorId,Hibernate.LONG);
+				qry.setParameter("indicatorId",themeIndicatorId,Hibernate.LONG);
 				Iterator indItr = qry.list().iterator();
 				while(indItr.hasNext())
 				{
@@ -1298,7 +1299,8 @@ public class ProgramUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			tx = session.beginTransaction();
-			AmpThemeIndicators tempThemeInd = (AmpThemeIndicators) session.load(AmpThemeIndicators.class,indId);
+			AmpIndicator tempThemeInd = (AmpIndicator) session.load(AmpIndicator.class,indId);
+			tempThemeInd.getThemes().remove(tempThemeInd);
 			session.delete(tempThemeInd);
 			tx.commit();
 		} catch (Exception e) {
@@ -1321,23 +1323,24 @@ public class ProgramUtil {
 				//deletePrgIndicatorValue(indId);
 				session = PersistenceManager.getRequestDBSession();
 				tx = session.beginTransaction();
-				AmpThemeIndicators tempThemeInd = (AmpThemeIndicators) session.load(AmpThemeIndicators.class,indId);
+				AmpIndicator tempThemeInd = (AmpIndicator) session.load(AmpIndicator.class,indId);
                 Iterator itr=tempThemeInd.getThemes().iterator();
                 while(itr.hasNext()){
                     AmpTheme tm=(AmpTheme)itr.next();
                     Iterator indItr=tm.getIndicators().iterator();
                     while(indItr.hasNext()){
-                        AmpThemeIndicators tmInd=(AmpThemeIndicators)indItr.next();
-                        if(tmInd.getAmpThemeIndId().equals(indId)){
+                        AmpIndicator tmInd=(AmpIndicator)indItr.next();
+                        if(tmInd.getIndicatorId().equals(indId)){
                             indItr.remove();
                             //please read http://www.hibernate.org/hib_docs/reference/en/html/example-parentchild.html
                             session.delete(tmInd);
+                            tempThemeInd.getThemes().remove(tm);
+                            
                         }
                     }
-                    session.update(tm);
+                    session.update(tempThemeInd);
                 }
 				tx.commit();
-				session.flush();
 			}
 			catch(Exception e1)
 			{
@@ -1387,9 +1390,9 @@ public class ProgramUtil {
             {
                 session = PersistenceManager.getRequestDBSession();
                 String queryString = "from " + AmpThemeIndicatorValue.class.getName() +
-                   " indVal where indVal.themeIndicatorId=:themeIndicatorId";
+                   " indVal where indVal.indicatorId=:indicatorId";
                 qry = session.createQuery(queryString);
-                qry.setParameter("themeIndicatorId",themeIndicatorId);
+                qry.setParameter("indicatorId",themeIndicatorId);
                 indValues = qry.list();
                 tx = session.beginTransaction();
                 Iterator indValuesItr = indValues.iterator();

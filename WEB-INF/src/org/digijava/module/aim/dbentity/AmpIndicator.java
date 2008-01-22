@@ -19,6 +19,8 @@ public class AmpIndicator implements Serializable
 	private Set themes;
 	private Set sectors;
 	private Set activity;
+	private Set indicatorValues;
+	
 	
 	
 	
@@ -87,6 +89,12 @@ public class AmpIndicator implements Serializable
 	}
 	public void setDefaultInd(boolean defaultInd) {
 		this.defaultInd = defaultInd;
+	}
+	public Set getIndicatorValues() {
+		return indicatorValues;
+	}
+	public void setIndicatorValues(Set indicatorValues) {
+		this.indicatorValues = indicatorValues;
 	}
 	
 	

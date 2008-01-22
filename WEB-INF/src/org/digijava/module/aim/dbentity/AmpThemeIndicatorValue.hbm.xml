@@ -13,5 +13,9 @@
 		<property name="creationDate" column="creation_date" type="java.util.Date"/>
 		<many-to-one name="themeIndicatorId" column="theme_indicator_id" 
 		class="org.digijava.module.aim.dbentity.AmpThemeIndicators" cascade="none"/>
+		
+		<many-to-one name="indicatorId" column="indicator_id" 
+		class="org.digijava.module.aim.dbentity.AmpIndicator" cascade="none"/>
+		
 	</class>
 </hibernate-mapping>

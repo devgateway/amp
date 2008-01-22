@@ -218,8 +218,10 @@ a.itr:hover {
                                                 ${indItr.name}</a>
                                                </td>
                                                <td nowrap="nowrap">
-	                                                <c:if test="${!empty indItr.sector}">
-	                                            	<b>${indItr.sector} </b>
+	                                                <c:if test="${!empty indItr.sectorNames}">
+	                                            	<c:forEach var="indsectname" items="${indItr.sectorNames}">
+	                                            	   ${indsectname}<br>
+	                                            	</c:forEach>
 	                                            	</c:if>
 	                                          </td>
                                               <td style="width:10%;">

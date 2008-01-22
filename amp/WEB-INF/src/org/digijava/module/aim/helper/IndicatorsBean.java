@@ -1,5 +1,6 @@
 package org.digijava.module.aim.helper;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -16,6 +17,7 @@ public class IndicatorsBean {
     private Integer category;
     private String type;
     private Collection sector;
+    private Collection sectorNames = new ArrayList();
     private String sectorName;
     
     private Long ampThemeIndId;
@@ -75,6 +77,7 @@ public class IndicatorsBean {
         this.code=ind.getCode();
         this.sector = ind.getSectors();
         this.description=ind.getDescription();
+        
         
     }
     
@@ -214,4 +217,14 @@ public class IndicatorsBean {
 	public void setFlag(boolean flag) {
 		this.flag = flag;
 	}
+
+	public Collection getSectorNames() {
+		return sectorNames;
+	}
+
+	public void setSectorNames(Collection sectorNames) {
+		this.sectorNames = sectorNames;
+	}
+
+
 }

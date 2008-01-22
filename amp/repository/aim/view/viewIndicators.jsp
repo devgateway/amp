@@ -215,9 +215,7 @@ a.itr:hover {
                                             <tr onmouseover="style.backgroundColor='#dddddd';" onmouseout="style.backgroundColor='white'">
                                               <td id="">
 	                                            <a class="itr" href="javascript:editIndicator('${indItr.id}');">
-                                                <span class="bpop"><b>Indicator Type is:</b><br> <c:if test="${indItr.sectorName == 'Z'}">Global</c:if>
-                                                 <c:if test="${indItr.sectorName != 'Z'}">Program/Project</c:if>
-                                                </span>${indItr.name}</a>
+                                                ${indItr.name}</a>
                                                </td>
                                                <td nowrap="nowrap">
 	                                                <c:if test="${!empty indItr.sector}">
@@ -244,7 +242,7 @@ a.itr:hover {
                                         </c:if>
                                         <tr>
                                           <td colspan="10" align="center">
-                                            <input type="button" value="Add Indicators" id="addBtn" onclick="addIndicator();" style="font-family:verdana;font-size:11px;"/>
+                                            <input type="button" value="<digi:trn key="btn:addIndicator">Add Indicators</digi:trn>" id="addBtn" onclick="addIndicator();" style="font-family:verdana;font-size:11px;"/>
                                           </td>
                                         </tr>
                                       </table>

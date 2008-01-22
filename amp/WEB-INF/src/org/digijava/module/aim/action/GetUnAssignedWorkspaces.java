@@ -15,7 +15,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.UpdateWorkspaceForm;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 /**
@@ -38,11 +40,17 @@ public class GetUnAssignedWorkspaces extends Action {
 			String workspaceType = request.getParameter("wType");
 			String teamCategory  = request.getParameter("tCategory");
 			String team = uwForm.getCategory();
-			
-			Long typeId	= null;
-			if (teamCategory != null) {
-				typeId	= new Long(teamCategory);
+			uwForm.setActionType(null);
+			if(request.getParameter("childorgs")!=null){
+				uwForm.setAllOrganizations(DbUtil.getAll(AmpOrganisation.class));
+				uwForm.setActionType("addOrgs");
 			}
+			else{
+				uwForm.setActionType(null);
+				Long typeId	= null;
+				if (teamCategory != null) {
+					typeId	= new Long(teamCategory);
+				}
 			
 			if ((workspaceType == null || workspaceType.trim().length() == 0) 
 					&& (teamCategory == null || typeId == null || typeId.longValue() == 0) ) {
@@ -54,6 +62,7 @@ public class GetUnAssignedWorkspaces extends Action {
 			logger.debug("Unassigned workspaces retreived, size = " + col.size());
 			
 			uwForm.setAvailChildWorkspaces(col);
+			}
 			uwForm.setReset(false);
 			//uwForm.setActionEvent(dest);
 			uwForm.setDest(dest);

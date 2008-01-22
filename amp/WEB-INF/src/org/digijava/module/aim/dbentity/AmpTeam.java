@@ -22,7 +22,6 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	
 	private AmpCategoryValue type;  // Replaces the old "type" attribute (Bilateral, Multilateral)
 	
-	private AmpRole role;  
 
 	private AmpTeam parentTeamId;
 	
@@ -32,6 +31,8 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	private String teamCategory;	// Donor or Mofed team
 	private AmpTeam relatedTeamId;	// a donor team referring a mofed team
 	private Set activityList;		// activities assigned to donor team
+	
+	private Set organizations;		// activities assigned to donor team
 	private NpdSettings npdSettings;
 
 	public NpdSettings getNpdSettings() {
@@ -199,15 +200,17 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 		return type;
 	}
 
-	public AmpRole getRole() {
-		return role;
-	}
-
-	public void setRole(AmpRole role) {
-		this.role = role;
-	}
+	
 
 	public void setType(AmpCategoryValue type) {
 		this.type = type;
+	}
+
+	public Set getOrganizations() {
+		return organizations;
+	}
+
+	public void setOrganizations(Set organizations) {
+		this.organizations = organizations;
 	}
 }

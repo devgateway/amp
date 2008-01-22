@@ -83,7 +83,21 @@
 
 	}
 
+function childOrgsAdded() {
 
+		var dest = document.aimUpdateWorkspaceForm.dest.value;
+
+		<digi:context name="addChild" property="context/module/moduleinstance/childWorkspacesAdded.do" />
+
+		document.aimUpdateWorkspaceForm.action = "<%=addChild%>?childorgs=true&dest="+dest;
+
+		document.aimUpdateWorkspaceForm.target = window.opener.name;
+
+	    document.aimUpdateWorkspaceForm.submit();
+
+		window.close();
+
+	}
 
 		function clearFormCheckBoxes() {
 
@@ -102,9 +116,10 @@
 <digi:instance property="aimUpdateWorkspaceForm" />
 <digi:form action="/childWorkspacesAdded.do" method="post">
 
+
+<logic:empty name="aimUpdateWorkspaceForm"  property="actionType">
 	<html:hidden property="teamId" />
 	<html:hidden property="dest" />
-
 	<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 		<tr>
 			<td vAlign="top">
@@ -165,6 +180,7 @@
 					</table>
 					</td>
 				</tr>
+				
 				<tr>
 					<td align=left vAlign=top>
 					<table width="100%" cellPadding=2 cellSpacing=1 valign="top"
@@ -238,7 +254,87 @@
 			</table>
 			</td>
 		</tr>
-	</table>
+	</table>	
+	</logic:empty>
+	
+	
+	<c:if test="${aimUpdateWorkspaceForm.actionType != null}">
+	<html:hidden property="dest" />
+	<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
+
+				
+				<tr>
+					<td align=left vAlign=top>
+					<table width="100%" cellPadding=2 cellSpacing=1 valign="top"
+						align="left" bgcolor="#006699">
+						<tr>
+							<td align="center" class="textalb" height="20"><digi:trn
+								key="aim:listOfAllOrganizations">
+
+									List of all organizations
+
+								</digi:trn></td>
+						</tr>
+						<tr>
+							<td bgcolor="#ECF3FD">
+								<table width="100%" cellSpacing=2 cellPadding=2 vAlign="top"
+									align="left" border=0>
+									<c:forEach var="org" items="${aimUpdateWorkspaceForm.allOrganizations}">
+											<tr>
+												<td width="3" align="left">
+												<html:multibox property="selChildOrgs">
+													<c:out value="${org.ampOrgId}" />
+												</html:multibox>
+												</td>
+												<td width="98%"><c:out value="${org.name}" /></td>
+											</tr>
+									</c:forEach>									
+									<tr>
+										<td colspan="2" align="center">
+										<table cellPadding=5>
+											<tr>
+												<td>
+													<c:set var="translation">
+															<digi:trn key="btn:addChildWorkspaceAdd">
+																	Add
+															</digi:trn>
+													</c:set>
+													<input type="button" value="${translation}" class="dr-menu"
+													onclick="return childOrgsAdded()">
+												</td>
+												<td>
+													<c:set var="translation">
+															<digi:trn key="btn:addChildWorkspaceClear">
+																	Clear
+															</digi:trn>
+													</c:set>
+													<input type="reset" value="${translation}" class="dr-menu" onclick="return clearFormCheckBoxes();">
+												</td>
+												<td>
+													<c:set var="translation">
+															<digi:trn key="btn:addChildWorkspaceClose">
+																	Close
+															</digi:trn>
+													</c:set>
+													<input type="button" value="${translation}" class="dr-menu"
+													onclick="return closeWindow();">
+												</td>
+											</tr>
+										</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+		</table>
+
+	</c:if>
 </digi:form>
 
 

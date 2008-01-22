@@ -17,8 +17,8 @@ import org.digijava.module.aim.dbentity.AmpCategoryValue;
 
 public class UpdateWorkspaceForm extends ValidatorForm {
 
-	private Long selectedRoleId;
-	private Collection roles;
+	private Long selectedOrgId;
+	private Collection organizations;
 	private String id = null;
 	private String teamName = null;
 	private String description = null;
@@ -48,16 +48,21 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 	
 	private String mainAction;
 	
+	private String actionType;
+	
 	// for select child workspaces popup
 	private String childWorkspaceType;
 //	private String childTeamCategoryId;
 	private Long childTeamTypeId;
 	private Collection availChildWorkspaces;
+	private Collection availChildOrgs;
 	private Long[] selChildWorkspaces;
+	private Long[] selChildOrgs;
 	private boolean popupReset;
 	private String dest;
 	private Collection allChildren;
-
+	private Collection allOrganizations;
+	
 	public Collection getAllChildren() {
 		Collection aux=new TreeSet();
 		if (availChildWorkspaces != null)
@@ -376,6 +381,7 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 			updateFlag = false;
 			workspaceType = null;
 			childWorkspaces = null;
+			organizations=null;
 			popupReset = true;
 			mainAction = null;
 			dest = null;
@@ -391,13 +397,17 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 			updateFlag = false;
 			workspaceType = null;
 			//availChildWorkspaces = null;
+			actionType=null;
 			selChildWorkspaces = null;
+			selChildOrgs=null;
 			addFlag = false;
 			reset	= false;
 		}		
 		if (popupReset) {
 			availChildWorkspaces = null;
-			selChildWorkspaces = null;			
+			selChildWorkspaces = null;	
+			availChildOrgs=null;
+			selChildOrgs=null;
 		}
 	}
 	
@@ -479,19 +489,57 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 		this.childTeamTypeId = childTeamTypeId;
 	}
 
-	public Long getSelectedRoleId() {
-		return selectedRoleId;
+
+
+
+
+	public Long getSelectedOrgId() {
+		return selectedOrgId;
 	}
 
-	public void setSelectedRoleId(Long selectedRoleId) {
-		this.selectedRoleId = selectedRoleId;
+	public void setSelectedOrgId(Long selectedOrgId) {
+		this.selectedOrgId = selectedOrgId;
 	}
 
-	public Collection getRoles() {
-		return roles;
+	public Collection getOrganizations() {
+		return organizations;
 	}
 
-	public void setRoles(Collection roles) {
-		this.roles = roles;
+	public void setOrganizations(Collection organizations) {
+		this.organizations = organizations;
 	}
+
+	public Collection getAvailChildOrgs() {
+		return availChildOrgs;
+	}
+
+	public void setAvailChildOrgs(Collection availChildOrgs) {
+		this.availChildOrgs = availChildOrgs;
+	}
+
+	public Long[] getSelChildOrgs() {
+		return selChildOrgs;
+	}
+
+	public void setSelChildOrgs(Long[] selChildOrgs) {
+		this.selChildOrgs = selChildOrgs;
+	}
+
+	public String getActionType() {
+		return actionType;
+	}
+
+	public void setActionType(String actionType) {
+		this.actionType = actionType;
+	}
+
+	public Collection getAllOrganizations() {
+		return allOrganizations;
+	}
+
+	public void setAllOrganizations(Collection allOrganizations) {
+		this.allOrganizations = allOrganizations;
+	}
+
+
 }

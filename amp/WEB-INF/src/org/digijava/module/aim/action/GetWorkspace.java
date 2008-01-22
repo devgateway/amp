@@ -12,6 +12,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.UpdateWorkspaceForm;
@@ -49,10 +50,11 @@ public class GetWorkspace extends Action {
 		if (!permitted) {
 			return mapping.findForward("index");
 		}
-		
+		//System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 		UpdateWorkspaceForm uwForm = (UpdateWorkspaceForm) form;
 		uwForm.setUpdateFlag(false);
-		uwForm.setRoles(DbUtil.getAll(AmpRole.class));
+	;
+		//uwForm.setOrganizations(DbUtil.getAll(AmpOrganisation.class));
 		
 		String dest = request.getParameter("dest");
 		String id	= request.getParameter("tId");
@@ -76,6 +78,7 @@ public class GetWorkspace extends Action {
 					uwForm.setAddFlag(true);
 				}
 				uwForm.setActionEvent("add");
+				//System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 				return mapping.findForward("showAddWorkspace");				
 			}
 		} catch (NumberFormatException nfe) {
@@ -95,6 +98,7 @@ public class GetWorkspace extends Action {
 			uwForm.setTypeId(typeId);
 			uwForm.setWorkspaceType(workspace.getWorkspaceType());
 			uwForm.setDescription(workspace.getDescription());
+			uwForm.setOrganizations(workspace.getChildOrgs());
 			
 			uwForm.setRelatedTeam(workspace.getRelatedTeam());
 			if (null == uwForm.getRelatedTeam()) {

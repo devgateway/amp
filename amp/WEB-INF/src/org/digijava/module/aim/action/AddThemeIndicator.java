@@ -74,7 +74,7 @@ public class AddThemeIndicator extends Action
 		
 		
 		//Collection indi = ProgramUtil.getAllThemesIndicators();
-		
+	
 		
 		//if(request.getParameter("resetIndicatorId")!=null) themeForm.setIndicatorId(null);
 		
@@ -112,6 +112,7 @@ public class AddThemeIndicator extends Action
 			{
 				String indId = request.getParameter("indicatorId");
 				AllPrgIndicators allPrgInd = new AllPrgIndicators();
+				if(indId != null){
 				if(indId.trim().length() == 0 || indId.trim().equals("0"))
 				{
 					AmpPrgIndicator ampPrgInd = new AmpPrgIndicator();
@@ -141,6 +142,7 @@ public class AddThemeIndicator extends Action
 					ProgramUtil.saveEditThemeIndicators(allPrgInd, id);
 				}
 			}
+		}
 			if(event.equals("indValue"))
 			{
 				indValues = new ArrayList();
@@ -162,7 +164,8 @@ public class AddThemeIndicator extends Action
 					
 					for (int j = 0; j < indId.length; j++) {
 						
-						ProgramUtil.deletePrgIndicator(indId[j]);
+						//ProgramUtil.deletePrgIndicator(indId[j]);
+						IndicatorUtil.deleteIndtheme(indId[j]);
 					}	
 					
 //			   	 ProgramUtil.deletePrgIndicator(indId);

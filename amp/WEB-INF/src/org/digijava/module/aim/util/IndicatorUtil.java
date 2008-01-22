@@ -21,11 +21,13 @@ import org.digijava.module.aim.dbentity.AmpIndicatorSector;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
+import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.DateConversion;
 
 public class IndicatorUtil {
@@ -417,6 +419,98 @@ public class IndicatorUtil {
 			e.printStackTrace(System.out);
 		}
 	}
+	
+	public static void deleteIndtheme(Long indid){
+		
+		 logger.info(" deleting the indthemes");
+			Session session = null;
+			Transaction tx = null;
+			AmpIndicator ampInd=null;
+	   
+	   try {
+		   session = PersistenceManager.getRequestDBSession();
+		   tx = session.beginTransaction();
+		  AmpIndicator tempindInd = (AmpIndicator) session.load(AmpIndicator.class, indid);
 		  
+		 Collection theme = tempindInd.getThemes();
+			if (theme != null && theme.size() > 0) {
+				Iterator<AmpTheme> themeItr = theme.iterator();
+				while (themeItr.hasNext()) {
+					AmpTheme themeInd = themeItr.next();
+					
+					if(themeInd!=null){
+					
+						AmpTheme tempAmpTheme = null;
+						tempAmpTheme = (AmpTheme) session.load(AmpTheme.class,themeInd.getAmpThemeId());
+						Set ampThemeSet = new HashSet();
+						tempAmpTheme.getIndicators().remove(tempindInd);
+						tempindInd.getThemes().remove(tempAmpTheme);
+					}
+	 		  }
+		 }
+			session.update(tempindInd);
+	 		tx.commit();
+	 		session.flush();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.error("Exception from deleteIndSectors:" + e.getMessage());
+			e.printStackTrace(System.out);
+		}
+	}
+	
+	 public static AmpIndicator getIndicatorById(Long indId){
+         Session session = null;
+         AmpIndicator tempInd = new AmpIndicator();
+
+         try{
+             session = PersistenceManager.getRequestDBSession();
+             tempInd = (AmpIndicator) session.load(AmpIndicator.class,indId);
+             session.flush();
+         }
+         catch(Exception e){
+             logger.error("Unable to get the specified Indicator");
+             logger.debug("Exception : "+e);
+         }
+         return tempInd;
+		}
+	 
+	 
+	 public static void saveEditPrgIndValues(Collection<AmpPrgIndicatorValue> prgIndValues,AmpIndicator ampInd)
+		{
+			Session session = null;
+			Transaction tx = null;
+			try
+			{
+				session = PersistenceManager.getRequestDBSession();
+				Iterator indValItr = prgIndValues.iterator();
+				while(indValItr.hasNext())
+				{
+					AmpThemeIndicatorValue ampThIndVal = null;
+					AmpPrgIndicatorValue ampPrgIndVal = (AmpPrgIndicatorValue) indValItr.next();
+					if(ampPrgIndVal.getIndicatorValueId() == null){
+						ampThIndVal = new AmpThemeIndicatorValue();
+					}else{
+												ampThIndVal = (AmpThemeIndicatorValue) session.load(AmpThemeIndicatorValue.class,ampPrgIndVal.getIndicatorValueId());
+					}
+					ampThIndVal.setValueAmount(ampPrgIndVal.getValAmount());
+					ampThIndVal.setCreationDate(DateConversion.getDate(ampPrgIndVal.getCreationDate()));
+					ampThIndVal.setValueType(ampPrgIndVal.getValueType());
+					ampThIndVal.setIndicatorId(ampInd);
+					tx = session.beginTransaction();
+					session.saveOrUpdate(ampThIndVal);
+					tx.commit();
+					}
+				}
+			
+			catch(Exception ex)
+			{
+				
+		             logger.error("Unable to get the specified Indicator");
+		             logger.debug("Exception : "+ex);
+			}
+			
+		}
+	 
 	  
 }

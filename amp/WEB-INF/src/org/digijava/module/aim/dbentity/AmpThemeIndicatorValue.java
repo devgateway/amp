@@ -10,6 +10,7 @@ public class AmpThemeIndicatorValue implements Comparable, Serializable
 	private Double valueAmount;
 	private Date creationDate;
 	private AmpThemeIndicators themeIndicatorId;
+	private AmpIndicator indicatorId;
 	/**
 	 * @return Returns the ampThemeIndValId.
 	 */
@@ -73,6 +74,12 @@ public class AmpThemeIndicatorValue implements Comparable, Serializable
 	public int compareTo(Object obj) {
 		AmpThemeIndicatorValue other = (AmpThemeIndicatorValue) obj;
 		return this.getCreationDate().compareTo(other.getCreationDate());
+	}
+	public AmpIndicator getIndicatorId() {
+		return indicatorId;
+	}
+	public void setIndicatorId(AmpIndicator indicatorId) {
+		this.indicatorId = indicatorId;
 	}
 }
 

@@ -85,14 +85,15 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 						ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
    		   		}
 				else 
-					//if(!checkTypeAndParentOfModule(ampTreeVisibility) || !checkTypeAndParentOfModule2(FeaturesUtil.getModuleVisibility(name))) //parent or type is not ok
-					if(!checkTypeAndParentOfModule(ampTreeVisibility)) 
+					if(!checkTypeAndParentOfModule(ampTreeVisibility) || !checkTypeAndParentOfModule2(FeaturesUtil.getModuleVisibility(name))) //parent or type is not ok
+					//if(!checkTypeAndParentOfModule(ampTreeVisibility)) 
 					{
 						try{
 							//logger.info("Updating module: "+this.getName() +" with  id:"+ ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId() +"and his parent "+parentModule);
 							logger.info("Updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
 							AmpModulesVisibility moduleAux= ampTreeVisibility.getModuleByNameFromRoot(this.getName());
 							if(moduleAux!=null)
+								if(moduleAux.getId()!=null)
 								FeaturesUtil.updateModuleVisibility(moduleAux.getId(), parentModule);
 							}
 							catch(Exception e)
@@ -155,15 +156,17 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 	public boolean isModuleActive(AmpTreeVisibility atv)
 	{
 		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) atv.getRoot();
-		for(Iterator it=currentTemplate.getItems().iterator();it.hasNext();)
-		{
-			AmpModulesVisibility module=(AmpModulesVisibility) it.next();
-			if(module.getName().compareTo(this.getName())==0) 
-			{
-				return true;
-			}
+		if(currentTemplate!=null)
+			if(currentTemplate.getAllItems()!=null)
+				for(Iterator it=currentTemplate.getItems().iterator();it.hasNext();)
+				{
+					AmpModulesVisibility module=(AmpModulesVisibility) it.next();
+					if(module.getName().compareTo(this.getName())==0) 
+					{
+						return true;
+					}
 			
-		}
+				}
 		return false;
 	}
 	

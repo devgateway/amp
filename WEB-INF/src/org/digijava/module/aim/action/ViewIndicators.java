@@ -61,7 +61,7 @@ public class ViewIndicators
         	
         	IndicatorsBean indbean = new IndicatorsBean(indicat);
         	
-        	indbean.getName();
+        	indbean.setName(indicat.getName().toLowerCase());
          	indbean.setType("0");
          	indbean.setCategory(Integer.valueOf(indbean.getCategory()));
          	indbean.setSectorName("Z");
@@ -93,8 +93,13 @@ public class ViewIndicators
   				addFlag=true;
   			}
          	 if(addFlag) {
-               if(allIndForm.getKeyword() != null && (indbean.getName().toLowerCase().indexOf(allIndForm.getKeyword().toLowerCase()) > -1)) {
+               if(allIndForm.getKeyword() != null  && (indbean.getName().toLowerCase().indexOf(allIndForm.getKeyword().toLowerCase()) > -1)) {
+            	  if(allIndForm.getKeyword() != ""){
+            	   allInds.clear();
             	   allInds.add(indbean);
+            	   break;
+            	  }
+            	  allInds.add(indbean);
                } else {
                    allInds.add(indbean);
                }

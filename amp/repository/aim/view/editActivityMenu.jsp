@@ -106,6 +106,12 @@ function gotoStep(value) {
   }
 }
 
+function fnGetSurvey() {
+	<digi:context name="step" property="context/module/moduleinstance/editSurveyList.do?edit=true" />
+	document.aimEditActivityForm.action = "<%= step %>";
+	document.aimEditActivityForm.target = "_self";
+	document.aimEditActivityForm.submit();
+}
 -->
 </script>
 
@@ -577,8 +583,20 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-
-	<tr>
+    <c:if test="${aimEditActivityForm.govFlag == true}">
+      <tr>
+        <td>
+          <IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+            <c:set var="translation">
+				<digi:trn key="aim:clickToAdd/UpdateAidEffectivenessSurvey">Add / Update Aid Effectiveness Survey</digi:trn>
+            </c:set>
+            <a href="javascript:fnGetSurvey()" class="menu" title="${translation}">
+              <digi:trn key="aim:editParisIndicators">Paris Indicators</digi:trn>
+            </a>
+        </td>
+      </tr>
+    </c:if>
+    <tr>
 		<c:if test="${aimEditActivityForm.step != 10}">
 		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>

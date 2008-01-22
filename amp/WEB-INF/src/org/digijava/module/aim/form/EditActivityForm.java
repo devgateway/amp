@@ -31,6 +31,7 @@ import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.ReferenceDoc;
 
 public class EditActivityForm extends ActionForm implements Serializable{
+    private boolean govFlag;
     private String svAction;
     private Long surveyOrgId;
     private Long activityLevel;
@@ -233,7 +234,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long ampCommentId;
 	private String fieldName;
 	private AmpField field = null;
-	
+
 	  private int pagesToShow;
 	  private int pagesSize;
 	  private int startPage;
@@ -1415,7 +1416,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setPages(Collection pages) {
 		this.pages = pages;
 		  if(pages!=null)
-		  {    
+		  {
 			  this.pagesSize=pages.size();
 		  }
 	}
@@ -4732,9 +4733,13 @@ public class EditActivityForm extends ActionForm implements Serializable{
     public void setstartPage(int offset) {
     	this.offset = offset;
     }
-    
+
     public int getPagesSize() {
     	return pagesSize;
+    }
+
+    public boolean isGovFlag() {
+        return govFlag;
     }
 
     public void setPagesSize(int pagesSize) {
@@ -4744,6 +4749,10 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setStartPage(int startPage) {
 		this.startPage = startPage;
 	}
+
+    public void setGovFlag(boolean govFlag) {
+        this.govFlag = govFlag;
+    }
 }
 
 

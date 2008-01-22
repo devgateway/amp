@@ -212,12 +212,14 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		if(atv!=null)
 			moduleByNameFromRoot = atv;
 		else return typeOK && parentOK;
+		if(moduleByNameFromRoot==null) return false;
 		
 		if(this.getParentModule()!=null && moduleByNameFromRoot.getParent()!=null)
 			if(moduleByNameFromRoot.getParent().getName().compareTo(this.getParentModule())==0)
 				parentOK=true;
-		//if(moduleByNameFromRoot==null) return false;
-		if(this.getParentModule()==null && moduleByNameFromRoot.getParent().getName()==null)
+		
+		//if(moduleByNameFromRoot.getParent()==null) return false;
+		if(this.getParentModule()==null && moduleByNameFromRoot.getParent()==null)
 			parentOK=true;
 		return typeOK && parentOK;
 	}

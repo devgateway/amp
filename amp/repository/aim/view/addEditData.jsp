@@ -34,11 +34,12 @@ function deleteData(ind){
 }
 
 function saveIndicator(id){
+
   <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=save" />
   document.forms[0].action = "<%=addEditIndicator%>";
   document.forms[0].submit();
-  window.close();
-  window.opener.document.forms[0].submit();
+  window.opener.location.reload();
+  window.close()
 }
 
 function selectLocation(index){

@@ -208,6 +208,23 @@ background-color: yellow;
 		myPanel2.hide();
 	}
 	
+	function checkProjectId(x){
+		var s_len = x.value.length;
+		var s_charcode = 0;
+	    for (var s_i=0;s_i<s_len;s_i++)
+		    {
+		     s_charcode = x.value.charCodeAt(s_i);
+		     if(!((s_charcode>=48 && s_charcode<=57)))
+		      {
+		         alert("Only Numeric Values Allowed");
+		         x.value='';
+		         x.focus();
+        		return false;
+      		  }
+    	}
+    	return true;
+	}
+	
 	function resetFilter(){
 		if (aimReportsFilterPickerForm.text)
 			aimReportsFilterPickerForm.text.value="";

@@ -286,6 +286,13 @@ public class EditActivity
       }*/
 
 
+if (tm != null && tm.getTeamType()
+   .equalsIgnoreCase("GOVERNMENT")) {
+   eaForm.setGovFlag(true);
+} else {
+   eaForm.setGovFlag(false);
+}
+
       if (tm != null && tm.getTeamType()
           .equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
         eaForm.setDonorFlag(true);
@@ -1645,7 +1652,7 @@ public class EditActivity
 		}
 		return form;
   }
-  
+
   private EditActivityForm setSectorsToForm(EditActivityForm form, AmpActivity activity) {
 		Collection sectors = activity.getSectors();
 
@@ -1704,11 +1711,11 @@ public class EditActivity
 		}
 		return form;
 	}
-  
+
   private Collection getSectosHelper(Collection sectors){
 	  return null;
   }
-  
+
 
 /**
  * @param activity

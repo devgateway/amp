@@ -27,28 +27,28 @@ import org.digijava.module.aim.util.DbUtil;
 public class EditSurveyList extends Action {
 
 	private static Logger logger = Logger.getLogger(EditSurveyList.class);
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 								 HttpServletRequest request, HttpServletResponse response) {
-		
+
 		// if user is not logged in, forward him to the home page
 		if (request.getSession().getAttribute("currentMember") == null)
 			return mapping.findForward("index");
 
 		TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");
-		
+
 		// if user is not a DONOR then forward him to his portfolio
-		if (!tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) 
+		if (!tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE) && !tm.getTeamType().equalsIgnoreCase("GOVERNMENT"))
 			return mapping.findForward("viewMyDesktop");
-		
+
 		logger.debug("In edit survey list action");
-		
+
 		if (form != null) {
 			EditActivityForm svForm = (EditActivityForm) form;
 			logger.debug("step[before] : " + svForm.getStep());
 			svForm.setStep("17");	// for indicators tab in donor-view
 			logger.debug("step[after] : " + svForm.getStep());
-			
+
 			if (null == svForm.getSurvey() || svForm.getSurvey().size() < 1) {
 				Comparator sfComp = new Comparator() {
 					public int compare(Object o1, Object o2) {

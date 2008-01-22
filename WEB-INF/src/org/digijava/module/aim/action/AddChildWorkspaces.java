@@ -7,6 +7,7 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,8 +17,10 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.UpdateWorkspaceForm;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class AddChildWorkspaces extends Action {
@@ -29,9 +32,50 @@ public class AddChildWorkspaces extends Action {
 		
 		UpdateWorkspaceForm uwForm = (UpdateWorkspaceForm) form;
 		uwForm.setReset(false);
-		
 		String dest = request.getParameter("dest");
+		uwForm.setActionType(null);
+	if(request.getParameter("childorgs")!=null){
 		
+		//uwForm.setOrganizations(DbUtil.getAll(AmpOrganisation.class));
+		//uwForm.setActionType("addOrgs");
+		if (uwForm.getSelChildOrgs() != null && uwForm.getSelChildOrgs().length > 0) {
+			logger.info("Selchildworkspaces.length :" + uwForm.getSelChildOrgs().length);
+			ArrayList allOrgs = (ArrayList) DbUtil.getAll(AmpOrganisation.class);
+			//uwForm.setOrganizations(new ArrayList());
+			if (uwForm.getOrganizations() == null) {
+				logger.debug("childWorkspace is null");
+				uwForm.setOrganizations(new ArrayList());
+			} else {
+				logger.debug("Child workspaces size = " + uwForm.getOrganizations().size());
+			}
+			Long [] auxIdOrgs=uwForm.getSelChildOrgs();
+			
+			ArrayList tmpOrg=new ArrayList();
+			ArrayList tmpOrgAux=new ArrayList();
+			ArrayList tmpOrgUnsel=new ArrayList();
+			ArrayList auxIdOrgCol=new ArrayList();
+			for(int i=0; i<auxIdOrgs.length;i++)
+				auxIdOrgCol.add(auxIdOrgs[i]);
+			for (Iterator it = allOrgs.iterator(); it.hasNext();) {
+				AmpOrganisation orgAux = (AmpOrganisation) it.next();
+				Long idOrgAux=orgAux.getAmpOrgId();
+				if(auxIdOrgCol.contains(idOrgAux)==true)
+					{
+						tmpOrg.add(orgAux);
+					}
+				else ;
+			}
+			TreeSet orgs=new TreeSet();
+			orgs.addAll(tmpOrg);
+			orgs.addAll(uwForm.getOrganizations());
+			uwForm.setOrganizations(new ArrayList());
+			if(orgs!=null)
+				uwForm.getOrganizations().addAll(orgs);
+		}
+	}
+	else
+	{
+		uwForm.setActionType(null);
 		if (uwForm.getSelChildWorkspaces() != null && uwForm.getSelChildWorkspaces().length > 0) {
 			logger.info("Selchildworkspaces.length :" + uwForm.getSelChildWorkspaces().length);
 			Collection teams = TeamUtil.getAllTeams(uwForm.getSelChildWorkspaces());
@@ -59,6 +103,7 @@ public class AddChildWorkspaces extends Action {
 				}
 			}		
 		}
+	}
 		
 		return mapping.findForward(dest);
 	}

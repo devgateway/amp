@@ -6,6 +6,7 @@ package org.digijava.module.aim.action;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -161,7 +162,12 @@ public class UpdateWorkspace extends Action {
                 newTeam.setTeamCategory(uwForm.getCategory());
                 newTeam.setAccessType(uwForm.getWorkspaceType());
                 newTeam.setType(typeCategoryValue);
-                if(uwForm.getSelectedRoleId()!=null) newTeam.setRole((AmpRole) DbUtil.get(AmpRole.class, uwForm.getSelectedRoleId()));
+                if(uwForm.getOrganizations()!=null) 
+                	{
+                	TreeSet s=new TreeSet();
+                	s.addAll(uwForm.getOrganizations());
+                	newTeam.setOrganizations(s);
+                	}
                 if(null == uwForm.getRelatedTeam()
                    || "-1".equals(uwForm.getRelatedTeam().toString()
                                   .trim()))
@@ -252,7 +258,15 @@ public class UpdateWorkspace extends Action {
                         saveErrors(request, errors);
                         return mapping.getInputForward();
                     }
-                    if(uwForm.getSelectedRoleId()!=null) newTeam.setRole((AmpRole) DbUtil.get(AmpRole.class, uwForm.getSelectedRoleId()));
+                   
+                    
+                    if(uwForm.getOrganizations()!=null) 
+                	{
+                	TreeSet s=new TreeSet();
+                	s.addAll(uwForm.getOrganizations());
+                	newTeam.setOrganizations(s);
+                	}
+        
                     boolean teamExist = TeamUtil.updateTeam(newTeam, uwForm
                         .getChildWorkspaces());
                     if(teamExist) {

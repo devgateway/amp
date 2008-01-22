@@ -55,10 +55,9 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Set sectors=null;
 	private Set regions=null;
 	private Set risks=null;
-	
-	private Long teamRoleId;
-	private Long userAssignedOrgId;
-	
+
+	private Collection teamAssignedOrgs;
+
 	private Set financingInstruments=null;
 	//private Long ampModalityId=null;
 	
@@ -104,22 +103,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 //			set the computed workspaces properties
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
 			if("Computed".equals(ampTeam.getAccessType())) {
-				if(ampTeam.getRole()!=null) this.setTeamRoleId(ampTeam.getRole().getAmpRoleId());
-				Session session;
-				try {
-					session = PersistenceManager.getSession();
-					AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
-					PersistenceManager.releaseSession(session);
-					User u=atm.getUser();
-					if(u.getAssignedOrgId()!=null) this.setUserAssignedOrgId(u.getAssignedOrgId());
-				} catch (HibernateException e) {
-					logger.error(e);
-					e.printStackTrace();
-				} catch (SQLException e) {
-					logger.error(e);
-					e.printStackTrace();
-				}
-				
+				teamAssignedOrgs=ampTeam.getOrganizations();
 			}
 			
 		    AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
@@ -174,8 +158,8 @@ public class AmpARFilter extends PropertyListable implements Filter {
 				"OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("+Util.toCSString(ampTeams,true)+") )";
 		
 		//computed workspace filter -- append it to the team filter so normal team activities are also possible 
-		if(teamRoleId!=null && userAssignedOrgId!=null) 
-			TEAM_FILTER+=" OR amp_activity_id IN (SELECT DISTINCT(activity) FROM amp_org_role WHERE role="+teamRoleId+" AND organisation="+userAssignedOrgId+")";
+		if(teamAssignedOrgs!=null) 
+			TEAM_FILTER+=" OR amp_activity_id IN (SELECT DISTINCT(activity) FROM amp_org_role WHERE organisation IN ("+Util.toCSString(teamAssignedOrgs, true)+") )";
 			
 			
 		
@@ -551,22 +535,6 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	}
 
 
-
-	public Long getUserAssignedOrgId() {
-		return userAssignedOrgId;
-	}
-
-	public void setUserAssignedOrgId(Long userAssignedOrgId) {
-		this.userAssignedOrgId = userAssignedOrgId;
-	}
-
-	public Long getTeamRoleId() {
-		return teamRoleId;
-	}
-
-	public void setTeamRoleId(Long teamRoleId) {
-		this.teamRoleId = teamRoleId;
-	}
 
 	
 }

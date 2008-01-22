@@ -12,6 +12,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 public class Workspace {
 	private String id;
 	private String name;
+	private Collection childOrgs;
 	private String description;
 	private String teamCategory;
 	//private String type;
@@ -140,5 +141,13 @@ public class Workspace {
 
 	public void setType(AmpCategoryValue type) {
 		this.type = type;
+	}
+
+	public Collection getChildOrgs() {
+		return childOrgs;
+	}
+
+	public void setChildOrgs(Collection childOrgs) {
+		this.childOrgs = childOrgs;
 	}
 }

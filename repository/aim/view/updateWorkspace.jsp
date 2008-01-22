@@ -30,6 +30,36 @@ function addChildWorkspaces() {
 		}
 }
 
+function addChildOrgs() {
+			
+			openNewWindow(650, 380);
+			<digi:context name="addChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
+			document.aimUpdateWorkspaceForm.action = "<%=addChild%>?dest=admin&childorgs=true";
+			document.aimUpdateWorkspaceForm.target = popupPointer.name;
+			document.aimUpdateWorkspaceForm.addFlag.value = false;
+			document.aimUpdateWorkspaceForm.submit();
+}
+
+
+function removeChildOrg(id) {
+	var temp = confirm("Do you want to delete this linked organisation ?");
+	if(temp == false)
+	{
+			document.aimUpdateWorkspaceForm.submit();
+			return false;
+	}
+	else
+	{
+	<digi:context name="update" property="context/module/moduleinstance/removeChildWorkspace.do" />
+	document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=admin&childorgs=true&tId="+id;
+	document.aimUpdateWorkspaceForm.target = "_self";
+	document.aimUpdateWorkspaceForm.addFlag.value = false;
+	document.aimUpdateWorkspaceForm.submit();
+	}
+}
+
+
+
 function removeChildWorkspace(id) {
 	var temp = confirm("Do you want to delete this child workspace ?");
 	if(temp == false)

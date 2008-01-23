@@ -3,7 +3,6 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -11,12 +10,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpWoreda;
 import org.digijava.module.aim.dbentity.AmpZone;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.form.EditActivityForm;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -63,6 +61,7 @@ public class LocationSelected extends Action {
 			location[0].setCountryId(cntry.getCountryId());
 			location[0].setCountry(cntry.getCountryName());
 			location[0].setNewCountryId(cntry.getIso());
+			location[0].setPercent(100f);
 			
 		}
 		

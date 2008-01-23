@@ -162,7 +162,7 @@
 
 				</td></tr>
 
-				<tr><td>
+				<tr><td style="vertical-align:top;>
 
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
 
@@ -361,12 +361,14 @@
 						</td>
 
 						<td width="25%" vAlign="top" align="right">
-
-						<!-- edit activity form menu -->
-
-							<jsp:include page="donorEditActivityMenu.jsp" flush="true" />
-
-						<!-- end of activity form menu -->
+  <!-- edit activity form menu -->
+  <c:if test="${aimEditActivityForm.donorFlag == false}">
+    <jsp:include page="editActivityMenu.jsp" flush="true" />
+  </c:if>
+  <c:if test="${aimEditActivityForm.donorFlag == true}">
+    <jsp:include page="donorEditActivityMenu.jsp" flush="true" />
+  </c:if>
+  <!-- end of activity form menu -->
 
 						</td></tr>
 

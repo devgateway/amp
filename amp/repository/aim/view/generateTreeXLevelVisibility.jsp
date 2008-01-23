@@ -41,7 +41,7 @@ function openFieldPermissionsPopup(fieldId) {
 						<ul>
 							<bean:define id="size" name="moduleAux2" property="submodules"/>
 							<logic:notEmpty name="size">
-							<logic:iterate name="moduleAux" property="items" id="moduleAuxIt" type="java.util.Map.Entry" >
+							<logic:iterate name="moduleAux" property="sorteditems" id="moduleAuxIt" type="java.util.Map.Entry" >
 								<bean:define name="currentTemplate" id="currentTemplate" type="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" scope="page" toScope="request"/>
 								<bean:define id="moduleAux" name="moduleAuxIt" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page" toScope="request"/>
 								<jsp:include page="generateTreeXLevelVisibility.jsp" />								
@@ -49,7 +49,7 @@ function openFieldPermissionsPopup(fieldId) {
 							</logic:notEmpty>
 							<logic:empty name="size">
 								<bean:define name="currentTemplate" id="currentTemplate" type="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" scope="page" toScope="page"/>
-								<logic:iterate name="moduleAux" property="items" id="feature" type="java.util.Map.Entry" >
+								<logic:iterate name="moduleAux" property="sorteditems" id="feature" type="java.util.Map.Entry" >
 								
 									<bean:define id="featureAux" name="feature" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page"/>
 									<bean:define id="featureAux2" name="featureAux" property="root" type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility" scope="page"/>
@@ -74,7 +74,7 @@ function openFieldPermissionsPopup(fieldId) {
 										<digi:trn key="<%="fm:"+featureAux.getRoot().getNameTrimmed() %>"><bean:write name="featureAux" property="root.name"/></digi:trn>
 									</a>
 									<ul>
-										<logic:iterate name="featureAux" property="items" id="field" type="java.util.Map.Entry" >
+										<logic:iterate name="featureAux" property="sorteditems" id="field" type="java.util.Map.Entry" >
 											<bean:define id="fieldAux" name="field" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page"/>
 											<bean:define id="fieldAux2" name="fieldAux" property="root" type="org.digijava.module.aim.dbentity.AmpFieldsVisibility" scope="page"/>
 											<li class="dhtmlgoodies_sheet.gif">

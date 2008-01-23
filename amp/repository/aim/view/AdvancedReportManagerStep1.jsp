@@ -1,5 +1,3 @@
-
-
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -30,6 +28,7 @@ function moveUp(val)
 {
 	if(document.aimAdvancedReportForm.removeColumns.length == undefined)
 		alert('<digi:trn key="aim:reportBuilder:ReportColumnMoveUpValidation">Cannot move the column Up!</digi:trn>');
+
 	else
 	{
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveUp" />
@@ -69,9 +68,12 @@ function gotoStep() {
 		document.aimAdvancedReportForm.submit();
 	}
 }
+function checkForBack(){
+return true;
+}
 /*added here*/
 function backStep() {
-	if (check()){
+	if (checkForBack()){
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=forward" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.target = "_self";

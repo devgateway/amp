@@ -42,6 +42,7 @@ function moveDown(val)
 
 function moveUpAdjType(val)
 {
+
 	if(document.aimAdvancedReportForm.removeAdjustType.length == undefined)
 		alert('<digi:trn key="aim:reportBuilder:ReportColumnMoveUpValidation">Cannot move the column Up!</digi:trn>');
 	else
@@ -83,9 +84,14 @@ function gotoStep() {
 		document.aimAdvancedReportForm.submit();
 	}
 }
+
+function checkForBack(){
+return true;
+}
+
 /*added here*/
 function backStep() {
-	if (check()){
+	if (checkForBack()){
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SelectRows" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.target = "_self";
@@ -173,7 +179,9 @@ function checkUncheckAll2() {
 		for(i=0; i<items.length; i++){
 			items[i].checked = document.aimAdvancedReportForm.checkall2.checked;
 		}
-}</script>
+}
+
+</script>
 
 <digi:instance property="aimAdvancedReportForm" />
 <digi:form action="/advancedReportManager.do" method="post">
@@ -610,6 +618,3 @@ function checkUncheckAll2() {
 </TR>
 </TABLE>
 </digi:form>
-
-
-

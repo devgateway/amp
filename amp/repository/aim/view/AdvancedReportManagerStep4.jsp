@@ -1,4 +1,3 @@
-
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -44,7 +43,6 @@ function check(){
 	}
 	else if(!(isNaN(a)))
 	{
-		
 		alert('<digi:trn key="aim:reportBuilder:ReportNumericTittleValidation">Report Title cannot start with a numeric value</digi:trn>');
 		flag=1;
 	}
@@ -84,9 +82,14 @@ function gotoStep()
 	}
 
 }
+
+function checkForBack(){
+return true;
+}
+
 /*added here*/
 function backStep() {
-	if (check()){
+	if (checkForBack()){
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SelectMeasures" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.target = "_self";
@@ -95,6 +98,7 @@ function backStep() {
 }
 /*ended here*/
 </script>
+
 <digi:instance property="aimAdvancedReportForm" />
 <digi:form action="/advancedReportManager.do" method="post">
 <input type="hidden" name="isAdd" >

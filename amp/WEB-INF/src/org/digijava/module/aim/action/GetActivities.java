@@ -14,10 +14,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -29,7 +27,6 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.ActivitiesForm;
 import org.digijava.module.aim.helper.ActivityItem;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.NpdUtil;
@@ -65,16 +62,16 @@ public class GetActivities extends Action {
 		response.setContentType("text/xml");
 		ActivitiesForm actForm = (ActivitiesForm) form;
 		logger.debug("programId=" + actForm.getProgramId() + " statusCode=" + actForm.getStatusId());
-		HttpSession session = request.getSession();
-		TeamMember tm =  (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
+		//HttpSession session = request.getSession();
+		TeamMember tm =  null;// TODO AMP-2539 we need some decision about this. (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		OutputStreamWriter outputStream =null;
 		
 		try {
 			Date fromYear = yearToDate(actForm.getStartYear(), false);
 			Date toYear = yearToDate(actForm.getEndYear(), true);
 
-			//retrive acivities
-			Collection activities = getActivities(actForm.getProgramId(),
+			//retrieve activities
+			Collection<AmpActivity> activities = getActivities(actForm.getProgramId(),
 					actForm.getStatusId(), actForm.getDonorId(), fromYear,
 					toYear, null, tm, true);
 
@@ -106,7 +103,7 @@ public class GetActivities extends Action {
 	}
 
 	/**
-	 * Retrives Activities filtered according params.
+	 * Retrieves Activities filtered according params.
 	 * @param ampThemeId filter activities assigne to programm(Theme) specified ith this id.
 	 * @param statusCode filter activities, get anly with this status.
 	 * @param donorOrgId 
@@ -139,11 +136,9 @@ public class GetActivities extends Action {
 				teamMember);
 
 		if (recurse){
-			Collection children = ProgramUtil.getAllSubThemesFor(ampThemeId);
+			Collection<AmpTheme> children = ProgramUtil.getAllSubThemesFor(ampThemeId);
 			if (children!= null && children.size() > 0){
-
-				for (Iterator iter = children.iterator(); iter.hasNext();) {
-					AmpTheme prog = (AmpTheme) iter.next();
+				for (AmpTheme prog : children) {
 					Collection<AmpActivity> subActivities = ActivityUtil.searchActivities(
 							prog.getAmpThemeId(), statusCode, donorOrgId,
 							fromDate, toDate, locationId, teamMember);
@@ -157,8 +152,7 @@ public class GetActivities extends Action {
 		Set<AmpActivity> activities = new TreeSet<AmpActivity>(new ActivityUtil.ActivityIdComparator());
 		List<AmpActivity> sortedActivities = null;
 		if (result!=null){
-			for (Iterator iter = result.iterator(); iter.hasNext();) {
-				AmpActivity element = (AmpActivity) iter.next();
+			for (AmpActivity element : result) {
 				activities.add(element);
 			}
 			sortedActivities = new ArrayList<AmpActivity>(activities);
@@ -233,7 +227,7 @@ public class GetActivities extends Action {
 	 * @see AmpActivity
 	 * @see ActivityItem
 	 */
-	private String activities2XML(Collection acts) throws Exception {
+	private String activities2XML(Collection<AmpActivity> acts) throws Exception {
 		double proposedSum = 0;
 		double actualSum = 0;
 		double plannedSum = 0;
@@ -242,8 +236,7 @@ public class GetActivities extends Action {
 		result += "<" + ROOT_TAG;
 		String temp = "";
 		if (acts != null && acts.size() > 0) {
-			for (Iterator iter = acts.iterator(); iter.hasNext();) {
-				AmpActivity activity = (AmpActivity) iter.next();
+			for (AmpActivity activity : acts) {
 				ActivityUtil.ActivityAmounts amounts = ActivityUtil.getActivityAmmountIn(activity, "USD");
 				
 				proposedSum += amounts.getProposedAmout();

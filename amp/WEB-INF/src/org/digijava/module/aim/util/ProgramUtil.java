@@ -18,22 +18,21 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.JDBCException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.kernel.util.collections.HierarchyMemberFactory;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
@@ -44,17 +43,12 @@ import org.digijava.module.aim.helper.AllMEIndicators;
 import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AllThemes;
 import org.digijava.module.aim.helper.AmpIndSectors;
-import org.digijava.module.aim.helper.EditProgram;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.EditProgram;
 import org.digijava.module.aim.helper.IndicatorsBean;
 import org.digijava.module.aim.helper.TreeItem;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.exception.AimException;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 
 
 public class ProgramUtil {
@@ -925,18 +919,17 @@ public class ProgramUtil {
 		 * Recursively iterates on all child programs till the end of the branch.
 		 * @param parentThemeId db ID of the parent program
 		 * @return collection of AmpTheme beans
-		 * @throws AimException if enything goes wrong
+		 * @throws AimException if anything goes wrong
 		 */
-		public static Collection getAllSubThemesFor(Long parentThemeId) throws AimException
+		public static Collection<AmpTheme> getAllSubThemesFor(Long parentThemeId) throws AimException
 		{
 			Collection subThemes = new ArrayList();
 			try
 			{
-				Collection progs = getSubThemes(parentThemeId);
+				Collection<AmpTheme> progs = getSubThemes(parentThemeId);
 				if (progs != null && progs.size()>0){
 					subThemes.addAll(progs);
-					for (Iterator iter = progs.iterator(); iter.hasNext();) {
-						AmpTheme child = (AmpTheme) iter.next();
+					for (AmpTheme child : progs) {
 						Collection col = getAllSubThemes(child.getAmpThemeId());
 						subThemes.addAll(col);
 					}

@@ -12,28 +12,22 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
@@ -41,7 +35,7 @@ import org.digijava.module.aim.util.TeamUtil;
 
 /**
  * Filtering bean. Holds info about filtering parameters and creates the filtering query
- * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
+ * @author Mihai Postelnicu - mpostelnicu@dgfoundatiTeam member rights follow the activity roles as we have defined them.on.org
  * @since Aug 5, 2006
  *
  */
@@ -56,7 +50,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Set regions=null;
 	private Set risks=null;
 
-	private Collection teamAssignedOrgs;
+	private Set teamAssignedOrgs;
 
 	private Set financingInstruments=null;
 	//private Long ampModalityId=null;
@@ -99,18 +93,23 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		
 				
 		this.setAmpTeams(new TreeSet());
+		teamAssignedOrgs=new TreeSet();
 		if(tm!=null){
 //			set the computed workspaces properties
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
-			if("Computed".equals(ampTeam.getAccessType())) {
-				teamAssignedOrgs=ampTeam.getOrganizations();
-			}
 			
 		    AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
 		    if (this.getCurrency() == null)
 		    	this.setCurrency(tempSettings.getCurrency());		    
 			this.getAmpTeams().add(ampTeam);
-			this.getAmpTeams().addAll(TeamUtil.getAmpLevel0Teams(tm.getTeamId()));	
+			this.getAmpTeams().addAll(TeamUtil.getAmpLevel0Teams(tm.getTeamId()));
+			Iterator i=this.getAmpTeams().iterator();
+			while (i.hasNext()) {
+				AmpTeam team = (AmpTeam) i.next();
+				if("Computed".equals(team.getAccessType())) {
+					teamAssignedOrgs.addAll(team.getOrganizations());
+				}
+			}
 		}
 		
 
@@ -160,8 +159,6 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		//computed workspace filter -- append it to the team filter so normal team activities are also possible 
 		if(teamAssignedOrgs!=null && teamAssignedOrgs.size() > 0) 
 			TEAM_FILTER+=" OR amp_activity_id IN (SELECT DISTINCT(activity) FROM amp_org_role WHERE organisation IN ("+Util.toCSString(teamAssignedOrgs, true)+") )";
-			
-			
 		
 		String STATUS_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("+Util.toCSString(statuses,true)+")";
 	

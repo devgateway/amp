@@ -125,7 +125,7 @@ function validateForm(){
     var npoSize = document.aimEditActivityForm.sizeNPOPrograms.value;
     var ppSize = document.aimEditActivityForm.sizePPrograms.value;
     var spSize = document.aimEditActivityForm.sizeSPrograms.value;
-    if (!validateSectorPercentage()||
+    if (!validateSectorPercentage()||!validateLocationPercentage()||
     !validateProgramsPercentage(npoSize,"nationalPlanObjectivePrograms") ||
     !validateProgramsPercentage(ppSize,"primaryPrograms") ||
     !validateProgramsPercentage(spSize,"secondaryPrograms")  ){
@@ -254,6 +254,56 @@ function validateProgramsPercentage(cnt,prefix){
   }
   return true;
 }
+function validateLocationPercentage(){
+  <c:set var="errMsgAddPercentage">
+  <digi:trn key="aim:addLocationPercentageErrorMessage">
+  Please add location percentage
+  </digi:trn>
+  </c:set>
+  <c:set var="errMsgSumPercentage">
+  <digi:trn key="aim:addLocationSumPercentageErrorMessage">
+  Sum of locations percentages should be 100
+  </digi:trn>
+  </c:set>
+  <c:set var="errMsgZeroPercentage">
+  <digi:trn key="aim:addzeroLocationPercentageErrorMessage">
+  A locations percentage cannot be equal to 0
+  </digi:trn>
+  </c:set>
+  var str = null;
+  var val = null;
+  var i = 0;
+  var flag = false;
+  var sum = 0;
+  var cnt = document.aimEditActivityForm.sizeLocs.value;
+  while (i < cnt) {
+    str   = "selectedLocs[" + i + "].percent";
+    val   = (document.aimEditActivityForm.elements)[str].value;
+    if (val == "" || val == null) {
+      alert("${errMsgAddPercentage}");
+      flag = true;
+      break;
+    }
+    if (val == "0"){
+    alert("${errMsgZeroPercentage}");
+    flag = true;
+      break;
+    }
+
+    sum = sum + parseFloat(val);
+    i = i + 1;
+  }
+  if (flag == true) {
+    (document.aimEditActivityForm.elements)[str].focus();
+    return false;
+  }
+  else if (cnt>0&&sum != 100) {
+    alert("${errMsgSumPercentage}");
+    (document.aimEditActivityForm.elements)[str].focus();
+    return false;
+  }
+  return true;
+}
 
 function fnChk(frmContrl){
   <c:set var="errMsgAddSectorNumericValue">
@@ -322,6 +372,13 @@ function remProgram(programType) {
   <html:hidden property="editAct" />
 
   <input type="hidden" name="edit" value="true">
+      
+   <c:if test="${empty aimEditActivityForm.selectedLocs}">
+    <input type="hidden" name="sizeLocs" value="0">
+  </c:if>
+  <c:if test="${!empty aimEditActivityForm.selectedLocs}">
+    <input type="hidden" name="sizeLocs" value="${fn:length(aimEditActivityForm.selectedLocs)}">
+  </c:if>
 
 
   <c:if test="${empty aimEditActivityForm.nationalPlanObjectivePrograms}">

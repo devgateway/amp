@@ -51,17 +51,8 @@ public class GroupColumn extends Column {
 	public static Column verticalSplitByCategs(CellColumn src,
             List categories, boolean generateTotalCols,AmpReports reportMetadata) {
 		
-		//create the set of unique IDS for all items that need to be categorized:
-    	TreeSet ids=new TreeSet();
-    	Iterator i=ids.iterator();
-    	while (i.hasNext()) {
-			Cell element = (Cell) i.next();
-			if(element.isShow())
-			ids.add(element.getOwnerId());
-		}
-    
 		
-		return verticalSplitByCategs(src,categories,ids,generateTotalCols, reportMetadata);
+		return verticalSplitByCategs(src,categories,null,generateTotalCols, reportMetadata);
 	}
 	
 	/**

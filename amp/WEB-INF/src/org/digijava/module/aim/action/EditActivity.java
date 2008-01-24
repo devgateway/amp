@@ -572,7 +572,14 @@ if (tm != null && tm.getTeamType()
         // load the activity details
         String actApprovalStatus = DbUtil.getActivityApprovalStatus(
             activityId);
-        eaForm.setApprovalStatus(actApprovalStatus);
+        
+        //eaForm.setApprovalStatus(actApprovalStatus);
+        if (tm != null) {
+            if (tm.getTeamHead())
+              eaForm.setApprovalStatus(Constants.APPROVED_STATUS);
+            else
+              eaForm.setApprovalStatus(actApprovalStatus);
+        }
 
         if (activity != null) {
           // set title,description and objective

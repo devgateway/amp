@@ -147,7 +147,8 @@ public class Constants
 	public static final String ANNUAL = "A" ;
 	public static final String QUARTERLY = "Q" ;
 
-	public static final String APPROVED_STATUS = "approved";
+	public static final String APPROVED_STATUS 	= "approved";
+	public static final String STARTED_STATUS 	= "started";
 
 	//proudly added by Alex Gartner
 	public static final String ACTIVITY_STATUS_PLANNED			= "Planned";

@@ -1065,9 +1065,11 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select act from " + AmpActivity.class.getName()
                 + " act where (act.team=:ampTeamId)"
-                + " and (act.approvalStatus in ("+ Constants.ACTIVITY_NEEDS_APPROVAL_STATUS +") )";
+                + " and (act.approvalStatus in ("+ Constants.ACTIVITY_NEEDS_APPROVAL_STATUS +") ) " 
+                + " and act.draft != :draftValue" ;
             q = session.createQuery(queryString);
             q.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
+            q.setBoolean("draftValue", true);
 
             actList = q.list();
 

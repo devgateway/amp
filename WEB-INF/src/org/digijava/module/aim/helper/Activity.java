@@ -83,6 +83,9 @@ public class Activity
   private String financialInstrumentString;
   private Boolean governmentApprovalProcedures;
   private Boolean jointCriteria;
+  
+  private String approvalStatus;
+  private Boolean draft;
 
   private AmpTeamMember createdBy;
 
@@ -876,4 +879,24 @@ public class Activity
   public void setCreatedBy(AmpTeamMember createdBy) {
     this.createdBy = createdBy;
   }
+  
+  	
+
+	public String getApprovalStatus() {
+		return approvalStatus;
+	}
+	
+	public void setApprovalStatus(String approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
+
+	public Boolean getDraft() {
+		return draft;
+	}
+	
+	public void setDraft(Boolean draft) {
+		this.draft = draft;
+	}
+  
+  
 }

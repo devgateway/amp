@@ -1320,6 +1320,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             )
             );
         /* END - Set Categories */
+        
+        activity.setDraft( ampAct.getDraft() );
+        activity.setApprovalStatus( ampAct.getApprovalStatus() );
 
         activity.setFinancialInstrument(CategoryManagerUtil.getStringValueOfAmpCategoryValue(
                 CategoryManagerUtil.getAmpCategoryValueFromListByKey(

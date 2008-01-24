@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -32,20 +34,22 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
-import org.digijava.module.aim.util.ProgramUtil;
 
 public class ViewChannelOverview extends TilesAction {
 
 	private static Logger logger = Logger.getLogger(ViewChannelOverview.class);
+	
+	private ActionErrors errors;
 
 	public ActionForward execute(ComponentContext context,
 			ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 
+		errors	= new ActionErrors();
 		HttpSession session = request.getSession();
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 		//PermissionUtil.resetScope(session);
@@ -66,6 +70,9 @@ public class ViewChannelOverview extends TilesAction {
 			}
 
 			Activity activity = ActivityUtil.getChannelOverview(id);
+			
+			createWarnings(activity);
+			
 			PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.ACTIVITY,activity);
 			ArrayList colAux=new ArrayList();
 			Collection ampFields=DbUtil.getAmpFields();
@@ -197,6 +204,21 @@ public class ViewChannelOverview extends TilesAction {
 				formBean.setCanView(false);
 			}*/
 		}
+		saveErrors(request, errors);
 		return null;
+	}
+	
+	private void createWarnings (Activity activity) {
+		if ( activity.getDraft() == true ) {
+			errors.add(
+				"title", new ActionError("error.aim.draftActivity")
+			);
+				
+		}
+		if ( Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus()) ) {
+			errors.add(
+				"title", new ActionError("error.aim.activityAwaitingApproval")
+			);
+		}
 	}
 }

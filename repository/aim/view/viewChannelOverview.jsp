@@ -197,14 +197,14 @@ function commentWin(val) {
 																		</td>
 			
 																	</c:if>
-							                                        <c:if test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
+							                                        <%--<c:if test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
 							                                        	<td >
 							                                        		<html:button  styleClass="FONT-SIZE: 11px; COLOR: #313131" disabled="true" property="validateBtn">
 																				<digi:trn key="aim:approvalAwaited">Approval Awaited</digi:trn>
 																			</html:button>
 							                                        	</td>
 			
-																	</c:if>
+																	</c:if> --%>
 																</field:display>
 															</feature:display>
 														</module:display>

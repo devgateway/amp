@@ -276,66 +276,51 @@ public class LocationUtil {
 
 		Session session = null;
 		AmpLocation loc = null;
-		boolean flag = false;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 
 			String queryString = "select l from " + AmpLocation.class.getName()
 					+ " l";
 			if (countryId != null && (!(countryId.equals(new Long(-1))))) {
-				if (!flag) {
-					queryString += " where";
-				}
-				queryString += " country_id like '" + countryId+"'";
-				flag = true;
+				queryString += " where country_id like '" + countryId+"'";
 			}
+                        else{
+                             queryString += " where country_id  is NULL ";
+                        }
 
 			if (regionId != null && (!(regionId.equals(new Long(-1))))) {
-				if (!flag) {
-					queryString += " where";
-				} else {
-					queryString += " and";
-				}
-				queryString += " region_id = " + regionId;
-				flag = true;
+				queryString += " and region_id = " + regionId;
 			}
+                        else{
+                             queryString += " and region_id  is NULL ";
+                        }
 
 			if (zoneId != null && (!(zoneId.equals(new Long(-1))))) {
-				if (!flag) {
-					queryString += " where";
-				} else {
-					queryString += " and";
-				}
-				queryString += " zone_id = " + zoneId;
+				queryString += " and zone_id = " + zoneId;
 			}
+                        else{
+                            queryString += " and zone_id  is NULL ";
+                        }
 
 			if (woredaId != null && (!(woredaId.equals(new Long(-1))))) {
-				if (!flag) {
-					queryString += " where";
-				} else {
-					queryString += " and";
-				}
-				queryString += " woreda_id = " + woredaId;
+				queryString += " and woreda_id = " + woredaId;
 			}
+                        else{
+                            queryString += " and woreda_id  is NULL ";
+                        }
 
 			Query qry = session.createQuery(queryString);
 			Iterator itr = qry.list().iterator();
-			while (itr.hasNext())
+			if (itr.hasNext())
 				loc = (AmpLocation) itr.next();
 
 		} catch (Exception e) {
 			logger.error("Uanble to get location :" + e);
-		} finally {
-
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed " + ex);
-			}
-		}
+		} 
 		return loc;
 	}
+        
         public static boolean isAssignedToActivity(Long countryId, Long regionId,
 			Long zoneId, Long woredaId)throws DgException{
           boolean  isAssignedToActivity=true;

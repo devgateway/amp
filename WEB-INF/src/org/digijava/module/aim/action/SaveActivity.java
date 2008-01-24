@@ -930,12 +930,15 @@ public class SaveActivity extends Action {
 					Iterator<Location> itr = eaForm.getSelectedLocs().iterator();
 					while (itr.hasNext()) {
 						Location loc = itr.next();
+                                                String countryIso=loc.getNewCountryId();
 						AmpLocation ampLoc = LocationUtil.getAmpLocation(loc.getNewCountryId(), loc.getRegionId(), loc.getZoneId(), loc.getWoredaId());
 
 						if (ampLoc == null) {
 							ampLoc = new AmpLocation();
 							ampLoc.setCountry(loc.getCountry());
-							ampLoc.setDgCountry(DbUtil.getDgCountry(loc.getCountryId()));
+                                                        if(countryIso!=null){
+							ampLoc.setDgCountry(DbUtil.getDgCountry(loc.getNewCountryId()));
+                                                        }
 							ampLoc.setRegion(loc.getRegion());
 							ampLoc.setAmpRegion(LocationUtil.getAmpRegion(loc.getRegionId()));
 							ampLoc.setAmpZone(LocationUtil.getAmpZone(loc.getZoneId()));

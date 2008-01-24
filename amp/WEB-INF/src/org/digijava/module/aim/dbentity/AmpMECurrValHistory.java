@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class AmpMECurrValHistory {
 	private Long ampMECurrValHistoryId;
-	private AmpMEIndicatorValue meIndValue;
+	private AmpIndicator meIndValue;
 	private float currValue;
 	private Date currValueDate;
 	private String comments;
@@ -48,13 +48,13 @@ public class AmpMECurrValHistory {
 	/**
 	 * @return Returns the meIndValue.
 	 */
-	public AmpMEIndicatorValue getMeIndValue() {
+	public AmpIndicator getMeIndValue() {
 		return meIndValue;
 	}
 	/**
 	 * @param meIndValue The meIndValue to set.
 	 */
-	public void setMeIndValue(AmpMEIndicatorValue meIndValue) {
+	public void setMeIndValue(AmpIndicator meIndValue) {
 		this.meIndValue = meIndValue;
 	}
 	/**

@@ -149,6 +149,22 @@ public class IndicatorUtil {
 			tempPrgInd.setCategory(tempInd.getCategory());
 			tempPrgInd.setSector(tempInd.getSectors());
 			tempPrgInd.setActivity(tempInd.getActivity());
+			tempPrgInd.setActualVal(tempInd.getActualVal());
+			tempPrgInd.setActualValComments(tempInd.getActualValComments());
+			tempPrgInd.setActualValDate(tempInd.getActualValDate());
+			tempPrgInd.setBaseVal(tempInd.getBaseVal());
+			tempPrgInd.setBaseValComments(tempInd.getBaseValComments());
+			tempPrgInd.setBaseValDate(tempInd.getBaseValDate());
+			tempPrgInd.setTargetVal(tempInd.getTargetVal());
+			tempPrgInd.setTargetValComments(tempInd.getTargetValComments());
+			tempPrgInd.setTargetValDate(tempInd.getTargetValDate());
+			tempPrgInd.setRevisedTargetVal(tempInd.getRevisedTargetVal());
+			tempPrgInd.setRevisedTargetValComments(tempInd.getRevisedTargetValComments());
+			tempPrgInd.setRevisedTargetValDate(tempInd.getRevisedTargetValDate());
+			tempPrgInd.setRisk(tempInd.getRisk());
+			tempPrgInd.setIndicatorsCategory(tempInd.getIndicatorsCategory());
+			
+			
 			session.flush();
 		} catch (Exception e) {
 			logger.error("Unable to get the specified Indicator");

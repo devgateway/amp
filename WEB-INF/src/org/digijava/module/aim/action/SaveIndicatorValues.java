@@ -56,12 +56,12 @@ public class SaveIndicatorValues extends Action
 						temp.setTargetValComments(eaForm.getTargetValComments());
 						if (eaForm.getRevTargetValDate() != null) {
 							temp.setTargetVal(eaForm.getRevTargetVal());
-                                                        temp.setTargetValDate(eaForm.getRevTargetValDate());
+                            temp.setTargetValDate(eaForm.getRevTargetValDate());
 							temp.setRevisedTargetVal(eaForm.getRevTargetVal());
 							temp.setRevisedTargetValDate(eaForm.getRevTargetValDate());
 							temp.setRevisedTargetValComments(eaForm.getRevTargetValComments());
 						} else {
-                                                        eaForm.setRevTargetVal(eaForm.getTargetVal());
+                                eaForm.setRevTargetVal(eaForm.getTargetVal());
 							temp.setRevisedTargetVal(eaForm.getTargetVal());
 							temp.setRevisedTargetValDate(eaForm.getTargetValDate());
 							temp.setRevisedTargetValComments(eaForm.getTargetValComments());
@@ -75,7 +75,14 @@ public class SaveIndicatorValues extends Action
 							//temp.setCurrentVal(eaForm.getCurrentVal());
 
 							temp.setCurrentValDate(eaForm.getCurrValDate());
+							temp.setActualValDate(eaForm.getCurrValDate());
 							temp.setCurrentValComments(eaForm.getCurrentValComments());
+						}
+						if(eaForm.getCurrentVal() != null){
+						temp.setActualVal(Float.parseFloat(eaForm.getCurrentVal()));
+						
+						}else{
+							temp.setActualVal(null);
 						}
 						temp.setRisk(eaForm.getIndicatorRisk());
 						////System.out.println(eaForm.getLogframeCategory());

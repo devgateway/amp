@@ -951,14 +951,21 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     Collection<AmpActivity> result = null;
     try {
       Session session = PersistenceManager.getRequestDBSession();
-      String oql = "select act from " + AmpActivity.class.getName() +
-          " act join act.categories as categories where 1=1 ";
-      //this is changed cos now we have many-to-many here.
-      if (ampThemeId != null) {
-        oql += " and ( :ampThemeId in elements(act.activityPrograms )) ";
-//                	oql+=" and act.activityPrograms in ( from "+AmpTheme.class.getName()+" thm where thm.ampThemeId=:ampThemeId )";
-//                    oql += " and act.themeId.ampThemeId=:ampThemeId ";
+      String oql = "select act from " + AmpActivityProgram.class.getName() + " prog ";
+      if (ampThemeId!=null){
+    	  oql += " inner join prog.program as theme ";
       }
+      oql+=" inner join prog.activity as  act ";
+      if (statusCode!=null && !"".equals(statusCode.trim())){
+    	  oql+=" join  act.categories as categories ";
+      }
+      oql+=" where 1=1 ";
+//      if (ampThemeId != null) {
+//        oql += " and ( :ampThemeId in elements(act.activityPrograms )) ";
+//      }
+      if (ampThemeId != null) {
+          oql += " and ( theme.ampThemeId = :ampThemeId) ";
+        }
       if (donorOrgId != null) {
         String s = " and act in (select rol.activity from " +
             AmpOrgRole.class.getName() + " rol, " +
@@ -966,7 +973,6 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         oql += s;
       }
       if (statusCode != null) {
-//                    oql += " and act.status.statusCode=:statusCode ";
         oql += " and categories.id=:statusCode ";
       }
       if (fromDate != null) {
@@ -976,12 +982,10 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         oql += " and act.createdDate <= :ToDate";
       }
       if (locationId != null) {
-        oql += " and act.locations in (from " + AmpLocation.class.getName() +
-            " loc where loc.id=:LocationID)";
-//                    oql += " and act in (select a from AmpLocation.aidlocation as a, AmpLocation loc where loc.id=20)";
+        oql += " and act.locations in (from " + AmpLocation.class.getName() +" loc where loc.id=:LocationID)";
       }
       if (teamMember != null) {
-        oql += " and " + getTeamMemberWhereClause(teamMember);
+        oql += " and ( act.team.ampTeamId =:teamId) "; //oql += " and " +getTeamMemberWhereClause(teamMember);
       }
       oql += " order by act.name";
 
@@ -1004,6 +1008,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       }
       if (locationId != null) {
         query.setLong("LocationID", locationId.longValue());
+      }
+      if (teamMember!=null && teamMember.getTeamId()!=null){
+    	  query.setLong("teamId", teamMember.getTeamId());
       }
 
       result = query.list();

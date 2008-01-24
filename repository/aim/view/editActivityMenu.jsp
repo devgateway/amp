@@ -116,7 +116,6 @@ function fnGetSurvey() {
 </script>
 
 <digi:instance property="aimEditActivityForm" />
-<html:hidden property="approvalStatus" />
 <html:hidden property="workingTeamLeadFlag" />
 <html:hidden property="pageId" />
 <html:hidden property="currentValDate" />

@@ -367,6 +367,7 @@ public class TeamUtil {
                 workspace.setDescription(team.getDescription().trim());
                 workspace.setId(team.getAmpTeamId().toString());
                 workspace.setName(team.getName());
+                workspace.setChildOrgs(team.getOrganizations());
                 workspace.setTeamCategory(team.getTeamCategory());
                 workspace.setType(team.getType());
                 workspace.setWorkspaceType(team.getAccessType());
@@ -484,7 +485,7 @@ public class TeamUtil {
                 updTeam.setAccessType(team.getAccessType());
                 updTeam.setType(team.getType());
                 updTeam.setRelatedTeamId(team.getRelatedTeamId());
-               // updTeam.setRole(team.getRole());
+                updTeam.setOrganizations(team.getOrganizations());
                 session.saveOrUpdate(updTeam);
 
                 qryStr = "select t from " + AmpTeam.class.getName() + " t "
@@ -2113,7 +2114,7 @@ public class TeamUtil {
             list.addAll(qry.list());
             while(list.size() > 0) {
                 ampTeam = (AmpTeam) list.removeFirst();
-                if(ampTeam.getAccessType().equals("Team"))
+                if(ampTeam.getAccessType().equals("Team") || ampTeam.getAccessType().equals("Computed") )
                     teams.add(ampTeam);
                 else {
                     queryString = "select t from " + AmpTeam.class.getName()

@@ -61,7 +61,7 @@ public class LocationSelected extends Action {
 			location[0].setCountryId(cntry.getCountryId());
 			location[0].setCountry(cntry.getCountryName());
 			location[0].setNewCountryId(cntry.getIso());
-			location[0].setPercent(100f);
+			location[0].setPercent("100");
 			
 		}
 		

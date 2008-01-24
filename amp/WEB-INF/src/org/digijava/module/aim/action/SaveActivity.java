@@ -948,7 +948,11 @@ public class SaveActivity extends Action {
 						actLoc.setActivity(activity);//activity);
 						actLoc.getActivity().setAmpActivityId(eaForm.getActivityId());
 						actLoc.setLocation(ampLoc);
-						actLoc.setLocationPercentage(loc.getPercent());
+						Double percent=DecimalToText.getDouble(loc.getPercent());
+                                                if(percent==null){
+						percent=new Double(0);
+                                                }
+                                                actLoc.setLocationPercentage(percent.floatValue());
 						locations.add(actLoc);
 						//locations.add(ampLoc);
 						//AMP-2250

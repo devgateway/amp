@@ -1488,7 +1488,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                 if (ampLoc.getAmpWoreda() != null) {
                   loc.setWoreda(ampLoc.getAmpWoreda().getName());
                 }
-                loc.setPercent(actLoc.getLocationPercentage());
+                loc.setPercent(DecimalToText.ConvertDecimalToText(actLoc.getLocationPercentage()));
                 locColl.add(loc);
             }
             

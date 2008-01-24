@@ -866,7 +866,7 @@ if (tm != null && tm.getTeamType()
                   location.setWoredaId(loc.getAmpWoreda()
                                        .getAmpWoredaId());
                 }
-                location.setPercent(actLoc.getLocationPercentage());
+                location.setPercent(DecimalToText.ConvertDecimalToText(actLoc.getLocationPercentage()));
                 locs.add(location);
               }
             }

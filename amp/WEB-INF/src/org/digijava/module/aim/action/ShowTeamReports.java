@@ -92,7 +92,7 @@ public class ShowTeamReports extends Action {
 				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(),true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
 				rf.setTotalPages(totalPages.intValue());
 			}else{
-				teamLeadResults = TeamUtil.getAllTeamReports(tm.getTeamId(),null, null,true,tm.getTeamId());				
+				teamLeadResults = TeamUtil.getAllTeamReports(tm.getTeamId(),null, null,true,tm.getMemberId());			
 		
 			}
 			

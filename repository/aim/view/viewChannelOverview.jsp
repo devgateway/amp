@@ -658,8 +658,8 @@ function commentWin(val) {
 																		<field:display name="Description" feature="Identification">
 																		<i><b><digi:trn
 																			key="aim:programDescription">Description</digi:trn></b></i>:
-																		<digi:edit key="${activity.description}" /><br/>
-																		</field:display>
+																			<digi:edit key="${activity.description}" /><br/>
+																			</field:display>
 																		<field:display feature="Identification" name="Objectives">
 																		<i><b><digi:trn
 																			key="aim:programObjective">Objective</digi:trn></b></i>:
@@ -886,7 +886,7 @@ function commentWin(val) {
 																							<c:forEach var="relOrg"
 																								items="${activity.relOrgs}">
 																								<c:if test="${relOrg.role == 'DN'}">
-                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request"/>
+                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request" scope="request"/>
 																								<%-- 	<bean:define id="currentOrg" name="relOrg"
 																											type="org.digijava.module.aim.helper.RelOrganization"
 																											toScope="request" />--%>
@@ -918,7 +918,7 @@ function commentWin(val) {
 																							<c:forEach var="relOrg"
 																								items="${activity.relOrgs}">
 																								<c:if test="${relOrg.role == 'EA'}">
-                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request"/>
+                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request" scope="request"/>
 																									<%-- <li><c:out value="${relOrg.orgName}" /></li><br>
 																									<bean:define id="currentOrg" name="relOrg"
 																											type="org.digijava.module.aim.helper.RelOrganization"
@@ -948,7 +948,7 @@ function commentWin(val) {
 																							<c:forEach var="relOrg"
 																								items="${activity.relOrgs}">
 																								<c:if test="${relOrg.role == 'IA'}">
-                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request"/>
+                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request" scope="request"/>
 																									<%-- <bean:define id="currentOrg" name="relOrg"
 																											type="org.digijava.module.aim.helper.RelOrganization"
 																											toScope="request" />--%>
@@ -977,6 +977,7 @@ function commentWin(val) {
 																							<c:forEach var="relOrg"
 																								items="${activity.relOrgs}">
 																								<c:if test="${relOrg.role == 'BA'}">
+																								<c:set var="currentOrg" value="${relOrg}" target="request" scope="request"/>
 																									<%--<bean:define id="currentOrg" name="relOrg"
 																											type="org.digijava.module.aim.helper.RelOrganization"
 																											toScope="request" />--%>
@@ -1005,7 +1006,7 @@ function commentWin(val) {
 																							<c:forEach var="relOrg"
 																								items="${activity.relOrgs}">
 																								<c:if test="${relOrg.role == 'CA'}">
-                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request"/>
+                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request" scope="request"/>
 																									<%--<bean:define id="currentOrg" name="relOrg"
 																											type="org.digijava.module.aim.helper.RelOrganization"
 																											toScope="request" />--%>
@@ -1034,7 +1035,7 @@ function commentWin(val) {
 																							<c:forEach var="relOrg"
 																								items="${activity.relOrgs}">
 																								<c:if test="${relOrg.role == 'RG'}">
-                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request"/>
+                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request" scope="request"/>
 																									<%--<bean:define id="currentOrg" name="relOrg"
 																											type="org.digijava.module.aim.helper.RelOrganization"
 																											toScope="request" />--%>
@@ -1064,7 +1065,7 @@ function commentWin(val) {
 																							<c:forEach var="relOrg"
 																								items="${activity.relOrgs}">
 																								<c:if test="${relOrg.role == 'SG'}">
-                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request"/>
+                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request" scope="request"/>
 																									<%--<bean:define id="currentOrg" name="relOrg"
 																											type="org.digijava.module.aim.helper.RelOrganization"
 																											toScope="request" />--%>

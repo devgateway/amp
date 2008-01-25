@@ -22,6 +22,7 @@ public class AllPrgIndicators implements Serializable
 	private Collection themes;
 	private Collection sector;
 	private Collection activity;
+	private Long activityId;
 	private String sectorName;
 	
 	private Float baseVal;  // BASE
@@ -299,5 +300,11 @@ public class AllPrgIndicators implements Serializable
 	}
 	public void setCurrentValComments(String currentValComments) {
 		this.currentValComments = currentValComments;
+	}
+	public Long getActivityId() {
+		return activityId;
+	}
+	public void setActivityId(Long activityId) {
+		this.activityId = activityId;
 	}
 }

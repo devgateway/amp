@@ -59,30 +59,30 @@ public class GetActivityIndicatorValues extends Action
 					{
 						
 						
-						ActivityIndicator actIndicator = (ActivityIndicator) itr.next();
-						if (actIndicator.getIndicatorValId().equals(indValId)) 
+						ActivityIndicator actInd = (ActivityIndicator) itr.next();
+						if (actInd.getIndicatorId().equals(indValId)) 
 						{
-							AllPrgIndicators actInd = IndicatorUtil.getAmpIndicator(actIndicator.getIndicatorId());
+							//AllPrgIndicators actInd = IndicatorUtil.getAmpIndicator(actIndicator.getIndicatorId(),actIndicator.getActivityId());
 							
 							SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 							
 							
-							eaForm.setIndicatorId(eaForm.getIndicatorId());
+							eaForm.setIndicatorId(actInd.getIndicatorId());
 							//eaForm.setIndicatorValId(actInd.getIndicatorValId());
 							eaForm.setExpIndicatorId(actInd.getIndicatorId());
 							eaForm.setBaseVal(actInd.getBaseVal());
-							actIndicator.setBaseVal(actInd.getBaseVal());
+							//actIndicator.setBaseVal(actInd.getBaseVal());
 							if(actInd.getBaseValDate() != null){
-					     		actIndicator.setBaseValDate(formatter.format(actInd.getBaseValDate()));
+					     		eaForm.setBaseValDate(actInd.getBaseValDate());
 							}else{
 								eaForm.setBaseValDate(null);
 							}
 							eaForm.setBaseValComments(actInd.getBaseValComments());
 							eaForm.setTargetVal(actInd.getTargetVal());
-							actIndicator.setTargetVal(actInd.getTargetVal());
+							eaForm.setTargetVal(actInd.getTargetVal());
 							if(actInd.getTargetValDate() != null){
 							     //eaForm.setTargetValDate(formatter.format(actInd.getTargetValDate()));
-							     actIndicator.setTargetValDate(formatter.format(actInd.getTargetValDate()));
+							     eaForm.setTargetValDate(actInd.getTargetValDate());
 							}else{
 								eaForm.setTargetValDate(null);
 							}
@@ -90,23 +90,24 @@ public class GetActivityIndicatorValues extends Action
 							eaForm.setRevTargetVal(actInd.getRevisedTargetVal());
 							if(actInd.getRevisedTargetValDate() != null){
 							//eaForm.setRevTargetValDate(formatter.format(actInd.getRevisedTargetValDate()));
-							actIndicator.setRevisedTargetValDate(formatter.format(actInd.getRevisedTargetValDate()));
+							eaForm.setRevTargetValDate(actInd.getRevisedTargetValDate());
 							}else{
 								eaForm.setRevTargetValDate(null);
 							}
 							eaForm.setRevTargetValComments(actInd.getRevisedTargetValComments());
-							eaForm.setLogframeCategory(new Long(actInd.getCategory()));
-							
+							if(actInd.getIndicatorsCategory()!=null){
+							eaForm.setLogframeCategory(actInd.getIndicatorsCategory().getId());
+							}
 							if(actInd.getCurrentValDate() != null) {
-								//eaForm.setCurrentValDate(formatter.format(actInd.getCurrentValDate()));
-								actIndicator.setCurrentValDate(formatter.format(actInd.getCurrentValDate()));
+								eaForm.setCurrentValDate(actInd.getCurrentValDate());
+								//actIndicator.setCurrentValDate(formatter.format(actInd.getCurrentValDate()));
 							}else{
 							    eaForm.setCurrentValDate(null);
 							}
   							   eaForm.setCurrentValComments(actInd.getCurrentValComments());
 							
 							if(actInd.getRisk()!= null){
-								eaForm.setIndicatorRisk(actInd.getRisk().getAmpIndRiskRatingsId());
+								eaForm.setIndicatorRisk(actInd.getRisk());
 							   
 							}else{
 								eaForm.setIndicatorRisk(null);
@@ -122,15 +123,15 @@ public class GetActivityIndicatorValues extends Action
 //									
 //									
 //								}
-								actIndicator.setCurrentValDate(formatter.format(actInd.getActualValDate()));
+								//eaForm.setCurrentValDate(formatter.format(actInd.getActualValDate()));
 							}else{
-								actIndicator.setActualValDate(null);
+								//actIndicator.setActualValDate(null);
 							}
 							
-							actIndicator.setActualVal(actInd.getActualVal());
+							//actIndicator.setActualVal(actInd.getActualVal());
 							eaForm.setCurrentValComments(actInd.getActualValComments());
 							if(actInd.getRisk() != null){
-							eaForm.setIndicatorRisk(actInd.getRisk().getAmpIndRiskRatingsId());
+							eaForm.setIndicatorRisk(actInd.getRisk());
 							}else{
 								eaForm.setIndicatorRisk(new Long(0));
 							}

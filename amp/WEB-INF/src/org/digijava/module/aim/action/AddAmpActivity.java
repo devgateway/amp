@@ -1162,8 +1162,9 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
 
         eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorsList(eaForm.getActivityId()));
        
-        for(Iterator itr = IndicatorUtil.getAllDefaultIndicators().iterator(); itr.hasNext();){
+        for(Iterator itr = IndicatorUtil.getAllDefaultIndicators(eaForm.getActivityId()).iterator(); itr.hasNext();){
         	ActivityIndicator actInd = (ActivityIndicator) itr.next();
+        	actInd.setActivityId(eaForm.getActivityId());
            eaForm.getIndicatorsME().add(actInd); 	
         }
         if (!eaForm.isEditAct()) {

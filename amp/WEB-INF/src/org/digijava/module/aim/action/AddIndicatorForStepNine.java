@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.helper.ActivityIndicator;
 
@@ -39,11 +40,11 @@ private static Logger logger = Logger.getLogger(AddIndicatorForStepNine.class);
 			AmpMEIndicatorValue tmpObj = (AmpMEIndicatorValue)itr.next();
 			ActivityIndicator actInd = new ActivityIndicator();
 			actInd.setActivityId(tmpObj.getActivityId().getAmpActivityId());
-			actInd.setIndicatorValId(new Long(-1));
-			name = tmpObj.getMeIndicatorId().getName();
-			code = tmpObj.getMeIndicatorId().getCode();
-			actInd.setIndicatorName(tmpObj.getMeIndicatorId().getName());
-			actInd.setIndicatorCode(tmpObj.getMeIndicatorId().getCode());
+			//actInd.setIndicatorValId(new Long(-1));
+			name = tmpObj.getIndicator().getName();
+			code = tmpObj.getIndicator().getCode();
+			actInd.setIndicatorName(name);
+			actInd.setIndicatorCode(code);
 			actInd.setBaseVal(null);
 			actInd.setBaseValDate(null);
 			actInd.setBaseValComments("");
@@ -57,7 +58,10 @@ private static Logger logger = Logger.getLogger(AddIndicatorForStepNine.class);
 			actInd.setCurrentValDate("");
 			actInd.setCurrentValComments("");
 			actInd.setRisk(new Long(-1));
-			actInd.setIndicatorId(tmpObj.getMeIndicatorId().getAmpMEIndId());
+			AmpIndicator ind=tmpObj.getIndicator();
+			if(ind!=null){
+			actInd.setIndicatorId(ind.getIndicatorId());
+			}
 			tmpActivityIndicator.add(actInd);
 		}
 		eaForm.setIndicatorsME(tmpActivityIndicator);

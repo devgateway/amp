@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -18,6 +19,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
+import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -149,23 +151,90 @@ public class IndicatorUtil {
 			tempPrgInd.setCategory(tempInd.getCategory());
 			tempPrgInd.setSector(tempInd.getSectors());
 			tempPrgInd.setActivity(tempInd.getActivity());
-			tempPrgInd.setActualVal(tempInd.getActualVal());
-			tempPrgInd.setActualValComments(tempInd.getActualValComments());
-			tempPrgInd.setActualValDate(tempInd.getActualValDate());
-			tempPrgInd.setBaseVal(tempInd.getBaseVal());
-			tempPrgInd.setBaseValComments(tempInd.getBaseValComments());
-			tempPrgInd.setBaseValDate(tempInd.getBaseValDate());
-			tempPrgInd.setTargetVal(tempInd.getTargetVal());
-			tempPrgInd.setTargetValComments(tempInd.getTargetValComments());
-			tempPrgInd.setTargetValDate(tempInd.getTargetValDate());
-			tempPrgInd.setRevisedTargetVal(tempInd.getRevisedTargetVal());
-			tempPrgInd.setRevisedTargetValComments(tempInd.getRevisedTargetValComments());
-			tempPrgInd.setRevisedTargetValDate(tempInd.getRevisedTargetValDate());
+//			tempPrgInd.setActualVal(tempInd.getActualVal());
+//			tempPrgInd.setActualValComments(tempInd.getActualValComments());
+//			tempPrgInd.setActualValDate(tempInd.getActualValDate());
+//			tempPrgInd.setBaseVal(tempInd.getBaseVal());
+//			tempPrgInd.setBaseValComments(tempInd.getBaseValComments());
+//			tempPrgInd.setBaseValDate(tempInd.getBaseValDate());
+//			tempPrgInd.setTargetVal(tempInd.getTargetVal());
+//			tempPrgInd.setTargetValComments(tempInd.getTargetValComments());
+//			tempPrgInd.setTargetValDate(tempInd.getTargetValDate());
+//			tempPrgInd.setRevisedTargetVal(tempInd.getRevisedTargetVal());
+//			tempPrgInd.setRevisedTargetValComments(tempInd.getRevisedTargetValComments());
+//			tempPrgInd.setRevisedTargetValDate(tempInd.getRevisedTargetValDate());
 			tempPrgInd.setRisk(tempInd.getRisk());
 			tempPrgInd.setIndicatorsCategory(tempInd.getIndicatorsCategory());
 			
 			
 			session.flush();
+		} catch (Exception e) {
+			logger.error("Unable to get the specified Indicator");
+			logger.debug("Exception : " + e);
+		}
+		return tempPrgInd;
+	}
+	
+	public static Object getAmpMEIndicatorValue(Long indId, Long actId){
+		Session session = null;
+		Query q = null;
+		String queryString = null;
+		Object val=null;
+		try {
+		if(actId!=null){
+		session = PersistenceManager.getRequestDBSession();
+		queryString = " select val from "
+				+ AmpMEIndicatorValue.class.getName()
+				+ " val where val.indicator=:indId and val.activityId=:actId";
+		q = session.createQuery(queryString);
+		q.setLong("indId", indId);
+		q.setLong("actId", actId);
+		val=q.uniqueResult();
+		}
+		}
+		catch (Exception e) {
+			logger.error("Unable to get the specified Indicator");
+			logger.debug("Exception : " + e);
+		}
+		return val;
+		
+	}
+
+	public static AllPrgIndicators getAmpIndicator(Long indId, Long actId) {
+		Session session = null;
+		AllPrgIndicators tempPrgInd = new AllPrgIndicators();
+		AmpIndicator tempInd=null;
+
+		try {
+			Object val=getAmpMEIndicatorValue(indId, actId);
+			if(val!=null){
+			AmpMEIndicatorValue value = (AmpMEIndicatorValue) val;
+			tempInd = value.getIndicator();
+			tempPrgInd.setActualVal(value.getActualVal());
+			tempPrgInd.setActualValComments(value.getActualValComments());
+			tempPrgInd.setActualValDate(value.getActualValDate());
+			tempPrgInd.setBaseVal(value.getBaseVal());
+			tempPrgInd.setBaseValComments(value.getBaseValComments());
+			tempPrgInd.setBaseValDate(value.getBaseValDate());
+			tempPrgInd.setTargetVal(value.getTargetVal());
+			tempPrgInd.setTargetValComments(value.getTargetValComments());
+			tempPrgInd.setTargetValDate(value.getTargetValDate());
+			tempPrgInd.setRevisedTargetVal(value.getRevisedTargetVal());
+			tempPrgInd.setRevisedTargetValComments(value
+					.getRevisedTargetValComments());
+			tempPrgInd.setRevisedTargetValDate(value.getRevisedTargetValDate());
+			}
+			else{
+				session = PersistenceManager.getRequestDBSession();
+				tempInd=(AmpIndicator) session.load(
+						AmpIndicator.class, indId);
+			}
+			tempPrgInd.setIndicatorId(tempInd.getIndicatorId());
+			tempPrgInd.setName(tempInd.getName());
+			tempPrgInd.setCode(tempInd.getCode());
+			tempPrgInd.setRisk(tempInd.getRisk());
+			tempPrgInd.setIndicatorsCategory(tempInd.getIndicatorsCategory());
+			
 		} catch (Exception e) {
 			logger.error("Unable to get the specified Indicator");
 			logger.debug("Exception : " + e);
@@ -267,7 +336,7 @@ public class IndicatorUtil {
 		return col;
 	}
 
-	public static Collection getAllDefaultIndicators() {
+	public static Collection getAllDefaultIndicators(Long ampActivityId) {
 		Session session = null;
 		Collection<ActivityIndicator> coll = new ArrayList();
 		Query qry = null;
@@ -285,9 +354,46 @@ public class IndicatorUtil {
 				ampIndicator = (AmpIndicator) iter.next();
 				ActivityIndicator actInd = new ActivityIndicator();
 				actInd.setIndicatorId(ampIndicator.getIndicatorId());
+				Object val=getAmpMEIndicatorValue(ampIndicator.getIndicatorId(), ampActivityId);
+				if(val!=null){
+					AmpMEIndicatorValue value = (AmpMEIndicatorValue) val;
+					actInd.setIndicatorValId(value.getAmpMeIndValId());
+					
+					
+					//================
+					SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+						
+					actInd.setActualVal(value.getActualVal());
+					actInd.setActualValComments(value.getActualValComments());
+					actInd.setActualValDate(formatter.format(value.getActualValDate()));
+					
+
+					actInd.setCurrentVal(value.getActualVal());
+					actInd.setCurrentValComments(value.getActualValComments());
+					actInd.setCurrentValDate(formatter.format(value.getActualValDate()));
+					
+					actInd.setBaseVal(value.getBaseVal());
+					actInd.setBaseValComments(value.getBaseValComments());
+					actInd.setBaseValDate(formatter.format(value.getBaseValDate()));
+					actInd.setTargetVal(value.getTargetVal());
+					actInd.setTargetValComments(value.getTargetValComments());
+					actInd.setTargetValDate(formatter.format(value.getTargetValDate()));
+					actInd.setRevisedTargetVal(value.getRevisedTargetVal());
+					actInd.setRevisedTargetValComments(value
+							.getRevisedTargetValComments());
+					actInd.setRevisedTargetValDate(formatter.format(value.getRevisedTargetValDate()));
+					if(value.getRisk()!=null){
+					actInd.setRisk(value.getRisk().getAmpIndRiskRatingsId());
+					}
+					actInd.setIndicatorsCategory(value.getIndicatorsCategory());
+						
+					//	===================
+							
+					
+				}
 				actInd.setIndicatorCode(ampIndicator.getCode());
 				actInd.setIndicatorName(ampIndicator.getName());
-				actInd.setIndicatorValId(ampIndicator.getIndicatorId() + 1);
+				//actInd.setIndicatorValId(ampIndicator.getIndicatorId() + 1);
 				coll.add(actInd);
 			}
 
@@ -298,18 +404,20 @@ public class IndicatorUtil {
 		}
 		return coll;
 	}
+	
+	
 
-	public static Collection getActivityIndicatorsList(Long AmpActivityId) {
+	public static Collection getActivityIndicatorsList(Long ampActivityId) {
 
 		Session session = null;
 		Query qry = null;
 		AmpActivity tempAmpactivity = null;
 		Collection coll = new ArrayList();
 		try {
-
+			if(ampActivityId!=null&&ampActivityId>0){
 			session = PersistenceManager.getRequestDBSession();
 			tempAmpactivity = (AmpActivity) session.load(AmpActivity.class,
-					AmpActivityId);
+					ampActivityId);
 			Set activityIndiSet = tempAmpactivity.getIndicators();
 			Iterator itrIndSet = activityIndiSet.iterator();
 			while (itrIndSet.hasNext()) {
@@ -319,8 +427,50 @@ public class IndicatorUtil {
 				actInd.setIndicatorId(ampThemeIndId);
 				actInd.setIndicatorCode(tempThemeInd.getCode());
 				actInd.setIndicatorName(tempThemeInd.getName());
-				actInd.setIndicatorValId(tempThemeInd.getIndicatorId() + 1);
+				Object val=getAmpMEIndicatorValue(ampThemeIndId,ampActivityId);
+				if(val!=null){
+				AmpMEIndicatorValue value = (AmpMEIndicatorValue) val;
+				actInd.setIndicatorValId(value.getAmpMeIndValId());
+				
+				
+				//================
+				SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+					
+				actInd.setActualVal(value.getActualVal());
+				actInd.setActualValComments(value.getActualValComments());
+				actInd.setActualValDate(formatter.format(value.getActualValDate()));
+				
+				actInd.setCurrentVal(value.getActualVal());
+				actInd.setCurrentValComments(value.getActualValComments());
+				actInd.setCurrentValDate(formatter.format(value.getActualValDate()));
+				
+				
+				actInd.setBaseVal(value.getBaseVal());
+				actInd.setBaseValComments(value.getBaseValComments());
+				actInd.setBaseValDate(formatter.format(value.getBaseValDate()));
+				actInd.setTargetVal(value.getTargetVal());
+				actInd.setTargetValComments(value.getTargetValComments());
+				actInd.setTargetValDate(formatter.format(value.getTargetValDate()));
+				actInd.setRevisedTargetVal(value.getRevisedTargetVal());
+				actInd.setRevisedTargetValComments(value
+						.getRevisedTargetValComments());
+				actInd.setRevisedTargetValDate(formatter.format(value.getRevisedTargetValDate()));
+				if(value.getRisk()!=null){
+				actInd.setRisk(value.getRisk().getAmpIndRiskRatingsId());
+				}
+				actInd.setIndicatorsCategory(value.getIndicatorsCategory());
+					
+				//	===================
+						
+				
+				
+				
+				
+				
+				}
+				actInd.setActivityId(ampActivityId);
 				coll.add(actInd);
+			}
 			}
 		}
 

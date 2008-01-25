@@ -20,6 +20,7 @@ public class AmpMEIndicatorValue {
 	private String revisedTargetValComments;
 	private Date revisedTargetValDate;
 	private String comments;
+	private AmpIndicator indicator;
 	//private Long logframeValueId;
 	
 	private AmpCategoryValue indicatorsCategory;
@@ -234,5 +235,11 @@ public class AmpMEIndicatorValue {
 	}
 	public void setIndicatorsCategory(AmpCategoryValue indicatorsCategory) {
 		this.indicatorsCategory = indicatorsCategory;
+	}
+	public AmpIndicator getIndicator() {
+		return indicator;
+	}
+	public void setIndicator(AmpIndicator indicator) {
+		this.indicator = indicator;
 	}
 }

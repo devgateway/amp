@@ -5,7 +5,6 @@ import java.lang.Comparable;
 import java.util.Date;
 import java.util.Set;
 
-
 public class AmpIndicator implements Serializable
 {
 	private Long indicatorId;
@@ -19,21 +18,8 @@ public class AmpIndicator implements Serializable
 	private Set themes;
 	private Set sectors;
 	private Set activity;
-	
-	
-	private Float baseVal;  // BASE
-	private Date baseValDate;
-	private String baseValComments;
-	private Float actualVal;  // ACTUAL
-	private Date actualValDate;
-	private String actualValComments;
-	private Float targetVal; // TARGET
-	private Date targetValDate;
-	private String targetValComments;
-	private Float revisedTargetVal; // Revised TARGET
-	private String revisedTargetValComments;
-	private Date revisedTargetValDate;
 	private String comments;
+	
 	
 	private AmpCategoryValue indicatorsCategory;
 
@@ -106,84 +92,7 @@ public class AmpIndicator implements Serializable
 	public void setDefaultInd(boolean defaultInd) {
 		this.defaultInd = defaultInd;
 	}
-	public Float getBaseVal() {
-		return baseVal;
-	}
-	public void setBaseVal(Float baseVal) {
-		this.baseVal = baseVal;
-	}
-	public Date getBaseValDate() {
-		return baseValDate;
-	}
-	public void setBaseValDate(Date baseValDate) {
-		this.baseValDate = baseValDate;
-	}
-	public String getBaseValComments() {
-		return baseValComments;
-	}
-	public void setBaseValComments(String baseValComments) {
-		this.baseValComments = baseValComments;
-	}
-	public Float getActualVal() {
-		return actualVal;
-	}
-	public void setActualVal(Float actualVal) {
-		this.actualVal = actualVal;
-	}
-	public Date getActualValDate() {
-		return actualValDate;
-	}
-	public void setActualValDate(Date actualValDate) {
-		this.actualValDate = actualValDate;
-	}
-	public String getActualValComments() {
-		return actualValComments;
-	}
-	public void setActualValComments(String actualValComments) {
-		this.actualValComments = actualValComments;
-	}
-	public Float getTargetVal() {
-		return targetVal;
-	}
-	public void setTargetVal(Float targetVal) {
-		this.targetVal = targetVal;
-	}
-	public Date getTargetValDate() {
-		return targetValDate;
-	}
-	public void setTargetValDate(Date targetValDate) {
-		this.targetValDate = targetValDate;
-	}
-	public String getTargetValComments() {
-		return targetValComments;
-	}
-	public void setTargetValComments(String targetValComments) {
-		this.targetValComments = targetValComments;
-	}
-	public String getRevisedTargetValComments() {
-		return revisedTargetValComments;
-	}
-	public void setRevisedTargetValComments(String revisedTargetValComments) {
-		this.revisedTargetValComments = revisedTargetValComments;
-	}
-	public Date getRevisedTargetValDate() {
-		return revisedTargetValDate;
-	}
-	public void setRevisedTargetValDate(Date revisedTargetValDate) {
-		this.revisedTargetValDate = revisedTargetValDate;
-	}
-	public String getComments() {
-		return comments;
-	}
-	public void setComments(String comments) {
-		this.comments = comments;
-	}
-	public Float getRevisedTargetVal() {
-		return revisedTargetVal;
-	}
-	public void setRevisedTargetVal(Float revisedTargetVal) {
-		this.revisedTargetVal = revisedTargetVal;
-	}
+
 	public AmpCategoryValue getIndicatorsCategory() {
 		return indicatorsCategory;
 	}
@@ -195,6 +104,12 @@ public class AmpIndicator implements Serializable
 	}
 	public void setRisk(AmpIndicatorRiskRatings risk) {
 		this.risk = risk;
+	}
+	public String getComments() {
+		return comments;
+	}
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 	
 	

@@ -13,6 +13,7 @@ import java.util.*;
 
 import org.digijava.module.aim.form.IndicatorForm;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.util.DbUtil;
@@ -33,8 +34,10 @@ public class AddIndicatorsTL extends Action {
 		AmpMEIndicatorValue ampMEIndValbox = null;
 		AmpMEIndicatorValue ampMEIndValsearch = null;
 		AmpMEIndicators ampMEIndbox = null;
+		AmpIndicator ampInd=null;
 		AmpMEIndicators ampMEIndsearch = null;
 		AmpActivity ampAct = new AmpActivity();
+		
 		
 		ampAct.setAmpActivityId(indForm.getActivityId());
 		Collection col = new ArrayList();
@@ -44,11 +47,16 @@ public class AddIndicatorsTL extends Action {
 				for (int i = 0; i < selectedIndicators.length; i++) {
 					ampMEIndValbox = new AmpMEIndicatorValue();
 					ampMEIndbox = new AmpMEIndicators();
+					ampInd=new AmpIndicator();
 					ampMEIndbox.setAmpMEIndId(selectedIndicators[i]);
 					ampMEIndbox.setName(IndicatorUtil.getIndicatorName(selectedIndicators[i]));
 					ampMEIndbox.setCode(IndicatorUtil.getIndicatorCode(selectedIndicators[i]));
+					ampInd.setIndicatorId(selectedIndicators[i]);
+					ampInd.setName(IndicatorUtil.getIndicatorName(selectedIndicators[i]));
+					ampInd.setCode(IndicatorUtil.getIndicatorCode(selectedIndicators[i]));
 					ampMEIndValbox.setActivityId(ampAct);
 					ampMEIndValbox.setMeIndicatorId(ampMEIndbox);
+					ampMEIndValbox.setIndicator(ampInd);
 					ampMEIndValbox.setBaseVal(null);
 					ampMEIndValbox.setTargetVal(null);
 					ampMEIndValbox.setActualVal(null);

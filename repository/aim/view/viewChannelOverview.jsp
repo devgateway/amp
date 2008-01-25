@@ -102,11 +102,11 @@ function commentWin(val) {
 </script>
 
 
-
+<digi:instance property="aimChannelOverviewForm" />
 <digi:form action="/viewChannelOverview.do"
 	name="aimChannelOverviewForm"
 	type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
-	<digi:instance property="aimChannelOverviewForm" />
+
 
 	<html:hidden property="id" />
 	<input type="hidden" name="currUrl1">
@@ -128,7 +128,7 @@ function commentWin(val) {
 					align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 					<TR>
 						<TD bgcolor="#f4f4f4">
-                          <bean:define id="activity"	property="activity" name="aimChannelOverviewForm" />
+                          <c:set var="activity" value="${aimChannelOverviewForm.activity}" />
 
 						<TABLE width="100%" cellSpacing=1 cellPadding=3 vAlign="top"
 							align="center" bgcolor="#f4f4f4">
@@ -141,7 +141,8 @@ function commentWin(val) {
 											id="urlChannelOverview" type="java.util.Map"
 											class="java.util.HashMap" /> <c:set
 											target="${urlChannelOverview}" property="ampActivityId">
-											<bean:write name="aimChannelOverviewForm" property="ampActivityId" />
+                                            ${aimChannelOverviewForm.ampActivityId}
+
 										</c:set>
                                         <c:set target="${urlChannelOverview}" property="tabIndex" value="0" /> <c:set var="translation">
 											<digi:trn key="aim:clickToViewChannelOverview">Click here to view Channel Overview</digi:trn>
@@ -150,11 +151,13 @@ function commentWin(val) {
 											title="${translation}">
 											<digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
 										</digi:link>&nbsp;&gt;&nbsp;<digi:trn key="aim:actOverview">Overview</digi:trn><logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&nbsp;&gt;&nbsp;
-										<bean:define id="perspectiveNameLocal" name="aimChannelOverviewForm" property="perspective"
-										type="java.lang.String"/>
+										<c:set var="perspectiveNameLocal" value="${aimChannelOverviewForm.perspective}" />
+
+
 											<logic:notEmpty name="aimChannelOverviewForm" property="perspective">
-												<digi:trn key='<%="aim:"+ perspectiveNameLocal %>'>
-													<bean:write name="aimChannelOverviewForm" property="perspective"/></digi:trn>
+												<digi:trn key="aim:${perspectiveNameLocal}">
+                                                    ${aimChannelOverviewForm.perspective}
+                                                </digi:trn>
 											</logic:notEmpty>
 										&nbsp;
 										<digi:trn key="aim:perspective">Perspective</digi:trn></logic:equal> </SPAN></TD>
@@ -195,7 +198,7 @@ function commentWin(val) {
 																				<digi:trn key="aim:validate">Validate</digi:trn>
 																			</html:button>
 																		</td>
-			
+
 																	</c:if>
 							                                        <%--<c:if test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
 							                                        	<td >
@@ -203,7 +206,7 @@ function commentWin(val) {
 																				<digi:trn key="aim:approvalAwaited">Approval Awaited</digi:trn>
 																			</html:button>
 							                                        	</td>
-			
+
 																	</c:if> --%>
 																</field:display>
 															</feature:display>
@@ -257,10 +260,12 @@ function commentWin(val) {
 										</c:if> <c:if test="${activity.status != 'Planned'}">
 											<b><digi:trn key="aim:totalCostOfActivity">
 										Total Cost Of Activity</digi:trn> : </b>
-										</c:if> <bean:write name="aimChannelOverviewForm"
-											property="grandTotal" /> <bean:write
-											name="aimChannelOverviewForm" property="currCode" /> <FONT
-											color="blue">( <digi:trn key="aim:enteredInThousands">Entered in thousands 000</digi:trn>)</FONT>
+										</c:if>
+                                        ${aimChannelOverviewForm.grandTotal}
+                                        ${aimChannelOverviewForm.currCode}
+                                        <FONT color="blue">
+                                          ( <digi:trn key="aim:enteredInThousands">Entered in thousands 000</digi:trn>)
+                                        </FONT>
 										</TD>
 									</TR>
 								</TABLE>
@@ -283,7 +288,7 @@ function commentWin(val) {
 										</TABLE>
 										</TD>
 									</TR>
-									
+
                                     <TR>
 										<TD width="100%" bgcolor="#F4F4F2" align="center">
 										<TABLE width="100%" cellPadding="2" cellSpacing="2"
@@ -304,11 +309,11 @@ function commentWin(val) {
 																	src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																	<b><digi:trn key="aim:ampId">AMP ID</digi:trn></b>
 																</TD>
-															</TR>	
+															</TR>
 															<TR>
 																<TD bgcolor="#ffffff">
 																	&nbsp;&nbsp;&nbsp;<c:out value="${activity.ampId}" />
-																</TD> 
+																</TD>
 															</TR>
 															<TR>
 																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
@@ -332,7 +337,7 @@ function commentWin(val) {
 														</TABLE>
 														</TD>
 													</TR>
-												
+
 															<field:display name="Status" feature="Planning">
 																<TR>
 																	<TD>
@@ -366,7 +371,7 @@ function commentWin(val) {
 																				<b><digi:trn key="aim:actBudget">Budget</digi:trn></b>
 																			</TD></TR>
 																			<TR><TD bgcolor="#ffffff">
-																				<logic:equal name="activity" property="budget" value="true">
+                                                                              <c:if test="${activity.budget}">
 																				<table>
 																				<tr>
 																					<td>
@@ -381,7 +386,7 @@ function commentWin(val) {
 																					<digi:trn key="aim:actFY">
 																					FY
 																					</digi:trn>:
-																					<c:out value="${activity.FY}"/>
+																					${activity.FY}
 																					</td>
 																				</tr>
 																				</field:display>
@@ -391,7 +396,7 @@ function commentWin(val) {
 																					<digi:trn key="aim:actVote">
 																					Vote
 																					</digi:trn>:
-																					<c:out value="${activity.vote}"/>
+																					${activity.vote}
 																					</td>
 																				</tr>
 																				</field:display>
@@ -401,7 +406,7 @@ function commentWin(val) {
 																					<digi:trn key="aim:actSub-Vote">
 																					Sub-Vote
 																					</digi:trn>:
-																					<c:out value="${activity.subVote}"/>
+																					${activity.subVote}
 																					</td>
 																				</tr>
 																				</field:display>
@@ -411,7 +416,7 @@ function commentWin(val) {
 																					<digi:trn key="aim:actSub-Program">
 																					Sub-Program
 																					</digi:trn>:
-																					<c:out value="${activity.subProgram}"/>
+																					${activity.subProgram}
 																					</td>
 																				</tr>
 																				</field:display>
@@ -421,7 +426,7 @@ function commentWin(val) {
 																					<digi:trn key="aim:actProjectCode">
 																					Project Code
 																					</digi:trn>:
-																					<c:out value="${activity.projectCode}"/>
+																					${activity.projectCode}
 																					</td>
 																				</tr>
 																				</field:display>
@@ -432,7 +437,7 @@ function commentWin(val) {
 																					Financial Instrument
 																					</digi:trn>:
 																					<!-- this part is to be replaced when the category manager is ready -->
-																					<c:out value="${activity.financialInstrument}"/>
+																					${activity.financialInstrument}
 																					</td>
 																				</tr>
 																				</field:display>
@@ -443,10 +448,10 @@ function commentWin(val) {
 																					Government Approval Procedures
 																					</digi:trn>:
 																					<c:if test="${activity.governmentApprovalProcedures==true}">
-																						<c:out value="Yes"/>
+																						Yes
 																					</c:if>
 																					<c:if test="${activity.governmentApprovalProcedures==false || activity.governmentApprovalProcedures==''}">
-																						<c:out value="No"/>
+																						No
 																					</c:if>
 																					</td>
 																				</tr>
@@ -467,17 +472,17 @@ function commentWin(val) {
 																				</tr>
 																				</field:display>
 																				</table>
-																				</logic:equal>
-																				<logic:equal name="activity" property="budget" value="false">
+																				</c:if>
+																				<c:if test="${!activity.budget}">
 																				<digi:trn key="aim:actBudgetoff">
 																						Activity is Off Budget
 																				</digi:trn>
-																				</logic:equal>
-																				<logic:equal name="activity" property="budget" value="">
+																				</c:if>
+                                                                                <c:if test="${empty activity.budget}">
 																				<digi:trn key="aim:actBudgetoff">
 																						Activity is Off Budget
 																				</digi:trn>
-																				</logic:equal>
+																				</c:if>
 																			</TD></TR>
 
 																		</TABLE>
@@ -528,7 +533,7 @@ function commentWin(val) {
 
 															</field:display>
 														</feature:display>
-                                                      
+
 														<feature:display module="Project ID and Planning" name="Location">
 																<TR>
 																	<TD>
@@ -594,7 +599,7 @@ function commentWin(val) {
 																	</TR>
 														</feature:display>
   													</module:display>
-													
+
 															<TR>
 																<TD>
 																<TABLE width="100%" cellPadding=3 cellSpacing=1
@@ -629,7 +634,7 @@ function commentWin(val) {
 																		</TD>
 																	</TR>
 											</field:display>
-                                            
+
                                             <field:display name="Secondary Program" feature="NPD Programs">
                                             <TR>
 																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
@@ -660,81 +665,69 @@ function commentWin(val) {
 																			key="aim:programObjective">Objective</digi:trn></b></i>:
 																		<digi:edit key="${activity.objective}"/>
 																		<ul>
-																		<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
-
-																		 	<logic:equal name="comments" property="key" value="Objective Assumption">
-																				<logic:iterate name="comments" id="comment" property="value"
-																					type="org.digijava.module.aim.dbentity.AmpComments">
-																					<li><i>
-																					<digi:trn key="aim:objectiveAssumption">Objective Assumption</digi:trn>:</i>
-																					<bean:write name="comment" property="comment"/></li>
-		                            						            		</logic:iterate>
-								                                        	</logic:equal>
-								                                        	<logic:equal name="comments" property="key" value="Objective Verification">
-																				<logic:iterate name="comments" id="comment" property="value"
-																					type="org.digijava.module.aim.dbentity.AmpComments">
-																					<li><i><digi:trn key="aim:objectiveVerification">Objective Verification</digi:trn>:</i>
-																					<bean:write name="comment" property="comment"/></li>
-								                                        		</logic:iterate>
-								                                        	</logic:equal>
-																		</logic:iterate>
+                                                                        <c:forEach var="comments" items="${aimChannelOverviewForm.allComments}">
+                                                                          <c:if test='${comments.key=="Objective Assumption"}'>
+                                                                            <c:forEach var="comment" items="${comments.value}">
+                                                                            <li><i><digi:trn key="aim:objectiveAssumption">Objective Assumption</digi:trn>:</i>
+                                                                            ${comment.comment}</li>
+                                                                            </c:forEach>
+                                                                          </c:if>
+                                                                          <c:if test='${comments.key=="Objective Verification"}'>
+                                                                            <c:forEach var="comment" items="${comments.value}">
+                                                                            <li><i><digi:trn key="aim:objectiveVerification">Objective Verification</digi:trn>:</i>
+                                                                            ${comment.comment}</li>
+                                                                            </c:forEach>
+                                                                          </c:if>
+                                                                        </c:forEach>
 																		</ul>
 																		</field:display>
 
 																		<field:display feature="Identification" name="Purpose">
-																		<logic:notEmpty name="activity" property="purpose">
-																			<i><b><digi:trn
-																				key="aim:programPurpose">Purpose</digi:trn></b></i>:
-																			<digi:edit key="${activity.purpose}" />
-																			<ul>
-																			<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
 
-																			 	<logic:equal name="comments" property="key" value="Purpose Assumption">
-																					<logic:iterate name="comments" id="comment" property="value"
-																						type="org.digijava.module.aim.dbentity.AmpComments">
-																						<li><i>
-																						<digi:trn key="aim:purposeAssumption">Purpose Assumption</digi:trn>:</i>
-																						<bean:write name="comment" property="comment"/></li>
-			                            						            		</logic:iterate>
-									                                        	</logic:equal>
-									                                        	<logic:equal name="comments" property="key" value="Purpose Verification">
-																					<logic:iterate name="comments" id="comment" property="value"
-																						type="org.digijava.module.aim.dbentity.AmpComments">
-																						<li><i><digi:trn key="aim:purposeVerification">Purpose Verification</digi:trn>:</i>
-																						<bean:write name="comment" property="comment"/></li>
-									                                        		</logic:iterate>
-									                                        	</logic:equal>
-																			</logic:iterate>
-																			</ul>
-																		</logic:notEmpty>
+                                                                        <c:if test="${!empty activity.purpose}">
+                                                                          <i><b><digi:trn	key="aim:programPurpose">Purpose</digi:trn></b></i>:
+                                                                          <digi:edit key="${activity.purpose}" />
+                                                                          <ul>
+                                                                          <c:forEach var="comments" items="${aimChannelOverviewForm.allComments}">
+                                                                            <c:if test='${comments.key=="Purpose Assumption"}'>
+                                                                              <c:forEach var="comment" items="${comments.value}">
+                                                                                <li><i><digi:trn key="aim:purposeAssumption">Purpose Assumption</digi:trn>:</i>
+                                                                                  ${comment.comment}</li>
+                                                                              </c:forEach>
+                                                                            </c:if>
+                                                                            <c:if test='${comments.key=="Purpose Verification"}'>
+                                                                              <c:forEach var="comment" items="${comments.value}">
+                                                                                <li><i><digi:trn key="aim:purposeVerification">Purpose Verification</digi:trn>:</i>
+                                                                                  ${comment.comment}</li>
+                                                                              </c:forEach>
+                                                                            </c:if>
+                                                                          </c:forEach>
+                                                                          </ul>
+                                                                          </c:if>
 																		</field:display>
 
 																		<field:display feature="Identification" name="Results">
-																		<logic:notEmpty name="activity" property="results">
-																			<i><b><digi:trn
-																				key="aim:programResults">Results</digi:trn></b></i>:
-																			<digi:edit key="${activity.results}" />
-																			<ul>
-																			<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
 
-																			 	<logic:equal name="comments" property="key" value="Results Assumption">
-																					<logic:iterate name="comments" id="comment" property="value"
-																						type="org.digijava.module.aim.dbentity.AmpComments">
-																						<li><i>
-																						<digi:trn key="aim:resultsAssumption">Results Assumption</digi:trn>:</i>
-																						<bean:write name="comment" property="comment"/></li>
-			                            						            		</logic:iterate>
-									                                        	</logic:equal>
-									                                        	<logic:equal name="comments" property="key" value="Results Verification">
-																					<logic:iterate name="comments" id="comment" property="value"
-																						type="org.digijava.module.aim.dbentity.AmpComments">
-																						<li><i><digi:trn key="aim:resultsVerification">Results Verification</digi:trn>:</i>
-																						<bean:write name="comment" property="comment"/></li>
-									                                        		</logic:iterate>
-									                                        	</logic:equal>
-																			</logic:iterate>
-																			</ul>
-																		</logic:notEmpty>
+                                                                          <c:if test="${!empty activity.results}">
+                                                                            <i><b><digi:trn	key="aim:programResults">Results</digi:trn></b></i>:
+                                                                            <digi:edit key="${activity.results}" />
+                                                                            <ul>
+                                                                              <c:forEach var="comments" items="${aimChannelOverviewForm.allComments}">
+                                                                                <c:if test='${comments.key=="Results Assumption"}'>
+                                                                                  <c:forEach var="comment" items="${comments.value}">
+                                                                                    <li><i><digi:trn key="aim:resultsAssumption">Results Assumption</digi:trn>:</i>
+                                                                                      ${comment.comment}</li>
+                                                                                  </c:forEach>
+                                                                                </c:if>
+                                                                                <c:if test='${comments.key=="Purpose Verification"}'>
+                                                                                  <c:forEach var="comment" items="${comments.value}">
+                                                                                    <li><i><digi:trn key="aim:resultsVerification">Results Verification</digi:trn>:</i>
+                                                                                      ${comment.comment}</li>
+                                                                                  </c:forEach>
+                                                                                </c:if>
+                                                                              </c:forEach>
+                                                                            </ul>
+                                                                          </c:if>
 																		</field:display>
 																		</TD>
 																	</TR>
@@ -744,8 +737,8 @@ function commentWin(val) {
 																</TD>
 															</TR>
 
-														
-													
+
+
 
 													<module:display name="Contact Information" parentModule="PROJECT MANAGEMENT">
 														<feature:display name="Donor Contact Information" module="Contact Information">
@@ -771,11 +764,9 @@ function commentWin(val) {
 																	<field:display feature="Donor Contact Information" name="Donor Email">
 																	<TR>
 																		<TD bgcolor="#ffffff"><i><digi:trn
-																			key="aim:contactPersonEmail">Email</digi:trn></i>: <bean:define
-																			id="mailTo">
-																				mailto:<c:out value="${activity.email}" />
-																		</bean:define> <a href="<%=mailTo%>"> <c:out
-																			value="${activity.email}" /></a></TD>
+																			key="aim:contactPersonEmail">Email</digi:trn></i>:
+                                                                            <c:set var="mailTo" value="mailto:${activity.email}" />
+                                                                            <a href="mailto:${activity.email}">${activity.email}</a></TD>
 																	</TR>
 																	</field:display>
 																</TABLE>
@@ -804,11 +795,10 @@ function commentWin(val) {
 																	<field:display feature="Mofed Contact Information" name="Mofed Email">
 																	<TR>
 																		<TD bgcolor="#ffffff"><i><digi:trn
-																			key="aim:contactPersonEmail">Email</digi:trn></i>: <bean:define
-																			id="mailTo">
-																				mailto:<c:out value="${activity.mfdContEmail}" />
-																		</bean:define> <a href="<%=mailTo%>"> <c:out
-																			value="${activity.mfdContEmail}" /></a></TD>
+																			key="aim:contactPersonEmail">Email</digi:trn></i>:
+
+
+                                                                        <a href="mailto:${activity.email}">${activity.email}</a></TD>
 																	</TR>
 																	</field:display>
 																</TABLE>
@@ -816,8 +806,7 @@ function commentWin(val) {
 															</TR>
 														</feature:display>
 													</module:display>
-
-													<logic:notEmpty name="activity" property="accessionInstrument">
+                                                    <c:if test="${!empty activity.accessionInstrument}">
 													<TR>
 														<TD>
 														<TABLE width="100%" cellPadding=3 cellSpacing=1
@@ -830,33 +819,33 @@ function commentWin(val) {
 															</TR>
 															<TR>
 																<TD bgcolor="#ffffff">
-																	<bean:write name="activity" property="accessionInstrument" />
+                                                                ${activity.accessionInstrument}
 																</TD>
 															</TR>
 														</TABLE>
 														</TD>
 													</TR>
-													</logic:notEmpty>
-													<logic:notEmpty name="activity" property="acChapter">
-													<TR>
-														<TD>
-														<TABLE width="100%" cellPadding=3 cellSpacing=1
-															vAlign="top" align="top" bgcolor="#aaaaaa">
-															<TR>
-																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
-																	src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																<b><digi:trn key="aim:acChapter">
-																	A.C. Chapter</digi:trn></b></TD>
-															</TR>
-															<TR>
-																<TD bgcolor="#ffffff">
-																	<bean:write name="activity" property="acChapter" />
-																</TD>
-															</TR>
-														</TABLE>
-														</TD>
-													</TR>
-													</logic:notEmpty>
+                                                    </c:if>
+                                                    <c:if test="${!empty activity.acChapter}">
+                                                      <TR>
+                                                        <TD>
+                                                          <TABLE width="100%" cellPadding=3 cellSpacing=1
+                                                          vAlign="top" align="top" bgcolor="#aaaaaa">
+                                                          <TR>
+                                                            <TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
+                                                            src="../ampTemplate/images/arrow-014E86.gif" width=15>
+                                                            <b><digi:trn key="aim:acChapter">
+                                                              A.C. Chapter</digi:trn></b></TD>
+                                                          </TR>
+                                                          <TR>
+                                                            <TD bgcolor="#ffffff">
+                                                            ${activity.acChapter}
+                                                            </TD>
+                                                          </TR>
+                                                          </TABLE>
+                                                            </TD>
+                                                      </TR>
+                                                    </c:if>
 												</TABLE>
 												</TD>
 												<TD width="50%" vAlign="top" align="left">
@@ -897,9 +886,10 @@ function commentWin(val) {
 																							<c:forEach var="relOrg"
 																								items="${activity.relOrgs}">
 																								<c:if test="${relOrg.role == 'DN'}">
-																									<bean:define id="currentOrg" name="relOrg"
+                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request"/>
+																								<%-- 	<bean:define id="currentOrg" name="relOrg"
 																											type="org.digijava.module.aim.helper.RelOrganization"
-																											toScope="request" />
+																											toScope="request" />--%>
 																											<jsp:include page="organizationPopup.jsp"/>
 																								</c:if>
 																							</c:forEach>
@@ -928,10 +918,11 @@ function commentWin(val) {
 																							<c:forEach var="relOrg"
 																								items="${activity.relOrgs}">
 																								<c:if test="${relOrg.role == 'EA'}">
-																									<%-- <li><c:out value="${relOrg.orgName}" /></li><br> --%>
+                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request"/>
+																									<%-- <li><c:out value="${relOrg.orgName}" /></li><br>
 																									<bean:define id="currentOrg" name="relOrg"
 																											type="org.digijava.module.aim.helper.RelOrganization"
-																											toScope="request" />
+																											toScope="request" />--%>
 																											<jsp:include page="organizationPopup.jsp"/>
 																								</c:if>
 																							</c:forEach>
@@ -957,9 +948,10 @@ function commentWin(val) {
 																							<c:forEach var="relOrg"
 																								items="${activity.relOrgs}">
 																								<c:if test="${relOrg.role == 'IA'}">
-																									<bean:define id="currentOrg" name="relOrg"
+                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request"/>
+																									<%-- <bean:define id="currentOrg" name="relOrg"
 																											type="org.digijava.module.aim.helper.RelOrganization"
-																											toScope="request" />
+																											toScope="request" />--%>
 																											<jsp:include page="organizationPopup.jsp"/>
 																								</c:if>
 																							</c:forEach>
@@ -985,9 +977,9 @@ function commentWin(val) {
 																							<c:forEach var="relOrg"
 																								items="${activity.relOrgs}">
 																								<c:if test="${relOrg.role == 'BA'}">
-																									<bean:define id="currentOrg" name="relOrg"
+																									<%--<bean:define id="currentOrg" name="relOrg"
 																											type="org.digijava.module.aim.helper.RelOrganization"
-																											toScope="request" />
+																											toScope="request" />--%>
 																											<jsp:include page="organizationPopup.jsp"/>
 																								</c:if>
 																							</c:forEach>
@@ -1013,9 +1005,10 @@ function commentWin(val) {
 																							<c:forEach var="relOrg"
 																								items="${activity.relOrgs}">
 																								<c:if test="${relOrg.role == 'CA'}">
-																									<bean:define id="currentOrg" name="relOrg"
+                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request"/>
+																									<%--<bean:define id="currentOrg" name="relOrg"
 																											type="org.digijava.module.aim.helper.RelOrganization"
-																											toScope="request" />
+																											toScope="request" />--%>
 																											<jsp:include page="organizationPopup.jsp"/>
 																								</c:if>
 																							</c:forEach>
@@ -1041,9 +1034,10 @@ function commentWin(val) {
 																							<c:forEach var="relOrg"
 																								items="${activity.relOrgs}">
 																								<c:if test="${relOrg.role == 'RG'}">
-																									<bean:define id="currentOrg" name="relOrg"
+                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request"/>
+																									<%--<bean:define id="currentOrg" name="relOrg"
 																											type="org.digijava.module.aim.helper.RelOrganization"
-																											toScope="request" />
+																											toScope="request" />--%>
 																											<jsp:include page="organizationPopup.jsp"/>
 																								</c:if>
 																							</c:forEach>
@@ -1070,9 +1064,10 @@ function commentWin(val) {
 																							<c:forEach var="relOrg"
 																								items="${activity.relOrgs}">
 																								<c:if test="${relOrg.role == 'SG'}">
-																									<bean:define id="currentOrg" name="relOrg"
+                                                                                                <c:set var="currentOrg" value="${relOrg}" target="request"/>
+																									<%--<bean:define id="currentOrg" name="relOrg"
 																											type="org.digijava.module.aim.helper.RelOrganization"
-																											toScope="request" />
+																											toScope="request" />--%>
 																											<jsp:include page="organizationPopup.jsp"/>
 																								</c:if>
 																							</c:forEach>

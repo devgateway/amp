@@ -178,27 +178,27 @@
 															<td width="100%">
 																<table width="634" border=0	 bgColor=#f4f4f2>
 																	<tr>
-																		<td height="30" width="220"><b>
-																			<digi:trn key="aim:organizationAcronym">Organization
-                                                                            Acrony</digi:trn></b>
-																		</td>																	
-																		<td height="30" width="220"><b>
+																		<td height="40" width="350"><b>
 																			<digi:trn key="aim:organizationName">Organization
                                                                             Name</digi:trn></b>
 																		</td>
-																	<%--<td height="30" width="171"><b>
+																		<td height="40" width="100"><b>
+																			<digi:trn key="aim:organizationAcronym">Organization
+                                                                            Acronym</digi:trn></b>
+																		</td>																	
+																	<%--<td height="40" width="171"><b>
 																			<digi:trn key="aim:organizationCountry">Country</digi:trn></b>
 																		</td>--%>
-																		<td height="30"width="147"><b>
+																		<td height="40"width="147"><b>
 																			<digi:trn key="aim:organizationType">Type</digi:trn></b>
 																		</td>
-																		<td height="30"width="147"><b>
+																		<td height="40"width="147"><b>
 																			<digi:trn key="aim:organizationGroup">Organization Group</digi:trn></b>
 																		</td>
 																	</tr>
 																<logic:iterate name="aimOrgManagerForm" property="pagedCol" id="organisation">
                                                            			<tr>
-	                                                           			<td height="30">
+	                                                           			<td height="40">
 																		  <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																		  <c:set target="${urlParams}" property="mode" value="resetMode" />
 																		  <c:set target="${urlParams}" property="actionFlag" value="edit" />
@@ -206,24 +206,24 @@
 																		  	<bean:write name="organisation" property="ampOrgId" />
 																		  </c:set>
 																		  <digi:link href="/editOrganisation.do" name="urlParams">																		  	
-																		  	<bean:write name="organisation" property="acronym" />
+																		  	<bean:write name="organisation" property="name" />
 																		  </digi:link>
 																		</td>
-																		<td height="30">
-																		  	<bean:write name="organisation" property="name" />																		  
+																		<td height="40">
+																		  	<bean:write name="organisation" property="acronym" />																		  
 																		</td>
 																	<%--<td height="30" width="171">
                                                                             <logic:notEmpty name="organisation" property="countryId">
                                                               					<c:out value="${organisation.countryId.countryName}" />
                                                               				</logic:notEmpty>
 																		</td>--%>
-																		<td height="30">
+																		<td height="40">
 																			<logic:notEmpty name="organisation" property="orgTypeId">
                                                               					<c:out value="${organisation.orgTypeId.orgType}" />
                                                               					<%--<bean:write name="organisation" property="${organisation.orgTypeId.orgType}" />--%>
                                                               				</logic:notEmpty>
 																		</td>
-																		<td height="30">
+																		<td height="40">
 																			<logic:notEmpty name="organisation" property="orgGrpId">
                                                               					<c:out value="${organisation.orgGrpId.orgGrpName}" />
                                                               				</logic:notEmpty>

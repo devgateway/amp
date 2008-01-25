@@ -1557,7 +1557,9 @@ public class TeamMemberUtil {
 							set.setDefaultTeamReport(null);
 							session.update(set);
 						}
-						//
+						// delete related information before we delete the report
+                                                String deleteTeamReports=" select tr from "+AmpTeamReports.class.getName()+ " tr where tr.report="+rep.getAmpReportId();
+                                                session.delete(deleteTeamReports);
 						session.delete(rep);
 					}
 					session.delete(ampMember);

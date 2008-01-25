@@ -89,13 +89,11 @@ public class ShowTeamReports extends Action {
 
 			if (appSettingSet) {
 				teamLeadResults = TeamUtil.getAllTeamReports(tm.getTeamId(),startReport, reportsPerPage,true,tm.getMemberId());
-				teamMemberResults = TeamMemberUtil.getAllTeamMembersReports(tm.getTeamId(), startReport, reportsPerPage);
 				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(),true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
 				rf.setTotalPages(totalPages.intValue());
 			}else{
 				teamLeadResults = TeamUtil.getAllTeamReports(tm.getTeamId(),null, null,true,tm.getTeamId());				
-				teamMemberResults = TeamMemberUtil.getAllTeamMembersReports(tm.getTeamId(),null,null);
-				
+		
 			}
 			
 			if(teamLeadResults!=null){

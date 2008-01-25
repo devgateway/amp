@@ -70,29 +70,39 @@ public class ShowTeamReports extends Action {
 			Set<AmpReports> reps = new TreeSet<AmpReports>(
 					new AdvancedReportUtil.AmpReportIdComparator());
 			
-			//Collection teamLeadResults = null;
-			//Collection teamMemberResults = null;
+			Collection teamLeadResults = null;
+			Collection teamMemberResults = null;
 			Collection results = null;
+//			if (appSettingSet) {
+//				results = TeamUtil.getAllTeamReports(tm.getTeamId(),startReport, reportsPerPage,true,tm.getMemberId());
+//				//teamMemberResults = TeamMemberUtil.getAllTeamMembersReports(tm.getTeamId(), startReport, reportsPerPage);
+//				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(),true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
+//				rf.setTotalPages(totalPages.intValue());
+//			}else{
+//				results = TeamUtil.getAllTeamReports(tm.getTeamId(),null, null,true,tm.getTeamId());				
+//				//teamMemberResults = TeamMemberUtil.getAllTeamMembersReports(tm.getTeamId(),null,null);
+//				
+//			}
+//			if (results!=null){
+//				reps.addAll(results);
+//			}			
+
 			if (appSettingSet) {
-				results = TeamUtil.getAllTeamReports(tm.getTeamId(),startReport, reportsPerPage,true,tm.getMemberId());
-				//teamMemberResults = TeamMemberUtil.getAllTeamMembersReports(tm.getTeamId(), startReport, reportsPerPage);
+				teamLeadResults = TeamUtil.getAllTeamReports(tm.getTeamId(),startReport, reportsPerPage,true,tm.getMemberId());
+				teamMemberResults = TeamMemberUtil.getAllTeamMembersReports(tm.getTeamId(), startReport, reportsPerPage);
 				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(),true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
 				rf.setTotalPages(totalPages.intValue());
 			}else{
-				results = TeamUtil.getAllTeamReports(tm.getTeamId(),null, null,true,tm.getTeamId());				
-				//teamMemberResults = TeamMemberUtil.getAllTeamMembersReports(tm.getTeamId(),null,null);
+				teamLeadResults = TeamUtil.getAllTeamReports(tm.getTeamId(),null, null,true,tm.getTeamId());				
+				teamMemberResults = TeamMemberUtil.getAllTeamMembersReports(tm.getTeamId(),null,null);
 				
 			}
-			/*
+			
 			if(teamLeadResults!=null){
 				reps.addAll(teamLeadResults);
 			}
 			if (teamMemberResults!=null){
 				reps.addAll(teamMemberResults);
-			}
-			*/
-			if (results!=null){
-				reps.addAll(results);
 			}
 			List<AmpReports> sortedReports=new ArrayList<AmpReports>();
 			//do not add this in ArrayList constructor.
@@ -100,7 +110,6 @@ public class ShowTeamReports extends Action {
 			//AmpReports are comparable by name, so this will sort by name.
 			Collections.sort(sortedReports);
 			rf.setReports(sortedReports);
-			
 			
 /***********
  * Old Code. 

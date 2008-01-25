@@ -205,7 +205,7 @@ tanzania adds
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpNotes"/>
 		</set>
 
-		<set name="closingDates" cascade="all-delete-orphan" order-by="closing_date desc">
+		<set name="closingDates" cascade="delete" order-by="closing_date desc">
 		<cache usage="read-write" />
 			<key column="amp_activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityClosingDates" />

@@ -50,7 +50,7 @@
 				<c:if test="${lead == true}">
 				<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<span class="page-title">
-					<digi:trn key="aim:activitytoEditList">Actual completion date of the following activity/ies is reached. Edit the following activities to revise the date or update the status</digi:trn></span>
+					<digi:trn key="aim:activitytoEditList">Actual completion date of the following activity or activities has been reached. Edit the following activity or activities to revise the date or update the status</digi:trn></span>
 				</td></tr>			
 				<c:forEach var="activity" items="${myMessages}">
 					<tr>

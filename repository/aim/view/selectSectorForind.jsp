@@ -258,6 +258,8 @@ function checkNumeric(objName,comma,period,hyphen)
 	</td></tr>
 </table>
 
+
+<!--
 <br>
 <br>
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
@@ -305,6 +307,7 @@ function checkNumeric(objName,comma,period,hyphen)
 					</table>
 				</td>
 			</tr>
-</table>
+			</table>
+ -->
 </digi:form>
 

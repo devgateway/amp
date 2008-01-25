@@ -638,6 +638,17 @@ public class TeamUtil {
                 AmpTeamReports tr = (AmpTeamReports) itr.next();
                 session.delete(tr);
             }
+            // Remove reference from RelatedTeam
+            qryStr = "select t from " + AmpTeam.class.getName() + " t"
+                + " where (t.relatedTeamId=:teamId)";
+            qry = session.createQuery(qryStr);
+            qry.setLong("teamId", teamId);
+            itr = qry.list().iterator();
+            while(itr.hasNext()) {
+                AmpTeam t = (AmpTeam) itr.next();
+                t.setRelatedTeamId(null);
+                session.update(t);
+            }
 
             // Remove reference from AmpTeam
             qryStr = "select t from " + AmpTeam.class.getName() + " t"

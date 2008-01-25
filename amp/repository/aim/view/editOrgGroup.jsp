@@ -32,12 +32,12 @@
 		str = trim(str);
 
 		if (str == null || str.length == 0) {
-			alert("Please enter name for this Group");
+			alert('<digi:trn key="aim:alert:editOrgGroup">Please enter a name for this Group</digi:trn>');
 			document.aimAddOrgGroupForm.orgGrpName.focus();
 			return false;
 		}
 		else if (type == null || type == "-1" || type.length == 0) {
-			alert("Please select type for this Group");
+			alert('<digi:trn key="aim:alert:editOrgGroupType">Please select type for this Group</digi:trn>');
 			document.aimAddOrgGroupForm.orgTypeId.focus();
 			return false;
 		}
@@ -89,7 +89,7 @@
 						</digi:link>&nbsp;&gt;&nbsp;
 						<digi:link href="/orgGroupManager.do" styleClass="comment">
 						<digi:trn key="aim:orgGroupManager">
-						Oraganization Group Manager
+						Organization Group Manager
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<logic:equal name="aimAddOrgGroupForm" property="action" value="create" >

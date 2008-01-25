@@ -73,10 +73,12 @@ public class SaveIndicatorValues extends Action
 								temp.setCurrentVal(Float.parseFloat(eaForm.getCurrentVal()));
 							}
 							//temp.setCurrentVal(eaForm.getCurrentVal());
-
+                         if(eaForm.getCurrentValDate() != null){
 							temp.setCurrentValDate(eaForm.getCurrValDate());
-							temp.setActualValDate(eaForm.getCurrValDate());
+                          }
+							//temp.setActualValDate(eaForm.getCurrentValDate());
 							temp.setCurrentValComments(eaForm.getCurrentValComments());
+							
 						}
 						if(eaForm.getCurrentVal() != null){
 						temp.setActualVal(Float.parseFloat(eaForm.getCurrentVal()));

@@ -720,31 +720,45 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         while (itr.hasNext()) {
           ActivityIndicator actInd = (ActivityIndicator) itr.next();
 
-          AmpIndicator ind = null;
-          if (actInd.getIndicatorId() != null &&
-              actInd.getIndicatorId().longValue() > 0) {
-            ind = (AmpIndicator) session.load(AmpIndicator.class, actInd.getIndicatorId());
+          AmpMEIndicatorValue indVal =new AmpMEIndicatorValue();
+          AmpIndicator ind=(AmpIndicator)session.get(AmpIndicator.class,actInd.getIndicatorId());
+          if (actInd.getIndicatorValId() != null &&
+              actInd.getIndicatorValId().longValue() > 0) {
+            indVal = (AmpMEIndicatorValue) session.get(AmpMEIndicatorValue.class, actInd.getIndicatorValId());
+          }
+          indVal.setActivityId(activity);
+          indVal.setIndicator(ind);
+          if(!ind.isDefaultInd()){
+        	  
+        	  Set indi = new HashSet();
+        	  indi.add(ind);
+        	  activity.setIndicators(indi);
+        	  
+        	  Set act = new HashSet();
+				act.add(activity);
+				ind.setActivity(act); 
+		     session.saveOrUpdate(ind);
           }
 
           if (actInd.getBaseValDate() != null &&
               actInd.getTargetValDate() != null &&
               actInd.getRevisedTargetValDate() != null) {
       
-            ind.setBaseVal(actInd.getBaseVal());
-            ind.setBaseValDate(DateConversion.getDate(actInd.getBaseValDate()));
-            ind.setBaseValComments(actInd.getBaseValComments());
+            indVal.setBaseVal(actInd.getBaseVal());
+            indVal.setBaseValDate(DateConversion.getDate(actInd.getBaseValDate()));
+            indVal.setBaseValComments(actInd.getBaseValComments());
       
-            ind.setTargetVal(actInd.getTargetVal());
-            ind.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
-            ind.setTargetValComments(actInd.getTargetValComments());
+            indVal.setTargetVal(actInd.getTargetVal());
+            indVal.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
+            indVal.setTargetValComments(actInd.getTargetValComments());
 
-            ind.setRevisedTargetVal(actInd.getRevisedTargetVal());
-            ind.setRevisedTargetValDate(DateConversion.getDate(actInd.
+            indVal.setRevisedTargetVal(actInd.getRevisedTargetVal());
+            indVal.setRevisedTargetValDate(DateConversion.getDate(actInd.
                 getRevisedTargetValDate()));
-            ind.setRevisedTargetValComments(actInd.
+            indVal.setRevisedTargetValComments(actInd.
                                                getRevisedTargetValComments());
             //indVal.setLogframeValueId(actInd.getLogframeValueId());
-            ind.setIndicatorsCategory(actInd.getIndicatorsCategory());
+            indVal.setIndicatorsCategory(actInd.getIndicatorsCategory());
 
             if (actInd.getCurrentValDate() != null &&
                 actInd.getCurrentValDate().trim().length() > 0) {
@@ -755,19 +769,20 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                       !actInd.getActualValDate().equals(
                           actInd.getCurrentValDate()))) {
                 logger.info("Here 2");
-                AmpMECurrValHistory currValHist = new AmpMECurrValHistory();
+                /*AmpMECurrValHistory currValHist = new AmpMECurrValHistory();
                 currValHist.setCurrValue(actInd.getActualVal());
                 currValHist.setCurrValueDate(DateConversion.getDate(actInd.
                     getActualValDate()));
                 currValHist.setComments(actInd.getActualValComments());
-                currValHist.setMeIndValue(ind);
+                currValHist.setMeIndValue(indVal);
                 session.save(currValHist);
+                */
               }
               logger.info("Here 3");
-              ind.setActualVal(actInd.getCurrentVal());
-              ind.setActualValDate(DateConversion.getDate(actInd.
+              indVal.setActualVal(actInd.getCurrentVal());
+              indVal.setActualValDate(DateConversion.getDate(actInd.
                   getCurrentValDate()));
-              ind.setActualValComments(actInd.getCurrentValComments());
+              indVal.setActualValComments(actInd.getCurrentValComments());
               logger.info("Here 4");
             }
 
@@ -777,8 +792,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
               risk = (AmpIndicatorRiskRatings) session.load(
                   AmpIndicatorRiskRatings.class, actInd.getRisk());
             }
-            ind.setRisk(risk);
-            session.saveOrUpdate(ind);
+            indVal.setRisk(risk);
+            session.saveOrUpdate(indVal);
           }
         }
       }

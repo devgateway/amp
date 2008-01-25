@@ -32,7 +32,10 @@
 		class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none"/>
 		
 		<many-to-one name="meIndicatorId" column="me_indicator_id" 
-		class="org.digijava.module.aim.dbentity.AmpMEIndicators" cascade="none"/>		
+		class="org.digijava.module.aim.dbentity.AmpMEIndicators" cascade="none"/>	
+		
+		<many-to-one name="indicator" column="indicator_id" 
+		class="org.digijava.module.aim.dbentity.AmpIndicator" cascade="none"/>	
 
 		<many-to-one name="risk" column="risk" 
 		class="org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings" cascade="none"/>

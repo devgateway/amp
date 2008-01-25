@@ -268,7 +268,7 @@ function fnSubmit() {
 										</td>
 										<td bgcolor="#f4f4f2" vAlign="center">
 											<html:select property="filterByCurrCode" styleClass="inp-text">
-												<html:option value="">-- All --</html:option>
+												<html:option value="">--<digi:trn key="aim:all">All</digi:trn>--</html:option>
 												<html:optionsCollection name="aimCurrencyRateForm" property="currencyCodes"
 												value="currencyCode" label="currencyCode" />&nbsp;&nbsp;&nbsp;
 											</html:select>

@@ -97,7 +97,7 @@ Default Hierarchy
 <td>
 
 <html:select name="settingsList" property="defaultHierarchyId" indexed="true">
-  <html:option value="-1">Select Program</html:option>
+  <html:option value="-1"><digi:trn key="aim:selsector">Select Program</digi:trn></html:option>
 	<html:optionsCollection  property="programList" value="ampThemeId" label="name" />
 </html:select>
 </td>
@@ -111,8 +111,8 @@ Default Hierarchy
 
 <tr>
 <td colspan="2">
-<html:submit property="event" value="Save"/>
-<html:cancel property="event" value="Cancel" onclick="return cancel();"/>
+<html:submit property="event" value="<digi:trn value="aim:btnsave">Save</digi:trn>"/>
+<html:cancel property="event" value="<digi:trn value="aim:btncancel">Cancel</digi:trn>" onclick="return cancel();"/>
 </td>
 </tr>
 </table>

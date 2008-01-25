@@ -138,7 +138,7 @@ function closeWindow() {
   <table width="100%" align="center" class=box-border-nopadding>
     <tr bgcolor="#006699" class=r-dotted-lg>
       <td vAlign="center" width="100%" align ="center" class="textalb" height="20">
-      <b>Add New Indicator</b>
+      <b><digi:trn key="aim:addnewindicator">Add New Indicator</digi:trn></b>
       </td>
     </tr>
     <tr align="center" bgcolor="#ECF3FD">

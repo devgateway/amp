@@ -203,44 +203,7 @@
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
 									<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left>
-										<!-- AMP-1655
-										<tr>
-											<td>
-											 	<table cellspacing=0 cellpadding=0 border="1" height="20">
-														<tr>
-
-															<td noWrap height=17>
-																<bean:define id="translation">
-																	<digi:trn key="aim:viewMultiProgramIndicators" >Click here to view Multi Program Indicators</digi:trn>
-																</bean:define>
-																<digi:link href="/themeManager.do?view=multiprogram"  styleClass="sub-navGov" title="<%=translation%>" ><font color="ffffff">
-															<digi:trn key="aim:multiProgramManager">
-																Strategy/Plan Manager
-															</digi:trn></font>
-																</digi:link>
-															</td>
-                                                            <td>
-                                                              <img id="img2" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-right1.gif" width="20" height="19" />
-                                                            </td>
-
-															<td noWrap height=17>
-																<bean:define id="translation">
-																	<digi:trn key="aim:viewAllIndicators" >Click here to view Indicators</digi:trn>
-																</bean:define>
-																<digi:link href="/viewIndicators.do"  styleClass="sub-navGovSelected" title="<%=translation%>" onmouseover="setOverImg(3)" onmouseout="setOutImg(3)"><font color="ffffff">
-																<digi:trn key="aim:ViewIndicatorManager">
-																		Indicator Manager
-																</digi:trn></font>
-																</digi:link>
-															</td>
-                                                            <td>
-                                                              <img id="img3" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif" width="20" height="19" />
-                                                            </td>
-
-														</tr>
-													</table>
-												</tr>
-												-->
+										<!-- AMP-1655 -->
 				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="100%" cellspacing=1 cellSpacing=1 border="0" class="r-dotted-lg">
@@ -297,7 +260,6 @@
 												
 												<!-- AMP-2204 -->
 														<bean:define id="firstLevel" name="aimThemeForm" property="themes" type="java.util.Collection"/>
-												
 														<%= ProgramUtil.renderLevel(firstLevel,0,request) %>
 												</td>											
 											
@@ -308,21 +270,21 @@
 												</td>
 											</tr>
 											<tr>
+											
 												<td  width="20%" nowrap="nowrap"> <digi:trn key="aim:subprogramleves">Sub Program leves</digi:trn> :
-												<img src= "../ampTemplate/images/arrow_right.gif" border=0>  Level 1,
-												<img src= "../ampTemplate/images/square1.gif" border=0>  Level 2,
-												<img src= "../ampTemplate/images/square2.gif" border=0>  Level 3,
-												<img src= "../ampTemplate/images/square3.gif" border=0>  Level 4,
-												<img src= "../ampTemplate/images/square4.gif" border=0>  Level 5,
-												<img src= "../ampTemplate/images/square5.gif" border=0>  Level 6,
-												<img src= "../ampTemplate/images/square6.gif" border=0>  Level 7,
-												<img src= "../ampTemplate/images/square7.gif" border=0>  Level 8.
+												<img src= "../ampTemplate/images/arrow_right.gif" border=0><digi:trn key="aim:subproglevel_1">  Level 1</digi:trn>,
+												<img src= "../ampTemplate/images/square1.gif" border=0><digi:trn key="aim:subproglevel_2">  Level 2</digi:trn>,
+												<img src= "../ampTemplate/images/square2.gif" border=0><digi:trn key="aim:subproglevel_3">  Level 3</digi:trn>,
+												<img src= "../ampTemplate/images/square3.gif" border=0><digi:trn key="aim:subproglevel_4">  Level 4</digi:trn>,
+												<img src= "../ampTemplate/images/square4.gif" border=0><digi:trn key="aim:subproglevel_5">  Level 5</digi:trn>,
+												<img src= "../ampTemplate/images/square5.gif" border=0><digi:trn key="aim:subproglevel_6">  Level 6</digi:trn>,
+												<img src= "../ampTemplate/images/square6.gif" border=0><digi:trn key="aim:subproglevel_7">  Level 7</digi:trn>,
+												<img src= "../ampTemplate/images/square7.gif" border=0><digi:trn key="aim:subproglevel_8">  Level 8</digi:trn>.
 												</td>
 											</tr>
 														<logic:empty name="aimThemeForm" property="themes">
 																<tr align="center" bgcolor="#ffffff"><td><b>
-																
-																		<digi:trn key="aim:noProgramsPresent">No Programs present</digi:trn></b></td>
+																	<digi:trn key="aim:noProgramsPresent">No Programs present</digi:trn></b></td>
 																</tr>
 														</logic:empty>
 													</table>

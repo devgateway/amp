@@ -13,7 +13,8 @@
 	
 	function deleteIndicator()
 	{
-		return confirm("Do you want to delete the Activity ?");
+		var translation = "<digi:trn key="aim:activitydelete">Do you want to delete the Activity</digi:trn>"; 
+		return confirm(translation);
 	}
 	function load() {}
 
@@ -197,7 +198,7 @@
 											</table>
 										</td></tr>
 										<tr><td bgColor=#ffffff height="20" align="left">
-												<img src= "../ampTemplate/images/start_button.gif" border=0> - <b>Unassigned Activities</b>
+												<img src= "../ampTemplate/images/start_button.gif" border=0> - <b><digi:trn key="aim:unassignedactivities">Unassigned Activities</digi:trn></b>
 										</td></tr>
 										<tr bgcolor="#ffffff">
 											<td>&nbsp;</td>

@@ -124,7 +124,7 @@ function confirmFunc() {
 														<% String s = (String)session.getAttribute("teamLeadFlag");
 														   TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 														 if(tm!=null)
-														   if( tm.getDelete() ){
+														  {
 														%>
 															<td bgColor=#dddddb align="center" height="20">
 																<b>
@@ -235,7 +235,7 @@ function confirmFunc() {
 
 														 	<%
 														 	if(tm!=null)
-														 	if( tm.getDelete() ){ %>
+														 	{ %>
 
 															<td>
 																<p style="white-space: nowrap">

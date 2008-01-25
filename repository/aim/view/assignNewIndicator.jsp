@@ -226,12 +226,13 @@ function closeWindow()
 									<tr>
 									<td>
 									<digi:trn key="aim:selsector">
-											Select Sector</digi:trn>
+											Select Sector
+									</digi:trn>
 									</td>
 										<td>
 										
                                       <html:select property="sectorName" styleClass="inp-text">
-                                      			<html:option value="-1">-Select sector-</html:option>
+                                      			<html:option value="-1">-<digi:trn key="aim:selsector">Select sector</digi:trn>-</html:option>
 												<c:if test="${!empty aimThemeForm.allSectors}">
 									<html:optionsCollection name="aimThemeForm" property="allSectors" value="name" label="name" />						
 												</c:if>

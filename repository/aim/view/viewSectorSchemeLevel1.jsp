@@ -12,7 +12,10 @@
 
 <script langauage="JavaScript">
 	function onDelete() {
-		var flag = confirm("Delete this Sector?");
+	<c:set var="translation">
+		<digi:trn key="aim:ConfirmDelete">Delete this Scheme ?</digi:trn>
+	</c:set>
+		var flag = confirm("${translation}");
 		return flag;
 	}
 	function updateScheme(id) {
@@ -62,7 +65,8 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>Sector Manager</span>
+					<td height=16 vAlign=center width=571><span class=subtitle-blue>
+					<digi:trn key="aim:sectorManager">Sector Manager</digi:trn></span>
 					</td>
 				</tr>
 				<tr>
@@ -93,8 +97,7 @@
 													</tr>
 													<tr>
 														<td>
-														
-															Scheme Code :
+															<digi:trn key="aim:SchemeCode">Scheme Code</digi:trn>:
 														</td>
 														<td>
 															<html:text name ="aimAddSectorForm" property="secSchemeCode" size="5"/> 

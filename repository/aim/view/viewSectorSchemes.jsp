@@ -10,8 +10,11 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script langauage="JavaScript">
+	<c:set var="translation">
+		<digi:trn key="aim:ConfirmDelete">Delete this Scheme ?</digi:trn>
+	</c:set>
 	function onDelete() {
-		var flag = confirm("Delete this Scheme ?");
+		var flag = confirm("${translation}");
 		return flag;
 	}
 </script>
@@ -109,7 +112,7 @@
 														</td>
 
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
-														<td bgcolor="#ffffff" width="55" align="center">
+														<td bgcolor="#ffffff" width="75" align="center">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams4}" property="ampSecSchemeId">
 																<bean:write name="sectorScheme" property="ampSecSchemeId" />

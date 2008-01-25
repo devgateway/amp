@@ -464,7 +464,7 @@ function closeWindow() 
 				<tr>
 				<td align="center" colspan="6" bgcolor="white">
 				<input type="button" class="buton" onclick="return removeIndicators()" value='<digi:trn key="aim:removeselec">Remove Selected</digi:trn>' />
-				<input class="buton" type="button" name="addValBtn" value="Assign New Indicator" onclick="addIndicator('${aimThemeForm.themeId}');">&nbsp;&nbsp;
+				<input class="buton" type="button" name="addValBtn" value="<digi:trn key="aim:assignnewindicator">Assign New Indicator</digi:trn>" onclick="addIndicator('${aimThemeForm.themeId}');">&nbsp;&nbsp;
 				</td>
 				</tr>
 		</table>

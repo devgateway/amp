@@ -140,9 +140,9 @@ function sortSubmit(value){
 										</td>
 										<td bgcolor="#f4f4f2" align="left" width="100">
 											<html:select property="filterByCurrency" styleClass="inp-text">
-												<html:option value="">-- All --</html:option>
-												<html:option value="A">Active Currencies</html:option>
-												<html:option value="N">Inactive Currencies</html:option>
+												<html:option value="">--<digi:trn key="aim:all">All</digi:trn>--</html:option>
+												<html:option value="A"><digi:trn key="aim:activecurrencies">Active Currencies</digi:trn></html:option>
+												<html:option value="N"><digi:trn key="aim:inactivecurrencies">Inactive Currencies</digi:trn></html:option>
 											</html:select>
 										</td>
 										<td bgcolor="#f4f4f2" align="right" width="50">

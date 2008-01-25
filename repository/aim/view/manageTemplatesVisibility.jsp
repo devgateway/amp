@@ -57,9 +57,18 @@
 			<c:set var="translation">
 				<digi:trn key="aim:clickToEditTemplate">Click here to Edit Template</digi:trn>
 			</c:set>	
+			<c:set var="translation1">
+				<digi:trn key="aim:InUse">In use</digi:trn>
+			</c:set>	
+			
 			<td width="70%"> <digi:link href="/visibilityManager.do" name="urlParams10" 
-				title="${translation}" ><bean:write name="template" property="name"/></digi:link> &nbsp;&nbsp;&nbsp; 
-				<%= template.isDefault()?"in use":"" %>
+				title="${translation}"><bean:write name="template" property="name"/></digi:link> &nbsp;&nbsp;&nbsp; 
+				
+				<%if (template.isDefault()){%>
+					${translation1}
+				<%}%>
+				
+				<%//=template.isDefault()?"'in use":""%>
 			</td>
 
 			<td width="30%" align="center">

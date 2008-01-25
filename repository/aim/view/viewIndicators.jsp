@@ -152,7 +152,7 @@ a.itr:hover {
                                     </td>
                                     <td>
                                       <html:select property="sectorId" styleClass="inp-text">
-                                      			<html:option value="-1">-Select sector-</html:option>
+                                      			<html:option value="-1">-<digi:trn key="aim:selsector">Select sector-</digi:trn></html:option>
 												<c:if test="${!empty aimViewIndicatorsForm.sectors}">
 														<html:optionsCollection name="aimViewIndicatorsForm" property="sectors" 
 													value="ampSectorId" label="name" />						

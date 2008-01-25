@@ -24,8 +24,12 @@ import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
+import org.apache.tools.ant.taskdefs.optional.i18n.Translate;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.translator.util.TrnLocale;
+import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
@@ -45,10 +49,13 @@ import org.digijava.module.aim.helper.AllThemes;
 import org.digijava.module.aim.helper.AmpIndSectors;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.EditProgram;
 import org.digijava.module.aim.helper.IndicatorsBean;
+import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.TreeItem;
+import org.digijava.module.translation.taglib.TrnTag;
 
 
 public class ProgramUtil {
@@ -1723,7 +1730,9 @@ public class ProgramUtil {
 	}
 
 	 public static String getTrn(String key, String defResult, HttpServletRequest request){
-		 return defResult;
+		 String result;
+		 result = CategoryManagerUtil.translate(key, request, defResult);
+		 return result;
 	 }
 	 
     public static String getLevelImage(int level){

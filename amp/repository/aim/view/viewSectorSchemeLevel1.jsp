@@ -157,11 +157,15 @@
 															<bean:write name="sectorSchemeLevelOne" property="name"/></digi:link>
 														</td>
 														
-														<td bgcolor="#ffffff" width="40" align="center">
+														<td bgcolor="#ffffff" width="75" align="center">
 														<c:set var="clickToEditSector">
-														<digi:trn key="aim:clickToEditSector">Click here to Edit Sector</digi:trn>
+															<digi:trn key="aim:clickToEditSector">Click here to Edit Sector</digi:trn>
 														</c:set>
-															[ <digi:link href="/viewSectorDetails.do" name="urlParams2" title="${clickToEditSector}" >Edit</digi:link> ]
+														<c:set var="edittext">
+															<digi:trn key="aim:edit">Edit</digi:trn>
+														</c:set>
+														
+															[ <digi:link href="/viewSectorDetails.do" name="urlParams2" title="${clickToEditSector}">${edittext}</digi:link> ]
 														</td>
 														<td bgcolor="#ffffff" width="55" align="center">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
@@ -178,9 +182,12 @@
 															<c:set var="clickToDeleteSector">
 															<digi:trn key="aim:clickToDeleteSector">Click here to Delete Sector</digi:trn>
 															</c:set>
+															<c:set var="deletetext">
+															<digi:trn key="aim:delete">Delete</digi:trn>
+															</c:set>
 															
 															[ <digi:link href="/deleteSector.do" name="urlParams4" 
-																title="${clickToDeleteSector}" onclick="return onDelete()">Delete</digi:link> ]
+																title="${clickToDeleteSector}" onclick="return onDelete()">${deletetext}</digi:link> ]
 																
 														</td>
 													</tr>

@@ -94,7 +94,7 @@
 					<td width="201">
 						<digi:trn key="aim:orgManagerType">Type</digi:trn>&nbsp;
 						<html:select property="ampOrgTypeId" styleClass="inp-text">
-							<html:option value="-1">All</html:option>
+							<html:option value="-1"><digi:trn key="aim:all">All</digi:trn></html:option>
 							<logic:notEmpty name="aimOrgManagerForm" property="orgTypes">
 								<html:optionsCollection name="aimOrgManagerForm" property="orgTypes"
 									value="ampOrgTypeId" label="orgType" />

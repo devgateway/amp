@@ -146,7 +146,8 @@ function closeWindow() {
         <table border="0">
           <tr id="trName">
             <td>
-            Indicator name:<span style="color:Red;">*</span>
+            <digi:trn key="aim:indicatorname">Indicator name:</digi:trn>
+            <span style="color:Red;">*</span>
             </td>
             <td>
               <html:text property="name" styleId="txtName" style="font-family:verdana;font-size:11px;width:200px;"/>
@@ -154,7 +155,9 @@ function closeWindow() {
           </tr>
           <tr id="trDescription">
             <td valign="top">
+            <digi:trn key="admin:decription">
             Description:
+            </digi:trn>
             </td>
             <td>
               <html:textarea property="description" styleId="txtDescription" style="font-family:verdana;font-size:11px;width:200px;"></html:textarea>
@@ -173,14 +176,20 @@ function closeWindow() {
           <tr id="trCategory">
           </tr>
           <tr id="trSector">
-          <td>Sectors<span style="color:Red;">*</td>
+          <td>
+          <digi:trn key="admin:sectors">
+          	Sectors
+          </digi:trn>
+          <span style="color:Red;">*</td>
             <td >
               <jsp:include page="addIndicatorSector.jsp"/>
              </td>
           </tr>   
 	      <tr id="trCreationDate">
             <td>
+            <digi:trn key="admin:creationdate">
             Creation date:
+            </digi:trn>
             </td>
             <td>
               <html:text property="date" disabled="true" styleId="txtCreationDate" style="font-family:verdana;font-size:11px;width:80px;"/>
@@ -188,7 +197,7 @@ function closeWindow() {
           </tr>
           <tr>
             <td colspan="10" nowrap="nowrap">
-              <input type="checkbox" name="IndicatorType" id="radioProgramIndicator" value="0" /> &nbsp;Program indicator&nbsp;
+              <input type="checkbox" name="IndicatorType" id="radioProgramIndicator" value="0" /> &nbsp;<digi:trn key="admin:programind">Program indicator</digi:trn>&nbsp;
               <!-- 
                <span id="spnSelectProgram" style="">
                  [<a href="javascript:selectProgram();">Select program</a>]
@@ -204,16 +213,16 @@ function closeWindow() {
               </span>
                -->
               <br>
-              <input type="checkbox" name="IndType" id="radioProjectIndicator" value="2" /> &nbsp;Project indicator&nbsp;
+              <input type="checkbox" name="IndType" id="radioProjectIndicator" value="2" /> &nbsp;<digi:trn key="admin:projectind">Project indicator</digi:trn>&nbsp;
               <span id="spnSelectProject" style="">
-                     [<a href="javascript:selectActivity();">Select project</a>]
+                     [<a href="javascript:selectActivity();"><digi:trn key="admin:selectproject">Select project</digi:trn></a>]
                      <c:if test="${!empty aimNewIndicatorForm.selectedActivities}">
                        <c:forEach var="act" items="${aimNewIndicatorForm.selectedActivities}">
                          [${act.label}]
                        </c:forEach>
                    </c:if>
                    <c:if test="${empty aimNewIndicatorForm.selectedActivities}">
-                       [<span style="color:Red;">Activity is not selected</span>]
+                       [<span style="color:Red;"><digi:trn key="admin:activitynoselected">Activity is not selected</digi:trn></span>]
                   </c:if>
              </span>
             </td>

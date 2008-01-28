@@ -97,7 +97,7 @@ Default Hierarchy
 <td>
 
 <html:select name="settingsList" property="defaultHierarchyId" indexed="true">
-  <html:option value="-1"><digi:trn key="aim:selsector">Select Program</digi:trn></html:option>
+  <html:option value="-1"><digi:trn key="aim:selprogram">Select Program</digi:trn></html:option>
 	<html:optionsCollection  property="programList" value="ampThemeId" label="name" />
 </html:select>
 </td>

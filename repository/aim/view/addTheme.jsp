@@ -232,8 +232,9 @@
 				<tr bgColor=#ffffff><td height="30" colspan="2"></td></tr>
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="25" align="center" colspan="2">
-						<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="aimThemeForm" property="prgParentThemeId" />','<bean:write name="aimThemeForm" property="prgLevel"/>','${aimThemeForm.encodeName}')">&nbsp;&nbsp;
-						<input styleClass="dr-menu" type="reset" value="Cancel" onclick="closeWindow()">
+						<input styleClass="dr-menu" type="button" name="addBtn" value="<digi:trn key="aim:btnsave">Save</digi:trn>" onclick="return saveProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="aimThemeForm" property="prgParentThemeId" />','<bean:write name="aimThemeForm" property="prgLevel"/>','${aimThemeForm.encodeName}')">&nbsp;&nbsp;
+						<input styleClass="dr-menu" type="reset" value="<digi:trn key="aim:btncancelCancel">Cancel</digi:trn>" onclick="closeWindow()">
+						<input styleClass="dr-menu" type="button" name="close" value="<digi:trn key="aim:btnclose">Close</digi:trn>" onclick="closeWindow()">
 				</td>
 			</tr>
 	</table>

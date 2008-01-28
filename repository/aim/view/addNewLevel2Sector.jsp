@@ -81,7 +81,9 @@
 												<table width="100%">
 													<tr>
 														<td>
+														<digi:trn key="aim:sectorManagerLevel">
 															Sector Name : this one
+														</digi:trn>
 														</td>
 														<td>
 															<html:textarea  name ="aimAddSectorForm" property="sectorName" rows="1" cols= "35"/> 
@@ -89,7 +91,9 @@
 													</tr>
 													<tr>
 														<td>
+														<digi:trn key="aim:sectorCode">
 															Sector Code :
+														</digi:trn>
 														</td>
 														<td>
 															<html:text name ="aimAddSectorForm" property="sectorCode" size="5"/> 
@@ -156,13 +160,16 @@
 															<bean:write name="sectorLevelTwo" property="name"/></digi:link>
 														</td>
 														
-														<td bgcolor="#ffffff" width="40" align="center">
+														<td bgcolor="#ffffff" width="75" align="center">
 															<c:set var="translation">
 																<digi:trn key="aim:clickToEditSector">Click here to Edit Sector</digi:trn>
 															</c:set>
-															[ <digi:link href="/viewSectorDetails.do" name="urlParams2" title="${translation}" >Edit </digi:link> ]
+															<c:set var="edittext">
+																<digi:trn key="aim:edit">Edit</digi:trn>
+															</c:set>
+															[ <digi:link href="/viewSectorDetails.do" name="urlParams2" title="${translation}" >${edittext}</digi:link> ]
 														</td>
-														<td bgcolor="#ffffff" width="55" align="center">
+														<td bgcolor="#ffffff" width="60" align="center">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams4}" property="ampSectorId">
 																<bean:write name="sectorLevelTwo" property="ampSectorId" />
@@ -174,8 +181,11 @@
 															<c:set var="translation">
 																<digi:trn key="aim:clickToDeleteSector">Click here to Delete Sector</digi:trn>
 															</c:set>
+															<c:set var="deletetext">
+																<digi:trn key="aim:delete">Delete</digi:trn>
+															</c:set>
 															[ <digi:link href="/deleteSector.do" name="urlParams4" 
-																title="${translation}" onclick="return onDelete()">Delete</digi:link> ]
+																title="${translation}" onclick="return onDelete()">${deletetext}</digi:link> ]
 														</td>
 													</tr>
 													</logic:iterate>

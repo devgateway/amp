@@ -80,7 +80,9 @@
 												<table width="100%">
 													<tr>
 														<td>
+														<digi:trn key="aim:sectorManagerLevel">
 															Sector Name : this one
+														</digi:trn>	
 														</td>
 														<td>
 															<html:textarea  name ="aimAddSectorForm" property="sectorName" rows="1" cols= "35"/> 
@@ -88,7 +90,9 @@
 													</tr>
 													<tr>
 														<td>
+														<digi:trn key="aim:sectorCode">
 															Sector Code :
+														</digi:trn>
 														</td>
 														<td>
 															<html:text name ="aimAddSectorForm" property="sectorCode" size="5"/> 

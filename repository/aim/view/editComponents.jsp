@@ -117,8 +117,13 @@
 																cols="40" rows="3" /></td>
 														</tr>
 														<tr>
-															<td width=30% align=right><font color=red>* Mandatory
-															fields</font></td>
+															<td width=30% align=right>
+																<font color=red>
+																	<digi:trn key="aim:statusmandatoryfields">
+																	* Mandatory fields
+																	</digi:trn>
+																</font>
+															</td>
 														</tr>
 														<tr>
 															<td colspan="2" width="60%">

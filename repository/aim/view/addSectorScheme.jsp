@@ -86,7 +86,7 @@
 													</tr>
 													<tr>
 														<td>
-															Scheme Code :
+															<digi:trn key="aim:SchemeCode">Scheme Code :</digi:trn>
 														</td>
 														<td>
 															<html:text name ="aimAddSectorForm" property="secSchemeCode" size="5"/> 

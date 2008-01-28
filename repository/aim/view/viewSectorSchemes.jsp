@@ -84,7 +84,7 @@
 													<logic:iterate name="aimAddSectorForm" property="formSectorSchemes" id="sectorScheme"
 																	type="org.digijava.module.aim.dbentity.AmpSectorScheme	">
 													<tr>
-														<td bgcolor="#ffffff">
+														<td width="256" bgcolor="#ffffff">
 															<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams2}" property="ampSecSchemeId">
 															<bean:write name="sectorScheme" property="ampSecSchemeId" />
@@ -94,11 +94,14 @@
 															<c:set var="clickToViewSchemes">
 															<digi:trn key="aim:clickToViewSchemes">Click here to view Schemes</digi:trn>
 															</c:set>
+															<c:set var="edittext">
+															<digi:trn key="aim:edit">Edit</digi:trn>
+															</c:set>
 															<digi:link href="/updateSectorSchemes.do" name="urlParams2" title="${clickToViewSchemes}" >
 															<bean:write name="sectorScheme" property="secSchemeName"/></digi:link>
-														</td>
+													  </td>
 
-														<td bgcolor="#ffffff" width="40" align="center">
+														<td bgcolor="#ffffff" width="97" align="right">
 															<c:set var="trnEditScheme">
 																<digi:trn key="aim:clickToEditScheme">Click here to Edit Scheme</digi:trn>
 															</c:set>
@@ -106,13 +109,12 @@
 
 
 															[ <digi:link href="/updateSectorSchemes.do" name="urlParams2" title="${trnEditScheme}" >
-															 <digi:trn key="btn:edit">Edit</digi:trn>
+															 ${edittext} 
 															</digi:link>
-															]
-														</td>
+															]													  </td>
 
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
-														<td bgcolor="#ffffff" width="75" align="center">
+														<td bgcolor="#ffffff" width="75" align="left">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams4}" property="ampSecSchemeId">
 																<bean:write name="sectorScheme" property="ampSecSchemeId" />
@@ -123,7 +125,7 @@
 															</c:set>
 															[ <digi:link href="/updateSectorSchemes.do" name="urlParams4"
 																title="${trnDeleteScheme}" onclick="return onDelete()">
-																 <digi:trn key="btn:delete">Delete</digi:trn>
+																 <digi:trn key="aim:delete">Delete</digi:trn>
 															</digi:link>
 															]
 
@@ -164,8 +166,8 @@
 												Other links
 												</digi:trn>
 											</td>
-											<td background="module/aim/images/corner-r.gif" height="17" width=17>
-												&nbsp;
+											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+												
 											</td>
 										</tr>
 									</table>

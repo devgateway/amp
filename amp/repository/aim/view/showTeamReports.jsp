@@ -179,41 +179,41 @@ function confirmFunc() {
 														 	</td>
 														 	<td>
 														 		<p style="white-space: nowrap">
-														 		<ul>
-																 		<%
-																 			if (report.getType().equals(new Long(1))) {
-																 		%>
-																 			<li>
-																 				<digi:trn key="aim:donorType">donor</digi:trn>
-																 			</li>
-																 		<%
-																 			}
-																 			else
-																 				if (report.getType().equals(new Long (3))){
-																 		%>
-																	 			<li>
-																 					<digi:trn key="aim:regionalType">regional</digi:trn>
-																	 			</li>
-																 		<%
-																 				}
-																 				else
-																 					if (report.getType().equals(new Long(2))){
-																 		%>
-																		 			<li>
-																 						<digi:trn key="aim:componentType">component</digi:trn>
-																		 			</li>
-																		<%
-																 				}
-																 				else
-																 					if (report.getType().equals(new Long(4))){
-																 		%>
-																	 					<li>
-																	 						<digi:trn key="aim:contributionType">contribution</digi:trn>
-																			 			</li>
-																 		<%
-																 					}
-																 		%>
-														 			</li>
+														 		<ul>  <%
+                                                                             if (report.getType()!=null && report.getType().equals(new Long(1))) {
+                                                                         %>
+                                                                             <li>
+                                                                                 <digi:trn key="aim:donorType">donor</digi:trn>
+                                                                             </li>
+                                                                         <%
+                                                                             }
+                                                                             else
+                                                                                 if (report.getType()!=null && report.getType().equals(new Long (3))){
+                                                                         %>
+                                                                                 <li>
+                                                                                     <digi:trn key="aim:regionalType">regional</digi:trn>
+                                                                                 </li>
+                                                                         <%
+                                                                                 }
+                                                                                 else
+                                                                                     if (report.getType()!=null && report.getType().equals(new Long(2))){
+                                                                         %>
+                                                                                     <li>
+                                                                                         <digi:trn key="aim:componentType">component</digi:trn>
+                                                                                     </li>
+                                                                        <%
+                                                                                 }
+                                                                                 else
+                                                                                     if (report.getType()!=null && report.getType().equals(new Long(4))){
+                                                                         %>
+                                                                                         <li>
+                                                                                             <digi:trn key="aim:contributionType">contribution</digi:trn>
+                                                                                         </li>
+                                                                         <%
+                                                                                     }
+                                                                         %>
+                                                                        
+                                                                     </li>
 													 				<logic:equal name="report" property="drilldownTab" value="true">
 															 			<li>
 														 					<digi:trn key="aim:typeDrilldownTab">Desktop Tab</digi:trn>

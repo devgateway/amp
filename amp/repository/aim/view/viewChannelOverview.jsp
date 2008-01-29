@@ -796,9 +796,7 @@ function commentWin(val) {
 																	<TR>
 																		<TD bgcolor="#ffffff"><i><digi:trn
 																			key="aim:contactPersonEmail">Email</digi:trn></i>:
-
-
-                                                                        <a href="mailto:${activity.email}">${activity.email}</a></TD>
+                                                                        <a href="mailto:${activity.mfdContEmail}">${activity.mfdContEmail}</a></TD>
 																	</TR>
 																	</field:display>
 																</TABLE>

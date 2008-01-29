@@ -375,17 +375,9 @@
 											&gt;
 										</digi:link>
 										<jsp:useBean id="urlParamsLast" type="java.util.Map" class="java.util.HashMap"/>
-										<c:if test="${aimEditActivityForm.pagesSize < aimEditActivityForm.pagesToShow}">
-											<c:set target="${urlParamsLast}" property="edit" value="true"/>
-											<c:set target="${urlParamsLast}" property="orgSelReset" value="false"/>
-											<c:set target="${urlParamsLast}" property="page" value="${aimEditActivityForm.pagesSize-aimEditActivityForm.pagesToShow}"/>
-										</c:if>
-										<c:if test="${aimEditActivityForm.pagesSize > aimEditActivityForm.pagesToShow}">
-											<c:set target="${urlParamsLast}" property="edit" value="true"/>
-											<c:set target="${urlParamsLast}" property="orgSelReset" value="false"/>
-											<c:set target="${urlParamsLast}" property="page" value="${aimEditActivityForm.pagesSize}"/>
-										</c:if>
+										<c:set target="${urlParamsLast}" property="edit" value="true"/>
 										<c:set target="${urlParamsLast}" property="orgSelReset" value="false"/>
+										<c:set target="${urlParamsLast}" property="page" value="${aimEditActivityForm.pagesSize}"/>
 										<c:set var="translation">
 										<digi:trn key="aim:lastpage">Last Page</digi:trn>
 										</c:set>

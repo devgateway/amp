@@ -83,7 +83,8 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		Set measures=generator.getReportMetadata().getMeasures();
 		showable=ARUtil.containsMeasure(cac.getMetaValueString(ArConstants.FUNDING_TYPE),measures) || generator.getReportMetadata().getType().intValue()==4;
-		if(!showable) return false;
+		
+		if((!showable)||(filter.isWidget())) return false;
 		
 		//we now check if the year filtering is used - we do not want items from other years to be shown
 		if(filter.getFromYear()!=null || filter.getToYear()!=null) {
@@ -91,6 +92,10 @@ public class CategAmountColWorker extends ColumnWorker {
 			if(filter.getFromYear()!=null && filter.getFromYear().intValue()>itemYear.intValue()) showable=false;
 			if(filter.getToYear()!=null && filter.getToYear().intValue()<itemYear.intValue()) showable=false;
 		}
+		
+		   
+	        
+	        
 		return showable;
 	}
 
@@ -122,7 +127,9 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		int tr_type = -1;
 		int adj_type = -1;
+		
 		double tr_amount = rs.getDouble("transaction_amount");
+		
 		String tds = rs.getString("transaction_date");
 		 
 		java.sql.Date td=null;
@@ -132,8 +139,15 @@ public class CategAmountColWorker extends ColumnWorker {
 		    logger.error(e1);
 		    logger.info("Exception encountered parsing a transaction date!", e1);
 		}
-		//double exchangeRate=rs.getDouble("exchange_rate");
-		String currencyCode=rs.getString("currency_code");
+		//double exchangeRate=rs.getDouble("exchange_rate")
+		
+		;
+		String currencyCode="";
+		
+		if (columnsMetaData.contains("currency_code")){
+		    currencyCode=rs.getString("currency_code");
+		}
+		
 		String perspectiveCode=null; 
 		double fixedExchangeRate=1;
 		
@@ -141,46 +155,36 @@ public class CategAmountColWorker extends ColumnWorker {
 		String headMetaName=rsmd.getColumnName(4);
 
 
-		try {
-			fixedExchangeRate=rs.getDouble("fixed_exchange_rate");
-		
-		} catch (SQLException e) {
-
+		if (columnsMetaData.contains("fixed_exchange_rate")){
+		    fixedExchangeRate=rs.getDouble("fixed_exchange_rate");
 		}
-		
-
-		try {
+				
+		if (columnsMetaData.contains("perspective_code")){
 			perspectiveCode=rs.getString("perspective_code");
 		
-		} catch (SQLException e) {
-
 		}
 
-		
-		try {
-			adj_type = rs.getInt("adjustment_type");
+		if (columnsMetaData.contains("adjustment_type")){
+		    	adj_type = rs.getInt("adjustment_type");
+		}
+
+		if (columnsMetaData.contains("transaction_type")){
 			tr_type  = rs.getInt("transaction_type");
-		
-		} catch (SQLException e) {
-
 		}
 		
-		try {
+				
+		if (columnsMetaData.contains("terms_assist_name")){
 			String termsAssist = rs.getString("terms_assist_name");
 			MetaInfo termsAssistMeta = this.getCachedMetaInfo(ArConstants.TERMS_OF_ASSISTANCE,
 					termsAssist);
 			acc.getMetaData().add(termsAssistMeta);
-		} catch (SQLException e) {
-
 		}
 		
-		try {
-			String financingInstrument = rs.getString("financing_instrument_name");
+		if (columnsMetaData.contains("financing_instrument_name")){			
+		    	String financingInstrument = rs.getString("financing_instrument_name");
 			MetaInfo termsAssistMeta = this.getCachedMetaInfo(ArConstants.FINANCING_INSTRUMENT,
 					financingInstrument);
 			acc.getMetaData().add(termsAssistMeta);
-		} catch (SQLException e) {
-
 		}
 
 

@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import net.sf.hibernate.HibernateException;
@@ -54,6 +56,9 @@ public abstract class ColumnWorker {
 	
 	
 	protected ResultSetMetaData rsmd;
+	
+	protected HashSet<String> columnsMetaData;
+	
 	
 	protected boolean extractor;
 
@@ -132,6 +137,14 @@ public abstract class ColumnWorker {
 			ResultSet rs = ps.executeQuery();
 			rsmd=rs.getMetaData();
 			
+			
+			int colsCount=rsmd.getColumnCount()+1;
+			
+			columnsMetaData=new HashSet<String>();
+			
+			for (int i=1; i < colsCount;i++){
+			    columnsMetaData.add(rsmd.getColumnName(i));
+			}
 			rs.last();
 			int rsSize=rs.getRow();			
 			cc = newColumnInstance(rsSize+1);

@@ -70,7 +70,7 @@
 								<th><digi:trn key="aim:editorEmail">Editor Email</digi:trn></th>
 								<th><digi:trn key="aim:changeDate">Change Date</digi:trn></th>
 								<th><digi:trn key="aim:action">Action</digi:trn></th>											
-
+								
 							</tr>
 							<logic:iterate name="aimAuditLoggerManagerForm" property="logs" id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
 								<tr>
@@ -83,7 +83,17 @@
 									<td align="center">&nbsp;<bean:write name="log" property="editorName"/>&nbsp;</td>
 									<td align="center">&nbsp;<bean:write name="log" property="editorEmail"/>&nbsp;</td>
 									<td align="center">&nbsp;<bean:write name="log" property="modifyDate"/>&nbsp;</td>
-									<td align="center">&nbsp;<bean:write name="log" property="action"/>&nbsp;</td>
+									<td align="center">
+										<logic:equal value="delete" property="action" name="log">
+											<digi:trn key="admin:delete">Delete</digi:trn>
+										</logic:equal>
+										<logic:equal value="add" property="action" name="log">
+											<digi:trn key="admin:add">Add</digi:trn>
+										</logic:equal>
+										<logic:equal value="update" property="action" name="log">
+											<digi:trn key="admin:update">Update</digi:trn>
+										</logic:equal>
+									</td>
 								</tr>
 							</logic:iterate>
 						</table>

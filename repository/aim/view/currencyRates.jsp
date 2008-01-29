@@ -300,8 +300,12 @@ function fnSubmit() {
                                         &nbsp;&nbsp;&nbsp;&nbsp;
 											<%--<digi:trn key="aim:andPrev7Days">and previous</digi:trn>--%>
 											<html:select property="timePeriod" styleClass="inp-text">
-												<html:optionsCollection name="aimCurrencyRateForm" property="timePeriods"
-												value="value" label="label" />&nbsp;&nbsp;&nbsp;
+												<logic:iterate id="period" name="aimCurrencyRateForm" property="timePeriods">
+												<c:set var="translation">
+													<digi:trn key="aim:timeperiods${period.label}">${period.label}</digi:trn>
+												</c:set>						
+												<html:option value="period.value">${translation}</html:option>
+												</logic:iterate>
 											</html:select>
 										</td>
 										<td bgcolor="#f4f4f2" vAlign="center">

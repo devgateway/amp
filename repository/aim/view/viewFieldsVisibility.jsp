@@ -54,8 +54,11 @@
 					<c:set var="translation">
 						<digi:trn key="aim:clickToDeleteModule">Click here to Delete Module</digi:trn>
 					</c:set>
+					<c:set var="deletetext">
+						<digi:trn key="aim:delete">Delete</digi:trn>
+					</c:set>
 					[ <digi:link href="/visibilityManager.do" name="urlParamsDelModule" 
-						title="${translation}" onclick="return onDeleteModule()">Delete</digi:link> ]
+						title="${translation}" onclick="return onDeleteModule()">${deletetext}</digi:link> ]
 				</td>
 				
 			</tr>
@@ -86,16 +89,28 @@
 			type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility">
 			<tr>
 				<bean:define id="module" name="feature" property="parent" type="org.digijava.module.aim.dbentity.AmpModulesVisibility"/>
-				<td align="left"><digi:trn key="<%="fm:"+feature.getNameTrimmed() %>"><bean:write name="feature" property="name"/></digi:trn></td>
-				<td><i><bean:write name="module" property="name"/></i></td>
+				<td align="left">
+				<digi:trn key="<%="fm:"+feature.getNameTrimmed()%>">
+					<bean:write name="feature" property="name"/>
+				</digi:trn>
+				</td>
+				<td>
+					<i>
+					<digi:trn key="<%="fm:"+module.getNameTrimmed()%>">
+					<bean:write name="module" property="name"/></i>
+					</digi:trn>
+				</td>
 				<c:set target="${urlParamsDelFeature}" property="action" value="deleteFFM"/>
 				<c:set target="${urlParamsDelFeature}" property="featureId" value="<%=feature.getId()%>"/>
 				<td>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToDeleteFeature">Click here to Delete Feature</digi:trn>
 					</c:set>
+					<c:set var="translation">
+						<digi:trn key="aim:clickToDeleteModule">Click here to Delete Module</digi:trn>
+					</c:set>
 					[ <digi:link href="/visibilityManager.do" name="urlParamsDelFeature" 
-						title="${translation}" onclick="return onDeleteFeature()">Delete</digi:link> ]
+						title="${translation}" onclick="return onDeleteFeature()">${deletetext}</digi:link> ]
 				</td>
 				
 			</tr>
@@ -127,17 +142,33 @@
 			<tr>
 				<bean:define id="feature" name="field" property="parent" type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility"/>
 				<bean:define id="module" name="feature" property="parent" type="org.digijava.module.aim.dbentity.AmpModulesVisibility"/>
-				<td align="left"><digi:trn key="<%="fm:"+field.getNameTrimmed() %>"><bean:write name="field" property="name"/></digi:trn></td>
-				<td><i><bean:write name="feature" property="name"/></i></td>
-				<td><i><bean:write name="module" property="name"/></i></td>
+				<td align="left">
+					<digi:trn key="<%="fm:"+field.getNameTrimmed() %>">
+						<bean:write name="field" property="name"/>
+					</digi:trn></td>
+				<td>
+					<i>
+					<digi:trn key="<%="fm:"+feature.getNameTrimmed()%>">
+						<bean:write name="feature" property="name"/>
+					</digi:trn>
+					</i>
+				</td>
+				<td>
+					<i>
+					<digi:trn key="<%="fm:"+module.getNameTrimmed()%>">
+						<bean:write name="module" property="name"/>
+					</digi:trn>
+					</i>
+				</td>
 				<c:set target="${urlParamsDelField}" property="action" value="deleteFFM"/>
 				<c:set target="${urlParamsDelField}" property="fieldId" value="<%=field.getId()%>"/>
 				<td>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToDeleteField">Click here to Delete Field</digi:trn>
 					</c:set>
+					
 					[ <digi:link href="/visibilityManager.do" name="urlParamsDelField" 
-						title="${translation}" onclick="return onDeleteField()">Delete</digi:link> ]
+						title="${translation}" onclick="return onDeleteField()">${deletetext}</digi:link> ]
 				</td>
 				
 			</tr>

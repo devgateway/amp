@@ -118,7 +118,6 @@ public class GroupColumn extends Column {
     private static Column verticalSplitByCateg(CellColumn src,
             String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
         Column ret = new GroupColumn(src);
-
         // create a set of unique meta infos
         Set metaSet = new TreeSet();
         Iterator i = src.iterator();
@@ -127,12 +126,7 @@ public class GroupColumn extends Column {
             if(!element.isShow()) continue;
             MetaInfo minfo=MetaInfo.getMetaInfo(element.getMetaData(),category);
             if(minfo==null || minfo.getValue()==null) return null;
-            try {
             metaSet.add(minfo);
-            } catch(Exception e) {
-            	e.printStackTrace();
-            	logger.error(e);
-            }
         }
         
         //TODO: ugly stuff... i have no choice

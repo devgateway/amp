@@ -116,9 +116,13 @@ public class AmpReportGenerator extends ReportGenerator {
 			arc.setOrderId(new String("1"));
 			extractable.add(arc);
 		}
-
-		createDataForColumns(extractable);
-		createDataForColumns(generated);
+		if (extractable.size() > 0){
+		    createDataForColumns(extractable);
+		}
+		
+		if (extractable.size() > 0){
+		    createDataForColumns(generated);
+		}
 	}
 
 	/**

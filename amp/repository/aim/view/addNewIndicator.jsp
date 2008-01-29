@@ -165,7 +165,10 @@ function closeWindow() {
           </tr>
           <tr>
             <td>
-            Indicator code:<span style="color:Red;">*</span>
+            	<digi:trn key="admin:indicatorcode">
+            	Indicator code:
+            	</digi:trn>
+            	<span style="color:Red;">*</span>
             </td>
             <td>
                <html:text property="code" styleId="txtCode" style="font-family:verdana;font-size:11px;width:100px;"/>

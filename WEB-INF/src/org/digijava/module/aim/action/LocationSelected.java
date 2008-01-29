@@ -105,7 +105,8 @@ public class LocationSelected extends Action {
 						location[i].setCountryId(cntryId);// from implev=1
 						location[i].setCountry(cntryName);// from implev=1
 						location[i].setRegionId(reg.getAmpRegionId());
-						location[i].setRegion(reg.getName());		
+						location[i].setRegion(reg.getName());
+						location[i].setPercent("100");
 						if (eaForm.getFundingRegions() == null) {
 							eaForm.setFundingRegions(new ArrayList());
 						}
@@ -158,7 +159,8 @@ public class LocationSelected extends Action {
 						location[i].setRegionId(regnId);// from implev=2
 						location[i].setRegion(regnName);// from implev=2
 						location[i].setZoneId(zne.getAmpZoneId());
-						location[i].setZone(zne.getName());						
+						location[i].setZone(zne.getName());
+						location[i].setPercent("100");
 					}
 				}
 				flag = false;
@@ -198,7 +200,8 @@ public class LocationSelected extends Action {
 						location[i].setZoneId(zoneId);// from implev=3
 						location[i].setZone(zoneName);// from implev=3
 						location[i].setWoredaId(wrda.getAmpWoredaId());
-						location[i].setWoreda(wrda.getName());						
+						location[i].setWoreda(wrda.getName());
+						location[i].setPercent("100");
 					}
 				}
 				flag = false;

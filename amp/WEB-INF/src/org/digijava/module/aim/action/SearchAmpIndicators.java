@@ -72,7 +72,8 @@ public class SearchAmpIndicators extends Action {
 			
 			if (!eaForm.getAction().equals("viewall")) {
 				col = IndicatorUtil.searchIndicators(eaForm.getKeyword(),eaForm.getSectorName());
-			} else if(eaForm.getKeyword()!=null && eaForm.getKeyword().trim().length() > 0){
+			} else if((eaForm.getKeyword()!=null && eaForm.getKeyword().trim().length() > 0) || 
+					(eaForm.getSectorName()!=null && eaForm.getSectorName().trim().length()>0 && !eaForm.getSectorName().trim().equals("-1"))){
 				col = IndicatorUtil.searchIndicators(eaForm.getKeyword(),eaForm.getSectorName());
 			}else {
 				col = IndicatorUtil.getAmpIndicator();

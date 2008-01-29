@@ -66,33 +66,52 @@ public class SearchAmpIndicators extends Action {
 				
 			}
 			
+	/**
+	 * New code  AMP-2564
+	 */		
+			
 			if (!eaForm.getAction().equals("viewall")) {
-				if (eaForm.getKeyword().trim().length() != 0) {
-					// serach for indicators based on the keyword and the
-					// organisation type
-					//col = ProgramUtil.searchForindicators(eaForm.getKeyword().trim(),eaForm.getSectorName());
-					col = IndicatorUtil.searchForindicator(eaForm.getKeyword());
-//						if(col.size()==0 ){
-//							col = ProgramUtil.getThemeindicators(eaForm.getKeyword().trim());
-//					 	 }
-				} else {
-					// search for indicators based on organisation type only
-					col = IndicatorUtil.searchForindicator(eaForm.getSectorName());
-//				 	if(col.size()==0 ){
-//				     	col = ProgramUtil.getThemeindicators(eaForm.getSectorName());
-//					}
-	  			 }
-			} else if (eaForm.getKeyword().trim().length() != 0) {
-				// search based on the given keyword only.
-				col = IndicatorUtil.searchForindicator(eaForm.getKeyword().trim());
-			} else  {
-				// get all indicators since keyword field is blank and ind type field has 'ALL'.
+				col = IndicatorUtil.searchIndicators(eaForm.getKeyword(),eaForm.getSectorName());
+			} else if(eaForm.getKeyword()!=null && eaForm.getKeyword().trim().length() > 0){
+				col = IndicatorUtil.searchIndicators(eaForm.getKeyword(),eaForm.getSectorName());
+			}else {
 				col = IndicatorUtil.getAmpIndicator();
-				
-				/**
-		         * Returns All project indicator.
-		         */		
-				
+			}
+			
+			
+			
+			
+/**
+ * Old code
+ */			
+			
+//			if (!eaForm.getAction().equals("viewall")) {
+//				if (eaForm.getKeyword().trim().length() != 0) {
+//					// serach for indicators based on the keyword and the
+//					// organisation type
+//					//col = ProgramUtil.searchForindicators(eaForm.getKeyword().trim(),eaForm.getSectorName());
+//					col = IndicatorUtil.searchForindicator(eaForm.getKeyword().trim());
+////						if(col.size()==0 ){
+////							col = ProgramUtil.getThemeindicators(eaForm.getKeyword().trim());
+////					 	 }
+//				} else {
+//					// search for indicators based on organisation type only
+//					col = IndicatorUtil.searchForindicator(eaForm.getSectorName());
+////				 	if(col.size()==0 ){
+////				     	col = ProgramUtil.getThemeindicators(eaForm.getSectorName());
+////					}
+//	  			 }
+//			} else if (eaForm.getKeyword().trim().length() != 0) {
+//				// search based on the given keyword only.
+//				col = IndicatorUtil.searchForindicator(eaForm.getKeyword().trim());
+//			} else  {
+//				// get all indicators since keyword field is blank and ind type field has 'ALL'.
+//				col = IndicatorUtil.getAmpIndicator();
+//				
+//				/**
+//		         * Returns All project indicator.
+//		         */		
+//				
 //				coll =  MEIndicatorsUtil.getAllActivityIds();
 //				 
 //				 for(Iterator itr = coll.iterator(); itr.hasNext(); ) {
@@ -108,12 +127,12 @@ public class SearchAmpIndicators extends Action {
 //					 					ind.setName(tInd.getName());
 //					 					
 //					 					col.add(ind);
-//					 				 }
+//				 				 }
 //									 
 //							 }
 //					  }
-				 
-			}
+//				 
+//			}
 			if (col != null && col.size() > 0) {
 				List temp = (List) col;
 				

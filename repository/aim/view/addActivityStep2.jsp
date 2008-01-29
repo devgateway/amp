@@ -347,16 +347,28 @@ function addProgram(programType) {
 
 
 function remProgram(programType) {
-
-		<digi:context name="tremProgram" property="context/module/moduleinstance/remProgram.do?edit=true" />
-                var url="<%=tremProgram %>&programType="+programType;
-	  	document.aimEditActivityForm.action = url;
-               document.aimEditActivityForm.target = "_self"
-
-
-		document.aimEditActivityForm.submit();
-                return true;
-
+	if(programType==1){
+		var val=document.getElementsByName('selectedNPOPrograms');
+	} else if (programType==2) {
+		var val=document.getElementsByName('selectedPPrograms');
+	}else if (programType==3){
+		var val=document.getElementsByName('selectedSPrograms');
+	}		
+		if(val!=null ){
+			for(var i=0;i<val.length;I++){
+				if(val[i]!=null && val[i].checked){
+					<digi:context name="tremProgram" property="context/module/moduleinstance/remProgram.do?edit=true" />
+		            var url="<%=tremProgram %>&programType="+programType;
+			  		document.aimEditActivityForm.action = url;
+		            document.aimEditActivityForm.target = "_self"
+					document.aimEditActivityForm.submit();
+		            return true;
+				} else {
+					alert('Please select a program to remove');
+					return false;
+				}
+			}			
+		}		
 }
 -->
 </script>

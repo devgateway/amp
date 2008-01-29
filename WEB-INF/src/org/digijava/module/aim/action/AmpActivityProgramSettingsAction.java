@@ -26,8 +26,8 @@ public class AmpActivityProgramSettingsAction
                 AmpActivityProgramSettingsForm ampActivityProgramSettingsForm = (
                     AmpActivityProgramSettingsForm) form;
 
-                String event = ampActivityProgramSettingsForm.getEvent();
-                if (event != null && event.equals("Save")) {
+                
+                if (request.getParameter("save")!=null) {
                         ProgramUtil.saveAmpActivityProgramSettings(
                             ampActivityProgramSettingsForm.getSettingsList());
                         ampActivityProgramSettingsForm.setEvent(null);

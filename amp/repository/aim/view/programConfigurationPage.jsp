@@ -112,9 +112,9 @@ Default Hierarchy
 <tr>
 <td colspan="2">
 <c:set var="trn"><digi:trn key="aim:btnsave">Save</digi:trn></c:set>
-<html:submit property="event" value="${trn}"/>
+<html:submit property="save" value="${trn}"/>
 <c:set var="tran"><digi:trn key="aim:btncancel">Cancel</digi:trn></c:set>
-<html:cancel property="event" value="${tran}" onclick="return cancel();"/>
+<html:cancel property="cancel" value="${tran}" onclick="return cancel();"/>
 </td>
 </tr>
 </table>

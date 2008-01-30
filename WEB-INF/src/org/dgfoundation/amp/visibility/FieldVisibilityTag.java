@@ -139,10 +139,14 @@ public class FieldVisibilityTag extends BodyTagSupport {
    				HttpSession session		= pageContext.getSession();
    				TeamMember teamMember 	= (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
    			    
-   			    PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
-   			   if(ampFieldFromTree.getPermission(false)!=null && !ampFieldFromTree.canDo(GatePermConst.Actions.VIEW,scope))
-   			       return SKIP_BODY;
-   			   pageContext.getOut().print(bodyText);   			    
+   				//TODO AMP-2579 this IF was added to fix null pointer temporary.
+   				if (teamMember!=null){
+   	   			    PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
+   	   			    if(ampFieldFromTree.getPermission(false)!=null && !ampFieldFromTree.canDo(GatePermConst.Actions.VIEW,scope))
+   	   			    return SKIP_BODY;
+   				}
+
+   				pageContext.getOut().print(bodyText);   			    
    			} else return SKIP_BODY;//the field is not active!!!
    		   }
     	   

@@ -92,6 +92,8 @@ public class OrgRoleGate extends Gate {
 	    a = (Activity) oo;
 
 	TeamMember tm = (TeamMember) scope.get(GatePermConst.ScopeKeys.CURRENT_MEMBER);
+	//TODO AMP-2579 this IF was added to fix null pointer temporary.
+	if (tm==null) return false; 
 	AmpTeamMember atm = (AmpTeamMember) session.get(AmpTeamMember.class, tm.getMemberId());
 	PersistenceManager.releaseSession(session);
 	User user = atm.getUser();

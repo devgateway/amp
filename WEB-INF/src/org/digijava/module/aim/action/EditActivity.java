@@ -6,11 +6,9 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -47,6 +45,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -61,7 +60,6 @@ import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpSISINProyect;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.ActivityDocumentsUtil;
@@ -105,7 +103,6 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.gateperm.core.GatePermConst;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 
 /**
  * Loads the activity details of the activity specified in the form bean
@@ -146,6 +143,7 @@ public class EditActivity
       if ("true".compareTo(request.getParameter("public")) != 0)
         return mapping.findForward("index");
 
+    boolean isPublicView = (request.getParameter("public")==null)?false:request.getParameter("public").equals("true");
     EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
     Long activityId = eaForm.getActivityId();
 
@@ -1441,7 +1439,8 @@ if (tm != null && tm.getTeamType()
           eaForm.setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
           eaForm.setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
 
-          if (eaForm.getIsPreview() != 1) {
+		  //TODO AMP-2579 !isPublicView was added to fix null pointer temporary.
+          if (eaForm.getIsPreview() != 1 && !isPublicView) {
             AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm.
                 getMemberId());
             activity.setActivityCreator(teamMember);

@@ -197,7 +197,7 @@ public class EditActivity
 	      return null;
 
 	    }
-	    else if (tm != null && tm.getWrite() == false)
+	    else if (tm != null && ((!mapping.getPath().trim().endsWith("viewActivityPreview") && tm.getWrite() == false) || (mapping.getPath().trim().endsWith("viewActivityPreview") && tm.getRead()==false)) )
 	      errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
 
 	    if (errorMsgKey.trim().length() > 0) {

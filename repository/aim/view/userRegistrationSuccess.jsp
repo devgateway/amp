@@ -36,11 +36,11 @@
 		          <td class=r-dotted-lg-buttom vAlign=top><br>
 						<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 						<c:set var="translation">
-							<digi:trn key="aim:clickToUseAmpEthiopia">Click here to Use AMP Ethiopia now</digi:trn>
+							<digi:trn key="aim:loginSuccess:clickToUseAmp">Click here to Use AMP now</digi:trn>
 						</c:set>
 						<digi:link href="/index.do" title="${translation}" >	
-						<digi:trn key="aim:useAMPEthiopiaNow">
-						Use AMP Ethiopia now
+						<digi:trn key="aim:loginSuccess:useAMPNow">
+						Use AMP now
 						</digi:trn>
 						</digi:link>
 						<BR><BR><BR>

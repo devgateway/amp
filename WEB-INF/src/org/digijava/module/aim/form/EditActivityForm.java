@@ -710,7 +710,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			financingBreakdown=null;
 			visibleProgram=null;
 			fundingRegions = null;
-
+			lessonsLearned = null;
 			allReferenceDocNameIds =null;
 //			refDocComments = null;
 			referenceDocs = null;

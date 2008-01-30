@@ -1126,7 +1126,16 @@ A.head-menu-link,A.head-menu-link:active, A.head-menu-link:visited{
 
 A.head-menu-link:hover {
  color: #ffffff;
- background-color:#222e5d; 
+ background-color:#222e5d;
+position:relative;
+top: 5px;
+padding: 5 10 5 10px;
+font-family: Verdana,Tahoma,Arial,sans-serif;
+font-size: 7pt;		  
+font-weight:normal;
+text-align: center ;
+text-transform:uppercase;
+text-decoration:none; 
 }
 
 #gen {

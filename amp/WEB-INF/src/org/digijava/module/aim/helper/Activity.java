@@ -33,6 +33,7 @@ public class Activity
   private String origStartDate;
   private String revStartDate;
   private String currCompDate;
+  private String propCompDate;
   private String contractingDate;
   private String disbursmentsDate;
 
@@ -896,6 +897,14 @@ public class Activity
 	
 	public void setDraft(Boolean draft) {
 		this.draft = draft;
+	}
+
+	public String getPropCompDate() {
+		return propCompDate;
+	}
+
+	public void setPropCompDate(String propCompDate) {
+		this.propCompDate = propCompDate;
 	}
   
   

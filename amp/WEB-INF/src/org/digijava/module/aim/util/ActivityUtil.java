@@ -1281,6 +1281,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setCurrCompDate(DateConversion.
                                  ConvertDateToString(ampAct.
             getActualCompletionDate()));
+        activity.setPropCompDate(DateConversion.ConvertDateToString(ampAct.getProposedCompletionDate()));
         activity.setOrigAppDate(DateConversion.
                                 ConvertDateToString(ampAct.
             getProposedApprovalDate()));

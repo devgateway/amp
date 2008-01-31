@@ -1157,13 +1157,19 @@ function commentWin(val) {
 																	</TR>
 																	</field:display>
 																	<field:display name="Proposed Completion Date" feature="Planning">
+																	<tr>
+																		<TD bgcolor="#ffffff"><digi:trn
+																			key="aim:proposedCompletionDate">
+																			Proposed Completion Date</digi:trn> : <c:out
+																			value="${activity.propCompDate}" /> </TD>
+																	</tr>
 																	<TR>
 																		<TD bgcolor="#ffffff">
 																		<TABLE width="100%" cellspacing=0 cellpadding=0
 																			valign=top align=left>
 																			<TR>
 																				<TD width="170" valign=top><digi:trn
-																					key="aim:proposedCompletionDates">Proposed Completion Dates
+																					key="aim:proposedClosingDates">Closing Dates
 																					</digi:trn> :</TD>
 																				<TD>
 																				<TABLE cellPadding=0 cellSpacing=0>

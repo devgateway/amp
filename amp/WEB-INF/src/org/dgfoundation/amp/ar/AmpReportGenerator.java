@@ -307,9 +307,12 @@ public class AmpReportGenerator extends ReportGenerator {
 		applyExchangeRate();
 
 		createTotals();
-
-		categorizeData();
-
+		AmpARFilter arf=(AmpARFilter) filter;
+		
+		if (!arf.isWidget()){
+		    categorizeData();
+		}
+		
 		report = new GroupReportData(reportMetadata.getName());
 		report.setReportMetadata(this.reportMetadata);
 		report.setSourceColsCount(new Integer(extractableCount - 1));
@@ -329,7 +332,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		reportChild.addColumns(rawColumns.getItems());
 		report.addReport(reportChild);
 		
-		AmpARFilter arf=(AmpARFilter) filter;
+		
 		
 		//perform removal of funding column if no measure except undisbursed balance is selected. in such case,we just need totals
 		//or if widget mode is true...

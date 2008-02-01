@@ -5,9 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<jsp:include page="../../aim/view/scripts/newCalendar.jsp" flush="true" />
 
 <digi:instance property="calendarViewForm"/>
-
 <script type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
 <script type="text/javascript">
 function selectCalendarType(view, type) {
@@ -48,22 +48,27 @@ function selectCalendarType(view, type) {
                     <tr>
                         <td nowrap="nowrap"><digi:trn key="calendar:fromDate">&nbsp;From&nbsp;&nbsp;</digi:trn></td>
                         <c:if test="${calendarViewForm.selectedCalendarType == 0}">
-                            <script type="text/javascript" src="/thirdparty/CalendarPopup/PopupWindow.js"></script>
-                            <script type="text/javascript" src="/thirdparty/CalendarPopup/AnchorPosition.js"></script>
-                            <script type="text/javascript" src="/thirdparty/CalendarPopup/CalendarPopup.js"></script>
-                            <script type="text/javascript" src="/thirdparty/CalendarPopup/date.js"></script>
-                            <script type="text/javascript">
-                                var startDateCalendar = new CalendarPopup();
-                                startDateCalendar.setWeekStartDay(1);
-                            </script>
-                            <td nowrap="nowrap">
+              	           <td nowrap="nowrap">
                                 <table cellpadding="0" cellspacing="0">
-                                    <td nowrap="nowrap"><html:text styleId="customViewStartDate" name="calendarViewForm" property="customViewStartDate" style="width:80px"/></td>
-                                    <td nowrap="nowrap">&nbsp;<img id="startDateImg" name="startDateImg" src="/thirdparty/CalendarPopup/img/cal.gif" alt="STARTDATE" onclick="startDateCalendar.select(document.getElementById('customViewStartDate'), 'startDateImg', 'dd/MM/yyyy');return false;"></td>
+                                	<tr>
+                                    	<td nowrap="nowrap">
+                                    		<html:text styleId="customViewStartDate" name="calendarViewForm" property="customViewStartDate" style="width:80px"/>
+                                    	</td>
+                                    	<td nowrap="nowrap">&nbsp;
+                                    		<a id="clear1" href="javascript:clearDate(customViewStartDate, 'clear1')" style="text-decoration:none">
+									 			<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="CLEAR"/>
+											</a>
+                                    		<a id="date1" href='javascript:pickDateById("date1","customViewStartDate","dd/mm/yyyy","clear1")' style="text-decoration:none">
+												<img src="../ampTemplate/images/show-calendar.gif" alt="START DATE" border=0>
+											</a>
+                                   		</td>
+                                   	</tr>
                                 </table>
                             </td>
                         </c:if>
-                        <c:if test="${calendarViewForm.selectedCalendarType != 0}">
+                        
+                        
+          				<c:if test="${calendarViewForm.selectedCalendarType != 0}">
                             <html:hidden styleId="customViewStartDate" name="calendarViewForm" property="customViewStartDate"/>
                             <td nowrap="nowrap">
                                 <select id="customViewStartYear" onchange="updateDate(document.getElementById('customViewStartDate'), 'year', this.value)"></select>
@@ -98,15 +103,22 @@ function selectCalendarType(view, type) {
                     <tr>
                         <td nowrap="nowrap">&nbsp;<digi:trn key="aim:calendar:to">To</digi:trn>&nbsp;&nbsp;</td>
                         <c:if test="${calendarViewForm.selectedCalendarType == 0}">
-                            <script type="text/javascript">
-                                var endDateCalendar = new CalendarPopup();
-                                startDateCalendar.setWeekStartDay(1);
-                            </script>
                             <td nowrap="nowrap">
                                 <table cellpadding="0" cellspacing="0">
-                                    <td nowrap="nowrap"><html:text styleId="customViewEndDate" name="calendarViewForm" property="customViewEndDate" style="width:80px"/></td>
-                                    <td nowrap="nowrap">&nbsp;<img id="endDateImg" name="endDateImg" src="/thirdparty/CalendarPopup/img/cal.gif" alt="ENDDATE" onclick="startDateCalendar.select(document.getElementById('customViewEndDate'), 'endDateImg', 'dd/MM/yyyy');return false;"></td>
-                                </table>
+                                	<tr>
+                                    	<td nowrap="nowrap">
+                                    		<html:text styleId="customViewEndDate" name="calendarViewForm" property="customViewEndDate" style="width:80px"/>
+                                    	</td>
+                                    	<td nowrap="nowrap">&nbsp;
+                                    		<a id="clear2" href="javascript:clearDate(customViewEndDate, 'clear2')" style="text-decoration:none">
+									 			<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="CLEAR"/>
+											</a>
+                                    		<a id="date2" href='javascript:pickDateById("date2","customViewEndDate","dd/mm/yyyy","clear2")' style="text-decoration:none">
+												<img src="../ampTemplate/images/show-calendar.gif" alt="END DATE" border=0>
+											</a>
+										</td>
+									</tr>
+                           		</table>
                             </td>
                         </c:if>
                         <c:if test="${calendarViewForm.selectedCalendarType != 0}">

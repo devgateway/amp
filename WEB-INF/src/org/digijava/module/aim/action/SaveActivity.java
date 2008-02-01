@@ -213,7 +213,7 @@ public class SaveActivity extends Action {
 
 				// set funding and funding details
 				Set fundings = new HashSet();
-				if (eaForm.getFundingOrganizations() != null) {
+				if (eaForm.getFundingOrganizations() != null && eaForm.getFundingOrganizations().size()>0) {
 					Iterator itr1 = eaForm.getFundingOrganizations().iterator();
 					while (itr1.hasNext()) {
 						FundingOrganization fOrg = (FundingOrganization) itr1
@@ -222,7 +222,7 @@ public class SaveActivity extends Action {
 								eaForm.getFundDonor()!=null &&
                                 fOrg.getAmpOrgId().longValue() == eaForm.getFundDonor().longValue()) {
 							// add fundings
-							if (fOrg.getFundings() != null) {
+							if (fOrg.getFundings() != null && fOrg.getFundings().size()>0) {
 								Iterator itr2 = fOrg.getFundings().iterator();
 								while (itr2.hasNext()) {
 									Funding fund = (Funding) itr2.next();
@@ -237,7 +237,7 @@ public class SaveActivity extends Action {
 
 									// add funding details for each funding
 									Set fundDeatils = new HashSet();
-									if (fund.getFundingDetails() != null) {
+									if (fund.getFundingDetails() != null && fund.getFundingDetails().size()>0) {
 										Iterator itr3 = fund
 												.getFundingDetails().iterator();
 										while (itr3.hasNext()) {
@@ -632,7 +632,7 @@ public class SaveActivity extends Action {
 					activity.getClosingDates().add(closeDate);
 				}
 
-				if (eaForm.getActivityCloseDates() != null) {
+				if (eaForm.getActivityCloseDates() != null && eaForm.getActivityCloseDates().size()>0) {
 					Iterator itr = eaForm.getActivityCloseDates().iterator();
 					while (itr.hasNext()) {
 						String date = (String) itr.next();
@@ -739,7 +739,7 @@ public class SaveActivity extends Action {
 
 
 				// set the sectors
-				if (eaForm.getActivitySectors() != null) {
+				if (eaForm.getActivitySectors() != null && eaForm.getActivitySectors().size()>0) {
 					Set sectors = new HashSet();
 					if (eaForm.getActivitySectors() != null) {
 						Iterator itr = eaForm.getActivitySectors().iterator();
@@ -769,7 +769,7 @@ public class SaveActivity extends Action {
 				// set the sectors
 				if (eaForm.getActivityComponentes() != null) {
 					Set componentes = new HashSet();
-					if (eaForm.getActivityComponentes() != null) {
+					if (eaForm.getActivityComponentes() != null && eaForm.getActivityComponentes().size()>0) {
 						Iterator itr = eaForm.getActivityComponentes().iterator();
 						while (itr.hasNext()) {
 							ActivitySector actSect = (ActivitySector) itr.next();
@@ -813,7 +813,7 @@ public class SaveActivity extends Action {
 				// set organizations role
 				Set orgRole = new HashSet();
 
-				if (eaForm.getFundingOrganizations() != null) { // funding
+				if (eaForm.getFundingOrganizations() != null && eaForm.getFundingOrganizations().size()>0) { // funding
 																// organizations
 					AmpRole role = DbUtil.getAmpRole(Constants.DONOR);
 					Iterator itr = eaForm.getFundingOrganizations().iterator();
@@ -829,7 +829,7 @@ public class SaveActivity extends Action {
 						orgRole.add(ampOrgRole);
 					}
 				}
-				if (eaForm.getExecutingAgencies() != null) { // executing
+				if (eaForm.getExecutingAgencies() != null && eaForm.getExecutingAgencies().size()>0) { // executing
 																// agencies
 					AmpRole role = DbUtil
 							.getAmpRole(Constants.EXECUTING_AGENCY);
@@ -843,7 +843,7 @@ public class SaveActivity extends Action {
 						orgRole.add(ampOrgRole);
 					}
 				}
-				if (eaForm.getImpAgencies() != null) { // implementing agencies
+				if (eaForm.getImpAgencies() != null && eaForm.getImpAgencies().size()>0) { // implementing agencies
 					AmpRole role = DbUtil
 							.getAmpRole(Constants.IMPLEMENTING_AGENCY);
 					Iterator itr = eaForm.getImpAgencies().iterator();
@@ -856,7 +856,7 @@ public class SaveActivity extends Action {
 						orgRole.add(ampOrgRole);
 					}
 				}
-				if (eaForm.getBenAgencies() != null) { // beneficiary agencies
+				if (eaForm.getBenAgencies() != null && eaForm.getBenAgencies().size()>0) { // beneficiary agencies
 					AmpRole role = DbUtil
 							.getAmpRole(Constants.BENEFICIARY_AGENCY);
 					Iterator itr = eaForm.getBenAgencies().iterator();
@@ -869,7 +869,7 @@ public class SaveActivity extends Action {
 						orgRole.add(ampOrgRole);
 					}
 				}
-				if (eaForm.getConAgencies() != null) { // contracting agencies
+				if (eaForm.getConAgencies() != null && eaForm.getConAgencies().size()>0) { // contracting agencies
 					AmpRole role = DbUtil
 							.getAmpRole(Constants.CONTRACTING_AGENCY);
 					Iterator itr = eaForm.getConAgencies().iterator();
@@ -882,7 +882,7 @@ public class SaveActivity extends Action {
 						orgRole.add(ampOrgRole);
 					}
 				}
-				if (eaForm.getRegGroups() != null) { // regional groups
+				if (eaForm.getRegGroups() != null && eaForm.getRegGroups().size()>0) { // regional groups
 					AmpRole role = DbUtil
 							.getAmpRole(Constants.REGIONAL_GROUP);
 					Iterator itr = eaForm.getRegGroups().iterator();
@@ -895,7 +895,7 @@ public class SaveActivity extends Action {
 						orgRole.add(ampOrgRole);
 					}
 				}
-				if (eaForm.getSectGroups() != null) { // sector groups
+				if (eaForm.getSectGroups() != null && eaForm.getSectGroups().size()>0) { // sector groups
 					AmpRole role = DbUtil
 							.getAmpRole(Constants.SECTOR_GROUP);
 					Iterator itr = eaForm.getSectGroups().iterator();
@@ -908,7 +908,7 @@ public class SaveActivity extends Action {
 						orgRole.add(ampOrgRole);
 					}
 				}
-				if (eaForm.getReportingOrgs() != null) { // Reporting
+				if (eaForm.getReportingOrgs() != null && eaForm.getReportingOrgs().size()>0) { // Reporting
 															// Organization
 					AmpRole role = DbUtil
 							.getAmpRole(Constants.REPORTING_AGENCY);
@@ -925,7 +925,7 @@ public class SaveActivity extends Action {
 				activity.setOrgrole(orgRole);
 
 				// set locations
-				if (eaForm.getSelectedLocs() != null) {
+				if (eaForm.getSelectedLocs() != null && eaForm.getSelectedLocs().size()>0) {
 					Set<AmpActivityLocation> locations = new HashSet<AmpActivityLocation>();
 					Iterator<Location> itr = eaForm.getSelectedLocs().iterator();
 					while (itr.hasNext()) {
@@ -963,18 +963,20 @@ public class SaveActivity extends Action {
 					activity.setLocations(locations);
 				}
 
-				if(eaForm.getCosts()!=null) {
+				if(eaForm.getCosts()!=null && eaForm.getCosts().size()>0) {
 					Set costs=new HashSet();
 					Iterator i=eaForm.getCosts().iterator();
 					while (i.hasNext()) {
 						EUActivity element = (EUActivity) i.next();
 						element.setActivity(activity);
 						element.setId(null);
-						Iterator ii=element.getContributions().iterator();
-						while (ii.hasNext()) {
-							EUActivityContribution element2 = (EUActivityContribution) ii.next();
-							element2.setId(null);
-						}
+						if(element.getContributions()!=null){
+							Iterator ii=element.getContributions().iterator();
+							while (ii.hasNext()) {
+								EUActivityContribution element2 = (EUActivityContribution) ii.next();
+								element2.setId(null);
+							}
+						}						
 						costs.add(element);
 					}
 					activity.setCosts(costs);
@@ -990,14 +992,14 @@ public class SaveActivity extends Action {
 //				}
 
 				Collection relatedLinks = new ArrayList();
-				if (eaForm.getDocumentList() != null) {
+				if (eaForm.getDocumentList() != null && eaForm.getDocumentList() .size()>0) {
 					Iterator itr = eaForm.getDocumentList().iterator();
 					while (itr.hasNext()) {
 						RelatedLinks rl = (RelatedLinks) itr.next();
 						relatedLinks.add(rl);
 					}
 				}
-				if (eaForm.getLinksList() != null) {
+				if (eaForm.getLinksList() != null && eaForm.getLinksList().size()>0) {
 					Iterator itr = eaForm.getLinksList().iterator();
 					while (itr.hasNext()) {
 						RelatedLinks rl = (RelatedLinks) itr.next();
@@ -1038,14 +1040,14 @@ public class SaveActivity extends Action {
 
 				// set funding and funding details
 				Set fundings = new HashSet();
-				if (eaForm.getFundingOrganizations() != null) {
+				if (eaForm.getFundingOrganizations() != null && eaForm.getFundingOrganizations().size()>0) {
 					Iterator itr1 = eaForm.getFundingOrganizations().iterator();
 					while (itr1.hasNext()) {
 						FundingOrganization fOrg = (FundingOrganization) itr1
 								.next();
 
 						// add fundings
-						if (fOrg.getFundings() != null) {
+						if (fOrg.getFundings() != null && fOrg.getFundings().size()>0) {
 							Iterator itr2 = fOrg.getFundings().iterator();
 							while (itr2.hasNext()) {
 								Funding fund = (Funding) itr2.next();
@@ -1185,36 +1187,44 @@ public class SaveActivity extends Action {
 								ampRegFund.setTransactionType(new Integer(
 										Constants.COMMITMENT));
 								FundingDetail fd = (FundingDetail) itr2.next();
-								Iterator tmpItr = eaForm.getCurrencies()
-										.iterator();
-								while (tmpItr.hasNext()) {
-									AmpCurrency curr = (AmpCurrency) tmpItr
-											.next();
-									if (curr.getCurrencyCode().equals(
-											fd.getCurrencyCode())) {
-										ampRegFund.setCurrency(curr);
-										break;
+								Iterator tmpItr=null;
+								if(eaForm.getCurrencies()!=null){
+									tmpItr = eaForm.getCurrencies()
+									.iterator();
+									while (tmpItr.hasNext()) {
+										AmpCurrency curr = (AmpCurrency) tmpItr
+												.next();
+										if (curr.getCurrencyCode().equals(
+												fd.getCurrencyCode())) {
+											ampRegFund.setCurrency(curr);
+											break;
+										}
 									}
 								}
-								tmpItr = eaForm.getPerspectives().iterator();
-								while (tmpItr.hasNext()) {
-									AmpPerspective pers = (AmpPerspective) tmpItr
-											.next();
-									if (pers.getCode().equals(
-											fd.getPerspectiveCode())) {
-										ampRegFund.setPerspective(pers);
-										break;
+								 if(eaForm.getPerspectives()!=null && eaForm.getPerspectives().size()>0){
+									 tmpItr = eaForm.getPerspectives().iterator();
+										while (tmpItr.hasNext()) {
+											AmpPerspective pers = (AmpPerspective) tmpItr
+													.next();
+											if (pers.getCode().equals(
+													fd.getPerspectiveCode())) {
+												ampRegFund.setPerspective(pers);
+												break;
+											}
+										}
+								 }
+								
+								if(eaForm.getFundingRegions()!=null && eaForm.getFundingRegions().size()>0){
+									tmpItr = eaForm.getFundingRegions().iterator();
+									while (tmpItr.hasNext()) {
+										AmpRegion reg = (AmpRegion) tmpItr.next();
+										if (reg.getAmpRegionId().equals(
+												regFund.getRegionId())) {
+											ampRegFund.setRegion(reg);
+											break;
+										}
 									}
-								}
-								tmpItr = eaForm.getFundingRegions().iterator();
-								while (tmpItr.hasNext()) {
-									AmpRegion reg = (AmpRegion) tmpItr.next();
-									if (reg.getAmpRegionId().equals(
-											regFund.getRegionId())) {
-										ampRegFund.setRegion(reg);
-										break;
-									}
-								}
+								}								
 								ampRegFund.setTransactionAmount(new Double(
 										DecimalToText.getDouble(fd
 												.getTransactionAmount())));
@@ -1236,36 +1246,45 @@ public class SaveActivity extends Action {
 								ampRegFund.setTransactionType(new Integer(
 										Constants.DISBURSEMENT));
 								FundingDetail fd = (FundingDetail) itr2.next();
-								Iterator tmpItr = eaForm.getCurrencies()
-										.iterator();
-								while (tmpItr.hasNext()) {
-									AmpCurrency curr = (AmpCurrency) tmpItr
-											.next();
-									if (curr.getCurrencyCode().equals(
-											fd.getCurrencyCode())) {
-										ampRegFund.setCurrency(curr);
-										break;
+								Iterator tmpItr=null;
+								if(eaForm.getCurrencies()!=null){
+									 tmpItr = eaForm.getCurrencies()
+									.iterator();
+									while (tmpItr.hasNext()) {
+										AmpCurrency curr = (AmpCurrency) tmpItr
+												.next();
+										if (curr.getCurrencyCode().equals(
+												fd.getCurrencyCode())) {
+											ampRegFund.setCurrency(curr);
+											break;
+										}
 									}
 								}
-								tmpItr = eaForm.getPerspectives().iterator();
-								while (tmpItr.hasNext()) {
-									AmpPerspective pers = (AmpPerspective) tmpItr
-											.next();
-									if (pers.getCode().equals(
-											fd.getPerspectiveCode())) {
-										ampRegFund.setPerspective(pers);
-										break;
+								if(eaForm.getPerspectives()!=null && eaForm.getPerspectives().size()>0){
+									tmpItr = eaForm.getPerspectives().iterator();
+									while (tmpItr.hasNext()) {
+										AmpPerspective pers = (AmpPerspective) tmpItr
+												.next();
+										if (pers.getCode().equals(
+												fd.getPerspectiveCode())) {
+											ampRegFund.setPerspective(pers);
+											break;
+										}
+									}
+								}								
+								
+								if(eaForm.getFundingRegions()!=null && eaForm.getFundingRegions().size()>0){
+									tmpItr = eaForm.getFundingRegions().iterator();
+									while (tmpItr.hasNext()) {
+										AmpRegion reg = (AmpRegion) tmpItr.next();
+										if (reg.getAmpRegionId().equals(
+												regFund.getRegionId())) {
+											ampRegFund.setRegion(reg);
+											break;
+										}
 									}
 								}
-								tmpItr = eaForm.getFundingRegions().iterator();
-								while (tmpItr.hasNext()) {
-									AmpRegion reg = (AmpRegion) tmpItr.next();
-									if (reg.getAmpRegionId().equals(
-											regFund.getRegionId())) {
-										ampRegFund.setRegion(reg);
-										break;
-									}
-								}
+								
 								ampRegFund.setTransactionAmount(new Double(
 										DecimalToText.getDouble(fd
 												.getTransactionAmount())));
@@ -1288,36 +1307,44 @@ public class SaveActivity extends Action {
 								ampRegFund.setTransactionType(new Integer(
 										Constants.EXPENDITURE));
 								FundingDetail fd = (FundingDetail) itr2.next();
-								Iterator tmpItr = eaForm.getCurrencies()
-										.iterator();
-								while (tmpItr.hasNext()) {
-									AmpCurrency curr = (AmpCurrency) tmpItr
-											.next();
-									if (curr.getCurrencyCode().equals(
-											fd.getCurrencyCode())) {
-										ampRegFund.setCurrency(curr);
-										break;
+								Iterator tmpItr=null;
+								if(eaForm.getCurrencies()!=null){
+									tmpItr = eaForm.getCurrencies()
+									.iterator();
+									while (tmpItr.hasNext()) {
+										AmpCurrency curr = (AmpCurrency) tmpItr
+												.next();
+										if (curr.getCurrencyCode().equals(
+												fd.getCurrencyCode())) {
+											ampRegFund.setCurrency(curr);
+											break;
+										}
 									}
 								}
-								tmpItr = eaForm.getPerspectives().iterator();
-								while (tmpItr.hasNext()) {
-									AmpPerspective pers = (AmpPerspective) tmpItr
-											.next();
-									if (pers.getCode().equals(
-											fd.getPerspectiveCode())) {
-										ampRegFund.setPerspective(pers);
-										break;
+								if(eaForm.getPerspectives()!=null && eaForm.getPerspectives().size()>0){
+									tmpItr = eaForm.getPerspectives().iterator();
+									while (tmpItr.hasNext()) {
+										AmpPerspective pers = (AmpPerspective) tmpItr
+												.next();
+										if (pers.getCode().equals(
+												fd.getPerspectiveCode())) {
+											ampRegFund.setPerspective(pers);
+											break;
+										}
 									}
 								}
-								tmpItr = eaForm.getFundingRegions().iterator();
-								while (tmpItr.hasNext()) {
-									AmpRegion reg = (AmpRegion) tmpItr.next();
-									if (reg.getAmpRegionId().equals(
-											regFund.getRegionId())) {
-										ampRegFund.setRegion(reg);
-										break;
+								if( eaForm.getFundingRegions()!=null && eaForm.getFundingRegions().size()>0){
+									tmpItr = eaForm.getFundingRegions().iterator();
+									while (tmpItr.hasNext()) {
+										AmpRegion reg = (AmpRegion) tmpItr.next();
+										if (reg.getAmpRegionId().equals(
+												regFund.getRegionId())) {
+											ampRegFund.setRegion(reg);
+											break;
+										}
 									}
 								}
+								
 								ampRegFund.setTransactionAmount(new Double(
 										DecimalToText.getDouble(fd
 												.getTransactionAmount())));
@@ -1333,12 +1360,15 @@ public class SaveActivity extends Action {
 				}
 
 				// Delete the following code
-				Iterator tmp = regFundings.iterator();
-				while (tmp.hasNext()) {
-					AmpRegionalFunding rf = (AmpRegionalFunding) tmp.next();
-					logger.debug("Regional Fundings :" + rf.getAdjustmentType()
-							+ " " + rf.getTransactionAmount());
+				if(regFundings!=null && regFundings.size() >0){
+					Iterator tmp = regFundings.iterator();
+					while (tmp.hasNext()) {
+						AmpRegionalFunding rf = (AmpRegionalFunding) tmp.next();
+						logger.debug("Regional Fundings :" + rf.getAdjustmentType()
+								+ " " + rf.getTransactionAmount());
+					}
 				}
+				
 
 				activity.setRegionalFundings(regFundings);
 
@@ -1510,11 +1540,14 @@ public class SaveActivity extends Action {
 				Collection actIds = new ArrayList();
 				actIds.add(actId);
 				Collection dirtyActivities = DesktopUtil.getAmpProjects(actIds);
-				Iterator pItr = dirtyActivities.iterator();
-				if (pItr.hasNext()) {
-					AmpProject proj = (AmpProject) pItr.next();
-					col.add(proj);
+				if(dirtyActivities!=null && dirtyActivities.size()>0){
+					Iterator pItr = dirtyActivities.iterator();
+					if (pItr.hasNext()) {
+						AmpProject proj = (AmpProject) pItr.next();
+						col.add(proj);
+					}
 				}
+				
 				session.setAttribute(Constants.AMP_PROJECTS,col);
 				session.setAttribute(Constants.DIRTY_ACTIVITY_LIST,dirtyActivities);
 				session.setAttribute(Constants.DESKTOP_SETTINGS_CHANGED,new Boolean(true));

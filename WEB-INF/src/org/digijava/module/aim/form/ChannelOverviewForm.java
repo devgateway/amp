@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.digijava.module.aim.helper.Activity;
+import org.digijava.module.aim.helper.OrgProjectId;
 
 public class ChannelOverviewForm extends MainProjectDetailsForm
 {
@@ -43,14 +44,30 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private Collection modal;
 	private boolean canView;
 	private HashMap allComments;
-
 	private Activity activity;
 
 	private String buttonText;  // added by Akash for activity approval
         private List primaryPrograms;
         private List secondaryPrograms;
         private List nationalPlanObjectivePrograms;
+        
+    private OrgProjectId selectedOrganizations[]; //To Show organitations name in channel overview
+    
+    
+    /**
+	 * @return Returns the selectedOrganizations.
+	 */
+	public OrgProjectId[] getSelectedOrganizations() {
+		return selectedOrganizations;
+	}
 
+	/**
+	 * @param selectedOrganizations
+	 *            The selectedOrganizations to set.
+	 */
+	public void setSelectedOrganizations(OrgProjectId[] selectedOrganizations) {
+		this.selectedOrganizations = selectedOrganizations;
+	}
 
 	public Integer getPageNo() {
 			  return pageNo;

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -24,12 +25,15 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.ChannelOverviewForm;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -69,9 +73,43 @@ public class ViewChannelOverview extends TilesAction {
 				id = formBean.getId();
 			}
 
+			 
+			
 			Activity activity = ActivityUtil.getChannelOverview(id);
 			
 			createWarnings(activity);
+			
+			AmpActivity ampact = ActivityUtil.getAmpActivity(id);
+			
+			Set orgProjIdsSet = ampact.getInternalIds();
+	          if (orgProjIdsSet != null) {
+	            Iterator projIdItr = orgProjIdsSet.iterator();
+	            Collection temp = new ArrayList();
+	            while (projIdItr.hasNext()) {
+	              AmpActivityInternalId actIntId = (
+	                  AmpActivityInternalId) projIdItr
+	                  .next();
+	              OrgProjectId projId = new OrgProjectId();
+	              projId.setAmpOrgId(actIntId.getOrganisation()
+	                                 .getAmpOrgId());
+	              projId
+	                  .setName(actIntId.getOrganisation()
+	                           .getName());
+	              projId.setOrganisation(actIntId.getOrganisation());
+	              projId.setProjectId(actIntId.getInternalId());
+	              temp.add(projId);
+	            }
+	            if (temp != null && temp.size() > 0) {
+	              OrgProjectId orgProjectIds[] = new OrgProjectId[
+	                  temp
+	                  .size()];
+	              Object arr[] = temp.toArray();
+	              for (int i = 0; i < arr.length; i++) {
+	                orgProjectIds[i] = (OrgProjectId) arr[i];
+	              }
+	              formBean.setSelectedOrganizations(orgProjectIds);
+	            }
+	          }
 			
 			PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.ACTIVITY,activity);
 			ArrayList colAux=new ArrayList();

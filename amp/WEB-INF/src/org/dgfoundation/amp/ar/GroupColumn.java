@@ -191,8 +191,11 @@ public class GroupColumn extends Column {
 				AmountCell element = (AmountCell) ii.next();
 				acc.addCell(element);
 			}
-        	ret=acc;
         	
+        	//fixed problem when there is only  TOTAL_COMMITMENTS  or UNDISBURSED_BALANCE selected
+        	// ret=acc;
+        	 ret.getItems().add(acc);
+        	 acc.setParent(ret);
         }
         
         return ret;

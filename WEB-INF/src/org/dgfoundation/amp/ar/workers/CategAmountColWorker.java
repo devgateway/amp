@@ -84,7 +84,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		Set measures=generator.getReportMetadata().getMeasures();
 		showable=ARUtil.containsMeasure(cac.getMetaValueString(ArConstants.FUNDING_TYPE),measures) || generator.getReportMetadata().getType().intValue()==4;
 		
-		if((!showable)||(filter.isWidget())) return false;
+		if(!showable) return false;
 		
 		//we now check if the year filtering is used - we do not want items from other years to be shown
 		if(filter.getFromYear()!=null || filter.getToYear()!=null) {

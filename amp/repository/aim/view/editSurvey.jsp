@@ -70,6 +70,9 @@
 
 	}
 
+	function validateForm() {
+      return true;
+	}
 
 
 -->
@@ -579,11 +582,14 @@
 
 						<td width="25%" vAlign="top" align="right">
 
-						<!-- edit activity form menu -->
-
-							<jsp:include page="donorEditActivityMenu.jsp" flush="true" />
-
-						<!-- end of activity form menu -->
+  <!-- edit activity form menu -->
+  <c:if test="${aimEditActivityForm.donorFlag == false}">
+    <jsp:include page="editActivityMenu.jsp" flush="true" />
+  </c:if>
+  <c:if test="${aimEditActivityForm.donorFlag == true}">
+    <jsp:include page="donorEditActivityMenu.jsp" flush="true" />
+  </c:if>
+  <!-- end of activity form menu -->
 
 						</td></tr>
 

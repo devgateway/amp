@@ -33,7 +33,41 @@
 	function getDateFromCalendar(inputArray)
 	{
 		var references = calendarObjForForm.getHtmlElementReferences(); // Get back reference to form field.
-		references.myDate.value = inputArray.day + '/' + inputArray.month + '/' + inputArray.year;
+		var format = dateFormat;
+		var monthPos, dayPos, yearPos;
+		if (format.indexOf('MMM') != -1){
+			monthPos = format.indexOf('MMM');
+			yearPos = format.indexOf('yyyy');
+			dayPos = format.indexOf('dd');
+		}
+		else{
+			monthPos = format.indexOf('mm');
+			yearPos = format.indexOf('yyyy');
+			dayPos = format.indexOf('dd');
+		}	
+		var result = '';
+		if (dayPos < monthPos){
+			if (monthPos < yearPos)
+				result = inputArray.day + '/' + inputArray.month + '/' + inputArray.year;
+			else{
+				if (dayPos < yearPos)
+					result = inputArray.day + '/' + inputArray.year + '/' + inputArray.month;
+				else
+					result = inputArray.year + '/' + inputArray.day + '/' + inputArray.month;
+			}
+		}	
+		else{ //month < dayPos
+			if (yearPos < monthPos)
+				result = inputArray.year + '/' + inputArray.month + '/' + inputArray.day;
+			else{
+				if (dayPos < yearPos)
+					result = inputArray.month + '/' + inputArray.day + '/' + inputArray.year;
+				else
+					result = inputArray.month + '/' + inputArray.year + '/' + inputArray.day;
+			}
+		}	
+		
+		references.myDate.value = result;
 		calendarObjForForm.hide();			
 	}	
 

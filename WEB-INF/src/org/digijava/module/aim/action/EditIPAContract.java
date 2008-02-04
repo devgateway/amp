@@ -381,25 +381,26 @@ public class EditIPAContract extends MultiAction {
         if (euaf.getTotalPrivateContribCurrency() != null) {
             eua.setTotalPrivateContribCurrency(CurrencyUtil.getAmpcurrency(euaf.getTotalPrivateContribCurrency()));
         }
+         if (eaf.getContracts() == null) {
+                eaf.setContracts(new ArrayList());
+        }
         if (euaf.getContractDisbursements() != null) {
             HashSet disbs = new HashSet(euaf.getContractDisbursements());
             eua.setDisbursements(disbs);
-            if (eaf.getContracts() == null) {
-                eaf.setContracts(new ArrayList());
-            }
+           
             Iterator<IPAContractDisbursement> disbIter = disbs.iterator();
             while (disbIter.hasNext()) {
                 IPAContractDisbursement disb = disbIter.next();
                 disb.setContract(eua);
             }
-            if (euaf.getIndexId() != null && euaf.getIndexId() != -1) {
+           
+        }
+         if (euaf.getIndexId() != null && euaf.getIndexId() != -1) {
                 eaf.getContracts().set(euaf.getIndexId(), eua);
             } else {
                 eaf.getContracts().add(eua);
-            }
-            request.setAttribute("close", "close");
-
-        }
+         }
+        request.setAttribute("close", "close");
         return modeFinalize(mapping, form, request, response);
 
     }

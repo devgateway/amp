@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.poi.hssf.record.SSTRecord;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.OrgProjectId;
 
@@ -45,6 +46,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private boolean canView;
 	private HashMap allComments;
 	private Activity activity;
+	private String implemLocationLevel;
 
 	private String buttonText;  // added by Akash for activity approval
         private List primaryPrograms;
@@ -53,6 +55,22 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
         
     private OrgProjectId selectedOrganizations[]; //To Show organitations name in channel overview
     
+    /**
+     * 
+     * @return
+     */
+    public String getImplemLocationLevel() {
+		return implemLocationLevel;
+	}
+    
+    /**
+     * 
+     * @param implemLocationLevel
+     */
+    
+	public void setImplemLocationLevel(String implemLocationLevel) {
+		this.implemLocationLevel = implemLocationLevel;
+	}
     
     /**
 	 * @return Returns the selectedOrganizations.

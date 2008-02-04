@@ -348,7 +348,7 @@ function commentWin(val) {
 																					<li><i><c:out value="${selectedOrganizations.name}"/></i></li>
 																			  </td>
 																				<td width="11%">
-																					<i><c:out value="${selectedOrganizations.ampOrgId}"/></i>		
+																					<i><c:out value="${selectedOrganizations.projectId}"/></i>		
 																			  </td>
 																			</c:if>	
 																		</tr>
@@ -569,35 +569,51 @@ function commentWin(val) {
 																					<field:display name="Implementation Level"
 																						feature="Location">
 																						<TR>
-																							<TD width="100%" colspan="3" align="left"
-																								bgcolor="#ffffff"><i><digi:trn
-																								key="aim:impLevel">
-																									Implementation Level</digi:trn></i>: &nbsp; <c:out
-																								value="${activity.impLevel}" /></TD>
+																							<TD width="100%" colspan="3" align="left" bgcolor="#ffffff">
+																								<i><digi:trn key="aim:impLevel">Implementation Level</digi:trn></i>
+																								 :&nbsp;<c:out value="${activity.impLevel}"/>
+																							</TD>
 																						</TR>
 																					</field:display>
+																					
+																					<TD width="100%" colspan="3" align="left" bgcolor="#ffffff">
+																						<i>
+																							<digi:trn key="aim:impLocations">Implementation Location</digi:trn>
+																							:&nbsp;
+																						</i>
+																						<c:out value="${aimChannelOverviewForm.implemLocationLevel}" />
+																						
+																					</TD>
+																					
 																					<c:if test="${!empty activity.locations}">
 																						<TR>
-																							<TD width="33%" align="center" bgcolor="#ffffff"><digi:trn
-																								key="aim:region">
-																									Region</digi:trn></TD>
-																							<TD width="33%" align="center" bgcolor="#ffffff"><digi:trn
-																								key="aim:zone">
-																										Zone
-																									</digi:trn></TD>
-																							<TD width="33%" align="center" bgcolor="#ffffff"><digi:trn
-																								key="aim:woreda">
-																										Woreda
-																									</digi:trn></TD>
-																						</TR>
+																							<TD width="33%" align="center" bgcolor="#ffffff">
+																								<digi:trn key="aim:region">Region</digi:trn>
+																							</TD>
+																							<TD width="33%" align="center" bgcolor="#ffffff">
+																								<digi:trn key="aim:zone"> Zone </digi:trn>
+																							</TD>
+																							<TD width="33%" align="center" bgcolor="#ffffff">
+																								<digi:trn key="aim:woreda"> Woreda </digi:trn></TD>
+																							</TR>
+																						
 																						<c:forEach var="loc" items="${activity.locations}">
 																							<TR>
-																								<TD width="33%" align="left" bgcolor="#ffffff"><c:out
-																									value="${loc.region}" /></TD>
-																								<TD width="33%" align="left" bgcolor="#ffffff"><c:out
-																									value="${loc.zone}" /></TD>
-																								<TD width="33%" align="left" bgcolor="#ffffff"><c:out
-																									value="${loc.woreda}" /></TD>
+																								<c:if test="${!empty loc.region}">
+																									<TD width="33%" align="center" bgcolor="#ffffff">
+																										<c:out value="${loc.region}" />
+																									</TD>
+																								</c:if>
+																								<c:if test="${!empty loc.zone}">
+																									<TD width="33%" align="center" bgcolor="#ffffff">
+																										<c:out value="${loc.zone}" />
+																									</TD>
+																								</c:if>
+																								<c:if test="${!empty loc.woreda}">
+																								<TD width="33%" align="center" bgcolor="#ffffff">
+																									<c:out value="${loc.woreda}" />
+																								</TD>
+																								</c:if>
 																							</TR>
 																						</c:forEach>
 																					</c:if>
@@ -631,10 +647,11 @@ function commentWin(val) {
 																				key="aim:national Plan Objective">National Plan Objective</digi:trn></b></TD>
 																		</TR>
 																		<TR>
-																			<TD bgcolor="#ffffff"><c:forEach var="program"
+																			<TD bgcolor="#ffffff">
+																			<c:forEach var="program"
 																				items="${aimChannelOverviewForm.nationalPlanObjectivePrograms}">
-																				<c:out value="${program.hierarchyNames}" />&nbsp; <c:out
-																					value="${program.programPercentage}" />%<br />
+																				<c:out value="${program.hierarchyNames}" />&nbsp; 
+																				<c:out value="${program.programPercentage}"/>%<br/>
 																			</c:forEach></TD>
 																		</TR>
 																	</field:display>
@@ -680,31 +697,43 @@ function commentWin(val) {
 																<feature:display name="Identification"
 																	module="Project ID and Planning">
 																	<TR>
-																		<TD bgcolor="#ffffff"><field:display
-																			name="Description" feature="Identification">
+																		<TD bgcolor="#ffffff">
+																		<field:display name="Description" feature="Identification">
 																			<i><b><digi:trn key="aim:programDescription">Description</digi:trn></b></i>:
-																			<digi:edit key="${activity.description}" />
+																			<c:if test='${!empty activity.description}'>
+																				<digi:edit key="${activity.description}" />
+																			</c:if>
 																			<br />
 																		</field:display> <field:display feature="Identification"
 																			name="Objectives">
 																			<i><b><digi:trn key="aim:programObjective">Objective</digi:trn></b></i>:
-																		<digi:edit key="${activity.objective}" />
+																			<c:if test='${!empty activity.objective}'>
+																				<digi:edit key="${activity.objective}" />
+																			</c:if>
 																			<ul>
 																				<c:forEach var="comments"
 																					items="${aimChannelOverviewForm.allComments}">
-																					<c:if
-																						test='${comments.key=="Objective Assumption"}'>
+																					<c:if test='${comments.key=="Objective Assumption"}'>
 																						<c:forEach var="comment" items="${comments.value}">
 																							<li><i><digi:trn
 																								key="aim:objectiveAssumption">Objective Assumption</digi:trn>:</i>
 																							${comment.comment}</li>
 																						</c:forEach>
 																					</c:if>
-																					<c:if
-																						test='${comments.key=="Objective Verification"}'>
+																					<c:if test='${comments.key=="Objective Verification"}'>
 																						<c:forEach var="comment" items="${comments.value}">
 																							<li><i><digi:trn
 																								key="aim:objectiveVerification">Objective Verification</digi:trn>:</i>
+																							${comment.comment}</li>
+																						</c:forEach>
+																					</c:if>
+																					<c:if
+																						test='${comments.key=="Objective Objectively Verifiable Indicators"}'>
+																						<c:forEach var="comment" items="${comments.value}">
+																							<li><i><digi:trn key="aim:objectivelyindicatorspreview">
+																							Objectively Verifiable Indicators
+																							</digi:trn>:
+																							</i>
 																							${comment.comment}</li>
 																						</c:forEach>
 																					</c:if>

@@ -163,6 +163,7 @@
 	<page name="addActivityStep10" title=" - Add Activity - Monitoring and Evaluation" />
 	<page name="addActivityStep11" title=" - Add Activity - Project Costs" />
 	<page name="addActivityStep12" title=" - Add Activity - Level Linker" />
+        <page name="addActivityStep13" title=" - Add Activity -IPA Contracting" />
 	<page name="activityExist" title=" - Add Activity - Activity Already Exist" />
 	<page name="locationManager" title=" - Region Manager" />
 <!--	<page name="locationManager" title=" - Location Manager" />
@@ -176,6 +177,7 @@
 	<page page="selectOrganization" name="aim_orgPopupLayout" title="AMP - Select Organization" />
 	<page page="addFunding" name="aim_fundingPopupLayout" title="AMP - Add Funding" />
 	<page page="editEUActivity" name="aim_editEUActivity" title="AMP - Edit Activity" />
+        <page page="editIPAContract" name="aim_editIPAContract" title="AMP - Edit Activity" />	
 	<page page="addRegionalFunding" name="aim_addRegionalFunding" title="AMP - Add Regional Funding" />
 	<page page="selectSector" name="aim_selSectorPopupLayout" title="AMP - Select Sector" />
 	<page page="selectSectorForind" name="aim_selectSectorForind" title="AMP - Select Sector" />

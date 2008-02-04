@@ -1,0 +1,255 @@
+package org.digijava.module.aim.dbentity;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
+import org.digijava.module.common.util.DateTimeUtil;
+
+/**
+ * @author mihai
+ *
+ */
+public class IPAContract implements Serializable {
+
+    private static final long serialVersionUID = 2485772788422409800L;
+    private Long id;
+    private String contractName;
+    private String description;
+    private AmpCategoryValue activityCategory;
+    private Date startOfTendering;
+    private Date signatureOfContract;
+    private Date contractCompletion;
+    private Double totalECContribIBAmount;
+    private AmpCurrency totalECContribIBCurrency;
+    private Double totalECContribINVAmount;
+    private AmpCurrency totalECContribINVCurrency;
+    private Double totalNationalContribCentralAmount;
+    private AmpCurrency totalNationalContribCentralCurrency;
+    private Double totalNationalContribRegionalAmount;
+    private AmpCurrency totalNationalContribRegionalCurrency;
+    private Double totalNationalContribIFIAmount;
+    private AmpCurrency totalNationalContribIFICurrency;
+    private Double totalPrivateContribAmount;
+    private AmpCurrency totalPrivateContribCurrency;
+    private Set disbursements;
+    private AmpActivity activity;
+    private AmpOrganisation organization;
+    private AmpCategoryValue status;
+
+    public AmpCategoryValue getStatus() {
+        return status;
+    }
+
+    public void setStatus(AmpCategoryValue status) {
+        this.status = status;
+    }
+
+    public AmpOrganisation getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(AmpOrganisation organization) {
+        this.organization = organization;
+    }
+
+    public AmpActivity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(AmpActivity activity) {
+        this.activity = activity;
+    }
+
+    public AmpCategoryValue getActivityCategory() {
+        return activityCategory;
+    }
+
+    public void setActivityCategory(AmpCategoryValue activityCategory) {
+        this.activityCategory = activityCategory;
+    }
+
+    public Date getContractCompletion() {
+        return contractCompletion;
+    }
+
+    public void setContractCompletion(Date contractCompletion) {
+        this.contractCompletion = contractCompletion;
+    }
+
+    public String getContractName() {
+        return contractName;
+    }
+
+    public void setContractName(String contractName) {
+        this.contractName = contractName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getFormattedStartOfTendering() {
+        String formatted = "";
+        if (startOfTendering != null) {
+            formatted = DateTimeUtil.formatDate(startOfTendering);
+        }
+        return formatted;
+    }
+
+    public String getFormattedSignatureOfContract() {
+        String formatted = "";
+        if (signatureOfContract != null) {
+            formatted = DateTimeUtil.formatDate(signatureOfContract);
+        }
+        return formatted;
+
+    }
+
+    public String getFormattedContractCompletion() {
+        String formatted = "";
+        if (contractCompletion != null) {
+            formatted = DateTimeUtil.formatDate(contractCompletion);
+        }
+        return formatted;
+
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set getDisbursements() {
+        return disbursements;
+    }
+
+    public void setDisbursements(Set disbursements) {
+        this.disbursements = disbursements;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getSignatureOfContract() {
+        return signatureOfContract;
+    }
+
+    public void setSignatureOfContract(Date signatureOfContract) {
+        this.signatureOfContract = signatureOfContract;
+    }
+
+    public Date getStartOfTendering() {
+        return startOfTendering;
+    }
+
+    public void setStartOfTendering(Date startOfTendering) {
+        this.startOfTendering = startOfTendering;
+    }
+
+    public Double getTotalECContribIBAmount() {
+        return totalECContribIBAmount;
+    }
+
+    public void setTotalECContribIBAmount(Double totalECContribIBAmount) {
+        this.totalECContribIBAmount = totalECContribIBAmount;
+    }
+
+    public AmpCurrency getTotalECContribIBCurrency() {
+        return totalECContribIBCurrency;
+    }
+
+    public void setTotalECContribIBCurrency(AmpCurrency totalECContribIBCurrency) {
+        this.totalECContribIBCurrency = totalECContribIBCurrency;
+    }
+
+    public Double getTotalECContribINVAmount() {
+        return totalECContribINVAmount;
+    }
+
+    public void setTotalECContribINVAmount(Double totalECContribINVAmount) {
+        this.totalECContribINVAmount = totalECContribINVAmount;
+    }
+
+    public AmpCurrency getTotalECContribINVCurrency() {
+        return totalECContribINVCurrency;
+    }
+
+    public void setTotalECContribINVCurrency(AmpCurrency totalECContribINVCurrency) {
+        this.totalECContribINVCurrency = totalECContribINVCurrency;
+    }
+
+    public Double getTotalNationalContribCentralAmount() {
+        return totalNationalContribCentralAmount;
+    }
+
+    public void setTotalNationalContribCentralAmount(
+            Double totalNationalContribCentralAmount) {
+        this.totalNationalContribCentralAmount = totalNationalContribCentralAmount;
+    }
+
+    public AmpCurrency getTotalNationalContribCentralCurrency() {
+        return totalNationalContribCentralCurrency;
+    }
+
+    public void setTotalNationalContribCentralCurrency(
+            AmpCurrency totalNationalContribCentralCurrency) {
+        this.totalNationalContribCentralCurrency = totalNationalContribCentralCurrency;
+    }
+
+    public Double getTotalNationalContribIFIAmount() {
+        return totalNationalContribIFIAmount;
+    }
+
+    public void setTotalNationalContribIFIAmount(
+            Double totalNationalContribIFIAmount) {
+        this.totalNationalContribIFIAmount = totalNationalContribIFIAmount;
+    }
+
+    public AmpCurrency getTotalNationalContribIFICurrency() {
+        return totalNationalContribIFICurrency;
+    }
+
+    public void setTotalNationalContribIFICurrency(
+            AmpCurrency totalNationalContribIFICurrency) {
+        this.totalNationalContribIFICurrency = totalNationalContribIFICurrency;
+    }
+
+    public Double getTotalNationalContribRegionalAmount() {
+        return totalNationalContribRegionalAmount;
+    }
+
+    public void setTotalNationalContribRegionalAmount(
+            Double totalNationalContribRegionalAmount) {
+        this.totalNationalContribRegionalAmount = totalNationalContribRegionalAmount;
+    }
+
+    public AmpCurrency getTotalNationalContribRegionalCurrency() {
+        return totalNationalContribRegionalCurrency;
+    }
+
+    public void setTotalNationalContribRegionalCurrency(
+            AmpCurrency totalNationalContribRegionalCurrency) {
+        this.totalNationalContribRegionalCurrency = totalNationalContribRegionalCurrency;
+    }
+
+    public Double getTotalPrivateContribAmount() {
+        return totalPrivateContribAmount;
+    }
+
+    public void setTotalPrivateContribAmount(Double totalPrivateContribAmount) {
+        this.totalPrivateContribAmount = totalPrivateContribAmount;
+    }
+
+    public AmpCurrency getTotalPrivateContribCurrency() {
+        return totalPrivateContribCurrency;
+    }
+
+    public void setTotalPrivateContribCurrency(
+            AmpCurrency totalPrivateContribCurrency) {
+        this.totalPrivateContribCurrency = totalPrivateContribCurrency;
+    }
+}

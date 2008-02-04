@@ -1426,7 +1426,7 @@ public class SaveActivity extends Action {
 					actId = ActivityUtil.saveActivity(activity, eaForm.getActivityId(),
 							true, eaForm.getCommentsCol(), eaForm
 									.isSerializeFlag(), field, relatedLinks, tm
-									.getMemberId(), eaForm.getIndicatorsME(),tempComp);
+									.getMemberId(), eaForm.getIndicatorsME(),tempComp,eaForm.getContracts());
 
 					//for logging the activity
 					AuditLoggerUtil.logActivityUpdate(session, request,
@@ -1477,7 +1477,7 @@ public class SaveActivity extends Action {
 
 					// create a new activity
 					actId = ActivityUtil.saveActivity(activity, null, false, eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
-	                        field, relatedLinks,tm.getMemberId() , eaForm.getIndicatorsME(), tempComp);
+	                        field, relatedLinks,tm.getMemberId() , eaForm.getIndicatorsME(), tempComp, eaForm.getContracts());
 
 					//for logging the activity
 					AuditLoggerUtil.logObject(session, request,activity,"add");

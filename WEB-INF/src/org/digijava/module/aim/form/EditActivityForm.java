@@ -267,6 +267,15 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String totalUnExpended = "";
 	private String totalExpended="";
         private String totalDisbOrder="";
+        private Integer contrcatToRemove;
+
+        public Integer getContrcatToRemove() {
+            return contrcatToRemove;
+        }
+
+        public void setContrcatToRemove(Integer contrcatToRemove) {
+            this.contrcatToRemove = contrcatToRemove;
+        }
 
     public String getTotalDisbOrder() {
         return totalDisbOrder;
@@ -503,6 +512,15 @@ public class EditActivityForm extends ActionForm implements Serializable{
      private String disbOrderId;
 
      private AmpAhsurvey ahsurvey;
+     private List contracts;
+
+    public List getContracts() {
+        return contracts;
+    }
+
+    public void setContracts(List contracts) {
+        this.contracts = contracts;
+    }
 
 
      public Boolean getGovernmentApprovalProcedures() {
@@ -745,6 +763,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
                       selectedSPrograms=null;
                       selectedPPrograms=null;
                       selectedNPOPrograms=null;
+                      contracts=null;
+                      contrcatToRemove=null;
 
 
 		}

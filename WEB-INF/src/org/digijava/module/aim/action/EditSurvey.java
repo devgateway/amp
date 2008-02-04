@@ -35,7 +35,7 @@ public class EditSurvey extends Action {
 		TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");
 
 		// if user is not a DONOR then forward him to his portfolio
-		if (!tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE))
+		if (!tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE) && !tm.getTeamType().equalsIgnoreCase("GOVERNMENT"))
 			return mapping.findForward("viewMyDesktop");
 
 		logger.debug("In edit survey action");

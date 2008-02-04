@@ -106,9 +106,14 @@ public class AddAmpActivity extends Action {
 
     EditActivityForm eaForm = (EditActivityForm) form; 
     
-    //set the level, if available
+    //set the contracts, if available
     String levelTxt=request.getParameter("activityLevelId");
     if(levelTxt!=null) eaForm.setActivityLevel(Long.parseLong(levelTxt));
+    //set the level, if available
+    if(eaForm.getActivityId()!=null&&(eaForm.getContracts()==null||eaForm.getContracts().size()==0)){
+           List contracts=ActivityUtil.getIPAContracts(eaForm.getActivityId());
+           eaForm.setContracts(contracts);
+     }
 
     /*Clear eventually dirty information found in session related to DM*/
 		if ( request.getParameter("action") != null && request.getParameter("action").equals("create") ){
@@ -882,6 +887,9 @@ public class AddAmpActivity extends Action {
       else if (eaForm.getStep().equals("12")) { // show the step 12 page.
 	        return mapping.findForward("addActivityStep12");
 	      }
+      else if (eaForm.getStep().equals("13")) { // show the step 13 page.
+          return mapping.findForward("addActivityStep13");
+      }
       else if (eaForm.getStep().equals("9")) { // show the preview page.
 
  //       if (eaForm.getAmpId() == null ) { // if AMP-ID is not generated, generate the AMP-ID

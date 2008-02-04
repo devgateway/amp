@@ -328,6 +328,12 @@
     <hibernate-class>
 			 org.digijava.module.aim.dbentity.AmpUserExtension
 	</hibernate-class>
+        <hibernate-class>
+			  org.digijava.module.aim.dbentity.IPAContract
+	</hibernate-class>
+	<hibernate-class>
+			  org.digijava.module.aim.dbentity.IPAContractDisbursement
+	</hibernate-class>
 
 	</hibernate-classes>
         <!-- highlights classes End-->

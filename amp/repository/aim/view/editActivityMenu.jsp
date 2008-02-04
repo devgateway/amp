@@ -700,6 +700,42 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	</feature:display>
+         <!-- IPA Contracting -->
+	<module:display name="IPA Contracting">
+	<feature:display name="IPA Contracting" module="IPA Contracting">
+	<tr>
+		<c:if test="${aimEditActivityForm.step != 13}">
+		<td nowrap="nowrap">
+			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+			<c:set var="translation">
+				<digi:trn key="aim:ipaContracting">IPA Contracting</digi:trn>
+			</c:set>
+			<a href="javascript:gotoStep(13)" class="menu" title="${translation}">
+				<digi:trn key="aim:ipacontracting">IPA Contracting</digi:trn>
+			</a>
+		</td>
+		</c:if>
+		<c:if test="${aimEditActivityForm.step == 13}">
+		<td nowrap="nowrap">
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
+				<tr>
+					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					</td>
+					<td bgcolor="#3399ff" height="19">
+			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+			<span class="textalb">
+				<digi:trn key="aim:ipacontracting">IPA Contracting</digi:trn>			
+			</span>
+					</td>
+					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					</td>
+				</tr>
+			</table>
+		</td>
+		</c:if>
+	</tr>
+	</feature:display>
+	</module:display>
 
 
 

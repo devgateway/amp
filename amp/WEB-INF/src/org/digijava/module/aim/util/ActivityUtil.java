@@ -88,6 +88,8 @@ import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.IPAContract;
+import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 
 /**
  * ActivityUtil is the persister class for all activity related
@@ -107,14 +109,14 @@ public class ActivityUtil {
   public static Long saveActivity(AmpActivity activity, ArrayList commentsCol,
                                   boolean serializeFlag, Long field,
                                   Collection relatedLinks, Long memberId,
-                                  Set<Components<AmpComponentFunding>> ampTempComp) {
+                                  Set<Components<AmpComponentFunding>> ampTempComp,List<IPAContract> contracts) {
     /*
      * calls saveActivity(AmpActivity activity,Long oldActivityId,boolean edit)
      * by passing null and false to the parameters oldActivityId and edit respectively
      * since this is creating a new activity
      */
     return saveActivity(activity, null, false, commentsCol, serializeFlag,
-                        field, relatedLinks, memberId, null, ampTempComp);
+                        field, relatedLinks, memberId, null, ampTempComp, contracts);
   }
 
   /**
@@ -135,7 +137,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                                   ArrayList commentsCol, boolean serializeFlag,
                                   Long field,
                                   Collection relatedLinks, Long memberId,
-                                  Collection indicators, Set<Components<AmpComponentFunding>> componentsFunding) {
+                                  Collection indicators, Set<Components<AmpComponentFunding>> componentsFunding, List<IPAContract> contracts) {
     logger.debug("In save activity " + activity.getName());
     Session session = null;
     Transaction tx = null;
@@ -797,6 +799,106 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           }
         }
       }
+        String queryString = "select con from " + IPAContract.class.getName() + " con where con.activity=" + activityId;
+        String ids = "";
+        if (contracts != null) {
+
+            Iterator<IPAContract> ipaConIter = contracts.iterator();
+            while (ipaConIter.hasNext()) {
+                IPAContract contract = ipaConIter.next();
+                contract.setActivity(activity);
+                if (contract.getId() != null) {
+                    IPAContract oldContract = (IPAContract) session.get(IPAContract.class, contract.getId());
+                    oldContract.setContractName(contract.getContractName());
+                    oldContract.setDescription(contract.getDescription());
+                    oldContract.setActivityCategory(contract.getActivityCategory());
+                    oldContract.setStartOfTendering(contract.getStartOfTendering());
+                    oldContract.setSignatureOfContract(contract.getSignatureOfContract());
+                    oldContract.setContractCompletion(contract.getContractCompletion());
+                    oldContract.setTotalECContribIBAmount(contract.getTotalECContribIBAmount());
+                    oldContract.setTotalECContribIBCurrency(contract.getTotalECContribIBCurrency());
+                    oldContract.setTotalECContribINVAmount(contract.getTotalECContribINVAmount());
+                    oldContract.setTotalECContribINVCurrency(contract.getTotalECContribINVCurrency());
+                    oldContract.setTotalNationalContribCentralAmount(contract.getTotalNationalContribCentralAmount());
+                    oldContract.setTotalNationalContribCentralCurrency(contract.getTotalNationalContribCentralCurrency());
+                    oldContract.setTotalNationalContribRegionalAmount(contract.getTotalNationalContribRegionalAmount());
+                    oldContract.setTotalNationalContribRegionalCurrency(contract.getTotalNationalContribRegionalCurrency());
+                    oldContract.setTotalNationalContribIFIAmount(contract.getTotalNationalContribIFIAmount());
+                    oldContract.setTotalNationalContribIFICurrency(contract.getTotalNationalContribIFICurrency());
+                    oldContract.setTotalPrivateContribAmount(contract.getTotalPrivateContribAmount());
+                    oldContract.setTotalPrivateContribCurrency(contract.getTotalPrivateContribCurrency());
+                    oldContract.setOrganization(contract.getOrganization());
+                    oldContract.setStatus(contract.getStatus());
+                    //oldContract.getDisbursements().clear();
+                    Set disbs = contract.getDisbursements();
+                    List<Long> disbIds=new ArrayList();
+                    Set newDisb=new HashSet();
+                    Set removeDisb=new HashSet();
+                    //ugly solution, need refactoring...
+                        Iterator<IPAContractDisbursement> iterDisb = disbs.iterator();
+                        while (iterDisb.hasNext()) {
+                            IPAContractDisbursement contrDisb = iterDisb.next();
+                            if(contrDisb.getId()!=null){
+                                IPAContractDisbursement oldDisbContract = (IPAContractDisbursement) session.get(IPAContractDisbursement.class, contrDisb.getId());
+                                oldDisbContract.setAdjustmentType(contrDisb.getAdjustmentType());
+                                oldDisbContract.setAmount(contrDisb.getAmount());
+                                oldDisbContract.setCurrency(contrDisb.getCurrency());
+                                oldDisbContract.setDate(contrDisb.getDate());
+                                disbIds.add(contrDisb.getId());
+                            }else{
+                             contrDisb.setContract(oldContract);
+                             newDisb.add(contrDisb);
+                            }
+                        }
+                        if(oldContract.getDisbursements()!=null){
+                            Iterator <IPAContractDisbursement>oldDisbIter=oldContract.getDisbursements().iterator();
+                            while(oldDisbIter.hasNext()){
+                                IPAContractDisbursement oldDisb=oldDisbIter.next();
+                                Iterator<Long> disbIdsIter=disbIds.iterator();
+                                boolean delete=true;
+                                while(disbIdsIter.hasNext()){
+                                    Long id=disbIdsIter.next();
+                                    if(id.equals(oldDisb.getId())){
+                                        delete=false;
+                                        break;
+                                    }
+                                    
+                                }
+                                if(delete){
+                                    removeDisb.add(oldDisb);
+                                }
+                                
+                            }
+                        }
+                        
+                        if(oldContract.getDisbursements()!=null){
+                        oldContract.getDisbursements().removeAll(removeDisb);
+                        Iterator<IPAContractDisbursement> iter=removeDisb.iterator();
+                        while(iter.hasNext()){
+                            IPAContractDisbursement deleteDisb=iter.next();
+                            session.delete(deleteDisb);
+                        }
+                        oldContract.getDisbursements().addAll(newDisb);
+                        }
+                        else{
+                            oldContract.setDisbursements(newDisb);
+                        }
+                        contract=oldContract;
+
+                }
+                session.saveOrUpdate(contract);
+                ids += contract.getId() + ", ";
+            }
+            if(ids.length()>2)
+            ids = ids.substring(0, ids.length() - 2);
+
+
+
+        }
+        if (ids.length() != 0) {
+            queryString += " and con.id not in (" + ids + ")";
+        }
+        session.delete(queryString);
       tx.commit(); // commit the transcation
       logger.debug("Activity saved");
     }
@@ -2255,6 +2357,30 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       }
     }
     return activity;
+  }
+  
+  public static List getIPAContracts(Long activityId) {
+    Session session = null;
+    List<IPAContract> contrcats = null;
+
+    try {
+      session = PersistenceManager.getRequestDBSession();
+
+     
+      String queryString = "select con from " + IPAContract.class.getName()
+          + " con " + "where (con.activity=:activityId)";
+      Query qry = session.createQuery(queryString);
+      qry.setLong("activityId",activityId );
+      contrcats = qry.list();
+    }
+     
+    catch (Exception ex) {
+      logger
+          .error("Unable to get IPAContracts :"
+                 + ex);
+    }
+    
+    return  contrcats ;
   }
 
   /*

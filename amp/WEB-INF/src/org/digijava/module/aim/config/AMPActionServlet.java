@@ -85,7 +85,7 @@ public class AMPActionServlet
     if (index > -1) {
       int tempIndex = url.indexOf("/" + Constants.AIM_MODULE_KEY + "/");
       if (tempIndex != -1 && !url.endsWith("displayFlag.do") &&
-          !url.endsWith("editEUActivity.do")) {
+          !url.endsWith("editEUActivity.do")&&!url.endsWith("editIPAContract.do")) {
         String pggrp = request.getParameter("edit");
         /*
          * The value of the request parameter 'edit tells the system, whether the user is still in the edit

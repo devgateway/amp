@@ -92,8 +92,17 @@ public class DateTimeUtil {
 		}
 
 		SimpleDateFormat formater=new SimpleDateFormat(pattern);
+                Date result=null;
 		//if(date.contains("-")) date=date.replaceAll("-", "/");
-		Date result = formater.parse(date);
+                try{
+                    result = formater.parse(date);
+                }
+                catch(Exception ex){
+                    // temp solution
+                    // TODO refactoring contracting dates
+                    SimpleDateFormat formaterCont=new SimpleDateFormat(Constants.CALENDAR_DATE_PICKER);
+                    result = formaterCont.parse(date);
+                }
 		return result;
 	}
 
@@ -106,7 +115,16 @@ public class DateTimeUtil {
 
 		SimpleDateFormat formater=new SimpleDateFormat(pattern);
 		//if(date.contains("-")) date=date.replaceAll("-", "/");
-		String result = formater.format(date);
+                String result="";
+                try{
+		result = formater.format(date);
+                }
+                catch(Exception ex){
+                    // temp solution
+                    // TODO refactoring contracting dates
+                    SimpleDateFormat formaterCont=new SimpleDateFormat(Constants.CALENDAR_DATE_PICKER);
+                    result = formaterCont.format(date);
+                }
 		return result;
 	}
 

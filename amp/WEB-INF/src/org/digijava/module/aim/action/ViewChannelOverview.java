@@ -27,11 +27,14 @@ import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.ChannelOverviewForm;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ApplicationSettings;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.TeamMember;
@@ -42,7 +45,7 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
-
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 public class ViewChannelOverview extends TilesAction {
 
 	private static Logger logger = Logger.getLogger(ViewChannelOverview.class);
@@ -110,7 +113,19 @@ public class ViewChannelOverview extends TilesAction {
 	              formBean.setSelectedOrganizations(orgProjectIds);
 	            }
 	          }
+	          
+	          AmpCategoryValue ampCategoryValue = CategoryManagerUtil.
+	            getAmpCategoryValueFromList(CategoryConstants.ACCHAPTER_NAME,ampact.getCategories());
 			
+
+	            ampCategoryValue = CategoryManagerUtil
+					.getAmpCategoryValueFromListByKey(
+							CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
+							ampact.getCategories());
+			if (ampCategoryValue != null)
+				formBean.setImplemLocationLevel(ampCategoryValue.getValue());
+				
+	          
 			PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.ACTIVITY,activity);
 			ArrayList colAux=new ArrayList();
 			Collection ampFields=DbUtil.getAmpFields();

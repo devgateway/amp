@@ -39,7 +39,7 @@
 	[ ] AMPDocumentManager.Title.SetText("Test2 Title")
 	[ ] AMPDocumentManager.Description.SetText("Test2 description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description Test description ")
 	[ ] 
-	[-] AMPDocumentManager.Submit.Click ()
+	[+] AMPDocumentManager.Submit.Click ()
 		[-] AMPDocumentManager.Empty.TeamDocuments.TestDoc.VerifyProperties ({...})
 			[ ] ""
 			[-] {...}
@@ -222,7 +222,3 @@
 	[ ] 
 [ ] 
 [ ] 
-[-] testcase Test1 () appstate none
-	[-] recording
-		[ ] AMPDocumentManager.SetActive( )
-		[ ] AMPDocumentManager.AddFile1.Click ()

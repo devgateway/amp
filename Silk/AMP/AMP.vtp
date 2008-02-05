@@ -23,6 +23,7 @@ Source=mdea.t
 Source=t.t
 Source=mdea2.t
 Source=reports.t
+Source=admin.t
 EndFolder=TRUE
 [ProjectPlan]
 Source=Calendar.pln

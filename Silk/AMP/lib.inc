@@ -4,6 +4,7 @@
 	[ ] AMPHome1.SerLogIn.SetText(user)
 	[ ] AMPHome1.Assword.SetText(pass)
 	[ ] AMPHome1.SignIn.Click ()
+	[ ] 
 [-] void calendarCheckAll()
 	[ ] 
 	[ ] 

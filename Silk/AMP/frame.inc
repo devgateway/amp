@@ -4,7 +4,7 @@
 	[ ]  tag "AMP -Home"
 	[ ] 
 	[ ]  // The URL of this page
-	[ ]  const sLocation = "http://amp-staging.code.ro:8080/showLayout.do?layout=login"
+	[ ]  const sLocation = "http://amp-testing.code.ro/showLayout.do?layout=login"
 	[ ] 
 	[ ]  // The login user name
 	[ ]  // const sUserName = ?
@@ -21,15 +21,15 @@
 [+] window BrowserChild AMPHome1
 	[ ] tag "AMP -Home"
 	[ ] parent Browser
-	[-] HtmlTextField SerLogIn
+	[+] HtmlTextField SerLogIn
 		[-] multitag "&name='j_username'"
 			[ ] "User Log In:"
 			[ ] "$j_username"
-	[-] HtmlTextField Assword
+	[+] HtmlTextField Assword
 		[-] multitag "&name='j_password'"
 			[ ] "Password:"
 			[ ] "$j_password"
-	[-] HtmlPushButton SignIn
+	[+] HtmlPushButton SignIn
 		[-] multitag "&name='submitButton'"
 			[ ] "Sign In"
 			[ ] "$submitButton"
@@ -1334,25 +1334,23 @@
 		[-] multitag "&name='docWebResource'"
 			[ ] "Web resources"
 			[ ] "$docWebResource"
-	[+] HtmlTextField File2
+	[-] HtmlTextField File2
 		[-] multitag "&id='docFile';name='docFile'"
-			[ ] "File[2]"
 			[ ] "$docFile"
 [ ] 
 [+] window BrowserChild AMPAddDocumentsFromRepository
 	[ ] tag "Popup"
 	[ ] parent Browser
 	[+] HtmlTable HtmlTable1
-		[ ] tag "&name='framingTable'"
-		[+] HtmlColumn SelectSelectDocumen
+		[ ] tag "&name='framingTable[0]'"
+		[-] HtmlColumn SelectSelectDocumen
 			[ ] tag "Select          Select Documents"
 			[+] HtmlPushButton Select
 				[-] multitag "&id='otherDocumentsMenu0';name='otherDocumentsButton'"
 					[ ] "Select"
 					[ ] "$otherDocumentsButton"
-			[+] HtmlText Examen_krDoc
+			[-] HtmlText Examen_krDoc
 				[-] multitag "&id='yui-dt0-bdrow0-cell0'"
-					[ ] "*"
 					[ ] "$yui-dt0-bdrow0-cell0"
 	[+] HtmlList Empty
 		[ ] tag "Empty"
@@ -1362,6 +1360,14 @@
 	[+] HtmlPushButton Submit
 		[ ] tag "Submit"
 	[ ] 
+	[+] HtmlPushButton Select2
+		[-] multitag "&id='otherDocumentsMenu0';name='otherDocumentsButton'"
+			[ ] "Select[2]"
+			[ ] "$otherDocumentsButton[2]"
+	[-] HtmlText ClipArt1Doc
+		[-] multitag "&id='yui-dt0-bdrow0-cell0'"
+			[ ] "ClipArt1.doc"
+			[ ] "$yui-dt0-bdrow0-cell0"
 [ ] 
 [+] window BrowserChild AMPAddActivityStep7
 	[ ] tag "AMP - Add Activity - Related Organizations"
@@ -1464,7 +1470,7 @@
 	[ ] parent Browser
 	[+] HtmlImage IND004
 		[-] multitag "- IND004"
-			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?arr[5]"
+			[ ] "$http:??*?TEMPLATE?ampTemplate?images?arrow_ri"
 	[+] HtmlTextField BaseValue
 		[-] multitag "&name='baseVal'"
 			[ ] "?[1]"
@@ -1526,6 +1532,9 @@
 	[+] HtmlImage ClickToViewCalendar3
 		[-] multitag "Click to View Calendar[3]"
 			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[3]"
+	[+] HtmlImage N12345
+		[-] multitag "- 12345"
+			[ ] "$http:??amp-testing.code.ro?TEMPLATE?ampTemplate?images?arrow_ri"
 [ ] 
 [+] window BrowserChild AMPAddActivityStep11
 	[ ] tag "AMP - Add Activity - Project Costs"
@@ -1600,12 +1609,32 @@
 			[ ] "OK"
 			[ ] "$save"
 [ ] 
-[+] window BrowserChild AMPPublicTeamReports
+[-] window BrowserChild AMPPublicTeamReports
 	[ ] tag "AMP - Public Team Reports"
 	[ ] parent Browser
-	[-] HtmlLink ReportGenerator
+	[+] HtmlLink ReportGenerator
 		[-] multitag "Report Generator"
 			[ ] "$http:??amp-staging.code.ro:8080?aim?advancedReportManager.do~cl"
+	[+] HtmlLink N8
+		[-] multitag "8"
+			[ ] "$http:??amp-staging.code.ro:8080?aim?viewTeamReports.do~currentP[8]"
+	[+] HtmlLink N9
+		[-] multitag "9"
+			[ ] "$http:??amp-staging.code.ro:8080?aim?viewTeamReports.do~currentP[8]"
+	[+] HtmlText TeamReports
+		[ ] tag "Team Reports"
+	[+] HtmlLink TestDonorReport
+		[-] multitag "test donor report"
+			[ ] "$http:??amp-staging.code.ro:8080?aim?viewNewAdvancedReport.do~vi[5]"
+	[+] HtmlLink _test
+		[-] multitag "_test"
+			[ ] "$http:??*?aim?viewNewAdvancedReport.do~view=re[1]"
+	[+] HtmlLink Edit1
+		[-] multitag "Edit[1]"
+			[ ] "$http:??*?aim?editReport.do~reportEdit=true~ev[1]"
+	[-] HtmlLink Delete1
+		[-] multitag "Delete[1]"
+			[ ] "$http:??*?aim?deleteAllReports.do~event=edit~r[1]"
 [ ] 
 [+] window BrowserChild AMPReportGeneratorStep1
 	[ ] tag "AMP - Report Generator Step 0*"
@@ -1658,8 +1687,16 @@
 		[-] multitag "&name='submitButton'"
 			[ ] "<< Remove"
 			[ ] "$submitButton[2]"
+	[+] HtmlCheckBox Objective
+		[-] multitag "&name='removeColumns'"
+			[ ] "Objective"
+			[ ] "$removeColumns[1]"
+	[+] HtmlCheckBox Box1
+		[-] multitag "&name='removeColumns'"
+			[ ] "$removeColumns[1]"
+	[ ] 
 [ ] 
-[-] window BrowserChild AMPReportGeneratorStep3
+[+] window BrowserChild AMPReportGeneratorStep3
 	[ ] tag "AMP - Report Generator Step : Select Rows*"
 	[ ] parent Browser
 	[+] HtmlCheckBox CheckBox1
@@ -1691,8 +1728,11 @@
 		[-] multitag "&name='submitButton'"
 			[ ] "<< Remove"
 			[ ] "$submitButton[2]"
+	[+] HtmlCheckBox Box3
+		[-] multitag "&name='removeColumns'"
+			[ ] "$removeColumns[3]"
 [ ] 
-[-] window BrowserChild AMPReportGeneratorStep4
+[+] window BrowserChild AMPReportGeneratorStep4
 	[ ] tag "AMP - Report Generator Step : Select Measures*"
 	[ ] parent Browser
 	[+] HtmlCheckBox CheckAll
@@ -1712,10 +1752,17 @@
 		[-] multitag "&name='submitButton'"
 			[ ] "<< Remove"
 			[ ] "$submitButton[2]"
-	[+] HtmlCheckBox ActualDisbursements
+	[+] HtmlCheckBox RemBox1
 		[-] multitag "&name='removeColumns'"
-			[ ] "Actual Disbursements"
 			[ ] "$removeColumns[1]"
+	[+] HtmlCheckBox ShowAsADrilldownInMyTabs
+		[-] multitag "&name='drilldownTab'"
+			[ ] "Show as a drilldown in My Tabs"
+			[ ] "$drilldownTab"
+	[+] HtmlPushButton Previous
+		[-] multitag "&name='submitButton'"
+			[ ] "<< Previous"
+			[ ] "$submitButton[3]"
 [ ] 
 [+] window BrowserChild AMPReportGeneratorStep5
 	[ ] tag "AMP - Report Generator Step 4 : Report Details"
@@ -1941,7 +1988,7 @@
 	[ ] 
 	[ ] 
 	[ ] 
-	[-] HtmlCheckBox AccessionInstrument
+	[+] HtmlCheckBox AccessionInstrument
 		[-] multitag "&name='selectedColumns'"
 			[ ] "Accession Instrument"
 			[ ] "$selectedColumns[1]"
@@ -1957,4 +2004,7 @@
 		[-] multitag "&name='checkall'"
 			[ ] "Actual Commitments"
 			[ ] "$checkall"
+	[-] HtmlLink TanzaniaMainland
+		[-] multitag "Tanzania (mainland)"
+			[ ] "$http:??amp-testing.code.ro?aim?selectTeam.do~id=38"
 [ ] 

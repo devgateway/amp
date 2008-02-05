@@ -166,7 +166,7 @@
 	[ ] 
 	[ ] 
 	[ ] AMPAddActivityStep3.ImplementationLevel.Select (2)
-	[ ] AMPAddActivityStep3.SelectTheAppropriateRegion.Select (5)
+	[ ] AMPAddActivityStep3.SelectTheAppropriateRegion.Select (4)
 	[ ] AMPAddActivityStep3.AddLocation.Click ()
 	[ ] 
 	[ ] AMPSelectLocation.SetActive( )
@@ -243,6 +243,7 @@
 		[ ] 
 	[ ] AMPAddFunding.Conditions.SetText("conditions")
 	[ ] AMPAddFunding.Save.Click()
+	[ ] 
 	[ ] AMPAddActivityStep4.Components.Click()
 	[ ] AMPAddActivityStep5.AddComponent.Click()
 	[ ] 
@@ -278,19 +279,31 @@
 	[ ] 
 	[ ] AMPAddActivityStep5.RelatedDocuments.Click ()
 	[ ] AMPAddActivityStep6.AddDocumentsFromRepository.Click ()
-	[ ] AMPAddDocumentsFromRepository.HtmlTable1.SelectSelectDocumen.Select.Click ()
-	[ ] AMPAddDocumentsFromRepository.Empty.TeamDocuments.Click ()
-	[ ] AMPAddDocumentsFromRepository.HtmlTable1.SelectSelectDocumen.Examen_krDoc.Click ()
-	[ ] AMPAddDocumentsFromRepository.Submit.Click ()
+	[-] if (AMPAddDocumentsFromRepository.HtmlTable1.SelectSelectDocumen.Select.Exists())
+		[ ] AMPAddDocumentsFromRepository.HtmlTable1.SelectSelectDocumen.Select.Click ()
+		[ ] AMPAddDocumentsFromRepository.Empty.TeamDocuments.Click ()
+		[ ] AMPAddDocumentsFromRepository.HtmlTable1.SelectSelectDocumen.Examen_krDoc.Click ()
+		[ ] AMPAddDocumentsFromRepository.Submit.Click ()
+	[-] else
+		[ ] AMPAddDocumentsFromRepository.SetActive( )
+		[ ] AMPAddDocumentsFromRepository.Select2.Click ()
+		[ ] AMPAddDocumentsFromRepository.Empty.TeamDocuments.Click ()
+		[ ] AMPAddDocumentsFromRepository.ClipArt1Doc.Click ()
+		[ ] AMPAddDocumentsFromRepository.Submit.Click ()
+	[ ] AMPAddActivityStep6.SetActive()
 	[ ] AMPAddActivityStep6.AddDocuments.Click ()
 	[ ] AMPAddDocuments.Title.SetText("title")
 	[ ] AMPAddDocuments.Description.TypeKeys ("description")
 	[ ] AMPAddDocuments.Comments.TypeKeys ("comments")
 	[ ] BrowserPage.ExecLine('document.getElementById("docDate").value = "'+date1+'"', TRUE)
-	[ ] AMPAddDocuments.Browse.Click()
-	[ ] ChooseFile.SetActive ()
-	[ ] ChooseFile.ListView1.Select (1)
-	[ ] ChooseFile.Open.Click ()
+	[ ] AMPAddDocuments.File2.SetText("C:\Documents and Settings\Administrator\My Documents\test.txt")
+	[ ] AMPAddDocuments.Add.Click()
+	[ ] 
+	[ ] //AMPAddDocuments.Browse.Click()
+	[ ] //ChooseFile.SetActive ()
+	[ ] //ChooseFile.ListView1.Select (1)
+	[ ] //ChooseFile.Open.Click ()
+	[ ] 
 	[ ] AMPAddActivityStep6.AddWebResources.Click ()
 	[ ] AMPAddDocuments.Title.SetText("title")
 	[ ] AMPAddDocuments.Description.SetText("description")
@@ -354,23 +367,24 @@
 	[ ] AMPAddActivityStep10.CurrentValue.SetText("4")
 	[ ] AMPAddActivityStep10.Comments3.TypeKeys ("comment")
 	[ ] AMPAddActivityStep10.SetValues.Click ()
-	[ ] AMPAddActivityStep10.Costing.Click ()
-	[ ] AMPAddActivityStep10.Costing.Click ()
-	[ ] AMPAddActivityStep11.AddActivity.Click ()
-	[ ] AMPAddEditActivity.SetActive()
-	[ ] AMPAddEditActivity.ActivityName.SetText("activity")
-	[ ] AMPAddEditActivity.ActivityID.SetText("10")
-	[ ] AMPAddEditActivity.Inputs.SetPosition( 1, 1)
-	[ ] AMPAddEditActivity.Inputs.SetText ("input")
-	[ ] AMPAddEditActivity.TotalCost.SetText("4")
-	[ ] AMPAddEditActivity.ActivityID1.Select ("Canadian Dollar")
-	[ ] AMPAddEditActivity.Contributions.SetText("4")
-	[ ] AMPAddEditActivity.Pop1.Select (2)
-	[ ] AMPAddEditActivity.Pop2.Select (2)
-	[ ] AMPAddEditActivity.Pop3.Select (2)
-	[ ] AMPAddEditActivity.Pop4.Select (2)
-	[ ] AMPAddEditActivity.Assumptions.TypeKeys ("asumptions")
-	[ ] AMPAddEditActivity.Progress.TypeKeys ("progress")
+	[ ] 
+	[-] if (AMPAddActivityStep10.Costing.Exists())
+		[ ] AMPAddActivityStep10.Costing.Click ()
+		[ ] AMPAddActivityStep11.AddActivity.Click ()
+		[ ] AMPAddEditActivity.SetActive()
+		[ ] AMPAddEditActivity.ActivityName.SetText("activity")
+		[ ] AMPAddEditActivity.ActivityID.SetText("10")
+		[ ] AMPAddEditActivity.Inputs.SetPosition( 1, 1)
+		[ ] AMPAddEditActivity.Inputs.SetText ("input")
+		[ ] AMPAddEditActivity.TotalCost.SetText("4")
+		[ ] AMPAddEditActivity.ActivityID1.Select ("Canadian Dollar")
+		[ ] AMPAddEditActivity.Contributions.SetText("4")
+		[ ] AMPAddEditActivity.Pop1.Select (2)
+		[ ] AMPAddEditActivity.Pop2.Select (2)
+		[ ] AMPAddEditActivity.Pop3.Select (2)
+		[ ] AMPAddEditActivity.Pop4.Select (2)
+		[ ] AMPAddEditActivity.Assumptions.TypeKeys ("asumptions")
+		[ ] AMPAddEditActivity.Progress.TypeKeys ("progress")
 	[ ] 
 	[ ] 
 [-] testcase Test2() appstate DefaultBaseState
@@ -827,7 +841,7 @@
 	[ ] AMPDesktopLinks.Save.Click()
 	[ ] 
 	[ ] 
-[-] testcase Test5() appstate DefaultBaseState
+[+] testcase Test5() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
 	[ ] AMPMyDesktop.AddActivity.Click ()
 	[ ] DATETIME today
@@ -879,6 +893,7 @@
 	[ ] AMPAddActivityStep4.SetActive( )
 	[ ] AMPAddActivityStep4.AddFunding.Click ()
 	[ ] AMPAddFunding.SetActive( )
+	[ ] AMPAddFunding.AssistanceType.Select(2)
 	[ ] AMPAddFunding.FundingOrganizationId.SetText("8")
 	[ ] AMPAddFunding.Modality.Select (2)
 	[-] if (AMPAddFunding.AddProjection.Exists())

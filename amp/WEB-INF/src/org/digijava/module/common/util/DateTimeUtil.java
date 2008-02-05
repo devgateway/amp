@@ -100,7 +100,7 @@ public class DateTimeUtil {
                 catch(Exception ex){
                     // temp solution
                     // TODO refactoring contracting dates
-                    SimpleDateFormat formaterCont=new SimpleDateFormat(Constants.CALENDAR_DATE_PICKER);
+                    SimpleDateFormat formaterCont=new SimpleDateFormat("MM/dd/yyyy");
                     result = formaterCont.parse(date);
                 }
 		return result;
@@ -122,7 +122,7 @@ public class DateTimeUtil {
                 catch(Exception ex){
                     // temp solution
                     // TODO refactoring contracting dates
-                    SimpleDateFormat formaterCont=new SimpleDateFormat(Constants.CALENDAR_DATE_PICKER);
+                    SimpleDateFormat formaterCont=new SimpleDateFormat("MM/dd/yyyy");
                     result = formaterCont.format(date);
                 }
 		return result;

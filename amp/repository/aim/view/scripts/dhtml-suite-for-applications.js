@@ -14868,8 +14868,8 @@ DHTMLSuite.calendarModel.prototype =
 	{		
 		var tmpDay;
 		if(inputReference.value.length>0){	
-			if (format.indexOf('MMM') != -1){
-				var monthPos = format.indexOf('MMM');
+			if (format.toLowerCase().indexOf('mmm') != -1){
+				var monthPos = format.toLowerCase().indexOf('mmm');
 				var monthName = inputReference.value.substr(monthPos,3);
 				
 				var pos = -1;
@@ -17040,6 +17040,7 @@ DHTMLSuite.calendar.prototype =
 				'({'
 				+ ' year:' + this.calendarModelReference.__getDisplayedYear() 
 				+ ',month:"' + this.calendarModelReference.__getDisplayedMonthNumberWithLeadingZeros() + '"'
+				+ ',monthName:"' + this.calendarModelReference.languageModel.monthArrayShort[this.calendarModelReference.__getDisplayedMonthNumber() - 1] + '"'
 				+ ',day:"' + this.calendarModelReference.__getDisplayedDayWithLeadingZeros() + '"'
 				+ ',hour:"' + this.calendarModelReference.__getDisplayedHourWithLeadingZeros() + '"'
 				+ ',minute:"' + this.calendarModelReference.__getDisplayedMinuteWithLeadingZeros() + '"'

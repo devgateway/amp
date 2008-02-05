@@ -35,10 +35,12 @@
 		var references = calendarObjForForm.getHtmlElementReferences(); // Get back reference to form field.
 		var format = dateFormat;
 		var monthPos, dayPos, yearPos;
-		if (format.indexOf('MMM') != -1){
-			monthPos = format.indexOf('MMM');
+		var month = inputArray.month;
+		if (format.toLowerCase().indexOf('mmm') != -1){
+			monthPos = format.toLowerCase().indexOf('mmm');
 			yearPos = format.indexOf('yyyy');
 			dayPos = format.indexOf('dd');
+			month = inputArray.monthName;		
 		}
 		else{
 			monthPos = format.indexOf('mm');
@@ -48,22 +50,22 @@
 		var result = '';
 		if (dayPos < monthPos){
 			if (monthPos < yearPos)
-				result = inputArray.day + '/' + inputArray.month + '/' + inputArray.year;
+				result = inputArray.day + '/' + month + '/' + inputArray.year;
 			else{
 				if (dayPos < yearPos)
-					result = inputArray.day + '/' + inputArray.year + '/' + inputArray.month;
+					result = inputArray.day + '/' + inputArray.year + '/' + month;
 				else
-					result = inputArray.year + '/' + inputArray.day + '/' + inputArray.month;
+					result = inputArray.year + '/' + inputArray.day + '/' + month;
 			}
 		}	
 		else{ //month < dayPos
 			if (yearPos < monthPos)
-				result = inputArray.year + '/' + inputArray.month + '/' + inputArray.day;
+				result = inputArray.year + '/' + month + '/' + inputArray.day;
 			else{
 				if (dayPos < yearPos)
-					result = inputArray.month + '/' + inputArray.day + '/' + inputArray.year;
+					result = month + '/' + inputArray.day + '/' + inputArray.year;
 				else
-					result = inputArray.month + '/' + inputArray.year + '/' + inputArray.day;
+					result = month + '/' + inputArray.year + '/' + inputArray.day;
 			}
 		}	
 		

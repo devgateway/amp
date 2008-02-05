@@ -8,6 +8,8 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="/taglib/category" prefix="category"%>
+<%@ page import="org.digijava.module.aim.helper.CategoryConstants" %>
 
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
@@ -349,8 +351,8 @@ function commentWin(val) {
 																			  </td>
 																				<td width="25%" align="center">
 																					<i>
-																				  <c:out value="${selectedOrganizations.projectId}"/></i>		
-																			  </td>
+																				  <c:out value="${selectedOrganizations.projectId}"/>
+																					</i></td>
 																			</c:if>	
 																		</tr>
 																	</c:forEach>
@@ -589,32 +591,37 @@ function commentWin(val) {
 																					<c:if test="${!empty activity.locations}">
 																						<TR>
 																							<TD width="33%" align="center" bgcolor="#ffffff">
-																								<digi:trn key="aim:region">Region</digi:trn>
+																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 1}" > 
+																									<category:getoptionvalue upperCase="true" categoryIndex="1" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
+																								</c:if>
+																								&nbsp;
 																							</TD>
 																							<TD width="33%" align="center" bgcolor="#ffffff">
-																								<digi:trn key="aim:zone"> Zone </digi:trn>
+																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 2}" >
+																									<category:getoptionvalue upperCase="true" categoryIndex="2" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
+																								</c:if>
+																								&nbsp;
 																							</TD>
 																							<TD width="33%" align="center" bgcolor="#ffffff">
-																								<digi:trn key="aim:woreda"> Woreda </digi:trn></TD>
+																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 3}" >
+																									<category:getoptionvalue upperCase="true" categoryIndex="3" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
+																								</c:if>
+																								&nbsp;
+																							</TD>
 																							</TR>
 																						
 																						<c:forEach var="loc" items="${activity.locations}">
 																							<TR>
-																								<c:if test="${!empty loc.region}">
-																									<TD width="33%" align="center" bgcolor="#ffffff">
-																										<c:out value="${loc.region}" />
-																									</TD>
-																								</c:if>
-																								<c:if test="${!empty loc.zone}">
-																									<TD width="33%" align="center" bgcolor="#ffffff">
-																										<c:out value="${loc.zone}" />
-																									</TD>
-																								</c:if>
-																								<c:if test="${!empty loc.woreda}">
+																								<TD width="33%" align="center" bgcolor="#ffffff">
+																									<c:out value="${loc.region}" />
+																								</TD>
+																						
+																								<TD width="33%" align="center" bgcolor="#ffffff">
+																									<c:out value="${loc.zone}" />
+																								</TD>
 																								<TD width="33%" align="center" bgcolor="#ffffff">
 																									<c:out value="${loc.woreda}" />
 																								</TD>
-																								</c:if>
 																							</TR>
 																						</c:forEach>
 																					</c:if>

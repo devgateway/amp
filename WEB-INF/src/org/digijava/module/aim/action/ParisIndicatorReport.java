@@ -110,7 +110,7 @@ public class ParisIndicatorReport extends Action {
 					Iterator iter = SectorUtil.getAmpSectors().iterator() ;
 					while(iter.hasNext()) {
 						AmpSector ampSector = (AmpSector) iter.next();
-						if(ampSector.getName().length() > 30) {
+						if(ampSector.getName()!=null && ampSector.getName().length() > 30) {
 							String temp=ampSector.getName().substring(0,30) + "...";
 							ampSector.setName(temp);
 						}
@@ -119,7 +119,7 @@ public class ParisIndicatorReport extends Action {
 						Iterator iter1 = SectorUtil.getAmpSubSectors(ampSector.getAmpSectorId()).iterator();
 						while(iter1.hasNext()) {
 							AmpSector ampSubSector = (AmpSector) iter1.next();
-							if(ampSubSector.getName().length() > 35) {
+							if(ampSubSector.getName()!=null && ampSubSector.getName().length() > 35) {
 								ampSubSector.setName("--" + ampSubSector.getName().substring(0,35) + "...");
 							} else {
 								ampSubSector.setName("--" + ampSubSector.getName());
@@ -129,7 +129,7 @@ public class ParisIndicatorReport extends Action {
 							Iterator iter2 = SectorUtil.getAmpSubSectors(ampSubSector.getAmpSectorId()).iterator();
 							while(iter2.hasNext()) {
 								AmpSector ampSubSubSector = (AmpSector) iter2.next();
-								if(ampSubSubSector.getName().length() > 35) {
+								if(ampSubSubSector.getName()!=null && ampSubSubSector.getName().length() > 35) {
 									ampSubSubSector.setName("----" + ampSubSubSector.getName().substring(0,35) + "...");
 								} else {
 									ampSubSubSector.setName("----" + ampSubSubSector.getName());

@@ -51,7 +51,7 @@ public class FormatHelper {
          * @return
          * @throws ParseException
          */
-    public static Double parseDouble(String number) throws ParseException {
+    public static Double parseDouble(String number) {
 
 	String format = "###,###,###,###.##";
 	String decimalSeparator = ".";
@@ -71,9 +71,44 @@ public class FormatHelper {
 	    result = formater.parse(number).doubleValue();
 	} catch (ParseException e) {
 	    logger.error("Error parsing String to double", e);
-	    throw e;
+	   return null;
 	}
 	return result;
     }
+    public static DecimalFormat getDefaultFormat() {
 
+	String format = "###,###,###,###.##";
+	String decimalSeparator = ".";
+	String groupSeparator = ",";
+
+	// get setting from global setting
+	format = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
+	decimalSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR);
+	groupSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR);
+
+	DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();
+	decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));
+	decSymbols.setGroupingSeparator(groupSeparator.charAt(0));
+	DecimalFormat formater = new DecimalFormat(format, decSymbols);
+	
+	return formater;
+    }
+    
+    public static String getDecimalSymbol() {
+	return String.valueOf(getDefaultFormat().getDecimalFormatSymbols().getDecimalSeparator());
+    }
+
+    public static String getGroupSymbol() {
+	return String.valueOf(getDefaultFormat().getDecimalFormatSymbols().getGroupingSeparator());
+    }
+
+    
+    
+    public static String getDifference(String s1, String s2)
+	{
+		double d1 = parseDouble(s1) ;
+		double d2 = parseDouble(s2) ;
+		double d3 = d1 - d2 ;
+		return formatNumber(d3) ;
+	}
 }

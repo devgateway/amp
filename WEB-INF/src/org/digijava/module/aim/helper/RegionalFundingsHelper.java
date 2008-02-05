@@ -58,7 +58,7 @@ public class RegionalFundingsHelper {
 			fd.setCurrencyCode(regFund.getCurrency().getCurrencyCode());
 			fd.setPerspectiveCode(regFund.getPerspective().getCode());
 			fd.setPerspectiveName(regFund.getPerspective().getName());
-			fd.setTransactionAmount(DecimalToText.getString(regFund.getTransactionAmount().doubleValue()));
+			fd.setTransactionAmount(FormatHelper.formatNumber(regFund.getTransactionAmount().doubleValue()));
 			
 			String tsDate = DateConversion.ConvertDateToString(regFund.getTransactionDate());
 			
@@ -79,7 +79,7 @@ public class RegionalFundingsHelper {
 			double frmExRt = CurrencyUtil.getExchangeRate(fd.getCurrencyCode(),1,dt);
 			double toExRt = CurrencyUtil.getExchangeRate(currCode,1,dt);
 			double amt = CurrencyWorker.convert1(regFund.getTransactionAmount().doubleValue(),frmExRt,toExRt);
-			fd.setTransactionAmount(DecimalToText.ConvertDecimalToText(amt));
+			fd.setTransactionAmount(FormatHelper.formatNumber(amt));
 			fd.setCurrencyCode(currCode);
 			fd.setAdjustmentType(regFund.getAdjustmentType().intValue());
 			if (fd.getAdjustmentType() == Constants.PLANNED) {

@@ -25,6 +25,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.DecimalToText;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -101,6 +102,7 @@ public class FundingAdded extends Action {
 				String formattedAmt = CurrencyWorker.formatAmount(
 						fundDet.getTransactionAmount());
 				fundDet.setTransactionAmount(formattedAmt);
+				
 				if (fundDet.getCurrencyCode() != null
 						&& fundDet.getCurrencyCode().trim().length() != 0) {
 					AmpCurrency currency = CurrencyUtil.getCurrencyByCode(fundDet
@@ -134,7 +136,7 @@ public class FundingAdded extends Action {
 					String toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 					eaForm.setCurrCode(toCurrCode);
 					double toExRt = CurrencyUtil.getExchangeRate(toCurrCode,1,dt);
-					double amt = CurrencyWorker.convert1(DecimalToText.getDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
+					double amt = CurrencyWorker.convert1(FormatHelper.parseDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
 					if (fundDet.getTransactionType() == Constants.COMMITMENT)
 						totComm += amt;
 					else if (fundDet.getTransactionType() == Constants.DISBURSEMENT)

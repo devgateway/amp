@@ -41,8 +41,8 @@ public class CurrencyWorker {
 		resultDbl	= convertToDouble(amt, fromExchangeRate, toExchangeRate);
 
 		//*** fix for AMP-1755
-		DecimalFormat format = new DecimalFormat();
-		String inputString= format.format(resultDbl);
+//		DecimalFormat format = new DecimalFormat();
+		String inputString= FormatHelper.formatNumber(resultDbl);
 //		String inputString = String.valueOf(resultDbl);
 //		resultStr = CurrencyWorker.formatAmount(inputString);
 
@@ -120,20 +120,15 @@ public class CurrencyWorker {
 	public static String formatAmount(String amt) {
 
 		if (amt == null)
-			return "0.00";
-
-		String fmt = amt.trim();
-		fmt = fmt.replaceAll(",", "");
-		fmt=removeCharsFromDouble(fmt);
+			return FormatHelper.formatNumber(new Double(0));
 		double value = 0;
 		try {
-			value = Double.parseDouble(fmt);
+			value = FormatHelper.parseDouble(amt);
 		} catch (NumberFormatException e) {
-			logger.error("Trying to parse " + fmt + " to double :" + e);
-			return "0.00";
+			logger.error("Trying to parse " + amt + " to double :" + e);
+			return FormatHelper.formatNumber(new Double(0));
 		}
-
-		return DecimalToText.ConvertDecimalToText(value);
+		return FormatHelper.formatNumber(value);
 
 	}
 

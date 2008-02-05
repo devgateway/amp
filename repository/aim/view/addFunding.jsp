@@ -10,6 +10,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
 
@@ -41,17 +42,21 @@
 		var errmsg1="<digi:trn key="aim:addFunding:errmsg:assitanceType">Type Of Assistance not selected</digi:trn>";
 		var errmsg2="\n<digi:trn key="aim:addFunding:errmsg:fundOrgId">Funding Id not entered</digi:trn>";
 		var errmsg3="\n<digi:trn key="aim:addFunding:errmsg:financeInstrument">Financing Instrument not selected</digi:trn>";
-                var msgEnterAmount="\n<digi:trn key="aim:addFunding:errmsg:enterAmount">Please enter the amount for the transaction</digi:trn>";
+        var msgEnterAmount="\n<digi:trn key="aim:addFunding:errmsg:enterAmount">Please enter the amount for the transaction</digi:trn>";
 		var msgInvalidAmount="\n<digi:trn key="aim:addFunding:errmsg:invalidAmount">Invalid amount entered for the transaction</digi:trn>";
 		var msgEnterDate="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
-		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate);
+		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>");
+		
 		if (flag == false) return false;
 		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;
 		document.aimEditActivityForm.action = "<%= fundAdded %>";
 		document.aimEditActivityForm.target = "_self";
 	  	document.aimEditActivityForm.submit();
+	  	validateFormatUsingSymbos();
+	  	
 		return true;
 	}
+
 
 	function addFundingDetail(type) {
 
@@ -167,6 +172,11 @@
 <%! long t = System.currentTimeMillis(); %>
 
 <body onload="load()">
+
+<c:set var="formatTip">
+	<digi:trn key="aim:decimalforma">Format has to be: </digi:trn> <%=FormatHelper.formatNumber(FormatHelper.parseDouble("100000"+FormatHelper.getDecimalSymbol()+"150"))%>
+</c:set>
+
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addFundingDetail.do" method="post">
 
@@ -335,7 +345,8 @@
 						</html:select>
 						</td>
 						<td valign="bottom">
-							<html:text name="mtefProjection" indexed="true" property="amount" size="17" styleClass="amt"/>
+						
+							<html:text title="${tip}" name="mtefProjection" indexed="true" property="amount" size="17" styleClass="amt"/>
 						</td>
 						<td valign="bottom">
 						<html:select name="mtefProjection" indexed="true" property="currencyCode" styleClass="inp-text">
@@ -452,7 +463,7 @@
 												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
 											</td>
 											<td valign="bottom">
-												<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
+												<html:text name="fundingDetail"  title="${formatTip}" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
 											</td>
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text">
@@ -547,7 +558,7 @@
 											</c:if>
 												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
 											<td valign="bottom">
-												<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
+												<html:text name="fundingDetail" title="${formatTip}"  indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
 											</td>
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text">
@@ -726,7 +737,7 @@
 
 											<td valign="bottom">
                                                                                         <field:display name="Amount of Disbursement Order" feature="Disbursement Orders">
-												<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
+												<html:text name="fundingDetail" title="${formatTip}"  indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
                                                                                                 </field:display>
 											</td>
 
@@ -881,7 +892,7 @@
 												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
 											</td>
 											<td valign="bottom">
-												<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
+												<html:text name="fundingDetail" indexed="true" title="${formatTip}"  property="transactionAmount" size="17" styleClass="amt"/>
 											</td>
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
@@ -949,7 +960,7 @@
 												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
 											</td>
 											<td valign="bottom">
-												<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
+												<html:text name="fundingDetail" indexed="true" title="${formatTip}"  property="transactionAmount" size="17" styleClass="amt"/>
 											</td>
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
@@ -1092,7 +1103,7 @@
 															<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
 														</td>
 														<td valign="bottom">
-															<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
+															<html:text name="fundingDetail" indexed="true" title="${formatTip}"  property="transactionAmount" size="17" styleClass="amt"/>
 														</td>
 														<td valign="bottom">
 															<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
@@ -1165,7 +1176,7 @@
 															<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
 														</td>
 														<td valign="bottom">
-															<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
+															<html:text name="fundingDetail" indexed="true" title="${formatTip}"  property="transactionAmount" size="17" styleClass="amt"/>
 														</td>
 														<td valign="bottom">
 															<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >

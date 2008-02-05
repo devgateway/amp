@@ -36,7 +36,7 @@ public class FinancingBreakdownWorker
 			totals			+= temp;
 		}
 
-		return DecimalToText.getString(totals);
+		return FormatHelper.formatNumber(totals);
 	}
 
 	public static String getTotalDonorFund(FilterParams fp)	{
@@ -44,7 +44,7 @@ public class FinancingBreakdownWorker
 			logger.debug("getTotalDonorFund() with FilterParams " +
 						 " transactionType=" + fp.getTransactionType() +
 						 " ampFunding=" + fp.getAmpFundingId() );
-		double total = 0.0;
+		double total = 0;
 		Collection<YearlyInfo> c = YearlyInfoWorker.getYearlyInfo(fp);
 		if ( c.size() != 0 )	{
 			Iterator<YearlyInfo> iter = c.iterator();
@@ -57,21 +57,21 @@ public class FinancingBreakdownWorker
 				YearlyInfo yf = iter.next();
 
 				if ( yf.getActualAmount() != null && (!yf.getActualAmount().equals("NA")) )	{
-					double temp = DecimalToText.getDouble(yf.getActualAmount());
+					double temp = FormatHelper.parseDouble(yf.getActualAmount());
 					total += temp;
 				}
 
 				//if (includePlannedInTotals && yf.getPlannedAmount()!=null && !yf.getPlannedAmount().equals("NA") && fp.getTransactionType() != Constants.DISBURSEMENT){
 				if (yf.getPlannedAmount()!=null && !yf.getPlannedAmount().equals("NA") && fp.getTransactionType() != Constants.DISBURSEMENT){
-					double temp = DecimalToText.getDouble(yf.getPlannedAmount());
+					double temp = FormatHelper.parseDouble(yf.getPlannedAmount());
 					total += temp;
 				}
 			}
 		}
 
-			logger.debug("getTotalDonorFund() returning " +DecimalToText.getString(total));
+			logger.debug("getTotalDonorFund() returning " +FormatHelper.formatNumber(total));
 
-		return DecimalToText.getString(total);
+		return FormatHelper.formatNumber(total);
 	}
 
 	public static String getTotalDonorDisbursement(Long ampFundingId,
@@ -117,39 +117,39 @@ public class FinancingBreakdownWorker
 			if ( type == Constants.COMMITMENT )
 			{
 					s1 = financingBreakdown.getTotalCommitted() ;
-					s2 = DecimalToText.removeCommas(s1) ;
-					total += Double.parseDouble(s2) ;
+					//s2 = DecimalToText.removeCommas(s1) ;
+					total += FormatHelper.parseDouble(s1) ;
 			}
 			else if ( type == Constants.DISBURSEMENT )
 			{
-				s1 = financingBreakdown.getTotalDisbursed() ;
-				s2 = DecimalToText.removeCommas(s1) ;
-				total += Double.parseDouble(s2) ;
+				//s2 = DecimalToText.removeCommas(s1) ;
+			    s1 = financingBreakdown.getTotalDisbursed() ;
+				total += FormatHelper.parseDouble(s1) ;
 			}
 			else if ( type == Constants.EXPENDITURE )
 			{
 				s1 = financingBreakdown.getTotalExpended() ;
-				s2 = DecimalToText.removeCommas(s1) ;
-				total += Double.parseDouble(s2) ;
+				//s2 = DecimalToText.removeCommas(s1) ;
+				total += FormatHelper.parseDouble(s1) ;
 			}
                         else if ( type == Constants.DISBURSEMENT_ORDER )
                         {
                                 s1 = financingBreakdown.getTotalDisbOrdered() ;
-                                s2 = DecimalToText.removeCommas(s1) ;
-                                total += Double.parseDouble(s2) ;
+                               // s2 = DecimalToText.removeCommas(s1) ;
+                                total += FormatHelper.parseDouble(s1) ;
                         }
 			else if ( type == Constants.MTEFPROJECTION ) {
 				s1 = financingBreakdown.getTotalProjection() ;
-				s2 = DecimalToText.removeCommas(s1) ;
-				total += Double.parseDouble(s2) ;
+				//s2 = DecimalToText.removeCommas(s1) ;
+				total += FormatHelper.parseDouble(s1) ;
 			}
 		}
 		if ( logger.isDebugEnabled() )
 		logger.debug("getOverallTotal(Collection c , type= " + type
 		+ ") returning total " + total ) ;
 //		strTotal = DecimalToText.ConvertDecimalToText(total) ;
-		DecimalFormat format = new DecimalFormat();
-		strTotal= format.format(total);
+		//DecimalFormat format = new DecimalFormat();
+		strTotal= FormatHelper.formatNumber(total);
 		return strTotal ;
 	}
 
@@ -194,7 +194,7 @@ public class FinancingBreakdownWorker
 				String totalDonorDisbursement = getTotalDonorFund(fp) ;
 				financingBreakdown.setTotalDisbursed(totalDonorDisbursement) ;
 
-				String unDisbursed = DecimalToText.getDifference(totalDonorCommitment,totalDonorDisbursement) ;
+				String unDisbursed = FormatHelper.getDifference(totalDonorCommitment,totalDonorDisbursement) ;
 				financingBreakdown.setUnDisbursed(unDisbursed);
 
 				fp.setTransactionType(Constants.EXPENDITURE);
@@ -208,7 +208,7 @@ public class FinancingBreakdownWorker
 
 				financingBreakdown.setTotalProjection( getTotalProjections(fp) );
 
-				String unExpended = DecimalToText.getDifference(totalDonorDisbursement,totalDonorExpenditure) ;
+				String unExpended = FormatHelper.getDifference(totalDonorDisbursement,totalDonorExpenditure) ;
 				financingBreakdown.setUnExpended(unExpended) ;
 				if ( ampFunding.getActualStartDate() != null )	{
 					actualStartDate = DateConversion.ConvertDateToString(ampFunding.getActualStartDate()) ;

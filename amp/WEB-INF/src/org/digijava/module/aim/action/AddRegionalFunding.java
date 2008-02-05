@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.Location;
@@ -143,7 +144,7 @@ public class AddRegionalFunding extends Action {
 							}
 							break;
 						case 2:
-							fd.setTransactionAmount(val);
+							fd.setTransactionAmount(CurrencyWorker.formatAmount(val));
 							break;
 						case 3:
 							fd.setCurrencyCode(val);
@@ -193,7 +194,7 @@ public class AddRegionalFunding extends Action {
 							}
 							break;
 						case 2:
-							fd.setTransactionAmount(val);
+							fd.setTransactionAmount(CurrencyWorker.formatAmount(val));
 							break;
 						case 3:
 							fd.setCurrencyCode(val);
@@ -243,7 +244,7 @@ public class AddRegionalFunding extends Action {
 							}
 							break;
 						case 2:
-							fd.setTransactionAmount(val);
+							fd.setTransactionAmount(CurrencyWorker.formatAmount(val));
 							break;
 						case 3:
 							fd.setCurrencyCode(val);

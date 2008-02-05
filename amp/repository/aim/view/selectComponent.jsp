@@ -11,6 +11,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -158,7 +159,8 @@
 								<tr bgcolor="#f4f4f2">
 									<td colspan="2" class="box-border-alt1">
 										<span class="f-names">
-											<digi:trn key="aim:commitmentsTotalActAllocation">Commitments - (Total Actual Allocation</digi:trn> <%=eaForm.getTotalCommitments()%>
+											<digi:trn key="aim:commitmentsTotalActAllocation">Commitments - (Total Actual Allocation</digi:trn> 
+											<%=FormatHelper.formatNumber(eaForm.getTotalCommitments())%>
 															 <%=eaForm.getCurrCode()%> )
 										</span>
 										<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
@@ -241,7 +243,8 @@
 								</tr>
 								<tr bgcolor="#ffffff">
 									<td colspan="2" class="box-border">
-										<span class="f-names"><digi:trn key="aim:disbursementTotalActToDate"> Disbursement - (Total actual to date</digi:trn> <%=eaForm.getTotalDisbursements()%>
+										<span class="f-names"><digi:trn key="aim:disbursementTotalActToDate"> Disbursement - (Total actual to date</digi:trn> 
+										<%=FormatHelper.formatNumber(eaForm.getTotalDisbursements())%>
 															 <%=eaForm.getCurrCode()%>)
 										</span>
 										<a href="javascript:addDisbursement()"><digi:trn key="btn:add">Add</digi:trn></a><br><br>
@@ -324,7 +327,8 @@
 							</tr>
 							<tr>
 								<td colspan="2" class="box-border-alt1">
-											<span class="f-names"><digi:trn key="aim:expenditureTotalActToDate"> Expenditure - (Total actual to date</digi:trn> <%=eaForm.getTotalExpenditures()%>
+											<span class="f-names"><digi:trn key="aim:expenditureTotalActToDate"> Expenditure - (Total actual to date</digi:trn> 
+											<%=FormatHelper.formatNumber(eaForm.getTotalExpenditures())%>
 																 <%=eaForm.getCurrCode()%>)</span>
 											<a href="javascript:addExpenditure()"><digi:trn key="btn:add">Add</digi:trn></a>&nbsp;&nbsp;
 											<br><br>

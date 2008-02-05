@@ -1,10 +1,23 @@
+var decimalSymbol=null;
+var groupSymbol=null;
+
 function trim(s) {
-
 	return s.replace( /^\s*/, "" ).replace( /\s*$/, "" );
-
 }
 
 
+
+function checkAmountUsingSymbols(amount){
+	var validChars= "0123456789"+this.decimalSymbol+this.groupSymbol;
+
+	for (i = 0;  i < amount.length;  i++) {
+		var ch = amount.charAt(i);
+		if (validChars.indexOf(ch)==-1){
+			return false;
+			break
+		}
+	}
+}
 
 function chkNumericForProjection(objName)
 
@@ -168,8 +181,13 @@ function validateFunding() {
 
 
 
-function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate) {
+function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate,decimalSymbol,groupSymbol) {
+	
+	this.decimalSymbol=decimalSymbol;
+	
+	this.groupSymbol=groupSymbol;
 
+	
 	var fundId = trim(document.aimEditActivityForm.orgFundingId.value);
 
 	var assistType = trim(document.aimEditActivityForm.assistanceType.value);
@@ -407,8 +425,7 @@ function validateFundingDetailsExchangeRate(comm,disb,exp)
 			if(temp[i].name != null && temp[i].name == fixedExchangeRate)
 
 			{
-
-				if(chkNumeric(temp[i],'','.','')==false) {return false;}
+				if(chkNumeric(temp[i],this.groupSymbol,this.decimalSymbol,'')==false) {return false;}
 
 			}
 
@@ -462,7 +479,7 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount,msgInvalidAmount,ms
 
 			{
 
-				if(chkNumeric(temp[i],'','.','')==false) {return false;}
+				if(chkNumeric(temp[i],this.groupSymbol,this.decimalSymbol,'')==false) {return false;}
 
 			}
 
@@ -484,7 +501,7 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount,msgInvalidAmount,ms
 
 
 
-				if (checkAmount(temp[i].value) == false) {
+				if (checkAmountUsingSymbols(temp[i].value) == false) {
 
 
 

@@ -8,6 +8,8 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
+<%@page import="org.digijava.module.aim.form.RegionalFundingForm"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript">
 
@@ -219,27 +221,31 @@ function projectFiche(id)
 																</TD>
 																<field:display name="Total Committed" feature="Funding Organizations">
 													                <TD align="right">
-													                	<bean:write name="fd" property="totCommitments"/>
+													                <%=FormatHelper.formatNumber(fd.getTotCommitments())  %>
 													                </TD>
 													            </field:display>
 																<field:display name="Total Disbursed" feature="Funding Organizations">
 													                <TD align="right">
-													                	<bean:write name="fd" property="totDisbursements"/>
+													                	<%=FormatHelper.formatNumber(fd.getTotDisbursements())  %>
+												
 													                </TD>
 													            </field:display>
 																<field:display name="Undisbursed Funds" feature="Funding Organizations">
 											      			        <TD align="right">
-											      			        	<bean:write name="fd" property="totUnDisbursed"/>
+											      			        <%=FormatHelper.formatNumber(fd.getTotUnDisbursed())  %>
+											      			        	
 											      			        </TD>
 											      			    </field:display>
 																<field:display name="Total Expended" feature="Funding Organizations">
 														            <TD align="right">
 														            	<bean:write name="fd" property="totExpenditures"/>
+														            <%=FormatHelper.formatNumber(fd.getTotExpenditures())  %>
 														            </TD>
 														        </field:display>
 																<field:display name="Unexpended Funds" feature="Funding Organizations">
 											            		    <TD align="right">
-											            		    	<bean:write name="fd" property="totUnExpended"/>
+											            		    	
+											            		    	 <%=FormatHelper.formatNumber(fd.getTotUnExpended())  %>
 											            		    </TD>
 											            		</field:display>
 															</TR>
@@ -251,27 +257,29 @@ function projectFiche(id)
 														</TD>
 														<field:display name="Total Committed" feature="Funding Organizations">
 															<TD align="right">
-																<bean:write name="aimRegionalFundingForm" property="totCommitments"/>
+															<% %>
+															<%=FormatHelper.formatNumber(((RegionalFundingForm) pageContext.getAttribute("aimRegionalFundingForm")).getTotCommitments())%>
 															</TD>
 														</field:display>
 														<field:display name="Total Disbursed" feature="Funding Organizations">
 															<TD align="right">
-																<bean:write name="aimRegionalFundingForm" property="totDisbursements"/>
+																<%//=FormatHelper.formatNumber(((RegionalFundingForm) pageContext.getAttribute("aimRegionalFundingForm")).getTotDisbursements())%>
 															</TD>
 														</field:display>
 														<field:display name="Undisbursed Funds" feature="Funding Organizations">
 															<TD align="right">
-																<bean:write name="aimRegionalFundingForm" property="totUnDisbursed"/>
-															</TD>
+															<%=FormatHelper.formatNumber(((RegionalFundingForm) pageContext.getAttribute("aimRegionalFundingForm")).getTotUnDisbursed())%>
+														</TD>
 														</field:display>
 														<field:display name="Total Expended" feature="Funding Organizations">
 															<TD align="right">
-																<bean:write name="aimRegionalFundingForm" property="totExpenditures"/>
+															<%=FormatHelper.formatNumber(((RegionalFundingForm) pageContext.getAttribute("aimRegionalFundingForm")).getTotExpenditures())%>
+									
 															</TD>
 														</field:display>
 														<field:display name="Unexpended Funds" feature="Funding Organizations">
 															<TD align="right">
-																<bean:write name="aimRegionalFundingForm" property="totUnExpended"/>
+															<%=FormatHelper.formatNumber(((RegionalFundingForm) pageContext.getAttribute("aimRegionalFundingForm")).getTotUnExpended())%>
 															</TD>
 														</field:display>
 													</TR>

@@ -36,8 +36,8 @@ public class YearlyInfoWorker {
 			double tempActual = 0.0;
 			QuarterlyInfo qf = null;
 			YearlyInfo yf = null;
-			String pa = "";
-			String aa = "";
+			//String pa = "";
+			//String aa = "";
 
 			int i = 0;
 			qf =  qo.get(i);
@@ -48,13 +48,13 @@ public class YearlyInfoWorker {
 				yf.setFiscalYear(qf.getFiscalYear());
 				if ( qf.getAggregate() == 0 )	{
 					if (qf.getPlannedAmount() != null &&  (!qf.getPlannedAmount().equals("0"))) {
-						pa = DecimalToText.removeCommas(qf.getPlannedAmount());
-						tempPlanned += Double.parseDouble(pa);
+						//pa = DecimalToText.removeCommas(qf.getPlannedAmount());
+						tempPlanned += FormatHelper.parseDouble(qf.getPlannedAmount());
 					}
 					if (qf.getActualAmount() != null && (!qf.getActualAmount().equals("0"))) {
-						aa = DecimalToText.removeCommas(qf.getActualAmount());
+						//aa = DecimalToText.removeCommas(qf.getActualAmount());
                         //if(StringUtils.isNumeric(aa)){
-                            tempActual += Double.parseDouble(aa);
+                            tempActual += FormatHelper.parseDouble(qf.getActualAmount());
                         //}
 					}
 				}
@@ -63,8 +63,8 @@ public class YearlyInfoWorker {
 					qf = (QuarterlyInfo) qo.get(i);
 				}
 				else {
-					yf.setPlannedAmount( DecimalToText.mf.format(tempPlanned) );
-					yf.setActualAmount( DecimalToText.mf.format(tempActual) );
+					yf.setPlannedAmount( FormatHelper.formatNumber(tempPlanned) );
+					yf.setActualAmount( FormatHelper.formatNumber(tempActual) );
 					yo.add(yf);
 					break;
 				}
@@ -72,13 +72,13 @@ public class YearlyInfoWorker {
 				while (qf.getFiscalYear()==yf.getFiscalYear()  ) {
 					if ( qf.getAggregate()==0)	{
 						if (qf.getPlannedAmount() != null &&  (!qf.getPlannedAmount().equals("0"))) {
-							pa = DecimalToText.removeCommas(qf.getPlannedAmount());
-							tempPlanned += Double.parseDouble(pa);
+							//pa = DecimalToText.removeCommas(qf.getPlannedAmount());
+							tempPlanned += FormatHelper.parseDouble(qf.getPlannedAmount());
 						}
 
 						if (qf.getActualAmount() != null && (!qf.getActualAmount().equals("0"))) {
-							aa = DecimalToText.removeCommas(qf.getActualAmount());
-							tempActual += Double.parseDouble(aa);
+							//aa = DecimalToText.removeCommas(qf.getActualAmount());
+							tempActual += FormatHelper.parseDouble(qf.getActualAmount());
 						}
 					}
 					i++;
@@ -87,11 +87,11 @@ public class YearlyInfoWorker {
 					else
 						break;
 				}
-				yf.setPlannedAmount( DecimalToText.mf.format(tempPlanned) );
-				yf.setActualAmount( DecimalToText.mf.format(tempActual) );
+				yf.setPlannedAmount( FormatHelper.formatNumber(tempPlanned) );
+				yf.setActualAmount( FormatHelper.formatNumber(tempActual) );
 				yo.add(yf);
-				tempPlanned = 0.0;
-				tempActual = 0.0;
+				tempPlanned = 0d;
+				tempActual = 0d;
 			}
 		}
 		logger.debug("GETYEARLYSUM() RETURNING A COLLECTION OF SIZE : " + yo.size());
@@ -104,19 +104,19 @@ public class YearlyInfoWorker {
 		YearlyInfo y = null ;
 		double total = 0.0 ;
 		String s1 = "" ;
-		String s2 = "" ;
+		//String s2 = "" ;
 
 		while ( iter.hasNext() )	{
 			y =  iter.next();
 			if ( type == Constants.PLANNED )	{
 				s1 = y.getPlannedAmount();
-				s2 = DecimalToText.removeCommas(s1);
-				total += Double.parseDouble(s2);
+				//s2 = DecimalToText.removeCommas(s1);
+				total += FormatHelper.parseDouble(s1);
 			}
 			else if ( type == Constants.ACTUAL )	{
 				s1 = y.getActualAmount();
-				s2 = DecimalToText.removeCommas(s1);
-				total += Double.parseDouble(s2);
+				//s2 = DecimalToText.removeCommas(s1);
+				total += FormatHelper.parseDouble(s1);
 			}
 		}
 		String strTotal = CurrencyWorker.mf.format(total);

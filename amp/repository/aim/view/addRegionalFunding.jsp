@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
@@ -93,7 +94,7 @@
 										<digi:trn key="aim:commitments">Commitments</digi:trn>
 										 - (
 										 <digi:trn key="aim:totalActualAllocation">Total Actual Allocation</digi:trn> 
-											<%=eaForm.getTotalCommitments()%> 
+											<%=FormatHelper.formatNumber( eaForm.getTotalCommitments())%> 
 											<%=eaForm.getCurrCode()%>
 											)
 										</span>
@@ -184,7 +185,7 @@
 										<span class="f-names"><digi:trn key="aim:disbursement">Disbursement</digi:trn> 
 										- (
 											<digi:trn key="aim:totalActualToDate">Total actual to date</digi:trn> 
-											<%=eaForm.getTotalDisbursements()%>
+											<%=FormatHelper.formatNumber( eaForm.getTotalDisbursements())%>
 															 <%=eaForm.getCurrCode()%>)
 										</span>
 										<a href="javascript:addDisbursement()">${translationAdd }</a><br><br>
@@ -273,7 +274,7 @@
 											<span class="f-names"><digi:trn key="aim:expenditure">Expenditure</digi:trn> 
 											- 	(
 												<digi:trn key="aim:totalActualToDate">Total actual to date</digi:trn>
-												<%=eaForm.getTotalExpenditures()%>
+												<%=FormatHelper.formatNumber( eaForm.getTotalExpenditures())%>
 												<%=eaForm.getCurrCode()%>
 												)
 											</span>

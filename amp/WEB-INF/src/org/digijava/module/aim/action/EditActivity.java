@@ -73,11 +73,11 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.FinancingBreakdown;
 import org.digijava.module.aim.helper.FinancingBreakdownWorker;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -871,7 +871,7 @@ if (tm != null && tm.getTeamType()
                   location.setWoredaId(loc.getAmpWoreda()
                                        .getAmpWoredaId());
                 }
-                location.setPercent(DecimalToText.ConvertDecimalToText(actLoc.getLocationPercentage()));
+                location.setPercent(FormatHelper.formatNumber( actLoc.getLocationPercentage().doubleValue()));
                 locs.add(location);
               }
             }
@@ -1085,14 +1085,9 @@ if (tm != null && tm.getTeamType()
                                                                         .getAmpCurrencyId().
                                                                         getCountryName());
 
-                                          fundingDetail
-                                              .setTransactionAmount(CurrencyWorker
-                                                                    .convert(fundDet
-                                                                             .getTransactionAmount()
-                                                                             .doubleValue(), 1, 1));
-                                          fundingDetail.setTransactionDate(DateConversion
-                                                                           .ConvertDateToString(fundDet
-                                              .getTransactionDate()));
+                                          fundingDetail.setTransactionAmount(CurrencyWorker.convert(fundDet.getTransactionAmount().doubleValue(), 1, 1));
+                                          
+                                          fundingDetail.setTransactionDate(DateConversion.ConvertDateToString(fundDet.getTransactionDate()));
 
                                           fundingDetail.setPerspectiveCode(fundDet.
                                                                            getPerspectiveId().getCode());
@@ -1190,8 +1185,7 @@ if (tm != null && tm.getTeamType()
                                   .getCode());
             fd.setPerspectiveName(ampRegFund.getPerspective()
                                   .getName());
-            fd.setTransactionAmount(DecimalToText
-                                    .ConvertDecimalToText(
+            fd.setTransactionAmount(FormatHelper.formatNumber(
                                         ampRegFund
                                         .getTransactionAmount().doubleValue()));
             fd.setTransactionDate(DateConversion
@@ -1584,14 +1578,14 @@ if (tm != null && tm.getTeamType()
           fb, Constants.DISBURSEMENT_ORDER);
 
       eaForm.setTotalDisbursed(overallTotalDisbursed);
-      overallTotalUnDisbursed = DecimalToText.getDifference(
+      overallTotalUnDisbursed = FormatHelper.getDifference(
           overallTotalCommitted, overallTotalDisbursed);
       eaForm.setTotalUnDisbursed(overallTotalUnDisbursed);
       overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(
           fb, Constants.EXPENDITURE);
 
       eaForm.setTotalExpended(overallTotalExpenditure);
-      overallTotalUnExpended = DecimalToText.getDifference(
+      overallTotalUnExpended = FormatHelper.getDifference(
           overallTotalDisbursed, overallTotalExpenditure);
       eaForm.setTotalUnExpended(overallTotalUnExpended);
       eaForm.setTotalDisbOrder(overallTotalDisburOrder);
@@ -1778,7 +1772,7 @@ if (tm != null && tm.getTeamType()
 				fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
 				fd.setPerspectiveCode(ampCompFund.getPerspective().getCode());
 				fd.setPerspectiveName(ampCompFund.getPerspective().getName());
-				fd.setTransactionAmount(DecimalToText.ConvertDecimalToText(ampCompFund.getTransactionAmount().doubleValue()));
+				fd.setTransactionAmount(FormatHelper.formatNumber(ampCompFund.getTransactionAmount().doubleValue()));
 				fd.setTransactionDate(DateConversion.ConvertDateToString(ampCompFund.getTransactionDate()));
 				fd.setTransactionType(ampCompFund.getTransactionType().intValue());
 				if (fd.getTransactionType() == 0) {

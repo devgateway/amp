@@ -22,10 +22,10 @@ import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CommonWorker;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Currency;
-import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.FinancialFilters;
 import org.digijava.module.aim.helper.FinancingBreakdownWorker;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.YearUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -120,13 +120,13 @@ public class ViewFinancingBreakdown extends TilesAction {
 			overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(
 					fb, Constants.DISBURSEMENT);
 			formBean.setTotalDisbursed(overallTotalDisbursed);
-			overallTotalUnDisbursed = DecimalToText.getDifference(
+			overallTotalUnDisbursed = FormatHelper.getDifference(
 					overallTotalCommitted, overallTotalDisbursed);
 			formBean.setTotalUnDisbursed(overallTotalUnDisbursed);
 			overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(
 					fb, Constants.EXPENDITURE);
 			formBean.setTotalExpended(overallTotalExpenditure);
-			overallTotalUnExpended = DecimalToText.getDifference(
+			overallTotalUnExpended = FormatHelper.getDifference(
 					overallTotalDisbursed, overallTotalExpenditure);
 			formBean.setTotalUnExpended(overallTotalUnExpended);
                         overallTotalDibsOrders= FinancingBreakdownWorker.getOverallTotal(

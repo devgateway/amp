@@ -28,6 +28,8 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.AmpComponent;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.TeamMember;
@@ -218,7 +220,7 @@ public class ShowAddComponent extends Action {
 									}
 									break;
 								case 2:
-									fd.setTransactionAmount( val );
+									fd.setTransactionAmount( CurrencyWorker.formatAmount(val));
 									break;
 								case 3:
 									fd.setCurrencyCode( val );
@@ -283,7 +285,7 @@ public class ShowAddComponent extends Action {
 									}
 									break;
 								case 2:
-									fd.setTransactionAmount( val );
+									fd.setTransactionAmount(CurrencyWorker.formatAmount(val));
 									break;
 								case 3:
 									fd.setCurrencyCode( val );
@@ -348,7 +350,7 @@ public class ShowAddComponent extends Action {
 									}
 									break;
 								case 2:
-									fd.setTransactionAmount( val );
+									fd.setTransactionAmount( CurrencyWorker.formatAmount(val));
 									break;
 								case 3:
 									fd.setCurrencyCode( val );

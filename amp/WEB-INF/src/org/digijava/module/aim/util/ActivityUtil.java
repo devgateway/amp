@@ -77,6 +77,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.DecimalToText;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.Issues;
@@ -1607,7 +1608,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                 if (ampLoc.getAmpWoreda() != null) {
                   loc.setWoreda(ampLoc.getAmpWoreda().getName());
                 }
-                loc.setPercent(DecimalToText.ConvertDecimalToText(actLoc.getLocationPercentage()));
+                loc.setPercent(FormatHelper.formatNumber(actLoc.getLocationPercentage().doubleValue()));
                 locColl.add(loc);
             }
             
@@ -1776,9 +1777,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             fd.setCurrencyName(cf.getCurrency().getCurrencyName());
             fd.setPerspectiveCode(cf.getPerspective().getCode());
             fd.setPerspectiveName(cf.getPerspective().getName());
-            fd.setTransactionAmount(
-                DecimalToText.ConvertDecimalToText(
-                    cf.getTransactionAmount().doubleValue()));
+            fd.setTransactionAmount(FormatHelper.formatNumber(cf.getTransactionAmount().doubleValue()));
             fd.setTransactionDate(
                 DateConversion.ConvertDateToString(
                     cf.getTransactionDate()));

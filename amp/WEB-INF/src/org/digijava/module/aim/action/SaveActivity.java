@@ -75,6 +75,7 @@ import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.DecimalToText;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -274,13 +275,13 @@ public class SaveActivity extends Action {
 											}
 
 											if (!useFixedRate) {
-												Double transAmt = new Double(DecimalToText.getDouble(fundDet.getTransactionAmount()));
+												Double transAmt = new Double(FormatHelper.parseDouble(fundDet.getTransactionAmount()));
 												ampFundDet.setTransactionAmount(transAmt);
 												ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
 												ampFundDet.setFixedExchangeRate(null);
 											} else {
 												// Use the fixed exchange rate
-												double transAmt = DecimalToText.getDouble(fundDet.getTransactionAmount());
+												double transAmt = FormatHelper.parseDouble(fundDet.getTransactionAmount());
 
 												Date trDate = DateConversion.getDate(fundDet.getTransactionDate());
 //												double frmExRt = CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,trDate);
@@ -951,7 +952,7 @@ public class SaveActivity extends Action {
 						actLoc.setActivity(activity);//activity);
 						actLoc.getActivity().setAmpActivityId(eaForm.getActivityId());
 						actLoc.setLocation(ampLoc);
-						Double percent=DecimalToText.getDouble(loc.getPercent());
+						Double percent=FormatHelper.parseDouble(loc.getPercent());
                                                 if(percent==null){
 						percent=new Double(0);
                                                 }
@@ -1130,7 +1131,7 @@ public class SaveActivity extends Action {
 
                                                                             if (!useFixedRate) {
                                                                               Double transAmt = new Double(
-                                                                                  DecimalToText.getDouble(fundDet.getTransactionAmount()));
+                                                                                  FormatHelper.parseDouble(fundDet.getTransactionAmount()));
                                                                               ampFundDet.setTransactionAmount(transAmt);
                                                                               ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.
                                                                                   getCurrencyCode()));
@@ -1138,7 +1139,7 @@ public class SaveActivity extends Action {
                                                                             }
                                                                             else {
                                                                               // Use the fixed exchange rate
-                                                                              double transAmt = DecimalToText.getDouble(fundDet.getTransactionAmount());
+                                                                              double transAmt = FormatHelper.parseDouble(fundDet.getTransactionAmount());
 
                                                                               Date trDate = DateConversion.getDate(fundDet.getTransactionDate());
                                                                         //											double frmExRt = CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,trDate);
@@ -1226,7 +1227,7 @@ public class SaveActivity extends Action {
 									}
 								}								
 								ampRegFund.setTransactionAmount(new Double(
-										DecimalToText.getDouble(fd
+									FormatHelper.parseDouble(fd
 												.getTransactionAmount())));
 								ampRegFund.setTransactionDate(DateConversion
 										.getDate(fd.getTransactionDate()));
@@ -1286,7 +1287,7 @@ public class SaveActivity extends Action {
 								}
 								
 								ampRegFund.setTransactionAmount(new Double(
-										DecimalToText.getDouble(fd
+									FormatHelper.parseDouble(fd
 												.getTransactionAmount())));
 								ampRegFund.setTransactionDate(DateConversion
 										.getDate(fd.getTransactionDate()));
@@ -1346,7 +1347,7 @@ public class SaveActivity extends Action {
 								}
 								
 								ampRegFund.setTransactionAmount(new Double(
-										DecimalToText.getDouble(fd
+									FormatHelper.parseDouble(fd
 												.getTransactionAmount())));
 								ampRegFund.setTransactionDate(DateConversion
 										.getDate(fd.getTransactionDate()));
@@ -1641,7 +1642,7 @@ public class SaveActivity extends Action {
 
 						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
 						ampCompFund.setReportingOrganization(null);
-						ampCompFund.setTransactionAmount(new Double(DecimalToText.getDouble(fd.getTransactionAmount())));
+						ampCompFund.setTransactionAmount(FormatHelper.parseDouble(fd.getTransactionAmount()));
 						ampCompFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
 						ampCompFund.setAdjustmentType(new Integer(fd
@@ -1687,7 +1688,7 @@ public class SaveActivity extends Action {
 
 						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
 						ampCompFund.setTransactionAmount(new Double(
-								DecimalToText.getDouble(fd
+								FormatHelper.parseDouble(fd
 										.getTransactionAmount())));
 						ampCompFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
@@ -1733,7 +1734,7 @@ public class SaveActivity extends Action {
 
 						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
 						ampCompFund.setTransactionAmount(new Double(
-								DecimalToText.getDouble(fd
+							FormatHelper.parseDouble(fd
 										.getTransactionAmount())));
 						ampCompFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
@@ -1795,7 +1796,7 @@ public class SaveActivity extends Action {
 			{
 				MTEFProjection mtef=(MTEFProjection)mtefItr.next();
 				AmpFundingMTEFProjection ampmtef=new AmpFundingMTEFProjection();
-				ampmtef.setAmount(DecimalToText.getDouble(mtef.getAmount()));
+				ampmtef.setAmount(FormatHelper.parseDouble(mtef.getAmount()));
 				ampmtef.setAmpFunding(ampFunding);
 				ampmtef.setAmpCurrency(CurrencyUtil.getCurrencyByCode(mtef.getCurrencyCode()));
 				ampmtef.setProjected( CategoryManagerUtil.getAmpCategoryValueFromDb(mtef.getProjected()) );

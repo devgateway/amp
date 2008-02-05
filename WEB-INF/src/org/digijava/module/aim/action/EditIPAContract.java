@@ -61,7 +61,7 @@ public class EditIPAContract extends MultiAction {
         while (i.hasNext()) {
             String element = (String) i.next();
             try {
-                String.valueOf(element);
+               Double.parseDouble(element);
             } catch (NumberFormatException e) {
                 return true;
             }
@@ -231,13 +231,6 @@ public class EditIPAContract extends MultiAction {
             throws Exception {
         ActionErrors errors = new ActionErrors();
         IPAContractForm eaf = (IPAContractForm) form;
-        try {
-            String.valueOf(eaf.getTotalECContribIBAmount());
-        } catch (NumberFormatException e) {
-            errors.add("title", new ActionError(
-                    "error.aim.ipacontract.invalidAmountFormat"));
-        }
-
         List<String> amountsList = new ArrayList<String>();
         amountsList.add(eaf.getTotalECContribIBAmount());
         amountsList.add(eaf.getTotalECContribINVAmount());

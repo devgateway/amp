@@ -19,7 +19,7 @@ function previewClicked() {
 	<digi:context name="preview" property="context/module/moduleinstance/previewActivity.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= preview %>";
 	document.aimEditActivityForm.target = "_self";
-	document.aimEditActivityForm.submit();
+	document.aimEdiatActivityForm.submit();
 	}
 }
 

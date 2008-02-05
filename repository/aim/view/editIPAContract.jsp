@@ -12,6 +12,12 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
 
+<script language="JavaScript" type="text/javascript">
+	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
+</script>
+
+<jsp:include page="scripts/newCalendar.jsp" flush="true" />
+
 <!-- invoked to close myself and reload my parent (after save was performed) -->
 <logic:present name="close">
 <script type="text/javascript">
@@ -24,7 +30,20 @@
 function clearDefault(editBox)
 {
 		if(editBox.value=='Amount') editBox.value='';
-}	
+}
+function fnChk(frmContrl){
+  <c:set var="errMsgAddNumericValue">
+  <digi:trn key="aim:addNumericValueErrorMessage">
+  Please enter numeric value only
+  </digi:trn>
+  </c:set>
+  if (isNaN(frmContrl.value)) {
+    alert("${errMsgAddNumericValue}");
+    frmContrl.value = "";
+    return false;
+  }
+  return true;
+}
 
 function selectOrganisation1() {
 		openNewWindow(650, 420);
@@ -36,35 +55,7 @@ function selectOrganisation1() {
 </script>
 
 <!-- code for rendering that nice calendar -->
-<bean:define id="langBean" name="org.digijava.kernel.navigation_language" scope="request" type="org.digijava.kernel.entity.Locale" toScope="page" />
-<bean:define id="lang" name="langBean" property="code" scope="page" toScope="page" />
 
-<script type="text/javascript">
-	var myCalendarModel = new DHTMLSuite.calendarModel();
-	
-	myCalendarModel.setLanguageCode('<bean:write name="lang" />'); 
-	calendarObjForForm = new DHTMLSuite.calendar({callbackFunctionOnDayClick:'getDateFromCalendar',isDragable:false,displayTimeBar:false,calendarModelReference:myCalendarModel}); 
-		
-	function getDateFromCalendar(inputArray)
-	{
-		var references = calendarObjForForm.getHtmlElementReferences(); // Get back reference to form field.
-		references.dueDate.value = inputArray.year + '-' + inputArray.month + '-' + inputArray.day;
-		calendarObjForForm.hide();			
-	}	
-
-	function pickDate(buttonObj,inputObject)
-	{
-		calendarObjForForm.setCalendarPositionByHTMLElement(inputObject,0,inputObject.offsetHeight-80);	// Position the calendar right below the form input
-		calendarObjForForm.setInitialDateFromInput(inputObject,'yyyy-mm-dd');	// Specify that the calendar should set it's initial date from the value of the input field.
-		calendarObjForForm.addHtmlElementReference('dueDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
-		if(calendarObjForForm.isVisible()){
-			calendarObjForForm.hide();
-		}else{
-			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
-			calendarObjForForm.display();
-		}		
-	}
-</script>		
 
 <body onload="load()">
 <digi:instance property="aimIPAContractForm" />
@@ -82,6 +73,7 @@ function selectOrganisation1() {
 </td></tr>
 	<tr>
 		<td align="right">
+                   
 		<b><digi:trn key="aim:IPA:popup:name">Contract name:</digi:trn></b>
 		</td>
 		<td>
@@ -116,8 +108,12 @@ function selectOrganisation1() {
 		<b><digi:trn key="aim:IPA:popup">Start of Tendering:</digi:trn></b>
 		</td>
 		<td>
-			<html:text readonly="true" property="startOfTendering" styleClass="inp-text"/>
-			<input type="button" class="buton" value='<digi:trn key="aim:addEditActivityPickDate">Pick date</digi:trn>' onclick="pickDate(this,document.aimIPAContractForm.startOfTendering);"></td>
+			<html:text readonly="true" property="startOfTendering" styleClass="inp-text" styleId="startOfTendering"/>
+                          <a id ="startOfTenderingDate" href='javascript:pickDateById("startOfTenderingDate","startOfTendering")'>
+				<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                          </a>
+                         
+			</td>
 		
 	</tr>	
 
@@ -126,8 +122,11 @@ function selectOrganisation1() {
 		<b><digi:trn key="aim:IPA:popup:signatureOfContract">Signature of Contract:</digi:trn></b>
 		</td>
 		<td>
-			<html:text readonly="true" property="signatureOfContract" styleClass="inp-text"/>
-			<input type="button" class="buton" value='<digi:trn key="aim:addEditActivityPickDate">Pick date</digi:trn>' onclick="pickDate(this,document.aimIPAContractForm.signatureOfContract);"></td>
+			<html:text readonly="true" property="signatureOfContract" styleClass="inp-text" styleId="signatureOfContract"/>
+                           <a id="signatureOfContractDate" href='javascript:pickDateById("signatureOfContractDate","signatureOfContract")'>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                          </a>
+			</td>
 		
 	</tr>	
           <tr>
@@ -147,8 +146,11 @@ function selectOrganisation1() {
 		<b><digi:trn key="aim:IPA:popup:contractCompletion">Contract Completion:</digi:trn></b>
 		</td>
 		<td>
-			<html:text readonly="true" property="contractCompletion" styleClass="inp-text"/>
-			<input type="button" class="buton" value='<digi:trn key="aim:addEditActivityPickDate">Pick date</digi:trn>' onclick="pickDate(this,document.aimIPAContractForm.contractCompletion);"></td>
+			<html:text readonly="true" property="contractCompletion" styleClass="inp-text" styleId="contractCompletion"/>
+                          <a id="contractCompletionDate" href='javascript:pickDateById("contractCompletionDate","contractCompletion")'>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                          </a>
+		</td>
 		
 	</tr>	
          <tr>
@@ -177,7 +179,7 @@ function selectOrganisation1() {
 		<b>IB:</b>
 		</td>
 		<td>
-			<html:text property="totalECContribIBAmount" style="text-align:right"/>
+			<html:text property="totalECContribIBAmount" style="text-align:right" onkeyup="fnChk(this)"/>
 			<html:select property="totalECContribIBCurrency" styleClass="inp-text">
 			<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
 			<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
@@ -190,7 +192,7 @@ function selectOrganisation1() {
 		<b>INV:</b>
 		</td>
 		<td>
-			<html:text property="totalECContribINVAmount" style="text-align:right"/>
+			<html:text property="totalECContribINVAmount" style="text-align:right" onkeyup="fnChk(this)"/>
 			<html:select property="totalECContribINVCurrency" styleClass="inp-text">
 			<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
 			<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
@@ -213,7 +215,7 @@ function selectOrganisation1() {
 		<b>Central:</b>
 		</td>
 		<td>
-			<html:text property="totalNationalContribCentralAmount" style="text-align:right"/>
+			<html:text property="totalNationalContribCentralAmount" style="text-align:right" onkeyup="fnChk(this)"/>
 			<html:select property="totalNationalContribCentralCurrency" styleClass="inp-text">
 			<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
 			<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
@@ -226,7 +228,7 @@ function selectOrganisation1() {
 		<b>Regional:</b>
 		</td>
 		<td>
-			<html:text property="totalNationalContribRegionalAmount" style="text-align:right"/>
+			<html:text property="totalNationalContribRegionalAmount" style="text-align:right" onkeyup="fnChk(this)"/>
 			<html:select property="totalNationalContribRegionalCurrency" styleClass="inp-text">
 			<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
 			<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
@@ -239,7 +241,7 @@ function selectOrganisation1() {
 		<b>IFIs:</b>
 		</td>
 		<td>
-			<html:text property="totalNationalContribIFIAmount" style="text-align:right"/>
+			<html:text property="totalNationalContribIFIAmount" style="text-align:right" onkeyup="fnChk(this)"/>
 			<html:select property="totalNationalContribIFICurrency" styleClass="inp-text">
 			<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
 			<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
@@ -260,7 +262,7 @@ function selectOrganisation1() {
 		<b>IB:</b>
 		</td>
 		<td>
-			<html:text property="totalPrivateContribAmount" style="text-align:right"/>
+			<html:text property="totalPrivateContribAmount" style="text-align:right" onkeyup="fnChk(this)"/>
 			<html:select property="totalPrivateContribCurrency" styleClass="inp-text">
 			<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
 			<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
@@ -298,7 +300,7 @@ function selectOrganisation1() {
 							</html:select>
 							</td>
 							<td align="right" valign="top">
-							<html:text indexed="true" name="contractDisbursement" property="amount">Amount</html:text>
+							<html:text indexed="true" name="contractDisbursement" property="amount" onkeyup="fnChk(this)">Amount</html:text>
 							</td>
 							<td align="right" valign="top">
                                                          <html:select name="contractDisbursement" indexed="true" property="currCode" styleClass="inp-text">
@@ -307,7 +309,10 @@ function selectOrganisation1() {
 							</td>
 							<td align="right" valign="top"  nowrap>
 							<html:text readonly="true" indexed="true" name="contractDisbursement" property="disbDate" styleClass="inp-text" styleId="date${idx.count}"/>
-							<input type="button" class="buton" value='<digi:trn key="aim:addEditActivityPickDate">Pick date</digi:trn>' onclick="pickDate(this,document.getElementById('date${idx.count}'))"/>							
+                                                         <a id="image${idx.count}" href='javascript:pickDateById("image${idx.count}","date${idx.count}")'>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                                         </a>
+														
 							</td>
 							</tr>
 						</c:forEach>

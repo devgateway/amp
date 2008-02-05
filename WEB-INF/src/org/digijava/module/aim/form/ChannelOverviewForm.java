@@ -47,7 +47,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private HashMap allComments;
 	private Activity activity;
 	private String implemLocationLevel;
-
+	private int numImplLocationLevels	= 0;
 	private String buttonText;  // added by Akash for activity approval
         private List primaryPrograms;
         private List secondaryPrograms;
@@ -503,4 +503,13 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
                 this.nationalPlanObjectivePrograms =
                     nationalPlanObjectivePrograms;
         }
+
+		public int getNumImplLocationLevels() {
+			return numImplLocationLevels;
+		}
+
+		public void setNumImplLocationLevels(int numImplLocationLevels) {
+			this.numImplLocationLevels = numImplLocationLevels;
+		}
+        
 }

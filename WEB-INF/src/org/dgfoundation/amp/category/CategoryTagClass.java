@@ -200,7 +200,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		
 		while (iterator.hasNext()) {
 			AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)iterator.next();
-			String outputValue					= CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request, null);
+			String outputValue					= CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request);
 			
 			if ( valueId != null && valueId.longValue()	== ampCategoryValue.getId().longValue() || 
 					( valueIdsColl != null && valueIdsColl.contains(ampCategoryValue.getId()) ) ) {
@@ -246,7 +246,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 		
 		while (iterator.hasNext()) {
 			AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)iterator.next();
-			String outputValue					= CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request, null);
+			String outputValue					= CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request);
 			out.println("<tr><td>");
 			if ( ( valueId != null && valueId.longValue()	== ampCategoryValue.getId().longValue() ) || 
 					( valueIdsColl != null && valueIdsColl.contains(ampCategoryValue.getId()) ) ) {

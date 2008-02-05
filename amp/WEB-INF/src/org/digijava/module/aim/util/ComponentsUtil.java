@@ -8,6 +8,8 @@ import org.apache.log4j.*;
 import org.digijava.kernel.persistence.*;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.AmpMEIndicatorList;
+import org.digijava.module.aim.helper.Components;
+import org.digijava.module.aim.helper.FundingDetail;
 
 import net.sf.hibernate.*;
 
@@ -542,42 +544,32 @@ public class ComponentsUtil{
 		return duplicatesExist;
 	}
 
-	public static AmpSISINProyect getSisinProyect(Long ampActivityId, Long componentId)
-	{
-		Collection col = null;
-		String queryString=null;
-		Session session = null;
-		Query qry = null;
-		try
-		{
-			session = PersistenceManager.getSession();
-			queryString ="select sp from " +AmpSISINProyect.class.getName()+" sp where sp.ampActivityId=:ampActivityId and sp.componentId=:componentId";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActivityId",ampActivityId,Hibernate.LONG);
-			qry.setParameter("componentId",componentId,Hibernate.LONG);
-
-			col = qry.list();
-			if (col == null || col.isEmpty())
-				return null;
-			return (AmpSISINProyect) col.iterator().next();
-		}
-		catch(Exception ex)
-		{
-			logger.error("Unable to get AmpSISINProyect for editing from database " + ex.getMessage());
-			ex.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
+	public static void calculateFinanceByYearInfo(Components<FundingDetail> tempComp, Collection<AmpComponentFunding> fundingComponentActivity) {
+		SortedMap<Integer, Map<String, Double>> fbyi = new TreeMap<Integer,Map<String,Double>>();
+		Iterator<AmpComponentFunding> fundingDetailIterator = fundingComponentActivity.iterator();
+		while(fundingDetailIterator.hasNext()){
+			AmpComponentFunding fundingDetail = fundingDetailIterator.next();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(fundingDetail.getTransactionDate());
+			int year = cal.get(Calendar.YEAR);
+			if(!fbyi.containsKey(year)){
+				fbyi.put(year, new HashMap<String,Double>());
 			}
-			catch (Exception ex2)
-			{
-				logger.error("releaseSession() failed ");
+			Map<String, Double> yearInfo = fbyi.get(year);
+			double montoProgramado = yearInfo.get("MontoProgramado") != null ? yearInfo.get("MontoProgramado") : 0;
+			double montoReprogramado = yearInfo.get("MontoReprogramado") != null ? yearInfo.get("MontoReprogramado") : 0;
+			double montoEjecutado = yearInfo.get("MontoEjecutado") != null ? yearInfo.get("MontoEjecutado") : 0;
+			if(fundingDetail.getTransactionType()== 0 && fundingDetail.getAdjustmentType() == 0){
+				montoProgramado +=fundingDetail.getTransactionAmount();
+			}else if(fundingDetail.getTransactionType()== 0 && fundingDetail.getAdjustmentType() == 1){
+				montoReprogramado +=fundingDetail.getTransactionAmount();
+			}else if(fundingDetail.getTransactionType()== 2 && fundingDetail.getAdjustmentType() == 1){
+				montoEjecutado +=fundingDetail.getTransactionAmount();
 			}
+			yearInfo.put("MontoProgramado", montoProgramado);
+			yearInfo.put("MontoReprogramado", montoReprogramado);
+			yearInfo.put("MontoEjecutado", montoEjecutado);			
 		}
-		return null;
+		tempComp.setFinanceByYearInfo(fbyi);		
 	}
-	
 }

@@ -293,6 +293,7 @@ public class Constants
 	public static final String GLOBAL_PUBLIC_VIEW = "Public View";
 	public static final String GLOBAL_DEFAULT_COUNTRY = "Default Country";
 	public static final String GLOBAL_PERSPECTIVE = "Perspective";
+	public static final String GLOBAL_SHOW_COMPONENT_FUNDING_BY_YEAR = "Show Component Funding by Year";
 
 
 	public static final String GLOBAL_DEFAULT_SECTOR_SCHEME="Default Sector Scheme";

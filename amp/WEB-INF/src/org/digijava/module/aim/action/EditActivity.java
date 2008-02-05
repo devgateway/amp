@@ -6,6 +6,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -14,6 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.servlet.RequestDispatcher;
@@ -1736,20 +1739,17 @@ if (tm != null && tm.getTeamType()
 			} else {
 				tempComp.setDescription(temp.getDescription().trim());
 			}
+			tempComp.setCode(temp.getCode());
+			tempComp.setUrl(temp.getUrl());
+			
 			tempComp.setCommitments(new ArrayList<FundingDetail>());
 			tempComp.setDisbursements(new ArrayList<FundingDetail>());
 			tempComp.setExpenditures(new ArrayList<FundingDetail>());
 
-			AmpSISINProyect sisinProyect = ComponentsUtil.getSisinProyect(
-					activity.getAmpActivityId(), temp.getAmpComponentId());
-			if (sisinProyect == null) {
-				sisinProyect = new AmpSISINProyect();
-			}
-			tempComp.setSisinProyect(sisinProyect);
 
-
-			Iterator cItr = ActivityUtil.getFundingComponentActivity(
-					tempComp.getComponentId(), activity.getAmpActivityId()).iterator();
+			Collection<AmpComponentFunding> fundingComponentActivity = ActivityUtil.getFundingComponentActivity(
+					tempComp.getComponentId(), activity.getAmpActivityId());
+			Iterator cItr = fundingComponentActivity.iterator();
 			while (cItr.hasNext()) {
 				AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr
 						.next();
@@ -1781,10 +1781,12 @@ if (tm != null && tm.getTeamType()
 					tempComp.getDisbursements().add(fd);
 				} else if (fd.getTransactionType() == 2) {
 					tempComp.getExpenditures().add(fd);
-				}
+				}				
 			}
+		
+			ComponentsUtil.calculateFinanceByYearInfo(tempComp,fundingComponentActivity);
 
-          Collection<AmpPhysicalPerformance> phyProgress = ActivityUtil
+			Collection<AmpPhysicalPerformance> phyProgress = ActivityUtil
 						.getPhysicalProgressComponentActivity(tempComp.getComponentId(), activity.getAmpActivityId());
 
 			if (phyProgress != null && phyProgress.size() > 0) {

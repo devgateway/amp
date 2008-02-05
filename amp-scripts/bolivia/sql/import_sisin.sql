@@ -1,4 +1,4 @@
-﻿use amp_bolivia;
+use amp_bolivia;
 
 SET @commitment=0;
 SET @disbursment=1;
@@ -17,10 +17,13 @@ ALTER TABLE amp_components ADD COLUMN CodigoSISIN VARCHAR(13) AFTER `type`;
 ALTER TABLE amp_components ADD INDEX `Index_CodigoSISIN` USING BTREE(`CodigoSISIN`);
 
 
+SELECT 'Inserting Proyectos references into Component table';
 INSERT INTO amp_components (CodigoSISIN)
 SELECT distinct CodigoSISIN FROM sisin_db.seguimiento_financiero s
 where CodConvExt != '00000' and CodConvExt != '99999';
 
+
+SELECT 'Updating Components with Proyecto data';
 UPDATE amp_components a,
 sisin_db.proyecto p
 SET a.title = p.NombreProyecto,
@@ -29,6 +32,8 @@ a.code = p.CodigoSISIN,
 a.url = CONCAT(@base_url_sisin,p.CodigoSISIN)
 where a.CodigoSISIN = p.CodigoSISIN;
 
+
+SELECT 'Inserting references from Proyectos to Activities';
 INSERT INTO amp_activity_components(amp_activity_id, amp_component_id)
 SELECT
 a.amp_activity_id,
@@ -39,6 +44,7 @@ join amp_activity a on a.amp_id = sf.CodConvExt
 group by a.amp_activity_id, c.amp_component_id;
 
 
+SELECT 'Inserting Monto Programado Funding Data';
 INSERT INTO amp_component_funding (transaction_type,adjustment_type,currency_id,perspective_id,amp_component_id,activity_id,transaction_amount,transaction_date,reporting_date)
 SELECT
 @commitment as transaction_type,
@@ -54,6 +60,8 @@ FROM amp_components c
 join sisin_db.seguimiento_financiero sf on c.CodigoSISIN = sf.CodigoSisin
 join amp_activity a on a.amp_id = sf.CodConvExt and sf.MontoProgramado != 0;
 
+
+SELECT 'Inserting Monto Reprogramado Funding Data';
 INSERT INTO amp_component_funding (transaction_type,adjustment_type,currency_id,perspective_id,amp_component_id,activity_id,transaction_amount,transaction_date,reporting_date)
 SELECT
 @commitment as transaction_type,
@@ -70,6 +78,7 @@ join sisin_db.seguimiento_financiero sf on c.CodigoSISIN = sf.CodigoSisin
 join amp_activity a on a.amp_id = sf.CodConvExt and sf.MontoReprogramado != 0;
 
 
+SELECT 'Inserting Monto Ejecutado Funding Data';
 INSERT INTO amp_component_funding (transaction_type,adjustment_type,currency_id,perspective_id,amp_component_id,activity_id,transaction_amount,transaction_date,reporting_date)
 SELECT
 @expenditure,
@@ -84,3 +93,5 @@ FechaRegistro as reporting_date
 FROM amp_components c
 join sisin_db.seguimiento_financiero sf on c.CodigoSISIN = sf.CodigoSisin
 join amp_activity a on a.amp_id = sf.CodConvExt and sf.MontoEjecutado != 0;
+
+COMMIT;

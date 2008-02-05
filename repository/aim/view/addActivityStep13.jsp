@@ -138,10 +138,10 @@ ${fn:replace(message,quote,escapedQuote)}
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn key="aim:editActivityStep1">Edit Activity - Step 13</digi:trn>
+									<digi:trn key="aim:editActivityStep13">Edit Activity - Step 13</digi:trn>
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == false}">
-									<digi:trn key="aim:addActivityStep1">Add Activity - Step 13</digi:trn>
+									<digi:trn key="aim:addActivityStep13">Add Activity - Step 13</digi:trn>
 								</c:if>
 								</span>
 							</td>
@@ -441,6 +441,9 @@ ${fn:replace(message,quote,escapedQuote)}
 							
 							
 							</td></tr>
+                                                         <tr><td>
+                                                             &nbsp;
+                                                         </td></tr>
                                                          <tr><td>
                                                               <input type="button" value="Add IPA Contract" class="buton" onclick="addIPAContract()"/>
                                                          </td></tr>

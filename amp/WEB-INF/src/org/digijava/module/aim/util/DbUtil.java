@@ -1065,7 +1065,7 @@ public class DbUtil {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select act from " + AmpActivity.class.getName()
                 + " act where (act.team=:ampTeamId)"
-                + " and (act.approvalStatus in ("+ Constants.ACTIVITY_NEEDS_APPROVAL_STATUS +") ) " 
+                + " and (act.approvalStatus in ("+ Constants.ACTIVITY_NEEDS_APPROVAL_STATUS +") ) "
                 + " and act.draft != :draftValue" ;
             q = session.createQuery(queryString);
             q.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
@@ -2235,9 +2235,12 @@ public class DbUtil {
         Iterator iter = null;
 
         try {
+            AmpOrgType tBil=getAmpOrgTypeByCode("BIL");
+            AmpOrgType tMul=getAmpOrgTypeByCode("MUL");
+
             session = PersistenceManager.getRequestDBSession();
             queryString = " select org from " + AmpOrganisation.class.getName()
-                + " org where org.orgTypeCode='MUL' or org.orgTypeCode='BIL' order by org.name";
+                + " org where org.orgTypeId='" + tBil.getAmpOrgTypeId() + "' or org.orgTypeId='" + tMul.getAmpOrgTypeId() + "' order by org.name";
             q = session.createQuery(queryString);
             iter = q.list().iterator();
 
@@ -2249,6 +2252,7 @@ public class DbUtil {
         } catch (Exception ex) {
             logger.error("Unable to get Amp organisation names  from database "
                          + ex.getMessage());
+            ex.printStackTrace();
         }
         return organisation;
     }
@@ -2365,6 +2369,7 @@ public class DbUtil {
             tx.commit();
         } catch (Exception e) {
             logger.error("Unable to update");
+            e.printStackTrace();
             logger.debug(e.toString());
             if (tx != null) {
                 try {
@@ -4164,6 +4169,28 @@ public class DbUtil {
         return col;
     }
 
+    public static AmpOrgType getAmpOrgTypeByCode(String ampOrgTypeCode) {
+        Session session = null;
+        Query qry = null;
+        AmpOrgType ampOrgType = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select f from " + AmpOrgType.class.getName()
+                + " f where (f.orgTypeCode=:ampOrgTypeCode)";
+            qry = session.createQuery(queryString);
+            qry.setString("ampOrgTypeCode", ampOrgTypeCode);
+            Iterator itr = qry.list().iterator();
+            if (itr.hasNext()) {
+                ampOrgType = (AmpOrgType) itr.next();
+            }
+        } catch (Exception e) {
+            logger.error("Unable to get Org Type");
+            logger.debug("Exceptiion " + e);
+        }
+        return ampOrgType;
+    }
+
     public static AmpOrgType getAmpOrgType(Long ampOrgTypeId) {
         Session session = null;
         Query qry = null;
@@ -5091,23 +5118,40 @@ public class DbUtil {
         return responses;
     }
 
-    public static AmpAhsurveyIndicator getIndicatorById(Long id) {
-        AmpAhsurveyIndicator indc = new AmpAhsurveyIndicator();
+    public static void updateIndicator(AmpAhsurveyIndicator ind) {
+        AmpAhsurveyIndicator oldInd = new AmpAhsurveyIndicator();
         Session session = null;
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            String qry = "select indc from " + AmpAhsurveyIndicator.class.getName()
-                + " indc where (indc.ampIndicatorId=:id)";
-            indc = (AmpAhsurveyIndicator) session.createQuery(qry)
-                .setParameter("id", id, Hibernate.LONG)
-                .list().get(0);
+            oldInd=(AmpAhsurveyIndicator)session.load(AmpAhsurveyIndicator.class, ind.getAmpIndicatorId());
 
+            oldInd.setAmpIndicatorId(ind.getAmpIndicatorId());
+            oldInd.setCalcFormulas(ind.getCalcFormulas());
+            oldInd.setIndicatorCode(ind.getIndicatorCode());
+            oldInd.setIndicatorNumber(ind.getIndicatorNumber());
+            oldInd.setName(ind.getName());
+            oldInd.setQuestions(ind.getQuestions());
+            oldInd.setStatus(ind.getStatus());
+            oldInd.setTotalQuestions(ind.getTotalQuestions());
+
+            update(oldInd);
         } catch (Exception ex) {
             logger.debug("Unable to get survey indicator : " + ex.getMessage());
             ex.printStackTrace(System.out);
         }
-        return indc;
+    }
+
+    public static AmpAhsurveyIndicator getIndicatorById(Long id) {
+        try {
+            Session session = PersistenceManager.getRequestDBSession();
+            AmpAhsurveyIndicator indc=(AmpAhsurveyIndicator)session.load(AmpAhsurveyIndicator.class, id);
+            return indc;
+        } catch (Exception ex) {
+            logger.debug("Unable to get survey indicator : " + ex.getMessage());
+            ex.printStackTrace(System.out);
+        }
+        return null;
     }
 
     public static Collection getSurveyQuestionsByIndicator(Long indcId) {

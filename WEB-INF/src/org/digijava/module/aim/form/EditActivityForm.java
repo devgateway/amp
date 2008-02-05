@@ -402,7 +402,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String componentTitle;
 	private String componentDesc;
 	private String componentAmount;
-	private AmpSISINProyect sisinProyect;
 	////////////////////
 	private double compTotalDisb;
 
@@ -4481,17 +4480,9 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		this.docComment = docComment;
 	}
 
-	public void setSisinProyect(AmpSISINProyect sisinProyect) {
-		this.sisinProyect = sisinProyect;
-	}
-
     public void setDraft(Boolean draft) {
         this.draft = draft;
     }
-
-    public AmpSISINProyect getSisinProyect() {
-		return sisinProyect;
-	}
 
     public Long getActivityLevel() {
         return activityLevel;

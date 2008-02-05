@@ -1602,12 +1602,6 @@ public class SaveActivity extends Action {
 					activity.getComponents().add(ampComp);
 				}
 
-				if (comp.getSisinProyect() != null){
-					AmpSISINProyect sisinProyect = comp.getSisinProyect();
-					sisinProyect.setComponentId(ampComp.getAmpComponentId());
-					tempComp.setSisinProyect(sisinProyect);
-				}
-
 				if (comp.getCommitments() != null
 						&& comp.getCommitments().size() > 0) {
 					HashSet<AmpComponentFunding> temp = new HashSet<AmpComponentFunding>();

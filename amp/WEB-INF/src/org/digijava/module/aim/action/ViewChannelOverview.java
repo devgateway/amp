@@ -76,7 +76,11 @@ public class ViewChannelOverview extends TilesAction {
 				id = formBean.getId();
 			}
 
-			 
+			Collection<AmpCategoryValue> implLocationLevels	= 
+				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY);
+			
+			if ( implLocationLevels != null)
+					formBean.setNumImplLocationLevels( implLocationLevels.size() );
 			
 			Activity activity = ActivityUtil.getChannelOverview(id);
 			
@@ -114,11 +118,7 @@ public class ViewChannelOverview extends TilesAction {
 	            }
 	          }
 	          
-	          AmpCategoryValue ampCategoryValue = CategoryManagerUtil.
-	            getAmpCategoryValueFromList(CategoryConstants.ACCHAPTER_NAME,ampact.getCategories());
-			
-
-	            ampCategoryValue = CategoryManagerUtil
+	          AmpCategoryValue ampCategoryValue	= CategoryManagerUtil
 					.getAmpCategoryValueFromListByKey(
 							CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
 							ampact.getCategories());

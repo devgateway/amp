@@ -592,19 +592,25 @@ function commentWin(val) {
 																						<TR>
 																							<TD width="33%" align="center" bgcolor="#ffffff">
 																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 1}" > 
-																									<category:getoptionvalue upperCase="true" categoryIndex="1" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
+																									<i>
+																									<category:getoptionvalue categoryIndex="1" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
+																									</i>
 																								</c:if>
 																								&nbsp;
 																							</TD>
 																							<TD width="33%" align="center" bgcolor="#ffffff">
 																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 2}" >
-																									<category:getoptionvalue upperCase="true" categoryIndex="2" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
+																									<i>
+																									<category:getoptionvalue categoryIndex="2" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
+																									</i>
 																								</c:if>
 																								&nbsp;
 																							</TD>
 																							<TD width="33%" align="center" bgcolor="#ffffff">
 																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 3}" >
-																									<category:getoptionvalue upperCase="true" categoryIndex="3" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
+																									<i>
+																									<category:getoptionvalue categoryIndex="3" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
+																									</i>
 																								</c:if>
 																								&nbsp;
 																							</TD>

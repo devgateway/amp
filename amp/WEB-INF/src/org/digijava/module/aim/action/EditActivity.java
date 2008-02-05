@@ -874,7 +874,8 @@ if (tm != null && tm.getTeamType()
                   location.setWoredaId(loc.getAmpWoreda()
                                        .getAmpWoredaId());
                 }
-                location.setPercent(FormatHelper.formatNumber( actLoc.getLocationPercentage().doubleValue()));
+                Float locationPercentage = actLoc.getLocationPercentage();
+                location.setPercent(FormatHelper.formatNumber(locationPercentage == null ? 0 : locationPercentage.doubleValue()));
                 locs.add(location);
               }
             }

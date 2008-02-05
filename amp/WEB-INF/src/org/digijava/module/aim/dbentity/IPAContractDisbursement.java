@@ -31,13 +31,17 @@ public class IPAContractDisbursement implements Serializable {
             this.contract = contract;
         }
         
-        public String getDisbDate(){
-            String disbDate="";
-            if(date!=null){
-               disbDate= DateTimeUtil.formatDate(date);
+        public String getDisbDate() {
+        String disbDate = "";
+        try {
+            if (date != null) {
+                disbDate = DateTimeUtil.parseDateForPicker2(date);
             }
-            return disbDate;
+        } catch (Exception ex) {
+            Logger.getLogger(IPAContractDisbursement.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return disbDate;
+    }
         
          public void setDisbDate(String date){
         try {

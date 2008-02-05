@@ -350,6 +350,7 @@ public class IPAContractForm extends ActionForm  {
             statusId=null;
             activityCategoryId=null;
             selContractDisbursements=null;
+            contrOrg=null;
             }
 	
             

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import org.digijava.module.common.util.DateTimeUtil;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author mihai
@@ -90,25 +92,39 @@ public class IPAContract implements Serializable {
 
     public String getFormattedStartOfTendering() {
         String formatted = "";
+        try{
         if (startOfTendering != null) {
-            formatted = DateTimeUtil.formatDate(startOfTendering);
+            formatted = DateTimeUtil.parseDateForPicker2(startOfTendering);
+        }
+        }
+        catch(Exception ex){
+            Logger.getLogger(IPAContract.class.getName()).log(Level.SEVERE, null, ex);
         }
         return formatted;
     }
 
     public String getFormattedSignatureOfContract() {
         String formatted = "";
-        if (signatureOfContract != null) {
-            formatted = DateTimeUtil.formatDate(signatureOfContract);
+        try {
+            if (signatureOfContract != null) {
+                formatted = DateTimeUtil.parseDateForPicker2(signatureOfContract);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(IPAContract.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return formatted;
 
     }
 
     public String getFormattedContractCompletion() {
         String formatted = "";
-        if (contractCompletion != null) {
-            formatted = DateTimeUtil.formatDate(contractCompletion);
+        try {
+            if (contractCompletion != null) {
+                formatted = DateTimeUtil.parseDateForPicker2(contractCompletion);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(IPAContract.class.getName()).log(Level.SEVERE, null, ex);
         }
         return formatted;
 

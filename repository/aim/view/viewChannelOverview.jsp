@@ -323,7 +323,7 @@ function commentWin(val) {
 															<TR>
 																<TD>
 																<TABLE width="100%" cellPadding=2 cellSpacing=1
-																	vAlign="top" align="top" bgcolor="#FFFFFF">
+																	vAlign="top" align="center" bgcolor="#FFFFFF">
 																	<TR>
 																		<TD bgcolor="#eeeeee" height="18" colspan="2">&nbsp; <IMG
 																			height=10
@@ -344,11 +344,12 @@ function commentWin(val) {
 																		<c:forEach items="${aimChannelOverviewForm.selectedOrganizations}" var="selectedOrganizations">
 																		<tr>
 																			<c:if test="${!empty selectedOrganizations.ampOrgId}">
-																				<td width="89%">
+																				<td width="75%">
 																					<li><i><c:out value="${selectedOrganizations.name}"/></i></li>
 																			  </td>
-																				<td width="11%">
-																					<i><c:out value="${selectedOrganizations.projectId}"/></i>		
+																				<td width="25%" align="center">
+																					<i>
+																				  <c:out value="${selectedOrganizations.projectId}"/></i>		
 																			  </td>
 																			</c:if>	
 																		</tr>

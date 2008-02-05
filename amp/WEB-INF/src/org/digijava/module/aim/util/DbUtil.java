@@ -5127,7 +5127,7 @@ public class DbUtil {
             oldInd=(AmpAhsurveyIndicator)session.load(AmpAhsurveyIndicator.class, ind.getAmpIndicatorId());
 
             oldInd.setAmpIndicatorId(ind.getAmpIndicatorId());
-            oldInd.setCalcFormulas(ind.getCalcFormulas());
+            //oldInd.setCalcFormulas(ind.getCalcFormulas());
             oldInd.setIndicatorCode(ind.getIndicatorCode());
             oldInd.setIndicatorNumber(ind.getIndicatorNumber());
             oldInd.setName(ind.getName());

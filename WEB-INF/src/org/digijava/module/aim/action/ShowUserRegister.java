@@ -22,7 +22,10 @@ import org.digijava.kernel.translator.util.TrnCountry;
 import org.digijava.kernel.util.SiteUtils;
 import org.apache.log4j.Logger;
 import java.util.Collection;
+
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CountryBean;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class ShowUserRegister extends Action {
 
@@ -61,6 +64,9 @@ public class ShowUserRegister extends Action {
 					registerForm.setCountryResidence(countrieCol);
 					logger.debug("sortedCountries.size : " + countrieCol.size());
 
+					//set default country from global settings.
+                    registerForm.setSelectedCountryResidence(FeaturesUtil.getGlobalSettingValue(Constants.GLOBAL_DEFAULT_COUNTRY));
+					
 					// set default web site
 					registerForm.setWebSite("http://");
 

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
  
@@ -70,7 +71,7 @@ public class DateConversion
 			if (strDate.length() > 10 || strDate.length() < 8) 
 				return null;
 			
-			int index = 0,curr = 0;
+/*			int index = 0,curr = 0;
 			
 			index = strDate.indexOf('/', curr);
 			int day = Integer.parseInt(strDate.substring(curr, index));
@@ -81,13 +82,16 @@ public class DateConversion
 			
 			curr = index + 1;
 			int yr = Integer.parseInt(strDate.substring(curr, strDate.length()));
-			
-			GregorianCalendar gc = new GregorianCalendar(yr,mon-1,day) ;
+*/
+			String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+			pattern = pattern.replaceAll("m", "M");
+			Date date = new SimpleDateFormat(pattern).parse(strDate);
+			//GregorianCalendar gc = new GregorianCalendar(yr,mon-1,day) ;
 			/*if ( logger.isDebugEnabled() )
 				logger.debug("getDate returning date with year " + gc.get(Calendar.YEAR)
 						  + " month " + gc.get(Calendar.MONTH) 
 						  + " day "  + gc.get(Calendar.DAY_OF_MONTH)) ; */
-			return gc.getTime() ;	
+			return date;//gc.getTime() ;	
 		}catch(Exception ex){
 			throw new RuntimeException();
 		}

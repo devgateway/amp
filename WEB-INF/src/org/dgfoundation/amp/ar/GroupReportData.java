@@ -30,7 +30,7 @@ public class GroupReportData extends ReportData {
 
     
 	@Override
-	public int getVisibleRows() {
+	/*public int getVisibleRows() {
     	    Iterator i=items.iterator();
     	    int ret=1;
     	    while (i.hasNext()) {
@@ -38,8 +38,23 @@ public class GroupReportData extends ReportData {
 		ret+=element.getVisibleRows();
 	    }
     	    return ret;
-	}
+	}*/
     
+	public int getVisibleRows() {
+		int ret=1; //one is for the title, one is for totals
+		if(this.getReportMetadata().getHideActivities())
+		{
+			return ret;
+		}
+		Iterator i=items.iterator();
+		int visCol=1;
+		while (i.hasNext()) {
+			ReportData element = (ReportData) i.next();
+		 	visCol=element.getVisibleRows();
+		}
+		return visCol;
+	}
+		 	
 	/**
 	 * GroupReportData comparator class. This class implements reportData comparison. 
 	 * Comparison is based on the level of this ReportData and the chosen sorter for that particular level

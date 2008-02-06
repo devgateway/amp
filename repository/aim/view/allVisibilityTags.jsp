@@ -115,7 +115,6 @@
 <feature:display name="Regional Report" module="Reports"></feature:display>
 <feature:display name="Related Documents" module="Document"></feature:display>
 <feature:display name="Reports Contact Information" module="Contact Information"></feature:display>
-<feature:display name="SISIN" module="Components"></feature:display>
 <feature:display name="Sector Group" module="Organizations"></feature:display>
 <feature:display name="Sectors" module="Project ID and Planning"></feature:display>
 <feature:display name="Web Resources" module="Document"></feature:display>
@@ -196,24 +195,19 @@
 <field:display name="Components Actual/Planned Commitments" feature="Components"></field:display>
 <field:display name="Components Actual/Planned Disbursements" feature="Components"></field:display>
 <field:display name="Components Actual/Planned Expenditures" feature="Components"></field:display>
-<field:display name="Components Agency Source" feature="SISIN"></field:display>
-<field:display name="Components Classification Program Code" feature="SISIN"></field:display>
 <field:display name="Components Currency Commitments" feature="Components"></field:display>
 <field:display name="Components Currency Disbursements" feature="Components"></field:display>
 <field:display name="Components Currency Expenditures" feature="Components"></field:display>
 <field:display name="Components Date Commitments" feature="Components"></field:display>
 <field:display name="Components Date Disbursements" feature="Components"></field:display>
 <field:display name="Components Date Expenditures" feature="Components"></field:display>
-<field:display name="Components Financing Source" feature="SISIN"></field:display>
 <field:display name="Components Grand Total Commitments" feature="Components"></field:display>
 <field:display name="Components Grand Total Disbursements" feature="Components"></field:display>
 <field:display name="Components Grand Total Expenditures" feature="Components"></field:display>
-<field:display name="Components Localization" feature="SISIN"></field:display>
 <field:display name="Components Perspective Commitments" feature="Components"></field:display>
 <field:display name="Components Perspective Disbursements" feature="Components"></field:display>
 <field:display name="Components Perspective Expenditures" feature="Components"></field:display>
 <field:display name="Components Physical Progress" feature="Components"></field:display>
-<field:display name="Components Stage" feature="SISIN"></field:display>
 <field:display name="Components Total Amount Commitments" feature="Components"></field:display>
 <field:display name="Components Total Amount Disbursements" feature="Components"></field:display>
 <field:display name="Components Total Amount Expenditures" feature="Components"></field:display>
@@ -390,8 +384,6 @@
 <field:display name="Results" feature="Identification"></field:display>
 <field:display name="Revised Target Value" feature="Activity"></field:display>
 <field:display name="Risk" feature="Activity"></field:display>
-<field:display name="SISIN Code" feature="SISIN"></field:display>
-<field:display name="SISIN Sector" feature="SISIN"></field:display>
 <field:display name="Secondary Program" feature="NPD Programs"></field:display>
 <field:display name="Secondary Program" feature="NPD Programs"></field:display>
 <field:display name="Sector Group Add Organizations Button" feature="Sector Group"></field:display>

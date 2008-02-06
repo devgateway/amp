@@ -68,7 +68,8 @@ public class UndisbursedTotalAmountColumn extends TotalAmountColumn {
 	public void addCell(Object c) {
 		AmountCell ac=(AmountCell) c;
 		UndisbursedAmountCell uac=new UndisbursedAmountCell(ac.getOwnerId());		
-		super.addCell(uac.merge(ac));
+		uac.merge(uac,ac);
+		super.addCell(uac);
 	}
 
     public Column newInstance() {
@@ -80,7 +81,8 @@ public class UndisbursedTotalAmountColumn extends TotalAmountColumn {
 		Cell ac=new UndisbursedAmountCell();		
 		Iterator i=items.iterator();
 		while (i.hasNext()) {
-			UndisbursedAmountCell element = (UndisbursedAmountCell) i.next();
+			Object el = i.next();
+			UndisbursedAmountCell element = (UndisbursedAmountCell) el;
 			ac.merge(element,ac);			
 		}
 		ac.setColumn(this);

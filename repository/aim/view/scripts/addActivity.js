@@ -2,19 +2,28 @@ function sameAsfunction(val)
 {
 		if(val == 1)
 		{
-			if(document.aimEditActivityForm.sameAs1.checked == true)
+			if(document.aimEditActivityForm.sameAs1.checked == true){
 				document.aimEditActivityForm.revisedAppDate.value = document.aimEditActivityForm.originalAppDate.value;
+				clearDisplay(document.getElementById('date2'),'clear2');				
+			}			
+				
 			else
 				document.aimEditActivityForm.revisedAppDate.value = "";
+				clearDisplay(document.aimEditActivityForm.revisedAppDate,'clear2');
 		}
 		else if(val == 2)
 		{
-			if(document.aimEditActivityForm.sameAs2.checked == true)
+			if(document.aimEditActivityForm.sameAs2.checked == true) {
 				document.aimEditActivityForm.revisedStartDate.value = document.aimEditActivityForm.originalStartDate.value;
+				clearDisplay(document.getElementById('date4'),'clear4');	
+			}
+				
 			else
 				document.aimEditActivityForm.revisedStartDate.value = "";
+				clearDisplay(document.aimEditActivityForm.revisedStartDate,'clear4');
 		}
 }
+
 
 function quitRnot()
 {

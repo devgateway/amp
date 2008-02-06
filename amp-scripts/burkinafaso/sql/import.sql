@@ -142,7 +142,8 @@ actual_start_date,
 amp_team_id,
 approval_status,
 activity_creator,
-totalCost
+totalCost,
+draft
 
 )
 SELECT 
@@ -162,7 +163,8 @@ DATE_FIN,
 @team_id,
 @approved,
 @activity_creator,
-c.MONTANT_DEVISE_CONV/1000
+c.MONTANT_DEVISE_CONV/1000,
+true
   
 FROM  burkina_db.`convention` as c ;
 /* where c.STATCONV!='D' and c.STATCONV!='C' and c.STATCONV!='A' and c.STATCONV!='5'; */ 

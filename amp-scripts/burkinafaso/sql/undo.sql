@@ -10,6 +10,9 @@ START TRANSACTION;
 
  /*truncate amp_activity;*/
 truncate amp_activity_location;
+truncate amp_indicator_sectors;
+truncate amp_activity_components;
+truncate amp_activity_document;
 
 truncate amp_activity_sector;
 
@@ -26,6 +29,11 @@ truncate amp_activity_closing_dates;
 truncate amp_me_indicator_value;
 truncate amp_ahsurvey;
 truncate AMP_ISSUES;
+truncate ipa_contract_disbursement;
+truncate ipa_contract;
+truncate amp_indicator_project;
+truncate amp_activity_referencedoc;
+
 
 truncate  AMP_ACTIVITY  ;
 

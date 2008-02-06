@@ -73,11 +73,11 @@ public class TotalAmountColumn extends AmountCellColumn {
         AmountCell byOwner = (AmountCell) this.getByOwner(ac.getOwnerId());
         if(byOwner!=null) 
         	byOwner.merge(byOwner,ac);
-         else{
-        	 
-        	 super.addCell(ac);
-         }
-        	
+        else {
+       	 AmountCell newcell=(AmountCell) ac.newInstance();
+       	 newcell.merge(newcell,ac);
+       	 super.addCell(newcell);
+        }	
         
         /*
         while (i.hasNext()) {

@@ -106,7 +106,13 @@
 		}		
 		
 		//set Clear link visible
-		clr.style.display="inline";
+	
+		clr.style.display="inline";		
+
+		
+		var obj=calendarObjForForm.htmlElementReferences.myDate;
+		DHTMLSuite.commonObj.addEvent(calendarObjForForm.divElementClose,'click',function(){ if (obj.value=="") {clearDate(obj, clearObj)} });
+		
 	}
 	
 	function clearDisplay(editBox, clearLink){ //Display the clear link or not ?

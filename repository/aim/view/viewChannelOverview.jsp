@@ -359,12 +359,30 @@ function commentWin(val) {
 																</TABLE>
 																</TD>
 															</TR>
-
-															<field:display name="Status" feature="Planning">
+															<field:display name="Lessons Learned" feature="Identification">
 																<TR>
 																	<TD>
 																	<TABLE width="100%" cellPadding=2 cellSpacing=1
 																		vAlign="top" align="top" bgcolor="#aaaaaa">
+																		<TR>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																				height=10
+																				src="../ampTemplate/images/arrow-014E86.gif"
+																				width=15> <b><digi:trn key="aim:Lessons Learned">Lessons Learned</digi:trn></b></TD>
+																		</TR>
+																		<TR>
+																			<TD bgcolor="#ffffff"><bean:define id="lessonsLearnedKey"><c:out value="${activity.lessonsLearned}"/></bean:define>
+																			<digi:edit key="<%=lessonsLearnedKey%>"/></TD>
+																		</TR>																		
+																	</TABLE>
+																	</TD>
+																</TR>
+															</field:display>
+															<field:display name="Status" feature="Planning">
+																<TR>
+																	<TD>
+																	<TABLE width="100%" cellPadding=2 cellSpacing=1
+																		vAlign="top" align="top" bgcolor="#FFFFFF">
 																		<TR>
 																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
 																				height=10

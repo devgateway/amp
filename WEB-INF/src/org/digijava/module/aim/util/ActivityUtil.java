@@ -1309,6 +1309,10 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         if (ampActivity.getActivityCreator() != null) {
           activity.setCreatedBy(ampActivity.getActivityCreator());
         }
+      //get lessons learned
+        if(ampActivity.getLessonsLearned()!=null) {
+        	activity.setLessonsLearned(ampActivity.getLessonsLearned());
+        }
 
       }
     }
@@ -1591,6 +1595,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           }
         }
         activity.setLocations(locColl);
+        
+      //set lessons learned
+        activity.setLessonsLearned(ampAct.getLessonsLearned());
 
         activity.setProjectIds(ampAct.getInternalIds());
 

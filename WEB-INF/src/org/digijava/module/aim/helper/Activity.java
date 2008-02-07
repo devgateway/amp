@@ -87,6 +87,8 @@ public class Activity
   
   private String approvalStatus;
   private Boolean draft;
+  
+  private String lessonsLearned;
 
   private AmpTeamMember createdBy;
 
@@ -905,6 +907,14 @@ public class Activity
 
 	public void setPropCompDate(String propCompDate) {
 		this.propCompDate = propCompDate;
+	}
+
+	public String getLessonsLearned() {
+		return lessonsLearned;
+	}
+
+	public void setLessonsLearned(String lessonsLearned) {
+		this.lessonsLearned = lessonsLearned;
 	}
   
   

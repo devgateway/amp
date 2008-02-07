@@ -7,31 +7,31 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <bean:define id="groupReport" name="viewable" type="org.dgfoundation.amp.ar.GroupReportData" scope="request" toScope="page"/>
-
 <logic:present name="groupReport" property="parent">
-<tr><td>
-<b><u><bean:write name="groupReport" property="name"/></u></b>
-</td></tr>
+	<tr>
+		<td colspan="3" style="font-size: 13pt; color:#000000;padding-bottom: 5px;padding-top: 5px;" >
+			<b><bean:write name="groupReport" property="name"/></u></b>
+		</td>
+	</tr>
 </logic:present>
 
 
-<br/>
 <logic:iterate name="groupReport"  property="items" id="item" scope="page">
-	<bean:define id="viewable" name="item" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
-	<jsp:include page="<%=viewable.getViewerPath()%>"/>	
+	
+		<bean:define id="viewable" name="item" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
+		<jsp:include flush="true"  page="<%=viewable.getViewerPath()%>"/>
+		
 </logic:iterate>
-<br/>
 
 <!-- generate total row -->
 <logic:present name="groupReport" property="parent">
-<bean:define id="viewable" name="groupReport" type="org.dgfoundation.amp.ar.GroupReportData" scope="page" toScope="request"/>
-<jsp:include page="TrailCells.jsp"/>	
-
-<tr><td>
-<hr/>
-</td></tr>
-
-<tr><td>
-<hr/>
-</td></tr>
+	<tr>
+	<td></td>
+		<td colspan="2">
+			<bean:define id="viewable" name="groupReport" type="org.dgfoundation.amp.ar.GroupReportData" scope="page" toScope="request"/>
+			<jsp:include flush="true"  page="TrailCells.jsp"/>	
+		</td>
+	</tr>
+		
+		
 </logic:present>

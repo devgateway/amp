@@ -125,7 +125,15 @@ public class ActivityManager extends Action {
 		case 1:
 			Collections.sort(activities, new Comparator<AmpActivity>(){
 				public int compare(AmpActivity a1, AmpActivity a2) {
-					return a1.getName().compareTo(a2.getName());
+					String s1	= a1.getName();
+					String s2	= a2.getName();
+					if ( s1 == null )
+						s1	= "";
+					if ( s2 == null )
+						s2	= "";
+					
+					return s1.trim().compareTo(s2.trim());
+					//return a1.getName().compareTo(a2.getName());
 				}
 			});
 			break;

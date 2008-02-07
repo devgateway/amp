@@ -98,7 +98,12 @@ function selectOrganisation1() {
 		<td>
 			<html:select property="activityCategoryId" styleClass="inp-text">
 			<option value="-1"><digi:trn key="aim:select">Select</digi:trn></option>
-			<html:optionsCollection name="aimIPAContractForm" property="activitiyCategories" value="id" label="value"/>
+			<logic:iterate id="actCat" name="aimIPAContractForm" property="activitiyCategories">
+				<c:set var="trn">
+					<digi:trn key="aim:ipa:popup:${actCat.id}">${actCat.value}</digi:trn>
+				</c:set>
+				<html:option value="${actCat.id}">${trn}</html:option>			
+			</logic:iterate>			
 			</html:select>
 		</td>
 	</tr>
@@ -136,9 +141,14 @@ function selectOrganisation1() {
          <td>
          <html:select property="contrOrg" styleClass="inp-text">
 			<option value="-1"><digi:trn key="aim:selectOrganisation">Select Organisation</digi:trn></option>
-			<html:optionsCollection name="aimIPAContractForm" property="organisations" value="ampOrgId" label="name"/>
+			<logic:iterate id="actOrg" name="aimIPAContractForm" property="organisations">
+				<c:set var="trn">
+					<digi:trn key="aim:ipa:popup:${actOrg.ampOrgId}">${actOrg.name}</digi:trn>
+				</c:set>
+				<html:option value="${actOrg.ampOrgId}">${trn}</html:option>			
+			</logic:iterate>
 			</html:select>
-                     </td>
+        </td>
 	</tr>
 	
 		<tr>
@@ -160,9 +170,14 @@ function selectOrganisation1() {
 		<td>
 			<html:select property="statusId" styleClass="inp-text">
 			<option value="-1"><digi:trn key="aim:select">Select</digi:trn></option>
-			<html:optionsCollection name="aimIPAContractForm" property="statuses" value="id" label="value"/>
+			<logic:iterate id="actstat" name="aimIPAContractForm" property="statuses">
+				<c:set var="trn">
+					<digi:trn key="aim:ipa:popup:${actstat.id}">${actstat.value}</digi:trn>
+				</c:set>
+				<html:option value="${actstat.id}">${trn}</html:option>			
+			</logic:iterate>			
 			</html:select>
-                     </td>
+        </td>
 	</tr>	
          
         
@@ -176,7 +191,7 @@ function selectOrganisation1() {
 	
 		<tr>
 		<td align="right">
-		<b>IB:</b>
+		<b><digi:trn key="aim:ipa:popup:ib">IB</digi:trn>:</b>
 		</td>
 		<td>
 			<html:text property="totalECContribIBAmount" style="text-align:right" onkeyup="fnChk(this)"/>
@@ -189,7 +204,7 @@ function selectOrganisation1() {
 
 		<tr>
 		<td align="right">
-		<b>INV:</b>
+		<b><digi:trn key="aim:ipa:popup:inv">INV</digi:trn>:</b>
 		</td>
 		<td>
 			<html:text property="totalECContribINVAmount" style="text-align:right" onkeyup="fnChk(this)"/>
@@ -212,7 +227,7 @@ function selectOrganisation1() {
 	
 		<tr>
 		<td align="right">
-		<b>Central:</b>
+		<b><digi:trn key="aim:ipa:popup:central">Central</digi:trn>:</b>
 		</td>
 		<td>
 			<html:text property="totalNationalContribCentralAmount" style="text-align:right" onkeyup="fnChk(this)"/>
@@ -225,7 +240,7 @@ function selectOrganisation1() {
 
 		<tr>
 		<td align="right">
-		<b>Regional:</b>
+		<b><digi:trn key="aim:ipa:popup:regional">Regional</digi:trn>:</b>
 		</td>
 		<td>
 			<html:text property="totalNationalContribRegionalAmount" style="text-align:right" onkeyup="fnChk(this)"/>
@@ -238,7 +253,7 @@ function selectOrganisation1() {
 
 	<tr>
 		<td align="right">
-		<b>IFIs:</b>
+		<b><digi:trn key="aim:ipa:popup:ifis">IFIs</digi:trn>:</b>
 		</td>
 		<td>
 			<html:text property="totalNationalContribIFIAmount" style="text-align:right" onkeyup="fnChk(this)"/>
@@ -259,7 +274,7 @@ function selectOrganisation1() {
 	
 		<tr>
 		<td align="right">
-		<b>IB:</b>
+		<b><digi:trn key="aim:ipa:popup:ib">IB</digi:trn>:</b>
 		</td>
 		<td>
 			<html:text property="totalPrivateContribAmount" style="text-align:right" onkeyup="fnChk(this)"/>
@@ -295,12 +310,12 @@ function selectOrganisation1() {
                                                          </td>
 							<td align="right" valign="top">
 							<html:select indexed="true" name="contractDisbursement" property="adjustmentType">
-							<html:option value="0">Actual</html:option>
-							<html:option value="1">Planned</html:option>							
+							<html:option value="0"><digi:trn key="aim:ipa:popup:actual"> Actual</digi:trn></html:option>
+							<html:option value="1"><digi:trn key="aim:ipa:popup:planned">Planned</digi:trn></html:option>							
 							</html:select>
 							</td>
 							<td align="right" valign="top">
-							<html:text indexed="true" name="contractDisbursement" property="amount" onkeyup="fnChk(this)">Amount</html:text>
+							<html:text indexed="true" name="contractDisbursement" property="amount" onkeyup="fnChk(this)"><digi:trn key="aim:ipa:popup:amount">Amount</digi:trn></html:text>
 							</td>
 							<td align="right" valign="top">
                                                          <html:select name="contractDisbursement" indexed="true" property="currCode" styleClass="inp-text">

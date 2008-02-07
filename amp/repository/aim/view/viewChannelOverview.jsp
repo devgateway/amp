@@ -358,26 +358,8 @@ function commentWin(val) {
 																	</c:forEach>
 																</TABLE>
 																</TD>
-															</TR>
-															<field:display name="Lessons Learned" feature="Identification">
-																<TR>
-																	<TD>
-																	<TABLE width="100%" cellPadding=2 cellSpacing=1
-																		vAlign="top" align="top" bgcolor="#aaaaaa">
-																		<TR>
-																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
-																				height=10
-																				src="../ampTemplate/images/arrow-014E86.gif"
-																				width=15> <b><digi:trn key="aim:Lessons Learned">Lessons Learned</digi:trn></b></TD>
-																		</TR>
-																		<TR>
-																			<TD bgcolor="#ffffff"><bean:define id="lessonsLearnedKey"><c:out value="${activity.lessonsLearned}"/></bean:define>
-																			<digi:edit key="<%=lessonsLearnedKey%>"/></TD>
-																		</TR>																		
-																	</TABLE>
-																	</TD>
-																</TR>
-															</field:display>
+															</TR>														
+																
 															<field:display name="Status" feature="Planning">
 																<TR>
 																	<TD>
@@ -402,7 +384,7 @@ function commentWin(val) {
 																	</TD>
 																</TR>
 															</field:display>
-														</feature:display>
+														</feature:display>		
 														<feature:display name="Budget"
 															module="Project ID and Planning">
 															<field:display feature="Identification"
@@ -564,8 +546,8 @@ function commentWin(val) {
 																</TR>
 
 															</field:display>
-														</feature:display>
-
+														</feature:display>													
+														
 														<feature:display module="Project ID and Planning"
 															name="Location">
 															<TR>
@@ -736,42 +718,67 @@ function commentWin(val) {
 																				<digi:edit key="${activity.description}" />
 																			</c:if>
 																			<br />
-																		</field:display> <field:display feature="Identification"
-																			name="Objectives">
-																			<i><b><digi:trn key="aim:programObjective">Objective</digi:trn></b></i>:
+																		</field:display> 
+																		<field:display feature="Identification" name="Objectives">
+																			<i><b><digi:trn key="aim:programObjective">
+																				Objective
+																			</digi:trn></b></i>:
 																			<c:if test='${!empty activity.objective}'>
 																				<digi:edit key="${activity.objective}" />
 																			</c:if>
+																		</field:display> 
 																			<ul>
 																				<c:forEach var="comments"
 																					items="${aimChannelOverviewForm.allComments}">
-																					<c:if test='${comments.key=="Objective Assumption"}'>
-																						<c:forEach var="comment" items="${comments.value}">
-																							<li><i><digi:trn
-																								key="aim:objectiveAssumption">Objective Assumption</digi:trn>:</i>
-																							${comment.comment}</li>
-																						</c:forEach>
-																					</c:if>
-																					<c:if test='${comments.key=="Objective Verification"}'>
-																						<c:forEach var="comment" items="${comments.value}">
-																							<li><i><digi:trn
+																					<field:display feature="Identification" name="Objective Assumption">
+																						<c:if test='${comments.key=="Objective Assumption"}'>
+																							<c:forEach var="comment" items="${comments.value}">
+																								<li><i><digi:trn
+																									key="aim:objectiveAssumption">Objective Assumption</digi:trn>:</i>
+																								${comment.comment}</li>
+																							</c:forEach>
+																						</c:if>
+																					</field:display>
+																					<field:display feature="Identification" name="Objective Verification">
+																						<c:if test='${comments.key=="Objective Verification"}'>
+																							<c:forEach var="comment" items="${comments.value}">
+																								<li><i><digi:trn
 																								key="aim:objectiveVerification">Objective Verification</digi:trn>:</i>
-																							${comment.comment}</li>
-																						</c:forEach>
-																					</c:if>
-																					<c:if
-																						test='${comments.key=="Objective Objectively Verifiable Indicators"}'>
-																						<c:forEach var="comment" items="${comments.value}">
-																							<li><i><digi:trn key="aim:objectivelyindicatorspreview">
-																							Objectively Verifiable Indicators
-																							</digi:trn>:
-																							</i>
-																							${comment.comment}</li>
-																						</c:forEach>
-																					</c:if>
+																								${comment.comment}</li>
+																							</c:forEach>
+																						</c:if>
+																					</field:display>
+																					<field:display feature="Identification" name="Objective Objectively Verifiable Indicators">
+																						<c:if test='${comments.key=="Objective Objectively Verifiable Indicators"}'>
+																							<c:forEach var="comment" items="${comments.value}">
+																								<li><i><digi:trn key="aim:objectivelyindicatorspreview">
+																								Objectively Verifiable Indicators
+																								</digi:trn>:
+																								</i>
+																								${comment.comment}</li>
+																							</c:forEach>
+																						</c:if>
+																					</field:display>
 																				</c:forEach>
 																			</ul>
-																		</field:display> <field:display feature="Identification"
+																		 
+																		
+																		<field:display name="Lessons Learned" feature="Identification">
+																			<TR>
+																				<TD bgcolor="#ffffff">																			
+																					<i><b><digi:trn key="aim:Lessons Learned">Lessons Learned</digi:trn></b></i>:
+																					<c:if test="${not empty activity.lessonsLearned}">
+																						<bean:define id="lessonsLearnedKey">
+																						<c:out value="${activity.lessonsLearned}"/>
+																					</bean:define>
+																						<digi:edit key="<%=lessonsLearnedKey%>"/>
+																					 </c:if>
+																				</TD>
+																			</TR>																		
+																			
+																		</field:display>
+																		
+																		<field:display feature="Identification"
 																			name="Purpose">
 
 																			<c:if test="${!empty activity.purpose}">

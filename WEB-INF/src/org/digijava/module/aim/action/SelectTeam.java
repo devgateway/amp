@@ -124,6 +124,7 @@ public class SelectTeam extends Action {
             tm.setDelete(member.getDeletePermission().booleanValue());
             tm.setAppSettings(appSettings);
             tm.setEmail(member.getUser().getEmail());
+            tm.setTeamAccessType(member.getAmpTeam().getAccessType());
 
             if (DbUtil.isUserTranslator(member.getUser().getId()) == true) {
                 tm.setTranslator(true);

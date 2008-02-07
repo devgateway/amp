@@ -16,7 +16,7 @@
 			</b>
 		</a>
 		 -->
-</div>
+	</div>
 
 <div id="myFilter" style="display: none">
 		<jsp:include page="/aim/reportsFilterPicker.do" />
@@ -170,12 +170,20 @@
 				<c:set var="pageNumber" value="<%=Integer.valueOf(request.getParameter("pageNumber"))%>" scope="request"/>
 			</c:if>
 
+	<logic:equal name="viewFormat" value="print">
+			<table id='reportTable'  cellSpacing="0" width="780">
+				<bean:define id="viewable" name="report"
+					type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
+				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
+			</table>
+	</logic:equal>
+		<logic:notEqual name="viewFormat" value="print">
 			<table id='reportTable'  cellSpacing="0" cellPadding="1" width="100%" class="reportsBorderTable">
 				<bean:define id="viewable" name="report"
 					type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
 			</table>
-
+		</logic:notEqual>
 			<!-- end of big report table --></td>
 		</tr>
 		<tr>

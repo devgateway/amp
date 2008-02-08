@@ -348,4 +348,18 @@ function checkAmountLen(amt)
 		valid = confirm('All funding information should be entered in thousands "000". Do you wish to proceed with your entry?');
 		return valid;
 	}
+	
 }
+
+function checkAmountUsingSymbols(amount,groupSymbol,decimalSymbol){
+		var validChars= "0123456789"+groupSymbol+decimalSymbol;
+		
+		for (i = 0;  i < amount.length;  i++) {
+			var ch = amount.charAt(i);
+			if (validChars.indexOf(ch)==-1){
+				return false;
+				break
+			}
+		}
+		return true;
+	}

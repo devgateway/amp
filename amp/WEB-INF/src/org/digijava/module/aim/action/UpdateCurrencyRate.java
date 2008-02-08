@@ -23,6 +23,7 @@ import org.digijava.module.aim.form.CurrencyRateForm;
 import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.DecimalToText;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 
 
@@ -70,12 +71,10 @@ public class UpdateCurrencyRate extends Action {
 					String code = st.nextToken().trim();
 					double rate = Double.parseDouble(st.nextToken().trim());
 					String date = st.nextToken().trim();
-
 					currencyRates = new CurrencyRates();
 					currencyRates.setCurrencyCode(code);
 					currencyRates.setExchangeRate(new Double(rate));
 					currencyRates.setExchangeRateDate(date);
-
 					col.add(currencyRates);
 				}
 			}
@@ -118,9 +117,15 @@ public class UpdateCurrencyRate extends Action {
                     else {
                       AmpCurrencyRate cRate = new AmpCurrencyRate();
                       if (crForm.getUpdateCRateAmount() != null) {
-                    	String amountRate=DecimalToText.removeCommas(crForm.getUpdateCRateAmount());
+                    	//String amountRate=DecimalToText.removeCommas(crForm.getUpdateCRateAmount());
                         //Double rate = new Double(Double.parseDouble(crForm.getUpdateCRateAmount()));
-                    	Double rate = new Double(1/Double.parseDouble(amountRate));
+                	 //AMP-2600: not use removeCommas because we can use comma as decimal separator
+                    	Double amountRate=FormatHelper.parseDouble(crForm.getUpdateCRateAmount());
+                    	Double rate= 0d;
+                    	if (amountRate!=null){
+                    	    rate= new Double(1/amountRate);
+                    	}
+                	  
                         cRate.setExchangeRate(rate);
                       }
                       if (crForm.getUpdateCRateDate() != null) {

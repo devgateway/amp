@@ -99,8 +99,14 @@ public class UpdateCurrencyRate extends Action {
                           crForm.getUpdateCRateDate() != null) {
                         Date date = DateConversion.getDate(crForm.
                                                            getUpdateCRateDate());
-                        crForm.setUpdateCRateAmount(CurrencyUtil.getExchangeRate(
-                            crForm.getUpdateCRateCode(), date).toString());
+                        Double rate=CurrencyUtil.getExchangeRate(
+                                crForm.getUpdateCRateCode(), date);
+                       
+                        String amount="0";
+                        if((rate!=null)&&(rate!=0)){
+                            amount=FormatHelper.formatNumber(1/rate);
+                        }
+                        crForm.setUpdateCRateAmount(amount);
                         crForm.setReset(false);
                       }
                       else {

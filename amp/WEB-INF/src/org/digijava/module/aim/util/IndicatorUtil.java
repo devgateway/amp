@@ -406,7 +406,29 @@ public class IndicatorUtil {
 		return coll;
 	}
 	
+	public static Collection getAllDefaultIndicators()
+	{
+		Session session = null;
+		Collection col = new ArrayList();
+		Query qry = null;
+		try
+		{
+			session = PersistenceManager.getRequestDBSession();
 	
+			String queryString = "select defInd from "
+				+ AmpIndicator.class.getName()
+				+ " defInd where defInd.defaultInd = true";
+			
+			qry = session.createQuery(queryString);
+			col = qry.list();
+		}
+		catch(Exception e)
+		{
+			logger.error("Unable to get default indicators");
+			logger.debug("Exception : " + e);
+		}
+		return col;
+	}
 
 	public static Collection getActivityIndicatorsList(Long ampActivityId) {
 

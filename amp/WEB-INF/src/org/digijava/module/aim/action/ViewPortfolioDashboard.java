@@ -16,11 +16,13 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.helper.AmpProject;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DesktopUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 public class ViewPortfolioDashboard extends TilesAction {
@@ -83,10 +85,11 @@ public class ViewPortfolioDashboard extends TilesAction {
 			pageListSize = (projects.size() % 10 == 0) ? pageListSize : pageListSize+1;
 		}
 		 
-		Collection col = MEIndicatorsUtil.getAllDefaultIndicators();
+		//Collection col = MEIndicatorsUtil.getAllDefaultIndicators();
+		Collection col = IndicatorUtil.getAllDefaultIndicators();
 		Iterator itr = col.iterator();
 		while (itr.hasNext()) {
-			AmpMEIndicators meInd = (AmpMEIndicators) itr.next();
+			AmpIndicator meInd = (AmpIndicator) itr.next();
 			meInd.setName(meInd.getName());
 			/*
 			if (meInd.getName().length() > 30) {

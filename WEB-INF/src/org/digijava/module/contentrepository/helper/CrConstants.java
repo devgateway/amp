@@ -21,6 +21,10 @@ public class CrConstants {
 	public static final String PROPERTY_VERSION_NUMBER				= "ampdoc:versionNumber";
 	public static final String PROPERTY_DATA						= "ampdoc:data";
 	public static final String PROPERTY_LINK						= "ampdoc:link";
+	public static final String PROPERTY_WEB_LINK					= "ampdoc:webLink";
 	public static final String PROPERTY_FILE_SIZE					= "ampdoc:fileSize";
 	
+	public static final String TEMPORARY_UUID						= "__TEMPORARY__";
+	
+	public static final String URL_CONTENT_TYPE						= "URL";
 }

@@ -28,7 +28,7 @@
 						</thead>
 						<logic:iterate name="crDocumentManagerForm"
 							property="otherDocuments" id="documentData"
-							type="org.digijava.module.contentrepository.action.DocumentManager.DocumentData">
+							type="org.digijava.module.contentrepository.helper.DocumentData">
 							<%
 					int index2;
 					String documentName = documentData.getName();

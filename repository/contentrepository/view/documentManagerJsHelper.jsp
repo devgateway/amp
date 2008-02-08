@@ -1,4 +1,7 @@
 <style type="text/css">
+
+.yui-tt{ background: LightYellow; border-color: black }
+
 .all_markup
 {margin:1em} 
 .all_markup table
@@ -34,6 +37,7 @@
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/datatable/assets/datatable.css'/>"> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/fonts/fonts.css'/>"> 
 <link rel="stylesheet" type="text/css" href="<digi:file src='module/contentrepository/scripts/menu/assets/menu.css'/>"> 
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/reset.css'/>"> 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/datatable/datatable-beta-min.js'/>" > .</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/datatable/datasource-beta-min.js'/>" > .</script>
@@ -41,6 +45,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/panel/dom-min.js'/>" > .</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/menu/menu-min.js'/>" > .</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/container/container-core-min.js'/>" > .</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/contentrepository/scripts/tooltip/wz_tooltip.js'/>" > .</script>
 
 <c:set var="translation_public_ver_msg">
 		<digi:trn key="contentrepository:publicVersionMsg">The marked version is currently public</digi:trn>
@@ -54,7 +59,7 @@
 </c:set>
 
 <c:set var="headerFileName">
-	<digi:trn key="contentrepository:versionhistory:header:filename">File Name</digi:trn>
+	<digi:trn key="contentrepository:versionhistory:header:resourcename">Resource Name</digi:trn>
 </c:set>
 
 <c:set var="headerDate">
@@ -85,6 +90,7 @@
 			setHeightOfDiv("versions_div", 250, 250);
 			YAHOO.amp.table.enhanceVersionsMarkup();
 			YAHOO.amp.panels[1].setFooter("* ${translation_public_ver_msg}");
+			//createToolTips( document.getElementById('versions_div') );
 		},
 		failure: function () {
 			YAHOO.amp.panels[1].setBody("<div align='center'><font color='red'>We are sorry but your request cannot be processed at this time</font></div>");
@@ -162,10 +168,10 @@
 	 <digi:trn key="contentrepository:TableHeader:Type">Type</digi:trn>  
 </c:set>
 <c:set var="trans_headerFileName">
-	 <digi:trn key="contentrepository:TableHeader:FileName">File Name</digi:trn>  
+	 <digi:trn key="contentrepository:TableHeader:ResourceName">Resource Name</digi:trn>  
 </c:set>
 <c:set var="trans_headerResourceTitle">
-	 <digi:trn key="contentrepository:TableHeader:ResourceTitle">Resource Title</digi:trn>  
+	 <digi:trn key="contentrepository:TableHeader:Title">Title</digi:trn>  
 </c:set>
 <c:set var="trans_headerDate">
 	 <digi:trn key="contentrepository:TableHeader:Date">Date</digi:trn>
@@ -193,9 +199,9 @@ YAHOO.namespace("YAHOO.amp.table");
 YAHOO.amp.table.enhanceMarkup = function(markupName) {
 
     this.columnHeaders = [
+        {key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true},
 	    {key:"type",text:"${trans_headerType}",sortable:true},
         {key:"file_name",text:"${trans_headerFileName}",sortable:true},
-        {key:"resource_title",text:"${trans_headerResourceTitle}",sortable:true},
         {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
         {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
         
@@ -311,6 +317,10 @@ function WindowControllerObject(bodyContainerEl) {
 						parameters	+= "&versioningRights=" + obj.rights.versioningRights;
 					if (obj.rights.deleteRights != null) 
 						parameters	+= "&deleteRights=" + obj.rights.deleteRights;
+					if (obj.rights.showVersionsRights != null) 
+						parameters	+= "&showVersionsRights=" + obj.rights.showVersionsRights;
+					if (obj.rights.makePublicRights != null) 
+						parameters	+= "&makePublicRights=" + obj.rights.makePublicRights;
 				}
 				if (obj.userName != null)
 					parameters	+= "&otherUsername=" + obj.userName;
@@ -546,6 +556,8 @@ function getCallbackForOtherDocuments(containerElement, windowController) {
 					
 					YAHOO.amp.datatables[YAHOO.amp.num_of_tables-1] = datatable;
 					windowController.datatable	= datatable;
+				
+					//createToolTips(containerElement);
 				},
 		failure: function(o) {
 					containerElement.innerHTML	= "Unable to retrieve requested documents";
@@ -631,7 +643,7 @@ function toggleView(elementId, iconId, isMinus) {
 	return isMinus;
 }
 /* Configures the form with id typeId */
-function configPanel(panelNum, title, description, uuid) {
+function configPanel(panelNum, title, description, uuid, isAUrl) {
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML = '';
 
 	var myForm		= document.getElementById('typeId').form;
@@ -641,10 +653,25 @@ function configPanel(panelNum, title, description, uuid) {
 	myForm.docNotes.value		= '';
 	myForm.uuid.value			= uuid;
 	myForm.fileData.value		= null;
+	myForm.webLink.value		= null;
+	
+	if (isAUrl == null) 
+		isAUrl	= false;
+	selectResourceType(isAUrl);
+		
+	if (isAUrl) {
+		myForm.webResource[1].checked				= true;
+	}
+	else {
+		myForm.webResource[0].checked				= true;		
+	}
 	
 	if (uuid != null && uuid.length > 0) {
+		myForm.webResource[1].disabled				= true;
+		myForm.webResource[0].disabled				= true;
+		
 		myForm.docTitle.readOnly					= true;
-		myForm.docTitle.style.background			= "#eeeeee";
+		myForm.docTitle.style.background			= "#eeeeee"; 
 		myForm.docTitle.style.color					= "darkgray";
 		
 		myForm.docDescription.readOnly				= true;
@@ -654,6 +681,9 @@ function configPanel(panelNum, title, description, uuid) {
 		setPanelHeader(0, "${translation_add_new_version}");
 	}
 	else {
+		myForm.webResource[1].disabled				= false;
+		myForm.webResource[0].disabled				= false;
+		
 		myForm.docTitle.readOnly					= false;
 		myForm.docTitle.style.backgroundColor		= "";
 		myForm.docTitle.style.color					= "";
@@ -669,6 +699,18 @@ function configPanel(panelNum, title, description, uuid) {
 	
 }
 
+function selectResourceType(isAUrl) {
+	var elFile	= document.getElementById('tr_path');
+	var elUrl	= document.getElementById('tr_url');
+	if (isAUrl) {
+		elFile.style.display	= "none";
+		elUrl.style.display		= "";
+	}
+	else {
+		elFile.style.display	= "";
+		elUrl.style.display		= "none";	
+	}
+}
 
 /* Sets whether we are currently adding a new 
  personal/team document or a new version */
@@ -686,7 +728,8 @@ function validateAddDocument() {
 	var msg	= '';
 	if (document.forms['crDocumentManagerForm'].docTitle.value == '')
 		msg = msg + "${translation_validation_title}" ;
-	if (document.forms['crDocumentManagerForm'].fileData.value == '')
+	if ( document.forms['crDocumentManagerForm'].webResource[0].checked == true && 
+			document.forms['crDocumentManagerForm'].fileData.value == '')
 		msg = msg + "${translation_validation_filedata}" ;
 	
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML	= msg;
@@ -716,6 +759,21 @@ function setAttributeOnNode(action, uuid, doReload) {
 						};
 	
 	YAHOO.util.Connect.asyncRequest("POST","/contentrepository/setAttributes.do?uuid="+uuid+"&action="+action, callback);
+}
+
+function createToolTips(containerElement) {
+	var elements	= containerElement.getElementsByTagName("a");
+	
+	for (i=0; i<elements.length; i++) {
+		if ( elements[i].id != null ) {
+			createToolTip(elements[i], containerElement);
+		}
+	}
+	
+}
+
+function createToolTip (id, containerElement) {
+		new YAHOO.widget.Tooltip("tt"+id, { context: id, container: containerElement });
 }
 
 /* Number of possible panels on this page */

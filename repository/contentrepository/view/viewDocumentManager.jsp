@@ -71,7 +71,7 @@
 					<ul>
 						<logic:iterate name="crDocumentManagerForm"
 							property="myPersonalDocuments" id="documentData"
-							type="org.digijava.module.contentrepository.action.DocumentManager.DocumentData">
+							type="org.digijava.module.contentrepository.helper.DocumentData">
 							<%
 					int index2;
 					String documentName = documentData.getName();
@@ -146,7 +146,7 @@
 						</thead>
 						<logic:iterate name="crDocumentManagerForm"
 							property="myPersonalDocuments" id="documentData"
-							type="org.digijava.module.contentrepository.action.DocumentManager.DocumentData">
+							type="org.digijava.module.contentrepository.helper.DocumentData">
 							<%
 					int index2;
 					String documentName = documentData.getName();
@@ -260,9 +260,9 @@
 					</div>
 					<br />
 				</logic:notEmpty>
-				<button type="button" class="buton" onClick="setType('private');configPanel(0,'','',''); showMyPanel(0, 'addDocumentDiv'); ">
-	               <digi:trn key="contentrepository:addFile">
-	 	    	       Add File ...
+				<button type="button" class="buton" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
+	               <digi:trn key="contentrepository:addResource">
+	 	    	       Add Resource ...
     				</digi:trn>            
                 </button>
 				</td>
@@ -311,7 +311,7 @@
 						</thead>
 						<logic:iterate name="crDocumentManagerForm"
 							property="myTeamDocuments" id="documentData"
-							type="org.digijava.module.contentrepository.action.DocumentManager.DocumentData">
+							type="org.digijava.module.contentrepository.helper.DocumentData">
 							<%
 					int index2;
 					String documentName = documentData.getName();
@@ -422,9 +422,9 @@
 					<br />
 				</logic:notEmpty>
 				<c:if test="${isTeamLeader}">
-					<button class="buton" type="button" onClick="setType('team'); configPanel(0,'','','');showMyPanel(0, 'addDocumentDiv');">						
-                            	<digi:trn key="contentrepository:addFile">
-	 	    	       				Add File ...
+					<button class="buton" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
+                            	<digi:trn key="contentrepository:addResource">
+	 	    	       				Add Resource ...
     							</digi:trn>            
 					</button>
 				</c:if>
@@ -453,6 +453,16 @@
 		<input type="hidden" name="uuid" id="nodeUUID"/>
 		<table cellpadding="3" cellspacing="3" border="0">
 			<tr>
+				<td> 
+					<digi:trn key="contentrepository:addEdit:typeDocument">Document</digi:trn>
+					<input name="webResource" type="radio" value="false" onchange="selectResourceType(false)" />
+				</td>
+				<td> 
+					<digi:trn key="contentrepository:addEdit:typeUrl">URL</digi:trn>
+					<input name="webResource" type="radio" value="true" onchange="selectResourceType(true)"/>
+				</td>
+			</tr>
+			<tr>
 			<td><strong><digi:trn key="contentrepository:addEdit:Title">Title:</digi:trn></strong><font color="red">*</font></td>
 			<td><html:text property="docTitle" size="30" /></td>
 			</tr>
@@ -464,9 +474,13 @@
 			<td><strong><digi:trn key="contentrepository:addEdit:Notes">Notes:</digi:trn></strong></td>
 			<td><html:textarea property="docNotes" cols="28" /></td>
 			
-			<tr>
+			<tr id="tr_path">
 			<td><strong><digi:trn key="contentrepository:addEdit:Path">Path:</digi:trn><font color="red">*</font></strong></td>
 			<td><html:file property="fileData" /></td>
+			</tr>
+			<tr style="display: none" id="tr_url">
+			<td><strong><digi:trn key="contentrepository:addEdit:Url">URL:</digi:trn><font color="red">*</font></strong></td>
+			<td><html:text property="webLink" size="32" /></td>
 			</tr>
 			<tr>
 				<td align="right">
@@ -487,4 +501,5 @@
 YAHOO.namespace("YAHOO.amp.table");
 YAHOO.amp.table.mytable	= YAHOO.amp.table.enhanceMarkup("team_markup");
 YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("my_markup");
+
 </script>

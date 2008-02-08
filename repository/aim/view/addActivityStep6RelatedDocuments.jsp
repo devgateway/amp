@@ -24,16 +24,7 @@
 									<tr>
 										<td>
 										<table width="100%" cellSpacing=1 cellPadding=5 border="0" bgcolor="white">
-										<tr>
-											<td>
-												<bean:define toScope="request" id="showRemoveButton" value="true" />
-												<bean:define toScope="request" id="documentsType" value="<%=org.digijava.module.aim.helper.ActivityDocumentsConstants.RELATED_DOCUMENTS %>" />
-												<bean:define toScope="request" id="versioningRights" value="false" />
-												<bean:define toScope="request" id="deleteRights" value="false" />
-												<bean:define toScope="request" id="crRights" value="true" />
-												<jsp:include page="/repository/contentrepository/view/showSelectedDocumentsDM.jsp"/>
-											</td>
-										</tr>
+										
 										<tr>
 											<td>
 												<c:set var="documentsType"><%=org.digijava.module.aim.helper.ActivityDocumentsConstants.RELATED_DOCUMENTS%></c:set>

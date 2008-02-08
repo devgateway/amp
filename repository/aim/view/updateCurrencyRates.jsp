@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 <digi:instance property="aimCurrencyRateForm" />
@@ -33,11 +34,14 @@ function validate() {
 		document.aimCurrencyRateForm.updateCRateAmount.focus();
 		return false;
 	}
-	if (checkAmount(document.aimCurrencyRateForm.updateCRateAmount.value) == false) {
-		alert("Invalid exchange rate entered");
-		document.aimCurrencyRateForm.updateCRateAmount.focus();
-		return false;
-	}
+
+	if (checkAmountUsingSymbols(document.aimCurrencyRateForm.updateCRateAmount.value,'<%=FormatHelper.getGroupSymbol()%>','<%=FormatHelper.getDecimalSymbol()%>') == false) 
+		{
+			alert("Invalid exchange rate entered");
+			document.aimCurrencyRateForm.updateCRateAmount.focus();
+			return false;
+		}
+	
 	return true;
 }
 
@@ -121,7 +125,11 @@ function closePopup() {
 									<digi:trn key="aim:exchangeRateFor1ForeignCurrency">Exchange rate (value of 1 Foreign Currency in USD)</digi:trn>&nbsp;
 								</td>
 								<td align="left" valign="middle">
-									<html:text property="updateCRateAmount" styleClass="amt" size="7"/>
+								<c:set var="formatTip">
+														<digi:trn key="aim:decimalforma">Format has to be: </digi:trn> <%=FormatHelper.formatNumber(FormatHelper.parseDouble("1"+FormatHelper.getDecimalSymbol()+"5"))%>
+								</c:set>
+								
+									<html:text title="${formatTip}" property="updateCRateAmount" styleClass="amt" size="7"/>
 									<FONT color=red>
 									<digi:trn key="aim:USD">USD</digi:trn></FONT>
 								</td>

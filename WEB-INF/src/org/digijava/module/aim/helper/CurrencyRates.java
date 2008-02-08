@@ -5,6 +5,8 @@
 
 package org.digijava.module.aim.helper;
 
+import java.text.DecimalFormat;
+
 public class CurrencyRates {
 	private Long id;
 	private String currencyCode;
@@ -73,5 +75,11 @@ public class CurrencyRates {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getformattedRate(){
+	    DecimalFormat f= FormatHelper.getDefaultFormat();
+	    f.setMinimumFractionDigits(10);
+	    return f.format(this.exchangeRate);
 	}
 }

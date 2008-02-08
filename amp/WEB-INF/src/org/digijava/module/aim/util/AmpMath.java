@@ -15,11 +15,11 @@ public class AmpMath {
     static byte PREC_UNARY = 12; // Not actually used.
     static byte PREC_NONE = 13;
 
-    public static double CalcExp(String exp) {
+    public static long CalcExp(String exp) {
         String expr = exp.toLowerCase();
         expr = expr.replace(" ", "");
         expr = expr.replace(",",".");
-        return CalcExp_Ex(expr);
+        return (long)CalcExp_Ex(expr);
     }
 
     private static double CalcExp_Ex(String exp) {

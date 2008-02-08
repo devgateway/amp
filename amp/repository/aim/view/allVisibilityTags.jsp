@@ -10,6 +10,9 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%
+pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.getMeasureList());
+%>
 
 
 <module:display name="DOCUMENTS MANAGEMENT"></module:display>
@@ -119,6 +122,8 @@
 <feature:display name="Sectors" module="Project ID and Planning"></feature:display>
 <feature:display name="Web Resources" module="Document"></feature:display>
 <feature:display module="Funding" name="Disbursement Orders"></feature:display>
+<feature:display name="Measures" module="Reports"></feature:display>
+
 <field:display  name="Remove Location" feature="Location"></field:display>
 <field:display feature="Donor Contact Information" name="Donor Email"></field:display>
 <field:display feature="Donor Contact Information" name="Donor First Name"></field:display>
@@ -438,3 +443,7 @@
 <field:display name="Actual Disbursement Orders" feature="Disbursement Orders"></field:display>
 <field:display name="Total Ordered" feature="Disbursement Orders"></field:display>
 <field:display name="Add Disbursement Order Button" feature="Disbursement Orders"></field:display>
+
+<logic:iterate id="ampMeasures"  name="list" scope="page" type="org.digijava.module.aim.dbentity.AmpMeasures">
+	<field:display name="${ampMeasures.aliasName}" feature="Measures"></field:display>
+</logic:iterate>

@@ -7,6 +7,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <%@ taglib uri="/taglib/globalsettings" prefix="gs" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/advanceReportManager.js"/>"></script>
 <script language="JavaScript">
@@ -304,67 +307,71 @@ function checkUncheckAll2() {
 																						</td>
 																					</tr>
 																					<TR>
-																						<TD>
-																							<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top"
-																							align="top" bgcolor="#aaaaaa" border=0>
-																								<c:if test="${!empty aimAdvancedReportForm.ampMeasures}">
-																								<logic:iterate name="aimAdvancedReportForm" id="ampMeasures"
-																								property="ampMeasures" type="org.digijava.module.aim.dbentity.AmpMeasures">
-																								<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="false">
-																								<TR bgcolor="#ffffff">
-																									<td align="left" width="98%" valign=top>
-																									<digi:trn key="aim:reportBuilder:${ampMeasures.aliasName}">
-																										<c:out value="${ampMeasures.aliasName}"/>
-																									</digi:trn>
-																									</td>
-																									<td align="right">
-																										<html:multibox property="selectedColumns">
-																										<c:out value="${ampMeasures.measureId}"/>
-																									    </html:multibox>
-																									</td>
-																								</tr>
-																								</gs:test>
-																								<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="true">
-																								<%
-																									Long myId	= ampMeasures.getMeasureId();
-																									java.util.HashMap<Long, java.util.Collection<org.digijava.module.aim.dbentity.AmpCategoryValue>> measureToLevelHM	
-																										= myForm.getMeasureToLevel();
-																									java.util.Collection<org.digijava.module.aim.dbentity.AmpCategoryValue> levelsCollection	
-																										= (java.util.Collection<org.digijava.module.aim.dbentity.AmpCategoryValue>)measureToLevelHM.get(myId);
-																									pageContext.setAttribute("levelsCollection", levelsCollection, PageContext.PAGE_SCOPE);
-																								%>
-																								<logic:notEmpty name="levelsCollection">
-																								<tr bgcolor="#ffffff">
-																									<td align="left" width="68%" valign=top>
-																									<digi:trn key="aim:reportBuilder:${ampMeasures.aliasName}">
-																										<c:out value="${ampMeasures.aliasName}"/>
-																									</digi:trn>
-																									</td>
-																									<td align="left" width="30%" valign=top>
-																									<select name="selectedMeasureToLevel(${ampMeasures.measureId})" style="font-size: 10px">
-																									<logic:iterate name="levelsCollection" id="categoryLevel" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
-																										<c:choose>
-																											<c:when test="${categoryLevel.id == aimAdvancedReportForm.activityLevel}">
-																												<option value="${categoryLevel.id}" selected="selected">${categoryLevel.value}</option>
-																											</c:when>
-																											<c:otherwise>
-																												<option value="${categoryLevel.id}">${categoryLevel.value}</option>
-																											</c:otherwise>
-																										</c:choose>
+																						<TD><feature:display name="Measures" module="Reports">
+																								<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top"
+																								align="top" bgcolor="#aaaaaa" border=0>
+																									<c:if test="${!empty aimAdvancedReportForm.ampMeasures}">
+																									<logic:iterate name="aimAdvancedReportForm" id="ampMeasures"
+																									property="ampMeasures" type="org.digijava.module.aim.dbentity.AmpMeasures">
+																									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="false">
+																										<field:display name="${ampMeasures.aliasName}" feature="Measures">
+																											<TR bgcolor="#ffffff">
+																												<td align="left" width="98%" valign=top>
+																												<digi:trn key="aim:reportBuilder:${ampMeasures.aliasName}">
+																													<c:out value="${ampMeasures.aliasName}"/>
+																												</digi:trn>
+																												</td>
+																												<td align="right">
+																													<html:multibox property="selectedColumns">
+																													<c:out value="${ampMeasures.measureId}"/>
+																												    </html:multibox>
+																												</td>
+																											</tr>
+																									</field:display>
+																									
+																									</gs:test>
+																									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="true">
+																									<%
+																										Long myId	= ampMeasures.getMeasureId();
+																										java.util.HashMap<Long, java.util.Collection<org.digijava.module.aim.dbentity.AmpCategoryValue>> measureToLevelHM	
+																											= myForm.getMeasureToLevel();
+																										java.util.Collection<org.digijava.module.aim.dbentity.AmpCategoryValue> levelsCollection	
+																											= (java.util.Collection<org.digijava.module.aim.dbentity.AmpCategoryValue>)measureToLevelHM.get(myId);
+																										pageContext.setAttribute("levelsCollection", levelsCollection, PageContext.PAGE_SCOPE);
+																									%>
+																									<logic:notEmpty name="levelsCollection">
+																									<tr bgcolor="#ffffff">
+																										<td align="left" width="68%" valign=top>
+																										<digi:trn key="aim:reportBuilder:${ampMeasures.aliasName}">
+																											<c:out value="${ampMeasures.aliasName}"/>
+																										</digi:trn>
+																										</td>
+																										<td align="left" width="30%" valign=top>
+																										<select name="selectedMeasureToLevel(${ampMeasures.measureId})" style="font-size: 10px">
+																										<logic:iterate name="levelsCollection" id="categoryLevel" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
+																											<c:choose>
+																												<c:when test="${categoryLevel.id == aimAdvancedReportForm.activityLevel}">
+																													<option value="${categoryLevel.id}" selected="selected">${categoryLevel.value}</option>
+																												</c:when>
+																												<c:otherwise>
+																													<option value="${categoryLevel.id}">${categoryLevel.value}</option>
+																												</c:otherwise>
+																											</c:choose>
+																										</logic:iterate>
+																										</select>
+																										</td>
+																										<td align="right">
+																											<html:multibox property="selectedColumns">
+																											<c:out value="${ampMeasures.measureId}"/>
+																										    </html:multibox>
+																										</td>
+																									</tr>
+																									</logic:notEmpty>
+																									</gs:test>
 																									</logic:iterate>
-																									</select>
-																									</td>
-																									<td align="right">
-																										<html:multibox property="selectedColumns">
-																										<c:out value="${ampMeasures.measureId}"/>
-																									    </html:multibox>
-																									</td>
-																								</tr>
-																								</logic:notEmpty>
-																								</gs:test>
-																								</logic:iterate>
-																								</c:if>
-																							</TABLE>
+																									</c:if>
+																								</TABLE>
+																							</feature:display>
 																						</TD>
 																					</TR>
 																					<tr>

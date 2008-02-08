@@ -21,7 +21,7 @@
 	Long actId = (Long) request.getAttribute("actId");
 	
 	String actPerfChartFileName = ChartGenerator.getActivityPerformanceChartFileName(
-						 actId,session,new PrintWriter(out),600,450,"",false);
+						 actId,session,new PrintWriter(out),600,450,"",false,request );
 
 	String actPerfChartUrl = null;
 	if (actPerfChartFileName != null) {

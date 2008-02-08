@@ -21,6 +21,7 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 
+import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
@@ -733,8 +734,9 @@ public class MEIndicatorsUtil
 				while (itr.hasNext()) {
 					AmpMEIndicatorValue meIndValue = (AmpMEIndicatorValue) itr.next();
 					ActivityIndicator actInd = new ActivityIndicator();
-					actInd.setIndicatorName(meIndValue.getMeIndicatorId().getName());
-					actInd.setIndicatorCode(meIndValue.getMeIndicatorId().getCode());
+					if(meIndValue.getIndicator() != null){
+					actInd.setIndicatorName(meIndValue.getIndicator().getName());
+					actInd.setIndicatorCode(meIndValue.getIndicator().getCode());
 
 					actInd.setBaseVal(meIndValue.getBaseVal());
 					if (meIndValue.getBaseValDate() != null) {
@@ -744,8 +746,7 @@ public class MEIndicatorsUtil
 					}
 					actInd.setBaseValComments(meIndValue.getBaseValComments());
 
-					actInd.setIndicatorId(meIndValue.getMeIndicatorId()
-							.getAmpMEIndId());
+					actInd.setIndicatorId(meIndValue.getIndicator().getIndicatorId());
 					actInd.setIndicatorValId(meIndValue.getAmpMeIndValId());
 
 					actInd.setActualVal(meIndValue.getActualVal());
@@ -773,8 +774,7 @@ public class MEIndicatorsUtil
 					actInd.setIndicatorsCategory(meIndValue.getIndicatorsCategory());
 
 					actInd.setPriorValues(getPriorIndicatorValues(meIndValue.getAmpMeIndValId(),false));
-					actInd.setDefaultInd(meIndValue.getMeIndicatorId()
-							.isDefaultInd());
+					actInd.setDefaultInd(meIndValue.getIndicator().isDefaultInd());
 
 					if (meIndValue.getRisk() != null) {
 						if (meIndValue.getRisk() != null)
@@ -802,6 +802,7 @@ public class MEIndicatorsUtil
 
 					actInd.setProgress(df.format(progress));
 					col.add(actInd);
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -827,16 +828,16 @@ public class MEIndicatorsUtil
         Query qry = null;
 
         try {
-                session = PersistenceManager.getSession();
+                session = PersistenceManager.getRequestDBSession();
                 if (actId != null) {
-                        qryStr = "select me.ampMEIndId from " +
+                        qryStr = "select me.indicatorId from " +
                             AmpMEIndicatorValue.class.getName() + " " +
-                            "indVal inner join indVal.meIndicatorId me where (indVal.activityId=:actId) and me.name=:name" ;
+                            "indVal inner join indVal.indicator me where (indVal.activityId=:actId) and me.name=:name" ;
                         qry = session.createQuery(qryStr);
                         qry.setLong("actId",actId);
                         qry.setString("name",name);
                         if(qry!=null){
-                                Iterator <Long> meIter=qry.iterate();
+                                Iterator <Long> meIter= qry.list().iterator();
                                 if(meIter.hasNext()){
                                      id=meIter.next();
                                 }
@@ -1006,12 +1007,19 @@ public class MEIndicatorsUtil
 								"iv.activity_id in (" + params + ") and iv.me_indicator_id=" + indId + "" +
 										" order by a.name";
 					} else {
-						qryStr = "select mi.amp_me_indicator_id,sum(iv.base_val),sum(iv.actual_val),sum(iv.revised_target_val)," +
-								"mi.name from amp_me_indicator_value iv inner join amp_me_indicators mi on" +
-								" (iv.me_indicator_id=mi.amp_me_indicator_id) where mi.default_ind = 1 and " +
-								"iv.activity_id in ( " + params + ") group by iv.me_indicator_id " +
-										"order by iv.activity_id";
-					}
+//						{
+//						qryStr = "select mi.amp_me_indicator_id,sum(iv.base_val),sum(iv.actual_val),sum(iv.revised_target_val)," +
+//								"mi.name from amp_me_indicator_value iv inner join amp_me_indicators mi on" +
+//								" (iv.me_indicator_id=mi.amp_me_indicator_id) where mi.default_ind = 1 and " +
+//								"iv.activity_id in ( " + params + ") group by iv.me_indicator_id " +
+//										"order by iv.activity_id";
+//					}
+						qryStr = "select mi.indicator_id,sum(iv.base_val),sum(iv.actual_val),sum(iv.revised_target_val)," +
+						         "mi.name from amp_me_indicator_value iv inner join amp_indicators mi on" +
+						         " (iv.indicator_id=mi.indicator_id) where mi.default_ind = true and " +
+						         "iv.activity_id in ( " + params + ") group by iv.indicator_id " +
+								 "order by iv.activity_id";
+			}
 				}
 
 				Connection con = session.connection();
@@ -1093,13 +1101,15 @@ public class MEIndicatorsUtil
 			while (itr.hasNext()) {
 
 				AmpMEIndicatorValue meIndValue = (AmpMEIndicatorValue) itr.next();
-				AmpMEIndicators meInd = meIndValue.getMeIndicatorId();
-
-				float tarVal = meIndValue.getRevisedTargetVal();
-
+				AmpIndicator meInd = meIndValue.getIndicator();
+				
+				//AmpMEIndicators meInd = meIndValue.getMeIndicatorId();
+				if(meIndValue.getRevisedTargetVal() != null){
+					float tarVal = meIndValue.getRevisedTargetVal();	
+				
 				if (includeBaseline) {
 					MEIndicatorValue actIndVal = new MEIndicatorValue();
-					actIndVal.setIndId(meInd.getAmpMEIndId());
+					actIndVal.setIndId(meInd.getIndicatorId());
 					actIndVal.setIndicatorName(meInd.getName());
 					actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
 					float bVal = meIndValue.getBaseVal();
@@ -1110,7 +1120,7 @@ public class MEIndicatorsUtil
 					}
 				} else {
 					MEIndicatorValue actIndVal = new MEIndicatorValue();
-					actIndVal.setIndId(meInd.getAmpMEIndId());
+					actIndVal.setIndId(meInd.getIndicatorId());
 					actIndVal.setIndicatorName(meInd.getName());
 					actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
 					float bVal = meIndValue.getBaseVal();
@@ -1123,7 +1133,7 @@ public class MEIndicatorsUtil
 
 
 				MEIndicatorValue targetIndVal = new MEIndicatorValue();
-				targetIndVal.setIndId(meInd.getAmpMEIndId());
+				targetIndVal.setIndId(meInd.getIndicatorId());
 				targetIndVal.setIndicatorName(meInd.getName());
 				targetIndVal.setType(Constants.ME_IND_VAL_TARGET_ID);
 				if (tarVal > 0) {
@@ -1131,7 +1141,7 @@ public class MEIndicatorsUtil
 					col.add(targetIndVal);
 				}
 			}
-
+		}
 		} catch (Exception e) {
 			logger.error("Exception from getMEIndicatorValues() :" + e.getMessage());
 			e.printStackTrace(System.out);

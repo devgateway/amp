@@ -21,7 +21,7 @@
 	Long actId = (Long) request.getAttribute("actId");
 	
 	String actRiskChartFileName = ChartGenerator.getActivityRiskChartFileName(
-						 actId,session,new PrintWriter(out),600,400,"");
+						 actId,session,new PrintWriter(out),600,400,"",request);
 
 	String actRiskChartUrl = request.getContextPath() + "/aim/DisplayChart.img?filename=" + actRiskChartFileName;
 

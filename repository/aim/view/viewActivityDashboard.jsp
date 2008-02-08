@@ -267,11 +267,11 @@ method="post">
 
 								<div align="center">
 
-							<html:button  styleClass="buton" property="submitButton" 	onclick="javascript:showPrinterFriendly('<%=actId%>','P')">
+							<html:button  styleClass="buton" property="submitButton" 	onclick="javascript:showPrinterFriendly(${actId},'P')">
 								<digi:trn key="btn:printerFriendly">Printer Friendly</digi:trn>
 							</html:button>
 
-							<html:button  styleClass="buton" property="submitButton" onclick="javascript:actPerfWithoutBaseline('<%=actId%>','P')">
+							<html:button  styleClass="buton" property="submitButton" onclick="javascript:actPerfWithoutBaseline(${actId},'P')">
 								<digi:trn key="btn:withoutBaseline">Without Baseline</digi:trn>
 							</html:button>
 								</div>
@@ -314,7 +314,7 @@ method="post">
 
 								<div align="center">
 
-							<html:button  styleClass="dr-menu" property="submitButton" onclick="javascript:showPrinterFriendly('<%=actId%>','R')">
+							<html:button  styleClass="dr-menu" property="submitButton" onclick="javascript:showPrinterFriendly(${actId},'R')">
 								<digi:trn key="btn:printerFriendly">Printer Friendly</digi:trn>
 							</html:button>
 

@@ -1,43 +1,44 @@
 /*
  * Created on 12/05/2006
  * @author akashs
- * 
+ *
  */
 package org.digijava.module.aim.form;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.helper.Constants;
 
 public class ParisIndicatorReportForm extends ActionForm {
-	
+
 	private Collection indicatorsColl = null;
 	private String indicatorId = null;
 	private String indicatorCode = null;
 	private String indicatorName = null;
 	private String numColsCalculated = null;	// number of columns in one donor-row
-	
-	// holds collection of ParisIndicator helper objects for first report-table of all but indicator-7 
+
+    private String targetValue = null;
+    private String calcResult = null;
+
+	// holds collection of ParisIndicator helper objects for first report-table of all but indicator-7
 	private Collection donorsColl = null;
 	// holds collection of ParisIndicator helper objects for second report-table of indicator-5a & 5b
 	private ArrayList donorsCollIndc5 = null;
-	
+
 	// Filters for ParisIndicator reports
 	private Integer startYear = null;
 	private Integer closeYear = null;
 	private String currency = null;
 	private String perspective = null;
 	private String orgGroup = null;
-	
+
 	private Long status = null;
-		
+
 	private String termAssist = null;			// defunct
 	private Long financingInstrument = null;
 	private String calendar = null;
@@ -52,10 +53,10 @@ public class ParisIndicatorReportForm extends ActionForm {
 	private Collection calendarColl = null;
 	private Collection donorColl = null;
 	private Collection sectorColl = null;
-	
+
 	private Boolean reset = Boolean.FALSE;
 	private Boolean filterFlag = Boolean.FALSE;
-	
+
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		if (reset.booleanValue()) {
 			startYear = new Integer(Calendar.getInstance().get(Calendar.YEAR) - 2);
@@ -74,7 +75,7 @@ public class ParisIndicatorReportForm extends ActionForm {
 			filterFlag = Boolean.FALSE;
 		}
 	}
-	
+
 	/**
 	 * @return Returns the indicatorsColl.
 	 */
@@ -111,7 +112,7 @@ public class ParisIndicatorReportForm extends ActionForm {
 	public void setDonorsColl(Collection donorsColl) {
 		this.donorsColl = donorsColl;
 	}
-	
+
 	/**
 	 * @return Returns the closeYear.
 	 */
@@ -264,9 +265,9 @@ public class ParisIndicatorReportForm extends ActionForm {
 	public String getIndicatorName() {
 		return indicatorName;
 	}
-	
+
 	public String getIndicatorNameTrn() {
-		return indicatorName.toLowerCase().replaceAll(" ", "");	
+		return indicatorName.toLowerCase().replaceAll(" ", "");
 	}
 	/**
 	 * @param indicatorName The indicatorName to set.
@@ -286,7 +287,7 @@ public class ParisIndicatorReportForm extends ActionForm {
 	public void setIndicatorCode(String indicatorCode) {
 		this.indicatorCode = indicatorCode;
 	}
-	
+
 	/**
 	 * @return Returns the reset.
 	 */
@@ -404,7 +405,23 @@ public class ParisIndicatorReportForm extends ActionForm {
 		return donorColl;
 	}
 
-	public void setDonorColl(Collection donorColl) {
+    public String getTargetValue() {
+        return targetValue;
+    }
+
+    public String getCalcResult() {
+        return calcResult;
+    }
+
+    public void setDonorColl(Collection donorColl) {
 		this.donorColl = donorColl;
 	}
+
+    public void setTargetValue(String targetValue) {
+        this.targetValue = targetValue;
+    }
+
+    public void setCalcResult(String calcResult) {
+        this.calcResult = calcResult;
+    }
 }

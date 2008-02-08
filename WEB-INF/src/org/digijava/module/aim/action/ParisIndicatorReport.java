@@ -33,6 +33,8 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import java.util.Collection;
 import java.util.*;
+import org.digijava.module.aim.dbentity.AmpAhsurveyIndicatorCalcFormula;
+import org.digijava.module.aim.util.AmpMath;
 
 
 public class ParisIndicatorReport extends Action {
@@ -140,8 +142,8 @@ public class ParisIndicatorReport extends Action {
 					}
 				}
 
+                AmpAhsurveyIndicator indc = DbUtil.getIndicatorById(Long.valueOf(indcId));
 				try {
-					AmpAhsurveyIndicator indc = DbUtil.getIndicatorById(Long.valueOf(indcId));
 					svForm.setIndicatorId(indcId);
 					svForm.setIndicatorName(indc.getName());
 					svForm.setIndicatorCode(indc.getIndicatorCode());
@@ -174,7 +176,7 @@ public class ParisIndicatorReport extends Action {
 
 
 
-					if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()) || "5b".equalsIgnoreCase(svForm.getIndicatorCode())) {
+					if (svForm.getIndicatorCode().equalsIgnoreCase("5a") || svForm.getIndicatorCode().equalsIgnoreCase("5b")) {
 						if (!svForm.getDonorsColl().isEmpty()) {
 							int dnSize = svForm.getDonorsColl().size() - 1;
 							int lastIndex = Integer.parseInt(svForm.getNumColsCalculated()) - 1;
@@ -229,6 +231,7 @@ public class ParisIndicatorReport extends Action {
 										j++;
 									}
 								}
+
 								for(j = 0; j < numCols; j++) {
 									val = (100.0 * answers[j]) / dnSize ;
 									if ((val - (int) val) < 0.5)
@@ -239,6 +242,7 @@ public class ParisIndicatorReport extends Action {
 								}
 								svForm.getDonorsCollIndc5().add(dnIndc5Row);
 							}
+
 						}
 					}
 				}
@@ -250,10 +254,80 @@ public class ParisIndicatorReport extends Action {
 					logger.debug(ex);
 					ex.printStackTrace(System.out);
 				}
-				if ("7".equalsIgnoreCase(svForm.getIndicatorCode()) ||
-                    "6".equalsIgnoreCase(svForm.getIndicatorCode())){
 
-                    svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(),0));
+                List flDonorCol=filterDonors(svForm.getDonorsColl(),0);
+
+                svForm.setTargetValue(null);
+                svForm.setCalcResult(null);
+
+                if(svForm.getIndicatorCode().equalsIgnoreCase("3")){
+                    if (indc.getCalcFormulas() != null && indc.getCalcFormulas().size() > 0) {
+                        AmpAhsurveyIndicatorCalcFormula fl = (AmpAhsurveyIndicatorCalcFormula) indc.getCalcFormulas().iterator().next();
+                        if (fl.getCalcFormula() != null) {
+                            ParisIndicator donor = (ParisIndicator) flDonorCol.get(0);
+                            ArrayList answ1 = donor.getAnswers();
+                            double ans1[] = (double[]) answ1.get(0);
+
+                            String formula = getFormula(fl, ans1[3]);
+                            svForm.setTargetValue(fl.getTargetValue());
+
+                            svForm.setCalcResult(String.valueOf(AmpMath.CalcExp(formula)));
+                        }
+                    }
+
+                    return mapping.findForward("report1");
+                }else if(svForm.getIndicatorCode().equalsIgnoreCase("5a") || svForm.getIndicatorCode().equalsIgnoreCase("5b")){
+                    if (indc.getCalcFormulas() != null && indc.getCalcFormulas().size() > 0) {
+                        AmpAhsurveyIndicatorCalcFormula fl = (AmpAhsurveyIndicatorCalcFormula) indc.getCalcFormulas().iterator().next();
+                        if (fl.getCalcFormula() != null) {
+                            ParisIndicator donor = (ParisIndicator) flDonorCol.get(0);
+                            ArrayList answ1 = donor.getAnswers();
+                            double ans1[] = (double[]) answ1.get(0);
+
+                            String formula = getFormula(fl, ans1[7]);
+                            svForm.setTargetValue(fl.getTargetValue());
+
+                            svForm.setCalcResult(String.valueOf(AmpMath.CalcExp(formula)));
+                        }
+                    }
+
+                    return mapping.findForward("report1");
+                }else if(svForm.getIndicatorCode().equalsIgnoreCase("6")){
+
+
+                    if(indc.getCalcFormulas() != null && indc.getCalcFormulas().size()>0){
+                        AmpAhsurveyIndicatorCalcFormula fl=(AmpAhsurveyIndicatorCalcFormula)indc.getCalcFormulas().iterator().next();
+                        if(fl.getCalcFormula()!=null){
+                            ParisIndicator donor=(ParisIndicator)flDonorCol.get(0);
+                            ArrayList answ1=donor.getAnswers();
+                            double ans1[] = (double[]) answ1.get(0);
+
+                            String formula=getFormula(fl,ans1[0]);
+                            svForm.setTargetValue(fl.getTargetValue());
+
+                            svForm.setCalcResult(String.valueOf(AmpMath.CalcExp(formula)));
+                        }
+                    }
+
+                    svForm.setDonorsColl(flDonorCol);
+                    return mapping.findForward("report2");
+                }else if (svForm.getIndicatorCode().equalsIgnoreCase("7")){
+
+                    if (indc.getCalcFormulas() != null && indc.getCalcFormulas().size()>0) {
+                        AmpAhsurveyIndicatorCalcFormula fl = (AmpAhsurveyIndicatorCalcFormula) indc.getCalcFormulas().iterator().next();
+                        if (fl.getCalcFormula() != null) {
+                            ParisIndicator donor = (ParisIndicator) flDonorCol.get(0);
+                            ArrayList answ1 = donor.getAnswers();
+                            double ans1[] = (double[]) answ1.get(0);
+
+                            String formula = getFormula(fl, ans1[3]);
+                            svForm.setTargetValue(fl.getTargetValue());
+
+                            svForm.setCalcResult(String.valueOf(AmpMath.CalcExp(formula)));
+                        }
+                    }
+
+                    svForm.setDonorsColl(flDonorCol);
 					return mapping.findForward("report2");
 				}else{
                     svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(),1));
@@ -267,6 +341,14 @@ public class ParisIndicatorReport extends Action {
 			return mapping.findForward("viewMyDesktop");
 		}
 	}
+
+    private String getFormula(AmpAhsurveyIndicatorCalcFormula formula,double constant){
+        String flText=null;
+        if(formula!=null){
+            flText=formula.getCalcFormula().replace(formula.getConstantName(),String.valueOf(constant));
+        }
+        return flText;
+    }
 
     private List filterDonors(Collection donorsCol,int st){
 

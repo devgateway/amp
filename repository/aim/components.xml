@@ -2,8 +2,12 @@
 <config>
 <secondary-pages>
 
+
+    <page name="viewAhSurveyFormulas" title=" - View AhSurvey Formulas" />
+	<page name="viewAhSurveis" title=" - View AhSurveis " />
+
 	<page name="viewPortfolioDashboard" title=" - Portfolio Dashboard " />
-	<page name="addQuickLink" title="Add link" />
+    <page name="addQuickLink" title="Add link" />
   <page name="editQuickLink" title="Edit link" />
 	<page name="showMyTask" title=" - My Task List " />
 	<page name="showMyMessages" title=" - My Message List " />

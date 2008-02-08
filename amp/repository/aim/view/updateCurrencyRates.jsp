@@ -49,7 +49,7 @@ function saveRate() {
 	var valid = validate();
 	if (valid == true) {
 		document.aimCurrencyRateForm.target = window.opener.name;
-		document.aimCurrencyRateForm.submit();
+		document.aimCurrencyRateForm.submit();	
 		window.close();
 	}
 	return valid;

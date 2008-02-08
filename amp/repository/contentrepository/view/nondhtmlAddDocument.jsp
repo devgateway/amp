@@ -331,7 +331,7 @@ div.fakefile2 input {
 									</tr>
 									</field:display>
 									
-									
+									<field:display name="Document Type" feature="Related Documents">
 										<tr>
 											<td>
 												<a title="<digi:trn key="aim:typeOfTheDocumentDescription">Select type of document</digi:trn>">
@@ -347,7 +347,7 @@ div.fakefile2 input {
 												</a>
 											</td>
 										</tr>
-					
+									</field:display>
 									
 									<field:display name="Document Language" feature="Related Documents">
 									<tr>

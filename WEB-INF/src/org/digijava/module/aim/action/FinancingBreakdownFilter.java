@@ -23,6 +23,7 @@ import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.FinancialFilters;
 import org.digijava.module.aim.helper.FinancingBreakdownWorker;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.YearUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -38,9 +39,13 @@ public class FinancingBreakdownFilter extends TilesAction	{
 								 HttpServletResponse response) 
 								 throws java.lang.Exception 	{
 							 	
-		String overallTotalCommitted = null ;
-		String overallTotalDisbursed = null ;
-		String overallTotalExpenditure = null ;
+		String overallTotalCommitted 	= null ;
+		String overallTotalDisbursed 	= null ;
+		String overallTotalExpenditure 	= null ;
+		String overallTotalDibsOrders	= null;
+		String overallTotalUnDisbursed 	= null ;
+		String overallTotalUnExpended 	= null ;
+		
 		FinancingBreakdownForm formBean = (FinancingBreakdownForm) form ;
 		HttpSession session = request.getSession();
 		TeamMember teamMember=(TeamMember)session.getAttribute("currentMember");
@@ -98,12 +103,22 @@ public class FinancingBreakdownFilter extends TilesAction	{
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 		formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 		formBean.setPerspectives(DbUtil.getAmpPerspective());
-		overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(fb,0);
+		overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(fb,Constants.COMMITMENT);
 		formBean.setTotalCommitted(overallTotalCommitted);
-		overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(fb,1);
+		overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(fb,Constants.DISBURSEMENT);
 		formBean.setTotalDisbursed(overallTotalDisbursed);
-		overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(fb,2);
+		overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(fb,Constants.EXPENDITURE);
 		formBean.setTotalExpended(overallTotalExpenditure);
+		overallTotalDibsOrders= FinancingBreakdownWorker.getOverallTotal(
+				fb, Constants.DISBURSEMENT_ORDER);
+        formBean.setTotalDisbOrdered(overallTotalDibsOrders);
+        
+        overallTotalUnDisbursed = FormatHelper.getDifference(
+				overallTotalCommitted, overallTotalDisbursed);
+        formBean.setTotalUnDisbursed(overallTotalUnDisbursed);
+        
+        overallTotalUnExpended = FormatHelper.getDifference(overallTotalDisbursed, overallTotalExpenditure);
+		formBean.setTotalUnExpended(overallTotalUnExpended);
 		
 		formBean.setTotalProjections( FinancingBreakdownWorker.getOverallTotal(fb, Constants.MTEFPROJECTION) );
 		

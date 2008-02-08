@@ -11,12 +11,9 @@
 <%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ page import="org.digijava.module.aim.helper.CategoryConstants" %>
 
-<script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 
@@ -90,16 +87,13 @@ function fnDeleteProject()
 }
 
 function commentWin(val) {
-	if (document.aimChannelOverviewForm.currUrl1.value == "") {
-		openNewWindow(600, 400);
-		<digi:context name="commurl" property="context/module/moduleinstance/viewComment.do" />
-		url = "<%=commurl %>?comment=" + "viewccd" + "&actId=" + val;
-		document.aimChannelOverviewForm.action = url;
-		document.aimChannelOverviewForm.currUrl1.value = "<%=commurl %>";
-		document.aimChannelOverviewForm.target = popupPointer.name;
-		document.aimChannelOverviewForm.submit();
-	} else
-		popupPointer.focus();
+	openNewWindow(600, 400);
+	<digi:context name="commurl" property="context/module/moduleinstance/viewComment.do" />
+	url = "<%=commurl %>~comment=viewccd~previus=vco~actId=" + val;
+	document.aimChannelOverviewForm.action = url;
+	document.aimChannelOverviewForm.currUrl1.value = "<%=commurl%>";
+	document.aimChannelOverviewForm.target = popupPointer.name;
+	document.aimChannelOverviewForm.submit();
 }
 
 </script>

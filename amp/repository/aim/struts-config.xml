@@ -10,9 +10,13 @@
       <form-property name="templateFeatures" type="java.util.Collection" />
       <form-property name="templateFeaturesNotActive" type="java.util.Collection" />
     </form-bean>
+
+    <form-bean name="aimViewAhSurveisForm" type="org.digijava.module.aim.form.ViewAhSurveisForm" />
+    <form-bean name="aimViewAhSurveyFormulasForm" type="org.digijava.module.aim.form.ViewAhSurveyFormulasForm" />
+
     <form-bean name="aimFieldPermissionsForm" type="org.digijava.module.aim.form.FieldPermissionsForm" />
     <form-bean name="aimEUActivityForm" type="org.digijava.module.aim.form.EUActivityForm" />
-    <form-bean name="aimIPAContractForm" type="org.digijava.module.aim.form.IPAContractForm" />  
+    <form-bean name="aimIPAContractForm" type="org.digijava.module.aim.form.IPAContractForm" />
     <form-bean name="aimVisibilityManagerForm" type="org.digijava.module.aim.form.VisibilityManagerForm" />
     <form-bean name="aimAuditLoggerManagerForm" type="org.digijava.module.aim.form.AuditLoggerManagerForm" />
     <form-bean name="aimDesktopForm" type="org.digijava.module.aim.form.DesktopForm" />
@@ -137,6 +141,14 @@
     <forward name="index" path="/aim/index.do" />
   </global-forwards>
   <action-mappings>
+
+    <action name="aimViewAhSurveisForm" path="/aim/viewAhSurveis" scope="session" type="org.digijava.module.aim.action.ViewAhSurveis" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=viewAhSurveis" />
+    </action>
+    <action name="aimViewAhSurveyFormulasForm" path="/aim/viewAhSurveyFormulas" scope="session" type="org.digijava.module.aim.action.ViewAhSurveyFormulas" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=viewAhSurveyFormulas" />
+    </action>
+
     <action path="/aim/feedback" forward="/showLayout.do?layout=feedback" />
     <action name="aimUserDetailForm" path="/aim/userProfile" scope="request" type="org.digijava.module.aim.action.ViewUserProfile" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_viewUserProfile" />
@@ -234,7 +246,7 @@
      <action name="aimEditActivityForm" path="/aim/deleteIPAContract" scope="session" type="org.digijava.module.aim.action.DeleteIPAContract">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
     </action>
-     
+
     <action name="aimYearlyComparisonsForm" path="/aim/yearlyComparisonsFilter" scope="request" type="org.digijava.module.aim.action.YearlyComparisonsFilter" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewYearlyComparisons" />
     </action>

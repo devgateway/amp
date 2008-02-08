@@ -151,12 +151,11 @@
                               <c:set var="translation">
                                 <digi:trn key="aim:activityImportExportManager">Click here to view Activity import/export Manager</digi:trn>
                               </c:set>
-                              
+
                               <digi:link module="ampharvester" href="/ieManager.do?actionType=load" title="${translation}">
                                 <digi:trn key="aim:importExportManager">Activity import/export Manager</digi:trn>
                               </digi:link>
-                            
-                            
+
                             </td>
                           </tr>
                           <tr>
@@ -170,6 +169,19 @@
                               </digi:link>
                             </td>
                           </tr>
+
+                          <tr>
+                            <td class=f-names noWrap>
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn key="aim:tipViewAhSurveis">Click here to view Paris Indicator Manager</digi:trn>
+                              </c:set>
+                              <digi:link module="aim" href="/viewAhSurveis.do" title="${translation}">
+                                <digi:trn key="aim:parisIndManager">Paris Indicators Targets Manager</digi:trn>
+                              </digi:link>
+                            </td>
+                          </tr>
+
                         </table>
                       </td>
                     </tr>

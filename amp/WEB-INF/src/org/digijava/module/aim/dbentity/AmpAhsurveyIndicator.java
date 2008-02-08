@@ -1,8 +1,8 @@
 /*
  * Created on 1/03/2006
- * 
+ *
  * @author akashs
- * 
+ *
  */
 package org.digijava.module.aim.dbentity;
 
@@ -17,7 +17,8 @@ public class AmpAhsurveyIndicator {
 	private String indicatorCode;
 	private String status;
 	private Set questions;
-	
+    private Set calcFormulas;
+
 	/**
 	 * @return Returns the indicatorCode.
 	 */
@@ -48,11 +49,11 @@ public class AmpAhsurveyIndicator {
 	public String getName() {
 		return name;
 	}
-	
+
 	public String getNameTrn() {
 		return name.toLowerCase().replaceAll(" ", "").replaceAll("%", "");
 	}
-	
+
 	/**
 	 * @param name The name to set.
 	 */
@@ -101,11 +102,20 @@ public class AmpAhsurveyIndicator {
 	public Set getQuestions() {
 		return questions;
 	}
-	/**
+
+    public Set getCalcFormulas() {
+        return calcFormulas;
+    }
+
+    /**
 	 * @param questions The questions to set.
 	 */
 	public void setQuestions(Set questions) {
 		this.questions = questions;
 	}
+
+    public void setCalcFormulas(Set calcFormulas) {
+        this.calcFormulas = calcFormulas;
+    }
 
 }

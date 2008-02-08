@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.jcr.Node;
@@ -31,7 +30,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
@@ -68,12 +66,10 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AmpProject;
-import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
@@ -95,13 +91,15 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DesktopUtil;
 import org.digijava.module.aim.util.DocumentUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
+import org.digijava.module.contentrepository.helper.DocumentData;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 
 /**
  * SaveActivity class creates a 'AmpActivity' object and populate the fields
@@ -136,7 +134,7 @@ public class SaveActivity extends Action {
 		session.removeAttribute("forStep9");
 
 		try {
-
+			ActionErrors errors = new ActionErrors();
 			TeamMember tm = null;
 			if (session.getAttribute("currentMember") != null)
 				tm = (TeamMember) session.getAttribute("currentMember");
@@ -158,7 +156,19 @@ public class SaveActivity extends Action {
 			/* END - Saving categories to AmpActivity */
 
 			/* Saving related documents into AmpActivity */
-			HashSet<String>UUIDs		= SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false);
+            HashSet<String>UUIDs				= new HashSet<String>();
+            Collection<DocumentData> tempDocs	= TemporaryDocumentData.retrieveTemporaryDocDataList(request);
+            Iterator<DocumentData> docIter			= tempDocs.iterator();
+            while ( docIter.hasNext() ) {
+            	TemporaryDocumentData tempDoc	= (TemporaryDocumentData) docIter.next();
+            	NodeWrapper nodeWrapper			= tempDoc.saveToRepository(request, errors);
+            	if ( nodeWrapper != null )
+            			UUIDs.add( nodeWrapper.getUuid() );
+            }
+            
+			UUIDs.addAll( 
+					SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false)
+			);
 			if (UUIDs != null && UUIDs.size() >0 ) {
 				if ( activity.getActivityDocuments() == null )
 						activity.setActivityDocuments(new HashSet<AmpActivityDocument>() );
@@ -337,7 +347,7 @@ public class SaveActivity extends Action {
 					logger.debug("No duplicate found");
 				}
 
-				ActionErrors errors = new ActionErrors();
+				
 				boolean titleFlag = false;
 				boolean statusFlag = false;
 

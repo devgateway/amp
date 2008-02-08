@@ -8,6 +8,7 @@ import java.util.Collection;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.contentrepository.helper.DocumentData;
 
 /**
  * @author Alex Gartner
@@ -21,22 +22,38 @@ public class DocumentManagerForm extends ActionForm {
 	private String docNotes					= null;
 	private FormFile fileData					= null;
 	private String uuid						= null;
-	private Collection myPersonalDocuments	= null;
-	private Collection myTeamDocuments		= null;
+	private Collection<DocumentData> myPersonalDocuments	= null;
+	private Collection<DocumentData> myTeamDocuments		= null;
 	
 	
-	private Collection otherDocuments		= null;
+	private Collection<DocumentData> otherDocuments		= null;
 	private String otherUsername			= null;
 	private Long otherTeamId				= null;
-	private String docListInSession		= null;
+	private String docListInSession			= null;
 	
 	private TeamMember teamMember			= null;
-	private Collection teamMembers		= null;
+	private Collection teamMembers			= null;
 	
 	private boolean teamLeader				= false;
 	
 	private boolean ajaxDocumentList		= false;
 	
+	private String webLink					= null;
+	private boolean webResource				= false;
+	
+	private Long docType			= null;
+	private Long docLang			= null;
+	
+	private Boolean pageCloseFlag	= false;
+	
+	public Boolean getPageCloseFlag() {
+		return pageCloseFlag;
+	}
+
+	public void setPageCloseFlag(Boolean pageCloseFlag) {
+		this.pageCloseFlag = pageCloseFlag;
+	}
+
 	public boolean getAjaxDocumentList() {
 		return ajaxDocumentList;
 	}
@@ -53,11 +70,11 @@ public class DocumentManagerForm extends ActionForm {
 		this.teamLeader = teamLeader;
 	}
 
-	public Collection getMyPersonalDocuments() {
+	public Collection<DocumentData> getMyPersonalDocuments() {
 		return myPersonalDocuments;
 	}
 
-	public void setMyPersonalDocuments(Collection myPersonalDocuments) {
+	public void setMyPersonalDocuments(Collection<DocumentData> myPersonalDocuments) {
 		this.myPersonalDocuments = myPersonalDocuments;
 	}
 
@@ -85,11 +102,11 @@ public class DocumentManagerForm extends ActionForm {
 		this.docTitle = docTitle;
 	}
 
-	public Collection getMyTeamDocuments() {
+	public Collection<DocumentData> getMyTeamDocuments() {
 		return myTeamDocuments;
 	}
 
-	public void setMyTeamDocuments(Collection myTeamDocuments) {
+	public void setMyTeamDocuments(Collection<DocumentData> myTeamDocuments) {
 		this.myTeamDocuments = myTeamDocuments;
 	}
 
@@ -109,11 +126,11 @@ public class DocumentManagerForm extends ActionForm {
 		this.uuid = uuid;
 	}
 
-	public Collection getOtherDocuments() {
+	public Collection<DocumentData> getOtherDocuments() {
 		return otherDocuments;
 	}
 
-	public void setOtherDocuments(Collection otherDocuments) {
+	public void setOtherDocuments(Collection<DocumentData> otherDocuments) {
 		this.otherDocuments = otherDocuments;
 	}
 
@@ -165,9 +182,41 @@ public class DocumentManagerForm extends ActionForm {
 		this.docNotes = docNotes;
 	}
 
+	public String getWebLink() {
+		return webLink;
+	}
+
+	public void setWebLink(String webLink) {
+		this.webLink = webLink;
+	}
+
+	public Long getDocLang() {
+		return docLang;
+	}
+
+	public void setDocLang(Long docLang) {
+		this.docLang = docLang;
+	}
+
+	public Long getDocType() {
+		return docType;
+	}
+
+	public void setDocType(Long docType) {
+		this.docType = docType;
+	}
+
+	public boolean isWebResource() {
+		return webResource;
+	}
+
+	public void setWebResource(boolean webResource) {
+		this.webResource = webResource;
+	}
 
 
 	
+
 
 	
 	

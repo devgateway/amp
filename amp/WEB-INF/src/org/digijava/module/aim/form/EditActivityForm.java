@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
@@ -28,6 +29,7 @@ import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.ReferenceDoc;
+import org.digijava.module.contentrepository.helper.DocumentData;
 
 public class EditActivityForm extends ActionForm implements Serializable{
     private boolean govFlag;
@@ -143,6 +145,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long selPhyProg[];
 	private Collection documentList;
 	private Collection documents;
+	private Collection<DocumentData> crDocuments;
+	
     private Collection managedDocumentList;
 	private long selDocs[];
 	private Collection linksList;
@@ -4763,6 +4767,15 @@ public class EditActivityForm extends ActionForm implements Serializable{
     public void setGovFlag(boolean govFlag) {
         this.govFlag = govFlag;
     }
+
+	public Collection<DocumentData> getCrDocuments() {
+		return crDocuments;
+	}
+
+	public void setCrDocuments(Collection<DocumentData> crDocuments) {
+		this.crDocuments = crDocuments;
+	}
+    
 }
 
 

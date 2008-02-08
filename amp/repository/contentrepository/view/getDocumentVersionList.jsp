@@ -17,18 +17,18 @@
 	<table>
 						<thead>
 							<tr>
-								<th><digi:trn key="contentrepository:versionTableHead">Version</digi:trn></th>
-								<th><digi:trn key="contentrepository:typeTableHead">Type</digi:trn></th>
-								<th><digi:trn key="contentrepository:fileNameTableHead">File Name</digi:trn></th>
-								<th><digi:trn key="contentrepository:dateTableHead">Date</digi:trn></th>
+								<th><digi:trn key="contentrepository:versionhistory:header:version">Version</digi:trn></th>
+								<th><digi:trn key="contentrepository:versionhistory:header:type">Type</digi:trn></th>
+								<th><digi:trn key="contentrepository:versionhistory:header:resourcename">Resource Name</digi:trn></th>
+								<th><digi:trn key="contentrepository:versionhistory:header:date">Date</digi:trn></th>
 								<th><digi:trn key="contentrepository:TableHeader:Size">Size (MB)</digi:trn></th>
-								<th><digi:trn key="contentrepository:notesTableHead">Notes</digi:trn></th>
-								<th><digi:trn key="contentrepository:actionsTableHead">Actions</digi:trn></th>
+								<th><digi:trn key="contentrepository:versionhistory:header:notes">Notes</digi:trn></th>
+								<th><digi:trn key="contentrepository:versionhistory:header:actions">Actions</digi:trn></th>
 							</tr>
 						</thead>
 						<logic:iterate name="crDocumentManagerForm"
 							property="otherDocuments" id="documentData"
-							type="org.digijava.module.contentrepository.action.DocumentManager.DocumentData">
+							type="org.digijava.module.contentrepository.helper.DocumentData">
 							
 							<tr>
 								<td>
@@ -42,7 +42,20 @@
 									<div>&nbsp;</div>
 								</td>
 								<td>
-									 &nbsp;<bean:write name="documentData" property="name" />
+									<c:choose>
+									<c:when test="${documentData.webLink == null}">
+										&nbsp;<bean:write name="documentData" property="name" />
+									</c:when>
+									<c:otherwise>
+										<c:set var="translation">
+											<digi:trn key="contentrepository:documentManagerFollowLinkHint">Follow link to</digi:trn>
+										</c:set>
+										<a onmouseover="Tip('${translation} ${documentData.webLink}')" onclick="window.open('${documentData.webLink}')" 
+											style="cursor:pointer;  color: blue; font-size: 11px"> 
+											<bean:write name="documentData" property="name" />
+										</a>
+									</c:otherwise>	
+									 </c:choose>
 								</td>
 								<td>
 									<bean:write name="documentData" property="calendar" />
@@ -55,14 +68,26 @@
 									<a name="aDocumentUUID" style="display: none"><bean:write name="documentData" property="uuid" /></a>
 								</td>
 								<td> 
-								<c:set var="translation">
-									<digi:trn key="contentrepository:documentManagerDownloadHint">Click here to download document</digi:trn>
-								</c:set>
 								
-								<a style="cursor:pointer; text-decoration:underline; color: blue"
-								onClick="window.location='/contentrepository/downloadFile.do?uuid=<bean:write name='crDocumentManagerForm' property='uuid' />'"
-								title="${translation }"><img src= "../ampTemplate/images/check_out.gif" border=0></a>
-								
+								<c:choose>
+									<c:when test="${documentData.webLink == null}">
+										<c:set var="translation">
+											<digi:trn key="contentrepository:documentManagerDownloadHint">Click here to download document</digi:trn>
+										</c:set>
+										
+										<a style="cursor:pointer; text-decoration:underline; color: blue"
+										onClick="window.location='/contentrepository/downloadFile.do?uuid=<bean:write name='crDocumentManagerForm' property='uuid' />'"
+										title="${translation }"><img src= "/repository/contentrepository/view/images/check_out.gif" border=0></a>
+									</c:when>
+									<c:otherwise>
+										<c:set var="translation">
+											<digi:trn key="contentrepository:documentManagerFollowLinkHint">Follow link to </digi:trn>
+										</c:set> 
+										<a style="cursor:pointer; text-decoration:underline; color: blue"
+										onclick="window.open('${documentData.webLink}')"
+										onmouseover="Tip('${translation} ${documentData.webLink}')"><img src= "/repository/contentrepository/view/images/link_go.gif" border=0></a>
+									</c:otherwise>
+								</c:choose>
 								</td>
 							</tr>
 						</logic:iterate>

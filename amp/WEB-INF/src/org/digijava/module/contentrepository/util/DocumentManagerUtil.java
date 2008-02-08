@@ -1,9 +1,11 @@
 package org.digijava.module.contentrepository.util;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 
 import javax.jcr.InvalidItemStateException;
@@ -27,15 +29,25 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.jackrabbit.core.TransientRepository;
 import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.upload.FormFile;
+import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.contentrepository.action.DocumentManager;
+import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.action.SetAttributes;
 import org.digijava.module.contentrepository.exception.CrException;
 import org.digijava.module.contentrepository.exception.NoNodeInVersionNodeException;
 import org.digijava.module.contentrepository.exception.NoVersionsFoundException;
 import org.digijava.module.contentrepository.helper.CrConstants;
+import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.TeamInformationBeanDM;
+import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 
 
 public class DocumentManagerUtil {
@@ -71,7 +83,6 @@ public class DocumentManagerUtil {
 			try {
 				jcrSession	= getJCRRepository(request).login();
 				httpSession.setAttribute(CrConstants.JCR_READ_SESSION, jcrSession);
-				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -311,6 +322,80 @@ public class DocumentManagerUtil {
 		return teamInfo;
 	}
 	
+	public static Collection<DocumentData> createDocumentDataCollectionFromSession(HttpServletRequest request) {
+		Collection<String> UUIDs		= SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false);
+		if ( UUIDs == null )
+			return null;
+		try {
+			DocumentManager dm				= new DocumentManager();
+			dm.myRequest					= request;
+			Collection<DocumentData> ret	= dm.getDocuments(UUIDs);
+			ret.addAll(
+					TemporaryDocumentData.retrieveTemporaryDocDataList(request)
+				);
+			return ret;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	public static boolean checkFileSize(FormFile formFile, ActionErrors errors) {
+		int maxFileSizeInBytes		= Integer.MAX_VALUE;
+		int maxFileSizeInMBytes		= Integer.MAX_VALUE;
+		String maxFileSizeGS		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE); // File size in MB
+		if (maxFileSizeGS != null) {
+				maxFileSizeInMBytes		= Integer.parseInt( maxFileSizeGS );
+				maxFileSizeInBytes		= 1024 * 1024 * maxFileSizeInMBytes; 
+		}
+		if ( formFile.getFileSize() > maxFileSizeInBytes) {
+			errors.add("title", 
+					new ActionError("error.contentrepository.addFile.fileTooLarge", maxFileSizeInMBytes + "")
+					);
+			return false;
+			}
+		if (formFile.getFileSize()<1){
+			ActionError	error	= new ActionError("error.contentrepository.addFile.badPath");
+			errors.add("title", error);
+			return false;
+		}
+		return true;
+	}
+	
+	public static String processUrl (String urlString, ActionErrors errors) {
+		try {
+			URL url	= new URL( urlString );
+			return url.toString();
+		} catch (MalformedURLException e) {
+			errors.add("title", new ActionError("error.contentrepository.addFile.malformedWebLink") );
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static double bytesToMega (long bytes) {
+		double size	= ((double)bytes) / (1024*1024);
+		int temp	= (int)(size * 1000);
+		size		= ( (double)temp ) / 1000;
+		
+		return size;
+	}
+	public static Node getTeamNode(Session jcrWriteSession, TeamMember teamMember){
+		String teamId		= "" + teamMember.getTeamId();
+		
+		return
+				DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "team/"+teamId);
+	}
+	public static Node getUserPrivateNode(Session jcrWriteSession, TeamMember teamMember){
+		String userName		= teamMember.getEmail();
+		String teamId		= "" + teamMember.getTeamId();
+		
+		return 
+				DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "private/"+teamId+"/"+userName);
+	}
+	
 	/**
 	 * 
 	 * @param jcrWriteSession
@@ -319,7 +404,6 @@ public class DocumentManagerUtil {
 	 */
 	public static Node getNodeByPath(Session jcrWriteSession, TeamMember teamMember, String path) {
 		Node folderNode	= null;
-		Node leafNode	= null;
 		
 		try {
 			Node tempNode;

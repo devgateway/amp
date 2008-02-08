@@ -3,9 +3,7 @@
  */
 package org.digijava.module.contentrepository.action;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,8 +11,6 @@ import java.util.Iterator;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
-import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
@@ -23,20 +19,19 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.CrConstants;
+import org.digijava.module.contentrepository.helper.DocumentData;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
+import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerRights;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
@@ -45,10 +40,10 @@ import org.digijava.module.contentrepository.util.DocumentManagerUtil;
  *
  */
 public class DocumentManager extends Action {
-	private static Logger logger	= Logger.getLogger(DocumentManager.class);
-	DocumentManagerForm myForm		= null;
-	HttpServletRequest myRequest	= null;
-	ActionErrors errors				= null;
+	private static Logger logger		= Logger.getLogger(DocumentManager.class);
+	public HttpServletRequest myRequest	= null;
+	DocumentManagerForm myForm			= null;
+	ActionErrors errors					= null;
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
@@ -70,7 +65,7 @@ public class DocumentManager extends Action {
 			return mapping.findForward("publicView");
 		}
 
-		initializeRepository(request);
+		showContentRepository(request);
 		
 		this.saveErrors(request, errors);
 		
@@ -89,10 +84,18 @@ public class DocumentManager extends Action {
 			}
 		}
 		if (myForm.getDocListInSession() != null) {
-			HashSet<String> UUIDs		= SelectDocumentDM.getSelectedDocsSet(myRequest, myForm.getDocListInSession(), false);
+			HashSet<String> UUIDs				= SelectDocumentDM.getSelectedDocsSet(myRequest, myForm.getDocListInSession(), true);
+			Collection<DocumentData> tempCol	= TemporaryDocumentData.retrieveTemporaryDocDataList(myRequest);
 			if (UUIDs != null)
 				try {
 					myForm.setOtherDocuments( this.getDocuments(UUIDs) );
+					if ( tempCol != null ) {
+						if ( myForm.getOtherDocuments() == null ) {
+							myForm.setOtherDocuments( tempCol );
+						}
+						else
+							myForm.getOtherDocuments().addAll(tempCol);
+					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -114,19 +117,19 @@ public class DocumentManager extends Action {
 			}
 			
 			if (otherTeamMember != null) {
-				Node otherHomeNode				= this.getUserPrivateNode(jcrWriteSession , otherTeamMember );
+				Node otherHomeNode				= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession , otherTeamMember );
 				myForm.setOtherDocuments( this.getDocuments(otherHomeNode) );
 			}
 		}
 		if ( myForm.getOtherUsername() == null && myForm.getOtherTeamId() != null ) {
 			TeamMember otherTeamLeader			= TeamMemberUtil.getTMTeamHead( myForm.getOtherTeamId() );
-			Node otherHomeNode					= this.getTeamNode(jcrWriteSession, otherTeamLeader);
+			Node otherHomeNode					= DocumentManagerUtil.getTeamNode(jcrWriteSession, otherTeamLeader);
 			myForm.setOtherDocuments( this.getDocuments(otherHomeNode) );
 		}
 		return false;
 	}
 	
-	private boolean initializeRepository(HttpServletRequest request) {
+	private boolean showContentRepository(HttpServletRequest request) {
 		try {
 			
 			HttpSession	httpSession		= request.getSession();
@@ -144,26 +147,28 @@ public class DocumentManager extends Action {
 			
 			
 			if ( myForm.getType() != null && myForm.getType().equals("private") ) {
-				Node userHomeNode			= this.getUserPrivateNode(jcrWriteSession, teamMember);
-				if (myForm.getFileData() != null) {
-					if (   this.addFileNode( jcrWriteSession, userHomeNode, myForm.getFileData(), false, false, null )   ) {
-						//jcrWriteSession.save();
-					}
+				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
+					Node userHomeNode			= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
+					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, myRequest, userHomeNode, false, errors);
+					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() )
+							nodeWrapper.saveNode(jcrWriteSession);
 				}
 			}
 			if ( myForm.getType() != null && myForm.getType().equals("team") && teamMember.getTeamHead() ) {
-				Node teamHomeNode			= this.getTeamNode(jcrWriteSession, teamMember);
-				if (myForm.getFileData() != null) {
-					if (   this.addFileNode( jcrWriteSession, teamHomeNode, myForm.getFileData(), false, false, null )   ) {
-						jcrWriteSession.save();
+				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
+					Node teamHomeNode			= DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember);
+					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, myRequest, teamHomeNode , false, errors);
+					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
+						nodeWrapper.saveNode(jcrWriteSession);
 					}
 				}
 			}
 			if ( myForm.getType() != null && myForm.getType().equals("version") && myForm.getUuid() != null ) {
-				Node vNode		= DocumentManagerUtil.getWriteNode(myForm.getUuid(), request);
-				if (myForm.getFileData() != null) {
-					if (   this.addFileNode( jcrWriteSession, vNode, myForm.getFileData(), true, false, null )   ) {
-						//jcrWriteSession.save();
+				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
+					Node vNode		= DocumentManagerUtil.getWriteNode(myForm.getUuid(), request);
+					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, myRequest, vNode , true, errors);
+					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
+						nodeWrapper.saveNode(jcrWriteSession);
 					}
 				}
 			}
@@ -178,7 +183,7 @@ public class DocumentManager extends Action {
 		}
 		return true;
 	}
-	private Node getTeamNode(Session jcrWriteSession, TeamMember teamMember){
+	/*private Node getTeamNode(Session jcrWriteSession, TeamMember teamMember){
 		Node rootNode		= null;
 		Node teamRootNode	= null;
 		Node teamNode		= null;
@@ -225,79 +230,8 @@ public class DocumentManager extends Action {
 			e.printStackTrace();
 			return null;
 		}
-	}
+	}*/
 	
-	private Node getUserPrivateNode(Session jcrWriteSession, TeamMember teamMember){
-		Node rootNode		= null;
-		Node privateNode	= null;
-		Node teamNode		= null;
-		Node userNode		= null;
-		
-		String userName		= teamMember.getEmail();
-		String teamId		= "" + teamMember.getTeamId();
-		
-		return 
-				DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "private/"+teamId+"/"+userName);
-		
-		/*try {
-			rootNode	= jcrWriteSession.getRootNode();
-			privateNode	= rootNode.getNode("private");
-		} catch (PathNotFoundException e) {
-			// TODO Auto-generated catch block
-			logger.info("Private node not created. Trying to create now.");
-			try {
-				privateNode	= rootNode.addNode("private");
-			}
-			catch(Exception E) {
-				logger.error("Cannot create private node");
-				e.printStackTrace();
-				return null;
-			}
-		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-		
-		try {
-			teamNode	= privateNode.getNode(teamId);
-		} catch (PathNotFoundException e) {
-			logger.info("Team node not created. Trying to create now.");
-			try{
-				teamNode	= privateNode.addNode(teamId);
-			}
-			catch (Exception E) {
-				logger.error("Cannot create team node");
-				e.printStackTrace();
-				return null;
-			}
-			
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-			return null;
-		}
-		
-		try {
-			userNode	= teamNode.getNode(userName);
-			return userNode;
-		} catch (PathNotFoundException e) {
-			logger.info("User node not created. Trying to create now.");
-			try{
-				userNode	= teamNode.addNode(userName);
-				jcrWriteSession.save();
-				return userNode;
-			}
-			catch (Exception E) {
-				logger.error("Cannot create user node");
-				e.printStackTrace();
-				return null;
-			}
-			
-		} catch (RepositoryException e) {
-			e.printStackTrace();
-			return null;
-		}*/
-	}
 	/**
 	 * 
 	 * @param jcrWriteSession
@@ -308,30 +242,16 @@ public class DocumentManager extends Action {
 	 * @param uuid if isLink==true then the new document will be a link which points to the document with this uuid
 	 * @return
 	 */
-	private boolean addFileNode(Session jcrWriteSession, Node parentNode, FormFile formFile, boolean isANewVersion, boolean isLink, String uuid) {
+	/*private boolean addFileNode(Session jcrWriteSession, Node parentNode, FormFile formFile, boolean isANewVersion, boolean isLink, String uuid) {
 		if (formFile == null) {
 			logger.error("No file was transmitted to the server");
 			return false;
 		}
-		int maxFileSizeInBytes		= Integer.MAX_VALUE;
-		int maxFileSizeInMBytes	= Integer.MAX_VALUE;
-		String maxFileSizeGS		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE); // File size in MB
-		if (maxFileSizeGS != null) {
-				maxFileSizeInMBytes		= Integer.parseInt( maxFileSizeGS );
-				maxFileSizeInBytes		= 1024 * 1024 * maxFileSizeInMBytes; 
+		if ( !DocumentManagerUtil.checkFileSize(formFile, errors) ) {
+			return false;
 		}
-		int uploadedFileSize	= formFile.getFileSize(); // This is in bytes
-		if ( formFile.getFileSize() > maxFileSizeInBytes) {
-			errors.add("title", 
-					new ActionError("error.contentrepository.addFile.fileTooLarge", maxFileSizeInMBytes + "")
-					);
-			return false;
-			}
-		if (formFile.getFileSize()<1){
-			ActionError	error	= new ActionError("error.contentrepository.addFile.badPath");
-			errors.add("title", error);
-			return false;
-		}	
+		
+		int uploadedFileSize	= formFile.getFileSize(); // This is in bytes	
 		
 		try {
 			TeamMember teamMember		= (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
@@ -381,12 +301,12 @@ public class DocumentManager extends Action {
 		}
 		
 		return true;
-	}
+	}*/
 	private Collection getPrivateDocuments(TeamMember teamMember, Node rootNode) {
 		Node userNode;
 		try {
 			//userNode = rootNode.getNode("private/" + teamMember.getTeamId() +  "/" + teamMember.getEmail());
-			userNode	= this.getUserPrivateNode(rootNode.getSession(), teamMember);
+			userNode	= DocumentManagerUtil.getUserPrivateNode(rootNode.getSession(), teamMember);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -397,7 +317,7 @@ public class DocumentManager extends Action {
 		Node teamNode;
 		try {
 			//teamNode = rootNode.getNode("team/" + teamMember.getTeamId() );
-			teamNode	= this.getTeamNode(rootNode.getSession(), teamMember);
+			teamNode	= DocumentManagerUtil.getTeamNode(rootNode.getSession(), teamMember);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -418,7 +338,7 @@ public class DocumentManager extends Action {
 				
 	}
 	
-	public Collection getDocuments(Collection<String> UUIDs) throws Exception {
+	public Collection<DocumentData> getDocuments(Collection<String> UUIDs) throws Exception {
 		ArrayList<Node> documents		= new ArrayList<Node>();
 		Iterator<String> iter			= UUIDs.iterator();
 		while (iter.hasNext()) {
@@ -434,14 +354,15 @@ public class DocumentManager extends Action {
 				getDocuments(iterator);
 	}
 	
-	private Collection getDocuments(Iterator nodeIterator) {
-		ArrayList documents										= new ArrayList();
+	private Collection<DocumentData> getDocuments(Iterator nodeIterator) {
+		ArrayList<DocumentData> documents										= new ArrayList<DocumentData>();
 		HashMap<String,CrDocumentNodeAttributes> uuidMapOrg		= CrDocumentNodeAttributes.getPublicDocumentsMap(false);
 		HashMap<String,CrDocumentNodeAttributes> uuidMapVer		= CrDocumentNodeAttributes.getPublicDocumentsMap(true);
 		try{
 			while ( nodeIterator.hasNext() ) {
 				Node documentNode		= (Node)nodeIterator.next();
-				Property name			= null;
+				NodeWrapper nodeWrapper	= new NodeWrapper(documentNode);
+/*				Property name			= null;
 				Property title			= null;
 				Property description	= null;
 				Property notes			= null;
@@ -449,8 +370,9 @@ public class DocumentManager extends Action {
 				Property contentType	= null;
 				Property versionNumber	= null;
 				Property fileSize		= null;
-				
+*/				
 				Boolean hasViewRights			= false;
+				Boolean hasShowVersionsRights	= false;
 				Boolean hasVersioningRights		= false;
 				Boolean hasDeleteRights			= false;
 				Boolean hasMakePublicRights		= false;
@@ -469,7 +391,23 @@ public class DocumentManager extends Action {
 					continue;
 				}
 				
-				name		= DocumentManagerUtil.getPropertyFromNode(documentNode, CrConstants.PROPERTY_NAME);
+				String fileName		=  nodeWrapper.getName();
+				if ( fileName == null && nodeWrapper.getWebLink() == null )
+						continue;
+				
+				DocumentData documentData		= new DocumentData();
+				documentData.setName( fileName );
+				documentData.setUuid( nodeWrapper.getUuid() );
+				documentData.setTitle( nodeWrapper.getTitle() );
+				documentData.setDescription( nodeWrapper.getDescription() );
+				documentData.setNotes( nodeWrapper.getNotes() );
+				documentData.setFileSize( nodeWrapper.getFileSizeInMegabytes() );
+				documentData.setCalendar( nodeWrapper.getDate() );
+				documentData.setVersionNumber( nodeWrapper.getVersionNumber() );
+				documentData.setContentType( nodeWrapper.getContentType() );
+				documentData.setWebLink( nodeWrapper.getWebLink() );
+				
+				/*name		= DocumentManagerUtil.getPropertyFromNode(documentNode, CrConstants.PROPERTY_NAME);
 				if ( name == null )
 						continue;
 				
@@ -511,15 +449,13 @@ public class DocumentManager extends Action {
 						documentData.setVersionNumber( verNum );
 					}
 					if (fileSize != null) {
-						double size	= fileSize.getDouble() / (1024*1024);
-						int temp	= (int)(size * 1000);
-						size		= ( (double)temp ) / 1000;
+						double size		= DocumentManagerUtil.bytesToMega( fileSize.getLong() );
 						documentData.setFileSize( size );
 					}
 					else {
 						documentData.setFileSize( 0 );
-					}
-					
+					}*/
+					documentData.processWebLink();
 					documentData.computeIconPath(true);
 					
 	//				Boolean hasViewRights			= DocumentManagerRights.hasViewRights(documentNode, myRequest); 
@@ -528,6 +464,10 @@ public class DocumentManager extends Action {
 	//				}
 					
 					if ( !isPublicVersion ) {
+						hasShowVersionsRights	= DocumentManagerRights.hasShowVersionsRights(documentNode, myRequest);
+						if ( hasShowVersionsRights != null )
+							documentData.setHasShowVersionsRights(hasShowVersionsRights);
+						
 						hasVersioningRights		= DocumentManagerRights.hasVersioningRights(documentNode, myRequest);
 						if ( hasVersioningRights != null ) {
 							documentData.setHasVersioningRights( hasVersioningRights.booleanValue() );
@@ -565,12 +505,12 @@ public class DocumentManager extends Action {
 					// This is not the actual document node. It is the node of the public version. That's why one shouldn't have 
 					// the above rights.
 					else {
-						documentData.showVersionHistory			= false; 
+						documentData.setShowVersionHistory(false); 
 					}
 					documents.add(documentData);
 				}
 				
-			}
+			/*}*/
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -591,166 +531,6 @@ public class DocumentManager extends Action {
 		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
 		return teamMember;
 	}
+		
 	
-	public class DocumentData {
-		String name				= null;
-		String uuid				= null;
-		String title			= null;
-		String description		= null;
-		String notes			= null;
-		String calendar			= null;
-		String contentType		= null;
-		double fileSize			= 0;
-		
-		String iconPath			= null;
-		
-		float versionNumber;
-		
-		boolean hasDeleteRights			= false;
-		boolean hasViewRights				= false;
-		boolean hasVersioningRights		= false;
-		boolean hasMakePublicRights		= false;
-		boolean hasDeleteRightsOnPublicVersion	= false;
-		
-		boolean isPublic					= false;
-		boolean lastVersionIsPublic		= false;
-		
-		boolean showVersionHistory		= true;
-		
-		public boolean getHasDeleteRights() {
-			return hasDeleteRights;
-		}
-		public void setHasDeleteRights(boolean hasDeleteRights) {
-			this.hasDeleteRights = hasDeleteRights;
-		}
-		public boolean getHasVersioningRights() {
-			return hasVersioningRights;
-		}
-		public void setHasVersioningRights(boolean hasVersioningRights) {
-			this.hasVersioningRights = hasVersioningRights;
-		}
-		public boolean getHasViewRights() {
-			return hasViewRights;
-		}
-		public void setHasViewRights(boolean hasViewRights) {
-			this.hasViewRights = hasViewRights;
-		}
-		public String getContentType() {
-			return contentType;
-		}
-		public void setContentType(String contentType) {
-			this.contentType = contentType;
-		}
-		public String getCalendar() {
-			return calendar;
-		}
-		public void setCalendar(String calendar) {
-			this.calendar = calendar;
-		}
-		public String getDescription() {
-			return description;
-		}
-		public void setDescription(String description) {
-			this.description = description;
-		}
-		public String getTitle() {
-			return title;
-		}
-		public void setTitle(String title) {
-			this.title = title;
-		}
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-		public String getUuid() {
-			return uuid;
-		}
-		public void setUuid(String uuid) {
-			this.uuid = uuid;
-		}
-		public boolean getHasMakePublicRights() {
-			return hasMakePublicRights;
-		}
-		public void setHasMakePublicRights(boolean hasMakePublicRights) {
-			this.hasMakePublicRights = hasMakePublicRights;
-		}
-		public boolean getIsPublic() {
-			return isPublic;
-		}
-		public void setIsPublic(boolean isPublic) {
-			this.isPublic = isPublic;
-		}
-				
-		public boolean isLastVersionIsPublic() {
-			return lastVersionIsPublic;
-		}
-		public void setLastVersionIsPublic(boolean lastVersionIsPublic) {
-			this.lastVersionIsPublic = lastVersionIsPublic;
-		}
-		public boolean isHasDeleteRightsOnPublicVersion() {
-			return hasDeleteRightsOnPublicVersion;
-		}
-		public void setHasDeleteRightsOnPublicVersion(boolean hasDeleteRightsOnPublicVersion) {
-			this.hasDeleteRightsOnPublicVersion = hasDeleteRightsOnPublicVersion;
-		}
-		public boolean isShowVersionHistory() {
-			return showVersionHistory;
-		}
-		public void setShowVersionHistory(boolean showVersionHistory) {
-			this.showVersionHistory = showVersionHistory;
-		}
-		public float getVersionNumber() {
-			return versionNumber;
-		}
-		public void setVersionNumber(float versionNumber) {
-			this.versionNumber = versionNumber;
-		}
-		public String getNotes() {
-			return notes;
-		}
-		public void setNotes(String notes) {
-			this.notes = notes;
-		}
-		public String getIconPath() {
-			return iconPath;
-		}
-		public void setIconPath(String iconPath) {
-			this.iconPath = iconPath;
-		}
-		
-		
-		public double getFileSize() {
-			return fileSize;
-		}
-		public void setFileSize(double fileSize) {
-			this.fileSize = fileSize;
-		}
-		public void computeIconPath( boolean forDigiImgTag ) {
-			if ( name == null )  {
-				iconPath = null;
-				return;
-			}
-			String iconPath = "";
-			int index = name.lastIndexOf(".");
-			if (index >= 0) {
-				if (forDigiImgTag) {
-					iconPath = "module/cms/images/extensions/"
-							+ name.substring(index + 1,	name.length())
-							+ ".gif";
-				}
-				else
-					iconPath = "/repository/cms/view/images/extensions/"
-						+ name.substring(index + 1,	name.length())
-						+ ".gif";
-			}
-			
-			this.iconPath	= iconPath;
-			
-			
-		}
-		
-	}
 }

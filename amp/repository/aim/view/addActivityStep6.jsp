@@ -142,9 +142,9 @@ function addDocuments() {
 
 		document.aimEditActivityForm.docFileOrLink.value = "file";
 
-		<digi:context name="selDoc" property="context/module/moduleinstance/selectDocument.do?edit=true" />
+		//<digi:context name="selDoc" property="context/module/moduleinstance/selectDocument.do?edit=true" />
 
-		document.aimEditActivityForm.action = "<%= selDoc %>";
+		document.aimEditActivityForm.action = "/contentrepository/addTemporaryDocument.do?webResource=false";
 
 		document.aimEditActivityForm.target = popupPointer.name;
 
@@ -186,7 +186,7 @@ function addLinks() {
 
 		<digi:context name="selDoc" property="context/module/moduleinstance/selectDocument.do?edit=true" />
 
-		document.aimEditActivityForm.action = "<%= selDoc %>";
+		document.aimEditActivityForm.action = "/contentrepository/addTemporaryDocument.do?webResource=true";
 
 		document.aimEditActivityForm.target = popupPointer.name;
 
@@ -633,7 +633,27 @@ ${fn:replace(message,quote,escapedQuote)}
 										&nbsp;
 
 									</td></tr>
-
+									<feature:display name="Content Repository" module="Document Management">
+									<tr>
+										<td>
+										<table width="100%" cellSpacing=1 cellPadding=5 border="0" bgcolor="white">
+										<tr>
+											<td>
+												<bean:define toScope="request" id="showRemoveButton" value="true" />
+												<bean:define toScope="request" id="documentsType" value="<%=org.digijava.module.aim.helper.ActivityDocumentsConstants.RELATED_DOCUMENTS %>" />
+												<bean:define toScope="request" id="versioningRights" value="false" />
+												<bean:define toScope="request" id="makePublicRights" value="false" />
+												<bean:define toScope="request" id="showVersionsRights" value="false" />
+												<bean:define toScope="request" id="deleteRights" value="false" />
+												<bean:define toScope="request" id="crRights" value="true" />
+												<jsp:include page="/repository/contentrepository/view/showSelectedDocumentsDM.jsp"/>
+											</td>
+										</tr>
+										</table>
+										</td>
+									</tr>
+									</feature:display>
+									
 <!--
 
 									<tr><td bgColor=#f4f4f2 align="center">

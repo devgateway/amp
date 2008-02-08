@@ -17,8 +17,11 @@
 	</action>
     <action path="/contentrepository/deleteForDocumentManager" type="org.digijava.module.contentrepository.action.DeleteForDocumentManager" validate="false" />
     <action path="/contentrepository/downloadFile" type="org.digijava.module.contentrepository.action.DownloadFile" validate="false" />
-    <action path="/contentrepository/getDocumentList" type="org.digijava.module.contentrepository.action.GetDocumentList" validate="false" name="aimDocumentManagerListForm">
+    <!-- <action path="/contentrepository/getDocumentList" type="org.digijava.module.contentrepository.action.GetDocumentList" validate="false" name="aimDocumentManagerListForm">
     	<forward name="forward" path="/showLayout.do?layout=amp_getDocumentList" />
+    </action>  -->
+    <action path="/contentrepository/addTemporaryDocument" scope="request" type="org.digijava.module.contentrepository.action.AddTemporaryDocument" validate="false" name="crDocumentManagerForm">
+    	<forward name="forward" path="/showLayout.do?layout=nondhtmlAddDocument" />
     </action>
     <action name="crDocumentManagerForm" path="/contentrepository/documentManager" scope="request" type="org.digijava.module.contentrepository.action.DocumentManager" validate="false">
     	<forward name="forward" path="/showLayout.do?layout=viewDocumentManager" />

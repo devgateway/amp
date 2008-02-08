@@ -1973,7 +1973,7 @@ function collapseAll() {
 										<td bgcolor="#ffffff">
 											<div id="related_documents_dots">...</div>
 											<div id="act_related_documents" style="display: none;">
-											<c:if test="${!empty aimEditActivityForm.documentList}">
+											<c:if test="${ (!empty aimEditActivityForm.documentList) || (!empty aimEditActivityForm.crDocuments)}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
 												 <logic:iterate name="aimEditActivityForm"  property="documents"
 													id="docs" type="org.digijava.module.aim.helper.Documents">
@@ -2002,6 +2002,30 @@ function collapseAll() {
 													</td></tr>
 													</c:if>
 													</logic:iterate>
+													<logic:notEmpty name="aimEditActivityForm" property="crDocuments">
+														<tr>
+														<td>
+														<logic:iterate name="aimEditActivityForm" property="crDocuments" id="crDoc">
+															<table width="100%" class="box-border-nopadding">
+															 	<tr bgcolor="#ffffff">
+																	<td vAlign="center" align="left">
+																		&nbsp;<b><c:out value="${crDoc.title}"/></b> -
+																		&nbsp;&nbsp;&nbsp;<i><c:out value="${crDoc.name}"/></i>
+																		<logic:notEmpty name="crDoc" property="description">
+																			<br />&nbsp;
+																			<b>Description:</b>&nbsp;<bean:write name="crDoc" property="description" />
+																		</logic:notEmpty>
+																		<logic:notEmpty name="crDoc" property="calendar">
+																			<br />&nbsp;
+																			<b>Date:</b>&nbsp;<c:out value="${crDoc.calendar}"/>
+																		</logic:notEmpty>
+																	</td>
+																</tr>
+															 </table>
+														</logic:iterate>
+														</td>
+														</tr>
+													</logic:notEmpty>
 												</table>
 											</c:if>
 											<c:if test="${!empty aimEditActivityForm.linksList}">

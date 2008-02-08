@@ -6,7 +6,6 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -15,8 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.servlet.RequestDispatcher;
@@ -104,6 +101,7 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 
 /**
@@ -530,6 +528,8 @@ if (tm != null && tm.getTeamType()
         SelectDocumentDM.clearContentRepositoryHashMap(request);
         if (activity.getActivityDocuments() != null && activity.getActivityDocuments().size() > 0 )
         		ActivityDocumentsUtil.injectActivityDocuments(request, activity.getActivityDocuments());
+
+        eaForm.setCrDocuments( DocumentManagerUtil.createDocumentDataCollectionFromSession(request) );
         /* END - Injecting documents into session */
 
         /* Clearing session information about comments */

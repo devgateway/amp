@@ -36,6 +36,15 @@ public class DocumentManagerRights {
 		return new Boolean(false);
 	}
 	
+	public static Boolean hasShowVersionsRights (Node node, HttpServletRequest request) {
+		boolean result						= true;
+		Boolean manuallySetNoVersioningFlag	= isManuallySetNoShowVersionsFlag(request);
+		if (manuallySetNoVersioningFlag != null) {
+			result = result && manuallySetNoVersioningFlag;
+		}
+		return result && isOwnerOrTeamLeader(node, request);
+	}
+	
 	public static Boolean hasVersioningRights (Node node, HttpServletRequest request) {
 		boolean result						= true;
 		Boolean manuallySetNoVersioningFlag	= isManuallySetNoVersioningFlag(request);
@@ -46,7 +55,10 @@ public class DocumentManagerRights {
 	}
 	
 	public static Boolean hasMakePublicRights (Node node, HttpServletRequest request) {
-		return true && isOwnerOrTeamLeader(node, request);
+		Boolean manuallySetNoMakePublicFlag	= isManuallySetNoMakePublicFlag(request);
+		if ( manuallySetNoMakePublicFlag == null )
+			manuallySetNoMakePublicFlag = true;
+		return true && manuallySetNoMakePublicFlag && isOwnerOrTeamLeader(node, request);
 	}
 	public static Boolean hasDeleteRightsOnPublicVersion(Node node, HttpServletRequest request) {
 		return true && isOwnerOrTeamLeader(node, request);
@@ -111,6 +123,14 @@ public class DocumentManagerRights {
 		
 	}
 	
+	private static Boolean isManuallySetNoShowVersionsFlag(HttpServletRequest request) {
+		if ( request.getParameter("showVersionsRights") != null ) {
+			Boolean result	= Boolean.parseBoolean( request.getParameter("showVersionsRights") );
+			return result;
+		}
+		return null;
+	}
+	
 	private static Boolean isManuallySetNoVersioningFlag(HttpServletRequest request) {
 		if ( request.getParameter("versioningRights") != null ) {
 			Boolean result	= Boolean.parseBoolean( request.getParameter("versioningRights") );
@@ -122,6 +142,14 @@ public class DocumentManagerRights {
 	private static Boolean isManuallySetNoDeleteFlag(HttpServletRequest request) {
 		if ( request.getParameter("deleteRights") != null ) {
 			Boolean result	= Boolean.parseBoolean( request.getParameter("deleteRights") );
+			return result;
+		}
+		return null;
+	}
+	
+	private static Boolean isManuallySetNoMakePublicFlag(HttpServletRequest request) {
+		if ( request.getParameter("makePublicRights") != null ) {
+			Boolean result	= Boolean.parseBoolean( request.getParameter("makePublicRights") );
 			return result;
 		}
 		return null;

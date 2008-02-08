@@ -47,7 +47,9 @@ import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.ReferenceDoc;
+import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -59,12 +61,12 @@ import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.Constants;
-import org.digijava.module.gateperm.core.GatePermConst;
-import org.digijava.module.gateperm.util.PermissionUtil;
 
 /**
  * Used to capture the activity details to the form bean of type org.digijava.module.aim.form.EditActivityForm
@@ -1163,6 +1165,23 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
               eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
             return mapping.findForward("previewLogframe");
           }
+          /* Setting documents for preview */
+          Collection rlList	= eaForm.getDocumentList();
+          eaForm.setDocuments( new ArrayList<Documents>() );
+          if (rlList != null ) {
+        	  Iterator iter 		= rlList.iterator();
+        	  if(iter.hasNext())
+        	  {
+        		  RelatedLinks rl		= (RelatedLinks) iter.next();
+        		  CMSContentItem item	= rl.getRelLink();
+        		  if ( item != null ) {
+        			  eaForm.getDocuments().add( createHelperDocument(item, null, null) );
+        		  }
+        	  }
+          }
+          eaForm.setCrDocuments( DocumentManagerUtil.createDocumentDataCollectionFromSession(request) ); 
+          
+          /* END - Setting documents for preview */
           return mapping.findForward("preview");
         }
       }
@@ -1208,6 +1227,27 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
     return null;
   }
 
+  public static Documents createHelperDocument (CMSContentItem cmsItem, Long activityId, String activityName) {
+		Documents document = new Documents();
+      document.setActivityId( activityId );
+      document.setActivityName( activityName );
+      document.setDocId(new Long(cmsItem.getId()));
+      document.setTitle(cmsItem.getTitle());
+      document.setIsFile(cmsItem.getIsFile());
+      document.setFileName(cmsItem.getFileName());
+      document.setUrl(cmsItem.getUrl());
+      document.setDocDescription(cmsItem.getDescription());
+      document.setDate(cmsItem.getDate());
+      if (cmsItem.getDocType() != null)
+      	document.setDocType(cmsItem.getDocType().getValue());
+
+      if (cmsItem.getDocLanguage() != null)
+      	document.setDocLanguage( cmsItem.getDocLanguage().getValue() );
+      document.setDocComment( cmsItem.getDocComment() );
+      
+      return document;
+	}
+  
   public void setEditorKey(String s, HttpServletRequest request)
   {
 	  User user = RequestUtils.getUser(request);

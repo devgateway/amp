@@ -1,5 +1,6 @@
 package org.digijava.module.contentrepository.action;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -12,7 +13,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.contentrepository.form.SelectDocumentForm;
+import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.TeamInformationBeanDM;
+import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 public class SelectDocumentDM extends Action {
@@ -29,6 +32,13 @@ public class SelectDocumentDM extends Action {
 		return contentRepositoryHashMap;
 	}
 	
+	/**
+	 * 
+	 * @param request the HttpRequest
+	 * @param documentsType RELATED_DOCUMENTS / WEB_RESOURCES from ActivityDocumentsConstants
+	 * @param createIfNull if true and the HashSet containing the selcted documents is null than the HashSet will be created
+	 * @return HashSet<String> containing the UUIDs 
+	 */
 	public static HashSet<String> getSelectedDocsSet (HttpServletRequest request, String documentsType, boolean createIfNull) {
 		HashMap<String,Object> map			= getContentRepositoryHashMap(request);
 		HashSet<String> selectedDocsSet		= (HashSet<String>)map.get( documentsType );
@@ -54,29 +64,38 @@ public class SelectDocumentDM extends Action {
 		SelectDocumentForm selectDocumentForm	= (SelectDocumentForm) form;
 		
 		if (request.getParameter("selectedDocs") != null) {
-			HashMap<String, Object>	crSessionMap	= getContentRepositoryHashMap(request);
-			HashSet<String> selectedDocsSet			= getSelectedDocsSet(request, selectDocumentForm.getDocumentsType(), true);
+			HashMap<String, Object>	crSessionMap		= getContentRepositoryHashMap(request);
+			HashSet<String> selectedDocsSet				= getSelectedDocsSet(request, selectDocumentForm.getDocumentsType(), true);
+			
 			
 			if ( selectDocumentForm.getAction().equals("set") ) {
 				for (int i=0; i<selectDocumentForm.getSelectedDocs().length; i++) {
 					selectedDocsSet.add( selectDocumentForm.getSelectedDocs()[i] );
 				}
 			}
+			
 			if ( selectDocumentForm.getAction().equals("remove") ){
 				for (int i=0; i<selectDocumentForm.getSelectedDocs().length; i++) {
 					Set<String> typeSets			= crSessionMap.keySet();
 					Iterator<String> typeSetsIter	= typeSets.iterator();
-					while ( typeSetsIter.hasNext() ) {
+					while ( typeSetsIter.hasNext() ) { // this has at the moment 3 cycles
 						Object value		= crSessionMap.get( typeSetsIter.next() );
 						if (value instanceof HashSet) {
 							HashSet<String> docsSet	= (HashSet<String>) value;
 							docsSet.remove( selectDocumentForm.getSelectedDocs()[i] );
 						}
+						if (value instanceof Collection) {
+							Collection<DocumentData> tempDocs 	= (Collection<DocumentData>) value;
+							Iterator<DocumentData> tempIter		= tempDocs.iterator();
+							if ( selectDocumentForm.getSelectedDocs()[i].equals(tempIter.next().getUuid()) )
+								tempIter.remove();
+						}
 					} 
 				}
 			}
 			
-			//crSessionMap.put( SELECTED_DOCUMENTS, selectedDocsSet );
+			TemporaryDocumentData.refreshTemporaryUuids(request);
+			
 			return null; 
 		}
 		

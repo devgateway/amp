@@ -925,13 +925,27 @@
 													</html:select>
 												</logic:equal>
 											</td>
-                                                                                        <td>
-                                                                                        <html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                        <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
+
+  											<td valign="bottom">
+												<html:select name="fundingDetail" indexed="true" property="disbOrderId" styleClass="inp-text">
+													<html:option value="">&nbsp;</html:option>
+		   										    <c:forEach var="funding" items="${aimEditActivityForm.fundingDetails}">
+														<c:if test="${funding.transactionType==4}">
+															<html:option value="${funding.disbOrderId}">${funding.disbOrderId}</html:option>
+														</c:if>
+													</c:forEach>
+												</html:select>
+											</td>
+
+											<!-- 
+                                            <td>
+                                            <html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
+                                            </td>
+                                            <td>
+                                            <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
 
 											</td>
+											 -->
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
 												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
@@ -994,13 +1008,27 @@
 													</html:select>
 												</logic:equal>
 											</td>
-                                                                                         <td>
-                                                                                        <html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
-                                                                                        </td>
-                                                                                         <td>
-                                                                                        <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
-
+											
+  											<td valign="bottom">
+												<html:select name="fundingDetail" indexed="true" property="disbOrderId" styleClass="inp-text">
+													<html:option value="">&nbsp;</html:option>
+		   										    <c:forEach var="funding" items="${aimEditActivityForm.fundingDetails}">
+														<c:if test="${funding.transactionType==4}">
+															<html:option value="${funding.disbOrderId}">${funding.disbOrderId}</html:option>
+														</c:if>
+													</c:forEach>
+												</html:select>
 											</td>
+
+										<!-- 
+			                               <td>
+			                              <html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
+			                              </td>
+			                               <td>
+			                              <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
+			
+											</td>
+										 -->
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
 												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>

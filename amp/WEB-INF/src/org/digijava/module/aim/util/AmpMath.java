@@ -1,5 +1,7 @@
 package org.digijava.module.aim.util;
-
+/*
+Created By: Vazha Ezugbaia
+*/
 public class AmpMath {
     static byte PREC_PLUS = 3;
     static byte PREC_MIN = 4;

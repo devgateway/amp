@@ -78,8 +78,13 @@ public class CurrencyRates {
 	}
 	
 	public String getformattedRate(){
-	    DecimalFormat f= FormatHelper.getDefaultFormat();
-	    f.setMinimumFractionDigits(10);
-	    return f.format(this.exchangeRate);
+	    
+	    if (this.exchangeRate!=null){
+		if (this.exchangeRate!=0){
+		   return FormatHelper.formatNumber(1/this.exchangeRate);
+		}    
+	    }
+	    
+	    return null;
 	}
 }

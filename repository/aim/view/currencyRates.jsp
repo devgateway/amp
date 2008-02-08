@@ -120,16 +120,13 @@ function updateRates()
 }
 
 function editExchangeRate(date,code) {
-	if (document.aimCurrencyRateForm.currUrl.value == "") {
 	openNewWindow(420, 180);
 		<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do" />
   	document.aimCurrencyRateForm.action = "<%= addExchangeRate %>~doAction=showRates~updateCRateCode="+code+"~updateCRateDate="+date+"~reset=false";
 	document.aimCurrencyRateForm.target = popupPointer.name;
-		document.aimCurrencyRateForm.currUrl.value = "<%= addExchangeRate %>";
+	document.aimCurrencyRateForm.currUrl.value = "<%= addExchangeRate %>";
 	document.aimCurrencyRateForm.submit();
-}
-	else
-		popupPointer.focus();
+
 }
 
 function checkall() {
@@ -300,14 +297,15 @@ function fnSubmit() {
                                         &nbsp;&nbsp;&nbsp;&nbsp;
 											<%--<digi:trn key="aim:andPrev7Days">and previous</digi:trn>--%>
 											<html:select property="timePeriod" styleClass="inp-text">
-												<logic:iterate id="period" name="aimCurrencyRateForm" property="timePeriods">
-												<c:set var="translation">
-													<digi:trn key="aim:timeperiods${period.label}">${period.label}</digi:trn>
-												</c:set>						
-												<html:option value="period.value">${translation}</html:option>
+												<logic:iterate id="period" name="aimCurrencyRateForm" property="timePeriods" >
+													<c:set var="translation">
+														<digi:trn key="aim:timeperiods${period.label}">${period.label}</digi:trn>
+													</c:set>						
+													<html:option value="${period.value}">${translation}</html:option>
 												</logic:iterate>
 											</html:select>
 										</td>
+										
 										<td bgcolor="#f4f4f2" vAlign="center">
                                           <c:set var="trnGoBtn">
                                             <digi:trn key="aim:goBtn"> Go </digi:trn>

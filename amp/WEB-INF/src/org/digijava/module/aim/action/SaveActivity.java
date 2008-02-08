@@ -64,7 +64,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
-import org.digijava.module.aim.dbentity.AmpSISINProyect;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.ActivitySector;

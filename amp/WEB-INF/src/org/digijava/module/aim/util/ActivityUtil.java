@@ -65,7 +65,6 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.EUActivity;
-import org.digijava.module.aim.dbentity.AmpSISINProyect;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;

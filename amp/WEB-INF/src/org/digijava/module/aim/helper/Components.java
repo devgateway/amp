@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.digijava.module.aim.dbentity.AmpSISINProyect;
-
 
 public class Components<T> implements Comparable , Serializable{
 	

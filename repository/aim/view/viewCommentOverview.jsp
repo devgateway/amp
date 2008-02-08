@@ -25,6 +25,7 @@
 <digi:context name="digiContext" property="context"/>
 <input type="hidden" name="viewFlag" id="viewFlag">
 
+
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
 				<td align=left vAlign=top>
@@ -48,6 +49,7 @@
 								<c:set value="1" var="sno" />
 								<logic:iterate name="aimEditActivityForm" id="comment" property="commentsCol" 
 									type="org.digijava.module.aim.dbentity.AmpComments">
+									<c:if test="${comment.ampFieldId.ampFieldId == aimEditActivityForm.field.ampFieldId}"> 
 										<tr>
 											<td bgcolor=#ECF3FD width="5%">
 												<b><c:out value="${sno}"/></b>
@@ -72,6 +74,7 @@
 											</TD>
 										</TR>
 										<c:set value="${sno + 1}" var="sno"/>
+									</c:if>
 									</logic:iterate>
 								</logic:notEmpty>
 										<tr>

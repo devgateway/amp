@@ -55,6 +55,7 @@ public class ViewComment extends Action {
 							editForm.setCommentsCol( new ArrayList() );
 					}
 					 
+					 
 					 String action = editForm.getActionFlag();
 					 if(action==null ||action.equals("") )
 					 {
@@ -62,7 +63,7 @@ public class ViewComment extends Action {
 						 editForm.setActionFlag("create");
 					 }
 					 String comment = request.getParameter("comment");
-
+					 
 					 TeamMember member = (TeamMember) request.getSession().getAttribute("currentMember");
 					 logger.debug("CommentFlag[before IF] : " + editForm.isCommentFlag());
 					 if (comment != null && comment.trim().length() != 0) {
@@ -72,7 +73,7 @@ public class ViewComment extends Action {
 						if (comment.equals("ccd") || comment.equals("viewccd")){
 							editForm.setFieldName("current completion date");
 							field = DbUtil.getAmpFieldByName("current completion date");
-						}
+							}
 						else
 							if (comment.equals("fdd") || comment.equals("viewfdd")){
 								editForm.setFieldName("Final Date for Disbursements");
@@ -122,8 +123,13 @@ public class ViewComment extends Action {
 																	editForm.setFieldName("Purpose Objectively Verifiable Indicators");
 																	field = DbUtil.getAmpFieldByName("Purpose Objectively Verifiable Indicators");
 																}
-							
 							editForm.setField(field);
+							if (request.getParameter("previus")!=null && request.getParameter("previus").equalsIgnoreCase("vco")){
+								editForm.setField(field);
+								long actid = Long.parseLong(request.getParameter("actId"));
+								editForm.setCommentsCol(DbUtil.getAllCommentsByField(editForm.getField().getAmpFieldId(), actid));
+								return mapping.findForward("overview");
+							}
 						//}
 						
 						//logger.debug("editForm.getCommentsCol().size() [At Start-I]: " + editForm.getCommentsCol().size());
@@ -201,7 +207,7 @@ public class ViewComment extends Action {
 						if (editForm.getCommentText().trim().equals("") || editForm.getCommentText() == null)
 							com.setComment(" ");
 						else
-							com.setComment(editForm.getCommentText());
+						com.setComment(editForm.getCommentText());
 						com.setCommentDate(new Date());
 						com.setMemberId(TeamMemberUtil.getAmpTeamMember(member.getMemberId()));
 

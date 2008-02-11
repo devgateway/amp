@@ -1513,12 +1513,11 @@ if (tm != null && tm.getTeamType()
       eaForm.setValidcurrencies(validcurrencies);
       for (Iterator iter = eaForm.getCurrencies().iterator(); iter.hasNext();) {
 		AmpCurrency element = (AmpCurrency) iter.next();
-		 if( CurrencyUtil.getLatestExchangeRate(element.getCurrencyCode())!= 1.0)
+		 if( CurrencyUtil.isRate(element.getCurrencyCode())== true)
 				{
 			 	eaForm.getValidcurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
+				}
 		}
-		
-	}
 
       // load all the perspectives
       eaForm.setPerspectives(DbUtil.getAmpPerspective());

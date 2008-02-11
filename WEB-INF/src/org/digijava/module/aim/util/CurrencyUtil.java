@@ -13,6 +13,8 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.JDBCException;
 import net.sf.hibernate.Query;
@@ -1011,6 +1013,42 @@ public class CurrencyUtil {
 					+ "returns " + exchangeRate); */
 		return exchangeRate.doubleValue();
 	}
+	
+	/**
+	 * Returns true if currency have at leat one value added.
+	 * Used in addfunding.
+	 * @param currencyCode currency Code
+	 * @return boolean
+	 * @author Irakli Kobiashvili
+	 */
+	public static Boolean isRate(String currencyCode) throws AimException {
+		Session session = null;
+		Query q = null;
+		try {
+			logger.debug("retrivieving latest exchange rate for currency:"+currencyCode);
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select f.exchangeRate from "
+					+ AmpCurrencyRate.class.getName()
+					+ " f where (f.toCurrencyCode=:currencyCode) order by f.exchangeRateDate desc";
+			q = session.createQuery(queryString);
+			q.setString("currencyCode", currencyCode);
+			List rates = q.list();
+			boolean result = false;
+			if (rates == null){
+				logger.debug("No exchange rate value found for currency: "+currencyCode);
+				result = false;
+			}else{
+				result = true;
+			}
+			return true;
+		} catch (Exception ex) {
+			logger.debug("Unable to get exchange rate from database", ex);
+			throw new AimException("Error retriving currency exchange rate for "+ currencyCode,ex);
+		}
+	}
+
+	
+	
 
 	/**
 	 * Returns Latest Exchange rate for currency specified in parameter by code.
@@ -1045,7 +1083,7 @@ public class CurrencyUtil {
 		}
 	}
 
-
+	
 
 	public static List getAmpCurrency(Long ampActivityId) {
 		List currency = null;

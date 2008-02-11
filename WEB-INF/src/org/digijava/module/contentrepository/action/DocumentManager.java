@@ -406,6 +406,7 @@ public class DocumentManager extends Action {
 				documentData.setVersionNumber( nodeWrapper.getVersionNumber() );
 				documentData.setContentType( nodeWrapper.getContentType() );
 				documentData.setWebLink( nodeWrapper.getWebLink() );
+				documentData.setCmDocTypeId( nodeWrapper.getCmDocTypeId() );
 				
 				/*name		= DocumentManagerUtil.getPropertyFromNode(documentNode, CrConstants.PROPERTY_NAME);
 				if ( name == null )
@@ -455,7 +456,7 @@ public class DocumentManager extends Action {
 					else {
 						documentData.setFileSize( 0 );
 					}*/
-					documentData.processWebLink();
+					documentData.process(myRequest);
 					documentData.computeIconPath(true);
 					
 	//				Boolean hasViewRights			= DocumentManagerRights.hasViewRights(documentNode, myRequest); 

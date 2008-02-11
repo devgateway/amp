@@ -41,7 +41,7 @@ public class DocumentManagerForm extends ActionForm {
 	private String webLink					= null;
 	private boolean webResource				= false;
 	
-	private Long docType			= null;
+	private Long docType			= new Long(0);
 	private Long docLang			= null;
 	
 	private Boolean pageCloseFlag	= false;

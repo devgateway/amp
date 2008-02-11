@@ -15,7 +15,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.upload.FormFile;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
@@ -50,7 +52,7 @@ public class TemporaryDocumentData extends DocumentData {
 		this.formFile = formFile;
 	}
 	
-	public TemporaryDocumentData (DocumentManagerForm dmForm, ActionErrors errors) {
+	public TemporaryDocumentData (DocumentManagerForm dmForm, HttpServletRequest request, ActionErrors errors) {
 		errorsFound		= false;
 		if ( dmForm.getFileData() != null ) {
 			
@@ -85,8 +87,9 @@ public class TemporaryDocumentData extends DocumentData {
 		this.setHasViewRights(true);
 		this.setHasVersioningRights(false);
 		this.setShowVersionHistory(false);
-
-		this.processWebLink();
+		this.setCmDocTypeId( dmForm.getDocType() );
+		
+		this.process( request );
 		this.computeIconPath(true);
 	}
 	

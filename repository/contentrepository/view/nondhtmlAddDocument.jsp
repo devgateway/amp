@@ -349,6 +349,7 @@ div.fakefile2 input {
 										</tr>
 									</field:display>
 									
+									<%-- 
 									<field:display name="Document Language" feature="Related Documents">
 									<tr>
 										<td>
@@ -366,7 +367,7 @@ div.fakefile2 input {
 										</td>
 									</tr>
 									</field:display>
-									
+									--%>
 									<logic:equal name="crDocumentManagerForm" property="webResource" value="false">
 									<tr>
 										<td>

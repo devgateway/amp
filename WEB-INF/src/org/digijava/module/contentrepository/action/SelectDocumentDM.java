@@ -84,12 +84,15 @@ public class SelectDocumentDM extends Action {
 							HashSet<String> docsSet	= (HashSet<String>) value;
 							docsSet.remove( selectDocumentForm.getSelectedDocs()[i] );
 						}
-						if (value instanceof Collection) {
-							Collection<DocumentData> tempDocs 	= (Collection<DocumentData>) value;
-							Iterator<DocumentData> tempIter		= tempDocs.iterator();
-							if ( selectDocumentForm.getSelectedDocs()[i].equals(tempIter.next().getUuid()) )
-								tempIter.remove();
-						}
+						else
+							if (value instanceof Collection) {
+								Collection<DocumentData> tempDocs 	= (Collection<DocumentData>) value;
+								Iterator<DocumentData> tempIter		= tempDocs.iterator();
+								while (tempIter.hasNext()) {
+									if ( selectDocumentForm.getSelectedDocs()[i].equals(tempIter.next().getUuid()) )
+										tempIter.remove();
+								}
+							}
 					} 
 				}
 			}

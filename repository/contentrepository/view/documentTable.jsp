@@ -17,6 +17,7 @@
 								<th><digi:trn key="contentrepository:TableHeader:Date">Date</digi:trn></th>
 								<th><digi:trn key="contentrepository:TableHeader:Size">Size (MB)</digi:trn></th>
 								<%-- <th><digi:trn key="contentrepository:TableHeader:ContentType">Content Type</digi:trn></th> --%>
+								<th><digi:trn key="contentrepository:TableHeader:CmDocType">Document Type</digi:trn></th>
 								<th><digi:trn key="contentrepository:TableHeader:Description">Description</digi:trn></th>
 								<th><digi:trn key="contentrepository:TableHeader:Actions">Actions</digi:trn></th>
 							</tr>
@@ -78,6 +79,9 @@
 								<%-- <td>
 									<bean:write name="documentData" property="contentType" />
 								</td> --%>
+								<td>
+									${documentData.cmDocType }
+								</td>
 								<td>
 									<bean:write name="documentData" property="description" />
 									<a name="aDocumentUUID" style="display: none"><bean:write name="documentData" property="uuid" /></a>

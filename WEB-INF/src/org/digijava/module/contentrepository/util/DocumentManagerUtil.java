@@ -369,6 +369,8 @@ public class DocumentManagerUtil {
 			URL url	= new URL( urlString );
 			return url.toString();
 		} catch (MalformedURLException e) {
+			if ( !urlString.startsWith("http://") )
+				return processUrl("http://"+urlString, errors);
 			errors.add("title", new ActionError("error.contentrepository.addFile.malformedWebLink") );
 			e.printStackTrace();
 			return null;

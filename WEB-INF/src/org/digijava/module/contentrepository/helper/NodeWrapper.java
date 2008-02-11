@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.upload.FormFile;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
@@ -60,7 +62,7 @@ public class NodeWrapper {
 			if ( isAUrl ){
 				String link				= DocumentManagerUtil.processUrl(myForm.getWebLink(), errors);
 				if (link != null) {
-					newNode.setProperty ( CrConstants.PROPERTY_WEB_LINK, myForm.getWebLink() );
+					newNode.setProperty ( CrConstants.PROPERTY_WEB_LINK, link );
 					contentType				= CrConstants.URL_CONTENT_TYPE;
 				}
 				else
@@ -81,9 +83,9 @@ public class NodeWrapper {
 				}
 			}
 			
-			if ( !errorAppeared ) {
+			if ( !errorAppeared ) {			
 				populateNode(newNode, myForm.getDocTitle(), myForm.getDocDescription(), myForm.getDocNotes(), 
-					contentType, teamMember.getEmail() );
+					contentType, myForm.getDocType() , teamMember.getEmail() );
 			}
 			
 			this.node		= newNode;
@@ -151,7 +153,7 @@ public class NodeWrapper {
 			
 			if ( !errorAppeared ) {
 				populateNode(newNode, tempDoc.getTitle(), tempDoc.getDescription(), tempDoc.getNotes(), 
-					contentType, teamMember.getEmail() );
+					contentType, tempDoc.getCmDocTypeId(), teamMember.getEmail() );
 			}
 			
 			this.node		= newNode;
@@ -169,12 +171,13 @@ public class NodeWrapper {
 		
 	}
 	
-	private void populateNode(Node newNode, String doTitle, String docDescr, String docNotes, String contentType, String user) {
+	private void populateNode(Node newNode, String doTitle, String docDescr, String docNotes, String contentType, Long cmDocType, String user) {
 		try{
 			newNode.setProperty( CrConstants.PROPERTY_TITLE, doTitle );
 			newNode.setProperty( CrConstants.PROPERTY_DESCRIPTION, docDescr );
 			newNode.setProperty( CrConstants.PROPERTY_NOTES, docNotes );
 			newNode.setProperty( CrConstants.PROPERTY_CONTENT_TYPE, contentType );
+			newNode.setProperty( CrConstants.PROPERTY_CM_DOCUMENT_TYPE, cmDocType );
 			newNode.setProperty( CrConstants.PROPERTY_ADDING_DATE, Calendar.getInstance());
 			newNode.setProperty( CrConstants.PROPERTY_CREATOR, user );
 		}
@@ -336,6 +339,19 @@ public class NodeWrapper {
 		if ( webLinkProp != null ) {
 			try{
 				return webLinkProp.getString(); 
+			}
+			catch ( Exception E ) {
+				E.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+	public Long getCmDocTypeId() {
+		Property docType			= DocumentManagerUtil.getPropertyFromNode(node, CrConstants.PROPERTY_CM_DOCUMENT_TYPE);
+		if ( docType != null ) {
+			try{
+				return docType.getLong(); 
 			}
 			catch ( Exception E ) {
 				E.printStackTrace();

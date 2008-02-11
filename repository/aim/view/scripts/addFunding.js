@@ -7,7 +7,7 @@ function trim(s) {
 
 
 
-function checkAmountUsingSymbols(amount){
+function checkAmountUsingSymbol(amount){
 	var validChars= "0123456789"+this.decimalSymbol+this.groupSymbol;
 
 	for (i = 0;  i < amount.length;  i++) {
@@ -501,7 +501,7 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount,msgInvalidAmount,ms
 
 
 
-				if (checkAmountUsingSymbols(temp[i].value) == false) {
+				if (checkAmountUsingSymbol(temp[i].value) == false) {
 
 
 

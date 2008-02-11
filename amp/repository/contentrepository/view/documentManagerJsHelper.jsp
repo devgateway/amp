@@ -182,7 +182,9 @@
 <c:set var="trans_headerContentType">
 	<digi:trn key="contentrepository:TableHeader:ContentType">Content Type</digi:trn>  
 </c:set>
-
+<c:set var="trans_cmDocType">
+	<digi:trn key="contentrepository:TableHeader:CmDocType">Document Type</digi:trn>  
+</c:set>
 <c:set var="trans_headerDescription">
 	 <digi:trn key="contentrepository:TableHeader:Description">Description</digi:trn>
 </c:set>
@@ -204,7 +206,7 @@ YAHOO.amp.table.enhanceMarkup = function(markupName) {
         {key:"file_name",text:"${trans_headerFileName}",sortable:true},
         {key:"date",type:"Date",text:"${trans_headerDate}",sortable:true},
         {key:"size",type:"number",text:"${trans_fileSize}",sortable:true},
-        
+        {key:"cm_doc_type",text:"${trans_cmDocType}",sortable:true},
         {key:"description",text:"${trans_headerDescription}",sortable:false},
         {key:"actions",text:"${trans_headerActions}",sortable:false}
     ];
@@ -643,8 +645,10 @@ function toggleView(elementId, iconId, isMinus) {
 	return isMinus;
 }
 /* Configures the form with id typeId */
-function configPanel(panelNum, title, description, uuid, isAUrl) {
+function configPanel(panelNum, title, description, optionText, uuid, isAUrl) {
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML = '';
+	if (optionText == null)
+		optionText	= '';
 
 	var myForm		= document.getElementById('typeId').form;
 	
@@ -679,6 +683,15 @@ function configPanel(panelNum, title, description, uuid, isAUrl) {
 		myForm.docDescription.style.color			= "darkgray";
 		
 		setPanelHeader(0, "${translation_add_new_version}");
+		
+		var opts									= myForm.docType.options;
+		for ( j=0; j<opts.length; j++ ) {
+			if ( opts[j].text	== optionText ) {
+				opts[j].selected	= true;
+				break;
+			}
+		}
+		myForm.docType.disabled						= true;
 	}
 	else {
 		myForm.webResource[1].disabled				= false;
@@ -691,6 +704,8 @@ function configPanel(panelNum, title, description, uuid, isAUrl) {
 		myForm.docDescription.readOnly				= false;
 		myForm.docDescription.style.backgroundColor	= "";
 		myForm.docDescription.style.color			= "";
+		
+		myForm.docType.selectedIndex				= 0;
 		
 		setPanelHeader(0, "${translation_add_new_content}");
 	}

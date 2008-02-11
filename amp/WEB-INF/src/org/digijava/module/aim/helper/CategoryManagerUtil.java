@@ -51,7 +51,7 @@ public class CategoryManagerUtil {
 	 * in "Translator View". This function just extracts the translation from the database
 	 * @param ampCategoryValue
 	 * @param request
-	 * @return The translated category value
+	 * @return The translated category value or ,if any eror appear, the empty string
 	 */
 	public static String translateAmpCategoryValue(AmpCategoryValue ampCategoryValue, HttpServletRequest request) {
 		return translate(CategoryManagerUtil.getTranslationKeyForCategoryValue(ampCategoryValue), request, ampCategoryValue.getValue() );

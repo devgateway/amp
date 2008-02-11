@@ -4,8 +4,10 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/category" prefix="category"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ page import="java.util.List"%>
+<%@ page import="org.digijava.module.aim.helper.CategoryConstants"%>
 
 <jsp:include page="/repository/aim/view/teamPagesHeader.jsp" flush="true" />
 
@@ -473,7 +475,16 @@
 			<tr>
 			<td><strong><digi:trn key="contentrepository:addEdit:Notes">Notes:</digi:trn></strong></td>
 			<td><html:textarea property="docNotes" cols="28" /></td>
-			
+			</tr>
+			<tr>
+			<td><strong><digi:trn key="aim:typeOfTheDocument">Type:</digi:trn></strong></td>
+			<td>
+				<c:set var="translation">
+					<digi:trn key="contentrepository:doctype:firstline">Please select a type from below</digi:trn>
+				</c:set>
+				<category:showoptions firstLine="${translation}" name="crDocumentManagerForm" property="docType"  keyName="<%= CategoryConstants.DOCUMENT_TYPE_KEY %>" styleClass="inp-text" />
+			</td>
+			</tr>
 			<tr id="tr_path">
 			<td><strong><digi:trn key="contentrepository:addEdit:Path">Path:</digi:trn><font color="red">*</font></strong></td>
 			<td><html:file property="fileData" /></td>
@@ -501,5 +512,4 @@
 YAHOO.namespace("YAHOO.amp.table");
 YAHOO.amp.table.mytable	= YAHOO.amp.table.enhanceMarkup("team_markup");
 YAHOO.amp.table.teamtable	= YAHOO.amp.table.enhanceMarkup("my_markup");
-
 </script>

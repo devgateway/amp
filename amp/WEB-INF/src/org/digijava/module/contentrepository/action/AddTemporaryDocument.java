@@ -40,7 +40,7 @@ public class AddTemporaryDocument extends Action {
 	
 	private ActionForward addTemporaryDocument () {
 		ActionErrors errors				= new ActionErrors();
-		TemporaryDocumentData tempDoc	= new TemporaryDocumentData(myForm, errors);
+		TemporaryDocumentData tempDoc	= new TemporaryDocumentData(myForm, myRequest, errors);
 		if ( !tempDoc.isErrorsFound() ) {
 			tempDoc.addToSession( myRequest );
 			myForm.setPageCloseFlag( true );

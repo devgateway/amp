@@ -1,5 +1,10 @@
 package org.digijava.module.contentrepository.helper;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
+
 public class DocumentData {
 	String name				= null;
 	String uuid				= null;
@@ -9,9 +14,12 @@ public class DocumentData {
 	String calendar			= null;
 	String contentType		= null;
 	String webLink			= null;
+	String cmDocType		= "";
 	double fileSize			= 0;
 	
 	String iconPath			= null;
+	
+	Long cmDocTypeId		= null;
 	
 	float versionNumber;
 	
@@ -139,6 +147,18 @@ public class DocumentData {
 	}
 	
 	
+	public Long getCmDocTypeId() {
+		return cmDocTypeId;
+	}
+	public void setCmDocTypeId(Long cmDocTypeId) {
+		this.cmDocTypeId = cmDocTypeId;
+	}
+	public String getCmDocType() {
+		return cmDocType;
+	}
+/*	public void setCmDocType(String cmDocType) { // This is not needed
+		this.cmDocType = cmDocType;
+	}*/
 	public double getFileSize() {
 		return fileSize;
 	}
@@ -153,7 +173,14 @@ public class DocumentData {
 		this.webLink = webLink;
 	}
 	
-	public void processWebLink() {
+	public void process(HttpServletRequest request) {
+		if (cmDocTypeId != null) {
+			AmpCategoryValue docTypeCv	= CategoryManagerUtil.getAmpCategoryValueFromDb(cmDocTypeId);
+			if ( docTypeCv != null ) {
+				String translation		= CategoryManagerUtil.translateAmpCategoryValue(docTypeCv, request);
+				cmDocType				= translation;
+			}
+		}
 		if ( webLink != null ) {
 			if ( webLink.length() <= 25 )
 				name	= webLink;

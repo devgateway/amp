@@ -87,6 +87,7 @@ public class GetVersionsForDocumentManager extends Action {
 		docData.setDescription	( nodeWrapper.getDescription() );
 		docData.setNotes		( nodeWrapper.getNotes() );
 		docData.setContentType	( nodeWrapper.getContentType() );
+		docData.setCmDocTypeId	( nodeWrapper.getCmDocTypeId() );
 		docData.setCalendar		( nodeWrapper.getDate() );
 		docData.setFileSize		( nodeWrapper.getFileSizeInMegabytes() );
 		docData.setVersionNumber( nodeWrapper.getVersionNumber() );
@@ -98,7 +99,7 @@ public class GetVersionsForDocumentManager extends Action {
 		if ( uuidMapVer.containsKey(nodeUUID) ) {
 			docData.setIsPublic(true);
 		}
-		docData.processWebLink();
+		docData.process(myRequest);
 		docData.computeIconPath( false );
 		return true;
 	}

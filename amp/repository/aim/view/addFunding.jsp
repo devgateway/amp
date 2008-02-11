@@ -171,7 +171,7 @@
 
 <%! long t = System.currentTimeMillis(); %>
 
-<body onload="load()">
+<body onLoad="load()">
 
 <c:set var="formatTip">
 	<digi:trn key="aim:decimalforma">Format has to be: </digi:trn> <%=FormatHelper.formatNumber(FormatHelper.parseDouble("100000"+FormatHelper.getDecimalSymbol()+"150"))%>
@@ -297,6 +297,10 @@
 	</td></tr>
 	<% int tempIndex = 0; %>
 	<% String tempIndexStr = ""; %>
+	
+	<c:set var="translation">
+		<digi:trn key="aim:currencieswithexchange">Only currencies having exchange rate are listed here</digi:trn>
+	</c:set>
 	<feature:display module="Funding" name="MTEF Projections">
 	<field:display feature="MTEF Projections" name="MTEFProjections">
 	<tr>
@@ -304,7 +308,7 @@
 
 			<table width="100%" cellpadding=0 cellspacing=1 vAlign="top" align="left" bgcolor="#006699">
 			<tr><td>
-
+	
 			<table width="100%" cellpadding=1 cellspacing=0 bgcolor="#ffffff">
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center" colspan="4">
@@ -317,6 +321,7 @@
 					<td><b><font color="white"><digi:trn key="aim:amount">Amount</digi:trn></font></b>
 					</td>
 					<td><b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b>
+					<img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" />
 					</td>
 					<td><b><font color="white"><digi:trn key="aim:ProjectionDate">Projection Date</digi:trn></font></b>
 					</td>
@@ -434,7 +439,7 @@
 								</td>
 								<td align="center" valign="middle" width="170">
 								<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">											  <b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
-								</td>
+								<img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" /></td>
 								<td align="center" valign="middle" width="120">
 									<a title="<digi:trn key="aim:CommitmentDate">The date (day, month, year) when funding commitment was signed</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:CommitmentDateFIE">Commitment Date</digi:trn></font></b></a>
@@ -505,8 +510,8 @@
 											</td>
 										</tr>
 										<tr>
-											<td>
-												&nbsp;
+											<td>&nbsp;
+												
 											</td>
 											<td>
 												<digi:trn key="aim:FixedRate">Fixed Rate</digi:trn>
@@ -516,8 +521,8 @@
 											</td>
 										</tr>
 										<tr>
-											<td>
-												&nbsp;
+											<td>&nbsp;
+												
 											</td>
 											<td align="right">
 												<% String exchRatefldId = "exchFld"+(t++);
@@ -562,7 +567,7 @@
 											</td>
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text">
-													<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode"
+													<html:optionsCollection name="aimEditActivityForm" property="validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
 											</td>
@@ -597,8 +602,8 @@
 												</a>
 											</td>
 										<tr>
-											<td bgcolor="#ffff00">
-												&nbsp;
+											<td bgcolor="#ffff00">&nbsp;
+												
 											</td>
 											<td align="left"  bgcolor="#ffff00">
 												<b>
@@ -612,8 +617,8 @@
 											</td>
 										</tr>
 										<tr>
-											<td>
-												&nbsp;
+											<td>&nbsp;
+												
 											</td>
 											<td align="right">
 												<% String exchRatefldId = "exchFld"+ (t++);
@@ -696,6 +701,7 @@
 								<td align="center" valign="middle" width="170">
 									<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
+									<img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" />
 								</td>
 								<td align="center" valign="middle" width="120">
 								<a title="<digi:trn key="aim:DateofDisbursementOrder">Date of actual international transfer of financial resources</digi:trn>">
@@ -706,9 +712,9 @@
 
 									<b><font color="white"><digi:trn key="aim:DisbursementOrderIDFIE">Disbursement Order ID</digi:trn></font></b>
 								</td>
-                                                                <td align="center" valign="middle">
+                                                                <td align="center" valign="middle">&nbsp;
 
-									&nbsp;
+									
 								</td>
 
 							</tr>
@@ -745,7 +751,7 @@
 											<td valign="bottom">
                                                                                         <field:display name="Currency of Disbursement Order" feature="Disbursement Orders">
 												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
-													<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode"
+													<html:optionsCollection name="aimEditActivityForm" property="validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
                                                                                                 </field:display>
@@ -848,7 +854,7 @@
 								<td align="center" valign="middle" width="170">
 									<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
-								</td>
+								    <img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" /></td>
 								<td align="center" valign="middle" width="120">
 								<a title="<digi:trn key="aim:DateofDisbursement">Date of actual international transfer of financial resources</digi:trn>">
 								<b><font color="white">
@@ -896,7 +902,7 @@
 											</td>
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
-													<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode"
+													<html:optionsCollection name="aimEditActivityForm" property="validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
 											</td>
@@ -978,7 +984,7 @@
 											</td>
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
-													<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode"
+													<html:optionsCollection name="aimEditActivityForm" property="validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
 											</td>
@@ -1094,7 +1100,7 @@
 								</td>
 								<td align="center" valign="middle" width="170">
 									<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">								   		  <b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
-								</td>
+								    <img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" /></td>
 								<td align="center" valign="middle" width="120">
 									<a title="<digi:trn key="aim:DateofExpenditure">Date of actual expenditure</digi:trn>">
 									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:ExpenditureDateFIE">Expenditure Date</digi:trn></font></b></a>
@@ -1310,13 +1316,13 @@
 						<table cellPadding=3>
 							<tr>
 								<td>
-									<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>" class="inp-text" onclick="return addFunding()">
+									<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>" class="inp-text" onClick="return addFunding()">
 								</td>
 								<td>
 									<input type="reset" value="<digi:trn key='btn:reset'>Reset</digi:trn>" class="inp-text">
 								</td>
 								<td>
-									<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="inp-text" onclick="closeWindow()">
+									<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="inp-text" onClick="closeWindow()">
 								</td>
 							</tr>
 						</table>

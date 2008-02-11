@@ -46,6 +46,7 @@ import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -1504,8 +1505,20 @@ if (tm != null && tm.getTeamType()
                    }
        */
 
-      // load all the active currencies
+      //Lload all the active currencies **-- I will leave this becouse I don't know if is used in another page AMP-2620
       eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
+      
+      //Only currencies havening exchanges rates AMP-2620
+      ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
+      eaForm.setValidcurrencies(validcurrencies);
+      for (Iterator iter = eaForm.getCurrencies().iterator(); iter.hasNext();) {
+		AmpCurrency element = (AmpCurrency) iter.next();
+		 if( CurrencyUtil.getLatestExchangeRate(element.getCurrencyCode())!= 1.0)
+				{
+			 	eaForm.getValidcurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
+		}
+		
+	}
 
       // load all the perspectives
       eaForm.setPerspectives(DbUtil.getAmpPerspective());

@@ -44,10 +44,20 @@
     function unload(){
       return true;
     }
+
+	function checkExchange(code){
+		
+	
+	
+	}
 </script>
+
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addProposedFunding.do?edit=true" method="post">
   <input type="hidden" name="edit" value="true">
+  	<c:set var="translation">
+		<digi:trn key="aim:currencieswithexchange">Only currencies having exchange rate are listed here</digi:trn>
+	</c:set>
   <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class=box-border-nopadding>
     <tr>
       <td>
@@ -74,38 +84,36 @@
                     <table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class=box-border-nopadding>
                       <tr bgcolor="#003366" class="textalb">
                         <td align="center" valign="middle" width="75">
-                          <b><font color="white"><digi:trn key="aim:PlannedFIE">Planned</digi:trn></font></b>
-                        </td>
+                          <b><font color="white"><digi:trn key="aim:PlannedFIE">Planned</digi:trn></font></b>                        
+                         </td>
                         <td align="center" valign="middle" width="100">
-                          <b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b>
+                          <b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b>                        
                         </td>
                         <td align="center" valign="middle" width="100">
                           <b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b>
+                          <img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" />
                         </td>
                         <td align="center" valign="middle" width="120" colspan="2">
-                          <b><font color="white"><digi:trn key="aim:PlannedFIE">Planned</digi:trn><br><digi:trn key="aim:commitments">Commitment</digi:trn> <digi:trn key="aim:DateFIE">Date</digi:trn></font></b>
-                        </td>
+                          <b><font color="white"><digi:trn key="aim:PlannedFIE">Planned</digi:trn><br><digi:trn key="aim:commitments">Commitment</digi:trn> <digi:trn key="aim:DateFIE">Date</digi:trn></font></b>                        </td>
                       </tr>
                       <tr>
                         <td valign="center" align="center">
-                        <digi:trn key="aim:PlannedFIE">Planned</digi:trn>
+                        <digi:trn key="aim:PlannedFIE">Planned</digi:trn>                        </td>
+                        <td valign="center" align="center">
+                          <html:text property="proProjCost.funAmount" styleId="funAmount" style="width:100px;"/>                        </td>
+                        <td valign="center" align="center">
+                          	<html:select property="proProjCost.currencyCode" styleClass="inp-text" onchange="">
+                            	<html:optionsCollection name="aimEditActivityForm" property="validcurrencies" value="currencyCode" label="currencyName" style="width:100%;"/>
+                        	</html:select>
                         </td>
                         <td valign="center" align="center">
-                          <html:text property="proProjCost.funAmount" styleId="funAmount" style="width:100px;"/>
-                        </td>
-                        <td valign="center" align="center">
-                          <html:select property="proProjCost.currencyCode" styleClass="inp-text">
-                            <html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode" label="currencyName" style="width:100%;"/>
-                          </html:select>
-                        </td>
-                        <td valign="center" align="center">
-                          <html:text property="proProjCost.funDate" styleId="funDate" readonly="true" style="width:100px;"/>
+                          <html:text property="proProjCost.funDate" styleId="funDate" readonly="true" style="width:100px;"/>                        
                         </td>
                         <td valign="center" align="center">
 							<a id="date1" href='javascript:pickDateByIdDxDy("date1","funDate",210,80)'>
-								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>							
 							</a>
-                        </td>
+						</td>
                       </tr>
                     </table>
                   </td>

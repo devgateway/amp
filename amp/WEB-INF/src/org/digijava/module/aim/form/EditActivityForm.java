@@ -19,6 +19,8 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -304,6 +306,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String actualCompletionDate;
 	private String fundingConditions;
 	private Collection currencies;
+	private Collection <AmpCurrency> validcurrencies;
 	private Collection organizations;
 	private List fundingDetails; //Collection of FundingDetail objects
 	private List<MTEFProjection> fundingMTEFProjections; //collection of funding mtefprojections objects
@@ -647,6 +650,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			fundingConditions = null;
 			event = null;
 			currencies = null;
+			validcurrencies=null;
 			organizations = null;
 			fundingDetails = null;
 			editFunding = false;
@@ -4775,6 +4779,16 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setCrDocuments(Collection<DocumentData> crDocuments) {
 		this.crDocuments = crDocuments;
 	}
+
+	public Collection<AmpCurrency> getValidcurrencies() {
+		return validcurrencies;
+	}
+
+	public void setValidcurrencies(Collection<AmpCurrency> validcurrencies) {
+		this.validcurrencies = validcurrencies;
+	}
+
+
     
 }
 

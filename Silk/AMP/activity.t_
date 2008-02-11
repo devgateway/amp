@@ -1,5 +1,5 @@
 ﻿[ ] 
-[-] testcase Test1() appstate DefaultBaseState
+[+] testcase Test1() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
 	[ ] AMPMyDesktop.AddActivity.Click()
 	[ ] AMPAddActivityStep1.ProjectTitle.SetText("Full Activity Silk Test")
@@ -841,7 +841,7 @@
 	[ ] AMPDesktopLinks.Save.Click()
 	[ ] 
 	[ ] 
-[+] testcase Test5() appstate DefaultBaseState
+[-] testcase Test5() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
 	[ ] AMPMyDesktop.AddActivity.Click ()
 	[ ] DATETIME today

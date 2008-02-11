@@ -1,5 +1,5 @@
 ﻿[ ] 
-[+] testcase Test1() appstate DefaultBaseState
+[-] testcase Test1() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
 	[ ] AMPMyDesktop.AddActivity.Click()
 	[ ] AMPAddActivityStep1.ProjectTitle.SetText("Full Activity Silk Test")

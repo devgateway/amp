@@ -45,7 +45,7 @@
 		[-] multitag "&name='selectedEventTypeId"
 			[ ] "Event Type"
 			[ ] "$selectedEventTypeId"
-	[+] HtmlLink AddOrganizations
+	[-] HtmlLink AddOrganizations
 		[-] multitag "Add Organizations"
 			[ ] "$?calendar?selectOrganization.do?orgSelReset=true?edit=true"
 	[+] HtmlTextField fromDate
@@ -54,15 +54,15 @@
 		[ ] tag "$selectedEndDate"
 	[+] HtmlPopupList startHour
 		[ ] tag "&id='selectedStartHour'"
-	[-] HtmlPopupList startMinute
+	[+] HtmlPopupList startMinute
 		[ ] tag "&id='selectedStartMinute'"
-	[-] HtmlPopupList endHour
+	[+] HtmlPopupList endHour
 		[ ] tag "&id='selectedEndHour'"
-	[-] HtmlPopupList endMinute
+	[+] HtmlPopupList endMinute
 		[ ] tag "&id='selectedEndMinute'"
 	[+] HtmlPushButton Preview
 		[ ] tag "Preview"
-	[-] HtmlList Gregorian
+	[+] HtmlList Gregorian
 		[ ] tag "Gregorian"
 	[+] HtmlListBox Users
 		[-] multitag "&id='usersList'"
@@ -86,6 +86,24 @@
 			[ ] "$privateEvent"
 	[+] HtmlPushButton Delete
 		[ ] tag "Delete"
+	[+] HtmlImage ClickToViewCalendar1
+		[-] multitag "Click to View Calendar[1]"
+			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[1]"
+	[-] HtmlTable Today
+		[ ] tag "Today"
+		[+] HtmlColumn Fri
+			[ ] tag "Fri"
+			[+] HtmlText N1
+				[ ] tag "1"
+			[-] HtmlText N8
+				[ ] tag "8"
+		[+] HtmlColumn Tue
+			[ ] tag "Tue"
+			[-] HtmlText N5
+				[ ] tag "5"
+	[-] HtmlImage ClickToViewCalendar2
+		[-] multitag "Click to View Calendar[2]"
+			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[2]"
 [ ] 
 [+] window BrowserChild AMPCalendar
 	[ ] tag "AMP View Events"
@@ -194,7 +212,7 @@
 [+] window BrowserChild AMPDocumentManager
 	[ ] tag "AMP - Content Repository"
 	[ ] parent Browser
-	[+] HtmlTable DM
+	[-] HtmlTable DM
 		[ ] tag "Document Manager"
 		[-] HtmlColumn MyDocuments
 			[ ] tag "My Documents"
@@ -1495,7 +1513,7 @@
 		[-] multitag "&name='currentValComments'"
 			[ ] "Comments[3]"
 			[ ] "$currentValComments"
-	[+] HtmlPushButton SetValues
+	[-] HtmlPushButton SetValues
 		[ ] tag "Set Values"
 	[+] HtmlLink Costing
 		[-] multitag "Costing"
@@ -1609,7 +1627,7 @@
 			[ ] "OK"
 			[ ] "$save"
 [ ] 
-[-] window BrowserChild AMPPublicTeamReports
+[+] window BrowserChild AMPPublicTeamReports
 	[ ] tag "AMP - Public Team Reports"
 	[ ] parent Browser
 	[+] HtmlLink ReportGenerator
@@ -1632,7 +1650,7 @@
 	[+] HtmlLink Edit1
 		[-] multitag "Edit[1]"
 			[ ] "$http:??*?aim?editReport.do~reportEdit=true~ev[1]"
-	[-] HtmlLink Delete1
+	[+] HtmlLink Delete1
 		[-] multitag "Delete[1]"
 			[ ] "$http:??*?aim?deleteAllReports.do~event=edit~r[1]"
 [ ] 
@@ -1648,7 +1666,7 @@
 			[ ] "Next"
 			[ ] "$submitButton[2]"
 [ ] 
-[+] window BrowserChild AMPReportGeneratorStep2
+[-] window BrowserChild AMPReportGeneratorStep2
 	[ ] tag "AMP - Report Generator Step 1*"
 	[ ] parent Browser
 	[+] HtmlCheckBox AMP
@@ -1689,7 +1707,6 @@
 			[ ] "$submitButton[2]"
 	[+] HtmlCheckBox Objective
 		[-] multitag "&name='removeColumns'"
-			[ ] "Objective"
 			[ ] "$removeColumns[1]"
 	[+] HtmlCheckBox Box1
 		[-] multitag "&name='removeColumns'"
@@ -1779,6 +1796,29 @@
 		[-] multitag "&name='submitButton'"
 			[ ] "Save Report"
 			[ ] "$submitButton[3]"
+[ ] 
+[-] window BrowserChild AMPEventTypes
+	[ ] tag "AMP Event Types"
+	[ ] parent Browser
+	[ ] 
+	[+] HtmlTextField Name
+		[-] multitag "&name='eventTypeName'"
+			[ ] "$eventTypeName"
+	[+] HtmlTextField Color
+		[-] multitag "&id='hexColorNum';name='eventTypeColor'"
+			[ ] "$eventTypeColor"
+	[+] HtmlPushButton Save
+		[ ] string sTag
+		[ ] tag sTag
+		[ ] 
+		[-] void Select(int no)
+			[ ] sTag = "Save[{no}]"
+	[+] HtmlPushButton Delete
+		[ ] string sTag
+		[ ] tag sTag
+		[ ] 
+		[-] void Select(int no)
+			[ ] sTag = "Delete[{no}]"
 [ ] 
 [+] window DialogBox ChooseFile
 	[ ] tag "Choose file"
@@ -1983,14 +2023,8 @@
 	[+] HtmlLink Costing
 		[-] multitag "Costing"
 			[ ] "$javascript:gotoStep(11)"
-	[ ] 
-	[ ] 
-	[ ] 
-	[ ] 
-	[ ] 
-	[+] HtmlCheckBox AccessionInstrument
+	[-] HtmlCheckBox AccessionInstrument
 		[-] multitag "&name='selectedColumns'"
-			[ ] "Accession Instrument"
 			[ ] "$selectedColumns[1]"
 	[+] HtmlCheckBox DonorAgency
 		[-] multitag "&name='selectedColumns'"
@@ -2004,7 +2038,13 @@
 		[-] multitag "&name='checkall'"
 			[ ] "Actual Commitments"
 			[ ] "$checkall"
-	[-] HtmlLink TanzaniaMainland
+	[+] HtmlLink TanzaniaMainland
 		[-] multitag "Tanzania (mainland)"
 			[ ] "$http:??amp-testing.code.ro?aim?selectTeam.do~id=38"
-[ ] 
+[+] window BrowserChild AMPAdmin
+	[ ] tag "AMP - Admin Home"
+	[ ] parent Browser
+	[+] HtmlLink EventTypeManager
+		[-] multitag "Event Type Manager"
+			[ ] "$http:??*?calendar?eventTypes.do"
+	[ ] 

@@ -171,7 +171,7 @@
 	[ ] AMPMyDesktop.SetActive( )
 	[ ] AMPDesktopLinks.TopMenu.REPORTS.Click ()
 	[ ] AMPPublicTeamReports.ReportGenerator.Click ()
-	[ ] AMPReportGeneratorStep1.N5ReportDetails.Select (3)
+	[ ] AMPReportGeneratorStep1.N5ReportDetails.Select (4)
 	[ ] AMPReportGeneratorStep1.Next.Click ()
 	[ ] AMPReportGeneratorStep2.SelectAll.AMP.Identification.Check ()
 	[ ] AMPReportGeneratorStep2.Add.Click ()

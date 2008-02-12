@@ -165,7 +165,7 @@ public class ParisIndicatorReport extends Action {
                     if ("10a".equalsIgnoreCase(svForm.getIndicatorCode())) {
                         svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator10a(svForm.getOrgGroup(), svForm.getDonor(),
                             svForm.getStartYear().intValue(), svForm.getCloseYear().intValue()));
-                        svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(), 0));
+                        svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(), 1));
                         return mapping.findForward("report1");
                     }
                     if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()))

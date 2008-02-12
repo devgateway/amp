@@ -171,6 +171,9 @@
 	
 	function pickDateCurrency(buttonObj,inputObject)
 	{
+		var dateFormat = '<%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT) %>';
+		if (dateFormat == 'null')
+		dateFormat = 'mm/dd/yyyy';
 		var butt = document.getElementById(buttonObj);
 		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
 		calendarObjForForm.setCalendarPositionByHTMLElement(butt,-160,intY+butt.offsetHeight-40);	// Position the calendar right below the form input

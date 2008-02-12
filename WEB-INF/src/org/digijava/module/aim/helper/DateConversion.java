@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
- 
+
 public class DateConversion
 {
 	private static Logger logger = Logger.getLogger(DateConversion.class) ;
@@ -29,17 +29,17 @@ public class DateConversion
 				}
 				try{
 					 dt1 = DateConversion.getDate(tdt1);
-					 dt2 = DateConversion.getDate(tdt2);	
+					 dt2 = DateConversion.getDate(tdt2);
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
-				
+
 				return dt2.compareTo(dt1);
 			} else throw new ClassCastException();
 		}
-	};	
-	
-	public static String ConvertDateToString(Date mysqlDate ) 
+	};
+
+	public static String ConvertDateToString(Date mysqlDate )
 	{
 		String textDate ="";
 		if (mysqlDate != null) {
@@ -48,8 +48,8 @@ public class DateConversion
 			  textDate = DateTimeUtil.formatDate(mysqlDate);
 		}
 		return textDate;
-	}	
-	
+	}
+
 	/**@author jose
 	 * This method given a String like dd/mm/yyyy it will parse the date out of it and
 	 * return a date object
@@ -58,46 +58,49 @@ public class DateConversion
 	 */
 	public static Date getDate(String strDate)
 	{
-		if (strDate == null) 
+		if (strDate == null)
 			return null;
-		try{			
+		try{
 			SimpleDateFormat formater=new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT);
 			if(strDate!=null && !strDate.equals("") && strDate.length() > 10 ){
-				Date date=DateTimeUtil.parseDate(strDate);     //apr/03/2006			
+				Date date=DateTimeUtil.parseDate(strDate);     //apr/03/2006
 				strDate = formater.format(date);
-			}	
-			
-			
-			if (strDate.length() > 10 || strDate.length() < 8) 
+			}
+
+
+			if (strDate.length() > 10 || strDate.length() < 8)
 				return null;
-			
+
 /*			int index = 0,curr = 0;
-			
+
 			index = strDate.indexOf('/', curr);
 			int day = Integer.parseInt(strDate.substring(curr, index));
-			
+
 			curr = index + 1;
 			index = strDate.indexOf('/', curr);
 			int mon = Integer.parseInt(strDate.substring(curr, index));
-			
+
 			curr = index + 1;
 			int yr = Integer.parseInt(strDate.substring(curr, strDate.length()));
 */
 			String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+            if(pattern==null || pattern.equals("")){
+                pattern = "MM/dd/yyyy";
+            }
 			pattern = pattern.replaceAll("m", "M");
 			Date date = new SimpleDateFormat(pattern).parse(strDate);
 			//GregorianCalendar gc = new GregorianCalendar(yr,mon-1,day) ;
 			/*if ( logger.isDebugEnabled() )
 				logger.debug("getDate returning date with year " + gc.get(Calendar.YEAR)
-						  + " month " + gc.get(Calendar.MONTH) 
+						  + " month " + gc.get(Calendar.MONTH)
 						  + " day "  + gc.get(Calendar.DAY_OF_MONTH)) ; */
-			return date;//gc.getTime() ;	
+			return date;//gc.getTime() ;
 		}catch(Exception ex){
 			throw new RuntimeException();
 		}
-		
+
 	}
-	
+
 	/**@author jose
 	 * This method given a String like dd/mm/yyyy it will parse the year out of it and
 	 * return the year
@@ -117,14 +120,14 @@ public class DateConversion
 			{
 				strYr += arr[i] ;
 				i-- ;
-			}		  
+			}
 			StringBuffer sb = new StringBuffer(strYr) ;
 			sb.reverse() ;
-			yr= Integer.parseInt(sb.toString()) ;	
+			yr= Integer.parseInt(sb.toString()) ;
 		}
 		//if ( logger.isDebugEnabled() )
-			//logger.debug("getYear returning year="+yr) ; 
+			//logger.debug("getYear returning year="+yr) ;
 		return yr ;
 	}
-	
+
 }

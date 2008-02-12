@@ -266,70 +266,39 @@ public class ParisIndicatorReport extends Action {
                     ex.printStackTrace(System.out);
                 }
 
-                List flDonorCol = filterDonors(svForm.getDonorsColl(), 0);
-
                 if (svForm.getIndicatorCode().equalsIgnoreCase("3")) {
-                    if (indc.getCalcFormulas() != null && indc.getCalcFormulas().size() > 0) {
-                        if (fl.getCalcFormula() != null) {
-                            ParisIndicator donor = (ParisIndicator) flDonorCol.get(0);
-                            ArrayList answ1 = donor.getAnswers();
-                            double ans1[] = (double[]) answ1.get(0);
-                            if (ans1 != null) {
-                                String formula = getFormulaText(fl, ans1[3]);
-                                svForm.setTargetValue(fl.getTargetValue());
-
-                                svForm.setCalcResult(String.valueOf(AmpMath.CalcExp(formula)));
-                            }
-                        }
+                    List flDonorCol = filterDonors(svForm.getDonorsColl(), 0);
+                    svForm.setCalcResult(clacTargetValue(fl,flDonorCol,true));
+                    if (fl!=null && fl.getCalcFormula() != null) {
+                        svForm.setTargetValue(fl.getTargetValue());
                     }
 
+                    svForm.setDonorsColl(flDonorCol);
                     return mapping.findForward("report1");
                 } else if (svForm.getIndicatorCode().equalsIgnoreCase("5a") || svForm.getIndicatorCode().equalsIgnoreCase("5b")) {
-
-                    if (fl.getCalcFormula() != null) {
-                        ParisIndicator donor = (ParisIndicator) flDonorCol.get(0);
-                        ArrayList answ1 = donor.getAnswers();
-                        double ans1[] = (double[]) answ1.get(0);
-                        if (ans1 != null) {
-                            String formula = getFormulaText(fl, ans1[7]);
-                            svForm.setTargetValue(fl.getTargetValue());
-
-                            svForm.setCalcResult(String.valueOf(AmpMath.CalcExp(formula)));
-
-                        }
+                    List flDonorCol = filterDonors(svForm.getDonorsColl(), 0);
+                    svForm.setCalcResult(clacTargetValue(fl,flDonorCol,true));
+                    if (fl!=null && fl.getCalcFormula() != null) {
+                        svForm.setTargetValue(fl.getTargetValue());
                     }
 
+                    svForm.setDonorsColl(flDonorCol);
                     return mapping.findForward("report1");
                 } else if (svForm.getIndicatorCode().equalsIgnoreCase("6")) {
-
-                    if (fl.getCalcFormula() != null) {
-                        ParisIndicator donor = (ParisIndicator) flDonorCol.get(0);
-                        ArrayList answ1 = donor.getAnswers();
-                        double ans1[] = (double[]) answ1.get(0);
-                        if (ans1 != null) {
-                            String formula = getFormulaText(fl, ans1[0]);
-                            svForm.setTargetValue(fl.getTargetValue());
-
-                            svForm.setCalcResult(String.valueOf(AmpMath.CalcExp(formula)));
-
-                        }
+                    List flDonorCol = filterDonors(svForm.getDonorsColl(), 0);
+                    svForm.setCalcResult(clacTargetValue(fl,flDonorCol,false));
+                    if (fl!=null && fl.getCalcFormula() != null) {
+                        svForm.setTargetValue(fl.getTargetValue());
                     }
 
                     svForm.setDonorsColl(flDonorCol);
                     return mapping.findForward("report2");
                 } else if (svForm.getIndicatorCode().equalsIgnoreCase("7")) {
 
-                    if (fl.getCalcFormula() != null) {
-                        ParisIndicator donor = (ParisIndicator) flDonorCol.get(0);
-                        ArrayList answ1 = donor.getAnswers();
-                        double ans1[] = (double[]) answ1.get(0);
-                        if (ans1 != null) {
-                            String formula = getFormulaText(fl, ans1[3]);
-                            svForm.setTargetValue(fl.getTargetValue());
-
-                            svForm.setCalcResult(String.valueOf(AmpMath.CalcExp(formula)));
-
-                        }
+                    List flDonorCol = filterDonors(svForm.getDonorsColl(), 0);
+                    svForm.setCalcResult(clacTargetValue(fl,flDonorCol,true));
+                    if (fl!=null && fl.getCalcFormula() != null) {
+                        svForm.setTargetValue(fl.getTargetValue());
                     }
 
                     svForm.setDonorsColl(flDonorCol);
@@ -344,6 +313,25 @@ public class ParisIndicatorReport extends Action {
             logger.debug("ActionForm is null.");
             return mapping.findForward("viewMyDesktop");
         }
+    }
+
+    private String clacTargetValue(AmpAhsurveyIndicatorCalcFormula fl, List donorCol, boolean lastColumn) {
+        if (donorCol!=null && fl != null && fl.getCalcFormula() != null) {
+            ParisIndicator donor = (ParisIndicator) donorCol.get(0);
+            ArrayList answ1 = donor.getAnswers();
+            double ans1[] = (double[]) answ1.get(0);
+            if (ans1 != null) {
+                String formula = null;
+                if(lastColumn){
+                    formula=getFormulaText(fl, ans1[ans1.length-1]);
+                }else{
+                    formula=getFormulaText(fl, ans1[0]);
+                }
+
+                return String.valueOf(AmpMath.CalcExp(formula));
+            }
+        }
+        return null;
     }
 
     private AmpAhsurveyIndicatorCalcFormula getFormula(Set set) {

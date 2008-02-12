@@ -266,8 +266,20 @@ public class ParisIndicatorReport extends Action {
                     ex.printStackTrace(System.out);
                 }
 
+                List flDonorCol=null;
+                if (svForm.getIndicatorCode().equalsIgnoreCase("3") ||
+                    svForm.getIndicatorCode().equalsIgnoreCase("4") ||
+                    svForm.getIndicatorCode().equalsIgnoreCase("5a") ||
+                    svForm.getIndicatorCode().equalsIgnoreCase("5b") ||
+                    svForm.getIndicatorCode().equalsIgnoreCase("9") ||
+                    svForm.getIndicatorCode().equalsIgnoreCase("10a")) {
+
+                    flDonorCol = filterDonors(svForm.getDonorsColl(), 1);
+                }else{
+                    flDonorCol = filterDonors(svForm.getDonorsColl(), 0);
+                }
+
                 if (svForm.getIndicatorCode().equalsIgnoreCase("3")) {
-                    List flDonorCol = filterDonors(svForm.getDonorsColl(), 0);
                     svForm.setCalcResult(clacTargetValue(fl,flDonorCol,true));
                     if (fl!=null && fl.getCalcFormula() != null) {
                         svForm.setTargetValue(fl.getTargetValue());
@@ -276,7 +288,6 @@ public class ParisIndicatorReport extends Action {
                     svForm.setDonorsColl(flDonorCol);
                     return mapping.findForward("report1");
                 } else if (svForm.getIndicatorCode().equalsIgnoreCase("5a") || svForm.getIndicatorCode().equalsIgnoreCase("5b")) {
-                    List flDonorCol = filterDonors(svForm.getDonorsColl(), 0);
                     svForm.setCalcResult(clacTargetValue(fl,flDonorCol,true));
                     if (fl!=null && fl.getCalcFormula() != null) {
                         svForm.setTargetValue(fl.getTargetValue());
@@ -285,7 +296,6 @@ public class ParisIndicatorReport extends Action {
                     svForm.setDonorsColl(flDonorCol);
                     return mapping.findForward("report1");
                 } else if (svForm.getIndicatorCode().equalsIgnoreCase("6")) {
-                    List flDonorCol = filterDonors(svForm.getDonorsColl(), 0);
                     svForm.setCalcResult(clacTargetValue(fl,flDonorCol,false));
                     if (fl!=null && fl.getCalcFormula() != null) {
                         svForm.setTargetValue(fl.getTargetValue());
@@ -294,8 +304,6 @@ public class ParisIndicatorReport extends Action {
                     svForm.setDonorsColl(flDonorCol);
                     return mapping.findForward("report2");
                 } else if (svForm.getIndicatorCode().equalsIgnoreCase("7")) {
-
-                    List flDonorCol = filterDonors(svForm.getDonorsColl(), 0);
                     svForm.setCalcResult(clacTargetValue(fl,flDonorCol,true));
                     if (fl!=null && fl.getCalcFormula() != null) {
                         svForm.setTargetValue(fl.getTargetValue());
@@ -304,7 +312,7 @@ public class ParisIndicatorReport extends Action {
                     svForm.setDonorsColl(flDonorCol);
                     return mapping.findForward("report2");
                 } else {
-                    svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(), 1));
+                    svForm.setDonorsColl(flDonorCol);
                     return mapping.findForward("report1");
                 }
             }

@@ -85,9 +85,9 @@ public class EditSurvey extends Action {
                     DbUtil.updateSurvey(svForm.getAhsurvey());
                     DbUtil.saveSurveyResponses(svForm.getAmpSurveyId(), svForm.getIndicators());
 
-					//svForm.getSurvey().clear();
-					//svForm.getIndicators().clear();
-					//svForm.setAmpSurveyId(null);
+					svForm.getSurvey().clear();
+					svForm.getIndicators().clear();
+					svForm.setAmpSurveyId(null);
 					//eaForm.setSurveyFlag(Boolean.FALSE);
 					//logger.debug("mapping.getAttribute() : " + mapping.getAttribute());
 					request.getSession().removeAttribute(mapping.getAttribute());

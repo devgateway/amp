@@ -121,12 +121,11 @@ function updateRates()
 
 function editExchangeRate(date,code) {
 	openNewWindow(420, 180);
-		<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do" />
+	<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do" />
   	document.aimCurrencyRateForm.action = "<%= addExchangeRate %>~doAction=showRates~updateCRateCode="+code+"~updateCRateDate="+date+"~reset=false";
-	document.aimCurrencyRateForm.target = popupPointer.name;
+  	document.aimCurrencyRateForm.target = popupPointer.name;
 	document.aimCurrencyRateForm.currUrl.value = "<%= addExchangeRate %>";
 	document.aimCurrencyRateForm.submit();
-
 }
 
 function checkall() {
@@ -310,7 +309,7 @@ function fnSubmit() {
                                           <c:set var="trnGoBtn">
                                             <digi:trn key="aim:goBtn"> Go </digi:trn>
                                           </c:set>
-                                          <html:submit value="${trnGoBtn}" styleClass="buton"/>
+                                          <html:submit onclick="javascrip:fnSubmit()" value="${trnGoBtn}"  styleClass="buton"/>
 										</td>
 									</tr>
 								</table>

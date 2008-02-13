@@ -130,7 +130,7 @@ public class CellColumn extends Column {
 				// more than one element. if it does, add the whole list to the
 				// dest column
 				// if it has only one, add just that element to the dest colmn
-				if (lc.getCell(0).getOwnerId().equals(element.getOwnerId()))
+				if (lc.getCell(0).getOwnerId()!=null && lc.getCell(0).getOwnerId().equals(element.getOwnerId()))
 					lc.addCell(element);
 				else {
 					if (lc.size() == 1)
@@ -195,7 +195,9 @@ public class CellColumn extends Column {
 		Iterator i=items.iterator();
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
-			ret.add(element.getOwnerId());
+			if(element.getOwnerId()!=null){
+				ret.add(element.getOwnerId());
+			}			
 		}
 		return ret;
 	}

@@ -156,7 +156,7 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 	 */
 	public Cell filter(Cell metaCell,Set ids) {
 		try {
-		if(ids.contains(ownerId)) return (Cell) this.clone(); else return null;
+		if(ownerId!=null && ids.contains(ownerId)) return (Cell) this.clone(); else return null;
 		} catch(CloneNotSupportedException e) {
 			e.printStackTrace();
 		}

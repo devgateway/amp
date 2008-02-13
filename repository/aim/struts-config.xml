@@ -17,6 +17,7 @@
     <form-bean name="aimFieldPermissionsForm" type="org.digijava.module.aim.form.FieldPermissionsForm" />
     <form-bean name="aimEUActivityForm" type="org.digijava.module.aim.form.EUActivityForm" />
     <form-bean name="aimIPAContractForm" type="org.digijava.module.aim.form.IPAContractForm" />
+     <form-bean name="aimViewContractingForm" type="org.digijava.module.aim.form.ViewContractingForm" />
     <form-bean name="aimVisibilityManagerForm" type="org.digijava.module.aim.form.VisibilityManagerForm" />
     <form-bean name="aimAuditLoggerManagerForm" type="org.digijava.module.aim.form.AuditLoggerManagerForm" />
     <form-bean name="aimDesktopForm" type="org.digijava.module.aim.form.DesktopForm" />
@@ -257,6 +258,7 @@
     <action forward="/showLayout.do?layout=layoutSurveyList" name="aimSurveyForm" path="/aim/viewSurveyList" />
     <action forward="/showLayout.do?layout=layoutSurvey" name="aimEditSurveyForm" path="/aim/viewSurvey" />
     <action forward="/showLayout.do?layout=layoutFinancingBreakdown" path="/aim/viewFinancingBreakdown" />
+    <action name="aimViewContractingForm" forward="/showLayout.do?layout=layoutViewIPAContracting" path="/aim/viewIPAContracting" />
     <action forward="/showLayout.do?layout=layoutProjectCostsBreakdown" path="/aim/viewProjectCostsBreakdown" />
     <action forward="/showLayout.do?layout=layoutRegionalFundingBreakdown" name="aimRegionalFundingForm" path="/aim/viewRegionalFundingBreakdown" />
     <action forward="/showLayout.do?layout=layoutRegionalFundingDetails" name="aimRegionalFundingForm" path="/aim/viewRegFundDetails" />
@@ -294,6 +296,7 @@
     <action name="aimMainProjectDetailsForm" path="/aim/mainProjectDetails" scope="session" type="org.digijava.module.aim.action.ViewMainProjectDetails" validate="false" />
     <action name="aimFinancingBreakdownForm" path="/aim/financingBreakdown" scope="request" type="org.digijava.module.aim.action.ViewFinancingBreakdown" validate="false" />
     <action path="/aim/projectCostsBreakdown" scope="request" type="org.digijava.module.aim.action.ProjectCostsBreakdown" validate="false" />
+    <action name="aimViewContractingForm" path="/aim/contractingBreakdown" scope="request" type="org.digijava.module.aim.action.ContractingBreakdown" validate="false" />
     <action name="aimActivityDashboardForm" path="/aim/activityDashboard" scope="request" type="org.digijava.module.aim.action.ViewActivityDashboard" validate="false" />
     <action name="aimRegionalFundingForm" path="/aim/getRegionalFundings" scope="session" type="org.digijava.module.aim.action.GetRegionalFundings" validate="false" />
     <action input="/aim/viewFinancingBreakdownFilter" name="aimFinancingBreakdownForm" path="/aim/financingBreakdownFilter" scope="request" type="org.digijava.module.aim.action.FinancingBreakdownFilter" validate="true" />
@@ -1381,6 +1384,11 @@
 
     <action name="aimEditActivityForm" path="/aim/addDisbOrderToDisb" scope="session" type="org.digijava.module.aim.action.AddDisbOrderToDisb">
       <forward name="forward" path="/showLayout.do?layout=aim_addDisbOrderToDisbPopupLayout" />
+       <forward name="save" path="/showLayout.do?layout=aim_fundingPopupLayout"/>
+    </action>
+    
+     <action name="aimEditActivityForm" path="/aim/addDisbOrderToContract" scope="session" type="org.digijava.module.aim.action.AddDisbOrderToContract">
+      <forward name="forward" path="/showLayout.do?layout=aim_addDisbOrderToContractPopupLayout" />
        <forward name="save" path="/showLayout.do?layout=aim_fundingPopupLayout"/>
     </action>
 

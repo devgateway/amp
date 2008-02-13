@@ -1,219 +1,173 @@
-<%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
-<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
-<%@ taglib uri="/taglib/struts-html" prefix="html" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ page pageEncoding="UTF-8"%>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
+<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ page import="org.digijava.module.aim.form.FinancingBreakdownForm"%>
+<%@ taglib uri="/taglib/fmt" prefix="fmt"%>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronousSendNotNull.js"/>"></script>
+<digi:instance property="aimViewContractingForm"/>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery-latest.pack.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery.disable.text.select.js"/>"></script>
+<script type="text/javascript">
 
-<script language="JavaScript" type="text/javascript">
-	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
+function fnEditProject(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+   document.location.href="<%=addUrl%>?pageId=1&action=edit&step=13&surveyFlag=true&activityId=" + id;
+}
+
+function preview(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+   document.location.href = "<%=addUrl%>~pageId=2~activityId=" + id;
+}
+
+
+function previewLogframe(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+	var url ="<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
+	openURLinWindow(url,650,500);
+}
+
+function projectFiche(id)
+{
+	<digi:context name="ficheUrl" property="context/module/moduleinstance/projectFicheExport.do" />
+	window.open ( "<%=ficheUrl%>~ampActivityId=" + id,"<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>");
+}
+
 </script>
 
 
-<script language="JavaScript">
-    <!--
-    
-    function mapCallBack(status, statusText, responseText, responseXML){
-         window.location.reload();
-         
-     
-    }
-
-    function callUrl(indexId){
-    var async=new Asynchronous();
-    async.complete=mapCallBack;
-    async.call("/aim/editIPAContract.do?deleteEU&indexId="+indexId);
-    
-    
-    }
-    
-    
-    
-    function addIPAContract() {
-        openNewWindow(900, 600);
-        <digi:context name="editIPAContract" property="context/module/moduleinstance/editIPAContract.do?new" />
-        document.aimEditActivityForm.action = "<%= editIPAContract %>";
-        document.aimEditActivityForm.target = popupPointer.name;
-        document.aimEditActivityForm.submit();
-    }
-    
-    function editContract(indexId) {
-        openNewWindow(900, 600);
-        <digi:context name="editIPAContract" property="context/module/moduleinstance/editIPAContract.do?editEU&indexId=" />
-        document.aimEditActivityForm.action = "<%=editIPAContract%>"+indexId;
-        document.aimEditActivityForm.target = popupPointer.name;
-        document.aimEditActivityForm.submit();
-    }
-    
-    function deleteContract(indexId) {
-        
-        <digi:context name="editIPAContract" property="context/module/moduleinstance/deleteIPAContract.do?indexId=" />
-        document.aimEditActivityForm.action = "<%=editIPAContract%>"+indexId;
-        document.aimEditActivityForm.target = "_self";
-        document.aimEditActivityForm.submit();
-    }
-    
-    
-  
-    function validateForm() {
-        return true;
-    }
-    -->
-    </script>
+<html:errors />
 
 
-<jsp:include page="scripts/newCalendar.jsp" flush="true" />
-
-<digi:instance property="aimEditActivityForm" />
-
-<digi:form action="/addActivity.do" method="post">
-
-<html:hidden property="step"/>
-
-<html:hidden property="editAct"/>
+<digi:context name="digiContext" property="context" />
 
 
-<table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left" border=0>
-<tr><td width="100%" vAlign="top" align="left">
-<!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
-<!-- End of Logo -->
-</td></tr>
-<tr><td width="100%" vAlign="top" align="left">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
-	<tr>
-		<td class=r-dotted-lg width="10">&nbsp;</td>
-		<td align=left vAlign=top class=r-dotted-lg>
-			<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
-				<tr><td>
-					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
-						<tr>
-							<td><jsp:include page="t.jsp"/>
-								<span class=crumb>
-								<c:if test="${aimEditActivityForm.pageId == 0}">
-									<c:set var="translation">
-										<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
-									</c:set>
-									<digi:link href="/admin.do" styleClass="comment" title="${translation}">
-										<digi:trn key="aim:AmpAdminHome">
-											Admin Home
-										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;
-								</c:if>
-								<c:if test="${aimEditActivityForm.pageId == 1}">
-									<c:set var="translation">
-										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop </digi:trn>
-									</c:set>
+<TABLE cellSpacing="0" cellPadding="0" align="center" vAlign="top"
+	border="0" width="100%">
+	<TR>
+		<TD vAlign="top" align="center"><!-- contents -->
+		<TABLE width="99%" cellSpacing="0" cellPadding="0" vAlign="top"
+			align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
+			<TR>
+				<TD bgcolor="#f4f4f4">
+				<TABLE width="100%" cellSpacing="3" cellPadding="3" vAlign="top"
+					align="center" bgcolor="#f4f4f4">
+					<TR bgColor="#f4f4f2">
+						<TD align="left">
+						<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left"
+							vAlign="top">
+							<TR>
+								<TD align="left"><SPAN class="crumb"> <jsp:useBean
+									id="urlContrcatingBreakdown" type="java.util.Map"
+									class="java.util.HashMap" /> <c:set
+									target="${urlContrcatingBreakdown}" property="ampActivityId">
+									<bean:write name="aimMainProjectDetailsForm" property="ampActivityId" />
+								</c:set> <c:set target="${urlContrcatingBreakdown}"
+									property="tabIndex" value="9" /> <c:set var="translation">
+									<digi:trn key="aim:clickToViewContracting">Click here to view Contracting</digi:trn>
+								</c:set> <digi:link href="/viewProjectCostsBreakdown.do"
+									name="urlContrcatingBreakdown" styleClass="comment"
+									title="${translation}">
+									<digi:trn key="aim:contracting">Contracting</digi:trn>
+                                                                 </digi:link>&nbsp;&gt;&nbsp;<digi:trn key="aim:actOverview">Overview</digi:trn><logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&nbsp;&gt;&nbsp;<digi:trn key="aim:costingPerspective">Costing Perspective</digi:trn></logic:equal></SPAN>
+								</TD>
+								<TD align="right">
+
+											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+												<feature:display name="Preview Activity" module="Previews">
+													<field:display feature="Preview Activity" name="Preview Button">
+														<input type="button" value="Preview" class="dr-menu" onclick='preview(${aimViewContractingForm.ampActivityId})'>
+													</field:display>
+												</feature:display>
+											</module:display>
+											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+												<feature:display name="Edit Activity" module="Previews">
+													<field:display feature="Edit Activity" name="Edit Activity Button">
+														<input type="button" value="Edit" class="dr-menu" onclick='fnEditProject(${aimViewContractingForm.ampActivityId})'>													</field:display>
+												</feature:display>
+											</module:display>
+											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+												<feature:display name="Logframe" module="Previews">
+													<field:display name="Logframe Preview Button" feature="Logframe" >
+															<input type="button" value="Preview Logframe" class="dr-menu" onclick="previewLogframe(${aimViewContractingForm.ampActivityId})">
+													</field:display>
+												</feature:display>
+											</module:display>
+
+											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
+												<feature:display name="Project Fiche" module="Previews">
+													<field:display name="Project Fiche Button" feature="Project Fiche" >
+														<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu' onclick='projectFiche(${aimViewContractingForm.ampActivityId})'>
+													</field:display>
+												</feature:display>
+											</module:display>
+
+								</TD>
 
 
-
-
-
-<c:set var="message">
-<digi:trn key="aim:documentNotSaved">WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.</digi:trn>
-</c:set>
-<c:set var="quote">'</c:set>
-<c:set var="escapedQuote">\'</c:set>
-<c:set var="msg">
-${fn:replace(message,quote,escapedQuote)}
-</c:set>
-
-									<digi:link href="/viewMyDesktop.do" styleClass="comment"  onclick="return quitRnot1('${msg}')" title="${translation}">
-
-										<digi:trn key="aim:portfolio">Portfolio</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;
-								</c:if>
-								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn key="aim:editActivityStep13">Edit Activity - Step 13</digi:trn>
-								</c:if>
-								<c:if test="${aimEditActivityForm.editAct == false}">
-									<digi:trn key="aim:addActivityStep13">Add Activity - Step 13</digi:trn>
-								</c:if>
-								</span>
-							</td>
-						</tr>
-					</table>
-				</td></tr>
-				<tr><td>
-					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
-						<tr>
-							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
-								<c:if test="${aimEditActivityForm.editAct == false}">
-									<digi:trn key="aim:addNewActivity">Add New Activity</digi:trn>
-								</c:if>
-								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>
-:
-										<bean:write name="aimEditActivityForm" property="title"/>
-								</c:if>
-							</td>
-						</tr>
-					</table>
-				</td></tr>
-				<tr> <td>
-					<digi:errors/>
-				</td></tr>
-				<tr><td>
-					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
-						<tr><td width="75%" vAlign="top">
-						<table cellPadding=0 cellSpacing=0 width="100%" border=0>
-							<tr>
-								<td width="100%">
-									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
-										<tr>
-											<td width="13" height="20" background="module/aim/images/left-side.gif">
-											</td>
-											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												 <digi:trn key="aim:step13">IPA Contracting</digi:trn>
-											</td>
-											<td width="13" height="20" background="module/aim/images/right-side.gif">
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-							<tr><td bgcolor="#f4f4f2" width="100%">
-							
-							
-								<!-- contents -->
-
-								 <logic:notEmpty name="aimEditActivityForm" property="contracts">
+							</TR>
+						</TABLE>
+						</TD>
+					</TR>
+					<TR>
+						<TD width="750" bgcolor="#F4F4F2" height="17">
+						<TABLE border="0" cellpadding="0" cellspacing="0"
+							bgcolor="#F4F4F2" height="17">
+							<TR bgcolor="#F4F4F2" height="17">
+								<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp; <digi:trn
+									key="aim:contracting">Contracting</digi:trn>
+								</TD>
+								<TD background="module/aim/images/corner-r.gif" height="17"
+									width="17"></TD>
+							</TR>
+						</TABLE>
+						</TD>
+					</TR>
+					<TR>
+						<TD bgcolor="#f4f4f4">
+						<TABLE width="100%" cellSpacing="3" cellPadding="3" vAlign="top"
+							align="center" bgcolor="#f4f4f4">
+							<TR bgColor="#f4f4f2">
+								<td>
+                                                                                         
+                                                                         	<!-- IPA Contracting -->
+                                                                                
+									
+										<!-- contents -->
+								 <logic:notEmpty name="aimViewContractingForm" property="contracts">
                                                                                 <table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
-                                                                                <c:forEach items="${aimEditActivityForm.contracts}" var="contract" varStatus="idx">
+                                                                                <c:forEach items="${aimViewContractingForm.contracts}" var="contract" varStatus="idx">
                                                                                 
                                                                                 <tr><td bgColor=#f4f4f2 align="center" vAlign="top">
                                                                                 
                                                                                     <table width="100%" border="0" cellspacing="2" cellpadding="2" align="left" class="box-border-nopadding">
-                                                                                        <field:display name="Contract Name" feature="Contracting">
+                                                                                        
+                                                                                      <field:display name="Contract Name" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:name">Contract name:</digi:trn></b>
                                                                                             </td>
                                                                                             <td>
-                                                                                               
-                                                                                                ${contract.contractName}
                                                                                                 
+                                                                                                ${contract.contractName}
+                                                                                             
                                                                                                
                                                                                             </td>
                                                                                             
                                                                                         </tr>
-                                                                                    </field:display>
-                                                                                        <field:display name="Description" feature="Contracting">
+                                                                                        </field:display>
+                                                                                            
+                                                                                        <field:display name="Description" feature="Contracting Tab">
+                                                                                        
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:description">Description:</digi:trn></b>
@@ -222,8 +176,8 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                                ${contract.description}
                                                                                             </td>
                                                                                         </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Activity Category" feature="Contracting">
+                                                                                    </field:display>
+                                                                                              <field:display name="Activity Category" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:actCat">Activity Category:</digi:trn></b>
@@ -235,9 +189,9 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                                 
                                                                                             </td>
                                                                                         </tr>
-                                                                                         </field:display>
-                                                                                         <field:display name="Start of Tendering" feature="Contracting">
-                                                                                        
+                                                                                    </field:display>
+                                                                                         
+                                                                                              <field:display name="Start of Tendering" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:startOfTendering">Start of Tendering:</digi:trn></b>
@@ -246,10 +200,9 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                                 ${contract.formattedStartOfTendering}
                                                                                            </td>
                                                                                             
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Signature of Contract" feature="Contracting">
-                                                                                        
+                                                                                        </tr>	
+                                                                                    </field:display>
+                                                                                              <field:display name="Signature of Contract" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:signatureOfContract">Signature of Contract:</digi:trn></b>
@@ -259,8 +212,8 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             </td>
                                                                                             
                                                                                         </tr>	
-                                                                                         </field:display>
-                                                                                        <field:display name="Contract Name" feature="Contracting">
+                                                                                    </field:display>
+                                                                                              <field:display name="Contract Organization" feature="Contracting Tab">
                                                                                          <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization:</digi:trn></b>
@@ -273,9 +226,9 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             </td>
                                                                                             
                                                                                         </tr>	
-                                                                                         </field:display>
+                                                                                    </field:display>
                                                                                         
-                                                                                        <field:display name="Contract Completion" feature="Contracting">
+                                                                                              <field:display name="Contract Completion" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:contractCompletion">Contract Completion:</digi:trn></b>
@@ -284,9 +237,9 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                                  ${contract.formattedContractCompletion}
                                                                                             </td>
                                                                                             
-                                                                                        </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Status" feature="Contracting">
+                                                                                        </tr>	
+                                                                                    </field:display>
+                                                                                              <field:display name="Status" feature="Contracting Tab">
                                                                                          <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:status">Status:</digi:trn></b>
@@ -300,59 +253,65 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                                 
                                                                                             </td>
                                                                                         </tr>
-                                                                                         </field:display>
+                                                                                    </field:display>
+                                                                                     <field:display name="Total EC Contribution" feature="Contracting Tab">
                                                                                         
-                                                                                        <field:display name="Total EC Contribution" feature="Contracting">
+                                                                                        
                                                                                         <tr>
                                                                                             <td align="left" colspan="2">
                                                                                                 <b><digi:trn key="aim:IPA:popup:totalECContribution">Total EC Contribution:</digi:trn></b>
                                                                                             </td>
                                                                                         </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="IB" feature="Contracting">
+                                                                                    </field:display>
+                                                                                       <field:display name="IB" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
-                                                                                                <b><digi:trn key="aim:ipa:popup:ib">IB</digi:trn>:</b>
+                                                                                                <b><digi:trn key="aim:IPA:popup:IB">IB</digi:trn>:</b>
                                                                                             </td>
                                                                                             <td>
                                                                                                  ${contract.totalECContribIBAmount}
                                                                                                 ${contract.totalECContribIBCurrency} 
                                                                                             </td>
                                                                                         </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="INV" feature="Contracting">
+                                                                                    </field:display>
+                                                                                          <field:display name="INV" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
-                                                                                                <b><digi:trn key="aim:ipa:popup:inv">INV</digi:trn>:</b>
+                                                                                                <b><digi:trn key="aim:IPA:popup:INV">INV:</digi:trn></b>
                                                                                             </td>
                                                                                             <td>
                                                                                                 ${contract.totalECContribINVAmount}
                                                                                                ${contract.totalECContribINVCurrency}
                                                                                             </td>
-                                                                                        </tr>   
-                                                                                         </field:display>
-                                                                                        <field:display name="Total National Contribution" feature="Contracting">
+                                                                                        </tr>
+                                                                                    </field:display>
+                                                                                        
+                                                                                        
+                                                                                       <field:display name="Total National Contribution" feature="Contracting Tab">
+                                                                                        
+                                                                                        
                                                                                         <tr>
                                                                                             <td align="left" colspan="2">
                                                                                                 <b><digi:trn key="aim:IPA:popup:totalNationalContribution">Total National Contribution:</digi:trn></b>
                                                                                             </td>
                                                                                         </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Central" feature="Contracting">
+                                                                                    </field:display>
+                                                                                        
+                                                                                    <field:display name="Central" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
-                                                                                                <b><digi:trn key="aim:ipa:popup:central">Central</digi:trn>:</b>
+                                                                                                <b><digi:trn key="aim:IPA:popup:Central">Central</digi:trn>:</b>
                                                                                             </td>
                                                                                             <td>
                                                                                                 ${contract.totalNationalContribCentralAmount}
                                                                                                 ${contract.totalNationalContribCentralCurrency} 
                                                                                             </td>
                                                                                         </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Regional" feature="Contracting">
+                                                                                    </field:display>
+                                                                                              <field:display name="Regional" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
-                                                                                                <b><digi:trn key="aim:ipa:popup:regional">Regional</digi:trn>:</b>
+                                                                                                <b><digi:trn key="aim:IPA:popup:Regional">Regional</digi:trn>:</b>
                                                                                             </td>
                                                                                             <td>
                                                                                                 ${contract.totalNationalContribRegionalAmount} 
@@ -360,42 +319,49 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                    
                                                                                             </td>
                                                                                         </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="IFIs" feature="Contracting">
+                                                                                    </field:display>
+                                                                                              <field:display name="IFIs" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
-                                                                                                <b><digi:trn key="aim:ipa:popup:ifis">IFIs</digi:trn>:</b>
+                                                                                                <b><digi:trn key="aim:IPA:popup:IFIs">IFIs</digi:trn>:</b>
                                                                                             </td>
                                                                                             <td>
                                                                                                 ${contract.totalNationalContribIFIAmount}
                                                                                                ${contract.totalNationalContribIFICurrency}
                                                                                             </td>
                                                                                         </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Total Private Contribution" feature="Contracting">
+                                                                                    </field:display>
+                                                                                        
+                                                                                              <field:display name="Total Private Contribution" feature="Contracting Tab">
+                                                                                        
                                                                                         <tr>
                                                                                             <td align="left" colspan="2">
                                                                                                 <b><digi:trn key="aim:IPA:popup:totalPrivateContribution">Total Private Contribution:</digi:trn></b>
                                                                                             </td>
                                                                                         </tr>
-                                                                                       
+                                                                                   
+                                                                                
                                                                                         <tr>
                                                                                             <td align="left">
-                                                                                                <b><digi:trn key="aim:ipa:popup:ib">IB</digi:trn>:</b>
+                                                                                                <b><digi:trn key="aim:IPA:popup:IB">IB:</digi:trn></b>
                                                                                             </td>
                                                                                             <td>
                                                                                                 ${contract.totalPrivateContribAmount}
                                                                                                 ${contract.totalPrivateContribCurrency}
                                                                                             </td>
                                                                                         </tr>
-                                                                                         </field:display>
-                                                                                        <field:display name="Disbursements" feature="Contracting">
+                                                                                    </field:display>
+                                                                                        
+                                                                                        
+                                                                                        
+                                                                                              <field:display name="Disbursements" feature="Contracting Tab">
                                                                                         <tr>
                                                                                     
                                                                                             <td colspan="2">
                                                                                                 <b><digi:trn key="aim:IPA:popup:disbursements">Disbursements:</digi:trn></b>
                                                                                             </td>
                                                                                         </tr>
+                                                                         
                                                                                         <tr>
                                                                                             <td>&nbsp;
                                                                                             </td>
@@ -430,58 +396,41 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                                             </tr>
                                                                                                         </c:forEach>
                                                                                                         </table>
+                                                                                                        
                                                                                                     </logic:notEmpty>						
                                                                                                 		
                                                                                             </td>		
                                                                                         </tr>
-                                                                                         </field:display>
-                                                                                         <tr><td>  <field:display name="Edit Contract" feature="Contracting"><a style="cursor:pointer;color:#006699; text-decoration: underline" title="Click to edit the contract" onClick='editContract(${idx.count})'><b><digi:trn key="aim:editThisItem">Edit this item</b></digi:trn></a> </field:display>
-                                                                                        <field:display name="Delete Contract" feature="Contracting">
-                                                                               &nbsp;&nbsp;&nbsp; <a style="cursor:pointer;color:#006699;text-decoration: underline"
-                                                                                                title="Click to remove the contract"
-                                                                                                onClick='callUrl(${idx.count})'><b><digi:trn key="aim:deleteThisItem">Delete this item</digi:trn></b></a></field:display>
-                                                                                       </td></tr>
+                                                                                    </field:display>
                                                                                         
                                                                                     </table>
                                                                                     
+                                                                                    
                                                                              
                                                                                    </td></tr>
-                                                                                    
+                                                                           
                                                                                   
                                                                                 </c:forEach>
-                                                                               
                                                                                 </table>
                                                                                 
                                                                             </logic:notEmpty>
 								<!-- end contents -->
-							
-							
-							</td></tr>
-                                                         <tr><td>
-                                                             &nbsp;
-                                                         </td></tr>
-                                                        
-                                                         <tr><td>
-                                                              <field:display name="Add IPA Contract" feature="Contracting">
-                                                         		<c:set var="trn"> <digi:trn key="aim:addIPAContract">Add IPA Contract</digi:trn></c:set>
-                                                                 <input type="button" value="${trn}" class="buton" onclick="addIPAContract()"/>
-                                                             </field:display>
-                                                         </td></tr>
-						</table>
-						</td>
-						<td width="25%" vAlign="top" align="right">
-						<!-- edit activity form menu -->
-							<jsp:include page="editActivityMenu.jsp" flush="true" />
-						<!-- end of activity form menu -->
-						</td></tr>
-					</table>
-				</td></tr>
-				<tr><td>&nbsp;</td></tr>
-			</table>
-		</td>
-		<td width="10">&nbsp;</td>
-	</tr>
-</table>
-</td></tr>
-</table>
-</digi:form>
+                                                                 </td>
+							</TR>
+						</TABLE>
+						</TD>
+					</TR>
+				</TABLE>
+				</TD>
+			</TR>
+			<TR>
+				<TD>&nbsp;</TD>
+			</TR>
+		</TABLE>
+
+		</TD>
+	</TR>
+</TABLE>
+
+
+

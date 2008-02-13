@@ -2,6 +2,7 @@ package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
+import org.digijava.module.aim.dbentity.IPAContract;
 /**
  * @author jose
  *
@@ -29,6 +30,15 @@ public class FundingDetail implements Serializable
 	private Long ampComponentFundingId;
         private Long fundDetId;
         private String disbOrderId;
+        private IPAContract contract;
+
+        public IPAContract getContract() {
+            return contract;
+        }
+
+        public void setContract(IPAContract contract) {
+            this.contract = contract;
+        }
 
         /*
 	private Long regionId;

@@ -821,7 +821,13 @@ ${fn:replace(message,quote,escapedQuote)}
 		                                                                                      <bean:write name="fundingDetail" property="transactionDate"/>
 	                                                                                    </field:display>
                                                                                     </td>
-                                                                                      <td>&nbsp;</td>
+                                                                                      <td>
+                                                                                          <field:display name="Contract of Disbursement Order" feature="Disbursement Orders">
+                                                                                              <c:if test="${not empty fundingDetail.contract}">
+		                                                                                     ${fundingDetail.contract.contractName}
+                                                                                                   </c:if>
+	                                                                                    </field:display>
+                                                                                      </td>
 
                                                                                       </tr>
 

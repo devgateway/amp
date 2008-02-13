@@ -9,7 +9,6 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-
 <logic:present name="close">
 <script type="text/javascript">
 	window.opener.location.href = window.opener.location.href;
@@ -17,21 +16,33 @@
 </script>	
 </logic:present>
 
+
+
+
+
 <digi:instance property="aimEditActivityForm" />
-<digi:form action="/addDisbOrderToDisb.do" method="post">
+<digi:form action="/addDisbOrderToContract.do" method="post">
 <table width="100%" cellpadding=1 cellspacing=3 bgcolor="#ffffff">
 <tr>
-<td colspan="2" width="100%" bgcolor="#006699" class="textalb" height="20" align="center">Select Disbursement Order</td>
+<td colspan="2" width="100%" bgcolor="#006699" class="textalb" height="20" align="center"><digi:trn key="aim:selectContract">Select Contract:&nbsp;</digi:trn></td>
 </tr>
 <tr />
 <tr>
-<td width="50%" align="right"><digi:trn key="aim:disbursementOrderId">Disbursement Order Id:&nbsp;</digi:trn></td>
+<c:if test="${empty aimEditActivityForm.contracts}">
+<td align="center" colspan="2">
+    <digi:trn key="aim:noContract">There are not contracts for Activity to select</digi:trn>
+</td>
+</c:if>
+<c:if test="${not empty aimEditActivityForm.contracts}">
+<td width="50%" align="right"><digi:trn key="aim:selectContract">Select Contract:&nbsp;</digi:trn></td>
+
+
 <td align="left">
-  <html:select name="aimEditActivityForm" property="disbOrderId" styleClass="inp-text">
-  <c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}">
-  <c:if test="${fundingDetail.transactionType==4}">
-    <html:option value="${fundingDetail.disbOrderId}">${fundingDetail.disbOrderId}</html:option>
-   </c:if>
+  <html:select name="aimEditActivityForm" property="selContractId" styleClass="inp-text">
+  <c:forEach var="contract" items="${aimEditActivityForm.contracts}" varStatus="conId">
+  
+    <html:option value="${conId.count}">${contract.contractName}</html:option>
+  
   </c:forEach>
   </html:select></td>
 </tr>
@@ -41,6 +52,7 @@
 
 <html:submit property="event" style="inp-text" onclick="javascript: window.close(); return false;"><digi:trn key="aim:cancel">Cancel</digi:trn></html:submit>
 </td>
+</c:if>
 </tr>
 
 </table>

@@ -19,7 +19,7 @@ function previewClicked() {
 	<digi:context name="preview" property="context/module/moduleinstance/previewActivity.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= preview %>";
 	document.aimEditActivityForm.target = "_self";
-	document.aimEdiatActivityForm.submit();
+	document.aimEditActivityForm.submit();
 	}
 }
 
@@ -307,7 +307,7 @@ bgcolor="#006699">
 	</tr>
 
 
-	<feature:display name="Program" module="Program">
+	<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 2}">
 		<td nowrap="nowrap">
@@ -341,7 +341,7 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-	</feature:display>
+	</module:display>
 
 	<feature:display name="Funding Organizations"  module="Funding">
 	<tr>
@@ -595,7 +595,8 @@ bgcolor="#006699">
         </td>
       </tr>
     </c:if>
-    <tr>
+    <module:display name="M & E" parentModule="MONITORING AND EVALUATING">
+	<tr>
 		<c:if test="${aimEditActivityForm.step != 10}">
 		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
@@ -608,6 +609,7 @@ bgcolor="#006699">
 			</a>
 		</td>
 		</c:if>
+		
 		<c:if test="${aimEditActivityForm.step == 10}">
 		<td nowrap="nowrap">
 			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
@@ -629,6 +631,7 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
+	</module:display>
 
 	<!-- EU Costs -->
 	<feature:display name="Costing" module="Activity Costing">
@@ -700,9 +703,9 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	</feature:display>
-         <!-- IPA Contracting -->
-	<module:display name="IPA Contracting">
-	<feature:display name="IPA Contracting" module="IPA Contracting">
+         
+
+	<feature:display name="Contracting" module="Contracting">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 13}">
 		<td nowrap="nowrap">
@@ -735,7 +738,7 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	</feature:display>
-	</module:display>
+
 
 
 

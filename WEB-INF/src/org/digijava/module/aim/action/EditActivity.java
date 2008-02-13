@@ -1060,7 +1060,7 @@ if (tm != null && tm.getTeamType()
                                                 fundDet.getTransactionAmount()
                                                 .doubleValue(), frmExRt,
                                                 toExRt);
-
+                                        fundingDetail.setContract(fundDet.getContract());
                                             eaForm.setCurrCode(toCurrCode);
                                             if (fundDet.getTransactionType().intValue() ==
                                                 Constants.COMMITMENT) {

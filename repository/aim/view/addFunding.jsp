@@ -79,13 +79,21 @@
 	}
 
         function addDisbOrderToDisb(indexId) {
-          openNewWindow(400, 100);
+          openNewWindow(400, 100,"addDisbOrderToDisb");
           document.aimEditActivityForm.action= "/addDisbOrderToDisb.do";
           document.aimEditActivityForm.transIndexId.value = indexId;
           document.aimEditActivityForm.target =  popupPointer.name;
           document.aimEditActivityForm.submit();
 
 	}
+        function   addDisbOrderToContract (indexId) {
+          openNewWindowWithName(400, 100,"addDisbOrderToContract");
+          document.aimEditActivityForm.action= "/addDisbOrderToContract.do";
+          document.aimEditActivityForm.transIndexId.value = indexId;
+          document.aimEditActivityForm.target =  popupPointer.name;
+          document.aimEditActivityForm.submit();
+            
+        }
 
 
 	function addMTEFProjection() {
@@ -171,7 +179,7 @@
 
 <%! long t = System.currentTimeMillis(); %>
 
-<body onLoad="load()">
+<body onload="load()">
 
 <c:set var="formatTip">
 	<digi:trn key="aim:decimalforma">Format has to be: </digi:trn> <%=FormatHelper.formatNumber(FormatHelper.parseDouble("100000"+FormatHelper.getDecimalSymbol()+"150"))%>
@@ -308,7 +316,7 @@
 
 			<table width="100%" cellpadding=0 cellspacing=1 vAlign="top" align="left" bgcolor="#006699">
 			<tr><td>
-	
+
 			<table width="100%" cellpadding=1 cellspacing=0 bgcolor="#ffffff">
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center" colspan="4">
@@ -714,8 +722,14 @@
 								</td>
                                                                 <td align="center" valign="middle">&nbsp;
 
-									
+									<b><font color="white"><digi:trn key="aim:DisbursementOrderContractId">Contract ID</digi:trn></font></b>
 								</td>
+
+                                                                <td align="center" valign="middle">
+
+									&nbsp;
+								</td>
+                                                                 
 
 							</tr>
 							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
@@ -783,8 +797,23 @@
 												<html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
                                                                                                   </field:display>
 											</td>
+                                                                                            <td>
+                                                                                        <field:display name="Disbursement Order Contract ID" feature="Disbursement Orders">
+                                                                                              <c:if test="${empty fundingDetail.contract}">
+                                                                                            
+												<input type="text" value="" readonly="true"/>
+                                                                                             </c:if>
+                                                                                            <c:if test="${not empty fundingDetail.contract}">
+                                                                                            
+												<input type="text" value="${fundingDetail.contract.contractName}" readonly="true"/>
+                                                                                             </c:if>
+                                                                                            </field:display>
+											</td>
 
+                                                                                        <td>
+                                                                                        <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
 
+											</td>
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,4)">
 												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
@@ -942,16 +971,14 @@
 													</c:forEach>
 												</html:select>
 											</td>
-
-											<!-- 
+											 
                                             <td>
-                                            <html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
+    	                                        <html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
                                             </td>
                                             <td>
-                                            <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
-
+	                                            <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
 											</td>
-											 -->
+											       
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
 												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
@@ -1025,16 +1052,15 @@
 													</c:forEach>
 												</html:select>
 											</td>
-
-										<!-- 
-			                               <td>
-			                              <html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
-			                              </td>
-			                               <td>
-			                              <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
-			
+        	
+											 
+                                            <td>
+    	                                        <html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
+                                            </td>
+                                            <td>
+	                                            <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
 											</td>
-										 -->
+											       
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
 												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
@@ -1316,13 +1342,13 @@
 						<table cellPadding=3>
 							<tr>
 								<td>
-									<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>" class="inp-text" onClick="return addFunding()">
+									<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>" class="inp-text" onclick="return addFunding()">
 								</td>
 								<td>
 									<input type="reset" value="<digi:trn key='btn:reset'>Reset</digi:trn>" class="inp-text">
 								</td>
 								<td>
-									<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="inp-text" onClick="closeWindow()">
+									<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="inp-text" onclick="closeWindow()">
 								</td>
 							</tr>
 						</table>

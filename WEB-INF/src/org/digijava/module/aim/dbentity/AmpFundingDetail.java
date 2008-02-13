@@ -27,6 +27,15 @@ public class AmpFundingDetail implements Serializable
 	private AmpPerspective perspectiveId;
 	private String expCategory;
         private String disbOrderId;
+        private IPAContract contract;
+
+        public IPAContract getContract() {
+            return contract;
+        }
+
+        public void setContract(IPAContract contract) {
+            this.contract = contract;
+        }
 
         /**
 		 * @return

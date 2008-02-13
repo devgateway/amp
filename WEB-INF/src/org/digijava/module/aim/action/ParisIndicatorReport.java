@@ -372,7 +372,7 @@ public class ParisIndicatorReport extends Action {
             for (Iterator fdIter = filteredDonorsCol.iterator(); fdIter.hasNext(); ) {
                 ParisIndicator fDonor = (ParisIndicator) fdIter.next();
 
-                if (fDonor.getDonor().equals(donor.getDonor())) {
+                if (fDonor.getDonor().equalsIgnoreCase(donor.getDonor())) {
                     flag = false;
                     break;
                 }
@@ -388,7 +388,7 @@ public class ParisIndicatorReport extends Action {
 
             for (Iterator fdIter = donorsLst.iterator(); fdIter.hasNext(); ) {
                 ParisIndicator fDonor = (ParisIndicator) fdIter.next();
-                if (fDonor.getDonor().equals(donor.getDonor())) {
+                if (fDonor.getDonor().equalsIgnoreCase(donor.getDonor())) {
                     ArrayList answ1 = fDonor.getAnswers();
                     ArrayList answ2 = donor.getAnswers();
 

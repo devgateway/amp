@@ -75,7 +75,7 @@ public class TotalAmountColumn extends AmountCellColumn {
         	byOwner.merge(byOwner,ac);
         else {
        	 AmountCell newcell=(AmountCell) ac.newInstance();
-       	 newcell.merge(newcell,ac);
+       	 newcell.merge(ac,newcell);
        	 super.addCell(newcell);
         }	
         

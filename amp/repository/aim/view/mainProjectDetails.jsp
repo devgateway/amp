@@ -297,6 +297,24 @@
 								</LI>
 							</logic:notEqual>
 						</feature:display>
+                                                 <feature:display name="Contracting Tab" module="Contracting"></feature:display>
+						<feature:display name="Contracting Tab" module="Contracting">
+							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="9">
+							   <LI class="selected">
+									:: <digi:trn key="aim:projectContracting"> Contracting </digi:trn>								
+								</LI>
+								</logic:equal>
+								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="9">
+									
+										<c:set target="${urlTabs}" property="tabIndex" value="9"/>
+										<LI>
+										<div id="gen" title='<digi:trn key="aim:clickToViewContracting">Click here to view Contracting</digi:trn>'>
+				              		<digi:link href="/viewIPAContracting.do" name="urlTabs">
+											:: <digi:trn key="aim:projectContracting">Contracting</digi:trn>
+										</digi:link></div>
+								</LI>
+							</logic:notEqual>
+						</feature:display>
 					</UL>		
 				</DIV>	
 				</TD></TR>

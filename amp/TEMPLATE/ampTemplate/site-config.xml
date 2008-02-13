@@ -113,6 +113,11 @@
 			<put name="title">Activity - Project Costing </put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="costsBreakdown"/>
 	 	</layout>
+                
+                <layout name="layoutViewIPAContracting" extends="tabLayout">
+			<put name="title">Activity - IPA Contracting </put>
+			<put-item name="tabBody" module="aim" instance="default" teaser="contractingBreakdown"/>
+	 	</layout>
  		<layout name="layoutRegionalFundingBreakdown" extends="tabLayout">
 			<put name="title">Activity - Regional Funding </put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="regionalFundingBreakdown"/>
@@ -497,6 +502,7 @@
 				<page>assignNewIndicator</page>
 				<page>showActivityLog</page>
                                 <page>aim_addDisbOrderToDisbPopupLayout</page>
+                                <page>aim_addDisbOrderToContractPopupLayout</page>
 			</module>
 			<module name="contentrepository">
 				<page>amp_selectDocumentDM</page>

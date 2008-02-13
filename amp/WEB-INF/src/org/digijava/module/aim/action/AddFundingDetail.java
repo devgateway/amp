@@ -52,6 +52,7 @@ public class AddFundingDetail extends Action {
 		}
 
 		long index = formBean.getTransIndexId();
+                if(event!=null){
 		String subEvent = event.substring(0,3);
 		FundingDetail fd = null;
 		if (subEvent.equalsIgnoreCase("del") || subEvent.equalsIgnoreCase("add")) {
@@ -108,6 +109,7 @@ public class AddFundingDetail extends Action {
                         }
 			formBean.setFundingDetails(fundingDetails);
 		}
+                }
 		formBean.setEvent(null);
 		formBean.setDupFunding(true);
 		formBean.setFirstSubmit(false);

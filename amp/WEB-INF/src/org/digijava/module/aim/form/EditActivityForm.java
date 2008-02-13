@@ -518,6 +518,15 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
      private AmpAhsurvey ahsurvey;
      private List contracts;
+     private Integer selContractId;
+
+    public Integer getSelContractId() {
+        return selContractId;
+    }
+
+    public void setSelContractId(Integer selContractId) {
+        this.selContractId = selContractId;
+    }
 
     public List getContracts() {
         return contracts;
@@ -771,6 +780,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
                       selectedNPOPrograms=null;
                       contracts=null;
                       contrcatToRemove=null;
+                      selContractId=null;
 
 
 		}

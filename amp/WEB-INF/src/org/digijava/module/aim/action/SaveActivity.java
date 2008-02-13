@@ -165,7 +165,7 @@ public class SaveActivity extends Action {
             	if ( nodeWrapper != null )
             			UUIDs.add( nodeWrapper.getUuid() );
             }
-            
+            if(SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false)!=null)
 			UUIDs.addAll( 
 					SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false)
 			);
@@ -272,6 +272,7 @@ public class SaveActivity extends Action {
 																	.getTransactionDate()));
 											ampFundDet.setOrgRoleCode(fundDet
 													.getPerspectiveCode());
+                                                                                        ampFundDet.setContract(fundDet.getContract());
 
 
 											boolean useFixedRate = false;
@@ -1165,6 +1166,7 @@ public class SaveActivity extends Action {
                                                                                   fundDet.getClassification());
                                                                             }
                                                                             ampFundDet.setDisbOrderId(fundDet.getDisbOrderId());
+                                                                            ampFundDet.setContract(fundDet.getContract());
                                                                             fundDeatils.add(ampFundDet);
                                                                           }
 

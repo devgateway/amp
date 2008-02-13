@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.hibernate.Session;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -18,8 +17,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.MultiAction;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.form.EditActivityForm;
@@ -61,7 +60,9 @@ public class EditIPAContract extends MultiAction {
         while (i.hasNext()) {
             String element = (String) i.next();
             try {
+               if(!element.equals("")){
                Double.parseDouble(element);
+               }
             } catch (NumberFormatException e) {
                 return true;
             }
@@ -218,10 +219,28 @@ public class EditIPAContract extends MultiAction {
             throws Exception {
         IPAContractForm eaf = (IPAContractForm) form;
         eaf.setContractDisbursements(new ArrayList<IPAContractDisbursement>());
+        eaf.setIndexId(-1);
+        Long currId=new Long(-1);
         HttpSession session = request.getSession();
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-        Long currencyId = tm.getAppSettings().getCurrencyId();
-        eaf.setIndexId(-1);
+          if (tm != null && tm.getAppSettings() != null && tm.getAppSettings()
+          .getCurrencyId() != null) {
+            
+              AmpCurrency curr=CurrencyUtil.
+                  getAmpcurrency(
+                      tm.getAppSettings()
+                      .getCurrencyId());
+              if(curr!=null){
+                      currId = curr.getAmpCurrencyId();
+              }
+          }
+        eaf.setTotalECContribIBCurrency(currId);
+        eaf.setTotalECContribINVCurrency(currId);
+        eaf.setTotalNationalContribCentralCurrency(currId);
+        eaf.setTotalNationalContribIFICurrency(currId);
+        eaf.setTotalNationalContribRegionalCurrency(currId);
+        eaf.setTotalPrivateContribCurrency(currId);
+              
 
         return modeFinalize(mapping, form, request, response);
     }
@@ -274,10 +293,21 @@ public class EditIPAContract extends MultiAction {
             HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         IPAContractForm eaf = (IPAContractForm) form;
-        HttpSession session = request.getSession();
-        TeamMember tm = (TeamMember) session.getAttribute("currentMember");
         IPAContractDisbursement icd = new IPAContractDisbursement();
         eaf.getContractDisbursements().add(icd);
+        HttpSession session = request.getSession();
+        TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+          if (tm != null && tm.getAppSettings() != null && tm.getAppSettings()
+          .getCurrencyId() != null) {
+              AmpCurrency curr=CurrencyUtil.
+                  getAmpcurrency(
+                      tm.getAppSettings()
+                      .getCurrencyId());
+              icd.setCurrency(curr);
+ 
+          }
+       
+        
 
         return modeFinalize(mapping, form, request, response);
     }
@@ -327,53 +357,59 @@ public class EditIPAContract extends MultiAction {
         }
 
 
-        if (euaf.getStartOfTendering() != null) {
+        if (euaf.getStartOfTendering() != null&&!euaf.getStartOfTendering().equals("")) {
             eua.setStartOfTendering(DateTimeUtil.parseDateForPicker(euaf.getStartOfTendering()));
         }
-        if (euaf.getSignatureOfContract() != null) {
+        if (euaf.getSignatureOfContract() != null&&!euaf.getSignatureOfContract().equals("")) {
             eua.setSignatureOfContract(DateTimeUtil.parseDateForPicker(euaf.getSignatureOfContract()));
         }
-        if (euaf.getContractCompletion() != null) {
+        if (euaf.getContractCompletion() != null&&!euaf.getContractCompletion().equals("")) {
             eua.setContractCompletion(DateTimeUtil.parseDateForPicker(euaf.getContractCompletion()));
         }
-        if (euaf.getTotalECContribIBAmount() != null) {
+        if (euaf.getTotalECContribIBAmount() != null&&!euaf.getTotalECContribIBAmount().equals("")) {
             eua.setTotalECContribIBAmount(Double.parseDouble(euaf.getTotalECContribIBAmount()));
-        }
-        if (euaf.getTotalECContribIBCurrency() != null) {
+            if (euaf.getTotalECContribIBCurrency() != null&&!euaf.getTotalECContribIBCurrency().equals("")) {
             eua.setTotalECContribIBCurrency(CurrencyUtil.getAmpcurrency(euaf.getTotalECContribIBCurrency()));
         }
-        if (euaf.getTotalECContribINVAmount() != null) {
+        }
+       
+        if (euaf.getTotalECContribINVAmount() != null&&!euaf.getTotalECContribINVAmount().equals("")) {
 
             eua.setTotalECContribINVAmount(Double.parseDouble(euaf.getTotalECContribINVAmount()));
-        }
-        if (euaf.getTotalECContribINVCurrency() != null) {
+              if (euaf.getTotalECContribINVCurrency() != null) {
             eua.setTotalECContribINVCurrency(CurrencyUtil.getAmpcurrency(euaf.getTotalECContribINVCurrency()));
         }
-        if (euaf.getTotalNationalContribCentralAmount() != null) {
-            eua.setTotalNationalContribCentralAmount(Double.parseDouble(euaf.getTotalNationalContribCentralAmount()));
         }
-        if (euaf.getTotalNationalContribCentralCurrency() != null) {
+      
+        if (euaf.getTotalNationalContribCentralAmount() != null&&!euaf.getTotalNationalContribCentralAmount().equals("")) {
+            eua.setTotalNationalContribCentralAmount(Double.parseDouble(euaf.getTotalNationalContribCentralAmount()));
+            if (euaf.getTotalNationalContribCentralCurrency() != null) {
             eua.setTotalNationalContribCentralCurrency(CurrencyUtil.getAmpcurrency(euaf.getTotalNationalContribCentralCurrency()));
         }
-        if (euaf.getTotalNationalContribRegionalAmount() != null) {
+        }
+        
+        if (euaf.getTotalNationalContribRegionalAmount() != null&&!euaf.getTotalNationalContribRegionalAmount().equals("")) {
 
             eua.setTotalNationalContribRegionalAmount(Double.parseDouble(euaf.getTotalNationalContribRegionalAmount()));
-        }
-        if (euaf.getTotalNationalContribRegionalCurrency() != null) {
+             if (euaf.getTotalNationalContribRegionalCurrency() != null) {
             eua.setTotalNationalContribRegionalCurrency(CurrencyUtil.getAmpcurrency(euaf.getTotalNationalContribRegionalCurrency()));
         }
-        if (euaf.getTotalNationalContribIFIAmount() != null) {
-            eua.setTotalNationalContribIFIAmount(Double.parseDouble(euaf.getTotalNationalContribIFIAmount()));
         }
-        if (euaf.getTotalNationalContribIFICurrency() != null) {
+       
+        if (euaf.getTotalNationalContribIFIAmount() != null&&!euaf.getTotalNationalContribIFIAmount().equals("")) {
+            eua.setTotalNationalContribIFIAmount(Double.parseDouble(euaf.getTotalNationalContribIFIAmount()));
+            if (euaf.getTotalNationalContribIFICurrency() != null) {
             eua.setTotalNationalContribIFICurrency(CurrencyUtil.getAmpcurrency(euaf.getTotalNationalContribIFICurrency()));
         }
-        if (euaf.getTotalPrivateContribAmount() != null) {
-            eua.setTotalPrivateContribAmount(Double.parseDouble(euaf.getTotalPrivateContribAmount()));
         }
-        if (euaf.getTotalPrivateContribCurrency() != null) {
+        
+        if (euaf.getTotalPrivateContribAmount() != null&&!euaf.getTotalPrivateContribAmount().equals("")) {
+            eua.setTotalPrivateContribAmount(Double.parseDouble(euaf.getTotalPrivateContribAmount()));
+             if (euaf.getTotalPrivateContribCurrency() != null) {
             eua.setTotalPrivateContribCurrency(CurrencyUtil.getAmpcurrency(euaf.getTotalPrivateContribCurrency()));
         }
+        }
+       
          if (eaf.getContracts() == null) {
                 eaf.setContracts(new ArrayList());
         }

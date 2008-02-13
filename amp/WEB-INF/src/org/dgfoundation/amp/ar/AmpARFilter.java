@@ -170,6 +170,17 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		String PLAN_MIN_RANK_FILTER="SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank="+planMinRank;
 		String REGION_SELECTED_FILTER="SELECT amp_activity_id FROM v_regions WHERE region_id ="+regionSelected;
 		
+		if(fromYear!=null) {
+		    String FROM_FUNDING_YEAR_FILTER="SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.amp_funding_id AND date_format(fd.transaction_date,_latin1'%Y')>='"+fromYear+"'";
+		    queryAppend(FROM_FUNDING_YEAR_FILTER);
+		}
+		
+		if(toYear!=null) {
+		    String TO_FUNDING_YEAR_FILTER="SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.amp_funding_id AND date_format(fd.transaction_date,_latin1'%Y')<='"+toYear+"'";
+		    queryAppend(TO_FUNDING_YEAR_FILTER);
+		}
+
+		
 		if(text!=null)
 		{
 			if("".equals(text.trim())==false)

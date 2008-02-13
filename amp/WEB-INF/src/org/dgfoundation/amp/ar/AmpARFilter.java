@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 /**
@@ -112,6 +113,16 @@ public class AmpARFilter extends PropertyListable implements Filter {
 			}
 		}
 		
+		if (this.getFromYear()==null){
+		    Long fromYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE));
+		    this.setFromYear(fromYear.intValue());
+		}
+		
+		if (this.getToYear()==null){
+		    Long toYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));
+		    this.setToYear(toYear.intValue());
+		}
+	
 
 		String widget=(String) request.getAttribute("widget");
 		if(widget!=null) this.setWidget(new Boolean(widget).booleanValue());

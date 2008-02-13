@@ -122,8 +122,10 @@ public void applyMetaFilter(String columnName,String metaName,Cell metaCell,Cate
 }
 	
 	
-public Cell filter(Cell metaCell,Set ids) {
-    	CategAmountCell ret = (CategAmountCell) super.filter(metaCell,ids);    
+public Cell filter(Cell metaCell,Set ids)  {
+	CategAmountCell ret=null;
+	try{
+		 ret = (CategAmountCell) super.filter(metaCell,ids);    
 		if(ret==null) return null;
 		if(metaCell.getColumn().getName().equals(ArConstants.DONOR)) {
 				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.DONOR)))
@@ -158,6 +160,10 @@ public Cell filter(Cell metaCell,Set ids) {
 		 applyMetaFilter("Componente", ArConstants.COMPONENTE_PERCENTAGE, metaCell, ret);
 		 applyMetaFilter("National Planning Objectives", ArConstants.NPO_PERCENTAGE, metaCell, ret);
 		}
+	}catch(RuntimeException ex) {
+		ex.printStackTrace();
+	}
+    	
 		
 		//if(ret.getMergedCells().size()>0) 
 			//logger.info(ret.getMergedCells());

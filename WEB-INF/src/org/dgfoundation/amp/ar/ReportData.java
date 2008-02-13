@@ -169,7 +169,7 @@ public abstract class ReportData extends Viewable {
 	}
 	
 	public int getTotalUniqueRows() {
-		return getOwnerIds().size();
+		return getOwnerIds()==null?null: getOwnerIds().size();
 	}
 	
 	/**

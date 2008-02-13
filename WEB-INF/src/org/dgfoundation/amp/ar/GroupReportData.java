@@ -42,7 +42,7 @@ public class GroupReportData extends ReportData {
     
 	public int getVisibleRows() {
 		int ret=1; //one is for the title, one is for totals
-		if(this.getReportMetadata().getHideActivities())
+		if(this.getReportMetadata()!=null && this.getReportMetadata().getHideActivities()!=null && this.getReportMetadata().getHideActivities())
 		{
 			return ret;
 		}
@@ -254,7 +254,9 @@ public class GroupReportData extends ReportData {
 		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			ReportData element = (ReportData) i.next();
-			ret.addAll(element.getOwnerIds());
+			if(element.getOwnerIds()!=null){
+				ret.addAll(element.getOwnerIds());
+			}			
 		}
 		return ret;
 	}

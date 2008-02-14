@@ -38,6 +38,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpComments;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
@@ -108,14 +109,28 @@ public class AddAmpActivity extends Action {
 
     EditActivityForm eaForm = (EditActivityForm) form; 
     
-    //set the contracts, if available
+    //set the level, if available
     String levelTxt=request.getParameter("activityLevelId");
     if(levelTxt!=null) eaForm.setActivityLevel(Long.parseLong(levelTxt));
-    //set the level, if available
+    //set the contracts , if available
     if(eaForm.getActivityId()!=null&&(eaForm.getContracts()==null||eaForm.getContracts().size()==0)){
            List contracts=ActivityUtil.getIPAContracts(eaForm.getActivityId());
            eaForm.setContracts(contracts);
      }
+     // load all the active currencies
+      eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
+    
+     //Only currencies havening exchanges rates AMP-2620
+      ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
+      eaForm.setValidcurrencies(validcurrencies);
+      for (Iterator iter = eaForm.getCurrencies().iterator(); iter.hasNext();) {
+		AmpCurrency element = (AmpCurrency) iter.next();
+		 if( CurrencyUtil.isRate(element.getCurrencyCode())== true)
+				{
+			 	eaForm.getValidcurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
+				}
+		}
+
 
     /*Clear eventually dirty information found in session related to DM*/
 		if ( request.getParameter("action") != null && request.getParameter("action").equals("create") ){

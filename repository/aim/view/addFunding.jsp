@@ -1053,13 +1053,14 @@
 												</html:select>
 											</td>
         	
-											 
+					<!--						 
                                             <td>
     	                                        <html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
                                             </td>
                                             <td>
 	                                            <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
 											</td>
+                                                                                         -->
 											       
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">

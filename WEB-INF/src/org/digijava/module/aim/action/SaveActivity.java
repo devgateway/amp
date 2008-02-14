@@ -166,7 +166,7 @@ public class SaveActivity extends Action {
             			UUIDs.add( nodeWrapper.getUuid() );
             }
             if(SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false)!=null)
-			UUIDs.addAll( 
+			UUIDs.addAll(
 					SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false)
 			);
 			if (UUIDs != null && UUIDs.size() >0 ) {
@@ -348,7 +348,7 @@ public class SaveActivity extends Action {
 					logger.debug("No duplicate found");
 				}
 
-				
+
 				boolean titleFlag = false;
 				boolean statusFlag = false;
 
@@ -490,6 +490,9 @@ public class SaveActivity extends Action {
                     }
                 }
 				// end of Modified code
+
+                DbUtil.updateSurvey(eaForm.getAhsurvey());
+                DbUtil.saveSurveyResponses(eaForm.getAmpSurveyId(), eaForm.getIndicators());
 
                 if(eaForm.getProProjCost()==null){
                     activity.setFunAmount(null);
@@ -987,7 +990,7 @@ public class SaveActivity extends Action {
 								EUActivityContribution element2 = (EUActivityContribution) ii.next();
 								element2.setId(null);
 							}
-						}						
+						}
 						costs.add(element);
 					}
 					activity.setCosts(costs);
@@ -1225,7 +1228,7 @@ public class SaveActivity extends Action {
 											}
 										}
 								 }
-								
+
 								if(eaForm.getFundingRegions()!=null && eaForm.getFundingRegions().size()>0){
 									tmpItr = eaForm.getFundingRegions().iterator();
 									while (tmpItr.hasNext()) {
@@ -1236,7 +1239,7 @@ public class SaveActivity extends Action {
 											break;
 										}
 									}
-								}								
+								}
 								ampRegFund.setTransactionAmount(new Double(
 									FormatHelper.parseDouble(fd
 												.getTransactionAmount())));
@@ -1283,8 +1286,8 @@ public class SaveActivity extends Action {
 											break;
 										}
 									}
-								}								
-								
+								}
+
 								if(eaForm.getFundingRegions()!=null && eaForm.getFundingRegions().size()>0){
 									tmpItr = eaForm.getFundingRegions().iterator();
 									while (tmpItr.hasNext()) {
@@ -1296,7 +1299,7 @@ public class SaveActivity extends Action {
 										}
 									}
 								}
-								
+
 								ampRegFund.setTransactionAmount(new Double(
 									FormatHelper.parseDouble(fd
 												.getTransactionAmount())));
@@ -1356,7 +1359,7 @@ public class SaveActivity extends Action {
 										}
 									}
 								}
-								
+
 								ampRegFund.setTransactionAmount(new Double(
 									FormatHelper.parseDouble(fd
 												.getTransactionAmount())));
@@ -1380,7 +1383,7 @@ public class SaveActivity extends Action {
 								+ " " + rf.getTransactionAmount());
 					}
 				}
-				
+
 
 				activity.setRegionalFundings(regFundings);
 
@@ -1559,7 +1562,7 @@ public class SaveActivity extends Action {
 						col.add(proj);
 					}
 				}
-				
+
 				session.setAttribute(Constants.AMP_PROJECTS,col);
 				session.setAttribute(Constants.DIRTY_ACTIVITY_LIST,dirtyActivities);
 				session.setAttribute(Constants.DESKTOP_SETTINGS_CHANGED,new Boolean(true));

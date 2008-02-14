@@ -245,9 +245,8 @@
 	                         	   	--%>
 
 	                         	   		<TD width="172"><digi:trn key="aim:aeSurvey">Aid Effectiveness Survey</digi:trn></TD>
-
-				                    	<TD width="410"><digi:trn key="aim:donorOrganization">Donor Organization</digi:trn></TD>
-
+				                    	<TD width="210"><digi:trn key="aim:donorOrganization">Donor Organization</digi:trn></TD>
+                                        <TD width="200"><digi:trn key="aim:pointOfDeliveryDonor">Point of delivery donor</digi:trn></TD>
 									</TR>
 
 									<nested:empty name="aimEditActivityForm" property="survey">
@@ -288,7 +287,8 @@
 
 												</TD>
 
-						               			<TD width="410"><nested:write name="surveyFund" property="fundingOrgName" /></TD>
+						               			<TD width="210"><nested:write name="surveyFund" property="fundingOrgName" /></TD>
+                                                <TD width="200"><nested:write name="surveyFund" property="deliveryDonorName" /></TD>
 
 											<%--
 

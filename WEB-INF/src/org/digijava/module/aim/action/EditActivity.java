@@ -160,9 +160,11 @@ public class EditActivity
     boolean gatePermEditAllowed = false;
     if (activityId != null) {
         activity = ActivityUtil.getAmpActivity(activityId);
-        Map scope=new HashMap();
-        scope.put(GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
-		gatePermEditAllowed = activity.canDo(GatePermConst.Actions.EDIT, scope);
+        if(activity!=null){
+            Map scope = new HashMap();
+            scope.put(GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
+            gatePermEditAllowed = activity.canDo(GatePermConst.Actions.EDIT, scope);
+        }
     }
 
 
@@ -573,7 +575,7 @@ if (tm != null && tm.getTeamType()
         // load the activity details
         String actApprovalStatus = DbUtil.getActivityApprovalStatus(
             activityId);
-        
+
         //eaForm.setApprovalStatus(actApprovalStatus);
         if (tm != null) {
             if (tm.getTeamHead())
@@ -1090,7 +1092,7 @@ if (tm != null && tm.getTeamType()
                                                                         getCountryName());
 
                                           fundingDetail.setTransactionAmount(CurrencyWorker.convert(fundDet.getTransactionAmount().doubleValue(), 1, 1));
-                                          
+
                                           fundingDetail.setTransactionDate(DateConversion.ConvertDateToString(fundDet.getTransactionDate()));
 
                                           fundingDetail.setPerspectiveCode(fundDet.
@@ -1507,7 +1509,7 @@ if (tm != null && tm.getTeamType()
 
       //Lload all the active currencies **-- I will leave this becouse I don't know if is used in another page AMP-2620
       eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
-      
+
       //Only currencies havening exchanges rates AMP-2620
       ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
       eaForm.setValidcurrencies(validcurrencies);
@@ -1753,7 +1755,7 @@ if (tm != null && tm.getTeamType()
 			}
 			tempComp.setCode(temp.getCode());
 			tempComp.setUrl(temp.getUrl());
-			
+
 			tempComp.setCommitments(new ArrayList<FundingDetail>());
 			tempComp.setDisbursements(new ArrayList<FundingDetail>());
 			tempComp.setExpenditures(new ArrayList<FundingDetail>());
@@ -1793,9 +1795,9 @@ if (tm != null && tm.getTeamType()
 					tempComp.getDisbursements().add(fd);
 				} else if (fd.getTransactionType() == 2) {
 					tempComp.getExpenditures().add(fd);
-				}				
+				}
 			}
-		
+
 			ComponentsUtil.calculateFinanceByYearInfo(tempComp,fundingComponentActivity);
 
 			Collection<AmpPhysicalPerformance> phyProgress = ActivityUtil

@@ -4861,6 +4861,11 @@ public class DbUtil {
                             SurveyFunding svfund = new SurveyFunding();
                             svfund.setSurveyId(svy.getAmpAHSurveyId());
                             svfund.setFundingOrgName(svy.getAmpDonorOrgId().getName());
+                            if(svy.getPointOfDeliveryDonor()!=null){
+                                svfund.setDeliveryDonorName(svy.getPointOfDeliveryDonor().getName());
+                            }else{
+                                svfund.setDeliveryDonorName(svy.getAmpDonorOrgId().getName());
+                            }
                             survey.add(svfund);
                         }
                     }

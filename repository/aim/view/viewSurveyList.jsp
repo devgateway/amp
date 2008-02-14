@@ -30,7 +30,7 @@
 
 		var val = (document.aimSurveyForm.elements)[sid].value;
 
-		
+
 
 		if (val != "-1") {
 
@@ -62,7 +62,7 @@ function fnEditProject(id)
 
    document.aimSurveyForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~activityId=" + id;
 
-	document.aimSurveyForm.target = "_self";    
+	document.aimSurveyForm.target = "_self";
 
    document.aimSurveyForm.submit();
 
@@ -130,7 +130,7 @@ function projectFiche(id)
 
 			<!-- contents -->
 
-			
+
 
 			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 
@@ -206,7 +206,7 @@ function projectFiche(id)
 													</field:display>
 												</feature:display>
 											</module:display>
-											
+
 											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Project Fiche" module="Previews">
 													<field:display name="Project Fiche Button" feature="Project Fiche" >
@@ -214,14 +214,14 @@ function projectFiche(id)
 															onclick='projectFiche(<c:out value="${aimSurveyForm.ampActivityId}"/>)'>
 													</field:display>
 												</feature:display>
-											</module:display>												
-												
+											</module:display>
+
 
 											</TD>
 
 										</TR>
 
-									</TABLE>										
+									</TABLE>
 
 								</TD>
 
@@ -239,7 +239,7 @@ function projectFiche(id)
 
 												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
 
-                        							<TR bgcolor="#F4F4F2" height="17"> 
+                        							<TR bgcolor="#F4F4F2" height="17">
 
                           	  							<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
 
@@ -255,7 +255,7 @@ function projectFiche(id)
 
 													</TR>
 
-												</TABLE>									
+												</TABLE>
 
 											</TD>
 
@@ -267,7 +267,7 @@ function projectFiche(id)
 
 												<TABLE width="756"  border="0" cellpadding="4" cellspacing="1">
 
-                 									<TR bgcolor="#DDDDDB" > 
+                 									<TR bgcolor="#DDDDDB" >
 
                  									<%--
 
@@ -281,15 +281,14 @@ function projectFiche(id)
 
 	                         	   					--%>
 
-	                         	   						<TD width="172"><digi:trn key="aim:aeSurvey">Aid Effectiveness Survey</digi:trn></TD>
-
-				                    					<TD width="410"><digi:trn key="aim:donorOrganization">Donor Organization</digi:trn></TD>
-
+                                                    <TD width="172"><digi:trn key="aim:aeSurvey">Aid Effectiveness Survey</digi:trn></TD>
+                                                    <TD width="210"><digi:trn key="aim:donorOrganization">Donor Organization</digi:trn></TD>
+                                                    <TD width="200"><digi:trn key="aim:pointOfDeliveryDonor">Point of delivery donor</digi:trn></TD>
 													</TR>
 
-												<nested:empty name="aimSurveyForm" property="survey"> 
+												<nested:empty name="aimSurveyForm" property="survey">
 
-			                    					<TR valign="top"> 
+			                    					<TR valign="top">
 
 													<TD align="center" colspan="7" width="742"><span class="note">No funding for this activity !</span></TD>
 
@@ -323,7 +322,8 @@ function projectFiche(id)
 
 														</TD>
 
-						               					<TD width="400"><nested:write name="surveyFund" property="fundingOrgName" /></TD>
+						               					<TD width="210"><nested:write name="surveyFund" property="fundingOrgName" /></TD>
+                                                        <TD width="200"><nested:write name="surveyFund" property="deliveryDonorName" /></TD>
 
 													<%--
 
@@ -345,7 +345,7 @@ function projectFiche(id)
 
 															<nested:notEmpty name="surveyFund" property="survey">
 
-																<nested:optionsCollection name="surveyFund" property="survey" 
+																<nested:optionsCollection name="surveyFund" property="survey"
 
 																						  value="surveyId" label="year" />
 

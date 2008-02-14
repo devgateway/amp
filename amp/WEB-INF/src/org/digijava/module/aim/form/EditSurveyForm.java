@@ -1,7 +1,7 @@
 /*
  * Created on 9/03/2006
  * @author akashs
- * 
+ *
  */
 package org.digijava.module.aim.form;
 
@@ -16,15 +16,16 @@ public class EditSurveyForm extends ActionForm {
 	private Collection pages = null;	 // total number of survey pages
 	private Integer currentPage = null;
 	private Integer offset = null;		 // starting record for iteartion over indicator collection on each page
-	
-	private String fundingOrg = null;	 // acronym of funding organisation 
-	
+
+	private String fundingOrg = null;	 // acronym of funding organisation
+	private String deliveryDonor = null;
+
 	private Long ampSurveyId = null;
-	
+
 	private Long ampActivityId;
 	private String tabIndex;
-	private Boolean reset = null; 
-	
+	private Boolean reset = null;
+
 	/**
 	 * @return Returns the indicator.
 	 */
@@ -36,7 +37,7 @@ public class EditSurveyForm extends ActionForm {
 	 */
 	public void setIndicators(List indicators) {
 		this.indicators = indicators;
-	}	
+	}
 	/**
 	 * @return Returns the page.
 	 */
@@ -127,11 +128,20 @@ public class EditSurveyForm extends ActionForm {
 	public Boolean getReset() {
 		return reset;
 	}
-	/**
+
+    public String getDeliveryDonor() {
+        return deliveryDonor;
+    }
+
+    /**
 	 * @param reset The reset to set.
 	 */
 	public void setReset(Boolean reset) {
 		this.reset = reset;
 	}
+
+    public void setDeliveryDonor(String deliveryDonor) {
+        this.deliveryDonor = deliveryDonor;
+    }
 
 }

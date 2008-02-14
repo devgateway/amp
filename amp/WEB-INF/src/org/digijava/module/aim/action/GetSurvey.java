@@ -1,7 +1,7 @@
 /*
  * Created on 9/03/2006
  * @author akashs
- * 
+ *
  */
 package org.digijava.module.aim.action;
 
@@ -22,74 +22,61 @@ import org.digijava.module.aim.util.DbUtil;
 
 public class GetSurvey extends TilesAction {
 
-	private static Logger logger = Logger.getLogger(GetSurvey.class);
-	
-	public ActionForward execute( ComponentContext context, ActionMapping mapping, ActionForm form,
-							HttpServletRequest request, HttpServletResponse response) {
-		
-		// if user is not logged in, forward him to the home page
-		//if (request.getSession().getAttribute("currentMember") == null)
-			//return mapping.findForward("index");
+    private static Logger logger = Logger.getLogger(GetSurvey.class);
 
-		logger.debug("In get survey action");
-		
-		if (form != null) {
-			
-			EditSurveyForm svForm = (EditSurveyForm) form;
-			
-			final int NUM_RECORDS = 5;
-			long surveyId = 0;
-			
-			try {
-				String survey = request.getParameter("surveyId");
-				if (null != survey && survey.trim().length() > 0) {
-					surveyId = Long.parseLong(survey);
-					logger.debug("surveyId : " + surveyId);
-					svForm.setAmpSurveyId(new Long(surveyId));
-				}
-			}
-			catch (NumberFormatException nex) {
-				logger.debug("incorrect surveyId in request scope : " + nex.getMessage());
-				nex.printStackTrace(System.out);
-			}
-				
-			if (null == svForm.getIndicators() || svForm.getReset().booleanValue()) {
-				svForm.setIndicators(DbUtil.getResposesBySurvey(svForm.getAmpSurveyId(), svForm.getAmpActivityId()));
-				svForm.setReset(Boolean.FALSE);
-				AmpAhsurvey survey = DbUtil.getAhSurvey(svForm.getAmpSurveyId());
-				svForm.setFundingOrg(survey.getAmpDonorOrgId().getAcronym());
-				
-				svForm.setPages(new ArrayList());
-				int numPages = svForm.getIndicators().size() / NUM_RECORDS;
-				numPages += (svForm.getIndicators().size() % NUM_RECORDS != 0) ? 1 : 0;
-				if (numPages > 1) {
-					for (int i = 0; i < numPages; i ++)
-						svForm.getPages().add(new Integer(i+1));
-				}
-			}
-			
-			int page = 0;
-			if (request.getParameter("page") == null) {
-				page = 1;
-			} else {
-				try {
-			 		page = Integer.parseInt(request.getParameter("page"));
-			 	}
-			 	catch (NumberFormatException nex) {
-					logger.debug("incorrect page in request scope : " + nex.getMessage());
-				}
-			}
-			svForm.setCurrentPage(new Integer(page));
-			svForm.setOffset(new Integer(NUM_RECORDS * (page - 1)));
-			logger.debug("currentPage : " + svForm.getCurrentPage());
-			logger.debug("offset : " + svForm.getOffset());
-			
-			return null;
-		}
-		else {
-			logger.debug("ActionForm is null.");
-			//return mapping.findForward("forward");
-			return null;
-		}
-	}
+    public ActionForward execute(ComponentContext context, ActionMapping mapping, ActionForm form,
+                                 HttpServletRequest request, HttpServletResponse response) {
+
+        EditSurveyForm svForm = (EditSurveyForm) form;
+
+        final int NUM_RECORDS = 5;
+        long surveyId = 0;
+        boolean flag = false;
+
+        try {
+            String strSurvey = request.getParameter("surveyId");
+            if (null != strSurvey && strSurvey.trim().length() > 0) {
+                surveyId = Long.parseLong(strSurvey);
+                if (svForm.getAmpSurveyId()==null || surveyId != svForm.getAmpSurveyId().longValue()) {
+                    svForm.setAmpSurveyId(new Long(surveyId));
+                    flag = true;
+                }
+            }
+        } catch (NumberFormatException ex) {
+            svForm.setAmpSurveyId(null);
+        }
+
+        if (svForm.getAmpSurveyId()!=null && flag) {
+            svForm.setIndicators(DbUtil.getResposesBySurvey(svForm.getAmpSurveyId(), svForm.getAmpActivityId()));
+            svForm.setReset(Boolean.FALSE);
+            AmpAhsurvey survey = DbUtil.getAhSurvey(svForm.getAmpSurveyId());
+            svForm.setFundingOrg(survey.getAmpDonorOrgId().getAcronym());
+            svForm.setDeliveryDonor(survey.getPointOfDeliveryDonor().getName());
+
+            svForm.setPages(new ArrayList());
+            int numPages = svForm.getIndicators().size() / NUM_RECORDS;
+            numPages += (svForm.getIndicators().size() % NUM_RECORDS != 0) ? 1 : 0;
+            if (numPages > 1) {
+                for (int i = 0; i < numPages; i++)
+                    svForm.getPages().add(new Integer(i + 1));
+            }
+        }
+
+        int page = 0;
+        if (request.getParameter("page") == null) {
+            page = 1;
+        } else {
+            try {
+                page = Integer.parseInt(request.getParameter("page"));
+            } catch (NumberFormatException nex) {
+                logger.debug("incorrect page in request scope : " + nex.getMessage());
+            }
+        }
+        svForm.setCurrentPage(new Integer(page));
+        svForm.setOffset(new Integer(NUM_RECORDS * (page - 1)));
+        logger.debug("currentPage : " + svForm.getCurrentPage());
+        logger.debug("offset : " + svForm.getOffset());
+
+        return null;
+    }
 }

@@ -19,30 +19,50 @@ public class SelectActivityForIndicator
         	
             NewIndicatorForm newIndForm=(NewIndicatorForm)form;
 
-            String forward=request.getParameter("forward");
+            String edit = request.getParameter("forward");
+            String id = request.getParameter("aId");
             
             if(newIndForm.getAction()!=null && newIndForm.getAction().equalsIgnoreCase("add")){
                 Collection<LabelValueBean> actCol=new ArrayList<LabelValueBean>();
-
-                AmpActivity act=ActivityUtil.getAmpActivity(newIndForm.getSelectedActivityId());
-
-                LabelValueBean lbv=null;
-                if(act != null) {
-                    if(act.getName().length() > 35) {
-                        lbv = new LabelValueBean(act.getName().substring(0, 32) + "...", act.getAmpActivityId().toString());
-                    } else {
-                        lbv = new LabelValueBean(act.getName(), act.getAmpActivityId().toString());
-                    }
-                }
-                if(lbv != null) {
-                    actCol.add(lbv);
-                    newIndForm.setSelectedActivities(actCol);
-                    newIndForm.setAction(null);
-                    newIndForm.setSelectedPrograms(null);
-                    newIndForm.setSelectedProgramId(null);
-                }
+                Collection activities = new ArrayList();
                 
-                if(forward != null){
+                Long selInds[] = newIndForm.getSelectedActivity();
+                
+                if(selInds != null){
+                	for(int i=0; i<selInds.length; i++){
+                	
+                		AmpActivity act = ActivityUtil.getAmpActivity(selInds[i]);
+                		activities.add(act);
+                		
+                	}
+                }
+		       if(activities != null){
+		    	   for(Iterator activity = activities.iterator(); activity.hasNext(); ){
+		    		   AmpActivity act = (AmpActivity) activity.next();
+		  
+		    		   LabelValueBean lbv=null;
+		                
+		                if(act != null) {
+		                    if(act.getName().length() > 35) {
+		                        lbv = new LabelValueBean(act.getName().substring(0, 32) + "...", act.getAmpActivityId().toString());
+		                    } else {
+		                        lbv = new LabelValueBean(act.getName(), act.getAmpActivityId().toString());
+		                    }
+		                }
+		                
+		                if(lbv != null) {
+		                    actCol.add(lbv);
+		                    newIndForm.setSelectedActivities(actCol);
+		                    newIndForm.setAction(null);
+		                    newIndForm.setSelectedPrograms(null);
+		                    newIndForm.setSelectedProgramId(null);
+		                }
+		    	   
+		    	   }
+			    	   
+		       }
+ 		       
+                if(edit != null){
                 	newIndForm.setAction(null);
                 	return mapping.findForward("edit");
                 	
@@ -51,6 +71,29 @@ public class SelectActivityForIndicator
                     return mapping.findForward("add");
                 }
             }
+            
+            if(newIndForm.getAction() != null && newIndForm.getAction().equals("remove")){
+         	   
+         	   for(Iterator itr = newIndForm.getSelectedActivities().iterator(); itr.hasNext();){
+         		  LabelValueBean beanitr = (LabelValueBean) itr.next();
+         		   
+         		  if(beanitr.getValue().equals(id)){
+         		    itr.remove();
+         		    break;
+         		  }
+         	   }
+         	   
+         	  if(edit != null){
+              	newIndForm.setAction(null);
+              	return mapping.findForward("edit");
+              	
+              }else{
+              	newIndForm.setAction(null);
+                  return mapping.findForward("add");
+              }
+            } 
+            
+            
             Collection<AmpActivity> actCol = ActivityUtil.getAllActivitiesList();
             if(actCol != null) {
                 List<AmpActivity> actList = new ArrayList<AmpActivity>(actCol);

@@ -15,6 +15,7 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
@@ -32,6 +33,7 @@ import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.IndicatorsBean;
 
 public class IndicatorUtil {
 
@@ -77,12 +79,14 @@ public class IndicatorUtil {
 					tempind.setSectors(ampThemeSet);
 				}
 			}
-
-			if (tempPrgInd.getSelectedActivityId() != null
-					&& tempPrgInd.getSelectedActivityId() > 0) {
+			Collection selActivity = tempPrgInd.getSelectedActivity();
+			if (selActivity != null && selActivity.size() > 0 ) {
+				Iterator<LabelValueBean> selAct = selActivity.iterator();
+				while(selAct.hasNext()){
+					LabelValueBean 	selActivitys = selAct.next(); 
 				AmpActivity tmpAmpActivity = null;
 				tmpAmpActivity = (AmpActivity) session.load(AmpActivity.class,
-						tempPrgInd.getSelectedActivityId());
+						new Long(selActivitys.getValue()));
 				Set activity = new HashSet();
 				if (tmpAmpActivity.getIndicators() != null) {
 					tmpAmpActivity.getIndicators().add(tempind);
@@ -95,6 +99,27 @@ public class IndicatorUtil {
 				activity.add(tmpAmpActivity);
 				tempind.setActivity(activity);
 			}
+		}
+			
+			
+			if(tempPrgInd.isPrjStatus() 
+					&& tempPrgInd.getSelectedActivity() != null
+					&& tempPrgInd.getSelectedActivity().size() > 0){
+				
+				if (selActivity != null && selActivity.size() > 0 ){
+					
+					Iterator<LabelValueBean> selAct = selActivity.iterator();
+				
+					while(selAct.hasNext()){
+						LabelValueBean 	selActivitys = selAct.next(); 
+					AmpActivity tmpAmpActivity = null;
+					tmpAmpActivity = (AmpActivity) session.load(AmpActivity.class,
+							new Long(selActivitys.getValue()));
+					tmpAmpActivity.getIndicators().remove(tempind);
+					tempind.getActivity().remove(tmpAmpActivity);
+			   }
+			}
+		}
 			tx = session.beginTransaction();
 			session.saveOrUpdate(tempind);
 			tx.commit();
@@ -166,7 +191,9 @@ public class IndicatorUtil {
 //			tempPrgInd.setRevisedTargetValDate(tempInd.getRevisedTargetValDate());
 			tempPrgInd.setRisk(tempInd.getRisk());
 			tempPrgInd.setIndicatorsCategory(tempInd.getIndicatorsCategory());
-			
+			if(tempInd.isDefaultInd()){
+				tempPrgInd.setType("global");
+			}
 			
 			session.flush();
 		} catch (Exception e) {

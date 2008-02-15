@@ -12,7 +12,42 @@
 
 <digi:instance property="aimNewIndicatorForm" />
 <script language="javascript">
+	
+	function validete (){
+	
+	if(document.getElementById("radioProgramIndicator").checked){
+	   alert("ok");
+	}else{
+	      alert("no");  }  
+	
+	if(document.getElementById("radioProjectSpecific").checked){
+	   alert("ok1");
+	 }else{
+	 alert("no1");
+	 }
+	 
+	}
+
+
+function removeActivity(id) {
+	var temp = confirm("Do you want to delete this Activity?");
+	if(temp == false)
+	{
+			return false;
+	}
+	else
+	 {
+		<digi:context name="update" property="context/module/moduleinstance/selectActivityForIndicator.do?action=remove" />
+		document.aimNewIndicatorForm.action = "<%=update%>&forward=edit&aId="+id;
+	    document.aimNewIndicatorForm.target = "_self"
+	    document.aimNewIndicatorForm.submit();
+	    return true;		  
+    }
+}
+
+
 function saveIndicator(){
+
   if(document.getElementById("txtName").value==""){
     alert("Please enter name");
     return false;
@@ -22,6 +57,25 @@ function saveIndicator(){
     return false;
   }
   
+  if(!document.getElementById("radioProgramIndicator").checked){
+
+		 var indStatus = "prgUnchecked"
+		 document.getElementById("programStatus").value = indStatus;
+	} 
+	
+	
+	if(!document.getElementById("radioProjectSpecific").checked){
+
+		var indStatus = "prjUnchecked"
+		
+		document.getElementById("projectStatus").value = indStatus;
+		
+		
+	}   
+	  
+	 
+		
+	  
   /*
   if(document.aimNewIndicatorForm.selActivitySector.value == ""){
 		alert("Please add sectors");
@@ -49,70 +103,27 @@ function selectActivity(){
   <digi:context name="selAct" property="context/module/moduleinstance/selectActivityForIndicator.do?action=edit" />
   openURLinWindow("<%= selAct %>",700, 500);
 }
-  /*
+  
 function radiosStatus(type){
-
-  if(type=="0"){
-    document.getElementById("radioProgramIndicator").checked=true;
-    document.getElementById("radioProjectIndicator").checked=false;
-  }else if(type=="1"){
-    document.getElementById("radioProgramIndicator").checked=false;
-    document.getElementById("radioProjectIndicator").checked=true;
-  }else
-  
-  
- */ 
-
-
- /*
-function changeIndType(type){
+	
+	  if(type=="global"){
+	    document.getElementById("radioProgramIndicator").checked=false;
+	    document.getElementById("radioProjectSpecific").checked=true;
+	  }else
+	  if(type == "prg/prj "){
+	    document.getElementById("radioProgramIndicator").checked=true;
+	    document.getElementById("radioProjectSpecific").checked=true;
+	  }else 
+	  if(type == "programInd"){
+	    document.getElementById("radioProgramIndicator").checked=true;
+	    document.getElementById("radioProjectSpecific").checked=false;
+	  }else
+	  if(type == "projectInd"){
+	    document.getElementById("radioProgramIndicator").checked=false;
+	    document.getElementById("radioProjectSpecific").checked=true;
+	  }
+ }
  
-   document.getElementById("hdnIndType").value=type;
-  if(type=="0"){
-    document.getElementById("trType").style.display="";
-    document.getElementById("trCategory").style.display="";
-    document.getElementById("trDescription").style.display="";
-
-    document.getElementById("trCreationDate").style.display="";
-
-     document.getElementById("Sectors").style.display="";
-    document.getElementById("tTypes").style.display="none";
-    document.getElementById("radioProjectIndicatore").style.display="";
-    //document.getElementById("spnSelectProgram").style.display="";
-    document.getElementById("spnSelectProject").style.display="none"
-  }else if(type=="1"){
-    document.getElementById("trType").style.display="none";
-    document.getElementById("trCategory").style.display="none";
-    document.getElementById("trCreationDate").style.display="none";
-
-document.getElementById("trType").style.display="none";
-    document.getElementById("tTypes").style.display="none";
-    document.getElementById("radioProjectIndicatore").style.display="";
-    //document.getElementById("spnSelectProgram").style.display="none";
-    if(document.getElementById("radioProjectSpecific").checked){
-      document.getElementById("spnSelectProject").style.display="";
-      document.getElementById("trDescription").style.display="";
-    }else{
-      document.getElementById("spnSelectProject").style.display="none";
-      document.getElementById("trDescription").style.display="none";
-    }
-  }else 
-  
-  if(type=="2"){
-    
-    document.getElementById("trType").style.display="none";
-    document.getElementById("trCategory").style.display="none";
-    document.getElementById("trCreationDate").style.display="none";
-    document.getElementById("trDescription").style.display="";
-     document.getElementById("Sectors").style.display="";
-    document.getElementById("tTypes").style.display="";
-    document.getElementById("radioProjectIndicator").style.display="";
-    document.getElementById("spnSelectProject").style.display="";
-    
-  }
-  
-}
-*/
 
 
 function validate(field) {
@@ -167,10 +178,13 @@ function closeWindow() {
 </script>
 <digi:form action="/viewEditIndicator.do" method="post">
   <html:hidden property="indType" styleId="hdnIndType" />
+  <html:hidden property="prjStatus" styleId="projectStatus" />
+  <html:hidden property="prgStatus" styleId="programStatus" />
+  <html:hidden name="aimNewIndicatorForm" property="type" styleId="Intype" />
   <html:hidden name="aimNewIndicatorForm" property="themeId" styleId="hdnThemeId" />
-   <html:hidden property="selActivitySector" styleId="hdnselActivitySectors" />
+  <html:hidden property="selActivitySector" styleId="hdnselActivitySectors" />
 
-  <table width="100%" align="center" border="0" class=box-border-nopadding>
+  <table width="100%" align="center" border="1" class=box-border-nopadding>
     <tr bgcolor="#006699" class=r-dotted-lg >
       <td colspan="1" align="center" class="textalb">
       <b>View/Edit Indicator</b>
@@ -178,7 +192,7 @@ function closeWindow() {
     </tr>
     <tr align="center" bgcolor="#ECF3FD">
       <td>
-        <table>
+        <table border="1">
           <tr id="trName">
             <td>
             Indicator name:
@@ -226,10 +240,36 @@ function closeWindow() {
           </tr>
           <tr>
             <td colspan="10" nowrap="nowrap">
-              <input type="checkbox" name="indTypeRadio" id="radioProgramIndicator" checked="checked"/> &nbsp;Program indicator&nbsp;
-              <br />
-                   <input type="checkbox" name="tradio" id="radioProjectSpecific"  value="" checked="checked" /> &nbsp;Project specific&nbsp;
-                   [<a href="javascript:selectActivity();">Select project</a>]<c:if test="${!empty aimNewIndicatorForm.selectedActivities}"><c:forEach var="act" items="${aimNewIndicatorForm.selectedActivities}">[${act.label}]</c:forEach></c:if><c:if test="${empty aimNewIndicatorForm.selectedActivities}">[<span style="color:Red;">Activity is not selected</span>]</c:if>
+              <input type="checkbox" name="indTypeRadio" id="radioProgramIndicator"  checked="checked"/> 
+              &nbsp;Program indicator&nbsp;
+             <br />
+              <input type="checkbox" name="tradio" id="radioProjectSpecific"  checked="checked" />
+                   &nbsp;Project specific&nbsp;
+                      [<a href="javascript:selectActivity();">Select project</a>]
+                      <br>
+                 </td>
+                </tr>
+                <tr> 
+                 <td colspan="10" nowrap="nowrap" align="center" bgcolor="#f4f4f2">
+                   <table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center" class="box-border-nopadding">
+						<c:if test="${!empty aimNewIndicatorForm.selectedActivities}">
+	            		   <c:forEach var="act" items="${aimNewIndicatorForm.selectedActivities}">
+			                   <tr onmouseover="style.backgroundColor='#dddddd';" onmouseout="style.backgroundColor='white'">
+				                   <td align="left" >&nbsp;
+				                     ${act.label}
+				                  </td>
+				                  <td align="right">
+				                  <a href="javascript:removeActivity(${act.value})">
+																	 	<digi:img src="module/cms/images/deleteIcon.gif" 
+																		border="0" alt="Remove this child workspace"/></a>&nbsp;
+				                  </td>
+			                  </tr>
+	                      </c:forEach>									
+			          </c:if>
+			          <c:if test="${empty aimNewIndicatorForm.selectedActivities}">
+                         [<span style="color:Red;">Activity is not selected</span>]
+                      </c:if>
+				 </table>									
             </td>
           </tr>
         </table>
@@ -258,3 +298,7 @@ function closeWindow() {
     </tr>
   </table>
 </digi:form>
+
+<script language="javascript">
+radiosStatus(document.getElementById("Intype").value);
+</script>

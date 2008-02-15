@@ -61,8 +61,23 @@ public class ViewEditIndicator
                     newInd.setSector(existIndForm.getSelActivitySector());
                     newInd.setIndSectores(existIndForm.getActivitySectors());
                     //existIndForm.setSelectedProgramId(new Long(1));
-                    newInd.setSelectedActivityId(existIndForm.getSelectedActivityId());
-
+                    //newInd.setSelectedActivityId(existIndForm.getSelectedActivityId());
+                    newInd.setSelectedActivity(existIndForm.getSelectedActivities());  
+                  
+                    if(existIndForm.getPrjStatus().equals("prjUnchecked")){
+                    	newInd.setPrjStatus(true);
+                    	newInd.setType("programInd");
+                    }else if (existIndForm.getActivitySectors() != null  && existIndForm.getSelectedActivityId() != null){
+                    	newInd.setType("prg/prj");
+                    }
+                    
+                    if(existIndForm.getPrgStatus().equals("prgUnchecked")){
+                    	newInd.setPrgStatus(true);
+                    	newInd.setType("projectInd");
+                    }
+                    
+                    
+                    
                     IndicatorUtil.saveIndicators(newInd);
 //                    ProgramUtil.saveThemeIndicators(newInd, existIndForm.getSelectedProgramId());
                     existIndForm.reset();
@@ -123,6 +138,8 @@ public class ViewEditIndicator
             	existIndForm.setCategory(ind.getCategory());
             	existIndForm.setId(ind.getIndicatorId());
             	existIndForm.setIndType(2);
+            	existIndForm.setPrjStatus(null);
+            	existIndForm.setPrgStatus(null);
             	
             	  Collection indSector=ind.getSector();
             	  Collection Sectors = new ArrayList();

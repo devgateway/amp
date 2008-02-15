@@ -16,12 +16,20 @@
 </script>	
 </logic:present>
 
-
-
-
+<script language="JavaScript">
+function addEvent() {
+  document.aimEditActivityForm.event.value = "Add";
+  document.aimEditActivityForm.action= "/addDisbOrderToContract.do";
+  document.aimEditActivityForm.target = "_self";
+  document.aimEditActivityForm.submit();
+  return true;
+ 
+ }
+</script>
 
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addDisbOrderToContract.do" method="post">
+    <html:hidden property="event"/>
 <table width="100%" cellpadding=1 cellspacing=3 bgcolor="#ffffff">
 <tr>
 <td colspan="2" width="100%" bgcolor="#006699" class="textalb" height="20" align="center"><digi:trn key="aim:selectContract">Select Contract:&nbsp;</digi:trn></td>
@@ -48,9 +56,9 @@
 </tr>
 <tr>
 <td colspan="2" align="center">
-<html:submit property="event" style="inp-text"><digi:trn key="aim:add">Add</digi:trn></html:submit>
+    <input type="button" value="<digi:trn key="aim:add">Add</digi:trn>" class="inp-text" onclick="return addEvent();"/>
 
-<html:submit property="event" style="inp-text" onclick="javascript: window.close(); return false;"><digi:trn key="aim:cancel">Cancel</digi:trn></html:submit>
+ <input type="button" value="<digi:trn key="aim:cancel">Cancel</digi:trn>" onclick="javascript: window.close(); return false;"/>
 </td>
 </c:if>
 </tr>

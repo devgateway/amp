@@ -373,11 +373,14 @@ function closeWindow()
 												<td align="center">
 													<table width="90%">
 													<tr><td>
-														<bean:define id="translation">
+													<!-- 
+													<bean:define id="translation">
 															<digi:trn key="aim:clickToViewAllSearchPages">Click here to view all search pages</digi:trn>
 														</bean:define>
 														<a href="javascript:searchAlphaAll('viewAll')" title="<%=translation%>">
 															viewAll</a>&nbsp;|&nbsp;
+													 -->
+														
 														<logic:iterate name="aimThemeForm" property="alphaPages" id="alphaPages" type="java.lang.String">
 															<c:if test="${alphaPages != null}">
 																<c:if test="${aimThemeForm.currentAlpha == alphaPages}">

@@ -1,4 +1,3 @@
-
 package org.digijava.module.aim.action;
 
 import org.apache.struts.action.ActionForward;
@@ -38,8 +37,16 @@ public class SelectOrganisationForAhsurvey extends Action {
             eaform.setSvAction(eaform.getSvAction().toLowerCase());
         }
 
-        Collection col = new ArrayList();
-        if (eaform.getSvAction().equals("search")) {
+        if (eaform.getSvAction().equals("sel")) {
+            AmpAhsurvey ahs = eaform.getAhsurvey();
+            AmpOrganisation selOrg = DbUtil.getOrganisation(eaform.getSurveyOrgId());
+            ahs.setPointOfDeliveryDonor(selOrg);
+            eaform.setAhsurvey(ahs);
+
+            eaform.setSvAction(null);
+            return mapping.findForward("finish");
+        } else {
+            Collection col = new ArrayList();
             Collection orgCol = DbUtil.getBilMulOrganisations();
             if (!isEmpty(eaform.getKeyword())) {
                 for (Iterator orgIter = orgCol.iterator(); orgIter.hasNext(); ) {
@@ -52,14 +59,6 @@ public class SelectOrganisationForAhsurvey extends Action {
                 col = orgCol;
             }
             eaform.setPagedCol(col);
-        } else if (eaform.getSvAction().equals("sel")) {
-            AmpAhsurvey ahs=eaform.getAhsurvey();
-            AmpOrganisation selOrg = DbUtil.getOrganisation(eaform.getSurveyOrgId());
-            ahs.setPointOfDeliveryDonor(selOrg);
-            eaform.setAhsurvey(ahs);
-
-            eaform.setSvAction(null);
-            return mapping.findForward("finish");
         }
 
         eaform.setSvAction(null);

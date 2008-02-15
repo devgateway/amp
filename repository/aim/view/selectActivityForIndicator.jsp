@@ -68,7 +68,14 @@ function closeWindow() {
               </tr>
               <tr onmouseover="style.backgroundColor='#dddddd';" onmouseout="style.backgroundColor='#ECF3FD'">
                 <td valign="middle" style="margin:5px 1px 5px 5px;padding:1px 1px 1px 1px;width:1px;">
-                  <html:radio property="selectedActivityId" value="${act.ampActivityId}"/>
+                  
+                  <!--
+                  <html:checkbox property="selectedActivityId" value="${act.ampActivityId}"/>
+                  -->
+                  
+                  <html:multibox property="selectedActivity">
+                  ${act.ampActivityId}
+                  </html:multibox>
                 </td>
                 <td>
                 ${act.name}

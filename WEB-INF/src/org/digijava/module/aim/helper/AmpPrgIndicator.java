@@ -20,6 +20,9 @@ public class AmpPrgIndicator
 	private Set activity;
 	private Long selectedActivityId;
     private boolean defaultInd;
+    private boolean prjStatus;
+    private boolean prgStatus;
+    private Collection selectedActivity;
 	/**
 	 * @return Returns the category.
 	 */
@@ -164,5 +167,23 @@ public class AmpPrgIndicator
 	}
 	public void setDefaultInd(boolean defaultInd) {
 		this.defaultInd = defaultInd;
+	}
+	public boolean isPrjStatus() {
+		return prjStatus;
+	}
+	public void setPrjStatus(boolean prjStatus) {
+		this.prjStatus = prjStatus;
+	}
+	public boolean isPrgStatus() {
+		return prgStatus;
+	}
+	public void setPrgStatus(boolean prgStatus) {
+		this.prgStatus = prgStatus;
+	}
+	public Collection getSelectedActivity() {
+		return selectedActivity;
+	}
+	public void setSelectedActivity(Collection selectedActivity) {
+		this.selectedActivity = selectedActivity;
 	}
 }

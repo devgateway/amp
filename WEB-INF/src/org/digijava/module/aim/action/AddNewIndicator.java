@@ -96,14 +96,30 @@ public class AddNewIndicator
                  newInd.setCreationDate(newIndForm.getDate());
                  newInd.setDescription(newIndForm.getDescription());
                  newInd.setName(newIndForm.getName());
-                 newInd.setType(newIndForm.getType());
+                 newInd.setType("prg/prj");
+                 
+                 if(newIndForm.getActivitySectors() != null &&
+                		 newIndForm.getSelectedActivityId() == null  ){
+                	newInd.setType("programInd");
+                 }
+                 
+                 if(newIndForm.getSelectedActivities() != null &&
+                	newIndForm.getActivitySectors() == null){
+                	newInd.setType("projectInd");
+                 }
+                 
                  newInd.setSector(newIndForm.getSelActivitySector());
+                 
                  newInd.setIndSectores(newIndForm.getActivitySectors());
-	                 if(newIndForm.getSelectedActivityId() == null && 
+	                
+                 if(newIndForm.getSelectedActivityId() == null && 
 	                	newIndForm.getActivitySectors() == null ){
 	                	   newInd.setDefaultInd(true);
+	                	   newInd.setType("global");
 	                      }
-                 newInd.setSelectedActivityId(newIndForm.getSelectedActivityId());
+	                 
+	                 
+                 newInd.setSelectedActivity(newIndForm.getSelectedActivities());
                  IndicatorUtil.saveIndicators(newInd);
 //                 ProgramUtil.saveThemeIndicators(newInd, newIndForm.getSelectedProgramId());
                  //newIndForm.reset();

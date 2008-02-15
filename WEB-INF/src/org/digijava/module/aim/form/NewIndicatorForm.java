@@ -23,6 +23,8 @@ public class NewIndicatorForm
     private int indicatorType;
     private String action;
     private String keyword;
+    private String prgStatus;
+    private String prjStatus;
 
     private Collection<AmpTheme> programsCol;
     private Collection<AmpActivity> ActivitiesCol;
@@ -42,6 +44,7 @@ public class NewIndicatorForm
 	private Long subsectorLevel1;
 	private Long subsectorLevel2;
 	private Collection activitySectors;
+	private Long selectedActivity[];
 
     public Collection getSectorSchemes() {
 		return sectorSchemes;
@@ -312,6 +315,30 @@ public class NewIndicatorForm
 
 	public void setIndicatorType(int indicatorType) {
 		this.indicatorType = indicatorType;
+	}
+
+	public String getPrgStatus() {
+		return prgStatus;
+	}
+
+	public void setPrgStatus(String prgStatus) {
+		this.prgStatus = prgStatus;
+	}
+
+	public String getPrjStatus() {
+		return prjStatus;
+	}
+
+	public void setPrjStatus(String prjStatus) {
+		this.prjStatus = prjStatus;
+	}
+
+	public Long[] getSelectedActivity() {
+		return selectedActivity;
+	}
+
+	public void setSelectedActivity(Long[] selectedActivity) {
+		this.selectedActivity = selectedActivity;
 	}
 
 	

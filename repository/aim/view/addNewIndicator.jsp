@@ -125,10 +125,27 @@ function selectActivity(){
 function closeWindow() {
 		window.close();
 	}
+	function removeActivity(id) {
+	var temp = confirm("Do you want to delete this Activity?");
+	if(temp == false)
+	{
+			return false;
+	}
+	else
+	 {
+		<digi:context name="update" property="context/module/moduleinstance/selectActivityForIndicator.do?action=remove" />
+		document.aimNewIndicatorForm.action = "<%=update%>&aId="+id;
+	    document.aimNewIndicatorForm.target = "_self"
+	    document.aimNewIndicatorForm.submit();
+	    return true;		  
+    }
+}
+	
+	
 </script>
 <digi:instance property="aimNewIndicatorForm" />
 <digi:form action="/addNewIndicator.do" method="post">
-  <html:hidden property="type" value="3"/>
+ <!-- <html:hidden property="type" value="3"/> --> 
   <html:hidden property="trType" value="3"/>
   <html:hidden property="category" value="-1"/>
   <html:hidden property="indType"  styleId="IndTypChecke"/>
@@ -216,18 +233,35 @@ function closeWindow() {
               </span>
                -->
               <br>
-              <input type="checkbox" name="IndType" id="radioProjectIndicator" value="2" /> &nbsp;<digi:trn key="admin:projectind">Project indicator</digi:trn>&nbsp;
-              <span id="spnSelectProject" style="">
+              <input type="checkbox" name="IndType" id="radioProjectIndicator" value="2" /> 
+              &nbsp;<digi:trn key="admin:projectind">Project indicator</digi:trn>&nbsp;
                      [<a href="javascript:selectActivity();"><digi:trn key="admin:selectproject">Select project</digi:trn></a>]
+                     
+                      </td>
+                </tr>
+                <tr> 
+                 <td colspan="10" nowrap="nowrap" align="center" bgcolor="#f4f4f2">
+                   <table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center" class="box-border-nopadding">
                      <c:if test="${!empty aimNewIndicatorForm.selectedActivities}">
-                       <c:forEach var="act" items="${aimNewIndicatorForm.selectedActivities}">
-                         [${act.label}]
-                       </c:forEach>
-                   </c:if>
+	            		   <c:forEach var="act" items="${aimNewIndicatorForm.selectedActivities}">
+			                   <tr onmouseover="style.backgroundColor='#dddddd';" onmouseout="style.backgroundColor='white'">
+				                   <td align="left" >&nbsp;
+				                     ${act.label}
+				                  </td>
+				                  <td align="right">
+				                  <a href="javascript:removeActivity(${act.value})">
+																	 	<digi:img src="module/cms/images/deleteIcon.gif" 
+																		border="0" alt="Remove this child workspace"/></a>&nbsp;
+				                  </td>
+			                  </tr>
+	                      </c:forEach>									
+			          </c:if>
+             
+             
                    <c:if test="${empty aimNewIndicatorForm.selectedActivities}">
                        [<span style="color:Red;"><digi:trn key="admin:activitynoselected">Activity is not selected</digi:trn></span>]
                   </c:if>
-             </span>
+            </table>
             </td>
           </tr>
         </table>

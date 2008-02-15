@@ -108,7 +108,7 @@
 
 	function setValues(val) {
 		var valid;
-		if(document.aimEditActivityForm.teamLead.value == 'no') {
+		if(!document.aimEditActivityForm.teamLead.value) {
 			valid = validateEntryByMember();
 		} else {
 			valid = validateEntryByLeader();

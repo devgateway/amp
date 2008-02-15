@@ -363,7 +363,7 @@
 						</td>
 						<td valign="bottom">
 						<html:select name="mtefProjection" indexed="true" property="currencyCode" styleClass="inp-text">
-							<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode"
+							<html:optionsCollection name="aimEditActivityForm" property="validcurrencies" value="currencyCode"
 												label="currencyName"/>
 						</html:select>
 						</td>
@@ -480,7 +480,7 @@
 											</td>
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text">
-													<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode"
+													<html:optionsCollection name="aimEditActivityForm" property="validcurrencies" value="currencyCode"
 													label="currencyName"/>
 												</html:select>
 											</td>
@@ -1168,7 +1168,7 @@
 														</td>
 														<td valign="bottom">
 															<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
-																<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode"
+																<html:optionsCollection name="aimEditActivityForm" property="validcurrencies" value="currencyCode"
 																label="currencyName"/>
 															</html:select>
 														</td>
@@ -1241,7 +1241,7 @@
 														</td>
 														<td valign="bottom">
 															<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
-																<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode"
+																<html:optionsCollection name="aimEditActivityForm" property="validcurrencies" value="currencyCode"
 																label="currencyName"/>
 															</html:select>
 														</td>

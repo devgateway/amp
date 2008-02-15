@@ -108,7 +108,7 @@
 
 	function setValues(val) {
 		var valid;
-		if(document.aimEditActivityForm.workingTeamLeadFlag.value == 'no') {
+		if(document.aimEditActivityForm.teamLead.value == 'no') {
 			valid = validateEntryByMember();
 		} else {
 			valid = validateEntryByLeader();
@@ -383,7 +383,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</td>
 															</tr>
 														</field:display>
-														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='no'}">
+														<c:if test="${!aimEditActivityForm.teamLead}">
 															<tr>
 																<field:display name="Base Value" feature="Activity"></field:display>
 																<td><b>
@@ -463,7 +463,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</tr>
 														</c:if>
 
-														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='yes'}">
+														<c:if test="${aimEditActivityForm.teamLead}">
 															<tr>
 																<field:display name="Base Value" feature="Activity"></field:display>
 																<td><b>
@@ -640,7 +640,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</logic:iterate>
 														</logic:notEmpty>
 
-														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='yes' ||
+														<c:if test="${aimEditActivityForm.teamLead ||
 																indicator.baseValDate!=null}">
 
 														<%--

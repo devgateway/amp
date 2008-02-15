@@ -1526,6 +1526,7 @@ public class SaveActivity extends Action {
 			eaForm.setCommentFlag(false);
 			// Clearing approval process properties
 			eaForm.setWorkingTeamLeadFlag("no");
+                        eaForm.setTeamLead(false);
 			eaForm.setFundingRegions(null);
 			eaForm.setRegionalFundings(null);
 			eaForm.setLineMinRank(null);

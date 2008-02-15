@@ -354,8 +354,8 @@ ${fn:replace(message,quote,escapedQuote)}
 														<digi:link href="/detailedIndicator.do" name="urlParams">
 															<img src= "../ampTemplate/images/arrow_right.gif" border=0>
 														</digi:link>
-													</c:if>&nbsp;&nbsp;&nbsp;<b>
-													<field:display name="Indicator Name" feature="Activity">
+													</c:if>&nbsp;&nbsp;&nbsp;
+													<field:display name="Indicator Name" feature="Activity"><b>
 														<bean:define id="indName">
 															<bean:write name="indicator" property="indicatorName"/>
 														</bean:define>

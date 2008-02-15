@@ -33,7 +33,7 @@ public class SaveIndicatorValues extends Action
 			while (itr.hasNext()) {
 				ActivityIndicator temp = (ActivityIndicator) itr.next();
 				if (temp.equals(actInd)) {
-					if(eaForm.getWorkingTeamLeadFlag().equalsIgnoreCase("no"))
+					if(!eaForm.isTeamLead())
 					{
 						if (eaForm.getCurrentValDate() != null) {
 							if( eaForm.getCurrentVal() != null) {
@@ -45,7 +45,7 @@ public class SaveIndicatorValues extends Action
 						temp.setRisk(eaForm.getIndicatorRisk());
 						break;
 					}
-					if(eaForm.getWorkingTeamLeadFlag().equalsIgnoreCase("yes"))
+					if(eaForm.isTeamLead())
 					{
 						temp.setBaseVal(eaForm.getBaseVal());
 						temp.setBaseValDate(eaForm.getBaseValDate());

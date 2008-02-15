@@ -254,7 +254,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	// For activity approval process
 	private String approvalStatus;
 	private String workingTeamLeadFlag;
-
+         //to check if the current memeber is Team lead
+        private boolean teamLead;
 	// For aid harmonization survey indicators
 	private Collection survey = null;
 	private List indicators = null; 	// holds collection of Indicator helper objects
@@ -519,6 +520,15 @@ public class EditActivityForm extends ActionForm implements Serializable{
      private AmpAhsurvey ahsurvey;
      private List contracts;
      private Integer selContractId;
+    
+     
+       public boolean isTeamLead() {
+            return teamLead;
+        }
+
+        public void setTeamLead(boolean teamLead) {
+            this.teamLead = teamLead;
+        }
 
     public Integer getSelContractId() {
         return selContractId;

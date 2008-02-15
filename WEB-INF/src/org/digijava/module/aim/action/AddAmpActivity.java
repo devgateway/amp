@@ -440,6 +440,7 @@ public class AddAmpActivity extends Action {
         eaForm.setWorkingTeamLeadFlag("yes");
       else
         eaForm.setWorkingTeamLeadFlag("no");
+      eaForm.setTeamLead(teamLeadFlag);
 
       if (!eaForm.isEditAct() || logframepr.compareTo("true") == 0 || request.getParameter("logframe") != null) {
         if (teamMember != null)

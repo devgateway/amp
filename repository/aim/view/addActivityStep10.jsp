@@ -141,6 +141,7 @@
 <html:hidden property="indicatorId" />
 <html:hidden property="indicatorValId" />
 <html:hidden property="activityId" />
+<html:hidden property="teamLead" />
 <input type="hidden" name="edit" value="true">
 
 

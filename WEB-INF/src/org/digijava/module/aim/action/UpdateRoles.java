@@ -84,8 +84,8 @@ public class UpdateRoles extends Action {
 				} else {
 					ampRoles.setDeletePermission(new Boolean(false));
 				}
-				if (urForm.getTeamHead() != null
-						&& urForm.getTeamHead().equals("on")) {
+				if ((urForm.getTeamHead() != null && urForm.getTeamHead().equals("on"))
+						|| urForm.getRole().equalsIgnoreCase("Team Leader")) {
 					ampRoles.setTeamHead(new Boolean(true));
 				} else {
 					ampRoles.setTeamHead(new Boolean(false));
@@ -133,8 +133,8 @@ public class UpdateRoles extends Action {
 				} else {
 					ampRoles.setDeletePermission(new Boolean(false));
 				}
-				if (urForm.getTeamHead() != null
-						&& urForm.getTeamHead().equals("on")) {
+				if ((urForm.getTeamHead() != null && urForm.getTeamHead().equals("on"))
+						|| urForm.getRole().equalsIgnoreCase("Team Leader")) {
 					ampRoles.setTeamHead(new Boolean(true));
 				} else {
 					ampRoles.setTeamHead(new Boolean(false));

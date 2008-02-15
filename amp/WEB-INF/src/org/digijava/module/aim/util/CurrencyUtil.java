@@ -1024,14 +1024,23 @@ public class CurrencyUtil {
 	public static Boolean isRate(String currencyCode) throws AimException {
 		Session session = null;
 		Query q = null;
+		Date todate;
+		Date fromdate;
 		try {
 			logger.debug("retrivieving latest exchange rate for currency:"+currencyCode);
+			Calendar cal=Calendar.getInstance();
+			todate = cal.getTime();
+			cal.add(Calendar.YEAR, -1);	  
+			fromdate = cal.getTime();
+			
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select f.exchangeRate from "
 					+ AmpCurrencyRate.class.getName()
-					+ " f where (f.toCurrencyCode=:currencyCode) order by f.exchangeRateDate desc";
+					+ " f where (f.toCurrencyCode=:currencyCode) and f.exchangeRateDate between :fromDate and :toDate order by f.exchangeRateDate desc";
 			q = session.createQuery(queryString);
 			q.setString("currencyCode", currencyCode);
+			q.setParameter("fromDate",fromdate,Hibernate.DATE);
+			q.setParameter("toDate",todate,Hibernate.DATE);
 			List rates = q.list();
 			boolean result = false;
 			for (Iterator iter = rates.iterator(); iter.hasNext();) {

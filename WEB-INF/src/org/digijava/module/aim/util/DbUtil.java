@@ -857,11 +857,11 @@ public class DbUtil {
         return ampFundings;
     }
 
-    public static Collection getAmpFunding(Long ampActivityId) {
+    public static List<AmpFunding> getAmpFunding(Long ampActivityId) {
         logger.debug("getAmpFunding() with ampActivityId=" + ampActivityId);
         Session session = null;
         Query q = null;
-        Collection ampFundings = null;
+        List<AmpFunding> ampFundings = null;
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = new String();

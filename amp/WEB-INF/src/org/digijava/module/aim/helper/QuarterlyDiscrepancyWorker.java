@@ -29,8 +29,8 @@ public class QuarterlyDiscrepancyWorker	{
 			discrepancy.setFiscalQuarter(qi.getFiscalQuarter());
 			if ( qi.getAggregate() == 1 )
 				discrepancy.setTransactionDate(qi.getDateDisbursed());
-			discrepancy.setDonorPlanned(qi.getPlannedAmount());
-			discrepancy.setDonorActual(qi.getActualAmount());
+			discrepancy.setDonorPlanned(Double.toString(qi.getPlannedAmount()));
+			discrepancy.setDonorActual(Double.toString(qi.getActualAmount()));
 			discrepancy.setAggregate(qi.getAggregate());
 			arrList.add(discrepancy);
 		}
@@ -64,12 +64,12 @@ public class QuarterlyDiscrepancyWorker	{
 							&& ( disc.getFiscalQuarter()==qi.getFiscalQuarter() ) )	{
 								b = true;
 								if ( fp.getPerspective() == "IA")	{
-									disc.setImplAgencyPlanned(qi.getPlannedAmount());
-									disc.setImplAgencyActual(qi.getActualAmount());
+									disc.setImplAgencyPlanned(Double.toString(qi.getPlannedAmount()));
+									disc.setImplAgencyActual(Double.toString(qi.getActualAmount()));
 								}
 								else if ( fp.getPerspective() == "MA" )	{
-									disc.setMofedPlanned(qi.getPlannedAmount());
-									disc.setMofedActual(qi.getActualAmount());
+									disc.setMofedPlanned(Double.toString(qi.getPlannedAmount()));
+									disc.setMofedActual(Double.toString(qi.getActualAmount()));
 								}
 								break;
 						}
@@ -86,12 +86,12 @@ public class QuarterlyDiscrepancyWorker	{
 								if ( d1.equals(d2 ))	{
 									b = true;
 									if ( fp.getPerspective() == "IA")	{
-										disc.setImplAgencyPlanned(qi.getPlannedAmount());
-										disc.setImplAgencyActual(qi.getActualAmount());
+										disc.setImplAgencyPlanned(Double.toString(qi.getPlannedAmount()));
+										disc.setImplAgencyActual(Double.toString(qi.getActualAmount()));
 									}
 									else if ( fp.getPerspective() == "MA" )	{
-										disc.setMofedPlanned(qi.getPlannedAmount());
-										disc.setMofedActual(qi.getActualAmount());
+										disc.setMofedPlanned(Double.toString(qi.getPlannedAmount()));
+										disc.setMofedActual(Double.toString(qi.getActualAmount()));
 									}
 									break;					
 								}
@@ -105,12 +105,12 @@ public class QuarterlyDiscrepancyWorker	{
 					discrepancy.setFiscalQuarter(qi.getFiscalQuarter());
 					discrepancy.setAggregate(qi.getAggregate());
 					if ( fp.getPerspective() == "IA")	{
-						discrepancy.setImplAgencyPlanned(qi.getPlannedAmount());
-						discrepancy.setImplAgencyActual(qi.getActualAmount());
+						discrepancy.setImplAgencyPlanned(Double.toString(qi.getPlannedAmount()));
+						discrepancy.setImplAgencyActual(Double.toString(qi.getActualAmount()));
 					}
 					else if ( fp.getPerspective() == "MA" )	{
-						discrepancy.setMofedPlanned(qi.getPlannedAmount());
-						discrepancy.setMofedActual(qi.getActualAmount());
+						discrepancy.setMofedPlanned(Double.toString(qi.getPlannedAmount()));
+						discrepancy.setMofedActual(Double.toString(qi.getActualAmount()));
 					}
 					arrList.add(discrepancy);
 				}

@@ -6,7 +6,6 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -64,7 +63,6 @@ public class AmountCell extends Cell {
 	public AmountCell() {
 		super();
 		mergedCells = new HashSet();
-		// TODO Auto-generated constructor stub
 	}
 
 	public AmountCell(int ensureCapacity) {
@@ -79,7 +77,6 @@ public class AmountCell extends Cell {
 	public AmountCell(Long id) {
 		super(id);
 		mergedCells = new HashSet();
-		// TODO Auto-generated constructor stub
 	}
 
 	/*

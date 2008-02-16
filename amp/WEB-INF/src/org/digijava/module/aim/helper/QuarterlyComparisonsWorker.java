@@ -62,23 +62,23 @@ public class QuarterlyComparisonsWorker	{
 				for ( int i = 0 ; i < arrList.size() ; i++ )	{
 					QuarterlyComparison qc = (QuarterlyComparison) arrList.get(i);
 					if ( fy == qc.getFiscalYear() && fq == qc.getFiscalQuarter() )	{
-						String pm = qi.getPlannedAmount();
-						String am = qi.getActualAmount();
+						double pm = qi.getPlannedAmount();
+						double am = qi.getActualAmount();
 
-                                                if ( transactionType == Constants.DISBURSEMENT_ORDER)	{
-                                                        if ( qc.getActualDisbOrder() == null ) {
-                                                                qc.setActualDisbOrder(am);
-                                                                b = true;
-                                                        }
-                                                }
+                        if ( transactionType == Constants.DISBURSEMENT_ORDER)	{
+                                if ( qc.getActualDisbOrder() == null ) {
+                                        qc.setActualDisbOrder(Double.toString(am));
+                                        b = true;
+                                }
+                        }
 
 
 
 						if ( transactionType == Constants.DISBURSEMENT)	{
 							if ( qc.getPlannedDisbursement() == null
 								&& qc.getActualDisbursement()== null) {
-								qc.setPlannedDisbursement(pm);
-								qc.setActualDisbursement(am);
+								qc.setPlannedDisbursement(Double.toString(pm));
+								qc.setActualDisbursement(Double.toString(am));
 								b = true;
 							}
 						}
@@ -86,8 +86,8 @@ public class QuarterlyComparisonsWorker	{
 						if ( transactionType == Constants.EXPENDITURE)	{
 							if ( qc.getPlannedExpenditure() == null
 								&& qc.getActualExpenditure() == null ) {
-								qc.setPlannedExpenditure(pm);
-								qc.setActualExpenditure(am);
+								qc.setPlannedExpenditure(Double.toString(pm));
+								qc.setActualExpenditure(Double.toString(am));
 								b = true;
 							}
 
@@ -114,19 +114,19 @@ public class QuarterlyComparisonsWorker	{
 			qc.setFiscalYear(qi.getFiscalYear());
 			qc.setFiscalQuarter(qi.getFiscalQuarter());
 			if ( transactionType == Constants.COMMITMENT ) {
-				qc.setPlannedCommitment(qi.getPlannedAmount());
-				qc.setActualCommitment(qi.getActualAmount());
+				qc.setPlannedCommitment(Double.toString(qi.getPlannedAmount()));
+				qc.setActualCommitment(Double.toString(qi.getActualAmount()));
 			}
 			if ( transactionType == Constants.DISBURSEMENT)	{
-				qc.setPlannedDisbursement(qi.getPlannedAmount());
-				qc.setActualDisbursement(qi.getActualAmount());
+				qc.setPlannedDisbursement(Double.toString(qi.getPlannedAmount()));
+				qc.setActualDisbursement(Double.toString(qi.getActualAmount()));
 			}
                         if ( transactionType == Constants.DISBURSEMENT_ORDER)	{
-				qc.setActualDisbOrder(qi.getActualAmount());
+				qc.setActualDisbOrder(Double.toString(qi.getActualAmount()));
 			}
 			if ( transactionType == Constants.EXPENDITURE)	{
-				qc.setPlannedExpenditure(qi.getPlannedAmount());
-				qc.setActualExpenditure(qi.getActualAmount());
+				qc.setPlannedExpenditure(Double.toString(qi.getPlannedAmount()));
+				qc.setActualExpenditure(Double.toString(qi.getActualAmount()));
 			}
 			arrList.add(qc);
 		}

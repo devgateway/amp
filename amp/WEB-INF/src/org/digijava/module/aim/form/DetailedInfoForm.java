@@ -15,7 +15,8 @@ public class DetailedInfoForm extends MainProjectDetailsForm
 	private String totalRemaining ;
 	private String totalDisbursed ;
 	private String totalUnExpended ;
-        private String totalDisbOrdered ;
+	private String totalExpended; 
+    private String totalDisbOrdered ;
 	private String currCode;
 
 	/**
@@ -156,4 +157,12 @@ public class DetailedInfoForm extends MainProjectDetailsForm
         public void setTotalDisbOrdered(String totalDisbOrdered) {
                 this.totalDisbOrdered = totalDisbOrdered;
         }
+
+		public String getTotalExpended() {
+			return totalExpended;
+		}
+
+		public void setTotalExpended(String totalExpended) {
+			this.totalExpended = totalExpended;
+		}
 }

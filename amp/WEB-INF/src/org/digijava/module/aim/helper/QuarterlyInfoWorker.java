@@ -518,6 +518,10 @@ public class QuarterlyInfoWorker {
 		tq.setTotalDisbursed(strTotDisbursement);
 		double totExpended = DbUtil.getTotalDonorFund(ampFundingId,
 				new Integer(Constants.EXPENDITURE), adjType, perspective);
+		tq.setTotalExpended(CurrencyWorker.convert(totExpended,
+				fromCurrency, targetCurrency));
+		tq.setTotalExpended(CurrencyWorker.convert(totExpended,
+				fromCurrency, targetCurrency));
 		double totUnExpended = totDisbursement - totExpended;
 		String strTotUnexpended = CurrencyWorker.convert(totUnExpended,
 				fromCurrency, targetCurrency);

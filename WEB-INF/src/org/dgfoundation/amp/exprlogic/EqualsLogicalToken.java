@@ -11,6 +11,7 @@ public class EqualsLogicalToken extends LogicalToken {
 		this.type=type;
 	}
 	
+	@Override
 	public boolean evaluate(CategAmountCell c) {
 		ret=value.equals(c.getMetaValueString(type));
 		return super.evaluate(c);

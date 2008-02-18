@@ -12,7 +12,9 @@ public class ExampleLogicalToken {
 			 ArConstants.PLANNED.equals(element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE)) )
 	*/
 	
-	public LogicalToken buildLogicalToken() {
+	public static LogicalToken testToken=buildLogicalToken();
+	
+	public static LogicalToken buildLogicalToken() {
 		EqualsLogicalToken NotDisbursementTrType=new EqualsLogicalToken(ArConstants.DISBURSEMENT,ArConstants.TRANSACTION_TYPE,true );
 		EqualsLogicalToken actualAdjType=new EqualsLogicalToken(ArConstants.ACTUAL,ArConstants.ADJUSTMENT_TYPE,false );		
 		EqualsLogicalToken plannedAdjType=new EqualsLogicalToken(ArConstants.PLANNED,ArConstants.ADJUSTMENT_TYPE,false );		

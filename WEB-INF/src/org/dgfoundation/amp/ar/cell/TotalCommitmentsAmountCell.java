@@ -5,9 +5,8 @@ package org.dgfoundation.amp.ar.cell;
 
 import java.util.Iterator;
 
-import org.dgfoundation.amp.ar.ArConstants;
-import org.digijava.module.aim.logic.AmountCalculator;
-import org.digijava.module.aim.logic.Logic;
+import org.dgfoundation.amp.exprlogic.ExampleLogicalToken;
+import org.dgfoundation.amp.exprlogic.LogicalToken;
 
 /**
  * @author mihai
@@ -38,9 +37,23 @@ public class TotalCommitmentsAmountCell extends AmountCell {
          * @return Returns the amount.
          */
     public double getAmount() {
+    	double ret = 0;
 		if (id != null)
 			return convert();
-		return Logic.getInstance().getCommitmentCalculator().calculateAmount(mergedCells);
+	
+		Iterator i = mergedCells.iterator();
+		while (i.hasNext()) {
+			CategAmountCell element = (CategAmountCell) i.next();
+		/*	if( ArConstants.DISBURSEMENT.equals(element.getMetaValueString(ArConstants.TRANSACTION_TYPE)) ) continue;
+			
+			 if( ArConstants.ACTUAL.equals(element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE)) || 
+					 ArConstants.PLANNED.equals(element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE)) )
+		*/
+			if(ExampleLogicalToken.testToken.evaluate(element))
+			ret += element.getAmount();
+		}
+		return ret;
+
 	}
 
     public Cell merge(Cell c) {

@@ -533,7 +533,7 @@ function commentWin(val) {
 																					</logic:present>
                                                                                                                                                                          </li>
 
-																				</c:forEach>														</c:forEach>
+																				</c:forEach>														
 																			</ul>
 																			</TD>
 																		</TR>

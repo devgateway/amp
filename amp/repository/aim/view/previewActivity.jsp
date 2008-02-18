@@ -474,21 +474,30 @@ function collapseAll() {
                                   
                                     
                                     <!--Begin Objectives --->
-			      <field:display feature="Identification" name="Objectives">
-								 <tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											<digi:trn key="aim:objectives">Objectives</digi:trn>										</td>
+			      					<field:display feature="Identification" name="Objectives">
+			      					<field:display feature="Identification" name="Objective">
+								 	<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+											<digi:trn key="aim:objectives">Objectives</digi:trn>										
+										</td>
 										<td bgcolor="#ffffff">
                                           <c:if test="${aimEditActivityForm.objectives!=null}">
 											<c:set var="objKey" value="${aimEditActivityForm.objectives}" />
 											<digi:edit key="${objKey}"></digi:edit>
-                                         </c:if>										</td>
+                                         </c:if>										
+                                        </td>
 									</tr>
+									</field:display>
 									<logic:present name="currentMember" scope="session">
 									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											<digi:trn key="aim:objectiveComments"> 
-											Objective Comments</digi:trn>										</td>
+									<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
+									<digi:trn key="aim:objectiveComments"> 
+										Objective Comments
+									</digi:trn>										
+									</td>
 										<td bgcolor="#ffffff">
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
+										 <field:display feature="Identification" name="Objective Assumption">
 										 	<logic:equal name="comments" property="key" value="Objective Assumption">
 												<logic:iterate name="comments" id="comment" property="value"
 													type="org.digijava.module.aim.dbentity.AmpComments"><b>
@@ -496,6 +505,8 @@ function collapseAll() {
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
+                                         </field:display>
+                                         <field:display feature="Identification" name="Objective Verification">
                                         	<logic:equal name="comments" property="key" value="Objective Verification">
 												<logic:iterate name="comments" id="comment" property="value"
 													type="org.digijava.module.aim.dbentity.AmpComments"><b>
@@ -503,6 +514,8 @@ function collapseAll() {
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
+                                          </field:display>
+                                        	<field:display feature="Identification" name="Objective Objectively Verifiable Indicators">
                                         	<logic:equal name="comments" property="key" value="Objective Objectively Verifiable Indicators">
 												<logic:iterate name="comments" id="comment" property="value"
 													type="org.digijava.module.aim.dbentity.AmpComments"><b>
@@ -510,12 +523,14 @@ function collapseAll() {
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
-										</logic:iterate>										</td>
+                                        	</field:display>
+										</logic:iterate>										
+										</td>
 									</tr>
 									</logic:present>
 									</field:display>
   						
- <!--END Objectives --->
+ 						<!--END Objectives --->
  
 						 <field:display feature="Identification" name="Description">
 									<tr>

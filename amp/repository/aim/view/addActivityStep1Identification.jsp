@@ -99,13 +99,14 @@ target.style.cursor = "default"
 												<html:textarea property="title" cols="60" rows="2" styleClass="inp-text"/>
 												</a>
 											</td></tr>
-											<field:display name="Objective" feature="Identification">
-											<tr bgcolor="#ffffff"><td valign="top" align="left">
-												<a title="<digi:trn key="aim:ObjectivesAndComponentsofProject">The key objectives and main components of the project</digi:trn>">
-												<digi:trn key="aim:objective">Objective</digi:trn>
-												</a>
-											</td>
-											<td valign="top" align="left">
+											<field:display name="Objectives" feature="Identification">
+												<field:display name="Objective" feature="Identification">
+													<tr bgcolor="#ffffff"><td valign="top" align="left">
+													<a title="<digi:trn key="aim:ObjectivesAndComponentsofProject">The key objectives and main components of the project</digi:trn>">
+													<digi:trn key="aim:objective">Objective</digi:trn>
+													</a>
+												</td>
+												<td valign="top" align="left">
 												<table cellPadding=0 cellSpacing=0>
 													<tr>
 														<td>
@@ -123,19 +124,35 @@ target.style.cursor = "default"
 																<a href="javascript:edit('<%=objKey%>')">
 																<digi:trn key="aim:edit">Edit</digi:trn></a>	
 																&nbsp;
-															
-														
-															<a href="javascript:commentWin('objObjVerIndicators')" id="CommentObjObjVerIndicators"><digi:trn key="aim:addEditObjVerIndicators">Add/Edit Objectively Verifiable Indicators</digi:trn></a>
-															&nbsp;
-															<a href="javascript:commentWin('objAssumption')" id="CommentObjAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
-															&nbsp;
-															<a href="javascript:commentWin('objVerification')" id="CommentObjVerification"><digi:trn key="aim:addEditVerification">Add/Edit Verification</digi:trn></a>		
-														</td>
-													</tr>
-												</table>												
-											</td></tr>
+																<field:display feature="Identification" name="Objective Objectively Verifiable Indicators">
+																	<a href="javascript:commentWin('objObjVerIndicators')" id="CommentObjObjVerIndicators">
+																		<digi:trn key="aim:addEditObjVerIndicators">
+																			Add/Edit Objectively Verifiable Indicators
+																		</digi:trn>
+																	</a>
+																</field:display>
+																&nbsp;
+																<field:display feature="Identification" name="Objective Assumption">
+																	<a href="javascript:commentWin('objAssumption')" id="CommentObjAssumption">
+																		<digi:trn key="aim:addEditAssumption">
+																			Add/Edit Assumption
+																		</digi:trn>
+																	</a>
+																</field:display>
+																&nbsp;
+																<field:display feature="Identification" name="Objective Verification">
+																	<a href="javascript:commentWin('objVerification')" id="CommentObjVerification">
+																		<digi:trn key="aim:addEditVerification">
+																			Add/Edit Verification
+																		</digi:trn>
+																	</a>
+																</field:display>		
+															</td>
+														</tr>
+													</table>												
+												</td></tr>
+												</field:display>
 											</field:display>
-											
 											<field:display name="Description" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">

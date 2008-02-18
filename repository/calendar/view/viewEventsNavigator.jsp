@@ -55,10 +55,10 @@ function selectCalendarType(view, type) {
                                     		<html:text styleId="customViewStartDate" name="calendarViewForm" property="customViewStartDate" style="width:80px"/>
                                     	</td>
                                     	<td nowrap="nowrap">&nbsp;
-                                    		<a id="clear1" href="javascript:clearDate(customViewStartDate, 'clear1')" style="text-decoration:none">
+                                    		<a id="clear1" href="javascript:clearDate(document.calendarViewForm.customViewStartDate, 'clear1')" style="text-decoration:none">
 									 			<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="CLEAR"/>
 											</a>
-                                    		<a id="date1" href='javascript:pickDateById("date1","customViewStartDate","dd/mm/yyyy","clear1")' style="text-decoration:none">
+                                    		<a id="date1" href='javascript:pickDateWithClear("date1",document.calendarViewForm.customViewStartDate,"clear1")' style="text-decoration:none">
 												<img src="../ampTemplate/images/show-calendar.gif" alt="START DATE" border=0>
 											</a>
                                    		</td>
@@ -110,10 +110,10 @@ function selectCalendarType(view, type) {
                                     		<html:text styleId="customViewEndDate" name="calendarViewForm" property="customViewEndDate" style="width:80px"/>
                                     	</td>
                                     	<td nowrap="nowrap">&nbsp;
-                                    		<a id="clear2" href="javascript:clearDate(customViewEndDate, 'clear2')" style="text-decoration:none">
+                                    		<a id="clear2" href="javascript:clearDate(document.calendarViewForm.customViewEndDate, 'clear2')" style="text-decoration:none">
 									 			<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="CLEAR"/>
 											</a>
-                                    		<a id="date2" href='javascript:pickDateById("date2","customViewEndDate","dd/mm/yyyy","clear2")' style="text-decoration:none">
+                                    		<a id="date2" href='javascript:pickDateWithClear("date2",document.calendarViewForm.customViewEndDate,"clear2")' style="text-decoration:none">
 												<img src="../ampTemplate/images/show-calendar.gif" alt="END DATE" border=0>
 											</a>
 										</td>

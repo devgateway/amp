@@ -1158,7 +1158,10 @@
 																					<c:forEach var="fd" items="${regFunds.commitments}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
-																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
+																								<digi:trn key="aim:commitments:${fd.adjustmentTypeNameTrimmed}">
+																										<c:out value="${fd.adjustmentTypeName}"/>	
+																								</digi:trn>
+																																															</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
 																							<FONT color=blue>*</FONT>
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
@@ -1167,7 +1170,10 @@
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.perspectiveName}"/>																							</td>
+																								<digi:trn key="aim:commitments:${fd.perspectiveNameTrimmed}">
+																										<c:out value="${fd.perspectiveName}"/>	
+																							</digi:trn>
+																																														</td>
 																						</tr>
 																					</c:forEach>
 																				</table>																			</td>
@@ -1187,7 +1193,9 @@
 																					<c:forEach var="fd" items="${regFunds.disbursements}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
-																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
+																									<digi:trn key="aim:disbursements:${fd.adjustmentTypeNameTrimmed}">
+																										<c:out value="${fd.adjustmentTypeName}"/>	
+																								</digi:trn>																						</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
 																							<FONT color=blue>*</FONT>
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
@@ -1196,7 +1204,9 @@
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.perspectiveName}"/>																							</td>
+																								<digi:trn key="aim:disbursements:${fd.perspectiveNameTrimmed}">
+																										<c:out value="${fd.perspectiveName}"/>	
+																							</digi:trn>																						</td>
 																						</tr>
 																					</c:forEach>
 																				</table>																			</td>
@@ -1216,7 +1226,10 @@
 																					<c:forEach var="fd" items="${regFunds.expenditures}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
-																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
+																								<digi:trn key="aim:expenditures:${fd.adjustmentTypeNameTrimmed}">
+																										<c:out value="${fd.adjustmentTypeName}"/>	
+																								</digi:trn>
+																							</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
 																							<FONT color=blue>*</FONT>
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
@@ -1225,7 +1238,10 @@
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.perspectiveName}"/>																							</td>
+																									<digi:trn key="aim:expenditures:${fd.perspectiveNameTrimmed}">
+																										<c:out value="${fd.perspectiveName}"/>	
+																									</digi:trn>
+																							</td>																							</td>
 																						</tr>
 																					</c:forEach>
 																				</table>																			</td>
@@ -1286,7 +1302,10 @@
 																						<tr>
 																							<field:display name="Components Actual/Planned Commitments" feature="Components">
 																							<td width="50" bgcolor="#ffffff">
-																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
+																								<digi:trn key="aim:commitments:${fd.adjustmentTypeNameTrimmed}">
+																									<c:out value="${fd.adjustmentTypeName}"/>	
+																								</digi:trn>
+																							</td>
 																							</field:display>
 																							<field:display name="Components Total Amount Commitments" feature="Components">
 																							<td align="right" width="100" bgcolor="#ffffff">
@@ -1303,7 +1322,10 @@
 																							</field:display>
 																							<field:display name="Components Perspective Commitments" feature="Components">
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.perspectiveName}"/>																							</td>
+																								<digi:trn key="aim:commitments:${fd.perspectiveNameTrimmed}">
+																									<c:out value="${fd.perspectiveName}"/>	
+																								</digi:trn>
+																							</td>
 																							</field:display>
 																						</tr>
 																					</c:forEach>
@@ -1325,7 +1347,10 @@
 																						<tr>
 																							<field:display name="Components Actual/Planned Disbursements" feature="Components">
 																							<td width="50" bgcolor="#ffffff">
-																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
+																							<digi:trn key="aim:disbursements:${fd.adjustmentTypeNameTrimmed}">
+																								<c:out value="${fd.adjustmentTypeName}"/>	
+																							</digi:trn>								
+																							</td>
 																							</field:display>
 																							<field:display name="Components Total Amount Disbursements" feature="Components">
 																							<td align="right" width="100" bgcolor="#ffffff">
@@ -1342,7 +1367,10 @@
 																							</field:display>
 																							<field:display name="Components Perspective Disbursements" feature="Components">
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.perspectiveName}"/>																							</td>
+																								<digi:trn key="aim:disbursements:${fd.perspectiveNameTrimmed}">
+																									<c:out value="${fd.perspectiveName}"/>	
+																								</digi:trn>	
+																																													</td>
 																							</field:display>
 																						</tr>
 																					</c:forEach>
@@ -1364,7 +1392,9 @@
 																						<tr bgcolor="#ffffff">
 																							<field:display name="Components Actual/Planned Expenditures" feature="Components">
 																							<td width="50">
-																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
+																								<digi:trn key="aim:expenditures:${fd.adjustmentTypeNameTrimmed}">
+																									<c:out value="${fd.adjustmentTypeName}"/>	
+																								</digi:trn>																							</td>
 																							</field:display>
 																							<field:display name="Components Total Amount Expenditures" feature="Components">
 																							<td align="right">
@@ -1381,7 +1411,9 @@
 																							</field:display>
 																							<field:display name="Components Perspective Expenditures" feature="Components">
 																							<td>
-																								<c:out value="${fd.perspectiveName}"/>																							</td>
+																								<digi:trn key="aim:expenditures:${fd.perspectiveNameTrimmed}">
+																									<c:out value="${fd.perspectiveName}"/>	
+																								</digi:trn>																						</td>
 																							</field:display>
 																						</tr>
 																					</c:forEach>

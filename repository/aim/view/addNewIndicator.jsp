@@ -68,11 +68,12 @@ if(!document.aimNewIndicatorForm.IndType.checked && !document.aimNewIndicatorFor
          document.getElementById("IndTypChecke").value = valind;
       }
  
- /*
+ 
 	var length = document.aimNewIndicatorForm.selActivitySector.length;
+	var checkbox = document.aimNewIndicatorForm.IndicatorType.checked
 	var Sector;
 	
-	if(!length){
+	if(checkbox && !length){
 		alert("Please add Sectors");
 		 return false;
 	}else{
@@ -81,7 +82,7 @@ if(!document.aimNewIndicatorForm.IndType.checked && !document.aimNewIndicatorFor
 			document.getElementById("hdnselActivitySectors").value = Sector;
 		}
 	}
-*/
+
   <digi:context name="addInd" property="context/module/moduleinstance/addNewIndicator.do?action=add" />
   document.forms[0].action="<%=addInd%>";
   document.forms[0].submit();

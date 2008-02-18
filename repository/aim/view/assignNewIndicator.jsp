@@ -303,6 +303,13 @@ function closeWindow()
 											</td>
 										</tr>
                                     </tr>
+                                    <tr>
+                                     <td align="center">
+                                     <c:if test="${empty aimThemeForm.pagedCol && aimThemeForm.pagedCol != null}">
+									   <digi:trn key="aim:noindicators">No indicators match the search criteria</digi:trn> .
+									</c:if>	
+                                     </td>
+                                    </tr>
                               <logic:notEmpty name="aimThemeForm" property="pagedCol">  
                                     <logic:iterate name="aimThemeForm" id="indicators" property="pagedCol"
 									type="org.digijava.module.aim.dbentity.AmpIndicator">
@@ -321,8 +328,9 @@ function closeWindow()
 										 &nbsp;
 										</td>
 										</tr>
-										
+									
 									</logic:iterate>
+									
                                         <tr>
                                           <td colspan="10" align="center">
                                             &nbsp;
@@ -401,7 +409,8 @@ function closeWindow()
 												</td>
 											</tr>
 										</logic:notEmpty>
-				                     </logic:notEmpty>                
+				                     </logic:notEmpty>
+				                                     
                                     </td>
                                   </tr>
                                 </table>

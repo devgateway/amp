@@ -72,8 +72,6 @@ function saveIndicator(){
 		
 		
 	}   
-	  
-	 
 		
 	  
   /*
@@ -184,7 +182,7 @@ function closeWindow() {
   <html:hidden name="aimNewIndicatorForm" property="themeId" styleId="hdnThemeId" />
   <html:hidden property="selActivitySector" styleId="hdnselActivitySectors" />
 
-  <table width="100%" align="center" border="1" class=box-border-nopadding>
+  <table width="100%" align="center" border="0" class=box-border-nopadding>
     <tr bgcolor="#006699" class=r-dotted-lg >
       <td colspan="1" align="center" class="textalb">
       <b>View/Edit Indicator</b>
@@ -192,7 +190,7 @@ function closeWindow() {
     </tr>
     <tr align="center" bgcolor="#ECF3FD">
       <td>
-        <table border="1">
+        <table border="0">
           <tr id="trName">
             <td>
             Indicator name:

@@ -49,8 +49,8 @@ public class TotalCommitmentsAmountCell extends AmountCell {
 			 if( ArConstants.ACTUAL.equals(element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE)) || 
 					 ArConstants.PLANNED.equals(element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE)) )
 		*/
-			if(ExampleLogicalToken.testToken.evaluate(element))
-			ret += element.getAmount();
+			ret+=ExampleLogicalToken.totalCommitmentsLogicalToken.evaluate(element);
+		
 		}
 		return ret;
 

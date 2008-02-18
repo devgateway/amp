@@ -12,23 +12,34 @@ public class ExampleLogicalToken {
 			 ArConstants.PLANNED.equals(element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE)) )
 	*/
 	
-	public static LogicalToken testToken=buildLogicalToken();
+	public static TokenExpression totalCommitmentsLogicalToken=buildTotalCommitmentsLogicalToken();
+	public static TokenExpression undisbursedLogicalToken=buildUndisbursedLogicalToken();
 	
-	public static LogicalToken buildLogicalToken() {
+	public static TokenExpression buildTotalCommitmentsLogicalToken() {
+		
 		EqualsLogicalToken NotDisbursementTrType=new EqualsLogicalToken(ArConstants.DISBURSEMENT,ArConstants.TRANSACTION_TYPE,true );
 		EqualsLogicalToken actualAdjType=new EqualsLogicalToken(ArConstants.ACTUAL,ArConstants.ADJUSTMENT_TYPE,false );		
 		EqualsLogicalToken plannedAdjType=new EqualsLogicalToken(ArConstants.PLANNED,ArConstants.ADJUSTMENT_TYPE,false );		
 		ORBinaryLogicalToken or1=new ORBinaryLogicalToken(actualAdjType,plannedAdjType,false);	
 		ANDBinaryLogicalToken and1=new ANDBinaryLogicalToken(NotDisbursementTrType,or1,false);
 		
-		return and1;
+		TokenExpression te=new TokenExpression(new LogicalToken[]{and1});
+		
+		return te;
 		
 	}
 	
 	
-	public boolean useToken(CategAmountCell c) {
-		LogicalToken logicalToken = buildLogicalToken();
-		return logicalToken.evaluate(c);
+	public static TokenExpression buildUndisbursedLogicalToken() {
+		EqualsLogicalToken commitmentTrType=new EqualsLogicalToken(ArConstants.COMMITMENT,ArConstants.TRANSACTION_TYPE,false );
+		
+		EqualsLogicalToken disbursement=new EqualsLogicalToken(ArConstants.DISBURSEMENT,ArConstants.TRANSACTION_TYPE,false );
+		EqualsLogicalToken actualAdjType=new EqualsLogicalToken(ArConstants.ACTUAL,ArConstants.ADJUSTMENT_TYPE,false );	
+		ANDBinaryLogicalToken and1=new ANDBinaryLogicalToken(disbursement,actualAdjType,false);
+		and1.setSign(-1);
+		TokenExpression te=new TokenExpression(new LogicalToken[]{commitmentTrType,and1});
+		return te;
 	}
+	
 	
 }

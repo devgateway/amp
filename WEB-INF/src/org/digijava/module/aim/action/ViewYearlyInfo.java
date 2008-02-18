@@ -104,8 +104,9 @@ public class ViewYearlyInfo extends TilesAction {
 									Constants.MOFED,fp.getCurrencyCode());
 					formBean.setTotalCommitted(tq.getTotalCommitted());
 					formBean.setTotalDisbursed(tq.getTotalDisbursed());
-                                        formBean.setTotalDisbOrdered(tq.getTotalDisbOrdered());
+                    formBean.setTotalDisbOrdered(tq.getTotalDisbOrdered());
 					formBean.setTotalUnExpended(tq.getTotalUnExpended());
+					formBean.setTotalExpended(tq.getTotalExpended());
 					formBean.setTotalRemaining(tq.getTotalRemaining());
 					formBean.setCurrCode(tq.getCurrencyCode());
 

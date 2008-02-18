@@ -5,9 +5,19 @@ public class TotalsQuarterly
 	private String totalCommitted ;
 	private String totalRemaining ;
 	private String totalDisbursed ;
-        private String totalDisbOrdered ;
-	private String totalUnExpended ;
+	private String totalDisbOrdered ;
+	private String totalUnExpended;
+	private String totalExpended;
 	private String currencyCode;
+	
+
+	public String getTotalExpended() {
+		return totalExpended;
+	}
+
+	public void setTotalExpended(String totalExpended) {
+		this.totalExpended = totalExpended;
+	}
 
 	/**
 	 * @return

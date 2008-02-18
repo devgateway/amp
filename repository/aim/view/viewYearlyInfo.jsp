@@ -650,49 +650,22 @@
             	      		        			<SPAN class="note">
 
                	         	  					<logic:equal name="aimYearlyInfoForm" property="transactionType" value="1">
+													<digi:trn key="aim:totaldisbursed">Total Disbursed</digi:trn>:
+													<bean:write name="aimYearlyInfoForm" property="totalDisbursed"/>
+													<bean:write name="aimYearlyInfoForm" property="currency"/>
+												</logic:equal>
 
-                     								<digi:trn key="aim:totalCommitted">Total Committed</digi:trn>:
+                                                <logic:equal name="aimYearlyInfoForm" property="transactionType" value="4">
+													<digi:trn key="aim:totalDisbOrdered">Total Ordered</digi:trn>:
+													<bean:write name="aimYearlyInfoForm" property="totalDisbOrdered"/>
+													<bean:write name="aimYearlyInfoForm" property="currency"/>
+												</logic:equal>
 
-						     								<bean:write name="aimYearlyInfoForm" property="totalCommitted"/>
-
-															<bean:write name="aimYearlyInfoForm" property="currency"/>
-
-						     								<digi:trn key="aim:totalRemaining">Total Remaining</digi:trn>:
-
-						     								<bean:write name="aimYearlyInfoForm" property="totalRemaining"/>
-
-															<bean:write name="aimYearlyInfoForm" property="currency"/>
-
-				     										</logic:equal>
-
-                                                                                                                	<logic:equal name="aimYearlyInfoForm" property="transactionType" value="4">
-
-         		            						<digi:trn key="aim:totalDisbOrdered">Total Ordered</digi:trn>:
-
-				   		  								<bean:write name="aimYearlyInfoForm" property="totalDisbOrdered"/>
-
-															<bean:write name="aimYearlyInfoForm" property="currency"/>
-
-                                                                                                                    </logic:equal>
-
-
-
-
-							     							<logic:equal name="aimYearlyInfoForm" property="transactionType" value="2">
-
-         		            						<digi:trn key="aim:totalDisbursed">Total Disbursed</digi:trn>:
-
-				   		  								<bean:write name="aimYearlyInfoForm" property="totalDisbursed"/>
-
-															<bean:write name="aimYearlyInfoForm" property="currency"/>
-
-				     										<digi:trn key="aim:totalUnExpended">Total Un-Expended</digi:trn>:
-
-				     										<bean:write name="aimYearlyInfoForm" property="totalUnExpended"/>
-
-															<bean:write name="aimYearlyInfoForm" property="currency"/>
-
-							     							</logic:equal>
+												<logic:equal name="aimYearlyInfoForm" property="transactionType" value="2">
+													<digi:trn key="aim:totalexpended">Total Expended</digi:trn>:
+													<bean:write name="aimYearlyInfoForm" property="totalExpended"/>
+													<bean:write name="aimYearlyInfoForm" property="currency"/>
+												</logic:equal>
 
          			                 			</SPAN>
 

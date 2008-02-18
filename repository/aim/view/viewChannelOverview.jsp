@@ -511,29 +511,27 @@ function commentWin(val) {
 																			<TD bgcolor="#ffffff">
 																			<ul>
 																				<c:forEach var="actSect" items="${activity.sectors}">
-																					<li><c:out value="${actSect.sectorName}" />
-																		
-																					<c:if test="${!empty actSect.subsectorLevel1Name}">
-																						<br/><IMG
-																							src="../ampTemplate/images/link_out_bot.gif"/>
-																						<c:out value="${actSect.subsectorLevel1Name}" />
-																					
-																						<c:if test="${!empty actSect.subsectorLevel2Name}">
-																							 <br/>&nbsp;&nbsp;&nbsp;&nbsp;<IMG
-																								src="../ampTemplate/images/link_out_bot.gif"/>
-																							<c:out value="${actSect.subsectorLevel2Name}" />
-																							&nbsp;
-																						</c:if>
-																					</c:if>
-                                                                                                                                                                         <logic:present name="actSect"
+																					<li><c:out value="${actSect.sectorName}" />&nbsp;&nbsp;
+																					<logic:present name="actSect"
 																						property="sectorPercentage">
 																						<c:if test="${actSect.sectorPercentage!=0}">
 																							(<c:out value="${actSect.sectorPercentage}" />%)
 																						</c:if>
-																					</logic:present>
-                                                                                                                                                                         </li>
+																					</logic:present></li>
+																					<c:if test="${!empty actSect.subsectorLevel1Name}">
+																						<li><IMG
+																							src="../ampTemplate/images/link_out_bot.gif">
+																						<c:out value="${actSect.subsectorLevel1Name}" />&nbsp;
+																						</li>
+																						<c:if test="${!empty actSect.subsectorLevel2Name}">
+																							<li>&nbsp;&nbsp;&nbsp;&nbsp; <IMG
+																								src="../ampTemplate/images/link_out_bot.gif">
+																							<c:out value="${actSect.subsectorLevel2Name}" />
+																							&nbsp;</li>
+																						</c:if>
+																					</c:if>
 
-																				</c:forEach>														
+																				</c:forEach>
 																			</ul>
 																			</TD>
 																		</TR>
@@ -568,14 +566,14 @@ function commentWin(val) {
 																					<field:display name="Implementation Level"
 																						feature="Location">
 																						<TR>
-																							<TD width="100%" colspan="4" align="left" bgcolor="#ffffff">
+																							<TD width="100%" colspan="3" align="left" bgcolor="#ffffff">
 																								<i><digi:trn key="aim:impLevel">Implementation Level</digi:trn></i>
 																								 :&nbsp;<c:out value="${activity.impLevel}"/>
 																							</TD>
 																						</TR>
 																					</field:display>
 																					
-																					<TD width="100%" colspan="4" align="left" bgcolor="#ffffff">
+																					<TD width="100%" colspan="3" align="left" bgcolor="#ffffff">
 																						<i>
 																							<digi:trn key="aim:impLocations">Implementation Location</digi:trn>
 																							:&nbsp;
@@ -586,7 +584,7 @@ function commentWin(val) {
 																					
 																					<c:if test="${!empty activity.locations}">
 																						<TR>
-																							<TD width="30%" align="center" bgcolor="#ffffff">
+																							<TD width="33%" align="center" bgcolor="#ffffff">
 																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 1}" > 
 																									<i>
 																									<category:getoptionvalue categoryIndex="1" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
@@ -594,7 +592,7 @@ function commentWin(val) {
 																								</c:if>
 																								&nbsp;
 																							</TD>
-																							<TD width="30%" align="center" bgcolor="#ffffff">
+																							<TD width="33%" align="center" bgcolor="#ffffff">
 																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 2}" >
 																									<i>
 																									<category:getoptionvalue categoryIndex="2" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
@@ -602,7 +600,7 @@ function commentWin(val) {
 																								</c:if>
 																								&nbsp;
 																							</TD>
-																							<TD width="30%" align="center" bgcolor="#ffffff">
+																							<TD width="33%" align="center" bgcolor="#ffffff">
 																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 3}" >
 																									<i>
 																									<category:getoptionvalue categoryIndex="3" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
@@ -610,27 +608,19 @@ function commentWin(val) {
 																								</c:if>
 																								&nbsp;
 																							</TD>
-                                                                                                                                                                                         <TD  align="center" bgcolor="#ffffff">
-                                                                                                                                                                                             <i> <digi:trn key="aim:percent">Percent</digi:trn></i>
-																							</TD>
 																							</TR>
 																						
 																						<c:forEach var="loc" items="${activity.locations}">
 																							<TR>
-																								<TD width="30%" align="center" bgcolor="#ffffff">
+																								<TD width="33%" align="center" bgcolor="#ffffff">
 																									<c:out value="${loc.region}" />
 																								</TD>
 																						
-																								<TD width="30%" align="center" bgcolor="#ffffff">
+																								<TD width="33%" align="center" bgcolor="#ffffff">
 																									<c:out value="${loc.zone}" />
 																								</TD>
-																								<TD width="30%" align="center" bgcolor="#ffffff">
+																								<TD width="33%" align="center" bgcolor="#ffffff">
 																									<c:out value="${loc.woreda}" />
-																								</TD>
-                                                                                                                                                                                                 <TD  align="center" bgcolor="#ffffff">
-                                                                                                                                                                                                     <c:if test='${loc.percent!=""}'>
-																									<c:out value="${loc.percent}%" />
-                                                                                                                                                                                                       </c:if>
 																								</TD>
 																							</TR>
 																						</c:forEach>
@@ -723,14 +713,17 @@ function commentWin(val) {
 																			</c:if>
 																			<br />
 																		</field:display> 
+																	
 																		<field:display feature="Identification" name="Objectives">
-																			<i><b><digi:trn key="aim:programObjective">
-																				Objective
-																			</digi:trn></b></i>:
-																			<c:if test='${!empty activity.objective}'>
-																				<digi:edit key="${activity.objective}" />
-																			</c:if>
-																		</field:display> 
+																			<field:display feature="Identification" name="Objective">
+																				<i><b>
+																				<digi:trn key="aim:programObjective">
+																					Objective
+																				</digi:trn></b></i>:
+																				<c:if test='${!empty activity.objective}'>
+																					<digi:edit key="${activity.objective}" />
+																				</c:if>
+																			</field:display> 
 																			<ul>
 																				<c:forEach var="comments"
 																					items="${aimChannelOverviewForm.allComments}">
@@ -756,7 +749,7 @@ function commentWin(val) {
 																						<c:if test='${comments.key=="Objective Objectively Verifiable Indicators"}'>
 																							<c:forEach var="comment" items="${comments.value}">
 																								<li><i><digi:trn key="aim:objectivelyindicatorspreview">
-																								Objectively Verifiable Indicators
+																									Objectively Verifiable Indicators
 																								</digi:trn>:
 																								</i>
 																								${comment.comment}</li>
@@ -765,7 +758,7 @@ function commentWin(val) {
 																					</field:display>
 																				</c:forEach>
 																			</ul>
-																		 
+																		 	</field:display>
 																		
 																		<field:display name="Lessons Learned" feature="Identification">
 																			<TR>
@@ -782,9 +775,7 @@ function commentWin(val) {
 																			
 																		</field:display>
 																		
-																		<field:display feature="Identification"
-																			name="Purpose">
-
+																		<field:display feature="Identification" name="Purpose">
 																			<c:if test="${!empty activity.purpose}">
 																				<i><b><digi:trn key="aim:programPurpose">Purpose</digi:trn></b></i>:
                                                                           <digi:edit

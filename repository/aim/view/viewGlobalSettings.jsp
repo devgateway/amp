@@ -20,7 +20,7 @@ function saveClicked() {
 }
 function validateCustomFields(form){
 	if (form.gsfValue.value==''){
-		alert('<digi:trn key="aim:Global:validation">You must provide a value for the current setting</digi:trn>')	
+		alert('<digi:trn key="aim:Global:validation">You must provide a value for</digi:trn>: '+form.globalSettingsNameTranslated.value)	
 		return false;
 	}
 	return true;
@@ -88,6 +88,22 @@ function createDateString(monthId, dayId) {
 	}
 }
 
+function saveAllSettings(){
+	var allvalues='';
+	for (i=0;i < document.aimGlobalSettingsForm.length -1;i++){
+	  if (document.aimGlobalSettingsForm[i].globalId){
+			if (!validateCustomFields(document.aimGlobalSettingsForm[i])){
+			return false;
+		}
+		    var id=document.aimGlobalSettingsForm[i].globalId.value;
+	    	var val=document.aimGlobalSettingsForm[i].gsfValue.value;
+		    allvalues=allvalues+id+"="+val+"&";
+		}
+	  
+	}
+	document.aimGlobalSettingsForm[document.aimGlobalSettingsForm.length -1].allValues.value=allvalues;
+	return true;
+}
 --></script>
 
 <digi:instance property="aimGlobalSettingsForm" />
@@ -97,14 +113,16 @@ function createDateString(monthId, dayId) {
 <!-- End of Logo -->
 <html:hidden property="event" value="view"/>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=760>
   <tr>
     <td class=r-dotted-lg width=14>&nbsp;</td>
     <td align=left class=r-dotted-lg vAlign=top width=750>
       <table cellPadding=5 cellSpacing=0 width="100%" border=0>
         <tr>
           <!-- Start Navigation -->
-          <td height=33><span class=crumb>
+          <td height=33>
+          
+          <span class=crumb>
             <c:set var="clickToViewAdmin">
               <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
             </c:set>
@@ -116,6 +134,7 @@ function createDateString(monthId, dayId) {
             <digi:trn key="aim:globalSettingsManager">
             Global Settings Manager
             </digi:trn>
+          </span>
           </td>
           <!-- End navigation -->
         </tr>
@@ -129,15 +148,9 @@ function createDateString(monthId, dayId) {
           </td>
         </tr>
         <tr>
-          <td height=16 vAlign=center width=571>
+          <td height=16 vAlign=center>
             <html:errors />
-          </td>
-        </tr>
-        <tr>
-          <td noWrap width=100% vAlign="top">
-            <table width="100%" cellspacing=1 cellSpacing=1 border=0>
-              <tr><td noWrap width=600 vAlign="top">
-                <table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
+            <table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
                   <tr bgColor=#ffffff>
                     <td vAlign="top" width="100%">
 
@@ -155,28 +168,20 @@ function createDateString(monthId, dayId) {
                           <td bgcolor="#fefefe">
                             <b>
                               <digi:trn key="aim:systemName">
-                              Setting Name
-                              </digi:trn>
-                            </b>
-                          </td>
+                              Setting Name                              </digi:trn>
+                            </b>                          </td>
                           <td bgcolor="#fefefe">
                             <b>
                               <digi:trn key="aim:currentValue">
-                              Current Value
-                              </digi:trn>
-                            </b>
-                          </td>
+                              Current Value                              </digi:trn>
+                            </b>                          </td>
                           <td bgcolor="#fefefe">
                             <b>
                               <digi:trn key="aim:newValue">
-                              New Value
-                              </digi:trn>
-                            </b>
-                          </td>
-                          <td bgcolor="#fefefe">
-                          &nbsp;
-                          </td>
-
+                              New Value                              </digi:trn>
+                            </b>                          </td>
+                          <td bgcolor="#fefefe">&nbsp;                          </td>
+							</tr>
 
                           <logic:notEmpty name="aimGlobalSettingsForm" property="gsfCol">
                             <logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett"
@@ -187,14 +192,10 @@ function createDateString(monthId, dayId) {
                                 <c:set var="globaLset">
                                   <bean:write name="globalSett" property="globalSettingsName"/>
                                 </c:set>
-                                <digi:trn key="aim:Global:${globaLset}">
-                                  <bean:write name="globalSett" property="globalSettingsName"/>
-                                </digi:trn>
+                                <digi:trn key="aim:Global:${globaLset}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>
 
                                 <logic:notEmpty name="globalSett" property="globalSettingsDescription">
-                                  <img src= "../ampTemplate/images/help.gif" border="0" title="<bean:write name="globalSett" property="globalSettingsDescription"/>">
-                                </logic:notEmpty>
-                              </td>
+                                  <img src= "../ampTemplate/images/help.gif" border="0" title="<bean:write name="globalSett" property="globalSettingsDescription"/>">                                </logic:notEmpty>                              </td>
                               <td bgcolor="#ffffff">
                                 <b>
                                   <bean:define id="thisForm" name="aimGlobalSettingsForm" type="org.digijava.module.aim.form.GlobalSettingsForm" />
@@ -217,17 +218,15 @@ function createDateString(monthId, dayId) {
                                     <digi:trn key='${fn:replace(newKey, " ", "_")}'>
                                       <%out.write(currentValue);%>
                                     </digi:trn>
-
-                                </b>
-                              </td>
+                                </b>                              </td>
 
 
                               <digi:form action="/GlobalSettings.do" method="post" onsubmit="return validateCustomFields(this)" >
                                 <td bgcolor="#ffffff" >
                                   <html:hidden property="globalId" name="globalSett"/>
                                   <html:hidden property="globalSettingsName" name="globalSett"/>
-
-
+								 <input type="hidden" name="globalSettingsNameTranslated" value='<digi:trn key="aim:Global:${globaLset}"><bean:write name="globalSett" property="globalSettingsName"/></digi:trn>'>
+									
                                   <% 
                                   	String possibleValues 	= "possibleValues(" + globalSett.getGlobalSettingsName() + ")"; 
                                   	String gsType			= globalSett.getGlobalSettingsPossibleValues();
@@ -255,6 +254,7 @@ function createDateString(monthId, dayId) {
                                     <html:text property="gsfValue" value="<%= globalSett.getGlobalSettingsValue()%>"></html:text> 
                                     <digi:trn key="aim:gloablSetting:customFormat">(Custom Format)</digi:trn> 	
                                     <%}else { %>
+                                    	
                                     <html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
                                       <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global" type="org.digijava.module.aim.helper.KeyValue">
                                       	<% String key2	= "aim:globalSettings:" + globalSett.getGlobalSettingsName() + ":" + global.getValue(); %>
@@ -313,6 +313,7 @@ function createDateString(monthId, dayId) {
 	                                    			%>
 	                                    		</select>
 	                                    	</c:when>
+	                                    	
 	                                    	<c:when test='${type == "t_Boolean"}'>
 	                                    		<html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
 	                                    			<html:option value="true">true</html:option>
@@ -323,35 +324,46 @@ function createDateString(monthId, dayId) {
 	                                      		<html:text property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>' />
 	                                      	</c:otherwise>
                                       	</c:choose>
-                                    </logic:empty>
-                                </td>
-                                <td bgcolor="#f4f4f2" >
+                                    </logic:empty>                                </td>
+                                <td bgcolor="#f4f4f2">
                                   <html:submit property="save">
                                     <digi:trn key="aim:save">
-                                    save
-                                    </digi:trn>
-                                  </html:submit>
-                                </td>
-
+                                    save                                    </digi:trn>
+                                  </html:submit>                                </td>
                               </digi:form>
                             </tr>
                             </logic:iterate>
                           </logic:notEmpty>
                           <!-- end page logic -->
+                          <tr>
+                              <td colspan="4" align="right" bgcolor="#ffffff">
+                              	<digi:form  action="/GlobalSettings.do" method="post" onsubmit="return saveAllSettings()" >
+                              
+                              <html:hidden property="allValues"/>
+                              	<html:submit property="saveAll">
+                                    <digi:trn key="aim:saveAll">
+                                    	Save All                                    
+                                    </digi:trn>
+                                  </html:submit> 
+                              </digi:form>
+                              </td>
+                           
+                            </tr>
                       </table>
           </td></tr>
                       </table>
 
     </td>
-                        </tr>
-                </table>
-</td>
-                    </tr>
+              </tr>
             </table>
+          </td>
+        </tr>
+        <tr>
+          <td noWrap width=100% vAlign="top">
+          
+				</td>
+                  </tr>	
+	</table>
 </td>
-                        </tr>
-      </table>
-</td>
-                  </tr>
+</tr>
 </table>
-

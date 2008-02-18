@@ -22,6 +22,14 @@ public class GlobalSettingsForm extends ActionForm {
 	String newSettingName;
 	String newTableName;
 	
+	private String allValues;
+	
+	public String getAllValues() {
+            return allValues;
+        }
+	public void setAllValues(String allValues) {
+            this.allValues = allValues;
+        }
 	public String getNewSettingName() {
 		return newSettingName;
 	}

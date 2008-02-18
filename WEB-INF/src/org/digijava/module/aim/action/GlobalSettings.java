@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.servlet.ServletContext;
@@ -76,6 +77,24 @@ public class GlobalSettings extends Action {
 			//ActionErrors errors = new ActionErrors();
 			refreshGlobalSettingsCache	= true;
 		}
+		
+		
+		if(request.getParameter("saveAll")!=null){
+			flushSessionObjects(session);
+			String allValues=gsForm.getAllValues();
+			StringTokenizer token=new StringTokenizer(allValues,"&");
+			
+			while (token.hasMoreTokens()) {
+	                    String element = token.nextToken();
+	                    String[] nameValue= element.split("=");
+	                    this.updateGlobalSetting(Long.parseLong(nameValue[0]), nameValue[1]);
+                        }
+			
+			//this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
+			//ActionErrors errors = new ActionErrors();
+			refreshGlobalSettingsCache	= true;
+		}
+		
 		Collection col = FeaturesUtil.getGlobalSettings();
 		if (refreshGlobalSettingsCache) {
 			FeaturesUtil.setGlobalSettingsCache(col);

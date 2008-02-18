@@ -6,6 +6,7 @@ package org.dgfoundation.amp.ar.cell;
 import java.util.Iterator;
 
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.exprlogic.ExampleLogicalToken;
 import org.digijava.module.aim.logic.Logic;
 
 /**
@@ -39,7 +40,13 @@ public class UndisbursedAmountCell extends AmountCell {
 	public double getAmount() {
 		if (id != null)
 			return convert();
-		return Logic.getInstance().getUnDisbursmentCalculator().calculateAmount(mergedCells);
+		double ret = 0;
+		Iterator<CategAmountCell> i = mergedCells.iterator();
+		while (i.hasNext()) {
+			CategAmountCell element = (CategAmountCell) i.next();
+			ret+=ExampleLogicalToken.undisbursedLogicalToken.evaluate(element);	
+		}
+		return ret;
 	}
 	
 	

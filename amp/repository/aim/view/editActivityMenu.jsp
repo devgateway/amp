@@ -55,7 +55,7 @@ function saveAsDraftClicked() {
 function save() {
   var flag = validateForm();
   if (flag == true) {
-    document.aimEditActivityForm.saveButton.disabled = true;
+     /* document.aimEditActivityForm.saveButton.disabled = true;   	 AMP-2688 */
     <digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
     document.aimEditActivityForm.action = "<%= save %>?edit=true";
     document.aimEditActivityForm.target = "_self";

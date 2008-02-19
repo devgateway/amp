@@ -170,6 +170,24 @@
 															</html:select>
 														</td>
 													</tr>
+                                                    <tr>
+														<td bgcolor="#f4f4f2" align="right" width="50%">
+															<digi:trn key="aim:reportsDefaultStartYear">Reports Default Start Year</digi:trn>
+														</td>
+														<td align="left" width="50%" bgcolor="#f4f4f2">
+															<html:text property="reportStartYear" size="5"  styleClass="inp-text"/>
+														</td>
+													</tr>
+ <tr>
+														<td bgcolor="#f4f4f2" align="right" width="50%">
+															<digi:trn key="aim:reportsDefaultEndYear">Reports Default End Year</digi:trn>
+														</td>
+														<td align="left" width="50%" bgcolor="#f4f4f2">
+															<html:text property="reportEndYear" size="5"  styleClass="inp-text"/>
+														</td>
+													</tr>
+
+
 													<tr>
 														<td bgcolor="#f4f4f2"  align="right" width="50%">
 															<digi:trn key="aim:defFisCalendar">Fiscal Calendar</digi:trn>

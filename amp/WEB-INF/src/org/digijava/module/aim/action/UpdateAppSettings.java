@@ -100,7 +100,17 @@ public class UpdateAppSettings extends Action {
                                 if(reportsPerPage==null){
                                   reportsPerPage=0;
                                 }
+                                Integer reportStartYear = ampAppSettings.getReportStartYear();
+                                if(reportStartYear==null){
+                                    reportStartYear=0;
+                                }
+                                Integer reportEndYear = ampAppSettings.getReportEndYear();
+                                if(reportEndYear==null){
+                                    reportEndYear=0;
+                                }
                                 uForm.setDefReportsPerPage(reportsPerPage);
+                                uForm.setReportStartYear(reportStartYear);
+                                uForm.setReportEndYear(reportEndYear);                                
 				uForm.setLanguage(ampAppSettings.getLanguage());
 				uForm.setDefPerspective(ampAppSettings.getDefaultPerspective());
 				uForm.setCurrencyId(ampAppSettings.getCurrency()
@@ -165,6 +175,9 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings.setAmpAppSettingsId(uForm.getAppSettingsId());
 				ampAppSettings.setDefaultRecordsPerPage(new Integer(uForm
 						.getDefRecsPerPage()));
+				ampAppSettings.setReportStartYear((new Integer(uForm.getReportStartYear())));
+				ampAppSettings.setReportEndYear((new Integer(uForm.getReportEndYear())));
+			
                                 ampAppSettings.setDefaultReportsPerPage(uForm.getDefReportsPerPage());
 				ampAppSettings.setCurrency(CurrencyUtil.getAmpcurrency(uForm
 						.getCurrencyId()));
@@ -299,6 +312,9 @@ public class UpdateAppSettings extends Action {
 		oldSettings.setDefaultPerspective(newSettings.getDefaultPerspective());
 		oldSettings.setTeam(newSettings.getTeam());
 		oldSettings.setMember(ampMember);
+		oldSettings.setReportStartYear(newSettings.getReportStartYear());
+		oldSettings.setReportEndYear(newSettings.getReportEndYear());
+	
 		oldSettings.setUseDefault(new Boolean(true));
 		oldSettings.setDefaultTeamReport( newSettings.getDefaultTeamReport() );
 		DbUtil.update(oldSettings);
@@ -311,6 +327,9 @@ public class UpdateAppSettings extends Action {
 		appSettings.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
 		appSettings.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage()
 				.intValue());
+		appSettings.setReportStartYear(ampAppSettings.getReportStartYear());
+		appSettings.setReportEndYear(ampAppSettings.getReportEndYear());
+	
                 appSettings.setDefReportsPerPage(ampAppSettings.getDefaultReportsPerPage());
 		appSettings.setCurrencyId(ampAppSettings.getCurrency()
 				.getAmpCurrencyId());

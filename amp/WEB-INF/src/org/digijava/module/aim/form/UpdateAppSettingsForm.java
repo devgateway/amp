@@ -18,8 +18,12 @@ public class UpdateAppSettingsForm extends ActionForm {
 
 	private Long fisCalendarId = null;
 
-	private String type = null; /*
-								 * specifies whether updating team level
+	private int reportStartYear;
+	private int reportEndYear;
+	
+	private String type = null; 				/*
+	
+									 * specifies whether updating team level
 								 * settings or user specific settings
 								 */
 
@@ -211,5 +215,21 @@ public class UpdateAppSettingsForm extends ActionForm {
         public int getDefReportsPerPage() {
           return defReportsPerPage;
         }
+
+	public int getReportStartYear() {
+	    return reportStartYear;
+	}
+
+	public void setReportStartYear(int reportStartYear) {
+	    this.reportStartYear = reportStartYear;
+	}
+
+	public int getReportEndYear() {
+	    return reportEndYear;
+	}
+
+	public void setReportEndYear(int reportEndYear) {
+	    this.reportEndYear = reportEndYear;
+	}
 
 }

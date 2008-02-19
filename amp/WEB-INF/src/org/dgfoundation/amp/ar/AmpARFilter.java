@@ -68,6 +68,8 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Integer fromYear;
 	private Integer toYear;	
 	private Long regionSelected=null;
+	private boolean approved=false;
+	private boolean draft=false;
 	
 	private Boolean governmentApprovalProcedures;
 	private Boolean jointCriteria;
@@ -100,6 +102,11 @@ public class AmpARFilter extends PropertyListable implements Filter {
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
 			
 		    AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
+		    
+			if(tempSettings==null)
+				if(tm!=null)
+				    tempSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
+			
 		    if (this.getCurrency() == null)
 		    	this.setCurrency(tempSettings.getCurrency());		    
 			this.getAmpTeams().add(ampTeam);
@@ -111,19 +118,18 @@ public class AmpARFilter extends PropertyListable implements Filter {
 					teamAssignedOrgs.addAll(team.getOrganizations());
 				}
 			}
+		
+		
+			if (this.getFromYear()==null && tempSettings.getReportStartYear()!=null && tempSettings.getReportStartYear().intValue()!=0)
+			    this.setFromYear(tempSettings.getReportStartYear());
+			
+			if (this.getToYear()==null && tempSettings.getReportEndYear()!=null && tempSettings.getReportEndYear().intValue()!=0)
+			    this.setToYear(tempSettings.getReportEndYear());
+			
 		}
 		
-		if (this.getFromYear()==null){
-		    Long fromYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE));
-		    this.setFromYear(fromYear.intValue());
-		}
-		
-		if (this.getToYear()==null){
-		    Long toYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));
-		    this.setToYear(toYear.intValue());
-		}
-	
 
+		
 		String widget=(String) request.getAttribute("widget");
 		if(widget!=null) this.setWidget(new Boolean(widget).booleanValue());
 		
@@ -180,7 +186,8 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		String LINE_MIN_RANK_FILTER="SELECT amp_activity_id FROM amp_activity WHERE line_min_rank="+lineMinRank;
 		String PLAN_MIN_RANK_FILTER="SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank="+planMinRank;
 		String REGION_SELECTED_FILTER="SELECT amp_activity_id FROM v_regions WHERE region_id ="+regionSelected;
-		
+		String APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status like '" + Constants.APPROVED_STATUS+"'";
+		String DRAFT_FILTER="SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = false)";
 		if(fromYear!=null) {
 		    String FROM_FUNDING_YEAR_FILTER="SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.amp_funding_id AND date_format(fd.transaction_date,_latin1'%Y')>='"+fromYear+"'";
 		    queryAppend(FROM_FUNDING_YEAR_FILTER);
@@ -551,6 +558,24 @@ public class AmpARFilter extends PropertyListable implements Filter {
 
 	public void setRegionSelected(Long regionSelected) {
 		this.regionSelected = regionSelected;
+	}
+
+
+
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
+	}
+
+	public boolean isDraft() {
+		return draft;
+	}
+
+	public void setDraft(boolean draft) {
+		this.draft = draft;
 	}
 
 

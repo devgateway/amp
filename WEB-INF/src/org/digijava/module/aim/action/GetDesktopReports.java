@@ -32,12 +32,12 @@ public class GetDesktopReports extends TilesAction {
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		if (tm != null) {
 				Collection reports;
-				if (tm.getTeamHead() == true) {
-					reports = TeamUtil.getAllTeamReports(tm.getTeamId());
-				} else {
+//				if (tm.getTeamHead() == true) {
+//					reports = TeamUtil.getAllTeamReports(tm.getTeamId());
+//				} else {
 					reports = TeamMemberUtil.getAllMemberReports(tm.getMemberId());
 
-				}
+//				}
                                 Integer reportsPerPage=0;
 				session.setAttribute(Constants.MY_REPORTS,reports);
 				session.setAttribute(Constants.TEAM_ID,tm.getTeamId());

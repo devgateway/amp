@@ -77,8 +77,8 @@ public final class AdvancedReportUtil {
 				session.save(ampTeamReports);
 				
 			}
-			else
-			{
+//			else
+//			{
 				//logger.info(teamMember.getMemberName() + " is Team Memeber ");
 				//Long lg = teamMember.getMemberId();
 				AmpTeamMember ampTeamMember =null;
@@ -95,7 +95,7 @@ public final class AdvancedReportUtil {
 				ampReports.getMembers().add(ampTeamMember);
 				session.saveOrUpdate(ampTeamMember);
 				//session.save(ampTeamMember);
-			}
+//			}
 
 			queryString = "select filters from " + AmpFilters.class.getName() + " filters ";
 			//logger.info( " Filter Query...:: " + queryString);

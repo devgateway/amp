@@ -5,6 +5,8 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@page import="org.dgfoundation.amp.ar.CellColumn"%>
+<%@page import="org.dgfoundation.amp.ar.cell.Cell"%>
 <bean:define id="metadata" name="reportMeta"
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
 	toScope="page" />
@@ -52,31 +54,44 @@
 					<tr>
 						<td></td>
 						<td
-							style="font-size: 8pt; font-weight: bold;text-align: center;border-bottom:1px solid;text-transform: uppercase;"
-							><c:set var="key">
+							style="font-size: 8pt; font-weight: bold;text-align: left;border-bottom:1px solid;text-transform: uppercase;"><c:set
+							var="key">
 								aim:reportBuilder:${column.name}
 							</c:set> <digi:trn key="${key}">
 					 				${column.name}
-							 </digi:trn>:</td>
-						<td valign="bottom"> 
-						<table border="0" cellpadding="0" cellspacing="0">
-							<bean:define id="viewable" name="column"
-								type="org.dgfoundation.amp.ar.Viewable" scope="page"
-								toScope="request" />
-							<bean:define id="isGroup" type="java.lang.String" value="true"
-								toScope="request" />
-
-							<logic:iterate id="cell" name="column" property="items"
-								type="org.dgfoundation.amp.ar.Viewable">
+							 </digi:trn>:
+						</td>
+						<td valign="bottom" style="font-size: 8pt;text-align: left;border-bottom:1px solid;text-transform: uppercase;">
+						<table border="0" cellpadding="2" cellspacing="1" style="margin:3px ">
+								
+								<bean:define id="isGroup" type="java.lang.String" value="true" toScope="request" />
+								<logic:iterate id="cell" name="column" property="items" type="org.dgfoundation.amp.ar.Viewable">
+								<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request" />
+									
+								<%
+								CellColumn cellColumn=(CellColumn)viewable;
+								Cell c=cellColumn.getByOwner((Long)ownerId);
+								if(c!=null) {
+								%> 
 								<tr>
-									<bean:define id="viewable" name="cell"
-										type="org.dgfoundation.amp.ar.Viewable" scope="page"
-										toScope="request" />
-									<jsp:include page="<%=viewable.getViewerPath()%>" />
-
+									<td nowrap="nowrap" style="font-size: 8pt;text-align: right;text-transform: uppercase;font-style: italic">
+									<c:set var="key">
+										aim:reportBuilder:<%=cellColumn.getName()%>
+									</c:set>
+								 	<digi:trn key="${key}">
+								 		<%=cellColumn.getName()%>
+									 </digi:trn>:&nbsp;
+									</td>
+									<td style="font-size: 8pt;text-align: left;text-transform: uppercase" align="right">
+										<jsp:include page="<%=viewable.getViewerPath()%>" />
+									</td>		
 								</tr>
-							</logic:iterate>
+								<%} %>
+								</logic:iterate>
+						
 						</table>
+						
+						
 						</td>
 					</tr>
 				</logic:equal>
@@ -84,7 +99,8 @@
 			</logic:notEqual>
 		</logic:iterate>
 		<%//for funding columns%>
-
+		
+	<bean:define id="isGroup" type="java.lang.String" value="true" toScope="request" />
 		<!--//iterate  all columns  -->
 		<logic:iterate name="columnReport" property="items" id="column"
 			scope="page">
@@ -111,7 +127,7 @@
 											width="50">&nbsp;</td>
 										<logic:iterate id="cellHeader" name="col" property="items"
 											type="org.dgfoundation.amp.ar.Viewable">
-											<td  width="25%"
+											<td width="25%"
 												style="font-size: 8pt; font-weight: bold;text-align: center;border-bottom:1px dotted;text-transform: uppercase;padding:4px;border-left:1px dotted #CCCCCC;">
 											<c:out value="${cellHeader.name}"></c:out></td>
 										</logic:iterate>
@@ -120,14 +136,14 @@
 								<c:set var="showHeader" value="false" scope="page" />
 							</c:if>
 							<tr>
-								<td height="18"
-									style="font-size: 8pt; font-weight: bold;text-align: center;border-bottom:1px dotted;text-transform: uppercase;"
-									width="70"><c:out value="${col.name}"></c:out></td>
+								<td height="18" width="20%"
+									style="font-size: 8pt; font-weight: bold;text-align: center;border-bottom:1px dotted;text-transform: uppercase;">
+										<c:out value="${col.name}"></c:out></td>
 								<logic:iterate id="cell" name="col" property="items"
 									type="org.dgfoundation.amp.ar.Viewable">
-									<td  width="25%" nowrap="nowrap"
+									<td width="25%" nowrap="nowrap"
 										style="font-size:8pt;text-align: right;border-bottom:1px dotted;border-left:1px dotted #CCCCCC; padding: 2px"
-										valign="middle" ><bean:define id="viewable" name="cell"
+										valign="middle"><bean:define id="viewable" name="cell"
 										type="org.dgfoundation.amp.ar.Viewable" scope="page"
 										toScope="request" /> <jsp:include
 										page="<%=viewable.getViewerPath()%>" /></td>
@@ -151,4 +167,15 @@
 	</logic:iterate>
 
 </logic:notEqual>
+<tr>
+	<td></td>
 
+	<!-- generate total row -->
+	<td colspan="2" style="border-bottom: 1px solid #000000"><bean:define
+		id="viewable" name="columnReport"
+		type="org.dgfoundation.amp.ar.ColumnReportData" scope="page"
+		toScope="request" /> <jsp:include page="TrailCells.jsp" /></td>
+</tr>
+<tr>
+	<td colspan="2" height="20">&nbsp;</td>
+</tr>

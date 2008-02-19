@@ -17,7 +17,11 @@ public class AmpApplicationSettings implements Serializable {
 	private AmpTeamMember member;
 
 	private Integer defaultRecordsPerPage;
-
+	
+	private Integer reportStartYear;
+	
+	private Integer reportEndYear;
+	
 	private AmpCurrency currency;
 
 	private AmpFiscalCalendar fiscalCalendar;
@@ -138,4 +142,20 @@ public class AmpApplicationSettings implements Serializable {
         public void setDefaultReportsPerPage(Integer  defaultReportsPerPage) {
           this.defaultReportsPerPage = defaultReportsPerPage;
         }
+
+	public Integer getReportStartYear() {
+	    return reportStartYear;
+	}
+
+	public void setReportStartYear(Integer reportStartYear) {
+	    this.reportStartYear = reportStartYear;
+	}
+
+	public Integer getReportEndYear() {
+	    return reportEndYear;
+	}
+
+	public void setReportEndYear(Integer reportEndYear) {
+	    this.reportEndYear = reportEndYear;
+	}
 }

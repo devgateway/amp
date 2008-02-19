@@ -11,7 +11,8 @@ public class ApplicationSettings {
 		  private String perspective;
 		  private Long currencyId;
 		  private Long fisCalId;
-
+		  private Integer reportStartYear;
+		  private Integer reportEndYear;
 		  private AmpReports defaultAmpReport;
                   private int defReportsPerPage;
 
@@ -78,4 +79,20 @@ public class ApplicationSettings {
                 public void setDefReportsPerPage(int defReportsPerPage) {
                   this.defReportsPerPage = defReportsPerPage;
                 }
+
+		public Integer getReportStartYear() {
+		    return reportStartYear;
+		}
+
+		public void setReportStartYear(Integer reportStartYear) {
+		    this.reportStartYear = reportStartYear;
+		}
+
+		public Integer getReportEndYear() {
+		    return reportEndYear;
+		}
+
+		public void setReportEndYear(Integer reportEndYear) {
+		    this.reportEndYear = reportEndYear;
+		}
 }

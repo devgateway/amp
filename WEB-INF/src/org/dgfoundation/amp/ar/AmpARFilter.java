@@ -120,10 +120,10 @@ public class AmpARFilter extends PropertyListable implements Filter {
 			}
 		
 		
-			if (this.getFromYear()==null && tempSettings.getReportStartYear()!=null && tempSettings.getReportStartYear().intValue()!=0)
+			if (tempSettings.getReportStartYear()!=null && tempSettings.getReportStartYear().intValue()!=0)
 			    this.setFromYear(tempSettings.getReportStartYear());
 			
-			if (this.getToYear()==null && tempSettings.getReportEndYear()!=null && tempSettings.getReportEndYear().intValue()!=0)
+			if ( tempSettings.getReportEndYear()!=null && tempSettings.getReportEndYear().intValue()!=0)
 			    this.setToYear(tempSettings.getReportEndYear());
 			
 		}

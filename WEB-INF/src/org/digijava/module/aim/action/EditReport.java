@@ -138,22 +138,19 @@ public class EditReport extends Action {
 						Collections.sort( formBean.getHierarchiesSelection() );
 					}
 					else {
-						Set dbHierarchies				= ampreport.getHierarchies();
-						Iterator dbHierarchiesIterator; // dbHierarchies.iterator();
-						Collection collHierarchies 		= new ArrayList();
-						ArrayList sortedHierchies		= new ArrayList();
-						sortedHierchies.addAll(dbHierarchies);
-						Collections.sort(sortedHierchies);
-						dbHierarchiesIterator=sortedHierchies.iterator();
-						while ( dbHierarchiesIterator.hasNext() ) {
-							Object next								= dbHierarchiesIterator.next();
-	//						logger.info( "Object in Hierarchie collection is:" + next.getClass() );
-							AmpReportHierarchy ampReportHierarchie	= (AmpReportHierarchy) next;
+						Set<AmpReportHierarchy> hierarchies	= ampreport.getHierarchies();
+						List<AmpReportHierarchy> sortedCollHierarchies 		= new ArrayList<AmpReportHierarchy>();
+						sortedCollHierarchies.addAll(hierarchies);
+						Collections.sort(sortedCollHierarchies);
+						Iterator<AmpReportHierarchy> hierarchiesIterator	= sortedCollHierarchies.iterator();
+						List<AmpColumns> collHierarchies 		= new ArrayList<AmpColumns>();
+						while ( hierarchiesIterator.hasNext() ) {
+							AmpReportHierarchy ampReportHierarchie	= hierarchiesIterator.next();
 							collHierarchies.add ( ampReportHierarchie.getColumn() );
-						}
+						}						
 						formBean.setColumnHierarchie( collHierarchies );
 					}
-//					 END - Getting Column Hierarchies 
+//				    END - Getting Column Hierarchies 
 					if (isXLevelEnabled){
 						formBean.setActivityLevel( ampreport.getActivityLevel().getId() );
 						

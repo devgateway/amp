@@ -30,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
@@ -89,6 +90,9 @@ public class ReportsFilterPicker extends MultiAction {
 //		donors = DbUtil.getAllOrgGroups();
 		donors = DbUtil.getAllOrgGrpBeeingUsed();
 		
+		Collection donorTypes	= DbUtil.getAllOrgTypes();
+		Collection donorGroups	= DbUtil.getAllOrgGroups();
+		
 		Collection meRisks = MEIndicatorsUtil.getAllIndicatorRisks();
 		for (Iterator iter = meRisks.iterator(); iter.hasNext();) {
 			AmpIndicatorRiskRatings element = (AmpIndicatorRiskRatings) iter.next();
@@ -111,6 +115,8 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setToYears(new ArrayList<BeanWrapperImpl>());
 		filterForm.setPageSizes(pageSizes);
 		filterForm.setRegionSelectedCollection(regions);
+		filterForm.setDonorTypes(donorTypes);
+		filterForm.setDonorGroups(donorGroups);
 		
 				// loading Activity Rank collection
 		if (null == filterForm.getActRankCollection()) {
@@ -310,6 +316,29 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setGovernmentApprovalProcedures(filterForm.getGovernmentApprovalProcedures());
 		arf.setJointCriteria(filterForm.getJointCriteria());
 		
+		if ( filterForm.getSelectedDonorTypes() != null && filterForm.getSelectedDonorTypes().length > 0 ) {
+			arf.setDonorTypes(new HashSet());
+			for (int i=0; i<filterForm.getSelectedDonorTypes().length ; i++) {
+				Long id			= Long.parseLong( ""+filterForm.getSelectedDonorTypes()[i] );
+				AmpOrgType type	= DbUtil.getAmpOrgType( id );
+				if ( type != null )
+					arf.getDonorTypes().add( type );
+			}
+		}
+		else 
+			arf.setDonorTypes(null);
+		
+		if ( filterForm.getSelectedDonorGroups() != null && filterForm.getSelectedDonorGroups().length > 0 ) {
+			arf.setDonorGroups(new HashSet() );
+			for (int i=0; i<filterForm.getSelectedDonorGroups().length; i++) {
+				Long id 		= Long.parseLong (""+filterForm.getSelectedDonorGroups()[i]);
+				AmpOrgGroup	grp	= DbUtil.getAmpOrgGroup(id);
+				if (grp != null)
+					arf.getDonorGroups().add( grp );
+			}
+		}
+		else
+			arf.setDonorGroups(null);
 		
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER,arf);
 

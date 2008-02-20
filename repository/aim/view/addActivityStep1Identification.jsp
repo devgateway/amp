@@ -350,6 +350,7 @@ target.style.cursor = "default"
 												<digi:trn key="aim:actBudget">
 												Activity Budget
 												</digi:trn>
+												<br/>
 												</a>
 													<html:checkbox property="budget"  onclick="budgetCheckboxClick();">
 													<digi:trn key="aim:actBudgeton">

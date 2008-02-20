@@ -22,7 +22,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <module:display name="PROJECT MANAGEMENT"></module:display>
 <module:display name="NATIONAL PLAN DASHBOARD"></module:display>
 <module:display name="HELP"></module:display>
-
+<module:display name="PARIS INDICATORS"></module:display>
 
 <module:display name="Activity Levels" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -52,7 +52,13 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 <module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Activity Approval Process" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display>
+<module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display>
+<module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display>
 
+<feature:display  name="Paris Indicator" module="Add & Edit Activity"></feature:display>
+<feature:display  name="Paris Indicators Targets Manager" module="Admin Home"></feature:display>
+<feature:display  name="Paris Indicators Reports" module="Portfolio"></feature:display>
 <feature:display  name="Funding Organizations" module="Funding"></feature:display>
 <feature:display module="Contact Information" name="Mofed Contact Information"></feature:display>
 <feature:display module="Funding" name="Funding Organizations"></feature:display>

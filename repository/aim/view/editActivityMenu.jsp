@@ -582,12 +582,13 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
+    <feature:display  name="Paris Indicator" module="Add & Edit Activity">
     <c:if test="${aimEditActivityForm.govFlag == true}">
       <tr>
         <td>
           <IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
             <c:set var="translation">
-				<digi:trn key="aim:clickToAdd/UpdateAidEffectivenessSurvey">Add / Update Aid Effectiveness Survey</digi:trn>
+				<digi:trn key="aim:clickToAdd/UpdateParisIndicators">Add / Update Paris Indicators</digi:trn>
             </c:set>
             <a href="javascript:fnGetSurvey()" class="menu" title="${translation}">
               <digi:trn key="aim:editParisIndicators">Paris Indicators</digi:trn>
@@ -595,6 +596,7 @@ bgcolor="#006699">
         </td>
       </tr>
     </c:if>
+    </feature:display>
     <module:display name="M & E" parentModule="MONITORING AND EVALUATING">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 10}">
@@ -609,7 +611,7 @@ bgcolor="#006699">
 			</a>
 		</td>
 		</c:if>
-		
+
 		<c:if test="${aimEditActivityForm.step == 10}">
 		<td nowrap="nowrap">
 			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
@@ -703,7 +705,7 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	</feature:display>
-         
+
 
 	<feature:display name="Contracting" module="Contracting">
 	<tr>
@@ -727,7 +729,7 @@ bgcolor="#006699">
 					<td bgcolor="#3399ff" height="19">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<span class="textalb">
-				<digi:trn key="aim:ipacontracting">IPA Contracting</digi:trn>			
+				<digi:trn key="aim:ipacontracting">IPA Contracting</digi:trn>
 			</span>
 					</td>
 					<td width="10" height="19"  background="module/aim/images/right-arc.gif">

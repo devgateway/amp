@@ -149,13 +149,15 @@ return false;
 
 				<%-- <c:if var="teamType" test="${currentMember.teamType == 'DONOR'}" scope="session"> --%>
 
-					<field:display name="Paris Survey" feature="Paris Indicators">
-		      			<TR><TD title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
-							<digi:link href="/parisIndicatorReport.do">
-								<b><digi:trn key="aim:parisIndicatorReports">Paris Indicator Reports</digi:trn></b>
-							</digi:link>
+
+                <feature:display  name="Paris Indicators Reports" module="Portfolio">
+                        <TR><TD title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
+                            <digi:link href="/parisIndicatorReport.do">
+                                <b><digi:trn key="aim:parisIndicatorReports">Paris Indicator Reports</digi:trn></b>
+                            </digi:link>
 						</TD></TR>
-					</field:display>
+                </feature:display>
+
 
 				<%-- </c:if>  --%>
 

@@ -100,6 +100,8 @@ public class GlobalSettings extends Action {
 			FeaturesUtil.logGlobalSettingsCache();
 			org.digijava.module.aim.helper.GlobalSettings globalSettings = (org.digijava.module.aim.helper.GlobalSettings) getServlet().getServletContext().getAttribute(Constants.GLOBAL_SETTINGS);
 	    	globalSettings.setPerspectiveEnabled(FeaturesUtil.isPerspectiveEnabled());
+	    	globalSettings.setShowComponentFundingByYear(FeaturesUtil.isShowComponentFundingByYear());
+	    	FeaturesUtil.switchLogicInstance();	    	
 	     	
 	    	ServletContext ampContext = this.getServlet().getServletContext();
 			AmpTreeVisibility ampTreeVisibility=new AmpTreeVisibility();

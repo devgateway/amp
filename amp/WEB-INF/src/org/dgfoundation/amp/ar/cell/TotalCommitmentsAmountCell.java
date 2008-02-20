@@ -6,31 +6,29 @@ package org.dgfoundation.amp.ar.cell;
 import java.util.Iterator;
 
 import org.dgfoundation.amp.ar.ArConstants;
+import org.digijava.module.aim.logic.AmountCalculator;
+import org.digijava.module.aim.logic.Logic;
 
 /**
  * @author mihai
  */
 public class TotalCommitmentsAmountCell extends AmountCell {
 
-    /**
-     * 
-     */
+
     public TotalCommitmentsAmountCell() {
-	super();
-	// TODO Auto-generated constructor stub
+    	super();
     }
 
     public TotalCommitmentsAmountCell(AmountCell ac) {
-	super(ac.getOwnerId());
-	this.mergedCells = ac.getMergedCells();
+		super(ac.getOwnerId());
+		this.mergedCells = ac.getMergedCells();
     }
 
     /**
          * @param id
          */
     public TotalCommitmentsAmountCell(Long id) {
-	super(id);
-	// TODO Auto-generated constructor stub
+    	super(id);
     }
 
     /**
@@ -40,29 +38,19 @@ public class TotalCommitmentsAmountCell extends AmountCell {
          * @return Returns the amount.
          */
     public double getAmount() {
-		double ret = 0;
 		if (id != null)
 			return convert();
-		Iterator i = mergedCells.iterator();
-		while (i.hasNext()) {
-			CategAmountCell element = (CategAmountCell) i.next();
-			if( ArConstants.DISBURSEMENT.equals(element.getMetaValueString(ArConstants.TRANSACTION_TYPE)) ) continue;
-			
-			 if( ArConstants.ACTUAL.equals(element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE)) || 
-					 ArConstants.PLANNED.equals(element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE)) )
-			ret += element.getAmount();
-		}
-		return ret;
+		return Logic.getInstance().getCommitmentCalculator().calculateAmount(mergedCells);
 	}
 
     public Cell merge(Cell c) {
-	AmountCell ac = (AmountCell) super.merge(c);
-	TotalCommitmentsAmountCell uac = new TotalCommitmentsAmountCell(ac);
-	return uac;
+		AmountCell ac = (AmountCell) super.merge(c);		
+		TotalCommitmentsAmountCell uac = new TotalCommitmentsAmountCell(ac);
+		return uac;
     }
 
     public Cell newInstance() {
-	return new TotalCommitmentsAmountCell();
+    	return new TotalCommitmentsAmountCell();
     }
 
 }

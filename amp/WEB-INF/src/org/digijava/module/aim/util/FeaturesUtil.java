@@ -35,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.FeatureTemplates;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
+import org.digijava.module.aim.logic.Logic;
 
 public class FeaturesUtil {
 
@@ -2387,5 +2388,32 @@ public class FeaturesUtil {
             return pairA.getRoot().getName().compareTo(pairB.getRoot().getName());
         }
     };
+
+	public static Boolean isShowComponentFundingByYear() {
+	    String perspectiveStr = FeaturesUtil
+				.getGlobalSettingValue(Constants.GLOBAL_SHOW_COMPONENT_FUNDING_BY_YEAR);
+		if (perspectiveStr != null && "On".equals(perspectiveStr))
+			return true;
+		return false;
+	}
+
+	public static void switchLogicInstance() {
+		String countryISO = null;
+		Collection col = FeaturesUtil.getDefaultCountryISO();
+		Iterator itr = col.iterator();
+		while (itr.hasNext()) {
+			AmpGlobalSettings ampG = (AmpGlobalSettings) itr.next();
+			countryISO = ampG.getGlobalSettingsValue();
+		}
+		if (countryISO != null) {
+			if (countryISO.equalsIgnoreCase("BO")) {
+				Logic.switchLogic(Logic.BOLIVIA_FACTORY);
+			} else {
+				Logic.switchLogic(Logic.DEFAULT_FACTORY);
+			}
+		} else {
+			Logic.switchLogic(Logic.DEFAULT_FACTORY);
+		}
+	}
 
 }

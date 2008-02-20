@@ -44,7 +44,7 @@ function menuA(val){
 	return true;
 }
 function nope(){
-	alert("Please do not skip steps!");
+	alert('<digi:trn key="aim:reportBuilder:ReportSkipValidation">Please do not skip steps!</digi:trn>');
 	return true;
 }
 </script>
@@ -137,7 +137,7 @@ function nope(){
 															</a>	
 														</c:if>
 														<c:if test="${aimAdvancedReportForm.currentTabName!='SelectRows'}">
-															<a class="sub-nav" style="cursor:move;" title="${translation}"  onclick="return nope())">
+															<a class="sub-nav" style="cursor:move;" title="${translation}"  onclick="return nope()">
 																3 : <digi:trn key="aim:SelectRows/hierarchies">Select rows/hierarchies</digi:trn>
 															</a>	
 														</c:if>			

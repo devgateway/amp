@@ -30,30 +30,20 @@ public class GroupReportData extends ReportData {
 
     
 	@Override
-	/*public int getVisibleRows() {
+	public int getVisibleRows() {
     	    Iterator i=items.iterator();
     	    int ret=1;
+    	if(this.getReportMetadata().getHideActivities()!=null && this.getReportMetadata().getHideActivities())
+			return ret;
+		
     	    while (i.hasNext()) {
 		ReportData element = (ReportData) i.next();
 		ret+=element.getVisibleRows();
 	    }
     	    return ret;
-	}*/
-    
-	public int getVisibleRows() {
-		int ret=1; //one is for the title, one is for totals
-		if(this.getReportMetadata()!=null && this.getReportMetadata().getHideActivities()!=null && this.getReportMetadata().getHideActivities())
-		{
-			return ret;
-		}
-		Iterator i=items.iterator();
-		int visCol=1;
-		while (i.hasNext()) {
-			ReportData element = (ReportData) i.next();
-		 	visCol=element.getVisibleRows();
-		}
-		return visCol;
 	}
+    
+
 		 	
 	/**
 	 * GroupReportData comparator class. This class implements reportData comparison. 
@@ -254,9 +244,7 @@ public class GroupReportData extends ReportData {
 		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			ReportData element = (ReportData) i.next();
-			if(element.getOwnerIds()!=null){
-				ret.addAll(element.getOwnerIds());
-			}			
+			ret.addAll(element.getOwnerIds());
 		}
 		return ret;
 	}

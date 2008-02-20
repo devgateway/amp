@@ -233,10 +233,11 @@ public class Login extends Action {
 					TeamMember tm = new TeamMember();
 
 					if (lead != null) {
-						if (lead.getAmpTeamMemRoleId().equals(
-										member.getAmpMemberRole().getAmpTeamMemRoleId()) ||
+						if (
+						lead.getAmpTeamMemRoleId().equals(member.getAmpMemberRole().getAmpTeamMemRoleId()) 
+							||
 						//very ugly but we have no choice - only one team head role possible :(
-										member.getAmpMemberRole().getRole().equals("Top Management") 				
+						member.getAmpMemberRole().getRole().equals("Top Management") 				
 						) {
 							session.setAttribute("teamLeadFlag", new String(
 									"true"));

@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
@@ -22,6 +21,7 @@ import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpSISINProyect;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.ActivityIndicator;
@@ -39,6 +39,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
     private Long surveyOrgId;
     private Long activityLevel;
     private int isPreview=0;
+    private String govAgreementNumber;
 	private Long activityId = null;
 	private String ampId = null;
 	private String title = null;
@@ -98,6 +99,16 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private boolean sectorReset;
 
 	private List costs;
+        //to check if the current memeber is Team lead
+        private boolean teamLead;
+
+        public boolean isTeamLead() {
+            return teamLead;
+        }
+
+        public void setTeamLead(boolean teamLead) {
+            this.teamLead = teamLead;
+        }
 
 	/**
 	 * List of ReferenceDoc helper beans
@@ -254,8 +265,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	// For activity approval process
 	private String approvalStatus;
 	private String workingTeamLeadFlag;
-         //to check if the current memeber is Team lead
-        private boolean teamLead;
+
 	// For aid harmonization survey indicators
 	private Collection survey = null;
 	private List indicators = null; 	// holds collection of Indicator helper objects
@@ -273,15 +283,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String totalUnExpended = "";
 	private String totalExpended="";
         private String totalDisbOrder="";
-        private Integer contrcatToRemove;
-
-        public Integer getContrcatToRemove() {
-            return contrcatToRemove;
-        }
-
-        public void setContrcatToRemove(Integer contrcatToRemove) {
-            this.contrcatToRemove = contrcatToRemove;
-        }
 
     public String getTotalDisbOrder() {
         return totalDisbOrder;
@@ -409,6 +410,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String componentTitle;
 	private String componentDesc;
 	private String componentAmount;
+	private AmpSISINProyect sisinProyect;
 	////////////////////
 	private double compTotalDisb;
 
@@ -520,15 +522,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
      private AmpAhsurvey ahsurvey;
      private List contracts;
      private Integer selContractId;
-    
-     
-       public boolean isTeamLead() {
-            return teamLead;
-        }
-
-        public void setTeamLead(boolean teamLead) {
-            this.teamLead = teamLead;
-        }
 
     public Integer getSelContractId() {
         return selContractId;
@@ -789,7 +782,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
                       selectedPPrograms=null;
                       selectedNPOPrograms=null;
                       contracts=null;
-                      contrcatToRemove=null;
                       selContractId=null;
 
 
@@ -4507,9 +4499,17 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		this.docComment = docComment;
 	}
 
+	public void setSisinProyect(AmpSISINProyect sisinProyect) {
+		this.sisinProyect = sisinProyect;
+	}
+
     public void setDraft(Boolean draft) {
         this.draft = draft;
     }
+
+    public AmpSISINProyect getSisinProyect() {
+		return sisinProyect;
+	}
 
     public Long getActivityLevel() {
         return activityLevel;
@@ -4806,6 +4806,14 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setValidcurrencies(Collection<AmpCurrency> validcurrencies) {
 		this.validcurrencies = validcurrencies;
+	}
+
+	public String getGovAgreementNumber() {
+	    return govAgreementNumber;
+	}
+
+	public void setGovAgreementNumber(String govAgreementNumber) {
+	    this.govAgreementNumber = govAgreementNumber;
 	}
 
 

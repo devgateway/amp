@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.TeamActivitiesForm;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.Constants;
@@ -112,8 +113,16 @@ public class UpdateTeamActivities extends Action {
 					if (selActivities[i] != null) {
 						Long actId = selActivities[i];
 						AmpActivity activity = ActivityUtil.getProjectChannelOverview(actId);
+						
 						AmpTeam ampTeam = TeamUtil.getAmpTeam(taForm.getTeamId());
 						activity.setTeam(ampTeam);
+						
+						if (activity.getActivityCreator() == null) {
+							AmpTeamMember thisTeamMember	= TeamUtil.getAmpTeamMember(tm.getMemberId());
+							if (thisTeamMember != null) {
+								activity.setActivityCreator(thisTeamMember);
+							}
+						}
 
 						logger.info("updating " + activity.getName());
 						DbUtil.update(activity);

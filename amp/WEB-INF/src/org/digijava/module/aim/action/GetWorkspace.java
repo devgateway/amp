@@ -34,6 +34,10 @@ public class GetWorkspace extends Action {
 		
 		boolean permitted = false;
 		HttpSession session = request.getSession();
+		TeamMember tmember = (TeamMember) session.getAttribute("currentMember");
+		//System.out.println("-----------------------------------"+tmember.getTeamHead());
+		if(tmember!=null)
+			permitted=tmember.getTeamHead();
 		if (session.getAttribute("ampAdmin") != null) {
 			String key = (String) session.getAttribute("ampAdmin");
 			if (key.equalsIgnoreCase("yes")) {
@@ -41,7 +45,7 @@ public class GetWorkspace extends Action {
 			} else {
 				if (session.getAttribute("teamLeadFlag") != null) {
 					key = (String) session.getAttribute("teamLeadFlag");
-					if (key.equalsIgnoreCase("true")) {
+					if (key.equalsIgnoreCase("true") || key.equalsIgnoreCase("yes")) {
 						permitted = true;	
 					}
 				}
@@ -50,10 +54,8 @@ public class GetWorkspace extends Action {
 		if (!permitted) {
 			return mapping.findForward("index");
 		}
-		//System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 		UpdateWorkspaceForm uwForm = (UpdateWorkspaceForm) form;
 		uwForm.setUpdateFlag(false);
-	;
 		//uwForm.setOrganizations(DbUtil.getAll(AmpOrganisation.class));
 		
 		String dest = request.getParameter("dest");

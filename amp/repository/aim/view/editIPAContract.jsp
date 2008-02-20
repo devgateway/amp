@@ -205,7 +205,7 @@ function selectOrganisation1() {
 		
 	</tr>
          </field:display>
-         <field:display name="Status" feature="Contracting Tab">
+         <field:display name="Contracting Tab Status" feature="Contracting Tab">
          <tr>
 		<td align="right"  nowrap>
 		<b><digi:trn key="aim:IPA:popup:status">Status:</digi:trn></b>

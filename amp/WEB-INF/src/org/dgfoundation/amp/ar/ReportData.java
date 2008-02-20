@@ -28,6 +28,12 @@ public abstract class ReportData extends Viewable {
 	
 	protected static Logger logger = Logger.getLogger(ReportData.class);
 	
+	@Override
+	public ReportData getNearestReportData() {
+		return this;
+	}
+	
+	
 	public boolean getCanDisplayRow() {	    
     	    int startRow=getStartRow();
 	    int endRow=getEndRow();
@@ -169,7 +175,7 @@ public abstract class ReportData extends Viewable {
 	}
 	
 	public int getTotalUniqueRows() {
-		return getOwnerIds()==null?null: getOwnerIds().size();
+		return getOwnerIds().size();
 	}
 	
 	/**

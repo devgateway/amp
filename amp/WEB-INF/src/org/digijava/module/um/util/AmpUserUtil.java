@@ -25,7 +25,7 @@ import org.digijava.module.aim.exception.AimException;
 public class AmpUserUtil {
 	private static Logger logger = Logger.getLogger(AmpUserUtil.class);
 
-	public static Collection<User> getAllUsers() {
+	public static Collection<User> getAllUsers(boolean getBanned) {
 		Session session = null;
 		Query qry = null;
 		Collection<User> users = new ArrayList<User>();
@@ -33,8 +33,12 @@ public class AmpUserUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select u from " + User.class.getName() + " u"
-					+ " where u.banned=0 order by u.email";
+					+ " where u.banned=:banned order by u.email";
 			qry = session.createQuery(queryString);
+			if ( getBanned )
+				qry.setInteger("banned", 1);
+			else
+				qry.setInteger("banned", 0);
 			users = qry.list();
 		} catch (Exception e) {
 			logger.error("Unable to get user");

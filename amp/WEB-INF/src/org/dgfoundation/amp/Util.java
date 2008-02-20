@@ -302,7 +302,7 @@ public final class Util {
 			e.printStackTrace();
 		}
 
-		logger.debug("rate for " + currency + " to USD on " + currencyDate
+		logger.info("rate for " + currency + " to USD on " + currencyDate
 				+ " is " + ret);
 		if (ret != 1)
 			ratesCache

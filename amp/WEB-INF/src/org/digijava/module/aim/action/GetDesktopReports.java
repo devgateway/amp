@@ -32,6 +32,7 @@ public class GetDesktopReports extends TilesAction {
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		if (tm != null) {
 				Collection reports;
+				//After Tanzania: Team Leaders should see all
 //				if (tm.getTeamHead() == true) {
 //					reports = TeamUtil.getAllTeamReports(tm.getTeamId());
 //				} else {

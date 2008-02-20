@@ -34,6 +34,9 @@ public class ViewAllUsersForm
     private int pagesToShow;
     private int offset;
     private int pagesSize;
+    
+    private boolean showBanned	= false;
+    
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
           //pages = null;
           // currentAlpha = null;        
@@ -197,4 +200,14 @@ public class ViewAllUsersForm
 		this.pagesSize = pagesSize;
 	}
 
+	public boolean getShowBanned() {
+		return showBanned;
+	}
+
+	public void setShowBanned(boolean showBanned) {
+		this.showBanned = showBanned;
+	}
+
+	
+	
 }

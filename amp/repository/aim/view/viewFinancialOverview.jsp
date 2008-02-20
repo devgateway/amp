@@ -64,7 +64,11 @@
 			<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">
 				<TR bgColor=#222e5d height="20"><TD style="COLOR: #c9c9c7" height="20">
 				&nbsp;&nbsp;&nbsp;
-				<SPAN class="sub-nav2-selected">OVERVIEW</SPAN> |
+				<!-- logic:notEqual name="aimFinancialOverviewForm" property="ampActivityId" value="0"-->
+	            	<span class="sub-nav2-selected">
+	              		<digi:trn key="aim:overview">OVERVIEW</digi:trn>
+	              	</span>
+	              	<!-- /logic:notEqual--> |
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewCommitments">Click here to view Commitments</digi:trn>
 					</c:set>

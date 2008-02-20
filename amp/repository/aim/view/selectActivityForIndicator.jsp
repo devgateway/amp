@@ -26,7 +26,7 @@ function closeWindow() {
   <table align="center" width="100%" border="0" bgcolor="white">
     <tr bgcolor="#006699" class=r-dotted-lg>
       <td colspan="10" align="center" style="font-size:14px;height:30px;color:white">
-        <b><digi:trn key="aim:selectactivity">Select activity</digi:trn></b>
+        <b> <digi:trn key="btn:selectact">Select activity</digi:trn></b>
       </td>
     </tr>
     <tr>
@@ -39,8 +39,8 @@ function closeWindow() {
     </tr>
       <tr align="center">
         <td>
-         <digi:trn key="aim:keyword"> Keyword</digi:trn>: <html:text property="keyword"/>
-          <input type="submit" value="<digi:trn key="btn:search">Search</digi:trn>"/>
+        	<digi:trn key="btn:keyword">Keyword</digi:trn>: <html:text property="keyword"/>
+          <input type="submit" value="<digi:trn key="btn:keyword">Search</digi:trn>"/>
         </td>
       </tr>
       <tr>
@@ -90,7 +90,7 @@ function closeWindow() {
       <tr align="center">
         <td>
         <c:if test="${!empty aimNewIndicatorForm.activitiesCol}">
-         <input type="button" value="<digi:trn key="btn:select">Select</digi:trn> " onclick="selectActivity();"/>
+         <input type="button" value="<digi:trn key="btn:Select">Select</digi:trn>" onclick="selectActivity();"/>
         </c:if>
          <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow();">
 			<digi:trn key="btn:close">Close</digi:trn> 

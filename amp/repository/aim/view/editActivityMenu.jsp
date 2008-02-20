@@ -55,7 +55,7 @@ function saveAsDraftClicked() {
 function save() {
   var flag = validateForm();
   if (flag == true) {
-     /* document.aimEditActivityForm.saveButton.disabled = true;   	 AMP-2688 */
+   /* document.aimEditActivityForm.saveButton.disabled = true;   	 AMP-2688 */
     <digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
     document.aimEditActivityForm.action = "<%= save %>?edit=true";
     document.aimEditActivityForm.target = "_self";
@@ -761,7 +761,9 @@ bgcolor="#006699">
 			<field:display feature="Preview Activity" name="Preview Button">
 				<tr>
 					<td align="center">
-						<input type="button" value='<digi:trn key="aim:preview">Preview</digi:trn>' class="buton" onclick="previewClicked()">
+						<html:button  styleClass="buton" property="logframe" onclick="previewClicked()">
+							<digi:trn key="aim:preview">Preview</digi:trn>
+						</html:button>
 					</td>
 				</tr>
 			</field:display>
@@ -769,12 +771,16 @@ bgcolor="#006699">
 
 	<tr>
 		<td align="center">
-			<input type="button" value='<digi:trn key="aim:save">Save</digi:trn>' name="saveButton" class="buton" onclick="saveClicked()">
+			<html:button  styleClass="buton" property="submitButton" onclick="saveClicked()">
+				<digi:trn key="aim:save">Save</digi:trn>
+			</html:button>
 		</td>
 	</tr>
 	<tr>
 		<td align="center">
-			<input type="button" value='<digi:trn key="aim:saveAsDraft">Save as draft</digi:trn>' name="saveAsDraftButton" class="buton" onclick="saveAsDraftClicked()">
+			<html:button  styleClass="buton" property="submitButton" onclick="saveAsDraftClicked()">
+				<digi:trn key="aim:saveAsDraft">Save as draft</digi:trn>
+			</html:button>
 		</td>
 	</tr>
 </table>

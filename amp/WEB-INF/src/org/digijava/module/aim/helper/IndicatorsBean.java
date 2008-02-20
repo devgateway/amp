@@ -78,7 +78,6 @@ public class IndicatorsBean {
         this.sector = ind.getSectors();
         this.description=ind.getDescription();
         
-        
     }
     
     public IndicatorsBean(AmpMEIndicatorList ind) {
@@ -217,7 +216,6 @@ public class IndicatorsBean {
 	public void setFlag(boolean flag) {
 		this.flag = flag;
 	}
-
 	public Collection getSectorNames() {
 		return sectorNames;
 	}

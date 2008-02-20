@@ -20,7 +20,7 @@
                 <tr>
                     <td valign="top"><jsp:include page="viewEventsFilter.jsp" flush="true"/></td>
                 </tr>
-                	<tr>
+               	<tr>
                     <td valign="top"><jsp:include page="viewEventsCreateNewEvent.jsp" flush="true"/></td>
                 </tr>
             </table>

@@ -24,11 +24,9 @@
 
 <logic:iterate name="groupReport"  property="items" id="item" scope="page">
 		<bean:define id="viewable" name="item" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
-		<c:if test="${not empty viewable.renderBody}">
-			<logic:equal name="viewable" property="renderBody" value="true">
-			<jsp:include page="<%=viewable.getViewerPath()%>"/>	
-			</logic:equal>
-		</c:if>		
+		<logic:equal name="viewable" property="renderBody" value="true">
+		<jsp:include page="<%=viewable.getViewerPath()%>"/>	
+		</logic:equal>
 </logic:iterate>
 
 </td></tr>

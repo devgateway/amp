@@ -595,43 +595,44 @@ public class IndicatorUtil {
   			}
   		return Indicator;
   	}
-	/**
-	 * 
-	 * @param keyWord
-	 * @param sectorName
-	 * @return List of Indicators
-	 * @author dare
-	 */  
-	public static ArrayList searchIndicators(String keyWord,String sectorName){
-		Session session = null;
-		Query qry = null;
-		List retValue=new ArrayList();
-		try{
-			session=PersistenceManager.getRequestDBSession();
-			String queryString=null;			
-			
-			if (keyWord!=null && keyWord.length()>0){
-				if(sectorName!=null && sectorName.length()>0 && !sectorName.equals("-1")){
-					queryString="select ind from "+ AmpIndicator.class.getName() +" ind inner join ind.sectors sec where ind.name like '%" + keyWord + "%'"
-					+" and sec.name='"+sectorName+"'";
-					qry = session.createQuery(queryString);
-					retValue=qry.list();
-				}else {
-					 queryString="select ind from "+ AmpIndicator.class.getName() +" ind where ind.name like '%" + keyWord + "%'";
-					 qry = session.createQuery(queryString);
-					 retValue=qry.list();
-				} 
-			}else if (sectorName!=null && sectorName.length()>0 && !sectorName.equals("-1")){
-				retValue=searchForindicator(sectorName);
-			}			
-		}catch (Exception ex) {
-			logger.debug("Unable to search " + ex);
-			ex.printStackTrace();
-		}
-		return (ArrayList)retValue;
-	}
 	  
-	public static void deleteIndsector(Long sectorid,Long indid){
+	  /**
+	   * 
+	   * @param keyWord
+	   * @param sectorName
+	   * @return List of Idicators
+	   * @author dare
+	   */
+	  public static ArrayList searchIndicators(String keyWord,String sectorName){
+			Session session = null;
+			Query qry = null;
+			List retValue=new ArrayList();
+			try{
+				session=PersistenceManager.getRequestDBSession();
+				String queryString=null;			
+				
+				if (keyWord!=null && keyWord.length()>0){
+					if(sectorName!=null && sectorName.length()>0 && !sectorName.equals("-1")){
+						queryString="select ind from "+ AmpIndicator.class.getName() +" ind inner join ind.sectors sec where ind.name like '%" + keyWord + "%'"
+						+" and sec.name='"+sectorName+"'";
+						qry = session.createQuery(queryString);
+						retValue=qry.list();
+					}else {
+						 queryString="select ind from "+ AmpIndicator.class.getName() +" ind where ind.name like '%" + keyWord + "%'";
+						 qry = session.createQuery(queryString);
+						 retValue=qry.list();
+					} 
+				}else if (sectorName!=null && sectorName.length()>0 && !sectorName.equals("-1")){
+					retValue=searchForindicator(sectorName);
+				}			
+			}catch (Exception ex) {
+				logger.debug("Unable to search " + ex);
+				ex.printStackTrace();
+			}
+			return (ArrayList)retValue;
+		}
+	  
+	  public static void deleteIndsector(Long sectorid,Long indid){
 		
 		 logger.info(" deleting the indsectors");
 			Session session = null;

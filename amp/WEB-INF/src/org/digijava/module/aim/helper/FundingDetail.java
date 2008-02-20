@@ -14,6 +14,7 @@ public class FundingDetail implements Serializable
 	private int transactionType;
 	private int adjustmentType;
 	private String adjustmentTypeName;
+	private String adjustmentTypeNameTrimmed;
 	private String transactionDate;
 	private String transactionAmount;
 	private String perspectiveCode;

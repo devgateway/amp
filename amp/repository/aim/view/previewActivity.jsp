@@ -8,7 +8,6 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
@@ -474,7 +473,7 @@ function collapseAll() {
                                   
                                     
                                     <!--Begin Objectives --->
-			      					<field:display feature="Identification" name="Objectives">
+			     					<field:display feature="Identification" name="Objectives">
 			      					<field:display feature="Identification" name="Objective">
 								 	<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
@@ -530,7 +529,7 @@ function collapseAll() {
 									</logic:present>
 									</field:display>
   						
- 						<!--END Objectives --->
+ <!--END Objectives --->
  
 						 <field:display feature="Identification" name="Description">
 									<tr>
@@ -542,6 +541,20 @@ function collapseAll() {
 											<digi:edit key="${descKey}"></digi:edit>
                                             </c:if>										</td>
 									</tr>
+									</field:display>
+									
+									<field:display name="Lessons Learned" feature="Identification">
+										<TR>
+											<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+												<digi:trn key="aim:Lessons Learned">Lessons Learned</digi:trn>
+											</td>
+											<TD bgcolor="#ffffff">																			
+												<c:if test="${not empty aimEditActivityForm.lessonsLearned}">
+													<bean:define id="lessonsLearnedKey"><c:out value="${aimEditActivityForm.lessonsLearned}"/></bean:define>
+													<digi:edit key="<%=lessonsLearnedKey%>"/>
+												 </c:if>
+											</TD>
+										</TR>																		
 									</field:display>
 
  
@@ -649,6 +662,18 @@ function collapseAll() {
 									</tr>
 									</field:display>
                               <!--END 11 12  -->        
+
+                                <field:display name="Government Agreement Number" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+											<digi:trn key="aim:step1:GovernmentAgreementNumTitle">Budget</digi:trn>
+										</td>
+										<td bgcolor="#ffffff">
+											${aimEditActivityForm.govAgreementNumber}
+										</td>
+									</tr>
+								</field:display>
+
                                 <field:display name="Activity Budget" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:actBudget">Budget</digi:trn>										</td>
@@ -931,34 +956,27 @@ function collapseAll() {
                                             </field:display>
                                     </feature:display>
                                     
-                                    <feature:display name="Sectors" module="Project ID and Planning">
-			                            &nbsp;
-			                            </feature:display>			                          
-			                            	<field:display name="Componente" feature="Sectors"> 
-			                            		 <c:if test="${not empty aimEditActivityForm.activityComponentes}">
+                                    <c:if test="${not empty aimEditActivityForm.activityComponentes}">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="component_sector_plus"  onclick="toggleGroup('component_sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+											<img id="component_sector_minus" onclick="toggleGroup('component_sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+											<digi:trn key="aim:preview:component_Sector">Components</digi:trn>										</td>
+										<td bgcolor="#ffffff">
+											<div id="component_sector_dots">...</div>
+											<div id="act_component_sector" style="display: none;">
+												<table>
+													<c:forEach var="compo" items="${aimEditActivityForm.activityComponentes}">
 													<tr>
-														<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="component_sector_plus"  onclick="toggleGroup('component_sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-															<img id="component_sector_minus" onclick="toggleGroup('component_sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
-															<digi:trn key="aim:preview:component_Sector">Components</digi:trn>										</td>
-														<td bgcolor="#ffffff">
-															<div id="component_sector_dots">...</div>
-															<div id="act_component_sector" style="display: none;">
-																<table>
-																	<c:forEach var="compo" items="${aimEditActivityForm.activityComponentes}">
-																	<tr>
-																		<td width="100%">
-																			${compo.sectorName}														</td>
-																		<td align="right">
-																			${compo.sectorPercentage}%														</td>
-																	</tr>
-																	</c:forEach>
-																</table>
-															</div>										</td>
-														</tr>
-													</c:if>													
-			                            	</field:display>	    
-                                    
-                                    
+														<td width="100%">
+															${compo.sectorName}														</td>
+														<td align="right">
+															${compo.sectorPercentage}%														</td>
+													</tr>
+													</c:forEach>
+												</table>
+											</div>										</td>
+									</tr>
+									</c:if>
                                     
                                     <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
 								
@@ -1570,7 +1588,8 @@ function collapseAll() {
 																					<c:forEach var="fd" items="${regFunds.commitments}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
-																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
+																								<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
+																								<c:out value="${fd.adjustmentTypeName}"/></digi:trn></td>
 																							<td align="right" width="100" bgcolor="#ffffff">
 																							<FONT color=blue>*</FONT>
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
@@ -1579,7 +1598,9 @@ function collapseAll() {
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.perspectiveName}"/>																							</td>
+																							<digi:trn key="aim:${fd.perspectiveNameTrimmed}">
+																								<c:out value="${fd.perspectiveName}"/></digi:trn>																																															
+																							</td>
 																						</tr>
 																					</c:forEach>
 																				</table>																			</td>
@@ -1599,7 +1620,10 @@ function collapseAll() {
 																					<c:forEach var="fd" items="${regFunds.disbursements}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
-																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
+																								<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
+																								<c:out value="${fd.adjustmentTypeName}"/>
+																								</digi:trn>
+																						</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
 																							<FONT color=blue>*</FONT>
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
@@ -1608,7 +1632,10 @@ function collapseAll() {
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.perspectiveName}"/>																							</td>
+																								<digi:trn key="aim:${fd.perspectiveNameTrimmed}">
+																								<c:out value="${fd.perspectiveName}"/>
+																								</digi:trn>
+																								</td>
 																						</tr>
 																					</c:forEach>
 																				</table>																			</td>
@@ -1628,7 +1655,10 @@ function collapseAll() {
 																					<c:forEach var="fd" items="${regFunds.expenditures}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
-																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
+																								<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
+																								<c:out value="${fd.adjustmentTypeName}"/>
+																								</digi:trn>
+																							</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
 																							<FONT color=blue>*</FONT>
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
@@ -1637,7 +1667,10 @@ function collapseAll() {
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.perspectiveName}"/>																							</td>
+																								<digi:trn key="aim:${fd.perspectiveNameTrimmed}">
+																								<c:out value="${fd.perspectiveName}"/>
+																								</digi:trn>
+																							</td>
 																						</tr>
 																					</c:forEach>
 																				</table>																			</td>
@@ -1658,7 +1691,6 @@ function collapseAll() {
 									</tr>
 									</feature:display>
 									
-									<logic:equal name="globalSettings" scope="application" property="showComponentFundingByYear" value="false">
 									<module:display name="Components" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="components_plus"  onclick="toggleGroup('components')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
@@ -1675,7 +1707,9 @@ function collapseAll() {
 														<table width="100%" cellSpacing="2" cellPadding="1" class="box-border-nopadding">
 
 															<tr><td><b>
-																<c:out value="${comp.title}"/></b>
+																<digi:trn key="aim:equipment">
+																								<c:out value="${comp.title}"/>
+																							</digi:trn>	</b>
 															</td></tr>
 
 															<tr><td>
@@ -1683,6 +1717,67 @@ function collapseAll() {
 																<digi:trn key="aim:description">Description</digi:trn> :</i>
 																<c:out value="${comp.description}"/>
 															</td></tr>
+
+															<!-- START SISIN Fields -->
+															<feature:display name="SISIN" module="Components">
+																<field:display name="SISIN Code" feature="SISIN">
+																	<tr>
+																		<td width="50">
+																			<i>
+																			<digi:trn key="aim:sisincode">SISIN Code</digi:trn> :</i>
+																			<c:out value="${comp.sisinProyect.sisincode}"/>																		</td>
+																	</tr>
+																</field:display>
+																<field:display name="Components Localization" feature="SISIN">
+																	<tr>
+																		<td width="50">
+																			<i>
+																			<digi:trn key="aim:localization">Localization</digi:trn> :</i>
+																			<c:out value="${comp.sisinProyect.localization}"/>																		</td>
+																	</tr>
+																</field:display>
+																<field:display name="SISIN Sector" feature="SISIN">
+																	<tr>
+																		<td width="50">
+																			<i>
+																			<digi:trn key="aim:sisinsector">SISIN Sector</digi:trn> :</i>
+																			<c:out value="${comp.sisinProyect.sisinsector}"/>																		</td>
+																	</tr>
+																</field:display>
+																<field:display name="Components Financing Source" feature="SISIN">
+																	<tr>
+																		<td width="50">
+																			<i>
+																			<digi:trn key="financingsource">Financing Source</digi:trn> :</i>
+																			<c:out value="${comp.sisinProyect.financingsource}"/>																		</td>
+																	</tr>
+																</field:display>
+																<field:display name="Components Agency Source" feature="SISIN">
+																	<tr>
+																		<td width="50">
+																			<i>
+																			<digi:trn key="agencysource">Agency Source</digi:trn> :</i>
+																			<c:out value="${comp.sisinProyect.agencysource}"/>																		</td>
+																	</tr>
+																</field:display>
+																<field:display name="Components Stage" feature="SISIN">
+																	<tr>
+																		<td width="50">
+																			<i>
+																			<digi:trn key="stage">Stage</digi:trn> :</i>
+																			<c:out value="${comp.sisinProyect.stage}"/>																		</td>
+																	</tr>
+																</field:display>
+																<field:display name="Components Classification Program Code" feature="SISIN">
+																	<tr>
+																		<td width="50">
+																			<i>
+																			<digi:trn key="classifprogramcode">Classification Program Code</digi:trn> :</i>
+																			<c:out value="${comp.sisinProyect.programcode}"/>																		</td>
+																	</tr>
+																</field:display>
+															</feature:display>
+															<!-- END SISIN Fields -->
 
 															<tr><td bgcolor="#f4f4f2">
 																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>
@@ -1700,7 +1795,9 @@ function collapseAll() {
 																						<tr>
 																							<field:display name="Components Actual/Planned Commitments" feature="Components">
 																							<td width="50" bgcolor="#ffffff">
-																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
+																								<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}"><c:out value="${fd.adjustmentTypeName}"/>
+																								</digi:trn>
+																							</td>
 																							</field:display>
 																							<field:display name="Components Total Amount Commitments" feature="Components">
 																							<td align="right" width="100" bgcolor="#ffffff">
@@ -1717,7 +1814,9 @@ function collapseAll() {
 																							</field:display>
 																							<field:display name="Components Perspective Commitments" feature="Components">
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.perspectiveName}"/>																							</td>
+																							<digi:trn key="aim:${fd.perspectiveNameTrimmed}">
+																								<c:out value="${fd.perspectiveName}"/>
+																							</digi:trn>																								</td>
 																							</field:display>
 																						</tr>
 																					</c:forEach>
@@ -1739,7 +1838,8 @@ function collapseAll() {
 																						<tr>
 																							<field:display name="Components Actual/Planned Disbursements" feature="Components">
 																							<td width="50" bgcolor="#ffffff">
-																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
+																								<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}"><c:out value="${fd.adjustmentTypeName}"/>
+																								</digi:trn>																							</td>
 																							</field:display>
 																							<field:display name="Components Total Amount Disbursements" feature="Components">
 																							<td align="right" width="100" bgcolor="#ffffff">
@@ -1756,7 +1856,9 @@ function collapseAll() {
 																							</field:display>
 																							<field:display name="Components Perspective Disbursements" feature="Components">
 																							<td bgcolor="#ffffff">
-																								<c:out value="${fd.perspectiveName}"/>																							</td>
+																								<digi:trn key="aim:${fd.perspectiveNameTrimmed}">
+																								<c:out value="${fd.perspectiveName}"/>
+																							</digi:trn>																								</td>
 																							</field:display>
 																						</tr>
 																					</c:forEach>
@@ -1778,7 +1880,8 @@ function collapseAll() {
 																						<tr bgcolor="#ffffff">
 																							<field:display name="Components Actual/Planned Expenditures" feature="Components">
 																							<td width="50">
-																								<c:out value="${fd.adjustmentTypeName}"/>																							</td>
+																								<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}"><c:out value="${fd.adjustmentTypeName}"/>
+																								</digi:trn>																							</td>
 																							</field:display>
 																							<field:display name="Components Total Amount Expenditures" feature="Components">
 																							<td align="right">
@@ -1795,7 +1898,9 @@ function collapseAll() {
 																							</field:display>
 																							<field:display name="Components Perspective Expenditures" feature="Components">
 																							<td>
-																								<c:out value="${fd.perspectiveName}"/>																							</td>
+																								<digi:trn key="aim:${fd.perspectiveNameTrimmed}">
+																								<c:out value="${fd.perspectiveName}"/>
+																							</digi:trn>																							</td>
 																							</field:display>
 																						</tr>
 																					</c:forEach>
@@ -1839,108 +1944,7 @@ function collapseAll() {
 									</tr>
                                     <!--end 26-->
 									</module:display>
-									</logic:equal>
-									
-									<logic:equal name="globalSettings" scope="application" property="showComponentFundingByYear" value="true">									
-									<module:display name="Components_Resume" parentModule="PROJECT MANAGEMENT">
-									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-											<img id="components_resume_plus"  onclick="toggleGroup('components_resume')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="components_resume_minus" onclick="toggleGroup('components_resume')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
-											<digi:trn key="aim:components">
-											Components</digi:trn>										</td>
-										<td bgcolor="#ffffff">
-											<div id="components_resume_dots">...</div>
-											<div id="act_components_resume" style="display: none;">
-											<c:if test="${!empty aimEditActivityForm.selectedComponents}">
-												<c:forEach var="comp" items="${aimEditActivityForm.selectedComponents}">
-													<table width="100%" cellSpacing="1" cellPadding="1">
-													<tr><td>
-														<table width="100%" cellSpacing="2" cellPadding="1" class="box-border-nopadding">
-
-															<tr><td><b>
-																<c:out value="${comp.title}"/></b>
-															</td></tr>
-															
-															<tr><td>
-																<i>
-																<digi:trn key="aim:component_code">Component code</digi:trn> :</i>
-																<c:out value="${comp.code}"/>
-															</td></tr>															
-
-															<tr><td>
-															<a href="<c:out value="${comp.url}"/>" target="_blank"><digi:trn key="aim:preview_link_to_component">Link to component</digi:trn>&nbsp;<c:out value="${comp.code}"/></a>																
-															</td></tr>
-															
-															<tr><td bgcolor="#f4f4f2">
-																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>
-															</td></tr>																
-																<tr>
-																	<td bgcolor="#ffffff">
-																		<table width="100%" cellSpacing="1" cellPadding="0" class="box-border-nopadding">
-																		<c:forEach var="financeByYearInfo" items="${comp.financeByYearInfo}">
-																		<tr>
-																			<td valign="top" width="100" bgcolor="#ffffff">
-																				<c:out value="${financeByYearInfo.key}"/>
-																			</td>
-																			<c:set var="financeByYearInfoMap" value="${financeByYearInfo.value}"/>
-																			<td bgcolor="#ffffff">
-																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
-																				<fmt:timeZone value="US/Eastern">
-																						<tr>
-																							<td width="50" bgcolor="#ffffff">
-																								<digi:trn key="aim:preview_plannedcommitments_sum">Planned Commitments Sum</digi:trn>																							
-																							</td>																							
-																							<td align="right" width="100" bgcolor="#ffffff">																								
-																								<fmt:formatNumber type="number" pattern="0.00" value="${financeByYearInfoMap['MontoProgramado']}" />																						
-																							</td>																																													
-																						</tr>
-																						<tr>
-																							<td width="50" bgcolor="#ffffff">
-																								<digi:trn key="aim:preview_actualcommitments_sum">Actual Commitments Sum</digi:trn>																																															
-																							</td>																							
-																							<td align="right" width="100" bgcolor="#ffffff">																																															
-																								<fmt:formatNumber type="number" pattern="0.00" value="${financeByYearInfoMap['MontoReprogramado']}" />																																														
-																							</td>																						
-																						</tr>																																																																		
-																						<tr>
-																							<td width="50" bgcolor="#ffffff">
-																								<digi:trn key="aim:preview_plannedexpenditures_sum">Actual Expenditures Sum</digi:trn>																																															
-																							</td>																							
-																							<td align="right" width="100" bgcolor="#ffffff">																																															
-																								<fmt:formatNumber type="number" pattern="0.00" value="${financeByYearInfoMap['MontoEjecutado']}" />																							
-																							</td>																						
-																						</tr>
-																				</fmt:timeZone>
-																				</table>																			
-																			</td>
-																		</tr>
-																		<tr>
-																			<td>
-																				&nbsp;
-																			</td>
-																			<td>
-																				&nbsp;
-																			</td>																			
-																		</tr>																	
-																		</c:forEach>
-																	</table>																	
-																	</td>
-																</tr>
-														</table>
-													</td></tr>
-													<tr>
-														<td>&nbsp;</td>
-													</tr>
-													</table>																										
-												</c:forEach>
-											</c:if>
-											</div>										
-										</td>
-									</tr>
-                                    <!--end 26-->
-									</module:display>									
-                                    </logic:equal>
+                                    
 
 									
                                     	<module:display name="Issues" parentModule="PROJECT MANAGEMENT">
@@ -1948,7 +1952,7 @@ function collapseAll() {
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="issues_plus"  onclick="toggleGroup('issues')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
 											<img id="issues_minus" onclick="toggleGroup('issues')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
 											<digi:trn key="aim:issues">
-											Issues</digi:trn>										</td>
+											Issues</digi:trn></td>
 										<td bgcolor="#ffffff">
 											<div id="issues_dots">...</div>
 											<div id="act_issues" style="display: none;">
@@ -1956,17 +1960,27 @@ function collapseAll() {
 												<table width="100%" cellSpacing="2" cellPadding="2" border="0">
 												<c:forEach var="issue" items="${aimEditActivityForm.issues}">
 													<tr><td valign="top">
-														<li class="level1"><b><c:out value="${issue.name}"/></b></li>
+														<li class="level1"><b>
+														<digi:trn key="aim:${issue.nameTrimmed}"><c:out value="${issue.name}"/></digi:trn>
+														</b></li>
 													</td></tr>
 													<c:if test="${!empty issue.measures}">
 														<c:forEach var="measure" items="${issue.measures}">
 															<tr><td>
-																<li class="level2"><i><c:out value="${measure.name}"/></i></li>
+																<li class="level2"><i>
+																<digi:trn key="aim:${measure.nameTrimmed}">
+																<c:out value="${measure.name}"/>
+																</digi:trn>
+																</i></li>
 															</td></tr>
 															<c:if test="${!empty measure.actors}">
 																<c:forEach var="actor" items="${measure.actors}">
 																	<tr><td>
-																		<li class="level3"><c:out value="${actor.name}"/></li>
+																		<li class="level3">
+																		<digi:trn key="aim:${actor.nameTrimmed}">
+																		<c:out value="${actor.name}"/>
+																		</digi:trn>
+																		</li>
 																	</td></tr>
 																</c:forEach>
 															</c:if>
@@ -2001,15 +2015,17 @@ function collapseAll() {
 																&nbsp;&nbsp;&nbsp;<i><c:out value="${docs.fileName}"/></i>
 																<logic:notEqual name="docs" property="docDescription" value=" ">
 																	<br />&nbsp;
-																	<b>Description:</b>&nbsp;<bean:write name="docs" property="docDescription" />
+																	<b><digi:trn key="aim:description">Description</digi:trn>:</b>
+																	&nbsp;<bean:write name="docs" property="docDescription" />
 																</logic:notEqual>
 																<logic:notEmpty name="docs" property="date">
 																	<br />&nbsp;
-																	<b>Date:</b>&nbsp;<c:out value="${docs.date}"/>
+																	<b><digi:trn key="aim:date">Date</digi:trn>:</b>
+																	&nbsp;<c:out value="${docs.date}"/>
 																</logic:notEmpty>
 																<logic:notEmpty name="docs" property="docType">
 																	<br />&nbsp;
-																	<b>Document Type:</b>&nbsp;
+																	<b><digi:trn key="aim:documentType">Document Type</digi:trn>:</b>&nbsp;
 																	<bean:write name="docs" property="docType"/>
 																</logic:notEmpty>															</td>
 														</tr>
@@ -2028,11 +2044,13 @@ function collapseAll() {
 																		&nbsp;&nbsp;&nbsp;<i><c:out value="${crDoc.name}"/></i>
 																		<logic:notEmpty name="crDoc" property="description">
 																			<br />&nbsp;
-																			<b>Description:</b>&nbsp;<bean:write name="crDoc" property="description" />
+																			<b><digi:trn key="aim:description">Description</digi:trn>:</b>&nbsp;
+																			<bean:write name="crDoc" property="description" />
 																		</logic:notEmpty>
 																		<logic:notEmpty name="crDoc" property="calendar">
 																			<br />&nbsp;
-																			<b>Date:</b>&nbsp;<c:out value="${crDoc.calendar}"/>
+																			<b><digi:trn key="aim:date">Date</digi:trn>:</b>
+																			&nbsp;<c:out value="${crDoc.calendar}"/>
 																		</logic:notEmpty>
 																	</td>
 																</tr>
@@ -2057,7 +2075,8 @@ function collapseAll() {
 																	&nbsp;&nbsp;&nbsp;<i><a href="<c:out value="${links.url}"/>">
 																	<c:out value="${links.url}"/></a></i>
 																	<br>&nbsp;
-																	<b>Desc:</b>&nbsp;<c:out value="${links.description}"/>																</td>
+																	<b><digi:trn key="aim:description">Description</digi:trn>:</b>
+																	&nbsp;<c:out value="${links.description}"/>																</td>
 															</tr>
 														</table>
 													</td></tr>
@@ -2286,14 +2305,14 @@ function collapseAll() {
 											<c:if test="${aimEditActivityForm.proProjCost!=null}">
                                                   <table cellSpacing=1 cellPadding="3" bgcolor="#aaaaaa" width="100%">
                                                       <tr bgcolor="#ffffff">
-															<td>Cost</td>
+															<td><digi:trn key="aim:cost">Cost</digi:trn></td>
                                                         <td bgcolor="#FFFFFF" align="left" >
                                                           <c:if test="${aimEditActivityForm.proProjCost.funAmount!=null}">
 																 	<FONT color=blue>*</FONT> ${aimEditActivityForm.proProjCost.funAmount}                                                          </c:if>&nbsp;
 																<c:if test="${aimEditActivityForm.proProjCost.currencyCode!=null}"> ${aimEditActivityForm.proProjCost.currencyCode} </c:if>                                                        </td>
 												    </tr>
 																		  <tr bgcolor="#ffffff">
-															<td>Proposed Completion Date  </td>
+															<td><digi:trn key="aim:proposedCompletionDate">Proposed Completion Date</digi:trn></td>
                                                         <td bgcolor="#FFFFFF" align="left" width="150">
                                                           <c:if test="${aimEditActivityForm.proProjCost.funDate!=null}">
                                                              ${aimEditActivityForm.proProjCost.funDate}                                                          </c:if>                                                        </td>
@@ -2321,6 +2340,280 @@ function collapseAll() {
 									</tr>
 									</feature:display>
 									<!-- End Costing -->
+                                                                         
+                                                                         	<!-- IPA Contracting -->
+                                                                                
+									<feature:display name="Contracting" module="Contracting">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+                                                                                     <img id="contract_plus"  onclick="toggleGroup('contract')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+                                                                                       <img id="contract_minus" onclick="toggleGroup('contract')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+											<digi:trn key="aim:IPAContracting">
+										    IPA Contracting</digi:trn>										</td>
+										<td bgcolor="#ffffff">
+											&nbsp;&nbsp;&nbsp;
+                                                                                         <div id="contract_dots">...</div>
+											<div id="act_contract" style="display: none;">
+											<table width="100%">
+												<tr>
+													<td>
+																						<!-- contents -->
+
+								 <logic:notEmpty name="aimEditActivityForm" property="contracts">
+                                                                                <table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
+                                                                                <c:forEach items="${aimEditActivityForm.contracts}" var="contract" varStatus="idx">
+                                                                                
+                                                                                <tr><td bgColor=#f4f4f2 align="center" vAlign="top">
+                                                                                
+                                                                                    <table width="100%" border="0" cellspacing="2" cellpadding="2" align="left" class="box-border-nopadding">
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:name">Contract name:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                
+                                                                                                ${contract.contractName}
+                                                                                             
+                                                                                               
+                                                                                            </td>
+                                                                                            
+                                                                                        </tr>
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:description">Description:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                               ${contract.description}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:actCat">Activity Category:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                  <c:if test ="${not empty contract.activityCategory}">
+                                                                                                    ${contract.activityCategory.value}
+                                                                                                </c:if>
+                                                                                                
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                         
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:startOfTendering">Start of Tendering:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                ${contract.formattedStartOfTendering}
+                                                                                           </td>
+                                                                                            
+                                                                                        </tr>	
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:signatureOfContract">Signature of Contract:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                 ${contract.formattedSignatureOfContract}
+                                                                                            </td>
+                                                                                            
+                                                                                        </tr>	
+                                                                                        
+                                                                                         <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <c:if test="${not empty contract.organization}">
+                                                                                                     ${contract.organization.name}
+                                                                                                </c:if>
+                                                                                                
+                                                                                            </td>
+                                                                                            
+                                                                                        </tr>	
+                                                                                        
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:contractCompletion">Contract Completion:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                 ${contract.formattedContractCompletion}
+                                                                                            </td>
+                                                                                            
+                                                                                        </tr>	
+                                                                                        
+                                                                                         <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:status">Status:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                
+                                                                                                <c:if test ="${not empty contract.status}">
+                                                                                 
+                                                                                                    ${contract.status.value}
+                                                                                                </c:if>
+                                                                                                
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td align="left" colspan="2">
+                                                                                                <b><digi:trn key="aim:IPA:popup:totalECContribution">Total EC Contribution:</digi:trn></b>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:IB">IB</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                 ${contract.totalECContribIBAmount}
+                                                                                                ${contract.totalECContribIBCurrency} 
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:INV">INV:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                ${contract.totalECContribINVAmount}
+                                                                                               ${contract.totalECContribINVCurrency}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        
+                                                                                        
+                                                                                        
+                                                                                        
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td align="left" colspan="2">
+                                                                                                <b><digi:trn key="aim:IPA:popup:totalNationalContribution">Total National Contribution:</digi:trn></b>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:Central">Central</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                ${contract.totalNationalContribCentralAmount}
+                                                                                                ${contract.totalNationalContribCentralCurrency} 
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:Regional">Regional</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                ${contract.totalNationalContribRegionalAmount} 
+                                                                                              ${contract.totalNationalContribRegionalCurrency}
+                                                                                   
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:IFIs">IFIs</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                ${contract.totalNationalContribIFIAmount}
+                                                                                               ${contract.totalNationalContribIFICurrency}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        
+                                                                                        
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td align="left" colspan="2">
+                                                                                                <b><digi:trn key="aim:IPA:popup:totalPrivateContribution">Total Private Contribution:</digi:trn></b>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:IB">IB:</digi:trn></b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                ${contract.totalPrivateContribAmount}
+                                                                                                ${contract.totalPrivateContribCurrency}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        
+                                                                                        
+                                                                                        
+                                                                                        
+                                                                                        <tr>
+                                                                                    
+                                                                                            <td colspan="2">
+                                                                                                <b><digi:trn key="aim:IPA:popup:disbursements">Disbursements:</digi:trn></b>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td>&nbsp;
+                                                                                            </td>
+                                                                                            <td>
+                                                                                               
+                                                                                    
+                                                                                                    <logic:notEmpty name="contract" property="disbursements">
+                                                                                                         <table>
+                                                                                              
+                                                                                                        <c:forEach  items="${contract.disbursements}" var="disbursement" >
+                                                                                                            <tr>
+                                                                                          
+                                                                                                                <td align="left" valign="top">
+                                                                                                                    <c:if test="${disbursement.adjustmentType==0}">
+                                                                                                                          <digi:trn key="aim:actual">Actual</digi:trn>
+                                                                                                                   </c:if>
+                                                                                                                    <c:if test="${disbursement.adjustmentType==1}">
+                                                                                                                          <digi:trn key="aim:planned">Planned</digi:trn>
+                                                                                                                   </c:if>
+                                                                                                    
+                                                                                                                </td>
+                                                                                                                <td align="left" valign="top">
+                                                                                                                    ${disbursement.amount}
+                                                                                                                </td>
+                                                                                                                <td align="left" valign="top">
+                                                                                                                   ${disbursement.currency.currencyName} 
+                                                                                                                </td>
+                                                                                                                <td align="left" valign="top">
+                                                                                                                    ${disbursement.disbDate}
+                                                                                                                    
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                        </c:forEach>
+                                                                                                        </table>
+                                                                                                        
+                                                                                                    </logic:notEmpty>						
+                                                                                                		
+                                                                                            </td>		
+                                                                                        </tr>		
+                                                                                        
+                                                                                    </table>
+                                                                                    
+                                                                                    
+                                                                             
+                                                                                   </td></tr>
+                                                                                  
+                                                                                </c:forEach>
+                                                                                </table>
+                                                                                
+                                                                            </logic:notEmpty>
+								<!-- end contents -->
+                                                                 </td>
+										</tr>
+											</table>
+                                                                                         </div>
+                                                                                         </td>
+									</tr>
+									</feature:display>
+									<!-- end IPA Contracting -->
+                                                                         
 									<field:display name="Activity Created By" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">

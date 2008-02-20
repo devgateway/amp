@@ -4,6 +4,7 @@
 
 package org.digijava.module.aim.action;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -57,6 +58,7 @@ import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpSISINProyect;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -168,7 +170,6 @@ public class SaveActivity extends Action {
             if(SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false)!=null) {
             	UUIDs.addAll(SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false));
             }
-			
 			if (UUIDs != null && UUIDs.size() >0 ) {
 				if ( activity.getActivityDocuments() == null )
 						activity.setActivityDocuments(new HashSet<AmpActivityDocument>() );
@@ -332,16 +333,16 @@ public class SaveActivity extends Action {
 
 				if (toDelete == null
 						|| (!toDelete.trim().equalsIgnoreCase("true"))) {
-					if (eaForm.isEditAct() == false || eaForm.getActivityId()==null) {
-                        AmpActivity act = ActivityUtil.getActivityByName(eaForm.getTitle());
-                        if (act != null) {
-                            eaForm.setActivityId(null);
-                            logger.debug("Activity with the name " + eaForm.getTitle() + " already exist.");
-                            return mapping.findForward("activityExist");
-                        }
-                    }
-
-
+					if (eaForm.isEditAct() == false) {
+						AmpActivity act = ActivityUtil.getActivityByName(eaForm
+								.getTitle());
+						if (act != null) {
+							eaForm.setActivityId(act.getAmpActivityId());
+							logger.debug("Activity with the name "
+									+ eaForm.getTitle() + " already exist.");
+							return mapping.findForward("activityExist");
+						}
+					}
 				} else if (toDelete.trim().equals("true")) {
 					eaForm.setEditAct(true);
 				} else {
@@ -491,8 +492,8 @@ public class SaveActivity extends Action {
                 }
 				// end of Modified code
 
-                DbUtil.updateSurvey(eaForm.getAhsurvey());
-                DbUtil.saveSurveyResponses(eaForm.getAmpSurveyId(), eaForm.getIndicators());
+                if(eaForm.getAhsurvey()!=null) DbUtil.updateSurvey(eaForm.getAhsurvey());
+                if(eaForm.getAmpSurveyId()!=null) DbUtil.saveSurveyResponses(eaForm.getAmpSurveyId(), eaForm.getIndicators());
 
                 if(eaForm.getProProjCost()==null){
                     activity.setFunAmount(null);
@@ -518,6 +519,7 @@ public class SaveActivity extends Action {
 				activity.setSubProgram(eaForm.getSubProgram());
 				activity.setProjectCode(eaForm.getProjectCode());
 				activity.setGovernmentApprovalProcedures(eaForm.getGovernmentApprovalProcedures());
+				activity.setGovAgreementNumber(eaForm.getGovAgreementNumber());
 
 
 				activity.setJointCriteria(eaForm.getJointCriteria());
@@ -945,7 +947,7 @@ public class SaveActivity extends Action {
 					while (itr.hasNext()) {
 						Location loc = itr.next();
                                                 String countryIso=loc.getNewCountryId();
-						AmpLocation ampLoc = LocationUtil.getAmpLocation(loc.getNewCountryId(), loc.getRegionId(), loc.getZoneId(), loc.getWoredaId());
+						AmpLocation ampLoc = LocationUtil.getAmpLocation(countryIso, loc.getRegionId(), loc.getZoneId(), loc.getWoredaId());
 
 						if (ampLoc == null) {
 							ampLoc = new AmpLocation();
@@ -1433,7 +1435,7 @@ public class SaveActivity extends Action {
 				if (eaForm.isEditAct()) {
 					// Setting approval status of activity
 					activity.setApprovalStatus(eaForm.getApprovalStatus());
-                                        activity.setActivityCreator(eaForm.getCreatedBy());
+                    activity.setActivityCreator(eaForm.getCreatedBy());
 
                     List<String> auditTrail = AuditLoggerUtil.generateLogs(
 												activity, eaForm.getActivityId());
@@ -1526,11 +1528,11 @@ public class SaveActivity extends Action {
 			eaForm.setCommentFlag(false);
 			// Clearing approval process properties
 			eaForm.setWorkingTeamLeadFlag("no");
-            eaForm.setTeamLead(false);
 			eaForm.setFundingRegions(null);
 			eaForm.setRegionalFundings(null);
 			eaForm.setLineMinRank(null);
 			eaForm.setPlanMinRank(null);
+                        eaForm.setTeamLead(false);
 
 			/* Clearing categories */
 			eaForm.setAccessionInstrument(new Long(0));
@@ -1617,6 +1619,12 @@ public class SaveActivity extends Action {
 					activity.getComponents().add(ampComp);
 				}
 
+				if (comp.getSisinProyect() != null){
+					AmpSISINProyect sisinProyect = comp.getSisinProyect();
+					sisinProyect.setComponentId(ampComp.getAmpComponentId());
+					tempComp.setSisinProyect(sisinProyect);
+				}
+
 				if (comp.getCommitments() != null
 						&& comp.getCommitments().size() > 0) {
 					HashSet<AmpComponentFunding> temp = new HashSet<AmpComponentFunding>();
@@ -1651,7 +1659,8 @@ public class SaveActivity extends Action {
 
 						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
 						ampCompFund.setReportingOrganization(null);
-						ampCompFund.setTransactionAmount(FormatHelper.parseDouble(fd.getTransactionAmount()));
+							ampCompFund.setTransactionAmount(FormatHelper.parseDouble(fd.getTransactionAmount()));
+						
 						ampCompFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
 						ampCompFund.setAdjustmentType(new Integer(fd
@@ -1696,9 +1705,11 @@ public class SaveActivity extends Action {
 						}
 
 						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
-						ampCompFund.setTransactionAmount(new Double(
-								FormatHelper.parseDouble(fd
-										.getTransactionAmount())));
+						
+							ampCompFund.setTransactionAmount(new Double(
+									FormatHelper.parseDouble(fd
+											.getTransactionAmount())));
+						
 						ampCompFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
 						ampCompFund.setAdjustmentType(new Integer(fd
@@ -1742,9 +1753,8 @@ public class SaveActivity extends Action {
 						}
 
 						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
-						ampCompFund.setTransactionAmount(new Double(
-							FormatHelper.parseDouble(fd
-										.getTransactionAmount())));
+						ampCompFund.setTransactionAmount(new Double(FormatHelper.parseDouble(fd.getTransactionAmount())));
+					
 						ampCompFund.setTransactionDate(DateConversion
 								.getDate(fd.getTransactionDate()));
 						ampCompFund.setAdjustmentType(new Integer(fd
@@ -1806,6 +1816,7 @@ public class SaveActivity extends Action {
 				MTEFProjection mtef=(MTEFProjection)mtefItr.next();
 				AmpFundingMTEFProjection ampmtef=new AmpFundingMTEFProjection();
 				ampmtef.setAmount(FormatHelper.parseDouble(mtef.getAmount()));
+				
 				ampmtef.setAmpFunding(ampFunding);
 				ampmtef.setAmpCurrency(CurrencyUtil.getCurrencyByCode(mtef.getCurrencyCode()));
 				ampmtef.setProjected( CategoryManagerUtil.getAmpCategoryValueFromDb(mtef.getProjected()) );

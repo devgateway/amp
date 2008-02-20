@@ -19,6 +19,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private AmpTeamMember createdBy;
 
     private Boolean budget;
+    private String govAgreementNumber;
 
     @PermissibleProperty(type=Permissible.PermissibleProperty.PROPERTY_TYPE_ID)
     private Long ampActivityId ;
@@ -1274,6 +1275,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setIndicators(Set indicators) {
 		this.indicators = indicators;
+	}
+
+	public String getGovAgreementNumber() {
+		return govAgreementNumber;
+	}
+
+	public void setGovAgreementNumber(String govAgreementNumber) {
+		this.govAgreementNumber = govAgreementNumber;
 	}
 
 }

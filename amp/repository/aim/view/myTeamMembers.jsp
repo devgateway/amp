@@ -60,6 +60,7 @@
 					<br/><br/>
 					<c:if test="${not empty sessionScope.currentMember}">
 						<c:if test="${sessionScope.currentMember.teamType != 'DONOR'}">
+						<c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">
 							<c:set var="trnClickToAddNewActivit">
 								<digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
 							</c:set>
@@ -80,15 +81,16 @@
 							</div>
 						</c:if>
 					</c:if>
-					<logic:equal name="teamHead" scope="session" value="yes">
-						<br/>
-					<c:set var="trnclickToConfigureTeamPages">
-						<digi:trn key="aim:clickToConfigureTeamPages">Click here to Add New Activity</digi:trn>
-					</c:set>
-						<div title='${trnclickToConfigureTeamPages}' align="left">
-                     	<input type="button" class="dr-menu" onclick='return teamWorkspaceSetup("-1")' value="<digi:trn key="btn:teamWorkspaceSetup">Team Workspace Setup</digi:trn>" name="addActivity"/>
-                     	</div><br/><br/>
-					</logic:equal>
+					</c:if>
+					<c:if test="${sessionScope.currentMember.teamHead == true}">
+							<br/>
+							<c:set var="trnclickToConfigureTeamPages">
+								<digi:trn key="aim:clickToConfigureTeamPages1">Click here to Configure Team Pages</digi:trn>
+							</c:set>
+							<div title='${trnclickToConfigureTeamPages}' align="left">
+            	         	<input type="button" class="dr-menu" onclick='return teamWorkspaceSetup("-1")' value="<digi:trn key="btn:teamWorkspaceSetup">Team Workspace Setup</digi:trn>" name="addActivity"/>
+                	     	</div><br/><br/>
+					</c:if>
 			</TD>
 	</TR>
 </TABLE>

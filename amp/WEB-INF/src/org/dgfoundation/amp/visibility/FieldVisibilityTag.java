@@ -146,7 +146,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
    	   			    return SKIP_BODY;
    				}
 
-   				pageContext.getOut().print(bodyText);   			    
+   			   pageContext.getOut().print(bodyText);   			    
    			} else return SKIP_BODY;//the field is not active!!!
    		   }
     	   

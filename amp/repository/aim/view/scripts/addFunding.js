@@ -181,7 +181,7 @@ function validateFunding() {
 
 
 
-function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate,decimalSymbol,groupSymbol) {
+function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate, decimalSymbol,groupSymbol,msgConfirmFunding) {
 	
 	this.decimalSymbol=decimalSymbol;
 	
@@ -204,7 +204,7 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmo
 
 	if (fundId.length == 0) {
 
-		errmsg+=errmsg2;
+		//errmsg+=errmsg2;//tanzania
 
 	}
 
@@ -262,7 +262,7 @@ function validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmo
 
 	}
 
-	return validateFundingDetails(numComm,numDisb,numExp,msgEnterAmount,msgInvalidAmount,msgEnterDate);
+	return validateFundingDetails(numComm,numDisb,numExp,msgEnterAmount,msgInvalidAmount,msgEnterDate,msgConfirmFunding);
 
 }
 
@@ -447,7 +447,7 @@ function validateFundingDetailsExchangeRate(comm,disb,exp)
 
 
 
-function validateFundingDetails(comm,disb,exp,msgEnterAmount,msgInvalidAmount,msgEnterDate) {
+function validateFundingDetails(comm,disb,exp,msgEnterAmount,msgInvalidAmount,msgEnterDate,msgConfirmFunding) {
 
 	var itr = comm + disb + exp;
 
@@ -512,8 +512,8 @@ function validateFundingDetails(comm,disb,exp,msgEnterAmount,msgInvalidAmount,ms
 					return false;
 
 				}
-
-				if (checkAmountLen(temp[i].value) == false) {
+				
+				if (checkAmountLen(temp[i].value,msgConfirmFunding) == false) {
 
 					temp[i].focus();
 

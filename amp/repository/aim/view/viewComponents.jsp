@@ -9,7 +9,7 @@
 
 <script langauage="JavaScript">
 function onDelete() {
-  var flag = confirm("Delete this Component?");
+  var flag = confirm('<digi:trn key="aim:deletethiscomponent">Delete this component</digi:trn>');
   return flag;
 }
 

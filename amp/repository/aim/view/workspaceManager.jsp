@@ -140,7 +140,7 @@
 																</digi:trn>
 															</digi:link> ]
 														</td>
-														<td bgcolor="#ffffff" width="40" align="center">
+														<td bgcolor="#ffffff" width="65" align="center">
 															<%--
 															<c:set target="${urlParams2}" property="actionEvent" value="edit" />--%>
 															<c:set var="translation">
@@ -152,7 +152,7 @@
 																</digi:trn>
 															</digi:link> ]
 														</td>
-														<td bgcolor="#ffffff" width="55" align="center">
+														<td bgcolor="#ffffff" width="75" align="center">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams4}" property="tId">
 																<bean:write name="workspaces" property="ampTeamId" />

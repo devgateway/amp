@@ -11,7 +11,7 @@
 <script language="JavaScript">
 
 	function msg() {
-          var msg='<digi:trn key="aim:deleteOrganizationType">Are you sure about deleting this Organization Type ?</digi:trn>'
+          var msg="<digi:trn key="aim:deleteOrganizationType">Are you sure about deleting this Organization Type ?</digi:trn>"
 		if (confirm(msg)) {
 			document.aimAddOrgTypeForm.action.value = "delete";
 			document.aimAddOrgTypeForm.submit();

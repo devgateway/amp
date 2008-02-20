@@ -673,7 +673,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 					                          		</td>
 
-					                          		<td bgcolor="#DDDDDB">
+					                          		<!-- td bgcolor="#DDDDDB">
 
 			      		                    			<div align="center">
 
@@ -683,7 +683,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 			                  		        			</div>
 
-			                        		  		</td>
+			                        		  		</td-->
 
 			                          				<td bgcolor="#DDDDDB">
 
@@ -807,11 +807,11 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 						                          		</td>
 
-			                   			       		<td valign="baseline" bgcolor="#F8F8F5">
+			                   			       		<!-- td valign="baseline" bgcolor="#F8F8F5">
 
 			                          						<div align="right"><bean:write name="qtr" property="plannedAmount" /></div>
 
-						                          		</td>
+						                          		</td-->
 
 			                          					<td valign="baseline" bgcolor="#F8F8F5">
 
@@ -1066,9 +1066,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 			        											<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" title="${translation}" >
 
 				      	  										<STRONG>
-
-																		Show Yearly
-
+																		<digi:trn key="aim:showYearly">Show Yearly</digi:trn>																		
 																	</STRONG>
 
 						   		     						</digi:link>

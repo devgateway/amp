@@ -80,4 +80,8 @@ public class AmpColumns  implements Serializable, Comparable
 		AmpColumns auxColumn=(AmpColumns) o;
 		return this.getColumnName().compareTo(auxColumn.getColumnName());
 	}
+	
+	public String toString(){
+		return columnName;
+	}
 }

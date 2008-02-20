@@ -13,6 +13,8 @@
 	import org.digijava.kernel.user.User;
 	import java.util.ArrayList;
 	import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.RepairDbUtil;
+
 	import java.util.*;
 	import org.digijava.module.aim.util.TeamMemberUtil;
 	import org.digijava.module.um.util.AmpUserUtil;
@@ -20,7 +22,7 @@
 	import org.digijava.module.aim.dbentity.AmpTeamMember;
 	import org.digijava.module.aim.helper.UserBean;
 	import org.digijava.module.aim.dbentity.AmpTeam;
-	import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.TeamUtil;
 	
 	public class ViewAllUsers
 	    extends Action {
@@ -32,6 +34,16 @@
 	    	
 	    	if(request.getParameter("reset")!=null && request.getParameter("reset").equals("true")){
 	    		vwForm.reset(mapping, request);    		
+	    	}
+	    	
+	    	RepairDbUtil.repairBannedUsersAreStillInATeam();
+	    	
+	    	if ( request.getParameter("showBanned")!=null && request.getParameter("showBanned").equals("true") ) {
+	    		vwForm.setShowBanned(true);
+	    		vwForm.setType(-1);
+	    	}
+	    	if ( request.getParameter("showBanned")!=null && request.getParameter("showBanned").equals("false") ) {
+	    		vwForm.setShowBanned(false);
 	    	}
 	        
 	    	vwForm.setPagesToShow(10);
@@ -166,11 +178,11 @@
 	    	Collection<User> users=null;
 	    	 String alpha = vwForm.getCurrentAlpha(); //request.getParameter("alpha");
 	    	    if (alpha == null || alpha.trim().length() == 0 || alpha.equals("viewAll")) {
-	    	    	users = AmpUserUtil.getAllUsers();
+	    	    	users = AmpUserUtil.getAllUsers(vwForm.getShowBanned());
 	    	    	vwForm.setSelectedNoLetter(true);
 	    	    }else if(alpha!=null && !alpha.equals("viewAll")){
 	    	    	users=new  ArrayList<User>();
-	    	    	Iterator iter=AmpUserUtil.getAllUsers().iterator();
+	    	    	Iterator iter=AmpUserUtil.getAllUsers(vwForm.getShowBanned()).iterator();
 	    	    	while (iter.hasNext()){
 	    	    		User us=(User)iter.next();
 	    	    		if(us.getFirstNames().toUpperCase().startsWith(alpha)){

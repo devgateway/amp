@@ -4,6 +4,7 @@ import java.util.Collection;
 public class AmpComponent
 {
 	private Long ampComponentId;
+	private String title;
 	private String name;
 	private String objective ;
 	private String signatureDate;
@@ -136,6 +137,14 @@ public class AmpComponent
 
 	public void setShortName(String shortName) {
 		ShortName = shortName;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	
 	

@@ -21,8 +21,6 @@ public class AmpComponentFunding{
 	private String expenditureCategory;
 	private AmpComponent component;
 	private AmpPerspective perspective;
-	private Float exchangeRate;
-	
 	/**
 	 * @return Returns the activity.
 	 */
@@ -183,12 +181,6 @@ public class AmpComponentFunding{
 		AmpComponentFunding comp = (AmpComponentFunding) obj;
 		return this.ampComponentFundingId.equals(comp.ampComponentFundingId);
 		
-	}
-	public void setExchangeRate(Float exchangeRate) {
-		this.exchangeRate = exchangeRate;
-	}
-	public Float getExchangeRate() {
-		return exchangeRate;
 	}
 	
 }

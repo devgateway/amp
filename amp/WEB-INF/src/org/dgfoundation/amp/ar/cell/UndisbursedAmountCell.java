@@ -6,8 +6,6 @@ package org.dgfoundation.amp.ar.cell;
 import java.util.Iterator;
 
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.exprlogic.ExampleLogicalToken;
-import org.digijava.module.aim.logic.Logic;
 
 /**
  * @author mihai
@@ -15,9 +13,12 @@ import org.digijava.module.aim.logic.Logic;
  */
 public class UndisbursedAmountCell extends AmountCell {
 
-
+	/**
+	 * 
+	 */
 	public UndisbursedAmountCell() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
 	
 	 	public UndisbursedAmountCell(AmountCell ac) {
@@ -30,6 +31,7 @@ public class UndisbursedAmountCell extends AmountCell {
 	 */
 	public UndisbursedAmountCell(Long id) {
 		super(id);
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -38,13 +40,21 @@ public class UndisbursedAmountCell extends AmountCell {
 	 * @return Returns the amount.
 	 */
 	public double getAmount() {
+		double ret = 0;
 		if (id != null)
 			return convert();
-		double ret = 0;
-		Iterator<CategAmountCell> i = mergedCells.iterator();
+		Iterator i = mergedCells.iterator();
 		while (i.hasNext()) {
 			CategAmountCell element = (CategAmountCell) i.next();
-			ret+=ExampleLogicalToken.undisbursedLogicalToken.evaluate(element);	
+			if(!element.isCummulativeShow() && element.getMetaValueString(ArConstants.TRANSACTION_TYPE)!=null && element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equals(ArConstants.DISBURSEMENT)) continue;
+			if(!ArConstants.ACTUAL.equals( element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE) )) continue;
+			//if(!element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equals(ArConstants.ACTUAL)) continue;
+			if (ArConstants.COMMITMENT.equals( element.getMetaValueString(ArConstants.TRANSACTION_TYPE) ))
+										ret += element.getAmount();
+			//if(element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equals(ArConstants.COMMITMENT)) ret += element.getAmount();
+			if (ArConstants.DISBURSEMENT.equals( element.getMetaValueString(ArConstants.TRANSACTION_TYPE) ))
+				ret -= element.getAmount();
+			//if(element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equals(ArConstants.DISBURSEMENT)) ret -= element.getAmount();
 		}
 		return ret;
 	}

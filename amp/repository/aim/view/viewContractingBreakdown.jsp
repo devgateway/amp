@@ -85,20 +85,21 @@ function projectFiche(id)
 											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Preview Activity" module="Previews">
 													<field:display feature="Preview Activity" name="Preview Button">
-														<input type="button" value="Preview" class="dr-menu" onclick='preview(${aimViewContractingForm.ampActivityId})'>
+														<input type="button" value='<digi:trn key="aim:preview">Preview</digi:trn>' class="dr-menu" onclick='preview(${aimViewContractingForm.ampActivityId})'>														
 													</field:display>
 												</feature:display>
 											</module:display>
 											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Edit Activity" module="Previews">
 													<field:display feature="Edit Activity" name="Edit Activity Button">
-														<input type="button" value="Edit" class="dr-menu" onclick='fnEditProject(${aimViewContractingForm.ampActivityId})'>													</field:display>
+														<input type="button" value='<digi:trn key="aim:edit">Edit</digi:trn>' class="dr-menu" onclick='fnEditProject(${aimViewContractingForm.ampActivityId})'>
+													</field:display>														
 												</feature:display>
 											</module:display>
 											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Logframe" module="Previews">
 													<field:display name="Logframe Preview Button" feature="Logframe" >
-															<input type="button" value="Preview Logframe" class="dr-menu" onclick="previewLogframe(${aimViewContractingForm.ampActivityId})">
+															<input type="button" value='<digi:trn key="aim:previewLogFrame">Preview LogFrame</digi:trn>' class="dr-menu" onclick="previewLogframe(${aimViewContractingForm.ampActivityId})">															
 													</field:display>
 												</feature:display>
 											</module:display>
@@ -239,7 +240,7 @@ function projectFiche(id)
                                                                                             
                                                                                         </tr>	
                                                                                     </field:display>
-                                                                                              <field:display name="Status" feature="Contracting Tab">
+                                                                                              <field:display name="Contracting Tab Status" feature="Contracting Tab">
                                                                                          <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:status">Status:</digi:trn></b>

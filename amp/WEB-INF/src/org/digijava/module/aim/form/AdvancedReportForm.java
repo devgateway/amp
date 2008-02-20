@@ -53,6 +53,7 @@ public class AdvancedReportForm extends ActionForm
 	private Long removeColumns[] = null; // list of columns after selecting.
 	private Long columnId;
 	private Collection addedColumns = null; // contains the columns that have been added.
+	private Collection notHierarchyColumns = null; //Columns that are in step 3 but are not selected as hierarchy
 	private boolean isAdd = false;
 	private String step = null;
 	private Collection finalData = null;
@@ -84,6 +85,7 @@ public class AdvancedReportForm extends ActionForm
 	private String currency ;
 	private String option;
 	private Collection options;
+	private boolean canMakePublic=false;
 	
 	private boolean inEditingMode	= false; // true if in editing mode
 	private long dbReportId			= 0; // If in editing mode, it represents the id of the AmpReports object in the database
@@ -1605,6 +1607,18 @@ private int yrDiff;
 	}
 	public void setSelectedMeasureToLevel(String measureId, Long levelId) {
 		selectedMeasureToLevel.put(measureId, levelId);
+	}
+	public Collection getNotHierarchyColumns() {
+		return notHierarchyColumns;
+	}
+	public void setNotHierarchyColumns(Collection notHierarchyColumns) {
+		this.notHierarchyColumns = notHierarchyColumns;
+	}
+	public boolean isCanMakePublic() {
+		return canMakePublic;
+	}
+	public void setCanMakePublic(boolean canMakePublic) {
+		this.canMakePublic = canMakePublic;
 	}
 	
 	

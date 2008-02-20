@@ -72,7 +72,7 @@
                                                                 <tr>
                                                                   <logic:notEmpty name="MS" scope="application">
                                                                     <td>
-                                                                      <input type="button" value="Add Sectors" class="buton"  onclick="addSectors();">
+                                                                      <input type="button" value="<digi:trn key="admin:addsector">Add Sectors</digi:trn>" class="buton"  onclick="addSectors();">
                                                                     </td>
                                                                   </logic:notEmpty>
                                                                   <td >

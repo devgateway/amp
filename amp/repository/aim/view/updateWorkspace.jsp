@@ -13,7 +13,7 @@
 function addChildWorkspaces() {
 		if (document.aimUpdateWorkspaceForm.workspaceType.value != "Team") {
 			if (document.aimUpdateWorkspaceForm.category.value == "-1") {
-				alert("Team category is required");
+				alert("<digi:trn key="aim:teamcategoryrequired">Team category is required</digi:trn>");
 				document.aimUpdateWorkspaceForm.category.focus();
 				return false;
 			}
@@ -24,7 +24,7 @@ function addChildWorkspaces() {
 			document.aimUpdateWorkspaceForm.addFlag.value = false;
 			document.aimUpdateWorkspaceForm.submit();
 		} else {
-			alert("Workspace type must be 'Management' to add teams");
+			alert("<digi:trn key="aim:teamcaddmanagement">Workspace type must be MANAGEMENT to add teams</digi:trn>");
 			document.aimUpdateWorkspaceForm.workspaceType.focus();
 			return false;
 		}
@@ -42,7 +42,7 @@ function addChildOrgs() {
 
 
 function removeChildOrg(id) {
-	var temp = confirm("Do you want to delete this linked organisation ?");
+	var temp = confirm("<digi:trn key="aim:deletelinkedorganization">Do you want to delete this linked organization ?</digi:trn>");
 	if(temp == false)
 	{
 			document.aimUpdateWorkspaceForm.submit();
@@ -61,7 +61,7 @@ function removeChildOrg(id) {
 
 
 function removeChildWorkspace(id) {
-	var temp = confirm("Do you want to delete this child workspace ?");
+	var temp = confirm("<digi:trn key="aim:deletechildworkspace">Do you want to delete this child workspace ?</digi:trn>");
 	if(temp == false)
 	{
 			document.aimUpdateWorkspaceForm.submit();
@@ -85,11 +85,11 @@ function chekingWorkspaceTypeAndCatValue(action){
 		var val2    = document.aimUpdateWorkspaceForm.workspaceType.options[index2].value;
 		var msg='';
 		if(val1 == "DONOR" && (val2 == "Team"|| val2=="Management")){
-			msg+='<digi:trn key="aim:workspaceManager:selectDonorType">if you choose Donor Team Category, you must choose Donor workspace type and vice versa</digi:trn>';
+			msg+="<digi:trn key="aim:workspaceManager:selectDonorType">if you choose Donor Team Category, you must choose Donor workspace type and vice versa</digi:trn>";
 			alert(msg);
 			return false;
 		}else if(val1 == "GOVERNMENT" && val2 == "Donor"){
-			msg+='<digi:trn key="aim:workspaceManager:selectGivernmentType">if you choose Government Team Category, you must choose Team or Management workspace type and vice versa</digi:trn>';
+			msg+="<digi:trn key="aim:workspaceManager:selectGivernmentType">if you choose Government Team Category, you must choose Team or Management workspace type and vice versa</digi:trn>";
 			alert(msg);
 			return false;
 		} else return true;
@@ -104,7 +104,7 @@ function update(action) {
 		if (event == "edit" && relFlag == "noedit") {
 			var name = trim(document.aimUpdateWorkspaceForm.teamName.value);
 			if (name == "" || name.length == 0) {
-				alert("Team name is required");
+				alert("<digi:trn key="aim:teamnamerequired">Team name required</digi:trn>");
 				document.aimUpdateWorkspaceForm.teamName.focus();
 				return false;
 			}
@@ -140,12 +140,12 @@ function update(action) {
 	
 					if (val1 == "DONOR" && val2 == "Donor") {
 						if (val5 == "0") {
-								alert("Please select team type");
+								alert("<digi:trn key="aim:selectteamtype">Please select team type</digi:trn>");
 								document.aimUpdateWorkspaceForm.typeId.focus();
 								return false;
 							}
 							else if (val3 == "-1") {
-								alert("Please select a related team");
+								alert("<digi:trn key="aim:selectrelatedteam">Please select a related team</digi:trn>");
 								document.aimUpdateWorkspaceForm.relatedTeam.focus();
 								return false;
 							}
@@ -153,7 +153,7 @@ function update(action) {
 								if (lab5 == "<%= org.digijava.module.aim.helper.Constants.TEAM_TYPE_BILATERAL %>") {
 									if (bsize != 0) {
 										if (index3 > bsize) {
-											alert("Please select a Bilateral team");
+											alert("<digi:trn key="aim:selectbilateralteam">Please select bilateral team</digi:trn>");
 											document.aimUpdateWorkspaceForm.relatedTeam.focus();
 											return false;
 										}
@@ -162,7 +162,7 @@ function update(action) {
 								if (lab5 == "<%= org.digijava.module.aim.helper.Constants.TEAM_TYPE_MULTILATERAL %>") {
 									if (bsize != 0) {
 										if (index3 <= bsize) {
-											alert("Please select a Multilateral team");
+											alert("<digi:trn key="aim:selectmultilateralteam">Please select multilateral team</digi:trn>");
 											document.aimUpdateWorkspaceForm.relatedTeam.focus();
 											return false;
 										}
@@ -183,7 +183,7 @@ function update(action) {
 		
 	}	
 }
-
+  
 function relTeam() { 
 	var index1  = document.aimUpdateWorkspaceForm.category.selectedIndex;
 	var index2  = document.aimUpdateWorkspaceForm.workspaceType.selectedIndex;
@@ -492,19 +492,8 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 														</c:if>
 													</tr>
 													
-													<tr>
-													<tr>
-														<td align="right" bgcolor="#f4f4f2">
-															<font color="red"><b>*</b></font>
-															<digi:trn key="aim:workspaceRole">Workspace Role</digi:trn>
-														</td>
-														
-														<td align="left" bgcolor="#f4f4f2">
-															<html:select property="selectedRoleId" styleClass="inp-text" onchange="relTeam()">
-																<html:optionsCollection name="aimUpdateWorkspaceForm" property="roles" value="ampRoleId" label="name" />
-															</html:select>
-														</td>
-													</tr>
+													
+													
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
 														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'no'}">
 															<tr  id="relTeamRow">
@@ -585,6 +574,52 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 															</tr>
 														</c:if>
 													</c:if>
+													
+													
+													<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
+														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
+															<tr>
+																<td align="right" width="150" bgcolor="#f4f4f2">
+																	<digi:trn key="aim:childrenOrganizations">Children (Organizations)</digi:trn>
+																</td>
+																<td align="left" bgcolor="#f4f4f2">
+																	<c:set var="translation">
+																		<digi:trn key="btn:createWorkspaceAdd">
+																			Add
+																		</digi:trn>
+																	</c:set>
+																	<input type="button" value="${translation}" class="buton" onclick="addChildOrgs()">
+																</td>
+															</tr>
+														</c:if>
+													</c:if>
+													<c:if test="${!empty aimUpdateWorkspaceForm.organizations}">
+													<tr>
+														<td colspan="2" align="center" bgcolor="#f4f4f2">
+															<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center"
+															class="box-border-nopadding">
+															<c:forEach var="org" items="${aimUpdateWorkspaceForm.organizations}">
+																<tr>
+																	<td align="left">&nbsp;
+																		<c:out value="${org.name}"/>
+																	</td>
+																	<td align="right" width="10">
+																		<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
+																		<a href="javascript:removeChildOrg(<c:out value="${org.ampOrgId}"/>)">
+																	 	<digi:img src="module/cms/images/deleteIcon.gif"
+																		border="0" alt="Remove this linked org"/></a>&nbsp;
+																		</c:if>
+																	</td>
+																</tr>
+															</c:forEach>
+															</table>
+														</td>
+													</tr>
+													</c:if>
+													
+													
+													
+													
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
 															<tr>

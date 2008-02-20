@@ -90,11 +90,14 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 					{
 						try{
 							//logger.info("Updating module: "+this.getName() +" with  id:"+ ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId() +"and his parent "+parentModule);
-							logger.info("Updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
+							logger.info("Trying to Updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
 							AmpModulesVisibility moduleAux= ampTreeVisibility.getModuleByNameFromRoot(this.getName());
 							if(moduleAux!=null)
 								if(moduleAux.getId()!=null)
-								FeaturesUtil.updateModuleVisibility(moduleAux.getId(), parentModule);
+								{
+									FeaturesUtil.updateModuleVisibility(moduleAux.getId(), parentModule);
+									logger.info(".........updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
+								}
 							}
 							catch(Exception e)
 							{

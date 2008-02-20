@@ -150,8 +150,15 @@
 <c:set var="translation_validation_title">
 			<digi:trn key="contentrepository:plsSpecifyTitle">Please specify a title !</digi:trn>
 </c:set>
+<c:set var="translation_validation_url">
+			<digi:trn key="contentrepository:plsSpecifyUrl;">Please specify a Url !</digi:trn>
+</c:set>
+
+<c:set var="translation_validation_title_chars">
+			<digi:trn key="contentrepository:plsTitleChars">Please only use letters, digits, '_' and space !</digi:trn>
+</c:set>
 <c:set var="translation_validation_filedata">
-			<digi:trn key="contentrepository:plsSpecifyPath">Please specify a file path !</digi:trn>
+			<digi:trn key="contentrepository:plsSpecifyPath">Please select a file path !</digi:trn>
 </c:set>
 
 <c:set var="translation_mandatory_fields">
@@ -738,14 +745,27 @@ function setType(typeValue) {
 }
 
 function validateAddDocument() {
+	var regexp	= new RegExp("[a-zA-Z0-9_ ]+");
 	//alert( document.forms['crDocumentManagerForm'].docTitle.value );
 	//alert( document.forms['crDocumentManagerForm'].fileData.value );
 	var msg	= '';
 	if (document.forms['crDocumentManagerForm'].docTitle.value == '')
 		msg = msg + "${translation_validation_title}" ;
+	else {
+		var title	= document.forms['crDocumentManagerForm'].docTitle.value;
+		var found	= regexp.exec(title);
+		//alert(found);
+		if ( found != title ) {
+			msg = msg + "${translation_validation_title_chars}" ;
+		}
+		
+	}
 	if ( document.forms['crDocumentManagerForm'].webResource[0].checked == true && 
 			document.forms['crDocumentManagerForm'].fileData.value == '')
 		msg = msg + "${translation_validation_filedata}" ;
+	if ( document.forms['crDocumentManagerForm'].webResource[1].checked == true && 
+			document.forms['crDocumentManagerForm'].webLink.value == '')
+		msg = msg + "${translation_validation_url}" ;
 	
 	document.getElementById('addDocumentErrorHolderDiv').innerHTML	= msg;
 	if (msg.length == 0)

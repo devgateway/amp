@@ -22,7 +22,6 @@ import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
@@ -62,7 +61,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				ret.add(ArConstants.QUARTER);
 			if(monthly) ret.add(ArConstants.MONTH);
 
-			if(reportMetadata.getType().intValue()!=4)
+			if(reportMetadata.getType().intValue()!=ArConstants.CONTRIBUTION_TYPE)
 				ret.add(ArConstants.FUNDING_TYPE); else {
 					ret.add(ArConstants.FINANCING_INSTRUMENT);
 				}
@@ -90,6 +89,8 @@ public class AmpReportGenerator extends ReportGenerator {
 	protected void retrieveData() {
 		// divide the column set into those that can be extracted
 		// (extractorView!=null) and those that are to be generated
+		
+		
 		List extractable = new ArrayList();
 		List generated = new ArrayList();
 		List colNames = reportMetadata.getOrderedColumns();
@@ -116,6 +117,8 @@ public class AmpReportGenerator extends ReportGenerator {
 			arc.setOrderId(new String("1"));
 			extractable.add(arc);
 		}
+		
+
 		if (extractable.size() > 0){
 		    createDataForColumns(extractable);
 		}
@@ -206,13 +209,13 @@ public class AmpReportGenerator extends ReportGenerator {
 		arc.setOrderId(new String("0"));
 		ac.setCellType("org.dgfoundation.amp.ar.cell.CategAmountCell");
 		ac.setColumnName(ArConstants.COLUMN_FUNDING);
-		if (reportMetadata.getType().intValue() == 1)
+		if (reportMetadata.getType().intValue() == ArConstants.DONOR_TYPE)
 			ac.setExtractorView("v_donor_funding");
-		if (reportMetadata.getType().intValue() == 2)
+		if (reportMetadata.getType().intValue() == ArConstants.COMPONENT_TYPE)
 			ac.setExtractorView("v_component_funding");
-		if (reportMetadata.getType().intValue() == 3)
+		if (reportMetadata.getType().intValue() == ArConstants.REGIONAL_TYPE)
 			ac.setExtractorView("v_regional_funding");
-		if (reportMetadata.getType().intValue() == 4)
+		if (reportMetadata.getType().intValue() == ArConstants.CONTRIBUTION_TYPE)
 			ac.setExtractorView("v_contribution_funding");		
 
 		reportMetadata.getOrderedColumns().add(arc);
@@ -237,9 +240,9 @@ public class AmpReportGenerator extends ReportGenerator {
 		List cats = new ArrayList();
 
 		// we perform totals by categorizing only by Funding Type...
-		boolean  totalIncludedPlaned = "On".equals(FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_INCLUDE_PLANNED)) ? true : false;
+		String singleTotalColumn = FeaturesUtil.getGlobalSettingValue("Totals include planned");
 		
-		if(reportMetadata.getType().intValue()!=4 && totalIncludedPlaned)
+		if(reportMetadata.getType().intValue()!=ArConstants.CONTRIBUTION_TYPE && !"On".equals(singleTotalColumn))
 			cats.add(ArConstants.FUNDING_TYPE); 
 
 		// get the funding column
@@ -316,7 +319,9 @@ public class AmpReportGenerator extends ReportGenerator {
 		report = new GroupReportData(reportMetadata.getName());
 		report.setReportMetadata(this.reportMetadata);
 		report.setSourceColsCount(new Integer(extractableCount - 1));
-		
+		//ensure acess to the report metadata from the raw columns. we should not need this but ...
+		rawColumns.setParent(report);
+	
 
 
 		ColumnReportData reportChild = new ColumnReportData(reportMetadata
@@ -331,7 +336,6 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		reportChild.addColumns(rawColumns.getItems());
 		report.addReport(reportChild);
-		
 		
 		
 		//perform removal of funding column if no measure except undisbursed balance is selected. in such case,we just need totals
@@ -361,7 +365,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	 */
 	protected void createHierarchies() {
 		List orderedHierarchies = ARUtil
-				.createOrderedHierarchies(reportMetadata.getHierarchies());
+				.createOrderedHierarchies(reportMetadata.getColumns(),reportMetadata.getHierarchies());
 		// add Unallocated fake items for activities missing hierarchy enabled
 		// data
 		Collection allIds = report.getOwnerIds();
@@ -438,7 +442,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	public AmpReportGenerator(AmpReports reportMetadata, AmpARFilter filter) {
 		super();
 		this.reportMetadata = reportMetadata;
-		rawColumns = new GroupColumn();
+		rawColumns = new GroupColumn("RAW DATA");
 		this.filter = filter;
 		extractableCount=0;
 		
@@ -446,8 +450,22 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		logger.info("Master report query:" + filter.getGeneratedFilterQuery());
 
+	//remove the columns that are also hierarchies
+		
+		Iterator i=reportMetadata.getColumns().iterator();
+		while (i.hasNext()) {
+			AmpReportColumn col = (AmpReportColumn) i.next();
+			Iterator ii=reportMetadata.getHierarchies().iterator();
+			while (ii.hasNext()) {
+				AmpReportHierarchy h = (AmpReportHierarchy) ii.next();
+				if(h.getColumn().getColumnName().equals(col.getColumn().getColumnName())) 
+					i.remove();
+			}
+		}
+	
+		
 		reportMetadata.setOrderedColumns(ARUtil
-				.createOrderedColumns(reportMetadata.getColumns()));
+				.createOrderedColumns(reportMetadata.getColumns(),reportMetadata.getHierarchies()));
 
 		attachFundingMeta();
 	}

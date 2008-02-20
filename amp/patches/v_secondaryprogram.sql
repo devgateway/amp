@@ -10,7 +10,7 @@ CREATE OR REPLACE VIEW `v_secondaryprogram` AS
     
     
     
-   CREATE OR REPLACE VIEW  `v_primaryprogram` AS 
+ CREATE OR REPLACE VIEW `v_primaryprogram` AS 
   select 
     `a`.`amp_activity_id` AS `amp_activity_id`,
     `t`.`name` AS `name`,

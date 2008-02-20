@@ -7,11 +7,25 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
+<c:set var="translationBan">
+	<digi:trn key="um:confirmBanMsg">Do you really want to ban the user ?</digi:trn>
+</c:set>
+
+<c:set var="translationUnban">
+	<digi:trn key="um:confirmUnbanMsg">Do you really want to remove the ban ?</digi:trn>
+</c:set>
+
 <script language="JavaScript">
 
 
 function banUser(txt) {
-  var ban=confirm("Do you really want to"+txt);
+  var ban=confirm("${translationBan}");
+  return ban;
+  }
+  
+ function unbanUser(txt) {
+  var ban=confirm("${translationUnban}");
   return ban;
   }
   
@@ -60,7 +74,7 @@ function banUser(txt) {
           </tr>
           <tr>
             <td>
-              <digi:errors/>
+              <html:errors/> 
               <span class=subtitle-blue>
                 <digi:trn key="um:viewAllUsers:ListOfUsers">
                 List of users
@@ -69,33 +83,52 @@ function banUser(txt) {
             </td>
           </tr>
           <tr style="width:50%;">
-            <td width="160">
-	              <digi:trn key="um:viewAllUsers:filter">
-	              Filter by:
-	              </digi:trn>
-	              <html:select property="type" style="font-family:verdana;font-size:11px;">
-	                <c:set var="translation">
-	                  <digi:trn key="um:viewAllUsers:all">
-	                  -All-
-	                  </digi:trn>
-	                </c:set>
-	                <html:option value="-1">${translation}</html:option>
-	
-	                <c:set var="translation">
-	                  <digi:trn key="um:viewAllUsers:regisetred">
-	                  Registered
-	                  </digi:trn>
-	                </c:set>
-	                <html:option value="0">${translation}</html:option>
-	
-	                <c:set var="translation">
-	                  <digi:trn key="um:viewAllUsers:teamMembers">
-	                  Team members
-	                  </digi:trn>
-	                </c:set>
-	                <html:option value="1">${translation}</html:option>	                
-	              </html:select>
-              </td>
+          	<c:choose>
+          		<c:when test="${umViewAllUsersForm.showBanned}">
+          		<td width="160">
+		              <digi:trn key="um:viewAllUsers:filter">
+		              Filter by:
+		              </digi:trn>
+		              <html:select property="type" style="font-family:verdana;font-size:11px;" disabled="true">
+		                <c:set var="translation">
+		                  <digi:trn key="um:viewAllUsers:all">
+		                  -All-
+		                  </digi:trn>
+		                </c:set>
+		                <html:option value="-1">${translation}</html:option>
+		              </html:select>
+	              </td>
+          		</c:when>
+          		<c:otherwise>
+	            <td width="160">
+		              <digi:trn key="um:viewAllUsers:filter">
+		              Filter by:
+		              </digi:trn>
+		              <html:select property="type" style="font-family:verdana;font-size:11px;" >
+		                <c:set var="translation">
+		                  <digi:trn key="um:viewAllUsers:all">
+		                  -All-
+		                  </digi:trn>
+		                </c:set>
+		                <html:option value="-1">${translation}</html:option>
+		
+		                <c:set var="translation">
+		                  <digi:trn key="um:viewAllUsers:regisetred">
+		                  Registered
+		                  </digi:trn>
+		                </c:set>
+		                <html:option value="0">${translation}</html:option>
+		
+		                <c:set var="translation">
+		                  <digi:trn key="um:viewAllUsers:teamMembers">
+		                  Team members
+		                  </digi:trn>
+		                </c:set>
+		                <html:option value="1">${translation}</html:option>	                
+		              </html:select>
+	              </td>
+	              </c:otherwise>
+              </c:choose>
               <td width="200">
 	              <digi:trn key="um:viewAllUsers:keyword">
 	              keyword:
@@ -210,14 +243,14 @@ function banUser(txt) {
 								                                                    <c:set var="translation">
 								                                                      <digi:trn key="um:viewAllUsers:unBanUserLink">Remove ban</digi:trn>
 								                                                    </c:set>
-								                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=false" onclick="return banUser(' remove ban?')"  >${translation}</digi:link>
+								                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=false" onclick="return unbanUser()"  >${translation}</digi:link>
 								                                                  </c:when>
 								                                                  <c:otherwise>
 								                                                    <c:set var="translation">
 								                                                      <digi:trn key="um:viewAllUsers:banUsersLink">Ban user</digi:trn>
 								                                                    </c:set>
 								
-								                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=true" onclick="return banUser(' ban user?')">${translation}</digi:link>
+								                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=true" onclick="return banUser()">${translation}</digi:link>
 								                                                  </c:otherwise>
 								                                                </c:choose>
 																			</td>
@@ -414,6 +447,34 @@ function banUser(txt) {
 																</digi:link>
 															</td>
 														</tr>
+														<c:choose>
+														<c:when test="${umViewAllUsersForm.showBanned}">
+															<tr>
+																<td>
+																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
+																<td>
+																	<digi:link  module="aim" href="/../um/viewAllUsers.do~showBanned=false">
+																	<digi:trn key="aim:ViewActiveUsers">
+																	View Active Users
+																	</digi:trn>
+																	</digi:link>
+																</td>
+															</tr>
+														</c:when>
+														<c:otherwise>
+															<tr>
+																<td>
+																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
+																<td>
+																	<digi:link  module="aim" href="/../um/viewAllUsers.do~showBanned=true">
+																	<digi:trn key="aim:ViewBannedUsers">
+																	View Banned Users
+																	</digi:trn>
+																	</digi:link>
+																</td>
+															</tr>
+														</c:otherwise>
+														</c:choose>
 														<!-- end of other links -->
 													</table>
 												</td>

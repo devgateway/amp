@@ -4,9 +4,9 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<script langauage="JavaScript">
+<script language="JavaScript">
 function onDelete() {
-  var flag = confirm("Are You Sure?");
+  var flag = confirm('<digi:trn key="aim:deleteconfirm">Are you sure?</digi:trn>');
   return flag;
 }
 
@@ -22,13 +22,13 @@ function validate()
 {
   if ((document.aimUpdateComponentsForm.compTitle.value).length == 0)
   {
-    alert("Please enter component title name");
+    alert("<digi:trn key="aim:componenttitlename">Please Enter component title name</digi:trn>");
     document.aimUpdateComponentsForm.compTitle.focus();
     return false;
   }
   if ((document.aimUpdateComponentsForm.compCode.value).length == 0)
   {
-    alert("Please enter component code");
+    alert("<digi:trn key="aim:componentcode">Please Enter component code</digi:trn>");
     document.aimUpdateComponentsForm.compCode.focus();
     return false;
   }

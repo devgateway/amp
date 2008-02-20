@@ -138,7 +138,7 @@
     </action>
     <action name="umViewEditUserForm" path="/um/viewEditUser" scope="session" type="org.digijava.module.um.action.ViewEditUser" validate="false">
       <forward name="forward" path="/showLayout.do?layout=umViewEditUser" />
-      <forward name="saved" path="/um/viewAllUsers.do" />
+      <forward name="saved" path="/um/viewAllUsers.do" redirect="false"/>
     </action>
     <action name="umViewAllUsersForm" path="/um/userSearch" scope="session" type="org.digijava.module.um.action.UserSearch">
    		<forward name="index" path="/aim/index.do" redirect="true" />

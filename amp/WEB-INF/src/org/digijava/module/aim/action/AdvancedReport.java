@@ -113,6 +113,17 @@ public class AdvancedReport extends Action {
 			return goTo("index",formBean,mapping);
 		Long ampTeamId=teamMember.getTeamId();
 		logger.debug("Team Id: " + ampTeamId);
+		
+		//if management team leader, then he is able to make public
+		if (Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(teamMember.getTeamAccessType()) 
+				&& teamMember.getTeamHead()){
+			formBean.setCanMakePublic(true);
+		}else{
+			formBean.setCanMakePublic(false);
+		}
+
+		
+		
 		String perspective = "DN";
 		Long All=new Long(0);
 		
@@ -162,6 +173,7 @@ public class AdvancedReport extends Action {
 				//logger.info("from ViewMyDesktop");
 				formBean.setAmpColumns(null);
 				formBean.setAddedColumns(null);
+				formBean.setNotHierarchyColumns(null);
 				formBean.setColumnHierarchie(null);
 				formBean.setAddedMeasures(null);
 				formBean.setReportTitle("");
@@ -185,6 +197,7 @@ public class AdvancedReport extends Action {
 				formBean.setMeasureToLevel(null);
 				formBean.setMeasuresSelection(null);
 				
+				formBean.setArReportType(null);
 			} 
 			
 			
@@ -226,10 +239,25 @@ public class AdvancedReport extends Action {
 				//Advanced Report Builder Report Type Check
 				String arReportType="Donor";
 				arReportType=request.getParameter("reportType");
-				logger.info("arReportType::::"+arReportType);
+				logger.info("arReportType::::"+arReportType);				
 				/* Only change the Advanced Report Type if it has been selected on the previous webpage */
-				if ( arReportType != null && arReportType.compareTo("") != 0 )
+				if ( arReportType != null && arReportType.compareTo("") != 0 ) {
 					formBean.setArReportType(arReportType);
+				} else {
+					// added get from the form bean in case previous button is pressed
+					// if it is not so whow error
+					logger.info("FB : "+formBean);
+					logger.info("Ar : " + arReportType);
+					arReportType=formBean.getArReportType();
+					logger.info("arReportType 2::::"+arReportType);
+					if (arReportType == null || arReportType.compareTo("") == 0) {
+						ActionErrors errors = new ActionErrors();
+						errors.add("ReportTypeNotSelected", new ActionError("error.aim.reportManager.ReportTypeNotSelected"));
+						saveErrors(request, errors);
+						formBean.setMaxStep(new Integer(0));
+						return goTo("forward", formBean, mapping);	
+					}					
+				}
 				
 				//logger.info("inside Step 1...");
 				if (formBean.getMaxStep().intValue() < 1)
@@ -281,13 +309,15 @@ public class AdvancedReport extends Action {
 			{
 				str = request.getParameter("check");
 				if ( !isXLevelEnabled) {
-					updateData(formBean.getAddedColumns(), formBean.getColumnHierarchie(), formBean.getSelectedColumns(), formBean);
+					//updateData(formBean.getAddedColumns(), formBean.getColumnHierarchie(), formBean.getSelectedColumns(), formBean);
+					updateData(formBean.getNotHierarchyColumns(), formBean.getColumnHierarchie(), formBean.getSelectedColumns(), formBean);
 					formBean.setSelectedColumns(null);
 				}
 				else
 					moveReportObjectsToList(formBean.getSelectedColumns(), formBean.getColumnsSelection(), AmpReportHierarchy.class, formBean.getHierarchiesSelection());
 				if (formBean.getMaxStep().intValue() < 2)
 					formBean.setMaxStep(new Integer(2));
+				
 				return goTo(selectRowsStepName,formBean,mapping);				
 			}
 			// Remove the columns selected : Step 2
@@ -296,7 +326,8 @@ public class AdvancedReport extends Action {
 				str = request.getParameter("check");
 				//logger.info( "Operation is : " + str);
 				if ( !isXLevelEnabled ) {
-					updateData(formBean.getColumnHierarchie(), formBean.getAddedColumns(), formBean.getRemoveColumns(), formBean);
+					//updateData(formBean.getColumnHierarchie(), formBean.getAddedColumns(), formBean.getRemoveColumns(), formBean);
+					updateData(formBean.getColumnHierarchie(), formBean.getNotHierarchyColumns(), formBean.getRemoveColumns(), formBean);
 					formBean.setRemoveColumns(null);
 				}
 				else 
@@ -880,8 +911,27 @@ public class AdvancedReport extends Action {
 				return goTo("forward",formBean,mapping);
 				
 			
-			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectRows"))
+			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectRows")){
+				if (formBean.getColumnHierarchie() != null && formBean.getColumnHierarchie().size() != 0){
+					Collection addedColumns = formBean.getAddedColumns();
+					Iterator it = formBean.getColumnHierarchie().iterator();
+					while (it.hasNext()) {//we will remove the hierarchies that are not in the added columns no more
+						AmpColumns element = (AmpColumns) it.next();
+						if (!formBean.getAddedColumns().contains(element))
+							it.remove();
+					}
+				}
+				formBean.setNotHierarchyColumns(new TreeSet());
+				if(formBean.getAddedColumns()!=null) formBean.getNotHierarchyColumns().addAll(formBean.getAddedColumns());
+				if (formBean.getColumnHierarchie() != null){
+					Iterator it = formBean.getColumnHierarchie().iterator();
+					while (it.hasNext()) {
+						AmpColumns el = (AmpColumns) it.next();
+						formBean.getNotHierarchyColumns().remove(el);
+					}
+				}
 				return goTo(selectRowsStepName,formBean,mapping);
+			}
 				
 
 
@@ -1466,12 +1516,12 @@ public class AdvancedReport extends Action {
 				if(str.equals("Step2AddRows") == true)
 				{
 					formBean.setColumnHierarchie(coll);
-					formBean.setAddedColumns(temp);
+					//formBean.setAddedColumns(temp);
 				}
 				if(str.equals("Step2DeleteRows"))
 				{
 					formBean.setColumnHierarchie(temp);
-					formBean.setAddedColumns(coll);
+					//formBean.setAddedColumns(coll);
 				}
 			
 				if(str.equals("AddMeasure") == true)

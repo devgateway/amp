@@ -6,7 +6,6 @@ package org.digijava.module.gateperm.gates;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
 
 import net.sf.hibernate.Session;
 
@@ -14,7 +13,6 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Activity;
@@ -24,10 +22,10 @@ import org.digijava.module.gateperm.core.Gate;
 import org.digijava.module.gateperm.core.GatePermConst;
 
 /**
- * Implements logic for organization roles user access filtering. users are assigned to organisations through the um
- * module (verified assigned organisation). An user will have access to an activity if he has been assigned to an
- * organisation that has a role in the current activity and if that role corresponds with the parameter of this gate.
- * this gate has only one parameter that states the type of role of the organisation (implementing, executing,etc...)
+ * Implements logic for organization roles user access filtering. users are assigned to organizations through the um
+ * module (verified assigned organization). An user will have access to an activity if he has been assigned to an
+ * Organization that has a role in the current activity and if that role corresponds with the parameter of this gate.
+ * this gate has only one parameter that states the type of role of the organization (implementing, executing,etc...)
  * 
  * @author mihai
  */

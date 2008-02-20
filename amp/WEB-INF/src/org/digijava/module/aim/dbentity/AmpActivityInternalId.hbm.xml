@@ -3,10 +3,9 @@
 <hibernate-mapping>
 
 	<class name="org.digijava.module.aim.dbentity.AmpActivityInternalId" table="AMP_ACTIVITY_INTERNAL_ID">
-		<composite-id>
+	
      		  <key-property name="ampActivityId"  type="java.lang.Long" column="amp_activity_id"  />
 	          <key-property name="ampOrgId" type="java.lang.Long" column="amp_org_id" />
-		</composite-id>
 		<property name="internalId" column="internal_id" type="java.lang.String"/>
 				
 	</class>

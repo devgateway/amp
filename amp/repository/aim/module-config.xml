@@ -24,7 +24,7 @@
 
 	<!-- highlights classes Begin-->
 	<hibernate-classes required="false">
-		<hibernate-class>
+       <hibernate-class>
 			org.digijava.module.aim.dbentity.AmpAhsurveyIndicatorCalcFormula
 		</hibernate-class>
 		<hibernate-class>
@@ -303,6 +303,9 @@
 	<hibernate-class>
 			  org.digijava.module.aim.dbentity.AmpActivityDocument
 	</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpSISINProyect
+		</hibernate-class>
 	<hibernate-class>
 			  org.digijava.module.aim.dbentity.AmpIndicatorSector
 	</hibernate-class>

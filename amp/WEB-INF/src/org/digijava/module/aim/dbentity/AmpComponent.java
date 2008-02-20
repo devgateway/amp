@@ -22,7 +22,6 @@ public class AmpComponent implements Serializable {
 	private String code;
 	private String type;
 	private Set activities;
-	private String Url;
 	
 	public Set getActivities() {
 		return activities;
@@ -60,11 +59,14 @@ public class AmpComponent implements Serializable {
 	public void setType(String type) {
 		this.type = type;
 	}
-	public void setUrl(String url) {
-		Url = url;
-	}
-	public String getUrl() {
-		return Url;
-	}	
+	
+	//private Set activities;
+	//private Double amount;
+	//private Date reportingDate;	
+	//private AmpCurrency currency;
+	//private AmpActivity activity;
+	//private Set physicalProgress; 
+	//private Set componentFundings;
+	
 	
 }

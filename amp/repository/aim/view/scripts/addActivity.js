@@ -24,7 +24,6 @@ function sameAsfunction(val)
 		}
 }
 
-
 function quitRnot()
 {
 	var temp = confirm('WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.');

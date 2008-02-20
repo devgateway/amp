@@ -6,6 +6,26 @@ public class AmpActivityInternalId implements Serializable {
     
     private AmpOrganisation organisation;
     private String internalId;
+    private Long ampActivityId;
+    private Long ampOrgId;
+
+   
+    
+    public Long getAmpOrgId() {
+		return ampOrgId;
+	}
+
+	public void setAmpOrgId(Long ampOrgId) {
+		this.ampOrgId = ampOrgId;
+	}
+
+	public Long getAmpActivityId() {
+        return ampActivityId;
+    }
+
+    public void setAmpActivityId(Long internalId) {
+        this.ampActivityId = internalId;
+    }
     
     /**
      * @return Returns the internalId.

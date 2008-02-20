@@ -118,7 +118,6 @@ public class GroupColumn extends Column {
     private static Column verticalSplitByCateg(CellColumn src,
             String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
         Column ret = new GroupColumn(src);
-        // create a set of unique meta infos
         Set metaSet = new TreeSet();
         Iterator i = src.iterator();
         while (i.hasNext()) {

@@ -15,8 +15,9 @@
 <!--
 
 	function validate() {
-		if(isEmpty(document.aimEditActivityForm.issue.value) == true) {
-			alert("Please enter issue");			
+		if(isEmpty(document.aimEditActivityForm.issue.value) == true) {	
+			var issueError = "<digi:trn key="aim:enterIssue">Please enter issue</digi:trn>"; 	
+			alert(issueError);			
 			document.aimEditActivityForm.issue.focus();
 			return false;
 		}

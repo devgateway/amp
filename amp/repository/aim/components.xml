@@ -2,12 +2,11 @@
 <config>
 <secondary-pages>
 
-
     <page name="viewAhSurveyFormulas" title=" - View AhSurvey Formulas" />
 	<page name="viewAhSurveis" title=" - View AhSurveis " />
 
 	<page name="viewPortfolioDashboard" title=" - Portfolio Dashboard " />
-    <page name="addQuickLink" title="Add link" />
+	<page name="addQuickLink" title="Add link" />
   <page name="editQuickLink" title="Edit link" />
 	<page name="showMyTask" title=" - My Task List " />
 	<page name="showMyMessages" title=" - My Message List " />
@@ -181,7 +180,7 @@
 	<page page="selectOrganization" name="aim_orgPopupLayout" title="AMP - Select Organization" />
 	<page page="addFunding" name="aim_fundingPopupLayout" title="AMP - Add Funding" />
 	<page page="editEUActivity" name="aim_editEUActivity" title="AMP - Edit Activity" />
-        <page page="editIPAContract" name="aim_editIPAContract" title="AMP - Edit Activity" />	
+        <page page="editIPAContract" name="aim_editIPAContract" title="AMP - Edit Activity" />
 	<page page="addRegionalFunding" name="aim_addRegionalFunding" title="AMP - Add Regional Funding" />
 	<page page="selectSector" name="aim_selSectorPopupLayout" title="AMP - Select Sector" />
 	<page page="selectSectorForind" name="aim_selectSectorForind" title="AMP - Select Sector" />
@@ -424,9 +423,11 @@
 	<teaser name="costsBreakdown" action="projectCostsBreakdown.do">
 		viewCostsBreakdown.jsp
 	</teaser>
-         <teaser name="contractingBreakdown" action="contractingBreakdown.do">
+        
+       <teaser name="contractingBreakdown" action="contractingBreakdown.do">
 		viewContractingBreakdown.jsp
 	</teaser>
+        
 	<teaser name="regionalFundingBreakdown" action="getRegionalFundings.do">
 		viewRegionalFundingBreakdown.jsp
 	</teaser>

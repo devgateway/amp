@@ -320,7 +320,6 @@ public class LocationUtil {
 		} 
 		return loc;
 	}
-        
         public static boolean isAssignedToActivity(Long countryId, Long regionId,
 			Long zoneId, Long woredaId)throws DgException{
           boolean  isAssignedToActivity=true;

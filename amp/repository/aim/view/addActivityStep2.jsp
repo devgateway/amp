@@ -125,7 +125,7 @@ function validateForm(){
     var npoSize = document.aimEditActivityForm.sizeNPOPrograms.value;
     var ppSize = document.aimEditActivityForm.sizePPrograms.value;
     var spSize = document.aimEditActivityForm.sizeSPrograms.value;
-    if (!validateSectorPercentage()||!validateLocationPercentage()||
+    if (!validateSectorPercentage()||!validateLocationPercentage() ||
     !validateProgramsPercentage(npoSize,"nationalPlanObjectivePrograms") ||
     !validateProgramsPercentage(ppSize,"primaryPrograms") ||
     !validateProgramsPercentage(spSize,"secondaryPrograms")  ){
@@ -254,6 +254,7 @@ function validateProgramsPercentage(cnt,prefix){
   }
   return true;
 }
+
 function validateLocationPercentage(){
   <c:set var="errMsgAddPercentage">
   <digi:trn key="aim:addLocationPercentageErrorMessage">
@@ -304,6 +305,7 @@ function validateLocationPercentage(){
   }
   return true;
 }
+
 
 function fnChk(frmContrl){
   <c:set var="errMsgAddSectorNumericValue">
@@ -385,7 +387,7 @@ function remProgram(programType) {
 
   <input type="hidden" name="edit" value="true">
       
-   <c:if test="${empty aimEditActivityForm.selectedLocs}">
+  <c:if test="${empty aimEditActivityForm.selectedLocs}">
     <input type="hidden" name="sizeLocs" value="0">
   </c:if>
   <c:if test="${!empty aimEditActivityForm.selectedLocs}">

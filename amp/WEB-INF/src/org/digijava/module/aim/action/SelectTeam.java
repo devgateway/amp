@@ -39,7 +39,9 @@ public class SelectTeam extends Action {
         HttpSession session = request.getSession();
         LoginForm lForm = (LoginForm) form;
         String temp = request.getParameter("id");
+        TeamMember currentTeamMember = (TeamMember)session.getAttribute("currentMember");
 
+        
         try {
             Long id = new Long(Long.parseLong(temp));
             AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(id);

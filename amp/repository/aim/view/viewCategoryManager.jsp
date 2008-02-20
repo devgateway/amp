@@ -117,12 +117,14 @@ function confirmDelete() {
 							<td align="left">
 								<ul>
 								<logic:iterate name="category" property="possibleValues" id="categoryValue" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
+								<logic:notEmpty name="categoryValue">
 								<% String keyForValue	= org.digijava.module.aim.helper.CategoryManagerUtil.getTranslationKeyForCategoryValue(categoryValue); %>
 									<li>
 										<digi:trn key='<%=keyForValue%>'>
 											<bean:write name="categoryValue" property="value" />
 										</digi:trn>
 									</li>
+								</logic:notEmpty>
 								</logic:iterate>
 								</ul>
 							</td>

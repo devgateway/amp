@@ -11,7 +11,7 @@
 
 <script language="javaScript" type="">
 function setActionMethod(methodName) {
-  document.getElementById('method').value=methodName;
+  document.getElementById("method").value=methodName;
   return true;
 }
 
@@ -34,7 +34,7 @@ function setDeleteId(id) {
   return true;
 }
 
-var cp = new ColorPicker('window');
+var cp = new ColorPicker("window");
 var objId=null;
 var hexColor=null;
 function pickColor(color) {
@@ -115,7 +115,7 @@ function chooseColor(){
                                 <input type="text" name="colorViwe${varSt.count}" id="colorViwe${varSt.count}" style="width:25px;font-family:verdana;font-size:11px;background:${eventType.color}" disabled="disabled" />
                               </td>
                               <td>
-                                <a href="javascript:showColors('colorViwe${varSt.count}','eventTypeNameColor${varSt.count}');" >
+                                <a href=javascript:showColors("colorViwe${varSt.count}","eventTypeNameColor${varSt.count}"); >
                                   <img alt="" src="<digi:file src="module/calendar/images/colorImg.gif"/>" border="0" NAME="pick" ID="pick" width="15" height="15"/>
                                 </a>
                               </td>

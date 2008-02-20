@@ -16,11 +16,14 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -37,6 +40,7 @@ public class ThemeManager extends Action {
 			throws java.lang.Exception {
 
 		HttpSession session = request.getSession();
+	    ActionErrors errors = new ActionErrors();
 		if (session.getAttribute("ampAdmin") == null) {
 			return mapping.findForward("index");
 		} else {
@@ -134,7 +138,14 @@ public class ThemeManager extends Action {
 					////System.out.println("I deleted this theme....ups!!!!!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
 					Long id = new Long(Long.parseLong(request.getParameter("themeId")));
 					
-					ProgramUtil.deleteTheme(id);
+					try {
+						ProgramUtil.deleteTheme(id);
+					} catch (AimException e) {
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.theme.cannotDeleteTheme"));
+						saveErrors(request, errors);
+					}catch (Exception e) {
+						logger.error(e);
+					}
 					
 					return mapping.findForward("delete");
 				}

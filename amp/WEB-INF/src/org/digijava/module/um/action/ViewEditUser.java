@@ -29,6 +29,8 @@ import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.helper.CountryBean;
@@ -70,7 +72,38 @@ public class ViewEditUser extends Action {
         Boolean isBanned = uForm.getBan();
         if (isBanned != null) {
             if (isAmpAdmin.equalsIgnoreCase("yes")) {
-                user.setBanned(isBanned);
+            	if (isBanned) {
+            		List ampTeamMembers	= TeamMemberUtil.getAmpTeamMembersbyDgUserId(userId);
+            		if ( ampTeamMembers != null && ampTeamMembers.size() == 0 ) {
+            			user.setBanned(true);
+            			DbUtil.updateUser(user);
+            		}
+            		if ( ampTeamMembers != null && ampTeamMembers.size() > 0 ) {
+            			String teamNames	= "";
+            			Iterator iter		= ampTeamMembers.iterator();
+            			while ( iter.hasNext() ) {
+	            			AmpTeamMember atm	= (AmpTeamMember) iter.next();
+	            			AmpTeam team		= atm.getAmpTeam();
+	            			if (team != null && team.getName() != null)  {
+	            				if (teamNames.length() == 0)
+	            					teamNames	+= "'" + team.getName() + "'";
+	            				else
+	            					teamNames	+= ", '" + team.getName() + "'";
+	            			}
+            			}
+            			errors.add("title",
+                                new ActionError("error.um.userIsInTeams", teamNames));
+            		}
+            		if ( ampTeamMembers == null ) {
+            			errors.add("title",
+                                new ActionError("error.um.errorBanning"));
+            		}
+            	}
+            	else {
+            		user.setBanned(false);
+            		DbUtil.updateUser(user);
+            	}
+                /*user.setBanned(isBanned);
                 if (isBanned) {
                     Site site = RequestUtils.getSite(request);
                     List teamMembersId = TeamMemberUtil.getTeamMemberbyUserId(userId);
@@ -81,13 +114,13 @@ public class ViewEditUser extends Action {
                     }
 
                 }
-                DbUtil.updateUser(user);
+                DbUtil.updateUser(user);*/
             } else {
                 errors.add(ActionErrors.GLOBAL_ERROR,
                            new ActionError("error.um.banUserInvalidPermission"));
-                saveErrors(request, errors);
             }
             resetViewEditUserForm(uForm);
+            saveErrors(request, errors);
             return mapping.findForward("saved");
         }
         if (uForm.getEvent() == null) {

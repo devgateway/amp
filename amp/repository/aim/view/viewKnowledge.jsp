@@ -231,8 +231,7 @@ function preview(id)
 									</TD>
 								</tr>
 							</feature:display>
-								
-
+							
 							<c:if
 								test="${aimKnowledgeForm.managedDocuments != null && !empty aimKnowledgeForm.managedDocuments}">
 

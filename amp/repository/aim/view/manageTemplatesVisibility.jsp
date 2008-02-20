@@ -8,7 +8,7 @@
 
 <script language="JavaScript">
 	function onDelete() {
-		var flag = confirm("Delete this Template?");
+		var flag = confirm("<digi:trn key="aim:deletetemplates">Delete this Template?</digi:trn>");
 		return flag;
 	}
     function deleteTemplate(id) {

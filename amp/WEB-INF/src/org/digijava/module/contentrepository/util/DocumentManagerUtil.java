@@ -364,6 +364,17 @@ public class DocumentManagerUtil {
 		return true;
 	}
 	
+	public static boolean checkStringAsNodeTitle (String string) {
+		for (int i=0; i<string.length(); i++) {
+			char ch					= string.charAt(i);
+			Character charObj		= new Character(ch);
+			
+			if ( Character.isLetterOrDigit(ch) || charObj.equals('_') || Character.isSpaceChar(ch) )
+				return true;
+		}
+		return false;
+	}
+	
 	public static String processUrl (String urlString, ActionErrors errors) {
 		try {
 			URL url	= new URL( urlString );
@@ -457,15 +468,26 @@ public class DocumentManagerUtil {
 			
 			URL rootUrl			= this.getClass().getResource("/");
 			try {
-				String path					= rootUrl.toURI().getPath();
+				String path;
+				try {
+					path					= rootUrl.toURI().getPath();
+				}
+				catch (Exception E) {
+					System.out.println("PathHelper:::0)Trying to recover from URI error ! ");
+					path					= rootUrl.getPath();
+				}
+				//System.out.println("PathHelper:::1)The path is: " + path);
 				if (path.contains( "classes" )) {
 					path	= path + "../";
 				}
+				//System.out.println("PathHelper:::2)The path is: " + path);
 				if (path.contains( "WEB-INF" )) {
 					path	= path + "../";
 				}
+				//System.out.println("PathHelper:::3)The path is: " + path);
 				File applicationPathFile	= new File (path);
 				applicationPath				= applicationPathFile.getCanonicalPath();
+				System.out.println("PathHelper:::The application path is: " + applicationPath);
 				logger.info("The application path is: " + applicationPath);
 			}
 			catch (Exception E) {

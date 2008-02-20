@@ -48,7 +48,6 @@ function gotoStep() {
 		document.aimAdvancedReportForm.submit();
 	}
 }
-
 /*added here*/
 function backStep() {
 	if (check()){

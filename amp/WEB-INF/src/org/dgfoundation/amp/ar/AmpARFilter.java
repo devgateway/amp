@@ -119,11 +119,11 @@ public class AmpARFilter extends PropertyListable implements Filter {
 				}
 			}
 		
-		
-			if (tempSettings.getReportStartYear()!=null && tempSettings.getReportStartYear().intValue()!=0)
+
+			if (this.getFromYear()==null && tempSettings.getReportStartYear()!=null && tempSettings.getReportStartYear().intValue()!=0)
 			    this.setFromYear(tempSettings.getReportStartYear());
 			
-			if ( tempSettings.getReportEndYear()!=null && tempSettings.getReportEndYear().intValue()!=0)
+			if (this.getToYear()==null && tempSettings.getReportEndYear()!=null && tempSettings.getReportEndYear().intValue()!=0)
 			    this.setToYear(tempSettings.getReportEndYear());
 			
 		}
@@ -197,7 +197,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		    String TO_FUNDING_YEAR_FILTER="SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.amp_funding_id AND date_format(fd.transaction_date,_latin1'%Y')<='"+toYear+"'";
 		    queryAppend(TO_FUNDING_YEAR_FILTER);
 		}
-
+		
 		
 		if(text!=null)
 		{
@@ -221,6 +221,8 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		if(lineMinRank!=null) queryAppend(LINE_MIN_RANK_FILTER);
 		if(planMinRank!=null) queryAppend(PLAN_MIN_RANK_FILTER);
 		if(regionSelected!=null) queryAppend(REGION_SELECTED_FILTER);
+		if(approved==true) queryAppend(APPROVED_FILTER);
+		if (draft == true) queryAppend(DRAFT_FILTER);
 		
 		if(governmentApprovalProcedures!=null)
 		{
@@ -559,8 +561,6 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	public void setRegionSelected(Long regionSelected) {
 		this.regionSelected = regionSelected;
 	}
-
-
 
 	public boolean isApproved() {
 		return approved;

@@ -105,7 +105,7 @@ function commentWin(val) {
 	type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 
 
-	<html:hidden property="id" />
+	<html:hidden property="id" styleId="actId" />
 	<input type="hidden" name="currUrl1">
 
 	<logic:equal name="aimChannelOverviewForm" property="validLogin"
@@ -139,7 +139,7 @@ function commentWin(val) {
 											id="urlChannelOverview" type="java.util.Map"
 											class="java.util.HashMap" /> <c:set
 											target="${urlChannelOverview}" property="ampActivityId">
-                                            ${aimChannelOverviewForm.ampActivityId}
+                                            ${aimChannelOverviewForm.id}
 
 										</c:set> <c:set target="${urlChannelOverview}" property="tabIndex"
 											value="0" /> <c:set var="translation">
@@ -175,7 +175,7 @@ function commentWin(val) {
 															<td><input type="button"
 																value="<digi:trn key='btn:preview'>Preview</digi:trn>"
 																class="dr-menu"
-																onclick="preview(${activity.activityId})"></td>
+																onclick="preview(${aimChannelOverviewForm.id})"></td>
 
 														</field:display>
 													</feature:display>
@@ -183,16 +183,15 @@ function commentWin(val) {
 												<module:display name="Previews"
 													parentModule="PROJECT MANAGEMENT">
 													<feature:display name="Edit Activity" module="Previews">
-														<field:display feature="Edit Activity"
-															name="Edit Activity Button">
-															<td><c:if
-																test="${aimChannelOverviewForm.buttonText != 'validate'}">
-																<input type="button"
-																	value="<digi:trn key='btn:edit'>Edit</digi:trn>"
-																	class="dr-menu"
-																	onclick="fnEditProject(${activity.activityId})">
-															</c:if> &nbsp;</td>
-
+														<field:display feature="Edit Activity" name="Edit Activity Button">
+															 <td>                                                                                  
+                                                                               <c:if test="${aimChannelOverviewForm.buttonText != 'validate'}">              
+                                                                               <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">    
+                                                                                       <input type="button" value="<digi:trn key='btn:edit'>Edit</digi:trn>" 
+                                                                                       class="dr-menu" onclick="fnEditProject(${activity.activityId})">      
+                                                                               </c:if>                                                                       
+                                                                               </c:if> &nbsp;                                                                
+                                                                       </td>      
 														</field:display>
 													</feature:display>
 												</module:display>
@@ -203,11 +202,14 @@ function commentWin(val) {
 															name="Validate Activity Button">
 															<c:if
 																test="${aimChannelOverviewForm.buttonText == 'validate'}">
+																 <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}"> 
+																
 																<td><html:button styleClass="dr-menu"
-																	onclick="fnEditProject(${activity.activityId})"
+																	onclick="fnEditProject(${aimChannelOverviewForm.id})"
 																	property="validateBtn">
 																	<digi:trn key="aim:validate">Validate</digi:trn>
 																</html:button></td>
+															</c:if>	
 
 															</c:if>
 															<%--<c:if test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
@@ -230,7 +232,7 @@ function commentWin(val) {
 															<td><input type="button"
 																value="<digi:trn key="logframeBtn:previewLogframe">Preview Logframe</digi:trn>"
 																class="dr-menu"
-																onclick="previewLogframe(${activity.activityId})">
+																onclick="previewLogframe(${aimChannelOverviewForm.id})">
 															</td>
 
 														</field:display>
@@ -246,7 +248,7 @@ function commentWin(val) {
 															<td><input type='button'
 																value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>'
 																class='dr-menu'
-																onclick='projectFiche(${activity.activityId})'>
+																onclick='projectFiche(${aimChannelOverviewForm.id})'>
 															</td>
 
 														</field:display>
@@ -347,13 +349,13 @@ function commentWin(val) {
 																					<i>
 																				  <c:out value="${selectedOrganizations.projectId}"/>
 																					</i></td>
-																			</c:if>	
+																			</c:if>
 																		</tr>
 																	</c:forEach>
 																</TABLE>
 																</TD>
-															</TR>														
-																
+															</TR>
+
 															<field:display name="Status" feature="Planning">
 																<TR>
 																	<TD>
@@ -378,7 +380,7 @@ function commentWin(val) {
 																	</TD>
 																</TR>
 															</field:display>
-														</feature:display>		
+														</feature:display>
 														<feature:display name="Budget"
 															module="Project ID and Planning">
 															<field:display feature="Identification"
@@ -510,8 +512,7 @@ function commentWin(val) {
 																		<TR>
 																			<TD bgcolor="#ffffff">
 																			<ul>
-                                                                                                                                                            
-                                                                                                                                                        <c:forEach var="actSect" items="${activity.sectors}">
+																				<c:forEach var="actSect" items="${activity.sectors}">
 																					<li><c:out value="${actSect.sectorName}" />
 																		
 																					<c:if test="${!empty actSect.subsectorLevel1Name}">
@@ -543,8 +544,8 @@ function commentWin(val) {
 																</TR>
 
 															</field:display>
-														</feature:display>													
-														
+														</feature:display>
+
 														<feature:display module="Project ID and Planning"
 															name="Location">
 															<TR>
@@ -575,20 +576,20 @@ function commentWin(val) {
 																							</TD>
 																						</TR>
 																					</field:display>
-																					
+
 																					<TD width="100%" colspan="4" align="left" bgcolor="#ffffff">
 																						<i>
 																							<digi:trn key="aim:impLocations">Implementation Location</digi:trn>
 																							:&nbsp;
 																						</i>
 																						<c:out value="${aimChannelOverviewForm.implemLocationLevel}" />
-																						
+
 																					</TD>
-																					
+
 																					<c:if test="${!empty activity.locations}">
 																						<TR>
 																							<TD width="30%" align="center" bgcolor="#ffffff">
-																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 1}" > 
+																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 1}" >
 																									<i>
 																									<category:getoptionvalue categoryIndex="1" categoryKey="<%=CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>"  />
 																									</i>
@@ -611,24 +612,24 @@ function commentWin(val) {
 																								</c:if>
 																								&nbsp;
 																							</TD>
-                                                                                                                                                                                         <TD  align="center" bgcolor="#ffffff">
+                                                                                                                                                                                          <TD  align="center" bgcolor="#ffffff">
                                                                                                                                                                                              <i> <digi:trn key="aim:percent">Percent</digi:trn></i>
 																							</TD>
 																							</TR>
-																						
+
 																						<c:forEach var="loc" items="${activity.locations}">
 																							<TR>
 																								<TD width="30%" align="center" bgcolor="#ffffff">
 																									<c:out value="${loc.region}" />
 																								</TD>
-																						
+
 																								<TD width="30%" align="center" bgcolor="#ffffff">
 																									<c:out value="${loc.zone}" />
 																								</TD>
 																								<TD width="30%" align="center" bgcolor="#ffffff">
 																									<c:out value="${loc.woreda}" />
 																								</TD>
-                                                                                                                                                                                                  <TD  align="center" bgcolor="#ffffff">
+                                                                                                                                                                                                 <TD  align="center" bgcolor="#ffffff">
                                                                                                                                                                                                      <c:if test='${loc.percent!=""}'>
 																									<c:out value="${loc.percent}%" />
                                                                                                                                                                                                        </c:if>
@@ -669,7 +670,7 @@ function commentWin(val) {
 																			<TD bgcolor="#ffffff">
 																			<c:forEach var="program"
 																				items="${aimChannelOverviewForm.nationalPlanObjectivePrograms}">
-																				<c:out value="${program.hierarchyNames}" />&nbsp; 
+																				<c:out value="${program.hierarchyNames}" />&nbsp;
 																				<c:out value="${program.programPercentage}"/>%<br/>
 																			</c:forEach></TD>
 																		</TR>
@@ -723,18 +724,17 @@ function commentWin(val) {
 																				<digi:edit key="${activity.description}" />
 																			</c:if>
 																			<br />
-																		</field:display> 
-																	
+																		</field:display>
 																		<field:display feature="Identification" name="Objectives">
 																			<field:display feature="Identification" name="Objective">
-																				<i><b>
-																				<digi:trn key="aim:programObjective">
-																					Objective
-																				</digi:trn></b></i>:
-																				<c:if test='${!empty activity.objective}'>
-																					<digi:edit key="${activity.objective}" />
-																				</c:if>
-																			</field:display> 
+																			<i><b><digi:trn key="aim:programObjective">
+																				Objective
+																			</digi:trn></b></i>:
+																			<c:if test='${!empty activity.objective}'>
+																				<digi:edit key="${activity.objective}" />
+																			</c:if>
+																			</field:display>
+																		
 																			<ul>
 																				<c:forEach var="comments"
 																					items="${aimChannelOverviewForm.allComments}">
@@ -760,7 +760,7 @@ function commentWin(val) {
 																						<c:if test='${comments.key=="Objective Objectively Verifiable Indicators"}'>
 																							<c:forEach var="comment" items="${comments.value}">
 																								<li><i><digi:trn key="aim:objectivelyindicatorspreview">
-																									Objectively Verifiable Indicators
+																								Objectively Verifiable Indicators
 																								</digi:trn>:
 																								</i>
 																								${comment.comment}</li>
@@ -769,11 +769,11 @@ function commentWin(val) {
 																					</field:display>
 																				</c:forEach>
 																			</ul>
-																		 	</field:display>
-																		
+																			</field:display>
+
 																		<field:display name="Lessons Learned" feature="Identification">
 																			<TR>
-																				<TD bgcolor="#ffffff">																			
+																				<TD bgcolor="#ffffff">
 																					<i><b><digi:trn key="aim:Lessons Learned">Lessons Learned</digi:trn></b></i>:
 																					<c:if test="${not empty activity.lessonsLearned}">
 																						<bean:define id="lessonsLearnedKey">
@@ -782,11 +782,13 @@ function commentWin(val) {
 																						<digi:edit key="<%=lessonsLearnedKey%>"/>
 																					 </c:if>
 																				</TD>
-																			</TR>																		
-																			
+																			</TR>
+
 																		</field:display>
-																		
-																		<field:display feature="Identification" name="Purpose">
+
+																		<field:display feature="Identification"
+																			name="Purpose">
+
 																			<c:if test="${!empty activity.purpose}">
 																				<i><b><digi:trn key="aim:programPurpose">Purpose</digi:trn></b></i>:
                                                                           <digi:edit

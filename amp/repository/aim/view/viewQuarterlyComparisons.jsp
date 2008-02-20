@@ -1170,9 +1170,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 							                        	<digi:link href="/viewYearlyComparisons.do" name="urlShowQuarterly" title="${translation}" >
 
 				      	  										<STRONG>
-
-																		Show Yearly
-
+																	<digi:trn key="aim:showYearly">Show Yearly</digi:trn>
 																	</STRONG>
 
 						   		     						</digi:link>

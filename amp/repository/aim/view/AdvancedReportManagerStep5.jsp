@@ -47,8 +47,8 @@ function gotoStep() {
 		document.aimAdvancedReportForm.submit();
 	}
 }
-/*added here*/
 
+/*added here*/
 function backStep() {
 	if (check()){
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SelectCols" />
@@ -199,27 +199,27 @@ function deleteColumn()
 																	<TR>
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
-																				<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
+																				<c:if test="${!empty aimAdvancedReportForm.notHierarchyColumns}">
 
 																						<!-- Donor Funding -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'donor' }">
-																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+																						<logic:iterate name="aimAdvancedReportForm" id="notHierarchyColumns"	property="notHierarchyColumns" >
 
-																							<c:if test="${addedColumns.columnName == 'A.C. Chapter' || addedColumns.columnName == 'Sub-Sector' || addedColumns.columnName == 'Implementation Level' || addedColumns.columnName == 'Accession Instrument' || 
-																							addedColumns.columnName == 'Executing Agency' || addedColumns.columnName == 'Donor' || addedColumns.columnName == 'Donor Group' || 
-																							addedColumns.columnName == 'Donor Agency' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Region' || 
-																							addedColumns.columnName == 'Type Of Assistance' || addedColumns.columnName == 'Financing Instrument' || addedColumns.columnName == 'Project Title' || 
-																							addedColumns.columnName == 'National Planning Objectives' || addedColumns.columnName == 'Primary Program' || addedColumns.columnName == 'Componente' || 
-																							addedColumns.columnName == 'Secondary Program'}">
+																							<c:if test="${notHierarchyColumns.columnName == 'A.C. Chapter' || notHierarchyColumns.columnName == 'Sub-Sector' || notHierarchyColumns.columnName == 'Implementation Level' || notHierarchyColumns.columnName == 'Accession Instrument' || 
+																							notHierarchyColumns.columnName == 'Executing Agency' || notHierarchyColumns.columnName == 'Donor' || notHierarchyColumns.columnName == 'Donor Group' || 
+																							notHierarchyColumns.columnName == 'Donor Agency' || notHierarchyColumns.columnName == 'Sector' || notHierarchyColumns.columnName == 'Status' || notHierarchyColumns.columnName == 'Region' || 
+																							notHierarchyColumns.columnName == 'Type Of Assistance' || notHierarchyColumns.columnName == 'Financing Instrument' || notHierarchyColumns.columnName == 'Project Title' || 
+																							notHierarchyColumns.columnName == 'National Planning Objectives' || notHierarchyColumns.columnName == 'Primary Program' || notHierarchyColumns.columnName == 'Componente' || 
+																							notHierarchyColumns.columnName == 'Secondary Program' || notHierarchyColumns.columnName == 'Donor Type'}">
 																								<TR bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
-																									<digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>
+																									<digi:trn key="aim:report:${notHierarchyColumns.columnName}"><c:out value="${notHierarchyColumns.columnName}"/></digi:trn>
 
 																									</td>
 																									<td align="right">
 																									<html:multibox property="selectedColumns">
 
-																									<c:out value="${addedColumns.columnId}"/>
+																									<c:out value="${notHierarchyColumns.columnId}"/>
 
 																									  </html:multibox>
 																									</td>
@@ -231,21 +231,21 @@ function deleteColumn()
 
 																						<!-- Regional Funding -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional' }">
-																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-																							<c:if test="${addedColumns.columnName == 'Status' || 
-																							addedColumns.columnName == 'A.C. Chapter' || addedColumns.columnName == 'Accession Instrument' || addedColumns.columnName == 'Financing Instrument' || 
-																							addedColumns.columnName == 'Implementation Level' || addedColumns.columnName == 'National Planning Objectives' || addedColumns.columnName == 'Primary Program' || 
-																							addedColumns.columnName == 'Secondary Program' || addedColumns.columnName == 'Sub-Sector' || addedColumns.columnName == 'Type Of Assistance' || 
-																							addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Region' || 
-																							addedColumns.columnName == 'Project Title'}">
+																						<logic:iterate name="aimAdvancedReportForm" id="notHierarchyColumns"	property="notHierarchyColumns" >
+																							<c:if test="${notHierarchyColumns.columnName == 'Status' || 
+																							notHierarchyColumns.columnName == 'A.C. Chapter' || notHierarchyColumns.columnName == 'Accession Instrument' || notHierarchyColumns.columnName == 'Financing Instrument' || 
+																							notHierarchyColumns.columnName == 'Implementation Level' || notHierarchyColumns.columnName == 'National Planning Objectives' || notHierarchyColumns.columnName == 'Primary Program' || 
+																							notHierarchyColumns.columnName == 'Secondary Program' || notHierarchyColumns.columnName == 'Sub-Sector' || notHierarchyColumns.columnName == 'Type Of Assistance' || 
+																							notHierarchyColumns.columnName == 'Sector' || notHierarchyColumns.columnName == 'Region' || 
+																							notHierarchyColumns.columnName == 'Project Title'}">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
-																									<digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>
+																									<digi:trn key="aim:report:${notHierarchyColumns.columnName}"><c:out value="${notHierarchyColumns.columnName}"/></digi:trn>
 
 																									</td>
 																									<td align="right">
 																									<html:multibox property="selectedColumns">
-																									<c:out value="${addedColumns.columnId}"/>
+																									<c:out value="${notHierarchyColumns.columnId}"/>
 																										</html:multibox>
 																									</td>
 																								</tr>
@@ -255,20 +255,19 @@ function deleteColumn()
 
 																						<!-- Component Funding -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'component' }">
-																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-																							<c:if test="${addedColumns.columnName == 'Status' ||
-																							addedColumns.columnName == 'A.C. Chapter' || addedColumns.columnName == 'Accession Instrument' || addedColumns.columnName == 'Financing Instrument' || 
-																							addedColumns.columnName == 'Implementation Level' || addedColumns.columnName == 'National Planning Objectives' || addedColumns.columnName == 'Primary Program' || 
-																							addedColumns.columnName == 'Secondary Program' || addedColumns.columnName == 'Sub-Sector' || addedColumns.columnName == 'Type Of Assistance' || 
-																							addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Project Title' || 
-																							addedColumns.columnName == 'Component Name'}">
+																						<logic:iterate name="aimAdvancedReportForm" id="notHierarchyColumns"	property="notHierarchyColumns" >
+																							<c:if test="${notHierarchyColumns.columnName == 'Status' ||
+																							notHierarchyColumns.columnName == 'A.C. Chapter' || notHierarchyColumns.columnName == 'Accession Instrument' || notHierarchyColumns.columnName == 'Financing Instrument' || 
+																							notHierarchyColumns.columnName == 'Implementation Level' || notHierarchyColumns.columnName == 'National Planning Objectives' || notHierarchyColumns.columnName == 'Primary Program' || 
+																							notHierarchyColumns.columnName == 'Secondary Program' || notHierarchyColumns.columnName == 'Sub-Sector' || notHierarchyColumns.columnName == 'Type Of Assistance' || 
+																							notHierarchyColumns.columnName == 'Sector' || notHierarchyColumns.columnName == 'Project Title'}">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
-																									  	<digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>
+																									  	<digi:trn key="aim:report:${notHierarchyColumns.columnName}"><c:out value="${notHierarchyColumns.columnName}"/></digi:trn>
 																								  	</td>
 																									<td align="right">
 																									<html:multibox property="selectedColumns">
-																									  	<c:out value="${addedColumns.columnId}"/>
+																									  	<c:out value="${notHierarchyColumns.columnId}"/>
 																									 </html:multibox>
 																									</td>
 																								</tr>
@@ -279,18 +278,18 @@ function deleteColumn()
 
 																							<!-- Contribution Funding -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'contribution' }">
-																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-																							<c:if test="${addedColumns.columnName == 'Costing Donor' || addedColumns.columnName == 'National Planning Objectives' || addedColumns.columnName == 'Primary Program' || 
-																							addedColumns.columnName == 'Project Title' || addedColumns.columnName == 'Secondary Program' || addedColumns.columnName == 'Sub-Sector' || 
-																							 addedColumns.columnName == 'Status' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'A.C. Chapter' || 
-																							 addedColumns.columnName == 'Accession Instrument' || addedColumns.columnName == 'Donor'}">
+																						<logic:iterate name="aimAdvancedReportForm" id="notHierarchyColumns"	property="notHierarchyColumns" >
+																							<c:if test="${notHierarchyColumns.columnName == 'Costing Donor' || notHierarchyColumns.columnName == 'National Planning Objectives' || notHierarchyColumns.columnName == 'Primary Program' || 
+																							notHierarchyColumns.columnName == 'Project Title' || notHierarchyColumns.columnName == 'Secondary Program' || notHierarchyColumns.columnName == 'Sub-Sector' || 
+																							 notHierarchyColumns.columnName == 'Status' || notHierarchyColumns.columnName == 'Sector' || notHierarchyColumns.columnName == 'A.C. Chapter' || 
+																							 notHierarchyColumns.columnName == 'Accession Instrument' || notHierarchyColumns.columnName == 'Donor'}">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
-																										<digi:trn key="aim:report:${addedColumns.columnName}"> <c:out value="${addedColumns.columnId}"/></digi:trn>
+																										<digi:trn key="aim:report:${notHierarchyColumns.columnName}"> <c:out value="${notHierarchyColumns.columnId}"/></digi:trn>
 																									</td>
 																									<td align="right">
 																									<html:multibox property="selectedColumns">
-																									<c:out value="${addedColumns.columnId}"/>
+																									<c:out value="${notHierarchyColumns.columnId}"/>
 																									  	</html:multibox>
 																									</td>
 																								</tr>
@@ -303,7 +302,7 @@ function deleteColumn()
 																	</TR>
 
 																	<tr>
-																		<c:if test="${empty aimAdvancedReportForm.addedColumns}">
+																		<c:if test="${empty aimAdvancedReportForm.notHierarchyColumns}">
 																			<td >
 																				<TABLE width="100%" height="200" cellPadding=2 cellSpacing=0 vAlign="top" align="center" bgcolor="#f4f4f2">
 																					<tr bgcolor="#eeeeee">
@@ -363,7 +362,7 @@ function deleteColumn()
 																		</TD>
 																		</c:if>
 
-																		<c:if test="${empty aimAdvancedReportForm.columnHierarchie}">
+																		<c:if test="${empty aimAdvancedReportForm.columnHierarchie}">Column Hierarchy
 																			<td >
 																				<TABLE width="100%" height="200" cellPadding=2 cellSpacing=0 vAlign="top" align="center" bgcolor="#f4f4f2">
 																					<tr bgcolor="#eeeeee">	<td class=box-title align=center>

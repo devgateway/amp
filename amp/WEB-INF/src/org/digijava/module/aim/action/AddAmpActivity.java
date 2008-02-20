@@ -40,6 +40,8 @@ import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpModulesVisibility;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.form.EditActivityForm;
@@ -112,24 +114,30 @@ public class AddAmpActivity extends Action {
     //set the level, if available
     String levelTxt=request.getParameter("activityLevelId");
     if(levelTxt!=null) eaForm.setActivityLevel(Long.parseLong(levelTxt));
-    //set the contracts , if available
+    
+     //set the contracts, if available
     if(eaForm.getActivityId()!=null&&(eaForm.getContracts()==null||eaForm.getContracts().size()==0)){
            List contracts=ActivityUtil.getIPAContracts(eaForm.getActivityId());
            eaForm.setContracts(contracts);
      }
+    
      // load all the active currencies
       eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
     
-     //Only currencies havening exchanges rates AMP-2620
+    //Only currencies havening exchanges rates AMP-2620
       ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
       eaForm.setValidcurrencies(validcurrencies);
-      for (Iterator iter = eaForm.getCurrencies().iterator(); iter.hasNext();) {
-		AmpCurrency element = (AmpCurrency) iter.next();
-		 if( CurrencyUtil.isRate(element.getCurrencyCode())== true)
-				{
-			 	eaForm.getValidcurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
-				}
-		}
+      if(eaForm.getCurrencies()!=null && eaForm.getCurrencies().size()>0){
+    	  for (Iterator iter = eaForm.getCurrencies().iterator(); iter.hasNext();) {
+    			AmpCurrency element = (AmpCurrency) iter.next();
+    			 if( CurrencyUtil.isRate(element.getCurrencyCode())== true)
+    					{
+    				 	eaForm.getValidcurrencies().add((CurrencyUtil.getCurrencyByCode(element.getCurrencyCode())));
+    					}
+    			}
+      }
+      
+
 
 
     /*Clear eventually dirty information found in session related to DM*/
@@ -450,14 +458,24 @@ public class AddAmpActivity extends Action {
         eaForm.setWorkingTeamLeadFlag("yes");
       else
         eaForm.setWorkingTeamLeadFlag("no");
-      eaForm.setTeamLead(teamLeadFlag);
+        eaForm.setTeamLead(teamLeadFlag);
 
+      AmpModulesVisibility moduleToTest=FeaturesUtil.getModuleVisibility("Activity Approval Process");
+      boolean activityApprovalStatusProcess=false;
+      AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateById(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"));
+      if(moduleToTest!=null) 
+    	  {
+    	  	activityApprovalStatusProcess= moduleToTest.isVisibleTemplateObj(currentTemplate);
+    	  }
       if (!eaForm.isEditAct() || logframepr.compareTo("true") == 0 || request.getParameter("logframe") != null) {
-        if (teamMember != null)
-          if (teamMember.getTeamHead())
+       if (teamMember != null)
+        if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0)
             eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
           else
-            eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.STARTED_STATUS);
+            {
+        	  if(activityApprovalStatusProcess==true ) eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.STARTED_STATUS);
+        	  	else eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
+            }
       }
       else {
         String sessId = session.getId();
@@ -915,7 +933,7 @@ public class AddAmpActivity extends Action {
       else if (eaForm.getStep().equals("12")) { // show the step 12 page.
 	        return mapping.findForward("addActivityStep12");
 	      }
-      else if (eaForm.getStep().equals("13")) { // show the step 13 page.
+       else if (eaForm.getStep().equals("13")) { // show the step 13 page.
           return mapping.findForward("addActivityStep13");
       }
       else if (eaForm.getStep().equals("9")) { // show the preview page.
@@ -1205,7 +1223,7 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
         		  }
         	  }
           }
-          eaForm.setCrDocuments( DocumentManagerUtil.createDocumentDataCollectionFromSession(request) ); 
+          eaForm.setCrDocuments( DocumentManagerUtil.createDocumentDataCollectionFromSession(request) );
           
           /* END - Setting documents for preview */
           return mapping.findForward("preview");
@@ -1213,34 +1231,34 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
       }
       else if (eaForm.getStep().equals("10")) { // show step 9 - M&E page
 
-        eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorsList(eaForm.getActivityId()));
-       
-        for(Iterator itr = IndicatorUtil.getAllDefaultIndicators(eaForm.getActivityId()).iterator(); itr.hasNext();){
-        	ActivityIndicator actInd = (ActivityIndicator) itr.next();
-        	actInd.setActivityId(eaForm.getActivityId());
-           eaForm.getIndicatorsME().add(actInd); 	
-        }
-        if (!eaForm.isEditAct()) {
-          eaForm.setIndicatorId(null);
-          eaForm.setIndicatorValId(null);
-          eaForm.setExpIndicatorId(null);
-          eaForm.setBaseVal(null);
-          eaForm.setBaseValDate(null);
-          eaForm.setTargetVal(null);
-          eaForm.setTargetValDate(null);
-          eaForm.setRevTargetVal(null);
-          eaForm.setRevTargetValDate(null);
-          eaForm.setIndicatorPriorValues(null);
-          eaForm.setCurrentVal(null);
-          eaForm.setCurrentValDate(null);
-          eaForm.setIndicatorRisk(null);
-        }
+          eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorsList(eaForm.getActivityId()));
+          
+          for(Iterator itr = IndicatorUtil.getAllDefaultIndicators(eaForm.getActivityId()).iterator(); itr.hasNext();){
+          	ActivityIndicator actInd = (ActivityIndicator) itr.next();
+          	actInd.setActivityId(eaForm.getActivityId());
+             eaForm.getIndicatorsME().add(actInd); 	
+          }
+          if (!eaForm.isEditAct()) {
+            eaForm.setIndicatorId(null);
+            eaForm.setIndicatorValId(null);
+            eaForm.setExpIndicatorId(null);
+            eaForm.setBaseVal(null);
+            eaForm.setBaseValDate(null);
+            eaForm.setTargetVal(null);
+            eaForm.setTargetValDate(null);
+            eaForm.setRevTargetVal(null);
+            eaForm.setRevTargetValDate(null);
+            eaForm.setIndicatorPriorValues(null);
+            eaForm.setCurrentVal(null);
+            eaForm.setCurrentValDate(null);
+            eaForm.setIndicatorRisk(null);
+          }
 
-        //get the levels of risks
-        if (!eaForm.getIndicatorsME().isEmpty())
-          eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
+          //get the levels of risks
+          if (!eaForm.getIndicatorsME().isEmpty())
+            eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
 
-        return mapping.findForward("addActivityStep10");
+          return mapping.findForward("addActivityStep10");
       }
       else {
         return mapping.findForward("adminHome");

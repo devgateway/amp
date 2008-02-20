@@ -69,10 +69,8 @@ public class ShowTeamReports extends Action {
  */
 			Set<AmpReports> reps = new TreeSet<AmpReports>(
 					new AdvancedReportUtil.AmpReportIdComparator());
-			
-			Collection teamLeadResults = null;
-			Collection teamMemberResults = null;
-			Collection results = null;
+
+//			Collection results = null;
 //			if (appSettingSet) {
 //				results = TeamUtil.getAllTeamReports(tm.getTeamId(),startReport, reportsPerPage,true,tm.getMemberId());
 //				//teamMemberResults = TeamMemberUtil.getAllTeamMembersReports(tm.getTeamId(), startReport, reportsPerPage);
@@ -81,19 +79,29 @@ public class ShowTeamReports extends Action {
 //			}else{
 //				results = TeamUtil.getAllTeamReports(tm.getTeamId(),null, null,true,tm.getTeamId());				
 //				//teamMemberResults = TeamMemberUtil.getAllTeamMembersReports(tm.getTeamId(),null,null);
-//				
+//				 
 //			}
+//			/*
+//			if(teamLeadResults!=null){
+//				reps.addAll(teamLeadResults);
+//			}
+//			if (teamMemberResults!=null){
+//				reps.addAll(teamMemberResults);
+//			}
+//			*/
 //			if (results!=null){
 //				reps.addAll(results);
-//			}			
-
+//			}		
+			
+			Collection teamLeadResults = null;
+			Collection teamMemberResults = null;
+			
 			if (appSettingSet) {
 				teamLeadResults = TeamUtil.getAllTeamReports(tm.getTeamId(),startReport, reportsPerPage,true,tm.getMemberId());
 				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(),true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
 				rf.setTotalPages(totalPages.intValue());
 			}else{
-				teamLeadResults = TeamUtil.getAllTeamReports(tm.getTeamId(),null, null,true,tm.getMemberId());			
-		
+				teamLeadResults = TeamUtil.getAllTeamReports(tm.getTeamId(),null, null,true,tm.getMemberId());				
 			}
 			
 			if(teamLeadResults!=null){

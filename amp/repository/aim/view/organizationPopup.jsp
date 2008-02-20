@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<logic:notEmpty name="currentOrg" scope="request">
 <bean:define id="org" name="currentOrg"
 	type="org.digijava.module.aim.helper.RelOrganization" scope="request"
 	toScope="page" />
@@ -40,3 +41,4 @@
 </div>
 </li>
 </ul>
+</logic:notEmpty>

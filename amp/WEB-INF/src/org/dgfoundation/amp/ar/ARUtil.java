@@ -174,10 +174,10 @@ public final class ARUtil {
 		return false;
 	}
 
-	public static List createOrderedHierarchies(Collection columns) {
-		List orderedColumns = new ArrayList(columns.size());
-		for (int x = 0; x < columns.size(); x++) {
-			Iterator i = columns.iterator();
+	public static List createOrderedHierarchies(Collection columns, Collection hierarchies) {
+		List orderedColumns = new ArrayList(hierarchies.size());
+		for (int x = 0; x < hierarchies.size()+columns.size(); x++) {
+			Iterator i = hierarchies.iterator();
 			while (i.hasNext()) {
 				AmpReportHierarchy element = (AmpReportHierarchy) i.next();
 				int order = Integer.parseInt(element.getLevelId());
@@ -188,9 +188,9 @@ public final class ARUtil {
 		return orderedColumns;
 	}
 
-	public static List createOrderedColumns(Collection columns) {
+	public static List createOrderedColumns(Collection columns, Set hierarchies) {
 		List orderedColumns = new ArrayList(columns.size());
-		for (int x = 0; x < columns.size(); x++) {
+		for (int x = 0; x < columns.size()+hierarchies.size(); x++) {
 			Iterator i = columns.iterator();
 			while (i.hasNext()) {
 				AmpReportColumn element = (AmpReportColumn) i.next();

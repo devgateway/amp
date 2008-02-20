@@ -83,8 +83,9 @@ public class DateConversion
 			curr = index + 1;
 			int yr = Integer.parseInt(strDate.substring(curr, strDate.length()));
 */
-			String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
-            if(pattern==null || pattern.equals("")){
+			String pattern=null;
+			    //FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+            if (pattern == null || pattern.equals("")) {
                 pattern = "MM/dd/yyyy";
             }
 			pattern = pattern.replaceAll("m", "M");
@@ -96,7 +97,7 @@ public class DateConversion
 						  + " day "  + gc.get(Calendar.DAY_OF_MONTH)) ; */
 			return date;//gc.getTime() ;
 		}catch(Exception ex){
-			throw new RuntimeException();
+			throw new RuntimeException(ex);
 		}
 
 	}

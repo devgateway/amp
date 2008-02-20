@@ -49,5 +49,6 @@ public class AmpIssues  implements Serializable
 		}
 		throw new ClassCastException();
 	}
+	
 
 }

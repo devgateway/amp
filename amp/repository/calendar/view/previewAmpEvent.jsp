@@ -34,7 +34,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap" valign="top"><digi:trn key="calendar:dolors">&nbsp;Donors:&nbsp;&nbsp;</digi:trn></td>
+                    <td nowrap="nowrap" valign="top"><digi:trn key="calendar:donors">&nbsp;Donors:&nbsp;&nbsp;</digi:trn></td>
                     <td>
                         <logic:empty name="calendarEventForm" property="donors">
                             &nbsp;
@@ -54,7 +54,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">&nbsp;From (${calendarEventForm.selectedCalendarTypeName}):&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap">&nbsp;<digi:trn key="aim:calendar:from">From</digi:trn> (${calendarEventForm.selectedCalendarTypeName}):&nbsp;&nbsp;</td>
                     <td>
                         <html:hidden name="calendarEventForm" property="selectedStartDate" value="${calendarEventForm.selectedStartDate}"/>
                         <html:hidden name="calendarEventForm" property="selectedStartTime" value="${calendarEventForm.selectedStartTime}"/>
@@ -62,7 +62,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">&nbsp;To (${calendarEventForm.selectedCalendarTypeName}):&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap">&nbsp;<digi:trn key="calendar:to">To</digi:trn> (${calendarEventForm.selectedCalendarTypeName}):&nbsp;&nbsp;</td>
                     <td>
                         <html:hidden name="calendarEventForm" property="selectedEndDate" value="${calendarEventForm.selectedEndDate}"/>
                         <html:hidden name="calendarEventForm" property="selectedEndTime" value="${calendarEventForm.selectedEndTime}"/>
@@ -119,16 +119,16 @@
                     <td nowrap="nowrap"><digi:trn key="calendar:eventIsPrivate">&nbsp;Event is private</digi:trn></td>
                     <td>
                         <html:hidden name="calendarEventForm" property="privateEvent" value="${calendarEventForm.privateEvent}"/>
-                        <c:if test="${calendarEventForm.privateEvent}"><b>Yes</b></c:if>
-                        <c:if test="${!calendarEventForm.privateEvent}"><b>No</b></c:if>
+                        <c:if test="${calendarEventForm.privateEvent}"><b><digi:trn key="calendar:yes">Yes</digi:trn></b></c:if>
+                        <c:if test="${!calendarEventForm.privateEvent}"><b><digi:trn key="calendar:no">No</digi:trn></b></c:if>
                     </td>
-                </tr>
-                <tr>
+                </tr>                     
+                    <tr>
                     <td>&nbsp;</td>
                      <td>
                         <input type="submit" value="<digi:trn key="calendar:savebutton">Save</digi:trn>">&nbsp;<input type="submit" value="<digi:trn key="calendar:editbutton">Edit</digi:trn>" onclick="document.getElementById('method').value = 'edit'">
                     </td>
-                </tr>
+                </tr>                 
             </table>
             </digi:form>
         </td>

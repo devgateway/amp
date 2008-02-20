@@ -17,7 +17,7 @@
 
 
 
-
+<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <digi:instance property="aimYearlyInfoForm" />
 
 <digi:context name="digiContext" property="context"/>
@@ -701,7 +701,7 @@
 
    					                       			</td>
 
-									                    	<!-- td bgcolor="#DDDDDB">
+									                    	<td bgcolor="#DDDDDB">
 
 				   					                     <div align="center">
 
@@ -709,7 +709,7 @@
 
 																	</div>
 
-				   					              		</td-->
+				   					              		</td>
 
 									                 		<td bgcolor="#DDDDDB">
 
@@ -726,56 +726,33 @@
 									              		</tr>
 
 				   					           		<logic:notEmpty name="aimYearlyInfoForm" property="yearlyInfo">
-
-															<logic:iterate name="aimYearlyInfoForm" property="yearlyInfo" id="yearlyInfo"
-
-															type="org.digijava.module.aim.helper.YearlyInfo">
-
-															<tr valign="top" bgcolor="#F8F8F5">
-
-				   					              		<td bgcolor="#F8F8F5">
-
-				                  					  	<logic:equal name="yearlyInfo" property="fiscalYear" value="0">NA</logic:equal>
-
-								                        <logic:notEqual  name="yearlyInfo" property="fiscalYear" value="0">
-
-																	<bean:write name="yearlyInfo" property="fiscalYear" />
-
-																</logic:notEqual>
-
+														<logic:iterate name="aimYearlyInfoForm" property="yearlyInfo" id="yearlyInfo" type="org.digijava.module.aim.helper.YearlyInfo">
+																<tr valign="top" bgcolor="#F8F8F5">
+																	<td bgcolor="#F8F8F5">
+																	<logic:equal name="yearlyInfo" property="fiscalYear" value="0">NA</logic:equal>
+																	<logic:notEqual  name="yearlyInfo" property="fiscalYear" value="0">
+																		<bean:write name="yearlyInfo" property="fiscalYear" />
+																	</logic:notEqual>
 																</td>
-
-		         					                 	<!-- td bgcolor="#F8F8F5">
-
-		                        					    	<div align="right">
-
-																		<bean:write name="yearlyInfo" property="plannedAmount" />
-
+																<td bgcolor="#F8F8F5">
+		         					                 				<div align="right">
+		         					                 					<%=FormatHelper.formatNumber(yearlyInfo.getPlannedAmount())%>
 																	</div>
-
-				                  					 	</td-->
-
-									                    	<td bgcolor="#F8F8F5">
-
-										                    	<div align="right">
-
-																		<bean:write name="yearlyInfo" property="actualAmount" />
-
+																</td>
+																<td bgcolor="#F8F8F5">
+																	<div align="right">
+																		<%=FormatHelper.formatNumber(yearlyInfo.getActualAmount())%>
 																	</div>
-
-									                    	</td>
-
-									                  </tr>
-
-															</logic:iterate>
-
-															</logic:notEmpty>
+																</td>
+															</tr>
+														</logic:iterate>
+													</logic:notEmpty>
 
 															<logic:empty name="aimYearlyInfoForm" property="yearlyInfo">
 
 															<tr valign="top" bgcolor="#F8F8F5">
 
-									                  	<td bgcolor="#F8F8F5" colspan="2">
+									                  	<td bgcolor="#F8F8F5" colspan="3">
 
 				         					            	<div align="center" class="note">
 
@@ -797,7 +774,7 @@
 
 																</td>
 
-				                  					   <!-- td>
+				                  					   <td>
 
 									                     	<div align="right">
 
@@ -805,7 +782,7 @@
 
 																	</div>
 
-									                      </td-->
+									                      </td>
 
 									                      <td>
 

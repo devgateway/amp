@@ -981,7 +981,7 @@ public class CurrencyUtil {
 			String queryString = new String();
 			queryString = "select f.exchangeRate from "
 					+ AmpCurrencyRate.class.getName()
-					+ " f where (f.toCurrencyCode=:currencyCode) ";
+					+ " f where (f.toCurrencyCode=:currencyCode) order by f.exchangeRateDate desc";
 			q = session.createQuery(queryString);
 			q.setParameter("currencyCode", currencyCode, Hibernate.STRING);
 			c = q.list();
@@ -1019,7 +1019,7 @@ public class CurrencyUtil {
 	 * Used in addfunding.
 	 * @param currencyCode currency Code
 	 * @return boolean
-	 * 
+	 * @author Irakli Kobiashvili
 	 */
 	public static Boolean isRate(String currencyCode) throws AimException {
 		Session session = null;

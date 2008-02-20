@@ -201,6 +201,7 @@ public class Location implements Serializable, Comparable
 	public void setPercent(String percent) {
 		this.percent = percent;
 	}
+
 	public String getNewCountryId() {
             return newCountryId;
         }

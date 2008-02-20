@@ -3,13 +3,13 @@ package org.digijava.module.aim.helper ;
 public class YearlyInfo 
 {
 	private int fiscalYear;
-	private double plannedAmount ;
-	private double actualAmount ;
+	private String plannedAmount ;
+	private String actualAmount ;
 	
 	/**
 	 * @return
 	 */
-	public double getActualAmount() {
+	public String getActualAmount() {
 		return actualAmount;
 	}
 
@@ -23,15 +23,15 @@ public class YearlyInfo
 	/**
 	 * @return
 	 */
-	public double getPlannedAmount() {
+	public String getPlannedAmount() {
 		return plannedAmount;
 	}
 
 	/**
 	 * @param string
 	 */
-	public void setActualAmount(double amount) {
-		actualAmount = amount;
+	public void setActualAmount(String string) {
+		actualAmount = string;
 	}
 
 	/**
@@ -44,8 +44,8 @@ public class YearlyInfo
 	/**
 	 * @param string
 	 */
-	public void setPlannedAmount(double amount) {
-		plannedAmount = amount;
+	public void setPlannedAmount(String string) {
+		plannedAmount = string;
 	}
 
 }

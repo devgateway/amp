@@ -278,6 +278,7 @@ function checkUncheckAll2() {
 											
 											<field:display name="Status" feature="Planning">&nbsp;</field:display>
 											<field:display name="Donor Agency" feature="Funding Organizations">&nbsp;</field:display>
+											<field:display name="Donor Type" feature="Funding Organizations">&nbsp;</field:display>
 												<field:display name="Actual Start Date" feature="Planning">&nbsp;</field:display>
 												<field:display name="Project Title" feature="Identification">&nbsp;</field:display>
 											<field:display name="Type Of Assistance" feature="Funding Organizations">&nbsp;</field:display>
@@ -320,6 +321,7 @@ function checkUncheckAll2() {
 			                            	<field:display name="Primary Program" feature="NPD Programs">&nbsp;</field:display>
 											<field:display name="Secondary Program" feature="NPD Programs">&nbsp;</field:display>
 											
+											
 			                            	<field:display name="National Planning Objectives" feature="NPD Programs">&nbsp;</field:display>
 			                            	<field:display name="Primary Program" feature="NPD Programs">&nbsp;</field:display>
 											<field:display name="Secondary Program" feature="NPD Programs">&nbsp;</field:display>
@@ -329,7 +331,7 @@ function checkUncheckAll2() {
 											<field:display name="Contracting Agency" feature="Contracting Agency"></field:display>
 											<field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display>
 											<field:display name="Draft" feature="Identification">&nbsp;</field:display>
-
+											
 																	<TR>
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
@@ -692,7 +694,7 @@ treeObj = new DHTMLSuite.JSDragDropTree();
 treeObj.setTreeId('dhtmlgoodies_tree');
 treeObj.init();
 treeObj.showHideNode(false,'dhtmlgoodies_tree');
-treeObj.expandAll();
+//treeObj.expandAll();
 }
 window.onload=initScripts;
 </script>

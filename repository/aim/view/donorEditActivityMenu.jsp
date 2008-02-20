@@ -122,7 +122,6 @@ function fnGetSurvey() {
 
 <html:hidden property="approvalStatus" />
 
-
 <table width="209" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
 
 <tr><td width="209" height="10" background="module/aim/images/top.gif">
@@ -206,15 +205,25 @@ bgcolor="#006699">
 	<tr>
 
 		<c:if test="${aimEditActivityForm.step != '17'}">
+
 		<td>
+
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+
 			<c:set var="translation">
+
 				<digi:trn key="aim:clickToAdd/UpdateAidEffectivenessSurvey">Add / Update Aid Effectiveness Survey</digi:trn>
+
 			</c:set>
+
 			<a href="javascript:fnGetSurvey()" class="menu" title="${translation}">
+
 				<digi:trn key="aim:editParisIndicators">Paris Indicators</digi:trn>
+
 			</a>
+
 		</td>
+
 		</c:if>
 
 		<c:if test="${aimEditActivityForm.step == '17'}">

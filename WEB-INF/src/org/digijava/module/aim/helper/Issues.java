@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Issues {
 	private Long id;
 	private String name;
+	private String nameTrimmed ;
 	private ArrayList measures;
 	/**
 	 * @return Returns the id.
@@ -56,6 +57,12 @@ public class Issues {
 			return issue.getId().equals(id);
 		}
 		throw new ClassCastException();
+	}
+	public String getNameTrimmed() {
+		return name.replace(" ", "");
+	}
+	public void setNameTrimmed(String nameTrimmed) {
+		this.nameTrimmed = nameTrimmed;
 	}
 	
 }

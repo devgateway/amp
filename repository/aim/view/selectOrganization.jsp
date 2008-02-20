@@ -285,7 +285,7 @@
 											</td>
 											<td bgcolor=#ECF3FD width="90%">
 												<bean:write name="organisations" property="acronym" /> &nbsp;&nbsp; ( <bean:write name="organisations" property="name" /> )
-											</td>											
+											</td>
 										</tr>
 									</logic:iterate>
 									<tr>

@@ -857,11 +857,11 @@ public class DbUtil {
         return ampFundings;
     }
 
-    public static List<AmpFunding> getAmpFunding(Long ampActivityId) {
+    public static Collection getAmpFunding(Long ampActivityId) {
         logger.debug("getAmpFunding() with ampActivityId=" + ampActivityId);
         Session session = null;
         Query q = null;
-        List<AmpFunding> ampFundings = null;
+        Collection ampFundings = null;
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = new String();
@@ -2257,6 +2257,53 @@ public class DbUtil {
         return organisation;
     }
 
+    public static void updateIndicator(AmpAhsurveyIndicator ind) {
+        AmpAhsurveyIndicator oldInd = new AmpAhsurveyIndicator();
+        Session session = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            oldInd=(AmpAhsurveyIndicator)session.load(AmpAhsurveyIndicator.class, ind.getAmpIndicatorId());
+
+            oldInd.setAmpIndicatorId(ind.getAmpIndicatorId());
+            oldInd.setCalcFormulas(ind.getCalcFormulas());
+            oldInd.setIndicatorCode(ind.getIndicatorCode());
+            oldInd.setIndicatorNumber(ind.getIndicatorNumber());
+            oldInd.setName(ind.getName());
+            oldInd.setQuestions(ind.getQuestions());
+            oldInd.setStatus(ind.getStatus());
+            oldInd.setTotalQuestions(ind.getTotalQuestions());
+
+            update(oldInd);
+        } catch (Exception ex) {
+            logger.debug("Unable to get survey indicator : " + ex.getMessage());
+            ex.printStackTrace(System.out);
+        }
+    }
+
+    public static AmpOrgType getAmpOrgTypeByCode(String ampOrgTypeCode) {
+        Session session = null;
+        Query qry = null;
+        AmpOrgType ampOrgType = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select f from " + AmpOrgType.class.getName()
+                + " f where (f.orgTypeCode=:ampOrgTypeCode)";
+            qry = session.createQuery(queryString);
+            qry.setString("ampOrgTypeCode", ampOrgTypeCode);
+            Iterator itr = qry.list().iterator();
+            if (itr.hasNext()) {
+                ampOrgType = (AmpOrgType) itr.next();
+            }
+        } catch (Exception e) {
+            logger.error("Unable to get Org Type");
+            logger.debug("Exceptiion " + e);
+        }
+        return ampOrgType;
+    }
+
+
     public static Collection getFundingDetWithCurrId(Long currId) {
         Session sess = null;
         Collection col = null;
@@ -2369,7 +2416,6 @@ public class DbUtil {
             tx.commit();
         } catch (Exception e) {
             logger.error("Unable to update");
-            e.printStackTrace();
             logger.debug(e.toString());
             if (tx != null) {
                 try {
@@ -4169,28 +4215,6 @@ public class DbUtil {
         return col;
     }
 
-    public static AmpOrgType getAmpOrgTypeByCode(String ampOrgTypeCode) {
-        Session session = null;
-        Query qry = null;
-        AmpOrgType ampOrgType = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select f from " + AmpOrgType.class.getName()
-                + " f where (f.orgTypeCode=:ampOrgTypeCode)";
-            qry = session.createQuery(queryString);
-            qry.setString("ampOrgTypeCode", ampOrgTypeCode);
-            Iterator itr = qry.list().iterator();
-            if (itr.hasNext()) {
-                ampOrgType = (AmpOrgType) itr.next();
-            }
-        } catch (Exception e) {
-            logger.error("Unable to get Org Type");
-            logger.debug("Exceptiion " + e);
-        }
-        return ampOrgType;
-    }
-
     public static AmpOrgType getAmpOrgType(Long ampOrgTypeId) {
         Session session = null;
         Query qry = null;
@@ -4861,11 +4885,12 @@ public class DbUtil {
                             SurveyFunding svfund = new SurveyFunding();
                             svfund.setSurveyId(svy.getAmpAHSurveyId());
                             svfund.setFundingOrgName(svy.getAmpDonorOrgId().getName());
-                            if(svy.getPointOfDeliveryDonor()!=null){
+                            if (svy.getPointOfDeliveryDonor() != null) {
                                 svfund.setDeliveryDonorName(svy.getPointOfDeliveryDonor().getName());
-                            }else{
+                            } else {
                                 svfund.setDeliveryDonorName(svy.getAmpDonorOrgId().getName());
                             }
+
                             survey.add(svfund);
                         }
                     }
@@ -5029,10 +5054,16 @@ public class DbUtil {
         Transaction tx = null;
 
         try {
+        	if (survey == null || survey.getAmpAHSurveyId()==null)
+        	{
+        		logger.debug("The survey or AHSurvey is null ... no update for Survey");
+        		return;
+        	}
             session = PersistenceManager.getRequestDBSession();
             tx = session.beginTransaction();
-
-            AmpAhsurvey oldSurvey = (AmpAhsurvey) session.load(AmpAhsurvey.class, survey.getAmpAHSurveyId());
+            
+            AmpAhsurvey oldSurvey ;
+            oldSurvey = (AmpAhsurvey) session.load(AmpAhsurvey.class, survey.getAmpAHSurveyId());
             oldSurvey.setAmpActivityId(survey.getAmpActivityId());
             oldSurvey.setAmpDonorOrgId(survey.getAmpDonorOrgId());
             oldSurvey.setPointOfDeliveryDonor(survey.getPointOfDeliveryDonor());
@@ -5059,11 +5090,15 @@ public class DbUtil {
         Iterator itr1 = null;
         Iterator itr2 = null;
         boolean flag = true;
-
+        if (surveyId == null)
+    	{
+    		logger.debug("The survey id is null ... no save survey response");
+    		return;
+    	}
         try {
             session = PersistenceManager.getRequestDBSession();
             tx = session.beginTransaction();
-
+            
             AmpAhsurvey survey = (AmpAhsurvey) session.get(AmpAhsurvey.class, surveyId);
             String qry = "select count(*) from " + AmpAhsurveyResponse.class.getName()
                 + " res where (res.ampAHSurveyId=:surveyId)";
@@ -5123,40 +5158,23 @@ public class DbUtil {
         return responses;
     }
 
-    public static void updateIndicator(AmpAhsurveyIndicator ind) {
-        AmpAhsurveyIndicator oldInd = new AmpAhsurveyIndicator();
+    public static AmpAhsurveyIndicator getIndicatorById(Long id) {
+        AmpAhsurveyIndicator indc = new AmpAhsurveyIndicator();
         Session session = null;
 
         try {
             session = PersistenceManager.getRequestDBSession();
-            oldInd=(AmpAhsurveyIndicator)session.load(AmpAhsurveyIndicator.class, ind.getAmpIndicatorId());
+            String qry = "select indc from " + AmpAhsurveyIndicator.class.getName()
+                + " indc where (indc.ampIndicatorId=:id)";
+            indc = (AmpAhsurveyIndicator) session.createQuery(qry)
+                .setParameter("id", id, Hibernate.LONG)
+                .list().get(0);
 
-            oldInd.setAmpIndicatorId(ind.getAmpIndicatorId());
-            oldInd.setCalcFormulas(ind.getCalcFormulas());
-            oldInd.setIndicatorCode(ind.getIndicatorCode());
-            oldInd.setIndicatorNumber(ind.getIndicatorNumber());
-            oldInd.setName(ind.getName());
-            oldInd.setQuestions(ind.getQuestions());
-            oldInd.setStatus(ind.getStatus());
-            oldInd.setTotalQuestions(ind.getTotalQuestions());
-
-            update(oldInd);
         } catch (Exception ex) {
             logger.debug("Unable to get survey indicator : " + ex.getMessage());
             ex.printStackTrace(System.out);
         }
-    }
-
-    public static AmpAhsurveyIndicator getIndicatorById(Long id) {
-        try {
-            Session session = PersistenceManager.getRequestDBSession();
-            AmpAhsurveyIndicator indc=(AmpAhsurveyIndicator)session.load(AmpAhsurveyIndicator.class, id);
-            return indc;
-        } catch (Exception ex) {
-            logger.debug("Unable to get survey indicator : " + ex.getMessage());
-            ex.printStackTrace(System.out);
-        }
-        return null;
+        return indc;
     }
 
     public static Collection getSurveyQuestionsByIndicator(Long indcId) {

@@ -57,6 +57,7 @@ public abstract class ReportGenerator {
 		retrieveData();
 		long retrTS=System.currentTimeMillis();
 		
+		
 		prepareData();
 		long endTS=System.currentTimeMillis();
 		logger.info("Report "+getReport().getName()+" generated in "+(endTS-startTS)/1000.0+" seconds. Data retrieval completed in "+(retrTS-startTS)/1000.0+" seconds");

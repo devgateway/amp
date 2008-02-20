@@ -304,7 +304,7 @@ function delSubmit(){
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span><digi:trn key="calendar:from">From&nbsp;&nbsp;</digi:trn></td>
+                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span><digi:trn key="calendar:from">From</digi:trn></td>
                     <html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
                     <html:hidden styleId="selectedEndTime" name="calendarEventForm" property="selectedEndTime"/>
                     <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
@@ -417,7 +417,7 @@ function delSubmit(){
                     </c:if>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span><digi:trn key="calendar:to">To&nbsp;&nbsp;&nbsp;</digi:trn></td>
+                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span><digi:trn key="calendar:to">To</digi:trn></td>
                     <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
 
                         <td nowrap="nowrap">

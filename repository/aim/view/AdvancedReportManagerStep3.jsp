@@ -1,4 +1,4 @@
-%@ page pageEncoding="UTF-8" %>
+<%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -12,8 +12,7 @@
 <script language="JavaScript">
 <!--
 	function saveReport()
-	{	
-		
+	{
 		alert('<digi:trn key="aim:reportBuilder:ReportSavingValidation">Your report is being saved</digi:trn>');
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SaveReport" />
 		document.aimAdvancedReportForm.action = "<%= step %>";

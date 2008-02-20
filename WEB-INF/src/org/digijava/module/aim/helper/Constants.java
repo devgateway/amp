@@ -149,6 +149,8 @@ public class Constants
 
 	public static final String APPROVED_STATUS 	= "approved";
 	public static final String STARTED_STATUS 	= "started";
+	public static final String NOT_APPRVED = "not_approved";
+	//TODO better to have APPROVAL_APROVED, APPROVAL_NOT_APROVED and something like that
 
 	//proudly added by Alex Gartner
 	public static final String ACTIVITY_STATUS_PLANNED			= "Planned";
@@ -293,7 +295,6 @@ public class Constants
 	public static final String GLOBAL_PUBLIC_VIEW = "Public View";
 	public static final String GLOBAL_DEFAULT_COUNTRY = "Default Country";
 	public static final String GLOBAL_PERSPECTIVE = "Perspective";
-	public static final String GLOBAL_SHOW_COMPONENT_FUNDING_BY_YEAR = "Show Component Funding by Year";
 
 
 	public static final String GLOBAL_DEFAULT_SECTOR_SCHEME="Default Sector Scheme";
@@ -303,4 +304,5 @@ public class Constants
 
        
     public static final String   FEATURE_MANAGER_VISIBILITY_TREE_UPDATED="Your changes have been saved." ;
+    public static final String  TEAM_LEAD_ALREADY_EXISTS = "The already has a team leader. You should remove the actual team leader first";
 }

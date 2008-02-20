@@ -164,7 +164,7 @@ function gotoStep() {
                                           	</table>
                                           	<hr />
                                           	</gs:test>
-                                          	
+                                          	<digi:errors />
                                             <table cellPadding=0 cellSpacing=1 bgColor=#f4f4f2 border="0">
                                               <feature:display name="Donor Report" module="Reports">
                                               <tr>

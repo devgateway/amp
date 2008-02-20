@@ -1,15 +1,17 @@
-<%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
-<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
-<%@ taglib uri="/taglib/struts-html" prefix="html" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ page pageEncoding="UTF-8"%>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
+<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript"
+	src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
+<script language="JavaScript" type="text/javascript"
+	src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
 	<!--
@@ -85,130 +87,140 @@
 
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addProgram.do" method="post">
-<c:set var="noDefaultProgram">
-<digi:trn key="aim:noDefaultProgram">
+	<c:set var="noDefaultProgram">
+		<digi:trn key="aim:noDefaultProgram">
 Default program is not selected
 </digi:trn>
-</c:set>
-<c:set var="defaultProgram">
-<digi:trn key="aim:defaultProgram">
+	</c:set>
+	<c:set var="defaultProgram">
+		<digi:trn key="aim:defaultProgram">
 Default Program
 </digi:trn>
-</c:set>
+	</c:set>
 
 
 
-<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
-  <tr>
-    <td vAlign="top">
-      <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
-        <tr>
-          <td align=left vAlign=top>
-            <table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding id="tblSlo">
-              <tr bgcolor="#006699">
-                <td vAlign="center" width="100%" align ="center" class="textalb" height="20">
-                  Select Program
-                </td>
-              </tr>
-              <tr>
-                <td align="center" bgcolor=#ECF3FD>
-                  <table cellSpacing=2 cellPadding=2>
-                  <tr>
-                  <td colspan="2" align="center">
-                    <c:choose>
-                      <c:when test="${aimEditActivityForm.programType==1}">
-                        <c:choose>
-                          <c:when test="${aimEditActivityForm.nationalSetting.defaultHierarchy!=null}">
-                              <c:out value="${defaultProgram}"/>:&nbsp;<c:out value="${aimEditActivityForm.nationalSetting.defaultHierarchy.name}"/>
-                          </c:when>
-                          <c:otherwise>
-                            <c:out value="${noDefaultProgram}"/>
-                          </c:otherwise>
-                        </c:choose>
+	<table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
+		<tr>
+			<td vAlign="top">
+			<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%"
+				class=box-border-nopadding>
+				<tr>
+					<td align=left vAlign=top>
+					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%"
+						class=box-border-nopadding id="tblSlo">
+						<tr bgcolor="#006699">
+							<td vAlign="center" width="100%" align="center" class="textalb"
+								height="20"><digi:trn key="aim:selectProgram">Select Program</digi:trn>
+							</td>
+						</tr>
+						<tr>
+							<td align="center" bgcolor=#ECF3FD>
+							<table cellSpacing=2 cellPadding=2>
+								<tr>
+									<td colspan="2" align="center"><c:choose>
+										<c:when test="${aimEditActivityForm.programType==1}">
+											<c:choose>
+												<c:when
+													test="${aimEditActivityForm.nationalSetting.defaultHierarchy!=null}">
+													<c:out value="${defaultProgram}" />:&nbsp;<c:out
+														value="${aimEditActivityForm.nationalSetting.defaultHierarchy.name}" />
+												</c:when>
+												<c:otherwise>
+													<c:out value="${noDefaultProgram}" />
+												</c:otherwise>
+											</c:choose>
 
-                      </c:when>
+										</c:when>
 
-                      <c:when test="${aimEditActivityForm.programType==2}">
+										<c:when test="${aimEditActivityForm.programType==2}">
 
-                        <c:choose>
-                          <c:when test="${aimEditActivityForm.primarySetting.defaultHierarchy!=null}">
-                               <c:out value="${defaultProgram}"/>:&nbsp;<c:out value="${aimEditActivityForm.primarySetting.defaultHierarchy.name}"/>
-                          </c:when>
-                          <c:otherwise>
-                            <c:out value="${noDefaultProgram}"/>
-                          </c:otherwise>
-                        </c:choose>
+											<c:choose>
+												<c:when
+													test="${aimEditActivityForm.primarySetting.defaultHierarchy!=null}">
+													<c:out value="${defaultProgram}" />:&nbsp;<c:out
+														value="${aimEditActivityForm.primarySetting.defaultHierarchy.name}" />
+												</c:when>
+												<c:otherwise>
+													<c:out value="${noDefaultProgram}" />
+												</c:otherwise>
+											</c:choose>
 
-                      </c:when>
-
-
-                      <c:otherwise>
-
-                        <c:choose>
-                          <c:when test="${aimEditActivityForm.secondarySetting.defaultHierarchy!=null}">
-                               <c:out value="${defaultProgram}"/>:&nbsp;<c:out value="${aimEditActivityForm.secondarySetting.defaultHierarchy.name}"/>
-                          </c:when>
-                          <c:otherwise>
-                            <c:out value="${noDefaultProgram}"/>
-                          </c:otherwise>
-                        </c:choose>
-
-                      </c:otherwise>
-                    </c:choose>
-                  </td>
-                  </tr>
-                    <c:if test="${!empty aimEditActivityForm.programLevels}">
-                      <c:forEach var="prgLevels" varStatus="varSt" items="${aimEditActivityForm.programLevels}">
-                        <tr>
-                          <td width="120" align="right">
-                            <c:if test="${varSt.count==1}">
-                            Program scheme
-                            </c:if>
-                            <c:if test="${varSt.count!=1}">
-                            Sub program level ${varSt.count-1}
-                            </c:if>
-                          </td>
-                          <td id="slo${varSt.count}">
-                            <html:select property="selPrograms" onchange="reloadProgram(this)" styleClass="inp-text">
-                              <option value="-1">-Select Program-</option>
-                              <html:optionsCollection name="prgLevels" value="ampThemeId" label="name" />
-                           </html:select>
-                          </td>
-                        </tr>
-                      </c:forEach>
+										</c:when>
 
 
-                    <tr>
-                      <td align="center" colspan=2>
-                        <table cellPadding=5>
-                          <tr>
-                            <td>
-                              <input type="button" value="Add" class="dr-menu" onclick="addProgram()">
-                            </td>
-                            <td>
-                              <input type="button" value="Reset" class="dr-menu" onclick="resetResults()">
-                            </td>
-                            <td>
-                              <input type="button" value="Close" class="dr-menu" onclick="closeWindow()">
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                      </c:if>
-                  </table>
-                </td>
-              </tr>
+										<c:otherwise>
 
-            </table>
+											<c:choose>
+												<c:when
+													test="${aimEditActivityForm.secondarySetting.defaultHierarchy!=null}">
+													<c:out value="${defaultProgram}" />:&nbsp;<c:out
+														value="${aimEditActivityForm.secondarySetting.defaultHierarchy.name}" />
+												</c:when>
+												<c:otherwise>
+													<c:out value="${noDefaultProgram}" />
+												</c:otherwise>
+											</c:choose>
 
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-</table>
-<script language="JavaScript" type="text/javascript">
+										</c:otherwise>
+									</c:choose></td>
+								</tr>
+								<c:if test="${!empty aimEditActivityForm.programLevels}">
+									<c:forEach var="prgLevels" varStatus="varSt"
+										items="${aimEditActivityForm.programLevels}">
+										<tr>
+											<td width="120" align="right"><c:if
+												test="${varSt.count==1}">
+												<digi:trn key="aim:programScheme">Program scheme</digi:trn>
+											</c:if> <c:if test="${varSt.count!=1}">
+												<digi:trn key="aim:subProgramLevel">Sub program level </digi:trn>${varSt.count-1}
+                            </c:if></td>
+											<td id="slo${varSt.count}"><html:select
+												property="selPrograms" onchange="reloadProgram(this)"
+												styleClass="inp-text">
+												<option value="-1"><digi:trn
+												key="aim:selectProgramOpt">-Select Program-</digi:trn></option>
+												<html:optionsCollection name="prgLevels" value="ampThemeId"
+													label="name" />
+											</html:select></td>
+										</tr>
+									</c:forEach>
+
+
+									<tr>
+										<td align="center" colspan=2>
+										<table cellPadding=5>
+											<tr>
+												<td><html:button styleClass="dr-menu"
+													property="submitButton" onclick="addProgram()">
+													<digi:trn key="btn:add">Add</digi:trn>
+												</html:button></td>
+												<td><html:button styleClass="dr-menu"
+													property="submitButton" onclick="resetResults()">
+													<digi:trn key="btn:reset">Reset</digi:trn>
+												</html:button></td>
+												<td><html:button styleClass="dr-menu"
+													property="submitButton" onclick="closeWindow()">
+													<digi:trn key="btn:close">Close</digi:trn>
+												</html:button></td>
+											</tr>
+										</table>
+										</td>
+									</tr>
+								</c:if>
+							</table>
+							</td>
+						</tr>
+
+					</table>
+
+					</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+	</table>
+	<script language="JavaScript" type="text/javascript">
 //var prgSels=document.getElementsByName("selPrograms");
 //var maxLeng=0;
 //for (var i = 0; i < prgSels.length; i++) {

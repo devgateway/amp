@@ -141,7 +141,7 @@ function validateForm() {
     document.aimEditActivityForm.status.focus();
     return false;
   }*/
-  //document.aimEditActivityForm.step.value="2";
+  document.aimEditActivityForm.step.value="2";
   <digi:context name="commentUrl" property="context/module/moduleinstance/addActivity.do?edit=true" />
   url = "<%=commentUrl %>?comment=" + "ccd" + "&edit=" + "true";
   document.aimEditActivityForm.action = url;
@@ -317,10 +317,10 @@ ${fn:replace(message,quote,escapedQuote)}
 
 									</td></tr>
 									<tr><td>&nbsp;</td></tr>
-
+									
 									<tr><td><jsp:include page="addActivityStep1Identification.jsp"/>
 									</td></tr>
-
+									
 
 									<tr><td>
 										&nbsp;

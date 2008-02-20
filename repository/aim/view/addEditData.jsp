@@ -34,7 +34,6 @@ function deleteData(ind){
 }
 
 function saveIndicator(id){
-
   <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=save" />
   document.forms[0].action = "<%=addEditIndicator%>";
   document.forms[0].submit();

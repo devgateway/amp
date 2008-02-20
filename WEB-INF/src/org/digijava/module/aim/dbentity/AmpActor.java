@@ -6,7 +6,8 @@ public class AmpActor  implements Serializable
 {
 
 	private Long ampActorId ;
-	private String name ;
+	private String name;
+	private String nameTrimmed;
 	private AmpMeasure measure;
 	
 
@@ -38,6 +39,12 @@ public class AmpActor  implements Serializable
 			return actor.getAmpActorId().equals(ampActorId);
 		} 
 		throw new ClassCastException();
+	}
+	public String getNameTrimmed() {
+		return name.replace(" ", "");
+	}
+	public void setNameTrimmed(String nameTrimmed) {
+		this.nameTrimmed = nameTrimmed;
 	}
 	
 

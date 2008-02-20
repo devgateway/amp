@@ -23,6 +23,8 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.TeamMemberForm;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -87,12 +89,14 @@ public class UpdateTeamMembers extends Action {
 					logger.info(" this is the team Id = "+upForm.getTeamId() + " this is the member id = "+upForm.getTeamMemberId());
 					if ((ampTeam.getTeamLead() != null)&&(!ampTeam.getTeamLead().getAmpTeamMemId().equals(upForm.getTeamMemberId()))) {
 						upForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-						errors.add(
-										ActionErrors.GLOBAL_ERROR,
-										new ActionError(
-												"error.aim.addTeamMember.teamLeadAlreadyExist"));
+						
 						logger.info(" here");
-
+						String trnKey = "aim:teamLeadAlreadyExist";
+						String msg = CategoryManagerUtil.translate(trnKey, request, Constants.TEAM_LEAD_ALREADY_EXISTS);
+						errors.add(
+								ActionErrors.GLOBAL_ERROR,
+								new ActionError(
+										"error.aim.addTeamMember.teamLeadAlreadyExist",msg));
 						saveErrors(request, errors);
 
 						return mapping.findForward("forward");

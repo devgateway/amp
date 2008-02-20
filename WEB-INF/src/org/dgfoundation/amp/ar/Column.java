@@ -36,8 +36,6 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 
 	protected int rowSpan;
 	
-
-	
 	
 	
 	protected String contentCategory;
@@ -90,6 +88,8 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 			return null;
 	}
 
+	
+	
 	/**
 	 * Returns true for ColumnS that can generate trail cells
 	 * @return true if the column can generate trail cells
@@ -297,6 +297,12 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	public abstract List getTrailCells();
 
 	public abstract Column newInstance();
+	
+	
+	@Override
+	public ReportData getNearestReportData() {
+		return parent.getNearestReportData();
+	}
 	
 	
 	public abstract int getColumnDepth();

@@ -29,7 +29,6 @@ import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.BaseCalendar;
-import org.digijava.module.aim.helper.CalendarHelper;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.util.DbUtil;
@@ -42,21 +41,25 @@ import org.digijava.module.aim.util.DbUtil;
  */
 public class CategAmountColWorker extends ColumnWorker {
 
-	private CalendarHelper calendarHelper;
-	protected Map metaInfoCache;
-
-	protected MetaInfo getCachedMetaInfo(String category, Comparable value) {
-		Map valuesMap = (Map) metaInfoCache.get(category);
-		if (valuesMap == null) {
-			valuesMap = new HashMap();
-			metaInfoCache.put(category, valuesMap);
-		}
-		MetaInfo mi = (MetaInfo) valuesMap.get(value);
-		if (mi != null)
-			return mi;
-		mi = new MetaInfo(category, value);
-		valuesMap.put(value, mi);
-		return mi;
+	
+    	
+    
+	
+    	protected GregorianCalendar calendar;
+    	protected EthiopianCalendar ethcalendar;
+    	protected DateFormatSymbols dfs;
+    	protected Map metaInfoCache;
+    	protected MetaInfo getCachedMetaInfo(String category, Comparable value) {	    
+	    Map valuesMap=(Map) metaInfoCache.get(category);
+	    if(valuesMap==null) { 
+		valuesMap=new HashMap();
+		metaInfoCache.put(category, valuesMap);
+	    }
+	    MetaInfo mi=(MetaInfo) valuesMap.get(value);
+	    if(mi!=null) return mi;
+	    mi=new MetaInfo(category,value);
+	    valuesMap.put(value, mi);
+	    return mi;	    
 	}
     	
 	/**
@@ -67,8 +70,10 @@ public class CategAmountColWorker extends ColumnWorker {
 	public CategAmountColWorker(String condition, String viewName,
 			String columnName,ReportGenerator generator) {
 		super(condition, viewName, columnName,generator);
+		calendar=new GregorianCalendar();
+		dfs=new DateFormatSymbols();
+		ethcalendar=new EthiopianCalendar();
 		this.metaInfoCache=new HashMap();
-		this.calendarHelper = new CalendarHelper();
 	}
 
 	/**filter.getFromYear()!=null
@@ -82,9 +87,9 @@ public class CategAmountColWorker extends ColumnWorker {
 		AmpARFilter filter=(AmpARFilter) generator.getFilter();
 		
 		Set measures=generator.getReportMetadata().getMeasures();
-		showable=ARUtil.containsMeasure(cac.getMetaValueString(ArConstants.FUNDING_TYPE),measures) || generator.getReportMetadata().getType().intValue()==4;
-		
-		if(!showable) return false;
+		showable=ARUtil.containsMeasure(cac.getMetaValueString(ArConstants.FUNDING_TYPE),measures) || generator.getReportMetadata().getType().intValue()==ArConstants.CONTRIBUTION_TYPE;
+		if(!showable)
+			return false;
 		
 		//we now check if the year filtering is used - we do not want items from other years to be shown
 		if(filter.getFromYear()!=null || filter.getToYear()!=null) {
@@ -92,10 +97,6 @@ public class CategAmountColWorker extends ColumnWorker {
 			if(filter.getFromYear()!=null && filter.getFromYear().intValue()>itemYear.intValue()) showable=false;
 			if(filter.getToYear()!=null && filter.getToYear().intValue()<itemYear.intValue()) showable=false;
 		}
-		
-		   
-	        
-	        
 		return showable;
 	}
 
@@ -127,9 +128,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		int tr_type = -1;
 		int adj_type = -1;
-		
 		double tr_amount = rs.getDouble("transaction_amount");
-		
 		String tds = rs.getString("transaction_date");
 		 
 		java.sql.Date td=null;
@@ -149,6 +148,8 @@ public class CategAmountColWorker extends ColumnWorker {
 		}
 		
 		String perspectiveCode=null; 
+		String donorGroupName=null;
+		String donorTypeName=null;
 		double fixedExchangeRate=1;
 		
 		//the most important meta name, the source name (donor name, region name, component name)
@@ -167,7 +168,11 @@ public class CategAmountColWorker extends ColumnWorker {
 		if (columnsMetaData.contains("adjustment_type")){
 		    	adj_type = rs.getInt("adjustment_type");
 		}
-
+		
+		if(columnsMetaData.contains("donor_type_name"))
+			donorTypeName=rs.getString("donor_type_name");
+					
+		
 		if (columnsMetaData.contains("transaction_type")){
 			tr_type  = rs.getInt("transaction_type");
 		}
@@ -207,7 +212,7 @@ public class CategAmountColWorker extends ColumnWorker {
 
 		acc.setAmount(tr_amount);
 		
-		//use fixed exchange rate only if it has been entered. Else use 
+		//use fixed exchange rate only if it has been entered. Else use Agency
 		if(fixedExchangeRate!=1 && fixedExchangeRate!=0)
 			acc.setFromExchangeRate(fixedExchangeRate); else
 			
@@ -215,7 +220,7 @@ public class CategAmountColWorker extends ColumnWorker {
 			//acc.setFromExchangeRate(1);
 			acc.setFromExchangeRate(Util.getExchange(currencyCode,td));
 			    
-			//OLD AND SLOW - db based
+			//OLD AND SLOW - db basedAgency
 			//acc.setFromExchangeRate(exchangeRate);
 		
 		acc.setCurrencyDate(td);
@@ -238,6 +243,10 @@ public class CategAmountColWorker extends ColumnWorker {
 		case 2:
 			trStr = ArConstants.EXPENDITURE;
 			break;
+		case 4:
+			trStr = ArConstants.DISBURSEMENT_ORDERS;
+			break;
+			
 		}
 
 		if(trStr!=null) {
@@ -252,30 +261,38 @@ public class CategAmountColWorker extends ColumnWorker {
 		//Date handling..
 		
 		
-		if (td!=null) 
-			calendarHelper.setTime(td); 
-		else 
+		if (td!=null) calendar.setTime(td); else 
 			logger.error("MISSING DATE FOR FUNDING id ="+id+ " of activity id ="+ ownerId);
 		
 		
 		String quarter=null;
-		Comparable month=null;		
+		String month=null;
 		Integer year=null;
-		
 		
 //		AMP-2212
 		if(filter.getCalendarType()==null || filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_GREGORIAN.getValue())) {
-			month = calendarHelper.getMonth();
-			quarter= "Q"+ new Integer(calendarHelper.getQuarter());
-			year=new Integer(calendarHelper.getYear());
-		} else if(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) {
-				year=new Integer(calendarHelper.getEthiopianFiscalYear());
-				quarter=new String("Q"+calendarHelper.getEthiopianFiscalQuarter());
-				month = calendarHelper.getEthiopianMonth();
-		} else if(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())){
-				year=new Integer(calendarHelper.getEthiopianYear());				
-				quarter=new String("Q"+calendarHelper.getEthiopianQuarter());
-				month = calendarHelper.getEthiopianMonth();				
+			int monthId=calendar.get(Calendar.MONTH);
+			month=Integer.toString(monthId)+"-"+dfs.getMonths()[monthId];
+			quarter= "Q"+ new Integer(calendar.get(Calendar.MONTH) / 4 + 1);
+			year=new Integer(calendar.get(Calendar.YEAR));
+		} else
+		    //AMP-2212
+		if(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) || 
+			filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) {		    	
+			EthiopianCalendar ec = ethcalendar.getEthiopianDate(calendar);
+			//AMP-2212
+			if(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue()))
+			{
+				year=new Integer(ec.ethFiscalYear);
+				quarter=new String("Q"+ec.ethFiscalQrt);
+				month=Integer.toString(ec.ethMonth)+"-"+ec.ethMonthName;
+			}//AMP-2212
+			if(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()))
+			{
+				year=new Integer(ec.ethYear);
+				quarter=new String("Q"+ec.ethQtr);
+				month=Integer.toString(ec.ethMonth)+"-"+ec.ethMonthName;
+			}
 		}
 
 		
@@ -284,9 +301,9 @@ public class CategAmountColWorker extends ColumnWorker {
 		if(perspectiveCode!=null) {
 //			we eliminate the perspective items that do not match the filter one
 			MetaInfo perspMs=this.getCachedMetaInfo(ArConstants.PERSPECTIVE,perspectiveCode);
-			if(!filter.getPerspective().getCode().equals(perspMs.getValue())) return null;
+			if(filter.getPerspective()!=null && !filter.getPerspective().getCode().equals(perspMs.getValue())) return null;
 			
-		acc.getMetaData().add(perspMs);
+			acc.getMetaData().add(perspMs);
 		}
 
 		
@@ -295,12 +312,24 @@ public class CategAmountColWorker extends ColumnWorker {
 		MetaInfo aMs = this.getCachedMetaInfo(ArConstants.YEAR, year);
 
 		
+		
+		
 		//add the newly created metainfo objects to the virtual funding object
 	
 		acc.getMetaData().add(aMs);
 		acc.getMetaData().add(qMs);
 		acc.getMetaData().add(mMs);		
 		acc.getMetaData().add(headMeta);
+		
+		if(donorGroupName!=null) {
+			MetaInfo donorGroupMs = this.getCachedMetaInfo(ArConstants.DONOR_GROUP, donorGroupName);
+			acc.getMetaData().add(donorGroupMs);
+		}
+		
+		if(donorTypeName!=null) {
+			MetaInfo donorTypeMs = this.getCachedMetaInfo(ArConstants.DONOR_TYPE_COL, donorTypeName);
+			acc.getMetaData().add(donorTypeMs);
+		}
 		
 		//set the showable flag, based on selected measures - THIS NEEDS TO BE MOVED OUT
 		//TODO: move this to postProcess!!

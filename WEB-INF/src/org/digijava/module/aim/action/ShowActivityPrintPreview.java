@@ -37,7 +37,6 @@ import java.util.TreeSet;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
-import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.FundingValidator;
@@ -730,11 +729,149 @@ public class ShowActivityPrintPreview
 
                 eaForm.setSelectedComponents(null);
                 eaForm.setCompTotalDisb(0);
-                
-                if (activity.getComponents() != null && activity.getComponents().size() > 0) {
-                	getComponents(activity, eaForm);
+                Collection componets = activity.getComponents();
+                if(componets != null && componets.size() > 0) {
+                    ArrayList comp = new ArrayList();
+                    Iterator compItr = componets.iterator();
+                    while(compItr.hasNext()) {
+                        AmpComponent temp = (AmpComponent) compItr.next();
+                        Components tempComp = new Components();
+                        tempComp.setTitle(temp.getTitle());
+                        tempComp.setComponentId(temp.getAmpComponentId());
+                        if(temp.getDescription() == null) {
+                            tempComp.setDescription(" ");
+                        } else {
+                            tempComp.setDescription(temp.getDescription()
+                                .trim());
+                        }
+                        tempComp.setCommitments(new ArrayList());
+                        tempComp.setDisbursements(new ArrayList());
+                        tempComp.setExpenditures(new ArrayList());
+
+                        //Iterator cItr = temp.getComponentFundings().iterator();
+                        Iterator cItr = ComponentsUtil.getComponentFunding(
+                            tempComp.getComponentId()).iterator();
+                        while(cItr.hasNext()) {
+                            AmpComponentFunding ampCompFund = (
+                                AmpComponentFunding) cItr
+                                .next();
+
+                            /**
+                             * If the funding wasn't created for this activity it should be ignored.
+                             */
+                            if(ampCompFund.getActivity().getAmpActivityId().longValue() != activity.getAmpActivityId().longValue()) {
+                                continue;
+                            }
+                            double disb = 0;
+                            if(ampCompFund.getAdjustmentType().intValue() ==
+                               1 &&
+                               ampCompFund.getTransactionType().intValue() ==
+                               1)
+                                disb = ampCompFund.getTransactionAmount().
+                                    doubleValue();
+                            //if(!ampCompFund.getCurrency().getCurrencyCode().equals("USD")) {
+                            //double toRate=1;
+
+                            //	disb/=ARUtil.getExchange(ampCompFund.getCurrency().getCurrencyCode(),new java.sql.Date(ampCompFund.getTransactionDate().getTime()));
+                            //}
+                            eaForm.setCompTotalDisb(eaForm.getCompTotalDisb() +
+                                disb);
+                            FundingDetail fd = new FundingDetail();
+                            fd.setAdjustmentType(ampCompFund
+                                                 .getAdjustmentType().intValue());
+                            if(fd.getAdjustmentType() == 1) {
+                                fd.setAdjustmentTypeName("Actual");
+                            } else if(fd.getAdjustmentType() == 0) {
+                                fd.setAdjustmentTypeName("Planned");
+                            }
+                            fd.setCurrencyCode(ampCompFund.getCurrency()
+                                               .getCurrencyCode());
+                            fd.setCurrencyName(ampCompFund.getCurrency()
+                                               .getCurrencyName());
+                            fd.setPerspectiveCode(ampCompFund
+                                                  .getPerspective().getCode());
+                            fd.setPerspectiveName(ampCompFund
+                                                  .getPerspective().getName());
+                            fd.setTransactionAmount(DecimalToText
+                                .ConvertDecimalToText(ampCompFund
+                                .getTransactionAmount()
+                                .doubleValue()));
+                            fd.setTransactionDate(DateConversion
+                                                  .ConvertDateToString(ampCompFund
+                                .getTransactionDate()));
+                            fd.setTransactionType(ampCompFund
+                                                  .getTransactionType().intValue());
+
+                            if(fd.getTransactionType() == 0) {
+                                tempComp.getCommitments().add(fd);
+                            } else if(fd.getTransactionType() == 1) {
+                                tempComp.getDisbursements().add(fd);
+                            } else if(fd.getTransactionType() == 2) {
+                                tempComp.getExpenditures().add(fd);
+                            }
+                        }
+
+                        //Collection phyProgess = temp.getPhysicalProgress();
+                        Collection phyProgess = ComponentsUtil.
+                            getComponentPhysicalProgress(tempComp.
+                            getComponentId());
+                        if(phyProgess != null && phyProgess.size() > 0) {
+                            Collection physicalProgress = new ArrayList();
+                            Iterator phyProgItr = phyProgess.iterator();
+                            while(phyProgItr.hasNext()) {
+                                AmpPhysicalPerformance phyPerf = (
+                                    AmpPhysicalPerformance) phyProgItr
+                                    .next();
+                                PhysicalProgress phyProg = new
+                                    PhysicalProgress();
+                                phyProg.setPid(phyPerf.getAmpPpId());
+                                phyProg.setDescription(phyPerf
+                                    .getDescription());
+                                phyProg.setReportingDate(DateConversion
+                                    .ConvertDateToString(phyPerf
+                                    .getReportingDate()));
+                                phyProg.setTitle(phyPerf.getTitle());
+                                physicalProgress.add(phyProg);
+                            }
+                            tempComp.setPhyProgress(physicalProgress);
+                        }
+                        comp.add(tempComp);
+                    }
+
+                    // Sort the funding details based on Transaction date.
+                    itr1 = comp.iterator();
+                    index = 0;
+                    while(itr1.hasNext()) {
+                        Components components = (Components) itr1.next();
+                        List list = null;
+                        if(components.getCommitments() != null) {
+                            list = new ArrayList(components
+                                                 .getCommitments());
+                            Collections.sort(list,
+                                             FundingValidator.dateComp);
+                        }
+                        components.setCommitments(list);
+                        list = null;
+                        if(components.getDisbursements() != null) {
+                            list = new ArrayList(components
+                                                 .getDisbursements());
+                            Collections.sort(list,
+                                             FundingValidator.dateComp);
+                        }
+                        components.setDisbursements(list);
+                        list = null;
+                        if(components.getExpenditures() != null) {
+                            list = new ArrayList(components
+                                                 .getExpenditures());
+                            Collections.sort(list,
+                                             FundingValidator.dateComp);
+                        }
+                        components.setExpenditures(list);
+                        comp.set(index++, components);
+                    }
+
+                    eaForm.setSelectedComponents(comp);
                 }
-                
 
                 Collection memLinks = TeamMemberUtil.getMemberLinks(tm.getMemberId());
                 Collection actDocs = activity.getDocuments();
@@ -1136,121 +1273,7 @@ public class ShowActivityPrintPreview
     }
         return mapping.findForward("forward");
     }
-
-	private void getComponents(AmpActivity activity, EditActivityForm eaForm) {
-		Collection componets = activity.getComponents();
-		List<Components<FundingDetail>> selectedComponents = new ArrayList<Components<FundingDetail>>();
-		Iterator compItr = componets.iterator();
-		while (compItr.hasNext()) {
-			AmpComponent temp = (AmpComponent) compItr.next();
-			Components<FundingDetail> tempComp = new Components<FundingDetail>();
-			tempComp.setTitle(temp.getTitle());
-			tempComp.setComponentId(temp.getAmpComponentId());
-			if (temp.getDescription() == null) {
-				tempComp.setDescription(" ");
-			} else {
-				tempComp.setDescription(temp.getDescription().trim());
-			}
-			tempComp.setCode(temp.getCode());
-			tempComp.setUrl(temp.getUrl());
-
-			tempComp.setCommitments(new ArrayList<FundingDetail>());
-			tempComp.setDisbursements(new ArrayList<FundingDetail>());
-			tempComp.setExpenditures(new ArrayList<FundingDetail>());
-
-
-			Collection<AmpComponentFunding> fundingComponentActivity = ActivityUtil.getFundingComponentActivity(
-					tempComp.getComponentId(), activity.getAmpActivityId());
-			Iterator cItr = fundingComponentActivity.iterator();
-			while (cItr.hasNext()) {
-				AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr
-						.next();
-
-				double disb = 0;
-				if (ampCompFund.getAdjustmentType().intValue() == 1
-					&& ampCompFund.getTransactionType().intValue() == 1)
-					disb = ampCompFund.getTransactionAmount().doubleValue();
-
-				eaForm.setCompTotalDisb(eaForm.getCompTotalDisb() + disb);
-				FundingDetail fd = new FundingDetail();
-				fd.setAdjustmentType(ampCompFund.getAdjustmentType().intValue());
-				if (fd.getAdjustmentType() == 1) {
-					fd.setAdjustmentTypeName("Actual");
-				} else if (fd.getAdjustmentType() == 0) {
-					fd.setAdjustmentTypeName("Planned");
-				}
-				fd.setAmpComponentFundingId(ampCompFund.getAmpComponentFundingId());
-				fd.setCurrencyCode(ampCompFund.getCurrency().getCurrencyCode());
-				fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
-				fd.setPerspectiveCode(ampCompFund.getPerspective().getCode());
-				fd.setPerspectiveName(ampCompFund.getPerspective().getName());
-				fd.setTransactionAmount(FormatHelper.formatNumber(ampCompFund.getTransactionAmount().doubleValue()));
-				fd.setTransactionDate(DateConversion.ConvertDateToString(ampCompFund.getTransactionDate()));
-				fd.setTransactionType(ampCompFund.getTransactionType().intValue());
-				if (fd.getTransactionType() == 0) {
-					tempComp.getCommitments().add(fd);
-				} else if (fd.getTransactionType() == 1) {
-					tempComp.getDisbursements().add(fd);
-				} else if (fd.getTransactionType() == 2) {
-					tempComp.getExpenditures().add(fd);
-				}
-			}
-
-			ComponentsUtil.calculateFinanceByYearInfo(tempComp,fundingComponentActivity);
-
-			Collection<AmpPhysicalPerformance> phyProgress = ActivityUtil
-						.getPhysicalProgressComponentActivity(tempComp.getComponentId(), activity.getAmpActivityId());
-
-			if (phyProgress != null && phyProgress.size() > 0) {
-				Collection physicalProgress = new ArrayList();
-				Iterator phyProgItr = phyProgress.iterator();
-				while (phyProgItr.hasNext()) {
-					AmpPhysicalPerformance phyPerf = (AmpPhysicalPerformance) phyProgItr
-							.next();
-					PhysicalProgress phyProg = new PhysicalProgress();
-					phyProg.setPid(phyPerf.getAmpPpId());
-					phyProg.setDescription(phyPerf.getDescription());
-					phyProg.setReportingDate(DateConversion
-							.ConvertDateToString(phyPerf.getReportingDate()));
-					phyProg.setTitle(phyPerf.getTitle());
-					physicalProgress.add(phyProg);
-				}
-				tempComp.setPhyProgress(physicalProgress);
-			}
-
-			selectedComponents.add(tempComp);
-		}
-
-
-		// Sort the funding details based on Transaction date.
-		Iterator compIterator = selectedComponents.iterator();
-		int index = 0;
-		while (compIterator.hasNext()) {
-			Components components = (Components) compIterator.next();
-			List list = null;
-			if (components.getCommitments() != null) {
-				list = new ArrayList(components.getCommitments());
-				Collections.sort(list, FundingValidator.dateComp);
-			}
-			components.setCommitments(list);
-			list = null;
-			if (components.getDisbursements() != null) {
-				list = new ArrayList(components.getDisbursements());
-				Collections.sort(list, FundingValidator.dateComp);
-			}
-			components.setDisbursements(list);
-			list = null;
-			if (components.getExpenditures() != null) {
-				list = new ArrayList(components.getExpenditures());
-				Collections.sort(list, FundingValidator.dateComp);
-			}
-			components.setExpenditures(list);
-			selectedComponents.set(index++, components);
-		}
-
-		eaForm.setSelectedComponents(selectedComponents);
-	}
-}
+  }
   
 
 

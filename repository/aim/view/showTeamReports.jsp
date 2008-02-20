@@ -214,6 +214,8 @@ function confirmFunc() {
                                                                          %>
                                                                         
                                                                      </li>
+
+
 													 				<logic:equal name="report" property="drilldownTab" value="true">
 															 			<li>
 														 					<digi:trn key="aim:typeDrilldownTab">Desktop Tab</digi:trn>
@@ -237,7 +239,7 @@ function confirmFunc() {
 														 	if(tm!=null)
 														 	{ %>
 
-															<td>
+															<td>  
 																<p style="white-space: nowrap">
 																<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																<c:set target="${urlParams}" property="rid">

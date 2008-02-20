@@ -92,7 +92,7 @@ public class TrailCellsPDF extends PDFExporter {
 				result+=grd.getName();
 			else result+=translatedName;
 				
-			PdfPCell pdfc = new PdfPCell(new Paragraph(result,totalFont));
+			PdfPCell pdfc = new PdfPCell(new Paragraph(result+" ("+grd.getTotalUniqueRows()+")",totalFont));
 			pdfc.setColspan(grd.getSourceColsCount().intValue());
 			table.addCell(pdfc);
 			

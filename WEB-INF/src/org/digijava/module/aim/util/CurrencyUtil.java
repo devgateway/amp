@@ -1019,7 +1019,7 @@ public class CurrencyUtil {
 	 * Used in addfunding.
 	 * @param currencyCode currency Code
 	 * @return boolean
-	 * @author Irakli Kobiashvili
+	 * 
 	 */
 	public static Boolean isRate(String currencyCode) throws AimException {
 		Session session = null;
@@ -1032,7 +1032,9 @@ public class CurrencyUtil {
 			todate = cal.getTime();
 			cal.add(Calendar.YEAR, -1);	  
 			fromdate = cal.getTime();
-			
+			if (currencyCode.equalsIgnoreCase("USD") ){
+				return true;
+			}
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select f.exchangeRate from "
 					+ AmpCurrencyRate.class.getName()

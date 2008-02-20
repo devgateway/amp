@@ -79,9 +79,9 @@ function editIndicator(id,parentid,type){
   openURLinWindow("<%=viewEditIndicator%>?id=" + id + "&parentid="+parentid+"&type=program&event=edit",500, 300);
 }
 
-function addData(id,name){
+function addData(id){
   <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do" />
-  openURLinWindow("<%= addEditIndicator %>?parent=" + id + "&indame="+name,575, 300);
+  openURLinWindow("<%= addEditIndicator %>?parent=" + id,575, 300);
 }
 
 function checkValues(){
@@ -369,7 +369,7 @@ function closeWindow() 
 												<c:set target="${urlParams}" property="themeId">
 														${aimThemeForm.themeId}
 												</c:set>
-	
+
 												<bean:define id="translation">
 														<digi:trn key="aim:clickToEditPrgIndicator">Click here to Edit Program Indicator</digi:trn>
 												</bean:define>
@@ -381,7 +381,7 @@ function closeWindow() 
 											-->
 									</td>
                   					<td height="10%" width="9%" bgcolor="#f4f4f2" nowrap="nowrap">
-												<a href="javascript:addData('${prgIndicatorItr.indicatorId}','${prgIndicatorItr.name}')">	Add/Edit data</a>
+												<a href="javascript:addData('${prgIndicatorItr.indicatorId}')">	Add/Edit data</a>
 									</td>
 									<!-- 
 									<td  bgcolor="#f4f4f2">

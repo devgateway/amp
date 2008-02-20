@@ -22,6 +22,7 @@ import org.digijava.module.aim.form.TeamActivitiesForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class GetTeamActivities
@@ -60,6 +61,8 @@ public class GetTeamActivities
 
             int numRecords = Constants.NUM_RECORDS;
             int page = 0;
+            
+            RepairDbUtil.repairDb();
 
             if(request.getParameter("id") != null) {
                 id = new Long(Long.parseLong(request.getParameter("id")));

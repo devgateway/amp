@@ -10,6 +10,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+
+
 <bean:define id="reportMeta" name="reportMeta"
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
 	toScope="page" />
@@ -21,11 +23,12 @@
 
 <html:hidden property="ampReportId"/>
 	<table>
+		
 		<tr>
 			<td colspan="4"><b><digi:trn key="rep:filter:projectid">Project ID</digi:trn> </b></td>
 		</tr>
 		<tr>
-			<td colspan="4">
+			<td colspan="3">
 			<html:text  property="text" style="width: 400px" styleClass="inp-text" onchange="checkProjectId(this)"/>
 			</td>
 			<td colspan="1"><font color="red">*<digi:trn key="aim:chanheFilters:numericAmpId">Amp Id must contain only numbers</digi:trn></font></td>

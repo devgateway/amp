@@ -30,10 +30,12 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 /**
  * 
@@ -107,6 +109,15 @@ public class ViewNewAdvancedReport extends Action {
 			filter=new AmpARFilter();
 			httpSession.setAttribute(ArConstants.REPORTS_FILTER,filter);
 			filter.readRequestData(request);
+		}
+
+		if (tm !=null && Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||
+				"Donor".equalsIgnoreCase(tm.getTeamType())){
+			filter.setApproved(true);
+			filter.setDraft(true);
+		}else{
+			filter.setApproved(false);
+			filter.setDraft(false);
 		}
 		
 		

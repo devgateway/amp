@@ -13,7 +13,6 @@ import java.util.Set;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.ObjectNotFoundException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
@@ -24,7 +23,6 @@ import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpPages;
-import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -66,7 +64,9 @@ public final class AdvancedReportUtil {
 			AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, ampTeamId);
 			
 			
-			if(teamLead == true&&(ampReports.getOwnerId()==null||(ampReports.getOwnerId().getAmpTeamMemId().equals(ampReports.getOwnerId().getAmpTeam().getTeamLead().getAmpTeamMemId()))))
+			if(teamLead == true&&(ampReports.getOwnerId()==null||(ampReports.getOwnerId().getAmpTeam().getTeamLead()!=null && 
+					ampReports.getOwnerId().getAmpTeamMemId().equals(ampReports.getOwnerId().getAmpTeam().getTeamLead().getAmpTeamMemId())))
+					)
 			{
 				//logger.info(teamMember.getMemberName() + " is Team Leader ");
 				AmpTeamReports ampTeamReports = new AmpTeamReports();

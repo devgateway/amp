@@ -41,7 +41,7 @@ public class ShowAddTeamMember extends Action {
 				upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 				upMemForm.setPermissions("default");
 				upMemForm.setFromPage(frmPage);
-				upMemForm.setallUser(AmpUserUtil.getAllUsers());
+				upMemForm.setallUser(AmpUserUtil.getAllUsers(false));
 				if (frmPage == 1) {
 					return mapping.findForward("showAddFromAdmin");	
 				} else {

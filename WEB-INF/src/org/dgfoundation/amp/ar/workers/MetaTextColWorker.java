@@ -38,13 +38,16 @@ public class MetaTextColWorker extends TextColWorker {
 			mtc.getMetaData().add(new MetaInfo(ArConstants.DRAFT,rs.getBoolean(4))); else
 		if(columnName.equals("National Planning Objectives")) 
 			mtc.getMetaData().add(new MetaInfo(ArConstants.NPO_PERCENTAGE,rs.getDouble(4))); else
-		if(columnName.equals("Sector")) 
+		if(columnName.equals("Sector") || columnName.equals("Sub-Sector")) 
 			mtc.getMetaData().add(new MetaInfo(ArConstants.SECTOR_PERCENTAGE,rs.getDouble(4))); else
-		if(columnName.equals("Region")) 
+		if(columnName.equals("Region") && generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE)
 			mtc.getMetaData().add(new MetaInfo(ArConstants.LOCATION_PERCENTAGE,rs.getDouble(4))); else
-		if(columnName.equals("Componente")) 
+		if(columnName.equals("Componente") && generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE) 
 			mtc.getMetaData().add(new MetaInfo(ArConstants.COMPONENTE_PERCENTAGE,rs.getDouble(4))); 
-
+		if(columnName.equals("Componente") && generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE) 
+			mtc.getMetaData().add(new MetaInfo(ArConstants.COMPONENTE_PERCENTAGE,rs.getDouble(4))); 
+		if((columnName.equals("Primary Program") || columnName.equals("Secondary Program")) && generator.getReportMetadata().getType()==ArConstants.DONOR_TYPE) 
+			mtc.getMetaData().add(new MetaInfo(ArConstants.PROGRAM_PERCENTAGE,rs.getDouble(4))); 
 		
 		return mtc;
 	}

@@ -460,7 +460,8 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Signature of Contract" feature="Contracting Tab"></field:display>
 <field:display name="Contract Organization" feature="Contracting Tab"></field:display>
 <field:display name="Contract Completion" feature="Contracting Tab"></field:display>
-<field:display name="Status" feature="Contracting Tab"></field:display>
+<field:display name="Contracting Status" feature="Contracting"></field:display>
+<field:display name="Contracting Tab Status" feature="Contracting Tab"></field:display>
 <field:display name="Total EC Contribution" feature="Contracting Tab"></field:display>
 <field:display name="IB" feature="Contracting Tab"></field:display>
 <field:display name="INV" feature="Contracting Tab"></field:display>
@@ -478,7 +479,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Signature of Contract" feature="Contracting"></field:display>
 <field:display name="Contract Organization" feature="Contracting"></field:display>
 <field:display name="Contract Completion" feature="Contracting"></field:display>
-<field:display name="Status" feature="Contracting Tab"></field:display>
+<field:display name="Contracting Tab Status" feature="Contracting Tab"></field:display>
 <field:display name="Total EC Contribution" feature="Contracting"></field:display>
 <field:display name="IB" feature="Contracting"></field:display>
 <field:display name="INV" feature="Contracting"></field:display>

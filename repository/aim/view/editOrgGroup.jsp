@@ -11,7 +11,7 @@
 <script language="JavaScript">
 
 	function msg() {
-          var msg='<digi:trn key="aim:deleteOrganizationGroup">Are you sure about deleting this Organization Group ?</digi:trn>'
+          var msg="<digi:trn key="aim:deleteOrganizationGroup">Are you sure about deleting this Organization Group ?</digi:trn>"
 		if (confirm(msg)) {
 			document.aimAddOrgGroupForm.action.value = "delete";
 			document.aimAddOrgGroupForm.submit();

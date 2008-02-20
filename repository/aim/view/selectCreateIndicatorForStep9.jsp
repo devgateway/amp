@@ -167,7 +167,7 @@
 																	<logic:notEmpty name="aimIndicatorForm" property="nondefaultindicators">
 																		<tr>
 																			<td bgcolor="#f4f4f2" align="right" valign="center">
-																				<digi:trn key="aim:IndicatorName">Indicator Name</digi:trn>
+																				Indicator Name
 																			</td>
 																			<td bgcolor="#f4f4f2" align="left">
 																				<html:select property="selectedIndicators" styleClass="inp-text" 
@@ -222,7 +222,7 @@
 																bgcolor="#f4f4f2">
 																	<tr>
 																		<td bgcolor="#f4f4f2" align="right">
-																			<digi:trn key="aim:GiveKeyword">Give a Keyword</digi:trn>
+																			Give a Keyword
 																		</td>
 																		<td bgcolor="#f4f4f2" align="left">
 																			<html:text property="searchkey" size="20" styleClass="inp-text"/>&nbsp;&nbsp;
@@ -257,7 +257,7 @@
 																		</td></tr>
 																		<tr>
 																			<td bgcolor="#f4f4f2" align="center" colspan="3">
-																				<input class="buton" type="	on" name="addFromSearchList" value=" Add " onclick="addIndicatorTL(2)">
+																				<input class="buton" type="button" name="addFromSearchList" value=" Add " onclick="addIndicatorTL(2)">
 																				<html:button  styleClass="dr-menu" property="addFromSearchList"  onclick="addIndicatorTL(2)">
 																					<digi:trn key="btn:add">Add</digi:trn> 
 																				</html:button>

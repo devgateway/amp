@@ -76,7 +76,7 @@ function showUserProfile(id){
 										</td></tr>
 										<tr><td>
 											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
-
+													<digi:errors/>
 													<logic:empty name="aimTeamMemberForm" property="teamMembers">
 														<tr bgcolor="#ffffff">
 															<td colspan="3" align="center">

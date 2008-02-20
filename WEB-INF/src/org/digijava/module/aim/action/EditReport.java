@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -78,14 +79,20 @@ public class EditReport extends Action {
 						Collections.sort( formBean.getColumnsSelection() );
 					}
 					else {
-						Set addedColumns			= ampreport.getColumns();
-						Iterator iterator			= addedColumns.iterator();
-						Collection collColumns		= new ArrayList();
+						Set addedColumns								= ampreport.getColumns();
+						Iterator iterator								= addedColumns.iterator();
+						Collection collColumns							= new ArrayList();
+						ArrayList<AmpReportColumn> reportColumnsOrdered	= new ArrayList<AmpReportColumn>();
+						
+						reportColumnsOrdered.addAll(addedColumns);
+						Collections.sort(reportColumnsOrdered);
+						iterator	= reportColumnsOrdered.iterator();
 						while ( iterator.hasNext() ) {
 							AmpReportColumn ampReportColumn		= (AmpReportColumn) iterator.next();
 							AmpColumns ampColumns				= ampReportColumn.getColumn();
 							collColumns.add( ampColumns );
 						}
+						
 						formBean.setAddedColumns( collColumns );
 					}
 					
@@ -131,19 +138,22 @@ public class EditReport extends Action {
 						Collections.sort( formBean.getHierarchiesSelection() );
 					}
 					else {
-						Set<AmpReportHierarchy> hierarchies	= ampreport.getHierarchies();
-						List<AmpReportHierarchy> sortedCollHierarchies 		= new ArrayList<AmpReportHierarchy>();
-						sortedCollHierarchies.addAll(hierarchies);
-						Collections.sort(sortedCollHierarchies);
-						Iterator<AmpReportHierarchy> hierarchiesIterator	= sortedCollHierarchies.iterator();
-						List<AmpColumns> collHierarchies 		= new ArrayList<AmpColumns>();
-						while ( hierarchiesIterator.hasNext() ) {
-							AmpReportHierarchy ampReportHierarchie	= hierarchiesIterator.next();
+						Set dbHierarchies				= ampreport.getHierarchies();
+						Iterator dbHierarchiesIterator; // dbHierarchies.iterator();
+						Collection collHierarchies 		= new ArrayList();
+						ArrayList sortedHierchies		= new ArrayList();
+						sortedHierchies.addAll(dbHierarchies);
+						Collections.sort(sortedHierchies);
+						dbHierarchiesIterator=sortedHierchies.iterator();
+						while ( dbHierarchiesIterator.hasNext() ) {
+							Object next								= dbHierarchiesIterator.next();
+	//						logger.info( "Object in Hierarchie collection is:" + next.getClass() );
+							AmpReportHierarchy ampReportHierarchie	= (AmpReportHierarchy) next;
 							collHierarchies.add ( ampReportHierarchie.getColumn() );
-						}						
+						}
 						formBean.setColumnHierarchie( collHierarchies );
 					}
-//				    END - Getting Column Hierarchies 
+//					 END - Getting Column Hierarchies 
 					if (isXLevelEnabled){
 						formBean.setActivityLevel( ampreport.getActivityLevel().getId() );
 						

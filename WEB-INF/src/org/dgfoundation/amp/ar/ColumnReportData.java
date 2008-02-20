@@ -27,10 +27,13 @@ import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
  */
 public class ColumnReportData extends ReportData {
 	
-    	@Override
+    @Override
 	public int getVisibleRows() {
-    	    Iterator i=items.iterator();
     	    int ret=1; //one is for the title, one is for totals
+        	if(this.getReportMetadata().getHideActivities()!=null && this.getReportMetadata().getHideActivities())
+    			return ret;
+
+    	    Iterator i=items.iterator();
     	    while (i.hasNext()) {
 		Column element = (Column) i.next();
 		int visCol=element.getVisibleRows();

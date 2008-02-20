@@ -31,6 +31,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
@@ -47,9 +48,7 @@ import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpMECurrValHistory;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpNotes;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -61,10 +60,12 @@ import org.digijava.module.aim.dbentity.AmpReportCache;
 import org.digijava.module.aim.dbentity.AmpReportLocation;
 import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpReportSector;
+import org.digijava.module.aim.dbentity.AmpSISINProyect;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.EUActivity;
+import org.digijava.module.aim.dbentity.IPAContract;
+import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -87,9 +88,6 @@ import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.cms.dbentity.CMSContentItem;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import org.digijava.module.aim.dbentity.IPAContract;
-import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 
 /**
  * ActivityUtil is the persister class for all activity related
@@ -368,14 +366,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         	oldActivity.getRegionalFundings().addAll(activity.getRegionalFundings());
         if (activity.getInternalIds() != null)
         	oldActivity.getInternalIds().addAll(activity.getInternalIds());
-        if (activity.getLocations() != null){
-        	for (Iterator locIter = col.iterator(); locIter.hasNext();) {
-				AmpActivityLocation actLoc = (AmpActivityLocation) locIter.next();
-				actLoc.setActivity(oldActivity);
-				session.save(actLoc);
-			}
+        if (activity.getLocations() != null)
         	oldActivity.getLocations().addAll(activity.getLocations());
-        }
+       
         if (activity.getOrgrole() != null)
         	oldActivity.getOrgrole().addAll(activity.getOrgrole());
         if (activity.getReferenceDocs() != null)
@@ -492,6 +485,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         oldActivity.setVote(activity.getVote());
         oldActivity.setActivityCreator(activity.getActivityCreator());
         oldActivity.setDraft(activity.getDraft());
+        oldActivity.setGovAgreementNumber(activity.getGovAgreementNumber());
 
       }
 
@@ -643,6 +637,31 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 			  }
 	        }
 	      }
+
+
+	      if (ampTempComp.getSisinProyect() != null) {
+			AmpSISINProyect sisinProyect = ampTempComp
+					.getSisinProyect();
+			sisinProyect.setAmpActivityId(activity.getAmpActivityId());
+			AmpSISINProyect sisinProyectOld = ComponentsUtil
+					.getSisinProyect(sisinProyect.getAmpActivityId(),
+							sisinProyect.getComponentId());
+			if (sisinProyectOld == null) {
+				session.save(sisinProyect);
+			} else {
+				sisinProyectOld.setAgencysource(sisinProyect.getAgencysource());
+				sisinProyectOld.setFinancingsource(sisinProyectOld.getFinancingsource());
+				sisinProyectOld.setLocalization(sisinProyectOld.getLocalization());
+				sisinProyectOld.setProgramcode(sisinProyectOld.getProgramcode());
+				sisinProyectOld.setSisincode(sisinProyectOld.getSisincode());
+				sisinProyectOld.setSisinsector(sisinProyectOld.getSisinsector());
+				sisinProyectOld.setStage(sisinProyectOld.getStage());
+
+				session.saveOrUpdate(sisinProyectOld);
+			}
+		  }
+
+
 
 
 	      Collection<AmpPhysicalPerformance> phyProgress = DbUtil.getAmpPhysicalProgress(activityId,ampTempComp.getComponentId());
@@ -874,8 +893,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             queryString += " and con.id not in (" + ids + ")";
         }
         session.delete(queryString);
-      tx.commit(); // commit the transcation
-      logger.debug("Activity saved");
+			tx.commit(); // commit the transcation
+			logger.debug("Activity saved");
     }
     catch (Exception ex) {
       logger.error("Exception from saveActivity().", ex);
@@ -904,10 +923,11 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
   }
 
   /**
-   * Return all reference documents for Activity
-   * @param activityId
-   * @return
-   */
+	 * Return all reference documents for Activity
+	 * 
+	 * @param activityId
+	 * @return
+	 */
   @SuppressWarnings("unchecked")
   public static Collection<AmpActivityReferenceDoc> getReferenceDocumentsFor(Long activityId) throws DgException{
 	  String oql="select refdoc from "+AmpActivityReferenceDoc.class.getName()+" refdoc "+
@@ -1230,6 +1250,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 
         activity.setBudget(ampActivity.getBudget());
         activity.setUpdatedBy(ampActivity.getUpdatedBy());
+        activity.setGovAgreementNumber(ampActivity.getGovAgreementNumber());
 
         activity.setDnrCntTitle(ampActivity.getDnrCntTitle());
         activity.setDnrCntOrganization(ampActivity.getDnrCntOrganization());
@@ -1308,7 +1329,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         if (ampActivity.getActivityCreator() != null) {
           activity.setCreatedBy(ampActivity.getActivityCreator());
         }
-      //get lessons learned
+        //get lessons learned
         if(ampActivity.getLessonsLearned()!=null) {
         	activity.setLessonsLearned(ampActivity.getLessonsLearned());
         }
@@ -1362,13 +1383,13 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setCurrCompDate(DateConversion.
                                  ConvertDateToString(ampAct.
             getActualCompletionDate()));
-        activity.setPropCompDate(DateConversion.ConvertDateToString(ampAct.getProposedCompletionDate()));
         activity.setOrigAppDate(DateConversion.
                                 ConvertDateToString(ampAct.
             getProposedApprovalDate()));
         activity.setOrigStartDate(DateConversion.
                                   ConvertDateToString(ampAct.
             getProposedStartDate()));
+        activity.setPropCompDate(DateConversion.ConvertDateToString(ampAct.getProposedCompletionDate()));
         activity.setRevAppDate(DateConversion.
                                ConvertDateToString(ampAct.getActualApprovalDate()));
         activity.setRevStartDate(DateConversion.
@@ -1586,17 +1607,15 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                 if (ampLoc.getAmpWoreda() != null) {
                   loc.setWoreda(ampLoc.getAmpWoreda().getName());
                 }
-                Float locationPercentage = actLoc.getLocationPercentage();
-				loc.setPercent(FormatHelper.formatNumber(locationPercentage == null ? 0 : locationPercentage.doubleValue()));
+                loc.setPercent(DecimalToText.ConvertDecimalToText(actLoc.getLocationPercentage()));
                 locColl.add(loc);
             }
             
           }
         }
         activity.setLocations(locColl);
-        
-      //set lessons learned
-        activity.setLessonsLearned(ampAct.getLessonsLearned());
+        //set lessons learned
+        //activity.setLessonsLearned(ampAct.getLessonsLearned());
 
         activity.setProjectIds(ampAct.getInternalIds());
 
@@ -2339,6 +2358,10 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     }
     return activity;
   }
+   /*
+   * get the  the Contracts for Activity
+   * 
+   */
   
   public static List getIPAContracts(Long activityId) {
     Session session = null;
@@ -2362,7 +2385,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     }
     
     return  contrcats ;
-  }
+  } 
 
   /*
    * get the list of all the activities
@@ -2382,7 +2405,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       logger.debug("the size of the ampActivity : " + col.size());
     }
     catch (Exception e1) {
-      logger.error("Could not retrieve the activities list");
+      logger.error("Could not retrieve the activities list from getallactivitieslist");
       e1.printStackTrace(System.out);
     }
     finally {
@@ -2417,7 +2440,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       logger.debug("the size of the ampActivity : " + col.size());
     }
     catch (Exception e1) {
-      logger.error("Could not retrieve the activities list", e1);
+      logger.error("Could not retrieve the activities list from getallactivitiesbyname", e1);
+      e1.printStackTrace();
     }
     finally {
       if (session != null) {
@@ -2516,16 +2540,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           }
         }
 
-        /* delete closing dates */
-        Set closeDates = ampAct.getClosingDates();
-        if (closeDates != null) {
-          Iterator dtItr = closeDates.iterator();
-          while (dtItr.hasNext()) {
-            AmpActivityClosingDates date = (AmpActivityClosingDates) dtItr.next();
-            session.delete(date);
-          }
-        }
-
+  
         /* delete issues,measures,actors */
         Set issues = ampAct.getIssues();
         if (issues != null) {
@@ -2605,6 +2620,22 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           }
         }
 
+
+        /* delete the activity closing dates */
+        Set closingDates = ampAct.getClosingDates();
+        if (closingDates != null) {
+          Iterator closingDatesItr = closingDates.iterator();
+          while (closingDatesItr.hasNext()) {
+            AmpActivityClosingDates closingDatesItem = (AmpActivityClosingDates) closingDatesItr.next();
+            session.delete(closingDatesItem);
+            
+          }
+        }
+        
+       
+        
+
+        
         //	 delete all previous comments
         ArrayList col = org.digijava.module.aim.util.DbUtil.
             getAllCommentsByActivityId(ampAct.getAmpActivityId());
@@ -3037,7 +3068,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         public int compare(Object obj1, Object obj2) {
             AmpActivity act1 = (AmpActivity) obj1;
             AmpActivity act2 = (AmpActivity) obj2;
-            return act1.getName().compareTo(act2.getName());
+            return (act1.getName()!=null && act2.getName()!=null)?act1.getName().compareTo(act2.getName()):0; 
         }
     }
 
@@ -3120,5 +3151,22 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 		retVal=countryCode.toUpperCase()+"/"+lastId;		
 		return retVal;
 	}
-
+	
+	public static Collection getActivitiesRelatedToAmpTeamMember(Session session, Long ampTeamMemberId) {
+		  try {
+	            String queryStr	= "SELECT a FROM " + AmpActivity.class.getName() + " a WHERE " +
+	            			"(a.activityCreator=:atmId)  OR  (a.updatedBy=:atmId) OR (:atmId IN ELEMENTS(a.member))";
+	            Query qry 		= session.createQuery(queryStr);
+	            qry.setLong("atmId", ampTeamMemberId);
+	            
+	            return qry.list();
+	            
+		  }
+		  catch (Exception ex) {
+	        ex.printStackTrace();
+	        logger.error("There was an error getting all activities related to AmpTeamMember " + ampTeamMemberId);
+	        return null;
+		  }
+	}
+	
 } // End

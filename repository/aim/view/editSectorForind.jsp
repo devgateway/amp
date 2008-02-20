@@ -259,7 +259,6 @@ function checkNumeric(objName,comma,period,hyphen)
 		</table>
 	</td></tr>
 </table>
-
 <!-- 
 <br>
 <br>

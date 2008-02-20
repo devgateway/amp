@@ -21,9 +21,10 @@ import java.util.Hashtable;
  * 
  */
 public abstract class Viewable implements Cloneable {
-	
 
-    
+
+		public abstract ReportData getNearestReportData();
+	
     	/**
     	 * required by : pagination
     	 * implemented by each subclass to return the number of rows that are displayed for this item.

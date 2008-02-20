@@ -9,7 +9,6 @@
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
-
 <jsp:include page="scripts/newCalendar.jsp" flush="true" />
 
 <script language="JavaScript" type="text/javascript">
@@ -18,7 +17,10 @@
       var fna=aimEditActivityForm.funAmount.value;
       var fnd=aimEditActivityForm.funDate.value;
       if(fna==""){
-        alert("Please enter amount");
+        <c:set var="message">
+        <digi:trn key="aim:enterAmount">Please enter amount</digi:trn>
+        </c:set>
+        alert("${message}");
         return false;
       }else if(fna.match("[^0-9,]")!=null){
         <c:set var="message">
@@ -28,7 +30,10 @@
         return false;
       }
       if(fnd==""){
-        alert("Please select date");
+        <c:set var="message">
+        <digi:trn key="aim:selectDate">Please select date</digi:trn>
+        </c:set>
+        alert("${message}");
         return false;
       }
       <digi:context name="fundAdded" property="context/module/moduleinstance/addProposedFunding.do" />;
@@ -44,14 +49,7 @@
     function unload(){
       return true;
     }
-
-	function checkExchange(code){
-		
-	
-	
-	}
 </script>
-
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addProposedFunding.do?edit=true" method="post">
   <input type="hidden" name="edit" value="true">
@@ -87,33 +85,36 @@
                           <b><font color="white"><digi:trn key="aim:PlannedFIE">Planned</digi:trn></font></b>                        
                          </td>
                         <td align="center" valign="middle" width="100">
-                          <b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b>                        
+                          <b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b>
                         </td>
                         <td align="center" valign="middle" width="100">
                           <b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b>
                           <img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" />
                         </td>
                         <td align="center" valign="middle" width="120" colspan="2">
-                          <b><font color="white"><digi:trn key="aim:PlannedFIE">Planned</digi:trn><br><digi:trn key="aim:commitments">Commitment</digi:trn> <digi:trn key="aim:DateFIE">Date</digi:trn></font></b>                        </td>
+                          <b><font color="white"><digi:trn key="aim:PlannedFIE">Planned</digi:trn><br><digi:trn key="aim:commitments">Commitment</digi:trn> <digi:trn key="aim:DateFIE">Date</digi:trn></font></b>
+                        </td>
                       </tr>
                       <tr>
                         <td valign="center" align="center">
-                        <digi:trn key="aim:PlannedFIE">Planned</digi:trn>                        </td>
+                        <digi:trn key="aim:PlannedFIE">Planned</digi:trn>
+                        </td>
                         <td valign="center" align="center">
-                          <html:text property="proProjCost.funAmount" styleId="funAmount" style="width:100px;"/>                        </td>
+                          <html:text property="proProjCost.funAmount" styleId="funAmount" style="width:100px;"/>
+                        </td>
                         <td valign="center" align="center">
-                          	<html:select property="proProjCost.currencyCode" styleClass="inp-text" onchange="">
+                          	<html:select property="proProjCost.currencyCode" styleClass="inp-text">
                             	<html:optionsCollection name="aimEditActivityForm" property="validcurrencies" value="currencyCode" label="currencyName" style="width:100%;"/>
                         	</html:select>
                         </td>
                         <td valign="center" align="center">
-                          <html:text property="proProjCost.funDate" styleId="funDate" readonly="true" style="width:100px;"/>                        
+                          <html:text property="proProjCost.funDate" styleId="funDate" readonly="true" style="width:100px;"/>
                         </td>
                         <td valign="center" align="center">
 							<a id="date1" href='javascript:pickDateByIdDxDy("date1","funDate",210,80)'>
-								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>							
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 							</a>
-						</td>
+                        </td>
                       </tr>
                     </table>
                   </td>

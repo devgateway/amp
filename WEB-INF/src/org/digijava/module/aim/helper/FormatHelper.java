@@ -15,66 +15,106 @@ public class FormatHelper {
 
     private static Logger logger = Logger.getLogger(FormatHelper.class);
 
-    	/**
-         * Return an string based on Global Setting Number Format
-         * @param number
-         * @return
-         */
-    public static String formatNumber(Double number) {
-	
-	String format = "###,###,###,###.##";
-	String decimalSeparator = ".";
-	String groupSeparator = ",";
 
-	// get setting from global setting
-	format = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
-	decimalSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR);
-	groupSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR);
+           /**                                                                                                                                                  
+            * Parse a String tring based on Global Setting Format to Double                                                                                     
+            *                                                                                                                                                   
+            * @param number                                                                                                                                     
+            * @return                                                                                                                                           
+            * @throws ParseException                                                                                                                            
+            */                                                                                                                                                  
+           public static Double parseDouble(String number) {                                                                              
+                                             
+                   if(number==null) return null;
+                   String format = "###,###,###,###.##";                                                                                                        
+                   String decimalSeparator = ".";                                                                                                               
+                   String groupSeparator = ",";                                                                                                                 
+                                                                                                                                                                
+                   // get setting from global setting                                                                                                           
+                   format = FeaturesUtil                                                                                                                        
+                                  .getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);                                                               
+                   decimalSeparator = FeaturesUtil                                                                                                              
+                                   .getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR);                                                           
+                   groupSeparator = FeaturesUtil                                                                                                                
+                                  .getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR);                                                             
+                                                                                                                                                                
+                   Double result;                                                                                                                               
+                   DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();                                                                                
+                   decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));                                                                                  
+                   decSymbols.setGroupingSeparator(groupSeparator.charAt(0));                                                                                   
+                   DecimalFormat formater = new DecimalFormat(format, decSymbols);                                                                              
+                   try {                                                                                                                                        
+                           result = formater.parse(number).doubleValue();                                                                                       
+                   } catch (ParseException e) {                                                                                                                 
+                           logger.error("Error parsing String to double", e);     
+                           return null;
+                   }                                                                                                                                            
+                   return result;                                                                                                                               
+           }                                                                                                                                                    
+                                                                                                                                                                
+           public static String getDifference(String one,String two){                                                                                           
+                   return "";                                                                                                                                   
+            }                      
+    
+    public static String formatNumber(double nr) {
+    	
+    	String format = "###,###,###,###.##";
+    	String decimalSeparator = ".";
+    	String groupSeparator = ",";
 
-	String result;
-	if (number == null) {
-	    number = new Double(0d);
-	}
+    	// get setting from global setting
+    	format = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
+    	decimalSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR);
+    	groupSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR);
+    	Double number;
+    	String result;
+    	if (nr == 0) {
+    	    number = new Double(0d);
+    	}
+    	else number = new Double(nr);
 
-	DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();
-	decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));
-	decSymbols.setGroupingSeparator(groupSeparator.charAt(0));
-	DecimalFormat formater = new DecimalFormat(format, decSymbols);
-	result = formater.format(number);
-	return result;
-    }
-
-    /**
-         * Parse a String tring based on Global Setting Format to Double
-         * 
-         * @param number
-         * @return
-         * @throws ParseException
-         */
-    public static Double parseDouble(String number) {
-
-	String format = "###,###,###,###.##";
-	String decimalSeparator = ".";
-	String groupSeparator = ",";
-
-	// get setting from global setting
-	format = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
-	decimalSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR);
-	groupSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR);
-
-	Double result;
-	DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();
-	decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));
-	decSymbols.setGroupingSeparator(groupSeparator.charAt(0));
-	DecimalFormat formater = new DecimalFormat(format, decSymbols);
-	try {
-	    result = formater.parse(number).doubleValue();
-	} catch (ParseException e) {
-	    logger.error("Error parsing String to double", e);
-	   return null;
-	}
-	return result;
-    }
+    	DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();
+    	decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));
+    	decSymbols.setGroupingSeparator(groupSeparator.charAt(0));
+    	DecimalFormat formater = new DecimalFormat(format, decSymbols);
+    	result = formater.format(number);
+    	return result;
+        }
+           /**                                                                                                                                                  
+            * Return an string based on Global Setting Number Format                                                                                            
+            * @param number                                                                                                                                     
+            * @return                                                                                                                                           
+            */                                                                                                                                                  
+           public static String formatNumber(Double number) {                                                                                                   
+                                                                                                                                                                
+                   String format = "###,###,###,###.##";                                                                                                        
+                   String decimalSeparator = ".";                                                                                                               
+                   String groupSeparator = ",";                                                                                                                 
+                                                                                                                                                                
+                   // get setting from global setting                                                                                                           
+                   format = FeaturesUtil                                                                                                                        
+                                   .getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);                                                               
+                   decimalSeparator = FeaturesUtil                                                                                                              
+                                  .getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR);                                                           
+                   groupSeparator = FeaturesUtil                                                                                                                
+                                   .getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR);                                                             
+                                                                                                                                                                
+                   String result;                                                                                                                               
+                   if (number == null) {                                                                                                                        
+                           number = new Double(0d);                                                                                                             
+                   }                                                                                                                                            
+                                                                                                                                                               
+                   DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();                                                                                
+                  decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));                                                                                  
+                   decSymbols.setGroupingSeparator(groupSeparator.charAt(0));                                                                                   
+                   DecimalFormat formater = new DecimalFormat(format, decSymbols);                                                                              
+                   result = formater.format(number);                                                                                                            
+                   return result;                                                                                                                               
+            }                                                                                                                                                    
+                       
+    
+    
+   
     public static DecimalFormat getDefaultFormat() {
 
 	String format = "###,###,###,###.##";
@@ -103,14 +143,5 @@ public class FormatHelper {
     }
 
     
-    
-    public static String getDifference(String s1, String s2)
-	{
-		double d1 = parseDouble(s1) ;
-		double d2 = parseDouble(s2) ;
-		double d3 = d1 - d2 ;
-		return formatNumber(d3) ;
-	}
-    
- 
+   
 }

@@ -312,7 +312,6 @@ public class TeamMemberUtil {
 			qry = session.createQuery(queryString);
 			qry.setParameter("teamId", teamId, Hibernate.LONG);
 			Iterator itr = qry.list().iterator();
-
 			while (itr.hasNext()) {
 				AmpTeamMember ampMem = (AmpTeamMember) itr.next();
 				Long id = ampMem.getAmpTeamMemId();
@@ -330,6 +329,9 @@ public class TeamMemberUtil {
 				if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(
 						headRole.getAmpTeamMemRoleId())) {
 					tm.setTeamHead(true);
+					System.out.println("[team member util] "+ tm.getMemberName() + " is team leader of team with id " +tm.getTeamId());
+					logger.info("[logger] "+ tm.getMemberName() + " is team leader of team with id " +tm.getTeamId());
+					
 				} else {
 					tm.setTeamHead(false);
 				}
@@ -1483,7 +1485,9 @@ public class TeamMemberUtil {
 				tm.setMemberId(memId);
 				tm.setMemberName((String)temp[1] + " " + (String)temp[2]);
 				if (memId.equals(id)) {
-				    tm.setTeamHead(true);
+				    {	System.out.println("!!!this team member: "+tm.getMemberName()+" is the TEAM LEADER!!!");
+				    	tm.setTeamHead(true);
+				    }
 				}
 				members.add(tm);
 			}
@@ -1522,6 +1526,8 @@ public class TeamMemberUtil {
 						team.setTeamLead(null);
 						session.update(team);
 					}
+					Collection relatedActivities	= ActivityUtil.getActivitiesRelatedToAmpTeamMember(session, ampMember.getAmpTeamMemId() );
+					removeLinksFromATMToActivity(relatedActivities, ampMember);
 
 					qryStr = "select a from " + AmpApplicationSettings.class.getName() +
 							" a where (a.member=:memberId)";
@@ -1649,6 +1655,57 @@ public class TeamMemberUtil {
 
             return teamMembers;
 
+    }
+        
+        public static List getAmpTeamMembersbyDgUserId(Long userId) throws Exception{
+
+
+            Session session = null;
+            Query qry = null;
+            List teamMembers = null;
+
+            try {
+                    session = PersistenceManager.getRequestDBSession();
+                    String queryString = "select tm from "
+                                    + AmpTeamMember.class.getName()
+                                    + " tm where (tm.user.id=:user)";
+                    qry = session.createQuery(queryString);
+                    qry.setParameter("user",userId, Hibernate.LONG);
+                    teamMembers= qry.list();
+            }
+            catch (HibernateException ex) {
+                    logger.error("Unable to get team member");
+                    logger.debug("Exceptiion " + ex);
+                    throw ex;
+            }
+
+            return teamMembers;
+
+        }
+        
+    private static void removeLinksFromATMToActivity (Collection activities, AmpTeamMember atm) {
+    	if (activities == null || atm == null) {
+    		return;
+    	}
+    	Iterator iter 	= activities.iterator();
+    	while ( iter.hasNext() ) {
+    		AmpActivity act	= (AmpActivity) iter.next();
+    		if ( act.getUpdatedBy() != null && act.getUpdatedBy().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
+    			act.setUpdatedBy(null);
+    		}
+    		if ( act.getActivityCreator() != null && act.getActivityCreator().getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
+    			act.setActivityCreator(null);
+    		}
+    		if ( act.getMember() != null ) {
+    			Iterator iterMem	= act.getMember().iterator();
+    			while ( iterMem.hasNext() ) {
+    				AmpTeamMember mem	= (AmpTeamMember) iterMem.next();
+    				if ( mem.getAmpTeamMemId().equals(atm.getAmpTeamMemId()) ) {
+    					iterMem.remove();
+    				}
+    			}
+    		}
+    	} 
     }
 
 }

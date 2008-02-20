@@ -58,7 +58,9 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.AmpSISINProyect;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
@@ -100,6 +102,7 @@ import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
@@ -124,6 +127,11 @@ public class EditActivity
 
     HttpSession session = request.getSession();
     TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+    
+    //added in tanzania
+    AmpTeam currentTeam=TeamUtil.getAmpTeam(tm.getTeamId());
+    boolean isPreview=mapping.getPath().trim().endsWith("viewActivityPreview");
+    
 
     AmpActivity activity = null;
     String computeTotals = FeaturesUtil.getGlobalSettingValue(Constants.
@@ -160,61 +168,74 @@ public class EditActivity
     boolean gatePermEditAllowed = false;
     if (activityId != null) {
         activity = ActivityUtil.getAmpActivity(activityId);
-        if(activity!=null){
-            Map scope = new HashMap();
-            scope.put(GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
-            gatePermEditAllowed = activity.canDo(GatePermConst.Actions.EDIT, scope);
-        }
+        Map scope=new HashMap();
+        scope.put(GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
+		gatePermEditAllowed = activity.canDo(GatePermConst.Actions.EDIT, scope);
     }
 
 
     //old permission checking - this will be replaced by a global gateperm stuff
     // Checking whether the user have write access to the activity
 
-    if(!gatePermEditAllowed) {
-	    if (!mapping.getPath().trim().endsWith("viewActivityPreview")) {
-//	    	 if (! ("Team".equalsIgnoreCase(tm.getTeamAccessType()))&& !("Donor".equalsIgnoreCase(tm.getTeamAccessType()))) {
-//	        errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
-//	    	}
-//	      else
-	    	if (tm.getWrite() == false) {
-	        errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
-	      }
-	    }
-	    else {
-	      Collection euActs = EUActivityUtil.getEUActivities(activityId);
-	      request.setAttribute("costs", euActs);
-	    }
+    if (!gatePermEditAllowed) {
+			if (!mapping.getPath().trim().endsWith("viewActivityPreview")) {
+				// if (! ("Team".equalsIgnoreCase(tm.getTeamAccessType()))&&
+				// !("Donor".equalsIgnoreCase(tm.getTeamAccessType()))) {
+				// errorMsgKey =
+				// "error.aim.editActivity.userPartOfManagementTeam";
+				// }
+				// else
+				if (tm.getWrite() == false) {
+					//errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
+				}
+			} else {
+				Collection euActs = EUActivityUtil.getEUActivities(activityId);
+				request.setAttribute("costs", euActs);
+			}
 
-	    if (errorMsgKey.trim().length() > 0) {
-	      errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-	          errorMsgKey));
-	      saveErrors(request, errors);
+//			if (errorMsgKey.trim().length() > 0) {
+//				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//						errorMsgKey));
+//				saveErrors(request, errors);
+//
+//				errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
+//				String url = "/aim/viewChannelOverview.do?ampActivityId="
+//						+ activityId + "&tabIndex=0";
+//				RequestDispatcher rd = getServlet().getServletContext()
+//						.getRequestDispatcher(url);
+//				rd.forward(request, response);
+//				return null;
+//
+//			}
+			
+			//TODO this for tanzania. think we should have plugable rules cos all cantries have different rules.
+			if (!isPreview && activity!=null && activity.getTeam()!=null && currentTeam!=null){
+				AmpTeam activityTeam=activity.getTeam();
+				//if user is member of same team to which activity belongs then it can be edited
+				if (!currentTeam.getAmpTeamId().equals(activityTeam.getAmpTeamId())){
+					errorMsgKey="error.aim.editActivity.noWritePermissionForUser";
+				}
+			}
+			
+			
+//			if (tm != null && ((!mapping.getPath().trim().endsWith(
+//							"viewActivityPreview") && tm.getWrite() == false) || (mapping
+//							.getPath().trim().endsWith("viewActivityPreview") && tm
+//							.getRead() == false)))
+//				errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
 
-	      errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
-	      String url = "/aim/viewChannelOverview.do?ampActivityId="
-	          + activityId + "&tabIndex=0";
-	      RequestDispatcher rd = getServlet().getServletContext()
-	          .getRequestDispatcher(url);
-	      rd.forward(request, response);
-	      return null;
-
-	    }
-	    else if (tm != null && ((!mapping.getPath().trim().endsWith("viewActivityPreview") && tm.getWrite() == false) || (mapping.getPath().trim().endsWith("viewActivityPreview") && tm.getRead()==false)) )
-	      errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
-
-	    if (errorMsgKey.trim().length() > 0) {
-	      errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-	          errorMsgKey));
-	      saveErrors(request, errors);
-	      String url = "/aim/viewChannelOverview.do?ampActivityId="
-	          + activityId + "&tabIndex=0";
-	      RequestDispatcher rd = getServlet().getServletContext()
-	          .getRequestDispatcher(url);
-	      rd.forward(request, response);
-	      return null;
-	    }
-    }
+			if (errorMsgKey.trim().length() > 0 && !isPreview) {
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+						errorMsgKey));
+				saveErrors(request, errors);
+				String url = "/aim/viewChannelOverview.do?ampActivityId="
+						+ activityId + "&tabIndex=0";
+				RequestDispatcher rd = getServlet().getServletContext()
+						.getRequestDispatcher(url);
+				rd.forward(request, response);
+				return null;
+			}
+		}
     // load all themes
     Collection themes = new ArrayList(ProgramUtil.getAllThemes());
     eaForm.setProgramCollection(themes);
@@ -286,13 +307,12 @@ public class EditActivity
         eaForm.setActPrograms(prLst);
       }*/
 
-
-if (tm != null && tm.getTeamType()
-   .equalsIgnoreCase("GOVERNMENT")) {
-   eaForm.setGovFlag(true);
-} else {
-   eaForm.setGovFlag(false);
-}
+    if (tm != null && tm.getTeamType()
+       .equalsIgnoreCase("GOVERNMENT")) {
+       eaForm.setGovFlag(true);
+    } else {
+       eaForm.setGovFlag(false);
+   }
 
       if (tm != null && tm.getTeamType()
           .equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
@@ -492,46 +512,46 @@ if (tm != null && tm.getTeamType()
             getAmpCategoryValueFromList(CategoryConstants.ACCHAPTER_NAME,
                                         activity.getCategories());
         if (ampCategoryValue != null)
-          eaForm.setAcChapter(ampCategoryValue.getId());
+          eaForm.setAcChapter(new Long(ampCategoryValue.getId()));
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromList(
             CategoryConstants.ACCESSION_INSTRUMENT_NAME, activity.getCategories());
         if (ampCategoryValue != null)
-          eaForm.setAccessionInstrument(ampCategoryValue.getId());
+          eaForm.setAccessionInstrument(new Long(ampCategoryValue.getId()));
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
             CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
         if (ampCategoryValue != null)
-          eaForm.setStatusId(ampCategoryValue.getId());
+          eaForm.setStatusId(new Long(ampCategoryValue.getId()));
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
             CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());
         if (ampCategoryValue != null)
-          eaForm.setLevelId(ampCategoryValue.getId());
+          eaForm.setLevelId(new Long(ampCategoryValue.getId()));
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                 CategoryConstants.ACTIVITY_LEVEL_KEY, activity.getCategories());
             if (ampCategoryValue != null)
-              eaForm.setActivityLevel(ampCategoryValue.getId());
+              eaForm.setActivityLevel(new Long(ampCategoryValue.getId()));
 
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                 CategoryConstants.FINANCIAL_INSTRUMENT_KEY, activity.getCategories());
             if (ampCategoryValue != null)
-              eaForm.setGbsSbs(ampCategoryValue.getId());
+              eaForm.setGbsSbs(new Long(ampCategoryValue.getId()));
 
             ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                 CategoryConstants.IMPLEMENTATION_LOCATION_KEY, activity.getCategories());
             if (ampCategoryValue != null)
-              eaForm.setImplemLocationLevel(ampCategoryValue.getId());
+              eaForm.setImplemLocationLevel(new Long(ampCategoryValue.getId()));
 
-        /* End - Insert Categories */
+        /* End - Insert Categories */ 
 
         /* Injecting documents into session */
         SelectDocumentDM.clearContentRepositoryHashMap(request);
         if (activity.getActivityDocuments() != null && activity.getActivityDocuments().size() > 0 )
         		ActivityDocumentsUtil.injectActivityDocuments(request, activity.getActivityDocuments());
-
+        
         eaForm.setCrDocuments( DocumentManagerUtil.createDocumentDataCollectionFromSession(request) );
         /* END - Injecting documents into session */
 
@@ -575,13 +595,14 @@ if (tm != null && tm.getTeamType()
         // load the activity details
         String actApprovalStatus = DbUtil.getActivityApprovalStatus(
             activityId);
-
+       // HttpSession session = request.getSession();
+        
         //eaForm.setApprovalStatus(actApprovalStatus);
         if (tm != null) {
-            if (tm.getTeamHead())
+            if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0)
               eaForm.setApprovalStatus(Constants.APPROVED_STATUS);
             else
-              eaForm.setApprovalStatus(actApprovalStatus);
+              eaForm.setApprovalStatus(Constants.STARTED_STATUS);//actApprovalStatus);
         }
 
         if (activity != null) {
@@ -876,8 +897,8 @@ if (tm != null && tm.getTeamType()
                   location.setWoredaId(loc.getAmpWoreda()
                                        .getAmpWoredaId());
                 }
-                Float locationPercentage = actLoc.getLocationPercentage();
-                location.setPercent(FormatHelper.formatNumber(locationPercentage == null ? 0 : locationPercentage.doubleValue()));
+                if(actLoc.getLocationPercentage()!=null)
+                location.setPercent(FormatHelper.formatNumber( actLoc.getLocationPercentage().doubleValue()));
                 locs.add(location);
               }
             }
@@ -1062,7 +1083,7 @@ if (tm != null && tm.getTeamType()
                                                 fundDet.getTransactionAmount()
                                                 .doubleValue(), frmExRt,
                                                 toExRt);
-                                        fundingDetail.setContract(fundDet.getContract());
+                                            fundingDetail.setContract(fundDet.getContract());
                                             eaForm.setCurrCode(toCurrCode);
                                             if (fundDet.getTransactionType().intValue() ==
                                                 Constants.COMMITMENT) {
@@ -1091,9 +1112,14 @@ if (tm != null && tm.getTeamType()
                                                                         .getAmpCurrencyId().
                                                                         getCountryName());
 
-                                          fundingDetail.setTransactionAmount(CurrencyWorker.convert(fundDet.getTransactionAmount().doubleValue(), 1, 1));
-
-                                          fundingDetail.setTransactionDate(DateConversion.ConvertDateToString(fundDet.getTransactionDate()));
+                                          fundingDetail
+                                              .setTransactionAmount(CurrencyWorker
+                                                                    .convert(fundDet
+                                                                             .getTransactionAmount()
+                                                                             .doubleValue(), 1, 1));
+                                          fundingDetail.setTransactionDate(DateConversion
+                                                                           .ConvertDateToString(fundDet
+                                              .getTransactionDate()));
 
                                           fundingDetail.setPerspectiveCode(fundDet.
                                                                            getPerspectiveId().getCode());
@@ -1507,9 +1533,9 @@ if (tm != null && tm.getTeamType()
                    }
        */
 
-      //Lload all the active currencies **-- I will leave this becouse I don't know if is used in another page AMP-2620
+      // load all the active currencies
       eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
-
+      
       //Only currencies havening exchanges rates AMP-2620
       ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
       eaForm.setValidcurrencies(validcurrencies);
@@ -1753,17 +1779,20 @@ if (tm != null && tm.getTeamType()
 			} else {
 				tempComp.setDescription(temp.getDescription().trim());
 			}
-			tempComp.setCode(temp.getCode());
-			tempComp.setUrl(temp.getUrl());
-
 			tempComp.setCommitments(new ArrayList<FundingDetail>());
 			tempComp.setDisbursements(new ArrayList<FundingDetail>());
 			tempComp.setExpenditures(new ArrayList<FundingDetail>());
 
+			AmpSISINProyect sisinProyect = ComponentsUtil.getSisinProyect(
+					activity.getAmpActivityId(), temp.getAmpComponentId());
+			if (sisinProyect == null) {
+				sisinProyect = new AmpSISINProyect();
+			}
+			tempComp.setSisinProyect(sisinProyect);
 
-			Collection<AmpComponentFunding> fundingComponentActivity = ActivityUtil.getFundingComponentActivity(
-					tempComp.getComponentId(), activity.getAmpActivityId());
-			Iterator cItr = fundingComponentActivity.iterator();
+
+			Iterator cItr = ActivityUtil.getFundingComponentActivity(
+					tempComp.getComponentId(), activity.getAmpActivityId()).iterator();
 			while (cItr.hasNext()) {
 				AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr
 						.next();
@@ -1798,9 +1827,7 @@ if (tm != null && tm.getTeamType()
 				}
 			}
 
-			ComponentsUtil.calculateFinanceByYearInfo(tempComp,fundingComponentActivity);
-
-			Collection<AmpPhysicalPerformance> phyProgress = ActivityUtil
+          Collection<AmpPhysicalPerformance> phyProgress = ActivityUtil
 						.getPhysicalProgressComponentActivity(tempComp.getComponentId(), activity.getAmpActivityId());
 
 			if (phyProgress != null && phyProgress.size() > 0) {

@@ -45,11 +45,19 @@ public final class ArConstants {
 	
 	public final static String PERSPECTIVE="Perspective";
 
-	//report types
-	public final static String DONOR="Donor";
+	
+	public final static String DONOR="Donor Agency";
+	public final static String DONOR_GROUP="Donor Group";
+	public final static String DONOR_TYPE_COL="Donor Type";
+	
 	public final static String REGION="Region";
-	public final static String COMPONENT="Component";
+	public final static String COMPONENT="Component Name";
 
+	//report type
+	public final static int DONOR_TYPE=1;
+	public final static int COMPONENT_TYPE=2;
+	public final static int REGIONAL_TYPE=3;
+	public final static int CONTRIBUTION_TYPE=4;
 	
 	//metainfo values:
 	public final static String COMMITMENT="Commitments";
@@ -79,9 +87,16 @@ public final class ArConstants {
 	public final static String LOCATION_PERCENTAGE="Location Percentage";
 	public final static String COMPONENTE_PERCENTAGE="Componente Percentage";
 	
+	//burkina
+	public final static String PROGRAM_PERCENTAGE="Program Percentage";
+	
+	
+	
 	public final static String NPO_PERCENTAGE="National Planning Objectives Percentage";
 	//hierarchysorter
 	public final static String HIERARCHY_SORTER_TITLE="Title";
+	
+	
 	
 	//reportsFilter
 	
@@ -89,4 +104,6 @@ public final class ArConstants {
 	
 	//the currency in use
 	public final static String SELECTED_CURRENCY="SelectedCurrency";
+
+	public static final String DISBURSEMENT_ORDERS = "Disbursement Orders";
 }

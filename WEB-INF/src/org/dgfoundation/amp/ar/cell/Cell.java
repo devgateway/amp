@@ -11,6 +11,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnIdentifiable;
+import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.RowIdentifiable;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
@@ -33,6 +34,12 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  */
 public abstract class Cell extends Viewable implements RowIdentifiable, ColumnIdentifiable, Comparable,Cloneable {
 
+	
+	@Override
+	public ReportData getNearestReportData() {
+		return column.getNearestReportData();
+	}
+	
 	public static class CellComparator implements Comparator { 
 		public final int compare (Object o1, Object o2) {
 			Cell c1=(Cell) o1;
@@ -156,7 +163,7 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 	 */
 	public Cell filter(Cell metaCell,Set ids) {
 		try {
-		if(ownerId!=null && ids.contains(ownerId)) return (Cell) this.clone(); else return null;
+		if(ids.contains(ownerId)) return (Cell) this.clone(); else return null;
 		} catch(CloneNotSupportedException e) {
 			e.printStackTrace();
 		}

@@ -21,7 +21,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 /**
- * The action class will retreive all workspaces which is not associated with
+ * The action class will retrieve all workspaces which is not associated with
  * any parent team. It also filters the workspaces based on the 'Workspace Type' 
  * & 'Team Category'
  */
@@ -40,6 +40,10 @@ public class GetUnAssignedWorkspaces extends Action {
 			String workspaceType = request.getParameter("wType");
 			String teamCategory  = request.getParameter("tCategory");
 			String team = uwForm.getCategory();
+			//workaround :(
+//			if (team!=null && team.toLowerCase().equals("mofed")){
+//				team="GOVERNMENT";
+//			}
 			uwForm.setActionType(null);
 			if(request.getParameter("childorgs")!=null){
 				uwForm.setAllOrganizations(DbUtil.getAll(AmpOrganisation.class));

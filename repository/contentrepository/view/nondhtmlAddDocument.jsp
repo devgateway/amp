@@ -14,6 +14,21 @@
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
+<c:set var="translation_validation_title_chars">
+			<digi:trn key="contentrepository:plsTitleChars">Please only use letters, digits, '_' and space !</digi:trn>
+</c:set>
+<c:set var="translation_validation_url">
+			<digi:trn key="contentrepository:plsSpecifyUrl;">Please specify a Url !</digi:trn>
+</c:set>
+<c:set var="translation_validation_title">
+			<digi:trn key="contentrepository:plsSpecifyTitle">Please specify a title !</digi:trn>
+</c:set>
+<c:set var="translation_validation_filedata">
+			<digi:trn key="contentrepository:plsSpecifyPath">Please select a file path !</digi:trn>
+</c:set>
+<c:set var="translation_validation_url_invalid">
+			<digi:trn key="contentrepository:urlInvalid">URL format invalid !</digi:trn>
+</c:set>
 
 <script language="JavaScript">
 <!-- 
@@ -37,7 +52,7 @@
 			flag =  true;
 		else
 		{
-			alert("URL format invalid ");
+			alert(" ${translation_validation_url_invalid} ");
 			document.crDocumentManagerForm.webLink.focus();
 			flag =  false;
 		}
@@ -62,19 +77,25 @@
 		else
 		{
 			flag = false;
-			alert("URl format invalid ");
+			alert(" ${translation_validation_url_invalid} ");
 			document.crDocumentManagerForm.webLink.focus();
 		}
 		return flag;
 	}
-	
+	function usesAllowedCharacters(str) {
+		var regexp	= new RegExp("[a-zA-Z0-9_ ]+");
+		var found	= regexp.exec(str);
+		if (found != str)
+			return false;
+		return true;
+	}
 	function validateResource()
 	{
 		var titleFlag = isEmpty(document.crDocumentManagerForm.docTitle.value);
 		var urlFlag = isEmpty(document.crDocumentManagerForm.webLink.value);
 		if(titleFlag == true && urlFlag == true)
 		{
-			alert("Please enter Title and URL");
+			alert(" ${translation_validation_title} ${translation_validation_url}");
 			document.crDocumentManagerForm.docTitle.focus();
 			return false;
 		}
@@ -82,14 +103,19 @@
 		{
 			if(titleFlag == true)
 			{
-				alert(" Please enter Title");
+				alert(" ${translation_validation_title} ");
 				document.crDocumentManagerForm.docTitle.focus();
 				return false;
 			}
 			if(urlFlag == true)
 			{
-				alert(" Please enter URL ");
+				alert(" ${translation_validation_url} ");
 				document.crDocumentManagerForm.webLink.focus();
+				return false;
+			}
+			if ( !usesAllowedCharacters(document.crDocumentManagerForm.docTitle.value) ) {
+				alert(" ${translation_validation_title_chars} ");
+				document.crDocumentManagerForm.docTitle.focus();
 				return false;
 			}
 			else
@@ -108,7 +134,7 @@
 		var fileFlag = isEmpty(document.crDocumentManagerForm.fileData.value);
 		if(titleFlag == true && fileFlag == true)
 		{
-			alert("Please enter Title and select a File");
+			alert(" ${translation_validation_title} ${translation_validation_filedata} ");
 			document.crDocumentManagerForm.docTitle.focus();
 			return false;
 			
@@ -117,13 +143,18 @@
 		{
 			if(titleFlag == true)
 			{
-				alert(" Please enter title");
+				alert(" ${translation_validation_title} ");
+				document.crDocumentManagerForm.docTitle.focus();
+				return false;
+			}
+			if ( !usesAllowedCharacters(document.crDocumentManagerForm.docTitle.value) ) {
+				alert(" ${translation_validation_title_chars} ");
 				document.crDocumentManagerForm.docTitle.focus();
 				return false;
 			}
 			if(fileFlag == true)
 			{
-				alert(" Please select File ");
+				alert(" $translation_validation_filedata{} ");
 				document.crDocumentManagerForm.fileData.focus();
 				return false;
 			}

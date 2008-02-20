@@ -26,7 +26,6 @@ import org.dgfoundation.amp.ar.AmpARFilter;
  */
 public class GlobalSettings {
 	private Boolean perspectiveEnabled;
-	private Boolean showComponentFundingByYear;
 
 	private static final GlobalSettings INSTANCE = new GlobalSettings();
 	
@@ -43,13 +42,4 @@ public class GlobalSettings {
 	public Boolean getPerspectiveEnabled() {
 		return perspectiveEnabled;
 	}
-
-	public void setShowComponentFundingByYear(Boolean showComponentFundingByYear) {
-		this.showComponentFundingByYear = showComponentFundingByYear;
-	}
-
-	public Boolean getShowComponentFundingByYear() {
-		return showComponentFundingByYear;
-	}
-	
 }

@@ -701,7 +701,7 @@
 
    					                       			</td>
 
-									                    	<td bgcolor="#DDDDDB">
+									                    	<!-- td bgcolor="#DDDDDB">
 
 				   					                     <div align="center">
 
@@ -709,7 +709,7 @@
 
 																	</div>
 
-				   					              		</td>
+				   					              		</td-->
 
 									                 		<td bgcolor="#DDDDDB">
 
@@ -745,7 +745,7 @@
 
 																</td>
 
-		         					                 	<td bgcolor="#F8F8F5">
+		         					                 	<!-- td bgcolor="#F8F8F5">
 
 		                        					    	<div align="right">
 
@@ -753,7 +753,7 @@
 
 																	</div>
 
-				                  					 	</td>
+				                  					 	</td-->
 
 									                    	<td bgcolor="#F8F8F5">
 
@@ -775,7 +775,7 @@
 
 															<tr valign="top" bgcolor="#F8F8F5">
 
-									                  	<td bgcolor="#F8F8F5" colspan="3">
+									                  	<td bgcolor="#F8F8F5" colspan="2">
 
 				         					            	<div align="center" class="note">
 
@@ -797,7 +797,7 @@
 
 																</td>
 
-				                  					   <td>
+				                  					   <!-- td>
 
 									                     	<div align="right">
 
@@ -805,7 +805,7 @@
 
 																	</div>
 
-									                      </td>
+									                      </td-->
 
 									                      <td>
 

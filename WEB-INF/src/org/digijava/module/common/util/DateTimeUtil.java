@@ -108,7 +108,7 @@ public class DateTimeUtil {
 
 	public static String parseDateForPicker2(Date date) throws Exception{
 		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
-		String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+		String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);;
 		if (pattern==null){
 			pattern=Constants.CALENDAR_DATE_PICKER;
 		}

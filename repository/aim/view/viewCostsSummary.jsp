@@ -12,11 +12,11 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-
+<logic:empty name="costs" scope="request">
 <bean:define id="costs" name="costs" scope="request" toScope="page" type="java.util.Collection"/>
 <bean:define id="mode" name="mode" scope="request" toScope="page" type="java.lang.String"/>
-
 <script type="text/javascript">
+
 function openEUActivityDetails(euActivityId) {
 			<digi:context name="ActivityDetailsURL" property="context/module/moduleinstance/viewEUActivityDetails.do?euActivityId=" />
 			openURLinWindow("<%=ActivityDetailsURL%>"+euActivityId,500, 350);
@@ -28,6 +28,7 @@ function openEUActivityDetails(euActivityId) {
 			<td>
 				<table  class="box-border-nopadding">
 					<tr class="textnegru" bgcolor="#f4f4f2" align="right">
+					
 </logic:equal>
 <logic:notEqual name="mode" value="preview">
 	<table width="90%" bgcolor="#f4f4f2">
@@ -163,3 +164,4 @@ function openEUActivityDetails(euActivityId) {
 			</tr>
 	</logic:equal>
 </table>
+</logic:empty>

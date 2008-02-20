@@ -108,7 +108,7 @@
 
 	function setValues(val) {
 		var valid;
-		if(!document.aimEditActivityForm.teamLead.value) {
+		if(document.aimEditActivityForm.teamLead.value) {
 			valid = validateEntryByMember();
 		} else {
 			valid = validateEntryByLeader();
@@ -356,8 +356,8 @@ ${fn:replace(message,quote,escapedQuote)}
 															<img src= "../ampTemplate/images/arrow_right.gif" border=0>
 														</digi:link>
 													</c:if>&nbsp;&nbsp;&nbsp;
-													<field:display name="Indicator Name" feature="Activity"><b>
-														<bean:define id="indName">
+													<field:display name="Indicator Name" feature="Activity">
+														<b><bean:define id="indName">
 															<bean:write name="indicator" property="indicatorName"/>
 														</bean:define>
 														<digi:trn key="<%=indName%>"><%=indName%></digi:trn></b> -

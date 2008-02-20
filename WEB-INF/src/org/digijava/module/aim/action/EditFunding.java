@@ -66,8 +66,9 @@ public class EditFunding extends Action {
 
 								formBean.setFundingMTEFProjections( new ArrayList<MTEFProjection> (funding.getMtefProjections()) );
 
-								formBean.setFundingDetails(new ArrayList(funding.getFundingDetails()));
+								formBean.setFundingDetails(new ArrayList());
 								if (funding.getFundingDetails() != null) {
+									formBean.getFundingDetails().addAll(funding.getFundingDetails());
 									Iterator itr = funding.getFundingDetails().iterator();
 									while (itr.hasNext()) {
 										FundingDetail fd = (FundingDetail) itr.next();

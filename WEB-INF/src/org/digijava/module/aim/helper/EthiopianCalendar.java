@@ -24,7 +24,7 @@ public class EthiopianCalendar
 	 * @param GregorianCalendar object
 	 * @return EthiopianCalendar
 	 */
-	static public EthiopianCalendar getEthiopianDate(GregorianCalendar gc)
+	public EthiopianCalendar getEthiopianDate(GregorianCalendar gc)
 	{
 		//if ( logger.isDebugEnabled() )
 		//logger.debug("GregorianCalendar passed in day " + gc.get(Calendar.DAY_OF_MONTH) +

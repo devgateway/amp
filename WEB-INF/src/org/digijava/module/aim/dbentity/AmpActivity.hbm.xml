@@ -10,6 +10,7 @@
 		</id>
 		<property name="ampId" column="amp_id" type="java.lang.String"/>
 		<property name="name" column="name" type="java.lang.String"/>
+		<property name="govAgreementNumber" column="gov_agreement_number" type="java.lang.String"/>
 		<property name="description" column="description"  type="org.digijava.kernel.db.SafeClobType"/>
 		<property name="lessonsLearned" column="lessons_learned"  type="org.digijava.kernel.db.SafeClobType"/>
 		<property name="objective" column="objectives" type="org.digijava.kernel.db.SafeClobType"/>
@@ -122,7 +123,7 @@ tanzania adds
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityDocument"  />
 		</set>
 
-		<set name="referenceDocs" cascade="all-delete-orphan">
+		<set name="referenceDocs" cascade="all-delete-orphan" inverse="true">
 			<cache usage="read-write" />
 			<key column="activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityReferenceDoc"/>
@@ -205,19 +206,19 @@ tanzania adds
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpNotes"/>
 		</set>
 
-		<set name="closingDates" cascade="delete" order-by="closing_date desc">
+		<set name="closingDates" cascade="delete" order-by="closing_date desc" inverse="true">
 		<cache usage="read-write" />
 			<key column="amp_activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityClosingDates" />
 		</set>
 
-		<set name="issues" cascade="all-delete-orphan" order-by="amp_issue_id asc">
+		<set name="issues" cascade="all-delete-orphan" order-by="amp_issue_id asc" inverse="true">
 		<cache usage="read-write" />
 			<key column="amp_activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpIssues"/>
  		</set>
 
-		<set name="regionalFundings" cascade="all-delete-orphan">
+		<set name="regionalFundings" cascade="all-delete-orphan" inverse="true">
 		<cache usage="read-write" />
 			<key column="activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpRegionalFunding"/>

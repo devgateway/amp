@@ -26,9 +26,23 @@
 	var calendarObjForForm = new DHTMLSuite.calendar({callbackFunctionOnDayClick:'getDateFromCalendar',isDragable:false,displayTimeBar:false}); 
 	calendarObjForForm.setCalendarModelReference(myCalendarModel);
 	
+	
+	calendarObjForForm.setCallbackFunctionOnClose("userCloseEvt");
+	
+	function userCloseEvt(obj) {		
+		DHTMLSuite.variableStorage.arrayOfDhtmlSuiteObjects[ind].hide();
+	}
+	
+	
+	
+	
+	
 	var dateFormat = '<%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT) %>';
 	if (dateFormat == 'null')
 		dateFormat = 'dd/mm/yyyy';
+	
+	
+	
 	
 	function getDateFromCalendar(inputArray)
 	{

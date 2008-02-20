@@ -99,31 +99,32 @@ public class AddFunding extends Action {
 	}
 	public static String getFYDate(Integer numOfAddedYears, Integer year) {
 
-			if ( year == null ) {
-				String yearGS			= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.CURRENT_SYSTEM_YEAR );
-				
-				if ( yearGS.equals(GlobalSettingsConstants.SYSTEM_YEAR) )
-					year		= Util.getSystemYear();
-				else
-					year		= Integer.parseInt( yearGS );
-			}
-			year			+= numOfAddedYears;
-			// String date		= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.FISCAL_YEAR_END_DATE ) + "/" + year;
-			String date;
-			try {
-				String fiscalCalendarId		= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.DEFAULT_CALENDAR );
-				AmpFiscalCalendar fiscalCal	= DbUtil.getAmpFiscalCalendar( Long.parseLong(fiscalCalendarId) );
+		if ( year == null ) {
+			String yearGS			= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.CURRENT_SYSTEM_YEAR );
 			
-				date						= fiscalCal.getStartDayNum() + "/" + fiscalCal.getStartMonthNum() + "/" + year;
-			}
-			catch (Exception E) {
-				E.printStackTrace();
-				logger.error("Information about fiscal year start NOT retrievable. Using 01 January.");
-				date						= "01/01/" + year; 
-			}
-			return date;
+			if ( yearGS.equals(GlobalSettingsConstants.SYSTEM_YEAR) )
+				year		= Util.getSystemYear();
+			else
+				year		= Integer.parseInt( yearGS );
+		}
+		year			+= numOfAddedYears;
+		// String date		= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.FISCAL_YEAR_END_DATE ) + "/" + year;
+		String date;
+		try {
+			String fiscalCalendarId		= FeaturesUtil.getGlobalSettingValue( GlobalSettingsConstants.DEFAULT_CALENDAR );
+			AmpFiscalCalendar fiscalCal	= DbUtil.getAmpFiscalCalendar( Long.parseLong(fiscalCalendarId) );
+		
+			date						= fiscalCal.getStartDayNum() + "/" + fiscalCal.getStartMonthNum() + "/" + year;
+		}
+		catch (Exception E) {
+			E.printStackTrace();
+			logger.error("Information about fiscal year start NOT retrievable. Using 01 January.");
+			date						= "01/01/" + year; 
+		}
+		return date;
 
-	}
+}
+
 	public static boolean isAfterFiscalYearStart(String fyDate) {
 		if ( fyDate == null )
 			fyDate				= getFYDate(0, null);

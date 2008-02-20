@@ -49,7 +49,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValue;
 public class ViewChannelOverview extends TilesAction {
 
 	private static Logger logger = Logger.getLogger(ViewChannelOverview.class);
-	
+
 	private ActionErrors errors;
 
 	public ActionForward execute(ComponentContext context,
@@ -71,23 +71,24 @@ public class ViewChannelOverview extends TilesAction {
 			Long id = null;
 			if (request.getParameter("ampActivityId") != null) {
 				id = new Long(request.getParameter("ampActivityId"));
+                formBean.setId(id);
 			}
 			else {
 				id = formBean.getId();
 			}
 
-			Collection<AmpCategoryValue> implLocationLevels	= 
+			Collection<AmpCategoryValue> implLocationLevels	=
 				CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY);
-			
+
 			if ( implLocationLevels != null)
 					formBean.setNumImplLocationLevels( implLocationLevels.size() );
-			
+
 			Activity activity = ActivityUtil.getChannelOverview(id);
-			
-			createWarnings(activity);
-			
+
+			createWarnings(activity,teamMember.getTeamHead());
+
 			AmpActivity ampact = ActivityUtil.getAmpActivity(id);
-			
+
 			Set orgProjIdsSet = ampact.getInternalIds();
 	          if (orgProjIdsSet != null) {
 	            Iterator projIdItr = orgProjIdsSet.iterator();
@@ -117,15 +118,16 @@ public class ViewChannelOverview extends TilesAction {
 	              formBean.setSelectedOrganizations(orgProjectIds);
 	            }
 	          }
-	          
-	          AmpCategoryValue ampCategoryValue	= CategoryManagerUtil
+
+	          AmpCategoryValue ampCategoryValue = CategoryManagerUtil
 					.getAmpCategoryValueFromListByKey(
 							CategoryConstants.IMPLEMENTATION_LOCATION_KEY,
 							ampact.getCategories());
+
 			if (ampCategoryValue != null)
 				formBean.setImplemLocationLevel(ampCategoryValue.getValue());
-				
-	          
+
+
 			PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.ACTIVITY,activity);
 			ArrayList colAux=new ArrayList();
 			Collection ampFields=DbUtil.getAmpFields();
@@ -147,12 +149,12 @@ public class ViewChannelOverview extends TilesAction {
 			boolean teamLeadFlag    = teamMember.getTeamHead();
 			boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
 
-		 	
-		 	if ( actApprovalStatus != null && 
+
+		 	if ( actApprovalStatus != null &&
 		 			Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(actApprovalStatus.toLowerCase())  )
 		 	{
 		 		if (workingTeamFlag && teamLeadFlag)
-		 	
+
 		 			formBean.setButtonText("validate");
 		 	     else
 		 			formBean.setButtonText("approvalAwaited");
@@ -260,18 +262,22 @@ public class ViewChannelOverview extends TilesAction {
 		saveErrors(request, errors);
 		return null;
 	}
-	
-	private void createWarnings (Activity activity) {
+
+	private void createWarnings (Activity activity, boolean isTeamHead) {
 		if ( activity.getDraft() == true ) {
 			errors.add(
 				"title", new ActionError("error.aim.draftActivity")
 			);
-				
+
 		}
-		if ( Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus()) ) {
-			errors.add(
-				"title", new ActionError("error.aim.activityAwaitingApproval")
-			);
+		if(isTeamHead)
+		{
+			System.out.println("the team member is not the TEAM LEADER!!!!!!!!");
+			if ( Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus()) ) {
+				errors.add(
+						"title", new ActionError("error.aim.activityAwaitingApproval")
+				);
+			}
 		}
 	}
 }

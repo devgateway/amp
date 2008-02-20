@@ -213,6 +213,7 @@
 									<td vAlign="top" width="100%">
 										<table align=left valign=top cellPadding=1 cellSpacing=1 width="100%">
 												<tr><td>
+													<digi:errors/>
 												</td></tr>
 												<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 														<digi:trn key="aim:listofPrograms">

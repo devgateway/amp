@@ -1,0 +1,93 @@
+package org.digijava.module.aim.dbentity;
+
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * Indicator Value entity.
+ * Can be assigned to themes(program) or activities(project).
+ * @author George Khakhanashvili
+ *
+ */
+public class AmpIndicatorValue implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	private Long indValId;
+	private String comment;
+	private Date valueDate;
+	private Double value;
+	private int valueType;
+	private AmpCategoryValue logFrame;
+	private AmpIndicatorRiskRatings risk;
+	private AmpIndicator indicator;
+	private AmpActivity activity;
+	private AmpTheme theme;
+	private Boolean defaultInd;
+	
+	public Long getIndValId() {
+		return indValId;
+	}
+	public void setIndValId(Long indValId) {
+		this.indValId = indValId;
+	}
+	public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+	public Date getValueDate() {
+		return valueDate;
+	}
+	public void setValueDate(Date valueDate) {
+		this.valueDate = valueDate;
+	}
+	public Double getValue() {
+		return value;
+	}
+	public void setValue(Double value) {
+		this.value = value;
+	}
+	public int getValueType() {
+		return valueType;
+	}
+	public void setValueType(int valueType) {
+		this.valueType = valueType;
+	}
+	public AmpCategoryValue getLogFrame() {
+		return logFrame;
+	}
+	public void setLogFrame(AmpCategoryValue logFrame) {
+		this.logFrame = logFrame;
+	}
+	public AmpIndicatorRiskRatings getRisk() {
+		return risk;
+	}
+	public void setRisk(AmpIndicatorRiskRatings risk) {
+		this.risk = risk;
+	}
+	public AmpIndicator getIndicator() {
+		return indicator;
+	}
+	public void setIndicator(AmpIndicator indicator) {
+		this.indicator = indicator;
+	}
+	public AmpActivity getActivity() {
+		return activity;
+	}
+	public void setActivity(AmpActivity activity) {
+		this.activity = activity;
+	}
+	public AmpTheme getTheme() {
+		return theme;
+	}
+	public void setTheme(AmpTheme theme) {
+		this.theme = theme;
+	}
+	public Boolean getDefaultInd() {
+		return defaultInd;
+	}
+	public void setDefaultInd(Boolean defaultInd) {
+		this.defaultInd = defaultInd;
+	}
+}

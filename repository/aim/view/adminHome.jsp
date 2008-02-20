@@ -156,6 +156,7 @@
                                 <digi:trn key="aim:importExportManager">Activity import/export Manager</digi:trn>
                               </digi:link>
 
+
                             </td>
                           </tr>
                           <tr>
@@ -169,7 +170,6 @@
                               </digi:link>
                             </td>
                           </tr>
-
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -181,7 +181,6 @@
                               </digi:link>
                             </td>
                           </tr>
-
                         </table>
                       </td>
                     </tr>

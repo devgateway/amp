@@ -44,8 +44,11 @@
 		var errmsg3="\n<digi:trn key="aim:addFunding:errmsg:financeInstrument">Financing Instrument not selected</digi:trn>";
         var msgEnterAmount="\n<digi:trn key="aim:addFunding:errmsg:enterAmount">Please enter the amount for the transaction</digi:trn>";
 		var msgInvalidAmount="\n<digi:trn key="aim:addFunding:errmsg:invalidAmount">Invalid amount entered for the transaction</digi:trn>";
+		var msgConfirmFunding="<digi:trn key="aim:addFunding:errmsg:confirmFunding">All funding information should be entered in thousands '000'. Do you wish to proceed with your entry?</digi:trn>";
+		//var msgConfirmFunding ="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
 		var msgEnterDate="\n<digi:trn key="aim:addFunding:errmsg:enterDate">Please enter the transaction date for the transaction</digi:trn>";
-		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>");
+		//var msgEnterDate="qsfgqsg";
+		var flag = validateFundingTrn(errmsg1,errmsg2,errmsg3,msgEnterAmount,msgInvalidAmount,msgEnterDate,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>",msgConfirmFunding);
 		
 		if (flag == false) return false;
 		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;
@@ -246,7 +249,7 @@
 							</tr>
 							<tr>
 								<td align="right" bgcolor=#ECF3FD>
-			                	<FONT color=red>*</FONT><b>
+			                	<%-- FONT color=red>*</FONT--%><b>
 										<a title="<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>">
 										<digi:trn key="aim:fundingOrgId">
 										Funding Organization Id</digi:trn></a>
@@ -518,8 +521,8 @@
 											</td>
 										</tr>
 										<tr>
-											<td>&nbsp;
-												
+											<td>
+												&nbsp;
 											</td>
 											<td>
 												<digi:trn key="aim:FixedRate">Fixed Rate</digi:trn>
@@ -529,8 +532,8 @@
 											</td>
 										</tr>
 										<tr>
-											<td>&nbsp;
-												
+											<td>
+												&nbsp;
 											</td>
 											<td align="right">
 												<% String exchRatefldId = "exchFld"+(t++);
@@ -610,8 +613,8 @@
 												</a>
 											</td>
 										<tr>
-											<td bgcolor="#ffff00">&nbsp;
-												
+											<td bgcolor="#ffff00">
+												&nbsp;
 											</td>
 											<td align="left"  bgcolor="#ffff00">
 												<b>
@@ -625,8 +628,8 @@
 											</td>
 										</tr>
 										<tr>
-											<td>&nbsp;
-												
+											<td>
+												&nbsp;
 											</td>
 											<td align="right">
 												<% String exchRatefldId = "exchFld"+ (t++);
@@ -971,14 +974,14 @@
 													</c:forEach>
 												</html:select>
 											</td>
-											 
+											<!--- 
                                             <td>
     	                                        <html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
                                             </td>
                                             <td>
 	                                            <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
 											</td>
-											       
+											 --->        
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
 												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
@@ -1041,7 +1044,6 @@
 													</html:select>
 												</logic:equal>
 											</td>
-											
   											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="disbOrderId" styleClass="inp-text">
 													<html:option value="">&nbsp;</html:option>
@@ -1053,15 +1055,14 @@
 												</html:select>
 											</td>
         	
-					<!--						 
+											<!-- 
                                             <td>
     	                                        <html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
                                             </td>
                                             <td>
 	                                            <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
 											</td>
-                                                                                         -->
-											       
+											 -->        
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
 												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>

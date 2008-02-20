@@ -1,1 +1,0 @@
-update amp_modules_visibility set parent=null where name="Help";

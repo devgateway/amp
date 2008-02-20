@@ -95,8 +95,10 @@
                                                       	<field:display name="Add Sectors Button" feature="Sectors">
                                                       	&nbsp;
                                                       	</field:display>
-                                                        	<input type="button" class="buton" onclick="addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
-
+                                                      	<html:button styleClass="buton"
+															property="submitButton" onclick="addSectors();">
+															<digi:trn key="btn:addSectors">Add Sectors</digi:trn>
+														</html:button>
                                                       </td>
                                                     </tr>
                                                   </c:if>
@@ -156,13 +158,18 @@
 																	<field:display name="Add Sectors Button" feature="Sectors">&nbsp;
     		                                                            <td>
     		                                                            <html:hidden name="aimEditActivityForm" property="editAct"/>
-    		                                                                 <input type="button" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' class="buton"  onclick="addSectors(${aimEditActivityForm.editAct});">
-                    	                                                </td>
+    		                                                            <html:button styleClass="buton"
+															property="submitButton" onclick="addSectors(${aimEditActivityForm.editAct});">
+															<digi:trn key="btn:addSectors">Add Sectors</digi:trn>
+														</html:button></td>
                                                                     </field:display>                                                          
 																</logic:equal>      
 																    <field:display name="Remove Sectors Button" feature="Sectors">&nbsp;
                                                                   <td>
-																	<input type="button" class="buton" onclick="return removeSelSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
+                                                                  <html:button styleClass="buton"
+															property="submitButton" onclick="return removeSelSectors()">
+															<digi:trn key="btn:removeSector">Remove Sector</digi:trn>
+														</html:button>
                                                                   </td>
 	                                                                  </field:display>
 

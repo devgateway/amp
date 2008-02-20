@@ -559,8 +559,8 @@ function checkUncheckAll2() {
 																						</html:checkbox>
 																					</td>
 																				</tr>
-
-																		<tr align="center">
+																				<c:if test="${aimAdvancedReportForm.canMakePublic==true}">
+																				<tr align="center">
 																					<td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 																						<html:checkbox property="publicReport">
 																							<b><digi:trn key="aim:publicReport">
@@ -571,7 +571,7 @@ function checkUncheckAll2() {
 																						<input type="hidden" value="hidden" name="wasSelectMeasuresStep"/>
 																					</td>
 																				</tr>
-
+																				</c:if>
 																			</table>
 																		</TD></TR>
 																	</TABLE>
@@ -625,3 +625,6 @@ function checkUncheckAll2() {
 </TR>
 </TABLE>
 </digi:form>
+
+
+

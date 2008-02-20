@@ -23,6 +23,23 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 
 	protected Set metaData;
 
+	@Override
+	public Cell merge(Cell c) {
+		AmountCell ret=(AmountCell) super.merge(c);
+		CategAmountCell realRet=new CategAmountCell(ret.getOwnerId());
+		realRet.getMergedCells().addAll(ret.getMergedCells());
+		CategAmountCell categ=(CategAmountCell) c;
+		realRet.getMetaData().addAll(categ.getMetaData());
+		return realRet;
+	}	
+	@Override
+    public void merge(Cell c1, Cell c2) {
+		super.merge(c1, c2);
+		CategAmountCell categ1=(CategAmountCell) c1;
+		CategAmountCell categ2=(CategAmountCell) c2;
+		categ1.getMetaData().addAll(categ2.getMetaData());
+	}
+	
 	/**
 	 * this item is a customized show only for cummulative amounts
 	 */
@@ -114,56 +131,59 @@ public void applyMetaFilter(String columnName,String metaName,Cell metaCell,Cate
 		MetaTextCell relatedLocation=(MetaTextCell) c.getByOwnerAndValue(this.getOwnerId(),metaCell.getValue());
 		if(relatedLocation!=null) { 
 		MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedLocation.getMetaData(),metaName);
-		Double percentage=(Double) percentMeta.getValue() ;
-		ret.setPercentage(percentage.doubleValue());			
+		if(percentMeta!=null) {
+			Double percentage=(Double) percentMeta.getValue() ;
+			ret.setPercentage(percentage.doubleValue());			
+		}
 		}
 	}
 	
 }
 	
 	
-public Cell filter(Cell metaCell,Set ids)  {
-	CategAmountCell ret=null;
-	try{
-		 ret = (CategAmountCell) super.filter(metaCell,ids);    
+public Cell filter(Cell metaCell,Set ids) {
+    	CategAmountCell ret = (CategAmountCell) super.filter(metaCell,ids);    
 		if(ret==null) return null;
-		if(metaCell.getColumn().getName().equals(ArConstants.DONOR)) {
+		if(metaCell.getColumn().getName().equals(ArConstants.DONOR)) 
 				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.DONOR)))
-			return null;
-		}
-		
-		//TODO: find a solution so Regional filtering and Regional percentage work at the same time! right now only one can be used 
-		//at the same time. the matacell is REGION regardles if i am making regional reports or im filtering regional percentage in
-		// a regional hierarchy. so we need to differentiate somehow, maybe using reportsMeta
-		/*
-		if(metaCell.getColumn().getName().equals(ArConstants.REGION)) {
-				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.REGION)))
-			return null;
-		}
-		*/
-
-		if(metaCell.getColumn().getName().equals("Type Of Assistance")) {
-				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.TERMS_OF_ASSISTANCE)))
-			return null;
-		}
-
-		if(metaCell.getColumn().getName().equals("Component Name")) {
-			if(!metaCell.getValue().toString().equals(ret.getMetaValueString("Component")))
 		return null;
-		}
+		
+		if(metaCell.getColumn().getName().equals(ArConstants.DONOR_GROUP)) 
+			if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.DONOR_GROUP)))
+		return null;
+		
+			
+		if(metaCell.getColumn().getName().equals(ArConstants.DONOR_TYPE_COL)) 
+			if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.DONOR_TYPE_COL)))
+		return null;
+	
+		if(metaCell.getColumn().getName().equals(ArConstants.REGION) &&
+				this.getNearestReportData().getReportMetadata().getType().equals(ArConstants.REGIONAL_TYPE)) 
+				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.REGION)))
+		return null;
+		
+
+		if(metaCell.getColumn().getName().equals(ArConstants.TERMS_OF_ASSISTANCE)) 
+				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.TERMS_OF_ASSISTANCE)))
+		return null;
+		
+
+		if(metaCell.getColumn().getName().equals(ArConstants.COMPONENT)) 
+			if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.COMPONENT)))
+		return null;
+		
 		
 		//apply metatext filters
 		if(metaCell instanceof MetaTextCell) {
 			//apply metatext filters for column Sector
 		 applyMetaFilter("Sector", ArConstants.SECTOR_PERCENTAGE, metaCell, ret);
+		 applyMetaFilter("Sub-Sector", ArConstants.SECTOR_PERCENTAGE, metaCell, ret);
 		 applyMetaFilter("Region", ArConstants.LOCATION_PERCENTAGE, metaCell, ret);
 		 applyMetaFilter("Componente", ArConstants.COMPONENTE_PERCENTAGE, metaCell, ret);
 		 applyMetaFilter("National Planning Objectives", ArConstants.NPO_PERCENTAGE, metaCell, ret);
+		 applyMetaFilter("Primary Program", ArConstants.PROGRAM_PERCENTAGE, metaCell, ret);
+		 applyMetaFilter("Secodary Program", ArConstants.PROGRAM_PERCENTAGE, metaCell, ret);
 		}
-	}catch(RuntimeException ex) {
-		ex.printStackTrace();
-	}
-    	
 		
 		//if(ret.getMergedCells().size()>0) 
 			//logger.info(ret.getMergedCells());

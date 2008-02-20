@@ -431,6 +431,5 @@ public class EditIPAContract extends MultiAction {
          }
         request.setAttribute("close", "close");
         return modeFinalize(mapping, form, request, response);
-
     }
     }

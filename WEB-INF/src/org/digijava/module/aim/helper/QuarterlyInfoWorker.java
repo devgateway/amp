@@ -147,9 +147,8 @@ public class QuarterlyInfoWorker {
 					fromCurrency=fixedRate.doubleValue();
 				}
 				
-				//String strAmt = CurrencyWorker.convert(tmpAmt, fromCurrency, targetCurrency);
-				double amountConverted = CurrencyWorker.convertToDouble(tmpAmt, fromCurrency, targetCurrency);
-				quarterlyInfo.setPlannedAmount(amountConverted);
+				String strAmt = CurrencyWorker.convert(tmpAmt, fromCurrency,targetCurrency);
+				quarterlyInfo.setPlannedAmount(strAmt);
 				String strDate = DateConversion.ConvertDateToString(transactionDate);
 				quarterlyInfo.setDateDisbursed(strDate);
 				FiscalDO fdo = FiscalCalendarWorker.getFiscalYrQtr(transactionDate, fp.getFiscalCalId());
@@ -223,9 +222,8 @@ public class QuarterlyInfoWorker {
 				fromCurrency=fixedRate.doubleValue();
 			}
 			
-			//String strAmt = CurrencyWorker.convert(tmpAmt, fromCurrency,targetCurrency);
-			double amountConverted = CurrencyWorker.convertToDouble(tmpAmt, fromCurrency, targetCurrency);			
-			
+			String strAmt = CurrencyWorker.convert(tmpAmt, fromCurrency,
+					targetCurrency);
 			String strDate = DateConversion
 					.ConvertDateToString(transactionDate);
 			FiscalDO fdo = FiscalCalendarWorker.getFiscalYrQtr(transactionDate,fiscalId);
@@ -237,7 +235,7 @@ public class QuarterlyInfoWorker {
 								.getFiscalQuarter()
 						&& !quarterlyInfo.isActualAmountSet()) {
 					b = true;
-					quarterlyInfo.setActualAmount(amountConverted);
+					quarterlyInfo.setActualAmount(strAmt);
 					quarterlyInfo.setDateDisbursed(strDate);
 					quarterlyInfo.setActualAmountSet(true);
 					break;
@@ -247,8 +245,8 @@ public class QuarterlyInfoWorker {
 				QuarterlyInfo qf = new QuarterlyInfo();
 				qf.setFiscalYear(fdo.getFiscalYear());
 				qf.setFiscalQuarter(fdo.getFiscalQuarter());
-				qf.setPlannedAmount(0);
-				qf.setActualAmount(amountConverted);
+				qf.setPlannedAmount("0");
+				qf.setActualAmount(strAmt);
 				qf.setDateDisbursed(strDate);
 				qf.setAggregate(1);
 				qf.setActualAmountSet(true);
@@ -284,6 +282,8 @@ public class QuarterlyInfoWorker {
 			double tmpAmt = 0.0;
 			QuarterlyInfo qi = null;
 			QuarterlyInfo qf = null;
+			String strActualAmt = null;
+			String strPlannedAmt = null;
 			String tmpDate = null;
 			double dblAmt = 0.0;
 
@@ -304,8 +304,8 @@ public class QuarterlyInfoWorker {
 				qi = (QuarterlyInfo) arrList.get(index);
 				tmpYr = qi.getFiscalYear();
 				tmpQtr = qi.getFiscalQuarter();
-				tmpActualAmt = qi.getActualAmount();
-				tmpPlannedAmt = qi.getPlannedAmount();
+				tmpActualAmt = DecimalToText.getDouble(qi.getActualAmount());
+				tmpPlannedAmt = DecimalToText.getDouble(qi.getPlannedAmount());
 				tmpDate = qi.getDateDisbursed();
 
 				while (index < arrList.size()) {
@@ -316,19 +316,25 @@ public class QuarterlyInfoWorker {
 					while (index < arrList.size()
 							&& (qi.getFiscalYear() == tmpYr && qi
 									.getFiscalQuarter() == tmpQtr)) {
-						tmpActualAmt += qi.getActualAmount();
-						tmpPlannedAmt += qi.getPlannedAmount();
+						tmpActualAmt += DecimalToText.getDouble(qi
+								.getActualAmount());
+						tmpPlannedAmt += DecimalToText.getDouble(qi
+								.getPlannedAmount());
 						tmpDate = qi.getDateDisbursed();
 						index++;
 						if (index < arrList.size()) {
 							qi = (QuarterlyInfo) arrList.get(index);
 						}
 					}
+					strActualAmt = DecimalToText
+							.ConvertDecimalToText(tmpActualAmt);
+					strPlannedAmt = DecimalToText
+							.ConvertDecimalToText(tmpPlannedAmt);
 					qf = new QuarterlyInfo();
 					qf.setFiscalYear(tmpYr);
 					qf.setFiscalQuarter(tmpQtr);
-					qf.setPlannedAmount(tmpPlannedAmt);
-					qf.setActualAmount(tmpActualAmt);
+					qf.setPlannedAmount(strPlannedAmt);
+					qf.setActualAmount(strActualAmt);
 					qf.setDateDisbursed(tmpDate);
 					qf.setAggregate(0);
 					qf.setPlus(true);
@@ -337,8 +343,10 @@ public class QuarterlyInfoWorker {
 
 					tmpYr = qi.getFiscalYear();
 					tmpQtr = qi.getFiscalQuarter();
-					tmpActualAmt = qi.getActualAmount();
-					tmpPlannedAmt = qi.getPlannedAmount();
+					tmpActualAmt = DecimalToText
+							.getDouble(qi.getActualAmount());
+					tmpPlannedAmt = DecimalToText.getDouble(qi
+							.getPlannedAmount());
 				}
 			}
 		//	if (logger.isDebugEnabled())
@@ -518,10 +526,9 @@ public class QuarterlyInfoWorker {
 		tq.setTotalDisbursed(strTotDisbursement);
 		double totExpended = DbUtil.getTotalDonorFund(ampFundingId,
 				new Integer(Constants.EXPENDITURE), adjType, perspective);
-		tq.setTotalExpended(CurrencyWorker.convert(totExpended,
-				fromCurrency, targetCurrency));
-		tq.setTotalExpended(CurrencyWorker.convert(totExpended,
-				fromCurrency, targetCurrency));
+		String strTotEexpended =  CurrencyWorker.convert(totExpended,
+				fromCurrency, targetCurrency);
+		tq.setTotalExpended(strTotEexpended);
 		double totUnExpended = totDisbursement - totExpended;
 		String strTotUnexpended = CurrencyWorker.convert(totUnExpended,
 				fromCurrency, targetCurrency);

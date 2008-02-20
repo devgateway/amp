@@ -309,7 +309,7 @@ function checkAmount(amt)
 	return valid;
 }
 
-function checkAmountLen(amt)
+function checkAmountLen(amt,msgConfFunding)
 {
 	var len = amt.length;
 	var valid = false;
@@ -335,7 +335,7 @@ function checkAmountLen(amt)
 				}
 				if(cnt > 6)
 				{
-					valid = confirm('All funding information should be entered in thousands "000". Do you wish to proceed with your entry?');
+					valid = confirm(msgConfFunding);															
 				}
 				return valid;
 			}
@@ -345,7 +345,7 @@ function checkAmountLen(amt)
 	}
 	if(len > 6)
 	{
-		valid = confirm('All funding information should be entered in thousands "000". Do you wish to proceed with your entry?');
+		valid = confirm(msgConfFunding);		
 		return valid;
 	}
 	

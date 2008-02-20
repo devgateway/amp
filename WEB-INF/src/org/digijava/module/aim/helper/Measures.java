@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class Measures {
 	private Long id;
 	private String name;
+	private String nameTrimmed ;
 	private ArrayList actors;
 	/**
 	 * @return Returns the actors.
@@ -55,5 +56,11 @@ public class Measures {
 			return measure.getId().equals(id);
 		}
 		throw new ClassCastException();
+	}
+	public String getNameTrimmed() {
+		return name.replace(" ", "");
+	}
+	public void setNameTrimmed(String nameTrimmed) {
+		this.nameTrimmed = nameTrimmed;
 	}
 }

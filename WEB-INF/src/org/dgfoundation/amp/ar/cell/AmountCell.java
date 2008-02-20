@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.MetaInfo;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.FormatHelper;
 
 /**
@@ -63,6 +64,7 @@ public class AmountCell extends Cell {
 	public AmountCell() {
 		super();
 		mergedCells = new HashSet();
+		// TODO Auto-generated constructor stub
 	}
 
 	public AmountCell(int ensureCapacity) {
@@ -77,6 +79,7 @@ public class AmountCell extends Cell {
 	public AmountCell(Long id) {
 		super(id);
 		mergedCells = new HashSet();
+		// TODO Auto-generated constructor stub
 	}
 
 	/*
@@ -245,7 +248,8 @@ public class AmountCell extends Cell {
 	public Date getCurrencyDate() {
 		return currencyDate;
 	}
-
+	
+	
 	public void setCurrencyDate(Date CurrencyDate) {
 		this.currencyDate = CurrencyDate;
 	}
@@ -261,7 +265,8 @@ public class AmountCell extends Cell {
 		 while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();
 			AmountCell filtered=(AmountCell) element.filter(metaCell,ids);
-			if(filtered!=null) realRet.getMergedCells().add(filtered);
+			if(filtered!=null) 
+				realRet.merge(realRet,filtered);
 		}
 		 return realRet;
 	}
@@ -288,7 +293,7 @@ public class AmountCell extends Cell {
 		AmountCell ac1 = (AmountCell) c1;
 		AmountCell ac2 = (AmountCell) c2;
 		if (this.getOwnerId() == null)
-		    this.setOwnerId(ac1.getOwnerId());
+		    if(ac1.getOwnerId()!=null) this.setOwnerId(ac1.getOwnerId()); else this.setOwnerId(ac2.getOwnerId());
 		
 		//merge with c1 only if this is different than c1
 		if (!this.equals(c1)) {

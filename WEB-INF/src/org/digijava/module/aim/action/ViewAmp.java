@@ -206,8 +206,7 @@ public class ViewAmp
 
             // checking whether the member is a Team lead. if yes, then
             // we set the session variable 'teamLeadFlag' as 'true' else 'false'
-            AmpTeamMemberRoles lead = TeamMemberUtil
-                    .getAmpTeamHeadRole();
+            AmpTeamMemberRoles lead = TeamMemberUtil.getAmpTeamHeadRole();
             TeamMember tm = new TeamMember();
 
             if (lead != null) {

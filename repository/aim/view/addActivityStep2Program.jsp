@@ -89,9 +89,7 @@
                                                                   <tr>
                                                                     <td>
                                                                       <html:multibox property="selectedNPOPrograms" value="${program.ampThemeId}"/>
-
-
-                                                                      ${nationalPlanObjectivePrograms.hierarchyNames}
+										${nationalPlanObjectivePrograms.hierarchyNames}
                                                                     </td>
                                                                       <td width="5%" align="right" vAlign="center" nowrap="nowrap">
                                                                     	<FONT color="red">*</FONT>
@@ -118,12 +116,16 @@
 
                                                           <c:if test="${!empty aimEditActivityForm.nationalSetting.defaultHierarchy && (aimEditActivityForm.nationalSetting.allowMultiple||empty aimEditActivityForm.nationalPlanObjectivePrograms)}">
                                                           <field:display name="Add Programs Button - National Plan Objective" feature="Program">
-                                                            <input type="button" value='<digi:trn key="btn:addPrograms">Add Programs</digi:trn>' onclick="addProgram(1);" class="buton">
+                                                            <html:button styleClass="buton" property="submitButton" onclick="addProgram(1);">
+															<digi:trn key="btn:addPrograms">Add Programs</digi:trn>
+														</html:button>
                                                           </field:display>
                                                             </c:if>
                                                             <c:if test="${!empty aimEditActivityForm.nationalPlanObjectivePrograms}">
                                                             <field:display name="Remove Program Button - National Plan Objective" feature="Program">
-                                                              <input type="button" value='<digi:trn key="btn:removeProgram">Remove program</digi:trn>' onclick="remProgram(1);" class="buton">
+                                                              <html:button styleClass="buton" property="submitButton" onclick="remProgram(1);">
+															<digi:trn key="btn:removeProgram">Remove program</digi:trn>
+														</html:button>
                                                               </field:display>
                                                             </c:if>
                                                           </td>
@@ -190,12 +192,16 @@
                                                           <td>
                                                             <c:if test="${!empty aimEditActivityForm.primarySetting.defaultHierarchy&&(aimEditActivityForm.primarySetting.allowMultiple||empty aimEditActivityForm.primaryPrograms)}">
                                                             <field:display name="Add Programs Button - Primary Programs" feature="Program">
-                                                            <input type="button" value='<digi:trn key="btn:addPrograms">Add Programs</digi:trn>' onclick="addProgram(2);" class="buton">
+                                                            <html:button styleClass="buton" property="submitButton" onclick="addProgram(2);">
+															<digi:trn key="btn:addPrograms">Add Programs</digi:trn>
+														</html:button>
                                                             </field:display>
                                                             </c:if>
                                                             <c:if test="${!empty aimEditActivityForm.primaryPrograms}">
 																<field:display name="Remove Program Button - Primary Programs" feature="Program">
-                                                              <input type="button" value='<digi:trn key="btn:removeProgram">Remove program</digi:trn>' onclick="remProgram(2);" class="buton">
+																<html:button styleClass="buton" property="submitButton" onclick="remProgram(2);">
+															<digi:trn key="btn:removeProgram">Remove program</digi:trn>
+														</html:button>
                                                               </field:display>
                                                             </c:if>
                                                           </td>
@@ -264,12 +270,16 @@
                                                           <td>
                                                             <c:if test="${!empty aimEditActivityForm.secondarySetting.defaultHierarchy&&(aimEditActivityForm.secondarySetting.allowMultiple||empty aimEditActivityForm.secondaryPrograms)}">
                                                             <field:display name="Add Programs Button - Secondary Programs" feature="Program">
-                                                            <input type="button" value='<digi:trn key="btn:addPrograms">Add Programs</digi:trn>' onclick="addProgram(3);" class="buton">
+                                                            <html:button styleClass="buton" property="submitButton" onclick="addProgram(3);">
+															<digi:trn key="btn:addPrograms">Add Programs</digi:trn>
+														</html:button>
                                                             </field:display>
                                                             </c:if>
                                                             <c:if test="${!empty aimEditActivityForm.secondaryPrograms}">
                                                             <field:display name="Remove Program Button - Secondary Programs" feature="Program">
-                                                              <input type="button" value='<digi:trn key="btn:removeProgram">Remove program</digi:trn>' onclick="remProgram(3);" class="buton">
+                                                              <html:button styleClass="buton" property="submitButton" onclick="remProgram(3);">
+															<digi:trn key="btn:removeProgram">Remove program</digi:trn>
+														</html:button>
                                                               </field:display>
                                                             </c:if>
                                                           </td>

@@ -18,6 +18,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
@@ -926,17 +927,18 @@ public class ProgramUtil {
 		 * Recursively iterates on all child programs till the end of the branch.
 		 * @param parentThemeId db ID of the parent program
 		 * @return collection of AmpTheme beans
-		 * @throws AimException if anything goes wrong
+		 * @throws AimException if enything goes wrong
 		 */
-		public static Collection<AmpTheme> getAllSubThemesFor(Long parentThemeId) throws AimException
+		public static Collection getAllSubThemesFor(Long parentThemeId) throws AimException
 		{
 			Collection subThemes = new ArrayList();
 			try
 			{
-				Collection<AmpTheme> progs = getSubThemes(parentThemeId);
+				Collection progs = getSubThemes(parentThemeId);
 				if (progs != null && progs.size()>0){
 					subThemes.addAll(progs);
-					for (AmpTheme child : progs) {
+					for (Iterator iter = progs.iterator(); iter.hasNext();) {
+						AmpTheme child = (AmpTheme) iter.next();
 						Collection col = getAllSubThemes(child.getAmpThemeId());
 						subThemes.addAll(col);
 					}
@@ -1154,7 +1156,7 @@ public class ProgramUtil {
 			}
 		}
 
-		public static void deleteTheme(Long themeId)
+		public static void deleteTheme(Long themeId) throws AimException
 		{
 			ArrayList colTheme = (ArrayList)getRelatedThemes(themeId);
 			int colSize = colTheme.size();
@@ -1168,26 +1170,20 @@ public class ProgramUtil {
 					AmpThemeIndicators themeInd = (AmpThemeIndicators) tempInd.next();
 					//deletePrgIndicator(themeInd.getAmpThemeIndId());
 				}*/
-				deleteonebyone(ampTh.getAmpThemeId());
-			}
-		}
-
-		public static void deleteonebyone(Long thID)
-		{
-			Session sess = null;
-			Transaction tx = null;
-			try
-			{
-				sess = PersistenceManager.getRequestDBSession();
-				tx = sess.beginTransaction();
-				AmpTheme tempTheme = (AmpTheme) sess.load(AmpTheme.class,thID);
-				sess.delete(tempTheme);
-				tx.commit();
-			}
-			catch(Exception e1)
-			{
-				logger.error("Unable to delete the themes");
-				logger.debug("Exception : "+e1);
+				Session sess = null;
+				Transaction tx = null;
+				try {
+					sess = PersistenceManager.getRequestDBSession();
+					tx = sess.beginTransaction();
+					AmpTheme tempTheme = (AmpTheme) sess.load(AmpTheme.class,themeId);
+					sess.delete(tempTheme);
+					tx.commit();
+				} catch (HibernateException e) {
+					logger.error(e);
+					throw new AimException("Cannot delete theme with id "+themeId,e);
+				} catch (DgException e) {
+					logger.error(e);
+				}
 			}
 		}
 
@@ -1341,6 +1337,7 @@ public class ProgramUtil {
                     session.update(tempThemeInd);
                 }
 				tx.commit();
+				session.flush();
 			}
 			catch(Exception e1)
 			{
@@ -1730,9 +1727,7 @@ public class ProgramUtil {
 	}
 
 	 public static String getTrn(String key, String defResult, HttpServletRequest request){
-		 String result;
-		 result = CategoryManagerUtil.translate(key, request, defResult);
-		 return result;
+		 return defResult;
 	 }
 	 
     public static String getLevelImage(int level){

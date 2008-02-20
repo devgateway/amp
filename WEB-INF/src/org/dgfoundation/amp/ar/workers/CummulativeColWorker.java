@@ -95,7 +95,7 @@ public class CummulativeColWorker extends ColumnWorker {
 		if(columnName.equalsIgnoreCase("Cumulative Disbursement")) trStr=ArConstants.DISBURSEMENT;
 		
 		try{
-			if(MetaInfo.getMetaInfo(c.getMetaData(),ArConstants.TRANSACTION_TYPE)!=null&& MetaInfo.getMetaInfo(c.getMetaData(),ArConstants.TRANSACTION_TYPE)!=null && MetaInfo.getMetaInfo(c.getMetaData(),ArConstants.TRANSACTION_TYPE).getValue().equals(trStr) && MetaInfo.getMetaInfo(c.getMetaData(),ArConstants.ADJUSTMENT_TYPE).getValue().equals(ArConstants.ACTUAL)) return src;
+			if(MetaInfo.getMetaInfo(c.getMetaData(),ArConstants.TRANSACTION_TYPE).getValue().equals(trStr) && MetaInfo.getMetaInfo(c.getMetaData(),ArConstants.ADJUSTMENT_TYPE).getValue().equals(ArConstants.ACTUAL)) return src;
 			else return null;	
 		}
 		catch (NullPointerException E) {

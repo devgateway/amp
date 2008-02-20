@@ -38,6 +38,7 @@
 						<c:set var="translation">
 							<digi:trn key="aim:loginSuccess:clickToUseAmp">Click here to Use AMP now</digi:trn>
 						</c:set>
+						<br>
 						<digi:link href="/index.do" title="${translation}" >	
 						<digi:trn key="aim:loginSuccess:useAMPNow">
 						Use AMP now

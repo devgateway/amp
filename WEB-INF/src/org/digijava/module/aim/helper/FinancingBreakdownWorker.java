@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.logic.Logic;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -48,12 +47,29 @@ public class FinancingBreakdownWorker
 		double total = 0;
 		Collection<YearlyInfo> c = YearlyInfoWorker.getYearlyInfo(fp);
 		if ( c.size() != 0 )	{
-			
-			total = Logic.getInstance().getTotalDonorFundingCalculator().getTotalDonorFunding(c, fp);
-						
+			Iterator<YearlyInfo> iter = c.iterator();
+
+			/* please do not remove these commented lines, I am sure we will need them again */
+			//String totalsSetting=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_INCLUDE_PLANNED);
+			//boolean includePlannedInTotals=(totalsSetting!=null) && (totalsSetting.trim().equals("On"));
+
+			while ( iter.hasNext() )	{
+				YearlyInfo yf = iter.next();
+
+				if ( yf.getActualAmount() != null && (!yf.getActualAmount().equals("NA")) )	{
+					double temp = FormatHelper.parseDouble(yf.getActualAmount());
+					total += temp;
+				}
+
+				//if (includePlannedInTotals && yf.getPlannedAmount()!=null && !yf.getPlannedAmount().equals("NA") && fp.getTransactionType() != Constants.DISBURSEMENT){
+				if (yf.getPlannedAmount()!=null && !yf.getPlannedAmount().equals("NA") && fp.getTransactionType() != Constants.DISBURSEMENT){
+					double temp = FormatHelper.parseDouble(yf.getPlannedAmount());
+					total += temp;
+				}
+			}
 		}
 
-		logger.debug("getTotalDonorFund() returning " + FormatHelper.formatNumber(total));
+			logger.debug("getTotalDonorFund() returning " +FormatHelper.formatNumber(total));
 
 		return FormatHelper.formatNumber(total);
 	}
@@ -87,8 +103,8 @@ public class FinancingBreakdownWorker
 	public static String getOverallTotal(Collection c,int type)
 	{
 		if ( logger.isDebugEnabled() )
-			logger.debug("getOverallTotal(Collection c size=" + c.size()
-					   + ", type= " + type ) ;
+		logger.debug("getOverallTotal(Collection c size=" + c.size()
+		+", type= " + type ) ;
 		Iterator iter = c.iterator() ;
 		FinancingBreakdown financingBreakdown = null ;
 		String strTotal = "" ;
@@ -129,7 +145,10 @@ public class FinancingBreakdownWorker
 			}
 		}
 		if ( logger.isDebugEnabled() )
-		logger.debug("getOverallTotal(Collection c , type= " + type + ") returning total " + total ) ;
+		logger.debug("getOverallTotal(Collection c , type= " + type
+		+ ") returning total " + total ) ;
+//		strTotal = DecimalToText.ConvertDecimalToText(total) ;
+		//DecimalFormat format = new DecimalFormat();
 		strTotal= FormatHelper.formatNumber(total);
 		return strTotal ;
 	}

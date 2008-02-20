@@ -23,3 +23,11 @@ CREATE TABLE `amp_activity_location` (
 INSERT INTO amp_activity_location (`amp_activity_id`,`amp_location_id`,`amp_activity_location_id`)
 select 	`amp_activity_id`,`amp_location_id`,`amp_activity_location_id` from tmp_location_table;
 
+
+
+
+
+
+
+
+

@@ -90,6 +90,8 @@ public class AMPStartupListener extends HttpServlet
         	
         	GlobalSettings globalSettings = GlobalSettings.getInstance();
         	globalSettings.setPerspectiveEnabled(FeaturesUtil.isPerspectiveEnabled());
+        	globalSettings.setShowComponentFundingByYear(FeaturesUtil.isShowComponentFundingByYear());
+        	FeaturesUtil.switchLogicInstance();
         	
         	ampContext.setAttribute(Constants.GLOBAL_SETTINGS, globalSettings);
         	

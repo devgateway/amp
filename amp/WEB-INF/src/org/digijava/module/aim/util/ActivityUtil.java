@@ -60,7 +60,6 @@ import org.digijava.module.aim.dbentity.AmpReportCache;
 import org.digijava.module.aim.dbentity.AmpReportLocation;
 import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpReportSector;
-import org.digijava.module.aim.dbentity.AmpSISINProyect;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;

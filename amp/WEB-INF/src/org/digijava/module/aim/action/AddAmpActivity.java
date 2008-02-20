@@ -205,9 +205,19 @@ public class AddAmpActivity extends Action {
     	  }
       }
       if (addSector) {
+    	  //if an activity already has one or more sectors,than after adding new one
+    	  //the percentages must equal blanks and user should fill them
 			if (prevSelSectors != null) {
-				if (prevSelSectors.isEmpty())
+				if (prevSelSectors.isEmpty()) {
 					selectedSector.setSectorPercentage(new Integer(100));
+				} else {
+					selectedSector.setSectorPercentage(null);
+					Iterator iter=prevSelSectors.iterator();
+					while(iter.hasNext()){
+						ActivitySector actSect=(ActivitySector)iter.next();
+						actSect.setSectorPercentage(null);
+					}
+				}					
 				prevSelSectors.add(selectedSector);
 			} else {
 				selectedSector.setSectorPercentage(new Integer(100));

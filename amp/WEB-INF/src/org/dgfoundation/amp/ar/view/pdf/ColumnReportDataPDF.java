@@ -115,12 +115,12 @@ public class ColumnReportDataPDF extends PDFExporter {
 				if(ii.hasNext())
 				while (ii.hasNext()) {
 					Column element2 = (Column) ii.next();
-					element2.setMaxNameDisplayLength(16);
+					//element2.setMaxNameDisplayLength(16);
 					
 					String cellValue=element2.getName(metadata.getHideActivities());
 					//this value should be translated
 					String translatedCellValue=new String();
-					String prefix="aim:pop:";
+					String prefix="aim:reportBuilder:";
 					
 					try{
 						translatedCellValue=TranslatorWorker.translate(prefix+cellValue,locale,siteId);
@@ -131,11 +131,20 @@ public class ColumnReportDataPDF extends PDFExporter {
 						}
 					PdfPCell pdfc=null;
 				 
-					if(translatedCellValue.compareTo("")==0)
+					if(translatedCellValue.compareTo("")==0){
+					    if(cellValue.length() < 16){
 						pdfc = new PdfPCell(new Paragraph(cellValue,font));
-					else 
+					    }else{
+						pdfc = new PdfPCell(new Paragraph(cellValue.substring(0,15),font));
+					    }
+						
+					}else{ 
+					    if (translatedCellValue.length() < 16){
 						pdfc = new PdfPCell(new Paragraph(translatedCellValue,font));
-					
+					    }else{
+						pdfc = new PdfPCell(new Paragraph(translatedCellValue.substring(0,15),font));
+					    }
+					    }
 					pdfc.setVerticalAlignment(Element.ALIGN_CENTER);
 					pdfc.setColspan(element2.getWidth());
 					table.addCell(pdfc);

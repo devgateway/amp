@@ -23,7 +23,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpPerspective;
-import org.digijava.module.aim.dbentity.AmpSISINProyect;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.AmpComponent;
 import org.digijava.module.aim.helper.Components;
@@ -97,8 +96,6 @@ public class ShowAddComponent extends Action {
 					request.setAttribute("defPerspective",Constants.MOFED);
 				}
 				
-				eaForm.setSisinProyect(new AmpSISINProyect());
-				
 				String defCurr = CurrencyUtil.getCurrency(
 						tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 				request.setAttribute("defCurrency",defCurr);				
@@ -133,7 +130,6 @@ public class ShowAddComponent extends Action {
 						eaForm.setComponentId(comp.getComponentId());
 						eaForm.setComponentTitle(comp.getTitle());
 						eaForm.setComponentDesc(comp.getDescription());
-						eaForm.setSisinProyect(comp.getSisinProyect());
 						break;
 					}
 				}
@@ -168,11 +164,6 @@ public class ShowAddComponent extends Action {
 				compFund.setTitle(eaForm.getComponentTitle());
 				compFund.setAmount(eaForm.getComponentAmount());
 				compFund.setDescription(eaForm.getComponentDesc());
-				
-				
-				if (eaForm.getSisinProyect() != null) {
-					compFund.setSisinProyect(eaForm.getSisinProyect());
-				}
 				
 				
 				Enumeration paramNames = request.getParameterNames();

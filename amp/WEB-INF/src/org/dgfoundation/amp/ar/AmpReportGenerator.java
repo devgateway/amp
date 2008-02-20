@@ -23,6 +23,7 @@ import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.helper.Constants;
 
 /**
  * 
@@ -240,9 +241,9 @@ public class AmpReportGenerator extends ReportGenerator {
 		List cats = new ArrayList();
 
 		// we perform totals by categorizing only by Funding Type...
-		String singleTotalColumn = FeaturesUtil.getGlobalSettingValue("Totals include planned");
+		boolean  totalIncludedPlaned = "On".equals(FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_INCLUDE_PLANNED)) ? true : false;
 		
-		if(reportMetadata.getType().intValue()!=ArConstants.CONTRIBUTION_TYPE && !"On".equals(singleTotalColumn))
+		if(reportMetadata.getType().intValue()!=4 && totalIncludedPlaned)
 			cats.add(ArConstants.FUNDING_TYPE); 
 
 		// get the funding column

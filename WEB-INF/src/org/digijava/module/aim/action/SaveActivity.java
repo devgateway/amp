@@ -165,10 +165,10 @@ public class SaveActivity extends Action {
             	if ( nodeWrapper != null )
             			UUIDs.add( nodeWrapper.getUuid() );
             }
-            if(SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false)!=null)
-			UUIDs.addAll(
-					SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false)
-			);
+            if(SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false)!=null) {
+            	UUIDs.addAll(SelectDocumentDM.getSelectedDocsSet(request, ActivityDocumentsConstants.RELATED_DOCUMENTS, false));
+            }
+			
 			if (UUIDs != null && UUIDs.size() >0 ) {
 				if ( activity.getActivityDocuments() == null )
 						activity.setActivityDocuments(new HashSet<AmpActivityDocument>() );
@@ -1526,7 +1526,7 @@ public class SaveActivity extends Action {
 			eaForm.setCommentFlag(false);
 			// Clearing approval process properties
 			eaForm.setWorkingTeamLeadFlag("no");
-                        eaForm.setTeamLead(false);
+            eaForm.setTeamLead(false);
 			eaForm.setFundingRegions(null);
 			eaForm.setRegionalFundings(null);
 			eaForm.setLineMinRank(null);

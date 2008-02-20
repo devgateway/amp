@@ -736,7 +736,7 @@
 																</td>
 																<td bgcolor="#F8F8F5">
 		         					                 				<div align="right">
-		         					                 					<%=FormatHelper.formatNumber(yearlyInfo.getPlannedAmount()))%>
+		         					                 					<%=FormatHelper.formatNumber(yearlyInfo.getPlannedAmount())%>
 																	</div>
 																</td>
 																<td bgcolor="#F8F8F5">

@@ -9,9 +9,6 @@ package org.dgfoundation.amp.ar.workers;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormatSymbols;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -27,11 +24,8 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.BaseCalendar;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.EthiopianCalendar;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.helper.CalendarHelper;
 
 /**
  * 
@@ -41,25 +35,21 @@ import org.digijava.module.aim.util.DbUtil;
  */
 public class CategAmountColWorker extends ColumnWorker {
 
-	
-    	
-    
-	
-    	protected GregorianCalendar calendar;
-    	protected EthiopianCalendar ethcalendar;
-    	protected DateFormatSymbols dfs;
-    	protected Map metaInfoCache;
-    	protected MetaInfo getCachedMetaInfo(String category, Comparable value) {	    
-	    Map valuesMap=(Map) metaInfoCache.get(category);
-	    if(valuesMap==null) { 
-		valuesMap=new HashMap();
-		metaInfoCache.put(category, valuesMap);
-	    }
-	    MetaInfo mi=(MetaInfo) valuesMap.get(value);
-	    if(mi!=null) return mi;
-	    mi=new MetaInfo(category,value);
-	    valuesMap.put(value, mi);
-	    return mi;	    
+	private CalendarHelper calendarHelper;
+	protected Map metaInfoCache;
+
+	protected MetaInfo getCachedMetaInfo(String category, Comparable value) {
+		Map valuesMap = (Map) metaInfoCache.get(category);
+		if (valuesMap == null) {
+			valuesMap = new HashMap();
+			metaInfoCache.put(category, valuesMap);
+		}
+		MetaInfo mi = (MetaInfo) valuesMap.get(value);
+		if (mi != null)
+			return mi;
+		mi = new MetaInfo(category, value);
+		valuesMap.put(value, mi);
+		return mi;
 	}
     	
 	/**
@@ -70,10 +60,8 @@ public class CategAmountColWorker extends ColumnWorker {
 	public CategAmountColWorker(String condition, String viewName,
 			String columnName,ReportGenerator generator) {
 		super(condition, viewName, columnName,generator);
-		calendar=new GregorianCalendar();
-		dfs=new DateFormatSymbols();
-		ethcalendar=new EthiopianCalendar();
 		this.metaInfoCache=new HashMap();
+		this.calendarHelper = new CalendarHelper();
 	}
 
 	/**filter.getFromYear()!=null
@@ -261,38 +249,30 @@ public class CategAmountColWorker extends ColumnWorker {
 		//Date handling..
 		
 		
-		if (td!=null) calendar.setTime(td); else 
+		if (td!=null) 
+			calendarHelper.setTime(td); 
+		else 
 			logger.error("MISSING DATE FOR FUNDING id ="+id+ " of activity id ="+ ownerId);
 		
 		
 		String quarter=null;
-		String month=null;
+		Comparable month=null;		
 		Integer year=null;
+		
 		
 //		AMP-2212
 		if(filter.getCalendarType()==null || filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_GREGORIAN.getValue())) {
-			int monthId=calendar.get(Calendar.MONTH);
-			month=Integer.toString(monthId)+"-"+dfs.getMonths()[monthId];
-			quarter= "Q"+ new Integer(calendar.get(Calendar.MONTH) / 4 + 1);
-			year=new Integer(calendar.get(Calendar.YEAR));
-		} else
-		    //AMP-2212
-		if(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) || 
-			filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) {		    	
-			EthiopianCalendar ec = ethcalendar.getEthiopianDate(calendar);
-			//AMP-2212
-			if(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue()))
-			{
-				year=new Integer(ec.ethFiscalYear);
-				quarter=new String("Q"+ec.ethFiscalQrt);
-				month=Integer.toString(ec.ethMonth)+"-"+ec.ethMonthName;
-			}//AMP-2212
-			if(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()))
-			{
-				year=new Integer(ec.ethYear);
-				quarter=new String("Q"+ec.ethQtr);
-				month=Integer.toString(ec.ethMonth)+"-"+ec.ethMonthName;
-			}
+			month = calendarHelper.getMonth();
+			quarter= "Q"+ new Integer(calendarHelper.getQuarter());
+			year=new Integer(calendarHelper.getYear());
+		} else if(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())) {
+				year=new Integer(calendarHelper.getEthiopianFiscalYear());
+				quarter=new String("Q"+calendarHelper.getEthiopianFiscalQuarter());
+				month = calendarHelper.getEthiopianMonth();
+		} else if(filter.getCalendarType().getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())){
+				year=new Integer(calendarHelper.getEthiopianYear());				
+				quarter=new String("Q"+calendarHelper.getEthiopianQuarter());
+				month = calendarHelper.getEthiopianMonth();				
 		}
 
 		

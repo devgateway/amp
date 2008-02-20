@@ -27,7 +27,9 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection<BeanWrapperImpl> fromYears;
 	private Collection<BeanWrapperImpl> toYears;
 	private Collection actRankCollection;
-	private Collection pageSizes; //A0,A1,A2,A3,A4 
+	private Collection pageSizes; //A0,A1,A2,A3,A4
+	private Collection donorTypes; //Ex: Multilateral, Bilateral, Regional Governament
+	private Collection donorGroups;
 	private Long regionSelected;
 	
 	private Object[] selectedSectors;
@@ -35,6 +37,9 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedDonors;
 	private Object[] selectedRisks;
 	private Object[] selectedFinancingInstruments;
+	private Object[] selectedDonorTypes; // ids of AmpOrgType
+	private Object[] selectedDonorGroups; //  
+	
 	private Collection regionSelectedCollection;
 	
 	private Long fromYear;
@@ -95,11 +100,13 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		if(request.getParameter("apply")!=null && request.getAttribute("apply")==null){
-			this.selectedDonors = null;
-			this.selectedRisks = null;
-			this.selectedSectors = null;
-			this.selectedStatuses = null;
-			this.selectedFinancingInstruments = null;
+			this.selectedDonors 				= null;
+			this.selectedRisks	 				= null;
+			this.selectedSectors 				= null;
+			this.selectedStatuses				= null;
+			this.selectedFinancingInstruments 	= null;
+			this.selectedDonorTypes				= null;
+			this.selectedDonorGroups			= null;
 		}
 	}
 	
@@ -264,5 +271,36 @@ public class ReportsFilterPickerForm extends ActionForm {
 	}
 	
 	
+	public Collection getDonorTypes() {
+		return donorTypes;
+	}
+
+	public void setDonorTypes(Collection donorTypes) {
+		this.donorTypes = donorTypes;
+	}
+
+	public Object[] getSelectedDonorTypes() {
+		return selectedDonorTypes;
+	}
+
+	public void setSelectedDonorTypes(Object[] selectedDonorTypes) {
+		this.selectedDonorTypes = selectedDonorTypes;
+	}
+
+	public Collection getDonorGroups() {
+		return donorGroups;
+	}
+
+	public void setDonorGroups(Collection donorGroups) {
+		this.donorGroups = donorGroups;
+	}
+
+	public Object[] getSelectedDonorGroups() {
+		return selectedDonorGroups;
+	}
+
+	public void setSelectedDonorGroups(Object[] selectedDonorGroups) {
+		this.selectedDonorGroups = selectedDonorGroups;
+	}
 	
 }

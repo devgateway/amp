@@ -50,6 +50,8 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Set sectors=null;
 	private Set regions=null;
 	private Set risks=null;
+	private Set donorTypes=null;
+	private Set donorGroups=null;
 
 	private Set teamAssignedOrgs;
 
@@ -188,6 +190,21 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		String REGION_SELECTED_FILTER="SELECT amp_activity_id FROM v_regions WHERE region_id ="+regionSelected;
 		String APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status like '" + Constants.APPROVED_STATUS+"'";
 		String DRAFT_FILTER="SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = false)";
+		
+		String DONOR_TYPE_FILTER	= 
+			"SELECT aa.amp_activity_id " +
+			"FROM amp_activity aa, amp_org_role aor, amp_role rol, amp_org_type typ, amp_organisation og  " +
+			"WHERE aa.amp_activity_id = aor.activity AND aor.role = rol.amp_role_id AND rol.role_code='DN' " +
+			"AND typ.amp_org_type_id =  og.org_type_id AND og.amp_org_id = aor.organisation " +
+			"AND typ.amp_org_type_id IN ("+ Util.toCSString(donorTypes, true) +")";
+		
+		String DONOR_GROUP_FILTER	= 
+			"SELECT aa.amp_activity_id " +
+			"FROM amp_activity aa, amp_org_role aor, amp_role rol, amp_org_group grp, amp_organisation og  " +
+			"WHERE aa.amp_activity_id = aor.activity AND aor.role = rol.amp_role_id AND rol.role_code='DN' " +
+			"AND grp.amp_org_grp_id =  og.org_grp_id AND og.amp_org_id = aor.organisation " +
+			"AND grp.amp_org_grp_id IN ("+ Util.toCSString(donorGroups, true) +")";
+		
 		if(fromYear!=null) {
 		    String FROM_FUNDING_YEAR_FILTER="SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.amp_funding_id AND date_format(fd.transaction_date,_latin1'%Y')>='"+fromYear+"'";
 		    queryAppend(FROM_FUNDING_YEAR_FILTER);
@@ -223,6 +240,9 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		if(regionSelected!=null) queryAppend(REGION_SELECTED_FILTER);
 		if(approved==true) queryAppend(APPROVED_FILTER);
 		if (draft == true) queryAppend(DRAFT_FILTER);
+		
+		if(donorGroups!=null && donorGroups.size()>0) queryAppend(DONOR_GROUP_FILTER);
+		if(donorTypes!=null && donorTypes.size()>0) queryAppend(DONOR_TYPE_FILTER);
 		
 		if(governmentApprovalProcedures!=null)
 		{
@@ -578,7 +598,20 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		this.draft = draft;
 	}
 
+	public Set getDonorTypes() {
+		return donorTypes;
+	}
 
+	public void setDonorTypes(Set donorTypes) {
+		this.donorTypes = donorTypes;
+	}
 
+	public Set getDonorGroups() {
+		return donorGroups;
+	}
+
+	public void setDonorGroups(Set donorGroups) {
+		this.donorGroups = donorGroups;
+	}
 	
 }

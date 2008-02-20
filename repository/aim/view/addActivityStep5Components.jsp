@@ -94,45 +94,6 @@
 																<br>
 																<digi:trn key="aim:description">Description</digi:trn>:&nbsp;<c:out value="${selComponents.description}"/>
 																<br>
-																<!-- START SISIN Fields -->
-																<feature:display name="SISIN" module="Components">
-																	<field:display name="SISIN Code" feature="SISIN">
-																				<digi:trn key="aim:sisincode">SISIN Code</digi:trn>:&nbsp;
-																				<c:out value="${selComponents.sisinProyect.sisincode}" /> &nbsp;
-																		<br>
-																	</field:display>
-																	<field:display name="Components Localization" feature="SISIN">
-																				<digi:trn key="aim:localization">Localization</digi:trn>:&nbsp;
-																				<c:out value="${selComponents.sisinProyect.localization}"  /> &nbsp;
-																		<br>
-																	</field:display>
-																	<field:display name="SISIN Sector" feature="SISIN">
-																				<digi:trn key="aim:sisinsector">SISIN Sector</digi:trn>:&nbsp;
-																				<c:out value="${selComponents.sisinProyect.sisinsector}" /> &nbsp;
-																		<br>
-																	</field:display>
-																	<field:display name="Components Financing Source" feature="SISIN">
-																				<digi:trn key="financingsource">Financing Source</digi:trn>:&nbsp;
-																				<c:out value="${selComponents.sisinProyect.financingsource}" /> &nbsp;
-																		<br>
-																	</field:display>
-																	<field:display name="Components Agency Source" feature="SISIN">
-																				<digi:trn key="agencysource">Agency Source</digi:trn>:&nbsp;
-																				<c:out value="${selComponents.sisinProyect.agencysource}" /> &nbsp;
-																		<br>
-																	</field:display>
-																	<field:display name="Components Stage" feature="SISIN">
-																				<digi:trn key="stage">Stage</digi:trn>:&nbsp;
-																				<c:out value="${selComponents.sisinProyect.stage}" /> &nbsp;
-																		<br>
-																	</field:display>
-																	<field:display name="Components Classification Program Code" feature="SISIN">
-																				<digi:trn key="classifprogramcode">Classification Program Code</digi:trn>:&nbsp;
-																				<c:out value="${selComponents.sisinProyect.programcode}" /> &nbsp;
-																		<br>
-																	</field:display>
-																</feature:display>
-																<!-- END SISIN Fields -->
 															</td>
 														</tr>
 

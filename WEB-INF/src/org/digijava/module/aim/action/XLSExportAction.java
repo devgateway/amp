@@ -102,19 +102,28 @@ public class XLSExportAction extends Action {
 			colId.reset();
 			row=sheet.createRow(rowId.shortValue());
 			HSSFCell cell=row.createCell(colId.shortValue());
-			cell.setCellValue(AmpReports.getNote(session) + "\n");
+			
+			String translatedNotes="";
+			String translatedReportName="Report Name:";
+			String translatedReportDescription="Description:";
+			
+			try{	
+			    	translatedNotes=TranslatorWorker.translate("rep:pop:notes",locale,siteId);
+			    	if("".equalsIgnoreCase(translatedNotes)){
+			    	    translatedNotes=AmpReports.getNote(session);    
+			    	}
+				translatedReportName=TranslatorWorker.translate("rep:pop:ReportName",locale,siteId);
+				translatedReportDescription=TranslatorWorker.translate("rep:pop:Description",locale,siteId);
+			}catch (WorkerException e){;}
+			
+			cell.setCellValue(translatedNotes+"\n");
+			
 			grdx.makeColSpan(rd.getTotalDepth());
 			
 			
 			rowId.inc();
 			colId.reset();
 			
-			String translatedReportName="Report Name:";
-			String translatedReportDescription="Description:";
-			try{	
-				translatedReportName=TranslatorWorker.translate("rep:pop:ReportName",locale,siteId);
-				translatedReportDescription=TranslatorWorker.translate("rep:pop:Description",locale,siteId);
-			}catch (WorkerException e){;}
 			
 			row=sheet.createRow(rowId.shortValue());
 			cell=row.createCell(colId.shortValue());

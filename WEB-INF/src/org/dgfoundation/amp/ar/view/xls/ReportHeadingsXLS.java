@@ -79,7 +79,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 						String cellValue=element2.getName(metadata.getHideActivities());
 						//this value should be translated
 						String translatedCellValue=new String();
-						String prefix="aim:pop:";
+						String prefix="aim:reportBuilder:";
 						
 						try{
 							translatedCellValue=TranslatorWorker.translate(prefix+cellValue,locale,siteId);

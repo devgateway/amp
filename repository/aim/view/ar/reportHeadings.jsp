@@ -51,7 +51,7 @@
             </logic:equal>
             <logic:notEqual name="widget" scope="request" value="true">
               <html:link style="color:#FFFFFF;cursor:pointer" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
-              <digi:trn key="aim:report:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
+              <digi:trn key="aim:reportBuilder:${reportHeading}"><c:out value="${reportHeading}"/></digi:trn>
 
               </html:link>
             </logic:notEqual>

@@ -25,6 +25,11 @@ import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
 import java.io.PrintWriter;
 import java.io.OutputStreamWriter;
@@ -85,14 +90,40 @@ public class CSVExportAction
     colId.reset();
     row = sheet.createRow(rowId.shortValue());
     HSSFCell cell = row.createCell(colId.shortValue());
-    cell.setCellValue(AmpReports.getNote(session) + "\n");
+
+    Site site = RequestUtils.getSite(request);
+    Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+
+    String siteId=site.getSiteId();
+    String locale=navigationLanguage.getCode();	
+    
+    String translatedNotes = "";
+    
+	translatedNotes = TranslatorWorker.translate("rep:pop:notes", locale, siteId);
+	
+	if ("".equalsIgnoreCase(translatedNotes)) {
+	    translatedNotes = AmpReports.getNote(session);
+	}
+    
+	
+    cell.setCellValue(translatedNotes + "\n");
+    
     grdx.makeColSpan(rd.getTotalDepth());
     rowId.inc();
     colId.reset();
 
     row = sheet.createRow(rowId.shortValue());
     cell = row.createCell(colId.shortValue());
-    cell.setCellValue("Report Name: " + r.getName());
+    
+  	
+	String translatedReportName="Report Name:";
+	String translatedReportDescription="Description:";
+	try{	
+		translatedReportName=TranslatorWorker.translate("rep:pop:ReportName",locale,siteId);
+		translatedReportDescription=TranslatorWorker.translate("rep:pop:Description",locale,siteId);
+	}catch (WorkerException e){;}
+
+    cell.setCellValue(translatedReportName+": " + r.getName());
 
     grdx.makeColSpan(rd.getTotalDepth());
     rowId.inc();
@@ -100,7 +131,7 @@ public class CSVExportAction
 
     row = sheet.createRow(rowId.shortValue());
     cell = row.createCell(colId.shortValue());
-    cell.setCellValue("Report Description:" + r.getReportDescription());
+    cell.setCellValue(translatedReportDescription+": " + r.getReportDescription());
 
     grdx.makeColSpan(rd.getTotalDepth());
     rowId.inc();

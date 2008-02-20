@@ -170,17 +170,19 @@
                               </digi:link>
                             </td>
                           </tr>
-                          <tr>
-                            <td class=f-names noWrap>
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <c:set var="translation">
-                                <digi:trn key="aim:tipViewAhSurveis">Click here to view Paris Indicator Manager</digi:trn>
-                              </c:set>
-                              <digi:link module="aim" href="/viewAhSurveis.do" title="${translation}">
-                                <digi:trn key="aim:parisIndManager">Paris Indicators Targets Manager</digi:trn>
-                              </digi:link>
-                            </td>
-                          </tr>
+                          <feature:display  name="Paris Indicators Targets Manager" module="Admin Home">
+                            <tr>
+                              <td class=f-names noWrap>
+                                <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                                <c:set var="translation">
+                                  <digi:trn key="aim:tipViewAhSurveis">Click here to view Paris Indicator Manager</digi:trn>
+                                </c:set>
+                                <digi:link module="aim" href="/viewAhSurveis.do" title="${translation}">
+                                  <digi:trn key="aim:parisIndManager">Paris Indicators Targets Manager</digi:trn>
+                                </digi:link>
+                              </td>
+                            </tr>
+                          </feature:display>
                         </table>
                       </td>
                     </tr>

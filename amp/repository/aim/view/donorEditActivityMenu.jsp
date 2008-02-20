@@ -204,27 +204,23 @@ bgcolor="#006699">
 
 	<tr>
 
+        <feature:display  name="Paris Indicator" module="Add & Edit Activity">
 		<c:if test="${aimEditActivityForm.step != '17'}">
 
 		<td>
 
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
-
 			<c:set var="translation">
-
-				<digi:trn key="aim:clickToAdd/UpdateAidEffectivenessSurvey">Add / Update Aid Effectiveness Survey</digi:trn>
-
+			<digi:trn key="aim:clickToAdd/ParisIndicator">Add / Update Paris Indicator</digi:trn>
 			</c:set>
-
 			<a href="javascript:fnGetSurvey()" class="menu" title="${translation}">
-
 				<digi:trn key="aim:editParisIndicators">Paris Indicators</digi:trn>
-
 			</a>
 
 		</td>
 
 		</c:if>
+        </feature:display>
 
 		<c:if test="${aimEditActivityForm.step == '17'}">
 

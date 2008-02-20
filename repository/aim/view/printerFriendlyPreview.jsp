@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
@@ -1252,6 +1253,8 @@
 											</c:if>										</td>
 									</tr>
 									</feature:display>
+									
+									<logic:equal name="globalSettings" scope="application" property="showComponentFundingByYear" value="false">
                                     <module:display name="Components" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap">
@@ -1276,67 +1279,6 @@
 																<digi:trn key="aim:description">Description</digi:trn> :</i>
 																<c:out value="${comp.description}"/>
 															</td></tr>
-
-															<!-- START SISIN Fields -->
-															<feature:display name="SISIN" module="Components">
-																<field:display name="SISIN Code" feature="SISIN">
-																	<tr>
-																		<td width="50">
-																			<i>
-																			<digi:trn key="aim:sisincode">SISIN Code</digi:trn> :</i>
-																			<c:out value="${comp.sisinProyect.sisincode}"/>																		</td>
-																	</tr>
-																</field:display>
-																<field:display name="Components Localization" feature="SISIN">
-																	<tr>
-																		<td width="50">
-																			<i>
-																			<digi:trn key="aim:localization">Localization</digi:trn> :</i>
-																			<c:out value="${comp.sisinProyect.localization}"/>																		</td>
-																	</tr>
-																</field:display>
-																<field:display name="SISIN Sector" feature="SISIN">
-																	<tr>
-																		<td width="50">
-																			<i>
-																			<digi:trn key="aim:sisinsector">SISIN Sector</digi:trn> :</i>
-																			<c:out value="${comp.sisinProyect.sisinsector}"/>																		</td>
-																	</tr>
-																</field:display>
-																<field:display name="Components Financing Source" feature="SISIN">
-																	<tr>
-																		<td width="50">
-																			<i>
-																			<digi:trn key="financingsource">Financing Source</digi:trn> :</i>
-																			<c:out value="${comp.sisinProyect.financingsource}"/>																		</td>
-																	</tr>
-																</field:display>
-																<field:display name="Components Agency Source" feature="SISIN">
-																	<tr>
-																		<td width="50">
-																			<i>
-																			<digi:trn key="agencysource">Agency Source</digi:trn> :</i>
-																			<c:out value="${comp.sisinProyect.agencysource}"/>																		</td>
-																	</tr>
-																</field:display>
-																<field:display name="Components Stage" feature="SISIN">
-																	<tr>
-																		<td width="50">
-																			<i>
-																			<digi:trn key="stage">Stage</digi:trn> :</i>
-																			<c:out value="${comp.sisinProyect.stage}"/>																		</td>
-																	</tr>
-																</field:display>
-																<field:display name="Components Classification Program Code" feature="SISIN">
-																	<tr>
-																		<td width="50">
-																			<i>
-																			<digi:trn key="classifprogramcode">Classification Program Code</digi:trn> :</i>
-																			<c:out value="${comp.sisinProyect.programcode}"/>																		</td>
-																	</tr>
-																</field:display>
-															</feature:display>
-															<!-- END SISIN Fields -->
 
 															<tr><td bgcolor="#f4f4f2">
 																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>
@@ -1508,6 +1450,109 @@
 										</td>
 									</tr>
 								  </module:display>
+									</logic:equal>
+									
+									<logic:equal name="globalSettings" scope="application" property="showComponentFundingByYear" value="true">									
+									<module:display name="Components_Resume" parentModule="PROJECT MANAGEMENT">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap">
+											<b>
+											<digi:trn key="aim:components">
+										    Components</digi:trn>
+										  </b>								
+									  </td>
+										<td bgcolor="#ffffff">
+											<c:if test="${!empty aimEditActivityForm.selectedComponents}">
+												<c:forEach var="comp" items="${aimEditActivityForm.selectedComponents}">
+													<table width="100%" cellSpacing="1" cellPadding="1">
+													<tr><td>
+														<table width="100%" cellSpacing="2" cellPadding="1" class="box-border-nopadding">
+
+															<tr><td><b>
+																<c:out value="${comp.title}"/></b>
+															</td></tr>
+
+															<tr><td>
+																<i>
+																<digi:trn key="aim:component_code">Component code</digi:trn> :</i>
+																<c:out value="${comp.code}"/>
+															</td></tr>															
+
+															<tr><td>
+															 <c:out value="${comp.url}"/><c:out value="${comp.code}"/>																
+															</td></tr>
+
+															<tr><td bgcolor="#f4f4f2">
+																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>
+															</td></tr>
+
+															<tr>
+																	<td bgcolor="#ffffff">
+																		<table width="100%" cellSpacing="1" cellPadding="0" class="box-border-nopadding">
+																		<c:forEach var="financeByYearInfo" items="${comp.financeByYearInfo}">
+																		<tr>
+																			<td width="20%" valign="top" bgcolor="#ffffff">
+																				<c:out value="${financeByYearInfo.key}"/>
+																			</td>
+																			<c:set var="financeByYearInfoMap" value="${financeByYearInfo.value}"/>
+																			<td bgcolor="#ffffff" align="left">
+																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
+																				<fmt:timeZone value="US/Eastern">
+																						<tr>
+																							<td bgcolor="#ffffff">
+																								<digi:trn key="aim:preview_plannedcommitments_sum">Planned Commitments Sum</digi:trn>																							
+																							</td>																							
+																							<td align="right" width="100" bgcolor="#ffffff">																								
+																								<fmt:formatNumber type="number" pattern="0.00" value="${financeByYearInfoMap['MontoProgramado']}" />																						
+																							</td>																																													
+																						</tr>
+																						<tr>
+																							<td bgcolor="#ffffff">
+																								<digi:trn key="aim:preview_actualcommitments_sum">Actual Commitments Sum</digi:trn>																																															
+																							</td>																							
+																							<td align="right" width="100" bgcolor="#ffffff">																																															
+																								<fmt:formatNumber type="number" pattern="0.00" value="${financeByYearInfoMap['MontoReprogramado']}" />																																														
+																							</td>																						
+																						</tr>																																																																		
+																						<tr>
+																							<td bgcolor="#ffffff">
+																								<digi:trn key="aim:preview_plannedexpenditures_sum">Actual Expenditures Sum</digi:trn>																																															
+																							</td>																							
+																							<td align="right" width="100" bgcolor="#ffffff">																																															
+																								<fmt:formatNumber type="number" pattern="0.00" value="${financeByYearInfoMap['MontoEjecutado']}" />																							
+																							</td>																						
+																						</tr>
+																				</fmt:timeZone>
+																				</table>																			
+																			</td>
+																		</tr>
+																		<tr>
+																			<td>
+																				&nbsp;
+																			</td>
+																			<td>
+																				&nbsp;
+																			</td>																			
+																		</tr>																	
+																		</c:forEach>
+																	</table>																	
+																	</td>
+																</tr>
+														</table>
+													</td></tr>
+													<tr>
+														<td>&nbsp;</td>
+													</tr>													
+													</table>
+												</c:forEach>
+											</c:if>
+										</td>
+									</tr>
+
+									</module:display>									
+                                    </logic:equal>
+								  
+								  
                                	  <module:display name="Issues" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">

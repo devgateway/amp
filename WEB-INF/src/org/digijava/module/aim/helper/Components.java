@@ -6,8 +6,9 @@ package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
 import java.util.Collection;
-
-import org.digijava.module.aim.dbentity.AmpSISINProyect;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 
 public class Components<T> implements Comparable , Serializable{
@@ -22,7 +23,10 @@ public class Components<T> implements Comparable , Serializable{
 	private String reportingDate;	
 	private String currencyCode;
 	private Collection<PhysicalProgress> phyProgress;
-	private AmpSISINProyect SisinProyect;
+	private String code;
+	private String url;
+	
+	private SortedMap<Integer,Map<String,Double>> financeByYearInfo;
 	
 	public Components() {}
 	
@@ -175,14 +179,28 @@ public class Components<T> implements Comparable , Serializable{
 		return this.componentId.equals(temp.componentId);
 	}
 
-	public void setSisinProyect(AmpSISINProyect sisinProyect) {
-		SisinProyect = sisinProyect;
+	public void setCode(String code) {
+		this.code = code;
 	}
 
-	public AmpSISINProyect getSisinProyect() {
-		return SisinProyect;
+	public String getCode() {
+		return code;
 	}
 
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
+	public String getUrl() {
+		return url;
+	}
+
+	public void setFinanceByYearInfo(SortedMap<Integer,Map<String,Double>> financeByYearInfo) {
+		this.financeByYearInfo = financeByYearInfo;
+	}
+
+	public SortedMap<Integer,Map<String,Double>> getFinanceByYearInfo() {
+		return financeByYearInfo;
+	}
 
 }

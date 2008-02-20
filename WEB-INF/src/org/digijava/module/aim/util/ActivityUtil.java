@@ -639,31 +639,6 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	      }
 
 
-	      if (ampTempComp.getSisinProyect() != null) {
-			AmpSISINProyect sisinProyect = ampTempComp
-					.getSisinProyect();
-			sisinProyect.setAmpActivityId(activity.getAmpActivityId());
-			AmpSISINProyect sisinProyectOld = ComponentsUtil
-					.getSisinProyect(sisinProyect.getAmpActivityId(),
-							sisinProyect.getComponentId());
-			if (sisinProyectOld == null) {
-				session.save(sisinProyect);
-			} else {
-				sisinProyectOld.setAgencysource(sisinProyect.getAgencysource());
-				sisinProyectOld.setFinancingsource(sisinProyectOld.getFinancingsource());
-				sisinProyectOld.setLocalization(sisinProyectOld.getLocalization());
-				sisinProyectOld.setProgramcode(sisinProyectOld.getProgramcode());
-				sisinProyectOld.setSisincode(sisinProyectOld.getSisincode());
-				sisinProyectOld.setSisinsector(sisinProyectOld.getSisinsector());
-				sisinProyectOld.setStage(sisinProyectOld.getStage());
-
-				session.saveOrUpdate(sisinProyectOld);
-			}
-		  }
-
-
-
-
 	      Collection<AmpPhysicalPerformance> phyProgress = DbUtil.getAmpPhysicalProgress(activityId,ampTempComp.getComponentId());
 
 	      if (ampTempComp.getPhyProgress() != null) {

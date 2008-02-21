@@ -442,6 +442,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private double totalCommitments;
 	private double totalDisbursements;
 	private double totalExpenditures;
+	private double totalPlannedDisbursements;	
 	private String currCode;
 
 	private boolean donorFlag;
@@ -519,7 +520,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
      private AmpAhsurvey ahsurvey;
      private List contracts;
-     private Integer selContractId;
+     private Integer selContractId;	
 
     public Integer getSelContractId() {
         return selContractId;
@@ -4805,6 +4806,16 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setGovAgreementNumber(String govAgreementNumber) {
 	    this.govAgreementNumber = govAgreementNumber;
+	}
+
+	public void setTotalPlannedDisbursements(double totPlannedDisb) {
+		this.totalPlannedDisbursements = totPlannedDisb;
+		
+	}
+	
+	public double getTotalPlannedDisbursements() {
+		return this.totalPlannedDisbursements;
+		
 	}
 
 

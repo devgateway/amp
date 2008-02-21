@@ -962,6 +962,7 @@ public class EditActivity
 
           double totComm = 0;
           double totDisb = 0;
+          double totPlanDisb = 0;
           double totExp = 0;
 
 
@@ -1061,44 +1062,46 @@ public class EditActivity
                                           int adjType = fundDet.getAdjustmentType()
                                               .intValue();
                                           fundingDetail.setAdjustmentType(adjType);
+                                          
+                                          Date dt = fundDet.getTransactionDate();
+                                          double frmExRt = CurrencyUtil.
+                                              getExchangeRate(
+                                                  fundDet.getAmpCurrencyId()
+                                                  .getCurrencyCode(), 1, dt);
+                                          String toCurrCode = Constants.DEFAULT_CURRENCY;
+                                          if (tm != null)
+                                            toCurrCode = CurrencyUtil.
+                                                getAmpcurrency(
+                                                    tm.getAppSettings()
+                                                    .getCurrencyId()).getCurrencyCode();
+
+
+                                          double toExRt = CurrencyUtil.
+                                              getExchangeRate(toCurrCode, 1, dt);
+                                          double amt = CurrencyWorker.convert1(
+                                              fundDet.getTransactionAmount()
+                                              .doubleValue(), frmExRt,
+                                              toExRt);
+                                          fundingDetail.setContract(fundDet.getContract());
+                                          eaForm.setCurrCode(toCurrCode);
+                                          
                                           if (adjType == Constants.PLANNED) {
-                                            fundingDetail
-                                                .setAdjustmentTypeName("Planned");
-                                          }
-                                          else if (adjType == Constants.ACTUAL) {
+                                            fundingDetail.setAdjustmentTypeName("Planned");
+                                            if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
+                                            	totPlanDisb += amt;
+                                            }                                            
+                                          }else if (adjType == Constants.ACTUAL) {
                                             fundingDetail
                                                 .setAdjustmentTypeName("Actual");
-                                            Date dt = fundDet.getTransactionDate();
-                                            double frmExRt = CurrencyUtil.
-                                                getExchangeRate(
-                                                    fundDet.getAmpCurrencyId()
-                                                    .getCurrencyCode(), 1, dt);
-                                            String toCurrCode = Constants.DEFAULT_CURRENCY;
-                                            if (tm != null)
-                                              toCurrCode = CurrencyUtil.
-                                                  getAmpcurrency(
-                                                      tm.getAppSettings()
-                                                      .getCurrencyId()).getCurrencyCode();
-
-
-                                            double toExRt = CurrencyUtil.
-                                                getExchangeRate(toCurrCode, 1, dt);
-                                            double amt = CurrencyWorker.convert1(
-                                                fundDet.getTransactionAmount()
-                                                .doubleValue(), frmExRt,
-                                                toExRt);
-                                            fundingDetail.setContract(fundDet.getContract());
-                                            eaForm.setCurrCode(toCurrCode);
+                                            
                                             if (fundDet.getTransactionType().intValue() ==
                                                 Constants.COMMITMENT) {
                                               totComm += amt;
-                                            }
-                                            else if (fundDet.getTransactionType()
+                                            }else if (fundDet.getTransactionType()
                                                      .intValue() ==
                                                      Constants.DISBURSEMENT) {
                                               totDisb += amt;
-                                            }
-                                            else if (fundDet.getTransactionType()
+                                            }else if (fundDet.getTransactionType()
                                                      .intValue() ==
                                                      Constants.EXPENDITURE) {
                                               totExp += amt;
@@ -1129,24 +1132,6 @@ public class EditActivity
                                                                            getPerspectiveId().getCode());
                                           fundingDetail.setPerspectiveName(fundDet.
                                                                            getPerspectiveId().getName());
-
-                                          /*
-                                           fundingDetail.setPerspectiveCode(fundDet
-                                            .getOrgRoleCode());
-
-                                           Iterator itr1 = eaForm.getPerspectives()
-                                            .iterator();
-                                                   while (itr1.hasNext()) {
-                                           AmpPerspective pers = (AmpPerspective) itr1
-                                             .next();
-                                           if (pers.getCode().equals(
-                                             fundDet.getOrgRoleCode())) {
-                                            fundingDetail.setPerspectiveName(pers
-                                              .getName());
-                                           }
-                                                   }
-                                           */
-
 
 
                                           fundingDetail.setTransactionType(fundDet
@@ -1180,6 +1165,7 @@ public class EditActivity
           eaForm.setFundingOrganizations(fundingOrgs);
           eaForm.setTotalCommitments(totComm);
           eaForm.setTotalDisbursements(totDisb);
+          eaForm.setTotalPlannedDisbursements(totPlanDisb);
           eaForm.setTotalExpenditures(totExp);
 
           ArrayList regFunds = new ArrayList();
@@ -1614,26 +1600,24 @@ public class EditActivity
       String overallTotalExpenditure = "";
       String overallTotalUnExpended = "";
       String overallTotalDisburOrder = "";
+      
       overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(
           fb, Constants.COMMITMENT);
-
-      eaForm.setTotalCommitted(overallTotalCommitted);
-
       overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(
           fb, Constants.DISBURSEMENT);
       overallTotalDisburOrder=FinancingBreakdownWorker.getOverallTotal(
-          fb, Constants.DISBURSEMENT_ORDER);
-
-      eaForm.setTotalDisbursed(overallTotalDisbursed);
+          fb, Constants.DISBURSEMENT_ORDER);      
       overallTotalUnDisbursed = FormatHelper.getDifference(
-          overallTotalCommitted, overallTotalDisbursed);
-      eaForm.setTotalUnDisbursed(overallTotalUnDisbursed);
+          overallTotalCommitted, overallTotalDisbursed);      
       overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(
-          fb, Constants.EXPENDITURE);
-
-      eaForm.setTotalExpended(overallTotalExpenditure);
+          fb, Constants.EXPENDITURE);      
       overallTotalUnExpended = FormatHelper.getDifference(
           overallTotalDisbursed, overallTotalExpenditure);
+      
+      eaForm.setTotalCommitted(overallTotalCommitted);
+      eaForm.setTotalDisbursed(overallTotalDisbursed);
+      eaForm.setTotalExpended(overallTotalExpenditure);
+      eaForm.setTotalUnDisbursed(overallTotalUnDisbursed);
       eaForm.setTotalUnExpended(overallTotalUnExpended);
       eaForm.setTotalDisbOrder(overallTotalDisburOrder);
     }

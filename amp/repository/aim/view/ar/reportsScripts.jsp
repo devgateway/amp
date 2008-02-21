@@ -267,6 +267,13 @@ background-color: yellow;
 			
 		if (aimReportsFilterPickerForm.selectedDonorTypes)
 			aimReportsFilterPickerForm.selectedDonorTypes.selectedIndex=-1;
+			
+		if (aimReportsFilterPickerForm.selectedBeneficiaryAgency)
+			aimReportsFilterPickerForm.selectedBeneficiaryAgency.selectedIndex=-1;
+		if (aimReportsFilterPickerForm.selectedExecutingAgency)
+			aimReportsFilterPickerForm.selectedExecutingAgency.selectedIndex=-1;
+		if (aimReportsFilterPickerForm.selectedImplementingAgency)
+			aimReportsFilterPickerForm.selectedImplementingAgency.selectedIndex=-1;
 		
 		if (aimReportsFilterPickerForm.jointCriteria){
 			aimReportsFilterPickerForm.jointCriteria[0].checked=false;

@@ -30,6 +30,9 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection pageSizes; //A0,A1,A2,A3,A4
 	private Collection donorTypes; //Ex: Multilateral, Bilateral, Regional Governament
 	private Collection donorGroups;
+	private Collection executingAgency;
+	private Collection implementingAgency;
+	private Collection beneficiaryAgency;
 	private Long regionSelected;
 	
 	private Object[] selectedSectors;
@@ -38,7 +41,10 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Object[] selectedRisks;
 	private Object[] selectedFinancingInstruments;
 	private Object[] selectedDonorTypes; // ids of AmpOrgType
-	private Object[] selectedDonorGroups; //  
+	private Object[] selectedDonorGroups; //
+	private Object[] selectedExecutingAgency;
+	private Object[] selectedImplementingAgency;
+	private Object[] selectedBeneficiaryAgency;
 	
 	private Collection regionSelectedCollection;
 	
@@ -107,6 +113,9 @@ public class ReportsFilterPickerForm extends ActionForm {
 			this.selectedFinancingInstruments 	= null;
 			this.selectedDonorTypes				= null;
 			this.selectedDonorGroups			= null;
+			this.selectedExecutingAgency		= null;
+			this.selectedBeneficiaryAgency		= null;
+			this.selectedImplementingAgency		= null;
 		}
 	}
 	
@@ -301,6 +310,54 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setSelectedDonorGroups(Object[] selectedDonorGroups) {
 		this.selectedDonorGroups = selectedDonorGroups;
+	}
+
+	public Collection getBeneficiaryAgency() {
+		return beneficiaryAgency;
+	}
+
+	public void setBeneficiaryAgency(Collection beneficiaryAgency) {
+		this.beneficiaryAgency = beneficiaryAgency;
+	}
+
+	public Collection getExecutingAgency() {
+		return executingAgency;
+	}
+
+	public void setExecutingAgency(Collection executingAgency) {
+		this.executingAgency = executingAgency;
+	}
+
+	public Collection getImplementingAgency() {
+		return implementingAgency;
+	}
+
+	public void setImplementingAgency(Collection implementingAgency) {
+		this.implementingAgency = implementingAgency;
+	}
+
+	public Object[] getSelectedBeneficiaryAgency() {
+		return selectedBeneficiaryAgency;
+	}
+
+	public void setSelectedBeneficiaryAgency(Object[] selectedBeneficiaryAgency) {
+		this.selectedBeneficiaryAgency = selectedBeneficiaryAgency;
+	}
+
+	public Object[] getSelectedExecutingAgency() {
+		return selectedExecutingAgency;
+	}
+
+	public void setSelectedExecutingAgency(Object[] selectedExecutingAgency) {
+		this.selectedExecutingAgency = selectedExecutingAgency;
+	}
+
+	public Object[] getSelectedImplementingAgency() {
+		return selectedImplementingAgency;
+	}
+
+	public void setSelectedImplementingAgency(Object[] selectedImplementingAgency) {
+		this.selectedImplementingAgency = selectedImplementingAgency;
 	}
 	
 }

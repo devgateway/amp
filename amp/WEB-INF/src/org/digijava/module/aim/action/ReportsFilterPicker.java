@@ -24,6 +24,7 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -31,6 +32,7 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
@@ -118,6 +120,11 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setDonorTypes(donorTypes);
 		filterForm.setDonorGroups(donorGroups);
 		
+		filterForm.setExecutingAgency( ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_EXECUTING_AGENCY) );
+		filterForm.setBeneficiaryAgency( ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_BENEFICIARY_AGENCY) );
+		filterForm.setImplementingAgency( ReportsUtil.getAllOrgByRole(Constants.ROLE_CODE_IMPLEMENTING_AGENCY) );
+		
+		
 				// loading Activity Rank collection
 		if (null == filterForm.getActRankCollection()) {
 			filterForm.setActRankCollection(new ArrayList());
@@ -194,6 +201,11 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setJointCriteria(null);
 		filterForm.setRegionSelected(null);
 		//filterForm.setRegions(null);
+		filterForm.setDonorGroups(null);
+		filterForm.setDonorTypes(null);
+		filterForm.setExecutingAgency(null);
+		filterForm.setBeneficiaryAgency(null);
+		filterForm.setImplementingAgency(null);
 	
 		return modeApply(mapping,form,request,response);
 	}
@@ -339,6 +351,10 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 		else
 			arf.setDonorGroups(null);
+		
+		arf.setBeneficiaryAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedBeneficiaryAgency() , AmpOrganisation.class ) );
+		arf.setImplementingAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedImplementingAgency() , AmpOrganisation.class ) );
+		arf.setExecutingAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedExecutingAgency(), AmpOrganisation.class ) );
 		
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER,arf);
 

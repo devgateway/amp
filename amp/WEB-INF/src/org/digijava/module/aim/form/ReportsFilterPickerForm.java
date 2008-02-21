@@ -22,7 +22,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection currencies;
 	private Collection calendars;
 	private Collection sectors;
-	private Collection donors;
+	//private Collection donors;
 	private Collection risks;
 	private Collection<BeanWrapperImpl> fromYears;
 	private Collection<BeanWrapperImpl> toYears;
@@ -34,7 +34,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	
 	private Object[] selectedSectors;
 	private Object[] selectedStatuses;
-	private Object[] selectedDonors;
+	//private Object[] selectedDonors;
 	private Object[] selectedRisks;
 	private Object[] selectedFinancingInstruments;
 	private Object[] selectedDonorTypes; // ids of AmpOrgType
@@ -100,7 +100,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		if(request.getParameter("apply")!=null && request.getAttribute("apply")==null){
-			this.selectedDonors 				= null;
+			//this.selectedDonors 				= null;
 			this.selectedRisks	 				= null;
 			this.selectedSectors 				= null;
 			this.selectedStatuses				= null;
@@ -146,12 +146,12 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setCurrencies(Collection currecies) {
 		this.currencies = currecies;
 	}
-	public Collection getDonors() {
+	/*public Collection getDonors() {
 		return donors;
 	}
 	public void setDonors(Collection donors) {
 		this.donors = donors;
-	}
+	}*/
 	public Collection getRisks() {
 		return risks;
 	}
@@ -165,12 +165,12 @@ public class ReportsFilterPickerForm extends ActionForm {
 		this.sectors = sectors;
 	}
 	
-	public Object[] getSelectedDonors() {
+	/*public Object[] getSelectedDonors() {
 		return selectedDonors;
 	}
 	public void setSelectedDonors(Object[] selectedDonors) {
 		this.selectedDonors = selectedDonors;
-	}
+	}*/
 	public Object[] getSelectedRisks() {
 		return selectedRisks;
 	}

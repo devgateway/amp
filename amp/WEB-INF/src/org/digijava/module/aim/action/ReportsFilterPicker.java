@@ -108,7 +108,7 @@ public class ReportsFilterPicker extends MultiAction {
 		Collection regions=LocationUtil.getAllVRegions();
 		filterForm.setCurrencies(currency);
 		filterForm.setCalendars(allFisCalenders);
-		filterForm.setDonors(donors);
+		//filterForm.setDonors(donors);
 		filterForm.setRisks(allIndicatorRisks);
 		filterForm.setSectors(ampSectors);
 		filterForm.setFromYears(new ArrayList<BeanWrapperImpl>());
@@ -169,7 +169,7 @@ public class ReportsFilterPicker extends MultiAction {
 	public ActionForward modeReset(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ReportsFilterPickerForm filterForm=(ReportsFilterPickerForm) form;
 		request.setAttribute("reset","reset");
-		filterForm.setSelectedDonors(null);
+		//filterForm.setSelectedDonors(null);
 		filterForm.setSelectedRisks(null);
 		filterForm.setSelectedSectors(null);
 		filterForm.setSelectedStatuses(null);
@@ -276,7 +276,7 @@ public class ReportsFilterPicker extends MultiAction {
 
 		arf.setFromYear(filterForm.getFromYear()==null || filterForm.getFromYear().longValue()==-1?null:new Integer(filterForm.getFromYear().intValue()));
 		arf.setToYear(filterForm.getToYear()==null || filterForm.getToYear().longValue()==-1?null:new Integer(filterForm.getToYear().intValue()));
-		arf.setDonors(Util.getSelectedObjects(AmpOrgGroup.class,filterForm.getSelectedDonors()));
+		//arf.setDonors(Util.getSelectedObjects(AmpOrgGroup.class,filterForm.getSelectedDonors()));
 		AmpCurrency currency = (AmpCurrency) Util.getSelectedObject(AmpCurrency.class,filterForm.getCurrency());
 		arf.setCurrency(currency);
 		String name = "- " + currency.getCurrencyName();

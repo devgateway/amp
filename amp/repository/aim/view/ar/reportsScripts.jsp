@@ -241,8 +241,8 @@ background-color: yellow;
 		if (aimReportsFilterPickerForm.selectedSectors)
 			aimReportsFilterPickerForm.selectedSectors.selectedIndex=-1;
 		
-		if (aimReportsFilterPickerForm.selectedDonors)
-			aimReportsFilterPickerForm.selectedDonors.selectedIndex=-1;
+		/*if (aimReportsFilterPickerForm.selectedDonors)
+			aimReportsFilterPickerForm.selectedDonors.selectedIndex=-1; */
 		
 		if (aimReportsFilterPickerForm.selectedRisks)
 			aimReportsFilterPickerForm.selectedRisks.selectedIndex=-1;
@@ -261,6 +261,12 @@ background-color: yellow;
 		
 		if (aimReportsFilterPickerForm.selectedFinancingInstruments)
 			aimReportsFilterPickerForm.selectedFinancingInstruments.selectedIndex=-1;
+			
+		if (aimReportsFilterPickerForm.selectedDonorGroups)
+			aimReportsFilterPickerForm.selectedDonorGroups.selectedIndex=-1;
+			
+		if (aimReportsFilterPickerForm.selectedDonorTypes)
+			aimReportsFilterPickerForm.selectedDonorTypes.selectedIndex=-1;
 		
 		if (aimReportsFilterPickerForm.jointCriteria){
 			aimReportsFilterPickerForm.jointCriteria[0].checked=false;

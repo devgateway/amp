@@ -1836,15 +1836,18 @@ public class TeamUtil {
            try {
                session = PersistenceManager.getRequestDBSession();
                AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
-
+               
+               /*AMP-2685 Team leader should not see all reports*/
+               AmpTeamMember ampteammember = TeamMemberUtil.getAmpTeamMember(memberId);
                String queryString = null;
                Query qry = null;
 
                if(team.getAccessType().equalsIgnoreCase(
                    Constants.ACCESS_TYPE_MNGMT)) {
                    queryString = "select r from " + AmpReports.class.getName()
-                       + " r " + " order by r.name ";
+                       + " r " + " where r.ownerId=:p.memberid order by r.name ";
                    qry = session.createQuery(queryString);
+                   qry.setParameter("p.memberid", ampteammember);
                    if (currentPage !=null){
                 	   qry.setFirstResult(currentPage);
                    }

@@ -126,6 +126,28 @@
 			</td>
 		</tr>
 		<tr>
+			<td colspan="1"><b><digi:trn key="rep:filer:beneficiaryAgency">Beneficiary Agency</digi:trn></b></td>
+			<td colspan="1"><b><digi:trn key="rep:filer:executingAgency">Executing Agency</digi:trn></b></td>
+			<td colspan="2"><b><digi:trn key="rep:filer:implementingAgency">Implementing Agency</digi:trn></b></td>
+		</tr>
+		<tr>
+			<td colspan="1">
+				<html:select style="width: 190px" multiple="true" property="selectedBeneficiaryAgency" size="3" styleClass="inp-text">
+				<html:optionsCollection property="beneficiaryAgency" label="name" value="ampOrgId" />
+				</html:select>
+			</td>
+			<td colspan="1">
+				<html:select style="width: 190px" multiple="true" property="selectedExecutingAgency" size="3" styleClass="inp-text">
+				<html:optionsCollection property="executingAgency" label="name" value="ampOrgId" />
+				</html:select>
+			</td>
+			<td colspan="2">
+				<html:select style="width: 190px" multiple="true" property="selectedImplementingAgency" size="3" styleClass="inp-text">
+				<html:optionsCollection property="implementingAgency" label="name" value="ampOrgId" />
+				</html:select>
+			</td>
+		</tr>
+		<tr>
 			<td><b><digi:trn key="rep:filer:Status">Status</digi:trn></b></td>
 			<field:display name="Risk" feature="Activity">
 			<td><b><digi:trn key="rep:filer:Risks">Risks</digi:trn></b></td>

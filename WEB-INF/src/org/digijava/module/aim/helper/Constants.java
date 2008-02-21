@@ -289,6 +289,11 @@ public class Constants
         public static final String ORGANIZATION_FILTER = "Organization";
 
 
+    public static final String ROLE_CODE_DONOR						= "DN";
+    public static final String ROLE_CODE_IMPLEMENTING_AGENCY		= "IA";
+    public static final String ROLE_CODE_REPORTING_AGENCY			= "RA";
+    public static final String ROLE_CODE_BENEFICIARY_AGENCY			= "BA";
+    public static final String ROLE_CODE_EXECUTING_AGENCY			= "EA";
 
 	//global settings
 	public static final String GLOBAL_BUDGET_FILTER = "Public View Budget Filter";

@@ -53,6 +53,10 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Set donorTypes=null;
 	private Set donorGroups=null;
 
+	private Set executingAgency;
+	private Set implementingAgency;
+	private Set beneficiaryAgency;
+	
 	private Set teamAssignedOrgs;
 
 	private Set financingInstruments=null;
@@ -205,6 +209,16 @@ public class AmpARFilter extends PropertyListable implements Filter {
 			"AND grp.amp_org_grp_id =  og.org_grp_id AND og.amp_org_id = aor.organisation " +
 			"AND grp.amp_org_grp_id IN ("+ Util.toCSString(donorGroups, true) +")";
 		
+		String EXECUTING_AGENCY_FILTER	= 
+			"SELECT v.amp_activity_id FROM v_executing_agency v  " +
+			"WHERE v.amp_org_id IN ("+ Util.toCSString(executingAgency, true) +")";
+		String BENEFICIARY_AGENCY_FILTER	= 
+			"SELECT v.amp_activity_id FROM v_beneficiary_agency v  " +
+			"WHERE v.amp_org_id IN ("+ Util.toCSString(beneficiaryAgency, true) +")";
+		String IMPLEMENTING_AGENCY_FILTER	= 
+			"SELECT v.amp_activity_id FROM v_implementing_agency v  " +
+			"WHERE v.amp_org_id IN ("+ Util.toCSString(implementingAgency, true) +")";
+		
 		if(fromYear!=null) {
 		    String FROM_FUNDING_YEAR_FILTER="SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.amp_funding_id AND date_format(fd.transaction_date,_latin1'%Y')>='"+fromYear+"'";
 		    queryAppend(FROM_FUNDING_YEAR_FILTER);
@@ -243,6 +257,10 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		
 		if(donorGroups!=null && donorGroups.size()>0) queryAppend(DONOR_GROUP_FILTER);
 		if(donorTypes!=null && donorTypes.size()>0) queryAppend(DONOR_TYPE_FILTER);
+		
+		if ( executingAgency!=null && executingAgency.size()>0 ) queryAppend(EXECUTING_AGENCY_FILTER);
+		if ( beneficiaryAgency!=null && beneficiaryAgency.size()>0 ) queryAppend(BENEFICIARY_AGENCY_FILTER);
+		if ( implementingAgency!=null && implementingAgency.size()>0 ) queryAppend(IMPLEMENTING_AGENCY_FILTER);
 		
 		if(governmentApprovalProcedures!=null)
 		{
@@ -612,6 +630,30 @@ public class AmpARFilter extends PropertyListable implements Filter {
 
 	public void setDonorGroups(Set donorGroups) {
 		this.donorGroups = donorGroups;
+	}
+
+	public Set getBeneficiaryAgency() {
+		return beneficiaryAgency;
+	}
+
+	public void setBeneficiaryAgency(Set beneficiaryAgency) {
+		this.beneficiaryAgency = beneficiaryAgency;
+	}
+
+	public Set getExecutingAgency() {
+		return executingAgency;
+	}
+
+	public void setExecutingAgency(Set executingAgency) {
+		this.executingAgency = executingAgency;
+	}
+
+	public Set getImplementingAgency() {
+		return implementingAgency;
+	}
+
+	public void setImplementingAgency(Set implementingAgency) {
+		this.implementingAgency = implementingAgency;
 	}
 	
 }

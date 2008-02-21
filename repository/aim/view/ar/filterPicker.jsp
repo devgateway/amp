@@ -98,7 +98,7 @@
 
 
 
-		<tr>
+		<%-- <tr>
 			<td colspan="4"><b><digi:trn key="rep:filer:donor">Donor</digi:trn></b></td>
 		</tr>
 		<tr>
@@ -108,8 +108,23 @@
 					value="ampOrgGrpId" label="orgGrpName" />
 			</html:select>
 			</td>
+		</tr>--%>
+		<tr>
+			<td colspan="1"><b><digi:trn key="rep:filer:DonorType">Donor Type</digi:trn></b></td>
+			<td colspan="3"><b><digi:trn key="rep:filer:DonorGroup">Donor Group</digi:trn></b></td>
 		</tr>
-
+		<tr>
+			<td colspan="1">
+				<html:select style="width: 190px" multiple="true" property="selectedDonorTypes" size="3" styleClass="inp-text">
+				<html:optionsCollection property="donorTypes" value="ampOrgTypeId" label="orgType" />
+				</html:select>
+			</td>
+			<td colspan="3">
+				<html:select multiple="true" property="selectedDonorGroups" size="3" styleClass="inp-text">
+				<html:optionsCollection style="width: 195px" property="donorGroups" value="ampOrgGrpId" label="orgGrpName" />
+				</html:select>
+			</td>
+		</tr>
 		<tr>
 			<td><b><digi:trn key="rep:filer:Status">Status</digi:trn></b></td>
 			<field:display name="Risk" feature="Activity">

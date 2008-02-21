@@ -46,7 +46,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Long id;
 	private Long ampReportId;
 	private Set statuses=null;
-	private Set donors=null;
+	//private Set donors=null; //not used anymore
 	private Set sectors=null;
 	private Set regions=null;
 	private Set risks=null;
@@ -181,7 +181,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		
 		String STATUS_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("+Util.toCSString(statuses,true)+")";
 	
-		String ORG_FILTER = "SELECT amp_activity_id FROM v_donor_groups WHERE amp_org_grp_id IN ("+Util.toCSString(donors,true)+")";
+		//String ORG_FILTER = "SELECT amp_activity_id FROM v_donor_groups WHERE amp_org_grp_id IN ("+Util.toCSString(donors,true)+")";
 		String SECTOR_FILTER="SELECT amp_activity_id FROM v_sectors WHERE amp_sector_id IN ("+Util.toCSString(sectors,true)+")";
 		String REGION_FILTER="SELECT amp_activity_id FROM v_regions WHERE name IN ("+Util.toCSString(regions,true)+")";
 		String FINANCING_INSTR_FILTER="SELECT amp_activity_id FROM v_financing_instrument WHERE amp_modality_id IN ("+Util.toCSString(financingInstruments, true)+")";
@@ -230,7 +230,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	if(budget!=null) queryAppend(BUDGET_FILTER);
 		if(ampTeams!=null && ampTeams.size()>0) queryAppend(TEAM_FILTER);
 		if(statuses!=null && statuses.size()>0) queryAppend(STATUS_FILTER);
-		if(donors!=null && donors.size()>0) queryAppend(ORG_FILTER);
+		//if(donors!=null && donors.size()>0) queryAppend(ORG_FILTER);
 		if(sectors!=null && sectors.size()!=0) queryAppend(SECTOR_FILTER);
 		if(regions!=null && regions.size()>0) queryAppend(REGION_FILTER);
 		if(financingInstruments!=null && financingInstruments.size()>0) queryAppend(FINANCING_INSTR_FILTER);
@@ -362,16 +362,16 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	/**
 	 * @return Returns the donors.
 	 */
-	public Set getDonors() {
-		return donors;
-	}
+//	public Set getDonors() {
+//		return donors;
+//	}
 
 	/**
 	 * @param donors The donors to set.
 	 */
-	public void setDonors(Set donors) {
-		this.donors = donors;
-	}
+//	public void setDonors(Set donors) {
+//		this.donors = donors;
+//	}
 
 	/**
 	 * @return Returns the regions.

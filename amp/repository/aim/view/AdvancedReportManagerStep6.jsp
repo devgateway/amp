@@ -422,25 +422,25 @@ function checkUncheckAll2() {
 																							
 																							<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="false">
 																							<logic:iterate name="aimAdvancedReportForm" id="addedMeasures"
-																							property="addedMeasures" type="org.digijava.module.aim.dbentity.AmpMeasures">
+																							property="addedMeasures" type="org.digijava.module.aim.dbentity.AmpReportMeasures">
 																							<tr bgcolor=#ffffff>
 																								<td align="left" width="98%">
-																								<digi:trn key="aim:reportBuilder:${addedMeasures.aliasName}">
-																										<c:out value="${addedMeasures.aliasName}"/>
+																								<digi:trn key="aim:reportBuilder:${addedMeasures.measure.aliasName}">
+																										<c:out value="${addedMeasures.measure.aliasName}"/>
 																								 </digi:trn>
 																								</td>
 																								<td align="right">
 																									<html:multibox property="removeColumns" >
-																										<c:out value="${addedMeasures.measureId}"/>
+																										<c:out value="${addedMeasures.measure.measureId}"/>
 																									</html:multibox>
 																								</td>
 																								<td align="right">
 																									<IMG alt="Move Up"  height=10
 																									src="../ampTemplate/images/up-arrow.jpg" width=10
-																									onclick="moveUp(<c:out value='${addedMeasures.measureId}' />)">
+																									onclick="moveUp(<c:out value='${addedMeasures.measure.measureId}' />)">
 																									<IMG alt="Move Down" styleClass="test" height=10
 																									src="../ampTemplate/images/down-arrow.jpg" width=10
-																									onclick="moveDown(<c:out value='${addedMeasures.measureId}' />)">
+																									onclick="moveDown(<c:out value='${addedMeasures.measure.measureId}' />)">
 																								</td>
 																							</tr>
 																							</logic:iterate>
@@ -457,8 +457,8 @@ function checkUncheckAll2() {
 																								<bean:define name="reportMeasure" property="level" type="org.digijava.module.aim.dbentity.AmpCategoryValue" id="level" />
 																								<tr bgcolor=#ffffff>
 																									<td align="left" width="98%">
-																									<digi:trn key="aim:reportBuilder:${addedMeasures.aliasName}">
-																											<c:out value="${addedMeasures.aliasName}"/>
+																									<digi:trn key="aim:reportBuilder:${addedMeasures.measure.aliasName}">
+																											<c:out value="${addedMeasures.measure.aliasName}"/>
 																									 </digi:trn> - 
 																									 <category:getoptionvalue categoryValueId="${level.id}"/>
 																									</td>

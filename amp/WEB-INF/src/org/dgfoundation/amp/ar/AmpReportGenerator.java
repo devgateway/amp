@@ -10,6 +10,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,9 +22,10 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
+import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * 
@@ -251,15 +253,20 @@ public class AmpReportGenerator extends ReportGenerator {
 				.getColumn(ArConstants.COLUMN_FUNDING);
 
 		Column newcol = null;
-		if(cats.size()>0) newcol=GroupColumn.verticalSplitByCategs(funding, cats, true,this.reportMetadata);
-		else
-			try {
-				newcol=new GroupColumn();
-				newcol.getItems().add((Column) funding.clone());
-			} catch (CloneNotSupportedException e) {
-				logger.error(e);
-				e.printStackTrace();
-			}
+		boolean addFunding=false;
+		if(cats.size()>0){ 
+		    newcol=GroupColumn.verticalSplitByCategs(funding, cats, true,this.reportMetadata);
+		}else{
+		    newcol=new GroupColumn();
+		    addFunding=true;
+		}
+			//try {
+			//	newcol=new GroupColumn();
+			//	newcol.getItems().add((Column) funding.clone());
+			//} catch (CloneNotSupportedException e) {
+			//	logger.error(e);
+			//	e.printStackTrace();
+			//}
 
 		// we create the cummulative balance (undisbursed) = act commitment -
 		// act disbursement
@@ -297,7 +304,40 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		
 		newcol.setName(reportMetadata.getType().intValue()==4?ArConstants.COLUMN_CONTRIBUTION_TOTAL:ArConstants.COLUMN_TOTAL);
-
+		
+		
+		
+		//make order to  measurements
+		List<AmpReportMeasures> listMeasurement=new ArrayList<AmpReportMeasures>(reportMetadata.getMeasures());
+		Collections.sort(listMeasurement);
+		
+		List<Column> columnlist=newcol.getItems();
+		List<Column> tmpColumnList=new ArrayList<Column>(columnlist.size());
+		//add columns as measurements order
+		
+		
+		if(addFunding){
+		    try {
+			tmpColumnList.add((Column) funding.clone());
+        		} catch (CloneNotSupportedException e) {
+        			logger.error(e);
+        			e.printStackTrace();
+        		}
+  
+		}
+		
+		for (AmpReportMeasures measures : listMeasurement) {
+	            for (Column column : columnlist) {
+	        
+	        	if (column.getName().equalsIgnoreCase(measures.getMeasure().getMeasureName())){
+	                    tmpColumnList.add(column);
+	                    break;
+	                }
+                    }
+                }
+		
+		//replace items by ordered items
+		newcol.setItems(tmpColumnList);
 		rawColumns.addColumn(newcol);
 	}
 

@@ -1221,15 +1221,15 @@ public class AdvancedReport extends Action {
 						}
 							// saving the AMP Report Measures
 						if ( !isXLevelEnabled ) {
-							Set measures = new HashSet();
+							Set<AmpReportMeasures> measures= new HashSet<AmpReportMeasures>();
 							if(formBean.getAddedMeasures() != null)
 							{
 								iter = formBean.getAddedMeasures().iterator();
 								i = 1;
 								while(iter.hasNext())
-								{
-									AmpMeasures ampMeasures = (AmpMeasures) iter.next();
-									measures.add(ampMeasures);
+								{	AmpReportMeasures measure=(AmpReportMeasures) iter.next();;
+									measure.setOrderId(""+i);
+;									measures.add(measure);
 									i = i + 1;
 								}
 							}
@@ -1240,8 +1240,10 @@ public class AdvancedReport extends Action {
 								
 								while(iter.hasNext())
 								{
-									AmpMeasures ampMeasures = (AmpMeasures) iter.next();
-									measures.add(ampMeasures);
+								    AmpReportMeasures measure=(AmpReportMeasures) iter.next();;
+									measure.setOrderId(""+i);
+;									measures.add(measure);
+									i = i + 1;
 								}
 							}
 							ampReports.setMeasures(measures);
@@ -1459,17 +1461,35 @@ public class AdvancedReport extends Action {
 						if(str.equals("AddMeasure") == true || str.equals("DeleteMeasure") == true 
 								|| str.equals("AddAdjustType") == true || str.equals("DeleteAdjustType") == true )
 						{
+						    if (str.equals("DeleteMeasure")|| str.equals("DeleteAdjustType")){
+							ampMeasures = ((AmpReportMeasures) iter.next()).getMeasure();
+						    }else{
 							ampMeasures = (AmpMeasures) iter.next();
+						    }
 							if(ampMeasures.getMeasureId().compareTo(selCol[i]) == 0 )
-							{
+							{	
+							    if (str.equals("DeleteMeasure")|| str.equals("DeleteAdjustType")){
 								coll.add(ampMeasures);
+							    }else{
+							    	AmpReportMeasures measure=new AmpReportMeasures();
+							    	measure.setMeasure(ampMeasures);
+							    	coll.add(measure);
 								tempMeasures = ampMeasures;
+							    }
 								flag = true;
 							}
 							else
 							{
-								if(temp.contains(ampMeasures) == false)
+								if(temp.contains(ampMeasures) == false){
+								    if (str.equals("DeleteMeasure")|| str.equals("DeleteAdjustType")){
+								    AmpReportMeasures measure=new AmpReportMeasures();
+								    	measure.setMeasure(ampMeasures);
+								    	temp.add(measure);
+								    }else{
 									temp.add(ampMeasures);
+								    }
+								}
+									
 							}
 						}
 						else
@@ -1774,7 +1794,7 @@ public class AdvancedReport extends Action {
 	{
 		Iterator iter= null;
 		AmpColumns ampColumns = null;
-		AmpMeasures ampMeasures  = null;
+		AmpReportMeasures ampMeasures  = null;
 		Collection tempColl = new ArrayList();
 
 		if(option.equals("MoveUp") || option.equals("MoveDown"))
@@ -1802,7 +1822,7 @@ public class AdvancedReport extends Action {
 			Long lg = new Long(formBean.getMoveColumn());
 			ArrayList temp = new ArrayList();
 			AmpColumns curr = null, prev = null , next = null;
-			AmpMeasures currMeasure, prevMeasure, nextMeasure;
+			AmpReportMeasures currMeasure, prevMeasure, nextMeasure;
 			int index = 0;
 			
 			temp.addAll(tempColl);
@@ -1813,15 +1833,15 @@ public class AdvancedReport extends Action {
 				if(option.equals("MoveUpMeasure")== true || option.equals("MoveDownMeasure")== true
 					|| option.equals("MoveUpAdjustType")== true || option.equals("MoveDownAdjustType")== true)
 				{
-					ampMeasures = (AmpMeasures) iter.next();
+					ampMeasures = (AmpReportMeasures) iter.next();
 					if(option.equals("MoveUpMeasure")== true || option.equals("MoveUpAdjustType")== true)
 					{
-						if(lg.compareTo(ampMeasures.getMeasureId()) == 0 )
+						if(lg.compareTo(ampMeasures.getMeasure().getMeasureId()) == 0 )
 						{
 							if(temp.indexOf(ampMeasures) > 0)
 							{
-								currMeasure = (AmpMeasures)temp.get(temp.indexOf(ampMeasures));
-								prevMeasure = (AmpMeasures)temp.get(temp.indexOf(ampMeasures)-1);
+								currMeasure = (AmpReportMeasures)temp.get(temp.indexOf(ampMeasures));
+								prevMeasure = (AmpReportMeasures)temp.get(temp.indexOf(ampMeasures)-1);
 								index = temp.indexOf(ampMeasures);
 								temp.set(index, prevMeasure);
 								temp.set(index-1, currMeasure);
@@ -1836,12 +1856,12 @@ public class AdvancedReport extends Action {
 					}
 					if(option.equals("MoveDownMeasure")== true  || option.equals("MoveDownAdjustType")== true )
 					{
-						if(lg.compareTo(ampMeasures.getMeasureId()) == 0 )
+						if(lg.compareTo(ampMeasures.getMeasure().getMeasureId()) == 0 )
 						{
 							if( (temp.indexOf(ampMeasures)+1) < tempColl.size() )
 							{
-								currMeasure = (AmpMeasures)temp.get(temp.indexOf(ampMeasures));
-								nextMeasure = (AmpMeasures)temp.get(temp.indexOf(ampMeasures)+1);
+								currMeasure = (AmpReportMeasures)temp.get(temp.indexOf(ampMeasures));
+								nextMeasure = (AmpReportMeasures)temp.get(temp.indexOf(ampMeasures)+1);
 								index = temp.indexOf(ampMeasures);
 								temp.set(index, nextMeasure);
 								temp.set(index+1, currMeasure);

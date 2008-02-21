@@ -7,6 +7,7 @@
 package org.dgfoundation.amp.ar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -15,6 +16,7 @@ import java.util.TreeSet;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.module.aim.dbentity.AmpMeasures;
+import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 
 /**
@@ -149,11 +151,18 @@ public class GroupColumn extends Column {
        //manually add measures selected
        if(category.equals(ArConstants.FUNDING_TYPE)) {
     	   Set measures=reportMetadata.getMeasures();
-    	   Iterator ii=measures.iterator();
+    	   //give order to measurments
+    	   ArrayList<AmpReportMeasures> measurmentsList=new ArrayList<AmpReportMeasures>(measures);
+    	   Collections.sort(measurmentsList);
+    	   metaSet.clear();
+    	   Iterator ii=measurmentsList.iterator();
     	   while (ii.hasNext()) {
-			AmpMeasures element = (AmpMeasures) ii.next();
+    	       		AmpReportMeasures ampReportMeasurement=(AmpReportMeasures) ii.next();
+			AmpMeasures element = ampReportMeasurement.getMeasure();
 			if(element.getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE) || element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS)) continue;
-			metaSet.add(new MetaInfo(ArConstants.FUNDING_TYPE,new FundingTypeSortedString(element.getMeasureName())));
+			
+			Integer orderId=(ampReportMeasurement.getOrderId()==null)?null:Integer.parseInt(ampReportMeasurement.getOrderId());
+			metaSet.add(new MetaInfo(ArConstants.FUNDING_TYPE,new FundingTypeSortedString(element.getMeasureName(),orderId)));
 		}
     	   
        }
@@ -161,6 +170,7 @@ public class GroupColumn extends Column {
         
 
         // iterate the set and create a subColumn for each of the metainfo
+       
         i = metaSet.iterator();
         while (i.hasNext()) {
             MetaInfo element = (MetaInfo) i.next();

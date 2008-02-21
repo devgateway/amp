@@ -235,6 +235,10 @@
 		<taglib-location>/WEB-INF/globalsettings.tld</taglib-location>
 	</taglib>
 	<taglib>
+		<taglib-uri>/taglib/aim</taglib-uri>
+		<taglib-location>/WEB-INF/aim.tld</taglib-location>
+	</taglib>	
+	<taglib>
 		<taglib-uri>/taglib/moduleVisibility</taglib-uri>
 		<taglib-location>/WEB-INF/moduleVisibility.tld</taglib-location>
 	</taglib>

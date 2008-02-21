@@ -22,11 +22,20 @@ public class FundingTypeSortedString extends SortedString {
 		new MetaInfo(ArConstants.PLANNED+" "+ArConstants.EXPENDITURE,new Integer(5)),
 	};
 	
+	
+	private Integer customOrder=null;
 	/**
 	 * @param string
 	 */
 	public FundingTypeSortedString(String string) {
 		super(string);
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+	public FundingTypeSortedString(String string,Integer customOrder) {
+		super(string);
+		this.customOrder=customOrder;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -35,7 +44,10 @@ public class FundingTypeSortedString extends SortedString {
 	 */
 	@Override
 	public int getOrder() {
-		int max=0;
+	    	if(customOrder!=null){
+	    	    return customOrder;
+	    	}
+	    	int max=0;
 		for(int i=0;i<order.length;i++) {
 			int corder=((Integer)order[i].getValue()).intValue();
 			if(corder>max) max=corder;

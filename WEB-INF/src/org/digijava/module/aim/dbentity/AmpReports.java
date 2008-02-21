@@ -50,7 +50,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 
 	private Set hierarchies;
 
-	private Set measures;
+	private Set<AmpReportMeasures> measures;
 
 	private Set reportMeasures;
 
@@ -98,11 +98,11 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 		return "Amounts are in thousands (000)";
 	}
 
-	public Set getMeasures() {
+	public Set<AmpReportMeasures> getMeasures() {
 		return measures;
 	}
 
-	public void setMeasures(Set measures) {
+	public void setMeasures(Set<AmpReportMeasures> measures) {
 		this.measures = measures;
 	}
 

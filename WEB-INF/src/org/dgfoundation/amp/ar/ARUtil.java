@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
+import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.TeamMember;
@@ -167,7 +168,7 @@ public final class ARUtil {
 		if(measureName==null) return false;
 		Iterator i = measures.iterator();
 		while (i.hasNext()) {
-			AmpMeasures element = (AmpMeasures) i.next();
+			AmpMeasures element = ((AmpReportMeasures) i.next()).getMeasure();
 			if (element.getMeasureName().indexOf(measureName) != -1)
 				return true;
 		}

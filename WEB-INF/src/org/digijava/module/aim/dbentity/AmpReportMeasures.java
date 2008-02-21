@@ -39,8 +39,8 @@ public class AmpReportMeasures  implements Serializable, Comparable
 	
 	public int compareTo(Object o) {
 		try {
-			int myOrder	= Integer.parseInt(orderId);
-			int oOrder	= Integer.parseInt( ((AmpReportMeasures)o).getOrderId() );
+			int myOrder	=(orderId!=null)?Integer.parseInt(orderId):0;
+			int oOrder	= (((AmpReportMeasures)o).getOrderId()!=null)?Integer.parseInt( ((AmpReportMeasures)o).getOrderId() ):0;
 			return myOrder-oOrder;
 		}
 		catch (NumberFormatException e) {

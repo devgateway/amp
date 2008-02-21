@@ -104,12 +104,14 @@ public class EditReport extends Action {
 					else {
 						Set addedMeasures			= ampreport.getMeasures();
 						Iterator iterator			= addedMeasures.iterator();
-						Collection collMeasures		= new ArrayList();
+						ArrayList collMeasures		= new ArrayList();
 						while ( iterator.hasNext() ) {
-							AmpMeasures ampMeasures		= (AmpMeasures) iterator.next();
+						    	AmpReportMeasures ampMeasures		= (AmpReportMeasures) iterator.next();
 							collMeasures.add( ampMeasures );
 						}
+						Collections.sort(collMeasures);
 						formBean.setAddedMeasures( collMeasures);
+						
 					}
 					
 					Long longReportType	= ampreport.getType();
@@ -243,7 +245,7 @@ public class EditReport extends Action {
 		Iterator addedMeasuresIterator			= addedMeasures.iterator();
 		
 		while ( addedMeasuresIterator.hasNext() ) {
-			AmpMeasures addedAmpMeasure		= (AmpMeasures)addedMeasuresIterator.next();
+			AmpMeasures addedAmpMeasure		= ((AmpReportMeasures)addedMeasuresIterator.next()).getMeasure();
 			Set removableMeasures				= new HashSet();
 			
 			Iterator possibleMeasuresIterator	= possibleMeasures.iterator();

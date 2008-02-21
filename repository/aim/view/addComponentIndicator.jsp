@@ -33,11 +33,15 @@ function onDelete() {
 	}
 	
 	function saveCompIndicator(id)
-	{
+	{	if(trim(document.aimComponentsForm.compIndicatorName.value).length == 0 || trim(document.aimComponentsForm.compIndicatorCode.value).length == 0) {
+			alert('Please fill all mandatory data');
+			return false;
+		} else {
 		<digi:context name="saveIndi" property="context/module/moduleinstance/addCompIndicator.do?event=save" />
 		document.aimComponentsForm.action = "<%= saveIndi %>&id="+id;
 		document.aimComponentsForm.target = "_self";
-		document.aimComponentsForm.submit();
+		document.aimComponentsForm.submit();	
+		}
 		
 	}
 	

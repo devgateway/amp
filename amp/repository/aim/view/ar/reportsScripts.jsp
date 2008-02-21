@@ -246,6 +246,9 @@ background-color: yellow;
 		
 		if (aimReportsFilterPickerForm.selectedRisks)
 			aimReportsFilterPickerForm.selectedRisks.selectedIndex=-1;
+			
+		if (aimReportsFilterPickerForm.regionSelected)
+			aimReportsFilterPickerForm.regionSelected.selectedIndex=0;
 		
 		if (aimReportsFilterPickerForm.lineMinRank)
 			aimReportsFilterPickerForm.lineMinRank.selectedIndex=0;

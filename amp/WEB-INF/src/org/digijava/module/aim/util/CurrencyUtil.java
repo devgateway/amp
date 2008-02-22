@@ -1027,7 +1027,6 @@ public class CurrencyUtil {
 		Date todate;
 		Date fromdate;
 		try {
-			logger.debug("retrivieving latest exchange rate for currency:"+currencyCode);
 			Calendar cal=Calendar.getInstance();
 			todate = cal.getTime();
 			cal.add(Calendar.YEAR, -1);	  

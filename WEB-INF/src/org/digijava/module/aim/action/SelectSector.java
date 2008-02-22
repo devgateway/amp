@@ -122,6 +122,7 @@ public class SelectSector extends Action {
 				actSect.setSectorName(sec.getName());
 				actSect.setSubsectorLevel1Id(subsectorLevel1);
 				actSect.setSubsectorLevel2Id(subsectorLevel2);
+                                actSect.setSectorScheme(sec.getAmpSecSchemeId().getSecSchemeName());
 				/*
 				if (actSect.getSectorName().equalsIgnoreCase("MULTISECTOR/CROSS-CUTTING")) {
 					actSect.setSubsectorLevel1Id(null);

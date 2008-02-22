@@ -936,17 +936,21 @@ function collapseAll() {
                                                         <table width="100%" cellSpacing="2" cellPadding="1">
                                                         <c:forEach var="sectors" items="${aimEditActivityForm.activitySectors}">
                                                             <tr><td>
+                                                             
+                                                                                        [<c:out value="${sectors.sectorScheme}" />]
+                                                          
                                                             <c:if test="${!empty sectors.sectorName}">
-                                                                                        <c:out value="${sectors.sectorName}" />
-                                                              </c:if>&nbsp;&nbsp; <c:if
-                                                                                        test="${sector.sectorPercentage!=''}">
-                                                                                        <c:if test="${sector.sectorPercentage!='0'}">
-                                                                                    (<c:out value="${sectors.sectorPercentage}" />)%																			</c:if>
-                                                                                    </c:if> <c:if test="${!empty sectors.subsectorLevel1Name}">
+                                                                                       [<c:out value="${sectors.sectorName}" />]
+                                                              </c:if> <c:if test="${!empty sectors.subsectorLevel1Name}">
                                                                 [<c:out value="${sectors.subsectorLevel1Name}"/>]
                                                             </c:if>
                                                             <c:if test="${!empty sectors.subsectorLevel2Name}">
-                                                                [<c:out value="${sectors.subsectorLevel2Name}"/>]													</c:if>
+                                                                [<c:out value="${sectors.subsectorLevel2Name}"/>]</c:if>
+                                                                &nbsp;&nbsp; <c:if
+                                                                                        test="${sector.sectorPercentage!=''}">
+                                                                                        <c:if test="${sector.sectorPercentage!='0'}">
+                                                                                    (<c:out value="${sectors.sectorPercentage}" />)%</c:if>
+                                                                                    </c:if>
                                                             </td>
                                                             </tr>
                                                         </c:forEach>

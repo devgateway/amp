@@ -1515,6 +1515,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             AmpSector sec = ampActSect.getSectorId();
             ActivitySector actSect = new ActivitySector();
             actSect.setSectorPercentage(ampActSect.getSectorPercentage());
+            actSect.setSectorScheme(sec.getAmpSecSchemeId().getSecSchemeName());
             if (sec.getParentSectorId() == null) {
               actSect.setSectorName(sec.getName());
             }

@@ -32,6 +32,9 @@ public class ActivitySector implements Serializable{
 	private String view;
 	
 	private int count;
+        private String sectorScheme;
+
+  
 
 	public ActivitySector() {
 		id = new Long(-1);
@@ -193,4 +196,15 @@ public class ActivitySector implements Serializable{
 	public void setCount(int count) {
 		this.count = count;
 	}
+        /**
+	 * @return Returns the Sector Scheme.
+	 */
+        
+        public String getSectorScheme() {
+            return sectorScheme;
+         }
+
+        public void setSectorScheme(String sectorScheme) {
+            this.sectorScheme = sectorScheme;
+        }
 }

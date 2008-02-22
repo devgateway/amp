@@ -90,7 +90,11 @@ public class UpdateAppSettings extends Action {
 				uForm.setMemberName(tm.getMemberName());
 				ampAppSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
 			}
-
+			// added by mouhamad for burkina on 21/02/08
+			HttpSession httpSession = request.getSession();
+			String name = "- " + ampAppSettings.getCurrency().getCurrencyName();
+			httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
+			// end
 			if (ampAppSettings != null) {
 				uForm.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
 				uForm.setDefRecsPerPage(ampAppSettings
@@ -202,7 +206,10 @@ public class UpdateAppSettings extends Action {
 					httpSession.setAttribute("filterCurrentReport", ampAppSettings.getDefaultTeamReport() );
 					//this.updateAllTeamMembersDefaultReport( tm.getTeamId(), ampReport);
 				}
-
+				// added by mouhamad for burkina on 21/02/08
+				String name = "- " + ampAppSettings.getCurrency().getCurrencyName();
+				httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
+				// end
 				if (uForm.getType().equals("userSpecific")) {
 					ampAppSettings.setMember(TeamMemberUtil.getAmpTeamMember(tm
 							.getMemberId()));

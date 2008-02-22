@@ -280,6 +280,7 @@ function validateLocationPercentage(){
   while (i < cnt) {
     str   = "selectedLocs[" + i + "].percent";
     val   = (document.aimEditActivityForm.elements)[str].value;
+    /* commented by Mouhamad for burkina on 21/02/08
     if (val == "" || val == null) {
       alert("${errMsgAddPercentage}");
       flag = true;
@@ -290,7 +291,7 @@ function validateLocationPercentage(){
     flag = true;
       break;
     }
-
+	*/
     sum = sum + parseFloat(val);
     i = i + 1;
   }

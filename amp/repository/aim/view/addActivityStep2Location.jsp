@@ -153,7 +153,7 @@
                                                                       </c:if>
                                                                     </td>
                                                                     <td align="right" nowrap="nowrap">
-                                                                    		<FONT color="red">*</FONT><digi:trn key="aim:editActivity:location_percentage">Percentage</digi:trn>:&nbsp;
+                                                                    		<digi:trn key="aim:editActivity:location_percentage">Percentage</digi:trn>:&nbsp;
                                                                       		<html:text name="selectedLocs" indexed="true" property="percent" size="2"  maxlength="3" onkeyup="fnChk(this)"/>
                                                                     </td>
                                                                   </tr>

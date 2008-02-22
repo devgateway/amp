@@ -1732,7 +1732,9 @@ public class EditActivity
 								}
 							}
 							actSect.setSectorPercentage(ampActSect.getSectorPercentage());
+                                                        actSect.setSectorScheme(parent.getAmpSecSchemeId().getSecSchemeName());
 						}
+                                               
 						activitySectors.add(actSect);
 					}
 				}

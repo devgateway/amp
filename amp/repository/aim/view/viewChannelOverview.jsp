@@ -513,15 +513,18 @@ function commentWin(val) {
 																			<TD bgcolor="#ffffff">
 																			<ul>
 																				<c:forEach var="actSect" items="${activity.sectors}">
-																					<li><c:out value="${actSect.sectorName}" />
+																					<li><c:out value="${actSect.sectorScheme}" />
+                                                                                                                                                                          <br/>&nbsp;<IMG
+																					src="../ampTemplate/images/link_out_bot.gif"/>
+                                                                                                                                                                         <c:out value="${actSect.sectorName}" />
 																		
 																					<c:if test="${!empty actSect.subsectorLevel1Name}">
-																						<br/><IMG
+																						<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
 																							src="../ampTemplate/images/link_out_bot.gif"/>
 																						<c:out value="${actSect.subsectorLevel1Name}" />
 																					
 																						<c:if test="${!empty actSect.subsectorLevel2Name}">
-																							 <br/>&nbsp;&nbsp;&nbsp;&nbsp;<IMG
+																							 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
 																								src="../ampTemplate/images/link_out_bot.gif"/>
 																							<c:out value="${actSect.subsectorLevel2Name}" />
 																							&nbsp;

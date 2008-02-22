@@ -195,13 +195,13 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 			<digi:trn key="aim:clickToViewExpenditures">Click here to view Expenditures</digi:trn>
 
 		</c:set>
-
+					<feature:display module="Funding" name="Expenditures">
 		  				<digi:link href="/viewQuarterlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
 
 		  					<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 
 		  				</digi:link> |
-
+					</feature:display>
 		  				<digi:link href="/viewYearlyDiscrepancy.do" name="urlDiscrepancy" styleClass="sub-nav2" title="${translation}" >
 
 									<digi:trn key="aim:discrepancy">DISCREPANCY</digi:trn>

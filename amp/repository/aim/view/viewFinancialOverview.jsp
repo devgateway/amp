@@ -95,10 +95,14 @@
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewExpenditures">Click here to view Expenditures</digi:trn>
 					</c:set>
-					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
-					<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
-					</digi:link>|
-					<digi:link href="/viewYearlyDiscrepancy.do" name="urlDiscrepancy" styleClass="sub-nav2" title="${translation}" >
+					
+                    <feature:display module="Funding" name="Expenditures">
+                    	<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+							<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
+						</digi:link>|
+					</feature:display>
+                    
+                    <digi:link href="/viewYearlyDiscrepancy.do" name="urlDiscrepancy" styleClass="sub-nav2" title="${translation}" >
 					<digi:trn key="aim:discrepancy">DISCREPANCY</digi:trn>
 					</digi:link> |
 					<c:set var="translation">
@@ -130,8 +134,8 @@
 										</digi:link> &gt; Overview
 									</SPAN>
 								</TD>
-								<TD align="right">
-									&nbsp;
+								<TD align="right">&nbsp;
+									
 								</TD>
 							</TR>
 						</TABLE>

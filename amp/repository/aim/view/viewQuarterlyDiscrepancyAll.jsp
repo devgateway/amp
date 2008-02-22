@@ -5,7 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <html:errors/>
 <digi:instance property="aimQuarterlyDiscrepancyAllForm" />
 <digi:context name="digiContext" property="context"/>
@@ -55,7 +57,7 @@
 			        <td width="100%" nowrap >
 			        	<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding">
 							<tr bgcolor="#222E5D"> 
-						  		<td style="color: #C9C9C7">&nbsp; &nbsp; &nbsp;
+						  		<td style="color: #C9C9C7" height="20">&nbsp; &nbsp; &nbsp;
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewFinancialOverview">Click here to view Financial Overview</digi:trn>
 						</c:set>
@@ -79,9 +81,12 @@
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewExpenditures">Click here to view Expenditures</digi:trn>
 					</c:set>
+					  					<feature:display module="Funding" name="Expenditures">
+					  			
 					  				<digi:link href="/viewQuarterlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
 					  					<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 					  				</digi:link> | 
+									</feature:display>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewAll">Click here to view All</digi:trn>
 					</c:set>
@@ -261,11 +266,13 @@
 							              			<digi:trn key="aim:discrepancyDisbursements">Disbursements</digi:trn>
 							              		</div>
 							              	</td>
-							              	<td bgcolor="#DDDDDB" colspan="3">
+							              <feature:display module="Funding" name="Expenditures">
+                                          	<td bgcolor="#DDDDDB" colspan="3">
 							              		<div align="center">
 							              			<digi:trn key="aim:discrepancyExpenditures">Expenditures</digi:trn>
 							              		</div>
 							              	</td>
+                                            </feature:display>
 				            			</tr>
 				            			<tr bgcolor="#DDDDDB" > 
 				              				<td height="30" bgcolor="#DDDDDB"></td>
@@ -304,7 +311,8 @@
 							              			<digi:trn key="aim:mofedActuals">MOFED Actuals</digi:trn>
 							              		</div>
 							              	</td>
-							              	<td bgcolor="#DDDDDB">
+							              	 <feature:display module="Funding" name="Expenditures">
+                                            <td bgcolor="#DDDDDB">
 							              		<div align="center"> 
 							                  		<p>
 							                  		<digi:trn key="aim:donorActuals">Donor Actuals</digi:trn>
@@ -321,6 +329,7 @@
 							              			<digi:trn key="aim:mofedActuals">MOFED Actuals</digi:trn>
 							              		</div>
 							              	</td>
+                                             </feature:display>
 				            			</tr>
 				            			<logic:empty name="aimQuarterlyDiscrepancyAllForm" property="quarterlyDiscrepanciesAll" >
 			                        		<tr valign="top"> 
@@ -386,7 +395,8 @@
 							                  <bean:write name="discrepancy" property="disbursementMofedActual"/>
 							                </div>
 							              </td>
-							               <td>
+							            <feature:display module="Funding" name="Expenditures">
+                                           <td>
 							              	<div align="right">
 							              		<bean:write name="discrepancy" property="expenditureDonorActual"/>
 							              	</div>
@@ -401,6 +411,7 @@
 							                  <bean:write name="discrepancy" property="expenditureMofedActual"/>
 							                </div>
 							              </td>
+                                          </feature:display>
 							            </tr>
 							            </logic:iterate>
 							            </logic:notEmpty>

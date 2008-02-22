@@ -5,7 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <script language="Javascript">
 <!--
 	
@@ -65,8 +67,8 @@
 			        <td width="100%" nowrap >
 			        	<table width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding">
 							<tr bgcolor="#222E5D"> 
-						  		<td style="color: #C9C9C7">&nbsp; &nbsp; &nbsp;
-						<c:set var="translation">
+						  		<td style="color: #C9C9C7" height="20">&nbsp; &nbsp; &nbsp;
+				  <c:set var="translation">
 							<digi:trn key="aim:clickToViewFinancialOverview">Click here to view Financial Overview</digi:trn>
 						</c:set>
 						  			<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" styleClass="sub-nav2" title="${translation}" >
@@ -89,9 +91,12 @@
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewExpenditures">Click here to view Expenditures</digi:trn>
 					</c:set>
+					  				<feature:display module="Funding" name="Expenditures">
 					  				<digi:link href="/viewQuarterlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
 					  					<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 					  				</digi:link> | 
+					  				</feature:display>
+					  				
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewAll">Click here to view All</digi:trn>
 					</c:set>
@@ -107,8 +112,7 @@
 					  				<digi:link href="/viewYearlyDiscrepancyAll.do" name="urlDiscrepancy" styleClass="sub-nav2" title="${translation}" >
 										<digi:trn key="aim:discrepancyAll">DISCREPANCY ALL</digi:trn>
 									</digi:link>| 
-			    				</td>
-			    			</tr>
+			    				</td></tr>
 			    		</table>
 			    	</td>		
 				</tr>		
@@ -148,8 +152,10 @@
 				              					<html:select property="transactionType" styleClass="dr-menu" onchange="formSubmit()">
 																	<html:option value="0">Commitments</html:option>
 																	<html:option value="1">Disbursements</html:option>
-																	<html:option value="2">Expenditures</html:option>
-																</html:select>
+																	<feature:display module="Funding" name="Expenditures">
+	            											     	    <html:option value="2">Expenditures</html:option>
+																	</feature:display>
+                                                                </html:select>
 																<html:hidden property="ampActivityId" />
 																<html:hidden property="tabIndex" />
 				                			</td>

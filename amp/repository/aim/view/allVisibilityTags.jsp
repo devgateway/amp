@@ -130,6 +130,9 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <feature:display name="Sectors" module="Project ID and Planning"></feature:display>
 <feature:display name="Web Resources" module="Document"></feature:display>
 <feature:display module="Funding" name="Disbursement Orders"></feature:display>
+<feature:display module="Funding" name="Expenditures"></feature:display>
+
+
 <feature:display module="Contracting" name="Contracting"></feature:display>
 
 <feature:display name="Measures" module="Reports"></feature:display>
@@ -174,7 +177,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Add Components Button" feature="Components"></field:display>
 <field:display name="Add Disbursement Button" feature="Funding Organizations"></field:display>
 <field:display name="Add Documents Button" feature="Related Documents"></field:display>
-<field:display name="Add Expenditure Button" feature="Funding Organizations"></field:display>
+<field:display name="Add Expenditure Button" feature="Expenditures"></field:display>
 <field:display name="Add Funding Button - Proposed Project Cost" feature="Proposed Project Cost"></field:display>
 <field:display name="Add Indicator Button" feature="Activity"></field:display>
 <field:display name="Add Issues Button" feature="Issues"></field:display>

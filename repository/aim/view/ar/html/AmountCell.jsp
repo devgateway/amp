@@ -6,11 +6,28 @@
 <logic:notPresent name="debug">
 <div align="right">
 </logic:notPresent>
+<logic:present name="debug">
+<div align="center" onMouseOver="stm(['AmountCell List',document.getElementById('<bean:write name="amountCell" property="column.name"/>-<bean:write name="amountCell" property="ownerId"/>').innerHTML],Style[1])" onMouseOut="htm()">
+</logic:present>
 <bean:write name="amountCell"/>&nbsp;
+<logic:present name="debug">
+</div>
+</logic:present>
 <logic:notPresent name="debug">
 </div>
 </logic:notPresent>
 <logic:present name="debug">
+<div style='position:relative;display:none;' id='<bean:write name="amountCell" property="column.name"/>-<bean:write name="amountCell" property="ownerId"/>'> 
+<ul>
+<li>From Rate=<bean:write name="amountCell" property="fromExchangeRate"/>
+<li>To Rate=<bean:write name="amountCell" property="toExchangeRate"/>
+<li>Percentage=<bean:write name="amountCell" property="percentage"/>%
+<li>Currency Code=<bean:write name="amountCell" property="currencyCode"/>
+<li>Currency Date=<bean:write name="amountCell" property="currencyDate"/>
+<li>Activity Owner Id=<bean:write name="amountCell" property="ownerId"/>
+<li>Source Column=<bean:write name="amountCell" property="column.name"/>
+</ul>
+</div>
 	<logic:notEmpty name="amountCell" property="mergedCells">
 =(<i>
 <bean:write name="amountCell" property="wrappedAmount"/><i> &nbsp;

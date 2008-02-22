@@ -190,7 +190,7 @@ function checkUncheckAll2() {
 <digi:form action="/advancedReportManager.do" method="post">
 <bean:define name="aimAdvancedReportForm" id="myForm" type="org.digijava.module.aim.form.AdvancedReportForm"/>
 
-
+<input type="hidden" value="hidden" name="wasSelectMeasuresStep"/>
 <html:hidden property="moveColumn"/>
 
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
@@ -568,7 +568,7 @@ function checkUncheckAll2() {
 																							</digi:trn>
 																							</b>
 																						</html:checkbox>
-																						<input type="hidden" value="hidden" name="wasSelectMeasuresStep"/>
+																						
 																					</td>
 																				</tr>
 																				</c:if>

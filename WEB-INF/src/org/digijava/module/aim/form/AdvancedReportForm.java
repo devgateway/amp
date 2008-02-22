@@ -1516,7 +1516,7 @@ private int yrDiff;
 	}
 	
 	public void reset (ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {
-		String wasSelectMeasuresStep	= request.getParameter("SelectMeasures");
+		String wasSelectMeasuresStep	= request.getParameter("wasSelectMeasuresStep");
 		if (wasSelectMeasuresStep != null )
 		{
 		this.setPublicReport(false);

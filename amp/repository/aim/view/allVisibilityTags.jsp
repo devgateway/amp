@@ -55,10 +55,12 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display>
 <module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display>
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display>
+<module:display name="PI Reports" parentModule="PARIS INDICATORS"></module:display>
 
 <feature:display  name="Paris Indicator" module="Add & Edit Activity"></feature:display>
 <feature:display  name="Paris Indicators Targets Manager" module="Admin Home"></feature:display>
-<feature:display  name="Paris Indicators Reports" module="Portfolio"></feature:display>
+<feature:display  name="Target Value" module="PI Reports"></feature:display>
+
 <feature:display  name="Funding Organizations" module="Funding"></feature:display>
 <feature:display module="Contact Information" name="Mofed Contact Information"></feature:display>
 <feature:display module="Funding" name="Funding Organizations"></feature:display>

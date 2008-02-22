@@ -213,21 +213,23 @@
 				<tr>
                   <td>
                     <table>
-                      <tr>
-                        <td class="subtitle-blue" style="width:70%;text-align:right;">
-                          <digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn>&nbsp;
-                          ${aimParisIndicatorReportForm.indicatorCode}&nbsp;
-                          <digi:trn key="aim:report">Report</digi:trn>
-                        </td>
+                      <feature:display  name="Target Value" module="PI Reports">
+                        <tr>
+                          <td class="subtitle-blue" style="width:70%;text-align:right;">
+                            <digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn>&nbsp;
+                            ${aimParisIndicatorReportForm.indicatorCode}&nbsp;
+                            <digi:trn key="aim:report">Report</digi:trn>
+                          </td>
 
-                        <td class="subtitle-blue" style="width:250px;text-align:right;">
-                          <c:if test="${!empty aimParisIndicatorReportForm.targetValue && !empty aimParisIndicatorReportForm.calcResult}">
-                          ${aimParisIndicatorReportForm.targetValue}&nbsp;
-                          <digi:trn key="aim:piTargerValue">Target</digi:trn>:
-                          ${aimParisIndicatorReportForm.calcResult}%
-                          </c:if>
-                        </td>
-                      </tr>
+                          <td class="subtitle-blue" style="width:250px;text-align:right;">
+                            <c:if test="${!empty aimParisIndicatorReportForm.targetValue && !empty aimParisIndicatorReportForm.calcResult}">
+                            ${aimParisIndicatorReportForm.targetValue}&nbsp;
+                            <digi:trn key="aim:piTargerValue">Target</digi:trn>:
+                            ${aimParisIndicatorReportForm.calcResult}%
+                            </c:if>
+                          </td>
+                        </tr>
+                      </feature:display>
                     </table>
                   </td>
 				</tr>

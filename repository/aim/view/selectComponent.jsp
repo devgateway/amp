@@ -44,8 +44,7 @@
 
 <input type="hidden" name="selectedDate">
 
-<table width="100%" cellSpacing=0 cellPadding=0 vAlign="top" border=0>
-	<tr><td vAlign="top">
+
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
 				<td align=left vAlign=top>
@@ -166,13 +165,14 @@
 										</div>
 									</td>
 								</tr>
-								<tr bgcolor="#ffffff">
+								<feature:display module="Funding" name="Disbursement Orders">
+                                <tr bgcolor="#ffffff">
 									<td colspan="2" class="box-border">
 										<span class="f-names"><digi:trn key="aim:disbursementTotalActToDate"> Disbursement - (Total actual to date</digi:trn> 
 										<%=FormatHelper.formatNumber(eaForm.getTotalDisbursements())%>
 															 <%=eaForm.getCurrCode()%>)
 										</span>
-										<a href="javascript:addDisbursement()"><digi:trn key="btn:add">Add</digi:trn></a><br><br>
+										<field:display name="Add Disbursement Order Button" feature="Disbursement Orders"><a href="javascript:addDisbursement()"><digi:trn key="btn:add">Add</digi:trn></a></field:display><br><br>
 												<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -250,12 +250,20 @@
 									</div>
 								</td>
 							</tr>
-							<tr>
+                            </feature:display>
+							<!-- beging Expenditure  -->
+								<feature:display module="Funding" name="Expenditures">
+                            <tr>
 								<td colspan="2" class="box-border-alt1">
 											<span class="f-names"><digi:trn key="aim:expenditureTotalActToDate"> Expenditure - (Total actual to date</digi:trn> 
 											<%=FormatHelper.formatNumber(eaForm.getTotalExpenditures())%>
 																 <%=eaForm.getCurrCode()%>)</span>
-											<a href="javascript:addExpenditure()"><digi:trn key="btn:add">Add</digi:trn></a>&nbsp;&nbsp;
+											<field:display name="Add Expenditure Button" feature="Expenditures">
+                                            <a href="javascript:addExpenditure()">
+                                            
+                                            <digi:trn key="btn:add">Add</digi:trn></a>
+                                            </field:display>
+                                            &nbsp;&nbsp;
 											<br><br>
 												<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -337,6 +345,7 @@
 									</div>
 								</td>
 							</tr>
+                            </feature:display>
 							<tr>
 								<td colspan="2" align="center">
 									<table cellPadding=3>
@@ -354,14 +363,8 @@
 									</table>
 								</td>
 							</tr>
-							</td>
-						</tr>
+						
 					</table>
-				</td>
-			</tr>
-		</table>
-	</td></tr>
-</table>
 
 <script language="JavaScript">
 <!--

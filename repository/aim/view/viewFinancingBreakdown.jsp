@@ -294,9 +294,11 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 			                	        <field:display name="Undisbursed Funds" feature="Funding Organizations">
 											<TD><digi:trn key="aim:unDisbursedFunds">Undisbursed Funds</digi:trn></TD>
 										</field:display>
+										
 										<field:display name="Total Expended" feature="Funding Organizations">
 		    	                    	 	<TD><digi:trn key="aim:totalExpended">Total Expended</digi:trn></TD>
 	    	                    	 	</field:display>
+	    	                    	 	
 	    	                    	 	<field:display name="Unexpended Funds" feature="Funding Organizations">
 											<TD><digi:trn key="aim:unExpendedFunds">Unexpended Funds</digi:trn></TD>
 										</field:display>

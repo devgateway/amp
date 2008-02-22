@@ -182,7 +182,7 @@
 
 <%! long t = System.currentTimeMillis(); %>
 
-<body onload="load()">
+<body onLoad="load()">
 
 <c:set var="formatTip">
 	<digi:trn key="aim:decimalforma">Format has to be: </digi:trn> <%=FormatHelper.formatNumber(FormatHelper.parseDouble("100000"+FormatHelper.getDecimalSymbol()+"150"))%>
@@ -521,8 +521,8 @@
 											</td>
 										</tr>
 										<tr>
-											<td>
-												&nbsp;
+											<td>&nbsp;
+												
 											</td>
 											<td>
 												<digi:trn key="aim:FixedRate">Fixed Rate</digi:trn>
@@ -532,8 +532,8 @@
 											</td>
 										</tr>
 										<tr>
-											<td>
-												&nbsp;
+											<td>&nbsp;
+												
 											</td>
 											<td align="right">
 												<% String exchRatefldId = "exchFld"+(t++);
@@ -613,8 +613,8 @@
 												</a>
 											</td>
 										<tr>
-											<td bgcolor="#ffff00">
-												&nbsp;
+											<td bgcolor="#ffff00">&nbsp;
+												
 											</td>
 											<td align="left"  bgcolor="#ffff00">
 												<b>
@@ -628,8 +628,8 @@
 											</td>
 										</tr>
 										<tr>
-											<td>
-												&nbsp;
+											<td>&nbsp;
+												
 											</td>
 											<td align="right">
 												<% String exchRatefldId = "exchFld"+ (t++);
@@ -728,9 +728,9 @@
 									<b><font color="white"><digi:trn key="aim:DisbursementOrderContractId">Contract ID</digi:trn></font></b>
 								</td>
 
-                                                                <td align="center" valign="middle">
+                                                                <td align="center" valign="middle">&nbsp;
 
-									&nbsp;
+									
 								</td>
                                                                  
 
@@ -1104,6 +1104,7 @@
 	</tr>
 
 	<!-- expenditures -->
+	<feature:display module="Funding" name="Expenditures">
 	<tr>
 		<td width="100%" vAlign="top">
 			<table width="100%" cellpadding=0 cellspacing=1 vAlign="top" align="left" bgcolor="#006699">
@@ -1303,7 +1304,7 @@
 						<table cellPadding=3>
 							<tr>
 								<td>
-								<field:display name="Add Expenditure Button" feature="Funding Organizations">
+								<field:display name="Add Expenditure Button" feature="Expenditures">
 									<input class="buton" type="button" name="xx1" value="<digi:trn key='aim:addExpediture'>Add Expenditure</digi:trn>"
 				   				onclick="addFundingDetail(2)">
 				   				</field:display>
@@ -1317,6 +1318,8 @@
 			</table>
 		</td>
 	</tr>
+    <!--end expenditures-->
+    </feature:display>
 	<tr>
 		<td>
 			<table width="100%" cellSpacing=1 cellPadding=1>
@@ -1344,13 +1347,13 @@
 						<table cellPadding=3>
 							<tr>
 								<td>
-									<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>" class="inp-text" onclick="return addFunding()">
+									<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>" class="inp-text" onClick="return addFunding()">
 								</td>
 								<td>
 									<input type="reset" value="<digi:trn key='btn:reset'>Reset</digi:trn>" class="inp-text">
 								</td>
 								<td>
-									<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="inp-text" onclick="closeWindow()">
+									<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="inp-text" onClick="closeWindow()">
 								</td>
 							</tr>
 						</table>

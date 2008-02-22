@@ -8,6 +8,10 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
 <%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
@@ -180,6 +184,7 @@
 										</div>
 								</td>
 							</tr>
+                             <feature:display module="Funding" name="Disbursement Orders">
 							<tr bgcolor="#ffffff">
 								<td colspan="2" class="box-border">
 										<span class="f-names"><digi:trn key="aim:disbursement">Disbursement</digi:trn> 
@@ -188,7 +193,11 @@
 											<%=FormatHelper.formatNumber( eaForm.getTotalDisbursements())%>
 															 <%=eaForm.getCurrCode()%>)
 										</span>
-										<a href="javascript:addDisbursement()">${translationAdd }</a><br><br>
+										<field:display name="Add Disbursement Order Button" feature="Disbursement Orders">
+											<a href="javascript:addDisbursement()">${translationAdd }</a>
+										</field:display>														
+											<br><br>
+												
 												<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -269,7 +278,9 @@
 									</div>
 								</td>
 							</tr>
-							<tr>
+                         </feature:display>
+						<feature:display module="Funding" name="Expenditures">
+                        	<tr>
 								<td colspan="2" class="box-border-alt1">
 											<span class="f-names"><digi:trn key="aim:expenditure">Expenditure</digi:trn> 
 											- 	(
@@ -278,7 +289,9 @@
 												<%=eaForm.getCurrCode()%>
 												)
 											</span>
-											<a href="javascript:addExpenditure()">${translationAdd }</a>&nbsp;&nbsp;
+											<field:display name="Add Expenditure Button" feature="Expenditures">
+												<a href="javascript:addExpenditure()">${translationAdd }</a>&nbsp;&nbsp;
+											</field:display>
 											<br><br>
 												<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -358,6 +371,7 @@
 									</div>
 								</td>									
 							</tr>
+                            </feature:display>
 							<tr>
 								<td colspan="2" align="center">
 									<c:set var="translationSave">

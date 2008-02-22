@@ -5,7 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <html:errors/>
 <digi:instance property="aimYearlyDiscrepancyAllForm" />
 <digi:context name="digiContext" property="context"/>
@@ -84,9 +86,12 @@
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewExpenditures">Click here to view Expenditures</digi:trn>
 					</c:set>
+					  				
+					  			<feature:display module="Funding" name="Expenditures">
 					  				<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
 					  					<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 					  				</digi:link> | 
+								</feature:display>
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewAllYearlyComparisons">Click here to view All Yearly Comparisons</digi:trn>
 					</c:set>
@@ -258,16 +263,20 @@
 							                  		</p>
 							                	</div>
 							                </td>
-							              	<td bgcolor="#DDDDDB" colspan="3">
+							              	
+                                            <td bgcolor="#DDDDDB" colspan="3">
 							              		<div align="center">
 							              			<digi:trn key="aim:discrepancyDisbursements">Disbursements</digi:trn>
 							              		</div>
 							              	</td>
+                                          
+                                            <feature:display module="Funding" name="Expenditures">
 							              	<td bgcolor="#DDDDDB" colspan="3">
 							              		<div align="center">
 							              			<digi:trn key="aim:discrepancyExpenditures">Expenditures</digi:trn>
 							              		</div>
 							              	</td>
+                                              </feature:display>
 				            			</tr>
 				            			<tr bgcolor="#DDDDDB" > 
 				              				<td height="30" bgcolor="#DDDDDB"></td>
@@ -305,7 +314,8 @@
 							              			<digi:trn key="aim:mofedActuals">MOFED Actuals</digi:trn>
 							              		</div>
 							              	</td>
-							              	<td bgcolor="#DDDDDB">
+							              	<feature:display module="Funding" name="Expenditures">
+                                            <td bgcolor="#DDDDDB">
 							              		<div align="center"> 
 							                  		<p>
 							                  		<digi:trn key="aim:donorActuals">Donor Actuals</digi:trn>
@@ -322,6 +332,7 @@
 							              			<digi:trn key="aim:mofedActuals">MOFED Actuals</digi:trn>
 							              		</div>
 							              	</td>
+                                            </feature:display>
 				            			</tr>
 				            			<logic:empty name="aimYearlyDiscrepancyAllForm" property="yearlyDiscrepanciesAll" >
 			                        		<tr valign="top"> 
@@ -371,7 +382,8 @@
 							                  <bean:write name="discrepancy" property="disbursementMofedActual"/>
 							                </div>
 							              </td>
-							               <td>
+							              	<feature:display module="Funding" name="Expenditures">
+                                           <td>
 							              	<div align="right">
 							              		<bean:write name="discrepancy" property="expenditureDonorActual"/>
 							              	</div>
@@ -386,6 +398,7 @@
 							                  <bean:write name="discrepancy" property="expenditureMofedActual"/>
 							                </div>
 							              </td>
+                                          </feature:display>
 							            </tr>
 							            </logic:iterate>
 							            </logic:notEmpty>

@@ -272,22 +272,27 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 			  		</logic:equal>|
 
-			  		<logic:notEqual name="aimQuarterlyInfoForm" property="transactionType" value="2">
+			  	
+			  	<feature:display module="Funding" name="Expenditures">
+			  	<logic:notEqual name="aimQuarterlyInfoForm" property="transactionType" value="2">
 
 			  			<c:set target="${urlSubTabs}" property="transactionType" value="2"/>
 
-			<c:set var="translation">
+					<c:set var="translation">
+		
+						<digi:trn key="aim:clickToViewExpenditures">Click here to view Expenditures</digi:trn>
+		
+					</c:set>
 
-				<digi:trn key="aim:clickToViewExpenditures">Click here to view Expenditures</digi:trn>
-
-			</c:set>
-
-			  			<digi:link href="/viewQuarterlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
-
-			  				<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
-
-			  			</digi:link>
-
+					  	
+							  			
+					  			<digi:link href="/viewQuarterlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+		
+					  				<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
+		
+					  			</digi:link>
+					
+				
 			    	</logic:notEqual>
 
 			    	<logic:equal name="aimQuarterlyInfoForm" property="transactionType" value="2">
@@ -299,7 +304,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 			      	</span>
 
 			  		</logic:equal>	|
-
+			</feature:display>
 			<c:set var="translation">
 
 				<digi:trn key="aim:clickToViewAll">Click here to view All</digi:trn>

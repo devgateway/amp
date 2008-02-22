@@ -261,24 +261,25 @@
 				<digi:trn key="aim:clickToViewExpenditures">Click here to view Expenditures</digi:trn>
 
 			</c:set>
-
+<feature:display module="Funding" name="Expenditures">
 			  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
 
 			  				<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 
 			  			</digi:link>
-
+</feature:display>
                </logic:notEqual>
 
                <logic:equal name="aimYearlyInfoForm" property="transactionType" value="2">
-
+				
+				<feature:display module="Funding" name="Expenditures">
 	            	<span class="sub-nav2-selected">
 
 	              		<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 
-	              	</span>
-
-              	</logic:equal>	|
+	              	</span>|
+				</feature:display>
+              	</logic:equal>	
 
 								<digi:link href="/viewYearlyDiscrepancy.do" name="urlDiscrepancy" styleClass="sub-nav2" title="${translation}" >
 

@@ -277,9 +277,15 @@ function validateLocationPercentage(){
   var flag = false;
   var sum = 0;
   var cnt = document.aimEditActivityForm.sizeLocs.value;
+  var cnt_blank_fields = 0;
   while (i < cnt) {
     str   = "selectedLocs[" + i + "].percent";
     val   = (document.aimEditActivityForm.elements)[str].value;
+    // added by mouhamad for burkina on 22/02/08
+    if (val == "" || val == null || val == "0") {
+    	val = "0";
+    	cnt_blank_fields = cnt_blank_fields + 1;
+    }    
     /* commented by Mouhamad for burkina on 21/02/08
     if (val == "" || val == null) {
       alert("${errMsgAddPercentage}");
@@ -299,10 +305,12 @@ function validateLocationPercentage(){
     (document.aimEditActivityForm.elements)[str].focus();
     return false;
   }
-  else if (cnt>0&&sum != 100) {
-    alert("${errMsgSumPercentage}");
-    (document.aimEditActivityForm.elements)[str].focus();
-    return false;
+  else if (cnt_blank_fields!=cnt) {
+  	if (cnt>0 && sum!=100 ) {
+	    alert("${errMsgSumPercentage}");
+	    (document.aimEditActivityForm.elements)[str].focus();
+	    return false;
+    }
   }
   return true;
 }

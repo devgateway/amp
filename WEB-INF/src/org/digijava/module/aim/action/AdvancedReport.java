@@ -936,7 +936,13 @@ public class AdvancedReport extends Action {
 
 
 			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectMeasures"))
+			{	request.setAttribute("SelectMeasures", "check");
+				formBean.setPublicReport(false);
+				formBean.setDrilldownTab(false);
+				formBean.setHideActivities(false);
+				formBean.setReportOption(null);
 				return goTo("SelectMeasures",formBean,mapping);
+			}
 
 
 			// step 3 : 
@@ -1253,8 +1259,7 @@ public class AdvancedReport extends Action {
 							ampReports.setReportMeasures( new HashSet(formBean.getMeasuresSelection()) );
 						}
 							ampReports.setHideActivities(formBean.getHideActivities());
-							ampReports.setDrilldownTab(formBean.getDrilldownTab());
-							ampReports.setPublicReport(formBean.getPublicReport());
+							System.out.println("1........." + ampReports.getHideActivities());
 							
 							if ( formBean.getInEditingMode() ) { // Editing an exisiting report
 //								logger.info ("Updating report.." );
@@ -1285,7 +1290,7 @@ public class AdvancedReport extends Action {
 							formBean.setInEditingMode( false );
 							formBean.setDbReportId( 0 );
 								
-							formBean.setHideActivities(null);
+							formBean.setHideActivities(false);
 							formBean.setDrilldownTab(null);
 							formBean.setPublicReport(null);
 							formBean.setReportType(null);		

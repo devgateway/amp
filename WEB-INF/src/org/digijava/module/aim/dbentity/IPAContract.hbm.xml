@@ -57,7 +57,7 @@
 		<many-to-one name="totalPrivateContribCurrency" column="total_private_contrib_currency" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>		
 
 			
-		<set name="disbursements" cascade="all">
+		<set name="disbursements" cascade="all-delete-orphan">
 			<key column="ipa_contract_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.IPAContractDisbursement"/>
 		</set>

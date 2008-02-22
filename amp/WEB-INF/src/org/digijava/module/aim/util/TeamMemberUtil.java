@@ -1529,17 +1529,7 @@ public class TeamMemberUtil {
 					Collection relatedActivities	= ActivityUtil.getActivitiesRelatedToAmpTeamMember(session, ampMember.getAmpTeamMemId() );
 					removeLinksFromATMToActivity(relatedActivities, ampMember);
 
-					qryStr = "select a from " + AmpApplicationSettings.class.getName() +
-							" a where (a.member=:memberId)";
-					qry = session.createQuery(qryStr);
-					qry.setParameter("memberId", id[i], Hibernate.LONG);
-					Iterator itr = qry.list().iterator();
-					if (itr.hasNext()) {
-						logger.info("Got the app settings..");
-						AmpApplicationSettings ampAppSettings = (AmpApplicationSettings) itr.next();
-						session.delete(ampAppSettings);
-						logger.info("deleted the app settings..");
-					}
+					
 
 					User user = (User) session.load(User.class,ampMember.getUser().getId());
 					Group group = (Group) session.load(Group.class,groupId);
@@ -1564,10 +1554,32 @@ public class TeamMemberUtil {
 							session.update(set);
 						}
 						// delete related information before we delete the report
-                                                String deleteTeamReports=" select tr from "+AmpTeamReports.class.getName()+ " tr where tr.report="+rep.getAmpReportId();
-                                                session.delete(deleteTeamReports);
+                         String deleteTeamReports=" select tr from "+AmpTeamReports.class.getName()+ " tr where (tr.report=:ampReportId)";
+                         Query qryaux;
+                         qryaux = session.createQuery(deleteTeamReports);
+                         qryaux.setParameter("ampReportId", rep.getAmpReportId(), Hibernate.LONG);
+             			 Iterator j=qryaux.list().iterator();
+             			 if(j.hasNext())
+             			 {
+             				 AmpTeamReports atr=(AmpTeamReports) j.next();
+             				 session.delete(atr);
+             			 }
+                         // session.delete(deleteTeamReports);
 						session.delete(rep);
 					}
+					
+					qryStr = "select a from " + AmpApplicationSettings.class.getName() +
+					" a where (a.member=:memberId)";
+					qry = session.createQuery(qryStr);
+					qry.setParameter("memberId", id[i], Hibernate.LONG);
+					Iterator itr = qry.list().iterator();
+					if (itr.hasNext()) {
+						logger.info("Got the app settings..");
+						AmpApplicationSettings ampAppSettings = (AmpApplicationSettings) itr.next();
+						session.delete(ampAppSettings);
+						logger.info("deleted the app settings..");
+					}
+					
 					session.delete(ampMember);
 				}
 			}

@@ -44,7 +44,7 @@ public class AdvancedReportForm extends ActionForm
 	private long statuses[];
 	private long sectors[];
 	private String regions[];
-	private Boolean hideActivities = null;
+	private Boolean hideActivities = false;
 	private Boolean drilldownTab = null;
 	private Boolean publicReport = null;
 	private Collection ampMeasures = null; // Contains the avaliable measures from Database
@@ -1516,11 +1516,12 @@ private int yrDiff;
 	}
 	
 	public void reset (ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {
-		String wasSelectMeasuresStep	= request.getParameter("wasSelectMeasuresStep");
-		if (wasSelectMeasuresStep != null ){
-			this.setPublicReport(false);
-			this.setDrilldownTab(false);
-			this.setHideActivities(false);
+		String wasSelectMeasuresStep	= request.getParameter("SelectMeasures");
+		if (wasSelectMeasuresStep != null )
+		{
+		this.setPublicReport(false);
+		this.setDrilldownTab(false);
+		this.setHideActivities(false);
 		}
 	}
 	public Boolean getReportEdit() {

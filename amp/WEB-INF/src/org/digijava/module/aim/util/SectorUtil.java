@@ -1126,6 +1126,7 @@ public class SectorUtil {
                                                 AmpSector sector = (AmpSector) session.load(
                                                                 AmpSector.class,sectorId);
                                                 tx = session.beginTransaction();
+                                                sector.setAidlist(null);
                                                 session.delete(sector);
                                                 tx.commit();
                                         }

@@ -170,9 +170,12 @@ public class EditActivity
     boolean gatePermEditAllowed = false;
     if (activityId != null) {
         activity = ActivityUtil.getAmpActivity(activityId);
-        Map scope=new HashMap();
-        scope.put(GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
-		gatePermEditAllowed = activity.canDo(GatePermConst.Actions.EDIT, scope);
+        if(activity!=null)
+        {
+        	Map scope=new HashMap();
+        	scope.put(GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
+        	gatePermEditAllowed = activity.canDo(GatePermConst.Actions.EDIT, scope);
+        }
     }
 
 

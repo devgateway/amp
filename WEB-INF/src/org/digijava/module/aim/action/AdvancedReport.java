@@ -198,6 +198,11 @@ public class AdvancedReport extends Action {
 				formBean.setMeasuresSelection(null);
 				
 				formBean.setArReportType(null);
+				
+				formBean.setPublicReport(false);
+				formBean.setDrilldownTab(false);
+				formBean.setHideActivities(false);
+				formBean.setReportOption(null);
 			} 
 			
 			
@@ -935,12 +940,7 @@ public class AdvancedReport extends Action {
 				
 
 
-			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectMeasures"))
-			{	request.setAttribute("SelectMeasures", "check");
-				formBean.setPublicReport(false);
-				formBean.setDrilldownTab(false);
-				formBean.setHideActivities(false);
-				formBean.setReportOption(null);
+			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectMeasures")) {
 				return goTo("SelectMeasures",formBean,mapping);
 			}
 

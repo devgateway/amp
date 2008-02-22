@@ -127,6 +127,8 @@
                                                                       </html:multibox>
                                                                     </td>
                                                                     <td  width="87%" vAlign="center" align="left">
+       
+                                                                        [${activitySectors.sectorScheme}]
                                                                       <c:if test="${!empty activitySectors.sectorName}">
                                                                         [${activitySectors.sectorName}]
                                                                       </c:if>

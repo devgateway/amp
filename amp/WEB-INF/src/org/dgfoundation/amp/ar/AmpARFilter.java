@@ -10,6 +10,7 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -17,11 +18,17 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.search.Hits;
+import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -30,7 +37,9 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -83,6 +92,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private String pageSize; // to be used for exporting reports
 	
 	private String text;
+	private String indexText;
 	
 	private static final String initialFilterQuery="SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1";
 	private String generatedFilterQuery;
@@ -174,7 +184,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		this.generatedFilterQuery=initialFilterQuery;
 	}
 	
-	public void generateFilterQuery() {
+	public void generateFilterQuery(HttpServletRequest request) {
 		String BUDGET_FILTER="SELECT amp_activity_id FROM amp_activity WHERE budget="+(budget!=null?budget.toString():"null")+(budget!=null && budget.booleanValue()==false?" OR budget is null":"");
 		String TEAM_FILTER="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IN ("+Util.toCSString(ampTeams,true)+") " +
 				"OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("+Util.toCSString(ampTeams,true)+") )";
@@ -239,9 +249,36 @@ public class AmpARFilter extends PropertyListable implements Filter {
 			}
 		}
 		
+		if (indexText != null)
+			if ("".equals(indexText.trim()) == false){
+				String LUCENE_ID_LIST = "";
+				HttpSession session = request.getSession();
+				ServletContext ampContext = session.getServletContext();
+				Directory idx = (Directory) ampContext.getAttribute(Constants.LUCENE_INDEX);
+	
+				Hits hits = LuceneUtil.search(idx, "title", indexText);
+				  
+				for(int i = 0; i < hits.length(); i++) {
+					Document doc;
+					try {
+						doc = hits.doc(i);
+						if (LUCENE_ID_LIST == "")
+							LUCENE_ID_LIST = doc.get("id");
+						else
+							LUCENE_ID_LIST = LUCENE_ID_LIST + "," + doc.get("id");
+						//AmpActivity act = ActivityUtil.getAmpActivity(Long.parseLong(doc.get("id")));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				logger.info("Lucene ID List:" + LUCENE_ID_LIST);
+				queryAppend(LUCENE_ID_LIST);
+			}
+		
 		String RISK_FILTER="SELECT v.activity_id from AMP_ME_INDICATOR_VALUE v, AMP_INDICATOR_RISK_RATINGS r where v.risk=r.amp_ind_risk_ratings_id and r.amp_ind_risk_ratings_id in ("+Util.toCSString(risks,true)+")";
 		
-	if(budget!=null) queryAppend(BUDGET_FILTER);
+		if(budget!=null) queryAppend(BUDGET_FILTER);
 		if(ampTeams!=null && ampTeams.size()>0) queryAppend(TEAM_FILTER);
 		if(statuses!=null && statuses.size()>0) queryAppend(STATUS_FILTER);
 		//if(donors!=null && donors.size()>0) queryAppend(ORG_FILTER);
@@ -600,13 +637,21 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		this.regionSelected = regionSelected;
 	}
 
+	public String getIndexText() {
+		return indexText;
+	}
 	public boolean isApproved() {
 		return approved;
 	}
 
+	public void setIndexText(String indexText) {
+		this.indexText = indexText;
+	}
 	public void setApproved(boolean approved) {
 		this.approved = approved;
 	}
+
+
 
 	public boolean isDraft() {
 		return draft;

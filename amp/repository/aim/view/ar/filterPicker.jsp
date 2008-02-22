@@ -25,15 +25,13 @@
 	<table>
 		
 		<tr>
-			<td colspan="4"><b><digi:trn key="rep:filter:projectid">Project ID</digi:trn> </b></td>
+			<td colspan="4"><b><digi:trn key="rep:filter:projectdata">Project Data</digi:trn> </b></td>
 		</tr>
 		<tr>
-			<td colspan="3">
-			<html:text  property="text" style="width: 400px" styleClass="inp-text" onchange="checkProjectId(this)"/>
+			<td colspan="4">
+			<html:text  property="indexString" style="width: 400px" styleClass="inp-text"/>
 			</td>
-			<td colspan="1"><font color="red">*<digi:trn key="aim:chanheFilters:numericAmpId">Amp Id must contain only numbers</digi:trn></font></td>
 		</tr>
-
 		<tr>
 			<td colspan="4"><b><digi:trn key="rep:filer:Currency">Currency</digi:trn></b></td>
 		</tr>

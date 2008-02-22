@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
@@ -24,6 +27,7 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
@@ -865,14 +869,14 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       }
     }
     finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception e) {
-          logger.error("Release session faliled.", e);
-        }
-      }
+		if (session != null) {
+			try {
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception e) {
+				logger.error("Release session faliled.", e);
+			}
+		}
     }
 
     return activityId;

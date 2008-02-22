@@ -14,6 +14,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
@@ -480,14 +482,14 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * @param reportMetadata
 	 * @param condition
 	 */
-	public AmpReportGenerator(AmpReports reportMetadata, AmpARFilter filter) {
+	public AmpReportGenerator(AmpReports reportMetadata, AmpARFilter filter, HttpServletRequest request) {
 		super();
 		this.reportMetadata = reportMetadata;
 		rawColumns = new GroupColumn("RAW DATA");
 		this.filter = filter;
 		extractableCount=0;
 		
-		filter.generateFilterQuery();
+		filter.generateFilterQuery(request);
 		
 		logger.info("Master report query:" + filter.getGeneratedFilterQuery());
 

@@ -133,7 +133,7 @@ public final class ARUtil {
 		af.readRequestData(request);
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER,af);
 
-		AmpReportGenerator arg = new AmpReportGenerator(r, af);
+		AmpReportGenerator arg = new AmpReportGenerator(r, af, request);
 
 		arg.generate();
 

@@ -19,13 +19,16 @@
 <logic:present name="debug">
 <div style='position:relative;display:none;' id='<bean:write name="amountCell" property="column.name"/>-<bean:write name="amountCell" property="ownerId"/>'> 
 <ul>
-<li>From Rate=<bean:write name="amountCell" property="fromExchangeRate"/>
-<li>To Rate=<bean:write name="amountCell" property="toExchangeRate"/>
-<li>Percentage=<bean:write name="amountCell" property="percentage"/>%
-<li>Currency Code=<bean:write name="amountCell" property="currencyCode"/>
-<li>Currency Date=<bean:write name="amountCell" property="currencyDate"/>
-<li>Activity Owner Id=<bean:write name="amountCell" property="ownerId"/>
-<li>Source Column=<bean:write name="amountCell" property="column.name"/>
+<li>From Rate=<bean:write name="amountCell" property="fromExchangeRate"/></li>
+<li>To Rate=<bean:write name="amountCell" property="toExchangeRate"/></li>
+<li>Percentage=<bean:write name="amountCell" property="percentage"/>%</li>
+<li>Currency Code=<bean:write name="amountCell" property="currencyCode"/></li>
+<li>Currency Date=<bean:write name="amountCell" property="currencyDate"/></li>
+<li>Activity Owner Id=<bean:write name="amountCell" property="ownerId"/></li>
+<li>Source Column=<bean:write name="amountCell" property="column.name"/></li>
+<logic:present name="amountCell" property="metaData">
+<li>Meta Information=<bean:write name="amountCell" property="metaData"/></li>
+</logic:present>
 </ul>
 </div>
 	<logic:notEmpty name="amountCell" property="mergedCells">

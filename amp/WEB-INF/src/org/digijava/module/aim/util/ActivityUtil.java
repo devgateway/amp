@@ -25,6 +25,7 @@ import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
+import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
@@ -798,60 +799,40 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                     oldContract.setOrganization(contract.getOrganization());
                     oldContract.setStatus(contract.getStatus());
                     //oldContract.getDisbursements().clear();
-                    Set disbs = contract.getDisbursements();
-                    List<Long> disbIds=new ArrayList();
-                    Set newDisb=new HashSet();
-                    Set removeDisb=new HashSet();
-                    //ugly solution, need refactoring...
-                        Iterator<IPAContractDisbursement> iterDisb = disbs.iterator();
-                        while (iterDisb.hasNext()) {
-                            IPAContractDisbursement contrDisb = iterDisb.next();
-                            if(contrDisb.getId()!=null){
-                                IPAContractDisbursement oldDisbContract = (IPAContractDisbursement) session.get(IPAContractDisbursement.class, contrDisb.getId());
-                                oldDisbContract.setAdjustmentType(contrDisb.getAdjustmentType());
-                                oldDisbContract.setAmount(contrDisb.getAmount());
-                                oldDisbContract.setCurrency(contrDisb.getCurrency());
-                                oldDisbContract.setDate(contrDisb.getDate());
-                                disbIds.add(contrDisb.getId());
-                            }else{
-                             contrDisb.setContract(oldContract);
-                             newDisb.add(contrDisb);
-                            }
-                        }
-                        if(oldContract.getDisbursements()!=null){
-                            Iterator <IPAContractDisbursement>oldDisbIter=oldContract.getDisbursements().iterator();
-                            while(oldDisbIter.hasNext()){
-                                IPAContractDisbursement oldDisb=oldDisbIter.next();
-                                Iterator<Long> disbIdsIter=disbIds.iterator();
-                                boolean delete=true;
-                                while(disbIdsIter.hasNext()){
-                                    Long id=disbIdsIter.next();
-                                    if(id.equals(oldDisb.getId())){
-                                        delete=false;
-                                        break;
-                                    }
-                                    
+                    Set toRetain=new HashSet();
+                   
+                    Set newDisbs = contract.getDisbursements();
+                    if (newDisbs != null && newDisbs.size() > 0) {
+                        Iterator<IPAContractDisbursement> iterNewDisb = newDisbs.iterator();
+                        while (iterNewDisb.hasNext()) {
+                            IPAContractDisbursement newDisb = iterNewDisb.next();
+                            if (newDisb.getId() != null) {
+                                IPAContractDisbursement oldDisb = (IPAContractDisbursement) session.load(IPAContractDisbursement.class,
+                                        newDisb.getId());
+                                oldDisb.setAdjustmentType(newDisb.getAdjustmentType());
+                                oldDisb.setAmount(newDisb.getAmount());
+                                oldDisb.setCurrency(newDisb.getCurrency());
+                                oldDisb.setDate(newDisb.getDate());
+                                toRetain.add(oldDisb);
+                            } else {
+                                if (oldContract.getDisbursements() == null) {
+                                    oldContract.setDisbursements(new HashSet());
                                 }
-                                if(delete){
-                                    removeDisb.add(oldDisb);
-                                }
+                                newDisb.setContract(oldContract);
+                                oldContract.getDisbursements().add(newDisb);
+                                toRetain.add(newDisb);
                                 
                             }
                         }
-                        
+                        oldContract.getDisbursements().retainAll(toRetain);
+                    }
+                    else{
                         if(oldContract.getDisbursements()!=null){
-                        oldContract.getDisbursements().removeAll(removeDisb);
-                        Iterator<IPAContractDisbursement> iter=removeDisb.iterator();
-                        while(iter.hasNext()){
-                            IPAContractDisbursement deleteDisb=iter.next();
-                            session.delete(deleteDisb);
+                        oldContract.getDisbursements().clear();
                         }
-                        oldContract.getDisbursements().addAll(newDisb);
-                        }
-                        else{
-                            oldContract.setDisbursements(newDisb);
-                        }
-                        contract=oldContract;
+                    }
+
+                    contract=oldContract;
 
                 }
                 session.saveOrUpdate(contract);
@@ -867,6 +848,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             queryString += " and con.id not in (" + ids + ")";
         }
         session.delete(queryString);
+        session.flush();
 			tx.commit(); // commit the transcation
 			logger.debug("Activity saved");
     }
@@ -3100,7 +3082,12 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 		String retVal=null;
 		String countryCode=FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY);
 		String userId=user.getId().toString();
-		String countryId=DbUtil.getDgCountry(countryCode).getCountryId().toString();
+                Country country=DbUtil.getDgCountry(countryCode);
+                String countryId="0";
+                if(country!=null){
+                    countryId=country.getCountryId().toString();
+                }
+		
 		String lastId=null;
 		if(actId!=null){
 			 lastId = actId.toString();	

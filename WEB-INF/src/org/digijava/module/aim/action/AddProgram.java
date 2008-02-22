@@ -112,10 +112,13 @@ public class AddProgram
           if(npoPrograms.size()==0){
             activityProgram.setProgramPercentage(100L);
           }
-          npoPrograms.add(activityProgram);
+          // changed by mouhamad for burkina the 22/02/08
+          // for AMP-2666
+          if (!npoPrograms.contains(activityProgram)) {
+        	  npoPrograms.add(activityProgram);
+          }
           eaform.setNationalPlanObjectivePrograms(npoPrograms);
-
-
+          // end 
         }
         else {
           if (settingsId ==ProgramUtil.PRIMARY_PROGRAM_KEY) {
@@ -129,7 +132,7 @@ public class AddProgram
           else {
             if( spPrograms.size()==0){
            activityProgram.setProgramPercentage(100L);
-        }
+            }
 
             spPrograms.add(activityProgram);
             eaform.setSecondaryPrograms(spPrograms);

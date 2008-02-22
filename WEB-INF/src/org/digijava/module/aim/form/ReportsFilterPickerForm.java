@@ -56,6 +56,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Integer lineMinRank;
 	private Integer planMinRank;
 	private String text;
+	private String indexString;
 	private String pageSize; //the specific page sizes
 
 	private Boolean governmentApprovalProcedures;
@@ -277,6 +278,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setRegionSelected(Long regionSelected) {
 		this.regionSelected = regionSelected;
+	}
+
+	public String getIndexString() {
+		return indexString;
+	}
+
+	public void setIndexString(String indexString) {
+		this.indexString = indexString;
 	}
 	
 	

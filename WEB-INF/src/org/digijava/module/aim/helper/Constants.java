@@ -310,5 +310,8 @@ public class Constants
 
        
     public static final String   FEATURE_MANAGER_VISIBILITY_TREE_UPDATED="Your changes have been saved." ;
+    
+    //Lucene Index
+    public static final String LUCENE_INDEX = "luceneIndex";
     public static final String  TEAM_LEAD_ALREADY_EXISTS = "The already has a team leader. You should remove the actual team leader first";
 }

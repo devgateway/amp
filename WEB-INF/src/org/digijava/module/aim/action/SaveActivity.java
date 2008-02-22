@@ -93,6 +93,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DesktopUtil;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -1443,7 +1444,8 @@ public class SaveActivity extends Action {
 							true, eaForm.getCommentsCol(), eaForm
 									.isSerializeFlag(), field, relatedLinks, tm
 									.getMemberId(), eaForm.getIndicatorsME(),tempComp,eaForm.getContracts());
-
+					//update lucene index
+					LuceneUtil.addUpdateActivity(request, true, actId);
 					//for logging the activity
 					AuditLoggerUtil.logActivityUpdate(session, request,
 												activity, auditTrail);
@@ -1494,7 +1496,8 @@ public class SaveActivity extends Action {
 					// create a new activity
 					actId = ActivityUtil.saveActivity(activity, null, false, eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
 	                        field, relatedLinks,tm.getMemberId() , eaForm.getIndicatorsME(), tempComp, eaForm.getContracts());
-
+					//update lucene index
+					LuceneUtil.addUpdateActivity(request, false, actId);
 					//for logging the activity
 					AuditLoggerUtil.logObject(session, request,activity,"add");
 				}

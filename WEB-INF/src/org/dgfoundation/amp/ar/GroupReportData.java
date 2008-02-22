@@ -44,6 +44,7 @@ public class GroupReportData extends ReportData {
 	}
     
 
+
 		 	
 	/**
 	 * GroupReportData comparator class. This class implements reportData comparison. 

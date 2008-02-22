@@ -183,6 +183,20 @@
                               </td>
                             </tr>
                           </feature:display>
+
+						  <feature:display name="Lucene Debug" module="Admin Home">
+                          <tr>
+                            <td class=f-names noWrap>
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn key="aim:tipUserManager">Click here to view Lucene index</digi:trn>
+                              </c:set>
+                              <digi:link module="aim" href="/luceneIndex.do" title="${translation}">
+                                <digi:trn key="aim:luceneDebug">Lucene Debug</digi:trn>
+                              </digi:link>
+                            </td>
+                          </tr>
+						  </feature:display>
                         </table>
                       </td>
                     </tr>

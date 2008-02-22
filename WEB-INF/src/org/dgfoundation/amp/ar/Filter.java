@@ -6,6 +6,8 @@
  */
 package org.dgfoundation.amp.ar;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
@@ -13,7 +15,7 @@ package org.dgfoundation.amp.ar;
  *
  */
 public interface Filter {
-	public void generateFilterQuery();
+	public void generateFilterQuery(HttpServletRequest request);
 	
 	public String getGeneratedFilterQuery();
 }

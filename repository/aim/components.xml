@@ -315,6 +315,8 @@
 	<page name="featureManager" title=" - Feature Manager" />
 
 	<page name="visibilityManager" title=" - Feature Manager" />
+	<page name="luceneIndex" title=" - Lucene Indexing" />
+	
 
 	<page name="auditLoggerManager" title=" - Audit Logger Manager" />
 

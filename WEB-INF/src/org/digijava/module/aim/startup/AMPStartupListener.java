@@ -17,6 +17,8 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.RAMDirectory;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumnsOrder;
@@ -24,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.LuceneUtil;
 
 
 
@@ -57,21 +60,21 @@ public class AMPStartupListener extends HttpServlet
     	try {
         	ampContext = sce.getServletContext();
 
-        	
-        		ampContext.setAttribute(Constants.ME_FEATURE,new Boolean(true));
-    			ampContext.setAttribute(Constants.AA_FEATURE,new Boolean(true));
-    			ampContext.setAttribute(Constants.PI_FEATURE,new Boolean(true));
-    			ampContext.setAttribute(Constants.CL_FEATURE,new Boolean(true));
-    			ampContext.setAttribute(Constants.DC_FEATURE,new Boolean(true));
-    			ampContext.setAttribute(Constants.SC_FEATURE,new Boolean(true));
-    			ampContext.setAttribute(Constants.MS_FEATURE,new Boolean(true));
-    			ampContext.setAttribute(Constants.AC_FEATURE,new Boolean(true));
-    			ampContext.setAttribute(Constants.LB_FEATURE,new Boolean(true));
-    			ampContext.setAttribute(Constants.SA_FEATURE,new Boolean(true));
-        	
-    		if (FeaturesUtil.getDefaultFlag() != null)
-    			ampContext.setAttribute(Constants.DEF_FLAG_EXIST,new Boolean(true));
-        
+
+        	ampContext.setAttribute(Constants.ME_FEATURE,new Boolean(true));
+        	ampContext.setAttribute(Constants.AA_FEATURE,new Boolean(true));
+        	ampContext.setAttribute(Constants.PI_FEATURE,new Boolean(true));
+        	ampContext.setAttribute(Constants.CL_FEATURE,new Boolean(true));
+        	ampContext.setAttribute(Constants.DC_FEATURE,new Boolean(true));
+        	ampContext.setAttribute(Constants.SC_FEATURE,new Boolean(true));
+        	ampContext.setAttribute(Constants.MS_FEATURE,new Boolean(true));
+        	ampContext.setAttribute(Constants.AC_FEATURE,new Boolean(true));
+        	ampContext.setAttribute(Constants.LB_FEATURE,new Boolean(true));
+        	ampContext.setAttribute(Constants.SA_FEATURE,new Boolean(true));
+
+        	if (FeaturesUtil.getDefaultFlag() != null)
+        		ampContext.setAttribute(Constants.DEF_FLAG_EXIST,new Boolean(true));
+
         	AmpTreeVisibility ampTreeVisibility=new AmpTreeVisibility();
         	//get the default amp template!!!
         	AmpTreeVisibility ampTreeVisibilityAux=new AmpTreeVisibility();
@@ -94,6 +97,13 @@ public class AMPStartupListener extends HttpServlet
         	FeaturesUtil.switchLogicInstance();
         	
         	ampContext.setAttribute(Constants.GLOBAL_SETTINGS, globalSettings);
+        	
+        	//Lucene indexation
+        	Directory idx = LuceneUtil.createIndex();
+			ampContext.setAttribute(Constants.LUCENE_INDEX, idx);
+        	//
+        	
+        	
         	
     	} catch (Exception e) {
     		logger.error("Exception while initialising AMP :" + e.getMessage());

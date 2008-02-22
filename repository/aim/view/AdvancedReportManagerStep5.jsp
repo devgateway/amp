@@ -260,7 +260,7 @@ function deleteColumn()
 																							notHierarchyColumns.columnName == 'A.C. Chapter' || notHierarchyColumns.columnName == 'Accession Instrument' || notHierarchyColumns.columnName == 'Financing Instrument' || 
 																							notHierarchyColumns.columnName == 'Implementation Level' || notHierarchyColumns.columnName == 'National Planning Objectives' || notHierarchyColumns.columnName == 'Primary Program' || 
 																							notHierarchyColumns.columnName == 'Secondary Program' || notHierarchyColumns.columnName == 'Sub-Sector' || notHierarchyColumns.columnName == 'Type Of Assistance' || 
-																							notHierarchyColumns.columnName == 'Sector' || notHierarchyColumns.columnName == 'Project Title'}">
+																							notHierarchyColumns.columnName == 'Sector' || notHierarchyColumns.columnName == 'Component Name' || notHierarchyColumns.columnName == 'Project Title'}">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
 																									  	<digi:trn key="aim:report:${notHierarchyColumns.columnName}"><c:out value="${notHierarchyColumns.columnName}"/></digi:trn>

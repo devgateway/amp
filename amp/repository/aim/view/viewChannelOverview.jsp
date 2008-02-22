@@ -590,6 +590,8 @@ function commentWin(val) {
 																					</TD>
 
 																					<c:if test="${!empty activity.locations}">
+                                                                                                                                                                             <c:if test="${aimChannelOverviewForm.implLocationCountry}" >
+                                                                                                                                                                 
 																						<TR>
 																							<TD width="30%" align="center" bgcolor="#ffffff">
 																								<c:if test="${aimChannelOverviewForm.numImplLocationLevels > 1}" >
@@ -621,6 +623,7 @@ function commentWin(val) {
 																							</TR>
 
 																						<c:forEach var="loc" items="${activity.locations}">
+                                                                                                                                                                                     <c:if test="${not empty loc.region || not empty loc.zone ||not empty loc.woreda}">
 																							<TR>
 																								<TD width="30%" align="center" bgcolor="#ffffff">
 																									<c:out value="${loc.region}" />
@@ -638,7 +641,9 @@ function commentWin(val) {
                                                                                                                                                                                                        </c:if>
 																								</TD>
 																							</TR>
+                                                                                                                                                                                         </c:if>
 																						</c:forEach>
+                                                                                                                                                                               </c:if>
 																					</c:if>
 																				</TABLE>
 																				</TD>

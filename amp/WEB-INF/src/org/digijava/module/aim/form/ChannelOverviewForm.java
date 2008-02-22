@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.poi.hssf.record.SSTRecord;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.OrgProjectId;
+import org.digijava.module.aim.util.ActivityUtil;
 
 public class ChannelOverviewForm extends MainProjectDetailsForm
 {
@@ -511,5 +511,10 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 		public void setNumImplLocationLevels(int numImplLocationLevels) {
 			this.numImplLocationLevels = numImplLocationLevels;
 		}
+                
+                public boolean getImplLocationCountry(){
+                    boolean flag=ActivityUtil.isImplLocationCountry(activity.getActivityId());
+                    return flag;
+                }
         
 }

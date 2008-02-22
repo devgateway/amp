@@ -3019,6 +3019,24 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                 }
                 return col;
        }
+  public static boolean isImplLocationCountry(Long actId) {
+                Session session = null;
+                boolean flag = false;
+                try {
+                       session = PersistenceManager.getRequestDBSession();
+                       String queryString = "select apl from " +AmpActivityLocation.class.getName() +
+                       " apl join apl.location l where (apl.activity=:actId) and (l.ampRegion is not NULL or l.ampZone is not  NULL or l.ampWoreda is not NULL)";
+                       Query qry = session.createQuery(queryString);
+                       qry.setLong("actId",actId);
+                       if(qry.list()!=null&&qry.list().size()>0){
+                           flag=true;
+                       }
+                } catch (Exception e) {
+                       logger.error("Unable to get locations");
+                       logger.error(e.getMessage());
+                }
+                return flag;
+       }
 
   public static class HelperAmpActivityNameComparator
         implements Comparator {

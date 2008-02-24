@@ -16,6 +16,7 @@ import java.util.List;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import java.util.Collection;
+import java.util.logging.Logger;
 
 public class AddProgram
     extends Action {
@@ -109,16 +110,24 @@ public class AddProgram
         activityProgram.setProgramSetting(parent);
 
         if (settingsId == ProgramUtil.NATIONAL_PLAN_OBJECTIVE_KEY) {
-          if(npoPrograms.size()==0){
+          if(npoPrograms.size()==0) {
             activityProgram.setProgramPercentage(100L);
           }
           // changed by mouhamad for burkina the 22/02/08
           // for AMP-2666
-          if (!npoPrograms.contains(activityProgram)) {
+          AmpActivityProgram program = null;
+          boolean exist = false; 
+          for (int i = 0; i < npoPrograms.size(); i++) {
+        	  program = (AmpActivityProgram) npoPrograms.get(i);
+        	  if ((program.getAmpActivityProgramId() == null) || (program.getAmpActivityProgramId().equals(activityProgram.getAmpActivityProgramId()))) {
+        		  exist = true;
+        	  }
+          }
+          if (!exist) {
         	  npoPrograms.add(activityProgram);
           }
-          eaform.setNationalPlanObjectivePrograms(npoPrograms);
           // end 
+          eaform.setNationalPlanObjectivePrograms(npoPrograms);         
         }
         else {
           if (settingsId ==ProgramUtil.PRIMARY_PROGRAM_KEY) {

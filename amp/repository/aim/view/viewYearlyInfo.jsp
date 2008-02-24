@@ -701,8 +701,8 @@
 																	</div>
 
    					                       			</td>
-
-									                    	<td bgcolor="#DDDDDB">
+															<!-- Commented by mouhamad for burkina -->
+									                    	<!--td bgcolor="#DDDDDB">
 
 				   					                     <div align="center">
 
@@ -710,7 +710,7 @@
 
 																	</div>
 
-				   					              		</td>
+				   					              		</td-->
 
 									                 		<td bgcolor="#DDDDDB">
 
@@ -735,11 +735,12 @@
 																		<bean:write name="yearlyInfo" property="fiscalYear" />
 																	</logic:notEqual>
 																</td>
-																<td bgcolor="#F8F8F5">
+																<!-- Commented by mouhamad for burkina -->
+																<!--td bgcolor="#F8F8F5">
 		         					                 				<div align="right">
 		         					                 					<%=FormatHelper.formatNumber(yearlyInfo.getPlannedAmount())%>
 																	</div>
-																</td>
+																</td-->
 																<td bgcolor="#F8F8F5">
 																	<div align="right">
 																		<%=FormatHelper.formatNumber(yearlyInfo.getActualAmount())%>
@@ -775,7 +776,7 @@
 
 																</td>
 
-				                  					   <td>
+				                  					   <!--td>
 
 									                     	<div align="right">
 
@@ -783,7 +784,7 @@
 
 																	</div>
 
-									                      </td>
+									                      </td-->
 
 									                      <td>
 

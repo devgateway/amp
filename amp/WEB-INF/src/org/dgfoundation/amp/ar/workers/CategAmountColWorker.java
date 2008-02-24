@@ -165,6 +165,9 @@ public class CategAmountColWorker extends ColumnWorker {
 			tr_type  = rs.getInt("transaction_type");
 		}
 		
+		if (columnsMetaData.contains("org_grp_name")) {
+			donorGroupName	= rs.getString("org_grp_name");
+		}
 				
 		if (columnsMetaData.contains("terms_assist_name")){
 			String termsAssist = rs.getString("terms_assist_name");

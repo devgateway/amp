@@ -520,7 +520,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
      private AmpAhsurvey ahsurvey;
      private List contracts;
-     private Integer selContractId;	
+     private Integer selContractId;
+	private Long creditTypeId;	
 
     public Integer getSelContractId() {
         return selContractId;
@@ -4816,6 +4817,14 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public double getTotalPlannedDisbursements() {
 		return this.totalPlannedDisbursements;
 		
+	}
+
+	public void setCreditTypeId(Long creditType) {
+		this.creditTypeId = creditType;
+	}
+
+	public Long getCreditTypeId() {
+		return creditTypeId;
 	}
 
 

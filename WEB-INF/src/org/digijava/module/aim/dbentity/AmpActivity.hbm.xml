@@ -83,6 +83,10 @@
 		<property name="funAmount" column="proj_cost_amount" type="java.lang.Double" />
 		<property name="funDate" column="proj_cost_date" type="java.lang.String" />
 		<property name="currencyCode" column="proj_cost_currcode" type="java.lang.String" />
+		
+		<!-- Start Bolivia Specific Fields -->
+		<many-to-one name="creditType" column="credit_type_id" class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none"/>
+		<!-- End Bolivia Specific Fields -->		
 
 <!--
 tanzania adds
@@ -109,6 +113,7 @@ tanzania adds
 
 		<property name="lineMinRank" column="line_min_rank" type="java.lang.Integer"/>
 		<property name="planMinRank" column="plan_min_rank" type="java.lang.Integer"/>
+
 
 
 		<set name="categories" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="false" cascade="none">

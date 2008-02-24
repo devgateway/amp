@@ -529,11 +529,10 @@ function collapseAll() {
 										</td>
 									</tr>
 									</logic:present>
-									</field:display>
-  						
- <!--END Objectives --->
+									</field:display>  						
+									<!--END Objectives --->
  
-						 <field:display feature="Identification" name="Description">
+						 			<field:display feature="Identification" name="Description">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:description">
 											 Description</digi:trn>										</td>
@@ -852,16 +851,29 @@ function collapseAll() {
                                     <!--16-->
                                     <field:display name="Status" feature="Planning">
                                         <tr>
-                                        <td align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2"  class="t-name" >                                        <digi:trn key="aim:status">Status</digi:trn>                                       	      </td>
-                                        <td bgcolor="#FFFFFF">
-                                        <category:getoptionvalue categoryValueId="${aimEditActivityForm.statusId}"/>
-                                        <td width="1%">                                        </tr>
+	                                        <td align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2"  class="t-name" >                                        <digi:trn key="aim:status">Status</digi:trn>                                       	      </td>
+	                                        <td bgcolor="#FFFFFF">
+	                                        <category:getoptionvalue categoryValueId="${aimEditActivityForm.statusId}"/>
+	                                        </td>
+                                        </tr>
                                         <tr>
-                                        <td valign="top" nowrap="nowrap" bgcolor="#f4f4f2"></td>
-                                        <td bgcolor="#ffffff" ><c:out value="${aimEditActivityForm.statusReason}"/></td>
+	                                        <td valign="top" nowrap="nowrap" bgcolor="#f4f4f2"></td>
+	                                        <td bgcolor="#ffffff" ><c:out value="${aimEditActivityForm.statusReason}"/></td>
                                         </tr>
                                     </field:display>
-                                                                <feature:display name="References" module="References">
+
+                                    <field:display name="TypeOfCredit" feature="Planning">
+                                        <tr>
+	                                        <td align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2"  class="t-name" >
+												<digi:trn key="aim:type_of_credit">Type of Credit</digi:trn>                                       	      
+											</td>
+	                                        <td bgcolor="#FFFFFF">
+	                                        	<category:getoptionvalue categoryValueId="${aimEditActivityForm.creditTypeId}"/>
+	                                        </td>                                        
+                                        </tr>
+                                    </field:display>
+                                   
+								<feature:display name="References" module="References">
 									<tr>
 									<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:References">References</digi:trn>									</td>
 									<td bgcolor="#ffffff">
@@ -875,7 +887,7 @@ function collapseAll() {
 										</table>
 									</c:forEach>									</td>
 									</tr>
-									</feature:display>
+								</feature:display>
                                     <!--END 16 -->
                                    <!--17--> 
                                

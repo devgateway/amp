@@ -1259,7 +1259,8 @@ public class AdvancedReport extends Action {
 							ampReports.setReportMeasures( new HashSet(formBean.getMeasuresSelection()) );
 						}
 							ampReports.setHideActivities(formBean.getHideActivities());
-							System.out.println("1........." + ampReports.getHideActivities());
+							ampReports.setDrilldownTab(formBean.getDrilldownTab());
+							ampReports.setPublicReport(formBean.getPublicReport());
 							
 							if ( formBean.getInEditingMode() ) { // Editing an exisiting report
 //								logger.info ("Updating report.." );
@@ -1478,6 +1479,7 @@ public class AdvancedReport extends Action {
 							    }else{
 							    	AmpReportMeasures measure=new AmpReportMeasures();
 							    	measure.setMeasure(ampMeasures);
+							    	measure.setOrderId(""+coll.size() );
 							    	coll.add(measure);
 								tempMeasures = ampMeasures;
 							    }
@@ -1845,11 +1847,17 @@ public class AdvancedReport extends Action {
 						{
 							if(temp.indexOf(ampMeasures) > 0)
 							{
-								currMeasure = (AmpReportMeasures)temp.get(temp.indexOf(ampMeasures));
-								prevMeasure = (AmpReportMeasures)temp.get(temp.indexOf(ampMeasures)-1);
 								index = temp.indexOf(ampMeasures);
+								currMeasure = (AmpReportMeasures)temp.get(index);
+								prevMeasure = (AmpReportMeasures)temp.get(index-1);
+								
+								currMeasure.setOrderId(""+(index-1));
+								prevMeasure.setOrderId(""+index);
+								
 								temp.set(index, prevMeasure);
 								temp.set(index-1, currMeasure);
+								
+																
 								if(option.equals("MoveUpAdjustType"))
 									formBean.setSelAdjustType(temp);
 								if(option.equals("MoveUpMeasure"))
@@ -1865,11 +1873,18 @@ public class AdvancedReport extends Action {
 						{
 							if( (temp.indexOf(ampMeasures)+1) < tempColl.size() )
 							{
-								currMeasure = (AmpReportMeasures)temp.get(temp.indexOf(ampMeasures));
-								nextMeasure = (AmpReportMeasures)temp.get(temp.indexOf(ampMeasures)+1);
 								index = temp.indexOf(ampMeasures);
+								currMeasure = (AmpReportMeasures)temp.get(index);
+								nextMeasure = (AmpReportMeasures)temp.get(index+1);
+								
+								currMeasure.setOrderId(""+(index+1));
+								nextMeasure.setOrderId(""+index);
+								
 								temp.set(index, nextMeasure);
 								temp.set(index+1, currMeasure);
+								
+
+								
 								if(option.equals("MoveDownAdjustType"))
 									formBean.setSelAdjustType(temp);
 								if(option.equals("MoveDownMeasure"))

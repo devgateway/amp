@@ -1289,9 +1289,13 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         if (ampActivity.getActivityCreator() != null) {
           activity.setCreatedBy(ampActivity.getActivityCreator());
         }
-        //get lessons learned
-        if(ampActivity.getLessonsLearned()!=null) {
-        	activity.setLessonsLearned(ampActivity.getLessonsLearned());
+        // get lessons learned
+		if (ampActivity.getLessonsLearned() != null) {
+			activity.setLessonsLearned(ampActivity.getLessonsLearned());
+		}
+        
+        if (ampActivity.getCreditType() != null) {
+        	activity.setCreditType(ampActivity.getCreditType());
         }
 
       }
@@ -1568,7 +1572,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                 if (ampLoc.getAmpWoreda() != null) {
                   loc.setWoreda(ampLoc.getAmpWoreda().getName());
                 }
-                loc.setPercent(DecimalToText.ConvertDecimalToText(actLoc.getLocationPercentage()));
+                if(actLoc.getLocationPercentage()!=null)
+                	loc.setPercent(DecimalToText.ConvertDecimalToText(actLoc.getLocationPercentage()));
                 locColl.add(loc);
             }
             

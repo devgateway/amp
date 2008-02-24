@@ -660,6 +660,11 @@ public class EditActivity
           eaForm.setCreatedBy(activity.getActivityCreator());
           eaForm.setUpdatedBy(activity.getUpdatedBy());
           eaForm.setBudget(activity.getBudget());
+          
+          if(activity.getCreditType() != null){
+        	  eaForm.setCreditTypeId(activity.getCreditType().getId());
+          }
+          
 
           /*
            * Tanzania adds

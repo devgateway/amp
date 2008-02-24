@@ -137,6 +137,11 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private Integer planMinRank;
 	private Collection actRankColl;
     private Set indicators;
+    
+    // Start Bolivia Adds
+    private AmpCategoryValue creditType;
+    // End Bolivia Adds
+
 
 	private Set<AmpActivityDocument> activityDocuments	= null;
 	/* Categories */
@@ -1283,6 +1288,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setGovAgreementNumber(String govAgreementNumber) {
 		this.govAgreementNumber = govAgreementNumber;
+	}
+
+	public void setCreditType(AmpCategoryValue creditType) {
+		this.creditType = creditType;
+	}
+
+	public AmpCategoryValue getCreditType() {
+		return creditType;
 	}
 
 }

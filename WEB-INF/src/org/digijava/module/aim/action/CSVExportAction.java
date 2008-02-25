@@ -99,7 +99,7 @@ public class CSVExportAction
     
     String translatedNotes = "";
     
-	translatedNotes = TranslatorWorker.translate("rep:pop:notes", locale, siteId);
+	translatedNotes = TranslatorWorker.translate("rep:pop:AllAmount", locale, siteId);
 	
 	if ("".equalsIgnoreCase(translatedNotes)) {
 	    translatedNotes = AmpReports.getNote(session);

@@ -57,7 +57,7 @@ public class TrailCellsPDF extends PDFExporter {
 	public void generate() {
 		//generate totals:
 		ReportData grd=(ReportData) item;
-		Font totalFont = new Font(Font.TIMES_ROMAN, Font.DEFAULTSIZE, Font.ITALIC);
+		Font totalFont = new Font(Font.COURIER, 10, Font.BOLD);
 		
 		if(grd.getParent()!=null) {
 			
@@ -85,7 +85,7 @@ public class TrailCellsPDF extends PDFExporter {
 			
 			//create the actual output string for the totals line
 			if(totalsFor.compareTo("")==0)
-				result="TOTALS for: ";
+				result="TOTALS FOR: ";
 			else result=totalsFor+": ";
 			
 			if(translatedName.compareTo("")==0 )
@@ -95,6 +95,7 @@ public class TrailCellsPDF extends PDFExporter {
 			PdfPCell pdfc = new PdfPCell(new Paragraph(result+" ("+grd.getTotalUniqueRows()+")",totalFont));
 			pdfc.setColspan(grd.getSourceColsCount().intValue());
 			table.addCell(pdfc);
+			
 			
 			Iterator i=grd.getTrailCells().iterator();
 			while (i.hasNext()) {

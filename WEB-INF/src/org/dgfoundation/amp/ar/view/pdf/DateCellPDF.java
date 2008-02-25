@@ -46,6 +46,7 @@ public class DateCellPDF extends PDFExporter {
 	public void generate() {
 		DateCell c=(DateCell) item;
 		PdfPCell pdfc = new PdfPCell(new Paragraph(c.toString()));
+		
 		table.addCell(pdfc);
 	}
 

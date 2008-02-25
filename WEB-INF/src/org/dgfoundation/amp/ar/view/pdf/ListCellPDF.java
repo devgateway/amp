@@ -14,6 +14,7 @@ import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ListCell;
 
+import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -53,7 +54,7 @@ public class ListCellPDF extends PDFExporter {
 			res+=element.toString();
 			if(i.hasNext()) res+=", ";
 		}
-		PdfPCell pdfc = new PdfPCell(new Paragraph(res));
+		PdfPCell pdfc = new PdfPCell(new Paragraph(res,new Font(Font.COURIER, 10)));
 		table.addCell(pdfc);
 	}
 

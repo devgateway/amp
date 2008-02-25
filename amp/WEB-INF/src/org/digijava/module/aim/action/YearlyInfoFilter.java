@@ -112,7 +112,7 @@ public class YearlyInfoFilter extends TilesAction {
 				if ( yearlyInfo.size() != 0 )	{
 					formBean.setYearlyInfo(yearlyInfo);
 
-					TotalsQuarterly tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode());
+					TotalsQuarterly tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode(),false);
 					formBean.setTotalCommitted(tq.getTotalCommitted());
 					formBean.setTotalDisbursed(tq.getTotalDisbursed());
                                         formBean.setTotalDisbOrdered(tq.getTotalDisbOrdered());

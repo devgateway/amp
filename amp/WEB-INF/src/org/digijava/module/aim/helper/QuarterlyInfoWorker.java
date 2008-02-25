@@ -13,9 +13,13 @@ import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
+
+import com.corda.taglib.Debug;
 
 public class QuarterlyInfoWorker {
 
@@ -148,8 +152,10 @@ public class QuarterlyInfoWorker {
 				}
 				
 				//String strAmt = CurrencyWorker.convert(tmpAmt, fromCurrency, targetCurrency);
-				double amountConverted = CurrencyWorker.convertToDouble(tmpAmt, fromCurrency, targetCurrency);
-				quarterlyInfo.setPlannedAmount(amountConverted);
+				DecimalWraper amountConverted = CurrencyWorker.convertWrapper(tmpAmt, fromCurrency, targetCurrency,
+							new java.sql.Date(transactionDate.getTime()));
+				quarterlyInfo.setPlannedAmount(FormatHelper.parseDouble(amountConverted.toString()));
+				quarterlyInfo.setWrapedPlanned(amountConverted.getCalculations());
 				String strDate = DateConversion.ConvertDateToString(transactionDate);
 				quarterlyInfo.setDateDisbursed(strDate);
 				FiscalDO fdo = FiscalCalendarWorker.getFiscalYrQtr(transactionDate, fp.getFiscalCalId());
@@ -224,7 +230,7 @@ public class QuarterlyInfoWorker {
 			}
 			
 			//String strAmt = CurrencyWorker.convert(tmpAmt, fromCurrency,targetCurrency);
-			double amountConverted = CurrencyWorker.convertToDouble(tmpAmt, fromCurrency, targetCurrency);			
+			DecimalWraper amountConverted = CurrencyWorker.convertWrapper(tmpAmt, fromCurrency, targetCurrency,new java.sql.Date(transactionDate.getTime()));			
 			
 			String strDate = DateConversion
 					.ConvertDateToString(transactionDate);
@@ -237,7 +243,8 @@ public class QuarterlyInfoWorker {
 								.getFiscalQuarter()
 						&& !quarterlyInfo.isActualAmountSet()) {
 					b = true;
-					quarterlyInfo.setActualAmount(amountConverted);
+					quarterlyInfo.setActualAmount(FormatHelper.parseDouble(amountConverted.toString()));
+					quarterlyInfo.setWrapedActual(amountConverted.getCalculations());
 					quarterlyInfo.setDateDisbursed(strDate);
 					quarterlyInfo.setActualAmountSet(true);
 					break;
@@ -248,7 +255,8 @@ public class QuarterlyInfoWorker {
 				qf.setFiscalYear(fdo.getFiscalYear());
 				qf.setFiscalQuarter(fdo.getFiscalQuarter());
 				qf.setPlannedAmount(0);
-				qf.setActualAmount(amountConverted);
+				qf.setActualAmount(FormatHelper.parseDouble(amountConverted.toString()));
+				qf.setWrapedActual(amountConverted.getCalculations());
 				qf.setDateDisbursed(strDate);
 				qf.setAggregate(1);
 				qf.setActualAmountSet(true);
@@ -285,6 +293,8 @@ public class QuarterlyInfoWorker {
 			QuarterlyInfo qi = null;
 			QuarterlyInfo qf = null;
 			String tmpDate = null;
+			String tmpActualWraped="";
+			String tmpPlanedWraped="";
 			double dblAmt = 0.0;
 
 			if (arrList.size() == 1) {
@@ -298,6 +308,8 @@ public class QuarterlyInfoWorker {
 				qf.setAggregate(0);
 				qf.setPlus(true);
 				qf.setDisplay(true);
+				qf.setWrapedActual(qi.getWrapedActual());
+				qf.setWrapedPlanned(qi.getWrapedPlanned());
 				al.add(qf);
 			} else {
 				int index = 0;
@@ -305,6 +317,8 @@ public class QuarterlyInfoWorker {
 				tmpYr = qi.getFiscalYear();
 				tmpQtr = qi.getFiscalQuarter();
 				tmpActualAmt = qi.getActualAmount();
+				tmpActualWraped = qi.getWrapedActual();
+				tmpPlanedWraped = qi.getWrapedPlanned();
 				tmpPlannedAmt = qi.getPlannedAmount();
 				tmpDate = qi.getDateDisbursed();
 
@@ -317,7 +331,9 @@ public class QuarterlyInfoWorker {
 							&& (qi.getFiscalYear() == tmpYr && qi
 									.getFiscalQuarter() == tmpQtr)) {
 						tmpActualAmt += qi.getActualAmount();
+						tmpActualWraped = tmpActualWraped + " + " + qi.getWrapedActual(); 
 						tmpPlannedAmt += qi.getPlannedAmount();
+						tmpPlanedWraped = tmpPlanedWraped +" + "+ qi.getWrapedPlanned(); 
 						tmpDate = qi.getDateDisbursed();
 						index++;
 						if (index < arrList.size()) {
@@ -328,7 +344,9 @@ public class QuarterlyInfoWorker {
 					qf.setFiscalYear(tmpYr);
 					qf.setFiscalQuarter(tmpQtr);
 					qf.setPlannedAmount(tmpPlannedAmt);
+					qf.setWrapedPlanned(tmpPlanedWraped);
 					qf.setActualAmount(tmpActualAmt);
+					qf.setWrapedActual(tmpActualWraped);
 					qf.setDateDisbursed(tmpDate);
 					qf.setAggregate(0);
 					qf.setPlus(true);
@@ -339,6 +357,8 @@ public class QuarterlyInfoWorker {
 					tmpQtr = qi.getFiscalQuarter();
 					tmpActualAmt = qi.getActualAmount();
 					tmpPlannedAmt = qi.getPlannedAmount();
+					tmpActualWraped = qi.getWrapedActual();
+					tmpPlanedWraped = qi.getWrapedPlanned();
 				}
 			}
 		//	if (logger.isDebugEnabled())
@@ -494,42 +514,85 @@ public class QuarterlyInfoWorker {
 	 * @param ampFundingId
 	 * @param perspective
 	 * @return TotalsQuarterly
+	 * 
 	 */
 	public static TotalsQuarterly getTotalsQuarterly(Long ampFundingId,
-			String perspective,String currCode) {
-	//	if (logger.isDebugEnabled())
-		//	logger.debug("getTotalsQuarterly() with ampFundingId : "
-		//			+ ampFundingId + ", perspective : " + perspective);
+		String perspective, String currCode, boolean isDebug) {
+		// if (logger.isDebugEnabled())
+		// logger.debug("getTotalsQuarterly() with ampFundingId : "
+		// + ampFundingId + ", perspective : " + perspective);
 		TotalsQuarterly tq = new TotalsQuarterly();
 		Integer adjType = new Integer(Constants.ACTUAL);
-		//Total actual commitment
+
+		// Total actual commitment
 		double totCommitment = DbUtil.getTotalDonorFund(ampFundingId,
 				new Integer(Constants.COMMITMENT), adjType, perspective);
-		double fromCurrency = CurrencyUtil.getExchangeRate(ampFundingId, perspective);
-		double targetCurrency = CurrencyUtil
-				.getExchangeRate(currCode);
-		String strTotCommitment = CurrencyWorker.convert(totCommitment,
-				fromCurrency, targetCurrency);
+		double fromCurrency = CurrencyUtil.getExchangeRate(ampFundingId,
+				perspective);
+		double targetCurrency = CurrencyUtil.getExchangeRate(currCode);
+		String strTotCommitment = "";
+		if (!isDebug) {
+			strTotCommitment = CurrencyWorker.convertWrapper(totCommitment,
+					fromCurrency, targetCurrency,
+					new java.sql.Date(new Date().getTime())).toString();
+		} else {
+			strTotCommitment = CurrencyWorker.convertWrapper(totCommitment,
+					fromCurrency, targetCurrency,
+					new java.sql.Date(new Date().getTime())).getCalculations();
+		}
 		tq.setTotalCommitted(strTotCommitment);
+
+		String strTotDisbursement = "";
 		double totDisbursement = DbUtil.getTotalDonorFund(ampFundingId,
 				new Integer(Constants.DISBURSEMENT), adjType, perspective);
-		String strTotDisbursement = CurrencyWorker.convert(totDisbursement,
-				fromCurrency, targetCurrency);
+		if (!isDebug) {
+			strTotDisbursement = CurrencyWorker.convertWrapper(totDisbursement,
+					fromCurrency, targetCurrency,
+					new java.sql.Date(new Date().getTime())).toString();
+		} else {
+			strTotDisbursement = CurrencyWorker.convertWrapper(totDisbursement,
+					fromCurrency, targetCurrency,
+					new java.sql.Date(new Date().getTime())).getCalculations();
+		}
 		tq.setTotalDisbursed(strTotDisbursement);
+
 		double totExpended = DbUtil.getTotalDonorFund(ampFundingId,
 				new Integer(Constants.EXPENDITURE), adjType, perspective);
-		tq.setTotalExpended(CurrencyWorker.convert(totExpended,
-				fromCurrency, targetCurrency));
-		tq.setTotalExpended(CurrencyWorker.convert(totExpended,
-				fromCurrency, targetCurrency));
+		if (!isDebug) {
+			tq.setTotalExpended(CurrencyWorker.convertWrapper(totExpended,
+					fromCurrency, targetCurrency,
+					new java.sql.Date(new Date().getTime())).toString());
+		} else {
+			tq.setTotalExpended(CurrencyWorker.convertWrapper(totExpended,
+					fromCurrency, targetCurrency,
+					new java.sql.Date(new Date().getTime())).getCalculations());
+		}
+
 		double totUnExpended = totDisbursement - totExpended;
-		String strTotUnexpended = CurrencyWorker.convert(totUnExpended,
-				fromCurrency, targetCurrency);
+		String strTotUnexpended = "";
+		if (!isDebug) {
+			strTotUnexpended = CurrencyWorker.convertWrapper(totUnExpended,
+					fromCurrency, targetCurrency,
+					new java.sql.Date(new Date().getTime())).toString();
+		} else {
+			strTotUnexpended = CurrencyWorker.convertWrapper(totUnExpended,
+					fromCurrency, targetCurrency,
+					new java.sql.Date(new Date().getTime())).getCalculations();
+		}
 		tq.setTotalUnExpended(strTotUnexpended);
 		double totRemaining = totCommitment - totDisbursement;
-		String strTotRemaining = CurrencyWorker.convert(totRemaining,
-				fromCurrency, targetCurrency);
+		String strTotRemaining = "";
+		if (!isDebug) {
+			strTotRemaining = CurrencyWorker.convertWrapper(totRemaining,
+					fromCurrency, targetCurrency,
+					new java.sql.Date(new Date().getTime())).toString();
+		} else {
+			strTotRemaining = CurrencyWorker.convertWrapper(totRemaining,
+					fromCurrency, targetCurrency,
+					new java.sql.Date(new Date().getTime())).getCalculations();
+		}
 		tq.setTotalRemaining(strTotRemaining);
+
 		tq.setCurrencyCode(currCode);
 		if (logger.isDebugEnabled())
 			logger

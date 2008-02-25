@@ -47,7 +47,8 @@ public class ViewQuarterlyInfo extends TilesAction	{
 		if (session.getAttribute("currentMember") == null) {
 			formBean.setSessionExpired(true);
 		}
-		else	{
+		else{
+			boolean debug = (request.getParameter("debug")!=null)?true:false;
 			formBean.setSessionExpired(false);
 			FinancialFilters ff = CommonWorker.getFilters(teamMember.getTeamId(),"FP");
 			formBean.setCalendarPresent(ff.isCalendarPresent());
@@ -108,8 +109,13 @@ public class ViewQuarterlyInfo extends TilesAction	{
 				Collection c = QuarterlyInfoWorker.getQuarterlyInfo(fp);
 				if ( c.size() != 0 )	{
 					formBean.setQuarterlyInfo(c);
-
-					TotalsQuarterly tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode());
+					TotalsQuarterly tq; 
+					if(!debug){
+						 tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode(),false);
+					}
+					else{
+						tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode(),true);
+					}
 					formBean.setTotalCommitted(tq.getTotalCommitted());
 					formBean.setTotalDisbursed(tq.getTotalDisbursed());
                                         formBean.setTotalDisbOrdered(tq.getTotalDisbOrdered());

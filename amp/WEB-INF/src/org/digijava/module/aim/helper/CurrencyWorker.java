@@ -1,11 +1,14 @@
 package org.digijava.module.aim.helper;
 
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.text.DecimalFormat;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DecimalWraper;
 
 public class CurrencyWorker {
 	private static Logger logger = Logger.getLogger(CurrencyWorker.class);
@@ -96,19 +99,40 @@ public class CurrencyWorker {
 
 	public static double convert1(double amt, double fromExchangeRate,
 			double toExchangeRate) {
-		
-		if (fromExchangeRate == 0) {
-			fromExchangeRate = 1;
-		}
-		if (fromExchangeRate != toExchangeRate) {
-			resultDbl = (amt / fromExchangeRate) * toExchangeRate;
-
+		if (fromExchangeRate != toExchangeRate && fromExchangeRate != 0) {
+			double inter = 1 / fromExchangeRate;
+			inter = inter * amt;
+			resultDbl = inter * toExchangeRate;
 		} else {
 			resultDbl = amt;
 		}
+
 		return resultDbl;
 	}
 
+	public static DecimalWraper convertWrapper(double amt, double fromExchangeRate,
+			double toExchangeRate, Date date) {
+		DecimalWraper result = new DecimalWraper();
+		BigDecimal reference = new BigDecimal(1d);
+		BigDecimal amount = new BigDecimal(amt);
+		BigDecimal fromRate = new BigDecimal(fromExchangeRate);
+		BigDecimal toRate = new BigDecimal(toExchangeRate);
+		BigDecimal inter = reference.divide(fromRate,30,java.math.RoundingMode.HALF_EVEN);
+		
+		if (fromExchangeRate != toExchangeRate) {
+			BigDecimal tmp;
+			tmp=amount.multiply(inter);
+			result.setValue(tmp.multiply(toRate));
+			result.setCalculations(result.getValue() + "= ((" + 1 + "/"
+					+ fromExchangeRate + ") * " + amount + " * " + toExchangeRate + ") " + date.toString());
+		} else {
+			result.setValue(amount);
+			result.setCalculations("No need it's due rate");
+
+		}
+		return result;
+	}
+	
 	/**
 	 * Formats the amount to include commas and decimal places Commas will be
 	 * inserted after every three digits

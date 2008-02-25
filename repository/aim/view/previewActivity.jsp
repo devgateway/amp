@@ -862,7 +862,7 @@ function collapseAll() {
                                         </tr>
                                     </field:display>
 
-                                    <field:display name="TypeOfCredit" feature="Planning">
+                                    <field:display name="Credit Type" feature="Planning">
                                         <tr>
 	                                        <td align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2"  class="t-name" >
 												<digi:trn key="aim:type_of_credit">Type of Credit</digi:trn>                                       	      

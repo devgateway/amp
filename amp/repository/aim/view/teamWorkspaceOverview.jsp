@@ -217,8 +217,8 @@ function update(action) {
 																		</digi:trn>
 																		--
 																	</html:option>
-																	<html:option value="GOVERNMENT"><digi:trn key="aim:GOVERNMENT">Government</digi:trn></html:option>
-																	<html:option value="DONOR"><digi:trn key="aim:DONOR">Donor</digi:trn></html:option>
+																	<html:option value="GOVERNMENT"><digi:trn key="aim:government">Government</digi:trn></html:option>
+																	<html:option value="DONOR"><digi:trn key="aim:donor">Donor</digi:trn></html:option>
 																</html:select>
 														</td>
 													</tr>
@@ -228,8 +228,8 @@ function update(action) {
 														</td>
 														<td align="left">
 															<html:select property="workspaceType" styleClass="inp-text">
-																<html:option value="">-- Select Type --</html:option>
-																<html:option value="Donor"><digi:trn key="aim:Donor">Donor</digi:trn></html:option>
+																<html:option value="">-- <digi:trn key="aim:selectType">Select Type</digi:trn> --</html:option>
+																<html:option value="Donor"><digi:trn key="aim:donor">Donor</digi:trn></html:option>
 																<html:option value="Management"><digi:trn key="aim:management">Management</digi:trn></html:option>
 																<html:option value="Team"><digi:trn key="aim:team">Team</digi:trn></html:option>
 															</html:select>

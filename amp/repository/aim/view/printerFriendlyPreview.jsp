@@ -466,12 +466,25 @@
                                                   	<digi:trn key="aim:status"> Status</digi:trn>
                                                   	</b>                      	      
                                                   	</td>
-<td bgcolor="#FFFFFF">
+													<td bgcolor="#FFFFFF">
 												   		<category:getoptionvalue categoryValueId="${aimEditActivityForm.statusId}"/><br><br>
                                                         <c:out value="${aimEditActivityForm.statusReason}"/>
                                                    </td>									
                                          	 </tr>
 										</field:display>
+										<field:display name="Credit Type" feature="Planning">							
+                                            <tr>
+                                            	  <td align="right" valign="top" nowrap="nowrap" >
+                                                  	<b>
+                                                  		<digi:trn key="aim:type_of_credit">Type of Credit</digi:trn>                                       	      
+                                                  	</b>                      	      
+                                                  	</td>
+													<td bgcolor="#FFFFFF">
+												   		<category:getoptionvalue categoryValueId="${aimEditActivityForm.creditTypeId}"/>
+                                                   </td>									
+                                         	 </tr>
+										</field:display>
+										
                                         </feature:display>
                                         <feature:display name="References" module="References">
 									<tr>

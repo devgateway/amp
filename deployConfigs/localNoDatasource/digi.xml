@@ -13,6 +13,8 @@
      -->
     
     
+        <server-type caseSensitiveTranslatioKeys="false"/>
+
 	<server-type prefix="">development</server-type>
 
 	<site-config>repository</site-config>

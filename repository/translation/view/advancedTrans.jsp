@@ -29,6 +29,7 @@ function onChangeList(paramName, paramValue) {
 }
 
 function saveAll() {
+	<digi:context name="saveAllAction" property="context/module/moduleinstance/saveAllMessages.do" />
 	
 	var form   		= document.forms['advancedTranslationForm'];
 	var targetValue = '';
@@ -58,7 +59,8 @@ function saveAll() {
 
 	}
 	
-	form.action = getFormActionURL(form);
+	form.action = "<%=saveAllAction%>"+ "?d-1338053-p="+pageId+"&showExpired="+form.showExpired.checked;
+	alert(form.action);
 	return true;
 	
 }

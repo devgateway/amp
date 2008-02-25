@@ -344,7 +344,7 @@
                      	<digi:trn key="aim:yearlyCommitments">Yearly Commitments</digi:trn>
 
 							</logic:equal>
-                                                        <logic:equal name="aimYearlyInfoForm" property="transactionType" value="4">
+                            <logic:equal name="aimYearlyInfoForm" property="transactionType" value="4">
 
                   	  	<digi:trn key="aim:yearlyDisbursementsOrders">Yearly Disbursement Orders</digi:trn>
 
@@ -527,12 +527,8 @@
 															<TD>
 
 		                           	 				<html:select property="currency" styleClass="dr-menu">
-
-	   			                        	 			<html:optionsCollection name="aimYearlyInfoForm" property="currencies"
-
-																	value="currencyCode" label="currencyName"/>
-
-																</html:select>
+		                           	 					<html:optionsCollection name="aimYearlyInfoForm" property="currencies" value="currencyCode" label="currencyName"/>
+	   			                        	 		</html:select>
 
 															</TD>
 
@@ -738,12 +734,22 @@
 																<!-- Commented by mouhamad for burkina -->
 																<!--td bgcolor="#F8F8F5">
 		         					                 				<div align="right">
-		         					                 					<%=FormatHelper.formatNumber(yearlyInfo.getPlannedAmount())%>
+		         					                 					<logic:present name="debug">
+		         					                 						<%=yearlyInfo.getWrapedPlanned()%>
+		         					                 					</logic:present>
+		         					                 					<logic:notPresent name="debug">
+		         					                 						<%=FormatHelper.formatNumber(yearlyInfo.getPlannedAmount())%>
+		         					                 					</logic:notPresent>
 																	</div>
 																</td-->
 																<td bgcolor="#F8F8F5">
 																	<div align="right">
-																		<%=FormatHelper.formatNumber(yearlyInfo.getActualAmount())%>
+																		<logic:present name="debug">
+																			<%=yearlyInfo.getWrapedActual()%>
+																		</logic:present>
+																		<logic:notPresent name="debug">
+																			<%=FormatHelper.formatNumber(yearlyInfo.getActualAmount())%>
+																		</logic:notPresent>
 																	</div>
 																</td>
 															</tr>

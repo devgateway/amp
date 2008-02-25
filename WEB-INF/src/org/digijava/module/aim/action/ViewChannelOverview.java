@@ -36,16 +36,17 @@ import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
 public class ViewChannelOverview extends TilesAction {
 
 	private static Logger logger = Logger.getLogger(ViewChannelOverview.class);
@@ -63,7 +64,10 @@ public class ViewChannelOverview extends TilesAction {
 		//PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
 		ChannelOverviewForm formBean = (ChannelOverviewForm) form;
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
-
+		
+		boolean debug = (request.getParameter("debug")!=null)?true:false;
+		
+		
 		if (teamMember == null) {
 			formBean.setValidLogin(false);
 		} else {
@@ -206,9 +210,25 @@ public class ViewChannelOverview extends TilesAction {
 
 					//if (includePlannedInTotals){
 						// again this is for Bolivia. But may be usefull for other countries too. AMP-1774
-						double actual = DbUtil.getAmpFundingAmount(activity.getActivityId(),new Integer(0),new Integer(1),perspective,currCode);
-						double planned = DbUtil.getAmpFundingAmount(activity.getActivityId(),new Integer(0),new Integer(0),perspective,currCode);
-						formBean.setGrandTotal(mf.format(actual+planned));
+					DecimalWraper actual = DbUtil.getAmpFundingAmount(activity
+							.getActivityId(), new Integer(0), new Integer(1),
+							perspective, currCode);
+					DecimalWraper planned = DbUtil.getAmpFundingAmount(activity
+							.getActivityId(), new Integer(0), new Integer(0),
+							perspective, currCode);
+					if (!debug) {
+						formBean.setGrandTotal(FormatHelper.formatNumber(actual
+								.getValue().doubleValue()
+								+ planned.getValue().doubleValue()));
+					} else {
+						formBean.setGrandTotal(FormatHelper.formatNumber(actual
+								.getValue().doubleValue()
+								+ planned.getValue().doubleValue())
+								+ " = "
+								+ actual.getCalculations()
+								+ " + "
+								+ planned.getCalculations());
+					}
 					//}else{
 					//	formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
 					//			new Integer(0),new Integer(1),perspective,currCode)));

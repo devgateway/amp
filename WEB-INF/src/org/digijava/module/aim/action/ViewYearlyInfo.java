@@ -35,6 +35,8 @@ import org.digijava.module.aim.helper.YearlyInfoWorker;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
+import com.corda.taglib.Debug;
+
 public class ViewYearlyInfo extends TilesAction {
 	private static Logger logger = Logger.getLogger(ViewYearlyInfo.class);
 
@@ -49,6 +51,13 @@ public class ViewYearlyInfo extends TilesAction {
 			formBean.setSessionExpired(true);
 		} else {
 			formBean.setSessionExpired(false);
+			boolean debug = (request.getParameter("debug")!=null)?true:false;
+			if(debug){
+				session.setAttribute("debug", debug);
+			}
+			else{
+				session.removeAttribute("debug");
+			}
 			FinancialFilters ff = CommonWorker.getFilters(teamMember
 					.getTeamId(), "FP");
 			formBean.setCalendarPresent(ff.isCalendarPresent());
@@ -98,10 +107,17 @@ public class ViewYearlyInfo extends TilesAction {
 			} else {
 				Collection yearlyInfo = YearlyInfoWorker.getYearlyInfo(fp);
 				if (yearlyInfo.size() != 0) {
+					TotalsQuarterly tq=null;
 					formBean.setYearlyInfo(yearlyInfo);
-					TotalsQuarterly tq = QuarterlyInfoWorker
-							.getTotalsQuarterly(fp.getAmpFundingId(),
-									Constants.MOFED,fp.getCurrencyCode());
+					if (debug){
+						tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),
+									Constants.MOFED,fp.getCurrencyCode(),true);
+					}
+					else
+					{
+						tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),
+									Constants.MOFED,fp.getCurrencyCode(),false);
+					}
 					formBean.setTotalCommitted(tq.getTotalCommitted());
 					formBean.setTotalDisbursed(tq.getTotalDisbursed());
                     formBean.setTotalDisbOrdered(tq.getTotalDisbOrdered());

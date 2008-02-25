@@ -32,6 +32,7 @@ import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
+import org.dgfoundation.amp.Util;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
@@ -2935,8 +2936,17 @@ public class DbUtil {
         }
         return ampFundings;
     }
-
-    public static double getAmpFundingAmount(Long ampActivityId,
+    
+    /**
+     * 
+     * @param ampActivityId
+     * @param transactionType
+     * @param adjustmentType
+     * @param perspective
+     * @param ampCurrencyCode
+     * @return
+     */
+    public static DecimalWraper getAmpFundingAmount(Long ampActivityId,
                                              Integer transactionType, Integer adjustmentType,
                                              String perspective, String ampCurrencyCode) {
         Session session = null;
@@ -2945,7 +2955,7 @@ public class DbUtil {
         String inClause = null;
         double fromCurrency = 0.0;
         double toCurrency = 1.0;
-        double amount = 0.0;
+        DecimalWraper amount = null;
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = queryString = "select f from "
@@ -2985,19 +2995,39 @@ public class DbUtil {
                 Double fixedRateToUSD = ampFundingDetail.getFixedExchangeRate();
                 if (fixedRateToUSD!=null && fixedRateToUSD.doubleValue()!=1){
                 	toCurrency=fixedRateToUSD.doubleValue();
-                	amount += ampFundingDetail.getTransactionAmount().doubleValue() / toCurrency;
+                	DecimalWraper tmpamount =CurrencyWorker.convertWrapper(ampFundingDetail
+							.getTransactionAmount().doubleValue(),
+							fromCurrency, toCurrency, new java.sql.Date(
+									ampFundingDetail.getTransactionDate()
+											.getTime())); 
+                	amount.setValue(tmpamount.getValue());
+                	amount.setCalculations(amount.getCalculations() + " +" + tmpamount.getCalculations()+"<BR>");
                 }else{
-                    toCurrency = CurrencyUtil.getExchangeRate(ampCurrencyCode,
-                    		adjustmentType.intValue(), ampFundingDetail.getTransactionDate());
-                    fromCurrency = CurrencyUtil.getExchangeRate(ampFundingDetail
-                            .getAmpCurrencyId().getCurrencyCode(), adjustmentType
-                            .intValue(), ampFundingDetail.getTransactionDate());
-                        logger.debug("to Currency: " + toCurrency);
-                        logger.debug("From Currency: " + fromCurrency);
-                        amount = amount + CurrencyWorker.convert1(ampFundingDetail
-                                                  .getTransactionAmount().doubleValue(),
-                                                  fromCurrency, toCurrency);
-                }
+                    toCurrency = Util.getExchange(ampCurrencyCode,
+							new java.sql.Date(ampFundingDetail
+									.getTransactionDate().getTime()));
+
+					fromCurrency = Util.getExchange(ampFundingDetail
+							.getAmpCurrencyId().getCurrencyCode(),
+							new java.sql.Date(ampFundingDetail
+									.getTransactionDate().getTime()));
+
+					logger.debug("to Currency: " + toCurrency);
+					logger.debug("From Currency: " + fromCurrency);
+					
+					DecimalWraper tmpamount =CurrencyWorker.convertWrapper(ampFundingDetail
+							.getTransactionAmount().doubleValue(),
+							fromCurrency, toCurrency, new java.sql.Date(
+									ampFundingDetail.getTransactionDate()
+											.getTime()));
+					amount = new DecimalWraper();
+					amount.setValue(tmpamount.getValue());
+					if (amount.getCalculations()!=null){
+					amount.setCalculations(amount.getCalculations() + " +" + tmpamount.getCalculations()+"<BR>");
+					}
+					else{amount.setCalculations(tmpamount.getCalculations()+"<BR>");
+					}
+				}
 
             }
             logger.debug("Amount: " + amount);

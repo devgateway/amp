@@ -5,7 +5,24 @@ public class YearlyInfo
 	private int fiscalYear;
 	private double plannedAmount ;
 	private double actualAmount ;
-	
+	private String wrapedPlanned;
+	private String wrapedActual;
+	public String getWrapedActual() {
+		return wrapedActual;
+	}
+
+	public void setWrapedActual(String wrapedActual) {
+		this.wrapedActual = wrapedActual;
+	}
+
+	public String getWrapedPlanned() {
+		return wrapedPlanned;
+	}
+
+	public void setWrapedPlanned(String wrapedPlanned) {
+		this.wrapedPlanned = wrapedPlanned;
+	}
+
 	/**
 	 * @return
 	 */
@@ -47,5 +64,5 @@ public class YearlyInfo
 	public void setPlannedAmount(double amount) {
 		plannedAmount = amount;
 	}
-
+	
 }

@@ -157,7 +157,7 @@ public class ViewQuarterlyGrouping extends TilesAction	{
 
 				formBean.setQuarterlyInfo(arrList);
 
-				TotalsQuarterly tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode());
+				TotalsQuarterly tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode(),false);
 				formBean.setTotalCommitted(tq.getTotalCommitted());
 				formBean.setTotalDisbursed(tq.getTotalDisbursed());
 				formBean.setTotalUnExpended(tq.getTotalUnExpended());

@@ -34,6 +34,8 @@ public class YearlyInfoWorker {
 
 			double tempPlanned = 0.0;
 			double tempActual = 0.0;
+			String tmpActualWraped="";
+			String tmpPlanedWraped="";
 			QuarterlyInfo qf = null;
 			YearlyInfo yf = null;
 			//String pa = "";
@@ -48,7 +50,9 @@ public class YearlyInfoWorker {
 				yf.setFiscalYear(qf.getFiscalYear());
 				if ( qf.getAggregate() == 0 )	{
 						tempPlanned += qf.getPlannedAmount();
-						tempActual += qf.getActualAmount();					
+						tempActual += qf.getActualAmount();
+						tmpActualWraped = qf.getWrapedActual();
+						tmpPlanedWraped = qf.getWrapedPlanned();
 				}
 				i++;
 				if ( i < qo.size() )	{
@@ -57,14 +61,26 @@ public class YearlyInfoWorker {
 				else {
 					yf.setPlannedAmount( tempPlanned );
 					yf.setActualAmount( tempActual );
+					yf.setWrapedActual(tmpActualWraped);
+					yf.setWrapedPlanned(tmpPlanedWraped);
 					yo.add(yf);
 					break;
 				}
 
 				while (qf.getFiscalYear()==yf.getFiscalYear()  ) {
 					if ( qf.getAggregate()==0)	{
-							tempPlanned += qf.getPlannedAmount();
-							tempActual += qf.getActualAmount();
+						tempPlanned += qf.getPlannedAmount();
+						tempActual += qf.getActualAmount();
+						if (qf.getWrapedActual() != null && tmpPlanedWraped != null) {
+							tmpActualWraped = tmpPlanedWraped + "+" + qf.getWrapedActual();
+						} else if (qf.getWrapedActual()!=null) {
+							tmpActualWraped = qf.getWrapedActual();
+						}
+						if (qf.getWrapedPlanned() != null && tmpPlanedWraped != null) {
+							tmpPlanedWraped = tmpPlanedWraped + "+" + qf.getWrapedPlanned();
+						} else if (qf.getWrapedPlanned()!=null) {
+							tmpPlanedWraped = qf.getWrapedPlanned();
+						}
 					}
 					i++;
 					if ( i < qo.size() )
@@ -74,6 +90,8 @@ public class YearlyInfoWorker {
 				}
 				yf.setPlannedAmount( tempPlanned );
 				yf.setActualAmount( tempActual );
+				yf.setWrapedActual(tmpActualWraped);
+				yf.setWrapedPlanned(tmpPlanedWraped);
 				yo.add(yf);
 				tempPlanned = 0d;
 				tempActual = 0d;

@@ -11,6 +11,7 @@ import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 
 import com.lowagie.text.Element;
+import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -41,9 +42,13 @@ public class AmountCellPDF extends PDFExporter {
 	 * @see org.dgfoundation.amp.ar.view.pdf.PDFExporter#generate()
  	 */
 	public void generate() {
+
+		
+		
 		AmountCell ac=(AmountCell) item;
-		PdfPCell pdfc = new PdfPCell(new Paragraph(ac.toString()));
+		PdfPCell pdfc = new PdfPCell(new Paragraph(ac.toString(),new Font(Font.COURIER, 9, Font.NORMAL)));
 		pdfc.setVerticalAlignment(Element.ALIGN_CENTER);
+		pdfc.setHorizontalAlignment(Element.ALIGN_RIGHT);
 	//	pdfc.setBackgroundColor(Color.GRAY);
 		table.addCell(pdfc);
 	}

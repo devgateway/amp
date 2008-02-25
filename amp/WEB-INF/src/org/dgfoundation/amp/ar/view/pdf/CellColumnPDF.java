@@ -11,6 +11,7 @@ import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.Cell;
 
+import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -44,7 +45,7 @@ public class CellColumnPDF extends PDFExporter {
 		 Cell c=col.getByOwner(ownerId);
 		 if(c!=null)
 		 c.invokeExporter(this);
-		 else table.addCell(new PdfPCell(new Paragraph(" ")));
+		 else table.addCell(new PdfPCell(new Paragraph(" ",new Font(Font.COURIER, 10))));
 	}
 
 }

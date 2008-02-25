@@ -98,12 +98,13 @@ public class ColumnReportDataPDF extends PDFExporter {
 		
 		
 		// headings
-		Font font = new Font(Font.HELVETICA, Font.DEFAULTSIZE, Font.BOLD);
+		Font font = new Font(Font.COURIER, 9, Font.BOLD);
 
 		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false)  {
 			PDFExporter.headingCells=new ArrayList();
 			columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
-		for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++) {
+		
+			for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++) {
 			Iterator i = columnReport.getItems().iterator();
 			while (i.hasNext()) {
 				
@@ -130,22 +131,21 @@ public class ColumnReportDataPDF extends PDFExporter {
 						
 						}
 					PdfPCell pdfc=null;
-				 
+					font.setSize(9);
 					if(translatedCellValue.compareTo("")==0){
-					    if(cellValue.length() < 16){
-						pdfc = new PdfPCell(new Paragraph(cellValue,font));
-					    }else{
-						pdfc = new PdfPCell(new Paragraph(cellValue.substring(0,15),font));
+					    if(cellValue.length() < 18){
+						font.setSize(12);
 					    }
-						
-					}else{ 
-					    if (translatedCellValue.length() < 16){
-						pdfc = new PdfPCell(new Paragraph(translatedCellValue,font));
-					    }else{
-						pdfc = new PdfPCell(new Paragraph(translatedCellValue.substring(0,15),font));
+					    pdfc = new PdfPCell(new Paragraph(cellValue,font));
+					   	
+					}else{
+					    if(translatedCellValue.length() < 18){
+						font.setSize(12);
 					    }
-					    }
-					pdfc.setVerticalAlignment(Element.ALIGN_CENTER);
+					    pdfc = new PdfPCell(new Paragraph(translatedCellValue,font));
+					   }
+					
+					pdfc.setHorizontalAlignment(Element.ALIGN_CENTER);
 					pdfc.setColspan(element2.getWidth());
 					table.addCell(pdfc);
 					headingCells.add(pdfc);

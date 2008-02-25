@@ -13,6 +13,7 @@ import org.dgfoundation.amp.ar.cell.TextCell;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 
+import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -72,10 +73,10 @@ public class TextCellPDF extends PDFExporter {
 				translatedStatus=actualStatus;
 			finalStatus+=translatedStatus;
 
-			pdfc = new PdfPCell(new Paragraph(finalStatus));
+			pdfc = new PdfPCell(new Paragraph(finalStatus,new Font(Font.COURIER, 10)));
 		}
 		else 
-			pdfc = new PdfPCell(new Paragraph(c.toString()));
+			pdfc = new PdfPCell(new Paragraph(c.toString(),new Font(Font.COURIER, 10)));
 		table.addCell(pdfc);
 	}
 

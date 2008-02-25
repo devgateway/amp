@@ -6,6 +6,7 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
+import java.awt.Color;
 import java.util.Iterator;
 
 import org.dgfoundation.amp.ar.Exporter;
@@ -25,7 +26,11 @@ import com.lowagie.text.pdf.PdfPTable;
  */
 public class GroupReportDataPDF extends PDFExporter {
 
-	/**
+    	private static Color alternateColorA=new Color(185,219,243);
+    	private static Color alternateColorB=new Color(0,156,205);
+    	private static Color lastedUsedColor=null;
+    	private boolean visible=true;
+    	/**
 	 * @param parent
 	 */
 	public GroupReportDataPDF(Exporter parent,Viewable item) {
@@ -47,17 +52,27 @@ public class GroupReportDataPDF extends PDFExporter {
 	public void generate() {
 		GroupReportData grd=(GroupReportData) item;
 		
-		Font titleFont = new Font(Font.COURIER, Font.DEFAULTSIZE, Font.BOLD);
+		Font titleFont;
+		 titleFont = new Font(Font.COURIER, 14, Font.BOLD);
 				
-		if(grd.getParent()!=null) {
+		if((grd.getParent()!=null)&&(visible)) {
 			PdfPCell pdfc = new PdfPCell(new Paragraph(grd.getName(),titleFont));
 			pdfc.setColspan(grd.getTotalDepth());
+			pdfc.setPaddingTop(5);
+			pdfc.setPaddingBottom(5);
+			if (lastedUsedColor!=alternateColorA){
+			    pdfc.setBackgroundColor(alternateColorA);
+			    lastedUsedColor=alternateColorA;
+			}else{
+			    pdfc.setBackgroundColor(alternateColorB);    
+			}	
 			table.addCell(pdfc);
 		}
 		Iterator i=grd.getItems().iterator();
 		while (i.hasNext()) {
-			Viewable element = (Viewable) i.next();
+		    	Viewable element = (Viewable) i.next();
 			element.invokeExporter(this);			
+		
 		}
 
 		//add trail cells
@@ -69,5 +84,13 @@ public class GroupReportDataPDF extends PDFExporter {
 		pdfc2.setColspan(grd.getTotalDepth());
 		table.addCell(pdfc2);
 	}
+
+	public boolean isVisible() {
+            return visible;
+        }
+
+	public void setVisible(boolean visible) {
+            this.visible = visible;
+        }
 
 }

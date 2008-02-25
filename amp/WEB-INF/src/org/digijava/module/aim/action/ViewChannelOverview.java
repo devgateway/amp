@@ -5,6 +5,7 @@
 package org.digijava.module.aim.action;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -216,18 +217,26 @@ public class ViewChannelOverview extends TilesAction {
 					DecimalWraper planned = DbUtil.getAmpFundingAmount(activity
 							.getActivityId(), new Integer(0), new Integer(0),
 							perspective, currCode);
+                                          double total=0;
+                                          String cal="=";
+                                            if(actual!=null){
+                                               total+=actual
+								.getValue().doubleValue(); 
+                                               cal+=actual
+								.getValue().doubleValue();
+                                            }
+                    
+                                            if(planned!=null){
+                                                total+=planned.getValue().doubleValue();
+                                                cal+=" + "+planned
+								.getValue().doubleValue();
+                                            }
 					if (!debug) {
-						formBean.setGrandTotal(FormatHelper.formatNumber(actual
-								.getValue().doubleValue()
-								+ planned.getValue().doubleValue()));
+                     
+						formBean.setGrandTotal(FormatHelper.formatNumber(total));
 					} else {
-						formBean.setGrandTotal(FormatHelper.formatNumber(actual
-								.getValue().doubleValue()
-								+ planned.getValue().doubleValue())
-								+ " = "
-								+ actual.getCalculations()
-								+ " + "
-								+ planned.getCalculations());
+						formBean.setGrandTotal(FormatHelper.formatNumber(total)
+								+cal);
 					}
 					//}else{
 					//	formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),

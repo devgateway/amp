@@ -181,10 +181,7 @@ function selectOrganisation1() {
          <html:select property="contrOrg" styleClass="inp-text">
 			<option value="-1"><digi:trn key="aim:selectOrganisation">Select Organisation</digi:trn></option>
 			<logic:iterate id="actOrg" name="aimIPAContractForm" property="organisations">
-				<c:set var="trn">
-					<digi:trn key="aim:ipa:popup:${actOrg.ampOrgId}">${actOrg.name}</digi:trn>
-				</c:set>
-				<html:option value="${actOrg.ampOrgId}">${trn}</html:option>			
+				<html:option value="${actOrg.ampOrgId}">${actOrg.name}</html:option>			
 			</logic:iterate>
 			</html:select>
         </td>

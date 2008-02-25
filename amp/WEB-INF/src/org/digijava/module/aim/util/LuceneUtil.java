@@ -140,7 +140,8 @@ public class LuceneUtil {
 			while (isNext){
 				//
 				Document doc = activity2Document(rs.getString("amp_activity_id"), rs.getString("title"), rs.getString("description"), rs.getString("objective"), rs.getString("purpose"), rs.getString("results"));
-				indexWriter.addDocument(doc);
+				if (doc != null)
+					indexWriter.addDocument(doc);
 				isNext = rs.next();
 			}
 			conn.close();
@@ -180,10 +181,14 @@ public class LuceneUtil {
 	public static Document activity2Document(String actId, String title, String description, String objective, String purpose, String results){
 		Document doc = new Document();
 		String all = new String("");
-		doc.add(new Field(idField, actId, Field.Store.YES, Field.Index.UN_TOKENIZED));
-		all = all.concat(" " + actId);
-		doc.add(new Field("title", title, Field.Store.NO, Field.Index.TOKENIZED));
-		all = all.concat(" " + title);
+		if (actId != null){
+			doc.add(new Field(idField, actId, Field.Store.YES, Field.Index.UN_TOKENIZED));
+			all = all.concat(" " + actId);
+		}
+		if (title != null){
+			doc.add(new Field("title", title, Field.Store.NO, Field.Index.TOKENIZED));
+			all = all.concat(" " + title);
+		}
 		if (description != null && description.length()>0){
 			doc.add(new Field("description", description, Field.Store.NO, Field.Index.TOKENIZED));
 			all = all.concat(" " + description);
@@ -200,6 +205,9 @@ public class LuceneUtil {
 			doc.add(new Field("results", results, Field.Store.NO, Field.Index.TOKENIZED));
 			all = all.concat(" " + results);
 		}
+		
+		if (all.length() == 0)
+			return null;
 		
 		doc.add(new Field("all", all, Field.Store.NO, Field.Index.TOKENIZED));
 		return doc;

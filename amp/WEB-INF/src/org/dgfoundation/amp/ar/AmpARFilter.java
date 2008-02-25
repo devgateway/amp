@@ -273,6 +273,10 @@ public class AmpARFilter extends PropertyListable implements Filter {
 					}
 				}
 				logger.info("Lucene ID List:" + LUCENE_ID_LIST);
+				if (LUCENE_ID_LIST.length() < 1){
+					logger.info("Not found!");
+					LUCENE_ID_LIST = "-1";
+				}
 				queryAppend(LUCENE_ID_LIST);
 			}
 		

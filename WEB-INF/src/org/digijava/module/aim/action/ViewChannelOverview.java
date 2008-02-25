@@ -210,33 +210,24 @@ public class ViewChannelOverview extends TilesAction {
 					logger.debug("Not planned");
 
 					//if (includePlannedInTotals){
-						// again this is for Bolivia. But may be usefull for other countries too. AMP-1774
+						// again this is for Bolivia. But may 	be usefull for other countries too. AMP-1774
 					DecimalWraper actual = DbUtil.getAmpFundingAmount(activity
 							.getActivityId(), new Integer(0), new Integer(1),
 							perspective, currCode);
 					DecimalWraper planned = DbUtil.getAmpFundingAmount(activity
 							.getActivityId(), new Integer(0), new Integer(0),
 							perspective, currCode);
-                                          double total=0;
-                                          String cal="=";
-                                            if(actual!=null){
-                                               total+=actual
-								.getValue().doubleValue(); 
-                                               cal+=actual
-								.getValue().doubleValue();
-                                            }
-                    
-                                            if(planned!=null){
-                                                total+=planned.getValue().doubleValue();
-                                                cal+=" + "+planned
-								.getValue().doubleValue();
-                                            }
-					if (!debug) {
-                     
+					
+                     double total=0;
+                     String cal="=";
+                     if(actual!=null){
+                    	 total+=actual.getValue().doubleValue();
+                    	 cal = actual.getCalculations();
+                         }
+                    if (!debug) {
 						formBean.setGrandTotal(FormatHelper.formatNumber(total));
 					} else {
-						formBean.setGrandTotal(FormatHelper.formatNumber(total)
-								+cal);
+						formBean.setGrandTotal(FormatHelper.formatNumber(total)+cal);
 					}
 					//}else{
 					//	formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),

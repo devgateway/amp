@@ -87,7 +87,8 @@
 											<%=FormatHelper.formatNumber(eaForm.getTotalCommitments())%>
 															 <%=eaForm.getCurrCode()%> )
 										</span>
-										<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
+										<!-- Commented added by mouhamad for burkina AMP-2709 -->
+										<!-- <digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn> -->&nbsp;&nbsp;&nbsp;
 										<a href="javascript:addCommitments()"><digi:trn key="btn:add">Add</digi:trn></a><br><br>
                                         <digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
                                         <digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

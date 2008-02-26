@@ -218,7 +218,7 @@ public class EditActivity
 				AmpTeam activityTeam=activity.getTeam();
 				//if user is member of same team to which activity belongs then it can be edited
 				if (!currentTeam.getAmpTeamId().equals(activityTeam.getAmpTeamId())){
-					errorMsgKey="error.aim.editActivity.noWritePermissionForUser";
+					errorMsgKey="error:aim:editActivity:noWritePermissionForUser";
 				}
 			}
 			
@@ -394,7 +394,7 @@ public class EditActivity
       //logger.info("CanEdit = " + canEdit);
       if (!canEdit) {
         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-            "error.aim.activityAlreadyOpenedForEdit"));
+            "error:aim:activityAlreadyOpenedForEdit"));
         saveErrors(request, errors);
 
         String url = "/aim/viewChannelOverview.do?ampActivityId="

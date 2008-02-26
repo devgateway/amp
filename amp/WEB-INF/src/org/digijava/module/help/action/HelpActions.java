@@ -75,7 +75,7 @@ public class HelpActions extends DispatchAction {
 			if(HelpUtil.hasChildren(siteId, moduleInstance, helpTopic.getHelpTopicId())){
 				
 				List<String> helpErrors=new ArrayList<String>();
-				helpErrors.add("errors.help.delete.cannotDeleteTopic");
+				helpErrors.add("errors:help:delete:cannotDeleteTopic");
 				helpForm.setHelpErrors(helpErrors);	
 				helpForm.setBlankPage(false);
 			

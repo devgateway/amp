@@ -82,16 +82,16 @@ public class NpdSettingsAction extends DispatchAction {
 		ActionErrors errors = new ActionErrors();
 		if (form.getHeight() == null || form.getHeight().intValue() <= 0) {
 			errors.add(null, new ActionMessage(
-					"errors.aim.npdsettings.incorrectHeigh"));
+					"errors:aim:npdsettings:incorrectHeigh"));
 		}
 		if (form.getWidth() == null || form.getWidth().intValue() <= 0) {
 			errors.add(null, new ActionMessage(
-					"errors.aim.npdsettings.incorectWidth"));
+					"errors:aim:npdsettings:incorectWidth"));
 		}
 		if (!form.getAngle().equals("") && ( form.getAngle() == null || Integer.parseInt(form.getAngle()) < 0
 				|| Integer.parseInt(form.getAngle()) > 90)) {
 			errors.add(null, new ActionMessage(
-					"errors.aim.npdsettings.incorrectAngle"));
+					"errors:aim:npdsettings:incorrectAngle"));
 		}
 		return errors;
 	}

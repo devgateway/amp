@@ -286,7 +286,7 @@ public class ViewChannelOverview extends TilesAction {
 	private void createWarnings (Activity activity, boolean isTeamHead) {
 		if ( activity.getDraft() == true ) {
 			errors.add(
-				"title", new ActionError("error.aim.draftActivity")
+				"title", new ActionError("error:aim:draftActivity")
 			);
 
 		}
@@ -295,7 +295,7 @@ public class ViewChannelOverview extends TilesAction {
 			System.out.println("the team member is not the TEAM LEADER!!!!!!!!");
 			if ( Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus()) ) {
 				errors.add(
-						"title", new ActionError("error.aim.activityAwaitingApproval")
+						"title", new ActionError("error:aim:activityAwaitingApproval")
 				);
 			}
 		}

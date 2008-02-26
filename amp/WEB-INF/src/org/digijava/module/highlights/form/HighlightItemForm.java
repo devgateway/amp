@@ -891,7 +891,7 @@ public class HighlightItemForm
         }
         if (shortTopicLength == 0) {
             errors.add(null,
-                       new ActionError("error.highlights.shortLengthNull"));
+                       new ActionError("error:highlights:shortLengthNull"));
         }
 
         if (links != null && links.size() != 0) {
@@ -908,7 +908,7 @@ public class HighlightItemForm
                     "://")))) {
 
                     errors.add(null,
-                               new ActionError("error.highlights.urlEmpty"));
+                               new ActionError("error:highlights:urlEmpty"));
                 }
 
                 if ( ( (item.getUrl() != null) &&
@@ -920,14 +920,14 @@ public class HighlightItemForm
                        item.getName().trim().length() == 0))) {
 
                     errors.add(null,
-                               new ActionError("error.highlights.nameEmpty"));
+                               new ActionError("error:highlights:nameEmpty"));
                 }
             }
         }
 
         if (layout == null) {
             errors.add(null,
-                       new ActionError("error.highlights.layoutEmpty"));
+                       new ActionError("error:highlights:layoutEmpty"));
         }
         else {
             if ( (layout.equals("1") || layout.equals("2"))) {
@@ -936,7 +936,7 @@ public class HighlightItemForm
                     image == null) {
 
                     errors.add(null,
-                               new ActionError("error.highlights.imgEmpty"));
+                               new ActionError("error:highlights:imgEmpty"));
                 }
             }
         }
@@ -945,7 +945,7 @@ public class HighlightItemForm
               photoFile.getFileSize() > Highlight.MAX_IMG_SIZE) ||
             imageSize > Highlight.MAX_IMG_SIZE) {
             errors.add(null,
-                       new ActionError("error.highlights.imgSizeExceed"));
+                       new ActionError("error:highlights:imgSizeExceed"));
         }
         return errors.isEmpty() ? null : errors;
     }

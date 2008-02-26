@@ -64,7 +64,7 @@ public class FeatureManager extends MultiAction {
 		{
 			ActionErrors errors = new ActionErrors();
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					"error.aim.templateExistent"));
+					"error:aim:templateExistent"));
 			
 			saveErrors(request, errors);
 		}
@@ -268,7 +268,7 @@ public class FeatureManager extends MultiAction {
 		session.setAttribute("newEditTemplate","new");
 		ActionErrors errors = new ActionErrors();
 		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-				"error.aim.templateSaved"));
+				"error:aim:templateSaved"));
 		saveErrors(request, errors);
 		{//for refreshing the page
 			Collection features1 = FeaturesUtil.getAMPFeatures();

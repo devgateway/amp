@@ -27,7 +27,7 @@ public class ComponentsUtil{
 		try
 		{
 			session = PersistenceManager.getSession();
-			queryString ="select distinct co from "+AmpComponent.class.getName()+" co order by co.title";
+			queryString ="select distinct co from "+AmpComponent.class.getName()+" co ";
 			qry = session.createQuery(queryString);
 			col = qry.list();
 		}

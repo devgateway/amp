@@ -378,7 +378,7 @@
 												<td bgcolor="#ffffff">
 												<FONT color=red>*</FONT>&nbsp;
 												<digi:trn key="aim:status">Status</digi:trn>												  
-												<a href="javascript:popupwin()">
+												<a href="javascript:popupwin('activity_status')">
 												<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0></a>
 												</td>
 												<td bgcolor="#ffffff">

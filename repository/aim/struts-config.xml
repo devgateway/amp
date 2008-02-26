@@ -148,7 +148,8 @@
     <action name="aimViewAhSurveyFormulasForm" path="/aim/viewAhSurveyFormulas" scope="session" type="org.digijava.module.aim.action.ViewAhSurveyFormulas" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewAhSurveyFormulas" />
     </action>
-
+  	
+  	<action forward="/showLayout.do?layout=viewStatusDescription" path="/aim/getSatusDescription" />     
     <action path="/aim/feedback" forward="/showLayout.do?layout=feedback" />
     <action name="aimUserDetailForm" path="/aim/userProfile" scope="request" type="org.digijava.module.aim.action.ViewUserProfile" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_viewUserProfile" />

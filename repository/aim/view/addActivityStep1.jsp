@@ -165,22 +165,12 @@ function reviseCloseDate() {
 	document.aimEditActivityForm.submit();
 }
 
-function popupwin()
-{
-	var wndWidth = window.screen.availWidth/3.5;
-	var wndHeight = window.screen.availHeight/3.5;
-	var t = ((screen.width)-wndWidth)/2;
-	var l = ((screen.height)-wndHeight)/2;
-	winpopup=window.open('',"popup","height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=yes,status=no,toolbar=no");
-	winpopup.document.write('<html>\n<head>\n');
-	winpopup.document.write("<title><digi:trn key='aboutStatus'>About : Status</digi:trn></title>\n");
-	winpopup.document.write('</head>\n');
-	winpopup.document.write('<body bgcolor="#f4f4f2">\n');
-	winpopup.document.write('<font face="verdana" size=1>\n');
-	winpopup.document.write("<ul><li><b><digi:trn key='aim:planned'>Planned</digi:trn>:</b><digi:trn key='aim:plannedDescription'> from the conceptual stage to just prior to official commitment</digi:trn>.</li><li><b><digi:trn key='aim:onGoing'>On-going</digi:trn>:</b><digi:trn key='aim:onGoingDescription'> the project is committed, is active but not yet completed</digi:trn>.</li><li><b><digi:trn key='aim:completed'>Completed</digi:trn>:</b> <digi:trn key='aim:completedDescription'>the project is finished, with all approved assistance provided</digi:trn>.</li><li><b><digi:trn key='aim:cancelled'>Cancelled</digi:trn>:</b> <digi:trn key='aim:cancelledDescrption'>the project was committed but was terminated prior to planned completion</digi:trn> .</li><li><b> <digi:trn key='aim:suspended'>Suspended: </digi:trn></b><digi:trn key='aim:suspendedDescrption'> the project has been suspended</digi:trn>.</li></ul>\n");
-	winpopup.document.write('</font>\n');
-	winpopup.document.write('</font>\n</body>\n</html>\n');
-	winpopup.document.close();
+function popupwin() {
+	var statId=document.getElementsByName('statusId')[0].value;
+	openNewWindow(600, 550);	
+	document.aimEditActivityForm.action = "/getSatusDescription.do?catEditKey="+statId;
+	document.aimEditActivityForm.target = popupPointer.name;
+	document.aimEditActivityForm.submit();	
 }
 
 

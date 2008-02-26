@@ -109,6 +109,8 @@
 	<page name="login" title=" - Login" />
 	<page name="selectTeam" title=" - Select Team" />
 	<page name="viewNpdSettings" title="View Settings" />
+	<page name="viewStatusDescription" title="View Status Description"/>
+	
 	<!--
 	<page name="logout" title=" - Logout" />
 	-->
@@ -372,6 +374,7 @@
     <page page="programConfigurationPage" name="programConfigurationPage" title="Configuration Page" />
     <page page="addDisbOrderToDisb" name="aim_addDisbOrderToDisbPopupLayout" title="Disbursement Order For Activity" />
     <page page="addDisbOrderToContract" name="aim_addDisbOrderToContractPopupLayout" title="Disbursement Order Contract For Activity" />
+  
 </secondary-pages>
 <module>
 
@@ -406,9 +409,11 @@
 	<teaser name="myTasks" action="getDesktopTasks.do">
 		myTasks.jsp
 	</teaser>
-		  <teaser name="logout" action="logoutAction.do">
-				logout.jsp
-			</teaser>
+	
+	
+    <teaser name="logout" action="logoutAction.do">
+		logout.jsp
+	</teaser>
 
 	<teaser name="surveyList" action="getSurveyList.do">
 		viewSurveyList.jsp

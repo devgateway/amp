@@ -77,6 +77,7 @@ public class AddSector extends Action {
 					newSector.setAmpSecSchemeId(SectorUtil.getAmpSectorScheme(addSectorForm.getParentId()));
 					newSector.setSectorCode(addSectorForm.getSectorCode());
 					newSector.setName(addSectorForm.getSectorName());
+					newSector.setDescription(addSectorForm.getDescription());
 					newSector.setType(null);
 					newSector.setAmpSectorId(null);
 					if (addSectorForm.getDescription() == null
@@ -119,6 +120,7 @@ public class AddSector extends Action {
 					newSector.setAmpSecSchemeId(user);
 					newSector.setSectorCode(addSectorForm.getSectorCode());
 					newSector.setName(addSectorForm.getSectorName());
+					newSector.setDescription(addSectorForm.getDescription());
 					newSector.setType(null);
 					if (addSectorForm.getDescription() == null
 							|| addSectorForm.getDescription().trim().equals("")) {
@@ -147,6 +149,7 @@ public class AddSector extends Action {
 					addSectorForm.setSectorCode(editSector.getSectorCode());
 					addSectorForm.setSectorName(editSector.getName());
 					addSectorForm.setSectorId(editSector.getAmpSectorId());
+					addSectorForm.setDescription(editSector.getDescription());
 					logger.debug("level 2  sector added");
 					session.setAttribute("Id",null);
 					return mapping.findForward("levelSecondSectorAdded");
@@ -164,6 +167,7 @@ public class AddSector extends Action {
 					newSector.setAmpSecSchemeId(user);
 					newSector.setSectorCode(addSectorForm.getSectorCode());
 					newSector.setName(addSectorForm.getSectorName());
+					newSector.setDescription(addSectorForm.getDescription());
 					newSector.setType(null);
 					if (addSectorForm.getDescription() == null
 							|| addSectorForm.getDescription().trim().equals("")) {
@@ -192,6 +196,7 @@ public class AddSector extends Action {
 					addSectorForm.setSectorCode(editSector.getSectorCode());
 					addSectorForm.setSectorName(editSector.getName());
 					addSectorForm.setSectorId(editSector.getAmpSectorId());
+					addSectorForm.setDescription(editSector.getDescription());
 					
 					
 					

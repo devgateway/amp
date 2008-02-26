@@ -102,6 +102,16 @@
 															<html:text name ="aimAddSectorForm" property="sectorCode" size="5"/> 
 														</td>
 													</tr>
+													<tr>
+														<td>
+														<digi:trn key="aim:sectordescription">
+															Sector Description :
+														</digi:trn>
+														</td>
+														<td>
+														<html:textarea name="aimAddSectorForm" cols="60" rows="3" styleClass="inp-text" property="description"/>															 
+														</td>
+													</tr>
 
 													<%--<tr>
 														<td>

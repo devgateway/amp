@@ -73,6 +73,7 @@ public class ViewSectorDetails extends Action {
 								editSector = SectorUtil.getAmpSector(parentId);
 								viewSectorForm.setSectorCode(editSector.getSectorCode());
 								viewSectorForm.setSectorName(editSector.getName());
+								viewSectorForm.setDescription(editSector.getDescription());
 								viewSectorForm.setSectorId(editSector.getAmpSectorId());
 								
 								if(level.equals("one"))
@@ -94,6 +95,7 @@ public class ViewSectorDetails extends Action {
 								editSector = SectorUtil.getAmpSector(parentId);
 								viewSectorForm.setSectorCode(editSector.getSectorCode());
 								viewSectorForm.setSectorName(editSector.getName());
+								viewSectorForm.setDescription(editSector.getDescription());
 								viewSectorForm.setSectorId(editSector.getAmpSectorId());
 								logger.debug("Setting jsp Flag==================(true)================");
 								viewSectorForm.setJspFlag(true);

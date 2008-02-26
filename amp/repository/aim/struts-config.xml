@@ -1544,7 +1544,8 @@
       <forward name="deleted" path="/aim/viewIndicators.do?indicator=deleted" />
     </action>
 	<action name="aimNewIndicatorForm" path="/aim/addNewIndicator" scope="session" type="org.digijava.module.aim.action.AddNewIndicator" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=addNewIndicator" />
+     <forward name="forward" path="/showLayout.do?layout=addNewIndicator" />
+     <forward name="added" path="/showLayout.do?layout=viewIndicators" />
     </action>
     <action name="aimNewIndicatorForm" path="/aim/selectProgramForIndicator" scope="session" type="org.digijava.module.aim.action.SelectProgramForIndicator" validate="false">
       <forward name="edit" path="/showLayout.do?layout=viewEditIndicator" />

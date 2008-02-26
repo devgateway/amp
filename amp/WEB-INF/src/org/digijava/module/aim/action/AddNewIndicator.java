@@ -123,6 +123,7 @@ public class AddNewIndicator
                  IndicatorUtil.saveIndicators(newInd);
 //                 ProgramUtil.saveThemeIndicators(newInd, newIndForm.getSelectedProgramId());
                  //newIndForm.reset();
+                 return mapping.findForward("added");
         		
         	}
         	

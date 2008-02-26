@@ -911,7 +911,7 @@ public class NewsItemForm
 
 	if ( (title == null) || (title.trim().length() == 0)) {
 	    errors.add(null,
-		       new ActionError("error.news.itemTitleEmpty"));
+		       new ActionError("error:news:itemTitleEmpty"));
 	}
 
 	if ( (description == null) || (description.trim().length() == 0)) {
@@ -921,12 +921,12 @@ public class NewsItemForm
 						 "://")))) {
 		    errors.add(null,
 			       new ActionError(
-			  "error.news.itemDescrAndSourceEmpty"));
+			  "error:news:itemDescrAndSourceEmpty"));
 
 		}
 		else {
 		    errors.add(null,
-			       new ActionError("error.news.itemSourceNameEmpty"));
+			       new ActionError("error:news:itemSourceNameEmpty"));
 		}
 	    }
 	    else {
@@ -934,7 +934,7 @@ public class NewsItemForm
 		    (sourceUrl.equals( (String) (httpServletRequest.getScheme() +
 						 "://")))) {
 		    errors.add(null,
-			       new ActionError("error.news.itemSourceUrlEmpty"));
+			       new ActionError("error:news:itemSourceUrlEmpty"));
 		}
 	    }
 

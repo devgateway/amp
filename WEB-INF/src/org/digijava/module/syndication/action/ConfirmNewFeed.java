@@ -57,7 +57,7 @@ public class ConfirmNewFeed
 
             if(feed != null && feedForm.getProcessingMode().intValue() == 1) {
                 ActionErrors errors = new ActionErrors();
-                errors.add(null, new ActionError("display.syndication.feedAlreadyExists"));
+                errors.add(null, new ActionError("display:syndication:feedAlreadyExists"));
                 saveErrors(request, errors);
                 return mapping.findForward("return");
             }

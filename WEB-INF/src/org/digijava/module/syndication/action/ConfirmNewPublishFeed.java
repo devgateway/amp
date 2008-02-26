@@ -63,7 +63,7 @@ public class ConfirmNewPublishFeed
 
             if (list.size() != 0 && feedForm.getProcessingMode().intValue() == 1) {
                 ActionErrors errors = new ActionErrors();
-                errors.add(null, new ActionError("display.syndication.feedAlreadyPublished"));
+                errors.add(null, new ActionError("display:syndication:feedAlreadyPublished"));
                 saveErrors(request, errors);
                 return mapping.findForward("return");
             }

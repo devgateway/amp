@@ -51,13 +51,13 @@ public class GroupReportDataPDF extends PDFExporter {
 	public void generate() {
 	  	GroupReportData grd=(GroupReportData) item;
 		Font titleFont;
-		 titleFont = new Font(Font.COURIER, 14, Font.BOLD);
+		 titleFont = new Font(Font.COURIER, 13, Font.BOLD);
 				
 		if((grd.getParent()!=null)&&(!grd.getName().equalsIgnoreCase(grd.getParent().getName()))) {
 		    	PdfPCell pdfc = new PdfPCell(new Paragraph(grd.getName(),titleFont));
 			pdfc.setColspan(grd.getTotalDepth());
-			pdfc.setPaddingTop(5);
-			pdfc.setPaddingBottom(5);
+			pdfc.setPaddingTop(2);
+			pdfc.setPaddingBottom(2);
 			if (lastedUsedColor!=alternateColorA){
 			    pdfc.setBackgroundColor(alternateColorA);
 			    lastedUsedColor=alternateColorA;

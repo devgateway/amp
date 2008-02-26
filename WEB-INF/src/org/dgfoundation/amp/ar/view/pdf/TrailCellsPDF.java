@@ -6,6 +6,7 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
+import java.awt.Color;
 import java.util.Iterator;
 
 import org.dgfoundation.amp.ar.Exporter;
@@ -93,7 +94,11 @@ public class TrailCellsPDF extends PDFExporter {
 			else result+=translatedName;
 				
 			PdfPCell pdfc = new PdfPCell(new Paragraph(result+" ("+grd.getTotalUniqueRows()+")",totalFont));
+			
 			pdfc.setColspan(grd.getSourceColsCount().intValue());
+			currentBackColor=new  Color(235,235,235);
+			
+			pdfc.setBackgroundColor(currentBackColor);
 			table.addCell(pdfc);
 			
 			
@@ -103,7 +108,7 @@ public class TrailCellsPDF extends PDFExporter {
 				element.invokeExporter(this);
 			}
 			
-			
+			currentBackColor=null;
 		}
 	
 

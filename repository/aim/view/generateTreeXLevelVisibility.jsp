@@ -94,7 +94,7 @@ function openFieldPermissionsPopup(fieldId) {
 												<a id="field:<bean:write name="fieldAux" property="root.id"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
 													<digi:trn key="<%="fm:"+fieldAux.getRoot().getNameTrimmed() %>"><bean:write name="fieldAux" property="root.name"/></digi:trn>
 												</a>
-												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;[<a style="font-size: 12px; cursor:pointer;color:#006699;text-decoration:none" title="Click to edit field based permissions" onClick='openFieldPermissionsPopup(<bean:write name="fieldAux" property="root.id"/>)'>edit permissions</a>]
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;[<a style="font-size: 12px; cursor:pointer;color:#006699;text-decoration:none" title="Click to edit field based permissions" onClick='openFieldPermissionsPopup(<bean:write name="fieldAux" property="root.id"/>)'><digi:trn key="aim:editPermissions">edit permissions</digi:trn></a>]
 												
 											</li>	
 										</logic:iterate>

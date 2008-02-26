@@ -20,61 +20,63 @@
 				</tr>
 		<tr>
 			<td colspan="3" align="center">
-				<b>Field Name:</b>&nbsp;<i><bean:write name="aimFieldPermissionsForm" property="fieldName"/></i>
+				<b><digi:trn key="aim:fieldName">Field Name:</digi:trn></b>&nbsp;<i><bean:write name="aimFieldPermissionsForm" property="fieldName"/></i>
 			</td>
 		</tr>
 		<tr>
-			<th>Name</th>
-			<th>Read</th>
-			<th>Edit</th>
+			<th><digi:trn key="aim:name">Name</digi:trn></th>
+			<th><digi:trn key="aim:read">Read</digi:trn></th>
+			<th><digi:trn key="aim:edit">Edit</digi:trn></th>
 		</tr>
 		<tr>
-			<td>Everyone</td>
+			<td><digi:trn key="aim:everyone">Everyone</digi:trn></td>
 			<td align="center"><html:checkbox property="evRead" /></td>
 			<td align="center"><html:checkbox property="evEdit" /></td>
 		</tr>
 		<tr>
-			<td>Guest</td>
+			<td><digi:trn key="aim:guest">Guest</digi:trn></td>
 			<td align="center"><html:checkbox property="guRead" /></td>
 			<td align="center"><html:checkbox property="guEdit" /></td>
 		</tr>
 		<tr>
-			<td>Beneficiary Agency</td>
+			<td><digi:trn key="aim:beneficiaryAgency">Beneficiary Agency</digi:trn></td>
 			<td align="center"><html:checkbox property="baRead" /></td>
 			<td align="center"><html:checkbox property="baEdit" /></td>
 		</tr>			
 		<tr>
-			<td>Contracting Agency</td>
+			<td><digi:trn key="aim:contractingAgency">Contracting Agency</digi:trn></td>
 			<td align="center"><html:checkbox property="caRead" /></td>
 			<td align="center"><html:checkbox property="caEdit" /></td>
 		</tr>			
 		<tr>
-			<td>Executing Agency</td>
+			<td><digi:trn key="aim:executingAgency">Executing Agency</digi:trn></td>
 			<td align="center"><html:checkbox property="eaRead" /></td>
 			<td align="center"><html:checkbox property="eaEdit" /></td>
 		</tr>			
 		<tr>
-			<td>Funding Agency</td>
+			<td><digi:trn key="aim:fundingAgency">Funding Agency</digi:trn></td>
 			<td align="center"><html:checkbox property="faRead" /></td>
 			<td align="center"><html:checkbox property="faEdit" /></td>
 		</tr>			
 		<tr>
-			<td>Implementing Agency</td>
+			<td><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></td>
 			<td align="center"><html:checkbox property="iaRead" /></td>
 			<td align="center"><html:checkbox property="iaEdit" /></td>
 		</tr>	
 		<tr>
-			<td>Regional Group</td>
+			<td><digi:trn key="aim:regionalGroup">Regional Group</digi:trn></td>
 			<td align="center"><html:checkbox property="rgRead" /></td>
 			<td align="center"><html:checkbox property="rgEdit" /></td>
 		</tr>			
 		<tr>
-			<td>Sector Group</td>
+			<td><digi:trn key="aim:sectorGroup">Sector Group</digi:trn></td>
 			<td align="center"><html:checkbox property="sgRead" /></td>
 			<td align="center"><html:checkbox property="sgEdit" /></td>
 		</tr>			
 		<tr>
-			<td align="center" colspan="3"><html:submit styleClass="buton" property="save">Save</html:submit>&nbsp;&nbsp;<html:button property="cancel" styleClass="buton" onclick="javascript:window.close()">Cancel</html:button>
+			<td align="center" colspan="3">
+			<html:submit styleClass="buton" property="save"><digi:trn key="aim:save">Save</digi:trn></html:submit>&nbsp;&nbsp;
+			<html:button property="cancel" styleClass="buton" onclick="javascript:window.close()"><digi:trn key="aim:cancel">Cancel</digi:trn></html:button>
 			</td>			
 		</tr>			
 	</table>

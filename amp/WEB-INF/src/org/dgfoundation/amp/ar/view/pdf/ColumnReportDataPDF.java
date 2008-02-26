@@ -6,6 +6,7 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -99,7 +100,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 		
 		// headings
 		Font font = new Font(Font.COURIER, 9, Font.BOLD);
-
+		font.setColor(new Color(255,255,255));
 		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false)  {
 			PDFExporter.headingCells=new ArrayList();
 			columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
@@ -147,12 +148,14 @@ public class ColumnReportDataPDF extends PDFExporter {
 					
 					pdfc.setHorizontalAlignment(Element.ALIGN_CENTER);
 					pdfc.setColspan(element2.getWidth());
-					table.addCell(pdfc);
+					pdfc.setBackgroundColor(new Color(51,102,153));
+					//table.addCell(pdfc);
 					headingCells.add(pdfc);
 				} else {
 					PdfPCell pdfc = new PdfPCell(new Paragraph(""));
 					pdfc.setColspan(col.getWidth());
-					table.addCell(pdfc);
+					pdfc.setBackgroundColor(new Color(51,102,153));
+					//table.addCell(pdfc);
 					headingCells.add(pdfc);
 				}
 			}

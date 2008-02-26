@@ -6,6 +6,7 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import org.dgfoundation.amp.ar.Exporter;
@@ -31,6 +32,8 @@ public abstract class PDFExporter extends Exporter {
 	
 	protected PdfPTable table;
 	protected Long ownerId; 
+	
+	protected static Color currentBackColor=null;
 	
 	public PDFExporter(Exporter parent,Viewable item) {
 		super(parent,item);

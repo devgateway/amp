@@ -6,6 +6,8 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
+import java.awt.Color;
+
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
@@ -73,10 +75,13 @@ public class TextCellPDF extends PDFExporter {
 				translatedStatus=actualStatus;
 			finalStatus+=translatedStatus;
 
-			pdfc = new PdfPCell(new Paragraph(finalStatus,new Font(Font.COURIER, 10)));
+			pdfc = new PdfPCell(new Paragraph(finalStatus,new Font(Font.COURIER, 9)));
+			
 		}
 		else 
-			pdfc = new PdfPCell(new Paragraph(c.toString(),new Font(Font.COURIER, 10)));
+			pdfc = new PdfPCell(new Paragraph(c.toString(),new Font(Font.COURIER, 9)));
+		
+		
 		table.addCell(pdfc);
 	}
 

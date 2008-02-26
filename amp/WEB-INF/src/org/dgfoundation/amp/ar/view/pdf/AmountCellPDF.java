@@ -49,7 +49,9 @@ public class AmountCellPDF extends PDFExporter {
 		PdfPCell pdfc = new PdfPCell(new Paragraph(ac.toString(),new Font(Font.COURIER, 9, Font.NORMAL)));
 		pdfc.setVerticalAlignment(Element.ALIGN_CENTER);
 		pdfc.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	//	pdfc.setBackgroundColor(Color.GRAY);
+		if (currentBackColor!=null){
+		    pdfc.setBackgroundColor(currentBackColor);
+		}
 		table.addCell(pdfc);
 	}
  

@@ -55,9 +55,7 @@ import com.lowagie.text.pdf.PdfWriter;
  */
 public class PDFExportAction extends Action implements PdfPageEvent{
     	
-//	private HttpSession session;
-	private String noteFromSession;
-	
+   	
 	protected static Logger logger = Logger.getLogger(PDFExportAction.class);
 	private  HttpSession session=null;
 	private  String locale=null;
@@ -72,34 +70,31 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	 super();
         }
 	
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
+	@SuppressWarnings("unchecked")
+        public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
 		
 		//for translation purposes
-		TranslatorWorker translator=TranslatorWorker.getInstance();
-		Site site = RequestUtils.getSite(request);
+	    	Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 				
 		 String siteId=site.getSiteId();
 		 String locale=navigationLanguage.getCode();
 		
-		
+		 
 		GroupReportData rd=ARUtil.generateReport(mapping,form,request,response);
 		rd.setCurrentView(GenericViews.PDF);
+		HttpSession session = request.getSession();
+		AmpReports r=(AmpReports) session.getAttribute("reportMeta");
+		AmpARFilter arf=(AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
 		
-		//AdvancedReportForm formBean = (AdvancedReportForm) form;
-		
-		 
 		/*
 		 * this should not be used anymore as the page size has been included in the ARFilters.
 		 * String pageSize=formBean.getPdfPageSize();
 		 */
 		//use the session to get the existing filters
 		String pageSize=null;
-		
-		 HttpSession session = request.getSession();
-		AmpARFilter arf=(AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
 		if(arf!=null)
 			pageSize=arf.getPageSize();//use the page size set in the filters 
 
@@ -117,7 +112,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		}
 
 		response.setContentType("application/pdf");
-	        response.setHeader("Content-Disposition","attachment; filename=data.pdf");
+	        response.setHeader("Content-Disposition","attachment; filename="+r.getName());
 	   
 	        
 		Document document = new Document(page.rotate(),5, 5, 5, 50);
@@ -127,7 +122,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		
 		writer.setPageEvent(new PDFExportAction(session,locale,site));
 		
-		noteFromSession=AmpReports.getNote(request.getSession());
+		//noteFromSession=AmpReports.getNote(request.getSession());
 		
 		String sortBy=(String) session.getAttribute("sortBy");
 		
@@ -139,7 +134,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		
 		PDFExporter.widths=new float[rd.getTotalDepth()];		
 		for (int k = 0; k < rd.getSourceColsCount().intValue(); k++) {
-			PDFExporter.widths[k]=0.120f;
+		    PDFExporter.widths[k]=0.120f;
 		}
 		
 		for (int k = rd.getSourceColsCount().intValue();k<rd.getTotalDepth() ; k++) {
@@ -175,7 +170,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		    logger.error("Error translating ", e);}
 		
 		
-		AmpReports r=(AmpReports) session.getAttribute("reportMeta");
+		
 		PdfPCell pdfc = new PdfPCell(new Paragraph(r.getName(),titleFont));
 		pdfc.setPaddingBottom(10);
 		pdfc.setPaddingTop(10);

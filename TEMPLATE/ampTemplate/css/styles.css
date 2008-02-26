@@ -825,7 +825,7 @@ A.menu:hover
 	font-weight: bold ; 
 	color: #FFFFFF; }
 
-.buton 
+.buton, input[type="button"], input[type="reset"],input[type="submit"] 
 {  
 	font-family: Verdana, Arial, Helvetica, sans-serif; 
 	font-size: 11px; 

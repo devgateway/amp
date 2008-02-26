@@ -20,13 +20,7 @@
 				alert("Please enter Program name");
 				document.aimThemeForm.programName.focus();
 				return false;
-			}
-			if (trim(document.aimThemeForm.programCode.value).length == 0)
-			{
-				alert("Please enter Program code");
-				document.aimThemeForm.programCode.focus();
-				return false;
-			}
+			}			
 			if (document.aimThemeForm.programType.value == -1)
 			{
 				alert("Please Select a  Program type");

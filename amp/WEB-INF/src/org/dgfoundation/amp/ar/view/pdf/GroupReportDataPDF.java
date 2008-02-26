@@ -29,7 +29,6 @@ public class GroupReportDataPDF extends PDFExporter {
     	private static Color alternateColorA=new Color(185,219,243);
     	private static Color alternateColorB=new Color(0,156,205);
     	private static Color lastedUsedColor=null;
-    	private boolean visible=true;
     	/**
 	 * @param parent
 	 */
@@ -50,13 +49,12 @@ public class GroupReportDataPDF extends PDFExporter {
 	 * @see org.dgfoundation.amp.ar.Exporter#generate()
 	 */
 	public void generate() {
-		GroupReportData grd=(GroupReportData) item;
-		
+	  	GroupReportData grd=(GroupReportData) item;
 		Font titleFont;
 		 titleFont = new Font(Font.COURIER, 14, Font.BOLD);
 				
-		if((grd.getParent()!=null)&&(visible)) {
-			PdfPCell pdfc = new PdfPCell(new Paragraph(grd.getName(),titleFont));
+		if((grd.getParent()!=null)&&(!grd.getName().equalsIgnoreCase(grd.getParent().getName()))) {
+		    	PdfPCell pdfc = new PdfPCell(new Paragraph(grd.getName(),titleFont));
 			pdfc.setColspan(grd.getTotalDepth());
 			pdfc.setPaddingTop(5);
 			pdfc.setPaddingBottom(5);
@@ -85,12 +83,5 @@ public class GroupReportDataPDF extends PDFExporter {
 		table.addCell(pdfc2);
 	}
 
-	public boolean isVisible() {
-            return visible;
-        }
-
-	public void setVisible(boolean visible) {
-            this.visible = visible;
-        }
-
+	
 }

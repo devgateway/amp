@@ -74,7 +74,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 		String locale=parent.getReportMetadata().getLocale();
 		
 //		title
-		if (columnReport.getParent() != null) {
+		if ((columnReport.getParent() != null)&&(!columnReport.getName().equalsIgnoreCase(columnReport.getParent().getName()))) {
 			
 			//introducing the translaton issues
 			

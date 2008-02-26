@@ -8,6 +8,11 @@
 
 <script language="JavaScript">
 <!--
+
+	function onDelete() {
+  	var flag = confirm('<digi:trn key="aim:deletethiscomponentIndicator">Are you sure you want to remove this component indicator ?</digi:trn>');
+  	return flag;
+}
 	function addingCompIndicators()
 	{
 		openNewWindow(500, 300);
@@ -102,7 +107,7 @@
 																	<bean:define id="translation">
 																		<digi:trn key="aim:clickToDeleteIndicator">Click here to Delete Indicator</digi:trn>
 																	</bean:define>
-																	<a href="javascript:deleteIndicator(<bean:write name="indicators" property="ampCompIndId" />)">
+																	<a href="javascript:deleteIndicator(<bean:write name="indicators" property="ampCompIndId" />)" onclick="return onDelete()">
 																		<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																	</a>
 																</td>

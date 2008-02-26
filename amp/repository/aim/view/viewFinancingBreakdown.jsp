@@ -56,7 +56,7 @@ function preview(id)
 </script>
 
 
-<html:errors/>
+<digi:errors/>
 
 <digi:instance property="aimFinancingBreakdownForm" />
 

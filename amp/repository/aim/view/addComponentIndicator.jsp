@@ -84,7 +84,7 @@ function onDelete() {
 		</td>
 	</tr>
 	<tr bgColor=#ffffff><td height="15" colspan="2" align="center">
-		<html:errors />
+		<digi:errors />
 	</td></tr>
 
 	<tr bgColor=#ffffff>

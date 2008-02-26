@@ -220,7 +220,7 @@ function save() {
 
 														<!-- Page Logic -->
 
-														<tr>	<html:errors/>
+														<tr>	<digi:errors/>
 
 															<td width="100%">	
 

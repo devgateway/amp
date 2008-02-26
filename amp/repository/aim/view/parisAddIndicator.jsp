@@ -49,7 +49,7 @@
 <digi:errors/>
 
 <html:hidden name="aimParisIndicatorManagerForm" property="errorFlag"/>
-<html:errors />
+<digi:errors />
 
 <digi:instance property="aimParisIndicatorManagerForm" />
 

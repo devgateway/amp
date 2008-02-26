@@ -298,7 +298,7 @@ div.fakefile2 input {
 
 <digi:instance property="crDocumentManagerForm" />
 <digi:form action="/addTemporaryDocument.do" method="post" enctype="multipart/form-data" onsubmit="return false;">
-<html:errors/>
+<digi:errors/>
 <html:hidden property="webResource" />
 <html:hidden property="pageCloseFlag" />
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>

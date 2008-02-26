@@ -80,7 +80,7 @@
 														</digi:trn></span>
 												</td>
 										</tr>
-										<tr><td height=16 vAlign=center width=571><html:errors /></td></tr>
+										<tr><td height=16 vAlign=center width=571><digi:errors /></td></tr>
 										<tr>
 												<td noWrap width=100% vAlign="top">
 														<table width="100%" cellspacing=0 cellSpacing=0 border=0>

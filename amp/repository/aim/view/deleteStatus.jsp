@@ -5,7 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
-<html:errors/>
+<digi:errors/>
 
 <digi:form name="aimStatusItemForm" type="org.digijava.module.aim.form.StatusItemForm" scope="request" action="/deleteStatus.do">
 <html:hidden name="aimStatusItemForm" property="ampStatusId"/>

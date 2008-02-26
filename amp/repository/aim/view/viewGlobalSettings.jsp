@@ -149,7 +149,7 @@ function saveAllSettings(){
         </tr>
         <tr>
           <td height=16 vAlign=center>
-            <html:errors />
+            <digi:errors />
             <table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
                   <tr bgColor=#ffffff>
                     <td vAlign="top" width="100%">

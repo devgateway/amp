@@ -64,7 +64,7 @@
 				</tr>
 				<tr>
 					<td height=16 vAlign=center width=571>
-						<html:errors />
+						<digi:errors />
 					</td>
 				</tr>
 				<tr>

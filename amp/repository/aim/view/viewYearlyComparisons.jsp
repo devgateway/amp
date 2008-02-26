@@ -18,7 +18,7 @@
 
 
 
-<html:errors/>
+<digi:errors/>
 
 <digi:instance property="aimYearlyComparisonsForm" />
 

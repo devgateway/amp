@@ -45,7 +45,7 @@ function projectFiche(id)
 </script>
 
 
-<html:errors />
+<digi:errors />
 
 
 <digi:context name="digiContext" property="context" />

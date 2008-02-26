@@ -13,7 +13,7 @@
 
 <%@include file="addDocumentPanel.jsp" %>
 
-<html:errors />
+<digi:errors />
 
 <digi:instance property="crDocumentManagerForm" />
 <bean:define id="myForm" name="crDocumentManagerForm" toScope="page"

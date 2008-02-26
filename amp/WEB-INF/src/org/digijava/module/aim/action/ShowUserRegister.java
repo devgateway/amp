@@ -67,6 +67,7 @@ public class ShowUserRegister extends Action {
 					//set default country from global settings.
                     registerForm.setSelectedCountryResidence(FeaturesUtil.getGlobalSettingValue(Constants.GLOBAL_DEFAULT_COUNTRY));
 					
+                    
 					// set default web site
 					registerForm.setWebSite("http://");
 

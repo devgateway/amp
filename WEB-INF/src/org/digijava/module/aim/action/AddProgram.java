@@ -134,16 +134,41 @@ public class AddProgram
             if( ppPrograms.size()==0){
                activityProgram.setProgramPercentage(100L);
             }
-            ppPrograms.add(activityProgram);
+            // changed by mouhamad for burkina the 26/02/08
+            // for AMP-2666
+            AmpActivityProgram program = null;
+            boolean exist = false; 
+            for (int i = 0; i < ppPrograms.size(); i++) {
+          	  program = (AmpActivityProgram) ppPrograms.get(i);
+          	  if ((program.getAmpActivityProgramId() == null) || (program.getAmpActivityProgramId().equals(activityProgram.getAmpActivityProgramId()))) {
+          		  exist = true;
+          	  }
+            }
+            if (!exist) {
+            	 ppPrograms.add(activityProgram);
+            }
+            // end            
             eaform.setPrimaryPrograms(ppPrograms);
 
           }
           else {
             if( spPrograms.size()==0){
-           activityProgram.setProgramPercentage(100L);
+            	activityProgram.setProgramPercentage(100L);
             }
-
-            spPrograms.add(activityProgram);
+            // changed by mouhamad for burkina the 26/02/08
+            // for AMP-2666
+            AmpActivityProgram program = null;
+            boolean exist = false; 
+            for (int i = 0; i < spPrograms.size(); i++) {
+          	  program = (AmpActivityProgram) spPrograms.get(i);
+          	  if ((program.getAmpActivityProgramId() == null) || (program.getAmpActivityProgramId().equals(activityProgram.getAmpActivityProgramId()))) {
+          		  exist = true;
+          	  }
+            }
+            if (!exist) {
+            	spPrograms.add(activityProgram);
+            }
+            // end            
             eaform.setSecondaryPrograms(spPrograms);
           }
         }

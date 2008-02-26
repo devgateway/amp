@@ -6,10 +6,12 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
+
 <digi:edit key="aim:statusDescription:${param.catEditKey}">no description</digi:edit><br>
 <digi:secure actions="ADMIN, TRANSLATE">
 	<script language="JavaScript">
-		  document.write('<A HREF=http://amp.mofed.gov:8080/editor/showEditText.do?id=aim:statusDescription:${param.catEditKey}&lang=en&body=no%20text%20preview&referrer='+location.href+'>');
+		  document.write('<A HREF=${contextPath}/editor/showEditText.do?id=aim:statusDescription:${param.catEditKey}&lang=en&body=no%20text%20preview&referrer='+location.href+'>');
 	      document.write('Edit');        
 	      document.write('</A>');
 	</script>

@@ -23,31 +23,30 @@
 
 <html:hidden property="ampReportId"/>
 	<table>
+		
 		<tr>
-			<td colspan="4" align="center">
-			<font size="+1">
-				<digi:trn key="rep:popFilterReportName">Filter </digi:trn> "<bean:write scope="session" name="reportMeta" property="name" />"
-			</font>
-			</td>
+			<td colspan="4"><b><digi:trn key="rep:filter:projectdata">Project Data</digi:trn> </b></td>
 		</tr>
-		<tr><td colspan="4"><i><digi:trn key="rep:filter:multipleSelect">Note: to select multiple items in a list, hold down the ctrl key while clicking.</digi:trn></i></td></tr>
-		<tr><td colspan="4" height="10">&nbsp;</td></tr>		
-		<tr bgcolor="#EEEEEE">
-			<td colspan="4">		
-			<b><font color="red"><digi:trn key="aim:chanheFilters:SpecifyprojectID">Specify the Project ID. The ID must be numeric.</digi:trn></font></b>
-			<br><b><digi:trn key="rep:filter:projectid">Project ID</digi:trn> </b>
-		</td>			
-		</tr>
-		<tr bgcolor="#EEEEEE">
+		<tr>
 			<td colspan="4">
-			<html:text  property="text" style="width: 400px" styleClass="inp-text" onchange="checkProjectId(this)"/>
+			<html:text  property="indexString" style="width: 400px" styleClass="inp-text"/>
 			</td>
 		</tr>
-		
-		<tr><td colspan="4" height="10">&nbsp;</td></tr>
-		<tr bgcolor="#EEEEEE"><td colspan="4" height="15"><b><font color=red><digi:trn key="rep:filter:SpecifytheProjectTimePeriod">Specify the Project Time-period</digi:trn></font></b></td></tr>
-		
-		<tr bgcolor="#EEEEEE">
+		<tr>
+			<td colspan="4"><b><digi:trn key="rep:filer:Currency">Currency</digi:trn></b></td>
+		</tr>
+		<tr>
+			<td colspan="4">
+			<html:select property="currency" style="width: 400px" styleClass="inp-text">
+				<html:optionsCollection property="currencies"
+					value="ampCurrencyId" label="currencyName" />
+
+			</html:select>
+			</td>
+		</tr>
+
+
+		<tr>
 			<bean:define id="calendars" name="aimReportsFilterPickerForm" property="calendars" type="java.util.Collection"/>
 			<% int size =  ((java.util.Collection)calendars).size();
 			   boolean condition = (size != 1);
@@ -57,7 +56,7 @@
 			<td align="center"><b><digi:trn key="rep:filer:FromYear">From Year</digi:trn></b></td>
 			<td align="center"><b><digi:trn key="rep:filer:ToYear">To Year</digi:trn></b></td>
 		</tr>
-		<tr bgcolor="#EEEEEE">
+		<tr>
 			<% if (condition){%>
 			<td colspan="2">
 			<html:select property="calendar" style="width: 270px" styleClass="inp-text">
@@ -81,80 +80,11 @@
 			</td>
 		</tr>
 
-		<tr><td colspan="4" height="15">&nbsp;</td></tr>
-		<tr bgcolor="#EEEEEE"><td colspan="4" height="15"><b><font color=red><digi:trn key="rep:filter:FinanceCriteria">Specify the Financing Options</digi:trn></font></b></td></tr>		
-		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><b><digi:trn key="rep:filer:Currency">Currency</digi:trn></b></td>
-		</tr>
-		<tr bgcolor="#EEEEEE">
-			<td colspan="4">
-			<html:select property="currency" style="width: 400px" styleClass="inp-text">
-				<html:optionsCollection property="currencies"
-					value="ampCurrencyId" label="currencyName" />
 
-			</html:select>
-			</td>
+		<tr>
+			<td colspan="4"><b><digi:trn key="rep:filer:Sector">Sector</digi:trn></b></td>
 		</tr>
-
-
-		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><b><digi:trn key="rep:filer:financingInstrumenst">Financing Instruments</digi:trn></b></td>
-		</tr>
-		<tr bgcolor="#EEEEEE">
-			<td colspan="4">
-			<category:showoptions size="3" outerstyle="width: 250px" styleClass="inp-text" name="aimReportsFilterPickerForm" property="selectedFinancingInstruments" multiselect="true" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>"/>
-			</td>
-		</tr>
-	
-	<field:display name="Government Approval Procedures" feature="Budget">
-		<t bgcolor="#EEEEEE"r>
-			<td colspan="4">
-				<b><digi:trn key="rep:filter:govAppProc?"> Government Approval Procedures? </digi:trn></b>
-			</td>
-		</tr>
-		<tr bgcolor="#EEEEEE">
-			<td colspan="4" valign="top" align="left">
-				<html:select property="governmentApprovalProcedures" style="width: 400px" styleClass="inp-text">
-					<html:option value="true"><digi:trn key="rep:filter:Yes">Yes</digi:trn></html:option>
-					<html:option value="false"><digi:trn key="rep:filter:No">No</digi:trn></html:option>
-				</html:select>			
-			</td>
-		</tr>
-	</field:display>
-
-	<field:display name="Joint Criteria" feature="Budget">
-		<tr bgcolor="#EEEEEE">
-			<td colspan="4">
-				<digi:trn key="rep:filter:jointCriteria?"><b>Joint Criteria?</b></digi:trn>
-			</td>
-		</tr>
-		<tr bgcolor="#EEEEEE">
-			<td colspan="4" valign="top" align="left">
-				<html:select property="jointCriteria" style="width: 400px" styleClass="inp-text">
-					<html:option value="Yes"><digi:trn key="rep:filter:Yes">Yes</digi:trn></html:option>
-					<html:option value="No"><digi:trn key="rep:filter:No">No</digi:trn></html:option>
-				</html:select>
-			</td>
-		</tr>
-	</field:display>
-		
-		<tr><td colspan="4" height="10">&nbsp;</td></tr>
-		<tr bgcolor="#EEEEEE"><td colspan="4" height="15"><b><font color=red><digi:trn key="rep:filter:SpecifyDonorsSectorsRegion">Specify Donors, Sectors and Region</digi:trn></font></b></td></tr>
-		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><b><digi:trn key="rep:filer:donosr">Donors</digi:trn></b></td>
-		</tr>
-		<tr bgcolor="#EEEEEE">
-			<td colspan="4">
-			<html:select multiple="true" property="selectedDonors" size="3" style="width: 400px" styleClass="inp-text">
-				<html:optionsCollection property="donors"
-					value="ampOrgGrpId" label="orgGrpName" />
-			</html:select>
-			</td>
-		</tr>		
-		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><b><digi:trn key="rep:filer:Sectors">Sectors</digi:trn></b></td>
-		</tr>
-		<tr bgcolor="#EEEEEE">
+		<tr>
 			<td colspan="4" styleClass="inp-text">
 			<html:select multiple="true" property="selectedSectors" size="3" style="width: 400px" styleClass="inp-text">
 				<html:optionsCollection property="sectors"
@@ -162,55 +92,89 @@
 			</html:select>
 			</td>
 		</tr>
-		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><b><digi:trn key="rep:filter:Location">Region</digi:trn></b></td>
+
+
+
+
+		<%-- <tr>
+			<td colspan="4"><b><digi:trn key="rep:filer:donor">Donor</digi:trn></b></td>
 		</tr>
-		<tr bgcolor="#EEEEEE">
+		<tr>
 			<td colspan="4">
-			<html:select property="regionSelected" style="width: 400px" styleClass="inp-text">
-				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>
-				<html:optionsCollection property="regionSelectedCollection" label="region" value="regionId" />
+			<html:select multiple="true" property="selectedDonors" size="3" style="width: 400px" styleClass="inp-text">
+				<html:optionsCollection property="donors"
+					value="ampOrgGrpId" label="orgGrpName" />
 			</html:select>
 			</td>
-		</tr>		
-
-		<tr><td colspan="4" height="10">&nbsp;</td></tr>
-		<tr bgcolor="#EEEEEE"><td colspan="4" height="15"><b><font color=red><digi:trn key="rep:filter:otherFilterCriteria">Specify Other Filter Criteria</digi:trn></font></b></td></tr>
-		<tr bgcolor="#EEEEEE">
-			<td colspan="2"><b><digi:trn key="rep:filer:projectStatus">Project Status</digi:trn></b></td>
+		</tr>--%>
+		<tr>
+			<td colspan="1"><b><digi:trn key="rep:filer:DonorType">Donor Type</digi:trn></b></td>
+			<td colspan="3"><b><digi:trn key="rep:filer:DonorGroup">Donor Group</digi:trn></b></td>
+		</tr>
+		<tr>
+			<td colspan="1">
+				<html:select style="width: 190px" multiple="true" property="selectedDonorTypes" size="3" styleClass="inp-text">
+				<html:optionsCollection property="donorTypes" value="ampOrgTypeId" label="orgType" />
+				</html:select>
+			</td>
+			<td colspan="3">
+				<html:select multiple="true" property="selectedDonorGroups" size="3" styleClass="inp-text">
+				<html:optionsCollection style="width: 195px" property="donorGroups" value="ampOrgGrpId" label="orgGrpName" />
+				</html:select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="1"><b><digi:trn key="rep:filer:beneficiaryAgency">Beneficiary Agency</digi:trn></b></td>
+			<td colspan="1"><b><digi:trn key="rep:filer:executingAgency">Executing Agency</digi:trn></b></td>
+			<td colspan="2"><b><digi:trn key="rep:filer:implementingAgency">Implementing Agency</digi:trn></b></td>
+		</tr>
+		<tr>
+			<td colspan="1">
+				<html:select style="width: 190px" multiple="true" property="selectedBeneficiaryAgency" size="3" styleClass="inp-text">
+				<html:optionsCollection property="beneficiaryAgency" label="name" value="ampOrgId" />
+				</html:select>
+			</td>
+			<td colspan="1">
+				<html:select style="width: 190px" multiple="true" property="selectedExecutingAgency" size="3" styleClass="inp-text">
+				<html:optionsCollection property="executingAgency" label="name" value="ampOrgId" />
+				</html:select>
+			</td>
+			<td colspan="2">
+				<html:select style="width: 190px" multiple="true" property="selectedImplementingAgency" size="3" styleClass="inp-text">
+				<html:optionsCollection property="implementingAgency" label="name" value="ampOrgId" />
+				</html:select>
+			</td>
+		</tr>
+		<tr>
+			<td><b><digi:trn key="rep:filer:Status">Status</digi:trn></b></td>
 			<field:display name="Risk" feature="Activity">
-			<td colspan="2"><b><digi:trn key="rep:filer:projectRisks">Project Risks (hold down the ctrl key and click multiple risks to select)</digi:trn></b></td>
+			<td><b><digi:trn key="rep:filer:Risks">Risks</digi:trn></b></td>
+			</field:display>
+			<field:display  name="Line Ministry Rank" feature="Planning">
+			<td>
+			<b><digi:trn key="rep:filer:LineMinRank">Line Min. Rank</digi:trn></b>
+			</td>
+			</field:display>
+			<field:display  name="Planning Ministry Rank" feature="Planning">
+			<td>
+			<b><digi:trn key="rep:filer:PlanningMinRank">Planning Min. Rank</digi:trn></b>
+			</td>
 			</field:display>
 		</tr>
-		<tr bgcolor="#EEEEEE">
-			<td valign="top" colspan="2">
+		<tr>
+			<td valign="top" >
 					<category:showoptions outerstyle="width: 190px" styleClass="inp-text" property="selectedStatuses" size="3" name="aimReportsFilterPickerForm" multiselect="true" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY%>"/>
 			</td>
 			<field:display name="Risk" feature="Activity">
-			<td valign="top"colspan="2" >
+			<td valign="top" >
 			<html:select multiple="true" property="selectedRisks" size="3" styleClass="inp-text">
 				<html:optionsCollection property="risks"
 					value="ampIndRiskRatingsId" label="ratingName" />
 			</html:select>
 			</td>
 			</field:display>
-		</tr>
-		
-		<tr bgcolor="#EEEEEE">		
 			<field:display  name="Line Ministry Rank" feature="Planning">
-			<td colspan="2">
-			<b><digi:trn key="rep:filer:LineMinRank">Line Min. Rank</digi:trn></b>
-			</td>
-			</field:display>
-			<field:display  name="Planning Ministry Rank" feature="Planning">
-			<td colspan="2">
-			<b><digi:trn key="rep:filer:PlanningMinRank">Planning Min. Rank</digi:trn></b>
-			</td>
-			</field:display>
-		</tr>
-		<tr bgcolor="#EEEEEE">		
-		<field:display  name="Line Ministry Rank" feature="Planning">
-			<td valign="top"colspan="2" >
+			<td valign="top" >
 			<html:select property="lineMinRank" style="width: 50px" styleClass="inp-text">
 				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>
 				<html:optionsCollection property="actRankCollection" label="wrappedInstance" value="wrappedInstance" />
@@ -218,22 +182,39 @@
 			</td>
 			</field:display>
 			<field:display  name="Planning Ministry Rank" feature="Planning">
-			<td valign="top" colspan="2">
+			<td valign="top" >
 			<html:select property="planMinRank" style="width: 50px" styleClass="inp-text">
 				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>
 				<html:optionsCollection property="actRankCollection" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
 			</td>
 			</field:display>
-		</tr>			
 
-		<tr><td colspan="4" height="10">&nbsp;</td></tr>
-		<tr bgcolor="#EEEEEE"><td colspan="4" height="15"><b><font color=red><digi:trn key="rep:filter:formatReportSize">Format Report Size to Fit</digi:trn></font></b></td></tr>
-<logic:notEqual name="widget" value="true" scope="request">
-		<tr bgcolor="#EEEEEE">
+		</tr>
+		<tr>
+			<td colspan="4"><b><digi:trn key="rep:filter:Location">Region</digi:trn></b></td>
+		</tr>
+		<tr>
+			<td colspan="4">
+			<html:select property="regionSelected" style="width: 400px" styleClass="inp-text">
+				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>
+				<html:optionsCollection property="regionSelectedCollection" label="region" value="regionId" />
+			</html:select>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4"><b><digi:trn key="rep:filer:financingInstrument">Financing Instrument</digi:trn></b></td>
+		</tr>
+		<tr>
+			<td colspan="4">
+			<category:showoptions size="3" outerstyle="width: 250px" styleClass="inp-text" name="aimReportsFilterPickerForm" property="selectedFinancingInstruments" multiselect="true" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>"/>
+			</td>
+		</tr>
+	<logic:notEqual name="widget" value="true" scope="request">
+		<tr>
 			<td colspan="4"><b><digi:trn key="rep:filter:pageSize"> Page Size</digi:trn></b></td>
 		</tr>
-		<tr bgcolor="#EEEEEE">
+		<tr>
 			<td colspan="4">
 			<html:select property="pageSize" style="width: 100px" styleClass="inp-text">
 				<html:optionsCollection property="pageSizes"
@@ -241,8 +222,36 @@
 			</html:select>
 			</td>
 		</tr>
-</logic:notEqual>	
-	<tr><td colspan="4">&nbsp;</td></tr>
+</logic:notEqual>
+
+	<field:display name="Government Approval Procedures" feature="Budget">
+		<tr>
+			<td colspan="4">
+				<digi:trn key="rep:filter:govAppProc"> Government Approval Procedures </digi:trn>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4" valign="top" align="left">
+				<digi:trn key="rep:filter:yes">Yes</digi:trn><html:radio property="governmentApprovalProcedures" value="true"/> &nbsp;&nbsp;<digi:trn key="rep:filter:no"> No</digi:trn><html:radio property="governmentApprovalProcedures" value="false"/>
+			</td>
+		</tr>
+	</field:display>
+
+	<field:display name="Joint Criteria" feature="Budget">
+		<tr>
+			<td colspan="4">
+				<digi:trn key="rep:filter:jointCriteria"> Joint Criteria</digi:trn>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4" valign="top" align="left">
+				<digi:trn key="rep:filter:yes">Yes</digi:trn><html:radio property="jointCriteria" value="true"/> &nbsp;&nbsp;<digi:trn key="rep:filter:no"> No</digi:trn><html:radio property="jointCriteria" value="false"/>
+			</td>
+		</tr>
+	</field:display>
+	<tr>
+	<td>&nbsp;</td>
+	</tr>
 
 	<tr>
 	<td align="center"  colspan="4">

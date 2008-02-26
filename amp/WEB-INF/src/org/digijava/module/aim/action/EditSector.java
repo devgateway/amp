@@ -58,6 +58,7 @@ public class EditSector extends Action {
 										AmpSector ampSector = SectorUtil.getAmpSector(secId);
 										editSectorForm.setSectorId(secId);
 										ampSector.setName(editSectorForm.getSectorName());
+										ampSector.setDescription(editSectorForm.getDescription());
 										ampSector.setSectorCode(editSectorForm.getSectorCode());
 										logger.debug("Updating.............................................");
 										DbUtil.update(ampSector);
@@ -75,6 +76,7 @@ public class EditSector extends Action {
 									AmpSector ampSector = SectorUtil.getAmpSector(secId);
 									editSectorForm.setSectorId(secId);
 									ampSector.setName(editSectorForm.getSectorName());
+									ampSector.setDescription(editSectorForm.getDescription());
 									ampSector.setSectorCode(editSectorForm.getSectorCode());
 									logger.debug("Updating.............................................");
 									DbUtil.update(ampSector);
@@ -86,6 +88,7 @@ public class EditSector extends Action {
 									editSectorForm.setSectorName(ampSector.getParentSectorId().getName());
 									editSectorForm.setSecSchemeId(ampSector.getAmpSecSchemeId().getAmpSecSchemeId());
 									editSectorForm.setSectorId(ampSector.getParentSectorId().getAmpSectorId());
+									editSectorForm.setDescription(ampSector.getParentSectorId().getDescription());
 									logger.debug(" update sector2 Complete");
 									return mapping.findForward("editedThirdLevelSector");
 								}
@@ -100,6 +103,7 @@ public class EditSector extends Action {
 									AmpSector ampSector = SectorUtil.getAmpSector(secId);
 									editSectorForm.setSectorId(secId);
 									ampSector.setName(editSectorForm.getSectorName());
+									ampSector.setDescription(editSectorForm.getDescription());
 									ampSector.setSectorCode(editSectorForm.getSectorCode());
 									logger.debug("Updating.............................................");
 									DbUtil.update(ampSector);
@@ -111,6 +115,7 @@ public class EditSector extends Action {
 									editSectorForm.setSectorName(ampSector.getParentSectorId().getName());
 									editSectorForm.setSecSchemeId(ampSector.getAmpSecSchemeId().getAmpSecSchemeId());
 									editSectorForm.setSectorId(ampSector.getParentSectorId().getAmpSectorId());
+									editSectorForm.setDescription(ampSector.getParentSectorId().getDescription());
 									logger.debug(" update sector3 Complete");
 									editSectorForm.setJspFlag(false);
 									return mapping.findForward("editedThirdLevelSectorPlusOne");

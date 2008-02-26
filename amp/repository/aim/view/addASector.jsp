@@ -213,7 +213,7 @@ width="100%">
 		<td width="30%">
 																
 
-           <html:text property="description" size="40" />
+          <html:textarea property="description" cols="60" rows="3" styleClass="inp-text"/>
 																
 
 		</td>

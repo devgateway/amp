@@ -28,7 +28,9 @@
 		<layout name="seachResultsLayout" extends="helpLayout">
 			<put-item name="body" module="help" page="searchResults"/>
 		</layout>
+		
 
+		
 		<layout name="footerLayout" file="footerLayout.jsp">
 			<put name="version">1.09 RC1</put>
 		    <put-item name="transmode" module="translation" instance="default" teaser="modeSwitch"/>
@@ -293,6 +295,7 @@
 			<put-item name="myLinks" module="aim" instance="default" teaser="myLinks"/>
 			<put-item name="myTeamMembers" module="aim" instance="default" teaser="myTeamMembers"/>
 			<put-item name="myTasks" module="aim" instance="default" teaser="myTasks"/>
+			
 	 		<put-item name="footer" layout="footerLayout"/>
  		</layout>
 
@@ -408,6 +411,8 @@
 				<page>calendarOrgPopupLayout</page>
             </module>
 			<module name="aim">
+				
+				<page>viewStatusDescription</page>
 				<page>viewNpdSettings</page>
 				<page>aim_filterPicker</page>
 				<page>aim_euActivityDetails</page>

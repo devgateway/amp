@@ -13,7 +13,7 @@
 
 <%@include file="addDocumentPanel.jsp" %>
 
-<html:errors />
+<digi:errors />
 
 <%@include file="documentManagerJsHelper.jsp" %>
 

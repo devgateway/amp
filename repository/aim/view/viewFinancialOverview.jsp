@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<html:errors/>
+<digi:errors/>
 <digi:instance property="aimFinancialOverviewForm" />
 
 <digi:context name="digiContext" property="context"/>

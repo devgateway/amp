@@ -15,7 +15,7 @@
 <html:hidden property="action" />
 <html:hidden property="userId" />
 <html:hidden property="name" />
-<html:errors/>
+<digi:errors/>
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>

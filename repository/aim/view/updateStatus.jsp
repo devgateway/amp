@@ -172,7 +172,7 @@ function save() {
 
 				</tr>
 
-				<html:errors/>
+				<digi:errors/>
 
 				<tr>
 
@@ -228,7 +228,7 @@ function save() {
 
 														<tr>
 
-														<html:errors/>
+														<digi:errors/>
 														</tr>
 														<tr>
 															<td width="100%">	

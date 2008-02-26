@@ -45,7 +45,7 @@ function projectFiche(id)
 
 </script>
 
-<html:errors/>
+<digi:errors/>
 
 <digi:instance property="aimRegionalFundingForm" />
 <digi:form action="/viewRegionalFundingBreakdown.do" method="post">

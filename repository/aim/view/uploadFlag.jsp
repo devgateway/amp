@@ -71,7 +71,7 @@
 								<table width="100%" cellpadding="2" cellspacing="1">
 									<tr>
 										<td colspan="2" align="center">
-											<html:errors/>
+											<digi:errors/>
 										</td>
 									</tr>								
 									<tr>

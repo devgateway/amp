@@ -251,7 +251,7 @@ function delSubmit(){
     <tr>
       <td class="r-dotted-lg">&nbsp;</td>
         <td colspan="3">
-            <html:errors/>
+            <digi:errors/>
             <digi:form action="/previewCalendarEvent.do" onsubmit="selectGuests()">
             <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
             <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>

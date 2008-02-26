@@ -19,7 +19,7 @@
 -->
 </script>
 
-<html:errors/>
+<digi:errors/>
 <digi:instance property="aimYearlyDiscrepancyForm" />
 <digi:context name="digiContext" property="context"/>
 

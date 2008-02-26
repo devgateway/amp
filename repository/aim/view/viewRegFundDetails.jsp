@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<html:errors/>
+<digi:errors/>
 
 <digi:instance property="aimRegionalFundingForm" />
 <digi:form action="/viewRegFundDetails.do" method="post">

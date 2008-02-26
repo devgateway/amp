@@ -183,7 +183,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<html:errors/>
+<digi:errors/>
 <digi:instance property="aimFinancialOverviewForm" />
 
 <digi:context name="digiContext" property="context"/>

@@ -311,7 +311,7 @@ function deleteFlag(id) {
 
                         <td colspan="2" align="center">
 
-                          <html:errors/>
+                          <digi:errors/>
 
                         </td>
 

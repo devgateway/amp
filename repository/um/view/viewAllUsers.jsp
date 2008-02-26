@@ -74,7 +74,7 @@ function banUser(txt) {
           </tr>
           <tr>
             <td>
-              <html:errors/> 
+              <digi:errors/> 
               <span class=subtitle-blue>
                 <digi:trn key="um:viewAllUsers:ListOfUsers">
                 List of users

@@ -20,13 +20,7 @@
 				alert("Please enter Program name");
 				document.aimThemeForm.programName.focus();
 				return false;
-			}	
-			if (trim(document.aimThemeForm.programCode.value).length == 0) 
-			{
-				alert("Please enter Program code");
-				document.aimThemeForm.programCode.focus();
-				return false;
-			}
+			}			
 			if (document.aimThemeForm.programTypeCategValId.value == 0) 
 			{
 				alert("Please Select a  Program type");
@@ -157,8 +151,7 @@
 				<td height="20" align="center">
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<digi:trn key="aim:programCode">
-						Program Code</digi:trn>
-						<font color="red">*</font>
+						Program Code</digi:trn>						
 				</td>
 				<td align="left">
 						<html:text property="programCode" size="20" styleClass="inp-text"/>

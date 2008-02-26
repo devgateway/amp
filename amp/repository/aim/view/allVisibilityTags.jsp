@@ -55,7 +55,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <module:display name="Add & Edit Activity" parentModule="PARIS INDICATORS"></module:display>
 <module:display name="Admin Home" parentModule="PARIS INDICATORS"></module:display>
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display>
-<module:display name="PI Reports" parentModule="PARIS INDICATORS"></module:display>
+<module:display name="PI Reports" parentModule="REPORTING"></module:display>
 
 <feature:display  name="Paris Indicator" module="Add & Edit Activity"></feature:display>
 <feature:display  name="Paris Indicators Targets Manager" module="Admin Home"></feature:display>

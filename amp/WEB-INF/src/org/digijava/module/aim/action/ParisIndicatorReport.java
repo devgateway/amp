@@ -336,7 +336,7 @@ public class ParisIndicatorReport extends Action {
                     formula=getFormulaText(fl, ans1[0]);
                 }
 
-                return String.valueOf(AmpMath.CalcExp(formula));
+                return String.valueOf(AmpMath.calcExp(formula));
             }
         }
         return null;

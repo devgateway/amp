@@ -15,14 +15,14 @@ public class AmpMath {
     static byte PREC_UNARY = 12; // Not actually used.
     static byte PREC_NONE = 13;
 
-    public static long CalcExp(String exp) {
+    public static long calcExp(String exp) {
         String expr = exp.toLowerCase();
         expr = expr.replace(" ", "");
         expr = expr.replace(",",".");
-        return (long)CalcExp_Ex(expr);
+        return (long)calcExp_Ex(expr);
     }
 
-    private static double CalcExp_Ex(String exp) {
+    private static double calcExp_Ex(String exp) {
         if (isEmpty(exp)) {
             return 0;
         }
@@ -118,36 +118,36 @@ public class AmpMath {
             String rexp = exp.substring(best_pos + 1);
             String op = exp.substring(best_pos, best_pos + 1);
             if (op.equals("^")) {
-                return Math.pow(CalcExp_Ex(lexp), (int) CalcExp_Ex(rexp));
+                return Math.pow(calcExp_Ex(lexp), (int) calcExp_Ex(rexp));
             } else if (op.equals("*")) {
-                return CalcExp_Ex(lexp) * CalcExp_Ex(rexp);
+                return calcExp_Ex(lexp) * calcExp_Ex(rexp);
             } else if (op.equals("/")) {
-                return CalcExp_Ex(lexp) / CalcExp_Ex(rexp);
+                return calcExp_Ex(lexp) / calcExp_Ex(rexp);
             } else if (op.equals("\\")) {
-                return Math.round(CalcExp_Ex(lexp) / CalcExp_Ex(rexp));
+                return Math.round(calcExp_Ex(lexp) / calcExp_Ex(rexp));
             } else if (op.equals("%")) {
-                return CalcExp_Ex(lexp) / 100 * CalcExp_Ex(rexp);
+                return calcExp_Ex(lexp) / 100 * calcExp_Ex(rexp);
             } else if (op.equals("#")) {
-                return CalcExp_Ex(lexp) % CalcExp_Ex(rexp);
+                return calcExp_Ex(lexp) % calcExp_Ex(rexp);
             } else if (op.equals("+")) {
-                return CalcExp_Ex(lexp) + CalcExp_Ex(rexp);
+                return calcExp_Ex(lexp) + calcExp_Ex(rexp);
             } else if (op.equals("-")) {
-                return CalcExp_Ex(lexp) - CalcExp_Ex(rexp);
+                return calcExp_Ex(lexp) - calcExp_Ex(rexp);
             } else if (op.equals("@")) {
-                return (int) CalcExp_Ex(lexp) ^ (int) CalcExp_Ex(rexp);
+                return (int) calcExp_Ex(lexp) ^ (int) calcExp_Ex(rexp);
             }
         }
 
         if (exp.startsWith("(") && exp.endsWith(")")) {
-            return CalcExp_Ex(exp.substring(1, exp.length() - 1));
+            return calcExp_Ex(exp.substring(1, exp.length() - 1));
         }
 
         if (exp.startsWith("-")) {
-            return -CalcExp_Ex(exp.substring(1));
+            return -calcExp_Ex(exp.substring(1));
         }
 
         if (exp.startsWith("+")) {
-            return CalcExp_Ex(exp.substring(1));
+            return calcExp_Ex(exp.substring(1));
         }
 
         if (exp.length() > 4 && exp.endsWith(")")) {
@@ -158,25 +158,25 @@ public class AmpMath {
                 String rexp = exp.substring(pos + 1, exp.length() - pos - 2);
 
                 if (lexp.equals("abs")) {
-                    return Math.abs(CalcExp_Ex(rexp));
+                    return Math.abs(calcExp_Ex(rexp));
                 } else if (lexp.equals("cos")) {
-                    return Math.cos(CalcExp_Ex(rexp));
+                    return Math.cos(calcExp_Ex(rexp));
                 } else if (lexp.equals("exp")) {
-                    return Math.exp(CalcExp_Ex(rexp));
+                    return Math.exp(calcExp_Ex(rexp));
                 } else if (lexp.equals("flr")) {
-                    return Math.floor(CalcExp_Ex(rexp));
+                    return Math.floor(calcExp_Ex(rexp));
                 } else if (lexp.equals("log")) {
-                    return Math.log(CalcExp_Ex(rexp));
+                    return Math.log(calcExp_Ex(rexp));
                 } else if (lexp.equals("rnd")) {
-                    return Math.round(CalcExp_Ex(rexp));
+                    return Math.round(calcExp_Ex(rexp));
                 } else if (lexp.equals("sin")) {
-                    return Math.sin(CalcExp_Ex(rexp));
+                    return Math.sin(calcExp_Ex(rexp));
                 } else if (lexp.equals("sqr")) {
-                    return Math.sqrt(CalcExp_Ex(rexp));
+                    return Math.sqrt(calcExp_Ex(rexp));
                 } else if (lexp.equals("tan")) {
-                    return Math.tan(CalcExp_Ex(rexp));
+                    return Math.tan(calcExp_Ex(rexp));
                 } else if (lexp.equals("fct")) {
-                    return fact(CalcExp_Ex(rexp));
+                    return fact(calcExp_Ex(rexp));
                 } else {
                     throw new RuntimeException("Invalid function " + exp);
                 }

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -132,20 +134,98 @@ public class LuceneUtil {
 			session				= PersistenceManager.getSession();
 			Connection	conn	= session.connection();
 			Statement st		= conn.createStatement();
-			qryStr 				= "select * from v_lucene_index_data" ;
+			qryStr 				= "select * from v_titles" ;
 			ResultSet rs		= st.executeQuery(qryStr);
+			
+			final class Items {
+				int id;
+				String title;
+				String description;
+				String objective;
+				String purpose;
+				String results;
+			};
+			
+			HashMap list = new HashMap();
+			
+			Items x;
+			
 			rs.last();
 			logger.info("Starting iteration of " + rs.getRow() + " activities!");
 			boolean isNext = rs.first();
 			while (isNext){
-				//
-				Document doc = activity2Document(rs.getString("amp_activity_id"), rs.getString("title"), rs.getString("description"), rs.getString("objective"), rs.getString("purpose"), rs.getString("results"));
-				if (doc != null)
-					indexWriter.addDocument(doc);
+				x = new Items();
+				x.id = Integer.parseInt(rs.getString("amp_activity_id"));
+				x.title = rs.getString("name");
+				list.put(x.id, x);
 				isNext = rs.next();
+				//
+			}
+			
+			qryStr = "select * from v_description" ;
+			rs = st.executeQuery(qryStr);
+			rs.last();
+			logger.info("Starting iteration of " + rs.getRow() + " descriptions!");
+			isNext = rs.first();
+			while (isNext){
+				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+				x = (Items) list.get(actId);
+				x.description = rs.getString("trim(dg_editor.body)");
+				isNext = rs.next();
+				//
+			}
+			
+			qryStr = "select * from v_objectives" ;
+			rs = st.executeQuery(qryStr);
+			rs.last();
+			logger.info("Starting iteration of " + rs.getRow() + " objectives!");
+			isNext = rs.first();
+			while (isNext){
+				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+				x = (Items) list.get(actId);
+				x.objective = rs.getString("trim(dg_editor.body)");
+				isNext = rs.next();
+				//
+			}
+
+			qryStr = "select * from v_purposes" ;
+			rs = st.executeQuery(qryStr);
+			rs.last();
+			logger.info("Starting iteration of " + rs.getRow() + " purposes!");
+			isNext = rs.first();
+			while (isNext){
+				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+				x = (Items) list.get(actId);
+				x.purpose = rs.getString("trim(dg_editor.body)");
+				isNext = rs.next();
+				//
+			}
+			
+			qryStr = "select * from v_results" ;
+			rs = st.executeQuery(qryStr);
+			rs.last();
+			logger.info("Starting iteration of " + rs.getRow() + " results!");
+			isNext = rs.first();
+			while (isNext){
+				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+				x = (Items) list.get(actId);
+				x.results = rs.getString("trim(dg_editor.body)");
+				isNext = rs.next();
+				//
 			}
 			conn.close();
 
+			logger.info("Building the index ");
+			Iterator it = list.values().iterator();
+			while (it.hasNext()) {
+				Items el = (Items) it.next();
+				Document doc = activity2Document(String.valueOf(el.id), el.title, el.description, el.objective, el.purpose, el.results);
+				if (doc != null)
+					indexWriter.addDocument(doc);
+			}
+			list.clear();
+			
+			
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());

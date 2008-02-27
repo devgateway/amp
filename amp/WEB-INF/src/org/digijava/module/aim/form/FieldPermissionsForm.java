@@ -48,6 +48,8 @@ public class FieldPermissionsForm extends ActionForm {
     private String sgEdit;
     
     private String fieldName;
+    private String fieldNameTrimmed;
+    
     
     public String getFieldName() {
         return fieldName;
@@ -169,5 +171,11 @@ public class FieldPermissionsForm extends ActionForm {
 	public void setSgEdit(String sgEdit) {
 		this.sgEdit = sgEdit;
 	}
- 
+	public String getFieldNameTrimmed() {
+		return this.fieldName.replaceAll(" ","");
+	}
+	public void setFieldNameTrimmed(String fieldNameTrimmed) {
+		this.fieldNameTrimmed = fieldNameTrimmed;
+	}
+	
 }

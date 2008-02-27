@@ -4,6 +4,7 @@
 
 package org.digijava.module.aim.util;
 
+import java.math.BigDecimal;
 import java.text.Collator;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -2989,6 +2990,7 @@ public class DbUtil {
             q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
             iter = q.list().iterator();
             logger.debug("Size: " + q.list().size());
+            amount = new DecimalWraper();
             while (iter.hasNext()) {
                 AmpFundingDetail ampFundingDetail = (AmpFundingDetail) iter
                     .next();
@@ -3020,12 +3022,15 @@ public class DbUtil {
 							fromCurrency, toCurrency, new java.sql.Date(
 									ampFundingDetail.getTransactionDate()
 											.getTime()));
-					amount = new DecimalWraper();
-					amount.setValue(tmpamount.getValue());
-					if (amount.getCalculations()!=null){
-					amount.setCalculations(amount.getCalculations() + " +" + tmpamount.getCalculations()+"<BR>");
+					
+					if (amount.getValue()!=null){
+						amount.setCalculations(amount.getCalculations() + " +" + tmpamount.getCalculations()+"<BR>");
+						BigDecimal tmp = amount.getValue().add(tmpamount.getValue()); 
+						amount.setValue(tmp);
 					}
-					else{amount.setCalculations(tmpamount.getCalculations()+"<BR>");
+					else{
+						amount.setCalculations(tmpamount.getCalculations()+"<BR>");
+						amount.setValue(tmpamount.getValue());
 					}
 				}
 

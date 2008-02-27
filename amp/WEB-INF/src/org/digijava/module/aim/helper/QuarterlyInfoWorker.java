@@ -116,7 +116,7 @@ public class QuarterlyInfoWorker {
 		Iterator iter1 = null;
 		Iterator iter2 = null;
 		String strActualAmt;
-
+		
 		double fromCurrency = CurrencyUtil.getExchangeRate(fp.getAmpFundingId(), fp
 				.getPerspective());
 		double targetCurrency = 1.0;
@@ -216,8 +216,8 @@ public class QuarterlyInfoWorker {
 			// modified by priyajith
 			AmpCurrency curr = (AmpCurrency) row[2];
 			Double fixedRate=(Double) row[3];
-			fromCurrency = CurrencyUtil.getExchangeRate(curr.getCurrencyCode(),Constants.ACTUAL,transactionDate);
-			double targetCurrency = CurrencyUtil.getExchangeRate(selCurrency,Constants.ACTUAL,transactionDate);	
+			fromCurrency = Util.getExchange(curr.getCurrencyCode(),new java.sql.Date(transactionDate.getTime()));
+			double targetCurrency = Util.getExchange(selCurrency,new java.sql.Date(transactionDate.getTime()));	
 			//end			
 			double tmpAmt = 0.0;
 			if (transactionAmount != null)

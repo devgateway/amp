@@ -3328,8 +3328,8 @@ public class DbUtil {
                     total = total
                         + fundDetails.getTransactionAmount().doubleValue();
                 } else { //logger.debug(" not equal to USD ") ;
-                    double fromCurrency = CurrencyUtil.getExchangeRate(fundDetails
-                        .getAmpCurrencyId().getCurrencyCode());
+                    double fromCurrency = Util.getExchange(fundDetails
+                        .getAmpCurrencyId().getCurrencyCode(),new java.sql.Date(fundDetails.getTransactionDate().getTime()));
                     double toCurrency = CurrencyUtil.getExchangeRate("USD");
                     //total = total +
                     // CurrencyWorker.convert(fundDetails.getTransactionAmount().doubleValue(),"USD")

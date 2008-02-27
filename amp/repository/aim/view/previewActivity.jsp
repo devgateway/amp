@@ -1247,7 +1247,9 @@ function collapseAll() {
                                                                                 <td><digi:trn key='aim:totalcommittment'>
                                                                                 TOTAL:
                                                                                 </digi:trn></td>
-                                                                                      <TD  colspan="4" align="right"><bean:write name="aimEditActivityForm" property="totalCommitted"/>&nbsp;<bean:write name="aimEditActivityForm" property="currCode"/></TD>
+                                                                                      <TD  colspan="4" align="right">
+                                                                                      	<bean:write name="aimEditActivityForm" property="totalCommitted"/>&nbsp;<bean:write name="aimEditActivityForm" property="currCode"/>
+                                                                                      </TD>
                                                                                 </tr>
                                                                               </c:if>
                                                                            
@@ -1402,7 +1404,7 @@ function collapseAll() {
 	                                                                                	</digi:trn>
 	                                                                                </td>
 	                                                                                <TD  colspan="4" align="right">	                                                                                	
-	                                                                                	<aim:formatNumber value="${aimEditActivityForm.totalPlannedDisbursements}"/>&nbsp;<bean:write name="aimEditActivityForm" property="currCode"/>
+	                                                                                	<c:out value="${aimEditActivityForm.totalPlannedDisbursements}"/>&nbsp;<bean:write name="aimEditActivityForm" property="currCode"/>
 	                                                                                </TD>
 	                                                                           </tr>
 	                                                                           <tr bgcolor="#ffffff">

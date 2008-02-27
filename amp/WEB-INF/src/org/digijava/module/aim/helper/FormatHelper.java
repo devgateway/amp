@@ -26,6 +26,9 @@ public class FormatHelper {
            public static Double parseDouble(String number) {                                                                              
                                              
                    if(number==null) return null;
+                   if("".equalsIgnoreCase(number)){
+                	   return new Double(0);
+                   }
                    String format = "###,###,###,###.##";                                                                                                        
                    String decimalSeparator = ".";                                                                                                               
                    String groupSeparator = ",";                                                                                                                 
@@ -52,9 +55,11 @@ public class FormatHelper {
                    return result;                                                                                                                               
            }                                                                                                                                                    
                                                                                                                                                                 
-           public static String getDifference(String one,String two){                                                                                           
-                   return "";                                                                                                                                   
-            }                      
+        public static String getDifference(String one, String two) {
+		Double d1 = parseDouble(one);
+		Double d2 = parseDouble(two);
+		return formatNumber(d1 - d2);
+	}                      
     
     public static String formatNumber(double nr) {
     	

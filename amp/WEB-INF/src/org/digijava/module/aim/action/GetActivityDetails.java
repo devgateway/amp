@@ -255,9 +255,9 @@ public class GetActivityDetails extends Action {
 			fp.setFromYear(1934);
 			fp.setToYear(2014);
 			Collection fb = FinancingBreakdownWorker.getFinancingBreakdownList(
-					activity.getAmpActivityId(), ampFundings, fp);
+					activity.getAmpActivityId(), ampFundings, fp,false);
 			coForm.setGrandTotal(
-					FinancingBreakdownWorker.getOverallTotal(fb, 0));
+					FinancingBreakdownWorker.getOverallTotal(fb, 0,false));
 		}
 
 		logger.info("Results Check ");

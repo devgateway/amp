@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -76,8 +77,8 @@ public class RegionalFundingsHelper {
 			fd.setTransactionType(regFund.getTransactionType().intValue());
 
 			Date dt = regFund.getTransactionDate();
-			double frmExRt = CurrencyUtil.getExchangeRate(fd.getCurrencyCode(),1,dt);
-			double toExRt = CurrencyUtil.getExchangeRate(currCode,1,dt);
+			double frmExRt = Util.getExchange(fd.getCurrencyCode(),new java.sql.Date(dt.getTime()));
+			double toExRt = Util.getExchange(currCode,new java.sql.Date(dt.getTime()));
 			double amt = CurrencyWorker.convert1(regFund.getTransactionAmount().doubleValue(),frmExRt,toExRt);
 			fd.setTransactionAmount(FormatHelper.formatNumber(amt));
 			fd.setCurrencyCode(currCode);

@@ -51,8 +51,7 @@
 				<logic:empty name="myTasks" scope="session">				
 				<TR><TD bgColor=#ffffff class=box-border align=left>
 					<digi:trn key="aim:emptyMyTaskList">No pending task</digi:trn>								
-					<br/>
-		<digi:link href="/viewEditableTasks.do"><digi:trn key="aim:moreTasks">..more</digi:trn></digi:link>					
+					<br/>						
 				</TD></TR>
 				</logic:empty>
 			</TABLE>	

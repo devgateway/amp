@@ -59,16 +59,16 @@ function selectLocation(index){
   </tr>
   <tr bgcolor="#003366" class="textalb">
     <td align="center" valign="middle" width="75">
-      <b><font color="white">Actual/Base/<br>Target</font></b>
+      <b><font color="white"><digi:trn key="aim:addeditdata:actualbasetarget">Actual/Base/<br>Target</digi:trn>=</font></b>
     </td>
     <td align="center" valign="middle" width="120">
-      <b><font color="white">Value</font></b>
+      <b><font color="white"><digi:trn key="aim:addeditdata:value">Value</digi:trn></font></b>
     </td>
     <td align="center" valign="middle" width="120">
-      <b><font color="white">Creation Date</font></b>
+      <b><font color="white"><digi:trn key="aim:addeditdata:creationdate">Creation Date</digi:trn></font></b>
     </td>
     <td align="center" valign="middle" width="120" colspan="3">
-      <b><font color="white">Add Location</font></b>
+      <b><font color="white"><digi:trn key="aim:addeditdata:addlocation">Add Location</digi:trn></font></b>
     </td>
   </tr>
 
@@ -77,9 +77,9 @@ function selectLocation(index){
         <tr>
           <td bgColor=#d7eafd  height="10" align="center" width="10%">
             <html:select name="ind" property="valueType" styleClass="inp-text">
-              <html:option value="1">Actual</html:option>
-              <html:option value="2">Base</html:option>
-              <html:option value="0">Target</html:option>
+              <html:option value="1"><digi:trn key="aim:addeditdata:actual">Actual</digi:trn></html:option>
+              <html:option value="2"><digi:trn key="aim:addeditdata:base">Base</digi:trn></html:option>
+              <html:option value="0"><digi:trn key="aim:addeditdata:target">Target</digi:trn></html:option>
             </html:select>
           </td>
 
@@ -100,13 +100,13 @@ function selectLocation(index){
             [${ind.location.name}]
             </c:if>
             <c:if test="${ind.location==null}">
-              <span>[<span style="color:Red">National</span>]</span>
+              <span>[<span style="color:Red"><digi:trn key="aim:addeditdata:national">National</digi:trn></span>]</span>
             </c:if>
           </td>
 
           <td bgColor=#d7eafd  height="10" nowrap="nowrap">
             [<a href="javascript:selectLocation('${index.count-1}')">
-            	Add location
+            	<digi:trn key="aim:addeditdata:addlocation">Add location</digi:trn>
               <!-- <img src="../ampTemplate/images/closed.gif" border="0" alt="Select location" /> -->
             </a>]
           </td>
@@ -131,15 +131,15 @@ function selectLocation(index){
     </tr>
   </c:if>
   <tr>
-    <td height="25" align="center" colspan="6">
-      <input style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="Add Data" onclick="addData()">&nbsp;&nbsp;
+    <td height="25" align="center" colspan="6"><digi:trn key="aim:addeditdata:adddata">
+      <input style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="Add Data" onclick="addData()">&nbsp;&nbsp;</digi:trn>
     </td>
   </tr>
   <tr>
     <td bgColor=#dddddb height="25" align="center" colspan="6">
-      <input class="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveIndicator('${aimThemeForm.themeId}')">&nbsp;&nbsp;
-      <input class="dr-menu" type="reset" value="Cancel">&nbsp;&nbsp;
-      <input class="dr-menu" type="button" name="close" value="Close" onclick="window.close();">
+      <digi:trn key="aim:addeditdata:save"><input class="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveIndicator('${aimThemeForm.themeId}')">&nbsp;&nbsp;</digi:trn>
+      <digi:trn key="aim:addeditdata:cancel"><input class="dr-menu" type="reset" value="Cancel">&nbsp;&nbsp;</digi:trn>
+      <digi:trn key="aim:addeditdata:close"><input class="dr-menu" type="button" name="close" value="Close" onclick="window.close();"></digi:trn>
     </td>
   </tr>
 </table>

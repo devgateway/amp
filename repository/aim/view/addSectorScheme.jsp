@@ -55,7 +55,7 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>Sector Manager</span>
+					<td height=16 vAlign=center width=571><span class=subtitle-blue><digi:trn key="aim:scheme:sector">Sector Manager</digi:trn></span>
 					</td>
 				</tr>
 				<tr>

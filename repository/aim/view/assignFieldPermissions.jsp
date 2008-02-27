@@ -20,7 +20,10 @@
 				</tr>
 		<tr>
 			<td colspan="3" align="center">
-				<b><digi:trn key="aim:gateperm:fieldName">Field Name:</digi:trn></b>&nbsp;<i><bean:write name="aimFieldPermissionsForm" property="fieldName"/></i>
+				<bean:define id="nameTrimmed" name="aimFieldPermissionsForm" property="fieldNameTrimmed" />			
+				<b><digi:trn key="aim:gateperm:fieldName">Field Name:</digi:trn></b>&nbsp;<i>
+				<digi:trn key="<%="fm:"+nameTrimmed %>">
+				<bean:write name="aimFieldPermissionsForm" property="fieldName"/></digi:trn></i>
 			</td>
 		</tr>
 		<tr>

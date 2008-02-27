@@ -588,8 +588,9 @@
                                   <c:if test="${not empty aimEditActivityForm.activityComponentes}">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
-									  <digi:trn key="aim:preview:component_Sector"><strong> Components</strong></digi:trn>										</td>
-<td bgcolor="#ffffff">
+									  	<strong><digi:trn key="aim:preview:component_Sector">Components</digi:trn></strong>
+									  	</td>
+									  <td bgcolor="#ffffff">
 												<table>
 													<c:forEach var="compo" items="${aimEditActivityForm.activityComponentes}">
 													<tr>

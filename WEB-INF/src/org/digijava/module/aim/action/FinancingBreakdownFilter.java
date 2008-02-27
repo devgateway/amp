@@ -96,21 +96,21 @@ public class FinancingBreakdownFilter extends TilesAction	{
 		formBean.setPerpsectiveName(DbUtil.getPerspective(fp.getPerspective()).getName());
 		Long id = new Long(formBean.getAmpActivityId());
 		Collection ampFundings = DbUtil.getAmpFunding(id);
-		Collection fb = FinancingBreakdownWorker.getFinancingBreakdownList(id,ampFundings,fp);
+		Collection fb = FinancingBreakdownWorker.getFinancingBreakdownList(id,ampFundings,fp,false);
 		formBean.setFinancingBreakdown(fb);
 		formBean.setYears(YearUtil.getYears());
 		formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 		formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 		formBean.setPerspectives(DbUtil.getAmpPerspective());
-		overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(fb,Constants.COMMITMENT);
+		overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(fb,Constants.COMMITMENT,false);
 		formBean.setTotalCommitted(overallTotalCommitted);
-		overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(fb,Constants.DISBURSEMENT);
+		overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(fb,Constants.DISBURSEMENT,false);
 		formBean.setTotalDisbursed(overallTotalDisbursed);
-		overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(fb,Constants.EXPENDITURE);
+		overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(fb,Constants.EXPENDITURE,false);
 		formBean.setTotalExpended(overallTotalExpenditure);
 		overallTotalDibsOrders= FinancingBreakdownWorker.getOverallTotal(
-				fb, Constants.DISBURSEMENT_ORDER);
+				fb, Constants.DISBURSEMENT_ORDER,false);
         formBean.setTotalDisbOrdered(overallTotalDibsOrders);
         
         overallTotalUnDisbursed = FormatHelper.getDifference(
@@ -120,7 +120,7 @@ public class FinancingBreakdownFilter extends TilesAction	{
         overallTotalUnExpended = FormatHelper.getDifference(overallTotalDisbursed, overallTotalExpenditure);
 		formBean.setTotalUnExpended(overallTotalUnExpended);
 		
-		formBean.setTotalProjections( FinancingBreakdownWorker.getOverallTotal(fb, Constants.MTEFPROJECTION) );
+		formBean.setTotalProjections( FinancingBreakdownWorker.getOverallTotal(fb, Constants.MTEFPROJECTION,false) );
 		
 		return  null;
 	}

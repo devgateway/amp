@@ -139,7 +139,7 @@ public class EditActivity
     String computeTotals = FeaturesUtil.getGlobalSettingValue(Constants.
         GLOBALSETTINGS_COMPUTE_TOTALS);
 
-
+    boolean debug = (request.getParameter("debug")!=null)?true:false;
 
     //if("true".compareTo(request.getParameter("public"))!=0)
     //return mapping.findForward("forward");
@@ -218,7 +218,7 @@ public class EditActivity
 				AmpTeam activityTeam=activity.getTeam();
 				//if user is member of same team to which activity belongs then it can be edited
 				if (!currentTeam.getAmpTeamId().equals(activityTeam.getAmpTeamId())){
-					errorMsgKey="error:aim:editActivity:noWritePermissionForUser";
+					errorMsgKey="error.aim.editActivity.noWritePermissionForUser";
 				}
 			}
 			
@@ -394,7 +394,7 @@ public class EditActivity
       //logger.info("CanEdit = " + canEdit);
       if (!canEdit) {
         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-            "error:aim:activityAlreadyOpenedForEdit"));
+            "error.aim.activityAlreadyOpenedForEdit"));
         saveErrors(request, errors);
 
         String url = "/aim/viewChannelOverview.do?ampActivityId="
@@ -1600,7 +1600,7 @@ public class EditActivity
 //      }
 
       Collection<FinancingBreakdown> fb = FinancingBreakdownWorker.getFinancingBreakdownList(
-          activityId, ampFundingsAux, fp);
+          activityId, ampFundingsAux, fp,debug);
       eaForm.setFinancingBreakdown(fb);
       String overallTotalCommitted = "";
       String overallTotalDisbursed = "";
@@ -1610,17 +1610,27 @@ public class EditActivity
       String overallTotalDisburOrder = "";
       
       overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(
-          fb, Constants.COMMITMENT);
+          fb, Constants.COMMITMENT,debug);
       overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(
-          fb, Constants.DISBURSEMENT);
+          fb, Constants.DISBURSEMENT,debug);
       overallTotalDisburOrder=FinancingBreakdownWorker.getOverallTotal(
-          fb, Constants.DISBURSEMENT_ORDER);      
+          fb, Constants.DISBURSEMENT_ORDER,debug);      
+      if(!debug){
       overallTotalUnDisbursed = FormatHelper.getDifference(
-          overallTotalCommitted, overallTotalDisbursed);      
+          overallTotalCommitted, overallTotalDisbursed);
+      }
+      else{
+    	  overallTotalUnDisbursed =overallTotalCommitted +"-" +overallTotalDisbursed; 
+      }
       overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(
-          fb, Constants.EXPENDITURE);      
+          fb, Constants.EXPENDITURE,debug);
+      if(!debug){
       overallTotalUnExpended = FormatHelper.getDifference(
           overallTotalDisbursed, overallTotalExpenditure);
+      }
+      else{
+    	  overallTotalExpenditure = overallTotalDisbursed+ "-" + overallTotalExpenditure;
+      }
       
       eaForm.setTotalCommitted(overallTotalCommitted);
       eaForm.setTotalDisbursed(overallTotalDisbursed);

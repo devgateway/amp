@@ -1,6 +1,5 @@
 package org.digijava.module.aim.helper ;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -11,12 +10,13 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.logic.Logic;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.DecimalWraper;
+
+import com.corda.taglib.Debug;
 
 public class FinancingBreakdownWorker
 {
 	private static Logger logger = Logger.getLogger(FinancingBreakdownWorker.class) ;
-
 	public static String getDonor(AmpFunding ampFunding)
 	{
 			AmpOrganisation ampOrganisation = ampFunding.getAmpDonorOrgId();
@@ -40,22 +40,26 @@ public class FinancingBreakdownWorker
 		return FormatHelper.formatNumber(totals);
 	}
 
-	public static String getTotalDonorFund(FilterParams fp)	{
+	public static String getTotalDonorFund(FilterParams fp, boolean isDebug)	{
 		if ( logger.isDebugEnabled() )
 			logger.debug("getTotalDonorFund() with FilterParams " +
 						 " transactionType=" + fp.getTransactionType() +
 						 " ampFunding=" + fp.getAmpFundingId() );
-		double total = 0;
+		DecimalWraper total = new DecimalWraper();
 		Collection<YearlyInfo> c = YearlyInfoWorker.getYearlyInfo(fp);
 		if ( c.size() != 0 )	{
-			
-			total = Logic.getInstance().getTotalDonorFundingCalculator().getTotalDonorFunding(c, fp);
-						
+				total = Logic.getInstance().getTotalDonorFundingCalculator().getTotalDonorFunding(c, fp);
+			}
+		if (total.getValue()!=null){
+			if(isDebug){
+				return total.getCalculations();
+			}
+			else{
+				logger.debug("getTotalDonorFund() returning " + FormatHelper.formatNumber(total.getValue().doubleValue()));
+				return FormatHelper.formatNumber(total.getValue().doubleValue());
+			}
 		}
-
-		logger.debug("getTotalDonorFund() returning " + FormatHelper.formatNumber(total));
-
-		return FormatHelper.formatNumber(total);
+		return "";
 	}
 
 	public static String getTotalDonorDisbursement(Long ampFundingId,
@@ -84,7 +88,7 @@ public class FinancingBreakdownWorker
 		return strTotal ;
 	}
 
-	public static String getOverallTotal(Collection c,int type)
+	public static String getOverallTotal(Collection c,int type,boolean isDebug)
 	{
 		if ( logger.isDebugEnabled() )
 			logger.debug("getOverallTotal(Collection c size=" + c.size()
@@ -98,45 +102,90 @@ public class FinancingBreakdownWorker
 		while ( iter.hasNext() )
 		{
 			financingBreakdown = (FinancingBreakdown)iter.next() ;
-			if ( type == Constants.COMMITMENT )
-			{
+			if ( type == Constants.COMMITMENT ){
+				if (!isDebug){
 					s1 = financingBreakdown.getTotalCommitted() ;
-					//s2 = DecimalToText.removeCommas(s1) ;
 					total += FormatHelper.parseDouble(s1) ;
+				}
+				else{
+					if ("".equalsIgnoreCase(s1)){
+						s1 = financingBreakdown.getTotalCommitted();
+					}
+					else{
+						s1 = s1 + "+" + financingBreakdown.getTotalCommitted();
+					}
+				}
 			}
-			else if ( type == Constants.DISBURSEMENT )
-			{
-				//s2 = DecimalToText.removeCommas(s1) ;
-			    s1 = financingBreakdown.getTotalDisbursed() ;
-				total += FormatHelper.parseDouble(s1) ;
+			else if ( type == Constants.DISBURSEMENT ){
+				if(!isDebug){
+					s1 = financingBreakdown.getTotalDisbursed() ;
+					total += FormatHelper.parseDouble(s1) ;
+				}
+				else{
+					if ("".equalsIgnoreCase(s1)){
+						s1 = financingBreakdown.getTotalDisbursed();
+					}
+					else{
+						s1 = s1 + "+" + financingBreakdown.getTotalDisbursed();
+					}
+					
+				}
 			}
-			else if ( type == Constants.EXPENDITURE )
-			{
-				s1 = financingBreakdown.getTotalExpended() ;
-				//s2 = DecimalToText.removeCommas(s1) ;
-				total += FormatHelper.parseDouble(s1) ;
+			else if ( type == Constants.EXPENDITURE ){
+				if(!isDebug){
+					s1 = financingBreakdown.getTotalExpended() ;
+					total += FormatHelper.parseDouble(s1) ;
+				}
+				else{
+					if("".equalsIgnoreCase(s1)){
+						s1 =  financingBreakdown.getTotalExpended();
+					}
+					else{
+						s1 = s1 + "+" + financingBreakdown.getTotalExpended();
+					}
+				}
 			}
-                        else if ( type == Constants.DISBURSEMENT_ORDER )
-                        {
-                                s1 = financingBreakdown.getTotalDisbOrdered() ;
-                               // s2 = DecimalToText.removeCommas(s1) ;
-                                total += FormatHelper.parseDouble(s1) ;
-                        }
+			else if ( type == Constants.DISBURSEMENT_ORDER ){
+				if(!isDebug){
+					s1 = financingBreakdown.getTotalDisbOrdered() ;
+					total += FormatHelper.parseDouble(s1) ;
+				}
+				else{
+					if("".equalsIgnoreCase(s1)){
+						s1 = s1 + "+" + financingBreakdown.getTotalDisbOrdered();
+					}
+					else{
+						s1 =  financingBreakdown.getTotalDisbOrdered();
+					}
+				}
+			}
 			else if ( type == Constants.MTEFPROJECTION ) {
-				s1 = financingBreakdown.getTotalProjection() ;
-				//s2 = DecimalToText.removeCommas(s1) ;
-				total += FormatHelper.parseDouble(s1) ;
+				if(!isDebug){
+					s1 = financingBreakdown.getTotalProjection() ;
+					total += FormatHelper.parseDouble(s1) ;
+				}
+				else{
+					if("".equalsIgnoreCase(s1)){
+						s1 =  financingBreakdown.getTotalProjection();
+					}
+					else{
+						s1 = s1 + "+" + financingBreakdown.getTotalProjection();
+					}
+				}
 			}
 		}
 		if ( logger.isDebugEnabled() )
 		logger.debug("getOverallTotal(Collection c , type= " + type + ") returning total " + total ) ;
+		if (isDebug){
+			return s1;
+		}
 		strTotal= FormatHelper.formatNumber(total);
 		return strTotal ;
 	}
 
 	public static Collection<FinancingBreakdown> getFinancingBreakdownList(Long ampActivityId,
 													   Collection<AmpFunding> ampFundings,
-													   FilterParams fp)	{
+													   FilterParams fp,boolean isDebug)	{
 		if ( logger.isDebugEnabled() )
 			logger.debug("GETFINANCINGBREAKDOWNLIST() PASSED AMPACTIVITYID : " + ampActivityId);
 
@@ -168,28 +217,39 @@ public class FinancingBreakdownWorker
 
 				fp.setAmpFundingId(ampFunding.getAmpFundingId());
 				fp.setTransactionType(Constants.COMMITMENT);
-				String totalDonorCommitment = getTotalDonorFund(fp) ;
+				String totalDonorCommitment = getTotalDonorFund(fp,isDebug) ;
 				financingBreakdown.setTotalCommitted(totalDonorCommitment) ;
 
 				fp.setTransactionType(Constants.DISBURSEMENT);
-				String totalDonorDisbursement = getTotalDonorFund(fp) ;
+				String totalDonorDisbursement = getTotalDonorFund(fp,isDebug) ;
 				financingBreakdown.setTotalDisbursed(totalDonorDisbursement) ;
-
-				String unDisbursed = FormatHelper.getDifference(totalDonorCommitment,totalDonorDisbursement) ;
+				String unDisbursed ="";
+				if (isDebug){
+					unDisbursed = "(" + totalDonorCommitment + ")" + "-" + "("
+							+ totalDonorDisbursement + ")";
+				}
+				else{
+					unDisbursed = FormatHelper.getDifference(totalDonorCommitment,totalDonorDisbursement) ;
+				}	
 				financingBreakdown.setUnDisbursed(unDisbursed);
 
 				fp.setTransactionType(Constants.EXPENDITURE);
-				String totalDonorExpenditure = getTotalDonorFund(fp);
+				String totalDonorExpenditure = getTotalDonorFund(fp,isDebug);
 				financingBreakdown.setTotalExpended(totalDonorExpenditure) ;
 
-                                fp.setTransactionType(Constants.DISBURSEMENT_ORDER);
-                                String totalDisbOrdered = getTotalDonorFund(fp);
-                                financingBreakdown.setTotalDisbOrdered(totalDisbOrdered);
-
-
-				financingBreakdown.setTotalProjection( getTotalProjections(fp) );
-
-				String unExpended = FormatHelper.getDifference(totalDonorDisbursement,totalDonorExpenditure) ;
+                fp.setTransactionType(Constants.DISBURSEMENT_ORDER);
+				String totalDisbOrdered = getTotalDonorFund(fp, isDebug);
+				financingBreakdown.setTotalDisbOrdered(totalDisbOrdered);
+				financingBreakdown.setTotalProjection(getTotalProjections(fp));
+				String unExpended = "";
+				if (isDebug){
+					unExpended = "(" + totalDonorDisbursement + ")" + "-" + "("
+							+ totalDonorExpenditure + ")";
+				}
+				else{
+					unExpended = FormatHelper.getDifference(totalDonorDisbursement,totalDonorExpenditure) ;
+				}
+				
 				financingBreakdown.setUnExpended(unExpended) ;
 				if ( ampFunding.getActualStartDate() != null )	{
 					actualStartDate = DateConversion.ConvertDateToString(ampFunding.getActualStartDate()) ;
@@ -210,5 +270,13 @@ public class FinancingBreakdownWorker
 		if ( logger.isDebugEnabled() )
 					logger.debug("GETFINANCINGBREAKDOWNLIST() RETURNING A COLLECTION OF SIZE : " + temp.size());
 	 	return temp ;
+	}
+
+	public static Logger getLogger() {
+		return logger;
+	}
+
+	public static void setLogger(Logger logger) {
+		FinancingBreakdownWorker.logger = logger;
 	}
 }

@@ -222,7 +222,7 @@
 																bgcolor="#f4f4f2">
 																	<tr>
 																		<td bgcolor="#f4f4f2" align="right">
-																			Give a Keyword
+																			<digi:trn key="aim:GiveKeyword">Give a Keyword</digi:trn>
 																		</td>
 																		<td bgcolor="#f4f4f2" align="left">
 																			<html:text property="searchkey" size="20" styleClass="inp-text"/>&nbsp;&nbsp;

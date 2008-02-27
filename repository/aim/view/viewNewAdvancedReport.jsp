@@ -34,14 +34,14 @@
 <!--
 <div style='position:relative;display:none;' id="sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>">
 
-		<MM:BeginLock translatorClass="MM_SSI" type="ssi" orig="%3Cjsp:include page=%22/repository/aim/view/ar/levelSorterPicker.jsp%22 /%3E" fileRef="/repository/aim/view/ar/levelSorterPicker.jsp"><MM:EndLock>
+		><jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
 		<br/>
 		<a href='#' onclick='closeMessage();return false'><b><digi:trn key="rep:pop:Close">Close</digi:trn></b></a>
 </div>
  -->
 <!--
 <div style='position:relative;display:none;' id="filterPicker-<bean:write name="reportMeta" property="ampReportId"/>">
-		<MM:BeginLock translatorClass="MM_SSI" type="ssi" orig="%3Cjsp:include page=%22/aim/reportsFilterPicker.do%22 /%3E" fileRef="/aim/reportsFilterPicker.do"><MM:EndLock>
+		><jsp:include page="/aim/reportsFilterPicker.do" />
 		<br/>
 		<a href='#' onclick='closeMessage();return false'><b><digi:trn key="rep:pop:Close">Close</digi:trn></b></a>
 
@@ -91,39 +91,39 @@
 			scope="session" name="reportMeta" property="name" /></b></font></td>
 	</tr>
 	<tr>
-		<td><b><digi:trn key="rep:pop:ReportDescription">Report Description:</digi:trn></b><i><bean:write scope="session" name="reportMeta"
+		<td height="20"><b>
+	    <digi:trn key="rep:pop:ReportDescription">Report Description:</digi:trn>
+		</b><i><bean:write scope="session" name="reportMeta"
 			property="reportDescription" /></i></td>
 	</tr>
 	<tr bgcolor="#EEEEEE">
 			<td>
 			<table width="100%">
-			<tr>
-				<td width="50%">
+		  <tr>
+				<td width="50%" height="20">
 				<font size="-5" face="arial" color="red">
 					<span  STYLE="font-style:  italic">
 
 					<c:set var="AllAmount">
-					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
-					</c:set>
+					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>					</c:set>
 					<digi:trn key="rep:pop:AllAmount"><%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%></digi:trn>
 					<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>">
 					<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
 					<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>">
-						<%=selCurrency %>
-					</digi:trn>
+						<%=selCurrency %>					</digi:trn>
 					</logic:present>
-					</span>
-				</font>
-				</td>
-				<td align="right">
-					<logic:notEmpty name="reportMeta" property="hierarchies">
-						<input type="button" onClick="showSorter(); " value="<digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>">&nbsp;
-					</logic:notEmpty>
-					<input type="button" onClick="showFilter(); " value="<digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>">	&nbsp;			
-				</td>
-				</tr>
+					</span>				</font>				</td>
+				<td align="left">
+</td>
+			  </tr>
+		  <tr>
+		    <td height="20">					<logic:notEmpty name="reportMeta" property="hierarchies">
+						<input type="button" onClick="showSorter(); " value="<digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>">&nbsp;			    </logic:notEmpty>
+			  <input type="button" onClick="showFilter(); " value="<digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>">&nbsp;				</td>
+		    <td align="left">&nbsp;</td>
+		    </tr>
 			</table>
-			</td>
+		</td>
 		</tr>
 </logic:notEqual>
 	

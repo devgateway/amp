@@ -122,7 +122,7 @@ function closePopup() {
 							<tr bgcolor="#f4f4f2">
 								<td align="right" valign="middle" width="50%">
 									<FONT color=red>*</FONT>
-									<digi:trn key="aim:exchangeRateFor1ForeignCurrency">Exchange rate (value of 1 Foreign Currency in USD)</digi:trn>&nbsp;
+									<digi:trn key="admin:currencyRates:editPopup:ExchangeRateDescr">Exchange rate (value of 1 USD in selected currency)</digi:trn>&nbsp;
 								</td>
 								<td align="left" valign="middle">
 								<c:set var="formatTip">
@@ -130,8 +130,9 @@ function closePopup() {
 								</c:set>
 								
 									<html:text title="${formatTip}" property="updateCRateAmount" styleClass="amt" size="7"/>
+									<!-- 
 									<FONT color=red>
-									<digi:trn key="aim:USD">USD</digi:trn></FONT>
+									<digi:trn key="aim:USD">USD</digi:trn></FONT> -->
 								</td>
 							</tr>
 							<tr bgcolor="#ffffff">

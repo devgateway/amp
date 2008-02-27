@@ -52,7 +52,7 @@ public class FinancingBreakdownWorker
 			}
 		if (total.getValue()!=null){
 			if(isDebug){
-				return total.getCalculations();
+				return total.toString()+ "=" +  total.getCalculations();
 			}
 			else{
 				logger.debug("getTotalDonorFund() returning " + FormatHelper.formatNumber(total.getValue().doubleValue()));

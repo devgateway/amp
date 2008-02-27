@@ -71,13 +71,13 @@ public class YearlyInfoWorker {
 					if ( qf.getAggregate()==0)	{
 						tempPlanned += qf.getPlannedAmount();
 						tempActual += qf.getActualAmount();
-						if (qf.getWrapedActual() != null && tmpPlanedWraped != null) {
-							tmpActualWraped = tmpPlanedWraped + "+" + qf.getWrapedActual();
+						if (qf.getWrapedActual() != null && tmpActualWraped != null) {
+							tmpActualWraped = tmpActualWraped + " + " + qf.getWrapedActual();
 						} else if (qf.getWrapedActual()!=null) {
 							tmpActualWraped = qf.getWrapedActual();
 						}
 						if (qf.getWrapedPlanned() != null && tmpPlanedWraped != null) {
-							tmpPlanedWraped = tmpPlanedWraped + "+" + qf.getWrapedPlanned();
+							tmpPlanedWraped = tmpPlanedWraped + " + " + qf.getWrapedPlanned();
 						} else if (qf.getWrapedPlanned()!=null) {
 							tmpPlanedWraped = qf.getWrapedPlanned();
 						}

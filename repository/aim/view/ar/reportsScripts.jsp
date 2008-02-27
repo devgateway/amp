@@ -228,6 +228,10 @@ background-color: yellow;
 	function resetFilter(){
 		if (aimReportsFilterPickerForm.text)
 			aimReportsFilterPickerForm.text.value="";
+
+		if (aimReportsFilterPickerForm.indexString)
+			aimReportsFilterPickerForm.indexString.value="";
+			
 		
 		if (aimReportsFilterPickerForm.currency)
 			aimReportsFilterPickerForm.currency.value=aimReportsFilterPickerForm.defaultCurrency.value;

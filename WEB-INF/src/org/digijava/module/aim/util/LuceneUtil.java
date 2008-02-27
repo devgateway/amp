@@ -35,6 +35,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.editor.exception.EditorException;
 
@@ -139,6 +140,7 @@ public class LuceneUtil {
 			
 			final class Items {
 				int id;
+				String amp_id;
 				String title;
 				String description;
 				String objective;
@@ -161,7 +163,20 @@ public class LuceneUtil {
 				isNext = rs.next();
 				//
 			}
-			
+
+			qryStr = "select * from v_amp_id" ;
+			rs = st.executeQuery(qryStr);
+			rs.last();
+			logger.info("Starting iteration of " + rs.getRow() + " project id's!");
+			isNext = rs.first();
+			while (isNext){
+				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+				x = (Items) list.get(actId);
+				x.amp_id = rs.getString("amp_id");
+				isNext = rs.next();
+				//
+			}
+
 			qryStr = "select * from v_description" ;
 			rs = st.executeQuery(qryStr);
 			rs.last();
@@ -219,7 +234,7 @@ public class LuceneUtil {
 			Iterator it = list.values().iterator();
 			while (it.hasNext()) {
 				Items el = (Items) it.next();
-				Document doc = activity2Document(String.valueOf(el.id), el.title, el.description, el.objective, el.purpose, el.results);
+				Document doc = activity2Document(String.valueOf(el.id),el.amp_id, el.title, el.description, el.objective, el.purpose, el.results);
 				if (doc != null)
 					indexWriter.addDocument(doc);
 			}
@@ -258,12 +273,16 @@ public class LuceneUtil {
 	 * @param request is used to retreive curent site and navigation language
 	 * @param act the activity that will be added
 	 */
-	public static Document activity2Document(String actId, String title, String description, String objective, String purpose, String results){
+	public static Document activity2Document(String actId, String projectId, String title, String description, String objective, String purpose, String results){
 		Document doc = new Document();
 		String all = new String("");
 		if (actId != null){
 			doc.add(new Field(idField, actId, Field.Store.YES, Field.Index.UN_TOKENIZED));
-			all = all.concat(" " + actId);
+			//all = all.concat(" " + actId);
+		}
+		if (projectId != null){
+			doc.add(new Field("projectId", projectId, Field.Store.NO, Field.Index.TOKENIZED));
+			all = all.concat(" " + projectId);
 		}
 		if (title != null){
 			doc.add(new Field("title", title, Field.Store.NO, Field.Index.TOKENIZED));
@@ -328,7 +347,7 @@ public class LuceneUtil {
 		//Util.getEditorBody(site,act.getDescription(),navigationLanguage);
 		Document doc = null;
 		try {
-			doc = activity2Document(String.valueOf(act.getAmpActivityId()), String.valueOf(act.getName()), Util.getEditorBody(site,act.getDescription(),navigationLanguage), Util.getEditorBody(site,act.getObjective(),navigationLanguage), Util.getEditorBody(site,act.getPurpose(),navigationLanguage), Util.getEditorBody(site,act.getResults(),navigationLanguage));
+			doc = activity2Document(String.valueOf(act.getAmpActivityId()), String.valueOf(((AmpActivityInternalId)act.getInternalIds().iterator().next()).getInternalId()), String.valueOf(act.getName()), Util.getEditorBody(site,act.getDescription(),navigationLanguage), Util.getEditorBody(site,act.getObjective(),navigationLanguage), Util.getEditorBody(site,act.getPurpose(),navigationLanguage), Util.getEditorBody(site,act.getResults(),navigationLanguage));
 		} catch (EditorException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

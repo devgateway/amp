@@ -16,7 +16,7 @@
 			</b>
 		</a>
 		 -->
-</div>
+	</div>
 
 <div id="myFilter" style="display: none">
 		<jsp:include page="/aim/reportsFilterPicker.do" />
@@ -34,14 +34,14 @@
 <!--
 <div style='position:relative;display:none;' id="sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>">
 
-		><jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
+		<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
 		<br/>
 		<a href='#' onclick='closeMessage();return false'><b><digi:trn key="rep:pop:Close">Close</digi:trn></b></a>
 </div>
  -->
 <!--
 <div style='position:relative;display:none;' id="filterPicker-<bean:write name="reportMeta" property="ampReportId"/>">
-		><jsp:include page="/aim/reportsFilterPicker.do" />
+		<jsp:include page="/aim/reportsFilterPicker.do" />
 		<br/>
 		<a href='#' onclick='closeMessage();return false'><b><digi:trn key="rep:pop:Close">Close</digi:trn></b></a>
 
@@ -91,44 +91,46 @@
 			scope="session" name="reportMeta" property="name" /></b></font></td>
 	</tr>
 	<tr>
-		<td height="20"><b>
-	    <digi:trn key="rep:pop:ReportDescription">Report Description:</digi:trn>
-		</b><i><bean:write scope="session" name="reportMeta"
+		<td><digi:trn key="rep:pop:Description">Description:</digi:trn><i><bean:write scope="session" name="reportMeta"
 			property="reportDescription" /></i></td>
 	</tr>
-	<tr bgcolor="#EEEEEE">
-			<td>
-			<table width="100%">
-		  <tr>
-				<td width="50%" height="20">
-				<font size="-5" face="arial" color="red">
-					<span  STYLE="font-style:  italic">
 
-					<c:set var="AllAmount">
-					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>					</c:set>
-					<digi:trn key="rep:pop:AllAmount"><%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%></digi:trn>
-					<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>">
-					<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
-					<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>">
-						<%=selCurrency %>					</digi:trn>
-					</logic:present>
-					</span>				</font>				</td>
-				<td align="left">
-</td>
-			  </tr>
-		  <tr>
-		    <td height="20">					<logic:notEmpty name="reportMeta" property="hierarchies">
-						<input type="button" onClick="showSorter(); " value="<digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn>">&nbsp;			    </logic:notEmpty>
-			  <input type="button" onClick="showFilter(); " value="<digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn>">&nbsp;				</td>
-		    <td align="left">&nbsp;</td>
-		    </tr>
-			</table>
-		</td>
-		</tr>
 </logic:notEqual>
-	
+
+
+	<tr>
+		<td>
+		<div id="menucontainer">
+			<logic:notEmpty name="reportMeta" property="hierarchies">
+				<a style="cursor:pointer"
+					onClick="showSorter(); ">
+				<u><digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn></u> </a>&nbsp;
+			</logic:notEmpty>
+			<a style="cursor:pointer"
+				onClick="showFilter(); ">
+			<u><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></u> </a>
+		</div>
+		</td>
+	</tr>
+	<tr>
+			<td align="right">
+							<span  style="font-style:italic;color: red;font-family: Arial">
+								<c:set var="AllAmount">
+							<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
+							</c:set>
+							<digi:trn key="rep:pop:AllAmount"><%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%></digi:trn>
+							<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY%>">
+								<bean:define id="selCurrency" name="<%=org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY %>" />
+								<digi:trn key="<%="aim:currency:" + ((String)selCurrency).toLowerCase().replaceAll(" ", "") %>">
+									<%=selCurrency %>
+								</digi:trn>
+							</logic:present>
+					</span>
+				&nbsp;
+			</td>
+		</tr>
 <logic:notEmpty name="reportMeta" property="hierarchies">
-		<tr bgcolor="#EEEEEE">
+		<tr>
 			<td>
 				<logic:notEmpty name="report" property="levelSorters">
 				<logic:iterate name="report" property="levelSorters" id="sorter" indexId="levelId">
@@ -139,11 +141,12 @@
 				</logic:notEmpty>
 			</td>
 		</tr>
+	<tr> <td>&nbsp;</td></tr>
 	</logic:notEmpty>
-	<tr><td height="5">&nbsp;</td></tr>
-	<tr bgcolor="#EEEEEE">
+
+	<tr>
 	<td width="500">
-	<b><digi:trn key="rep:pop:SelectedFiltersCurrentCriterias">The following is the current filter criteria apllied to the report:</digi:trn></b><br><br>
+	<digi:trn key="rep:pop:SelectedFilters">Currently Selected Filters:</digi:trn>
 		<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
 		<bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
 		<bean:define id="listableStyle" value="list" toScope="request"/>
@@ -152,12 +155,12 @@
 		</logic:present>
 	</td>
 	</tr>
-	<tr bgcolor="#EEEEEE">
+	<tr>
 
 
 
 	<logic:notEqual name="report" property="totalUniqueRows" value="0">
-		<tr bgcolor="#EEEEEE">
+		<tr>
 			<td><!-- begin big report table -->
 			<c:set var="pageNumber" value="<%=new Integer(0)%>" scope="request"/>
 			<c:set var="paginar" value="<%=new Boolean(true)%>" scope="request"/>
@@ -165,12 +168,20 @@
 				<c:set var="pageNumber" value="<%=Integer.valueOf(request.getParameter("pageNumber"))%>" scope="request"/>
 			</c:if>
 
+	<logic:equal name="viewFormat" value="print">
+			<table id='reportTable'  cellSpacing="0" width="780">
+				<bean:define id="viewable" name="report"
+					type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
+				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
+			</table>
+	</logic:equal>
+		<logic:notEqual name="viewFormat" value="print">
 			<table id='reportTable'  cellSpacing="0" cellPadding="1" width="100%" class="reportsBorderTable">
 				<bean:define id="viewable" name="report"
 					type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
 			</table>
-
+		</logic:notEqual>
 			<!-- end of big report table --></td>
 		</tr>
 		<tr>
@@ -201,18 +212,19 @@
 					<logic:equal name="viewFormat" value="html">
 							<a  style="cursor:pointer" onclick="window.location.href='/aim/viewNewAdvancedReport.do~viewFormat=html~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=false~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage}"/>';">
 					</logic:equal>
+					
 					<logic:equal name="viewFormat" value="foldable">
 						<a  style="cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~cached=true~startRow=<c:out value="${i}"/>~endRow=<c:out value="${i+recordsPerPage}"/>');">	
 					</logic:equal>
-							<c:choose>							
-								<c:when  test="${i eq report.startRow}">
-									<font color="#FF0000"><fmt:formatNumber value="${(i-1)/recordsPerPage + 1}" maxFractionDigits="0"/></font>
-								</c:when>
-								<c:otherwise>
-									<fmt:formatNumber value="${(i-1)/recordsPerPage + 1}" maxFractionDigits="0"/>
-								</c:otherwise>								
-							</c:choose>
-							</a>
+					<c:choose>							
+						<c:when  test="${i eq report.startRow}">
+							<font color="#FF0000"><fmt:formatNumber value="${(i-1)/recordsPerPage + 1}" maxFractionDigits="0"/></font>
+						</c:when>
+						<c:otherwise>
+							<fmt:formatNumber value="${(i-1)/recordsPerPage + 1}" maxFractionDigits="0"/>
+						</c:otherwise>								
+					</c:choose>
+					</a>
 				|&nbsp
 				</c:forEach>
 				</logic:notEqual>
@@ -221,32 +233,32 @@
 			
 
 	</logic:notEqual>
-	<tr><td height="15">&nbsp;</td></tr>
 	<logic:equal name="report" property="totalUniqueRows" value="0">
 		<tr>
-			<td>
-			<digi:trn key="rep:pop:filteredreportnodata">The report has no data to display using the current filter criteria. Kindly select different filter criteria by clicking the button labelled "Change Filters" at the top of this page, or choose to view another report.</digi:trn>
-			</td>
+			<td><b>
+			<digi:trn key="rep:pop:filteredreport">The specified filtered report does not hold any data. Either
+			pick a different filter criteria or use another report.	</digi:trn>
+			</b></td>
 		</tr>
 	</logic:equal>
 	<tr>
-		<td>&nbsp;
-			
+		<td>
+			&nbsp;
 		</td>
 	</tr>
 	<tr>
-		<td>&nbsp;
-			
+		<td>
+			&nbsp;
 		</td>
 	</tr>
 	<tr>
-		<td>&nbsp;
-			
+		<td>
+			&nbsp;
 		</td>
 	</tr>
 	<tr>
-		<td>&nbsp;
-			
+		<td>
+			&nbsp;
 		</td>
 	</tr>
 

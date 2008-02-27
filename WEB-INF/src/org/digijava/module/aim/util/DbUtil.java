@@ -3024,12 +3024,12 @@ public class DbUtil {
 											.getTime()));
 					
 					if (amount.getValue()!=null){
-						amount.setCalculations(amount.getCalculations() + " +" + tmpamount.getCalculations()+"<BR>");
+						amount.setCalculations(amount.getCalculations() + " + " + tmpamount.getCalculations());
 						BigDecimal tmp = amount.getValue().add(tmpamount.getValue()); 
 						amount.setValue(tmp);
 					}
 					else{
-						amount.setCalculations(tmpamount.getCalculations()+"<BR>");
+						amount.setCalculations(tmpamount.getCalculations());
 						amount.setValue(tmpamount.getValue());
 					}
 				}

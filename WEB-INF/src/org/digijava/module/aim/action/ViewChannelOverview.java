@@ -227,7 +227,7 @@ public class ViewChannelOverview extends TilesAction {
                     if (!debug) {
 						formBean.setGrandTotal(FormatHelper.formatNumber(total));
 					} else {
-						formBean.setGrandTotal(FormatHelper.formatNumber(total)+cal);
+						formBean.setGrandTotal(FormatHelper.formatNumber(total)+ "<BR>" + cal + "<BR>");
 					}
 					//}else{
 					//	formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),

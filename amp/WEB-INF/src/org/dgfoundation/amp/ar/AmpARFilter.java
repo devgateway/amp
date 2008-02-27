@@ -256,7 +256,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 				ServletContext ampContext = session.getServletContext();
 				Directory idx = (Directory) ampContext.getAttribute(Constants.LUCENE_INDEX);
 	
-				Hits hits = LuceneUtil.search(idx, "title", indexText);
+				Hits hits = LuceneUtil.search(idx, "all", indexText);
 				  
 				for(int i = 0; i < hits.length(); i++) {
 					Document doc;

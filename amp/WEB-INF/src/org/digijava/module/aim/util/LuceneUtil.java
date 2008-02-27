@@ -347,7 +347,16 @@ public class LuceneUtil {
 		//Util.getEditorBody(site,act.getDescription(),navigationLanguage);
 		Document doc = null;
 		try {
-			doc = activity2Document(String.valueOf(act.getAmpActivityId()), String.valueOf(((AmpActivityInternalId)act.getInternalIds().iterator().next()).getInternalId()), String.valueOf(act.getName()), Util.getEditorBody(site,act.getDescription(),navigationLanguage), Util.getEditorBody(site,act.getObjective(),navigationLanguage), Util.getEditorBody(site,act.getPurpose(),navigationLanguage), Util.getEditorBody(site,act.getResults(),navigationLanguage));
+			String projectid="";
+			if (act.getInternalIds().size()>0){
+				projectid= String.valueOf(((AmpActivityInternalId)act.getInternalIds().iterator().next()).getInternalId());
+			}
+			doc = activity2Document(String.valueOf(act.getAmpActivityId()), 
+					projectid, 
+					String.valueOf(act.getName()), Util.getEditorBody(site,act.getDescription(),navigationLanguage), 
+					Util.getEditorBody(site,act.getObjective(),navigationLanguage), 
+					Util.getEditorBody(site,act.getPurpose(),navigationLanguage), 
+					Util.getEditorBody(site,act.getResults(),navigationLanguage));
 		} catch (EditorException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

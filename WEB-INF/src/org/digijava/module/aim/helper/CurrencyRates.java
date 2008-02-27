@@ -81,7 +81,7 @@ public class CurrencyRates {
 	    
 	    if (this.exchangeRate!=null){
 		if (this.exchangeRate!=0){
-		   return FormatHelper.formatNumber(1/this.exchangeRate);
+		   return FormatHelper.formatNumber(this.exchangeRate);
 		}    
 	    }
 	    

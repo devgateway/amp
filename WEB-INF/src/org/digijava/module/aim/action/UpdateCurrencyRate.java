@@ -104,7 +104,8 @@ public class UpdateCurrencyRate extends Action {
                        
                         String amount="0";
                         if((rate!=null)&&(rate!=0)){
-                            amount=FormatHelper.formatNumber(1/rate);
+                            //amount=FormatHelper.formatNumber(1/rate);
+                        	amount=FormatHelper.formatNumber(rate);
                         }
                         crForm.setUpdateCRateAmount(amount);
                         crForm.setReset(false);
@@ -127,9 +128,11 @@ public class UpdateCurrencyRate extends Action {
                         //Double rate = new Double(Double.parseDouble(crForm.getUpdateCRateAmount()));
                 	 //AMP-2600: not use removeCommas because we can use comma as decimal separator
                     	Double amountRate=FormatHelper.parseDouble(crForm.getUpdateCRateAmount());
+                    	//Double rate = new Double(Double.parseDouble(amountRate));
                     	Double rate= 0d;
                     	if (amountRate!=null){
-                    	    rate= new Double(1/amountRate);
+                    	    //rate= new Double(1/amountRate);
+                    	    rate= new Double(amountRate);
                     	}
                 	  
                         cRate.setExchangeRate(rate);

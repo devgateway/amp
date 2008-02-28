@@ -233,7 +233,18 @@
 												<html:multibox property="selSectors">
 													<bean:write name="searchedSectors" property="sectorId"/>
 												</html:multibox>&nbsp;
-												[<bean:write name="searchedSectors" property="sectorName"/>]
+												
+												<c:if test="${!empty searchedSectors.subsectorLevel1Name && empty searchedSectors.subsectorLevel2Name }">
+											    [${searchedSectors.subsectorLevel1Name}]
+												</c:if>
+												
+												<c:if test="${!empty searchedSectors.subsectorLevel1Name && !empty searchedSectors.subsectorLevel2Name}">
+											    [${searchedSectors.subsectorLevel2Name}]
+												</c:if>
+												
+												<c:if test="${empty searchedSectors.subsectorLevel1Name && empty searchedSectors.subsectorLevel2Name}">
+												[${searchedSectors.sectorName}]
+												</c:if>
 											</td>
 										</tr>
 									</logic:iterate>

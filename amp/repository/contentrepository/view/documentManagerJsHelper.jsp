@@ -250,7 +250,6 @@ function getCallbackForDelete (row, table) {
 						YAHOO.amp.datatables[i].deleteRow(row);
 				}
 			}
-					
 
 		},
 		failure: function(o) {
@@ -306,6 +305,43 @@ function WindowControllerObject(bodyContainerEl) {
 	
 	this.lastPopulateObject		= null;
 	
+	this.showOnlyLinks			= false;
+	this.showOnlyDocs			= false;
+	
+	this.clickedShowOnlyLinks	= function (sType, aArgs, obj) {
+									//alert(obj);
+									if ( this.showOnlyLinks ) {
+										this.showOnlyLinks	= false;
+									}
+									else {
+										this.showOnlyLinks	= true;
+										this.showOnlyDocs	= false;
+									}
+									//alert(this.showOnlyLinks);
+									obj.mItemDoc.cfg.setProperty("checked", this.showOnlyDocs);
+									obj.mItemLink.cfg.setProperty("checked", this.showOnlyLinks);
+									if ( this.lastPopulateObject != null )
+										this.populateCallback(null, null, this.lastPopulateObject);
+									return;
+								}
+	this.clickedShowOnlyDocs	= function (sType, aArgs, obj) {
+									//alert(obj);
+									if ( this.showOnlyDocs ) {
+										this.showOnlyDocs	= false;
+									}
+									else {
+										this.showOnlyLinks	= false;
+										this.showOnlyDocs	= true;
+									}
+									//alert(this.showOnlyDocs);
+									obj.mItemDoc.cfg.setProperty("checked", this.showOnlyDocs);
+									obj.mItemLink.cfg.setProperty("checked", this.showOnlyLinks);
+									if ( this.lastPopulateObject != null )
+										this.populateCallback(null, null, this.lastPopulateObject);
+									return;
+								}
+	
+	
 	this.setTitle				= function (title) {
 									this.titleSpanEl.innerHTML	= title;
 								};
@@ -339,6 +375,10 @@ function WindowControllerObject(bodyContainerEl) {
 				if (obj.docListInSession != null) {
 					parameters	+= "&docListInSession=" + obj.docListInSession;
 				}
+				if ( this.showOnlyLinks ) 
+						parameters	+= "&showOnlyLinks=" + this.showOnlyLinks;
+				if ( this.showOnlyDocs ) 
+						parameters	+= "&showOnlyDocs=" + this.showOnlyDocs;
 				//alert(parameters);
 				this.bodyContainerElement.innerHTML="<div align='center'>Please wait a moment...<br /><img src='/repository/contentrepository/view/images/ajax-loader-darkblue.gif' border='0' /> </div>";
 				YAHOO.util.Connect.asyncRequest('POST', '/contentrepository/documentManager.do', getCallbackForOtherDocuments(this.bodyContainerElement, this),
@@ -583,6 +623,8 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 	
 	var membersMenu	= new YAHOO.widget.Menu("membersMenu" + menuNum);
 	
+	var optionsMenu	= new YAHOO.widget.Menu("optionsMenu" + menuNum);
+	
 	<logic:notEmpty name="tMembers">
 	<logic:iterate name="tMembers" id="member">
 		var scopeObj	= {
@@ -603,7 +645,7 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 	</logic:notEmpty>
 	
 	<logic:notEmpty name="meTeamMember">
-	var scopeObj	= {
+		var scopeObj	= {
 			teamId				: '<bean:write name="meTeamMember" property="teamId" />'
 		};
 		var onclickObj 	= {
@@ -623,6 +665,32 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 		};
 		
 	menu.addItem(  new YAHOO.widget.MenuItem("Public Documents", {onclick: onclickObj} )   );
+	
+	var scopeObj	= {
+			mItemDoc			: null,
+			mItemLink			: null
+		};
+	var onclickObj 	= {
+			fn					: windowController.clickedShowOnlyDocs,
+			obj					: scopeObj,
+			scope				: windowController
+			
+	};
+	var showDocItem			= new YAHOO.widget.MenuItem("Show only documents", {onclick: onclickObj} );
+	scopeObj.mItemDoc		= showDocItem;
+	
+	var onclickObj 	= {
+			fn					: windowController.clickedShowOnlyLinks,
+			obj					: scopeObj,
+			scope				: windowController
+	};
+	var showLinkItem		= new YAHOO.widget.MenuItem("Show only web links", {onclick: onclickObj});
+	scopeObj.mItemLink		= showLinkItem;
+	
+	optionsMenu.addItem( showDocItem );
+	optionsMenu.addItem( showLinkItem );
+	
+	menu.addItem(  new YAHOO.widget.MenuItem("Options", {submenu: optionsMenu})   );
 	
 	menu.render(containerElement);
 	//menu.show();
@@ -664,18 +732,22 @@ function configPanel(panelNum, title, description, optionText, uuid, isAUrl) {
 	myForm.docNotes.value		= '';
 	myForm.uuid.value			= uuid;
 	myForm.fileData.value		= null;
-	myForm.webLink.value		= null;
+	myForm.webLink.value		= '';
 	
 	if (isAUrl == null) 
 		isAUrl	= false;
-	selectResourceType(isAUrl);
 		
 	if (isAUrl) {
 		myForm.webResource[1].checked				= true;
+		myForm.webResource[1].defaultChecked		= true;	
+		
 	}
 	else {
 		myForm.webResource[0].checked				= true;		
+		myForm.webResource[0].defaultChecked		= true;		
 	}
+	
+	selectResourceType();
 	
 	if (uuid != null && uuid.length > 0) {
 		myForm.webResource[1].disabled				= true;
@@ -722,9 +794,10 @@ function configPanel(panelNum, title, description, optionText, uuid, isAUrl) {
 }
 
 function selectResourceType(isAUrl) {
+	var myForm		= document.getElementById('typeId').form;
 	var elFile	= document.getElementById('tr_path');
 	var elUrl	= document.getElementById('tr_url');
-	if (isAUrl) {
+	if (myForm.webResource[1].checked) {
 		elFile.style.display	= "none";
 		elUrl.style.display		= "";
 	}

@@ -44,6 +44,8 @@ public class DocumentManager extends Action {
 	public HttpServletRequest myRequest	= null;
 	DocumentManagerForm myForm			= null;
 	ActionErrors errors					= null;
+	private boolean showOnlyLinks		= false;
+	private boolean showOnlyDocs		= false;
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
@@ -55,6 +57,15 @@ public class DocumentManager extends Action {
 		myRequest	= request;
 		
 		myRequest.setAttribute("ServletContext", this.getServlet().getServletContext() );
+		
+		if ( myRequest.getParameter(CrConstants.REQUEST_GET_SHOW_DOCS) != null )
+			showOnlyDocs 	= true;
+		else
+			showOnlyDocs	= false;
+		if ( myRequest.getParameter(CrConstants.REQUEST_GET_SHOW_LINKS) != null )
+			showOnlyLinks 	= true;
+		else
+			showOnlyLinks	= false;
 		
 		if (  myForm.getAjaxDocumentList() ) {
 			ajaxDocumentList();
@@ -362,6 +373,12 @@ public class DocumentManager extends Action {
 			while ( nodeIterator.hasNext() ) {
 				Node documentNode		= (Node)nodeIterator.next();
 				NodeWrapper nodeWrapper	= new NodeWrapper(documentNode);
+				
+				if ( nodeWrapper.getWebLink()!=null && showOnlyDocs )
+					continue;
+				if ( nodeWrapper.getWebLink()==null && showOnlyLinks )
+					continue;
+					
 /*				Property name			= null;
 				Property title			= null;
 				Property description	= null;

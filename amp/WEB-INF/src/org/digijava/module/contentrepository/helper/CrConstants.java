@@ -28,4 +28,7 @@ public class CrConstants {
 	public static final String TEMPORARY_UUID						= "__TEMPORARY__";
 	
 	public static final String URL_CONTENT_TYPE						= "URL";
+	
+	public static final String REQUEST_GET_SHOW_LINKS				= "showOnlyLinks";
+	public static final String REQUEST_GET_SHOW_DOCS				= "showOnlyDocs";
 }

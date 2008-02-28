@@ -457,11 +457,11 @@
 			<tr>
 				<td> 
 					<digi:trn key="contentrepository:addEdit:typeDocument">Document</digi:trn>
-					<input name="webResource" type="radio" value="false" onchange="selectResourceType(false)" />
+					<input name="webResource" type="radio" value="false" onclick="selectResourceType()" />
 				</td>
 				<td> 
 					<digi:trn key="contentrepository:addEdit:typeUrl">URL</digi:trn>
-					<input name="webResource" type="radio" value="true" onchange="selectResourceType(true)"/>
+					<input name="webResource" type="radio" value="true" onclick="selectResourceType()"/>
 				</td>
 			</tr>
 			<tr>
@@ -491,7 +491,7 @@
 			</tr>
 			<tr style="display: none" id="tr_url">
 			<td><strong><digi:trn key="contentrepository:addEdit:Url">URL:</digi:trn><font color="red">*</font></strong></td>
-			<td><html:text property="webLink" size="32" /></td>
+			<td><html:text property="webLink" size="32"></html:text></td>
 			</tr>
 			<tr>
 				<td align="right">

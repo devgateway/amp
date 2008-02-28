@@ -107,10 +107,15 @@ function addColumn()
 {
 	var items	= document.aimAdvancedReportForm.selectedColumns;
 	var ok		= false;
-	for (i=0; i<items.length; i++) {
-		if ( items[i].checked ) {
-			ok	= true;
-			break;
+	if ( items.checked != null && items.checked ) { // this is if there is only one item checked
+		ok 		= true;
+	}
+	else {
+		for (i=0; i<items.length; i++) {
+			if ( items[i].checked ) {
+				ok	= true;
+				break;
+			}
 		}
 	}
 	if (ok) {

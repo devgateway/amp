@@ -235,10 +235,17 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	        	try {
 	        	    while (keys.hasNext()) {
 	        		String key = keys.next();
-	        		strFilters.append(("".equalsIgnoreCase(TranslatorWorker.translate(" filterproperty:" + key, locale, siteId)))?key:TranslatorWorker.translate(" filterproperty:" + key, locale, siteId));
+	        		
+	        		    String translatedName=TranslatorWorker.translate("filterproperty:" + key,locale,siteId);
+	        		    translatedName=("".equalsIgnoreCase(translatedName))?key:translatedName;
+				    
+				    String translatedValue=TranslatorWorker.translate("filterproperty:" + props.get(key).toString(),locale,siteId);
+				    translatedValue=("".equalsIgnoreCase(translatedValue))?props.get(key).toString():translatedValue;
+				
+	        		strFilters.append(translatedName);
 	        		strFilters.append(":");
-	        		strFilters.append(("".equalsIgnoreCase(TranslatorWorker.translate(" filterproperty:" + props.get(key), locale, siteId)))?props.get(key):TranslatorWorker.translate(" filterproperty:" + props.get(key), locale, siteId));
-	        	        strFilters.append(", ");
+	        		strFilters.append(translatedValue);
+	        	        strFilters.append(",");
 	        	    }
 	        	} catch (WorkerException e) {
 	        	    logger.error("Error translating", e);
@@ -246,7 +253,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			
 	        	strFilters.delete(strFilters.length()-2,strFilters.length());
 			
-			pdfc = new PdfPCell(new Paragraph(translatedCurrentFilter + strFilters.toString(),currencyFont));
+			pdfc = new PdfPCell(new Paragraph(translatedCurrentFilter +" "+ strFilters.toString(),currencyFont));
 			pdfc.setPaddingBottom(2);
 			pdfc.setPaddingTop(2);
 			pdfc.setPaddingLeft(20);
@@ -288,13 +295,15 @@ public class PDFExportAction extends Action implements PdfPageEvent{
     		text.append( TranslatorWorker.translate("rep:print:lastupdate", locale, siteId));
     		text.append(r.getFormatedUpdatedDate());
     		text.append(" ");
-    		text.append(TranslatorWorker.translate("rep:print:user", locale, siteId));
-    		text.append(r.getUser());
-    		
-    	    } else {
-    		text.append(TranslatorWorker.translate("rep:print:user", locale, siteId));
-    		text.append(r.getUser());
-    	    }
+    	    } 
+    	    if(r.getUser()!=null){
+    		String translatedUser=TranslatorWorker.translate("rep:print:user", locale, siteId);
+    		if ("".equalsIgnoreCase(translatedUser)){
+    		    	translatedUser="User:";
+    		   }
+    	    	text.append(translatedUser);
+    	    	text.append(r.getUser());
+    		}    	    
     	
     	    
     	    //text.append( "Page " + writer.getPageNumber());
@@ -315,7 +324,8 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    cb.setFontAndSize(font, 10);
 	    textBase = document.bottom() - 30;
 	    StringBuffer pageText=new StringBuffer();
-	    pageText.append("Page " + writer.getPageNumber());
+	   
+	    pageText.append(TranslatorWorker.translate("rep:pop:page", locale, siteId) + writer.getPageNumber());
 	    
 	    adjust = font.getWidthPoint("0",  10);
 	    textSize = font.getWidthPoint(pageText.toString(),  10);

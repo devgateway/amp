@@ -57,8 +57,8 @@ public class SectorUtil {
 					+ " sector , "
 					+ AmpSectorScheme.class.getName()
 					+ " sscheme"
-					+ " where sector.name like '%"
-					+ keyword
+					+ " where lower(sector.name) like '%"
+					+ keyword.toLowerCase()
 					+ "%' and " + "sector.ampSecSchemeId = sscheme.ampSecSchemeId";
 
 				Query qry = session.createQuery(qryStr);
@@ -72,8 +72,31 @@ public class SectorUtil {
 				while (itr.hasNext()) {
 					AmpSector as=(AmpSector) itr.next();
 					sectr = new ActivitySector();
-					sectr.setSectorId(as.getAmpSectorId());
-					sectr.setSectorName(as.getName());
+			   		sectr.setSectorScheme(as.getAmpSecSchemeId().getSecSchemeName());
+					if(as.getParentSectorId() != null){
+						
+						sectr.setSectorName(as.getParentSectorId().getName());
+						sectr.setSectorId(as.getParentSectorId().getAmpSectorId());
+						sectr.setSubsectorLevel1Id(as.getAmpSectorId());
+						sectr.setSubsectorLevel1Name(as.getName());
+						
+						if(as.getParentSectorId().getParentSectorId() != null){
+						
+							sectr.setSectorName(as.getParentSectorId().getParentSectorId().getName());
+							sectr.setSectorId(as.getParentSectorId().getAmpSectorId());
+							sectr.setSubsectorLevel1Id(as.getParentSectorId().getAmpSectorId());
+							sectr.setSubsectorLevel1Name(as.getParentSectorId().getName());
+							sectr.setSubsectorLevel2Id(as.getAmpSectorId());
+							sectr.setSubsectorLevel2Name(as.getName());
+							
+						}
+					}else{
+						
+						sectr.setSectorName(as.getName());
+				   		sectr.setSectorId(as.getAmpSectorId());
+						
+						
+					}
 					col.add(sectr);
 				}
 

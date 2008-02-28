@@ -32,6 +32,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.request.Site;
@@ -99,6 +100,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -968,10 +970,10 @@ public class EditActivity
         	  eaForm.setProgramDescription(activity
                                        .getProgramDescription().trim());
 
-          double totComm = 0;
-          double totDisb = 0;
-          double totPlanDisb = 0;
-          double totExp = 0;
+          DecimalWraper totComm = new DecimalWraper();
+          DecimalWraper totDisb = new DecimalWraper();
+          DecimalWraper totPlanDisb =new DecimalWraper();
+          DecimalWraper totExp = new DecimalWraper();
 
 
 
@@ -1071,7 +1073,7 @@ public class EditActivity
                                               .intValue();
                                           fundingDetail.setAdjustmentType(adjType);
                                           
-                                          Date dt = fundDet.getTransactionDate();
+                                          java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
                                           double frmExRt = CurrencyUtil.
                                               getExchangeRate(
                                                   fundDet.getAmpCurrencyId()
@@ -1083,36 +1085,44 @@ public class EditActivity
                                                     tm.getAppSettings()
                                                     .getCurrencyId()).getCurrencyCode();
 
-
-                                          double toExRt = CurrencyUtil.
-                                              getExchangeRate(toCurrCode, 1, dt);
-                                          double amt = CurrencyWorker.convert1(
+                                          
+                                          double toExRt = Util.getExchange(toCurrCode,dt);
+                                          DecimalWraper amt = CurrencyWorker.convertWrapper(
                                               fundDet.getTransactionAmount()
                                               .doubleValue(), frmExRt,
-                                              toExRt);
+                                              toExRt,dt);
                                           fundingDetail.setContract(fundDet.getContract());
                                           eaForm.setCurrCode(toCurrCode);
                                           
                                           if (adjType == Constants.PLANNED) {
                                             fundingDetail.setAdjustmentTypeName("Planned");
                                             if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-                                            	totPlanDisb += amt;
+                                            	if (totPlanDisb.getValue()!=null){
+                                            		totPlanDisb.getValue().add(amt.getValue());
+                                            	}
+                                            	else{
+                                            		totPlanDisb.setValue(amt.getValue());
+                                            	}
                                             }                                            
                                           }else if (adjType == Constants.ACTUAL) {
-                                            fundingDetail
-                                                .setAdjustmentTypeName("Actual");
-                                            
-                                            if (fundDet.getTransactionType().intValue() ==
-                                                Constants.COMMITMENT) {
-                                              totComm += amt;
-                                            }else if (fundDet.getTransactionType()
-                                                     .intValue() ==
-                                                     Constants.DISBURSEMENT) {
-                                              totDisb += amt;
-                                            }else if (fundDet.getTransactionType()
-                                                     .intValue() ==
-                                                     Constants.EXPENDITURE) {
-                                              totExp += amt;
+                                        	  fundingDetail.setAdjustmentTypeName("Actual");
+                                        	  if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
+                                        	  	if(totComm.getValue()!=null){
+                                        	  		totComm.getValue().add(amt.getValue());
+                                        	  	}
+                                        	  	else{
+                                        	  		totComm.setValue(amt.getValue());
+                                        	  	}
+                                          }else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
+                                        	  if(totDisb.getValue()!=null){
+                                        		  totDisb.getValue().add(amt.getValue());
+                                        	  }
+                                        	  else{
+                                        		  totDisb.setValue(amt.getValue());
+                                        	  }
+                                          }else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
+                                        	  if(totExp.getValue()!=null)
+                                              totExp.getValue().add(amt.getValue());
                                             }
                                           }
                                           if (fundDet.getTransactionType().intValue() ==
@@ -1171,12 +1181,19 @@ public class EditActivity
           }
           //logger.info("size = " + fundingOrgs);
           eaForm.setFundingOrganizations(fundingOrgs);
-          eaForm.setTotalCommitments(totComm);
-          eaForm.setTotalDisbursements(totDisb);
-          eaForm.setTotalPlannedDisbursements(totPlanDisb);
-          eaForm.setTotalExpenditures(totExp);
-
-          ArrayList regFunds = new ArrayList();
+          if(debug){
+        	eaForm.setTotalCommitments(totComm.getCalculations());
+            eaForm.setTotalDisbursements(totDisb.getCalculations());
+            eaForm.setTotalPlannedDisbursements(totPlanDisb.getCalculations());
+            eaForm.setTotalExpenditures(totExp.getCalculations());  
+          }
+          else{
+          eaForm.setTotalCommitments(totComm.toString());
+          eaForm.setTotalDisbursements(totDisb.toString());
+          eaForm.setTotalPlannedDisbursements(totPlanDisb.toString());
+          eaForm.setTotalExpenditures(totExp.toString());
+          }
+          ArrayList regFunds = new ArrayList(); 
           Iterator rItr = activity.getRegionalFundings().iterator();
 
           eaForm.setRegionTotalDisb(0);

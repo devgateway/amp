@@ -35,6 +35,9 @@ public class DecimalWraper  {
 	
 	@Override
 	public String toString() {
-		return FormatHelper.formatNumber(this.value.doubleValue());
+		if (this.value!=null){
+			return FormatHelper.formatNumber(this.value.doubleValue());
+		}
+		return "";
 	}
 }

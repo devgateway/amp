@@ -117,9 +117,8 @@ public class QuarterlyInfoWorker {
 		Iterator iter2 = null;
 		String strActualAmt;
 		
-		double fromCurrency = CurrencyUtil.getExchangeRate(fp.getAmpFundingId(), fp
-				.getPerspective());
-		double targetCurrency = 1.0;
+		double fromCurrency;
+		double targetCurrency;
 		String selCurrency=fp.getCurrencyCode();
 		
 		//logger.debug("In get Quarterly frm curr = " + fromCurrency);
@@ -138,8 +137,8 @@ public class QuarterlyInfoWorker {
 				Double fixedRate=(row[3]!=null && ((Double)row[3]).doubleValue()!=1)? (Double)row[3]:null;
 		//		fromCurrency = CurrencyUtil.getExchangeRate(curr.getCurrencyCode());
 				//end
-				fromCurrency = CurrencyUtil.getExchangeRate(curr.getCurrencyCode(),Constants.PLANNED,transactionDate);
-				targetCurrency = CurrencyUtil.getExchangeRate(fp.getCurrencyCode(),Constants.PLANNED,transactionDate);
+				fromCurrency = Util.getExchange(curr.getCurrencyCode(),new java.sql.Date(transactionDate.getTime()));
+				targetCurrency = Util.getExchange(fp.getCurrencyCode(),new java.sql.Date(transactionDate.getTime()));
 				QuarterlyInfo quarterlyInfo = new QuarterlyInfo();
 				double tmpAmt = 0.0;
 				if (transactionAmount != null)
@@ -173,7 +172,7 @@ public class QuarterlyInfoWorker {
 		
 		if (arrayList.size() > 0 || c1.size() > 0) {
 			//here it is !!!!!
-			arrayList1 = merge(arrayList, c1, fromCurrency, selCurrency,fp.getFiscalCalId());
+			arrayList1 = merge(arrayList, c1,selCurrency,fp.getFiscalCalId());
 		//AMP-2212
 			AmpFiscalCalendar fiscalCal=FiscalCalendarUtil.getAmpFiscalCalendar(fp.getFiscalCalId());
 			if (fiscalCal.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) 
@@ -201,11 +200,11 @@ public class QuarterlyInfoWorker {
 
 
 	public static ArrayList merge(ArrayList arrayList, Collection c1,
-			double fromCurrency, String selCurrency,Long fiscalId) {
+			 String selCurrency,Long fiscalId) {
 
 	//	if (logger.isDebugEnabled())
 		//	logger.debug("MERGE()<");
-
+		double fromCurrency;
 		Iterator iter1 = c1.iterator();
 		boolean b = false;
 		while (iter1.hasNext()) {
@@ -359,6 +358,7 @@ public class QuarterlyInfoWorker {
 					tmpPlannedAmt = qi.getPlannedAmount();
 					tmpActualWraped = qi.getWrapedActual();
 					tmpPlanedWraped = qi.getWrapedPlanned();
+					tmpDate = qi.getDateDisbursed();
 				}
 			}
 		//	if (logger.isDebugEnabled())
@@ -523,8 +523,8 @@ public class QuarterlyInfoWorker {
 		// + ampFundingId + ", perspective : " + perspective);
 		TotalsQuarterly tq = new TotalsQuarterly();
 		Integer adjType = new Integer(Constants.ACTUAL);
-
 		// Total actual commitment
+		
 		double totCommitment = DbUtil.getTotalDonorFund(ampFundingId,
 				new Integer(Constants.COMMITMENT), adjType, perspective);
 		double fromCurrency = CurrencyUtil.getExchangeRate(ampFundingId,

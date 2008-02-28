@@ -2264,30 +2264,35 @@ function collapseAll() {
 <module:display name="Organizations" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-											<digi:trn key="aim:relatedOrganizations">
-										    Related Organizations</digi:trn>										</td>
+											<img id="orgz_plus"  onclick="toggleGroup('orgz')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+											<img id="orgz_minus" onclick="toggleGroup('orgz')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+											<digi:trn key="aim:relatedOrganizations">Related Organizations</digi:trn>
+										</td>
 
 										<td bgcolor="#ffffff">
-                                           <feature:display name="Executing Agency" module="Organizations">
-                                            <logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
-												<img id="executing_agency_plus"  onclick="toggleGroup('executing_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-                                            	<img id="executing_agency_minus" onclick="toggleGroup('executing_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display : none"/>											</logic:notEmpty>
-											<b><digi:trn key="aim:executingAgency">Executing Agency</digi:trn></b><br/>
-											<logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
-												<div id="executing_agency_dots">...</div>
-												<div id="act_executing_agency" style="display: none;">
-												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
-													<tr><td>
-													<logic:iterate name="aimEditActivityForm" property="executingAgencies"
-													id="execAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-															<ul><li> <bean:write name="execAgencies" property="name" /></li></ul>
-													</logic:iterate>
-													</td></tr>
-												</table>
-												</div>
-											</logic:notEmpty>
-											<br/>
-											</feature:display>
+											<div id="orgz_dots">...</div>
+											<div id="act_orgz" style="display: none;">
+	                                           <feature:display name="Executing Agency" module="Organizations">
+	                                            <logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
+													<img id="executing_agency_plus"  onclick="toggleGroup('executing_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+	                                            	<img id="executing_agency_minus" onclick="toggleGroup('executing_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display : none"/>											</logic:notEmpty>
+												<b><digi:trn key="aim:executingAgency">Executing Agency</digi:trn></b><br/>
+												<logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
+													<div id="executing_agency_dots">...</div>
+													<div id="act_executing_agency" style="display: none;">
+													<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+														<tr><td>
+														<logic:iterate name="aimEditActivityForm" property="executingAgencies"
+														id="execAgencies" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+																<ul><li> <bean:write name="execAgencies" property="name" /></li></ul>
+														</logic:iterate>
+														</td></tr>
+													</table>
+													</div>
+												</logic:notEmpty>
+												<br/>
+												</feature:display>
+											
 
 											<feature:display name="Implementing Agency" module="Organizations">
 											<logic:notEmpty name="aimEditActivityForm" property="impAgencies">
@@ -2401,7 +2406,9 @@ function collapseAll() {
 												</div>
 											</logic:notEmpty><br/>
 											</field:display>
-                                  	</feature:display>                                           </td>
+                                  	</feature:display> 
+                                  	</div>
+                                  	                                          </td>
 									</tr>
 									</module:display>
 									

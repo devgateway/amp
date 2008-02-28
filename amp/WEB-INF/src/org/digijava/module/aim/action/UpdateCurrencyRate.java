@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.form.CurrencyRateForm;
 import org.digijava.module.aim.helper.CurrencyRates;
@@ -99,8 +100,8 @@ public class UpdateCurrencyRate extends Action {
                           crForm.getUpdateCRateDate() != null) {
                         Date date = DateConversion.getDate(crForm.
                                                            getUpdateCRateDate());
-                        Double rate=CurrencyUtil.getExchangeRate(
-                                crForm.getUpdateCRateCode(), date);
+                        Double rate=Util.getExchange(crForm.getUpdateCRateCode(),
+                        		new java.sql.Date(date.getTime()));
                        
                         String amount="0";
                         if((rate!=null)&&(rate!=0)){

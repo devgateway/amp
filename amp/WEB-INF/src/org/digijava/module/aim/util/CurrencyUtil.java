@@ -22,6 +22,7 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
@@ -193,7 +194,13 @@ public class CurrencyUtil {
 		logger.info("returning a collection of size " + col.size());
 		return col;
 	}
-
+	/**
+	 * AMP-2805
+	 * @deprecated use Util.getExchange(currency, currencyDate)
+	 * @param currCode
+	 * @param date
+	 * @return
+	 */
 	public static Double getExchangeRate(String currCode,Date date) {
 		Double exchRate = null;
 		Session session = null;

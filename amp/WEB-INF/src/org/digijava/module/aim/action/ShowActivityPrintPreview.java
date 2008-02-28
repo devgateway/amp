@@ -609,9 +609,9 @@ public class ShowActivityPrintPreview
                     }
                     //logger.info("size = " + fundingOrgs);
                     eaForm.setFundingOrganizations(fundingOrgs);
-                    eaForm.setTotalCommitments(totComm);
-                    eaForm.setTotalDisbursements(totDisb);
-                    eaForm.setTotalExpenditures(totExp);
+                    eaForm.setTotalCommitments(FormatHelper.formatNumber(totComm));
+                    eaForm.setTotalDisbursements(FormatHelper.formatNumber(totDisb));
+                    eaForm.setTotalExpenditures(FormatHelper.formatNumber(totExp));
                 }
                 
 

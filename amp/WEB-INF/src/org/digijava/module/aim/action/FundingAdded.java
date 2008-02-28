@@ -77,9 +77,9 @@ public class FundingAdded extends Action {
 			}
 		}
 
-		double totComm = eaForm.getTotalCommitments();
-		double totDisb = eaForm.getTotalDisbursements();
-		double totExp = eaForm.getTotalExpenditures();
+		double totComm = FormatHelper.parseDouble(eaForm.getTotalCommitments());
+		double totDisb =FormatHelper.parseDouble(eaForm.getTotalDisbursements());
+		double totExp = FormatHelper.parseDouble(eaForm.getTotalExpenditures());
 
 		Funding newFund = new Funding();
 
@@ -260,9 +260,9 @@ public class FundingAdded extends Action {
 			fundingOrgs = new ArrayList(eaForm.getFundingOrganizations());
 			fundingOrgs.set(fundOrgOffset, fundOrg);
 		}
-		eaForm.setTotalCommitments(totComm);
-		eaForm.setTotalDisbursements(totDisb);
-		eaForm.setTotalExpenditures(totExp);
+		eaForm.setTotalCommitments(FormatHelper.formatNumber(totComm));
+		eaForm.setTotalDisbursements(FormatHelper.formatNumber(totDisb));
+		eaForm.setTotalExpenditures(FormatHelper.formatNumber(totExp));
 		eaForm.setStep("3");
 
 		return mapping.findForward("forward");

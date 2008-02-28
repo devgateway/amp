@@ -96,7 +96,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String currentValComments;
 	private String programDescription;
 	private boolean sectorReset;
-
+	private String totalCommitments;
+	private String totalDisbursements;
+	private String totalExpenditures;
+	private String totalPlannedDisbursements;
+	
 	private List costs;
         //to check if the current memeber is Team lead
         private boolean teamLead;
@@ -439,10 +443,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	private String editKey;
 
-	private double totalCommitments;
-	private double totalDisbursements;
-	private double totalExpenditures;
-	private double totalPlannedDisbursements;	
+	
 	private String currCode;
 
 	private boolean donorFlag;
@@ -584,9 +585,9 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		docWebResource = "http://";
 		editKey = "";
 		fundingRegionId = new Long(-1);
-		totalCommitments = 0;
-		totalDisbursements = 0;
-		totalExpenditures = 0;
+		totalCommitments = "";
+		totalDisbursements = "";
+		totalExpenditures = "";
 		donorFlag = false;
 		keyword=null;
 		//selectedOrganizationsList=null;
@@ -728,9 +729,9 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			editKey = "";
 			regionalFundings = null;
 			perspectives = null;
-			totalCommitments = 0;
-			totalDisbursements = 0;
-			totalExpenditures = 0;
+			totalCommitments = "";
+			totalDisbursements = "";
+			totalExpenditures = "";
 			lineMinRank = null;
 			planMinRank = null;
 			costs=null;
@@ -3161,47 +3162,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	}
 
 	/**
-	 * @return Returns the totalCommitments.
-	 */
-	public double getTotalCommitments() {
-		return Math.round(totalCommitments * 100) / ((double)100);
-	}
-
-	/**
-	 * @param totalCommitments The totalCommitments to set.
-	 */
-	public void setTotalCommitments(double totalCommitments) {
-		this.totalCommitments = totalCommitments;
-	}
-
-	/**
-	 * @return Returns the totalDisbursements.
-	 */
-	public double getTotalDisbursements() {
-		return Math.round(totalDisbursements * 100) / ((double)100);
-	}
-
-	/**
-	 * @param totalDisbursements The totalDisbursements to set.
-	 */
-	public void setTotalDisbursements(double totalDisbursements) {
-		this.totalDisbursements = totalDisbursements;
-	}
-
-	/**
-	 * @return Returns the totalExpenditures.
-	 */
-	public double getTotalExpenditures() {
-		return Math.round(totalExpenditures* 100) / ((double)100);
-	}
-
-	/**
-	 * @param totalExpenditures The totalExpenditures to set.
-	 */
-	public void setTotalExpenditures(double totalExpenditures) {
-		this.totalExpenditures = totalExpenditures;
-	}
-	/**
 	 * @return Returns the approvalStatus.
 	 */
 	public String getApprovalStatus() {
@@ -4809,22 +4769,44 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	    this.govAgreementNumber = govAgreementNumber;
 	}
 
-	public void setTotalPlannedDisbursements(double totPlannedDisb) {
-		this.totalPlannedDisbursements = totPlannedDisb;
-		
-	}
-	
-	public double getTotalPlannedDisbursements() {
-		return this.totalPlannedDisbursements;
-		
-	}
-
 	public void setCreditTypeId(Long creditType) {
 		this.creditTypeId = creditType;
 	}
 
 	public Long getCreditTypeId() {
 		return creditTypeId;
+	}
+
+	public String getTotalCommitments() {
+		return totalCommitments;
+	}
+
+	public void setTotalCommitments(String totalCommitments) {
+		this.totalCommitments = totalCommitments;
+	}
+
+	public String getTotalDisbursements() {
+		return totalDisbursements;
+	}
+
+	public void setTotalDisbursements(String totalDisbursements) {
+		this.totalDisbursements = totalDisbursements;
+	}
+
+	public String getTotalExpenditures() {
+		return totalExpenditures;
+	}
+
+	public void setTotalExpenditures(String totalExpenditures) {
+		this.totalExpenditures = totalExpenditures;
+	}
+
+	public String getTotalPlannedDisbursements() {
+		return totalPlannedDisbursements;
+	}
+
+	public void setTotalPlannedDisbursements(String totalPlannedDisbursements) {
+		this.totalPlannedDisbursements = totalPlannedDisbursements;
 	}
 
 

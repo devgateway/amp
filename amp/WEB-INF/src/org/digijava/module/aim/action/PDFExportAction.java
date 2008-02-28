@@ -324,8 +324,11 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	    cb.setFontAndSize(font, 10);
 	    textBase = document.bottom() - 30;
 	    StringBuffer pageText=new StringBuffer();
-	   
-	    pageText.append(TranslatorWorker.translate("rep:pop:page", locale, siteId) + writer.getPageNumber());
+	    String translatedPage=TranslatorWorker.translate("rep:pop:page", locale, siteId);
+	   if ("".equalsIgnoreCase(translatedPage)){
+	       translatedPage="Page:";
+	   }
+	    pageText.append(translatedPage + writer.getPageNumber());
 	    
 	    adjust = font.getWidthPoint("0",  10);
 	    textSize = font.getWidthPoint(pageText.toString(),  10);

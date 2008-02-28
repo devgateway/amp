@@ -26,7 +26,7 @@
 
 	function openSelOrgPopup() {
       openNewWindow(600, 450);
-      <digi:context name="url" property="context/module/moduleinstance/selectOrganisationForAhsurvey.do?edit=true&svAction=searsh" />
+      <digi:context name="url" property="context/module/moduleinstance/selectOrganisationForAhsurvey.do?edit=true&orgSelReset=true&edit=true&svAction=searsh" />
       openURLinWindow("<%=url%>",600, 450)
     }
 

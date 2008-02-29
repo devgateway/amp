@@ -12,6 +12,7 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
@@ -434,8 +435,8 @@ public class DesktopUtil {
 					while (cItr.hasNext()) {
 						Commitments comm = (Commitments) cItr.next();
 						if (comm.getPerspectiveId().equals(persId)) {
-							double toCurrency = CurrencyUtil.getExchangeRate(currCode,0,comm.getTransactionDate());
-							double fromCurrency = CurrencyUtil.getExchangeRate(comm.getCurrencyCode(),0,comm.getTransactionDate());
+							double toCurrency = Util.getExchange(currCode, new java.sql.Date( comm.getTransactionDate().getTime()));
+							double fromCurrency = Util.getExchange(comm.getCurrencyCode(),new java.sql.Date(comm.getTransactionDate().getTime()));
 							totAmount += CurrencyWorker.convert1(comm.getAmount(),fromCurrency, toCurrency);
 						}
 					}

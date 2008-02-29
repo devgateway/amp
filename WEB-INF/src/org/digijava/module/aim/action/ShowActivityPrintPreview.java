@@ -12,6 +12,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -511,34 +512,18 @@ public class ShowActivityPrintPreview
                                     fundingDetail
                                         .setAdjustmentTypeName("Planned");
                                 } else if(adjType == Constants.ACTUAL) {
-                                    fundingDetail
-                                        .setAdjustmentTypeName("Actual");
-                                    Date dt = fundDet.getTransactionDate();
-                                    double frmExRt = CurrencyUtil.
-                                        getExchangeRate(
-                                            fundDet.getAmpCurrencyId()
-                                            .getCurrencyCode(), 1, dt);
-                                    String toCurrCode = CurrencyUtil.
-                                        getAmpcurrency(
-                                            tm.getAppSettings()
-                                            .getCurrencyId()).getCurrencyCode();
-                                    double toExRt = CurrencyUtil.
-                                        getExchangeRate(toCurrCode, 1, dt);
-                                    double amt = CurrencyWorker.convert1(
-                                        fundDet.getTransactionAmount()
-                                        .doubleValue(), frmExRt,
-                                        toExRt);
+                                    fundingDetail.setAdjustmentTypeName("Actual");
+                                    java.sql.Date dt =  new java.sql.Date(fundDet.getTransactionDate().getTime());
+                                    double frmExRt = Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(), dt);
+                                    String toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
+                                    double toExRt = Util.getExchange(toCurrCode, dt);
+                                    double amt = CurrencyWorker.convert1(fundDet.getTransactionAmount().doubleValue(), frmExRt,toExRt);
                                     eaForm.setCurrCode(toCurrCode);
-                                    if(fundDet.getTransactionType().intValue() ==
-                                       Constants.COMMITMENT) {
-                                        totComm += amt;
-                                    } else if(fundDet.getTransactionType()
-                                              .intValue() ==
-                                              Constants.DISBURSEMENT) {
+                                    if(fundDet.getTransactionType().intValue() ==Constants.COMMITMENT) {
+                                    		totComm += amt;
+                                    } else if(fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
                                         totDisb += amt;
-                                    } else if(fundDet.getTransactionType()
-                                              .intValue() ==
-                                              Constants.EXPENDITURE) {
+                                    } else if(fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
                                         totExp += amt;
                                     }
                                 }

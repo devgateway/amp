@@ -16,6 +16,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPerspective;
@@ -131,11 +132,11 @@ public class FundingAdded extends Action {
 					fundDet.setAdjustmentTypeName("Planned");
 				else if (fundDet.getAdjustmentType() == Constants.ACTUAL) {
 					fundDet.setAdjustmentTypeName("Actual");
-					Date dt = DateConversion.getDate(fundDet.getTransactionDate());
-					double frmExRt = CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,dt);
+					java.sql.Date dt = new java.sql.Date(DateConversion.getDate(fundDet.getTransactionDate()).getTime());
+					double frmExRt = Util.getExchange(fundDet.getCurrencyCode(),dt);
 					String toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 					eaForm.setCurrCode(toCurrCode);
-					double toExRt = CurrencyUtil.getExchangeRate(toCurrCode,1,dt);
+					double toExRt = Util.getExchange(toCurrCode,dt);
 					double amt = CurrencyWorker.convert1(FormatHelper.parseDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
 					if (fundDet.getTransactionType() == Constants.COMMITMENT)
 						totComm += amt;
@@ -160,11 +161,11 @@ public class FundingAdded extends Action {
 						fundDet.setAdjustmentTypeName("Planned");
 					else if (fundDet.getAdjustmentType() == Constants.ACTUAL) {
 						fundDet.setAdjustmentTypeName("Actual");
-						Date dt = DateConversion.getDate(fundDet.getTransactionDate());
-						double frmExRt = CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,dt);
+						java.sql.Date dt = new java.sql.Date(DateConversion.getDate(fundDet.getTransactionDate()).getTime());
+						double frmExRt = Util.getExchange(fundDet.getCurrencyCode(),dt);
 						String toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 						eaForm.setCurrCode(toCurrCode);
-						double toExRt = CurrencyUtil.getExchangeRate(toCurrCode,1,dt);
+						double toExRt = Util.getExchange(toCurrCode,dt);
 						double amt = CurrencyWorker.convert1(DecimalToText.getDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
 						if (fundDet.getTransactionType() == Constants.COMMITMENT)
 							totComm -= amt;

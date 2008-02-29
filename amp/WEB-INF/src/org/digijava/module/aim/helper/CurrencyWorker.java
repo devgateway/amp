@@ -125,7 +125,7 @@ public class CurrencyWorker {
 			result.setValue(tmp.multiply(toRate));
 			result.setCalculations(result.getValue() + "= ((" + 1 + "/"
 					+ fromExchangeRate + ") * " + amount + " * " + toExchangeRate + ") " + date.toString());
-		} else {
+			} else {
 			result.setValue(amount);
 			result.setCalculations("No need it's due rate");
 

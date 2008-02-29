@@ -881,7 +881,64 @@ public class DbUtil {
                    + (ampFundings != null ? ampFundings.size() : 0));
         return ampFundings;
     }
-
+    
+    /**
+     *  Return total amount using the exchange for each funding according with funding date
+     * @param ampFundingId
+     * @param transactionType
+     * @param adjustmentType
+     * @param perspective
+     * @param currcode
+     * @return
+     */
+    public static DecimalWraper getTotalDonorFunding(Long ampFundingId,
+           Integer transactionType, Integer adjustmentType, String perspective,String currcode) {
+    	   Session session = null;
+           Query q = null;
+           List list = null;
+           Iterator iter = null;
+           double fromrate;
+           double torate;
+           DecimalWraper total = new DecimalWraper();
+           try {
+               session = PersistenceManager.getRequestDBSession();
+               String queryString = new String();
+               queryString = "select from "
+                   + AmpFundingDetail.class.getName()
+                   + " f where (f.ampFundingId=:ampFundingId) "
+                   + " and (f.orgRoleCode=:perspective) "
+                   + " and (f.transactionType=:transactionType) "
+                   + " and (f.adjustmentType=:adjustmentType)";
+               q = session.createQuery(queryString);
+               q.setParameter("ampFundingId", ampFundingId, Hibernate.LONG);
+               q.setParameter("perspective", perspective, Hibernate.STRING);
+               q.setParameter("transactionType", transactionType,
+                              Hibernate.INTEGER);
+               q.setParameter("adjustmentType", adjustmentType, Hibernate.INTEGER);
+               list = q.list();
+               if (list.size() != 0) {
+                   iter = list.iterator();
+                   while (iter.hasNext()) {
+                       AmpFundingDetail fundingdetails = (AmpFundingDetail)iter.next();
+                       fromrate = Util.getExchange(fundingdetails.getAmpCurrencyId().getCurrencyCode(),new java.sql.Date(fundingdetails.getTransactionDate().getTime()));
+                       torate = Util.getExchange(currcode,new java.sql.Date(fundingdetails.getTransactionDate().getTime()));
+                       if (total.getValue() == null){
+                    	   total = CurrencyWorker.convertWrapper(fundingdetails.getTransactionAmount(),fromrate, torate,new java.sql.Date(fundingdetails.getTransactionDate().getTime()));
+                       }
+                       else
+                       {
+                    	  DecimalWraper tmp = CurrencyWorker.convertWrapper(fundingdetails.getTransactionAmount(),fromrate, torate,new java.sql.Date(fundingdetails.getTransactionDate().getTime()));
+                    	  total.setValue(tmp.getValue().add(total.getValue()));
+                    	  total.setCalculations(tmp.getCalculations()+ " + " + total.getCalculations());
+                       }
+                      }
+               }
+           } catch (Exception ex) {
+               logger.error("Unable to get sum of funds from database", ex);
+           }
+				return total;
+    } 
+    
     public static double getTotalDonorFund(Long ampFundingId,
                                            Integer transactionType, Integer adjustmentType, String perspective) {
 
@@ -5476,18 +5533,18 @@ public class DbUtil {
                                                             if ("USD".equalsIgnoreCase(fundtl.getAmpCurrencyId().getCurrencyCode()))
                                                                 fromExchangeRate = 1.0;
                                                             else if (indcFlag == 7 && j == 0)
-                                                                fromExchangeRate = CurrencyUtil.getExchangeRate(fundtl.getAmpCurrencyId().getCurrencyCode(),
-                                                                    Constants.PLANNED, fundtl.getTransactionDate());
+                                                                fromExchangeRate = Util.getExchange(fundtl.getAmpCurrencyId().getCurrencyCode(),
+                                                                    new java.sql.Date (fundtl.getTransactionDate().getTime()));
                                                             else
-                                                                fromExchangeRate = CurrencyUtil.getExchangeRate(fundtl.getAmpCurrencyId().getCurrencyCode(),
-                                                                    Constants.ACTUAL, fundtl.getTransactionDate());
+                                                                fromExchangeRate = Util.getExchange(fundtl.getAmpCurrencyId().getCurrencyCode(),
+                                                                    new java.sql.Date( fundtl.getTransactionDate().getTime()));
                                                             if (null != currency && currency.trim().length() > 1) {
                                                                 if ("USD".equalsIgnoreCase(currency))
                                                                     toExchangeRate = 1.0;
                                                                 else if (indcFlag == 7 && j == 0)
-                                                                    toExchangeRate = CurrencyUtil.getExchangeRate(currency, Constants.PLANNED, fundtl.getTransactionDate());
+                                                                    toExchangeRate = Util.getExchange(currency, new java.sql.Date(fundtl.getTransactionDate().getTime()));
                                                                 else
-                                                                    toExchangeRate = CurrencyUtil.getExchangeRate(currency, Constants.ACTUAL, fundtl.getTransactionDate());
+                                                                    toExchangeRate = Util.getExchange(currency, new java.sql.Date (fundtl.getTransactionDate().getTime()));
                                                             }
                                                             sum += CurrencyWorker.convert1(fundtl.getTransactionAmount().doubleValue(),
                                                                 fromExchangeRate, toExchangeRate);

@@ -525,71 +525,52 @@ public class QuarterlyInfoWorker {
 		Integer adjType = new Integer(Constants.ACTUAL);
 		// Total actual commitment
 		
-		double totCommitment = DbUtil.getTotalDonorFund(ampFundingId,
-				new Integer(Constants.COMMITMENT), adjType, perspective);
-		double fromCurrency = CurrencyUtil.getExchangeRate(ampFundingId,
-				perspective);
-		double targetCurrency = CurrencyUtil.getExchangeRate(currCode);
+		DecimalWraper totCommitment = DbUtil.getTotalDonorFunding(ampFundingId,
+				new Integer(Constants.COMMITMENT), adjType, perspective,currCode);
 		String strTotCommitment = "";
 		if (!isDebug) {
-			strTotCommitment = CurrencyWorker.convertWrapper(totCommitment,
-					fromCurrency, targetCurrency,
-					new java.sql.Date(new Date().getTime())).toString();
-		} else {
-			strTotCommitment = CurrencyWorker.convertWrapper(totCommitment,
-					fromCurrency, targetCurrency,
-					new java.sql.Date(new Date().getTime())).getCalculations();
+			strTotCommitment =totCommitment.toString();
+		} 
+		else {
+			strTotCommitment = totCommitment.getCalculations();
+			tq.setTotalCommitted(strTotCommitment);
 		}
-		tq.setTotalCommitted(strTotCommitment);
-
 		String strTotDisbursement = "";
-		double totDisbursement = DbUtil.getTotalDonorFund(ampFundingId,
-				new Integer(Constants.DISBURSEMENT), adjType, perspective);
+		DecimalWraper totDisbursement = DbUtil.getTotalDonorFunding(ampFundingId,
+				new Integer(Constants.DISBURSEMENT), adjType, perspective,currCode);
 		if (!isDebug) {
-			strTotDisbursement = CurrencyWorker.convertWrapper(totDisbursement,
-					fromCurrency, targetCurrency,
-					new java.sql.Date(new Date().getTime())).toString();
+			strTotDisbursement = totDisbursement.toString();
 		} else {
-			strTotDisbursement = CurrencyWorker.convertWrapper(totDisbursement,
-					fromCurrency, targetCurrency,
-					new java.sql.Date(new Date().getTime())).getCalculations();
+			strTotDisbursement = totDisbursement.getCalculations();
 		}
 		tq.setTotalDisbursed(strTotDisbursement);
-
-		double totExpended = DbUtil.getTotalDonorFund(ampFundingId,
-				new Integer(Constants.EXPENDITURE), adjType, perspective);
+		
+		DecimalWraper totExpended = DbUtil.getTotalDonorFunding(ampFundingId,
+				new Integer(Constants.EXPENDITURE), adjType, perspective,currCode);
 		if (!isDebug) {
-			tq.setTotalExpended(CurrencyWorker.convertWrapper(totExpended,
-					fromCurrency, targetCurrency,
-					new java.sql.Date(new Date().getTime())).toString());
+			tq.setTotalExpended(totExpended.toString());
 		} else {
-			tq.setTotalExpended(CurrencyWorker.convertWrapper(totExpended,
-					fromCurrency, targetCurrency,
-					new java.sql.Date(new Date().getTime())).getCalculations());
+			tq.setTotalExpended(totExpended.getCalculations());
 		}
-
-		double totUnExpended = totDisbursement - totExpended;
+		
+		DecimalWraper totUnExpended = new DecimalWraper(); 
+		totUnExpended.setValue(totDisbursement.getValue().subtract(totExpended.getValue()));
+		totUnExpended.setCalculations(totDisbursement.getCalculations() + " - " + totExpended.getCalculations());
 		String strTotUnexpended = "";
 		if (!isDebug) {
-			strTotUnexpended = CurrencyWorker.convertWrapper(totUnExpended,
-					fromCurrency, targetCurrency,
-					new java.sql.Date(new Date().getTime())).toString();
+			strTotUnexpended = totUnExpended.toString();
 		} else {
-			strTotUnexpended = CurrencyWorker.convertWrapper(totUnExpended,
-					fromCurrency, targetCurrency,
-					new java.sql.Date(new Date().getTime())).getCalculations();
+			strTotUnexpended = totUnExpended.getCalculations();
 		}
 		tq.setTotalUnExpended(strTotUnexpended);
-		double totRemaining = totCommitment - totDisbursement;
+		DecimalWraper totRemaining = new DecimalWraper(); 
+			totRemaining.setValue(totCommitment.getValue().subtract(totDisbursement.getValue()));
+			totRemaining.setCalculations(totCommitment.getCalculations()+ " - " + totDisbursement.getCalculations());
 		String strTotRemaining = "";
 		if (!isDebug) {
-			strTotRemaining = CurrencyWorker.convertWrapper(totRemaining,
-					fromCurrency, targetCurrency,
-					new java.sql.Date(new Date().getTime())).toString();
+			strTotRemaining =  totRemaining.toString();
 		} else {
-			strTotRemaining = CurrencyWorker.convertWrapper(totRemaining,
-					fromCurrency, targetCurrency,
-					new java.sql.Date(new Date().getTime())).getCalculations();
+			strTotRemaining = totRemaining.getCalculations();
 		}
 		tq.setTotalRemaining(strTotRemaining);
 

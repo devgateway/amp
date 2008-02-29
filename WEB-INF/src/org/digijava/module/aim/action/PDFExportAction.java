@@ -64,13 +64,15 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	private AmpARFilter arf=null;
 	private AmpReports r=null;
 	private PdfPTable contenTable;
-	public PDFExportAction(HttpSession session,String locale,Site site,GroupReportData rd,AmpARFilter arf,AmpReports r ) {
+	private HttpServletResponse response;
+	public PDFExportAction(HttpSession session,String locale,Site site,GroupReportData rd,AmpARFilter arf,AmpReports r ,HttpServletResponse response) {
 	    this.session=session;
 	    this.locale=locale;
 	    this.site=site;
 	    this.arf=arf;
 	    this.rd=rd;
 	    this.r=r;
+	    this.response=response;
         }
 	public PDFExportAction() {
 	 super();
@@ -127,7 +129,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		
 		PdfWriter writer=PdfWriter.getInstance(document,response.getOutputStream());
 		
-		writer.setPageEvent(new PDFExportAction(session,locale,site,rd,arf,r));
+		writer.setPageEvent(new PDFExportAction(session,locale,site,rd,arf,r,response));
 		
 		//noteFromSession=AmpReports.getNote(request.getSession());
 		
@@ -166,8 +168,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	}
 
 	public void onStartPage(PdfWriter writer, Document arg1) {
-		if(PDFExporter.headingCells==null) return;
-		
+	  	if(PDFExporter.headingCells==null) return;
 		  PdfContentByte cb = writer.getDirectContent();
 		  cb.saveState();
 			PdfPTable table = new PdfPTable(PDFExporter.widths);
@@ -199,7 +200,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			
 			Font titleFont = new Font(Font.COURIER, 16, Font.BOLD);
 			
-				PdfPCell pdfc = new PdfPCell(new Paragraph(rd.getName(),titleFont));
+			PdfPCell pdfc = new PdfPCell(new Paragraph(rd.getName(),titleFont));
 			pdfc.setPaddingBottom(10);
 			pdfc.setPaddingTop(10);
 			pdfc.setColspan(rd.getTotalDepth());
@@ -270,8 +271,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
         			//}
 			try {
 			    arg1.add(table);
-			} catch (DocumentException e) {
-				e.printStackTrace();
+			} catch (Exception e) {
 				logger.error("Error onStartPage",e);
 			}
 		
@@ -293,6 +293,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
     		
     	    if (r.getFormatedUpdatedDate() != null) {
     		text.append( TranslatorWorker.translate("rep:print:lastupdate", locale, siteId));
+    		text.append(" ");
     		text.append(r.getFormatedUpdatedDate());
     		text.append(" ");
     	    } 
@@ -302,6 +303,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
     		    	translatedUser="User:";
     		   }
     	    	text.append(translatedUser);
+    	    	text.append(" ");
     	    	text.append(r.getUser());
     		}    	    
     	
@@ -328,7 +330,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	   if ("".equalsIgnoreCase(translatedPage)){
 	       translatedPage="Page:";
 	   }
-	    pageText.append(translatedPage + writer.getPageNumber());
+	    pageText.append(translatedPage +" "+writer.getPageNumber());
 	    
 	    adjust = font.getWidthPoint("0",  10);
 	    textSize = font.getWidthPoint(pageText.toString(),  10);

@@ -123,8 +123,8 @@ public class CurrencyWorker {
 			BigDecimal tmp;
 			tmp=amount.multiply(inter);
 			result.setValue(tmp.multiply(toRate));
-			result.setCalculations(result.getValue() + "= ((" + 1 + "/"
-					+ fromExchangeRate + ") * " + amount + " * " + toExchangeRate + ") " + date.toString());
+			result.setCalculations(result.toString() + "= ((" + 1 + "/"
+					+ fromExchangeRate + ") * " + amount.toString() + " * " + toExchangeRate + ") " + date.toString());
 			} else {
 			result.setValue(amount);
 			result.setCalculations("No need it's due rate");

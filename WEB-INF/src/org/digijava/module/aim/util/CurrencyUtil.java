@@ -24,6 +24,7 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -615,6 +616,7 @@ public class CurrencyUtil {
 				}
 			}
 			tx.commit();
+			DigiCacheManager.getInstance().getCache("EXCHANGE_RATES_CACHE").clearAll();
 		} catch (Exception e) {
 			logger.error("Exception from saveCurrencyRates");
 			e.printStackTrace(System.out);

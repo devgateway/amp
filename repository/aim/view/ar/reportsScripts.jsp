@@ -161,7 +161,7 @@ background-color: yellow;
 
 <script type="text/javascript">
 		var myPanel1 = new YAHOO.widget.Panel("new", {
-		    fixedcenter: true,
+		    fixedcenter: false,
 		    constraintoviewport: true,
 		    underlay:"shadow",
 		    close:true,
@@ -176,6 +176,8 @@ background-color: yellow;
 		    visible:false,
 		    modal:true,
 		    draggable:true} );
+		    
+		    
 	function initScripts() {
 	    var msg='\n<digi:trn key="rep:filter:selectFilter">Select filters</digi:trn>';
 		myPanel1.setHeader(msg);
@@ -193,6 +195,7 @@ background-color: yellow;
 		var element = document.getElementById("myFilter");
 		element.style.display = "inline";
 		myPanel1.setBody(element);
+		myPanel1.center();
 		myPanel1.show();
 	}
 	function hideFilter() {

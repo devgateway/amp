@@ -18,7 +18,7 @@
 		 -->
 	</div>
 
-<div id="myFilter" style="display: none">
+<div id="myFilter" style="display: none;" >
 		<jsp:include page="/aim/reportsFilterPicker.do" />
         <!--
 		<a href='#' onclick='hideFilter();return false'>

@@ -39,10 +39,10 @@
 				</html:option>
 
 					<logic:iterate name="reportMeta" property="hierarchies"  id="iter">
-						<c:set var="key" value="aim:popsort:hierarchy:${iter.column.absoluteColumnName}"/>
+						<c:set var="key" value="aim:popsort:hierarchy:${iter.column.columnNameTrimmed}"/>
 						<html:option value="${iter.levelId}">
 							<digi:trn key="${key}">
-							${iter.column.absoluteColumnName}
+							${iter.column.columnNameTrimmed}
 						</digi:trn>
 						</html:option>
 					</logic:iterate>

@@ -305,7 +305,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 									</TR>
 													<logic:empty name="aimFinancingBreakdownForm" property="financingBreakdown">
 			                    	<TR valign="top">
-															<TD align="center" colspan="7"><span class="note"> No records !! </span></TD>
+															<TD align="center" colspan="7"><span class="note"> <digi:trn key="aim:noRecords">No records !! </digi:trn></span></TD>
 			                     </TR>
 			                    </logic:empty>
 			                    <logic:notEmpty name="aimFinancingBreakdownForm" property="financingBreakdown">

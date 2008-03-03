@@ -185,7 +185,7 @@ function checkUncheckAll2() {
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="770" vAlign="top" align="left" border=0>
 	<tr>
 
-	<td class=r-dotted-lg align=left vAlign=top >	&nbsp;</td>
+	<td class=r-dotted-lg align=left vAlign=top >&nbsp;	</td>
 	<td>
 		<table width="80%">
 			<tr>
@@ -262,7 +262,6 @@ function checkUncheckAll2() {
 																	</td>
 																	</tr>
 											<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
-											
 											<feature:display name="Identification" module="Project ID and Planning"></feature:display>
 											<feature:display name="Planning" module="Project ID and Planning"></feature:display>
 											<feature:display name="Location" module="Project ID and Planning"></feature:display>
@@ -279,8 +278,9 @@ function checkUncheckAll2() {
 											<field:display name="Status" feature="Planning">&nbsp;</field:display>
 											<field:display name="Donor Agency" feature="Funding Organizations">&nbsp;</field:display>
 											<field:display name="Donor Type" feature="Funding Organizations">&nbsp;</field:display>
-												<field:display name="Actual Start Date" feature="Planning">&nbsp;</field:display>
-												<field:display name="Project Title" feature="Identification">&nbsp;</field:display>
+											<field:display name="Actual Start Date" feature="Planning">&nbsp;</field:display>
+											<field:display name="Project Title" feature="Identification">&nbsp;</field:display>
+											
 											<field:display name="Type Of Assistance" feature="Funding Organizations">&nbsp;</field:display>
 												<field:display name="Implementation Level" feature="Location">&nbsp;</field:display>
 											<field:display name="Actual Completion Date" feature="Planning">&nbsp;</field:display>
@@ -289,7 +289,9 @@ function checkUncheckAll2() {
 												<field:display name="Region" feature="Location">&nbsp;</field:display>
 											<field:display name="Financing Instrument" feature="Funding Organizations">&nbsp;</field:display>
 											<field:display name="Objective" feature="Identification">&nbsp;</field:display>
+											
 											<field:display name="Project Id" feature="Identification">&nbsp;</field:display>
+											<field:display name="AMP ID" feature="Identification">&nbsp;</field:display>
 											<field:display name="Contact Name" feature="Reports Contact Information">&nbsp;</field:display>
 											<field:display name="Description" feature="Identification">&nbsp;</field:display>
 												<field:display name="Cumulative Commitment" feature="Funding Organizations">&nbsp;</field:display>
@@ -333,7 +335,8 @@ function checkUncheckAll2() {
 											<field:display name="Draft" feature="Identification">&nbsp;</field:display>
 											<field:display name="Credit Type" feature="Planning">&nbsp;</field:display>
 											<field:display name="Credit/Donation" feature="Planning">&nbsp;</field:display>
-																	<TR>
+                                            
+                                        							<TR>
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
 																				<c:if test="${!empty aimAdvancedReportForm.ampColumns}">
@@ -365,6 +368,8 @@ function checkUncheckAll2() {
 																								<bean:define id="columnCollection" name="ampTreeColumn" property="value" type="java.util.ArrayList" scope="page"/>
 																								<div id="limodule:<bean:write name="themeColumn"/>" noDrag="true">
 																								<li id="limodule:<bean:write name="themeColumn"/>" noDrag="true">
+																								
+																							
 
 																								<input type=checkbox id="moduleVis:<bean:write name="themeColumn"/>"
 																											name="selectedThemes"
@@ -373,12 +378,14 @@ function checkUncheckAll2() {
 
 																								/>
 																								<a id="module:<bean:write name="themeColumn"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
-																								<digi:trn key="aim:report:${themeColumn}"><bean:write name="themeColumn"/></digi:trn>
+																								
+																								<bean:write name="themeColumn"/>
 																								</a>
 																								<ul>
 																								<logic:iterate name="columnCollection" id="ampColumnFromTree" type="org.digijava.module.aim.dbentity.AmpColumns">
 																									<li class="dhtmlgoodies_sheet.gif" noDrag="true">
 																									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="false">
+																										
 																										<input type=checkbox id="fieldVis:<bean:write name="ampColumnFromTree" property="columnId"/>"
 																											name="selectedColumns"
 																											value="<bean:write name="ampColumnFromTree" property="columnId"/>"
@@ -404,9 +411,10 @@ function checkUncheckAll2() {
 																											/>
 																											<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
 																												<digi:trn key="aim:report:${ampColumnFromTree.columnName}"><bean:write name="ampColumnFromTree" property="columnName"/></digi:trn>
-																											</a>
+																											</a> 
 																										</logic:empty>					
 																										<logic:notEmpty name="levelsCollection">
+																										DD
 																										<input type=checkbox id="fieldVis:<bean:write name="ampColumnFromTree" property="columnId"/>"
 																											name="selectedColumns"
 																											value="<bean:write name="ampColumnFromTree" property="columnId"/>"
@@ -680,7 +688,7 @@ function checkUncheckAll2() {
 			</TR>
 		</table>
 	</td>
-	<td class=r-dotted-lg align=left vAlign=top >	&nbsp;</td>
+	<td class=r-dotted-lg align=left vAlign=top >&nbsp;	</td>
 </tr>
 </table>
 </td>

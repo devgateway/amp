@@ -147,6 +147,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display feature="Identification" name="Objective"></field:display>
 <field:display feature="Identification" name="Organizations and Project ID"></field:display>
 <field:display feature="Identification" name="Project Title"></field:display>
+<field:display feature="Identification" name="AMP ID"></field:display>
 <field:display feature="Identification" name="Purpose"></field:display>
 <field:display feature="Identification" name="Results"></field:display>
 <field:display feature="MTEF Projections" name="MTEFProjections"></field:display>

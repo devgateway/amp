@@ -599,7 +599,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 			         			                   	<td colspan="5" align="center">
 
-			                  						  		<span class="note">No records!!</span>
+			                  						  		<span class="note"><digi:trn key="aim:noRecords">No records</digi:trn>!!</span>
 
 						                            	</td>
 

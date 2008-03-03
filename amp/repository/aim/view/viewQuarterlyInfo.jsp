@@ -708,7 +708,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 					                        		<tr valign="top">
 
-			   		                       			<td colspan="5" align="center"><span class="note">No records!</td>
+			   		                       			<td colspan="5" align="center"><span class="note"><digi:trn key="aim:noRecords">No records</digi:trn>!</td>
 
 			         		                 		</tr>
 

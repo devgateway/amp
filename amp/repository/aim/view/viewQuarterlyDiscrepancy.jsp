@@ -299,7 +299,7 @@
 				            			</tr>
 				            			<logic:empty name="aimQuarterlyDiscrepancyForm" property="discrepancies" >
 			                        <tr valign="top"> 
-			                        		<td colspan="8" align="center"><span class="note">No records!</td>
+			                        		<td colspan="8" align="center"><span class="note"><digi:trn key="aim:noRecords">No records</digi:trn>!</td>
 			                        </tr>
 			                    </logic:empty>
 				            			<logic:notEmpty name="aimQuarterlyDiscrepancyForm" property="discrepancies">

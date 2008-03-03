@@ -398,7 +398,7 @@
 				<!--<td align="center" height="21" width="73" ><b>Sector</b></td>-->
 				<td colspan=<bean:write name="aimCommitmentbyDonorForm" property="totalColumns"/> align="center" height="21" >
 				<b>
-				<digi:trn key="aim:noRecords">No Records</digi:trn>
+				<digi:trn key="aim:noRecords">No records !!</digi:trn>
 				</b>
 				</td>
 			</tr>

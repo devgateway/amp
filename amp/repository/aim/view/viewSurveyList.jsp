@@ -290,7 +290,7 @@ function projectFiche(id)
 
 			                    					<TR valign="top">
 
-													<TD align="center" colspan="7" width="742"><span class="note">No funding for this activity !</span></TD>
+													<TD align="center" colspan="7" width="742"><span class="note"><digi:trn key="aim:activityNofunding">No funding for this activity</digi:trn> !</span></TD>
 
 			                    					</TR>
 

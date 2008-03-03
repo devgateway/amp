@@ -13,30 +13,11 @@ package org.dgfoundation.amp.ar;
  * Customized ordering for FUNDING TYPE category
  */
 public class FundingTypeSortedString extends SortedString {
-	public final static MetaInfo []order=new MetaInfo[] {
-		new MetaInfo(ArConstants.ACTUAL+" "+ArConstants.COMMITMENT,new Integer(2)),
-		new MetaInfo(ArConstants.ACTUAL+" "+ArConstants.DISBURSEMENT,new Integer(4)),
-		new MetaInfo(ArConstants.ACTUAL+" "+ArConstants.EXPENDITURE,new Integer(6)),
-		new MetaInfo(ArConstants.PLANNED+" "+ArConstants.COMMITMENT,new Integer(1)),
-		new MetaInfo(ArConstants.PLANNED+" "+ArConstants.DISBURSEMENT,new Integer(3)),
-		new MetaInfo(ArConstants.PLANNED+" "+ArConstants.EXPENDITURE,new Integer(5)),
-	};
-	
-	
-	private Integer customOrder=null;
-	/**
-	 * @param string
-	 */
-	public FundingTypeSortedString(String string) {
+	private Integer order; 	
+
+	public FundingTypeSortedString(String string, Integer order) {
 		super(string);
-		// TODO Auto-generated constructor stub
-	}
-	
-	
-	public FundingTypeSortedString(String string,Integer customOrder) {
-		super(string);
-		this.customOrder=customOrder;
-		// TODO Auto-generated constructor stub
+		this.order = order;
 	}
 
 	/* (non-Javadoc)
@@ -44,17 +25,7 @@ public class FundingTypeSortedString extends SortedString {
 	 */
 	@Override
 	public int getOrder() {
-	    	if(customOrder!=null){
-	    	    return customOrder;
-	    	}
-	    	int max=0;
-		for(int i=0;i<order.length;i++) {
-			int corder=((Integer)order[i].getValue()).intValue();
-			if(corder>max) max=corder;
-			if(string.equals(order[i].getCategory())) return  corder;
-		}
-		//if unknown, put it on the last position
-		return max+1; 		
+		return order;		
 	}
 
 }

@@ -120,7 +120,7 @@ public class GroupColumn extends Column {
     private static Column verticalSplitByCateg(CellColumn src,
             String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
         Column ret = new GroupColumn(src);
-        Set metaSet = new TreeSet();
+        Set<MetaInfo> metaSet = new TreeSet<MetaInfo>();
         Iterator i = src.iterator();
         while (i.hasNext()) {
             Categorizable element = (Categorizable) i.next();
@@ -133,44 +133,51 @@ public class GroupColumn extends Column {
         //TODO: ugly stuff... i have no choice
         //manually add all quarters
        if(category.equals(ArConstants.QUARTER)) {
-        	metaSet.add(new MetaInfo(ArConstants.QUARTER,"Q1"));
-        	metaSet.add(new MetaInfo(ArConstants.QUARTER,"Q2"));
-        	metaSet.add(new MetaInfo(ArConstants.QUARTER,"Q3"));
-        	metaSet.add(new MetaInfo(ArConstants.QUARTER,"Q4"));
+        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q1"));
+        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q2"));
+        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q3"));
+        	metaSet.add(new MetaInfo<String>(ArConstants.QUARTER,"Q4"));
         }
    
        //manually add at least one term :(
        
        if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) && ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) {
-    	   metaSet.add(new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,"Grant"));
+    	   metaSet.add(new MetaInfo<String>(ArConstants.TERMS_OF_ASSISTANCE,"Grant"));
     	//   metaSet.add(new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,"Loan"));
     	//metaSet.add(new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,"In Kind"));
        }
        
-       
        //manually add measures selected
        if(category.equals(ArConstants.FUNDING_TYPE)) {
-    	   Set measures=reportMetadata.getMeasures();
-    	   //give order to measurments
-    	   ArrayList<AmpReportMeasures> measurmentsList=new ArrayList<AmpReportMeasures>(measures);
-    	   Collections.sort(measurmentsList);
     	   metaSet.clear();
-    	   Iterator ii=measurmentsList.iterator();
+    	   Set<AmpReportMeasures> measures=reportMetadata.getMeasures();
+    	   Iterator<AmpReportMeasures> ii = measures.iterator();
     	   while (ii.hasNext()) {
-    	       		AmpReportMeasures ampReportMeasurement=(AmpReportMeasures) ii.next();
-			AmpMeasures element = ampReportMeasurement.getMeasure();
-			if(element.getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE) || element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS)) continue;
-			
-			Integer orderId=(ampReportMeasurement.getOrderId()==null)?null:Integer.parseInt(ampReportMeasurement.getOrderId());
-			metaSet.add(new MetaInfo(ArConstants.FUNDING_TYPE,new FundingTypeSortedString(element.getMeasureName(),orderId)));
-		}
-    	   
+	    		AmpReportMeasures ampReportMeasurement = ii.next();
+				AmpMeasures element = ampReportMeasurement.getMeasure();
+				if (element.getMeasureName().equals(
+						ArConstants.UNDISBURSED_BALANCE)
+						|| element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS)
+					) continue;
+				
+				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(
+						ArConstants.FUNDING_TYPE, new FundingTypeSortedString(
+						element.getMeasureName(), reportMetadata.getMeasureOrder(element.getMeasureName())));
+				metaSet.add(metaInfo);
+    	   }
+    	   /*
+    	    * if there isn't measure selected different than UNDISBURSED_BALANCE and TOTAL_COMMITMENTS.
+    	    * We add at least one measure.
+    	    */    	   
+    	   if(metaSet.isEmpty()){
+				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(ArConstants.FUNDING_TYPE,new FundingTypeSortedString(ArConstants.PLANNED + " " + ArConstants.COMMITMENT, 0));
+				metaSet.add(metaInfo);    		   
+    	   }
        }
         
         
 
         // iterate the set and create a subColumn for each of the metainfo
-       
         i = metaSet.iterator();
         while (i.hasNext()) {
             MetaInfo element = (MetaInfo) i.next();
@@ -189,8 +196,6 @@ public class GroupColumn extends Column {
     			Categorizable item = (Categorizable) ii.next();
     			if(item.hasMetaInfo(element)) cc.addCell(item);
     		}
-            
-        
         }
         
         if(ret.getItems().size()==0) {

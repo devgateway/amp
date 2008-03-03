@@ -2,13 +2,15 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 
+import org.apache.log4j.Logger;
 import org.digijava.module.aim.annotations.reports.ColumnLike;
 import org.digijava.module.aim.annotations.reports.Level;
 import org.digijava.module.aim.annotations.reports.Order;
 
 
-public class AmpReportMeasures  implements Serializable, Comparable
-{
+public class AmpReportMeasures  implements Serializable, Comparable<AmpReportMeasures>{
+	private static Logger logger = Logger.getLogger(AmpReportMeasures.class);
+	
 	@ColumnLike
 	private AmpMeasures measure;
 	@Order
@@ -37,18 +39,27 @@ public class AmpReportMeasures  implements Serializable, Comparable
 		this.level = level;
 	}
 	
-	public int compareTo(Object o) {
+	public int compareTo(AmpReportMeasures o) {
 		try {
 			if(orderId==null) return -1;
 			if(o==null) return -1;
-			if(((AmpReportMeasures)o).getOrderId()==null)return -1;
-			int myOrder	= Integer.parseInt(orderId);
-			int oOrder	= Integer.parseInt( ((AmpReportMeasures)o).getOrderId() );
-			return myOrder-oOrder;
+			if(o.getOrderId()==null)return -1;
+			int myOrder	= getOrder();
+			int oOrder	= ((AmpReportMeasures)o).getOrder();
+			return myOrder - oOrder;
 		}
 		catch (NumberFormatException e) {
-			e.printStackTrace();
+			logger.error("NumberFormatException:", e);
 			return -1;
 		}
+	}
+	
+	public Integer getOrder() {
+		try{
+			return 	Integer.parseInt(orderId);
+		}catch (NumberFormatException e) {
+			logger.error("NumberFormatException:", e);
+			return 0;
+		}		
 	}
 }

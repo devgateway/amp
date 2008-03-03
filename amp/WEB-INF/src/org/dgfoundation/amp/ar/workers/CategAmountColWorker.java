@@ -74,10 +74,6 @@ public class CategAmountColWorker extends ColumnWorker {
 		boolean showable=true;
 		AmpARFilter filter=(AmpARFilter) generator.getFilter();
 		
-		Set measures=generator.getReportMetadata().getMeasures();
-		showable=ARUtil.containsMeasure(cac.getMetaValueString(ArConstants.FUNDING_TYPE),measures) || generator.getReportMetadata().getType().intValue()==ArConstants.CONTRIBUTION_TYPE;
-		if(!showable)
-			return false;
 		
 		//we now check if the year filtering is used - we do not want items from other years to be shown
 		if(filter.getFromYear()!=null || filter.getToYear()!=null) {
@@ -241,13 +237,13 @@ public class CategAmountColWorker extends ColumnWorker {
 		}
 
 		if(trStr!=null) {
-		MetaInfo trMs = this.getCachedMetaInfo(ArConstants.TRANSACTION_TYPE, trStr);
-		MetaInfo fundMs = this.getCachedMetaInfo(ArConstants.FUNDING_TYPE, new FundingTypeSortedString((String) adjMs
-				.getValue()
-				+ " " + (String) trMs.getValue()));
-		acc.getMetaData().add(trMs);
-		acc.getMetaData().add(fundMs);
-		acc.getMetaData().add(adjMs);
+			MetaInfo trMs = this.getCachedMetaInfo(ArConstants.TRANSACTION_TYPE, trStr);
+			String fundMes = (String) adjMs.getValue()+ " " + (String) trMs.getValue();
+			Integer order = this.generator.getReportMetadata().getMeasureOrder(fundMes);
+			MetaInfo fundMs = this.getCachedMetaInfo(ArConstants.FUNDING_TYPE, new FundingTypeSortedString(fundMes, order));
+			acc.getMetaData().add(trMs);
+			acc.getMetaData().add(fundMs);
+			acc.getMetaData().add(adjMs);			
 		}	
 		//Date handling..
 		

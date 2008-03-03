@@ -12,7 +12,7 @@ package org.dgfoundation.amp.ar;
  * @since Nov 22, 2006
  * Implements customized ordering for sortable Collections like TreeSetS.
  */
-public abstract class SortedString implements Comparable {
+public abstract class SortedString implements Comparable<SortedString> {
 	public String string;
 	
 	public SortedString(String string) {
@@ -22,14 +22,20 @@ public abstract class SortedString implements Comparable {
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public int compareTo(Object o) {	
-		return this.getOrder()-((SortedString)o).getOrder();
+	public int compareTo(SortedString o) {	
+		return this.getOrder()-o.getOrder();
 	}
 
 	public abstract int getOrder();
 	
 	public String toString() {
 		return string;
+	}
+
+	public boolean equals(Object obj) {	
+		if(obj instanceof SortedString)
+			return this.string.equals(((SortedString)obj).string);
+		return false;
 	}
 	
 }

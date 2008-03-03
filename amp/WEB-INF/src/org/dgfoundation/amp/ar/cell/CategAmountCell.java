@@ -197,7 +197,7 @@ public Cell filter(Cell metaCell,Set ids) {
 		MetaInfo internal = MetaInfo.getMetaInfo(metaData,m.getCategory());
 		if (internal == null)
 			return false;
-		if (internal.compareTo(m) == 0)
+		if (internal.equals(m))
 			return true;
 		else
 			return false;

@@ -7,7 +7,6 @@
 package org.dgfoundation.amp.ar;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -50,8 +49,8 @@ public class AmpReportGenerator extends ReportGenerator {
 	 *            requested
 	 * @return the list of categories
 	 */
-	public List getColumnSubCategories(String columnName) {
-		List ret = new ArrayList();
+	public List<String> getColumnSubCategories(String columnName) {
+		List<String> ret = new ArrayList<String>();
 		if (ArConstants.COLUMN_FUNDING.equals(columnName)) {
 			boolean annual = true;
 			boolean monthly = false;
@@ -182,24 +181,8 @@ public class AmpReportGenerator extends ReportGenerator {
 				rawColumns.addColumn(new Integer(rcol.getOrderId()), column);
 			}
 
-		} catch (ClassNotFoundException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			logger.error(e);
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			logger.error(e);
-			e.printStackTrace();
 		} catch (Exception e) {
-			logger.error(e);
-			e.printStackTrace();
+			logger.error("Exception: ", e);
 		}
 
 	}
@@ -242,7 +225,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * 
 	 */
 	protected void createTotals() {
-		List cats = new ArrayList();
+		List<String> cats = new ArrayList<String>();
 
 		// we perform totals by categorizing only by Funding Type...
 		boolean  totalIncludedPlaned = "On".equals(FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_INCLUDE_PLANNED)) ? true : false;

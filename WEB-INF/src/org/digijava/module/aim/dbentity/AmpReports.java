@@ -361,14 +361,14 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 		return "";
 	}
 
-	public Integer getMeasureOrder(String measurName) {
+	public int getMeasureOrder(String measurName) {
 		Set<AmpReportMeasures> locMeasures = this.getMeasures();
 		for (AmpReportMeasures m : locMeasures) {
 			if(m.getMeasure().getMeasureName().equals(measurName)){
 				return m.getOrder();
 			}	
 		}
-		return -1;
+		return 0;
 	}
 
 }

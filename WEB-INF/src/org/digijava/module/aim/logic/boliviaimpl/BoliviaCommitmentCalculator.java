@@ -1,16 +1,11 @@
 package org.digijava.module.aim.logic.boliviaimpl;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FilterParams;
-import org.digijava.module.aim.helper.YearlyInfo;
 import org.digijava.module.aim.logic.AmountCalculator;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * 

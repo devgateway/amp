@@ -220,7 +220,7 @@ public class ViewChannelOverview extends TilesAction {
 					
                      double total=0;
                      String cal="=";
-                     if(actual!=null){
+                     if(actual.getValue()!=null){
                     	 total+=actual.getValue().doubleValue();
                     	 cal = actual.getCalculations();
                          }

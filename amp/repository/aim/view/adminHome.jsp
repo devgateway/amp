@@ -49,7 +49,7 @@
                     </tr>
                     <tr align="center" bgcolor="#f4f4f2" height="120" valign="top">
                       <td class="f-names">
-                        <table cellPadding=0 cellSpacing=0>
+                        <table cellPadding=0 cellSpacing=0 width="70%">
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -69,7 +69,7 @@
                                 <digi:trn key="aim:clickToAccessFeatureManager">Click here to access Feature Manager</digi:trn>
                               </c:set>
                               <digi:link href="/visibilityManager.do" title="${trnFeatureManager}" >
-                                <digi:trn key="aim:featureManager">Feature Manager</digi:trn>
+                                <digi:trn key="aim:theFeatureManager">Feature Manager</digi:trn>
                               </digi:link>
                             </td>
                           </tr>
@@ -93,8 +93,8 @@
                                 <digi:trn key="aim:gatePermLinkTitle">Click here to manage gate permissions and assignments</digi:trn>
                               </c:set>
                               <html:link href="/gateperm/managePermMap.do" title="${gatePermLinkTitle}" >
-                                <digi:trn key="aim:gatePermLink">
-                                Manage Gate Permissions
+                                <digi:trn key="aim:globalPermissionManager">
+                                Global Permission Manager
                                 </digi:trn>
                               </html:link>
                             </td>
@@ -213,7 +213,7 @@
                     </tr>
                     <tr align="center" bgcolor="#f4f4f2" height="120" valign="top">
                       <td class="f-names">
-                        <table cellPadding=0 cellSpacing=0>
+                        <table cellPadding=0 cellSpacing=0 width="70%">
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -299,7 +299,7 @@
                     </tr>
                     <tr bgcolor="#f4f4f2" align="center" height="80" valign="top">
                       <td class="f-names">
-                        <table cellPadding=0 cellSpacing=0>
+                        <table cellPadding=0 cellSpacing=0 width="70%">
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -403,7 +403,7 @@
                     </tr>
                     <tr bgcolor="#f4f4f2" align="center" height="80" valign="top">
                       <td>
-                        <table cellPadding=0 cellSpacing=0>
+                        <table cellPadding=0 cellSpacing=0 width="70%">
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

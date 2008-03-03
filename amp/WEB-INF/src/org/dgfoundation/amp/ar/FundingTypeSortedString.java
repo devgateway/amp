@@ -13,9 +13,9 @@ package org.dgfoundation.amp.ar;
  * Customized ordering for FUNDING TYPE category
  */
 public class FundingTypeSortedString extends SortedString {
-	private Integer order; 	
+	private int order; 	
 
-	public FundingTypeSortedString(String string, Integer order) {
+	public FundingTypeSortedString(String string, int order) {
 		super(string);
 		this.order = order;
 	}

@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,6 +22,7 @@ import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
@@ -225,33 +227,46 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * 
 	 */
 	protected void createTotals() {
-		List<String> cats = new ArrayList<String>();
-
 		// we perform totals by categorizing only by Funding Type...
-		boolean  totalIncludedPlaned = "On".equals(FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_INCLUDE_PLANNED)) ? true : false;
-		
-		if(reportMetadata.getType().intValue()!=4 && totalIncludedPlaned)
-			cats.add(ArConstants.FUNDING_TYPE); 
+		boolean categorizeByFundingType = false;
+		if (reportMetadata.getType().intValue() != 4)
+			categorizeByFundingType = true; 
 
 		// get the funding column
 		AmountCellColumn funding = (AmountCellColumn) rawColumns
 				.getColumn(ArConstants.COLUMN_FUNDING);
 
-		Column newcol = null;
-		boolean addFunding=false;
-		if(cats.size()>0){ 
-		    newcol=GroupColumn.verticalSplitByCategs(funding, cats, true,this.reportMetadata);
-		}else{
-		    newcol=new GroupColumn();
-		    addFunding=true;
+		Column newcol=new GroupColumn();
+		if (categorizeByFundingType) {
+			Set<AmpReportMeasures> measures = reportMetadata.getMeasures();
+			List<AmpReportMeasures> measuresList = new ArrayList<AmpReportMeasures>(measures);
+			Collections.sort(measuresList);
+			Iterator<AmpReportMeasures> ii = measuresList.iterator();
+			while (ii.hasNext()) {
+				AmpReportMeasures ampReportMeasurement = ii.next();
+				AmpMeasures element = ampReportMeasurement.getMeasure();
+				if (element.getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE) || 
+					element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS))
+					continue;
+
+				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(
+						ArConstants.FUNDING_TYPE, new FundingTypeSortedString(
+								element.getMeasureName(), reportMetadata
+										.getMeasureOrder(element
+												.getMeasureName())));
+	            CellColumn cc = new TotalAmountColumn(metaInfo.getValue().toString(),true);
+	            newcol.getItems().add(cc);
+	            cc.setParent(newcol);
+	            
+	            cc.setContentCategory(ArConstants.COLUMN_FUNDING);
+	            //iterate the src column and add the items with same MetaInfo
+	            Iterator it=funding.iterator();
+	            while (it.hasNext()) {
+	    			Categorizable item = (Categorizable) it.next();
+	    			if(item.hasMetaInfo(metaInfo)) cc.addCell(item);
+	    		}
+			}
 		}
-			//try {
-			//	newcol=new GroupColumn();
-			//	newcol.getItems().add((Column) funding.clone());
-			//} catch (CloneNotSupportedException e) {
-			//	logger.error(e);
-			//	e.printStackTrace();
-			//}
 
 		// we create the cummulative balance (undisbursed) = act commitment -
 		// act disbursement
@@ -301,7 +316,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		//add columns as measurements order
 		
 		
-		if(addFunding){
+		if(!categorizeByFundingType){
 		    try {
 			tmpColumnList.add((Column) funding.clone());
         		} catch (CloneNotSupportedException e) {
@@ -312,16 +327,16 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 		
 		for (AmpReportMeasures measures : listMeasurement) {
-	            for (Column column : columnlist) {
-	        
-	        	if (column.getName().equalsIgnoreCase(measures.getMeasure().getMeasureName())){
-	                    tmpColumnList.add(column);
-	                    break;
-	                }
-                    }
-                }
+			for (Column column : columnlist) {
+				if (column.getName().equalsIgnoreCase(
+						measures.getMeasure().getMeasureName())) {
+					tmpColumnList.add(column);
+					break;
+				}
+			}
+		}
 		
-		//replace items by ordered items
+		// replace items by ordered items
 		newcol.setItems(tmpColumnList);
 		rawColumns.addColumn(newcol);
 	}

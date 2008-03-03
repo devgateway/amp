@@ -7,7 +7,6 @@
 package org.dgfoundation.amp.ar;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -89,7 +88,8 @@ public class GroupColumn extends Column {
      */
     private static Column verticalSplitByCateg(Column src, 
             String category,Set ids, boolean generateTotalCols,AmpReports reportMetadata) {    
-    	if(src instanceof CellColumn || src instanceof AmountCellColumn) return verticalSplitByCateg((CellColumn)src,category,ids,generateTotalCols,reportMetadata);
+    	if(src instanceof CellColumn) 
+    		return verticalSplitByCateg((CellColumn)src,category,ids,generateTotalCols,reportMetadata);
     	else {
     		GroupColumn srcG=(GroupColumn) src;
     		GroupColumn dest=null;
@@ -166,10 +166,10 @@ public class GroupColumn extends Column {
 				metaSet.add(metaInfo);
     	   }
     	   /*
-    	    * if there isn't measure selected different than UNDISBURSED_BALANCE and TOTAL_COMMITMENTS.
+    	    * if there isn't a measure selected and TOTAL_COMMITMENTS isn't selected.
     	    * We add at least one measure.
     	    */    	   
-    	   if(metaSet.isEmpty()){
+    	   if(metaSet.isEmpty() && !ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,reportMetadata.getMeasures())){
 				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(ArConstants.FUNDING_TYPE,new FundingTypeSortedString(ArConstants.PLANNED + " " + ArConstants.COMMITMENT, 0));
 				metaSet.add(metaInfo);    		   
     	   }
@@ -197,6 +197,36 @@ public class GroupColumn extends Column {
     			if(item.hasMetaInfo(element)) cc.addCell(item);
     		}
         }
+        
+        
+        // Start AMP-2724
+        if(category.equals(ArConstants.FUNDING_TYPE)) {
+			if (ARUtil.containsMeasure(ArConstants.TOTAL_COMMITMENTS,reportMetadata.getMeasures())) {
+	
+				TotalCommitmentsAmountColumn tac = new TotalCommitmentsAmountColumn(
+						ArConstants.TOTAL_COMMITMENTS);
+				
+	            List theItems = ret.getItems();
+	            
+	            int index = reportMetadata.getMeasureOrder(ArConstants.TOTAL_COMMITMENTS) - 1;
+	            
+	            theItems.add(index <  0  || index > theItems.size() ?  theItems.size() : index, tac);
+	            
+	            tac.setParent(ret);
+	            
+	            tac.setContentCategory(category);
+	            
+				Iterator it = src.iterator();
+				while (it.hasNext()) {
+					AmountCell element = (AmountCell) it.next();
+					tac.addCell(element);
+				}
+	
+			}  
+        }
+        // End AMP-2724
+        
+        
         
         if(ret.getItems().size()==0) {
         	AmountCellColumn acc=new AmountCellColumn(ret);

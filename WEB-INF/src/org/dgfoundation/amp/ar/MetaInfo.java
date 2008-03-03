@@ -18,11 +18,11 @@ import java.util.Iterator;
  * @since Jun 15, 2006
  * 
  */
-public class MetaInfo implements Comparable {
+public class MetaInfo<T extends Comparable<? super T>> implements Comparable<MetaInfo<T>>  {
 
 	protected String category;
 
-	protected Comparable value;
+	protected T value;
 
 	/**
 	 * @return Returns the category.
@@ -34,11 +34,11 @@ public class MetaInfo implements Comparable {
 	/**
 	 * @return Returns the value.
 	 */
-	public Comparable getValue() {
+	public T getValue() {
 		return value;
 	}
 
-	public MetaInfo(String category, Comparable value) {
+	public MetaInfo(String category, T value) {
 		this.category = category;
 		this.value = value;
 	}
@@ -50,24 +50,22 @@ public class MetaInfo implements Comparable {
 	 * @param o
 	 *            the MetaInfo to be compared with
 	 * @return the compareTo of getValue for the objects
-	 */
-	public int compareTo(Object o) {
-		MetaInfo mo = (MetaInfo) o;
+	 */	
+	public int compareTo(MetaInfo<T> mo) {
 		if (getCategory().equals(mo.getCategory())) {
 			return getValue().compareTo(mo.getValue());
 		}
-		return -1;
+		return getCategory().compareTo(mo.getCategory());
 	}
-
 	
 	public String toString() {
 		return category+": "+value;
 	}
 	
-	public static MetaInfo getMetaInfo(Collection metaData,String category) {
-		Iterator i = metaData.iterator();
+	public static <V extends Comparable<? super V>> MetaInfo<V> getMetaInfo(Collection<MetaInfo<V>> metaData, String category) {
+		Iterator<MetaInfo<V>> i = metaData.iterator();
 		while (i.hasNext()) {
-			MetaInfo element = (MetaInfo) i.next();
+			MetaInfo<V> element =  i.next();
 			if (element == null)
 				continue;
 			if (element.getCategory().equals(category))
@@ -76,8 +74,25 @@ public class MetaInfo implements Comparable {
 		return null;
 	}
 
-	public void setValue(Comparable value) {
+	public void setValue(T value) {
 		this.value = value;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof MetaInfo){
+			MetaInfo<?> theObj = (MetaInfo<?>) obj;
+			if (this.category != null && this.value != null)
+				return this.category.equals(theObj.category) && this.value.equals(theObj.value);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		if(this.category == null)
+			return 0;
+		return this.category.hashCode();
 	}
 
 }

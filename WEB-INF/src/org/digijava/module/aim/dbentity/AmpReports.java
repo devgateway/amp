@@ -12,7 +12,6 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.digijava.kernel.user.User;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.common.util.DateTimeUtil;
 
@@ -360,6 +359,16 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 			return user;
 		}
 		return "";
+	}
+
+	public Integer getMeasureOrder(String measurName) {
+		Set<AmpReportMeasures> locMeasures = this.getMeasures();
+		for (AmpReportMeasures m : locMeasures) {
+			if(m.getMeasure().getMeasureName().equals(measurName)){
+				return m.getOrder();
+			}	
+		}
+		return -1;
 	}
 
 }

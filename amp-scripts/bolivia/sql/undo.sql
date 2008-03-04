@@ -1,4 +1,4 @@
-use amp_testing;
+use amp_bolivia;
 
 SET AUTOCOMMIT = 0;
 START TRANSACTION;

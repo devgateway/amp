@@ -1,4 +1,4 @@
-use amp_testing;
+use amp_bolivia;
 
 /* set up variables */
 SET @import_time:=unix_timestamp();
@@ -204,8 +204,8 @@ approval_status,
 proj_cost_amount,
 activity_creator,
 totalCost,
-old_status_id
-
+old_status_id,
+draft
 )
 SELECT 
 c.numconv,
@@ -226,10 +226,10 @@ c.fechcont,
 montorig,
 @activity_creator,
 montous,
-cvealc
-  
-FROM  bolivian_db.`conv` as c ;
-/* where c.STATCONV!='D' and c.STATCONV!='C' and c.STATCONV!='A' and c.STATCONV!='5'; */  
+cvealc,
+0
+FROM  bolivian_db.`conv` as c
+where c.STATCONV!='C' and c.STATCONV!='A';
 
 
 /* mapping contacts */
@@ -614,8 +614,8 @@ select 'remove previous category values for financing instrument';
 DELETE catval FROM amp_category_value AS catval, amp_category_class AS catclass
 where catval.amp_category_class_id=catclass.id  AND catclass.keyName ='financing_instrument'; 
 
-/*  importing new values: there are just 3 records*/
-select 'iporting new category values for Type of Credit';
+/*  importing new values: there are just 3 records */
+select 'importing new category values for Type of Credit';
 
 SET @temp_cat_val=-1;
 
@@ -624,8 +624,20 @@ INSERT INTO amp_category_value
 SELECT cla.interp, catclass.id, @temp_cat_val:=@temp_cat_val+1 FROM amp_category_class AS catclass, bolivian_db.`claves` AS cla 
 WHERE cla.nomdato='cvecred' AND catclass.keyName='financing_instrument';
 
+
 /* mapping credit types to activities */
 select 'mapping credit types to activity fundings';
+
+UPDATE amp_activity AS act, bolivian_db.`conv` AS con, amp_category_value AS catval, amp_category_class AS catclass, bolivian_db.`claves` AS cla
+SET act.credit_type_id=catval.id    
+WHERE cla.nomdato='cvecred' 
+AND catclass.keyName='financing_instrument' 
+AND cla.interp=catval.category_value 
+AND act.old_id=con.numconv 
+AND con.cvecred=cla.valdato;
+
+/* mapping credit types to activities */
+select 'mapping founding credit types to activity fundings';
 
 UPDATE amp_activity AS act, bolivian_db.`conv` AS con, amp_category_value AS catval, amp_category_class AS catclass, bolivian_db.`claves` AS cla, amp_funding AS fnd
 SET fnd.financing_instr_category_value_id=catval.id    
@@ -636,7 +648,7 @@ AND act.old_id=con.numconv
 AND con.cvecred=cla.valdato
 AND fnd.amp_activity_id=act.amp_activity_id;
 
-/* ==Regions==*/
+/* ==Regions== */
 select 'importin regions';
 
 insert into amp_region
@@ -687,7 +699,7 @@ select 'mapping activities and themes(programs)';
 
 INSERT INTO amp_activity_theme
 (amp_activity_id,amp_theme_id)
-select act.amp_activity_id, prog.amp_theme_id 
+select act.amp_activity_id, prog.amp_theme_id
 from  amp_activity as act, amp_theme as prog, bolivian_db.`conv` as acto 
 where act.old_id=acto.numconv and prog.theme_code = concat('EBRP', substring(acto.Cod_EBRP,2));
 

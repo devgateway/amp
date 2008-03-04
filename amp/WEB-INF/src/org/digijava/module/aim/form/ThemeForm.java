@@ -94,7 +94,9 @@ public class ThemeForm extends ActionForm {
        // pop-up organisation selector window
       	private Collection pages;
       	private String[] alphaPages;
-          
+        
+      	
+      	private String activitiesUsingTheme	= null;
 				
 		public String getFlag() {
 			return flag;
@@ -795,4 +797,14 @@ public class ThemeForm extends ActionForm {
 	public void setAction(String action) {
 		this.action = action;
 	}
+
+	public String getActivitiesUsingTheme() {
+		return activitiesUsingTheme;
+	}
+
+	public void setActivitiesUsingTheme(String activitiesUsingTheme) {
+		this.activitiesUsingTheme = activitiesUsingTheme;
+	}
+	
+	
 }

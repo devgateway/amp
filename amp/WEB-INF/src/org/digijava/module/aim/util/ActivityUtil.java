@@ -3158,4 +3158,21 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 		  }
 	}
 	
+	public static String collectionToCSV(Collection<AmpActivity> activities) {
+		if ( activities == null )
+			return null;
+		String ret	= "";
+		Iterator<AmpActivity> iter	= activities.iterator();
+		while ( iter.hasNext() ) {
+			AmpActivity activity	= iter.next();
+			if ( activity.getName() != null ) {
+				ret	+= "'" + activity.getName() + "'" + ", ";
+			}
+			else
+				ret +=  "' '" + ", ";
+		}
+		return ret.substring(0, ret.length()-2);
+		
+	}
+	
 } // End

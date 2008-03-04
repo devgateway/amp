@@ -389,7 +389,11 @@ public class IndicatorUtil {
 					
 					
 					//================
-					SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+					// AMP-2828 by mouhamad
+			        String dateFormat = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT);
+			        dateFormat = dateFormat.replace("m", "M");
+			          
+			        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
 						
 					actInd.setActualVal(value.getActualVal());
 					actInd.setActualValComments(value.getActualValComments());

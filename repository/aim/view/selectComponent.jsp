@@ -84,8 +84,8 @@
 									<td colspan="2" class="box-border-alt1">
 										<span class="f-names">
 											<digi:trn key="aim:commitmentsTotalActAllocation">Commitments - (Total Actual Allocation</digi:trn> 
-											<%=FormatHelper.formatNumber(eaForm.getTotalCommitments())%>
-															 <%=eaForm.getCurrCode()%> )
+											<%=eaForm.getTotalCommitments()%>
+											<%=eaForm.getCurrCode()%> )
 										</span>
 										<!-- Commented added by mouhamad for burkina AMP-2709 -->
 										<!-- <digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn> -->&nbsp;&nbsp;&nbsp;
@@ -170,7 +170,7 @@
                                 <tr bgcolor="#ffffff">
 									<td colspan="2" class="box-border">
 										<span class="f-names"><digi:trn key="aim:disbursementTotalActToDate"> Disbursement - (Total actual to date</digi:trn> 
-										<%=FormatHelper.formatNumber(eaForm.getTotalDisbursements())%>
+										<%=eaForm.getTotalDisbursements()%>
 															 <%=eaForm.getCurrCode()%>)
 										</span>
 										<field:display name="Add Disbursement Order Button" feature="Disbursement Orders"><a href="javascript:addDisbursement()"><digi:trn key="btn:add">Add</digi:trn></a></field:display><br><br>
@@ -257,8 +257,8 @@
                             <tr>
 								<td colspan="2" class="box-border-alt1">
 											<span class="f-names"><digi:trn key="aim:expenditureTotalActToDate"> Expenditure - (Total actual to date</digi:trn> 
-											<%=FormatHelper.formatNumber(eaForm.getTotalExpenditures())%>
-																 <%=eaForm.getCurrCode()%>)</span>
+											<%=eaForm.getTotalExpenditures()%>
+											<%=eaForm.getCurrCode()%>)</span>
 											<field:display name="Add Expenditure Button" feature="Expenditures">
                                             <a href="javascript:addExpenditure()">
                                             

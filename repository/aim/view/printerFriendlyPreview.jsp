@@ -588,7 +588,7 @@
                                   <c:if test="${not empty aimEditActivityForm.activityComponentes}">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
-									  	<strong><digi:trn key="aim:preview:component_Sector">Components</digi:trn></strong>
+									  	<b><digi:trn key="aim:preview:component_Sector">Components</digi:trn></b>
 									  	</td>
 									  <td bgcolor="#ffffff">
 												<table>
@@ -1010,7 +1010,7 @@
 	                                                                                	</digi:trn>
 	                                                                                </td>
 	                                                                                <TD  colspan="4" align="right">	                                                                                	
-	                                                                                	<aim:formatNumber value="${aimEditActivityForm.totalPlannedDisbursements}"/>&nbsp;<bean:write name="aimEditActivityForm" property="currCode"/>
+	                                                                                	<c:out value="${aimEditActivityForm.totalPlannedDisbursements}"/>&nbsp;<bean:write name="aimEditActivityForm" property="currCode"/>
 	                                                                                </TD>
 	                                                                           </tr>
 	                                                                           	

@@ -28,6 +28,7 @@ import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.ProgramUtil.ProgramHierarchyDefinition;
 import org.digijava.module.aim.util.ProgramUtil.XMLtreeItemFactory;
 
@@ -121,6 +122,7 @@ public class ThemeManager extends Action {
 		{
 			//Iterator itr = DbUtil.getActivityTheme(themeForm.getThemeId()).iterator();
 			logger.info(" theme Id is ... "+themeForm.getThemeId());
+			RepairDbUtil.repairThemesHavingNullIndicator();
 			//Iterator itr = DbUtil.getActivityThemeFromAAT(new Long(Long.parseLong(request.getParameter("themeId")))).iterator();
 			Collection col = ProgramUtil.checkActivitiesUsingProgram( themeForm.getThemeId() );
 			Collection col2 = ProgramUtil.getThemeIndicators(themeForm.getThemeId());

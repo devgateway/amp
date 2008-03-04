@@ -122,4 +122,36 @@ public class RepairDbUtil {
 			}
 		}
 	}
+	public static void repairThemesHavingNullIndicator() {
+		Session session = null;
+		String qryStr = null;
+		
+		try{
+				session				= PersistenceManager.getSession();
+				Connection	conn	= session.connection();
+				Statement st		= conn.createStatement();
+				qryStr 				= "DELETE FROM amp_theme_indicator WHERE indicator_id IS null;" ;
+				int result			=  st.executeUpdate(qryStr);
+				conn.close();
+				
+				if (result > 0) {
+					logger.error ("There was an error with themes having null indicators --- deleted " + result + "rows" );
+				}
+		}
+	
+		
+		catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		}
+		finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+	}
 }

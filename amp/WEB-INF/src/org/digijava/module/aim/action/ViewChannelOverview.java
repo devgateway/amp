@@ -227,10 +227,12 @@ public class ViewChannelOverview extends TilesAction {
 					
                      double total=0;
                      String cal="=";
-                     if(actual.getValue()!=null){
-                    	 total+=actual.getValue().doubleValue();
-                    	 cal = actual.getCalculations();
-                         }
+                     if(actual!=null){
+                    	 if (actual.getValue() != null) 
+                    		 total+=actual.getValue().doubleValue();
+                    	 if (actual.getCalculations() != null)
+                    		 cal = actual.getCalculations();
+                     }
                     if (!debug) {
 						formBean.setGrandTotal(FormatHelper.formatNumber(total));
 					} else {

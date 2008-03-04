@@ -495,7 +495,11 @@ public class EditOrganisation
           fund.setAmount(String.valueOf(e.getAmount()));
           fund.setCurrencyCode(e.getCurrency().getCurrencyCode());
           fund.setProgram(e.getProgram());
-          SimpleDateFormat dz = new SimpleDateFormat("dd/MM/yyyy");
+          // AMP-2828 by mouhamad
+          String dateFormat = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT);
+          dateFormat = dateFormat.replace("m", "M");
+          
+          SimpleDateFormat dz = new SimpleDateFormat(dateFormat);
           String date = "";
           if (e.getDate() != null)
             date = dz.format(e.getDate());

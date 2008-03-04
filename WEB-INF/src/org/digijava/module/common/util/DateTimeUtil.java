@@ -90,9 +90,11 @@ public class DateTimeUtil {
 		if (pattern==null){
 			pattern=Constants.CALENDAR_DATE_PICKER;
 		}
-
+		// AMP-2828 by mouhamad
+		pattern = pattern.replace("m", "M");
+		
 		SimpleDateFormat formater=new SimpleDateFormat(pattern);
-                Date result=null;
+        Date result=null;
 		//if(date.contains("-")) date=date.replaceAll("-", "/");
                 try{
                     result = formater.parse(date);
@@ -100,7 +102,8 @@ public class DateTimeUtil {
                 catch(Exception ex){
                     // temp solution
                     // TODO refactoring contracting dates
-                    SimpleDateFormat formaterCont=new SimpleDateFormat("MM/dd/yyyy");
+                	// AMP-2828 by mouhamad
+                    SimpleDateFormat formaterCont=new SimpleDateFormat(pattern);
                     result = formaterCont.parse(date);
                 }
 		return result;
@@ -112,7 +115,9 @@ public class DateTimeUtil {
 		if (pattern==null){
 			pattern=Constants.CALENDAR_DATE_PICKER;
 		}
-
+		// AMP-2828 by mouhamad
+		pattern = pattern.replace("m", "M");
+		
 		SimpleDateFormat formater=new SimpleDateFormat(pattern);
 		//if(date.contains("-")) date=date.replaceAll("-", "/");
                 String result="";
@@ -122,7 +127,8 @@ public class DateTimeUtil {
                 catch(Exception ex){
                     // temp solution
                     // TODO refactoring contracting dates
-                    SimpleDateFormat formaterCont=new SimpleDateFormat("MM/dd/yyyy");
+                	// AMP-2828 by mouhamad
+                    SimpleDateFormat formaterCont=new SimpleDateFormat(pattern);
                     result = formaterCont.format(date);
                 }
 		return result;

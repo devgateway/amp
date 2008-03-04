@@ -24,8 +24,10 @@ import org.digijava.module.aim.dbentity.AmpMECurrValHistory;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.AllPrgIndicators;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 
 public class GetActivityIndicatorValues extends Action 
 {
@@ -63,9 +65,11 @@ public class GetActivityIndicatorValues extends Action
 						if (actInd.getIndicatorId().equals(indValId)) 
 						{
 							//AllPrgIndicators actInd = IndicatorUtil.getAmpIndicator(actIndicator.getIndicatorId(),actIndicator.getActivityId());
-							
-							SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-							
+							// AMP-2828 by mouhamad
+					        String dateFormat = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT);
+					        dateFormat = dateFormat.replace("m", "M");
+					          
+					        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);							
 							
 							eaForm.setIndicatorId(actInd.getIndicatorId());
 							//eaForm.setIndicatorValId(actInd.getIndicatorValId());

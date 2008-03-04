@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.digijava.module.aim.form.NewIndicatorForm;
 import org.digijava.module.aim.form.ThemeForm;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -207,9 +208,13 @@ public class AddNewIndicator
 //                }
 //            }
 //        }
-        
-        SimpleDateFormat sdf= new SimpleDateFormat("dd/MM/yyyy");
-	    newIndForm.setDate(sdf.format(new Date()).toString());
+        // AMP-2828 by mouhamad
+        String dateFormat = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT);
+        dateFormat = dateFormat.replace("m", "M");
+          
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+		
+        newIndForm.setDate(sdf.format(new Date()).toString());
       
 	    return mapping.findForward("forward");
     }

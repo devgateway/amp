@@ -83,8 +83,9 @@ public class DateConversion
 			curr = index + 1;
 			int yr = Integer.parseInt(strDate.substring(curr, strDate.length()));
 */
-			String pattern=null;
-			    //FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+			// AMP-2828
+			//String pattern=null;
+			String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
             if (pattern == null || pattern.equals("")) {
                 pattern = "MM/dd/yyyy";
             }

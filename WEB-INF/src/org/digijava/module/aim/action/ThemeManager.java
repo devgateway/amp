@@ -25,6 +25,7 @@ import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.ThemeForm;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.ProgramUtil.ProgramHierarchyDefinition;
@@ -121,12 +122,13 @@ public class ThemeManager extends Action {
 			//Iterator itr = DbUtil.getActivityTheme(themeForm.getThemeId()).iterator();
 			logger.info(" theme Id is ... "+themeForm.getThemeId());
 			//Iterator itr = DbUtil.getActivityThemeFromAAT(new Long(Long.parseLong(request.getParameter("themeId")))).iterator();
-			Collection col = DbUtil.getActivityThemeFromAAT(themeForm.getThemeId());
+			Collection col = ProgramUtil.checkActivitiesUsingProgram( themeForm.getThemeId() );
 			Collection col2 = ProgramUtil.getThemeIndicators(themeForm.getThemeId());
 			if((col!=null)&&(!(col.isEmpty())))
 			{
 				////System.out.println("activity references i can not delete this theme!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
 				themeForm.setFlag("activityReferences");
+				themeForm.setActivitiesUsingTheme( ActivityUtil.collectionToCSV(col) );
 			}
 			else
 				if ((col2 != null) && (!(col2.isEmpty()))){

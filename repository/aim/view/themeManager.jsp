@@ -219,8 +219,11 @@
 																		<td colspan="2" align="center">
 																			<font color="red"><b><digi:trn key="aim:cannotDeleteThemeMsg1">
 																			Cannot delete the theme since some
-																			activities references it.
-																			</digi:trn></b></font>
+																			activities references it: 
+																			</digi:trn>
+																				${aimThemeForm.activitiesUsingTheme }
+																				</b>
+																			</font>
 																		</td>
 																	</tr>
 												</c:if>

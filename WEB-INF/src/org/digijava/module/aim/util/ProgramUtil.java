@@ -35,6 +35,8 @@ import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.kernel.util.collections.HierarchyMemberFactory;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
@@ -1754,6 +1756,49 @@ public class ProgramUtil {
     	return "../ampTemplate/images/arrow_right.gif";
     }
 
+    public static Collection<AmpActivity> checkActivitiesUsingProgram( Long programId ) {
+    	ArrayList<AmpActivity> activities	= new ArrayList<AmpActivity>();
+    	 Session sess = null;
+         Collection col = null;
+         try {
+             sess = PersistenceManager.getRequestDBSession();
+             AmpTheme themeToBeDeleted = (AmpTheme) sess.load(AmpTheme.class, programId);
+             if ( themeToBeDeleted.getActivities() != null ){
+            	Iterator iter	= themeToBeDeleted.getActivities().iterator();
+		    	while ( iter.hasNext() ) {
+		    		AmpActivity activity	= (AmpActivity) iter.next();
+		    		if (activity != null) {
+		    			activities.add(activity);
+		    		}
+		    	}
+             }
+             if ( themeToBeDeleted.getActivityId() != null ) {
+            	 activities.add( themeToBeDeleted.getActivityId() ); 
+             }
+             
+             String queryString = "select a from " + AmpActivityProgram.class.getName() + " a where (a.program=:program) ";
+             Query qry 			= sess.createQuery(queryString);
+             qry.setLong("program", programId);
+             Collection result	= qry.list();
+             if ( result != null ) {
+            	 Iterator iterator	= result.iterator();
+            	 while ( iterator.hasNext() ) {
+            		 AmpActivityProgram program = (AmpActivityProgram)iterator.next();
+            		 if (program != null && program.getActivity() != null)
+            		       		 activities.add( program.getActivity() );
+            	 }
+             }
+             return activities;
+         }
+         catch (Exception e) {
+			// TODO: handle exception
+        	 e.printStackTrace();
+        	 return null;
+		}
+    	
+    }
+
+    
         /**
          * Hierarchy member factory.
          * Used to create XML enabled members.

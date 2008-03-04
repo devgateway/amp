@@ -38,6 +38,9 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.um.form.ViewEditUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
+import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.Constants;
 
 public class ViewEditUser extends Action {
 
@@ -180,23 +183,23 @@ public class ViewEditUser extends Action {
                 if(user.getAssignedOrgId()!=null) {
                     uForm.setOrgs(new ArrayList<AmpOrganisation>());
                     AmpOrganisation organization = org.digijava.module.aim.util.DbUtil.getOrganisation(user.getAssignedOrgId());
-                    if(organization != null){ 
+                    if(organization != null){
                     	uForm.getOrgs().add(organization);
                     }
-                
+
                 }
-                
+
 
                 Locale language = null;
                 if (langPref == null) {
                     language = user.getRegisterLanguage();
                 } else {
-                    language = langPref.getNavigationLanguage();
+                    language = langPref.getAlertsLanguage();
                 }
 
                 uForm.setSelectedLanguageCode(language.getCode());
                 uForm.setSelectedOrgName(user.getOrganizationName());
-                
+
                 if (userExt!=null){
                 	if (userExt.getOrgGroup()!=null){
                 		uForm.setSelectedOrgGroupId(userExt.getOrgGroup().getAmpOrgGrpId());
@@ -208,7 +211,7 @@ public class ViewEditUser extends Action {
                 		uForm.setSelectedOrgName(userExt.getOrganization().getName());
                 		uForm.setSelectedOrgId(userExt.getOrganization().getAmpOrgId());
                 	}
-                	
+
                 }
 
 //                if (user.getOrganizationName() != null &&
@@ -275,33 +278,22 @@ public class ViewEditUser extends Action {
                     user.setLastName(uForm.getLastName());
                     user.setAddress(uForm.getMailingAddress());
                     user.setOrganizationName(uForm.getSelectedOrgName());
-                    
+
                     user.setAssignedOrgId(uForm.getAssignedOrgId());
-                    
+
                     user.setUrl(uForm.getUrl());
 
-                    Locale language = DbUtil.getLanguageByCode(uForm.getSelectedLanguageCode());
+                    SiteDomain siteDomain = (SiteDomain) request.getAttribute(Constants.CURRENT_SITE);
+                    UserLangPreferences userLangPreferences = new UserLangPreferences(user, DgUtil.getRootSite(siteDomain.getSite()));
 
-                    if (langPref == null) {
-                        UserPreferences pref = UserUtils.getUserPreferences(user, curSite);
-                        if (pref == null) {
-                            pref = new UserPreferences(user, curSite);
-                            pref.setPublicProfile(true);
-                            pref.setReceiveAlerts(true);
-                            pref.setBiography("");
-                            UserUtils.saveUserPreferences(pref);
-                        }
-                        langPref = new UserLangPreferences();
-                        langPref.setId(pref.getId());
-                        langPref.setAlertsLanguage(language);
-                        Set<Locale> contentLangs = new HashSet<Locale> ();
-                        langPref.setContentLanguages(contentLangs);
-                    }
-                    langPref.setNavigationLanguage(language);
-                    UserUtils.saveUserLangPreferences(langPref);
+                    Locale language = new Locale();
+                    language.setCode(uForm.getSelectedLanguageCode());
 
-                    
-                    
+                    userLangPreferences.setAlertsLanguage(language);
+                    userLangPreferences.setNavigationLanguage(RequestUtils.getNavigationLanguage(request));
+
+                    user.setUserLangPreferences(userLangPreferences);
+
                     DbUtil.updateUser(user);
 
                     resetViewEditUserForm(uForm);

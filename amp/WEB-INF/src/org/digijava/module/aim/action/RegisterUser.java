@@ -76,25 +76,10 @@ public class RegisterUser extends Action {
 			user.setOrganizationTypeOther(new String(" "));
 
 			// set country
-			Collection col1 =FeaturesUtil.getDefaultCountryISO();
-            String ISO= null;
-            Iterator itr1 = col1.iterator();
-            while(itr1.hasNext())
-            {
-            	AmpGlobalSettings ampG = (AmpGlobalSettings)itr1.next();
-            	ISO = ampG.getGlobalSettingsValue();
-            }
-            
-            Collection col =FeaturesUtil.getDefaultCountry(ISO);
-            String countryIso = null;
-            Iterator itr = col.iterator();
-            while(itr.hasNext())
-            {
-            	Country ampG = (Country)itr.next();
-            	countryIso = ampG.getIso();
-            }
+            ;
+            user.setCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(userRegisterForm.getSelectedCountryResidence()));
             //System.out.println(" this is the default country.... "+countryIso);
-            user.setCountry(new Country(countryIso));
+            //user.setCountry(new Country(countryIso));
 			//user.setCountry(new Country(org.digijava.module.aim.helper.Constants.COUNTRY_ISO));
 
 			// set default language
@@ -129,7 +114,7 @@ public class RegisterUser extends Action {
 			AmpOrganisation organ = org.digijava.module.aim.util.DbUtil.getOrganisation(userRegisterForm.getSelectedOrganizationId());
 			userExt.setOrganization(organ);
 			// ===== end user extension setup =====
-			
+
 			// if email register get error message
 
 			if (DbUtil.isRegisteredEmail(user.getEmail())) {
@@ -145,14 +130,14 @@ public class RegisterUser extends Action {
 				Long uid[] = new Long[1];
 				uid[0] = user.getId();
 				org.digijava.module.admin.util.DbUtil.addUsersToGroup(memberGroup.getId(),uid);
-				
+
 				//save amp user extensions;
 				AmpUserExtensionPK extPK=new AmpUserExtensionPK(user);
 				userExt.setAmpUserExtId(extPK);
 				AmpUserUtil.saveAmpUserExtension(userExt);
 			}
-			
-			
+
+
 
 		} catch (Exception e) {
 			logger.error("Exception from RegisterUser :" + e);

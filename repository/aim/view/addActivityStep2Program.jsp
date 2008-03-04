@@ -80,6 +80,11 @@
                                                   <tr>
                                                     <td>
                                                       <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+                                                     <digi:trn key="aim:defaultprogram">Default Program</digi:trn>:
+                                  							<c:if test="${!empty aimEditActivityForm.nationalSetting}">
+                                  							${aimEditActivityForm.nationalSetting.defaultHierarchy.name}
+                                  							</c:if>
+															<br>
                                                         <c:if test="${!empty aimEditActivityForm.nationalPlanObjectivePrograms}">
                                                           <c:forEach var="nationalPlanObjectivePrograms" items="${aimEditActivityForm.nationalPlanObjectivePrograms}">
                                                           <c:set var="program" value="${nationalPlanObjectivePrograms.program}"/>
@@ -89,7 +94,7 @@
                                                                   <tr>
                                                                     <td>
                                                                       <html:multibox property="selectedNPOPrograms" value="${program.ampThemeId}"/>
-										${nationalPlanObjectivePrograms.hierarchyNames}
+										                                         ${nationalPlanObjectivePrograms.hierarchyNames}
                                                                     </td>
                                                                       <td width="5%" align="right" vAlign="center" nowrap="nowrap">
                                                                     	<FONT color="red">*</FONT>
@@ -111,10 +116,9 @@
                                                         </c:if>
                                                         <tr>
                                                           <td>
-
-
-
-                                                          <c:if test="${!empty aimEditActivityForm.nationalSetting.defaultHierarchy && (aimEditActivityForm.nationalSetting.allowMultiple||empty aimEditActivityForm.nationalPlanObjectivePrograms)}">
+                                                          
+															
+                                                          <c:if test="${!empty aimEditActivityForm.nationalSetting.defaultHierarchy.name && (aimEditActivityForm.nationalSetting.allowMultiple||empty aimEditActivityForm.nationalPlanObjectivePrograms)}">
                                                           <field:display name="Add Programs Button - National Plan Objective" feature="Program">
                                                             <html:button styleClass="buton" property="submitButton" onclick="addProgram(1);">
 															<digi:trn key="btn:addPrograms">Add Programs</digi:trn>
@@ -165,6 +169,11 @@
                                                   <tr>
                                                     <td>
                                                       <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+                                                     <digi:trn key="aim:defaultprogram">Default Program</digi:trn>:
+                                                      <c:if test="${!empty aimEditActivityForm.primarySetting}">
+                                                      	${aimEditActivityForm.primarySetting.defaultHierarchy.name}
+                                                      </c:if>
+                                                      <br>
                                                         <c:if test="${!empty aimEditActivityForm.primaryPrograms}">
                                                           <c:forEach var="primaryPrograms" items="${aimEditActivityForm.primaryPrograms}">
                                                                 <c:set var="program" value="${primaryPrograms.program}"/>
@@ -241,6 +250,11 @@
                                                   <tr>
                                                     <td>
                                                       <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+                                                       <digi:trn key="aim:defaultprogram">Default Program</digi:trn>:
+                                                      <c:if test="${!empty aimEditActivityForm.secondarySetting}">
+                                                       ${aimEditActivityForm.secondarySetting.defaultHierarchy.name}
+                                                       </c:if>
+                                                       <br>
                                                         <c:if test="${!empty aimEditActivityForm.secondaryPrograms}">
                                                           <c:forEach var="secondaryPrograms" items="${aimEditActivityForm.secondaryPrograms}" >
                                                            <c:set var="program" value="${secondaryPrograms.program}"/>

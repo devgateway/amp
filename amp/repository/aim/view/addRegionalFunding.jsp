@@ -12,7 +12,6 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
@@ -98,7 +97,7 @@
 										<digi:trn key="aim:commitments">Commitments</digi:trn>
 										 - (
 										 <digi:trn key="aim:totalActualAllocation">Total Actual Allocation</digi:trn> 
-											<%=FormatHelper.formatNumber( eaForm.getTotalCommitments())%> 
+											<%=eaForm.getTotalCommitments()%> 
 											<%=eaForm.getCurrCode()%>
 											)
 										</span>
@@ -190,8 +189,8 @@
 										<span class="f-names"><digi:trn key="aim:disbursement">Disbursement</digi:trn> 
 										- (
 											<digi:trn key="aim:totalActualToDate">Total actual to date</digi:trn> 
-											<%=FormatHelper.formatNumber( eaForm.getTotalDisbursements())%>
-															 <%=eaForm.getCurrCode()%>)
+											<%=eaForm.getTotalDisbursements()%>
+											<%=eaForm.getCurrCode()%>)
 										</span>
 										<field:display name="Add Disbursement Order Button" feature="Disbursement Orders">
 											<a href="javascript:addDisbursement()">${translationAdd }</a>
@@ -285,7 +284,7 @@
 											<span class="f-names"><digi:trn key="aim:expenditure">Expenditure</digi:trn> 
 											- 	(
 												<digi:trn key="aim:totalActualToDate">Total actual to date</digi:trn>
-												<%=FormatHelper.formatNumber( eaForm.getTotalExpenditures())%>
+												<%=eaForm.getTotalExpenditures()%>
 												<%=eaForm.getCurrCode()%>
 												)
 											</span>

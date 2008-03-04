@@ -8,8 +8,6 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-
-<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <%@page import="org.digijava.module.aim.form.EditActivityForm"%>
 <digi:instance property="aimEditActivityForm"/>
 
@@ -34,7 +32,7 @@
 																			<digi:trn key="aim:commitments">Commitments</digi:trn> - (
 																			<digi:trn key="aim:grantTotalActualAllocation">Grand Total actual
 																			allocation</digi:trn> =
-																				<%=FormatHelper.formatNumber(((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getTotalCommitments())%>
+																				<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getTotalCommitments()%>
 																			
 																			<c:out value="${aimEditActivityForm.currCode}"/>)
 																		<br/></field:display>
@@ -43,7 +41,7 @@
 																			<digi:trn key="aim:disbursements">Disbursements</digi:trn> - (
 																			<digi:trn key="aim:totalActualToDate">Total actual to date
 																			</digi:trn> =
-																			<%=FormatHelper.formatNumber(((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getTotalDisbursements())%>
+																			<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getTotalDisbursements()%>
 																			
 																			<c:out value="${aimEditActivityForm.currCode}"/>)
 																		<br/>
@@ -53,7 +51,7 @@
 																			<digi:trn key="aim:expenditures">Expenditures</digi:trn> - (
 																			<digi:trn key="aim:totalActualToDate">Total actual to date
 																			</digi:trn> =
-																			<%=FormatHelper.formatNumber(((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getTotalExpenditures())%>
+																			<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getTotalExpenditures()%>
 																			
 																			<c:out value="${aimEditActivityForm.currCode}"/>)
 																		<br/>
@@ -66,7 +64,7 @@
 																		</c:if>
 																		>
 																		<digi:trn key="aim:totalComponentActualDisbursement">Component Grand Total Actual Disbursements</digi:trn>=
-																			<%=FormatHelper.formatNumber(((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getCompTotalDisb())%>
+																			<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getCompTotalDisb()%>
 																	
 																		<c:out value="${aimEditActivityForm.currCode}"/>
 																		</font>

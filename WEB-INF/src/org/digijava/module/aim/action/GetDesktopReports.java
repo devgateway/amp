@@ -15,10 +15,12 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.dgfoundation.amp.ar.ARUtil;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -31,13 +33,28 @@ public class GetDesktopReports extends TilesAction {
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		if (tm != null) {
-				Collection reports;
+				Collection reports = new ArrayList();
+				//Adding the default team report
+				AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
+				AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
+				ArrayList userReports = TeamMemberUtil.getAllMemberReports(tm.getMemberId());
+				Iterator iter = userReports.iterator();
+				boolean found = false;
+				while (iter.hasNext()) {
+					AmpReports el = (AmpReports) iter.next();
+					if (el.compareTo(defaultTeamReport) == 0){
+						found = true;
+						break;
+					}
+				}
+				
+				if ((defaultTeamReport != null) && (userReports != null) && (!found))
+					reports.add(defaultTeamReport);
 				//After Tanzania: Team Leaders should see all
 //				if (tm.getTeamHead() == true) {
-//					reports = TeamUtil.getAllTeamReports(tm.getTeamId());
+//					reports.addAll(TeamUtil.getAllTeamReports(userReports));
 //				} else {
-					reports = TeamMemberUtil.getAllMemberReports(tm.getMemberId());
-
+					reports.addAll(userReports);
 //				}
                                 Integer reportsPerPage=0;
 				session.setAttribute(Constants.MY_REPORTS,reports);

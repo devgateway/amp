@@ -111,10 +111,10 @@ public class YearlyInfoWorker {
 		while ( iter.hasNext() )	{
 			y =  iter.next();
 			if ( type == Constants.PLANNED )	{
-				total += y.getActualAmount();
+				total += y.getPlannedAmount();
 			}
 			else if ( type == Constants.ACTUAL )	{
-				total += y.getPlannedAmount();
+				total += y.getActualAmount();
 			}
 		}
 		String strTotal = FormatHelper.formatNumber(total);

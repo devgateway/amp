@@ -708,17 +708,12 @@
 
 				   					              		</td-->
 
-									                 		<td bgcolor="#DDDDDB">
-
-				   					                     <div align="center">
-
-																	<font color="blue">*</font>
-
-															  		<digi:trn key="aim:actualAmount">Actual Amount</digi:trn>
-
-																	</div>
-
-									                 		</td>
+									                 <td bgcolor="#DDDDDB">
+														  <div align="center">
+															<font color="blue">*</font>
+																<digi:trn key="aim:actualAmount">Actual Amount</digi:trn>
+														 </div>
+													</td>
 
 									              		</tr>
 
@@ -735,10 +730,10 @@
 																<!--td bgcolor="#F8F8F5">
 		         					                 				<div align="right">
 		         					                 					<logic:present name="debug">
-		         					                 						<%=yearlyInfo.getWrapedPlanned()%>
+		         					                 						<%//=yearlyInfo.getWrapedPlanned()%>
 		         					                 					</logic:present>
 		         					                 					<logic:notPresent name="debug">
-		         					                 						<%=FormatHelper.formatNumber(yearlyInfo.getPlannedAmount())%>
+		         					                 						<%//=FormatHelper.formatNumber(yearlyInfo.getPlannedAmount())%>
 		         					                 					</logic:notPresent>
 																	</div>
 																</td-->
@@ -755,56 +750,31 @@
 															</tr>
 														</logic:iterate>
 													</logic:notEmpty>
-
-															<logic:empty name="aimYearlyInfoForm" property="yearlyInfo">
-
-															<tr valign="top" bgcolor="#F8F8F5">
-
-									                  	<td bgcolor="#F8F8F5" colspan="3">
-
-				         					            	<div align="center" class="note">
-
-																		<digi:trn key="aim:noRecords">No records</digi:trn> !
-
-																	</div>
-
-				      					               </td>
-
-									                  </tr>
-
-															</logic:empty>
-
-															<tr valign="top" class="note">
-
-				         					         	<td>
-
-																	<digi:trn key="aim:total">Total</digi:trn>
-
-																</td>
-
-				                  					   <!--td>
-
-									                     	<div align="right">
-
-																		<bean:write name="aimYearlyInfoForm" property="totalPlanned" />
-
-																	</div>
-
-									                      </td-->
-
-									                      <td>
-
-				   					                   	<div align="right">
-
-																		<bean:write name="aimYearlyInfoForm" property="totalActual" />
-
-																	</div>
-
-									                     </td>
-
-															</tr>
-
-					                       		</TABLE>
+													<logic:empty name="aimYearlyInfoForm" property="yearlyInfo">
+														<tr valign="top" bgcolor="#F8F8F5">
+															<td bgcolor="#F8F8F5" colspan="3">
+																<div align="center" class="note">
+																	<digi:trn key="aim:noRecords">No records</digi:trn> !
+																</div>
+															</td>
+														</tr>
+													</logic:empty>
+													<tr valign="top" class="note">
+														<td>
+															<digi:trn key="aim:total">Total</digi:trn>
+														</td>
+														<!--td>
+															<div align="right">
+																<bean:write name="aimYearlyInfoForm" property="totalPlanned" />
+															</div>
+														</td-->
+														<td>
+															<div align="right">
+																<bean:write name="aimYearlyInfoForm" property="totalActual" />
+															</div>
+														</td>
+													</tr>
+												</TABLE>
 
 													</logic:notEqual>
 

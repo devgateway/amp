@@ -66,6 +66,8 @@ public class AddThemeIndicator extends Action
 		Long selInds[] =  themeForm.getIndid();
 //		Long id = new Long(Long.parseLong(request.getParameter("themeId")));
 		Long id = themeForm.getThemeId();
+		String name=ProgramUtil.getThemeById(id).getName();
+		themeForm.setThemeName(name);
 		String event = themeForm.getEvent();
 		themeForm.setThemeId(id);
 		boolean flag = true;

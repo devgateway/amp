@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
@@ -19,7 +20,6 @@ import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -215,7 +215,21 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String mfdCntOrganization;
 	private String mfdCntPhoneNumber;
 	private String mfdCntFaxNumber;
-
+	private String prjCoFirstName;
+	private String prjCoLastName;
+	private String prjCoEmail;
+	private String prjCoTitle;
+	private String prjCoOrganization;
+	private String prjCoPhoneNumber;
+	private String prjCoFaxNumber;
+	private String secMiCntFirstName;
+	private String secMiCntLastName;
+	private String secMiCntEmail;
+	private String secMiCntTitle;
+	private String secMiCntOrganization;
+	private String secMiCntPhoneNumber;
+	private String secMiCntFaxNumber;
+	
 	private String actAthFirstName;
 	private String actAthLastName;
 	private String actAthEmail;
@@ -720,6 +734,20 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			mfdCntOrganization = null;
 			mfdCntPhoneNumber = null;
 			mfdCntFaxNumber = null;
+			prjCoEmail = null;
+			prjCoFirstName = null;
+			prjCoLastName = null;
+			prjCoTitle = null;
+			prjCoOrganization = null;
+			prjCoPhoneNumber = null;
+			prjCoFaxNumber = null;
+			secMiCntEmail = null;
+			secMiCntFirstName = null;
+			secMiCntLastName = null;
+			secMiCntTitle = null;
+			secMiCntOrganization = null;
+			secMiCntPhoneNumber = null;
+			secMiCntFaxNumber = null;
 			actAthEmail = null;
 			actAthFirstName = null;
 			actAthAgencySource=null;
@@ -4809,8 +4837,202 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		this.totalPlannedDisbursements = totalPlannedDisbursements;
 	}
 
+	/**
+	 * @return the prjCoFirstName
+	 */
+	public String getPrjCoFirstName() {
+		return prjCoFirstName;
+	}
 
-    
+	/**
+	 * @param prjCoFirstName the prjCoFirstName to set
+	 */
+	public void setPrjCoFirstName(String prjCoFirstName) {
+		this.prjCoFirstName = prjCoFirstName;
+	}
+
+	/**
+	 * @return the prjCoLastName
+	 */
+	public String getPrjCoLastName() {
+		return prjCoLastName;
+	}
+
+	/**
+	 * @param prjCoLastName the prjCoLastName to set
+	 */
+	public void setPrjCoLastName(String prjCoLastName) {
+		this.prjCoLastName = prjCoLastName;
+	}
+
+	/**
+	 * @return the prjCoEmail
+	 */
+	public String getPrjCoEmail() {
+		return prjCoEmail;
+	}
+
+	/**
+	 * @param prjCoEmail the prjCoEmail to set
+	 */
+	public void setPrjCoEmail(String prjCoEmail) {
+		this.prjCoEmail = prjCoEmail;
+	}
+
+	/**
+	 * @return the prjCoTitle
+	 */
+	public String getPrjCoTitle() {
+		return prjCoTitle;
+	}
+
+	/**
+	 * @param prjCoTitle the prjCoTitle to set
+	 */
+	public void setPrjCoTitle(String prjCoTitle) {
+		this.prjCoTitle = prjCoTitle;
+	}
+
+	/**
+	 * @return the prjCoOrganization
+	 */
+	public String getPrjCoOrganization() {
+		return prjCoOrganization;
+	}
+
+	/**
+	 * @param prjCoOrganization the prjCoOrganization to set
+	 */
+	public void setPrjCoOrganization(String prjCoOrganization) {
+		this.prjCoOrganization = prjCoOrganization;
+	}
+
+	/**
+	 * @return the prjCoPhoneNumber
+	 */
+	public String getPrjCoPhoneNumber() {
+		return prjCoPhoneNumber;
+	}
+
+	/**
+	 * @param prjCoPhoneNumber the prjCoPhoneNumber to set
+	 */
+	public void setPrjCoPhoneNumber(String prjCoPhoneNumber) {
+		this.prjCoPhoneNumber = prjCoPhoneNumber;
+	}
+
+	/**
+	 * @return the prjCoFaxNumber
+	 */
+	public String getPrjCoFaxNumber() {
+		return prjCoFaxNumber;
+	}
+
+	/**
+	 * @param prjCoFaxNumber the prjCoFaxNumber to set
+	 */
+	public void setPrjCoFaxNumber(String prjCoFaxNumber) {
+		this.prjCoFaxNumber = prjCoFaxNumber;
+	}
+
+	/**
+	 * @return the secMiCntFirstName
+	 */
+	public String getSecMiCntFirstName() {
+		return secMiCntFirstName;
+	}
+
+	/**
+	 * @param secMiCntFirstName the secMiCntFirstName to set
+	 */
+	public void setSecMiCntFirstName(String secMiCntFirstName) {
+		this.secMiCntFirstName = secMiCntFirstName;
+	}
+
+	/**
+	 * @return the secMiCntLastName
+	 */
+	public String getSecMiCntLastName() {
+		return secMiCntLastName;
+	}
+
+	/**
+	 * @param secMiCntLastName the secMiCntLastName to set
+	 */
+	public void setSecMiCntLastName(String secMiCntLastName) {
+		this.secMiCntLastName = secMiCntLastName;
+	}
+
+	/**
+	 * @return the secMiCntEmail
+	 */
+	public String getSecMiCntEmail() {
+		return secMiCntEmail;
+	}
+
+	/**
+	 * @param secMiCntEmail the secMiCntEmail to set
+	 */
+	public void setSecMiCntEmail(String secMiCntEmail) {
+		this.secMiCntEmail = secMiCntEmail;
+	}
+
+	/**
+	 * @return the secMiCntTitle
+	 */
+	public String getSecMiCntTitle() {
+		return secMiCntTitle;
+	}
+
+	/**
+	 * @param secMiCntTitle the secMiCntTitle to set
+	 */
+	public void setSecMiCntTitle(String secMiCntTitle) {
+		this.secMiCntTitle = secMiCntTitle;
+	}
+
+	/**
+	 * @return the secMiCntOrganization
+	 */
+	public String getSecMiCntOrganization() {
+		return secMiCntOrganization;
+	}
+
+	/**
+	 * @param secMiCntOrganization the secMiCntOrganization to set
+	 */
+	public void setSecMiCntOrganization(String secMiCntOrganization) {
+		this.secMiCntOrganization = secMiCntOrganization;
+	}
+
+	/**
+	 * @return the secMiCntPhoneNumber
+	 */
+	public String getSecMiCntPhoneNumber() {
+		return secMiCntPhoneNumber;
+	}
+
+	/**
+	 * @param secMiCntPhoneNumber the secMiCntPhoneNumber to set
+	 */
+	public void setSecMiCntPhoneNumber(String secMiCntPhoneNumber) {
+		this.secMiCntPhoneNumber = secMiCntPhoneNumber;
+	}
+
+	/**
+	 * @return the secMiCntFaxNumber
+	 */
+	public String getSecMiCntFaxNumber() {
+		return secMiCntFaxNumber;
+	}
+
+	/**
+	 * @param secMiCntFaxNumber the secMiCntFaxNumber to set
+	 */
+	public void setSecMiCntFaxNumber(String secMiCntFaxNumber) {
+		this.secMiCntFaxNumber = secMiCntFaxNumber;
+	}
+
 }
 
 

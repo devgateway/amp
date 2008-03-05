@@ -97,6 +97,7 @@ public class ThemeForm extends ActionForm {
         
       	
       	private String activitiesUsingTheme	= null;
+      	private String settingsUsedByTheme	= null;
 				
 		public String getFlag() {
 			return flag;
@@ -804,6 +805,14 @@ public class ThemeForm extends ActionForm {
 
 	public void setActivitiesUsingTheme(String activitiesUsingTheme) {
 		this.activitiesUsingTheme = activitiesUsingTheme;
+	}
+
+	public String getSettingsUsedByTheme() {
+		return settingsUsedByTheme;
+	}
+
+	public void setSettingsUsedByTheme(String settingsUsedByTheme) {
+		this.settingsUsedByTheme = settingsUsedByTheme;
 	}
 	
 	

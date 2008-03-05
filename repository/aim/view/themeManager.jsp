@@ -78,11 +78,11 @@
 			document.aimThemeForm.submit();
 
 		}
-		function assignIndicators(id,name)
+		function assignIndicators(id)
 		{
 
 			<digi:context name="indAssign" property="context/module/moduleinstance/addThemeIndicator.do"/>
-			document.aimThemeForm.action = "<%= indAssign %>?resetIndicatorId=true&themeId=" + id + "&themeName="+name;
+			document.aimThemeForm.action = "<%= indAssign %>?resetIndicatorId=true&themeId=" + id;
 			document.aimThemeForm.target = "_self";
 			document.aimThemeForm.submit();
 

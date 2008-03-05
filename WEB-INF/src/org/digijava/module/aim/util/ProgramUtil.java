@@ -1707,7 +1707,7 @@ public class ProgramUtil {
 			retVal += "     <a href=\"javascript:addSubProgram('5','"+theme.getAmpThemeId() +"','"+level+"','"+theme.getEncodeName()+"')\">"+getTrn("aim:admin:themeTree:add_sub_prog", "Add Sub Program", request)+"</a> |\n";
 			retVal += "   </td>";
 			retVal += "   <td nowrap=\"nowrap\" width=\"10%\">";
-			retVal += "     <a href=\"javascript:assignIndicators('"+theme.getAmpThemeId() +"','"+theme.getEncodeName()+"')\">"+getTrn("aim:admin:themeTree:manage_indicators", "Manage Indicators", request)+"</a>\n";
+			retVal += "     <a href=\"javascript:assignIndicators('"+theme.getAmpThemeId() +"')\">"+getTrn("aim:admin:themeTree:manage_indicators", "Manage Indicators", request)+"</a>\n";
 			retVal += "   </td>";
 			retVal += "   <td width=\"12\">";
 			retVal += "     <a href=\"/aim/themeManager.do~event=delete~themeId="+theme.getAmpThemeId()+"\" onclick=\"return deleteProgram()\"><img src=\"../ampTemplate/images/trash_12.gif\" border=\"0\"></a>";

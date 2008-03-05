@@ -66,7 +66,6 @@ public class AddThemeIndicator extends Action
 		Long selInds[] =  themeForm.getIndid();
 //		Long id = new Long(Long.parseLong(request.getParameter("themeId")));
 		Long id = themeForm.getThemeId();
-		String name = themeForm.getThemeName();
 		String event = themeForm.getEvent();
 		themeForm.setThemeId(id);
 		boolean flag = true;
@@ -221,7 +220,7 @@ public class AddThemeIndicator extends Action
 		}
 
 		List prgInds = new ArrayList(IndicatorUtil.getAllIndicators(id));
-        Collections.sort(prgInds, new ProgramUtil.HelperAmpIndicatorNameComparator());
+        Collections.sort(prgInds, new ProgramUtil.HelperAmpIndicatorNameComparator());   
         themeForm.setPrgIndicators(prgInds);
 
 		return mapping.findForward("forward");

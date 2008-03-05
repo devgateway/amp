@@ -26,6 +26,7 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 
 
 public class UpdateCurrencyRate extends Action {
@@ -75,6 +76,7 @@ public class UpdateCurrencyRate extends Action {
 					currencyRates = new CurrencyRates();
 					currencyRates.setCurrencyCode(code);
 					currencyRates.setExchangeRate(new Double(rate));
+					//DateTimeUtil.parseDate(date).toString();
 					currencyRates.setExchangeRateDate(date);
 					col.add(currencyRates);
 				}
@@ -139,8 +141,8 @@ public class UpdateCurrencyRate extends Action {
                         cRate.setExchangeRate(rate);
                       }
                       if (crForm.getUpdateCRateDate() != null) {
-                        cRate.setExchangeRateDate(DateConversion.getDate(crForm.
-                            getUpdateCRateDate()));
+                    	 cRate.setExchangeRateDate(DateTimeUtil.parseDate(crForm.getUpdateCRateDate())); 
+                        //cRate.setExchangeRateDate(DateConversion.getDate(crForm.getUpdateCRateDate()));
                       }
 
                       cRate.setToCurrencyCode(crForm.getUpdateCRateCode());

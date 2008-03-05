@@ -130,6 +130,9 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <feature:display name="Web Resources" module="Document"></feature:display>
 <feature:display module="Funding" name="Disbursement Orders"></feature:display>
 <feature:display module="Funding" name="Expenditures"></feature:display>
+<feature:display name="Donor Contact Information" module="Contact Information"></feature:display>
+<feature:display name="Project Coordinator" module="Contact Information"></feature:display>
+<feature:display name="Sector Ministry Contact" module="Contact Information"></feature:display>
 
 
 <feature:display module="Contracting" name="Contracting"></feature:display>
@@ -495,6 +498,25 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Delete Contract" feature="Contracting"></field:display>
 <field:display name="Edit Contract" feature="Contracting"></field:display>
 <field:display name="Add IPA Contract" feature="Contracting"></field:display>
+
+<!-- AMP-2675 by mouhamad -->
+<field:display name="Email" feature="Project Coordinator"></field:display>
+<field:display name="Fax Number" feature="Project Coordinator"></field:display>
+<field:display name="First Name" feature="Project Coordinator"></field:display>
+<field:display name="Last Name" feature="Project Coordinator"></field:display>
+<field:display name="Organization" feature="Project Coordinator"></field:display>
+<field:display name="Phone Number" feature="Project Coordinator"></field:display>
+<field:display name="Title" feature="Project Coordinator"></field:display>
+
+<field:display name="Email" feature="Sector Ministry Contact"></field:display>
+<field:display name="Fax Number" feature="Sector Ministry Contact"></field:display>
+<field:display name="First Name" feature="Sector Ministry Contact"></field:display>
+<field:display name="Last Name" feature="Sector Ministry Contact"></field:display>
+<field:display name="Organization" feature="Sector Ministry Contact"></field:display>
+<field:display name="Phone Number" feature="Sector Ministry Contact"></field:display>
+<field:display name="Title" feature="Sector Ministry Contact"></field:display>
+
+
 <logic:iterate id="ampMeasures"  name="list" scope="page" type="org.digijava.module.aim.dbentity.AmpMeasures">
 	<field:display name="${ampMeasures.aliasName}" feature="Measures"></field:display>
 </logic:iterate>

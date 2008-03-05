@@ -1060,7 +1060,7 @@ function collapseAll() {
 											<div id="group_funding_dots"><bean:write name="aimEditActivityForm" property="totalCommitted"/>&nbsp;
 											<bean:write name="aimEditActivityForm" property="currCode"/>
 											&nbsp; ...</div>
-											<div id="act_group_funding" style="display: none;">
+											<div id="act_group_funding" style="display:none;">
 										    <table width="95%" cellSpacing=1 cellPadding=0 border=0 align="center">
                                               <tr>
                                                 <td>
@@ -1507,13 +1507,18 @@ function collapseAll() {
 	                                                                                      </TD>
 	                                                                                </tr>																						
                                                                                     </c:if>
+                                                                                    
+                                                                                 
 																						<tr bgcolor="#ffffff">
 																							<td colspan="5">&nbsp;</td>
 																						</tr>
-																						<tr bgcolor="#ffffff">
+																				     <!-- expenditures -->
+	<feature:display module="Funding" name="Expenditures">
+                                                                                    	<tr bgcolor="#ffffff">
 																							<td colspan="5">
-																							<a title="<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>">	<b><digi:trn key="aim:expenditures"> Expenditures </digi:trn></b>																							</a>																							</td>
+																							<a title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>	<b><digi:trn key="aim:expenditures"> Expenditures </digi:trn></b>																							</a>																							</td>
 																						</tr>
+                                                                                   
                                                                                         <c:if test="${!empty funding.fundingDetails}">
 																						<logic:iterate name="funding" property="fundingDetails"
 																						id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
@@ -1614,10 +1619,18 @@ function collapseAll() {
 																						</logic:equal>
 																						</logic:iterate>
                                                                                         </c:if>
-																				  </table>																				</td>
-																			</tr>
-																		</table>																	</td></tr>
-																	<tr><td bgcolor="#ffffff">
+                                                                                        <!-- expenditures -->
+	</feature:display>
+                                                                                       
+																				  </table>
+                                                                                  </td>
+                                                                                  	</tr>
+                                                                                    </table>
+                                                                            </td>
+                                                                            </tr>
+																	<tr>
+                                                                    
+                                                                    <td bgcolor="#ffffff">
 																		<FONT color=blue>*
 																			<digi:trn key="aim:theAmountEnteredAreInThousands">
 																				The amount entered are in thousands (000)		  																	</digi:trn>
@@ -1775,6 +1788,7 @@ function collapseAll() {
 																	</table>
 																</td></tr>
 															</c:if>
+                                                            <feature:display module="Funding" name="Expenditures">
 															<c:if test="${!empty regFunds.expenditures}">
 																<tr><td bgcolor="#ffffff">
 																	<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
@@ -1810,6 +1824,7 @@ function collapseAll() {
 																	</table>
 																</td></tr>
 															</c:if>
+                                                            </feature:display>
 														</table>
 													</td></tr>
 												</c:forEach>
@@ -2093,11 +2108,11 @@ function collapseAll() {
 																			</td>
 																		</tr>
 																		<tr>
-																			<td>
-																				&nbsp;
+																			<td>&nbsp;
+																				
 																			</td>
-																			<td>
-																				&nbsp;
+																			<td>&nbsp;
+																				
 																			</td>																			
 																		</tr>																	
 																		</c:forEach>

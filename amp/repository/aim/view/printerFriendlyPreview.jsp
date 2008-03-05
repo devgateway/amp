@@ -1114,9 +1114,11 @@
 																						<tr bgcolor="#ffffff">
 																							<td colspan="5">&nbsp;</td>
 																						</tr>
-																						<tr bgcolor="#ffffff">
+																						<!-- expenditures -->
+	<feature:display module="Funding" name="Expenditures">
+                                                                                        <tr bgcolor="#ffffff">
 																							<td colspan="5">
-																							<a title="<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>">	<b><digi:trn key="aim:expenditures"> Expenditures </digi:trn></b>																							</a>																							</td>
+																							<a title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>	<b><digi:trn key="aim:expenditures"> Expenditures </digi:trn></b>																							</a>																							</td>
 																						</tr>
                                                                                         <c:if test="${!empty funding.fundingDetails}">
 																						<logic:iterate name="funding" property="fundingDetails"
@@ -1218,6 +1220,7 @@
 																						</logic:equal>
 																						</logic:iterate>
                                                                                         </c:if>
+                                                                                        </feature:display>
 																			</table>																				</td>
 																		</tr>
 																	  </table>																	</td></tr>
@@ -1646,11 +1649,11 @@
 																			</td>
 																		</tr>
 																		<tr>
-																			<td>
-																				&nbsp;
+																			<td>&nbsp;
+																				
 																			</td>
-																			<td>
-																				&nbsp;
+																			<td>&nbsp;
+																				
 																			</td>																			
 																		</tr>																	
 																		</c:forEach>

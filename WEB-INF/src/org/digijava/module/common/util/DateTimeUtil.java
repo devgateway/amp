@@ -79,6 +79,7 @@ public class DateTimeUtil {
 		if (pattern==null){
 			pattern=Constants.CALENDAR_DATE_FORMAT;
 		}
+		pattern = pattern.replace('m', 'M');
 		SimpleDateFormat formater=new SimpleDateFormat(pattern);
 		Date result = formater.parse(date);
 		return result;

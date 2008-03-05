@@ -293,7 +293,7 @@ public class ViewChannelOverview extends TilesAction {
 	}
 
 	private void createWarnings (Activity activity, boolean isTeamHead) {
-		if ( activity.getDraft() == true ) {
+		if (activity.getDraft()!=null && activity.getDraft()) {
 			errors.add(
 				"title", new ActionError("error:aim:draftActivity")
 			);

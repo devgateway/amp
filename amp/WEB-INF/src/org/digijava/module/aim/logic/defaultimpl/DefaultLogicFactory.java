@@ -12,6 +12,7 @@ public class DefaultLogicFactory extends BaseFactory{
 		commitmentCalculator = new DefaultCommitmentCalculator();
 		undisbursmentCalculator = new DefaultUnDisbursmentCalculator();
 		donorFundingCalculator = new DefaultDonorFundingCalculator();
+		ampARFilterHelper = new DefaulAmpARFilterHelper();
 	}
 
 

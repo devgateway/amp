@@ -37,6 +37,8 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.logic.AmpARFilterHelper;
+import org.digijava.module.aim.logic.Logic;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LuceneUtil;
@@ -230,12 +232,14 @@ public class AmpARFilter extends PropertyListable implements Filter {
 			"WHERE v.amp_org_id IN ("+ Util.toCSString(implementingAgency, true) +")";
 		
 		if(fromYear!=null) {
-		    String FROM_FUNDING_YEAR_FILTER="SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.amp_funding_id AND date_format(fd.transaction_date,_latin1'%Y')>='"+fromYear+"'";
+			AmpARFilterHelper filterHelper = Logic.getInstance().getAmpARFilterHelper();
+			String FROM_FUNDING_YEAR_FILTER = filterHelper.createFromYearQuery(fromYear);
 		    queryAppend(FROM_FUNDING_YEAR_FILTER);
 		}
 		
 		if(toYear!=null) {
-		    String TO_FUNDING_YEAR_FILTER="SELECT DISTINCT(f.amp_activity_id) FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.amp_funding_id AND date_format(fd.transaction_date,_latin1'%Y')<='"+toYear+"'";
+			AmpARFilterHelper filterHelper = Logic.getInstance().getAmpARFilterHelper();
+			String TO_FUNDING_YEAR_FILTER = filterHelper.createToYearQuery(toYear);
 		    queryAppend(TO_FUNDING_YEAR_FILTER);
 		}
 		

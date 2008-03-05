@@ -140,6 +140,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
     
     // Start Bolivia Adds
     private AmpCategoryValue creditType;
+    private Date convenioDateFilter;
     // End Bolivia Adds
 
 
@@ -1296,6 +1297,14 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public AmpCategoryValue getCreditType() {
 		return creditType;
+	}
+
+	public void setConvenioDateFilter(Date convenioDateFilter) {
+		this.convenioDateFilter = convenioDateFilter;
+	}
+
+	public Date getConvenioDateFilter() {
+		return convenioDateFilter;
 	}
 
 }

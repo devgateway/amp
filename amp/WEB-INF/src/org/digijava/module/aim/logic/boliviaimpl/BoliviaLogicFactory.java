@@ -11,6 +11,7 @@ public class BoliviaLogicFactory extends BaseFactory {
 		commitmentCalculator = new BoliviaCommitmentCalculator();
 		undisbursmentCalculator = new BoliviaUnDisbursmentCalculator();
 		donorFundingCalculator = new BoliviaDonorFundingCalculator();
+		ampARFilterHelper = new BoliviaAmpARFilterHelper();
 	}
 
 }

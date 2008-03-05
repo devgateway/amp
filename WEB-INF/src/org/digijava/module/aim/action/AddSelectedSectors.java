@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
@@ -8,6 +9,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.helper.ActivitySector;
 import javax.servlet.http.HttpSession;
 
@@ -25,6 +27,7 @@ public class AddSelectedSectors
 
     eaForm = (SelectSectorForm) form;
     boolean isDuplicated = false;
+    Collection<ActivitySector> sectr = new ArrayList();
 
     if (eaForm.getCols() == null) {
       eaForm.setCols(new ArrayList());
@@ -36,13 +39,24 @@ public class AddSelectedSectors
     Iterator itr = eaForm.getSearchedSectors().iterator();
     int count = 0;
     ActivitySector sctr = null;
+    Long sectorId = null;
 
     while (itr.hasNext()) {
       sctr = (ActivitySector) itr.next();
       for (int i = 0; i < selsearchedSector.length; i++) {
-        logger.info("getsectorid: " + sctr.getSectorId() +
-                    " selsearchedSector: " + selsearchedSector[i]);
-        if (sctr.getSectorId().equals(selsearchedSector[i])) {
+        
+        if(sctr.getSubsectorLevel2Id() == -1 && sctr.getSubsectorLevel1Id() != -1){
+        	sectorId = sctr.getSubsectorLevel1Id();
+        }else if(sctr.getSubsectorLevel1Id() == -1){
+        	sectorId = sctr.getSectorId();
+        }else{
+        	sectorId = sctr.getSubsectorLevel2Id();
+        }
+        
+        logger.info("getsectorid: " + sectorId +
+                " selsearchedSector: " + selsearchedSector[i]);
+ 
+        if (sectorId.equals(selsearchedSector[i])) {
           isDuplicated = checkDuplicate(sctr);
           if (!isDuplicated) {
             logger.info("adding now...");
@@ -67,8 +81,8 @@ public class AddSelectedSectors
               }
             }
             eaForm.getCols().add(sctr);
+            sectr.add(sctr);
             count++;
-            break;
           }
 
         }
@@ -83,7 +97,7 @@ public class AddSelectedSectors
 
     if (request.getParameter("addButton") != null && !isDuplicated) {
       HttpSession session = request.getSession();
-      session.setAttribute("sectorSelected", sctr);
+      session.setAttribute("sectorSelected", sectr);
       request.setAttribute("addButton", "true");
     }
 

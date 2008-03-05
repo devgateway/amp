@@ -212,9 +212,9 @@
 			</tr>
 			<tr>
 				<td align=left vAlign=top>
-					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding border="0" >
 						<tr bgcolor="#006699">
-							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
+							<td vAlign="center" width="100%" align ="center" class="textalb" height="20" >
 								<digi:trn key="aim:SectorList">
 								List of Sectors</digi:trn>
 
@@ -223,38 +223,75 @@
 <!-- 1 -->
 						<logic:notEmpty name="aimSelectSectorForm" property="pagedCol">
 						<tr>
-							<td align=left vAlign=top>
-							<table width="100%" cellPadding=3 cellspacing=0>
+							<td rowspan="1" align=left vAlign=top>
+							<table width="100%" cellPadding=3 cellspacing=0 border="0" >
 							<logic:iterate name="aimSelectSectorForm" id="searchedSectors" property="pagedCol"
 									type="org.digijava.module.aim.helper.ActivitySector">
 										<tr>
-											<td bgcolor=#ECF3FD>
+											<td bgcolor=#ECF3FD colspan="5" >
 												&nbsp;&nbsp;
 												<html:multibox property="selSectors">
-													<bean:write name="searchedSectors" property="sectorId"/>
-												</html:multibox>&nbsp;
-												
-												<c:if test="${!empty searchedSectors.subsectorLevel1Name && empty searchedSectors.subsectorLevel2Name }">
-											    [${searchedSectors.subsectorLevel1Name}]
-												</c:if>
-												
-												<c:if test="${!empty searchedSectors.subsectorLevel1Name && !empty searchedSectors.subsectorLevel2Name}">
-											    [${searchedSectors.subsectorLevel2Name}]
-												</c:if>
+													<c:if test="${empty searchedSectors.subsectorLevel1Name && empty searchedSectors.subsectorLevel2Name}">
+															${searchedSectors.sectorId}
+											 	    </c:if>
+													<c:if test="${!empty searchedSectors.subsectorLevel1Name && empty searchedSectors.subsectorLevel2Name }">
+														    ${searchedSectors.subsectorLevel1Id}												
+												     </c:if>
+													<c:if test="${!empty searchedSectors.subsectorLevel1Name && !empty searchedSectors.subsectorLevel2Name}">
+														    ${searchedSectors.subsectorLevel2Id}
+													</c:if>
+												</html:multibox>&nbsp;		
 												
 												<c:if test="${empty searchedSectors.subsectorLevel1Name && empty searchedSectors.subsectorLevel2Name}">
-												[${searchedSectors.sectorName}]
+															${searchedSectors.sectorId}
+											 	    </c:if>
+													<c:if test="${!empty searchedSectors.subsectorLevel1Name && empty searchedSectors.subsectorLevel2Name }">
+														    ${searchedSectors.subsectorLevel1Id}												</c:if>
+													
+													<c:if test="${!empty searchedSectors.subsectorLevel1Name && !empty searchedSectors.subsectorLevel2Name}">
+														    ${searchedSectors.subsectorLevel2Id}
+													</c:if>
+													
+												<c:if test="${!empty searchedSectors.sectorScheme}">
+											    [${searchedSectors.sectorScheme}]
 												</c:if>
 											</td>
 										</tr>
+										<tr>
+										<td width="2"> 
+										</td>
+										<td width="100">
+												<c:if test="${empty searchedSectors.subsectorLevel1Name && empty searchedSectors.subsectorLevel2Name}">
+														<img src= "../ampTemplate/images/link_out_bot.gif" border="0">
+		 												<b>[${searchedSectors.sectorName}]<b>
+										 	    </c:if>
+										
+												<c:if test="${!empty searchedSectors.subsectorLevel1Name && empty searchedSectors.subsectorLevel2Name }">
+													    <img src= "../ampTemplate/images/link_out_bot.gif" border="0">
+													    [${searchedSectors.sectorName}]<br>
+													    <img src= "../ampTemplate/images/link_out_bot.gif" border="0">
+													    <b>[${searchedSectors.subsectorLevel1Name}]<b>
+												</c:if>
+												
+												<c:if test="${!empty searchedSectors.subsectorLevel1Name && !empty searchedSectors.subsectorLevel2Name}">
+													     <img src= "../ampTemplate/images/link_out_bot.gif" border="0">
+													     [${searchedSectors.sectorName}]<br>
+													     <img src= "../ampTemplate/images/link_out_bot.gif" border="0">
+													     [${searchedSectors.subsectorLevel1Name}]<br>
+													     <img src= "../ampTemplate/images/link_out_bot.gif" border="0">
+													    <b>[${searchedSectors.subsectorLevel2Name}]</b>
+												</c:if>
+											</td>
+										</tr>	
+										</tr>
 									</logic:iterate>
 									<tr>
-										<td align="center">
+										<td align="center" colspan="3">
 											<table cellPadding=5>
 												<tr>
 													<td>
 
-														<html:submit styleClass="dr-menu" property="addButton" onclick="return validate()" >
+														<html:submit styleClass="dr-menu" property="addButton">
 															<digi:trn key="btn:add">Add</digi:trn>
 														</html:submit>
 

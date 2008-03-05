@@ -35,13 +35,9 @@
 	
 	
 	
-	
-	
 	var dateFormat = '<%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT) %>';
 	if (dateFormat == 'null')
 		dateFormat = 'dd/mm/yyyy';
-	
-	
 	
 	
 	function getDateFromCalendar(inputArray)
@@ -163,11 +159,9 @@
 		}		
 	}
 	
-	function pickDateById(buttonObj,objectId,format)
+	function pickDateById(buttonObj,objectId)
 	{
-		if(format==null){
-			format=	dateFormat;
-		}
+		var	format=	dateFormat;
 		var butt = document.getElementById(buttonObj);
 		var inputObject = document.getElementById(objectId);
 		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
@@ -185,9 +179,6 @@
 	
 	function pickDateCurrency(buttonObj,inputObject)
 	{
-		var dateFormat = '<%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT) %>';
-		if (dateFormat == 'null')
-		dateFormat = 'mm/dd/yyyy';
 		var butt = document.getElementById(buttonObj);
 		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
 		calendarObjForForm.setCalendarPositionByHTMLElement(butt,-160,intY+butt.offsetHeight-40);	// Position the calendar right below the form input
@@ -199,7 +190,7 @@
 		}else{
 			calendarObjForForm.resetViewDisplayedMonth();	// This line resets the view back to the inital display, i.e. it displays the inital month and not the month it displayed the last time it was open.
 			calendarObjForForm.display();
-		}		var dateFormat = "mm/dd/yyyy";
+		}
 	
 	}
 	function pickDateByIdDxDy(buttonObj,objectId,dx,dy)

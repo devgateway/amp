@@ -38,18 +38,20 @@ public class GetDesktopReports extends TilesAction {
 				AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 				AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
 				ArrayList userReports = TeamMemberUtil.getAllMemberReports(tm.getMemberId());
-				Iterator iter = userReports.iterator();
-				boolean found = false;
-				while (iter.hasNext()) {
-					AmpReports el = (AmpReports) iter.next();
-					if (el.compareTo(defaultTeamReport) == 0){
-						found = true;
-						break;
+				if (defaultTeamReport != null){
+					Iterator iter = userReports.iterator();
+					boolean found = false;
+					while (iter.hasNext()) {
+						AmpReports el = (AmpReports) iter.next();
+						if (el.compareTo(defaultTeamReport) == 0){
+							found = true;
+							break;
+						}
 					}
+
+					if ((userReports != null) && (!found))
+						reports.add(defaultTeamReport);
 				}
-				
-				if ((defaultTeamReport != null) && (userReports != null) && (!found))
-					reports.add(defaultTeamReport);
 				//After Tanzania: Team Leaders should see all
 //				if (tm.getTeamHead() == true) {
 //					reports.addAll(TeamUtil.getAllTeamReports(userReports));

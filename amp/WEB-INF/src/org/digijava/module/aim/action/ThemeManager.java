@@ -122,37 +122,47 @@ public class ThemeManager extends Action {
 		{
 			//Iterator itr = DbUtil.getActivityTheme(themeForm.getThemeId()).iterator();
 			logger.info(" theme Id is ... "+themeForm.getThemeId());
+			boolean flagProblemFound	= false;
 			RepairDbUtil.repairThemesHavingNullIndicator();
 			//Iterator itr = DbUtil.getActivityThemeFromAAT(new Long(Long.parseLong(request.getParameter("themeId")))).iterator();
 			Collection col = ProgramUtil.checkActivitiesUsingProgram( themeForm.getThemeId() );
 			Collection col2 = ProgramUtil.getThemeIndicators(themeForm.getThemeId());
-			if((col!=null)&&(!(col.isEmpty())))
+			
+			String nameOfSettingsUsedInActivity	= ProgramUtil.getNameOfProgramSettingsUsed( themeForm.getThemeId() );
+			
+			if( !flagProblemFound && (col!=null) && (!(col.isEmpty())) )
 			{
-				////System.out.println("activity references i can not delete this theme!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
+				flagProblemFound	= true;
 				themeForm.setFlag("activityReferences");
 				themeForm.setActivitiesUsingTheme( ActivityUtil.collectionToCSV(col) );
 			}
-			else
-				if ((col2 != null) && (!(col2.isEmpty()))){
-					themeForm.setFlag("indicatorsNotEmpty");
+			if ( !flagProblemFound && nameOfSettingsUsedInActivity != null && nameOfSettingsUsedInActivity.length() > 0 ) {
+				flagProblemFound 	= true;
+				themeForm.setFlag("settingUsedInActivity");
+				themeForm.setSettingsUsedByTheme( nameOfSettingsUsedInActivity );
+			} 
+			if ( !flagProblemFound && (col2 != null) && (!(col2.isEmpty())) ){
+				flagProblemFound	= true;
+				themeForm.setFlag("indicatorsNotEmpty");
+			}
+			if ( !flagProblemFound )
+			{
+				themeForm.setFlag("deleted");
+				////System.out.println("I deleted this theme....ups!!!!!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
+				Long id = new Long(Long.parseLong(request.getParameter("themeId")));
+				
+				try {
+					ProgramUtil.deleteTheme(id);
+				} catch (AimException e) {
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error:aim:theme:cannotDeleteTheme"));
+					saveErrors(request, errors);
+				}catch (Exception e) {
+					logger.error(e);
 				}
-				else
-				{
-					themeForm.setFlag("deleted");
-					////System.out.println("I deleted this theme....ups!!!!!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
-					Long id = new Long(Long.parseLong(request.getParameter("themeId")));
-					
-					try {
-						ProgramUtil.deleteTheme(id);
-					} catch (AimException e) {
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error:aim:theme:cannotDeleteTheme"));
-						saveErrors(request, errors);
-					}catch (Exception e) {
-						logger.error(e);
-					}
-					
-					return mapping.findForward("delete");
-				}
+				
+				return mapping.findForward("delete");
+			}
+			
 			/*Iterator itr = DbUtil.getActivityThemeFromAAT(themeForm.getThemeId()).iterator();
 			 if (itr.hasNext()) {
 				//System.out.println("activity references i can not delete this theme!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));

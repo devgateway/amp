@@ -227,6 +227,18 @@
 																		</td>
 																	</tr>
 												</c:if>
+												<c:if test="${aimThemeForm.flag == 'settingUsedInActivity'}">
+																	<tr>
+																		<td colspan="2" align="center">
+																			<font color="red"><b><digi:trn key="aim:cannotDeleteThemeDefHierarchy">
+																			Cannot delete the theme since it is used as a default hierarchy in: 
+																			</digi:trn>
+																				${aimThemeForm.settingsUsedByTheme }
+																				</b>
+																			</font>
+																		</td>
+																	</tr>
+												</c:if>
 												<c:if test="${aimThemeForm.flag == 'indicatorsNotEmpty'}">
 
 																	<tr>

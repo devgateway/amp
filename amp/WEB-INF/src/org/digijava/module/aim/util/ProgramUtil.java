@@ -1797,7 +1797,37 @@ public class ProgramUtil {
 		}
     	
     }
-
+    public static String getNameOfProgramSettingsUsed(Long programId) { 
+    	Collection programSettings					= getProgramSetttingsUsed(programId);
+    	
+    	Iterator iter	= programSettings.iterator();
+    	String result	= "";
+    	while ( iter.hasNext() ) {
+    		AmpActivityProgramSettings aaps			= (AmpActivityProgramSettings) iter.next();
+    		if ( aaps.getName() != null )
+    			result	+= "'" + aaps.getName() + "'" + ", ";
+    	}
+    	if ( result.length() > 0 ) 
+    		return result.substring(0, result.length()-2);
+    	else
+    		return null;
+    }
+    public static Collection getProgramSetttingsUsed(Long programId) {
+    	Session sess 						= null;
+        try {
+        	sess = PersistenceManager.getRequestDBSession();
+        	String qryString 		= "select a from " + AmpActivityProgramSettings.class.getName() + " a where (a.defaultHierarchy=:program) ";
+        	Query qry 			= sess.createQuery(qryString);
+            qry.setLong("program", programId);
+            Collection result	= qry.list();
+            return result;
+        }
+        catch (Exception e) {
+			// TODO: handle exception
+        	 e.printStackTrace();
+        	 return null;
+		}
+	}
     
         /**
          * Hierarchy member factory.

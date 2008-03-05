@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.jcr.Session;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -171,12 +172,22 @@ public class AddAmpActivity extends Action {
 
     // Add sectors
     if (request.getParameter("addSector") != null) {
-      ActivitySector selectedSector = (ActivitySector) session.getAttribute(
-          "sectorSelected");
+    	Collection selSector = (Collection) session.getAttribute("sectorSelected");
+    	//ActivitySector selectedSector = (ActivitySector) session.getAttribute(
+          //"sectorSelected");
+    
+      
       session.removeAttribute("sectorSelected");
+      
+      
+      
 
       Collection<ActivitySector> prevSelSectors = eaForm.getActivitySectors();
 
+if(selSector != null){
+	Iterator<ActivitySector> itre = selSector.iterator();
+	while (itre.hasNext()) {
+		ActivitySector selectedSector = (ActivitySector) itre.next();
 
 
       boolean addSector = true;
@@ -212,6 +223,7 @@ public class AddAmpActivity extends Action {
 	          }
     	  }
       }
+
       if (addSector) {
     	  //if an activity already has one or more sectors,than after adding new one
     	  //the percentages must equal blanks and user should fill them
@@ -234,10 +246,14 @@ public class AddAmpActivity extends Action {
 			}
       }
 
-      eaForm.setActivitySectors(prevSelSectors);
-      return mapping.findForward("addActivityStep2");
+     
     }
-
+	     eaForm.setActivitySectors(prevSelSectors);
+   }
+		return mapping.findForward("addActivityStep2");	
+}
+    
+    
     // Remove sectors
     else
     if (request.getParameter("remSectors") != null) {
@@ -275,6 +291,8 @@ public class AddAmpActivity extends Action {
       eaForm.setActivitySectors(newSectors);
       return mapping.findForward("addActivityStep2");
     }
+	
+
     //
 
     //we use this pointer to simplify adding items in the selectors:

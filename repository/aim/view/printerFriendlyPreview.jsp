@@ -485,6 +485,27 @@
                                          	 </tr>
 										</field:display>
 										
+	                                    <field:display name="Credit/Donation" feature="Planning">
+	                                        <tr>
+		                                        <td align="right" valign="top" nowrap="nowrap" >
+		                                        	<b>
+														<digi:trn key="aim:credit_donation">Credit/Donation</digi:trn> 
+													</b>                                       	      
+												</td>
+		                                        <td bgcolor="#FFFFFF">
+		                                        	<c:set var="creditTypeId">
+		                                        		<category:getoptionvalue categoryValueId="${aimEditActivityForm.creditTypeId}"/>
+		                                        	</c:set>
+		                                        	<c:if test="${creditTypeId == 'Comercial' || creditTypeId == 'Concesional'}">
+		                                        		<digi:trn key="aim:preview_credit">CREDITO</digi:trn>	                                        		 
+		                                        	</c:if>
+													<c:if test="${creditTypeId == 'Donación'}">
+														<digi:trn key="aim:preview_donation">DONACIÓN</digi:trn>	                                        		
+		                                        	</c:if>
+		                                        </td>                                        
+	                                        </tr>
+	                                    </field:display> 
+                                    										
                                         </feature:display>
                                         <feature:display name="References" module="References">
 									<tr>

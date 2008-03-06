@@ -213,14 +213,14 @@
 				<tr>
                   <td>
                     <table>
-                      <feature:display  name="Target Value" module="PI Reports">
+
                         <tr>
                           <td class="subtitle-blue" style="width:70%;text-align:right;">
                             <digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn>&nbsp;
                             ${aimParisIndicatorReportForm.indicatorCode}&nbsp;
                             <digi:trn key="aim:report">Report</digi:trn>
                           </td>
-
+                       <feature:display  name="Target Value" module="PI Reports">
                           <td class="subtitle-blue" style="width:250px;text-align:right;">
                             <c:if test="${!empty aimParisIndicatorReportForm.targetValue && !empty aimParisIndicatorReportForm.calcResult}">
                             ${aimParisIndicatorReportForm.targetValue}&nbsp;

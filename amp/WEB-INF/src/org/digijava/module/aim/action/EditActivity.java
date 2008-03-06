@@ -1159,6 +1159,7 @@ public class EditActivity
 			                Collections.sort(fundDetail,
 			                                 FundingValidator.dateComp);
 			              fund.setFundingDetails(fundDetail);
+			              eaForm.setFundingDetails(fundDetail);
 			              // funding.add(fund);
 			            }
 			            if (fundOrg.getFundings() == null)

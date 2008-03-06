@@ -3049,18 +3049,28 @@ public class DbUtil {
             logger.debug("Size: " + q.list().size());
             amount = new DecimalWraper();
             while (iter.hasNext()) {
-                AmpFundingDetail ampFundingDetail = (AmpFundingDetail) iter
-                    .next();
+                AmpFundingDetail ampFundingDetail = (AmpFundingDetail) iter.next();
                 Double fixedRateToUSD = ampFundingDetail.getFixedExchangeRate();
                 if (fixedRateToUSD!=null && fixedRateToUSD.doubleValue()!=1){
-                	toCurrency=fixedRateToUSD.doubleValue();
-                	DecimalWraper tmpamount =CurrencyWorker.convertWrapper(ampFundingDetail
+                	 fromCurrency=fixedRateToUSD.doubleValue();
+                	
+                	 toCurrency = Util.getExchange(ampCurrencyCode,
+ 							new java.sql.Date(ampFundingDetail
+ 									.getTransactionDate().getTime()));
+                	
+                	 DecimalWraper tmpamount =CurrencyWorker.convertWrapper(ampFundingDetail
 							.getTransactionAmount().doubleValue(),
 							fromCurrency, toCurrency, new java.sql.Date(
 									ampFundingDetail.getTransactionDate()
 											.getTime())); 
-                	amount.setValue(tmpamount.getValue());
-                	amount.setCalculations(amount.getCalculations() + " +" + tmpamount.getCalculations()+"<BR>");
+                	if (amount.getValue()!=null){
+                		amount.setValue(amount.getValue().add(tmpamount.getValue()));
+                		amount.setCalculations(amount.getCalculations() + " +" + tmpamount.getCalculations()+"<BR>");
+                	}
+                	else{
+                		amount.setValue(tmpamount.getValue());
+                		amount.setCalculations(tmpamount.getCalculations());
+                	}
                 }else{
                     toCurrency = Util.getExchange(ampCurrencyCode,
 							new java.sql.Date(ampFundingDetail

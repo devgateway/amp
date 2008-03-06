@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -536,8 +537,28 @@ public class EditActivityForm extends ActionForm implements Serializable{
      private AmpAhsurvey ahsurvey;
      private List contracts;
      private Integer selContractId;
-	private Long creditTypeId;	
+	 private Long creditTypeId;	
+	 private boolean fixerate;
+	 
+	 public boolean isFixerate() {
+		this.fixerate = false;
+		if (fundingDetails != null) {
+			Iterator iter = fundingDetails.iterator();
+			while (iter.hasNext()) {
+				FundingDetail element = (FundingDetail) iter.next();
+				if (element.getFixedExchangeRate() != null) {
+					this.fixerate = true;
+					break;
+				}
+			}
+		}
+			return fixerate;
+		}
 
+	public void setFixerate(boolean fixerate) {
+			this.fixerate = fixerate;
+	}
+	
     public Integer getSelContractId() {
         return selContractId;
     }

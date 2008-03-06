@@ -675,11 +675,6 @@ function remProgram(programType) {
 			                            -->
                           			</table>
                           		</td>
-                          		<td width="25%" vAlign="top" align="right">
-					              <!-- edit activity form menu -->
-					              <jsp:include page="editActivityMenu.jsp" flush="true" />
-					              <!-- end of activity form menu -->
-				           	 	</td>
 
                           	</tr>
 
@@ -687,13 +682,18 @@ function remProgram(programType) {
                           </table>
                           <!-- end contents -->
                         </td>
+                    	
                       </tr>
                     </table>
                   </td>
                 </tr>
               </table>
             </td>
-
+             <td width="25%" vAlign="top" align="right">
+	           <!-- edit activity form menu -->
+	           <jsp:include page="editActivityMenu.jsp" flush="true" />
+	           <!-- end of activity form menu -->
+	       	 </td>
           </tr>
         </table>
       </td>

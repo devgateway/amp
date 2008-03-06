@@ -129,7 +129,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		    createDataForColumns(extractable);
 		}
 		
-		if (extractable.size() > 0){
+		if (generated.size() > 0){
 		    createDataForColumns(generated);
 		}
 	}

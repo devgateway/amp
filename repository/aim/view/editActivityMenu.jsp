@@ -122,14 +122,14 @@ function fnGetSurvey() {
 <html:hidden property="draft" styleId="draftFlag" />
 
 
-<table border=0 width="250" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
+<table border=0 width="300" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
 	<tr>
-		<td width="250" height="10" background="module/aim/images/top.gif" >
+		<td width="300" height="10" background="module/aim/images/top.gif" >
 		</td>
 	</tr>
 	<tr>
 		<td>			
-			<table border=0 width="250" cellSpacing=4 cellPadding=2 vAlign="top" align="left" bgcolor="#006699">				
+			<table border=0 width="300" cellSpacing=4 cellPadding=2 vAlign="top" align="left" bgcolor="#006699">				
 				<feature:display name="Identification" module="Project ID and Planning">
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 1}">
@@ -780,7 +780,7 @@ function fnGetSurvey() {
 		</td>
 	</tr>
 	<tr>
-		<td width="250" height="10" background="module/aim/images/bottom.gif">
+		<td width="300" height="10" background="module/aim/images/bottom.gif">
 		</td>
 	</tr>
 </table>

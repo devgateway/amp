@@ -99,6 +99,7 @@ public class AddSelectedSectors
       HttpSession session = request.getSession();
       session.setAttribute("sectorSelected", sectr);
       request.setAttribute("addButton", "true");
+      session.setAttribute("add", "true");
     }
 
     return mapping.findForward("forward");

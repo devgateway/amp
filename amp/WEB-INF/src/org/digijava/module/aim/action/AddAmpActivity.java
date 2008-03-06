@@ -162,81 +162,191 @@ public class AddAmpActivity extends Action {
 		
 	//===============Sectors START===========================
 		
-		
-    // set Global Settings Multi-Sector Selecting
-    String multiSectorSelect = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.
-    		GLOBALSETTINGS_MULTISECTORSELECT);
-    eaForm.setMultiSectorSelecting(multiSectorSelect);
+		// set Global Settings Multi-Sector Selecting
+		String multiSectorSelect = FeaturesUtil
+				.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_MULTISECTORSELECT);
+		eaForm.setMultiSectorSelecting(multiSectorSelect);
 
+		// Add sectors
+		if (request.getParameter("addSector") != null) {
 
-    // Add sectors
-    if (request.getParameter("addSector") != null) {
-      ActivitySector selectedSector = (ActivitySector) session.getAttribute(
-          "sectorSelected");
-      session.removeAttribute("sectorSelected");
+			Object searchedsector = session.getAttribute("add");
 
-      Collection<ActivitySector> prevSelSectors = eaForm.getActivitySectors();
+			if (searchedsector != null && searchedsector.equals("true")) {
+				Collection selectedSecto = (Collection) session
+						.getAttribute("sectorSelected");
+				Collection<ActivitySector> prevSelSectors = eaForm
+						.getActivitySectors();
 
+				if (selectedSecto != null) {
+					Iterator<ActivitySector> itre = selectedSecto.iterator();
+					while (itre.hasNext()) {
+						ActivitySector selectedSector = (ActivitySector) itre
+								.next();
 
-
-      boolean addSector = true;
-      if (prevSelSectors != null) {
-    	  Iterator<ActivitySector> itr = prevSelSectors.iterator();
-    	  while (itr.hasNext()) {
-    		  ActivitySector asec = (ActivitySector) itr.next();
-	          if (asec.getSectorName().equals(selectedSector.getSectorName())){
-	        	  if (selectedSector.getSubsectorLevel1Name() == null) {
-						addSector = false;
-						break;
-	        	  }
-	        	  if(asec.getSubsectorLevel1Name() != null ) {
-						if(asec.getSubsectorLevel1Name().equals(selectedSector.getSubsectorLevel1Name())){
-							if(selectedSector.getSubsectorLevel2Name() == null){
-				        		  addSector = false;
-							      break;									
-							}					
-							if(asec.getSubsectorLevel2Name() != null){
-								if(asec.getSubsectorLevel2Name().equals(selectedSector.getSubsectorLevel2Name())){
-									addSector = false;
-							        break;
-							 	}
-							}else{
-								addSector = false;
-						        break;
-							}								
+						boolean addSector = true;
+						if (prevSelSectors != null) {
+							Iterator<ActivitySector> itr = prevSelSectors
+									.iterator();
+							while (itr.hasNext()) {
+								ActivitySector asec = (ActivitySector) itr
+										.next();
+								if (asec.getSectorName().equals(
+										selectedSector.getSectorName())) {
+									if (selectedSector.getSubsectorLevel1Name() == null) {
+										addSector = false;
+										break;
+									}
+									if (asec.getSubsectorLevel1Name() != null) {
+										if (asec
+												.getSubsectorLevel1Name()
+												.equals(
+														selectedSector
+																.getSubsectorLevel1Name())) {
+											if (selectedSector
+													.getSubsectorLevel2Name() == null) {
+												addSector = false;
+												break;
+											}
+											if (asec.getSubsectorLevel2Name() != null) {
+												if (asec
+														.getSubsectorLevel2Name()
+														.equals(
+																selectedSector
+																		.getSubsectorLevel2Name())) {
+													addSector = false;
+													break;
+												}
+											} else {
+												addSector = false;
+												break;
+											}
+										}
+									} else {
+										addSector = false;
+										break;
+									}
+								}
+							}
 						}
-		          }else{
-						addSector = false;
-						break;
-		          }
-	          }
-    	  }
-      }
-      if (addSector) {
-    	  //if an activity already has one or more sectors,than after adding new one
-    	  //the percentages must equal blanks and user should fill them
-			if (prevSelSectors != null) {
-				if (prevSelSectors.isEmpty()) {
-					selectedSector.setSectorPercentage(new Integer(100));
-				} else {
-					selectedSector.setSectorPercentage(null);
-					Iterator iter=prevSelSectors.iterator();
-					while(iter.hasNext()){
-						ActivitySector actSect=(ActivitySector)iter.next();
-						actSect.setSectorPercentage(null);
-					}
-				}					
-				prevSelSectors.add(selectedSector);
-			} else {
-				selectedSector.setSectorPercentage(new Integer(100));
-				prevSelSectors = new ArrayList<ActivitySector>();
-				prevSelSectors.add(selectedSector);
-			}
-      }
 
-      eaForm.setActivitySectors(prevSelSectors);
-      return mapping.findForward("addActivityStep2");
-    }
+						if (addSector) {
+							// if an activity already has one or more
+							// sectors,than after adding new one
+							// the percentages must equal blanks and user should
+							// fill them
+							if (prevSelSectors != null) {
+								if (prevSelSectors.isEmpty()) {
+									selectedSector
+											.setSectorPercentage(new Integer(
+													100));
+								} else {
+									selectedSector.setSectorPercentage(null);
+									Iterator iter = prevSelSectors.iterator();
+									while (iter.hasNext()) {
+										ActivitySector actSect = (ActivitySector) iter
+												.next();
+										actSect.setSectorPercentage(null);
+									}
+								}
+								prevSelSectors.add(selectedSector);
+							} else {
+								selectedSector.setSectorPercentage(new Integer(
+										100));
+								prevSelSectors = new ArrayList<ActivitySector>();
+								prevSelSectors.add(selectedSector);
+							}
+						}
+
+						eaForm.setActivitySectors(prevSelSectors);
+					}
+
+				}
+				session.removeAttribute("sectorSelected");
+				session.removeAttribute("add");
+				return mapping.findForward("addActivityStep2");
+
+			} else {
+				ActivitySector selectedSector = (ActivitySector) session
+						.getAttribute("sectorSelected");
+				Collection<ActivitySector> prevSelSectors = eaForm
+						.getActivitySectors();
+
+				boolean addSector = true;
+				if (prevSelSectors != null) {
+					Iterator<ActivitySector> itr = prevSelSectors.iterator();
+					while (itr.hasNext()) {
+						ActivitySector asec = (ActivitySector) itr.next();
+						if (asec.getSectorName().equals(
+								selectedSector.getSectorName())) {
+							if (selectedSector.getSubsectorLevel1Name() == null) {
+								addSector = false;
+								break;
+							}
+							if (asec.getSubsectorLevel1Name() != null) {
+								if (asec
+										.getSubsectorLevel1Name()
+										.equals(
+												selectedSector
+														.getSubsectorLevel1Name())) {
+									if (selectedSector.getSubsectorLevel2Name() == null) {
+										addSector = false;
+										break;
+									}
+									if (asec.getSubsectorLevel2Name() != null) {
+										if (asec
+												.getSubsectorLevel2Name()
+												.equals(
+														selectedSector
+																.getSubsectorLevel2Name())) {
+											addSector = false;
+											break;
+										}
+									} else {
+										addSector = false;
+										break;
+									}
+								}
+							} else {
+								addSector = false;
+								break;
+							}
+						}
+					}
+				}
+
+				if (addSector) {
+					// if an activity already has one or more sectors,than after
+					// adding new one
+					// the percentages must equal blanks and user should fill
+					// them
+					if (prevSelSectors != null) {
+						if (prevSelSectors.isEmpty()) {
+							selectedSector
+									.setSectorPercentage(new Integer(100));
+						} else {
+							selectedSector.setSectorPercentage(null);
+							Iterator iter = prevSelSectors.iterator();
+							while (iter.hasNext()) {
+								ActivitySector actSect = (ActivitySector) iter
+										.next();
+								actSect.setSectorPercentage(null);
+							}
+						}
+						prevSelSectors.add(selectedSector);
+					} else {
+						selectedSector.setSectorPercentage(new Integer(100));
+						prevSelSectors = new ArrayList<ActivitySector>();
+						prevSelSectors.add(selectedSector);
+					}
+				}
+				eaForm.setActivitySectors(prevSelSectors);
+				session.removeAttribute("sectorSelected");
+				return mapping.findForward("addActivityStep2");
+
+			}
+
+		}
 
     // Remove sectors
     else

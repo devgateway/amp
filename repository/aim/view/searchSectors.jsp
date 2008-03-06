@@ -149,7 +149,6 @@
 
 <digi:form action="/addSelectedSectors.do" method="post">
 <html:hidden property="sectorReset" value="false" />
-
 <input type="hidden" name="edit" value="true" />
 
 
@@ -241,17 +240,6 @@
 														    ${searchedSectors.subsectorLevel2Id}
 													</c:if>
 												</html:multibox>&nbsp;		
-												
-												<c:if test="${empty searchedSectors.subsectorLevel1Name && empty searchedSectors.subsectorLevel2Name}">
-															${searchedSectors.sectorId}
-											 	    </c:if>
-													<c:if test="${!empty searchedSectors.subsectorLevel1Name && empty searchedSectors.subsectorLevel2Name }">
-														    ${searchedSectors.subsectorLevel1Id}												</c:if>
-													
-													<c:if test="${!empty searchedSectors.subsectorLevel1Name && !empty searchedSectors.subsectorLevel2Name}">
-														    ${searchedSectors.subsectorLevel2Id}
-													</c:if>
-													
 												<c:if test="${!empty searchedSectors.sectorScheme}">
 											    [${searchedSectors.sectorScheme}]
 												</c:if>

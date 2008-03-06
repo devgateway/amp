@@ -39,8 +39,8 @@
 	<td>
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#f4f4f2">
                                 <tr>
-                                  <td bgColor=#f4f4f2 align="center" vAlign="top"><!-- contents -->
-                                    <table width="95%" bgcolor="#f4f4f2">
+                                  <td bgColor=#f4f4f2 vAlign="top"><!-- contents -->
+                                    <table width="100%" bgcolor="#f4f4f2">
                                     
                                     
                                       <tr>
@@ -93,7 +93,7 @@
                                                     <tr>
                                                       <td bgcolor="#ffffff">
                                                       	<field:display name="Add Sectors Button" feature="Sectors">
-                                                      	&nbsp;
+                                                      
                                                       	</field:display>
                                                       	<html:button styleClass="buton"
 															property="submitButton" onclick="addSectors();">

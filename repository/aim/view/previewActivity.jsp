@@ -1166,7 +1166,9 @@ function collapseAll() {
                                                                                   </a>
                                                                                   </b>                                                                                </td>
                                                                                 <td width="25%"><b>
-                                                                                <digi:trn key="aim:exchange">Exchange Rate</digi:trn></b>                                                                                </td>
+                                                                                <c:if test="${aimEditActivityForm.fixerate == true}">
+                                                                                	<digi:trn key="aim:exchange">Exchange Rate</digi:trn></b>
+                                                                                </c:if>                                                                                </td>
                                                                               </tr>
                                                                               <c:if test="${!empty funding.fundingDetails}">
                                                                               <logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">

@@ -32,7 +32,7 @@
 
 </script>
 
-
+<field:display name="National Planning Objectives" feature="NPD Programs">
 
 <digi:instance property="aimEditActivityForm" />
 
@@ -56,7 +56,7 @@
                                         </td>
                                       </tr>
 
-                                      <field:display name="National Planning Objectives" feature="NPD Programs">
+                                      
                                       <tr>
                                         <td>
                                           <table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">

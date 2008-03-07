@@ -165,7 +165,7 @@ public class DeleteSector extends Action {
 
     else {
     	ActionErrors errors = new ActionErrors();
-		errors.add("title", new ActionError("error:aim:deleteScheme:sectorSelected"));
+		errors.add("title", new ActionError("error.aim.deleteScheme.sectorSelected"));
 		saveErrors(request, errors);
     	forward="cantDelete";
     }

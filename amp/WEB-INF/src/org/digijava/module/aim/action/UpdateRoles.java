@@ -54,7 +54,7 @@ public class UpdateRoles extends Action {
 				ampRoles = TeamMemberUtil.getAmpRoleByName(urForm.getRole());
 				if (ampRoles != null) {
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-							"error:aim:updateRoles:roleAlreadyExist"));
+							"error.aim.updateRoles.roleAlreadyExist"));
 					saveErrors(request, errors);
 					return mapping.getInputForward();
 				}

@@ -128,7 +128,7 @@ public class UpdateWorkspace extends Action {
                                 .add(
                                     ActionErrors.GLOBAL_ERROR,
                                     new ActionError(
-                                        "error:aim:updateWorkspace:multilatTeamSelected"));
+                                        "error.aim.updateWorkspace.multilatTeamSelected"));
                             break;
                         }
                     } while(itr2.hasNext()) {
@@ -140,7 +140,7 @@ public class UpdateWorkspace extends Action {
                                 .add(
                                     ActionErrors.GLOBAL_ERROR,
                                     new ActionError(
-                                        "error:aim:updateWorkspace:bilatTeamSelected"));
+                                        "error.aim.updateWorkspace.bilatTeamSelected"));
                             break;
                         }
                     }
@@ -206,11 +206,11 @@ public class UpdateWorkspace extends Action {
                         .add(
                             ActionErrors.GLOBAL_ERROR,
                             new ActionError(
-                                "error:aim:updateWorkspace:noManagementChildSelected"));
+                                "error.aim.updateWorkspace.noManagementChildSelected"));
                     saveErrors(request, errors);
                     logger
                         .debug(
-                        "error:aim:updateWorkspace:noManagementChildSelected !!!!!");
+                        "error.aim.updateWorkspace.noManagementChildSelected !!!!!");
                     return mapping.getInputForward();
                     }
 
@@ -221,7 +221,7 @@ public class UpdateWorkspace extends Action {
                             .add(
                                 ActionErrors.GLOBAL_ERROR,
                                 new ActionError(
-                                    "error:aim:updateWorkspace:teamNameAlreadyExist"));
+                                    "error.aim.updateWorkspace.teamNameAlreadyExist"));
                         saveErrors(request, errors);
                         logger
                             .debug(
@@ -238,11 +238,11 @@ public class UpdateWorkspace extends Action {
                         .add(
                             ActionErrors.GLOBAL_ERROR,
                             new ActionError(
-                                "error:aim:updateWorkspace:noManagementChildSelected"));
+                                "error.aim.updateWorkspace.noManagementChildSelected"));
                     saveErrors(request, errors);
                     logger
                         .debug(
-                        "error:aim:updateWorkspace:noManagementChildSelected !!!!!");
+                        "error.aim.updateWorkspace.noManagementChildSelected !!!!!");
                     return mapping.getInputForward();
                     }
                 	if (tId1==null)	newTeam.setAmpTeamId(uwForm.getTeamId());
@@ -254,7 +254,7 @@ public class UpdateWorkspace extends Action {
                             .add(
                                 ActionErrors.GLOBAL_ERROR,
                                 new ActionError(
-                                    "error:aim:updateWorkspace:childTeamsExistForTeam"));
+                                    "error.aim.updateWorkspace.childTeamsExistForTeam"));
                         saveErrors(request, errors);
                         return mapping.getInputForward();
                     }
@@ -274,7 +274,7 @@ public class UpdateWorkspace extends Action {
                             .add(
                                 ActionErrors.GLOBAL_ERROR,
                                 new ActionError(
-                                    "error:aim:updateWorkspace:teamNameAlreadyExist"));
+                                    "error.aim.updateWorkspace.teamNameAlreadyExist"));
                         saveErrors(request, errors);
                         logger
                             .debug(
@@ -303,7 +303,7 @@ public class UpdateWorkspace extends Action {
                 } else {
                     errors = new ActionErrors();
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                        "error:aim:membersExistForTeam"));
+                        "error.aim.membersExistForTeam"));
                     saveErrors(request, errors);
                 }
                 return mapping.findForward("forward");

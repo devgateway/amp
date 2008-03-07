@@ -69,7 +69,7 @@ public class AddComponentIndicator extends Action
 			if (dupExist) {
 				ActionErrors errors = new ActionErrors();
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						"error:aim:compAddIndicator:duplicateNameOrCode"));
+						"error.aim.compAddIndicator.duplicateNameOrCode"));
 				saveErrors(request, errors);
 				compForm.setDuplicate("true");
 				logger.debug("Duplicate Values::::::::::::::;;");

@@ -79,7 +79,7 @@ public class AddIndicator extends Action {
 				if (dupExist) {
 					ActionErrors errors = new ActionErrors();
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-							"error:aim:meAddIndicator:duplicateNameOrCode"));
+							"error.aim.meAddIndicator.duplicateNameOrCode"));
 					saveErrors(request, errors);
 					if (indForm.getIndId() != null && indForm.getIndId().longValue() < 1) {
 						indForm.setIndId(null);

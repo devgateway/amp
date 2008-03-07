@@ -83,7 +83,7 @@ public class AddLocation extends Action
 	 		}
 	 		else {
 	 			ActionErrors errors = new  ActionErrors();
-	 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error:aim:addLocation:duplicateCountryInfo"));
+	 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.addLocation.duplicateCountryInfo"));
 	 			saveErrors(request, errors);
 	 			//return mapping.getInputForward();
 	 			return mapping.findForward("forward");

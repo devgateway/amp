@@ -48,10 +48,10 @@ public class UploadFlag extends Action {
 					errorMsg = "error.aim.uploadFlag.noCountrySelected";	
 				}
 			} else {
-				errorMsg = "error:aim:uploadFlag:noFlagSelected";				
+				errorMsg = "error.aim.uploadFlag.noFlagSelected";				
 			}
 		} catch (Exception e) {
-			errorMsg = "error:aim:serverError";
+			errorMsg = "error.aim.serverError";
 			e.printStackTrace(System.out);				
 		} finally {
 			if (errorMsg != null) {

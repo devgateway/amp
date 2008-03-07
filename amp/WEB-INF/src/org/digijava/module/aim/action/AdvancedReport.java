@@ -257,7 +257,7 @@ public class AdvancedReport extends Action {
 					logger.info("arReportType 2::::"+arReportType);
 					if (arReportType == null || arReportType.compareTo("") == 0) {
 						ActionErrors errors = new ActionErrors();
-						errors.add("ReportTypeNotSelected", new ActionError("error:aim:reportManager:ReportTypeNotSelected"));
+						errors.add("ReportTypeNotSelected", new ActionError("error.aim.reportManager.ReportTypeNotSelected"));
 						saveErrors(request, errors);
 						formBean.setMaxStep(new Integer(0));
 						return goTo("forward", formBean, mapping);	
@@ -1117,7 +1117,7 @@ public class AdvancedReport extends Action {
 				{
 					if(formBean.getReportTitle().trim().length() == 0)
 					{
-							errors.add("title", new ActionError("error:aim:reportManager:ReportNameAbsent"));
+							errors.add("title", new ActionError("error.aim.reportManager.ReportNameAbsent"));
 							saveErrors(request, errors);
 							flag = true;
 							return goTo("MissingReportDetails",formBean,mapping);							

@@ -50,7 +50,7 @@ public class AddTeamMember extends Action {
 		if (user == null) {
 			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					"error:aim:addTeamMember:invalidUser"));
+					"error.aim.addTeamMember.invalidUser"));
 			saveErrors(request, errors);
 			if (upMemForm.getFromPage() == 1) {
 				return mapping.findForward("showAddFromAdmin");	
@@ -63,7 +63,7 @@ public class AddTeamMember extends Action {
 		if (upMemForm.getRole() == null) {
 			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					"error:aim:addTeamMember:roleNotSelected"));
+					"error.aim.addTeamMember.roleNotSelected"));
 			saveErrors(request, errors);
 			if (upMemForm.getFromPage() == 1) {
 				return mapping.findForward("showAddFromAdmin");	
@@ -78,7 +78,7 @@ public class AddTeamMember extends Action {
 				ampTeam.getTeamLead().getAmpMemberRole().getAmpTeamMemRoleId().equals(upMemForm.getRole())) {
 			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError(
-					"error:aim:addTeamMember:teamLeadAlreadyExist"));
+					"error.aim.addTeamMember.teamLeadAlreadyExist"));
 			saveErrors(request, errors);
 			if (upMemForm.getFromPage() == 1) {
 				return mapping.findForward("showAddFromAdmin");	
@@ -91,7 +91,7 @@ public class AddTeamMember extends Action {
 		if (TeamUtil.isMemberExisting(upMemForm.getTeamId(),upMemForm.getEmail())) {
 			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError(
-					"error:aim:addTeamMember:teamMemberAlreadyExist"));
+					"error.aim.addTeamMember.teamMemberAlreadyExist"));
 			saveErrors(request, errors);
 			logger.debug("Member is already existing");
 			if (upMemForm.getFromPage() == 1) {

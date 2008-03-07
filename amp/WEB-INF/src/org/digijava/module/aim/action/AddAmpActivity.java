@@ -594,7 +594,7 @@ public class AddAmpActivity extends Action {
         if (sessList.contains(sessId) == false) {
           ActionErrors errors = new ActionErrors();
           errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-              "error:aim:activityAlreadyOpenedForEdit"));
+              "error.aim.activityAlreadyOpenedForEdit"));
           saveErrors(request, errors);
 
           String url = "/aim/viewChannelOverview.do?ampActivityId="

@@ -250,7 +250,7 @@ public class GlobalSettings extends Action {
 					return true;
 				}
 				catch(Exception E) { // value is not an integer
-					ActionError ae	= new ActionError("error:aim:globalSettings:valueIsNotOfType", criterion.substring(2));
+					ActionError ae	= new ActionError("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
 					errors.add("title", ae);
 					return false;
 				}
@@ -263,7 +263,7 @@ public class GlobalSettings extends Action {
 					return true;
 				}
 				catch(Exception E) { // value is not a year
-					ActionError ae	= new ActionError("error:aim:globalSettings:valueIsNotOfType", criterion.substring(2));
+					ActionError ae	= new ActionError("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
 					errors.add("title", ae);
 					return false;
 				}
@@ -274,7 +274,7 @@ public class GlobalSettings extends Action {
 					return true;
 				}
 				catch(Exception E) { // value is not an Date
-					ActionError ae	= new ActionError("error:aim:globalSettings:valueIsNotOfType", criterion.substring(2));
+					ActionError ae	= new ActionError("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
 					errors.add("title", ae);
 					return false;
 				}

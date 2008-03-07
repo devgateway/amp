@@ -388,12 +388,12 @@ public class SaveActivity extends Action {
 				if (eaForm.getTitle() != null) {
 					if (eaForm.getTitle().trim().length() == 0) {
 						errors.add("title", new ActionError(
-								"error:aim:addActivity:titleMissing"));
+								"error.aim.addActivity.titleMissing"));
 						saveErrors(request, errors);
 						titleFlag = true;
 					} else if (eaForm.getTitle().length() > 255) {
 						errors.add("title", new ActionError(
-								"error:aim:addActivity:titleTooLong"));
+								"error.aim.addActivity.titleTooLong"));
 						saveErrors(request, errors);
 						titleFlag = true;
 					}
@@ -404,7 +404,7 @@ public class SaveActivity extends Action {
 
 				if (statId != null && statId.equals(new Long(0))) {
 					errors.add("status", new ActionError(
-							"error:aim:addActivity:statusMissing"));
+							"error.aim.addActivity.statusMissing"));
 					saveErrors(request, errors);
 					statusFlag = true;
 				}
@@ -422,7 +422,7 @@ public class SaveActivity extends Action {
                     if (eaForm.getActivitySectors() == null
                         || eaForm.getActivitySectors().size() < 1) {
                         errors.add("sector", new ActionError(
-                            "error:aim:addActivity:sectorEmpty"));
+                            "error.aim.addActivity.sectorEmpty"));
                         saveErrors(request, errors);
                         eaForm.setStep("2");
                         return mapping.findForward("addActivity");
@@ -436,7 +436,7 @@ public class SaveActivity extends Action {
                         if (null == actSect.getSectorPercentage()
                             || "".equals(actSect.getSectorPercentage())) {
                             errors.add("sectorPercentageEmpty",
-                                       new ActionError("error:aim:addActivity:sectorPercentageEmpty"));
+                                       new ActionError("error.aim.addActivity.sectorPercentageEmpty"));
                             logger.debug("sector percentage is empty");
                             secPer = true;
                         }
@@ -447,7 +447,7 @@ public class SaveActivity extends Action {
                             } catch (NumberFormatException nex) {
                                 logger.debug("sector percentage is not a number : " + nex);
                                 errors.add("sectorPercentageNonNumeric",
-                                           new ActionError("error:aim:addActivity:sectorPercentageNonNumeric"));
+                                           new ActionError("error.aim.addActivity.sectorPercentageNonNumeric"));
                                 secPer = true;
                             }
                         }
@@ -461,7 +461,7 @@ public class SaveActivity extends Action {
                     // Total sector percentage is not equal to 100%
                     if (percent != 100) {
                         errors.add("sectorPercentageSumWrong",
-                                   new ActionError("error:aim:addActivity:sectorPercentageSumWrong"));
+                                   new ActionError("error.aim.addActivity.sectorPercentageSumWrong"));
                         saveErrors(request, errors);
                         logger.debug("sector percentage is not equal to 100%");
                         eaForm.setStep("2");
@@ -481,7 +481,7 @@ public class SaveActivity extends Action {
                                     .add(
                                         "fundings",
                                         new ActionError(
-                                            "error:aim:addActivity:fundingsNotEntered"));
+                                            "error.aim.addActivity.fundingsNotEntered"));
                                 saveErrors(request, errors);
                                 logger.info(" the funds added is null... please check");
                                 eaForm.setStep("3");

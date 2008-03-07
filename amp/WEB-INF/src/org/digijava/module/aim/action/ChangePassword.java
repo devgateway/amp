@@ -25,13 +25,13 @@ public class ChangePassword extends Action {
 					 if (cpForm.getUserId() != null && cpForm.getOldPassword() != null && cpForm.getNewPassword() != null) {
 								try {
 										  if (DbUtil.isRegisteredEmail(cpForm.getUserId()) != true) {
-													 errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error:aim:invalidUserId"));
+													 errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.aim.invalidUserId"));
 													 saveErrors(request,errors);
 													 return mapping.getInputForward();
 										  }
 
 										  if (DbUtil.isCorrectPassword(cpForm.getUserId(),cpForm.getOldPassword()) != true) {
-													 errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error:aim:invalidPassword"));
+													 errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.aim.invalidPassword"));
 													 saveErrors(request,errors);
 													 return mapping.getInputForward();
 										  }
@@ -41,7 +41,7 @@ public class ChangePassword extends Action {
 																cpForm.getNewPassword());
 								} catch (Exception e) {
 										  errors.add(ActionErrors.GLOBAL_ERROR,
-																new ActionError("error:aim:cannotChangePassword"));
+																new ActionError("error.aim.cannotChangePassword"));
 										  saveErrors(request,errors);
 										  return mapping.getInputForward();
 								}

@@ -50,7 +50,7 @@ public class GetStatusItem extends Action
 			id = formBean.getOriginalAmpStatusId();
 			ActionErrors errors = new ActionErrors();
 			errors.add("title", new ActionError(
-					"error:aim:addStatus:statusAdded"));
+					"error.aim.addStatus.statusAdded"));
 			saveErrors(request, errors);
 		}
 		if(request.getParameter("action")!=null)

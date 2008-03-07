@@ -88,7 +88,7 @@ public class TranslatorManager extends Action {
 				ex.printStackTrace(System.out);
 				ActionErrors errors = new ActionErrors();
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						"error:aim:importErrorFileContentTranslation"));
+						"error.aim.importErrorFileContentTranslation"));
 				
 				saveErrors(request, errors);
 				return mapping.findForward("forward");
@@ -105,7 +105,7 @@ public class TranslatorManager extends Action {
 			{
 				ActionErrors errors = new ActionErrors();
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						"error:aim:importErrorFileContentTranslation"));
+						"error.aim.importErrorFileContentTranslation"));
 				
 				saveErrors(request, errors);
 				return mapping.findForward("forward");
@@ -114,7 +114,7 @@ public class TranslatorManager extends Action {
 			{
 				ActionErrors errors = new ActionErrors();
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						"error:aim:importErrorFileContentTranslation"));
+						"error.aim.importErrorFileContentTranslation"));
 				
 				saveErrors(request, errors);
 				return mapping.findForward("forward");
@@ -158,7 +158,7 @@ public class TranslatorManager extends Action {
 					ex.printStackTrace(System.out);
 					ActionErrors errors = new ActionErrors();
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-							"error:aim:importErrorFileContentTranslation"));
+							"error.aim.importErrorFileContentTranslation"));
 					
 					saveErrors(request, errors);
 					return mapping.findForward("forward");
@@ -187,7 +187,7 @@ public class TranslatorManager extends Action {
 								ActionErrors errors = new ActionErrors();
 								
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-										"error:aim:updateErrorTranslation"));
+										"error.aim.updateErrorTranslation"));
 								
 								saveErrors(request, errors);
 								return mapping.findForward("forward");
@@ -255,7 +255,7 @@ public class TranslatorManager extends Action {
 				ex.printStackTrace(System.out);
 				ActionErrors errors = new ActionErrors();
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						"error:aim:importErrorFileContentTranslation"));
+						"error.aim.importErrorFileContentTranslation"));
 				
 				saveErrors(request, errors);
 				return mapping.findForward("forward");
@@ -295,7 +295,7 @@ public class TranslatorManager extends Action {
 			else {
 				ActionErrors errors = new ActionErrors();
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-						"error:aim:pleaseChooseALanguageForExport"));
+						"error.aim.pleaseChooseALanguageForExport"));
 				saveErrors(request, errors);
 				return mapping.findForward("forward");
 			}

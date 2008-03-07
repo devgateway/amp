@@ -48,10 +48,10 @@ public class DeleteFlag extends Action {
                     DbUtil.delete(siteFlag);
                 }
             } else {
-                errorMsg = "error:aim:uploadFlag:noCountrySelected";
+                errorMsg = "error.aim.uploadFlag.noCountrySelected";
             }
         } catch (Exception e) {
-            errorMsg = "error:aim:serverError";
+            errorMsg = "error.aim.serverError";
             e.printStackTrace(System.out);
         } finally {
             if (errorMsg != null) {

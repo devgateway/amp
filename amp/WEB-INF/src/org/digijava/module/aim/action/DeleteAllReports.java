@@ -77,14 +77,14 @@ public class DeleteAllReports extends Action {
 								 boolean deleted = AdvancedReportUtil.deleteReportsCompletely(ampReportForm.getReportId());										 
 										 if (deleted) {
 											errors.add("title", new ActionError(
-													"error:aim:deleteReports:reportDeleted"));
+													"error.aim.deleteReports.reportDeleted"));
 											saveErrors(request,errors);								
 														logger.debug("Report deleted");
 										 }												
 						 }
 				 }else {
 					 errors.add("title", new ActionError(
-						"error:aim:deleteReports:reportNotDeleted"));
+						"error.aim.deleteReports.reportNotDeleted"));
 					saveErrors(request,errors);
 		
 					logger.debug("Report could not be deleted! ");

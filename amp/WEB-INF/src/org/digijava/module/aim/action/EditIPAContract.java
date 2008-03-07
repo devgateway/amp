@@ -263,7 +263,7 @@ public class EditIPAContract extends MultiAction {
 
         if (hasInvalidAmounts(amountsList)) {
             errors.add("title", new ActionError(
-                    "error:aim:ipacontract:invalidAmountFormat"));
+                    "error.aim.ipacontract.invalidAmountFormat"));
         }
         //if(hasUnselectedItems(eaf.())) errors.add("title", new ActionError(
         //"error.aim.euactivity.selectDonor"));

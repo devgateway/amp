@@ -85,7 +85,7 @@ public class AddStatus extends Action
 		else{ 
 			ActionErrors errors = new ActionErrors();
 			errors.add("title", new ActionError(
-					"error:aim:addStatus:statusAdded"));
+					"error.aim.addStatus.statusAdded"));
 			saveErrors(request, errors);
 			return mapping.findForward("forward");
 		}

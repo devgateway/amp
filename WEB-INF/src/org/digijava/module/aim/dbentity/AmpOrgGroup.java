@@ -3,10 +3,12 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+import org.dgfoundation.amp.ar.dimension.ARDimensionable;
+import org.dgfoundation.amp.ar.dimension.DonorGroupDimension;
 import org.digijava.module.aim.util.Identifiable;
 
 
-public class AmpOrgGroup implements Serializable, Comparable, Identifiable
+public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDimensionable
 {
 	private Long ampOrgGrpId;
 	private String orgGrpName;
@@ -87,6 +89,9 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable
 	}
 	public String toString() {
 		return this.getOrgGrpName();
+	}
+	public Class getDimensionClass() {
+	    return DonorGroupDimension.class;
 	}
 
 }

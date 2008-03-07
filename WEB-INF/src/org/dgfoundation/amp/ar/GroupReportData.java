@@ -29,6 +29,7 @@ import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 public class GroupReportData extends ReportData {
 
     
+    	
 	@Override
 	public int getVisibleRows() {
     	    Iterator i=items.iterator();
@@ -143,11 +144,7 @@ public class GroupReportData extends ReportData {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dgfoundation.amp.ar.ReportData#categorizeBy(org.dgfoundation.amp.ar.cell.Cell)
-	 */
+
 	public GroupReportData horizSplitByCateg(String columnName)
 			throws UnidentifiedItemException, IncompatibleColumnException {
 		GroupReportData dest = new GroupReportData(this);
@@ -321,4 +318,6 @@ public class GroupReportData extends ReportData {
 			if(element.getItems().size()==0) i.remove(); else element.removeEmptyChildren();
 		}
 	}
+
+	
 }

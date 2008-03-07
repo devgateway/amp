@@ -3,10 +3,12 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.dgfoundation.amp.ar.dimension.ARDimensionable;
+import org.dgfoundation.amp.ar.dimension.SectorDimension;
 import org.digijava.module.aim.util.Identifiable;
 
 
-public class AmpSector implements Serializable, Comparable, Identifiable
+public class AmpSector implements Serializable, Comparable, Identifiable, ARDimensionable
 {
 	private Long ampSectorId ;
 	private AmpSector parentSectorId ;
@@ -211,6 +213,10 @@ public void setAmpOrgId(AmpOrganisation org) {
 
 	public void setIndicators(Set indicators) {
 		this.indicators = indicators;
+	}
+
+	public Class getDimensionClass() {
+	    return SectorDimension.class;
 	}
 	
 }

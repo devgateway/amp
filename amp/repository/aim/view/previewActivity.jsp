@@ -1022,14 +1022,15 @@ function collapseAll() {
                                 	<feature:display name="NPD Programs" module="National Planning Dashboard">
 									<field:display name="National Plan Objective" feature="NPD Programs">
 									<TR>
-																		<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="npo_plus"  onclick="toggleGroup('npo')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-												<img id="npo_minus" onclick="toggleGroup('npo')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+																		<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+												<img id="npd_npo_plus"  onclick="toggleGroup('npd_npo')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
+												<img id="npd_npo_minus" onclick="toggleGroup('npd_npo')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display : none"/>
 																		<b>
 						                        <digi:trn key="aim:national Plan Objective">National Plan Objective</digi:trn></b></TD>
 
 					      <TD bgcolor="#ffffff">
-														<div id="npo_dots">...</div>
-														<div id="act_npo" style="display: none;">
+														<div id="npd_npo_dots">...</div>
+														<div id="act_npd_npo" style="display: none;">
                                                                                                                                                   <c:forEach var="program" items="${aimEditActivityForm.nationalPlanObjectivePrograms}">
                                                                                                                                                   <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
                                                                                                                                                   </c:forEach>

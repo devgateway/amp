@@ -98,7 +98,7 @@ public class ForumAction
       catch (ForumException ex) {
         errors.add("forumGlobalError",
                    new ActionError(
-            "error:forum:errorGettingUserSettings"));
+            "error.forum.errorGettingUserSettings"));
 
       }
       Subject subject = DgSecurityManager.getSubject(request);

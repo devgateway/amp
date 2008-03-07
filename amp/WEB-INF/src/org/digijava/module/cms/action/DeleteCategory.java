@@ -63,7 +63,7 @@ public class DeleteCategory
     }
     catch (CMSException ex) {
       errors.add(ActionErrors.GLOBAL_ERROR,
-                 new ActionError("error:cms:gettingCMSObject"));
+                 new ActionError("error.cms.gettingCMSObject"));
     }
     //Get cms
 
@@ -102,7 +102,7 @@ public class DeleteCategory
     }
     catch (Exception ex1) {
       errors.add(ActionErrors.GLOBAL_ERROR,
-                 new ActionError("error:cms:deleteCategory"));
+                 new ActionError("error.cms.deleteCategory"));
     }
     return mapping.findForward(forward);
   }

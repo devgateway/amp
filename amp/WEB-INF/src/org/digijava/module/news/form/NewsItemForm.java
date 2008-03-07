@@ -911,7 +911,7 @@ public class NewsItemForm
 
 	if ( (title == null) || (title.trim().length() == 0)) {
 	    errors.add(null,
-		       new ActionError("error:news:itemTitleEmpty"));
+		       new ActionError("error.news.itemTitleEmpty"));
 	}
 
 	if ( (description == null) || (description.trim().length() == 0)) {

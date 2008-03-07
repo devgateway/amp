@@ -83,7 +83,7 @@ public class CMSForm
           if (actionMapping.getType().equals("org.digijava.module.cms.action.SaveCategory")) {
             if (this.categoryName == null ||
                 this.categoryName.trim().length()==0) {
-              errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("cms:error:categoryNameCanNotBeEmpty"));
+              errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("cms.error.categoryNameCanNotBeEmpty"));
             }
           }
 

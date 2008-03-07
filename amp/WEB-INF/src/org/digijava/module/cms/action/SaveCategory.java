@@ -67,7 +67,7 @@ public class SaveCategory
     }
     catch (CMSException ex1) {
       errors.add(ActionErrors.GLOBAL_ERROR,
-                 new ActionError("error:cms:saveCategory"));
+                 new ActionError("error.cms.saveCategory"));
     }
     //Get cms
 

@@ -102,21 +102,21 @@ public class AddLocationForm extends ValidatorForm {
 			}
 			else if ("off".equalsIgnoreCase(edFlag)) {
 				if (null == name || "".equals(name))
-					errors.add("name", new ActionError("error:aim:addLocation:noName"));
+					errors.add("name", new ActionError("error.aim.addLocation.noName"));
 				if (categoryLevel != null && categoryLevel.longValue() == 0) {
 					//errors = super.validate(mapping, req);
 					if (null == iso || "".equals(iso))
-						errors.add("iso", new ActionError("error:aim:addLocation:noIso"));
+						errors.add("iso", new ActionError("error.aim.addLocation.noIso"));
 					else if (!iso.matches("[a-zA-Z]+"))
-						errors.add("iso", new ActionError("error:aim:addLocation:noAlphaIso"));
+						errors.add("iso", new ActionError("error.aim.addLocation.noAlphaIso"));
 					else if (iso.length() != 2)
-						errors.add("iso", new ActionError("error:aim:addLocation:wrongIsoLength"));
+						errors.add("iso", new ActionError("error.aim.addLocation.wrongIsoLength"));
 					if (null == iso3 || "".equals(iso3))
-						errors.add("Iso3", new ActionError("error:aim:addLocation:noIso3"));
+						errors.add("Iso3", new ActionError("error.aim.addLocation.noIso3"));
 					else if (!iso3.matches("[a-zA-Z]+"))
-						errors.add("iso3", new ActionError("error:aim:addLocation:noAlphaIso3"));
+						errors.add("iso3", new ActionError("error.aim.addLocation.noAlphaIso3"));
 					else if (iso3.length() != 3)
-						errors.add("iso3", new ActionError("error:aim:addLocation:wrongIso3Length"));
+						errors.add("iso3", new ActionError("error.aim.addLocation.wrongIso3Length"));
 				}
 				edFlag = null;
 			}

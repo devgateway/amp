@@ -94,7 +94,7 @@ public class EditCategory extends Action {
       }
       catch (Exception ex) {
         errors.add(ActionErrors.GLOBAL_ERROR,
-                 new ActionError("error:cms:editCategory"));
+                 new ActionError("error.cms.editCategory"));
       }
       return mapping.findForward(forward);
     }

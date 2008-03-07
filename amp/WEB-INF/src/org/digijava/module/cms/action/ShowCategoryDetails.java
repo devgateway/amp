@@ -57,7 +57,7 @@ public class ShowCategoryDetails
     }
     catch (Exception ex) {
       errors.add(ActionErrors.GLOBAL_ERROR,
-                 new ActionError("error:cms:showingCtegoryDetails"));
+                 new ActionError("error.cms.showingCtegoryDetails"));
     }
 
 

@@ -77,7 +77,7 @@ public class AdminPageForm
         if (this.getForumName() == null ||
             this.getForumName().trim().length() == 0) {
           errors.add("forumGlobalError",
-                     new ActionError("error:forum:emptyForumName"));
+                     new ActionError("error.forum.emptyForumName"));
         }
       }
       else if (mapping.getType().equals(
@@ -85,7 +85,7 @@ public class AdminPageForm
         if (this.getSectionTitle() == null ||
             this.getSectionTitle().trim().length() == 0) {
           errors.add("forumGlobalError",
-                     new ActionError("error:forum:emptySectionName"));
+                     new ActionError("error.forum.emptySectionName"));
         }
 
       } else if (mapping.getType().equals(
@@ -93,7 +93,7 @@ public class AdminPageForm
           if (this.getSubsectionTitle() == null ||
               this.getSubsectionTitle().trim().length() == 0) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:emptySubsectionName"));
+                       new ActionError("error.forum.emptySubsectionName"));
           }
 
 

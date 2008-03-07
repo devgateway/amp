@@ -95,11 +95,11 @@ public class ViewEditUser extends Action {
 	            			}
             			}
             			errors.add("title",
-                                new ActionError("error:um:userIsInTeams", teamNames));
+                                new ActionError("error.um.userIsInTeams", teamNames));
             		}
             		if ( ampTeamMembers == null ) {
             			errors.add("title",
-                                new ActionError("error:um:errorBanning"));
+                                new ActionError("error.um.errorBanning"));
             		}
             	}
             	else {
@@ -120,7 +120,7 @@ public class ViewEditUser extends Action {
                 DbUtil.updateUser(user);*/
             } else {
                 errors.add(ActionErrors.GLOBAL_ERROR,
-                           new ActionError("error:um:banUserInvalidPermission"));
+                           new ActionError("error.um.banUserInvalidPermission"));
             }
             resetViewEditUserForm(uForm);
             saveErrors(request, errors);
@@ -309,12 +309,12 @@ public class ViewEditUser extends Action {
                         newPassword.trim().length() == 0 ||
                         confirmNewPassword.trim().length() == 0) {
                         errors.add(ActionErrors.GLOBAL_ERROR,
-                                   new ActionError("error:update:blankFields"));
+                                   new ActionError("error.update.blankFields"));
                         saveErrors(request, errors);
                     } else {
                         if (!newPassword.equals(confirmNewPassword)) {
                             errors.add(ActionErrors.GLOBAL_ERROR,
-                                       new ActionError("error:update:noPasswordMatch"));
+                                       new ActionError("error.update.noPasswordMatch"));
                             saveErrors(request, errors);
 
                         } else {

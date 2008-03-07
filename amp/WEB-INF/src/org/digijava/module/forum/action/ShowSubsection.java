@@ -65,7 +65,7 @@ public class ShowSubsection
         }
         catch (ForumException ex1) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:gettingSubsection"));
+                       new ActionError("error.forum.gettingSubsection"));
         }
 
         forumPageForm.setSize(forumSubsection.getThreadCount());

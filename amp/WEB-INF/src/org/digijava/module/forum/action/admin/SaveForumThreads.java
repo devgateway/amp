@@ -59,7 +59,7 @@ public class SaveForumThreads
         }
         catch (ForumException ex2) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:savingThread"));
+                       new ActionError("error.forum.savingThread"));
         }
 
         for (int threadIdIndex = 0;
@@ -74,7 +74,7 @@ public class SaveForumThreads
             }
             catch (ForumException ex3) {
                 errors.add("forumGlobalError",
-                       new ActionError("error:forum:savingThread"));
+                       new ActionError("error.forum.savingThread"));
             }
             forumThread.setSubsection(subsection);
             threads.add(forumThread);
@@ -98,7 +98,7 @@ public class SaveForumThreads
         }
         catch (ForumException ex) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:savingThread"));
+                       new ActionError("error.forum.savingThread"));
         }
 
         if (leaveShadow) {
@@ -107,7 +107,7 @@ public class SaveForumThreads
             }
             catch (ForumException ex1) {
                 errors.add("forumGlobalError",
-                       new ActionError("error:forum:savingThread"));
+                       new ActionError("error.forum.savingThread"));
             }
 
             /*

@@ -43,7 +43,7 @@ public class DeleteMessage
         }
         catch (ForumException ex) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:deletePost"));
+                       new ActionError("error.forum.deletePost"));
         }
 
         ActionForward retFwd = mapping.findForward(forward);

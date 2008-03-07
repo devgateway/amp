@@ -34,13 +34,13 @@ public class YearRangeValidator
 	 try {
 		if ( v1 > v2 ) {
 		  errors.add(null,
-					 new ActionError("error:aim:invalidYearRange"));
+					 new ActionError("error.aim.invalidYearRange"));
 		  return false;
 		}
 	 }
 	 catch (Exception e) {
 		errors.add(null,
-				   new ActionError("error:aim:invalidYearRange"));
+				   new ActionError("error.aim.invalidYearRange"));
 		return false;
 	  }
 	  

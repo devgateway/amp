@@ -60,7 +60,7 @@ public class MoveForumSubsection extends Action {
         }
         catch (ForumException ex1) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:movingSubsection"));
+                       new ActionError("error.forum.movingSubsection"));
         }
         int subsectionIndex = 0;
         int swapSubsectionIndex = subsection.getOrderIndex();
@@ -102,12 +102,12 @@ public class MoveForumSubsection extends Action {
             catch (Exception ex) {
                 errors.add("forumGlobalError",
                            new ActionError(
-                    "error:forum:errorMovingSubsection"));
+                    "error.forum.errorMovingSubsection"));
             }
         } else {
             errors.add("forumGlobalError",
                        new ActionError(
-                "error:forum:errorMovingSubsection"));
+                "error.forum.errorMovingSubsection"));
         }
 
         if (!errors.isEmpty()) {

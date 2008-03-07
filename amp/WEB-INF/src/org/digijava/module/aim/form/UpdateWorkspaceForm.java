@@ -420,7 +420,7 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 			
 			if(("DONOR".equalsIgnoreCase(category) &&("Team".equalsIgnoreCase(workspaceType)|| "Management".equalsIgnoreCase(workspaceType)))
 					||("GOVERNMENT".equalsIgnoreCase(category) && ("Donor".equals(workspaceType))) ){
-				ActionError error = new ActionError("error:aim:updateWorkspace:incorrectWorkspaceType");
+				ActionError error = new ActionError("error.aim.updateWorkspace.incorrectWorkspaceType");
 				errors.add("workspaceType", error);
 			}
 			
@@ -429,7 +429,7 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 					if (typeCategoryValue!=null && Constants.TEAM_TYPE_BILATERAL.equals( typeCategoryValue.getValue() )) {
 						if (relatedTeamBilatColl.size() > 0 )
 							if (null == relatedTeam || "-1".equals(relatedTeam) || relatedTeam.toString().trim().length() < 1) {
-								ActionError error = new ActionError("error:aim:updateWorkspace:noRelatedTeam");
+								ActionError error = new ActionError("error.aim.updateWorkspace.noRelatedTeam");
 								errors.add("relatedTeam", error);
 								relatedTeamFlag = "set";
 							}
@@ -437,7 +437,7 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 					if ( typeCategoryValue!=null && Constants.TEAM_TYPE_MULTILATERAL.equals(typeCategoryValue.getValue()) ) {
 						if (relatedTeamMutilatColl.size() > 0)
 							if (null == relatedTeam || "-1".equals(relatedTeam) || relatedTeam.toString().trim().length() < 1) {
-								ActionError error = new ActionError("error:aim:updateWorkspace:noRelatedTeam");
+								ActionError error = new ActionError("error.aim.updateWorkspace.noRelatedTeam");
 								errors.add("relatedTeam", error);
 								relatedTeamFlag = "set";
 							}
@@ -446,11 +446,11 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 				else if ("add".equalsIgnoreCase(actionEvent)) {
 					if (relatedTeamBilatColl.size() > 0 && relatedTeamMutilatColl.size() > 0) {
 						if (null == typeCategoryValue) {
-							ActionError error = new ActionError("error:aim:updateWorkspace:noTeamType");
+							ActionError error = new ActionError("error.aim.updateWorkspace.noTeamType");
 							errors.add("type", error);
 						}
 						else if (null == relatedTeam || "-1".equals(relatedTeam) || relatedTeam.toString().trim().length() < 1) {
-							ActionError error = new ActionError("error:aim:updateWorkspace:noRelatedTeam");
+							ActionError error = new ActionError("error.aim.updateWorkspace.noRelatedTeam");
 							errors.add("relatedTeam", error);
 						}
 						relatedTeamFlag = "set";

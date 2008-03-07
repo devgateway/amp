@@ -120,7 +120,7 @@ public class ShowAdminThread
         }
         catch (ForumException ex4) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:gettingThreads"));
+                       new ActionError("error.forum.gettingThreads"));
         }
 
         adminPageForm.setForumThread(forumThread);

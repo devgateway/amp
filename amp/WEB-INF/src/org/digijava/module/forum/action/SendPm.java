@@ -67,7 +67,7 @@ public class SendPm
                 }
                 catch (ForumException ex) {
                     errors.add("forumGlobalError",
-                               new ActionError("error:forum:createPm"));
+                               new ActionError("error.forum.createPm"));
                 }
             }
             else {
@@ -85,13 +85,13 @@ public class SendPm
                 }
                 catch (ForumException ex) {
                     errors.add("forumGlobalError",
-                               new ActionError("error:forum:editPm"));
+                               new ActionError("error.forum.editPm"));
                 }
             }
         }
         else {
                     errors.add("forumGlobalError",
-                       new ActionError("error:forum:pm:userNotFound"));
+                       new ActionError("error.forum.pm.userNotFound"));
                        setCriticalError(true);
         }
 

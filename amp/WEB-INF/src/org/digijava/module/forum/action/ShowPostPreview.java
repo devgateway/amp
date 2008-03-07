@@ -124,11 +124,11 @@ public class ShowPostPreview
       }
       catch (IOException ex) {
         errors.add("forumGlobalError",
-                   new ActionError("error:forum:bbcode"));
+                   new ActionError("error.forum.bbcode"));
       }
       catch (BBCodeException ex) {
         errors.add("forumGlobalError",
-                   new ActionError("error:forum:bbcode"));
+                   new ActionError("error.forum.bbcode"));
       }
 
       forumPageForm.setParsedContent(parsedContent);

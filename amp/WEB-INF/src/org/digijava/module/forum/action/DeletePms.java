@@ -66,7 +66,7 @@ public class DeletePms
         }
         catch (ForumException ex) {
             errors.add("forumGlobalError",
-                           new ActionError("error:forum:pm:delete"));
+                           new ActionError("error.forum.pm.delete"));
         }
         return mapping.findForward(forward);
     }

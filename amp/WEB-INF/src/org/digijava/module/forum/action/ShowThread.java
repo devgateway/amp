@@ -93,7 +93,7 @@ public class ShowThread
     }
     catch (ForumException ex) {
       errors.add("forumGlobalError",
-                 new ActionError("error:forum:gettingThread"));
+                 new ActionError("error.forum.gettingThread"));
       setCriticalError(true);
     }
 

@@ -60,7 +60,7 @@ public class AddContentItemCategory
       }
       catch (Exception ex) {
         errors.add(ActionErrors.GLOBAL_ERROR,
-                 new ActionError("error:cms:addCategory"));
+                 new ActionError("error.cms.addCategory"));
       }
 
 

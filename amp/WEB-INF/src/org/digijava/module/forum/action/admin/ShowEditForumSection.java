@@ -53,7 +53,7 @@ public class ShowEditForumSection
         }
         catch (ForumException ex) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:gettingSection"));
+                       new ActionError("error.forum.gettingSection"));
         }
         adminPageForm.setSectionParams(section);
         return mapping.findForward(forward);

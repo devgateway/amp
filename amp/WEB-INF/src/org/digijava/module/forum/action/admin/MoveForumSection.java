@@ -57,7 +57,7 @@ public class MoveForumSection
         }
         catch (ForumException ex1) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:movingSectons"));
+                       new ActionError("error.forum.movingSectons"));
         }
         int sectionIndex = 0;
         int swapSectionIndex = section.getOrderIndex();
@@ -88,7 +88,7 @@ public class MoveForumSection
         }
         catch (Exception ex) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:movingSectons"));
+                       new ActionError("error.forum.movingSectons"));
         }
 
         return mapping.findForward(forward);

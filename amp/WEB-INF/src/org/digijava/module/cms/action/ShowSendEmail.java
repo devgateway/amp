@@ -70,7 +70,7 @@ public class ShowSendEmail extends Action {
       }
       else {
           ActionErrors errors = new ActionErrors();
-          errors.add(null, new ActionError("error:um:userNotLoggedin"));
+          errors.add(null, new ActionError("error.cms.userNotLoggedin"));
       }
 
       return mapping.findForward("forward");

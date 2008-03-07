@@ -75,7 +75,7 @@ public class ShowChangeItemStatus
         }
         catch (CMSException ex) {
           errors.add(ActionErrors.GLOBAL_ERROR,
-                     new ActionError("error:cms:getContentItem"));
+                     new ActionError("error.cms.getContentItem"));
         }
 
       }

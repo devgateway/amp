@@ -481,23 +481,23 @@ public class UserRegisterForm
         if ( (this.getFirstNames() == null) ||
                 this.getFirstNames().trim().length() == 0) {
                 ActionError error = new ActionError(
-                    "error:registration:FirstNameBlank");
+                    "error.registration.FirstNameBlank");
                 errors.add(null, error);
             }
             if ( (this.getLastName() == null) ||
                 this.getLastName().trim().length() == 0) {
                 ActionError error = new ActionError(
-                    "error:registration:LastNameBlank");
+                    "error.registration.LastNameBlank");
                 errors.add(null, error);
             }
             if ( (this.getEmail() == null) || this.getEmail().trim().length() == 0) {
-                ActionError error = new ActionError("error:registration:noemail");
+                ActionError error = new ActionError("error.registration.noemail");
                        errors.add(null, error);
                    }
             if ( (this.getPassword() == null) ||
                     this.getPassword().trim().length() == 0) {
                     ActionError error = new ActionError(
-                        "error:registration:passwordBlank");
+                        "error.registration.passwordBlank");
                     errors.add(null, error);
                 }            
             
@@ -505,7 +505,7 @@ public class UserRegisterForm
         if ( (this.getEmail() != null) && this.getEmail().trim().length() != 0) {
             if (! (this.getEmail().equals(this.getEmailConfirmation()))) {
                 ActionError error = new ActionError(
-                    "error:registration:noemailmatch");
+                    "error.registration.noemailmatch");
                 errors.add(null, error);
             }
         }
@@ -514,7 +514,7 @@ public class UserRegisterForm
             this.getPassword().trim().length() != 0) {
             if (! (this.getPassword().equals(this.getPasswordConfirmation()))) {
                 ActionError error = new ActionError(
-                    "error:registration:NoPasswordMatch");
+                    "error.registration.NoPasswordMatch");
                 errors.add(null, error);
             }
         }      
@@ -522,12 +522,12 @@ public class UserRegisterForm
        
         
         if (null == this.getOrgGrp() || this.getOrgGrp().trim().length() < 1) {
-        	ActionError error = new ActionError("error:registration:NoOrgGroup");
+        	ActionError error = new ActionError("error.registration.NoOrgGroup");
         	errors.add(null, error);
         }
 
         if (null == this.getOrganizationName() || this.getOrganizationName().trim().length() < 1) {
-        	ActionError error = new ActionError("error:registration:NoOrganization");
+        	ActionError error = new ActionError("error.registration.NoOrganization");
         	errors.add(null, error);
         }
         

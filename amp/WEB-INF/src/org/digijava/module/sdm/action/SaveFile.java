@@ -67,7 +67,7 @@ public class SaveFile
 
             if( sdmItem.getContent() == null ) {
                 ActionErrors errors = new ActionErrors();
-                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error:sdm:fileRequired"));
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.sdm.fileRequired"));
                 saveErrors(request, errors );
 
                 return mapping.getInputForward();

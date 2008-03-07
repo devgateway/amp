@@ -96,7 +96,7 @@ public class SaveForumSection
             }
             catch (ForumException ex3) {
                 errors.add("forumGlobalError",
-                       new ActionError("error:forum:savingSection"));
+                       new ActionError("error.forum.savingSection"));
             }
             adminPageForm.fillSection(section);
             try {
@@ -104,7 +104,7 @@ public class SaveForumSection
             }
             catch (Exception ex2) {
                 errors.add("forumGlobalError",
-                       new ActionError("error:forum:savingSection"));
+                       new ActionError("error.forum.savingSection"));
             }
         }
         return mapping.findForward(forward);

@@ -54,7 +54,7 @@ public class ShowEditForumSubsection extends Action {
         }
         catch (ForumException ex) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:gettingSubsection"));
+                       new ActionError("error.forum.gettingSubsection"));
         }
 
         // Get forum for the current site and instance

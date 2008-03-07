@@ -60,7 +60,7 @@ public class SaveUserSettings
             }
             catch (Exception ex) {
                 errors.add("forumGlobalError",
-                           new ActionError("error:forum:updateUser"));
+                           new ActionError("error.forum.updateUser"));
             }
         }
         return mapping.findForward(forward);

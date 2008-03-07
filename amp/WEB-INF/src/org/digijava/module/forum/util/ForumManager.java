@@ -476,7 +476,7 @@ public class ForumManager {
                   }
                   catch (IOException ex4) {
                       errors.add("forumGlobalError",
-                                 new ActionError("error:forum:fileUploadError"));
+                                 new ActionError("error.forum.fileUploadError"));
                   }
                   if (fileData != null && fileData.length > 0) {
                       String fileName = ff.getFileName();
@@ -495,7 +495,7 @@ public class ForumManager {
                       }
                       catch (ForumException ex5) {
                           errors.add("forumGlobalError",
-                                 new ActionError("error:forum:pm:userNotFound"));
+                                 new ActionError("error.forum.pm.userNotFound"));
                       }
 
                       StringBuffer imgTag = new StringBuffer();

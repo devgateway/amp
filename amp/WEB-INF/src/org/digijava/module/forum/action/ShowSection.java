@@ -70,7 +70,7 @@ public class ShowSection
         }
         catch (ForumException ex) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:gettingSection"));
+                       new ActionError("error.forum.gettingSection"));
         }
 
         //Trail generation

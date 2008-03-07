@@ -53,7 +53,7 @@ public class AlertNewPm extends ForumAction {
             }
             catch (ForumException ex) {
                 errors.add("forumGlobalError",
-                           new ActionError("error:forum:updateUser"));
+                           new ActionError("error.forum.updateUser"));
             }
         }
 

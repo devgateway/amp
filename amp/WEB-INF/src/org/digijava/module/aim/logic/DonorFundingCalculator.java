@@ -11,5 +11,9 @@ import org.digijava.module.aim.util.DecimalWraper;
  * @author Mauricio Coria - coriamauricio@gmail.com
  */
 public interface DonorFundingCalculator {
-	DecimalWraper getTotalDonorFunding(Collection<YearlyInfo> c, FilterParams fp);
+	
+    DecimalWraper getTotalDonorFunding(Collection<YearlyInfo> c, FilterParams fp);
+    
+     DecimalWraper getTotalCommtiments(Long activityId, String currCode, String perspective);
+
 }

@@ -77,7 +77,7 @@ public class ActivityManager extends Action {
 	private void doPagination(ActivityForm actForm, HttpServletRequest request) {
 		List<AmpActivity> allActivities = actForm.getAllActivityList();
 		List<AmpActivity> pageList = actForm.getActivityList();
-		int pageSize = actForm.getPageSize();
+		int pageSize = actForm.getTempNumResults();
 		if (pageList == null) {
 			pageList = new ArrayList<AmpActivity>();
 			actForm.setActivityList(pageList);

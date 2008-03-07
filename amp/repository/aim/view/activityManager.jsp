@@ -7,6 +7,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
 <script language="JavaScript">
 <!--
 	<digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>
@@ -20,18 +22,46 @@
 
 	function unload() {}
 	
-	function searchActivity() {		 
-	     url = "<%= searchOrg %>?action=search";
-	     document.aimActivityForm.action = url;
-	     document.aimActivityForm.submit();
-		 return true;
+	function searchActivity() {
+		if (document.aimActivityForm.tempNumResults.value == 0) {
+			  alert ("Invalid value at 'Number of results per page'");
+			  document.aimActivityForm.tempNumResults.focus();
+			  return false;
+		} else {
+			
+			 <digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>
+		     url = "<%= searchOrg %>?action=search";
+		     document.aimActivityForm.action = url;
+		     document.aimActivityForm.submit();
+			 return true;
+		}
 	}
-	
+
+
+
+	function searchAlpha(val) {
+		if (document.aimActivityForm.tempNumResults.value == 0) {
+			  alert ("Invalid value at 'Number of results per page'");
+			  document.aimActivityForm.tempNumResults.focus();
+			  return false;
+		} else {
+			 <digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>
+			 url = "<%= searchOrg %>?alpha=" + val + "&orgSelReset=false";
+		     document.aimActivityForm.action = url;
+		     document.aimActivityForm.submit();
+			 return true;
+		}
+	}
+
+
+
 	function resetSearch() {
-	     url = "<%= searchOrg %>?action=reset";
+		<digi:context name="searchOrg" property="context/module/moduleinstance/activityManager.do"/>     
+		url = "<%= searchOrg %>?action=reset";
 	     document.aimActivityForm.action = url;
 	     document.aimActivityForm.submit();
 		 return true;
+
 	}	
 	
 -->
@@ -88,21 +118,32 @@
 											<td>
 												<table>
 													<tr>
-														<td align="left">
+														<td width="195">
 															<digi:trn key="aim:keyword">Keyword</digi:trn>&nbsp;
-															<html:text property="keyword" styleClass="inp-text" size="50" />														
+															<html:text property="keyword" styleClass="inp-text" />
 														</td>
-														<td align="center">
-										                    <c:set var="trnResetBtn">
-										                      <digi:trn key="aim:btnReset"> Reset </digi:trn>
-										                    </c:set>
-										                    <input type="button" value="${trnResetBtn}" class="buton" onclick="return resetSearch();">
-										                </td>
-										                <td align="left">
-										                    <c:set var="trnGoBtn">
-										                      <digi:trn key="aim:btnGo"> GO </digi:trn>
-										                    </c:set>
-										                    <input type="button" value="${trnGoBtn}" class="buton"    onclick="return searchActivity();">
+														<td width="120">
+															<digi:trn key="aim:results">Results</digi:trn>&nbsp;
+															<!--<digi:trn key="aim:resultsPerPage">Results per page</digi:trn>&nbsp;-->
+															<!--<html:text property="tempNumResults" size="2" styleClass="inp-text" />-->
+															<html:select property="tempNumResults" styleClass="inp-text">
+																<html:option value="10">10</html:option>
+																<html:option value="20">20</html:option>
+																<html:option value="50">50</html:option>
+																<html:option value="-1">ALL</html:option>
+															</html:select>
+														</td>
+														<td width="50">
+									                    <c:set var="trnResetBtn">
+									                      <digi:trn key="aim:btnReset"> Reset </digi:trn>
+									                    </c:set>
+									                    <input type="button" value="${trnResetBtn}" class="buton" onclick="return resetSearch()">
+														</td>
+														<td width="260">					
+									                    <c:set var="trnGoBtn">
+									                      <digi:trn key="aim:btnGo"> GO </digi:trn>
+									                    </c:set>
+									                    <input type="button" value="${trnGoBtn}" class="buton" onclick="return searchActivity()">
 														</td>
 													</tr>
 												</table>
@@ -282,32 +323,6 @@
 												</c:if>
 												<c:out value="${aimActivityForm.currentPage+1}"></c:out>&nbsp;<digi:trn key="aim:of">of</digi:trn>&nbsp;<c:out value="${aimActivityForm.totalPages}"></c:out>
 											</td>											
-										</tr>
-										<tr bgcolor="#ffffff">
-											<td>&nbsp;</td>
-										</tr>
-										<tr bgcolor="#ffffff">
-											<td> 
-											    <digi:trn key="aim:pageSize">Pages Size:</digi:trn>
-												<jsp:useBean id="urlParamsPageSize" type="java.util.Map" class="java.util.HashMap"/>
-												<c:set target="${urlParamsPageSize}" property="action" value="setPageSize"/>
-												<%
-													pageContext.setAttribute("pageSize", new Integer(aimActivityForm.getPageSize()));
-													for(int i = 10; i < 50; i = i + 10){
-														pageContext.setAttribute("actualPageSize", new Integer(i));
-												%>
-													<c:if test="${pageSize ne actualPageSize}"> 
-														<c:set target="${urlParamsPageSize}" property="pageSize" value="${actualPageSize}"/>
-														<digi:link href="/activityManager.do"  name="urlParamsPageSize"><%=i%></digi:link> 
-													</c:if>
-													<c:if test="${pageSize eq actualPageSize}"> 
-														<%=i%>
-													</c:if>
-													<c:if test="${actualPageSize lt 40}"> 
-														|
-													</c:if>													
-												<%}%>
-											</td>
 										</tr>
 									</table>
 

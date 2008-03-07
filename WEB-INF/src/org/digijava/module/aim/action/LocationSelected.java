@@ -63,11 +63,11 @@ public class LocationSelected extends Action {
 			location[0].setNewCountryId(cntry.getIso());
 			//determine whether activity already has 1 or more locations
 			if(eaForm.getSelectedLocs()!=null && eaForm.getSelectedLocs().size()>0) {
-				location[0].setPercent(null);
+				//location[0].setPercent(null);
 				Iterator iter=eaForm.getSelectedLocs().iterator();
 				while (iter.hasNext()) {
 					Location loc=(Location)iter.next();
-					loc.setPercent(null);
+					//loc.setPercent(null);
 				}					
 			}else {
 				location[0].setPercent("100");
@@ -118,11 +118,11 @@ public class LocationSelected extends Action {
 						location[i].setRegion(reg.getName());
 						//determine whether activity already has 1 or more locations
 						if(eaForm.getSelectedLocs()!=null && eaForm.getSelectedLocs().size()>0) {
-							location[0].setPercent(null);
+							//location[0].setPercent(null);
 							Iterator iter=eaForm.getSelectedLocs().iterator();
 							while (iter.hasNext()) {
 								Location loc=(Location)iter.next();
-								loc.setPercent(null);
+								//loc.setPercent(null);
 							}					
 						}else {
 							location[0].setPercent("100");
@@ -182,11 +182,11 @@ public class LocationSelected extends Action {
 						location[i].setZone(zne.getName());
 						//determine whether activity already has 1 or more locations
 						if(eaForm.getSelectedLocs()!=null && eaForm.getSelectedLocs().size()>0) {
-							location[0].setPercent(null);
+							//location[0].setPercent(null);
 							Iterator iter=eaForm.getSelectedLocs().iterator();
 							while (iter.hasNext()) {
 								Location loc=(Location)iter.next();
-								loc.setPercent(null);
+								//loc.setPercent(null);
 							}					
 						}else {
 							location[0].setPercent("100");
@@ -233,11 +233,11 @@ public class LocationSelected extends Action {
 						location[i].setWoreda(wrda.getName());
 						//determine whether activity already has 1 or more locations
 						if(eaForm.getSelectedLocs()!=null && eaForm.getSelectedLocs().size()>0) {
-							location[0].setPercent(null);
+							//location[0].setPercent(null);
 							Iterator iter=eaForm.getSelectedLocs().iterator();
 							while (iter.hasNext()) {
 								Location loc=(Location)iter.next();
-								loc.setPercent(null);
+								//loc.setPercent(null);
 							}					
 						}else {
 							location[0].setPercent("100");

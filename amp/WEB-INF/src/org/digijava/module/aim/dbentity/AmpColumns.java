@@ -16,8 +16,15 @@ public class AmpColumns  implements Serializable, Comparable
 	private Set reports;
 	private String cellType;
 	private String extractorView;
+	private String relatedContentPersisterClass;
 	
 
+	public String getRelatedContentPersisterClass() {
+	    return relatedContentPersisterClass;
+	}
+	public void setRelatedContentPersisterClass(String relatedContentPersisterClass) {
+	    this.relatedContentPersisterClass = relatedContentPersisterClass;
+	}
 	public String getAliasName() {
 		return aliasName;
 	}

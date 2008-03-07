@@ -17,6 +17,7 @@
 </div>
 </logic:notPresent>
 <logic:present name="debug">
+<logic:notEmpty name="amountCell" property="currencyCode">
 <div style='position:relative;display:none;' id='<bean:write name="amountCell" property="column.name"/>-<bean:write name="amountCell" property="ownerId"/>'> 
 <ul>
 <li>From Rate=<bean:write name="amountCell" property="fromExchangeRate"/></li>
@@ -31,7 +32,7 @@
 </logic:present>
 </ul>
 </div>
-	<logic:notEmpty name="amountCell" property="mergedCells">
+<logic:notEmpty name="amountCell" property="mergedCells">
 =(<i>
 <bean:write name="amountCell" property="wrappedAmount"/><i> &nbsp;
 		<logic:iterate id="mergedCell" name="amountCell" property="mergedCells">
@@ -42,5 +43,6 @@
 0)
 </i>
 
+</logic:notEmpty>
 </logic:notEmpty>
 </logic:present>

@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 
@@ -77,14 +78,14 @@ public class ColumnReportData extends ReportData {
 		return null;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dgfoundation.amp.ar.ReportData#categorizeBy(org.dgfoundation.amp.ar.cell.Cell)
+	/**
+	 * @see org.dgfoundation.amp.ar.ReportData#horizSplitByCateg(java.lang.String)
 	 */
+	@Override
 	public GroupReportData horizSplitByCateg(String columnName)
 			throws UnidentifiedItemException, IncompatibleColumnException {
 		GroupReportData dest = new GroupReportData(this.getName());
+		dest.setSplitterCell(this.getSplitterCell());
 
 		// create set with unique values for the filtered col:
 		Column keyCol = getColumn(columnName);
@@ -110,9 +111,16 @@ public class ColumnReportData extends ReportData {
 		i = cats.iterator();
 		while (i.hasNext()) {
 			Cell cat = (Cell) i.next();
+			
+			//we check the dimension of this cell. if this cell and the current report
+			
+			if(!ARDimension.isLinkedWith(this, cat)) continue;
+			logger.info("Splitting by categorty: "+cat);
 			ColumnReportData crd = new ColumnReportData((String) cat
 					.getColumnId()
 					+ ": " + cat.toString());
+			crd.setSplitterCell(cat);
+
 			dest.addReport(crd);
 
 			// construct the Set of ids that match the filter:
@@ -353,6 +361,12 @@ public class ColumnReportData extends ReportData {
 		String id = this.name.substring(this.name.indexOf(':') + 1, name.length());
 		return id.toLowerCase().replaceAll(" ",	"");
 	}
+
+
+
+
+	
+
 
 	
 }

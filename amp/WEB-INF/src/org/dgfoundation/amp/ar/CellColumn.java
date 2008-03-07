@@ -51,12 +51,14 @@ public class CellColumn extends Column {
 	public CellColumn(Column source) {
 		super(source.getParent(),source.getName());
 		this.contentCategory=source.getContentCategory();
+		this.dimensionClass=source.getDimensionClass();
+		this.relatedContentPersisterClass=source.getRelatedContentPersisterClass();
 		itemsMap=new HashMap();
 	}
 	
 	public CellColumn(Column parent, String name) {
 		super(parent, name);
-		this.contentCategory=parent.getContentCategory();
+		this.contentCategory=parent.getContentCategory();	
 		itemsMap=new HashMap();
 	}
 
@@ -89,6 +91,7 @@ public class CellColumn extends Column {
 	 * 
 	 * @see org.dgfoundation.amp.ar.Column#filterCopy(org.dgfoundation.amp.ar.cell.Cell)
 	 */
+	@Override
 	public Column filterCopy(Cell metaCell, Set ids) {
 		CellColumn dest = (CellColumn) this.newInstance();
 		Iterator i = items.iterator();
@@ -106,6 +109,7 @@ public class CellColumn extends Column {
 	 * 
 	 * @see org.dgfoundation.amp.ar.Column#process()
 	 */
+	@Override
 	public Column postProcess() {
 	  	CellColumn dest = (CellColumn) this.newInstance();
 		ListCell lc = new ListCell();
@@ -166,6 +170,7 @@ public class CellColumn extends Column {
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Column#getSubColumn(int)
 	 */
+	@Override
 	public List getSubColumns(int depth) {
 		ArrayList ret=new ArrayList();
 		if(depth>0) return ret;
@@ -176,6 +181,7 @@ public class CellColumn extends Column {
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Column#getColumnDepth()
 	 */
+	@Override
 	public int getColumnSpan() {
 		return 0;
 	}
@@ -190,6 +196,7 @@ public class CellColumn extends Column {
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Column#getOwnerIds()
 	 */
+	@Override
 	public Set getOwnerIds() {
 		TreeSet ret=new TreeSet();
 		Iterator i=items.iterator();
@@ -203,6 +210,7 @@ public class CellColumn extends Column {
 	/**
 	 * Trail Cells are by default TextCellS, in any CellColumn. Override this to add a different behaviour...
 	 */
+	@Override
 	public List getTrailCells() {
 		return null;
 	}
@@ -210,6 +218,7 @@ public class CellColumn extends Column {
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Column#newInstance()
 	 */
+	@Override
 	public Column newInstance() {
 		return new CellColumn(this);
 	}
@@ -217,6 +226,7 @@ public class CellColumn extends Column {
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Column#getColumnDepth()
 	 */
+	@Override
 	public int getColumnDepth() {
 		return 1;
 	}
@@ -234,6 +244,7 @@ public class CellColumn extends Column {
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Column#cellCount()
 	 */
+	@Override
 	public int getCellCount() {
 		return items.size();
 	}
@@ -241,6 +252,7 @@ public class CellColumn extends Column {
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Column#getVisibleCellCount()
 	 */
+	@Override
 	public int getVisibleCellCount(Long ownerId) {
 		int count=0;
 		Iterator i=items.iterator();

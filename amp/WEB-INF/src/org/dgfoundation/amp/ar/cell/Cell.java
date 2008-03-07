@@ -22,7 +22,7 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * @since May 29, 2006
  * the (table) cell a Horizontally and Vertically unique 
- * (implemending ColumnIdentifiable and RowIdentifiable)  is the most
+ * (implementing ColumnIdentifiable and RowIdentifiable)  is the most
  * basic part of our structure. The Cell has some crucial properties 
  * implemented by all the subtypes:
  */

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
@@ -37,7 +38,8 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * 
  */
 public class AmpReportGenerator extends ReportGenerator {
-
+    	
+    
 	protected int extractableCount;
 
 	/**
@@ -150,6 +152,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				String cellTypeName = col.getCellType();
 				String extractorView = col.getExtractorView();
 				String columnName = col.getColumnName();
+				String relatedContentPersisterClass = col.getRelatedContentPersisterClass();
 
 				logger.debug("Seeking class " + cellTypeName);
 
@@ -180,6 +183,16 @@ public class AmpReportGenerator extends ReportGenerator {
 				}
 
 				Column column = ce.populateCellColumn();
+				
+				if(relatedContentPersisterClass!=null) {
+        				column.setRelatedContentPersisterClass(Class.forName(relatedContentPersisterClass));
+        				//instantiate a relatedContentPersister bean to get the ARDimension and store it for later use
+        				Constructor contentPersisterCons = ARUtil.getConstrByParamNo(column.getRelatedContentPersisterClass(), 0);
+        				ARDimensionable cp = (ARDimensionable) contentPersisterCons.newInstance();
+        				column.setDimensionClass(cp.getDimensionClass());
+				}
+				
+				
 				rawColumns.addColumn(new Integer(rcol.getOrderId()), column);
 			}
 

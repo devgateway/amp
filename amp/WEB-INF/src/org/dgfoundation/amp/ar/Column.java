@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 
 /**
@@ -36,7 +37,17 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 
 	protected int rowSpan;
 	
+	/**
+	 * The hibernate bean that holds information relative to this cell. This cell is a usually a subset of the information that
+	 * the content persister class holds.
+	 */
+	protected Class relatedContentPersisterClass;
 	
+	/**
+	 * This class controls the behaviour of dimensions. a dimension is cross hierarchy linking between objects. For example
+	 * Sector and Sub-Sector share the same dimension, thus they are subject of filtering while in nested hierarchy
+	 */
+	protected Class dimensionClass;
 	
 	protected String contentCategory;
 	
@@ -379,9 +390,23 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	public void setItems(List items) {
 	    this.items = items;
 	}
-	
 
-	
+	public Class getRelatedContentPersisterClass() {
+	    return relatedContentPersisterClass;
+	}
+
+	public void setRelatedContentPersisterClass(Class relatedContentPersisterClass) {
+	    this.relatedContentPersisterClass = relatedContentPersisterClass;
+	}
+
+	public Class getDimensionClass() {
+	    return dimensionClass;
+	}
+
+	public void setDimensionClass(Class dimensionArbiter) {
+	    this.dimensionClass = dimensionArbiter;
+	}
+
 
 }
 

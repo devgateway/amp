@@ -12,6 +12,7 @@
 		<property column="aliasName" name="aliasName" type="java.lang.String"/>
 		<property column="cellType" name="cellType" type="java.lang.String"/>
 		<property column="extractorView" name="extractorView" type="java.lang.String"/>
+		<property column="relatedContentPersisterClass" name="relatedContentPersisterClass" type="java.lang.String"/>		
 
 	</class>
 </hibernate-mapping>

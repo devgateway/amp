@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.cell.Cell;
@@ -24,9 +25,25 @@ import org.digijava.module.aim.dbentity.AmpReports;
  *
  */
 public abstract class ReportData extends Viewable {
-	
-	
+    	
+    	/**
+    	 * This property is set with the cell that is responsible of creating the reportdata (in hierarchy).
+    	 * a hierarchy is created based on a unique set of cells coming from a column. each cell in this column creates a new sub-report
+    	 * to be able to keep track of dimensions, we remember this cell as the splitterCell
+    	 */
+    	protected Cell splitterCell=null;
+    
 	protected static Logger logger = Logger.getLogger(ReportData.class);
+	
+	/**
+	 * 
+	 * @return a set with all splitter cells coming from all the parents of this reportdata, if any. This is used to implement
+	 * dimensions
+	 */
+	public void appendAllSplitterCells(Set<Cell> s) {
+	    if(this.getParent()!=null) this.getParent().appendAllSplitterCells(s);
+	    if(this.getSplitterCell()!=null) s.add(this.getSplitterCell());
+	}
 	
 	@Override
 	public ReportData getNearestReportData() {
@@ -209,8 +226,16 @@ public abstract class ReportData extends Viewable {
 	
 	/**
 	 * Hierarchy generator. This method splits horizontally a report into subReports,
-	 * based on categories (hierarchies). Descendants will support thgetSortByColumnis for any type
-	 * of ReportData object (nested or plain). 
+	 * based on categories (hierarchies). A category is a grouping factor here. The source report
+	 * to be splitted is always a ColumnReportData while the destination report is always
+	 * a GroupReportData holding one or more ColumnReportDataS.
+	 * A => D (B,C) where A = C u B, D is the group report and A, B, C column reports
+	 * The grouping is generic and does not take care of any kind of internal hierarchy order, 
+	 * other than the one specified in the report wizard. 
+	 * However the behavior can be changed easily.
+	 * Filtering of cells is supported. Thus whenever several ColumnReports are created from one
+	 * source ColumnReport, the cells are not copied verbatim but through a filter function
+	 * @see Cell.#filter(Cell, java.util.Set)
 	 * @param columnName
 	 * @return
 	 * @throws UnidentifiedItemException
@@ -325,6 +350,16 @@ public abstract class ReportData extends Viewable {
 		//if (v==3) return "#BBFFBB";
 		if (v==3) return "#8FBCFF";
 		return "ffffff";
+	}
+
+
+	public Cell getSplitterCell() {
+	    return splitterCell;
+	}
+
+
+	public void setSplitterCell(Cell splitterCell) {
+	    this.splitterCell = splitterCell;
 	}
 	
 	

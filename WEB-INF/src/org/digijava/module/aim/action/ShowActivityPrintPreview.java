@@ -527,6 +527,13 @@ public class ShowActivityPrintPreview
                                         totExp += amt;
                                     }
                                 }
+                                if (fundDet.getFixedExchangeRate() != null &&
+                                        fundDet.getFixedExchangeRate().doubleValue() != 1) {
+                                      fundingDetail.setFixedExchangeRate(fundDet.
+                                                                         getFixedExchangeRate());
+                                      fundingDetail.setUseFixedRate(true);
+                                    }
+                                
                                 if(fundDet.getTransactionType().intValue() ==
                                    Constants.EXPENDITURE) {
                                     fundingDetail.setClassification(fundDet
@@ -576,6 +583,7 @@ public class ShowActivityPrintPreview
                                 Collections.sort(fundDetail,
                                                  FundingValidator.dateComp);
                             fund.setFundingDetails(fundDetail);
+                            eaForm.setFundingDetails(fundDetail);
                             // funding.add(fund);
                         }
                         if(fundOrg.getFundings() == null)

@@ -6,8 +6,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionMapping;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DbUtil;
 /**
  * <p>Title: </p>
  *
@@ -27,10 +31,16 @@ public class EditProposedProjectCost extends Action{
                                  HttpServletResponse response) throws java.lang.Exception{
 
         EditActivityForm eaForm = (EditActivityForm) form;
+        TeamMember teamMember = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
+        AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+
         eaForm.setReset(false);
         if(eaForm.getProProjCost()==null){
             ProposedProjCost propProjCost=new ProposedProjCost();
-            propProjCost.setCurrencyCode(null);
+            if (tempSettings != null && tempSettings.getCurrency() != null)
+            	propProjCost.setCurrencyCode( tempSettings.getCurrency().getCurrencyCode() );
+            else
+            	propProjCost.setCurrencyCode(null);
             propProjCost.setFunAmount(null);
             propProjCost.setFunDate(null);
             eaForm.setProProjCost(propProjCost);

@@ -40,6 +40,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.logic.Logic;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -197,53 +198,14 @@ public class ViewChannelOverview extends TilesAction {
 					perspective = Constants.DONOR;
 				}
 
-				/* please do not remove these commented lines, I am sure we will need them again */
-				//String totalsSetting=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_INCLUDE_PLANNED);
-				//boolean includePlannedInTotals=(totalsSetting!=null) && (totalsSetting.trim().equals("On"));
-
-
-				if (activity.getStatus().equalsIgnoreCase("Planned")) {
-					logger.debug("Planned");
-					DecimalWraper plan=new DecimalWraper();
-					plan=DbUtil.getAmpFundingAmount(activity.getActivityId(),new Integer(0),new Integer(0),perspective,currCode);
-					if(plan.getValue()!=null){
-						formBean.setGrandTotal(FormatHelper.formatNumber(plan.getValue().doubleValue()));
-					}
-					else{
-						formBean.setGrandTotal("0");
-					}
-					
-				} else {
-					logger.debug("Not planned");
-
-					//if (includePlannedInTotals){
-						// again this is for Bolivia. But may 	be usefull for other countries too. AMP-1774
-					DecimalWraper actual = DbUtil.getAmpFundingAmount(activity
-							.getActivityId(), new Integer(0), new Integer(1),
-							perspective, currCode);
-					DecimalWraper planned = DbUtil.getAmpFundingAmount(activity
-							.getActivityId(), new Integer(0), new Integer(0),
-							perspective, currCode);
-					
-                     double total=0;
-                     String cal="=";
-                     if(actual!=null){
-                    	 if (actual.getValue() != null) 
-                    		 total+=actual.getValue().doubleValue();
-                    	 if (actual.getCalculations() != null)
-                    		 cal = actual.getCalculations();
-                     }
-                    if (!debug) {
-						formBean.setGrandTotal(FormatHelper.formatNumber(total));
-					} else {
-						formBean.setGrandTotal(FormatHelper.formatNumber(total)+ "<BR>" + cal + "<BR>");
-					}
-					//}else{
-					//	formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
-					//			new Integer(0),new Integer(1),perspective,currCode)));
-					//}
-				}
-
+    			// call the logic instance to perform the caculations, so it will depend of each implementancion how we will calculate the total inlcuding or not planned 
+    			DecimalWraper total = Logic.getInstance().getTotalDonorFundingCalculator().getTotalCommtiments(activity.getActivityId(), currCode, perspective);
+            		if (!debug) {
+            		    formBean.setGrandTotal(total.toString());
+            		} else {
+            		    formBean.setGrandTotal(total.getCalculations());
+            		}
+				
 			}
 
 			AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());

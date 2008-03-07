@@ -8,6 +8,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.YearlyInfo;
 import org.digijava.module.aim.logic.DonorFundingCalculator;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 
 /**
@@ -42,5 +43,24 @@ public class BoliviaDonorFundingCalculator implements DonorFundingCalculator {
 		}		
 		return total;
 	}
+
+	/**
+	 * Return the total commitment for the specified activity 
+	 */
+	public DecimalWraper getTotalCommtiments(Long activityId,String currCode,String perspective) {
+	    
+	    DecimalWraper actual = DbUtil.getAmpFundingAmount(activityId,org.digijava.module.aim.helper.Constants.COMMITMENT, 
+		   org.digijava.module.aim.helper.Constants.ACTUAL,perspective,currCode);
+	    
+	    DecimalWraper planned = DbUtil.getAmpFundingAmount(activityId,org.digijava.module.aim.helper.Constants.COMMITMENT, 
+			   org.digijava.module.aim.helper.Constants.PLANNED,perspective,currCode);
+	    
+	    DecimalWraper total=new DecimalWraper();
+	    total.setValue(actual.getValue().add(planned.getValue()));
+	   
+	    total.setCalculations("Total = (sum of Planned = "+planned.getCalculations()+") + (sum of Actual ="+actual.getCalculations()+") = "+total.toString());
+	    
+	    return total;
+        }
 
 }

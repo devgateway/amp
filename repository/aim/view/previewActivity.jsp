@@ -706,9 +706,11 @@ function collapseAll() {
 												<table cellSpacing=2 cellPadding=2 border=0>
 													<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.selectedOrganizations}" >
 														<c:if test="${not empty selectedOrganizations}">
-															<tr><td>
+															<tr><td><!-- 
+															AMP - 2681
 																<c:out value="${selectedOrganizations.name}"/>:
 																<c:out value="${selectedOrganizations.projectId}"/>
+															 -->
 																	<c:if test ="${!empty selectedOrganizations.organisation.ampOrgId}">
 																			<bean:define id="selectedOrgForPopup" name="selectedOrganizations" 	type="org.digijava.module.aim.helper.OrgProjectId"  	toScope="request" />
 																			<jsp:include page="previewOrganizationPopup.jsp"/>
@@ -1027,7 +1029,7 @@ function collapseAll() {
 
 					      <TD bgcolor="#ffffff">
 														<div id="npo_dots">...</div>
-														<div id="npo" style="display: none;">
+														<div id="act_npo" style="display: none;">
                                                                                                                                                   <c:forEach var="program" items="${aimEditActivityForm.nationalPlanObjectivePrograms}">
                                                                                                                                                   <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
                                                                                                                                                   </c:forEach>
@@ -1043,7 +1045,7 @@ function collapseAll() {
 
       <TD bgcolor="#ffffff">
 															<div id="npd_primaryprog_dots">...</div>
-															<div id="npd_primaryprog" style="display: none;">
+															<div id="act_npd_primaryprog" style="display: none;">
                                                                                                                                                   <c:forEach var="program" items="${aimEditActivityForm.primaryPrograms}">
                                                                                                                                                   <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
                                                                                                                                                   </c:forEach>
@@ -1059,7 +1061,7 @@ function collapseAll() {
 
 																		<TD bgcolor="#ffffff">
 															<div id="npd_secondprog_dots">...</div>
-															<div id="npd_secondprog" style="display: none;">
+															<div id="act_npd_secondprog" style="display: none;">
                                                                                                                                                   <c:forEach var="program" items="${aimEditActivityForm.secondaryPrograms}">
                                                                                                                                                   <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
                                                                                                                                                   </c:forEach>

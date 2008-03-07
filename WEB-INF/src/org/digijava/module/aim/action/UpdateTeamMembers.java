@@ -81,7 +81,7 @@ public class UpdateTeamMembers extends Action {
 					ActionErrors error = new ActionErrors();
 					error.add(ActionErrors.GLOBAL_ERROR,
 											new ActionError(
-													"error:aim:addTeamMember:teamLeadRole"));
+													"error.aim.addTeamMember.teamLeadRole"));
 				}
 				if (role.getRole().equals(teamLead.getRole())) {
 					logger.info("team name = " + ampTeam.getName());
@@ -96,7 +96,7 @@ public class UpdateTeamMembers extends Action {
 						errors.add(
 								ActionErrors.GLOBAL_ERROR,
 								new ActionError(
-										"error:aim:addTeamMember:teamLeadAlreadyExist",msg));
+										"error.aim.addTeamMember.teamLeadAlreadyExist",msg));
 						saveErrors(request, errors);
 
 						return mapping.findForward("forward");

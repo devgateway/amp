@@ -228,7 +228,7 @@ public class EditEUActivity extends MultiAction {
                           totalCurCode);
                 if (totalCostExRate == 1.0 && !totalCurCode.equals("USD")) {
                   errors.add("title", new ActionError(
-                      "error:aim:addActivity:noExchangeRateIsDefined",
+                      "error.aim.addActivity.noExchangeRateIsDefined",
                       totalCostCurr.getCurrencyName(), defaultCurName));
                 }
                    else{
@@ -242,7 +242,7 @@ public class EditEUActivity extends MultiAction {
                              currCode);
                          if (exchangeRate == 1.0 &&!currCode.equals("USD")) {
                            errors.add("title", new ActionError(
-                               "error:aim:addActivity:noExchangeRateIsDefined",
+                               "error.aim.addActivity.noExchangeRateIsDefined",
                                curr.getCurrencyName(), defaultCurName));
                            break;
                          }
@@ -254,26 +254,26 @@ public class EditEUActivity extends MultiAction {
 			Double.parseDouble(eaf.getTotalCost());
 		} catch (NumberFormatException e) {
 			errors.add("title", new ActionError(
-					"error:aim:euactivity:invalidAmountFormat"));
+					"error.aim.euactivity.invalidAmountFormat"));
 		}
 
 		try {
 			DateTimeUtil.parseDateForPicker(eaf.getDueDate());
 		} catch (ParseException e) {
 			errors.add("title", new ActionError(
-					"error:aim:euactivity:dueDate"));
+					"error.aim.euactivity.dueDate"));
 		}
 
 		if(hasInvalidAmounts(eaf.getContrAmountList())) errors.add("title", new ActionError(
-		"error:aim:euactivity:invalidAmountFormat"));
+		"error.aim.euactivity.invalidAmountFormat"));
 		if(hasUnselectedItems(eaf.getContrDonorIdList())) errors.add("title", new ActionError(
-		"error:aim:euactivity:selectDonor"));
+		"error.aim.euactivity.selectDonor"));
 		if(hasUnselectedItems(eaf.getContrCurrIdList())) errors.add("title", new ActionError(
-		"error:aim:euactivity:selectCurrency"));
+		"error.aim.euactivity.selectCurrency"));
 		if(hasUnselectedItems(eaf.getContrFinInstrIdList())) errors.add("title", new ActionError(
-		"error:aim:euactivity:contrFinInstr"));
+		"error.aim.euactivity.contrFinInstr"));
 		if(hasUnselectedItems(eaf.getContrFinTypeIdList())) errors.add("title", new ActionError(
-		"error:aim:euactivity:contrFinType"));
+		"error.aim.euactivity.contrFinType"));
 
 
 

@@ -93,14 +93,14 @@ public class Login extends Action {
 						// invalid login
 						lForm.setLogin(false);
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-								"error:aim:invalidLogin"));
+								"error.aim.invalidLogin"));
 						saveErrors(request, errors);
 						return mapping.getInputForward();
 					} else if (loginInfo.getLoginResult() == HttpLoginManager.LOGIN_RESULT_BANNED) {
 						// user banned
 						lForm.setLogin(false);
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-								"error:aim:userBanned"));
+								"error.aim.userBanned"));
 						saveErrors(request, errors);
 						return mapping.getInputForward();
 					} else if (loginInfo.getLoginResult() == HttpLoginManager.LOGIN_RESULT_OK) {
@@ -120,7 +120,7 @@ public class Login extends Action {
 						// problem in login. login again
 						lForm.setLogin(false);
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-								"error:aim:loginFailed"));
+								"error.aim.loginFailed"));
 						saveErrors(request, errors);
 						return mapping.getInputForward();
 					}
@@ -128,7 +128,7 @@ public class Login extends Action {
 					// problem in login. login again
 					lForm.setLogin(false);
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-							"error:aim:loginFailed"));
+							"error.aim.loginFailed"));
 					saveErrors(request, errors);
 					return mapping.getInputForward();
 				}
@@ -166,7 +166,7 @@ public class Login extends Action {
 						lForm.setLogin(false);
 						errors.add(ActionErrors.GLOBAL_ERROR,
 								new ActionError(
-										"error:aim:userNotTeamMember"));
+										"error.aim.userNotTeamMember"));
 						saveErrors(request, errors);
 						return mapping.getInputForward();
 					}

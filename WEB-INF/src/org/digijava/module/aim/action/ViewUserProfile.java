@@ -52,7 +52,7 @@ public class ViewUserProfile
          memberInformationn=new String[]{teamMember.getTeamName(),teamMember.getRoleName()};
       }
       else {
-        errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error:aim:invalidUserId"));
+        errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.aim.invalidUserId"));
         saveErrors(request,errors);
         return mapping.getInputForward();
       }

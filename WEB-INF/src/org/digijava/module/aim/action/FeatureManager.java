@@ -64,7 +64,7 @@ public class FeatureManager extends MultiAction {
 		{
 			ActionErrors errors = new ActionErrors();
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					"error:aim:templateExistent"));
+					"error.aim.templateExistent"));
 			
 			saveErrors(request, errors);
 		}

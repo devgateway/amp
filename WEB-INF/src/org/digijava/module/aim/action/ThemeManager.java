@@ -154,7 +154,7 @@ public class ThemeManager extends Action {
 				try {
 					ProgramUtil.deleteTheme(id);
 				} catch (AimException e) {
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error:aim:theme:cannotDeleteTheme"));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.theme.cannotDeleteTheme"));
 					saveErrors(request, errors);
 				}catch (Exception e) {
 					logger.error(e);

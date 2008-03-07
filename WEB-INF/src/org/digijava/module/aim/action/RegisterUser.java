@@ -119,7 +119,7 @@ public class RegisterUser extends Action {
 
 			if (DbUtil.isRegisteredEmail(user.getEmail())) {
 				ActionErrors errors = new ActionErrors();
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error:registration:emailexits"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.registration.emailexits"));
 				saveErrors(request, errors);
 				//return (new ActionForward(mapping.getInput()));
 				return (mapping.getInputForward());

@@ -217,7 +217,7 @@ public class CategoryManager extends Action {
 			transaction.commit();
 		} 
 		catch (Exception ex) {
-			ActionError error	= (ActionError) new ActionError("error:aim:categoryManager:cannotDeleteCategory");
+			ActionError error	= (ActionError) new ActionError("error.aim.categoryManager.cannotDeleteCategory");
 			errors.add("title", error);
 			logger.error("Unable to delete Category: " + ex.getMessage());
 			
@@ -265,7 +265,7 @@ public class CategoryManager extends Action {
 			if ( myForm.getEditedCategoryId() == null && 
 					CategoryManagerUtil.isCategoryKeyInUse( myForm.getKeyName() )  ) 
 			{
-				ActionError duplicateKeyError	= new ActionError("error:aim:categoryManager:duplicateKey");
+				ActionError duplicateKeyError	= new ActionError("error.aim.categoryManager.duplicateKey");
 				errors.add("title",duplicateKeyError);
 				return false;
 			}
@@ -331,7 +331,7 @@ public class CategoryManager extends Action {
 			if (undeletableCategoryValues != null) {
 				if (tx != null)
 					tx.rollback();
-				ActionError error2	= new ActionError("error:aim:categoryManager:cannotDeleteValues", undeletableCategoryValues);
+				ActionError error2	= new ActionError("error.aim.categoryManager.cannotDeleteValues", undeletableCategoryValues);
 				errors.add("title",error2);
 				retValue			= false;
 			}
@@ -349,7 +349,7 @@ public class CategoryManager extends Action {
 			
 		} catch (Exception ex) {
 			logger.error("Unable to save or update the AmpCategoryClass: " + ex);
-			ActionError error1	= new ActionError("error:aim:categoryManager:cannotSaveOrUpdate");
+			ActionError error1	= new ActionError("error.aim.categoryManager.cannotSaveOrUpdate");
 			errors.add("title",error1);
 			if (tx != null)
 					tx.rollback();

@@ -80,9 +80,9 @@ public class UpdateComponents extends Action{
 					if (flag || flagCode) {
 						ActionErrors errors = new ActionErrors();
 						if(flag)
-						errors.add("title", new ActionError("error:aim:componentName:Present"));
+						errors.add("title", new ActionError("error.aim.componentName.Present"));
 						else
-							errors.add("code", new ActionError("error:aim:componentCode:Present"));
+							errors.add("code", new ActionError("error.aim.componentCode.Present"));
 						saveErrors(request, errors);
 						updCompForm.setCheck("true");
 						logger.debug("Duplicate Values::::::::::::::;;");

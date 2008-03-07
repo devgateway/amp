@@ -50,7 +50,7 @@ public class GetSectorSchemes extends Action {
 					 if("true".equals(session.getAttribute("schemeDeletedError")))
 					 {
 						 	ActionErrors errors = new ActionErrors();
-						 	errors.add("title", new ActionError("error:aim:deleteScheme.schemeSelected"));
+						 	errors.add("title", new ActionError("error.aim.deleteScheme.schemeSelected"));
 						 	saveErrors(request, errors);
 						 	session.setAttribute("schemeDeletedError",null);
 					 }

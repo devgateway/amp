@@ -66,7 +66,7 @@ public class MovePmToFolder
             }
             catch (Exception ex) {
                 errors.add("forumGlobalError",
-                           new ActionError("error:forum:pm:movePm"));
+                           new ActionError("error.forum.pm.movePm"));
             }
 
         }

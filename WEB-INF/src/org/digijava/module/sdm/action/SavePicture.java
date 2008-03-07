@@ -67,7 +67,7 @@ public class SavePicture
 
             if( sdmItem.getContent() == null ) {
                 ActionErrors errors = new ActionErrors();
-                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error:sdm:pictureRequired"));
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.sdm.pictureRequired"));
                 saveErrors(request, errors);
 
                 return mapping.getInputForward();

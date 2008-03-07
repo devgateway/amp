@@ -70,7 +70,7 @@ public class SaveForum
             }
             catch (Exception ex) {
                 errors.add("forumGlobalError",
-                       new ActionError("error:forum:savingForum"));
+                       new ActionError("error.forum.savingForum"));
             }
         } else {
             adminPageForm.fillForum(forum);
@@ -79,7 +79,7 @@ public class SaveForum
             }
             catch (ForumException ex1) {
                 errors.add("forumGlobalError",
-                       new ActionError("error:forum:savingForum"));
+                       new ActionError("error.forum.savingForum"));
             }
         }
         return mapping.findForward(forward);

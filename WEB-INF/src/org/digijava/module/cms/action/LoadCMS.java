@@ -80,7 +80,7 @@ public class LoadCMS
     }
     catch (CMSException ex1) {
       errors.add(ActionErrors.GLOBAL_ERROR,
-                 new ActionError("error:cms:gettingCMSObject"));
+                 new ActionError("error.cms.gettingCMSObject"));
     }
     return mapping.findForward(forward);
   }

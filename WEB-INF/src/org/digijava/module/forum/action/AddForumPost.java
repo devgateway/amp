@@ -134,7 +134,7 @@ public class AddForumPost
         }
         catch (ForumException ex2) {
             errors.add("forumGlobalError",
-                           new ActionError("error:forum:createNewPost"));
+                           new ActionError("error.forum.createNewPost"));
         }
 
         forumThread.setLastPost(newPost);
@@ -154,7 +154,7 @@ public class AddForumPost
         }
         catch (ForumException ex3) {
             errors.add("forumGlobalError",
-                           new ActionError("error:forum:createNewPost"));
+                           new ActionError("error.forum.createNewPost"));
         }
 
 
@@ -165,7 +165,7 @@ public class AddForumPost
             }
             catch (ForumException ex1) {
                 errors.add("forumGlobalError",
-                           new ActionError("error:forum:createNewPost"));
+                           new ActionError("error.forum.createNewPost"));
             }
         }
 

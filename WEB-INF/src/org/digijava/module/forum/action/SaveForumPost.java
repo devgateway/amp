@@ -63,7 +63,7 @@ public class SaveForumPost
         }
         catch (Exception ex1) {
             errors.add("forumGlobalError",
-                           new ActionError("error:forum:savePost"));
+                           new ActionError("error.forum.savePost"));
         }
 
         forumPageForm.fillPost(post);
@@ -75,7 +75,7 @@ public class SaveForumPost
         }
         catch (ForumException ex) {
             errors.add("forumGlobalError",
-                           new ActionError("error:forum:savePost"));
+                           new ActionError("error.forum.savePost"));
         }
 
         long threadId = post.getThread().getId();

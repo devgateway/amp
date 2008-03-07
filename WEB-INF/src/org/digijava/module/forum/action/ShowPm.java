@@ -75,11 +75,11 @@ public class ShowPm extends ForumAction {
                     }
                     catch (IOException ex) {
                         errors.add("forumGlobalError",
-                           new ActionError("error:forum:bbcode"));
+                           new ActionError("error.forum.bbcode"));
                     }
                     catch (BBCodeException ex) {
                         errors.add("forumGlobalError",
-                           new ActionError("error:forum:bbcode"));
+                           new ActionError("error.forum.bbcode"));
                     }
                     forumPageForm.setParsedContent(parsedContent);
                     forumPageForm.setPostTitle(pm.getTitle());
@@ -112,7 +112,7 @@ public class ShowPm extends ForumAction {
                         }
                         catch (ForumException ex1) {
                             errors.add("forumGlobalError",
-                           new ActionError("error:forum:pmProcess"));
+                           new ActionError("error.forum.pmProcess"));
                         }
 
                     }

@@ -98,7 +98,7 @@ public class ShowUserInbox
             }
             catch (ForumException ex) {
                 errors.add("forumGlobalError",
-                           new ActionError("error:forum:gettingPms"));
+                           new ActionError("error.forum.gettingPms"));
             }
         }
 

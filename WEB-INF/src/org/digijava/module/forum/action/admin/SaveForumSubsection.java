@@ -67,7 +67,7 @@ public class SaveForumSubsection
             }
             catch (ForumException ex2) {
                 errors.add("forumGlobalError",
-                       new ActionError("error:forum:savingSubection"));
+                       new ActionError("error.forum.savingSubection"));
             }
             ForumSubsection subsection =
                 new ForumSubsection(adminPageForm.getSubsectionTitle(),
@@ -82,7 +82,7 @@ public class SaveForumSubsection
             }
             catch (Exception ex) {
                 errors.add("forumGlobalError",
-                       new ActionError("error:forum:savingSubection"));
+                       new ActionError("error.forum.savingSubection"));
             }
         } else { //Update edited subsection
             ForumSubsection subsection = null;
@@ -92,7 +92,7 @@ public class SaveForumSubsection
             }
             catch (ForumException ex4) {
                 errors.add("forumGlobalError",
-                       new ActionError("error:forum:savingSubection"));
+                       new ActionError("error.forum.savingSubection"));
             }
             adminPageForm.fillSubsection(subsection);
             //Subsection was moved to another section
@@ -105,7 +105,7 @@ public class SaveForumSubsection
                 }
                 catch (ForumException ex3) {
                     errors.add("forumGlobalError",
-                       new ActionError("error:forum:savingSubection"));
+                       new ActionError("error.forum.savingSubection"));
                 }
                 subsection.setSection(section);
             }
@@ -114,7 +114,7 @@ public class SaveForumSubsection
             }
             catch (Exception ex1) {
                     errors.add("forumGlobalError",
-                       new ActionError("error:forum:savingSubection"));
+                       new ActionError("error.forum.savingSubection"));
             }
 
         }

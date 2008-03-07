@@ -98,31 +98,31 @@ public class AddFiscalCalendarForm extends ActionForm {
 
 		if (startMonthNum < 1 || startMonthNum > 12) {
 			errors.add("startMonthNum", new ActionError(
-					"error:aim:addFiscalCal:invalidStartMonth"));
+					"error.aim.addFiscalCal.invalidStartMonth"));
 		}
 		
 		if (startDayNum > 31) {
 			errors.add("startDayNum", new ActionError(
-					"error:aim:addFiscalCal:invalidStartDay"));
+					"error.aim.addFiscalCal.invalidStartDay"));
 		} else if (startMonthNum % 2 == 0 && startMonthNum < 8) {
 			if (startDayNum > 30) {
 				errors.add("startDayNum", new ActionError(
-						"error:aim:addFiscalCal:invalidStartDay"));
+						"error.aim.addFiscalCal.invalidStartDay"));
 			}
 			if (startMonthNum == 2 && startDayNum > 28) {
 				errors.add("startDayNum", new ActionError(
-						"error:aim:addFiscalCal:invalidStartDay"));
+						"error.aim.addFiscalCal.invalidStartDay"));
 			}
 		} else if (startMonthNum % 2 != 0 && startMonthNum > 7) {
 			if (startDayNum > 30) {
 				errors.add("startDayNum", new ActionError(
-						"error:aim:addFiscalCal:invalidStartDay"));
+						"error.aim.addFiscalCal.invalidStartDay"));
 			}
 		}
 
 		if (yearOffset > 0) {
 			errors.add("yearOffset", new ActionError(
-					"error:aim:addFiscalCal:invalidYearOffset"));
+					"error.aim.addFiscalCal.invalidYearOffset"));
 		}
 
 		return (errors);

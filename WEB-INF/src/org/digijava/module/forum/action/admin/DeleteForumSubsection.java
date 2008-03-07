@@ -53,7 +53,7 @@ public class DeleteForumSubsection
         }
         catch (ForumException ex1) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:deletingSubection"));
+                       new ActionError("error.forum.deletingSubection"));
         }
         ForumSection section = subsection.getSection();
 
@@ -73,7 +73,7 @@ public class DeleteForumSubsection
         }
         catch (Exception ex) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:deletingSubection"));
+                       new ActionError("error.forum.deletingSubection"));
         }
         return mapping.findForward(forward);
     }

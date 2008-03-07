@@ -73,7 +73,7 @@ public class DeleteForumThreads
     }
     catch (ForumException ex) {
       errors.add("forumGlobalError",
-                 new ActionError("error:forum:deletingThread"));
+                 new ActionError("error.forum.deletingThread"));
     }
 
     long subsectionId = adminPageForm.getSubsectionId();

@@ -352,12 +352,12 @@ public class DocumentManagerUtil {
 		}
 		if ( formFile.getFileSize() > maxFileSizeInBytes) {
 			errors.add("title", 
-					new ActionError("error:contentrepository:addFile:fileTooLarge", maxFileSizeInMBytes + "")
+					new ActionError("error.contentrepository.addFile.fileTooLarge", maxFileSizeInMBytes + "")
 					);
 			return false;
 			}
 		if (formFile.getFileSize()<1){
-			ActionError	error	= new ActionError("error:contentrepository:addFile:badPath");
+			ActionError	error	= new ActionError("error.contentrepository.addFile.badPath");
 			errors.add("title", error);
 			return false;
 		}
@@ -382,7 +382,7 @@ public class DocumentManagerUtil {
 		} catch (MalformedURLException e) {
 			if ( !urlString.startsWith("http://") )
 				return processUrl("http://"+urlString, errors);
-			errors.add("title", new ActionError("error:contentrepository:addFile:malformedWebLink") );
+			errors.add("title", new ActionError("error.contentrepository.addFile.malformedWebLink") );
 			e.printStackTrace();
 			return null;
 		}

@@ -92,7 +92,7 @@ public class ShowAdminSubsection
         }
         catch (ForumException ex2) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:gettingSubsections"));
+                       new ActionError("error.forum.gettingSubsections"));
         }
 
         adminPageForm.setSize(forumSubsection.getThreadCount());

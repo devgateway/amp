@@ -156,7 +156,7 @@ public class CreateNewsItem
     else {
       ActionErrors errors = new ActionErrors();
       errors.add(null,
-                 new ActionError("error:news:userEmpty"));
+                 new ActionError("error.:news.userEmpty"));
       saveErrors(request, errors);
 
     }

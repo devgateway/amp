@@ -64,7 +64,7 @@ public class ShowTaxonomyManager
     }
     catch (CMSException ex) {
       errors.add(ActionErrors.GLOBAL_ERROR,
-                 new ActionError("error:cms:gettingCMSObject"));
+                 new ActionError("error.cms.gettingCMSObject"));
     }
     //Get cms
 

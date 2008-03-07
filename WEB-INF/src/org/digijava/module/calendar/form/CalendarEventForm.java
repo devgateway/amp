@@ -276,31 +276,31 @@ public class CalendarEventForm
         ActionErrors errors = new ActionErrors();
         // event title
         if(this.getEventTitle() == null || this.getEventTitle().equals("")) {
-            errors.add(null, new ActionError("error:calendar:emptyEventTitle"));
+            errors.add(null, new ActionError("error.calendar.emptyEventTitle"));
         }
         // event typeId
         if(this.getSelectedEventTypeId() == null) {
-            errors.add(null, new ActionError("error:calendar:emptyEventType"));
+            errors.add(null, new ActionError("error.calendar.emptyEventType"));
         }
         // start date
         if(this.selectedStartDate == null || this.selectedStartDate.equals("")) {
             errors.add(null,
-                       new ActionError("error:calendar:emptyEventStartDate"));
+                       new ActionError("error.calendar.emptyEventStartDate"));
         } else if(!DateBreakDown.isValidDate(this.selectedCalendarTypeId,
                                              this.selectedStartDate)) {
             errors.add(null,
-                       new ActionError("error:calendar:invalidEventStartDate"));
+                       new ActionError("error.calendar.invalidEventStartDate"));
         } else if(!DateBreakDown.isValidTime(this.selectedStartTime)) {
             errors.add(null,
-                       new ActionError("error:calendar:invalidEventStartTime"));
+                       new ActionError("error.calendar.invalidEventStartTime"));
         }
         // end date
         if(this.selectedEndDate == null || this.selectedEndDate.equals("")) {
-            errors.add(null, new ActionError("error:calendar:emptyEventEndDate"));
+            errors.add(null, new ActionError("error.calendar.emptyEventEndDate"));
         } else if(!DateBreakDown.isValidDate(this.selectedCalendarTypeId,
                                              this.selectedEndDate)) {
             errors.add(null,
-                       new ActionError("error:calendar:invalidEventEndDate"));
+                       new ActionError("error.calendar.invalidEventEndDate"));
         } else if(!DateBreakDown.isValidTime(this.selectedEndTime)) {
             errors.add(null,
                        new ActionError("error:calendar:invalidEventEndTime"));
@@ -312,7 +312,7 @@ public class CalendarEventForm
             selectedCalendarTypeId, this.selectedEndDate, this.selectedEndTime);
         if(startDate.getTimeInMillis() > endDate.getTimeInMillis()) {
             errors.add(null,
-                       new ActionError("error:calendar:endDateLessThanStartDate"));
+                       new ActionError("error.calendar.endDateLessThanStartDate"));
         }
         return errors.isEmpty() ? null : errors;
     }

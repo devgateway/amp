@@ -71,7 +71,7 @@ public class RenderTeaser
       }
       catch (CMSException ex) {
         errors.add(ActionErrors.GLOBAL_ERROR,
-                   new ActionError("error:cms:gettingCMSObject"));
+                   new ActionError("error.cms.gettingCMSObject"));
       }
       //Get cms
       if (cms != null) {

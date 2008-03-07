@@ -54,7 +54,7 @@ public class DeleteForumSection extends Action {
         }
         catch (ForumException ex1) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:deletingSection"));
+                       new ActionError("error.forum.deletingSection"));
         }
         Forum forum = section.getForum();
         forum.getSections().remove(section);
@@ -80,7 +80,7 @@ public class DeleteForumSection extends Action {
         }
         catch (Exception ex) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:deletingSection"));
+                       new ActionError("error.forum.deletingSection"));
         }
         return mapping.findForward(forward);
     }

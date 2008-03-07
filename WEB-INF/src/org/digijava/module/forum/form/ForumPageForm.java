@@ -66,21 +66,21 @@ public class ForumPageForm
             "org.digijava.module.forum.action.SaveUserSettings")) {
           if (getNickName().trim().length() == 0) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:emptyUserNick"));
+                       new ActionError("error.forum.emptyUserNick"));
           }
         }
         else if (mapping.getType().equals(
             "org.digijava.module.forum.action.SaveForumThread")) {
           if (getThreadTitle().trim().length() == 0) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:emptyThreadTitle"));
+                       new ActionError("error.forum.emptyThreadTitle"));
           }
         }
         else if (mapping.getType().equals(
             "org.digijava.module.forum.action.SendPm")) {
           if (getPostTitle().trim().length() == 0) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:emptyPmTitle"));
+                       new ActionError("error.forum.emptyPmTitle"));
           }
         }
       }

@@ -109,7 +109,7 @@ public class SplitTopic
             }
             catch (ForumException ex) {
                 errors.add("forumGlobalError",
-                       new ActionError("error:forum:splitTopics"));
+                       new ActionError("error.forum.splitTopics"));
             }
 
         }

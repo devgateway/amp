@@ -891,7 +891,7 @@ public class HighlightItemForm
         }
         if (shortTopicLength == 0) {
             errors.add(null,
-                       new ActionError("error:highlights:shortLengthNull"));
+                       new ActionError("error.highlights.shortLengthNull"));
         }
 
         if (links != null && links.size() != 0) {

@@ -69,11 +69,11 @@ public class ChangeItemStatus
         }
         catch (CMSException ex) {
           errors.add(ActionErrors.GLOBAL_ERROR,
-                 new ActionError("error:cms:changeItemStatus"));
+                 new ActionError("error.cms.changeItemStatus"));
         }
         catch (IOException ex1) {
           errors.add(ActionErrors.GLOBAL_ERROR,
-                 new ActionError("error:cms:changeItemStatus"));
+                 new ActionError("error.cms.changeItemStatus"));
         }
       } else {
         retForward = mapping.findForward(forward);
@@ -113,11 +113,11 @@ public class ChangeItemStatus
       }
       catch (NumberFormatException ex) {
         errors.add(ActionErrors.GLOBAL_ERROR,
-                 new ActionError("error:cms:changeItemStatus"));
+                 new ActionError("error.cms.changeItemStatus"));
       }
       catch (CMSException ex) {
         errors.add(ActionErrors.GLOBAL_ERROR,
-                 new ActionError("error:cms:changeItemStatus"));
+                 new ActionError("error.cms.changeItemStatus"));
       }
       finally {
         retForward = mapping.findForward(forward);

@@ -111,7 +111,7 @@ public class SaveForumThread
       }
       catch (ForumException ex1) {
         errors.add("forumGlobalError",
-                   new ActionError("error:forum:updateUser"));
+                   new ActionError("error.forum.updateUser"));
       }
     }
 

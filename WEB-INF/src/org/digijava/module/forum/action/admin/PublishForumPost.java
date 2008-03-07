@@ -48,7 +48,7 @@ public class PublishForumPost extends Action {
         }
         catch (Exception ex1) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:publishingPost"));
+                       new ActionError("error.forum.publishingPost"));
         }
 
         publishPost.setPublished(true);
@@ -58,7 +58,7 @@ public class PublishForumPost extends Action {
         }
         catch (ForumException ex) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:publishingPost"));
+                       new ActionError("error.forum.publishingPost"));
         }
 
         ActionForward retFwd = mapping.findForward(forward);

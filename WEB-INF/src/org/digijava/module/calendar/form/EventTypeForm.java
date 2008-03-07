@@ -60,24 +60,24 @@ public class EventTypeForm
         ActionErrors errors = new ActionErrors();
 
         if(this.getEventTypeColor()==null || this.getEventTypeColor().trim().equals("")){
-            errors.add(null, new ActionError("error:calendar:emptyEventTypeName"));
+            errors.add(null, new ActionError("error.calendar.emptyEventTypeName"));
         }
 
         if(this.getEventTypeName()==null || this.getEventTypeName().trim().equals("")){
-            errors.add(null, new ActionError("error:calendar:emptyEventTypeColor"));
+            errors.add(null, new ActionError("error.calendar.emptyEventTypeColor"));
         }else{
             String color = this.getEventTypeColor();
             if(color != null) {
                 if(color.length() != 0) {
                     try{
                         if(color.charAt(0) != '#') {
-                            errors.add(null,new ActionError("error:calendar:missingCharInBegining"));
+                            errors.add(null,new ActionError("error.calendar.missingCharInBegining"));
                         } else {
                             color = color.substring(1, color.length());
                         }
 
                         if(!color.matches("^[a-fA-F0-9]{6}$")) {
-                            errors.add(null,new ActionError("error:calendar:invalidEventTypeColor"));
+                            errors.add(null,new ActionError("error.calendar.invalidEventTypeColor"));
                         }
                     }catch(Exception ex){
                         ex.printStackTrace();
@@ -95,7 +95,7 @@ public class EventTypeForm
                     if (et.getColor().equalsIgnoreCase(this.getEventTypeColor())) {
                         if(!et.getId().equals(this.getEventTypeId())){
                             errors.add(null,
-                                       new ActionError("error:calendar:colorAlreadyExist"));
+                                       new ActionError("error.calendar.colorAlreadyExist"));
                             break;
                         }
                     }
@@ -108,7 +108,7 @@ public class EventTypeForm
                     if (et.getName().equalsIgnoreCase(this.getEventTypeName())) {
                         if(!et.getId().equals(this.getEventTypeId())){
                             errors.add(null,
-                                       new ActionError("error:calendar:nameAlreadyExist"));
+                                       new ActionError("error.calendar.nameAlreadyExist"));
                             break;
                         }
                     }

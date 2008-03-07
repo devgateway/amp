@@ -85,7 +85,7 @@ public class RevokeHighlight
         else {
             ActionErrors errors = new ActionErrors();
             errors.add(null,
-                       new ActionError("error:highlights:userEmpty"));
+                       new ActionError("error.highlights.userEmpty"));
             saveErrors(request, errors);
         }
 

@@ -68,7 +68,7 @@ public class RenderTeaser
                 }
                 catch (Exception ex) {
                     errors.add("forumGlobalError",
-                           new ActionError("error:forum:teaser"));
+                           new ActionError("error.forum.teaser"));
                 }
                 if (fUserRecord != null) {
                     lastActive = fUserRecord.getLastActiveTime();

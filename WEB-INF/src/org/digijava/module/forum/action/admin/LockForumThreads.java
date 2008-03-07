@@ -59,7 +59,7 @@ public class LockForumThreads extends Action  {
         }
         catch (ForumException ex) {
             errors.add("forumGlobalError",
-                       new ActionError("error:forum:lockingThreads"));
+                       new ActionError("error.forum.lockingThreads"));
         }
 
         long subsectionId = adminPageForm.getSubsectionId();

@@ -55,7 +55,7 @@ public class FindUser extends ForumAction {
         }
         catch (ForumException ex1) {
             errors.add("forumGlobalError",
-                           new ActionError("error:forum:pm:findUser"));
+                           new ActionError("error.forum.pm.findUser"));
         }
         return mapping.findForward(forward);
     }

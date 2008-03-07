@@ -367,7 +367,7 @@ public class CMSContentItemForm
     if (title == null || title.trim().length() == 0) {
       errors.add(null,
                  new ActionError(
-          "error:cms:itemTitleEmpty"));
+          "error.cms.itemTitleEmpty"));
     }
     if ( (url == null || url.trim().length() == 0 ||
           url.equals( (String) (httpServletRequest.getScheme() +
@@ -376,7 +376,7 @@ public class CMSContentItemForm
         if (file == null) {
           errors.add(null,
                      new ActionError(
-              "error:cms:urlAndFileEmpty"));
+              "error.cms.urlAndFileEmpty"));
         }
       }
     }
@@ -386,14 +386,14 @@ public class CMSContentItemForm
       if (formFile != null && formFile.getFileSize() != 0 && file != null) {
         errors.add(null,
                    new ActionError(
-            "error:cms:urlAndFileGiven"));
+            "error.cms.urlAndFileGiven"));
       }
     }
 
     if (categoryIdList == null || categoryIdList.size() == 0) {
       errors.add(null,
                  new ActionError(
-          "error:cms:categoryEmpty"));
+          "error.cms.categoryEmpty"));
     }
     return errors.isEmpty() ? null : errors;
   }

@@ -242,12 +242,12 @@ public class AddAmpActivity extends Action {
 													100));
 								} else {
 									selectedSector.setSectorPercentage(null);
-									Iterator iter = prevSelSectors.iterator();
+									/*Iterator iter = prevSelSectors.iterator();
 									while (iter.hasNext()) {
 										ActivitySector actSect = (ActivitySector) iter
 												.next();
-										actSect.setSectorPercentage(null);
-									}
+										//actSect.setSectorPercentage(null); //as required by AMP-2870
+									}*/
 								}
 								prevSelSectors.add(selectedSector);
 							} else {
@@ -327,11 +327,11 @@ public class AddAmpActivity extends Action {
 						} else {
 							selectedSector.setSectorPercentage(null);
 							Iterator iter = prevSelSectors.iterator();
-							while (iter.hasNext()) {
+							/*while (iter.hasNext()) {
 								ActivitySector actSect = (ActivitySector) iter
 										.next();
-								actSect.setSectorPercentage(null);
-							}
+								// actSect.setSectorPercentage(null); // as requested by AMP-2870 
+							}*/
 						}
 						prevSelSectors.add(selectedSector);
 					} else {

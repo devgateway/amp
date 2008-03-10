@@ -24,6 +24,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -149,10 +150,11 @@ public class ProjectFicheExport extends Action {
 		document.add(newParagraph("3. Description of Project",rootSectionFont,0));
 		
 		document.add(newParagraph("3.1 Background and justification: "+Util.getEditorBody(site,act.getDescription(),navigationLanguage),regularFont,1));
-		document.add(newParagraph("3.2 Assessment of project impact, catalytic effect, sustainability and cross border impact (where applicable) : ",regularFont,1));		
+		document.add(newParagraph("3.2 Assessment of project impact, catalytic effect, sustainability and cross border impact (where applicable) : "+Util.getEditorBody(site,act.getProjectImpact(),navigationLanguage),regularFont,1));		
 		document.add(newParagraph("3.3 Results and measurable indicators: "+Util.getEditorBody(site,act.getResults(),navigationLanguage),regularFont,1));
-		document.add(newParagraph("3.4 Activities: ",regularFont,1));
+		document.add(newParagraph("3.4 Activities: "+Util.getEditorBody(site,act.getActivitySummary(),navigationLanguage),regularFont,1));
 		
+		/*
 		i=act.getCosts().iterator();
 		int k=0;
 		while (i.hasNext()) {
@@ -193,10 +195,11 @@ public class ProjectFicheExport extends Action {
 			document.add(tbl);
 			
 		}
+		*/
 
-		document.add(newParagraph("3.5 Conditionality and sequencing: ",regularFont,1));
-		document.add(newParagraph("3.6 Linked activities: ",regularFont,1));
-		document.add(newParagraph("3.7 Lessons learned: ",regularFont,1));
+		document.add(newParagraph("3.5 Conditionality and sequencing: "+Util.getEditorBody(site,act.getCondSeq(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("3.6 Linked activities: "+Util.getEditorBody(site,act.getLinkedActivities(),navigationLanguage),regularFont,1));
+		document.add(newParagraph("3.7 Lessons learned: "+Util.getEditorBody(site,act.getLessonsLearned(),navigationLanguage),regularFont,1));
 		
 		//LOGFRAME
 		
@@ -256,10 +259,20 @@ public class ProjectFicheExport extends Action {
 		}
 		
 		
-		
-		
 		document.add(tbl);
-			
+		
+		document.add(newParagraph("ANNEX 3: Reference to laws, regulations and strategic documents",rootSectionFont,0));
+		
+		i=act.getReferenceDocs().iterator();
+		while (i.hasNext()) {
+			AmpActivityReferenceDoc element = (AmpActivityReferenceDoc) i.next();
+			document.add(newParagraph(" - Reference to "+element.getCategoryValue()+" :"+element.getComment(),regularFont,1));
+		}
+
+		document.add(newParagraph("ANNEX 4: Details per EU funded contract",rootSectionFont,0));
+		
+		document.add(newParagraph(Util.getEditorBody(site,act.getContractDetails(),navigationLanguage),regularFont,1));
+		
 		document.close();
 		
 		} catch (Exception e) {

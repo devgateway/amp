@@ -416,14 +416,7 @@ function collapseAll() {
 										<input type="button" class="buton" onclick="javascript:collapseAll()" value="${tran}"/>
 										</td>
 										<td height=16 vAlign=bottom align="right">
-											<digi:img src="module/aim/images/print_icon.gif"/>
-										</td>
-										<td height=16 vAlign=center align="left" width="50">
-											<digi:link href="/showPrinterFriendlyPage.do?edit=true" target="_blank">
-												<digi:trn key="aim:print">
-													Print
-												</digi:trn>
-											</digi:link>&nbsp;
+												<input type="button" class="buton" onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" value="<digi:trn key="aim:print">Print</digi:trn>"> 
 										</td>
 									</tr>
 								</table>

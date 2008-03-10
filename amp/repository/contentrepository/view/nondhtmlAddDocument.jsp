@@ -154,7 +154,7 @@
 			}
 			if(fileFlag == true)
 			{
-				alert(" $translation_validation_filedata{} ");
+				alert(" ${translation_validation_filedata} ");
 				document.crDocumentManagerForm.fileData.focus();
 				return false;
 			}

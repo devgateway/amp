@@ -711,7 +711,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         	  
         	  Set act = new HashSet();
 				act.add(activity);
-				ind.setActivity(act); 
+				//ind.setActivity(act); 
 		     session.saveOrUpdate(ind);
           }
 

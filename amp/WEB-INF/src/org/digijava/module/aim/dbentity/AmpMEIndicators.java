@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.util.Date;
 import java.util.Set;
 
+@Deprecated
 public class AmpMEIndicators {
 	private Long ampMEIndId;
 	private String code;

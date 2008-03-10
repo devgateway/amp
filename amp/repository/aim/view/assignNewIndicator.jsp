@@ -60,7 +60,7 @@ function selectIndicators() {
 			return false;
 
 		<digi:context name="selInd" property="context/module/moduleinstance/addThemeIndicator.do"/>
-	   	document.aimThemeForm.action = "<%= selInd %>";
+	   	document.aimThemeForm.action = "<%= selInd %>"+"?event=assignIndicators";
 		document.aimThemeForm.target = window.opener.name;
 	   	document.aimThemeForm.submit();
 		window.close();

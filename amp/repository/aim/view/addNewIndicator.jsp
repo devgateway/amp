@@ -86,9 +86,10 @@ if(!document.aimNewIndicatorForm.IndType.checked && !document.aimNewIndicatorFor
   <digi:context name="addInd" property="context/module/moduleinstance/addNewIndicator.do?action=add" />
   document.forms[0].action="<%=addInd%>";
   document.forms[0].submit();
-  window.opener.location.reload(true);
+ // window.opener.location.reload(true);
   window.opener.focus();
   window.close();
+  window.opener.viewall();
 }
 
 function addSectors() {

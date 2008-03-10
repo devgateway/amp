@@ -3,42 +3,436 @@ package org.digijava.module.aim.util;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.ObjectNotFoundException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorSector;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpThemeIndicators;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.dbentity.IndicatorConnection;
+import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.IndicatorsBean;
 
+/**
+ * Indicator utilities.
+ * Methods for manipulating {@link AmpIndicator}, {@link AmpIndicatorValue},
+ * {@link IndicatorConnection} and all its subclasses.
+ * Also indicator relation management methods can be found here. 
+ *
+ */
 public class IndicatorUtil {
 
 	private static Logger logger = Logger.getLogger(IndicatorUtil.class);
+	
+	
+	/**
+	 * Loads Indicator from db.
+	 * NULL if nothing found with specified ID.
+	 * @param id primary key values of AmpIndicator
+	 * @return {@link AmpIndicator} object loaded from db.
+	 * @throws DgException
+	 */
+	public static AmpIndicator getIndicator(Long id) throws DgException{
+		Session session = PersistenceManager.getRequestDBSession();
+		AmpIndicator indicator=null;
+		try {
+			indicator = (AmpIndicator)session.load(AmpIndicator.class, id);
+		} catch (ObjectNotFoundException e) {
+			logger.debug("indicator with "+id+"not found");
+		} catch (Exception e) {
+			throw new DgException("Cannot load indicator",e);
+		}
+		return indicator;
+	}
+	
+	/**
+	 * Saves {@link AmpIndicator} or updates in db.
+	 * @param indicator object.
+	 * @throws DgException if anything goes wrong rollback is attempted.
+	 */
+	public static void saveIndicator(AmpIndicator indicator) throws DgException {
+		Session session = PersistenceManager.getRequestDBSession();
+		Transaction tx=null;
+		try {
+			tx=session.beginTransaction();
+			session.saveOrUpdate(indicator);
+			tx.commit();
+		} catch (HibernateException e) {
+			logger.error("Error saving indicator",e);
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (Exception ex) {
+					throw new DgException("Cannot rallback save Indicator actioin",ex);
+				}
+				throw new DgException("Cannot save Indicator!",e);
+			}
+		}
+	}
+	
+	/**
+	 * Removes {@link AmpIndicator} from db.
+	 * Also Indicator values will be deleted because of AmpIndicator.hbm.xml mappings.
+	 * @param id primary key of indicator
+	 * @throws DgException
+	 */
+	public static void deleteIndicator(Long id) throws DgException{
+		deleteIndicator(getIndicator(id));
+	}
 
+	/**
+	 * Removes {@link AmpIndicator} from db.
+	 * Also Indicator values will be deleted because of AmpIndicator.hbm.xml mappings.
+	 * @param indicator AmpIndicator object
+	 * @throws DgException
+	 */
+	public static void deleteIndicator(AmpIndicator indicator) throws DgException{
+		//unAssigneIndicatorFromAll(indicator);
+		Session session=PersistenceManager.getRequestDBSession();
+		Transaction tx=null;
+		try {
+			tx=session.beginTransaction();
+			indicator.getSectors().clear();
+			session.update(indicator);
+			session.delete(indicator);
+			tx.commit();
+		} catch (HibernateException e) {
+			logger.error("caannot remove Indicator!",e);
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (HibernateException e1) {
+					throw new DgException("Cannot rollback delete AmpIndicator action");
+				}
+			}
+			throw new DgException("Cannot delete AmpIndicator");
+		}
+		
+	}
+
+	/**
+	 * Drops all connections of indicator to activities, themes and sectors.
+	 * Removing connection beans will cascade remove on indicator values too.
+	 * @param indicator
+	 * @throws DgException
+	 */
+	public static void unAssigneIndicatorFromAll(AmpIndicator indicator)throws DgException{
+		Session session=PersistenceManager.getRequestDBSession();
+		Set sectors=indicator.getSectors();
+		Transaction tx=null;
+		try {
+			//Indicator sectors.
+			if (sectors!=null && sectors.size()>0){
+				//start transaction if not started
+				if (tx==null) tx=session.beginTransaction();
+				for (Iterator sectIter = sectors.iterator(); sectIter.hasNext();) {
+					AmpSector sector = (AmpSector) sectIter.next();
+					sector.getIndicators().remove(indicator);
+					session.update(sector);
+				}
+				indicator.getSectors().clear();
+			}
+			
+			//Indicator values for activities.
+			if (indicator.getValuesActivity()!=null){
+				//start transaction if not started
+				if (tx==null) tx=session.beginTransaction();
+				//delete all connections to activities.
+				for (IndicatorActivity indicatorValues : indicator.getValuesActivity()) {
+					try {
+						session.delete(indicatorValues);
+					} catch (HibernateException e) {
+						e.printStackTrace();
+					}
+				}
+				indicator.getValuesActivity().clear();
+			}
+			
+			//Indicator values for themes.
+			if (indicator.getValuesTheme()!=null){
+				//start transaction if not started
+				if (tx==null) tx=session.beginTransaction();
+				//delete all connections to themes.
+				for (IndicatorTheme indicatorValues : indicator.getValuesTheme()) {
+					try {
+						session.delete(indicatorValues);
+					} catch (HibernateException e) {
+						e.printStackTrace();
+					}
+				}
+				indicator.getValuesTheme().clear();
+			}
+			
+			//save indicator changes.
+			session.save(indicator);
+			
+			//try to commit
+			if (tx!=null) tx.commit();
+		} catch (HibernateException e) {
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (HibernateException e1) {
+					throw new DgException("Cannot rollback unassigne inndicator from all entities",e);
+				}
+			}
+			throw new DgException("Cannot unassigne inndicator from all entities",e);
+		}
+	}
+	
+	/**
+	 * Loads connection bean.
+	 * NULL if not found.
+	 * @param connId
+	 * @return bean that represents connection between AmpTheme and Indicator - {@link IndicatorTheme}
+	 * @throws DgException
+	 */
+	public static IndicatorTheme getConnectionToTheme(Long connId) throws DgException{
+		Session session=PersistenceManager.getRequestDBSession();
+		IndicatorTheme conn=null;
+		try {
+			conn=(IndicatorTheme)session.load(IndicatorTheme.class, connId);
+		} catch (ObjectNotFoundException e) {
+			logger.debug("Cannot fined IndicatorTheme with Id="+connId);
+		} catch (Exception ex){
+			throw new DgException("Cannot load connection to theme (IndicatorTheme) with id "+connId,ex);
+		}
+		return conn;
+	}
+	
+	/**
+	 * Removes connection bean dropping connection between indicator and program or activity.
+	 * Indicator itself is unaffected but values for this connections will be deleted with connection bean.
+	 * @param conenctionId id of the connection bean.
+	 * @throws DgException
+	 */
+	public static void removeConnection(Long connectionId)throws DgException{
+		removeConnection(getConnectionToTheme(connectionId));
+	}
+	
+	/**
+	 * Removes connection bean dropping connection between indicator and program or activity.
+	 * Indicator itself is unaffected but values for this connections will be deleted with connection bean.
+	 * @param conn
+	 * @throws DgException
+	 */
+	public static void removeConnection(IndicatorConnection conn)throws DgException{
+		Session session=PersistenceManager.getRequestDBSession();
+		Transaction tx=null;
+		try {
+			tx=session.beginTransaction();
+			session.delete(conn);
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (HibernateException e1) {
+					throw new DgException("Cannot rollback indicator connection deletion operation!",e1);
+				}
+				throw new DgException("Cannot delete indicator connection bean ",e);
+			}
+		}
+	}
+	
+	/**
+	 * Loads all indicators from DB.
+	 * @return list of {@link AmpIndicator} objects
+	 * @throws DgException
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<AmpIndicator> getAllIndicators() throws DgException{
+		Session session = PersistenceManager.getRequestDBSession();
+		List result=null;
+		try {
+			result=session.createQuery("from "+AmpIndicator.class.getName()).list();
+		} catch (HibernateException e) {
+			throw new DgException("Cannot load all indicators!",e);
+		}
+		return result;
+	}
+
+	/**
+	 * Assigns Indicator to program (AmpTheme).
+	 * @see #assignIndicatorToTheme(AmpTheme, AmpIndicator)
+	 * @param themeId
+	 * @param indicatorId
+	 * @throws DgException
+	 */
+	public static void assignIndicatorToTheme(Long themeId, Long indicatorId) throws DgException{
+		AmpTheme theme=ProgramUtil.getThemeById(themeId);
+		AmpIndicator indicator=IndicatorUtil.getIndicator(indicatorId);
+		assignIndicatorToTheme(theme, indicator);
+	}
+	
+	/**
+	 * Assigns indicator to program (theme).
+	 * Actually this creates new {@link IndicatorTheme} object in db 
+	 * which is subclass of {@link IndicatorConnection} db bean.
+	 * @param theme
+	 * @param indicator
+	 * @throws DgException
+	 */
+	public static void assignIndicatorToTheme(AmpTheme theme, AmpIndicator indicator) throws DgException{
+		IndicatorTheme connection=new IndicatorTheme();
+		connection.setIndicator(indicator);
+		connection.setTheme(theme);
+		Session sessioin=PersistenceManager.getRequestDBSession();
+		Transaction tx=null;
+		try {
+			tx=sessioin.beginTransaction();
+			sessioin.save(connection);
+			tx.commit();
+			sessioin.flush();
+		} catch (HibernateException e) {
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (HibernateException e1) {
+					throw new DgException("Cannot rollback create indicator-theme connection action",e1);
+				}
+			}
+			throw new DgException("Cannot create indicator-theme connection ",e);
+		}
+	}
+
+	/**
+	 * Return all indicators (Not connection beans) assigned to specified Theme 
+	 * @param themeId primary key of the theme who's indicators should be returned.
+	 * @return set of {@link AmpIndicator} beans.
+	 * @throws DgException
+	 */
+	public static Set<AmpIndicator> getThemeIndicators(Long themeId) throws DgException{
+		Session session=PersistenceManager.getRequestDBSession();
+		Set<AmpIndicator> result=null;
+		String oql="from "+IndicatorTheme.class.getName()+" ti where ti.theme.ampThemeId=:themeId";
+		try {
+			Query query=session.createQuery(oql);
+			query.setLong("themeId", themeId);
+			List resultList=query.list();
+			if (resultList!=null && resultList.size()>0){
+				result=new HashSet<AmpIndicator>();
+				for (Iterator resIter = resultList.iterator(); resIter.hasNext();) {
+					IndicatorTheme themeConnection = (IndicatorTheme) resIter.next();
+					result.add(themeConnection.getIndicator());
+				}
+			}
+		} catch (HibernateException e) {
+			throw new DgException("cannot load Theme("+themeId+") indicators!",e);
+		}
+		return result;
+	}
+	
+	public static Set<IndicatorTheme> getIndicatorThemeConnections(Long themeId) throws DgException{
+		AmpTheme theme=ProgramUtil.getThemeById(themeId);
+		return getIndicatorThemeConnections(theme);
+	}
+
+	public static Set<IndicatorTheme> getIndicatorThemeConnections(AmpTheme theme){
+		return theme.getIndicators();
+	}
+	
+	/**
+	 * Update {@link IndicatorTheme} connection bean.
+	 * To create new in db, use {@link #assignIndicatorToTheme(AmpTheme, AmpIndicator)}
+	 * @param connection
+	 * @throws DgException
+	 */
+	public static void updateThemeConnection(IndicatorTheme connection) throws DgException{
+		Session session=PersistenceManager.getRequestDBSession();
+		Transaction tx=null;
+		try {
+			tx=session.beginTransaction();
+			session.update(connection);
+			tx.commit();
+		} catch (HibernateException e) {
+			if (tx!=null){
+				try {
+					tx.rollback();
+				} catch (HibernateException e1) {
+					throw new DgException("Cannot rollback update operation of IndicatorTheme bean",e);
+				}
+			}
+			throw new DgException("Cannot update IndicatorTheme bean",e);
+		}
+	}
+	
+	/**
+	 * Loads all indicators for activity.
+	 * NULL if there are no Indicators
+	 * TODO correct this method
+	 * @param activityId
+	 * @return
+	 * @throws DgException
+	 */
+	public static Set<AmpIndicator> getActivityIndicators(Long activityId) throws DgException{
+		Set<AmpIndicator> result=null;
+		Session sesison=PersistenceManager.getRequestDBSession();
+		String oql="select indi from "+AmpIndicator.class.getName()+" indi ";
+		oql+="where indi.valuesActivity.activity.ampActivityId =:actId ";
+		oql+="order by indi.name";
+		try {
+			Query query=sesison.createQuery(oql);
+			query.setLong("actId", activityId);
+			List resultList=query.list();
+			if (result!=null && result.size()>0){
+				result=new HashSet<AmpIndicator>();
+				for (Iterator iterator = resultList.iterator(); iterator.hasNext();) {
+					AmpIndicator indicator = (AmpIndicator) iterator.next();
+					result.add(indicator);
+				}
+			}
+		} catch (HibernateException e) {
+			throw new DgException("Cannot load indicators for Activity with id "+activityId,e);
+		}
+		return result;
+	}
+	
+	
+	public static class IndicatorNameComparator implements Comparator<AmpIndicator> {
+
+		public int compare(AmpIndicator indic0, AmpIndicator indic1) {
+			return indic0.getName().compareTo(indic1.getName());
+		}
+		
+	}
+	
+	public static class IndThemeIndciatorNameComparator implements Comparator<IndicatorTheme>{
+
+		public int compare(IndicatorTheme ind0, IndicatorTheme ind1) {
+			return ind0.getIndicator().getName().compareTo(ind1.getIndicator().getName());
+		}
+		
+	}
+	
+	
+	//TODO INDIC - Old Methods below this. Above are added by Irakli.
+	//most code below is deprecated or removed because of ugly names and ugly implementation!
+
+	@Deprecated
 	public static void saveIndicators(AmpPrgIndicator tempPrgInd) {
 
 		Session session = null;
@@ -97,7 +491,7 @@ public class IndicatorUtil {
 					tmpAmpActivity.setIndicators(indcators);
 				}
 				activity.add(tmpAmpActivity);
-				tempind.setActivity(activity);
+				//TODO INDIC tempind.setActivity(activity);
 			}
 		}
 			
@@ -116,7 +510,7 @@ public class IndicatorUtil {
 					tmpAmpActivity = (AmpActivity) session.load(AmpActivity.class,
 							new Long(selActivitys.getValue()));
 					tmpAmpActivity.getIndicators().remove(tempind);
-					tempind.getActivity().remove(tmpAmpActivity);
+					//TODO INDIC tempind.getActivity().remove(tmpAmpActivity);
 			   }
 			}
 		}
@@ -130,6 +524,7 @@ public class IndicatorUtil {
 		}
 	}
 
+	@Deprecated
 	public static ArrayList getAmpIndicator() {
 		Session session = null;
 		Query q = null;
@@ -157,6 +552,7 @@ public class IndicatorUtil {
 		return Indicator;
 	}
 
+	@Deprecated
 	public static AllPrgIndicators getAmpIndicator(Long indId) {
 		Session session = null;
 		AllPrgIndicators tempPrgInd = new AllPrgIndicators();
@@ -176,7 +572,8 @@ public class IndicatorUtil {
 					.ConvertDateToString(tempInd.getCreationDate()));
 			tempPrgInd.setCategory(tempInd.getCategory());
 			tempPrgInd.setSector(tempInd.getSectors());
-			tempPrgInd.setActivity(tempInd.getActivity());
+			//TODO INDIC tempPrgInd.setActivity(tempInd.getActivity());
+			
 //			tempPrgInd.setActualVal(tempInd.getActualVal());
 //			tempPrgInd.setActualValComments(tempInd.getActualValComments());
 //			tempPrgInd.setActualValDate(tempInd.getActualValDate());
@@ -203,6 +600,7 @@ public class IndicatorUtil {
 		return tempPrgInd;
 	}
 	
+	@Deprecated
 	public static Object getAmpMEIndicatorValue(Long indId, Long actId){
 		Session session = null;
 		Query q = null;
@@ -228,6 +626,7 @@ public class IndicatorUtil {
 		
 	}
 
+	@Deprecated
 	public static AllPrgIndicators getAmpIndicator(Long indId, Long actId) {
 		Session session = null;
 		AllPrgIndicators tempPrgInd = new AllPrgIndicators();
@@ -270,6 +669,7 @@ public class IndicatorUtil {
 		return tempPrgInd;
 	}
 
+	@Deprecated
 	public static Collection getAllIndicators(Long ampThemeId) {
 		Session session = null;
 		AmpTheme tempAmpTheme = null;
@@ -301,7 +701,8 @@ public class IndicatorUtil {
 		return themeInd;
 	}
 
-	public static void deleteIndicator(Long indId) {
+	@Deprecated
+	public static void deleteIndicatorOLD(Long indId) {
 		Session session = null;
 		Transaction tx = null;
 		try {
@@ -324,18 +725,19 @@ public class IndicatorUtil {
 				}
 			}
 
-			Collection activity = tempindInd.getActivity();
-			if (activity != null && activity.size() > 0) {
-				Iterator<AmpActivity> actItre = activity.iterator();
-				while (actItre.hasNext()) {
-					AmpActivity activit = actItre.next();
-					AmpActivity tempActivity = null;
-					tempActivity = (AmpActivity) session.load(
-							AmpActivity.class, activit.getAmpActivityId());
-					tempActivity.getIndicators().remove(tempindInd);
-					tempindInd.getActivity().remove(tempActivity);
-				}
-			}
+			//TODO INDIC
+//			Collection activity = tempindInd.getActivity();
+//			if (activity != null && activity.size() > 0) {
+//				Iterator<AmpActivity> actItre = activity.iterator();
+//				while (actItre.hasNext()) {
+//					AmpActivity activit = actItre.next();
+//					AmpActivity tempActivity = null;
+//					tempActivity = (AmpActivity) session.load(
+//							AmpActivity.class, activit.getAmpActivityId());
+//					tempActivity.getIndicators().remove(tempindInd);
+//					tempindInd.getActivity().remove(tempActivity);
+//				}
+//			}
 
 			session.delete(tempindInd);
 			tx.commit();
@@ -461,6 +863,7 @@ public class IndicatorUtil {
 		return col;
 	}
 
+	@Deprecated
 	public static Collection getActivityIndicatorsList(Long ampActivityId) {
 
 		Session session = null;
@@ -537,6 +940,7 @@ public class IndicatorUtil {
 
 	}
 
+	@Deprecated
 	public static String getIndicatorName(Long id) {
 		Session session = null;
 		AmpIndicator Ind = null;
@@ -553,6 +957,7 @@ public class IndicatorUtil {
 		return indName;
 	}
 
+	@Deprecated
 	public static String getIndicatorCode(Long id) {
 		Session session = null;
 		AmpIndicator Ind = null;
@@ -675,6 +1080,7 @@ public class IndicatorUtil {
 		}
 	}
 	
+	  @Deprecated
 	public static void deleteIndtheme(Long indid){
 		
 		 logger.info(" deleting the indthemes");
@@ -686,23 +1092,24 @@ public class IndicatorUtil {
 		   session = PersistenceManager.getRequestDBSession();
 		   tx = session.beginTransaction();
 		  AmpIndicator tempindInd = (AmpIndicator) session.load(AmpIndicator.class, indid);
-		  
-		 Collection theme = tempindInd.getThemes();
-			if (theme != null && theme.size() > 0) {
-				Iterator<AmpTheme> themeItr = theme.iterator();
-				while (themeItr.hasNext()) {
-					AmpTheme themeInd = themeItr.next();
-					
-					if(themeInd!=null){
-					
-						AmpTheme tempAmpTheme = null;
-						tempAmpTheme = (AmpTheme) session.load(AmpTheme.class,themeInd.getAmpThemeId());
-						Set ampThemeSet = new HashSet();
-						tempAmpTheme.getIndicators().remove(tempindInd);
-						tempindInd.getThemes().remove(tempAmpTheme);
-					}
-	 		  }
-		 }
+
+		  //TODO INDIC
+//		 Collection theme = tempindInd.getThemes();
+//			if (theme != null && theme.size() > 0) {
+//				Iterator<AmpTheme> themeItr = theme.iterator();
+//				while (themeItr.hasNext()) {
+//					AmpTheme themeInd = themeItr.next();
+//					
+//					if(themeInd!=null){
+//					
+//						AmpTheme tempAmpTheme = null;
+//						tempAmpTheme = (AmpTheme) session.load(AmpTheme.class,themeInd.getAmpThemeId());
+//						Set ampThemeSet = new HashSet();
+//						tempAmpTheme.getIndicators().remove(tempindInd);
+//						tempindInd.getThemes().remove(tempAmpTheme);
+//					}
+//	 		  }
+//		 }
 			session.update(tempindInd);
 	 		tx.commit();
 	 		session.flush();
@@ -714,6 +1121,7 @@ public class IndicatorUtil {
 		}
 	}
 	
+	@Deprecated
 	 public static AmpIndicator getIndicatorById(Long indId){
          Session session = null;
          AmpIndicator tempInd = new AmpIndicator();
@@ -730,7 +1138,7 @@ public class IndicatorUtil {
          return tempInd;
 		}
 	 
-	 
+	 @Deprecated
 	 public static void saveEditPrgIndValues(Collection<AmpPrgIndicatorValue> prgIndValues,AmpIndicator ampInd)
 		{
 			Session session = null;

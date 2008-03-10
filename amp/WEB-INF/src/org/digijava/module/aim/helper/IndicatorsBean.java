@@ -34,14 +34,15 @@ public class IndicatorsBean {
     public IndicatorsBean() {
     }
 
+    
+    @Deprecated
     public IndicatorsBean(AllMEIndicators ind) {
         this.id=ind.getAmpMEIndId();
         this.name=ind.getName();
         this.code=ind.getCode();
-        
-        
     }
 
+    @Deprecated
     public IndicatorsBean(AllPrgIndicators ind) {
         this.id=ind.getIndicatorId();
         this.name=ind.getName();
@@ -51,33 +52,25 @@ public class IndicatorsBean {
         this.description=ind.getDescription();
         this.sector= ind.getSector();
         this.sectorName = ind.getSectorName();
-        
     }
 
+    @Deprecated
     public IndicatorsBean(AmpThemeIndicators ind) {
- 
-    	
     	this.id=ind.getAmpThemeIndId();
         this.name=ind.getName();
         this.category=Integer.valueOf(ind.getCategory());
         this.code=ind.getCode();
         this.sector = ind.getSectors();
         this.description=ind.getDescription();
-        
-        
-        
     }
 
-
     public IndicatorsBean(AmpIndicator ind) {
- 
     	this.id=ind.getIndicatorId();
         this.name=ind.getName();
         this.category=Integer.valueOf(ind.getCategory());
         this.code=ind.getCode();
         this.sector = ind.getSectors();
         this.description=ind.getDescription();
-        
     }
     
     public IndicatorsBean(AmpMEIndicatorList ind) {

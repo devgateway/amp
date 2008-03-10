@@ -2,6 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.util.Date;
 
+@Deprecated
 public class AmpMECurrValHistory {
 	private Long ampMECurrValHistoryId;
 	private AmpIndicator meIndValue;

@@ -25,7 +25,7 @@ public class ViewIndicators
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
    
-    	List<IndicatorsBean> allInds = new ArrayList();
+    	List<IndicatorsBean> allInds = new ArrayList<IndicatorsBean>();
     	Collection sectorsName = new ArrayList();
       
         ViewIndicatorsForm allIndForm = (ViewIndicatorsForm) form;
@@ -51,17 +51,17 @@ public class ViewIndicators
              }
             }
         
-        Collection  Indicator = IndicatorUtil.getAmpIndicator();
+        List<AmpIndicator>  searchResult = IndicatorUtil.getAllIndicators();
         Collection allSectors = SectorUtil.getAllParentSectors();
       
       
        allIndForm.setSectors(allSectors);
-       for(Iterator itr = Indicator.iterator(); itr.hasNext();){
-        	AmpIndicator  indicat = (AmpIndicator) itr.next();
+       for(AmpIndicator indicator : searchResult){
         	
-        	IndicatorsBean indbean = new IndicatorsBean(indicat);
         	
-        	indbean.setName(indicat.getName().toLowerCase());
+        	IndicatorsBean indbean = new IndicatorsBean(indicator);
+        	
+        	indbean.setName(indicator.getName().toLowerCase());
          	indbean.setType("0");
          	indbean.setCategory(Integer.valueOf(indbean.getCategory()));
             indbean.setSectorName("Z");

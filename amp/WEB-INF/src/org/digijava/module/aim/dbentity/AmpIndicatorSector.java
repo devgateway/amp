@@ -2,6 +2,12 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
+/**
+ * 
+ * @deprecated now indicator itself has sector.
+ *
+ */
+@Deprecated
 public class AmpIndicatorSector implements  Serializable {
 
 	private Long ampIndicatorSectorId;

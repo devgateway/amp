@@ -2,10 +2,13 @@ package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
 
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpRegion;
+import org.digijava.module.aim.util.IndicatorUtil;
 
 public class AmpPrgIndicatorValue implements Serializable
 {
+	//TODO INDIC rename this bean to IndicatorValue - remove Prg and AMP from name.
 	private Long indicatorValueId;
 	private String creationDate;
 	private int valueType;

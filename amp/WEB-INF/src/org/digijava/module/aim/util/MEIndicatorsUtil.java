@@ -38,6 +38,7 @@ import org.digijava.module.aim.helper.MEIndicatorRisk;
 import org.digijava.module.aim.helper.MEIndicatorValue;
 import org.digijava.module.aim.helper.AllActivities;
 
+@Deprecated
 public class MEIndicatorsUtil
 {
 	private static Logger logger = Logger.getLogger(MEIndicatorsUtil.class);

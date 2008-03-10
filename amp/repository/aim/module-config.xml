@@ -73,12 +73,6 @@
 			org.digijava.module.aim.dbentity.AmpTheme
 		</hibernate-class>
 		<hibernate-class>
-			org.digijava.module.aim.dbentity.AmpThemeIndicators
-		</hibernate-class>
-		<hibernate-class>
-			org.digijava.module.aim.dbentity.AmpThemeIndicatorValue
-		</hibernate-class>
-		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpFiscalCalendar
 		</hibernate-class>
 		<hibernate-class>
@@ -235,16 +229,6 @@
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings
 	 	</hibernate-class>
- 		<hibernate-class>
-			org.digijava.module.aim.dbentity.AmpMECurrValHistory
- 		</hibernate-class>
- 		<hibernate-class>
-			org.digijava.module.aim.dbentity.AmpMEIndicators
- 		</hibernate-class>
- 		<hibernate-class>
-			org.digijava.module.aim.dbentity.AmpMEIndicatorValue
- 		</hibernate-class>
-
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpAhsurvey
 		</hibernate-class>
@@ -304,9 +288,6 @@
 			  org.digijava.module.aim.dbentity.AmpActivityDocument
 	</hibernate-class>
 	<hibernate-class>
-			  org.digijava.module.aim.dbentity.AmpIndicatorSector
-	</hibernate-class>
-	<hibernate-class>
 			  org.digijava.module.aim.dbentity.AmpIndicator
 	</hibernate-class>
         <hibernate-class>
@@ -334,6 +315,19 @@
 	<hibernate-class>
 			  org.digijava.module.aim.dbentity.IPAContractDisbursement
 	</hibernate-class>
+	<hibernate-class>
+			  org.digijava.module.aim.dbentity.AmpIndicatorValue
+	</hibernate-class>
+	<hibernate-class>
+			  org.digijava.module.aim.dbentity.IndicatorConnection
+	</hibernate-class>
+	<hibernate-class>
+			  org.digijava.module.aim.dbentity.IndicatorActivity
+	</hibernate-class>
+	<hibernate-class>
+			  org.digijava.module.aim.dbentity.IndicatorTheme
+	</hibernate-class>
+
 
 	</hibernate-classes>
         <!-- highlights classes End-->

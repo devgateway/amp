@@ -136,6 +136,13 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private Integer lineMinRank;
 	private Integer planMinRank;
 	private Collection actRankColl;
+	
+	/**
+	 * Indicator connections.
+	 * This field contains {@link IndicatorActivity} beans which represent activity-indicator connections 
+	 * and contain set of values for this connection.
+	 * Please refer to AmpActivity.hbm.xml and IndicatorConnection.hbm.xml for details.
+	 */
     private Set indicators;
     
     // Start Bolivia Adds

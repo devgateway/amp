@@ -2,6 +2,7 @@
 
 package org.digijava.module.aim.action;
 
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -16,9 +17,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
+import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
+import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -38,13 +42,28 @@ public class AddEditData
         String parent=request.getParameter("parent");
         if(parent!=null){
             Long parentId=Long.valueOf(parent);
-            Collection<AmpPrgIndicatorValue> indValCol=ProgramUtil.getThemeIndicatorValues(parentId);
-            if(indValCol!=null){
-                List<AmpPrgIndicatorValue> indValuesList=new ArrayList<AmpPrgIndicatorValue>(indValCol);
+            IndicatorTheme connection=IndicatorUtil.getConnectionToTheme(parentId);
+            if (connection.getValues()!=null && connection.getValues().size()>0){
+                List<AmpPrgIndicatorValue> indValuesList=new ArrayList<AmpPrgIndicatorValue>();
+            	for (AmpIndicatorValue value : connection.getValues()) {
+                	AmpPrgIndicatorValue bean=new AmpPrgIndicatorValue();
+					bean.setCreationDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					bean.setValAmount(value.getValue());
+					bean.setValueType(value.getValueType());
+					bean.setIndicatorValueId(value.getIndValId());
+					indValuesList.add(bean);
+				}
                 themeForm.setPrgIndValues(indValuesList);
             }else{
                 themeForm.setPrgIndValues(null);
             }
+//            Collection<AmpPrgIndicatorValue> indValCol=ProgramUtil.getThemeIndicatorValues(parentId);
+//            if(indValCol!=null){
+//                List<AmpPrgIndicatorValue> indValuesList=new ArrayList<AmpPrgIndicatorValue>(indValCol);
+//                themeForm.setPrgIndValues(indValuesList);
+//            }else{
+//                themeForm.setPrgIndValues(null);
+//            }
             themeForm.setParentId(parentId);
             themeForm.setCreationDate(null);
             themeForm.setValAmount(null);
@@ -53,8 +72,8 @@ public class AddEditData
         String event = request.getParameter("event");
        
 
-
         List<AmpPrgIndicatorValue> indValues = themeForm.getPrgIndValues();
+        //WTF?
         if(indValues == null) {
             indValues = new ArrayList();
         } else if(themeForm.getCreationDate()!=null &&
@@ -87,20 +106,47 @@ public class AddEditData
             }
             themeForm.setPrgIndValues(indValues);
         }else if(event!=null && event.equals("save")){
-            if(themeForm.getParentId()!=null){
-                for(Iterator indValIter = indValues.iterator(); indValIter.hasNext();) {
-                    AmpPrgIndicatorValue indVal = (AmpPrgIndicatorValue) indValIter.next();
-                    if(indVal.getIndicatorValueId()!=null && (indVal.getIndicatorValueId().longValue()<0)){
-                        ProgramUtil.deletePrgIndicatorValueById(themeForm.getParentId(),indVal.getIndicatorValueId());
-                    }
-                }
-            }
-
-            //AmpThemeIndicators themeInd=ProgramUtil.getThemeIndicatorById(themeForm.getParentId());
-            AmpIndicator indId = IndicatorUtil.getIndicatorById(themeForm.getParentId());
-          //  ProgramUtil.saveEditPrgIndValues(indValues,themeInd);
+            if (themeForm.getParentId() != null) {
+				for (Iterator indValIter = indValues.iterator(); indValIter
+						.hasNext();) {
+					AmpPrgIndicatorValue indVal = (AmpPrgIndicatorValue) indValIter
+							.next();
+					if (indVal.getIndicatorValueId() != null
+							&& (indVal.getIndicatorValueId().longValue() < 0)) {
+						// ProgramUtil.deletePrgIndicatorValueById(themeForm.getParentId(),indVal.getIndicatorValueId());
+					}
+				}
+			}
+			// AmpThemeIndicators
+			// themeInd=ProgramUtil.getThemeIndicatorById(themeForm.getParentId());
+			// AmpIndicator indId =
+			// IndicatorUtil.getIndicatorById(themeForm.getParentId());
+			// ProgramUtil.saveEditPrgIndValues(indValues,themeInd);
+			// IndicatorUtil.saveEditPrgIndValues(indValues, indId);
             
-            IndicatorUtil.saveEditPrgIndValues(indValues, indId);
+            // TODO INDIC all "save" code above should be deleted.
+            //And this code needs more refactoring to remove these program indicators!
+            IndicatorTheme connection=IndicatorUtil.getConnectionToTheme(themeForm.getParentId());
+            if (connection!=null){
+            	connection.getValues().clear();
+            	for (Iterator indValIter = indValues.iterator(); indValIter.hasNext();) {
+					AmpPrgIndicatorValue prgValue = (AmpPrgIndicatorValue) indValIter.next();
+					AmpIndicatorValue value=new AmpIndicatorValue();
+					value.setValue(prgValue.getValAmount());
+					value.setValueDate(DateConversion.getDate(prgValue.getCreationDate()));
+					value.setValueType(prgValue.getValueType());
+					value.setIndicatorConnection(connection);
+					connection.getValues().add(value);
+				}
+            	try{
+                	IndicatorUtil.updateThemeConnection(connection);
+            	}catch(Exception ex){
+            		logger.error(ex);
+            	}
+            }
+            //returning null because "delete" is called from already closed popup window.
+            //returning normal forward causes digikernel exception.
+            return null;
         }
         return mapping.findForward("forward");
     }

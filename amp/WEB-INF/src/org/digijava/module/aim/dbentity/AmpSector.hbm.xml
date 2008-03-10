@@ -24,8 +24,7 @@
 
 		<property name="segmentCode" column="segment_code" type="java.lang.Integer"/>
 
-        <set name="indicators" table="AMP_INDICATOR_SECTORS" lazy="true" cascade="none">
-			<cache usage="read-write"/> 
+        <set name="indicators" table="AMP_SECTOR_INDICATOR" lazy="true" inverse="true" cascade="none">
 			<key column="amp_sector_id"/>
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpIndicator" column="indicator_id"/>
 		</set>

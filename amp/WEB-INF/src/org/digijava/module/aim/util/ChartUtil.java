@@ -245,19 +245,34 @@ public class ChartUtil {
 		public String map;
 	}
 
-	public static void saveMap(String map, Long timestamp, HttpSession session){
-		ChartUtil.GraphMapRecord rec = (ChartUtil.GraphMapRecord)session.getAttribute(LATEST_GRAPH_MAP);
-		if (rec!=null && map!=null && timestamp !=null && rec.timestamp!=null && rec.map!=null){
-			if (timestamp.compareTo(rec.timestamp) > 0){
-				rec.timestamp=timestamp;
-				rec.map=map;
-				session.setAttribute(LATEST_GRAPH_MAP,rec);
+	/**
+	 * Save map in Http Session.
+	 * @param map http map tag definition
+	 * @param timestamp timestamp of ajax request from client side
+	 * @param session http session bean
+	 */
+	public static void saveMap(String map, Long timestamp, HttpSession session) {
+		ChartUtil.GraphMapRecord rec = null;
+		synchronized (session) {
+			rec = (ChartUtil.GraphMapRecord) session.getAttribute(LATEST_GRAPH_MAP);
+		}
+		// TODO rec can also be accessed from multiple request (thrads) so access to rec also should be synchronized
+		if (rec != null && map != null && timestamp != null
+				&& rec.timestamp != null && rec.map != null) {
+			if (timestamp.compareTo(rec.timestamp) > 0) {
+				rec.timestamp = timestamp;
+				rec.map = map;
+				synchronized (session) {
+					session.setAttribute(LATEST_GRAPH_MAP, rec);
+				}
 			}
-		}else{
-			rec =  new ChartUtil.GraphMapRecord();
-			rec.timestamp=timestamp;
-			rec.map=map;
-			session.setAttribute(LATEST_GRAPH_MAP,rec);
+		} else {
+			rec = new ChartUtil.GraphMapRecord();
+			rec.timestamp = timestamp;
+			rec.map = map;
+			synchronized (session) {
+				session.setAttribute(LATEST_GRAPH_MAP, rec);
+			}
 		}
 	}
 

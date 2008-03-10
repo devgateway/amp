@@ -80,6 +80,8 @@ a.itr:hover {
 					return confirm("Do you want to delete the Indicator ? Please check whether the indicator is being used by some Program.");
 			}
 			
+	
+	//if yu remove or rename this function please look in addNewIndicator.jsp
 	function viewall(){
 	    <digi:context name="viewIndicators" property="context/module/moduleinstance/viewIndicators.do?sector=viewall" />
 	    document.aimViewIndicatorsForm.action = "<%= viewIndicators %>";

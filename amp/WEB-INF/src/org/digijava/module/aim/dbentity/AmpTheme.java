@@ -6,6 +6,7 @@ import java.util.Set;
 
 public class AmpTheme implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private AmpActivity activityId;
     private Long ampThemeId ;
 	private AmpTheme parentThemeId ;
@@ -18,7 +19,13 @@ public class AmpTheme implements Serializable
 	private String description ;
 	private String language ;
 	private String version ;
-	private Set indicators;
+
+	/**
+	 * Connections to Indicators.
+	 * This field contains {@link IndicatorTheme} beans.
+	 * Please refer to AmpTheme.hbm.xml and IndicatorConnection.hbm.xml for details.
+	 */
+	private Set<IndicatorTheme> indicators;
 	private Set activities;
 	private String leadAgency;
 	private String targetGroups;
@@ -138,7 +145,7 @@ public class AmpTheme implements Serializable
 	/**
 	 * @return Returns the indicators.
 	 */
-	public Set getIndicators() {
+	public Set<IndicatorTheme> getIndicators() {
 		return indicators;
 	}
 
@@ -149,7 +156,7 @@ public class AmpTheme implements Serializable
     /**
 	 * @param indicators The indicators to set.
 	 */
-	public void setIndicators(Set indicators) {
+	public void setIndicators(Set<IndicatorTheme> indicators) {
 		this.indicators = indicators;
 	}
 

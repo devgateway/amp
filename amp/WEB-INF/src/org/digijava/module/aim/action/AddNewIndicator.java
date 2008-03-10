@@ -10,7 +10,10 @@ import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
+import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
@@ -21,6 +24,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.digijava.module.aim.util.ActivityUtil;
@@ -121,9 +125,28 @@ public class AddNewIndicator
 	                 
 	                 
                  newInd.setSelectedActivity(newIndForm.getSelectedActivities());
-                 IndicatorUtil.saveIndicators(newInd);
-//                 ProgramUtil.saveThemeIndicators(newInd, newIndForm.getSelectedProgramId());
+                 //TODO INDIC IndicatorUtil.saveIndicators(newInd);
+//               ProgramUtil.saveThemeIndicators(newInd, newIndForm.getSelectedProgramId());
                  //newIndForm.reset();
+                 
+                 //TODO INDIC  all "add" action above is depricated!!! because it is awful!!!!
+                 AmpIndicator indicator = new AmpIndicator();
+                 indicator.setName(newIndForm.getName());
+                 indicator.setDescription(newIndForm.getDescription());
+                 indicator.setCreationDate(new Date());
+                 indicator.setCode(newIndForm.getCode());
+                 if (newIndForm.getActivitySectors()!=null && newIndForm.getActivitySectors().size()>0){
+                	 indicator.setSectors(new HashSet<AmpSector>());
+                	 for (Iterator sectorIt = newIndForm.getActivitySectors().iterator(); sectorIt.hasNext();) {
+                		 //This is awful! why is here AmpActivitySector???!!
+						ActivitySector actSector = (ActivitySector) sectorIt.next();
+						AmpSector sector=SectorUtil.getAmpSector(actSector.getSectorId());
+						sector.setAmpSectorId(actSector.getSectorId());
+						indicator.getSectors().add(sector);
+					}
+                 }
+                 
+                 IndicatorUtil.saveIndicator(indicator);
                  return mapping.findForward("added");
         		
         	}
@@ -210,9 +233,15 @@ public class AddNewIndicator
 //        }
         // AMP-2828 by mouhamad
         String dateFormat = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT);
-        dateFormat = dateFormat.replace("m", "M");
-          
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+        SimpleDateFormat sdf = null;
+        //temporary workaround
+        if (dateFormat!=null){
+        	//?????
+            dateFormat = dateFormat.replace("m", "M");
+            sdf = new SimpleDateFormat(dateFormat);
+        }else{
+        	sdf= new SimpleDateFormat();
+        }
 		
         newIndForm.setDate(sdf.format(new Date()).toString());
       

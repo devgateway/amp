@@ -19,14 +19,16 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpThemeIndicators;
+import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.NpdGraphForm;
 import org.digijava.module.aim.helper.NpdGraphTooltipGenerator;
 import org.digijava.module.aim.util.ChartUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -95,14 +97,15 @@ public class getNPDgraph extends Action {
     		ChartUtilities.writeChartAsPNG(response.getOutputStream(), chart, npdSettings.getWidth().intValue(),
             		npdSettings.getHeight().intValue(), info);
          
-            //generate map for this graph
             NpdGraphTooltipGenerator ttGen = new NpdGraphTooltipGenerator();
 
+            //generate map for this graph
             String map = ChartUtilities.getImageMap("npdChartMap", info);
             //String map = getImageMap("npdChartMap", info, new StandardToolTipTagFragmentGenerator(), new StandardURLTagFragmentGenerator());
             //System.out.println(map);
 
-            //save map tor this timestamp for later use
+            //save map with timestamp from request for later use
+            //timestemp is generated with javascript before sending ajax request.
             ChartUtil.saveMap(map, npdForm.getTimestamp(), session);
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,47 +127,44 @@ public class getNPDgraph extends Action {
             dataset = new CustomCategoryDataset();
 
             //Set sortedIndicators = new TreeSet(currentTheme.getIndicators());
-            List sortedIndicators = new ArrayList(currentTheme.getIndicators());
-            //Iterator iter = sortedIndicators.iterator();
-            Collections.sort(sortedIndicators, new ProgramUtil.IndicatorNameComparator());
-            Iterator iter = sortedIndicators.iterator();
+            List<IndicatorTheme> sortedIndicators = new ArrayList<IndicatorTheme>(currentTheme.getIndicators());
+            Collections.sort(sortedIndicators, new IndicatorUtil.IndThemeIndciatorNameComparator());
+            Iterator<IndicatorTheme> iter = sortedIndicators.iterator();
             while (iter.hasNext()) {
-                AmpThemeIndicators item = (AmpThemeIndicators) iter.next();
-
-                int pos = Arrays.binarySearch(selectedIndicators, item.getAmpThemeIndId().longValue());
+                IndicatorTheme item = iter.next();
+                AmpIndicator indicator=item.getIndicator();
+                int pos = Arrays.binarySearch(selectedIndicators, indicator.getIndicatorId().longValue());
 
                 if (pos >= 0) {
-                    String displayLabel = item.getName();
+                    String displayLabel = indicator.getName();
                     try {
-                        Collection indValues = ProgramUtil.getThemeIndicatorValuesDB(item.getAmpThemeIndId());
-                        Map actualValues = new HashMap();
+                        Collection<AmpIndicatorValue> indValues = item.getValues();  // ProgramUtil.getThemeIndicatorValuesDB(item.getAmpThemeIndId());
+                        Map<String,AmpIndicatorValue> actualValues = new HashMap<String,AmpIndicatorValue>();
                         Double targetValue = null;
                         Double baseValue = null;
 
-                        // arrage all values by types
-                        for (Iterator valueIter = indValues.iterator(); valueIter.hasNext();) {
-                            AmpThemeIndicatorValue valueItem = (AmpThemeIndicatorValue) valueIter.next();
+                        // Arrange all values by types
+//                        for (Iterator valueIter = indValues.iterator(); valueIter.hasNext();) {
+                        for (AmpIndicatorValue valueItem :indValues) {
+                            //AmpThemeIndicatorValue valueItem = (AmpThemeIndicatorValue) valueIter.next();
 
                             // target value
                             if (valueItem.getValueType() == 0) {
-                                targetValue = valueItem.getValueAmount();
+                                targetValue = valueItem.getValue();
                             }
                             // actual Value
                             if (valueItem.getValueType() == 1 && isInSelectedYears(valueItem, selectedYears)) {
-                                Date actualDate = valueItem.getCreationDate();
+                                Date actualDate = valueItem.getValueDate();
                                 String year = extractYearString(actualDate);
-                                // for every year we should have only latest
-                                // actual value
-                                // so check if we already have atual value fro
-                                // this year
-                                AmpThemeIndicatorValue v = (AmpThemeIndicatorValue) actualValues.get(year);
+                                // for every year we should have only latest actual value
+                                // so check if we already have actual value for this year
+                                AmpIndicatorValue v = actualValues.get(year);
                                 if (v == null) {
                                     // if not then store this actual value
                                     actualValues.put(year, valueItem);
                                 } else {
-                                    // if we have valu, chack and store latest
-                                    // value
-                                    Date crDate = v.getCreationDate();
+                                    // if we have value, check and store latest value
+                                    Date crDate = v.getValueDate();
                                     if (crDate != null && crDate.compareTo(actualDate) < 0) {
                                         actualValues.put(year, valueItem);
                                     }
@@ -172,7 +172,7 @@ public class getNPDgraph extends Action {
                             }
                             // base value - not used
                             if (valueItem.getValueType() == 2) {
-                                baseValue = valueItem.getValueAmount();
+                                baseValue = valueItem.getValue();
                             }
                         }
                         if (targetValue == null) {
@@ -186,13 +186,13 @@ public class getNPDgraph extends Action {
 
                         if (selectedYears != null) {
                             for (int i = 0; i < selectedYears.length; i++) {
-                                AmpThemeIndicatorValue actualValue = (AmpThemeIndicatorValue) actualValues.get(selectedYears[i]);
+                                AmpIndicatorValue actualValue = actualValues.get(selectedYears[i]);
                                 if (actualValue != null) {
-                                    Double realActual = actualValue.getValueAmount();
+                                    Double realActual = actualValue.getValue();
                                     if (realActual != null) {
 //										realActual = new Double(realActual.doubleValue() / targetValue.doubleValue());
                                         dataset.addCustomTooltipValue(new String[]{formatValue(baseValue), formatValue(realActual), formatActualDate(actualValue), formatValue(targetValue)});
-                                        realActual = computePercent(item, targetValue, realActual, baseValue);
+                                        realActual = computePercent(indicator, targetValue, realActual, baseValue);
                                         dataset.addValue(realActual.doubleValue(), selectedYears[i], displayLabel);
                                     }
                                 } else {
@@ -221,22 +221,28 @@ public class getNPDgraph extends Action {
         return "0";
     }
 
-    public String formatActualDate(AmpThemeIndicatorValue val) {
+    public String formatActualDate(AmpIndicatorValue val) {
         if (val != null) {
-        	return DateTimeUtil.formatDate(val.getCreationDate());
+        	return DateTimeUtil.formatDate(val.getValueDate());
         }
         return "";
     }
 
-    private static Double computePercent(AmpThemeIndicators indic, Double _target, Double _actual, Double _base) {
+    /**
+     * Calculates percent from indicator values.
+     * This calculation depends on type of indicator which may be ascending or descending.
+     * @param indic
+     * @param _target
+     * @param _actual
+     * @param _base
+     * @return
+     */
+    private static Double computePercent(AmpIndicator indic, Double _target, Double _actual, Double _base) {
         double actual = (_actual == null) ? 0 : _actual.doubleValue();
         double base = (_base == null) ? actual : _base.doubleValue();//if no base value than using actual as base
         double target = (_target == null) ? actual : _target.doubleValue();
         double result = 0;
-        if (indic.getType().equals("A")) {
-            //ascending
-            result = actual / target;
-        } else {
+        if (indic.getType()!=null && "D".equals(indic.getType())) {
             //descending
             base -= target;
             actual -= target;
@@ -246,6 +252,9 @@ public class getNPDgraph extends Action {
                 result = 1 - result / 100;
 
             }
+        } else {
+            //ascending
+            result = actual / target;
         }
         return new Double(result);
     }
@@ -266,8 +275,8 @@ public class getNPDgraph extends Action {
         return sYear;
     }
 
-    private static boolean isInSelectedYears(AmpThemeIndicatorValue value, String[] selYars) {
-        String sYear = extractYearString(value.getCreationDate());
+    private static boolean isInSelectedYears(AmpIndicatorValue value, String[] selYars) {
+        String sYear = extractYearString(value.getValueDate());
         if (sYear != null) {
             for (int i = 0; i < selYars.length; i++) {
                 if (selYars[i].equals(sYear)) {

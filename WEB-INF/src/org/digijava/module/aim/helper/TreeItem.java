@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.AmpThemeIndicators;
-import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.dbentity.IndicatorTheme;
+import org.digijava.module.aim.util.IndicatorUtil;
 
 /**
  * TreeItem represents AMP program tree node. It extends HierarchyMember for
@@ -28,10 +28,10 @@ public class TreeItem extends HierarchyMember {
 
 	/**
 	 * Level of the program. This is ThredLocal cos usually there may be many
-	 * requests in seperate threads that construct XML from the set of this
+	 * requests in separate threads that construct XML from the set of this
 	 * objects.
 	 */
-	private static ThreadLocal _level = null;
+	private static ThreadLocal<Integer> _level = null;
 
 	public boolean showIndicators;
 
@@ -41,10 +41,10 @@ public class TreeItem extends HierarchyMember {
 
 	private void incrementLevel() {
 		if (_level == null) {
-			_level = new ThreadLocal();
+			_level = new ThreadLocal<Integer>();
 		}
 		synchronized (_level) {
-			Integer oldLevel = (Integer) _level.get();
+			Integer oldLevel = _level.get();
 			if (oldLevel == null) {
 				oldLevel = new Integer(0);
 			}
@@ -55,13 +55,13 @@ public class TreeItem extends HierarchyMember {
 
 	private void decrementLevel() {
 		synchronized (_level) {
-			Integer oldLevel = (Integer) _level.get();
+			Integer oldLevel = _level.get();
 			_level.set(new Integer(oldLevel.intValue() - 1));
 		}
 	}
 
 	private int getProgLevel() {
-		Integer level = (Integer) _level.get();
+		Integer level = _level.get();
 		if (level == null) {
 			return 0;
 		}
@@ -69,11 +69,12 @@ public class TreeItem extends HierarchyMember {
 	}
 
 	/**
-	 * Generates XML for this program including children programs and indicators
-	 * if they exist
+	 * Generates XML for this program including children programs and indicators if they exist.
+	 * It is better to use Velocity here.
 	 * 
 	 * @return text representing XML of this node and all child nodes.
 	 */
+	@SuppressWarnings("unchecked")
 	public String getXml() {
 		String result = "";
 		if (this.getMember() == null) {
@@ -109,16 +110,13 @@ public class TreeItem extends HierarchyMember {
 			result += "  <" + INDICATORS_TAG_NAME + ">\n";
 
 			// sort indicators by name
-			List sortedIndics = new ArrayList(realMe.getIndicators());
-			Collections.sort(sortedIndics,
-					new ProgramUtil.IndicatorNameComparator());
+			List<IndicatorTheme> sortedIndics = new ArrayList<IndicatorTheme>(realMe.getIndicators());
+			Collections.sort(sortedIndics,new IndicatorUtil.IndThemeIndciatorNameComparator());
 
-			for (Iterator indicIter = sortedIndics.iterator(); indicIter
-					.hasNext();) {
-				AmpThemeIndicators item = (AmpThemeIndicators) indicIter.next();
+			for (IndicatorTheme indicatorTheme : sortedIndics) {
 				String indicatString = "<indicator id=\""
-						+ item.getAmpThemeIndId() + "\" name=\""
-						+ filter(item.getName()) + "\"/>\n";
+					+ indicatorTheme.getIndicator().getIndicatorId() + "\" name=\""
+					+ filter(indicatorTheme.getIndicator().getName()) + "\"/>\n";
 				result += "    " + indicatString;
 			}
 			result += "  </" + INDICATORS_TAG_NAME + ">\n";

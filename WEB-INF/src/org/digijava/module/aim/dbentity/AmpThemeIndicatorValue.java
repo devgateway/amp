@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Date;
 
+@Deprecated
 public class AmpThemeIndicatorValue implements Comparable, Serializable 
 {
 	private Long ampThemeIndValId;

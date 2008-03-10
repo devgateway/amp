@@ -35,10 +35,9 @@
 			<key column="amp_theme_id"/>
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpActivity" column="amp_activity_id"/>
 		</set>
-        <set name="indicators" table="AMP_THEME_INDICATOR" lazy="true" cascade="none">
-			<cache usage="read-write"/>
-			<key column="amp_theme_id"/>
-			<many-to-many class="org.digijava.module.aim.dbentity.AmpIndicator" column="indicator_id"/>
+        <set name="indicators" lazy="true" cascade="none" inverse="true">
+			<key column="theme_id"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.IndicatorTheme"/>
 		</set>
        <set name="programSettings" lazy="false">
 			<cache usage="read-write"/>

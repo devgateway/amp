@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 	<hibernate-mapping>
-		<class name="org.digijava.module.aim.dbentity.AmpIndicatorValue" table="AMP_INDICATOR_VALUE">
-			<id name="indValId" column="ind_val_id">
-			  <generator class="native"/>
+		<class name="org.digijava.module.aim.dbentity.AmpIndicatorValue" table="AMP_INDICATOR_VALUES">
+			<id name="indValId" column="ind_val_id" type="java.lang.Long">
+				<generator class="native">
+					<param name="sequence">AMP_INDICATOR_VALUES_seq</param>
+				</generator>
 			</id>
 	        <property name="comment" column="comment" type="java.lang.String"/>
 			<property name="valueDate" column="value_date" type="java.util.Date"/>
-			<property name="value" column="type" type="java.lang.Double"/>
+			<property name="value" column="value" type="java.lang.Double"/>
 			<property name="valueType" column="value_type" type="int"/>
 			<many-to-one name="logFrame" column="ind_val_category" class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none"/> 
 			<many-to-one name="risk" column="risk" 	class="org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings" cascade="none"/>
 
-			<many-to-one name="indicator" column="indicator_id" class="org.digijava.module.aim.dbentity.AmpIndicator" cascade="none" not-null="true"/>
-			<many-to-one name="activity" column="activity_id" class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none"/>
-			<many-to-one name="theme" column="activity_id" class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none"/>
+			<many-to-one name="indicatorConnection" column="ind_connect_id" class="org.digijava.module.aim.dbentity.IndicatorConnection" cascade="none" not-null="true"/>
 			<property name="defaultInd" column="default_ind" type="java.lang.Boolean"/>
 	</class>
 </hibernate-mapping>

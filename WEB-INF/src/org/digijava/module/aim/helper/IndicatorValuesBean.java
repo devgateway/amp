@@ -1,22 +1,33 @@
 package org.digijava.module.aim.helper;
 
-import java.util.Comparator;
 import java.util.Date;
 
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
 
 public class IndicatorValuesBean {
-    Long indicatorValueId;
-    int valueTypeId;
-    String valueType;
-    String value;
-    Date creationDate;
-    Long indicatorId;
+    private Long indicatorValueId;
+    private int valueTypeId;
+    private String valueType;
+    private String value;
+    private Date creationDate;
+    private Long indicatorId;
+    private Long connectionId;
 
     public IndicatorValuesBean() {
 
     }
 
+    public IndicatorValuesBean(AmpIndicatorValue value){
+        this.indicatorValueId = value.getIndValId();
+        this.valueTypeId = value.getValueType();
+        this.value = value.getValue().toString();
+        this.creationDate = value.getValueDate();
+        this.indicatorId = value.getIndicatorConnection().getIndicator().getIndicatorId();
+        this.connectionId = value.getIndicatorConnection().getId();
+    }
+    
+    @Deprecated
     public IndicatorValuesBean(AmpThemeIndicatorValue dbIndicatorValue) {
         this.indicatorValueId = dbIndicatorValue.getAmpThemeIndValId();
         this.valueTypeId = dbIndicatorValue.getValueType();
@@ -65,5 +76,21 @@ public class IndicatorValuesBean {
     public void setValueTypeId(int valueTypeId) {
         this.valueTypeId = valueTypeId;
     }
+
+	public Long getIndicatorValueId() {
+		return indicatorValueId;
+	}
+
+	public void setIndicatorValueId(Long indicatorValueId) {
+		this.indicatorValueId = indicatorValueId;
+	}
+
+	public Long getConnectionId() {
+		return connectionId;
+	}
+
+	public void setConnectionId(Long connectionId) {
+		this.connectionId = connectionId;
+	}
 
 }

@@ -5,7 +5,7 @@ import java.util.Date;
 
 /**
  * Indicator Value entity.
- * Can be assigned to themes(program) or activities(project).
+ * Can be assigned to {@link IndicatorConnection}.
  * @author George Khakhanashvili
  *
  */
@@ -19,10 +19,8 @@ public class AmpIndicatorValue implements Serializable{
 	private int valueType;
 	private AmpCategoryValue logFrame;
 	private AmpIndicatorRiskRatings risk;
-	private AmpIndicator indicator;
-	private AmpActivity activity;
-	private AmpTheme theme;
 	private Boolean defaultInd;
+	private IndicatorConnection indicatorConnection;
 	
 	public Long getIndValId() {
 		return indValId;
@@ -66,23 +64,11 @@ public class AmpIndicatorValue implements Serializable{
 	public void setRisk(AmpIndicatorRiskRatings risk) {
 		this.risk = risk;
 	}
-	public AmpIndicator getIndicator() {
-		return indicator;
+	public IndicatorConnection getIndicatorConnection() {
+		return indicatorConnection;
 	}
-	public void setIndicator(AmpIndicator indicator) {
-		this.indicator = indicator;
-	}
-	public AmpActivity getActivity() {
-		return activity;
-	}
-	public void setActivity(AmpActivity activity) {
-		this.activity = activity;
-	}
-	public AmpTheme getTheme() {
-		return theme;
-	}
-	public void setTheme(AmpTheme theme) {
-		this.theme = theme;
+	public void setIndicatorConnection(IndicatorConnection indicatorConnection) {
+		this.indicatorConnection = indicatorConnection;
 	}
 	public Boolean getDefaultInd() {
 		return defaultInd;

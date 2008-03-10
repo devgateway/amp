@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.ObjectNotFoundException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
@@ -58,6 +59,7 @@ import org.digijava.module.aim.helper.EditProgram;
 import org.digijava.module.aim.helper.IndicatorsBean;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.TreeItem;
+import org.digijava.module.ampharvester.exception.AmpHarvesterException;
 import org.digijava.module.translation.taglib.TrnTag;
 
 
@@ -149,6 +151,7 @@ public class ProgramUtil {
          * @return Coll AmpThemeIndicators
          */
 	
+		@Deprecated
 		public static Collection getThemeindicators(String keyword) {
 			Session session = null;
 			Query qry = null;
@@ -168,25 +171,19 @@ public class ProgramUtil {
 			return ThemeIndicators;
 		}
 		
-        public static AmpTheme getThemeById(Long ampThemeId) {
-            Session session = null;
-            AmpTheme theme = null;
-
-            try {
-                session = PersistenceManager.getRequestDBSession();
-                String qryStr = "select theme from " + AmpTheme.class.getName()
-                        + " theme where (theme.ampThemeId=:ampThemeId)";
-                Query qry = session.createQuery(qryStr);
-                qry.setParameter("ampThemeId", ampThemeId, Hibernate.LONG);
-                Iterator itr = qry.list().iterator();
-                if (itr.hasNext()) {
-                    theme = (AmpTheme) itr.next();
-                }
-            } catch (Exception e) {
-                logger.error("Exception from getTheme()");
-                logger.error(e.getMessage());
-            }
-            return theme;
+        public static AmpTheme getThemeById(Long ampThemeId) throws DgException {
+			Session session = PersistenceManager.getRequestDBSession();
+			AmpTheme theme = null;
+	
+			try {
+				theme = (AmpTheme) session.load(AmpTheme.class, ampThemeId);
+			} catch (ObjectNotFoundException e) {
+				logger.debug("AmpTheme with id " + ampThemeId + " not found");
+			} catch (Exception e) {
+				throw new DgException("Cannot load AmpTheme with id " + ampThemeId,
+						e);
+			}
+			return theme;
 		}
 
 		public static Collection getParentThemes() {
@@ -300,6 +297,7 @@ public class ProgramUtil {
     		return col;
     	}
 
+        @Deprecated
         public static ArrayList getAmpThemeIndicators() {
     		Session session = null;
     		Query q = null;
@@ -342,6 +340,7 @@ public class ProgramUtil {
             return result;
         }
 
+        @Deprecated
 	    public static Collection getAllThemeIndicators() throws AimException
 	    {
 	    	Collection colThInd = new ArrayList();
@@ -379,6 +378,7 @@ public class ProgramUtil {
 
         // New function added for the program Indicator Manager by pcsingh
 
+        @Deprecated
         public static Collection getAllThemesIndicators() throws AimException
 	    {
 	    	Collection colThInd = new ArrayList();
@@ -466,6 +466,7 @@ public class ProgramUtil {
         	return colPrg;
         }
 
+        @Deprecated
         public static Collection getAllProgramIndicators()
         {
         	Session session = null;
@@ -582,55 +583,49 @@ public class ProgramUtil {
 		}
 */
 	
+		@Deprecated
 		public static void assignThemeInd(Long indId, Long themeId)
 		{
 
-			logger.info("\n\nInside program Util\n"+indId+"      "+themeId);
-			Session session = null;
-			Transaction tx = null;
-			AmpIndicator ampThInd = null;
-			AmpTheme ampTh = getThemeObject(themeId);
-			logger.info(ampTh.getName());
-			Set tmp1 = ampTh.getIndicators();
-			Iterator itr1 = tmp1.iterator();
-			while(itr1.hasNext()){
-				AmpIndicator ampTmp = (AmpIndicator)itr1.next();
-				logger.info(ampTmp.getName());
-			}
-			Set tmpTest = ampTh.getIndicators();
-			try
-			{
-				session = PersistenceManager.getRequestDBSession();
-				ampThInd = (AmpIndicator) session.load(AmpIndicator.class, indId);
-				logger.info(ampThInd.getName());
-				Set tempTh = ampThInd.getThemes();
-				Iterator itr = tempTh.iterator();
-				while(itr.hasNext()){
-					AmpTheme tmp = (AmpTheme)itr.next();
-					logger.info("Themes related to indicator\n\n"+tmp.getName());
-				}
-				tempTh.clear();
-				logger.info(tempTh.isEmpty());
-				tempTh.add(ampTh);
-				itr = tempTh.iterator();
-				while(itr.hasNext()){
-					AmpTheme tmp = (AmpTheme)itr.next();
-					logger.info("Now Themes related to indicator\n\n"+tmp.getName());
-				}
-				logger.info(tempTh.isEmpty());
+//			logger.info("\n\nInside program Util\n"+indId+"      "+themeId);
+//			Session session = null;
+//			Transaction tx = null;
+//			AmpIndicator ampThInd = null;
+//			AmpTheme ampTh = getThemeObject(themeId);
+//			Set tmpTest = ampTh.getIndicators();
+//			try
+//			{
+//				session = PersistenceManager.getRequestDBSession();
+//				ampThInd = (AmpIndicator) session.load(AmpIndicator.class, indId);
+//				logger.info(ampThInd.getName());
+//				Set tempTh = ampThInd.getThemes();
+//				Iterator itr = tempTh.iterator();
+//				while(itr.hasNext()){
+//					AmpTheme tmp = (AmpTheme)itr.next();
+//					logger.info("Themes related to indicator\n\n"+tmp.getName());
+//				}
+//				tempTh.clear();
+//				logger.info(tempTh.isEmpty());
+//				tempTh.add(ampTh);
+//				itr = tempTh.iterator();
+//				while(itr.hasNext()){
+//					AmpTheme tmp = (AmpTheme)itr.next();
+//					logger.info("Now Themes related to indicator\n\n"+tmp.getName());
+//				}
+//				logger.info(tempTh.isEmpty());
 				//ampThInd.setThemes(ampThInd);
-				ampThInd.setThemes(tempTh);
+//				ampThInd.setThemes(tempTh);
 
-				tmpTest.add(ampThInd);
-				ampTh.setIndicators(tmpTest);
-				tx = session.beginTransaction();
-				session.saveOrUpdate(ampThInd);
-				tx.commit();
-			}
-			catch(Exception ex) {
-				logger.error("Exception from getThemeIndicators()  " + ex.getMessage());
-				ex.printStackTrace(System.out);
-			}
+//				tmpTest.add(ampThInd);
+//				ampTh.setIndicators(tmpTest);
+//				tx = session.beginTransaction();
+//				session.saveOrUpdate(ampThInd);
+//				tx.commit();
+//			}
+//			catch(Exception ex) {
+//				logger.error("Exception from getThemeIndicators()  " + ex.getMessage());
+//				ex.printStackTrace(System.out);
+//			}
 		}
  //Comment over pcsing
 		
@@ -666,6 +661,7 @@ public class ProgramUtil {
 			return col;
 		}
 
+		@Deprecated
 		public static Collection getThemeIndicators(Long ampThemeId)
 		{
 			Session session = null;
@@ -699,6 +695,7 @@ public class ProgramUtil {
 			return themeInd;
 		}
 
+		@Deprecated
 		public static Collection getThemeIndicatorValues(Long themeIndicatorId)
 		{
 			Session session = null;
@@ -730,6 +727,7 @@ public class ProgramUtil {
 			return col;
 		}
 
+		@Deprecated
         public static Collection getThemeIndicatorValuesDB(Long themeIndicatorId)
         {
                 Session session = null;
@@ -955,7 +953,12 @@ public class ProgramUtil {
 			return subThemes;
 		}
 
-
+		/**
+		 * @deprecated use {@link IndicatorUtil} methods. 
+		 * @param allPrgInd
+		 * @param ampThemeId
+		 */
+		@Deprecated
 		public static void saveEditThemeIndicators(AllPrgIndicators allPrgInd, Long ampThemeId)
 		{
 			Session session = null;
@@ -975,6 +978,13 @@ public class ProgramUtil {
 			}
 		}
 
+		/**
+		 * @deprecated use {@link IndicatorUtil} methods.
+		 * @param allPrgInd
+		 * @param tempAmpTheme
+		 * @return
+		 */
+		@Deprecated
 		public static AmpThemeIndicators saveEditPrgInd(AllPrgIndicators allPrgInd, AmpTheme tempAmpTheme)
 		{
 			Session session = null;
@@ -1017,6 +1027,7 @@ public class ProgramUtil {
 			return ampThemeInd;
 		}
 
+		@Deprecated
 		public static void saveEditPrgIndValues(Collection prgIndValues, AmpThemeIndicators ampThemeInd)
 		{
 			Session session = null;
@@ -1075,6 +1086,13 @@ public class ProgramUtil {
 			}
 		}
 		
+		/**
+		 * This was saving theme indicator but deprecated now.
+		 * @deprecated there are no Theme Indicators any more. use {@link IndicatorUtil} methods.
+		 * @param tempPrgInd
+		 * @param ampThemeId
+		 */
+		@Deprecated
 		public static void saveThemeIndicators(AmpPrgIndicator tempPrgInd,Long ampThemeId)
 		{
 			Session session = null;
@@ -1217,6 +1235,7 @@ public class ProgramUtil {
 			return tempPrgInd;
 		}
 
+		@Deprecated
         public static AmpThemeIndicators getThemeIndicatorById(Long indId){
             Session session = null;
             AmpThemeIndicators tempInd = new AmpThemeIndicators();
@@ -1233,6 +1252,7 @@ public class ProgramUtil {
             return tempInd;
 		}
 
+		@Deprecated
 		public static AllPrgIndicators getThemeIndValues(Long indId)
 		{
 			AllPrgIndicators programInd = getThemeIndicator(indId);
@@ -1240,6 +1260,11 @@ public class ProgramUtil {
 			return programInd;
 		}
 
+		/**
+		 * @deprecated use {@link IndicatorUtil} mthods.
+		 * @param allPrgInd
+		 */
+		@Deprecated
 		public static void saveIndicator(AllPrgIndicators allPrgInd)
 		{
 			Session session = null;
@@ -1291,6 +1316,11 @@ public class ProgramUtil {
 			}
 		}
 
+		/**
+		 * @deprecated use {@link IndicatorUtil}
+		 * @param indId
+		 */
+		@Deprecated
 		public static void deleteProgramIndicator(Long indId){
 			Session session = null;
 			Transaction tx = null;
@@ -1298,7 +1328,7 @@ public class ProgramUtil {
 			session = PersistenceManager.getRequestDBSession();
 			tx = session.beginTransaction();
 			AmpIndicator tempThemeInd = (AmpIndicator) session.load(AmpIndicator.class,indId);
-			tempThemeInd.getThemes().remove(tempThemeInd);
+//			tempThemeInd.getThemes().remove(tempThemeInd);
 			session.delete(tempThemeInd);
 			tx.commit();
 		} catch (Exception e) {
@@ -1311,44 +1341,47 @@ public class ProgramUtil {
 		 * Deletes indicator with its values
 		 * @param indId db ID of the indicator
 		 * @throws AimException if any error with DB
+		 * @deprecated
 		 */
+		@Deprecated
 		public static void deletePrgIndicator(Long indId) throws AimException
 		{
-			Session session = null;
-			Transaction tx = null;
-			try
-			{
-				//deletePrgIndicatorValue(indId);
-				session = PersistenceManager.getRequestDBSession();
-				tx = session.beginTransaction();
-				AmpIndicator tempThemeInd = (AmpIndicator) session.load(AmpIndicator.class,indId);
-                Iterator itr=tempThemeInd.getThemes().iterator();
-                while(itr.hasNext()){
-                    AmpTheme tm=(AmpTheme)itr.next();
-                    Iterator indItr=tm.getIndicators().iterator();
-                    while(indItr.hasNext()){
-                        AmpIndicator tmInd=(AmpIndicator)indItr.next();
-                        if(tmInd.getIndicatorId().equals(indId)){
-                            indItr.remove();
-                            //please read http://www.hibernate.org/hib_docs/reference/en/html/example-parentchild.html
-                            session.delete(tmInd);
-                            tempThemeInd.getThemes().remove(tm);
-                            
-                        }
-                    }
-                    session.update(tempThemeInd);
-                }
-				tx.commit();
-				session.flush();
-			}
-			catch(Exception e1)
-			{
-				logger.error("The theme indicators were not deleted");
-				logger.debug("Exception : "+e1);
-				throw new AimException(e1);
-			}
+//			Session session = null;
+//			Transaction tx = null;
+//			try
+//			{
+//				//deletePrgIndicatorValue(indId);
+//				session = PersistenceManager.getRequestDBSession();
+//				tx = session.beginTransaction();
+//				AmpIndicator tempThemeInd = (AmpIndicator) session.load(AmpIndicator.class,indId);
+//                Iterator itr=tempThemeInd.getThemes().iterator();
+//                while(itr.hasNext()){
+//                    AmpTheme tm=(AmpTheme)itr.next();
+//                    Iterator indItr=tm.getIndicators().iterator();
+//                    while(indItr.hasNext()){
+//                        AmpIndicator tmInd=(AmpIndicator)indItr.next();
+//                        if(tmInd.getIndicatorId().equals(indId)){
+//                            indItr.remove();
+//                            //please read http://www.hibernate.org/hib_docs/reference/en/html/example-parentchild.html
+//                            session.delete(tmInd);
+//                            tempThemeInd.getThemes().remove(tm);
+//                            
+//                        }
+//                    }
+//                    session.update(tempThemeInd);
+//                }
+//				tx.commit();
+//				session.flush();
+//			}
+//			catch(Exception e1)
+//			{
+//				logger.error("The theme indicators were not deleted");
+//				logger.debug("Exception : "+e1);
+//				throw new AimException(e1);
+//			}
 		}
 
+		@Deprecated
 		public static void deletePrgIndicatorValue(Long themeIndicatorId)
 		{
 			Session session = null;
@@ -1379,6 +1412,7 @@ public class ProgramUtil {
 			}
 		}
 
+		@Deprecated
         public static void deletePrgIndicatorValueById(Long themeIndicatorId,Long themeIndicatorValueId)
         {
             Session session = null;

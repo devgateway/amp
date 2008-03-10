@@ -545,7 +545,7 @@ public class SectorUtil {
 		AmpSector ampSector = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = new String();
 			queryString = "select s from " + AmpSector.class.getName()
 					+ " s where (s.ampSectorId=:ampSectorId)";
@@ -561,14 +561,6 @@ public class SectorUtil {
 		} catch (Exception ex) {
 			logger.error("Unable to get amp_sector info");
 			logger.debug("Exceptiion " + ex);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
 		}
 
 		return ampSector;

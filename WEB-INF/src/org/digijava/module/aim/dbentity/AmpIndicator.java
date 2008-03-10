@@ -1,12 +1,13 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
-import java.lang.Comparable;
 import java.util.Date;
 import java.util.Set;
 
 public class AmpIndicator implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	private Long indicatorId;
 	private boolean defaultInd;
 	private String name;
@@ -15,10 +16,24 @@ public class AmpIndicator implements Serializable
 	private Date creationDate;
 	private int category;
 	private String description;
-	private Set themes;
 	private Set sectors;
-	private Set activity;
 	private String comments;
+	
+	/**
+	 * Indicator connections with activities.
+	 * Elements in this set contains activity and values assigned to this activity-indicator connections.
+	 * Please look carefully in IndicatorConnection.hbm.xml before changing anything, because {@link IndicatorActivity} is subclass of {@link IndicatorConnection}
+	 * @see IndicatorConnection
+	 */
+	private Set<IndicatorActivity> valuesActivity;
+
+	/**
+	 * Indicator connections with themes.
+	 * Elements in this set contains theme and values assigned to this theme-indicator connections.
+	 * Please look carefully in IndicatorConnection.hbm.xml before changing anything, because {@link IndicatorTheme} is subclass of {@link IndicatorConnection}
+	 * @see IndicatorConnection
+	 */
+	private Set<IndicatorTheme> valuesTheme;
 	
 	
 	private AmpCategoryValue indicatorsCategory;
@@ -68,23 +83,11 @@ public class AmpIndicator implements Serializable
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Set getThemes() {
-		return themes;
-	}
-	public void setThemes(Set themes) {
-		this.themes = themes;
-	}
 	public Set getSectors() {
 		return sectors;
 	}
 	public void setSectors(Set sectors) {
 		this.sectors = sectors;
-	}
-	public Set getActivity() {
-		return activity;
-	}
-	public void setActivity(Set activity) {
-		this.activity = activity;
 	}
 	public boolean isDefaultInd() {
 		return defaultInd;
@@ -110,6 +113,18 @@ public class AmpIndicator implements Serializable
 	}
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+	public Set<IndicatorActivity> getValuesActivity() {
+		return valuesActivity;
+	}
+	public void setValuesActivity(Set<IndicatorActivity> valuesActivity) {
+		this.valuesActivity = valuesActivity;
+	}
+	public Set<IndicatorTheme> getValuesTheme() {
+		return valuesTheme;
+	}
+	public void setValuesTheme(Set<IndicatorTheme> valuesTheme) {
+		this.valuesTheme = valuesTheme;
 	}
 	
 	

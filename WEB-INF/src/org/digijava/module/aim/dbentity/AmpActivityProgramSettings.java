@@ -1,5 +1,6 @@
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.util.ProgramUtil;
 
 public class AmpActivityProgramSettings {
@@ -50,7 +51,12 @@ public class AmpActivityProgramSettings {
 
         public void setDefaultHierarchyId(Long id) {
                 if (id != null && id != new Long( -1)) {
-                        this.defaultHierarchy = ProgramUtil.getThemeById(id);
+                        try {
+							this.defaultHierarchy = ProgramUtil.getThemeById(id);
+						} catch (DgException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
                 }
                 else {
                         this.defaultHierarchy = null;

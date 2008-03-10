@@ -112,7 +112,7 @@ function selectLocation(index){
           </td>
 
           <td bgColor=#d7eafd>
-            <a href="javascript:deleteData('${index.count-1}')">
+            <a href="javascript:deleteData('${index.count-1}')"><%-- v-sh-p-u! :D --%>
               <img src="../ampTemplate/images/trash_16.gif" border="0" alt="Delete indicator value" />
             </a>
           </td>

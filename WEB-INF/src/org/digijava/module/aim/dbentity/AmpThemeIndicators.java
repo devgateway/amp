@@ -6,6 +6,12 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Date;
 
+/**
+ * 
+ * @deprecated use {@link AmpIndicator}
+ *
+ */
+@Deprecated
 public class AmpThemeIndicators implements Serializable, Comparable
 {
 	private Long ampThemeIndId;

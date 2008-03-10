@@ -6,6 +6,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
 
+@Deprecated
 public class AmpMEIndValue
 {
 	private Long ampMeIndValId;

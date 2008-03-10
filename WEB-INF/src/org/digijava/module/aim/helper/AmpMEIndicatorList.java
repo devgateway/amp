@@ -2,6 +2,7 @@ package org.digijava.module.aim.helper;
 
 import java.util.Collection;
 
+@Deprecated
 public class AmpMEIndicatorList {
 	private Long ampMEIndId;
 	private String code;

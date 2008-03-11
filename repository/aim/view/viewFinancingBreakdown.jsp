@@ -331,7 +331,15 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 																	</c:set>
 						                  							<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview"
 																		title="${translation}" >
-																		<bean:write name="breakdown" property="financingId" />
+																		<c:if test="${!empty breakdown.financingId}">
+																			<bean:write name="breakdown" property="financingId" />
+																		</c:if>
+																		<c:if test="${empty breakdown.financingId}">
+																			<c:set var="translation">
+																				<digi:trn key="im:unspecified">Unspecified</digi:trn>
+																			</c:set>
+																			<c:out value="${translation}"/>
+																		</c:if>
 																	</digi:link>
 																</TD>
 												</field:display>

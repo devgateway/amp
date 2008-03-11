@@ -54,5 +54,5 @@ INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView)
 INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (47,'Contracting Agency','contracting_agency','org.dgfoundation.amp.ar.cell.TextCell','v_contracting_agency');
 INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (48,'Beneficiary Agency','beneficiary_agency','org.dgfoundation.amp.ar.cell.TextCell','v_beneficiary_agency');
 INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (49,'Sector Group','sector_group','org.dgfoundation.amp.ar.cell.TextCell','v_sector_group');
-INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (50,'Regional Group','regional_group','org.dgfoundation.amp.ar.cell.TextCell','v_sector_group');
+INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (50,'Regional Group','regional_group','org.dgfoundation.amp.ar.cell.TextCell','v_regional_Group');
 INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (51,'Componente','componente','org.dgfoundation.amp.ar.cell.MetaTextCell','v_componente');

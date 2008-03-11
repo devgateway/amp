@@ -78,7 +78,7 @@ public class ViewEditIndicator
 //                    }
                     
                     //TODO INDIC code above this needs to be refactored !!!!! or deleted!
-                    Date date=DateConversion.getDate(indForm.getDate());
+                    Date date=DateConversion.getDateForIndicator(indForm.getDate());
                     AmpIndicator indicator=new AmpIndicator();
                     indicator.setIndicatorId(indForm.getId());
                     indicator.setName(indForm.getName());

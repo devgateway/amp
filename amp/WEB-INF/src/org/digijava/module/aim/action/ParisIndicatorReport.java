@@ -281,7 +281,7 @@ public class ParisIndicatorReport extends Action {
 
                 if (svForm.getIndicatorCode().equalsIgnoreCase("3")) {
                     svForm.setCalcResult(clacTargetValue(fl,flDonorCol,true));
-                    if (fl!=null && fl.getCalcFormula() != null) {
+                    if (fl!=null && fl.getEnabled()!=null && fl.getEnabled().booleanValue() && fl.getCalcFormula() != null) {
                         svForm.setTargetValue(fl.getTargetValue());
                     }
 
@@ -289,7 +289,7 @@ public class ParisIndicatorReport extends Action {
                     return mapping.findForward("report1");
                 } else if (svForm.getIndicatorCode().equalsIgnoreCase("5a") || svForm.getIndicatorCode().equalsIgnoreCase("5b")) {
                     svForm.setCalcResult(clacTargetValue(fl,flDonorCol,true));
-                    if (fl!=null && fl.getCalcFormula() != null) {
+                    if (fl!=null && fl.getEnabled()!=null && fl.getEnabled().booleanValue() && fl.getCalcFormula() != null) {
                         svForm.setTargetValue(fl.getTargetValue());
                     }
 
@@ -297,7 +297,7 @@ public class ParisIndicatorReport extends Action {
                     return mapping.findForward("report1");
                 } else if (svForm.getIndicatorCode().equalsIgnoreCase("6")) {
                     svForm.setCalcResult(clacTargetValue(fl,flDonorCol,false));
-                    if (fl!=null && fl.getCalcFormula() != null) {
+                    if (fl!=null && fl.getEnabled()!=null && fl.getEnabled().booleanValue() && fl.getCalcFormula() != null) {
                         svForm.setTargetValue(fl.getTargetValue());
                     }
 
@@ -305,7 +305,7 @@ public class ParisIndicatorReport extends Action {
                     return mapping.findForward("report2");
                 } else if (svForm.getIndicatorCode().equalsIgnoreCase("7")) {
                     svForm.setCalcResult(clacTargetValue(fl,flDonorCol,true));
-                    if (fl!=null && fl.getCalcFormula() != null) {
+                    if (fl!=null && fl.getEnabled()!=null && fl.getEnabled().booleanValue() && fl.getCalcFormula() != null) {
                         svForm.setTargetValue(fl.getTargetValue());
                     }
 

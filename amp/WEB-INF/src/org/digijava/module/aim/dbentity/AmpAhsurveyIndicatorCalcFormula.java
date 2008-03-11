@@ -8,6 +8,7 @@ public class AmpAhsurveyIndicatorCalcFormula {
     private String constantName;
     private String baseLineValue;
     private String targetValue;
+    private Boolean enabled;
     private AmpAhsurveyIndicator parentIndicator;
 
 
@@ -42,6 +43,10 @@ public class AmpAhsurveyIndicatorCalcFormula {
         return targetValue;
     }
 
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
     public void setCalcFormula(String calcFormula) {
         this.calcFormula = calcFormula;
     }
@@ -68,5 +73,9 @@ public class AmpAhsurveyIndicatorCalcFormula {
 
     public void setTargetValue(String targetValue) {
         this.targetValue = targetValue;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 }

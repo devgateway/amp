@@ -76,6 +76,13 @@ function resetFormula(){
     </tr>
     <tr>
       <td>
+        <html:checkbox property="enabled" value="enabled" styleId="chkEnabled" />&nbsp;Enable
+      </td>
+      <td>&nbsp;</td>
+    </tr>
+
+    <tr>
+      <td>
       Baseline value
       </td>
       <td>

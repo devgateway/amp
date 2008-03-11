@@ -41,17 +41,14 @@ public class ViewEditIndicator
         NewIndicatorForm indForm = (NewIndicatorForm) form;
 
         String action=request.getParameter("action");
-        if(action!=null &&
-           action.equalsIgnoreCase("save") &&
-           indForm.getName() != null &&
-           indForm.getCode() != null){
+        if(action!=null && action.equalsIgnoreCase("save") && indForm.getName() != null && indForm.getCode() != null){
 //            switch(existIndForm.getIndType()) {
 //                case 0: {
 //                    if(existIndForm.getSelectedProgramId() == null) {
 //                        return mapping.findForward("forward");
 //                    }
 
-        	if(indForm.getIndType() == 2){
+ //       	if(indForm.getIndType() == 2){
         		
                     AmpPrgIndicator newInd = new AmpPrgIndicator();
                     newInd.setIndicatorId(indForm.getId());
@@ -67,17 +64,18 @@ public class ViewEditIndicator
                     //newInd.setSelectedActivityId(existIndForm.getSelectedActivityId());
                     newInd.setSelectedActivity(indForm.getSelectedActivities());  
                   
-                    if(indForm.getPrjStatus().equals("prjUnchecked")){
-                    	newInd.setPrjStatus(true);
-                    	newInd.setType("programInd");
-                    }else if (indForm.getActivitySectors() != null  && indForm.getSelectedActivityId() != null){
+//                    if(indForm.getPrjStatus().equals("prjUnchecked")){
+//                    	newInd.setPrjStatus(true);
+//                    	newInd.setType("programInd");
+//                    }else 
+                    	if (indForm.getActivitySectors() != null  && indForm.getSelectedActivityId() != null){
                     	newInd.setType("prg/prj");
                     }
-                    
-                    if(indForm.getPrgStatus().equals("prgUnchecked")){
-                    	newInd.setPrgStatus(true);
-                    	newInd.setType("projectInd");
-                    }
+//                    
+//                    if(indForm.getPrgStatus().equals("prgUnchecked")){
+//                    	newInd.setPrgStatus(true);
+//                    	newInd.setType("projectInd");
+//                    }
                     
                     //TODO INDIC code above this needs to be refactored !!!!! or deleted!
                     Date date=DateConversion.getDate(indForm.getDate());
@@ -102,7 +100,7 @@ public class ViewEditIndicator
 //                    ProgramUtil.saveThemeIndicators(newInd, existIndForm.getSelectedProgramId());
                     indForm.reset();
 //                    break;
-       	}
+       //	}
 //                }
 //                case 1: {
 //
@@ -156,8 +154,7 @@ public class ViewEditIndicator
             	indForm.setName(ind.getName());
             	indForm.setType(ind.getType());
             	indForm.setCategory(ind.getCategory());
-            	indForm.setId(ind.getIndicatorId());
-            	indForm.setIndType(2);
+            	indForm.setId(ind.getIndicatorId());            	
             	indForm.setPrjStatus(null);
             	indForm.setPrgStatus(null);
             	

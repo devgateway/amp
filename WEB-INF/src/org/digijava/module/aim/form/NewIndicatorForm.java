@@ -19,8 +19,6 @@ public class NewIndicatorForm
     private String date;
     private Integer category;
     private String type;
-    private int indType;
-    private int indicatorType;
     private String action;
     private String keyword;
     private String prgStatus;
@@ -85,10 +83,6 @@ public class NewIndicatorForm
         return id;
     }
 
-    public int getIndType() {
-        return indType;
-    }
-
     public String getName() {
         return name;
     }
@@ -149,10 +143,6 @@ public class NewIndicatorForm
         this.id = id;
     }
 
-    public void setIndType(int indType) {
-        this.indType = indType;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -203,8 +193,6 @@ public class NewIndicatorForm
         this.date=null;
         this.category=null;
         this.type=null;
-        this.indType=2;
-        this.indicatorType=0;
         this.action=null;
         this.keyword=null;
         this.programsCol=null;
@@ -307,14 +295,6 @@ public class NewIndicatorForm
 
 	public void setActivitySectors(Collection activitySectors) {
 		this.activitySectors = activitySectors;
-	}
-
-	public int getIndicatorType() {
-		return indicatorType;
-	}
-
-	public void setIndicatorType(int indicatorType) {
-		this.indicatorType = indicatorType;
 	}
 
 	public String getPrgStatus() {

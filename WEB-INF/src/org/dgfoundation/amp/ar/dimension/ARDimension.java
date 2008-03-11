@@ -110,7 +110,7 @@ public abstract class ARDimension {
 	    if(m!=null) {
 		Long relatedId=m.get(childCell.getId());
 		if(relatedId!=null && relatedId.equals(c.getId())) return true;
-	    }	    	    
+	    } else return true;	    
 	}
 	return false;
     }

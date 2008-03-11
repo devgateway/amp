@@ -183,7 +183,7 @@
                               </td>
                             </tr>
                           </feature:display>
-
+						  <!-- hidden Lucene Debug! 
 						  <feature:display name="Lucene Debug" module="Admin Home">
                           <tr>
                             <td class=f-names noWrap>
@@ -197,6 +197,7 @@
                             </td>
                           </tr>
 						  </feature:display>
+						   -->
                         </table>
                       </td>
                     </tr>

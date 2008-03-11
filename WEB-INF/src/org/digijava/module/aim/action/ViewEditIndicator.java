@@ -5,6 +5,7 @@ import org.digijava.module.aim.form.NewIndicatorForm;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -14,10 +15,12 @@ import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AllMEIndicators;
 import org.digijava.module.aim.helper.AllActivities;
 import org.digijava.module.aim.helper.AmpIndSectors;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.IndicatorsBean;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Iterator;
@@ -85,6 +88,7 @@ public class ViewEditIndicator
                     indicator.setDescription(indForm.getDescription());
                     indicator.setCode(indForm.getCode());
                     indicator.setCreationDate(date);
+                    indicator.setType(indForm.getType());
                     Collection sectors=indForm.getActivitySectors();
                     if (sectors!=null && sectors.size()>0){
                     	indicator.setSectors(new HashSet<AmpSector>());
@@ -215,8 +219,9 @@ public class ViewEditIndicator
 //                }
             }
             return mapping.findForward("forward");
-        }
-    }
+        }       
+        
+    }    
   }
         //else if(indType.equalsIgnoreCase("project")){
 //        	existIndForm.reset();

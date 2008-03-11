@@ -98,8 +98,9 @@ public class AddNewIndicator
                  newInd.setCode(newIndForm.getCode());
                  newInd.setCreationDate(newIndForm.getDate());
                  newInd.setDescription(newIndForm.getDescription());
-                 newInd.setName(newIndForm.getName());
-                 newInd.setType("prg/prj");
+                 newInd.setName(newIndForm.getName());               	
+           
+                 
                  
 //                 if(newIndForm.getActivitySectors() != null &&
 //                		 newIndForm.getSelectedActivityId() == null  ){
@@ -133,6 +134,7 @@ public class AddNewIndicator
                  indicator.setDescription(newIndForm.getDescription());
                  indicator.setCreationDate(new Date());
                  indicator.setCode(newIndForm.getCode());
+                 indicator.setType(newIndForm.getType());
                  if (newIndForm.getActivitySectors()!=null && newIndForm.getActivitySectors().size()>0){
                 	 indicator.setSectors(new HashSet<AmpSector>());
                 	 for (Iterator sectorIt = newIndForm.getActivitySectors().iterator(); sectorIt.hasNext();) {

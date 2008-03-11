@@ -189,6 +189,14 @@ function closeWindow() {
                <html:text property="code" styleId="txtCode" style="font-family:verdana;font-size:11px;width:100px;"/>
             </td>
           </tr>
+          <tr>
+          	<td><digi:trn key="admin:indicatorType">Indicator Type</digi:trn>:</td>
+          	<td><html:select name="aimNewIndicatorForm" property="type">          		
+          		<html:option value="A"><digi:trn key="admin:indicatorType:ascending">ascending</digi:trn></html:option>
+          		<html:option value="D"><digi:trn key="admin:indicatorType:descending">descending</digi:trn></html:option>
+          	</html:select>
+          	</td>
+          </tr>
           <tr id="trType">
           </tr>
           <tr id="trCategory">

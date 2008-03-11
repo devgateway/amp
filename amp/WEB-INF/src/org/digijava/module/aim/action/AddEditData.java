@@ -3,8 +3,10 @@
 package org.digijava.module.aim.action;
 
 import java.net.ConnectException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -22,8 +24,10 @@ import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Indicator;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
@@ -133,7 +137,7 @@ public class AddEditData
 					AmpPrgIndicatorValue prgValue = (AmpPrgIndicatorValue) indValIter.next();
 					AmpIndicatorValue value=new AmpIndicatorValue();
 					value.setValue(prgValue.getValAmount());
-					value.setValueDate(DateConversion.getDate(prgValue.getCreationDate()));
+					value.setValueDate(DateConversion.getDateForIndicator(prgValue.getCreationDate()));
 					value.setValueType(prgValue.getValueType());
 					value.setIndicatorConnection(connection);
 					connection.getValues().add(value);
@@ -158,5 +162,6 @@ public class AddEditData
         prgIndVal.setValueType(1);
         return prgIndVal;
     }
-
+    
+   
 }

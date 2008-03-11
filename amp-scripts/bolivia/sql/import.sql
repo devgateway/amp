@@ -198,6 +198,7 @@ status_reason,
 proposed_approval_date,
 proposed_start_date,
 actual_completion_date,
+convenio_date_filter, -- AMP-2387 
 actual_start_date,
 amp_team_id,
 approval_status,
@@ -220,6 +221,7 @@ concat(@avtivity_obj, @timestmp:=@timestmp+1),
 c.fechprogefec,
 c.fechprogprdes,
 c.fechproguldes,
+c.fechproguldes, -- AMP-2387 I don't want to rewrite actual_completion_date
 c.fechcont,
 @team_id,
 @approved,
@@ -231,11 +233,18 @@ cvealc,
 FROM  bolivian_db.`conv` as c
 where c.STATCONV!='C' and c.STATCONV!='A';
 
+/* AMP-2387 */
+update amp_activity as a
+set a.convenio_date_filter = (
+  select max(e.fechvigenm)
+  from bolivian_db.enm e
+  where a.old_id = e.numconv and e.tipenm = 'PU' and e.fechvigenm is not null);
+
 
 /* mapping contacts */
 select 'mapping contacts';
 
-update amp_activity as a, bolivian_db.`usu` as u, bolivian_db.`conv` c 
+update amp_activity as a, bolivian_db.`usu` as u, bolivian_db.`conv` c
 set a.mofed_cnt_last_name=u.nombreusuario
 where a.old_id=c.numconv and c.codusu=u.codusu;
 
@@ -248,9 +257,10 @@ insert into amp_org_role
 (
 activity,
 organisation,
-role
+role,
+percentage
 )
-select a.amp_activity_id, o.amp_org_id, ar.amp_role_id 
+select a.amp_activity_id, o.amp_org_id, ar.amp_role_id, m.porcpart
 from  bolivian_db.`conv_entejec` as m, amp_activity as a, amp_organisation as o , amp_role as ar
 where ar.role_code='EA' 
 and a.old_id=m.numconv 

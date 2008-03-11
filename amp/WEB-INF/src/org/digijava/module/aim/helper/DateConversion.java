@@ -102,6 +102,22 @@ public class DateConversion
 		}
 
 	}
+	
+	public static Date getDateForIndicator(String strDate){
+		if (strDate == null)
+			return null;
+		try{
+			String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+            if (pattern == null || pattern.equals("")) {
+                pattern = "MMM/dd/yyyy";
+            }
+			pattern = pattern.replaceAll("m", "M");
+			Date date = new SimpleDateFormat(pattern).parse(strDate);
+			return date;
+		}catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
+	}
 
 	/**@author jose
 	 * This method given a String like dd/mm/yyyy it will parse the year out of it and

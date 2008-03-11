@@ -16,7 +16,7 @@ function previewClicked() {
 	if (flag == true) {
 	document.aimEditActivityForm.step.value = "9";
 	document.aimEditActivityForm.pageId.value = "1";
-	<digi:context name="preview" property="context/module/moduleinstance/previewActivity.do?edit=true" />
+	<digi:context name="preview" property="context/module/moduleinstance/previewActivity.do?edit=true&currentlyEditing=true" />
 	document.aimEditActivityForm.action = "<%= preview %>";
 	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();

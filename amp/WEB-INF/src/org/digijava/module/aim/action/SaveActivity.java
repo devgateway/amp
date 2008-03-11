@@ -134,6 +134,7 @@ public class SaveActivity extends Action {
 		session.removeAttribute("report");
 		session.removeAttribute("reportMeta");
 		session.removeAttribute("forStep9");
+		session.removeAttribute("commentColInSession");
 
 		try {
 			ActionErrors errors = new ActionErrors();

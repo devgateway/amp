@@ -50,9 +50,8 @@ function addNewIndicator(){
     alert("Please enter code");
     return false;
   }
-
- 
-if(!document.aimNewIndicatorForm.IndType.checked && !document.aimNewIndicatorForm.IndicatorType.checked){
+<%-- 
+	if(!document.aimNewIndicatorForm.IndType.checked && !document.aimNewIndicatorForm.IndicatorType.checked){
 	   alert("Please select indicator type(s).!");
 	   return false;
 	   
@@ -67,21 +66,20 @@ if(!document.aimNewIndicatorForm.IndType.checked && !document.aimNewIndicatorFor
          var valind = 1;
          document.getElementById("IndTypChecke").value = valind;
       }
- 
- 
-	var length = document.aimNewIndicatorForm.selActivitySector.length;
-	var checkbox = document.aimNewIndicatorForm.IndicatorType.checked
-	var Sector;
-	
-	if(checkbox && !length){
-		alert("Please add Sectors");
-		 return false;
-	}else{
-		for(i = 0; i<length; i++){
-			Sector = document.aimNewIndicatorForm.selActivitySector[i].value;
-			document.getElementById("hdnselActivitySectors").value = Sector;
-		}
-	}
+      	var checkbox = document.aimNewIndicatorForm.IndicatorType.checked
+--%>
+		var length = document.aimNewIndicatorForm.selActivitySector.length;		
+		var Sector;
+		
+		if(!length){
+			alert("Please add Sectors");
+			 return false;
+		}else{
+			for(i = 0; i<length; i++){
+				Sector = document.aimNewIndicatorForm.selActivitySector[i].value;
+				document.getElementById("hdnselActivitySectors").value = Sector;
+			}
+		} 
 
   <digi:context name="addInd" property="context/module/moduleinstance/addNewIndicator.do?action=add" />
   document.forms[0].action="<%=addInd%>";
@@ -216,11 +214,11 @@ function closeWindow() {
             <td>
               <html:text property="date" disabled="true" styleId="txtCreationDate" style="font-family:verdana;font-size:11px;width:80px;"/>
             </td>
-          </tr>
+          </tr> <!--
           <tr>
             <td colspan="10" nowrap="nowrap">
               <input type="checkbox" name="IndicatorType" id="radioProgramIndicator" value="0" /> &nbsp;<digi:trn key="admin:programind">Program indicator</digi:trn>&nbsp;
-              <!-- 
+              
                <span id="spnSelectProgram" style="">
                  [<a href="javascript:selectProgram();">Select program</a>]
                 <c:if test="${!empty aimNewIndicatorForm.selectedPrograms}">
@@ -232,8 +230,7 @@ function closeWindow() {
                 <c:if test="${empty aimNewIndicatorForm.selectedPrograms}">
                   [<span style="color:Red;">Program is not selected</span>]<span style="color:Red;">*</span>
                 </c:if>
-              </span>
-               -->
+              </span>             
               <br>
               <input type="checkbox" name="IndType" id="radioProjectIndicator" value="2" /> 
               &nbsp;<digi:trn key="admin:projectind">Project indicator</digi:trn>&nbsp;
@@ -262,10 +259,11 @@ function closeWindow() {
              
                    <c:if test="${empty aimNewIndicatorForm.selectedActivities}">
                        [<span style="color:Red;"><digi:trn key="admin:activitynoselected">Activity is not selected</digi:trn></span>]
-                  </c:if>
+                  </c:if>                   
             </table>
             </td>
           </tr>
+           -->
         </table>
       </td>
     </tr>

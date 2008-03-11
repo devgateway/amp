@@ -13,7 +13,7 @@
 <digi:instance property="aimNewIndicatorForm" />
 <script language="javascript">
 	
-	function validete (){
+<%--	function validete (){
 	
 	if(document.getElementById("radioProgramIndicator").checked){
 	   alert("ok");
@@ -27,7 +27,7 @@
 	 }
 	 
 	}
-
+--%>
 
 function removeActivity(id) {
 	var temp = confirm("Do you want to delete this Activity?");
@@ -56,22 +56,18 @@ function saveIndicator(){
     alert("Please enter code");
     return false;
   }
-  
+ 
+ <%-- 
   if(!document.getElementById("radioProgramIndicator").checked){
-
 		 var indStatus = "prgUnchecked"
 		 document.getElementById("programStatus").value = indStatus;
-	} 
-	
+	}	
 	
 	if(!document.getElementById("radioProjectSpecific").checked){
-
-		var indStatus = "prjUnchecked"
-		
-		document.getElementById("projectStatus").value = indStatus;
-		
-		
-	}   
+		var indStatus = "prjUnchecked"		
+		document.getElementById("projectStatus").value = indStatus;		
+	}
+	--%>   
 		
 	  
   /*
@@ -101,7 +97,7 @@ function selectActivity(){
   <digi:context name="selAct" property="context/module/moduleinstance/selectActivityForIndicator.do?action=edit" />
   openURLinWindow("<%= selAct %>",700, 500);
 }
-  
+ <%-- 
 function radiosStatus(type){
 	
 	  if(type=="global"){
@@ -121,6 +117,7 @@ function radiosStatus(type){
 	    document.getElementById("radioProjectSpecific").checked=true;
 	  }
  }
+ --%>
  
 
 
@@ -174,8 +171,7 @@ function closeWindow() {
 	}
 
 </script>
-<digi:form action="/viewEditIndicator.do" method="post">
-  <html:hidden property="indType" styleId="hdnIndType" />
+<digi:form action="/viewEditIndicator.do" method="post">  
   <html:hidden property="prjStatus" styleId="projectStatus" />
   <html:hidden property="prgStatus" styleId="programStatus" />
   <html:hidden name="aimNewIndicatorForm" property="type" styleId="Intype" />
@@ -236,6 +232,7 @@ function closeWindow() {
             </a>
             </td>
           </tr>
+          <!-- 
           <tr>
             <td colspan="10" nowrap="nowrap">
               <input type="checkbox" name="indTypeRadio" id="radioProgramIndicator"  checked="checked"/> 
@@ -270,6 +267,7 @@ function closeWindow() {
 				 </table>									
             </td>
           </tr>
+           -->
         </table>
       </td>
     </tr>

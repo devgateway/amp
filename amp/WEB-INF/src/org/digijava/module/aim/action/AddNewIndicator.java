@@ -89,12 +89,10 @@ public class AddNewIndicator
 //            }
 //        }
         	
-        if(action!=null &&
-           action.equalsIgnoreCase("add") && 
-             newIndForm.getName() != null &&  
+        if(action!=null && action.equalsIgnoreCase("add") && newIndForm.getName() != null &&  
              newIndForm.getCode() != null){
         	
-        	if(newIndForm.getIndicatorType() == 0 || newIndForm.getIndType() == 2){
+//        	if(newIndForm.getIndicatorType() == 0 || newIndForm.getIndType() == 2){
         		 AmpPrgIndicator newInd = new AmpPrgIndicator();
                  newInd.setCategory(newIndForm.getCategory());
                  newInd.setCode(newIndForm.getCode());
@@ -103,15 +101,15 @@ public class AddNewIndicator
                  newInd.setName(newIndForm.getName());
                  newInd.setType("prg/prj");
                  
-                 if(newIndForm.getActivitySectors() != null &&
-                		 newIndForm.getSelectedActivityId() == null  ){
-                	newInd.setType("programInd");
-                 }
-                 
-                 if(newIndForm.getSelectedActivities() != null &&
-                	newIndForm.getActivitySectors() == null){
-                	newInd.setType("projectInd");
-                 }
+//                 if(newIndForm.getActivitySectors() != null &&
+//                		 newIndForm.getSelectedActivityId() == null  ){
+//                	newInd.setType("programInd");
+//                 }
+//                 
+//                 if(newIndForm.getSelectedActivities() != null &&
+//                	newIndForm.getActivitySectors() == null){
+//                	newInd.setType("projectInd");
+//                 }
                  
                  newInd.setSector(newIndForm.getSelActivitySector());
                  
@@ -176,7 +174,7 @@ public class AddNewIndicator
                  newIndForm.reset();
         		
         	}*/
-        }
+ //       }
         	
 //            switch(newIndForm.getIndType()) {
 //                case 0: {

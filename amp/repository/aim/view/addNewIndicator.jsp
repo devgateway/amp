@@ -147,8 +147,7 @@ function closeWindow() {
 <digi:form action="/addNewIndicator.do" method="post">
  <!-- <html:hidden property="type" value="3"/> --> 
   <html:hidden property="trType" value="3"/>
-  <html:hidden property="category" value="-1"/>
-  <html:hidden property="indType"  styleId="IndTypChecke"/>
+  <html:hidden property="category" value="-1"/>  
   <html:hidden property="indicatorType"  styleId="IndicatorTypChecke"/>
   <html:hidden property="selActivitySector" styleId="hdnselActivitySectors" />
 

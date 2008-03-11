@@ -16,6 +16,7 @@ public class ViewAhSurveyFormulasForm extends ActionForm {
     private String targetValue;
     private Collection columns;
     private Long columnIndex;
+    private Boolean enabled;
     private String constantName;
 
     private Collection ahsurveyIndicatorCalcFormulas;
@@ -71,6 +72,10 @@ public class ViewAhSurveyFormulasForm extends ActionForm {
         return baseLineValue;
     }
 
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
     public void setAhsurveyIndicatorCalcFormulas(Collection ahsurveyIndicatorCalcFormulas) {
         this.ahsurveyIndicatorCalcFormulas = ahsurveyIndicatorCalcFormulas;
     }
@@ -117,5 +122,9 @@ public class ViewAhSurveyFormulasForm extends ActionForm {
 
     public void setBaseLineValue(String BaseLineValue) {
         this.baseLineValue = BaseLineValue;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 }

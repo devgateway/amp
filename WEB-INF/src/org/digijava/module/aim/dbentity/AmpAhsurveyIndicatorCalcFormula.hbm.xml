@@ -14,7 +14,7 @@
         <property name="constantName" column="constant_name" type="java.lang.String"/>
         <property name="baseLineValue" column="base_line_value" type="java.lang.String"/>
         <property name="targetValue" column="target_value" type="java.lang.String"/>
-
+        <property name="enabled" column="formula_status" type="java.lang.Boolean"/>
         <many-to-one name="parentIndicator" column="amp_indicator_id" class="org.digijava.module.aim.dbentity.AmpAhsurveyIndicator" cascade="save-update" not-null="true" />
 	</class>
 </hibernate-mapping>

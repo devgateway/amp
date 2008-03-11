@@ -50,6 +50,7 @@ public class ViewAhSurveyFormulas extends Action {
             selFormula.setColumnIndex(svform.getSelectedColumnIndex());
             selFormula.setConstantName(svform.getConstantName());
             selFormula.setTargetValue(svform.getTargetValue());
+            selFormula.setEnabled(svform.getEnabled());
 
             setSurvyByColumnIndex(calcFormulas, selFormula);
 
@@ -85,6 +86,7 @@ public class ViewAhSurveyFormulas extends Action {
         svform.setFormulaText(selFormula.getCalcFormula());
         svform.setBaseLineValue(selFormula.getBaseLineValue());
         svform.setTargetValue(selFormula.getTargetValue());
+        svform.setEnabled(selFormula.getEnabled());
 
         return mapping.findForward("forward");
     }

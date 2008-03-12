@@ -847,13 +847,16 @@ public class AddAmpActivity extends Action {
 //			else {
 //				statusCol = eaForm.getStatusCollection();
 //			}
-        // Initailly setting the implementation level as "country"
+        // Initially setting the implementation level as "country"
+        /*
+         * Removed As asked in AMP-2889
+         
         if (eaForm.getImplemLocationLevel() == null)
           eaForm.setImplemLocationLevel(
               CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.
               IMPLEMENTATION_LOCATION_KEY, new Long(0)).getId()
               );
-
+		*/
       	//get all possible refdoc names from categories
       	Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
 

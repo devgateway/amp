@@ -448,7 +448,9 @@ public class LocationUtil {
 		try {
 			session = PersistenceManager.getSession();
 			Connection connection = PersistenceManager.getSession().connection();
-			String queryString = "select distinct region_id, region from v_regions;";
+			//String queryString = "select distinct region_id, region from v_regions;";
+			String queryString = "select distinct amp_region_id as region_id, name as region from amp_region order by region";
+			
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(queryString);
 

@@ -273,7 +273,7 @@ public class AmpDbUtil {
     try {
       Session session = PersistenceManager.getRequestDBSession();
       String queryString = "select ac from " +
-          AmpCalendar.class.getName() + " ac join  ac.eventType et join ac.donors don, "+ Calendar.class.getName()   +" c ";
+          AmpCalendar.class.getName() + " ac left  join  ac.eventType et left  join ac.donors don, "+ Calendar.class.getName()   +" c ";
       /*String queryString = "select ac from " +
           AmpCalendar.class.getName() + " ac, " +
           Calendar.class.getName() + " c";
@@ -338,7 +338,7 @@ public class AmpDbUtil {
         query.setParameterList("selectedDonorIds",
                                selectedDonorIds);
       }
-
+      
       /*   if(userId != null && !showPublicEvents) {
              query.setLong("userId", userId.longValue());
          }
@@ -349,6 +349,10 @@ public class AmpDbUtil {
       if (siteId != null) {
         query.setString("siteId", siteId);
       }
+      
+      System.out.println("\n\n\n\n\n\n" + query.getQueryString());
+      
+      
       List events = query.list();
       /*if(events != null && !events.isEmpty() && selectedDonorIds != null &&
          selectedDonorIds.length != 0) {

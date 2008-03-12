@@ -5,7 +5,7 @@
 		 <from>system@digijava.org</from>
 	</smtp>
 
-    <logon-site id="dglogin" host="amp-login.code.ro">http://amp-demo.code.ro/login</logon-site>
+    <logon-site id="dglogin" host="amp-login.code.ro">http://demo.ampdev.net/login</logon-site>
     
         <server-type caseSensitiveTranslatioKeys="false"/>
     

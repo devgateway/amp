@@ -97,6 +97,7 @@ public class SelectLocation extends Action {
                         eaForm.setRegions(LocationUtil.
                                           getAllRegionsUnderCountry(iso));
                         eaForm.setImpZone(null);
+                        eaForm.setImpMultiZone(null);
                         eaForm.setImpMultiWoreda(null);
                         eaForm.setImpWoreda(null);
                         logger.info("Zones set");

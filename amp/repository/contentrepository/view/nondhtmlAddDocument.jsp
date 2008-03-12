@@ -83,7 +83,8 @@
 		return flag;
 	}
 	function usesAllowedCharacters(str) {
-		var regexp	= new RegExp("[a-zA-Z0-9_ ]+");
+		var regexp	= new RegExp("[a-zA-Z0-9_/-]+");
+		
 		var found	= regexp.exec(str);
 		if (found != str)
 			return false;
@@ -113,7 +114,10 @@
 				document.crDocumentManagerForm.webLink.focus();
 				return false;
 			}
-			if ( !usesAllowedCharacters(document.crDocumentManagerForm.docTitle.value) ) {
+			
+	/* AMP-2883		
+	
+	       if ( !usesAllowedCharacters(document.crDocumentManagerForm.docTitle.value) ) {
 				alert(" ${translation_validation_title_chars} ");
 				document.crDocumentManagerForm.docTitle.focus();
 				return false;
@@ -122,7 +126,8 @@
 			{
 				flag = validateUrl(document.crDocumentManagerForm.webLink.value);
 				return flag;
-			}			
+			}
+	*/			
 		}
 		return true;
 	}
@@ -147,11 +152,13 @@
 				document.crDocumentManagerForm.docTitle.focus();
 				return false;
 			}
+			
 			if ( !usesAllowedCharacters(document.crDocumentManagerForm.docTitle.value) ) {
 				alert(" ${translation_validation_title_chars} ");
 				document.crDocumentManagerForm.docTitle.focus();
 				return false;
 			}
+			
 			if(fileFlag == true)
 			{
 				alert(" ${translation_validation_filedata} ");

@@ -2293,6 +2293,7 @@ function collapseAll() {
 									</feature:display>
                                  </module:display>   
                                      
+                                     
 <module:display name="Organizations" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">

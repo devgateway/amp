@@ -149,7 +149,7 @@ public class FundingAdded extends Action {
 			}
 			
 			// Substract the old fundDetails of the funding we just added
-			if ((found)&&(eaForm.isEditFunding())) {
+			if ((found)&&(oldFundDetails != null)&&(eaForm.isEditFunding())) {
 				itr = oldFundDetails.iterator();
 				while (itr.hasNext()) {
 					FundingDetail fundDet = (FundingDetail) itr.next();

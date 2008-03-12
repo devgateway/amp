@@ -273,9 +273,9 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 								</TD>
 
-								<TD align="right">
+								<TD align="right">&nbsp;
 
-									&nbsp;
+									
 
 								</TD>
 
@@ -511,7 +511,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 												<TR><TD>
 
-													<logic:notEqual name="aimYearlyComparisonsForm" property="perspective" value="DI">
+												  <logic:notEqual name="aimYearlyComparisonsForm" property="perspective" value="DI">
 
 				                     			<table width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding">
 
@@ -523,7 +523,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
                               								<digi:trn key="aim:year">Year</digi:trn>
 
-                              							</div>
+                           							  </div>
 
 		                              				</td>
 
@@ -537,10 +537,11 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																	</div>
 
-						                             	</td>
+					                             	  </td>
 
+                                                                <feature:display name="Disbursement Orders" module="Funding">
                                                                                 <td width="13%" bgcolor="#DDDDDB">
-                                                                                  <field:display name="Disbursement Orders Tab" feature="Disbursement Orders">
+
 
 																	<div align="center">
 
@@ -549,12 +550,12 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 																		<digi:trn key="aim:disbursementsOrders">Disbursement Orders</digi:trn>
 
 																	</div>
-                                                                                                                                          </field:display>
+                                                                                                                                      
 
 						                            	</td>
 
 
-
+    </feature:display>
 						                             	<td width="13%" bgcolor="#DDDDDB">
 
 																	<div align="center">
@@ -579,6 +580,8 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 			      		                        	</td>
 
+			            		                  
+			            		                  <feature:display module="Funding" name="Expenditures">
 			            		                  	<td width="24%" bgcolor="#DDDDDB">
 
 			                  			              	<div align="center">
@@ -587,23 +590,21 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																		<digi:trn key="aim:actualExpenditures">Actual Expenditures</digi:trn>
 
-																	</div>
+													  </div>
 
 			                     		         	</td>
-
+			                     		         	
+												</feature:display>
                             						</tr>
 
 			                            			<logic:empty name="aimYearlyComparisonsForm" property="yearlyComparisons">
 
          			                   			<tr valign="top">
 
-			         			                   	<td colspan="5" align="center">
+			         			                   	<td align="center">
 
-			                  						  		<span class="note"><digi:trn key="aim:noRecords">No records</digi:trn>!!</span>
-
-						                            	</td>
-
-			                            			</tr>
+			                  						  		<span class="note"><digi:trn key="aim:noRecords">No records</digi:trn>!!</span>						                            	</td>
+         			                   			</tr>
 
 			                            			</logic:empty>
 
@@ -627,7 +628,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																		<bean:write name="yearlyComparisons" property="fiscalYear" />
 
-																	</logic:notEqual>
+														  </logic:notEqual>
 
 			                            				</td>
 
@@ -643,18 +644,18 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 
 
-                                                                                                                              <td bgcolor="#F8F8F5">
-                                                                                                                              <field:display name="Amount of Disbursement Order" feature="Disbursement Orders">
+                                                                                                                                                                                                                                                        <feature:display name="Disbursement Orders" module="Funding"> <td bgcolor="#F8F8F5">
+
 
 																	<div align="right">
 
 																		<bean:write name="yearlyComparisons" property="disbOrders" />
 
 																	</div>
-                                                                                                                                  </field:display>
+                                                                                                                                  
 
 																</td>
-
+</feature:display>
 
 
 			                           		   	<td bgcolor="#F8F8F5">
@@ -676,7 +677,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 																	</div>
 
 																</td>
-
+  <feature:display module="Funding" name="Expenditures">
 				                  	            	<td bgcolor="#F8F8F5">
 
 																	<div align="right">
@@ -685,8 +686,9 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																	</div>
 
-																</td>
+											  </td>
 
+  </feature:display>
 			               	           			</tr>
 
 															</logic:iterate>
@@ -717,12 +719,10 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																	</div>
 
-																</td>
+															  </td>
 
-
-
-                                                                                                                                	<td>
-                                                                                                                                        <field:display name="Disbursement Orders Total" feature="Disbursement Orders">
+   <feature:display name="Disbursement Orders" module="Funding"> 	<td>
+                                                                                                                                       
 
 																	<div align="right">
 
@@ -733,11 +733,11 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 																		</span>
 
 																	</div>
-                                                                                                                                          </field:display>
+                                                                                                                                       
 
 																</td>
 
-
+   </feature:display>
 
 
 			      		                        	<td>
@@ -752,7 +752,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																	</div>
 
-																</td>
+															  </td>
 
 			                     			        	<td>
 
@@ -766,9 +766,11 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																	</div>
 
-																</td>
+															  </td>
 
-			      		                        	<td>
+
+			      		                        	<feature:display module="Funding" name="Expenditures">
+                                                    <td>
 
 																	<div align="right">
 
@@ -780,15 +782,16 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 																	</div>
 
-																</td>
-
+													  </td>
+</feature:display>
 			      			                      </tr>
 
 			               			             </logic:notEmpty>
 
                    		         		   </table>
 
-	                   		            </logic:notEqual>
+	                   		                    <p>&nbsp;</p>
+												  </logic:notEqual>
 
 
 
@@ -840,6 +843,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 											              	</td>
 
+	<feature:display module="Funding" name="Expenditures">
 							   				           	<td bgcolor="#DDDDDB" colspan="3">
 
 							              						<div align="center">
@@ -851,7 +855,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 											              		</div>
 
 							   					        	</td>
-
+</feature:display>
 								            			</tr>
 
 								            			<tr bgcolor="#DDDDDB" >
@@ -938,7 +942,8 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 											              	</td>
 
-							   				           	<td bgcolor="#DDDDDB">
+							   				         <feature:display module="Funding" name="Expenditures">
+                                                       	<td bgcolor="#DDDDDB">
 
 							              						<div align="center">
 
@@ -977,20 +982,17 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 											              		</div>
 
 											              	</td>
-
+</feature:display>
 				            							</tr>
 
 								            			<logic:empty name="aimYearlyComparisonsForm" property="yearlyDiscrepanciesAll" >
 
 			   			                    		<tr valign="top">
 
-			            				        			<td colspan="8" align="center">
+			            				        			<td colspan="10" align="center">
 
-			                        			  			<span class="note">No records!</span>
-
-			                          					</td>
-
-					                          		</tr>
+			                        			  			<span class="note">No records!</span>			                          					</td>
+			   			                    		</tr>
 
 						                        	</logic:empty>
 
@@ -1077,7 +1079,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 							         					      </div>
 
 							              					</td>
-
+   <feature:display module="Funding" name="Expenditures">
 							               				<td bgcolor="#F8F8F5">
 
 							              						<div align="right">
@@ -1107,7 +1109,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 							                					</div>
 
 							              					</td>
-
+   </feature:display>
 							            				</tr>
 
 							            				</logic:iterate>

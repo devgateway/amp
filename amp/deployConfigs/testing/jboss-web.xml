@@ -1,6 +1,6 @@
 <jboss-web>
 <context-root>/</context-root>
-<virtual-host>amp-testing.code.ro</virtual-host>
+<virtual-host>testing.ampdev.net</virtual-host>
  <class-loading java2ClassLoadingCompliance="false">
  <loader-repository>
  com.example:loader=amp-testing.war

@@ -68,7 +68,7 @@ function edit(key) {
 
                                                   <tr>
                                                     <td>
-                                                      <table cellSpacing="1" cellPadding="5" border="1" style="border-collapse:collapse; border-color:#cccccc;"width="40%">
+                                                      <table cellSpacing="1" cellPadding="5" border="0"  width="40%">
                                                       <field:display name="Equal Opportunity" feature="Cross Cutting Issues">
                                                         <tr>
 															<td>

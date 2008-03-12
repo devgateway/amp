@@ -221,11 +221,13 @@ ${fn:replace(message,quote,escapedQuote)}
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
-							<feature:display name="Executing Agency" module="Organizations">
+							
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
+								<table width="95%" bgcolor="#f4f4f2">
+							<feature:display name="Executing Agency" module="Organizations">
 								<jsp:include page="addActivityStep7ExecutingAgency.jsp"/>
-							</td></tr>
 							</feature:display>
+
 									<tr><td>
 										&nbsp;
 									</td></tr>
@@ -309,6 +311,7 @@ ${fn:replace(message,quote,escapedQuote)}
 										</table>
 									</td></tr>
  -->
+							</td></tr>
 								</table>
 
 								<!-- end contents -->

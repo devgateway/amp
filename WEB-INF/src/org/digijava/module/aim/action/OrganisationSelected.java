@@ -15,6 +15,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -152,14 +153,19 @@ public class OrganisationSelected extends Action {
 								boolean flag = false;
 								Iterator itr = eaForm.getExecutingAgencies().iterator();
 								while (itr.hasNext()) {
-									AmpOrganisation org = (AmpOrganisation) itr.next();
-									if (org.getAmpOrgId().equals(newOrg.getAmpOrgId())) {
+									
+									AmpOrgRole org = (AmpOrgRole) itr.next();
+									if (org.getOrganisation().getAmpOrgId().equals(newOrg.getAmpOrgId())) {
 										flag = true;
 										break;
 									}
 								}
 								if (!flag) {
-									eaForm.getExecutingAgencies().add(newOrg);
+									AmpOrgRole role=new AmpOrgRole();
+									//set a temp ID only to let remove it 
+									role.setAmpOrgRoleId(newOrg.getAmpOrgId());
+									role.setOrganisation(newOrg);
+									eaForm.getExecutingAgencies().add(role);
 								}
 							}
 						}

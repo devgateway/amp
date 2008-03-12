@@ -177,6 +177,7 @@ public Cell filter(Cell metaCell,Set ids) {
 		if(metaCell instanceof MetaTextCell) {
 			//apply metatext filters for column Sector
 		 applyMetaFilter("Sector", ArConstants.SECTOR_PERCENTAGE, metaCell, ret);
+		 applyMetaFilter("Executing Agency", ArConstants.EXECUTING_AGENCY_PERCENTAGE, metaCell, ret);
 		 applyMetaFilter("Sub-Sector", ArConstants.SECTOR_PERCENTAGE, metaCell, ret);
 		 applyMetaFilter("Region", ArConstants.LOCATION_PERCENTAGE, metaCell, ret);
 		 applyMetaFilter("Componente", ArConstants.COMPONENTE_PERCENTAGE, metaCell, ret);

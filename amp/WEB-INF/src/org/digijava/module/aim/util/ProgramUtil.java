@@ -16,6 +16,9 @@ import java.util.ListIterator;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+//import org.digijava.kernel.util.*;
+//import org.digijava.kernel.request.*;
+//import org.digijava.module.translation.util.DbUtil;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
@@ -27,11 +30,13 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.apache.tools.ant.taskdefs.optional.i18n.Translate;
+import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.translator.util.TrnLocale;
 import org.digijava.kernel.translator.util.TrnUtil;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.kernel.util.collections.HierarchyMember;
@@ -61,6 +66,7 @@ import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.TreeItem;
 import org.digijava.module.ampharvester.exception.AmpHarvesterException;
 import org.digijava.module.translation.taglib.TrnTag;
+import org.digijava.module.translation.util.DbUtil;
 
 
 public class ProgramUtil {
@@ -1702,9 +1708,11 @@ public class ProgramUtil {
 
     
 	 public static String renderLevel(Collection themes,int level,HttpServletRequest request) {
-		if (themes == null || themes.size() == 0)
+		 //CategoryManagerUtil cat = new CategoryManagerUtil();
+		 if (themes == null || themes.size() == 0)
 			return "<center><b>No Programs</b></<center>";
-		String retVal;
+		 //Site site = RequestUtils.getSite(request);
+		 String retVal;
 		retVal = "<table width=\"100%\" cellPadding=\"0\" cellSpacing=\"1\" valign=\"top\" align=\"left\" bgcolor=\"#ffffff\" border=\"0\" style=\"border-collapse: collapse;\">\n";
 		Iterator iter = themes.iterator();
 		while (iter.hasNext()) {
@@ -1763,7 +1771,28 @@ public class ProgramUtil {
 	}
 
 	 public static String getTrn(String key, String defResult, HttpServletRequest request){
-		 return defResult;
+		 //CategoryManagerUtil cat = new CategoryManagerUtil();
+		 //return CategoryManagerUtil.translate(key, request, defResult);
+		String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
+		Long	siteId	= RequestUtils.getSite(request).getId();
+		
+		Message m = null;
+		
+		try {
+			m = DbUtil.getMessage(key.toLowerCase(), lang, siteId);
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 if (m == null)
+		 {
+			 return defResult;
+		 }
+		 else
+		 {
+			 return m.toString();
+		 }
+		 
 	 }
 	 
     public static String getLevelImage(int level){

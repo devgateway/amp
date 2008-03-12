@@ -83,7 +83,7 @@ function saveIndicator(){
   <digi:context name="addInd" property="context/module/moduleinstance/viewEditIndicator.do?action=save" />
   document.forms[0].action="<%=addInd%>";
   document.forms[0].submit();
-  window.close();
+ window.close();
   window.opener.document.forms[0].submit();
 }
 
@@ -284,7 +284,7 @@ function closeWindow() {
       <html:hidden property="selectedActivityId"  value="${act.value}"/>
       </c:forEach>
       <html:button  styleClass="dr-menu" property="submitButton"  onclick="saveIndicator();">
-			<digi:trn key="btn:Edit">Edit</digi:trn> 
+			<digi:trn key="btn:Save">Save</digi:trn> 
 	     </html:button>
          <html:reset  styleClass="dr-menu" property="submitButton">
 		   <digi:trn key="btn:clear">Clear</digi:trn> 

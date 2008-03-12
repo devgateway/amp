@@ -69,7 +69,7 @@ public class CategoryManagerUtil {
 
 			Query qry		= session.createQuery(qryStr);
 			qry.setParameter("langIso", lang, Hibernate.STRING);
-			qry.setParameter("translationKey", key ,Hibernate.STRING);
+			qry.setParameter("translationKey", key.toLowerCase() ,Hibernate.STRING);
 			qry.setParameter("thisSiteId", siteId+"", Hibernate.STRING);
 
 			Message m		= (Message)qry.uniqueResult();

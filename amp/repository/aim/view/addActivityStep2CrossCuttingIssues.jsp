@@ -60,7 +60,7 @@ function edit(key) {
                                             </tr>
                                             <tr>
                                               <td bgcolor="#ffffff" width="100%">
-                                                <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
+                                                <table cellPadding=1 cellSpacing=5 border=0	bgcolor="#ffffff" width="100%">
                                                   <tr>
                                                     <td bgcolor="#ffffff">
                                                     </td>
@@ -68,18 +68,20 @@ function edit(key) {
 
                                                   <tr>
                                                     <td>
-                                                      <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="40%">
+                                                      <table cellSpacing=1 cellPadding=1 border=0 bgcolor="#ffffff" width="40%">
                                                       <field:display name="Equal Opportunity" feature="Cross Cutting Issues">
                                                         <tr>
-															<td><digi:trn key="aim:equalOportunity">Equal Opportunity:</digi:trn>
-																&nbsp;&nbsp;
-																<bean:define id="eqOppKey">
-																	<c:out value="${aimEditActivityForm.equalOpportunity}"/>
-																</bean:define>
-																<digi:edit key="<%=eqOppKey%>"/>
-																
+															<td>
+															  <digi:trn key="aim:equalOportunity">Equal Opportunity:</digi:trn>
 															</td>
 															<td>
+																<bean:define id="eqOppKey">
+																	   <c:out value="${aimEditActivityForm.equalOpportunity}"/>
+																</bean:define>
+																<digi:edit key="<%=eqOppKey%>"/>
+															</td>
+															<td>
+																
 																<a href="javascript:edit('<%=eqOppKey%>')">
 																	<digi:trn key="aim:edit">Edit</digi:trn>
 																</a>
@@ -88,12 +90,15 @@ function edit(key) {
 														</field:display>
 														<field:display name="Environment" feature="Cross Cutting Issues">
                                                         <tr>
-															<td><digi:trn key="aim:environment"> Environment:</digi:trn>&nbsp;&nbsp;
+															<td>
+															 <digi:trn key="aim:environment"> Environment:</digi:trn>&nbsp;&nbsp;
+															</td>
+															<td>
 																<bean:define id="envKey">
 																	<c:out value="${aimEditActivityForm.environment}"/>
 																</bean:define>
 																<digi:edit key="<%=envKey%>"/>
-																
+															
 															</td>
 															<td>
 																<a href="javascript:edit('<%=envKey%>')">
@@ -104,12 +109,14 @@ function edit(key) {
 														</field:display>
 														<field:display name="Minorities" feature="Cross Cutting Issues">
                                                         <tr>
-															<td><digi:trn key="aim:monitories"> Minorities:</digi:trn> &nbsp;&nbsp;
-																<bean:define id="minKey">
+															<td>
+															  <digi:trn key="aim:monitories"> Minorities:</digi:trn>
+															</td>
+															<td>
+															<bean:define id="minKey">
 																	<c:out value="${aimEditActivityForm.minorities}"/>
 																</bean:define>
 																<digi:edit key="<%=minKey%>"/>
-																
 															</td>
 															<td>
 																<a href="javascript:edit('<%=minKey%>')">

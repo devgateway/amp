@@ -298,10 +298,11 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 										<field:display name="Total Expended" feature="Funding Organizations">
 		    	                    	 	<TD><digi:trn key="aim:totalExpended">Total Expended</digi:trn></TD>
 	    	                    	 	</field:display>
-	    	                    	 	
-	    	                    	 	<field:display name="Unexpended Funds" feature="Funding Organizations">
-											<TD><digi:trn key="aim:unExpendedFunds">Unexpended Funds</digi:trn></TD>
-										</field:display>
+	    	                    	 	<feature:display module="Funding" name="Expenditures">
+		    	                    	 	<field:display name="Unexpended Funds" feature="Funding Organizations">
+												<TD><digi:trn key="aim:unExpendedFunds">Unexpended Funds</digi:trn></TD>
+											</field:display>
+										</feature:display>
 									</TR>
 													<logic:empty name="aimFinancingBreakdownForm" property="financingBreakdown">
 			                    	<TR valign="top">
@@ -368,9 +369,13 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 								            <field:display name="Total Expended" feature="Funding Organizations">
 					      			          <TD align="right"><bean:write name="breakdown" property="totalExpended"/></TD>
 					      			        </field:display>
-					      			        <field:display name="Unexpended Funds" feature="Funding Organizations">
-					            		      <TD align="right"><bean:write name="breakdown" property="unExpended"/></TD>
-					            		    </field:display>
+					      			        
+					      			        <feature:display module="Funding" name="Expenditures">
+							      			        <field:display name="Unexpended Funds" feature="Funding Organizations">
+							            		      <TD align="right"><bean:write name="breakdown" property="unExpended"/></TD>
+							            		    </field:display>
+					            		    </feature:display>
+											
 															</TR>
 														</logic:iterate>
 													</logic:notEmpty>
@@ -383,7 +388,9 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 														<field:display name="Total Disbursed" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalDisbursed"/></TD></field:display>
 														<field:display name="Undisbursed Funds" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalUnDisbursed"/></TD></field:display>
 														<field:display name="Total Expended" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalExpended"/></TD></field:display>
+														<feature:display module="Funding" name="Expenditures">
 														<field:display name="Unexpended Funds" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalUnExpended"/></TD></field:display>
+														</feature:display>
 													</TR>
 												</TABLE>
 											</TD>

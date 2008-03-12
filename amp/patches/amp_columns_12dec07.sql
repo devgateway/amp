@@ -49,7 +49,7 @@ INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView)
 INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (41,'National Planning Objectives','nationalojectives','org.dgfoundation.amp.ar.cell.MetaTextCell','v_nationalojectives');
 INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (42,'Primary Program','primaryprogram','org.dgfoundation.amp.ar.cell.TextCell','v_primaryprogram');
 INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (43,'Secondary Program','secondaryprogram','org.dgfoundation.amp.ar.cell.TextCell','v_secondaryprogram');
-INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (44,'Executing Agency','executing_agency','org.dgfoundation.amp.ar.cell.TextCell','v_executing_agency');
+INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (44,'Executing Agency','executing_agency','org.dgfoundation.amp.ar.cell.MetaTextCell','v_executing_agency');
 INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (46,'Implementing Agency','implementing_agency','org.dgfoundation.amp.ar.cell.TextCell','v_implementing_agency');
 INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (47,'Contracting Agency','contracting_agency','org.dgfoundation.amp.ar.cell.TextCell','v_contracting_agency');
 INSERT INTO `amp_columns` (columnId,columnName,aliasName,cellType,extractorView) VALUES (48,'Beneficiary Agency','beneficiary_agency','org.dgfoundation.amp.ar.cell.TextCell','v_beneficiary_agency');

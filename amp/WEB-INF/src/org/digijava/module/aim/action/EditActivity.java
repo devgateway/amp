@@ -1365,14 +1365,12 @@ public class EditActivity
             Iterator relOrgsItr = relOrgs.iterator();
             while (relOrgsItr.hasNext()) {
               AmpOrgRole orgRole = (AmpOrgRole) relOrgsItr.next();
+            
               if (orgRole.getRole().getRoleCode().equals(
                   Constants.EXECUTING_AGENCY)
-                  && (!eaForm
-                      .getExecutingAgencies()
-                      .contains(orgRole.getOrganisation()))) {
-                eaForm.getExecutingAgencies().add(
-                    orgRole.getOrganisation());
-              }
+                  && (!eaForm.getExecutingAgencies().contains(orgRole))) {
+            	  eaForm.getExecutingAgencies().add(orgRole);
+             }
               else if (orgRole.getRole().getRoleCode().equals(
                   Constants.IMPLEMENTING_AGENCY)
                        && (!eaForm.getImpAgencies().contains(

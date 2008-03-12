@@ -852,11 +852,11 @@ public class SaveActivity extends Action {
 							.getAmpRole(Constants.EXECUTING_AGENCY);
 					Iterator itr = eaForm.getExecutingAgencies().iterator();
 					while (itr.hasNext()) {
-						AmpOrganisation org = (AmpOrganisation) itr.next();
-						AmpOrgRole ampOrgRole = new AmpOrgRole();
+						AmpOrgRole tmpRole= (AmpOrgRole) itr.next();
+						AmpOrgRole ampOrgRole=new AmpOrgRole();
 						ampOrgRole.setActivity(activity);
 						ampOrgRole.setRole(role);
-						ampOrgRole.setOrganisation(org);
+						ampOrgRole.setOrganisation(tmpRole.getOrganisation());
 						orgRole.add(ampOrgRole);
 					}
 				}

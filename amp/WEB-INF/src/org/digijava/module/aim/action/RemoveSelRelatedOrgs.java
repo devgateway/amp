@@ -13,6 +13,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.EditActivityForm;
 
@@ -43,8 +44,8 @@ public class RemoveSelRelatedOrgs extends Action {
 				Long selOrgs[] = eaForm.getSelExAgencies();
 				if (selOrgs != null) {
 					for (int i = 0;i < selOrgs.length;i ++) {
-						AmpOrganisation org = new AmpOrganisation();
-						org.setAmpOrgId(selOrgs[i]);
+						AmpOrgRole org = new AmpOrgRole();
+						org.setAmpOrgRoleId(selOrgs[i]);
 						eaForm.getExecutingAgencies().remove(org);
 					}
 				}				

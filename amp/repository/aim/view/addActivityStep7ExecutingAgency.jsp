@@ -26,17 +26,17 @@
 										<logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<logic:iterate name="aimEditActivityForm" property="executingAgencies"
-												id="exAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+												id="exAgency" type="org.digijava.module.aim.dbentity.AmpOrgRole">
 												<tr><td>
 													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#ffffff">
 														<tr>
 															<td width="3">
 																<html:multibox property="selExAgencies">
-																	<bean:write name="exAgency" property="ampOrgId" />
+																	<bean:write name="exAgency" property="ampOrgRoleId" />
 																</html:multibox>
 															</td>
 															<td align="left">
-																<bean:write name="exAgency" property="name" />
+																<bean:write name="exAgency" property="organisation.name" />
 															</td>
 														</tr>
 													</table>

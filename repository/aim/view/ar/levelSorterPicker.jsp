@@ -39,16 +39,26 @@
 				</html:option>
 
 					<logic:iterate name="reportMeta" property="hierarchies"  id="iter">
-						<c:set var="key" value="aim:popsort:hierarchy:${iter.column.columnNameTrimmed}"/>
+						
 						<html:option value="${iter.levelId}">
+							<c:set var="key" value="aim:popsort:hierarchy:${iter.column.columnNameTrimmed}"/>
 							<digi:trn key="${key}">
 							${iter.column.columnNameTrimmed}
 						</digi:trn>
 						</html:option>
 					</logic:iterate>
+					
+					<logic:iterate name="report" property="trailCells"  id="iter1">
+						
+						<html:option value="${iter1.column.absoluteColumnName}">
+							<c:set var="key1" value="aim:popsort:hierarchy:${iter1.column.absoluteColumnName}"/>
+							<digi:trn key="${key1}">
+							${iter1.column.absoluteColumnName}
+						</digi:trn>
+						</html:option>
+					</logic:iterate>
+
 				
-				<html:optionsCollection name="report" property="trailCells"
-					value="column.absoluteColumnName" label="column.absoluteColumnName" />
 			</html:select></td>
 		</tr>
 		<tr>

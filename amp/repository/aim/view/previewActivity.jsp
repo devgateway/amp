@@ -1332,7 +1332,7 @@ function collapseAll() {
 																			  <logic:iterate name="funding" property="fundingDetails"
                                                                               id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
                                                                               <logic:equal name="fundingDetail" property="transactionType" value="1">
-                                                                              <logic:equal name="fundingDetail" property="adjustmentType" value="0">
+                                                                              <logic:equal name="fundingDetail" property="adjustmentType" value="1">
                                                                               
 
 
@@ -1414,43 +1414,28 @@ function collapseAll() {
 																			  </logic:iterate>
 																			  <!-- End Planned Disbursements -->
 	                                                                           
-	                                                                           <tr>
-	                                                                                <td>
-	                                                                                	<digi:trn key='aim:totalplanneddisbursement'>
-	                                                                                		TOTAL PLANNED DISBURSEMENT:
-	                                                                                	</digi:trn>
-	                                                                                </td>
-	                                                                                <TD  colspan="4" align="right">	                                                                                	
-	                                                                                	<c:out value="${aimEditActivityForm.totalPlannedDisbursements}"/>&nbsp;<bean:write name="aimEditActivityForm" property="currCode"/>
-	                                                                                </TD>
-	                                                                           </tr>
-	                                                                           <tr bgcolor="#ffffff">
-	                                                                                <td>&nbsp;</td>
-	                                                                                <TD colspan="4" align="right">&nbsp;</TD>
-	                                                                           </tr>	                                                                           
-	                                                                                
+	                                                                             
 																			  <!-- Start Actual Disbursements -->
-                                                                              <logic:iterate name="funding" property="fundingDetails"
-                                                                              id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+                                                                              <logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
                                                                                <logic:equal name="fundingDetail" property="transactionType" value="1">
-                                                                               <logic:equal name="fundingDetail" property="adjustmentType" value="1">
-
-
-                                                                                <c:if test="${aimEditActivityForm.donorFlag == true}">
+                                                                               <logic:equal name="fundingDetail" property="adjustmentType" value="0">
+																				 <c:if test="${aimEditActivityForm.donorFlag == true}">
                                                                                   <c:if test="${fundingDetail.perspectiveCode == 'DN'}">
-                                                                                    <tr bgcolor="#FFFF00">                                                                                  </c:if>
+                                                                                    <tr bgcolor="#FFFF00">                                                                                  
+                                                                                  </c:if>
                                                                                   <c:if test="${fundingDetail.perspectiveCode != 'DN'}">
-																						<tr bgcolor="#ffffff">																						</c:if>
-																							<td width="50">
-																								<field:display name="Adjustment Type Disbursement" feature="Funding Organizations">
-																									<digi:trn key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
-																									</digi:trn>
-																								</field:display>																							</td>
-																							<td width="120" align="right">
-																								<field:display name="Amount Disbursement" feature="Funding Organizations">
-																									<FONT color=blue>*</FONT>
-																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;																								</field:display>																							</td>
+																					<tr bgcolor="#ffffff">																						
+																				 </c:if>
+																						<td width="50">
+																							<field:display name="Adjustment Type Disbursement" feature="Funding Organizations">
+																								<digi:trn key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+																									<bean:write name="fundingDetail" property="adjustmentTypeName"/>
+																								</digi:trn>
+																							</field:display>																							</td>
+																						<td width="120" align="right">
+																						<field:display name="Amount Disbursement" feature="Funding Organizations">
+																							<FONT color=blue>*</FONT>
+																							<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;																								</field:display>																							</td>
 																							<td width="150">
 																								<field:display name="Currency Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="currencyCode"/>
@@ -1530,45 +1515,51 @@ function collapseAll() {
 																							<td colspan="5">&nbsp;</td>
 																						</tr>
 																				     <!-- expenditures -->
-	<feature:display module="Funding" name="Expenditures">
+																					<feature:display module="Funding" name="Expenditures">
                                                                                     	<tr bgcolor="#ffffff">
 																							<td colspan="5">
-																							<a title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>	<b><digi:trn key="aim:expenditures"> Expenditures </digi:trn></b>																							</a>																							</td>
+																							<a title='<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>'>	
+																							<b><digi:trn key="aim:expenditures"> Expenditures </digi:trn></b>																							</a>																							</td>
 																						</tr>
                                                                                    
                                                                                         <c:if test="${!empty funding.fundingDetails}">
-																						<logic:iterate name="funding" property="fundingDetails"
-																						id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+																						<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 																						<logic:equal name="fundingDetail" property="transactionType" value="2">
-
-
-																						<c:if test="${aimEditActivityForm.donorFlag == true}">
-																						<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
-																						<tr bgcolor="#FFFF00">																						</c:if>
-																						<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
-																						<tr bgcolor="#ffffff">																						</c:if>
+																							<c:if test="${aimEditActivityForm.donorFlag == true}">
+																							<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
+																								<tr bgcolor="#FFFF00">																						
+																							</c:if>
+																							<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
+																								<tr bgcolor="#ffffff">																						
+																							</c:if>
+																							<tr bgcolor="#ffffff">
 																							<td width="50">
 																								<field:display name="Adjustment Type Expenditure" feature="Funding Organizations">
 																									<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																									</digi:trn>
-																								</field:display>																							</td>
+																								</field:display>																							
+																							</td>
 																							<td width="120" align="right">
 																								<field:display name="Amount Expenditure" feature="Funding Organizations">
 																									<FONT color=blue>*</FONT>
-																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;																								</field:display>																							</td>
+																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;																								
+																								</field:display>																							
+																							</td>
 																							<td width="150">
 																								<field:display name="Currency Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="currencyCode"/>
-																								</field:display>																							</td>
+																								</field:display>																							
+																							</td>
 																							<td width="70" colspan="2">
 																								<field:display name="Date Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
-																								</field:display>																							</td>
+																								</field:display>																							
+																							</td>
 
 																						</tr>
 																						<tr>
-																							<td colspan=5 bgcolor="#ffffff">&nbsp;&nbsp;
+																							<td colspan=5 bgcolor="#ffffff">
 																								<field:display name="Classification Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="classification"/>
 																								</field:display>																							</td>
@@ -1583,7 +1574,8 @@ function collapseAll() {
 																									<digi:trn key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																									</digi:trn>
-																								</field:display>																							</td>
+																								</field:display>																							
+																							</td>
 																							<td width="120" align="right">
 																								<field:display name="Amount Expenditure" feature="Funding Organizations">
 																									<FONT color=blue>*</FONT>
@@ -1591,17 +1583,20 @@ function collapseAll() {
 																							<td width="150">
 																								<field:display name="Currency Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="currencyCode"/>
-																								</field:display>																							</td>
+																								</field:display>																							
+																							</td>
 																							<td width="70" colspan="2">
 																								<field:display name="Date Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
-																								</field:display>																							</td>
+																								</field:display>																							
+																							</td>
 																						</tr>
 																						<tr>
-																							<td colspan=5 bgcolor="#ffffff">&nbsp;&nbsp;
+																							<td colspan=5 bgcolor="#ffffff">
 																								<field:display name="Classification Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="classification"/>
-																								</field:display>																							</td>
+																								</field:display>																							
+																							</td>
 																						</tr>
 																							</c:if>
 																							<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
@@ -1623,21 +1618,32 @@ function collapseAll() {
 																							<td width="70">
 																								<field:display name="Date Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
-																								</field:display>																							</td>
+																								</field:display>																							
+																							</td>
 																						</tr>
 																						<tr>
-																							<td colspan=5 bgcolor="#ffffff">&nbsp;&nbsp;
+																							<td colspan=5 bgcolor="#ffffff">
 																								<field:display name="Classification Expenditure" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="classification"/>
-																								</field:display>																							</td>
+																								</field:display>																							
+																							</td>
 																						</tr>
 																							</c:if>
 																						</c:if>
 																						</logic:equal>
 																						</logic:iterate>
+																						<tr>
+	                                                                                		<td>
+	                                                                                			<digi:trn key='aim:totalExpenditures'>TOTAL:</digi:trn>
+	                                                                                		</td>
+	                                                                                      <td  colspan="4" align="right">
+	                                                                                      	<bean:write name="aimEditActivityForm" property="totalExpenditures"/>
+	                                                                                      	&nbsp;<bean:write name="aimEditActivityForm" property="currCode"/>
+	                                                                                      </Td>
+	                                                                                	</tr>		
                                                                                         </c:if>
                                                                                         <!-- expenditures -->
-	</feature:display>
+																					</feature:display>
                                                                                        
 																				  </table>
                                                                                   </td>
@@ -1650,10 +1656,12 @@ function collapseAll() {
                                                                     <td bgcolor="#ffffff">
 																		<FONT color=blue>*
 																			<digi:trn key="aim:theAmountEnteredAreInThousands">
-																				The amount entered are in thousands (000)		  																	</digi:trn>
+																				The amount entered are in thousands (000)		  																	
+																			</digi:trn>
 																		</FONT>
 																	</td></tr>
-																	</table>																	</td></tr>
+																	</table>																	
+																	</td></tr>
 																</logic:iterate>
 															  </logic:notEmpty>
 															</logic:iterate>

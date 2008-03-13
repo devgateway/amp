@@ -3,6 +3,9 @@ package org.digijava.module.aim.helper;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -152,6 +155,24 @@ public class FormatHelper {
 	return String.valueOf(getDefaultFormat().getDecimalFormatSymbols().getGroupingSeparator());
     }
 
-    
+   public static GregorianCalendar parseDate(String sDate) throws Exception{
+	  String defaultFormat= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
+	  SimpleDateFormat formater=new SimpleDateFormat(defaultFormat);
+	  GregorianCalendar result=new GregorianCalendar();
+	try {
+	    result.setTime(formater.parse(sDate));
+	} catch (ParseException e) {
+	    // TODO Auto-generated catch block
+	   throw new Exception("The source string has not a format according to globbal setting "+defaultFormat,e );
+	}
+	  return result;
+   }
+   
+   public static String formatDate(Date date) {
+	String defaultFormat = FeaturesUtil
+		.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
+	SimpleDateFormat formater = new SimpleDateFormat(defaultFormat);
+	return formater.format(date);
+    }
    
 }

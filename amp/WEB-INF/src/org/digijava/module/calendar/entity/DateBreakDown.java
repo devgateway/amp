@@ -4,6 +4,8 @@ import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.calendar.exception.CalendarException;
 
 public class DateBreakDown {
@@ -230,13 +232,17 @@ public class DateBreakDown {
         GregorianCalendar calendar = null;
         String[] tokens = date.split("/");
         try {
+       
             DateBreakDown calendarBreakDown = new DateBreakDown();
             calendarBreakDown.setType(type);
-            calendarBreakDown.setDayOfMonth(Integer.parseInt(tokens[0]));
-            calendarBreakDown.setMonth(Integer.parseInt(tokens[1]));
-            calendarBreakDown.setYear(Integer.parseInt(tokens[2]));
+            
+            GregorianCalendar tmpCalendar= FormatHelper.parseDate(date);
+            
+            calendarBreakDown.setDayOfMonth(tmpCalendar.get(GregorianCalendar.DAY_OF_MONTH));
+            calendarBreakDown.setMonth(tmpCalendar.get(GregorianCalendar.MONTH)+1);
+            calendarBreakDown.setYear(tmpCalendar.get(GregorianCalendar.YEAR));
             calendar = calendarBreakDown.getGregorianCalendar();
-        } catch(NumberFormatException e) {
+        } catch(Exception e) {
             calendar = new GregorianCalendar();
         }
         return calendar;
@@ -281,10 +287,7 @@ public class DateBreakDown {
     }
 
     public String formatDateString() {
-        String yyyy = formatDecimal("0000", this.getYear());
-        String MM = formatDecimal("00", this.getMonth());
-        String dd = formatDecimal("00", this.getDayOfMonth());
-        return dd + "/" + MM + "/" + yyyy;
+	return FormatHelper.formatDate(this.getGregorianCalendar().getTime());
     }
 
     public String formatTimeString() {

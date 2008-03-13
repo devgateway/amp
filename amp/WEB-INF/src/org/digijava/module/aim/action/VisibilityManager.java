@@ -194,7 +194,7 @@ public class VisibilityManager extends MultiAction {
 		}
 		
 		ActionErrors errors = new ActionErrors();
-	 	errors.add("title", new ActionError("error:aim:visibility:updatedTemplate"));
+	 	errors.add("title", new ActionError("error.aim.visibility.updatedTemplate"));
 	 	saveErrors(request, errors);
 
 	 	
@@ -212,7 +212,7 @@ public class VisibilityManager extends MultiAction {
 			vForm.setTemplates(templates);
 		}
 		ActionErrors errors = new ActionErrors();
-	 	errors.add("title", new ActionError("error:aim:visibility:deletedTemplate"));
+	 	errors.add("title", new ActionError("error.aim.visibility.deletedTemplate"));
 	 	saveErrors(request, errors);
 	 	hbsession.close();
 		return mapping.findForward("forward");
@@ -293,7 +293,7 @@ public class VisibilityManager extends MultiAction {
 		String trnKey = "aim:ampfeaturemanager:featuremanagerupdated";
 		String msg = CategoryManagerUtil.translate(trnKey, request, Constants.FEATURE_MANAGER_VISIBILITY_TREE_UPDATED);
 
-		errors.add("title", new ActionError("error:aim:visibility:visibilityTreeUpdated",msg));
+		errors.add("title", new ActionError("error.aim.visibility.visibilityTreeUpdated",msg));
 
 		saveErrors(request, errors);
 

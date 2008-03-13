@@ -86,7 +86,6 @@ function selectOrganisation1() {
 		&nbsp;&nbsp;<b><digi:trn key="aim:addEditActivityID">Activity ID:</digi:trn></b> <html:text property="textId" size="10"/> 
 		</td>
 	</tr>
-
 	<tr>
 		<td align="right">
 		<b><digi:trn key="aim:addEditActivityInputs">Inputs:</digi:trn></b>
@@ -97,7 +96,7 @@ function selectOrganisation1() {
 	</tr>
 	
 		<tr>
-		<td align="right">
+		<td align="right"><font color="red">*</font>
 		<b><digi:trn key="aim:addEditActivityTotalCost">Total Cost:</digi:trn></b>
 		</td>
 		<td>
@@ -126,6 +125,7 @@ function selectOrganisation1() {
 							id="currContr" scope="page">
 							<tr>
 							<td align="right" valign="top">
+							<font color="red">*</font>
 							<input type="checkbox" name="deleteContrib" value='<bean:write name="idx"/>'>
 							<input style="text-align:right" type='text' name='contrAmount' onclick="clearDefault(this)"
 									value='${aimEUActivityForm.contrAmount[idx]}'>
@@ -202,24 +202,37 @@ function selectOrganisation1() {
 	</tr>	
 
 	<tr>
-		<td align="right">
+		<td align="right"><font color="red">*</font>
 		<b><digi:trn key="aim:addEditActivityDueDate">Due Date:</digi:trn></b>
 		</td>
 		<td>
 			<html:text readonly="true" property="dueDate" styleClass="inp-text"/>
-			<input type="button" class="buton" value='<digi:trn key="aim:addEditActivityPickDate">Pick date</digi:trn>' onclick="pickDate(this,document.aimEUActivityForm.dueDate);"></td>
+			
+				<a onclick="pickDate(this,document.aimEUActivityForm.dueDate)">
+				  <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+				</a>
 		</td>
 	</tr>	
 
 
 	<tr>
 		<td colspan="2" align="center">
-		<html:submit styleClass="buton" property="save"><digi:trn key="aim:addEditActivityOK">OK</digi:trn></html:submit>
+		<html:submit styleClass="buton" property="save">
+		 <digi:trn key="aim:addEditActivitySave">Save</digi:trn>
+		</html:submit>
 		
 		&nbsp;&nbsp;
 		<html:button styleClass="buton" property="cancel" onclick="window.close();">
-		<digi:trn key="aim:addEditActivityCancel">Cancel</digi:trn>
+		<digi:trn key="aim:addEditActivitySlose">Close</digi:trn>
+
 		</html:button>
+		</td>
+		
+		
+	</tr>
+	<tr>
+	<td colspan="2">
+		 <font color="red">All amounts are in the thousands (000)</font>
 		</td>
 	</tr>	
 

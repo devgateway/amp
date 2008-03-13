@@ -12,7 +12,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<logic:empty name="costs" scope="request">
+
 <bean:define id="costs" name="costs" scope="request" toScope="page" type="java.util.Collection"/>
 <bean:define id="mode" name="mode" scope="request" toScope="page" type="java.lang.String"/>
 <script type="text/javascript">
@@ -135,7 +135,8 @@ function openEUActivityDetails(euActivityId) {
 		<hr />
 		</td>
 	</tr>
-
+	
+<c:if test="${!empty costs}">
 	<tr bgcolor="#FFFFFF">
 		<td align="right"><b><digi:trn key="aim:viewcostssummary:totals">Totals:</digi:trn></b></td>
 		<field:display name="Total Costs" feature="Costing">
@@ -149,19 +150,19 @@ function openEUActivityDetails(euActivityId) {
 		${grandContributionFormatted}</td>
 		</field:display>
 	</tr>
-<field:display name="Costing Contribution Gap" feature="Costing">
-	<tr bgcolor="#FFFFFF">
-		<td align="right"><b><digi:trn key="aim:viewcostssummary:contributionGap">Contribution Gap:</digi:trn></b></td>
-		<td align="right"><b> <fmt:formatNumber var="contributionGap"
-			pattern="###,###,###.##" value="<%=new Double(grandCost.doubleValue()-grandContribution.doubleValue())%>" />
-		${contributionGap} </b></td>
-		<td align="right">&nbsp;</td>
-	</tr>
+	<field:display name="Costing Contribution Gap" feature="Costing">
+		<tr bgcolor="#FFFFFF">
+			<td align="right"><b><digi:trn key="aim:viewcostssummary:contributionGap">Contribution Gap:</digi:trn></b></td>
+			<td align="right"><b> <fmt:formatNumber var="contributionGap"
+				pattern="###,###,###.##" value="<%=new Double(grandCost.doubleValue()-grandContribution.doubleValue())%>" />
+			${contributionGap} </b></td>
+			<td align="right">&nbsp;</td>
+		</tr>
 	</field:display>
+</c:if>
 	<logic:equal name="mode" value="preview">
 			</table>
 			</td>
 			</tr>
 	</logic:equal>
 </table>
-</logic:empty>

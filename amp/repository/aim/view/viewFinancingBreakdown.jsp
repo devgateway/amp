@@ -401,6 +401,11 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 													<digi:trn key="aim:allTheAmountsInThousands">
 													All the amounts are in thousands (000)</digi:trn>
 													<bean:write name="aimFinancingBreakdownForm" property="selectedCurrency"/>
+												</FONT><br>
+												<FONT color=blue>*
+													<digi:trn key="aim:UndisbursedAndUnexpectedBalancesAre">
+														Undisbursed Balance = Actual Commitments - Actual Disbursements. Unexpended Balance = Actual Disbursements - Actual Expenditures.
+													</digi:trn>													
 												</FONT>
 											</TD>
 										</TR>

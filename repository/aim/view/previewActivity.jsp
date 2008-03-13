@@ -718,8 +718,8 @@ function collapseAll() {
                                     
                                     <!--15-->
                                     <tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="group_planning_plus"  onclick="toggleGroup('group_planning')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="group_planning_minus" onclick="toggleGroup('group_planning')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display : none"/>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="group_planning_plus"  onclick="toggleGroup('group_planning')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+											<img id="group_planning_minus" onclick="toggleGroup('group_planning')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display : none"/>
 											<digi:trn key="aim:planning">Planning</digi:trn>										</td><td bgcolor="#ffffff">
 											<div id="group_planning_dots">...</div>
 											<div id="act_group_planning" style="display: none;">
@@ -908,8 +908,8 @@ function collapseAll() {
                                  <feature:display name="Location" module="Project ID and Planning">
                                		<field:display name="Implementation Location" feature="Location">
 									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="location_plus"  onclick="toggleGroup('location')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="location_minus" onclick="toggleGroup('location')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="location_plus"  onclick="toggleGroup('location')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+											<img id="location_minus" onclick="toggleGroup('location')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
 											<digi:trn key="aim:location">
 											Location</digi:trn>										</td>
 										<td bgcolor="#ffffff">
@@ -953,8 +953,8 @@ function collapseAll() {
                                              <field:display name="Sector" feature="Sectors">	  
                                             
                                             <tr>
-                                                <td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="sector_plus"  onclick="toggleGroup('sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-                                                    <img id="sector_minus" onclick="toggleGroup('sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+                                                <td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="sector_plus"  onclick="toggleGroup('sector')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+                                                    <img id="sector_minus" onclick="toggleGroup('sector')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
                                               <digi:trn key="aim:sector">	Sector</digi:trn>										</td>
                                       <td bgcolor="#ffffff">
                                                     <div id="sector_dots">...</div>
@@ -990,8 +990,8 @@ function collapseAll() {
                                     
                                     <c:if test="${not empty aimEditActivityForm.activityComponentes}">
 									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="component_sector_plus"  onclick="toggleGroup('component_sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="component_sector_minus" onclick="toggleGroup('component_sector')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="component_sector_plus"  onclick="toggleGroup('component_sector')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+											<img id="component_sector_minus" onclick="toggleGroup('component_sector')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
 											<digi:trn key="aim:preview:component_Sector">Components</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<div id="component_sector_dots">...</div>
@@ -1016,8 +1016,8 @@ function collapseAll() {
 									<field:display name="National Plan Objective" feature="NPD Programs">
 									<TR>
 																		<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-												<img id="npd_npo_plus"  onclick="toggleGroup('npd_npo')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-												<img id="npd_npo_minus" onclick="toggleGroup('npd_npo')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display : none"/>
+												<img id="npd_npo_plus"  onclick="toggleGroup('npd_npo')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+												<img id="npd_npo_minus" onclick="toggleGroup('npd_npo')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display : none"/>
 																		<b>
 						                        <digi:trn key="aim:national Plan Objective">National Plan Objective</digi:trn></b></TD>
 
@@ -1032,8 +1032,8 @@ function collapseAll() {
                                       </field:display> 
                                      <field:display name="Primary Program" feature="NPD Programs">
                                            <TR>
-																		<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="npd_primaryprog_plus"  onclick="toggleGroup('npd_primaryprog')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-													<img id="npd_primaryprog_minus" onclick="toggleGroup('npd_primaryprog')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+																		<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="npd_primaryprog_plus"  onclick="toggleGroup('npd_primaryprog')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+													<img id="npd_primaryprog_minus" onclick="toggleGroup('npd_primaryprog')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
 																		<b>
 						                        <digi:trn key="aim:primary Programs">Primary Programs</digi:trn></b></TD>
 
@@ -1048,19 +1048,19 @@ function collapseAll() {
 										</field:display>
 										<field:display name="Secondary Program" feature="NPD Programs">
                                                                                                                                         <TR>
-																		<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="npd_secondprog_plus"  onclick="toggleGroup('npd_secondprog')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-													<img id="npd_secondprog_minus" onclick="toggleGroup('npd_secondprog')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+																		<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="npd_secondprog_plus"  onclick="toggleGroup('npd_secondprog')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+													<img id="npd_secondprog_minus" onclick="toggleGroup('npd_secondprog')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
 																		<b>
 																		<digi:trn key="aim:secondary Programs">Secondary Programs</digi:trn></b></TD>
 
 																		<TD bgcolor="#ffffff">
 															<div id="npd_secondprog_dots">...</div>
 															<div id="act_npd_secondprog" style="display: none;">
-                                                                                                                                                  <c:forEach var="program" items="${aimEditActivityForm.secondaryPrograms}">
-                                                                                                                                                  <c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
-                                                                                                                                                  </c:forEach>
-                                                            </div>																		</TD>
-																	</TR>
+                                                                <c:forEach var="program" items="${aimEditActivityForm.secondaryPrograms}">
+                                                                	<c:out value="${program.hierarchyNames}" />&nbsp; <c:out value="${program.programPercentage}"/>%<br/>
+                                                                </c:forEach>
+                                                            </div></TD>
+											</TR>
 										</field:display>
 									</feature:display>
                                    </module:display>
@@ -1068,8 +1068,8 @@ function collapseAll() {
                                    <logic:present name="currentMember" scope="session">
 									<module:display name="Funding" parentModule="PROJECT MANAGEMENT">
 									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="group_funding_plus"  onclick="toggleGroup('group_funding')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="group_funding_minus" onclick="toggleGroup('group_funding')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display : none"/>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="group_funding_plus"  onclick="toggleGroup('group_funding')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+											<img id="group_funding_minus" onclick="toggleGroup('group_funding')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display : none"/>
 											<digi:trn key="aim:funding">Funding</digi:trn>										</td>
 										<td bgcolor="#ffffff">
 											<div id="group_funding_dots"><bean:write name="aimEditActivityForm" property="totalCommitted"/>&nbsp;
@@ -1866,10 +1866,11 @@ function collapseAll() {
 									<logic:equal name="globalSettings" scope="application" property="showComponentFundingByYear" value="false">
 									<module:display name="Components" parentModule="PROJECT MANAGEMENT">
 									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="components_plus"  onclick="toggleGroup('components')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="components_minus" onclick="toggleGroup('components')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="components_plus"  onclick="toggleGroup('components')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+											<img id="components_minus" onclick="toggleGroup('components')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
 											<digi:trn key="aim:components">
-											Components</digi:trn>										</td>
+											Components</digi:trn>
+										</td>
 										<td bgcolor="#ffffff">
 											<div id="components_dots">...</div>
 											<div id="act_components" style="display: none;">
@@ -1878,19 +1879,13 @@ function collapseAll() {
 													<table width="100%" cellSpacing="1" cellPadding="1">
 													<tr><td>
 														<table width="100%" cellSpacing="2" cellPadding="1" class="box-border-nopadding">
-
 															<tr><td><b>
-																<digi:trn key="aim:equipment">
-																								<c:out value="${comp.title}"/>
-																							</digi:trn>	</b>
+																<digi:trn key="aim:equipment"><c:out value="${comp.title}"/></digi:trn>	</b>
 															</td></tr>
-
-															<tr><td>
-																<i>
+															<tr><td><i>
 																<digi:trn key="aim:description">Description</digi:trn> :</i>
 																<c:out value="${comp.description}"/>
 															</td></tr>
-
 															<tr><td bgcolor="#f4f4f2">
 																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>
 															</td></tr>
@@ -2062,10 +2057,11 @@ function collapseAll() {
 									<module:display name="Components_Resume" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-											<img id="components_resume_plus"  onclick="toggleGroup('components_resume')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="components_resume_minus" onclick="toggleGroup('components_resume')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+											<img id="components_resume_plus"  onclick="toggleGroup('components_resume')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+											<img id="components_resume_minus" onclick="toggleGroup('components_resume')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
 											<digi:trn key="aim:components">
-											Components</digi:trn>										</td>
+											Components</digi:trn>
+										</td>
 										<td bgcolor="#ffffff">
 											<div id="components_resume_dots">...</div>
 											<div id="act_components_resume" style="display: none;">
@@ -2074,21 +2070,17 @@ function collapseAll() {
 													<table width="100%" cellSpacing="1" cellPadding="1">
 													<tr><td>
 														<table width="100%" cellSpacing="2" cellPadding="1" class="box-border-nopadding">
-
 															<tr><td><b>
 																<c:out value="${comp.title}"/></b>
-															</td></tr>
-															
+															</td></tr>															
 															<tr><td>
 																<i>
 																<digi:trn key="aim:component_code">Component code</digi:trn> :</i>
 																<c:out value="${comp.code}"/>
-															</td></tr>															
-
+															</td></tr>
 															<tr><td>
 															<a href="<c:out value="${comp.url}"/>" target="_blank"><digi:trn key="aim:preview_link_to_component">Link to component</digi:trn>&nbsp;<c:out value="${comp.code}"/></a>																
-															</td></tr>
-															
+															</td></tr>															
 															<tr><td bgcolor="#f4f4f2">
 																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>
 															</td></tr>																
@@ -2162,8 +2154,8 @@ function collapseAll() {
 									
                                     	<module:display name="Issues" parentModule="PROJECT MANAGEMENT">
 									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="issues_plus"  onclick="toggleGroup('issues')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="issues_minus" onclick="toggleGroup('issues')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="issues_plus"  onclick="toggleGroup('issues')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+											<img id="issues_minus" onclick="toggleGroup('issues')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
 											<digi:trn key="aim:issues">
 											Issues</digi:trn></td>
 										<td bgcolor="#ffffff">
@@ -2208,10 +2200,11 @@ function collapseAll() {
                              <module:display name="Document" parentModule="PROJECT MANAGEMENT">       
                                    	<feature:display name="Related Documents" module="Document">
 									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="related_documents_plus"  onclick="toggleGroup('related_documents')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="related_documents_minus" onclick="toggleGroup('related_documents')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><img id="related_documents_plus"  onclick="toggleGroup('related_documents')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+											<img id="related_documents_minus" onclick="toggleGroup('related_documents')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
 											<digi:trn key="aim:relatedDocuments">
-											Related Documents</digi:trn>										</td>
+											Related Documents</digi:trn>
+										</td>
 										<td bgcolor="#ffffff">
 											<div id="related_documents_dots">...</div>
 											<div id="act_related_documents" style="display: none;">
@@ -2305,18 +2298,17 @@ function collapseAll() {
 <module:display name="Organizations" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-											<img id="orgz_plus"  onclick="toggleGroup('orgz')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-											<img id="orgz_minus" onclick="toggleGroup('orgz')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
+											<img id="orgz_plus"  onclick="toggleGroup('orgz')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+											<img id="orgz_minus" onclick="toggleGroup('orgz')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
 											<digi:trn key="aim:relatedOrganizations">Related Organizations</digi:trn>
 										</td>
-
 										<td bgcolor="#ffffff">
 											<div id="orgz_dots">...</div>
 											<div id="act_orgz" style="display: none;">
 	                                           <feature:display name="Executing Agency" module="Organizations">
 	                                            <logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
-													<img id="executing_agency_plus"  onclick="toggleGroup('executing_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-	                                            	<img id="executing_agency_minus" onclick="toggleGroup('executing_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" style="display : none"/>											</logic:notEmpty>
+													<img id="executing_agency_plus"  onclick="toggleGroup('executing_agency')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+	                                            	<img id="executing_agency_minus" onclick="toggleGroup('executing_agency')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display : none"/>											</logic:notEmpty>
 												<b><digi:trn key="aim:executingAgency">Executing Agency</digi:trn></b><br/>
 												<logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
 													<div id="executing_agency_dots">...</div>
@@ -2342,8 +2334,8 @@ function collapseAll() {
 
 											<feature:display name="Implementing Agency" module="Organizations">
 											<logic:notEmpty name="aimEditActivityForm" property="impAgencies">
-												<img id="implementing_agency_plus"  onclick="toggleGroup('implementing_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-                                            	<img id="implementing_agency_minus" onclick="toggleGroup('implementing_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>											</logic:notEmpty>
+												<img id="implementing_agency_plus"  onclick="toggleGroup('implementing_agency')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+                                            	<img id="implementing_agency_minus" onclick="toggleGroup('implementing_agency')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>											</logic:notEmpty>
 											<b><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="impAgencies">
 												<div id="implementing_agency_dots">...</div>
@@ -2363,12 +2355,10 @@ function collapseAll() {
 											<feature:display name="Beneficiary Agency" module="Organizations">
 											
 											<logic:notEmpty name="aimEditActivityForm" property="benAgencies">
-												<img id="benAgencies_agency_plus"  onclick="toggleGroup('benAgencies_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-                                            	<img id="benAgencies_agency_minus" onclick="toggleGroup('benAgencies_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>											</logic:notEmpty>
-									
-											
-											<b><digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn></b><br/>
-									
+												<img id="benAgencies_agency_plus"  onclick="toggleGroup('benAgencies_agency')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+                                            	<img id="benAgencies_agency_minus" onclick="toggleGroup('benAgencies_agency')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
+                                            </logic:notEmpty>										
+											<b><digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn></b><br/>									
 											<logic:notEmpty name="aimEditActivityForm" property="benAgencies">
 												<div id="benAgencies_dots">...</div>
 												<div id="act_benAgencies_agency" style="display: none;">
@@ -2386,8 +2376,8 @@ function collapseAll() {
 
 											<feature:display name="Contracting Agency" module="Organizations">
 											<logic:notEmpty name="aimEditActivityForm" property="conAgencies">
-												<img id="contracting_agency_plus"  onclick="toggleGroup('contracting_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-												<img id="contracting_agency_minus" onclick="toggleGroup('contracting_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>											</logic:notEmpty>
+												<img id="contracting_agency_plus"  onclick="toggleGroup('contracting_agency')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+												<img id="contracting_agency_minus" onclick="toggleGroup('contracting_agency')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>											</logic:notEmpty>
 											<b><digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="conAgencies">
 												<div id="contracting_agency_dots">...</div>
@@ -2402,14 +2392,12 @@ function collapseAll() {
 												</table>
 												</div>
 											</logic:notEmpty><br/>
-											</feature:display>
-
-
-											
+											</feature:display>					
 											
 											<logic:notEmpty name="aimEditActivityForm" property="sectGroups">
-												<img id="sectGroups_agency_plus"  onclick="toggleGroup('sectGroups_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-												<img id="sectGroups_agency_minus" onclick="toggleGroup('sectGroups_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>											</logic:notEmpty>
+												<img id="sectGroups_agency_plus"  onclick="toggleGroup('sectGroups_agency')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+												<img id="sectGroups_agency_minus" onclick="toggleGroup('sectGroups_agency')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
+											</logic:notEmpty>
 											
 											<feature:display name="Sector Group" module="Organizations">
                                             <field:display name="Sector Group" feature="Sector Group">
@@ -2428,13 +2416,13 @@ function collapseAll() {
 												</div>
 											</logic:notEmpty><br/>
 											</field:display>
-								</feature:display>
+										</feature:display>
         									<feature:display name="Regional Group" module="Organizations">
 											
 											<logic:notEmpty name="aimEditActivityForm" property="sectGroups">
-												<img id="regGroups_agency_plus"  onclick="toggleGroup('regGroups_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-												<img id="regGroups_agency_minus" onclick="toggleGroup('regGroups_agency')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>											</logic:notEmpty>
-											
+												<img id="regGroups_agency_plus"  onclick="toggleGroup('regGroups_agency')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+												<img id="regGroups_agency_minus" onclick="toggleGroup('regGroups_agency')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
+											</logic:notEmpty>											
 											
 											<field:display name="Regional Group" feature="Regional Group">
 											<b><digi:trn key="aim:regionalGroup">Regional Group</digi:trn></b><br/>
@@ -2572,69 +2560,52 @@ function collapseAll() {
 									<feature:display name="Contracting" module="Contracting">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
-                                                                                     <img id="contract_plus"  onclick="toggleGroup('contract')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif"/>
-                                                                                       <img id="contract_minus" onclick="toggleGroup('contract')" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif"style="display : none"/>
-											<digi:trn key="aim:IPAContracting">
-										    IPA Contracting</digi:trn>										</td>
-										<td bgcolor="#ffffff">
-											&nbsp;&nbsp;&nbsp;
-                                                                                         <div id="contract_dots">...</div>
+                                           <img id="contract_plus"  onclick="toggleGroup('contract')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+                                           <img id="contract_minus" onclick="toggleGroup('contract')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>
+											<digi:trn key="aim:IPAContracting">IPA Contracting</digi:trn>
+										</td>
+										<td bgcolor="#ffffff">&nbsp;&nbsp;&nbsp;
+                                            <div id="contract_dots">...</div>
 											<div id="act_contract" style="display: none;">
 											<table width="100%">
 												<tr>
-													<td>
-																						<!-- contents -->
-
-								 <logic:notEmpty name="aimEditActivityForm" property="contracts">
-                                                                                <table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
-                                                                                <c:forEach items="${aimEditActivityForm.contracts}" var="contract" varStatus="idx">
-                                                                                
-                                                                                <tr><td bgColor=#f4f4f2 align="center" vAlign="top">
-                                                                                
-                                                                                    <table width="100%" border="0" cellspacing="2" cellpadding="2" align="left" class="box-border-nopadding">
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:name">Contract name:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                
-                                                                                                ${contract.contractName}
-                                                                                             
-                                                                                               
-                                                                                            </td>
-                                                                                            
-                                                                                        </tr>
-                                                                                        
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:description">Description:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                               ${contract.description}
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        
-                                                                                        <tr>
-                                                                                            <td align="left">
-                                                                                                <b><digi:trn key="aim:IPA:popup:actCat">Activity Category:</digi:trn></b>
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                  <c:if test ="${not empty contract.activityCategory}">
-                                                                                                    ${contract.activityCategory.value}
-                                                                                                </c:if>
-                                                                                                
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                         
-                                                                                        
+													<td><!-- contents -->
+								 						<logic:notEmpty name="aimEditActivityForm" property="contracts">
+                                                        	<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
+                                                                 <c:forEach items="${aimEditActivityForm.contracts}" var="contract" varStatus="idx">
+                                                                       <tr><td bgColor=#f4f4f2 align="center" vAlign="top">
+                                                            	           <table width="100%" border="0" cellspacing="2" cellpadding="2" align="left" class="box-border-nopadding">
+                                                                               <tr>
+                                                                                  <td align="left">
+                                                                                     <b><digi:trn key="aim:IPA:popup:name">Contract name:</digi:trn></b>
+                                                                                   </td>
+                                                                                   <td>
+                                                                	                  ${contract.contractName}
+                                                                                   </td>
+                                                                                </tr>
+                                                                                 <tr>
+                                                                                    <td align="left">
+                                                                                       <b><digi:trn key="aim:IPA:popup:description">Description:</digi:trn></b>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                       ${contract.description}
+                                                                                     </td>
+                                                                                  </tr> 
+                                                                                   <tr>
+                                                                                     <td align="left">
+                                                                                  	     <b><digi:trn key="aim:IPA:popup:actCat">Activity Category:</digi:trn></b>
+                                                                                      </td>
+                                                                                       <td>
+                                                                                          <c:if test ="${not empty contract.activityCategory}">${contract.activityCategory.value}</c:if>
+                                                                                       </td>
+                                                                                    </tr>
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:startOfTendering">Start of Tendering:</digi:trn></b>
                                                                                             </td>
                                                                                             <td>
                                                                                                 ${contract.formattedStartOfTendering}
-                                                                                           </td>
-                                                                                            
+                                                                                           </td>                                                                                            
                                                                                         </tr>	
                                                                                         
                                                                                         <tr>

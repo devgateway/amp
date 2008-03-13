@@ -1077,15 +1077,9 @@ public class EditActivity
                                           double frmExRt = Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(),dt);
                                           String toCurrCode = Constants.DEFAULT_CURRENCY;
                                           if (tm != null)
-                                            toCurrCode = CurrencyUtil.
-                                                getAmpcurrency(
-                                                    tm.getAppSettings()
-                                                    .getCurrencyId()).getCurrencyCode();
-
-                                          
+                                            toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
                                           double toExRt = Util.getExchange(toCurrCode,dt);
-                                          DecimalWraper amt = CurrencyWorker.convertWrapper(
-                                              fundDet.getTransactionAmount()
+                                          DecimalWraper amt = CurrencyWorker.convertWrapper(fundDet.getTransactionAmount()
                                               .doubleValue(), frmExRt,
                                               toExRt,dt);
                                           fundingDetail.setContract(fundDet.getContract());
@@ -1094,33 +1088,44 @@ public class EditActivity
                                           if (adjType == Constants.PLANNED) {
                                             fundingDetail.setAdjustmentTypeName("Planned");
                                             if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-                                            	if (totPlanDisb.getValue()!=null){
-                                            		totPlanDisb.getValue().add(amt.getValue());
+                                            	if (totPlanDisb.getValue().doubleValue()!=0){
+                                            		totPlanDisb.setValue(totPlanDisb.getValue().add(amt.getValue()));
+                                            		totPlanDisb.setCalculations(totPlanDisb.getCalculations() + " + " + amt.getCalculations());
                                             	}
                                             	else{
                                             		totPlanDisb.setValue(amt.getValue());
+                                            		totPlanDisb.setCalculations(amt.getCalculations());
                                             	}
                                             }                                            
                                           }else if (adjType == Constants.ACTUAL) {
                                         	  fundingDetail.setAdjustmentTypeName("Actual");
                                         	  if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
-                                        	  	if(totComm.getValue()!=null){
-                                        	  		totComm.getValue().add(amt.getValue());
+                                        	  	if(totComm.getValue().doubleValue()!=0){
+                                        	  		totComm.setValue(totComm.getValue().add(amt.getValue()));
+                                        	  		totComm.setCalculations(totComm.getCalculations() + " + " + amt.getCalculations());
                                         	  	}
                                         	  	else{
                                         	  		totComm.setValue(amt.getValue());
+                                        	  		totComm.setCalculations(amt.getCalculations());
                                         	  	}
                                           }else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-                                        	  if(totDisb.getValue()!=null){
-                                        		  totDisb.getValue().add(amt.getValue());
+                                        	  if(totDisb.getValue().doubleValue()!=0){
+                                        		  totDisb.setValue(totDisb.getValue().add(amt.getValue()));
+                                        		  totDisb.setCalculations(totDisb.getCalculations() + " + " + amt.getCalculations());
                                         	  }
                                         	  else{
                                         		  totDisb.setValue(amt.getValue());
+                                        		  totDisb.setCalculations(amt.getCalculations());
                                         	  }
-                                          }else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
-                                        	  if(totExp.getValue()!=null)
-                                              totExp.getValue().add(amt.getValue());
-                                            }
+                                          } else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
+                                        	  if (totExp.getValue().doubleValue() != 0) {
+                                        		  totExp.setValue(totExp.getValue().add(amt.getValue()));
+                                        		  totExp.setCalculations(totExp.getCalculations() + " + " + amt.getCalculations());
+                                        	  } else {
+                                        		  totExp.setValue(amt.getValue());
+                                        		  totExp.setCalculations(amt.getCalculations());
+                                        	  }
+                                          }
                                           }
                                           if (fundDet.getTransactionType().intValue() ==
                                               Constants.EXPENDITURE) {
@@ -1180,16 +1185,16 @@ public class EditActivity
           //logger.info("size = " + fundingOrgs);
           eaForm.setFundingOrganizations(fundingOrgs);
           if(debug){
-        	eaForm.setTotalCommitments(totComm.getCalculations());
-            eaForm.setTotalDisbursements(totDisb.getCalculations());
-            eaForm.setTotalPlannedDisbursements(totPlanDisb.getCalculations());
-            eaForm.setTotalExpenditures(totExp.getCalculations());  
+        	  eaForm.setTotalCommitments(totComm.getCalculations());
+        	  eaForm.setTotalDisbursements(totDisb.getCalculations());
+        	  eaForm.setTotalPlannedDisbursements(totPlanDisb.getCalculations());
+        	  eaForm.setTotalExpenditures(totExp.getCalculations());  
           }
           else{
-          eaForm.setTotalCommitments(totComm.toString());
-          eaForm.setTotalDisbursements(totDisb.toString());
-          eaForm.setTotalPlannedDisbursements(totPlanDisb.toString());
-          eaForm.setTotalExpenditures(totExp.toString());
+        	  eaForm.setTotalCommitments(totComm.toString());
+        	  eaForm.setTotalDisbursements(totDisb.toString());
+        	  eaForm.setTotalPlannedDisbursements(totPlanDisb.toString());
+        	  eaForm.setTotalExpenditures(totExp.toString());
           }
           ArrayList regFunds = new ArrayList(); 
           Iterator rItr = activity.getRegionalFundings().iterator();

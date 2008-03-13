@@ -53,9 +53,9 @@
 			month = inputArray.monthName;		
 		}
 		else{
-			monthPos = format.indexOf('mm');
-			yearPos = format.indexOf('yyyy');
-			dayPos = format.indexOf('dd');
+			monthPos = format.toLowerCase().indexOf('mm');
+			yearPos = format.toLowerCase().indexOf('yyyy');
+			dayPos = format.toLowerCase().indexOf('dd');
 		}	
 		var result = '';
 		if (dayPos < monthPos){

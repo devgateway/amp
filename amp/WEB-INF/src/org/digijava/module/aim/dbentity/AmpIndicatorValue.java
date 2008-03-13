@@ -10,6 +10,11 @@ import java.util.Date;
  *
  */
 public class AmpIndicatorValue implements Serializable{
+	
+	public static final int TARGET=0;
+	public static final int ACTUAL=1;
+	public static final int BASE=2;
+	public static final int REVISED=3;
 
 	private static final long serialVersionUID = 1L;
 	private Long indValId;

@@ -8,7 +8,8 @@ import java.util.Collection;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 
 public class ActivityIndicator {
-	
+
+	private Long connectionId;
 	private Long indicatorId;
 	private Long indicatorValId;
 	private Float baseVal;
@@ -373,6 +374,12 @@ public class ActivityIndicator {
 	}
 	public void setAmpCategoryValue(String ampCategoryValue) {
 		this.ampCategoryValue = ampCategoryValue;
+	}
+	public Long getConnectionId() {
+		return connectionId;
+	}
+	public void setConnectionId(Long connectionId) {
+		this.connectionId = connectionId;
 	}
 	
 }

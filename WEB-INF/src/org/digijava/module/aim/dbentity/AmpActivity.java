@@ -143,7 +143,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	 * and contain set of values for this connection.
 	 * Please refer to AmpActivity.hbm.xml and IndicatorConnection.hbm.xml for details.
 	 */
-    private Set indicators;
+    private Set<IndicatorActivity> indicators;
     
     // Start Bolivia Adds
     private AmpCategoryValue creditType;
@@ -1282,11 +1282,11 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	    return jointCriteria;
 	}
 
-	public Set getIndicators() {
+	public Set<IndicatorActivity> getIndicators() {
 		return indicators;
 	}
 
-	public void setIndicators(Set indicators) {
+	public void setIndicators(Set<IndicatorActivity> indicators) {
 		this.indicators = indicators;
 	}
 

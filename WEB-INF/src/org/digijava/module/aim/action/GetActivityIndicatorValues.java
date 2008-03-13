@@ -59,10 +59,9 @@ public class GetActivityIndicatorValues extends Action
 					Iterator itr = eaForm.getIndicatorsME().iterator();
 					while (itr.hasNext()) 
 					{
-						
-						
 						ActivityIndicator actInd = (ActivityIndicator) itr.next();
-						if (actInd.getIndicatorId().equals(indValId)) 
+
+						if (actInd.getConnectionId().equals(indValId)) 
 						{
 							//AllPrgIndicators actInd = IndicatorUtil.getAmpIndicator(actIndicator.getIndicatorId(),actIndicator.getActivityId());
 							// AMP-2828 by mouhamad

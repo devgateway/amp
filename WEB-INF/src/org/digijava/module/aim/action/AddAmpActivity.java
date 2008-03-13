@@ -1286,10 +1286,9 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
           eaForm.setAllComments(allComments);
           //eaForm.setCommentsCol(colAux);
 
-          if (request.getParameter("logframe") != null ||
-              logframepr.compareTo("true") == 0) {
-            eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorsList(eaForm.getActivityId())
-                );
+          if (request.getParameter("logframe") != null || logframepr.compareTo("true") == 0) {
+//            eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorsList(eaForm.getActivityId()));
+            eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorHelperBeans(eaForm.getActivityId()));
             if (!eaForm.isEditAct()) {
               eaForm.setIndicatorId(null);
               eaForm.setIndicatorValId(null);
@@ -1344,7 +1343,8 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
       }
       else if (eaForm.getStep().equals("10")) { // show step 9 - M&E page
 
-          eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorsList(eaForm.getActivityId()));
+//          eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorsList(eaForm.getActivityId()));
+          eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorHelperBeans(eaForm.getActivityId()));
           
           for(Iterator itr = IndicatorUtil.getAllDefaultIndicators(eaForm.getActivityId()).iterator(); itr.hasNext();){
           	ActivityIndicator actInd = (ActivityIndicator) itr.next();
@@ -1368,7 +1368,7 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
           }
 
           //get the levels of risks
-          if (!eaForm.getIndicatorsME().isEmpty())
+          if (eaForm.getIndicatorsME()!=null && !eaForm.getIndicatorsME().isEmpty())
             eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
 
           return mapping.findForward("addActivityStep10");

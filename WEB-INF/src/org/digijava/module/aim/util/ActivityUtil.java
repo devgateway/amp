@@ -17,17 +17,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
-
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.ObjectNotFoundException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
-import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
@@ -51,6 +48,7 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
@@ -70,6 +68,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -694,82 +693,130 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         itr = indicators.iterator();
         while (itr.hasNext()) {
           ActivityIndicator actInd = (ActivityIndicator) itr.next();
-
-          AmpMEIndicatorValue indVal =new AmpMEIndicatorValue();
+          
+          
+          
           AmpIndicator ind=(AmpIndicator)session.get(AmpIndicator.class,actInd.getIndicatorId());
-          if (actInd.getIndicatorValId() != null &&
-              actInd.getIndicatorValId().longValue() > 0) {
-            indVal = (AmpMEIndicatorValue) session.get(AmpMEIndicatorValue.class, actInd.getIndicatorValId());
-          }
-          indVal.setActivityId(activity);
-          indVal.setIndicator(ind);
-          if(!ind.isDefaultInd()){
-        	  
-        	  Set indi = new HashSet();
-        	  indi.add(ind);
-        	  activity.setIndicators(indi);
-        	  
-        	  Set act = new HashSet();
-				act.add(activity);
-				//ind.setActivity(act); 
-		     session.saveOrUpdate(ind);
+
+          IndicatorActivity indConn=IndicatorUtil.getConnectionToActivity(actInd.getConnectionId());
+          if (indConn==null){
+        	  indConn=new IndicatorActivity();
+              indConn.setActivity(activity);
+              indConn.setIndicator(ind);
+          }else{
+        	  if (indConn.getValues()!=null && indConn.getValues().size()>0){
+        		  for (AmpIndicatorValue value : indConn.getValues()) {
+					session.delete(value);
+				}
+        		  indConn.getValues().clear();
+        	  }
           }
 
-          if (actInd.getBaseValDate() != null &&
-              actInd.getTargetValDate() != null &&
-              actInd.getRevisedTargetValDate() != null) {
-      
-            indVal.setBaseVal(actInd.getBaseVal());
-            indVal.setBaseValDate(DateConversion.getDate(actInd.getBaseValDate()));
-            indVal.setBaseValComments(actInd.getBaseValComments());
-      
-            indVal.setTargetVal(actInd.getTargetVal());
-            indVal.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
-            indVal.setTargetValComments(actInd.getTargetValComments());
-
-            indVal.setRevisedTargetVal(actInd.getRevisedTargetVal());
-            indVal.setRevisedTargetValDate(DateConversion.getDate(actInd.
-                getRevisedTargetValDate()));
-            indVal.setRevisedTargetValComments(actInd.
-                                               getRevisedTargetValComments());
-            //indVal.setLogframeValueId(actInd.getLogframeValueId());
-            indVal.setIndicatorsCategory(actInd.getIndicatorsCategory());
-
-            if (actInd.getCurrentValDate() != null &&
-                actInd.getCurrentValDate().trim().length() > 0) {
-              logger.info("Here 1");
-              if (actInd.getActualValDate() != null &&
-                  actInd.getActualValDate().trim().length() > 0
-                  && (actInd.getActualVal() != actInd.getCurrentVal() ||
-                      !actInd.getActualValDate().equals(
-                          actInd.getCurrentValDate()))) {
-                logger.info("Here 2");
-                /*AmpMECurrValHistory currValHist = new AmpMECurrValHistory();
-                currValHist.setCurrValue(actInd.getActualVal());
-                currValHist.setCurrValueDate(DateConversion.getDate(actInd.
-                    getActualValDate()));
-                currValHist.setComments(actInd.getActualValComments());
-                currValHist.setMeIndValue(indVal);
-                session.save(currValHist);
-                */
-              }
-              logger.info("Here 3");
-              indVal.setActualVal(actInd.getCurrentVal());
-              indVal.setActualValDate(DateConversion.getDate(actInd.
-                  getCurrentValDate()));
-              indVal.setActualValComments(actInd.getCurrentValComments());
-              logger.info("Here 4");
-            }
-
-            AmpIndicatorRiskRatings risk = null;
-            if (actInd.getRisk() != null &&
-                actInd.getRisk().longValue() > 0) {
-              risk = (AmpIndicatorRiskRatings) session.load(
-                  AmpIndicatorRiskRatings.class, actInd.getRisk());
-            }
-            indVal.setRisk(risk);
-            session.saveOrUpdate(indVal);
+          //indConn.setValues(new HashSet<AmpIndicatorValue>());
+          //IndicatorUtil.saveConnectionToActivity(indConn);
+          
+          if (actInd.getActualVal()!=null){
+        	  AmpIndicatorValue indValActual=new AmpIndicatorValue();
+        	  indValActual.setValueType(AmpIndicatorValue.ACTUAL);
+        	  indValActual.setValue(new Double(actInd.getActualVal()));
+        	  indValActual.setComment(actInd.getCurrentValComments());
+        	  indValActual.setValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
+        	  indValActual.setIndicatorConnection(indConn);
+        	  indConn.getValues().add(indValActual);
           }
+          if (actInd.getTargetVal()!=null){
+        	  AmpIndicatorValue indValTarget=new AmpIndicatorValue();
+        	  indValTarget.setValueType(AmpIndicatorValue.TARGET);
+        	  indValTarget.setValue(new Double(actInd.getTargetVal()));
+        	  indValTarget.setComment(actInd.getTargetValComments());
+        	  indValTarget.setValueDate(DateConversion.getDate(actInd.getTargetValDate()));
+        	  indValTarget.setIndicatorConnection(indConn);
+        	  indConn.getValues().add(indValTarget);
+          }
+          if (actInd.getBaseVal()!=null){
+        	  AmpIndicatorValue indValBase=new AmpIndicatorValue();
+        	  indValBase.setValueType(AmpIndicatorValue.BASE);
+        	  indValBase.setValue(new Double(actInd.getBaseVal()));
+        	  indValBase.setComment(actInd.getBaseValComments());
+        	  indValBase.setValueDate(DateConversion.getDate(actInd.getBaseValDate()));
+        	  indValBase.setIndicatorConnection(indConn);
+        	  indConn.getValues().add(indValBase);
+          }
+          if (actInd.getRevisedTargetVal()!=null){
+        	  AmpIndicatorValue indValBase=new AmpIndicatorValue();
+        	  indValBase.setValueType(AmpIndicatorValue.REVISED);
+        	  indValBase.setValue(new Double(actInd.getRevisedTargetVal()));
+        	  indValBase.setComment(actInd.getRevisedTargetValComments());
+        	  indValBase.setValueDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
+        	  indValBase.setIndicatorConnection(indConn);
+        	  indConn.getValues().add(indValBase);
+          }
+          
+          IndicatorUtil.saveConnectionToActivity(indConn);
+          
+          //========
+          
+//          AmpMEIndicatorValue indVal =new AmpMEIndicatorValue();
+//          if (actInd.getIndicatorValId() != null &&
+//              actInd.getIndicatorValId().longValue() > 0) {
+//            indVal = (AmpMEIndicatorValue) session.get(AmpMEIndicatorValue.class, actInd.getIndicatorValId());
+//          }
+//          indVal.setActivityId(activity);
+//          indVal.setIndicator(ind);
+//          if(!ind.isDefaultInd()){
+//        	  
+//        	  Set indi = new HashSet();
+//        	  indi.add(ind);
+//        	  activity.setIndicators(indi);
+//        	  
+//        	  Set act = new HashSet();
+//				act.add(activity);
+//				//ind.setActivity(act); 
+//		     session.saveOrUpdate(ind);
+//          }
+//
+//          if (actInd.getBaseValDate() != null &&
+//              actInd.getTargetValDate() != null &&
+//              actInd.getRevisedTargetValDate() != null) {
+//      
+//            indVal.setBaseVal(actInd.getBaseVal());
+//            indVal.setBaseValDate(DateConversion.getDate(actInd.getBaseValDate()));
+//            indVal.setBaseValComments(actInd.getBaseValComments());
+//      
+//            indVal.setTargetVal(actInd.getTargetVal());
+//            indVal.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
+//            indVal.setTargetValComments(actInd.getTargetValComments());
+//
+//            indVal.setRevisedTargetVal(actInd.getRevisedTargetVal());
+//            indVal.setRevisedTargetValDate(DateConversion.getDate(actInd.
+//                getRevisedTargetValDate()));
+//            indVal.setRevisedTargetValComments(actInd.
+//                                               getRevisedTargetValComments());
+//            //indVal.setLogframeValueId(actInd.getLogframeValueId());
+//            indVal.setIndicatorsCategory(actInd.getIndicatorsCategory());
+//
+//            if (actInd.getCurrentValDate() != null &&
+//                actInd.getCurrentValDate().trim().length() > 0) {
+//              if (actInd.getActualValDate() != null &&
+//                  actInd.getActualValDate().trim().length() > 0
+//                  && (actInd.getActualVal() != actInd.getCurrentVal() ||
+//                      !actInd.getActualValDate().equals(
+//                          actInd.getCurrentValDate()))) {
+//              }
+//              indVal.setActualVal(actInd.getCurrentVal());
+//              indVal.setActualValDate(DateConversion.getDate(actInd.getCurrentValDate()));
+//              indVal.setActualValComments(actInd.getCurrentValComments());
+//            }
+
+//            AmpIndicatorRiskRatings risk = null;
+//            if (actInd.getRisk() != null &&
+//                actInd.getRisk().longValue() > 0) {
+//              risk = (AmpIndicatorRiskRatings) session.load(
+//                  AmpIndicatorRiskRatings.class, actInd.getRisk());
+//            }
+//            indVal.setRisk(risk);
+//            session.saveOrUpdate(indVal);
+//          }
         }
       }
         String queryString = "select con from " + IPAContract.class.getName() + " con where con.activity=" + activityId;
@@ -1171,6 +1218,29 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     return col;
   }
 
+  /**
+   * Load activity from db.
+   * Use this one instead of method below this if you realy want to load all data.
+   * @author irakli
+   * @param id
+   * @return
+   * @throws DgException
+   */
+  public static AmpActivity loadActivity(Long id) throws DgException {
+		AmpActivity result = null;
+		Session session = PersistenceManager.getRequestDBSession();
+		try {
+			result = (AmpActivity) session.load(AmpActivity.class, id);
+		} catch (ObjectNotFoundException e) {
+			logger.debug("AmpActivity with id=" + id + " not found");
+		} catch (Exception e) {
+			throw new DgException("Canno load AmpActivity with id" + id, e);
+		}
+		return result;
+	}
+  
+  
+  //WTF!!!!
   public static AmpActivity getAmpActivity(Long id) {
     Session session = null;
     AmpActivity activity = null;

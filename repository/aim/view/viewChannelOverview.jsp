@@ -277,8 +277,8 @@ function commentWin(val) {
 											<b><digi:trn key="aim:plannedCommitment">
 										Planned Commitment</digi:trn> : </b>
 										</c:if> <c:if test="${activity.status != 'Planned'}">
-											<b><digi:trn key="aim:totalCostOfActivity">
-										Total Cost Of Activity</digi:trn> : </b>
+											<b><digi:trn key="aim:totalCommitmentsActual">
+										Total Commitments(Actual)</digi:trn> : </b>
 										</c:if> ${aimChannelOverviewForm.grandTotal}
 										${aimChannelOverviewForm.currCode} <FONT color="blue">
 										( <digi:trn key="aim:enteredInThousands">Entered in thousands 000</digi:trn>)

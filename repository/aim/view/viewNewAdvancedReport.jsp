@@ -31,22 +31,6 @@
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 
-<!--
-<div style='position:relative;display:none;' id="sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>">
-
-		<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
-		<br/>
-		<a href='#' onclick='closeMessage();return false'><b><digi:trn key="rep:pop:Close">Close</digi:trn></b></a>
-</div>
- -->
-<!--
-<div style='position:relative;display:none;' id="filterPicker-<bean:write name="reportMeta" property="ampReportId"/>">
-		<jsp:include page="/aim/reportsFilterPicker.do" />
-		<br/>
-		<a href='#' onclick='closeMessage();return false'><b><digi:trn key="rep:pop:Close">Close</digi:trn></b></a>
-
-</div>
- -->
 
 
 <c:set var="rowIdx" value="<%=new Integer(0)%>" scope="request"/>

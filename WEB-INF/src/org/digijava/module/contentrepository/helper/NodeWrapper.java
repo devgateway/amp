@@ -159,7 +159,7 @@ public class NodeWrapper {
 			this.node		= newNode;
 
 		} catch(RepositoryException e) {
-			ActionError	error	= new ActionError("error:contentrepository:addFile:badPath");
+			ActionError	error	= new ActionError("error.contentrepository.addFile.badPath");
 			errors.add("title", error);
 			e.printStackTrace();
 			errorAppeared	= true;

@@ -84,7 +84,8 @@ public class DateTimeUtil {
 		Date result = formater.parse(date);
 		return result;
 	}
-
+/*
+ * it has some problems  amp-2885
 	public static Date parseDateForPicker(String date) throws Exception{
 		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
 		String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
@@ -107,10 +108,32 @@ public class DateTimeUtil {
                     SimpleDateFormat formaterCont=new SimpleDateFormat(pattern);
                     result = formaterCont.parse(date);
                 }
-                System.out.println(result);
+    	return result;
+	}
+*/
+	// old code 
+	public static Date parseDateForPicker(String date) throws Exception{
+		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
+		String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+		if (pattern==null){
+			pattern=Constants.CALENDAR_DATE_PICKER;
+		}
+
+		SimpleDateFormat formater=new SimpleDateFormat(pattern);
+                Date result=null;
+		//if(date.contains("-")) date=date.replaceAll("-", "/");
+                try{
+                    result = formater.parse(date);
+                }
+                catch(Exception ex){
+                    // temp solution
+                    // TODO refactoring contracting dates
+                    SimpleDateFormat formaterCont=new SimpleDateFormat("MM/dd/yyyy");
+                    result = formaterCont.parse(date);
+                }
 		return result;
 	}
-
+	//
 	public static String parseDateForPicker2(Date date) throws Exception{
 		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
 		String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);;

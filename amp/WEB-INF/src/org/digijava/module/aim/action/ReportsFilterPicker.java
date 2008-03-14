@@ -115,6 +115,8 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSectors(ampSectors);
 		filterForm.setFromYears(new ArrayList<BeanWrapperImpl>());
 		filterForm.setToYears(new ArrayList<BeanWrapperImpl>());
+		filterForm.setFromMonths(new ArrayList<BeanWrapperImpl>());
+		filterForm.setToMonths(new ArrayList<BeanWrapperImpl>());
 		filterForm.setPageSizes(pageSizes);
 		filterForm.setRegionSelectedCollection(regions);
 		filterForm.setDonorTypes(donorTypes);
@@ -150,6 +152,17 @@ public class ReportsFilterPicker extends MultiAction {
 		    Long toYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));
 		    filterForm.setToYear(toYear);
 		}
+		
+		for (int i=1; i<=12; i++) {
+			filterForm.getFromMonths().add(new BeanWrapperImpl(new Integer(i)));
+			filterForm.getToMonths().add(new BeanWrapperImpl(new Integer(i)));
+		}
+		
+		if (filterForm.getFromMonth()==null)
+			filterForm.setFromMonth(1);
+		
+		if (filterForm.getToMonth()==null)
+			filterForm.setToMonth(1);
 		/*
 		for (int i = (2010 - Constants.FROM_YEAR_RANGE); i <= (2010 + Constants.TO_YEAR_RANGE); i++) {
 			filterForm.getFromYears().add(new BeanWrapperImpl(new Long(i)));
@@ -193,6 +206,9 @@ public class ReportsFilterPicker extends MultiAction {
 
 		Long toYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));
 		filterForm.setToYear(toYear);
+		filterForm.setFromMonth(-1);
+		filterForm.setToMonth(-1);
+		
 		filterForm.setLineMinRank(null);
 		filterForm.setPlanMinRank(null);
 		filterForm.setText(null);
@@ -289,9 +305,12 @@ public class ReportsFilterPicker extends MultiAction {
 		if (filterForm.getIndexString() != null){
 			arf.setIndexText(filterForm.getIndexString());
 		}
-
+		
 		arf.setFromYear(filterForm.getFromYear()==null || filterForm.getFromYear().longValue()==-1?null:new Integer(filterForm.getFromYear().intValue()));
 		arf.setToYear(filterForm.getToYear()==null || filterForm.getToYear().longValue()==-1?null:new Integer(filterForm.getToYear().intValue()));
+		arf.setFromMonth(filterForm.getFromMonth()==null || filterForm.getFromMonth().intValue()==-1?null:new Integer(filterForm.getFromMonth().intValue()));
+		arf.setToMonth(filterForm.getToMonth()==null || filterForm.getToMonth().intValue()==-1?null:new Integer(filterForm.getToMonth().intValue()));
+		
 		//arf.setDonors(Util.getSelectedObjects(AmpOrgGroup.class,filterForm.getSelectedDonors()));
 		AmpCurrency currency = (AmpCurrency) Util.getSelectedObject(AmpCurrency.class,filterForm.getCurrency());
 		arf.setCurrency(currency);

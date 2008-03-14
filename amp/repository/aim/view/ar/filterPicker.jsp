@@ -13,6 +13,8 @@
 
 
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@page import="org.digijava.module.aim.dbentity.AmpGlobalSettings"%>
+<%@page import="java.util.Collections"%>
 <bean:define id="reportMeta" name="reportMeta"
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
 	toScope="page" />
@@ -64,9 +66,35 @@
 			<%
 			}
 			%>
+			<%
+			int i=0;
+			java.util.Collection col = FeaturesUtil.getGlobalSettings();
+			java.util.Iterator itr = col.iterator();
+			while (itr.hasNext()) {
+				AmpGlobalSettings ags = (AmpGlobalSettings)itr.next();
+				if (ags.getGlobalSettingsName().equals("Filter reports by month"))
+						if (ags.getGlobalSettingsValue().equals("On")) {
+							i=1;
+							break;
+						}
+			}
+			
+			if (i==1) {
+			%>
+			<td align="right"><b><digi:trn key="rep:filer:FromMonth">From Month</digi:trn></b></td>
+			<td align="left"><b><digi:trn key="rep:filer:FromYear"> From Year</digi:trn></b></td>
+			<td align="center"><b><digi:trn key="rep:filer:ToMonth">To Month</digi:trn></b>
+			<b><digi:trn key="rep:filer:ToYear">To Year</digi:trn></b></td>
+			<%
+			}
+			else {
+			%>
 			<td align="center"><b><digi:trn key="rep:filer:FromYear">From Year</digi:trn></b></td>
 			<td align="center"><b><digi:trn key="rep:filer:ToYear">To Year</digi:trn></b></td>
 			<td>&nbsp;</td>
+			<%
+			}
+			%>
 		</tr>
 		<tr bgcolor="#EEEEEE">
 			<%
@@ -79,6 +107,47 @@
 			</html:select></td>
 			<%
 			}
+			
+			if (i==1) {
+			%>
+			<td align="right"><html:select property="fromMonth"
+				styleClass="inp-text">
+				<html:option value="-1">
+					<digi:trn key="rep:filer:All">All</digi:trn>
+				</html:option>
+				<html:optionsCollection property="fromMonths" label="wrappedInstance"
+					value="wrappedInstance" />
+			</html:select></td>
+			
+			<td align="left"><html:select property="fromYear"
+				styleClass="inp-text">
+				<html:option value="-1">
+					<digi:trn key="rep:filer:All">All</digi:trn>
+				</html:option>
+				<html:optionsCollection property="fromYears" label="wrappedInstance"
+					value="wrappedInstance" />
+			</html:select></td>
+			
+			<td align="center"><html:select property="toMonth"
+				styleClass="inp-text">
+				<html:option value="-1">
+					<digi:trn key="rep:filer:All">All</digi:trn>
+				</html:option>
+				<html:optionsCollection property="toMonths" label="wrappedInstance"
+					value="wrappedInstance" />
+			</html:select>
+
+			<html:select property="toYear"
+				styleClass="inp-text">
+				<html:option value="-1">
+					<digi:trn key="rep:filer:All">All</digi:trn>
+				</html:option>
+				<html:optionsCollection property="toYears" label="wrappedInstance"
+					value="wrappedInstance" />
+			</html:select></td>
+			<%
+			}
+			else {
 			%>
 			<td align="center"><html:select property="fromYear"
 				styleClass="inp-text">
@@ -88,7 +157,7 @@
 				<html:optionsCollection property="fromYears" label="wrappedInstance"
 					value="wrappedInstance" />
 			</html:select></td>
-
+			
 			<td align="center"><html:select property="toYear"
 				styleClass="inp-text">
 				<html:option value="-1">
@@ -98,6 +167,9 @@
 					value="wrappedInstance" />
 			</html:select></td>
 			<td>&nbsp;</td>
+			<%
+			}
+			%>
 		</tr>
 
 		<tr bgcolor="#EEEEEE">

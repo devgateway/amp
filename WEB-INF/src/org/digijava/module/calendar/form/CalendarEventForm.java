@@ -303,7 +303,7 @@ public class CalendarEventForm
                        new ActionError("error.calendar.invalidEventEndDate"));
         } else if(!DateBreakDown.isValidTime(this.selectedEndTime)) {
             errors.add(null,
-                       new ActionError("error:calendar:invalidEventEndTime"));
+                       new ActionError("error.calendar.invalidEventEndTime"));
         }
         // startDate <= endDate ?
         GregorianCalendar startDate = DateBreakDown.createValidGregorianCalendar(this.

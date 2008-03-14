@@ -2,13 +2,23 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <HTML>
 <digi:base />
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <digi:context name="digiContext" property="context"/>
 <HEAD>
-	<TITLE>AMP - <tiles:getAsString name="title"/></TITLE>
+	<TITLE>
+		<%
+		String title=(String)((org.apache.struts.tiles.ComponentContext) request.getAttribute("org.apache.struts.taglib.tiles.CompContext")).getAttribute("title");
+		String key=(title.replaceAll(" ",""));
+		%>
+			<c:set var="key">aim:pagetitle:<%=key%></c:set>
+			<digi:trn key="aim:pagetitle:amp">AMP </digi:trn> 
+			<digi:trn key="${key}">
+				<%=title%>
+			</digi:trn>
+		</TITLE>
 	<META http-equiv=Content-Type content="text/html; charset=utf-8">
 </HEAD>
 <BODY>

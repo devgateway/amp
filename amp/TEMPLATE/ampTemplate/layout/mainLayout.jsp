@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 
 <HTML>
@@ -26,19 +26,32 @@
 	<HEAD>
 
 
-
+		<%
+			String title=(String)((org.apache.struts.tiles.ComponentContext) request.getAttribute("org.apache.struts.taglib.tiles.CompContext")).getAttribute("title");
+			String key=(title.replaceAll(" ",""));
+			%>
 		<logic:present name="extraTitle" scope="request">
 
 			<bean:define id="extTitle" name="extraTitle" scope="request" type="java.lang.String" />
 
-			<TITLE>AMP<tiles:getAsString name="title"/> <%=extTitle%></TITLE>
-
+		<TITLE>
+			
+				<c:set var="key">aim:pagetitle:<%=key%><%=extTitle%></c:set>
+				<digi:trn key="aim:pagetitle:amp">AMP </digi:trn> 
+				<digi:trn key="${key}">
+					<%=title%> <%=extTitle%>
+				</digi:trn>
+		</TITLE>
 		</logic:present>
 
 		<logic:notPresent name="extraTitle" scope="request">
-
-			<TITLE>AMP <tiles:getAsString name="title"/></TITLE>
-
+		<TITLE>
+				<c:set var="key">aim:pagetitle:<%=key%></c:set>
+				<digi:trn key="aim:pagetitle:amp">AMP </digi:trn> 
+				<digi:trn key="${key}">
+					<%=title%>
+				</digi:trn>
+		</TITLE>
 		</logic:notPresent>
 
 

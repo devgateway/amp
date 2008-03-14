@@ -236,6 +236,19 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             </td>
                                                                                         </tr>
                                                                                          </field:display>
+                                                                                         <field:display name="Type" feature="Contracting">
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:type">type</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                  <c:if test ="${not empty contract.type}">
+                                                                                                    ${contract.type.value}
+                                                                                                </c:if>
+                                                                                                
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                         </field:display>
                                                                                          <field:display name="Start of Tendering" feature="Contracting">
                                                                                         
                                                                                         <tr>

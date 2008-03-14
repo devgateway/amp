@@ -143,6 +143,26 @@ function selectOrganisation1() {
 		</td>
 	</tr>
          </field:display>
+         
+         <field:display name="Type" feature="Contracting">
+	<tr>
+		<td align="right"  nowrap>
+		<b><digi:trn key="aim:IPA:popup:type">Type</digi:trn>:</b>
+		</td>
+		<td>
+			<html:select property="typeId" styleClass="inp-text">
+			<option value="-1"><digi:trn key="aim:select">Select</digi:trn></option>
+			<logic:iterate id="type" name="aimIPAContractForm" property="types">
+				<c:set var="trn">
+					<digi:trn key="aim:ipa:popup:${type.id}">${type.value}</digi:trn>
+				</c:set>
+				<html:option value="${type.id}">${trn}</html:option>			
+			</logic:iterate>			
+			</html:select>
+		</td>
+	</tr>
+         </field:display>
+         
 	<field:display name="Start of Tendering" feature="Contracting">
 		<tr>
 		<td align="right"  nowrap>
@@ -220,6 +240,7 @@ function selectOrganisation1() {
         </td>
 	</tr>	
          </field:display>
+         
         
 	<field:display name="Total EC Contribution" feature="Contracting">
 

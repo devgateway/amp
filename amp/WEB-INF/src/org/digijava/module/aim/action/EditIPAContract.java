@@ -83,8 +83,10 @@ public class EditIPAContract extends MultiAction {
         eaf.setCurrencies(CurrencyUtil.getAmpCurrency());
         Collection<AmpCategoryValue> catValues = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IPA_ACTIVITY_CATEGORY_KEY, true);
         Collection<AmpCategoryValue> statuses = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IPA_STATUS_KEY, true);
+        Collection<AmpCategoryValue> types = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IPA_TYPE_KEY, true);
         eaf.setActivitiyCategories(catValues);
         eaf.setStatuses(statuses);
+        eaf.setTypes(types);
         eaf.setOrganisations(DbUtil.getAmpOrganisations());
 
         return modeSelect(mapping, form, request, response);
@@ -120,6 +122,10 @@ public class EditIPAContract extends MultiAction {
         }
         if (contract.getStatus() != null) {
             euaf.setStatusId(contract.getStatus().getId());
+        }
+        
+        if (contract.getType()!= null) {
+            euaf.setTypeId(contract.getType().getId());
         }
         if (contract.getOrganization() != null) {
             euaf.setContrOrg(contract.getOrganization().getAmpOrgId());
@@ -355,8 +361,9 @@ public class EditIPAContract extends MultiAction {
         if (euaf.getStatusId() != null) {
             eua.setStatus(CategoryManagerUtil.getAmpCategoryValueFromDb(euaf.getStatusId()));
         }
-
-
+        if (euaf.getTypeId() != null) {
+            eua.setType(CategoryManagerUtil.getAmpCategoryValueFromDb(euaf.getTypeId()));
+        }
         if (euaf.getStartOfTendering() != null&&!euaf.getStartOfTendering().equals("")) {
             eua.setStartOfTendering(DateTimeUtil.parseDateForPicker(euaf.getStartOfTendering()));
         }

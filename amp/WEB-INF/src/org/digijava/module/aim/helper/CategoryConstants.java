@@ -50,6 +50,8 @@ public class CategoryConstants {
         
         public static final String IPA_STATUS_NAME="IPA Status";
 	public static final String IPA_STATUS_KEY="ipa_cat_stat";
-	
+        
+        public static final String IPA_TYPE_NAME="IPA Type";
+	public static final String IPA_TYPE_KEY="ipa_type";
 }
 

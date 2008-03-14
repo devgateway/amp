@@ -191,6 +191,19 @@ function projectFiche(id)
                                                                                             </td>
                                                                                         </tr>
                                                                                     </field:display>
+                                                                                    <field:display name="Type" feature="Contracting Tab">
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:Type">Type</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                  <c:if test ="${not empty contract.type}">
+                                                                                                    ${contract.type.value}
+                                                                                                </c:if>
+                                                                                                
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </field:display>
                                                                                          
                                                                                               <field:display name="Start of Tendering" feature="Contracting Tab">
                                                                                         <tr>

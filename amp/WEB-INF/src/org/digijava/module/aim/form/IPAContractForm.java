@@ -19,7 +19,9 @@ public class IPAContractForm extends ActionForm  {
 	private List<IPAContractDisbursement> contractDisbursements;
 	private Collection<AmpCategoryValue> activitiyCategories;
         private Collection<AmpCategoryValue> statuses;
+        private Collection<AmpCategoryValue> types;
         private Long statusId;
+        private Long typeId;
 
         public Long getStatusId() {
             return statusId;
@@ -315,6 +317,23 @@ public class IPAContractForm extends ActionForm  {
 		this.activityCategoryId = activityCategoryId;
 	}
         
+        public Collection<AmpCategoryValue> getTypes() {
+            return types;
+        }
+
+        public void setTypes(Collection<AmpCategoryValue> types) {
+            this.types = types;
+        }
+        
+        public Long getTypeId() {
+            return typeId;
+        }
+
+        public void setTypeId(Long typeId) {
+            this.typeId = typeId;
+        }
+
+        
         public void reset(ActionMapping mapping, HttpServletRequest request) {
             if (request.getParameter("new")!=null){
             contractDisbursements=null;
@@ -351,6 +370,8 @@ public class IPAContractForm extends ActionForm  {
             activityCategoryId=null;
             selContractDisbursements=null;
             contrOrg=null;
+            types=null;
+            typeId=null;
             }
 	
             

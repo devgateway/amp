@@ -82,7 +82,9 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Boolean budget=null;
 	private Integer lineMinRank;
 	private Integer planMinRank;
+	private Integer fromMonth;
 	private Integer fromYear;
+	private Integer toMonth;
 	private Integer toYear;	
 	private Long regionSelected=null;
 	private boolean approved=false;
@@ -231,7 +233,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 			"SELECT v.amp_activity_id FROM v_implementing_agency v  " +
 			"WHERE v.amp_org_id IN ("+ Util.toCSString(implementingAgency, true) +")";
 		
-		if(fromYear!=null) {
+		/*if(fromYear!=null) {
 			AmpARFilterHelper filterHelper = Logic.getInstance().getAmpARFilterHelper();
 			String FROM_FUNDING_YEAR_FILTER = filterHelper.createFromYearQuery(fromYear);
 		    queryAppend(FROM_FUNDING_YEAR_FILTER);
@@ -243,6 +245,33 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		    queryAppend(TO_FUNDING_YEAR_FILTER);
 		}
 		
+		if (fromMonth!=null) {
+			AmpARFilterHelper filterHelper = Logic.getInstance().getAmpARFilterHelper();
+			String FROM_MONTH_FILTER = filterHelper.createFromMonthQuery(fromMonth);
+			queryAppend(FROM_MONTH_FILTER);
+		}
+		
+		if (toMonth!=null) {
+			AmpARFilterHelper filterHelper = Logic.getInstance().getAmpARFilterHelper();
+			String TO_MONTH_FILTER = filterHelper.createToMonthQuery(toMonth);
+			queryAppend(TO_MONTH_FILTER);
+		}*/
+		
+		if (fromYear==null)
+			fromYear = 0;
+		
+		if (fromMonth==null)
+			fromMonth = 1;
+		
+		if (toYear==null)
+			toYear = 9999;
+		
+		if (toMonth==null)
+			toMonth = 12;
+		
+		AmpARFilterHelper filterHelper = Logic.getInstance().getAmpARFilterHelper();
+		String MONTH_YEAR_FILTER = filterHelper.createMonthYearQuery(fromMonth, fromYear, toMonth, toYear);
+		queryAppend(MONTH_YEAR_FILTER);
 		
 		if(text!=null)
 		{
@@ -590,6 +619,22 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		if(text.trim().length()==0) this.text=null;
 		this.text = text;
 		
+	}
+	
+	public void setFromMonth(Integer fromMonth) {
+		this.fromMonth = fromMonth;
+	}
+	
+	public void setToMonth(Integer toMonth) {
+		this.toMonth = toMonth;
+	}
+	
+	public Integer getFromMonth() {
+		return fromMonth;
+	}
+	
+	public Integer getToMonth() {
+		return toMonth;
 	}
 
 	public Integer getFromYear() {

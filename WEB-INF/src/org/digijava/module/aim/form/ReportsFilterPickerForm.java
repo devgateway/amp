@@ -26,6 +26,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection risks;
 	private Collection<BeanWrapperImpl> fromYears;
 	private Collection<BeanWrapperImpl> toYears;
+	private Collection<BeanWrapperImpl> fromMonths;
+	private Collection<BeanWrapperImpl> toMonths;
 	private Collection actRankCollection;
 	private Collection pageSizes; //A0,A1,A2,A3,A4
 	private Collection donorTypes; //Ex: Multilateral, Bilateral, Regional Governament
@@ -50,6 +52,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	
 	private Long fromYear;
 	private Long toYear;
+	private Integer toMonth;
+	private Integer fromMonth;
 	private Long currency;
 	private Long calendar;
 	private Long ampReportId;
@@ -128,6 +132,18 @@ public class ReportsFilterPickerForm extends ActionForm {
 	}
 	public Collection<BeanWrapperImpl> getFromYears() {
 		return fromYears;
+	}
+	public Collection<BeanWrapperImpl> getFromMonths() {
+		return fromMonths;
+	}
+	public void setFromMonths(Collection<BeanWrapperImpl> fromMonths) {
+		this.fromMonths = fromMonths;
+	}
+	public Collection<BeanWrapperImpl> getToMonths() {
+		return toMonths;
+	}
+	public void setToMonths(Collection<BeanWrapperImpl> toMonths) {
+		this.toMonths = toMonths;
 	}
 	public void setFromYears(Collection<BeanWrapperImpl> fromYears) {
 		this.fromYears = fromYears;
@@ -234,6 +250,22 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public Collection getPageSizes() {
 		return pageSizes;
+	}
+	
+	public Integer getToMonth() {
+		return toMonth;
+	}
+	
+	public void setToMonth(Integer toMonth) {
+		this.toMonth = toMonth;
+	}
+	
+	public Integer getFromMonth() {
+		return fromMonth;
+	}
+	
+	public void setFromMonth(Integer fromMonth) {
+		this.fromMonth = fromMonth;
 	}
 
 	public void setPageSizes(Collection pageSizes) {

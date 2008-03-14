@@ -238,7 +238,7 @@ public class AddAmpActivity extends Action {
 							if (prevSelSectors != null) {
 								if (prevSelSectors.isEmpty()) {
 									selectedSector
-											.setSectorPercentage(new Integer(
+											.setSectorPercentage(new Float(
 													100));
 								} else {
 									selectedSector.setSectorPercentage(null);
@@ -251,7 +251,7 @@ public class AddAmpActivity extends Action {
 								}
 								prevSelSectors.add(selectedSector);
 							} else {
-								selectedSector.setSectorPercentage(new Integer(
+								selectedSector.setSectorPercentage(new Float(
 										100));
 								prevSelSectors = new ArrayList<ActivitySector>();
 								prevSelSectors.add(selectedSector);
@@ -323,7 +323,7 @@ public class AddAmpActivity extends Action {
 					if (prevSelSectors != null) {
 						if (prevSelSectors.isEmpty()) {
 							selectedSector
-									.setSectorPercentage(new Integer(100));
+									.setSectorPercentage(new Float(100));
 						} else {
 							selectedSector.setSectorPercentage(null);
 							Iterator iter = prevSelSectors.iterator();
@@ -335,7 +335,7 @@ public class AddAmpActivity extends Action {
 						}
 						prevSelSectors.add(selectedSector);
 					} else {
-						selectedSector.setSectorPercentage(new Integer(100));
+						selectedSector.setSectorPercentage(new Float(100));
 						prevSelSectors = new ArrayList<ActivitySector>();
 						prevSelSectors.add(selectedSector);
 					}
@@ -448,10 +448,10 @@ public class AddAmpActivity extends Action {
       if (addComponente) {
 			if (prevSelComponentes != null) {
 				if (prevSelComponentes.isEmpty())
-					selectedComponente.setSectorPercentage(new Integer(100));
+					selectedComponente.setSectorPercentage(new Float(100));
 				prevSelComponentes.add(selectedComponente);
 			} else {
-				selectedComponente.setSectorPercentage(new Integer(100));
+				selectedComponente.setSectorPercentage(new Float(100));
 				prevSelComponentes = new ArrayList<ActivitySector>();
 				prevSelComponentes.add(selectedComponente);
 			}

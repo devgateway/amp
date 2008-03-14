@@ -1696,7 +1696,7 @@ public class EditActivity
 									actCompo.setSubsectorLevel2Name(subsectorLevel2.getName());
 								}
 							}
-							actCompo.setSectorPercentage(ampActSect.getPercentage().intValue());
+							actCompo.setSectorPercentage(ampActSect.getPercentage().floatValue());
 						}
 						activitySectors.add(actCompo);
 					}

@@ -186,7 +186,7 @@ public class ImportManager {
       aas.setActivityId(retValue);
       aas.setSectorId(ampSector);
       if (cvt.getPercent() >= 0) {
-        aas.setSectorPercentage(Integer.valueOf(cvt.getPercent()));
+        aas.setSectorPercentage(Float.valueOf(cvt.getPercent()));
       }
       retValue.getSectors().add(aas);
     }
@@ -414,7 +414,7 @@ public class ImportManager {
         ampActivity.getSectors().add(ampActivitySector);
       }
       if (cvt.getPercent() >= 0) {
-        ampActivitySector.setSectorPercentage(Integer.valueOf(cvt.getPercent()));
+        ampActivitySector.setSectorPercentage(Float.valueOf(cvt.getPercent()));
       }
     }
 

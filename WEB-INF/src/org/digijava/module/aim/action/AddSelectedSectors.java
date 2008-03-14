@@ -62,12 +62,12 @@ public class AddSelectedSectors
             logger.info("adding now...");
             if (eaForm.getCols() == null) {
               if (selsearchedSector.length == 1) {
-                sctr.setSectorPercentage(new Integer(100));
+                sctr.setSectorPercentage(new Float(100));
               }
             }
             else if (eaForm.getCols().size() == 0) {
               if (selsearchedSector.length == 1) {
-                sctr.setSectorPercentage(new Integer(100));
+                sctr.setSectorPercentage(new Float(100));
               }
             }
             else if (eaForm.getCols().size() == 1) {

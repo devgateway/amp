@@ -27,7 +27,7 @@ public class ActivitySector implements Serializable{
 
 	private String subsectorLevel2Name;
 	
-	private Integer sectorPercentage;
+	private Float sectorPercentage;
 	
 	private String view;
 	
@@ -173,11 +173,11 @@ public class ActivitySector implements Serializable{
 		this.subsectorLevel2Name = subsectorLevel2Name;
 	}
 
-	public Integer getSectorPercentage() {
+	public Float getSectorPercentage() {
 		return sectorPercentage;
 	}
 
-	public void setSectorPercentage(Integer sectorPercentage) {
+	public void setSectorPercentage(Float sectorPercentage) {
 		this.sectorPercentage = sectorPercentage;
 	}
 

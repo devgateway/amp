@@ -1,22 +1,23 @@
 package org.digijava.module.aim.action;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import java.util.Collection;
-import java.util.Iterator;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.form.EditActivityForm;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
-
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
+import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 
 public class AddIndicatorForStepNine extends Action{
@@ -33,6 +34,9 @@ private static Logger logger = Logger.getLogger(AddIndicatorForStepNine.class);
 		Collection colampMEIndValbox = (Collection)session.getAttribute("ampMEIndValbox");
 		String name=null,code=null;
 		Collection  tmpActivityIndicator = 	eaForm.getIndicatorsME();
+		if (tmpActivityIndicator==null){
+			tmpActivityIndicator=new HashSet();
+		}
 		
 	 if(colampMEIndValbox!=null && !colampMEIndValbox.isEmpty()){
 		Iterator itr = colampMEIndValbox.iterator();

@@ -455,6 +455,35 @@ public class IndicatorUtil {
 	}
 	
 	/**
+	 * Tries to find connection bean between activity and indicator.
+	 * If not found NULL is returned.
+	 * @param activity
+	 * @param indicator
+	 * @return
+	 * @throws DgException
+	 */
+	public static IndicatorActivity findActivityIndicatorConnection(AmpActivity activity,AmpIndicator indicator) throws DgException{
+		IndicatorActivity result=null;
+		//these two line may throw null pointer exception, but don't fix here, fix caller of this method to not path null here!
+		Long activityId=activity.getAmpActivityId();
+		Long indicatorId=indicator.getIndicatorId();
+		Session session=PersistenceManager.getRequestDBSession();
+		String oql="from "+IndicatorActivity.class.getName()+" conn ";
+		oql+=" where conn.activity.ampActivityId=:actId and conn.indicator.indicatorId=:indicId";
+		try {
+			Query query=session.createQuery(oql);
+			query.setLong("actId", activityId);
+			query.setLong("indicId", indicatorId);
+			result=(IndicatorActivity)query.uniqueResult();
+		} catch (ObjectNotFoundException e) {
+			logger.debug("Cannot find conenction for activity("+activityId+") and indicator("+indicatorId+")!");
+		} catch (HibernateException e) {
+			throw new DgException("Error searching conenction for activity("+activityId+") and indicator("+indicatorId+")!",e);
+		}
+		return result;
+	}
+	
+	/**
 	 * Loads all indicators for activity.
 	 * NULL if there are no Indicators
 	 * TODO correct this method
@@ -506,6 +535,7 @@ public class IndicatorUtil {
 	 */
 	public static Set<ActivityIndicator> getActivityIndicatorHelperBeans(AmpActivity activity) throws DgException{
 		Set<ActivityIndicator> result=null;
+		if (activity!=null) return null;
 		Set<IndicatorActivity> indicators =activity.getIndicators();
 		if (indicators!=null && indicators.size()>0){
 			result=new HashSet<ActivityIndicator>();
@@ -519,7 +549,7 @@ public class IndicatorUtil {
 				helper.setIndicatorName(indicator.getName());
 				helper.setDefaultInd(indicator.isDefaultInd());
 				helper.setIndicatorsCategory(indicator.getIndicatorsCategory());
-				helper.setIndicatorValId(connection.getId());
+				helper.setIndicatorValId(indicator.getIndicatorId());
 				if (indicator.getRisk()!=null){
 					helper.setRisk(indicator.getRisk().getAmpIndRiskRatingsId());
 				}

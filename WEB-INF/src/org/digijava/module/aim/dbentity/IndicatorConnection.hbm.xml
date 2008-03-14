@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
  <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 	<hibernate-mapping>
-		<class name="org.digijava.module.aim.dbentity.IndicatorConnection" table="AMP_INDICATOR_CONNECTION">
+		<class name="org.digijava.module.aim.dbentity.IndicatorConnection" table="AMP_INDICATOR_CONNECTION" discriminator-value="c">
 			<id name="id" column="id" type="java.lang.Long">
 				<generator class="native">
 					<param name="sequence">AMP_INDICATOR_CONNECTION_seq</param>
 				</generator>
 			</id>
 			
-			<discriminator column="sub_clazz"/>
+			<discriminator column="sub_clazz" force="true"/>
 			
 			<many-to-one name="indicator" column="indicator_id" class="org.digijava.module.aim.dbentity.AmpIndicator" cascade="none"/>
 		

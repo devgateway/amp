@@ -68,7 +68,7 @@ public class SaveIndicatorValues extends Action
 						}
 
 						if (eaForm.getCurrentValDate() != null) {
-							logger.info("Setting currValComments :" + eaForm.getCurrentValComments());
+							logger.debug("Setting currValComments :" + eaForm.getCurrentValComments());
 							if( eaForm.getCurrentVal() != null) {
 								temp.setCurrentVal(Float.parseFloat(eaForm.getCurrentVal()));
 							}
@@ -78,6 +78,7 @@ public class SaveIndicatorValues extends Action
                           }
 							//temp.setActualValDate(eaForm.getCurrentValDate());
 							temp.setCurrentValComments(eaForm.getCurrentValComments());
+							temp.setActualValComments(eaForm.getCurrentValComments());
 							
 						}
 						if(eaForm.getCurrentVal() != null){

@@ -235,13 +235,13 @@ ${fn:replace(message,quote,escapedQuote)}
 																	<tr><td>&nbsp;</td></tr>
 
 																	<tr><td valign="top">
-																<logic:notEmpty name="aimEditActivityForm" property="costs">
-																<bean:define id="costs" name="aimEditActivityForm" property="costs" toScope="request"/>
-																<bean:define id="mode" value="form" type="java.lang.String" toScope="request"/>
-                                                                                                                                <digi:trn key="aim:amountsinthousands">Amounts in thousands (000) -</digi:trn><c:out value="${aimEditActivityForm.currCode}"/>
-																<jsp:include page="viewCostsSummary.jsp"/>
-				                                               </logic:notEmpty>
-
+																		<c:if test="${!empty aimEditActivityForm.costs}">
+																		<bean:define id="costs" name="aimEditActivityForm" property="costs" toScope="request"/>
+																		<bean:define id="mode" value="form" type="java.lang.String" toScope="request"/>
+		                                                                  <digi:trn key="aim:amountsinthousands">Amounts in thousands (000) -</digi:trn>
+		                                                                  <c:out value="${aimEditActivityForm.currCode}"/>
+																		<jsp:include page="viewCostsSummary.jsp"/>
+																		</c:if>
 																	</td></tr>
 
 

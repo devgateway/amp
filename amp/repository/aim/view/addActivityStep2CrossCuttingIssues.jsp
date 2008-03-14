@@ -70,59 +70,66 @@ function edit(key) {
                                                     <td>
                                                       <table cellSpacing="1" cellPadding="5" border="0"  width="40%">
                                                       <field:display name="Equal Opportunity" feature="Cross Cutting Issues">
+                                                                                                                            <bean:define id="eqOppKey">
+																	   <c:out value="${aimEditActivityForm.equalOpportunity}"/>
+																</bean:define>
                                                         <tr>
 															<td>
 															  <digi:trn key="aim:equalOportunity">Equal Opportunity:</digi:trn>
 															</td>
-															<td>
-																<bean:define id="eqOppKey">
-																	   <c:out value="${aimEditActivityForm.equalOpportunity}"/>
-																</bean:define>
-																<digi:edit key="<%=eqOppKey%>"/>
-															</td>
+															
 															<td>
 																
 																<a href="javascript:edit('<%=eqOppKey%>')">
 																	<digi:trn key="aim:edit">Edit</digi:trn>
 																</a>
 															</td>
+                                                                                                                         <td>
+																
+																<digi:edit key="<%=eqOppKey%>"/>
+															</td>
 														</tr>
 														</field:display>
 														<field:display name="Environment" feature="Cross Cutting Issues">
-                                                        <tr>
+                                                        <tr>                                                                    <bean:define id="envKey">
+																	<c:out value="${aimEditActivityForm.environment}"/>
+																</bean:define>
 															<td>
 															 <digi:trn key="aim:environment"> Environment:</digi:trn>&nbsp;&nbsp;
 															</td>
-															<td>
-																<bean:define id="envKey">
-																	<c:out value="${aimEditActivityForm.environment}"/>
-																</bean:define>
-																<digi:edit key="<%=envKey%>"/>
 															
-															</td>
 															<td>
 																<a href="javascript:edit('<%=envKey%>')">
 																	<digi:trn key="aim:edit">Edit</digi:trn>
 																</a>
 															</td>
+                                                                                                                         <td>
+																
+																<digi:edit key="<%=envKey%>"/>
+															
+															</td>
 														</tr>
 														</field:display>
 														<field:display name="Minorities" feature="Cross Cutting Issues">
+                                                                                                                     <bean:define id="minKey">
+																	<c:out value="${aimEditActivityForm.minorities}"/>
+																</bean:define>
+																
                                                         <tr>
 															<td>
 															  <digi:trn key="aim:monitories"> Minorities:</digi:trn>
 															</td>
-															<td>
-															<bean:define id="minKey">
-																	<c:out value="${aimEditActivityForm.minorities}"/>
-																</bean:define>
-																<digi:edit key="<%=minKey%>"/>
-															</td>
+									
 															<td>
 																<a href="javascript:edit('<%=minKey%>')">
 																	<digi:trn key="aim:edit">Edit</digi:trn>
 																</a>
+                                                                                                                               
+                                                                                                                                 
 															</td>
+                                                                                                                        <td>
+                                                                                                                          <digi:edit key="<%=minKey%>"/>
+                                                                                                                      </td>
 														</tr>
 														</field:display>
                                                       </table>

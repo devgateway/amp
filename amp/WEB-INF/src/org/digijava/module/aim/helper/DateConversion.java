@@ -1,5 +1,6 @@
 package org.digijava.module.aim.helper ;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
@@ -49,6 +50,17 @@ public class DateConversion
 		}
 		return textDate;
 	}
+	
+	public static Date getDate(String strDate, String format)
+	{
+			SimpleDateFormat formater=new SimpleDateFormat(format);
+			try {
+				return formater.parse(strDate);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			return null;
+	}	
 
 	/**@author jose
 	 * This method given a String like dd/mm/yyyy it will parse the date out of it and

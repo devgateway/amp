@@ -70,7 +70,7 @@ public class FiscalCalendarWorker
 					//
 					//logger.info("Stday = " + stDay + ", stMnt = " + stMnt);
 					String bsDate = stMnt + "/" +  stDay + "/" + year;
-					Date baseDate = DateConversion.getDate(bsDate); 
+					Date baseDate = DateConversion.getDate(bsDate,"MM/dd/yyyy"); 
 
 					if (d.after(baseDate) || d.equals(baseDate)) {
 						fiscalYr = year;	
@@ -81,7 +81,7 @@ public class FiscalCalendarWorker
 					int fiscalQtr = 0;
 					bsDate = stMnt + "/" +  stDay + "/" + year;
 					///logger.info("Base date got = " + bsDate);
-					baseDate = DateConversion.getDate(bsDate);
+					baseDate = DateConversion.getDate(bsDate,"MM/dd/yyyy"); 
 					GregorianCalendar gc1 = new GregorianCalendar();
 					gc1.setTime(baseDate);
 					boolean found = false;

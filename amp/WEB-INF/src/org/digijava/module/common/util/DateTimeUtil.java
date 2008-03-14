@@ -95,7 +95,7 @@ public class DateTimeUtil {
 		pattern = pattern.replace("m", "M");
 		
 		System.out.println(pattern);
-		SimpleDateFormat formater=new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat formater=new SimpleDateFormat(pattern);
         Date result=null;
 		//if(date.contains("-")) date=date.replaceAll("-", "/");
                 try{
@@ -105,7 +105,7 @@ public class DateTimeUtil {
                     // temp solution
                     // TODO refactoring contracting dates
                 	// AMP-2828 by mouhamad
-                    SimpleDateFormat formaterCont=new SimpleDateFormat(pattern);
+                    SimpleDateFormat formaterCont=new SimpleDateFormat("yyyy-MM-dd");
                     result = formaterCont.parse(date);
                 }
     	return result;

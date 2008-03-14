@@ -111,8 +111,8 @@ public class ViewNewAdvancedReport extends Action {
 			filter.readRequestData(request);
 		}
 
-		if (tm !=null && Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||
-				"Donor".equalsIgnoreCase(tm.getTeamType())){
+		if (tm !=null && (Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||
+				"Donor".equalsIgnoreCase(tm.getTeamType()))){
 			filter.setApproved(true);
 			filter.setDraft(true);
 		}else{

@@ -119,7 +119,7 @@ public class EditOrganisation
       Collection prevSelSectors = editForm.getSectors();
       if (prevSelSectors != null) {
         if (prevSelSectors.isEmpty())
-          sect.setSectorPercentage(new Integer(100));
+          sect.setSectorPercentage(new Float(100));
         Iterator i = prevSelSectors.iterator();
         boolean ok = true;
         while (i.hasNext()) {
@@ -133,7 +133,7 @@ public class EditOrganisation
           prevSelSectors.add(sect);
       }
       else {
-        sect.setSectorPercentage(new Integer(100));
+        sect.setSectorPercentage(new Float(100));
         prevSelSectors = new ArrayList();
         prevSelSectors.add(sect);
       }
@@ -460,10 +460,10 @@ public class EditOrganisation
           //actSect.setSectorPercentage(ampActSect.getSectorPercentage());
           if (first) {
             first = false;
-            actSect.setSectorPercentage(new Integer(100));
+            actSect.setSectorPercentage(new Float(100));
           }
           else
-            actSect.setSectorPercentage(new Integer(0));
+            actSect.setSectorPercentage(new Float(0));
 
           if (sec.getParentSectorId() == null) {
             actSect.setSectorName(sec.getName());

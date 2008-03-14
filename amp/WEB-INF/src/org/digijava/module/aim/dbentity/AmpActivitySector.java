@@ -8,7 +8,7 @@ public class AmpActivitySector {
 	
 	private AmpSector sectorId;
 	
-	private Integer sectorPercentage;
+	private Float sectorPercentage;
 
 
 	public Long getAmpActivitySectorId() {
@@ -35,11 +35,11 @@ public class AmpActivitySector {
 		this.sectorId = sectorId;
 	}
 
-	public Integer getSectorPercentage() {
+	public Float getSectorPercentage() {
 		return sectorPercentage;
 	}
 
-	public void setSectorPercentage(Integer sectorPercentage) {
+	public void setSectorPercentage(Float sectorPercentage) {
 		this.sectorPercentage = sectorPercentage;
 	}
 	

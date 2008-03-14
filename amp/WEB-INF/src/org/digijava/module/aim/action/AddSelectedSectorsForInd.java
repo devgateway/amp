@@ -42,11 +42,11 @@ public class AddSelectedSectorsForInd extends Action {
 							logger.info("adding now...");
                             if(eaForm.getActivitySectors()==null){
                                 if(selsearchedSector.length==1){
-                                    sctr.setSectorPercentage(new Integer(100));
+                                    sctr.setSectorPercentage(new Float(100));
                                 }
                             }else if(eaForm.getActivitySectors().size()==0){
                                 if(selsearchedSector.length==1){
-                                    sctr.setSectorPercentage(new Integer(100));
+                                    sctr.setSectorPercentage(new Float(100));
                                 }
                             }else if(eaForm.getActivitySectors().size()==1){
                                 Iterator sectItr=eaForm.getActivitySectors().iterator();

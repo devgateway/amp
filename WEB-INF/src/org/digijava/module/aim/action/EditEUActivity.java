@@ -202,7 +202,8 @@ public class EditEUActivity extends MultiAction {
 		eaf.setTotalCostCurrencyId(currencyId);
 		eaf.getContrCurrIdList().set(0,currencyId);
 		eaf.getContrDonorIdList().set(0,new Long(11));
-
+         
+		System.out.println("DueDate:"+eaf.getDueDate());
 		return modeFinalize(mapping, form, request, response);
 	}
 
@@ -258,6 +259,7 @@ public class EditEUActivity extends MultiAction {
 		}
 
 		try {
+			System.out.println("DueDate:"+eaf.getDueDate());
 			DateTimeUtil.parseDateForPicker(eaf.getDueDate());
 		} catch (ParseException e) {
 			errors.add("title", new ActionError(

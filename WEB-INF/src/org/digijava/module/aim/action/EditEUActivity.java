@@ -261,7 +261,9 @@ public class EditEUActivity extends MultiAction {
 		try {
 			System.out.println("DueDate:"+eaf.getDueDate());
 			DateTimeUtil.parseDateForPicker(eaf.getDueDate());
+			
 		} catch (ParseException e) {
+			System.out.println("Exception:"+e);
 			errors.add("title", new ActionError(
 					"error.aim.euactivity.dueDate"));
 		}

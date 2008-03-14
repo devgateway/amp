@@ -6,8 +6,10 @@
 
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <HTML>
 
 	<digi:base />
@@ -20,8 +22,17 @@
 
 	<HEAD>
 
-		<TITLE>AMP - <tiles:getAsString name="title"/></TITLE>
-
+	<TITLE>
+			<%
+			String title=(String)((org.apache.struts.tiles.ComponentContext) request.getAttribute("org.apache.struts.taglib.tiles.CompContext")).getAttribute("title");
+			String key=(title.replaceAll(" ",""));
+			%>
+			<c:set var="key">aim:pagetitle:<%=key%></c:set>
+				<digi:trn key="aim:pagetitle:amp">AMP </digi:trn> 
+				<digi:trn key="aim:pagetitle:${key}">
+					<%=title%>
+				</digi:trn>
+		</TITLE>
 		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 
 		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">

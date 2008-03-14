@@ -12,7 +12,17 @@
 	<digi:context name="digiContext" property="context"/>
 
 	<HEAD>
-		<TITLE>AMP<tiles:getAsString name="title"/></TITLE>
+		<TITLE>
+			<%
+			String title=(String)((org.apache.struts.tiles.ComponentContext) request.getAttribute("org.apache.struts.taglib.tiles.CompContext")).getAttribute("title");
+			String key=(title.replaceAll(" ",""));
+			%>
+				<c:set var="key">aim:pagetitle:<%=key%></c:set>
+				<digi:trn key="aim:pagetitle:amp">AMP </digi:trn> 
+				<digi:trn key="${key}">
+					<%=title%>
+				</digi:trn>
+		</TITLE>
 		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 		<META HTTP-EQUIV="Expires" CONTENT="0">
 		<META HTTP-EQUIV="Cache-Control" CONTENT="private">

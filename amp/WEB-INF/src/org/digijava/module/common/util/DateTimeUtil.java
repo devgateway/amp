@@ -107,6 +107,7 @@ public class DateTimeUtil {
                     SimpleDateFormat formaterCont=new SimpleDateFormat(pattern);
                     result = formaterCont.parse(date);
                 }
+                System.out.println(result);
 		return result;
 	}
 

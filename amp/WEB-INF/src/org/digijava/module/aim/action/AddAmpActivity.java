@@ -1344,7 +1344,11 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
       else if (eaForm.getStep().equals("10")) { // show step 9 - M&E page
 
 //          eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorsList(eaForm.getActivityId()));
-          eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorHelperBeans(eaForm.getActivityId()));
+    	  if (eaForm.getActivityId()!=null && eaForm.getActivityId()!=0){
+              eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorHelperBeans(eaForm.getActivityId()));
+    	  }else{
+    		  eaForm.setIndicatorsME(null);
+    	  }
           
           for(Iterator itr = IndicatorUtil.getAllDefaultIndicators(eaForm.getActivityId()).iterator(); itr.hasNext();){
           	ActivityIndicator actInd = (ActivityIndicator) itr.next();

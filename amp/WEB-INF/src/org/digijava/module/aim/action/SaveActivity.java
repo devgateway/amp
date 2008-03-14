@@ -4,7 +4,6 @@
 
 package org.digijava.module.aim.action;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;

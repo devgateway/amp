@@ -6,17 +6,13 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.servlet.RequestDispatcher;
@@ -50,7 +46,6 @@ import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -223,13 +218,6 @@ public class EditActivity
 					errorMsgKey="error.aim.editActivity.noWritePermissionForUser";
 				}
 			}
-			
-			
-//			if (tm != null && ((!mapping.getPath().trim().endsWith(
-//							"viewActivityPreview") && tm.getWrite() == false) || (mapping
-//							.getPath().trim().endsWith("viewActivityPreview") && tm
-//							.getRead() == false)))
-//				errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
 
 			if (errorMsgKey.trim().length() > 0 && !isPreview) {
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(

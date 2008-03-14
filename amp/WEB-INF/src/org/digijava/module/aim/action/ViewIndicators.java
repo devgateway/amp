@@ -2,23 +2,26 @@
 
 package org.digijava.module.aim.action;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.*;
-import org.apache.struts.util.LabelValueBean;
-import org.digijava.module.aim.form.*;
-import org.digijava.module.aim.helper.*;
-import org.digijava.module.aim.util.*;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorSector;
-import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.AmpThemeIndicators;
-
-import org.digijava.module.aim.dbentity.AmpSectorIndicator;
+import org.digijava.module.aim.form.ViewIndicatorsForm;
+import org.digijava.module.aim.helper.IndicatorsBean;
+import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.SectorUtil;
 
 public class ViewIndicators
     extends Action {

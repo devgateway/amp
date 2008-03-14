@@ -346,7 +346,7 @@ ${fn:replace(message,quote,escapedQuote)}
 													</c:if>
 													<c:if test="${aimEditActivityForm.expIndicatorId!=indicator.indicatorId}">
 														<c:set target="${urlParams}" property="indValId">
-															<bean:write name="indicator" property="connectionId" />
+															<bean:write name="indicator" property="indicatorId" />
 														</c:set>
 														<c:set target="${urlParams}" property="activityId">
 															<bean:write name="aimEditActivityForm" property="activityId"/>

@@ -1,5 +1,8 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -9,16 +12,13 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import java.util.*;
-
-import org.digijava.module.aim.form.IndicatorForm;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpMEIndicators;
+import org.digijava.module.aim.form.IndicatorForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 public class AddIndicatorsTL extends Action {
 	private static Logger logger = Logger.getLogger(AddIndicatorsTL.class);

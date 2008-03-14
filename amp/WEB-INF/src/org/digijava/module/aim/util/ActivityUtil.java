@@ -47,7 +47,6 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -698,11 +697,14 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           
           AmpIndicator ind=(AmpIndicator)session.get(AmpIndicator.class,actInd.getIndicatorId());
 
-          IndicatorActivity indConn=IndicatorUtil.getConnectionToActivity(actInd.getConnectionId());
+          //try to find connection of current activity with current indicator
+          IndicatorActivity indConn=IndicatorUtil.findActivityIndicatorConnection(activity, ind);
+          //if no connection found then create new one. Else clear old values for the connection.
           if (indConn==null){
         	  indConn=new IndicatorActivity();
               indConn.setActivity(activity);
               indConn.setIndicator(ind);
+              indConn.setValues(new HashSet<AmpIndicatorValue>());
           }else{
         	  if (indConn.getValues()!=null && indConn.getValues().size()>0){
         		  for (AmpIndicatorValue value : indConn.getValues()) {
@@ -712,9 +714,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         	  }
           }
 
-          //indConn.setValues(new HashSet<AmpIndicatorValue>());
-          //IndicatorUtil.saveConnectionToActivity(indConn);
-          
+          //create each type of value and assign to connection
           if (actInd.getActualVal()!=null){
         	  AmpIndicatorValue indValActual=new AmpIndicatorValue();
         	  indValActual.setValueType(AmpIndicatorValue.ACTUAL);
@@ -751,72 +751,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         	  indValBase.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValBase);
           }
-          
+          // save connection with its new values.
           IndicatorUtil.saveConnectionToActivity(indConn);
-          
-          //========
-          
-//          AmpMEIndicatorValue indVal =new AmpMEIndicatorValue();
-//          if (actInd.getIndicatorValId() != null &&
-//              actInd.getIndicatorValId().longValue() > 0) {
-//            indVal = (AmpMEIndicatorValue) session.get(AmpMEIndicatorValue.class, actInd.getIndicatorValId());
-//          }
-//          indVal.setActivityId(activity);
-//          indVal.setIndicator(ind);
-//          if(!ind.isDefaultInd()){
-//        	  
-//        	  Set indi = new HashSet();
-//        	  indi.add(ind);
-//        	  activity.setIndicators(indi);
-//        	  
-//        	  Set act = new HashSet();
-//				act.add(activity);
-//				//ind.setActivity(act); 
-//		     session.saveOrUpdate(ind);
-//          }
-//
-//          if (actInd.getBaseValDate() != null &&
-//              actInd.getTargetValDate() != null &&
-//              actInd.getRevisedTargetValDate() != null) {
-//      
-//            indVal.setBaseVal(actInd.getBaseVal());
-//            indVal.setBaseValDate(DateConversion.getDate(actInd.getBaseValDate()));
-//            indVal.setBaseValComments(actInd.getBaseValComments());
-//      
-//            indVal.setTargetVal(actInd.getTargetVal());
-//            indVal.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
-//            indVal.setTargetValComments(actInd.getTargetValComments());
-//
-//            indVal.setRevisedTargetVal(actInd.getRevisedTargetVal());
-//            indVal.setRevisedTargetValDate(DateConversion.getDate(actInd.
-//                getRevisedTargetValDate()));
-//            indVal.setRevisedTargetValComments(actInd.
-//                                               getRevisedTargetValComments());
-//            //indVal.setLogframeValueId(actInd.getLogframeValueId());
-//            indVal.setIndicatorsCategory(actInd.getIndicatorsCategory());
-//
-//            if (actInd.getCurrentValDate() != null &&
-//                actInd.getCurrentValDate().trim().length() > 0) {
-//              if (actInd.getActualValDate() != null &&
-//                  actInd.getActualValDate().trim().length() > 0
-//                  && (actInd.getActualVal() != actInd.getCurrentVal() ||
-//                      !actInd.getActualValDate().equals(
-//                          actInd.getCurrentValDate()))) {
-//              }
-//              indVal.setActualVal(actInd.getCurrentVal());
-//              indVal.setActualValDate(DateConversion.getDate(actInd.getCurrentValDate()));
-//              indVal.setActualValComments(actInd.getCurrentValComments());
-//            }
-
-//            AmpIndicatorRiskRatings risk = null;
-//            if (actInd.getRisk() != null &&
-//                actInd.getRisk().longValue() > 0) {
-//              risk = (AmpIndicatorRiskRatings) session.load(
-//                  AmpIndicatorRiskRatings.class, actInd.getRisk());
-//            }
-//            indVal.setRisk(risk);
-//            session.saveOrUpdate(indVal);
-//          }
         }
       }
         String queryString = "select con from " + IPAContract.class.getName() + " con where con.activity=" + activityId;

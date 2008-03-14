@@ -28,6 +28,7 @@ public class GetActivityIndicators extends Action {
 		HttpSession session = request.getSession();
 		
 		uIndValForm.setActivityId(uIndValForm.getActivityId());
+		//TODO INDIC this should be investigated, why is this list required, and how this can be changed with IndicatorUtil.
 		uIndValForm.setIndicators(MEIndicatorsUtil.getActivityIndicators(
 				uIndValForm.getActivityId()));
 		

@@ -2599,6 +2599,14 @@ function collapseAll() {
                                                                                           <c:if test ="${not empty contract.activityCategory}">${contract.activityCategory.value}</c:if>
                                                                                        </td>
                                                                                     </tr>
+                                                                                     <tr>
+                                                                                     <td align="left">
+                                                                                  	     <b><digi:trn key="aim:IPA:popup:type">Type</digi:trn>:</b>
+                                                                                      </td>
+                                                                                       <td>
+                                                                                          <c:if test ="${not empty contract.type}">${contract.type.value}</c:if>
+                                                                                       </td>
+                                                                                    </tr>
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:startOfTendering">Start of Tendering:</digi:trn></b>

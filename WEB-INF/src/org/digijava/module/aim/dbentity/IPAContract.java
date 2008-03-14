@@ -37,6 +37,15 @@ public class IPAContract implements Serializable {
     private AmpActivity activity;
     private AmpOrganisation organization;
     private AmpCategoryValue status;
+    private AmpCategoryValue type;
+
+    public AmpCategoryValue getType() {
+        return type;
+    }
+
+    public void setType(AmpCategoryValue type) {
+        this.type = type;
+    }
 
     public AmpCategoryValue getStatus() {
         return status;

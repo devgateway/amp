@@ -67,7 +67,7 @@ START TRANSACTION;
 
 /*importing sectors */
 
-select 'importing sector shceme'; 
+select 'importing sector shceme';
 
 insert into AMP_SECTOR_SCHEME (sec_scheme_code, sec_scheme_name)
 Values ('BOL_IMP', 'Bolivia Import');
@@ -79,7 +79,7 @@ select 'importing sectors';
 
 insert into AMP_SECTOR (amp_sec_scheme_id,  sector_code,   name,   old_id)
 select sch.amp_sec_scheme_id,   c.codsec,   c.descsec, c.codsec    
-from bolivian_db.sec c, AMP_SECTOR_SCHEME sch 
+from bolivian_db.sec c, AMP_SECTOR_SCHEME sch
 where sch.sec_scheme_code='BOL_IMP' ;
  
 
@@ -93,7 +93,7 @@ select 'importing components (sectors)';
 
 INSERT INTO AMP_SECTOR (amp_sec_scheme_id,  sector_code,   name)
 SELECT  sch.amp_sec_scheme_id,  c.valdato, c.interp   
-FROM bolivian_db.claves AS c,  AMP_SECTOR_SCHEME AS sch 
+FROM bolivian_db.claves AS c,  AMP_SECTOR_SCHEME AS sch
 WHERE sch.sec_scheme_code='BOL_COMPO_IMP'  AND c.nomdato='cvetipcomp';
 
 
@@ -118,13 +118,13 @@ FROM bolivian_db.`age` as o;
 /* setting up organization types */
 select 'update AMP_ORGANISATION MUL'; 
 
-UPDATE AMP_ORGANISATION AS org, bolivian_db.`age` AS o, AMP_ORG_TYPE AS t 
+UPDATE AMP_ORGANISATION AS org, bolivian_db.`age` AS o, AMP_ORG_TYPE AS t
 SET org.org_type_id=t.amp_org_type_id
 WHERE org.old_id=o.codage AND o.cvebimulti='M' AND t.org_type_code='MUL';
 
 select 'update AMP_ORGANISATION BIL'; 
 
-UPDATE AMP_ORGANISATION AS org, bolivian_db.`age` AS o, AMP_ORG_TYPE AS t 
+UPDATE AMP_ORGANISATION AS org, bolivian_db.`age` AS o, AMP_ORG_TYPE AS t
 SET org.org_type_id=t.amp_org_type_id
 WHERE org.old_id=o.codage AND o.cvebimulti='B' AND t.org_type_code='BIL';
 
@@ -157,15 +157,15 @@ where  tt.org_type_code='OTHER' and not exists (select a.codage from bolivian_db
 /* importing activity statuses */
 
 /*INSERT INTO AMP_CATEGORY_VALUE (old_id, amp_category_class_id,category_value, index_column)
-SELECT c.valdato, @status_class_id, c.interp , @max_order_no:=@max_order_no+1 
-FROM bolivian_db.`claves` as c 
+SELECT c.valdato, @status_class_id, c.interp , @max_order_no:=@max_order_no+1
+FROM bolivian_db.`claves` as c
 WHERE c.nomdato='statconv' ;*/ 
 
 
 /* importing implementation levels */
 /*INSERT INTO AMP_CATEGORY_VALUE (old_id, amp_category_class_id,category_value, index_column)
-SELECT lvl.valdato, @level_class_id, lvl.interp , @max_level_order_no:=@max_level_order_no+1 
-FROM bolivian_db.`claves` as lvl 
+SELECT lvl.valdato, @level_class_id, lvl.interp , @max_level_order_no:=@max_level_order_no+1
+FROM bolivian_db.`claves` as lvl
 WHERE lvl.nomdato='cvealc' ;  */ 
 
 /*INSERT INTO AMP_LEVEL (level_code,name,old_id)
@@ -184,21 +184,21 @@ WHERE lvl.nomdato='cvecoop';
 /* import activities */
 select 'inserting into AMP_ACTIVITY fom conv';
 
-INSERT INTO AMP_ACTIVITY 
+INSERT INTO AMP_ACTIVITY
 (
-old_id, 
+old_id,
 amp_id,
-name, 
-description, 
+name,
+description,
 objectives,
-contractors, 
+contractors,
 program_description,
-`condition`, 
-status_reason, 
+`condition`,
+status_reason,
 proposed_approval_date,
 proposed_start_date,
 actual_completion_date,
-convenio_date_filter, -- AMP-2387 
+convenio_date_filter, -- AMP-2387
 actual_start_date,
 amp_team_id,
 approval_status,
@@ -208,9 +208,9 @@ totalCost,
 old_status_id,
 draft
 )
-SELECT 
+SELECT
 c.numconv,
-c.numconv, 
+c.numconv,
 c.nomconv,
 concat(@avtivity_desc, @timestmp:=@timestmp+1),
 concat(@avtivity_obj, @timestmp:=@timestmp+1),
@@ -272,28 +272,28 @@ select 'importing issues 1';
 
 INSERT INTO AMP_ISSUES(name, amp_activity_id)
 SELECT c.sit_actual, a.amp_activity_id  
-FROM bolivian_db.`conv` AS c, amp_activity AS a 
+FROM bolivian_db.`conv` AS c, amp_activity AS a
 WHERE (c.sit_actual is not null) AND c.numconv=a.old_id; 
 
 select 'importing issues 2';
 
 insert into amp_issues(name,amp_activity_id)
 SELECT c.tramite_actual, a.amp_activity_id 
-FROM bolivian_db.`conv` c, amp_activity a 
+FROM bolivian_db.`conv` c, amp_activity a
 where (c.tramite_actual is not null) and c.numconv=a.old_id; 
 
 select 'importing issues 3';
 
 insert into amp_issues(name,amp_activity_id)
 SELECT c.Tip_ejecucion, a.amp_activity_id 
-FROM bolivian_db.`conv` c, amp_activity a 
+FROM bolivian_db.`conv` c, amp_activity a
 where (c.Tip_ejecucion is not null) and c.numconv=a.old_id ;
 
 select 'importing issues 4';
 
 insert into amp_issues(name,amp_activity_id)
 SELECT c.marca, a.amp_activity_id 
-FROM bolivian_db.`conv` c, amp_activity a 
+FROM bolivian_db.`conv` c, amp_activity a
 where (c.marca is not null) and c.numconv=a.old_id; 
 
 
@@ -303,7 +303,7 @@ select 'mapping activity and sectors';
 insert into amp_activity_sector
 (amp_activity_id,amp_sector_id,sector_percentage)
 select  act.amp_activity_id, sec.amp_sector_id,  ac.porcsec 
-from AMP_ACTIVITY as act, AMP_SECTOR as sec, bolivian_db.conv_sec as ac   
+from AMP_ACTIVITY as act, AMP_SECTOR as sec, bolivian_db.conv_sec as ac
 where act.old_id=ac.numconv and sec.old_id=ac.codsec ;
 
 /* mapping activity and statuses */ 
@@ -311,12 +311,12 @@ select 'mapping activity and statuses';
 
 INSERT INTO amp_activities_categoryvalues (amp_activity_id, amp_categoryvalue_id) 
 SELECT act.amp_activity_id, cat.id 
-FROM AMP_ACTIVITY as act,    AMP_CATEGORY_VALUE as cat,    bolivian_db.`conv` acto, bolivian_db.`claves` as cla   
+FROM AMP_ACTIVITY as act,    AMP_CATEGORY_VALUE as cat,    bolivian_db.`conv` acto, bolivian_db.`claves` as cla
 WHERE cat.amp_category_class_id=@status_class_id and cat.category_value=cla.interp and acto.numconv=act.old_id 
 and acto.statconv=cla.valdato and cla.nomdato='statconv'; 
 
 /*
-FROM AMP_ACTIVITY as act,    AMP_CATEGORY_VALUE as cat,    bolivian_db.`conv` co, bolivian_db.`claves` as cla   
+FROM AMP_ACTIVITY as act,    AMP_CATEGORY_VALUE as cat,    bolivian_db.`conv` co, bolivian_db.`claves` as cla
 WHERE co.numconv=act.old_id and co.statconv=cat.old_id and cla; 
 */
 
@@ -325,12 +325,12 @@ select 'mapping implementation levels';
 
 INSERT INTO amp_activities_categoryvalues (amp_activity_id, amp_categoryvalue_id) 
 SELECT act.amp_activity_id, cat.id 
-FROM AMP_ACTIVITY as act,    AMP_CATEGORY_VALUE as cat,    bolivian_db.`conv` acto, bolivian_db.`claves` as cla   
+FROM AMP_ACTIVITY as act,    AMP_CATEGORY_VALUE as cat,    bolivian_db.`conv` acto, bolivian_db.`claves` as cla
 WHERE cat.amp_category_class_id=@level_class_id and cat.category_value=cla.interp and acto.numconv=act.old_id 
 and acto.cvealc=cla.valdato and cla.nomdato='cvealc'; 
 
 /*INSERT INTO amp_activities_categoryvalues (amp_activity_id, amp_categoryvalue_id) 
-SELECT act.amp_activity_id, cat.id FROM AMP_ACTIVITY as act, AMP_CATEGORY_VALUE as cat, bolivian_db.`conv` co  
+SELECT act.amp_activity_id, cat.id FROM AMP_ACTIVITY as act, AMP_CATEGORY_VALUE as cat, bolivian_db.`conv` co
 WHERE co.numconv=act.old_id and co.cvealc=cat.old_id;*/ 
 
 
@@ -338,7 +338,7 @@ WHERE co.numconv=act.old_id and co.cvealc=cat.old_id;*/
 select 'mapping implementation levels';
 /*INSERT INTO amp_activities_categoryvalues (amp_activity_id, amp_categoryvalue_id) 
 SELECT act.amp_activity_id, @financing_instrument 
-FROM AMP_ACTIVITY as act,   bolivian_db.`conv` acto    
+FROM AMP_ACTIVITY as act,   bolivian_db.`conv` acto
 WHERE acto.numconv=act.old_id  ;*/
 
 
@@ -384,11 +384,11 @@ a.amp_activity_id,
 catval.id, 
 @funding_modality,
 111 
-FROM bolivian_db.`conv` AS c,  
+FROM bolivian_db.`conv` AS c,
 AMP_ACTIVITY AS a,  
 AMP_ORGANISATION AS org,  
-bolivian_db.`age` AS o,  
-bolivian_db.`claves` AS ta,  
+bolivian_db.`age` AS o,
+bolivian_db.`claves` AS ta,
 amp_category_value AS catval   
 WHERE c.numconv=a.old_id AND org.old_id=o.codage 
 AND c.codage=org.old_id AND ta.nomdato='cvecoop' 
@@ -415,7 +415,7 @@ currency_code,
 country_name,
 currency_name,
 active_flag)
-SELECT e.cvemonorig, e.cvemonorig, e.cvemonorig, 1 FROM bolivian_db.enm e 
+SELECT e.cvemonorig, e.cvemonorig, e.cvemonorig, 1 FROM bolivian_db.enm e
 where e.cvemonorig is not null 
 and not exists (select * from amp_currency c where c.currency_code=e.cvemonorig)
 group by e.cvemonorig;
@@ -475,7 +475,7 @@ enm.montorig,
 f.amp_funding_id,
 cu.amp_currency_id,
 enm.tipcam
-FROM bolivian_db.`enm` as enm, AMP_ACTIVITY as a, AMP_FUNDING as f, amp_currency as cu 
+FROM bolivian_db.`enm` as enm, AMP_ACTIVITY as a, AMP_FUNDING as f, amp_currency as cu
 WHERE  a.old_id=enm.numconv 
 and a.actual_start_date not like '0000-00-00%'  
 and a.actual_start_date is not null 
@@ -631,7 +631,7 @@ SET @temp_cat_val=-1;
 
 INSERT INTO amp_category_value
 (category_value,amp_category_class_id,index_column)
-SELECT cla.interp, catclass.id, @temp_cat_val:=@temp_cat_val+1 FROM amp_category_class AS catclass, bolivian_db.`claves` AS cla 
+SELECT cla.interp, catclass.id, @temp_cat_val:=@temp_cat_val+1 FROM amp_category_class AS catclass, bolivian_db.`claves` AS cla
 WHERE cla.nomdato='cvecred' AND catclass.keyName='financing_instrument';
 
 
@@ -663,7 +663,7 @@ select 'importin regions';
 
 insert into amp_region
 (name, country_id, region_code)
-select interp, 'bo', valdato from bolivian_db.`claves` as c 
+select interp, 'bo', valdato from bolivian_db.`claves` as c
 where c.nomdato='cvedep';
 
 select 'inserting locations';
@@ -681,7 +681,7 @@ select act.amp_activity_id, loc.amp_location_id, condep.porcdep
 from amp_activity as act, 
 amp_location as loc, 
 amp_region as reg, 
-bolivian_db.`claves` as c, 
+bolivian_db.`claves` as c,
 bolivian_db.`conv_dep` as condep
 where 
 act.amp_id=condep.numconv 
@@ -710,13 +710,13 @@ select 'mapping activities and themes(programs)';
 INSERT INTO amp_activity_theme
 (amp_activity_id,amp_theme_id)
 select act.amp_activity_id, prog.amp_theme_id
-from  amp_activity as act, amp_theme as prog, bolivian_db.`conv` as acto 
+from  amp_activity as act, amp_theme as prog, bolivian_db.`conv` as acto
 where act.old_id=acto.numconv and prog.theme_code = concat('EBRP', substring(acto.Cod_EBRP,2));
 
 insert INTO amp_activity_program
 (amp_activity_id,amp_program_id,program_percentage,program_setting)
 select  act.amp_activity_id, prog.amp_theme_id, 100, progset.amp_program_settings_id 
-from amp_activity as act, amp_theme as prog, amp_program_settings as progset, bolivian_db.`conv` as con  
+from amp_activity as act, amp_theme as prog, amp_program_settings as progset, bolivian_db.`conv` as con
 where act.amp_id=con.numconv
 and prog.theme_code = concat('EBRP', substring(con.Cod_EBRP,2))
 and progset.name like 'National Plan Objective';

@@ -30,7 +30,7 @@ where exists (select * from amp_activity act, bolivian_db.`conv` c  where c.numc
 */
 
  /*truncate amp_activity;*/
-delete act from AMP_ACTIVITY AS act 
+delete act from AMP_ACTIVITY AS act
 where  EXISTS (SELECT c.numconv FROM bolivian_db.`conv` c where c.numconv=act.amp_id);
 
 
@@ -52,7 +52,7 @@ where amp_sector_id in (select s.amp_sector_id from AMP_SECTOR_SCHEME sc, AMP_SE
 delete FROM amp_activity_closing_dates
 where amp_activity_id not in (select a.amp_activity_id from amp_activity a);
 
-delete FROM amp_org_role 
+delete FROM amp_org_role
 where activity not in (select a.amp_activity_id from amp_activity a);
 
 delete FROM amp_me_indicator_value
@@ -67,19 +67,19 @@ where amp_activity_id not in (select a.amp_activity_id from amp_activity a);
 delete from amp_activity_sector
 where amp_activity_id  not in (select a.amp_activity_id from amp_activity a);
 
-delete from DG_EDITOR 
+delete from DG_EDITOR
 where EDITOR_KEY  like '%aim-desc-import-%' or EDITOR_KEY like '%aim-obj-import-%' ;
 
 delete from amp_terms_assist
 where terms_assist_code in  (SELECT lvl.valdato FROM bolivian_db.`claves` lvl WHERE lvl.nomdato='cvecoop');
 
-delete from AMP_FUNDING 
+delete from AMP_FUNDING
 where amp_activity_id not in (select a.amp_activity_id from amp_activity a);
 
-delete from AMP_FUNDING_DETAIL 
+delete from AMP_FUNDING_DETAIL
 where AMP_FUNDING_ID not in ( select f.amp_funding_id FROM  AMP_FUNDING as f );
 
-delete from amp_activity_theme; /* this table is not used anymore, so deleteing everithing here. */  
+delete from amp_activity_theme; /* this table is not used anymore, so deleteing everithing here. */
 
 delete from amp_ahsurvey
 where (
@@ -112,23 +112,30 @@ select aorg.amp_org_id from AMP_ORGANISATION as aorg
 where  aorg.org_code in (select a.codage from bolivian_db.age a)
 );
 
+delete asi.* from
+amp_sector_indicator as asi,
+amp_sector as s,
+amp_sector_scheme as sch
+where sch.sec_scheme_code='BOL_IMP' AND s.amp_sec_scheme_id=sch.amp_sec_scheme_id
+and asi.amp_sector_id = s.amp_sector_id;
+
 /*
 delete from AMP_SECTOR
 where sector_code  in (select c.codsec from bolivian_db.sec c);
 */
 
 delete s from AMP_SECTOR AS s
-where exists (select * FROM AMP_SECTOR_SCHEME AS sch where sch.sec_scheme_code='BOL_IMP' AND s.amp_sec_scheme_id=sch.amp_sec_scheme_id);  
+where exists (select * FROM AMP_SECTOR_SCHEME AS sch where sch.sec_scheme_code='BOL_IMP' AND s.amp_sec_scheme_id=sch.amp_sec_scheme_id);
 
 
 delete s from AMP_SECTOR AS s
 where exists (select * FROM AMP_SECTOR_SCHEME AS sch where sch.sec_scheme_code='BOL_COMPO_IMP' AND s.amp_sec_scheme_id=sch.amp_sec_scheme_id);  
 
 
-delete from AMP_SECTOR_SCHEME 
+delete from AMP_SECTOR_SCHEME
 where sec_scheme_code='BOL_IMP';
 
-delete from AMP_SECTOR_SCHEME 
+delete from AMP_SECTOR_SCHEME
 where sec_scheme_code='BOL_COMPO_IMP';
 
 

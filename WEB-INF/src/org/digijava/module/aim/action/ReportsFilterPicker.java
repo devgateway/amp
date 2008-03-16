@@ -159,10 +159,10 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 		
 		if (filterForm.getFromMonth()==null)
-			filterForm.setFromMonth(1);
+			filterForm.setFromMonth(-1);
 		
 		if (filterForm.getToMonth()==null)
-			filterForm.setToMonth(1);
+			filterForm.setToMonth(-1);
 		/*
 		for (int i = (2010 - Constants.FROM_YEAR_RANGE); i <= (2010 + Constants.TO_YEAR_RANGE); i++) {
 			filterForm.getFromYears().add(new BeanWrapperImpl(new Long(i)));

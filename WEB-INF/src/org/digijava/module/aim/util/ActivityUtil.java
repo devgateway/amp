@@ -1300,6 +1300,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 			activity.setLessonsLearned(ampActivity.getLessonsLearned());
 		}
 		
+		activity.setReferenceDocs(ampActivity.getReferenceDocs());
+	      
+		
 		activity.setProjectImpact(ampActivity.getProjectImpact());
         activity.setActivitySummary(ampActivity.getActivitySummary());
         activity.setContractingArrangements(ampActivity.getContractingArrangements());

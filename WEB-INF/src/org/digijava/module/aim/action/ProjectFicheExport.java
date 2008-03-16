@@ -263,10 +263,12 @@ public class ProjectFicheExport extends Action {
 		
 		document.add(newParagraph("ANNEX 3: Reference to laws, regulations and strategic documents",rootSectionFont,0));
 		
-		i=act.getReferenceDocs().iterator();
-		while (i.hasNext()) {
-			AmpActivityReferenceDoc element = (AmpActivityReferenceDoc) i.next();
-			document.add(newParagraph(" - Reference to "+element.getCategoryValue()+" :"+element.getComment(),regularFont,1));
+		if(act.getReferenceDocs()!=null) {
+			i=act.getReferenceDocs().iterator();
+			while (i.hasNext()) {
+				AmpActivityReferenceDoc element = (AmpActivityReferenceDoc) i.next();
+				document.add(newParagraph(" - Reference to "+element.getCategoryValue()+" :"+element.getComment(),regularFont,1));
+			}
 		}
 
 		document.add(newParagraph("ANNEX 4: Details per EU funded contract",rootSectionFont,0));

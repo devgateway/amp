@@ -12,8 +12,10 @@
 
 <logic:present name="groupReport" property="parent">
 	<c:if test="${(groupReport.name == groupReport.parent.name)}">
+	<logic:present name="groupReport" property="firstColumnReport" scope="page">
 	<bean:define id="viewable" name="groupReport" property="firstColumnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 	<jsp:include page="../reportHeadings.jsp"/>
+	</logic:present>
 	</c:if>
 	<bean:define id="viewable" name="groupReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 	<jsp:include page="TrailCells.jsp"/>

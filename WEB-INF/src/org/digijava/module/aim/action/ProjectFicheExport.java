@@ -24,12 +24,11 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpField;
-import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.EUActivity;
-import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -118,8 +117,8 @@ public class ProjectFicheExport extends Action {
 		document.add(newParagraph("1.4 Location: ",regularFont,1));
 		Iterator i=act.getLocations().iterator();
 		while (i.hasNext()) {
-			AmpLocation element = (AmpLocation) i.next();
-			document.add(newParagraph(element.toString(),regularFont,2));	
+			AmpActivityLocation element = (AmpActivityLocation) i.next();
+			document.add(newParagraph(element.getLocation().toString(),regularFont,2));	
 		}
 		
 		document.add(newParagraph("Implementing arrangements:",subSectionFont,1));

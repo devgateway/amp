@@ -146,6 +146,16 @@ public class ShowActivityPrintPreview
                 	 eaForm.setObjectives(activity.getObjective().trim());
                 }
                 
+                eaForm.setProjectImpact(activity.getProjectImpact().trim());
+                eaForm.setActivitySummary(activity.getActivitySummary().trim());
+            	eaForm.setContractingArrangements(activity.getContractingArrangements().trim());
+            	eaForm.setCondSeq(activity.getCondSeq().trim());
+            	eaForm.setLinkedActivities(activity.getLinkedActivities().trim());
+            	eaForm.setConditionality(activity.getConditionality().trim());
+            	eaForm.setProjectManagement(activity.getProjectManagement().trim());
+            	eaForm.setContractDetails(activity.getContractDetails().trim());
+            	
+                
                 
                
                 if(activity.getDocumentSpace() == null ||

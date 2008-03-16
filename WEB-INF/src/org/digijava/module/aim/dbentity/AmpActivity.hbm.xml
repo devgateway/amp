@@ -17,6 +17,16 @@
 		<property name="results" column="results"  type="org.digijava.kernel.db.SafeClobType"/>
 		<property name="purpose" column="purpose" type="org.digijava.kernel.db.SafeClobType"/>
 
+		<property name="projectImpact" column="project_impact"  type="org.digijava.kernel.db.SafeClobType"/>
+		<property name="activitySummary" column="activity_summary"  type="org.digijava.kernel.db.SafeClobType"/>
+		<property name="contractingArrangements" column="contracting_arrangements"  type="org.digijava.kernel.db.SafeClobType"/>
+		<property name="condSeq" column="cond_seq"  type="org.digijava.kernel.db.SafeClobType"/>
+		<property name="linkedActivities" column="linked_activities"  type="org.digijava.kernel.db.SafeClobType"/>
+		<property name="conditionality" column="conditionality"  type="org.digijava.kernel.db.SafeClobType"/>
+		<property name="projectManagement" column="project_management"  type="org.digijava.kernel.db.SafeClobType"/>				
+		<property name="contractDetails" column="contract_details"  type="org.digijava.kernel.db.SafeClobType"/>								
+	
+
         <property name="activityLevel" column="activity_level_id" type="java.lang.Long"/>
 
         <property name="documentSpace" column="document_space" type="java.lang.String"/>

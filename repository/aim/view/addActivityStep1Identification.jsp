@@ -260,6 +260,61 @@ target.style.cursor = "default"
 											</td></tr>
 											</field:display>
 											
+											<bean:define id="largeTextFeature" value="Identification" toScope="request"/>
+										
+											<bean:define id="largeTextLabel" value="Lessons Learned" toScope="request"/>
+											<bean:define id="largeTextKey" toScope="request">
+												<c:out value="${aimEditActivityForm.lessonsLearned}"/>
+											</bean:define>
+											<jsp:include page="largeTextPropertyEdit.jsp"/>
+			
+			
+			
+			
+											<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
+											<bean:define id="largeTextKey" toScope="request">
+												<c:out value="${aimEditActivityForm.projectImpact}"/>
+											</bean:define>
+											<jsp:include page="largeTextPropertyEdit.jsp"/>
+
+											<bean:define id="largeTextLabel" value="Activity Summary" toScope="request"/>
+											<bean:define id="largeTextKey" toScope="request">
+												<c:out value="${aimEditActivityForm.activitySummary}"/>
+											</bean:define>
+											<jsp:include page="largeTextPropertyEdit.jsp"/>
+			
+											<bean:define id="largeTextLabel" value="Contracting Arrangements" toScope="request"/>
+											<bean:define id="largeTextKey" toScope="request">
+												<c:out value="${aimEditActivityForm.contractingArrangements}"/>
+											</bean:define>
+											<jsp:include page="largeTextPropertyEdit.jsp"/>
+			
+											<bean:define id="largeTextLabel" value="Conditionality and Sequencing" toScope="request"/>
+											<bean:define id="largeTextKey" toScope="request">
+												<c:out value="${aimEditActivityForm.condSeq}"/>
+											</bean:define>
+											<jsp:include page="largeTextPropertyEdit.jsp"/>
+			
+											<bean:define id="largeTextLabel" value="Linked Activities" toScope="request"/>
+											<bean:define id="largeTextKey" toScope="request">
+												<c:out value="${aimEditActivityForm.linkedActivities}"/>
+											</bean:define>
+											<jsp:include page="largeTextPropertyEdit.jsp"/>
+			
+											<bean:define id="largeTextLabel" value="Conditionalities" toScope="request"/>
+											<bean:define id="largeTextKey" toScope="request">
+												<c:out value="${aimEditActivityForm.conditionality}"/>
+											</bean:define>
+											<jsp:include page="largeTextPropertyEdit.jsp"/>
+			
+											<bean:define id="largeTextLabel" value="Project Management" toScope="request"/>
+											<bean:define id="largeTextKey" toScope="request">
+												<c:out value="${aimEditActivityForm.projectManagement}"/>
+											</bean:define>
+											<jsp:include page="largeTextPropertyEdit.jsp"/>
+											
+											
+											
 											<field:display name="Lessons Learned" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:Lessons Learned">Lessons Learned</digi:trn>">

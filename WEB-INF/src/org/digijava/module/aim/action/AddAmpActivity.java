@@ -26,6 +26,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
 import org.digijava.kernel.request.Site;
@@ -705,7 +706,16 @@ public class AddAmpActivity extends Action {
           ed.setGroupName(Constants.GROUP_OTHER);
           org.digijava.module.editor.util.DbUtil.saveEditor(ed);
         }
-
+        eaForm.setProjectImpact(Util.initLargeTextProperty("aim-projimp-",eaForm.getProjectImpact(), request));
+        eaForm.setActivitySummary(Util.initLargeTextProperty("aim-actsum-",eaForm.getActivitySummary(), request));
+        eaForm.setContractingArrangements(Util.initLargeTextProperty("aim-contrarr-",eaForm.getContractingArrangements(), request));
+        eaForm.setCondSeq(Util.initLargeTextProperty("aim-condseq-",eaForm.getCondSeq(), request));
+        eaForm.setLinkedActivities(Util.initLargeTextProperty("aim-linkedact-",eaForm.getLinkedActivities(), request));
+        eaForm.setConditionality(Util.initLargeTextProperty("aim-conditional-",eaForm.getConditionality(), request));
+        eaForm.setProjectManagement(Util.initLargeTextProperty("aim-projmanag-",eaForm.getProjectManagement(), request));
+        eaForm.setContractDetails(Util.initLargeTextProperty("aim-contrdetail-",eaForm.getContractDetails(), request));
+  
+        
         if (eaForm.getResults() == null ||
             eaForm.getResults().trim().length() == 0) {
           eaForm.setResults("aim-results-" + teamMember.getMemberId() + "-" +

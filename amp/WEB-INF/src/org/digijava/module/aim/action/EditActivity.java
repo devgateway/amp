@@ -696,6 +696,32 @@ public class EditActivity
 
           if (activity.getLessonsLearned()!=null)
         	eaForm.setLessonsLearned(activity.getLessonsLearned().trim());
+          
+      	eaForm.setProjectImpact(activity.getProjectImpact());
+
+        
+    	eaForm.setActivitySummary(activity.getActivitySummary());
+
+  
+    	eaForm.setContractingArrangements(activity.getContractingArrangements());
+
+  
+    	eaForm.setCondSeq(activity.getCondSeq());
+
+  
+    	eaForm.setLinkedActivities(activity.getLinkedActivities());
+
+  
+    	eaForm.setConditionality(activity.getConditionality());
+
+  
+    	eaForm.setProjectManagement(activity.getProjectManagement());
+  
+  
+  	eaForm.setContractDetails(activity.getContractDetails());
+
+
+          
           if (activity.getObjective() != null)
             eaForm.setObjectives(activity.getObjective().trim());
           if (activity.getPurpose() != null)

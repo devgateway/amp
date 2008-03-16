@@ -1299,6 +1299,16 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 		if (ampActivity.getLessonsLearned() != null) {
 			activity.setLessonsLearned(ampActivity.getLessonsLearned());
 		}
+		
+		activity.setProjectImpact(ampActivity.getProjectImpact());
+        activity.setActivitySummary(ampActivity.getActivitySummary());
+        activity.setContractingArrangements(ampActivity.getContractingArrangements());
+        activity.setCondSeq(ampActivity.getCondSeq());
+        activity.setLinkedActivities(ampActivity.getLinkedActivities());
+        activity.setConditionality(ampActivity.getConditionality());
+        activity.setProjectManagement(ampActivity.getProjectManagement());
+        activity.setContractDetails(ampActivity.getContractDetails());
+        
         
         if (ampActivity.getCreditType() != null) {
         	activity.setCreditType(ampActivity.getCreditType());
@@ -1350,6 +1360,16 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setResults(ampAct.getResults());
         activity.setDescription(ampAct.getDescription());
 
+        activity.setLessonsLearned(ampAct.getLessonsLearned());
+        activity.setProjectImpact(ampAct.getProjectImpact());
+        activity.setActivitySummary(ampAct.getActivitySummary());
+        activity.setContractingArrangements(ampAct.getContractingArrangements());
+        activity.setCondSeq(ampAct.getCondSeq());
+        activity.setLinkedActivities(ampAct.getLinkedActivities());
+        activity.setConditionality(ampAct.getConditionality());
+        activity.setProjectManagement(ampAct.getProjectManagement());
+      
+        
         activity.setCurrCompDate(DateConversion.
                                  ConvertDateToString(ampAct.
             getActualCompletionDate()));

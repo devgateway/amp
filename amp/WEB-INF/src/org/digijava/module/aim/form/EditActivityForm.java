@@ -72,6 +72,16 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private double regionTotalDisb;
 	private AmpTeam team;
 
+	//montenegro mission:
+	private String projectImpact=null;
+	private String activitySummary=null;
+	private String contractingArrangements=null;
+	private String condSeq=null;
+	private String linkedActivities=null;
+	private String conditionality=null;
+	private String projectManagement=null;
+	private String contractDetails=null;
+	
     private Long selPrograms[];
     private Long selProgramId;
     private Long program;
@@ -634,6 +644,14 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		currentVal					= null;
 
 		if (reset) {
+			projectImpact=null;
+			activitySummary=null;
+			contractingArrangements=null;
+			condSeq=null;
+			linkedActivities=null;
+			conditionality=null;
+			projectManagement=null;
+			contractDetails=null;
 			donorFlag = false;
 			fundDonor = null;
 			createdDate = null;
@@ -5052,6 +5070,70 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setSecMiCntFaxNumber(String secMiCntFaxNumber) {
 		this.secMiCntFaxNumber = secMiCntFaxNumber;
+	}
+
+	public String getProjectImpact() {
+		return projectImpact;
+	}
+
+	public void setProjectImpact(String projectImpact) {
+		this.projectImpact = projectImpact;
+	}
+
+	public String getActivitySummary() {
+		return activitySummary;
+	}
+
+	public void setActivitySummary(String activitySummary) {
+		this.activitySummary = activitySummary;
+	}
+
+	public String getContractingArrangements() {
+		return contractingArrangements;
+	}
+
+	public void setContractingArrangements(String contractingArrangements) {
+		this.contractingArrangements = contractingArrangements;
+	}
+
+	public String getCondSeq() {
+		return condSeq;
+	}
+
+	public void setCondSeq(String condSeq) {
+		this.condSeq = condSeq;
+	}
+
+	public String getLinkedActivities() {
+		return linkedActivities;
+	}
+
+	public void setLinkedActivities(String linkedActivities) {
+		this.linkedActivities = linkedActivities;
+	}
+
+	public String getConditionality() {
+		return conditionality;
+	}
+
+	public void setConditionality(String conditionality) {
+		this.conditionality = conditionality;
+	}
+
+	public String getProjectManagement() {
+		return projectManagement;
+	}
+
+	public void setProjectManagement(String projectManagement) {
+		this.projectManagement = projectManagement;
+	}
+
+	public String getContractDetails() {
+		return contractDetails;
+	}
+
+	public void setContractDetails(String contractDetails) {
+		this.contractDetails = contractDetails;
 	}
 
 }

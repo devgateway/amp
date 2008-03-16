@@ -16,6 +16,18 @@ public class Activity
   private String ampId;
   private Boolean budget;
 
+  
+    //montenegro mission:
+	private String projectImpact=null;
+	private String activitySummary=null;
+	private String contractingArrangements=null;
+	private String condSeq=null;
+	private String linkedActivities=null;
+	private String conditionality=null;
+	private String projectManagement=null;
+		
+	  
+  
   private String description;
   private String objective;
   private String purpose;
@@ -915,6 +927,62 @@ public class Activity
 
 	public void setLessonsLearned(String lessonsLearned) {
 		this.lessonsLearned = lessonsLearned;
+	}
+
+	public String getProjectImpact() {
+		return projectImpact;
+	}
+
+	public void setProjectImpact(String projectImpact) {
+		this.projectImpact = projectImpact;
+	}
+
+	public String getActivitySummary() {
+		return activitySummary;
+	}
+
+	public void setActivitySummary(String activitySummary) {
+		this.activitySummary = activitySummary;
+	}
+
+	public String getContractingArrangements() {
+		return contractingArrangements;
+	}
+
+	public void setContractingArrangements(String contractingArrangements) {
+		this.contractingArrangements = contractingArrangements;
+	}
+
+	public String getCondSeq() {
+		return condSeq;
+	}
+
+	public void setCondSeq(String condSeq) {
+		this.condSeq = condSeq;
+	}
+
+	public String getLinkedActivities() {
+		return linkedActivities;
+	}
+
+	public void setLinkedActivities(String linkedActivities) {
+		this.linkedActivities = linkedActivities;
+	}
+
+	public String getConditionality() {
+		return conditionality;
+	}
+
+	public void setConditionality(String conditionality) {
+		this.conditionality = conditionality;
+	}
+
+	public String getProjectManagement() {
+		return projectManagement;
+	}
+
+	public void setProjectManagement(String projectManagement) {
+		this.projectManagement = projectManagement;
 	}
   
   

@@ -18,6 +18,16 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	private AmpTeamMember createdBy;
 
+	private String projectImpact;
+	private String activitySummary;
+	private String contractingArrangements;
+	private String condSeq;
+	private String linkedActivities;
+	private String conditionality;
+	private String projectManagement;
+	private String contractDetails;
+	
+	
     private Boolean budget;
     private String govAgreementNumber;
 
@@ -1312,6 +1322,70 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public Date getConvenioDateFilter() {
 		return convenioDateFilter;
+	}
+
+	public String getProjectImpact() {
+		return projectImpact;
+	}
+
+	public void setProjectImpact(String projectImpact) {
+		this.projectImpact = projectImpact;
+	}
+
+	public String getActivitySummary() {
+		return activitySummary;
+	}
+
+	public void setActivitySummary(String activitySummary) {
+		this.activitySummary = activitySummary;
+	}
+
+	public String getContractingArrangements() {
+		return contractingArrangements;
+	}
+
+	public void setContractingArrangements(String contractingArrangements) {
+		this.contractingArrangements = contractingArrangements;
+	}
+
+	public String getCondSeq() {
+		return condSeq;
+	}
+
+	public void setCondSeq(String condSeq) {
+		this.condSeq = condSeq;
+	}
+
+	public String getLinkedActivities() {
+		return linkedActivities;
+	}
+
+	public void setLinkedActivities(String linkedActivities) {
+		this.linkedActivities = linkedActivities;
+	}
+
+	public String getConditionality() {
+		return conditionality;
+	}
+
+	public void setConditionality(String conditionality) {
+		this.conditionality = conditionality;
+	}
+
+	public String getProjectManagement() {
+		return projectManagement;
+	}
+
+	public void setProjectManagement(String projectManagement) {
+		this.projectManagement = projectManagement;
+	}
+
+	public String getContractDetails() {
+		return contractDetails;
+	}
+
+	public void setContractDetails(String contractDetails) {
+		this.contractDetails = contractDetails;
 	}
 
 }

@@ -14,6 +14,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
@@ -26,13 +29,17 @@ import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DigiCacheManager;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.helper.BaseCalendar;
 import org.digijava.module.aim.helper.EthiopianCalendar;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -40,6 +47,44 @@ public final class Util {
 
 	protected static Logger logger = Logger.getLogger(Util.class);
 
+	/**
+	 * Used to initialize the digi.edtior popup for activity large text
+	 * @param textKey
+	 * @param initialText
+	 * @param request
+	 * @return
+	 * @throws EditorException
+	 */
+	public static String initLargeTextProperty(String textKey,String initialText,HttpServletRequest request) throws EditorException
+	{
+	HttpSession session = request.getSession();
+	TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
+	String ret=null;
+    if (initialText == null ||
+    		initialText.length() == 0) {
+    	ret=textKey + teamMember.getMemberId() + "-" +System.currentTimeMillis();
+          User user = RequestUtils.getUser(request);
+          String currentLang = RequestUtils.getNavigationLanguage(request).
+              getCode();
+          String refUrl = RequestUtils.getSourceURL(request);
+          
+          Editor ed = org.digijava.module.editor.util.DbUtil.createEditor(user,
+              currentLang,
+              refUrl,
+              ret,
+              ret,
+              " ",
+              null,
+              request);
+          ed.setLastModDate(new Date());
+          ed.setGroupName(org.digijava.module.editor.util.Constants.GROUP_OTHER);
+          org.digijava.module.editor.util.DbUtil.saveEditor(ed);
+        }
+    if(ret==null) ret=initialText;
+    return ret;
+	}
+	
+	
 	/**
 	 * Returns a set with objects from the "source" collection, which were identified by "selected" id
 	 * @param source

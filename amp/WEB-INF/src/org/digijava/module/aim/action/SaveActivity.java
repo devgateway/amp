@@ -536,6 +536,65 @@ public class SaveActivity extends Action {
 				} else {
 					activity.setLessonsLearned(eaForm.getLessonsLearned());
 				}
+				
+				if (eaForm.getProjectImpact() == null
+						|| eaForm.getProjectImpact().trim().length() == 0) {
+					activity.setProjectImpact(new String(" "));
+				} else {
+					activity.setProjectImpact(eaForm.getProjectImpact());
+				}
+				
+				if (eaForm.getActivitySummary() == null
+						|| eaForm.getActivitySummary().trim().length() == 0) {
+					activity.setActivitySummary(new String(" "));
+				} else {
+					activity.setActivitySummary(eaForm.getActivitySummary());
+				}
+				
+				if (eaForm.getContractingArrangements() == null
+						|| eaForm.getContractingArrangements().trim().length() == 0) {
+					activity.setContractingArrangements(new String(" "));
+				} else {
+					activity.setContractingArrangements(eaForm.getContractingArrangements());
+				}
+				
+				
+				if (eaForm.getCondSeq() == null
+						|| eaForm.getCondSeq().trim().length() == 0) {
+					activity.setCondSeq(new String(" "));
+				} else {
+					activity.setCondSeq(eaForm.getCondSeq());
+				}
+				
+				
+				if (eaForm.getLinkedActivities() == null
+						|| eaForm.getLinkedActivities().trim().length() == 0) {
+					activity.setLinkedActivities(new String(" "));
+				} else {
+					activity.setLinkedActivities(eaForm.getLinkedActivities());
+				}
+				
+				if (eaForm.getConditionality() == null
+						|| eaForm.getConditionality().trim().length() == 0) {
+					activity.setConditionality(new String(" "));
+				} else {
+					activity.setConditionality(eaForm.getConditionality());
+				}
+				
+				if (eaForm.getProjectManagement() == null
+						|| eaForm.getProjectManagement().trim().length() == 0) {
+					activity.setProjectManagement(new String(" "));
+				} else {
+					activity.setProjectManagement(eaForm.getProjectManagement());
+				}
+				
+		
+				if (eaForm.getContractDetails() == null
+						|| eaForm.getContractDetails().trim().length() == 0) {
+					activity.setContractDetails(new String(" "));
+				} else {
+					activity.setContractDetails(eaForm.getContractDetails());
+				}
 
 				if (eaForm.getEqualOpportunity() == null
 						|| eaForm.getEqualOpportunity().trim().length() == 0) {

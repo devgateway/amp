@@ -31,7 +31,7 @@
 		}
 		else if(implevel == 3)
 		{
-			if (document.aimEditActivityForm.impMultiZone.value != -1)
+			if ((document.aimEditActivityForm.impMultiZone.value != "") && (document.aimEditActivityForm.impMultiZone.value != -1))
 			{
 				check=true;
 			}

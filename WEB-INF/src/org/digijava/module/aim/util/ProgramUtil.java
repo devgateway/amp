@@ -2074,7 +2074,7 @@ public class ProgramUtil {
             public int compare(Object obj1, Object obj2) {
                 IndicatorsBean indic1 = (IndicatorsBean) obj1;
                 IndicatorsBean indic2 = (IndicatorsBean) obj2;
-                return indic1.getName().compareTo(indic2.getName());
+                return indic1.getName().toLowerCase().compareTo(indic2.getName().toLowerCase());
             }
         }
 

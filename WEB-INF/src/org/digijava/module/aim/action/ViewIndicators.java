@@ -64,7 +64,7 @@ public class ViewIndicators
         	
         	IndicatorsBean indbean = new IndicatorsBean(indicator);
         	
-        	indbean.setName(indicator.getName().toLowerCase());
+        	indbean.setName(indicator.getName());
          	indbean.setType("0");
          	indbean.setCategory(Integer.valueOf(indbean.getCategory()));
             indbean.setSectorName("Z");

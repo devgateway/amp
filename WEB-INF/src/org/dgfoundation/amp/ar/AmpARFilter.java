@@ -257,6 +257,34 @@ public class AmpARFilter extends PropertyListable implements Filter {
 			queryAppend(TO_MONTH_FILTER);
 		}*/
 		
+		if (fromMonth == null){
+			if (fromYear != null){
+				AmpARFilterHelper filterHelper = Logic.getInstance().getAmpARFilterHelper();
+				String FROM_FUNDING_YEAR_FILTER = filterHelper.createFromYearQuery(fromYear);
+			    queryAppend(FROM_FUNDING_YEAR_FILTER);
+			}
+		}
+		else{
+			AmpARFilterHelper filterHelper = Logic.getInstance().getAmpARFilterHelper();
+			String FROM_FUNDING_YEARMONTH_FILTER = filterHelper.createFromMonthQuery(fromMonth, fromYear);
+		    queryAppend(FROM_FUNDING_YEARMONTH_FILTER);
+		}
+		
+		
+		if (toMonth == null){
+			if (toYear != null){
+				AmpARFilterHelper filterHelper = Logic.getInstance().getAmpARFilterHelper();
+				String TO_FUNDING_YEAR_FILTER = filterHelper.createToYearQuery(toYear);
+			    queryAppend(TO_FUNDING_YEAR_FILTER);
+			}
+		}
+		else{
+			AmpARFilterHelper filterHelper = Logic.getInstance().getAmpARFilterHelper();
+			String TO_FUNDING_YEARMONTH_FILTER = filterHelper.createToMonthQuery(toMonth, toYear);
+		    queryAppend(TO_FUNDING_YEARMONTH_FILTER);
+		}
+		
+		/*
 		if (fromYear==null)
 			fromYear = 0;
 		
@@ -272,7 +300,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		AmpARFilterHelper filterHelper = Logic.getInstance().getAmpARFilterHelper();
 		String MONTH_YEAR_FILTER = filterHelper.createMonthYearQuery(fromMonth, fromYear, toMonth, toYear);
 		queryAppend(MONTH_YEAR_FILTER);
-		
+		*/
 		if(text!=null)
 		{
 			if("".equals(text.trim())==false)

@@ -244,6 +244,12 @@ background-color: yellow;
 		
 		if (aimReportsFilterPickerForm.toYear)
 			aimReportsFilterPickerForm.toYear.selectedIndex=0
+			
+		if (aimReportsFilterPickerForm.fromMonth)
+			aimReportsFilterPickerForm.fromMonth.selectedIndex=0;
+			
+		if (aimReportsFilterPickerForm.toMonth)
+			aimReportsFilterPickerForm.toMonth.selectedIndex=0;
 		
 		if (aimReportsFilterPickerForm.selectedSectors)
 			aimReportsFilterPickerForm.selectedSectors.selectedIndex=-1;

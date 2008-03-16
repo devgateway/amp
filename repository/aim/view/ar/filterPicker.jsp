@@ -27,7 +27,7 @@
 	<html:hidden property="ampReportId" />
 	<table align="center" cellpadding="1" cellspacing="1">
 		<tr>
-			<td height="30" colspan="4" style="font-size:14px"><b><digi:trn
+			<td height="30" colspan="5" style="font-size:14px"><b><digi:trn
 				key="rep:pop:FilterReportName:">Filter Report:</digi:trn> <bean:write
 				scope="session" name="reportMeta" property="name" /></b></td>
 		</tr>
@@ -35,22 +35,22 @@
 
 
 		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><font color=red><digi:trn
+			<td colspan="5"><font color=red><digi:trn
 				key="rep:filter:SpecifyprojectsKeywords.">Specify keywords to look for in the project data.</digi:trn></font><br>
 			</td>
 		</tr>
 		<tr bgcolor="#EEEEEE">
-			<td colspan="4"></td>
+			<td colspan="5"></td>
 		</tr>
 		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><b><digi:trn key="rep:filter:Keywords">Keywords</digi:trn>
+			<td colspan="5"><b><digi:trn key="rep:filter:Keywords">Keywords</digi:trn>
 			</b> <html:text property="indexString" style="width: 300px"
 				styleClass="inp-text" /></td>
 		</tr>
 
 
 		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><font color=red><digi:trn
+			<td colspan="5"><font color=red><digi:trn
 				key="rep:filter:timePeriod">Specify the time period to limit your search within.</digi:trn></font><br>
 			</td>
 		</tr>
@@ -67,34 +67,57 @@
 			}
 			%>
 			<%
-			int i=0;
+			int filterByMonths=0;
 			java.util.Collection col = FeaturesUtil.getGlobalSettings();
 			java.util.Iterator itr = col.iterator();
 			while (itr.hasNext()) {
 				AmpGlobalSettings ags = (AmpGlobalSettings)itr.next();
 				if (ags.getGlobalSettingsName().equals("Filter reports by month"))
 						if (ags.getGlobalSettingsValue().equals("On")) {
-							i=1;
+							filterByMonths=1;
 							break;
 						}
 			}
 			
-			if (i==1) {
+			if (filterByMonths==1) {
 			%>
-			<td align="right"><b><digi:trn key="rep:filer:FromMonth">From Month</digi:trn></b></td>
-			<td align="left"><b><digi:trn key="rep:filer:FromYear"> From Year</digi:trn></b></td>
-			<td align="center"><b><digi:trn key="rep:filer:ToMonth">To Month</digi:trn></b>
-			<b><digi:trn key="rep:filer:ToYear">To Year</digi:trn></b></td>
-			<%
-			}
-			else {
-			%>
-			<td align="center"><b><digi:trn key="rep:filer:FromYear">From Year</digi:trn></b></td>
-			<td align="center"><b><digi:trn key="rep:filer:ToYear">To Year</digi:trn></b></td>
-			<td>&nbsp;</td>
+				<td align="center">
+					<b><digi:trn key="rep:filer:FromMonth">From Month</digi:trn></b>
+				</td>
 			<%
 			}
 			%>
+			<td align="center">
+				<b><digi:trn key="rep:filer:FromYear"> From Year</digi:trn></b>
+			</td>
+
+			<%			
+			if (filterByMonths==1) {
+			%>
+				<td align="center">
+					<b><digi:trn key="rep:filer:ToMonth">To Month</digi:trn>
+					</b>
+				</td>
+			<%
+			}
+			%>
+			<td align="center">
+				<b><digi:trn key="rep:filer:ToYear">To Year</digi:trn></b>
+			</td>
+			<%
+			if (filterByMonths == 0)
+			{
+			%>
+				<td align="center">
+				&nbsp;
+				</td>	
+				<td align="center">
+				&nbsp;
+				</td>	
+			<%
+			}
+			%>
+			
 		</tr>
 		<tr bgcolor="#EEEEEE">
 			<%
@@ -108,27 +131,38 @@
 			<%
 			}
 			
-			if (i==1) {
+			if (filterByMonths==1) {
 			%>
-			<td align="right"><html:select property="fromMonth"
+			<td align="center">
+			<html:select property="fromMonth"
 				styleClass="inp-text">
 				<html:option value="-1">
 					<digi:trn key="rep:filer:All">All</digi:trn>
 				</html:option>
 				<html:optionsCollection property="fromMonths" label="wrappedInstance"
 					value="wrappedInstance" />
-			</html:select></td>
-			
-			<td align="left"><html:select property="fromYear"
+			</html:select>
+			</td>
+			<%
+			}
+			%>			
+			<td align="center">
+			<html:select property="fromYear"
 				styleClass="inp-text">
 				<html:option value="-1">
 					<digi:trn key="rep:filer:All">All</digi:trn>
 				</html:option>
 				<html:optionsCollection property="fromYears" label="wrappedInstance"
 					value="wrappedInstance" />
-			</html:select></td>
+			</html:select>
+			</td>
 			
-			<td align="center"><html:select property="toMonth"
+			
+			<%			
+			if (filterByMonths==1) {
+			%>
+			<td align="center">
+			<html:select property="toMonth"
 				styleClass="inp-text">
 				<html:option value="-1">
 					<digi:trn key="rep:filer:All">All</digi:trn>
@@ -136,7 +170,11 @@
 				<html:optionsCollection property="toMonths" label="wrappedInstance"
 					value="wrappedInstance" />
 			</html:select>
-
+			</td>
+			<%
+			}
+			%>
+			<td align="center">
 			<html:select property="toYear"
 				styleClass="inp-text">
 				<html:option value="-1">
@@ -144,51 +182,40 @@
 				</html:option>
 				<html:optionsCollection property="toYears" label="wrappedInstance"
 					value="wrappedInstance" />
-			</html:select></td>
+			</html:select>
+			</td>
 			<%
-			}
-			else {
+			if (filterByMonths == 0)
+			{
 			%>
-			<td align="center"><html:select property="fromYear"
-				styleClass="inp-text">
-				<html:option value="-1">
-					<digi:trn key="rep:filer:All">All</digi:trn>
-				</html:option>
-				<html:optionsCollection property="fromYears" label="wrappedInstance"
-					value="wrappedInstance" />
-			</html:select></td>
-			
-			<td align="center"><html:select property="toYear"
-				styleClass="inp-text">
-				<html:option value="-1">
-					<digi:trn key="rep:filer:All">All</digi:trn>
-				</html:option>
-				<html:optionsCollection property="toYears" label="wrappedInstance"
-					value="wrappedInstance" />
-			</html:select></td>
-			<td>&nbsp;</td>
+				<td align="center">
+				&nbsp;
+				</td>	
+				<td align="center">
+				&nbsp;
+				</td>	
 			<%
 			}
 			%>
 		</tr>
 
 		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><font color=red><digi:trn
+			<td colspan="5"><font color=red><digi:trn
 				key="rep:filter:financingDetails">Specify the financing details.</digi:trn></font><br>
 			</td>
 		</tr>
 		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><b><digi:trn key="rep:filer:Currency">Currency</digi:trn></b></td>
+			<td colspan="5"><b><digi:trn key="rep:filer:Currency">Currency</digi:trn></b></td>
 		</tr>
 		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><html:select property="currency"
+			<td colspan="5"><html:select property="currency"
 				style="width: 400px" styleClass="inp-text">
 				<html:optionsCollection property="currencies" value="ampCurrencyId"
 					label="currencyName" />
 			</html:select></td>
 		</tr>
 		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><b><digi:trn
+			<td colspan="5"><b><digi:trn
 				key="rep:filer:financingInstrument">Financing Instrument</digi:trn></b></td>
 		</tr>
 		<tr bgcolor="#EEEEEE">
@@ -207,19 +234,22 @@
 				<html:checkbox property="governmentApprovalProcedures" value="true" />&nbsp;<digi:trn
 					key="rep:filter:govAppProcCheck"> Display Only Projects Having Government Approval Procedures. </digi:trn>
 			</field:display></td>
+			<td>
+			&nbsp;
+			</td>
 		</tr>
 
 
 		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><font color=red><digi:trn
+			<td colspan="5"><font color=red><digi:trn
 				key="rep:filter:regionandSector">Specify the region and sectors of interest.</digi:trn></font><br>
 			</td>
 		</tr>
 		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><b><digi:trn key="rep:filter:Location">Region</digi:trn></b></td>
+			<td colspan="5"><b><digi:trn key="rep:filter:Location">Region</digi:trn></b></td>
 		</tr>
 		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><html:select property="regionSelected"
+			<td colspan="5"><html:select property="regionSelected"
 				style="width: 400px" styleClass="inp-text">
 				<html:option value="-1">
 					<digi:trn key="rep:filer:All">All</digi:trn>
@@ -229,10 +259,10 @@
 			</html:select></td>
 		</tr>
 		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><b><digi:trn key="rep:filer:Sector">Sector</digi:trn></b></td>
+			<td colspan="5"><b><digi:trn key="rep:filer:Sector">Sector</digi:trn></b></td>
 		</tr>
 		<tr bgcolor="#EEEEEE">
-			<td colspan="4" styleClass="inp-text"><html:select
+			<td colspan="5" styleClass="inp-text"><html:select
 				multiple="true" property="selectedSectors" size="3"
 				style="width: 400px" styleClass="inp-text">
 				<html:optionsCollection property="sectors" value="ampSectorId"
@@ -242,16 +272,16 @@
 
 
 		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><font color=red><digi:trn
+			<td colspan="5"><font color=red><digi:trn
 				key="rep:filter:DonorsandAgencies">Specify Donors and Cooperating Agencies.</digi:trn></font><br>
 			</td>
 		</tr>
 
 		<%-- <tr>
-			<td colspan="4"><b><digi:trn key="rep:filer:donor">Donor</digi:trn></b></td>
+			<td colspan="5"><b><digi:trn key="rep:filer:donor">Donor</digi:trn></b></td>
 		</tr>
 		<tr>
-			<td colspan="4">
+			<td colspan="5">
 			<html:select multiple="true" property="selectedDonors" size="3" style="width: 400px" styleClass="inp-text">
 				<html:optionsCollection property="donors"
 					value="ampOrgGrpId" label="orgGrpName" />
@@ -260,7 +290,7 @@
 		</tr>--%>
 		<tr bgcolor="#EEEEEE">
 			<td colspan="1"><b><digi:trn key="rep:filer:DonorType">Donor Type</digi:trn></b></td>
-			<td colspan="3"><b><digi:trn key="rep:filer:DonorGroup">Donor Group</digi:trn></b></td>
+			<td colspan="4"><b><digi:trn key="rep:filer:DonorGroup">Donor Group</digi:trn></b></td>
 		</tr>
 		<tr bgcolor="#EEEEEE">
 			<td colspan="1"><html:select style="width: 190px"
@@ -269,14 +299,14 @@
 				<html:optionsCollection property="donorTypes" value="ampOrgTypeId"
 					label="orgType" />
 			</html:select></td>
-			<td colspan="3"><html:select multiple="true"
+			<td colspan="4"><html:select multiple="true"
 				property="selectedDonorGroups" size="3" styleClass="inp-text">
 				<html:optionsCollection style="width: 195px" property="donorGroups"
 					value="ampOrgGrpId" label="orgGrpName" />
 			</html:select></td>
 		</tr>
 		<tr bgcolor="#EEEEEE">
-         <td colspan="4">
+         <td colspan="5">
 			<feature:display name="Beneficiary Agency" module="Organizations">
 				<table align="left" cellpadding="1" cellspacing="1">
                 <tr>
@@ -333,7 +363,7 @@
 
 
 		<tr bgcolor="#EEEEEE">
-			<td colspan="4"><font color=red><digi:trn
+			<td colspan="5"><font color=red><digi:trn
 				key="rep:filter:otherCriteria">Specify other criteria to filter with.</digi:trn></font><br>
 			</td>
 		</tr>
@@ -352,6 +382,10 @@
 				feature="Planning">
 				<b><digi:trn key="rep:filer:PlanningMinRank">Planning Min. Rank</digi:trn></b>
 			</field:display></td>
+			<td>
+			&nbsp;
+			</td>
+			
 		</tr>
 		<tr bgcolor="#EEEEEE">
 			<td valign="top"><category:showoptions
@@ -360,13 +394,15 @@
 				name="aimReportsFilterPickerForm" multiselect="true"
 				keyName="<%=org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY%>" />
 			</td>
+			<td valign="top">
 			<field:display name="Risk" feature="Activity">
-				<td valign="top"><html:select multiple="true"
+				<html:select multiple="true"
 					property="selectedRisks" size="3" styleClass="inp-text">
 					<html:optionsCollection property="risks"
 						value="ampIndRiskRatingsId" label="ratingName" />
-				</html:select></td>
+				</html:select>
 			</field:display>
+			</td>
 			<td valign="top"><field:display name="Line Ministry Rank"
 				feature="Planning">
 				<html:select property="lineMinRank" style="width: 50px"
@@ -391,21 +427,24 @@
 						label="wrappedInstance" value="wrappedInstance" />
 				</html:select>
 			</field:display></td>
+			<td>
+			&nbsp;
+			</td>
 		</tr>
 
 
 		<logic:notEqual name="widget" value="true" scope="request">
 
 			<tr bgcolor="#EEEEEE">
-				<td colspan="4"><font color=red><digi:trn
+				<td colspan="5"><font color=red><digi:trn
 					key="rep:filter:pageSizeMesg">Specify the page size you want to format your report to print in.</digi:trn></font><br>
 				</td>
 			</tr>
 			<tr bgcolor="#EEEEEE">
-				<td colspan="4"><b><digi:trn key="rep:filter:pageSize"> Page Size</digi:trn></b></td>
+				<td colspan="5"><b><digi:trn key="rep:filter:pageSize"> Page Size</digi:trn></b></td>
 			</tr>
 			<tr bgcolor="#EEEEEE">
-				<td colspan="4"><html:select property="pageSize"
+				<td colspan="5"><html:select property="pageSize"
 					style="width: 100px" styleClass="inp-text">
 					<html:optionsCollection property="pageSizes"
 						label="wrappedInstance" value="wrappedInstance" />
@@ -419,7 +458,7 @@
 
 
 		<tr>
-			<td align="center" colspan="4"><html:submit styleClass="buton"
+			<td align="center" colspan="5"><html:submit styleClass="buton"
 				property="apply">
 				<digi:trn key="rep:filer:ApplyFiltersToReport">Apply Filters to the Report</digi:trn>
 			</html:submit>&nbsp; <html:button onclick="resetFilter();" styleClass="buton"

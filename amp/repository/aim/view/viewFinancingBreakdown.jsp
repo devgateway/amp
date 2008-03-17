@@ -268,7 +268,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 											<TD width="750" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
 												<TABLE width="750"  border="0" cellpadding="4" cellspacing="1">
                  					<TR bgcolor="#DDDDDB" >
-
+ 
 		    	                    	<field:display name="Funding Organization Id" feature="Funding Organizations">
 		    	                    		<TD><digi:trn key="aim:orgFundingId">Org Funding ID</digi:trn></TD>
 		    	                    	</field:display>
@@ -283,13 +283,13 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 										</feature:display>
 
 						                <field:display name="Total Committed" feature="Funding Organizations">
-											<TD><digi:trn key="aim:totalCommitted">Total Commitments(Actual)</digi:trn></TD>
+											<TD><digi:trn key="aim:totalCommitmentsActual">Total Commitments (Actual)</digi:trn></TD>
 										</field:display>
                                                                               <field:display name="Total Ordered" feature="Disbursement Orders">
 			                	         	<TD><digi:trn key="aim:totalOrdered">Total Ordered</digi:trn></TD>
 			                	        </field:display>
 										<field:display name="Total Disbursed" feature="Funding Organizations">
-			                	         	<TD><digi:trn key="aim:totalDisbursed">Total Disbursements(Actual)</digi:trn></TD>
+			                	         	<TD><digi:trn key="aim:totalDisbursementsActual">Total Disbursements (Actual)</digi:trn></TD>
 			                	        </field:display>
 			                	        <field:display name="Undisbursed Funds" feature="Funding Organizations">
 											<TD><digi:trn key="aim:unDisbursedFunds">Undisbursed Funds</digi:trn></TD>
@@ -298,16 +298,17 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 										<feature:display module="Funding" name="Expenditures">
                                    
                                             <field:display name="Total Expended" feature="Funding Organizations">
-                                                <TD><digi:trn key="aim:totalExpended">Total Expenditures(Actual)</digi:trn></TD>
+                                                <TD><digi:trn key="aim:totalExpendituresActual">Total Expenditures (Actual)</digi:trn></TD>
                                             </field:display>
                                    
                                         </feature:display>
 
 	    	                    	 	<feature:display module="Funding" name="Expenditures">
 		    	                    	 	<field:display name="Unexpended Funds" feature="Funding Organizations">
-												<TD><digi:trn key="aim:unExpendedFunds">Unexpended Funds</digi:trn></TD>
+												<TD><digi:trn key="aim:unExpendedFunds">Unexpended a Funds</digi:trn></TD>
 											</field:display>
 										</feature:display>
+
 									</TR>
 													<logic:empty name="aimFinancingBreakdownForm" property="financingBreakdown">
 			                    	<TR valign="top">

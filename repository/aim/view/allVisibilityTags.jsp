@@ -61,6 +61,15 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <feature:display  name="Paris Indicators Targets Manager" module="Admin Home"></feature:display>
 <feature:display  name="Target Value" module="PI Reports"></feature:display>
 
+<feature:display  name="PI report 3" module="PI Reports"></feature:display>
+<feature:display  name="PI report 4" module="PI Reports"></feature:display>
+<feature:display  name="PI report 5a" module="PI Reports"></feature:display>
+<feature:display  name="PI report 5b" module="PI Reports"></feature:display>
+<feature:display  name="PI report 6" module="PI Reports"></feature:display>
+<feature:display  name="PI report 7" module="PI Reports"></feature:display>
+<feature:display  name="PI report 9" module="PI Reports"></feature:display>
+<feature:display  name="PI report 10a" module="PI Reports"></feature:display>
+
 <feature:display  name="Funding Organizations" module="Funding"></feature:display>
 <feature:display module="Contact Information" name="Mofed Contact Information"></feature:display>
 <feature:display module="Funding" name="Funding Organizations"></feature:display>

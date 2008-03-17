@@ -18,7 +18,9 @@
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 
 <%@ taglib uri="/taglib/category" prefix="category" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
 
@@ -213,23 +215,23 @@
 				<tr>
                   <td>
                     <table>
-
-                        <tr>
-                          <td class="subtitle-blue" style="width:70%;text-align:right;">
-                            <digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn>&nbsp;
-                            ${aimParisIndicatorReportForm.indicatorCode}&nbsp;
-                            <digi:trn key="aim:report">Report</digi:trn>
-                          </td>
+                      <tr>
+                        <td class="subtitle-blue" style="width:70%;text-align:right;">
+                          <digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn>&nbsp;
+                          ${aimParisIndicatorReportForm.indicatorCode}&nbsp;
+                          <digi:trn key="aim:report">Report</digi:trn>
+                        </td>
+                        <td class="subtitle-blue" style="width:250px;text-align:right;">
                           <feature:display  name="Target Value" module="PI Reports">
-                            <td class="subtitle-blue" style="width:250px;text-align:right;">
-                              <c:if test="${!empty aimParisIndicatorReportForm.targetValue && !empty aimParisIndicatorReportForm.calcResult}">
-                              ${aimParisIndicatorReportForm.targetValue}&nbsp;
-                              <digi:trn key="aim:piTargerValue">Target</digi:trn>:
-                              ${aimParisIndicatorReportForm.calcResult}%
-                              </c:if>
-                            </td>
+                            <c:if test="${!empty aimParisIndicatorReportForm.targetValue && !empty aimParisIndicatorReportForm.calcResult}">
+                            ${aimParisIndicatorReportForm.targetValue}&nbsp;
+                            <digi:trn key="aim:piTargerValue">Target</digi:trn>:
+                            ${aimParisIndicatorReportForm.calcResult}%
+                            </c:if>
                           </feature:display>
-                        </tr>
+                          &nbsp;
+                        </td>
+                      </tr>
                     </table>
                   </td>
 				</tr>

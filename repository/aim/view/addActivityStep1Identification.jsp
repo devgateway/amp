@@ -262,7 +262,13 @@ target.style.cursor = "default"
 											
 											<bean:define id="largeTextFeature" value="Identification" toScope="request"/>
 										
-										
+											<bean:define id="largeTextLabel" value="Lessons Learned" toScope="request"/>
+											<bean:define id="largeTextKey" toScope="request">
+												<c:out value="${aimEditActivityForm.lessonsLearned}"/>
+											</bean:define>
+											<jsp:include page="largeTextPropertyEdit.jsp"/>
+			
+			
 			
 			
 											<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
@@ -309,39 +315,7 @@ target.style.cursor = "default"
 											
 											
 											
-											<field:display name="Lessons Learned" feature="Identification">
-											<tr bgcolor="#ffffff"><td valign="top" align="left">
-												<a title="<digi:trn key="aim:Lessons Learned">Lessons Learned</digi:trn>">
-												<digi:trn key="aim:lessonslearned">
-												Lessons Learned
-												</digi:trn>
-												</a>
-											</td>
-											<td valign="top" align="left">
-												<table cellPadding=0 cellSpacing=0>
-													<tr>
-														<td>
-															<bean:define id="lessonsLearnedKey">
-																<c:out value="${aimEditActivityForm.lessonsLearned}"/>
-															</bean:define>
-			
-															<digi:edit key="<%=lessonsLearnedKey%>"/>
-														</td>
-													</tr>
-													<tr>
-														<td>
-															<%--
-															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
-															--%>
-															<a href="javascript:edit('<%=lessonsLearnedKey%>')">
-															<digi:trn key="aim:edit">Edit</digi:trn></a>
-														</td>
-													</tr>
-												</table>
-											</td></tr>
-											</field:display>
-											
-											
+																		
 											
 											<field:display name="Accession Instrument" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">

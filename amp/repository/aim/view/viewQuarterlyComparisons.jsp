@@ -266,9 +266,9 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 								</TD>
 
-								<TD align="right">
+								<TD align="right">&nbsp;
 
-									&nbsp;
+									
 
 								</TD>
 
@@ -642,7 +642,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
                               							</div>
 
 			                              			</td>
-
+										<feature:display module="Funding" name="Expenditures">
          			                     			<td bgcolor="#DDDDDB">
 
                   			            				<div align="center">
@@ -654,7 +654,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
                                							</div>
 
                               						</td>
-
+											</feature:display>
 				                            		</tr>
 
             				                		<logic:empty name="aimQuarterlyComparisonsForm" property="quarterlyComparisons" >
@@ -750,7 +750,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 																			</div>
 
 																		</td>
-
+	<feature:display module="Funding" name="Expenditures">
 																		<td bgcolor="#F8F8F5">
 
 																			<div align="right">
@@ -760,7 +760,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 																			</div>
 
 																		</td>
-
+	</feature:display>
 																	</tr>
 
 																</logic:iterate>
@@ -826,7 +826,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 																	</div>
 
 																</td>
-
+<feature:display module="Funding" name="Expenditures">
 																<td bgcolor="#DDDDDB" colspan="3">
 
 																	<div align="center">
@@ -838,7 +838,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 																	</div>
 
 																</td>
-
+</feature:display>
 															</tr>
 
 															<tr bgcolor="#DDDDDB" >
@@ -918,7 +918,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 							              						</div>
 
 							              					</td>
-
+<feature:display module="Funding" name="Expenditures">
 							              					<td bgcolor="#DDDDDB">
 
 							              						<div align="center">
@@ -954,7 +954,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 							              						</div>
 
 							              					</td>
-
+	</feature:display>
 				            							</tr>
 
 				            							<logic:empty name="aimQuarterlyComparisonsForm" property="quarterlyDiscrepanciesAll" >
@@ -1088,7 +1088,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 													                  </div>
 
 							              							</td>
-
+	<feature:display module="Funding" name="Expenditures">
 							               						<td bgcolor="#F8F8F5">
 
 							              								<div align="right">
@@ -1118,7 +1118,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 							                							</div>
 
 							              							</td>
-
+	</feature:display>
 							            						</tr>
 
 							            					</logic:iterate>

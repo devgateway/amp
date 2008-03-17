@@ -262,13 +262,7 @@ target.style.cursor = "default"
 											
 											<bean:define id="largeTextFeature" value="Identification" toScope="request"/>
 										
-											<bean:define id="largeTextLabel" value="Lessons Learned" toScope="request"/>
-											<bean:define id="largeTextKey" toScope="request">
-												<c:out value="${aimEditActivityForm.lessonsLearned}"/>
-											</bean:define>
-											<jsp:include page="largeTextPropertyEdit.jsp"/>
-			
-			
+										
 			
 			
 											<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>

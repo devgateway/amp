@@ -1,0 +1,1 @@
+update amp_fiscal_calendar set base_cal='ETH-CAL' where amp_fiscal_cal_id=1;

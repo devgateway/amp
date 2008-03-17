@@ -259,7 +259,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             session.delete(sec);
           }
         }*/
-
+        
 //				 delete all previous costs
         oldActivity.getCosts().clear();
         /*if (oldActivity.getCosts() != null) {
@@ -376,7 +376,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         if (activity.getReferenceDocs() != null)
         	oldActivity.getReferenceDocs().addAll(activity.getReferenceDocs());
         if (activity.getSectors() != null)
-        	oldActivity.getSectors().addAll(activity.getSectors());
+        	oldActivity.getSectors().addAll(activity.getSectors()); 
         if (activity.getComponentes() != null)
         	oldActivity.getComponentes().addAll(activity.getComponentes());
         if (activity.getIssues() != null)
@@ -785,6 +785,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                     oldContract.setTotalPrivateContribCurrency(contract.getTotalPrivateContribCurrency());
                     oldContract.setOrganization(contract.getOrganization());
                     oldContract.setStatus(contract.getStatus());
+                    oldContract.setType(contract.getType());
                     //oldContract.getDisbursements().clear();
                     Set toRetain=new HashSet();
                    
@@ -834,8 +835,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         if (ids.length() != 0) {
             queryString += " and con.id not in (" + ids + ")";
         }
-        session.delete(queryString);
-        session.flush();
+       session.delete(queryString);
+       session.flush();
 			tx.commit(); // commit the transcation
 			logger.debug("Activity saved");
     }

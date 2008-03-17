@@ -40,7 +40,7 @@ public class FiscalCalendarWorker
 			gc.setTime(d) ;
 			//target date
 			//Ethiopian calendar //AMP-2212
-			if ( fc.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue()))
+			if ((fc.getBaseCal() != null) && ( fc.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue())))
 			{
 				//logger.info("Setting year and quarter for Ethiopian Fiscal Year");				
 				ec1 = ec.getEthiopianDate(gc) ;

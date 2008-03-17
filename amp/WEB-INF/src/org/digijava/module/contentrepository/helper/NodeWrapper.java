@@ -109,8 +109,18 @@ public class NodeWrapper {
 		FormFile formFile		= tempDoc.getFormFile(); 
 		
 		boolean isAUrl			= false;
-		if ( tempDoc.getWebLink()!=null && tempDoc.getWebLink().length()>0 )
+		if ( tempDoc.getWebLink()!=null && tempDoc.getWebLink().length()>0 ){
+			if (tempDoc.getWebLink().indexOf("http://") >= 0){
+				tempDoc.setWebLink(tempDoc.getWebLink().replaceFirst("http://", ""));
+			}
+			if (tempDoc.getName().indexOf("http://") >= 0){
+				tempDoc.setName(tempDoc.getName().replaceFirst("http://", ""));
+			}
+			if (tempDoc.getTitle().indexOf("http://") >= 0){
+				tempDoc.setTitle(tempDoc.getTitle().replaceFirst("http://", ""));
+			}
 			isAUrl				= true;
+		}
 		
 		try {
 			TeamMember teamMember		= (TeamMember)myRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);

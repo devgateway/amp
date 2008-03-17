@@ -55,8 +55,9 @@ public class SaveIndicatorValues extends Action
 						temp.setTargetValDate(eaForm.getTargetValDate());
 						temp.setTargetValComments(eaForm.getTargetValComments());
 						if (eaForm.getRevTargetValDate() != null) {
-							temp.setTargetVal(eaForm.getRevTargetVal());
-                            temp.setTargetValDate(eaForm.getRevTargetValDate());
+							//TODO INDIC : This two line temporary commented because of AMP-2562 and AMP-2900.
+							//temp.setTargetVal(eaForm.getRevTargetVal());
+                            //temp.setTargetValDate(eaForm.getRevTargetValDate());
 							temp.setRevisedTargetVal(eaForm.getRevTargetVal());
 							temp.setRevisedTargetValDate(eaForm.getRevTargetValDate());
 							temp.setRevisedTargetValComments(eaForm.getRevTargetValComments());

@@ -670,7 +670,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<td align="left">
 																	<input type="text" name="currValDate"
 																	value="<bean:write name="indicator" property="currentValDate" />"
-																	class="inp-text" size="10" readonly="true" id="currValDate">&nbsp;&nbsp;
+																	class="inp-text" size="10" readonly="readonly" id="currValDate">&nbsp;&nbsp;
 
 																	<a id="clear4" href="javascript:clearDate(document.aimEditActivityForm.currValDate, 'clear4')">
 																	 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>

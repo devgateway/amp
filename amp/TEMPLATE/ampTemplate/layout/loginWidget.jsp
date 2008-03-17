@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<logic:present name="currentMember" scope="session">
+<logic:present name="isUserLogged" scope="session">
 <DIV id="menu" align="right" style="">
 <div id="gen" style="white-space:nowrap;"
 	title='<digi:trn key="aim:clickToLogoutTheSystem">Click here to logout from the system</digi:trn>'>
@@ -26,7 +26,7 @@ ${fn:replace(message,quote,escapedQuote)}
 </DIV>
 </logic:present>
 
-<logic:notPresent name="currentMember" scope="session">
+<logic:notPresent name="isUserLogged" scope="session">
 <DIV id="menu" align="right">
 <div id="gen"
 	title='<digi:trn key="aim:aimGoToLogin">Go To Login Page</digi:trn>'>

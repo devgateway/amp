@@ -283,13 +283,13 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 										</feature:display>
 
 						                <field:display name="Total Committed" feature="Funding Organizations">
-											<TD><digi:trn key="aim:totalCommitted">Total Committed</digi:trn></TD>
+											<TD><digi:trn key="aim:totalCommitted">Total Commitments(Actual)</digi:trn></TD>
 										</field:display>
                                                                               <field:display name="Total Ordered" feature="Disbursement Orders">
 			                	         	<TD><digi:trn key="aim:totalOrdered">Total Ordered</digi:trn></TD>
 			                	        </field:display>
 										<field:display name="Total Disbursed" feature="Funding Organizations">
-			                	         	<TD><digi:trn key="aim:totalDisbursed">Total Disbursed</digi:trn></TD>
+			                	         	<TD><digi:trn key="aim:totalDisbursed">Total Disbursements(Actual)</digi:trn></TD>
 			                	        </field:display>
 			                	        <field:display name="Undisbursed Funds" feature="Funding Organizations">
 											<TD><digi:trn key="aim:unDisbursedFunds">Undisbursed Funds</digi:trn></TD>
@@ -298,7 +298,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 										<feature:display module="Funding" name="Expenditures">
                                    
                                             <field:display name="Total Expended" feature="Funding Organizations">
-                                                <TD><digi:trn key="aim:totalExpended">Total Expended</digi:trn></TD>
+                                                <TD><digi:trn key="aim:totalExpended">Total Expenditures(Actual)</digi:trn></TD>
                                             </field:display>
                                    
                                         </feature:display>

@@ -47,7 +47,7 @@ public class FiscalCalendarWorker
 				fdo.setFiscalYear(ec1.ethFiscalYear) ;
 				fdo.setFiscalQuarter(ec1.ethFiscalQrt) ;
 				//logger.info("Year :" + fdo.getFiscalYear() + ",Qtr : " + fdo.getFiscalQuarter());
-			} else if (fc.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue())) {
+			} else if ((fc.getBaseCal() != null) && ( fc.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()))) {
 				//logger.info("Setting year and quarter for Ethiopian Calendar");
 				ec1 = ec.getEthiopianDate(gc) ;
 				fdo.setFiscalYear(ec1.ethYear) ;

@@ -551,58 +551,62 @@ function collapseAll() {
 										</TR>																		
 									</field:display>
 									
-										<logic:notEmpty name="aimEditActivityForm" property="projectImpact">
+											<logic:present name="aimEditActivityForm" property="projectImpact">
 											<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
 												<c:out value="${aimEditActivityForm.projectImpact}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyView.jsp"/>
-										</logic:notEmpty>
-									
-									<logic:notEmpty name="aimEditActivityForm" property="activitySummary">
+											</logic:present>
+											
+											<logic:present name="aimEditActivityForm" property="activitySummary">
 											<bean:define id="largeTextLabel" value="Activity Summary" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
 												<c:out value="${aimEditActivityForm.activitySummary}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyView.jsp"/>
-									</logic:notEmpty>
-									
-									<logic:notEmpty name="aimEditActivityForm" property="contractingArrangements">
+											</logic:present>
+											
+											<logic:present name="aimEditActivityForm" property="contractingArrangements">
 											<bean:define id="largeTextLabel" value="Contracting Arrangements" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
 												<c:out value="${aimEditActivityForm.contractingArrangements}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyView.jsp"/>
-									</logic:notEmpty>
-									
-									<logic:notEmpty name="aimEditActivityForm" property="condSeq">
+											</logic:present>
+			
+											<logic:present name="aimEditActivityForm" property="condSeq">
 											<bean:define id="largeTextLabel" value="Conditionality and Sequencing" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
 												<c:out value="${aimEditActivityForm.condSeq}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyView.jsp"/>
-								</logic:notEmpty>
-								<logic:notEmpty name="aimEditActivityForm" property="linkedActivities">
+											</logic:present>
+			
+											<logic:present name="aimEditActivityForm" property="linkedActivities">
 											<bean:define id="largeTextLabel" value="Linked Activities" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
 												<c:out value="${aimEditActivityForm.linkedActivities}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyView.jsp"/>
-											</logic:notEmpty>
-							<logic:notEmpty name="aimEditActivityForm" property="conditionality">
+											</logic:present>
+											
+											<logic:present name="aimEditActivityForm" property="conditionality">
 											<bean:define id="largeTextLabel" value="Conditionalities" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
 												<c:out value="${aimEditActivityForm.conditionality}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyView.jsp"/>
-							</logic:notEmpty>
-								<logic:notEmpty name="aimEditActivityForm" property="projectManagement">
+											</logic:present>
+			
+											<logic:present name="aimEditActivityForm" property="projectManagement">
 											<bean:define id="largeTextLabel" value="Project Management" toScope="request"/>
 											<bean:define id="largeTextKey" toScope="request">
 												<c:out value="${aimEditActivityForm.projectManagement}"/>
 											</bean:define>
 											<jsp:include page="largeTextPropertyView.jsp"/>
-									</logic:notEmpty>
+											</logic:present>
+									
 
  
                                 

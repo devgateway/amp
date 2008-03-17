@@ -535,7 +535,7 @@ public class IndicatorUtil {
 	 */
 	public static Set<ActivityIndicator> getActivityIndicatorHelperBeans(AmpActivity activity) throws DgException{
 		Set<ActivityIndicator> result=null;
-		if (activity!=null) return null;
+		if (activity==null) return null;
 		Set<IndicatorActivity> indicators =activity.getIndicators();
 		if (indicators!=null && indicators.size()>0){
 			result=new HashSet<ActivityIndicator>();
@@ -561,6 +561,7 @@ public class IndicatorUtil {
 						if (AmpIndicatorValue.ACTUAL==value.getValueType()){
 							helper.setActualVal(value.getValue().floatValue());
 							helper.setActualValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+							helper.setCurrentValDate(DateConversion.ConvertDateToString(value.getValueDate()));
 							helper.setActualValComments(value.getComment());
 						}
 						if (AmpIndicatorValue.BASE==value.getValueType()){

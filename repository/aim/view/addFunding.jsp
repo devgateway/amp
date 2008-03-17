@@ -721,7 +721,10 @@
 								</td>
                                                                 <td align="center" valign="middle">
 
+								<feature:display module="Funding" name="Disbursement Orders">
 									<b><font color="white"><digi:trn key="aim:DisbursementOrderIDFIE">Disbursement Order ID</digi:trn></font></b>
+								</feature:display>
+								&nbsp;	
 								</td>
                                                                 <td align="center" valign="middle">&nbsp;
 
@@ -900,7 +903,9 @@
 									</logic:equal>
 								</td>
                                                                  <td align="center" valign="middle" colspan="3" >
+                                                                 <feature:display module="Funding" name="Disbursement Orders">
                                                                 <b><font color="white"><digi:trn key="aim:DisbursementOrderIDFIE">Disbursement Order ID</digi:trn></font></b>
+                                                                </feature:display>
                                                                 </td>
 
 

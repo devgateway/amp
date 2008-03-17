@@ -120,7 +120,9 @@ public class AddProgram
           for (int i = 0; i < npoPrograms.size(); i++) {
         	  program = (AmpActivityProgram) npoPrograms.get(i);
         	  if ((program.getAmpActivityProgramId() == null) || (program.getAmpActivityProgramId().equals(activityProgram.getAmpActivityProgramId()))) {
+                      if(program.getProgram().equals(activityProgram.getProgram())){
         		  exist = true;
+                      }
         	  }
           }
           if (!exist) {
@@ -141,7 +143,9 @@ public class AddProgram
             for (int i = 0; i < ppPrograms.size(); i++) {
           	  program = (AmpActivityProgram) ppPrograms.get(i);
           	  if ((program.getAmpActivityProgramId() == null) || (program.getAmpActivityProgramId().equals(activityProgram.getAmpActivityProgramId()))) {
-          		  exist = true;
+                    if(program.getProgram().equals(activityProgram.getProgram())){  
+                            exist = true;
+                     }
           	  }
             }
             if (!exist) {
@@ -162,7 +166,9 @@ public class AddProgram
             for (int i = 0; i < spPrograms.size(); i++) {
           	  program = (AmpActivityProgram) spPrograms.get(i);
           	  if ((program.getAmpActivityProgramId() == null) || (program.getAmpActivityProgramId().equals(activityProgram.getAmpActivityProgramId()))) {
+                       if(program.getProgram().equals(activityProgram.getProgram())){
           		  exist = true;
+                       }
           	  }
             }
             if (!exist) {

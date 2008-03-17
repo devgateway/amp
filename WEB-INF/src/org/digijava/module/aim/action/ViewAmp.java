@@ -63,6 +63,8 @@ public class ViewAmp
          * MyDesktop page, when he tries to login again in that same session.
          */
         HttpSession session = request.getSession();
+        session.setAttribute("isUserLogged",
+                new String("true"));
         String siteAdmin = (String) session.getAttribute("ampAdmin");
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");
         if (tm != null && tm.getTeamId() != null &&
@@ -84,6 +86,9 @@ public class ViewAmp
         Collection members = TeamMemberUtil.getTeamMembers(user.getEmail());
         lForm.setMembers(members);
         //response.sendRedirect("showSelectTeam.do");
+
+
+
         return mapping.findForward("selectTeam");
 
         //throw new AuthenticationException("Please log in") {
@@ -309,9 +314,7 @@ public class ViewAmp
             Locale navLocale = new Locale();
             navLocale.setCode(tm.getAppSettings().getLanguage());
             DgUtil.switchLanguage(navLocale, request, response);
-
         } else if (members.size() > 1) {
-
             // member is part of more than one team. Show the select team page
             // Moved to ViewAmp action
             return;

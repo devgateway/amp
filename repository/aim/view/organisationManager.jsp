@@ -178,22 +178,64 @@
 															<td width="100%">
 																<table width="634" border=0	 bgColor=#f4f4f2>
 																	<tr>
-																		<td height="40" width="350"><b>
-																			<digi:trn key="aim:organizationName">Organization
-                                                                            Name</digi:trn></b>
+																		<td height="40" width="350">
+																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy!='nameAscending'}">
+																				<digi:link href="/organisationManager.do?sortBy=nameAscending&reset=false&orgSelReset=false">
+																					<b><digi:trn key="aim:organizationName">Organization Name</digi:trn></b>
+																				</digi:link>																					
+																			</c:if>
+																			<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy=='nameAscending'}">
+																				<digi:link href="/organisationManager.do?sortBy=nameDescending&reset=false&orgSelReset=false">
+																					<b><digi:trn key="aim:organizationName">Organization Name</digi:trn></b>
+																				</digi:link>																					
+																			</c:if>
+																			<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy=='nameAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
+																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='nameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 																		</td>
-																		<td height="40" width="100"><b>
-																			<digi:trn key="aim:organizationAcronym">Organization
-                                                                            Acronym</digi:trn></b>
+																		<td height="40" width="350">																		
+																			<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='acronymAscending'}">
+																				<digi:link href="/organisationManager.do?sortBy=acronymAscending&reset=false&orgSelReset=false">
+																					<b><digi:trn key="aim:organizationAcronym">Organization Acronym</digi:trn></b>
+																				</digi:link>																					
+																			</c:if>
+																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='acronymAscending'}">
+																				<digi:link href="/organisationManager.do?sortBy=acronymDescending&reset=false&orgSelReset=false">
+																					<b><digi:trn key="aim:organizationAcronym">Organization Acronym</digi:trn></b>
+																				</digi:link>																					
+																			</c:if>
+																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='acronymAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
+																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='acronymDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 																		</td>																	
 																	<%--<td height="40" width="171"><b>
 																			<digi:trn key="aim:organizationCountry">Country</digi:trn></b>
 																		</td>--%>
-																		<td height="40"width="147"><b>
-																			<digi:trn key="aim:organizationType">Type</digi:trn></b>
+																		<td height="40" width="171"> &nbsp;&nbsp;&nbsp;
+																			<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='typeAscending'}">
+																				<digi:link href="/organisationManager.do?sortBy=typeAscending&reset=false&orgSelReset=false">
+																					<b><digi:trn key="aim:organizationType">Type</digi:trn></b>
+																				</digi:link>																					
+																			</c:if>
+																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='typeAscending'}">
+																				<digi:link href="/organisationManager.do?sortBy=typeDescending&reset=false&orgSelReset=false">
+																					<b><digi:trn key="aim:organizationType">Type</digi:trn></b>
+																				</digi:link>																					
+																			</c:if>
+																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='typeAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
+																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='typeDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>																																			
 																		</td>
-																		<td height="40"width="147"><b>
-																			<digi:trn key="aim:organizationGroup">Organization Group</digi:trn></b>
+																		<td height="40"width="147">
+																		<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='groupAscending'}">
+																				<digi:link href="/organisationManager.do?sortBy=groupAscending&reset=false&orgSelReset=false">
+																					<b><digi:trn key="aim:organizationGroup">Organization Group</digi:trn></b>
+																				</digi:link>																					
+																			</c:if>
+																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='groupAscending'}">
+																				<digi:link href="/organisationManager.do?sortBy=groupDescending&reset=false&orgSelReset=false">
+																					<b><digi:trn key="aim:organizationGroup">Organization Group</digi:trn></b>
+																				</digi:link>																					
+																			</c:if>
+																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='groupAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
+																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='groupDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 																		</td>
 																	</tr>
 																<logic:iterate name="aimOrgManagerForm" property="pagedCol" id="organisation">

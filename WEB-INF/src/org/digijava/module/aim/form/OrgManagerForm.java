@@ -34,7 +34,17 @@ public class OrgManagerForm
   private int pagesToShow;
   private int pagesSize;
   private int offset;
-  public OrgManagerForm() {
+  private String sortBy;
+  
+  public String getSortBy() {
+	return sortBy;
+}
+
+public void setSortBy(String sortBy) {
+	this.sortBy = sortBy;
+}
+
+public OrgManagerForm() {
     reset = false;
     orgPopupReset = true;
     numResults = 0;
@@ -54,6 +64,7 @@ public class OrgManagerForm
       reset = false;
       currentPage = new Integer(0);
       currentAlpha = null;
+     
     }
 
     if (orgSelReset) {

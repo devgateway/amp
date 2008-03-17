@@ -111,8 +111,8 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
                                                                                                                 </logic:equal>
 												</SPAN>
 											</TD>
-											<TD align="right">
-												&nbsp;
+											<TD align="right">&nbsp;
+												
 											</TD>
 
 
@@ -191,8 +191,8 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 														</STRONG>
 													</TD>
 												</logic:equal>
-												<TD width="5">
-													&nbsp;
+												<TD width="5">&nbsp;
+													
 												</TD>
 											</TR>
 											<TR>
@@ -294,10 +294,15 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 			                	        <field:display name="Undisbursed Funds" feature="Funding Organizations">
 											<TD><digi:trn key="aim:unDisbursedFunds">Undisbursed Funds</digi:trn></TD>
 										</field:display>
-										
-										<field:display name="Total Expended" feature="Funding Organizations">
-		    	                    	 	<TD><digi:trn key="aim:totalExpended">Total Expended</digi:trn></TD>
-	    	                    	 	</field:display>
+
+										<feature:display module="Funding" name="Expenditures">
+                                   
+                                            <field:display name="Total Expended" feature="Funding Organizations">
+                                                <TD><digi:trn key="aim:totalExpended">Total Expended</digi:trn></TD>
+                                            </field:display>
+                                   
+                                        </feature:display>
+
 	    	                    	 	<feature:display module="Funding" name="Expenditures">
 		    	                    	 	<field:display name="Unexpended Funds" feature="Funding Organizations">
 												<TD><digi:trn key="aim:unExpendedFunds">Unexpended Funds</digi:trn></TD>
@@ -349,11 +354,11 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 											<field:display name="Funding Organization" feature="Funding Organizations">
 						                  		<TD><jsp:include page="previewFinancingOrganizationPopup.jsp"/></TD>
 						                  	</field:display>
-
+<feature:display module="Funding" name="MTEF Projections">
 											<field:display feature="MTEF Projections" name="MTEFProjections">
 												<TD align="right"><bean:write name="breakdown" property="totalProjection"/></TD>
 											</field:display>
-
+</feature:display>
 						                  	<field:display name="Total Committed" feature="Funding Organizations">
 							                  <TD align="right"><bean:write name="breakdown" property="totalCommitted"/></TD>
 							                </field:display>
@@ -366,10 +371,13 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 							                <field:display name="Undisbursed Funds" feature="Funding Organizations">
 								                <TD align="right"><bean:write name="breakdown" property="unDisbursed"/></TD>
 								            </field:display>
-								            <field:display name="Total Expended" feature="Funding Organizations">
-					      			          <TD align="right"><bean:write name="breakdown" property="totalExpended"/></TD>
-					      			        </field:display>
-					      			        
+                                            
+                                            <feature:display module="Funding" name="Expenditures">
+                                                <field:display name="Total Expended" feature="Funding Organizations">
+                                                  <TD align="right"><bean:write name="breakdown" property="totalExpended"/></TD>
+                                                </field:display>
+					      			        </feature:display>
+                                            
 					      			        <feature:display module="Funding" name="Expenditures">
 							      			        <field:display name="Unexpended Funds" feature="Funding Organizations">
 							            		      <TD align="right"><bean:write name="breakdown" property="unExpended"/></TD>
@@ -381,17 +389,35 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 													</logic:notEmpty>
 				                  <TR valign="top" class="note">
 														<TD><digi:trn key="aim:total">Total</digi:trn></TD>
-				                    <TD>&nbsp;</TD>
-				                    					<field:display feature="MTEF Projections" name="MTEFProjections"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalProjections"/></TD></field:display>
-														<field:display name="Total Committed" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalCommitted"/></TD></field:display>
-                                                                                                                <field:display name="Total Ordered" feature="Disbursement Orders"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalDisbOrdered"/></TD></field:display>
-														<field:display name="Total Disbursed" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalDisbursed"/></TD></field:display>
-														<field:display name="Undisbursed Funds" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalUnDisbursed"/></TD></field:display>
-														<field:display name="Total Expended" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalExpended"/></TD></field:display>
-														<feature:display module="Funding" name="Expenditures">
-														<field:display name="Unexpended Funds" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalUnExpended"/></TD></field:display>
-														</feature:display>
-													</TR>
+				                    <TD></TD>
+				                    				
+                                                    <feature:display module="Funding" name="MTEF Projections">
+                                                    	<field:display feature="MTEF Projections" name="MTEFProjections"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalProjections"/></TD>
+				                    					</field:display>
+                                                        </feature:display>
+														<field:display name="Total Committed" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalCommitted"/></TD>
+														</field:display>
+                                                                                                                <field:display name="Total Ordered" feature="Disbursement Orders"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalDisbOrdered"/></TD>
+                                                                                                                </field:display>
+														<field:display name="Total Disbursed" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalDisbursed"/></TD>
+														</field:display>
+														<field:display name="Undisbursed Funds" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalUnDisbursed"/></TD>
+                                                        
+                                                        </field:display>
+												
+                                                <feature:display module="Funding" name="Expenditures">
+                                              
+                                                		<field:display name="Total Expended" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalExpended"/></TD>
+                                                		</field:display>
+                                                        
+                                                        </feature:display>
+														
+<feature:display module="Funding" name="Expenditures">
+    <field:display name="Unexpended Funds" feature="Funding Organizations">
+        <TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalUnExpended"/></TD>
+    </field:display>
+</feature:display>
+</TR>
 												</TABLE>
 											</TD>
 										</TR>

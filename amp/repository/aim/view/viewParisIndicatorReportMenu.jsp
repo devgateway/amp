@@ -8,10 +8,18 @@
 
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 
+<%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
+
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ taglib uri="/taglib/fmt" prefix="fmt" %>
 
+<%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
 <digi:instance property="aimParisIndicatorReportForm" />
@@ -26,11 +34,11 @@
 
 		<td class=r-dotted-lg width=14>&nbsp;</td>
 
-	
+
 
 		<td align=left class=r-dotted-lg vAlign=top width=750>
 
-		
+
 
 			<table cellPadding=5 cellSpacing=0 width="100%">
 
@@ -86,7 +94,7 @@
 
 								<td valign="top">
 
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">	
+									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">
 
 										<tr>
 
@@ -126,17 +134,18 @@
 
 										<logic:notEmpty name="aimParisIndicatorReportForm"  property="indicatorsColl">
 
-											<logic:iterate id="report" name="aimParisIndicatorReportForm"  property="indicatorsColl" 
+											<logic:iterate id="report" name="aimParisIndicatorReportForm"  property="indicatorsColl"
 
 													   type="org.digijava.module.aim.dbentity.AmpAhsurveyIndicator">
 
 											<c:if test="${report.indicatorCode != '10b'}">
 
 												<TR><TD>
+                                                    <feature:display  name="PI report ${report.indicatorCode}" module="PI Reports">
 
 													<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
 
-													<strong>[<c:out value="${report.indicatorCode}"/>]</strong>
+													<strong>[${report.indicatorCode}]</strong>
 
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 
@@ -156,7 +165,7 @@
 														</digi:trn>
 
 													</digi:link>
-
+                                                    </feature:display>
 												</TD></TR>
 
 											</c:if>
@@ -183,7 +192,7 @@
 
 							</td></tr>
 
-						</table>			
+						</table>
 
 					</td>
 

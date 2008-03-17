@@ -2258,7 +2258,7 @@ public class DbUtil {
         return col;
     }
 
-    public static ArrayList getAmpOrganisations() {
+    public static ArrayList<AmpOrganisation> getAmpOrganisations() {
         Session session = null;
         Query q = null;
         AmpOrganisation ampOrganisation = null;
@@ -4360,7 +4360,7 @@ public class DbUtil {
         return grp;
     }
 
-    public static Collection getAllOrganisationGroup() {
+    public static Collection<AmpOrgGroup> getAllOrganisationGroup() {
         Session session = null;
         Query qry = null;
         Collection organisation = new ArrayList();
@@ -6370,6 +6370,44 @@ public class DbUtil {
             return result;
         }
     }
+    /**
+     * This class is used for sorting AmpOrgGroup by code.
+     * @author Dare Roinishvili
+     *
+     */
+    public static class HelperAmpOrgGroupCodeComparator implements Comparator<AmpOrgGroup> {
+        Locale locale;
+        Collator collator;
+
+        public HelperAmpOrgGroupCodeComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAmpOrgGroupCodeComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(AmpOrgGroup o1, AmpOrgGroup o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+
+            int result = (o1.getOrgGrpCode()!=null && o2.getOrgGrpCode()!=null)?collator.compare(o1.getOrgGrpCode(), o2.getOrgGrpCode()):0;
+            return result;
+        }
+    }
+    
+    /**
+     * This class is used for sorting AmpOrgGroup by Type.
+     * @author Dare Roinishvili
+     *
+     */
+    public static class HelperAmpOrgGroupTypeComparator implements Comparator<AmpOrgGroup>{
+    	public int compare(AmpOrgGroup o1,AmpOrgGroup o2){
+    		AmpOrgType o1Type=o1.getOrgType();
+    		AmpOrgType o2Type=o2.getOrgType();
+    		return new HelperAmpOrgTypeNameComparator().compare(o1Type, o2Type);
+    	}
+    }
 
     public static class HelperAmpOrgTypeNameComparator implements Comparator<AmpOrgType> {
         Locale locale;
@@ -6391,4 +6429,82 @@ public class DbUtil {
             return result;
         }
     }
+    
+    /**
+     * This class is used for sorting organisations by name.
+     * @author Dare Roinishvili
+     *
+     */
+    public static class HelperAmpOrganisationNameComparator implements Comparator<AmpOrganisation> {
+    	public int compare (AmpOrganisation o1,AmpOrganisation o2){
+    	 		return (o1.getName()==null || o2.getName()==null)?0:o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase());
+    	}
+    }
+    
+    /**
+     * This class is used for soring organisations by acronym.
+     * @author Dare Roinishvili
+     *
+     */
+    public static class HelperAmpOrganisatonAcronymComparator implements Comparator<AmpOrganisation>{
+    	public int compare (AmpOrganisation o1,AmpOrganisation o2){
+	 		return (o1.getAcronym()==null || o2.getAcronym()==null)?0:o1.getAcronym().toLowerCase().compareTo(o2.getAcronym().toLowerCase());
+    	}    	
+   }
+    
+    /**
+     * This class is used for sorting organisation by group.
+     * such long and complicated case is necessary because orgGroup maybe empty for organisation
+     * @author Dare Roinishvili
+     *
+     */
+    public static class HelperAmpOrganisationGroupComparator implements Comparator<AmpOrganisation> {
+    	public int compare (AmpOrganisation o1,AmpOrganisation o2){
+    		int result=0;
+    		//such long and complicated case is necessary because orgGroup maybe empty for organisation
+    		if (o1.getOrgGrpId()!=null && o2.getOrgGrpId()!=null) {
+    			if(o1.getOrgGrpId().getOrgGrpName()!=null && o2.getOrgGrpId().getOrgGrpName()!=null){
+    				result=o1.getOrgGrpId().getOrgGrpName().toLowerCase().trim().compareTo(o2.getOrgGrpId().getOrgGrpName().toLowerCase().trim());
+    			} else if (o1.getOrgGrpId().getOrgGrpName()!=null) {
+    				result=o1.getOrgGrpId().getOrgGrpName().toLowerCase().trim().compareTo("");
+    			}else if (o2.getOrgGrpId().getOrgGrpName()!=null){
+    				result= "".compareTo(o2.getOrgGrpId().getOrgGrpCode().toLowerCase());
+    			}
+    		} else if (o1.getOrgGrpId()!=null && o1.getOrgGrpId().getOrgGrpName()!=null){
+    			result=o1.getOrgGrpId().getOrgGrpName().toLowerCase().trim().compareTo("");
+    		}else if (o2.getOrgGrpId()!=null && o2.getOrgGrpId().getOrgGrpName()!=null){
+    			result= "".compareTo(o2.getOrgGrpId().getOrgGrpCode().toLowerCase());
+    		}
+    		return result;
+    	}    	
+    }
+    
+    /**
+     * This class is used for sorting organisation by Type.
+     * such long and complicated case is necessary because orgType maybe empty for organisation
+     * @author Dare Roinisvili
+     *
+     */
+    public static class HelperAmpOrganisationTypeComparator implements Comparator<AmpOrganisation> {
+    	public int compare (AmpOrganisation o1,AmpOrganisation o2){
+    		int result=0;
+    		//such long and complicated case is necessary because orgType maybe empty for organisation
+    		if (o1.getOrgTypeId()!=null && o2.getOrgTypeId()!=null) {
+    			if(o1.getOrgTypeId().getOrgType()!=null && o2.getOrgTypeId().getOrgType()!=null){
+    				result=o1.getOrgTypeId().getOrgType().toLowerCase().trim().compareTo(o2.getOrgTypeId().getOrgType().toLowerCase().trim());
+    			} else if (o1.getOrgTypeId().getOrgType()!=null) {
+    				result=o1.getOrgTypeId().getOrgType().toLowerCase().trim().compareTo("");
+    			}else if (o2.getOrgTypeId().getOrgType()!=null){
+    				result= "".compareTo(o2.getOrgTypeId().getOrgType().toLowerCase());
+    			}
+    		} else if (o1.getOrgTypeId()!=null && o1.getOrgTypeId().getOrgType()!=null){
+    			result=o1.getOrgTypeId().getOrgType().toLowerCase().trim().compareTo("");
+    		}else if (o2.getOrgTypeId()!=null && o2.getOrgTypeId().getOrgType()!=null){
+    			result= "".compareTo(o2.getOrgTypeId().getOrgType().toLowerCase());
+    		}
+    		return result;
+    		
+    	}    	
+    }
+    
 }

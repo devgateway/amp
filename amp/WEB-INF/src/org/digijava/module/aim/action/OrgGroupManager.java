@@ -3,6 +3,8 @@ package org.digijava.module.aim.action ;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.OrgGroupManagerForm;
 import javax.servlet.http.*;
 import java.util.*;
@@ -28,7 +30,7 @@ public class OrgGroupManager extends Action {
 
 					 final int NUM_RECORDS = 10;
 
-					 Collection org = new ArrayList();
+					 Collection<AmpOrgGroup> org = new ArrayList<AmpOrgGroup>();
 					 OrgGroupManagerForm orgForm = (OrgGroupManagerForm) form;
 					 int page = 0;
 					 
@@ -43,30 +45,111 @@ public class OrgGroupManager extends Action {
 								page = Integer.parseInt(request.getParameter("page"));
 					 }
 
-					 Collection ampOrg = (Collection)session.getAttribute("ampOrgGrp");
+					 Collection<AmpOrgGroup> ampOrg = (Collection<AmpOrgGroup>)session.getAttribute("ampOrgGrp");
 					 if (ampOrg == null) {
 					 	ampOrg = DbUtil.getAllOrganisationGroup();
 						session.setAttribute("ampOrgGrp",ampOrg);
 					 }
-					 
-					 int numPages = ampOrg.size() / NUM_RECORDS;
-					 numPages += (ampOrg.size() % NUM_RECORDS != 0) ? 1 : 0;
+					 // sorting!!!
+					 if(request.getParameter("sortBy")!=null){
+			            	orgForm.setSortBy(request.getParameter("sortBy"));
+			            }		          
+			            
+			            if (orgForm.getSortBy()!=null){
+			            	if(orgForm.getSortBy().equals("nameAscending")){
+					        	   Collections.sort((List)ampOrg, new DbUtil.HelperAmpOrgGroupNameComparator());
+					           }else if (orgForm.getSortBy().equals("nameDescending")) {
+					        	   Collections.sort((List)ampOrg, new DbUtil.HelperAmpOrgGroupNameComparator());
+					        	   Collections.reverse((List)ampOrg);
+					           } else if(orgForm.getSortBy().equals("codeAscending")){
+					        	   Collections.sort((List)ampOrg, new DbUtil.HelperAmpOrgGroupCodeComparator());
+					           } else if (orgForm.getSortBy().equals("codeDescending")){
+					        	   Collections.sort((List)ampOrg, new DbUtil.HelperAmpOrgGroupCodeComparator());
+					        	   Collections.reverse((List)ampOrg);
+					           } else if (orgForm.getSortBy().equals("typeAscending")) {
+					        	   Collections.sort((List)ampOrg, new DbUtil.HelperAmpOrgGroupTypeComparator());
+					           } else if(orgForm.getSortBy().equals("typeDescending")){
+					        	   Collections.sort((List)ampOrg, new DbUtil.HelperAmpOrgGroupTypeComparator());
+					        	   Collections.reverse((List)ampOrg);
+					           }
+			            }else {
+			            	Collections.sort((List)ampOrg, new DbUtil.HelperAmpOrgGroupNameComparator());
+			            }
+			            
+			            //pagination
+			            String alpha = orgForm.getAlpha();
+			            Collection<AmpOrgGroup> orgsForCurrentAlpha=null;
+			            if (ampOrg!=null && ampOrg.size()>0) {			            	 
+				            if(alpha == null || alpha.trim().length() == 0){
+				          	  if (orgForm.getCurrentAlpha() != null) {
+				          		orgForm.setCurrentAlpha(null);
+				                  } 
+				            }else {
+				            	orgForm.setCurrentAlpha(alpha);
+				            } 
+				            String[] alphaArray = new String[26];
+				            int i = 0;
+				            for (char c = 'A'; c <= 'Z'; c++) {
+				              Iterator<AmpOrgGroup> itr = ampOrg.iterator();
+				              while (itr.hasNext()) {
+				                AmpOrgGroup orgGr = itr.next();
+				                if (orgGr.getOrgGrpName().toUpperCase().indexOf(c) == 0) {
+				                  alphaArray[i++] = String.valueOf(c);
+				                  break;
+				                }
+				              }
+				            }
+				            orgForm.setAlphaPages(alphaArray);
+			            }else {
+			            	orgForm.setAlphaPages(null);
+			            }
+			            
+			            if (alpha!=null && !alpha.equalsIgnoreCase("view all")){
+			            	orgsForCurrentAlpha=new ArrayList<AmpOrgGroup>();
+			            	if(ampOrg!=null){
+			            		Iterator<AmpOrgGroup> it=ampOrg.iterator();
+			            		while(it.hasNext()) {
+			            			AmpOrgGroup orgGroup=it.next();
+			            			if(orgGroup.getOrgGrpName().toUpperCase().startsWith(alpha)){
+			            				orgsForCurrentAlpha.add(orgGroup);
+			            			}
+			            		}
+			            	}
+			            	orgForm.setOrgsForCurrentAlpha(orgsForCurrentAlpha);
+			            }			            
+			            
+			        
+			            int stIndex = ((page - 1) * NUM_RECORDS) + 1;
+			            int edIndex=page * NUM_RECORDS ;
+			            int numPages;
+			            Vector<AmpOrgGroup> vect = new Vector<AmpOrgGroup>();
+			            
+			            if (alpha == null || alpha.trim().length() == 0 || alpha.equals("viewAll")){
+			            	 if (edIndex > ampOrg.size()) {
+									edIndex = ampOrg.size();
+			            	 }
+			            	vect.addAll(ampOrg);
+			            	 numPages = ampOrg.size() / NUM_RECORDS;
+							 numPages += (ampOrg.size() % NUM_RECORDS != 0) ? 1 : 0;
+			            }else {
+			            	if (edIndex > orgsForCurrentAlpha.size()) {
+								edIndex = orgsForCurrentAlpha.size();
+			            	}
+			            	vect.addAll(orgsForCurrentAlpha);
+			            	 numPages = orgsForCurrentAlpha.size() / NUM_RECORDS;
+							 numPages += (orgsForCurrentAlpha.size() % NUM_RECORDS != 0) ? 1 : 0;
+			            }           
+					
 
 					 /*
 					  * check whether the numPages is less than the page . if yes return error.
 					  */
-					 
-					 int stIndex = ((page - 1) * NUM_RECORDS) + 1;
-					 int edIndex = page * NUM_RECORDS;
-					 if (edIndex > ampOrg.size()) {
-								edIndex = ampOrg.size();
-					 }
 
-					 Vector vect = new Vector();
-					 vect.addAll(ampOrg);
 					 
 					 for (int i = (stIndex-1); i < edIndex; i++) {
-						org.add(vect.get(i));
+						 if(vect.get(i)!=null){
+							 org.add(vect.get(i));
+						 }						
 					 }
 					 
 					 Collection pages = null;

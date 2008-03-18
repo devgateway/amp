@@ -145,15 +145,46 @@ public class ShowActivityPrintPreview
                 if(activity.getObjective()!=null){
                 	 eaForm.setObjectives(activity.getObjective().trim());
                 }
+                // fferreyra: Added null checking for field project_impact
+                if(activity.getProjectImpact()!=null){
+                	eaForm.setProjectImpact(activity.getProjectImpact().trim());
+                }
                 
-                eaForm.setProjectImpact(activity.getProjectImpact().trim());
-                eaForm.setActivitySummary(activity.getActivitySummary().trim());
-            	eaForm.setContractingArrangements(activity.getContractingArrangements().trim());
-            	eaForm.setCondSeq(activity.getCondSeq().trim());
-            	eaForm.setLinkedActivities(activity.getLinkedActivities().trim());
-            	eaForm.setConditionality(activity.getConditionality().trim());
-            	eaForm.setProjectManagement(activity.getProjectManagement().trim());
-            	eaForm.setContractDetails(activity.getContractDetails().trim());
+                // fferreyra: Added null checking for field activity_summary
+                if(activity.getActivitySummary()!=null){
+                	eaForm.setActivitySummary(activity.getActivitySummary().trim());
+                }
+
+                // fferreyra: Added null checking for field contracting_arrangements
+                if(activity.getContractingArrangements()!=null){
+                	eaForm.setContractingArrangements(activity.getContractingArrangements().trim());
+                }
+
+                // fferreyra: Added null checking for field cond_seq
+                if(activity.getCondSeq()!=null){
+                	eaForm.setCondSeq(activity.getCondSeq().trim());
+                }
+                
+                // fferreyra: Added null checking for field linked_activities
+                if(activity.getLinkedActivities()!=null){
+                	eaForm.setLinkedActivities(activity.getLinkedActivities().trim());
+                }
+                
+                // fferreyra: Added null checking for field conditionality
+                if(activity.getConditionality()!=null){
+                	eaForm.setConditionality(activity.getConditionality().trim());
+                }
+                
+                // fferreyra: Added null checking for field project_management
+                if(activity.getProjectManagement()!=null){
+                	eaForm.setProjectManagement(activity.getProjectManagement().trim());
+                }
+                
+                // fferreyra: Added null checking for field contract_details
+                if(activity.getContractDetails()!=null){
+                	eaForm.setContractDetails(activity.getContractDetails().trim());
+                }
+                
             	
                 
                 

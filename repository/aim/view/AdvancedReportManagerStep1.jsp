@@ -378,8 +378,7 @@ function checkUncheckAll2() {
 
 																								/>
 																								<a id="module:<bean:write name="themeColumn"/>" style="font-size: 12px;color:#0e69b3;text-decoration:none">
-																								
-																								<bean:write name="themeColumn"/>
+																									<digi:trn key="aim:report:${themeColumn}"><bean:write name="themeColumn"/></digi:trn>
 																								</a>
 																								<ul>
 																								<logic:iterate name="columnCollection" id="ampColumnFromTree" type="org.digijava.module.aim.dbentity.AmpColumns">

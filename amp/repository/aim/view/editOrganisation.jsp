@@ -392,6 +392,11 @@ function loadPage()
 					</td>
 				</tr>
 				<tr>
+					<td>
+						<digi:errors/>
+					</td>
+				</tr>
+				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="740" cellspacing=1 cellSpacing=1>
 					<tr>

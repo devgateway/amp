@@ -36,6 +36,7 @@ import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.entity.Organization;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -6506,5 +6507,30 @@ public class DbUtil {
     		
     	}    	
     }
+
+	public static AmpOrganisation getOrganisationByName(String name) {
+		AmpOrganisation obResult=null;
+        Session sess = null;
+        Query qry = null;
+        String queryString = null;
+
+        try {
+            sess = PersistenceManager.getRequestDBSession();
+            queryString = "select o from " + AmpOrganisation.class.getName()
+                + " o where (TRIM(o.name)=:orgName)";
+            qry = sess.createQuery(queryString);
+            qry.setParameter("orgName", name, Hibernate.STRING);
+            
+            List  result=qry.list();
+            if (result.size() > 0){
+            	obResult= (AmpOrganisation) result.get(0);
+            }
+            
+        } catch (Exception e) {
+            logger.debug("Exception from getOrganisationByName(): " + e);
+            e.printStackTrace(System.out);
+        }
+        return obResult;
+	}
     
 }

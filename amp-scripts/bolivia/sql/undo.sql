@@ -5,40 +5,40 @@ START TRANSACTION;
 
 /*truncate amp_activities_categoryvalues;*/
 delete ac from amp_activities_categoryvalues as ac
-where exists (select * from amp_activity as act, bolivian_db.`conv` AS con where con.numconv=act.amp_id and ac.amp_activity_id=act.amp_activity_id);
+where exists (select * from amp_activity as act, sisfin_db.`conv` AS con where con.numconv=act.amp_id and ac.amp_activity_id=act.amp_activity_id);
 
 
 /* truncate amp_activity_componente; */
 delete ac from amp_activity_componente as ac
-where exists (select * from amp_activity as act, bolivian_db.`conv` AS con where con.numconv=act.amp_id and ac.amp_activity_id=act.amp_activity_id);
+where exists (select * from amp_activity as act, sisfin_db.`conv` AS con where con.numconv=act.amp_id and ac.amp_activity_id=act.amp_activity_id);
 
 /*  delete mappings with sectors (which are colled components) and activities  
 delete cs FROM amp_activity_compsector as cs
-where EXISTS (SELECT * FROM amp_activity AS act, bolivian_db.`conv` AS con WHERE con.numconv=act.amp_id AND act.amp_activity_id=cs.amp_activity_id);
+where EXISTS (SELECT * FROM amp_activity AS act, sisfin_db.`conv` AS con WHERE con.numconv=act.amp_id AND act.amp_activity_id=cs.amp_activity_id);
 */
 truncate amp_activity_compsector;
 
 /*truncate amp_activity_program;*/
 delete cs FROM amp_activity_program as cs
-where EXISTS (SELECT act.* FROM amp_activity AS act, bolivian_db.`conv` AS con WHERE con.numconv=act.amp_id AND act.amp_activity_id=cs.amp_activity_id);
+where EXISTS (SELECT act.* FROM amp_activity AS act, sisfin_db.`conv` AS con WHERE con.numconv=act.amp_id AND act.amp_activity_id=cs.amp_activity_id);
 
 
 truncate amp_activity_location;
 /*
 delete actloc from amp_activity_location_persent as actloc
-where exists (select * from amp_activity act, bolivian_db.`conv` c  where c.numconv=act.amp_id and act.amp_activity_id=actloc.amp_activity_id );
+where exists (select * from amp_activity act, sisfin_db.`conv` c  where c.numconv=act.amp_id and act.amp_activity_id=actloc.amp_activity_id );
 */
 
  /*truncate amp_activity;*/
 delete act from AMP_ACTIVITY AS act
-where  EXISTS (SELECT c.numconv FROM bolivian_db.`conv` c where c.numconv=act.amp_id);
+where  EXISTS (SELECT c.numconv FROM sisfin_db.`conv` c where c.numconv=act.amp_id);
 
 
 /*delete from amp_currency_rate 
 where to_currency_code != 'USD';*/
 
 delete from amp_currency
-where currency_code in (select sigla_mda from bolivian_db.clasif_moneda);
+where currency_code in (select sigla_mda from sisfin_db.clasif_moneda);
 
 
 delete from AMP_LEVEL
@@ -71,7 +71,7 @@ delete from DG_EDITOR
 where EDITOR_KEY  like '%aim-desc-import-%' or EDITOR_KEY like '%aim-obj-import-%' ;
 
 delete from amp_terms_assist
-where terms_assist_code in  (SELECT lvl.valdato FROM bolivian_db.`claves` lvl WHERE lvl.nomdato='cvecoop');
+where terms_assist_code in  (SELECT lvl.valdato FROM sisfin_db.`claves` lvl WHERE lvl.nomdato='cvecoop');
 
 delete from AMP_FUNDING
 where amp_activity_id not in (select a.amp_activity_id from amp_activity a);
@@ -102,14 +102,14 @@ delete from amp_pledges
 where amp_org_id in 
 (
 select aorg.amp_org_id from AMP_ORGANISATION as aorg
-where  aorg.org_code in (select a.codage from bolivian_db.age a)
+where  aorg.org_code in (select a.codage from sisfin_db.age a)
 );
 
 delete from amp_organisation_sector
 where amp_org_id in 
 (
 select aorg.amp_org_id from AMP_ORGANISATION as aorg
-where  aorg.org_code in (select a.codage from bolivian_db.age a)
+where  aorg.org_code in (select a.codage from sisfin_db.age a)
 );
 
 delete asi.* from
@@ -121,7 +121,7 @@ and asi.amp_sector_id = s.amp_sector_id;
 
 /*
 delete from AMP_SECTOR
-where sector_code  in (select c.codsec from bolivian_db.sec c);
+where sector_code  in (select c.codsec from sisfin_db.sec c);
 */
 
 delete s from AMP_SECTOR AS s
@@ -140,15 +140,15 @@ where sec_scheme_code='BOL_COMPO_IMP';
 
 
 delete ignore from AMP_ORGANISATION
-where  org_code in (select a.codage from bolivian_db.age a);
+where  org_code in (select a.codage from sisfin_db.age a);
 
 delete ignore from AMP_ORGANISATION
-where  org_code in (select e.codent from bolivian_db.ent e);
+where  org_code in (select e.codent from sisfin_db.ent e);
 
-delete loc from amp_location as loc, amp_region as ar,  bolivian_db.`claves` as c
+delete loc from amp_location as loc, amp_region as ar,  sisfin_db.`claves` as c
 where c.nomdato='cvedep'  and ar.country_id='bo' and ar.region_code=c.valdato and ar.region_code is not null and loc.region_id=ar.amp_region_id;
 
-delete ar from  amp_region as ar,  bolivian_db.`claves` as c
+delete ar from  amp_region as ar,  sisfin_db.`claves` as c
 where c.nomdato='cvedep'  and ar.country_id='bo' and ar.region_code=c.valdato and ar.region_code is not null;
 
 delete actloc from amp_activity_location as actloc

@@ -1,10 +1,10 @@
 ﻿[ ] const wMainWindow = AMPHome
 [ ] 
-[-] window BrowserChild AMPHome
+[+] window BrowserChild AMPHome
 	[ ]  tag "AMP -Home"
 	[ ] 
 	[ ]  // The URL of this page
-	[ ]  const sLocation = "http://amp-testing.code.ro/showLayout.do?layout=login"
+	[ ]  const sLocation = "http://amp-staging.code.ro:8080/showLayout.do?layout=login"
 	[ ] 
 	[ ]  // The login user name
 	[ ]  // const sUserName = ?
@@ -33,6 +33,8 @@
 		[-] multitag "&name='submitButton'"
 			[ ] "Sign In"
 			[ ] "$submitButton"
+	[-] HtmlPushButton ViewPublicPortfolio
+		[ ] tag "View Public Portfolio"
 [ ] 
 [+] window BrowserChild AMPShowAmpEvent  // After clicking create new event
 	[ ] tag "AMP Show Amp Event"
@@ -105,7 +107,7 @@
 		[-] multitag "Click to View Calendar[2]"
 			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[2]"
 [ ] 
-[-] window BrowserChild AMPCalendar
+[+] window BrowserChild AMPCalendar
 	[ ] tag "AMP View Events"
 	[ ] parent Browser
 	[+] HtmlLink CreateNewEvent 
@@ -114,7 +116,7 @@
 	[ ] 
 	[+] HtmlLink NewTestTitle
 		[-] multitag "New Test Title"
-			[ ] "$http:??amp-demo.code.ro?calendar?showCalendarEvent.do~ampCalend"
+			[ ] "$http:??*?calendar?showCalendarEvent.do~ampCalend"
 	[+] HtmlCheckBox Donor
 		[ ] string sTag
 		[ ] tag sTag
@@ -125,7 +127,7 @@
 			[ ] 
 	[+] HtmlPushButton Show
 		[ ] tag "Show"
-	[-] HtmlLink NewEventForTest
+	[+] HtmlLink NewEventForTest
 		[-] multitag "New Event for Test[1]"
 			[ ] "$?calendar?showCalendarEvent.do"
 	[+] HtmlCheckBox ShowPublicEvents
@@ -172,7 +174,7 @@
 						[-] multitag "New Event for Test"
 							[ ] "$http:??amp-demo.code.ro?calendar?showCalendarEvent.do~ampCalend"
 [ ] 
-[-] window BrowserChild OrganisationPopup //Add Organization Popup
+[+] window BrowserChild OrganisationPopup //Add Organization Popup
 	[ ] tag "* Organisation Popup"	// should be generic
 	[ ] parent Browser
 	[+] HtmlPopupList OrganizationType
@@ -209,7 +211,7 @@
 	[-] HtmlPushButton Save
 		[ ] tag "Save"
 [ ] 
-[-] window BrowserChild AMPDocumentManager
+[+] window BrowserChild AMPDocumentManager
 	[ ] tag "AMP - Content Repository"
 	[ ] parent Browser
 	[-] HtmlTable DM
@@ -351,7 +353,7 @@
 			[ ] "$javascript:gotoStep('1_5')"
 	[ ] 
 	[ ] 
-	[+] HtmlLink ObjAddEditObjectivelyVerifIndicators
+	[-] HtmlLink ObjAddEditObjectivelyVerifIndicators
 		[ ] tag "$javascript:commentWin('objObjVerIndicators')"
 	[+] HtmlLink ObjAddEditAssumption
 		[ ] tag "$javascript:commentWin('objAssumption')"
@@ -435,7 +437,6 @@
 			[ ] "$lineMinRank"
 	[+] HtmlPopupList MinistryOfPlanningRank
 		[-] multitag "&name='planMinRank'"
-			[ ] "Ministry of Planning Rank"
 			[ ] "$planMinRank"
 	[+] HtmlCheckBox SameAsProposedApprovalDate
 		[-] multitag "&name='sameAs1'"
@@ -524,7 +525,7 @@
 		[-] multitag "Click to View Calendar[6]"
 			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[6]"
 [ ] 
-[-] window BrowserChild AMPMyDesktop
+[+] window BrowserChild AMPMyDesktop
 	[ ] tag "AMP- My Desktop" //
 	[ ] parent Browser
 	[+] HtmlPushButton AddActivity
@@ -539,6 +540,14 @@
 			[ ] tag "Status"
 			[-] HtmlText Ongoing13
 				[ ] tag "Ongoing[13]"
+	[+] HtmlList ProjectManagementPlatformP
+		[ ] tag "Project Management Platform (PMP)"
+		[-] HtmlLink CALENDAR
+			[-] multitag "::: CALENDAR"
+				[ ] "$http:??amp-montenegro.code.ro?calendar?showCalendarView.do"
+		[-] HtmlLink REPORTS
+			[-] multitag "::: REPORTS"
+				[ ] "$http:??amp-montenegro.code.ro?aim?viewTeamReports.do"
 [ ] 
 [+] window BrowserChild AMPAddActivityStep2
 	[ ] tag "AMP - Add Activity - References"
@@ -810,7 +819,7 @@
 		[-] multitag "&name='mtefProjection?0?.currencyCode'"
 			[ ] "*"
 			[ ] "$mtefProjection?0?.currencyCode"
-	[-] HtmlLink Components
+	[+] HtmlLink Components
 		[-] multitag "Components"
 			[ ] "$javascript:gotoStep(5)"
 	[ ] 
@@ -896,61 +905,43 @@
 	[ ] parent Browser
 	[+] HtmlPopupList Component
 		[-] multitag "&name='componentTitle'"
-			[ ] "Add Component"
 			[ ] "$componentTitle"
 	[+] HtmlLink AddCommitments
-		[-] multitag "Add[1]"
-			[ ] "$javascript:addCommitments()"
+		[ ] multitag "$javascript:addCommitments()"
 	[+] HtmlLink AddExpenditure
-		[-] multitag "Add*"
-			[ ] "$javascript:addExpenditure()"
+		[ ] multitag "$javascript:addExpenditure()"
 	[+] HtmlLink AddDisbursement
-		[-] multitag "Add*"
-			[ ] "$javascript:addDisbursement()"
+		[ ] multitag "$javascript:addDisbursement()"
 	[+] HtmlPopupList PlannedActual1
 		[-] multitag "&name='comm_0_1'"
-			[ ] "Planned?Actual*"
 			[ ] "$comm_0_1"
 	[+] HtmlTextField Planned
 		[-] multitag "&name='comm_0_2'"
-			[ ] "Planned[1]"
 			[ ] "$comm_0_2"
 	[+] HtmlPopupList Currency
 		[-] multitag "&name='comm_0_3'"
-			[ ] "Commitments - (Total Actual Allocation 0.0 null )"
 			[ ] "$comm_0_3"
 	[+] HtmlPopupList PlannedActual2
 		[-] multitag "&name='disb_0_1'"
-			[ ] "Planned?Actual*"
 			[ ] "$disb_0_1"
 	[+] HtmlTextField Planned2
 		[-] multitag "&name='disb_0_2'"
-			[ ] "Planned[2]"
 			[ ] "$disb_0_2"
 	[+] HtmlPopupList Currency2
 		[-] multitag "&name='disb_0_3'"
-			[ ] "Disbursement - (Total Actual Allocation 0.0 null )"
 			[ ] "$disb_0_3"
 	[+] HtmlPopupList PlannedActual3
 		[-] multitag "&name='expn_0_1'"
-			[ ] "Planned?Actual*"
 			[ ] "$expn_0_1"
 	[+] HtmlTextField Planned3
 		[-] multitag "&name='expn_0_2'"
-			[ ] "Planned[3]"
 			[ ] "$expn_0_2"
 	[+] HtmlPopupList Currency3
 		[-] multitag "&name='expn_0_3'"
-			[ ] "Expenditure - (Total Actual Allocation 0.0 null )"
 			[ ] "$expn_0_3"
 	[+] HtmlPushButton Save
 		[ ] tag "Save"
-	[ ] 
-	[ ] 
-	[+] HtmlImage ClickToViewCalendar
-		[-] multitag "Click to View Calendar"
-			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho"
-	[-] HtmlTable Add
+	[+] HtmlTable Add
 		[ ] tag "Add"
 		[+] HtmlColumn Fri
 			[ ] tag "Fri"
@@ -972,12 +963,6 @@
 			[ ] tag "Thu"
 			[-] HtmlText N10
 				[ ] tag "10"
-	[+] HtmlImage ClickToViewCalendar2
-		[-] multitag "Click to View Calendar[2]"
-			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[2]"
-	[-] HtmlImage ClickToViewCalendar3
-		[-] multitag "Click to View Calendar[3]"
-			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[3]"
 [ ] 
 [+] window BrowserChild AMPAddIssue
 	[ ] tag "AMP - Add Issue"
@@ -1184,28 +1169,20 @@
 [+] window BrowserChild AMPAddRegionalFunding
 	[ ] tag "AMP - Add Regional Funding"
 	[ ] parent Browser
-	[+] HtmlPopupList Region
+	[-] HtmlPopupList Region
 		[-] multitag "&name='fundingRegionId'"
-			[ ] "Region"
 			[ ] "$fundingRegionId"
 	[+] HtmlLink Add1
-		[-] multitag "Add[1]"
-			[ ] "$javascript:addCommitments()"
+		[ ] multitag "$javascript:addCommitments()"
 	[+] HtmlPopupList PlannedActualAmount
 		[-] multitag "&name='comm_0_1'"
-			[ ] "Planned?Actual    Amount                 Currency                        Date"
 			[ ] "$comm_0_1"
-	[+] HtmlTextField Planned
+	[-] HtmlTextField Planned
 		[-] multitag "&name='comm_0_2'"
-			[ ] "Planned"
 			[ ] "$comm_0_2"
 	[+] HtmlPopupList CommitmentsTotalActualA
 		[-] multitag "&name='comm_0_3'"
-			[ ] "Commitments - ( Total Actual Allocation 0.0 null )"
 			[ ] "$comm_0_3"
-	[+] HtmlImage ClickToViewCalendar
-		[-] multitag "Click to View Calendar"
-			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho"
 	[+] HtmlTable Add
 		[ ] tag "Add"
 		[+] HtmlColumn Fri
@@ -1242,42 +1219,29 @@
 				[ ] tag "2"
 	[+] HtmlPushButton Save
 		[ ] tag "Save"
-	[+] HtmlLink Add2
-		[-] multitag "Add[2]"
-			[ ] "$javascript:addDisbursement()"
+	[-] HtmlLink Add2
+		[ ] multitag "$javascript:addDisbursement()"
 	[+] HtmlPopupList PlannedActualAmount1
 		[-] multitag "&name='disb_0_1'"
 			[ ] "Planned?Actual    Amount                 Currency                        Date[2]"
 			[ ] "$disb_0_1"
-	[+] HtmlTextField Planned2
+	[-] HtmlTextField Planned2
 		[-] multitag "&name='disb_0_2'"
-			[ ] "Planned[2]"
 			[ ] "$disb_0_2"
-	[+] HtmlPopupList DisbursementTotalActual
+	[-] HtmlPopupList DisbursementTotalActual
 		[-] multitag "&name='disb_0_3'"
-			[ ] "Disbursement - ( Total actual to date 0.0 null)"
 			[ ] "$disb_0_3"
-	[+] HtmlImage ClickToViewCalendar2
-		[-] multitag "Click to View Calendar[2]"
-			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[2]"
 	[+] HtmlLink Add3
-		[-] multitag "Add[3]"
-			[ ] "$javascript:addExpenditure()"
-	[+] HtmlPopupList PlannedActualAmount2
+		[ ] multitag "$javascript:addExpenditure()"
+	[-] HtmlPopupList PlannedActualAmount2
 		[-] multitag "&name='expn_0_1'"
-			[ ] "Planned?Actual    Amount                 Currency                        Date[3]"
 			[ ] "$expn_0_1"
-	[+] HtmlTextField Planned3
+	[-] HtmlTextField Planned3
 		[-] multitag "&name='expn_0_2'"
-			[ ] "Planned[3]"
 			[ ] "$expn_0_2"
-	[+] HtmlPopupList ExpenditureTotalActualT
+	[-] HtmlPopupList ExpenditureTotalActualT
 		[-] multitag "&name='expn_0_3'"
-			[ ] "Expenditure - ( Total actual to date 0.0 null )"
 			[ ] "$expn_0_3"
-	[+] HtmlImage ClickToViewCalendar3
-		[-] multitag "Click to View Calendar[3]"
-			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[3]"
 [ ] 
 [+] window BrowserChild AMPAddActivityStep6
 	[ ] tag "AMP - Add Activity - Related Documents"
@@ -1303,20 +1267,17 @@
 			[ ] "$javascript:gotoStep(10)"
 [ ] 
 [+] window BrowserChild AMPAddDocuments
-	[ ] tag "AMP - Add Documents and Links"
+	[ ] tag "Popup"
 	[ ] parent Browser
 	[+] HtmlTextField Title
 		[-] multitag "&name='docTitle'"
-			[ ] "Title"
 			[ ] "$docTitle"
 	[+] HtmlTextField Description
 		[-] multitag "&name='docDescription'"
-			[ ] "Description"
 			[ ] "$docDescription"
 	[+] HtmlTextField Comments
-		[-] multitag "&name='docComment'"
-			[ ] "Comments"
-			[ ] "$docComment"
+		[-] multitag "&name='docNotes'"
+			[ ] "$docNotes"
 	[+] HtmlImage ClickToViewCalendar
 		[-] multitag "Click to View Calendar"
 			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho"
@@ -1353,8 +1314,8 @@
 			[ ] "Web resources"
 			[ ] "$docWebResource"
 	[-] HtmlTextField File2
-		[-] multitag "&id='docFile';name='docFile'"
-			[ ] "$docFile"
+		[-] multitag "&id='fileData';name='fileData'"
+			[ ] "$fileData"
 [ ] 
 [+] window BrowserChild AMPAddDocumentsFromRepository
 	[ ] tag "Popup"
@@ -1666,7 +1627,7 @@
 			[ ] "Next"
 			[ ] "$submitButton[2]"
 [ ] 
-[-] window BrowserChild AMPReportGeneratorStep2
+[+] window BrowserChild AMPReportGeneratorStep2
 	[ ] tag "AMP - Report Generator Step 1*"
 	[ ] parent Browser
 	[+] HtmlCheckBox AMP
@@ -1681,19 +1642,18 @@
 		[-] multitag "&name='submitButton'"
 			[ ] "Next >>"
 			[ ] "$submitButton[5]"
-	[+] HtmlList SelectAll
+	[-] HtmlList SelectAll
 		[-] multitag "&id='dhtmlgoodies_tree'"
-			[ ] "Select All"
 			[ ] "$dhtmlgoodies_tree"
-		[+] HtmlList AMP
+		[-] HtmlList AMP
 			[+] multitag "&id='tree_ul_0'"
 				[ ] "AMP"
 				[ ] "$tree_ul_0"
-			[-] HtmlCheckBox Identification
+			[+] HtmlCheckBox Identification
 				[-] multitag "&id='moduleVis:Identification';name='selectedThemes'"
 					[ ] "Identification"
 					[ ] "$selectedThemes[1]"
-			[-] HtmlList Location
+			[+] HtmlList Location
 				[-] multitag "&id='tree_ul_3'"
 					[ ] "Location"
 					[ ] "$tree_ul_3"
@@ -1701,6 +1661,15 @@
 					[-] multitag "&id='fieldVis:6';name='selectedColumns'"
 						[ ] "Implementation Level"
 						[ ] "$selectedColumns[1]"
+			[+] HtmlImage ExecutingAgency1
+				[-] multitag "Executing Agency[1]"
+					[ ] "$http:??amp-montenegro.code.ro?repository?aim?view?images?images[19]"
+			[+] HtmlImage HttpAmpMontenegroCodeRo
+				[-] multitag "#13"
+					[ ] "$http:??amp-montenegro.code.ro?repository?aim?view?images?images[13]"
+			[-] HtmlImage PhysicalProgressTitle1
+				[-] multitag "Physical progress title[1]"
+					[ ] "$http:??amp-montenegro.code.ro?repository?aim?view?images?images[15]"
 	[+] HtmlPushButton Remove
 		[-] multitag "&name='submitButton'"
 			[ ] "<< Remove"
@@ -1728,22 +1697,18 @@
 	[ ] 
 	[+] HtmlPushButton Add
 		[-] multitag "&name='submitButton'"
-			[ ] "Add >>"
 			[ ] "$submitButton[1]"
 	[+] HtmlPushButton Next
 		[-] multitag "&name='submitButton'"
-			[ ] "Next >>"
 			[ ] "$submitButton[5]"
 	[+] HtmlImage MoveUp2
 		[-] multitag "Move Up[2]"
-			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?up-[2]"
+			[ ] "$http:??*?TEMPLATE?ampTemplate?images?up-[2]"
 	[+] HtmlCheckBox ProjectTitle
 		[-] multitag "&name='removeColumns'"
-			[ ] "Project Title"
 			[ ] "$removeColumns[1]"
 	[+] HtmlPushButton Remove
 		[-] multitag "&name='submitButton'"
-			[ ] "<< Remove"
 			[ ] "$submitButton[2]"
 	[+] HtmlCheckBox Box3
 		[-] multitag "&name='removeColumns'"
@@ -1767,18 +1732,15 @@
 			[ ] "$selectedColumns[2]"
 	[+] HtmlPushButton Remove
 		[-] multitag "&name='submitButton'"
-			[ ] "<< Remove"
 			[ ] "$submitButton[2]"
 	[+] HtmlCheckBox RemBox1
 		[-] multitag "&name='removeColumns'"
 			[ ] "$removeColumns[1]"
 	[+] HtmlCheckBox ShowAsADrilldownInMyTabs
 		[-] multitag "&name='drilldownTab'"
-			[ ] "Show as a drilldown in My Tabs"
 			[ ] "$drilldownTab"
 	[+] HtmlPushButton Previous
 		[-] multitag "&name='submitButton'"
-			[ ] "<< Previous"
 			[ ] "$submitButton[3]"
 [ ] 
 [+] window BrowserChild AMPReportGeneratorStep5
@@ -1794,10 +1756,9 @@
 					[ ] "$reportTitle"
 	[+] HtmlPushButton SaveReport
 		[-] multitag "&name='submitButton'"
-			[ ] "Save Report"
 			[ ] "$submitButton[3]"
 [ ] 
-[-] window BrowserChild AMPEventTypes
+[+] window BrowserChild AMPEventTypes
 	[ ] tag "AMP Event Types"
 	[ ] parent Browser
 	[ ] 
@@ -1807,7 +1768,7 @@
 	[+] HtmlTextField Color
 		[-] multitag "&id='hexColorNum';name='eventTypeColor'"
 			[ ] "$eventTypeColor"
-	[+] HtmlPushButton Save
+	[-] HtmlPushButton Save
 		[ ] string sTag
 		[ ] tag sTag
 		[ ] 
@@ -1820,6 +1781,738 @@
 		[-] void Select(int no)
 			[ ] sTag = "Delete[{no}]"
 [ ] 
+[+] window BrowserChild AMPFeatureManager
+	[ ] tag "AMP - Feature Manager"
+	[ ] parent Browser
+	[+] HtmlTable FeatureManager1
+		[ ] tag "Feature Manager"
+		[-] HtmlColumn Options
+			[ ] tag "Options"
+			[+] HtmlLink Edit1
+				[-] multitag "Edit[1]"
+					[ ] "$http:??*?aim?visibilityManager.do~action[1]"
+			[+] HtmlLink Delete1
+				[-] multitag "Delete[1]"
+					[ ] "$http:??*?aim?visibilityManager.do~action[2]"
+	[+] HtmlList TemplateName
+		[+] multitag "&id='dhtmlgoodies_tree'"
+			[ ] "Template Name:"
+			[ ] "$dhtmlgoodies_tree"
+		[+] HtmlImage HttpAmpStagingCodeRo808
+			[-] multitag "#2"
+				[ ] "$http:??*?repository?aim?view?images?imag[2]"
+		[+] HtmlList DefaultTemplate
+			[+] multitag "&id='tree_ul_0'"
+				[ ] "Default Template"
+				[ ] "$tree_ul_0"
+			[+] HtmlImage HttpAmpStagingCodeRo808
+				[-] multitag "#12"
+					[ ] "$http:??*?repository?aim?view?images?imag[12]"
+			[-] HtmlList ProjectManagement
+				[+] multitag "&id='tree_ul_21'"
+					[ ] "Project Management"
+					[ ] "$tree_ul_21"
+				[+] HtmlImage AddProgramsButtonNational
+					[-] multitag "Add Programs Button - National Plan Objective      - ?edit permissions?  Add Programs Button - Primary Programs      - ?edit p*[4]"
+						[ ] "$http:??*?repository?aim?view?images?imag[38]"
+				[-] HtmlList ProjectIdAndPlanning
+					[-] multitag "&id='tree_ul_82'"
+						[ ] "Project Id And Planning"
+						[ ] "$tree_ul_82"
+					[-] HtmlCheckBox Budget
+						[-] multitag "&id='featureVis:6';name='featureVis:6'"
+							[ ] "Budget"
+							[ ] "$featureVis:6"
+	[+] HtmlPushButton SaveChanges
+		[-] multitag "&name='saveTreeVisibility'"
+			[ ] "$saveTreeVisibility"
+	[+] HtmlLink Logout
+		[-] multitag "Logout"
+			[ ] "$http:??*?aim?j_acegi_logout"
+	[+] HtmlLink AddANewTemplate
+		[-] multitag "Add a New Template"
+			[ ] "$http:??*?aim?visibilityManager.do~action[2]"
+	[+] HtmlTextField TemplateName1
+		[-] multitag "&name='templateName'"
+			[ ] "$templateName"
+	[+] HtmlPushButton SaveNewTemplate
+		[-] multitag "&name='newTemplate'"
+			[ ] "$newTemplate"
+[ ] 
+[+] window BrowserChild AMPFlagUploaderSelector
+	[ ] tag "AMP - Flag uploader*"
+	[ ] parent Browser
+	[+] HtmlTextField Flag1
+		[-] multitag "&id='flagUploader';name='flagFile'"
+			[ ] "$flagFile"
+	[+] HtmlPushButton Upload
+		[ ] tag "Upload"
+	[+] HtmlPopupList Country
+		[-] multitag "&name='countryId'"
+			[ ] "$countryId"
+	[+] HtmlPushButton Browse1
+		[-] multitag "&id='flagUploader';name='flagFile'"
+			[ ] "$flagFile"
+	[+] HtmlImage USMinorOutlyingIslands
+		[ ] multitag "$http:??*?TEMPLATE?ampTemplate?images?bul[3]"
+	[+] HtmlImage FirstFlag
+		[ ] multitag "$http:??*?TEMPLATE?ampTemplate?images?bul[1]"
+	[+] HtmlImage HttpAmpStagingCodeRo808
+		[ ] multitag "$http:??*?TEMPLATE?ampTemplate?images?tra[3]"
+[ ] 
+[+] window BrowserChild AMPGlobalSettings
+	[ ] tag "AMP - Global Settings"
+	[ ] parent Browser
+	[ ] 
+	[+] HtmlPopupList DefaultCountry
+		[-] multitag "&name='gsfValue'"
+			[ ] "$gsfValue[1]"
+	[+] HtmlPushButton Save1
+		[-] multitag "&name='save'"
+			[ ] "$save[1]"
+	[+] HtmlPopupList PublicView
+		[-] multitag "&name='gsfValue'"
+			[ ] "$gsfValue[2]"
+	[+] HtmlPushButton Save2
+		[-] multitag "&name='save'"
+			[ ] "$save[2]"
+	[+] HtmlPopupList Budget
+		[-] multitag "&name='gsfValue'"
+			[ ] "$gsfValue[3]"
+	[+] HtmlPushButton Save3
+		[-] multitag "&name='save'"
+			[ ] "$save[3]"
+	[+] HtmlPopupList DACCRSSectorScheme
+		[-] multitag "&name='gsfValue'"
+			[ ] "$gsfValue[5]"
+	[+] HtmlPushButton Save5
+		[-] multitag "&name='save'"
+			[ ] "$save[5]"
+	[+] HtmlPopupList DefaultTemplate1
+		[-] multitag "&name='gsfValue'"
+			[ ] "$gsfValue[6]"
+	[+] HtmlPushButton Save6
+		[-] multitag "&name='save'"
+			[ ] "$save[6]"
+	[+] HtmlPopupList MultiSector
+		[-] multitag "&name='gsfValue'"
+			[ ] "$gsfValue[8]"
+	[+] HtmlPushButton Save8
+		[-] multitag "&name='save'"
+			[ ] "$save[8]"
+	[+] HtmlPopupList Perspective
+		[-] multitag "&name='gsfValue'"
+			[ ] "$gsfValue[9]"
+	[+] HtmlPushButton Save9
+		[-] multitag "&name='save'"
+			[ ] "$save[9]"
+	[+] HtmlPopupList USFiscalCalendar
+		[-] multitag "&name='gsfValue'"
+			[ ] "$gsfValue[10]"
+	[+] HtmlPushButton Save10
+		[-] multitag "&name='save'"
+			[ ] "$save[10]"
+[ ] 
+[+] window BrowserChild AMPTranslationManager
+	[ ] tag "AMP - Translator Manager"
+	[ ] parent Browser
+	[+] HtmlCheckBox En
+		[-] multitag "&name='selectedLanguages'"
+			[ ] "$selectedLanguages[1]"
+	[+] HtmlPushButton Export
+		[-] multitag "&name='export'"
+			[ ] "$export"
+	[+] HtmlCheckBox Fr
+		[-] multitag "&name='selectedLanguages'"
+			[ ] "$selectedLanguages[2]"
+	[+] HtmlPushButton Browse2
+		[-] multitag "&id='fileUploaded';name='fileUploaded'"
+			[ ] "$fileUploaded"
+	[+] HtmlTextField PleaseSelectTheLanguagesYo
+		[-] multitag "&id='fileUploaded';name='fileUploaded'"
+			[ ] "Please select the languages you want to export[2]"
+			[ ] "$fileUploaded"
+	[+] HtmlPushButton Import
+		[-] multitag "&name='import'"
+			[ ] "$import"
+	[+] HtmlPopupList TheFollowingLanguagesWhere
+		[-] multitag "&name='LANG:en'"
+			[ ] "$LANG:en"
+	[+] HtmlPushButton Import1
+		[-] multitag "&name='importLang'"
+			[ ] "$importLang"
+[ ] 
+[+] window BrowserChild AMPWorkspaceManager
+	[ ] tag "AMP - Workspace Manager"
+	[ ] parent Browser
+	[ ] string teamId, edit, npd
+	[ ] 
+	[-] void setTeamId(int i)
+		[ ] teamId = "$http:??*?aim?teamMembers.do~teamId={i}"
+	[+] void setEdit(int i)
+		[-] if (i<10)
+			[ ] edit = "$http:??*?aim?getWorkspace.do~event=edit~tId={i}"
+		[-] else
+			[ ] edit = "$http:??*?aim?getWorkspace.do~event=edit~tId={i / 10}[*]"
+	[+] void setNPD(int i)
+		[ ] npd = "$javascript:openNpdSettingsWindow({i});"
+	[ ] 
+	[+] HtmlLink AddTeams
+		[-] multitag "Add Teams"
+			[ ] "$http:??*?aim?createWorkspace.do~dest=adm"
+	[+] HtmlTextField HtmlTextField1
+		[-] multitag "&name='teamName'"
+			[ ] "$teamName"
+	[+] HtmlPopupList TeamCategory
+		[-] multitag "&name='category'"
+			[ ] "$category"
+	[+] HtmlPopupList TeamType
+		[-] multitag "&name='typeId'"
+			[ ] "$typeId"
+	[+] HtmlPopupList WorkspaceType
+		[-] multitag "&name='workspaceType'"
+			[ ] "$workspaceType"
+	[+] HtmlPushButton Add2
+		[ ] tag "Add[2]"
+	[+] HtmlPushButton Save
+		[-] multitag "&name='saveButton'"
+			[ ] "Save"
+			[ ] "$saveButton"
+	[ ] 
+	[+] HtmlLink AddRoles
+		[-] multitag "Add Roles"
+			[ ] "$http:??*?aim?updateRole.do"
+	[-] HtmlTable Teams
+		[ ] tag "Teams"
+		[-] HtmlColumn Members
+			[ ] tag "? Members ?"
+			[+] HtmlLink Members1
+				[-] multitag "Members[1]"
+					[ ] "$http:??*?aim?teamMembers.do~teamId=1"
+			[-] HtmlLink Members2
+				[ ] tag teamId
+			[ ] 
+		[+] HtmlColumn Activities
+			[ ] tag "? Activities ?"
+			[-] HtmlLink Activities1
+				[-] multitag "Activities[1]"
+					[ ] "$http:??*?aim?teamActivities.do~id=1"
+		[+] HtmlColumn Edit
+			[ ] tag "? Edit ?"
+			[-] HtmlLink Edit14
+				[ ] tag edit
+			[-] HtmlLink Edit10
+				[-] multitag "Edit[10]"
+					[ ] "$http:??amp-testing.code.ro?aim?getWorkspace.do~event=edit~tId=1[2]"
+		[-] HtmlColumn NpdSettings
+			[ ] tag "? Npd Settings ?"
+			[-] HtmlLink NpdSettings14
+				[ ] tag npd
+[ ] 
+[+] window BrowserChild AMPSelectChildWorkspaces
+	[ ] tag "AMP - Select Child Workspaces"
+	[ ] parent Browser
+	[+] HtmlCheckBox TestWorkspace
+		[-] multitag "&name='selChildWorkspaces'"
+			[ ] "$selChildWorkspaces[1]"
+	[+] HtmlPushButton Add1
+		[ ] tag "Add"
+	[ ] 
+	[ ] 
+[ ] 
+[+] window BrowserChild AMPRolesManager
+	[ ] tag "AMP - Roles Manager"
+	[ ] parent Browser
+	[ ] 
+	[+] HtmlTextField RoleName
+		[-] multitag "&name='role'"
+			[ ] "$role"
+	[+] HtmlTextField Description
+		[-] multitag "&name='description'"
+			[ ] "$description"
+[ ] 
+[+] window BrowserChild AMPTeamMembers
+	[ ] tag "AMP - Team Members"
+	[ ] parent Browser
+	[ ] 
+	[+] HtmlLink AddTeamMember
+		[-] multitag "Add Team Member"
+			[ ] "$http:??*?aim?showAddTeamMember.do~teamId=1~fr"
+	[+] HtmlPopupList AddMembersForTestWorkspace
+		[-] multitag "&name='email'"
+			[ ] "$email"
+	[+] HtmlPopupList Role
+		[-] multitag "&name='role'"
+			[ ] "$role"
+	[+] HtmlTable MembersForTestWorkspace
+		[ ] tag "Members for Test Workspace"
+		[+] HtmlColumn Edit
+			[ ] tag "? Edit ?"
+			[+] HtmlLink Edit4
+				[-] multitag "Edit[4]"
+					[ ] "$http:??*?aim?getTeamMemberDetails.do~action=e[4]"
+	[+] HtmlCheckBox AddUpdate
+		[-] multitag "&name='writePerms'"
+			[ ] "$writePerms"
+	[+] HtmlCheckBox Delete
+		[-] multitag "&name='deletePerms'"
+			[ ] "$deletePerms"
+[ ] 
+[+] window BrowserChild AMPTeamActivities
+	[ ] tag "AMP - Team Activities"
+	[ ] parent Browser
+	[-] HtmlLink AssignAnActivity
+		[-] multitag "Assign an activity"
+			[ ] "$http:??*?aim?assignActivity.do~id=1"
+	[ ] 
+[ ] 
+[+] window BrowserChild AMPCategoryManager
+	[ ] tag "AMP - Category Manager"
+	[ ] parent Browser
+	[ ] string editCat
+	[ ] 
+	[-] void setNr(int i)
+		[ ] editCat = "$http:??*?aim?categoryManager.do~edit={i}"
+	[ ] 
+	[+] HtmlLink AddNewCategory
+		[ ] multitag "$http:??*?aim?categoryManager.do~new=true"
+	[-] HtmlTable CategoryManager
+		[ ] tag "Category Manager"
+		[-] HtmlColumn Actions
+			[ ] tag "Actions"
+			[-] HtmlList Ordered18
+				[ ] tag "Ordered[18]"
+				[-] HtmlLink EditCategory
+					[ ] tag "$http:??*?aim?categoryManager.do~edit=29"
+				[-] HtmlLink DeleteCategory
+					[ ] tag "$http:??*?aim?categoryManager.do~delete=2"
+[ ] 
+[+] window BrowserChild AMPAddCategory
+	[ ] tag "AMP - Category Manager - Create or Edit Category"
+	[ ] parent Browser
+	[ ] 
+	[+] HtmlTextField N1
+		[-] multitag "&name='categoryName'"
+			[ ] "$categoryName"
+	[+] HtmlTextField N2
+		[-] multitag "&name='keyName'"
+			[ ] "$keyName"
+	[+] HtmlTextField HtmlTextField4
+		[-] multitag "&id='field0';name='possibleValues'"
+			[ ] "$possibleValues[1]"
+	[+] HtmlTextField N4
+		[-] multitag "&id='field1';name='possibleValues'"
+			[ ] "$possibleValues[2]"
+	[+] HtmlCheckBox Should
+		[-] multitag "&name='isMultiselect'"
+			[ ] "$isMultiselect"
+	[+] HtmlCheckBox ShouldTheValuesBePresented
+		[-] multitag "&name='isOrdered'"
+			[ ] "$isOrdered"
+	[+] HtmlPushButton Submit
+		[-] multitag "&name='xx'"
+			[ ] "$xx"
+[ ] 
+[+] window BrowserChild AMPAllUsers
+	[ ] tag "AMP - All Users"
+	[ ] parent Browser
+	[ ] 
+	[+] HtmlTextField Keyword
+		[-] multitag "&name='keyword'"
+			[ ] "$keyword"
+	[+] HtmlTable Users
+		[ ] tag "Users"
+		[+] HtmlColumn Actions
+			[ ] tag "Actions"
+			[-] HtmlLink EditUser
+				[-] multitag "Edit user"
+					[ ] "$http:??*?um?viewEditUser.do~id=*"
+		[+] HtmlColumn BanUser
+			[ ] tag "Ban user"
+			[-] HtmlLink BanUser
+				[ ] multitag "$http:??*?um?viewEditUser.do~id=91~ban=true"
+[ ] 
+[+] window BrowserChild AMPViewEditUser
+	[ ] tag "AMP - View?Edit User"
+	[ ] parent Browser
+	[+] HtmlTextField Password
+		[-] multitag "&name='newPassword'"
+			[ ] "$newPassword"
+	[+] HtmlTextField Confirm
+		[-] multitag "&name='confirmNewPassword'"
+			[ ] "$confirmNewPassword"
+	[+] HtmlPushButton ChangePassword
+		[ ] tag "Change password"
+	[ ] 
+	[+] HtmlTextField FirstName
+		[-] multitag "&name='firstNames'"
+			[ ] "$firstNames"
+	[+] HtmlTextField LastName
+		[-] multitag "&name='lastName'"
+			[ ] "$lastName"
+	[+] HtmlTextField MailingAddress
+		[-] multitag "&name='mailingAddress'"
+			[ ] "$mailingAddress"
+	[+] HtmlPopupList OrganizationType
+		[-] multitag "&name='selectedOrgTypeId'"
+			[ ] "$selectedOrgTypeId"
+	[-] HtmlPopupList OrganizationGroup
+		[-] multitag "&name='selectedOrgGroupId'"
+			[ ] "$selectedOrgGroupId"
+	[-] HtmlPopupList OrganisationName
+		[-] multitag "&name='selectedOrgId'"
+			[ ] "$selectedOrgId"
+	[-] HtmlPopupList VerifiedAssignedOrganisation
+		[-] multitag "&name='assignedOrgId'"
+			[ ] "$assignedOrgId"
+	[-] HtmlPopupList Country
+		[-] multitag "&name='selectedCountryIso'"
+			[ ] "$selectedCountryIso"
+	[+] HtmlPushButton Save
+		[-] multitag "&name='saveButton'"
+			[ ] "$saveButton"
+	[ ] 
+[ ] 
+[+] window BrowserChild AMPComponentManager
+	[ ] tag "AMP * Components"
+	[ ] parent Browser
+	[+] HtmlPushButton AddComponent
+		[-] multitag "&name='submitButton'"
+			[ ] "$submitButton"
+	[+] HtmlLink ComponentIndicatorManager
+		[ ] multitag "$http:??*?aim?componentIndicatorManager.do"
+	[+] HtmlTable Components
+		[ ] tag "Components"
+		[+] HtmlColumn Edit
+			[ ] tag "? Edit ?"
+			[-] HtmlLink Edit602
+				[-] multitag "Edit[602]"
+					[ ] "$javascript:editComponent(104577)"
+		[+] HtmlColumn Delete
+			[ ] tag "? Delete ?"
+			[-] HtmlLink Delete602
+				[ ] multitag "$http:??*?aim?updateComponents.do~componentId=[602]"
+[ ] 
+[+] window BrowserChild AMPComponentIndicatorManager
+	[ ] tag "AMP - Component Indicator Manager"
+	[ ] parent Browser
+	[+] HtmlPushButton AddAComponentIndicator
+		[-] multitag "&name='submitButton'"
+			[ ] "$submitButton"
+	[+] HtmlImage STC
+		[ ] multitag "$http:??*?TEMPLATE?ampTemplate?images?trash_12[1]"
+[ ] 
+[+] window BrowserChild AMPAddComponentIndicator
+	[ ] tag "AMP - Add Component Indicator"
+	[ ] parent Browser
+	[+] HtmlTextField N1
+		[-] multitag "&name='compIndicatorName'"
+			[ ] "$compIndicatorName"
+	[+] HtmlTextField Description
+		[-] multitag "&name='compIndicatorDesc'"
+			[ ] "$compIndicatorDesc"
+	[+] HtmlTextField N2
+		[-] multitag "&name='compIndicatorCode'"
+			[ ] "$compIndicatorCode"
+	[+] HtmlPushButton Save
+		[ ] tag "Save"
+[ ] 
+[+] window BrowserChild AMPAddComponent
+	[ ] tag "AMP - Add Component"
+	[ ] parent Browser
+	[+] HtmlTextField ComponentTitle
+		[-] multitag "&name='compTitle'"
+			[ ] "$compTitle"
+	[+] HtmlTextField ComponentCode
+		[-] multitag "&name='compCode'"
+			[ ] "$compCode"
+	[+] HtmlTextField ComponentDescription
+		[-] multitag "&name='compDes'"
+			[ ] "$compDes"
+	[+] HtmlPushButton Save
+		[-] multitag "&id='addBtn'"
+			[ ] "$addBtn"
+	[+] HtmlTextField ComponentType
+		[-] multitag "&name='compType'"
+			[ ] "$compType"
+	[+] HtmlPushButton Cancel
+		[-] multitag "&name='submitButton'"
+			[ ] "$submitButton[1]"
+[ ] 
+[+] window BrowserChild AMPEditComponent
+	[ ] tag "AMP - Edit Component"
+	[ ] parent Browser
+	[+] HtmlTextField ComponentTitle
+		[-] multitag "&name='compTitle'"
+			[ ] "$compTitle"
+	[+] HtmlTextField ComponentCode
+		[-] multitag "&name='compCode'"
+			[ ] "$compCode"
+	[+] HtmlTextField ComponentType
+		[-] multitag "&name='compType'"
+			[ ] "$compType"
+	[+] HtmlTextField ComponentDescription
+		[-] multitag "&name='compDes'"
+			[ ] "$compDes"
+	[+] HtmlPushButton Save1
+		[-] multitag "&name='addBtn'"
+			[ ] "$addBtn"
+	[ ] 
+[ ] 
+[+] window BrowserChild AMPFiscalCalendarManager
+	[ ] tag "AMP - Fiscal Calendar Manager"
+	[ ] parent Browser
+	[ ] 
+	[+] HtmlLink AddAFiscalCalendar
+		[-] multitag "Add a Fiscal Calendar"
+			[ ] "$http:??*?aim?editFiscalCalendar.do~actio"
+	[+] HtmlTextField N1
+		[-] multitag "&name='fiscalCalName'"
+			[ ] "$fiscalCalName"
+	[+] HtmlTextField N2
+		[-] multitag "&name='startMonthNum'"
+			[ ] "$startMonthNum"
+	[+] HtmlTextField N3
+		[-] multitag "&name='startDayNum'"
+			[ ] "$startDayNum"
+	[+] HtmlTextField N4
+		[-] multitag "&name='yearOffset'"
+			[ ] "$yearOffset"
+	[+] HtmlTextField Description
+		[-] multitag "&name='description'"
+			[ ] "$description"
+	[+] HtmlPushButton Save
+		[-] multitag "&name='submitButton'"
+			[ ] "$submitButton[1]"
+	[+] HtmlTable FiscalCalendars
+		[ ] tag "Fiscal Calendars"
+		[-] HtmlColumn Name
+			[ ] tag "Name"
+			[-] HtmlLink TestCalendar
+				[-] multitag "test calendar"
+					[ ] "$http:??*?aim?editFiscalCalendar.do~fisca[6]"
+	[+] HtmlPushButton DeleteThisCalendar
+		[-] multitag "&name='submitButton'"
+			[ ] "$submitButton[4]"
+[ ] 
+[+] window BrowserChild AMPCurrencyManager
+	[ ] tag "AMP - Currency Manager"
+	[ ] parent Browser
+	[ ] 
+	[+] HtmlLink AdminHome
+		[-] multitag "Admin Home"
+			[ ] "$http:??*?aim?admin.do"
+	[+] HtmlLink AddANewCurrency
+		[ ] multitag "$javascript:addNewCurrency()"
+	[+] HtmlTextField NumberOfRecordsPerPage
+		[-] multitag "&name='numRecords'"
+			[ ] "$numRecords"
+	[+] HtmlText CurrencyName
+		[ ] tag "Currency Name"
+	[+] HtmlPushButton View
+		[ ] tag "View"
+	[+] HtmlLink AAA
+		[ ] multitag "$javascript:editCurrency('AAA')[1]"
+	[+] HtmlText Country
+		[ ] tag "Country"
+	[-] HtmlImage DeleteThisCurrency1
+		[-] multitag "Delete this Currency[1]"
+			[ ] "$http:??amp-staging.code.ro:8080?repository?cms?view?images?dele[1]"
+[ ] 
+[+] window BrowserChild AMPCurrencyEditor
+	[ ] tag "AMP - Currency Editor"
+	[ ] parent Browser
+	[ ]  
+	[+] HtmlTextField CurrencyCode
+		[-] multitag "&name='currencyCode'"
+			[ ] "$currencyCode"
+	[+] HtmlTextField CurrencyName
+		[-] multitag "&name='currencyName'"
+			[ ] "$currencyName"
+	[+] HtmlPopupList Country
+		[-] multitag "&id='lstCountry';name='countryId'"
+			[ ] "$countryId"
+	[+] HtmlPushButton Save
+		[ ] tag "Save"
+[ ] 
+[+] window BrowserChild AMPCurrencyRates
+	[ ] tag "AMP - Currency Rates"
+	[ ] parent Browser
+	[ ] 
+	[+] HtmlLink AdminHome
+		[-] multitag "Admin Home"
+			[ ] "$http:??*?aim?admin.do"
+	[+] HtmlLink AddNewExchangeRate
+		[ ] multitag "$javascript:addExchangeRate()"
+	[+] HtmlTextField NumberOfRecordsPerPage
+		[-] multitag "&name='numResultsPerPage'"
+			[ ] "$numResultsPerPage"
+	[+] HtmlPushButton View
+		[ ] tag "View"
+	[+] HtmlCheckBox CAD
+		[-] multitag "&name='selectedRates'"
+			[ ] "$selectedRates"
+	[+] HtmlPushButton DeleteSelectedRates
+		[ ] tag "Delete Selected Rates"
+[ ] 
+[+] window BrowserChild AMPCurrencyRateEditor
+	[ ] tag "AMP - Currency Rate Editor"
+	[ ] parent Browser
+	[ ] 
+	[+] HtmlTable HtmlTable1
+		[ ] tag "#1"
+		[+] HtmlColumn Sun
+			[ ] tag "Sun"
+			[+] HtmlText N16
+				[ ] tag "16"
+			[-] HtmlText N9
+				[ ] tag "9"
+	[+] HtmlTextField ExchangeRateValueOf1USD
+		[-] multitag "&name='updateCRateAmount'"
+			[ ] "$updateCRateAmount"
+	[+] HtmlPushButton Save
+		[ ] tag "Save"
+	[+] HtmlPopupList CurrencyEditor
+		[-] multitag "&name='updateCRateCode'"
+			[ ] "$updateCRateCode"
+[ ] 
+[+] window BrowserChild AMPRegionManager
+	[ ] tag "AMP - Region Manager"
+	[ ] parent Browser
+	[ ] 
+	[+] HtmlLink AddACountry
+		[ ] multitag "$javascript:newWin(0,'create')"
+	[+] HtmlTextField CharactersLeft1
+		[-] multitag "&name='name'"
+			[ ] "$name"
+	[+] HtmlTextField ISO
+		[-] multitag "&name='iso'"
+			[ ] "$iso"
+	[+] HtmlTextField ISO3
+		[-] multitag "&name='iso3'"
+			[ ] "$iso3"
+	[+] HtmlPushButton Save
+		[ ] tag "Save"
+	[+] HtmlPopupList Country
+		[-] multitag "&name='countryId'"
+			[ ] "$countryId"
+	[+] HtmlLink AddARegion
+		[ ] multitag "$javascript:newWin(1,'create')"
+	[+] HtmlLink AdminHome
+		[-] multitag "Admin Home"
+			[ ] "$http:??*?aim?admin.do"
+	[+] HtmlPopupList Region
+		[-] multitag "&name='regionId'"
+			[ ] "$regionId"
+	[+] HtmlLink EditThisRegion
+		[ ] multitag "$javascript:newWin(1,'edit')"
+	[+] HtmlLink AddAZone
+		[ ] multitag "$javascript:newWin(2,'create')"
+	[+] HtmlPopupList Zone
+		[-] multitag "&name='zoneId'"
+			[ ] "$zoneId"
+	[+] HtmlLink EditThisZone
+		[ ] multitag "$javascript:newWin(2,'edit')"
+	[+] HtmlLink AddADistrict
+		[ ] multitag "$javascript:newWin(3,'create')"
+	[+] HtmlPopupList District
+		[-] multitag "&name='woredaId'"
+			[ ] "$woredaId"
+	[+] HtmlLink EditThisDistrict
+		[ ] multitag "$javascript:newWin(3,'edit')"
+[ ] 
+[+] window BrowserChild AMPViewSectorScheme
+	[ ] tag "AMP ? View Sector Scheme"
+	[ ] parent Browser
+	[ ] 
+	[+] HtmlLink AddScheme
+		[ ] multitag "$http:??*?aim?updateSectorSchemes.do~dest"
+	[+] HtmlTable Schemes
+		[ ] tag "Schemes"
+		[-] HtmlColumn DACCRSSectorScheme
+			[ ] tag "DAC-CRS Sector Scheme"
+			[-] HtmlLink SilkTestScheme
+				[-] multitag "silk test scheme"
+					[ ] "$http:??*?aim?updateSectorSchemes.do~ampS[3]"
+[ ] 
+[+] window BrowserChild AMPAddSectorScheme
+	[ ] tag "AMP ? Add Sector Scheme"
+	[ ] parent Browser
+	[ ] 
+	[+] HtmlTextField SchemeName
+		[-] multitag "&name='secSchemeName'"
+			[ ] "$secSchemeName"
+	[+] HtmlTextField SchemeCode
+		[-] multitag "&name='secSchemeCode'"
+			[ ] "$secSchemeCode"
+	[+] HtmlPushButton Save
+		[-] multitag "&name='addBtn'"
+			[ ] "$addBtn"
+[ ] 
+[+] window BrowserChild AMPViewSectorLevel1
+	[ ] tag "AMP ? View Sector Level 1"
+	[ ] parent Browser
+	[+] HtmlLink AddSector
+		[ ] multitag "$http:??*?aim?addSector.do~ampSecSchemeId"
+	[+] HtmlTextField SectorName
+		[-] multitag "&name='sectorName'"
+			[ ] "$sectorName"
+	[+] HtmlTextField SectorCode
+		[-] multitag "&name='sectorCode'"
+			[ ] "$sectorCode"
+	[+] HtmlPushButton Save1
+		[-] multitag "&name='addBtn'"
+			[ ] "$addBtn"
+	[ ] 
+	[-] HtmlLink SilkTestSector
+		[-] multitag "silk test sector"
+			[ ] "$http:??amp-staging.code.ro:8080?aim?viewSectorDetails.do~level=[1]"
+[ ] 
+[+] window BrowserChild AMPViewSectorLevel2
+	[ ] tag "AMP ? Add New Level 2 Sector"
+	[ ] parent Browser
+	[+] HtmlLink AddSector
+		[ ] multitag "$http:??amp-staging.code.ro:8080?aim?addSector.do~ampSecSchemeId"
+	[+] HtmlTextField SectorName
+		[-] multitag "&name='sectorName'"
+			[ ] "$sectorName"
+	[+] HtmlTextField SectorCode
+		[-] multitag "&name='sectorCode'"
+			[ ] "$sectorCode"
+	[+] HtmlPushButton Save1
+		[-] multitag "&name='addBtn'"
+			[ ] "$addBtn"
+	[ ] 
+	[-] HtmlLink SilkLevel2
+		[-] multitag "silk level 2"
+			[ ] "$http:??amp-staging.code.ro:8080?aim?viewSectorDetails.do~level=[1]"
+[ ] 
+[+] window BrowserChild AMPViewSectorLevel3
+	[ ] tag "AMP ? Add New Level 3Sector"
+	[ ] parent Browser
+	[ ] 
+	[+] HtmlLink AddSector1
+		[ ] multitag "$http:??*?aim?addSector.do~level=three~am"
+[ ] 
+[ ] 
+[+] window BrowserChild ViewSettings
+	[ ] tag "View Settings"
+	[ ] parent Browser
+	[ ] 
+	[+] HtmlTextField Width
+		[-] multitag "&name='width'"
+			[ ] "Width"
+			[ ] "$width"
+	[+] HtmlTextField Height
+		[-] multitag "&name='height'"
+			[ ] "Height"
+			[ ] "$height"
+	[+] HtmlTextField Angle
+		[-] multitag "&name='angle'"
+			[ ] "Angle"
+			[ ] "$angle"
+	[-] HtmlPushButton Save
+		[ ] tag "Save"
 [+] window DialogBox ChooseFile
 	[ ] tag "Choose file"
 	[ ] parent Browser
@@ -1970,12 +2663,12 @@
 		[-] TextField TextField1
 			[-] multitag "#1"
 				[ ] "$1"
-[+] window BrowserChild AMPDesktopLinks
+[-] window BrowserChild AMPDesktopLinks
 	[ ] tag "AMP*" //should be generized
 	[ ] parent Browser
 	[+] HtmlList TopMenu
 		[ ] tag "Aid Management Platform (AMP)"
-		[+] HtmlLink Calendar
+		[-] HtmlLink Calendar
 			[-] multitag "::: CALENDAR"
 				[ ] "$?calendar?showCalendarView.do"
 		[+] HtmlLink Reports
@@ -1991,7 +2684,7 @@
 			[ ] 
 		[-] HtmlLink REPORTS
 			[-] multitag "::: REPORTS"
-				[ ] "$http:??amp-staging.code.ro:8080?aim?viewTeamReports.do"
+				[ ] "$http:??*?aim?viewTeamReports.do"
 	[+] HtmlPushButton Add1
 		[ ] tag "Add"
 	[+] HtmlTextField Actor
@@ -2000,7 +2693,6 @@
 			[ ] "$actor"
 	[+] HtmlPushButton Save
 		[-] multitag "&name='saveButton'"
-			[ ] "Save"
 			[ ] "$saveButton"
 	[+] HtmlLink Location
 		[-] multitag "Location"
@@ -2023,7 +2715,7 @@
 	[+] HtmlLink Costing
 		[-] multitag "Costing"
 			[ ] "$javascript:gotoStep(11)"
-	[-] HtmlCheckBox AccessionInstrument
+	[+] HtmlCheckBox AccessionInstrument
 		[-] multitag "&name='selectedColumns'"
 			[ ] "$selectedColumns[1]"
 	[+] HtmlCheckBox DonorAgency
@@ -2041,10 +2733,110 @@
 	[+] HtmlLink TanzaniaMainland
 		[-] multitag "Tanzania (mainland)"
 			[ ] "$http:??amp-testing.code.ro?aim?selectTeam.do~id=38"
+	[+] HtmlTable AidManagementPlatformAMP
+		[ ] tag "Aid Management Platform*"
+		[-] HtmlColumn YouHaveBeenLoggedOut
+			[ ] tag "You have been logged out"
+			[+] HtmlLink ClickHereToGoBackToTheH
+				[-] multitag "Click here to go back to the home page"
+					[ ] "$http:??*?aim?"
+	[+] HtmlTextField Flag2
+		[-] multitag "&id='pseudotext'"
+			[ ] "Flag[2]"
+			[ ] "$135"
+	[+] HtmlPushButton Browse1
+		[-] multitag "&id='flagUploader';name='flagFile'"
+			[ ] "$flagFile"
+	[+] HtmlTextField Flag1
+		[-] multitag "&id='flagUploader';name='flagFile'"
+			[ ] "Flag[1]"
+			[ ] "$flagFile"
+	[+] HtmlPushButton Upload
+		[ ] tag "Upload"
+	[+] HtmlLink GoToLoginPage
+		[-] multitag "Go To Login Page"
+			[ ] "$http:??*?aim?[2]"
+	[+] HtmlLink BilateralFundedActivities
+		[-] multitag "Bilateral Funded Activities"
+			[ ] "$http:??*?aim?selectTeam.do~id=38"
+	[+] HtmlLink Logout
+		[ ] multitag "$http:??*?aim?j_acegi_logout"
+	[+] HtmlTextField SectorName
+		[-] multitag "&name='sectorName'"
+			[ ] "$sectorName"
+	[+] HtmlTextField SectorCode
+		[-] multitag "&name='sectorCode'"
+			[ ] "$sectorCode"
+	[+] HtmlPushButton Save1
+		[-] multitag "&name='addBtn'"
+			[ ] "$addBtn"
 [+] window BrowserChild AMPAdmin
 	[ ] tag "AMP - Admin Home"
 	[ ] parent Browser
 	[+] HtmlLink EventTypeManager
 		[-] multitag "Event Type Manager"
 			[ ] "$http:??*?calendar?eventTypes.do"
-	[ ] 
+	[+] HtmlLink FeatureManager
+		[-] multitag "Feature Manager"
+			[ ] "$http:??*?aim?visibilityManager.do"
+	[+] HtmlLink FlagUploaderSelector
+		[-] multitag "Flag uploader?selector"
+			[ ] "$http:??*?aim?flagUploader.do"
+	[+] HtmlLink GlobalSettings
+		[-] multitag "Global Settings"
+			[ ] "$http:??*?aim?GlobalSettings.do"
+	[+] HtmlLink TranslationManager
+		[-] multitag "Translation Manager"
+			[ ] "$http:??amp-staging.code.ro:8080?aim?translationManager.do"
+	[+] HtmlLink WorkspaceManager
+		[-] multitag "Workspace Manager"
+			[ ] "$http:??amp-staging.code.ro:8080?aim?workspaceManager.do~page=1"
+	[+] HtmlLink CategoryManager
+		[-] multitag "Category Manager"
+			[ ] "$http:??*?aim?categoryManager.do"
+	[+] HtmlLink UserManager
+		[-] multitag "User Manager"
+			[ ] "$http:??amp-staging.code.ro?um?viewAllUsers.do"
+	[+] HtmlLink ComponentsManager
+		[ ] multitag "$http:??*?aim?getComponents.do"
+	[+] HtmlLink CalendarManager
+		[-] multitag "Calendar Manager"
+			[ ] "$http:??*?aim?fiscalCalendarManager.do"
+	[+] HtmlLink CurrencyManager
+		[-] multitag "Currency Manager"
+			[ ] "$http:??amp-staging.code.ro:8080?aim?currencyManager.do"
+	[+] HtmlLink CurrencyRateManager
+		[-] multitag "Currency Rate Manager"
+			[ ] "$http:??amp-staging.code.ro:8080?aim?showCurrencyRates.do~clean="
+	[+] HtmlLink RegionManager
+		[-] multitag "Region Manager"
+			[ ] "$http:??amp-staging.code.ro:8080?aim?locationManager.do"
+	[-] HtmlLink SectorManager
+		[-] multitag "Sector Manager"
+			[ ] "$http:??amp-staging.code.ro:8080?aim?getSectorSchemes.do"
+[+] window DialogBox FlagProperties
+	[ ] tag "flag Properties"
+	[+] DialogBox General
+		[-] multitag "General"
+			[ ] "$0"
+		[-] TextField Location
+			[-] multitag "Location:"
+				[ ] "$13065"
+[+] window DialogBox N0OfTranslationManagerDoFr
+	[ ] tag "0% of translationManager.do from amp-staging.code.ro Completed"
+[+] window DialogBox SaveAs
+	[ ] tag "Save As"
+	[ ] parent N0OfTranslationManagerDoFr
+	[+] PushButton Save
+		[-] multitag "Save"
+			[ ] "$1"
+	[-] ComboBox FileName1
+		[-] multitag "File name:[1]"
+			[ ] "$1148"
+[+] window DialogBox OverWrite
+	[+] multitag "Save As"
+		[ ] "$MessageBox"
+	[ ] parent SaveAs
+	[-] PushButton Yes
+		[-] multitag "Yes"
+			[ ] "$6"

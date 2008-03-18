@@ -1,7 +1,10 @@
 ﻿[ ] 
 [-] testcase Test1 () appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPDesktopLinks.TopMenu.Calendar.Click()
+	[ ] 
+	[ ] //AMPDesktopLinks.TopMenu.Calendar.Click()
+	[ ] //AMPMyDesktop.ProjectManagementPlatformP.CALENDAR.Click ()
+	[ ] startConditions()
 	[ ] calendarCheckEventTypes()
 	[ ] calendarCheckDonors()
 	[ ] AMPCalendar.CreateNewEvent.Click()
@@ -33,11 +36,11 @@
 	[ ] AMPShowAmpEvent.endMinute.Select("10")
 	[ ] Agent.SetOption(OPT_VERIFY_ENABLED,  true)
 	[ ] AMPShowAmpEvent.Preview.Click()
-	[+] AMPShowAmpEvent.Gregorian.VerifyProperties({...})
-		[ ] ""
-		[-] {...}
-			[-] {"$Contents",            [LIST OF STRING] {...}}
-				[ ] "Start Date Should Be Less Or Equal To End Date"
+	[-] //AMPShowAmpEvent.Gregorian.VerifyProperties({...})
+		[ ] //""
+		[-] //{...}
+			[-] //{"$Contents",            [LIST OF STRING] {...}}
+				[ ] //"Start Date Should Be Less Or Equal To End Date"
 	[ ] new = AddDateTime(today,10)
 	[ ] date2 = FormatDateTime(new, "dd/mm/yyyy")
 	[ ] BrowserPage.ExecLine ('document.getElementById("selectedEndDate").value = "'+date2+'"', TRUE)
@@ -192,7 +195,8 @@
 [ ] 
 [-] testcase Test5 () appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPDesktopLinks.TopMenu.Calendar.Click()
+	[ ] startConditions()
+	[ ] //AMPDesktopLinks.TopMenu.Calendar.Click()
 	[ ] calendarCheckEventTypes()
 	[ ] calendarCheckDonors()
 	[ ] AMPCalendar.CreateNewEvent.Click()
@@ -261,7 +265,8 @@
 [ ] 
 [-] testcase Test6 () appstate DefaultBaseState //make event private
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPDesktopLinks.TopMenu.Calendar.Click()
+	[ ] startConditions()
+	[ ] //AMPDesktopLinks.TopMenu.Calendar.Click()
 	[ ] calendarCheckEventTypes()
 	[ ] calendarCheckDonors()
 	[ ] 
@@ -299,7 +304,8 @@
 [ ] 
 [-] testcase Test7 () appstate DefaultBaseState //make event public
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPDesktopLinks.TopMenu.Calendar.Click()
+	[ ] startConditions()
+	[ ] //AMPDesktopLinks.TopMenu.Calendar.Click()
 	[ ] calendarCheckEventTypes()
 	[ ] calendarCheckDonors()
 	[ ] 
@@ -337,7 +343,8 @@
 [ ] 
 [-] testcase Test8 () appstate DefaultBaseState 
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPDesktopLinks.TopMenu.Calendar.Click()
+	[ ] startConditions()
+	[ ] //AMPDesktopLinks.TopMenu.Calendar.Click()
 	[ ] calendarCheckEventTypes()
 	[ ] calendarCheckDonors()
 	[ ] 

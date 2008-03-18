@@ -11,7 +11,8 @@
 [ ] //Check Calendar Event Types
 [-] void calendarTest2Preconditions()
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPDesktopLinks.TopMenu.Calendar.Click()
+	[ ] startConditions()
+	[ ] //AMPDesktopLinks.TopMenu.Calendar.Click()
 	[ ] calendarCheckEventTypes()
 	[ ] calendarCheckDonors()
 	[ ] 
@@ -25,6 +26,15 @@
 			[ ] {"Text",                 "New Event for Test"}
 	[ ] //end preconditions
 	[ ] 
+[-] void startConditions()
+	[-] if (AMPDesktopLinks.BilateralFundedActivities.Exists())
+		[ ] AMPDesktopLinks.BilateralFundedActivities.Click ()
+	[-] //if (AMPMyDesktop.ProjectManagementPlatformP.CALENDAR.Exists())
+		[ ] //AMPMyDesktop.ProjectManagementPlatformP.CALENDAR.Click ()
+	[-] if (AMPMyDesktop.ProjectManagementPlatformP.REPORTS.Exists())
+		[ ] AMPMyDesktop.ProjectManagementPlatformP.REPORTS.Click ()
+	[-] if (AMPDesktopLinks.TopMenu.Calendar.Exists())
+		[ ] AMPDesktopLinks.TopMenu.Calendar.Click()
 [-] void calendarCheckEventTypes()
 	[ ] // to be implemented
 [-] void calendarCheckDonors()

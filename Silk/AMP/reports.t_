@@ -1,7 +1,7 @@
 ﻿[-] testcase Test1_1() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPMyDesktop.SetActive( )
-	[ ] AMPDesktopLinks.TopMenu.REPORTS.Click ()
+	[ ] startConditions()
+	[ ] //AMPDesktopLinks.TopMenu.REPORTS.Click ()
 	[ ] AMPPublicTeamReports.ReportGenerator.Click ()
 	[ ] AMPReportGeneratorStep1.N5ReportDetails.Select (1)
 	[ ] AMPReportGeneratorStep1.Next.Click ()
@@ -23,8 +23,8 @@
 	[ ] 
 [-] testcase Test1_2() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPMyDesktop.SetActive( )
-	[ ] AMPDesktopLinks.TopMenu.REPORTS.Click ()
+	[ ] startConditions()
+	[ ] //AMPDesktopLinks.TopMenu.REPORTS.Click ()
 	[ ] AMPPublicTeamReports.ReportGenerator.Click ()
 	[ ] AMPReportGeneratorStep1.N5ReportDetails.Select (1)
 	[ ] AMPReportGeneratorStep1.Next.Click ()
@@ -44,8 +44,9 @@
 	[ ] 
 [-] testcase Test1_3() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPMyDesktop.SetActive( )
-	[ ] AMPDesktopLinks.TopMenu.REPORTS.Click ()
+	[ ] startConditions()
+	[ ] 
+	[ ] //AMPDesktopLinks.TopMenu.REPORTS.Click ()
 	[ ] AMPPublicTeamReports.ReportGenerator.Click ()
 	[ ] AMPReportGeneratorStep1.N5ReportDetails.Select (1)
 	[ ] AMPReportGeneratorStep1.Next.Click ()
@@ -67,8 +68,9 @@
 	[ ] 
 [-] testcase Test1_4() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPMyDesktop.SetActive( )
-	[ ] AMPDesktopLinks.TopMenu.REPORTS.Click ()
+	[ ] startConditions()
+	[ ] 
+	[ ] //AMPDesktopLinks.TopMenu.REPORTS.Click ()
 	[ ] AMPPublicTeamReports.ReportGenerator.Click ()
 	[ ] AMPReportGeneratorStep1.N5ReportDetails.Select (1)
 	[ ] AMPReportGeneratorStep1.Next.Click ()
@@ -96,8 +98,9 @@
 	[ ] 
 [-] testcase Test1_5() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPMyDesktop.SetActive( )
-	[ ] AMPDesktopLinks.TopMenu.REPORTS.Click ()
+	[ ] startConditions()
+	[ ] 
+	[ ] //AMPDesktopLinks.TopMenu.REPORTS.Click ()
 	[ ] AMPPublicTeamReports.ReportGenerator.Click ()
 	[ ] AMPReportGeneratorStep1.N5ReportDetails.Select (1)
 	[ ] AMPReportGeneratorStep1.Next.Click ()
@@ -120,8 +123,9 @@
 	[ ] 
 [-] testcase Test1_6() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPMyDesktop.SetActive( )
-	[ ] AMPDesktopLinks.TopMenu.REPORTS.Click ()
+	[ ] startConditions()
+	[ ] 
+	[ ] //AMPDesktopLinks.TopMenu.REPORTS.Click ()
 	[ ] AMPPublicTeamReports.ReportGenerator.Click ()
 	[ ] AMPReportGeneratorStep1.N5ReportDetails.Select (2)
 	[ ] AMPReportGeneratorStep1.Next.Click ()
@@ -143,8 +147,9 @@
 	[ ] 
 [-] testcase Test1_7() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPMyDesktop.SetActive( )
-	[ ] AMPDesktopLinks.TopMenu.REPORTS.Click ()
+	[ ] startConditions()
+	[ ] 
+	[ ] //AMPDesktopLinks.TopMenu.REPORTS.Click ()
 	[ ] AMPPublicTeamReports.ReportGenerator.Click ()
 	[ ] AMPReportGeneratorStep1.N5ReportDetails.Select (3)
 	[ ] AMPReportGeneratorStep1.Next.Click ()
@@ -168,10 +173,11 @@
 	[ ] 
 [-] testcase Test1_8() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPMyDesktop.SetActive( )
-	[ ] AMPDesktopLinks.TopMenu.REPORTS.Click ()
+	[ ] startConditions()
+	[ ] 
+	[ ] //AMPDesktopLinks.TopMenu.REPORTS.Click ()
 	[ ] AMPPublicTeamReports.ReportGenerator.Click ()
-	[ ] AMPReportGeneratorStep1.N5ReportDetails.Select (4)
+	[ ] AMPReportGeneratorStep1.N5ReportDetails.Select (3)
 	[ ] AMPReportGeneratorStep1.Next.Click ()
 	[ ] AMPReportGeneratorStep2.SelectAll.AMP.Identification.Check ()
 	[ ] AMPReportGeneratorStep2.Add.Click ()
@@ -192,8 +198,9 @@
 	[ ] 
 [-] testcase Test1_9() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPMyDesktop.SetActive( )
-	[ ] AMPDesktopLinks.TopMenu.REPORTS.Click ()
+	[ ] startConditions()
+	[ ] 
+	[ ] //AMPDesktopLinks.TopMenu.REPORTS.Click ()
 	[ ] AMPPublicTeamReports.ReportGenerator.Click ()
 	[ ] AMPReportGeneratorStep1.N5ReportDetails.Select (1)
 	[ ] AMPReportGeneratorStep1.Next.Click ()
@@ -217,14 +224,16 @@
 	[ ] 
 [-] testcase Test2() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPMyDesktop.SetActive( )
-	[ ] AMPDesktopLinks.TopMenu.REPORTS.Click ()
+	[ ] startConditions()
+	[ ] 
+	[ ] //AMPDesktopLinks.TopMenu.REPORTS.Click ()
 	[ ] AMPPublicTeamReports._test.Click ()
 	[ ] 
 [-] testcase Test3_1() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPMyDesktop.SetActive( )
-	[ ] AMPDesktopLinks.TopMenu.REPORTS.Click ()
+	[ ] startConditions()
+	[ ] 
+	[ ] //AMPDesktopLinks.TopMenu.REPORTS.Click ()
 	[ ] AMPPublicTeamReports.Edit1.Click ()
 	[ ] AMPReportGeneratorStep1.Next.Click ()
 	[ ] AMPReportGeneratorStep2.Box1.Check ()
@@ -238,8 +247,9 @@
 	[ ] 
 [-] testcase Test3_2() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPMyDesktop.SetActive( )
-	[ ] AMPDesktopLinks.TopMenu.REPORTS.Click ()
+	[ ] startConditions()
+	[ ] 
+	[ ] //AMPDesktopLinks.TopMenu.REPORTS.Click ()
 	[ ] AMPPublicTeamReports.Edit1.Click ()
 	[ ] AMPReportGeneratorStep1.Next.Click ()
 	[ ] AMPReportGeneratorStep2.Next1.Click ()
@@ -257,8 +267,9 @@
 	[ ] 
 [-] testcase Test3_3() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPMyDesktop.SetActive( )
-	[ ] AMPDesktopLinks.TopMenu.REPORTS.Click ()
+	[ ] startConditions()
+	[ ] 
+	[ ] //AMPDesktopLinks.TopMenu.REPORTS.Click ()
 	[ ] AMPPublicTeamReports.Edit1.Click ()
 	[ ] AMPReportGeneratorStep1.Next.Click ()
 	[ ] AMPReportGeneratorStep2.Next1.Click ()
@@ -272,8 +283,9 @@
 	[ ] 
 [-] testcase Test3_4() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
-	[ ] AMPMyDesktop.SetActive( )
-	[ ] AMPDesktopLinks.TopMenu.REPORTS.Click ()
+	[ ] startConditions()
+	[ ] 
+	[ ] //AMPDesktopLinks.TopMenu.REPORTS.Click ()
 	[ ] AMPPublicTeamReports.Edit1.Click ()
 	[ ] AMPReportGeneratorStep1.Next.Click ()
 	[ ] AMPReportGeneratorStep2.Next1.Click ()
@@ -286,6 +298,8 @@
 	[ ] 
 [-] testcase Test3_5() appstate DefaultBaseState
 	[ ] login("atl@amp.org", "atl")
+	[ ] startConditions()
+	[ ] 
 	[ ] AMPMyDesktop.SetActive( )
 	[ ] AMPDesktopLinks.TopMenu.REPORTS.Click ()
 	[ ] AMPPublicTeamReports.Delete1.Click ()

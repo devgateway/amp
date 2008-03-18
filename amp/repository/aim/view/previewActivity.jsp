@@ -1254,7 +1254,7 @@ function collapseAll() {
                                                                                     	<field:display name="Date Commitment" feature="Funding Organizations">
 		                                                                                      <bean:write name="fundingDetail" property="transactionDate"/>
 	                                                                                    </field:display>                                                                                    </td>
-                                                                                    <td>
+                                                                                    <td width="25%">
                                                                                     	<field:display name="Exchange Rate" feature="Funding Organizations">
    																									<bean:write name="fundingDetail" property="formattedRate" format="###.##"/>
 																							</field:display>                                                                                    </td>
@@ -1282,7 +1282,7 @@ function collapseAll() {
                                                                                        	 	<field:display name="Date Commitment" feature="Funding Organizations">
                                                                                           		<bean:write name="fundingDetail" property="transactionDate"/>
                                                                                           	</field:display>                                                                                        </td>
-                                                                                        <td>
+                                                                                        <td width="25%">
 	                                                                                        <field:display name="Exchange Rate" feature="Funding Organizations">
    																									<bean:write name="fundingDetail" property="formattedRate" format="###.##"/>
 																							</field:display>                                                                                        </td>
@@ -1308,7 +1308,7 @@ function collapseAll() {
 	                                                                                        <field:display name="Date Commitment" feature="Funding Organizations">
     	                                                                                      <bean:write name="fundingDetail" property="transactionDate"/>
     	                                                                                    </field:display>                                                                                        </td>
-                                                                                        <td>
+                                                                                        <td width="25%">
    																							<field:display name="Exchange Rate" feature="Funding Organizations">
    																									<bean:write name="fundingDetail" property="formattedRate"/>
 																							</field:display>																						</td>
@@ -1416,7 +1416,11 @@ function collapseAll() {
 																								<field:display name="Date Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
 																								</field:display>																							</td>
-
+																							<td width="25%">
+	   																							<field:display name="Exchange Rate" feature="Funding Organizations">
+	   																									<bean:write name="fundingDetail" property="formattedRate"/>
+																								</field:display>																						
+																							</td>
 																						</tr>
 																						</c:if>
 
@@ -1437,10 +1441,15 @@ function collapseAll() {
 																								<field:display name="Currency Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="currencyCode"/>
 																								</field:display>																							</td>
-																							<td width="70" colspan="2">
+																							<td width="70">
 																								<field:display name="Date Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
 																								</field:display>																							</td>
+																							<td width="25%">
+	   																							<field:display name="Exchange Rate" feature="Funding Organizations">
+	   																									<bean:write name="fundingDetail" property="formattedRate"/>
+																								</field:display>																						
+																							</td>
 																						</tr>
 																						</c:if>
 																						<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
@@ -1459,10 +1468,15 @@ function collapseAll() {
 																								<field:display name="Currency Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="currencyCode"/>
 																								</field:display>																							</td>
-																							<td width="70" colspan="2">
+																							<td width="70">
 																								<field:display name="Date Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
 																								</field:display>																							</td>
+																							<td width="25%">
+   																								<field:display name="Exchange Rate" feature="Funding Organizations">
+   																									<bean:write name="fundingDetail" property="formattedRate"/>
+																								</field:display>																						
+																							</td>
 																						</tr>
 																						</c:if>
 																						</c:if>
@@ -1501,6 +1515,11 @@ function collapseAll() {
 																								<field:display name="Date Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
 																								</field:display>																							</td>
+																							<td width="25%">
+   																								<field:display name="Exchange Rate" feature="Funding Organizations">
+   																									<bean:write name="fundingDetail" property="formattedRate"/>
+																								</field:display>																						
+																							</td>
 
 																						</tr>
 																						</c:if>
@@ -1522,10 +1541,15 @@ function collapseAll() {
 																								<field:display name="Currency Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="currencyCode"/>
 																								</field:display>																							</td>
-																							<td width="70" colspan="2">
+																							<td width="70">
 																								<field:display name="Date Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
 																								</field:display>																							</td>
+																							<td width="25%">
+   																								<field:display name="Exchange Rate" feature="Funding Organizations">
+   																									<bean:write name="fundingDetail" property="formattedRate"/>
+																								</field:display>																						
+																							</td>
 																						</tr>
 																						</c:if>
 																						<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
@@ -1544,10 +1568,15 @@ function collapseAll() {
 																								<field:display name="Currency Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="currencyCode"/>
 																								</field:display>																							</td>
-																							<td width="70" colspan="2">
+																							<td width="70">
 																								<field:display name="Date Disbursement" feature="Funding Organizations">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
 																								</field:display>																							</td>
+																							<td width="25%">
+   																								<field:display name="Exchange Rate" feature="Funding Organizations">
+   																									<bean:write name="fundingDetail" property="formattedRate"/>
+																								</field:display>																						
+																							</td>
 																						</tr>
 																						</c:if>
 																						</c:if>

@@ -18,6 +18,8 @@ import javax.swing.text.DateFormatter;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -37,6 +39,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.AddOrgForm;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.Pledge;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -757,10 +760,20 @@ public class EditOrganisation
 
           ampOrg.getFundingDetails().addAll(ampPledges);
         }
-        //
-
-        if ("create".equals(action))
+                	
+        boolean exist= DbUtil.getOrganisationByName(ampOrg.getName())!=null;
+        if (exist) {
+          ActionErrors ae = new ActionErrors();
+          String key = "aim:admin:error:orgexists";
+          String message = CategoryManagerUtil.translate(key,
+          request, "The organization name already exist");
+          ae.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.admin.orgExists", message));
+          saveErrors(request, ae);
+          return mapping.findForward("forward");
+        }
+        if ("create".equals(action)){
           DbUtil.add(ampOrg);
+        }
         else {
           DbUtil.updateOrg(ampOrg);
         }

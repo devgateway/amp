@@ -320,7 +320,7 @@
 											<digi:trn key="aim:contributions">Contributions</digi:trn>
 										</td>
 										<td valign="top" vAlign="center"  width="25%" align ="center" class="textalb" height="20" bgcolor="#006699">
-											<digi:trn key="aim:costs">Costs</digi:trn>
+											<digi:trn key="aim:means">Means</digi:trn>
 										</td>
 										<td valign="top" vAlign="center"  width="25%" align ="center" class="textalb" height="20" bgcolor="#006699">
 											<digi:trn key="aim:assumptions">Assumptions</digi:trn>
@@ -334,6 +334,16 @@
 									<tr>
 										<td valign="top" bgcolor="#ffffff" width="25%"  style="border:1px solid #CCC;">
 												<c:out default="" value="${euActivity.name}"/>
+												<c:if test="${euActivity.inputs != null}">
+												<br/>
+												<table bgcolor="#F6F6F6" style="border:1px solid #DDDDDD;">
+													<tr>
+														<td>
+															<c:out default="" value="${euActivity.inputs }" />
+														</td>
+													</tr>
+												</table>
+												</c:if>
 										</td>
 										<td valign="top" bgcolor="#ffffff" width="25%"  style="border:1px solid #CCC;">
 												<bean:write name="euActivity" property="totalContributionsConverted" format="###,###,###"/>

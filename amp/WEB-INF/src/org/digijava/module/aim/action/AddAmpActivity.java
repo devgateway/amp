@@ -1327,7 +1327,7 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
             	allCosts+=euAct.getTotalCostConverted();
             }
             eaForm.setAllCosts(new Double(allCosts));
-            if (!eaForm.getIndicatorsME().isEmpty())
+            if ((eaForm.getIndicatorsME() != null) && (!eaForm.getIndicatorsME().isEmpty()))
               eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
             return mapping.findForward("previewLogframe");
           }

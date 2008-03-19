@@ -804,7 +804,7 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimTeamReportsForm" path="/aim/deleteAllReports" scope="session" type="org.digijava.module.aim.action.DeleteAllReports" validate="false">
-      <forward name="forward" path="/aim/viewTeamReports.do" />
+      <forward name="forward" path="/aim/viewTeamReports.do" redirect="true" />
     </action>
     <action input="/showLayout.do?layout=teamActivities" name="aimTeamActivitiesForm" path="/aim/updateTeamActivity" scope="session" type="org.digijava.module.aim.action.UpdateTeamActivities" validate="false">
       <forward name="showAddActivity" path="/showLayout.do?layout=addTeamActivities" />

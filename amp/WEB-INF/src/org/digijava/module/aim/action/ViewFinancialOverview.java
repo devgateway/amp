@@ -147,8 +147,15 @@ public class ViewFinancialOverview extends TilesAction {
 					formBean.setReportingDate(tempDateStore);
 					if (logger.isDebugEnabled())
 						logger.debug("comments : " + ampFunding.getComments());
+					
+					if(ampFunding.getComments() != null){
 					formBean.setComments(ampFunding.getComments());
+					}
+					
+					if(ampFunding.getConditions() != null){
 					formBean.setConditions(ampFunding.getConditions().trim());
+					}
+					
 					if (logger.isDebugEnabled())
 						logger.debug("last audit date : "
 								+ ampFunding.getLastAuditDate());

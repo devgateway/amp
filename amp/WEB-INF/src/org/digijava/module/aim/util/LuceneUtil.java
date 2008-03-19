@@ -164,7 +164,7 @@ public class LuceneUtil {
 				//
 			}
 
-			qryStr = "select * from v_amp_id" ;
+			qryStr = "select * from v_ampid" ;
 			rs = st.executeQuery(qryStr);
 			rs.last();
 			logger.info("Starting iteration of " + rs.getRow() + " project id's!");

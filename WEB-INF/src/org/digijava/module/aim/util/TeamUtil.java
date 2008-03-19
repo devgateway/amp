@@ -1829,7 +1829,7 @@ public class TeamUtil {
      * @author Dare
      */
 
-    public static List getAllTeamReports(Long teamId, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId) {
+    public synchronized static List getAllTeamReports(Long teamId, Integer currentPage, Integer reportPerPage, Boolean inlcludeMemberReport, Long memberId) {
     
     	   Session session = null;
            List col = new ArrayList();

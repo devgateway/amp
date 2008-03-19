@@ -1046,7 +1046,7 @@ public class SaveActivity extends Action {
 							eaForm.getRegionalFundings().clear();	
 				 	      }
 					 }
-				}else if (eaForm.getSelectedLocs().size() == 0){
+				}else if (eaForm.getSelectedLocs()==null || eaForm.getSelectedLocs().size() == 0){
 					eaForm.getRegionalFundings().clear();
 				}
 				

@@ -1021,6 +1021,7 @@ public class SaveActivity extends Action {
 							ampLoc.setDescription(new String(" "));
 							DbUtil.add(ampLoc);
 						}
+						
 						//AMP-2250
 						AmpActivityLocation actLoc=new AmpActivityLocation();
 						actLoc.setActivity(activity);//activity);
@@ -1037,6 +1038,18 @@ public class SaveActivity extends Action {
 					}
 					activity.setLocations(locations);
 				}
+				if(eaForm.getSelectedLocs() != null && eaForm.getSelectedLocs().size() == 1){
+					Iterator<Location> itr = eaForm.getSelectedLocs().iterator();
+					while (itr.hasNext()) {
+						Location loc = itr.next();
+						if(loc.getRegion().equals("")){
+							eaForm.getRegionalFundings().clear();	
+				 	      }
+					 }
+				}else if (eaForm.getSelectedLocs().size() == 0){
+					eaForm.getRegionalFundings().clear();
+				}
+				
 
 				if(eaForm.getCosts()!=null && eaForm.getCosts().size()>0) {
 					Set costs=new HashSet();

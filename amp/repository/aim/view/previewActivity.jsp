@@ -912,37 +912,7 @@ function collapseAll() {
 	                                        <td valign="top" nowrap="nowrap" bgcolor="#f4f4f2"></td>
 	                                        <td bgcolor="#ffffff" ><c:out value="${aimEditActivityForm.statusReason}"/></td>
                                         </tr>
-                                    </field:display>
-
-                                    <field:display name="Credit Type" feature="Planning">
-                                        <tr>
-	                                        <td align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2"  class="t-name" >
-												<digi:trn key="aim:type_of_credit">Type of Credit</digi:trn>                                       	      
-											</td>
-	                                        <td bgcolor="#FFFFFF">
-	                                        	<category:getoptionvalue categoryValueId="${aimEditActivityForm.creditTypeId}"/>
-	                                        </td>                                        
-                                        </tr>
-                                    </field:display>
-                                    
-                                    <field:display name="Credit/Donation" feature="Planning">
-                                        <tr>
-	                                        <td align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2"  class="t-name" >
-												<digi:trn key="aim:credit_donation">Credit/Donation</digi:trn>                                       	      
-											</td>
-	                                        <td bgcolor="#FFFFFF">
-	                                        	<c:set var="creditTypeId">
-	                                        		<category:getoptionvalue categoryValueId="${aimEditActivityForm.creditTypeId}"/>
-	                                        	</c:set>
-	                                        	<c:if test="${creditTypeId == 'Comercial' || creditTypeId == 'Concesional'}">
-	                                        		<digi:trn key="aim:preview_credit">CREDITO</digi:trn>	                                        		 
-	                                        	</c:if>
-												<c:if test="${creditTypeId == 'Donación'}">
-													<digi:trn key="aim:preview_donation">DONACIÓN</digi:trn>	                                        		
-	                                        	</c:if>
-	                                        </td>                                        
-                                        </tr>
-                                    </field:display>                                    
+                                    </field:display>                                   
                                    
 								<feature:display name="References" module="References">
 									<tr>
@@ -1201,6 +1171,23 @@ function collapseAll() {
                                                                                     <bean:write name="funding"	property="financingInstrument.value"/>
                                                                                   </logic:notEmpty>                                                                                </td>
                                                                               </tr>
+                                                                              <tr>
+                                                                                <td bgcolor="#FFFFFF" align="left" width="150">
+                                                                                  <a title="<digi:trn key="aim:financialInst">Financial Instrument</digi:trn>">
+                                                                                 	 <digi:trn key="aim:credit_donation">Credit/Donation</digi:trn>
+																				  </a>                                                                                </td>
+                                                                                <td width="1">:</td>
+                                                                                <td bgcolor="#FFFFFF" align="left">
+	                                                                                <c:set var="creditTypeId">
+										                                        		<bean:write name="funding"	property="financingInstrument.value"/>
+										                                        	</c:set>
+										                                        	<c:if test="${creditTypeId == 'Comercial' || creditTypeId == 'Concesional'}">
+										                                        		<digi:trn key="aim:preview_credit">Credito</digi:trn>	                                        		 
+										                                        	</c:if>
+																					<c:if test="${creditTypeId == 'Donación'}">
+																						<digi:trn key="aim:preview_donation">Donación</digi:trn>	                                        		
+										                                        	</c:if>                                                                               </td>
+                                                                              </tr>                                                                              
 																			</field:display>
 				                                                            </table>                                          </td>
                                                                         </tr>

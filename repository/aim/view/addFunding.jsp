@@ -726,15 +726,12 @@
 								</feature:display>
 								&nbsp;	
 								</td>
-                                                                <td align="center" valign="middle">&nbsp;
+                                                                <td align="center" valign="middle" colspan="2">&nbsp;
 
 									<b><font color="white"><digi:trn key="aim:DisbursementOrderContractId">Contract ID</digi:trn></font></b>
 								</td>
 
-                                                                <td align="center" valign="middle">&nbsp;
-
-									
-								</td>
+                                                               
                                                                  
 
 							</tr>
@@ -798,12 +795,12 @@
                                                                                                 </field:display>
 											</td>
 
-                                                                                        <td>
+                                             <td>
                                                                                         <field:display name="Disbursement Order Number" feature="Disbursement Orders">
 												<html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
                                                                                                   </field:display>
 											</td>
-                                                                                            <td>
+                                             <td align="center">
                                                                                         <field:display name="Disbursement Order Contract ID" feature="Disbursement Orders">
                                                                                               <c:if test="${empty fundingDetail.contract}">
                                                                                             
@@ -814,8 +811,8 @@
 												<input type="text" value="${fundingDetail.contract.contractName}" readonly="true"/>
                                                                                              </c:if>
                                                                                             </field:display>
-											</td>
-                                            <td>
+												</td>
+												<td>
                                                <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
 
 											</td>
@@ -902,12 +899,14 @@
 									</logic:equal>
 								</td>
                                
-                                                                 <td align="center" valign="middle" colspan="3" >
+                                                                 <td align="center" valign="middle" >
                                                                  <feature:display module="Funding" name="Disbursement Orders">
                                                                 <b><font color="white"><digi:trn key="aim:DisbursementOrderIDFIE">Disbursement Order ID</digi:trn></font></b>
                                                                 </feature:display>
                                                                 </td>
-
+									<td align="center" valign="middle" colspan="2">&nbsp;
+										<b><font color="white"><digi:trn key="aim:DisbursementOrderContractId">Contract ID</digi:trn></font></b>
+									</td>
 
 
 							</tr>
@@ -969,7 +968,7 @@
 												</logic:equal>
 											</td>
 
-  											<td valign="bottom">
+  											<td valign="bottom" align="center">
 												<html:select name="fundingDetail" indexed="true" property="disbOrderId" styleClass="inp-text">
 													<html:option value="">&nbsp;</html:option>
 		   										    <c:forEach var="funding" items="${aimEditActivityForm.fundingDetails}">
@@ -986,7 +985,26 @@
                                             <td>
 	                                            <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
 											</td>
-											 --->        
+											 --->     
+											 
+											 <td align="center">
+                                                                                        <field:display name="Disbursement Order Contract ID" feature="Disbursement Orders">
+                                                                                              <c:if test="${empty fundingDetail.contract}">
+                                                                                            
+												<input type="text" value="" readonly="true"/>
+                                                                                             </c:if>
+                                                                                            <c:if test="${not empty fundingDetail.contract}">
+                                                                                            
+												<input type="text" value="${fundingDetail.contract.contractName}" readonly="true"/>
+                                                                                             </c:if>
+                                                                                            </field:display>
+											</td>
+                                            <td>
+                                               <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+
+											</td>
+											 
+											    
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
 												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
@@ -1049,7 +1067,7 @@
 													</html:select>
 												</logic:equal>
 											</td>
-  											<td valign="bottom">
+  											<td valign="bottom" align="center">
 												<html:select name="fundingDetail" indexed="true" property="disbOrderId" styleClass="inp-text">
 													<html:option value="">&nbsp;</html:option>
 		   										    <c:forEach var="funding" items="${aimEditActivityForm.fundingDetails}">
@@ -1068,6 +1086,24 @@
 	                                            <input type="submit" value="<digi:trn key='aim:LinkDisbOrder'>Link to Disbursement Order</digi:trn>" onclick='return addDisbOrderToDisb("${fundingDetail.indexId}")'/>
 											</td>
 											 -->        
+											 
+											 <td align="center">
+                                                                                        <field:display name="Disbursement Order Contract ID" feature="Disbursement Orders">
+                                                                                              <c:if test="${empty fundingDetail.contract}">
+                                                                                            
+												<input type="text" value="" readonly="true"/>
+                                                                                             </c:if>
+                                                                                            <c:if test="${not empty fundingDetail.contract}">
+                                                                                            
+												<input type="text" value="${fundingDetail.contract.contractName}" readonly="true"/>
+                                                                                             </c:if>
+                                                                                            </field:display>
+											</td>
+                                            <td>
+                                               <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+
+											</td>
+											 
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
 												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>

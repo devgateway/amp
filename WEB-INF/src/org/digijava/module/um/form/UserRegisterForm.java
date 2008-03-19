@@ -478,11 +478,12 @@ public class UserRegisterForm
                 }*/
         
         
-        if ( (this.getFirstNames() == null) ||
+        	if ( (this.getFirstNames() == null) ||
                 this.getFirstNames().trim().length() == 0) {
-                ActionError error = new ActionError(
+        		this.setFirstNames("");
+                /*ActionError error = new ActionError(
                     "error.registration.FirstNameBlank");
-                errors.add(null, error);
+                errors.add(null, error);*/
             }
             if ( (this.getLastName() == null) ||
                 this.getLastName().trim().length() == 0) {

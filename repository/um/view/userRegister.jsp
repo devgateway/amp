@@ -28,8 +28,8 @@
           <TD colSpan=2 td>
             <TABLE cellSpacing=1 cellPadding=2 width="95%" border=0>
           <TR bgColor=#f0f0f0>
-            <TD class=text noWrap align=left>&nbsp;<FONT
-                  color=red>*</FONT><digi:trn key="um:firstName">First Name</digi:trn></TD>
+            <TD class=text noWrap align=left>&nbsp;
+            	<digi:trn key="um:firstName">First Name</digi:trn></TD>
             <TD class=text noWrap align=left><html:text  property="firstNames" size="50" /></TD>
           </TR>
           <TR bgColor=#f0f0f0>

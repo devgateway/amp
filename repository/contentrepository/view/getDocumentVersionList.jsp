@@ -33,9 +33,6 @@
 							<tr>
 								<td>
 									 <bean:write name="documentData" property="versionNumber" />
-									 <c:if test="${documentData.isPublic}">
-									 	<font color="blue">*</font>
-									 </c:if>
 								</td>
 								<td>
 									<digi:img skipBody="true" src="${documentData.iconPath}" border="0" alt="${ documentData.contentType }" align="absmiddle"/>
@@ -56,6 +53,9 @@
 										</a>
 									</c:otherwise>	
 									 </c:choose>
+									  <c:if test="${documentData.isPublic}">
+									 	<font size="3px" color="blue">*</font>
+									 </c:if>
 								</td>
 								<td>
 									<bean:write name="documentData" property="calendar" />

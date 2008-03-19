@@ -603,6 +603,9 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
                                							</div>
 
 			                              			</td>
+                                                    
+                                                     <feature:display module="Funding" name="Disbursement orders">
+                                                    
                                                                             <field:display name="Disbursement Orders Tab" feature="Disbursement Orders">
 
                                                                         <td bgcolor="#DDDDDB">
@@ -615,10 +618,10 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
                                							</div>
 
-			                              			</td>
-                                                                        </field:display>
+			                              				</td>
+                                                  	</field:display>
 
-
+												 </feature:display>
                   			            			<td bgcolor="#DDDDDB">
 
          			         		        				<div align="center">
@@ -712,23 +715,23 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 																			<div align="right">
 
 																				<bean:write name="quarterlyComparison" property="actualCommitment" />
-
 																			</div>
 
 																		</td>
+                                                                                                                                              
+                                                                                                                                              <feature:display module="Funding" name="Disbursement orders">
                                                                                                                                                 <td bgcolor="#F8F8F5">
                                                                                                                                                 <field:display name="Actual Disbursement Orders" feature="Disbursement Orders">
 
 																			<div align="right">
 
 																				<bean:write name="quarterlyComparison" property="actualDisbOrder" />
-
 																			</div>
                                                                                                                                                             </field:display >
 
 
 																		</td>
-
+</feature:display>
 
 
 																		<td bgcolor="#F8F8F5">
@@ -736,7 +739,6 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 																			<div align="right">
 
 																				<bean:write name="quarterlyComparison" property="plannedDisbursement" />
-
 																			</div>
 
 																		</td>
@@ -746,7 +748,6 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 																			<div align="right">
 
 																				<bean:write name="quarterlyComparison" property="actualDisbursement" />
-
 																			</div>
 
 																		</td>
@@ -756,7 +757,6 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 																			<div align="right">
 
 																				<bean:write name="quarterlyComparison" property="actualExpenditure" />
-
 																			</div>
 
 																		</td>

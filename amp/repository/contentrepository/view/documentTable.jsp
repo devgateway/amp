@@ -115,7 +115,7 @@
 								</c:set>
 								<logic:equal name="documentData" property="hasVersioningRights" value="true">
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="plus<bean:write name='documentData' property='uuid' />"
-								onClick="setType('version'); configPanel(0,'<%=documentData.getTitle() %>','<%=documentData.getDescription() %>','<%=documentData.getUuid() %>', ${isUrl});showMyPanel(0, 'addDocumentDiv');"
+								onClick="setType('version'); configPanel(0,'<%=documentData.getTitle() %>','<%=documentData.getDescription() %>', '<%=documentData.getCmDocType() %>' ,'<%=documentData.getUuid() %>', ${isUrl});showMyPanel(0, 'addDocumentDiv');"
 								title="${translation}"><img src= "/repository/contentrepository/view/images/update.gif" border=0></a>
 								
 								</logic:equal>

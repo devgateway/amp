@@ -1455,10 +1455,11 @@ public class TeamMemberUtil {
 			session = PersistenceManager.getSession();
 
 			// get the team leader of the team
-			String queryString = "select t.teamLead.ampTeamMemId from " + AmpTeam.class.getName() +
-				" t where (t.ampTeamId=:id)";
+			String queryString = "select t.ampTeamMemId from " + AmpTeamMember.class.getName() +
+				" t where (t.ampTeam=:teamid AND t.ampMemberRole=:roleid)";
 			qry = session.createQuery(queryString);
-			qry.setParameter("id", teamId, Hibernate.LONG);
+			qry.setParameter("teamid", teamId, Hibernate.LONG);
+			qry.setParameter("roleid", 1, Hibernate.INTEGER);
 			Iterator itr = qry.list().iterator();
 			Long id = new Long(-1);
 			if (itr.hasNext()) {

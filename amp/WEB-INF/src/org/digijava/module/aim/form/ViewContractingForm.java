@@ -19,7 +19,14 @@ public class ViewContractingForm extends ActionForm {
 	
 	private Long ampActivityId;
 	private String tabIndex;
+	private String currCode;
 	
+	public String getCurrCode() {
+		return currCode;
+	}
+	public void setCurrCode(String currCode) {
+		this.currCode = currCode;
+	}
 	/**
 	 * @return Returns the contracts.
 	 */

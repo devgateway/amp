@@ -273,6 +273,18 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             
                                                                                         </tr>	
                                                                                          </field:display>
+                                                                                         <field:display name="Contract Validity" feature="Contracting">
+                                                                                        
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:contractValidityDate">Contract Validity Date</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                 ${contract.formattedContractValidity}
+                                                                                            </td>
+                                                                                            
+                                                                                        </tr>	
+                                                                                         </field:display>
                                                                                         <field:display name="Contract Name" feature="Contracting">
                                                                                          <tr>
                                                                                             <td align="left">
@@ -314,7 +326,17 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             </td>
                                                                                         </tr>
                                                                                          </field:display>
-                                                                                        
+                                                                                        <field:display name="Total Amount" feature="Contracting">
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:ipa:popup:totalAmount">Total Amount</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                 ${contract.totalAmount}
+                                                                                                ${contract.totalAmountCurrency} 
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                         </field:display>
                                                                                         <field:display name="Total EC Contribution" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left" colspan="2">
@@ -402,6 +424,34 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             </td>
                                                                                         </tr>
                                                                                          </field:display>
+                                                                                         
+                                                                                    <field:display name="Total Disbursements of Contract" feature="Contracting">
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:totalDisbursements">Total Disbursements</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                            									${contract.totalDisbursements} &nbsp;
+                                                            									<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
+                                                            										&nbsp; ${aimEditActivityForm.currCode}
+                                                            									</logic:empty>
+                                                            									<logic:notEmpty name="contract" property="dibusrsementsGlobalCurrency">
+                                                            										&nbsp; ${contract.dibusrsementsGlobalCurrency}
+                                                            									</logic:notEmpty>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </field:display>    
+                                                                                    <field:display name="Contract Execution Rate" feature="Contracting">
+                                                                                        <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:contractExecutionRate">Contract Execution Rate</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                            										&nbsp; ${contract.executionRate}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </field:display>    
+                                                                                         
                                                                                         <field:display name="Disbursements" feature="Contracting">
                                                                                         <tr>
                                                                                     

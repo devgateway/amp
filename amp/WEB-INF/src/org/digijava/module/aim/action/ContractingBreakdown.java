@@ -5,20 +5,30 @@
 
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.IPAContract;
+import org.digijava.module.aim.dbentity.IPAContractDisbursement;
+import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.ViewContractingForm;
+import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
+
 
 /**
  *
@@ -32,9 +42,23 @@ public class ContractingBreakdown extends TilesAction {
 	
 		logger.debug("In get Contracting list action");
 		
-	
+			HttpSession session = request.getSession();
+			TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 			ViewContractingForm contrForm =(ViewContractingForm) form;
-			
+
+		      if (tm != null && tm.getAppSettings() != null && tm.getAppSettings()
+		          .getCurrencyId() != null) {
+		              String currCode="";
+		              AmpCurrency curr=CurrencyUtil.
+		                  getAmpcurrency(
+		                      tm.getAppSettings()
+		                      .getCurrencyId());
+		              if(curr!=null){
+		                      currCode = curr.getCurrencyCode();
+		              }
+		              contrForm.setCurrCode(currCode);
+		      }
+		      
 			Long actId = null;
 			
 				contrForm.setTabIndex(request.getParameter("tabIndex"));
@@ -47,9 +71,64 @@ public class ContractingBreakdown extends TilesAction {
 			
 			
 			
-			List contracts = ActivityUtil.getIPAContracts(actId);
+			List<IPAContract> contracts = ActivityUtil.getIPAContracts(actId);
+			ArrayList<IPAContract> newContracts=new ArrayList<IPAContract>();
+			for(Iterator<IPAContract> it= contracts.iterator(); it.hasNext();)
+			{
+				IPAContract contract=(IPAContract) it.next();
+				
+				if (contract.getDisbursements() != null) {
+		             ArrayList<IPAContractDisbursement> disbs = new ArrayList<IPAContractDisbursement>(contract.getDisbursements());
+		             
+		             //if there is no disbursement global currency saved in db we'll use the default from edit activity form
+		             String cc=contrForm.getCurrCode();
+		            if(contract.getDibusrsementsGlobalCurrency()!=null)
+		         	   cc=contract.getDibusrsementsGlobalCurrency().getCurrencyCode();
+		            double td=0;
+		            double usdAmount=0;  
+		    		double finalAmount=0; 
 
-			contrForm.setContracts(contracts);
+		    		   for(Iterator<IPAContractDisbursement> j=disbs.iterator();j.hasNext();)
+		       	  	{
+		       		  IPAContractDisbursement cd=(IPAContractDisbursement) j.next();
+		       		  // converting the amount to the currency from the top and adding to the final sum.
+		       		  if(cd.getAmount()!=null)
+		       			  {
+		       			  	try {
+								usdAmount = CurrencyWorker.convertToUSD(cd.getAmount().doubleValue(),cd.getCurrCode());
+							} catch (AimException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+		       			  	try {
+								finalAmount = CurrencyWorker.convertFromUSD(usdAmount,cc);
+							} catch (AimException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+		       			  	td+=finalAmount;
+		       			  }
+		       	  	}
+		       	  	
+		       	  	//eaf.getCurrCode();
+		    		   
+		       	  	contract.setTotalDisbursements(td);
+				}
+				
+				 if(contract.getTotalAmount()!=null)
+			   	  	{
+			   	  		double amountRate=contract.getTotalDisbursements().doubleValue()/contract.getTotalAmount().doubleValue();
+			   	  		contract.setExecutionRate(amountRate);
+			   	  	System.out.println("2 execution rate: "+amountRate);
+			   	  	}
+			   	  	else {
+			   	  		contract.setExecutionRate(new Double(0));
+			   	  	}
+				
+				newContracts.add(contract);
+			}
+
+			contrForm.setContracts(newContracts);
 			
 			return null;
 			

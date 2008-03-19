@@ -20,9 +20,13 @@ public class IPAContract implements Serializable {
     private AmpCategoryValue activityCategory;
     private Date startOfTendering;
     private Date signatureOfContract;
+    private Date contractValidity;
     private Date contractCompletion;
     private Double totalECContribIBAmount;
     private AmpCurrency totalECContribIBCurrency;
+    private Double totalAmount;
+    private AmpCurrency totalAmountCurrency;
+    private AmpCurrency dibusrsementsGlobalCurrency;
     private Double totalECContribINVAmount;
     private AmpCurrency totalECContribINVCurrency;
     private Double totalNationalContribCentralAmount;
@@ -37,6 +41,8 @@ public class IPAContract implements Serializable {
     private AmpActivity activity;
     private AmpOrganisation organization;
     private AmpCategoryValue status;
+    private Double totalDisbursements;
+    private Double executionRate;
     private AmpCategoryValue type;
 
     public AmpCategoryValue getType() {
@@ -112,6 +118,20 @@ public class IPAContract implements Serializable {
         return formatted;
     }
 
+    public String getFormattedContractValidity() {
+        String formatted = "";
+        try {
+            if (contractValidity != null) {
+                formatted = DateTimeUtil.parseDateForPicker2(contractValidity);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(IPAContract.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return formatted;
+
+    }
+
     public String getFormattedSignatureOfContract() {
         String formatted = "";
         try {
@@ -125,7 +145,7 @@ public class IPAContract implements Serializable {
         return formatted;
 
     }
-
+    
     public String getFormattedContractCompletion() {
         String formatted = "";
         try {
@@ -277,4 +297,53 @@ public class IPAContract implements Serializable {
             AmpCurrency totalPrivateContribCurrency) {
         this.totalPrivateContribCurrency = totalPrivateContribCurrency;
     }
+
+	public Date getContractValidity() {
+		return contractValidity;
+	}
+
+	public void setContractValidity(Date contractValidity) {
+		this.contractValidity = contractValidity;
+	}
+
+	public Double getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(Double totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public AmpCurrency getTotalAmountCurrency() {
+		return totalAmountCurrency;
+	}
+
+	public void setTotalAmountCurrency(AmpCurrency totalAmountCurrency) {
+		this.totalAmountCurrency = totalAmountCurrency;
+	}
+
+	public Double getTotalDisbursements() {
+		return totalDisbursements;
+	}
+
+	public void setTotalDisbursements(Double totalDisbursements) {
+		this.totalDisbursements = totalDisbursements;
+	}
+
+	public Double getExecutionRate() {
+		return executionRate;
+	}
+
+	public void setExecutionRate(Double executionRate) {
+		this.executionRate = executionRate;
+	}
+
+	public AmpCurrency getDibusrsementsGlobalCurrency() {
+		return dibusrsementsGlobalCurrency;
+	}
+
+	public void setDibusrsementsGlobalCurrency(
+			AmpCurrency dibusrsementsGlobalCurrency) {
+		this.dibusrsementsGlobalCurrency = dibusrsementsGlobalCurrency;
+	}
 }

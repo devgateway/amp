@@ -770,9 +770,14 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                     oldContract.setActivityCategory(contract.getActivityCategory());
                     oldContract.setStartOfTendering(contract.getStartOfTendering());
                     oldContract.setSignatureOfContract(contract.getSignatureOfContract());
+                    oldContract.setContractValidity(contract.getContractValidity());
                     oldContract.setContractCompletion(contract.getContractCompletion());
                     oldContract.setTotalECContribIBAmount(contract.getTotalECContribIBAmount());
                     oldContract.setTotalECContribIBCurrency(contract.getTotalECContribIBCurrency());
+                    oldContract.setTotalAmount(contract.getTotalAmount());
+                    oldContract.setTotalAmountCurrency(contract.getTotalAmountCurrency());
+                    oldContract.setDibusrsementsGlobalCurrency(contract.getDibusrsementsGlobalCurrency());
+                    oldContract.setExecutionRate(contract.getExecutionRate());
                     oldContract.setTotalECContribINVAmount(contract.getTotalECContribINVAmount());
                     oldContract.setTotalECContribINVCurrency(contract.getTotalECContribINVCurrency());
                     oldContract.setTotalNationalContribCentralAmount(contract.getTotalNationalContribCentralAmount());
@@ -2372,6 +2377,19 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       Query qry = session.createQuery(queryString);
       qry.setLong("activityId",activityId );
       contrcats = qry.list();
+      ArrayList<IPAContract> fullContracts=new ArrayList<IPAContract>();
+      for(Iterator i=contrcats.iterator();i.hasNext();)
+      {
+    	  IPAContract c=(IPAContract) i.next();
+    	  double td=0;
+    	  for(Iterator j=c.getDisbursements().iterator();j.hasNext();)
+    	  {
+    		  IPAContractDisbursement cd=(IPAContractDisbursement) j.next();
+    		  if(cd.getAmount()!=null)
+    			  td+=cd.getAmount().doubleValue();
+    	  }
+    	  c.setTotalDisbursements(new Double(td));
+      }
     }
      
     catch (Exception ex) {
@@ -2382,6 +2400,65 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     
     return  contrcats ;
   } 
+/**
+ * @author dan
+ * @return
+ */
+  
+  public static List getIPAContracts(Long activityId, String currCode) {
+	    Session session = null;
+	    List<IPAContract> contrcats = null;
+
+	    try {
+	      session = PersistenceManager.getRequestDBSession();
+
+	     
+	      String queryString = "select con from " + IPAContract.class.getName()
+	          + " con " + "where (con.activity=:activityId)";
+	      Query qry = session.createQuery(queryString);
+	      qry.setLong("activityId",activityId );
+	      contrcats = qry.list();
+	      String cc=currCode;
+          
+          double usdAmount;  
+  		   double finalAmount; 
+
+	      for(Iterator i=contrcats.iterator();i.hasNext();)
+	      {
+	    	  IPAContract c=(IPAContract) i.next();
+	    	  if(c.getDibusrsementsGlobalCurrency()!=null)
+	          	   cc=c.getDibusrsementsGlobalCurrency().getCurrencyCode();
+	    	  double td=0;
+	    	  for(Iterator j=c.getDisbursements().iterator();j.hasNext();)
+	    	  {
+	    		  IPAContractDisbursement cd=(IPAContractDisbursement) j.next();
+	    		  if(cd.getAmount()!=null)
+     			  {
+     			  	usdAmount = CurrencyWorker.convertToUSD(cd.getAmount().doubleValue(),cd.getCurrCode());
+     			  	finalAmount = CurrencyWorker.convertFromUSD(usdAmount,cc);
+     			  	td+=finalAmount;
+     			  }
+	    	  }
+	    	  c.setTotalDisbursements(new Double(td));
+	    	  if(c.getTotalAmount()!=null)
+	    	  {
+	    		  double execRate=c.getTotalDisbursements()/c.getTotalAmount().doubleValue();
+	    		  System.out.println("1 execution rate: "+execRate);
+	    		  c.setExecutionRate(execRate);
+	    	  }
+	    	  else c.setExecutionRate(new Double(0));
+	    	  
+	      }
+	    }
+	     
+	    catch (Exception ex) {
+	      logger
+	          .error("Unable to get IPAContracts :"
+	                 + ex);
+	    }
+	    
+	    return  contrcats ;
+	  } 
 
   /*
    * get the list of all the activities

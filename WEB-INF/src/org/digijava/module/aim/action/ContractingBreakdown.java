@@ -73,15 +73,17 @@ public class ContractingBreakdown extends TilesAction {
 			
 			List<IPAContract> contracts = ActivityUtil.getIPAContracts(actId);
 			ArrayList<IPAContract> newContracts=new ArrayList<IPAContract>();
+			String cc=contrForm.getCurrCode();
 			for(Iterator<IPAContract> it= contracts.iterator(); it.hasNext();)
 			{
 				IPAContract contract=(IPAContract) it.next();
-				
+				double usdAmount1=0;  
+	    		double finalAmount1=0; 
 				if (contract.getDisbursements() != null) {
 		             ArrayList<IPAContractDisbursement> disbs = new ArrayList<IPAContractDisbursement>(contract.getDisbursements());
 		             
 		             //if there is no disbursement global currency saved in db we'll use the default from edit activity form
-		             String cc=contrForm.getCurrCode();
+		             
 		            if(contract.getDibusrsementsGlobalCurrency()!=null)
 		         	   cc=contract.getDibusrsementsGlobalCurrency().getCurrencyCode();
 		            double td=0;
@@ -117,7 +119,20 @@ public class ContractingBreakdown extends TilesAction {
 				
 				 if(contract.getTotalAmount()!=null)
 			   	  	{
-			   	  		double amountRate=contract.getTotalDisbursements().doubleValue()/contract.getTotalAmount().doubleValue();
+					 try {
+							usdAmount1 = CurrencyWorker.convertToUSD(contract.getTotalAmount().doubleValue(),contract.getTotalAmountCurrency().getCurrencyCode());
+						} catch (AimException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+	       			  	try {
+							finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
+						} catch (AimException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}	
+					 
+					 double amountRate=contract.getTotalDisbursements().doubleValue()/finalAmount1;
 			   	  		contract.setExecutionRate(amountRate);
 			   	  	System.out.println("2 execution rate: "+amountRate);
 			   	  	}

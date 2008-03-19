@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/fmt" prefix="fmt" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/colorPicker.js"/>"></script>
 
@@ -23,8 +24,22 @@ function saveEventType(id) {
 }
 
 function setDeleteId(id) {
-  var txt="<digi:trn key="calendar:deletingEventType">Are you sure about deleting event type?</digi:trn>"
-  var quertion=window.confirm(txt);
+   <c:set var="message">
+	<digi:trn key="calendar:deletingEventType">Are you sure about deleting event type?</digi:trn>						
+    </c:set>
+    <c:set var="msg">
+	${fn:replace(message,'\\n',' ')}
+    </c:set>
+    
+    
+    
+    <c:set var="quote">'</c:set>
+    <c:set var="escapedQuote">\'</c:set>
+    <c:set var="deletemsg">
+	${fn:replace(msg,quote,escapedQuote)}
+    </c:set>
+
+  var quertion=window.confirm('${deletemsg}');
   if(!quertion){
     return false;
   }

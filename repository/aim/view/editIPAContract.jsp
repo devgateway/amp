@@ -181,11 +181,25 @@ function selectOrganisation1() {
 <field:display name="Signature of Contract" feature="Contracting">
 		<tr>
 		<td align="right"  nowrap>
-		<b><digi:trn key="aim:IPA:popup:signatureOfContract">Signature of Contract:</digi:trn></b>
+		<b><digi:trn key="aim:IPA:popup:signatureOfContract">Signature of Contract</digi:trn>:</b>
 		</td>
 		<td>
 			<html:text readonly="true" property="signatureOfContract" styleClass="inp-text" styleId="signatureOfContract"/>
                            <a id="signatureOfContractDate" href='javascript:pickDateById("signatureOfContractDate","signatureOfContract")'>
+								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                          </a>
+			</td>
+		
+	</tr>	
+         </field:display>
+         <field:display name="Contract Validity Date" feature="Contracting">
+		<tr>
+		<td align="right"  nowrap>
+		<b><digi:trn key="aim:IPA:popup:contractValidityDate">Contract Validity Date</digi:trn>:</b>
+		</td>
+		<td>
+			<html:text readonly="true" property="contractValidity" styleClass="inp-text" styleId="contractValidity"/>
+                           <a id="contractValidityDate" href='javascript:pickDateById("contractValidityDate","contractValidity")'>
 								<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
                           </a>
 			</td>
@@ -240,8 +254,20 @@ function selectOrganisation1() {
         </td>
 	</tr>	
          </field:display>
-         
-        
+    <field:display name="Total Amount" feature="Contracting">
+		<tr>
+		<td align="right"  nowrap>
+		<b><digi:trn key="aim:ipa:popup:totalAmount">Total Amount</digi:trn>:</b>
+		</td>
+		<td>
+			<html:text property="totalAmount" style="text-align:right" onkeyup="fnChk(this)"/>
+			<html:select property="totalAmountCurrency" styleClass="inp-text">
+			<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
+			<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
+			</html:select>
+		</td>
+		</tr>
+     </field:display>
 	<field:display name="Total EC Contribution" feature="Contracting">
 
 		<tr>
@@ -262,8 +288,8 @@ function selectOrganisation1() {
 			<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
 			</html:select>
 		</td>
-	</tr>
-         </field:display>
+		</tr>
+     </field:display>
 <field:display name="INV" feature="Contracting">
 		<tr>
 		<td align="right"  nowrap>
@@ -354,6 +380,19 @@ function selectOrganisation1() {
 
 </field:display>
 
+ <field:display name="Disbursements Global Currency" feature="Contracting">
+		<tr>
+		<td align="right"  nowrap>
+		<b><digi:trn key="aim:ipa:popup:dibusrsementsGlobalCurrency">Disbursements Global Currency</digi:trn>:</b>
+		</td>
+		<td>
+			<html:select property="dibusrsementsGlobalCurrency" styleClass="inp-text">
+			<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
+			<html:optionsCollection name="aimIPAContractForm" property="currencies" value="ampCurrencyId" label="currencyName"/>
+			</html:select>
+		</td>
+		</tr>
+     </field:display>
 <field:display name="Disbursements" feature="Contracting">
 	<tr>
 		<td>&nbsp;</td>

@@ -116,7 +116,7 @@
 			<put-item name="tabBody" module="aim" instance="default" teaser="costsBreakdown"/>
 	 	</layout>
                 
-                <layout name="layoutViewIPAContracting" extends="tabLayout">
+        <layout name="layoutViewIPAContracting" extends="tabLayout">
 			<put name="title">Activity - IPA Contracting </put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="contractingBreakdown"/>
 	 	</layout>

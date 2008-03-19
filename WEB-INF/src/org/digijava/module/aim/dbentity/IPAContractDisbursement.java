@@ -45,7 +45,7 @@ public class IPAContractDisbursement implements Serializable {
         
          public void setDisbDate(String date){
         try {
-            this.date = DateTimeUtil.parseDateForPicker(date);
+            if(date!=null && "".compareTo(date)!=0) this.date = DateTimeUtil.parseDateForPicker(date);
         } catch (Exception ex) {
             Logger.getLogger(IPAContractDisbursement.class.getName()).log(Level.SEVERE, null, ex);
         }

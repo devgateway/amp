@@ -40,11 +40,16 @@
 		<property name="startOfTendering" column="start_of_tendering" type="java.util.Date" />
 		
 		<property name="signatureOfContract" column="signature_of_contract" type="java.util.Date" />
+		<property name="contractValidity" column="contract_validity" type="java.util.Date" />
 		<property name="contractCompletion" column="contract_completion" type="java.util.Date" />		
 				
 		<property name="totalECContribIBAmount" column="total_ec_contrib_ib_amount" type="java.lang.Double" />		
-		<many-to-one name="totalECContribIBCurrency" column="total_ec_contrib_ib_currency" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>		
-
+		<many-to-one name="totalECContribIBCurrency" column="total_ec_contrib_ib_currency" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>
+		
+		<property name="totalAmount" column="total_amount" type="java.lang.Double" />		
+		<many-to-one name="totalAmountCurrency" column="total_amount_currency" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>		
+		<many-to-one name="dibusrsementsGlobalCurrency" column="disbursements_global_currency" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>
+		
 		<property name="totalECContribINVAmount" column="total_ec_contrib_inv_amount" type="java.lang.Double" />		
 		<many-to-one name="totalECContribINVCurrency" column="total_ec_contrib_inv_currency" class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>		
 

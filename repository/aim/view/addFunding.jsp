@@ -815,9 +815,8 @@
                                                                                              </c:if>
                                                                                             </field:display>
 											</td>
-
-                                                                                        <td>
-                                                                                        <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
+                                            <td>
+                                               <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
 
 											</td>
 											<td>
@@ -902,6 +901,7 @@
 										<b><font color="white"><digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn></font></b></a>
 									</logic:equal>
 								</td>
+                               
                                                                  <td align="center" valign="middle" colspan="3" >
                                                                  <feature:display module="Funding" name="Disbursement Orders">
                                                                 <b><font color="white"><digi:trn key="aim:DisbursementOrderIDFIE">Disbursement Order ID</digi:trn></font></b>

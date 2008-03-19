@@ -72,10 +72,15 @@ public class IPAContractForm extends ActionForm  {
 	private String startOfTendering;
 	
 	private String signatureOfContract;
+	private String contractValidity;
 	private String contractCompletion;
 	
 	private String totalECContribIBAmount;
 	private Long totalECContribIBCurrency;
+	
+	private String totalAmount;
+	private Long totalAmountCurrency;
+	private Long dibusrsementsGlobalCurrency;
 	
 	private String totalECContribINVAmount;
 	private Long totalECContribINVCurrency;
@@ -91,6 +96,8 @@ public class IPAContractForm extends ActionForm  {
 	
 	private String totalPrivateContribAmount;
 	private Long totalPrivateContribCurrency;
+	private Double totalDisbursements;
+    private Double executionRate;
 	
 	private List disbursements;
         private List<AmpOrganisation> organisations;
@@ -349,6 +356,11 @@ public class IPAContractForm extends ActionForm  {
 
             totalECContribIBAmount = null;
             totalECContribIBCurrency = null;
+            
+            totalAmount = null;
+            totalAmountCurrency = null;
+            dibusrsementsGlobalCurrency=null;
+            executionRate=null;
 
             totalECContribINVAmount = null;
             totalECContribINVCurrency = null;
@@ -376,6 +388,54 @@ public class IPAContractForm extends ActionForm  {
 	
             
         }
+
+		public String getContractValidity() {
+			return contractValidity;
+		}
+
+		public void setContractValidity(String contractValidity) {
+			this.contractValidity = contractValidity;
+		}
+
+		public String getTotalAmount() {
+			return totalAmount;
+		}
+
+		public void setTotalAmount(String totalAmount) {
+			this.totalAmount = totalAmount;
+		}
+
+		public Long getTotalAmountCurrency() {
+			return totalAmountCurrency;
+		}
+
+		public void setTotalAmountCurrency(Long totalAmountCurrency) {
+			this.totalAmountCurrency = totalAmountCurrency;
+		}
+
+		public Long getDibusrsementsGlobalCurrency() {
+			return dibusrsementsGlobalCurrency;
+		}
+
+		public void setDibusrsementsGlobalCurrency(Long dibusrsementsGlobalCurrency) {
+			this.dibusrsementsGlobalCurrency = dibusrsementsGlobalCurrency;
+		}
+
+		public Double getTotalDisbursements() {
+			return totalDisbursements;
+		}
+
+		public void setTotalDisbursements(Double totalDisbursements) {
+			this.totalDisbursements = totalDisbursements;
+		}
+
+		public Double getExecutionRate() {
+			return executionRate;
+		}
+
+		public void setExecutionRate(Double executionRate) {
+			this.executionRate = executionRate;
+		}
 
 
 }

@@ -764,7 +764,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 																								</digi:trn>
 																							</field:display>
-                                                                                                                                                                                        </logic:equal>
+                                                                                           </logic:equal>
 																						</td>
                                                                                       </tr>
                                                                                     </c:if>
@@ -841,7 +841,8 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                               </tr>
                                                                               <tr bgcolor="#ffffff">
                                                                                 <td colspan="5">
-                                                                                  <a title="<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>"><b> <digi:trn key="aim:disbursements">			Disbursements </digi:trn></b>
+                                                                                  <a title="<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>">
+                                                                                  <b> <digi:trn key="aim:disbursements">			Disbursements </digi:trn></b>
 																				</a>
                                                                                 </td>
                                                                               </tr>
@@ -881,16 +882,16 @@ ${fn:replace(message,quote,escapedQuote)}
 																									<bean:write name="fundingDetail" property="transactionDate"/>
 																								</field:display>
 																							</td>
-																							<td>
-                                                                                                                                                                                        <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																							<td>aaaaaaaaa
+                                                                                             <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 																								<field:display name="Perspective Disbursement" feature="Funding Organizations">
    																								<digi:trn key='<%="aim:"+fundingDetail.getPerspectiveNameTrimmed() %>'>
 																									<bean:write name="fundingDetail" property="perspectiveName"/>
 																								</digi:trn>
 																								</field:display>
-                                                                                                                                                                                                </logic:equal>
+                                                                                             </logic:equal>
 																							</td>
-																						</tr>
+																																													</tr>
 																						</c:if>
 
 																						<c:if test="${aimEditActivityForm.donorFlag == false}">
@@ -920,14 +921,22 @@ ${fn:replace(message,quote,escapedQuote)}
 																								</field:display>
 																							</td>
 																							<td>
-                                                                                                                                                                                        <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																							
+																							<field:display name="Contract of Disbursement Order" feature="Disbursement Orders">
+                                                                                             	 <c:if test="${not empty fundingDetail.contract}">
+		                                                                                     		${fundingDetail.contract.contractName}
+                                                                                                   </c:if>
+	                                                                                    		</field:display>
+																							
+                                                                                               <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 																								<field:display name="Perspective Disbursement" feature="Funding Organizations">
 																								<digi:trn key='<%="aim:"+fundingDetail.getPerspectiveNameTrimmed() %>'>
 																									<bean:write name="fundingDetail" property="perspectiveName"/>
 																								</digi:trn>
-																								</field:display>
+																							   </field:display>
                                                                                                                                                                                                 </logic:equal>
 																							</td>
+																							
 																						</tr>
 																						</c:if>
 																						<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
@@ -956,14 +965,20 @@ ${fn:replace(message,quote,escapedQuote)}
 																								</field:display>
 																							</td>
 																							<td>
-                                                                                                                                                                                        <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
+																							 	<field:display name="Contract of Disbursement Order" feature="Disbursement Orders">
+                                                                                             	 <c:if test="${not empty fundingDetail.contract}">
+		                                                                                     		${fundingDetail.contract.contractName}
+                                                                                                   </c:if>
+	                                                                                    		</field:display>
+                                                                                               <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 																								<field:display name="Perspective Disbursement" feature="Funding Organizations">
 																								<digi:trn key='<%="aim:"+fundingDetail.getPerspectiveNameTrimmed() %>'>
 																									<bean:write name="fundingDetail" property="perspectiveName"/>
 																								</digi:trn>
 																								</field:display>
-                                                                                                                                                                                                </logic:equal>
+                                                                                              </logic:equal>
 																							</td>
+																							
 																						</tr>
 																						</c:if>
 																						</c:if>

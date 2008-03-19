@@ -285,7 +285,7 @@ function checkUncheckAll2() {
 												<field:display name="Implementation Level" feature="Location">&nbsp;</field:display>
 											<field:display name="Actual Completion Date" feature="Planning">&nbsp;</field:display>
 											<field:display name="Sector" feature="Sectors">&nbsp;</field:display>
-											<field:display name="Componente" feature="Sectors">&nbsp;</field:display>											
+											<field:display name="Componente" feature="Planning">&nbsp;</field:display>											
 												<field:display name="Region" feature="Location">&nbsp;</field:display>
 											<field:display name="Financing Instrument" feature="Funding Organizations">&nbsp;</field:display>
 											<field:display name="Objective" feature="Identification">&nbsp;</field:display>

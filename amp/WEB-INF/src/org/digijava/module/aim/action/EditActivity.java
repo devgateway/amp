@@ -1200,11 +1200,13 @@ public class EditActivity
           eaForm.setFundingOrganizations(fundingOrgs);
           if(debug){
         	  eaForm.setTotalCommitments(totComm.getCalculations());
+        	  eaForm.setTotalCommitmentsDouble(totComm.getValue().doubleValue());
         	  eaForm.setTotalDisbursements(totDisb.getCalculations());
         	  eaForm.setTotalPlannedDisbursements(totPlanDisb.getCalculations());
         	  eaForm.setTotalExpenditures(totExp.getCalculations());  
           }
           else{
+        	  eaForm.setTotalCommitmentsDouble(totComm.getValue().doubleValue());
         	  eaForm.setTotalCommitments(totComm.toString());
         	  eaForm.setTotalDisbursements(totDisb.toString());
         	  eaForm.setTotalPlannedDisbursements(totPlanDisb.toString());

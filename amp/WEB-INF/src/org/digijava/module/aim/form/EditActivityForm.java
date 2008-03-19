@@ -108,6 +108,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String programDescription;
 	private boolean sectorReset;
 	private String totalCommitments;
+	private double totalCommitmentsDouble;
 	private String totalDisbursements;
 	private String totalExpenditures;
 	private String totalPlannedDisbursements;
@@ -5135,6 +5136,15 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setContractDetails(String contractDetails) {
 		this.contractDetails = contractDetails;
 	}
+
+	public double getTotalCommitmentsDouble() {
+		return totalCommitmentsDouble;
+	}
+
+	public void setTotalCommitmentsDouble(double totalCommitmentsDouble) {
+		this.totalCommitmentsDouble = totalCommitmentsDouble;
+	}
+
 
 }
 

@@ -59,7 +59,7 @@
 																		&nbsp;&nbsp;
 
 																		<font
-																		<c:if test="${aimEditActivityForm.totalCommitments < aimEditActivityForm.compTotalDisb }">
+																		<c:if test="${aimEditActivityForm.totalCommitmentsDouble < aimEditActivityForm.compTotalDisb }">
 																		 color="RED"
 																		</c:if>
 																		>

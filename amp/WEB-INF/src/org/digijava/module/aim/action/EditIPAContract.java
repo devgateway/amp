@@ -20,6 +20,7 @@ import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
+import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.IPAContractForm;
 import org.digijava.module.aim.helper.CategoryConstants;
@@ -194,16 +195,19 @@ public class EditIPAContract extends MultiAction {
         if (contract.getTotalPrivateContribCurrency() != null) {
             euaf.setTotalPrivateContribCurrency(contract.getTotalPrivateContribCurrency().getAmpCurrencyId());
         }
+        String cc=eaf.getCurrCode();
         if (contract.getDisbursements() != null) {
             ArrayList<IPAContractDisbursement> disbs = new ArrayList(contract.getDisbursements());
             
             //if there is no disbursement global currency saved in db we'll use the default from edit activity form
-            String cc=eaf.getCurrCode();
+            
            if(contract.getDibusrsementsGlobalCurrency()!=null)
         	   cc=contract.getDibusrsementsGlobalCurrency().getCurrencyCode();
            double td=0;
-           double usdAmount;  
-   		   double finalAmount; 
+           double usdAmount=0;  
+   		   double finalAmount=0; 
+   		   
+
 
    		   for(Iterator j=disbs.iterator();j.hasNext();)
       	  	{
@@ -224,7 +228,24 @@ public class EditIPAContract extends MultiAction {
 
         if(contract.getTotalAmount()!=null)
    	  	{
-   	  		double amountRate=contract.getTotalDisbursements().doubleValue()/contract.getTotalAmount().doubleValue();
+        	double usdAmount1=0;  
+ 		   double finalAmount1=0; 
+        	try {
+				usdAmount1 = CurrencyWorker.convertToUSD(contract.getTotalAmount().doubleValue(),contract.getTotalAmountCurrency().getCurrencyCode());
+			} catch (AimException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			  	try {
+				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
+			} catch (AimException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		 
+		 double amountRate=contract.getTotalDisbursements().doubleValue()/finalAmount1;
+        	
+   	  		//double amountRate=contract.getTotalDisbursements().doubleValue()/contract.getTotalAmount().doubleValue();
    	  		contract.setExecutionRate(amountRate);
    	  		euaf.setExecutionRate(amountRate);
    	  	System.out.println("2 execution rate: "+amountRate);
@@ -497,12 +518,12 @@ public class EditIPAContract extends MultiAction {
         }
          
          
-         
+        String cc=eaf.getCurrCode();
          if (eua.getDisbursements() != null) {
              ArrayList<IPAContractDisbursement> disbs = new ArrayList(eua.getDisbursements());
              
              //if there is no disbursement global currency saved in db we'll use the default from edit activity form
-             String cc=eaf.getCurrCode();
+             
             if(eua.getDibusrsementsGlobalCurrency()!=null)
          	   cc=eua.getDibusrsementsGlobalCurrency().getCurrencyCode();
             double td=0;
@@ -530,7 +551,23 @@ public class EditIPAContract extends MultiAction {
          
          if(eua.getTotalAmount()!=null)
     	  	{
-    	  		double amountRate=eua.getTotalDisbursements().doubleValue()/eua.getTotalAmount().doubleValue();
+        	 double usdAmount1=0;  
+   		   double finalAmount1=0; 
+          	try {
+  				usdAmount1 = CurrencyWorker.convertToUSD(eua.getTotalAmount().doubleValue(),eua.getTotalAmountCurrency().getCurrencyCode());
+  			} catch (AimException e) {
+  				// TODO Auto-generated catch block
+  				e.printStackTrace();
+  			}
+  			  	try {
+  				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
+  			} catch (AimException e) {
+  				// TODO Auto-generated catch block
+  				e.printStackTrace();
+  			}	
+  		 
+  		 double amountRate=eua.getTotalDisbursements().doubleValue()/finalAmount1;	
+        	// double amountRate=eua.getTotalDisbursements().doubleValue()/eua.getTotalAmount().doubleValue();
     	  		eua.setExecutionRate(amountRate);
     	  		System.out.println("3 execution rate: "+amountRate);
     	  	}

@@ -68,6 +68,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IPAContractDisbursement;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -2442,7 +2443,22 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
 	    	  c.setTotalDisbursements(new Double(td));
 	    	  if(c.getTotalAmount()!=null)
 	    	  {
-	    		  double execRate=c.getTotalDisbursements()/c.getTotalAmount().doubleValue();
+	    		  double usdAmount1=0;  
+	      		   double finalAmount1=0; 
+	             	try {
+	     				usdAmount1 = CurrencyWorker.convertToUSD(c.getTotalAmount().doubleValue(),c.getTotalAmountCurrency().getCurrencyCode());
+	     			} catch (AimException e) {
+	     				// TODO Auto-generated catch block
+	     				e.printStackTrace();
+	     			}
+	     			  	try {
+	     				finalAmount1 = CurrencyWorker.convertFromUSD(usdAmount1,cc);
+	     			} catch (AimException e) {
+	     				// TODO Auto-generated catch block
+	     				e.printStackTrace();
+	     			}	
+	    		  
+	    		  double execRate=c.getTotalDisbursements()/finalAmount1;
 	    		  System.out.println("1 execution rate: "+execRate);
 	    		  c.setExecutionRate(execRate);
 	    	  }

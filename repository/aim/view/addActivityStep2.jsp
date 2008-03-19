@@ -621,7 +621,7 @@ function remProgram(programType) {
 			                            <feature:display name="Sectors" module="Project ID and Planning">
 			                            &nbsp;
 			                            </feature:display>			                          
-			                            	<field:display name="Componente" feature="Sectors">
+			                            	<field:display name="Componente" feature="Planning">
 			                            		<jsp:include page="addActivityStep2Componente.jsp"/>
 			                            	</field:display>	                            
 			                           

@@ -190,7 +190,7 @@
 
 					<td align=right class=f-names noWrap width="40%">
 
-						<FONT color=red>*</FONT>
+						<%-- <FONT color=red>*</FONT> --%>
 
 						<digi:trn key="um:firstName">First Name
 
@@ -372,7 +372,7 @@
 
 					<td align=right class=f-names noWrap>
 
-						<FONT color=red>*</FONT>
+						<%-- <FONT color=red>*</FONT> --%>
 
 						<digi:trn key="um:organizationType">Organization Type</digi:trn>
 
@@ -400,7 +400,7 @@
 
 					<td align=right class=f-names noWrap>
 
-						<FONT color=red>*</FONT>
+						<%-- <FONT color=red>*</FONT> --%>
 
 						<digi:trn key="um:organizationGroup">Organization Group</digi:trn>
 
@@ -434,7 +434,7 @@
 
 					<td align=right class=f-names noWrap>
 
-						<FONT color=red>*</FONT>
+						<%-- <FONT color=red>*</FONT> --%>	
 
 						<digi:trn key="um:organizationName">Organization Name
 

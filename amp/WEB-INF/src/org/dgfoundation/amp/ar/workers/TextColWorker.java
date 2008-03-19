@@ -42,6 +42,7 @@ public class TextColWorker extends ColumnWorker {
 		
 		TextCell ret=new TextCell(ownerId);
 		ret.setId(id);
+		value=(value!=null)?value.trim():"";
 		ret.setValue(value);
 		return ret;
 	}

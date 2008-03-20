@@ -65,6 +65,7 @@ import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.message.helper.AmpMessageWorker;
 import org.digijava.module.aim.helper.AmpProject;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Components;
@@ -1573,6 +1574,10 @@ public class SaveActivity extends Action {
 					//for logging the activity
 					AuditLoggerUtil.logObject(session, request,activity,"add");
 				}
+			}
+			//If we're adding an activity, create system/admin message
+			if(!eaForm.isEditAct()) {
+				AmpMessageWorker.createAmpMessageForActivityCreation(actId, tm.getTeamId());
 			}
 
             if(DocumentUtil.isDMEnabled()) {

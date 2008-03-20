@@ -87,6 +87,15 @@
 						  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
 						  				<digi:trn key="aim:commitments">COMMITMENTS</digi:trn>
 						  			</digi:link> | 
+						  			<field:display feature="Disbursement Orders" name="Disbursement Orders Tab">
+                                        <c:set target="${urlSubTabs}" property="transactionType" value="4"/>
+					<c:set var="translation">
+						<digi:trn key="aim:clickToViewDisbursementOrders">Click here to view Disbursement Orders</digi:trn>
+					</c:set>
+					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+					<digi:trn key="aim:disbursementOrdersTab">DISBURSEMENT ORDERS</digi:trn>
+					</digi:link>|
+                                        </field:display>
 						  			<c:set target="${urlSubTabs}" property="transactionType" value="1"/>
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewDisbursements">Click here to view Disbursements</digi:trn>
@@ -103,22 +112,25 @@
 					  				<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
 					  					<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 					  				</digi:link> | 
-						</feature:display>
-					<c:set var="translation">
-						<digi:trn key="aim:clickToViewYearlyComparisons">Click here to view Yearly Comparisons</digi:trn>
-					</c:set>
-					  				<digi:link href="/viewYearlyComparisons.do" name="urlAll" styleClass="sub-nav2" title="${translation}" >
-										<digi:trn key="aim:all">ALL</digi:trn>
-									</digi:link>|
+						</feature:display>					
 									<span class="sub-nav2-selected">
 					  					<digi:trn key="aim:discrepancy">DISCREPANCY</digi:trn>
 					  				</span>|
-					<c:set var="translation">
-						<digi:trn key="aim:clickToViewAllYearlyDiscrepancy">Click here to view All Yearly Discrepancy</digi:trn>
-					</c:set>
-					  				<digi:link href="/viewYearlyDiscrepancyAll.do" name="urlDiscrepancy" styleClass="sub-nav2" title="${translation}" >
+					  			 	
+								<!-- <c:set var="translation">
+									<digi:trn key="aim:clickToViewAllYearlyDiscrepancy">Click here to view All Yearly Discrepancy</digi:trn>
+								</c:set> -->
+					  				<!-- <digi:link href="/viewYearlyDiscrepancyAll.do" name="urlDiscrepancy" styleClass="sub-nav2" title="${translation}" >
 										<digi:trn key="aim:discrepancyAll">DISCREPANCY ALL</digi:trn>
-									</digi:link>| 
+									</digi:link> -->
+									 
+									<c:set var="translation">
+										<digi:trn key="aim:clickToViewYearlyComparisons">Click here to view Yearly Comparisons</digi:trn>
+									</c:set>
+					  				<digi:link href="/viewYearlyComparisons.do" name="urlAll" styleClass="sub-nav2" title="${translation}" >
+										<digi:trn key="aim:all">ALL</digi:trn>
+									</digi:link>
+									
 			    				</td>
 		    			  </tr>
 			    		</table>

@@ -131,7 +131,8 @@
 										<digi:link href="/viewFinancingBreakdown.do" name="urlFinancingBreakdown" styleClass="comment"
 										title="${translation}" >
 										<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
-										</digi:link> &gt; Overview
+										</digi:link> &gt; 
+										<digi:trn key="aim:overview">Overview</digi:trn>
 									</SPAN>
 								</TD>
 								<TD align="right">&nbsp;

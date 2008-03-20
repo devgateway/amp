@@ -302,8 +302,8 @@
 														<td>
 															<font color="blue">
 															<digi:trn key="aim:reportTeamSpecific">*T</digi:trn>
-															<digi:trn key="aim:teamReportListViewableByAll">
-																Indicates the report is viewable by all team members.
+															<digi:trn key="aim:teamReportListViewableByAllWorkspaceMembers">
+																Indicates the report is viewable by all workspace members.
 															</digi:trn>
 															</font>
 														</td>

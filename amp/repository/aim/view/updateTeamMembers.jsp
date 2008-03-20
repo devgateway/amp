@@ -46,7 +46,7 @@
 						<bean:write name="aimTeamMemberForm" property="teamId" />
 						</c:set>
 						<c:set var="clickToViewTeamMembers">
-						<digi:trn key="aim:clickToViewTeamMembers">Click here to view Team Members</digi:trn>
+						<digi:trn key="aim:clickToViewWorkspaceMembers">Click here to view Workspace Members</digi:trn>
 						</c:set>
 						<digi:link href="/teamMembers.do" name="urlParams" styleClass="comment" title="${clickToViewTeamMembers}" >
 						<digi:trn key="aim:members">

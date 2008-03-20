@@ -125,8 +125,8 @@
 												<table border="0" cellPadding=0 cellSpacing=0 width=117>
 													<tr bgColor=#f4f4f2>
 														<td bgColor=#c9c9c7 class=box-title width=100>
-															<digi:trn key="aim:teamMembers">
-															Team Members 
+															<digi:trn key="aim:workspaceMembers">
+															Workspace Members 
 															</digi:trn>
 														</td>
 														<td background="module/aim/images/corner-r.gif" height="17" width=17>

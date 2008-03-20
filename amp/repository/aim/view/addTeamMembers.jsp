@@ -65,8 +65,8 @@
 						Members
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:addTeamMember">
-							Add Team Member
+						<digi:trn key="aim:addWorkspaceMember">
+							Add Workspace Member
 						</digi:trn>	
 					</td>
 				</tr>

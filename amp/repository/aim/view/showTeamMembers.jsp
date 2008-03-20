@@ -80,7 +80,7 @@ function showUserProfile(id){
 													<logic:empty name="aimTeamMemberForm" property="teamMembers">
 														<tr bgcolor="#ffffff">
 															<td colspan="3" align="center">
-																<b>No team members present</b>
+																<b>No workspace members present</b>
 															</td>
 														</tr>
 													</logic:empty>

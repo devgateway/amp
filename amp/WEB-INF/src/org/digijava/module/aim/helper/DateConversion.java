@@ -68,52 +68,20 @@ public class DateConversion
 	 * @param String dd/mm/yyyy or d/mm/yyyy or dd/m/yyyy or d/m/yyyy
 	 * @return Date
 	 */
-	public static Date getDate(String strDate)
-	{
-		if (strDate == null)
-			return null;
-		try{
-			SimpleDateFormat formater=new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT);
-			if(strDate!=null && !strDate.equals("") && strDate.length() > 10 ){
-				Date date=DateTimeUtil.parseDate(strDate);     //apr/03/2006
-				strDate = formater.format(date);
-			}
+	public static Date getDate(String strDate) {
+	try {
+	    Date date = null;
+	    if (strDate != null && !strDate.equals("") && strDate.length() > 10) {
+		date = DateTimeUtil.parseDate(strDate);
 
+	    }
 
-			if (strDate.length() > 10 || strDate.length() < 8)
-				return null;
-
-/*			int index = 0,curr = 0;
-
-			index = strDate.indexOf('/', curr);
-			int day = Integer.parseInt(strDate.substring(curr, index));
-
-			curr = index + 1;
-			index = strDate.indexOf('/', curr);
-			int mon = Integer.parseInt(strDate.substring(curr, index));
-
-			curr = index + 1;
-			int yr = Integer.parseInt(strDate.substring(curr, strDate.length()));
-*/
-			// AMP-2828
-			//String pattern=null;
-			String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
-            if (pattern == null || pattern.equals("")) {
-                pattern = "MM/dd/yyyy";
-            }
-			pattern = pattern.replaceAll("m", "M");
-			Date date = new SimpleDateFormat(pattern).parse(strDate);
-			//GregorianCalendar gc = new GregorianCalendar(yr,mon-1,day) ;
-			/*if ( logger.isDebugEnabled() )
-				logger.debug("getDate returning date with year " + gc.get(Calendar.YEAR)
-						  + " month " + gc.get(Calendar.MONTH)
-						  + " day "  + gc.get(Calendar.DAY_OF_MONTH)) ; */
-			return date;//gc.getTime() ;
-		}catch(Exception ex){
-			throw new RuntimeException(ex);
-		}
-
+	    return date;
+	} catch (Exception ex) {
+	    throw new RuntimeException(ex);
 	}
+
+    }
 	
 	public static Date getDateForIndicator(String strDate){
 		if (strDate == null)

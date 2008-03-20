@@ -134,7 +134,7 @@
 													<jsp:include page="previewActivityFundingCommitments.jsp" />
 
 													<feature:display module="Funding"
-														name="Disbursement Orders">
+														name="Disbursement">
 														<jsp:include page="previewActivityFundingDisbursement.jsp" />
 													</feature:display>
 

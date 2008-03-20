@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS ENTITY="StrutsProcess">
+ <PROCESS-ITEM ENTITY="StrutsProcessItem" ID="#message#messageActions"
+  NAME="action0" PATH="/message/messageActions" SHAPE="32,17,0,0"
+  TITLE="messageForm" TYPE="action">
+  <PROCESS-ITEM-OUTPUT ENTITY="StrutsProcessItemOutput"
+   ID="addOrEditAmpMessage" NAME="forward0"
+   PATH="/showLayout.do?layout=ampMessageLayout" TARGET="action5"
+   TITLE="addOrEditAmpMessage" TYPE="forward"/>
+  <PROCESS-ITEM-OUTPUT ENTITY="StrutsProcessItemOutput" ID="viewMessage"
+   NAME="forward1" PATH="/showLayout.do?layout=viewSelectedMessage"
+   TARGET="action6" TITLE="viewMessage" TYPE="forward"/>
+  <PROCESS-ITEM-OUTPUT ENTITY="StrutsProcessItemOutput" ID="showAll"
+   NAME="forward2" PATH="/showLayout.do?layout=allMessagesLayout"
+   TARGET="action7" TITLE="showAll" TYPE="forward"/>
+  <PROCESS-ITEM-OUTPUT ENTITY="StrutsProcessItemOutput"
+   ID="viewMyDesktop" NAME="forward3" PATH="/aim/viewMyDesktop.do"
+   TARGET="action9" TITLE="viewMyDesktop" TYPE="forward"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ENTITY="StrutsProcessItem" ID="#message#getMessages"
+  NAME="action1" PATH="/message/getMessages" SHAPE="32,561,0,0"
+  TITLE="messageForm" TYPE="action"/>
+ <PROCESS-ITEM ENTITY="StrutsProcessItem" ID="#aim#viewMyDesktop"
+  NAME="action9" PATH="/aim/viewMyDesktop" SHAPE="288,465,0,0"
+  SUBTYPE="unknown" TYPE="action"/>
+ <PROCESS-ITEM ENTITY="StrutsProcessItem" ID="#showLayout"
+  NAME="action5" PATH="/showLayout" SHAPE="240,241,0,0"
+  SUBTYPE="unknown" TYPE="action"/>
+ <PROCESS-ITEM ENTITY="StrutsProcessItem" ID="#showLayout"
+  NAME="action6" PATH="/showLayout" SHAPE="448,129,0,0"
+  SUBTYPE="unknown" TYPE="action"/>
+ <PROCESS-ITEM ENTITY="StrutsProcessItem" ID="#showLayout"
+  NAME="action7" PATH="/showLayout" SHAPE="656,17,0,0" SUBTYPE="unknown" TYPE="action"/>
+</PROCESS>

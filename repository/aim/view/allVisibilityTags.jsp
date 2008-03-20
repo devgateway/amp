@@ -23,6 +23,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <module:display name="NATIONAL PLAN DASHBOARD"></module:display>
 <module:display name="HELP"></module:display>
 <module:display name="PARIS INDICATORS"></module:display>
+<module:display name="Messaging System"></module:display>
 
 <module:display name="Activity Levels" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Activity Costing" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -147,6 +148,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <feature:display module="Contracting" name="Contracting"></feature:display>
 
 <feature:display name="Measures" module="Reports"></feature:display>
+<feature:display name="Messages" module="Messaging System"></feature:display>
 
 <field:display  name="Remove Location" feature="Location"></field:display>
 <field:display feature="Donor Contact Information" name="Donor Email"></field:display>
@@ -525,6 +527,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Organization" feature="Sector Ministry Contact"></field:display>
 <field:display name="Phone Number" feature="Sector Ministry Contact"></field:display>
 <field:display name="Title" feature="Sector Ministry Contact"></field:display>
+<field:display name="addMessageButton" feature="Messages"></field:display>
 
 
 <logic:iterate id="ampMeasures"  name="list" scope="page" type="org.digijava.module.aim.dbentity.AmpMeasures">

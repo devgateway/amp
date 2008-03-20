@@ -12,6 +12,10 @@
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
 
 
 <HTML>
@@ -170,7 +174,13 @@
 													<digi:insert attribute="myLinks" />
 
 												</TD></TR>
-
+																							
+													<TR><TD vAlign="top" align="left">
+														<digi:insert attribute="myMessages"/>
+													</TD></TR>
+												
+											
+												
 												<TR><TD vAlign="top" align="left">
 
 													<digi:insert attribute="myTeamMembers" />

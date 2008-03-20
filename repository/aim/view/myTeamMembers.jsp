@@ -6,6 +6,10 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
 <script language="JavaScript">
 	function addActivity() {
 		//levelObj=document.getElementById('activityLevel');
@@ -18,6 +22,9 @@
 	
 	function teamWorkspaceSetup(a) {
 		window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";	
+	}
+	function addMessage(fillTypesAndLevels) {
+		window.location.href="/message/messageActions.do?editingMessage=false&actionType="+fillTypesAndLevels;
 	}
 </script>
 
@@ -91,6 +98,20 @@
             	         	<input type="button" class="dr-menu" onclick='return teamWorkspaceSetup("-1")' value="<digi:trn key="btn:teamWorkspaceSetup">Team Workspace Setup</digi:trn>" name="addActivity"/>
                 	     	</div><br/><br/>
 					</c:if>
+					<feature:display name="Messages" module="Messaging System">
+						<field:display name="addMessageButton" feature="Messages">
+							<c:set var="trn">
+								<digi:trn key="aim:clickToCreateMessage">Click here to Create Message</digi:trn>
+							</c:set>
+								<div title='${trn}' align="left">
+								<c:set var="trans">
+									<digi:trn key="btn:createMessage">add Message</digi:trn>
+								</c:set>
+		                     	<input type="button" class="dr-menu" onclick='return addMessage("fillTypesAndLevels")' value="${trans}" name="addMessage"/>
+		                     	</div><br/><br/>
+						</field:display>
+						
+					</feature:display>					
 			</TD>
 	</TR>
 </TABLE>

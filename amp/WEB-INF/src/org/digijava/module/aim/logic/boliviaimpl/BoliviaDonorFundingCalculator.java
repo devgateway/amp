@@ -63,4 +63,13 @@ public class BoliviaDonorFundingCalculator implements DonorFundingCalculator {
 	    return total;
         }
 
+	public DecimalWraper getTotalCommtiments(DecimalWraper planned,
+		DecimalWraper actual) {
+	    DecimalWraper total=new DecimalWraper();
+	    total.setValue(planned.getValue().add(actual.getValue()));
+	    total.setCalculations("plannned="+planned.getCalculations()+"+ actual =  "+actual.getCalculations());
+	    // TODO Auto-generated method stub
+	    return total;
+	}
+
 }

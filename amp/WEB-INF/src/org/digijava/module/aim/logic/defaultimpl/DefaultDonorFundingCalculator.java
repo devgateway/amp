@@ -45,6 +45,12 @@ public class DefaultDonorFundingCalculator implements DonorFundingCalculator {
 	return actual;
     }
 
+	public DecimalWraper getTotalCommtiments(DecimalWraper planned,
+		DecimalWraper actual) {
+	    // just return the actual
+	    return actual;
+	}
+
 
 }
 

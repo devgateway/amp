@@ -20,6 +20,7 @@ import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.aim.util.SectorUtil;
 
 public class SelectCreateIndicators extends Action {
 	private static Logger logger = Logger
@@ -63,6 +64,7 @@ public class SelectCreateIndicators extends Action {
 
 		indForm.setNondefaultindicators(nonDefActInd);
 		indForm.setActivityId(indForm.getActivityId());
+		indForm.setAllSectors(SectorUtil.getAllParentSectors());
 		if("true".equalsIgnoreCase(request.getParameter("addIndicatorForStep9"))){
 			session.setAttribute("forStep9","true");
 			return mapping.findForward("toAdditionOfIndiForStep9");

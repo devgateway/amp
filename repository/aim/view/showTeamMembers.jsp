@@ -170,7 +170,7 @@ function showUserProfile(id){
 													<bean:write name="aimTeamMemberForm" property="teamId" />
 												</c:set>
 												<c:set var="clickToAddTeamMember">
-												<digi:trn key="aim:clickToAddTeamMember">Click here to Add Team Member</digi:trn>
+												<digi:trn key="aim:clickToAddWorkspaceMember">Click here to Add Workspace Member</digi:trn>
 												</c:set>
 												<c:set target="${urlParams1}" property="fromPage" value="1"/>
 												<digi:link href="/showAddTeamMember.do" name="urlParams1" title="${clickToAddTeamMember}" >

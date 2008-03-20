@@ -90,18 +90,7 @@
 																				<tr>
 																					<td align="right"><digi:trn key="messages:description">description</digi:trn></td>
 																					<td align="left"> <html:textarea name="messageForm" property="description"  rows="2" cols="60"/></td>
-																				</tr>
-																				<!-- 
-																				<tr>
-																					<td align="right"><digi:trn key="aim:messagetype">Message type</digi:trn></td>
-																					<td align="left"> 
-																						<c:set var="translation">
-																							<digi:trn key="aim:SelectMessageType">Select Message Type</digi:trn>
-																						</c:set>
-									                                                	<category:showoptions firstLine="${translation}" name="aimMessageForm" property="messageType"  keyName="<%= org.digijava.module.aim.helper.MessageConstants.MESSAGE_TYPE_KEY %>" styleClass="inp-text" />																																										
-																					</td>
-																				</tr>
-																				-->
+																				</tr>																				
 																				<tr>
 																					<td align="right"><digi:trn key="message:priorityLevel">Priority Level</digi:trn></td>
 																					<td align="left"> 

@@ -71,17 +71,7 @@
 																				<tr>
 																					<td align="right"><b><digi:trn key="message:name">Message Name</digi:trn></b></td>
 																					<td align="left" >${messageForm.messageName}</td>
-																				</tr>
-																				<!-- 
-																					<tr>
-																					<td align="right"><digi:trn key="aim:messagetype">Message type</digi:trn></td>
-																					<td align="left">	
-																					<category:getoptionvalue categoryValueId="${aimMessageForm.messageType}"/>																				
-																																									
-																					</td>
-																				</tr>
-																				 -->
-																				
+																				</tr>																				
 																				<tr>
 																					<td align="right"><b><digi:trn key="message:description">description</digi:trn></b></td>
 																					<td align="left">${messageForm.description}</td>

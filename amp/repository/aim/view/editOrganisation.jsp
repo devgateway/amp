@@ -384,6 +384,12 @@ function loadPage()
 							   </digi:trn>
 							</b>
 						</logic:equal>
+						<logic:equal name="aimAddOrgForm" property="flag" value="orgNameExist">
+							<b><digi:trn key="aim:orgNameExistMsg"><font color="#FF0000">
+                               		Please choose other organization name as it is currently in use by some other organization !</font>
+							   </digi:trn>
+							</b>
+						</logic:equal>						
 					</td>
 				</tr>
 				<tr>

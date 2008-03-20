@@ -539,7 +539,7 @@ public class EditOrganisation
           if (org.isEmpty()) // To check for duplicate org-code
             ampOrg.setOrgCode(editForm.getOrgCode());
           else {
-            editForm.setFlag(" orgCodeExist");
+            editForm.setFlag("orgCodeExist");
             return mapping.findForward("forward");
           }
         }
@@ -763,12 +763,7 @@ public class EditOrganisation
                 	
         boolean exist= DbUtil.getOrganisationByName(ampOrg.getName())!=null;
         if (exist) {
-          ActionErrors ae = new ActionErrors();
-          String key = "aim:admin:error:orgexists";
-          String message = CategoryManagerUtil.translate(key,
-          request, "The organization name already exist");
-          ae.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.admin.orgExists", message));
-          saveErrors(request, ae);
+		  editForm.setFlag("orgNameExist");
           return mapping.findForward("forward");
         }
         if ("create".equals(action)){

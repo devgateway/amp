@@ -134,7 +134,7 @@ public class UpdateRoles extends Action {
 					ampRoles.setDeletePermission(new Boolean(false));
 				}
 				if ((urForm.getTeamHead() != null && urForm.getTeamHead().equals("on"))
-						|| urForm.getRole().equalsIgnoreCase("Team Leader")) {
+						|| urForm.getRole().equalsIgnoreCase("Workspace Manager")) {
 					ampRoles.setTeamHead(new Boolean(true));
 				} else {
 					ampRoles.setTeamHead(new Boolean(false));

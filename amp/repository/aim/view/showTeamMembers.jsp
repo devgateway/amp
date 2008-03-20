@@ -126,8 +126,8 @@ function showUserProfile(id){
 														</logic:iterate>
 														<tr bgcolor="#ffffff"><td colspan="3">
 															*
-															<digi:trn key="aim:teamLead">	
-															Team lead
+															<digi:trn key="aim:workspaceManager">	
+															Workspace Manager
 															</digi:trn>
 														</td></tr>
 													</logic:notEmpty>

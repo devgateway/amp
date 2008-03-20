@@ -40,7 +40,7 @@ public class GetDesktopTeamMembers extends TilesAction {
 					System.out.println("-------team leader"+tm.getMemberName());
 					session.setAttribute("teamHead", "true");
 				}
-				if("Team Leader".compareTo(tm.getRoleName())==0)
+				if("Workspace Manager".compareTo(tm.getRoleName())==0)
 					{
 						System.out.println("****team leader"+tm.getMemberName());
 						session.setAttribute("teamHead", "true");

@@ -168,8 +168,8 @@ function addTeamMember(id) {
 																<tr>	
 																	<td bgcolor="#f4f4f2" width="100">
 																		<b>
-																		<digi:trn key="aim:teamLeader">
-																		Team Leader</digi:trn></b>
+																		<digi:trn key="aim:workspaceManager">
+																		Workspace Manager</digi:trn></b>
 																	</td>
 																	<c:forEach var="mem" items="${aimTeamMemberForm.teamMembers}">
 																		<c:if test="${mem.teamHead == true}">

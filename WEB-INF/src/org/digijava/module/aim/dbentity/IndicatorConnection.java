@@ -8,7 +8,7 @@ import java.util.Set;
  * @author Irakli Kobiashvili
  *
  */
-public class IndicatorConnection implements Serializable{
+public class IndicatorConnection implements Serializable, Comparable<IndicatorTheme>{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -47,6 +47,14 @@ public class IndicatorConnection implements Serializable{
 
 	public void setValues(Set<AmpIndicatorValue> values) {
 		this.values = values;
+	}
+
+	/**
+	 * Compares by db IDs.
+	 */
+	@Override
+	public int compareTo(IndicatorTheme o) {
+		return getId().compareTo(o.getId());
 	}
 
 }

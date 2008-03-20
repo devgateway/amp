@@ -1,24 +1,28 @@
 package org.digijava.module.aim.helper;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpThemeIndicators;
+import org.digijava.module.aim.dbentity.IndicatorTheme;
 
-public class IndicatorGridRow implements Comparable{
+/**
+ * Represents one row on the NPD table view.
+ * @author Irakli Kobiashvili
+ * @see IndicatorGridItem
+ *
+ */
+public class IndicatorGridRow implements Comparable<IndicatorGridRow>{
 	private Long id;
 	private String name;
-	private List values;
+	private List<IndicatorGridItem> values;
 	
-	public IndicatorGridRow(AmpThemeIndicators ind,String[] years){
-		this.id = ind.getAmpThemeIndId();
-		this.name = ind.getName();
+	public IndicatorGridRow(IndicatorTheme connection,String[] years){
+		this.id = connection.getIndicator().getIndicatorId();
+		this.name = connection.getIndicator().getName();
 		if (years != null){
-			this.values = new ArrayList(years.length);
+			this.values = new ArrayList<IndicatorGridItem>(years.length);
 			for (int i = 0; i < years.length; i++) {
-				IndicatorGridItem item = new IndicatorGridItem(years[i],ind.getIndicatorValues());
+				IndicatorGridItem item = new IndicatorGridItem(years[i],connection.getValues());
 				this.values.add(i,item);
 			}
 		}
@@ -36,15 +40,14 @@ public class IndicatorGridRow implements Comparable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	public List getValues() {
+	public List<IndicatorGridItem> getValues() {
 		return values;
 	}
-	public void setValues(List values) {
+	public void setValues(List<IndicatorGridItem> values) {
 		this.values = values;
 	}
-	public int compareTo(Object obj) {
-		IndicatorGridRow other = (IndicatorGridRow) obj;
-		return this.id.compareTo(other.getId());
+	public int compareTo(IndicatorGridRow row) {
+		return this.id.compareTo(row.getId());
 	}
 
 }

@@ -31,6 +31,8 @@ public class ViewPortfolioDashboard extends TilesAction {
 	
 	public ActionForward execute(ComponentContext context,ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
+
+		logger.info("Start="+System.currentTimeMillis());
 		
 		try {
 		
@@ -46,10 +48,12 @@ public class ViewPortfolioDashboard extends TilesAction {
 			page = Integer.parseInt(request.getParameter("pge"));
 		}
 		
-		
-		Collection session_projects = DesktopUtil.getDesktopActivities(tm.getTeamId(),tm.getMemberId(),
-					tm.getTeamHead());
-			session.setAttribute(Constants.AMP_PROJECTS,session_projects);
+		logger.info("Before getDesktopActivities="+System.currentTimeMillis());
+		Collection session_projects=null;
+		//TODO INDIC temporary commented line below, to not slow us down.
+		//session_projects = DesktopUtil.getDesktopActivities(tm.getTeamId(),tm.getMemberId(),tm.getTeamHead());
+		logger.info("After getDesktopActivities="+System.currentTimeMillis());
+			//session.setAttribute(Constants.AMP_PROJECTS,session_projects);
 		
 		
 		if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
@@ -57,6 +61,7 @@ public class ViewPortfolioDashboard extends TilesAction {
 			ArrayList temp = (ArrayList) session.getAttribute(Constants.AMP_PROJECTS);
 			
 			ArrayList projects = new ArrayList();
+			logger.info("before iterating all activities="+System.currentTimeMillis());
 			for (int i = 0;i < temp.size();i ++) {
 				AmpProject tempP = (AmpProject) temp.get(i);
 				col.add(tempP.getAmpActivityId());
@@ -71,12 +76,16 @@ public class ViewPortfolioDashboard extends TilesAction {
 				}*/
 				projects.add(proj);
 			}
+			logger.info("after iterating all activities="+System.currentTimeMillis());
 			Collections.sort(projects);
+			logger.info("after sort="+System.currentTimeMillis());
 			
 			int overallRisk = MEIndicatorsUtil.getOverallPortfolioRisk(col);
+			logger.info("after overall risk="+System.currentTimeMillis());
 			
 			logger.info("Overall risk = " + overallRisk);
 			String risk = MEIndicatorsUtil.getRiskRatingName(overallRisk);
+			logger.info("after overall risk name="+System.currentTimeMillis());
 			
 			pdForm.set("overallRisk",risk);
 			pdForm.set("activityList",projects);
@@ -86,7 +95,9 @@ public class ViewPortfolioDashboard extends TilesAction {
 		}
 		 
 		//Collection col = MEIndicatorsUtil.getAllDefaultIndicators();
+		logger.info("before all default indicators="+System.currentTimeMillis());
 		Collection col = IndicatorUtil.getAllDefaultIndicators();
+		logger.info("after all default indicators="+System.currentTimeMillis());
 		Iterator itr = col.iterator();
 		while (itr.hasNext()) {
 			AmpIndicator meInd = (AmpIndicator) itr.next();
@@ -96,6 +107,7 @@ public class ViewPortfolioDashboard extends TilesAction {
 				meInd.setName(meInd.getName().substring(0,30) + "...");
 			}*/
 		}
+		logger.info("after all default indicators iteration="+System.currentTimeMillis());
 		pdForm.set("indicatorList",col);
 		
 		Long actId = (Long) pdForm.get("actId");
@@ -108,6 +120,7 @@ public class ViewPortfolioDashboard extends TilesAction {
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}
+		logger.info("End="+System.currentTimeMillis());
 		return null;
 	}
 }

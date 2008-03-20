@@ -2,10 +2,9 @@ package org.digijava.module.aim.helper;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Set;
 
-import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 
 /**
  * Indicator value helper bean.
@@ -21,6 +20,7 @@ public class IndicatorGridItem {
 	private String year;
 	private String actualValue = " - ";
 	private String targetValue = " - ";
+	private String baseValue = " - ";
 
 	/**
 	 * Constructs new object from set of indicator values
@@ -28,42 +28,49 @@ public class IndicatorGridItem {
 	 * @param values set of AmpThemeIndicatorValue beans
 	 * @see org.digijava.module.aim.dbentity.AmpThemeIndicatorValue
 	 */
-	public IndicatorGridItem(String year, Set values){
+	public IndicatorGridItem(String year, Set<AmpIndicatorValue> values){
 		this.year = year;
 		if (values != null && values.size() >0){
+			AmpIndicatorValue latestValue =null;
 			
-			AmpThemeIndicatorValue latestValue = null;
+			//AmpThemeIndicatorValue latestValue = null;
 			int yearValue=Integer.valueOf(this.year).intValue();
-			for (Iterator iter = values.iterator(); iter.hasNext();) {
-				AmpThemeIndicatorValue value = (AmpThemeIndicatorValue) iter.next();
-				//if this is target value
-				if (value.getValueType() == 0){
-					//currently there are no constraints ven vales are entered.
-					//this means that in theory we may have several target values.
-					this.targetValue = value.getValueAmount().toString();
-				}
-				//if this is actual value
-				if (value.getValueType() == 1){
-					Date creationDate = value.getCreationDate();
-					if (creationDate!=null){
-						//get creating year only
-						Calendar cal = Calendar.getInstance();
-						cal.setTime(creationDate);
-						int creationYear = cal.get(Calendar.YEAR);
-						//if this is the year we want
-						if (creationYear == yearValue){
-							// and latest Value is not set or current is the latest
-							if (latestValue == null || creationDate.compareTo(latestValue.getCreationDate()) >= 0){
-								//save latest cos we need latest
-								latestValue = value;
+			if (values!=null){
+				for (AmpIndicatorValue value : values) {
+					//if this is target value
+					if (value.getValueType() == 0){
+						//currently there are no constraints when vales are entered.
+						//this means that in theory we may have several target values.
+						this.targetValue = value.getValue().toString();
+					}
+					//if this is actual value
+					if (value.getValueType() == 1){
+						Date creationDate = value.getValueDate();
+						if (creationDate!=null){
+							//get creating year only
+							Calendar cal = Calendar.getInstance();
+							cal.setTime(creationDate);
+							int creationYear = cal.get(Calendar.YEAR);
+							//if this is the year we want
+							if (creationYear == yearValue){
+								// and latest Value is not set or current is the latest
+								if (latestValue == null || creationDate.compareTo(latestValue.getValueDate()) >= 0){
+									//save latest cos we need latest
+									latestValue = value;
+								}
 							}
 						}
 					}
+					//base value
+					if (value.getValueType() == 2){
+						this.baseValue=value.getValue().toString();
+					}
+					
 				}
 			}
 			
 			if (latestValue !=null){
-				this.actualValue = latestValue.getValueAmount().toString();
+				this.actualValue = latestValue.getValue().toString();
 			}
 		}
 	}
@@ -97,6 +104,14 @@ public class IndicatorGridItem {
 	}
 	public void setYear(String year) {
 		this.year = year;
+	}
+
+	public String getBaseValue() {
+		return baseValue;
+	}
+
+	public void setBaseValue(String baseValue) {
+		this.baseValue = baseValue;
 	}
 	
 }

@@ -3,10 +3,8 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,11 +24,13 @@ import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.view.xls.XLSExporter;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.AmpThemeIndicators;
+import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.form.NpdForm;
 import org.digijava.module.aim.helper.IndicatorGridItem;
 import org.digijava.module.aim.helper.IndicatorGridRow;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
 /**
@@ -51,7 +51,7 @@ public class ExportIndicators2XSLAction extends Action {
 				"inline; filename=AMPIndicatorsExport.xls");
 
 		AmpTheme mainProg = ProgramUtil.getThemeObject(npdForm.getProgramId());
-		Collection rows = getGridRows(mainProg, npdForm.getRecursive(), npdForm
+		Collection<IndicatorGridRow> rows = getGridRows(mainProg, npdForm.getRecursive(), npdForm
 				.getSelYears());
 
 		XLSExporter.resetStyles();
@@ -123,21 +123,21 @@ public class ExportIndicators2XSLAction extends Action {
 
 			// rows
 			if (rows != null && rows.size() > 0) {
-				for (Iterator iter = rows.iterator(); iter.hasNext();) {
+				for (IndicatorGridRow indic : rows) {
 					cellNum = 0;
-					IndicatorGridRow indic = (IndicatorGridRow) iter.next();
 
 					row = sheet.createRow(rowNum++);
 					cell = row.createCell(cellNum++);
 					cell.setCellValue(indic.getName());
 					
-					List values = indic.getValues();
-					for (Iterator valIter = values.iterator(); valIter.hasNext();) {
-						IndicatorGridItem item = (IndicatorGridItem) valIter.next();
-						cell = row.createCell(cellNum++);
-						cell.setCellValue(item.getActualValue());
-						cell = row.createCell(cellNum++);
-						cell.setCellValue(item.getTargetValue());
+					List<IndicatorGridItem> values = indic.getValues();
+					if (values!=null){
+						for (IndicatorGridItem item: values) {
+							cell = row.createCell(cellNum++);
+							cell.setCellValue(item.getActualValue());
+							cell = row.createCell(cellNum++);
+							cell.setCellValue(item.getTargetValue());
+						}
 					}
 				}
 			}
@@ -148,22 +148,20 @@ public class ExportIndicators2XSLAction extends Action {
 		return null;
 	}
 
-	private Collection getGridRows(AmpTheme prog, boolean recursive,
-			String[] years) {
-		List result = null;
+	private Collection<IndicatorGridRow> getGridRows(AmpTheme prog, boolean recursive,String[] years) throws DgException{
+		List<IndicatorGridRow> result = null;
 		if (prog != null && prog.getAmpThemeId() != null) {
-			Set indicators = getIndicators(prog, recursive);
+			//get all indicators and if recursive=true then all sub indicators too 
+			Set<IndicatorTheme> indicators = IndicatorUtil.getIndicators(prog, recursive);
 			if (indicators != null && indicators.size() > 0) {
-				List indicatorsList = new ArrayList(indicators);
-				Collections.sort(indicatorsList,
-						new ProgramUtil.IndicatorNameComparator());
-				result = new ArrayList(indicatorsList.size());
-				// npdForm.setIndicators(indicatorsList);
-				for (Iterator iter = indicatorsList.iterator(); iter.hasNext();) {
-					AmpThemeIndicators indicator = (AmpThemeIndicators) iter
-							.next();
-					IndicatorGridRow row = new IndicatorGridRow(indicator,
-							years);
+				//convert to list
+				List<IndicatorTheme> indicatorsList = new ArrayList<IndicatorTheme>(indicators);
+				//sort
+				Collections.sort(indicatorsList,new IndicatorUtil.IndThemeIndciatorNameComparator());
+				result = new ArrayList<IndicatorGridRow>(indicatorsList.size());
+				//create row object for each indicator connection
+				for (IndicatorTheme connection : indicatorsList) {
+					IndicatorGridRow row = new IndicatorGridRow(connection,years);
 					result.add(row);
 				}
 			}
@@ -171,24 +169,6 @@ public class ExportIndicators2XSLAction extends Action {
 		return result;
 	}
 
-	private Set getIndicators(AmpTheme prog, boolean childrenToo) {
-		Set indicators = new TreeSet();
-		if (prog.getIndicators() != null) {
-			indicators.addAll(prog.getIndicators());
-		}
-		if (childrenToo) {
-			Collection children = ProgramUtil.getAllSubThemes(prog
-					.getAmpThemeId());
-			if (children != null) {
-				for (Iterator iter = children.iterator(); iter.hasNext();) {
-					AmpTheme chid = (AmpTheme) iter.next();
-					Set subIndicators = getIndicators(chid, childrenToo);
-					indicators.addAll(subIndicators);
-				}
-			}
-		}
-		return indicators;
-	}
 
 	public static class IndicatorsByyear2XLS extends XLSExporter {
 

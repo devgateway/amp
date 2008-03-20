@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.ObjectNotFoundException;
@@ -115,8 +116,8 @@ public class IndicatorUtil {
 		Transaction tx=null;
 		try {
 			tx=session.beginTransaction();
-			indicator.getSectors().clear();
-			session.update(indicator);
+			//indicator.getSectors().clear();
+			//session.update(indicator);
 			session.delete(indicator);
 			tx.commit();
 		} catch (HibernateException e) {
@@ -134,6 +135,56 @@ public class IndicatorUtil {
 	}
 
 	/**
+	 * Recursively all indicators of the theme object.
+	 * If childrenToo parameter is true then all indicators assigned to all sub themes at all levels of the specified theme are also add to the results.
+	 * If this parameter is  false then only specified theme indicators are returned.
+	 * @param prog
+	 * @param childrenToo
+	 * @return
+	 * @throws DgException
+	 */
+	public static Set<IndicatorTheme> getIndicators(AmpTheme prog, boolean childrenToo) throws DgException{
+		Set<IndicatorTheme> indicators = new TreeSet<IndicatorTheme>();
+		if (prog.getIndicators() != null) {
+			indicators.addAll(prog.getIndicators());
+		}
+		if (childrenToo) {
+			Collection<AmpTheme> children = ProgramUtil.getSubThemes(prog.getAmpThemeId());
+			if (children != null) {
+				for (AmpTheme child : children) {
+					Set<IndicatorTheme> subIndicators = getIndicators(child, childrenToo);
+					indicators.addAll(subIndicators);
+				}
+			}
+		}
+		return indicators;
+	}
+
+
+	/**
+	 * Returns all connections objects for indicator.
+	 * connection objects are for both {@link AmpTheme} and {@link AmpActivity}
+	 * @param indicator
+	 * @return
+	 * @throws DgException
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<IndicatorConnection> getAllConnectionsOfIndicator(AmpIndicator indicator) throws DgException{
+		List<IndicatorConnection> result=null;
+		Long indicatorId=indicator.getIndicatorId();
+		Session session=PersistenceManager.getRequestDBSession();
+		String oql="from "+IndicatorConnection.class.getName()+" c where c.indicator.indicatorId=:indId";
+		try {
+			Query query=session.createQuery(oql);
+			query.setLong("indId", indicatorId);
+			result=query.list();
+		} catch (HibernateException e) {
+			throw new DgException("Cannot search connections for indicators",e);
+		}
+		return result;
+	}
+	
+	/**
 	 * Drops all connections of indicator to activities, themes and sectors.
 	 * Removing connection beans will cascade remove on indicator values too.
 	 * @param indicator
@@ -141,43 +192,13 @@ public class IndicatorUtil {
 	 */
 	public static void unAssigneIndicatorFromAll(AmpIndicator indicator)throws DgException{
 		Session session=PersistenceManager.getRequestDBSession();
-		Set sectors=indicator.getSectors();
 		Transaction tx=null;
 		try {
 			tx=session.beginTransaction();
-			//Indicator sectors.
-			if (sectors!=null && sectors.size()>0){
-				//start transaction if not started
-//				if (tx==null) tx=session.beginTransaction();
-				for (Iterator sectIter = sectors.iterator(); sectIter.hasNext();) {
-					AmpSector sector = (AmpSector) sectIter.next();
-					sector.getIndicators().remove(indicator);
-					session.update(sector);
-				}
-				indicator.getSectors().clear();
-			}
-			
-			//Indicator values for activities.
-			if (indicator.getValuesActivity()!=null){
-				//start transaction if not started
-//				if (tx==null) tx=session.beginTransaction();
-				//delete all connections to activities.
-				for (IndicatorActivity indicatorValues : indicator.getValuesActivity()) {
-					try {
-						session.delete(indicatorValues);
-					} catch (HibernateException e) {
-						e.printStackTrace();
-					}
-				}
-				indicator.getValuesActivity().clear();
-			}
 			
 			//Indicator values for themes.
 			if (indicator.getValuesTheme()!=null){
-				//start transaction if not started
-//				if (tx==null) tx=session.beginTransaction();
-				//delete all connections to themes.
-				for (IndicatorTheme indicatorValues : indicator.getValuesTheme()) {
+				for (IndicatorConnection indicatorValues : getAllConnectionsOfIndicator(indicator)) {
 					try {
 						session.delete(indicatorValues);
 					} catch (HibernateException e) {

@@ -80,14 +80,18 @@ function addNewIndicator(){
 				document.getElementById("hdnselActivitySectors").value = Sector;
 			}
 		} 
+		
+	<digi:context name="addInd" property="context/module/moduleinstance/addNewIndicator.do?action=add" />	
+	window.opener.location.href="<%=addInd%>";
+	window.close();	
 
-  <digi:context name="addInd" property="context/module/moduleinstance/addNewIndicator.do?action=add" />
-  document.forms[0].action="<%=addInd%>";
-  document.forms[0].submit();
+  
+  //document.forms[0].action="<%=addInd%>";
+  //document.forms[0].submit();
  // window.opener.location.reload(true);
-  window.opener.focus();
-  window.close();
-  window.opener.viewall();
+ // window.opener.focus();
+  //window.close();
+  //window.opener.viewall();
 }
 
 function addSectors() {

@@ -768,6 +768,7 @@
     <action name="aimIndicatorForm" path="/aim/addNewIndicatorTL" scope="request" type="org.digijava.module.aim.action.AddNewIndicatorTL" validate="false">
       <forward name="forward" path="/aim/getActivityIndicators.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
+      <forward name="toAdditionOfIndiForStep9" path="/showLayout.do?layout=aim_selectCreateIndicatorForStep9" />
     </action>
     <action name="aimEditActivityForm" path="/aim/nondetailedIndicator" scope="session" type="org.digijava.module.aim.action.GetActivityIndicatorValues" validate="false">
       <forward name="forward" path="/showLayout.do?layout=addActivityStep10" />

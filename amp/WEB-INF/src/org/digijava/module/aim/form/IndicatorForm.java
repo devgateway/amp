@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpSector;
 
 
 
@@ -34,6 +35,10 @@ public class IndicatorForm extends ActionForm implements Serializable
 	private String searchkey = null;
 	private String addswitch = null;
 	private boolean noSearchResult = false;
+	
+	private Collection <AmpSector> allSectors;
+	private String sectorName;
+	private String action ;
 	
 	private char ascendingInd;
 	
@@ -283,5 +288,29 @@ public class IndicatorForm extends ActionForm implements Serializable
 	 */
 	public void reset(ActionMapping arg0, HttpServletRequest arg1) {
 		defaultFlag = false;
+	}
+
+	public Collection<AmpSector> getAllSectors() {
+		return allSectors;
+	}
+
+	public void setAllSectors(Collection<AmpSector> allSectors) {
+		this.allSectors = allSectors;
+	}
+
+	public String getSectorName() {
+		return sectorName;
+	}
+
+	public void setSectorName(String sectorName) {
+		this.sectorName = sectorName;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
 	}
 }

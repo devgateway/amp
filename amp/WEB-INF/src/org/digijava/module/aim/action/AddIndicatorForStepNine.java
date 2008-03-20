@@ -31,15 +31,17 @@ private static Logger logger = Logger.getLogger(AddIndicatorForStepNine.class);
 		HttpSession session = request.getSession();
 		
 		
-		Collection colampMEIndValbox = (Collection)session.getAttribute("ampMEIndValbox");
+		Collection<AmpMEIndicatorValue> colampMEIndValbox = (Collection)session.getAttribute("ampMEIndValbox");
+		session.setAttribute("ampMEIndValbox",null);
 		String name=null,code=null;
 		Collection  tmpActivityIndicator = 	eaForm.getIndicatorsME();
 		if (tmpActivityIndicator==null){
 			tmpActivityIndicator=new HashSet();
 		}
+
 		
 	 if(colampMEIndValbox!=null && !colampMEIndValbox.isEmpty()){
-		Iterator itr = colampMEIndValbox.iterator();
+		Iterator<AmpMEIndicatorValue> itr = colampMEIndValbox.iterator();
 		while(itr.hasNext()){
 			AmpMEIndicatorValue tmpObj = (AmpMEIndicatorValue)itr.next();
 			ActivityIndicator actInd = new ActivityIndicator();

@@ -56,7 +56,8 @@ function pickColor(color) {
   if(objId!=null){
     document.getElementById(hexColor).value = color;
     var cl=document.getElementById(objId);
-    cl.setAttribute("style","width:25px;font-family:verdana;font-size:9pt;background:"+color+";");
+    cl.style.cssText ="width:25px;font-family:verdana;font-size:9pt;background:"+color+";";
+   
   }
 }
 

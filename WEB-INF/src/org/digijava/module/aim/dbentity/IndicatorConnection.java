@@ -52,7 +52,6 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
 	/**
 	 * Compares by db IDs.
 	 */
-	@Override
 	public int compareTo(IndicatorTheme o) {
 		return getId().compareTo(o.getId());
 	}

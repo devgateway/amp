@@ -91,6 +91,7 @@ import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.logic.Logic;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -1173,9 +1174,12 @@ public class EditActivity
           }
           //logger.info("size = " + fundingOrgs);
           eaForm.setFundingOrganizations(fundingOrgs);
+          //get the total depend of the 
+          DecimalWraper totalCommitments=Logic.getInstance().getTotalDonorFundingCalculator().getTotalCommtiments(totPlannedComm, totActualComm);
+          
           if(debug){
-        	  eaForm.setTotalCommitments(totActualComm.getCalculations());
-        	  eaForm.setTotalCommitmentsDouble(totActualComm.getValue().doubleValue());
+        	  eaForm.setTotalCommitments(totalCommitments.getCalculations());
+        	  eaForm.setTotalCommitmentsDouble(totalCommitments.getValue().doubleValue());
         	  
         	  eaForm.setTotalDisbursements(totActualDisb.getCalculations());
         	  eaForm.setTotalPlannedDisbursements(totPlanDisb.getCalculations());
@@ -1187,7 +1191,7 @@ public class EditActivity
           }
           else{
               	//actual
-      		  eaForm.setTotalCommitments(totActualComm.toString());
+      		  eaForm.setTotalCommitments(totalCommitments.toString());
         	  eaForm.setTotalDisbursements(totActualDisb.toString());
         	  eaForm.setTotalExpenditures(totActualExp.toString());
         	  eaForm.setTotalActualDisbursementsOrders(totActualDisbOrder.toString());

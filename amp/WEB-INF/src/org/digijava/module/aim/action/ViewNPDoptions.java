@@ -2,7 +2,6 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -15,8 +14,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.AmpThemeIndicators;
+import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.form.NpdForm;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
 /**
@@ -30,19 +30,18 @@ public class ViewNPDoptions extends Action {
 		NpdForm npdForm=(NpdForm)form;
 		Long pid=npdForm.getProgramId();
 		AmpTheme prog = ProgramUtil.getThemeObject(pid);
-		Set indicators=prog.getIndicators();
+		Set<IndicatorTheme> indicators=prog.getIndicators();
 		if (indicators != null && indicators.size()>0){
-			List sortedIndicators=new ArrayList(indicators);
-			Collections.sort(sortedIndicators,new ProgramUtil.IndicatorNameComparator());
-			List indicatorLVBs=new ArrayList(indicators.size());
-			for (Iterator indicIter = sortedIndicators.iterator(); indicIter.hasNext();) {
-				AmpThemeIndicators indicator = (AmpThemeIndicators) indicIter.next();
-				LabelValueBean lvb=new LabelValueBean(indicator.getName(),indicator.getAmpThemeIndId().toString());
+			List<IndicatorTheme> sortedIndicators=new ArrayList<IndicatorTheme>(indicators);
+			Collections.sort(sortedIndicators,new IndicatorUtil.IndThemeIndciatorNameComparator());
+			List<LabelValueBean> indicatorLVBs=new ArrayList<LabelValueBean>(indicators.size());
+			for (IndicatorTheme indicator : sortedIndicators) {
+				LabelValueBean lvb=new LabelValueBean(indicator.getIndicator().getName(),indicator.getIndicator().getIndicatorId().toString());
 				indicatorLVBs.add(lvb);
 			}
 			npdForm.setIndicators(indicatorLVBs);
 		}
-		npdForm.setYears(new ArrayList(ProgramUtil.getYearsBeanList()));
+		npdForm.setYears(new ArrayList<LabelValueBean>(ProgramUtil.getYearsBeanList()));
 		return mapping.findForward("forward");
 	}
 

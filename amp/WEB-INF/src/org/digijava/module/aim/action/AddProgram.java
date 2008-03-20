@@ -1,22 +1,23 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.ListIterator;
+
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.Action;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.struts.action.ActionForm;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.util.ProgramUtil;
-import java.util.ArrayList;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.List;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import java.util.Collection;
-import java.util.logging.Logger;
 
 public class AddProgram
     extends Action {
@@ -224,8 +225,7 @@ public class AddProgram
           prg = (AmpTheme) subPrgItr.next();
           if (selectedThemeId.equals(prg.getAmpThemeId().
                                      toString())) {
-            ArrayList subPrograms = getThenmes(Long.valueOf(
-                selectedThemeId));
+            List<AmpTheme> subPrograms = getThenmes(Long.valueOf(selectedThemeId));
             if (subPrograms != null) {
               ind = prItr.nextIndex();
               if (subPrograms.size() != 0) {
@@ -235,8 +235,7 @@ public class AddProgram
                   ind = prItr.nextIndex();
                 }
                 else {
-                  prLevels.add(getThenmes(Long.valueOf(
-                      selectedThemeId)));
+                  prLevels.add(getThenmes(Long.valueOf(selectedThemeId)));
                   ind = 0;
                 }
                 opflag = true;
@@ -261,13 +260,13 @@ public class AddProgram
     return mapping.findForward("forward");
   }
 
-  private ArrayList getThenmes(Long parentid) {
-    ArrayList prl = new ArrayList(ProgramUtil.getSubThemes(parentid));
+  private List<AmpTheme> getThenmes(Long parentid) throws DgException{
+    ArrayList<AmpTheme> prl = new ArrayList<AmpTheme>(ProgramUtil.getSubThemes(parentid));
     return prl;
   }
 
-  private ArrayList getParents() {
-    ArrayList prl = new ArrayList(ProgramUtil.getParentThemes());
+  private List<AmpTheme> getParents() throws DgException{
+    ArrayList<AmpTheme> prl = new ArrayList<AmpTheme>(ProgramUtil.getParentThemes());
     return prl;
   }
 

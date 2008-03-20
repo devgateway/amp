@@ -16,9 +16,6 @@ import java.util.ListIterator;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-//import org.digijava.kernel.util.*;
-//import org.digijava.kernel.request.*;
-//import org.digijava.module.translation.util.DbUtil;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
@@ -29,13 +26,9 @@ import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
-import org.apache.tools.ant.taskdefs.optional.i18n.Translate;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.translator.util.TrnLocale;
-import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
@@ -58,14 +51,10 @@ import org.digijava.module.aim.helper.AllThemes;
 import org.digijava.module.aim.helper.AmpIndSectors;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
-import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.EditProgram;
 import org.digijava.module.aim.helper.IndicatorsBean;
-import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.TreeItem;
-import org.digijava.module.ampharvester.exception.AmpHarvesterException;
-import org.digijava.module.translation.taglib.TrnTag;
 import org.digijava.module.translation.util.DbUtil;
 
 
@@ -177,6 +166,12 @@ public class ProgramUtil {
 			return ThemeIndicators;
 		}
 		
+		/**
+		 * Load theme by ID.
+		 * @param ampThemeId
+		 * @return
+		 * @throws DgException
+		 */
         public static AmpTheme getThemeById(Long ampThemeId) throws DgException {
 			Session session = PersistenceManager.getRequestDBSession();
 			AmpTheme theme = null;
@@ -192,36 +187,38 @@ public class ProgramUtil {
 			return theme;
 		}
 
-		public static Collection getParentThemes() {
-			Session session = null;
+        /**
+         * Retrieves top level themes.
+         * @return
+         * @throws DgException
+         */
+		@SuppressWarnings("unchecked")
+		public static Collection<AmpTheme> getParentThemes() throws DgException{
+			Session session = PersistenceManager.getRequestDBSession();
 			Query qry = null;
-			Collection themes = new ArrayList();
+			Collection<AmpTheme> themes = new ArrayList<AmpTheme>();
 
 			try {
-				session = PersistenceManager.getSession();
 				String queryString = "select t from " + AmpTheme.class.getName()
 						+ " t where t.parentThemeId is null";
 				qry = session.createQuery(queryString);
 				themes = qry.list();
 			} catch (Exception e) {
-				logger.error("Unable to get all themes : "+e);
-				logger.debug("Exceptiion " + e);
-			} finally {
-				try {
-					if (session != null) {
-						PersistenceManager.releaseSession(session);
-					}
-				} catch (Exception ex) {
-					logger.error("releaseSession() failed");
-				}
+				throw new DgException("Cannot search parent themes",e);
 			}
 			return themes;
 		}
 
-		public static List getAllThemes() {
+		/**
+		 * Retrieves all themes from db.
+		 * @return
+		 * @throws DgException
+		 */
+		@SuppressWarnings("unchecked")
+		public static List<AmpTheme> getAllThemes() throws DgException{
 			Session session = null;
 			Query qry = null;
-			List themes = new ArrayList();
+			List<AmpTheme> themes = new ArrayList<AmpTheme>();
 
 			try {
 				session = PersistenceManager.getRequestDBSession();
@@ -230,26 +227,25 @@ public class ProgramUtil {
 				qry = session.createQuery(queryString);
 				themes = qry.list();
 			} catch (Exception e) {
-				logger.error("Unable to get all themes");
-				logger.debug("Exceptiion " + e);
+				throw new DgException("Cannot retrive all themes from db",e);
 			}
 			return themes;
 		}
 
         /**
-         * Returns All AmpThemes including sub Themes if parametre is true.
+         * Returns All AmpThemes including sub Themes if parameter is true.
          * @param includeSubThemes boolean false - only top level Themes, true - all themes
          * @return List AmpTheme
          */
-        public static List getAllThemes(boolean includeSubThemes) {
+        @SuppressWarnings("unchecked")
+		public static List<AmpTheme> getAllThemes(boolean includeSubThemes) throws DgException{
             Session session = null;
             Query qry = null;
-            List themes = new ArrayList();
+            List<AmpTheme> themes = new ArrayList<AmpTheme>();
 
             try {
                 session = PersistenceManager.getRequestDBSession();
-                String queryString = "select t from " + AmpTheme.class.getName()
-                        + " t ";
+                String queryString = "select t from " + AmpTheme.class.getName()+ " t ";
                 if (!includeSubThemes) {
                     queryString += "where t.parentThemeId is null ";
                 }
@@ -257,8 +253,7 @@ public class ProgramUtil {
                 themes = qry.list();
             }
             catch (Exception e) {
-                logger.error("Unable to get all themes");
-                logger.debug("Exceptiion " + e);
+            	throw new DgException("Cannot load themes hierarchy",e);
             }
             return themes;
         }
@@ -331,12 +326,16 @@ public class ProgramUtil {
     		return themeIndicators;
     	}
 
-        public static Collection getYearsBeanList(){
+        /**
+         * Returns list of years for drop-down list.
+         * @return
+         */
+        public static Collection<LabelValueBean> getYearsBeanList(){
             return getYearsBeanList(YAERS_LIST_START);
         }
 
-        public static Collection getYearsBeanList(int from){
-            Collection result=new ArrayList();
+        public static Collection<LabelValueBean> getYearsBeanList(int from){
+            Collection<LabelValueBean> result=new ArrayList<LabelValueBean>();
             int start=from;
             Calendar now=Calendar.getInstance();
             int end=now.get(Calendar.YEAR);
@@ -701,22 +700,22 @@ public class ProgramUtil {
 			return themeInd;
 		}
                 
-                public static Collection getProgramIndicators(Long programId)
-		{
-                    Set indicators=new HashSet();
-                    ArrayList programs = (ArrayList) getRelatedThemes(programId);
-                    if (programs != null) {
-                        Iterator<AmpTheme> iterProgram = programs.iterator();
-                        while (iterProgram.hasNext()) {
-                            AmpTheme program = iterProgram.next();
-                            Set inds=IndicatorUtil.getIndicatorThemeConnections(program);
-                            if(inds!=null){
-                                indicators.addAll(inds);
-                            }
-                        }
-                    }
-                    return indicators;
+      public static Collection getProgramIndicators(Long programId)
+			throws DgException {
+		Set indicators = new HashSet();
+		ArrayList programs = (ArrayList) getRelatedThemes(programId);
+		if (programs != null) {
+			Iterator<AmpTheme> iterProgram = programs.iterator();
+			while (iterProgram.hasNext()) {
+				AmpTheme program = iterProgram.next();
+				Set inds = IndicatorUtil.getIndicatorThemeConnections(program);
+				if (inds != null) {
+					indicators.addAll(inds);
+				}
+			}
 		}
+		return indicators;
+	}
                 
 		@Deprecated
 		public static Collection getThemeIndicatorValues(Long themeIndicatorId)
@@ -772,6 +771,7 @@ public class ProgramUtil {
                 return col;
         }
 
+		//WWWTTTFFFF!!!!????!!!   
 		public static Collection getAllSubThemes(Long parentThemeId)
 		{
 			Session session = null;
@@ -923,14 +923,18 @@ public class ProgramUtil {
 			return allSubThemes;
 		}
 
-		public static Collection getSubThemes(Long parentThemeId)
+		/**
+		 * Returns all sub themes of specified one.
+		 * @param parentThemeId
+		 * @return
+		 */
+		public static Collection<AmpTheme> getSubThemes(Long parentThemeId) throws DgException
 		{
-			Session session = null;
+			Session session = session = PersistenceManager.getRequestDBSession();
 			Query qry = null;
-			Collection subThemes = new ArrayList();
+			Collection<AmpTheme> subThemes = null;
 			try
 			{
-				session = PersistenceManager.getRequestDBSession();
 			    String queryString = "from " + AmpTheme.class.getName() +
 			        " subT where subT.parentThemeId=:parentThemeId";
 			    qry = session.createQuery(queryString);
@@ -939,8 +943,7 @@ public class ProgramUtil {
 			}
 			catch(Exception e1)
 			{
-				logger.error("Unable to get all the sub-themes");
-				logger.debug("Exception : "+e1);
+				throw new DgException("Cannot seacr sub themes for theme with id="+parentThemeId,e1);
 			}
 			return subThemes;
 		}
@@ -1050,6 +1053,12 @@ public class ProgramUtil {
 			return ampThemeInd;
 		}
 
+		/**
+		 * We do not have program indicators, but have universal {@link AmpIndicator}.
+		 * Use {@link IndicatorUtil} class to work with indicators.
+		 * @param prgIndValues
+		 * @param ampThemeInd
+		 */
 		@Deprecated
 		public static void saveEditPrgIndValues(Collection prgIndValues, AmpThemeIndicators ampThemeInd)
 		{
@@ -1199,7 +1208,7 @@ public class ProgramUtil {
 			}
 		}
 
-		public static void deleteTheme(Long themeId) throws AimException
+		public static void deleteTheme(Long themeId) throws AimException, DgException
 		{
 			ArrayList colTheme = (ArrayList)getRelatedThemes(themeId);
 			int colSize = colTheme.size();
@@ -1526,11 +1535,11 @@ public class ProgramUtil {
 			}
 		}
 
-		public static Collection getRelatedThemes(Long id)
+		public static Collection getRelatedThemes(Long id) throws DgException
 		{
 			AmpTheme ampThemetemp = new AmpTheme();
 			ampThemetemp = getThemeObject(id);
-			Collection themeCol = getSubThemes(id);
+			Collection<AmpTheme> themeCol = getSubThemes(id);
 			Collection tempPrg = new ArrayList();
 			tempPrg.add(ampThemetemp);
 			if(!themeCol.isEmpty())

@@ -9,7 +9,7 @@ package org.digijava.module.aim.dbentity;
  * @author Irakli Kobiashvili
  *
  */
-public class IndicatorTheme extends IndicatorConnection{
+public class IndicatorTheme extends IndicatorConnection {
 	
 	private static final long serialVersionUID = 3L;
 
@@ -22,5 +22,4 @@ public class IndicatorTheme extends IndicatorConnection{
 		this.theme = theme;
 	}
 	
-
 }

@@ -1,0 +1,272 @@
+<%@ page pageEncoding="UTF-8"%>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
+<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/fmt" prefix="fmt"%>
+<%@ taglib uri="/taglib/category" prefix="category"%>
+
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+
+
+<tr bgcolor="#ffffff">
+	<td height="20" colspan="4" bgcolor="#FFFFCC"
+		style="text-transform: uppercase"><a
+		title='<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>'>
+
+	<digi:trn key="aim:planneddisbursements">PLANNED DISBURSEMENT</digi:trn>
+	</a></td>
+</tr>
+<c:if test="${!empty funding.fundingDetails}">
+
+	<!-- Start Planned Disbursements -->
+	<logic:iterate name="funding" property="fundingDetails"
+		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+		<logic:equal name="fundingDetail" property="transactionType" value="1">
+			<logic:equal name="fundingDetail" property="adjustmentType" value="0">
+
+
+
+				<c:if test="${aimEditActivityForm.donorFlag == true}">
+					<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
+					</c:if>
+					<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
+					</c:if>
+					<tr>
+						<td align="right" bgcolor="#FFFFFF"><field:display
+							name="Adjustment Type Disbursement"
+							feature="Funding Organizations">
+							<digi:trn
+								key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+								<bean:write name="fundingDetail" property="adjustmentTypeName" />
+							</digi:trn>
+						</field:display></td>
+
+						<td align="right"><field:display name="Date Disbursement"
+							feature="Funding Organizations">
+							<bean:write name="fundingDetail" property="transactionDate" />
+						</field:display></td>
+						<td align="right"><field:display
+							name="Amount Disbursement" feature="Funding Organizations">
+							<FONT color=blue>*</FONT>
+							<bean:write name="fundingDetail" property="transactionAmount" />
+						</field:display> <field:display name="Currency Disbursement"
+							feature="Funding Organizations">
+							<bean:write name="fundingDetail" property="currencyCode" />
+						</field:display></td>
+						<td height="18"><field:display
+							name="Exchange Rate" feature="Funding Organizations">
+							<bean:write name="fundingDetail" property="formattedRate" />
+						</field:display></td>
+
+					</tr>
+				</c:if>
+
+				<c:if test="${aimEditActivityForm.donorFlag == false}">
+					<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
+						<tr bgcolor="#ffffff">
+							<td align="right" bgcolor="#FFFFFF"><field:display
+								name="Adjustment Type Disbursement"
+								feature="Funding Organizations">
+								<digi:trn
+									key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+									<bean:write name="fundingDetail" property="adjustmentTypeName" />
+								</digi:trn>
+							</field:display></td>
+
+							<td align="right"><field:display name="Date Disbursement"
+								feature="Funding Organizations">
+								<bean:write name="fundingDetail" property="transactionDate" />
+							</field:display></td>
+							<td align="right"><field:display
+								name="Amount Disbursement" feature="Funding Organizations">
+								<FONT color=blue>*</FONT>
+								<bean:write name="fundingDetail" property="transactionAmount" />
+							</field:display> <field:display name="Currency Disbursement"
+								feature="Funding Organizations">
+								<bean:write name="fundingDetail" property="currencyCode" />
+							</field:display></td>
+							<td height="18"><field:display
+								name="Exchange Rate" feature="Funding Organizations">
+								<bean:write name="fundingDetail" property="formattedRate" />
+							</field:display></td>
+						</tr>
+					</c:if>
+					<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
+						<tr bgcolor="#ffffff">
+							<td align="right" bgcolor="#FFFFFF"><field:display
+								name="Adjustment Type Disbursement"
+								feature="Funding Organizations">
+								<digi:trn
+									key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+									<bean:write name="fundingDetail" property="adjustmentTypeName" />
+								</digi:trn>
+							</field:display></td>
+
+							<td align="right"><field:display name="Date Disbursement"
+								feature="Funding Organizations">
+								<bean:write name="fundingDetail" property="transactionDate" />
+							</field:display></td>
+							<td align="right"><field:display
+								name="Amount Disbursement" feature="Funding Organizations">
+								<FONT color=blue>*</FONT>
+								<bean:write name="fundingDetail" property="transactionAmount" />
+							</field:display> <field:display name="Currency Disbursement"
+								feature="Funding Organizations">
+								<bean:write name="fundingDetail" property="currencyCode" />
+							</field:display></td>
+							<td height="18"><field:display
+								name="Exchange Rate" feature="Funding Organizations">
+								<bean:write name="fundingDetail" property="formattedRate" />
+							</field:display></td>
+						</tr>
+					</c:if>
+				</c:if>
+			</logic:equal>
+		</logic:equal>
+	</logic:iterate>
+	<!-- End Planned Disbursements -->
+
+	<tr>
+		<td colspan="2" bgcolor="#eeeeee"
+			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
+			key='aim:totalplanneddisbursement'>
+                                                                                		    TOTAL PLANNED DISBURSEMENT:	                                                                                	</digi:trn>
+		</td>
+		<td align="right" bgcolor="#eeeeee"
+			style="border-top: 1px solid #000000"><bean:write
+			name="aimEditActivityForm" property="totalPlannedDisbursements" /> <bean:write
+			name="aimEditActivityForm" property="currCode" /></td>
+		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+	</tr>
+<tr><td colspan="4" height="7px"></td></tr>
+	<tr bgcolor="#ffffff">
+		<td colspan="4" bgcolor="#FFFFCC"
+			style="text-transform: uppercase; text-transform: uppercase"><digi:trn
+			key="aim:actualisbursements">ACTUAL DISBURSEMENT</digi:trn></td>
+	</tr>
+
+	<!-- Start Actual Disbursements -->
+	<logic:iterate name="funding" property="fundingDetails"
+		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+		<logic:equal name="fundingDetail" property="transactionType" value="1">
+			<logic:equal name="fundingDetail" property="adjustmentType" value="1">
+
+
+				<c:if test="${aimEditActivityForm.donorFlag == true}">
+					<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
+					</c:if>
+					<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
+					</c:if>
+					<tr>
+						<td align="right" bgcolor="#FFFFFF"><field:display
+							name="Adjustment Type Disbursement"
+							feature="Funding Organizations">
+							<digi:trn
+								key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+								<bean:write name="fundingDetail" property="adjustmentTypeName" />
+							</digi:trn>
+						</field:display></td>
+
+						<td align="right" align="right"><field:display name="Date Disbursement"
+							feature="Funding Organizations">
+							<bean:write name="fundingDetail" property="transactionDate" />
+						</field:display></td>
+						<td align="right"><field:display name="Amount Disbursement"
+							feature="Funding Organizations">
+							<FONT color=blue>*</FONT>
+							<bean:write name="fundingDetail" property="transactionAmount" />
+						</field:display> <field:display name="Currency Disbursement"
+							feature="Funding Organizations">
+							<bean:write name="fundingDetail" property="currencyCode" />
+						</field:display></td>
+						<td height="18"><field:display name="Exchange Rate"
+							feature="Funding Organizations">
+							<bean:write name="fundingDetail" property="formattedRate" />
+						</field:display></td>
+					</tr>
+				</c:if>
+
+				<c:if test="${aimEditActivityForm.donorFlag == false}">
+					<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
+						<tr bgcolor="#ffffff">
+							<td align="right" bgcolor="#FFFFFF"><field:display
+								name="Adjustment Type Disbursement"
+								feature="Funding Organizations">
+								<digi:trn
+									key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+									<bean:write name="fundingDetail" property="adjustmentTypeName" />
+								</digi:trn>
+							</field:display></td>
+
+							<td align="right" align="right"><field:display name="Date Disbursement"
+								feature="Funding Organizations">
+								<bean:write name="fundingDetail" property="transactionDate" />
+							</field:display></td>
+							<td align="right"><field:display name="Amount Disbursement"
+								feature="Funding Organizations">
+								<FONT color=blue>*</FONT>
+								<bean:write name="fundingDetail" property="transactionAmount" />
+							</field:display> <field:display name="Currency Disbursement"
+								feature="Funding Organizations">
+								<bean:write name="fundingDetail" property="currencyCode" />
+							</field:display></td>
+							<td height="18"><field:display name="Exchange Rate"
+								feature="Funding Organizations">
+								<bean:write name="fundingDetail" property="formattedRate" />
+							</field:display></td>
+						</tr>
+					</c:if>
+					<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
+						<tr bgcolor="#ffffff">
+							<td align="right" bgcolor="#FFFFFF"><field:display
+								name="Adjustment Type Disbursement"
+								feature="Funding Organizations">
+								<digi:trn
+									key='<%="aim:disbursements:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+									<bean:write name="fundingDetail" property="adjustmentTypeName" />
+								</digi:trn>
+							</field:display></td>
+							<td align="right" align="right"><field:display name="Date Disbursement"
+								feature="Funding Organizations">
+								<bean:write name="fundingDetail" property="transactionDate" />
+							</field:display></td>
+							<td align="right"><field:display name="Amount Disbursement"
+								feature="Funding Organizations">
+								<FONT color=blue>*</FONT>
+								<bean:write name="fundingDetail" property="transactionAmount" />
+							</field:display> <field:display name="Currency Disbursement"
+								feature="Funding Organizations">
+								<bean:write name="fundingDetail" property="currencyCode" />
+							</field:display></td>
+							<td height="18"><field:display name="Exchange Rate"
+								feature="Funding Organizations">
+								<bean:write name="fundingDetail" property="formattedRate" />
+							</field:display></td>
+						</tr>
+					</c:if>
+				</c:if>
+			</logic:equal>
+		</logic:equal>
+	</logic:iterate>
+	<!-- End Actual Disbursements -->
+
+	<tr>
+		<td colspan="2" bgcolor="#eeeeee"
+			style="border-top: 1px solid #000000"><digi:trn
+			key='aim:totalActualdisbursement'>
+                                                                                    TOTAL ACTUAL DISBURSEMENT </digi:trn>
+		</td>
+		<td align="right" bgcolor="#eeeeee"
+			style="border-top: 1px solid #000000"><bean:write
+			name="aimEditActivityForm" property="totalDisbursements" /> <bean:write
+			name="aimEditActivityForm" property="currCode" /></td>
+		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
+	</tr>
+	<tr><td colspan="4" height="7px"></td></tr>
+</c:if>
+

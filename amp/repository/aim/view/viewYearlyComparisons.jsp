@@ -259,7 +259,7 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 
 							</digi:link>
 
-                  	&gt; Yearly All
+                  	&gt; <digi:trn key="aim:yearlyAll">Yearly All</digi:trn>
 <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 
 							&gt;

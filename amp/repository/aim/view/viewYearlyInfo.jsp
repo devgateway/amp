@@ -266,7 +266,7 @@
 
 			  				<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 
-			  			</digi:link>
+			  			</digi:link>|
 </feature:display>
                </logic:notEqual>
 

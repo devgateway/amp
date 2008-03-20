@@ -174,7 +174,7 @@ function showUserProfile(id){
 												</c:set>
 												<c:set target="${urlParams1}" property="fromPage" value="1"/>
 												<digi:link href="/showAddTeamMember.do" name="urlParams1" title="${clickToAddTeamMember}" >
-													<digi:trn key="aim:addTeamMember">Add Team Member </digi:trn>
+													<digi:trn key="aim:addWorkspaceMember">Add Workspace Member </digi:trn>
 												</digi:link>
 											</td>
 										</tr>

@@ -113,18 +113,8 @@ public class CategAmountColWorker extends ColumnWorker {
 		int tr_type = -1;
 		int adj_type = -1;
 		double tr_amount = rs.getDouble("transaction_amount");
-		String tds = rs.getString("transaction_date");
-		 
-		java.sql.Date td=null;
-		try {
-		    td = new Date(sdf.parse(tds).getTime());
-		} catch (Exception e1) {
-		    logger.error(e1);
-		    logger.info("Exception encountered parsing a transaction date!", e1);
-		}
-		//double exchangeRate=rs.getDouble("exchange_rate")
+		java.sql.Date td= rs.getDate("transaction_date");
 		
-		;
 		String currencyCode="";
 		
 		if (columnsMetaData.contains("currency_code")){

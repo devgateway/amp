@@ -81,10 +81,12 @@ function selectOrganisation1() {
 		<td align="right">
 		<b><digi:trn key="aim:addEditActivityName">Activity name:</digi:trn></b>
 		</td>
+		<field:display name="Costing Activity Id" feature="Costing">
 		<td>
 		         	<html:text property="name" size="30"/> 
 		&nbsp;&nbsp;<b><digi:trn key="aim:addEditActivityID">Activity ID:</digi:trn></b> <html:text property="textId" size="10"/> 
 		</td>
+		</field:display>
 	</tr>
 	<tr>
 		<td align="right">
@@ -110,7 +112,7 @@ function selectOrganisation1() {
 
 
 	<tr>
-		<td>&nbsp;</td>
+		<td>&nbsp;</td>		
 		<td bgcolor="#006699" class="textalb" align="center">
 		<b><digi:trn key="aim:addEditActivityContributions">Contributions</digi:trn></b>
 		</td>
@@ -127,8 +129,11 @@ function selectOrganisation1() {
 							<td align="right" valign="top">
 							<font color="red">*</font>
 							<input type="checkbox" name="deleteContrib" value='<bean:write name="idx"/>'>
+							<field:display name="Contribution Amount" feature="Costing">
 							<input style="text-align:right" type='text' name='contrAmount' onclick="clearDefault(this)"
 									value='${aimEUActivityForm.contrAmount[idx]}'>
+							</field:display>
+							<field:display name="Contribution Currency" feature="Costing">
 							<select name="contrCurrId" style="width: 100px" class="inp-text">
 								<option value="-1"><digi:trn key="aim:addEditActivityCurrency">Currency</digi:trn></option>
 							<logic:iterate name="aimEUActivityForm" property="currencies" id="currency" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpCurrency">
@@ -138,7 +143,8 @@ function selectOrganisation1() {
 								</option>
 							</logic:iterate>
 							</select>
-						
+							</field:display>
+							<field:display name="Contribution Type of Assistance" feature="Costing">
 							<select name="contrFinInstrId" class="inp-text" style="width: 100px">
 								<option value="-1"><digi:trn key="aim:addEditActivitySelectTypeOfAssistance">Select Type of Assistance</digi:trn></option>
 							<logic:iterate name="aimEUActivityForm" property="finInstrs" id="modality" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
@@ -148,7 +154,8 @@ function selectOrganisation1() {
 								</option>
 							</logic:iterate>
 							</select>
-
+							</field:display>
+							<field:display name="Contribution Donors" feature="Costing">
 							<select name="contrDonorId" style="width: 100px" class="inp-text"> 
 								<option value="-1"><digi:trn key="aim:addEditActivityDonor">Donor</digi:trn></option>
 							<logic:iterate name="aimEUActivityForm" property="donors" id="donor" indexId="cIdx" type="org.digijava.module.aim.dbentity.AmpOrganisation">
@@ -158,8 +165,8 @@ function selectOrganisation1() {
 								</option>
 							</logic:iterate>
 							</select>
-							
-							
+							</field:display>
+							<field:display name="Contribution Financing Type" feature="Costing">
 							<logic:present name="aimEUActivityForm" property="finTypes">
 							<select name="contrFinTypeId" style="width: 100px" class="inp-text">
 								<option value="-1"><digi:trn key="aim:addEditActivitySelectFinancingInstrument">Select Financing Instrument</digi:trn></option>
@@ -169,8 +176,9 @@ function selectOrganisation1() {
 								<bean:write name="finType" property="value"/>
 								</option>
 							</logic:iterate>
-							</select>
+							</select>							
 							</logic:present>
+							</field:display>
 						</td>
 
 							</tr>

@@ -247,6 +247,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Contact Name" feature="Reports Contact Information"></field:display>
 <field:display name="Contracting Agency Add Organizations Button" feature="Contracting Agency"></field:display>
 <field:display name="Contracting Agency Remove Organizations Button" feature="Contracting Agency"></field:display>
+
 <field:display name="Costing Activity Name" feature="Costing"></field:display>
 <field:display name="Costing Assumptions" feature="Costing"></field:display>
 <field:display name="Costing Contribution Gap" feature="Costing"></field:display>
@@ -257,6 +258,13 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Costing Progress" feature="Costing"></field:display>
 <field:display name="Costing Total Contribution" feature="Costing"></field:display>
 <field:display name="Costing Total Cost" feature="Costing"></field:display>
+<field:display name="Costing Activity Id" feature="Costing"></field:display>
+<field:display name="Contribution Amount" feature="Costing"></field:display>
+<field:display name="Contribution Currency" feature="Costing"></field:display>
+<field:display name="Contribution Type of Assistance" feature="Costing"></field:display>
+<field:display name="Contribution Donors" feature="Costing"></field:display>
+<field:display name="Contribution Financing Type" feature="Costing"></field:display>
+
 <field:display name="Cumulative Commitment" feature="Funding Organizations"></field:display>
 <field:display name="Cumulative Disbursement" feature="Funding Organizations"></field:display>
 <field:display name="Currency Commitment" feature="Funding Organizations"></field:display>
@@ -386,6 +394,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Projection Currency Code" feature="MTEF Projections"></field:display>
 <field:display name="Projection Date" feature	="MTEF Projections"></field:display>
 <field:display name="Projection Name" feature="MTEF Projections"></field:display>
+<field:display name="Add Projection" feature="MTEF Projections"></field:display>
 <field:display name="Proposed Approval Date" feature="Planning"></field:display>
 <field:display name="Proposed Completion Date" feature="Planning"></field:display>
 <field:display name="Proposed Project Amount" feature="Proposed Project Cost"></field:display>
@@ -489,6 +498,15 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="IFIs" feature="Contracting Tab"></field:display>
 <field:display name="Total Private Contribution" feature="Contracting Tab"></field:display>
 <field:display name="Disbursements" feature="Contracting Tab"></field:display>
+<field:display name="Add Regional Funding Link" feature="Regional Funding"></field:display>
+<field:display name="Delete Regional Funding Button" feature="Regional Funding"></field:display>
+
+<field:display name="Indicator name" feature="Admin"></field:display>
+<field:display name="Description" feature="Admin"></field:display>
+<field:display name="Indicator code" feature="Admin"></field:display>
+<field:display name="Indicator Type" feature="Admin"></field:display>
+<field:display name="Creation date" feature="Admin"></field:display>
+<field:display name="Add New Indicator" feature="Admin"></field:display>
 
 <field:display name="Contract Name" feature="Contracting"></field:display>
 <field:display name="Description" feature="Contracting"></field:display>

@@ -163,6 +163,7 @@ function closeWindow() {
     <tr align="center" bgcolor="#ECF3FD">
       <td>
         <table border="0">
+        <field:display name="Indicator name" feature="Admin">
           <tr id="trName">
             <td>
             <digi:trn key="aim:indicatorname">Indicator name:</digi:trn>
@@ -172,6 +173,8 @@ function closeWindow() {
               <html:text property="name" styleId="txtName" style="font-family:verdana;font-size:11px;width:200px;"/>
             </td>
           </tr>
+          </field:display>
+          <field:display name="Description" feature="Admin">
           <tr id="trDescription">
             <td valign="top">
             <digi:trn key="admin:decription">
@@ -182,6 +185,8 @@ function closeWindow() {
               <html:textarea property="description" styleId="txtDescription" style="font-family:verdana;font-size:11px;width:200px;"></html:textarea>
             </td>
           </tr>
+          </field:display>
+          <field:display name="Indicator code" feature="Admin">
           <tr>
             <td>
             	<digi:trn key="admin:indicatorcode">
@@ -193,6 +198,8 @@ function closeWindow() {
                <html:text property="code" styleId="txtCode" style="font-family:verdana;font-size:11px;width:100px;"/>
             </td>
           </tr>
+          </field:display>
+          <field:display name="Indicator Type" feature="Admin">
           <tr>
           	<td><digi:trn key="admin:indicatorType">Indicator Type</digi:trn>:</td>
           	<td><html:select name="aimNewIndicatorForm" property="type">          		
@@ -201,6 +208,7 @@ function closeWindow() {
           	</html:select>
           	</td>
           </tr>
+          </field:display>
           <tr id="trType">
           </tr>
           <tr id="trCategory">
@@ -215,6 +223,7 @@ function closeWindow() {
               <jsp:include page="addIndicatorSector.jsp"/>
              </td>
           </tr>   
+          <field:display name="Creation date" feature="Admin">
 	      <tr id="trCreationDate">
             <td>
             <digi:trn key="admin:creationdate">
@@ -224,7 +233,9 @@ function closeWindow() {
             <td>
               <html:text property="date" disabled="true" styleId="txtCreationDate" style="font-family:verdana;font-size:11px;width:80px;"/>
             </td>
-          </tr> <!--
+          </tr> 
+          </field:display>
+          <!--
           <tr>
             <td colspan="10" nowrap="nowrap">
               <input type="checkbox" name="IndicatorType" id="radioProgramIndicator" value="0" /> &nbsp;<digi:trn key="admin:programind">Program indicator</digi:trn>&nbsp;
@@ -279,9 +290,11 @@ function closeWindow() {
     </tr>
     <tr  align="center" bgcolor="#ECF3FD">
       <td>
+      <field:display name="Add New Indicator" feature="Admin">
       <html:button  styleClass="dr-menu" property="submitButton"  onclick="addNewIndicator()">
 		<digi:trn key="btn:add">Add</digi:trn> 													
  	 </html:button>
+ 	 </field:display>
  	 <html:reset  styleClass="dr-menu" property="submitButton">
 		<digi:trn key="btn:clear">Clear</digi:trn> 
 	</html:reset>											

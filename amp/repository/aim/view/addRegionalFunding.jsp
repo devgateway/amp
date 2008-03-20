@@ -101,8 +101,10 @@
 											<%=eaForm.getCurrCode()%>
 											)
 										</span>
-										
-										<a href="javascript:addCommitments()">${translationAdd }</a><br><br>
+										<field:display name="Add Regional Funding Link" feature="Regional Funding">
+										<a href="javascript:addCommitments()">${translationAdd }</a>
+										</field:display>
+										<br><br>
 											<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -174,8 +176,11 @@
 													</select>
 													&nbsp;
 												</logic:equal>
+												<field:display name="Delete Regional Funding Button" feature="Regional Funding">
 												<input type='button' value='${translationDelete}' class='inp-text' 
-												onclick="removeCommitment('<%=divName%>')"></div>
+												onclick="removeCommitment('<%=divName%>')">
+												</field:display>
+												</div>
 											</c:forEach>	
 											</c:if>
 											</c:forEach>
@@ -192,7 +197,7 @@
 											<%=eaForm.getTotalDisbursements()%>
 											<%=eaForm.getCurrCode()%>)
 										</span>
-										<field:display name="Add Disbursement Order Button" feature="Disbursement Orders">
+										<field:display name="Add Regional Funding Link" feature="Regional Funding">										
 											<a href="javascript:addDisbursement()">${translationAdd }</a>
 										</field:display>														
 											<br><br>
@@ -268,8 +273,11 @@
 													</select>
 													&nbsp;
 												</logic:equal>
+												<field:display name="Delete Regional Funding Button" feature="Regional Funding">
 												<input type='button' value='${translationDelete}' class='inp-text' 
-												onclick="removeDisbursement('<%=divName%>')"></div>
+												onclick="removeDisbursement('<%=divName%>')">
+												</field:display>
+												</div>
 											</c:forEach>	
 											</c:if>
 											</c:forEach>
@@ -288,7 +296,7 @@
 												<%=eaForm.getCurrCode()%>
 												)
 											</span>
-											<field:display name="Add Expenditure Button" feature="Expenditures">
+											<field:display name="Add Regional Funding Link" feature="Regional Funding">	
 												<a href="javascript:addExpenditure()">${translationAdd }</a>&nbsp;&nbsp;
 											</field:display>
 											<br><br>
@@ -361,8 +369,11 @@
 													</select>
 													&nbsp;
 												</logic:equal>
+												<field:display name="Delete Regional Funding Button" feature="Regional Funding">
 												<input type='button' value='${translationDelete}' class='inp-text' 
-												onclick="removeExpenditure('<%=divName%>')"></div>
+												onclick="removeExpenditure('<%=divName%>')">
+												</field:display>
+												</div>
 											</c:forEach>	
 											</c:if>
 											</c:forEach>
@@ -478,7 +489,10 @@ function addCommitments() {
 	s += "</select>&nbsp;";
 	</logic:equal>
 	
-	s += "<input type='button' value='${translationDelete}' class='inp-text' onclick=removeCommitment('" + divname + "')><br>";
+	s += "<field:display name='Delete Regional Funding Button' feature='Regional Funding'>" + 
+	"<input type='button' value='${translationDelete}' class='inp-text' onclick=removeCommitment('" + divname + "')>"+
+	"</field:display>" +
+	"<br>";
 	
 	newdiv.innerHTML = s;
 	ni.appendChild(newdiv);
@@ -536,7 +550,10 @@ function addDisbursement() {
 	s += "</select>&nbsp;";
 	</logic:equal>
 	
-	s += "<input type='button' value='${translationDelete}' class='inp-text' onclick=removeDisbursement('" + divname + "')><br>";
+	s += "<field:display name='Delete Regional Funding Button' feature='Regional Funding'>" + 
+	"<input type='button' value='${translationDelete}' class='inp-text' onclick=removeDisbursement('" + divname + "')>"+
+	"</field:display>" +
+	"<br>";
 	
 	newdiv.innerHTML = s;
 	ni.appendChild(newdiv);
@@ -594,8 +611,10 @@ function addExpenditure() {
 	s += "</select>&nbsp;";
 	</logic:equal>
 	
-	
-	s += "<input type='button' value='${translationDelete}' class='inp-text' onclick=removeExpenditure('" + divname + "')><br>";
+	s += "<field:display name='Delete Regional Funding Button' feature='Regional Funding'>" + 
+	"<input type='button' value='${translationDelete}' class='inp-text' onclick=removeExpenditure('" + divname + "')>"+
+	"</field:display>" +
+	"<br>";
 	
 	newdiv.innerHTML = s;
 	ni.appendChild(newdiv);

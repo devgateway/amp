@@ -138,6 +138,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <feature:display name="Sector Group" module="Organizations"></feature:display>
 <feature:display name="Sectors" module="Project ID and Planning"></feature:display>
 <feature:display name="Web Resources" module="Document"></feature:display>
+<feature:display module="Funding" name="Disbursement"></feature:display>
 <feature:display module="Funding" name="Disbursement Orders"></feature:display>
 <feature:display module="Funding" name="Expenditures"></feature:display>
 <feature:display name="Donor Contact Information" module="Contact Information"></feature:display>

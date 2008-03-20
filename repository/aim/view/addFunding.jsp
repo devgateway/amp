@@ -327,14 +327,23 @@
 					</td>
 				</tr>
 				<tr bgcolor="#003366" class="textalb" align="center">
-					<td><b><font color="white"><digi:trn key="aim:Projected">Projected</digi:trn>/<br><digi:trn key="aim:Pipeline">Pipeline</digi:trn></font></b>
-					</td>
+					<field:display name="Projection Name" feature="MTEF Projections">
+						<td><b><font color="white">						
+							<digi:trn key="aim:Projected">Projected</digi:trn>/<br><digi:trn key="aim:Pipeline">Pipeline</digi:trn></font></b>						
+						</td>
+					</field:display>
+					<field:display name="Projection Amount" feature="MTEF Projections">
 					<td><b><font color="white"><digi:trn key="aim:amount">Amount</digi:trn></font></b>
 					</td>
+					</field:display>
+					<field:display name="Projection Currency Code" feature="MTEF Projections">
 					<td><b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b>
 					<img src= "../ampTemplate/images/help.gif" border="0" align="absmiddle" title="${translation}" />
 					</td>
+					</field:display>
+					<field:display name="Projection Date" feature	="MTEF Projections">
 					<td><b><font color="white"><digi:trn key="aim:ProjectionDate">Projection Date</digi:trn></font></b>
+					</field:display>
 					</td>
 				</tr>
 
@@ -401,7 +410,7 @@
 				</c:forEach>
 				</c:if>
 
-
+				<field:display name="Add Projection" feature	="MTEF Projections">
 				<tr bgcolor="#ffffff">
 					<td align="center" colspan="4">
 						<table cellPadding=3>
@@ -414,7 +423,7 @@
 						</table>
 					</td>
 				</tr>
-
+				</field:display>
 
 				</table>
 				</td>

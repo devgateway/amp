@@ -31,7 +31,7 @@
 																		&nbsp;&nbsp;
 																			<digi:trn key="aim:commitments">Commitments</digi:trn> - (
 																			<digi:trn key="aim:grantTotalActualAllocation">Grand Total actual
-																			allocation</digi:trn> =
+																			allocation</digi:trn> = 
 																				<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getTotalCommitments()%>
 																			
 																			<c:out value="${aimEditActivityForm.currCode}"/>)

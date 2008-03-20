@@ -8,7 +8,9 @@ import org.digijava.module.aim.form.IndicatorForm;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.apache.log4j.Logger;
 
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
 
 import java.util.ArrayList;
@@ -33,41 +35,66 @@ public class SearchIndicators extends Action {
 		String nsr = "yes";
 		String searchkey = null;
 		
-		indForm.setActivityId(indForm.getActivityId());			
+		indForm.setActivityId(indForm.getActivityId());		
+		indForm.setAllSectors(SectorUtil.getAllParentSectors());
 		
 		logger.info("indForm.getSearchkey() = " + indForm.getSearchkey()+" indForm.getActivityId() : "+indForm.getActivityId());
-		if(indForm.getSearchkey().trim() != null)
-		{
-			logger.info("inside if.. :0");
-			activityInd = MEIndicatorsUtil.getActivityIndicatorsList(indForm.getActivityId());
-			searchkey = indForm.getSearchkey().trim();
-			searchResult = MEIndicatorsUtil.searchForIndicators(searchkey);
+		
+		if(indForm.getAction()!=null && indForm.getAction().equals("clear")){
+			indForm.setSectorName("-1");
+			indForm.setSearchkey("");			
+			indForm.setAction("");
 			
-			Iterator searchResultItr = searchResult.iterator();
-			while(searchResultItr.hasNext())
-			{
-				logger.info("inside 1st while... :0");
-				AmpMEIndicators tempSearchInd = (AmpMEIndicators) searchResultItr.next();
-				Iterator activityIndItr = activityInd.iterator();
-				sameIndicator = false;				
-				while(activityIndItr.hasNext() && sameIndicator == false)
-				{
-					logger.info("inside 2nd while... :0");
-					ActivityIndicator tempActInd = (ActivityIndicator) activityIndItr.next();
-
-					if(tempSearchInd.getAmpMEIndId().equals(tempActInd.getIndicatorId()))
-						sameIndicator = true;
-				}
-				if(sameIndicator == false)
-					searchInd.add(tempSearchInd);
-			}
-			if(searchInd.isEmpty())
-			{
-				logger.info("yes its NULL......");
-				indForm.setNoSearchResult(true);
-			}
-			indForm.setSearchReturn(searchInd);
 		}
+		
+		if(indForm.getAction() == null){
+			indForm.setAction("selected");
+			
+		}	
+		
+		
+		if((indForm.getSearchkey()!=null && indForm.getSearchkey().trim().length() > 0) || 
+			(indForm.getSectorName()!=null && indForm.getSectorName().trim().length()>0 && !indForm.getSectorName().trim().equals("-1"))){
+			searchInd = IndicatorUtil.searchIndicators(indForm.getSearchkey(),indForm.getSectorName());
+		}else {
+			searchInd = IndicatorUtil.getAmpIndicator();
+		}
+		
+				indForm.setSearchReturn(searchInd);
+		
+		
+		
+//		if(indForm.getSearchkey().trim() != null)
+//		{
+//			logger.info("inside if.. :0");
+//			activityInd = MEIndicatorsUtil.getActivityIndicatorsList(indForm.getActivityId());
+//			searchkey = indForm.getSearchkey().trim();
+//			searchResult = MEIndicatorsUtil.searchForIndicators(searchkey);
+//			
+//			Iterator searchResultItr = searchResult.iterator();
+//			while(searchResultItr.hasNext())
+//			{
+//				logger.info("inside 1st while... :0");
+//				AmpMEIndicators tempSearchInd = (AmpMEIndicators) searchResultItr.next();
+//				Iterator activityIndItr = activityInd.iterator();
+//				sameIndicator = false;				
+//				while(activityIndItr.hasNext() && sameIndicator == false)
+//				{
+//					logger.info("inside 2nd while... :0");
+//					ActivityIndicator tempActInd = (ActivityIndicator) activityIndItr.next();
+//
+//					if(tempSearchInd.getAmpMEIndId().equals(tempActInd.getIndicatorId()))
+//						sameIndicator = true;
+//				}
+//				if(sameIndicator == false)
+//					searchInd.add(tempSearchInd);
+//			}
+//			if(searchInd.isEmpty())
+//			{
+//				logger.info("yes its NULL......");
+//				indForm.setNoSearchResult(true);
+//			}
+//		}
 		return mapping.findForward("forward");
 	}
 }

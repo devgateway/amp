@@ -768,6 +768,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
                     IPAContract oldContract = (IPAContract) session.get(IPAContract.class, contract.getId());
                     oldContract.setContractName(contract.getContractName());
                     oldContract.setDescription(contract.getDescription());
+                    oldContract.setContractingOrganizationText(contract.getContractingOrganizationText());
                     oldContract.setActivityCategory(contract.getActivityCategory());
                     oldContract.setStartOfTendering(contract.getStartOfTendering());
                     oldContract.setSignatureOfContract(contract.getSignatureOfContract());

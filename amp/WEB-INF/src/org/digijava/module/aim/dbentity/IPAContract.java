@@ -3,9 +3,10 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
-import org.digijava.module.common.util.DateTimeUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * @author mihai
@@ -17,6 +18,7 @@ public class IPAContract implements Serializable {
     private Long id;
     private String contractName;
     private String description;
+    private String contractingOrganizationText;
     private AmpCategoryValue activityCategory;
     private Date startOfTendering;
     private Date signatureOfContract;
@@ -345,5 +347,13 @@ public class IPAContract implements Serializable {
 	public void setDibusrsementsGlobalCurrency(
 			AmpCurrency dibusrsementsGlobalCurrency) {
 		this.dibusrsementsGlobalCurrency = dibusrsementsGlobalCurrency;
+	}
+
+	public String getContractingOrganizationText() {
+		return contractingOrganizationText;
+	}
+
+	public void setContractingOrganizationText(String contractingOrganizationText) {
+		this.contractingOrganizationText = contractingOrganizationText;
 	}
 }

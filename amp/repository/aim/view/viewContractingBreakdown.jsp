@@ -238,7 +238,7 @@ function projectFiche(id)
                                                                                             
                                                                                         </tr>	
                                                                                     </field:display>
-                                                                                              <field:display name="Contract Organization" feature="Contracting Tab">
+                                                                                    <field:display name="Contract Organization" feature="Contracting Tab">
                                                                                          <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization:</digi:trn></b>
@@ -252,6 +252,20 @@ function projectFiche(id)
                                                                                             
                                                                                         </tr>	
                                                                                     </field:display>
+                                                                                   
+                                                                                    <field:display name="Contracting Organization Text" feature="Contracting Tab">
+                                                                                         <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                     ${contract.contractingOrganizationText}
+                                                                                                
+                                                                                            </td>
+                                                                                            
+                                                                                        </tr>	
+                                                                                    </field:display>
+                                                                                   
                                                                                         
                                                                                               <field:display name="Contract Completion" feature="Contracting Tab">
                                                                                         <tr>

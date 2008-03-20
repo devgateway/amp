@@ -124,7 +124,7 @@ function selectOrganisation1() {
 			<html:textarea property="description" rows="3" cols="90" styleClass="inp-text"/>
 		</td>
 	</tr>
-         </field:display>
+</field:display>
 	<field:display name="Activity Category" feature="Contracting">
 	<tr>
 		<td align="right"  nowrap>
@@ -221,6 +221,17 @@ function selectOrganisation1() {
         </td>
 	</tr>
          </field:display>
+
+	<field:display name="Contracting Organization Text" feature="Contracting">
+		<tr>
+			<td align="right"  nowrap>
+				<b><digi:trn key="aim:IPA:popup:contractingOrganization">Contracting Organization</digi:trn>:</b>
+			</td>
+			<td>
+				<html:textarea property="contractingOrganizationText" rows="1" cols="90" styleClass="inp-text"/>
+			</td>
+			</tr>
+	</field:display>
          <field:display name="Contract Completion" feature="Contracting">
 	
 		<tr>

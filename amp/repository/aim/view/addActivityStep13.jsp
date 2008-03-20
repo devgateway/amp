@@ -300,6 +300,19 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                         </tr>	
                                                                                          </field:display>
                                                                                         
+                                                                                        <field:display name="Contracting Organization Text" feature="Contracting">
+                                                                                         <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                     ${contract.contractingOrganizationText}
+                                                                                                
+                                                                                            </td>
+                                                                                            
+                                                                                        </tr>	
+                                                                                         </field:display>
+                                                                                        
                                                                                         <field:display name="Contract Completion" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">

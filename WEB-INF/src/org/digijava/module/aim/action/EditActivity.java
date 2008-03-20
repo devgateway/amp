@@ -933,41 +933,7 @@ public class EditActivity
             eaForm.setSelectedLocs(locs);
           }
 
-         /* if (impLevel >= 0) {
-            eaForm.setImplemLocationLevel(
-                CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.
-                IMPLEMENTATION_LEVEL_KEY,
-                new Long(impLevel)).getId()
-                );
-          }
-          else
-            eaForm.setImplemLocationLevel(
-                CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.
-                IMPLEMENTATION_LEVEL_KEY,
-                new Long(0)).getId()
-                );
-          */
-
-          /*switch(impLevel) {
-              case 0:
-                  eaForm.setImplementationLevel("country");
-                  break;
-              case 1:
-                  eaForm.setImplementationLevel("region");
-                  break;
-              case 2:
-                  eaForm.setImplementationLevel("zone");
-                  break;
-              case 3:
-                  eaForm.setImplementationLevel("woreda");
-                  break;
-              default:
-                  eaForm.setImplementationLevel("country");
-                               }*/
-
-
-
-//          eaForm.setRefDocComments(null);
+       
           eaForm.setAllReferenceDocNameIds(null);
           eaForm.setReferenceDocs(null);
 
@@ -984,10 +950,20 @@ public class EditActivity
         	  eaForm.setProgramDescription(activity
                                        .getProgramDescription().trim());
 
-          DecimalWraper totComm = new DecimalWraper();
-          DecimalWraper totDisb = new DecimalWraper();
+          
+          
+          
+          DecimalWraper totActualComm = new DecimalWraper();
+          DecimalWraper totPlannedComm = new DecimalWraper();
+          
+          DecimalWraper totActualDisb = new DecimalWraper();
           DecimalWraper totPlanDisb =new DecimalWraper();
-          DecimalWraper totExp = new DecimalWraper();
+          
+          DecimalWraper totActualExp = new DecimalWraper();
+          DecimalWraper totPlannedExp = new DecimalWraper();
+
+          DecimalWraper totActualDisbOrder = new DecimalWraper();
+          DecimalWraper totPlannedDisbOrder = new DecimalWraper();
 
 
 
@@ -1099,47 +1075,46 @@ public class EditActivity
                                           fundingDetail.setContract(fundDet.getContract());
                                           eaForm.setCurrCode(toCurrCode);
                                           
+                                         
                                           if (adjType == Constants.PLANNED) {
-                                            fundingDetail.setAdjustmentTypeName("Planned");
-                                            if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-                                            	if (totPlanDisb.getValue().doubleValue()!=0){
+                                            
+                                              fundingDetail.setAdjustmentTypeName("Planned");
+                                              if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
                                             		totPlanDisb.setValue(totPlanDisb.getValue().add(amt.getValue()));
                                             		totPlanDisb.setCalculations(totPlanDisb.getCalculations() + " + " + amt.getCalculations());
-                                            	}
-                                            	else{
-                                            		totPlanDisb.setValue(amt.getValue());
-                                            		totPlanDisb.setCalculations(amt.getCalculations());
-                                            	}
-                                            }                                            
+                                              }else if(fundDet.getTransactionType().intValue() == Constants.COMMITMENT){
+                                        	  
+                                        	      totPlannedComm.setValue(totPlannedComm.getValue().add(amt.getValue()));
+                                        	      totPlannedComm.setCalculations(totPlannedComm.getCalculations() + " + " + amt.getCalculations());
+                                         
+                                              }  else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
+                                        	  totPlannedExp.setValue(totPlannedExp.getValue().add(amt.getValue()));
+                                        	  totPlannedExp.setCalculations(totPlannedExp.getCalculations() + " + " + amt.getCalculations());
+                                              }
+                                	     
+                                              else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
+                                        	  totPlannedDisbOrder.setValue(totPlannedDisbOrder.getValue().add(amt.getValue()));
+                                        	  totPlannedDisbOrder.setCalculations(totPlannedDisbOrder.getCalculations() + " + " + amt.getCalculations());
+                                              }
                                           }else if (adjType == Constants.ACTUAL) {
-                                        	  fundingDetail.setAdjustmentTypeName("Actual");
+                                        	  
+                                              	fundingDetail.setAdjustmentTypeName("Actual");
                                         	  if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
-                                        	  	if(totComm.getValue().doubleValue()!=0){
-                                        	  		totComm.setValue(totComm.getValue().add(amt.getValue()));
-                                        	  		totComm.setCalculations(totComm.getCalculations() + " + " + amt.getCalculations());
-                                        	  	}
-                                        	  	else{
-                                        	  		totComm.setValue(amt.getValue());
-                                        	  		totComm.setCalculations(amt.getCalculations());
-                                        	  	}
-                                          }else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-                                        	  if(totDisb.getValue().doubleValue()!=0){
-                                        		  totDisb.setValue(totDisb.getValue().add(amt.getValue()));
-                                        		  totDisb.setCalculations(totDisb.getCalculations() + " + " + amt.getCalculations());
-                                        	  }
-                                        	  else{
-                                        		  totDisb.setValue(amt.getValue());
-                                        		  totDisb.setCalculations(amt.getCalculations());
-                                        	  }
-                                          } else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
-                                        	  if (totExp.getValue().doubleValue() != 0) {
-                                        		  totExp.setValue(totExp.getValue().add(amt.getValue()));
-                                        		  totExp.setCalculations(totExp.getCalculations() + " + " + amt.getCalculations());
-                                        	  } else {
-                                        		  totExp.setValue(amt.getValue());
-                                        		  totExp.setCalculations(amt.getCalculations());
-                                        	  }
-                                          }
+                                        	      totActualComm.setValue(totActualComm.getValue().add(amt.getValue()));
+                                        	      totActualComm.setCalculations(totActualComm.getCalculations() + " + " + amt.getCalculations());
+                                        	  	
+                                        	  }else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
+                                        	 	  totActualDisb.setValue(totActualDisb.getValue().add(amt.getValue()));
+                                        	 	 totActualDisb.setCalculations(totActualDisb.getCalculations() + " + " + amt.getCalculations());
+                                        	 
+                                        	  } else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
+                                        	      totActualExp.setValue(totActualExp.getValue().add(amt.getValue()));
+                                        	      totActualExp.setCalculations(totActualExp.getCalculations() + " + " + amt.getCalculations());
+                                        	 
+                                        	  }  else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT_ORDER) {
+                                        	  totActualDisbOrder.setValue(totActualDisbOrder.getValue().add(amt.getValue()));
+                                        	  totActualDisbOrder.setCalculations(totActualDisbOrder.getCalculations() + " + " + amt.getCalculations());
+                                              }
                                           }
                                           if (fundDet.getTransactionType().intValue() ==
                                               Constants.EXPENDITURE) {
@@ -1199,18 +1174,28 @@ public class EditActivity
           //logger.info("size = " + fundingOrgs);
           eaForm.setFundingOrganizations(fundingOrgs);
           if(debug){
-        	  eaForm.setTotalCommitments(totComm.getCalculations());
-        	  eaForm.setTotalCommitmentsDouble(totComm.getValue().doubleValue());
-        	  eaForm.setTotalDisbursements(totDisb.getCalculations());
+        	  eaForm.setTotalCommitments(totActualComm.getCalculations());
+        	  eaForm.setTotalCommitmentsDouble(totActualComm.getValue().doubleValue());
+        	  
+        	  eaForm.setTotalDisbursements(totActualDisb.getCalculations());
         	  eaForm.setTotalPlannedDisbursements(totPlanDisb.getCalculations());
-        	  eaForm.setTotalExpenditures(totExp.getCalculations());  
+        	  eaForm.setTotalExpenditures(totPlannedExp.getCalculations());  
+        	  eaForm.setTotalPlannedCommitments(totPlannedComm.getCalculations());
+        	  eaForm.setTotalPlannedExpenditures(totPlannedExp.getCalculations());
+        	  eaForm.setTotalActualDisbursementsOrders(totActualDisbOrder.getCalculations());
+        	  eaForm.setTotalPlannedDisbursementsOrders(totPlannedDisbOrder.getCalculations());
           }
           else{
-        	  eaForm.setTotalCommitmentsDouble(totComm.getValue().doubleValue());
-        	  eaForm.setTotalCommitments(totComm.toString());
-        	  eaForm.setTotalDisbursements(totDisb.toString());
+              	//actual
+      		  eaForm.setTotalCommitments(totActualComm.toString());
+        	  eaForm.setTotalDisbursements(totActualDisb.toString());
+        	  eaForm.setTotalExpenditures(totActualExp.toString());
+        	  eaForm.setTotalActualDisbursementsOrders(totActualDisbOrder.toString());
+        	  //planned
         	  eaForm.setTotalPlannedDisbursements(totPlanDisb.toString());
-        	  eaForm.setTotalExpenditures(totExp.toString());
+        	  eaForm.setTotalPlannedCommitments(totPlannedComm.toString());
+        	  eaForm.setTotalPlannedExpenditures(totPlannedExp.toString());
+        	  eaForm.setTotalPlannedDisbursementsOrders(totPlannedDisbOrder.toString());
           }
           ArrayList regFunds = new ArrayList(); 
           Iterator rItr = activity.getRegionalFundings().iterator();

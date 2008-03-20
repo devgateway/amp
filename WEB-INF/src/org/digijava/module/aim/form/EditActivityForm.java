@@ -65,7 +65,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String createdDate;
 	private String updatedDate;
 	private AmpTeamMember updatedBy;
-    private AmpTeamMember createdBy;
+	private AmpTeamMember createdBy;
 	private Collection perspectives;
 	private Boolean budget=true;
 	private String budgetCheckbox;
@@ -108,10 +108,15 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String programDescription;
 	private boolean sectorReset;
 	private String totalCommitments;
+	private String totalPlannedCommitments;
 	private double totalCommitmentsDouble;
 	private String totalDisbursements;
 	private String totalExpenditures;
+	private String totalPlannedExpenditures;
 	private String totalPlannedDisbursements;
+	
+	private String totalPlannedDisbursementsOrders;
+	private String totalActualDisbursementsOrders;
 	
 	private List costs;
         //to check if the current memeber is Team lead
@@ -5143,6 +5148,40 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setTotalCommitmentsDouble(double totalCommitmentsDouble) {
 		this.totalCommitmentsDouble = totalCommitmentsDouble;
+	}
+
+	public String getTotalPlannedCommitments() {
+	    return totalPlannedCommitments;
+	}
+
+	public void setTotalPlannedCommitments(String totalPlannedCommitments) {
+	    this.totalPlannedCommitments = totalPlannedCommitments;
+	}
+
+	public String getTotalPlannedExpenditures() {
+	    return totalPlannedExpenditures;
+	}
+
+	public void setTotalPlannedExpenditures(String totalPlannedExpenditures) {
+	    this.totalPlannedExpenditures = totalPlannedExpenditures;
+	}
+
+	public String getTotalPlannedDisbursementsOrders() {
+	    return totalPlannedDisbursementsOrders;
+	}
+
+	public void setTotalPlannedDisbursementsOrders(
+		String totalPlannedDisbursementsOrders) {
+	    this.totalPlannedDisbursementsOrders = totalPlannedDisbursementsOrders;
+	}
+
+	public String getTotalActualDisbursementsOrders() {
+	    return totalActualDisbursementsOrders;
+	}
+
+	public void setTotalActualDisbursementsOrders(
+		String totalActualDisbursementsOrders) {
+	    this.totalActualDisbursementsOrders = totalActualDisbursementsOrders;
 	}
 
 

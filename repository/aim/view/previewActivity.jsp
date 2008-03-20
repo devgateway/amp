@@ -550,6 +550,8 @@ function collapseAll() {
 											</TD>
 										</TR>																		
 									</field:display>
+
+											<bean:define id="largeTextFeature" value="Identification" toScope="request"/>
 									
 											<logic:present name="aimEditActivityForm" property="projectImpact">
 											<bean:define id="largeTextLabel" value="Project Impact" toScope="request"/>

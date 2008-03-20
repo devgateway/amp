@@ -11,6 +11,7 @@
 	</id>
 		<property name="contractName" column="contract_name" type="java.lang.String"/>
 		<property name="description" column="description" type="java.lang.String"/>
+		<property name="contractingOrganizationText" column="contracting_organization_text" type="java.lang.String"/>
 		
 		<many-to-one name="activityCategory" 
 			column="activity_category_id" 

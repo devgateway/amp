@@ -117,6 +117,8 @@ public class EditIPAContract extends MultiAction {
         euaf.setIndexId(indexId);
         euaf.setContractName(contract.getContractName());
         euaf.setDescription(contract.getDescription());
+        euaf.setContractingOrganizationText(contract.getContractingOrganizationText());
+        
         euaf.setId(contract.getId());
         
         if (contract.getActivityCategory() != null) {
@@ -423,6 +425,7 @@ public class EditIPAContract extends MultiAction {
         }
         eua.setContractName(euaf.getContractName());
         eua.setDescription(euaf.getDescription());
+        eua.setContractingOrganizationText(euaf.getContractingOrganizationText());
         Long orgId = euaf.getContrOrg();
         if (orgId != null && orgId != -1) {
             eua.setOrganization(DbUtil.getOrganisation(orgId));

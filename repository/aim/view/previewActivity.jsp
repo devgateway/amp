@@ -2712,6 +2712,18 @@ function collapseAll() {
                                                                                             
                                                                                         </tr>	
                                                                                         
+                                                                                        <field:display name="Contracting Organization Text" feature="Contracting Tab">
+                                                                                         <tr>
+                                                                                            <td align="left">
+                                                                                                <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization</digi:trn>:</b>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                     ${contract.contractingOrganizationText}
+                                                                                                
+                                                                                            </td>
+                                                                                            
+                                                                                        </tr>	
+                                                                                    </field:display>
                                                                                         
                                                                                         <tr>
                                                                                             <td align="left">

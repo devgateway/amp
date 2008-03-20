@@ -67,7 +67,7 @@ public class IPAContractForm extends ActionForm  {
 	private Long id;
 	private String contractName;
 	private String description;
-	
+	private String contractingOrganizationText;	
 	
 	private String startOfTendering;
 	
@@ -435,6 +435,14 @@ public class IPAContractForm extends ActionForm  {
 
 		public void setExecutionRate(Double executionRate) {
 			this.executionRate = executionRate;
+		}
+
+		public String getContractingOrganizationText() {
+			return contractingOrganizationText;
+		}
+
+		public void setContractingOrganizationText(String contractingOrganizationText) {
+			this.contractingOrganizationText = contractingOrganizationText;
 		}
 
 

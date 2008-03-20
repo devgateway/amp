@@ -120,8 +120,8 @@ function banUser(txt) {
 		                <html:option value="0">${translation}</html:option>
 		
 		                <c:set var="translation">
-		                  <digi:trn key="um:viewAllUsers:teamMembers">
-		                  Team members
+		                  <digi:trn key="um:viewAllUsers:workspaceMembers">
+		                  Workspace members
 		                  </digi:trn>
 		                </c:set>
 		                <html:option value="1">${translation}</html:option>	                

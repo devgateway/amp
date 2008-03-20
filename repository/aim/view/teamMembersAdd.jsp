@@ -59,11 +59,11 @@
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;					
 						<c:set var="translation">
-							<digi:trn key="aim:clickToViewTeamMembers">Click here to view Team Members</digi:trn>
+							<digi:trn key="aim:clickToViewWorkspaceMembers">Click here to view Workspace Members</digi:trn>
 						</c:set>
 						<digi:link href="/teamMemberList.do" styleClass="comment" title="${translation}" >
-						<digi:trn key="aim:teamMembers">
-						Team Members
+						<digi:trn key="aim:workspaceMembers">
+						Workspace Members
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;					
 						<digi:trn key="aim:addTeamMembers">

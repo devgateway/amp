@@ -36,8 +36,8 @@
               	<TABLE border=0 cellPadding=0 cellSpacing=0 >
               		<TR bgColor=#f4f4f2>
                  		<TD bgColor=#c9c9c7 class=box-title
-							title='<digi:trn key="aim:TeamMemberListAssocWithTeam">List of Team Members associated with Team</digi:trn>'>
-								<digi:trn key="aim:teamMembers">Team Members</digi:trn>
+							title='<digi:trn key="aim:WorkspaceMemberListAssocWithTeam">List of Workspace Members associated with Workspace</digi:trn>'>
+								<digi:trn key="aim:workspaceMembers">Workspace Members</digi:trn>
 							</TD>
                     	<TD background="module/aim/images/corner-r.gif" 
 							height=17 width=17></TD>

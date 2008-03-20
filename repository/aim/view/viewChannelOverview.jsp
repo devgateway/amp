@@ -200,7 +200,7 @@ function commentWin(val) {
 													<feature:display name="Edit Activity" module="Previews">
 														<field:display feature="Edit Activity"
 															name="Validate Activity Button">
-															<c:if
+    														<c:if
 																test="${aimChannelOverviewForm.buttonText == 'validate'}">
 																 <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}"> 
 																
@@ -209,9 +209,9 @@ function commentWin(val) {
 																	property="validateBtn">
 																	<digi:trn key="aim:validate">Validate</digi:trn>
 																</html:button></td>
-															</c:if>	
+ 															</c:if>	
 
-															</c:if>
+															</c:if>  
 															<%--<c:if test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
 							                                        	<td >
 							                                        		<html:button  styleClass="FONT-SIZE: 11px; COLOR: #313131" disabled="true" property="validateBtn">

@@ -700,7 +700,24 @@ public class ProgramUtil {
 			}
 			return themeInd;
 		}
-
+                
+                public static Collection getProgramIndicators(Long programId)
+		{
+                    Set indicators=new HashSet();
+                    ArrayList programs = (ArrayList) getRelatedThemes(programId);
+                    if (programs != null) {
+                        Iterator<AmpTheme> iterProgram = programs.iterator();
+                        while (iterProgram.hasNext()) {
+                            AmpTheme program = iterProgram.next();
+                            Set inds=IndicatorUtil.getIndicatorThemeConnections(program);
+                            if(inds!=null){
+                                indicators.addAll(inds);
+                            }
+                        }
+                    }
+                    return indicators;
+		}
+                
 		@Deprecated
 		public static Collection getThemeIndicatorValues(Long themeIndicatorId)
 		{
@@ -1201,7 +1218,7 @@ public class ProgramUtil {
 				try {
 					sess = PersistenceManager.getRequestDBSession();
 					tx = sess.beginTransaction();
-					AmpTheme tempTheme = (AmpTheme) sess.load(AmpTheme.class,themeId);
+					AmpTheme tempTheme = (AmpTheme) sess.load(AmpTheme.class,ampTh.getAmpThemeId());
 					sess.delete(tempTheme);
 					tx.commit();
 				} catch (HibernateException e) {
@@ -1824,33 +1841,36 @@ public class ProgramUtil {
     	 Session sess = null;
          Collection col = null;
          try {
-             sess = PersistenceManager.getRequestDBSession();
-             AmpTheme themeToBeDeleted = (AmpTheme) sess.load(AmpTheme.class, programId);
-             if ( themeToBeDeleted.getActivities() != null ){
-            	Iterator iter	= themeToBeDeleted.getActivities().iterator();
-		    	while ( iter.hasNext() ) {
-		    		AmpActivity activity	= (AmpActivity) iter.next();
-		    		if (activity != null) {
-		    			activities.add(activity);
-		    		}
-		    	}
+             ArrayList programs = (ArrayList) getRelatedThemes(programId);
+             if (programs != null) {
+                 Iterator<AmpTheme> iterProgram = programs.iterator();
+                 while (iterProgram.hasNext()) {
+                     AmpTheme program = iterProgram.next();
+                     sess = PersistenceManager.getRequestDBSession();
+                     AmpTheme themeToBeDeleted = (AmpTheme) sess.load(AmpTheme.class, program.getAmpThemeId());
+                     if (themeToBeDeleted.getActivities() != null) {
+                         activities.addAll(themeToBeDeleted.getActivities());
+                     }
+                     if (themeToBeDeleted.getActivityId() != null) {
+                         activities.add(themeToBeDeleted.getActivityId());
+                     }
+
+                     String queryString = "select a from " + AmpActivityProgram.class.getName() + " a where (a.program=:program) ";
+                     Query qry = sess.createQuery(queryString);
+                     qry.setLong("program", programId);
+                     Collection result = qry.list();
+                     if (result != null) {
+                         Iterator iterator = result.iterator();
+                         while (iterator.hasNext()) {
+                             AmpActivityProgram actProgram = (AmpActivityProgram) iterator.next();
+                             if (actProgram != null && actProgram.getActivity() != null) {
+                                 activities.add(actProgram.getActivity());
+                             }
+                         }
+                     }
+                 }
              }
-             if ( themeToBeDeleted.getActivityId() != null ) {
-            	 activities.add( themeToBeDeleted.getActivityId() ); 
-             }
-             
-             String queryString = "select a from " + AmpActivityProgram.class.getName() + " a where (a.program=:program) ";
-             Query qry 			= sess.createQuery(queryString);
-             qry.setLong("program", programId);
-             Collection result	= qry.list();
-             if ( result != null ) {
-            	 Iterator iterator	= result.iterator();
-            	 while ( iterator.hasNext() ) {
-            		 AmpActivityProgram program = (AmpActivityProgram)iterator.next();
-            		 if (program != null && program.getActivity() != null)
-            		       		 activities.add( program.getActivity() );
-            	 }
-             }
+
              return activities;
          }
          catch (Exception e) {

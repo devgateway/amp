@@ -219,7 +219,7 @@
 																		<td colspan="2" align="center">
 																			<font color="red"><b><digi:trn key="aim:cannotDeleteThemeMsg1">
 																			Cannot delete the theme since some
-																			activities references it: 
+																			activities references it or its sub program: 
 																			</digi:trn>
 																				${aimThemeForm.activitiesUsingTheme }
 																				</b>
@@ -247,7 +247,7 @@
 
 																			<font color="red"><b><digi:trn key="aim:cannotDeleteThemeMsg2">
 
-																			Cannot delete this program, one or more indicators are attached to it.
+																			Cannot delete this program, one or more indicators are attached to it or its sub program.
 
 																			Delete the indicator(s) before deleting the program.
 

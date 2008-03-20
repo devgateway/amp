@@ -125,9 +125,10 @@ public class ThemeManager extends Action {
 			boolean flagProblemFound	= false;
 			RepairDbUtil.repairThemesHavingNullIndicator();
 			//Iterator itr = DbUtil.getActivityThemeFromAAT(new Long(Long.parseLong(request.getParameter("themeId")))).iterator();
-			Collection col = ProgramUtil.checkActivitiesUsingProgram( themeForm.getThemeId() );
-			Collection col2 = ProgramUtil.getThemeIndicators(themeForm.getThemeId());
-			
+                        Long programId=themeForm.getThemeId();
+			Collection col = ProgramUtil.checkActivitiesUsingProgram(programId);
+			Collection col2 = ProgramUtil.getProgramIndicators(programId);
+                      
 			String nameOfSettingsUsedInActivity	= ProgramUtil.getNameOfProgramSettingsUsed( themeForm.getThemeId() );
 			
 			if( !flagProblemFound && (col!=null) && (!(col.isEmpty())) )

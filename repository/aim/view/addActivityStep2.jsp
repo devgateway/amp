@@ -280,7 +280,11 @@ function validateLocationPercentage(){
   var cnt_blank_fields = 0;
   while (i < cnt) {
     str   = "selectedLocs[" + i + "].percent";
+    if(str.value == "undefined"){
     val   = (document.aimEditActivityForm.elements)[str].value;
+    }else{
+    val = "0";
+    }
     // added by mouhamad for burkina on 22/02/08
     if (val == "" || val == null || val == "0") {
     	val = "0";
@@ -333,6 +337,7 @@ function fnChk(frmContrl){
     //frmContrl.focus();
     return false;
   }
+  
   if (frmContrl.value > 100) {
     alert("${errMsgAddSectorSumExceed}");
     frmContrl.value = "";

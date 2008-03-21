@@ -484,13 +484,13 @@ function collapseAll() {
 									</field:display>
 									<logic:present name="currentMember" scope="session">
 									<tr>
-									<field:display feature="Identification" name="Objective Comments">
-									<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
+									
+									<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+									<field:display feature="Identification" name="Objective Comments">											
 									<digi:trn key="aim:objectiveComments"> 
 										Objective Comments
-									</digi:trn>										
+									</digi:trn></field:display>								
 									</td>
-									</field:display>
 										<td bgcolor="#ffffff">
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
 										 <field:display feature="Identification" name="Objective Assumption">

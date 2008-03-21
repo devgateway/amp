@@ -404,7 +404,7 @@ function selectOrganisation1() {
 		</td>
 		</tr>
      </field:display>
-<field:display name="Disbursements" feature="Contracting">
+<field:display name="Contracting Disbursements" feature="Contracting">
 	<tr>
 		<td>&nbsp;</td>
 		<td bgcolor="#006699" class="textalb" align="center">

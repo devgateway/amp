@@ -465,7 +465,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                         </tr>
                                                                                     </field:display>    
                                                                                          
-                                                                                        <field:display name="Disbursements" feature="Contracting">
+                                                                                        <field:display name="Contracting Disbursements" feature="Contracting">
                                                                                         <tr>
                                                                                     
                                                                                             <td colspan="2">

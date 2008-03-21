@@ -324,11 +324,17 @@ public class IndicatorUtil {
 	 * @param indicatorId
 	 * @throws DgException
 	 */
+	
+	
+	
 	public static void assignIndicatorToTheme(Long themeId, Long indicatorId) throws DgException{
 		AmpTheme theme=ProgramUtil.getThemeById(themeId);
 		AmpIndicator indicator=IndicatorUtil.getIndicator(indicatorId);
 		assignIndicatorToTheme(theme, indicator);
 	}
+	
+	
+	
 	
 	/**
 	 * Assigns indicator to program (theme).

@@ -6437,9 +6437,25 @@ public class DbUtil {
      *
      */
     public static class HelperAmpOrganisationNameComparator implements Comparator<AmpOrganisation> {
-    	public int compare (AmpOrganisation o1,AmpOrganisation o2){
-    	 		return (o1.getName()==null || o2.getName()==null)?0:o1.getName().toLowerCase().compareTo(o2.getName().toLowerCase());
-    	}
+    	Locale locale;
+        Collator collator;
+
+        public HelperAmpOrganisationNameComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAmpOrganisationNameComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(AmpOrganisation o1, AmpOrganisation o2) {
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);           
+            
+
+            int result = (o1.getName()==null || o2.getName()==null)?0:collator.compare(o1.getName().toLowerCase(), o2.getName().toLowerCase());
+            return result;
+        }
     }
     
     /**
@@ -6448,9 +6464,35 @@ public class DbUtil {
      *
      */
     public static class HelperAmpOrganisatonAcronymComparator implements Comparator<AmpOrganisation>{
-    	public int compare (AmpOrganisation o1,AmpOrganisation o2){
-	 		return (o1.getAcronym()==null || o2.getAcronym()==null)?0:o1.getAcronym().toLowerCase().compareTo(o2.getAcronym().toLowerCase());
-    	}    	
+    	Locale locale;
+        Collator collator;
+
+        public HelperAmpOrganisatonAcronymComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAmpOrganisatonAcronymComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+
+        public int compare(AmpOrganisation o1, AmpOrganisation o2) {
+            
+        	int result=0;
+        	collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+
+            if (o1.getAcronym()!=null && o2.getAcronym()!=null) {
+            	result=collator.compare(o1.getAcronym(), o2.getAcronym());
+            }else if(o1.getAcronym()==null && o2.getAcronym()==null){
+            	result=0;
+            }else if(o1.getAcronym()==null){
+            	result=collator.compare("",o2.getAcronym());
+            }else if (o2.getAcronym()==null){
+            	result=collator.compare(o1.getAcronym(),"");
+            }             
+            return result;
+        }   	
+    	
    }
     
     /**
@@ -6460,21 +6502,31 @@ public class DbUtil {
      *
      */
     public static class HelperAmpOrganisationGroupComparator implements Comparator<AmpOrganisation> {
+    	Locale locale;
+    	Collator collator;
+    	
+    	public HelperAmpOrganisationGroupComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAmpOrganisationGroupComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+    	
+    	
     	public int compare (AmpOrganisation o1,AmpOrganisation o2){
+    		collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
     		int result=0;
     		//such long and complicated case is necessary because orgGroup maybe empty for organisation
     		if (o1.getOrgGrpId()!=null && o2.getOrgGrpId()!=null) {
-    			if(o1.getOrgGrpId().getOrgGrpName()!=null && o2.getOrgGrpId().getOrgGrpName()!=null){
-    				result=o1.getOrgGrpId().getOrgGrpName().toLowerCase().trim().compareTo(o2.getOrgGrpId().getOrgGrpName().toLowerCase().trim());
-    			} else if (o1.getOrgGrpId().getOrgGrpName()!=null) {
-    				result=o1.getOrgGrpId().getOrgGrpName().toLowerCase().trim().compareTo("");
-    			}else if (o2.getOrgGrpId().getOrgGrpName()!=null){
-    				result= "".compareTo(o2.getOrgGrpId().getOrgGrpCode().toLowerCase());
-    			}
-    		} else if (o1.getOrgGrpId()!=null && o1.getOrgGrpId().getOrgGrpName()!=null){
-    			result=o1.getOrgGrpId().getOrgGrpName().toLowerCase().trim().compareTo("");
-    		}else if (o2.getOrgGrpId()!=null && o2.getOrgGrpId().getOrgGrpName()!=null){
-    			result= "".compareTo(o2.getOrgGrpId().getOrgGrpCode().toLowerCase());
+    			AmpOrgGroup orggrp1=o1.getOrgGrpId();
+    			AmpOrgGroup orggrp2=o2.getOrgGrpId();
+    			result=new HelperAmpOrgGroupNameComparator().compare(orggrp1, orggrp2);
+    		} else if (o2.getOrgGrpId()==null){
+    			result=collator.compare(o1.getOrgGrpId().getOrgGrpName(), "");
+    		}else if (o1.getOrgGrpId()==null){
+    			result= collator.compare("", o2.getOrgGrpId().getOrgGrpName());
     		}
     		return result;
     	}    	
@@ -6487,21 +6539,30 @@ public class DbUtil {
      *
      */
     public static class HelperAmpOrganisationTypeComparator implements Comparator<AmpOrganisation> {
+    	Locale locale;
+    	Collator collator;
+    	
+    	public HelperAmpOrganisationTypeComparator(){
+            this.locale=new Locale("en", "EN");
+        }
+
+        public HelperAmpOrganisationTypeComparator(String iso) {
+            this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
+        }
+    	
     	public int compare (AmpOrganisation o1,AmpOrganisation o2){
+    		collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
     		int result=0;
     		//such long and complicated case is necessary because orgType maybe empty for organisation
     		if (o1.getOrgTypeId()!=null && o2.getOrgTypeId()!=null) {
-    			if(o1.getOrgTypeId().getOrgType()!=null && o2.getOrgTypeId().getOrgType()!=null){
-    				result=o1.getOrgTypeId().getOrgType().toLowerCase().trim().compareTo(o2.getOrgTypeId().getOrgType().toLowerCase().trim());
-    			} else if (o1.getOrgTypeId().getOrgType()!=null) {
-    				result=o1.getOrgTypeId().getOrgType().toLowerCase().trim().compareTo("");
-    			}else if (o2.getOrgTypeId().getOrgType()!=null){
-    				result= "".compareTo(o2.getOrgTypeId().getOrgType().toLowerCase());
-    			}
-    		} else if (o1.getOrgTypeId()!=null && o1.getOrgTypeId().getOrgType()!=null){
-    			result=o1.getOrgTypeId().getOrgType().toLowerCase().trim().compareTo("");
-    		}else if (o2.getOrgTypeId()!=null && o2.getOrgTypeId().getOrgType()!=null){
-    			result= "".compareTo(o2.getOrgTypeId().getOrgType().toLowerCase());
+    			AmpOrgType orgType1=o1.getOrgTypeId();
+    			AmpOrgType orgType2=o2.getOrgTypeId();
+    			result=new HelperAmpOrgTypeNameComparator().compare(orgType1, orgType2);
+    		} else if (o2.getOrgTypeId()==null){
+    			result=collator.compare(o1.getOrgTypeId().getOrgType(), "");
+    		}else if (o1.getOrgTypeId()==null){
+    			result=collator.compare("", o2.getOrgTypeId().getOrgType());
     		}
     		return result;
     		

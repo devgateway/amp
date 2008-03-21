@@ -151,8 +151,8 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <feature:display name="Measures" module="Reports"></feature:display>
 <feature:display name="Messages" module="Messaging System"></feature:display>
 
-<feature:display module="Funding" name="Commitments">
-<feature:display module="Funding" name="Disbursements">
+<feature:display module="Funding" name="Commitments"></feature:display>
+<feature:display module="Funding" name="Disbursements"></feature:display>
 
 <field:display  name="Remove Location" feature="Location"></field:display>
 <field:display feature="Donor Contact Information" name="Donor Email"></field:display>
@@ -552,7 +552,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="addMessageButton" feature="Messages"></field:display>
 
 <!-- AMP-2965 by cornel -->
-<field:display name="Objective Comments"> feature="Identification"</field:display>
+<field:display name="Objective Comments" feature="Identification"></field:display>
 <field:display name="Proposed Completion Dates" feature="Planning"></field:display>
 <field:display name="Contract Name" feature="Contracting Tab"></field:display>
 <field:display name="Contract Description" feature="Contracting Tab"></field:display>

@@ -484,11 +484,13 @@ function collapseAll() {
 									</field:display>
 									<logic:present name="currentMember" scope="session">
 									<tr>
+									<field:display feature="Identification" name="Objective Comments">
 									<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
 									<digi:trn key="aim:objectiveComments"> 
 										Objective Comments
 									</digi:trn>										
 									</td>
+									</field:display>
 										<td bgcolor="#ffffff">
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
 										 <field:display feature="Identification" name="Objective Assumption">
@@ -615,7 +617,9 @@ function collapseAll() {
                             	<!--7 8 9 10 -->	
 									<field:display feature="Identification" name="Purpose">
 									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											<digi:trn key="aim:purpose">Purpose</digi:trn>										</td>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
+										<digi:trn key="aim:purpose">Purpose</digi:trn>										
+										</td>
 										<td bgcolor="#ffffff">
                                           <c:if test="${aimEditActivityForm.purpose!=null}">
 											<c:set var="objKey" value="${aimEditActivityForm.purpose}" />
@@ -624,7 +628,9 @@ function collapseAll() {
 									</tr>
 									<logic:present name="aimEditActivityForm" property="allComments">
 									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											<digi:trn key="aim:purposeComments">Purpose Comments</digi:trn>										</td>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
+										<digi:trn key="aim:purposeComments">Purpose Comments</digi:trn>										
+										</td>
 										<td bgcolor="#ffffff">
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
 										 	<logic:equal name="comments" property="key" value="Purpose Assumption">
@@ -655,7 +661,9 @@ function collapseAll() {
 
 									<field:display feature="Identification" name="Results">
 									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											<digi:trn key="aim:results">Results</digi:trn>										</td>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
+										<digi:trn key="aim:results">Results</digi:trn>										
+										</td>
 										<td bgcolor="#ffffff">
                                           <c:if test="${aimEditActivityForm.results!=null}">
 											<c:set var="objKey" value="${aimEditActivityForm.results}" />
@@ -664,7 +672,9 @@ function collapseAll() {
 									</tr>
 									<logic:present name="aimEditActivityForm" property="allComments">
 									<tr>
-										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											<digi:trn key="aim:resultsComments">Results Comments</digi:trn>										</td>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">											
+										<digi:trn key="aim:resultsComments">Results Comments</digi:trn>										
+										</td>
 										<td bgcolor="#ffffff">
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
 										 	<logic:equal name="comments" property="key" value="Results Assumption">
@@ -876,6 +886,7 @@ function collapseAll() {
 														<c:out value="${aimEditActivityForm.currentCompDate}"/>													</td>
 												</tr>
 												</field:display>
+												<field:display name="Proposed Completion Dates" feature="Planning">
 												<c:if test="${aimEditActivityForm.editAct}">
 												<c:if test="${!empty aimEditActivityForm.activityCloseDates}">
 												<tr>
@@ -897,6 +908,7 @@ function collapseAll() {
 													<td colspan="3">&nbsp;</td>
 												</tr>
 												</c:if>
+												</field:display>
 											</table>
 											</div>										</td>
 									</tr>
@@ -1117,6 +1129,7 @@ function collapseAll() {
 															<tr><td bgcolor="#ffffff"><b>
 																<c:out value="${regFunds.regionName}"/></b>
 															</td></tr>
+															<feature:display module="Funding" name="Commitments">
 															<c:if test="${!empty regFunds.commitments}">
 																<tr><td bgcolor="#ffffff">
 																	<table width="100%" cellSpacing="1" cellPadding="0" class="box-border-nopadding" border="1">
@@ -1149,6 +1162,8 @@ function collapseAll() {
 																	</table>
 																</td></tr>
 															</c:if>
+															</feature:display>
+															<feature:display module="Funding" name="Disbursements">
 															<c:if test="${!empty regFunds.disbursements}">
 																<tr><td bgcolor="#ffffff">
 																	<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
@@ -1184,6 +1199,7 @@ function collapseAll() {
 																	</table>
 																</td></tr>
 															</c:if>
+															</feature:display>
                                                             <feature:display module="Funding" name="Expenditures">
 															<c:if test="${!empty regFunds.expenditures}">
 																<tr><td bgcolor="#ffffff">
@@ -1946,6 +1962,7 @@ function collapseAll() {
                                                                  <c:forEach items="${aimEditActivityForm.contracts}" var="contract" varStatus="idx">
                                                                        <tr><td bgColor=#f4f4f2 align="center" vAlign="top">
                                                             	           <table width="100%" border="0" cellspacing="2" cellpadding="2" align="left" class="box-border-nopadding">
+                                                            	           		<field:display name="Contract Name" feature="Contracting Tab">
                                                                                <tr>
                                                                                   <td align="left">
                                                                                      <b><digi:trn key="aim:IPA:popup:name">Contract name:</digi:trn></b>
@@ -1954,6 +1971,9 @@ function collapseAll() {
                                                                 	                  ${contract.contractName}
                                                                                    </td>
                                                                                 </tr>
+                                                                                </field:display>
+                                                                                
+                                                                                <field:display name="Contract Description" feature="Contracting Tab">
                                                                                  <tr>
                                                                                     <td align="left">
                                                                                        <b><digi:trn key="aim:IPA:popup:description">Description:</digi:trn></b>
@@ -1962,6 +1982,9 @@ function collapseAll() {
                                                                                        ${contract.description}
                                                                                      </td>
                                                                                   </tr> 
+                                                                                  </field:display>
+                                                                                  
+                                                                                  <field:display name="Activity Category" feature="Contracting Tab">
                                                                                    <tr>
                                                                                      <td align="left">
                                                                                   	     <b><digi:trn key="aim:IPA:popup:actCat">Activity Category:</digi:trn></b>
@@ -1970,6 +1993,9 @@ function collapseAll() {
                                                                                           <c:if test ="${not empty contract.activityCategory}">${contract.activityCategory.value}</c:if>
                                                                                        </td>
                                                                                     </tr>
+                                                                                    </field:display>
+                                                                                    
+                                                                                    <field:display name="Contract type" feature="Contracting Tab">
                                                                                      <tr>
                                                                                      <td align="left">
                                                                                   	     <b><digi:trn key="aim:IPA:popup:type">Type</digi:trn>:</b>
@@ -1978,6 +2004,9 @@ function collapseAll() {
                                                                                           <c:if test ="${not empty contract.type}">${contract.type.value}</c:if>
                                                                                        </td>
                                                                                     </tr>
+                                                                                    </field:display>
+                                                                                    
+                                                                                    <field:display name="Start of Tendering" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:startOfTendering">Start of Tendering:</digi:trn></b>
@@ -1985,8 +2014,10 @@ function collapseAll() {
                                                                                             <td>
                                                                                                 ${contract.formattedStartOfTendering}
                                                                                            </td>                                                                                            
-                                                                                        </tr>	
+                                                                                        </tr>
+                                                                                        </field:display>	
                                                                                         
+                                                                                        <field:display name="Signature of Contract" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:signatureOfContract">Signature of Contract:</digi:trn></b>
@@ -1996,7 +2027,9 @@ function collapseAll() {
                                                                                             </td>
                                                                                             
                                                                                         </tr>	
+                                                                                        </field:display>
                                                                                         
+                                                                                        <field:display name="Contract Organization" feature="Contracting Tab">
                                                                                          <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization:</digi:trn></b>
@@ -2009,6 +2042,7 @@ function collapseAll() {
                                                                                             </td>
                                                                                             
                                                                                         </tr>	
+                                                                                        </field:display>
                                                                                         
                                                                                         <field:display name="Contracting Organization Text" feature="Contracting Tab">
                                                                                          <tr>
@@ -2021,8 +2055,9 @@ function collapseAll() {
                                                                                             </td>
                                                                                             
                                                                                         </tr>	
-                                                                                    </field:display>
+                                                                                        </field:display>
                                                                                         
+                                                                                        <field:display name="Contract Completion" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:contractCompletion">Contract Completion:</digi:trn></b>
@@ -2032,7 +2067,9 @@ function collapseAll() {
                                                                                             </td>
                                                                                             
                                                                                         </tr>	
+                                                                                        </field:display>
                                                                                         
+                                                                                        <field:display name="Status" feature="Contracting Tab">
                                                                                          <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:status">Status:</digi:trn></b>
@@ -2046,6 +2083,7 @@ function collapseAll() {
                                                                                                 
                                                                                             </td>
                                                                                         </tr>
+                                                                                        </field:display>
                                                                                         
                                                                                         <field:display name="Total Amount" feature="Contracting Tab">
                                                                                         	<tr>
@@ -2059,12 +2097,15 @@ function collapseAll() {
                                                                                         	</tr>
                                                                                     	</field:display>
                                                                                         
+                                                                                        <field:display name="Total EC Contribution" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left" colspan="2">
                                                                                                 <b><digi:trn key="aim:IPA:popup:totalECContribution">Total EC Contribution:</digi:trn></b>
                                                                                             </td>
                                                                                         </tr>
+                                                                                        </field:display>
                                                                                         
+                                                                                        <field:display name="IB" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:IB">IB</digi:trn>:</b>
@@ -2074,7 +2115,9 @@ function collapseAll() {
                                                                                                 ${contract.totalECContribIBCurrency} 
                                                                                             </td>
                                                                                         </tr>
+                                                                                        </field:display>
                                                                                         
+                                                                                        <field:display name="INV" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:INV">INV:</digi:trn></b>
@@ -2084,17 +2127,20 @@ function collapseAll() {
                                                                                                ${contract.totalECContribINVCurrency}
                                                                                             </td>
                                                                                         </tr>
+                                                                                        </field:display>
                                                                                         
                                                                                         
                                                                                         
                                                                                         
-                                                                                        
+                                                                                        <field:display name="Total National Contribution" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left" colspan="2">
                                                                                                 <b><digi:trn key="aim:IPA:popup:totalNationalContribution">Total National Contribution:</digi:trn></b>
                                                                                             </td>
                                                                                         </tr>
+                                                                                        </field:display>
                                                                                         
+                                                                                        <field:display name="Central" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:Central">Central</digi:trn>:</b>
@@ -2104,7 +2150,9 @@ function collapseAll() {
                                                                                                 ${contract.totalNationalContribCentralCurrency} 
                                                                                             </td>
                                                                                         </tr>
+                                                                                        </field:display>
                                                                                         
+                                                                                        <field:display name="Regional" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:Regional">Regional</digi:trn>:</b>
@@ -2115,7 +2163,9 @@ function collapseAll() {
                                                                                    
                                                                                             </td>
                                                                                         </tr>
+                                                                                        </field:display>
                                                                                         
+                                                                                        <field:display name="IFIs" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:IFIs">IFIs</digi:trn>:</b>
@@ -2125,15 +2175,18 @@ function collapseAll() {
                                                                                                ${contract.totalNationalContribIFICurrency}
                                                                                             </td>
                                                                                         </tr>
+                                                                                        </field:display>
                                                                                         
                                                                                         
-                                                                                        
+                                                                                        <field:display name="Total Private Contribution" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left" colspan="2">
                                                                                                 <b><digi:trn key="aim:IPA:popup:totalPrivateContribution">Total Private Contribution:</digi:trn></b>
                                                                                             </td>
                                                                                         </tr>
+                                                                                        </field:display>
                                                                                         
+                                                                                        <field:display name="IB" feature="Contracting Tab">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:IB">IB:</digi:trn></b>
@@ -2143,6 +2196,7 @@ function collapseAll() {
                                                                                                 ${contract.totalPrivateContribCurrency}
                                                                                             </td>
                                                                                         </tr>
+                                                                                        </field:display>
                                                                                         
                                                                                         <field:display name="Total Disbursements of Contract" feature="Contracting Tab">
                                                                                         
@@ -2173,13 +2227,16 @@ function collapseAll() {
                                                                                         </tr>
                                                                                     </field:display>
                                                                                         
-                                                                                        
+                                                                                        <field:display name="Disbursements" feature="Contracting Tab">
                                                                                         <tr>
                                                                                     
                                                                                             <td colspan="2">
                                                                                                 <b><digi:trn key="aim:IPA:popup:disbursements">Disbursements:</digi:trn></b>
                                                                                             </td>
                                                                                         </tr>
+                                                                                        </field:display>
+                                                                                        
+                                                                                        
                                                                                         <tr>
                                                                                             <td>&nbsp;
                                                                                             </td>

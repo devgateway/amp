@@ -28,6 +28,7 @@ import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
+
 public class AddThemeIndicator extends Action {
 	private static Logger logger = Logger.getLogger(AddThemeIndicator.class);
 	private ArrayList indValues = null;
@@ -54,12 +55,17 @@ public class AddThemeIndicator extends Action {
 		AmpTheme theme=ProgramUtil.getThemeById(themeForm.getThemeId());
 		themeForm.setThemeName(theme.getName());
 
+		
+		
 		//TODO INDIC  all IF code above this should be deleted!!! already deleted..
 		if (themeForm.getIndid()!=null && themeForm.getIndid().length>0 
 				&& themeForm.getThemeId()!=null && themeForm.getThemeId().longValue()>0
 				&& "assignIndicators".equals(themeForm.getEvent())){
+			
 			for (int i = 0; i < themeForm.getIndid().length; i++) {
+				
 				AmpIndicator indicator=IndicatorUtil.getIndicator(themeForm.getIndid()[i]);
+								
 				IndicatorUtil.assignIndicatorToTheme(theme, indicator);
 			}
 		}

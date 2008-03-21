@@ -59,8 +59,10 @@ ALTER TABLE amp_terms_assist
 ADD COLUMN old_id varchar(20),
 ADD INDEX (old_id);
 
-alter table amp_region
+ALTER table amp_region
 ADD INDEX (region_code);
+
+/* SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; */
 
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
@@ -133,6 +135,12 @@ select 'update AMP_ORGANISATION GROUP';
 UPDATE AMP_ORGANISATION AS org, sisfin_db.`age` AS o, AMP_ORG_GROUP AS aog
 SET org.org_grp_id=aog.amp_org_grp_id
 WHERE org.old_id=o.codage and aog.org_grp_code = o.cveorg;
+
+/* AMP-2970 - Multiple codes for Alemania*/
+UPDATE AMP_ORGANISATION AS org, sisfin_db.`age` AS o, AMP_ORG_GROUP AS aog
+SET org.org_grp_id=aog.amp_org_grp_id
+WHERE org.old_id=o.codage and aog.org_grp_code = 'ALEMA' and  o.cveorg = 'ALEM';
+
 
 select 'importing executing Agencies';
 
@@ -233,12 +241,27 @@ cvealc,
 FROM  sisfin_db.`conv` as c
 where c.STATCONV!='C' and c.STATCONV!='A';
 
-/* AMP-2387 */
-update amp_activity as a
-set a.convenio_date_filter = (
-  select max(e.fechvigenm)
-  from sisfin_db.enm e
-  where a.old_id = e.numconv and e.tipenm = 'PU' and e.fechvigenm is not null);
+/* START - AMP-2387 */
+DROP TEMPORARY TABLE IF EXISTS `tmp_tbl_convenio_date_filter`;
+CREATE TEMPORARY TABLE `tmp_tbl_convenio_date_filter` (
+  `numconv` VARCHAR(5) NOT NULL,
+  `maxfechvigenm` DATETIME NOT NULL,
+  PRIMARY KEY (`numconv`)
+)ENGINE = InnoDB;
+
+
+insert into tmp_tbl_convenio_date_filter
+select e.numconv, max(e.fechvigenm)
+from sisfin_db.enm e
+where  e.tipenm = 'PU' and e.fechvigenm is not null
+group by e.numconv;
+
+update amp_activity as a, tmp_tbl_convenio_date_filter tmp
+set a.convenio_date_filter = tmp.maxfechvigenm
+where a.old_id = tmp.numconv;
+
+DROP TEMPORARY TABLE `tmp_tbl_convenio_date_filter`;
+/* END - AMP-2387 */
 
 
 /* mapping contacts */
@@ -723,41 +746,3 @@ and progset.name like 'National Plan Objective';
 
 
 COMMIT;
-
-/* REMOVE TEMPORARY INDEXES */
-DROP INDEX old_id ON amp_terms_assist;
-
-DROP INDEX old_id ON  AMP_SECTOR;
-
-DROP INDEX old_id ON AMP_ORGANISATION;
-
-DROP INDEX old_id ON AMP_CATEGORY_VALUE;
-
-DROP INDEX old_status_id ON AMP_ACTIVITY;
-DROP INDEX old_id ON AMP_ACTIVITY;
-
-DROP INDEX old_id ON AMP_LEVEL;
-
-DROP INDEX region_code on amp_region;
-
-/*removing temporary columnes  */
-ALTER TABLE amp_terms_assist
-DROP COLUMN old_id;
-
-ALTER TABLE AMP_SECTOR
-DROP COLUMN old_id;
-
-ALTER TABLE AMP_ORGANISATION
-DROP COLUMN old_id;
-
-ALTER TABLE AMP_CATEGORY_VALUE
-DROP COLUMN old_id;
-
-ALTER TABLE AMP_ACTIVITY
-DROP COLUMN old_status_id,
-DROP COLUMN old_id;
-
-
-ALTER TABLE AMP_LEVEL
-DROP COLUMN old_id;
-/* end */

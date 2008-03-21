@@ -1,14 +1,14 @@
-<%@ page pageEncoding="UTF-8" %>
-<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
-<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
-<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
-<%@ taglib uri="/taglib/struts-html" prefix="html" %>
-<%@ taglib uri="/taglib/digijava" prefix="digi" %>
-<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
-<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
-<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
-
+ <%@ page pageEncoding="UTF-8" %>
+ <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+ <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+ <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+ <%@ taglib uri="/taglib/struts-html" prefix="html" %>
+ <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+ <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+ <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+ <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+ <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+ 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
@@ -83,13 +83,14 @@ function selectOrganisation1() {
 	<tr>
 		<td align="right">
 		<b><digi:trn key="aim:addEditActivityName">Activity name:</digi:trn></b>
-		</td>
-		<field:display name="Costing Activity Id" feature="Costing">
+		</td>		
 		<td>
 		         	<html:text property="name" size="30"/> 
+		         	<field:display name="Costing Activity Id" feature="Costing">
 		&nbsp;&nbsp;<b><digi:trn key="aim:addEditActivityID">Activity ID:</digi:trn></b> <html:text property="textId" size="10"/> 
-		</td>
 		</field:display>
+		</td>
+		
 	</tr>
 	<tr>
 		<td align="right">

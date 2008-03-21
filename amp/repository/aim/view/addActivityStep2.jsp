@@ -112,7 +112,6 @@ function removeSelLocations(){
 function removeAllLocations(){
   try
   {
-  	alert("Enter");
   	var checkedItems = document.getElementsByName("selLocs");
   	if(checkedItems.length > 0){
 	  	for(a=0;a<checkedItems.length;a++){

@@ -92,7 +92,12 @@ function projectFiche(id)
 											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Edit Activity" module="Previews">
 													<field:display feature="Edit Activity" name="Edit Activity Button">
-														<input type="button" value="Edit" class="dr-menu" onclick='fnEditProject(${aimMainProjectDetailsForm.ampActivityId})'>													</field:display>
+														<c:if test="${aimChannelOverviewForm.buttonText != 'validate'}">              
+	                                                        <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">    
+	                                                                <input type="button" value="Edit" class="dr-menu" onclick='fnEditProject(${aimMainProjectDetailsForm.ampActivityId})'>													
+	                                                        </c:if>
+	                                                     </c:if> 			
+	                                                     </field:display>											
 												</feature:display>
 											</module:display>
 											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">

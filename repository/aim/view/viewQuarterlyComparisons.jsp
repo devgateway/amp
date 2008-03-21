@@ -604,7 +604,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 			                              			</td>
                                                     
-                                                     <feature:display module="Funding" name="Disbursement orders">
+                                                     <feature:display module="Funding" name="Disbursement Orders">
                                                     
                                                                             <field:display name="Disbursement Orders Tab" feature="Disbursement Orders">
 
@@ -719,7 +719,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 																		</td>
                                                                                                                                               
-                                                                                                                                              <feature:display module="Funding" name="Disbursement orders">
+                                                                                                                                              <feature:display module="Funding" name="Disbursement Orders">
                                                                                                                                                 <td bgcolor="#F8F8F5">
                                                                                                                                                 <field:display name="Actual Disbursement Orders" feature="Disbursement Orders">
 

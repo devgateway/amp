@@ -13,6 +13,9 @@
 		<action login-required="false" pattern="/logoutAction" />
         <action login-required="false" pattern="/displayFlag" />
         <action login-required="false" pattern="/viewNewAdvancedReport" />
+        <action login-required="false" pattern="/pdfExport" />
+        <action login-required="false" pattern="/xlsExport" />
+        <action login-required="false" pattern="/csvExport" />
         <action login-required="false" pattern="/reportsPublicView" />
         <action login-required="false" pattern="/getDesktopReports" />
         <action login-required="false" pattern="/viewActivityPreview" />

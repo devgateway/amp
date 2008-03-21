@@ -37,9 +37,7 @@
 <digi:instance property="aimEditActivityForm" />
 	<tr>
 	<td>
-							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#f4f4f2">
-                                <tr>
-                                  <td bgColor=#f4f4f2 vAlign="top"><!-- contents -->
+				<!-- contents -->
                                     <table width="100%" bgcolor="#f4f4f2">
                                     
                                     
@@ -194,6 +192,4 @@
                                      </table>
                                      </td>
                                      </tr>
-                                     </table>
-                                     </td>
-                                     </tr>
+                                     

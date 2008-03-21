@@ -525,7 +525,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Regional" feature="Contracting"></field:display>
 <field:display name="IFIs" feature="Contracting"></field:display>
 <field:display name="Total Private Contribution" feature="Contracting"></field:display>
-<field:display name="Disbursements" feature="Contracting"></field:display>
+<field:display name="Contracting Disbursements" feature="Contracting"></field:display>
 <field:display name="Delete Contract" feature="Contracting"></field:display>
 <field:display name="Edit Contract" feature="Contracting"></field:display>
 <field:display name="Add IPA Contract" feature="Contracting"></field:display>

@@ -1043,7 +1043,7 @@ public class SaveActivity extends Action {
 					Iterator<Location> itr = eaForm.getSelectedLocs().iterator();
 					while (itr.hasNext()) {
 						Location loc = itr.next();
-						if(loc.getRegion().equals("")){
+						if(loc.getRegion().equals("") && eaForm.getRegionalFundings()!=null){
 							eaForm.getRegionalFundings().clear();	
 				 	      }
 					 }

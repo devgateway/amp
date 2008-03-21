@@ -37,10 +37,8 @@
 <digi:instance property="aimEditActivityForm" />
 	<tr>
 	<td>
-							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#f4f4f2">
-                                <tr>
-                                  <td bgColor=#f4f4f2 align="center" vAlign="top"><!-- contents -->
-                                    <table width="95%" bgcolor="#f4f4f2">
+							<!-- contents -->
+                                    <table width="100%" bgcolor="#f4f4f2">
                                     
                                     
                                       <tr>
@@ -86,9 +84,7 @@
                                                   <c:if test="${empty aimEditActivityForm.activityComponentes}">
                                                     <tr>
                                                       <td bgcolor="#ffffff">
-                                                      	<field:display name="Add Sectors Button" feature="Sectors">
-                                                      	&nbsp;
-                                                      	</field:display>
+                                                  
                                                         	<input type="button" class="buton" onclick="addComponente();" value='<digi:trn key="btn:addComponente">Add Componente</digi:trn>' />
 
                                                       </td>
@@ -147,9 +143,9 @@
                                                               <table cellSpacing="2" cellPadding="2">
                                                                 <tr>
 																<logic:equal name="aimEditActivityForm" property="multiSectorSelecting" value="On">
-																	<field:display name="Add Sectors Button" feature="Sectors">&nbsp;
+																	<field:display name="Add Sectors Button" feature="Sectors">
     		                                                            <td>
-            		                                                        <input type="button" value='<digi:trn key="btn:addComponente">Add Componente</digi:trn>' class="buton"  onclick="addComponente();">
+            		                                                       <input type="button" value='<digi:trn key="btn:addComponente">Add Componente</digi:trn>' class="buton"  onclick="addComponente();">
                     	                                                </td>
                                                                     </field:display>                                                          
 																</logic:equal>      
@@ -178,6 +174,4 @@
                                      </table>
                                      </td>
                                      </tr>
-                                     </table>
-                                     </td>
-                                     </tr>
+                                   

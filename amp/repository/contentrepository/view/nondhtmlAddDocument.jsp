@@ -329,6 +329,8 @@ div.fakefile2 input {
 						<tr>
 							<td align="center" bgcolor=#ECF3FD>
 								<table cellSpacing=2 cellPadding=2>
+									<logic:equal name="crDocumentManagerForm" property="webResource" value="false">
+									<field:display name="Document Title" feature="Related Documents">
 									<tr>
 										<td>
 											<FONT color=red>*</FONT>
@@ -341,7 +343,29 @@ div.fakefile2 input {
 											<html:text property="docTitle"  styleClass="inp-text" size="50"/>
 											</a>
 										</td>
-									</tr>								
+									</tr>
+									</field:display>
+								</logic:equal>
+								<logic:equal name="crDocumentManagerForm" property="webResource" value="true">
+									<field:display name="Web Resources Title" feature="Web Resources">
+									<tr>
+										<td>
+											<FONT color=red>*</FONT>
+											<a title="<digi:trn key="aim:TitlefortheDocument">Title of the document to be attached</digi:trn>">
+											<digi:trn key="aim:title">Title</digi:trn>
+											</a>
+										</td>
+										<td>
+											<a title="<digi:trn key="aim:TitlefortheDocument">Title of the document to be attached</digi:trn>">
+											<html:text property="docTitle"  styleClass="inp-text" size="50"/>
+											</a>
+										</td>
+									</tr>
+									</field:display>
+								</logic:equal>		
+								<!--  -->
+								<logic:equal name="crDocumentManagerForm" property="webResource" value="false">
+									<field:display name="Document Description" feature="Related Documents">
 									<tr>
 										<td>
 											<a title="<digi:trn key="aim:DescoftheDocument">Description of the contents and intent of the document</digi:trn>">
@@ -354,6 +378,25 @@ div.fakefile2 input {
 											</a>
 										</td>
 									</tr>
+									</field:display>
+								</logic:equal>
+								<logic:equal name="crDocumentManagerForm" property="webResource" value="true">
+									<field:display name="Web Resource Description" feature="Web Resources">
+									<tr>
+										<td>
+											<a title="<digi:trn key="aim:DescoftheDocument">Description of the contents and intent of the document</digi:trn>">
+											<digi:trn key="aim:description">Description</digi:trn>
+											</a>
+										</td>
+										<td>
+											<a title="<digi:trn key="aim:DescoftheDocument">Description of the contents and intent of the document</digi:trn>">
+											<html:textarea property="docDescription" rows="4" cols="50" styleClass="inp-text"/>
+											</a>
+										</td>
+									</tr>
+									</field:display>
+								</logic:equal>								
+									
 									<field:display name="Document Comment" feature="Related Documents">
 									<tr>
 										<td>
@@ -407,6 +450,7 @@ div.fakefile2 input {
 									</field:display>
 									--%>
 									<logic:equal name="crDocumentManagerForm" property="webResource" value="false">
+									<field:display name="Document FileName" feature="Related Documents">
 									<tr>
 										<td>
 										<FONT color=red>*</FONT>
@@ -421,8 +465,10 @@ div.fakefile2 input {
 											</a>
 										</td>
 									</tr>
+									</field:display>
 									</logic:equal>
 									<logic:equal name="crDocumentManagerForm" property="webResource" value="true">
+									<field:display name="Web Resources Url" feature="Web Resources">
 									<tr>
 										<td>
 										<FONT color=red>*</FONT>
@@ -435,6 +481,7 @@ div.fakefile2 input {
 											</a>
 										</td>
 									</tr>
+									</field:display>
 									</logic:equal>
 									
 									

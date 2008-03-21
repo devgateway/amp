@@ -1,5 +1,7 @@
 use amp_bolivia;
 
+/* SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; */
+
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
 
@@ -158,10 +160,42 @@ DELETE catval FROM amp_category_value AS catval, amp_category_class AS catclass
 where catval.amp_category_class_id=catclass.id  AND catclass.keyName ='financing_instrument'; 
 
 COMMIT;
-/*
+
+
+/* REMOVE TEMPORARY INDEXES */
+DROP INDEX old_id ON amp_terms_assist;
+
+DROP INDEX old_id ON  AMP_SECTOR;
+
+DROP INDEX old_id ON AMP_ORGANISATION;
+
+DROP INDEX old_id ON AMP_CATEGORY_VALUE;
+
+DROP INDEX old_status_id ON AMP_ACTIVITY;
+DROP INDEX old_id ON AMP_ACTIVITY;
+
+DROP INDEX old_id ON AMP_LEVEL;
+
+DROP INDEX region_code on amp_region;
+
+/*removing temporary columnes  */
+ALTER TABLE amp_terms_assist
+DROP COLUMN old_id;
+
+ALTER TABLE AMP_SECTOR
+DROP COLUMN old_id;
+
+ALTER TABLE AMP_ORGANISATION
+DROP COLUMN old_id;
+
+ALTER TABLE AMP_CATEGORY_VALUE
+DROP COLUMN old_id;
+
 ALTER TABLE AMP_ACTIVITY
+DROP COLUMN old_status_id,
 DROP COLUMN old_id;
-*/
-/*ALTER TABLE AMP_ORGANISATION
+
+
+ALTER TABLE AMP_LEVEL
 DROP COLUMN old_id;
-*/
+/* end */

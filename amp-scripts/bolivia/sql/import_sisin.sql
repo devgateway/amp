@@ -16,6 +16,11 @@ SET @base_url_sisin='http://www.google.com?sisinCode=';
 ALTER TABLE amp_components ADD COLUMN CodigoSISIN VARCHAR(13) AFTER `type`;
 ALTER TABLE amp_components ADD INDEX `Index_CodigoSISIN` USING BTREE(`CodigoSISIN`);
 
+/* SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; */
+
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+
 
 SELECT 'Inserting Proyectos references into Component table';
 INSERT INTO amp_components (CodigoSISIN)

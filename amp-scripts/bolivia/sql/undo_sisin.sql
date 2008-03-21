@@ -1,5 +1,11 @@
 use amp_bolivia;
 
+/* SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; */
+
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+
+
 DELETE FROM  ac
 USING amp_activity_components as ac, amp_components as c
 where c.CodigoSISIN is not null and ac.amp_component_id = c.amp_component_id;

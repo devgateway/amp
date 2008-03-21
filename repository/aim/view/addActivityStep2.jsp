@@ -109,6 +109,32 @@ function removeSelLocations(){
   return true;
 }
 
+function removeAllLocations(){
+  try
+  {
+  	alert("Enter");
+  	var checkedItems = document.getElementsByName("selLocs");
+  	if(checkedItems.length > 0){
+	  	for(a=0;a<checkedItems.length;a++){
+	  	checkedItems[a].checked = true;
+	  	}
+  	}
+  	else
+  	
+  	{
+  		return false;
+  	}
+
+  }
+  catch(err){
+  	return false;
+  }
+  <digi:context name="remLocs" property="context/module/moduleinstance/removeSelLocations.do?edit=true" />
+  document.aimEditActivityForm.action = "<%= remLocs %>";
+  document.aimEditActivityForm.target = "_self"
+  document.aimEditActivityForm.submit();
+  return true;
+}
 function validateForm(){
   <c:set var="errMsgAddSector">
   <digi:trn key="aim:addSecorErrorMessage">

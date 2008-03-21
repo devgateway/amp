@@ -85,7 +85,12 @@
                                               	<c:set var="translation">
                                               		<digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn>
                                               	</c:set>
-                                              	<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="implemLocationLevel"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
+                                              	<category:showoptions  firstLine="${translation}" name="aimEditActivityForm" property="implemLocationLevel"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
+                                              	<script language="Javascript">
+
+                                              	var implemLocationLevelSelect = document.getElementsByName("implemLocationLevel")[0];
+                                              	implemLocationLevelSelect.onchange = removeAllLocations;
+                                              	</script>
 											</td>
                                             </tr>
                                             </field:display>

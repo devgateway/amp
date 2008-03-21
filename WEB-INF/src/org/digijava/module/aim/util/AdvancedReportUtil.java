@@ -277,7 +277,7 @@ public final class AdvancedReportUtil {
 		return coll;
 	}
 
-	
+	@Deprecated
 	public static AmpTeamMember checkDuplicateReportName(String reportTitle){
 		AmpTeamMember teamMember=null;
 		Session session = null;
@@ -320,7 +320,32 @@ public final class AdvancedReportUtil {
 		}
 		return teamMember;
 	}
+        
+        public static boolean checkDuplicateReportName(String reportTitle, Long ownerId) throws Exception{
+		boolean exist=false;
+		Session session = null;
+		Query query = null;
+		Iterator iter=null;
+		String queryString;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			queryString = "select report.ownerId from " + AmpReports.class.getName() 
+                                + " report where report.name=:name and report.ownerId=:ownerId ";
+			query = session.createQuery(queryString);
+                        query.setLong("ownerId", ownerId);
+                        query.setString("name", reportTitle.trim());
+                       if(query.list()!=null&&query.list().size()>0){
+                           exist=true;
+                       }			
 
+		} catch (Exception ex) {
+			logger.error("Unable to get checkDupilcateReportName()", ex);
+                        throw ex;
+		} 
+		
+		return exist;
+	}
+        
 	/**
 	 * compares AmpReports with primary key
 	 * @author dare

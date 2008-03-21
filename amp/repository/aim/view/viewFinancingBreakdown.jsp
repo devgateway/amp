@@ -128,9 +128,13 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 											<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 												<feature:display name="Edit Activity" module="Previews">
 													<field:display feature="Edit Activity" name="Edit Activity Button">
-														<input type="button" value="<digi:trn key='btn:edit'>Edit</digi:trn>" class="dr-menu"
+														<c:if test="${aimChannelOverviewForm.buttonText != 'validate'}">              
+	                                                        <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">    
+	                                                                <input type="button" value="<digi:trn key='btn:edit'>Edit</digi:trn>" class="dr-menu"
 															onclick="fnEditProject(<c:out value="${aimFinancingBreakdownForm.ampActivityId}"/>)">
-													&nbsp;
+													&nbsp;      
+	                                                        </c:if>                                                                       
+                                                        </c:if>														
 													</field:display>
 												</feature:display>
 											</module:display>

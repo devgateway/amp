@@ -185,10 +185,14 @@ method="post">
 										<module:display name="Previews" parentModule="PROJECT MANAGEMENT">
 											<feature:display name="Edit Activity" module="Previews">
 												<field:display feature="Edit Activity" name="Edit Activity Button">
-													<html:button style="FONT-SIZE: 11px; COLOR: #313131" onclick="fnEditProject('${actId}')" property="editBtn">
+													<c:if test="${aimChannelOverviewForm.buttonText != 'validate'}">              
+	                                                        <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">    
+	                                                                <html:button style="FONT-SIZE: 11px; COLOR: #313131" onclick="fnEditProject('${actId}')" property="editBtn">
 														<digi:trn key="btn:edit">Edit</digi:trn>
 													</html:button>
 												&nbsp;
+	                                                        </c:if>
+	                                                     </c:if> 													
 												</field:display>
 											</feature:display>
 										</module:display>

@@ -34,10 +34,11 @@ function deleteData(ind){
 }
 
 function saveIndicator(id){
-  <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=save" />
-  document.forms[0].action = "<%=addEditIndicator%>";
-  document.forms[0].submit();
-  window.opener.location.reload();
+  <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=save" /> 
+  aimThemeForm.action = "<%=addEditIndicator%>";
+  aimThemeForm.target=window.opener.name;
+  aimThemeForm.submit();
+  //window.opener.location.reload();
   window.close()
 }
 
@@ -65,7 +66,7 @@ function selectLocation(index){
       <b><font color="white"><digi:trn key="aim:addeditdata:value">Value</digi:trn></font></b>
     </td>
     <td align="center" valign="middle" width="120">
-      <b><font color="white"><digi:trn key="aim:addeditdata:creationdate">Creation Date</digi:trn></font></b>
+      <b><font color="white"><digi:trn key="aim:addData:creationdate">Date</digi:trn></font></b>
     </td>
     <td align="center" valign="middle" width="120" colspan="3">
       <b><font color="white"><digi:trn key="aim:addeditdata:addlocation">Add Location</digi:trn></font></b>

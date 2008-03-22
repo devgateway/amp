@@ -150,7 +150,7 @@ public class AddEditData
             }
             //returning null because "delete" is called from already closed popup window.
             //returning normal forward causes digikernel exception.
-            return null;
+            return mapping.findForward("backToIndicator");
         }
         return mapping.findForward("forward");
     }

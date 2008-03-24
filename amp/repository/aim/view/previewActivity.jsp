@@ -960,17 +960,20 @@ function collapseAll() {
 												<table width="100%" cellSpacing="2" cellPadding="1">
 												<c:forEach var="locations" items="${aimEditActivityForm.selectedLocs}">
 													<tr>
-													<td>
-													<c:if test="${!empty locations.country}">
-														[<c:out value="${locations.country}"/>]													</c:if>
-													<c:if test="${!empty locations.region}">
-														[<c:out value="${locations.region}"/>]													</c:if>
-													<c:if test="${!empty locations.zone}">
-														[<c:out value="${locations.zone}"/>]													</c:if>
-													<c:if test="${!empty locations.woreda}">
-														[<c:out value="${locations.woreda}"/>]													</c:if>													</td>
-													<td align="right">
-														${locations.percent}%													</td>
+														<td>
+															<c:if test="${!empty locations.country}">
+																[<c:out value="${locations.country}"/>]													</c:if>
+															<c:if test="${!empty locations.region}">
+																[<c:out value="${locations.region}"/>]													</c:if>
+															<c:if test="${!empty locations.zone}">
+																[<c:out value="${locations.zone}"/>]													</c:if>
+															<c:if test="${!empty locations.woreda}">
+																[<c:out value="${locations.woreda}"/>]													</c:if>													</td>
+															<td align="right">
+																<c:if test="${locations.percent} > 0">
+																	<c:out value="${locations.percent}"/>%
+																</c:if>
+														</td>
 													</tr>
 												</c:forEach>
 												</table>

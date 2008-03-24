@@ -129,14 +129,14 @@ if("On".equals(publicView)) { %>
 		</feature:display>
 		<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
     	<LI>
-			<div id="gen"  title='<digi:trn key="aim:viewMEDashboard">View M&E Dashboard</digi:trn>'>
+			<div id="gen"  title='<digi:trn key="aim:viewNPD">View National Plan Dashboard</digi:trn>'>
 			<logic:notEmpty name="TID" scope="session">
 				<digi:link styleClass="head-menu-link" href="/viewPortfolioDashboard.do~actId=-1~indId=-1" module="aim" onclick="return quitRnot1('${message}')">
-				::: <digi:trn key="aim:medashboard">M & E DASHBOARD</digi:trn></digi:link>
+				::: <digi:trn key="aim:NPD">NPD</digi:trn></digi:link>
 			</logic:notEmpty>
 			<logic:empty name="TID" scope="session">
 				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot1('${message}')">
-				::: <digi:trn key="aim:medashboard">M & E DASHBOARD</digi:trn></digi:link>
+				::: <digi:trn key="aim:NPD">NPD</digi:trn></digi:link>
 			</logic:empty>
 			</div>
 		</LI>

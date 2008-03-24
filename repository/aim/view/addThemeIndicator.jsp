@@ -381,7 +381,8 @@ function closeWindow() 
 											-->
 									</td>
                   					<td height="10%" width="9%" bgcolor="#f4f4f2" nowrap="nowrap">
-												<a href="javascript:addData('${prgIndicatorItr.id}')">	<digi:trn key="aim:addIndicator:add">Add/Edit data</digi:trn></a>
+                  						<c:set var="trn"><digi:trn key="aim:addIndicator:add">Add/Edit data</digi:trn></c:set>
+												<a href="javascript:addData('${prgIndicatorItr.id}')">${trn}</a>
 									</td>
 									<!-- 
 									<td  bgcolor="#f4f4f2">

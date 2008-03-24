@@ -554,25 +554,25 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <!-- AMP-2965 by cornel -->
 <field:display name="Objective Comments" feature="Identification"></field:display>
 <field:display name="Proposed Completion Dates" feature="Planning"></field:display>
-<field:display name="Contract Name" feature="Contracting Tab"></field:display>
-<field:display name="Contract Description" feature="Contracting Tab"></field:display>
-<field:display name="Activity Category" feature="Contracting Tab"></field:display>
-<field:display name="Contract type" feature="Contracting Tab"></field:display>
-<field:display name="Start of Tendering" feature="Contracting Tab"></field:display>
-<field:display name="Signature of Contract" feature="Contracting Tab"></field:display>
-<field:display name="Contract Organization" feature="Contracting Tab"></field:display>
-<field:display name="Contract Completion" feature="Contracting Tab"></field:display>
-<field:display name="Status" feature="Contracting Tab"></field:display>
-<field:display name="Total EC Contribution" feature="Contracting Tab"></field:display>
-<field:display name="IB" feature="Contracting Tab"></field:display>
-<field:display name="INV" feature="Contracting Tab"></field:display>
-<field:display name="Total National Contribution" feature="Contracting Tab"></field:display>
-<field:display name="Central" feature="Contracting Tab"></field:display>
-<field:display name="Regional" feature="Contracting Tab"></field:display>
-<field:display name="IFIs" feature="Contracting Tab"></field:display>
-<field:display name="Total Private Contribution" feature="Contracting Tab"></field:display>
-<field:display name="IB" feature="Contracting Tab"></field:display>
-<field:display name="Disbursements" feature="Contracting Tab"></field:display>
+<field:display name="Contract Name" feature="Contracting"></field:display>
+<field:display name="Contract Description" feature="Contracting"></field:display>
+<field:display name="Activity Category" feature="Contracting"></field:display>
+<field:display name="Contract type" feature="Contracting"></field:display>
+<field:display name="Start of Tendering" feature="Contracting"></field:display>
+<field:display name="Signature of Contract" feature="Contracting"></field:display>
+<field:display name="Contract Organization" feature="Contracting"></field:display>
+<field:display name="Contract Completion" feature="Contracting"></field:display>
+<field:display name="Status" feature="Contracting"></field:display>
+<field:display name="Total EC Contribution" feature="Contracting"></field:display>
+<field:display name="IB" feature="Contracting"></field:display>
+<field:display name="INV" feature="Contracting"></field:display>
+<field:display name="Total National Contribution" feature="Contracting"></field:display>
+<field:display name="Central" feature="Contracting"></field:display>
+<field:display name="Regional" feature="Contracting"></field:display>
+<field:display name="IFIs" feature="Contracting"></field:display>
+<field:display name="Total Private Contribution" feature="Contracting"></field:display>
+<field:display name="IB" feature="Contracting"></field:display>
+<field:display name="Disbursements" feature="Contracting"></field:display>
 
 
 <logic:iterate id="ampMeasures"  name="list" scope="page" type="org.digijava.module.aim.dbentity.AmpMeasures">

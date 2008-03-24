@@ -18,9 +18,9 @@ SET @max_level_order_no=0;
 SET @funding_modality=3;
 SET @financing_instrument=116; /*  This should be removed becase now we have correct query */
 SET @status_class_id=6;
-select @status_class_id:=c.id from amp_category_class c where c.keyName='activity_status'; 
+select @status_class_id:=c.id from amp_category_class c where c.keyName='activity_status';
 SET @level_class_id=7;
-select @level_class_id:=c.id from amp_category_class c where c.keyName='implementation_level'; 
+select @level_class_id:=c.id from amp_category_class c where c.keyName='implementation_level';
 select @max_order_no:=max(a.index_column) FROM AMP_CATEGORY_VALUE a WHERE a.amp_category_class_id=@status_class_id;
 select @max_level_order_no:=max(a.index_column) FROM AMP_CATEGORY_VALUE a WHERE a.amp_category_class_id=@level_class_id;
 SET @timestmp:=unix_timestamp();
@@ -62,7 +62,7 @@ ADD INDEX (old_id);
 ALTER table amp_region
 ADD INDEX (region_code);
 
-/* SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; */
+/*SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;*/ 
 
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
@@ -77,7 +77,7 @@ Values ('BOL_IMP', 'Bolivia Import');
 update AMP_GLOBAL_SETTINGS set settingsValue =  LAST_INSERT_ID()
 where settingsName = 'Default Sector Scheme';
 
-select 'importing sectors'; 
+select 'importing sectors';
 
 insert into AMP_SECTOR (amp_sec_scheme_id,  sector_code,   name,   old_id)
 select sch.amp_sec_scheme_id,   c.codsec,   c.descsec, c.codsec    
@@ -101,7 +101,7 @@ WHERE sch.sec_scheme_code='BOL_COMPO_IMP'  AND c.nomdato='cvetipcomp';
 
 /* import organizations */
 
-select 'importing organisations'; 
+select 'importing organisations';
 
 INSERT INTO AMP_ORGANISATION
 (
@@ -118,19 +118,19 @@ codage
 FROM sisfin_db.`age` as o;
 
 /* setting up organization types */
-select 'update AMP_ORGANISATION MUL'; 
+select 'update AMP_ORGANISATION MUL';
 
 UPDATE AMP_ORGANISATION AS org, sisfin_db.`age` AS o, AMP_ORG_TYPE AS t
 SET org.org_type_id=t.amp_org_type_id
 WHERE org.old_id=o.codage AND o.cvebimulti='M' AND t.org_type_code='MUL';
 
-select 'update AMP_ORGANISATION BIL'; 
+select 'update AMP_ORGANISATION BIL';
 
 UPDATE AMP_ORGANISATION AS org, sisfin_db.`age` AS o, AMP_ORG_TYPE AS t
 SET org.org_type_id=t.amp_org_type_id
 WHERE org.old_id=o.codage AND o.cvebimulti='B' AND t.org_type_code='BIL';
 
-select 'update AMP_ORGANISATION GROUP'; 
+select 'update AMP_ORGANISATION GROUP';
 
 UPDATE AMP_ORGANISATION AS org, sisfin_db.`age` AS o, AMP_ORG_GROUP AS aog
 SET org.org_grp_id=aog.amp_org_grp_id
@@ -182,7 +182,7 @@ FROM sisfin_db.`claves` lvl
 WHERE lvlnomdato='cvealc'; */
 
 /* terms and assist */
-select 'amp_terms_assist'; 
+select 'amp_terms_assist';
 
 INSERT INTO amp_terms_assist(terms_assist_code, terms_assist_name,old_id)
 SELECT lvl.valdato, lvl.interp, lvl.valdato
@@ -332,7 +332,7 @@ where act.old_id=ac.numconv and sec.old_id=ac.codsec ;
 /* mapping activity and statuses */ 
 select 'mapping activity and statuses';
 
-INSERT INTO amp_activities_categoryvalues (amp_activity_id, amp_categoryvalue_id) 
+INSERT INTO amp_activities_categoryvalues (amp_activity_id, amp_categoryvalue_id)
 SELECT act.amp_activity_id, cat.id 
 FROM AMP_ACTIVITY as act,    AMP_CATEGORY_VALUE as cat,    sisfin_db.`conv` acto, sisfin_db.`claves` as cla
 WHERE cat.amp_category_class_id=@status_class_id and cat.category_value=cla.interp and acto.numconv=act.old_id 
@@ -346,7 +346,7 @@ WHERE co.numconv=act.old_id and co.statconv=cat.old_id and cla;
 /* mapping implementation levels */
 select 'mapping implementation levels';
 
-INSERT INTO amp_activities_categoryvalues (amp_activity_id, amp_categoryvalue_id) 
+INSERT INTO amp_activities_categoryvalues (amp_activity_id, amp_categoryvalue_id)
 SELECT act.amp_activity_id, cat.id 
 FROM AMP_ACTIVITY as act,    AMP_CATEGORY_VALUE as cat,    sisfin_db.`conv` acto, sisfin_db.`claves` as cla
 WHERE cat.amp_category_class_id=@level_class_id and cat.category_value=cla.interp and acto.numconv=act.old_id 
@@ -373,7 +373,7 @@ WHERE a.old_id = c.numconv AND c.cvealc=il.old_id;*/
 /* mapping descriptions for english*/
 select 'mapping descriptions for english';
 
-INSERT INTO DG_EDITOR 
+INSERT INTO DG_EDITOR
 (EDITOR_KEY, LANGUAGE, SITE_ID, BODY,LAST_MOD_DATE,CREATION_IP,ORDER_INDEX)
 SELECT a.description, 'en', @amp_site_id ,c.descconv,now() ,'127.0.0.1',@editor_order 
 FROM sisfin_db.`conv` AS c, AMP_ACTIVITY AS a
@@ -382,7 +382,7 @@ WHERE c.numconv=a.old_id ;
 /* mapping descriptions for spanish*/
 select 'mapping descriptions for spanish';
 
-INSERT INTO DG_EDITOR 
+INSERT INTO DG_EDITOR
 (EDITOR_KEY, LANGUAGE, SITE_ID, BODY,LAST_MOD_DATE,CREATION_IP,ORDER_INDEX)
 SELECT a.description, 'es', @amp_site_id ,c.descconv,now() ,'127.0.0.1',@editor_order 
 FROM sisfin_db.`conv` AS c, AMP_ACTIVITY AS a
@@ -446,7 +446,7 @@ group by e.cvemonorig;
 /* importing planned fundings */
 select 'importing planned (initial) fundings';
 
-INSERT INTO AMP_FUNDING_DETAIL 
+INSERT INTO AMP_FUNDING_DETAIL
 (
 adjustment_type, 
 transaction_type,  
@@ -459,7 +459,7 @@ amp_currency_id,
 fixed_exchange_rate
 )
 SELECT
-@funding_adjusment_planned, 
+@funding_adjusment_planned,
 @commitment, 
 enm.fechvigenm,
 enm.montorig,
@@ -469,51 +469,16 @@ f.amp_funding_id,
 cu.amp_currency_id,
 enm.tipcam
 FROM sisfin_db.`enm` as enm, AMP_ACTIVITY as a, AMP_FUNDING as f, amp_currency as cu
-WHERE  a.old_id=enm.numconv 
-and a.amp_activity_id=f.amp_activity_id 
+WHERE  a.old_id=enm.numconv
+and a.amp_activity_id=f.amp_activity_id
 and enm.cvemonorig=cu.currency_code 
-and enm.numenm=0 
-and enm.fechvigenm is not null;
-
-/* mapping planned fundings but without dates, in this case we are using date from activity */
-INSERT INTO AMP_FUNDING_DETAIL 
-(
-adjustment_type, 
-transaction_type,  
-transaction_date, 
-transaction_amount,
-org_role_code,
-perspective_id,
-AMP_FUNDING_ID,
-amp_currency_id,
-fixed_exchange_rate
-)
-SELECT
-@funding_adjusment_planned, 
-@commitment, 
-a.actual_start_date,
-enm.montorig,
-@org_role_code,
-@funding_perspective,
-f.amp_funding_id,
-cu.amp_currency_id,
-enm.tipcam
-FROM sisfin_db.`enm` as enm, AMP_ACTIVITY as a, AMP_FUNDING as f, amp_currency as cu
-WHERE  a.old_id=enm.numconv 
-and a.actual_start_date not like '0000-00-00%'  
-and a.actual_start_date is not null 
-and a.amp_activity_id=f.amp_activity_id 
-and enm.cvemonorig=cu.currency_code 
-and enm.numenm=0 
-and enm.fechvigenm is null;
-/*  THIS IS TEMPORARY WORKAROUND becaue some activity-funding pairs have empty values */
-
+and enm.numenm=0;
 
 
 /* mapping additional commintments from ENM table.*/ 
 select 'mapping additional commintments from ENM table.';
 
-INSERT INTO AMP_FUNDING_DETAIL 
+INSERT INTO AMP_FUNDING_DETAIL
 (
 adjustment_type, 
 transaction_type,  
@@ -544,7 +509,7 @@ and enm.montorig!=0
 and enm.fechvigenm is not null;
 
 select 'importing actual disbursments';
-INSERT INTO AMP_FUNDING_DETAIL 
+INSERT INTO AMP_FUNDING_DETAIL
 (
 adjustment_type, 
 transaction_type,  
@@ -574,7 +539,7 @@ and lower(dsm.tipdesem)='e';
 
 
 select 'importing planned disbursments';
-INSERT INTO AMP_FUNDING_DETAIL 
+INSERT INTO AMP_FUNDING_DETAIL
 (
 adjustment_type, 
 transaction_type,  
@@ -607,7 +572,7 @@ and lower(dsm.tipdesem)='p';
 
 select 'correcting invalid dates in fundings';
 
-update amp_funding_detail 
+update amp_funding_detail
 set transaction_date='2011-01-01 01:01:01'
 where transaction_date is null or transaction_date like '0000-00-00%';
 
@@ -630,14 +595,12 @@ where proposed_approval_date='0000-00-00 00:00:00';
 
 update amp_activity
 set actual_approval_date=null
-where actual_approval_date='0000-00-00 00:00:00'; 
+where actual_approval_date='0000-00-00 00:00:00';
 
 update amp_activity
 set actual_completion_date=null
-where actual_completion_date='0000-00-00 00:00:00'; 
+where actual_completion_date='0000-00-00 00:00:00';
 
-
-/*  ==Type of credit==  - maps to  Financing Instrument in funding.*/
 
 select '==type of credit==';
 
@@ -645,41 +608,37 @@ select '==type of credit==';
 select 'remove previous category values for financing instrument';
 
 DELETE catval FROM amp_category_value AS catval, amp_category_class AS catclass
-where catval.amp_category_class_id=catclass.id  AND catclass.keyName ='financing_instrument'; 
+where catval.amp_category_class_id=catclass.id  AND catclass.keyName ='financing_instrument';
 
 /*  importing new values: there are just 3 records */
 select 'importing new category values for Type of Credit';
 
 SET @temp_cat_val=-1;
 
-INSERT INTO amp_category_value
-(category_value,amp_category_class_id,index_column)
-SELECT cla.interp, catclass.id, @temp_cat_val:=@temp_cat_val+1 FROM amp_category_class AS catclass, sisfin_db.`claves` AS cla
+INSERT INTO amp_category_value(category_value,amp_category_class_id,index_column)
+SELECT cla.interp, catclass.id, @temp_cat_val:=@temp_cat_val+1
+FROM amp_category_class AS catclass, sisfin_db.`claves` AS cla
 WHERE cla.nomdato='cvecred' AND catclass.keyName='financing_instrument';
 
 
 /* mapping credit types to activities */
-select 'mapping credit types to activity fundings';
-
-UPDATE amp_activity AS act, sisfin_db.`conv` AS con, amp_category_value AS catval, amp_category_class AS catclass, sisfin_db.`claves` AS cla
-SET act.credit_type_id=catval.id    
-WHERE cla.nomdato='cvecred' 
-AND catclass.keyName='financing_instrument' 
-AND cla.interp=catval.category_value 
-AND act.old_id=con.numconv 
-AND con.cvecred=cla.valdato;
-
-/* mapping credit types to activities */
 select 'mapping founding credit types to activity fundings';
 
-UPDATE amp_activity AS act, sisfin_db.`conv` AS con, amp_category_value AS catval, amp_category_class AS catclass, sisfin_db.`claves` AS cla, amp_funding AS fnd
-SET fnd.financing_instr_category_value_id=catval.id    
-WHERE cla.nomdato='cvecred' 
-AND catclass.keyName='financing_instrument' 
-AND cla.interp=catval.category_value 
-AND act.old_id=con.numconv 
-AND con.cvecred=cla.valdato
-AND fnd.amp_activity_id=act.amp_activity_id;
+UPDATE amp_activity AS act,
+sisfin_db.`conv` AS con,
+amp_category_value AS catval,
+amp_category_class AS catclass,
+sisfin_db.`claves` AS cla,
+amp_funding AS fnd
+SET act.credit_type_id=catval.id, fnd.financing_instr_category_value_id=catval.id
+WHERE act.old_id=con.numconv
+AND fnd.amp_activity_id=act.amp_activity_id
+AND catclass.keyName='financing_instrument'
+AND catval.amp_category_class_id = catclass.id
+AND cla.nomdato='cvecred'
+AND cla.interp=catval.category_value
+AND con.cvecred=cla.valdato;
+
 
 /* ==Regions== */
 select 'importin regions';
@@ -718,7 +677,7 @@ and condep.cvedep=c.valdato;
 
 select ' mapping components (sectors)';
 INSERT INTO amp_activity_componente (amp_activity_id, amp_sector_id, percentage)
-SELECT act.amp_activity_id, sec.amp_sector_id, bcomp.porccomp 
+SELECT act.amp_activity_id, sec.amp_sector_id, bcomp.porccomp
 FROM amp_sector AS sec, amp_sector_scheme AS sch, sisfin_db.comp AS bcomp, sisfin_db.`conv` AS con, amp_activity AS act
 WHERE sec.amp_sec_scheme_id=sch.amp_sec_scheme_id  
 AND sch.sec_scheme_code='BOL_COMPO_IMP'  

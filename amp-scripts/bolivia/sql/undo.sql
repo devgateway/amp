@@ -1,18 +1,20 @@
 use amp_bolivia;
 
-/* SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; */
+/*SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;*/
 
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
 
 /*truncate amp_activities_categoryvalues;*/
-delete ac from amp_activities_categoryvalues as ac
-where exists (select * from amp_activity as act, sisfin_db.`conv` AS con where con.numconv=act.amp_id and ac.amp_activity_id=act.amp_activity_id);
+DELETE FROM ac
+USING amp_activity as act, sisfin_db.`conv` AS con, amp_activities_categoryvalues as ac
+where con.numconv=act.amp_id and ac.amp_activity_id=act.amp_activity_id;
 
 
 /* truncate amp_activity_componente; */
-delete ac from amp_activity_componente as ac
-where exists (select * from amp_activity as act, sisfin_db.`conv` AS con where con.numconv=act.amp_id and ac.amp_activity_id=act.amp_activity_id);
+DELETE FROM ac
+USING amp_activity as act, sisfin_db.`conv` AS con, amp_activity_componente as ac
+where con.numconv=act.amp_id and ac.amp_activity_id=act.amp_activity_id;
 
 /*  delete mappings with sectors (which are colled components) and activities  
 delete cs FROM amp_activity_compsector as cs
@@ -21,8 +23,9 @@ where EXISTS (SELECT * FROM amp_activity AS act, sisfin_db.`conv` AS con WHERE c
 truncate amp_activity_compsector;
 
 /*truncate amp_activity_program;*/
-delete cs FROM amp_activity_program as cs
-where EXISTS (SELECT act.* FROM amp_activity AS act, sisfin_db.`conv` AS con WHERE con.numconv=act.amp_id AND act.amp_activity_id=cs.amp_activity_id);
+DELETE FROM cs
+USING amp_activity_program as cs,amp_activity AS act, sisfin_db.`conv` AS con
+WHERE con.numconv=act.amp_id AND act.amp_activity_id=cs.amp_activity_id;
 
 
 truncate amp_activity_location;
@@ -32,8 +35,9 @@ where exists (select * from amp_activity act, sisfin_db.`conv` c  where c.numcon
 */
 
  /*truncate amp_activity;*/
-delete act from AMP_ACTIVITY AS act
-where  EXISTS (SELECT c.numconv FROM sisfin_db.`conv` c where c.numconv=act.amp_id);
+DELETE FROM act
+USING AMP_ACTIVITY AS act, sisfin_db.`conv` c
+where c.numconv=act.amp_id;
 
 
 /*delete from amp_currency_rate 

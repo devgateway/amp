@@ -138,7 +138,8 @@ function selectLocation(index){
   </tr>
   <tr>
     <td bgColor=#dddddb height="25" align="center" colspan="6">
-      <digi:trn key="aim:addeditdata:save"><input class="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveIndicator('${aimThemeForm.themeId}')">&nbsp;&nbsp;</digi:trn>
+      <c:set var="trn"><digi:trn key="aim:btn:save">Save</digi:trn></c:set>      
+      <input class="dr-menu" type="button" name="addBtn" value="${trn}" onclick="return saveIndicator('${aimThemeForm.themeId}')">&nbsp;&nbsp;
       <digi:trn key="aim:addeditdata:cancel"><input class="dr-menu" type="reset" value="Cancel">&nbsp;&nbsp;</digi:trn>
       <digi:trn key="aim:addeditdata:close"><input class="dr-menu" type="button" name="close" value="Close" onclick="window.close();"></digi:trn>
     </td>

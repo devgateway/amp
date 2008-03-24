@@ -72,6 +72,10 @@ function submitFilterForm(view, timestamp) {
             <div style="width:200px;height:80px;border:1px solid;overflow:auto; border-color: #484846;">
               <logic:notEmpty name="calendarViewForm" property="filter.donors">
                 <table border="0">
+                   <tr>
+                     <td valign="middle"><html:multibox name="calendarViewForm" property="filter.selectedDonors" value="None" /></td>
+                     <td valign="middle" nowrap="nowrap"><digi:trn key="calendar:donorsNone">None</digi:trn></td>
+                   </tr>
                   <logic:iterate id="donor" name="calendarViewForm" property="filter.donors">
                     <tr>
                       <td valign="middle"><html:multibox name="calendarViewForm" property="filter.selectedDonors" value="${donor.value}"/></td>

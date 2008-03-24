@@ -484,24 +484,24 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Actual Disbursement Orders" feature="Disbursement Orders"></field:display>
 <field:display name="Total Ordered" feature="Disbursement Orders"></field:display>
 <field:display name="Add Disbursement Order Button" feature="Disbursement Orders"></field:display>
-<field:display name="Contract Name" feature="Contracting Tab"></field:display>
-<field:display name="Description" feature="Contracting Tab"></field:display>
-<field:display name="Activity Category" feature="Contracting Tab"></field:display>
-<field:display name="Start of Tendering" feature="Contracting Tab"></field:display>
-<field:display name="Signature of Contract" feature="Contracting Tab"></field:display>
-<field:display name="Contract Organization" feature="Contracting Tab"></field:display>
-<field:display name="Contract Completion" feature="Contracting Tab"></field:display>
+<field:display name="Contract Name" feature="Contracting"></field:display>
+<field:display name="Description" feature="Contracting"></field:display>
+<field:display name="Activity Category" feature="Contracting"></field:display>
+<field:display name="Start of Tendering" feature="Contracting"></field:display>
+<field:display name="Signature of Contract" feature="Contracting"></field:display>
+<field:display name="Contract Organization" feature="Contracting"></field:display>
+<field:display name="Contract Completion" feature="Contracting"></field:display>
 <field:display name="Contracting Status" feature="Contracting"></field:display>
-<field:display name="Contracting Tab Status" feature="Contracting Tab"></field:display>
-<field:display name="Total EC Contribution" feature="Contracting Tab"></field:display>
-<field:display name="IB" feature="Contracting Tab"></field:display>
-<field:display name="INV" feature="Contracting Tab"></field:display>
-<field:display name="Total National Contribution" feature="Contracting Tab"></field:display>
-<field:display name="Central" feature="Contracting Tab"></field:display>
-<field:display name="Regional" feature="Contracting Tab"></field:display>
-<field:display name="IFIs" feature="Contracting Tab"></field:display>
-<field:display name="Total Private Contribution" feature="Contracting Tab"></field:display>
-<field:display name="Disbursements" feature="Contracting Tab"></field:display>
+<field:display name="Contracting Tab Status" feature="Contracting"></field:display>
+<field:display name="Total EC Contribution" feature="Contracting"></field:display>
+<field:display name="IB" feature="Contracting"></field:display>
+<field:display name="INV" feature="Contracting"></field:display>
+<field:display name="Total National Contribution" feature="Contracting"></field:display>
+<field:display name="Central" feature="Contracting"></field:display>
+<field:display name="Regional" feature="Contracting"></field:display>
+<field:display name="IFIs" feature="Contracting"></field:display>
+<field:display name="Total Private Contribution" feature="Contracting"></field:display>
+<field:display name="Disbursements" feature="Contracting"></field:display>
 <field:display name="Add Regional Funding Link" feature="Regional Funding"></field:display>
 <field:display name="Delete Regional Funding Button" feature="Regional Funding"></field:display>
 
@@ -519,7 +519,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Signature of Contract" feature="Contracting"></field:display>
 <field:display name="Contract Organization" feature="Contracting"></field:display>
 <field:display name="Contract Completion" feature="Contracting"></field:display>
-<field:display name="Contracting Tab Status" feature="Contracting Tab"></field:display>
+<field:display name="Contracting Tab Status" feature="Contracting"></field:display>
 <field:display name="Total EC Contribution" feature="Contracting"></field:display>
 <field:display name="IB" feature="Contracting"></field:display>
 <field:display name="INV" feature="Contracting"></field:display>

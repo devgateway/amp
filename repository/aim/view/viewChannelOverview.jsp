@@ -1447,8 +1447,7 @@ function commentWin(val) {
 														parentModule="PROJECT MANAGEMENT">
 														<feature:display name="Funding Organizations"
 															module="Funding">
-															<field:display name="Financing Instrument"
-																feature="Funding Organizations">
+															<field:display name="Financing Instrument" feature="Funding Organizations">
 																<TR>
 																	<TD>
 																	<TABLE width="100%" cellPadding=2 cellSpacing=1

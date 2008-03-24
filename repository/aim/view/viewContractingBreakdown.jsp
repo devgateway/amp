@@ -156,7 +156,7 @@ function projectFiche(id)
                                                                                 
                                                                                     <table width="100%" border="0" cellspacing="2" cellpadding="2" align="left" class="box-border-nopadding">
                                                                                         
-                                                                                      <field:display name="Contract Name" feature="Contracting Tab">
+                                                                                      <field:display name="Contract Name" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:name">Contract name:</digi:trn></b>
@@ -171,7 +171,7 @@ function projectFiche(id)
                                                                                         </tr>
                                                                                         </field:display>
                                                                                             
-                                                                                        <field:display name="Description" feature="Contracting Tab">
+                                                                                        <field:display name="Description" feature="Contracting">
                                                                                         
                                                                                         <tr>
                                                                                             <td align="left">
@@ -182,7 +182,7 @@ function projectFiche(id)
                                                                                             </td>
                                                                                         </tr>
                                                                                     </field:display>
-                                                                                              <field:display name="Activity Category" feature="Contracting Tab">
+                                                                                              <field:display name="Activity Category" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:actCat">Activity Category:</digi:trn></b>
@@ -195,7 +195,7 @@ function projectFiche(id)
                                                                                             </td>
                                                                                         </tr>
                                                                                     </field:display>
-                                                                                    <field:display name="Type" feature="Contracting Tab">
+                                                                                    <field:display name="Type" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:Type">Type</digi:trn>:</b>
@@ -209,7 +209,7 @@ function projectFiche(id)
                                                                                         </tr>
                                                                                     </field:display>
                                                                                          
-                                                                                              <field:display name="Start of Tendering" feature="Contracting Tab">
+                                                                                              <field:display name="Start of Tendering" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:startOfTendering">Start of Tendering:</digi:trn></b>
@@ -220,7 +220,7 @@ function projectFiche(id)
                                                                                             
                                                                                         </tr>	
                                                                                     </field:display>
-                                                                                    <field:display name="Contract Validity Date" feature="Contracting Tab">
+                                                                                    <field:display name="Contract Validity Date" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:contractValidityDate">Contract Validity Date</digi:trn>:</b>
@@ -231,7 +231,7 @@ function projectFiche(id)
                                                                                             
                                                                                         </tr>	
                                                                                     </field:display>
-                                                                                              <field:display name="Signature of Contract" feature="Contracting Tab">
+                                                                                              <field:display name="Signature of Contract" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:signatureOfContract">Signature of Contract:</digi:trn></b>
@@ -242,7 +242,7 @@ function projectFiche(id)
                                                                                             
                                                                                         </tr>	
                                                                                     </field:display>
-                                                                                    <field:display name="Contract Organization" feature="Contracting Tab">
+                                                                                    <field:display name="Contract Organization" feature="Contracting">
                                                                                          <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization:</digi:trn></b>
@@ -257,7 +257,7 @@ function projectFiche(id)
                                                                                         </tr>	
                                                                                     </field:display>
                                                                                    
-                                                                                    <field:display name="Contracting Organization Text" feature="Contracting Tab">
+                                                                                    <field:display name="Contracting Organization Text" feature="Contracting">
                                                                                          <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization</digi:trn>:</b>
@@ -271,7 +271,7 @@ function projectFiche(id)
                                                                                     </field:display>
                                                                                    
                                                                                         
-                                                                                              <field:display name="Contract Completion" feature="Contracting Tab">
+                                                                                              <field:display name="Contract Completion" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:contractCompletion">Contract Completion:</digi:trn></b>
@@ -282,7 +282,7 @@ function projectFiche(id)
                                                                                             
                                                                                         </tr>	
                                                                                     </field:display>
-                                                                                              <field:display name="Contracting Tab Status" feature="Contracting Tab">
+                                                                                              <field:display name="Contracting Tab Status" feature="Contracting">
                                                                                          <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:status">Status:</digi:trn></b>
@@ -297,7 +297,7 @@ function projectFiche(id)
                                                                                             </td>
                                                                                         </tr>
                                                                                     </field:display>
-                                                                                    <field:display name="Total Amount" feature="Contracting Tab">
+                                                                                    <field:display name="Total Amount" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:totalAmount">Total Amount</digi:trn>:</b>
@@ -308,7 +308,7 @@ function projectFiche(id)
                                                                                             </td>
                                                                                         </tr>
                                                                                     </field:display>
-                                                                                    <field:display name="Total EC Contribution" feature="Contracting Tab">
+                                                                                    <field:display name="Total EC Contribution" feature="Contracting">
                                                                                         
                                                                                         
                                                                                         <tr>
@@ -317,7 +317,7 @@ function projectFiche(id)
                                                                                             </td>
                                                                                         </tr>
                                                                                     </field:display>
-                                                                                    <field:display name="IB" feature="Contracting Tab">
+                                                                                    <field:display name="IB" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:IB">IB</digi:trn>:</b>
@@ -328,7 +328,7 @@ function projectFiche(id)
                                                                                             </td>
                                                                                         </tr>
                                                                                     </field:display>
-                                                                                          <field:display name="INV" feature="Contracting Tab">
+                                                                                          <field:display name="INV" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:INV">INV:</digi:trn></b>
@@ -341,7 +341,7 @@ function projectFiche(id)
                                                                                     </field:display>
                                                                                         
                                                                                         
-                                                                                       <field:display name="Total National Contribution" feature="Contracting Tab">
+                                                                                       <field:display name="Total National Contribution" feature="Contracting">
                                                                                         
                                                                                         
                                                                                         <tr>
@@ -351,7 +351,7 @@ function projectFiche(id)
                                                                                         </tr>
                                                                                     </field:display>
                                                                                         
-                                                                                    <field:display name="Central" feature="Contracting Tab">
+                                                                                    <field:display name="Central" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:Central">Central</digi:trn>:</b>
@@ -362,7 +362,7 @@ function projectFiche(id)
                                                                                             </td>
                                                                                         </tr>
                                                                                     </field:display>
-                                                                                              <field:display name="Regional" feature="Contracting Tab">
+                                                                                              <field:display name="Regional" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:Regional">Regional</digi:trn>:</b>
@@ -374,7 +374,7 @@ function projectFiche(id)
                                                                                             </td>
                                                                                         </tr>
                                                                                     </field:display>
-                                                                                              <field:display name="IFIs" feature="Contracting Tab">
+                                                                                              <field:display name="IFIs" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:IFIs">IFIs</digi:trn>:</b>
@@ -386,7 +386,7 @@ function projectFiche(id)
                                                                                         </tr>
                                                                                     </field:display>
                                                                                         
-                                                                                    <field:display name="Total Private Contribution" feature="Contracting Tab">
+                                                                                    <field:display name="Total Private Contribution" feature="Contracting">
                                                                                         
                                                                                         <tr>
                                                                                             <td align="left" colspan="2">
@@ -405,7 +405,7 @@ function projectFiche(id)
                                                                                             </td>
                                                                                         </tr>
                                                                                     </field:display>
-                                                                                    <field:display name="Total Disbursements of Contract" feature="Contracting Tab">
+                                                                                    <field:display name="Total Disbursements of Contract" feature="Contracting">
                                                                                         
                                                                                         <tr>
                                                                                             <td align="left">
@@ -422,7 +422,7 @@ function projectFiche(id)
                                                                                             </td>
                                                                                         </tr>
                                                                                     </field:display>    
-                                                                                    <field:display name="Contract Execution Rate" feature="Contracting Tab">
+                                                                                    <field:display name="Contract Execution Rate" feature="Contracting">
                                                                                 
                                                                                         <tr>
                                                                                             <td align="left">
@@ -434,7 +434,7 @@ function projectFiche(id)
                                                                                         </tr>
                                                                                     </field:display>    
                                                                                         
-                                                                                              <field:display name="Disbursements" feature="Contracting Tab">
+                                                                                              <field:display name="Disbursements" feature="Contracting">
                                                                                         <tr>
                                                                                     
                                                                                             <td colspan="2">

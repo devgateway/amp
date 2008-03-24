@@ -188,15 +188,21 @@ public class ShowCalendarView
         selectedEventTypes[index++] = eventType.getId().toString();
       }
       filter.setSelectedEventTypes(selectedEventTypes);
-      // donors
-      String[] selectedDonors = new String[filter.getDonors().size()];
+      // donor
+      // FFerreyra: The selectedDonors array has one more member for "None" to show events without Donor set. See AMP-2691
+      String[] selectedDonors = new String[filter.getDonors().size()+1];
       index = 0;
+      
+      // FFerreyra: Add the first NULL Option to be set in the filter by default
+      selectedDonors[index++] = "None";
+      
       it = filter.getDonors().iterator();
       while (it.hasNext()) {
         LabelValueBean lvb = (LabelValueBean) it.next();
         selectedDonors[index++] = lvb.getValue();
       }
       filter.setSelectedDonors(selectedDonors);
+      
       // showPublicEvents
       filter.setShowPublicEvents(false);
     }

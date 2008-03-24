@@ -308,9 +308,20 @@ public class AmpDbUtil {
       else {
         queryString += " and 0 = 1";
       }
-      if (selectedDonorIds != null && selectedDonorIds.length != 0) {
-        queryString += " and don.id in (:selectedDonorIds)";
-      }
+      
+		if (selectedDonorIds != null && selectedDonorIds.length != 0) {
+			queryString += " and (don.id in (:selectedDonorIds)";
+	
+			// FFerreyra: Add clause to where for "None" donor selected. See AMP-2691
+			
+			for(int index=0;index<selectedDonorIds.length;index++){
+				if(selectedDonorIds[index].equals("None")){
+					queryString += " or don.id is null ";
+					break;
+				}
+			}
+			queryString += ") ";
+		}
 
       /* if(userId != null && !showPublicEvents) {
            queryString += " and ac.user.id = t1.user.id" +

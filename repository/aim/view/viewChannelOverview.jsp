@@ -617,13 +617,13 @@ function commentWin(val) {
 																								</c:if>
 																								&nbsp;
 																							</TD>
-                                                                                                                                                                                          <TD  align="center" bgcolor="#ffffff">
-                                                                                                                                                                                             <i> <digi:trn key="aim:percent">Percent</digi:trn></i>
+                                                                                              <TD  align="center" bgcolor="#ffffff">
+                                                                                              <i> <digi:trn key="aim:percent">Percent</digi:trn></i>
 																							</TD>
 																							</TR>
 
 																						<c:forEach var="loc" items="${activity.locations}">
-                                                                                                                                                                                     <c:if test="${not empty loc.region || not empty loc.zone ||not empty loc.woreda}">
+                                                                                            <c:if test="${not empty loc.region || not empty loc.zone ||not empty loc.woreda}">
 																							<TR>
 																								<TD width="30%" align="center" bgcolor="#ffffff">
 																									<c:out value="${loc.region}" />
@@ -635,10 +635,10 @@ function commentWin(val) {
 																								<TD width="30%" align="center" bgcolor="#ffffff">
 																									<c:out value="${loc.woreda}" />
 																								</TD>
-                                                                                                                                                                                                 <TD  align="center" bgcolor="#ffffff">
-                                                                                                                                                                                                     <c:if test='${loc.percent!=""}'>
+                                                                                                  <TD  align="center" bgcolor="#ffffff">
+                                                                                                     <c:if test='${loc.percent > 0}'>
 																									<c:out value="${loc.percent}%" />
-                                                                                                                                                                                                       </c:if>
+                                                                                                     </c:if>
 																								</TD>
 																							</TR>
                                                                                                                                                                                          </c:if>

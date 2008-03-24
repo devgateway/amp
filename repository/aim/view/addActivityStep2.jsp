@@ -304,12 +304,8 @@ function validateLocationPercentage(){
   var cnt = document.aimEditActivityForm.sizeLocs.value;
   var cnt_blank_fields = 0;
   while (i < cnt) {
-    str   = "selectedLocs[" + i + "].percent";
-    if(str.value == "undefined"){
-    val   = (document.aimEditActivityForm.elements)[str].value;
-    }else{
-    val = "0";
-    }
+    str   = "selectedLocs[" + i + "].percent";    
+    val   = (document.aimEditActivityForm.elements)[str].value;    
     // added by mouhamad for burkina on 22/02/08
     if (val == "" || val == null || val == "0") {
     	val = "0";

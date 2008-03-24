@@ -321,7 +321,7 @@ public final class AdvancedReportUtil {
 		return teamMember;
 	}
         
-        public static boolean checkDuplicateReportName(String reportTitle, Long ownerId) throws Exception{
+        public static boolean checkDuplicateReportName(String reportTitle, Long ownerId, Long dbReportId) throws Exception{
 		boolean exist=false;
 		Session session = null;
 		Query query = null;
@@ -331,9 +331,15 @@ public final class AdvancedReportUtil {
 			session = PersistenceManager.getRequestDBSession();
 			queryString = "select report.ownerId from " + AmpReports.class.getName() 
                                 + " report where report.name=:name and report.ownerId=:ownerId ";
+                        if(dbReportId!=null){
+                            queryString+=" and report.ampReportId!=:dbReportId";
+                        }
 			query = session.createQuery(queryString);
                         query.setLong("ownerId", ownerId);
                         query.setString("name", reportTitle.trim());
+                         if(dbReportId!=null){
+                            query.setLong("dbReportId", dbReportId);
+                        }
                        if(query.list()!=null&&query.list().size()>0){
                            exist=true;
                        }			

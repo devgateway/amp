@@ -412,7 +412,7 @@ public class AdvancedReport extends Action {
 				/* report Title check */
 				ActionErrors errors = new ActionErrors();	
 				//AmpTeamMember found = AdvancedReportUtil.checkDuplicateReportName(formBean.getReportTitle());
-                                boolean found=AdvancedReportUtil.checkDuplicateReportName(formBean.getReportTitle(),teamMember.getMemberId());
+                                boolean found=AdvancedReportUtil.checkDuplicateReportName(formBean.getReportTitle(),teamMember.getMemberId(),formBean.getDbReportId());
 				if(found)
 				{ 
 					formBean.setDuplicatedReportName(true);
@@ -1128,9 +1128,9 @@ public class AdvancedReport extends Action {
 				if(flag == false )
 				{
 					int i 			= 0;
-					boolean found 	=AdvancedReportUtil.checkDuplicateReportName(formBean.getReportTitle(),teamMember.getMemberId()) ;
+					boolean found 	=AdvancedReportUtil.checkDuplicateReportName(formBean.getReportTitle(),teamMember.getMemberId(),formBean.getDbReportId()) ;
 					/* No need to check for duplicate if editing an exisiting report */
-					if ( !formBean.getInEditingMode() ){
+					//if ( !formBean.getInEditingMode() ){
 						
 
 						if(found)
@@ -1142,7 +1142,7 @@ public class AdvancedReport extends Action {
 							formBean.setDuplicatedReportName(false);
 							formBean.setDuplicatedReportOwner(null);
 						}
-					}
+					//}
 					
 	           	if(!formBean.isDuplicatedReportName())
 	            {

@@ -83,6 +83,8 @@
 	var strPlanned="<digi:trn key='aim:NPD:sumplaned'>Planned</digi:trn>";
 	var strActual="<digi:trn key='aim:NPD:sumactual'>Actual</digi:trn>";
 	var strProposed="<digi:trn key='aim:NPD:sumproposed'>Proposed</digi:trn>";
+	var actCurrPage=0;
+	var actMaxPages=0;
 
 	function changeOptions(indics,years,locations){
         selIndicatorIDs=new Array();
@@ -617,6 +619,7 @@
 		if (selActYearFrom != null && selActYearFrom != -1){
 			result+= pd + 'startYear='+selActYearFrom;
 		}
+		result+= pd + 'currentPage='+actCurrPage;
 		return result;
 	}
 
@@ -627,6 +630,7 @@
 
 	function setUpActivityList(xml){
 		var tr= document.getElementById('activityListPlace');
+		var paginationTr=document.getElementById('paginationPlace');
 		var tbl= tr.parentNode;
 
 		clearActivityTable(tr);
@@ -643,6 +647,9 @@
 			}
 			return;
 		}
+		//total pages
+		actMaxPages=root.getAttribute('totalPages');
+		
 		//get activities array
 		var actList = root.childNodes;
 		if (actList == null || actList.length == 0){
@@ -761,8 +768,30 @@
 		lastTR1.appendChild(lastTD1);
 		tbl.appendChild(lastTR1);
 
+		setupPagination(paginationTr);
+		
 	}
 
+	function setupPagination(placeToAdd){
+		alert(actMaxPages);
+		for (var i=0; i<actMaxPages; i++){
+			var td = document.createElement('TD');
+			var pageLink = document.createElement('a');
+			pageLink.onclick=getActivities();
+			if (i=actCurrPage){
+				
+			}else{
+				
+			}	
+		}
+	}
+	
+	/* pagination link handler */
+	function gotoActListPage(pageNum){
+		actCurrPage=pageNum;
+		getActivities();
+	}
+	
 	function getDonorsHTML(donors,target){
 		if (donors !=null && donors.length >0 && donors[0].tagName=='donors'){
 			var donorList = donors[0].childNodes;
@@ -1131,6 +1160,15 @@
 					<td colspan="8">
 						&nbsp;
 					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">
+			<table>
+				<tr id="paginationPlace">
+					<td>showing all</td>
 				</tr>
 			</table>
 		</td>

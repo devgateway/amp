@@ -9,24 +9,25 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.ActivitiesForm;
 import org.digijava.module.aim.helper.ActivityItem;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.NpdUtil;
@@ -59,25 +60,40 @@ public class GetActivities extends Action {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		logger.debug("got asynchronous request for Activities list");
+		HttpSession session = request.getSession();
+		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
+		NpdSettings settings = NpdUtil.getCurrentSettings(tm.getTeamId());
+		// TODO AMP-2539 we need some decision about filtering activities for teams or team members.
+
+		int maxPages=1;
+		
 		response.setContentType("text/xml");
 		ActivitiesForm actForm = (ActivitiesForm) form;
 		logger.debug("programId=" + actForm.getProgramId() + " statusCode=" + actForm.getStatusId());
-		//HttpSession session = request.getSession();
-		TeamMember tm =  null;// TODO AMP-2539 we need some decision about this. (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		OutputStreamWriter outputStream =null;
 		
 		try {
 			Date fromYear = yearToDate(actForm.getStartYear(), false);
 			Date toYear = yearToDate(actForm.getEndYear(), true);
 
-			//retrieve activities
-			Collection<AmpActivity> activities = getActivities(actForm.getProgramId(),
-					actForm.getStatusId(), actForm.getDonorId(), fromYear,
-					toYear, null, tm, true);
+			//count activities with same filter but without pagination. this should be fast.
+			logger.debug("counting activities");
+			Integer count=getActivitiesCount(actForm.getProgramId(),actForm.getStatusId(), actForm.getDonorId(), fromYear,toYear, null, tm, false);
+			//calculate pagination
+			Integer pageStart=null;
+			Integer rowCount=null;
+			if (count!=null && count.intValue()>0 && settings!=null && settings.getActListPageSize()!=null && actForm.getCurrentPage()!=null && actForm.getCurrentPage()>0){
+				rowCount=settings.getActListPageSize();
+				pageStart=(actForm.getCurrentPage()-1)*rowCount;
+				maxPages=count/settings.getActListPageSize();
+			}
+			
+			logger.debug("retriving activities");
+			Collection<AmpActivity> activities = getActivities(actForm.getProgramId(),actForm.getStatusId(), actForm.getDonorId(), fromYear,toYear, null, null, pageStart,rowCount, false);
 
 			//convert activities to xml
 			logger.debug("Converting activities to XML");
-			String xml = activities2XML(activities);
+			String xml = activities2XML(activities,maxPages);
 
 			logger.debug("Setting activties XML in the response");
 			outputStream =  new OutputStreamWriter( response.getOutputStream(),"UTF-8");
@@ -122,12 +138,69 @@ public class GetActivities extends Action {
 			Date toDate,
 			Long locationId,
 			TeamMember teamMember,
-			boolean recurse) throws AimException{
+			Integer pageStart,
+			Integer rowCount, 
+			boolean recurse) throws AimException, DgException{
 
 
 		Collection<AmpActivity> result=null;
 
+		//search actvities in db, with pagination.
 		result = ActivityUtil.searchActivities(ampThemeId,
+				statusCode,
+				donorOrgId,
+				fromDate,
+				toDate,
+				locationId,
+				teamMember,
+				pageStart,
+				rowCount);
+
+		if (recurse){
+			Collection<AmpTheme> children = ProgramUtil.getSubThemes(ampThemeId);
+			if (children!= null && children.size() > 0){
+				for (AmpTheme prog : children) {
+//					Collection<AmpActivity> subActivities = ActivityUtil.searchActivities(
+//							prog.getAmpThemeId(), statusCode, donorOrgId,
+//							fromDate, toDate, locationId, teamMember);
+//					if (subActivities!= null && subActivities.size()>0){
+//						result.addAll(subActivities);
+//					}
+					Collection<AmpActivity> childsActivities=getActivities(prog.getAmpThemeId(), statusCode, donorOrgId, fromDate, toDate, locationId, teamMember, pageStart, rowCount, recurse);
+					if (childsActivities!=null && childsActivities.size()>0){
+						if(result==null){
+							result=childsActivities;
+						}else{
+							result.addAll(childsActivities);
+						}
+					}
+				}
+			}
+		}
+
+		//Set<AmpActivity> activities = new TreeSet<AmpActivity>(new ActivityUtil.ActivityIdComparator());
+		List<AmpActivity> sortedActivities = null;
+		if (result!=null){
+			sortedActivities= new ArrayList<AmpActivity>(result);
+			Collections.sort(sortedActivities);
+		}
+
+		return sortedActivities;
+	}
+
+	private Integer getActivitiesCount(Long ampThemeId,
+			String statusCode,
+			Long donorOrgId,
+			Date fromDate,
+			Date toDate,
+			Long locationId,
+			TeamMember teamMember,
+			boolean recurse) throws AimException, DgException{
+
+
+		int result=0;
+
+		result = ActivityUtil.searchActivitiesCount(ampThemeId,
 				statusCode,
 				donorOrgId,
 				fromDate,
@@ -136,36 +209,32 @@ public class GetActivities extends Action {
 				teamMember);
 
 		if (recurse){
-			Collection<AmpTheme> children = ProgramUtil.getAllSubThemesFor(ampThemeId);
+			Collection<AmpTheme> children = ProgramUtil.getSubThemes(ampThemeId);
 			if (children!= null && children.size() > 0){
 				for (AmpTheme prog : children) {
-					Collection<AmpActivity> subActivities = ActivityUtil.searchActivities(
-							prog.getAmpThemeId(), statusCode, donorOrgId,
-							fromDate, toDate, locationId, teamMember);
-					if (subActivities!= null && subActivities.size()>0){
-						result.addAll(subActivities);
+//					Collection<AmpActivity> subActivities = ActivityUtil.searchActivities(
+//							prog.getAmpThemeId(), statusCode, donorOrgId,
+//							fromDate, toDate, locationId, teamMember);
+//					if (subActivities!= null && subActivities.size()>0){
+//						result.addAll(subActivities);
+//					}
+					Integer childsActivities=getActivitiesCount(prog.getAmpThemeId(), statusCode, donorOrgId, fromDate, toDate, locationId, teamMember, recurse);
+					if (childsActivities!=null){
+						result+=childsActivities;
 					}
 				}
 			}
 		}
 
-		Set<AmpActivity> activities = new TreeSet<AmpActivity>(new ActivityUtil.ActivityIdComparator());
-		List<AmpActivity> sortedActivities = null;
-		if (result!=null){
-			for (AmpActivity element : result) {
-				activities.add(element);
-			}
-			sortedActivities = new ArrayList<AmpActivity>(activities);
-			Collections.sort(sortedActivities);
-		}
-
-		return sortedActivities;
+		return result;
 	}
-
+	
+	
+	
 	/**
 	 * Converts year represented as String to date. It can create last day or
 	 * first day of the year depending on the second parameter. todo: this
-	 * should be changed to last and first scond of the year.
+	 * should be changed to last and first second of the year.
 	 * 
 	 * @param year
 	 * @param lastSecondOfYear
@@ -220,14 +289,15 @@ public class GetActivities extends Action {
 	 * Constructs XML from Activities This method converts every AmpActivity db
 	 * bean to ActivtyItem helper beans. Then getXml() method of the helper bean
 	 * is used to get portions of the activity xml.
+	 * TODO we should have XML file and velocity here. and probably Schema too...
 	 * 
 	 * @param acts
 	 *            Collection of AmpActivity db beans
-	 * @return XML representing list of the cativities.
+	 * @return XML representing list of the activities.
 	 * @see AmpActivity
 	 * @see ActivityItem
 	 */
-	private String activities2XML(Collection<AmpActivity> acts) throws Exception {
+	private String activities2XML(Collection<AmpActivity> acts,int maxPages) throws Exception {
 		double proposedSum = 0;
 		double actualSum = 0;
 		double plannedSum = 0;
@@ -237,18 +307,22 @@ public class GetActivities extends Action {
 		String temp = "";
 		if (acts != null && acts.size() > 0) {
 			for (AmpActivity activity : acts) {
-				ActivityUtil.ActivityAmounts amounts = ActivityUtil.getActivityAmmountIn(activity, "USD");
-				
+				//create helper bean from activity
+				ActivityItem item = new ActivityItem(activity);
+				//get already calculated amounts from helper
+				ActivityUtil.ActivityAmounts amounts = item.getAmounts();
+				//calculate totals
 				proposedSum += amounts.getProposedAmout();
 				actualSum += amounts.getActualAmount();
 				plannedSum += amounts.getPlannedAmount();
-				ActivityItem item = new ActivityItem(activity);
+				//generate one activity portion of XML from helper
 				temp += item.getXml();
 			}
 		}
 		result += " proposedSum=\"" + mf.format(proposedSum)+ "\" ";
 		result += " actualSum=\"" + mf.format(actualSum)+ "\" ";
 		result += " plannedSum=\"" + mf.format(plannedSum)+ "\" ";
+		result += " totalPages=\""+maxPages+"\" ";
 		result += ">" + temp + "</" + ROOT_TAG + ">";
 		return result;
 	}

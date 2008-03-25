@@ -11,6 +11,7 @@
 		  <property name="width" column="wigth"  type="java.lang.Integer"/>
 		  <property name="height" column="height"  type="java.lang.Integer"/>
 		  <property name="angle" column="angle"  type="java.lang.Integer"/>
-		  <many-to-one name="team" column="ampTeam"  class="org.digijava.module.aim.dbentity.AmpTeam" unique="true"  />		  
+		  <many-to-one name="team" column="ampTeam"  class="org.digijava.module.aim.dbentity.AmpTeam" unique="true"  />
+		  <property name="actListPageSize" column="activities_per_page" type="java.lang.Integer"/>		  
 </class>
 </hibernate-mapping>

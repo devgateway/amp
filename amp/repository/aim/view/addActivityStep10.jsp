@@ -715,7 +715,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																		<c:set var="trn">
 																			<digi:trn key="aim:risk:${currRisk.translatedRatingName}">${currRisk.ratingName}</digi:trn>
 																		</c:set>
-																		<html:option value="${currRisk.ratingValue}">${trn}</html:option>																		
+																		<html:option value="${currRisk.ampIndRiskRatingsId}">${trn}</html:option>																		
 																	</logic:iterate>
 																</html:select>															
 															</td>

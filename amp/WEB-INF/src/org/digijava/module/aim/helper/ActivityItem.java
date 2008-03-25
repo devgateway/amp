@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -58,7 +57,9 @@ public class ActivityItem {
 	//end date not used 
 	private String endDate;
 	
-	private List donors;
+	private List<LabelValueBean> donors;
+	
+	private ActivityUtil.ActivityAmounts amounts;
 
 	
 	/**
@@ -81,20 +82,21 @@ public class ActivityItem {
 
 	/**
 	 * Constructs helper bean from db entity.
-	 * Also DateFormat is passed to frmat dates
+	 * Also DateFormat is passed to format dates
 	 * @param entity AmpActivity db entity to construct helper from
 	 * @param frmt date formatter
 	 */
 	public ActivityItem(AmpActivity entity,DateFormat frmt) throws Exception {
 		if (entity != null) {
-			AmpCategoryValue statusValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, entity.getCategories());
+			AmpCategoryValue statusValue	= new AmpCategoryValue();// CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, entity.getCategories());
+			statusValue.setValue("fake status");
 			if (statusValue != null)
 				status		= statusValue.getValue();
 			id = entity.getAmpActivityId();
 			name = entity.getName();
 			name = name.replaceAll("&","&amp;");
 			try {
-				ActivityUtil.ActivityAmounts amounts = ActivityUtil.getActivityAmmountIn(entity,"USD");
+				amounts = new ActivityUtil.ActivityAmounts();//ActivityUtil.getActivityAmmountIn(entity,"USD");
 				proposedAmount=amounts.proposedAmout();
 				actualAmount=amounts.actualAmount();
 				plannedAmount=amounts.plannedAmount();
@@ -106,7 +108,7 @@ public class ActivityItem {
 			}else{
 				startDate = "";
 			}
-			donors = setDonors(entity.getFunding());
+			donors = null;//getDonorsFromFundings(entity.getFunding());
 		}
 	}
 
@@ -144,8 +146,7 @@ public class ActivityItem {
 	private String getDonorsList(){
 		String result = "";
 		if (donors != null && donors.size()>0){
-			for (Iterator iter = donors.iterator(); iter.hasNext();) {
-				LabelValueBean lvb = (LabelValueBean) iter.next();
+			for (LabelValueBean lvb : donors) {
 				result += "<donor id=\""+lvb.getValue()+"\" name=\""+lvb.getLabel()+"\"/>";
 			}
 		}
@@ -158,11 +159,10 @@ public class ActivityItem {
 	 * @param donors Set of funding orgs from AmpActivity
 	 * @return list of LabelValueBean objects
 	 */
-	private List setDonors(Set donors){
-		List result = new ArrayList();
+	private List<LabelValueBean> getDonorsFromFundings(Set<AmpFunding> donors){
+		List<LabelValueBean> result = new ArrayList<LabelValueBean>();
 		if (donors != null && donors.size() > 0){
-			for (Iterator iter = donors.iterator(); iter.hasNext();) {
-				AmpFunding donor = (AmpFunding) iter.next();
+			for (AmpFunding donor: donors) {
 				String donorName = donor.getAmpDonorOrgId().getName();
 				Long donorId = donor.getAmpDonorOrgId().getAmpOrgId();
 				LabelValueBean lvb = new LabelValueBean(donorName,donorId.toString());
@@ -220,14 +220,6 @@ public class ActivityItem {
 		this.startDate = startDate;
 	}
 
-	public List getDonors() {
-		return donors;
-	}
-
-	public void setDonors(List donors) {
-		this.donors = donors;
-	}
-
 	public String getActualAmount() {
 		return actualAmount;
 	}
@@ -250,6 +242,14 @@ public class ActivityItem {
 
 	public void setProposedAmount(String proposedAmount) {
 		this.proposedAmount = proposedAmount;
+	}
+
+	public ActivityUtil.ActivityAmounts getAmounts() {
+		return amounts;
+	}
+
+	public void setAmounts(ActivityUtil.ActivityAmounts amounts) {
+		this.amounts = amounts;
 	}
 
 }

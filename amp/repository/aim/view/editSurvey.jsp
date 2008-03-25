@@ -294,7 +294,8 @@
                                           ${aimEditActivityForm.ahsurvey.pointOfDeliveryDonor.name}
                                           </td>
                                           <td align="right">
-                                            <input type="button" value="Select organization" onclick="openSelOrgPopup();" style="font-family:tahoma;font-size:8pt;" />
+                                          
+                                            <input type="button" value="<digi:trn key="aim:editactivity:selectorganization">Select organization</digi:trn>" onclick="openSelOrgPopup();" style="font-family:tahoma;font-size:8pt;" />
                                           </td>
                                         </tr>
                                       </TABLE>

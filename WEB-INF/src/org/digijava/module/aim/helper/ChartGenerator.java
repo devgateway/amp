@@ -7,7 +7,6 @@ package org.digijava.module.aim.helper;
 
 import java.awt.Color;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -18,16 +17,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
@@ -40,16 +36,12 @@ import org.jfree.chart.entity.StandardEntityCollection;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
-import org.jfree.chart.renderer.category.StackedBarRenderer;
 import org.jfree.chart.servlet.ServletUtilities;
 import org.jfree.chart.urls.CategoryURLGenerator;
-import org.jfree.chart.urls.StandardCategoryURLGenerator;
 import org.jfree.chart.urls.StandardPieURLGenerator;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
-import java.util.*;
 
 public class ChartGenerator {
 
@@ -113,6 +105,7 @@ public class ChartGenerator {
 					 AmpIndicatorValue val=valuesIter.next();
 					 if(val.getRisk()!=null){
 						 risks.add(val.getRisk());
+						 break;//TODO INDIC because this is stupid! all values have same risk and this risk should go to connection.
 					 }					 					
 				}
 			}
@@ -121,14 +114,14 @@ public class ChartGenerator {
 		//ArrayList meRisks = (ArrayList) MEIndicatorsUtil.getMEIndicatorRisks(actId);
         for (Iterator<AmpIndicatorRiskRatings> riskIter = risks.iterator(); riskIter.hasNext(); ) {
         	AmpIndicatorRiskRatings item = (AmpIndicatorRiskRatings) riskIter.next();
-            String value = item.getTranslatedRatingName()==null?"":item.getTranslatedRatingName();
+            String value = item.getRatingName();
             String key = KEY_RISK_PREFIX + value.toLowerCase();
             key = key.replaceAll(" ", "");
             String msg = CategoryManagerUtil.translate(key, request, value);
             item.setTranslatedRatingName(msg);
         }
 
-        Collections.sort((List)risks);
+        //Collections.sort((List)risks);
 
 
 		ChartParams cp = new ChartParams();
@@ -199,25 +192,28 @@ public class ChartGenerator {
 			HttpSession session,PrintWriter pw,
 			int chartWidth,int chartHeight,String url,boolean includeBaseline, HttpServletRequest request) throws Exception{
 
-		Set<AmpIndicatorValue> values=null;			
-		Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
-			if(valuesActivity!=null && valuesActivity.size()>0){
-				Iterator<IndicatorActivity> it=valuesActivity.iterator();
-				while(it.hasNext()){
-					 IndicatorActivity indActivity=it.next();
-					 values=indActivity.getValues();					
-					 for(Iterator valuesIter=values.iterator();valuesIter.hasNext();){
-						AmpIndicatorValue value=(AmpIndicatorValue)valuesIter.next();
-						String val=new Integer(value.getValueType()).toString(); 
-						String key = KEY_PERFORMANCE_PREFIX+ val.toLowerCase();
-						key = key.replaceAll(" ", "");
-						String msg = CategoryManagerUtil.translate(key, request, val);
-						//item.setType(msg);
-						
-					}
-				}
-			}
+		AmpActivity activity=ActivityUtil.loadActivity(actId);
+		Set<IndicatorActivity> values=activity.getIndicators();			
 		
+		
+//		Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
+//			if(valuesActivity!=null && valuesActivity.size()>0){
+//				Iterator<IndicatorActivity> it=valuesActivity.iterator();
+//				while(it.hasNext()){
+//					 IndicatorActivity indActivity=it.next();
+//					 values=indActivity.getValues();					
+//					 for(Iterator valuesIter=values.iterator();valuesIter.hasNext();){
+//						AmpIndicatorValue value=(AmpIndicatorValue)valuesIter.next();
+//						String val=new Integer(value.getValueType()).toString(); 
+//						String key = KEY_PERFORMANCE_PREFIX+ val.toLowerCase();
+//						key = key.replaceAll(" ", "");
+//						String msg = CategoryManagerUtil.translate(key, request, val);
+//						//item.setType(msg);
+//						
+//					}
+//				}
+//			}
+// lines above commented by Irakli		
 		
 		
 //		Collection meIndValues = MEIndicatorsUtil.getMEIndicatorValues(actId,includeBaseline);
@@ -277,7 +273,11 @@ public class ChartGenerator {
 						seriesColors[index++] = Constants.HIGHLY_UNSATISFACTORY_CLR;
 					}
 
-					ds.setValue(risk.getTranslatedRatingName(),risk.getRatingValue());
+					if (risk.getRatingValue()<0){
+						ds.setValue(risk.getTranslatedRatingName(),risk.getRatingValue());
+					}else{
+						ds.setValue(risk.getTranslatedRatingName(),risk.getRatingValue());
+					}
 				}
 
 				JFreeChart chart = ChartFactory.createPieChart(
@@ -316,39 +316,47 @@ public class ChartGenerator {
 
 		String fileName = null;
 		Double baseValue=null,actualValue=null,targetValue=null;
-		String baseAmpIndValueName=null,targetAmpIndValueName=null,actualAmpIndValueName=null;
 		String baseValueType=null,targetValueType=null,actualValueType=null;
-		Collection col = cp.getData();
+		DefaultCategoryDataset ds = new DefaultCategoryDataset();
 		try {
-			if (col != null && col.size() > 0) {
-				Iterator itr = col.iterator();
-				DefaultCategoryDataset ds = new DefaultCategoryDataset();
-				while (itr.hasNext()) {
-					AmpIndicatorValue ampIndValue=(AmpIndicatorValue)itr.next();
-					if (ampIndValue.getValueType()==2){						 
-						 baseValue=ampIndValue.getValue();
-						 baseValueType=new Integer(ampIndValue.getValueType()).toString();
-						 baseAmpIndValueName=ampIndValue.getIndicatorConnection().getIndicator().getName();
-					}else if(ampIndValue.getValueType()==1){						 
-						 actualValue=ampIndValue.getValue();
-						 actualValueType=new Integer(ampIndValue.getValueType()).toString();
-						 actualAmpIndValueName=ampIndValue.getIndicatorConnection().getIndicator().getName();
-					}else if(ampIndValue.getValueType()==0){						 
-						 targetValue=ampIndValue.getValue();
-						 baseValueType=new Integer(ampIndValue.getValueType()).toString();
-						 baseValueType=ampIndValue.getIndicatorConnection().getIndicator().getName();
-					}					
-				}
-				if (baseValue<=actualValue&& actualValue<=targetValue){									
-					actualValue=actualValue-baseValue;
-					targetValue=100 -actualValue;					
-				} else {
-					ds.addValue(baseValue,baseValueType,baseAmpIndValueName);					
-				}
-				ds.addValue(actualValue,actualValueType,actualAmpIndValueName);				
-//				ds.addValue(0.9,"kalosha", "java");
-//				ds.addValue(0.1,"jordano", "java");
-				//ds.addValue(targetAmpIndValue.getValue(),new Integer(targetAmpIndValue.getValueType()).toString() , actualAmpIndValueName);
+			Collection data=cp.getData();
+			for (Iterator iterator = data.iterator(); iterator.hasNext();) {
+				IndicatorActivity connection = (IndicatorActivity) iterator.next();
+
+				Collection<AmpIndicatorValue> col = connection.getValues();
+				if (col != null && col.size() > 0) {
+					String indicatorName=connection.getIndicator().getName();
+					
+					Iterator<AmpIndicatorValue> itr = col.iterator();
+					boolean revisedAlreadyParsed=false;
+					while (itr.hasNext()) {
+						AmpIndicatorValue ampIndValue = itr.next();
+						if (ampIndValue.getValueType() == AmpIndicatorValue.BASE) {
+							baseValue = ampIndValue.getValue();
+							baseValueType = new Integer(ampIndValue.getValueType()).toString();
+						} else if (ampIndValue.getValueType() == AmpIndicatorValue.ACTUAL) {
+							actualValue = ampIndValue.getValue();
+							actualValueType = new Integer(ampIndValue.getValueType()).toString();
+						} else if (ampIndValue.getValueType() == AmpIndicatorValue.TARGET && !revisedAlreadyParsed) {
+							targetValue = ampIndValue.getValue();
+							targetValueType = new Integer(ampIndValue.getValueType()).toString();
+						} else if (ampIndValue.getValueType() == AmpIndicatorValue.REVISED) {
+							targetValue = ampIndValue.getValue();
+							targetValueType = new Integer(ampIndValue.getValueType()).toString();
+							revisedAlreadyParsed=true;//this is used to not overwrite revised with target.
+						}
+					}
+					if (baseValue<=actualValue&& actualValue<=targetValue){									
+						actualValue=actualValue-baseValue;
+						targetValue=100 -actualValue;					
+					} else {
+						ds.addValue(baseValue,baseValueType,indicatorName);					
+					}
+					ds.addValue(actualValue,actualValueType,indicatorName);				
+					ds.addValue(targetValue,targetValueType,indicatorName);				
+				
+			}
+			
 				
 
 				JFreeChart chart = ChartFactory.createStackedBarChart(
@@ -358,7 +366,7 @@ public class ChartGenerator {
 						ds,		// dataset
 						PlotOrientation.VERTICAL,	// Orientation
 						true,	// show legend
-						true,	// show tooltips
+						false,	// show tooltips
 						true);	// show urls
 				chart.setBackgroundPaint(Color.WHITE);
 
@@ -402,6 +410,7 @@ public class ChartGenerator {
 
 		} catch (Exception e) {
 			logger.error("Exception from generatePerformanceChart() :" + e.getMessage());
+			e.printStackTrace();
 		}
  		return fileName;
 	}

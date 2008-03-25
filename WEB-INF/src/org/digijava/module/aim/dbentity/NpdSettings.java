@@ -2,12 +2,28 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import org.digijava.module.aim.dbentity.AmpTeam;
 
+/**
+ * NPD settings for each team.
+ * @author Dare Roinishvili
+ *
+ */
 public class NpdSettings implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+	
 	private Long npdSettingsId;
 	private Integer height;
 	private Integer width;
 	private Integer angle;
 	private AmpTeam team;
+	private Integer actListPageSize;
+	
+	public Integer getActListPageSize() {
+		return actListPageSize;
+	}
+	public void setActListPageSize(Integer actListPageSize) {
+		this.actListPageSize = actListPageSize;
+	}
 	public Integer getAngle() {
 		return angle;
 	}

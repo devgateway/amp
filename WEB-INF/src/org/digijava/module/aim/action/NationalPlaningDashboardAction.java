@@ -135,7 +135,7 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 			// retrive activities
 			Collection activities = ActivityUtil.searchActivities(
 					currentThemeId, "1", donorOrgId, fromDateActivities,
-					toDateActivities, locationId, null);
+					toDateActivities, locationId, null,null,null);
 			if (activities != null) {
 				npdForm.setActivities(new ArrayList(activities));
 				DecimalFormat frmt=new DecimalFormat("$,###.##");

@@ -47,6 +47,7 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -697,6 +698,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           
           
           AmpIndicator ind=(AmpIndicator)session.get(AmpIndicator.class,actInd.getIndicatorId());
+          AmpIndicatorRiskRatings risk=(AmpIndicatorRiskRatings)session.load(AmpIndicatorRiskRatings.class, actInd.getRisk());
 
           //try to find connection of current activity with current indicator
           IndicatorActivity indConn=IndicatorUtil.findActivityIndicatorConnection(activity, ind);
@@ -722,6 +724,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         	  indValActual.setValue(new Double(actInd.getActualVal()));
         	  indValActual.setComment(actInd.getCurrentValComments());
         	  indValActual.setValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
+        	  indValActual.setRisk(risk);
         	  indValActual.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValActual);
           }
@@ -731,6 +734,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         	  indValTarget.setValue(new Double(actInd.getTargetVal()));
         	  indValTarget.setComment(actInd.getTargetValComments());
         	  indValTarget.setValueDate(DateConversion.getDate(actInd.getTargetValDate()));
+        	  indValTarget.setRisk(risk);
         	  indValTarget.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValTarget);
           }
@@ -740,17 +744,19 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         	  indValBase.setValue(new Double(actInd.getBaseVal()));
         	  indValBase.setComment(actInd.getBaseValComments());
         	  indValBase.setValueDate(DateConversion.getDate(actInd.getBaseValDate()));
+        	  indValBase.setRisk(risk);
         	  indValBase.setIndicatorConnection(indConn);
         	  indConn.getValues().add(indValBase);
           }
           if (actInd.getRevisedTargetVal()!=null){
-        	  AmpIndicatorValue indValBase=new AmpIndicatorValue();
-        	  indValBase.setValueType(AmpIndicatorValue.REVISED);
-        	  indValBase.setValue(new Double(actInd.getRevisedTargetVal()));
-        	  indValBase.setComment(actInd.getRevisedTargetValComments());
-        	  indValBase.setValueDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
-        	  indValBase.setIndicatorConnection(indConn);
-        	  indConn.getValues().add(indValBase);
+        	  AmpIndicatorValue indValRevised=new AmpIndicatorValue();
+        	  indValRevised.setValueType(AmpIndicatorValue.REVISED);
+        	  indValRevised.setValue(new Double(actInd.getRevisedTargetVal()));
+        	  indValRevised.setComment(actInd.getRevisedTargetValComments());
+        	  indValRevised.setValueDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
+        	  indValRevised.setRisk(risk);
+        	  indValRevised.setIndicatorConnection(indConn);
+        	  indConn.getValues().add(indValRevised);
           }
           // save connection with its new values.
           IndicatorUtil.saveConnectionToActivity(indConn);
@@ -995,17 +1001,118 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     return col;
   }
 
+  /**
+   * Searches activities.
+   * Please note that this method is too slow if there are too many activities, because hibernate should load them all. Please use pagination.
+   * @param ampThemeId filter by program
+   * @param statusCode filter by status if not null
+   * @param donorOrgId filter by donor org if not null
+   * @param fromDate filter by date if not null
+   * @param toDate filter by date if not null
+   * @param locationId filter by location if not null
+   * @param teamMember filter by team if not null
+   * @param pageStart if null then 0 is assumed.
+   * @param rowCount number of activities to return
+   * @return list of activities.
+   * @throws DgException
+   */
   public static Collection<AmpActivity> searchActivities(Long ampThemeId,
       String statusCode,
       Long donorOrgId,
       Date fromDate,
       Date toDate,
       Long locationId,
-      TeamMember teamMember) {
+      TeamMember teamMember,Integer pageStart,Integer rowCount) throws DgException{
     Collection<AmpActivity> result = null;
     try {
       Session session = PersistenceManager.getRequestDBSession();
+
       String oql = "select act from " + AmpActivityProgram.class.getName() + " prog ";
+      oql+= getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
+      oql += " order by act.name";
+
+      Query query = session.createQuery(oql);
+      
+      setSearchActivitiesQueryParams(query, ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
+      
+      if (pageStart!=null && rowCount!=null){
+          query.setFirstResult(pageStart);
+          query.setMaxResults(rowCount);
+      }
+      
+      result = query.list();
+    }
+    catch (Exception ex) {
+      throw new DgException("Cannot search activities for NPD",ex);
+    }
+
+    return result;
+  }
+
+
+  /**
+   * Count how man activities will find search without pagination.
+   * This method is used together with {@link #searchActivities(Long, String, Long, Date, Date, Long, TeamMember, Integer, Integer)}
+   * @param ampThemeId
+   * @param statusCode
+   * @param donorOrgId
+   * @param fromDate
+   * @param toDate
+   * @param locationId
+   * @param teamMember
+   * @return
+   * @throws DgException
+   */
+  public static Integer searchActivitiesCount(Long ampThemeId,
+	      String statusCode,
+	      Long donorOrgId,
+	      Date fromDate,
+	      Date toDate,
+	      Long locationId,
+	      TeamMember teamMember) throws DgException{
+	    Integer result = null;
+	    try {
+	      Session session = PersistenceManager.getRequestDBSession();
+	      String oql = "select count(act) from " + AmpActivityProgram.class.getName() + " prog ";
+	      oql += getSearchActivitiesWhereClause(ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
+	      oql += " order by act.name";
+
+	      Query query = session.createQuery(oql);
+
+	      setSearchActivitiesQueryParams(query, ampThemeId, statusCode, donorOrgId, fromDate, toDate, locationId, teamMember);
+	      
+	      result = (Integer)query.uniqueResult();
+	    }
+	    catch (Exception ex) {
+	      throw new DgException("Cannot count activities for NPD",ex);
+	    }
+
+	    return result;
+	  }
+
+  /**
+   * Setups query string where clause for search and count methods.
+   * @param ampThemeId
+   * @param statusCode
+   * @param donorOrgId
+   * @param fromDate
+   * @param toDate
+   * @param locationId
+   * @param teamMember
+   * @return
+   * @see #searchActivities(Long, String, Long, Date, Date, Long, TeamMember, Integer, Integer)
+   * @see #searchActivitiesCount(Long, String, Long, Date, Date, Long, TeamMember)
+   */
+  public static String getSearchActivitiesWhereClause(Long ampThemeId,
+	      String statusCode,
+	      Long donorOrgId,
+	      Date fromDate,
+	      Date toDate,
+	      Long locationId,
+	      TeamMember teamMember) {
+	  
+	  String oql="";
+	  
       if (ampThemeId!=null){
     	  oql += " inner join prog.program as theme ";
       }
@@ -1041,41 +1148,43 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
       if (teamMember != null) {
         oql += " and ( act.team.ampTeamId =:teamId) "; //oql += " and " +getTeamMemberWhereClause(teamMember);
       }
-      oql += " order by act.name";
-
-      //==query
-      Query query = session.createQuery(oql);
-      if (ampThemeId != null) {
-        query.setLong("ampThemeId", ampThemeId.longValue());
-      }
-      if (donorOrgId != null) {
-        query.setLong("DonorId", donorOrgId.longValue());
-      }
-      if (statusCode != null) {
-        query.setString("statusCode", statusCode);
-      }
-      if (fromDate != null) {
-        query.setDate("FromDate", fromDate);
-      }
-      if (toDate != null) {
-        query.setDate("ToDate", toDate);
-      }
-      if (locationId != null) {
-        query.setLong("LocationID", locationId.longValue());
-      }
-      if (teamMember!=null && teamMember.getTeamId()!=null){
-    	  query.setLong("teamId", teamMember.getTeamId());
-      }
-
-      result = query.list();
-    }
-    catch (Exception ex) {
-      logger.error(ex);
-    }
-
-    return result;
+	  return oql;
   }
 
+  public static void setSearchActivitiesQueryParams(Query query, Long ampThemeId,
+	      String statusCode,
+	      Long donorOrgId,
+	      Date fromDate,
+	      Date toDate,
+	      Long locationId,
+	      TeamMember teamMember) {
+	  
+      if (ampThemeId != null) {
+          query.setLong("ampThemeId", ampThemeId.longValue());
+        }
+        if (donorOrgId != null) {
+          query.setLong("DonorId", donorOrgId.longValue());
+        }
+        if (statusCode != null) {
+          query.setString("statusCode", statusCode);
+        }
+        if (fromDate != null) {
+          query.setDate("FromDate", fromDate);
+        }
+        if (toDate != null) {
+          query.setDate("ToDate", toDate);
+        }
+        if (locationId != null) {
+          query.setLong("LocationID", locationId.longValue());
+        }
+        if (teamMember!=null && teamMember.getTeamId()!=null){
+      	  query.setLong("teamId", teamMember.getTeamId());
+        }
+        
+  }
+	  
+  
+  
   private static String getTeamMemberWhereClause(TeamMember teamMember) {
     Long teamId = teamMember.getTeamId();
     //boolean teamHead = teamMember.getTeamHead();

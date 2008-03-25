@@ -10,12 +10,21 @@ import org.apache.struts.action.ActionForm;
  */
 public class ActivitiesForm extends ActionForm {
 
+	private static final long serialVersionUID = 1;
+
 	private Long programId;
 	private String statusId;
 	private String startYear;
 	private String endYear;
 	private Long donorId;
+	private Integer currentPage;
 	
+	public Integer getCurrentPage() {
+		return currentPage;
+	}
+	public void setCurrentPage(Integer currentPage) {
+		this.currentPage = currentPage;
+	}
 	public Long getDonorId() {
 		return donorId;
 	}

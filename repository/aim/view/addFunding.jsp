@@ -25,12 +25,17 @@
 	<!--
 
 	function useFixedRateClicked(field1,field2) {
+		
 		var fld1 = document.getElementById(field1);
 		var fld2 = document.getElementById(field2);
+		
+		
 		if (fld1.disabled == true) {
 			fld1.disabled = false;
+			fld2.value=true;
 		} else {
 			fld1.disabled = true;
+			fld2.value=false;
 		}
 		}
 
@@ -202,6 +207,8 @@
 <html:hidden property="numProjections"/>
 <html:hidden property="editAct"/>
 <html:hidden property="firstSubmit"/>
+
+<input type="hidden" name="isEditFunfing" value="true"/>
 
 <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class=box-border-nopadding>
 	<!-- funding -->
@@ -547,9 +554,18 @@
 											<td align="right">
 												<% String exchRatefldId = "exchFld"+(t++);
 													String exchCurrfldId = "exchCurr"+(t++);
-													String jsUrl = "useFixedRateClicked('" + exchRatefldId + "')";
+													String exchHidden = "useFixedRate"+(t++);
+													String jsUrl = "useFixedRateClicked('" + exchRatefldId + "','" + exchHidden + "')";
 												%>
-												<html:checkbox name="fundingDetail" indexed="true" property="useFixedRate" onclick="<%=jsUrl%>"/>
+												
+												<html:hidden styleId="<%=exchHidden%>" name="fundingDetail"  property="useFixedRate" indexed="true" />
+												<input type="checkbox" onclick="<%=jsUrl%>"  
+													<c:if test="${fundingDetail.useFixedRate}">
+															checked="true"
+														</c:if>
+														/>
+											
+												
 											</td>
 											<td colspan="4">
 
@@ -641,12 +657,19 @@
 												
 											</td>
 											<td align="right">
-												<% String exchRatefldId = "exchFld"+ (t++);
-													String exchCurrfldId = "exchCurr"+ (t++);
-													String jsUrl = "useFixedRateClicked('" + exchRatefldId + "')";
-												%>
-												<html:checkbox name="fundingDetail" indexed="true" property="useFixedRate"
-												onclick="<%=jsUrl%>"/>
+													<% String exchRatefldId = "exchFld"+(t++);
+													String exchCurrfldId = "exchCurr"+(t++);
+													String exchHidden = "useFixedRate"+(t++);
+													String jsUrl = "useFixedRateClicked('" + exchRatefldId + "','" + exchHidden + "')";
+												%>	<html:hidden styleId="<%=exchHidden%>" name="fundingDetail"  property="useFixedRate" indexed="true" />
+														
+														
+														<input type="checkbox" onclick="<%=jsUrl%>" 
+														<c:if test="${fundingDetail.useFixedRate}">
+															checked="true"
+														</c:if>
+														/>
+												
 											</td>
 											<td colspan="4">
 												<logic:equal name="fundingDetail" property="useFixedRate" value="true">

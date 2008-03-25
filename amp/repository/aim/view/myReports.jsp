@@ -121,7 +121,7 @@ return false;
 
 					<TR><TD bgColor=#ffffff class=box-border align=left>
 
-						No reports for this workspace
+						<digi:trn key="aim:noReportForThisWorkspace">No reports for this workspace</digi:trn>
 
 					</TD></TR>
 

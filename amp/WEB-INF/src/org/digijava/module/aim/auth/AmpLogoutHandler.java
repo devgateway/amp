@@ -2,12 +2,11 @@ package org.digijava.module.aim.auth;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.acegisecurity.Authentication;
 import org.acegisecurity.ui.logout.LogoutHandler;
-import org.digijava.module.aim.helper.Constants;
-
-import javax.servlet.http.HttpSession;
+import org.digijava.kernel.util.RequestUtils;
 
 public class AmpLogoutHandler
     implements LogoutHandler {
@@ -23,7 +22,15 @@ public class AmpLogoutHandler
                        HttpServletResponse httpServletResponse,
                        Authentication authentication) {
         HttpSession session = httpServletRequest.getSession();
-      
+
+        //save dev mode setting after logout.
+        boolean wasDevMode=RequestUtils.isDevelopmentModeActive(httpServletRequest);
+        
         session.invalidate();
+
+        //if user switched to dev mode before logout, then restore it.
+        if (wasDevMode){
+            RequestUtils.switchToDevelopmentMode(httpServletRequest);
+        }
     }
 }

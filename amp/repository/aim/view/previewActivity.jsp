@@ -970,7 +970,7 @@ function collapseAll() {
 															<c:if test="${!empty locations.woreda}">
 																[<c:out value="${locations.woreda}"/>]													</c:if>													</td>
 															<td align="right">
-																<c:if test="${locations.percent} > 0">
+																<c:if test="${locations.percent > 0}">
 																	<c:out value="${locations.percent}"/>%
 																</c:if>
 														</td>

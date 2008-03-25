@@ -1,0 +1,1 @@
+update amp_activity set activity_creator=NULL where (select count(*) from amp_team_member where amp_team_member.amp_team_mem_id = amp_activity.activity_creator)=0;

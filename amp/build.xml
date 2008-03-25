@@ -149,6 +149,11 @@
       </java>
     </target>
 
+    <target name="autoBuild">
+        <javac srcdir="${src}" destdir="${classes}" deprecation="off" debug="${debug}" fork="yes" memoryMaximumSize="512m">
+            <classpath refid="compile.classpath"/>
+        </javac>
+    </target>
 
     <!-- Normal build of application -->
     <target name="compile" depends="prepare,resources">

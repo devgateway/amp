@@ -28,7 +28,9 @@ function confirmDeletion(message)
 <c:set var="msg">
 ${fn:replace(message,quote,escapedQuote)}
 </c:set>
-<table id="permissionsList" align="center">
+<!-- FFerreyra: This is to contain the widget that allows a sortable table to avoid freeze on IE7 -->
+<div id="permissionContainer">
+<table id="permissionsList">
 <thead>
 <tr><td>Name</td><td>Description</td><td>Permission Type</td><td>Contents</td><td>Linked With</td><td>Change Permission</td></tr>
 </thead>
@@ -74,7 +76,7 @@ ${fn:replace(message,quote,escapedQuote)}
 </tr>
 </logic:iterate>
 </table>
-
+</div>
 <div align="left">&nbsp;&nbsp;
 <digi:link href="/managePerm.do?new" title="NEW">
 <digi:img src="module/gateperm/images/add.gif" border="0" />Add New Permission
@@ -86,8 +88,8 @@ ${fn:replace(message,quote,escapedQuote)}
 <!--
 var tableWidgetObj = new DHTMLSuite.tableWidget();
 tableWidgetObj.setTableId('permissionsList');
-tableWidgetObj.setTableWidth('80%');
-tableWidgetObj.setTableHeight(200);
+tableWidgetObj.setTableWidth('100%');
+tableWidgetObj.setTableHeight(300);
 //tableWidgetObjsetNoCssLayout();
 tableWidgetObj.setColumnSort(Array('S','S','S'));
 tableWidgetObj.init();

@@ -76,7 +76,9 @@
 		<tr>
 			<td>
 				<b>
-					No reports present
+					<digi:trn key="aim:noReportsPresent">
+						No reports present
+					</digi:trn>
 				</b>
 			</td>
 		</tr>

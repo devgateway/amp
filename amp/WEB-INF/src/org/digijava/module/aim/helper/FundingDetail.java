@@ -2,6 +2,7 @@ package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
+
 import org.digijava.module.aim.dbentity.IPAContract;
 /**
  * @author jose
@@ -228,12 +229,15 @@ public class FundingDetail implements Serializable
 	 */
 	public boolean isUseFixedRate() {
 		return useFixedRate;
-	}
+ 	}
 
 	/**
 	 * @param useFixedRate The useFixedRate to set.
 	 */
 	public void setUseFixedRate(boolean useFixedRate) {
+	    if(useFixedRate==false){
+		setFixedExchangeRate(null);
+	    }
 		this.useFixedRate = useFixedRate;
 	}
 
@@ -279,5 +283,7 @@ public class FundingDetail implements Serializable
 	 }
 	 return returnValue;
  }
+       
+        
         
 }

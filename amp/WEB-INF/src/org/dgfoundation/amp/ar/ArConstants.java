@@ -37,7 +37,7 @@ public final class ArConstants {
 	public final static String ADJUSTMENT_TYPE="Adjustment Type";
 	public final static String TRANSACTION_TYPE="Transaction Type";
 	public final static String FUNDING_TYPE="Funding Type";
-	public final static String TERMS_OF_ASSISTANCE="Terms of Assistance";
+	public final static String TERMS_OF_ASSISTANCE="Type Of Assistance";
 	public final static String FINANCING_INSTRUMENT="Financing Instrument";	
 	public final static String YEAR="Year";
 	public final static String QUARTER="Quarter";

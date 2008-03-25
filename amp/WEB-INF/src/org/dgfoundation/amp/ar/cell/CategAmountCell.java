@@ -167,6 +167,11 @@ public Cell filter(Cell metaCell,Set ids) {
 				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.TERMS_OF_ASSISTANCE)))
 		return null;
 		
+		if(metaCell.getColumn().getName().equals(ArConstants.FINANCING_INSTRUMENT)) 
+			if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.FINANCING_INSTRUMENT)))
+		return null;
+	
+		
 
 		if(metaCell.getColumn().getName().equals(ArConstants.COMPONENT)) 
 			if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.COMPONENT)))

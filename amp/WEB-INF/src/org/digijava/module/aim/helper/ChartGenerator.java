@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,6 +22,12 @@ import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
@@ -33,6 +40,8 @@ import org.jfree.chart.entity.StandardEntityCollection;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.StackedBarRenderer;
 import org.jfree.chart.servlet.ServletUtilities;
 import org.jfree.chart.urls.CategoryURLGenerator;
@@ -91,25 +100,41 @@ public class ChartGenerator {
 
 	public static String getActivityRiskChartFileName(Long actId,
 			HttpSession session,PrintWriter pw,
-			int chartWidth,int chartHeight,String url, HttpServletRequest request) {
+			int chartWidth,int chartHeight,String url, HttpServletRequest request) throws Exception{
 
-		ArrayList meRisks = (ArrayList) MEIndicatorsUtil.getMEIndicatorRisks(actId);
-        for (Iterator valIter = meRisks.iterator(); valIter.hasNext(); ) {
-            MEIndicatorRisk item = (MEIndicatorRisk) valIter.next();
-            String value = item.getRisk();
+		ArrayList<AmpIndicatorRiskRatings> risks=new ArrayList<AmpIndicatorRiskRatings>();
+		Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
+		if(valuesActivity!=null && valuesActivity.size()>0){
+			Iterator<IndicatorActivity> it=valuesActivity.iterator();
+			while(it.hasNext()){
+				 IndicatorActivity indActivity=it.next();
+				 Set<AmpIndicatorValue> values=indActivity.getValues();					
+				 for(Iterator<AmpIndicatorValue> valuesIter=values.iterator();valuesIter.hasNext();){
+					 AmpIndicatorValue val=valuesIter.next();
+					 if(val.getRisk()!=null){
+						 risks.add(val.getRisk());
+					 }					 					
+				}
+			}
+		}
+		
+		//ArrayList meRisks = (ArrayList) MEIndicatorsUtil.getMEIndicatorRisks(actId);
+        for (Iterator<AmpIndicatorRiskRatings> riskIter = risks.iterator(); riskIter.hasNext(); ) {
+        	AmpIndicatorRiskRatings item = (AmpIndicatorRiskRatings) riskIter.next();
+            String value = item.getTranslatedRatingName()==null?"":item.getTranslatedRatingName();
             String key = KEY_RISK_PREFIX + value.toLowerCase();
             key = key.replaceAll(" ", "");
             String msg = CategoryManagerUtil.translate(key, request, value);
-            item.setRisk(msg);
+            item.setTranslatedRatingName(msg);
         }
 
-        Collections.sort(meRisks);
+        Collections.sort((List)risks);
 
 
 		ChartParams cp = new ChartParams();
 		cp.setChartHeight(chartHeight);
 		cp.setChartWidth(chartWidth);
-		cp.setData(meRisks);
+		cp.setData(risks);
 		cp.setTitle("");
 		cp.setSession(session);
 		cp.setWriter(pw);
@@ -172,22 +197,43 @@ public class ChartGenerator {
 
 	public static String getActivityPerformanceChartFileName(Long actId,
 			HttpSession session,PrintWriter pw,
-			int chartWidth,int chartHeight,String url,boolean includeBaseline, HttpServletRequest request) {
+			int chartWidth,int chartHeight,String url,boolean includeBaseline, HttpServletRequest request) throws Exception{
 
-		Collection meIndValues = MEIndicatorsUtil.getMEIndicatorValues(actId,includeBaseline);
-        for (Iterator valIter = meIndValues.iterator(); valIter.hasNext(); ) {
-            MEIndicatorValue item = (MEIndicatorValue) valIter.next();
-            String value = item.getType();
-            String key = KEY_PERFORMANCE_PREFIX+ value.toLowerCase();
-            key = key.replaceAll(" ", "");
-            String msg = CategoryManagerUtil.translate(key, request, value);
-            item.setType(msg);
-        }
+		Set<AmpIndicatorValue> values=null;			
+		Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
+			if(valuesActivity!=null && valuesActivity.size()>0){
+				Iterator<IndicatorActivity> it=valuesActivity.iterator();
+				while(it.hasNext()){
+					 IndicatorActivity indActivity=it.next();
+					 values=indActivity.getValues();					
+					 for(Iterator valuesIter=values.iterator();valuesIter.hasNext();){
+						AmpIndicatorValue value=(AmpIndicatorValue)valuesIter.next();
+						String val=new Integer(value.getValueType()).toString(); 
+						String key = KEY_PERFORMANCE_PREFIX+ val.toLowerCase();
+						key = key.replaceAll(" ", "");
+						String msg = CategoryManagerUtil.translate(key, request, val);
+						//item.setType(msg);
+						
+					}
+				}
+			}
+		
+		
+		
+//		Collection meIndValues = MEIndicatorsUtil.getMEIndicatorValues(actId,includeBaseline);
+//        for (Iterator valIter = meIndValues.iterator(); valIter.hasNext(); ) {
+//            MEIndicatorValue item = (MEIndicatorValue) valIter.next();
+//            String value = item.getType();
+//            String key = KEY_PERFORMANCE_PREFIX+ value.toLowerCase();
+//            key = key.replaceAll(" ", "");
+//            String msg = CategoryManagerUtil.translate(key, request, value);
+//            item.setType(msg);
+//        }
 
-		ChartParams cp = new ChartParams();
+		ChartParams cp = new ChartParams();	
 		cp.setChartHeight(chartHeight);
 		cp.setChartWidth(chartWidth);
-		cp.setData(meIndValues);
+		cp.setData(values);
 		cp.setTitle("");
 		cp.setSession(session);
 		cp.setWriter(pw);
@@ -198,19 +244,20 @@ public class ChartGenerator {
 
 	public static String generateRiskChart(ChartParams cp) {
 		String fileName = null;
-		Collection col = cp.getData();
+		Collection<AmpIndicatorRiskRatings> col = cp.getData();
 		try {
 			if (col != null && col.size() > 0) {
-				Iterator itr = col.iterator();
+				Iterator<AmpIndicatorRiskRatings> itr = col.iterator();
 
 				DefaultPieDataset ds = new DefaultPieDataset();
 
 				Color seriesColors[] = new Color[col.size()];
 				int index = 0;
 				while (itr.hasNext()) {
-					MEIndicatorRisk risk = (MEIndicatorRisk) itr.next();
+					AmpIndicatorRiskRatings risk=itr.next();
+					//MEIndicatorRisk risk = (MEIndicatorRisk) itr.next();
 
-					switch (risk.getRiskRating()) {
+					switch (risk.getRatingValue()) {
 					case Constants.HIGHLY_SATISFACTORY:
 						seriesColors[index++] = Constants.HIGHLY_SATISFACTORY_CLR;
 						break;
@@ -230,7 +277,7 @@ public class ChartGenerator {
 						seriesColors[index++] = Constants.HIGHLY_UNSATISFACTORY_CLR;
 					}
 
-					ds.setValue(risk.getRisk(),risk.getRiskCount());
+					ds.setValue(risk.getTranslatedRatingName(),risk.getRatingValue());
 				}
 
 				JFreeChart chart = ChartFactory.createPieChart(
@@ -268,15 +315,41 @@ public class ChartGenerator {
 	public static String generatePerformanceChart(ChartParams cp) {
 
 		String fileName = null;
+		Double baseValue=null,actualValue=null,targetValue=null;
+		String baseAmpIndValueName=null,targetAmpIndValueName=null,actualAmpIndValueName=null;
+		String baseValueType=null,targetValueType=null,actualValueType=null;
 		Collection col = cp.getData();
 		try {
 			if (col != null && col.size() > 0) {
 				Iterator itr = col.iterator();
 				DefaultCategoryDataset ds = new DefaultCategoryDataset();
 				while (itr.hasNext()) {
-					MEIndicatorValue meIndVal = (MEIndicatorValue) itr.next();
-					ds.addValue(meIndVal.getValue(),meIndVal.getType(), meIndVal.getIndicatorName());
+					AmpIndicatorValue ampIndValue=(AmpIndicatorValue)itr.next();
+					if (ampIndValue.getValueType()==2){						 
+						 baseValue=ampIndValue.getValue();
+						 baseValueType=new Integer(ampIndValue.getValueType()).toString();
+						 baseAmpIndValueName=ampIndValue.getIndicatorConnection().getIndicator().getName();
+					}else if(ampIndValue.getValueType()==1){						 
+						 actualValue=ampIndValue.getValue();
+						 actualValueType=new Integer(ampIndValue.getValueType()).toString();
+						 actualAmpIndValueName=ampIndValue.getIndicatorConnection().getIndicator().getName();
+					}else if(ampIndValue.getValueType()==0){						 
+						 targetValue=ampIndValue.getValue();
+						 baseValueType=new Integer(ampIndValue.getValueType()).toString();
+						 baseValueType=ampIndValue.getIndicatorConnection().getIndicator().getName();
+					}					
 				}
+				if (baseValue<=actualValue&& actualValue<=targetValue){									
+					actualValue=actualValue-baseValue;
+					targetValue=100 -actualValue;					
+				} else {
+					ds.addValue(baseValue,baseValueType,baseAmpIndValueName);					
+				}
+				ds.addValue(actualValue,actualValueType,actualAmpIndValueName);				
+//				ds.addValue(0.9,"kalosha", "java");
+//				ds.addValue(0.1,"jordano", "java");
+				//ds.addValue(targetAmpIndValue.getValue(),new Integer(targetAmpIndValue.getValueType()).toString() , actualAmpIndValueName);
+				
 
 				JFreeChart chart = ChartFactory.createStackedBarChart(
 						cp.getTitle(), // title
@@ -285,13 +358,14 @@ public class ChartGenerator {
 						ds,		// dataset
 						PlotOrientation.VERTICAL,	// Orientation
 						true,	// show legend
-						false,	// show tooltips
+						true,	// show tooltips
 						true);	// show urls
 				chart.setBackgroundPaint(Color.WHITE);
 
 				CategoryPlot plot = (CategoryPlot) chart.getPlot();
 
-				StackedBarRenderer r1 = new StackedBarRenderer();
+				CategoryItemRenderer r1 = plot.getRenderer();   //new StackedBarRenderer();
+				//r1.setSeriesPaint(0,Constants.BASE_VAL_CLR);
 				r1.setSeriesPaint(0,Constants.ACTUAL_VAL_CLR);
 				r1.setSeriesPaint(1,Constants.TARGET_VAL_CLR);
 
@@ -304,6 +378,7 @@ public class ChartGenerator {
 					r1.setSeriesPaint(0,Constants.ACTUAL_VAL_CLR);
 					r1.setSeriesPaint(1,Constants.TARGET_VAL_CLR);
 				}*/
+				
 
 				String url = cp.getUrl();
 				if (url != null && url.trim().length() > 0) {
@@ -311,12 +386,12 @@ public class ChartGenerator {
 					r1.setItemURLGenerator(cUrl1);
 				}
 
-				plot.setRenderer(r1);
+//				plot.setRenderer(r1);
 				CategoryAxis axis = plot.getDomainAxis();
 				axis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
 				NumberAxis numAxis = (NumberAxis) plot.getRangeAxis();
-				numAxis.setRange(0D,1D);
-				numAxis.setNumberFormatOverride(new DecimalFormat("###%"));
+				numAxis.setRange(0D,100D);
+			//	numAxis.setNumberFormatOverride(new DecimalFormat("%"));
 
 				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
 				fileName = ServletUtilities.saveChartAsPNG(chart,cp.getChartWidth(),

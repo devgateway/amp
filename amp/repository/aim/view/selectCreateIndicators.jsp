@@ -187,7 +187,7 @@
 																							<table cellSpacing=2 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f2">
 																								<logic:notEmpty name="aimIndicatorForm" property="searchReturn">
 																									<tr>
-																										<td bgcolor="#f4f4f2" align="right" valign="center">Indicator Name</td>
+																										<td bgcolor="#f4f4f2" align="right" valign="center"><digi:trn key="aim:IndicatorName">Indicator Name</digi:trn></td>
 																										<td bgcolor="#f4f4f2" align="left">
 																											<html:select property="selectedIndicators" styleClass="inp-text"size="6" multiple="true">																								
 																												<logic:notEmpty name="aimIndicatorForm" property="searchReturn">

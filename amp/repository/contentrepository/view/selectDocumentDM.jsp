@@ -26,20 +26,21 @@
 
 <script type="text/javascript">
 	function afterPageLoad(e) {
-		newWindow( 'Select Documents',true,'otherDocumentsDiv');
+	    var select = '<digi:trn key="contentrepository:SelectDocumentsTitle">Select Documents</digi:trn>';
+		newWindow( select,true,'otherDocumentsDiv');
 	}
 	YAHOO.util.Event.on(window, "load", afterPageLoad); 
 </script>	
 
 <br />
 <div id="otherDocumentsDiv">&nbsp;</div>
-<button onclick="saveSelectedDocuments()" type="button">Submit</button> 
+<button onclick="saveSelectedDocuments()" type="button"><digi:trn key="btn:submitDocumentsFromRepository">Submit this</digi:trn></button> 
 <br /><br />
 &nbsp;&nbsp;
 	<c:set var="translation">
 			<digi:trn key="contentrepository:newWindowExplanation">Click here to open a new document window</digi:trn>
 	</c:set>
-<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue; font-size: x-small" onClick="newWindow('Select Documents', true, 'otherDocumentsDiv')" /> 
+<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue; font-size: x-small" onClick="newWindow('<digi:trn key="contentrepository:SelectDocumentsTitle">Select Documents</digi:trn>', true, 'otherDocumentsDiv')" /> 
 	<digi:trn key="contentrepository:newWindow">New window</digi:trn>
 </a>
 

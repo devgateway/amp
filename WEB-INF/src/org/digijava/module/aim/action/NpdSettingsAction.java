@@ -11,7 +11,6 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.form.NpdSettingsForm;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -43,6 +42,7 @@ public class NpdSettingsAction extends DispatchAction {
 		form.setHeight(npdSettings.getHeight());
 		form.setWidth(npdSettings.getWidth());
 		form.setAmpTeamId(npdSettings.getTeam().getAmpTeamId());
+		form.setPageSize(npdSettings.getActListPageSize());
 
 		return arg0.findForward("forward");
 
@@ -70,10 +70,11 @@ public class NpdSettingsAction extends DispatchAction {
 		}else {
 			npdSettings.setAngle(new Integer(form.getAngle()));
 				
-		}		
+		}
 		
 		npdSettings.setHeight(form.getHeight());
 		npdSettings.setWidth(form.getWidth());
+		npdSettings.setActListPageSize(form.getPageSize());
 		NpdUtil.updateSettings(npdSettings);
 		return arg0.findForward("forward");
 	}

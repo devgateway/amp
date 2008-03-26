@@ -77,7 +77,7 @@
 						<td align="right" valign="middle" width="50%">
 							<digi:trn key="aim:npdSettings:height">Height</digi:trn>
 						</td>
-						<td align="left" valign="middle"><html:text property="height" styleClass="inp-text" size="7"/></td>
+						<td align="left" valign="middle" nowrap="nowrap"><html:text property="height" styleClass="inp-text" size="7"/></td>
 					</tr>
 					<tr bgcolor="#f4f4f2">
 						<td align="right" valign="middle" width="50%">
@@ -87,6 +87,14 @@
 							<small>
 								<digi:trn key="aim:npdSettings:blankAngle">Blank value will be generated automatically</digi:trn>
 							</small>
+						</td>
+					</tr>
+					<tr bgcolor="#f4f4f2">
+						<td align="right" valign="middle" width="50%">
+							<digi:trn key="aim:npdSettings:actvitiesPerPage">Activities per page</digi:trn>
+						</td>
+						<td align="left" valign="middle">
+							<html:text property="pageSize" styleClass="inp-text" size="7"/>
 						</td>
 					</tr>
 				

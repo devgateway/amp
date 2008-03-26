@@ -772,8 +772,7 @@
 		
 	}
 
-	function setupPagination(placeToAdd){
-		alert(actMaxPages);
+	function setupPagination(placeToAdd){		
 		for (var i=0; i<actMaxPages; i++){
 			var td = document.createElement('TD');
 			var pageLink = document.createElement('a');

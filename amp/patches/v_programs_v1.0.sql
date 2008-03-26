@@ -2,7 +2,6 @@
  * National Planning Objectives
  */
 
-DROP VIEW IF EXISTS `amp_staging`.`v_nationalojectives`;
 CREATE OR REPLACE VIEW `v_nationalojectives` AS 
 select `a`.`amp_activity_id` AS `amp_activity_id`,
        `t`.`name` AS `name`,`ap`.`amp_program_id` AS `amp_program_id` 
@@ -21,7 +20,6 @@ VALUES           ('National Planning Objectives', 'nationalojectives', 'org.dgfo
  * Primary Program
  */
 
-DROP VIEW IF EXISTS `amp_staging`.`v_primaryprogram`;
 CREATE OR REPLACE VIEW `v_primaryprogram` AS 
 select `a`.`amp_activity_id` AS `amp_activity_id`,
        `t`.`name` AS `name`,`ap`.`amp_program_id` AS `amp_program_id` 
@@ -40,7 +38,6 @@ VALUES           ('Primary Program', 'primaryprogram', 'org.dgfoundation.amp.ar.
  * Secondary Program
  */
 
-DROP VIEW IF EXISTS `amp_staging`.`v_secondaryprogram`;
 CREATE OR REPLACE VIEW `v_secondaryprogram` AS 
 select `a`.`amp_activity_id` AS `amp_activity_id`,
        `t`.`name` AS `name`,`ap`.`amp_program_id` AS `amp_program_id` 

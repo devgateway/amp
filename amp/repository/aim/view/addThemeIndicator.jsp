@@ -15,6 +15,19 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
 
 <script language="JavaScript">
+    var openImg;
+    var closeImg;
+    if(document.images){
+
+      openImg = new Image(9,9)
+
+      closeImg = new Image(6,6)
+
+      openImg.src = "../ampTemplate/images/arrow_down.gif"
+
+      closeImg.src = "../ampTemplate/images/arrow_right.gif"
+
+    }
 	<!--
 	function validate()
 	{
@@ -187,38 +200,23 @@ function closeWindow() 
   }
 
 
-  var Open = ""
-  var Closed = ""
 
-  function preload(){
 
-    if(document.images){
-
-      Open = new Image(9,9)
-
-      Closed = new Image(6,6)
-
-      Open.src = "../ampTemplate/images/arrow_down.gif"
-
-      Closed.src = "../ampTemplate/images/arrow_right.gif"
-
-    }
-
-  }
+  
   function showhide(what,what2){
 
     if (what.style.display=='none'){
 
       what.style.display='';
 
-      what2.src=Open.src
+      what2.src=openImg.src
 
     }
     else{
 
       what.style.display='none'
 
-      what2.src=Closed.src
+      what2.src=closeImg.src
 
     }
 
@@ -284,7 +282,7 @@ function closeWindow() 
 
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
-<body onload="preload()">
+<body >
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772 border="0">
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>

@@ -772,11 +772,23 @@
 		
 	}
 
-	function setupPagination(placeToAdd){		
+	function setupPagination(placeToAdd){
+		//alert(actMaxPages);
+		var tooManyPages=actMaxPages>=11;
+		var middleStart=-1;
+		var middleEnd=actMaxPages;
+		if (tooManyPages==true){
+			var temp=actMaxPages/2
+			middleStart=temp-4;
+			middleEnd=temp+4;
+		}
 		for (var i=0; i<actMaxPages; i++){
+			if (i>=middleStart && i<middleEnd){
+			
+			}
 			var td = document.createElement('TD');
 			var pageLink = document.createElement('a');
-			pageLink.onclick=getActivities();
+			//pageLink.onclick=gotoActListPage();
 			if (i=actCurrPage){
 				
 			}else{

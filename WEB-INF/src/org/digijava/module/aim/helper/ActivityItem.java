@@ -88,15 +88,15 @@ public class ActivityItem {
 	 */
 	public ActivityItem(AmpActivity entity,DateFormat frmt) throws Exception {
 		if (entity != null) {
-			AmpCategoryValue statusValue	= new AmpCategoryValue();// CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, entity.getCategories());
-			statusValue.setValue("fake status");
+			AmpCategoryValue statusValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, entity.getCategories());
+//			statusValue.setValue("fake status");
 			if (statusValue != null)
 				status		= statusValue.getValue();
 			id = entity.getAmpActivityId();
 			name = entity.getName();
 			name = name.replaceAll("&","&amp;");
 			try {
-				amounts = new ActivityUtil.ActivityAmounts();//ActivityUtil.getActivityAmmountIn(entity,"USD");
+				amounts = ActivityUtil.getActivityAmmountIn(entity,"USD");
 				proposedAmount=amounts.proposedAmout();
 				actualAmount=amounts.actualAmount();
 				plannedAmount=amounts.plannedAmount();
@@ -108,7 +108,7 @@ public class ActivityItem {
 			}else{
 				startDate = "";
 			}
-			donors = null;//getDonorsFromFundings(entity.getFunding());
+			donors = getDonorsFromFundings(entity.getFunding());
 		}
 	}
 

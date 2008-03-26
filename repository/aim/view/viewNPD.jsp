@@ -83,7 +83,7 @@
 	var strPlanned="<digi:trn key='aim:NPD:sumplaned'>Planned</digi:trn>";
 	var strActual="<digi:trn key='aim:NPD:sumactual'>Actual</digi:trn>";
 	var strProposed="<digi:trn key='aim:NPD:sumproposed'>Proposed</digi:trn>";
-	var actCurrPage=0;
+	var actCurrPage=1;
 	var actMaxPages=0;
 
 	function changeOptions(indics,years,locations){
@@ -774,33 +774,117 @@
 
 	function setupPagination(placeToAdd){
 		//alert(actMaxPages);
+		if (actMaxPages<=1) return;
+		//TODO clear tr first
+		while(placeToAdd.firstChild != null){
+			placeToAdd.removeChild(placeToAdd.firstChild);
+		}
+		
+		
 		var tooManyPages=actMaxPages>=11;
 		var middleStart=-1;
 		var middleEnd=actMaxPages;
 		if (tooManyPages==true){
-			var temp=actMaxPages/2
-			middleStart=temp-4;
-			middleEnd=temp+4;
-		}
-		for (var i=0; i<actMaxPages; i++){
-			if (i>=middleStart && i<middleEnd){
-			
+			middleStart=actCurrPage-4;
+			if (middleStart<1){
+				middleStart=1;
+			} 
+			middleEnd=actCurrPage+4;
+			if(middleEnd>actMaxPages){
+				middleEnd=actMaxPages;
 			}
-			var td = document.createElement('TD');
-			var pageLink = document.createElement('a');
-			//pageLink.onclick=gotoActListPage();
-			if (i=actCurrPage){
-				
-			}else{
-				
-			}	
 		}
+		
+		var tdLabel = document.createElement('TD');
+		tdLabel.innerHTML='Pages:   ';
+		placeToAdd.appendChild(tdLabel);
+		
+		if (actCurrPage>1){
+			var tdFirst = document.createElement('TD');
+			tdFirst.innerHTML='<a href="javascript:gotoActListPage(1)">First</a>';
+			placeToAdd.appendChild(tdFirst);
+			
+			var tdSp1 = document.createElement('TD');
+			tdSp1.innerHTML='&nbsp;';
+			placeToAdd.appendChild(tdSp1);
+			
+			var tdPrev = document.createElement('TD');
+			tdPrev.innerHTML='<a href="javascript:gotoActListPage('+(actCurrPage-1)+')">Previous</a>';
+			placeToAdd.appendChild(tdPrev);
+
+			var tdSp2 = document.createElement('TD');
+			tdSp2.innerHTML='&nbsp;';
+			placeToAdd.appendChild(tdSp2);
+		}
+		
+		for (var i=1; i <= actMaxPages; i++){
+			if (tooManyPages){
+				if (middleStart==i && middleStart>1){
+					var tddots1 = document.createElement('TD');
+					tddots1.innerHTML=' ... ';
+					placeToAdd.appendChild(tddots1);
+					var tdsp = document.createElement('TD');
+					tdsp.innerHTML='&nbsp;';
+					placeToAdd.appendChild(tdsp);
+				}
+				if (i>=middleStart && i<=middleEnd){
+					//pages
+					var td = document.createElement('TD');
+					if (i==actCurrPage){
+						td.innerHTML='<strong>'+i+'</strong>';
+					}else{
+						td.innerHTML='<a href="javascript:gotoActListPage('+i+')">'+i+'</a>';
+					}
+					placeToAdd.appendChild(td);	
+					//space
+					var tdsp = document.createElement('TD');
+					tdsp.innerHTML='&nbsp;';
+					placeToAdd.appendChild(tdsp);
+
+				}
+				if (middleEnd==i && middleEnd<actMaxPages){
+					var tddots2 = document.createElement('TD');
+					tddots2.innerHTML=' ... ';
+					placeToAdd.appendChild(tddots2);
+					var tdsp = document.createElement('TD');
+					tdsp.innerHTML='&nbsp;';
+					placeToAdd.appendChild(tdsp);
+				}
+			}else{
+				var td = document.createElement('TD');
+				if (i==actCurrPage){
+					td.innerHTML='<strong>'+i+'</strong>';
+				}else{
+					td.innerHTML='<a href="javascript:gotoActListPage('+i+')">'+i+'</a>';
+				}
+				placeToAdd.appendChild(td);	
+				var tdsp = document.createElement('TD');
+				tdsp.innerHTML='&nbsp;';
+				placeToAdd.appendChild(tdsp);
+			}
+		}//for each age ends
+		
+		if (actCurrPage<actMaxPages){
+			var tdNext = document.createElement('TD');
+			tdNext.innerHTML='<a href="javascript:gotoActListPage('+(actCurrPage+1)+')">Next</a>';
+			placeToAdd.appendChild(tdNext);
+			
+			var tdSp3 = document.createElement('TD');
+			tdSp3.innerHTML='&nbsp;';
+			placeToAdd.appendChild(tdSp3);
+			
+			var tdLast = document.createElement('TD');
+			tdLast.innerHTML='<a href="javascript:gotoActListPage('+actMaxPages+')">Last</a>';
+			placeToAdd.appendChild(tdLast);
+		}
+		
 	}
 	
 	/* pagination link handler */
 	function gotoActListPage(pageNum){
 		actCurrPage=pageNum;
 		getActivities();
+		//return false;
 	}
 	
 	function getDonorsHTML(donors,target){

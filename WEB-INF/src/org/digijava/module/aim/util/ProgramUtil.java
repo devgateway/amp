@@ -338,7 +338,7 @@ public class ProgramUtil {
             Collection<LabelValueBean> result=new ArrayList<LabelValueBean>();
             int start=from;
             Calendar now=Calendar.getInstance();
-            int end=now.get(Calendar.YEAR);
+            int end=now.get(Calendar.YEAR)+1;
             for (int i = start; i <= end; i++) {
                 result.add(new LabelValueBean(String.valueOf(i),String.valueOf(i)));
             }

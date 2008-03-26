@@ -22,6 +22,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -36,6 +37,7 @@ import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.MEIndicatorRisk;
 
 /**
  * Indicator utilities.
@@ -1389,6 +1391,32 @@ public class IndicatorUtil {
 		             logger.debug("Exception : "+ex);
 			}
 			
+		}
+	 
+	 
+	 public static int getOverallRisk(Collection<AmpIndicatorRiskRatings> risks) {
+			int risk = 0;
+			try {			
+				Iterator<AmpIndicatorRiskRatings> itr = risks.iterator();
+				float temp = 0;
+				while (itr.hasNext()) {
+					AmpIndicatorRiskRatings ampIndicatorRisk = (AmpIndicatorRiskRatings) itr.next();
+					temp += ampIndicatorRisk.getRatingValue();
+				}
+				if (risks.size() > 0) {
+					temp /= (float) risks.size();
+					temp = Math.round(temp);
+					if (temp < 0)
+						risk = (int) Math.floor(temp);
+					else if(temp > 0)
+						risk = (int) Math.ceil(temp);
+					else
+						risk = -1;
+				}
+			} catch (Exception e) {
+				e.printStackTrace(System.out);
+			}
+			return risk;
 		}
 	 
 	  

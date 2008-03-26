@@ -16,8 +16,11 @@ import org.apache.struts.action.ActionMapping;
 
 import org.digijava.module.aim.form.IndicatorForm;
 import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -31,7 +34,7 @@ public class SelectCreateIndicators extends Action {
 			throws Exception {
 		
 		Collection nonDefaultInd = null;
-		Collection activityInd = null;
+		Collection<IndicatorActivity> activityInd = null;
 		Collection nonDefActInd = new ArrayList();
 		boolean sameIndicator = false;
 		
@@ -40,22 +43,20 @@ public class SelectCreateIndicators extends Action {
 		IndicatorForm indForm = (IndicatorForm) form;
 
 		nonDefaultInd = IndicatorUtil.getAllNonDefaultIndicators();
-		activityInd = IndicatorUtil.getActivityIndicatorsList(indForm
-				.getActivityId());
+		AmpActivity activity=ActivityUtil.loadActivity(indForm.getActivityId());
+//		activityInd = IndicatorUtil.getActivityIndicatorsList(indForm.getActivityId());
+		activityInd = activity.getIndicators();
 
 		Iterator nonDefaultItr = nonDefaultInd.iterator();
 
 		while (nonDefaultItr.hasNext()) {
-			AmpIndicator tempNonDefaultInd = (AmpIndicator) nonDefaultItr
-					.next();
-			Iterator activityIndItr = activityInd.iterator();
+			AmpIndicator tempNonDefaultInd = (AmpIndicator) nonDefaultItr.next();
+			Iterator<IndicatorActivity> activityIndItr = activityInd.iterator();
 			sameIndicator = false;
 			while (activityIndItr.hasNext() && sameIndicator == false) {
-				ActivityIndicator tempActInd = (ActivityIndicator) activityIndItr
-						.next();
+				IndicatorActivity tempActInd =  activityIndItr.next();
 
-				if (tempNonDefaultInd.getIndicatorId().equals(
-						tempActInd.getIndicatorId()))
+				if (tempNonDefaultInd.getIndicatorId().equals(tempActInd.getIndicator().getIndicatorId()))
 					sameIndicator = true;
 			}
 			if (sameIndicator == false)

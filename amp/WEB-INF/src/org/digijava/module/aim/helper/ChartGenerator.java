@@ -10,7 +10,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -247,38 +249,98 @@ public class ChartGenerator {
 
 				DefaultPieDataset ds = new DefaultPieDataset();
 
+				//how many risks are for each risk name
+				Map<String,Integer> riskCount=new HashMap<String, Integer> ();
+				//what is value of each risk name
+				Map<String,Integer> riskValues=new HashMap<String, Integer> ();
+				
+				for (AmpIndicatorRiskRatings risk : col) {
+					Integer count=riskCount.get(risk.getRatingName());
+					if (count==null){
+						//this is first one o the type
+						count=new Integer(1);
+					}else{
+						//this is not first one so increment
+						count=new Integer(count+1);
+					}
+					riskCount.put(risk.getRatingName(), count);
+					riskValues.put(risk.getRatingName(), risk.getRatingValue());
+				}
+				
+				
 				Color seriesColors[] = new Color[col.size()];
 				int index = 0;
-				while (itr.hasNext()) {
-					AmpIndicatorRiskRatings risk=itr.next();
-					//MEIndicatorRisk risk = (MEIndicatorRisk) itr.next();
-
-					switch (risk.getRatingValue()) {
-					case Constants.HIGHLY_SATISFACTORY:
-						seriesColors[index++] = Constants.HIGHLY_SATISFACTORY_CLR;
-						break;
-					case Constants.VERY_SATISFACTORY:
-						seriesColors[index++] = Constants.VERY_SATISFACTORY_CLR;
-						break;
-					case Constants.SATISFACTORY:
-						seriesColors[index++] = Constants.SATISFACTORY_CLR;
-						break;
-					case Constants.UNSATISFACTORY:
-						seriesColors[index++] = Constants.UNSATISFACTORY_CLR;
-						break;
-					case Constants.VERY_UNSATISFACTORY:
-						seriesColors[index++] = Constants.VERY_UNSATISFACTORY_CLR;
-						break;
-					case Constants.HIGHLY_UNSATISFACTORY:
-						seriesColors[index++] = Constants.HIGHLY_UNSATISFACTORY_CLR;
-					}
-
-					if (risk.getRatingValue()<0){
-						ds.setValue(risk.getTranslatedRatingName(),risk.getRatingValue());
-					}else{
-						ds.setValue(risk.getTranslatedRatingName(),risk.getRatingValue());
+				Set<String> types=riskCount.keySet();
+				if (types!=null){
+					//for each name
+					for (String type : types) {
+						String riskName=type;
+						Integer count=riskCount.get(riskName);
+						Integer value=riskValues.get(riskName);
+						
+						//for each name/value (low, high) set different color
+						switch (value.intValue()) {
+						case Constants.HIGHLY_SATISFACTORY:
+							seriesColors[index++] = Constants.HIGHLY_SATISFACTORY_CLR;
+							break;
+						case Constants.VERY_SATISFACTORY:
+							seriesColors[index++] = Constants.VERY_SATISFACTORY_CLR;
+							break;
+						case Constants.SATISFACTORY:
+							seriesColors[index++] = Constants.SATISFACTORY_CLR;
+							break;
+						case Constants.UNSATISFACTORY:
+							seriesColors[index++] = Constants.UNSATISFACTORY_CLR;
+							break;
+						case Constants.VERY_UNSATISFACTORY:
+							seriesColors[index++] = Constants.VERY_UNSATISFACTORY_CLR;
+							break;
+						case Constants.HIGHLY_UNSATISFACTORY:
+							seriesColors[index++] = Constants.HIGHLY_UNSATISFACTORY_CLR;
+						}
+						
+						//put in datasource
+						ds.setValue(riskName,count);
+						
 					}
 				}
+				
+				
+				
+				
+//				while (itr.hasNext()) {
+//					AmpIndicatorRiskRatings risk=itr.next();
+//					//MEIndicatorRisk risk = (MEIndicatorRisk) itr.next();
+//
+//					switch (risk.getRatingValue()) {
+//					case Constants.HIGHLY_SATISFACTORY:
+//						seriesColors[index++] = Constants.HIGHLY_SATISFACTORY_CLR;
+//						break;
+//					case Constants.VERY_SATISFACTORY:
+//						seriesColors[index++] = Constants.VERY_SATISFACTORY_CLR;
+//						break;
+//					case Constants.SATISFACTORY:
+//						seriesColors[index++] = Constants.SATISFACTORY_CLR;
+//						break;
+//					case Constants.UNSATISFACTORY:
+//						seriesColors[index++] = Constants.UNSATISFACTORY_CLR;
+//						break;
+//					case Constants.VERY_UNSATISFACTORY:
+//						seriesColors[index++] = Constants.VERY_UNSATISFACTORY_CLR;
+//						break;
+//					case Constants.HIGHLY_UNSATISFACTORY:
+//						seriesColors[index++] = Constants.HIGHLY_UNSATISFACTORY_CLR;
+//					}
+//
+//					ds.setValue("High",-1);
+//					ds.setValue("hehee",0);
+//					ds.setValue("Low",1);
+//					if (risk.getRatingValue()<0){
+//						ds.setValue(risk.getTranslatedRatingName(),risk.getRatingValue());
+//					}else{
+//						ds.setValue(risk.getTranslatedRatingName(),risk.getRatingValue());
+//					}
+//				}
 
 				JFreeChart chart = ChartFactory.createPieChart(
 						cp.getTitle(), // title

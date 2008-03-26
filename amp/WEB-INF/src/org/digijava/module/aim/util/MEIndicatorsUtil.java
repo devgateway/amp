@@ -1532,7 +1532,8 @@ public class MEIndicatorsUtil
 		}
 		return risk;
 	}
-
+	@Deprecated 
+	// Please use IndicatorUtil.getOverallRisk instead
 	public static int getOverallRisk(Long actId) {
 		int risk = 0;
 		try {

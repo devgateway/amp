@@ -185,7 +185,7 @@ public class ChartGenerator {
 		cp.setWriter(pw);
 		cp.setUrl(url);
 
-		return generatePerformanceChart(cp);
+		return generatePerformanceChart(cp,request);
 	}
 
 	public static String getActivityPerformanceChartFileName(Long actId,
@@ -213,7 +213,7 @@ public class ChartGenerator {
 //					}
 //				}
 //			}
-// lines above commented by Irakli		
+		
 		
 		
 //		Collection meIndValues = MEIndicatorsUtil.getMEIndicatorValues(actId,includeBaseline);
@@ -235,7 +235,7 @@ public class ChartGenerator {
 		cp.setWriter(pw);
 		cp.setUrl(url);
 
-		return generatePerformanceChart(cp);
+		return generatePerformanceChart(cp,request);
 	}
 
 	public static String generateRiskChart(ChartParams cp) {
@@ -312,7 +312,7 @@ public class ChartGenerator {
 		return fileName;
 	}
 
-	public static String generatePerformanceChart(ChartParams cp) {
+	public static String generatePerformanceChart(ChartParams cp,HttpServletRequest request) {
 
 		String fileName = null;
 		Double baseValue=null,actualValue=null,targetValue=null;
@@ -333,16 +333,29 @@ public class ChartGenerator {
 						AmpIndicatorValue ampIndValue = itr.next();
 						if (ampIndValue.getValueType() == AmpIndicatorValue.BASE) {
 							baseValue = ampIndValue.getValue();
-							baseValueType = new Integer(ampIndValue.getValueType()).toString();
+							baseValueType = KEY_PERFORMANCE_PREFIX+ "base".toLowerCase();
+							baseValueType = baseValueType.replaceAll(" ", "");
+							String msg = CategoryManagerUtil.translate(baseValueType , request, "base");
+							baseValueType=msg;
 						} else if (ampIndValue.getValueType() == AmpIndicatorValue.ACTUAL) {
 							actualValue = ampIndValue.getValue();
-							actualValueType = new Integer(ampIndValue.getValueType()).toString();
+							actualValueType = KEY_PERFORMANCE_PREFIX+ "actual".toLowerCase();
+							actualValueType = actualValueType.replaceAll(" ", "");
+							String msg = CategoryManagerUtil.translate(actualValueType , request, "actual");
+							actualValueType=msg;						
 						} else if (ampIndValue.getValueType() == AmpIndicatorValue.TARGET && !revisedAlreadyParsed) {
 							targetValue = ampIndValue.getValue();
-							targetValueType = new Integer(ampIndValue.getValueType()).toString();
+							targetValueType = KEY_PERFORMANCE_PREFIX+ "target".toLowerCase();
+							targetValueType = targetValueType.replaceAll(" ", "");
+							String msg = CategoryManagerUtil.translate(targetValueType , request, "target");
+							targetValueType=msg;						
+							
 						} else if (ampIndValue.getValueType() == AmpIndicatorValue.REVISED) {
 							targetValue = ampIndValue.getValue();
-							targetValueType = new Integer(ampIndValue.getValueType()).toString();
+							targetValueType = KEY_PERFORMANCE_PREFIX+ "target".toLowerCase();
+							targetValueType = targetValueType.replaceAll(" ", "");
+							String msg = CategoryManagerUtil.translate(targetValueType , request, "target");
+							targetValueType=msg;						
 							revisedAlreadyParsed=true;//this is used to not overwrite revised with target.
 						}
 					}

@@ -1065,7 +1065,9 @@ public class EditActivity
                                           fundingDetail.setAdjustmentType(adjType);
                                           
                                           java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
-                                          double frmExRt = Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(),dt);
+                                          double frmExRt =  fundDet.getFixedExchangeRate() != null ? 
+                                        		  			fundDet.getFixedExchangeRate()
+														 :  Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(), dt);                                          
                                           String toCurrCode = Constants.DEFAULT_CURRENCY;
                                           if (tm != null)
                                             toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();

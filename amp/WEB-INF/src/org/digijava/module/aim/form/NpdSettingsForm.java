@@ -1,19 +1,26 @@
 package org.digijava.module.aim.form;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
+/**
+ * NPD settings in admin menu.
+ * @author Dare
+ *
+ */
 public class NpdSettingsForm extends ActionForm  {
+	private static final long serialVersionUID = 1L;
 	private Integer width;
 	private Integer height;
 	private String angle;
 	private Long ampTeamId;
+	private Integer pageSize;
 	
+	public Integer getPageSize() {
+		return pageSize;
+	}
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
 	public void setAngle(String angle) {
 		this.angle = angle;
 	}

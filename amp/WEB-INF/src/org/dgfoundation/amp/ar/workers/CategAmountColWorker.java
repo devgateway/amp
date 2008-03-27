@@ -124,7 +124,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		String perspectiveCode=null; 
 		String donorGroupName=null;
 		String donorTypeName=null;
-		double fixedExchangeRate=1;
+		Double fixedExchangeRate = null;;
 		
 		//the most important meta name, the source name (donor name, region name, component name)
 		String headMetaName=rsmd.getColumnName(4);
@@ -190,15 +190,11 @@ public class CategAmountColWorker extends ColumnWorker {
 		acc.setAmount(tr_amount);
 		
 		//use fixed exchange rate only if it has been entered. Else use Agency
-		if(fixedExchangeRate!=1 && fixedExchangeRate!=0)
-			acc.setFromExchangeRate(fixedExchangeRate); else
-			
-			//new and fast - cached
-			//acc.setFromExchangeRate(1);
-			acc.setFromExchangeRate(Util.getExchange(currencyCode,td));
-			    
-			//OLD AND SLOW - db basedAgency
-			//acc.setFromExchangeRate(exchangeRate);
+		if (fixedExchangeRate != null && fixedExchangeRate != 0) {
+			acc.setFromExchangeRate(fixedExchangeRate);
+		} else {
+			acc.setFromExchangeRate(Util.getExchange(currencyCode, td));
+		}
 		
 		acc.setCurrencyDate(td);
 		acc.setCurrencyCode(currencyCode);

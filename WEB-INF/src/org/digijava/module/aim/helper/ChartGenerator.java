@@ -423,7 +423,9 @@ public class ChartGenerator {
 					}
 					if (baseValue<=actualValue&& actualValue<=targetValue){									
 						actualValue=actualValue-baseValue;
-						targetValue=100 -actualValue;					
+						targetValue=targetValue-baseValue;	
+						actualValue=(100f*actualValue)/targetValue;
+						targetValue=100-actualValue;
 					} else {
 						ds.addValue(baseValue,baseValueType,indicatorName);					
 					}

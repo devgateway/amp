@@ -79,6 +79,12 @@ public class DocumentManagerUtil {
 		HttpSession httpSession	= request.getSession();
 		
 		Session jcrSession		= (Session)httpSession.getAttribute(CrConstants.JCR_READ_SESSION);
+		
+		if ( jcrSession!=null && !jcrSession.isLive() ) {
+			jcrSession.logout();
+			jcrSession			= null;
+		}
+		
 		if (jcrSession == null) {
 			try {
 				jcrSession	= getJCRRepository(request).login();
@@ -107,6 +113,10 @@ public class DocumentManagerUtil {
 		
 		Session jcrSession		= (Session)httpSession.getAttribute(CrConstants.JCR_WRITE_SESSION);
 		
+		if ( jcrSession!=null && !jcrSession.isLive() ) {
+			jcrSession.logout();
+			jcrSession			= null;
+		}
 		
 		if (jcrSession == null) {
 			try {

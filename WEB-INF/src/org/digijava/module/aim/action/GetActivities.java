@@ -86,6 +86,9 @@ public class GetActivities extends Action {
 				rowCount=settings.getActListPageSize();
 				pageStart=(actForm.getCurrentPage()-1)*rowCount;
 				maxPages=count/settings.getActListPageSize();
+				if (count % settings.getActListPageSize()!=0){
+					maxPages++;
+				}
 			}
 			
 			logger.debug("retriving activities");

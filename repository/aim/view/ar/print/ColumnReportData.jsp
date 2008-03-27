@@ -75,6 +75,7 @@
 								%> 
 								<tr>
 									<td nowrap="nowrap" style="font-size: 8pt;text-align: right;text-transform: uppercase;font-style: italic">
+									
 									<c:set var="key">
 										aim:reportBuilder:<%=cellColumn.getName()%>
 									</c:set>
@@ -129,7 +130,13 @@
 											type="org.dgfoundation.amp.ar.Viewable">
 											<td width="25%"
 												style="font-size: 8pt; font-weight: bold;text-align: center;border-bottom:1px dotted;text-transform: uppercase;padding:4px;border-left:1px dotted #CCCCCC;">
-											<c:out value="${cellHeader.name}"></c:out></td>
+											
+												<c:set var="key" value="aim:reportBuilder:${cellHeader.name}">
+													</c:set>
+												<digi:trn key="${key}">
+														<c:out value="${cellHeader.name}"></c:out>
+												</digi:trn>
+											</td>
 										</logic:iterate>
 									</tr>
 								</logic:iterate>

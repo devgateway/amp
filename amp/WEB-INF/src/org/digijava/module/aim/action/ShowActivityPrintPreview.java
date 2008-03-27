@@ -46,6 +46,7 @@ import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpIssues;
@@ -109,6 +110,14 @@ public class ShowActivityPrintPreview
                 //costing
                 Collection euActs = EUActivityUtil.getEUActivities(activity.getAmpActivityId());
       	      	request.setAttribute("costs", euActs);
+      	        
+      	      	request.setAttribute("actId", eaForm.getActivityId());     	      	
+		        int risk = MEIndicatorsUtil.getOverallRisk(actId);
+		        String riskName = MEIndicatorsUtil.getRiskRatingName(risk);
+		        String rskColor = MEIndicatorsUtil.getRiskColor(risk);
+		        request.setAttribute("overallRisk", riskName);
+		        request.setAttribute("riskColor", rskColor);
+		        
                 // set title,description and objective
 
             	ProposedProjCost pg = new ProposedProjCost();
@@ -1165,6 +1174,7 @@ public class ShowActivityPrintPreview
 				eaForm.setGovernmentApprovalProcedures(false);
 				eaForm.setJointCriteria(false);               
                 
+				
             
      }
     }

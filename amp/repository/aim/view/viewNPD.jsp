@@ -85,6 +85,11 @@
 	var strProposed="<digi:trn key='aim:NPD:sumproposed'>Proposed</digi:trn>";
 	var actCurrPage=1;
 	var actMaxPages=0;
+	var pgNext='<digi:trn key="aim:npd:pagination:next">Next</digi:trn>';
+	var pgPrev='<digi:trn key="aim:npd:pagination:prev">Prev</digi:trn>';
+	var pgLast='<digi:trn key="aim:npd:pagination:last">Last</digi:trn>';
+	var pgFirst='<digi:trn key="aim:npd:pagination:first">First</digi:trn>';
+	var pgPagesLabel='<digi:trn key="aim:npd:pagination:pageslabel">Pages:</digi:trn>';
 
 	function changeOptions(indics,years,locations){
         selIndicatorIDs=new Array();
@@ -796,12 +801,12 @@
 		}
 		
 		var tdLabel = document.createElement('TD');
-		tdLabel.innerHTML='Pages:   ';
+		tdLabel.innerHTML=pgPagesLabel;
 		placeToAdd.appendChild(tdLabel);
 		
 		if (actCurrPage>1){
 			var tdFirst = document.createElement('TD');
-			tdFirst.innerHTML='<a href="javascript:gotoActListPage(1)">First</a>';
+			tdFirst.innerHTML='<a href="javascript:gotoActListPage(1)">'+pgFirst+'</a>';
 			placeToAdd.appendChild(tdFirst);
 			
 			var tdSp1 = document.createElement('TD');
@@ -809,7 +814,7 @@
 			placeToAdd.appendChild(tdSp1);
 			
 			var tdPrev = document.createElement('TD');
-			tdPrev.innerHTML='<a href="javascript:gotoActListPage('+(actCurrPage-1)+')">Previous</a>';
+			tdPrev.innerHTML='<a href="javascript:gotoActListPage('+(actCurrPage-1)+')">'+pgPrev+'</a>';
 			placeToAdd.appendChild(tdPrev);
 
 			var tdSp2 = document.createElement('TD');
@@ -866,7 +871,7 @@
 		
 		if (actCurrPage<actMaxPages){
 			var tdNext = document.createElement('TD');
-			tdNext.innerHTML='<a href="javascript:gotoActListPage('+(actCurrPage+1)+')">Next</a>';
+			tdNext.innerHTML='<a href="javascript:gotoActListPage('+(actCurrPage+1)+')">'+pgNext+'</a>';
 			placeToAdd.appendChild(tdNext);
 			
 			var tdSp3 = document.createElement('TD');
@@ -874,7 +879,7 @@
 			placeToAdd.appendChild(tdSp3);
 			
 			var tdLast = document.createElement('TD');
-			tdLast.innerHTML='<a href="javascript:gotoActListPage('+actMaxPages+')">Last</a>';
+			tdLast.innerHTML='<a href="javascript:gotoActListPage('+actMaxPages+')">'+pgLast+'</a>';
 			placeToAdd.appendChild(tdLast);
 		}
 		

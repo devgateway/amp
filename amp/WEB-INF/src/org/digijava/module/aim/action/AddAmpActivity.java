@@ -193,39 +193,30 @@ public class AddAmpActivity extends Action {
 							while (itr.hasNext()) {
 								ActivitySector asec = (ActivitySector) itr
 										.next();
-								if (asec.getSectorName().equals(
-										selectedSector.getSectorName())) {
+								
+								if (asec.getSectorName().equals(selectedSector.getSectorName())) {
 									if (selectedSector.getSubsectorLevel1Name() == null) {
 										addSector = false;
 										break;
 									}
 									if (asec.getSubsectorLevel1Name() != null) {
-										if (asec
-												.getSubsectorLevel1Name()
-												.equals(
-														selectedSector
-																.getSubsectorLevel1Name())) {
-											if (selectedSector
-													.getSubsectorLevel2Name() == null) {
+										if (asec.getSubsectorLevel1Name().equals(selectedSector.getSubsectorLevel1Name())) {
+											if (selectedSector.getSubsectorLevel2Name() == null) {
 												addSector = false;
 												break;
 											}
 											if (asec.getSubsectorLevel2Name() != null) {
-												if (asec
-														.getSubsectorLevel2Name()
-														.equals(
-																selectedSector
-																		.getSubsectorLevel2Name())) {
+												if (asec.getSubsectorLevel2Name().equals(selectedSector.getSubsectorLevel2Name())) {
 													addSector = false;
 													break;
 												}
 											} else {
-												addSector = false;
+												addSector = true;
 												break;
 											}
 										}
 									} else {
-										addSector = false;
+										addSector = true;
 										break;
 									}
 								}
@@ -355,6 +346,7 @@ public class AddAmpActivity extends Action {
     if (request.getParameter("remSectors") != null) {
       Long selSectors[] = eaForm.getSelActivitySectors();
       Collection<ActivitySector> prevSelSectors = eaForm.getActivitySectors();
+      session.setAttribute("removedSector", eaForm.getSelActivitySectors());
       Collection newSectors = new ArrayList();
 
       Iterator<ActivitySector> itr = prevSelSectors.iterator();

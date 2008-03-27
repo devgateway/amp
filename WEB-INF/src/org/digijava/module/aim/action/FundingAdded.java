@@ -137,6 +137,7 @@ public class FundingAdded extends Action {
 					String toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 					eaForm.setCurrCode(toCurrCode);
 					double toExRt = Util.getExchange(toCurrCode,dt);
+				
 					double amt = CurrencyWorker.convert1(FormatHelper.parseDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
 					if (fundDet.getTransactionType() == Constants.COMMITMENT)
 						totComm += amt;
@@ -241,7 +242,7 @@ public class FundingAdded extends Action {
 					if(j>i)
 					{
 						if((fundDetItr2.getAdjustmentTypeName().equalsIgnoreCase(fundDetItr1.getAdjustmentTypeName()))&&
-						(fundDetItr2.getCurrencyName().equalsIgnoreCase(fundDetItr1.getCurrencyName()))&&
+						(fundDetItr2.getCurrencyCode().equalsIgnoreCase(fundDetItr1.getCurrencyCode()))&&
 						( !perspectiveEnabled || perspectiveEnabled && fundDetItr2.getPerspectiveName().equalsIgnoreCase(fundDetItr1.getPerspectiveName()) )&&
 						(fundDetItr2.getTransactionAmount().equalsIgnoreCase(fundDetItr1.getTransactionAmount()))&&
 						(fundDetItr2.getTransactionDate().equalsIgnoreCase(fundDetItr1.getTransactionDate()))&&

@@ -41,6 +41,7 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.servlet.ServletUtilities;
 import org.jfree.chart.urls.CategoryURLGenerator;
+import org.jfree.chart.urls.StandardCategoryURLGenerator;
 import org.jfree.chart.urls.StandardPieURLGenerator;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
@@ -432,59 +433,62 @@ public class ChartGenerator {
 					ds.addValue(actualValue,actualValueType,indicatorName);				
 					ds.addValue(targetValue,targetValueType,indicatorName);				
 				
+				}
 			}
+
 			
-				
+			JFreeChart chart = ChartFactory.createStackedBarChart(
+					cp.getTitle(), // title
+					null,	// X-axis label
+					null,	// Y-axis label
+					ds,		// dataset
+					PlotOrientation.VERTICAL,	// Orientation
+					true,	// show legend
+					false,	// show tooltips
+					true);	// show urls
+			chart.setBackgroundPaint(Color.WHITE);
 
-				JFreeChart chart = ChartFactory.createStackedBarChart(
-						cp.getTitle(), // title
-						null,	// X-axis label
-						null,	// Y-axis label
-						ds,		// dataset
-						PlotOrientation.VERTICAL,	// Orientation
-						true,	// show legend
-						false,	// show tooltips
-						true);	// show urls
-				chart.setBackgroundPaint(Color.WHITE);
+			CategoryPlot plot = (CategoryPlot) chart.getPlot();
 
-				CategoryPlot plot = (CategoryPlot) chart.getPlot();
+			CategoryItemRenderer r1 = plot.getRenderer();   //new StackedBarRenderer();
+			//r1.setSeriesPaint(0,Constants.BASE_VAL_CLR);
+			r1.setSeriesPaint(0,Constants.ACTUAL_VAL_CLR);
+			r1.setSeriesPaint(1,Constants.TARGET_VAL_CLR);
 
-				CategoryItemRenderer r1 = plot.getRenderer();   //new StackedBarRenderer();
-				//r1.setSeriesPaint(0,Constants.BASE_VAL_CLR);
+			/*
+			if (includeBaseLine) {
+				r1.setSeriesPaint(0,Constants.BASE_VAL_CLR);
+				r1.setSeriesPaint(1,Constants.ACTUAL_VAL_CLR);
+				r1.setSeriesPaint(2,Constants.TARGET_VAL_CLR);
+			} else {
 				r1.setSeriesPaint(0,Constants.ACTUAL_VAL_CLR);
 				r1.setSeriesPaint(1,Constants.TARGET_VAL_CLR);
+			}*/
+			
 
-				/*
-				if (includeBaseLine) {
-					r1.setSeriesPaint(0,Constants.BASE_VAL_CLR);
-					r1.setSeriesPaint(1,Constants.ACTUAL_VAL_CLR);
-					r1.setSeriesPaint(2,Constants.TARGET_VAL_CLR);
-				} else {
-					r1.setSeriesPaint(0,Constants.ACTUAL_VAL_CLR);
-					r1.setSeriesPaint(1,Constants.TARGET_VAL_CLR);
-				}*/
-				
-
-				String url = cp.getUrl();
-				if (url != null && url.trim().length() > 0) {
-					CategoryURLGenerator cUrl1 = new CategoryUrlGen(url);
-					r1.setItemURLGenerator(cUrl1);
-				}
-
-//				plot.setRenderer(r1);
-				CategoryAxis axis = plot.getDomainAxis();
-				axis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
-				NumberAxis numAxis = (NumberAxis) plot.getRangeAxis();
-				numAxis.setRange(0D,100D);
-			//	numAxis.setNumberFormatOverride(new DecimalFormat("%"));
-
-				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
-				fileName = ServletUtilities.saveChartAsPNG(chart,cp.getChartWidth(),
-						cp.getChartHeight(),info,cp.getSession());
-				ChartUtilities.writeImageMap(cp.getWriter(),fileName,info,false);
-				cp.getWriter().flush();
+			String url = cp.getUrl();
+			if (url != null && url.trim().length() > 0) {
+				StandardCategoryURLGenerator cUrl1 = new StandardCategoryURLGenerator(url,"series","ind");
+//				CategoryURLGenerator cUrl1 = new CategoryUrlGen(url);
+				r1.setItemURLGenerator(cUrl1);
 			}
 
+			plot.setRenderer(r1);
+			CategoryAxis axis = plot.getDomainAxis();
+			axis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
+			NumberAxis numAxis = (NumberAxis) plot.getRangeAxis();
+			numAxis.setRange(0D,100D);
+		//	numAxis.setNumberFormatOverride(new DecimalFormat("%"));
+
+			ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
+			fileName = ServletUtilities.saveChartAsPNG(chart,cp.getChartWidth(),
+					cp.getChartHeight(),info,cp.getSession());
+			ChartUtilities.writeImageMap(cp.getWriter(),fileName,info,false);
+			cp.getWriter().flush();
+			
+			
+			
+			
 		} catch (Exception e) {
 			logger.error("Exception from generatePerformanceChart() :" + e.getMessage());
 			e.printStackTrace();

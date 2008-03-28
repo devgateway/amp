@@ -23,7 +23,6 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
 	 * Indicator values.
 	 */
 	private Set<AmpIndicatorValue> values;
-
 	
 	public Long getId() {
 		return id;
@@ -55,5 +54,6 @@ public class IndicatorConnection implements Serializable, Comparable<IndicatorTh
 	public int compareTo(IndicatorTheme o) {
 		return getId().compareTo(o.getId());
 	}
+
 
 }

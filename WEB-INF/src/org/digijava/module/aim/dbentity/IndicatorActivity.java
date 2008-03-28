@@ -12,7 +12,17 @@ public class IndicatorActivity extends IndicatorConnection{
 
 	private static final long serialVersionUID = 2L;
 	
+	/**
+	 * Activity
+	 */
 	private AmpActivity activity;
+	
+	/**
+	 * Indicator risk.
+	 * Actually risk is in each connection of indicator and activity.
+	 */
+	private AmpIndicatorRiskRatings risk;
+
 
 	public AmpActivity getActivity() {
 		return activity;
@@ -20,6 +30,14 @@ public class IndicatorActivity extends IndicatorConnection{
 
 	public void setActivity(AmpActivity activity) {
 		this.activity = activity;
+	}
+
+	public AmpIndicatorRiskRatings getRisk() {
+		return risk;
+	}
+
+	public void setRisk(AmpIndicatorRiskRatings risk) {
+		this.risk = risk;
 	}
 
 }

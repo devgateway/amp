@@ -95,7 +95,6 @@
 		<property name="currencyCode" column="proj_cost_currcode" type="java.lang.String" />
 		
 		<!-- Start Bolivia Specific Fields -->
-		<many-to-one name="creditType" column="credit_type_id" class="org.digijava.module.aim.dbentity.AmpCategoryValue" cascade="none"/>
 		<property name="convenioDateFilter" column="convenio_date_filter" type="java.util.Date" />
 		<!-- End Bolivia Specific Fields -->		
 

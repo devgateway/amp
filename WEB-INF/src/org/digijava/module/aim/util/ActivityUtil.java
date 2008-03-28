@@ -1429,10 +1429,6 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setProjectManagement(ampActivity.getProjectManagement());
         activity.setContractDetails(ampActivity.getContractDetails());
         
-        
-        if (ampActivity.getCreditType() != null) {
-        	activity.setCreditType(ampActivity.getCreditType());
-        }
 
       }
     }

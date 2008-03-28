@@ -101,7 +101,6 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <feature:display name="Costing" module="Activity Costing"></feature:display>
 <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues"></feature:display>
 <feature:display name="Dashboard" module="M & E"></feature:display>
-<feature:display name="Documents" module="Document Management"></feature:display>
 <feature:display name="Donor Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Donor Report" module="Reports"></feature:display>
 <feature:display name="Edit Activity" module="Previews"></feature:display>

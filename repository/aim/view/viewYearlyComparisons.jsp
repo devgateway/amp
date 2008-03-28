@@ -1173,6 +1173,36 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 															</TD>
 
 														</TR>
+                                                                                                                 
+                                                                                                                 
+                                                                                                                 <TR>
+
+															<TD width="15">
+
+																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+
+															</TD>
+
+															<TD>
+
+																<c:set var="translation">
+
+								<digi:trn key="aim:clickToViewMonthlyComparisons">Click here to view Monthly Comparisons</digi:trn>
+
+							</c:set>
+
+							                        	<digi:link href="/viewMonthlyComparisons.do" name="urlShowQuarterly" title="${translation}" >
+
+			      	  											<STRONG>
+																	<digi:trn key="aim:showMonthly">Show Monthly</digi:trn>
+																	</STRONG>
+
+						   		     						</digi:link>
+
+															</TD>
+
+														</TR>
+
 
 													</TABLE>
 

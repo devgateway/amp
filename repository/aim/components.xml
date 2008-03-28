@@ -456,6 +456,12 @@
 	<teaser name="quarterlyInfo" action="quarterlyInfo.do">
 		viewQuarterlyInfo.jsp
 	</teaser>
+        <teaser name="monthlyInfo" action="monthlyInfo.do">
+		viewMonthlyInfo.jsp
+	</teaser>
+         <teaser name="monthlyComparisons" action="monthlyComparisons.do">
+		viewMonthlyComparisons.jsp
+	</teaser>
 	<teaser name="quarterlyGrouping" action="quarterlyGrouping.do">
 		viewQuarterlyInfo.jsp
 	</teaser>

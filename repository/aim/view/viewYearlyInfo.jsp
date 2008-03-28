@@ -959,6 +959,12 @@
 													<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="0">
 
 													<TABLE cellspacing="0" cellpadding="0" vAlign="top">
+                                                                                                             <c:set target="${urlSubTabs}" property="transactionType">
+
+							   		     						<bean:write name='aimYearlyInfoForm' property='transactionType'/>
+
+				      			  						    </c:set>
+
 
 														<TR>
 
@@ -970,12 +976,7 @@
 
 															<TD>
 
-																<c:set target="${urlSubTabs}" property="transactionType">
-
-							   		     						<bean:write name='aimYearlyInfoForm' property='transactionType'/>
-
-				      			  							</c:set>
-
+																
 			<c:set var="translation">
 
 				<digi:trn key="aim:clickToViewQuarterly">Click here to view Quarterly</digi:trn>
@@ -991,10 +992,36 @@
 																	</STRONG>
 
 						   		     						</digi:link>
+                                                                                                             	</TD>
+
+														</TR>
+                                                                                                                 <tr>
+                                                                                                                     <TD width="15">
+
+																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 
 															</TD>
 
-														</TR>
+                                                                                                                     <td>
+                                                                                                                     <c:set var="translation">
+
+                                                                                                                        <digi:trn key="aim:clickToViewMonthly">Click here to view Monthly</digi:trn>
+
+                                                                                                                 </c:set>
+
+                                                                                                                 <digi:link href="/viewMonthlyInfo.do" name="urlSubTabs" title="${translation}" >
+
+			      	  											<STRONG>
+
+																	<digi:trn key="aim:showMonthly">Show Monthly </digi:trn>
+
+																	</STRONG>
+
+                                                                                                                      </digi:link >
+                                                                                                                  </td>
+                                                                                                              </tr>
+
+														
 
 													</TABLE>
 

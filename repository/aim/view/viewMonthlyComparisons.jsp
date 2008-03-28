@@ -1,3 +1,8 @@
+<%-- 
+    Document   : viewMonthlyComparisons
+    Created on : Mar 27, 2008, 2:01:08 PM
+--%>
+
 <%@ page pageEncoding="UTF-8" %>
 
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
@@ -24,31 +29,22 @@
 
 <digi:errors/>
 
-<digi:instance property="aimQuarterlyComparisonsForm" />
+<digi:instance property="aimMonthlyInfoForm" />
 
 
 
-<logic:equal name="aimQuarterlyComparisonsForm" property="sessionExpired" value="true">
-
-	<jsp:include page="../../../repository/aim/view/sessionExpired.jsp" flush="true" />
-
-</logic:equal>
-
-
-
-<logic:equal name="aimQuarterlyComparisonsForm" property="sessionExpired" value="false">
 
 <jsp:useBean id="urlSubTabs" type="java.util.Map" class="java.util.HashMap"/>
 
 <c:set target="${urlSubTabs}" property="ampActivityId">
 
-	<bean:write name="aimQuarterlyComparisonsForm" property="ampActivityId"/>
+	<bean:write name="aimMonthlyInfoForm" property="ampActivityId"/>
 
 </c:set>
 
 <c:set target="${urlSubTabs}" property="ampFundingId">
 
-	<bean:write name="aimQuarterlyComparisonsForm" property="ampFundingId"/>
+	<bean:write name="aimMonthlyInfoForm" property="ampFundingId"/>
 
 </c:set>
 
@@ -62,19 +58,19 @@
 
 <c:set target="${urlFinancialOverview}" property="ampActivityId">
 
-	<bean:write name="aimQuarterlyComparisonsForm" property="ampActivityId"/>
+	<bean:write name="aimMonthlyInfoForm" property="ampActivityId"/>
 
 </c:set>
 
 <c:set target="${urlFinancialOverview}" property="ampFundingId">
 
-	<bean:write name="aimQuarterlyComparisonsForm" property="ampFundingId"/>
+	<bean:write name="aimMonthlyInfoForm" property="ampFundingId"/>
 
 </c:set>
 
 <c:set target="${urlFinancialOverview}" property="tabIndex">
 
-	<bean:write name="aimQuarterlyComparisonsForm" property="tabIndex"/>
+	<bean:write name="aimMonthlyInfoForm" property="tabIndex"/>
 
 </c:set>
 
@@ -84,7 +80,7 @@
 
 <c:set target="${urlDiscrepancy}" property="ampActivityId">
 
-	<bean:write name="aimQuarterlyComparisonsForm" property="ampActivityId"/>
+	<bean:write name="aimMonthlyInfoForm" property="ampActivityId"/>
 
 </c:set>
 
@@ -96,9 +92,9 @@
 
 
 
-<digi:form action="/viewQuarterlyComparisonsFilter.do" name="aimQuarterlyComparisonsForm"
+<digi:form action="/viewMonthlyComparisons.do" name="aimMonthlyInfoForm"
 
-type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
+type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 
 
@@ -146,17 +142,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 			  			</digi:link> |
 
-			<c:set var="translation">
-
-				<digi:trn key="aim:clickToViewCommitments">Click here to view Commitments</digi:trn>
-
-			</c:set>
-
-			  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
-
-			  				<digi:trn key="aim:commitments">COMMITMENTS</digi:trn>
-
-			  			</digi:link> |
+			
                                                     <field:display name="Disbursement Orders Tab" feature="Disbursement Orders">
 
                                                 <c:set target="${urlSubTabs}" property="transactionType" value="4"/>
@@ -167,7 +153,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 			</c:set>
 
-			  			<digi:link href="/viewQuarterlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+			  			<digi:link href="/viewMonthlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
 
 			  					<digi:trn key="aim:disbursementOrders">DISBURSEMENTS ORDERS</digi:trn>
 
@@ -182,7 +168,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 			</c:set>
 
-			  			<digi:link href="/viewQuarterlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+			  			<digi:link href="/viewMonthlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
 
 			  					<digi:trn key="aim:disbursements">DISBURSEMENTS</digi:trn>
 
@@ -196,18 +182,13 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 		</c:set>
 					<feature:display module="Funding" name="Expenditures">
-		  				<digi:link href="/viewQuarterlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
+		  				<digi:link href="/viewMonthlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
 
 		  					<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 
 		  				</digi:link> |
 					</feature:display>
-		  				<digi:link href="/viewYearlyDiscrepancy.do" name="urlDiscrepancy" styleClass="sub-nav2" title="${translation}" >
-
-									<digi:trn key="aim:discrepancy">DISCREPANCY</digi:trn>
-
-								</digi:link>		|
-
+		  				
 								<span class="sub-nav2-selected">
 
 		  					<digi:trn key="aim:all">ALL</digi:trn>
@@ -232,7 +213,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 							<c:set target="${urlFinancingBreakdown}" property="ampActivityId">
 
-								<bean:write name="aimQuarterlyComparisonsForm" property="ampActivityId"/>
+								<bean:write name="aimMonthlyInfoForm" property="ampActivityId"/>
 
 							</c:set>
 
@@ -250,13 +231,13 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 								</digi:link> &gt;
 
-								<digi:trn key="aim:quarterlyAll">Quarterly All</digi:trn>
+								<digi:trn key="aim:monthlyAll">Monthly All</digi:trn>
 
 
                                                                 <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 &gt;
-								<digi:trn key="aim:${aimQuarterlyComparisonsForm.perpsectiveName}">
-                                                                <bean:write name="aimQuarterlyComparisonsForm" property="perpsectiveName"/></digi:trn>&nbsp;
+								<digi:trn key="aim:${aimMonthlyInfoForm.perpsectiveName}">
+                                                                <bean:write name="aimMonthlyInfoForm" property="perpsectiveName"/></digi:trn>&nbsp;
                                                             <digi:trn key="aim:perspective">Perspective</digi:trn>
 
                                                              </logic:equal >
@@ -304,7 +285,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
                   			        			<TD nowrap bgcolor="#C9C9C7" class="box-title">&nbsp;
 
- 							              				<digi:trn key="aim:quarterlyAllAmounts">Quarterly All Amounts</digi:trn>
+ 							              				<digi:trn key="aim:monthlyAllAmounts">Monthly All Amounts</digi:trn>
 
                   			          		</TD>
 
@@ -320,7 +301,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 											<TD vAlign="top" align="right">
 
-	                              	<logic:equal name="aimQuarterlyComparisonsForm" property="perspectivePresent" value="true">
+	                              	<logic:equal name="aimMonthlyInfoForm" property="perspectivePresent" value="true">
 
 												<TABLE cellSpacing="2" cellPadding="0" vAlign="top" bgColor=#f4f4f2>
 
@@ -336,7 +317,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 															<html:select property="perspective" styleClass="dr-menu">
 
-																<html:optionsCollection name="aimQuarterlyComparisonsForm"
+																<html:optionsCollection name="aimMonthlyInfoForm"
 
 																property="perspectives" value="code" label="name"/>
 
@@ -370,7 +351,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 										<TR><TD bgColor="#ffffff">
 
-											<logic:equal name="aimQuarterlyComparisonsForm" property="goButtonPresent" value="true">
+											<logic:equal name="aimMonthlyInfoForm" property="goButtonPresent" value="true">
 
 
 
@@ -378,7 +359,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
    		              				<TR>
 
-												<logic:equal name="aimQuarterlyComparisonsForm" property="currencyPresent" value="true">
+												<logic:equal name="aimMonthlyInfoForm" property="currencyPresent" value="true">
 
       	    	       					<TD>
 
@@ -392,7 +373,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 		                           	 				<html:select property="currency" styleClass="dr-menu">
 
-	   			                        	 			<html:optionsCollection name="aimQuarterlyComparisonsForm" property="currencies"
+	   			                        	 			<html:optionsCollection name="aimMonthlyInfoForm" property="currencies"
 
 																	value="currencyCode" label="currencyName"/>
 
@@ -408,37 +389,9 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
                	           			</logic:equal>
 
-         	                 			<logic:equal name="aimQuarterlyComparisonsForm" property="calendarPresent" value="true">
+         	                 			
 
-      	                    			<TD>
-
-													<TABLE cellSpacing=2 cellPadding=0>
-
-														<TR>
-
-															<TD><STRONG>Calendar Type:</STRONG></TD>
-
-															<TD>
-
-																<html:select property="fiscalCalId" styleClass="dr-menu">
-
-																	<html:optionsCollection name="aimQuarterlyComparisonsForm" property="fiscalYears"
-
-																	value="ampFiscalCalId" label="name"/>
-
-																</html:select>
-
-															</TD>
-
-														</TR>
-
-													</TABLE>
-
-                  	        			</TD>
-
-               	           			</logic:equal>
-
-         	                 			<logic:equal name="aimQuarterlyComparisonsForm" property="yearRangePresent" value="true">
+         	                 			<logic:equal name="aimMonthlyInfoForm" property="yearRangePresent" value="true">
 
       	                    			<TD>
 
@@ -454,7 +407,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 							                      		<html:select property="fromYear" styleClass="dr-menu">
 
-									                      	<html:optionsCollection name="aimQuarterlyComparisonsForm" property="years"
+									                      	<html:optionsCollection name="aimMonthlyInfoForm" property="years"
 
 																	value="year" label="year"/>
 
@@ -468,7 +421,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 						   	                     	<html:select property="toYear" styleClass="dr-menu">
 
-																	<html:optionsCollection name="aimQuarterlyComparisonsForm" property="years"
+																	<html:optionsCollection name="aimMonthlyInfoForm" property="years"
 
 																	value="year" label="year"/>
 
@@ -502,7 +455,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 
 
-	                    				<logic:notEqual name="aimQuarterlyComparisonsForm" property="perspective" value="DI">
+	               
 
 											<TABLE cellSpacing=0 cellPadding=0 border=0 bgColor=#ffffff width="100%" vAlign="top" align="left">
 
@@ -512,37 +465,37 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
             	      		        			<SPAN class="note">
 
-				                      				<logic:equal name="aimQuarterlyComparisonsForm" property="transactionType" value="1">
+				                      				<logic:equal name="aimMonthlyInfoForm" property="transactionType" value="1">
 
                      									<digi:trn key="aim:totalCommitted">Total Committed</digi:trn>:
 
-								     								<bean:write name="aimQuarterlyComparisonsForm" property="totalCommitted"/> USD
+								     								<bean:write name="aimMonthlyInfoForm" property="totalCommitted"/> USD
 
 							     								<digi:trn key="aim:totalRemaining">Total Remaining</digi:trn>:
 
-				     											<bean:write name="aimQuarterlyComparisonsForm" property="totalRemaining"/> USD
+				     											<bean:write name="aimMonthlyInfoForm" property="totalRemaining"/> USD
 
 				     										</logic:equal>
-                                                                                                                	     							<logic:equal name="aimQuarterlyComparisonsForm" property="transactionType" value="2">
+                                                                                                                	     							<logic:equal name="aimMonthlyInfoForm" property="transactionType" value="2">
 
          		          								<digi:trn key="aim:totalDisbOrdered">Total Ordered</digi:trn>:
 
-				   				  								<bean:write name="aimQuarterlyComparisonsForm" property="totalDisbOrdered"/> USD
+				   				  								<bean:write name="aimMonthlyInfoForm" property="totalDisbOrdered"/> USD
 
 
 
 
 							     							</logic:equal>
 
-							     							<logic:equal name="aimQuarterlyComparisonsForm" property="transactionType" value="2">
+							     							<logic:equal name="aimMonthlyInfoForm" property="transactionType" value="2">
 
          		          								<digi:trn key="aim:totalDisbursed">Total Disbursed</digi:trn>:
 
-				   				  								<bean:write name="aimQuarterlyComparisonsForm" property="totalDisbursed"/> USD
+				   				  								<bean:write name="aimMonthlyInfoForm" property="totalDisbursed"/> USD
 
 				     											<digi:trn key="aim:totalUnExpended">Total Un-Expended</digi:trn>:
 
-				     											<bean:write name="aimQuarterlyComparisonsForm" property="totalUnExpended"/> USD
+				     											<bean:write name="aimMonthlyInfoForm" property="totalUnExpended"/> USD
 
 							     							</logic:equal>
 
@@ -554,7 +507,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 											</TABLE>
 
-	                          		</logic:notEqual>
+	                          		
 
 										</TD></TR>
 
@@ -566,7 +519,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 
 
-                          					<logic:notEqual name="aimQuarterlyComparisonsForm" property="perspective" value="DI">
+                          					<logic:notEqual name="aimMonthlyInfoForm" property="perspective" value="DI">
 
 				                          		<table width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding">
 
@@ -586,7 +539,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
                   			            				<div align="center">
 
-                           									<digi:trn key="aim:quarter">Quarter</digi:trn>
+                           									<digi:trn key="aim:MonthlyComparision:Month">Month</digi:trn>
 
                               							</div>
 
@@ -660,7 +613,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 											</feature:display>
 				                            		</tr>
 
-            				                		<logic:empty name="aimQuarterlyComparisonsForm" property="quarterlyComparisons" >
+            				                		<logic:empty name="aimMonthlyInfoForm" property="monthlyInfoList" >
 
 			               			         		<tr valign="top">
 
@@ -670,25 +623,25 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 							                        </logic:empty>
 
-			   				                     <logic:notEmpty name="aimQuarterlyComparisonsForm" property="quarterlyComparisons" >
+			   				                     <logic:notEmpty name="aimMonthlyInfoForm" property="monthlyInfoList" >
 
-                        				    			<logic:iterate name="aimQuarterlyComparisonsForm" property="quarterlyComparisons"
+                        				    			<logic:iterate name="aimMonthlyInfoForm" property="monthlyInfoList"
 
-				                            			id="quarterlyComparison" type="org.digijava.module.aim.helper.QuarterlyComparison">
+				                            			id="monthlyComparison" type="org.digijava.module.aim.helper.MonthlyComparison">
 
 																	<tr valign="top">
 
 			                  					      		<td bgcolor="#F8F8F5">
 
-								      		                 		<logic:equal name="quarterlyComparison" property="fiscalYear" value="0">
+								      		                 		<logic:equal name="monthlyComparison" property="fiscalYear" value="0">
 
 				   					      	                 		NA
 
 				                          							</logic:equal>
 
-										                          	<logic:notEqual  name="quarterlyComparison" property="fiscalYear" value="0">
+										                          	<logic:notEqual  name="monthlyComparison" property="fiscalYear" value="0">
 
-																				<bean:write name="quarterlyComparison" property="fiscalYear" />
+																				<bean:write name="monthlyComparison" property="fiscalYear" />
 
 																			</logic:notEqual>
 
@@ -696,17 +649,12 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 									                           <td bgcolor="#F8F8F5">
 
-			      	   		                   				<logic:equal name="quarterlyComparison" property="fiscalQuarter" value="0">
+			      	   		                   				
+				            	
 
-				      	                    							NA
+																				<bean:write name="monthlyComparison" property="month" />
 
-										                          	</logic:equal>
-
-				            						              	<logic:notEqual  name="quarterlyComparison" property="fiscalQuarter" value="0">
-
-																				<bean:write name="quarterlyComparison" property="fiscalQuarter" />
-
-																			</logic:notEqual>
+																			
 
 																		</td>
 
@@ -714,7 +662,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 																			<div align="right">
 
-																				<bean:write name="quarterlyComparison" property="actualCommitment" />
+																				<bean:write name="monthlyComparison" property="actualCommitment" format="#.##" />
 																			</div>
 
 																		</td>
@@ -725,7 +673,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 																			<div align="right">
 
-																				<bean:write name="quarterlyComparison" property="actualDisbOrder" />
+																				<bean:write name="monthlyComparison" property="disbOrders" format="#.##"/>
 																			</div>
                                                                                                                                                             </field:display >
 
@@ -738,7 +686,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 																			<div align="right">
 
-																				<bean:write name="quarterlyComparison" property="plannedDisbursement" />
+																				<bean:write name="monthlyComparison" property="plannedDisbursement" format="#.##"/>
 																			</div>
 
 																		</td>
@@ -747,7 +695,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 																			<div align="right">
 
-																				<bean:write name="quarterlyComparison" property="actualDisbursement" />
+																				<bean:write name="monthlyComparison" property="actualDisbursement" format="#.##" />
 																			</div>
 
 																		</td>
@@ -756,7 +704,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 																			<div align="right">
 
-																				<bean:write name="quarterlyComparison" property="actualExpenditure" />
+																				<bean:write name="monthlyComparison" property="actualExpenditure" format="#.##"/>
 																			</div>
 
 																		</td>
@@ -773,364 +721,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 												</TD></TR>
 
-												<TR><TD>
-
-
-
-				                       		<logic:equal name="aimQuarterlyComparisonsForm" property="perspective" value="DI">
-
-														<table width="100%"  border="0" cellpadding="0" cellspacing="1" class="box-border">
-
-															<tr bgcolor="#DDDDDB" >
-
-																<td height="30" bgcolor="#DDDDDB">
-
-				              									<div align="center">
-
-				              										<digi:trn key="aim:year">Year</digi:trn>
-
-				               								</div>
-
-				                  						</td>
-
-							              					<td bgcolor="#DDDDDB">
-
-																	<div align="center">
-
-																		<digi:trn key="aim:quarter">Quarter</digi:trn>
-
-																	</div>
-
-																</td>
-
-																<td bgcolor="#DDDDDB" colspan="3">
-
-																	<div align="center">
-
-																		<FONT color="blue">*</FONT>
-
-																		<p><digi:trn key="aim:discrepancyCommitments">Commitments</digi:trn></p>
-
-																	</div>
-
-																</td>
-
-																<td bgcolor="#DDDDDB" colspan="3">
-
-																	<div align="center">
-
-																		<FONT color="blue">*</FONT>
-
-																		<digi:trn key="aim:discrepancyDisbursements">Disbursements</digi:trn>
-
-																	</div>
-
-																</td>
-<feature:display module="Funding" name="Expenditures">
-																<td bgcolor="#DDDDDB" colspan="3">
-
-																	<div align="center">
-
-																		<FONT color="blue">*</FONT>
-
-																		<digi:trn key="aim:discrepancyExpenditures">Expenditures</digi:trn>
-
-																	</div>
-
-																</td>
-</feature:display>
-															</tr>
-
-															<tr bgcolor="#DDDDDB" >
-
-																<td height="30" bgcolor="#DDDDDB"></td>
-
-																<td bgcolor="#DDDDDB"></td>
-
-							              					<td bgcolor="#DDDDDB">
-
-							              						<div align="center">
-
-																		<FONT color="blue">*</FONT>
-
-							                  					<p><digi:trn key="aim:donorActuals">Donor Actuals</digi:trn></p>
-
-																	</div>
-
-																</td>
-
-																<td bgcolor="#DDDDDB">
-
-																	<div align="center">
-
-																		<FONT color="blue">*</FONT>
-
-																		Impl. Agency Actuals
-
-																	</div>
-
-																</td>
-
-																<td bgcolor="#DDDDDB">
-
-																	<div align="center">
-
-																		<FONT color="blue">*</FONT>
-
-																		<digi:trn key="aim:mofedActuals">MOFED Actuals</digi:trn>
-
-																	</div>
-
-							              					</td>
-
-																<td bgcolor="#DDDDDB">
-
-																	<div align="center">
-
-																		<FONT color="blue">*</FONT>
-
-							                  					<p><digi:trn key="aim:donorActuals">Donor Actuals</digi:trn></p>
-
-																	</div>
-
-																</td>
-
-																<td bgcolor="#DDDDDB">
-
-																	<div align="center">
-
-																		<FONT color="blue">*</FONT>
-
-							              							Impl. Agency Actuals
-
-							              						</div>
-
-							              					</td>
-
-							              					<td bgcolor="#DDDDDB">
-
-							              						<div align="center">
-
-																		<FONT color="blue">*</FONT>
-
-							              							<digi:trn key="aim:mofedActuals">MOFED Actuals</digi:trn>
-
-							              						</div>
-
-							              					</td>
-<feature:display module="Funding" name="Expenditures">
-							              					<td bgcolor="#DDDDDB">
-
-							              						<div align="center">
-
-																		<FONT color="blue">*</FONT>
-
-																		<p><digi:trn key="aim:donorActuals">Donor Actuals</digi:trn></p>
-
-							                					</div>
-
-							                				</td>
-
-							              					<td bgcolor="#DDDDDB">
-
-							              						<div align="center">
-
-																		<FONT color="blue">*</FONT>
-
-							              							Impl. Agency Actuals
-
-							              						</div>
-
-							              					</td>
-
-							              					<td bgcolor="#DDDDDB">
-
-							              						<div align="center">
-
-																		<FONT color="blue">*</FONT>
-
-							              							<digi:trn key="aim:mofedActuals">MOFED Actuals</digi:trn>
-
-							              						</div>
-
-							              					</td>
-	</feature:display>
-				            							</tr>
-
-				            							<logic:empty name="aimQuarterlyComparisonsForm" property="quarterlyDiscrepanciesAll" >
-
-			                        					<tr valign="top">
-
-			                          						<td colspan="8" align="center">
-
-			                          							<span class="note">No records!</span>
-
-			                          						</td>
-
-			                          					</tr>
-
-			                        				</logic:empty>
-
-				            							<logic:notEmpty name="aimQuarterlyComparisonsForm" property="quarterlyDiscrepanciesAll">
-
-																<logic:iterate name="aimQuarterlyComparisonsForm" property="quarterlyDiscrepanciesAll"
-
-																id="discrepancy" type="org.digijava.module.aim.helper.QuarterlyDiscrepancyAll">
-
-							            						<tr valign="top">
-
-							              							<td height="30" bgcolor="#F8F8F5">
-
-							              								<logic:equal name="discrepancy" property="fiscalYear" value="0">
-
-				                          								NA
-
-				                          							</logic:equal>
-
-				                          							<logic:notEqual  name="discrepancy" property="fiscalYear" value="0">
-
-																				<bean:write name="discrepancy" property="fiscalYear" />
-
-																			</logic:notEqual>
-
-							              							</td>
-
-							              							<td bgcolor="#F8F8F5">
-
-							              								<logic:equal name="discrepancy" property="fiscalQuarter" value="0">
-
-		                          			 							NA
-
-		                          			 						</logic:equal>
-
-							              								<logic:equal name="discrepancy" property="fiscalQuarter" value="1">
-
-		                          			 							1st qtr
-
-		                          			 						</logic:equal>
-
-		                           			 					<logic:equal name="discrepancy" property="fiscalQuarter" value="2">
-
-		                          			 							2nd qtr
-
-		                          			 						</logic:equal>
-
-		                          			 						<logic:equal name="discrepancy" property="fiscalQuarter" value="3">
-
-		                          			 							3rd qtr
-
-		                          			 						</logic:equal>
-
-		                           			 					<logic:equal name="discrepancy" property="fiscalQuarter" value="4">
-
-		                          			 							4th qtr
-
-		                          			 						</logic:equal>
-
-							              							</td>
-
-							              							<td bgcolor="#F8F8F5">
-
-							              								<div align="right">
-
-							              									<bean:write name="discrepancy" property="commitmentDonorActual"/>
-
-							              								</div>
-
-							              							</td>
-
-							              							<td bgcolor="#F8F8F5">
-
-							              								<div align="center">
-
-							              									<bean:write name="discrepancy" property="commitmentImplAgencyActual"/>
-
-							              								</div>
-
-							              							</td>
-
-							              							<td bgcolor="#F8F8F5">
-
-														              	<div align="right">
-
-														                  <bean:write name="discrepancy" property="commitmentMofedActual"/>
-
-													                	</div>
-
-																		</td>
-
-							              							<td bgcolor="#F8F8F5">
-
-														              	<div align="right">
-
-														              		<bean:write name="discrepancy" property="disbursementDonorActual"/>
-
-														              	</div>
-
-														            </td>
-
-							              							<td bgcolor="#F8F8F5">
-
-							              								<div align="center">
-
-							              									<bean:write name="discrepancy" property="disbursementImplAgencyActual"/>
-
-							              								</div>
-
-							              							</td>
-
-							              							<td bgcolor="#F8F8F5">
-
-							              								<div align="right">
-
-														                  <bean:write name="discrepancy" property="disbursementMofedActual"/>
-
-													                  </div>
-
-							              							</td>
-	<feature:display module="Funding" name="Expenditures">
-							               						<td bgcolor="#F8F8F5">
-
-							              								<div align="right">
-
-							              									<bean:write name="discrepancy" property="expenditureDonorActual"/>
-
-							              								</div>
-
-							              							</td>
-
-							              							<td bgcolor="#F8F8F5">
-
-							              								<div align="center">
-
-							              									<bean:write name="discrepancy" property="expenditureImplAgencyActual"/>
-
-							              								</div>
-
-							              							</td>
-
-							              							<td bgcolor="#F8F8F5">
-
-							              								<div align="right">
-
-							                  							<bean:write name="discrepancy" property="expenditureMofedActual"/>
-
-							                							</div>
-
-							              							</td>
-	</feature:display>
-							            						</tr>
-
-							            					</logic:iterate>
-
-											            </logic:notEmpty>
-
-								       				</table>
-
-		               		        		</logic:equal>
-
-												</TD></TR>
-
+												
 												<TR><TD align="right">
 
 													<TABLE cellspacing="0" cellpadding="0" vAlign="top">
@@ -1149,13 +740,13 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 																<c:set target="${urlShowQuarterly}" property="ampActivityId">
 
-																	<bean:write name="aimQuarterlyComparisonsForm" property="ampActivityId"/>
+																	<bean:write name="aimMonthlyInfoForm" property="ampActivityId"/>
 
 																</c:set>
 
 																<c:set target="${urlShowQuarterly}" property="ampFundingId">
 
-																	<bean:write name="aimQuarterlyComparisonsForm" property="ampFundingId"/>
+																	<bean:write name="aimMonthlyInfoForm" property="ampFundingId"/>
 
 																</c:set>
 
@@ -1190,24 +781,23 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 															<TD>
 
 					                        			
-							<c:set var="translation">
+                                                                                            <c:set var="translation">
 
-								<digi:trn key="aim:clickToViewMonthlyComparisons">Click here to view Monthly Comparisons</digi:trn>
+                                                                                                    <digi:trn key="aim:clickToViewQuarterlyComparisons">Click here to view Quarterly Comparisons</digi:trn>
 
-							</c:set>
+                                                                                            </c:set>
 
-							                        	<digi:link href="/viewMonthlyComparisons.do" name="urlShowQuarterly" title="${translation}" >
+							                        	<digi:link href="/viewQuarterlyComparisons.do" name="urlShowQuarterly" title="${translation}" >
 
 				      	  										<STRONG>
-																	<digi:trn key="aim:showMonthly">Show Monthly</digi:trn>
+																	<digi:trn key="aim:showQuarterly">Show Quarterly</digi:trn>
 																	</STRONG>
 
 						   		     						</digi:link>
 
 															</TD>
 
-														</TR>
-
+									
 
 													</TABLE>
 
@@ -1264,7 +854,6 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 
 </digi:form>
 
-</logic:equal>
 
 
 

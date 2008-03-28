@@ -220,6 +220,16 @@
 			<put name="title">Activity - Financial Progress - Discrepancy All</put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="yearlyDiscrepancyAllFilter"/>
 		</layout>
+      
+                 <layout name="layoutMonthlyInfo" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - Monthly</put>
+			<put-item name="tabBody" module="aim" instance="default" teaser="monthlyInfo"/>
+		</layout>
+                
+                <layout name="layoutMonthlyComparisons" extends="tabLayout">
+			<put name="title">Activity - Financial Progress - All(Monthly)</put>
+			<put-item name="tabBody" module="aim" instance="default" teaser="monthlyComparisons"/>
+		</layout>
 
 		<layout name="layoutActivityDashboard" extends="tabLayout">
 			<put name="title">Activity - Dashboard</put>

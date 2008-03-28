@@ -1045,6 +1045,12 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 												<TR><TD align="right">
 
 													<TABLE cellspacing="0" cellpadding="0" vAlign="top">
+                                                                                                             <c:set target="${urlSubTabs}" property="transactionType">
+
+			        												<bean:write name='aimQuarterlyInfoForm' property='transactionType'/>
+
+									        					</c:set>
+
 
 														<TR>
 
@@ -1056,12 +1062,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 															<TD>
 
-									        					<c:set target="${urlSubTabs}" property="transactionType">
-
-			        												<bean:write name='aimQuarterlyInfoForm' property='transactionType'/>
-
-									        					</c:set>
-
+									        					
 			<c:set var="translation">
 
 				<digi:trn key="aim:clickToViewYearlyInfo">Click here to view Yearly Info</digi:trn>
@@ -1079,6 +1080,35 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 															</TD>
 
 														</TR>
+                                                                                                                 <TR>
+
+															<TD width="15">
+
+																<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+
+															</TD>
+
+															<TD>
+
+									        					
+                                                                                                                    <c:set var="translation">
+
+                                                                                                                            <digi:trn key="aim:clickToViewMonthlyInfo">Click here to view Monthly Info</digi:trn>
+
+                                                                                                                    </c:set>
+
+			        											<digi:link href="/viewMonthlyInfo.do" name="urlSubTabs" title="${translation}" >
+
+				      	  										<STRONG>
+																		<digi:trn key="aim:showMonthly">Show Monthly</digi:trn>																		
+																	</STRONG>
+
+						   		     						</digi:link>
+
+															</TD>
+
+														</TR>
+
 
 													</TABLE>
 

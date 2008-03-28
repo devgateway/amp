@@ -177,13 +177,13 @@
                                 <c:set var="translation">
                                   <digi:trn key="aim:tipViewAhSurveis">Click here to view Paris Indicator Manager</digi:trn>
                                 </c:set>
-                                <digi:link module="aim" href="/viewAhSurveis.do" title="${translation}">
+                                <!--<digi:link module="aim" href="/viewAhSurveis.do" title="${translation}">-->
                                   <digi:trn key="aim:parisIndManager">Paris Indicators Targets Manager</digi:trn>
-                                </digi:link>
+                                <!--</digi:link>-->
                               </td>
                             </tr>
                           </feature:display>
-						  <!-- hidden Lucene Debug! 
+						  <!-- hidden Lucene Debug!
 						  <feature:display name="Lucene Debug" module="Admin Home">
                           <tr>
                             <td class=f-names noWrap>

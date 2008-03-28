@@ -81,10 +81,16 @@ function saveIndicator(){
   */
   
   <digi:context name="addInd" property="context/module/moduleinstance/viewEditIndicator.do?action=save" />
-  document.forms[0].action="<%=addInd%>";
-  document.forms[0].submit();
- window.close();
-  window.opener.document.forms[0].submit();
+  
+  //document.forms[0].action="<%=addInd%>";
+  //document.forms[0].submit();
+  //window.close();
+  //window.opener.document.forms[0].submit();
+  
+  aimNewIndicatorForm.action = "<%=addInd%>";
+  aimNewIndicatorForm.target=window.opener.name;
+  aimNewIndicatorForm.submit(); 
+  window.close();
 }
 
 function selectProgram(){

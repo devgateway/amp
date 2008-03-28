@@ -201,8 +201,7 @@
 								</logic:notEqual>
 							</feature:display>
 							
-						<module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display>
-						<feature:display name="Documents" module="Document Management">
+						<feature:display name="Document" module="Project Management">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
 							   <LI class="selected">
 									:: <digi:trn key="aim:documents">Documents</digi:trn>

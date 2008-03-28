@@ -479,6 +479,7 @@ function fnGetSurvey() {
 					</c:if>
 				</tr>
 				</feature:display>
+				<feature:display name="Document" module="Project Management">
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 6}">
 					<td nowrap="nowrap">
@@ -512,6 +513,7 @@ function fnGetSurvey() {
 					</td>
 					</c:if>
 				</tr>
+				</feature:display>
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 7}">
 					<td nowrap="nowrap">

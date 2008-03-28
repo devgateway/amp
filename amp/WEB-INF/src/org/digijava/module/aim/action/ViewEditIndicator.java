@@ -144,7 +144,7 @@ public class ViewEditIndicator
         String parentId=request.getParameter("parentid");
 
         if(indId==null){
-            return mapping.findForward("viewIndicators");
+            return mapping.findForward("showList");
         }else
                  {
         	indForm.reset();

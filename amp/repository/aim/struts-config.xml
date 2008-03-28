@@ -1535,7 +1535,7 @@
     </action>
     <action name="aimNewIndicatorForm" path="/aim/viewEditIndicator" scope="session" type="org.digijava.module.aim.action.ViewEditIndicator" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewEditIndicator" />
-      <forward name="viewIndicators" path="/aim/viewIndicators.do" redirect="true"/>
+      <forward name="showList" path="/aim/viewIndicators.do" redirect="true"/>
     </action>
     <action input="/showLayout.do?layout=viewNpdSettings" name="npdSettingsForm" scope="request" path="/aim/npdSettingsAction" parameter="actionType" type="org.digijava.module.aim.action.NpdSettingsAction" validate="false">
 		<forward name="forward" path="/showLayout.do?layout=viewNpdSettings"/>
@@ -1566,10 +1566,7 @@
       <forward name="forward" path="/showLayout.do?layout=selectActivityForIndicator" />
       <forward name="add" path="/showLayout.do?layout=addNewIndicator" />
       <forward name="edit" path="/showLayout.do?layout=viewEditIndicator" />
-    </action>
-    <action name="aimNewIndicatorForm" path="/aim/viewEditIndicator" scope="session" type="org.digijava.module.aim.action.ViewEditIndicator" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=viewEditIndicator" />
-    </action>
+    </action>   
     <action name="aimAuditLoggerManagerForm" path="/aim/showActivityLog" scope="request" type="org.digijava.module.aim.action.ShowActivityLog">
       <forward name="forward" path="/showLayout.do?layout=showActivityLog"/>
     </action>

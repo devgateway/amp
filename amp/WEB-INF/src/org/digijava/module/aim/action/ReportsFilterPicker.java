@@ -106,8 +106,8 @@ public class ReportsFilterPicker extends MultiAction {
            }
         
 		Collection allIndicatorRisks = meRisks;
-		//Collection regions=LocationUtil.getAmpLocationsForDefaultCountry();
-		Collection regions=LocationUtil.getAllVRegions();
+		Collection regions=LocationUtil.getAllDefCountryArRegions();
+		//Collection regions=LocationUtil.getAllVRegions();
 		filterForm.setCurrencies(currency);
 		filterForm.setCalendars(allFisCalenders);
 		//filterForm.setDonors(donors);

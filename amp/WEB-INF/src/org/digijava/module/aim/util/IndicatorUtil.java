@@ -570,48 +570,9 @@ public class IndicatorUtil {
 			result=new HashSet<ActivityIndicator>();
 			for (IndicatorActivity connection : indicators) {
 				ActivityIndicator helper=new ActivityIndicator();
-				AmpIndicator indicator=connection.getIndicator();
-				helper.setActivityId(activity.getAmpActivityId());
-				helper.setConnectionId(connection.getId());
-				helper.setIndicatorId(indicator.getIndicatorId());
-				helper.setIndicatorCode(indicator.getCode());
-				helper.setIndicatorName(indicator.getName());
-				helper.setDefaultInd(indicator.isDefaultInd());
-				helper.setIndicatorsCategory(indicator.getIndicatorsCategory());
-				helper.setIndicatorValId(indicator.getIndicatorId());
-				if (indicator.getRisk()!=null){
-					helper.setRisk(indicator.getRisk().getAmpIndRiskRatingsId());
-				}
 				
-				Set<AmpIndicatorValue> values=connection.getValues();
-				if (values!=null && values.size()>0){
-					for (AmpIndicatorValue value : values) {
-						//target
-						if (AmpIndicatorValue.ACTUAL==value.getValueType()){
-							helper.setActualVal(value.getValue().floatValue());
-							helper.setActualValDate(DateConversion.ConvertDateToString(value.getValueDate()));
-							helper.setCurrentValDate(DateConversion.ConvertDateToString(value.getValueDate()));
-							helper.setActualValComments(value.getComment());
-						}
-						if (AmpIndicatorValue.BASE==value.getValueType()){
-							helper.setBaseVal(value.getValue().floatValue());
-							helper.setBaseValDate(DateConversion.ConvertDateToString(value.getValueDate()));
-							helper.setBaseValComments(value.getComment());
-						}
-						if (AmpIndicatorValue.TARGET==value.getValueType()){
-							helper.setTargetVal(value.getValue().floatValue());
-							helper.setTargetValDate(DateConversion.ConvertDateToString(value.getValueDate()));
-							helper.setTargetValComments(value.getComment());
-						}
-						if (AmpIndicatorValue.REVISED==value.getValueType()){
-							helper.setRevisedTargetVal(value.getValue().floatValue());
-							helper.setRevisedTargetValDate(DateConversion.ConvertDateToString(value.getValueDate()));
-							helper.setRevisedTargetValComments(value.getComment());
-						}
-					}
-				}
-				
-				
+				helper = createIndicatorHelperBean(connection);
+
 				result.add(helper);
 			}
 		}
@@ -645,6 +606,81 @@ public class IndicatorUtil {
 		}
 		
 	}
+
+	//TODO INDIC this is stupid temporary solution. risk should be moved to connection but business team does not care about this and we have no time to do this changes.
+	public static AmpIndicatorRiskRatings getRisk(IndicatorActivity connection){
+		if (connection!=null && connection.getValues()!=null){
+			Iterator<AmpIndicatorValue> iter=connection.getValues().iterator();
+			if (iter.hasNext()) return iter.next().getRisk();
+		}
+		return null;
+	}
+	
+	public static ActivityIndicator createIndicatorHelperBean(IndicatorActivity connection) {
+		ActivityIndicator bean=new ActivityIndicator();
+		bean.setActivityId(connection.getActivity().getAmpActivityId());
+		bean.setIndicatorId(connection.getIndicator().getIndicatorId());
+		bean.setIndicatorName(connection.getIndicator().getName());
+		bean.setIndicatorCode(connection.getIndicator().getCode());
+		if (connection.getIndicator().getIndicatorsCategory()!=null){
+			bean.setAmpCategoryValue(connection.getIndicator().getIndicatorsCategory().getValue());
+		}else{
+			bean.setAmpCategoryValue("Unknown");
+		}
+		bean.setIndicatorsCategory(connection.getIndicator().getIndicatorsCategory());
+		
+		//set values to helper bean
+		Collection<AmpIndicatorValue> values=connection.getValues();
+		if (values!=null){
+			for (AmpIndicatorValue value : values) {
+				if (value.getValueType()==AmpIndicatorValue.ACTUAL){
+					bean.setActualVal(new Float(value.getValue()));
+					bean.setActualValComments(value.getComment());
+					bean.setActualValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+				}
+				if (value.getValueType()==AmpIndicatorValue.BASE){
+					bean.setBaseVal(new Float(value.getValue()));
+					bean.setBaseValComments(value.getComment());
+					bean.setBaseValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+				}
+				if (value.getValueType()==AmpIndicatorValue.TARGET){
+					bean.setTargetVal(new Float(value.getValue()));
+					bean.setTargetValComments(value.getComment());
+					bean.setTargetValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+				}
+				if (value.getValueType()==AmpIndicatorValue.REVISED){
+					bean.setRevisedTargetVal(new Float(value.getValue()));
+					bean.setRevisedTargetValComments(value.getComment());
+					bean.setRevisedTargetValDate(DateConversion.ConvertDateToString(value.getValueDate()));
+				}
+			}
+		}
+		//if no revised value then use target as revised target 
+		if (bean.getRevisedTargetVal()==null){
+			bean.setRevisedTargetVal(bean.getTargetVal());
+		}
+		
+		//calculate progress if possible 
+		Float actual=bean.getActualVal();
+		Float base=bean.getBaseVal();
+		Float target=bean.getRevisedTargetVal();
+		float progress=0;
+		if (actual!=null && base!=null && target!=null){
+			progress=(actual-base)/(target-base);
+			if (progress<0){
+				progress=0;
+			}
+		}
+		bean.setProgress(String.valueOf(progress*100+"%"));
+		
+		AmpIndicatorRiskRatings riskObj=getRisk(connection);
+		bean.setRisk(riskObj.getAmpIndRiskRatingsId());
+		bean.setRiskName(riskObj.getRatingName());
+		
+		
+		return bean;
+	}
+	
 	
 	
 	//TODO INDIC - Old Methods below this. Above are added by Irakli.

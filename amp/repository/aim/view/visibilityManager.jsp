@@ -56,7 +56,20 @@
 				</tr>
 				<tr>
 					<td height=16 vAlign=center width=571>
-						<digi:errors />
+				 		<font color="red">
+					 		<logic:iterate id="element" name="aimVisibilityManagerForm" property="errors">
+								<digi:trn key="${element.key}">
+									<bean:write name="element" property="value"/>
+								</digi:trn>
+							
+							</logic:iterate>
+							
+							<logic:iterate id="element" name="aimVisibilityManagerForm" property="messages">
+								<digi:trn key="${element.key}">
+									<bean:write name="element" property="value"/>
+								</digi:trn>
+							</logic:iterate>
+						</font>
 					</td>
 				</tr>
 				

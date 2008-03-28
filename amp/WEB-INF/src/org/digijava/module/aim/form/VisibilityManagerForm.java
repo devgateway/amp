@@ -2,6 +2,7 @@ package org.digijava.module.aim.form;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 
 import org.apache.struts.action.ActionForm;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
@@ -11,6 +12,10 @@ public class VisibilityManagerForm extends ActionForm implements Serializable{
 	/**
 	 * @author dan
 	 */
+    	private   HashMap<String,String> errors = new HashMap<String, String>();
+	private   HashMap<String,String> messages = new HashMap<String, String>();
+	
+    
 	private static final long serialVersionUID = -1859318593553304934L;
 	private Collection templates;
 	private Collection templateModules;
@@ -148,6 +153,23 @@ public class VisibilityManagerForm extends ActionForm implements Serializable{
 	public void setLevelCategory(Long levelCategory) {
 		this.levelCategory = levelCategory;
 	}
+	public HashMap<String, String> getErrors() {
+	    return errors;
+	}
 	
-
+	public HashMap<String, String> getMessages() {
+	    return messages;
+	}
+	public void addMessage(String key, String value) {
+	    this.messages.put(key, value) ;
+	}
+	
+	public void addError(String key, String value) {
+	    this.errors.put(key, value) ;
+	}
+	public void clearMessages(){
+	    this.errors.clear();
+	    this.messages.clear();
+	}
+	
 }

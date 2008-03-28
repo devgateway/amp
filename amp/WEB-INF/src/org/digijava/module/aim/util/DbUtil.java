@@ -36,12 +36,8 @@ import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.entity.Message;
-import org.digijava.kernel.entity.Organization;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
-import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.translator.util.TrnCountry;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
@@ -87,8 +83,6 @@ import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.AmpUserExtension;
-import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.AmpProjectBySector;
 import org.digijava.module.aim.helper.Assistance;
@@ -108,10 +102,8 @@ import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.common.util.DateTimeUtil;
-import org.digijava.kernel.translator.util.TrnUtil;
 import java.util.*;
 import org.digijava.module.aim.helper.CountryBean;
-import java.text.DateFormat;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -148,7 +140,7 @@ public class DbUtil {
 		return str;
 	}
 
-
+   
     /**
 	 * Removes the team-reports and member-reports association table.
 	 * @param reportId	A Long array of the reports to be updated
@@ -1323,7 +1315,8 @@ public class DbUtil {
                      + c.size());
         return c;
     }
-
+    
+  
     /*
      * @author Priyajith C
      */

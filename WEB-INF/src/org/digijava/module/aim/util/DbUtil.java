@@ -2199,12 +2199,13 @@ public class DbUtil {
     public static Collection searchForOrganisation(String keyword, Long orgType) {
         Session session = null;
         Collection col = null;
-
+        keyword = keyword.toLowerCase();
+        
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct org from "
                 + AmpOrganisation.class.getName() + " org "
-                + "where (acronym like '%" + keyword + "%' || name like '%"
+                + "where (lower(acronym) like '%" + keyword + "%' || lower(name) like '%"
                 + keyword + "%') and org.orgTypeId=:orgType";
             Query qry = session.createQuery(queryString);
             qry.setParameter("orgType", orgType, Hibernate.LONG);

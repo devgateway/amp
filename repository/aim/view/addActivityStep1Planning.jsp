@@ -172,8 +172,10 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<input type="checkbox" name="sameAs1" onclick="sameAsfunction(1)">
+																<field:display name="Same as Proposed Approval Date" feature="Planning">
+																	<input type="checkbox" name="sameAs1" onclick="sameAsfunction(1)">
 																	<digi:trn key="aim:sameAsProposedApprovalDate">Same as Proposed Approval Date</digi:trn>
+																</field:display>
 															</td>
 														</tr>
 													</table>
@@ -236,8 +238,10 @@
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<input type="checkbox" name="sameAs2" onclick="sameAsfunction(2)">
-																 <digi:trn key="aim:sameAsProposedStartDate">Same as Proposed Start Date</digi:trn>
+																<field:display name="Same as Proposed Start Date" feature="Planning">
+																	<input type="checkbox" name="sameAs2" onclick="sameAsfunction(2)">
+																	<digi:trn key="aim:sameAsProposedStartDate">Same as Proposed Start Date</digi:trn>
+																</field:display>
 															</td>
 														</tr>
 													</table>

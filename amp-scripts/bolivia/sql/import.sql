@@ -505,8 +505,7 @@ WHERE  a.old_id=enm.numconv
 and a.amp_activity_id=f.amp_activity_id 
 and enm.cvemonorig=cu.currency_code 
 and enm.numenm>0 
-and enm.montorig!=0 
-and enm.fechvigenm is not null;
+and enm.montorig!=0;
 
 select 'importing actual disbursments';
 INSERT INTO AMP_FUNDING_DETAIL

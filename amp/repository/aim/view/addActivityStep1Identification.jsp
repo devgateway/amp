@@ -482,7 +482,7 @@ target.style.cursor = "default"
 												</a>
 											</td>
 										<td valign="top" align="left">
-												Yes<html:radio property="governmentApprovalProcedures" value="true"/> &nbsp;&nbsp;No<html:radio property="governmentApprovalProcedures" value="false"/>
+												<digi:trn key="aim:yes">Yes</digi:trn><html:radio property="governmentApprovalProcedures" value="true"/> &nbsp;&nbsp;<digi:trn key="aim:no">No</digi:trn><html:radio property="governmentApprovalProcedures" value="false"/>
 									</td></tr>
 								</field:display>	
 								
@@ -495,7 +495,7 @@ target.style.cursor = "default"
 												</a>
 											</td>
 										<td valign="top" align="left">
-												Yes<html:radio property="jointCriteria" value="true"/> &nbsp;&nbsp;No<html:radio property="jointCriteria" value="false"/>
+												<digi:trn key="aim:yes">Yes</digi:trn><html:radio property="jointCriteria" value="true"/> &nbsp;&nbsp;<digi:trn key="aim:no">No</digi:trn><html:radio property="jointCriteria" value="false"/>
 									</td></tr>
 								</field:display>
 								</feature:display>

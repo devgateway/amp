@@ -642,8 +642,15 @@ function addRegionalFunding() {
 }
 
 function validate() {
+  var msgEnterAmount="<digi:trn key="aim:addRegionalFunding:errmsg:enterAmount">Amount not entered.</digi:trn>";
+  var msgInvalidAmount="<digi:trn key="aim:addRegionalFunding:errmsg:invalidAmount">Invalid amount entered.</digi:trn>";
+  var msgEnterDate="<digi:trn key="aim:addRegionalFunding:errmsg:enterDate">Date not entered.</digi:trn>";
+  var msgSelectRegion="<digi:trn key="aim:addRegionalFunding:errmsg:selectRegion">Please Select a region.</digi:trn>";
+  var msgEnterCommitment="<digi:trn key="aim:addRegionalFunding:errmsg:enterCommitment">Commitment not entered.</digi:trn>";
+  var msgEnterExpenditure="<digi:trn key="aim:addRegionalFunding:errmsg:enterExpenditure">Expenditure entered without entering disbursements.</digi:trn>";
+
 	if (document.aimEditActivityForm.fundingRegionId.value < 1)	 {
-		alert("Select a region");
+		alert(msgSelectRegion);
 		document.aimEditActivityForm.fundingRegionId.focus();
 		return false;
 	}
@@ -651,12 +658,12 @@ function validate() {
 	var x = document.aimEditActivityForm;
 
 	if (tempComm == 0) {
-		alert ("Commitment not entered.");
+		alert (msgEnterCommitment);
 		return false;			  
 	}
 
 	if (tempExpn > 0 && tempDisb == 0) {
-		alert ("Expenditure entered without entering disbursements.");
+		alert (msgEnterExpenditure);
 		return false;			  			  
 	}
 	
@@ -665,12 +672,12 @@ function validate() {
 		if (str.match("comm_[0-9]*_2")) {
 			// validate amount
 			if (trim(x.elements[index].value) == "") {
-				alert ("Amount not entered.");
+				alert (msgEnterAmount);
 				x.elements[index].focus();
 				return false;
 			}
 			if (checkAmount(x.elements[index].value) == false) {
-				alert ("Invalid amount entered.");
+				alert (msgInvalidAmount);
 				x.elements[index].focus();
 				return false;
 			}
@@ -678,43 +685,43 @@ function validate() {
 		} else if (str.match("comm_[0-9]*_4")) { 
 			// validate date	  
 			if (trim(x.elements[index].value) == "") {
-				alert ("Date not entered.");
+				alert (msgEnterDate);
 				x.elements[index].focus();
 				return false;
 			}
 		} else if (str.match("disb_[0-9]*_2")) { 
 			// validate amount
 			if (trim(x.elements[index].value) == "") {
-				alert ("Amount not entered.");
+				alert (msgEnterAmount);
 				x.elements[index].focus();
 				return false;				  
 			}
 			if (checkAmount(x.elements[index].value) == false) {
-				alert ("Invalid amount entered.");
+				alert (msgInvalidAmount);
 				x.elements[index].focus();
 				return false;
 			}			
 		} else if (str.match("disb_[0-9]*_4")) { 
 			if (trim(x.elements[index].value) == "") {
-				alert ("Date not entered.");
+				alert (msgEnterDate);
 				x.elements[index].focus();
 				return false;
 			}				  
 		} else if (str.match("expn_[0-9]*_2")) { 
 			// validate amount
 			if (trim(x.elements[index].value) == "") {
-				alert ("Amount not entered.");
+				alert (msgEnterAmount);
 				x.elements[index].focus();
 				return false;
 			}
 			if (checkAmount(x.elements[index].value) == false) {
-				alert ("Invalid amount entered.");
+				alert (msgInvalidAmount);
 				x.elements[index].focus();
 				return false;
 			}			
 		} else if (str.match("expn_[0-9]*_4")) { 
 			if (trim(x.elements[index].value) == "") {
-				alert ("Date not entered.");
+				alert (msgEnterDate);
 				x.elements[index].focus();
 				return false;
 			}				  

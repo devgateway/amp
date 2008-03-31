@@ -430,7 +430,39 @@ SELECT sigla_mda, moneda, pais, 1
 FROM sisfin_db.clasif_moneda
 where sigla_mda not in (select currency_code from amp_currency);
 
-/* importing strange currencies */
+
+
+select 'importing  old currencies used on the  transactions ';
+/*some currencies could be deleted  so we need check if there is old currencies used on the  transactions*/
+INSERT INTO 
+	amp_currency (currency_code,country_name,currency_name,active_flag)
+select 
+	cvemonorig,
+	null,
+	cvemonorig,
+	1 
+from sisfin_db.desem
+where cvemonorig 
+	not in (select sigla_mda from sisfin_db.clasif_moneda) and cvemonorig 
+	not in (select currency_code from amp_currency)
+group by cvemonorig;
+
+INSERT INTO amp_currency (currency_code,country_name,currency_name,active_flag)
+select 
+	cvemonorig, 
+	null, 
+	cvemonorig, 
+	1
+from 
+	sisfin_db.enm
+where 
+	cvemonorig not in (select sigla_mda from sisfin_db.clasif_moneda)and 
+	cvemonorig not in (select currency_code from amp_currency)
+group by cvemonorig;
+
+select 'end old currencies  ...... ';
+
+/* importing strange currencies
 select 'importing strange currencies';
 
 INSERT INTO amp_currency(
@@ -442,7 +474,7 @@ SELECT e.cvemonorig, e.cvemonorig, e.cvemonorig, 1 FROM sisfin_db.enm e
 where e.cvemonorig is not null 
 and not exists (select * from amp_currency c where c.currency_code=e.cvemonorig)
 group by e.cvemonorig;
-
+ */
 /* importing planned fundings */
 select 'importing planned (initial) fundings';
 

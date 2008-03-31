@@ -785,8 +785,9 @@
 
 												</html:select>
 
-												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
+												
                                                                                                    </field:display>
+												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
 											</td>
 
 

@@ -381,7 +381,7 @@ function checkUncheckAll2() {
 																								</a>
 																								<ul>
 																								<logic:iterate name="columnCollection" id="ampColumnFromTree" type="org.digijava.module.aim.dbentity.AmpColumns">
-																									<li class="dhtmlgoodies_sheet.gif" noDrag="true">
+																									<li class="dhtmlgoodies_sheet.gif" noDrag="true" style="white-space:nowrap";>
 																									<gs:test name="<%= org.digijava.module.aim.helper.GlobalSettingsConstants.ACTIVITY_LEVEL %>" compareWith="true" onTrueEvalBody="false">
 																										
 																										<input type=checkbox id="fieldVis:<bean:write name="ampColumnFromTree" property="columnId"/>"

@@ -123,19 +123,28 @@ function collapseAll() {
 	Long actId = (Long) request.getAttribute("actId");
 
 	String url = "/aim/viewIndicatorValues.do?ampActivityId="+actId+"&tabIndex=6";
-
-	String actPerfChartFileName = ChartGenerator.getActivityPerformanceChartFileName(
+	String actPerfChartFileName=null;
+    try{
+	  actPerfChartFileName= ChartGenerator.getActivityPerformanceChartFileName(
 						 actId,session,new PrintWriter(out),370,450,url,true,request);
-
+    } catch(Exception e)
+    {
+      e.printStackTrace();
+    }
 	String actPerfChartUrl = null;
 	if (actPerfChartFileName != null) {
 		actPerfChartUrl = request.getContextPath() + "/aim/DisplayChart.img?filename=" + actPerfChartFileName;
 	}
 
-
-	String actRiskChartFileName = ChartGenerator.getActivityRiskChartFileName(
+	String actRiskChartFileName = null;
+    try{
+    
+	  actRiskChartFileName = ChartGenerator.getActivityRiskChartFileName(
 						 actId,session,new PrintWriter(out),370,350,url,request);
-
+    }catch(Exception e){
+      e.printStackTrace();
+    }
+    
 	String actRiskChartUrl = null;
 
 	if (actRiskChartFileName != null)  {

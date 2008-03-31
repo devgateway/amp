@@ -18,8 +18,10 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.OrgProjectId;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class OrganisationSelected extends Action {
@@ -146,11 +148,27 @@ public class OrganisationSelected extends Action {
 				}
 				
 				if (item == 1) {
-					if (eaForm.getExecutingAgencies() != null) {
+					
 						for (int i = 0;i < temp.size();i ++) {
+                                                   
 							AmpOrganisation newOrg = (AmpOrganisation) temp.get(i);
-							if (newOrg != null) {
+                                                        AmpOrgRole role=new AmpOrgRole();
+                                                        role.setOrganisation(newOrg);
+                                                        role.setAmpOrgRoleId(newOrg.getAmpOrgId());
+                                                        if(eaForm.getActivityId()!=null){
+                                                        role.setActivity(ActivityUtil.getAmpActivity(eaForm.getActivityId()));
+                                                        }
+                                                        role.setRole( DbUtil.getAmpRole(Constants.EXECUTING_AGENCY));
+                                                        if(eaForm.getExecutingAgencies()==null){
+                                                                            eaForm.setExecutingAgencies(new ArrayList());
+                                                         }
+                                                        if(!eaForm.getExecutingAgencies().contains(role)){
+                                                            eaForm.getExecutingAgencies().add(role);
+                                                        }
+                                                        
+							/*if (newOrg != null) {
 								boolean flag = false;
+                                                                 if (eaForm.getExecutingAgencies() != null) {
 								Iterator itr = eaForm.getExecutingAgencies().iterator();
 								while (itr.hasNext()) {
 									
@@ -160,20 +178,22 @@ public class OrganisationSelected extends Action {
 										break;
 									}
 								}
+                                                               }
 								if (!flag) {
 									AmpOrgRole role=new AmpOrgRole();
 									//set a temp ID only to let remove it 
 									role.setAmpOrgRoleId(newOrg.getAmpOrgId());
 									role.setOrganisation(newOrg);
+                                                                        if(eaForm.getExecutingAgencies()==null){
+                                                                            eaForm.setExecutingAgencies(new ArrayList());
+                                                                        }
 									eaForm.getExecutingAgencies().add(role);
 								}
-							}
-						}
-					} else {
-						Collection col = new ArrayList();
-						col.addAll(temp);
-						eaForm.setExecutingAgencies(col);
-					}
+                                                         }*/
+							
+					
+                                              }
+					
 				} else if (item == 2) {
 					if (eaForm.getImpAgencies() != null) {
 						for (int i = 0;i < temp.size();i ++) {

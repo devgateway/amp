@@ -6,12 +6,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script type="text/javascript">
-function openFieldPermissionsPopup(fieldId) {
-			<digi:context name="assignFieldPermissionsURL" property="context/module/moduleinstance/assignFieldPermissions.do?fieldId=" />
-			openURLinWindow("<%=assignFieldPermissionsURL%>"+fieldId,280, 230);
-}
-</script>
 
 <digi:instance property="aimVisibilityManagerForm" />
 
@@ -19,7 +13,7 @@ function openFieldPermissionsPopup(fieldId) {
 <bean:define id="moduleAux" name="moduleAux" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="request" toScope="page"/>
 <bean:define id="moduleAux2" name="moduleAux" property="root" type="org.digijava.module.aim.dbentity.AmpModulesVisibility" scope="page"/>
 	
-					<li id="limodule:<bean:write name="moduleAux" property="root.id"/>">
+					<li id="limodule:<bean:write name="moduleAux" property="root.id"/>" title="<digi:trn key="<%="fm:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.properName"/></digi:trn>">
 					<logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
 						<input onclick="toggleChildrenVisibility('limodule:<bean:write name="moduleAux" property="root.id"/>')"
 						 type=checkbox id="moduleVis:<bean:write name="moduleAux" property="root.id"/>" 
@@ -53,7 +47,7 @@ function openFieldPermissionsPopup(fieldId) {
 								
 									<bean:define id="featureAux" name="feature" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page"/>
 									<bean:define id="featureAux2" name="featureAux" property="root" type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility" scope="page"/>
-									<li id="lifeature:<bean:write name="featureAux" property="root.id"/>">
+									<li id="lifeature:<bean:write name="featureAux" property="root.id"/>" title="<digi:trn key="<%="fm:"+featureAux.getRoot().getNameTrimmed() %>"><bean:write name="featureAux" property="root.name"/></digi:trn>">
 										<logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
 											<input onclick="toggleChildrenVisibility('lifeature:<bean:write name="featureAux" property="root.id"/>')" 
 												type=checkbox id="featureVis:<bean:write name="featureAux" property="root.id"/>" 
@@ -77,7 +71,7 @@ function openFieldPermissionsPopup(fieldId) {
 										<logic:iterate name="featureAux" property="sorteditems" id="field" type="java.util.Map.Entry" >
 											<bean:define id="fieldAux" name="field" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page"/>
 											<bean:define id="fieldAux2" name="fieldAux" property="root" type="org.digijava.module.aim.dbentity.AmpFieldsVisibility" scope="page"/>
-											<li class="dhtmlgoodies_sheet.gif">
+											<li class="dhtmlgoodies_sheet.gif" title="<digi:trn key="<%="fm:"+fieldAux.getRoot().getNameTrimmed() %>"><bean:write name="fieldAux" property="root.name"/></digi:trn>">
 												<logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
 													<input type=checkbox id="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 
 													name="fieldVis:<bean:write name="fieldAux" property="root.id"/>" 

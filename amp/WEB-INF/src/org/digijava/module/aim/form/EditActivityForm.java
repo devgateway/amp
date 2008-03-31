@@ -5183,6 +5183,26 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		String totalActualDisbursementsOrders) {
 	    this.totalActualDisbursementsOrders = totalActualDisbursementsOrders;
 	}
+        
+        
+     /* returns true if funding has at least one Disbursement Order
+     * 
+     */
+    public boolean isDisbursementOrders() {
+        boolean disbOrdersExist = false;
+        if (fundingDetails != null && fundingDetails.size() > 0) {
+            Iterator<FundingDetail> detailIter = fundingDetails.iterator();
+            while (detailIter.hasNext()) {
+                FundingDetail det = detailIter.next();
+                if (det.getTransactionType() == 4) {
+                    disbOrdersExist = true;
+                    break;
+                }
+            }
+        }
+        return disbOrdersExist;
+
+    }
 
 
 }

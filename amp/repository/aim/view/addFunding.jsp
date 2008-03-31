@@ -999,8 +999,10 @@
 													</html:select>
 												</logic:equal>
 											</td>
-
+                                                                                       
+                                                                                    <feature:display module="Funding" name="Disbursement Orders">
   											<td valign="bottom" align="center">
+                                                                                             <c:if test="${aimEditActivityForm.disbursementOrders}">
 												<html:select name="fundingDetail" indexed="true" property="disbOrderId" styleClass="inp-text">
 													<html:option value="">&nbsp;</html:option>
 		   										    <c:forEach var="funding" items="${aimEditActivityForm.fundingDetails}">
@@ -1009,7 +1011,9 @@
 														</c:if>
 													</c:forEach>
 												</html:select>
+                                                                                                 </c:if>&nbsp;
 											</td>
+                                                                                     </feature:display>
 											<!--- 
                                             <td>
     	                                        <html:text name="fundingDetail" property="disbOrderId" readonly="true"/>
@@ -1099,7 +1103,9 @@
 													</html:select>
 												</logic:equal>
 											</td>
+                                                                                        <feature:display module="Funding" name="Disbursement Orders">
   											<td valign="bottom" align="center">
+                                                                                        <c:if test="${aimEditActivityForm.disbursementOrders}">
 												<html:select name="fundingDetail" indexed="true" property="disbOrderId" styleClass="inp-text">
 													<html:option value="">&nbsp;</html:option>
 		   										    <c:forEach var="funding" items="${aimEditActivityForm.fundingDetails}">
@@ -1108,7 +1114,9 @@
 														</c:if>
 													</c:forEach>
 												</html:select>
+                                                                                           </c:if>&nbsp;
 											</td>
+                                                                                         </feature:display>
         	
 											<!-- 
                                             <td>

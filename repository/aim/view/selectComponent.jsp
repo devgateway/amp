@@ -602,10 +602,14 @@ function validate()
   var msgEnterAmount="<digi:trn key="aim:selectComponent:errmsg:enterAmount">Amount not entered.</digi:trn>";
   var msgInvalidAmount="<digi:trn key="aim:selectComponent:errmsg:invalidAmount">Invalid amount entered.</digi:trn>";
   var msgEnterDate="<digi:trn key="aim:selectComponent:errmsg:enterDate">Date not entered.</digi:trn>";
+  var msgEnterTitle="<digi:trn key="aim:selectComponent:errmsg:enterTitle">Please enter title.</digi:trn>";
+  var msgSelectComponent="<digi:trn key="aim:selectComponent:errmsg:selectComponent">Please select a Component before Saving.</digi:trn>";
+  var msgEnterCommitment="<digi:trn key="aim:selectComponent:errmsg:enterCommitment">Commitment not entered.</digi:trn>";
+  var msgEnterExpenditure="<digi:trn key="aim:selectComponent:errmsg:enterExpenditure">Expenditure entered without entering disbursements.</digi:trn>";
 
 	var titleFlag = isEmpty(document.aimEditActivityForm.componentTitle.value);
 	if(titleFlag == true) {
-		alert("Please enter title");
+		alert(msgEnterTitle);
 		document.aimEditActivityForm.componentTitle.focus();
 		return false;
 	}
@@ -613,19 +617,17 @@ function validate()
 	var x = document.aimEditActivityForm;
 	if(document.aimEditActivityForm.componentTitle.value == -1)
 	{
-		alert(" please select a Component before Saving");
+		alert(msgSelectComponent);
 			return false;
 	}
 
-	/*
 	if (tempComm == 0) {
-		alert ("Commitment not entered.");
+		alert (msgEnterCommitment);
 		return false;
 	}
-	*/
 
 	if (tempExpn > 0 && tempDisb == 0) {
-		alert ("Expenditure entered without entering disbursements.");
+		alert (msgEnterExpenditure);
 		return false;
 	}
 

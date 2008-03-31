@@ -75,7 +75,7 @@ public class AmpOrgRole implements Serializable
 		if (!(obj instanceof AmpOrgRole))
 			throw new ClassCastException();
 		AmpOrgRole orgRole = (AmpOrgRole) obj;
-		if ((activity==null)&&(organisation==null)){
+		if ((activity==null)&&(organisation!=null)){
 			//this is a new role added to an unsaved activity
 			return (orgRole.getAmpOrgRoleId().equals(this.ampOrgRoleId));
 		}else{

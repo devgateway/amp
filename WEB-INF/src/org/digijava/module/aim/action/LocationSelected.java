@@ -125,7 +125,7 @@ public class LocationSelected extends Action {
 								//loc.setPercent(null);
 							}					
 						}else {
-							location[0].setPercent("100");
+							location[0].setPercent("");
 						}		
 						if (eaForm.getFundingRegions() == null) {
 							eaForm.setFundingRegions(new ArrayList());
@@ -189,7 +189,7 @@ public class LocationSelected extends Action {
 								//loc.setPercent(null);
 							}					
 						}else {
-							location[0].setPercent("100");
+							location[0].setPercent("");
 						}		
 					}
 				}
@@ -240,7 +240,7 @@ public class LocationSelected extends Action {
 								//loc.setPercent(null);
 							}					
 						}else {
-							location[0].setPercent("100");
+							location[0].setPercent("");
 						}		
 					}
 				}

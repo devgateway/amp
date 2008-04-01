@@ -308,17 +308,21 @@
                                         </td>
                                       </tr>
 
+                                      <field:display name="NPD Program Description" feature="Program">
                                       <tr>
                                         <td>
                                           <a title="<digi:trn key="aim:ProgramDesc">Description of program, objectives, or associated projects</digi:trn>">
                                           Description
-</a>                                    </td>
+										  </a>
+	                                    </td>
                                       </tr>
                                       <tr>
                                         <td>
                                           <a title="<digi:trn key="aim:ProgramDesc">Description of program, objectives, or associated projects</digi:trn>">
                                           <html:textarea property="programDescription" rows="3" cols="75" styleClass="inp-text"/>
-</a>
+										  </a>
                                         </td>
                                       </tr>
-										</field:display>
+									  </field:display>
+								</field:display>
+										

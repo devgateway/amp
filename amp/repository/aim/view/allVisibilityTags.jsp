@@ -572,6 +572,8 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Total Private Contribution" feature="Contracting"></field:display>
 <field:display name="IB" feature="Contracting"></field:display>
 <field:display name="Disbursements" feature="Contracting"></field:display>
+<feature:display module="Components" name="Disbursements of Components"></feature:display>
+<field:display name="Add Disbursement" feature="Disbursements of Components"></field:display>
 
 
 <logic:iterate id="ampMeasures"  name="list" scope="page" type="org.digijava.module.aim.dbentity.AmpMeasures">

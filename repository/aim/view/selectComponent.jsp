@@ -166,14 +166,14 @@
 										</div>
 									</td>
 								</tr>
-								<feature:display module="Funding" name="Disbursement Orders">
+								<feature:display module="Components" name="Disbursements of Components">
                                 <tr bgcolor="#ffffff">
 									<td colspan="2" class="box-border">
 										<span class="f-names"><digi:trn key="aim:disbursementTotalActToDate"> Disbursement - (Total actual to date</digi:trn> 
 										<%=eaForm.getTotalDisbursements()%>
 															 <%=eaForm.getCurrCode()%>)
 										</span>
-										<field:display name="Add Disbursement Order Button" feature="Disbursement Orders"><a href="javascript:addDisbursement()"><digi:trn key="btn:add">Add</digi:trn></a></field:display><br><br>
+										<field:display name="Add Disbursement" feature="Disbursements of Components"><a href="javascript:addDisbursement()"><digi:trn key="btn:add">Add</digi:trn></a></field:display><br><br>
 												<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

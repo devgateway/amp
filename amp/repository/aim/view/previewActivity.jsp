@@ -1565,7 +1565,7 @@ function collapseAll() {
 												<c:forEach var="issue" items="${aimEditActivityForm.issues}">
 													<tr><td valign="top">
 														<li class="level1"><b>
-														<digi:trn key="aim:${issue.nameTrimmed}"><c:out value="${issue.name}"/></digi:trn>
+														<digi:trn key="aim:issuename:${issue.id}"><c:out value="${issue.name}"/></digi:trn>
 														</b></li>
 													</td></tr>
 													<c:if test="${!empty issue.measures}">

@@ -3,9 +3,9 @@ package org.digijava.module.aim.action;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.GregorianCalendar;
 
+import java.util.Iterator;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,10 +28,11 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.FinancialFilters;
+import org.digijava.module.aim.helper.MonthlyComparison;
+import org.digijava.module.aim.helper.MonthlyInfo;
 import org.digijava.module.aim.helper.MonthlyInfoWorker;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.YearUtil;
-import org.digijava.module.aim.helper.YearlyDiscrepancyWorker;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -104,19 +105,50 @@ public class ViewMonthlyInfo extends TilesAction {
         monthlyForm.setYears(YearUtil.getYears());
         monthlyForm.setCurrencies(CurrencyUtil.getAmpCurrency());
         monthlyForm.setPerspectives(DbUtil.getAmpPerspective());
-        if (fp.getPerspective().equals(Constants.DISCREPANCY)) {
-            Collection discrepancies = YearlyDiscrepancyWorker.getYearlyDiscrepancy(fp);
-        //monthlyForm.setDiscrepancies(discrepancies);
-        } else {
             List monthlyInfos = new ArrayList();
             try {
                 if (mapping.getInput().equals("/aim/viewMonthlyComparisons")) {
-
+                  double totalActualComm = 0, totalDisbOrders = 0,totalPlannedDisb=0,
+                          totalActualDisb=0, totalActualExp=0, totalPlannedExp=0;
+                  
                     monthlyInfos = MonthlyInfoWorker.getMonthlyComparisons(fp);
+                    if(monthlyInfos!=null){
+                       Iterator iterInfo = monthlyInfos.iterator();
+                        while (iterInfo.hasNext()) {
+                            MonthlyComparison comparison=(MonthlyComparison)iterInfo.next();
+                            totalActualComm+=comparison.getActualCommitment();
+                            totalActualDisb+=comparison.getActualDisbursement();
+                            totalActualExp+=comparison.getActualExpenditure();
+                            totalDisbOrders+=comparison.getDisbOrders();
+                            totalPlannedDisb+=comparison.getPlannedDisbursement();
+                            totalPlannedExp+=comparison.getPlannedExpenditure();
+                                
+                        }
+                       monthlyForm.setTotalActualCommitment(totalActualComm);
+                       monthlyForm.setTotalActualDisbursement(totalActualDisb);
+                       monthlyForm.setTotalActualExpenditure(totalActualExp);
+                       monthlyForm.setTotalPlannedDisbursement(totalPlannedDisb);
+                       monthlyForm.setTotalPlannedExpenditure(totalPlannedExp);
+                       monthlyForm.setTotalDisbOrder(totalDisbOrders);
+                        
+                    }
 
                 } else {
                     monthlyInfos = MonthlyInfoWorker.getMonthlyData(fp);
+                    double totalActual = 0, totalPlanned = 0;
+                    if (monthlyInfos != null) {
+                        Iterator iterInfo = monthlyInfos.iterator();
+                        while (iterInfo.hasNext()) {
+                            MonthlyInfo info = (MonthlyInfo) iterInfo.next();
+
+                            totalActual += info.getActualAmount();
+                            totalPlanned += info.getPlannedAmount();
+                    }
+                        monthlyForm.setTotalActual(totalActual);
+                        monthlyForm.setTotalPlanned(totalPlanned);
                 }
+            }
+                
             } catch (DgException ex) {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.monthlyview.unableLoadFundingDetails"));
                 saveErrors(request, errors);
@@ -124,7 +156,7 @@ public class ViewMonthlyInfo extends TilesAction {
             }
             monthlyForm.setMonthlyInfoList(monthlyInfos);
 
-        }
+        
 
 
 

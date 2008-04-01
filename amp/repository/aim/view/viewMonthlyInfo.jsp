@@ -698,6 +698,27 @@ property="perspectives" value="code" label="name"/>
                                                                                 
                                                                                 
                                                                             </logic:iterate>
+                                                                            <tr valign="top" class="note">
+                                                                                <c:if test="${aimMonthlyInfoForm.transactionType!=4}">
+                                                                                    <td colspan="2">
+                                                                                </c:if>
+                                                                                 <c:if test="${aimMonthlyInfoForm.transactionType==4}">
+                                                                                    <td>
+                                                                                </c:if>
+														
+															<digi:trn key="aim:total">Total</digi:trn>
+														</td>
+														<td>
+															<div align="right">
+																<bean:write name="aimMonthlyInfoForm" property="totalPlanned" format="#.##"/>
+															</div>
+														</td>
+														<td>
+															<div align="right">
+																<bean:write name="aimMonthlyInfoForm" property="totalActual" format="#.##"/>
+															</div>
+														</td>
+									</tr>
                                                                             
                                                                         </logic:notEmpty>
                                                                         

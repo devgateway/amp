@@ -829,6 +829,21 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 			                           			</logic:equal>
 
 														</logic:iterate>
+                                                                                                                      <tr valign="top" class="note">
+														<td colspan="2">
+															<digi:trn key="aim:total">Total</digi:trn>
+														</td>
+														<!--td>
+															<div align="right">
+																<bean:write name="aimQuarterlyInfoForm" property="totalPlanned" />
+															</div>
+														</td-->
+														<td>
+															<div align="right">
+																<bean:write name="aimQuarterlyInfoForm" property="totalActual" />
+															</div>
+														</td>
+													</tr>
 
 														</logic:notEmpty>
 
@@ -1033,6 +1048,21 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 																</logic:equal>
 
 															</logic:iterate>
+                                                                                                                         <tr valign="top" class="note">
+														<td colspan="2">
+															<digi:trn key="aim:total">Total</digi:trn>
+														</td>
+														<!--td>
+															<div align="right">
+																<bean:write name="aimQuarterlyInfoForm" property="totalPlanned" />
+															</div>
+														</td-->
+														<td>
+															<div align="right">
+																<bean:write name="aimQuarterlyInfoForm" property="totalActual" />
+															</div>
+														</td>
+													</tr>
 
 														</logic:notEmpty>
 

@@ -762,8 +762,103 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 																		</td>
 	</feature:display>
 																	</tr>
+                                                                                                                                      											</logic:iterate>
+                                                                                                                                                                                                                            <tr valign="top">
 
-																</logic:iterate>
+						                            	<td colspan="2">
+
+						                            		<span class="note">
+
+																		<FONT color="blue">*</FONT>
+
+			         				                   		<digi:trn key="aim:total">Total</digi:trn>
+
+			                     			       		</span>
+
+			                            				</td>
+
+					                              	<td>
+
+																	<div align="right">
+
+																		<span class="note">
+
+																			<bean:write name="aimQuarterlyComparisonsForm" property="totalActualCommitment" />
+
+																		</span>
+
+																	</div>
+
+															  </td>
+
+   <feature:display name="Disbursement Orders" module="Funding"> 	<td>
+                                                                                                                                       
+
+																	<div align="right">
+
+																		<span class="note">
+
+																			<bean:write name="aimQuarterlyComparisonsForm" property="totalDisbOrder" />
+
+																		</span>
+
+																	</div>
+                                                                                                                                       
+
+																</td>
+
+   </feature:display>
+
+
+			      		                        	<td>
+
+																	<div align="right">
+
+																		<span class="note">
+
+																			<bean:write name="aimQuarterlyComparisonsForm" property="totalPlannedDisbursement" />
+
+																		</span>
+
+																	</div>
+
+															  </td>
+
+			                     			        	<td>
+
+																	<div align="right">
+
+																		<span class="note">
+
+																			<bean:write name="aimQuarterlyComparisonsForm" property="totalActualDisbursement" />
+
+																		</span>
+
+																	</div>
+
+															  </td>
+
+
+			      		                        	<feature:display module="Funding" name="Expenditures">
+                                                    <td>
+
+																	<div align="right">
+
+																		<span class="note">
+
+																			<bean:write name="aimQuarterlyComparisonsForm" property="totalActualExpenditure" />
+
+																		</span>
+
+																	</div>
+
+													  </td></tr>
+</feature:display>
+			      			                      
+
+			               			    
+
+					
 
 															</logic:notEmpty>
 
@@ -1122,6 +1217,102 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 							            						</tr>
 
 							            					</logic:iterate>
+                                                                                                            <tr valign="top">
+
+						                            	<td>
+
+						                            		<span class="note">
+
+																		<FONT color="blue">*</FONT>
+
+			         				                   		<digi:trn key="aim:total">Total</digi:trn>
+
+			                     			       		</span>
+
+			                            				</td>
+
+					                              	<td>
+
+																	<div align="right">
+
+																		<span class="note">
+
+																			<bean:write name="aimQuarterlyComparisonsForm" property="totalActualCommitment" />
+
+																		</span>
+
+																	</div>
+
+															  </td>
+
+   <feature:display name="Disbursement Orders" module="Funding"> 	<td>
+                                                                                                                                       
+
+																	<div align="right">
+
+																		<span class="note">
+
+																			<bean:write name="aimQuarterlyComparisonsForm" property="totalDisbOrder" />
+
+																		</span>
+
+																	</div>
+                                                                                                                                       
+
+																</td>
+
+   </feature:display>
+
+
+			      		                        	<td>
+
+																	<div align="right">
+
+																		<span class="note">
+
+																			<bean:write name="aimQuarterlyComparisonsForm" property="totalPlannedDisbursement" />
+
+																		</span>
+
+																	</div>
+
+															  </td>
+
+			                     			        	<td>
+
+																	<div align="right">
+
+																		<span class="note">
+
+																			<bean:write name="aimQuarterlyComparisonsForm" property="totalActualDisbursement" />
+
+																		</span>
+
+																	</div>
+
+															  </td>
+
+
+			      		                        	<feature:display module="Funding" name="Expenditures">
+                                                    <td>
+
+																	<div align="right">
+
+																		<span class="note">
+
+																			<bean:write name="aimQuarterlyComparisonsForm" property="totalActualExpenditure" />
+
+																		</span>
+
+																	</div>
+
+													  </td></tr>
+</feature:display>
+			      			                      
+
+			               			    
+
+					
 
 											            </logic:notEmpty>
 

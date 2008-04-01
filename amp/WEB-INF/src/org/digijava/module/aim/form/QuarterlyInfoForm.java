@@ -16,6 +16,24 @@ public class QuarterlyInfoForm extends DetailedInfoForm
 	private Collection discrepancies;
 	private Collection fiscalYears;
 	private long fiscalCalId;
+        private String totalPlanned ;
+
+    public String getTotalActual() {
+        return totalActual;
+    }
+
+    public void setTotalActual(String totalActual) {
+        this.totalActual = totalActual;
+    }
+
+    public String getTotalPlanned() {
+        return totalPlanned;
+    }
+
+    public void setTotalPlanned(String totalPlanned) {
+        this.totalPlanned = totalPlanned;
+    }
+	private String totalActual ;
 	
 	public Collection getDiscrepancies() {
 		return discrepancies;

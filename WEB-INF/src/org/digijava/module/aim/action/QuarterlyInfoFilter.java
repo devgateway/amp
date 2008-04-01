@@ -31,6 +31,7 @@ import org.digijava.module.aim.helper.TabColors;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.TotalsQuarterly;
 import org.digijava.module.aim.helper.YearUtil;
+import org.digijava.module.aim.helper.YearlyInfoWorker;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -128,6 +129,13 @@ public class QuarterlyInfoFilter extends TilesAction	{
                                         formBean.setTotalDisbOrdered(tq.getTotalDisbOrdered());
 					formBean.setTotalUnExpended(tq.getTotalUnExpended());
 					formBean.setTotalRemaining(tq.getTotalRemaining());
+                                        Collection yearlyInfo = YearlyInfoWorker.getYearlyInfo(fp);
+                                        String strTotalPlanned = YearlyInfoWorker.getTotalYearly(
+							yearlyInfo, Constants.PLANNED);
+					formBean.setTotalPlanned(strTotalPlanned);
+					String strTotalActual = YearlyInfoWorker.getTotalYearly(
+							yearlyInfo, Constants.ACTUAL);
+					formBean.setTotalActual(strTotalActual);
 				}
 			}
 		}

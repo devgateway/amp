@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.QuarterlyComparisonsForm;
+import org.digijava.module.aim.helper.AllTotals;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CommonWorker;
 import org.digijava.module.aim.helper.Constants;
@@ -25,6 +26,7 @@ import org.digijava.module.aim.helper.QuarterlyComparisonsWorker;
 import org.digijava.module.aim.helper.QuarterlyDiscrepancyAllWorker;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.YearUtil;
+import org.digijava.module.aim.helper.YearlyComparisonsWorker;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -106,6 +108,15 @@ public class QuarterlyComparisonsFilter extends Action	{
 				Collection c = QuarterlyComparisonsWorker.getQuarterlyComparisons(fp);
 				if ( c.size() != 0 )
 					formBean.setQuarterlyComparisons(c) ;
+                                 Collection colYearly = YearlyComparisonsWorker.getYearlyComparisons(fp);
+				if ( colYearly.size() > 0 )	{
+					AllTotals allTotals = YearlyComparisonsWorker.getAllTotals(colYearly);
+					formBean.setTotalActualCommitment(allTotals.getTotalActualCommitment());
+					formBean.setTotalPlannedDisbursement(allTotals.getTotalPlannedDisbursement());
+					formBean.setTotalActualDisbursement(allTotals.getTotalActualDisbursement());
+					formBean.setTotalActualExpenditure(allTotals.getTotalActualExpenditure());
+                                        formBean.setTotalDisbOrder(allTotals.getTotalDisbOrder());
+				}
 			}
 		}
 		return null;

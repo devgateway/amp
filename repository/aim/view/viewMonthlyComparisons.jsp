@@ -712,6 +712,97 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 																	</tr>
 
 																</logic:iterate>
+                                                                                                                                 <tr valign="top">
+
+						                            	<td colspan="2">
+
+						                            		<span class="note">
+
+																		<FONT color="blue">*</FONT>
+
+			         				                   		<digi:trn key="aim:total">Total</digi:trn>
+
+			                     			       		</span>
+
+			                            				</td>
+
+					                              	<td>
+
+																	<div align="right">
+
+																		<span class="note">
+
+																			<bean:write name="aimMonthlyInfoForm" property="totalActualCommitment" format="#.##"/>
+
+																		</span>
+
+																	</div>
+
+															  </td>
+
+   <feature:display name="Disbursement Orders" module="Funding"> 	<td>
+                                                                                                                                       
+
+																	<div align="right">
+
+																		<span class="note">
+
+																			<bean:write name="aimMonthlyInfoForm" property="totalDisbOrder" format="#.##" />
+
+																		</span>
+
+																	</div>
+                                                                                                                                       
+
+																</td>
+
+   </feature:display>
+
+
+			      		                        	<td>
+
+																	<div align="right">
+
+																		<span class="note">
+
+																			<bean:write name="aimMonthlyInfoForm" property="totalPlannedDisbursement" format="#.##" />
+
+																		</span>
+
+																	</div>
+
+															  </td>
+
+			                     			        	<td>
+
+																	<div align="right">
+
+																		<span class="note">
+
+																			<bean:write name="aimMonthlyInfoForm" property="totalActualDisbursement" format="#.##" />
+
+																		</span>
+
+																	</div>
+
+															  </td>
+
+
+			      		                        	<feature:display module="Funding" name="Expenditures">
+                                                    <td>
+
+																	<div align="right">
+
+																		<span class="note">
+
+																			<bean:write name="aimMonthlyInfoForm" property="totalActualExpenditure" format="#.##"/>
+
+																		</span>
+
+																	</div>
+
+													  </td></tr>
+                                                                                                   </feature:display>
 
 															</logic:notEmpty>
 

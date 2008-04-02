@@ -15,6 +15,20 @@
 
 <script language="JavaScript">
 	<!--
+    function addDefaultProgram() {
+      <digi:context name="selPrg" property="context/module/moduleinstance/addProgram.do?edit=true"/>
+      var urlParams;
+      var defaultProgramId = document.getElementsByName("defaultProgramId")[0];
+
+      urlParams="<%=selPrg%>&themeid="+defaultProgramId.value+"&op=add";
+
+      document.aimEditActivityForm.action = urlParams;
+      document.aimEditActivityForm.target=window.opener.name;
+      document.aimEditActivityForm.submit();
+      window.close();
+      return true;
+    }
+
     function addProgram() {
       <digi:context name="selPrg" property="context/module/moduleinstance/addProgram.do?edit=true"/>
       var prgSels=document.getElementsByName("selPrograms");
@@ -125,6 +139,8 @@ Default Program
 													test="${aimEditActivityForm.nationalSetting.defaultHierarchy!=null}">
 													<c:out value="${defaultProgram}" />:&nbsp;<c:out
 														value="${aimEditActivityForm.nationalSetting.defaultHierarchy.name}" />
+														<html:hidden property="defaultProgramId" value="${aimEditActivityForm.nationalSetting.defaultHierarchy.ampThemeId}"/>
+														<c:set var="enableDefaultProgram" value="true" />
 												</c:when>
 												<c:otherwise>
 													<c:out value="${noDefaultProgram}" />
@@ -140,6 +156,8 @@ Default Program
 													test="${aimEditActivityForm.primarySetting.defaultHierarchy!=null}">
 													<c:out value="${defaultProgram}" />:&nbsp;<c:out
 														value="${aimEditActivityForm.primarySetting.defaultHierarchy.name}" />
+														<html:hidden property="defaultProgramId" value="${aimEditActivityForm.primarySetting.defaultHierarchy.ampThemeId}"/>
+														<c:set var="enableDefaultProgram" value="true" />
 												</c:when>
 												<c:otherwise>
 													<c:out value="${noDefaultProgram}" />
@@ -156,6 +174,8 @@ Default Program
 													test="${aimEditActivityForm.secondarySetting.defaultHierarchy!=null}">
 													<c:out value="${defaultProgram}" />:&nbsp;<c:out
 														value="${aimEditActivityForm.secondarySetting.defaultHierarchy.name}" />
+														<html:hidden property="defaultProgramId" value="${aimEditActivityForm.secondarySetting.defaultHierarchy.ampThemeId}"/>
+														<c:set var="enableDefaultProgram" value="true" />
 												</c:when>
 												<c:otherwise>
 													<c:out value="${noDefaultProgram}" />
@@ -179,7 +199,7 @@ Default Program
 												property="selPrograms" onchange="reloadProgram(this)"
 												styleClass="inp-text">
 												<option value="-1"><digi:trn
-												key="aim:selectProgramOpt">-Select Program-</digi:trn></option>
+													key="aim:selectProgramOpt">-Select Program-</digi:trn></option>
 												<html:optionsCollection name="prgLevels" value="ampThemeId"
 													label="name" />
 											</html:select></td>
@@ -191,6 +211,7 @@ Default Program
 										<td align="center" colspan=2>
 										<table cellPadding=5>
 											<tr>
+
 												<td><html:button styleClass="dr-menu"
 													property="submitButton" onclick="addProgram()">
 													<digi:trn key="btn:add">Add</digi:trn>
@@ -204,6 +225,16 @@ Default Program
 													<digi:trn key="btn:close">Close</digi:trn>
 												</html:button></td>
 											</tr>
+											<c:if test="${enableDefaultProgram != null}">
+											<tr>
+												<td colspan="3" align="center">
+												<html:button styleClass="dr-menu"
+													property="submitButton" onclick="addDefaultProgram()">
+													<digi:trn key="btn:addDefault">Add default program</digi:trn>
+												</html:button>
+												</td>	
+											</tr>										
+											</c:if>
 										</table>
 										</td>
 									</tr>

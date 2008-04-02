@@ -392,19 +392,26 @@ function remProgram(programType) {
 		var val=document.getElementsByName('selectedSPrograms');
 	}		
 		if(val!=null ){
-			for(var i=0;i<val.length;I++){
+			var isProgramSelected = false;
+			for(var i=0;i<val.length;i++){
 				if(val[i]!=null && val[i].checked){
-					<digi:context name="tremProgram" property="context/module/moduleinstance/remProgram.do?edit=true" />
-		            var url="<%=tremProgram %>&programType="+programType;
-			  		document.aimEditActivityForm.action = url;
-		            document.aimEditActivityForm.target = "_self"
-					document.aimEditActivityForm.submit();
-		            return true;
-				} else {
-					alert('Please select a program to remove');
-					return false;
+					isProgramSelected = true;
 				}
 			}			
+			if(!isProgramSelected)
+			{
+				alert('Please select a program to remove');
+				return false;
+			}
+			else
+			{
+				<digi:context name="tremProgram" property="context/module/moduleinstance/remProgram.do?edit=true" />
+	            var url="<%=tremProgram %>&programType="+programType;
+		  		document.aimEditActivityForm.action = url;
+	            document.aimEditActivityForm.target = "_self"
+				document.aimEditActivityForm.submit();
+	            return true;
+			}
 		}		
 }
 -->

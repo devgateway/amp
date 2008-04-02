@@ -119,7 +119,7 @@
 	                    				rowsPerPage: 7,
 	                    				pageCurrent: 1,
 	                    				startRecordIndex: 1,
-								        pageLinksLength: 2
+								        pageLinksLength: 5
 	                    			
 	                			};
 		

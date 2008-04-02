@@ -11,7 +11,7 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
-<tr class=newClsTableL1SubTotalEndSectionLabel><td colspan='<bean:write name="columnReport" property="totalDepth"/>'>
+<tr class=newClsTableL1SubTotalEndSectionLabel height="20px;"><td colspan='<bean:write name="columnReport" property="totalDepth"/>'>
 <b>
 	<digi:trn key="rep:popu:${columnReport.columnIdTrn}">${columnReport.columnId}</digi:trn>
 	<% if (!("".equals(columnReport.getRepName()))){ %>

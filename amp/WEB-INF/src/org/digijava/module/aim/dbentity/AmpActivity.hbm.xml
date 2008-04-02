@@ -68,6 +68,24 @@
 		<property name="mfdCntOrganization" column="mfd_cont_organization" type="java.lang.String"/>
 		<property name="mfdCntPhoneNumber" column="mfd_cont_phone_number" type="java.lang.String"/>
 		<property name="mfdCntFaxNumber" column="mfd_cont_fax_number" type="java.lang.String"/>
+		
+		<!-- Project coordinator contact information -->
+		<property name="prjCoFirstName" column="prj_co_first_name" type="java.lang.String"/>
+		<property name="prjCoLastName" column="prj_co_last_name" type="java.lang.String"/>
+		<property name="prjCoEmail" column="prj_co_email" type="java.lang.String"/>
+		<property name="prjCoTitle" column="prj_co_title" type="java.lang.String"/>
+		<property name="prjCoOrganization" column="prj_co_organization" type="java.lang.String"/>
+		<property name="prjCoPhoneNumber" column="prj_co_phone_number" type="java.lang.String"/>
+		<property name="prjCoFaxNumber" column="prj_co_fax_number" type="java.lang.String"/>
+		
+		<!-- Sector Ministry contact information -->
+		<property name="secMiCntFirstName" column="sec_min_first_name" type="java.lang.String"/>
+		<property name="secMiCntLastName" column="sec_min_last_name" type="java.lang.String"/>
+		<property name="secMiCntEmail" column="sec_min_email" type="java.lang.String"/>
+		<property name="secMiCntTitle" column="sec_min_title" type="java.lang.String"/>
+		<property name="secMiCntOrganization" column="sec_min_organization" type="java.lang.String"/>
+		<property name="secMiCntPhoneNumber" column="sec_min_phone_number" type="java.lang.String"/>
+		<property name="secMiCntFaxNumber" column="sec_min_fax_number" type="java.lang.String"/>
 
 
 

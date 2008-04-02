@@ -995,6 +995,80 @@ function commentWin(val) {
 																</TD>
 															</TR>
 														</feature:display>
+														<feature:display name="Project Coordinator"
+															module="Contact Information">
+															<TR>
+																<TD>
+																<TABLE width="100%" cellPadding=3 cellSpacing=1
+																	vAlign="top" align="top" bgcolor="#aaaaaa">
+																	<TR>
+																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																			height=10
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																		<b><digi:trn
+																			key="aim:projectCoordinator">
+																				Project Coordinator
+																			</digi:trn></b></TD>
+																	</TR>
+																	<field:display feature="Project Coordinator"
+																		name="Project Coordinator First Name">
+																		<TR>
+																			<TD bgcolor="#ffffff"><i><digi:trn
+																				key="aim:contactPersonName">Name</digi:trn></i>: <c:out
+																				value="${activity.prjCoFirstName}" />&nbsp; <c:out
+																				value="${activity.prjCoLastName}" /></TD>
+																		</TR>
+																	</field:display>
+																	<field:display feature="Project Coordinator"
+																		name="Project Coordinator Email">
+																		<TR>
+																			<TD bgcolor="#ffffff"><i><digi:trn
+																				key="aim:contactPersonEmail">Email</digi:trn></i>: <c:set
+																				var="mailTo" value="mailto:${activity.prjCoEmail}" /> <a
+																				href="mailto:${activity.prjCoEmail}">${activity.prjCoEmail}</a></TD>
+																		</TR>
+																	</field:display>
+																</TABLE>
+																</TD>
+															</TR>
+														</feature:display>
+														<feature:display name="Sector Ministry Contact"
+															module="Contact Information">
+															<TR>
+																<TD>
+																<TABLE width="100%" cellPadding=3 cellSpacing=1
+																	vAlign="top" align="top" bgcolor="#aaaaaa">
+																	<TR>
+																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG
+																			height=10
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																		<b><digi:trn
+																			key="aim:sectorMinistryCnt">
+																				Sector Ministry Contact
+																			</digi:trn></b></TD>
+																	</TR>
+																	<field:display feature="Sector Ministry Contact"
+																		name="Sector Ministry Contact First Name">
+																		<TR>
+																			<TD bgcolor="#ffffff"><i><digi:trn
+																				key="aim:contactPersonName">Name</digi:trn></i>: <c:out
+																				value="${activity.secMiCntFirstName}" />&nbsp; <c:out
+																				value="${activity.secMiCntLastName}" /></TD>
+																		</TR>
+																	</field:display>
+																	<field:display feature="Sector Ministry Contact"
+																		name="Sector Ministry Contact Email">
+																		<TR>
+																			<TD bgcolor="#ffffff"><i><digi:trn
+																				key="aim:contactPersonEmail">Email</digi:trn></i>: <c:set
+																				var="mailTo" value="mailto:${activity.secMiCntEmail}" /> <a
+																				href="mailto:${activity.secMiCntEmail}">${activity.secMiCntEmail}</a></TD>
+																		</TR>
+																	</field:display>
+																</TABLE>
+																</TD>
+															</TR>
+														</feature:display>
 													</module:display>
 													<c:if test="${!empty activity.accessionInstrument}">
 														<TR>

@@ -1916,6 +1916,32 @@
 											<c:out value="${aimEditActivityForm.mfdCntEmail}"/>										</td>
 									</tr>
 									</feature:display>
+									<feature:display name="Project Coordinator" module="Contact Information">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap">
+											<b>
+											<digi:trn key="aim:projectCoordinator">
+										    Project Coordinator</digi:trn>	
+									  </b>									</td>
+										<td bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.prjCoFirstName}"/>
+											<c:out value="${aimEditActivityForm.prjCoLastName}"/> -
+											<c:out value="${aimEditActivityForm.prjCoEmail}"/>										</td>
+									</tr>
+									</feature:display>
+									<feature:display name="Sector Ministry Contact" module="Contact Information">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap">
+											<b>
+											<digi:trn key="aim:sectorMinistryCnt">
+										    Sector Ministry Contact</digi:trn>	
+									  </b>									</td>
+										<td bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.secMiCntFirstName}"/>
+											<c:out value="${aimEditActivityForm.secMiCntLastName}"/> -
+											<c:out value="${aimEditActivityForm.secMiCntEmail}"/>										</td>
+									</tr>
+									</feature:display>
 									</module:display>
 							
 									

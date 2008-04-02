@@ -111,6 +111,24 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	private String mfdCntOrganization;
 	private String mfdCntPhoneNumber;
 	private String mfdCntFaxNumber;
+	
+	// Project Coordinator contact information
+	private String prjCoFirstName;
+	private String prjCoLastName;
+	private String prjCoEmail;
+	private String prjCoTitle;
+	private String prjCoOrganization;
+	private String prjCoPhoneNumber;
+	private String prjCoFaxNumber;
+	
+	// Sector Ministry contact information
+	private String secMiCntFirstName;
+	private String secMiCntLastName;
+	private String secMiCntEmail;
+	private String secMiCntTitle;
+	private String secMiCntOrganization;
+	private String secMiCntPhoneNumber;
+	private String secMiCntFaxNumber;
 
 	private String comments;
 
@@ -1377,6 +1395,118 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setContractDetails(String contractDetails) {
 		this.contractDetails = contractDetails;
+	}
+
+	public String getPrjCoFirstName() {
+		return prjCoFirstName;
+	}
+
+	public void setPrjCoFirstName(String prjCoFirstName) {
+		this.prjCoFirstName = prjCoFirstName;
+	}
+
+	public String getPrjCoLastName() {
+		return prjCoLastName;
+	}
+
+	public void setPrjCoLastName(String prjCoLastName) {
+		this.prjCoLastName = prjCoLastName;
+	}
+
+	public String getPrjCoEmail() {
+		return prjCoEmail;
+	}
+
+	public void setPrjCoEmail(String prjCoEmail) {
+		this.prjCoEmail = prjCoEmail;
+	}
+
+	public String getPrjCoTitle() {
+		return prjCoTitle;
+	}
+
+	public void setPrjCoTitle(String prjCoTitle) {
+		this.prjCoTitle = prjCoTitle;
+	}
+
+	public String getPrjCoOrganization() {
+		return prjCoOrganization;
+	}
+
+	public void setPrjCoOrganization(String prjCoOrganization) {
+		this.prjCoOrganization = prjCoOrganization;
+	}
+
+	public String getPrjCoPhoneNumber() {
+		return prjCoPhoneNumber;
+	}
+
+	public void setPrjCoPhoneNumber(String prjCoPhoneNumber) {
+		this.prjCoPhoneNumber = prjCoPhoneNumber;
+	}
+
+	public String getPrjCoFaxNumber() {
+		return prjCoFaxNumber;
+	}
+
+	public void setPrjCoFaxNumber(String prjCoFaxNumber) {
+		this.prjCoFaxNumber = prjCoFaxNumber;
+	}
+
+	public String getSecMiCntFirstName() {
+		return secMiCntFirstName;
+	}
+
+	public void setSecMiCntFirstName(String secMiCntFirstName) {
+		this.secMiCntFirstName = secMiCntFirstName;
+	}
+
+	public String getSecMiCntLastName() {
+		return secMiCntLastName;
+	}
+
+	public void setSecMiCntLastName(String secMiCntLastName) {
+		this.secMiCntLastName = secMiCntLastName;
+	}
+
+	public String getSecMiCntEmail() {
+		return secMiCntEmail;
+	}
+
+	public void setSecMiCntEmail(String secMiCntEmail) {
+		this.secMiCntEmail = secMiCntEmail;
+	}
+
+	public String getSecMiCntTitle() {
+		return secMiCntTitle;
+	}
+
+	public void setSecMiCntTitle(String secMiCntTitle) {
+		this.secMiCntTitle = secMiCntTitle;
+	}
+
+	public String getSecMiCntOrganization() {
+		return secMiCntOrganization;
+	}
+
+	public void setSecMiCntOrganization(String secMiCntOrganization) {
+		this.secMiCntOrganization = secMiCntOrganization;
+	}
+
+	public String getSecMiCntPhoneNumber() {
+		return secMiCntPhoneNumber;
+	}
+
+	public void setSecMiCntPhoneNumber(String secMiCntPhoneNumber) {
+		this.secMiCntPhoneNumber = secMiCntPhoneNumber;
+	}
+
+	public String getSecMiCntFaxNumber() {
+		return secMiCntFaxNumber;
+	}
+
+	public void setSecMiCntFaxNumber(String secMiCntFaxNumber) {
+		this.secMiCntFaxNumber = secMiCntFaxNumber;
 	}
 
 }

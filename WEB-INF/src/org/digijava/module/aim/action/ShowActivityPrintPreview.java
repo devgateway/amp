@@ -936,6 +936,23 @@ public class ShowActivityPrintPreview
                 eaForm.setMfdCntOrganization(activity.getMfdCntOrganization());
                 eaForm.setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
                 eaForm.setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
+                
+                eaForm.setPrjCoFirstName(activity.getPrjCoFirstName());
+                eaForm.setPrjCoLastName(activity.getPrjCoLastName());
+                eaForm.setPrjCoEmail(activity.getPrjCoEmail());
+                eaForm.setPrjCoTitle(activity.getPrjCoTitle());
+                eaForm.setPrjCoOrganization(activity.getPrjCoOrganization());
+                eaForm.setPrjCoPhoneNumber(activity.getPrjCoPhoneNumber());
+                eaForm.setPrjCoFaxNumber(activity.getPrjCoFaxNumber());
+                
+                eaForm.setSecMiCntFirstName(activity.getSecMiCntFirstName());
+                eaForm.setSecMiCntLastName(activity.getSecMiCntLastName());
+                eaForm.setSecMiCntEmail(activity.getSecMiCntEmail());
+                eaForm.setSecMiCntTitle(activity.getSecMiCntTitle());
+                eaForm.setSecMiCntOrganization(activity.getSecMiCntOrganization());
+                eaForm.setSecMiCntPhoneNumber(activity.getSecMiCntPhoneNumber());
+                eaForm.setSecMiCntFaxNumber(activity.getSecMiCntFaxNumber());
+                
                 if(activity.getCondition()!=null){
                 	 eaForm.setConditions(activity.getCondition().trim());
                 }
@@ -1151,6 +1168,22 @@ public class ShowActivityPrintPreview
 				eaForm.setMfdCntOrganization(null);
 				eaForm.setMfdCntPhoneNumber(null);
 				eaForm.setMfdCntFaxNumber(null);
+				
+				eaForm.setPrjCoFirstName(null);
+				eaForm.setPrjCoLastName(null);
+				eaForm.setPrjCoEmail(null);
+				eaForm.setPrjCoTitle(null);
+				eaForm.setPrjCoOrganization(null);
+				eaForm.setPrjCoPhoneNumber(null);
+				eaForm.setPrjCoFaxNumber(null);
+				
+				eaForm.setSecMiCntFirstName(null);
+				eaForm.setSecMiCntLastName(null);
+				eaForm.setSecMiCntEmail(null);
+				eaForm.setSecMiCntTitle(null);
+				eaForm.setSecMiCntOrganization(null);
+				eaForm.setSecMiCntPhoneNumber(null);
+				eaForm.setSecMiCntFaxNumber(null);
 				
                 eaForm.setConditions(null);
                 eaForm.setActAthFirstName(null);

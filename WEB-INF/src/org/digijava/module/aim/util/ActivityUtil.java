@@ -337,6 +337,22 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         oldActivity.setMfdCntOrganization(activity.getMfdCntOrganization());
         oldActivity.setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
         oldActivity.setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
+        
+        oldActivity.setPrjCoFirstName(activity.getPrjCoFirstName());
+        oldActivity.setPrjCoLastName(activity.getPrjCoLastName());
+        oldActivity.setPrjCoTitle(activity.getPrjCoTitle());
+        oldActivity.setPrjCoOrganization(activity.getPrjCoOrganization());
+        oldActivity.setPrjCoPhoneNumber(activity.getPrjCoPhoneNumber());
+        oldActivity.setPrjCoEmail(activity.getPrjCoEmail());
+        oldActivity.setPrjCoFaxNumber(activity.getPrjCoFaxNumber());
+        
+        oldActivity.setSecMiCntFirstName(activity.getSecMiCntFirstName());
+        oldActivity.setSecMiCntLastName(activity.getSecMiCntLastName());
+        oldActivity.setSecMiCntEmail(activity.getSecMiCntEmail());
+        oldActivity.setSecMiCntOrganization(activity.getSecMiCntOrganization());
+        oldActivity.setSecMiCntTitle(activity.getSecMiCntTitle());
+        oldActivity.setSecMiCntPhoneNumber(activity.getSecMiCntPhoneNumber());
+        oldActivity.setSecMiCntFaxNumber(activity.getSecMiCntFaxNumber());
 
 //				oldActivity.setLevel(activity.getLevel()); //TO BE DELETED
         oldActivity.setModality(activity.getModality());
@@ -1344,6 +1360,22 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setMfdCntOrganization(ampActivity.getMfdCntOrganization());
         activity.setMfdCntPhoneNumber(ampActivity.getMfdCntPhoneNumber());
         activity.setMfdCntFaxNumber(ampActivity.getMfdCntFaxNumber());
+        
+        activity.setPrjCoFirstName(ampActivity.getPrjCoFirstName());
+        activity.setPrjCoLastName(ampActivity.getPrjCoLastName());
+        activity.setPrjCoEmail(ampActivity.getPrjCoEmail());
+        activity.setPrjCoTitle(ampActivity.getPrjCoTitle());
+        activity.setPrjCoOrganization(ampActivity.getPrjCoOrganization());
+        activity.setPrjCoPhoneNumber(ampActivity.getPrjCoPhoneNumber());
+        activity.setPrjCoFaxNumber(ampActivity.getPrjCoFaxNumber());
+        
+        activity.setSecMiCntFirstName(ampActivity.getSecMiCntFirstName());
+        activity.setSecMiCntLastName(ampActivity.getSecMiCntLastName());
+        activity.setSecMiCntEmail(ampActivity.getSecMiCntEmail());
+        activity.setSecMiCntTitle(ampActivity.getSecMiCntTitle());
+        activity.setSecMiCntOrganization(ampActivity.getSecMiCntOrganization());
+        activity.setSecMiCntPhoneNumber(ampActivity.getSecMiCntPhoneNumber());
+        activity.setSecMiCntFaxNumber(ampActivity.getSecMiCntFaxNumber());
 
         activity.setEmail(ampActivity.getEmail());
         activity.setLanguage(ampActivity.getLanguage());
@@ -1596,6 +1628,22 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setMfdCntOrganization(ampAct.getMfdCntOrganization());
         activity.setMfdCntPhoneNumber(ampAct.getMfdCntPhoneNumber());
         activity.setMfdCntFaxNumber(ampAct.getMfdCntFaxNumber());
+        
+        activity.setPrjCoFirstName(ampAct.getPrjCoFirstName());
+        activity.setPrjCoLastName(ampAct.getPrjCoLastName());
+        activity.setPrjCoEmail(ampAct.getPrjCoEmail());
+        activity.setPrjCoTitle(ampAct.getPrjCoTitle());
+        activity.setPrjCoOrganization(ampAct.getPrjCoOrganization());
+        activity.setPrjCoPhoneNumber(ampAct.getPrjCoPhoneNumber());
+        activity.setPrjCoFaxNumber(ampAct.getPrjCoFaxNumber());
+        
+        activity.setSecMiCntFirstName(ampAct.getSecMiCntFirstName());
+        activity.setSecMiCntLastName(ampAct.getSecMiCntLastName());
+        activity.setSecMiCntEmail(ampAct.getSecMiCntEmail());
+        activity.setSecMiCntTitle(ampAct.getSecMiCntTitle());
+        activity.setSecMiCntOrganization(ampAct.getSecMiCntOrganization());
+        activity.setSecMiCntPhoneNumber(ampAct.getSecMiCntPhoneNumber());
+        activity.setSecMiCntFaxNumber(ampAct.getSecMiCntFaxNumber());
 
         if (ampAct.getCreatedDate() != null) {
           activity.setCreatedDate(

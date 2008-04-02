@@ -752,6 +752,22 @@ public class SaveActivity extends Action {
 				activity.setMfdCntOrganization(eaForm.getMfdCntOrganization());
 				activity.setMfdCntFaxNumber(eaForm.getMfdCntFaxNumber());
 				activity.setMfdCntPhoneNumber(eaForm.getMfdCntPhoneNumber());
+				
+				activity.setPrjCoFirstName(eaForm.getPrjCoFirstName());
+				activity.setPrjCoLastName(eaForm.getPrjCoLastName());
+				activity.setPrjCoEmail(eaForm.getPrjCoEmail());
+				activity.setPrjCoTitle(eaForm.getPrjCoTitle());
+				activity.setPrjCoOrganization(eaForm.getPrjCoOrganization());
+				activity.setPrjCoPhoneNumber(eaForm.getPrjCoPhoneNumber());
+				activity.setPrjCoFaxNumber(eaForm.getPrjCoFaxNumber());
+				
+				activity.setSecMiCntFirstName(eaForm.getSecMiCntFirstName());
+				activity.setSecMiCntLastName(eaForm.getSecMiCntLastName());
+				activity.setSecMiCntEmail(eaForm.getSecMiCntEmail());
+				activity.setSecMiCntTitle(eaForm.getSecMiCntTitle());
+				activity.setSecMiCntOrganization(eaForm.getSecMiCntOrganization());
+				activity.setSecMiCntPhoneNumber(eaForm.getSecMiCntPhoneNumber());
+				activity.setSecMiCntFaxNumber(eaForm.getSecMiCntFaxNumber());
 
                 activity.setDraft(eaForm.getDraft());
 

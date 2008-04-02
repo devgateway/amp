@@ -1483,6 +1483,22 @@ public class EditActivity
           eaForm.setMfdCntOrganization(activity.getMfdCntOrganization());
           eaForm.setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
           eaForm.setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
+          
+          eaForm.setPrjCoFirstName(activity.getPrjCoFirstName());
+          eaForm.setPrjCoLastName(activity.getPrjCoLastName());
+          eaForm.setPrjCoEmail(activity.getPrjCoEmail());
+          eaForm.setPrjCoTitle(activity.getPrjCoTitle());
+          eaForm.setPrjCoOrganization(activity.getPrjCoOrganization());
+          eaForm.setPrjCoPhoneNumber(activity.getPrjCoPhoneNumber());
+          eaForm.setPrjCoFaxNumber(activity.getPrjCoFaxNumber());
+          
+          eaForm.setSecMiCntFirstName(activity.getSecMiCntFirstName());
+          eaForm.setSecMiCntLastName(activity.getSecMiCntLastName());
+          eaForm.setSecMiCntEmail(activity.getSecMiCntEmail());
+          eaForm.setSecMiCntTitle(activity.getSecMiCntTitle());
+          eaForm.setSecMiCntOrganization(activity.getSecMiCntOrganization());
+          eaForm.setSecMiCntPhoneNumber(activity.getSecMiCntPhoneNumber());
+          eaForm.setSecMiCntFaxNumber(activity.getSecMiCntFaxNumber());
 
 		  //TODO AMP-2579 !isPublicView was added to fix null pointer temporary.
           if (eaForm.getIsPreview() != 1 && !isPublicView) {

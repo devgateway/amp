@@ -26,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.Components;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.MTEFProjection;
@@ -4854,6 +4855,10 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		return totalCommitments;
 	}
 
+	public double getTotalCommitmentsAsDouble() {
+		return FormatHelper.parseDouble(totalCommitments) ;
+	}
+	
 	public void setTotalCommitments(String totalCommitments) {
 		this.totalCommitments = totalCommitments;
 	}

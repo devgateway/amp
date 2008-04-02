@@ -10,6 +10,8 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+
+<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
@@ -259,8 +261,9 @@ ${fn:replace(message,quote,escapedQuote)}
 																						</td></tr>
 																				</field:display>
 																		<tr><td><b>
-																		<font
-																		<c:if test="${aimEditActivityForm.totalCommitments < aimEditActivityForm.regionTotalDisb }">
+																		
+																		
+																		<c:if test="${aimEditActivityForm.totalCommitmentsAsDouble < aimEditActivityForm.regionTotalDisb }">
 																		 color="RED"
 																		</c:if>
 																		>

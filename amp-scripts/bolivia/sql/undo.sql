@@ -163,6 +163,10 @@ where not exists (select * from amp_activity act where act.amp_activity_id=actlo
 DELETE catval FROM amp_category_value AS catval, amp_category_class AS catclass
 where catval.amp_category_class_id=catclass.id  AND catclass.keyName ='financing_instrument'; 
 
+
+delete from amp_user_ext;
+delete from amp_organisation;
+
 COMMIT;
 
 

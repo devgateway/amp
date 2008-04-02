@@ -99,7 +99,7 @@ FROM sisfin_db.claves AS c,  AMP_SECTOR_SCHEME AS sch
 WHERE sch.sec_scheme_code='BOL_COMPO_IMP'  AND c.nomdato='cvetipcomp';
 
 
-/* import organizations */
+/* import organizations  from the table AGE, also there are more organizatins on the TABLE ENT*/
 
 select 'importing organisations';
 
@@ -141,6 +141,8 @@ UPDATE AMP_ORGANISATION AS org, sisfin_db.`age` AS o, AMP_ORG_GROUP AS aog
 SET org.org_grp_id=aog.amp_org_grp_id
 WHERE org.old_id=o.codage and aog.org_grp_code = 'ALEMA' and  o.cveorg = 'ALEM';
 
+
+/* import organizations  from the table ENT checking if were not already added from the table AGE */
 
 select 'importing executing Agencies';
 
@@ -272,23 +274,30 @@ set a.mofed_cnt_last_name=u.nombreusuario
 where a.old_id=c.numconv and c.codusu=u.codusu;
 
 
-/* mapping executing agencies (organizations) to activities */
+/* mapping executing agencies (organizations) to activities using the ENT-CONVENIO relation */
 select 'mapping executing agencies to activities';
 
 
-insert into amp_org_role
-(
-activity,
-organisation,
-role,
-percentage
-)
-select a.amp_activity_id, o.amp_org_id, ar.amp_role_id, m.porcpart
-from  sisfin_db.`conv_entejec` as m, amp_activity as a, amp_organisation as o , amp_role as ar
-where ar.role_code='EA' 
-and a.old_id=m.numconv 
-and o.old_id = m.codentejec 
-and not exists (select ag.codage from sisfin_db.age as ag where ag.codage=o.old_id);
+insert into amp_org_role (activity,organisation,role,percentage)
+select 
+	a.amp_activity_id, 
+	o.amp_org_id, 
+	ar.amp_role_id, 
+	m.porcpart
+from  
+	sisfin_db.`conv_entejec` as m, 
+	amp_activity as a, 
+	amp_organisation as o , 
+	amp_role as ar
+
+where 
+	ar.role_code='EA' 
+	and a.old_id=m.numconv 
+	and o.old_id = m.codentejec;
+--	and not exists (select ag.codage from sisfin_db.age as ag where ag.codage=o.old_id);
+
+
+
 
 /* importing issues */
 select 'importing issues 1';
@@ -734,5 +743,19 @@ where act.amp_id=con.numconv
 and prog.theme_code = concat('EBRP', substring(con.Cod_EBRP,2))
 and progset.name like 'National Plan Objective';
 
+/*clean duplicated agencies*/
+select 'cleaning duplicated agencies';
 
+  delete
+      from
+          amp_organisation 
+      where
+           name in
+                (
+                select table1.name from
+                (select count(*), name from amp_organisation group by name having count(*) > 1) as table1
+                )
+                and amp_org_id not in (select  organisation from amp_org_role  )
+                and amp_org_id not in (select amp_donor_org_id from amp_funding);
+                
 COMMIT;

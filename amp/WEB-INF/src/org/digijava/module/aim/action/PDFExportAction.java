@@ -32,6 +32,8 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -185,9 +187,17 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 			    translatedCurrentFilter=TranslatorWorker.translate("rep:pop:SelectedFilters",locale,siteId);
 			    translatedCurrentFilter=("".equalsIgnoreCase(translatedCurrentFilter))?"Currently Selected Filters":translatedCurrentFilter;
 			    
-			    
-			    translatedCurrency=TranslatorWorker.translate("aim:currency:" +((String) session.getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY)).toLowerCase().replaceAll(" ", ""),locale,siteId);
-			    translatedCurrency=("".equalsIgnoreCase(translatedCurrency))?((String) session.getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY)):translatedCurrency;
+                String currencyCode = (String) session.getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY);
+                if(currencyCode != null) {
+                    translatedCurrency=TranslatorWorker.translate("aim:currency:" + currencyCode.toLowerCase().replaceAll(" ", ""),locale,siteId);
+    			    translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
+                }
+                else
+                {
+                    translatedCurrency=TranslatorWorker.translate("aim:currency:" +Constants.DEFAULT_CURRENCY.toLowerCase().replaceAll(" ", ""),locale,siteId);
+                }
+                	
+
 			    
 			    
 			    translatedAmount=TranslatorWorker.translate("rep:pop:AllAmount",locale,siteId);

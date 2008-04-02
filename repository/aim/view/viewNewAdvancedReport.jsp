@@ -36,8 +36,8 @@
 <c:set var="rowIdx" value="<%=new Integer(0)%>" scope="request"/>
 
 
-<div align="center">
-<table  cellSpacing="0" cellPadding="0" width="99%" border="0" align="center">
+<div align="center" >
+<table  cellSpacing="0" cellPadding="0" width="100%" align="center">
 
 	<logic:notEqual name="widget" scope="request" value="true">
 	<logic:notEqual name="viewFormat" scope="request" value="print">
@@ -71,11 +71,11 @@
 <logic:notEqual name="widget" scope="request" value="true">
 
 	<tr>
-		<td align="left"><font size="+1"><digi:trn key="rep:pop:ReportName">Report Name:</digi:trn><b><bean:write
+		<td style="padding-left: 5px;padding-left: 5px;" align="left"><font size="+1"><digi:trn key="rep:pop:ReportName">Report Name:</digi:trn><b><bean:write
 			scope="session" name="reportMeta" property="name" /></b></font></td>
 	</tr>
 	<tr>
-		<td><digi:trn key="rep:pop:Description">Description:</digi:trn><i><bean:write scope="session" name="reportMeta"
+		<td style="padding-left: 5px;padding-left: 5px;"><digi:trn key="rep:pop:Description">Description:</digi:trn><i><bean:write scope="session" name="reportMeta"
 			property="reportDescription" /></i></td>
 	</tr>
 
@@ -83,7 +83,7 @@
 
 
 	<tr>
-		<td>
+		<td style="padding-left: 5px;padding-left: 5px;">
 		<div id="menucontainer">
 			<logic:notEmpty name="reportMeta" property="hierarchies">
 				<a style="cursor:pointer"
@@ -97,7 +97,7 @@
 		</td>
 	</tr>
 	<tr>
-			<td align="right">
+			<td align="right" style="padding-left: 5px;padding-left: 5px;">
 							<span  style="font-style:italic;color: red;font-family: Arial">
 								<c:set var="AllAmount">
 							<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
@@ -115,7 +115,7 @@
 		</tr>
 <logic:notEmpty name="reportMeta" property="hierarchies">
 		<tr>
-			<td>
+			<td style="padding-left: 5px;padding-left: 5px;">
 				<logic:notEmpty name="report" property="levelSorters">
 				<logic:iterate name="report" property="levelSorters" id="sorter" indexId="levelId">
 				<logic:present name="sorter">
@@ -129,7 +129,7 @@
 	</logic:notEmpty>
 
 	<tr>
-	<td width="500">
+	<td width="500" style="padding-left: 5px;padding-left: 5px;">
 	<digi:trn key="rep:pop:SelectedFilters">Currently Selected Filters:</digi:trn>
 		<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
 		<bean:define id="listable" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" toScope="request"/>
@@ -139,13 +139,11 @@
 		</logic:present>
 	</td>
 	</tr>
-	<tr>
-
-
-
 	<logic:notEqual name="report" property="totalUniqueRows" value="0">
 		<tr>
-			<td><!-- begin big report table -->
+			<td  style="padding-left: 5px;padding-left: 5px;">
+			
+			<!-- begin big report table -->
 			<c:set var="pageNumber" value="<%=new Integer(0)%>" scope="request"/>
 			<c:set var="paginar" value="<%=new Boolean(true)%>" scope="request"/>
 			<c:if test="${not empty param.pageNumber }">
@@ -166,6 +164,7 @@
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />
 			</table>
 		</logic:notEqual>
+		
 			<!-- end of big report table --></td>
 		</tr>
 		<tr>
@@ -187,7 +186,7 @@
 		</tr>
 		
 			<tr>
-			 <td>
+			 <td style="padding-left: 5px;padding-right: 5px">
 				<logic:notEqual name="viewFormat" value="print">
 				<digi:trn key="aim:pages">Pages :
 				
@@ -209,7 +208,7 @@
 						</c:otherwise>								
 					</c:choose>
 					</a>
-				|&nbsp
+				|
 				</c:forEach>
 				</logic:notEqual>
 			</td>

@@ -95,11 +95,21 @@ public class ActivityManager extends Action {
 			actForm.setPage(0);
 		}
 
-		for (Iterator<AmpActivity> iterator = allActivities.listIterator(idx);
-				iterator.hasNext() && i < pageSize; i++) {
-			pageList.add(iterator.next());
+		Double totalPages = 0.0;
+		if(pageSize != -1){
+			for (Iterator<AmpActivity> iterator = allActivities.listIterator(idx);
+					iterator.hasNext() && i < pageSize; i++) {
+				pageList.add(iterator.next());
+			}
+        	totalPages=Math.ceil(1.0*allActivities.size() / actForm.getPageSize());
 		}
-                Double totalPages=Math.ceil(1.0*allActivities.size() / actForm.getPageSize());
+		else{
+			for (Iterator<AmpActivity> iterator = allActivities.listIterator(idx);
+				iterator.hasNext(); i++) {
+				pageList.add(iterator.next());
+	       }
+			totalPages=1.0;       	
+        }
 
 		actForm.setTotalPages(totalPages.intValue());
 	}

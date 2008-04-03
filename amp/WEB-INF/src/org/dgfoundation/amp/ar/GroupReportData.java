@@ -151,8 +151,11 @@ public class GroupReportData extends ReportData {
 		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			ReportData element = (ReportData) i.next();
-			dest.addReport(element.horizSplitByCateg(columnName));
-
+			
+			ReportData result= element.horizSplitByCateg(columnName);
+			if(result.getItems().size()!=0)
+			    dest.addReport(result);
+			else dest.addReport(element);
 		}
 		return dest;
 	}

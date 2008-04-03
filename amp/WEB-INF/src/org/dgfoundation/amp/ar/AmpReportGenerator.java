@@ -422,9 +422,10 @@ public class AmpReportGenerator extends ReportGenerator {
 				.createOrderedHierarchies(reportMetadata.getColumns(),reportMetadata.getHierarchies());
 		// add Unallocated fake items for activities missing hierarchy enabled
 		// data
-		Collection allIds = report.getOwnerIds();
 		Iterator i = orderedHierarchies.iterator();
+	
 		while (i.hasNext()) {
+		    	Collection allIds = report.getOwnerIds();
 			AmpReportHierarchy element = (AmpReportHierarchy) i.next();
 			AmpColumns c = element.getColumn();
 			// the report always has one ColumnReportData since we did no
@@ -439,6 +440,12 @@ public class AmpReportGenerator extends ReportGenerator {
 			// now we have the ids of the items that do not have the hierarchy
 			// cells present, and we need to add fakes so we can
 			// show the Unallocated hierarchy
+//			if(hc.getName().equals("Sub-Sector")){
+//			    //"
+//			    Cell fakeC = hc.getWorker().newCellInstance();
+//			    fakeC.setOwnerId(new Long(340));
+//			    hc.addCell(fakeC);
+//			}
 			Iterator ii = allIds.iterator();
 			while (ii.hasNext()) {
 				Long id = (Long) ii.next();
@@ -446,6 +453,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				fakeC.setOwnerId(id);
 				hc.addCell(fakeC);
 			}
+			
 
 		}
 		//now we can create the hiearchy tree

@@ -115,6 +115,7 @@ public class ColumnReportData extends ReportData {
 			//we check the dimension of this cell. if this cell and the current report
 			
 			if(!ARDimension.isLinkedWith(this, cat)) continue;
+			
 			logger.info("Splitting by categorty: "+cat);
 			ColumnReportData crd = new ColumnReportData((String) cat
 					.getColumnId()

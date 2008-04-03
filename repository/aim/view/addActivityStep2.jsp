@@ -242,7 +242,7 @@ function validateProgramsPercentage(cnt,prefix){
   </digi:trn>
   </c:set>
   <c:set var="errMsgZeroPercentage">
-  <digi:trn key="aim:addzeroPercentageErrorMessage">
+  <digi:trn key="aim:addzeroProgPercentageErrorMessage">
   A programs percentage cannot be equal to 0
   </digi:trn>
   </c:set>

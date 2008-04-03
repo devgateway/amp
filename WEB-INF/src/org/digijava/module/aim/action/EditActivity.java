@@ -125,11 +125,15 @@ public class EditActivity
                                HttpServletRequest request,
                                HttpServletResponse response) throws Exception {
 
-    HttpSession session = request.getSession();
+
+	HttpSession session = request.getSession();
+
     TeamMember tm = (TeamMember) session.getAttribute("currentMember");
     
     //added in tanzania
-    AmpTeam currentTeam=TeamUtil.getAmpTeam(tm.getTeamId());
+    AmpTeam currentTeam = null;
+    if(tm != null)
+    	currentTeam=TeamUtil.getAmpTeam(tm.getTeamId());
     boolean isPreview=mapping.getPath().trim().endsWith("viewActivityPreview");
     
 

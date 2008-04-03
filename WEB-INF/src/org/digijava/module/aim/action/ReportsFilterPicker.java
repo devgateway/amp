@@ -73,17 +73,27 @@ public class ReportsFilterPicker extends MultiAction {
 		Collection allFisCalenders = DbUtil.getAllFisCalenders();
 		List ampSectors;// = SectorUtil.getAmpSectorsAndSubSectors();
 		ampSectors = SectorUtil.getAllSectorsFromScheme(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_SECTOR_SCHEME));
+
+		AmpApplicationSettings tempSettings = null;
+		if (teamMember!= null)
+			tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
 		
-		AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
-		
-		filterForm.setDefaultCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
-			
-		if (filterForm.getCurrency() == null){
-			filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
+		if(tempSettings != null)
+		{
+			filterForm.setDefaultCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
+				
+			if (filterForm.getCurrency() == null){
+				filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
+			}
+			if (filterForm.getCalendar() == null){
+				filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
+			}
 		}
-		if (filterForm.getCalendar() == null){
-			filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
+		else
+		{
+			filterForm.setDefaultCurrency(CurrencyUtil.getCurrencyByCode(Constants.DEFAULT_CURRENCY).getAmpCurrencyId());
 		}
+
 		//create the pageSizes Collection for the dropdown	
 		Collection pageSizes=new ArrayList();
 		
@@ -195,11 +205,15 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedStatuses(null);
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession .getAttribute(Constants.CURRENT_MEMBER);
-		AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
-		filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
-		String name = "- " + tempSettings.getCurrency().getCurrencyName();
-		httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
-		filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
+
+		if (teamMember!= null)
+		{
+			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+			filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
+			String name = "- " + tempSettings.getCurrency().getCurrencyName();
+			httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
+			filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
+		}
 		
 		Long fromYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE));
 		filterForm.setFromYear(fromYear);
@@ -234,9 +248,11 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		if (httpSession.getAttribute(ArConstants.SELECTED_CURRENCY) == null){
 			TeamMember teamMember = (TeamMember) httpSession  .getAttribute(Constants.CURRENT_MEMBER);
-			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
-			String name = "- " + tempSettings.getCurrency().getCurrencyName();
-			httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
+			if(teamMember != null){
+				AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+				String name = "- " + tempSettings.getCurrency().getCurrencyName();
+				httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
+			}
 		}
 		return mapping.findForward("forward");
 	}

@@ -468,28 +468,20 @@ public class SaveActivity extends Action {
                         eaForm.setStep("2");
                         return mapping.findForward("addActivityStep2");
                     }
-
-                    if (eaForm.getFundingOrganizations() != null
-                        && eaForm.getFundingOrganizations().size() > 0) {
-                        Iterator tempItr = eaForm.getFundingOrganizations()
-                            .iterator();
+                  //AMP-2947 Funding amount should not be mandatory when adding a Funding Agency
+                    /*if (eaForm.getFundingOrganizations() != null && eaForm.getFundingOrganizations().size() > 0) {
+                        Iterator tempItr = eaForm.getFundingOrganizations().iterator();
                         while (tempItr.hasNext()) {
-                            FundingOrganization forg = (FundingOrganization) tempItr
-                                .next();
-                            if (forg.getFundings() == null
-                                || forg.getFundings().size() == 0) {
-                                errors
-                                    .add(
-                                        "fundings",
-                                        new ActionError(
-                                            "error.aim.addActivity.fundingsNotEntered"));
+                            FundingOrganization forg = (FundingOrganization) tempItr.next();
+                            if (forg.getFundings() == null || forg.getFundings().size() == 0) {
+                                errors.add("fundings",new ActionError("error.aim.addActivity.fundingsNotEntered"));
                                 saveErrors(request, errors);
                                 logger.info(" the funds added is null... please check");
                                 eaForm.setStep("3");
                                 return mapping.findForward("addActivity");
                             }
                         }
-                    }
+                    }*/
                 }
 				// end of Modified code
 
@@ -1140,25 +1132,21 @@ public class SaveActivity extends Action {
 			}
 				activity.setInternalIds(internalIds);
 
-				// set components
+				//set components
 				proccessComponents(tempComp, eaForm, activity);
 
-				// set funding and funding details
+				//set funding and funding details
 				Set fundings = new HashSet();
 				if (eaForm.getFundingOrganizations() != null && eaForm.getFundingOrganizations().size()>0) {
 					Iterator itr1 = eaForm.getFundingOrganizations().iterator();
 					while (itr1.hasNext()) {
-						FundingOrganization fOrg = (FundingOrganization) itr1
-								.next();
-
-						// add fundings
+						FundingOrganization fOrg = (FundingOrganization) itr1.next();
+						//add fundings
 						if (fOrg.getFundings() != null && fOrg.getFundings().size()>0) {
 							Iterator itr2 = fOrg.getFundings().iterator();
 							while (itr2.hasNext()) {
 								Funding fund = (Funding) itr2.next();
 								AmpFunding ampFunding = new AmpFunding();
-
-
 								ampFunding.setActive(fOrg.getFundingActive());
 								if("unchecked".equals(fOrg.getDelegatedCooperationString()) || fOrg.getDelegatedCooperation()==null)
 									ampFunding.setDelegatedCooperation(false);
@@ -1169,109 +1157,115 @@ public class SaveActivity extends Action {
 								else
 									ampFunding.setDelegatedPartner(true);
 
-								ampFunding.setAmpDonorOrgId(DbUtil
-										.getOrganisation(fOrg.getAmpOrgId()));
-								ampFunding.setFinancingId(fund
-										.getOrgFundingId());
+								ampFunding.setAmpDonorOrgId(DbUtil.getOrganisation(fOrg.getAmpOrgId()));
+								ampFunding.setFinancingId(fund.getOrgFundingId());
 								/*
 								 * if (fund.getSignatureDate() != null)
 								 * ampFunding.setSignatureDate(DateConversion
 								 * .getDate(fund.getSignatureDate()));
 								 */
-//								ampFunding.setModalityId(fund.getModality());
+								//ampFunding.setModalityId(fund.getModality());
 								ampFunding.setFinancingInstrument(fund.getFinancingInstrument());
 								if (fund.getConditions() != null
 										&& fund.getConditions().trim().length() != 0) {
-									ampFunding.setConditions(fund
-											.getConditions());
+									ampFunding.setConditions(fund.getConditions());
 								} else {
 									ampFunding.setConditions(new String(" "));
 								}
 								ampFunding.setComments(new String(" "));
-/*								ampFunding.setAmpTermsAssistId(fund
-										.getAmpTermsAssist());*/
+								/*ampFunding.setAmpTermsAssistId(fund.getAmpTermsAssist());*/
 								ampFunding.setTypeOfAssistance( fund.getTypeOfAssistance() );
 								ampFunding.setAmpActivityId(activity);
 
 								// add funding details for each funding
 								Set fundDeatils = new HashSet();
 								if (fund.getFundingDetails() != null) {
-									Iterator itr3 = fund.getFundingDetails()
-											.iterator();
+									Iterator itr3 = fund.getFundingDetails().iterator();
 									while (itr3.hasNext()) {
-                                                                          FundingDetail fundDet = (FundingDetail) itr3
-                                                                              .next();
+										FundingDetail fundDet = (FundingDetail) itr3.next();
+										AmpFundingDetail ampFundDet = new AmpFundingDetail();
+										ampFundDet.setTransactionType(new Integer(fundDet.getTransactionType()));
+										// ampFundDet.setPerspectiveId(DbUtil.getPerspective(Constants.MOFED));
+										ampFundDet.setPerspectiveId(DbUtil.getPerspective(fundDet.getPerspectiveCode()));
+										ampFundDet.setAdjustmentType(new Integer(fundDet.getAdjustmentType()));
+										ampFundDet.setTransactionDate(DateConversion.getDate(fundDet
+																.getTransactionDate()));
+										ampFundDet.setOrgRoleCode(fundDet
+												.getPerspectiveCode());
+										boolean useFixedRate = false;
+										if (fundDet.getTransactionType() == Constants.COMMITMENT) {
+											if (fundDet.isUseFixedRate()
+													&& fundDet.getFixedExchangeRate().doubleValue() > 0
+													&& fundDet.getFixedExchangeRate().doubleValue() != 1) {
+												useFixedRate = true;
+											}
+										}
 
-
-                                                                            AmpFundingDetail ampFundDet = new AmpFundingDetail();
-                                                                            ampFundDet
-                                                                                .setTransactionType(new Integer(
-                                                                                    fundDet
-                                                                                    .getTransactionType()));
-                                                                            // ampFundDet.setPerspectiveId(DbUtil.getPerspective(Constants.MOFED));
-                                                                            ampFundDet.setPerspectiveId(DbUtil
-                                                                                                        .getPerspective(fundDet
-                                                                                                                        .getPerspectiveCode()));
-
-                                                                            ampFundDet
-                                                                                .setAdjustmentType(new Integer(
-                                                                                    fundDet
-                                                                                    .getAdjustmentType()));
-                                                                            ampFundDet
-                                                                                .setTransactionDate(DateConversion
-                                                                                                    .getDate(fundDet
-                                                                                                             .getTransactionDate()));
-                                                                            ampFundDet.setOrgRoleCode(fundDet
-                                                                                                      .getPerspectiveCode());
-
-                                                                            boolean useFixedRate = false;
-                                                                            if (fundDet.getTransactionType() == Constants.COMMITMENT) {
-                                                                              if (fundDet.isUseFixedRate() &&
-                                                                                  fundDet.getFixedExchangeRate().doubleValue() > 0
-                                                                                  && fundDet.getFixedExchangeRate().doubleValue() != 1) {
-                                                                                useFixedRate = true;
-                                                                              }
-                                                                            }
-
-                                                                            if (!useFixedRate) {
-                                                                              Double transAmt = new Double(
-                                                                                  FormatHelper.parseDouble(fundDet.getTransactionAmount()));
-                                                                              ampFundDet.setTransactionAmount(transAmt);
-                                                                              ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.
-                                                                                  getCurrencyCode()));
-                                                                              ampFundDet.setFixedExchangeRate(null);
-                                                                            }
-                                                                            else {
-                                                                              // Use the fixed exchange rate
-                                                                              double transAmt = FormatHelper.parseDouble(fundDet.getTransactionAmount());
-
-                                                                              Date trDate = DateConversion.getDate(fundDet.getTransactionDate());
-                                                                        //											double frmExRt = CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,trDate);
-                                                                        //											double amt = CurrencyWorker.convert1(transAmt, frmExRt,1);
-                                                                        //											amt *= fundDet.getFixedExchangeRate();
-                                                                              ampFundDet.setTransactionAmount(new Double(transAmt));
-                                                                              ampFundDet.setFixedExchangeRate(fundDet.getFixedExchangeRate());
-                                                                              ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.
-                                                                                  getCurrencyCode()));
-                                                                            }
-                                                                            ampFundDet.setAmpFundingId(ampFunding);
-                                                                            if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
-                                                                              ampFundDet.setExpCategory(
-                                                                                  fundDet.getClassification());
-                                                                            }
-                                                                            ampFundDet.setDisbOrderId(fundDet.getDisbOrderId());
-                                                                            ampFundDet.setContract(fundDet.getContract());
-                                                                            fundDeatils.add(ampFundDet);
-                                                                          }
-
+										if (!useFixedRate) {
+											Double transAmt = new Double(
+													FormatHelper.parseDouble(fundDet.getTransactionAmount()));
+											ampFundDet.setTransactionAmount(transAmt);
+											ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
+											ampFundDet.setFixedExchangeRate(null);
+										} else {
+											// Use the fixed exchange rate
+											double transAmt = FormatHelper.parseDouble(fundDet.getTransactionAmount());
+											Date trDate = DateConversion.getDate(fundDet.getTransactionDate());
+											// double frmExRt =
+											// CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,trDate);
+											// double amt =
+											// CurrencyWorker.convert1(transAmt,
+											// frmExRt,1);
+											// amt *=
+											// fundDet.getFixedExchangeRate();
+											ampFundDet.setTransactionAmount(new Double(transAmt));
+											ampFundDet.setFixedExchangeRate(fundDet.getFixedExchangeRate());
+											ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet
+																	.getCurrencyCode()));
+										}
+										ampFundDet.setAmpFundingId(ampFunding);
+										if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
+											ampFundDet.setExpCategory(fundDet.getClassification());
+										}
+										ampFundDet.setDisbOrderId(fundDet.getDisbOrderId());
+										ampFundDet.setContract(fundDet.getContract());
+										fundDeatils.add(ampFundDet);
+									}
 								}
-
 								ampFunding.setFundingDetails(fundDeatils);
-
 								this.saveMTEFProjections(fund, ampFunding);
-
 								fundings.add(ampFunding);
 							}
+						}
+						//AMP-2947 Funding amount should not be mandatory when adding a Funding Agency
+						else{
+							Funding fund = new Funding();
+							AmpFunding ampFunding = new AmpFunding();
+							ampFunding.setActive(fOrg.getFundingActive());
+							if("unchecked".equals(fOrg.getDelegatedCooperationString()) || fOrg.getDelegatedCooperation()==null)
+								ampFunding.setDelegatedCooperation(false);
+							else
+								ampFunding.setDelegatedCooperation(true);
+							if("unchecked".equals(fOrg.getDelegatedPartnerString()) || fOrg.getDelegatedPartner()==null)
+								ampFunding.setDelegatedPartner(false);
+							else
+								ampFunding.setDelegatedPartner(true);
+
+							ampFunding.setAmpDonorOrgId(DbUtil.getOrganisation(fOrg.getAmpOrgId()));
+							ampFunding.setFinancingId(fund.getOrgFundingId());
+							
+							ampFunding.setFinancingInstrument(fund.getFinancingInstrument());
+							if (fund.getConditions() != null
+									&& fund.getConditions().trim().length() != 0) {
+								ampFunding.setConditions(fund.getConditions());
+							} else {
+								ampFunding.setConditions(new String(" "));
+							}
+							ampFunding.setComments(new String(" "));
+							ampFunding.setTypeOfAssistance( fund.getTypeOfAssistance() );
+							ampFunding.setAmpActivityId(activity);
+							this.saveMTEFProjections(fund, ampFunding);
+							fundings.add(ampFunding);
 						}
 					}
 				}

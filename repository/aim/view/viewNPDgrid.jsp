@@ -9,6 +9,11 @@
 <digi:instance property="aimNPDForm"/>
 
 <script language="javascript" type="text/javascript">
+
+	function getDescription() {
+	document.getElementById("t1").innerHTML="txt";	
+		
+	}
 	
 	var localIndicators=[];
 	
@@ -134,8 +139,8 @@
 										<c:if test="${!empty aimNPDForm.indicators}">
 											<c:forEach var="indRow" items="${aimNPDForm.indicators}">
 												<tr>
-													<td>
-														${indRow.name}
+													<td> 
+														<span title="${indRow.description}">${indRow.name}</span>
 													</td>
 													<c:forEach  var="val" items="${indRow.values}">
 														<td align="right">

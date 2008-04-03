@@ -109,7 +109,11 @@ public class ExportIndicators2XSLAction extends Action {
 			cellNum = 0;
 			row = sheet.createRow(rowNum++);
 			cell = row.createCell(cellNum++);
-			cell.setCellValue("indicator Name");
+			cell.setCellValue("indicator Name");			
+			cell.setCellStyle(csSubHeader);			
+			
+			cell=row.createCell(cellNum++);
+			cell.setCellValue("indicator Description");			
 			cell.setCellStyle(csSubHeader);
 
 			for (int i = 0; i < npdForm.getSelYears().length; i++) {
@@ -127,8 +131,14 @@ public class ExportIndicators2XSLAction extends Action {
 					cellNum = 0;
 
 					row = sheet.createRow(rowNum++);
+					
 					cell = row.createCell(cellNum++);
 					cell.setCellValue(indic.getName());
+					
+					
+					cell = row.createCell(cellNum++);
+					cell.setCellValue(indic.getDescription());
+					
 					
 					List<IndicatorGridItem> values = indic.getValues();
 					if (values!=null){

@@ -14,11 +14,13 @@ import org.digijava.module.aim.dbentity.IndicatorTheme;
 public class IndicatorGridRow implements Comparable<IndicatorGridRow>{
 	private Long id;
 	private String name;
+	private String description;
 	private List<IndicatorGridItem> values;
 	
 	public IndicatorGridRow(IndicatorTheme connection,String[] years){
 		this.id = connection.getIndicator().getIndicatorId();
 		this.name = connection.getIndicator().getName();
+		this.description=connection.getIndicator().getDescription();
 		if (years != null){
 			this.values = new ArrayList<IndicatorGridItem>(years.length);
 			for (int i = 0; i < years.length; i++) {
@@ -48,6 +50,14 @@ public class IndicatorGridRow implements Comparable<IndicatorGridRow>{
 	}
 	public int compareTo(IndicatorGridRow row) {
 		return this.id.compareTo(row.getId());
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

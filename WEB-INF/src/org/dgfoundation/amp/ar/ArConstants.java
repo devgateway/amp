@@ -53,6 +53,8 @@ public final class ArConstants {
 	public final static String REGION="Region";
 	public final static String COMPONENT="Component Name";
 
+	public final static String UNALLOCATED="Unallocated";
+	
 	//report type
 	public final static int DONOR_TYPE=1;
 	public final static int COMPONENT_TYPE=2;

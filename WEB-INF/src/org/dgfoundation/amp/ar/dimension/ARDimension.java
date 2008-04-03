@@ -19,6 +19,7 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -68,6 +69,7 @@ public abstract class ARDimension {
     
     public static boolean isLinkedWith(ReportData parent, Cell childCell) {
 	//we get the dimension worker
+	if(childCell.getValue().toString().equals(ArConstants.UNALLOCATED)) return true;
 	Class relatedContentPersisterClass = childCell.getColumn().getRelatedContentPersisterClass();
 	if(relatedContentPersisterClass==null) return true; // default behavior is to accept anything we have no information about
 	Class dimensionClass=childCell.getColumn().getDimensionClass();
@@ -109,10 +111,10 @@ public abstract class ARDimension {
 	    Map<Long,Long> m=links.get(relatedContentPersisterClass);
 	    if(m!=null) {
 		Long relatedId=m.get(childCell.getId());
-		if(relatedId!=null && relatedId.equals(c.getId())) return true;
-	    } else return true;	    
+		if( !(relatedId!=null && relatedId.equals(c.getId()))) return false;
+	    } 	    
 	}
-	return false;
+	return true;
     }
 
     

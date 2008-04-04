@@ -426,7 +426,7 @@ public class TranslatorManager extends Action {
 		Session session = null;
 		Message msgLocal=(Message)o;
 		try{
-				session				= PersistenceManager.getSession();
+				session	= PersistenceManager.getSession();
 				Transaction tx=session.beginTransaction();
 				session.save(msgLocal);
 				tx.commit();
@@ -465,21 +465,33 @@ public class TranslatorManager extends Action {
 				qry.setParameter("msgKey", msgLocal.getKey(), Hibernate.STRING);
 				qry.setParameter("langIso", lang, Hibernate.STRING);
 				
+				if (qry.list().iterator().hasNext()) {
 				Iterator itr = qry.list().iterator();
-				while (itr.hasNext()){
-					Message msg=(Message)itr.next();
-					
-					if (msgLocal.getCreated().after(msg.getCreated()) && msgLocal.getLocale().compareTo(msg.getLocale())==0)
-						{
-							msg.setCreated(msgLocal.getCreated());
-							msg.setMessage(msgLocal.getMessage());
-							session.saveOrUpdate(msg);
-							
-						}
+				while (itr.hasNext()) {
+					Message msg = (Message) itr.next();
+
+					if (msgLocal.getCreated().after(msg.getCreated())
+							&& msgLocal.getLocale().compareTo(msg.getLocale()) == 0) {
+						msg.setCreated(msgLocal.getCreated());
+						msg.setMessage(msgLocal.getMessage());
+						session.saveOrUpdate(msg);
+
+					}
 				}
 				tx.commit();
 				session.close();
+
+			}else{
+				logger.debug("New Key Found adding "+ msgLocal.getKey() + " to local db");
+				Message msg= new Message();
+				msg.setKey(msgLocal.getKey());
+				msg.setLocale(lang);
+				msg.setSiteId(msgLocal.getSiteId());
+				msg.setMessage(msgLocal.getMessage().trim());
+				msg.setCreated(new java.sql.Timestamp(msgLocal.getCreated().getTime()));
+				insertTranslationMessage(msg);
 				
+			}
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());

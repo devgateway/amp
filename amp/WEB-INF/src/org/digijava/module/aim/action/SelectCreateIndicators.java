@@ -43,26 +43,29 @@ public class SelectCreateIndicators extends Action {
 		IndicatorForm indForm = (IndicatorForm) form;
 
 		nonDefaultInd = IndicatorUtil.getAllNonDefaultIndicators();
-		AmpActivity activity=ActivityUtil.loadActivity(indForm.getActivityId());
+		AmpActivity activity=ActivityUtil.loadActivity(indForm.getActivityId());		
 //		activityInd = IndicatorUtil.getActivityIndicatorsList(indForm.getActivityId());
-		activityInd = activity.getIndicators();
+		if(activity!=null){
+			activityInd = activity.getIndicators();
 
-		Iterator nonDefaultItr = nonDefaultInd.iterator();
+			Iterator nonDefaultItr = nonDefaultInd.iterator();
 
-		while (nonDefaultItr.hasNext()) {
-			AmpIndicator tempNonDefaultInd = (AmpIndicator) nonDefaultItr.next();
-			Iterator<IndicatorActivity> activityIndItr = activityInd.iterator();
-			sameIndicator = false;
-			while (activityIndItr.hasNext() && sameIndicator == false) {
-				IndicatorActivity tempActInd =  activityIndItr.next();
+			while (nonDefaultItr.hasNext()) {
+				AmpIndicator tempNonDefaultInd = (AmpIndicator) nonDefaultItr.next();
+				Iterator<IndicatorActivity> activityIndItr = activityInd.iterator();
+				sameIndicator = false;
+				while (activityIndItr.hasNext() && sameIndicator == false) {
+					IndicatorActivity tempActInd =  activityIndItr.next();
 
-				if (tempNonDefaultInd.getIndicatorId().equals(tempActInd.getIndicator().getIndicatorId()))
-					sameIndicator = true;
+					if (tempNonDefaultInd.getIndicatorId().equals(tempActInd.getIndicator().getIndicatorId()))
+						sameIndicator = true;
+				}
+				if (sameIndicator == false)
+					nonDefActInd.add(tempNonDefaultInd);
 			}
-			if (sameIndicator == false)
-				nonDefActInd.add(tempNonDefaultInd);
+ 
 		}
-
+		
 		indForm.setNondefaultindicators(nonDefActInd);
 		indForm.setActivityId(indForm.getActivityId());
 		indForm.setAllSectors(SectorUtil.getAllParentSectors());

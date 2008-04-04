@@ -1996,7 +1996,7 @@ function collapseAll() {
                                                                                         </tr>	
                                                                                         </field:display>
                                                                                         
-                                                                                        <field:display name="Status" feature="Contracting">
+                                                                                        <field:display name="Contracting Status" feature="Contracting">
                                                                                          <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:status">Status:</digi:trn></b>

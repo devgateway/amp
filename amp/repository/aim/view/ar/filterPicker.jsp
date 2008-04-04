@@ -331,7 +331,7 @@
 							<b><digi:trn key="rep:filer:executingAgency">Executing Agency</digi:trn></b></td>
                 </tr>
                 <tr>
-                  <td><html:select style="width: 190px"
+                  <td><html:select style="80%"
 				multiple="true" property="selectedExecutingAgency" size="3"
 				styleClass="inp-text">
 			

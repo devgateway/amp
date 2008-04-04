@@ -561,7 +561,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Signature of Contract" feature="Contracting"></field:display>
 <field:display name="Contract Organization" feature="Contracting"></field:display>
 <field:display name="Contract Completion" feature="Contracting"></field:display>
-<field:display name="Status" feature="Contracting"></field:display>
+<field:display name="Contracting Status" feature="Contracting"></field:display>
 <field:display name="Total EC Contribution" feature="Contracting"></field:display>
 <field:display name="IB" feature="Contracting"></field:display>
 <field:display name="INV" feature="Contracting"></field:display>

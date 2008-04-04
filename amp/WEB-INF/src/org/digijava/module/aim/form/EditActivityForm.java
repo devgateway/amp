@@ -32,6 +32,7 @@ import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.ReferenceDoc;
+import org.digijava.module.aim.util.Step;
 import org.digijava.module.contentrepository.helper.DocumentData;
 
 public class EditActivityForm extends ActionForm implements Serializable{
@@ -556,6 +557,31 @@ public class EditActivityForm extends ActionForm implements Serializable{
      private Integer selContractId;
 	 private Long creditTypeId;	
 	 private boolean fixerate;
+         
+    private List steps;
+
+    public List getSteps() {
+        return steps;
+    }
+
+    public void setSteps(List steps) {
+        this.steps = steps;
+    }
+    
+    public int getStepNumberOnPage(){
+        int stepNumberOnPage=0;
+        if(steps!=null){
+            Iterator<Step> iter=steps.iterator();
+            while(iter.hasNext()){
+                Step stp=iter.next();
+                if(stp.getStepNumber().equals(step)){
+                    return stp.getStepActualNumber();
+                }
+            }
+        }
+        return stepNumberOnPage;
+        
+    }
 	 
 	 public boolean isFixerate() {
 		this.fixerate = false;

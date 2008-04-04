@@ -181,6 +181,9 @@
 
 <input type="hidden" name="prevOrg">
 <input type="hidden" name="edit" value="true">
+<c:set var="stepNm">
+    ${aimEditActivityForm.stepNumberOnPage}
+</c:set>
 
 <html:hidden property="editAct" />
 
@@ -235,68 +238,84 @@ ${fn:replace(message,quote,escapedQuote)}
 									</digi:link>
 									&nbsp;&gt;&nbsp;
 								</c:if>
-								<c:set var="translation">
-									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to go to Add Activity Step 1</digi:trn>
-								</c:set>
-
-								<c:if test="${aimEditActivityForm.donorFlag == false}">
-									<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="${translation}" >
-									<c:if test="${aimEditActivityForm.editAct == true}">
-										<digi:trn key="aim:editActivityStep1">
-											Edit Activity - Step 1
-										</digi:trn>
-									</c:if>
-									<c:if test="${aimEditActivityForm.editAct == false}">
-										<digi:trn key="aim:addActivityStep1">
-											Add Activity - Step 1
-										</digi:trn>
-									</c:if>
-									</digi:link>
-								</c:if>
-
-								<c:if test="${aimEditActivityForm.donorFlag == true}">
-									<c:if test="${aimEditActivityForm.editAct == true}">
-										<digi:trn key="aim:editActivityStep1">
-											Edit Activity - Step 1
-										</digi:trn>
-									</c:if>
-									<c:if test="${aimEditActivityForm.editAct == false}">
-										<digi:trn key="aim:addActivityStep1">
-											Add Activity - Step 1
-										</digi:trn>
-									</c:if>
-								</c:if>
-								&nbsp;&gt;&nbsp;
-												<digi:link href="/addActivity.do?step=1_5&edit=true" styleClass="comment"
-												title="${translation}" >
-													<digi:trn key="aim:addActivityStep2">
-														Step 2
-													</digi:trn>
-												</digi:link>&nbsp;&gt;&nbsp;
-
-								<c:if test="${aimEditActivityForm.donorFlag == false}">
-									<c:set var="translation">
-										<digi:trn key="aim:clickToViewAddActivityStep3">Click here to goto Add Activity Step 3</digi:trn>
-									</c:set>
-									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="${translation}" >
-										<digi:trn key="aim:addActivityStep3">
-											Step 3
-										</digi:trn>
-									</digi:link>
-								</c:if>
-
-								<c:if test="${aimEditActivityForm.donorFlag == true}">
-									<c:set var="translation">
-										<digi:trn key="aim:clickToViewAddActivityStep2">Click here to goto Add Activity Step 3</digi:trn>
-									</c:set>
-									<digi:trn key="aim:addActivityStep3">
-										Step 3
-									</digi:trn>
-								</c:if>
-								&nbsp;&gt;&nbsp;
-								<digi:trn key="aim:addActivityStep4">
-								Step 4
-								</digi:trn>
+			               
+                           <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
+                               
+                               <c:set property="translation" var="trans">
+                                   <digi:trn key="aim:clickToViewAddActivityStep${step.stepActualNumber}">
+                                       Click here to goto Add Activity Step ${step.stepActualNumber}
+                                   </digi:trn>
+                               </c:set>
+                               
+                               
+                               
+                               <c:if test="${!index.last}">
+                                   
+                                   <c:if test="${index.first}">
+                                       <digi:link href="/addActivity.do?step=${step.stepNumber}&edit=true" styleClass="comment" title="${trans}">
+                                           
+                                           
+                                           <c:if test="${aimEditActivityForm.editAct == true}">
+                                               <digi:trn key="aim:editActivityStep1">
+                                                   Edit Activity - Step 1
+                                               </digi:trn>
+                                           </c:if>
+                                           <c:if test="${aimEditActivityForm.editAct == false}">
+                                               <digi:trn key="aim:addActivityStep1">
+                                                   Add Activity - Step 1
+                                               </digi:trn>
+                                           </c:if>
+                                           
+                                       </digi:link>
+                                        &nbsp;&gt;&nbsp;
+                                   </c:if>
+                                   <c:if test="${!index.first}">
+                                       <digi:link href="/addActivity.do?step=${step.stepNumber}&edit=true" styleClass="comment" title="${trans}">
+                                           <digi:trn key="aim:addActivityStep${step.stepActualNumber}">Step ${step.stepActualNumber}</digi:trn>
+                                       </digi:link>
+                                        &nbsp;&gt;&nbsp;
+                                   </c:if>
+                               </c:if>
+                               
+                               
+                               
+                               <c:if test="${index.last}">
+                                   
+                                   <c:if test="${index.first}">
+                                       
+                                       
+                                       
+                                       <c:if test="${aimEditActivityForm.editAct == true}">
+                                           <digi:trn key="aim:editActivityStep1">
+                                               Edit Activity - Step 1
+                                           </digi:trn>
+                                       </c:if>
+                                       <c:if test="${aimEditActivityForm.editAct == false}">
+                                           <digi:trn key="aim:addActivityStep1">
+                                               Add Activity - Step 1
+                                           </digi:trn>
+                                       </c:if>
+                                   </c:if>
+                                   
+                                   
+                                   <c:if test="${!index.first}">
+                                       <digi:trn key="aim:addActivityStep${step.stepActualNumber}"> Step ${step.stepActualNumber}</digi:trn>
+                                   </c:if>
+                                   
+                                   
+                                   
+                               </c:if>
+                               
+                               
+                               
+                               
+                               
+                               
+                               
+                           </c:forEach>
+                            
+                           
+				
 								</span>
 							</td>
 						</tr>
@@ -341,8 +360,12 @@ ${fn:replace(message,quote,escapedQuote)}
                                     <td width="13" height="20" background="module/aim/images/left-side.gif">
                                     </td>
                                     <td vAlign="middle" align ="center" class="textalb" height="20" bgcolor="#006699">
-                                      <digi:trn key="aim:step4of10_Funding">
-                                      Step 4 of 10: Funding
+                             
+                                      <digi:trn key="aim:step${stepNm}of10">
+                                      Step ${stepNm} of 10: 
+                                      </digi:trn>
+                                      <digi:trn key="aim:activity:Funding">
+                                          Funding
                                       </digi:trn>
                                     </td>
                                     <td width="13" height="20" background="module/aim/images/right-side.gif">

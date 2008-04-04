@@ -2415,5 +2415,80 @@ public class FeaturesUtil {
 			Logic.switchLogic(Logic.DEFAULT_FACTORY);
 		}
 	}
+        
+        /**
+	 * return feature if it is visible or NULL
+	 * @param featureName
+         * @param moduleName 
+         * @param defTemplId
+	 * @return feature
+	 * 
+	 */
+         public static AmpFeaturesVisibility getFeatureByName(String featureName, String moduleName,Long defTemplId){
+             AmpFeaturesVisibility feature=null;
+             Session session = null;
+          
+                try {
+                       session = PersistenceManager.getRequestDBSession();
+                       String queryString = "select fv from " +AmpModulesVisibility.class.getName() +
+                       " mv inner join mv.items fv "+
+                        " inner join fv.templates tmpl" +
+                        " where (mv.name=:moduleName) and (fv.name=:featureName)" +
+                        " and (tmpl.id=:defTemplId)";
+                       Query qry = session.createQuery(queryString);
+                       qry.setString("featureName", featureName);
+                       qry.setString("moduleName", moduleName);
+                       qry.setLong("defTemplId", defTemplId);
+                       if(qry.list()!=null&&qry.list().size()>0){
+                           feature=(AmpFeaturesVisibility)qry.uniqueResult();
+                       }
+                       
+                      
+                } catch (Exception e) {
+                      
+                       logger.error(e.getMessage());
+                }
+              
+             return feature;
+            
+        }
+          /**
+	 * return module if it is visible or NULL
+	 * @param moduleName
+         * @param parentModuleName
+         * @param defTemplId
+	 * @return module  
+	 * 
+	 */
+        
+        
+        public static AmpModulesVisibility getModuleByName(String moduleName, String parentModuleName,Long defTemplId){
+             AmpModulesVisibility module=null;
+             Session session = null;
+          
+                try {
+                       session = PersistenceManager.getRequestDBSession();
+                       String queryString = "select mv from " +AmpModulesVisibility.class.getName() +
+                       " mv inner join mv.parent parent "+
+                               " inner join mv.templates tmpl " +
+                        " where (mv.name=:moduleName) and (parent.name=:parentModuleName)" +
+                        " and (tmpl.id=:defTemplId)";
+                       Query qry = session.createQuery(queryString);
+                       qry.setString("moduleName", moduleName );
+                       qry.setString("parentModuleName", parentModuleName);
+                       qry.setLong("defTemplId", defTemplId);
+                       if(qry.list()!=null&&qry.list().size()>0){
+                           module=(AmpModulesVisibility)qry.uniqueResult();
+                       }
+                       
+                      
+                } catch (Exception e) {
+                      
+                       logger.error(e.getMessage());
+                }
+              
+             return module;
+            
+        }
 
 }

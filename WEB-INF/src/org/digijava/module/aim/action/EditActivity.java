@@ -136,6 +136,7 @@ public class EditActivity
     	currentTeam=TeamUtil.getAmpTeam(tm.getTeamId());
     boolean isPreview=mapping.getPath().trim().endsWith("viewActivityPreview");
     
+    
 
     AmpActivity activity = null;
     String computeTotals = FeaturesUtil.getGlobalSettingValue(Constants.
@@ -159,6 +160,10 @@ public class EditActivity
     boolean isPublicView = (request.getParameter("public")==null)?false:request.getParameter("public").equals("true");
     EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
     Long activityId = eaForm.getActivityId();
+    if(eaForm.getSteps()==null){
+    List steps=ActivityUtil.getSteps();
+    eaForm.setSteps(steps);
+    }
 
     // set Globam Settings Multi-Sector Selecting
     String multiSectorSelect = FeaturesUtil.getGlobalSettingValue(Constants.

@@ -112,6 +112,11 @@ public class AddAmpActivity extends Action {
 
     EditActivityForm eaForm = (EditActivityForm) form; 
     
+      if (eaForm.getSteps() == null) {
+          List steps = ActivityUtil.getSteps();
+          eaForm.setSteps(steps);
+      }
+    
     //set the level, if available
     String levelTxt=request.getParameter("activityLevelId");
     if(levelTxt!=null) eaForm.setActivityLevel(Long.parseLong(levelTxt));

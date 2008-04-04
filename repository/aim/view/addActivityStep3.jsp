@@ -858,14 +858,14 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                               </logic:iterate>
                                                                               </c:if>
                                                                             </feature:display>
-
+																			<feature:display module="Funding" name="Disbursement">
                                                                               <tr bgcolor="#ffffff">
                                                                                 <td colspan="5">&nbsp;</td>
                                                                               </tr>
                                                                               <tr bgcolor="#ffffff">
                                                                                 <td colspan="5">
                                                                                   <a title="<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>">
-                                                                                  <b> <digi:trn key="aim:disbursements">			Disbursements </digi:trn></b>
+                                                                                  <b> <digi:trn key="aim:disbursements">Disbursements </digi:trn></b>
 																				</a>
                                                                                 </td>
                                                                               </tr>
@@ -883,31 +883,31 @@ ${fn:replace(message,quote,escapedQuote)}
 																						<tr bgcolor="#ffffff">
 																						</c:if>
 																							<td width="50">
-																								<field:display name="Adjustment Type Disbursement" feature="Funding Organizations">
+																								<field:display name="Adjustment Type Disbursement" feature="Disbursement">
 																									<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																									</digi:trn>
 																								</field:display>
 																							</td>
 																							<td width="120" align="right">
-																								<field:display name="Amount Disbursement" feature="Funding Organizations">
+																								<field:display name="Amount Disbursement" feature="Disbursement">
 																									<FONT color=blue>*</FONT>
 																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
 																								</field:display>
 																							</td>
 																							<td width="150">
-																								<field:display name="Currency Disbursement" feature="Funding Organizations">
+																								<field:display name="Currency Disbursement" feature="Disbursement">
 																									<bean:write name="fundingDetail" property="currencyCode"/>
 																								</field:display>
 																							</td>
 																							<td width="70">
-																								<field:display name="Date Disbursement" feature="Funding Organizations">
+																								<field:display name="Date Disbursement" feature="Disbursement">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
 																								</field:display>
 																							</td>
-																							<td>aaaaaaaaa
+																							<td>
                                                                                              <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																								<field:display name="Perspective Disbursement" feature="Funding Organizations">
+																								<field:display name="Perspective Disbursement" feature="Disbursement">
    																								<digi:trn key='<%="aim:"+fundingDetail.getPerspectiveNameTrimmed() %>'>
 																									<bean:write name="fundingDetail" property="perspectiveName"/>
 																								</digi:trn>
@@ -921,38 +921,38 @@ ${fn:replace(message,quote,escapedQuote)}
 																						<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
 																						<tr bgcolor="#ffffff">
 																							<td width="50">
-																								<field:display name="Adjustment Type Disbursement" feature="Funding Organizations">
+																								<field:display name="Adjustment Type Disbursement" feature="Disbursement">
 																									<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																									</digi:trn>
 																								</field:display>
 																							</td>
 																							<td width="120" align="right">
-																								<field:display name="Amount Disbursement" feature="Funding Organizations">
+																								<field:display name="Amount Disbursement" feature="Disbursement">
 																									<FONT color=blue>*</FONT>
 																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
 																								</field:display>
 																							</td>
 																							<td width="150">
-																								<field:display name="Currency Disbursement" feature="Funding Organizations">
+																								<field:display name="Currency Disbursement" feature="Disbursement">
 																									<bean:write name="fundingDetail" property="currencyCode"/>
 																								</field:display>
 																							</td>
 																							<td width="70">
-																								<field:display name="Date Disbursement" feature="Funding Organizations">
+																								<field:display name="Date Disbursement" feature="Disbursement">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
 																								</field:display>
 																							</td>
 																							<td>
 																							
-																							<field:display name="Contract of Disbursement Order" feature="Disbursement Orders">
+																							<field:display name="Contract of Disbursement Order" feature="Disbursement">
                                                                                              	 <c:if test="${not empty fundingDetail.contract}">
 		                                                                                     		${fundingDetail.contract.contractName}
                                                                                                    </c:if>
 	                                                                                    		</field:display>
 																							
                                                                                                <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																								<field:display name="Perspective Disbursement" feature="Funding Organizations">
+																								<field:display name="Perspective Disbursement" feature="Disbursement">
 																								<digi:trn key='<%="aim:"+fundingDetail.getPerspectiveNameTrimmed() %>'>
 																									<bean:write name="fundingDetail" property="perspectiveName"/>
 																								</digi:trn>
@@ -965,36 +965,36 @@ ${fn:replace(message,quote,escapedQuote)}
 																						<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
 																						<tr bgcolor="#ffffff">
 																							<td width="50">
-																								<field:display name="Adjustment Type Disbursement" feature="Funding Organizations">
+																								<field:display name="Adjustment Type Disbursement" feature="Disbursement">
 																									<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																									</digi:trn>
 																								</field:display>
 																							</td>
 																							<td width="120" align="right">
-																								<field:display name="Amount Disbursement" feature="Funding Organizations">
+																								<field:display name="Amount Disbursement" feature="Disbursement">
 																									<FONT color=blue>*</FONT>
 																									<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
 																								</field:display>
 																							</td>
 																							<td width="150">
-																								<field:display name="Currency Disbursement" feature="Funding Organizations">
+																								<field:display name="Currency Disbursement" feature="Disbursement">
 																									<bean:write name="fundingDetail" property="currencyCode"/>
 																								</field:display>
 																							</td>
 																							<td width="70">
-																								<field:display name="Date Disbursement" feature="Funding Organizations">
+																								<field:display name="Date Disbursement" feature="Disbursement">
 																									<bean:write name="fundingDetail" property="transactionDate"/>
 																								</field:display>
 																							</td>
 																							<td>
-																							 	<field:display name="Contract of Disbursement Order" feature="Disbursement Orders">
+																							 	<field:display name="Contract of Disbursement Order" feature="Disbursement">
                                                                                              	 <c:if test="${not empty fundingDetail.contract}">
 		                                                                                     		${fundingDetail.contract.contractName}
                                                                                                    </c:if>
 	                                                                                    		</field:display>
                                                                                                <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-																								<field:display name="Perspective Disbursement" feature="Funding Organizations">
+																								<field:display name="Perspective Disbursement" feature="Disbursement">
 																								<digi:trn key='<%="aim:"+fundingDetail.getPerspectiveNameTrimmed() %>'>
 																									<bean:write name="fundingDetail" property="perspectiveName"/>
 																								</digi:trn>
@@ -1005,10 +1005,11 @@ ${fn:replace(message,quote,escapedQuote)}
 																						</tr>
 																						</c:if>
 																						</c:if>
-
 																						</logic:equal>
 																						</logic:iterate>
                                                                                         </c:if>
+                                                                                        </feature:display>
+                                                                                        
 																						<tr bgcolor="#ffffff">
 																							<td colspan="5">&nbsp;</td>
 																						</tr>

@@ -212,10 +212,10 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Add Sectors Button" feature="Sectors"></field:display>
 <field:display name="Add Web Resource Button" feature="Web Resources"></field:display>
 <field:display name="Adjustment Type Commitment" feature="Funding Organizations"></field:display>
-<field:display name="Adjustment Type Disbursement" feature="Funding Organizations"></field:display>
+<field:display name="Adjustment Type Disbursement" feature="Disbursement"></field:display>
 <field:display name="Adjustment Type Expenditure" feature="Funding Organizations"></field:display>
 <field:display name="Amount Commitment" feature="Funding Organizations"></field:display>
-<field:display name="Amount Disbursement" feature="Funding Organizations"></field:display>
+<field:display name="Amount Disbursement" feature="Disbursement"></field:display>
 <field:display name="Amount Expenditure" feature="Funding Organizations"></field:display>
 <field:display name="Base Value" feature="Activity"></field:display>
 <field:display name="Beneficiary Agency Add Organizations Button" feature="Beneficiary Agency"></field:display>
@@ -272,7 +272,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Cumulative Disbursement" feature="Funding Organizations"></field:display>
 <field:display name="Currency Commitment" feature="Funding Organizations"></field:display>
 <field:display name="Currency Commitments" feature="Regional Funding"></field:display>
-<field:display name="Currency Disbursement" feature="Funding Organizations"></field:display>
+<field:display name="Currency Disbursement" feature="Disbursement"></field:display>
 <field:display name="Currency Disbursements" feature="Regional Funding"></field:display>
 <field:display name="Currency Expenditure" feature="Funding Organizations"></field:display>
 <field:display name="Currency Expenditures" feature="Regional Funding"></field:display>
@@ -282,7 +282,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Date Commitment" feature="Funding Organizations"></field:display>
 <field:display name="Date Commitments" feature="Regional Funding"></field:display>
 <field:display name="Date Current Value" feature="Activity"></field:display>
-<field:display name="Date Disbursement" feature="Funding Organizations"></field:display>
+<field:display name="Date Disbursement" feature="Disbursement"></field:display>
 <field:display name="Date Disbursements" feature="Regional Funding"></field:display>
 <field:display name="Date Expenditure" feature="Funding Organizations"></field:display>
 <field:display name="Date Expenditures" feature="Regional Funding"></field:display>
@@ -368,7 +368,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Overall Cost" feature="Planning"></field:display>
 <field:display name="Paris Survey" feature="Paris Indicators"></field:display>
 <field:display name="Perspective Commitment" feature="Funding Organizations"></field:display>
-<field:display name="Perspective Disbursement" feature="Funding Organizations"></field:display>
+<field:display name="Perspective Disbursement" feature="Disbursement"></field:display>
 <field:display name="Perspective Expenditure" feature="Funding Organizations"></field:display>
 <field:display name="Physical Progress" feature="Physical Progress"></field:display>
 <field:display name="Physical progress description" feature="Physical Progress"></field:display>

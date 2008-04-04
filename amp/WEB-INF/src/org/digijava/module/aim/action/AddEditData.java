@@ -55,6 +55,7 @@ public class AddEditData
 					bean.setValAmount(value.getValue());
 					bean.setValueType(value.getValueType());
 					bean.setIndicatorValueId(value.getIndValId());
+					bean.setLocation(value.getLocation());
 					indValuesList.add(bean);
 				}
                 themeForm.setPrgIndValues(indValuesList);
@@ -89,6 +90,7 @@ public class AddEditData
                 item.setCreationDate(themeForm.getCreationDate()[iter.nextIndex() - 1]);
                 item.setValAmount(themeForm.getValAmount()[iter.nextIndex() - 1]);
                 item.setValueType(themeForm.getValueType()[iter.nextIndex() - 1]);
+               
             }
         }
 
@@ -99,15 +101,16 @@ public class AddEditData
         }else if(event!=null && event.equals("delIndValue")){
             String index=request.getParameter("index");
             if(indValues!=null){
-                AmpPrgIndicatorValue prgIndVal=indValues.get(Integer.valueOf(index).intValue());
+                AmpPrgIndicatorValue prgIndVal=indValues.get(Integer.valueOf(index).intValue()); //es value minda rom amovushalo indicators.               
                 if(prgIndVal.getIndicatorValueId()!=null){
                     indValues.remove(Integer.valueOf(index).intValue());
-                    ProgramUtil.deletePrgIndicatorValueById(new Long(themeForm.getParentId()),new Long(prgIndVal.getIndicatorValueId()));
+                    IndicatorUtil.removeProgramIndicatorValue(new Long(prgIndVal.getIndicatorValueId()), new Long(themeForm.getParentId()));
+                    //ProgramUtil.deletePrgIndicatorValueById(new Long(themeForm.getParentId()),new Long(prgIndVal.getIndicatorValueId())); //pirvel parametrshi momdis connectiois id da meoreshi tviton romelic unda wavshalo imis
                     
                 }else{
                     prgIndVal.setIndicatorValueId(-prgIndVal.getIndicatorValueId());
                 }
-            }
+           }
             themeForm.setPrgIndValues(indValues);
         }else if(event!=null && event.equals("save")){
             if (themeForm.getParentId() != null) {
@@ -139,6 +142,7 @@ public class AddEditData
 					value.setValue(prgValue.getValAmount());
 					value.setValueDate(DateConversion.getDateForIndicator(prgValue.getCreationDate()));
 					value.setValueType(prgValue.getValueType());
+					value.setLocation(prgValue.getLocation());
 					value.setIndicatorConnection(connection);
 					connection.getValues().add(value);
 				}
@@ -146,6 +150,7 @@ public class AddEditData
                 	IndicatorUtil.updateThemeConnection(connection);
             	}catch(Exception ex){
             		logger.error(ex);
+            		ex.printStackTrace();
             	}
             }
             //returning null because "delete" is called from already closed popup window.
@@ -158,7 +163,7 @@ public class AddEditData
     private AmpPrgIndicatorValue getPrgIndicatorValue() {
         AmpPrgIndicatorValue prgIndVal = new AmpPrgIndicatorValue();
         prgIndVal.setCreationDate(null);
-        prgIndVal.setValAmount(null);
+        prgIndVal.setValAmount(null);        
         prgIndVal.setValueType(1);
         return prgIndVal;
     }

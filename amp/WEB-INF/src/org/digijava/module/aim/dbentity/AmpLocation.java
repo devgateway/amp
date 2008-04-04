@@ -16,6 +16,8 @@ public class AmpLocation implements Serializable
 	private String version ;
 	private String country ;
 	private String region ;
+	private String zone;
+	private String woreda;
 	private Set aidlocation;
 
 	private Country dgCountry; 
@@ -74,6 +76,24 @@ public class AmpLocation implements Serializable
 	 */
 	public String getCountry() {
 		return country;
+	}
+	
+	
+
+	public String getZone() {
+		return zone;
+	}
+
+	public void setZone(String zone) {
+		this.zone = zone;
+	}
+
+	public String getWoreda() {
+		return woreda;
+	}
+
+	public void setWoreda(String woreda) {
+		this.woreda = woreda;
 	}
 
 	/**

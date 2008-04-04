@@ -16,6 +16,8 @@
 		<property name="version" column="version" type="java.lang.String"/>
 		<property name="country" column="country" type="java.lang.String"/>
 		<property name="region" column="region" type="java.lang.String"/>
+		<property name="zone" column="zone" type="java.lang.String"/>
+		<property name="woreda" column="woreda" type="java.lang.String"/>
 
 		<set name="aidlocation" table="AMP_ACTIVITY_LOCATION" lazy="true">
   	            <cache usage="read-write"/>

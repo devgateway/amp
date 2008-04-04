@@ -1547,6 +1547,8 @@
 	</action>
     <action name="aimThemeForm" path="/aim/selectLocationForIndicatorValue" scope="session" type="org.digijava.module.aim.action.SelectLocationForIndicatorValue" validate="false">
       <forward name="forward" path="/showLayout.do?layout=selectLocationForIndicatorValue" />
+      <forward name="backToAddDataPage" path="/aim/addEditData.do" />
+      
     </action>
     <action name="aimViewIndicatorsForm" path="/aim/viewIndicators" scope="session" type="org.digijava.module.aim.action.ViewIndicators" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewIndicators" />

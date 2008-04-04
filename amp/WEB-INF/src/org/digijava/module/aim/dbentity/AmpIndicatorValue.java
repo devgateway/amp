@@ -26,6 +26,7 @@ public class AmpIndicatorValue implements Serializable{
 	private AmpIndicatorRiskRatings risk;
 	private Boolean defaultInd;
 	private IndicatorConnection indicatorConnection;
+	private AmpLocation location;
 	
 	public Long getIndValId() {
 		return indValId;
@@ -81,4 +82,12 @@ public class AmpIndicatorValue implements Serializable{
 	public void setDefaultInd(Boolean defaultInd) {
 		this.defaultInd = defaultInd;
 	}
+	public AmpLocation getLocation() {
+		return location;
+	}
+	public void setLocation(AmpLocation location) {
+		this.location = location;
+	}
+	
+	
 }

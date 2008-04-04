@@ -3,6 +3,7 @@ package org.digijava.module.aim.helper;
 import java.io.Serializable;
 
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.util.IndicatorUtil;
 
@@ -13,7 +14,7 @@ public class AmpPrgIndicatorValue implements Serializable
 	private String creationDate;
 	private int valueType;
 	private Double valAmount;
-	private AmpRegion location;
+	private AmpLocation location;
 
 	/**
 	 * @return Returns the indicatorValueId.
@@ -63,10 +64,10 @@ public class AmpPrgIndicatorValue implements Serializable
 	public void setValAmount(Double valAmount) {
 		this.valAmount = valAmount;
 	}
-	public AmpRegion getLocation() {
+	public AmpLocation getLocation() {
 		return location;
 	}
-	public void setLocation(AmpRegion location) {
+	public void setLocation(AmpLocation location) {
 		this.location = location;
 	}
 }

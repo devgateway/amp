@@ -4,6 +4,8 @@ import org.apache.struts.action.*;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpRegion;
+import org.digijava.module.aim.dbentity.AmpWoreda;
+import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.helper.IndicatorsBean;
 
 
@@ -87,8 +89,21 @@ public class ThemeForm extends ActionForm {
       	  private Long parentIndex;
       	  private String action;
       	  
+      	  private String fill; // National, region, district 	
+      	  private boolean defaultCountryIsSet;
+      	  private Collection<AmpRegion> regions;
+      	  private Long impRegion;
       	  
+      	  private Collection<AmpZone> zones;
+      	  private Long impZone;
           
+      	  private Collection<AmpWoreda> woredas;
+      	  private Long impWoreda;
+      	  
+      	  private String country;
+      	  private String impCountry;
+      	  
+      	  private Integer locationLevelIndex;
           
           
        // pop-up organisation selector window
@@ -98,13 +113,105 @@ public class ThemeForm extends ActionForm {
       	
       	private String activitiesUsingTheme	= null;
       	private String settingsUsedByTheme	= null;
+      	
+      	
 				
+		public String getFill() {
+			return fill;
+		}
+
+		public void setFill(String fill) {
+			this.fill = fill;
+		}
+		
+		
+
+		public Integer getLocationLevelIndex() {
+			return locationLevelIndex;
+		}
+
+		public void setLocationLevelIndex(Integer locationLevelIndex) {
+			this.locationLevelIndex = locationLevelIndex;
+		}
+
+		public boolean isDefaultCountryIsSet() {
+			return defaultCountryIsSet;
+		}
+
+		public void setDefaultCountryIsSet(boolean defaultCountryIsSet) {
+			this.defaultCountryIsSet = defaultCountryIsSet;
+		}
+
+		public Collection<AmpRegion> getRegions() {
+			return regions;
+		}
+
+		public void setRegions(Collection<AmpRegion> regions) {
+			this.regions = regions;
+		}
+
+		public Long getImpRegion() {
+			return impRegion;
+		}
+
+		public void setImpRegion(Long impRegion) {
+			this.impRegion = impRegion;
+		}
+
+		public Collection<AmpZone> getZones() {
+			return zones;
+		}
+
+		public void setZones(Collection<AmpZone> zones) {
+			this.zones = zones;
+		}
+
+		public Long getImpZone() {
+			return impZone;
+		}
+
+		public void setImpZone(Long impZone) {
+			this.impZone = impZone;
+		}
+
+		public Collection<AmpWoreda> getWoredas() {
+			return woredas;
+		}
+
+		public void setWoredas(Collection<AmpWoreda> woredas) {
+			this.woredas = woredas;
+		}
+
+		public Long getImpWoreda() {
+			return impWoreda;
+		}
+
+		public void setImpWoreda(Long impWoreda) {
+			this.impWoreda = impWoreda;
+		}
+
 		public String getFlag() {
 			return flag;
 		}
 
 		public void setFlag(String flag) {
 			this.flag = flag;
+		}
+
+		public String getCountry() {
+			return country;
+		}
+
+		public void setCountry(String country) {
+			this.country = country;
+		}
+
+		public String getImpCountry() {
+			return impCountry;
+		}
+
+		public void setImpCountry(String impCountry) {
+			this.impCountry = impCountry;
 		}
 
 		/**

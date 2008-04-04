@@ -116,7 +116,7 @@ public class LocationUtil {
 
 		try {
 
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			int tempIncr = 0;
 			if (implevel == 2) {
 				//logger.info("searching regions........");
@@ -259,14 +259,7 @@ public class LocationUtil {
 			}
 		} catch (Exception ex) {
 			logger.debug("Unable to search " + ex);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.debug("releaseSession() failed", ex2);
-			}
-		}
-
+		} 
 		return col;
 	}
 	//End Search Location.
@@ -394,7 +387,7 @@ public class LocationUtil {
 		Session session = null;
 		Iterator iter = null;
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 
 			// modified by Priyajith
 			// Desc: removed the usage of session.load and used the select query
@@ -429,15 +422,7 @@ public class LocationUtil {
 			}
 		} catch (Exception ex) {
 			logger.error("Unable to get amp locations :" + ex.getMessage());
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
-		}
+		} 
 		return ampLocations;
 	}
 
@@ -446,7 +431,7 @@ public class LocationUtil {
 		Session session = null;
 		Iterator iter = null;
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			Connection connection = PersistenceManager.getSession().connection();
 			//String queryString = "select distinct region_id, region from v_regions;";
 			String queryString = "select distinct amp_region_id as region_id, name as region from amp_region order by region";
@@ -491,14 +476,6 @@ public class LocationUtil {
 			
 		} catch (Exception ex) {
 			logger.error("Unable to get amp Regions :" + ex.getMessage());
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
 		}
 		return ampRegions;
 	}
@@ -543,7 +520,7 @@ public class LocationUtil {
 		Session session = null;
 		Iterator iter = null;
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 
 			// modified by Priyajith
 			// Desc: removed the usage of session.load and used the select query
@@ -566,15 +543,7 @@ public class LocationUtil {
 			}
 		} catch (Exception ex) {
 			logger.error("Unable to get amp locations :" + ex.getMessage());
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
-		}
+		} 
 		return ampLocations;
 	}
 
@@ -582,7 +551,7 @@ public class LocationUtil {
 		AmpLocation ampLocation = null;
 		Session session = null;
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			// modified by Priyajith
 			// Desc: removed the usage of session.load and
 			// used the select query
@@ -598,15 +567,7 @@ public class LocationUtil {
 			// end
 		} catch (Exception ex) {
 			logger.debug("Unable to get amp locations " + ex.getMessage());
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
-		}
+		} 
 		return ampLocation;
 	}
 
@@ -615,7 +576,7 @@ public class LocationUtil {
 		AmpRegion region = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select r from " + AmpRegion.class.getName()
 					+ " r " + "where (r.ampRegionId=:id)";
 			Query qry = session.createQuery(queryString);
@@ -628,16 +589,7 @@ public class LocationUtil {
 		} catch (Exception e) {
 			logger.debug("Exception from getAmpRegion()");
 			logger.debug(e.toString());
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-				logger.debug(ex.toString());
-			}
-		}
+		} 
 		return region;
 	}
 
@@ -646,7 +598,7 @@ public class LocationUtil {
 		AmpZone zone = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select z from " + AmpZone.class.getName()
 					+ " z " + "where (z.ampZoneId=:id)";
 			Query qry = session.createQuery(queryString);
@@ -659,16 +611,7 @@ public class LocationUtil {
 		} catch (Exception e) {
 			logger.debug("Exception from getAmpZone()");
 			logger.debug(e.toString());
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-				logger.debug(ex.toString());
-			}
-		}
+		} 
 		return zone;
 	}
 
@@ -677,7 +620,7 @@ public class LocationUtil {
 		AmpWoreda woreda = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select w from " + AmpWoreda.class.getName()
 					+ " w " + "where (w.ampWoredaId=:id)";
 			Query qry = session.createQuery(queryString);
@@ -690,25 +633,16 @@ public class LocationUtil {
 		} catch (Exception e) {
 			logger.debug("Exception from getAmpZone()");
 			logger.debug(e.toString());
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-				logger.debug(ex.toString());
-			}
-		}
+		} 
 		return woreda;
 	}
 
-	public static Collection getAllRegionsUnderCountry(String iso) {
+	public static Collection<AmpRegion> getAllRegionsUnderCountry(String iso) {
 		Session session = null;
-		Collection col = null;
+		Collection<AmpRegion> col = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select reg from " + AmpRegion.class.getName()
 					+ " reg " + "where country_id = '" + iso
 					+ "'  order by reg.name";
@@ -718,25 +652,16 @@ public class LocationUtil {
 		} catch (Exception e) {
 			logger.debug("Exception from getAllRegionsUnderCountry()");
 			logger.debug(e.toString());
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-				logger.debug(ex.toString());
-			}
-		}
+		} 
 		return col;
 	}
 
-	public static Collection getAllZonesUnderRegion(Long id) {
+	public static Collection<AmpZone> getAllZonesUnderRegion(Long id) {
 		Session session = null;
-		Collection col = null;
+		Collection<AmpZone> col = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select zon from " + AmpZone.class.getName()
 					+ " zon " + "where region_id = " + id
 					+ " order by zon.name";
@@ -746,25 +671,16 @@ public class LocationUtil {
 		} catch (Exception e) {
 			logger.debug("Exception from getAllZonesUnderRegion()");
 			logger.debug(e.toString());
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-				logger.debug(ex.toString());
-			}
-		}
+		} 
 		return col;
 	}
 
-	public static Collection getAllWoredasUnderZone(Long id) {
+	public static Collection<AmpWoreda> getAllWoredasUnderZone(Long id) {
 		Session session = null;
-		Collection col = null;
+		Collection<AmpWoreda> col = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select wor from " + AmpWoreda.class.getName()
 					+ " wor " + "where zone_id = " + id + " order by wor.name";
 
@@ -773,16 +689,7 @@ public class LocationUtil {
 		} catch (Exception e) {
 			logger.debug("Exception from getAllWoredasUnderZone()");
 			logger.debug(e.toString());
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-				logger.debug(ex.toString());
-			}
-		}
+		} 
 		return col;
 	}
 	public static ArrayList getAmpLocationsForDefaultCountry() {
@@ -794,7 +701,7 @@ public class LocationUtil {
 		Iterator iter = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			queryString = " select l from " + AmpRegion.class.getName()
 					+ " l where l.country=:country order by l.name";
 			q = session.createQuery(queryString);
@@ -810,13 +717,7 @@ public class LocationUtil {
 		} catch (Exception ex) {
 			logger.error("Unable to get Amp location names  from database "
 					+ ex.getMessage());
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
-		}
+		} 
 		return region;
 	}
 	public static ArrayList getAmpLocations() {
@@ -828,7 +729,7 @@ public class LocationUtil {
 		Iterator iter = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			queryString = " select l from " + AmpRegion.class.getName()
 					+ " l order by l.name";
 			q = session.createQuery(queryString);
@@ -843,13 +744,7 @@ public class LocationUtil {
 		} catch (Exception ex) {
 			logger.error("Unable to get Amp location names  from database "
 					+ ex.getMessage());
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
-		}
+		} 
 		return region;
 	}
 
@@ -857,20 +752,12 @@ public class LocationUtil {
 		Session session = null;
 		Long id = null;
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select max(c.countryId) from " + Country.class.getName() + " c";
 			id = (Long) session.createQuery(queryString).list().get(0);
 		} catch (Exception ex) {
 			logger.debug("Exception from getDgCountry()" + ex);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed" + ex);
-			}
-		}
+		} 
 		return id;
 	}
 
@@ -878,7 +765,7 @@ public class LocationUtil {
 		boolean result = true;
 		Session session = null;
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select c from " + Country.class.getName()
 									+ " c where (c.countryName=:name) or (c.iso=:iso) or (c.iso3=:iso3)";
 			Query q = session.createQuery(queryString);
@@ -892,16 +779,7 @@ public class LocationUtil {
 			logger.debug("Exception from chkDuplicateIso(): " + ex);
 			ex.printStackTrace(System.out);
 		}
-		finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				}
-				catch (Exception e) {
-					logger.debug("releaseSession() failed : " + e);
-				}
-			}
-		}
+		
 		return result;
 	}
 

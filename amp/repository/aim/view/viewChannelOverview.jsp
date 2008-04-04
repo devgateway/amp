@@ -66,13 +66,7 @@ function fnDeleteProject()
 {
 	var name=confirm("Are you sure you want to delete the record")
 	if (name==true)
-	{function fnEditProject(id)
-{
-	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-   document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~activityId=" + id + "~actId=" + id;
-	document.aimChannelOverviewForm.target = "_self";
-    document.aimChannelOverviewForm.submit();
-}
+	{
 		<digi:context name="addUrl" property="context/module/moduleinstance/deleteAmpActivity.do" />
 	    document.aimChannelOverviewForm.action = "<%=addUrl%>";
 		document.aimChannelOverviewForm.submit();

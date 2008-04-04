@@ -293,7 +293,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																				</field:display>
 																		<tr><td><b>
 																		
-																		
+																		<font 
 																		<c:if test="${aimEditActivityForm.totalCommitmentsAsDouble < aimEditActivityForm.regionTotalDisb }">
 																		 color="RED"
 																		</c:if>

@@ -116,7 +116,7 @@ public class ProgramUtil {
 			AmpTheme theme = null;
 
 			try {
-				session = PersistenceManager.getSession();
+				session = PersistenceManager.getRequestDBSession();
 				String qryStr = "select theme from " + AmpTheme.class.getName()
 						+ " theme where (theme.name=:name)";
 				Query qry = session.createQuery(qryStr);
@@ -128,15 +128,7 @@ public class ProgramUtil {
 			} catch (Exception e) {
 				logger.error("Exception from getTheme()");
 				logger.error(e.getMessage());
-			} finally {
-				if (session != null) {
-					try {
-						PersistenceManager.releaseSession(session);
-					} catch (Exception rsf) {
-						logger.error("Release session failed");
-					}
-				}
-			}
+			} 
 			return theme;
 		}
 
@@ -1066,7 +1058,7 @@ public class ProgramUtil {
 			Transaction tx = null;
 			try
 			{
-				session = PersistenceManager.getSession();
+				session = PersistenceManager.getRequestDBSession();
 				Iterator indValItr = prgIndValues.iterator();
 				while(indValItr.hasNext())
 				{
@@ -1101,21 +1093,7 @@ public class ProgramUtil {
 						trbf.printStackTrace(System.out);
 					}
 				}
-			}
-			finally
-			{
-				if (session != null)
-				{
-					try
-					{
-						PersistenceManager.releaseSession(session);
-					}
-					catch (Exception rsf)
-					{
-						logger.error("Failed to release session :" + rsf.getMessage());
-					}
-				}
-			}
+			}			
 		}
 		
 		/**
@@ -1303,7 +1281,7 @@ public class ProgramUtil {
 			Transaction tx = null;
 			try
 			{
-				session = PersistenceManager.getSession();
+				session = PersistenceManager.getRequestDBSession();
 				AmpThemeIndicators tempThemeInd = null;
 				tempThemeInd = (AmpThemeIndicators) session.load(AmpThemeIndicators.class,allPrgInd.getIndicatorId());
 				tempThemeInd.setName(allPrgInd.getName());
@@ -1331,21 +1309,7 @@ public class ProgramUtil {
 						trbf.printStackTrace(System.out);
 					}
 				}
-			}
-			finally
-			{
-				if (session != null)
-				{
-					try
-					{
-						PersistenceManager.releaseSession(session);
-					}
-					catch (Exception rsf)
-					{
-						logger.error("Failed to release session :" + rsf.getMessage());
-					}
-				}
-			}
+			}			
 		}
 
 		/**
@@ -1482,7 +1446,7 @@ public class ProgramUtil {
 			Transaction tx = null;
 			try
 			{
-				session = PersistenceManager.getSession();
+				session = PersistenceManager.getRequestDBSession();
 				AmpTheme tempAmpTheme = null;
 				tempAmpTheme = (AmpTheme) session.load(AmpTheme.class,editPrg.getAmpThemeId());
 				tempAmpTheme.setName(editPrg.getName());
@@ -1518,21 +1482,7 @@ public class ProgramUtil {
 						trbf.printStackTrace(System.out);
 					}
 				}
-			}
-			finally
-			{
-				if (session != null)
-				{
-					try
-					{
-						PersistenceManager.releaseSession(session);
-					}
-					catch (Exception rsf)
-					{
-						logger.error("Failed to release session :" + rsf.getMessage());
-					}
-				}
-			}
+			}			
 		}
 
 		public static Collection getRelatedThemes(Long id) throws DgException

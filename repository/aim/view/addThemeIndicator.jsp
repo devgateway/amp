@@ -424,31 +424,40 @@ function closeWindow() 
 													     </td>
 													</tr>
 														<logic:notEmpty name="prgIndicatorItr" property="values">
-													   <logic:iterate name="prgIndicatorItr" property="values" id="prgIndicatorValues" type="org.digijava.module.aim.dbentity.AmpIndicatorValue">
-															<tr bgcolor="#ffffff">
-																		 <td width="40" bgcolor="#f4f4f2" align="center">
-																		 ${prgIndicatorItr.indicator.description}
-																						<c:if test="${prgIndicatorValues.valueType=='0'}">
-																						Target
-																						</c:if>
-																						<c:if test="${prgIndicatorValues.valueType=='1'}">
-																						Actual
-																						</c:if>
-																						<c:if test="${prgIndicatorValues.valueType=='2'}">
-																						Base
-																						</c:if>
-																			</td>
-																			<td align="center" width="10%" bgcolor="#f4f4f2"><b>
-																						<bean:write name="prgIndicatorValues" property="value"/></b>
-																			</td>
-																			<td bgcolor="#f4f4f2" align="center">
-																				<bean:write name="prgIndicatorValues" property="valueDate"/></b>
-																			</td>
-																			<td bgcolor="#f4f4f2" align="center">
-																				<bean:write name="prgIndicatorValues" property="indValId"/></b>
-																			</td>
-															</tr>
-														</logic:iterate>
+														   <logic:iterate name="prgIndicatorItr" property="values" id="prgIndicatorValues" type="org.digijava.module.aim.dbentity.AmpIndicatorValue">
+																<tr bgcolor="#ffffff">
+																	<td width="40" bgcolor="#f4f4f2" align="center">
+																		${prgIndicatorItr.indicator.description}
+																		<c:if test="${prgIndicatorValues.valueType=='0'}">Target</c:if>
+																		<c:if test="${prgIndicatorValues.valueType=='1'}">Actual</c:if>
+																		<c:if test="${prgIndicatorValues.valueType=='2'}">Base</c:if>
+																	</td>
+																	<td align="center" width="10%" bgcolor="#f4f4f2"><b>
+																		<bean:write name="prgIndicatorValues" property="value"/></b>
+																	</td>
+																	<td bgcolor="#f4f4f2" align="center">
+																		<bean:write name="prgIndicatorValues" property="valueDate"/></b>
+																	</td>
+																	<td bgcolor="#f4f4f2" align="center">
+																		<c:if test="${not empty prgIndicatorValues.location}">
+																			<bean:define id="loc" name="prgIndicatorValues" property="location"></bean:define>
+																			
+																			<c:if test="${!empty loc.country}">
+															                	[${loc.country}]
+															                </c:if>
+															                <c:if test="${!empty loc.region}">
+															                	[${loc.region}]
+															                </c:if>
+															                <c:if test="${!empty loc.zone}">
+															                	[${loc.zone}]
+															                </c:if>
+															                <c:if test="${!empty loc.woreda}">
+															                	[${loc.woreda}]
+															                </c:if> 
+																		</c:if>
+																	</td>
+																</tr>
+															</logic:iterate>
 														</logic:notEmpty>
 												</table>
 											</span>

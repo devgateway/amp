@@ -942,8 +942,8 @@ public class FeaturesUtil {
   /*
    * to get the country name from the Iso got
    */
-  public static Collection getDefaultCountry(String ISO) {
-    Collection col = null;
+  public static Collection<Country> getDefaultCountry(String ISO) {
+    Collection<Country> col = null;
     Session session = null;
     Query qry = null;
     String qryStr = null;
@@ -951,7 +951,7 @@ public class FeaturesUtil {
     String a = "in the get country...";
     logger.info(a);
     try {
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
       qryStr = "select cn from " + Country.class.getName() +
           " cn where cn.iso = '" + ISO + "'";
       qry = session.createQuery(qryStr);
@@ -969,17 +969,7 @@ public class FeaturesUtil {
           logger.error("Rollback failed !");
         }
       }
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception rsf) {
-          logger.error("Release session failed :" + rsf.getMessage());
-        }
-      }
-    }
+    }    
     return col;
   }
 
@@ -996,7 +986,7 @@ public class FeaturesUtil {
     Query qry = null;
 
     try {
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
       qryStr = "select f from " + AmpTemplatesVisibility.class.getName() +
           " f order by f.name asc";
       qry = session.createQuery(qryStr);
@@ -1005,17 +995,7 @@ public class FeaturesUtil {
     }
     catch (Exception ex) {
       logger.error("Exception : " + ex.getMessage());
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception rsf) {
-          logger.error("Release session failed :" + rsf.getMessage());
-        }
-      }
-    }
+    }    
     return col;
   }
 
@@ -1032,7 +1012,7 @@ public class FeaturesUtil {
     Query qry = null;
 
     try {
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
       qryStr = "select f from " + AmpModulesVisibility.class.getName() +
           " f order by f.name asc";
       qry = session.createQuery(qryStr);
@@ -1041,17 +1021,7 @@ public class FeaturesUtil {
     }
     catch (Exception ex) {
       logger.error("Exception : " + ex.getMessage());
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception rsf) {
-          logger.error("Release session failed :" + rsf.getMessage());
-        }
-      }
-    }
+    }    
     return col;
   }
 
@@ -1068,7 +1038,7 @@ public class FeaturesUtil {
     Query qry = null;
 
     try {
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
       qryStr = "select f from " + AmpFeaturesVisibility.class.getName() +
           " f order by f.name asc";
       qry = session.createQuery(qryStr);
@@ -1077,17 +1047,7 @@ public class FeaturesUtil {
     }
     catch (Exception ex) {
       logger.error("Exception : " + ex.getMessage());
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception rsf) {
-          logger.error("Release session failed :" + rsf.getMessage());
-        }
-      }
-    }
+    }    
     return col;
   }
 
@@ -1104,7 +1064,7 @@ public class FeaturesUtil {
     Query qry = null;
 
     try {
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
       qryStr = "select f from " + AmpFieldsVisibility.class.getName() +
           " f order by f.name asc";
       qry = session.createQuery(qryStr);
@@ -1113,17 +1073,7 @@ public class FeaturesUtil {
     }
     catch (Exception ex) {
       logger.error("Exception : " + ex.getMessage());
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception rsf) {
-          logger.error("Release session failed :" + rsf.getMessage());
-        }
-      }
-    }
+    }    
     return col;
   }
 
@@ -1137,7 +1087,7 @@ public class FeaturesUtil {
     Query qry = null;
 
     try {
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
       qryStr = "select f from " + AmpTemplatesVisibility.class.getName() + " f" +
           " where f.name = '" + templateName + "'";
       qry = session.createQuery(qryStr);
@@ -1152,16 +1102,7 @@ public class FeaturesUtil {
     catch (Exception ex) {
       logger.error("Exception : " + ex.getMessage());
     }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception rsf) {
-          logger.error("Release session failed :" + rsf.getMessage());
-        }
-      }
-    }
+   
     return true;
   }
 
@@ -1178,7 +1119,7 @@ public class FeaturesUtil {
     Query qry = null;
 
     try {
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
       qryStr = "select f from " + AmpModulesVisibility.class.getName() +
           " f order by f.name asc";
       qry = session.createQuery(qryStr);
@@ -1187,17 +1128,7 @@ public class FeaturesUtil {
     }
     catch (Exception ex) {
       logger.error("Exception : " + ex.getMessage());
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception rsf) {
-          logger.error("Release session failed :" + rsf.getMessage());
-        }
-      }
-    }
+    }    
     return col;
   }
 
@@ -1211,7 +1142,7 @@ public class FeaturesUtil {
     Transaction tx = null;
 
     try {
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
       tx = session.beginTransaction();
       AmpTemplatesVisibility ampTemplate = new AmpTemplatesVisibility();
       ampTemplate.setName(templateName);
@@ -1220,18 +1151,7 @@ public class FeaturesUtil {
     }
     catch (Exception ex) {
       logger.error("Exception : " + ex.getMessage());
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception rsf) {
-          logger.error("Release session failed :" + rsf.getMessage());
-        }
-      }
-    }
-
+    }    
     return;
   }
 
@@ -1242,23 +1162,13 @@ public class FeaturesUtil {
     Session session = null;
     AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
     try {
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
       ft = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
                                                  id);
     }
     catch (Exception ex) {
       logger.error("Exception : " + ex.getMessage());
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception rsf) {
-          logger.error("Release session failed :" + rsf.getMessage());
-        }
-      }
-    }
+    }    
     return ft.getItems();
   }
 
@@ -1269,23 +1179,13 @@ public class FeaturesUtil {
     Session session = null;
     AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
     try {
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
       ft = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
                                                  id);
     }
     catch (Exception ex) {
       logger.error("Exception : " + ex.getMessage());
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception rsf) {
-          logger.error("Release session failed :" + rsf.getMessage());
-        }
-      }
-    }
+    }    
     return ft.getName();
   }
 
@@ -1388,18 +1288,7 @@ public class FeaturesUtil {
     }
     catch (Exception ex) {
       logger.error("Exception ;;;; " + ex.getMessage());
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception rsf) {
-          logger.error("Release session failed :" + rsf.getMessage());
-        }
-      }
-    }
-
+    }   
     return;
   }
 

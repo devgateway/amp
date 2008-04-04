@@ -426,8 +426,7 @@ function closeWindow() 
 														<logic:notEmpty name="prgIndicatorItr" property="values">
 														   <logic:iterate name="prgIndicatorItr" property="values" id="prgIndicatorValues" type="org.digijava.module.aim.dbentity.AmpIndicatorValue">
 																<tr bgcolor="#ffffff">
-																	<td width="40" bgcolor="#f4f4f2" align="center">
-																		${prgIndicatorItr.indicator.description}
+																	<td width="40" bgcolor="#f4f4f2" align="center">																		
 																		<c:if test="${prgIndicatorValues.valueType=='0'}">Target</c:if>
 																		<c:if test="${prgIndicatorValues.valueType=='1'}">Actual</c:if>
 																		<c:if test="${prgIndicatorValues.valueType=='2'}">Base</c:if>

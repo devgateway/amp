@@ -24,11 +24,11 @@
 		import org.digijava.module.aim.dbentity.AmpIndicator;
 		import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 		import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-		import org.digijava.module.aim.dbentity.AmpLocation;
-		import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
+		import org.digijava.module.aim.dbentity.AmpLocation;		
+import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 		import org.digijava.module.aim.dbentity.AmpSector;
-		import org.digijava.module.aim.dbentity.AmpTheme;
-		import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
+		import org.digijava.module.aim.dbentity.AmpTheme;		
+import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
 		import org.digijava.module.aim.dbentity.IndicatorActivity;
 		import org.digijava.module.aim.dbentity.IndicatorConnection;
 		import org.digijava.module.aim.dbentity.IndicatorTheme;
@@ -37,8 +37,8 @@
 		import org.digijava.module.aim.helper.AllPrgIndicators;
 		import org.digijava.module.aim.helper.AmpPrgIndicator;
 		import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
-		import org.digijava.module.aim.helper.DateConversion;
-		import org.digijava.module.aim.helper.MEIndicatorRisk;
+import org.digijava.module.aim.helper.DateConversion;
+		
 		
 		/**
 		 * Indicator utilities.
@@ -459,16 +459,23 @@
 				return theme.getIndicators();
 			}
 			
+			/**
+			 * loads Indicator value for the specified connection and indicator Id;
+			 * @param indicatorValueId
+			 * @param connectionId
+			 * @return
+			 * @throws Exception
+			 * @author Dare Roinishvili
+			 */
 			public static AmpIndicatorValue loadAmpIndicatorValue (Long indicatorValueId, Long connectionId) throws Exception{
-				Session session=PersistenceManager.getRequestDBSession();
-				Transaction tx=null;
+				Session session=PersistenceManager.getRequestDBSession();				
 				String queryStr=null;
 				Query qry=null;
 				AmpIndicatorValue ampIndValue=null;
 				try {
-					String queryString = "from " + AmpIndicatorValue.class.getName() +
+					queryStr = "from " + AmpIndicatorValue.class.getName() +
 		            " indVal where indVal.indValId=:indicatorId and indVal.indicatorConnection.id=:connId";
-		         qry = session.createQuery(queryString);
+		         qry = session.createQuery(queryStr);
 		         qry.setParameter("indicatorId",indicatorValueId);
 		         qry.setParameter("connId",connectionId );
 		         ampIndValue =(AmpIndicatorValue) qry.uniqueResult();	
@@ -479,12 +486,16 @@
 				return ampIndValue;
 			}
 			
-			
+			/**
+			 * removes ampIndicatorValue and AmpLocation from the db
+			 * @param indicatorValueId
+			 * @param connectionId
+			 * @throws Exception
+			 * @author Dare Roinishvili
+			 */
 			public static void removeProgramIndicatorValue(Long indicatorValueId, Long connectionId) throws Exception{
 				Session session=PersistenceManager.getRequestDBSession();
-				Transaction tx=null;
-				String queryStr=null;
-				Query qry=null;
+				Transaction tx=null;				
 				AmpIndicatorValue ampIndValue;
 				try {
 					ampIndValue=loadAmpIndicatorValue(indicatorValueId,connectionId);

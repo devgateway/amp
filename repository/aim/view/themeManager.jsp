@@ -276,7 +276,7 @@
 											<tr align="center" bgcolor="#ffffff">
 												<td>
 													<input class="button" type="button" name="addBtn" value="<digi:trn key="aim:addNewProgram">Add New Program</digi:trn>" onclick="addProgram()" style="font-family:verdana;font-size:11px;">
-													<input class="button" type="button" name="addBtn" value="<digi:trn key="aim:expandall">Expand All</digi:trn>" onclick="expabdall()" style="font-family:verdana;font-size:11px;">
+													<input class="button" type="button" name="expandBtn" value="<digi:trn key="aim:expandall">Expand All</digi:trn>" onclick="expabdall()" style="font-family:verdana;font-size:11px;">
 												</td>
 											</tr>
 											<tr>

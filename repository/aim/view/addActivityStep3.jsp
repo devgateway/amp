@@ -45,7 +45,7 @@
 	}
 
 	function addFunding(orgId) {
-			openNewWindow(900, 500);
+			openNewRsWindow(900, 500);
 			<digi:context name="addFunding" property="context/module/moduleinstance/addFunding.do" />
 			document.aimEditActivityForm.orgId.value = orgId;
 			document.aimEditActivityForm.action = "<%= addFunding %>?orgId" + orgId+"&edit=true";

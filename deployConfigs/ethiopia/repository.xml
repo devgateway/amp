@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <!DOCTYPE jackrabbitRepository[
-	<!ENTITY dsname "java:stagingDS">
+	<!ENTITY dsname "java:ethiopiaDS">
 ]>
 
 <Repository>

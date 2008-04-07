@@ -176,7 +176,7 @@ background-color: yellow;
 		    visible:false,
 		    modal:true,
 		    draggable:true} );
-		    
+                
 		    
 	function initScripts() {
 	    var msg='\n<digi:trn key="rep:filter:selectFilter">Select filters</digi:trn>';
@@ -192,9 +192,8 @@ background-color: yellow;
 	}
 	
 	function showFilter() {
-		var element = document.getElementById("myFilter");
-		element.style.display = "inline";
-		myPanel1.setBody(element);
+                var element= document.getElementById("myFilter");
+		myPanel1.setBody(element.innerHTML);
 		myPanel1.center();
 		myPanel1.show();
 	}

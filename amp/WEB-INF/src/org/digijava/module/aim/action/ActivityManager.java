@@ -88,7 +88,7 @@ public class ActivityManager extends Action {
 
 		int idx = 0;
 
-		if(actForm.getPage() * actForm.getPageSize() < allActivities.size()){
+		if(pageSize != -1 && actForm.getPage() * actForm.getPageSize() < allActivities.size()){
 			idx =  actForm.getPage() * actForm.getPageSize();
 		}else{
 			idx = 0;

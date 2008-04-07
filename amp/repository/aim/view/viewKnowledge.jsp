@@ -162,7 +162,7 @@ function preview(id)
 										</c:set> <digi:link href="/viewKnowledge.do" name="urlKnowledge"
 											styleClass="comment" title="${translation}">
 
-											<digi:trn key="aim:knowledge">Knowledge</digi:trn>
+											<digi:trn key="aim:documents">Documents</digi:trn>
 
 										</digi:link>&nbsp;&gt;&nbsp;<digi:trn key="aim:docOverview">Overview</digi:trn><logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&nbsp;&gt;&nbsp;
                                        <digi:trn key="aim:${aimKnowledgeForm.perspective}"> <bean:write name="aimKnowledgeForm"	property="perspective" /></digi:trn>

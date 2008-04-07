@@ -1,6 +1,7 @@
 package org.digijava.module.aim.util;
 
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -1840,6 +1841,10 @@ public class FeaturesUtil {
     Transaction tx = null;
     try {
       session = PersistenceManager.getSession();
+      if(session.isDirty()) {
+    	  System.out.println("field:::: dirtyyyyyyyyyyyyyyyyyyyyyyy");
+    	  session.flush();
+      }
       tx = session.beginTransaction();
       feature = (AmpFeaturesVisibility) session.load(AmpFeaturesVisibility.class,
           featureId);
@@ -1896,6 +1901,7 @@ public class FeaturesUtil {
     Transaction tx;
     try {
       session = PersistenceManager.getSession();
+
       tx = session.beginTransaction();
       module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class,
           moduleId);
@@ -1943,6 +1949,7 @@ public class FeaturesUtil {
     Transaction tx;
     try {
       session = PersistenceManager.getSession();
+
       tx = session.beginTransaction();
       module.setName(moduleName);
       if(hasLevel!=null && "no".compareTo(hasLevel)==0)
@@ -2135,6 +2142,427 @@ public class FeaturesUtil {
     return ft;
   }
 
+  /**
+   * @author dan
+   */
+  public static List getAllFieldsId() {
+    Session session = null;
+    Transaction tx=null;
+    ArrayList <Long> result=new ArrayList();
+    
+    try {
+    	session = PersistenceManager.getSession();
+		tx = session.beginTransaction();
+		List list = session.createQuery("from " + AmpFieldsVisibility.class.getName() ). list();
+	    for(Iterator it=list.iterator();it.hasNext();)
+	    {
+	    	AmpFieldsVisibility f=(AmpFieldsVisibility) it.next();
+	    	result.add(f.getId());
+	    }
+	} catch (HibernateException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    finally {
+        if (session != null) {
+          try {
+          	//session.close();
+            PersistenceManager.releaseSession(session);
+          }
+          catch (Exception rsf) {
+            logger.error("Release session failed :" + rsf.getMessage());
+          }
+        }
+      }
+    return result;
+  }
+  
+  /**
+   * @author dan
+   */
+  public static List getAllModulesId() {
+    Session session = null;
+    Transaction tx=null;
+    ArrayList <Long> result=new ArrayList();
+    
+    try {
+    	session = PersistenceManager.getSession();
+		tx = session.beginTransaction();
+		List list = session.createQuery("from " + AmpModulesVisibility.class.getName() ). list();
+	    for(Iterator it=list.iterator();it.hasNext();)
+	    {
+	    	AmpModulesVisibility f=(AmpModulesVisibility) it.next();
+	    	result.add(f.getId());
+	    }
+	} catch (HibernateException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    finally {
+        if (session != null) {
+          try {
+          	//session.close();
+            PersistenceManager.releaseSession(session);
+          }
+          catch (Exception rsf) {
+            logger.error("Release session failed :" + rsf.getMessage());
+          }
+        }
+      }
+    return result;
+  }
+  
+  /**
+   * @author dan
+   */
+  public static List getAllFeaturesId() {
+    Session session = null;
+    Transaction tx=null;
+    ArrayList <Long> result=new ArrayList();
+    
+    try {
+    	session = PersistenceManager.getSession();
+		tx = session.beginTransaction();
+		List list = session.createQuery("from " + AmpFeaturesVisibility.class.getName() ). list();
+	    for(Iterator it=list.iterator();it.hasNext();)
+	    {
+	    	AmpFeaturesVisibility f=(AmpFeaturesVisibility) it.next();
+	    	result.add(f.getId());
+	    }
+	} catch (HibernateException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    finally {
+        if (session != null) {
+          try {
+          	//session.close();
+            PersistenceManager.releaseSession(session);
+          }
+          catch (Exception rsf) {
+            logger.error("Release session failed :" + rsf.getMessage());
+          }
+        }
+      }
+    return result;
+  }
+  
+  /**
+   * @author dan
+   * 
+   */
+  
+  public static void cleanUpFM(ArrayList allFieldsId) {
+    Session session = null;
+    
+    Transaction tx=null;
+    try {
+    	session = PersistenceManager.getSession();
+    	tx = session.beginTransaction();
+    	 for (Iterator it = allFieldsId.iterator(); it.hasNext();) {
+			Long idf = (Long) it.next();
+			AmpFieldsVisibility field = (AmpFieldsVisibility) session.load(AmpFieldsVisibility.class, idf);
+			AmpFeaturesVisibility parent = (AmpFeaturesVisibility) field.getParent();
+			parent.getItems().remove(field);
+			Iterator i = field.getTemplates().iterator();
+			while (i.hasNext()) {
+				AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
+				element.getFields().remove(field);
+			}
+			session.delete(field);
+			//session.flush();
+    	 }
+    	 session.flush();
+    	 tx.commit();
+    }
+    catch (Exception ex) {
+        logger.error("Exception ::: " + ex.getMessage());
+      }
+      finally {
+        if (session != null) {
+          try {
+          	//session.close();
+            PersistenceManager.releaseSession(session);
+          }
+          catch (Exception rsf) {
+            logger.error("Release session failed :" + rsf.getMessage());
+          }
+        }
+      }
+  }
+  
+  /**
+   * @author dan
+   * setting the parent to null
+   */
+  public static void deleteOneModule(Long id) {
+	    Session session = null;
+	    
+	    Transaction tx=null;
+	    try {
+	    	session = PersistenceManager.getSession();
+	    	tx = session.beginTransaction();
+	    	AmpModulesVisibility module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, id);
+	    	      AmpModulesVisibility parent = (AmpModulesVisibility) module.getParent();
+	    	        Iterator i = module.getTemplates().iterator();
+	    	      i = module.getTemplates().iterator();
+	    	      while (i.hasNext()) {
+	    	        AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
+	    	        if(element.getAllItems()!=null)  element.getAllItems().remove(module);
+	    	        if(element.getItems()!=null) element.getItems().remove(module);
+	    	      }
+	    	      if(module.getParent()!=null)
+	    	      {
+	    	    	  parent.getSubmodules().remove(module);
+	    	    	  session.delete(module);
+	    	    	  session.flush();
+	    	      }
+	    	 tx.commit();
+	    }
+	    catch (Exception ex) {
+	        logger.error("Exception ... " + ex.getMessage());
+	      }
+	      finally {
+	        if (session != null) {
+	          try {
+	          	//session.close();
+	            PersistenceManager.releaseSession(session);
+	          }
+	          catch (Exception rsf) {
+	            logger.error("Release session failed :" + rsf.getMessage());
+	          }
+	        }
+	      }
+	  }
+
+  /**
+   * @author dan
+   * delete one module from db
+   */
+  public static void deleteModule(Long id) {
+	    Session session = null;
+	    
+	    Transaction tx=null;
+	    try {
+	    	session = PersistenceManager.getSession();
+	    	tx = session.beginTransaction();
+	    	AmpModulesVisibility module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, id);
+	    	session.delete(module);
+	    	session.flush();
+	    	tx.commit();
+	    }
+	    catch (Exception ex) {
+	        logger.error("Exception ... " + ex.getMessage());
+	      }
+	      finally {
+	        if (session != null) {
+	          try {
+	          	//session.close();
+	            PersistenceManager.releaseSession(session);
+	          }
+	          catch (Exception rsf) {
+	            logger.error("Release session failed :" + rsf.getMessage());
+	          }
+	        }
+	      }
+	  }
+
+
+  
+  
+  /**
+   * @author dan
+   * 
+   */
+  public static void deleteOneFeature(Long id) {
+	    Session session = null;
+	    
+	    Transaction tx=null;
+	    try {
+	    	session = PersistenceManager.getSession();
+	    	tx = session.beginTransaction();
+	    	
+	    	
+	    	AmpFeaturesVisibility feature = (AmpFeaturesVisibility) session.load(AmpFeaturesVisibility.class, id);
+	    	      AmpObjectVisibility parent = (AmpObjectVisibility) feature.getParent();
+	    	      parent.getItems().remove(feature);
+	    	      Iterator i = feature.getTemplates().iterator();
+	    	      i = feature.getTemplates().iterator();
+	    	      while (i.hasNext()) {
+	    	        AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
+	    	        element.getFeatures().remove(feature);
+	    	      }
+	    	  session.delete(feature);
+				
+	    	 session.flush();
+	    	 tx.commit();
+	    }
+	    catch (Exception ex) {
+	        logger.error("Exception :: " + ex.getMessage());
+	      }
+	      finally {
+	        if (session != null) {
+	          try {
+	          	//session.close();
+	            PersistenceManager.releaseSession(session);
+	          }
+	          catch (Exception rsf) {
+	            logger.error("Release session failed :" + rsf.getMessage());
+	          }
+	        }
+	      }
+	  }
+
+  /**
+   * @author dan
+   */
+  
+  public static void deleteOneField(Long id) {
+    Session session = null;
+    
+    Transaction tx=null;
+    try {
+    	session = PersistenceManager.getSession();
+    	tx = session.beginTransaction();
+			AmpFieldsVisibility field = (AmpFieldsVisibility) session.load(AmpFieldsVisibility.class, id);
+			AmpFeaturesVisibility parent = (AmpFeaturesVisibility) field.getParent();
+			parent.getItems().remove(field);
+			Iterator i = field.getTemplates().iterator();
+			while (i.hasNext()) {
+				AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
+				element.getFields().remove(field);
+			}
+			session.delete(field);
+	//	 if(session.contains(field)) System.out.println("o daaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: " + field.getName());
+    	 session.flush();
+    	 tx.commit();
+    }
+    catch (Exception ex) {
+        logger.error("Exception ::: " + ex.getMessage());
+      }
+      finally {
+        if (session != null) {
+          try {
+          	//session.close();
+            PersistenceManager.releaseSession(session);
+          }
+          catch (Exception rsf) {
+            logger.error("Release session failed :" + rsf.getMessage());
+          }
+        }
+      }
+  }
+
+  
+  /**
+   * @author dan
+   */
+  /*
+  public static void cleanUpFM(Long id, ArrayList allFieldsId) {
+    Session session = null;
+    AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
+    Transaction tx=null;
+    try {
+      session = PersistenceManager.getSession();
+      tx = session.beginTransaction();
+
+      //ft = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,id);
+      List list = session.createQuery("from " + AmpTemplatesVisibility.class.getName() ). list();
+      for(Iterator it=list.iterator();it.hasNext();)
+      {
+    	  AmpTemplatesVisibility atv=(AmpTemplatesVisibility) it.next();
+    	  atv.setFeatures(null);
+    	  atv.setItems(null);
+    	  atv.setFields(null);
+    	  //atv.setAllItems(null);
+      }
+      tx.commit();
+      
+       * AmpFieldsVisibility field = (AmpFieldsVisibility) session.load(
+          AmpFieldsVisibility.class, id);
+      AmpFeaturesVisibility parent = (AmpFeaturesVisibility) field.getParent();
+      parent.getItems().remove(field);
+      Iterator i = field.getTemplates().iterator();
+      while (i.hasNext()) {
+        AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
+        element.getFields().remove(field);
+      }
+      session.delete(field);
+      
+     // tx = session.beginTransaction();
+      List fieldsList = session.createQuery("from " + AmpFieldsVisibility.class.getName() ). list();
+      for(Iterator it=fieldsList.iterator();it.hasNext();)
+      {
+    	  AmpFieldsVisibility atv=(AmpFieldsVisibility) it.next();
+    	  //atv.setItems(null);
+    	  //atv.setAllItems(null);
+    	  AmpFeaturesVisibility parent = (AmpFeaturesVisibility) atv.getParent();
+          parent.getItems().remove(atv);
+         
+          
+          Iterator i = atv.getTemplates().iterator();
+          while (i.hasNext()) {
+            AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
+            element.getFields().remove(atv);
+          }
+          atv.setParent(null);
+          atv.setTemplates(null);
+          if(session.contains(atv)) System.out.println("ooooo daaaaaaaaaaaaaaaaaaaaaaaaaa");
+    	  //session.delete(atv);
+      }
+      session.flush();
+      tx.commit();
+      /*
+      List list = session.createQuery("from " +
+                                      AmpModulesVisibility.class.getName() ). list();
+
+      TreeSet mySet=new TreeSet(FeaturesUtil.ALPHA_ORDER);
+      mySet.addAll(list);
+      ft.setAllItems(mySet);
+      */
+
+     // Statement st = session.connection().createStatement();
+     /* st.execute("TRUNCATE TABLE amp_fields_templates");
+      st.execute("TRUNCATE TABLE amp_fields_visibility");
+      st.execute("TRUNCATE TABLE amp_features_templates");
+      st.execute("TRUNCATE TABLE amp_features_visibility");
+      st.execute("TRUNCATE TABLE amp_modules_templates");
+      st.execute("update amp_modules_visibility set parent=null");
+      st.execute("TRUNCATE TABLE amp_modules_visibility");
+
+     // session.flush();
+//      st.execute("")
+    //  st.close();
+      
+    }
+    catch (Exception ex) {
+      logger.error("Exception ::: " + ex.getMessage());
+    }
+    finally {
+      if (session != null) {
+        try {
+        	//session.close();
+          PersistenceManager.releaseSession(session);
+        }
+        catch (Exception rsf) {
+          logger.error("Release session failed :" + rsf.getMessage());
+        }
+      }
+    }
+   // return ft;
+  }
+
+  */
+  
   /**
    * @author dan
    */

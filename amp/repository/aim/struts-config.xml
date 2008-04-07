@@ -928,6 +928,7 @@
     </action>
     <action name="aimVisibilityManagerForm" path="/aim/visibilityManager" scope="request" type="org.digijava.module.aim.action.VisibilityManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=visibilityManager" />
+      <forward name="cleaning" path="/showLayout.do?layout=cleaningVisibilityManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
 

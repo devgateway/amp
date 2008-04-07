@@ -15,6 +15,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
+import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
@@ -36,6 +37,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	 * 
 	 */
 	private static final long serialVersionUID = -7009665621191882475L;
+	private static Logger logger = Logger.getLogger(FieldVisibilityTag.class);
 	private String name;
 	private String feature;
 	private String enabled;
@@ -65,38 +67,52 @@ public class FieldVisibilityTag extends BodyTagSupport {
  	   ServletContext ampContext=pageContext.getServletContext();
  try{
 	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
-	   if(ampTreeVisibility!=null)
-		   if(!existFieldinDB(ampTreeVisibility)){
-			   //if(FeaturesUtil.getFieldVisibility(name)==null)
-			   //{
-                    AmpFeaturesVisibility featureByNameFromRoot = ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature());
-                    Long id=null;
-                    if(featureByNameFromRoot!=null)
-                    {
-                        id = featureByNameFromRoot.getId();
-	   			        try {
-                             FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName(),this.getHasLevel());
-                             AmpTemplatesVisibility  currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-                             ampTreeVisibility. buildAmpTreeVisibility(currentTemplate);
-                             ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
-                           	}
-                         catch (DgException ex) {throw new JspException(ex);	}
-                     }
-                     else return EVAL_BODY_BUFFERED;
-			  //}
-	   		}
-	   		ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
-	   		if(ampTreeVisibility!=null)
-	   		   if(!isFeatureTheParent(ampTreeVisibility)){
-	   			   //update(featureId, fieldname);
-				   //System.out.println("error!!!! feature "+this.getFeature()+" is not the parent");
-				   FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());
-	   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-	   			   //System.out.println("-------------------------------"+currentTemplate.getId());
-	   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-	   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+	   String cache=(String) ampContext.getAttribute("FMcache");
+	   if(cache==null || cache=="" || "read".compareTo(cache)==0) {
+//		   if(ampTreeVisibility!=null)
+//		   {
+//			   AmpFeaturesVisibility featureByNameFromRoot = ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature());
+//			   if(featureByNameFromRoot==null) return EVAL_BODY_BUFFERED;
+//		   }
+	   }
+	   else
+	   if("readwrite".compareTo(cache)==0)
+	   {
+		   //logger.info("		Field visibility: cache is in writing mode...");
+		   if(ampTreeVisibility!=null)
+			   if(!existFieldinDB(ampTreeVisibility)){
+				   //if(FeaturesUtil.getFieldVisibility(name)==null)
+				   //{
+	                    AmpFeaturesVisibility featureByNameFromRoot = ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature());
+	                    Long id=null;
+	                    if(featureByNameFromRoot!=null)
+	                    {
+	                        id = featureByNameFromRoot.getId();
+		   			        try {
+	                             FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName(),this.getHasLevel());
+	                             AmpTemplatesVisibility  currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+	                             ampTreeVisibility. buildAmpTreeVisibility(currentTemplate);
+	                             ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+	                           	}
+	                         catch (DgException ex) {throw new JspException(ex);	}
+	                     }
+	                     else return EVAL_BODY_BUFFERED;
+				  //}
+		   		}
+		   		ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+		   		if(ampTreeVisibility!=null)
+		   		   if(!isFeatureTheParent(ampTreeVisibility)){
+		   			   //update(featureId, fieldname);
+					   //System.out.println("error!!!! feature "+this.getFeature()+" is not the parent");
+					   FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());
+		   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+		   			   //System.out.println("-------------------------------"+currentTemplate.getId());
+		   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+		   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 
-			   }
+				   } 
+	   }
+	   
  }catch (Exception e) {e.printStackTrace();}
 	   	
  	return EVAL_BODY_BUFFERED;//super.doStartTag();

@@ -83,11 +83,12 @@ public class AMPStartupListener extends HttpServlet
         	AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),session);
         	ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
         	ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
+        	ampContext.setAttribute("FMcache", "read");
         	
-        	currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),session);
-        	ampTreeVisibilityAux.buildAmpTreeVisibilityMultiLevel(currentTemplate);
+        	//currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),session);
+        	//ampTreeVisibilityAux.buildAmpTreeVisibilityMultiLevel(currentTemplate);
         	//ampTreeVisibilityAux2.displayVisibilityTreeForDebug(ampTreeVisibilityAux);
-        	ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
+        	//ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
         	Collection ampColumns=FeaturesUtil.getAMPColumnsOrder();
         	ampContext.setAttribute("ampColumnsOrder",ampColumns);
         	

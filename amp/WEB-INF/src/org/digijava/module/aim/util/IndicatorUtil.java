@@ -26,9 +26,12 @@ import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpWoreda;
+import org.digijava.module.aim.dbentity.AmpZone;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.dbentity.IndicatorConnection;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
@@ -488,6 +491,10 @@ public class IndicatorUtil {
 	
 	/**
 	 * removes ampIndicatorValue and AmpLocation from the db
+	 * if AmpLocation contains AmpRegion,AmpZone or AmpWoreda, than it is necessary to first remove current location
+	 * from AmpRegion's, AmpZone's or AmpWoreda's list of locations,update it and then remove ampLocation.
+	 * It's necessary because AmpRegion,AmpZone and AmpWoreda have cascade="all" for locations field.
+	 * So if we don't remove current location from ampRegion,AmpZone and AmpWoreda, than deleting of this location fails. 
 	 * @param indicatorValueId
 	 * @param connectionId
 	 * @throws Exception
@@ -501,10 +508,50 @@ public class IndicatorUtil {
 			ampIndValue=loadAmpIndicatorValue(indicatorValueId,connectionId);
 			 tx = session.beginTransaction();
 			 //deleting AmpLocation
-			AmpLocation ampLocation=ampIndValue.getLocation();
-			session.delete(ampLocation);
-        	//deleting AmpIndicatorValue
-        
+			AmpLocation ampLocation=ampIndValue.getLocation();			
+			if(ampLocation!=null){
+				if(ampLocation.getAmpRegion()!=null){
+					AmpRegion region=ampLocation.getAmpRegion();
+					Iterator<AmpLocation> it=region.getLocations().iterator();
+					while(it.hasNext()){
+						AmpLocation regionLoc=it.next();
+						if(regionLoc.getAmpLocationId().equals(ampLocation.getAmpLocationId())){
+							region.getLocations().remove(regionLoc); //remove ampLocation from AmpRegion's list of locations
+							break;
+						}
+					}
+					if(ampLocation.getAmpZone()!=null){ //It's inside of region's if block, because if ampLocation has Zone, than it must have region too.
+						AmpZone zone=ampLocation.getAmpZone();
+						Iterator<AmpLocation> zoneIt=zone.getLocations().iterator();
+						while(zoneIt.hasNext()){
+							AmpLocation zoneLoc=zoneIt.next();
+							if(zoneLoc.getAmpLocationId().equals(ampLocation.getAmpLocationId())){
+								zone.getLocations().remove(zoneLoc); //remove ampLocation from AmpZone's list of locations
+								break;
+							}
+						}
+						
+						if(ampLocation.getAmpWoreda()!=null){ //It's inside of zone's if block, because if ampLocation has Woreda, than it must have region too.
+							AmpWoreda woreda=ampLocation.getAmpWoreda();
+							Iterator<AmpLocation> woredaIt=woreda.getLocations().iterator();
+							while(woredaIt.hasNext()){
+								AmpLocation zoneLoc=woredaIt.next();
+								if(zoneLoc.getAmpLocationId().equals(ampLocation.getAmpLocationId())){
+									woreda.getLocations().remove(zoneLoc); //remove ampLocation from AmpWone's list of locations
+									break;
+								}
+							}							 
+							session.update(woreda);  
+						}
+						session.update(zone);
+					}
+					session.update(region);					
+				}
+				
+				session.delete(ampLocation);
+			}
+			
+        //deleting AmpIndicatorValue        
          session.delete(ampIndValue);       
          tx.commit();
          session.flush();

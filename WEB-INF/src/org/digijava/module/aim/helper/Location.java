@@ -22,6 +22,7 @@ public class Location implements Serializable, Comparable
 	private Long woredaId;
 	private String woreda;
 	private String percent;//AMP-2250 
+	private boolean showPercent;
 	
 	public Location() {
 		locId = new Long(-1);
@@ -199,6 +200,11 @@ public class Location implements Serializable, Comparable
 	}
 
 	public void setPercent(String percent) {
+		if(FormatHelper.parseDouble(percent) >0 )
+			this.setShowPercent(true);
+		else
+			this.setShowPercent(false);
+
 		this.percent = percent;
 	}
 
@@ -209,4 +215,13 @@ public class Location implements Serializable, Comparable
 	public void setNewCountryId(String newCountryId) {
             this.newCountryId = newCountryId;
         }
+
+	private void setShowPercent(boolean showPercent) {
+		this.showPercent = showPercent;
+	}
+
+	public boolean getShowPercent() {
+        return this.showPercent;
+    }
+
 }

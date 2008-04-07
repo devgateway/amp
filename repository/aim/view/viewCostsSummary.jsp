@@ -139,12 +139,12 @@ function openEUActivityDetails(euActivityId) {
 <c:if test="${!empty costs}">
 	<tr bgcolor="#FFFFFF">
 		<td align="right"><b><digi:trn key="aim:viewcostssummary:totals">Totals:</digi:trn></b></td>
-		<field:display name="Total Costs" feature="Costing">
+		<field:display name="Grand Total Cost" feature="Costing">
 		<td align="right"><fmt:formatNumber var="grandCostFormatted"
 			pattern="###,###,###.##" value="<%=grandCost%>" />
 		${grandCostFormatted}</td>
 		</field:display>
-		<field:display name="Costing Grand Total Contribution" feature="Costing">
+		<field:display name="Grand Total Cost" feature="Costing">
 		<td align="right"><fmt:formatNumber var="grandContributionFormatted"
 			pattern="###,###,###.##" value="<%=grandContribution%>" />
 		${grandContributionFormatted}</td>

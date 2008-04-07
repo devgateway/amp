@@ -1582,7 +1582,7 @@
 									</logic:equal>
 									
 									<logic:equal name="globalSettings" scope="application" property="showComponentFundingByYear" value="true">									
-									<module:display name="Components_Resume" parentModule="PROJECT MANAGEMENT">
+									<module:display name="Components Resume" parentModule="PROJECT MANAGEMENT">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap">
 											<b>

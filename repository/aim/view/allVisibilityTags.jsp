@@ -256,7 +256,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Costing Contribution Gap" feature="Costing"></field:display>
 <field:display name="Costing Donor" feature="Costing"></field:display>
 <field:display name="Costing Due Date" feature="Costing"></field:display>
-<field:display name="Costing Grand Total Contribution" feature="Costing"></field:display>
+<field:display name="Grand Total Cost" feature="Costing"></field:display>
 <field:display name="Costing Inputs" feature="Costing"></field:display>
 <field:display name="Costing Progress" feature="Costing"></field:display>
 <field:display name="Costing Total Contribution" feature="Costing"></field:display>
@@ -452,7 +452,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Total Amount Disbursements" feature="Regional Funding"></field:display>
 <field:display name="Total Amount Expenditures" feature="Regional Funding"></field:display>
 <field:display name="Total Committed" feature="Funding Organizations"></field:display>
-<field:display name="Total Costs" feature="Costing"></field:display>
+<field:display name="Grand Total Cost" feature="Costing"></field:display>
 <field:display name="Total Disbursed" feature="Funding Organizations"></field:display>
 <field:display name="Total Donor Commitments" feature="Regional Funding"></field:display>
 <field:display name="Total Donor Disbursements" feature="Regional Funding"></field:display>
@@ -533,21 +533,21 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Add IPA Contract" feature="Contracting"></field:display>
 
 <!-- AMP-2675 by mouhamad -->
-<field:display name="Email" feature="Project Coordinator"></field:display>
-<field:display name="Fax Number" feature="Project Coordinator"></field:display>
-<field:display name="First Name" feature="Project Coordinator"></field:display>
-<field:display name="Last Name" feature="Project Coordinator"></field:display>
-<field:display name="Organization" feature="Project Coordinator"></field:display>
-<field:display name="Phone Number" feature="Project Coordinator"></field:display>
-<field:display name="Title" feature="Project Coordinator"></field:display>
+<field:display name="Project Coordinator Email" feature="Project Coordinator"></field:display>
+<field:display name="Project Coordinator Fax Number" feature="Project Coordinator"></field:display>
+<field:display name="Project Coordinator First Name" feature="Project Coordinator"></field:display>
+<field:display name="Project Coordinator Last Name" feature="Project Coordinator"></field:display>
+<field:display name="Project Coordinator Organization" feature="Project Coordinator"></field:display>
+<field:display name="Project Coordinator Phone Number" feature="Project Coordinator"></field:display>
+<field:display name="Project Coordinator Title" feature="Project Coordinator"></field:display>
 
-<field:display name="Email" feature="Sector Ministry Contact"></field:display>
-<field:display name="Fax Number" feature="Sector Ministry Contact"></field:display>
-<field:display name="First Name" feature="Sector Ministry Contact"></field:display>
-<field:display name="Last Name" feature="Sector Ministry Contact"></field:display>
-<field:display name="Organization" feature="Sector Ministry Contact"></field:display>
-<field:display name="Phone Number" feature="Sector Ministry Contact"></field:display>
-<field:display name="Title" feature="Sector Ministry Contact"></field:display>
+<field:display name="Sector Ministry Contact Email" feature="Sector Ministry Contact"></field:display>
+<field:display name="Sector Ministry Contact Fax Number" feature="Sector Ministry Contact"></field:display>
+<field:display name="Sector Ministry Contact First Name" feature="Sector Ministry Contact"></field:display>
+<field:display name="Sector Ministry Contact Last Name" feature="Sector Ministry Contact"></field:display>
+<field:display name="Sector Ministry Contact Organization" feature="Sector Ministry Contact"></field:display>
+<field:display name="Sector Ministry Contact Phone Number" feature="Sector Ministry Contact"></field:display>
+<field:display name="Sector Ministry Contact Title" feature="Sector Ministry Contact"></field:display>
 <field:display name="addMessageButton" feature="Messages"></field:display>
 
 <!-- AMP-2965 by cornel -->

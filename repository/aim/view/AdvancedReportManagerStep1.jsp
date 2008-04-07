@@ -304,7 +304,7 @@ function checkUncheckAll2() {
 											<field:display name="Actual Approval Date" feature="Planning" >&nbsp;</field:display>
 												<field:display name="Donor Commitment Date" feature="Funding Organizations">&nbsp;</field:display>
 											<field:display name="Physical Progress" feature="Physical Progress">&nbsp;</field:display>
-											<field:display name="Total Costs" feature="Costing"></field:display>
+											<field:display name="Grand Total Cost" feature="Costing"></field:display>
 											<field:display name="A.C. Chapter" feature="Identification">&nbsp;</field:display>
 											<field:display name="Accession Instrument" feature="Identification">&nbsp;</field:display>
 											<field:display name="Costing Donor" feature="Costing"></field:display>

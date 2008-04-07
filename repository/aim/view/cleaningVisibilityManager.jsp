@@ -56,39 +56,71 @@
 				</tr>
 				<tr>
 					<td height=16 vAlign=center width=571>
-				 		<font color="red">
-					 		<logic:iterate id="element" name="aimVisibilityManagerForm" property="errors">
-								<digi:trn key="${element.key}">
-									<bean:write name="element" property="value"/>
-								</digi:trn>
-							
-							</logic:iterate>
-							
-							<logic:iterate id="element" name="aimVisibilityManagerForm" property="messages">
-								<digi:trn key="${element.key}">
-									<bean:write name="element" property="value"/>
-								</digi:trn>
-							</logic:iterate>
-						</font>
+						<digi:errors />
 					</td>
 				</tr>
 				
 				
 				<tr>
 					<td noWrap width=80% vAlign="top">
-						<logic:equal name="aimVisibilityManagerForm" property="mode" value="editTemplateTree">			
-							<jsp:include page="manageTreeVisibility.jsp" />
-						</logic:equal>
-							<logic:equal name="aimVisibilityManagerForm" property="mode" value="manageTemplates">
-							<jsp:include page="manageTemplatesVisibility.jsp" />
-							</logic:equal>
-							<logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
-								<jsp:include page="newTemplateVisibility.jsp" />
-							</logic:equal>
 							<logic:equal name="aimVisibilityManagerForm" property="mode" value="viewFields">
 								<jsp:include page="viewFieldsVisibility.jsp" />
 							</logic:equal>
-						
+							<logic:equal name="aimVisibilityManagerForm" property="mode" value="step1clean">
+								<c:set var="translation">
+									<digi:trn key="aim:clickToStep2">Click here to Go to Next Step </digi:trn>
+								</c:set>
+								<jsp:useBean id="step2" type="java.util.Map" class="java.util.HashMap"/>
+								<digi:trn key="aim:thisGuide">
+									This wizzard will guide you to clean and refresh all the visibility Tags.
+									</digi:trn> 
+								<br>
+								<digi:trn key="aim:thisGuideDelete">
+								 Click on the link below to delete all the fields from Feature Manager
+								</digi:trn><br>
+								<c:set target="${step2}" property="action" value="step2clean"/>
+								<digi:link href="/visibilityManager.do" name="step2" title="${translation}" >
+									<digi:trn key="aim:goToStep2">Go to Step 2</digi:trn> &nbsp; >>
+								</digi:link>
+								
+							</logic:equal>
+							
+							<logic:equal name="aimVisibilityManagerForm" property="mode" value="step2clean">
+								<c:set var="translation">
+									<digi:trn key="aim:clickToNextStep">Click here to Go to Next Step </digi:trn>
+								</c:set>
+								<digi:trn key="aim:fieldsDeleted">
+									The fields from Feature Manager were deleted.
+								</digi:trn> 
+								<br>
+								<digi:trn key="aim:populateDb">
+								 Click on the link below to populate the database with the new fields.
+								</digi:trn><br>
+								<jsp:useBean id="step3" type="java.util.Map" class="java.util.HashMap"/>
+								<c:set target="${step3}" property="action" value="step3clean"/>
+								<digi:link href="/visibilityManager.do" name="step3" title="${translation}" >
+									<digi:trn key="aim:goToStep3">Go to Step 3</digi:trn> &nbsp; >>
+								</digi:link>
+							</logic:equal>
+							
+							<logic:equal name="aimVisibilityManagerForm" property="mode" value="step3clean">
+								<c:set var="translation">
+									<digi:trn key="aim:clickToNextStep">Click here to Go to Next Step </digi:trn>
+								</c:set>
+								<jsp:include page="allVisibilityTagsComputed.jsp" />
+								<digi:trn key="aim:fieldsPopulated">
+									The fields were entered in Feature Manager
+								</digi:trn> 
+								<br>
+								<jsp:include page="allVisibilityTagsComputed.jsp" />
+								<% pageContext.getServletContext().removeAttribute("FMcache"); %>
+								<jsp:useBean id="step4" type="java.util.Map" class="java.util.HashMap"/>
+								<c:set target="${step4}" property="action" value="step4clean"/>
+								<digi:link href="/visibilityManager.do" name="step4" title="${translation}" >
+									<digi:trn key="aim:finish">Finish</digi:trn> &nbsp; >>
+								</digi:link>
+							</logic:equal>
+							
 					</td>
 				
 				<td valign="top">

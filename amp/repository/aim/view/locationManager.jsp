@@ -95,6 +95,9 @@ function delet1(val1, val2) {
 <html:hidden property="level" />
 <html:hidden property="start" value="false" />
 <input type="hidden" name="currUrl" value="">
+    <c:set var="size">
+        ${aimAddLocationForm.categoryValuesSize}
+    </c:set>
 
 <!--  AMP Admin Logo -->
 	<jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -153,7 +156,7 @@ function delet1(val1, val2) {
 															<!-- end header -->
 														</tr>
 													<!-- Page Logic -->
-
+                                                                                                    <c:if test = "${size>0}">
 													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="1">
 														<tr>
 															<td width="193" align="right" valign="top" height="19">
@@ -177,6 +180,7 @@ function delet1(val1, val2) {
                                                                     </c:forEach>
 																</html:select>
 																<br>
+                                                                                                    
 																<c:set var="country">
 																	<category:getoptionvalue lowerCase="true" categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="0"/>
 																</c:set>
@@ -203,7 +207,8 @@ function delet1(val1, val2) {
 															</td>
 														</tr>
 													</logic:greaterEqual>
-
+                                                                                                         </c:if>
+                                                                                                    <c:if test = "${size>1}">
 													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="1">
 														<tr>
 															<td  width="193" align="right" valign="top" height="19">
@@ -256,7 +261,8 @@ function delet1(val1, val2) {
 															</td>
 														</tr>
 													</logic:greaterEqual>
-
+                                                                                                         </c:if>
+                                                                                                         <c:if test = "${size>2}">
 													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="1">
 														<tr>
 															<td  width="193" align="right" valign="top" height="19">
@@ -309,7 +315,9 @@ function delet1(val1, val2) {
 															</td>
 														</tr>
 													</logic:greaterEqual>
-
+                                                                                                         </c:if>
+                                                                                           
+                                                                                                         <c:if test = "${size>3}">
 													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="1">
 														<tr>
 															<td  width="193" align="right" valign="top" height="19">
@@ -362,6 +370,7 @@ function delet1(val1, val2) {
 															</td>
 														</tr>
 													</logic:greaterEqual>
+                                                                                                         </c:if>
 
 												<!-- end page logic -->
 													</table>

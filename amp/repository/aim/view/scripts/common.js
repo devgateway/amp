@@ -17,6 +17,7 @@ location=no, directories=no, status=no')
 
 function load() {
 }
+ var correctLength=true;
 
 function test(callerId) {
 		caller = document.getElementById(callerId);
@@ -333,9 +334,10 @@ function checkAmountLen(amt,msgConfFunding)
 					if(amt.charCodeAt(j) == 44)
 						cnt = cnt - 1;
 				}
-				if(cnt > 6)
+				if(cnt > 6&correctLength)
 				{
-					valid = confirm(msgConfFunding);															
+					valid = confirm(msgConfFunding);
+                                        correctLength=false;
 				}
 				return valid;
 			}
@@ -343,9 +345,10 @@ function checkAmountLen(amt,msgConfFunding)
 				return true;
 		}
 	}
-	if(len > 6)
+	if(len > 6&& correctLength)
 	{
-		valid = confirm(msgConfFunding);		
+		valid = confirm(msgConfFunding);
+                correctLength=false;
 		return valid;
 	}
 	

@@ -24,6 +24,7 @@ import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * NPD main page.
@@ -33,7 +34,7 @@ import org.digijava.module.aim.util.ProgramUtil;
  *
  */
 public class ViewNPD extends Action {
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		NpdForm npdForm=(NpdForm)form;
 		//dimensions should come from NPD settings not from constants
@@ -47,14 +48,15 @@ public class ViewNPD extends Action {
 		npdForm.setSelYears(selectNYears(ProgramUtil.getYearsBeanList(),3));
 		npdForm.setDummyYear("-1");
 		npdForm.setDonors(getDonorsList(30));
+        npdForm.setDefaultProgram(FeaturesUtil.getGlobalSettingValue("NPD Default Program"));
 		//npdForm.setStatuses(getStatuses());
-		
+
 		List themes = ProgramUtil.getAllThemes(true);
 		npdForm.setAllThemes( FilteredAmpTheme.transformAmpThemeList(themes) );
-		
+
 		return mapping.findForward("forward");
 	}
-	
+
 	private String[] selectNYears(Collection years,int num){
 		String[] result= {};
 		if (years != null && years.size() > num){

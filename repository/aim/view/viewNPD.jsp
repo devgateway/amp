@@ -51,7 +51,7 @@
 			Please select a program before selecting a filter !
 	</digi:trn>
 </c:set>
-
+<html:hidden property="defaultProgram" styleId="defaultProgram"/>
 <script language="javascript" type="text/javascript">
 
 	var ptree;
@@ -361,6 +361,11 @@
 		}
 	}
 
+	function getFirstProg(progTree){
+		var allProgs=progTree.getElementsByTagName("program");
+        return allProgs[0];
+	}
+
 	/* finds programs with specified ID */
 	function findProgWithID(progTree, toFindID){
 		if (toFindID==null) return null;
@@ -369,6 +374,17 @@
 			var id=allProgs[i].getAttribute("id");
 			if(id==toFindID) return allProgs[i];
 		}
+        return null;
+	}
+
+	function getNodeIndexByProgID(progTree, progId){
+		if (progId==null) return null;
+		var allProgs=progTree.getElementsByTagName("program");
+		for(var i=0;i<allProgs.length;i++){
+			var id=allProgs[i].getAttribute("id");
+			if(id==progId) return i;
+		}
+        return null;
 	}
 
 	/* fill array with program and its parents*/
@@ -430,9 +446,15 @@
 		treeXML=progListRoot;
 
 		// this value now is uddated not from form but by click on the tree node
-		//curProgId=document.getElementsByName('currentProgramId')[0].value;
+        if(curProgId==null){
+          curProgId=document.getElementById("defaultProgram").value;
+        }
 		var curProg=findProgWithID(progListRoot,curProgId);
-
+        if(curProg==null){
+          curProg=getFirstProg(progListRoot);
+          curProgId=curProg.getAttribute("id");
+        }
+        curNodeId=getNodeIndexByProgID(progListRoot,curProgId);
 		//determine which programs should be openned
 		fillLine(progListRoot,curProg);
 
@@ -454,13 +476,14 @@
 		goToCurrentNode();
 
 		//highlight current Node
-		highlightNode(curProgNodeIndex);
+		//highlightNode(curProgNodeIndex);
 
-		setNumOfPrograms (myXML);
+		setNumOfPrograms(myXML);
 		addRootListener();
 		addEventListeners();
 
 		createPanel("Info","<i>info</i>");
+        browseProgram(curProgId,curNodeId+1);
 	}
 
 	/* recursivly builds tree nodes */
@@ -657,7 +680,7 @@
 		}
 		//total pages
 		actMaxPages=root.getAttribute('totalPages');
-		
+
 		//get activities array
 		var actList = root.childNodes;
 		if (actList == null || actList.length == 0){
@@ -777,7 +800,7 @@
 		tbl.appendChild(lastTR1);
 
 		setupPagination(paginationTr);
-		
+
 	}
 
 	function setupPagination(placeToAdd){
@@ -787,8 +810,8 @@
 		while(placeToAdd.firstChild != null){
 			placeToAdd.removeChild(placeToAdd.firstChild);
 		}
-		
-		
+
+
 		var tooManyPages=actMaxPages>=11;
 		var middleStart=-1;
 		var middleEnd=actMaxPages;
@@ -796,26 +819,26 @@
 			middleStart=actCurrPage-4;
 			if (middleStart<1){
 				middleStart=1;
-			} 
+			}
 			middleEnd=actCurrPage+4;
 			if(middleEnd>actMaxPages){
 				middleEnd=actMaxPages;
 			}
 		}
-		
+
 		var tdLabel = document.createElement('TD');
 		tdLabel.innerHTML=pgPagesLabel;
 		placeToAdd.appendChild(tdLabel);
-		
+
 		if (actCurrPage>1){
 			var tdFirst = document.createElement('TD');
 			tdFirst.innerHTML='<a href="javascript:gotoActListPage(1)">'+pgFirst+'</a>';
 			placeToAdd.appendChild(tdFirst);
-			
+
 			var tdSp1 = document.createElement('TD');
 			tdSp1.innerHTML='&nbsp;';
 			placeToAdd.appendChild(tdSp1);
-			
+
 			var tdPrev = document.createElement('TD');
 			tdPrev.innerHTML='<a href="javascript:gotoActListPage('+(actCurrPage-1)+')">'+pgPrev+'</a>';
 			placeToAdd.appendChild(tdPrev);
@@ -824,7 +847,7 @@
 			tdSp2.innerHTML='&nbsp;';
 			placeToAdd.appendChild(tdSp2);
 		}
-		
+
 		for (var i=1; i <= actMaxPages; i++){
 			if (tooManyPages){
 				if (middleStart==i && middleStart>1){
@@ -843,7 +866,7 @@
 					}else{
 						td.innerHTML='<a href="javascript:gotoActListPage('+i+')">'+i+'</a>';
 					}
-					placeToAdd.appendChild(td);	
+					placeToAdd.appendChild(td);
 					//space
 					var tdsp = document.createElement('TD');
 					tdsp.innerHTML='&nbsp;';
@@ -865,36 +888,36 @@
 				}else{
 					td.innerHTML='<a href="javascript:gotoActListPage('+i+')">'+i+'</a>';
 				}
-				placeToAdd.appendChild(td);	
+				placeToAdd.appendChild(td);
 				var tdsp = document.createElement('TD');
 				tdsp.innerHTML='&nbsp;';
 				placeToAdd.appendChild(tdsp);
 			}
 		}//for each age ends
-		
+
 		if (actCurrPage<actMaxPages){
 			var tdNext = document.createElement('TD');
 			tdNext.innerHTML='<a href="javascript:gotoActListPage('+(actCurrPage+1)+')">'+pgNext+'</a>';
 			placeToAdd.appendChild(tdNext);
-			
+
 			var tdSp3 = document.createElement('TD');
 			tdSp3.innerHTML='&nbsp;';
 			placeToAdd.appendChild(tdSp3);
-			
+
 			var tdLast = document.createElement('TD');
 			tdLast.innerHTML='<a href="javascript:gotoActListPage('+actMaxPages+')">'+pgLast+'</a>';
 			placeToAdd.appendChild(tdLast);
 		}
-		
+
 	}
-	
+
 	/* pagination link handler */
 	function gotoActListPage(pageNum){
 		actCurrPage=pageNum;
 		getActivities();
 		//return false;
 	}
-	
+
 	function getDonorsHTML(donors,target){
 		if (donors !=null && donors.length >0 && donors[0].tagName=='donors'){
 			var donorList = donors[0].childNodes;
@@ -1142,8 +1165,8 @@
 										<digi:trn key="aim:portfolioDashboard">Dashboard</digi:trn>
 									</digi:link>
 								</TD>
-							<TD background="module/aim/images/corner-r.gif" height="17" width="17"/> 
-                                                           
+							<TD background="module/aim/images/corner-r.gif" height="17" width="17"/>
+
                                                              </feature:display>
 								<TD bgColor="#c9c9c7" class="box-title" width="220" >                    &nbsp;
 								<digi:trn key="aim:npDashboard">National Planing Dashboard</digi:trn>

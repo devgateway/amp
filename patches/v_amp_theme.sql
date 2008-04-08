@@ -1,0 +1,1 @@
+CREATE OR REPLACE VIEW `v_amp_theme` AS SELECT `amp_theme`.`amp_theme_id` AS `id`,`amp_theme`.`name` AS `value` FROM `amp_theme`;

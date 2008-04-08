@@ -22,7 +22,7 @@
 </script>
 
 <%
-	Long actId = Long.parseLong(request.getParameter("actId"));
+	Long actId = (Long)request.getAttribute("actId");
 
 	String url = "/aim/viewIndicatorValues.do?ampActivityId="+actId+"&tabIndex=6";
 

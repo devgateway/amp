@@ -47,6 +47,17 @@ function nope(){
 	alert('<digi:trn key="aim:reportBuilder:ReportSkipValidation">Please do not skip steps!</digi:trn>');
 	return true;
 }
+
+function saveEditedReport(){
+	if (confirm('<digi:trn key="aim:reportBuilder:saveReportConfirmation">Do you really want to save the report ?</digi:trn>')) {
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SaveReport" />
+		document.aimAdvancedReportForm.action = "<%= step %>";
+		document.aimAdvancedReportForm.target = "_self";
+		document.aimAdvancedReportForm.submit();
+		return true;
+	}
+	return false;
+}
 </script>
 
 
@@ -212,16 +223,16 @@ function nope(){
 											</c:if>									
 										</logic:lessThan>
 									</td>
-									<!-- commented for AMP-3102 by mouhamad
-   								    <td valign="top">
-										<c:set var="translation">
-											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Reports</digi:trn>
-										</c:set>
-										<a class="sub-nav" style="cursor:pointer;" title="${translation}"  onclick="return nope()">
-													6 : <digi:trn key="aim:SaveReport">Save Report</digi:trn>
-										</a>										
-									</td>
-									 -->
+									<c:if test="${aimAdvancedReportForm.reportEdit == true}">
+										<td valign="top">
+											<c:set var="translation">
+												<digi:trn key="aim:clickToGenerateReport">Click here to Generate Reports</digi:trn>
+											</c:set>
+											<a class="sub-nav" style="cursor:pointer;" title="${translation}"  onclick="return saveEditedReport()">
+														6 : <digi:trn key="aim:SaveReport">Save Report</digi:trn>
+											</a>										
+										</td>
+									</c:if>
 								</tr>	
 									</table>
 									</td>	

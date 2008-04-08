@@ -6,8 +6,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
 <%@page import="org.digijava.module.aim.form.ReportsFilterPickerForm"%>
+
 <link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>" />
 <link rel="stylesheet" href="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.css"/>" />
 
@@ -157,13 +157,84 @@ background-color: yellow;
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
 
+<!-- For DHTML Tab View of Filters -->
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/tab/assets/tabview.css'/>">
+<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/border_tabs.css'/>">
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dom-min.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/element/element-beta.js'/>" >.</script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tab/tabview.js'/>" >.</script>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tooltip/wz_tooltip.js'/>" > .</script>
+
+<style type="text/css"> 
+	#tabview_container .yui-nav {  }
+	#tabview_container .yui-content { border-top-width: 2px; border-top-style: solid; border-top-color: #006699;}
+	#tabview_container .yui-nav li { padding-right: 3px }
+	#tabview_container .yui-nav li a { 
+			float:left;
+			margin-left: 2px;
+			cursor:pointer; 
+			text-decoration: none; 
+			font-size: 10px; 
+			font-weight: bold;
+			padding:2px 2px 2px 2px;
+			background-color: white;
+			border-width: 1px;
+			border-style: solid;
+			border-color: #006699;
+	}
+	#tabview_container li.selected a{ 
+			float:left;
+			margin-left: 2px;
+			cursor:pointer; 
+			text-decoration: none; 
+			font-size: 10px; 
+			font-weight: bold;
+			padding:2px 2px 2px 2px;
+			background-color: #006699;
+			color: white;
+			border-width: 1px;
+			border-style: solid;
+			border-color: #006699;
+	}
+	#tabview_container .yui-nav li a:hover {
+			background-color: #006699;
+			color: white;
+			border-width: 1px;
+			border-style: solid;
+			border-color: #006699;
+	}
+</style>
+
+<!-- END - For DHTML Tab View of Filters -->
 
 <script type="text/javascript">
+		YAHOO.namespace("YAHOO.amptab");
+		YAHOO.amptab.init = function() {
+		    		var tabView = new YAHOO.widget.TabView('tabview_container');
+		};
+		YAHOO.amptab.positionPanel	= function(panelObj) {
+			var totalX		= YAHOO.util.Dom.getViewportWidth();
+			var totalY		= YAHOO.util.Dom.getViewportHeight();
+			
+			var newX	= (totalX/2) - (totalX/4);
+			var newY	= (totalY/2) - (totalY/4);
+			YAHOO.util.Dom.setX(myPanel1.element, newX);
+			YAHOO.util.Dom.setY(myPanel1.element, newY);
+		}
+		YAHOO.amptab.handleClose = function() {
+			var wrapper			= document.getElementById('myFilterWrapper');
+			var filter			= document.getElementById('myFilter');
+			if (filter.parent != null)
+					filter.parent.removeChild(filter);
+			wrapper.appendChild(filter);
+		};
+	
 		var myPanel1 = new YAHOO.widget.Panel("new", {
+			width:"700px",
 		    fixedcenter: false,
 		    constraintoviewport: true,
-		    underlay:"shadow",
+		    underlay:"none",
 		    close:true,
 		    visible:false,
 		    modal:true,
@@ -176,26 +247,36 @@ background-color: yellow;
 		    visible:false,
 		    modal:true,
 		    draggable:true} );
-                
+	
+	myPanel1.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
 		    
 	function initScripts() {
 	    var msg='\n<digi:trn key="rep:filter:selectFilter">Select filters</digi:trn>';
 		myPanel1.setHeader(msg);
-		myPanel1.setBody("Empty");
+		myPanel1.setBody("");
 		myPanel1.render(document.body);
 		
 		var msgP2='\n<digi:trn key="rep:filter:selectsorter">Please select hierarchy sorter criteria</digi:trn>';
 ;
 		myPanel2.setHeader(msgP2);
-		myPanel2.setBody("Empty");
+		myPanel2.setBody("");
 		myPanel2.render(document.body);
 	}
 	
 	function showFilter() {
-                var element= document.getElementById("myFilter");
-		myPanel1.setBody(element.innerHTML);
-		myPanel1.center();
+		
+		var element = document.getElementById("myFilter");
+		element.style.display = "inline";
+		
+		
+		myPanel1.setBody(element);
 		myPanel1.show();
+		YAHOO.amptab.init();
+		YAHOO.amptab.positionPanel(myPanel1);
+		
+		
+		
+		
 	}
 	function hideFilter() {
 		myPanel1.hide();
@@ -302,6 +383,7 @@ background-color: yellow;
 	
 	window.onload=initScripts;
 </script>
+
 
 
 <style type="text/css">

@@ -18,15 +18,17 @@
 		 -->
 	</div>
 
-<div id="myFilter" style="display: none;" >
-		<jsp:include page="/aim/reportsFilterPicker.do" />
-        <!--
-		<a href='#' onclick='hideFilter();return false'>
-			<b>
-				<digi:trn key="rep:pop:Close">Close</digi:trn>
-			</b>
-		</a>
-		-->
+<div id="myFilterWrapper" style="display: none;" >
+	<div id="myFilter" style="display: none;" >
+			<jsp:include page="/aim/reportsFilterPicker.do" />
+	        <!--
+			<a href='#' onclick='hideFilter();return false'>
+				<b>
+					<digi:trn key="rep:pop:Close">Close</digi:trn>
+				</b>
+			</a>
+			-->
+	</div>
 </div>
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>

@@ -296,14 +296,14 @@
 	<page name="htmlAdvancedReportHierarchy2"			title=" : Advanced Report " />
 
 	<!-- Report Generator -->
-	<page name="AdvancedReportManagerStep0" title=" - Report Generator Step 0 : Select Report Type" />
-	<page name="AdvancedReportManagerStep1" title=" - Report Generator Step 1 : Select Columns" />
-	<page name="AdvancedReportManagerStep2" title=" - Report Generator Step 2 : Generate HTML Report" />
-	<page name="AdvancedReportManagerStep4" title=" - Report Generator Step 4 : Report Details " />
-	<page name="AdvancedReportManagerStep3" title=" - Report Generator Step 3 : Generate Charts " />
-	<page name="AdvancedReportManagerStep5" title=" - Report Generator Step  :  Select Rows/Hierarchies" />
-	<page name="AdvancedReportManagerStep5New" title=" - Report Generator Step  :  Select Rows/Hierarchies" />
-	<page name="AdvancedReportManagerStep6" title=" - Report Generator Step  :  Select Measures" />
+	<page name="AdvancedReportManagerStep0" title=" - Report Generator Step 1 : Select Report Type" />
+	<page name="AdvancedReportManagerStep1" title=" - Report Generator Step 2 : Select Columns" />
+	<page name="AdvancedReportManagerStep2" title=" - Report Generator Step 3 : Generate HTML Report" />
+	<page name="AdvancedReportManagerStep4" title=" - Report Generator Step 5 : Report Details " />
+	<page name="AdvancedReportManagerStep3" title=" - Report Generator Step 5 : Generate Charts " />
+	<page name="AdvancedReportManagerStep5" title=" - Report Generator Step 3 :  Select Rows/Hierarchies" />
+	<page name="AdvancedReportManagerStep5New" title=" - Report Generator Step 3 :  Select Rows/Hierarchies" />
+	<page name="AdvancedReportManagerStep6" title=" - Report Generator Step 4 :  Select Measures" />
 	<page name="viewAdvancedReport" title=" : Reports" />
 	<page name="viewNewAdvancedReport" title=" : Reports" />
 	<page name="viewAdvancedReportHierarchy1" title=" : Reports" />

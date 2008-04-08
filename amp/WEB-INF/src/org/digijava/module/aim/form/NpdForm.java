@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.struts.action.ActionForm;
 
 public class NpdForm extends ActionForm {
-	
+
 	private int mode;
 	private boolean recursive;
 	private int graphWidth;
@@ -22,11 +22,11 @@ public class NpdForm extends ActionForm {
 	//private List statuses;
 	//private String[] selectedStatuses;
 	private Long selectedStatuses;
-	
+
 	private String[] yearTo;
 	private String[] yearFrom;
 	private Collection allThemes;
-	
+	private String defaultProgram;
 
 	public Collection getAllThemes() {
 		return allThemes;
@@ -152,10 +152,16 @@ public class NpdForm extends ActionForm {
 		return selectedStatuses;
 	}
 
-	public void setSelectedStatuses(Long selectedStatuses) {
+    public String getDefaultProgram() {
+        return defaultProgram;
+    }
+
+    public void setSelectedStatuses(Long selectedStatuses) {
 		this.selectedStatuses = selectedStatuses;
 	}
 
-	
+    public void setDefaultProgram(String defaultProgram) {
+        this.defaultProgram = defaultProgram;
+    }
 
 }

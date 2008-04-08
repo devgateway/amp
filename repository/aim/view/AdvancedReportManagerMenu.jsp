@@ -212,6 +212,7 @@ function nope(){
 											</c:if>									
 										</logic:lessThan>
 									</td>
+									<!-- commented for AMP-3102 by mouhamad
    								    <td valign="top">
 										<c:set var="translation">
 											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Reports</digi:trn>
@@ -220,6 +221,7 @@ function nope(){
 													6 : <digi:trn key="aim:SaveReport">Save Report</digi:trn>
 										</a>										
 									</td>
+									 -->
 								</tr>	
 									</table>
 									</td>	

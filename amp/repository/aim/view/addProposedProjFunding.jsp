@@ -5,7 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@page import="org.digijava.module.aim.helper.FormatHelper"%>
 <script language="JavaScript" type="text/javascript">
 	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
 </script>
@@ -13,8 +13,7 @@
 
 <script language="JavaScript" type="text/javascript">
 	function addPropFunding() {
-
-      var fna=aimEditActivityForm.funAmount.value;
+	var fna=aimEditActivityForm.funAmount.value;
       var fnd=aimEditActivityForm.funDate.value;
       if(fna==""){
         <c:set var="message">
@@ -22,7 +21,7 @@
         </c:set>
         alert("${message}");
         return false;
-      }else if(fna.match("[^0-9,]")!=null){
+      }else if(!checkAmountUsingSymbol(fna,"<%=FormatHelper.getDecimalSymbol()%>","<%=FormatHelper.getGroupSymbol()%>")){
         <c:set var="message">
         <digi:trn key="aim:invalidAmountValue">Invalid amount value</digi:trn>
         </c:set>
@@ -49,6 +48,18 @@
     function unload(){
       return true;
     }
+    
+   function checkAmountUsingSymbol(amount,decimalSymbol,groupSymbol){
+	var validChars= "0123456789"+decimalSymbol+groupSymbol;
+	for (i = 0;  i < amount.length;  i++) {
+		var ch = amount.charAt(i);
+		if (validChars.indexOf(ch)==-1){
+			return false;
+			break
+		}
+	}
+		return true;
+}
 </script>
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addProposedFunding.do?edit=true" method="post">

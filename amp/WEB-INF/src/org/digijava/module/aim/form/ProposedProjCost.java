@@ -1,7 +1,6 @@
 package org.digijava.module.aim.form;
-import java.text.*;
-
-import org.apache.struts.action.*;
+import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.helper.FormatHelper;
 
 /**
  * <p>Title: </p>
@@ -26,12 +25,7 @@ public class ProposedProjCost extends ActionForm{
     }
 
     public Double getFunAmountAsDouble() {
-        try {
-            DecimalFormat format = new DecimalFormat();
-            return new Double(format.parse(funAmount).doubleValue());
-        } catch(Exception ex) {
-            return null;
-        }
+        return FormatHelper.parseDouble(funAmount);
     }
 
     public String getFunDate() {
@@ -47,28 +41,11 @@ public class ProposedProjCost extends ActionForm{
     }
 
     public void setFunAmount(String funAmount) {
-        try{
-        	if(funAmount!=null)
-            {
-        		DecimalFormat format = new DecimalFormat();
-        		funAmount=funAmount.replaceAll("'","");
-        		funAmount=funAmount.replaceAll(",","");
-        		this.funAmount = format.format(Double.valueOf(funAmount));
-            }
-        	else this.funAmount=null;
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
+    	this.funAmount = funAmount;
     }
 
     public void setFunAmountAsDouble(Double funAmount) {
-    	if(funAmount==null) return;
-        try{
-            DecimalFormat format = new DecimalFormat();
-            this.funAmount = format.format(funAmount);
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
+            this.funAmount =  FormatHelper.formatNumber(funAmount);
     }
 
     public void setCurrencyCode(String currencyCode) {

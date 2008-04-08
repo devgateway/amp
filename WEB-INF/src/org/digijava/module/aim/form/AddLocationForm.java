@@ -10,6 +10,8 @@ import org.apache.struts.validator.ValidatorForm;
 
 import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 
 public class AddLocationForm extends ValidatorForm {
 
@@ -331,5 +333,13 @@ public class AddLocationForm extends ValidatorForm {
 		public void setCategoryLevel(Long categoryLevel) {
 			this.categoryLevel = categoryLevel;
 		}
+                public  int getCategoryValuesSize(){
+                    int size=0;
+                    Collection values=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY);
+                    if(values!=null){
+                        size=values.size();
+                    }
+                    return size;
+                }
 }
 

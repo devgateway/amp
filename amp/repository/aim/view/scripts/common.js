@@ -351,6 +351,7 @@ function checkAmountLen(amt,msgConfFunding)
                 correctLength=false;
 		return valid;
 	}
+         return true;
 	
 }
 

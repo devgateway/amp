@@ -318,7 +318,7 @@ function collapseAll() {
 										<input type="button" class="buton" onclick="javascript:collapseAll()" value="${tran}"/>
 										</td>
 										<td height=16 vAlign=bottom align="right">
-												<input type="button" class="buton" onclick="window.open('/showPrinterFriendlyPage.do?edit=true&actId=<c:out value="${aimEditActivityForm.activityId}"/>', '_blank', '');" value="<digi:trn key="aim:print">Print</digi:trn>"> 
+												<input type="button" class="buton" onclick="window.open('/showPrinterFriendlyPage.do?edit=true', '_blank', '');" value="<digi:trn key="aim:print">Print</digi:trn>"> 
 										</td>
 									</tr>
 								</table>

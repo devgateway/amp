@@ -536,6 +536,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		this.perspective = perspective;
 	}
 
+	@PropertyListableIgnore
 	public boolean isPublicView() {
 		return publicView;
 	}
@@ -721,6 +722,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	public String getIndexText() {
 		return indexText;
 	}
+	@PropertyListableIgnore
 	public boolean isApproved() {
 		return approved;
 	}

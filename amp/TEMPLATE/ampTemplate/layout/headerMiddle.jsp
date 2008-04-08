@@ -127,12 +127,45 @@ if("On".equals(publicView)) { %>
 			</div>
 		</LI>
 		</feature:display>
-		<module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+		
     	<LI>
 			<div id="gen"  title='<digi:trn key="aim:viewNPD">View National Plan Dashboard</digi:trn>'>
 			<logic:notEmpty name="TID" scope="session">
-				<digi:link styleClass="head-menu-link" href="/viewPortfolioDashboard.do~actId=-1~indId=-1" module="aim" onclick="return quitRnot1('${message}')">
-				::: <digi:trn key="aim:NPD">NPD</digi:trn></digi:link>
+                             <c:set var="linkProf">
+                                 <feature:display name="Dashboard" module="M & E">
+                                     /viewPortfolioDashboard.do~actId=-1~indId=-1
+                                 </feature:display>
+                                 
+                             </c:set>
+                             <c:set var="linkNPD">
+                                <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
+                                    /nationalPlaningDashboard.do
+                                </module:display>
+                  
+                             </c:set>
+                            
+                                 <c:set var="link">
+                                     <c:if test="${empty linkProf}">
+                                         ${linkNPD}
+                                     </c:if>
+                                      <c:if test="${not empty linkProf}">
+                                         ${linkProf}
+                                     </c:if>
+                                  </c:set>
+                                 
+                           
+                            
+                             
+                          
+             <c:if test="${not empty link}">
+                   <digi:link styleClass="head-menu-link" href="${link}" module="aim" onclick="return quitRnot1('${message}')">
+                                     
+                                     ::: <digi:trn key="aim:NPD">NPD</digi:trn>
+                      </digi:link>
+             </c:if>
+             
+				
+				
 			</logic:notEmpty>
 			<logic:empty name="TID" scope="session">
 				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot1('${message}')">
@@ -140,7 +173,7 @@ if("On".equals(publicView)) { %>
 			</logic:empty>
 			</div>
 		</LI>
-		</module:display>
+		
 		<module:display name="HELP">
 		
 		<LI>

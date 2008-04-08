@@ -6,6 +6,9 @@
 <%@taglib uri="/taglib/digijava" prefix="digi"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
 
@@ -1133,12 +1136,15 @@
 					<td>
 						<table cellpadding="0" cellspacing="0" border="0">
 							<tr>
-								<TD bgColor="#c9c9c7" class="box-title" width="80">                    &nbsp;
+                                                                <feature:display name="Dashboard" module="M & E">
+								<TD bgColor="#c9c9c7" class="box-title" width="80">
 									<digi:link href="/viewPortfolioDashboard.do~actId=-1~indId=-1">
 										<digi:trn key="aim:portfolioDashboard">Dashboard</digi:trn>
 									</digi:link>
 								</TD>
-								<TD background="module/aim/images/corner-r.gif" height="17" width="17">                  </TD>
+							<TD background="module/aim/images/corner-r.gif" height="17" width="17"/> 
+                                                           
+                                                             </feature:display>
 								<TD bgColor="#c9c9c7" class="box-title" width="220" >                    &nbsp;
 								<digi:trn key="aim:npDashboard">National Planing Dashboard</digi:trn>
 								</TD>

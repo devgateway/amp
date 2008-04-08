@@ -137,33 +137,40 @@
            	<TABLE border=0 cellPadding=0 cellSpacing=0 >
 
            		<TR>
+                         <feature:display name="Dashboard" module="M & E">
 
               		<TD bgColor=#c9c9c7 class=box-title width=80>
 
 							&nbsp;<digi:trn key="aim:portfolioDashboard">Dashboard</digi:trn>
 
 						</TD>
+                       
 
                  	<TD background="module/aim/images/corner-r.gif"
 
 						height=17 width=17></TD>
+                         </feature:display>
+                         
+                         <module:display name="National Planning Dashboard" parentModule="NATIONAL PLAN DASHBOARD">
 
               		<TD bgColor=#c9c9c7 class=box-title width=220 nowrap="nowrap">
 
-							&nbsp;<digi:link href="/nationalPlaningDashboard.do"><digi:trn key="aim:npDashboard">National Planing Dashboard</digi:trn></digi:link>
+							&nbsp;
+                                                         <digi:link href="/nationalPlaningDashboard.do"><digi:trn key="aim:npDashboard">National Planing Dashboard</digi:trn></digi:link>
 
 						</TD>
 
                  	<TD background="module/aim/images/corner-r.gif"
 
 						height=17 width=17></TD>
+                                                 </module:display>
 
 					</TR>
 
 		</TABLE>
 
 			</TD></TR>
-
+                         <feature:display name="Dashboard" module="M & E">
 			<TR><TD bgColor=#ffffff class=box-border align=left>
 
 
@@ -315,7 +322,7 @@
 					<TR><TD>&nbsp;</TD></TR>
 
 				</TABLE>
-
+</feature:display>
 			</TD></TR>
 
 		</TABLE>

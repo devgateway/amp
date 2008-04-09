@@ -19,53 +19,6 @@
 										&nbsp;
 									</td></tr>									
 									<tr><td>
-										<logic:notEmpty name="aimEditActivityForm" property="linksList">
-											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-												<logic:iterate name="aimEditActivityForm" property="linksList"
-												id="relLinks" type="org.digijava.module.aim.helper.RelatedLinks">
-												<bean:define name="relLinks" id="selWebLinks" property="relLink" />
-												<tr>
-													<td>
-														<html:multibox property="selLinks">
-															<bean:write name="selWebLinks" property="id" />
-														</html:multibox>
-														<field:display name="Web Resources Title" feature="Web Resources">
-														<bean:write name="selWebLinks" property="title" />
-														 - </field:display>
-														 <field:display name="Web Resources Url" feature="Web Resources">
-														<a href="<bean:write name="selWebLinks" property="url" />" target="_blank">
-														<bean:write name="selWebLinks" property="url" /></a><br>
-														</field:display>
-														<field:display name="Web Resource Description" feature="Web Resources">
-													<b>Desc:</b><bean:write name="selWebLinks" property="description" />
-													</field:display>
-													</td>
-												</tr>
-												</logic:iterate>
-												<tr><td>
-													<table cellSpacing=2 cellPadding=2>
-														<tr>
-														<field:display name="Add Web Resource Button" feature="Web Resources">
-															<td>
-																<html:button  styleClass="buton" property="submitButton" onclick="addLinks()">
-																	<digi:trn key="btn:addWebResources">Add Web Resources</digi:trn>
-																</html:button>
-															</td>
-															</field:display>
-															<field:display name="Remove Web Resource Button" feature="Web Resources">
-															<td>
-																<html:button  styleClass="buton" property="submitButton" onclick="return removeSelLinks()">
-																	<digi:trn key="btn:removeWebResources">Remove Web Resources</digi:trn>
-																</html:button>
-
-															</td>
-															</field:display>
-														</tr>
-													</table>
-												</td></tr>
-											</table>											
-										</logic:notEmpty>
-										<logic:empty name="aimEditActivityForm" property="linksList">
 										<field:display name="Add Web Resource Button" feature="Web Resources">
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
@@ -79,5 +32,4 @@
 												</tr>
 											</table>
 										</field:display>
-										</logic:empty>
 									</td></tr>

@@ -213,15 +213,6 @@ background-color: yellow;
 		YAHOO.amptab.init = function() {
 		    		var tabView = new YAHOO.widget.TabView('tabview_container');
 		};
-		YAHOO.amptab.positionPanel	= function(panelObj) {
-			var totalX		= YAHOO.util.Dom.getViewportWidth();
-			var totalY		= YAHOO.util.Dom.getViewportHeight();
-			
-			var newX	= (totalX/2) - (totalX/4);
-			var newY	= (totalY/2) - (totalY/4);
-			YAHOO.util.Dom.setX(myPanel1.element, newX);
-			YAHOO.util.Dom.setY(myPanel1.element, newY);
-		}
 		YAHOO.amptab.handleClose = function() {
 			var wrapper			= document.getElementById('myFilterWrapper');
 			var filter			= document.getElementById('myFilter');
@@ -232,7 +223,7 @@ background-color: yellow;
 	
 		var myPanel1 = new YAHOO.widget.Panel("new", {
 			width:"700px",
-		    fixedcenter: false,
+		    fixedcenter: true,
 		    constraintoviewport: true,
 		    underlay:"none",
 		    close:true,
@@ -264,17 +255,14 @@ background-color: yellow;
 	}
 	
 	function showFilter() {
-		
+		YAHOO.amptab.init();
 		var element = document.getElementById("myFilter");
 		element.style.display = "inline";
 		
 		
 		myPanel1.setBody(element);
+		myPanel1.center();
 		myPanel1.show();
-		YAHOO.amptab.init();
-		YAHOO.amptab.positionPanel(myPanel1);
-		
-		
 		
 		
 	}

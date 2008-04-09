@@ -56,9 +56,10 @@ function openFieldPermissionsPopup(fieldId) {
 	<tr>
 		<td>
 <div id="searchBox" style="border:1px solid black;padding:2px 2px 2px 2px;"  style="position: fixed;">
-<form name="searchBoxForm" onsubmit="return false;">
-<digi:trn key="fm:search:searchTitle">Search</digi:trn> <input type="Text" id="searchCriteria" onfocus="isKeycaptureOn=false;"/> 
-<input type="submit" onclick="if(!isKeycaptureOn) searchFunction()" value="<digi:trn key="fm:search:search">Search</digi:trn>" />
+<form name="searchBoxForm" onsubmit="searchFunction();return false;">
+<digi:trn key="fm:search:searchTitle">Search</digi:trn> 
+<input type="Text" id="searchCriteria"/> 
+<input type="submit" value="<digi:trn key="fm:search:search">Search</digi:trn>" />
 <input type="button" onclick="resetSearch()" value="<digi:trn key="fm:search:reset">Reset</digi:trn>" />
 
 <input type="button" id="prevSearchButton" onclick="prevResult()" value="<<" disabled="disabled" style="display:none;"/>
@@ -89,23 +90,6 @@ function openFieldPermissionsPopup(fieldId) {
 <!--
 
 
-document.onkeyup = KeyCheck; 
-var isKeycaptureOn = false;      
-var isFirstEnter = true;
-function KeyCheck(e)
-{
-   var KeyID = (window.event) ? event.keyCode : e.keyCode;
-   if(KeyID == 13 && isKeycaptureOn && !isFirstEnter){
-   		nextResult();
-   		return false;
-   	}
-   	else if(isFirstEnter && isKeycaptureOn)
-   	{
-   		isFirstEnter = false;
-   	}
-
-}
-
 var arrayLI = new Array();
 var scrollArray = new Array();
 var currentScrollItem = 0;
@@ -118,7 +102,6 @@ function resetSearch(){
 	showNodeObject(false,"dhtmlgoodies_tree");
 	document.getElementById("searchCriteria").value = "";
 	document.getElementById("spanSearchMessage").innerHTML = "";
-	isKeycaptureOn = false;
 }
 
 function nextResult()
@@ -131,8 +114,6 @@ function nextResult()
 
 	highlightResult(scrollArray[currentScrollItem])
 	scrollArray[currentScrollItem].scrollIntoView(false);
-//	window.scrollTo();
-//	scrollArray[currentScrollItem].focus();
 }
 
 function highlightResultReset(linkObject)
@@ -277,9 +258,10 @@ function searchFunction()
 
 		}
 	}
+	document.getElementById('nextSearchButton').focus();
+
 	if(countMatches > 0){
 		scrollArray[0].scrollIntoView(false);
-		scrollArray[0].focus();
 		scrollArray[0].style.backgroundColor = '#FF0000';
 		scrollArray[0].style.color = '#FFFFFF';
 		setSearchMessage( countMatches + " <digi:trn key="fm:search:matchesFound">items found</digi:trn>.");

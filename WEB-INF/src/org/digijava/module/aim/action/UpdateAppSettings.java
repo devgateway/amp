@@ -128,7 +128,7 @@ public class UpdateAppSettings extends Action {
 					uForm.setDefaultReportForTeamId( new Long(0) );
 			}
 			/* Select only the reports that are shown as tabs */
-			Collection reports	= TeamUtil.getAllTeamReports(tm.getTeamId());
+			Collection reports	= TeamUtil.getAllTeamReports(tm.getTeamId(), null,null,true,tm.getMemberId());
 			if ( reports != null ) {
 				Iterator iterator	= reports.iterator();
 				while ( iterator.hasNext() ) {

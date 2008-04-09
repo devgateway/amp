@@ -49,14 +49,20 @@ function nope(){
 }
 
 function saveEditedReport(){
-	if (confirm('<digi:trn key="aim:reportBuilder:saveReportConfirmation">Do you really want to save the report ?</digi:trn>')) {
-		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SaveReport" />
-		document.aimAdvancedReportForm.action = "<%= step %>";
+	if (${aimAdvancedReportForm.reportIsModified} == true) {
+		if (confirm('<digi:trn key="aim:reportBuilder:saveReportConfirmation">Do you want to save the changes you made to the report ?</digi:trn>')) {
+			<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SaveReport" />
+			document.aimAdvancedReportForm.action = "<%= step %>";
+			document.aimAdvancedReportForm.target = "_self";
+			document.aimAdvancedReportForm.submit();
+			return true;
+		}
+		return false;
+	} else {
+		document.aimAdvancedReportForm.action = "/viewMyDesktop.do";
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
-		return true;
 	}
-	return false;
 }
 </script>
 

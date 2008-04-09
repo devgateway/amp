@@ -288,7 +288,10 @@ public class AdvancedReport extends Action {
 				formBean.setSelectedColumns(null);
 				if (formBean.getMaxStep().intValue() < 1)
 					formBean.setMaxStep(new Integer(1));
-				
+				//
+				// UPDATE FLAG FOR MODIFICATION
+				//
+				formBean.setReportIsModified(true);
 				return goTo("SelectCols",formBean,mapping);
 			}
 			// Remove the columns selected
@@ -306,6 +309,10 @@ public class AdvancedReport extends Action {
 				}
 				if (formBean.getMaxStep().intValue() < 1)
 					formBean.setMaxStep(new Integer(1));
+				//
+				// UPDATE FLAG FOR MODIFICATION
+				//				
+				formBean.setReportIsModified(true);
 				return goTo("SelectCols",formBean,mapping);
 			}
 			
@@ -322,7 +329,10 @@ public class AdvancedReport extends Action {
 					moveReportObjectsToList(formBean.getSelectedColumns(), formBean.getColumnsSelection(), AmpReportHierarchy.class, formBean.getHierarchiesSelection());
 				if (formBean.getMaxStep().intValue() < 2)
 					formBean.setMaxStep(new Integer(2));
-				
+				//
+				// UPDATE FLAG FOR MODIFICATION
+				//				
+				formBean.setReportIsModified(true);
 				return goTo(selectRowsStepName,formBean,mapping);				
 			}
 			// Remove the columns selected : Step 2
@@ -339,6 +349,10 @@ public class AdvancedReport extends Action {
 					moveReportObjectsToList(formBean.getRemoveColumns(), formBean.getHierarchiesSelection(), AmpReportColumn.class, formBean.getMeasuresSelection());
 				if (formBean.getMaxStep().intValue() < 2)
 					formBean.setMaxStep(new Integer(2));
+				//
+				// UPDATE FLAG FOR MODIFICATION
+				//				
+				formBean.setReportIsModified(true);
 				return goTo(selectRowsStepName,formBean,mapping);
 			}
 			// Step 3 : Select Measures
@@ -356,6 +370,10 @@ public class AdvancedReport extends Action {
 				}
 				if (formBean.getMaxStep().intValue() < 3)
 					formBean.setMaxStep(new Integer(3));
+				//
+				// UPDATE FLAG FOR MODIFICATION
+				//				
+				formBean.setReportIsModified(true);
 				return goTo("SelectMeasures",formBean,mapping);				
 			}
 			
@@ -374,6 +392,10 @@ public class AdvancedReport extends Action {
 				}
 				if (formBean.getMaxStep().intValue() < 3)
 					formBean.setMaxStep(new Integer(3));
+				//
+				// UPDATE FLAG FOR MODIFICATION
+				//				
+				formBean.setReportIsModified(true);
 				return goTo("SelectMeasures",formBean,mapping);
 			}
 
@@ -1048,6 +1070,10 @@ public class AdvancedReport extends Action {
 				}
 				else
 					moveColumns(formBean, "MoveUp");
+				//
+				// UPDATE FLAG FOR MODIFICATION
+				//				
+				formBean.setReportIsModified(true);
 				return goTo("SelectCols",formBean,mapping);				
 			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("Step2MoveUp"))
@@ -1057,6 +1083,10 @@ public class AdvancedReport extends Action {
 				}
 				else
 					moveColumns(formBean, "Step2MoveUp");
+				//
+				// UPDATE FLAG FOR MODIFICATION
+				//
+				formBean.setReportIsModified(true);
 				return goTo(selectRowsStepName,formBean,mapping);
 				
 			}
@@ -1066,6 +1096,10 @@ public class AdvancedReport extends Action {
 					moveUpOrDown(Integer.parseInt(formBean.getMoveColumn()), formBean.getMeasuresSelection(), true);
 				else
 					moveColumns(formBean, "MoveUpMeasure");
+				//
+				// UPDATE FLAG FOR MODIFICATION
+				//
+				formBean.setReportIsModified(true);
 				return goTo("SelectMeasures",formBean,mapping);				
 			}
 
@@ -1076,6 +1110,10 @@ public class AdvancedReport extends Action {
 				}
 				else
 					moveColumns(formBean, "MoveDown");
+				//
+				// UPDATE FLAG FOR MODIFICATION
+				//
+				formBean.setReportIsModified(true);
 				return goTo("SelectCols",formBean,mapping);
 			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("Step2MoveDown"))
@@ -1085,6 +1123,10 @@ public class AdvancedReport extends Action {
 				}
 				else
 					moveColumns(formBean, "Step2MoveDown");
+				//
+				// UPDATE FLAG FOR MODIFICATION
+				//
+				formBean.setReportIsModified(true);
 				return goTo(selectRowsStepName,formBean,mapping);
 			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveDownMeasure"))
@@ -1093,6 +1135,10 @@ public class AdvancedReport extends Action {
 					moveUpOrDown(Integer.parseInt(formBean.getMoveColumn()), formBean.getMeasuresSelection(), false);
 				else
 					moveColumns(formBean, "MoveDownMeasure");
+				//
+				// UPDATE FLAG FOR MODIFICATION
+				//
+				formBean.setReportIsModified(true);
 				return goTo("SelectMeasures",formBean,mapping);
 			}
 			
@@ -1100,11 +1146,19 @@ public class AdvancedReport extends Action {
 			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveUpAdjustType"))
 			{
 				moveColumns(formBean, "MoveUpAdjustType");
+				//
+				// UPDATE FLAG FOR MODIFICATION
+				//
+				formBean.setReportIsModified(true);
 				return goTo("SelectMeasures",formBean,mapping);
 			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveDownAdjustType"))
 			{
 				moveColumns(formBean, "MoveDownAdjustType");
+				//
+				// UPDATE FLAG FOR MODIFICATION
+				//
+				formBean.setReportIsModified(true);
 				return goTo("SelectMeasures",formBean,mapping);
 			}
 			

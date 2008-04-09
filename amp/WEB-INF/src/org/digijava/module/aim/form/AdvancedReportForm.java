@@ -30,7 +30,7 @@ public class AdvancedReportForm extends ActionForm
 		
 	}
 
-	
+	private Boolean reportIsModified = false;
 	private Boolean reportEdit=null;
 	private String currentTabName;
 	
@@ -1620,6 +1620,18 @@ private int yrDiff;
 	}
 	public void setCanMakePublic(boolean canMakePublic) {
 		this.canMakePublic = canMakePublic;
+	}
+	/**
+	 * @return the reportIsModified
+	 */
+	public Boolean getReportIsModified() {
+		return reportIsModified;
+	}
+	/**
+	 * @param reportIsModified the reportIsModified to set
+	 */
+	public void setReportIsModified(Boolean reportIsModified) {
+		this.reportIsModified = reportIsModified;
 	}
 	
 	

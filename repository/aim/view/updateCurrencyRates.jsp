@@ -24,6 +24,12 @@ function validate() {
 		document.aimCurrencyRateForm.updateCRateCode.focus();
 		return false;
 	}
+	if (document.aimCurrencyRateForm.updateCRateCode.value == 'USD') {
+		alert("All exchange rates are saved in terms of USD. Please select a different currency.");
+		document.aimCurrencyRateForm.updateCRateCode.focus();
+		return false;
+	}
+
 	if (isEmpty(document.aimCurrencyRateForm.updateCRateDate.value) == true) {
 		alert("Exchange rate date not entered");
 		document.aimCurrencyRateForm.updateCRateDate.focus();
@@ -34,7 +40,7 @@ function validate() {
 		document.aimCurrencyRateForm.updateCRateAmount.focus();
 		return false;
 	}
-
+	
 	if (checkAmountUsingSymbols(document.aimCurrencyRateForm.updateCRateAmount.value,'<%=FormatHelper.getGroupSymbol()%>','<%=FormatHelper.getDecimalSymbol()%>') == false) 
 		{
 			alert("Invalid exchange rate entered");
@@ -49,7 +55,7 @@ function saveRate() {
 	var valid = validate();
 	if (valid == true) {
 		document.aimCurrencyRateForm.target = window.opener.name;
-		document.aimCurrencyRateForm.submit();	
+		document.aimCurrencyRateForm.submit();
 		window.close();
 	}
 	return valid;

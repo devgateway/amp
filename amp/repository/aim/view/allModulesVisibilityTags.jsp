@@ -46,3 +46,5 @@
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 <module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Components Resume" parentModule="PROJECT MANAGEMENT"></module:display>
+									

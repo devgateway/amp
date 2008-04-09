@@ -41,100 +41,6 @@
 									<feature:display name="Related Documents" module="Document"></feature:display>
 									
 									<tr><td>
-										<logic:notEmpty name="aimEditActivityForm" property="documentList">
-											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-												<logic:iterate name="aimEditActivityForm" property="documentList"
-												id="relLinks" type="org.digijava.module.aim.helper.RelatedLinks">
-												<bean:define name="relLinks" id="selDocuments" property="relLink" />
-												<tr>
-													<td>
-														<html:multibox property="selDocs">
-															<bean:write name="selDocuments" property="id" />
-														</html:multibox>
-														<field:display name="Document Title" feature="Related Documents">
-															<bean:write name="selDocuments" property="title" /> - 
-														</field:display>
-														<c:if test="${!empty selDocuments.fileName}">
-							   							<bean:define id="fileName" name="selDocuments" 
-															property="fileName" />
-														    <%
-															int index2;
-															String extension = "";
-															index2 = ((String)fileName).lastIndexOf(".");	
-															if( index2 >= 0 ) {
-															   extension = "module/cms/images/extensions/" + 
-																((String)fileName).substring(
-																index2 + 1,((String)fileName).length()) + ".gif";
-															
-														    %>
-														    <digi:img skipBody="true" src="<%=extension%>" border="0" 
-															 align="absmiddle"/>	
-															 <%}%>
-														</c:if>
-															<i>
-														<field:display name="Document FileName" feature="Related Documents">
-															<bean:write name="selDocuments" property="fileName" />
-														</field:display>
-														</i>	<br>
-														<field:display name="Document Description" feature="Related Documents">
-														<logic:notEmpty name="selDocuments" property="description">
-															<b>Desc:</b><bean:write name="selDocuments" property="description" />
-														</logic:notEmpty>
-														</field:display>
-														<field:display name="Document Comment" feature="Related Documents">
-															<logic:notEmpty name="selDocuments" property="docComment">
-																<br />
-																<b><digi:trn key="aim:addActivity:relatedDocuments:comments">Comments</digi:trn>:</b>
-																<bean:write name="selDocuments" property="docComment" />
-															</logic:notEmpty>
-														</field:display>
-														<field:display name="Document Date" feature="Related Documents">
-														<logic:notEmpty name="selDocuments" property="date">
-															<br />
-															<b>Date:</b><bean:write name="selDocuments" property="date" />
-														</logic:notEmpty>
-														</field:display>
-														<field:display name="Document Type" feature="Related Documents">
-														<logic:notEmpty name="selDocuments" property="docType">
-															<bean:define name="selDocuments" property="docType" id="docTypeBean" />
-															<br />
-															<b>Doc type:</b><bean:write name="docTypeBean" property="value" />
-														</logic:notEmpty>
-														</field:display>
-														<field:display name="Document Language" feature="Related Documents">
-														<logic:notEmpty name="selDocuments" property="docLanguage">
-															<bean:define name="selDocuments" property="docLanguage" id="docLangBean" />
-															<br />
-															<b><digi:trn key="aim:addActivity:relatedDocuments:doclang">Doc lang</digi:trn>:</b><bean:write name="docLangBean" property="value" />
-														</logic:notEmpty>
-														</field:display>
-													</td>
-												</tr>
-												</logic:iterate>
-												<tr><td>
-													<table cellSpacing=2 cellPadding=2>
-														<tr>
-															<field:display name="Add Documents Button" feature="Related Documents">
-															<td>
-																<html:button  styleClass="buton" property="submitButton" onclick="addDocuments()">
-																	<digi:trn key="btn:addDocuments">Add Documents</digi:trn>
-																</html:button>															
-															</td>
-															</field:display>
-															<field:display name="Remove Documents Button" feature="Related Documents">
-															<td>
-																<html:button  styleClass="buton" property="submitButton" onclick="return removeSelDocuments()">
-																	<digi:trn key="btn:removeDocuments">Remove Documents</digi:trn>
-																</html:button>
-															</td>
-															</field:display>
-														</tr>
-													</table>
-												</td></tr>
-											</table>											
-										</logic:notEmpty>
-										
-										<logic:empty name="aimEditActivityForm" property="documentList">
 										<field:display name="Add Documents Button" feature="Related Documents">
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
@@ -147,4 +53,3 @@
 												</tr>
 											</table>
 										</field:display>
-										</logic:empty>										

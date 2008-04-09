@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.utils.MultiAction;
@@ -103,7 +104,7 @@ public class ReportsFilterPicker extends MultiAction {
 		donors = DbUtil.getAllOrgGrpBeeingUsed();
 		
 		Collection donorTypes	= DbUtil.getAllOrgTypes();
-		Collection donorGroups	= DbUtil.getAllOrgGroups();
+		Collection donorGroups	= ARUtil.filterDonorGroups( DbUtil.getAllOrgGroups() );
 		
 		Collection meRisks = MEIndicatorsUtil.getAllIndicatorRisks();
 		for (Iterator iter = meRisks.iterator(); iter.hasNext();) {

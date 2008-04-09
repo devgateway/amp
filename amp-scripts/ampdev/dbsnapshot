@@ -3,16 +3,13 @@
 me=`whoami`
 cdate=`date +%d%b%Y-%H%M`
 if [ -n "$1" ]; then                                                                                                                                   
-mysqldump --hex-blob -v --add-drop-database --add-drop-table --default-character-set=utf8 -R --single-transaction -u amp --databases $1 > tmp.sql
+mysqldump --hex-blob -v --add-drop-database --add-drop-table --default-character-set=utf8 -R --single-transaction -u amp --databases $1 > tmp-$1-$cdate-$me.sql
 echo " "
 echo " "
-echo "******************************************************************"
-echo "* Please be pacient ... I'm editing dg_site_domain and replacing *"
-echo "* the user amp to root so you don't have to :D                   *"
-echo "******************************************************************"
+echo "Replacing dg_site_domain sites with 'localhost' and removing references to user amp@localhost ..."
+echo " "
 
-
-cat tmp.sql | awk '
+cat tmp-$1-$cdate-$me.sql | awk '
 BEGIN { 
    FS = ",";
     }
@@ -33,10 +30,10 @@ BEGIN {
 !/^INSERT INTO `dg_site_domain` VALUES/{ 
     print $0;
 }
-' > tmp2.sql;
-rm -rf tmp.sql
-cat tmp2.sql | bzip2 > $1-$cdate.sql.bz2
-rm -rf tmp2.sql
+' > tmp2-$1-$cdate-$me.sql;
+rm -f tmp-$1-$cdate-$me.sql
+cat tmp2-$1-$cdate-$me.sql | bzip2 > $1-$cdate.sql.bz2
+rm -f tmp2-$1-$cdate-$me.sql
 
 echo " "
 echo " "
@@ -45,3 +42,4 @@ echo "To download locally, paste this command: scp $me@ampdev.net:$1-$cdate.sql.
 else
 echo "usage $0 [database_name]"
 fi
+

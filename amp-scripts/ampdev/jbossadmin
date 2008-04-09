@@ -1,7 +1,7 @@
 #!/bin/sh
 
 JBOSS_HOME=${JBOSS_HOME:-"/home/jboss/jboss"}                                                                                                                
-usage="usage: $0 (jbossrestart | tail [logname] | deltemp | delwork [srvname] | redeploy [srvname] | enable [srvname] | disable [srvname] | warsnapshot [srvname] | clean [srvname] | help)"
+usage="usage: $0 (jbossrestart | tail [logname] | deltemp | delwork [srvname] | deldmcache [srvname] | redeploy [srvname] | enable [srvname] | disable [srvname] | warsnapshot [srvname] | clean [srvname] | help)"
 cdate=`date +%d%b%Y-%H%M`                                                                                                                                    
 
 
@@ -16,6 +16,7 @@ help)
     echo "* tail        - tails the specified jboss log. invoke without parameters to display the list of logs"
     echo "* deltemp     - deletes the temporary dir of jboss. make sure to jbossrestart jboss aftewards!"
     echo "* delwork     - deletes the jboss work dir for the specified application. invoke without parameters to display the list of apps. redeploy the WAR afterwards!"
+    echo "* deldmcache  - deletes the indexes,cache and lock used by jackrabbit. The specific AMP server should be stopped!"
     echo "* redeploy    - redeploys the specified application WAR. invoke without parameters to display the list of WARs."
     echo "* enable      - enables the specified application WAR. invoke without parameters to display the list of WARs."
     echo "* disable     - disables (undeploys) the specified application WAR. invoke without parameters to display the list of WARs."
@@ -71,6 +72,16 @@ tail)
     else
 	echo "usage: $0 tail [logname] - where logname is one of the following:"
 	echo `cd $JBOSS_HOME/server/default/log/; ls *log`
+    fi
+    ;;
+deldmcache)
+    if [ -n "$2" ]; then
+        rm -rI $JBOSS_HOME/../disabled_wars/$2/jackrabbit/repository
+        rm -rI $JBOSS_HOME/../disabled_wars/$2/jackrabbit/workspaces
+	rm $JBOSS_HOME/../disabled_wars/$2/jackrabbit/.lock
+    else
+	echo "usage: $0 deldmcache [warname] where warname is one of the following:"
+	echo `cd $JBOSS_HOME/../disabled_wars/; ls -d */`
     fi
     ;;
 clean)

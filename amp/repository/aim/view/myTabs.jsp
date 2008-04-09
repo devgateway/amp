@@ -7,10 +7,10 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <script language="JavaScript">
-	function addActivity() {
+/*	function addActivity() {
 		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create";	
 	}
-	
+	*/
 	function teamWorkspaceSetup(a) {
 		window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";	
 	}

@@ -235,7 +235,7 @@
 			</td> </tr>
 		</table>
 		</div>
-		<div id="financing">
+		<div id="financing" style="display: none;">
 		<br />
 		<table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px">
 		<tr valign="top">
@@ -332,7 +332,7 @@
 		</tr>
 		</table>
 		</div>
-		<div id="donors">
+		<div id="donors" style="display: none;">
 			<br/>
 			<table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px">
 				<tr valign="top">
@@ -451,7 +451,7 @@
           </td></tr>
           </table>
 		</div>
-		<div id="status">
+		<div id="status" style="display: none;">
 		<br />
 		<table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px">
 			<tr valign="top">

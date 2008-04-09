@@ -28,12 +28,15 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpMeasures;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.helper.AmpDonors;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -160,6 +163,24 @@ public final class ARUtil {
 			ret.add(ampOrganisation);
 		}
 
+		return ret;
+	}
+	
+	public static Collection filterDonorGroups(Collection donorGroups) {
+		Collection ret	= new ArrayList<AmpOrgGroup>();
+		if ( donorGroups == null ){
+			logger.error("Collection of AmpOrgGroup should NOT be null in filterDonorGroups");
+			return ret;
+		}
+		Iterator iter	= donorGroups.iterator();
+		while ( iter.hasNext() ) {
+			AmpOrgGroup grp	= (AmpOrgGroup)iter.next();
+			if ( grp.getOrgType() != null && grp.getOrgType().getOrgType() != null && 
+				(grp.getOrgType().getOrgType().toLowerCase().contains("gov") || grp.getOrgType().getOrgType().toLowerCase().contains("gouv") )	) {
+				continue;
+			}
+			ret.add(grp);
+		}
 		return ret;
 	}
 

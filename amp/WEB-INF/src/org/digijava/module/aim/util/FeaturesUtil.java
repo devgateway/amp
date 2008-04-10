@@ -1,7 +1,6 @@
 package org.digijava.module.aim.util;
 
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -2732,7 +2731,7 @@ public class FeaturesUtil {
 			Logic.switchLogic(Logic.DEFAULT_FACTORY);
 		}
 	}
-        
+      
         /**
 	 * return feature if it is visible or NULL
 	 * @param featureName
@@ -2757,7 +2756,21 @@ public class FeaturesUtil {
                        qry.setString("moduleName", moduleName);
                        qry.setLong("defTemplId", defTemplId);
                        if(qry.list()!=null&&qry.list().size()>0){
-                           feature=(AmpFeaturesVisibility)qry.uniqueResult();
+                           feature = (AmpFeaturesVisibility) qry.uniqueResult();
+                           AmpObjectVisibility parent=feature.getParent() ;
+                           if (parent != null) {
+                               AmpObjectVisibility grandPar=parent.getParent();
+                               String grandParName=null;
+                               if(grandPar!=null){
+                                   grandParName=grandPar.getName();
+                                   AmpModulesVisibility module = getModuleByName(parent.getName(), grandParName, defTemplId);
+                                   if (module == null) {
+                                       feature = null;
+                                   }
+                               }
+                              
+                           }
+                          
                        }
                        
                       
@@ -2768,7 +2781,7 @@ public class FeaturesUtil {
               
              return feature;
             
-        }
+        }   
           /**
 	 * return module if it is visible or NULL
 	 * @param moduleName
@@ -2788,14 +2801,34 @@ public class FeaturesUtil {
                        String queryString = "select mv from " +AmpModulesVisibility.class.getName() +
                        " mv inner join mv.parent parent "+
                                " inner join mv.templates tmpl " +
-                        " where (mv.name=:moduleName) and (parent.name=:parentModuleName)" +
+                        " where (mv.name=:moduleName) " +
                         " and (tmpl.id=:defTemplId)";
+                       if(parentModuleName!=null){
+                        queryString+=" and (parent.name=:parentModuleName) " ;
+                       }
                        Query qry = session.createQuery(queryString);
                        qry.setString("moduleName", moduleName );
+                       if(parentModuleName!=null){
                        qry.setString("parentModuleName", parentModuleName);
+                       }
                        qry.setLong("defTemplId", defTemplId);
                        if(qry.list()!=null&&qry.list().size()>0){
                            module=(AmpModulesVisibility)qry.uniqueResult();
+                           AmpObjectVisibility parent=module.getParent() ;
+                            if (parent!= null) {
+                               AmpObjectVisibility grandPar=parent.getParent();
+                               String grandParName=null;
+                               if(grandPar!=null){
+                                   grandParName = grandPar.getName();
+                                   AmpModulesVisibility parentModule = getModuleByName(parent.getName(), grandParName, defTemplId);
+                                   if (parentModule == null) {
+                                       module = null;
+                                   }
+                               }
+                              
+                               
+                               return module;
+                           }
                        }
                        
                       

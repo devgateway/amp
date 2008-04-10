@@ -729,7 +729,7 @@ ${fn:replace(message,quote,escapedQuote)}
 
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
 
-												<digi:trn key="aim:step${stepNm}of10">Step ${stepNm} of 10:</digi:trn>
+												<digi:trn key="aim:step${stepNm}of">Step ${stepNm} of </digi:trn> ${fn:length(aimEditActivityForm.steps)}:
                                                                                                  <digi:trn key="aim:activity:Components">
                                                                                                  Components
                                                                                                  </digi:trn>

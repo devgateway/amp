@@ -206,8 +206,8 @@ ${fn:replace(message,quote,escapedQuote)}
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:step2of10">
-													Step 2 of 10: </digi:trn>
+												<digi:trn key="aim:step2of">
+													Step 2 of  </digi:trn>  ${fn:length(aimEditActivityForm.steps)}:
                                                                                                          <digi:trn key="aim:activity:References">
                                                                                                          References
                                                                                                          </digi:trn>

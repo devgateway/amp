@@ -274,31 +274,19 @@
 						keyName="<%=org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" />
 					</td>
 				</tr>
-				<tr bgcolor="#EEEEEE">
-					<td colspan="5"><digi:trn key="rep:filer:Budget">Budget</digi:trn></td>
-				</tr>
+
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5" styleClass="inp-text">
-						<html:select
-							property="selectedBudget"
-							style="width: 250px" styleClass="inp-text">
-							<html:option value="0">
-								<digi:trn key="rep:filer:BudgetAll">All</digi:trn>
-							</html:option>
-							<html:option value="1">
-								<digi:trn key="rep:filer:BudgetOn">On Budget</digi:trn>
-							</html:option>
-							<html:option value="2">
-								<digi:trn key="rep:filer:BudgetOff">Off Budget</digi:trn>
-							</html:option>
-						</html:select>
+						<html:checkbox property="selectedBudget" value="1" />&nbsp;
+						<digi:trn key="rep:filer:BudgetOn">On Budget</digi:trn>
+
 					</td>
 				</tr>
 				<tr>
 					<td colspan="5" valign="top"><field:display
 						name="Joint Criteria" feature="Budget">
 						<html:checkbox property="jointCriteria" value="true" /> &nbsp;<digi:trn
-							key="rep:filter:jointCriteriaCheckDisplay">Display Only Projects Under Joint Criteria.</digi:trn>&nbsp;&nbsp;				</field:display>
+							key="rep:filter:jointCriteriaCheckDisplay">Display Only Projects Under Joint Criteria.</digi:trn>&nbsp;				</field:display>
 					<br />
 					<field:display name="Government Approval Procedures" feature="Budget">
 						<html:checkbox property="governmentApprovalProcedures" value="true" />&nbsp;<digi:trn

@@ -112,6 +112,7 @@ public class EditIPAContract extends MultiAction {
 
         EditActivityForm eaf = (EditActivityForm) session.getAttribute("eaf");
         IPAContractForm euaf = (IPAContractForm) form;
+        euaf.reset(mapping, request);
         Integer indexId = new Integer(request.getParameter("indexId")) - 1;
         IPAContract contract = (IPAContract) eaf.getContracts().get(indexId);
         euaf.setIndexId(indexId);
@@ -124,79 +125,120 @@ public class EditIPAContract extends MultiAction {
         if (contract.getActivityCategory() != null) {
             euaf.setActivityCategoryId(contract.getActivityCategory().getId());
         }
+        else euaf.setActivityCategoryId((long)0);
+        
         if (contract.getStatus() != null) {
             euaf.setStatusId(contract.getStatus().getId());
         }
+        else euaf.setStatusId((long)0);
         
         if (contract.getType()!= null) {
             euaf.setTypeId(contract.getType().getId());
         }
+        else euaf.setTypeId((long)0);
+        
         if (contract.getOrganization() != null) {
             euaf.setContrOrg(contract.getOrganization().getAmpOrgId());
         }
-
+        else euaf.setContrOrg((long)0);
+        
         if (contract.getStartOfTendering() != null) {
             euaf.setStartOfTendering(DateTimeUtil.parseDateForPicker2(contract.getStartOfTendering()));
         }
+        else euaf.setStartOfTendering("");
+        
         if (contract.getSignatureOfContract() != null) {
             euaf.setSignatureOfContract(DateTimeUtil.parseDateForPicker2(contract.getSignatureOfContract()));
         }
+        else euaf.setSignatureOfContract("");
+        
         if (contract.getContractValidity() != null) {
             euaf.setContractValidity(DateTimeUtil.parseDateForPicker2(contract.getContractValidity()));
         }
+        else euaf.setContractValidity("");
+        
         //contractValidity
         if (contract.getContractCompletion() != null) {
             euaf.setContractCompletion(DateTimeUtil.parseDateForPicker2(contract.getContractCompletion()));
         }
+        else euaf.setContractCompletion("");
+        
         if (contract.getTotalECContribIBAmount() != null) {
             euaf.setTotalECContribIBAmount(String.valueOf(contract.getTotalECContribIBAmount()));
         }
         if (contract.getTotalECContribIBCurrency() != null) {
             euaf.setTotalECContribIBCurrency(contract.getTotalECContribIBCurrency().getAmpCurrencyId());
         }
+        else euaf.setTotalECContribIBCurrency((long)0);
+        
         if (contract.getTotalAmount() != null) {
             euaf.setTotalAmount(String.valueOf(contract.getTotalAmount()));
         }
+        else euaf.setTotalAmount("");
+        
         if (contract.getTotalAmountCurrency() != null) {
             euaf.setTotalAmountCurrency(contract.getTotalAmountCurrency().getAmpCurrencyId());
         }
+        else  euaf.setTotalAmountCurrency((long)0);
+        
         //dibusrsementsGlobalCurrency
         if (contract.getDibusrsementsGlobalCurrency()!= null) {
             euaf.setDibusrsementsGlobalCurrency(contract.getDibusrsementsGlobalCurrency().getAmpCurrencyId());
         }
+        else euaf.setDibusrsementsGlobalCurrency((long)0);
                 
         if (contract.getTotalECContribINVAmount() != null) {
             euaf.setTotalECContribINVAmount(String.valueOf(contract.getTotalECContribINVAmount()));
         }
+        else euaf.setTotalECContribINVAmount("");
+        
         if (contract.getTotalECContribINVCurrency() != null) {
             euaf.setTotalECContribINVCurrency(contract.getTotalECContribINVCurrency().getAmpCurrencyId());
         }
+        else euaf.setTotalECContribINVCurrency((long)0);
+        
         if (contract.getTotalNationalContribCentralAmount() != null) {
             euaf.setTotalNationalContribCentralAmount(String.valueOf(contract.getTotalNationalContribCentralAmount()));
         }
+        else  euaf.setTotalNationalContribCentralAmount("");
+        
         if (contract.getTotalNationalContribCentralCurrency() != null) {
             euaf.setTotalNationalContribCentralCurrency(contract.getTotalNationalContribCentralCurrency().getAmpCurrencyId());
         }
+        else euaf.setTotalNationalContribCentralCurrency((long)0);
+        
         if (contract.getTotalNationalContribRegionalAmount() != null) {
             euaf.setTotalNationalContribRegionalAmount(String.valueOf(contract.getTotalNationalContribRegionalAmount()));
         }
+        else euaf.setTotalNationalContribRegionalAmount("");
+        
         if (contract.getTotalNationalContribRegionalCurrency() != null) {
             euaf.setTotalNationalContribRegionalCurrency(contract.getTotalNationalContribRegionalCurrency().getAmpCurrencyId());
         }
+        else euaf.setTotalNationalContribRegionalCurrency((long)0);
+        
+        
         if (contract.getTotalNationalContribIFIAmount() != null) {
             euaf.setTotalNationalContribIFIAmount(String.valueOf(contract.getTotalNationalContribIFIAmount()));
         }
-
+        else euaf.setTotalNationalContribIFIAmount("");
+        
         if (contract.getTotalNationalContribIFICurrency() != null) {
             euaf.setTotalNationalContribIFICurrency(contract.getTotalNationalContribIFICurrency().getAmpCurrencyId());
         }
+        else euaf.setTotalNationalContribIFICurrency((long)0);
+        
         if (contract.getTotalPrivateContribAmount() != null) {
 
             euaf.setTotalPrivateContribAmount(String.valueOf(contract.getTotalPrivateContribAmount()));
         }
+        else euaf.setTotalPrivateContribAmount("");
+        
         if (contract.getTotalPrivateContribCurrency() != null) {
             euaf.setTotalPrivateContribCurrency(contract.getTotalPrivateContribCurrency().getAmpCurrencyId());
         }
+        else  euaf.setTotalPrivateContribCurrency((long)0);
+        
         String cc=eaf.getCurrCode();
         if (contract.getDisbursements() != null) {
             ArrayList<IPAContractDisbursement> disbs = new ArrayList(contract.getDisbursements());

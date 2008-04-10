@@ -25,7 +25,7 @@ function addData(){
 
 
 function deleteData(ind){
-  var flag = confirm("Delete this indicator?");
+  var flag = confirm("Delete this data?");
   if(flag == true){
   <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=delIndValue" />
   document.forms[0].action = "<%=addEditIndicator%>&index="+ind;

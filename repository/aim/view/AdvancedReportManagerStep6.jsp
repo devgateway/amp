@@ -291,7 +291,7 @@ function checkUncheckAll2() {
 																	<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top"
 																	align="center" bgColor=#f4f4f2 class="box-border-nopadding" border=0>
 																		<TR>
-																			<TD width="50%" vAlign="top" align="left" bgcolor="#eeeeee">
+																			<TD width="45%" vAlign="top" align="left" bgcolor="#eeeeee">
 																				<TABLE width="100%" cellPadding="3" cellSpacing="1" vAlign="top"
 																				align="left" bgcolor="#eeeeee" >
 																					<tr height=10>	<td>	</td>	</tr>
@@ -397,7 +397,18 @@ function checkUncheckAll2() {
 																					</tr>
 																				</TABLE>
 																			</TD>
-																			<TD width="50%" vAlign="top" align="left" bgcolor="#eeeeee">
+																			
+														  		<td width="10%" align="center" bgcolor="#eeeeee">
+																	<html:button  styleClass="dr-menu" property="submitButton"  onclick="addColumn()">
+																		 <digi:trn key="btn:add">Add</digi:trn> >>
+																	</html:button>
+																	<br><br>
+																	<html:button  styleClass="dr-menu" property="submitButton"  onclick="deleteColumn()">
+																		<< <digi:trn key="btn:remove">Remove</digi:trn>
+																	</html:button>
+																</td>   
+																			
+																<TD width="45%" vAlign="top" align="left" bgcolor="#eeeeee">
 																				<TABLE width="100%" cellPadding="2" cellSpacing="1" vAlign="top"
 																				align="top" bgcolor="#eeeeee" border=0>
 																					<tr height=10><td></td></tr>
@@ -510,7 +521,7 @@ function checkUncheckAll2() {
 																				</TABLE>
 																			</TD>
 																		</TR>
-																		<TR><TD colspan="2">
+																		<TR><TD colspan="3">
 																			<table width="638" bgColor=#f4f4f2 class="box-border-nopadding" border=0>
 																				<tr align="center">
 																					<td align="center" class="box-title" rowspan="3" width="300">
@@ -578,11 +589,12 @@ function checkUncheckAll2() {
 																				</tr>
 																				</c:if>
 																			</table>
-																		</TD></TR>
+																		</TD>
+																		<td></td></TR>
 																	</TABLE>
 																</TD>
 															</TR>
-															<tr align="center">
+											<!--  				<tr align="center">
 																<td align="center">
 																	<html:button  styleClass="dr-menu" property="submitButton"  onclick="addColumn()">
 																		 <digi:trn key="btn:add">Add</digi:trn> >>
@@ -593,9 +605,10 @@ function checkUncheckAll2() {
 																</td>
 															</tr>	<!-- Add and Remove Button-->
 															<tr>
-																<td height=30>	&nbsp;</td>	</tr>
+																<td height=30>	&nbsp;</td>	
+															</tr>
 															<tr>
-																<td align="right" colspan="2">
+																<td align="right" colspan="3">
 																	<html:hidden name="stepName" property="stepName" value="SelectMeasures" />
 																	<html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:backStep()">
 																		<< <digi:trn key="btn:previous">Previous</digi:trn>

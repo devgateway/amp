@@ -549,7 +549,18 @@ function checkUncheckAll2() {
 																	</tr>
 																</TABLE>
 															</TD>
+															
+															<td align="center" bgcolor="#eeeeee">
+													<html:button  styleClass="dr-menu" property="submitButton"  onclick="addColumn()">
+														<digi:trn key="btn:add">  Add </digi:trn> >>&nbsp;&nbsp;&nbsp;
+													</html:button>
+													<br><br>
+													<html:button  styleClass="dr-menu" property="submitButton"  onclick="deleteColumn()">
+														<< <digi:trn key="btn:remove">Remove</digi:trn>
+													</html:button>
 
+												</td>
+															
 															<TD width="50%" vAlign="top" align="left" bgcolor="#eeeeee">
 																<TABLE width="100%" cellPadding="2" cellSpacing="1" vAlign="top" align="top" bgcolor="#eeeeee" border=0>
 																	<tr height=10>	<td>	</td>	</tr>
@@ -631,6 +642,7 @@ function checkUncheckAll2() {
 																			</TABLE>
 																		</TD>
 																		</c:if>
+																		
 
 																		<c:if test="${empty aimAdvancedReportForm.addedColumns && empty aimAdvancedReportForm.columnsSelection}">
 																			<td >
@@ -648,7 +660,7 @@ function checkUncheckAll2() {
 													</TABLE>
 												</TD>
 											</TR>
-											<tr align="center">
+									<!-- 		<tr align="center">
 												<td align="center">
 													<html:button  styleClass="dr-menu" property="submitButton"  onclick="addColumn()">
 														<digi:trn key="btn:add">  Add </digi:trn> >>&nbsp;&nbsp;&nbsp;
@@ -658,7 +670,7 @@ function checkUncheckAll2() {
 													</html:button>
 
 												</td>
-											</tr>	<!-- Add and Remove Button-->
+											</tr>	 Add and Remove Button-->
 											<tr>
 												<td align="right" colspan="2">
 												   <html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:backStep()">

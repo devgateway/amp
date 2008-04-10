@@ -693,6 +693,8 @@ public class IndicatorUtil {
 	 * @throws DgException
 	 */
 	public static Set<ActivityIndicator> getActivityIndicatorHelperBeans(Long activityId) throws DgException{
+		if(activityId == null)
+			return null;
 		AmpActivity activity=ActivityUtil.loadActivity(activityId);
 		return getActivityIndicatorHelperBeans(activity);
 	}

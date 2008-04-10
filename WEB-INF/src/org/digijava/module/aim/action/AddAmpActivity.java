@@ -1318,12 +1318,13 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
 
             Long defaultCurrency=teamMember.getAppSettings().getCurrencyId();
 	        double allCosts=0;
-            for(Iterator it=eaForm.getCosts().iterator();it.hasNext();)
-            {
-            	EUActivity euAct=(EUActivity) it.next();
-            	euAct.setDesktopCurrencyId(defaultCurrency);
-            	allCosts+=euAct.getTotalCostConverted();
-            }
+	        if(eaForm.getCosts() != null)
+	        	for(Iterator it=eaForm.getCosts().iterator();it.hasNext();)
+	        	{
+	        		EUActivity euAct=(EUActivity) it.next();
+	        		euAct.setDesktopCurrencyId(defaultCurrency);
+	        		allCosts+=euAct.getTotalCostConverted();
+	        	}
             eaForm.setAllCosts(new Double(allCosts));
             if ((eaForm.getIndicatorsME() != null) && (!eaForm.getIndicatorsME().isEmpty()))
               eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());

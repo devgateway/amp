@@ -321,6 +321,9 @@ background-color: yellow;
 		
 		if (aimReportsFilterPickerForm.selectedSectors)
 			aimReportsFilterPickerForm.selectedSectors.selectedIndex=-1;
+			
+		if (aimReportsFilterPickerForm.selectedBudget)
+			aimReportsFilterPickerForm.selectedBudget.selectedIndex=0;
 		
 		/*if (aimReportsFilterPickerForm.selectedDonors)
 			aimReportsFilterPickerForm.selectedDonors.selectedIndex=-1; */

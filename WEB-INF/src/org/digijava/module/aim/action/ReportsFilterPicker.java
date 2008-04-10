@@ -392,6 +392,15 @@ public class ReportsFilterPicker extends MultiAction {
 		else
 			arf.setDonorGroups(null);
 		
+		if (filterForm.getSelectedBudget() != null) {
+			switch (filterForm.getSelectedBudget().intValue()) {
+				case 0: break;
+				case 1: arf.setBudget(true); break;
+				case 2: arf.setBudget(false); break;
+				
+			}
+		}
+		
 		arf.setBeneficiaryAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedBeneficiaryAgency() , AmpOrganisation.class ) );
 		arf.setImplementingAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedImplementingAgency() , AmpOrganisation.class ) );
 		arf.setExecutingAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedExecutingAgency(), AmpOrganisation.class ) );

@@ -274,6 +274,26 @@
 						keyName="<%=org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" />
 					</td>
 				</tr>
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5"><digi:trn key="rep:filer:Budget">Budget</digi:trn></td>
+				</tr>
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5" styleClass="inp-text">
+						<html:select
+							property="selectedBudget"
+							style="width: 250px" styleClass="inp-text">
+							<html:option value="0">
+								<digi:trn key="rep:filer:BudgetAll">All</digi:trn>
+							</html:option>
+							<html:option value="1">
+								<digi:trn key="rep:filer:BudgetOn">On Budget</digi:trn>
+							</html:option>
+							<html:option value="2">
+								<digi:trn key="rep:filer:BudgetOff">Off Budget</digi:trn>
+							</html:option>
+						</html:select>
+					</td>
+				</tr>
 				<tr>
 					<td colspan="5" valign="top"><field:display
 						name="Joint Criteria" feature="Budget">
@@ -326,7 +346,6 @@
 							label="name" />
 					</html:select></td>
 				</tr>
-				
 				</table>
 			</td>
 		</tr>

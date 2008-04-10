@@ -251,28 +251,28 @@ function loadPage()
 		var index3 = document.aimAddOrgForm.ampOrgGrpId.selectedIndex;
 		var val7 = document.aimAddOrgForm.ampOrgGrpId.options[index3].value;
 
-		if (str1.length == 0 || str1 == null) {
-			alert("Please enter name for this Organization.");
+		if (str1.length == 0 || str1 == null) {		
+			alert('<digi:trn key="aim:editOrganisation:enterOrganisationName">Please enter name for this Organization.</digi:trn>');
 			document.aimAddOrgForm.name.focus();
 			return false;
 		}
-		if (val5.length == 0 || val5 == null) {
-			alert("Please enter acronym for this Organization.");
+		if (val5.length == 0 || val5 == null) {		
+			alert('<digi:trn key="aim:editOrganisation:enterOrganisationAcronym">Please enter acronym for this Organization.</digi:trn>');
 			document.aimAddOrgForm.acronym.focus();
 			return false;
 		}
-		if (val6.length == 0 || val6 == null) {
-			alert("Please enter code for this Organization.");
+		if (val6.length == 0 || val6 == null) {		
+			alert('<digi:trn key="aim:editOrganisation:enterOrganisationCode">Please enter code for this Organization.</digi:trn>');
 			document.aimAddOrgForm.orgCode.focus();
 			return false;
 		}
-		if ( val1 == "-1") {
-			alert("Please select type of this Organization.");
+		if ( val1 == "-1") {		
+			alert('<digi:trn key="aim:editOrganisation:enterOrganisationType">Please select type of this Organization.</digi:trn>');
 			document.aimAddOrgForm.ampOrgTypeId.focus();
 			return false;
 		}
-		if ( val7 == "-1") {
-			alert("Please select group of this Organization.");
+		if ( val7 == "-1") {		
+			alert('<digi:trn key="aim:editOrganisation:enterOrganisationType">Please select group of this Organization.</digi:trn>');
 			document.aimAddOrgForm.ampOrgGrpId.focus();
 			return false;
 		}

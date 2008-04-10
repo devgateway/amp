@@ -6584,7 +6584,7 @@ public class DbUtil {
             if (result.size() > 0){
             	obResult= (AmpOrganisation) result.get(0);
             }
-            
+            System.out.println("DBUTIL.GETORGANISATIONBYNAME() : " + qry.getQueryString());
         } catch (Exception e) {
             logger.debug("Exception from getOrganisationByName(): " + e);
             e.printStackTrace(System.out);

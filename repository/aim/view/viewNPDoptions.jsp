@@ -8,11 +8,15 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
 <digi:instance property="aimNPDForm"/>
+<c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
+
 <script language="javascript" type="text/javascript">
 
 	var localIndicators=[];
+	
 
 	function getSelectedIndicators(){
 		var localIndicators=document.getElementsByName('selIndicators');
@@ -46,8 +50,38 @@
 		var ins=getSelectedIndicators();
 		var yrs=getSelectedYears();
 		yrs.sort();
+		var partialUrl=addActionToURL('saveDefaultYearsForGraph.do');
+		var url=getUrl(partialUrl);
+		var async=new Asynchronous();
+		async.complete=emptyFunction;
+		async.call(url);
 		window.opener.changeOptions(ins,yrs,null);
 		window.close();
+	}
+	
+	function addActionToURL(actionName){
+		var fullURL=document.URL;
+		var lastSlash=fullURL.lastIndexOf("/");
+		var partialURL=fullURL.substring(0,lastSlash);
+		return partialURL+"/"+actionName;
+	}
+	
+	function getUrl(url){
+		var locYears = document.getElementsByName('selYears');		
+		var result=url;
+		if(locYears.length>0){
+			var res;		
+			for (var i = 0; i < locYears.length; i++) {
+				if(locYears[i].checked){
+					res=locYears[i].value;	
+					result+='~selYears='+res;			
+				}
+			}			
+		}		
+		return result;
+	}
+	
+	function emptyFunction (){
 	}
 
 	function checkYearsRules(){
@@ -60,6 +94,8 @@
 		return true;
 	}
 </script>
+
+
 
 <table width="100%" cellSpacing="5" cellPadding="5" vAlign="top" border="0">
 	<tr>
@@ -136,5 +172,4 @@
 			<input type="button" value="Close" class="dr-dialogmenu" onclick="window.close();">
 		</td>
 	</tr>
-
 </table>

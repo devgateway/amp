@@ -17,6 +17,7 @@ public class NpdSettings implements Serializable{
 	private Integer angle;
 	private AmpTeam team;
 	private Integer actListPageSize;
+	private String selectedYearsForTeam; //used in npd to display graph by years;
 	
 	public Integer getActListPageSize() {
 		return actListPageSize;
@@ -53,6 +54,12 @@ public class NpdSettings implements Serializable{
 	}
 	public void setWidth(Integer width) {
 		this.width = width;
+	}
+	public String getSelectedYearsForTeam() {
+		return selectedYearsForTeam;
+	}
+	public void setSelectedYearsForTeam(String selectedYearsForTeam) {
+		this.selectedYearsForTeam = selectedYearsForTeam;
 	}
 	
 	

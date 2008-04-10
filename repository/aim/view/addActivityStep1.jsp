@@ -283,8 +283,11 @@ ${fn:replace(message,quote,escapedQuote)}
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:step1of10_IdentificationAndPlanning">
-													Step 1 of 10: Identification | Planning</digi:trn>
+												<digi:trn key="aim:step1of">
+                                                                                               
+													Step 1 of  </digi:trn> ${fn:length(aimEditActivityForm.steps)}:
+                                                                                                           <digi:trn key="IdentificationAndPlanning"> 
+                                                                                                               Identification | Planning </digi:trn>
 											</td>
 											<td width="13" height="20" background="module/aim/images/right-side.gif">
 											</td>

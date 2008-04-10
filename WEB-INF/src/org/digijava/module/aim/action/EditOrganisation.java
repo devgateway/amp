@@ -269,12 +269,13 @@ public class EditOrganisation
 
     if ("create".equals(action) || "edit".equals(action)) {
       AmpOrganisation ampOrg = new AmpOrganisation();
-
+      String oldOrgName = null;
       if ("edit".equals(action)) {
         editForm.setAmpOrgId(new Long(Integer.parseInt(request.getParameter(
-            "ampOrgId"))));
-        ampOrg = DbUtil.getOrganisation(editForm.getAmpOrgId());
-
+            "ampOrgId"))));        
+        ampOrg = DbUtil.getOrganisation(editForm.getAmpOrgId());        
+        oldOrgName = ampOrg.getName();
+        
         if (ampOrg == null) {
           if (session.getAttribute("ampOrg") != null) {
             session.removeAttribute("ampOrg");
@@ -751,7 +752,6 @@ public class EditOrganisation
               pledge.setDate(d);
             }
             ampPledges.add(pledge);
-
           }
           if (ampOrg.getFundingDetails() != null)
             ampOrg.getFundingDetails().clear();
@@ -760,13 +760,15 @@ public class EditOrganisation
 
           ampOrg.getFundingDetails().addAll(ampPledges);
         }
-                	
-        boolean exist= DbUtil.getOrganisationByName(ampOrg.getName())!=null;
+          	
+        //boolean exist= DbUtil.getOrganisationByName(ampOrg.getName()) != null;
+        boolean exist= oldOrgName.equalsIgnoreCase(editForm.getName());        
+        
         if (exist) {
 		  editForm.setFlag("orgNameExist");
           return mapping.findForward("forward");
         }
-        if ("create".equals(action)){
+        if ("create".equals(action)) {
           DbUtil.add(ampOrg);
         }
         else {

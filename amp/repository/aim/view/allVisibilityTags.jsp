@@ -578,3 +578,13 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <logic:iterate id="ampMeasures"  name="list" scope="page" type="org.digijava.module.aim.dbentity.AmpMeasures">
 	<field:display name="${ampMeasures.aliasName}" feature="Measures"></field:display>
 </logic:iterate>
+
+<field:display name="Actual Commitments" feature="Measures"></field:display>
+<field:display name="Actual Disbursements" feature="Measures"></field:display>
+<field:display name="Actual Expenditures" feature="Measures"></field:display>
+<field:display name="Planned Commitments" feature="Measures"></field:display>
+<field:display name="Planned Disbursements" feature="Measures"></field:display>
+<field:display name="Planned Expenditures" feature="Measures"></field:display>
+<field:display name="Undisbursed Balance" feature="Measures"></field:display>
+<field:display name="Total Commitments" feature="Measures"></field:display>
+<field:display name="Actual Disbursement Orders" feature="Measures"></field:display>

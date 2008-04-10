@@ -5,10 +5,12 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -74,6 +76,26 @@ public class ReportsFilterPicker extends MultiAction {
 		Collection allFisCalenders = DbUtil.getAllFisCalenders();
 		List ampSectors;// = SectorUtil.getAmpSectorsAndSubSectors();
 		ampSectors = SectorUtil.getAllSectorsFromScheme(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_SECTOR_SCHEME));
+		
+		TreeSet<AmpSector> alphaOrderedSectors	= new TreeSet<AmpSector>( 
+				new Comparator<AmpSector>() {
+
+					public int compare(AmpSector as1, AmpSector as2) {
+						if ( as1.getName() != null && as2.getName() != null )
+							return as1.getName().compareToIgnoreCase(as2.getName() );
+						
+						return -1;	
+					}
+					
+				}
+				
+		); 
+		Iterator<AmpSector> sectIter	= (Iterator<AmpSector>)ampSectors.iterator();
+		while ( sectIter.hasNext() ) {
+			alphaOrderedSectors.add( sectIter.next() );
+		}
+		
+		
 
 		AmpApplicationSettings tempSettings = null;
 		if (teamMember!= null)
@@ -123,7 +145,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setCalendars(allFisCalenders);
 		//filterForm.setDonors(donors);
 		filterForm.setRisks(allIndicatorRisks);
-		filterForm.setSectors(ampSectors);
+		filterForm.setSectors( alphaOrderedSectors );
 		filterForm.setFromYears(new ArrayList<BeanWrapperImpl>());
 		filterForm.setToYears(new ArrayList<BeanWrapperImpl>());
 		filterForm.setFromMonths(new ArrayList<BeanWrapperImpl>());
@@ -282,7 +304,14 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		//for each sector we have also to add the subsectors
 		
-		Set selectedSectors=Util.getSelectedObjects(AmpSector.class,filterForm.getSelectedSectors());
+		Set selectedSectors		= Util.getSelectedObjects(AmpSector.class,filterForm.getSelectedSectors());
+		Set generatedSectors	= new HashSet();
+		
+		generatedSectors.addAll( selectedSectors);
+		
+		
+		arf.setSelectedSectors( new HashSet() );
+		arf.getSelectedSectors().addAll(selectedSectors);
 		
 		if(selectedSectors!=null)
 		{
@@ -294,7 +323,7 @@ public class ReportsFilterPicker extends MultiAction {
 				if(currentSector!=null)
 				{
 					Collection childSectors=SectorUtil.getAllChildSectors(currentSector.getAmpSectorId());
-					selectedSectors.addAll(childSectors); //add the children sectors to the filter
+					generatedSectors.addAll(childSectors); //add the children sectors to the filter
 					
 					//add the grand children
 					Iterator childSectorsIterator=childSectors.iterator();
@@ -302,14 +331,14 @@ public class ReportsFilterPicker extends MultiAction {
 					{
 						AmpSector currentChild=(AmpSector)childSectorsIterator.next();
 						Collection grandChildrenSectors=SectorUtil.getAllChildSectors(currentChild.getAmpSectorId());
-						selectedSectors.addAll(grandChildrenSectors);
+						generatedSectors.addAll(grandChildrenSectors);
 					}
 					
 				}
 			
 			}
 		}
-		arf.setSectors(selectedSectors);
+		arf.setSectors( generatedSectors );
 		
 				
 		

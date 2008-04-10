@@ -28,6 +28,7 @@ import org.apache.lucene.search.Hits;
 import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.PropertyListable.PropertyListableIgnore;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -58,7 +59,10 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Long ampReportId;
 	private Set statuses=null;
 	//private Set donors=null; //not used anymore
+	@PropertyListableIgnore
 	private Set sectors=null;
+	private Set selectedSectors	= null;
+	
 	private Set regions=null;
 	private Set risks=null;
 	private Set donorTypes=null;
@@ -406,6 +410,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	/**
 	 * @return Returns the sectors.
 	 */
+	@PropertyListableIgnore
 	public Set getSectors() {
 		return sectors;
 	}
@@ -782,6 +787,14 @@ public class AmpARFilter extends PropertyListable implements Filter {
 
 	public void setImplementingAgency(Set implementingAgency) {
 		this.implementingAgency = implementingAgency;
+	}
+	
+	public Set getSelectedSectors() {
+		return selectedSectors;
+	}
+
+	public void setSelectedSectors(Set selectedSectors) {
+		this.selectedSectors = selectedSectors;
 	}
 	
 }

@@ -311,10 +311,9 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		
 		arf.setSelectedSectors( new HashSet() );
-		arf.getSelectedSectors().addAll(selectedSectors);
-		
 		if(selectedSectors!=null)
-		{
+			{
+			arf.getSelectedSectors().addAll(selectedSectors);
 			Iterator sectorIterator=selectedSectors.iterator();
 		
 			while(sectorIterator.hasNext())
@@ -435,10 +434,50 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setExecutingAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedExecutingAgency(), AmpOrganisation.class ) );
 		
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER,arf);
-
+		reset(form, request, mapping);
 		return mapping.findForward(arf.isWidget()?"mydesktop":"reportView");
 	}
-	 
+	
+	public void reset( ActionForm form, HttpServletRequest request,ActionMapping mapping){
+		request.setAttribute("apply",null);
+		ReportsFilterPickerForm filterForm=(ReportsFilterPickerForm) form;
+		filterForm.setSelectedRisks(null);
+		filterForm.setSelectedSectors(null);
+		filterForm.setSelectedStatuses(null);
+		HttpSession httpSession = request.getSession();
+		TeamMember teamMember = (TeamMember) httpSession .getAttribute(Constants.CURRENT_MEMBER);
+
+		if (teamMember!= null)
+		{
+			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+			filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
+			String name = "- " + tempSettings.getCurrency().getCurrencyName();
+			httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
+			filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
+		}
+		
+		Long fromYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE));
+		filterForm.setFromYear(fromYear);
+
+		Long toYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));
+		filterForm.setToYear(toYear);
+		filterForm.setFromMonth(-1);
+		filterForm.setToMonth(-1);
+		
+		filterForm.setLineMinRank(null);
+		filterForm.setPlanMinRank(null);
+		filterForm.setText(null);
+		filterForm.setPageSize(null);
+		filterForm.setGovernmentApprovalProcedures(null);
+		filterForm.setJointCriteria(null);
+		filterForm.setRegionSelected(null);
+		filterForm.setDonorGroups(null);
+		filterForm.setDonorTypes(null);
+		filterForm.setExecutingAgency(null);
+		filterForm.setBeneficiaryAgency(null);
+		filterForm.setImplementingAgency(null);
+		filterForm.reset(mapping, request);
+	}
 	
 }
 

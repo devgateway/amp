@@ -45,7 +45,13 @@ public class ViewNPD extends Action {
 		npdForm.setGraphHeight(npdSettings.getHeight().intValue());
 		npdForm.setYears(new ArrayList(ProgramUtil.getYearsBeanList()));
 //		if (npdForm.getSelYears() == null)
-		npdForm.setSelYears(selectNYears(ProgramUtil.getYearsBeanList(),3));
+		//  If default years for this team is null, than default years will be last three years from Yearsbean list                 
+		if(npdSettings.getSelectedYearsForTeam()!=null){
+			npdForm.setSelYears(defaulYearsGeneratorForNpdGraph(npdSettings.getSelectedYearsForTeam()));
+		}else {
+			npdForm.setSelYears(selectNYears(ProgramUtil.getYearsBeanList(),3));
+		}
+		
 		npdForm.setDummyYear("-1");
 		npdForm.setDonors(getDonorsList(30));
         npdForm.setDefaultProgram(FeaturesUtil.getGlobalSettingValue("NPD Default Program"));
@@ -66,6 +72,23 @@ public class ViewNPD extends Action {
 			for (int i=temp.size()-num;i<temp.size();i++){
 				LabelValueBean year = (LabelValueBean) temp.get(i);
 				result[c++]=year.getValue();
+			}
+		}
+		return result;
+	}
+	
+	private String[] defaulYearsGeneratorForNpdGraph(String selectedYearForTeam){
+		String[] result= {};
+		int size=selectedYearForTeam.length();
+		result=new String[size];
+		for (int i = 0; i <size ; i++) {			
+			if(selectedYearForTeam.indexOf(',')==-1){
+				result[i]=selectedYearForTeam;
+				break;
+			}else{
+				int endIndex=selectedYearForTeam.indexOf(',');
+				result[i]=selectedYearForTeam.substring(0,endIndex);
+				selectedYearForTeam=selectedYearForTeam.substring(endIndex+1); //selectedYearForTeam is replaced with substring,which starts from the first comma of old one 
 			}
 		}
 		return result;

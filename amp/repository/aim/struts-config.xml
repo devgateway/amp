@@ -1490,10 +1490,10 @@
 		<forward name="forward" path="/showLayout.do?layout=aim_addComponentIndicator"/>
 		<forward name="delete" path="/aim/componentIndicatorManager.do" redirect="true"/>
 	</action>
-    <action name="aimNationalPlaningDashboardForm" parameter="actionMethod" path="/aim/npd" scope="request" type="org.digijava.module.aim.action.NationalPlaningDashboardAction" unknown="true" validate="false">
+    <action name="aimNationalPlaningDashboardForm" parameter="actionMethod" path="/aim/npd" scope="request" type="org.digijava.module.aim.action.NationalPlaningDashboardAction" validate="false">
       <forward name="viewNPDDashboard" path="/showLayout.do?layout=amp_viewNationalPlaningDashboard" />
     </action>
-    <action name="aimNationalPlaningDashboardForm" parameter="actionMethod" path="/aim/getThemeTreeNode" scope="request" type="org.digijava.module.aim.action.GetProgramTreeNode" unknown="true" validate="false" />
+    <action name="aimNationalPlaningDashboardForm" parameter="actionMethod" path="/aim/getThemeTreeNode" scope="request" type="org.digijava.module.aim.action.GetProgramTreeNode" validate="false" />
     <action name="aimNPDgraphForm" path="/aim/getNpdGraphMap" scope="request" type="org.digijava.module.aim.action.GetNPDGraphMap" validate="false" />
     <action name="aimNPDgraphForm" parameter="actionMethod" path="/aim/npdGraph" scope="request" type="org.digijava.module.aim.action.getNPDgraph" validate="false" />
     <action name="aimActiityListForm" path="/aim/getActivities" scope="request" type="org.digijava.module.aim.action.GetActivities" validate="false" />
@@ -1580,6 +1580,9 @@
     </action>
      <action name="aimActivityProgramSettingsForm" path="/aim/programConfigurationPage" scope="session" type="org.digijava.module.aim.action.AmpActivityProgramSettingsAction" validate="false">
           <forward name="forward" path="/showLayout.do?layout=programConfigurationPage" />
+        </action>
+        <action name="aimNPDForm" path="/aim/saveDefaultYearsForGraph" type="org.digijava.module.aim.action.SaveDefaultYearsForNpdGraph" scope="request">
+        	<forward name="gotoGraph" path="/aim/npdGraph.do"/>
         </action>
   </action-mappings>
 </struts-config>

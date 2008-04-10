@@ -145,11 +145,11 @@ if("On".equals(publicView)) { %>
                              </c:set>
                             
                                  <c:set var="link">
-                                     <c:if test="${empty linkProf}">
-                                         ${linkNPD}
-                                     </c:if>
-                                      <c:if test="${not empty linkProf}">
+                                     <c:if test="${empty linkNPD}">
                                          ${linkProf}
+                                     </c:if>
+                                      <c:if test="${not empty linkNPD}">
+                                         ${linkNPD}
                                      </c:if>
                                   </c:set>
                                  

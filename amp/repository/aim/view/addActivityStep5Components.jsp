@@ -83,7 +83,7 @@
 																</html:multibox>
 																<a title="<digi:trn key="aim:TitleofComponent">Title of the project component specified</digi:trn>">											<b>
 																<digi:trn key="aim:TitleofComponent">Component Title</digi:trn></a> :
-																<c:out value="${selComponents.title}"/></b>
+																<b><c:out value="${selComponents.title}"/></b>
 																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 																<field:display name="Edit Components Link" feature="Components">
 																<a href="javascript:editFunding('<bean:write name="selComponents"
@@ -361,6 +361,7 @@
 												</table>
 											</td></tr>
 										</table>
+										
 									</logic:notEmpty>
 									<logic:empty name="aimEditActivityForm" property="selectedComponents">
 									<field:display name="Add Components Button" feature="Components">
@@ -373,3 +374,4 @@
 										</table>
 									</field:display>
 									</logic:empty>
+								

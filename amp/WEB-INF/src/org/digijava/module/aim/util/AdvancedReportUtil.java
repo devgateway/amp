@@ -4,6 +4,7 @@
  */
 package org.digijava.module.aim.util;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -225,9 +226,12 @@ public final class AdvancedReportUtil {
 			//System.out.println(" Error in getColumnList()  :  " + e);
 		} finally {
 			try {
-				session.close();
+				PersistenceManager.releaseSession(session);
 			} catch (HibernateException e) {
 				logger.error(e);
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -268,9 +272,12 @@ public final class AdvancedReportUtil {
 			//System.out.println(" Error in getMeasureList()  :  " + e);
 		} finally {
 			try {
-				session.close();
+				PersistenceManager.releaseSession(session);
 			} catch (HibernateException e) {
 				logger.error(e);
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

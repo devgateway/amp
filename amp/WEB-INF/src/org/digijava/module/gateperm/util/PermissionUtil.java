@@ -251,8 +251,7 @@ public final class PermissionUtil {
   	    query.setParameter("categoryName", permClass.getSimpleName());
   	    List col = query.list();
   	    if(col.size()==0) return null;
-  	    PermissionMap pm= (PermissionMap) col.get(0);	  
-  	    PersistenceManager.releaseSession(session);
+  	    PermissionMap pm= (PermissionMap) col.get(0);	 
   	    return pm.getPermission();
   	} catch (HibernateException e) {
   	    logger.error(e);

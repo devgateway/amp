@@ -151,6 +151,7 @@ public final class Util {
 		for (int i = 0; i < selected.length; i++) {
 			set.add(session.load(type,new Long(selected[i].toString())));
 		}
+		PersistenceManager.releaseSession(session);
 		return set;
 	}
 	
@@ -341,9 +342,12 @@ public final class Util {
 		}
 
 		try {
-			sess.close();
+			PersistenceManager.releaseSession(sess);
 		} catch (HibernateException e) {
 			logger.error(e);
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

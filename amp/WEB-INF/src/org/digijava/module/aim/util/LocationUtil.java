@@ -432,13 +432,14 @@ public class LocationUtil {
 		Iterator iter = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			Connection connection = PersistenceManager.getSession().connection();
+			Connection connection = session.connection();
+			
 			//String queryString = "select distinct region_id, region from v_regions;";
 			String queryString = "select distinct amp_region_id as region_id, name as region from amp_region order by region";
 			
 			Statement stmt = connection.createStatement();
 			ResultSet rs = stmt.executeQuery(queryString);
-
+			
 
 		    while (rs.next()) {
 

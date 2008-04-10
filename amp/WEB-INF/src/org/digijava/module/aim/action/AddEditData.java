@@ -108,7 +108,11 @@ public class AddEditData
                     //ProgramUtil.deletePrgIndicatorValueById(new Long(themeForm.getParentId()),new Long(prgIndVal.getIndicatorValueId())); //pirvel parametrshi momdis connectiois id da meoreshi tviton romelic unda wavshalo imis
                     
                 }else{
-                    prgIndVal.setIndicatorValueId(-prgIndVal.getIndicatorValueId());
+                    prgIndVal.setIndicatorValueId(null);
+                    prgIndVal.setCreationDate(null);
+                    prgIndVal.setLocation(null);
+                    prgIndVal.setValAmount(null);
+                    prgIndVal.setValueType(AmpIndicatorValue.ACTUAL);                   
                 }
            }
             themeForm.setPrgIndValues(indValues);
@@ -138,13 +142,15 @@ public class AddEditData
             	connection.getValues().clear();
             	for (Iterator indValIter = indValues.iterator(); indValIter.hasNext();) {
 					AmpPrgIndicatorValue prgValue = (AmpPrgIndicatorValue) indValIter.next();
-					AmpIndicatorValue value=new AmpIndicatorValue();
-					value.setValue(prgValue.getValAmount());
-					value.setValueDate(DateConversion.getDateForIndicator(prgValue.getCreationDate()));
-					value.setValueType(prgValue.getValueType());
-					value.setLocation(prgValue.getLocation());
-					value.setIndicatorConnection(connection);
-					connection.getValues().add(value);
+					if(prgValue.getCreationDate()!=null && !prgValue.getCreationDate().equals("") && prgValue.getValAmount()!=null && !prgValue.getValAmount().equals("")){
+						AmpIndicatorValue value=new AmpIndicatorValue();
+						value.setValue(prgValue.getValAmount());
+						value.setValueDate(DateConversion.getDateForIndicator(prgValue.getCreationDate()));
+						value.setValueType(prgValue.getValueType());
+						value.setLocation(prgValue.getLocation());
+						value.setIndicatorConnection(connection);
+						connection.getValues().add(value);
+					}					
 				}
             	try{
                 	IndicatorUtil.updateThemeConnection(connection);

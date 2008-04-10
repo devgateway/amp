@@ -307,7 +307,7 @@ public class ReportsFilterPicker extends MultiAction {
 		Set selectedSectors		= Util.getSelectedObjects(AmpSector.class,filterForm.getSelectedSectors());
 		Set generatedSectors	= new HashSet();
 		
-		generatedSectors.addAll( selectedSectors);
+		if(selectedSectors!=null) generatedSectors.addAll( selectedSectors);
 		
 		
 		arf.setSelectedSectors( new HashSet() );

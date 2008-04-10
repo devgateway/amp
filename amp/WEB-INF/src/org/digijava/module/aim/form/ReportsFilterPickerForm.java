@@ -65,10 +65,21 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	private Boolean governmentApprovalProcedures;
 	private Boolean jointCriteria;
+	private Integer selectedBudget	= null;
 	
 	//to keep the default currency after user changues 
 	private Long defaultCurrency;
 	
+
+
+	public Integer getSelectedBudget() {
+		return selectedBudget;
+	}
+
+	public void setSelectedBudget(Integer selectedBudget) {
+		this.selectedBudget = selectedBudget;
+	}
+
 	public Long getDefaultCurrency() {
 		return defaultCurrency;
 	}
@@ -121,6 +132,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 			this.selectedExecutingAgency		= null;
 			this.selectedBeneficiaryAgency		= null;
 			this.selectedImplementingAgency		= null;
+			this.selectedBudget					= null;
 		}
 	}
 	

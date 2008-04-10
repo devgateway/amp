@@ -46,6 +46,7 @@ public class DBUtil {
 				+ AmpExternalMapping.class.getName() + " a "
 				+ "WHERE (a.objectType=:objType) and (a.externalSource=:extSource)";
 			Query qry = session.createQuery(queryString);
+			PersistenceManager.releaseSession(session);
 			qry.setParameter("objType", objectType, Hibernate.STRING);
 			qry.setParameter("extSource", externalSource, Hibernate.STRING);
 	
@@ -77,6 +78,7 @@ public class DBUtil {
 		Transaction tx = session.beginTransaction();
 		
 			session.saveOrUpdate(obj);
+		PersistenceManager.releaseSession(session);
 		} catch (HibernateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

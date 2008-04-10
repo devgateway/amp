@@ -64,7 +64,7 @@ public class ActivityEraser {
 			tx.commit();
 
 			
-			session.close();
+			PersistenceManager.releaseSession(session);
 			
 
 		} catch (HibernateException e) {

@@ -36,6 +36,7 @@ public class StandaloneAMPStartup {
 			try {
 				//EXAMPLE OF A WORKING HIBERNATE SESSION OBJECT:
 				Session session = PersistenceManager.getSession();
+				PersistenceManager.releaseSession(session);
 			} catch (HibernateException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -5,6 +5,7 @@
 package org.digijava.module.aim.util;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.text.Collator;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -1411,11 +1412,14 @@ public class DbUtil {
             logger.debug("Exceptiion " + e);
         } finally {
             try {
-                session.close();
+                PersistenceManager.releaseSession(session);
             } catch (HibernateException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-            }
+            } catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
         return activities;
     }

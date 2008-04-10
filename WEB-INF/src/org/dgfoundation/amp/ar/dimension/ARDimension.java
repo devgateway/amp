@@ -51,6 +51,7 @@ public abstract class ARDimension {
 	    AmpColumns c = (AmpColumns) i.next();
 	   if(c.getRelatedContentPersisterClass()!=null) COLUMN_DB_TYPE.put(c.getColumnName(), Class.forName(c.getRelatedContentPersisterClass()));	    
 	}
+	PersistenceManager.releaseSession(session);
     }
     
     public ARDimension() { 

@@ -329,7 +329,7 @@ public class FreeBalanceHarvester {
 				
 			} while (line != null);
 			
-			session.close();
+			PersistenceManager.releaseSession(session);
 
 			lnr.close();
 

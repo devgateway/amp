@@ -846,7 +846,7 @@ public class FeaturesUtil {
     finally {
       if (session != null) {
         try {
-          session.close();
+          PersistenceManager.releaseSession(session);
         }
         catch (Exception rsf) {
           logger.error("Release session failed :" + rsf.getMessage());

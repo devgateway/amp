@@ -79,6 +79,13 @@ public class XLSExportAction extends Action {
 		HSSFWorkbook wb = new HSSFWorkbook();
 		String sheetName=rd.getName();
 		if(sheetName.length()>31) sheetName=sheetName.substring(0,31);
+		sheetName = sheetName.replace('/', '_');
+		sheetName = sheetName.replace('*', '_');
+		sheetName = sheetName.replace('?', '_');
+		sheetName = sheetName.replace(']', '_');
+		sheetName = sheetName.replace('[', '_');
+		sheetName = sheetName.replace('\\', '_');
+		
 		HSSFSheet sheet = wb.createSheet(sheetName);
 		
 		

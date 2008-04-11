@@ -43,12 +43,14 @@ function saveIndicator(id){
 }
 
 function selectLocation(index){
+	
   <digi:context name="selLoc" property="context/module/moduleinstance/selectLocationForIndicatorValue.do"/>  
   openURLinWindow("<%=selLoc%>?index="+index,700,500);
   
   <digi:context name="justSubmit" property="context/module/moduleinstance/addEditData.do?action=justSubmit" /> 
-  aimThemeForm.action = "<%=justSubmit%>";  
-  aimThemeForm.submit();  
+  	aimThemeForm.action = "<%=justSubmit%>&index="+index;  
+  	aimThemeForm.submit();    
+  
 }
 </script>
 

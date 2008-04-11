@@ -551,11 +551,11 @@ function checkUncheckAll2() {
 															</TD>
 															
 															<td align="center" bgcolor="#eeeeee">
-													<html:button  styleClass="dr-menu" property="submitButton"  onclick="addColumn()">
+													<html:button style="width:90px;" styleClass="dr-menu" property="submitButton"  onclick="addColumn()">
 														<digi:trn key="btn:add">  Add </digi:trn> >>&nbsp;&nbsp;&nbsp;
 													</html:button>
 													<br><br>
-													<html:button  styleClass="dr-menu" property="submitButton"  onclick="deleteColumn()">
+													<html:button  style="width:90px;"  styleClass="dr-menu" property="submitButton"  onclick="deleteColumn()">
 														<< <digi:trn key="btn:remove">Remove</digi:trn>
 													</html:button>
 

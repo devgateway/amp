@@ -7,6 +7,11 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 <script language="javascript">
+
+function closeWindow() {
+	window.close();
+}
+
 function selectLocation(){
   document.getElementById("indAction").value="add";
   document.forms[0].target=window.opener.name;

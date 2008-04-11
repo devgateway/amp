@@ -471,7 +471,7 @@ public class TranslatorManager extends Action {
 					Message msg = (Message) itr.next();
 
 					if (msgLocal.getCreated().after(msg.getCreated())
-							&& msgLocal.getLocale().compareTo(msg.getLocale()) == 0) {
+							&& msgLocal.getLocale().compareTo(msg.getLocale()) == 0 || msg.getMessage().equalsIgnoreCase("")) {
 						msg.setCreated(msgLocal.getCreated());
 						msg.setMessage(msgLocal.getMessage());
 						session.saveOrUpdate(msg);

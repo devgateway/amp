@@ -4,7 +4,9 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<script defer src="ie_onload.js" type="text/javascript"></script>
 <script language="JavaScript">
+
 function onDelete() {
   var flag = confirm('<digi:trn key="aim:deleteconfirm">Are you sure?</digi:trn>');
   return flag;
@@ -45,11 +47,11 @@ function updateComponents(id)
     document.aimUpdateComponentsForm.action = "<%= updateComponents%>&componentId="+id;
     document.aimUpdateComponentsForm.target = "_self";
     document.aimUpdateComponentsForm.submit();
-  }
+    }
   return temp;
 }
 
-function onload(){
+function myOnload(){
   //alert("onload="+document.aimUpdateComponentsForm.check.value);
   if(document.aimUpdateComponentsForm.check.value=="save"){
     <digi:context name="refreshComp" property="context/module/moduleinstance/getComponents.do" />
@@ -66,13 +68,11 @@ function closeWindow()
 {
   window.close();
 }
-
 </script>
-
+<body onload="myOnload()">
 <digi:instance property="aimUpdateComponentsForm" />
 <digi:form action="/updateComponents.do" method="post">
   <html:hidden styleId="check" property="check"/>
-
   <table bgColor=#ffffff cellPadding=0 cellSpacing=0>
     <tr>
       <td class=r-dotted-lg width=14>&nbsp;</td>
@@ -202,3 +202,4 @@ function closeWindow()
 </tr>
 </table>
 </digi:form>
+</body>

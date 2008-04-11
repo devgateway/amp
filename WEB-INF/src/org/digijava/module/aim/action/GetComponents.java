@@ -1,6 +1,9 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
@@ -8,6 +11,7 @@ import org.apache.struts.action.*;
 import javax.servlet.http.*;
 
 import org.digijava.module.aim.util.ComponentsUtil;
+import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.form.ComponentsForm;
 
 
@@ -29,10 +33,9 @@ public class GetComponents extends Action{
 								}
 							}
 							logger.info("came into the components manager");
-							Collection com = null;
+							List<AmpComponent> com = new ArrayList<AmpComponent>(ComponentsUtil.getAmpComponents());
 							ComponentsForm compForm = (ComponentsForm) form;
-							
-							com = ComponentsUtil.getAmpComponents();
+							Collections.sort(com);
 							compForm.setComponents(com);
 		return mapping.findForward("default");
 	  }

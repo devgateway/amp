@@ -17,7 +17,7 @@ public class ComponentsUtil{
 
 	private static Logger logger = Logger.getLogger(ComponentsUtil.class);
 
-	public static Collection getAmpComponents()
+	public static Collection<AmpComponent> getAmpComponents()
 	{
 		logger.debug(" starting to get all the components....");
 		Collection col = null;

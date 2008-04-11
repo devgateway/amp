@@ -262,8 +262,8 @@ public class AmpTheme implements Serializable
 
 	public String getEncodeName() {
 		if(name != null) {
-				encodeName = name.replaceAll("'", "\\'");
-				encodeName = encodeName.replaceAll("\"", "\\'");
+				encodeName = name.replace("'", " ");
+				//encodeName = encodeName.replaceAll("\"", "\\\'");
 				System.out.println(encodeName);
 
 		}

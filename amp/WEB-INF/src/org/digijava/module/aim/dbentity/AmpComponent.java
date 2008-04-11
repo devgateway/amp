@@ -9,12 +9,14 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 /**
  * Persister class for Components
  * @author Priyajith
  */
-public class AmpComponent implements Serializable {
-	
+public class AmpComponent implements Serializable,Comparable<AmpComponent> {
+	private static Logger logger = Logger.getLogger(AmpComponent.class);
 	private Long ampComponentId;
 	private String title;
 	private String description;
@@ -65,6 +67,22 @@ public class AmpComponent implements Serializable {
 	}
 	public String getUrl() {
 		return Url;
+	}
+	/**
+	 * A simple string comparison to sort components by title
+	 */
+	public int compareTo(AmpComponent o) {
+		try {
+			if (this.title.compareTo(o.title) > 0) {
+				return 1;
+			} else if (this.title.compareTo(o.title) == 0) {
+				return -0;
+			}
+		} catch (Exception e) {
+			logger.error(e);
+			return -1;
+		}
+		return -1;
 	}	
 	
 }

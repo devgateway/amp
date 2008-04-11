@@ -2749,7 +2749,7 @@ public class FeaturesUtil {
                        String queryString = "select fv from " +AmpModulesVisibility.class.getName() +
                        " mv inner join mv.items fv "+
                         " inner join fv.templates tmpl" +
-                        " where (mv.name=:moduleName) and (fv.name=:featureName)" +
+                        " where (cast(mv.name as Binary)=:moduleName) and (cast(fv.name as Binary)=:featureName)" +
                         " and (tmpl.id=:defTemplId)";
                        Query qry = session.createQuery(queryString);
                        qry.setString("featureName", featureName);
@@ -2797,39 +2797,38 @@ public class FeaturesUtil {
              Session session = null;
           
                 try {
-                       session = PersistenceManager.getRequestDBSession();
-                       String queryString = "select mv from " +AmpModulesVisibility.class.getName() +
-                       " mv inner join mv.parent parent "+
-                               " inner join mv.templates tmpl " +
-                        " where (mv.name=:moduleName) " +
-                        " and (tmpl.id=:defTemplId)";
-                       if(parentModuleName!=null){
-                        queryString+=" and (parent.name=:parentModuleName) " ;
-                       }
-                       Query qry = session.createQuery(queryString);
-                       qry.setString("moduleName", moduleName );
-                       if(parentModuleName!=null){
-                       qry.setString("parentModuleName", parentModuleName);
-                       }
-                       qry.setLong("defTemplId", defTemplId);
-                       if(qry.list()!=null&&qry.list().size()>0){
-                           module=(AmpModulesVisibility)qry.uniqueResult();
-                           AmpObjectVisibility parent=module.getParent() ;
-                            if (parent!= null) {
-                               AmpObjectVisibility grandPar=parent.getParent();
-                               String grandParName=null;
-                               if(grandPar!=null){
-                                   grandParName = grandPar.getName();
-                                   AmpModulesVisibility parentModule = getModuleByName(parent.getName(), grandParName, defTemplId);
-                                   if (parentModule == null) {
-                                       module = null;
-                                   }
-                               }
-                              
-                               
-                               return module;
-                           }
-                       }
+                      session = PersistenceManager.getRequestDBSession();
+                    String queryString = "select mv from " + AmpModulesVisibility.class.getName()+ " mv ";
+                    if (parentModuleName != null) {
+                        queryString += " inner join mv.parent parent ";
+                    }
+                    queryString += " inner join mv.templates tmpl " +
+                            " where (cast(mv.name as Binary)=:moduleName) " +
+                            " and (tmpl.id=:defTemplId)";
+                    if (parentModuleName != null) {
+                        queryString += " and (cast(parent.name as Binary)=:parentModuleName) ";
+                    }
+                    Query qry = session.createQuery(queryString);
+                    qry.setString("moduleName", moduleName);
+                    if (parentModuleName != null) {
+                        qry.setString("parentModuleName", parentModuleName);
+                    }
+                    qry.setLong("defTemplId", defTemplId);
+                    if (qry.list() != null && qry.list().size() > 0) {
+                        module = (AmpModulesVisibility) qry.uniqueResult();
+                        AmpObjectVisibility parent = module.getParent();
+                        if (parent != null) {
+                            AmpObjectVisibility grandPar = parent.getParent();
+                            String grandParName = null;
+                            if (grandPar != null) {
+                                grandParName = grandPar.getName();
+                            }
+                            AmpModulesVisibility parentModule = getModuleByName(parent.getName(), grandParName, defTemplId);
+                            if (parentModule == null) {
+                                module = null;
+                            }
+                        }
+                    }
                        
                       
                 } catch (Exception e) {

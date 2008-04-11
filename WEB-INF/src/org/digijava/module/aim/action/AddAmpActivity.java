@@ -112,8 +112,17 @@ public class AddAmpActivity extends Action {
 
     EditActivityForm eaForm = (EditActivityForm) form; 
     
+   
+    
+    if (teamMember != null && teamMember.getTeamType()
+       .equalsIgnoreCase("GOVERNMENT")) {
+       eaForm.setGovFlag(true);
+    } else {
+       eaForm.setGovFlag(false);
+   }
+    
       if (eaForm.getSteps() == null) {
-          List steps = ActivityUtil.getSteps();
+          List steps = ActivityUtil.getSteps(eaForm.isGovFlag());
           eaForm.setSteps(steps);
       }
     

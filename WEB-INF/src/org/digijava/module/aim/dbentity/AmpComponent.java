@@ -73,9 +73,9 @@ public class AmpComponent implements Serializable,Comparable<AmpComponent> {
 	 */
 	public int compareTo(AmpComponent o) {
 		try {
-			if (this.title.compareTo(o.title) > 0) {
+			if (this.title.compareToIgnoreCase(o.title) > 0) {
 				return 1;
-			} else if (this.title.compareTo(o.title) == 0) {
+			} else if (this.title.compareToIgnoreCase(o.title) == 0) {
 				return -0;
 			}
 		} catch (Exception e) {

@@ -2757,7 +2757,7 @@ public class FeaturesUtil {
                        qry.setLong("defTemplId", defTemplId);
                        if(qry.list()!=null&&qry.list().size()>0){
                            feature = (AmpFeaturesVisibility) qry.uniqueResult();
-                           AmpObjectVisibility parent=feature.getParent() ;
+                          /* AmpObjectVisibility parent=feature.getParent() ;
                            if (parent != null) {
                                AmpObjectVisibility grandPar=parent.getParent();
                                String grandParName=null;
@@ -2770,6 +2770,7 @@ public class FeaturesUtil {
                                }
                               
                            }
+                           * */
                           
                        }
                        
@@ -2816,7 +2817,7 @@ public class FeaturesUtil {
                     qry.setLong("defTemplId", defTemplId);
                     if (qry.list() != null && qry.list().size() > 0) {
                         module = (AmpModulesVisibility) qry.uniqueResult();
-                        AmpObjectVisibility parent = module.getParent();
+                        /*AmpObjectVisibility parent = module.getParent();
                         if (parent != null) {
                             AmpObjectVisibility grandPar = parent.getParent();
                             String grandParName = null;
@@ -2828,6 +2829,7 @@ public class FeaturesUtil {
                                 module = null;
                             }
                         }
+                         */
                     }
                        
                       

@@ -38,16 +38,7 @@
 					<digi:trn key="aim:popsort:hierarchy:title">Hierarchy Title</digi:trn>
 				</html:option>
 
-					<logic:iterate name="reportMeta" property="hierarchies"  id="iter">
-						
-						<html:option value="${iter.levelId}">
-							<c:set var="key" value="aim:popsort:hierarchy:${iter.column.columnNameTrimmed}"/>
-							<digi:trn key="${key}">
-							${iter.column.columnNameTrimmed}
-						</digi:trn>
-						</html:option>
-					</logic:iterate>
-					
+				
 					<logic:iterate name="report" property="trailCells"  id="iter1">
 						
 						<html:option value="${iter1.column.absoluteColumnName}">

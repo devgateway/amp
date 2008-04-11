@@ -69,7 +69,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	
 	//to keep the default currency after user changues 
 	private Long defaultCurrency;
-	
+	private boolean isnewreport;
 
 
 	public Integer getSelectedBudget() {
@@ -117,11 +117,13 @@ public class ReportsFilterPickerForm extends ActionForm {
 	}
 
 	public void setAmpReportId(Long ampReportId) {
-		this.ampReportId = ampReportId;
+		if (isnewreport){
+			this.ampReportId = ampReportId;
+		}
 	}
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
-		if(request.getParameter("apply")!=null && request.getAttribute("apply")==null){
+		if(request.getParameter("apply")!=null && request.getAttribute("apply")==null || isnewreport){
 			//this.selectedDonors 				= null;
 			this.selectedRisks	 				= null;
 			this.selectedSectors 				= null;
@@ -411,6 +413,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setSelectedImplementingAgency(Object[] selectedImplementingAgency) {
 		this.selectedImplementingAgency = selectedImplementingAgency;
+	}
+
+	public boolean isIsnewreport() {
+		return isnewreport;
+	}
+
+	public void setIsnewreport(boolean isnewreport) {
+		this.isnewreport = isnewreport;
 	}
 	
 }

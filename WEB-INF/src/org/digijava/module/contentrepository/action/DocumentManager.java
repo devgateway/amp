@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -99,7 +100,13 @@ public class DocumentManager extends Action {
 			Collection<DocumentData> tempCol	= TemporaryDocumentData.retrieveTemporaryDocDataList(myRequest);
 			if (UUIDs != null)
 				try {
-					myForm.setOtherDocuments( this.getDocuments(UUIDs) );
+					Collection<DocumentData> documents = this.getDocuments(UUIDs);
+					myForm.setOtherDocuments(documents);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+				
+				try{	
 					if ( tempCol != null ) {
 						if ( myForm.getOtherDocuments() == null ) {
 							myForm.setOtherDocuments( tempCol );

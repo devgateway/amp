@@ -639,7 +639,7 @@ function remProgram(programType) {
                     <digi:errors />
                   </td>
                 </tr>
-                <tr><td>
+                <tr><td valign="top">
 
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 
@@ -696,11 +696,6 @@ function remProgram(programType) {
 
 								<!-- Issues , Measures and Actions -->
 
-									<tr><td>
-
-										&nbsp;
-
-									</td></tr>
 									<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 		
 									<feature:display name="Issues" module="Issues">

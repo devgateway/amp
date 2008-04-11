@@ -33,7 +33,7 @@ public class AdvancedReportForm extends ActionForm
 	private Boolean reportIsModified = false;
 	private Boolean reportEdit=null;
 	private String currentTabName;
-	
+	private Boolean blankReportName = false;
 	
 	private String levelPicked=null;
 	private String levelSorter=null;
@@ -1522,6 +1522,7 @@ private int yrDiff;
 		this.setPublicReport(false);
 		this.setDrilldownTab(false);
 		this.setHideActivities(false);
+		this.setBlankReportName(false);
 		}
 	}
 	public Boolean getReportEdit() {
@@ -1632,6 +1633,12 @@ private int yrDiff;
 	 */
 	public void setReportIsModified(Boolean reportIsModified) {
 		this.reportIsModified = reportIsModified;
+	}
+	public Boolean getBlankReportName() {
+		return blankReportName;
+	}
+	public void setBlankReportName(Boolean blankReportName) {
+		this.blankReportName = blankReportName;
 	}
 	
 	

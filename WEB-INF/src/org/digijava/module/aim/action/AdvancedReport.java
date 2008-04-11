@@ -1172,10 +1172,11 @@ public class AdvancedReport extends Action {
 				{
 					if(formBean.getReportTitle().trim().length() == 0)
 					{
-							errors.add("title", new ActionError("error.aim.reportManager.ReportNameAbsent"));
-							saveErrors(request, errors);
-							flag = true;
-							return goTo("MissingReportDetails",formBean,mapping);							
+//						errors.add("title", new ActionError("error.aim.reportManager.ReportNameAbsent"));
+//						saveErrors(request, errors);
+						flag = true;
+						formBean.setBlankReportName(true);
+						return goTo("MissingReportDetails",formBean,mapping);							
 					}
 				}
 				
@@ -1352,6 +1353,9 @@ public class AdvancedReport extends Action {
 			            }
 					
 				}
+				//else
+					//System.out.println("AAAAAAAAAAAAAAAAAAAAAa");
+				
 				return goTo("viewMyDesktop",formBean,mapping);				
 			}
 

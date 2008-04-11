@@ -201,6 +201,9 @@ function backStep() {
 															<logic:equal name="aimAdvancedReportForm" property="duplicatedReportName" value="true">
 																<LI><digi:trn key="aim:reportBuilder:error:duplicatedReportName">A report with the same name already exists. Please choose another report name.</digi:trn></LI>
 															</logic:equal>
+															<logic:equal name="aimAdvancedReportForm" property="blankReportName" value="true">
+																<LI><digi:trn key="aim:reportBuilder:error:blankReportName">You need to put a title.</digi:trn></LI>
+															</logic:equal>
 															<logic:present name="aimAdvancedReportForm" property="duplicatedReportOwner">
 																<LI><digi:trn key="aim:reportBuilder:error:duplicatedReportOwner">The report with this name is owned by </digi:trn>&nbsp;<bean:write name="aimAdvancedReportForm" property="duplicatedReportOwner"/>.</LI>
 															</logic:present>

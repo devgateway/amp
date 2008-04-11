@@ -61,7 +61,19 @@ public class ReportsFilterPicker extends MultiAction {
 
 		ReportsFilterPickerForm filterForm=(ReportsFilterPickerForm) form;
 		String ampReportId=request.getParameter("ampReportId");
-		if(ampReportId!=null) filterForm.setAmpReportId(new Long(ampReportId));
+		
+		if(ampReportId!=null && filterForm.getAmpReportId()!=null){
+			if(!filterForm.getAmpReportId().toString().equalsIgnoreCase(ampReportId)){
+				filterForm.setIsnewreport(true);
+				reset(form, request, mapping);
+				filterForm.setAmpReportId(new Long(ampReportId));
+				filterForm.setIsnewreport(false);
+			}
+		}else{
+			filterForm.setIsnewreport(true);
+			filterForm.setAmpReportId(new Long(ampReportId));
+			filterForm.setIsnewreport(false);
+		}
 		
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession
@@ -434,7 +446,6 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setExecutingAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedExecutingAgency(), AmpOrganisation.class ) );
 		
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER,arf);
-		reset(form, request, mapping);
 		return mapping.findForward(arf.isWidget()?"mydesktop":"reportView");
 	}
 	

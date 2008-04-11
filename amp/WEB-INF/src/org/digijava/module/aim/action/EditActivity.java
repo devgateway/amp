@@ -160,10 +160,7 @@ public class EditActivity
     boolean isPublicView = (request.getParameter("public")==null)?false:request.getParameter("public").equals("true");
     EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
     Long activityId = eaForm.getActivityId();
-    if(eaForm.getSteps()==null){
-    List steps=ActivityUtil.getSteps();
-    eaForm.setSteps(steps);
-    }
+   
 
     // set Globam Settings Multi-Sector Selecting
     String multiSectorSelect = FeaturesUtil.getGlobalSettingValue(Constants.
@@ -318,6 +315,10 @@ public class EditActivity
     } else {
        eaForm.setGovFlag(false);
    }
+        if (eaForm.getSteps() == null) {
+            List steps = ActivityUtil.getSteps(eaForm.isGovFlag());
+            eaForm.setSteps(steps);
+        }
 
       if (tm != null && tm.getTeamType()
           .equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {

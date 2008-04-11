@@ -446,15 +446,14 @@
 		treeXML=progListRoot;
 
 		// this value now is uddated not from form but by click on the tree node
-        if(curProgId==null){
-          curProgId=document.getElementById("defaultProgram").value;
-        }
-		var curProg=findProgWithID(progListRoot,curProgId);
+        var defProgId=document.getElementById("defaultProgram").value;
+
+		var curProg=findProgWithID(progListRoot,defProgId);
         if(curProg==null){
           curProg=getFirstProg(progListRoot);
-          curProgId=curProg.getAttribute("id");
+          defProgId=curProg.getAttribute("id");
         }
-        curNodeId=getNodeIndexByProgID(progListRoot,curProgId);
+        curNodeId=getNodeIndexByProgID(progListRoot,defProgId);
 		//determine which programs should be openned
 		fillLine(progListRoot,curProg);
 
@@ -483,7 +482,8 @@
 		addEventListeners();
 
 		createPanel("Info","<i>info</i>");
-        browseProgram(curProgId,curNodeId+1);
+
+        browseProgram(defProgId,curNodeId);
 	}
 
 	/* recursivly builds tree nodes */

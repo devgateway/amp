@@ -12,7 +12,7 @@
 <script language="javascript">
 
 function validate(field) {
-    alert(field);
+//    alert(field);
 	if (field == 2) { // validate sector
 		if (document.aimNewIndicatorForm.selActivitySector.checked != null) {
 			if (document.aimNewIndicatorForm.selActivitySector.checked == false) {

@@ -284,7 +284,10 @@ public class AmountCell extends Cell {
 	}
 
 	public void setPercentage(double percentage) {
-		this.percentage = percentage;
+		if(this.percentage>0){
+			this.percentage = this.percentage * percentage / 100;
+		}
+		else this.percentage = percentage;
 	}
 
 	

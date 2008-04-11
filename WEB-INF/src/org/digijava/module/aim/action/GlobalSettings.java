@@ -258,7 +258,7 @@ public class GlobalSettings extends Action {
 			if (criterion.equals("t_Year")){
 				try{
 					int intValue	= Integer.parseInt(value);
-					if (intValue < 1000 || intValue > 2999 )
+					if (intValue!=-1 && (intValue < 1000 || intValue > 2999  ))
 						return false;
 					return true;
 				}

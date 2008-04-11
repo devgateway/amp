@@ -9,9 +9,9 @@
 <script language="javascript">
 function selectLocation(){
   document.getElementById("indAction").value="add";
-  //document.forms[0].target=window.opener.name;
+  document.forms[0].target=window.opener.name;
   document.forms[0].submit();
-  window.opener.document.forms[0].submit();
+  //window.opener.document.forms[0].submit();
   window.close();
 }
 

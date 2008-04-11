@@ -116,6 +116,7 @@ import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 	
 	            
 	            indValue.setLocation(location);
+	            themeForm.setLocationLevelIndex(-1);
 	            themeForm.setParentIndex(null);
 	            themeForm.setAction(null);
 	            themeForm.setSelectedLocationId(null);
@@ -126,7 +127,7 @@ import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 	            themeForm.setImpZone(null);
 	            themeForm.setImpWoreda(null);
 	            themeForm.setAction(null);
-	            return mapping.findForward("forward");
+	            return mapping.findForward("backToAddDataPage");
 	        }
 	
 	//        Collection<AmpRegion> locations = LocationUtil.getAmpLocations();

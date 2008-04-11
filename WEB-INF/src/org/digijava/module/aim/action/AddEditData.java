@@ -75,6 +75,7 @@ public class AddEditData
             themeForm.setValueType(null);
         }
         String event = request.getParameter("event");
+        String action=request.getParameter("action");
        
 
         List<AmpPrgIndicatorValue> indValues = themeForm.getPrgIndValues();
@@ -94,6 +95,9 @@ public class AddEditData
             }
         }
 
+        if(action!=null && action.equalsIgnoreCase("justSubmit")){        	
+        	return mapping.findForward("forward");
+        }
         if(event!=null && event.equals("addIndValue")){
             AmpPrgIndicatorValue prgIndVal = getPrgIndicatorValue();
             indValues.add(prgIndVal);

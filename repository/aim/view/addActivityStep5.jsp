@@ -701,9 +701,13 @@ function remProgram(programType) {
 										&nbsp;
 
 									</td></tr>
+									<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
+		
 									<feature:display name="Issues" module="Issues">
 										<jsp:include page="addActivityStep5Issues.jsp"/>
 									</feature:display>
+								</td></tr>
+									
 									<tr><td>
 
 										&nbsp;

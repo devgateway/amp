@@ -818,9 +818,10 @@ public class IndicatorUtil {
 		bean.setProgress(String.valueOf(progress*100+"%"));
 		
 		AmpIndicatorRiskRatings riskObj=getRisk(connection);
-		bean.setRisk(riskObj.getAmpIndRiskRatingsId());
-		bean.setRiskName(riskObj.getRatingName());
-		
+		if(riskObj!=null){
+			bean.setRisk(riskObj.getAmpIndRiskRatingsId());
+			bean.setRiskName(riskObj.getRatingName());
+		}	
 		
 		return bean;
 	}

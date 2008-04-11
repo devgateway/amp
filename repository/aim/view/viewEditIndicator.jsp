@@ -70,15 +70,19 @@ function saveIndicator(){
 	--%>   
 		
 	  
-  /*
-  if(document.aimNewIndicatorForm.selActivitySector.value == ""){
-		alert("Please add sectors");
-		 return false;
-	}else{
-		var Sector = document.aimNewIndicatorForm.selActivitySector.value;
-		document.getElementById("hdnselActivitySectors").value = Sector;
-	}
-  */
+		var length = document.aimNewIndicatorForm.selActivitySector.length;		
+		var Sector;
+		
+		if(!length){
+			alert("Please add Sectors");
+			 return false;
+		}else{
+			for(i = 0; i<length; i++){
+				Sector = document.aimNewIndicatorForm.selActivitySector[i].value;
+				document.getElementById("hdnselActivitySectors").value = Sector;
+			}
+		} 
+
   
   <digi:context name="addInd" property="context/module/moduleinstance/viewEditIndicator.do?action=save" />
   
@@ -309,5 +313,5 @@ function closeWindow() {
 </digi:form>
 
 <script language="javascript">
-radiosStatus(document.getElementById("Intype").value);
+//radiosStatus(document.getElementById("Intype").value);
 </script>

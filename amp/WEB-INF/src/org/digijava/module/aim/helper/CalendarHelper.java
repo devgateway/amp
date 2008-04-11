@@ -45,7 +45,7 @@ public class CalendarHelper {
 		return cm;
 	}
 	public int getQuarter() {
-		return gregCalendar.get(Calendar.MONTH) / 4 + 1;
+		return Math.round( (gregCalendar.get(Calendar.MONTH)+1.0f) / 4 + 1);
 	}
 	public int getYear() {
 		return gregCalendar.get(Calendar.YEAR);

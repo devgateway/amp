@@ -142,20 +142,37 @@ ${fn:replace(message,quote,escapedQuote)}
 										<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
-                                                                 <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
+                                                                  <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
                                                                      
                                                                      <c:set property="translation" var="trans">
                                                                          <digi:trn key="aim:clickToViewAddActivityStep${step.stepActualNumber}">
                                                                              Click here to goto Add Activity Step ${step.stepActualNumber}
                                                                          </digi:trn>
                                                                      </c:set>
+                                                                      
+                                                                      <c:set var="link">
+                                                                          <c:if test="${step.stepNumber==9}">
+                                                                              /editSurveyList.do?edit=true
+                                                                              
+                                                                          </c:if>
+                                                                          
+                                                                          <c:if test="${step.stepNumber!=9}">
+                                                                          
+                                                                              /addActivity.do?step=${step.stepNumber}&edit=true
+                                                                              
+                                                                          </c:if>
+                                                                      </c:set>
+                                                                           
+                                                                         
+                                                                         
                                                                      
                                                                      
                                                                      
                                                                      <c:if test="${!index.last}">
-                                                                         
+                                                                        
                                                                          <c:if test="${index.first}">
-                                                                             <digi:link href="/addActivity.do?step=${step.stepNumber}&edit=true" styleClass="comment" title="${trans}">
+                                                                            
+                                                                             <digi:link href=" ${link}" styleClass="comment" title="${trans}">
                                                                                  
                                                                                  
                                                                                  <c:if test="${aimEditActivityForm.editAct == true}">
@@ -173,8 +190,10 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                              &nbsp;&gt;&nbsp;
                                                                          </c:if>
                                                                          <c:if test="${!index.first}">
-                                                                             <digi:link href="/addActivity.do?step=${step.stepNumber}&edit=true" styleClass="comment" title="${trans}">
-                                                                                 <digi:trn key="aim:addActivityStep${step.stepActualNumber}">Step ${step.stepActualNumber}</digi:trn>
+                                                                             <digi:link href="${link}" styleClass="comment" title="${trans}">
+                                                                                 <digi:trn key="aim:addActivityStep${step.stepActualNumber}">
+                                                                                 Step ${step.stepActualNumber}
+                                                                             </digi:trn>
                                                                              </digi:link>
                                                                              &nbsp;&gt;&nbsp;
                                                                          </c:if>

@@ -132,79 +132,98 @@ ${fn:replace(message,quote,escapedQuote)}
 													</digi:link>&nbsp;&gt;&nbsp;
 												</c:if>
                                                                                                  <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
-                                                                                                     
-                                                                                                     <c:set property="translation" var="trans">
-                                                                                                         <digi:trn key="aim:clickToViewAddActivityStep${step.stepActualNumber}">
-                                                                                                             Click here to goto Add Activity Step ${step.stepActualNumber}
-                                                                                                         </digi:trn>
-                                                                                                     </c:set>
-                                                                                                     
-                                                                                                     
-                                                                                                     
-                                                                                                     <c:if test="${!index.last}">
-                                                                                                         
-                                                                                                         <c:if test="${index.first}">
-                                                                                                             <digi:link href="/addActivity.do?step=${step.stepNumber}&edit=true" styleClass="comment" title="${trans}">
-                                                                                                                 
-                                                                                                                 
-                                                                                                                 <c:if test="${aimEditActivityForm.editAct == true}">
-                                                                                                                     <digi:trn key="aim:editActivityStep1">
-                                                                                                                         Edit Activity - Step 1
-                                                                                                                     </digi:trn>
-                                                                                                                 </c:if>
-                                                                                                                 <c:if test="${aimEditActivityForm.editAct == false}">
-                                                                                                                     <digi:trn key="aim:addActivityStep1">
-                                                                                                                         Add Activity - Step 1
-                                                                                                                     </digi:trn>
-                                                                                                                 </c:if>
-                                                                                                                 
-                                                                                                             </digi:link>
-                                                                                                             &nbsp;&gt;&nbsp;
-                                                                                                         </c:if>
-                                                                                                         <c:if test="${!index.first}">
-                                                                                                             <digi:link href="/addActivity.do?step=${step.stepNumber}&edit=true" styleClass="comment" title="${trans}">
-                                                                                                                 <digi:trn key="aim:addActivityStep${step.stepActualNumber}"> Step ${step.stepActualNumber}</digi:trn>
-                                                                                                             </digi:link>
-                                                                                                             &nbsp;&gt;&nbsp;
-                                                                                                         </c:if>
-                                                                                                     </c:if>
-                                                                                                     
-                                                                                                     
-                                                                                                     
-                                                                                                     <c:if test="${index.last}">
-                                                                                                         
-                                                                                                         <c:if test="${index.first}">
-                                                                                                             
-                                                                                                             
-                                                                                                             
-                                                                                                             <c:if test="${aimEditActivityForm.editAct == true}">
-                                                                                                                 <digi:trn key="aim:editActivityStep1">
-                                                                                                                     Edit Activity - Step 1
-                                                                                                                 </digi:trn>
-                                                                                                             </c:if>
-                                                                                                             <c:if test="${aimEditActivityForm.editAct == false}">
-                                                                                                                 <digi:trn key="aim:addActivityStep1">
-                                                                                                                     Add Activity - Step 1
-                                                                                                                 </digi:trn>
-                                                                                                             </c:if>
-                                                                                                         </c:if>
-                                                                                                         
-                                                                                                         
-                                                                                                         <c:if test="${!index.first}">
-                                                                                                             <digi:trn key="aim:addActivityStep${step.stepActualNumber}"> Step ${step.stepActualNumber}</digi:trn>
-                                                                                                         </c:if>
-                                                                                                         
-                                                                                                         
-                                                                                                         
-                                                                                                     </c:if>
-                                                                                                     
-                                                                                                     
-                                                                                                     
-                                                                                                     
-                                                                                                     
-                                                                                                     
-                                                                                                     
-                                                                                                 </c:forEach>				
+                                                                     
+                                                                     <c:set property="translation" var="trans">
+                                                                         <digi:trn key="aim:clickToViewAddActivityStep${step.stepActualNumber}">
+                                                                             Click here to goto Add Activity Step ${step.stepActualNumber}
+                                                                         </digi:trn>
+                                                                     </c:set>
+                                                                      
+                                                                      <c:set var="link">
+                                                                          <c:if test="${step.stepNumber==9}">
+                                                                              /editSurveyList.do?edit=true
+                                                                              
+                                                                          </c:if>
+                                                                          
+                                                                          <c:if test="${step.stepNumber!=9}">
+                                                                          
+                                                                              /addActivity.do?step=${step.stepNumber}&edit=true
+                                                                              
+                                                                          </c:if>
+                                                                      </c:set>
+                                                                           
+                                                                         
+                                                                         
+                                                                     
+                                                                     
+                                 
+                                                                     <c:if test="${!index.last}">
+                                                                        
+                                                                         <c:if test="${index.first}">
+                                                                            
+                                                                             <digi:link href=" ${link}" styleClass="comment" title="${trans}">
+                                                                                 
+                                                                                 
+                                                                                 <c:if test="${aimEditActivityForm.editAct == true}">
+                                                                                     <digi:trn key="aim:editActivityStep1">
+                                                                                         Edit Activity - Step 1
+                                                                                     </digi:trn>
+                                                                                 </c:if>
+                                                                                 <c:if test="${aimEditActivityForm.editAct == false}">
+                                                                                     <digi:trn key="aim:addActivityStep1">
+                                                                                         Add Activity - Step 1
+                                                                                     </digi:trn>
+                                                                                 </c:if>
+                                                                                 
+                                                                             </digi:link>
+                                                                             &nbsp;&gt;&nbsp;
+                                                                         </c:if>
+                                                                         <c:if test="${!index.first}">
+                                                                             <digi:link href="${link}" styleClass="comment" title="${trans}">
+                                                                                 <digi:trn key="aim:addActivityStep${step.stepActualNumber}">
+                                                                                 Step ${step.stepActualNumber}
+                                                                             </digi:trn>
+                                                                             </digi:link>
+                                                                             &nbsp;&gt;&nbsp;
+                                                                         </c:if>
+                                                                     </c:if>
+                                                                     
+                                                                     
+                                                                     
+                                                                     <c:if test="${index.last}">
+                                                                         
+                                                                         <c:if test="${index.first}">
+                                                                             
+                                                                             
+                                                                             
+                                                                             <c:if test="${aimEditActivityForm.editAct == true}">
+                                                                                 <digi:trn key="aim:editActivityStep1">
+                                                                                     Edit Activity - Step 1
+                                                                                 </digi:trn>
+                                                                             </c:if>
+                                                                             <c:if test="${aimEditActivityForm.editAct == false}">
+                                                                                 <digi:trn key="aim:addActivityStep1">
+                                                                                     Add Activity - Step 1
+                                                                                 </digi:trn>
+                                                                             </c:if>
+                                                                         </c:if>
+                                                                         
+                                                                         
+                                                                         <c:if test="${!index.first}">
+                                                                             <digi:trn key="aim:addActivityStep${step.stepActualNumber}">Step ${step.stepActualNumber}</digi:trn>
+                                                                         </c:if>
+                                                                         
+                                                                         
+                                                                         
+                                                                     </c:if>
+                                                                     
+                                                                     
+                                                                     
+                                                                     
+                                                                     
+                                                                     
+                                                                     
+                                                                 </c:forEach>				
                                                                                              </span>
 										</td>
 									</tr>

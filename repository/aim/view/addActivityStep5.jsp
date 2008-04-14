@@ -141,7 +141,7 @@ function validateForm(){
   </digi:trn>
   </c:set>
   var draftStatus=document.getElementById("draftFlag");
-  if(draftStatus!=null && draftStatus.value!="true"){
+  if(draftStatus!=null && draftStatus.value!="true" && document.aimEditActivityForm.step.value=="2"){
     if (document.aimEditActivityForm.selActivitySectors == null) {
       alert("${errMsgAddSector}");
       document.aimEditActivityForm.addSec.focus();

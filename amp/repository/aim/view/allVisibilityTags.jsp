@@ -445,6 +445,7 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Sub Program Level 8" feature="NPD Dashboard"></field:display>
 <field:display name="Sub-Program" feature="Budget"></field:display>
 <field:display name="Sub-Sector" feature="Sectors"></field:display>
+<field:display name="Sub-Sub-Sector" feature="Sectors">&nbsp;</field:display>
 <field:display name="Sub-Vote" feature="Budget"></field:display>
 <field:display name="Target Value" feature="Activity"></field:display>
 <field:display name="Team" feature="Identification"></field:display>

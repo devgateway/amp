@@ -319,6 +319,7 @@ function checkUncheckAll2() {
 												<field:display name="Indicator Base Value" feature="Activity">&nbsp;</field:display>
 												<field:display name="Indicator Target Value" feature="Activity">&nbsp;</field:display>
 											<field:display name="Sub-Sector" feature="Sectors">&nbsp;</field:display>
+											<field:display name="Sub-Sub-Sector" feature="Sectors">&nbsp;</field:display>
 			                            	<field:display name="National Planning Objectives" feature="NPD Programs">&nbsp;</field:display>
 			                            	<field:display name="Primary Program" feature="NPD Programs">&nbsp;</field:display>
 											<field:display name="Secondary Program" feature="NPD Programs">&nbsp;</field:display>

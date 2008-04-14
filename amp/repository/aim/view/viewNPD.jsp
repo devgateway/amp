@@ -110,7 +110,8 @@
 
     function openOptionsWindow(){
       if(curProgId==null){
-        alert('please first select program in the tree');
+      	var msg='<digi:trn key="aim:plsSelectProgram">please first select program in the tree</digi:trn>';
+        alert(msg);
       }else{
         var url=addActionToURL('npdOptions.do');
         url+= p1d+'programId='+curProgId;

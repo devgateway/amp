@@ -54,286 +54,300 @@ public class ParisIndicatorReport extends Action {
 
         logger.debug("In paris-indicator survey report action");
 
-        if (form != null) {
-            ParisIndicatorReportForm svForm = (ParisIndicatorReportForm) form;
+        ParisIndicatorReportForm svForm = (ParisIndicatorReportForm) form;
 
-            if (null == svForm.getIndicatorsColl() || svForm.getIndicatorsColl().size() < 1) {
-                svForm.setIndicatorsColl(DbUtil.getAllAhSurveyIndicators());
-                return mapping.findForward("menu");
+        if (null == svForm.getIndicatorsColl() || svForm.getIndicatorsColl().size() < 1) {
+            svForm.setIndicatorsColl(DbUtil.getAllAhSurveyIndicators());
+            return mapping.findForward("menu");
+        }
+
+        if (svForm.getReset().booleanValue()) {
+            //svForm.setReset(Boolean.TRUE);
+            svForm.reset(mapping, request);
+        }
+
+        String indcId = request.getParameter("indcId");
+
+        // Populating indicator-report filters here
+        if ( (null != indcId && indcId.trim().length() > 0) || svForm.getFilterFlag().booleanValue()) {
+
+            if (!svForm.getFilterFlag().booleanValue()) {
+                ApplicationSettings apps = null;
+                if (null != tm) {
+                    apps = tm.getAppSettings();
+                    svForm.setPerspective(CommonWorker.getPerspective(apps.getPerspective()));
+                    if (null != apps.getFisCalId())
+                        svForm.setCalendar(apps.getFisCalId().toString());
+                    else
+                        svForm.setCalendar(DbUtil.getBaseFiscalCalendar().toString());
+                    svForm.setCurrency(CurrencyUtil.getAmpcurrency(apps.getCurrencyId()).getCurrencyCode());
+                }
             }
 
-            if (svForm.getReset().booleanValue()) {
-                //svForm.setReset(Boolean.TRUE);
-                svForm.reset(mapping, request);
-            }
+            AmpAhsurveyIndicator indc = DbUtil.getIndicatorById(Long.valueOf(indcId));
+            AmpAhsurveyIndicatorCalcFormula fl = getFormula(indc.getCalcFormulas());
 
-            String indcId = request.getParameter("indcId");
-
-            // Populating indicator-report filters here
-            if ( (null != indcId && indcId.trim().length() > 0) || svForm.getFilterFlag().booleanValue()) {
-
-                if (!svForm.getFilterFlag().booleanValue()) {
-                    ApplicationSettings apps = null;
-                    if (null != tm) {
-                        apps = tm.getAppSettings();
-                        svForm.setPerspective(CommonWorker.getPerspective(apps.getPerspective()));
-                        if (null != apps.getFisCalId())
-                            svForm.setCalendar(apps.getFisCalId().toString());
-                        else
-                            svForm.setCalendar(DbUtil.getBaseFiscalCalendar().toString());
-                        svForm.setCurrency(CurrencyUtil.getAmpcurrency(apps.getCurrencyId()).getCurrencyCode());
-                    }
-                }
-                if (null == svForm.getYearColl() || svForm.getYearColl().size() < 1) {
-                    int startYear = svForm.getStartYear().intValue() - Constants.FROM_YEAR_RANGE + 2;
-                    int closeYear = svForm.getCloseYear().intValue() + Constants.TO_YEAR_RANGE;
-                    svForm.setYearColl(new ArrayList());
-                    while (startYear <= closeYear)
-                        svForm.getYearColl().add(new Integer(startYear++));
-                }
-                if (null == svForm.getCurrencyColl() || svForm.getCurrencyColl().size() < 1)
-                    svForm.setCurrencyColl(CurrencyUtil.getAllCurrencies(1));
-                if (null == svForm.getOrgGroupColl() || svForm.getOrgGroupColl().size() < 1)
-                    svForm.setOrgGroupColl(DbUtil.getAllOrgGroups());
-                if (null == svForm.getStatusColl() || svForm.getStatusColl().size() < 1)
-                    svForm.setStatusColl(DbUtil.getAllActivityStatus());
-                //if (null == svForm.getTermAssistColl() || svForm.getTermAssistColl().size() < 1)
-                //svForm.setTermAssistColl(DbUtil.getAllTermAssist());
-//				if (null == svForm.getFinancingInstrumentColl() || svForm.getFinancingInstrumentColl().size() < 1)
-//					svForm.setFinancingInstrumentColl(DbUtil.getAllFinancingInstruments());
-                if (null == svForm.getCalendarColl() || svForm.getCalendarColl().size() < 1)
-                    svForm.setCalendarColl(DbUtil.getAllFisCalenders());
-                if (null == svForm.getDonorColl() || svForm.getDonorColl().size() < 1)
-                    svForm.setDonorColl(DbUtil.getAllDonorOrgs());
-                if (null == svForm.getSectorColl() || svForm.getSectorColl().size() < 1) {
-                    svForm.setSectorColl(new ArrayList());
-                    Iterator iter = SectorUtil.getAmpSectors().iterator();
-                    while (iter.hasNext()) {
-                        AmpSector ampSector = (AmpSector) iter.next();
-                        if (ampSector.getName() != null && ampSector.getName().length() > 30) {
-                            String temp = ampSector.getName().substring(0, 30) + "...";
-                            ampSector.setName(temp);
-                        }
-                        svForm.getSectorColl().add(ampSector);
-
-                        Iterator iter1 = SectorUtil.getAmpSubSectors(ampSector.getAmpSectorId()).iterator();
-                        while (iter1.hasNext()) {
-                            AmpSector ampSubSector = (AmpSector) iter1.next();
-                            if (ampSubSector.getName() != null && ampSubSector.getName().length() > 35) {
-                                ampSubSector.setName("--" + ampSubSector.getName().substring(0, 35) + "...");
-                            } else {
-                                ampSubSector.setName("--" + ampSubSector.getName());
-                            }
-                            svForm.getSectorColl().add(ampSubSector);
-
-                            Iterator iter2 = SectorUtil.getAmpSubSectors(ampSubSector.getAmpSectorId()).iterator();
-                            while (iter2.hasNext()) {
-                                AmpSector ampSubSubSector = (AmpSector) iter2.next();
-                                if (ampSubSubSector.getName() != null && ampSubSubSector.getName().length() > 35) {
-                                    ampSubSubSector.setName("----" + ampSubSubSector.getName().substring(0, 35) + "...");
-                                } else {
-                                    ampSubSubSector.setName("----" + ampSubSubSector.getName());
-                                }
-                                svForm.getSectorColl().add(ampSubSubSector);
-                            }
-                        }
-                    }
-                }
-
-                AmpAhsurveyIndicator indc = DbUtil.getIndicatorById(Long.valueOf(indcId));
-
-                AmpAhsurveyIndicatorCalcFormula fl = getFormula(indc.getCalcFormulas());
+            if (svForm.getStartYear() == null || svForm.getCloseYear() == null) {
                 if (indc != null && fl != null) {
                     try {
                         Integer i = Integer.valueOf(fl.getBaseLineValue());
                         svForm.setStartYear(i);
                         svForm.setCloseYear(i + 2);
                     } catch (Exception ex) {
-
+                        svForm.setStartYear(new Integer(Calendar.getInstance().get(Calendar.YEAR) - 2));
+                        svForm.setCloseYear(new Integer(Calendar.getInstance().get(Calendar.YEAR)));
                     }
-                }
-
-                try {
-
-                    svForm.setIndicatorId(indcId);
-                    svForm.setIndicatorName(indc.getName());
-                    svForm.setIndicatorCode(indc.getIndicatorCode());
-                    if (svForm.getFilterFlag().booleanValue()) {
-                        svForm.setFilterFlag(Boolean.FALSE);
-                        svForm.setNumColsCalculated("4");
-                    }
-                    if ("10a".equalsIgnoreCase(svForm.getIndicatorCode())) {
-                        svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator10a(svForm.getOrgGroup(), svForm.getDonor(),
-                            svForm.getStartYear().intValue(), svForm.getCloseYear().intValue()));
-                        svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(), 1));
-                        return mapping.findForward("report1");
-                    }
-                    if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()))
-                        svForm.setNumColsCalculated("8");
-                    else if ("9".equalsIgnoreCase(svForm.getIndicatorCode()))
-                        svForm.setNumColsCalculated("5");
-
-                    /* Added by Alex Gartner for category manager compatibility.
-                     * Getting the AmpCategoryValue object for the financingInstrument ID*/
-                    AmpCategoryValue financingInstrument = CategoryManagerUtil.getAmpCategoryValueFromDb(svForm.getFinancingInstrument());
-                    AmpCategoryValue status = CategoryManagerUtil.getAmpCategoryValueFromDb(svForm.getStatus());
-                    /* End by Alex Gartner*/
-                    Collection spCol = DbUtil.getAidSurveyReportByIndicator(svForm.getIndicatorCode(), svForm.getDonor(),
-                        svForm.getOrgGroup(), status, svForm.getStartYear().intValue(), svForm.getCloseYear().intValue(),
-                        svForm.getCurrency(), svForm.getTermAssist(), financingInstrument,
-                        svForm.getPerspective(), svForm.getSector(), svForm.getCalendar());
-
-                    svForm.setDonorsColl(spCol);
-
-                    if (svForm.getIndicatorCode().equalsIgnoreCase("5a") || svForm.getIndicatorCode().equalsIgnoreCase("5b")) {
-                        if (!svForm.getDonorsColl().isEmpty()) {
-                            int dnSize = svForm.getDonorsColl().size() - 1;
-                            int lastIndex = Integer.parseInt(svForm.getNumColsCalculated()) - 1;
-                            int numCols = svForm.getCloseYear().intValue() - svForm.getStartYear().intValue() + 1;
-                            String donor[] = {"Less than 10%", "From 10 to 50%", "From 50 to 90%", "More than 90%"};
-                            String dnIndc5Row[] = null;
-                            int answers[] = new int[numCols];
-                            double temp[] = new double[lastIndex + 1];
-                            int j = 0;
-                            double val = 0.0;
-                            Iterator itr1 = null;
-                            Iterator itr2 = null;
-
-                            svForm.setDonorsCollIndc5(new ArrayList());
-                            dnIndc5Row = new String[numCols + 1];
-
-                            // creating header row
-                            if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()))
-                                dnIndc5Row[0] = "Percent of ODA using all three partner's PFM procedures";
-                            else
-                                dnIndc5Row[0] = "Percent of ODA using national procurement systems";
-
-                            for (; j < numCols; j++)
-                                dnIndc5Row[j + 1] = Integer.toString(svForm.getStartYear().intValue() + j);
-                            svForm.getDonorsCollIndc5().add(dnIndc5Row);
-
-                            for (int cntr = 0; cntr < donor.length; cntr++) {
-                                dnIndc5Row = new String[numCols + 1];
-                                dnIndc5Row[0] = donor[cntr];
-                                itr1 = svForm.getDonorsColl().iterator();
-                                while (itr1.hasNext()) {
-                                    ParisIndicator pi = (ParisIndicator) itr1.next();
-                                    if ("All Donors".equalsIgnoreCase(pi.getDonor()))
-                                        continue;
-                                    j = 0;
-                                    itr2 = pi.getAnswers().iterator();
-                                    while (itr2.hasNext()) {
-                                        temp = (double[]) itr2.next();
-                                        switch (cntr) {
-                                            case 0:
-                                                if (temp[lastIndex] < 10)
-                                                    answers[j] += 1;
-                                                break;
-                                            case 1:
-                                                if (temp[lastIndex] >= 10 && temp[lastIndex] < 50)
-                                                    answers[j] += 1;
-                                                break;
-                                            case 2:
-                                                if (temp[lastIndex] >= 50 && temp[lastIndex] <= 90)
-                                                    answers[j] += 1;
-                                                break;
-                                            case 3:
-                                                if (temp[lastIndex] > 90)
-                                                    answers[j] += 1;
-                                        }
-                                        j++;
-                                    }
-                                }
-
-                                for (j = 0; j < numCols; j++) {
-                                    val = (100.0 * answers[j]) / dnSize;
-                                    if ( (val - (int) val) < 0.5)
-                                        dnIndc5Row[j + 1] = Integer.toString( (int) val);
-                                    else
-                                        dnIndc5Row[j + 1] = Long.toString(Math.round(val));
-                                    answers[j] = 0;
-                                }
-                                svForm.getDonorsCollIndc5().add(dnIndc5Row);
-                            }
-
-                        }
-                    }
-                } catch (NumberFormatException nex) {
-                    logger.debug(nex);
-                    nex.printStackTrace(System.out);
-                } catch (Exception ex) {
-                    logger.debug(ex);
-                    ex.printStackTrace(System.out);
-                }
-
-                List flDonorCol=null;
-                if (svForm.getIndicatorCode().equalsIgnoreCase("3") ||
-                    svForm.getIndicatorCode().equalsIgnoreCase("4") ||
-                    svForm.getIndicatorCode().equalsIgnoreCase("5a") ||
-                    svForm.getIndicatorCode().equalsIgnoreCase("5b") ||
-                    svForm.getIndicatorCode().equalsIgnoreCase("9") ||
-                    svForm.getIndicatorCode().equalsIgnoreCase("10a")) {
-
-                    flDonorCol = filterDonors(svForm.getDonorsColl(), 1);
-                }else{
-                    flDonorCol = filterDonors(svForm.getDonorsColl(), 0);
-                }
-
-                if (svForm.getIndicatorCode().equalsIgnoreCase("3")) {
-                    svForm.setCalcResult(clacTargetValue(fl,flDonorCol,true));
-                    if (fl!=null && fl.getEnabled()!=null && fl.getEnabled().booleanValue() && fl.getCalcFormula() != null) {
-                        svForm.setTargetValue(fl.getTargetValue());
-                    }
-
-                    svForm.setDonorsColl(flDonorCol);
-                    return mapping.findForward("report1");
-                } else if (svForm.getIndicatorCode().equalsIgnoreCase("5a") || svForm.getIndicatorCode().equalsIgnoreCase("5b")) {
-                    svForm.setCalcResult(clacTargetValue(fl,flDonorCol,true));
-                    if (fl!=null && fl.getEnabled()!=null && fl.getEnabled().booleanValue() && fl.getCalcFormula() != null) {
-                        svForm.setTargetValue(fl.getTargetValue());
-                    }
-
-                    svForm.setDonorsColl(flDonorCol);
-                    return mapping.findForward("report1");
-                } else if (svForm.getIndicatorCode().equalsIgnoreCase("6")) {
-                    svForm.setCalcResult(clacTargetValue(fl,flDonorCol,false));
-                    if (fl!=null && fl.getEnabled()!=null && fl.getEnabled().booleanValue() && fl.getCalcFormula() != null) {
-                        svForm.setTargetValue(fl.getTargetValue());
-                    }
-
-                    svForm.setDonorsColl(flDonorCol);
-                    return mapping.findForward("report2");
-                } else if (svForm.getIndicatorCode().equalsIgnoreCase("7")) {
-                    svForm.setCalcResult(clacTargetValue(fl,flDonorCol,true));
-                    if (fl!=null && fl.getEnabled()!=null && fl.getEnabled().booleanValue() && fl.getCalcFormula() != null) {
-                        svForm.setTargetValue(fl.getTargetValue());
-                    }
-
-                    svForm.setDonorsColl(flDonorCol);
-                    return mapping.findForward("report2");
                 } else {
-                    svForm.setDonorsColl(flDonorCol);
-                    return mapping.findForward("report1");
+                    svForm.setStartYear(new Integer(Calendar.getInstance().get(Calendar.YEAR) - 2));
+                    svForm.setCloseYear(new Integer(Calendar.getInstance().get(Calendar.YEAR)));
                 }
             }
-            return mapping.findForward("menu");
-        } else {
-            logger.debug("ActionForm is null.");
-            return mapping.findForward("viewMyDesktop");
+
+            if (null == svForm.getYearColl() || svForm.getYearColl().size() < 1) {
+                int startYear = svForm.getStartYear().intValue() - Constants.FROM_YEAR_RANGE + 2;
+                int closeYear = svForm.getCloseYear().intValue() + Constants.TO_YEAR_RANGE;
+                svForm.setYearColl(new ArrayList());
+                while (startYear <= closeYear)
+                    svForm.getYearColl().add(new Integer(startYear++));
+            }
+            if (null == svForm.getCurrencyColl() || svForm.getCurrencyColl().size() < 1)
+                svForm.setCurrencyColl(CurrencyUtil.getAllCurrencies(1));
+            if (null == svForm.getOrgGroupColl() || svForm.getOrgGroupColl().size() < 1)
+                svForm.setOrgGroupColl(DbUtil.getAllOrgGroups());
+            if (null == svForm.getStatusColl() || svForm.getStatusColl().size() < 1)
+                svForm.setStatusColl(DbUtil.getAllActivityStatus());
+            //if (null == svForm.getTermAssistColl() || svForm.getTermAssistColl().size() < 1)
+            //svForm.setTermAssistColl(DbUtil.getAllTermAssist());
+//				if (null == svForm.getFinancingInstrumentColl() || svForm.getFinancingInstrumentColl().size() < 1)
+//					svForm.setFinancingInstrumentColl(DbUtil.getAllFinancingInstruments());
+            if (null == svForm.getCalendarColl() || svForm.getCalendarColl().size() < 1)
+                svForm.setCalendarColl(DbUtil.getAllFisCalenders());
+            if (null == svForm.getDonorColl() || svForm.getDonorColl().size() < 1)
+                svForm.setDonorColl(DbUtil.getAllDonorOrgs());
+            if (null == svForm.getSectorColl() || svForm.getSectorColl().size() < 1) {
+                svForm.setSectorColl(new ArrayList());
+                Iterator iter = SectorUtil.getAmpSectors().iterator();
+                while (iter.hasNext()) {
+                    AmpSector ampSector = (AmpSector) iter.next();
+                    if (ampSector.getName() != null && ampSector.getName().length() > 30) {
+                        String temp = ampSector.getName().substring(0, 30) + "...";
+                        ampSector.setName(temp);
+                    }
+                    svForm.getSectorColl().add(ampSector);
+
+                    Iterator iter1 = SectorUtil.getAmpSubSectors(ampSector.getAmpSectorId()).iterator();
+                    while (iter1.hasNext()) {
+                        AmpSector ampSubSector = (AmpSector) iter1.next();
+                        if (ampSubSector.getName() != null && ampSubSector.getName().length() > 35) {
+                            ampSubSector.setName("--" + ampSubSector.getName().substring(0, 35) + "...");
+                        } else {
+                            ampSubSector.setName("--" + ampSubSector.getName());
+                        }
+                        svForm.getSectorColl().add(ampSubSector);
+
+                        Iterator iter2 = SectorUtil.getAmpSubSectors(ampSubSector.getAmpSectorId()).iterator();
+                        while (iter2.hasNext()) {
+                            AmpSector ampSubSubSector = (AmpSector) iter2.next();
+                            if (ampSubSubSector.getName() != null && ampSubSubSector.getName().length() > 35) {
+                                ampSubSubSector.setName("----" + ampSubSubSector.getName().substring(0, 35) + "...");
+                            } else {
+                                ampSubSubSector.setName("----" + ampSubSubSector.getName());
+                            }
+                            svForm.getSectorColl().add(ampSubSubSector);
+                        }
+                    }
+                }
+            }
+
+            try {
+
+                svForm.setIndicatorId(indcId);
+                svForm.setIndicatorName(indc.getName());
+                svForm.setIndicatorCode(indc.getIndicatorCode());
+                if (svForm.getFilterFlag().booleanValue()) {
+                    svForm.setFilterFlag(Boolean.FALSE);
+                    svForm.setNumColsCalculated("4");
+                }
+                if ("10a".equalsIgnoreCase(svForm.getIndicatorCode())) {
+                    svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator10a(svForm.getOrgGroup(), svForm.getDonor(),
+                        svForm.getStartYear().intValue(), svForm.getCloseYear().intValue()));
+                    svForm.setDonorsColl(filterDonors(svForm.getDonorsColl(), 1));
+                    return mapping.findForward("report1");
+                }
+                if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()))
+                    svForm.setNumColsCalculated("8");
+                else if ("9".equalsIgnoreCase(svForm.getIndicatorCode()))
+                    svForm.setNumColsCalculated("5");
+
+                /* Added by Alex Gartner for category manager compatibility.
+                 * Getting the AmpCategoryValue object for the financingInstrument ID*/
+                AmpCategoryValue financingInstrument = CategoryManagerUtil.getAmpCategoryValueFromDb(svForm.getFinancingInstrument());
+                AmpCategoryValue status = CategoryManagerUtil.getAmpCategoryValueFromDb(svForm.getStatus());
+                /* End by Alex Gartner*/
+                Collection spCol = DbUtil.getAidSurveyReportByIndicator(svForm.getIndicatorCode(), svForm.getDonor(),
+                    svForm.getOrgGroup(), status, svForm.getStartYear().intValue(), svForm.getCloseYear().intValue(),
+                    svForm.getCurrency(), svForm.getTermAssist(), financingInstrument,
+                    svForm.getPerspective(), svForm.getSector(), svForm.getCalendar());
+
+                svForm.setDonorsColl(spCol);
+
+                if (svForm.getIndicatorCode().equalsIgnoreCase("5a") || svForm.getIndicatorCode().equalsIgnoreCase("5b")) {
+                    if (!svForm.getDonorsColl().isEmpty()) {
+                        int dnSize = svForm.getDonorsColl().size() - 1;
+                        int lastIndex = Integer.parseInt(svForm.getNumColsCalculated()) - 1;
+                        int numCols = svForm.getCloseYear().intValue() - svForm.getStartYear().intValue() + 1;
+                        String donor[] = {"Less than 10%", "From 10 to 50%", "From 50 to 90%", "More than 90%"};
+                        String dnIndc5Row[] = null;
+                        int answers[] = new int[numCols];
+                        double temp[] = new double[lastIndex + 1];
+                        int j = 0;
+                        double val = 0.0;
+                        Iterator itr1 = null;
+                        Iterator itr2 = null;
+
+                        svForm.setDonorsCollIndc5(new ArrayList());
+                        dnIndc5Row = new String[numCols + 1];
+
+                        // creating header row
+                        if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()))
+                            dnIndc5Row[0] = "Percent of ODA using all three partner's PFM procedures";
+                        else
+                            dnIndc5Row[0] = "Percent of ODA using national procurement systems";
+
+                        for (; j < numCols; j++)
+                            dnIndc5Row[j + 1] = Integer.toString(svForm.getStartYear().intValue() + j);
+                        svForm.getDonorsCollIndc5().add(dnIndc5Row);
+
+                        for (int cntr = 0; cntr < donor.length; cntr++) {
+                            dnIndc5Row = new String[numCols + 1];
+                            dnIndc5Row[0] = donor[cntr];
+                            itr1 = svForm.getDonorsColl().iterator();
+                            while (itr1.hasNext()) {
+                                ParisIndicator pi = (ParisIndicator) itr1.next();
+                                if ("All Donors".equalsIgnoreCase(pi.getDonor()))
+                                    continue;
+                                j = 0;
+                                itr2 = pi.getAnswers().iterator();
+                                while (itr2.hasNext()) {
+                                    temp = (double[]) itr2.next();
+                                    switch (cntr) {
+                                        case 0:
+                                            if (temp[lastIndex] < 10)
+                                                answers[j] += 1;
+                                            break;
+                                        case 1:
+                                            if (temp[lastIndex] >= 10 && temp[lastIndex] < 50)
+                                                answers[j] += 1;
+                                            break;
+                                        case 2:
+                                            if (temp[lastIndex] >= 50 && temp[lastIndex] <= 90)
+                                                answers[j] += 1;
+                                            break;
+                                        case 3:
+                                            if (temp[lastIndex] > 90)
+                                                answers[j] += 1;
+                                    }
+                                    j++;
+                                }
+                            }
+
+                            for (j = 0; j < numCols; j++) {
+                                val = (100.0 * answers[j]) / dnSize;
+                                if ( (val - (int) val) < 0.5)
+                                    dnIndc5Row[j + 1] = Integer.toString( (int) val);
+                                else
+                                    dnIndc5Row[j + 1] = Long.toString(Math.round(val));
+                                answers[j] = 0;
+                            }
+                            svForm.getDonorsCollIndc5().add(dnIndc5Row);
+                        }
+
+                    }
+                }
+            } catch (NumberFormatException nex) {
+                logger.debug(nex);
+                nex.printStackTrace(System.out);
+            } catch (Exception ex) {
+                logger.debug(ex);
+                ex.printStackTrace(System.out);
+            }
+
+            List flDonorCol = null;
+            if (svForm.getIndicatorCode().equalsIgnoreCase("3") ||
+                svForm.getIndicatorCode().equalsIgnoreCase("4") ||
+                svForm.getIndicatorCode().equalsIgnoreCase("5a") ||
+                svForm.getIndicatorCode().equalsIgnoreCase("5b") ||
+                svForm.getIndicatorCode().equalsIgnoreCase("9") ||
+                svForm.getIndicatorCode().equalsIgnoreCase("10a")) {
+
+                flDonorCol = filterDonors(svForm.getDonorsColl(), 1);
+            } else {
+                flDonorCol = filterDonors(svForm.getDonorsColl(), 0);
+            }
+
+            if (svForm.getIndicatorCode().equalsIgnoreCase("3")) {
+                svForm.setCalcResult(clacTargetValue(fl, flDonorCol, true));
+                if (fl != null &&
+                    fl.getEnabled() != null &&
+                    fl.getEnabled().booleanValue() &&
+                    fl.getCalcFormula() != null) {
+                    svForm.setTargetValue(fl.getTargetValue());
+                }
+
+                svForm.setDonorsColl(flDonorCol);
+                return mapping.findForward("report1");
+            } else if (svForm.getIndicatorCode().equalsIgnoreCase("5a") || svForm.getIndicatorCode().equalsIgnoreCase("5b")) {
+                svForm.setCalcResult(clacTargetValue(fl, flDonorCol, true));
+                if (fl != null &&
+                    fl.getEnabled() != null &&
+                    fl.getEnabled().booleanValue() &&
+                    fl.getCalcFormula() != null) {
+                    svForm.setTargetValue(fl.getTargetValue());
+                }
+
+                svForm.setDonorsColl(flDonorCol);
+                return mapping.findForward("report1");
+            } else if (svForm.getIndicatorCode().equalsIgnoreCase("6")) {
+                svForm.setCalcResult(clacTargetValue(fl, flDonorCol, false));
+                if (fl != null &&
+                    fl.getEnabled() != null &&
+                    fl.getEnabled().booleanValue() &&
+                    fl.getCalcFormula() != null) {
+                    svForm.setTargetValue(fl.getTargetValue());
+                }
+
+                svForm.setDonorsColl(flDonorCol);
+                return mapping.findForward("report2");
+            } else if (svForm.getIndicatorCode().equalsIgnoreCase("7")) {
+                svForm.setCalcResult(clacTargetValue(fl, flDonorCol, true));
+                if (fl != null &&
+                    fl.getEnabled() != null &&
+                    fl.getEnabled().booleanValue() &&
+                    fl.getCalcFormula() != null) {
+                    svForm.setTargetValue(fl.getTargetValue());
+                }
+
+                svForm.setDonorsColl(flDonorCol);
+                return mapping.findForward("report2");
+            } else {
+                svForm.setDonorsColl(flDonorCol);
+                return mapping.findForward("report1");
+            }
         }
+        return mapping.findForward("menu");
     }
 
     private String clacTargetValue(AmpAhsurveyIndicatorCalcFormula fl, List donorCol, boolean lastColumn) {
-        if (donorCol!=null && fl != null && fl.getCalcFormula() != null) {
+        if (donorCol != null && fl != null && fl.getCalcFormula() != null) {
             ParisIndicator donor = (ParisIndicator) donorCol.get(0);
             ArrayList answ1 = donor.getAnswers();
             double ans1[] = (double[]) answ1.get(0);
             if (ans1 != null) {
                 String formula = null;
-                if(lastColumn){
-                    formula=getFormulaText(fl, ans1[ans1.length-1]);
-                }else{
-                    formula=getFormulaText(fl, ans1[0]);
+                if (lastColumn) {
+                    formula = getFormulaText(fl, ans1[ans1.length - 1]);
+                } else {
+                    formula = getFormulaText(fl, ans1[0]);
                 }
 
                 return String.valueOf(AmpMath.calcExp(formula));
@@ -406,4 +420,3 @@ public class ParisIndicatorReport extends Action {
         return filteredDonorsCol;
     }
 }
-

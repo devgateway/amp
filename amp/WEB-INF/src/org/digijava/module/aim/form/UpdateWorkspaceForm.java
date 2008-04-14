@@ -62,6 +62,28 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 	private String dest;
 	private Collection allChildren;
 	private Collection allOrganizations;
+	private Collection orgTypes;
+
+	// FOR SELECT ORGANIZATION POPUP
+	private Long ampOrgTypeId;
+	private String orgType;
+	private String keyword;
+	private int tempNumResults;
+	private Collection pagedCol;
+	private Integer currentPage;
+	private String currentAlpha;
+	private boolean startAlphaFlag;
+	private Long selOrganisations[]; // list of org selected from
+	private TreeSet selectedOrganisationPaged;
+	private Integer selectedOrganisationFromPages;
+
+	// pop-up organisation selector window
+	private Collection pages;
+	private String[] alphaPages;
+	private int numResults;
+	private boolean orgPopupReset;
+	
+	
 	
 	public Collection getAllChildren() {
 		Collection aux=new TreeSet();
@@ -540,6 +562,77 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 	public void setAllOrganizations(Collection allOrganizations) {
 		this.allOrganizations = allOrganizations;
 	}
+
+	public Collection getOrgTypes() {
+		return orgTypes;
+	}
+	public void setOrgTypes(Collection orgTypes) {
+		this.orgTypes = orgTypes;
+	}
+
+	/**
+	 * @param ampOrgTypeId The ampOrgTypeId to set.
+	 */
+	public void setAmpOrgTypeId(Long ampOrgTypeId) {
+		this.ampOrgTypeId = ampOrgTypeId;
+	}
+	/**
+	 * @return Returns the ampOrgTypeId.
+	 */
+	public Long getAmpOrgTypeId() {
+		return ampOrgTypeId;
+	}
+	/**
+	 * @return Returns the keyword.
+	 */
+	public String getKeyword() {
+		return keyword;
+	}
+
+	/**
+	 * @param keyword
+	 *            The keyword to set.
+	 */
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+	/**
+	 * @return Returns the pagedCol.
+	 */
+	public Collection getPagedCol() {
+		return pagedCol;
+	}
+
+	/**
+	 * @param pagedCol
+	 *            The pagedCol to set.
+	 */
+	public void setPagedCol(Collection pagedCol) {
+		this.pagedCol = pagedCol;
+	}
+	/**
+	 * @return Returns the tempNumResults.
+	 */
+	public int getTempNumResults() {
+		return tempNumResults;
+	}
+
+	/**
+	 * @param tempNumResults
+	 *            The tempNumResults to set.
+	 */
+	public void setTempNumResults(int tempNumResults) {
+		this.tempNumResults = tempNumResults;
+	}
+	/**
+	 * @param orgPopupReset
+	 *            The orgPopupReset to set.
+	 */
+	public void setOrgPopupReset(boolean orgPopupReset) {
+		this.orgPopupReset = orgPopupReset;
+	}
+
+
 
 
 }

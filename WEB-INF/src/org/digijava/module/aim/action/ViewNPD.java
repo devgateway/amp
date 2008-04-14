@@ -79,7 +79,19 @@ public class ViewNPD extends Action {
 	
 	private String[] defaulYearsGeneratorForNpdGraph(String selectedYearForTeam){
 		String[] result= {};
-		int size=selectedYearForTeam.length();
+		int size=0;
+		/**
+		 * So complicated defining of size is necessary , because if not exactly define the size,graph is not displayed correctly,
+		 * and then we get exceptions on view all and view table pages. 
+		 */
+		if(selectedYearForTeam.length()>=24){
+			//in this case, team has five years selected,which are separated by 4 commas. So dividing length to 4,gives us result=numberOfYears+1
+			//Note that max number of years is 5.We aen't allowed to add more years
+			size=selectedYearForTeam.length()/4 -1;
+		}else{
+			size=selectedYearForTeam.length()/4; //every year contains four symbols(2000,2005,e.t.c) By dividing this string to 4 ,we'll get number of years does the String contains
+		}
+		
 		result=new String[size];
 		for (int i = 0; i <size ; i++) {			
 			if(selectedYearForTeam.indexOf(',')==-1){

@@ -89,8 +89,7 @@ public class DocumentManager extends Action {
 		if ( !isLoggeedIn(myRequest) || myRequest.getParameter(CrConstants.GET_PUBLIC_DOCUMENTS) != null ) {
 			HashMap<String, CrDocumentNodeAttributes> uuidMap		= CrDocumentNodeAttributes.getPublicDocumentsMap(true);
 			try {
-				Collection<DocumentData> otherDocuments = this.getDocuments( uuidMap.keySet() );
-				myForm.setOtherDocuments( otherDocuments );
+				myForm.setOtherDocuments( this.getDocuments( uuidMap.keySet() ) );
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -363,8 +362,8 @@ public class DocumentManager extends Action {
 		while (iter.hasNext()) {
 			String uuid			= iter.next();
 			Node documentNode	= DocumentManagerUtil.getReadNode(uuid, myRequest);
-			if (documentNode != null)
-				//throw new Exception("Document with uuid '" + uuid + "' not found !");
+			if (documentNode == null)
+				throw new Exception("Document with uuid '" + uuid + "' not found !");
 			
 			documents.add(documentNode);
 		}

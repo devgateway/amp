@@ -5,6 +5,7 @@
 
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,7 +47,30 @@ public class GetUnAssignedWorkspaces extends Action {
 //			}
 			uwForm.setActionType(null);
 			if(request.getParameter("childorgs")!=null){
-				uwForm.setAllOrganizations(DbUtil.getAll(AmpOrganisation.class));
+/* Search feature start */
+				Collection col = null;
+				col = new ArrayList();
+				
+				uwForm.setOrgTypes(DbUtil.getAllOrgTypes());
+				if (uwForm.getAmpOrgTypeId() != null && !uwForm.getAmpOrgTypeId().equals(new Long(-1))) {
+					if (uwForm.getKeyword().trim().length() != 0) {
+						// serach for organisations based on the keyword and the
+						// organisation type
+						col = DbUtil.searchForOrganisation(uwForm.getKeyword().trim(),
+								uwForm.getAmpOrgTypeId());
+					} else {
+						// search for organisations based on organisation type only
+						col = DbUtil.searchForOrganisationByType(uwForm.getAmpOrgTypeId());
+					}
+				} else if (uwForm.getKeyword() != null && uwForm.getKeyword().trim().length() != 0) {
+					// search based on the given keyword only.
+					col = DbUtil.searchForOrganisation(uwForm.getKeyword().trim());
+				} else {
+					// get all organisations since keyword field is blank and org type field has 'ALL'.
+					col = DbUtil.getAmpOrganisations();
+				}
+				uwForm.setAllOrganizations(col);
+/* Search feature end */
 				uwForm.setActionType("addOrgs");
 			}
 			else{

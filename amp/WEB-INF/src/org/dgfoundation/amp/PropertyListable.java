@@ -12,8 +12,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
@@ -57,7 +57,7 @@ public abstract class PropertyListable implements Cloneable {
     
     @PropertyListableIgnore
     public Map getPropertiesMap() {
-	Map<String, Object> ret = new HashMap<String, Object>();
+	Map<String, Object> ret = new TreeMap<String, Object>();
 	BeanInfo beanInfo = null;
 	try {
 	    beanInfo = Introspector.getBeanInfo(this.getClass());

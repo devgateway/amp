@@ -88,7 +88,7 @@ public class ParisIndicatorReport extends Action {
             AmpAhsurveyIndicatorCalcFormula fl = getFormula(indc.getCalcFormulas());
 
             if (svForm.getStartYear() == null || svForm.getCloseYear() == null) {
-                if (indc != null && fl != null) {
+                if (indc != null && fl != null && fl.getEnabled()!=null && fl.getEnabled().booleanValue()) {
                     try {
                         Integer i = Integer.valueOf(fl.getBaseLineValue());
                         svForm.setStartYear(i);

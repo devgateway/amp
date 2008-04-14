@@ -59,8 +59,8 @@ public class ParisIndicatorReportForm extends ActionForm {
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {
         if (reset.booleanValue()) {
-            startYear = new Integer(Calendar.getInstance().get(Calendar.YEAR) - 2);
-            closeYear = new Integer(Calendar.getInstance().get(Calendar.YEAR));
+            startYear = null;
+            closeYear = null;
             currency = Constants.DEFAULT_CURRENCY;
             perspective = "MA";
             orgGroup = "all";

@@ -857,11 +857,10 @@
 													<input type="text" value="${fundingDetail.contract.contractName}" readonly="true"/>
                                                  </c:if>
 											 </td>
-                                             </field:display>
-												<td>
+                                             <td>
                                                <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
-
 											</td>
+											</field:display>
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,4)">
 												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
@@ -1063,13 +1062,12 @@
 												<c:if test="${not empty fundingDetail.contract}">
 													<input type="text" value="${fundingDetail.contract.contractName}" readonly="true"/>
 												</c:if>
-												</field:display>
 											</td>
                                             <td>
                                                <input type="submit" value="<digi:trn key='aim:LinkContract'>Link to Contract</digi:trn>" onclick='return addDisbOrderToContract("${fundingDetail.indexId}")'/>
 
 											</td>
-											 
+											 </field:display>
 											    
 											<td>
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">

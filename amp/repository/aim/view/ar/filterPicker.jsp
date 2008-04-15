@@ -274,6 +274,18 @@
 						keyName="<%=org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" />
 					</td>
 				</tr>
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5"><digi:trn
+						key="rep:filer:typeOfAssistance">Type of Assistance</digi:trn></td>
+				</tr>
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5"><category:showoptions size="3"
+						outerstyle="width: 250px" styleClass="inp-text"
+						name="aimReportsFilterPickerForm"
+						property="selectedTypeOfAssistance" multiselect="true"
+						keyName="<%=org.digijava.module.aim.helper.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" />
+					</td>
+				</tr>
 
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5" styleClass="inp-text">

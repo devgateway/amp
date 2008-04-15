@@ -31,6 +31,7 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.PropertyListable.PropertyListableIgnore;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpPerspective;
@@ -75,6 +76,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Set teamAssignedOrgs;
 
 	private Set financingInstruments=null;
+	private Set<AmpCategoryValue> typeOfAssistance=null;
 	//private Long ampModalityId=null;
 	
 	private AmpCurrency currency=null;
@@ -105,7 +107,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private static final String initialFilterQuery="SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1";
 	private String generatedFilterQuery;
 	private int initialQueryLength=initialFilterQuery.length();
-	
+
 	private void queryAppend(String filter) {
 		//generatedFilterQuery+= (initialQueryLength==generatedFilterQuery.length()?"":" AND ") + " amp_activity_id IN ("+filter+")";
 		generatedFilterQuery+= " AND amp_activity_id IN ("+filter+")";
@@ -212,6 +214,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		String REGION_SELECTED_FILTER="SELECT amp_activity_id FROM v_regions WHERE region_id ="+regionSelected;
 		String APPROVED_FILTER="SELECT amp_activity_id FROM amp_activity WHERE approval_status like '" + Constants.APPROVED_STATUS+"'";
 		String DRAFT_FILTER="SELECT amp_activity_id FROM amp_activity WHERE (draft is null) OR (draft = false)";
+		String TYPE_OF_ASSISTANCE_FILTER	= "SELECT amp_activity_id FROM v_terms_assist WHERE terms_assist_code IN ("+Util.toCSString(typeOfAssistance, true)+")";
 		
 		String DONOR_TYPE_FILTER	= 
 			"SELECT aa.amp_activity_id " +
@@ -360,6 +363,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		if(regionSelected!=null) queryAppend(REGION_SELECTED_FILTER);
 		if(approved==true) queryAppend(APPROVED_FILTER);
 		if (draft == true) queryAppend(DRAFT_FILTER);
+		if( typeOfAssistance!=null && typeOfAssistance.size()>0 ) queryAppend(TYPE_OF_ASSISTANCE_FILTER);
 		
 		if(donorGroups!=null && donorGroups.size()>0) queryAppend(DONOR_GROUP_FILTER);
 		if(donorTypes!=null && donorTypes.size()>0) queryAppend(DONOR_TYPE_FILTER);
@@ -796,5 +800,14 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	public void setSelectedSectors(Set selectedSectors) {
 		this.selectedSectors = selectedSectors;
 	}
-	
+
+	public Set<AmpCategoryValue> getTypeOfAssistance() {
+		return typeOfAssistance;
+	}
+
+	public void setTypeOfAssistance(Set<AmpCategoryValue> typeOfAssistance) {
+		this.typeOfAssistance = typeOfAssistance;
+	}
+
+
 }

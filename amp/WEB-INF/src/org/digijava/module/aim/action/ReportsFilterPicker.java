@@ -397,6 +397,17 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.getFinancingInstruments().add( value );
 		}
 		
+		if ( filterForm.getSelectedTypeOfAssistance() != null && filterForm.getSelectedTypeOfAssistance().length > 0 ) {
+			arf.setTypeOfAssistance(new HashSet<AmpCategoryValue>() );
+			for ( int i=0; i<filterForm.getSelectedTypeOfAssistance().length; i++  ){
+				Long id		= filterForm.getSelectedTypeOfAssistance()[i];
+				AmpCategoryValue value	= CategoryManagerUtil.getAmpCategoryValueFromDb(id);
+				if (value!=null)
+					arf.getTypeOfAssistance().add( value );
+			}
+		}
+		else arf.setTypeOfAssistance(null);
+		
 		
 	    if(filterForm.getPageSize()!=null)
 	    {

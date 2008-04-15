@@ -345,6 +345,8 @@ background-color: yellow;
 		
 		if (aimReportsFilterPickerForm.selectedFinancingInstruments)
 			aimReportsFilterPickerForm.selectedFinancingInstruments.selectedIndex=-1;
+		if (aimReportsFilterPickerForm.selectedTypeOfAssistance)
+			aimReportsFilterPickerForm.selectedTypeOfAssistance.selectedIndex=-1;
 			
 		if (aimReportsFilterPickerForm.selectedDonorGroups)
 			aimReportsFilterPickerForm.selectedDonorGroups.selectedIndex=-1;

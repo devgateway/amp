@@ -42,6 +42,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	//private Object[] selectedDonors;
 	private Object[] selectedRisks;
 	private Object[] selectedFinancingInstruments;
+	private Long[] selectedTypeOfAssistance;
 	private Object[] selectedDonorTypes; // ids of AmpOrgType
 	private Object[] selectedDonorGroups; //
 	private Object[] selectedExecutingAgency;
@@ -129,6 +130,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 			this.selectedSectors 				= null;
 			this.selectedStatuses				= null;
 			this.selectedFinancingInstruments 	= null;
+			this.selectedTypeOfAssistance		= null;
 			this.selectedDonorTypes				= null;
 			this.selectedDonorGroups			= null;
 			this.selectedExecutingAgency		= null;
@@ -421,6 +423,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setIsnewreport(boolean isnewreport) {
 		this.isnewreport = isnewreport;
+	}
+
+	public Long[] getSelectedTypeOfAssistance() {
+		return selectedTypeOfAssistance;
+	}
+
+	public void setSelectedTypeOfAssistance(Long[] selectedTypeOfAssistance) {
+		this.selectedTypeOfAssistance = selectedTypeOfAssistance;
 	}
 	
 }

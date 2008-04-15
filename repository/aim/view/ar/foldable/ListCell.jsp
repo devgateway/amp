@@ -7,8 +7,7 @@
 	toScope="page" />
 <div style='position:relative;display:none;' id='<bean:write name="listCell" property="column.name"/>-<bean:write name="listCell" property="ownerId"/>'> 
 <ul>
-<logic:iterate name="listCell" property="value" id="subCell"
-	scope="page">
+<logic:iterate name="listCell" property="value" id="subCell" scope="page">
 	<bean:define id="viewable" name="subCell"
 		type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request" />
 	<bean:define id="caller" name="listCell"

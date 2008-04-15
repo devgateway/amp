@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.GenericViews;
@@ -67,7 +68,16 @@ public class ListCell extends Cell {
 		if(c==null) return;
 		if(value.size()>0 && !getCell(0).getOwnerId().equals(c.getOwnerId())) 
 			throw new IncompatibleCellException("Group Cells must hold items with identical Ids!");
-		value.add(c);
+		/**
+		 * @author dan
+		 * to avoid the lists with the same elements such as...."Japan Japan Japan"
+		 */
+		TreeSet aux=new TreeSet();
+		aux.addAll(value);
+		aux.add(c);
+		value.clear();
+		value.addAll(aux);
+		//value.add(c);
 	}
 	
 	public Iterator iterator() {

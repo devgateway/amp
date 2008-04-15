@@ -20,9 +20,24 @@ body {
 	<table width="780" border="0" cellpadding="0" cellspacing="0" class="table">
       <tr>
         <td height="655">
-        <table width="500" border="0" align="center" cellpadding="2" cellspacing="1">
+          <table width="680" border="0" align="center" cellpadding="0" cellspacing="0">
+            <tr>
+              <td class="Text">
+               <br>
+			  	<html:text name="%{getText('message.form.support_1')}" />
+			  	<br>
+			  	<html:text name="%{getText('message.form.support_2')}" />
+			  	<br>
+			  	<html:text name="%{getText('message.form.support_3')}" />
+			  	<br>
+				<html:text name="%{getText('message.form.support_4')}" />
+			  </td>
+            </tr>
+          </table>
+          <table width="500" border="0" align="center" cellpadding="2" cellspacing="1">
           <tr>
-            <td height="23" colspan="3" align="left" class="textError"><html:actionerror />            
+            <td height="23" colspan="3" align="left" class="textError">
+            	<html:actionerror />            
           </td>
           </tr>
           <tr>
@@ -88,7 +103,7 @@ body {
             		name="modules" 
             		size="5" 
             		listKey="name"/>            
-            	</td>
+           	</td>
           </tr>
           <tr>
             <td align="left" valign="top" class="textError"></td>
@@ -158,7 +173,8 @@ body {
           </tr>
           <tr>
             <td colspan="3" align="center">
-            	<img src="Images/logo_mini.gif" width="91" height="32" longdesc="Development Gateway Foundation ">            </td>
+            	<img src="Images/logo_mini.gif" width="91" height="32" longdesc="Development Gateway Foundation ">            
+            </td>
           </tr>
         </table>
 		<br>

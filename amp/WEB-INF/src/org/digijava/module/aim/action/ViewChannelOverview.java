@@ -155,15 +155,14 @@ public class ViewChannelOverview extends TilesAction {
 			boolean teamLeadFlag    = teamMember.getTeamHead();
 			boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
 
-
-		 	if ( actApprovalStatus != null &&
-		 			Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(actApprovalStatus.toLowerCase())  )
+		 	if (!(activity.getDraft()!=null && activity.getDraft()) && ( actApprovalStatus != null &&
+		 			Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(actApprovalStatus.toLowerCase())  ))
 		 	{
 		 		if (workingTeamFlag && teamLeadFlag)
-
 		 			formBean.setButtonText("validate");
-		 	     else
+		 		else
 		 			formBean.setButtonText("approvalAwaited");
+		 		
 		 	}
 		 	else {
 		 		if (workingTeamFlag && teamMember.getWrite())
@@ -261,9 +260,9 @@ public class ViewChannelOverview extends TilesAction {
 			);
 
 		}
-		if(isTeamHead)
+		else //we are not checking for TL because of AMP-2705
 		{
-			System.out.println("the team member is not the TEAM LEADER!!!!!!!!");
+			//System.out.println("the team member is not the TEAM LEADER!!!!!!!!");
 			if ( Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus()) ) {
 				errors.add(
 						"title", new ActionError("error.aim.activityAwaitingApproval")

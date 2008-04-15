@@ -364,7 +364,7 @@ public class DocumentManager extends Action {
 			String uuid			= iter.next();
 			Node documentNode	= DocumentManagerUtil.getReadNode(uuid, myRequest);
 			if (documentNode == null)
-				throw new Exception("Document with uuid '" + uuid + "' not found !");
+				;//throw new Exception("Document with uuid '" + uuid + "' not found !");
 			else
 				documents.add(documentNode);
 		}

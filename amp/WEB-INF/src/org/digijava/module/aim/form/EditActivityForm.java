@@ -25,6 +25,7 @@ import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
@@ -163,7 +164,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	private String visibleProgram=null;
 
-	private Collection activitySectors; // sectors related to the activity
+	private Collection<ActivitySector> activitySectors; // sectors related to the activity
 	private Collection activityComponentes;
 	private Long[] selCompSectors;
 
@@ -330,7 +331,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 
 	/* START FINANCIAL EDIT */
-	private Collection fundingOrganizations; // Collection of FundingOrganization objects
+	private Collection<FundingOrganization> fundingOrganizations; // Collection of FundingOrganization objects
 	private String orgFundingId;
 	private Long fundingId;
 	private Long orgId;
@@ -981,7 +982,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	/**
 	 * @return Returns the activitySectors.
 	 */
-	public Collection getActivitySectors() {
+	public Collection<ActivitySector> getActivitySectors() {
 		return activitySectors;
 	}
 
@@ -989,7 +990,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 * @param activitySectors
 	 *            The activitySectors to set.
 	 */
-	public void setActivitySectors(Collection activitySectors) {
+	public void setActivitySectors(Collection<ActivitySector> activitySectors) {
 		this.activitySectors = activitySectors;
 	}
 
@@ -1235,7 +1236,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 * @param fundingOrganizations
 	 *            The fundingOrganizations to set.
 	 */
-	public void setFundingOrganizations(Collection fundingOrganizations) {
+	public void setFundingOrganizations(Collection<FundingOrganization> fundingOrganizations) {
 		this.fundingOrganizations = fundingOrganizations;
 	}
 
@@ -4400,7 +4401,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
         this.createdBy = createdBy;
     }
 
-	public Collection getFundingOrganizations() {
+	public Collection<FundingOrganization> getFundingOrganizations() {
 		return fundingOrganizations;
 	}
 

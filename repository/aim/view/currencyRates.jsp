@@ -423,7 +423,7 @@ function fnSubmit() {
 											</a>
 										</td>
 										<td align="right">
-											<c:out value="${cRates.formattedRate}"/>
+											<c:out value="${cRates.exchangeRate}"/>
 										</td>
 									</tr>
 									</c:forEach>

@@ -16,11 +16,17 @@
 			<result name="succes" type="redirect-action">
 				<param name="actionName">showRequestForm</param>
 			</result>
+			
 			<result name="input">/login.jsp</result>
 
 			<result name="failed" type="redirect-action">
 				<param name="actionName">loginfailed</param>
 			</result>
+			
+			<result name="isadmin" type="redirect-action">
+				<param name="actionName">admin</param>
+			</result>
+			
 		</action>
 
 		<action name="loginfailed" class="org.dgfundation.amp.support.action.LoginAction" method="loginfailed">
@@ -56,6 +62,13 @@
 		<action name="requestEnd" class="org.dgfundation.amp.support.action.RequestEnd">
 			<result name="viewend" type="dispatcher">
 				<param name="location">/requestend.jsp</param>
+			</result>
+		</action>
+		
+		<action name="admin" class="org.dgfundation.amp.support.action.Admin">
+			<result name="input">/admin.jsp</result>
+			<result name="admin" type="dispatcher">
+				<param name="location">/admin.jsp</param>
 			</result>
 		</action>
 	</package>

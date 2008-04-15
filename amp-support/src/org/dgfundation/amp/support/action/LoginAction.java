@@ -15,7 +15,8 @@ import org.dgfundation.amp.support.hibernate.EntityHelper;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class LoginAction extends ActionSupport implements ServletRequestAware {
-
+	private static final long serialVersionUID = 8739024626239922575L;
+	
 	HttpServletRequest request = null;
 
 	private String password;
@@ -26,20 +27,25 @@ public class LoginAction extends ActionSupport implements ServletRequestAware {
 
 	private String rlocale;
 
-	private static final long serialVersionUID = 8739024626239922575L;
+	
 
 	public String execute() throws Exception {
 		return "login";
 	}
 
 	public String postLoging() throws Exception {
-		Login login = EntityHelper.getLogin(this.username, this.password,
-				EntityHelper.getCountry(this.countrycode));
-		if (login != null) {
-			request.getSession().setAttribute("login", login);
-			request.getSession().setAttribute("request_locale", getLocale());
-			return "succes";
-		} else {
+		Login login = EntityHelper.getLogin(this.username, this.password,EntityHelper.getCountry(this.countrycode));
+			if (login != null) {
+				if (login.getRole()!=2){
+					request.getSession().setAttribute("login", login);
+					request.getSession().setAttribute("request_locale", getLocale());
+				return "succes";
+				}else{
+					request.getSession().setAttribute("login", login);
+					request.getSession().setAttribute("request_locale", getLocale());
+					return "isadmin";
+				}
+			} else {
 			return "failed";
 		}
 

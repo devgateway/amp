@@ -26,6 +26,9 @@ public class Login {
 	@JoinColumn(name = "COUNTRY_CODE")
 	private Country country;
 
+	@Column(name = "ROLE")
+	private int role;
+
 	public Country getCountry() {
 		return country;
 	}
@@ -56,6 +59,14 @@ public class Login {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public int getRole() {
+		return role;
+	}
+
+	public void setRole(int role) {
+		this.role = role;
 	}
 
 }

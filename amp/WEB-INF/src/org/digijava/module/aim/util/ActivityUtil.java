@@ -712,11 +712,13 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         itr = indicators.iterator();
         while (itr.hasNext()) {
           ActivityIndicator actInd = (ActivityIndicator) itr.next();
-          
+          AmpIndicatorRiskRatings risk=null;
           
           
           AmpIndicator ind=(AmpIndicator)session.get(AmpIndicator.class,actInd.getIndicatorId());
-          AmpIndicatorRiskRatings risk=(AmpIndicatorRiskRatings)session.load(AmpIndicatorRiskRatings.class, actInd.getRisk());
+          if(actInd.getRisk()!=null && actInd.getRisk().longValue()>0){
+        	  risk=(AmpIndicatorRiskRatings)session.load(AmpIndicatorRiskRatings.class, actInd.getRisk());  
+          }          
 
           //try to find connection of current activity with current indicator
           IndicatorActivity indConn=IndicatorUtil.findActivityIndicatorConnection(activity, ind);

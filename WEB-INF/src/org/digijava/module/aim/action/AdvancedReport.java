@@ -1489,7 +1489,7 @@ public class AdvancedReport extends Action {
 				return;
 		}
 		Iterator iter;
-		//Collection coll = new ArrayList();
+		Collection coll2 = new ArrayList(); //AMP-2800 - columns must not be sorted in the added list
 		Collection coll = new TreeSet();
 		Collection temp = new ArrayList();
 		Collection  dup= new ArrayList();
@@ -1505,6 +1505,7 @@ public class AdvancedReport extends Action {
 				{
 					dup = src;
 					coll.clear();
+					coll2.clear();
 					temp.clear();
 				}
 				else
@@ -1512,6 +1513,7 @@ public class AdvancedReport extends Action {
 					temp.clear();
 					dup = src;
 					coll = dest;
+					coll2 = dest;
 				}
 				
 				for(int i=0; i < selCol.length; i++)
@@ -1560,7 +1562,7 @@ public class AdvancedReport extends Action {
 							ampColumns = (AmpColumns) iter.next();
 							if(ampColumns.getColumnId().compareTo(selCol[i]) == 0)
 							{
-								coll.add(ampColumns);
+								coll2.add(ampColumns);
 								colTemp = ampColumns;
 								flag = true;
 							}
@@ -1588,13 +1590,13 @@ public class AdvancedReport extends Action {
 
 				if(str.equals("add"))
 				{
-					formBean.setAddedColumns(coll);
+					formBean.setAddedColumns(coll2);
 					formBean.setAmpColumns(temp);
 				}
 				if(str.equals("delete"))
 				{
 					formBean.setAddedColumns(temp);
-					formBean.setAmpColumns(coll);
+					formBean.setAmpColumns(coll2);
 				}
 				if(str.equals("Step2AddRows") == true)
 				{

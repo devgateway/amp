@@ -18,6 +18,11 @@ function saveFormula(){
   if(a!=null){
     a.value="save"
   }
+  var ie=document.getElementById("chkEnabled");
+  var he=document.getElementById("hdnEna");
+  if(ie!=null && he!=null){
+    he.value=ie.checked;
+  }
   document.aimViewAhSurveyFormulasForm.submit();
 }
 
@@ -76,7 +81,14 @@ function resetFormula(){
     </tr>
     <tr>
       <td>
-        <html:checkbox property="enabled" value="enabled" styleId="chkEnabled" />&nbsp;Enable
+        <html:hidden property="formulaEnabled" styleId="hdnEna" />
+        <c:if test="${aimViewAhSurveyFormulasForm.formulaEnabled}">
+          <input type="checkbox" id="chkEnabled" checked="checked" />
+        </c:if>
+        <c:if test="${!aimViewAhSurveyFormulasForm.formulaEnabled}">
+          <input type="checkbox" id="chkEnabled" />
+        </c:if>
+        <%--Not Working correctly ->  <html:checkbox property="formulaEnabled" styleId="chkEnabled" /> --%>&nbsp;Enable
       </td>
       <td>&nbsp;</td>
     </tr>

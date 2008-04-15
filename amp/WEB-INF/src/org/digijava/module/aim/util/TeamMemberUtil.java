@@ -551,7 +551,8 @@ public class TeamMemberUtil {
 			Iterator itr = ampTeamMember.getReports().iterator();
 			while (itr.hasNext()) {
 				AmpReports ampReports = (AmpReports) itr.next();
-				if (!(ampReports.getAmpReportId().equals(new Long(7)))) {
+				//if (!(ampReports.getAmpReportId().equals(new Long(7)))) 
+				{
 					logger.debug("inside iter");
 					col.add(ampReports);
 				}

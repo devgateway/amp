@@ -363,10 +363,10 @@ public class DocumentManager extends Action {
 		while (iter.hasNext()) {
 			String uuid			= iter.next();
 			Node documentNode	= DocumentManagerUtil.getReadNode(uuid, myRequest);
-			if (documentNode != null)
-				//throw new Exception("Document with uuid '" + uuid + "' not found !");
-			
-			documents.add(documentNode);
+			if (documentNode == null)
+				throw new Exception("Document with uuid '" + uuid + "' not found !");
+			else
+				documents.add(documentNode);
 		}
 		Iterator iterator			= documents.iterator();
 		return 

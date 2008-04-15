@@ -529,9 +529,9 @@ public class VisibilityManager extends MultiAction {
 	  }
 
 	 private void generateAllFieldsInFile(){
-		 TreeSet modules=new TreeSet();
-		 TreeSet features=new TreeSet();
-		 TreeSet fields=new TreeSet();
+		 TreeSet<String> modules=new TreeSet<String>();
+		 TreeSet<String> features=new TreeSet<String>();
+		 TreeSet<String> fields=new TreeSet<String>();
 			getAllPatchesFiles(this.getServlet().getServletContext().getRealPath("/"),modules, features, fields);
 			int i=0;
 			try{
@@ -556,15 +556,15 @@ public class VisibilityManager extends MultiAction {
 			    
 			    out.append(outHeader);
 			        
-			        for (Iterator iter = modules.iterator(); iter.hasNext();) {
+			        for (Iterator<String> iter = modules.iterator(); iter.hasNext();) {
 						String s = (String) iter.next();
 						out.append(s);
 					}
-			        for (Iterator iter = features.iterator(); iter.hasNext();) {
+			        for (Iterator<String> iter = features.iterator(); iter.hasNext();) {
 						String s = (String) iter.next();
 						out.append(s);
 					}
-			        for (Iterator iter = fields.iterator(); iter.hasNext();) {
+			        for (Iterator<String> iter = fields.iterator(); iter.hasNext();) {
 						String s = (String) iter.next();
 						out.append(s);
 					}

@@ -226,7 +226,7 @@ public class SaveActivity extends Action {
 				// set funding and funding details
 				Set fundings = new HashSet();
 				if (eaForm.getFundingOrganizations() != null && eaForm.getFundingOrganizations().size()>0) {
-					Iterator itr1 = eaForm.getFundingOrganizations().iterator();
+					Iterator<FundingOrganization> itr1 = eaForm.getFundingOrganizations().iterator();
 					while (itr1.hasNext()) {
 						FundingOrganization fOrg = (FundingOrganization) itr1
 								.next();
@@ -235,7 +235,7 @@ public class SaveActivity extends Action {
                                 fOrg.getAmpOrgId().longValue() == eaForm.getFundDonor().longValue()) {
 							// add fundings
 							if (fOrg.getFundings() != null && fOrg.getFundings().size()>0) {
-								Iterator itr2 = fOrg.getFundings().iterator();
+								Iterator<Funding> itr2 = fOrg.getFundings().iterator();
 								while (itr2.hasNext()) {
 									Funding fund = (Funding) itr2.next();
 									AmpFunding ampFunding = new AmpFunding();
@@ -431,7 +431,7 @@ public class SaveActivity extends Action {
 
                     boolean secPer = false;
                     int percent = 0;
-                    Iterator secPerItr = eaForm.getActivitySectors().iterator();
+                    Iterator<ActivitySector> secPerItr = eaForm.getActivitySectors().iterator();
                     while (secPerItr.hasNext()) {
                         ActivitySector actSect = (ActivitySector) secPerItr.next();
                         if (null == actSect.getSectorPercentage()

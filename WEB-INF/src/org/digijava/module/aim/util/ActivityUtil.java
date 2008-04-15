@@ -716,6 +716,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           
           
           AmpIndicator ind=(AmpIndicator)session.get(AmpIndicator.class,actInd.getIndicatorId());
+          //if actInd.getRisk()==0 , than no Risk is selected
           if(actInd.getRisk()!=null && actInd.getRisk().longValue()>0){
         	  risk=(AmpIndicatorRiskRatings)session.load(AmpIndicatorRiskRatings.class, actInd.getRisk());  
           }          

@@ -645,8 +645,7 @@ public class LocationUtil {
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select reg from " + AmpRegion.class.getName()
-					+ " reg " + "where country_id = '" + iso
-					+ "'  order by reg.name";
+					+ " reg " + "where country_id = '" + iso + "'";
 
 			Query qry = session.createQuery(queryString);
 			col = qry.list();

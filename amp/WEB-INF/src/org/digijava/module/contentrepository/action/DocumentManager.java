@@ -363,8 +363,15 @@ public class DocumentManager extends Action {
 		while (iter.hasNext()) {
 			String uuid			= iter.next();
 			Node documentNode	= DocumentManagerUtil.getReadNode(uuid, myRequest);
+			
+			/**
+			 * If documentNode is null it means that there is no node with the specified uuid in the repository
+			 * but the application still has some information about that node.
+			 * It means that there is a problem in the logic of the application so we need to throw an 
+			 * exception.
+			 */
 			if (documentNode == null)
-				;//throw new Exception("Document with uuid '" + uuid + "' not found !");
+				throw new Exception("Document with uuid '" + uuid + "' not found !");
 			else
 				documents.add(documentNode);
 		}

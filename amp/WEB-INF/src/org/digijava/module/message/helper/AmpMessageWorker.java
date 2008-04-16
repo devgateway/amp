@@ -1,15 +1,6 @@
 package org.digijava.module.message.helper;
 
 import java.util.Calendar;
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.mail.event.*;
 
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -31,35 +22,8 @@ public class AmpMessageWorker {
 		message.setRead(false);
 		Calendar cal=Calendar.getInstance();
 		message.setCreationDate(cal.getTime());
-		AmpMessageUtil.saveOrUpdateMessage(message);
-		sendMail();
+		AmpMessageUtil.saveOrUpdateMessage(message);		
 	}
 	
-	/* Bean Properties */
-	public static Properties props = null;
-	public static Session session = null;
-
-//	static {
-//		/*	Setting Properties for STMP host */
-//		props = System.getProperties();
-//		props.put("mail.smtp.host", "mail.yourisp.com");
-//		session = Session.getDefaultInstance(props, null);
-//	}
-
-	public static void sendMail() throws Exception {
-		props = System.getProperties();
-		props.put("mail.smtp.host", "mail.yahoo.com");
-		session = Session.getDefaultInstance(props, null);
-		try {				
-			MimeMessage message = new MimeMessage(session);
-			message.setRecipient(Message.RecipientType.TO, 
-				new InternetAddress("dareroinishvili@gmail.com"));
-			message.setFrom(new InternetAddress("skvisha@yahoo.com"));
-			message.setSubject("hola amigo");
-			message.setText("hello dear I");
-			Transport.send(message);
-		} catch (MessagingException e) {
-			throw new Exception(e.getMessage());
-		}
-	}	
+	
 }

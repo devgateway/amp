@@ -19,7 +19,7 @@ public class AddLocationForm extends ValidatorForm {
 		  private Collection region;
 		  private Collection zone;
 		  private Collection woreda;
-
+		  
 		  private Long id;
 		  private String name = null;
 		  private String iso;

@@ -596,7 +596,7 @@ ${fn:replace(message,quote,escapedQuote)}
 										&nbsp;
 
 									</td></tr>
-									<feature:display name="Content Repository" module="Document Management">
+									<module:display name="Document" parentModule="Project Management">
 									<tr>
 										<td>
 										<table width="100%" cellSpacing=1 cellPadding=5 border="0" bgcolor="white">
@@ -615,7 +615,7 @@ ${fn:replace(message,quote,escapedQuote)}
 										</table>
 										</td>
 									</tr>
-									</feature:display>
+									</module:display>
 									
 <!--
 

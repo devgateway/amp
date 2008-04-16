@@ -217,7 +217,7 @@ function preview(id)
 								</TD>
 
 							</TR>
-							<feature:display name="Content Repository" module="Document Management">
+							<module:display name="Document" parentModule="Project Management">
 								<tr>
 									<TD>
 									
@@ -234,7 +234,7 @@ function preview(id)
 											
 									</TD>
 								</tr>
-							</feature:display>
+							</module:display>
 							
 							<c:if
 								test="${aimKnowledgeForm.managedDocuments != null && !empty aimKnowledgeForm.managedDocuments}">

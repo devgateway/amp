@@ -63,16 +63,25 @@ public class AutopatcherService extends AbstractServiceImpl {
 				if(allAppliedPatches.contains(localPatchPath)) continue;
 				
 				try {
+				String delimiter=";";
+				boolean firstLine=true;
 				LineNumberReader bis=new LineNumberReader(new FileReader(element));
 				StringBuffer sb= new StringBuffer();
 				String s=bis.readLine();
 				while(s!=null) {
+				if(firstLine && s.length()>=11 && s.substring(0,9).equalsIgnoreCase("delimiter")) {
+					delimiter=s.substring(10, 11);
+					s = bis.readLine();
+					continue;
+				}
+					
 				 sb.append(s);
+				 firstLine=false;
 				 s = bis.readLine();					
 				}
 				bis.close();
 							
-				StringTokenizer stok=new StringTokenizer(sb.toString(),";");
+				StringTokenizer stok=new StringTokenizer(sb.toString(),delimiter);
 				logger.info("Applying patch "+element.getAbsolutePath());
 				logger.info("Executing sql commands: "+sb.toString());
 				

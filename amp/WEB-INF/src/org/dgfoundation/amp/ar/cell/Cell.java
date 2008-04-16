@@ -45,9 +45,9 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 			Cell c1=(Cell) o1;
 			Cell c2=(Cell) o2;
                         if(c1 instanceof TextCell && c2 instanceof TextCell){
-                            String c1Value=c1.comparableToken().toString().trim();
-                            String c2Value=c2.comparableToken().toString().trim();
-                            return c1Value.compareToIgnoreCase(c2Value);
+                            String c1Value=c1.comparableToken().toString();
+                            String c2Value=c2.comparableToken().toString();
+                           return c1Value.compareToIgnoreCase(c2Value);
                         }
 			return c1.comparableToken().compareTo(c2.comparableToken());
 		}

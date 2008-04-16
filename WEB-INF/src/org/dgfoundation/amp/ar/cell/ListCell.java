@@ -77,7 +77,7 @@ public class ListCell extends Cell {
 		aux.add(c);
 		value.clear();
 		value.addAll(aux);
-		//value.add(c);
+//		value.add(c);
 	}
 	
 	public Iterator iterator() {

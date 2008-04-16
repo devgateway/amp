@@ -426,9 +426,18 @@ public class ChartGenerator {
 						actualValue=actualValue-baseValue;
 						targetValue=targetValue-baseValue;	
 						actualValue=(100f*actualValue)/targetValue;
-						targetValue=100-actualValue;
+						targetValue=100-actualValue;						
 					} else {
-						ds.addValue(baseValue,baseValueType,indicatorName);					
+						double result = 0;
+						baseValue -= targetValue;
+			            actualValue -= targetValue;
+			            targetValue = baseValue;
+			            if (baseValue != 0 && actualValue != 0) {
+			                result = actualValue / (baseValue / 100);
+			                actualValue=100-result;			                
+			                targetValue=100 - actualValue;
+			            }						
+						//ds.addValue(baseValue,baseValueType,indicatorName);					
 					}
 					ds.addValue(actualValue,actualValueType,indicatorName);				
 					ds.addValue(targetValue,targetValueType,indicatorName);				

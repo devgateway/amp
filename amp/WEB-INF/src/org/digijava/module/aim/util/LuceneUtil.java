@@ -163,8 +163,8 @@ public class LuceneUtil {
 				isNext = rs.next();
 				//
 			}
-
-			qryStr = "select * from v_ampid" ;
+			//the correct view is v_amp_id, the view with name  v_ampid is not used 
+			qryStr = "select * from v_amp_id" ;
 			rs = st.executeQuery(qryStr);
 			rs.last();
 			logger.info("Starting iteration of " + rs.getRow() + " project id's!");

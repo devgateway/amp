@@ -322,9 +322,10 @@ public class ReportsFilterPicker extends MultiAction {
 		if(selectedSectors!=null) generatedSectors.addAll( selectedSectors);
 		
 		
-		arf.setSelectedSectors( new HashSet() );
-		if(selectedSectors!=null)
+		
+		if(selectedSectors!=null && selectedSectors.size() > 0)
 			{
+			arf.setSelectedSectors( new HashSet() );
 			arf.getSelectedSectors().addAll(selectedSectors);
 			Iterator sectorIterator=selectedSectors.iterator();
 		
@@ -348,8 +349,13 @@ public class ReportsFilterPicker extends MultiAction {
 				}
 			
 			}
+			arf.setSectors( generatedSectors );
 		}
-		arf.setSectors( generatedSectors );
+		else {
+			arf.setSectors(null);
+			arf.setSelectedSectors(null);
+		}
+		
 		
 				
 		

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,7 +30,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 /**
  * NPD main page.
  * Most things on this page are asynchronous,
- * so this action just sets lists and settingslike data.
+ * so this action just sets lists and settings like data.
  * @author Irakli Kobiashvili
  *
  */
@@ -78,30 +79,11 @@ public class ViewNPD extends Action {
 	}
 	
 	private String[] defaulYearsGeneratorForNpdGraph(String selectedYearForTeam){
-		String[] result= {};
-		int size=0;
-		/**
-		 * So complicated defining of size is necessary , because if not exactly define the size,graph is not displayed correctly,
-		 * and then we get exceptions on view all and view table pages. 
-		 */
-		if(selectedYearForTeam.length()>=24){
-			//in this case, team has five years selected,which are separated by 4 commas. So dividing length to 4,gives us result=numberOfYears+1
-			//Note that max number of years is 5.We aen't allowed to add more years
-			size=selectedYearForTeam.length()/4 -1;
-		}else{
-			size=selectedYearForTeam.length()/4; //every year contains four symbols(2000,2005,e.t.c) By dividing this string to 4 ,we'll get number of years does the String contains
-		}
-		
-		result=new String[size];
-		for (int i = 0; i <size ; i++) {			
-			if(selectedYearForTeam.indexOf(',')==-1){
-				result[i]=selectedYearForTeam;
-				break;
-			}else{
-				int endIndex=selectedYearForTeam.indexOf(',');
-				result[i]=selectedYearForTeam.substring(0,endIndex);
-				selectedYearForTeam=selectedYearForTeam.substring(endIndex+1); //selectedYearForTeam is replaced with substring,which starts from the first comma of old one 
-			}
+		StringTokenizer toka=new StringTokenizer(selectedYearForTeam,",");
+		String[] result=new String[toka.countTokens()];
+		int c=0;
+		while (toka.hasMoreTokens()) {
+			result[c++]=toka.nextToken();
 		}
 		return result;
 	}

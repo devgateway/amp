@@ -82,6 +82,8 @@ public class QuarterlyInfoWorker {
 					Date transactionDate 		= (Date) row[1];
 				
 					/*Checking Date Filter*/
+					
+					// TODO this 01/01 string is hardcodded patern part and is not good, its thros exeption if patren is dd/MMM/yyyy in global settinsg
 					Date startDate				=  DateConversion.getDate( "01/01/" + fp.getFromYear() );
 					Date endDate				=  DateConversion.getDate( "01/01/" + fp.getToYear() );
 					

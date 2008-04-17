@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.MetaInfo;
-import org.digijava.module.aim.dbentity.AmpReports;
+import org.dgfoundation.amp.ar.workers.AmountColWorker;
 import org.digijava.module.aim.helper.FormatHelper;
 
 /**
@@ -82,12 +82,8 @@ public class AmountCell extends Cell {
 		// TODO Auto-generated constructor stub
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.dgfoundation.amp.ar.cell.Cell#getWorker()
-	 */
 
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -186,7 +182,7 @@ public class AmountCell extends Cell {
 	}
 
 	public Class getWorker() {
-		return null;
+		return AmountColWorker.class;
 	}
 
 	/**

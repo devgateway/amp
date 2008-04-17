@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.exception.AimException;
@@ -32,6 +33,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 /**
  * Returns XML of Activities list depending on request parameters. This action
@@ -63,14 +65,16 @@ public class GetActivities extends Action {
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		NpdSettings settings = NpdUtil.getCurrentSettings(tm.getTeamId());
-		// TODO AMP-2539 we need some decision about filtering activities for teams or team members.
 
 		int maxPages=1;
 		
 		response.setContentType("text/xml");
 		ActivitiesForm actForm = (ActivitiesForm) form;
 		logger.debug("programId=" + actForm.getProgramId() + " statusCode=" + actForm.getStatusId());
-		OutputStreamWriter outputStream =null;
+
+		logger.debug("Setting activties XML in the response");
+		OutputStreamWriter outputStream = new OutputStreamWriter( response.getOutputStream(),"UTF-8");
+		PrintWriter out = new PrintWriter(outputStream, true);
 		
 		try {
 			Date fromYear = yearToDate(actForm.getStartYear(), false);
@@ -92,15 +96,11 @@ public class GetActivities extends Action {
 			}
 			
 			logger.debug("retriving activities");
-			Collection<AmpActivity> activities = getActivities(actForm.getProgramId(),actForm.getStatusId(), actForm.getDonorId(), fromYear,toYear, null, null, pageStart,rowCount, false);
+			Collection<AmpActivity> activities = getActivities(actForm.getProgramId(),actForm.getStatusId(), actForm.getDonorId(), fromYear,toYear, null, tm, pageStart,rowCount, false);
 
 			//convert activities to xml
 			logger.debug("Converting activities to XML");
 			String xml = activities2XML(activities,maxPages);
-
-			logger.debug("Setting activties XML in the response");
-			outputStream =  new OutputStreamWriter( response.getOutputStream(),"UTF-8");
-			PrintWriter out = new PrintWriter(outputStream, true);
 			
 			out.println(xml);
 //			outputStream.write(xml.getBytes());
@@ -110,6 +110,7 @@ public class GetActivities extends Action {
 			outputStream.close();
 		} catch (Exception e) {
 			logger.info(e);
+			e.printStackTrace();
 			if (outputStream != null) {
 				try {
 					outputStream.write(stackTrace2XML(e));

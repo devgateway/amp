@@ -71,7 +71,7 @@ public class DateConversion
 	public static Date getDate(String strDate) {
 	try {
 	    Date date = null;
-	    if (strDate != null && !strDate.equals("")) {
+	    if (strDate != null && !strDate.trim().equals("")) {
 		date = DateTimeUtil.parseDate(strDate);
 
 	    }

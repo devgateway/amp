@@ -2646,7 +2646,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     Query qry = null;
 
     try {
-      session = PersistenceManager.getSession();
+      session = PersistenceManager.getRequestDBSession();
       String queryString = "select ampAct from " + AmpActivity.class.getName() +
           " ampAct";
       qry = session.createQuery(queryString);
@@ -2656,16 +2656,6 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     catch (Exception e1) {
       logger.error("Could not retrieve the activities list from getallactivitieslist");
       e1.printStackTrace(System.out);
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception e2) {
-          logger.error("Release session failed");
-        }
-      }
     }
     return col;
   }

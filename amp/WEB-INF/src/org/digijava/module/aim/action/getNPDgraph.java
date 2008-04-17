@@ -26,7 +26,6 @@ import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.NpdGraphForm;
-import org.digijava.module.aim.helper.NpdGraphTooltipGenerator;
 import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.NpdUtil;
@@ -64,6 +63,9 @@ public class getNPDgraph extends Action {
             Long currentThemeId = npdForm.getCurrentProgramId();
             long[] selIndicators = npdForm.getSelectedIndicators();
             String[] selYears = npdForm.getSelectedYears();
+            if (selYears!=null){
+                Arrays.sort(selYears);
+            }
 
             //session for storing latest map for graph
             HttpSession session = request.getSession();
@@ -97,7 +99,7 @@ public class getNPDgraph extends Action {
     		ChartUtilities.writeChartAsPNG(response.getOutputStream(), chart, npdSettings.getWidth().intValue(),
             		npdSettings.getHeight().intValue(), info);
          
-            NpdGraphTooltipGenerator ttGen = new NpdGraphTooltipGenerator();
+            //NpdGraphTooltipGenerator ttGen = new NpdGraphTooltipGenerator();
 
             //generate map for this graph
             String map = ChartUtilities.getImageMap("npdChartMap", info);
@@ -115,6 +117,7 @@ public class getNPDgraph extends Action {
     }
 
 
+    // TODO This method should be moved to NPD or chart util.
     private CategoryDataset createPercentsDataset(AmpTheme currentTheme,
                                                   long[] selectedIndicators, String[] selectedYears)
             throws AimException {
@@ -183,7 +186,8 @@ public class getNPDgraph extends Action {
                         }
 
                         // now put all values in the dataset
-
+                        // they will appear on the chart in same order as added in dataset
+                        // so years should be ordered (done outside of this method) because we are adding data by year. 
                         if (selectedYears != null) {
                             for (int i = 0; i < selectedYears.length; i++) {
                                 AmpIndicatorValue actualValue = actualValues.get(selectedYears[i]);
@@ -277,12 +281,14 @@ public class getNPDgraph extends Action {
 
     private static boolean isInSelectedYears(AmpIndicatorValue value, String[] selYars) {
         String sYear = extractYearString(value.getValueDate());
-        if (sYear != null) {
-            for (int i = 0; i < selYars.length; i++) {
-                if (selYars[i].equals(sYear)) {
-                    return true;
-                }
-            }
+        if (sYear != null && selYars!=null) {
+        	//we can use this method because selYears are sorted by sort() method of Arrays class
+        	return Arrays.binarySearch(selYars, sYear) >= 0;
+//            for (int i = 0; i < selYars.length; i++) {
+//                if (selYars[i].equals(sYear)) {
+//                    return true;
+//                }
+//            }
         }
         return false;
     }

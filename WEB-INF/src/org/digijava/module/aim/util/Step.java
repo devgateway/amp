@@ -35,6 +35,11 @@ public class Step {
     public void setStepNumber(String stepNumber) {
         this.stepNumber = stepNumber;
     }
+    
+    @Override
+    public String toString() {
+    	return stepNumber + ":" + stepActualNumber;
+    }
 
    
 }

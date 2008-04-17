@@ -479,7 +479,7 @@ function fnGetSurvey() {
 					</c:if>
 				</tr>
 				</feature:display>
-				<module:display name="Document" parentModule="Project Management">
+				<module:display name="Document" parentModule="PROJECT MANAGEMENT">
 				<tr>
 					<c:if test="${aimEditActivityForm.step != 6}">
 					<td nowrap="nowrap">

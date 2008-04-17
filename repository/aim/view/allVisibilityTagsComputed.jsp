@@ -19,6 +19,7 @@
 <module:display name="Channel Overview" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Components Resume" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Components" parentModule="PROJECT MANAGEMENT"></module:display> 
+<module:display name="Components_Resume" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Contact Information" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Contracting" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Cross Cutting Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
@@ -26,7 +27,6 @@
 <module:display name="Desktop Sections" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Document Management" parentModule="DOCUMENTS MANAGEMENT"></module:display> 
 <module:display name="Document" parentModule="PROJECT MANAGEMENT"></module:display> 
-<module:display name="Document" parentModule="Project Management"></module:display> 
 <module:display name="Financial Progress" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="HELP"></module:display> 
@@ -183,13 +183,18 @@
 <field:display name="Activity Category" feature="Contracting"></field:display> 
 <field:display name="Activity Created By" feature="Identification"></field:display> 
 <field:display name="Activity Created On" feature="Identification"></field:display> 
+<field:display name="Activity Creator" feature="Identification"></field:display> 
 <field:display name="Activity Updated By" feature="Identification"></field:display> 
 <field:display name="Activity Updated On" feature="Identification"></field:display> 
 <field:display name="Actors" feature="Issues"></field:display> 
 <field:display name="Actual Approval Date" feature="Planning" ></field:display> 
 <field:display name="Actual Approval Date" feature="Planning"></field:display> 
+<field:display name="Actual Commitments" feature="Measures"></field:display> 
 <field:display name="Actual Completion Date" feature="Planning"></field:display> 
 <field:display name="Actual Disbursement Orders" feature="Disbursement Orders"></field:display> 
+<field:display name="Actual Disbursement Orders" feature="Measures"></field:display> 
+<field:display name="Actual Disbursements" feature="Measures"></field:display> 
+<field:display name="Actual Expenditures" feature="Measures"></field:display> 
 <field:display name="Actual Start Date" feature="Planning"></field:display> 
 <field:display name="Actual/Planned Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Actual/Planned Disbursements" feature="Regional Funding"></field:display> 
@@ -241,6 +246,7 @@
 <field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display> 
 <field:display name="Cancel" feature="Contracting"></field:display> 
 <field:display name="Central" feature="Contracting"></field:display> 
+<field:display name="Changed Date" feature="Planning"></field:display> 
 <field:display name="Classification Expenditure" feature="Funding Organizations"></field:display> 
 <field:display name="Comments Base Value" feature="Activity"></field:display> 
 <field:display name="Comments Current Value" feature="Activity"></field:display> 
@@ -302,6 +308,7 @@
 <field:display name="Costing Progress" feature="Costing"></field:display> 
 <field:display name="Costing Total Contribution" feature="Costing"></field:display> 
 <field:display name="Costing Total Cost" feature="Costing"></field:display> 
+<field:display name="Creation Date" feature="Planning"></field:display> 
 <field:display name="Creation date" feature="Admin"></field:display> 
 <field:display name="Credit/Donation" feature="Planning"></field:display> 
 <field:display name="Cumulative Commitment" feature="Funding Organizations"></field:display> 
@@ -413,6 +420,7 @@
 <field:display name="Indicator name" feature="Admin"></field:display> 
 <field:display name="Issues" feature="Issues"></field:display> 
 <field:display name="Joint Criteria" feature="Budget"></field:display> 
+<field:display name="Last changed by" feature="Identification"></field:display> 
 <field:display name="Lessons Learned" feature="Identification"></field:display> 
 <field:display name="Level 1 Sectors List" feature="Sectors"></field:display> 
 <field:display name="Level 2 Sectors List" feature="Sectors"></field:display> 
@@ -444,6 +452,9 @@
 <field:display name="Physical Progress" feature="Physical Progress"></field:display> 
 <field:display name="Physical progress description" feature="Physical Progress"></field:display> 
 <field:display name="Physical progress title" feature="Physical Progress"></field:display> 
+<field:display name="Planned Commitments" feature="Measures"></field:display> 
+<field:display name="Planned Disbursements" feature="Measures"></field:display> 
+<field:display name="Planned Expenditures" feature="Measures"></field:display> 
 <field:display name="Planning Ministry Rank" feature="Planning"></field:display> 
 <field:display name="Primary Program" feature="NPD Programs"></field:display> 
 <field:display name="Printer Friendly Button Performance" feature="Dashboard"></field:display> 
@@ -541,6 +552,7 @@
 <field:display name="Sub Program Level 8" feature="NPD Dashboard"></field:display> 
 <field:display name="Sub-Program" feature="Budget"></field:display> 
 <field:display name="Sub-Sector" feature="Sectors"></field:display> 
+<field:display name="Sub-Sub-Sector" feature="Sectors"></field:display> 
 <field:display name="Sub-Vote" feature="Budget"></field:display> 
 <field:display name="Target Value" feature="Activity"></field:display> 
 <field:display name="Team" feature="Identification"></field:display> 
@@ -548,6 +560,7 @@
 <field:display name="Total Amount Disbursements" feature="Regional Funding"></field:display> 
 <field:display name="Total Amount Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Total Amount" feature="Contracting"></field:display> 
+<field:display name="Total Commitments" feature="Measures"></field:display> 
 <field:display name="Total Committed" feature="Funding Organizations"></field:display> 
 <field:display name="Total Disbursed" feature="Funding Organizations"></field:display> 
 <field:display name="Total Disbursements of Contract" feature="Contracting"></field:display> 
@@ -561,6 +574,7 @@
 <field:display name="Total Private Contribution" feature="Contracting"></field:display> 
 <field:display name="Type Of Assistance" feature="Funding Organizations"></field:display> 
 <field:display name="Type" feature="Contracting"></field:display> 
+<field:display name="Undisbursed Balance" feature="Measures"></field:display> 
 <field:display name="Undisbursed Funds" feature="Funding Organizations"></field:display> 
 <field:display name="Unexpended Funds" feature="Funding Organizations"></field:display> 
 <field:display name="Verifications" feature="Identification"></field:display> 

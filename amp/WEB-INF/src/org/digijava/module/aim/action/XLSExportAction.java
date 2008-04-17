@@ -36,6 +36,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.Constants;
 
 /**
  * 
@@ -123,7 +124,18 @@ public class XLSExportAction extends Action {
 				translatedReportDescription=TranslatorWorker.translate("rep:pop:Description",locale,siteId);
 			}catch (WorkerException e){;}
 			
-			cell.setCellValue(translatedNotes+"\n");
+			String translatedCurrency = "";
+			String currencyCode = (String) session.getAttribute(org.dgfoundation.amp.ar.ArConstants.SELECTED_CURRENCY);
+            if(currencyCode != null) {
+                translatedCurrency=TranslatorWorker.translate("aim:currency:" + currencyCode.toLowerCase().replaceAll(" ", ""),locale,siteId);
+			    translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
+            }
+            else
+            {
+                translatedCurrency=TranslatorWorker.translate("aim:currency:" +Constants.DEFAULT_CURRENCY.toLowerCase().replaceAll(" ", ""),locale,siteId);
+            }
+            
+			cell.setCellValue(translatedNotes+translatedCurrency+"\n");
 			
 			grdx.makeColSpan(rd.getTotalDepth());
 			

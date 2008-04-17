@@ -762,7 +762,15 @@ public class EditOrganisation
         }
           	
         //boolean exist= DbUtil.getOrganisationByName(ampOrg.getName()) != null;
-        boolean exist= oldOrgName.equalsIgnoreCase(editForm.getName());        
+       boolean exist = false;
+       if ("create".equals(action) ){
+    	   if (DbUtil.getOrganisationByName(ampOrg.getName())!=null){
+    		   exist = true;
+    	   }
+       }
+       if ("edit".equals(action)&& !oldOrgName.equals(ampOrg.getName())){
+    	   exist= oldOrgName.equalsIgnoreCase(editForm.getName());
+       }
         
         if (exist) {
 		  editForm.setFlag("orgNameExist");

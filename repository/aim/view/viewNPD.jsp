@@ -83,9 +83,9 @@
 	var strNoActivities="<digi:trn key='aim:NPD:noActivitisLabel'>No Activities</digi:trn>";
 	var strTotal="<digi:trn key='aim:NPD:totalLabels'>Totals:</digi:trn>";
 	var strThousands="<digi:trn key='aim:NPD:thousandsLabel'>All amounts are in thousands (000)</digi:trn>";
-	var strPlanned="<digi:trn key='aim:NPD:sumplaned'>Planned</digi:trn>";
-	var strActual="<digi:trn key='aim:NPD:sumactual'>Actual</digi:trn>";
-	var strProposed="<digi:trn key='aim:NPD:sumproposed'>Proposed</digi:trn>";
+	var strPlanned="<digi:trn key='aim:NPD:sumplanedCommitments'>Planned Commitments</digi:trn>";
+	var strActual="<digi:trn key='aim:NPD:sumactualCommitments'>Actual Commitments</digi:trn>";
+	var strProposed="<digi:trn key='aim:NPD:sumproposedPrjCost'>Proposed Project Cost</digi:trn>";
 	var actCurrPage=1;
 	var actMaxPages=0;
 	var pgNext='<digi:trn key="aim:npd:pagination:next">Next</digi:trn>';
@@ -690,6 +690,31 @@
 			tr.parentNode.appendChild(newTR);
 			return;
 		}
+		
+		//sum labels
+		var labelsTR1 = document.createElement('TR');
+		var labelsTD0 = document.createElement('TD');
+		labelsTD0.colSpan=5;
+		labelsTD0.align='right';
+		labelsTD0.innerHTML='&nbsp;';
+		labelsTR1.appendChild(labelsTD0);
+
+		var labelTD1 = document.createElement('TD');
+		labelTD1.innerHTML='<strong>'+strProposed+' </strong>';
+		labelsTR1.appendChild(labelTD1);
+
+		var labelTD2 = document.createElement('TD');
+		labelTD2.innerHTML='<strong>'+strPlanned+' </strong>';
+		labelsTR1.appendChild(labelTD2);
+
+		var labelTD3 = document.createElement('TD');
+		labelTD3.innerHTML='<strong>'+strActual+' </strong>';
+		labelsTR1.appendChild(labelTD3);
+
+		tbl.appendChild(labelsTR1);
+		//end of sum labels
+		
+		
 		for (var i=0; i< actList.length; i++) {
 			if (actList[i].tagName=='activity'){
 				var actTR = document.createElement('TR');
@@ -765,28 +790,7 @@
 
 		tbl.appendChild(lastTR);
 
-		//sum labels
-		var labelsTR1 = document.createElement('TR');
-		var labelsTD0 = document.createElement('TD');
-		labelsTD0.colSpan=5;
-		labelsTD0.align='right';
-		labelsTD0.innerHTML='&nbsp;';
-		labelsTR1.appendChild(labelsTD0);
-
-		var labelTD1 = document.createElement('TD');
-		labelTD1.innerHTML='<strong>'+strProposed+' </strong>';
-		labelsTR1.appendChild(labelTD1);
-
-		var labelTD2 = document.createElement('TD');
-		labelTD2.innerHTML='<strong>'+strPlanned+' </strong>';
-		labelsTR1.appendChild(labelTD2);
-
-		var labelTD3 = document.createElement('TD');
-		labelTD3.innerHTML='<strong>'+strActual+' </strong>';
-		labelsTR1.appendChild(labelTD3);
-
-		tbl.appendChild(labelsTR1);
-
+		
 
 		//tousands label
 		if (strThousands==null || strThousands==''){
@@ -1282,7 +1286,7 @@
 					</td>
 					<td nowrap="nowrap" colspan="3">
 
-						<digi:trn key="aim:NPD:AmountAndCurrency">Amount And currency</digi:trn>
+						<digi:trn key="aim:NPD:Funding">Funding</digi:trn>
 					</td>
 				</tr>
 				<tr id="activityResultsPlace">

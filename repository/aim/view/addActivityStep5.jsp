@@ -17,7 +17,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
-<!--
+
 function goNextStep(){
   if(validateForm()){
     <digi:context name="nextStepUrl" property="context/module/moduleinstance/addActivity.do?edit=true" />
@@ -383,6 +383,82 @@ function addProgram(programType) {
 
 
 
+
+
+function addComponents()
+
+{
+
+	openNewWindow(650,500 );
+
+	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=show" />
+
+	document.aimEditActivityForm.action = "<%= addComp %>";
+
+	document.aimEditActivityForm.target = popupPointer.name;
+
+	document.aimEditActivityForm.submit();
+
+}
+
+
+
+function editFunding(id)
+
+{
+
+	openNewWindow(650,500 );
+
+	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=showEdit" />
+
+	document.aimEditActivityForm.action = "<%= addComp %>&fundId="+id;
+
+	document.aimEditActivityForm.target = popupPointer.name;
+
+	document.aimEditActivityForm.submit();
+
+}
+
+function validateComponents() {
+	if (document.aimEditActivityForm.selComp.checked != null) {
+		if (document.aimEditActivityForm.selComp.checked == false) {
+			alert("Please choose a component to remove");
+			return false;
+		}
+	} else {
+		var length = document.aimEditActivityForm.selComp.length;
+		var flag = 0;
+		for (i = 0;i < length;i ++) {
+			if (document.aimEditActivityForm.selComp[i].checked == true) {
+				flag = 1;
+				break;
+			}
+		}
+	}
+}
+
+
+
+	
+function removeSelComponents() {
+
+	var flag = validateComponents();
+
+	if (flag == false) return false;
+
+	<digi:context name="remPhyProg" property="context/module/moduleinstance/removeComponent.do?edit=true" />
+
+	document.aimEditActivityForm.action = "<%= remPhyProg %>";
+
+	document.aimEditActivityForm.target = "_self"
+
+	document.aimEditActivityForm.submit();
+
+	return true;
+
+}
+
+
 function remProgram(programType) {
 	if(programType==1){
 		var val=document.getElementsByName('selectedNPOPrograms');
@@ -414,7 +490,7 @@ function remProgram(programType) {
 			}
 		}		
 }
--->
+
 </script>
 
 <digi:instance property="aimEditActivityForm" />

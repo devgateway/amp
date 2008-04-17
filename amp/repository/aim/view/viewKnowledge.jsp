@@ -217,7 +217,7 @@ function preview(id)
 								</TD>
 
 							</TR>
-							<module:display name="Document" parentModule="Project Management">
+							<module:display name="Document" parentModule="PROJECT MANAGEMENT">
 								<tr>
 									<TD>
 									

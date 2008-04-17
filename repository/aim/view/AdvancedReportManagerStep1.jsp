@@ -276,10 +276,15 @@ function checkUncheckAll2() {
 											<feature:display name="Physical Progress" module="Components"></feature:display>
 											
 											<field:display name="Status" feature="Planning">&nbsp;</field:display>
+											<field:display name="Creation Date" feature="Planning">&nbsp;</field:display>
+											<field:display name="Changed Date" feature="Planning">&nbsp;</field:display>
+											
 											<field:display name="Donor Agency" feature="Funding Organizations">&nbsp;</field:display>
 											<field:display name="Donor Type" feature="Funding Organizations">&nbsp;</field:display>
 											<field:display name="Actual Start Date" feature="Planning">&nbsp;</field:display>
 											<field:display name="Project Title" feature="Identification">&nbsp;</field:display>
+											<field:display name="Activity Creator" feature="Identification">&nbsp;</field:display>
+											<field:display name="Last changed by" feature="Identification">&nbsp;</field:display>
 											
 											<field:display name="Type Of Assistance" feature="Funding Organizations">&nbsp;</field:display>
 												<field:display name="Implementation Level" feature="Location">&nbsp;</field:display>

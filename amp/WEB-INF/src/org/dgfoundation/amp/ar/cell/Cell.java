@@ -49,6 +49,8 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
                             String c2Value=c2.comparableToken().toString();
                            return c1Value.compareToIgnoreCase(c2Value);
                         }
+                        logger.info("cell c1 instance : "+c1.getValue());
+                        logger.info("cell c2 instance : "+c2.getValue());
 			return c1.comparableToken().compareTo(c2.comparableToken());
 		}
 	}

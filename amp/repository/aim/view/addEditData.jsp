@@ -34,6 +34,11 @@ function deleteData(ind){
 }
 
 function saveIndicator(id){
+	if (!validation()){
+	var msg='<digi:trn key="aim:addEditData:pleaseFillAllData">the quantity of actual,base,tagert values must be the same\n Please fill all data</digi:trn>';
+	alert(msg);
+	return false;
+	}
   <digi:context name="addEditIndicator" property="context/module/moduleinstance/addEditData.do?event=save" /> 
   aimThemeForm.action = "<%=addEditIndicator%>";
   aimThemeForm.target=window.opener.name;
@@ -51,6 +56,29 @@ function selectLocation(index){
   	aimThemeForm.action = "<%=justSubmit%>&index="+index;  
   	aimThemeForm.submit();    
   
+}
+
+function validation(){
+	var values=document.getElementsByTagName("select");
+	var baseValue=0;
+	var actualValue=0;
+	var targetValue=0;
+	if(values!=null){
+		for (var i=0;i<values.length;i++){
+			if(values[i].selectedIndex==0){
+				actualValue++;
+			}else if (values[i].selectedIndex==1){
+				baseValue++;
+			}else if(values[i].selectedIndex==2){
+				targetValue++;
+			}
+		}	
+	}
+	//for every actual value we should have base and target values
+	if(targetValue!=actualValue || actualValue!=baseValue || baseValue!=targetValue){
+		return false;	
+	}
+	return true;
 }
 </script>
 
@@ -78,7 +106,6 @@ function selectLocation(index){
       <b><font color="white"><digi:trn key="aim:addeditdata:addlocation">Add Location</digi:trn></font></b>
     </td>
   </tr>
-
   <c:if test="${!empty aimThemeForm.prgIndValues}">
     <c:forEach var="ind" varStatus="index" items="${aimThemeForm.prgIndValues}">
         <tr>
@@ -134,8 +161,8 @@ function selectLocation(index){
               <img src="../ampTemplate/images/trash_16.gif" border="0" alt="Delete indicator value" />
             </a>
           </td>
-        </tr>
-    </c:forEach>
+        </tr>        
+    </c:forEach>   
   </c:if>
 
   <c:if test="${empty aimThemeForm.prgIndicators}">
@@ -152,7 +179,7 @@ function selectLocation(index){
     <td height="25" align="center" colspan="6"><digi:trn key="aim:addeditdata:adddata">
       <input style="font-family:verdana;font-size:11px;" type="button" name="addValBtn" value="Add Data" onclick="addData()">&nbsp;&nbsp;</digi:trn>
     </td>
-  </tr>
+  </tr>  
   <tr>
     <td bgColor=#dddddb height="25" align="center" colspan="6">
       <c:set var="trn"><digi:trn key="aim:btn:save">Save</digi:trn></c:set>      
@@ -161,6 +188,9 @@ function selectLocation(index){
       <digi:trn key="aim:addeditdata:close"><input class="dr-menu" type="button" name="close" value="Close" onclick="window.close();"></digi:trn>
     </td>
   </tr>
+   <tr><td width="100%" colspan="6"><br>
+   		<font color="red"> *<digi:trn key="aim:equalValues">Please ensure that for every actual value,you filled corresponding base and target values</digi:trn></font> 
+   </td></tr>
 </table>
 
 </digi:form>

@@ -126,6 +126,28 @@ public class TeamUtil {
         return col;
     }
 
+    public static Set getRelatedTeamsForMember(TeamMember tm) {
+    	Set teams=new TreeSet();
+    	AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
+	    
+		teams.add(ampTeam);
+		teams.addAll(TeamUtil.getAmpLevel0Teams(tm.getTeamId()));
+		
+		return teams;
+    }
+    
+    public static Set getComputedOrgs(Collection relatedTeams) {
+    	Set teamAssignedOrgs=new TreeSet();
+    	Iterator i=relatedTeams.iterator();
+		while (i.hasNext()) {
+			AmpTeam team = (AmpTeam) i.next();
+			if("Computed".equals(team.getAccessType())) {
+				teamAssignedOrgs.addAll(team.getOrganizations());
+			}
+		}
+		return teamAssignedOrgs;
+    }
+    
     public static Collection getAllTeams(Long teamId[]) {
         Session session = null;
         Collection col = new ArrayList();

@@ -96,7 +96,8 @@ public class GatePermission extends Permission {
          */
     @Override
     public Set<String> getAllowedActions(Map scope) {
-	Queue<String> gateParametersQ = new ArrayBlockingQueue<String>(gateParameters.size(), true, gateParameters);
+	Queue<String> gateParametersQ =null;
+	if(gateParameters.size()>0) gateParametersQ=new ArrayBlockingQueue<String>(gateParameters.size(), true, gateParameters);
 	Gate gate = Gate.instantiateGate(scope, gateParametersQ, gateTypeName);
 	try {
 	    if (gate.isOpen())

@@ -103,7 +103,7 @@ public abstract class Gate extends PropertyListable {
 
 		try {
 		     	boolean b=logic();
-		     	logger.info("Gate "+this.getClass().getSimpleName()+" "+(b?"approves":"rejects")+" access. Gate state is: "+state);
+		     	logger.debug("Gate "+this.getClass().getSimpleName()+" "+(b?"approves":"rejects")+" access. Gate state is: "+state);
 			return b;
 		} catch (Exception e) {
 			logger.error("Gate "+this.getClass().getName()+" logic has thrown an exception: ", e);

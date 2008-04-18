@@ -122,30 +122,23 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		
 				
 		this.setAmpTeams(new TreeSet());
-		teamAssignedOrgs=new TreeSet();
+	
+		
 		if(tm!=null){
-//			set the computed workspaces properties
-			AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
-			
-		    AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
+		this.setAmpTeams(TeamUtil.getRelatedTeamsForMember(tm));			
+		//set the computed workspace orgs
+		this.setTeamAssignedOrgs(TeamUtil.getComputedOrgs(this.getAmpTeams()));
+
+			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
 		    
 			if(tempSettings==null)
 				if(tm!=null)
 				    tempSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 			
 		    if (this.getCurrency() == null)
-		    	this.setCurrency(tempSettings.getCurrency());		    
-			this.getAmpTeams().add(ampTeam);
-			this.getAmpTeams().addAll(TeamUtil.getAmpLevel0Teams(tm.getTeamId()));
-			Iterator i=this.getAmpTeams().iterator();
-			while (i.hasNext()) {
-				AmpTeam team = (AmpTeam) i.next();
-				if("Computed".equals(team.getAccessType())) {
-					teamAssignedOrgs.addAll(team.getOrganizations());
-				}
-			}
-		
-
+		    	this.setCurrency(tempSettings.getCurrency());	
+		    
+			
 			if (this.getFromYear()==null && tempSettings.getReportStartYear()!=null && tempSettings.getReportStartYear().intValue()!=0)
 			    this.setFromYear(tempSettings.getReportStartYear());
 			
@@ -807,6 +800,14 @@ public class AmpARFilter extends PropertyListable implements Filter {
 
 	public void setTypeOfAssistance(Set<AmpCategoryValue> typeOfAssistance) {
 		this.typeOfAssistance = typeOfAssistance;
+	}
+
+	public Set getTeamAssignedOrgs() {
+		return teamAssignedOrgs;
+	}
+
+	public void setTeamAssignedOrgs(Set teamAssignedOrgs) {
+		this.teamAssignedOrgs = teamAssignedOrgs;
 	}
 
 

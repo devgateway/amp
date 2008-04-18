@@ -95,15 +95,15 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 								}
 							}
 		   		   		}
-						else 
+//						else 
 //							if(!checkTypeAndParentOfModule(ampTreeVisibility) || !checkTypeAndParentOfModule2(FeaturesUtil.getModuleVisibility(name))) //parent or type is not ok
-							if(!checkTypeAndParentOfModule(ampTreeVisibility)) 
+						if(!checkTypeAndParentOfModule(ampTreeVisibility)) 
 							{
 								try{
 									//logger.info("Updating module: "+this.getName() +" with  id:"+ ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId() +"and his parent "+parentModule);
 									synchronized (this) {
 										if(!checkTypeAndParentOfModule2(FeaturesUtil.getModuleVisibility(name))){
-											logger.info("Trying to Updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
+											logger.info("Trying to update module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
 											AmpModulesVisibility moduleAux= ampTreeVisibility.getModuleByNameFromRoot(this.getName());
 											if(moduleAux!=null)
 												if(moduleAux.getId()!=null)

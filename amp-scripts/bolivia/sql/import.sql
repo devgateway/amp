@@ -161,7 +161,8 @@ codent,
 codent,
 tt.amp_org_type_id
 FROM sisfin_db.`ent` as e,  amp_org_type as tt
-where  tt.org_type_code='OTHER' and not exists (select a.codage from sisfin_db.`age` as a where a.codage=e.codent);
+where  tt.org_type_code='OTHER' and not exists  
+	(select a.codage from sisfin_db.`age` as a where a.codage=e.codent   and upper(a.nomage)=upper(e.noment));
 
 
 /* importing activity statuses */
@@ -279,23 +280,24 @@ select 'mapping executing agencies to activities';
 
 
 insert into amp_org_role (activity,organisation,role,percentage)
-select 
-	a.amp_activity_id, 
-	o.amp_org_id, 
-	ar.amp_role_id, 
+select
+	a.amp_activity_id,
+	o.amp_org_id,
+	ar.amp_role_id,
 	m.porcpart
-from  
-	sisfin_db.`conv_entejec` as m, 
-	amp_activity as a, 
-	amp_organisation as o , 
-	amp_role as ar
+from
+	sisfin_db.`conv_entejec` as m,
+	amp_activity as a,
+	amp_organisation as o ,
+	amp_role as ar,
+  	sisfin_db.`ent` as ent
 
-where 
-	ar.role_code='EA' 
-	and a.old_id=m.numconv 
-	and o.old_id = m.codentejec;
---	and not exists (select ag.codage from sisfin_db.age as ag where ag.codage=o.old_id);
-
+where
+	ar.role_code='EA'
+	and a.old_id=m.numconv
+    and ent.codent=o.old_id
+	and o.old_id = m.codentejec
+	and upper(ent.noment)=upper(o.name);
 
 
 
@@ -422,7 +424,7 @@ AMP_ORGANISATION AS org,
 sisfin_db.`age` AS o,
 sisfin_db.`claves` AS ta,
 amp_category_value AS catval   
-WHERE c.numconv=a.old_id AND org.old_id=o.codage 
+WHERE c.numconv=a.old_id AND org.old_id=o.codage  and upper(org.name)=upper(o.nomage)
 AND c.codage=org.old_id AND ta.nomdato='cvecoop' 
 AND ta.valdato=c.cvecoop AND catval.category_value=ta.interp 
 AND catval.amp_category_class_id=10;
@@ -753,7 +755,8 @@ select 'cleaning duplicated agencies';
            name in
                 (
                 select table1.name from
-                (select count(*), name from amp_organisation group by name having count(*) > 1) as table1
+                (
+			select count(*), name from amp_organisation group by name having count(*) > 1) as table1
                 )
                 and amp_org_id not in (select  organisation from amp_org_role  )
                 and amp_org_id not in (select amp_donor_org_id from amp_funding);

@@ -29,6 +29,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.utils.AmpCollectionUtils;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.user.User;
@@ -578,21 +579,25 @@ public class AddAmpActivity extends Action {
         eaForm.setWorkingTeamLeadFlag("no");
         eaForm.setTeamLead(teamLeadFlag);
 
-      AmpModulesVisibility moduleToTest=FeaturesUtil.getModuleVisibility("Activity Approval Process");
+      
       boolean activityApprovalStatusProcess=false;
-      AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateById(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"));
-      if(moduleToTest!=null) 
-    	  {
-    	  	activityApprovalStatusProcess= moduleToTest.isVisibleTemplateObj(currentTemplate);
-    	  }
+      
       if (!eaForm.isEditAct() || logframepr.compareTo("true") == 0 || request.getParameter("logframe") != null) {
        if (teamMember != null)
         if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0)
             eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
           else
             {
-        	  if(activityApprovalStatusProcess==true ) eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.STARTED_STATUS);
-        	  	else eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
+        	  synchronized (ampContext) {
+	        	  //ampContext=this.getServlet().getServletContext();
+	        	  AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+	        	 // AmpModulesVisibility moduleToTest=FeaturesUtil.getModuleVisibility("Activity Approval Process");
+	        	  AmpModulesVisibility moduleToTest=ampTreeVisibility.getModuleByNameFromRoot("Activity Approval Process");
+	        	  if(moduleToTest!=null) 
+	          	  	activityApprovalStatusProcess= moduleToTest.isVisibleTemplateObj(ampTreeVisibility.getRoot());
+	        	  if(activityApprovalStatusProcess==true ) eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.STARTED_STATUS);
+	        	  	else eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
+	        	  }
             }
       }
       else {

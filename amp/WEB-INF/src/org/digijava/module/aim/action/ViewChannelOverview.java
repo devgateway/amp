@@ -5,7 +5,6 @@
 package org.digijava.module.aim.action;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,8 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -37,7 +34,6 @@ import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.Logic;
@@ -53,13 +49,11 @@ public class ViewChannelOverview extends TilesAction {
 
 	private static Logger logger = Logger.getLogger(ViewChannelOverview.class);
 
-	private ActionErrors errors;
 
 	public ActionForward execute(ComponentContext context,
 			ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 
-		errors	= new ActionErrors();
 		HttpSession session = request.getSession();
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 		//PermissionUtil.resetScope(session);
@@ -90,8 +84,10 @@ public class ViewChannelOverview extends TilesAction {
 					formBean.setNumImplLocationLevels( implLocationLevels.size() );
 
 			Activity activity = ActivityUtil.getChannelOverview(id);
+			
+			formBean.clearMessages();
 
-			createWarnings(activity,teamMember.getTeamHead());
+			createWarnings(activity,teamMember.getTeamHead(), formBean);
 
 			AmpActivity ampact = ActivityUtil.getAmpActivity(id);
 
@@ -249,24 +245,21 @@ public class ViewChannelOverview extends TilesAction {
 				formBean.setCanView(false);
 			}*/
 		}
-		saveErrors(request, errors);
 		return null;
 	}
 
-	private void createWarnings (Activity activity, boolean isTeamHead) {
+	private void createWarnings (Activity activity, boolean isTeamHead, ChannelOverviewForm formBean) {
 		if (activity.getDraft()!=null && activity.getDraft()) {
-			errors.add(
-				"title", new ActionError("error.aim.draftActivity")
-			);
+			formBean.addError("error.aim.draftActivity", 
+					"This is a draft activity");
 
 		}
 		else //we are not checking for TL because of AMP-2705
 		{
 			//System.out.println("the team member is not the TEAM LEADER!!!!!!!!");
 			if ( Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus()) ) {
-				errors.add(
-						"title", new ActionError("error.aim.activityAwaitingApproval")
-				);
+				formBean.addError("error.aim.activityAwaitingApproval", 
+						"The activity is awaiting approval");
 			}
 		}
 	}

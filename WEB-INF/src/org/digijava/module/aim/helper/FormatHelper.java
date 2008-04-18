@@ -169,6 +169,7 @@ public class FormatHelper {
    }
    
    public static String formatDate(Date date) {
+	if(date==null) return null;
 	String defaultFormat = FeaturesUtil
 		.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
 	SimpleDateFormat formater = new SimpleDateFormat(defaultFormat);

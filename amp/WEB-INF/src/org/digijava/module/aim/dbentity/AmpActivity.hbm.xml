@@ -109,7 +109,7 @@
 		<property name="contractors" column="contractors" type="org.digijava.kernel.db.SafeClobType"/>
 
 		<property name="funAmount" column="proj_cost_amount" type="java.lang.Double" />
-		<property name="funDate" column="proj_cost_date" type="java.lang.String" />
+		<property name="funDate" column="proj_cost_date" type="java.util.Date" />
 		<property name="currencyCode" column="proj_cost_currcode" type="java.lang.String" />
 		
 		<!-- Start Bolivia Specific Fields -->

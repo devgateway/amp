@@ -121,8 +121,8 @@ public abstract class Permissible implements Identifiable {
 			Set<String> allowedActions = permissionMapForPermissible.getPermission().getAllowedActions(scope);
 			if(allowedActions!=null) actions.addAll(allowedActions);
 			if(permissionMapForPermissible.getObjectIdentifier()==null)
-			logger.info("Actions allowed by the Global Permission "+permissionMapForPermissible.getPermission().getName()+": "+actions); else
-			logger.info("Actions allowed for object "+ permissionMapForPermissible.getObjectLabel() + " (id="+permissionMapForPermissible.getObjectIdentifier()
+			logger.debug("Actions allowed by the Global Permission "+permissionMapForPermissible.getPermission().getName()+": "+actions); else
+			logger.debug("Actions allowed for object "+ permissionMapForPermissible.getObjectLabel() + " (id="+permissionMapForPermissible.getObjectIdentifier()
 					+ ") of type " + permissionMapForPermissible.getPermissibleCategory() + " are "
 					+ actions); }
 		return actions;

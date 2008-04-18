@@ -46,7 +46,7 @@
 		
 		
 		<layout name="footerLayout" file="footerLayout.jsp">
-			<put name="version">1.10a</put>
+			<put name="version">1.10b</put>
 		    <put-item name="transmode" module="translation" instance="default" teaser="modeSwitch"/>
 			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>
 			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>

@@ -153,20 +153,7 @@
 												</td>
 											</tr>
 											
-											<tr>
-												<td>
-													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-													<c:set var="translation">
-														<digi:trn key="aim:clickToCleanFeatureManager">Click here to clean up Feature Manager </digi:trn>
-													</c:set>
-													<jsp:useBean id="urlParams14" type="java.util.Map" class="java.util.HashMap"/>
-													<c:set target="${urlParams14}" property="action" value="cleanUp"/>
-													 <digi:link href="/visibilityManager.do" name="urlParams14" 
-													title="${translation}" ><digi:trn key="aim:cleanFeatureManager">Clean up Feature Manager</digi:trn></digi:link>
-													
-												</td>
-											</tr>
-											
+									
 											<tr>
 												<td>
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>

@@ -63,30 +63,38 @@ public class FeatureVisibilityTag extends BodyTagSupport {
  	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
  try{
 	 String cache=(String) ampContext.getAttribute("FMcache");
-	   if(cache==null || cache=="" || "read".compareTo(cache)==0) ;
-	   else
-	   if("readwrite".compareTo(cache)==0)
-	   {
+//	   if(cache==null || cache=="" || "read".compareTo(cache)==0) ;
+//	   else
+//	   if("readwrite".compareTo(cache)==0)
+//	   {
 		   //logger.info("	Feature visibility: cache is in writing mode...");
-		   if(ampTreeVisibility!=null)
+		   if(ampTreeVisibility!=null){
+				 if(!existModule(ampTreeVisibility)) return SKIP_BODY;
+
 	 		   if(!existFeatureinDB(ampTreeVisibility)){
-	 			   //if(FeaturesUtil.getFeatureVisibility(name)==null)
-	 			   //{
+	 			  synchronized (this) {
+	 				  if(FeaturesUtil.getFeatureVisibility(name)==null)
+	 				  {
 	                    AmpModulesVisibility moduleByNameFromRoot = ampTreeVisibility.getModuleByNameFromRoot(this.getModule());
 	                    Long id=null;
 	                    if(moduleByNameFromRoot!=null){
 	                       id = moduleByNameFromRoot.getId();
-	                       try {
-	                            FeaturesUtil.insertFeatureWithModuleVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName(), this.getHasLevel());
-	                                  AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-	                                  ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-	                                  ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
+	                       try {	
+		                            FeaturesUtil.insertFeatureWithModuleVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName(), this.getHasLevel());
+		                            AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+		                            ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+	                                ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
 	                           	}
 	                           	catch (DgException ex) {throw new JspException(ex);}
 	                     }
-	                    else return EVAL_BODY_BUFFERED;
-	 			   //}
+	                    else {
+	                    	logger.info("Feature: "+this.getName() + " has the parent: "+this.getModule()+ " which doesn't exist in DB");
+	                    	return SKIP_BODY;
+	                    }
+	 				  }
+	 			  }
 	 		   }
+		   }
 		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 		   if(ampTreeVisibility!=null)
 	   		   if(!isModuleTheParent(ampTreeVisibility)){
@@ -99,16 +107,10 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 	   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 	   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 			   }
-		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
-		   if(!existModule(ampTreeVisibility)) {
-			   //error
-			  //System.out.println("error!!!! module "+this.getModule()+" doesn't exist");
-			  return SKIP_BODY;
-		   }
-	   }
+//	   }
 	   
  	   
- }catch (Exception e) {e.printStackTrace();}
+ 	}catch (Exception e) {e.printStackTrace();}
 	   
 		return EVAL_BODY_BUFFERED;//super.doStartTag();
 	}

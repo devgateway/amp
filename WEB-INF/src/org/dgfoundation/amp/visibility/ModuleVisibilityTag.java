@@ -74,38 +74,47 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		try
 		{
 			String cache=(String) ampContext.getAttribute("FMcache");
-			   if(cache==null || cache=="" || "read".compareTo(cache)==0) ;
-			   else
-			   if("readwrite".compareTo(cache)==0)
-			   {
+//			   if(cache==null || cache=="" || "read".compareTo(cache)==0) ;
+//			   else
+//			   if("readwrite".compareTo(cache)==0)
+//			   {
 				  //logger.info("Module visibility: cache is in writing mode...");
 				   if(ampTreeVisibility!=null)
 					{
-						if(!existModuleinDB(ampTreeVisibility) && FeaturesUtil.getModuleVisibility(name)==null) //for concurent users...
-					//	if(!existModuleinDB(ampTreeVisibility))
+//						if(!existModuleinDB(ampTreeVisibility) && FeaturesUtil.getModuleVisibility(name)==null) //for concurent users...
+					   
+						if(!existModuleinDB(ampTreeVisibility))
 						{//insert without parent??
-								FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName(),this.getHasLevel());
-								logger.info("Inserting module: " + this.getName());
-								AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-								ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-								ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+							synchronized (this) {
+								if(FeaturesUtil.getModuleVisibility(name)==null){
+									FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName(),this.getHasLevel());
+									logger.info("Inserting module: " + this.getName());
+									AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+									ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+									ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+								}
+							}
 		   		   		}
 						else 
-							if(!checkTypeAndParentOfModule(ampTreeVisibility) || !checkTypeAndParentOfModule2(FeaturesUtil.getModuleVisibility(name))) //parent or type is not ok
-							//if(!checkTypeAndParentOfModule(ampTreeVisibility)) 
+//							if(!checkTypeAndParentOfModule(ampTreeVisibility) || !checkTypeAndParentOfModule2(FeaturesUtil.getModuleVisibility(name))) //parent or type is not ok
+							if(!checkTypeAndParentOfModule(ampTreeVisibility)) 
 							{
 								try{
 									//logger.info("Updating module: "+this.getName() +" with  id:"+ ampTreeVisibility.getModuleByNameFromRoot(this.getName()).getId() +"and his parent "+parentModule);
-									logger.info("Trying to Updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
-									AmpModulesVisibility moduleAux= ampTreeVisibility.getModuleByNameFromRoot(this.getName());
-									if(moduleAux!=null)
-										if(moduleAux.getId()!=null)
-										{
-											FeaturesUtil.updateModuleVisibility(moduleAux.getId(), parentModule);
-											logger.info(".........updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
+									synchronized (this) {
+										if(!checkTypeAndParentOfModule2(FeaturesUtil.getModuleVisibility(name))){
+											logger.info("Trying to Updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
+											AmpModulesVisibility moduleAux= ampTreeVisibility.getModuleByNameFromRoot(this.getName());
+											if(moduleAux!=null)
+												if(moduleAux.getId()!=null)
+												{
+													FeaturesUtil.updateModuleVisibility(moduleAux.getId(), parentModule);
+													logger.info(".........updating module: "+this.getName() +" with  id:" +"and his parent "+parentModule);
+												}
 										}
 									}
-									catch(Exception e)
+								}
+								catch(Exception e)
 									{
 										e.printStackTrace();
 									}
@@ -115,8 +124,8 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 							}
 						
 					}
-					else return SKIP_BODY;
-			   }
+//					else return SKIP_BODY;
+//				}
 			
 			
 		}catch(Exception e)

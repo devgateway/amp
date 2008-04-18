@@ -524,7 +524,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Government Fax Number" feature="Project Coordinator">
+														<field:display name="Project Coordinator Fax Number" feature="Project Coordinator">
 														<tr>
 															<td></td>
 															<td align="right">
@@ -608,7 +608,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Government Fax Number" feature="Sector Ministry Contact">
+														<field:display name="Sector Ministry Fax Number" feature="Sector Ministry Contact">
 														<tr>
 															<td></td>
 															<td align="right">

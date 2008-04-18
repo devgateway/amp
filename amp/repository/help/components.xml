@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<config>
-	
- 	<module>
- 		<teaser name="helpTopics" action="viewHelpTopics.do">
-			helpTopics.jsp
-		</teaser>
-	</module>
-</config>

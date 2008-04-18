@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<config>
-	<secondary-pages>
-		<page name="importExportManager" title="Import/Export Manager"/>
-	</secondary-pages>
-	<module>
-	</module>
-</config>

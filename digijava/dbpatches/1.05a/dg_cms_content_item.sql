@@ -1,1 +1,0 @@
-ALTER TABLE dg_cms_content_item MODIFY FILE_CONTENT longblob;

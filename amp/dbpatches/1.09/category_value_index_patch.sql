@@ -1,1 +1,0 @@
-CREATE INDEX value ON amp_category_value (category_value(7));

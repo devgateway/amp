@@ -1,1 +1,0 @@
-INSERT INTO amp_global_settings(settingsName, settingsValue, possibleValues, description) VALUES ('Max Inactive Session Interval',300,'t_Integer','The maximum amount of time in seconds that a session is allowed to live without activity');

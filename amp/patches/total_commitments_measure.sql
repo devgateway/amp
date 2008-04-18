@@ -1,1 +1,0 @@
-INSERT INTO `amp_measures` (measureId,measureName,aliasName,type) VALUES (8,'Total Commitments','Total Commitments','A');

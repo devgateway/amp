@@ -51,11 +51,11 @@
 				</tr>
 				<tr>
 					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%"
+						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%"
 						valign="top" align="left">
-							<tr bgColor=#3754a1>
+							<tr>
 								<td vAlign="top" width="100%">
-									<c:set var="selectedTab" value="6" scope="request"/>
+									<c:set var="selectedTab" value="5" scope="request"/>
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
 								</td>
 							</tr>

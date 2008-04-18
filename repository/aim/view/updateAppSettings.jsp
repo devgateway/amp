@@ -60,11 +60,12 @@
 				</tr>
 				<tr>
 					<td noWrap width=571 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%"
+						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%"
 						valign="top" align="left">
-							<tr bgColor=#3754a1>
+							<tr>
 								<td vAlign="top" width="100%">
-									<c:set var="selectedTab" value="5" scope="request"/>
+									<c:set var="selectedTab" value="0" scope="request"/>
+									<c:set var="selectedSubTab" value="1" scope="request"/>
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
 								</td>
 							</tr>
@@ -170,7 +171,19 @@
 															</html:select>
 														</td>
 													</tr>
-                                                    <tr>
+ 													<tr>
+														<td bgcolor="#f4f4f2"  align="right" width="50%">
+															<digi:trn key="aim:defValidation">
+															Validation</digi:trn>
+														</td>
+														<td align="left" width="50%" bgcolor="#f4f4f2">
+															<select class="inp-text" disabled="disabled">
+																<option value="">Validate New Only</option>
+																<option value="">Validate All</option>
+															</select>
+														</td>
+													</tr>
+													<tr>
 														<td bgcolor="#f4f4f2" align="right" width="50%">
 															<digi:trn key="aim:reportsDefaultStartYear">Reports Default Start Year</digi:trn>
 														</td>

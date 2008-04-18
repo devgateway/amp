@@ -188,7 +188,7 @@ public Cell filter(Cell metaCell,Set ids) {
 		 applyMetaFilter("Componente", ArConstants.COMPONENTE_PERCENTAGE, metaCell, ret);
 		 applyMetaFilter("National Planning Objectives", ArConstants.NPO_PERCENTAGE, metaCell, ret);
 		 applyMetaFilter("Primary Program", ArConstants.PROGRAM_PERCENTAGE, metaCell, ret);
-		 applyMetaFilter("Secodary Program", ArConstants.PROGRAM_PERCENTAGE, metaCell, ret);
+		 applyMetaFilter("Secondary Program", ArConstants.PROGRAM_PERCENTAGE, metaCell, ret);
 		}
 		
 		//if(ret.getMergedCells().size()>0) 

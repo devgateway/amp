@@ -20,14 +20,20 @@
 <c:set target="${urlParamsChild}" property="subtab" value="2"/>			
 
 <style type="text/css">
+
 #main {
 	clear:both;
 	text-align: left;
 	border: 1px solid #666;
 	background: #ebebeb;
 	width: 100%;
-	height: 25px;
+	height:27px;
 }
+
+html>body #main {
+	height:25px;
+}
+
 
 #tabs {
 	font-family: tahoma,verdana,sans-serif;
@@ -36,7 +42,6 @@
 	text-align: center;
 	font-weight: bold;
 }
-
 
 #tabs ul {
 	display: inline;
@@ -51,11 +56,11 @@
 
 
 
-#tabs a,span { 
+#tabs a, #tabs span { 
 	font-size: 8pt;
 }
 
-#tabs ul>li>a { 
+#tabs ul li a { 
 	background:#222E5D url(/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top;
 	color:#FFFFFF;
 	float:left;
@@ -66,12 +71,12 @@
 
 }
 
-#tabs ul>li>a>div { 
+#tabs ul li a div { 
 	background: url(/TEMPLATE/ampTemplate/images/tabrightcorner.gif) right top no-repeat;
 	padding: 6px 10px 6px 10px;
 }
 
-#tabs ul>li>span>a { 
+#tabs ul li span a { 
 	background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top;
 	color:#FFFFFF;
 	float:left;
@@ -82,7 +87,7 @@
 
 }
 
-#tabs ul>li>span>a>div { 
+#tabs ul li span a div { 
 	background: url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) right top no-repeat;
 	padding: 6px 10px 6px 10px;
 }
@@ -133,8 +138,7 @@
 	padding: 6px 4px 0px 0px;
 }
 
-#subtabs a,span { 
-	width: 80px; 
+#subtabs a, #subtabs span { 
 	font-size: 8pt; 
 }
 
@@ -142,7 +146,7 @@
 	color:#000;
 }
 
-#subtabs ul>li>span {
+#subtabs ul li span {
 	position: relative;
 	top: 0;
 	margin: 0 0px 0 0;
@@ -152,7 +156,7 @@
 	color: #fff;
 }
 
-#subtabs ul>li>div>span {
+#subtabs ul li div span {
 	position: relative;
 	top: 0;
 	margin: 0 0px 0 0;
@@ -168,9 +172,11 @@
 	font-family: tahoma,verdana,sans-serif;
 	font-size: 8pt;
 	font-weight: bold;
+
 }
 
 </style>
+<div style="width:751">
 				<DIV id="tabs">
 					<UL>
 						<c:if test="${selectedTab  == '0'}">
@@ -483,5 +489,5 @@
 
 				</logic:present>
 
-
+</div>
 

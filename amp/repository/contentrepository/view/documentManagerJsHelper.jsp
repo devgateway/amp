@@ -708,13 +708,11 @@ function toggleView(elementId, iconId, isMinus) {
 	if (isMinus) {
 			icon.src				= '/repository/contentrepository/view/images/dhtmlgoodies_plus.gif';
 			element.style.display	= 'none';
-			
 			isMinus		= false;
 	}
 	else{
 			icon.src	= '/repository/contentrepository/view/images/dhtmlgoodies_minus.gif';
-			element.style.display	= 'table-row';
-			
+			element.style.display	= '';
 			isMinus		= true;
 	}
 	return isMinus;

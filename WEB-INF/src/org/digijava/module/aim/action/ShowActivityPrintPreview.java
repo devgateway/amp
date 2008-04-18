@@ -125,7 +125,7 @@ public class ShowActivityPrintPreview
                 	pg.setFunAmountAsDouble(activity.getFunAmount());
                 }                  
                 pg.setCurrencyCode(activity.getCurrencyCode());
-                pg.setFunDate(activity.getFunDate());
+                pg.setFunDate(FormatHelper.formatDate(activity.getFunDate()));
                 eaForm.setProProjCost(pg);
 
 

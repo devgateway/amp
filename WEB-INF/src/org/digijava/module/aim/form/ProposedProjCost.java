@@ -1,4 +1,6 @@
 package org.digijava.module.aim.form;
+import java.util.Date;
+
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.helper.FormatHelper;
 

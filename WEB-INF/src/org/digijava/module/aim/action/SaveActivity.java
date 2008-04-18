@@ -195,7 +195,7 @@ public class SaveActivity extends Action {
                 activity.setCurrencyCode(null);
             }else{
                 activity.setFunAmount(eaForm.getProProjCost().getFunAmountAsDouble());
-                activity.setFunDate(eaForm.getProProjCost().getFunDate());
+                activity.setFunDate(FormatHelper.parseDate(eaForm.getProProjCost().getFunDate()).getTime());
                 activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
             }
 
@@ -494,7 +494,7 @@ public class SaveActivity extends Action {
                     activity.setCurrencyCode(null);
                 }else{
                     activity.setFunAmount(eaForm.getProProjCost().getFunAmountAsDouble());
-                    activity.setFunDate(eaForm.getProProjCost().getFunDate());
+                    activity.setFunDate(FormatHelper.parseDate(eaForm.getProProjCost().getFunDate()).getTime());
                     activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
                 }
 				activity.setAmpId(eaForm.getAmpId());

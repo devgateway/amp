@@ -86,7 +86,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
     private Double funAmount;
     private String currencyCode;
-    private String funDate;
+    private Date funDate;
 
     private Set referenceDocs;
 
@@ -974,7 +974,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
         return funAmount;
     }
 
-    public String getFunDate() {
+    public Date getFunDate() {
         return funDate;
     }
 
@@ -998,7 +998,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
         this.funAmount = funAmount;
     }
 
-    public void setFunDate(String funDate) {
+    public void setFunDate(Date funDate) {
         this.funDate = funDate;
     }
 

@@ -49,12 +49,26 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private String implemLocationLevel;
 	private int numImplLocationLevels	= 0;
 	private String buttonText;  // added by Akash for activity approval
-        private List primaryPrograms;
-        private List secondaryPrograms;
-        private List nationalPlanObjectivePrograms;
+    private List primaryPrograms;
+    private List secondaryPrograms;
+    private List nationalPlanObjectivePrograms;
         
     private OrgProjectId selectedOrganizations[]; //To Show organitations name in channel overview
-    
+	private    HashMap<String,String> errors = new HashMap<String, String>();
+	private    HashMap<String,String> messages = new HashMap<String, String>();
+	
+	public void addMessage(String key, String value) {
+	    this.messages.put(key, value) ;
+	}
+
+	public void addError(String key, String value) {
+	    this.errors.put(key, value) ;
+	}
+
+	public void clearMessages(){
+        this.errors.clear();
+	    this.messages.clear();
+	}
     /**
      * 
      * @return
@@ -516,5 +530,21 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
                     boolean flag=ActivityUtil.isImplLocationCountry(activity.getActivityId());
                     return flag;
                 }
+
+				public HashMap<String, String> getErrors() {
+					return errors;
+				}
+
+				public void setErrors(HashMap<String, String> errors) {
+					this.errors = errors;
+				}
+
+				public HashMap<String, String> getMessages() {
+					return messages;
+				}
+
+				public void setMessages(HashMap<String, String> messages) {
+					this.messages = messages;
+				}
         
 }

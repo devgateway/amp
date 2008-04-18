@@ -257,8 +257,21 @@ function commentWin(val) {
 								</TD>
 							</TR>
 
-							<TR bgColor=#f4f4f2>
-								<TD vAlign="top" align="center" width="100%"><digi:errors /></TD>
+							<TR bgColor=#f4f4f2 >
+								<TD vAlign="top" align="center" width="100%">
+								<font color="#FF0000">
+                            		<logic:iterate id="element" name="aimChannelOverviewForm" property="errors">
+                               			<digi:trn key="${element.key}">
+                                   			<bean:write name="element" property="value"/>                                   			
+                               			</digi:trn>
+                           			</logic:iterate>
+                       				<logic:iterate id="element" name="aimChannelOverviewForm" property="messages">
+                               			<digi:trn key="${element.key}">
+                                   			<bean:write name="element" property="value"/>
+                               		</digi:trn>
+                           			</logic:iterate>
+                   				</font>
+								</TD>
 							</TR>
 							<TR bgColor=#f4f4f2>
 								<TD vAlign="top" align="left" width="100%">

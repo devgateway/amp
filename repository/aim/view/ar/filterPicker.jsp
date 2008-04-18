@@ -373,8 +373,8 @@
 							<td colspan="5"><digi:trn key="rep:filer:DonorType">Donor Type</digi:trn>
 								<br/>
 							
-								<html:select style="width: 190px"
-								multiple="true" property="selectedDonorTypes" size="3"
+								<html:select style="width:150px"
+								multiple="true" property="selectedDonorTypes" size="3" 
 								styleClass="inp-text">
 								<html:optionsCollection property="donorTypes" value="ampOrgTypeId"
 									label="orgType" />
@@ -389,7 +389,7 @@
 							<td colspan="5">
 								<digi:trn key="rep:filer:DonorGroup">Donor Group</digi:trn>
 								<br />
-								<html:select multiple="true" style="width: 190px"
+								<html:select multiple="true" style="width:190px"
 								property="selectedDonorGroups" size="3" styleClass="inp-text">
 								<html:optionsCollection property="donorGroups"
 									value="ampOrgGrpId" label="orgGrpName" />
@@ -419,7 +419,7 @@
 				    	</tr>
 				        <tr>
 				                  	<td>
-					                  	<html:select style="width: 190px"
+					                  	<html:select style="width:400px"
 											multiple="true" property="selectedBeneficiaryAgency" size="3"
 											styleClass="inp-text">
 										<html:optionsCollection property="beneficiaryAgency" label="name"
@@ -438,7 +438,7 @@
 						</tr>
 				        <tr>
 				                <td>
-					                  <html:select style="width: 190px"
+					                  <html:select style="width:400px"
 									multiple="true" property="selectedExecutingAgency" size="3"
 									styleClass="inp-text">
 								
@@ -457,7 +457,7 @@
 						</tr>
 						<tr>
   							<td>	
-  									<html:select style="width: 190px" multiple="true"
+  									<html:select style="width:400px" multiple="true"
 									property="selectedImplementingAgency" size="3"
 									styleClass="inp-text">
 									<html:optionsCollection property="implementingAgency" label="name"

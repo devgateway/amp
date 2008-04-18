@@ -605,7 +605,7 @@ public class EditActivity
         
         //eaForm.setApprovalStatus(actApprovalStatus);
         if (tm != null) {
-            if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0)
+            if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0 && tm.getTeamId().equals(activity.getTeam().getAmpTeamId()))
               eaForm.setApprovalStatus(Constants.APPROVED_STATUS);
             else
               eaForm.setApprovalStatus(Constants.STARTED_STATUS);//actApprovalStatus);

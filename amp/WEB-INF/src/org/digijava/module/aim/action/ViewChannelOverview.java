@@ -154,7 +154,7 @@ public class ViewChannelOverview extends TilesAction {
 		 	if (!(activity.getDraft()!=null && activity.getDraft()) && ( actApprovalStatus != null &&
 		 			Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(actApprovalStatus.toLowerCase())  ))
 		 	{
-		 		if (workingTeamFlag && teamLeadFlag)
+		 		if (workingTeamFlag && teamLeadFlag && teamMember.getTeamId().equals(ampact.getTeam().getAmpTeamId()))
 		 			formBean.setButtonText("validate");
 		 		else
 		 			formBean.setButtonText("approvalAwaited");

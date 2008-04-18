@@ -167,44 +167,56 @@ background-color: yellow;
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/tooltip/wz_tooltip.js'/>" > .</script>
 
 <style type="text/css"> 
-	#tabview_container .yui-nav {  }
+	#tabview_container .yui-nav{
+
+	}
+	#tabview_container .yui-nav li {
+		margin-right:0;
+ 	}
+
 	#tabview_container .yui-content { border-top-width: 2px; border-top-style: solid; border-top-color: #006699;}
-	#tabview_container .yui-nav li { padding-right: 3px }
+	
 	#tabview_container .yui-nav li a { 
 			float:left;
-			margin-left: 2px;
 			cursor:pointer; 
 			text-decoration: none; 
-			font-size: 10px; 
+			font-size: 8pt; 
+			color:#fff;
 			font-weight: bold;
-			padding:2px 2px 2px 2px;
 			background-color: white;
-			border-width: 1px;
-			border-style: solid;
-			border-color: #006699;
+			margin:0pt 0px 0pt 0pt;
+			background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top;
 	}
+	
 	#tabview_container li.selected a{ 
 			float:left;
-			margin-left: 2px;
 			cursor:pointer; 
 			text-decoration: none; 
-			font-size: 10px; 
+			font-size: 8pt; 
 			font-weight: bold;
-			padding:2px 2px 2px 2px;
-			background-color: #006699;
+			background:#222E5D url(/TEMPLATE/ampTemplate/images/tableftcorner.gif) no-repeat scroll left top;
 			color: white;
-			border-width: 1px;
-			border-style: solid;
-			border-color: #006699;
+	}
+	#tabview_container li a div{ 
+			background:url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) no-repeat scroll right top;
+			padding: 6px 10px 6px 10px;
+	}
+		
+	#tabview_container li.selected a div{ 
+			background:url(/TEMPLATE/ampTemplate/images/tabrightcorner.gif) no-repeat scroll right top;
+			padding: 6px 10px 6px 10px;
 	}
 	#tabview_container .yui-nav li a:hover {
-			background-color: #006699;
-			color: white;
-			border-width: 1px;
-			border-style: solid;
-			border-color: #006699;
+	    background: #455786 url(/TEMPLATE/ampTemplate/images/tableftcornerhover.gif) left top no-repeat;  
 	}
-</style>
+	
+	#tabview_container .yui-nav li a:hover div {
+	    background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;  
+	}
+	#tabview_container .yui-content {
+		border-top:1px solid #000;
+	}
+	</style>
 
 <!-- END - For DHTML Tab View of Filters -->
 

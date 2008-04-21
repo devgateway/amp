@@ -100,12 +100,12 @@ public class ShowActivityPrintPreview
                                  HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         EditActivityForm eaForm = (EditActivityForm) form;
-        
-        if(eaForm.getActivityId()==null){
-        	eaForm.setActivityId(new Long(request.getParameter("activityid")));        	
+        Long actId = eaForm.getActivityId();  
+        if(actId==null){
+        	actId=new Long(request.getParameter("activityid"));        	
         }
         
-        Long actId = eaForm.getActivityId();        
+             
         if(actId != null) {
             HttpSession session = request.getSession();
             TeamMember tm = (TeamMember) session.getAttribute("currentMember");
@@ -117,7 +117,7 @@ public class ShowActivityPrintPreview
                 Collection euActs = EUActivityUtil.getEUActivities(activity.getAmpActivityId());
       	      	request.setAttribute("costs", euActs);
       	        
-      	      	request.setAttribute("actId", eaForm.getActivityId());     	      	
+      	      	request.setAttribute("actId", actId);     	      	
 		        int risk = IndicatorUtil.getOverallRisk(actId);
 		        String riskName = MEIndicatorsUtil.getRiskRatingName(risk);
 		        String rskColor = MEIndicatorsUtil.getRiskColor(risk);
@@ -1078,7 +1078,7 @@ public class ShowActivityPrintPreview
                         	for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
                                 AmpField field = (AmpField) itAux.next();
                                 	colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),
-                                                                      eaForm.getActivityId());
+                                                                      actId);
                                 allComments.put(field.getFieldName(), colAux);
                               }
                         }

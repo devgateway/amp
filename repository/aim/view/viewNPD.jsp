@@ -1260,8 +1260,8 @@
 												&nbsp;
 											</td>
 											<td align="right" nowrap="nowrap">
-												<digi:link href="/advancedReportManager.do~clear=true"><digi:trn key="aim:NPD:advancedReportsLink">Advanced Reports</digi:trn></digi:link>
-											</td>
+												<digi:link href="/advancedReportManager.do?clear=true&reportEdit=false"><digi:trn key="aim:NPD:advancedReportsLink">Advanced Reports</digi:trn></digi:link>
+												</td>
 										</tr>
 									</table>
 								</td>

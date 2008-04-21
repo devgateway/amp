@@ -46,6 +46,7 @@ import org.digijava.module.aim.helper.ReferenceDoc;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
@@ -99,7 +100,12 @@ public class ShowActivityPrintPreview
                                  HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         EditActivityForm eaForm = (EditActivityForm) form;
-        Long actId = eaForm.getActivityId();
+        
+        if(eaForm.getActivityId()==null){
+        	eaForm.setActivityId(new Long(request.getParameter("activityid")));        	
+        }
+        
+        Long actId = eaForm.getActivityId();        
         if(actId != null) {
             HttpSession session = request.getSession();
             TeamMember tm = (TeamMember) session.getAttribute("currentMember");
@@ -112,7 +118,7 @@ public class ShowActivityPrintPreview
       	      	request.setAttribute("costs", euActs);
       	        
       	      	request.setAttribute("actId", eaForm.getActivityId());     	      	
-		        int risk = MEIndicatorsUtil.getOverallRisk(actId);
+		        int risk = IndicatorUtil.getOverallRisk(actId);
 		        String riskName = MEIndicatorsUtil.getRiskRatingName(risk);
 		        String rskColor = MEIndicatorsUtil.getRiskColor(risk);
 		        request.setAttribute("overallRisk", riskName);

@@ -355,8 +355,9 @@ public class ResetAll extends Action
 					Iterator sectItr = sectors.iterator();
 					while (sectItr.hasNext())
 					{
+                                                 AmpActivitySector ampActSect = (AmpActivitySector) sectItr.next();
 						//AmpSector sec = (AmpSector) sectItr.next();
-						AmpSector sec = ((AmpActivitySector) sectItr.next()).getSectorId();
+						AmpSector sec = (ampActSect).getSectorId();
 						if (sec != null)
 						{
 							AmpSector parent = null;
@@ -382,6 +383,7 @@ public class ResetAll extends Action
 								parent = sec;
 							}
 							ActivitySector actSect = new ActivitySector();
+                                                        actSect.setConfigId(ampActSect.getClassificationConfig().getId());
 							if (parent != null)
 							{
 								actSect.setId(parent.getAmpSectorId());

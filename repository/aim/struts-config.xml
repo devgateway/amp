@@ -62,6 +62,7 @@
     <form-bean name="editPhysicalProgressForm" type="org.digijava.module.aim.form.EditPhysicalProgressForm" />
     <form-bean name="aimSectorsForm" type="org.digijava.module.aim.form.SectorsForm" />
     <form-bean name="aimAddSectorForm" type="org.digijava.module.aim.form.AddSectorForm" />
+    <form-bean name="aimSectorClassConfigForm" type="org.digijava.module.aim.form.SectorClassConfigForm" />
     <form-bean name="aimStatusListForm" type="org.digijava.module.aim.form.StatusListForm" />
     <form-bean name="aimStatusItemForm" type="org.digijava.module.aim.form.StatusItemForm" />
     <form-bean name="aimRelatedLinksForm" type="org.digijava.module.aim.form.RelatedLinksForm" />
@@ -398,7 +399,14 @@
       <forward name="levelThree" path="/showLayout.do?layout=addNewLevel3Sector" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimAddSectorForm" path="/aim/getSectorSchemes" scope="request" type="org.digijava.module.aim.action.GetSectorSchemes" validate="false">
+    <action name="aimSectorClassConfigForm" path="/aim/getSectorClassConfig" scope="session" type="org.digijava.module.aim.action.ManageClassificationConfig" validate="false">
+      <forward name="manageClassifications" path="/showLayout.do?layout=manageClassificationsConfig" />
+    </action>
+    <action name="aimSectorClassConfigForm" path="/aim/updateSectorClassConfig" scope="session" type="org.digijava.module.aim.action.ManageClassificationConfig" validate="false">
+      <forward name="edit" path="/showLayout.do?layout=editSectorClassConfig" />
+      <forward name="manageClassifications" path="/aim/getSectorClassConfig.do" redirect="true" />
+    </action>
+     <action name="aimAddSectorForm" path="/aim/getSectorSchemes" scope="request" type="org.digijava.module.aim.action.GetSectorSchemes" validate="false">
       <forward name="viewSectorSchemes" path="/showLayout.do?layout=viewSectorSchemes" />
     </action>
     <action name="aimAddSectorForm" path="/aim/updateSectorSchemes" scope="request" type="org.digijava.module.aim.action.UpdateSectorSchemes" validate="false">

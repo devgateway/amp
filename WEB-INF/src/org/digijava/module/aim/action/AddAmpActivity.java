@@ -65,6 +65,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
@@ -126,6 +127,9 @@ public class AddAmpActivity extends Action {
           List steps = ActivityUtil.getSteps(eaForm.isGovFlag());
           eaForm.setSteps(steps);
       }
+    if(eaForm.getClassificationConfigs()==null){
+        eaForm.setClassificationConfigs(SectorUtil.getAllClassificationConfigs());
+    }
     
     //set the level, if available
     String levelTxt=request.getParameter("activityLevelId");
@@ -180,9 +184,9 @@ public class AddAmpActivity extends Action {
 	//===============Sectors START===========================
 		
 		// set Global Settings Multi-Sector Selecting
-		String multiSectorSelect = FeaturesUtil
+		/*String multiSectorSelect = FeaturesUtil
 				.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_MULTISECTORSELECT);
-		eaForm.setMultiSectorSelecting(multiSectorSelect);
+		eaForm.setMultiSectorSelecting(multiSectorSelect);*/
 
 		// Add sectors
 		if (request.getParameter("addSector") != null) {
@@ -360,6 +364,7 @@ public class AddAmpActivity extends Action {
     else
     if (request.getParameter("remSectors") != null) {
       Long selSectors[] = eaForm.getSelActivitySectors();
+      String configId=request.getParameter("configId");
       Collection<ActivitySector> prevSelSectors = eaForm.getActivitySectors();
       session.setAttribute("removedSector", eaForm.getSelActivitySectors());
       Collection newSectors = new ArrayList();
@@ -373,15 +378,15 @@ public class AddAmpActivity extends Action {
         flag = false;
         for (int i = 0; i < selSectors.length; i++) {
 
-          if (asec.getSubsectorLevel1Id() == -1 && asec.getSectorId().equals(selSectors[i])) {
+          if (asec.getSubsectorLevel1Id() == -1 && asec.getSectorId().equals(selSectors[i])&&asec.getConfigId().equals(Long.parseLong(configId))) {
             flag = true;
             break;
           }
-          if (asec.getSubsectorLevel1Id() != -1 && asec.getSubsectorLevel2Id() == -1 && asec.getSubsectorLevel1Id().equals(selSectors[i])) {
+          if (asec.getSubsectorLevel1Id() != -1 && asec.getSubsectorLevel2Id() == -1 && asec.getSubsectorLevel1Id().equals(selSectors[i])&&asec.getConfigId().equals(Long.parseLong(configId))) {
               flag = true;
               break;
             }
-          if (asec.getSubsectorLevel1Id() != -1 && asec.getSubsectorLevel2Id() != -1 && asec.getSubsectorLevel2Id().equals(selSectors[i])) {
+          if (asec.getSubsectorLevel1Id() != -1 && asec.getSubsectorLevel2Id() != -1 && asec.getSubsectorLevel2Id().equals(selSectors[i])&&asec.getConfigId().equals(Long.parseLong(configId))) {
               flag = true;
               break;
             }

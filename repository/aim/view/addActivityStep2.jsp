@@ -82,10 +82,9 @@ function selectLocation() {
   document.aimEditActivityForm.submit();
 }
 
-function addSectors() {
+function addSectors(editAct,configId) {
   openNewWindow(600, 450);
-  <digi:context name="addSector" property="context/module/moduleinstance/selectSectors.do?edit=true" />
-  document.aimEditActivityForm.action = "<%= addSector %>";
+  document.aimEditActivityForm.action = "/selectSectors.do?edit=true&configId="+configId;
   document.aimEditActivityForm.target = popupPointer.name;
   document.aimEditActivityForm.submit();
 }
@@ -180,55 +179,86 @@ function popupwin(){
 }
 
 function validateSectorPercentage(){
-  <c:set var="errMsgAddPercentage">
-  <digi:trn key="aim:addSecorPercentageErrorMessage">
-  Please add sector-percentage
-  </digi:trn>
-  </c:set>
-  <c:set var="errMsgSumPercentage">
-  <digi:trn key="aim:addSecorSumPercentageErrorMessage">
-  Sum of sector percentages should be 100
-  </digi:trn>
-  </c:set>
-  <c:set var="errMsgZeroPercentage">
-  <digi:trn key="aim:addzeroPercentageErrorMessage">
-  A sector percentage cannot be equal to 0
-  </digi:trn>
-  </c:set>
-  var str = null;
-  var val = null;
-  var i = 0;
-  var flag = false;
-  var sum = 0;
-  var cnt = document.aimEditActivityForm.sizeActSectors.value;
-  while (i < cnt) {
-    str   = "activitySectors[" + i + "].sectorPercentage";
-    val   = (document.aimEditActivityForm.elements)[str].value;
-    if (val == "" || val == null) {
-      alert("${errMsgAddPercentage}");
-      flag = true;
-      break;
-    }
-    if (val == "0"){
-    alert("${errMsgZeroPercentage}");
-    flag = true;
-      break;
-    }
+    <c:set var="errMsgAddPercentage">
+    <digi:trn key="aim:addSecorPercentageErrorMessage">
+    Please add sector-percentage
+    </digi:trn>
+    </c:set>
+    <c:set var="errMsgSumPercentage">
+    <digi:trn key="aim:addSecorSumPercentageErrorMessage">
+    Sum of sector percentages should be 100
+    </digi:trn>
+    </c:set>
+    <c:set var="errMsgZeroPercentage">
+    <digi:trn key="aim:addzeroPercentageErrorMessage">
+    A sector percentage cannot be equal to 0
+    </digi:trn>
+    </c:set>
+    <c:set var="errMsgPrimarySectors">
+    <digi:trn key="aim:addPrimarySectorsErrorMessage">
+    Please add primary sectors
+    </digi:trn>
+    </c:set>
+    var i;
+    var flag = false;
+    var primConf=document.getElementById('primaryConfig');
+    if(primConf==null){
+        alert("${errMsgPrimarySectors}");
+        return false;
+     }
+    
+    var cnt = document.aimEditActivityForm.sizeSectorConfigs.value;
+    for(i=1;i<=cnt;i++) {
+        var id="config"+i;
+        var sum = 0;
+        var j;
+        var sectorDiV=document.getElementById(id);
+        var primaryDiv=sectorDiV.getElementsByTagName("div").length;
+        var inputs=sectorDiV.getElementsByTagName("input");
+        if(inputs.length==0&&primaryDiv>0){
+            alert("${errMsgPrimarySectors}");
+            return false;
+        }
+        
+        for (j=0; j<inputs.length; j++){
+            if (inputs[j].type == "text") {
+                var val=inputs[j].value;
+                if (val == "" || val == null) {
+                    alert("${errMsgAddPercentage}");
+                         inputs[j].focus();
+                          return false;
+                        
+                    }
+                    if (val == 0){
+                        alert("${errMsgZeroPercentage}");
+                            inputs[j].focus();
+                            return false;
+                            
+                        }
+                     
+                        sum+=parseFloat(val);
+                        
+                    }
+                }
+                    
+                if (sum != 100&&sum>0) {
+                    alert("${errMsgSumPercentage}");
+                        return false;
+                    }
+                  
+                    
+                }
+                
+                return true;
+                
+                
+            }
+            
+    
+ 
+ 
 
-    sum = sum + parseFloat(val);
-    i = i + 1;
-  }
-  if (flag == true) {
-    (document.aimEditActivityForm.elements)[str].focus();
-    return false;
-  }
-  else if (sum != 100) {
-    alert("${errMsgSumPercentage}");
-    (document.aimEditActivityForm.elements)[str].focus();
-    return false;
-  }
-  return true;
-}
+
 
 function validateProgramsPercentage(cnt,prefix){
   <c:set var="errMsgAddPercentage">
@@ -462,12 +492,11 @@ function remProgram(programType) {
   </c:if>
 
 
-  <c:if test="${empty aimEditActivityForm.activitySectors}">
-    <input type="hidden" name="sizeActSectors" value="0">
+  <c:if test="${empty aimEditActivityForm.classificationConfigs}">
+    <input type="hidden" name="sizeSectorConfigs" value="0">
   </c:if>
   <c:if test="${!empty aimEditActivityForm.activitySectors}">
-    <bean:size id ="actSectSize" name="aimEditActivityForm" property="activitySectors" />
-    <input type="hidden" name="sizeActSectors" value="${actSectSize}">
+     <input type="hidden" name="sizeSectorConfigs" value="${fn:length(aimEditActivityForm.classificationConfigs)}">
   </c:if>
 
 

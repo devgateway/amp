@@ -11,9 +11,11 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpIndicatorSector;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -1041,7 +1043,145 @@ public class SectorUtil {
 		}
 		return col;
 	}
-/*
+        
+        
+    /**
+     * Returns All  Configurations of Classifications
+     * 
+     * @return All Configurations
+     * @throws DgException If exception occurred
+     */
+    public static List getAllClassificationConfigs() throws DgException {
+        String queryString = null;
+        Session session = null;
+        List configs = null;
+        Query qry = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            queryString = "select cls from " + AmpClassificationConfiguration.class.getName() + " cls ";
+            qry = session.createQuery(queryString);
+            configs = qry.list();
+        } catch (Exception ex) {
+            logger.error("Unable to get report names  from database " + ex.getMessage());
+            throw new DgException(ex);
+
+        }
+
+        return configs;
+    }
+
+    /**
+     * Returns Classification Configuration by Configuration Id
+     * 
+     * @param configId Configuration Id
+     * @return Classification Configuration using  Configuration Id
+     * @throws DgException If exception occurred
+     */
+    public static AmpClassificationConfiguration getClassificationConfigById(Long configId) throws DgException {
+
+        Session session = null;
+        AmpClassificationConfiguration config = null;
+
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            config = (AmpClassificationConfiguration) session.load(AmpClassificationConfiguration.class, configId);
+        } catch (Exception ex) {
+            logger.error("Unable to get configs from database " + ex.getMessage());
+            throw new DgException(ex);
+
+        }
+
+        return config;
+    }
+
+    /**
+     * Returns true if specified classification is selected as default classification 
+     * in the configuration
+     * otherwise returns false.
+     * 
+     * @param classificationId  Id of classification
+     * @return true If specified classification is selected as default classification 
+     * in the configuration
+     * @throws DgException If exception occurred
+     */
+    public static boolean isClassificationUsed(Long classificationId) throws DgException {
+
+        Session session = null;
+        boolean used = false;
+        String queryString = null;
+        List configs = null;
+        Query qry = null;
+
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            queryString = "select cls from " + AmpClassificationConfiguration.class.getName() + " cls where cls.classification=:classificationId ";
+            qry = session.createQuery(queryString);
+            qry.setLong("classificationId", classificationId);
+            configs = qry.list();
+            if (configs != null && configs.size() > 0) {
+                used = true;
+            }
+        } catch (Exception ex) {
+            logger.error("Unable to get configs from database " + ex.getMessage());
+            throw new DgException(ex);
+
+        }
+
+        return used;
+    }
+
+    /**
+     * adds or update classification configuration 
+     * 
+     * 
+     * @param configId  Id of configuration
+     * @param configName Name of configuration
+     * @param multiSector  
+     * @param classification Default classification
+     * @throws DgException If exception occurred
+     */
+    public static void saveClassificationConfig(Long configId, String configName, boolean multiSector, AmpSectorScheme classification) throws DgException {
+
+        Session session = null;
+        AmpClassificationConfiguration config = null;
+        Transaction tx = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            if (configId != null && !configId.equals(0l)) {
+                //Load existed configuration for update procedure.
+                config = (AmpClassificationConfiguration) session.load(AmpClassificationConfiguration.class, configId);
+            } else {
+                // Create new configuration
+                config = new AmpClassificationConfiguration();
+
+            }
+            config.setName(configName);
+            config.setMultisector(multiSector);
+            config.setClassification(classification);
+            tx = session.beginTransaction();
+            session.saveOrUpdate(config);
+            tx.commit();
+
+
+
+        } catch (Exception ex) {
+            logger.error("Unable to save config to database " + ex.getMessage());
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (Exception rbf) {
+                    logger.error("Rollback failed");
+                }
+            }
+            throw new DgException(ex);
+
+        }
+
+    }
+    /*
  * this is to delete a scheme
  */
 	public static void deleteScheme(Long schemeId)

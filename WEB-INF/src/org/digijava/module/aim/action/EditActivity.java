@@ -163,9 +163,10 @@ public class EditActivity
    
 
     // set Globam Settings Multi-Sector Selecting
-    String multiSectorSelect = FeaturesUtil.getGlobalSettingValue(Constants.
+   /* String multiSectorSelect = FeaturesUtil.getGlobalSettingValue(Constants.
     		GLOBALSETTINGS_MULTISECTORSELECT);
     eaForm.setMultiSectorSelecting(multiSectorSelect);
+    */
     //
     String errorMsgKey = "";
 
@@ -1776,6 +1777,7 @@ public class EditActivity
 							parent = sec;
 						}
 						ActivitySector actSect = new ActivitySector();
+                                                actSect.setConfigId(ampActSect.getClassificationConfig().getId());
 						if (parent != null) {
 							actSect.setId(parent.getAmpSectorId());
 							String view = FeaturesUtil.getGlobalSettingValue("Allow Multiple Sectors");
@@ -1798,6 +1800,7 @@ public class EditActivity
 							}
 							actSect.setSectorPercentage(ampActSect.getSectorPercentage());
                                                         actSect.setSectorScheme(parent.getAmpSecSchemeId().getSecSchemeName());
+                                                        
 						}
                                                
 						activitySectors.add(actSect);

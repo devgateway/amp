@@ -82,7 +82,7 @@
     var lastTimeStamp;
 	var strNoActivities="<digi:trn key='aim:NPD:noActivitisLabel'>No Activities</digi:trn>";
 	var strTotal="<digi:trn key='aim:NPD:totalLabels'>Totals:</digi:trn>";
-	var strThousands="<digi:trn key='aim:NPD:thousandsLabel'>All amounts are in thousands (000)</digi:trn>";
+	var strThousands="<digi:trn key='aim:NPD:thousandsOfDollarsLabel'>All amounts are in thousands (000) of dollar</digi:trn>";
 	var strPlanned="<digi:trn key='aim:NPD:sumplanedCommitments'>Planned Commitments</digi:trn>";
 	var strActual="<digi:trn key='aim:NPD:sumactualCommitments'>Actual Commitments</digi:trn>";
 	var strProposed="<digi:trn key='aim:NPD:sumproposedPrjCost'>Proposed Project Cost</digi:trn>";
@@ -93,6 +93,11 @@
 	var pgLast='<digi:trn key="aim:npd:pagination:last">Last</digi:trn>';
 	var pgFirst='<digi:trn key="aim:npd:pagination:first">First</digi:trn>';
 	var pgPagesLabel='<digi:trn key="aim:npd:pagination:pageslabel">Pages:</digi:trn>';
+	var status='<digi:trn key="aim:npd:status">Status</digi:trn>';
+	var title='<digi:trn key="aim:npd:titl">Title</digi:trn>';
+	var strDate='<digi:trn key="aim:npd:strdate">Start Date</digi:trn>';
+	var donor='<digi:trn key="aim:npd:donor">Donor</digi:trn>';
+	
 
 	function changeOptions(indics,years,locations){
         selIndicatorIDs=new Array();
@@ -689,16 +694,35 @@
 			newTR.innerHTML='<td colspan="8">'+strNoActivities+'</td>';
 			tr.parentNode.appendChild(newTR);
 			return;
-		}
+		}	
+		
+		
 		
 		//sum labels
-		var labelsTR1 = document.createElement('TR');
+		var labelsTR1 = document.createElement('TR');		
+		var titleLabelTD=document.createElement('TD');
+		titleLabelTD.innerHTML='<strong>'+title+' </strong>';
+		labelsTR1.appendChild(titleLabelTD);
+		
+		var statusLabelTD=document.createElement('TD');
+		statusLabelTD.innerHTML='<strong>'+status+' </strong>';
+		labelsTR1.appendChild(statusLabelTD);
+		
+		var donorLabelTD=document.createElement('TD');
+		donorLabelTD.innerHTML='<strong>'+donor+' </strong>';
+		labelsTR1.appendChild(donorLabelTD);
+		
+		var strDateLabelTD=document.createElement('TD');
+		strDateLabelTD.innerHTML='<strong>'+strDate+' </strong>';
+		labelsTR1.appendChild(strDateLabelTD);
+		
+		
 		var labelsTD0 = document.createElement('TD');
-		labelsTD0.colSpan=5;
-		labelsTD0.align='right';
+		labelsTD0.colSpan=0;
+		labelsTD0.align='left';
 		labelsTD0.innerHTML='&nbsp;';
 		labelsTR1.appendChild(labelsTD0);
-
+		
 		var labelTD1 = document.createElement('TD');
 		labelTD1.innerHTML='<strong>'+strProposed+' </strong>';
 		labelsTR1.appendChild(labelTD1);

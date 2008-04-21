@@ -1574,10 +1574,38 @@ public class IndicatorUtil {
 			
 		}
 	 
+	 public static Collection<AmpIndicatorRiskRatings> getRisks(Long actId) throws Exception{
+		 ArrayList<AmpIndicatorRiskRatings> risks=new ArrayList<AmpIndicatorRiskRatings>();
+		 try {
+			 Set<IndicatorActivity> valuesActivity=ActivityUtil.loadActivity(actId).getIndicators();
+				if(valuesActivity!=null && valuesActivity.size()>0){
+					Iterator<IndicatorActivity> it=valuesActivity.iterator();
+					while(it.hasNext()){
+						 IndicatorActivity indActivity=it.next();
+						 Set<AmpIndicatorValue> values=indActivity.getValues();					
+						 for(Iterator<AmpIndicatorValue> valuesIter=values.iterator();valuesIter.hasNext();){
+							 AmpIndicatorValue val=valuesIter.next();
+							 if(val.getRisk()!=null){
+								 risks.add(val.getRisk());
+								 break;//all values have same risk and this risk should go to connection.
+							 }					 					
+						}
+					}
+				}
+		} catch (Exception e) {
+			 logger.error("Unable to get risks");
+			 e.printStackTrace();
+		}
+			
+			return risks;
+	 }
 	 
-	 public static int getOverallRisk(Collection<AmpIndicatorRiskRatings> risks) {
+	 
+	 public static int getOverallRisk(Long actId) {
+		 	Collection<AmpIndicatorRiskRatings> risks=null;
 			int risk = 0;
-			try {			
+			try {
+				risks=getRisks(actId);
 				Iterator<AmpIndicatorRiskRatings> itr = risks.iterator();
 				float temp = 0;
 				while (itr.hasNext()) {

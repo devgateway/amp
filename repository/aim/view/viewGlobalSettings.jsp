@@ -233,7 +233,7 @@ function saveAllSettings(){
                                   %>
 
                                   <logic:notEmpty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
-
+								
                                     <%if (globalSett.getGlobalSettingsName().trim().equalsIgnoreCase("Default Country".trim())) { %>
                                     <html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
                                       <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global">
@@ -255,7 +255,8 @@ function saveAllSettings(){
                                     <digi:trn key="aim:gloablSetting:customFormat">(Custom Format)</digi:trn> 	
                                     <%}else { %>
                                     	
-                                    <html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
+                                    
+                                    <html:select   property="gsfValue" alt="prueba"  style="width:180px"  styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
                                       <logic:iterate name="aimGlobalSettingsForm" property='<%=possibleValues%>' id="global" type="org.digijava.module.aim.helper.KeyValue">
                                       	<% String key2	= "aim:globalSettings:" + globalSett.getGlobalSettingsName() + ":" + global.getValue(); %>
                                       	<c:set var="newKey"><%= key2 %></c:set>
@@ -281,7 +282,7 @@ function saveAllSettings(){
 	                                    		%>
 	                                    		<html:hidden property="gsfValue" value='<%= globalSett.getGlobalSettingsValue() %>'/>
 	                                    		<digi:trn key="aim:globalSettings:month">Month</digi:trn>: 
-	                                    		<select id="<%= monthId %>" onchange="populateWithDays('<%=monthId %>','<%=dayId %>');createDateString('<%=monthId %>','<%=dayId %>')">
+	                                    		<select styleClass="inp-text" id="<%= monthId %>" onchange="populateWithDays('<%=monthId %>','<%=dayId %>');createDateString('<%=monthId %>','<%=dayId %>')">
 	                                    			<% for (int k=1; k<=12; k++) {
 	                                    					if ( k == monthNum ) {
 	                                    			%>
@@ -297,7 +298,7 @@ function saveAllSettings(){
 	                                    			%>
 	                                    		</select>
 	                                    		<digi:trn key="aim:globalSettings:day">Day</digi:trn>: 
-	                                    		<select id="<%= dayId %>" onchange="createDateString('<%=monthId %>','<%=dayId %>');">
+	                                    		<select styleClass="inp-text" id="<%= dayId %>" onchange="createDateString('<%=monthId %>','<%=dayId %>');">
 	                                    			<% for (int k=1; k<=org.digijava.module.aim.action.GlobalSettings.numOfDaysInMonth(monthNum); k++) {
 	                                    					if ( k == Integer.parseInt(dateValues[0]) ) {
 	                                    			%>

@@ -86,6 +86,9 @@ public class ViewAhSurveyFormulas extends Action {
         svform.setFormulaText(selFormula.getCalcFormula());
         svform.setBaseLineValue(selFormula.getBaseLineValue());
         svform.setTargetValue(selFormula.getTargetValue());
+        if(selFormula.getEnabled()==null){
+            selFormula.setEnabled(false);
+        }
         svform.setFormulaEnabled(selFormula.getEnabled());
 
         return mapping.findForward("forward");

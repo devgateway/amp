@@ -1,6 +1,10 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.util.SectorUtil;
 
 public class AmpSectorScheme implements Serializable
 {
@@ -49,5 +53,17 @@ public class AmpSectorScheme implements Serializable
 	public void setSecSchemeName(String string) {
 		secSchemeName = string;
 	}
+        
+       public boolean isUsed() {
+        boolean used = true;
+        try {
+            used = SectorUtil.isClassificationUsed(ampSecSchemeId);
+
+        } catch (DgException ex) {
+            ex.printStackTrace();
+
+        }
+        return used;
+    }
 
 }

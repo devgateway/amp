@@ -8,7 +8,6 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,13 +15,10 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.FeatureTemplates;
-import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.helper.ActivitySector;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.SectorUtil;
 
 public class SelectSector extends Action {
@@ -48,11 +44,12 @@ public class SelectSector extends Action {
 			// and reset the
 			// parent sectors and child sectors.
 			
-			String globalSettingValue = FeaturesUtil.getGlobalSettingValue(Constants.GLOBAL_DEFAULT_SECTOR_SCHEME);
-			
-			Collection secSchemes = SectorUtil.getAllSectorSchemes();
+			AmpClassificationConfiguration config=SectorUtil.getClassificationConfigById(ssForm.getConfigId());
+			AmpSectorScheme defClassification=config.getClassification();
+			Collection secSchemes = new ArrayList() ;
+                        secSchemes.add(defClassification);
 			ssForm.setSectorSchemes(secSchemes);
-			ssForm.setSectorScheme(new Long(globalSettingValue));
+			ssForm.setSectorScheme(defClassification.getAmpSecSchemeId());
 			Collection parentSectors = SectorUtil
 			.getAllParentSectors(ssForm.getSectorScheme());
 			ssForm.setParentSectors(parentSectors);
@@ -118,6 +115,7 @@ public class SelectSector extends Action {
 
 				ActivitySector actSect = new ActivitySector();
 				actSect.setSectorId(sector);
+                                actSect.setConfigId(ssForm.getConfigId());
 				AmpSector sec = SectorUtil.getAmpSector(actSect.getSectorId());
 				actSect.setSectorName(sec.getName());
 				actSect.setSubsectorLevel1Id(subsectorLevel1);

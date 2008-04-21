@@ -12,6 +12,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <%
 pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.getMeasureList());
+pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.getAllClassificationConfigs());
 %>
 
 
@@ -579,6 +580,9 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <logic:iterate id="ampMeasures"  name="list" scope="page" type="org.digijava.module.aim.dbentity.AmpMeasures">
 	<field:display name="${ampMeasures.aliasName}" feature="Measures"></field:display>
 </logic:iterate>
+<logic:iterate id="classConfig"  name="classConfigs" scope="page" type="org.digijava.module.aim.dbentity.AmpClassificationConfiguration">
+	<field:display name="${classConfig.name}" feature="Sectors"></field:display>
+</logic:iterate>
 
 <field:display name="Actual Commitments" feature="Measures"></field:display>
 <field:display name="Actual Disbursements" feature="Measures"></field:display>
@@ -589,3 +593,4 @@ pageContext.setAttribute("list",org.digijava.module.aim.util.AdvancedReportUtil.
 <field:display name="Undisbursed Balance" feature="Measures"></field:display>
 <field:display name="Total Commitments" feature="Measures"></field:display>
 <field:display name="Actual Disbursement Orders" feature="Measures"></field:display>
+<field:display name="Multi Sector Configuration" feature="Sectors"></field:display>

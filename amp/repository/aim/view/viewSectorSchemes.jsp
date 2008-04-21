@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script langauage="JavaScript">
 	<c:set var="translation">
@@ -114,7 +115,9 @@
 															]													  </td>
 
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
+                                                                                                               
 														<td bgcolor="#ffffff" width="75" align="left">
+                                                                                                                       <c:if test="${!sectorScheme.used}">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams4}" property="ampSecSchemeId">
 																<bean:write name="sectorScheme" property="ampSecSchemeId" />
@@ -127,7 +130,8 @@
 																title="${trnDeleteScheme}" onclick="return onDelete()">
 																 <digi:trn key="aim:delete">Delete</digi:trn>
 															</digi:link>
-															]
+                                                                                                                     ]</c:if>&nbsp;</td>
+                                                                                                                        
 
 
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="false">
@@ -159,7 +163,7 @@
 							<tr>
 								<td>
 									<!-- Other Links -->
-									<table cellPadding=0 cellSpacing=0 width=100>
+									<table cellPadding=0 cellSpacing=0 width=200>
 										<tr>
 											<td bgColor=#c9c9c7 class=box-title>
 												<digi:trn key="aim:otherLinks">
@@ -191,6 +195,21 @@
 											</td>
 										</tr>
 										</field:display>
+                                                                             
+                                                                                     <tr>
+                                                                                         <td>
+                                                                                             <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                                                                                             <c:set var="trnViewConfigurations">
+                                                                                                 <digi:trn key="aim:ClickToConfigureClassifications">Click here to see the Configuration of Classifications</digi:trn>
+                                                                                             </c:set>
+                                                                                             <digi:link href="/getSectorClassConfig.do" title="${trnViewConfigurations}" >
+                                                                                                 <digi:trn key="aim:MultiSectorConfiguration">
+                                                                                                     Multi Sector Configuration
+                                                                                                 </digi:trn>
+                                                                                             </digi:link>
+                                                                                         </td>
+                                                                                     </tr>
+                                                                         
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

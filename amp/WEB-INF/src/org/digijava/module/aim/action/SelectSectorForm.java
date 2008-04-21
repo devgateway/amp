@@ -36,6 +36,15 @@ public class SelectSectorForm extends ActionForm {
 
 	private Collection searchedSectors = null; // list of searched Sectors.
 	private Long selSectors[] = null; // sectors selected by user to be added in activity after searching
+        private Long configId;
+
+        public Long getConfigId() {
+            return configId;
+        }
+
+        public void setConfigId(Long configId) {
+            this.configId = configId;
+        }
 
     public Collection getSearchedSectors() {
 		return searchedSectors;

@@ -375,7 +375,8 @@
     <page page="programConfigurationPage" name="programConfigurationPage" title="Configuration Page" />
     <page page="addDisbOrderToDisb" name="aim_addDisbOrderToDisbPopupLayout" title="Disbursement Order For Activity" />
     <page page="addDisbOrderToContract" name="aim_addDisbOrderToContractPopupLayout" title="Disbursement Order Contract For Activity" />
-  
+    <page page="manageClassificationsConfig" name="manageClassificationsConfig" title="Manage Classifications Configuration" />
+    <page page="editSectorClassConfig" name="editSectorClassConfig" title="Add/Edit Classifications Configuration" />
 </secondary-pages>
 <module>
 

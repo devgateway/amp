@@ -9,6 +9,16 @@ public class AmpActivitySector {
 	private AmpSector sectorId;
 	
 	private Float sectorPercentage;
+        
+        private AmpClassificationConfiguration classificationConfig;
+
+        public AmpClassificationConfiguration getClassificationConfig() {
+            return classificationConfig;
+        }
+
+        public void setClassificationConfig(AmpClassificationConfiguration classificationConfig) {
+            this.classificationConfig = classificationConfig;
+        }
 
 
 	public Long getAmpActivitySectorId() {

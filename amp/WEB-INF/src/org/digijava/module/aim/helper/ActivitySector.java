@@ -8,8 +8,6 @@ package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
 
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpSector;
 
 public class ActivitySector implements Serializable{
 
@@ -33,6 +31,15 @@ public class ActivitySector implements Serializable{
 	
 	private int count;
         private String sectorScheme;
+        private Long configId;
+
+        public Long getConfigId() {
+            return configId;
+        }
+
+        public void setConfigId(Long configId) {
+            this.configId = configId;
+        }
 
   
 

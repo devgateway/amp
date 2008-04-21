@@ -560,6 +560,16 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 private boolean fixerate;
          
     private List steps;
+    
+    private List classificationConfigs;
+
+    public List getClassificationConfigs() {
+        return classificationConfigs;
+    }
+
+    public void setClassificationConfigs(List classificationConfigs) {
+        this.classificationConfigs = classificationConfigs;
+    }
 
     public List getSteps() {
         return steps;

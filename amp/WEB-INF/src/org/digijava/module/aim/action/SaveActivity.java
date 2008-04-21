@@ -41,6 +41,7 @@ import org.digijava.module.aim.dbentity.AmpActivityReferenceDoc;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -431,9 +432,14 @@ public class SaveActivity extends Action {
 
                     boolean secPer = false;
                     int percent = 0;
+                    boolean primary=false;
                     Iterator<ActivitySector> secPerItr = eaForm.getActivitySectors().iterator();
                     while (secPerItr.hasNext()) {
                         ActivitySector actSect = (ActivitySector) secPerItr.next();
+                        AmpClassificationConfiguration config=SectorUtil.getClassificationConfigById(actSect.getConfigId());
+                        if(config.isPrimary()){
+                            primary=true;
+                        }
                         if (null == actSect.getSectorPercentage()
                             || "".equals(actSect.getSectorPercentage())) {
                             errors.add("sectorPercentageEmpty",
@@ -459,12 +465,12 @@ public class SaveActivity extends Action {
                         }
                     }
 
-                    // Total sector percentage is not equal to 100%
-                    if (percent != 100) {
-                        errors.add("sectorPercentageSumWrong",
-                                   new ActionError("error.aim.addActivity.sectorPercentageSumWrong"));
+                    // no primary sectors added
+                    if (!primary) {
+                        errors.add("noPrimarySectorsAdded",
+                                   new ActionError("error.aim.addActivity.noPrimarySectorsAdded"));
                         saveErrors(request, errors);
-                        logger.debug("sector percentage is not equal to 100%");
+                        logger.debug("n oPrimary Sectors Added");
                         eaForm.setStep("2");
                         return mapping.findForward("addActivityStep2");
                     }
@@ -844,6 +850,7 @@ public class SaveActivity extends Action {
 							if (sectorId != null && (!sectorId.equals(new Long(-1))))
 								amps.setSectorId(SectorUtil.getAmpSector(sectorId));
 							amps.setSectorPercentage(actSect.getSectorPercentage());
+                                                        amps.setClassificationConfig(SectorUtil.getClassificationConfigById(actSect.getConfigId()));
 							sectors.add(amps);
 						}
 					}

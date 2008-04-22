@@ -348,7 +348,38 @@ public class OrganisationSelected extends Action {
 										col.addAll(temp);
 										eaForm.setSectGroups(col);						
 									}
-								}
+								} else
+									if (item == 9) { // Responsible Organisation
+										logger.info("1 ");
+										if (eaForm.getRespOrganisations()!= null) {
+											logger.info("2 ");
+											for (int i = 0;i < temp.size();i ++) {
+												logger.info("3 - "+i+" ");
+												AmpOrganisation newOrg = (AmpOrganisation) temp.get(i);
+												if (newOrg != null) {
+													boolean flag = false;
+													Iterator itr = eaForm.getRespOrganisations().iterator();
+													while (itr.hasNext()) {
+														AmpOrganisation org = (AmpOrganisation) itr.next();
+														if (org.getAmpOrgId().equals(newOrg.getAmpOrgId())) {
+															flag = true;
+															break;
+														}
+													}
+													if (!flag) {
+														eaForm.getRespOrganisations().add(newOrg);
+													}
+												}
+											}
+										} else {
+											logger.info("4 ");
+											logger.info("temp size : "+temp.size());
+											logger.info(temp);
+											Collection col = new ArrayList();
+											col.addAll(temp);
+											eaForm.setRespOrganisations(col);						
+										}
+									}
 				
 			}
 			return mapping.findForward("step6");

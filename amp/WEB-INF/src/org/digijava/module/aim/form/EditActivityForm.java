@@ -216,6 +216,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long selConAgencies[];
 	// /Contracting Agency
 
+	// Responsible Organisation
+	private Collection respOrganisations;
+	private Long selRespOrganisations[];
+	// Responsible Organisation
+
 	private String contFirstName;
 	private String contLastName;
 	private String email;
@@ -774,6 +779,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			impAgencies = null;
 			benAgencies = null;
 			conAgencies = null;
+			respOrganisations = null;
 			sectGroups=null;
 			regGroups=null;
 			contractors = null;
@@ -786,6 +792,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			selBenAgencies = null;
 			selConAgencies = null;
 			selContractors = null;
+			selRespOrganisations = null;
 			contFirstName = null;
 			contLastName = null;
 			email = null;
@@ -5245,6 +5252,34 @@ public class EditActivityForm extends ActionForm implements Serializable{
         return disbOrdersExist;
 
     }
+
+	/**
+	 * @return the respOrganisations
+	 */
+	public Collection getRespOrganisations() {
+		return respOrganisations;
+	}
+
+	/**
+	 * @param respOrganisations the respOrganisations to set
+	 */
+	public void setRespOrganisations(Collection respOrganisations) {
+		this.respOrganisations = respOrganisations;
+	}
+
+	/**
+	 * @return the selRespOrganisations
+	 */
+	public Long[] getSelRespOrganisations() {
+		return selRespOrganisations;
+	}
+
+	/**
+	 * @param selRespOrganisations the selRespOrganisations to set
+	 */
+	public void setSelRespOrganisations(Long[] selRespOrganisations) {
+		this.selRespOrganisations = selRespOrganisations;
+	}
 
 
 }

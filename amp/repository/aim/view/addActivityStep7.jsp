@@ -240,8 +240,15 @@ ${fn:replace(message,quote,escapedQuote)}
 							
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<table width="95%" bgcolor="#f4f4f2">
+							<feature:display name="Responsible Organisation" module="Organizations">
+								<jsp:include page="addActivityStep7ResponsibleOrganisation.jsp"/>
+							</feature:display>
+
+									<tr><td>
+										&nbsp;
+									</td></tr>
 							<feature:display name="Executing Agency" module="Organizations">
-								<jsp:include page="addActivityStep7ExecutingAgency.jsp"/>
+							<jsp:include page="addActivityStep7ExecutingAgency.jsp"/>
 							</feature:display>
 
 									<tr><td>

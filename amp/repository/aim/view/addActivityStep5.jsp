@@ -18,362 +18,346 @@
 
 <script language="JavaScript" type="text/javascript">
 
-function goNextStep(){
-  if(validateForm()){
-    <digi:context name="nextStepUrl" property="context/module/moduleinstance/addActivity.do?edit=true" />
-    document.aimEditActivityForm.action = "<%= nextStepUrl %>";
-    document.aimEditActivityForm.submit();
-  }
-}
 
-function validate(field) {
-  if (field == 1) { // validate location
-  if (document.aimEditActivityForm.selLocs.checked != null) {
-    if (document.aimEditActivityForm.selLocs.checked == false) {
-      alert("Please choose a location to remove");
-      return false;
-    }
-  } else {
-    var length = document.aimEditActivityForm.selLocs.length;
-    var flag = 0;
-    for (i = 0;i < length;i ++) {
-      if (document.aimEditActivityForm.selLocs[i].checked == true) {
-        flag = 1;
-        break;
-      }
-    }
 
-    if (flag == 0) {
-      alert("Please choose a location to remove");
-      return false;
-    }
-  }
-  return true;
-} else { // validate sector
-if (document.aimEditActivityForm.selActivitySectors.checked != null) {
-  if (document.aimEditActivityForm.selActivitySectors.checked == false) {
-    alert("Please choose a sector to remove");
-    return false;
-  }
-} else {
-  var length = document.aimEditActivityForm.selActivitySectors.length;
-  var flag = 0;
-  for (i = 0;i < length;i ++) {
-    if (document.aimEditActivityForm.selActivitySectors[i].checked == true) {
-      flag = 1;
-      break;
-    }
-  }
 
-  if (flag == 0) {
-    alert("Please choose a sector to remove");
-    return false;
-  }
-}
-return true;
-}
-}
 
-function selectLocation() {
-  openNewWindow(600, 500);
-  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=true" />
-  document.aimEditActivityForm.action = "<%= selectLoc %>";
-  document.aimEditActivityForm.target = popupPointer.name;
-  document.aimEditActivityForm.submit();
-}
 
-function addSectors() {
-  openNewWindow(600, 450);
-  <digi:context name="addSector" property="context/module/moduleinstance/selectSectors.do?edit=true" />
-  document.aimEditActivityForm.action = "<%= addSector %>";
-  document.aimEditActivityForm.target = popupPointer.name;
-  document.aimEditActivityForm.submit();
+	function validateForm() {
+
+		return true;
+
+	}
+
+
+
+function checkallIssues() {
+
+	var selectbox = document.aimEditActivityForm.checkAllIssues;
+
+	var items = document.aimEditActivityForm.selIssues;
+
+	if (document.aimEditActivityForm.selIssues.checked == true ||
+
+						 document.aimEditActivityForm.selIssues.checked == false) {
+
+			  document.aimEditActivityForm.selIssues.checked = selectbox.checked;
+
+	} else {
+
+		for(i=0; i<items.length; i++){
+
+			document.aimEditActivityForm.selIssues[i].checked = selectbox.checked;
+
+		}
+
+	}
+
 }
 
 
-function resetAll(){
-  <digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
-  document.aimEditActivityForm.action = "<%= resetAll %>";
-  document.aimEditActivityForm.target = "_self";
-  document.aimEditActivityForm.submit();
-  return true;
-}
 
-function removeSelLocations(){
-  var flag = validate(1);
-  if (flag == false) return false;
-  <digi:context name="remLocs" property="context/module/moduleinstance/removeSelLocations.do?edit=true" />
-  document.aimEditActivityForm.action = "<%= remLocs %>";
-  document.aimEditActivityForm.target = "_self"
-  document.aimEditActivityForm.submit();
-  return true;
-}
+function addIssues() {
 
-function removeAllLocations(){
-  try
-  {
-  	var checkedItems = document.getElementsByName("selLocs");
-  	if(checkedItems.length > 0){
-	  	for(a=0;a<checkedItems.length;a++){
-	  	checkedItems[a].checked = true;
-	  	}
-  	}
-  	else
-  	
-  	{
-  		return false;
-  	}
+	openNewWindow(610, 160);
 
-  }
-  catch(err){
-  	return false;
-  }
-  <digi:context name="remLocs" property="context/module/moduleinstance/removeSelLocations.do?edit=true" />
-  document.aimEditActivityForm.action = "<%= remLocs %>";
-  document.aimEditActivityForm.target = "_self"
-  document.aimEditActivityForm.submit();
-  return true;
-}
-function validateForm(){
-  <c:set var="errMsgAddSector">
-  <digi:trn key="aim:addSecorErrorMessage">
-  Please add sectors
-  </digi:trn>
-  </c:set>
-  var draftStatus=document.getElementById("draftFlag");
-  if(draftStatus!=null && draftStatus.value!="true" && document.aimEditActivityForm.step.value=="2"){
-    if (document.aimEditActivityForm.selActivitySectors == null) {
-      alert("${errMsgAddSector}");
-      document.aimEditActivityForm.addSec.focus();
-      return false;
-    }
-    var npoSize = document.aimEditActivityForm.sizeNPOPrograms.value;
-    var ppSize = document.aimEditActivityForm.sizePPrograms.value;
-    var spSize = document.aimEditActivityForm.sizeSPrograms.value;
-    if (!validateSectorPercentage()||!validateLocationPercentage() ||
-    !validateProgramsPercentage(npoSize,"nationalPlanObjectivePrograms") ||
-    !validateProgramsPercentage(ppSize,"primaryPrograms") ||
-    !validateProgramsPercentage(spSize,"secondaryPrograms")  ){
-      return false;
-    }
-  }
+	<digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
 
-  document.aimEditActivityForm.step.value="3";
-  return true;
-}
+	document.aimEditActivityForm.action = "<%=addIssue%>&issueId=-1";
 
-function popupwin(){
-  var wndWidth = window.screen.availWidth/2.5;
-  var wndHeight = window.screen.availHeight/2.5;
-  var t = ((screen.width)-wndWidth)/2;
-  var l = ((screen.height)-wndHeight)/2;
-  winpopup=window.open('',"popup","height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=yes,status=no,toolbar=no");
-  winpopup.document.write('<html>\n<head>\n');
-  winpopup.document.write('<title>About : Sector</title>\n');
-  winpopup.document.write('</head>\n');
-  winpopup.document.write('<body bgcolor="#f4f4f2">\n');
-  winpopup.document.write('<font face="verdana" size=1>\n');
-  winpopup.document.write('The OECD/DAC Creditor Reporting System(CRS) codes are used by all 23 OECD/DAC members when they report on their aid activities to the DAC Secretariat. The complete list of CRS codes and definitions and principles can be found in Annex 3.<ul><li>In the CRS,data on the sector of destination are recorded using 5-digit purpose codes. The first three digits of the code refer to the main sector or category (i.e.112 for Basic education, or 210 for Transpost and storage). The last two digits of the CRS purpose code allow providing more detailed classification(i.e. 11240 for Early childhood education, or 21020 for Rail transport).</li><li>For the purpose of AMP, if the 5-digits codificaton is too detailed and not relevant, only 3-digits codes may be used.</li><li>One and only one purpose code should be applied to each project. In case of multi-sector projects, use the CRS codes 400xx.</li><li>Non-sector activities (i.e. general budget support, debt, emergency aid, NGOs) are covered by the CRS, under codes 500xx to 900xx.</li></ul>\n');
-  winpopup.document.write('</font>\n');
-  winpopup.document.write('</body>\n</html>\n');
-  winpopup.document.close();
-}
+	document.aimEditActivityForm.target = popupPointer.name;
 
-function validateSectorPercentage(){
-  <c:set var="errMsgAddPercentage">
-  <digi:trn key="aim:addSecorPercentageErrorMessage">
-  Please add sector-percentage
-  </digi:trn>
-  </c:set>
-  <c:set var="errMsgSumPercentage">
-  <digi:trn key="aim:addSecorSumPercentageErrorMessage">
-  Sum of sector percentages should be 100
-  </digi:trn>
-  </c:set>
-  <c:set var="errMsgZeroPercentage">
-  <digi:trn key="aim:addzeroPercentageErrorMessage">
-  A sector percentage cannot be equal to 0
-  </digi:trn>
-  </c:set>
-  var str = null;
-  var val = null;
-  var i = 0;
-  var flag = false;
-  var sum = 0;
-  var cnt = document.aimEditActivityForm.sizeActSectors.value;
-  while (i < cnt) {
-    str   = "activitySectors[" + i + "].sectorPercentage";
-    val   = (document.aimEditActivityForm.elements)[str].value;
-    if (val == "" || val == null) {
-      alert("${errMsgAddPercentage}");
-      flag = true;
-      break;
-    }
-    if (val == "0"){
-    alert("${errMsgZeroPercentage}");
-    flag = true;
-      break;
-    }
+	document.aimEditActivityForm.submit();
 
-    sum = sum + parseFloat(val);
-    i = i + 1;
-  }
-  if (flag == true) {
-    (document.aimEditActivityForm.elements)[str].focus();
-    return false;
-  }
-  else if (sum != 100) {
-    alert("${errMsgSumPercentage}");
-    (document.aimEditActivityForm.elements)[str].focus();
-    return false;
-  }
-  return true;
-}
-
-function validateProgramsPercentage(cnt,prefix){
-  <c:set var="errMsgAddPercentage">
-  <digi:trn key="aim:addProgramPercentageErrorMessage">
-  Please add Program percentage
-  </digi:trn>
-  </c:set>
-  <c:set var="errMsgSumPercentage">
-  <digi:trn key="aim:addProgramSumPercentageErrorMessage">
-  Sum of programs percentages should be 100
-  </digi:trn>
-  </c:set>
-  <c:set var="errMsgZeroPercentage">
-  <digi:trn key="aim:addzeroProgPercentageErrorMessage">
-  A programs percentage cannot be equal to 0
-  </digi:trn>
-  </c:set>
-  var str = null;
-  var val = null;
-  var i = 0;
-  var flag = false;
-  var sum = 0;
-  while (i < cnt) {
-    str   = prefix+"[" + i + "].programPercentage";
-    val   = (document.aimEditActivityForm.elements)[str].value;
-    if (val == "" || val == null) {
-      alert("${errMsgAddPercentage}");
-      flag = true;
-      break;
-    }
-    if (val == "0"){
-    alert("${errMsgZeroPercentage}");
-    flag = true;
-      break;
-    }
-
-    sum = sum + parseFloat(val);
-    i = i + 1;
-  }
-  if (flag == true) {
-    (document.aimEditActivityForm.elements)[str].focus();
-    return false;
-  }
-  else if (cnt>0&&sum != 100) {
-    alert("${errMsgSumPercentage}");
-    (document.aimEditActivityForm.elements)[str].focus();
-    return false;
-  }
-  return true;
-}
-
-function validateLocationPercentage(){
-  <c:set var="errMsgAddPercentage">
-  <digi:trn key="aim:addLocationPercentageErrorMessage">
-  Please add location percentage
-  </digi:trn>
-  </c:set>
-  <c:set var="errMsgSumPercentage">
-  <digi:trn key="aim:addLocationSumPercentageErrorMessage">
-  Sum of locations percentages should be 100
-  </digi:trn>
-  </c:set>
-  <c:set var="errMsgZeroPercentage">
-  <digi:trn key="aim:addzeroLocationPercentageErrorMessage">
-  A locations percentage cannot be equal to 0
-  </digi:trn>
-  </c:set>
-  var str = null;
-  var val = null;
-  var i = 0;
-  var flag = false;
-  var sum = 0;
-  var cnt = document.aimEditActivityForm.sizeLocs.value;
-  var cnt_blank_fields = 0;
-  while (i < cnt) {
-    str   = "selectedLocs[" + i + "].percent";    
-    val   = (document.aimEditActivityForm.elements)[str].value;    
-    // added by mouhamad for burkina on 22/02/08
-    if (val == "" || val == null || val == "0") {
-    	val = "0";
-    	cnt_blank_fields = cnt_blank_fields + 1;
-    }    
-    /* commented by Mouhamad for burkina on 21/02/08
-    if (val == "" || val == null) {
-      alert("${errMsgAddPercentage}");
-      flag = true;
-      break;
-    }
-    if (val == "0"){
-    alert("${errMsgZeroPercentage}");
-    flag = true;
-      break;
-    }
-	*/
-    sum = sum + parseFloat(val);
-    i = i + 1;
-  }
-  if (flag == true) {
-    (document.aimEditActivityForm.elements)[str].focus();
-    return false;
-  }
-  else if (cnt_blank_fields!=cnt) {
-  	if (cnt>0 && sum!=100 ) {
-	    alert("${errMsgSumPercentage}");
-	    (document.aimEditActivityForm.elements)[str].focus();
-	    return false;
-    }
-  }
-  return true;
 }
 
 
-function fnChk(frmContrl){
-  <c:set var="errMsgAddSectorNumericValue">
-  <digi:trn key="aim:addSecorNumericValueErrorMessage">
-  Please enter numeric value only
-  </digi:trn>
-  </c:set>
-  <c:set var="errMsgAddSectorSumExceed">
-  <digi:trn key="aim:addSecorSumExceedErrorMessage">
-  Sector percentage can not exceed 100
-  </digi:trn>
-  </c:set>
-  if (isNaN(frmContrl.value)) {
-    alert("${errMsgAddSectorNumericValue}");
-    frmContrl.value = "";
-    //frmContrl.focus();
-    return false;
-  }
-  
-  if (frmContrl.value > 100) {
-    alert("${errMsgAddSectorSumExceed}");
-    frmContrl.value = "";
-    return false;
-  }
-  return true;
+
+function updateIssues(id) {
+
+	openNewWindow(610, 160);
+
+	<digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
+
+	document.aimEditActivityForm.action = "<%=addIssue%>&issueId="+id;
+
+	document.aimEditActivityForm.target = popupPointer.name;
+
+	document.aimEditActivityForm.submit();
+
 }
 
-function addProgram(programType) {
 
-		openNewRsWindow(750, 550);
-		<digi:context name="taddProgram" property="context/module/moduleinstance/addProgram.do?edit=true"/>
 
-                var url="<%= taddProgram %>&programType="+programType;
-	  	document.aimEditActivityForm.action =url ;
+function removeIssues() {
+
+	<digi:context name="addIssue" property="context/module/moduleinstance/removeIssue.do?edit=true" />
+
+	document.aimEditActivityForm.action = "<%=addIssue%>";
+
+	document.aimEditActivityForm.target = "_self"
+
+	document.aimEditActivityForm.submit();
+
+}
+
+
+
+function addMeasures(issueId) {
+
+	openNewWindow(610, 160);
+
+	<digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
+
+	document.aimEditActivityForm.action = "<%=addMeasure%>&issueId="+issueId+"&measureId=-1";
+
+	document.aimEditActivityForm.target = popupPointer.name;
+
+	document.aimEditActivityForm.submit();
+
+}
+
+
+
+function updateMeasures(issueId,measureId) {
+
+	openNewWindow(610, 160);
+
+	<digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
+
+	document.aimEditActivityForm.action = "<%=addMeasure%>&issueId="+issueId+"&measureId="+measureId;
+
+	document.aimEditActivityForm.target = popupPointer.name;
+
+	document.aimEditActivityForm.submit();
+
+}
+
+
+
+function removeMeasure(issueId) {
+
+	<digi:context name="removeMeasure" property="context/module/moduleinstance/removeMeasure.do?edit=true" />
+
+	document.aimEditActivityForm.action = "<%=removeMeasure%>&issueId="+issueId;
+
+	document.aimEditActivityForm.target = "_self"
+
+	document.aimEditActivityForm.submit();
+
+}
+
+
+
+function addActors(issueId,measureId) {
+
+	openNewWindow(610, 160);
+
+	<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
+
+	document.aimEditActivityForm.action = "<%=addActors%>&issueId="+issueId+"&measureId="+measureId+"&actorId=-1";
+
+	document.aimEditActivityForm.target = popupPointer.name;
+
+	document.aimEditActivityForm.submit();
+
+}
+
+
+
+function updateActor(issueId,measureId,actorId) {
+
+	openNewWindow(610, 160);
+
+	<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
+
+	document.aimEditActivityForm.action = "<%=addActors%>&issueId="+issueId+"&measureId="+measureId+"&actorId="+actorId;
+
+	document.aimEditActivityForm.target = popupPointer.name;
+
+	document.aimEditActivityForm.submit();
+
+}
+
+
+
+function removeActors(issueId,measureId) {
+
+	<digi:context name="removeActors" property="context/module/moduleinstance/removeActors.do?edit=true" />
+
+	document.aimEditActivityForm.action = "<%=removeActors%>&issueId="+issueId+"&measureId="+measureId;
+
+	document.aimEditActivityForm.target = "_self"
+
+	document.aimEditActivityForm.submit();
+
+}
+
+
+
+function validatePhyProg() {
+
+	if (document.aimEditActivityForm.selPhyProg.checked != null) {
+
+		if (document.aimEditActivityForm.selPhyProg.checked == false) {
+
+			alert("Please choose a physical progress to remove");
+
+			return false;
+
+		}
+
+	} else {
+
+		var length = document.aimEditActivityForm.selPhyProg.length;
+
+		var flag = 0;
+
+		for (i = 0;i < length;i ++) {
+
+			if (document.aimEditActivityForm.selPhyProg[i].checked == true) {
+
+				flag = 1;
+
+				break;
+
+			}
+
+		}
+
+
+
+		if (flag == 0) {
+
+			alert("Please choose a physical progress to remove");
+
+			return false;
+
+		}
+
+	}
+
+	return true;
+
+}
+
+
+
+function validateComponents() {
+
+	if (document.aimEditActivityForm.selComp.checked != null) {
+
+		if (document.aimEditActivityForm.selComp.checked == false) {
+
+			alert("Please choose a component to remove");
+
+			return false;
+
+		}
+
+	} else {
+
+		var length = document.aimEditActivityForm.selComp.length;
+
+		var flag = 0;
+
+		for (i = 0;i < length;i ++) {
+
+			if (document.aimEditActivityForm.selComp[i].checked == true) {
+
+				flag = 1;
+
+				break;
+
+			}
+
+		}
+
+
+
+		if (flag == 0) {
+
+			alert("Please choose a component to remove");
+
+			return false;
+
+		}
+
+	}
+
+	return true;
+
+}
+
+
+
+function addPhyProgess(id,comp) {
+
+		openNewWindow(610, 255);
+
+		<digi:context name="addPhyProg" property="context/module/moduleinstance/showAddPhyProg.do~edit=true" />
+
+		if (id == -1) {
+
+			document.aimEditActivityForm.action = "<%= addPhyProg %>~comp=" + comp;
+
+		} else {
+
+			document.aimEditActivityForm.action = "<%= addPhyProg %>~comp=" + comp + "~id=" + id;
+
+		}
+
+		document.aimEditActivityForm.target = popupPointer.name;
+
+		document.aimEditActivityForm.prevId.value = id;
+
+		document.aimEditActivityForm.submit();
+
+}
+
+
+
+function removeSelPhyProgress() {
+
+	var flag = validatePhyProg();
+
+	if (flag == false) return false;
+
+	<digi:context name="remPhyProg" property="context/module/moduleinstance/removeSelPhyProg.do?edit=true" />
+
+	document.aimEditActivityForm.action = "<%= remPhyProg %>";
+
+	document.aimEditActivityForm.target = "_self"
+
+	document.aimEditActivityForm.submit();
+
+	return true;
+
+}
+
+
+
+
+
+/*
+
+function addComponents(id) {
+
+
+
+		<digi:context name="addComponents" property="context/module/moduleinstance/showAddComponent.do~edit=true" />
+
+		if (id == -1) {
+
+			document.aimEditActivityForm.action = "<%= addComponents %>";
+
+		} else {
+
+			document.aimEditActivityForm.action = "<%= addComponents %>~id=" + id;
+
+		}
+
+		openNewWindow(610, 280);
 
 		document.aimEditActivityForm.target = popupPointer.name;
 
@@ -381,7 +365,7 @@ function addProgram(programType) {
 
 }
 
-
+*/
 
 
 
@@ -419,27 +403,48 @@ function editFunding(id)
 
 }
 
-function validateComponents() {
-	if (document.aimEditActivityForm.selComp.checked != null) {
-		if (document.aimEditActivityForm.selComp.checked == false) {
-			alert("Please choose a component to remove");
-			return false;
-		}
-	} else {
-		var length = document.aimEditActivityForm.selComp.length;
-		var flag = 0;
-		for (i = 0;i < length;i ++) {
-			if (document.aimEditActivityForm.selComp[i].checked == true) {
-				flag = 1;
-				break;
-			}
-		}
-	}
+
+
+/*
+
+function removeSelComponents()
+
+{
+
+	<digi:context name="rem" property="context/module/moduleinstance/removeSelPhyProg.do?edit=true" />
+
+	document.aimEditActivityForm.action = "<%= rem %>";
+
+	document.aimEditActivityForm.target = "_self";
+
+	document.aimEditActivityForm.submit();
+
+}
+
+*/
+
+
+
+function resetAll()
+
+{
+
+	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
+
+	document.aimEditActivityForm.action = "<%= resetAll %>";
+
+	document.aimEditActivityForm.target = "_self";
+
+	document.aimEditActivityForm.submit();
+
+	return true;
+
 }
 
 
 
-	
+
+
 function removeSelComponents() {
 
 	var flag = validateComponents();
@@ -458,38 +463,6 @@ function removeSelComponents() {
 
 }
 
-
-function remProgram(programType) {
-	if(programType==1){
-		var val=document.getElementsByName('selectedNPOPrograms');
-	} else if (programType==2) {
-		var val=document.getElementsByName('selectedPPrograms');
-	}else if (programType==3){
-		var val=document.getElementsByName('selectedSPrograms');
-	}		
-		if(val!=null ){
-			var isProgramSelected = false;
-			for(var i=0;i<val.length;i++){
-				if(val[i]!=null && val[i].checked){
-					isProgramSelected = true;
-				}
-			}			
-			if(!isProgramSelected)
-			{
-				alert('Please select a program to remove');
-				return false;
-			}
-			else
-			{
-				<digi:context name="tremProgram" property="context/module/moduleinstance/remProgram.do?edit=true" />
-	            var url="<%=tremProgram %>&programType="+programType;
-		  		document.aimEditActivityForm.action = url;
-	            document.aimEditActivityForm.target = "_self"
-				document.aimEditActivityForm.submit();
-	            return true;
-			}
-		}		
-}
 
 </script>
 
@@ -874,10 +847,6 @@ function remProgram(programType) {
 		<td width="10">&nbsp;</td>
 
 	</tr>
-
-</table>
-
-</td></tr>
 
 </table>
 

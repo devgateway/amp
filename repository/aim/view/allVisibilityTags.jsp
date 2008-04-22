@@ -82,6 +82,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display module="Organizations" name="Implementing Agency"></feature:display>
 <feature:display module="Organizations" name="Regional Group"></feature:display>
 <feature:display module="Organizations" name="Sector Group"></feature:display>
+<feature:display module="Organizations" name="Responsible Organisation"></feature:display>
 <feature:display module="Project ID and Planning" name="Identification"></feature:display>
 <feature:display module="Project ID and Planning" name="Location"></feature:display>
 <feature:display module="Project ID and Planning" name="Planning"></feature:display>
@@ -319,6 +320,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Exchange Rate" feature="Funding Organizations"></field:display>
 <field:display name="Executing Agency Add Organizations Button" feature="Executing Agency"></field:display>
 <field:display name="Executing Agency Remove Organizations Button" feature="Executing Agency"></field:display>
+<field:display name="Responsible Organisation Add Organizations Button" feature="Responsible Organisation"></field:display>
+<field:display name="Responsible Organisation Remove Organizations Button" feature="Responsible Organisation"></field:display>
 <field:display name="FY" feature="Budget"></field:display>
 <field:display name="Final Date for Contracting" feature="Planning"></field:display>
 <field:display name="Final Date for Disbursements" feature="Planning"></field:display>

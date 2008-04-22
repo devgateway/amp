@@ -50,6 +50,7 @@ public class Constants
 	public static final String REGIONAL_GROUP = "RG" ;
 	public static final String SECTOR_GROUP = "SG" ;
 	public static final String EXECUTING_AGENCY = "EA";
+	public static final String RESPONSIBLE_ORGANISATION = "RO";
 	public static final String CONTRACTOR = "CT";
 	public static final String RELATED_INSTITUTIONS = "RL" ;
 	public static final int NUM_RECORDS = 10 ;

@@ -1013,6 +1013,19 @@ public class SaveActivity extends Action {
 						orgRole.add(ampOrgRole);
 					}
 				}
+				if (eaForm.getRespOrganisations() != null && eaForm.getRespOrganisations().size()>0) { // Responsible Organisation
+					AmpRole role = DbUtil
+							.getAmpRole(Constants.RESPONSIBLE_ORGANISATION);
+					Iterator itr = eaForm.getRespOrganisations().iterator();
+					while (itr.hasNext()) {
+						AmpOrganisation org = (AmpOrganisation) itr.next();
+						AmpOrgRole ampOrgRole = new AmpOrgRole();
+						ampOrgRole.setActivity(activity);
+						ampOrgRole.setRole(role);
+						ampOrgRole.setOrganisation(org);
+						orgRole.add(ampOrgRole);
+					}
+				}
 				activity.setOrgrole(orgRole);
 
 				// set locations

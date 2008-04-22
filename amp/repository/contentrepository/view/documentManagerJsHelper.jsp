@@ -250,11 +250,13 @@ function getCallbackForDelete (row, table) {
 						YAHOO.amp.datatables[i].deleteRow(row);
 				}
 			}
+			else 
+				YAHOO.amp.panels[2].show();
 
 		},
 		failure: function(o) {
 			//YAHOO.amp.panels[2].setBody("<div align='center'><font color='red'>${translation3}</font></div>");
-			alert("${translation3}");
+			//alert("${translation3}");
 		}
 	}
 	return callbackForDelete;

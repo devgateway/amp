@@ -3,12 +3,21 @@
  */
 package org.digijava.module.aim.helper;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+
+import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.exception.NoDocumentTypeException;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
@@ -29,6 +38,30 @@ public class ActivityDocumentsUtil {
     		UUIDs.add(doc.getUuid());
     	}
 		
+	}
+	
+	public static Collection<String> getNamesOfActForDoc(String uuid) {
+		Session session = null;
+        Query qry = null;
+
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select a.name " +
+                " from " + AmpActivityDocument.class.getName() + " ad, " + AmpActivity.class.getName() + " a " +
+                " where ad.ampActivity=a AND ad.uuid=:uuid";
+            
+            qry		= session.createQuery(queryString);
+            qry.setString("uuid", uuid);
+            
+            Collection<String> ret	= qry.list();
+            return ret;
+        }
+        catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+        
 	}
 
 }

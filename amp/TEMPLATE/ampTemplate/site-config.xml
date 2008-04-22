@@ -548,6 +548,7 @@
 			<module name="contentrepository">
 				<page>amp_getDocumentList</page>
 				<page>amp_getDocumentVersionList</page>
+				<page>amp_deleteDocumentResponse</page>
 			</module>
 		</page-group>
 	</site-layout>

@@ -150,7 +150,7 @@ tanzania adds
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpCategoryValue" column="amp_categoryvalue_id" />
 		</set>
 
-		<set name="activityDocuments" lazy="false" cascade="all-delete-orphan">
+		<set name="activityDocuments" lazy="false" inverse="false" cascade="all-delete-orphan" >
 			<cache usage="read-write"/>
 			<key column="amp_activity_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityDocument"  />

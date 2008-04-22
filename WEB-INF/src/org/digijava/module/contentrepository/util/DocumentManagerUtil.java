@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.jcr.InvalidItemStateException;
@@ -27,11 +28,14 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import net.sf.hibernate.Query;
+
 import org.apache.jackrabbit.core.TransientRepository;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.upload.FormFile;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -383,6 +387,52 @@ public class DocumentManagerUtil {
 				return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * 
+	 * @param uuid 
+	 * @param className - the class of the db objects that need to be deleted
+	 * @return number of objects deleted
+	 */
+	public static int deleteObjectsReferringDocument(String uuid, String className) {
+		net.sf.hibernate.Session session = null;
+		int number	= 0;
+		try{
+				session				= PersistenceManager.getSession();
+				String queryString	= "select obj from " + className + " obj " +
+						"where obj.uuid=:uuid";
+				Query query			= session.createQuery(queryString);
+				query.setString("uuid", uuid);
+				
+				Collection objsUsingDoc	= query.list();  
+				
+				if ( objsUsingDoc != null && objsUsingDoc.size() > 0) {
+					number				= objsUsingDoc.size();
+					Iterator iter		= objsUsingDoc.iterator(); 
+					while( iter.hasNext() ) {
+						session.delete( iter.next() );
+					} 
+				}
+				session.flush();
+				
+		}
+	
+		
+		catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		}
+		finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return number;
 	}
 	
 	public static String processUrl (String urlString, ActionErrors errors) {

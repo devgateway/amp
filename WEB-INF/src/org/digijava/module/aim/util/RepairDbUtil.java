@@ -3,13 +3,14 @@ package org.digijava.module.aim.util;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.Collection;
-import java.util.Vector;
+import java.util.Iterator;
 
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 public class RepairDbUtil {
 	private static Logger logger = Logger.getLogger(RepairDbUtil.class);
@@ -153,5 +154,11 @@ public class RepairDbUtil {
 				}
 			}
 		}
+	}
+	
+	public static void repairDocumentNoLongerInContentRepository(String uuid, String className) {
+		int numOfObjectsDeleted			= DocumentManagerUtil.deleteObjectsReferringDocument(uuid, className); 
+		if ( numOfObjectsDeleted > 0 )
+			logger.error ("There was an error with " + className + " using deleted documents. Deleting " + numOfObjectsDeleted + "rows" );
 	}
 }

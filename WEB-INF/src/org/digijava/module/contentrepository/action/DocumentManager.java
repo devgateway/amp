@@ -24,8 +24,10 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
@@ -357,7 +359,7 @@ public class DocumentManager extends Action {
 				
 	}
 	
-	public Collection<DocumentData> getDocuments(Collection<String> UUIDs) throws Exception {
+	public Collection<DocumentData> getDocuments(Collection<String> UUIDs) {
 		ArrayList<Node> documents		= new ArrayList<Node>();
 		Iterator<String> iter			= UUIDs.iterator();
 		while (iter.hasNext()) {
@@ -370,8 +372,17 @@ public class DocumentManager extends Action {
 			 * It means that there is a problem in the logic of the application so we need to throw an 
 			 * exception.
 			 */
-			if (documentNode == null)
-				throw new Exception("Document with uuid '" + uuid + "' not found !");
+			if (documentNode == null) {
+				try {
+				  throw new Exception("Document with uuid '" + uuid + "' not found !");
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+					RepairDbUtil.repairDocumentNoLongerInContentRepository(uuid, CrDocumentNodeAttributes.class.getName() );
+					RepairDbUtil.repairDocumentNoLongerInContentRepository(uuid, AmpActivityDocument.class.getName() );
+				}
+				
+			}
 			else
 				documents.add(documentNode);
 		}

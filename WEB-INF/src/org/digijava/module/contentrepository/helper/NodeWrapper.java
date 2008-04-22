@@ -1,22 +1,27 @@
 package org.digijava.module.contentrepository.helper;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Iterator;
 
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
-import javax.jcr.ValueFormatException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.upload.FormFile;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
-import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.helper.ActivityDocumentsConstants;
+import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
@@ -368,6 +373,38 @@ public class NodeWrapper {
 			}
 		}
 		return null;
+	}
+	
+	public Collection<KeyValue> getObjectsUsingThisDocument () throws Exception {
+		Collection<KeyValue> ret	= new ArrayList<KeyValue>();
+		if ( this.node == null )
+			throw new Exception("Inner node not initialized");
+		
+		Collection<String> names	= ActivityDocumentsUtil.getNamesOfActForDoc( node.getUUID() );
+		
+		ret							= stringColToKeyValueCol("Activities", names);
+		
+		return ret;
+		
+		
+	} 
+	
+	public Boolean deleteNode(HttpServletRequest request) throws Exception  {
+		String uuid		= node.getUUID();
+		Boolean ret		= DocumentManagerUtil.deleteDocumentWithRightsChecking( uuid, request);
+		DocumentManagerUtil.deleteObjectsReferringDocument(uuid, CrDocumentNodeAttributes.class.getName() );
+		return ret;
+	}
+	
+	private static Collection<KeyValue> stringColToKeyValueCol(String key, Collection<String> names) {
+		Collection<KeyValue> ret	= new ArrayList<KeyValue>(names.size());
+		Iterator<String> iter	= names.iterator();
+		while ( iter.hasNext() ) {
+			KeyValue kv	= new KeyValue( key, iter.next() );
+			ret.add(kv);
+		}
+		
+		return ret;
 	}
 	
 }

@@ -12,7 +12,7 @@
 	<page name="addDocumentDM" page="addDocumentDM"/>
 	<page name="viewPublicDocuments" page="viewPublicDocuments"/>
 	<page name="nondhtmlAddDocument" page="nondhtmlAddDocument"/>
-
+	<page name="amp_deleteDocumentResponse" page="deleteDocumentResponse"/>
 </secondary-pages>
 
 

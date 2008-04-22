@@ -41,6 +41,7 @@ public class AddSelectedSectors
     if (eaForm.getCols() == null) {
       eaForm.setCols(new ArrayList());
     }
+    Long configId=eaForm.getConfigId();
 
     Long selsearchedSector[] = eaForm.getSelSectors();
     logger.info("size off selected searched sectors: " +
@@ -89,6 +90,7 @@ public class AddSelectedSectors
                 break;
               }
             }
+            sctr.setConfigId(configId);
             eaForm.getCols().add(sctr);
             sectr.add(sctr);
             count++;

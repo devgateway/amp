@@ -183,7 +183,7 @@ public class Constants
 	public static final String USER_ACT_LIST = "userActivityList";
 	public static final String TS_ACT_LIST = "timestampActivityList";
 
-	public static final long MAX_TIME_LIMIT = 30*60*1000;
+	public static final long MAX_TIME_LIMIT = 10*60*1000;
 
 	public static final String ME_IND_VAL_BASE_ID = "base";
 	public static final String ME_IND_VAL_ACTUAL_ID = "actual";

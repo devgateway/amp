@@ -258,6 +258,9 @@ public class getNPDgraph extends Action {
             }
         } else {
             //ascending
+        	actual-=base;
+        	target-=base;
+        	base=0;
             result = actual / target;
         }
         return new Double(result);

@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <script langauage="JavaScript">
 	function onDelete() {
 		var flag = confirm("Delete this Scheme?");
@@ -12,6 +13,7 @@
 	}
 	function updateScheme(id,levelType) {
 			  
+			 var sectorCode = document.aimAddSectorForm.sectorCode.value; 
 			  
 			 if(isEmpty(document.aimAddSectorForm.sectorName.value)==true)
 			 {
@@ -21,6 +23,22 @@
 			 {
 						alert("please enter a sector code:");
 			 }	
+			 else if(levelType=='sector' && !(sectorCode > 1000 && sectorCode < 10000))
+			 {
+			 		 <c:set var="translation">
+             	       <digi:trn key="aim:EnterValidSubSectorCode">Sector Code must be between 1000 and 10000</digi:trn>
+                     </c:set>   
+			 
+			         alert("${translation}");
+			 }
+			 else if(levelType=='sector3' && !(sectorCode > 10000 && sectorCode < 100000))
+			 {
+			 		 <c:set var="translation">
+             	       <digi:trn key="aim:EnterValidSubSubSectorCode">Sector Code must be between 10000 and 100000</digi:trn>
+                     </c:set>   
+			 
+			         alert("${translation}");
+			 }
 			 else
 			 {
 			<digi:context name="addSector" property="context/module/moduleinstance/addSector.do?event=addSector" />

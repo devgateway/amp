@@ -10,6 +10,8 @@
 
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+
 <script langauage="JavaScript">
 
 	function onDelete() {
@@ -22,9 +24,11 @@
 
 	function updateScheme(id) {
 
-			  
+			 var sectorCode = document.aimAddSectorForm.sectorCode.value; 
+			 <c:set var="translation">
+             	<digi:trn key="aim:pleaseEnterValidSectorCode">Sector Code must be between 100 and 1000</digi:trn>
+             </c:set>             
 
-			  
 
 			 if(isEmpty(document.aimAddSectorForm.sectorName.value)==true)
 
@@ -41,6 +45,10 @@
 						alert("please enter a sector code:");
 
 			 }	
+			 else if(!(sectorCode > 100 && sectorCode < 1000))
+			 {
+			            alert("${translation}");
+			 }
 
 			 else
 

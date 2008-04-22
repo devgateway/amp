@@ -237,7 +237,7 @@ function checkNumeric(objName,comma,period,hyphen)
 											<td>
 												<c:if test="${aimEditActivityForm.impLevelValue != 2}">
 													<html:select property="impRegion" onchange="regionChanged()" styleClass="inp-text">
-														<html:option value="-1">Select Region</html:option>
+                                                                                                             <html:option value="-1"><digi:trn key="aim:addActivityLocations:selectRegion">Select Region</digi:trn></html:option>
 														<logic:notEmpty name="aimEditActivityForm" property="regions">
 															<html:optionsCollection name="aimEditActivityForm" property="regions"
 															value="ampRegionId" label="name" />
@@ -246,7 +246,7 @@ function checkNumeric(objName,comma,period,hyphen)
 												</c:if>
 												<c:if test="${aimEditActivityForm.impLevelValue == 2}">
 														<html:select property="impMultiRegion" styleClass="inp-text" size="5" multiple="true">
-														<html:option value="-1">&nbsp;&nbsp;Select Region&nbsp;&nbsp;</html:option>
+														<html:option value="-1">&nbsp;&nbsp;<digi:trn key="aim:addActivityLocations:selectRegion">Select Region</digi:trn>&nbsp;&nbsp;</html:option>
 														<logic:notEmpty name="aimEditActivityForm" property="regions">
 															<html:optionsCollection name="aimEditActivityForm" property="regions"
 															value="ampRegionId" label="name" />
@@ -264,7 +264,7 @@ function checkNumeric(objName,comma,period,hyphen)
 											<td>
 												<c:if test="${aimEditActivityForm.impLevelValue != 3}">
 												<html:select property="impZone" onchange="zoneChanged()" styleClass="inp-text" >
-													<html:option value="-1">Select Zone</html:option>
+													<html:option value="-1"><digi:trn key="aim:addActivityLocations:selectZone">Select Zone</digi:trn></html:option>
 													<logic:notEmpty name="aimEditActivityForm" property="zones">
 														<html:optionsCollection name="aimEditActivityForm" property="zones"
 														value="ampZoneId" label="name" />
@@ -273,7 +273,7 @@ function checkNumeric(objName,comma,period,hyphen)
 												</c:if>
 												<c:if test="${aimEditActivityForm.impLevelValue == 3}">
 												<html:select property="impMultiZone" styleClass="inp-text" size="5" multiple="true">
-													<html:option value="-1">&nbsp;&nbsp;Select Zone&nbsp;&nbsp;</html:option>
+                                                                                                     <html:option value="-1">&nbsp;&nbsp;<digi:trn key="aim:addActivityLocations:selectZone">Select Zone</digi:trn>&nbsp;&nbsp;</html:option>
 													<logic:notEmpty name="aimEditActivityForm" property="zones">
 														<html:optionsCollection name="aimEditActivityForm" property="zones"
 														value="ampZoneId" label="name" />
@@ -290,7 +290,7 @@ function checkNumeric(objName,comma,period,hyphen)
 											</td>
 											<td>
 												<html:select property="impMultiWoreda"  styleClass="inp-text" size="5" multiple="true">
-													<html:option value="-1">&nbsp;&nbsp;Select <digi:trn key="aim:district">District </digi:trn>&nbsp;&nbsp;</html:option>
+													<html:option value="-1">&nbsp;&nbsp;<digi:trn key="aim:addActivityLocations:selectDistrict">Select District </digi:trn>&nbsp;&nbsp;</html:option>
 													<logic:notEmpty name="aimEditActivityForm" property="woredas">
 														<html:optionsCollection name="aimEditActivityForm" property="woredas"
 														value="ampWoredaId" label="name" />

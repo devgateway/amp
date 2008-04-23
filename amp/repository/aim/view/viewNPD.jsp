@@ -10,6 +10,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
@@ -671,7 +672,6 @@
 		var tbl= tr.parentNode;
 
 		clearActivityTable(tr);
-
 		var root=xml.getElementsByTagName('activityList')[0];
 		if(root==null){
 			root=xml.getElementsByTagName('error')[0];
@@ -718,7 +718,6 @@
 		
 		
 		var labelsTD0 = document.createElement('TD');
-		labelsTD0.colSpan=0;
 		labelsTD0.align='left';
 		labelsTD0.innerHTML='&nbsp;';
 		labelsTR1.appendChild(labelsTD0);
@@ -1136,7 +1135,7 @@
  	/* Adds the information for a theme to the themeArray array in the corresponding position (=pid). */
  	function addProgramInformation(pid, programName, description, leadAgency, programCode, programType, targetGroups,
  				background, objectives, outputs, beneficiaries, environmentConsiderations) {
- 			var panelBody =	"";
+ 			var panelBody =	"";                        
  			panelBody += '<table border="0">';
  			panelBody += "<tr><td align='left'><b><digi:trn key='aim:NPD:ProgramName'>Program Name</digi:trn>:</b>&nbsp;</td><td>"+ programName +"</td></tr>";
  			panelBody += "<tr><td align='left'><b><digi:trn key='aim:NPD:Description'>Description</digi:trn>:</b>&nbsp;</td><td>"+ description +"</td></tr>";
@@ -1154,13 +1153,22 @@
  			themeArray[pid]	= panelBody;
 
  	}
-	window.onload=loadInitial;;
+	window.onload=loadInitial;
 </script>
 <script language="javascript" type="text/javascript">
 	<digi:instance property="aimNPDForm" />
     <c:forEach var="theme" items="${aimNPDForm.allThemes}">
+    <c:set var="name">
+    ${theme.name}
+    </c:set>
+    <c:set var="quote">'</c:set>
+    <c:set var="escapedQuote">\'</c:set>
+    <c:set var="escapedName">
+    ${fn:replace(message,quote,escapedQuote)}
+    </c:set>
+
 		addProgramInformation(	'${theme.ampThemeId}',
-								'${theme.name}',
+								 '${escapedName}',
 								'${theme.description}',
 								'${theme.leadAgency}',
 								'${theme.themeCode}',

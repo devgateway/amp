@@ -81,7 +81,9 @@ public class EditOrgType extends DispatchAction {
 			  		if (null == editForm.getOrgType()) {
 			  			editForm.setOrgType(otype.getOrgType());
 					  	editForm.setOrgTypeCode(otype.getOrgTypeCode());
-					  	editForm.setOrgTypeIsGovernmental(otype.getOrgTypeIsGovernmental());
+					  	editForm.setOrgTypeIsGovernmental( 
+					  			(otype.getOrgTypeIsGovernmental()==null)?false:otype.getOrgTypeIsGovernmental() 
+					  	);
 					  	return mapping.findForward("forward");
 			  		}
 			  		otype.setOrgType(editForm.getOrgType());

@@ -1,5 +1,6 @@
 package org.digijava.module.aim.helper;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
@@ -172,7 +173,7 @@ public class FormatHelper {
 	if(date==null) return null;
 	String defaultFormat = FeaturesUtil
 		.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
-	SimpleDateFormat formater = new SimpleDateFormat(defaultFormat);
+	SimpleDateFormat formater = new SimpleDateFormat(defaultFormat);	
 	return formater.format(date);
     }
    

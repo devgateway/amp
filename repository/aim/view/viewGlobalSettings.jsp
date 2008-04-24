@@ -264,7 +264,7 @@ function saveAllSettings(){
                                           <digi:trn key='${fn:replace(newKey, " ", "_")}'>${global.value}</digi:trn>
                                         </c:set>
 
-                                        <html:option value="${global.key}">${globSettings}</html:option>
+                                        <html:option value="${global.key}">${global.value}</html:option>
                                       </logic:iterate>
                                     </html:select>
                                     <%} %>										

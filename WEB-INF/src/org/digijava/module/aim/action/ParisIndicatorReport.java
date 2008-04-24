@@ -374,6 +374,7 @@ public class ParisIndicatorReport extends Action {
     }
 
     private List filterDonors(Collection donorsCol, int st) {
+        if(donorsCol==null) return null;
 
         List filteredDonorsCol = new ArrayList();
         List donorsLst = new ArrayList(donorsCol);

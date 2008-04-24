@@ -1600,7 +1600,7 @@ public class AdvancedReport extends Action {
 				}
 				if(str.equals("Step2AddRows") == true)
 				{
-					formBean.setColumnHierarchie(coll);
+					formBean.setColumnHierarchie(coll2);
 					//formBean.setAddedColumns(temp);
 				}
 				if(str.equals("Step2DeleteRows"))

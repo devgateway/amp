@@ -5,7 +5,6 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-<%@ page import = "org.apache.struts.util.LabelValueBean" %>
 
 <digi:instance property="calendarEventForm"/>
 <script language="JavaScript" type="text/javascript">
@@ -319,7 +318,7 @@ function delSubmit(){
                 	       			<a id="clear1" href="javascript:clearDate(selectedStartDate, 'clear1')">
 									 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 									</a>
-                       				 <a id="date1" href='javascript:pickDateById("date1","selectedStartDate","dd/mm/yyyy","clear1")'>
+                       				 <a id="date1" href='javascript:pickDateById("date1","selectedStartDate","clear1")'>
 										<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 									</a>
                                 </td>
@@ -433,7 +432,7 @@ function delSubmit(){
                                 </td>
                                 <td>&nbsp;</td>
                                 <td>
-                      				<a id="date2" href='javascript:pickDateById("date2","selectedEndDate","dd/mm/yyyy","clear2")'>
+                      				<a id="date2" href='javascript:pickDateById("date2","selectedEndDate","clear2")'>
 										<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 									</a>
                                 </td>

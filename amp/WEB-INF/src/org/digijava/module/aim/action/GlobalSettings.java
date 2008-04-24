@@ -169,7 +169,7 @@ public class GlobalSettings extends Action {
 				//Iterator iterator 	= coll.iterator();
 				while (rs.next()){
 
-					//logger.info("Values:" + rs.getString(1) + "," + rs.getString(2) );
+					logger.info("Values:" + rs.getString(1) + "," + rs.getString(2) );
 					KeyValue keyValue	= new KeyValue( rs.getObject(1)+"", rs.getString(2) );
 					ret.add( keyValue );
 				}

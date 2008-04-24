@@ -4,8 +4,8 @@ import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.apache.log4j.Logger;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.calendar.exception.CalendarException;
 
 public class DateBreakDown {
@@ -248,8 +248,8 @@ public class DateBreakDown {
         return calendar;
     }
 
-    public static boolean isValidDate(int type, String date) {
-        if (date == null || !date.matches("^[0-9]{2}\\/[0-9]{2}\\/[0-9]{4}$")) {
+    public static boolean isValidDate(int type, String date) { //
+    	if (date == null || !date.matches("^[0-9]{2}\\/[0-9]{2}\\/[0-9]{4}$")) {
             return false;
         }
         try {
@@ -287,7 +287,7 @@ public class DateBreakDown {
     }
 
     public String formatDateString() {
-	return FormatHelper.formatDate(this.getGregorianCalendar().getTime());
+    	return FormatHelper.formatDate(this.getGregorianCalendar().getTime());
     }
 
     public String formatTimeString() {

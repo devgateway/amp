@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -40,7 +41,7 @@ public class ShowCalendarEvent
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
         CalendarEventForm calendarEventForm = (CalendarEventForm) form;
-
+        
         try {
         	if(calendarEventForm.isReset()==true){
         		calendarEventForm=resetForm(calendarEventForm);

@@ -45,8 +45,12 @@ public class AddEditData
 
         String parent=request.getParameter("parent");
         if(parent!=null){
+        	if(themeForm.getIndicatorName()!=null){
+        		themeForm.setIndicatorName(null);
+        	}
             Long parentId=Long.valueOf(parent);
             IndicatorTheme connection=IndicatorUtil.getConnectionToTheme(parentId);
+            themeForm.setIndicatorName(connection.getIndicator().getName());
             if (connection.getValues()!=null && connection.getValues().size()>0){
                 List<AmpPrgIndicatorValue> indValuesList=new ArrayList<AmpPrgIndicatorValue>();
             	for (AmpIndicatorValue value : connection.getValues()) {

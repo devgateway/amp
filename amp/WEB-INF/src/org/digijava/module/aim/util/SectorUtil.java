@@ -1201,7 +1201,7 @@ public class SectorUtil {
             queryString = "select cls.ampSecSchemeId from "
                     + AmpClassificationConfiguration.class.getName() +
                     " config inner join config.classification cls "+
-                    " where cls.primary=true ";
+                    " where config.primary=true ";
             qry = session.createQuery(queryString);
             //There must be only one primary configuration in database
             id=(Long)qry.uniqueResult();

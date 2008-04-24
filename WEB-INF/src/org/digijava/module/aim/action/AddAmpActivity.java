@@ -100,29 +100,29 @@ public class AddAmpActivity extends Action {
 
 
     TeamMember teamMember = new TeamMember();
-  
+
     // Get the current member who has logged in from the session
     teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-    
+
     //PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
-    
+
     // if user is not logged in, forward him to the home page
     //if (session.getAttribute("currentMember") == null)
     //return mapping.findForward("index");
 
     //return mapping.findForward("publicPreview");
 
-    EditActivityForm eaForm = (EditActivityForm) form; 
-    
-   
-    
+    EditActivityForm eaForm = (EditActivityForm) form;
+
+
+
     if (teamMember != null && teamMember.getTeamType()
        .equalsIgnoreCase("GOVERNMENT")) {
        eaForm.setGovFlag(true);
     } else {
        eaForm.setGovFlag(false);
    }
-    
+
       if (eaForm.getSteps() == null) {
           List steps = ActivityUtil.getSteps(eaForm.isGovFlag());
           eaForm.setSteps(steps);
@@ -130,21 +130,21 @@ public class AddAmpActivity extends Action {
     if(eaForm.getClassificationConfigs()==null){
         eaForm.setClassificationConfigs(SectorUtil.getAllClassificationConfigs());
     }
-    
+
     //set the level, if available
     String levelTxt=request.getParameter("activityLevelId");
     if(levelTxt!=null) eaForm.setActivityLevel(Long.parseLong(levelTxt));
-    
+
      //set the contracts, if available
      //eaForm.getCurrCode()
     if(eaForm.getActivityId()!=null&&(eaForm.getContracts()==null||eaForm.getContracts().size()==0)){
            List contracts=ActivityUtil.getIPAContracts(eaForm.getActivityId(),eaForm.getCurrCode());
            eaForm.setContracts(contracts);
      }
-   
+
      // load all the active currencies
       eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
-    
+
     //Only currencies havening exchanges rates AMP-2620
       ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
       eaForm.setValidcurrencies(validcurrencies);
@@ -157,7 +157,7 @@ public class AddAmpActivity extends Action {
     					}
     			}
       }
-      
+
 
 
 
@@ -179,10 +179,10 @@ public class AddAmpActivity extends Action {
                }
 
                 }
-		
-		
+
+
 	//===============Sectors START===========================
-		
+
 		// set Global Settings Multi-Sector Selecting
 		/*String multiSectorSelect = FeaturesUtil
 				.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_MULTISECTORSELECT);
@@ -212,7 +212,7 @@ public class AddAmpActivity extends Action {
 							while (itr.hasNext()) {
 								ActivitySector asec = (ActivitySector) itr
 										.next();
-								
+
 								if (asec.getSectorName().equals(selectedSector.getSectorName())) {
 									if (selectedSector.getSubsectorLevel1Name() == null) {
 										addSector = false;
@@ -247,27 +247,28 @@ public class AddAmpActivity extends Action {
 							// sectors,than after adding new one
 							// the percentages must equal blanks and user should
 							// fill them
-							if (prevSelSectors != null) {
-								if (prevSelSectors.isEmpty()) {
-									selectedSector
-											.setSectorPercentage(new Float(
-													100));
-								} else {
-									selectedSector.setSectorPercentage(null);
-									/*Iterator iter = prevSelSectors.iterator();
-									while (iter.hasNext()) {
-										ActivitySector actSect = (ActivitySector) iter
-												.next();
-										//actSect.setSectorPercentage(null); //as required by AMP-2870
-									}*/
-								}
-								prevSelSectors.add(selectedSector);
-							} else {
-								selectedSector.setSectorPercentage(new Float(
-										100));
-								prevSelSectors = new ArrayList<ActivitySector>();
-								prevSelSectors.add(selectedSector);
-							}
+                            if (prevSelSectors != null) {
+                                Iterator iter = prevSelSectors.iterator();
+                                boolean firstSecForConfig = true;
+                                while (iter.hasNext()) {
+                                    ActivitySector actSect = (ActivitySector) iter
+                                        .next();
+                                    if (actSect.getConfigId().equals(selectedSector.getConfigId())) {
+                                        firstSecForConfig = false;
+                                        break;
+                                    }
+
+                                }
+                                if (firstSecForConfig) {
+                                    selectedSector.setSectorPercentage(100f);
+                                }
+                                prevSelSectors.add(selectedSector);
+                            } else {
+                                selectedSector.setSectorPercentage(new Float(
+                                    100));
+                                prevSelSectors = new ArrayList<ActivitySector> ();
+                                prevSelSectors.add(selectedSector);
+                            }
 						}
 
 						eaForm.setActivitySectors(prevSelSectors);
@@ -327,31 +328,34 @@ public class AddAmpActivity extends Action {
 					}
 				}
 
-				if (addSector) {
-					// if an activity already has one or more sectors,than after
-					// adding new one
-					// the percentages must equal blanks and user should fill
-					// them
-					if (prevSelSectors != null) {
-						if (prevSelSectors.isEmpty()) {
-							selectedSector
-									.setSectorPercentage(new Float(100));
-						} else {
-							selectedSector.setSectorPercentage(null);
-							Iterator iter = prevSelSectors.iterator();
-							/*while (iter.hasNext()) {
-								ActivitySector actSect = (ActivitySector) iter
-										.next();
-								// actSect.setSectorPercentage(null); // as requested by AMP-2870 
-							}*/
-						}
-						prevSelSectors.add(selectedSector);
-					} else {
-						selectedSector.setSectorPercentage(new Float(100));
-						prevSelSectors = new ArrayList<ActivitySector>();
-						prevSelSectors.add(selectedSector);
-					}
-				}
+                if (addSector) {
+                    // if an activity already has one or more sectors,than after
+                    // adding new one
+                    // the percentages must equal blanks and user should fill
+                    // them
+                    if (prevSelSectors != null) {
+                        Iterator iter = prevSelSectors.iterator();
+                        boolean firstSecForConfig = true;
+                        while (iter.hasNext()) {
+                            ActivitySector actSect = (ActivitySector) iter
+                                .next();
+                            if (actSect.getConfigId().equals(selectedSector.getConfigId())) {
+                                firstSecForConfig = false;
+                                break;
+                            }
+
+                        }
+                        if (firstSecForConfig) {
+                            selectedSector.setSectorPercentage(100f);
+                        }
+                        prevSelSectors.add(selectedSector);
+                    } else {
+                        selectedSector.setSectorPercentage(new Float(
+                            100));
+                        prevSelSectors = new ArrayList<ActivitySector> ();
+                        prevSelSectors.add(selectedSector);
+                    }
+                }
 				eaForm.setActivitySectors(prevSelSectors);
 				session.removeAttribute("sectorSelected");
 				return mapping.findForward("addActivityStep2");
@@ -412,10 +416,10 @@ public class AddAmpActivity extends Action {
     }
     //===============Sectors END=============================
 
-    
+
     //===============Componentes START=======================
-    
-    
+
+
     // Add componente
     if (request.getParameter("addComponente") != null) {
       ActivitySector selectedComponente = (ActivitySector) session.getAttribute("addComponente");
@@ -440,8 +444,8 @@ public class AddAmpActivity extends Action {
 						if(asec.getSubsectorLevel1Name().equals(selectedComponente.getSubsectorLevel1Name())){
 							if(selectedComponente.getSubsectorLevel2Name() == null){
 								addComponente = false;
-							      break;									
-							}					
+							      break;
+							}
 							if(asec.getSubsectorLevel2Name() != null){
 								if(asec.getSubsectorLevel2Name().equals(selectedComponente.getSubsectorLevel2Name())){
 									addComponente = false;
@@ -450,7 +454,7 @@ public class AddAmpActivity extends Action {
 							}else{
 								addComponente = false;
 						        break;
-							}								
+							}
 						}
 		          }else{
 		        	  addComponente = false;
@@ -512,15 +516,15 @@ public class AddAmpActivity extends Action {
       eaForm.setActivitySectors(newComponentes);
       return mapping.findForward("addActivityStep2");
     }
-    
+
     //===============Componentes END=========================
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     //eaForm.setAllComps(ActivityUtil.getAllComponentNames());
     ProposedProjCost propProjCost = null;
     if (eaForm.getProProjCost() != null) {
@@ -584,9 +588,9 @@ public class AddAmpActivity extends Action {
         eaForm.setWorkingTeamLeadFlag("no");
         eaForm.setTeamLead(teamLeadFlag);
 
-      
+
       boolean activityApprovalStatusProcess=false;
-      
+
       if (!eaForm.isEditAct() || logframepr.compareTo("true") == 0 || request.getParameter("logframe") != null) {
        if (teamMember != null)
         if ("true".compareTo((String) session.getAttribute("teamLeadFlag"))==0)
@@ -598,7 +602,7 @@ public class AddAmpActivity extends Action {
 	        	  AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 	        	 // AmpModulesVisibility moduleToTest=FeaturesUtil.getModuleVisibility("Activity Approval Process");
 	        	  AmpModulesVisibility moduleToTest=ampTreeVisibility.getModuleByNameFromRoot("Activity Approval Process");
-	        	  if(moduleToTest!=null) 
+	        	  if(moduleToTest!=null)
 	          	  	activityApprovalStatusProcess= moduleToTest.isVisibleTemplateObj(ampTreeVisibility.getRoot());
 	        	  if(activityApprovalStatusProcess==true ) eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.STARTED_STATUS);
 	        	  	else eaForm.setApprovalStatus(org.digijava.module.aim.helper.Constants.APPROVED_STATUS);
@@ -731,8 +735,8 @@ public class AddAmpActivity extends Action {
         eaForm.setConditionality(Util.initLargeTextProperty("aim-conditional-",eaForm.getConditionality(), request));
         eaForm.setProjectManagement(Util.initLargeTextProperty("aim-projmanag-",eaForm.getProjectManagement(), request));
         eaForm.setContractDetails(Util.initLargeTextProperty("aim-contrdetail-",eaForm.getContractDetails(), request));
-  
-        
+
+
         if (eaForm.getResults() == null ||
             eaForm.getResults().trim().length() == 0) {
           eaForm.setResults("aim-results-" + teamMember.getMemberId() + "-" +
@@ -877,7 +881,7 @@ public class AddAmpActivity extends Action {
         // Initially setting the implementation level as "country"
         /*
          * Removed As asked in AMP-2889
-         
+
         if (eaForm.getImplemLocationLevel() == null)
           eaForm.setImplemLocationLevel(
               CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.
@@ -1104,14 +1108,14 @@ public class AddAmpActivity extends Action {
 //          long maxId = ActivityUtil.getActivityMaxId();
 //          maxId++;
 //          ampId += "/" + maxId;
-//          eaForm.setAmpId(ampId);      	
+//          eaForm.setAmpId(ampId);
 //        	User user= RequestUtils.getUser(request);
 //        	if(eaForm.getActivityId()!=null){
 //        		eaForm.setAmpId(ActivityUtil.generateAmpId(user,eaForm.getActivityId()));
 //        	}else {
 //        		eaForm.setAmpId(ActivityUtil.generateAmpId(user,ActivityUtil.getActivityMaxId()+1));
-//        	}        	
-//        	
+//        	}
+//
 //        }
 
         /*
@@ -1260,7 +1264,7 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
         if( request.getParameter("currentlyEditing")!=null && request.getParameter("currentlyEditing").equals("true")) {
         	currentlyEditing		= true;
         }
-        
+
         HashMap unsavedComments = (HashMap) session.getAttribute("commentColInSession");
         Set keySet = null;
         if (unsavedComments != null)
@@ -1273,7 +1277,7 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
           ArrayList<AmpComments> colAux	= null;
           Collection ampFields 			= DbUtil.getAmpFields();
           HashMap allComments 			= new HashMap();
-          
+
           for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
             AmpField field = (AmpField) itAux.next();
             if ( currentlyEditing && keySet!=null && keySet.contains(field.getAmpFieldId()) ) {
@@ -1364,7 +1368,7 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
         	  }
           }
           eaForm.setCrDocuments( DocumentManagerUtil.createDocumentDataCollectionFromSession(request) );
-          
+
           /* END - Setting documents for preview */
           return mapping.findForward("preview");
         }
@@ -1377,11 +1381,11 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
     	  }else{
     		  eaForm.setIndicatorsME(null);
     	  }
-          
+
           for(Iterator itr = IndicatorUtil.getAllDefaultIndicators(eaForm.getActivityId()).iterator(); itr.hasNext();){
           	ActivityIndicator actInd = (ActivityIndicator) itr.next();
           	actInd.setActivityId(eaForm.getActivityId());
-             eaForm.getIndicatorsME().add(actInd); 	
+             eaForm.getIndicatorsME().add(actInd);
           }
           if (!eaForm.isEditAct()) {
             eaForm.setIndicatorId(null);
@@ -1433,10 +1437,10 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
       if (cmsItem.getDocLanguage() != null)
       	document.setDocLanguage( cmsItem.getDocLanguage().getValue() );
       document.setDocComment( cmsItem.getDocComment() );
-      
+
       return document;
 	}
-  
+
   public void setEditorKey(String s, HttpServletRequest request)
   {
 	  User user = RequestUtils.getUser(request);

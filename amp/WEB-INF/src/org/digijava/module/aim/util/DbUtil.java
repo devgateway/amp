@@ -141,7 +141,7 @@ public class DbUtil {
 		return str;
 	}
 
-   
+
     /**
 	 * Removes the team-reports and member-reports association table.
 	 * @param reportId	A Long array of the reports to be updated
@@ -875,7 +875,7 @@ public class DbUtil {
                    + (ampFundings != null ? ampFundings.size() : 0));
         return ampFundings;
     }
-    
+
     /**
      *  Return total amount using the exchange for each funding according with funding date
      * @param ampFundingId
@@ -931,8 +931,8 @@ public class DbUtil {
                logger.error("Unable to get sum of funds from database", ex);
            }
 				return total;
-    } 
-    
+    }
+
     public static double getTotalDonorFund(Long ampFundingId,
                                            Integer transactionType, Integer adjustmentType, String perspective) {
 
@@ -1316,8 +1316,8 @@ public class DbUtil {
                      + c.size());
         return c;
     }
-    
-  
+
+
     /*
      * @author Priyajith C
      */
@@ -2204,7 +2204,7 @@ public class DbUtil {
         Session session = null;
         Collection col = null;
         keyword = keyword.toLowerCase();
-        
+
         try {
             session = PersistenceManager.getRequestDBSession();
             String queryString = "select distinct org from "
@@ -2993,9 +2993,9 @@ public class DbUtil {
         }
         return ampFundings;
     }
-    
+
     /**
-     * 
+     *
      * @param ampActivityId
      * @param transactionType
      * @param adjustmentType
@@ -3052,16 +3052,16 @@ public class DbUtil {
                 Double fixedRateToUSD = ampFundingDetail.getFixedExchangeRate();
                 if (fixedRateToUSD!=null && fixedRateToUSD.doubleValue()!=1){
                 	 fromCurrency=fixedRateToUSD.doubleValue();
-                	
+
                 	 toCurrency = Util.getExchange(ampCurrencyCode,
  							new java.sql.Date(ampFundingDetail
  									.getTransactionDate().getTime()));
-                	
+
                 	 DecimalWraper tmpamount =CurrencyWorker.convertWrapper(ampFundingDetail
 							.getTransactionAmount().doubleValue(),
 							fromCurrency, toCurrency, new java.sql.Date(
 									ampFundingDetail.getTransactionDate()
-											.getTime())); 
+											.getTime()));
                 	if (amount.getValue()!=null){
                 		amount.setValue(amount.getValue().add(tmpamount.getValue()));
                 		amount.setCalculations(amount.getCalculations() + " +" + tmpamount.getCalculations()+"<BR>");
@@ -3082,16 +3082,16 @@ public class DbUtil {
 
 					logger.debug("to Currency: " + toCurrency);
 					logger.debug("From Currency: " + fromCurrency);
-					
+
 					DecimalWraper tmpamount =CurrencyWorker.convertWrapper(ampFundingDetail
 							.getTransactionAmount().doubleValue(),
 							fromCurrency, toCurrency, new java.sql.Date(
 									ampFundingDetail.getTransactionDate()
 											.getTime()));
-					
+
 					if (amount.getValue()!=null){
 						amount.setCalculations(amount.getCalculations() + " + " + tmpamount.getCalculations());
-						BigDecimal tmp = amount.getValue().add(tmpamount.getValue()); 
+						BigDecimal tmp = amount.getValue().add(tmpamount.getValue());
 						amount.setValue(tmp);
 					}
 					else{
@@ -5162,7 +5162,7 @@ public class DbUtil {
         	}
             session = PersistenceManager.getRequestDBSession();
             tx = session.beginTransaction();
-            
+
             AmpAhsurvey oldSurvey ;
             oldSurvey = (AmpAhsurvey) session.load(AmpAhsurvey.class, survey.getAmpAHSurveyId());
             oldSurvey.setAmpActivityId(survey.getAmpActivityId());
@@ -5199,7 +5199,7 @@ public class DbUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             tx = session.beginTransaction();
-            
+
             AmpAhsurvey survey = (AmpAhsurvey) session.get(AmpAhsurvey.class, surveyId);
             String qry = "select count(*) from " + AmpAhsurveyResponse.class.getName()
                 + " res where (res.ampAHSurveyId=:surveyId)";
@@ -5323,7 +5323,8 @@ public class DbUtil {
         try {
             //logger.debug("indcCode[inside getAidSurveyReportByIndicator] : " + indcCode);
             session = PersistenceManager.getRequestDBSession();
-            String qry = "select distinct dn.pointOfDeliveryDonor from " + AmpAhsurvey.class.getName() + " dn";
+            String qry = "select distinct dn.ampDonorOrgId from " + AmpAhsurvey.class.getName() + " dn";
+            //String qry = "select distinct dn.pointOfDeliveryDonor from " + AmpAhsurvey.class.getName() + " dn";
             surveyDonors.addAll(session.createQuery(qry).list());
             //logger.debug("total donors from AmpOrganisation[surveyDonors] : " + surveyDonors.size());
             if (surveyDonors.size() > 0) {
@@ -5348,15 +5349,15 @@ public class DbUtil {
                     public int compare(Object o1, Object o2) {
                         AmpOrganisation r1 = (AmpOrganisation) o1;
                         AmpOrganisation r2 = (AmpOrganisation) o2;
-                        AmpOrgGroup og1=r1.getOrgGrpId();
-                        AmpOrgGroup og2=r2.getOrgGrpId();
-                        if(og1!=null && og2!=null){
-                            if(og1.getOrgGrpName()!=null && og2.getOrgGrpName()!=null){
+                        AmpOrgGroup og1 = r1.getOrgGrpId();
+                        AmpOrgGroup og2 = r2.getOrgGrpId();
+                        if (og1 != null && og2 != null) {
+                            if (og1.getOrgGrpName() != null && og2.getOrgGrpName() != null) {
                                 og1.getOrgGrpName().compareTo(og2.getOrgGrpName());
-                            }else{
+                            } else {
                                 return 0;
                             }
-                        }else{
+                        } else {
                             return 0;
                         }
                         return r1.getAcronym().trim().toLowerCase().compareTo(r2.getAcronym().trim().toLowerCase());
@@ -5381,9 +5382,9 @@ public class DbUtil {
                 while (itr1.hasNext()) {
                     AmpOrganisation dnOrg = (AmpOrganisation) itr1.next();
                     // Filtering by donor-organisation here
-                    if(dnOrg.getOrgTypeId()!=null){
-                        if(!dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("bil") &&
-                           !dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("mul")){
+                    if (dnOrg.getOrgTypeId() != null) {
+                        if (!dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("bil") &&
+                            !dnOrg.getOrgTypeId().getOrgTypeCode().equalsIgnoreCase("mul")) {
                             continue;
                         }
                     }
@@ -5401,9 +5402,9 @@ public class DbUtil {
                             continue;
                     }
                     ParisIndicator pi = new ParisIndicator(); // represents one row of indicator report.
-                    if(dnOrg.getOrgGrpId()!=null && dnOrg.getOrgGrpId().getOrgGrpName()!=null){
+                    if (dnOrg.getOrgGrpId() != null && dnOrg.getOrgGrpId().getOrgGrpName() != null) {
                         pi.setDonor(dnOrg.getOrgGrpId().getOrgGrpName());
-                    }else{
+                    } else {
                         pi.setDonor("N/A");
                     }
 
@@ -5418,12 +5419,11 @@ public class DbUtil {
                             answersRow = new double[NUM_ANSWER_COLUMNS];
                             answersRow[0] = (startYear + i);
                         }
-                        AmpFiscalCalendar fCalendar=FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(calendar));
-
+                        AmpFiscalCalendar fCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(Long.parseLong(calendar));
 
                         if (startDates[i] == null || endDates[i] == null) {
                             if (! (fCalendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN.getValue()) ||
-                        	    fCalendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue()))) {
+                                   fCalendar.getBaseCal().equalsIgnoreCase(BaseCalendar.BASE_ETHIOPIAN_FISCAl.getValue()))) {
                                 startDates[i] = FiscalCalendarUtil.getCalendarStartDate(new Long(calendar), startYear + i);
                                 endDates[i] = FiscalCalendarUtil.getCalendarEndDate(new Long(calendar), startYear + i);
                             }
@@ -5438,11 +5438,11 @@ public class DbUtil {
                             if (null != statusCM) {
                                 AmpCategoryValue statusValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, svy.getAmpActivityId().getCategories());
 
-                                if ( statusValue == null || (!statusCM.getId().equals(statusValue.getId()) )  )
-                                		continue;
+                                if (statusValue == null || (!statusCM.getId().equals(statusValue.getId())))
+                                    continue;
                                 /*if (statusValue != null && !status.equalsIgnoreCase(statusValue.getValue()))
                                     ;
-                                continue;*/
+                                                                 continue;*/
                             }
                             // Filtering by activity-sector here
                             if (null != sector && sector.trim().length() > 1 && !"all".equalsIgnoreCase(sector)) {
@@ -5472,6 +5472,15 @@ public class DbUtil {
                                 }
                             }
                             answers = answersColl[index++];
+                            //System.out.println(svy.getAmpActivityId().getName());
+
+                            AmpOrganisation pdOrg=svy.getPointOfDeliveryDonor();
+                            if (pdOrg!=null && pdOrg.getOrgGrpId() != null && pdOrg.getOrgGrpId().getOrgGrpName() != null) {
+                                pi.setDonor(pdOrg.getOrgGrpId().getOrgGrpName());
+                            } else {
+                                pi.setDonor("N/A");
+                            }
+
                             if (null != answers) {
                                 indc6Break:
                                     for (j = 0; j < answers.length; j++) {
@@ -5493,17 +5502,17 @@ public class DbUtil {
                                             if (0 == dnOrg.getAmpOrgId().compareTo(fund.getAmpDonorOrgId().getAmpOrgId())) {
                                                 // Filtering by financing-instrument here
                                                 if (null != financingInstr) {
-                                                    if (!financingInstr.getId().equals(fund.getFinancingInstrument().getId()) )
+                                                    if (!financingInstr.getId().equals(fund.getFinancingInstrument().getId()))
                                                         continue;
                                                 }
                                                 if ("9".equalsIgnoreCase(indcCode)) {
                                                     if (j == 0)
-                                                        if (!"Direct Budget Support".equalsIgnoreCase( fund.getFinancingInstrument().getValue() )) {
+                                                        if (!"Direct Budget Support".equalsIgnoreCase(fund.getFinancingInstrument().getValue())) {
                                                             //logger.debug("continue[indcCode=9]: because of !Direct Budget Suppor");
                                                             continue;
                                                         }
                                                     if (j == 1)
-                                                        if ("Direct Budget Support".equalsIgnoreCase( fund.getFinancingInstrument().getValue() )) {
+                                                        if ("Direct Budget Support".equalsIgnoreCase(fund.getFinancingInstrument().getValue())) {
                                                             //logger.debug("continue[indcCode=9]: because of Direct Budget Suppor");
                                                             continue;
                                                         }
@@ -5543,17 +5552,17 @@ public class DbUtil {
                                                                 fromExchangeRate = 1.0;
                                                             else if (indcFlag == 7 && j == 0)
                                                                 fromExchangeRate = Util.getExchange(fundtl.getAmpCurrencyId().getCurrencyCode(),
-                                                                    new java.sql.Date (fundtl.getTransactionDate().getTime()));
+                                                                    new java.sql.Date(fundtl.getTransactionDate().getTime()));
                                                             else
                                                                 fromExchangeRate = Util.getExchange(fundtl.getAmpCurrencyId().getCurrencyCode(),
-                                                                    new java.sql.Date( fundtl.getTransactionDate().getTime()));
+                                                                    new java.sql.Date(fundtl.getTransactionDate().getTime()));
                                                             if (null != currency && currency.trim().length() > 1) {
                                                                 if ("USD".equalsIgnoreCase(currency))
                                                                     toExchangeRate = 1.0;
                                                                 else if (indcFlag == 7 && j == 0)
                                                                     toExchangeRate = Util.getExchange(currency, new java.sql.Date(fundtl.getTransactionDate().getTime()));
                                                                 else
-                                                                    toExchangeRate = Util.getExchange(currency, new java.sql.Date (fundtl.getTransactionDate().getTime()));
+                                                                    toExchangeRate = Util.getExchange(currency, new java.sql.Date(fundtl.getTransactionDate().getTime()));
                                                             }
                                                             sum += CurrencyWorker.convert1(fundtl.getTransactionAmount().doubleValue(),
                                                                 fromExchangeRate, toExchangeRate);
@@ -5574,6 +5583,7 @@ public class DbUtil {
                             } else
                                 logger.debug("[inside getAidSurveyReportByIndicator()]- answers array is NULL !");
                         }
+
                         if (indcFlag == 6)
                             continue;
 
@@ -5675,13 +5685,9 @@ public class DbUtil {
                         }
                     }
                 }
-            } else
-                logger.debug("No donor found from amp_ahsurvey table.");
+            }
         } catch (Exception ex) {
-            logger.debug("Unable to get donors from survey : " + ex);
-            //throw
-            System.out.println("Error");
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
         //logger.debug("responses.size[getAidSurveyReportByIndicator()] : " + responses.size());
         return responses;
@@ -6394,7 +6400,7 @@ public class DbUtil {
             return result;
         }
     }
-    
+
     /**
      * This class is used for sorting AmpOrgGroup by Type.
      * @author Dare Roinishvili
@@ -6428,7 +6434,7 @@ public class DbUtil {
             return result;
         }
     }
-    
+
     /**
      * This class is used for sorting organisations by name.
      * @author Dare Roinishvili
@@ -6448,14 +6454,14 @@ public class DbUtil {
 
         public int compare(AmpOrganisation o1, AmpOrganisation o2) {
             collator = Collator.getInstance(locale);
-            collator.setStrength(Collator.TERTIARY);           
-            
+            collator.setStrength(Collator.TERTIARY);
+
 
             int result = (o1.getName()==null || o2.getName()==null)?0:collator.compare(o1.getName().toLowerCase(), o2.getName().toLowerCase());
             return result;
         }
     }
-    
+
     /**
      * This class is used for soring organisations by acronym.
      * @author Dare Roinishvili
@@ -6474,7 +6480,7 @@ public class DbUtil {
         }
 
         public int compare(AmpOrganisation o1, AmpOrganisation o2) {
-            
+
         	int result=0;
         	collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
@@ -6487,12 +6493,12 @@ public class DbUtil {
             	result=collator.compare("",o2.getAcronym());
             }else if (o2.getAcronym()==null){
             	result=collator.compare(o1.getAcronym(),"");
-            }             
+            }
             return result;
-        }   	
-    	
+        }
+
    }
-    
+
     /**
      * This class is used for sorting organisation by group.
      * such long and complicated case is necessary because orgGroup maybe empty for organisation
@@ -6502,7 +6508,7 @@ public class DbUtil {
     public static class HelperAmpOrganisationGroupComparator implements Comparator<AmpOrganisation> {
     	Locale locale;
     	Collator collator;
-    	
+
     	public HelperAmpOrganisationGroupComparator(){
             this.locale=new Locale("en", "EN");
         }
@@ -6510,8 +6516,8 @@ public class DbUtil {
         public HelperAmpOrganisationGroupComparator(String iso) {
             this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
         }
-    	
-    	
+
+
     	public int compare (AmpOrganisation o1,AmpOrganisation o2){
     		collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
@@ -6527,9 +6533,9 @@ public class DbUtil {
     			result= collator.compare("", o2.getOrgGrpId().getOrgGrpName());
     		}
     		return result;
-    	}    	
+    	}
     }
-    
+
     /**
      * This class is used for sorting organisation by Type.
      * such long and complicated case is necessary because orgType maybe empty for organisation
@@ -6539,7 +6545,7 @@ public class DbUtil {
     public static class HelperAmpOrganisationTypeComparator implements Comparator<AmpOrganisation> {
     	Locale locale;
     	Collator collator;
-    	
+
     	public HelperAmpOrganisationTypeComparator(){
             this.locale=new Locale("en", "EN");
         }
@@ -6547,7 +6553,7 @@ public class DbUtil {
         public HelperAmpOrganisationTypeComparator(String iso) {
             this.locale = new Locale(iso.toLowerCase(), iso.toUpperCase());
         }
-    	
+
     	public int compare (AmpOrganisation o1,AmpOrganisation o2){
     		collator = Collator.getInstance(locale);
             collator.setStrength(Collator.TERTIARY);
@@ -6563,8 +6569,8 @@ public class DbUtil {
     			result=collator.compare("", o2.getOrgTypeId().getOrgType());
     		}
     		return result;
-    		
-    	}    	
+
+    	}
     }
 
 	public static AmpOrganisation getOrganisationByName(String name) {
@@ -6579,7 +6585,7 @@ public class DbUtil {
                 + " o where (TRIM(o.name)=:orgName)";
             qry = sess.createQuery(queryString);
             qry.setParameter("orgName", name, Hibernate.STRING);
-            
+
             List  result=qry.list();
             if (result.size() > 0){
             	obResult= (AmpOrganisation) result.get(0);
@@ -6591,5 +6597,5 @@ public class DbUtil {
         }
         return obResult;
 	}
-    
+
 }

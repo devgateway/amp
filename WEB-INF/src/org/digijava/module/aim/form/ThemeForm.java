@@ -34,6 +34,7 @@ public class ThemeForm extends ActionForm {
 		  private String event;
 		  private Long indicatorId;
 		  private String code;
+		  private String indicatorName; 
 		  private String name;
 		  private String themeName;
 		  private String encodeName;
@@ -125,6 +126,14 @@ public class ThemeForm extends ActionForm {
 		}
 		
 		
+
+		public String getIndicatorName() {
+			return indicatorName;
+		}
+
+		public void setIndicatorName(String indicatorName) {
+			this.indicatorName = indicatorName;
+		}
 
 		public Integer getLocationLevelIndex() {
 			return locationLevelIndex;

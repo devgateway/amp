@@ -89,7 +89,7 @@ function validation(){
 <table  width=572 cellPadding=4 cellSpacing=1 valign=top align=left bgcolor="#ffffff" border="0">
   <tr>
     <td bgColor=#d7eafd class=box-title height="10" align="center" colspan="7">
-    Add/Edit Data: ${aimThemeForm.indame}
+    Add/Edit Data: ${aimThemeForm.indicatorName}
     </td>
   </tr>
   <tr bgcolor="#003366" class="textalb">

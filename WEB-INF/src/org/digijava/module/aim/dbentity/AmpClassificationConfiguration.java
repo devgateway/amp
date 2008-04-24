@@ -39,7 +39,11 @@ public class AmpClassificationConfiguration {
     public boolean isPrimary() {
         return primary;
     }
-
+    /**
+     *
+     * There must be only one primary configuration in database
+     */
+    
     public void setPrimary(boolean primary) {
         this.primary = primary;
     }
@@ -47,6 +51,6 @@ public class AmpClassificationConfiguration {
         private String name;
 	private AmpSectorScheme classification;
 	private boolean multisector ;
-        private boolean primary;
+        private boolean primary; 
 
 }

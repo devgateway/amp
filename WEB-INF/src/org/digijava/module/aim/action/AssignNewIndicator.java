@@ -20,8 +20,8 @@ public class AssignNewIndicator
         List<IndicatorsBean> allInds = new ArrayList();
         ThemeForm allIndForm = (ThemeForm) form;
         
-        String globalSettingsValue=FeaturesUtil.getGlobalSettingValue(Constants.GLOBAL_DEFAULT_SECTOR_SCHEME);
-        Collection allSectors = SectorUtil.getAllParentSectors(new Long(globalSettingsValue));
+        Long primaryConfigClassId=SectorUtil.getPrimaryConfigClassificationId();
+        Collection allSectors = SectorUtil.getAllParentSectors(primaryConfigClassId);
         allIndForm.setAllSectors(allSectors);
         allIndForm.setTempNumResults(10);
         allIndForm.setSectorName("");

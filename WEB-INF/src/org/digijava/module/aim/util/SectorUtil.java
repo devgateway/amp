@@ -1181,6 +1181,46 @@ public class SectorUtil {
         }
 
     }
+    
+    /**
+     * gets id of classification which is selected in primary configuration
+     * 
+     *
+     * @return Id of classification  
+     * @throws DgException If exception occurred
+     */
+    public static Long getPrimaryConfigClassificationId() throws DgException {
+
+        Session session = null;
+        Long id = null;
+        Transaction tx = null;
+        String queryString = null;
+        Query qry = null;
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            queryString = "select cls.ampSecSchemeId from "
+                    + AmpClassificationConfiguration.class.getName() +
+                    " config inner join config.classification cls "+
+                    " where cls.primary=true ";
+            qry = session.createQuery(queryString);
+            //There must be only one primary configuration in database
+            id=(Long)qry.uniqueResult();
+
+        } catch (Exception ex) {
+            logger.error("Unable to save config to database " + ex.getMessage());
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (Exception rbf) {
+                    logger.error("Rollback failed");
+                }
+            }
+            throw new DgException(ex);
+
+        }
+        return id;
+
+    }
     /*
  * this is to delete a scheme
  */

@@ -160,6 +160,14 @@
 																		</td>
 																	</tr>
 																	<tr>
+																		<td width="30%" align="right">
+																	        <digi:trn key="aim:orgTypeIsGovernmental">Is Governmental</digi:trn>
+																		</td>
+																		<td width="30%">
+																           <html:checkbox property="orgTypeIsGovernmental"/>
+																		</td>
+																	</tr>
+																	<tr>
 																		<td colspan="2" width="60%"  align="center">
 																			<table width="100%" cellspacing="5">
 																				<tr>

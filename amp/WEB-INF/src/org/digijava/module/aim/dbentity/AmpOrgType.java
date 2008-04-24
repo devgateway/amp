@@ -12,6 +12,7 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
 	private Long ampOrgTypeId;
 	private String orgType;
 	private String orgTypeCode;
+	private Boolean orgTypeIsGovernmental;
 	//private Set organizations;
 	
 	/**
@@ -68,5 +69,11 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
 	}
 	public Class getDimensionClass() {
 	    return DonorTypeDimension.class;
+	}
+	public Boolean getOrgTypeIsGovernmental() {
+		return orgTypeIsGovernmental;
+	}
+	public void setOrgTypeIsGovernmental(Boolean orgTypeIsGovernmental) {
+		this.orgTypeIsGovernmental = orgTypeIsGovernmental;
 	}
 }

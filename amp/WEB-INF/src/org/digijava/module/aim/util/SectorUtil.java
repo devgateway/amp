@@ -213,9 +213,9 @@ public class SectorUtil {
 		return col;
 	}
 
-	public static Collection getAllParentSectors(Long secSchemeId) {
+	public static Collection<AmpSector> getAllParentSectors(Long secSchemeId) {
 		Session session = null;
-		Collection col = null;
+		Collection<AmpSector> col = null;
 
 		try {
 			session = PersistenceManager.getSession();

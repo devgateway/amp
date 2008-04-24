@@ -2,15 +2,21 @@
 
 package org.digijava.module.aim.action;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.*;
-import org.digijava.module.aim.form.*;
-import org.digijava.module.aim.helper.*;
-import org.digijava.module.aim.util.*;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.form.ThemeForm;
+import org.digijava.module.aim.helper.IndicatorsBean;
+import org.digijava.module.aim.util.SectorUtil;
 
 public class AssignNewIndicator
     extends Action {
@@ -21,7 +27,7 @@ public class AssignNewIndicator
         ThemeForm allIndForm = (ThemeForm) form;
         
         Long primaryConfigClassId=SectorUtil.getPrimaryConfigClassificationId();
-        Collection allSectors = SectorUtil.getAllParentSectors(primaryConfigClassId);
+        Collection<AmpSector> allSectors = SectorUtil.getAllParentSectors(primaryConfigClassId);
         allIndForm.setAllSectors(allSectors);
         allIndForm.setTempNumResults(10);
         allIndForm.setSectorName("");

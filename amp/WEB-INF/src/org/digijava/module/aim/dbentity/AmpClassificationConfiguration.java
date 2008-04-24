@@ -1,8 +1,13 @@
-
 package org.digijava.module.aim.dbentity;
 
 
 public class AmpClassificationConfiguration {
+	
+	private Long id;
+    private String name;
+    private AmpSectorScheme classification;
+    private boolean multisector ;
+    private boolean primary;
 
     public AmpSectorScheme getClassification() {
         return classification;
@@ -47,10 +52,6 @@ public class AmpClassificationConfiguration {
     public void setPrimary(boolean primary) {
         this.primary = primary;
     }
-        private Long id;
-        private String name;
-	private AmpSectorScheme classification;
-	private boolean multisector ;
-        private boolean primary; 
+        
 
 }

@@ -12,11 +12,11 @@ import javax.jcr.Session;
 import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.upload.FormFile;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.helper.ActivityDocumentsConstants;
+import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.KeyValue;
@@ -26,6 +26,9 @@ import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 
 public class NodeWrapper {
+	
+	private static Logger logger	= Logger.getLogger(NodeWrapper.class);
+	
 	private Node node;
 	private boolean errorAppeared	= false;
 	
@@ -392,7 +395,13 @@ public class NodeWrapper {
 	public Boolean deleteNode(HttpServletRequest request) throws Exception  {
 		String uuid		= node.getUUID();
 		Boolean ret		= DocumentManagerUtil.deleteDocumentWithRightsChecking( uuid, request);
+		
 		DocumentManagerUtil.deleteObjectsReferringDocument(uuid, CrDocumentNodeAttributes.class.getName() );
+		int delActivityDocs	= DocumentManagerUtil.deleteObjectsReferringDocument(uuid, AmpActivityDocument.class.getName() );
+		if ( delActivityDocs > 0 ) {
+			logger.error(delActivityDocs + " AmpActivityDocument object have been deleted on deletion of referring node. " +
+					"Deletion of this node should not have been allowed.");
+		}
 		return ret;
 	}
 	

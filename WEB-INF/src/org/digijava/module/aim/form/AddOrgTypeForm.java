@@ -8,6 +8,7 @@ public class AddOrgTypeForm extends ActionForm {
 	
 	private Long ampOrgTypeId = null;
 	private String orgType = null;
+	private Boolean orgTypeIsGovernmental = Boolean.FALSE;
 	private String orgTypeCode = null;
 	private String action = null;
 	private Boolean reset = Boolean.FALSE;
@@ -19,6 +20,7 @@ public class AddOrgTypeForm extends ActionForm {
 			ampOrgTypeId = null;
 			orgType = null;
 			orgTypeCode = null;
+			orgTypeIsGovernmental = Boolean.FALSE;
 			deleteFlag = "delete";
 			reset = Boolean.FALSE;
 		}
@@ -61,6 +63,14 @@ public class AddOrgTypeForm extends ActionForm {
 
 	public void setDeleteFlag(String deleteFlag) {
 		this.deleteFlag = deleteFlag;
+	}
+
+	public boolean getOrgTypeIsGovernmental() {
+		return orgTypeIsGovernmental;
+	}
+
+	public void setOrgTypeIsGovernmental(boolean orgTypeIsGovernmental) {
+		this.orgTypeIsGovernmental = orgTypeIsGovernmental;
 	}
 	
 }

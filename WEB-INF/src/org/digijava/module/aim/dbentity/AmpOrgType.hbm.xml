@@ -10,6 +10,7 @@
 		</id>
 		<property name="orgType" column="org_type" type="java.lang.String"/>
 		<property name="orgTypeCode" column="org_type_code" type="java.lang.String"/>
+		<property name="orgTypeIsGovernmental" column="org_type_is_governmental" type="java.lang.Boolean"/>
 		
 		<!--
 		<set name="organizations" cascade="delete" inverse="true">

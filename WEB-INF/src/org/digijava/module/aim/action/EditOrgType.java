@@ -50,6 +50,7 @@ public class EditOrgType extends DispatchAction {
 					 AmpOrgType otype = new AmpOrgType();
 					 otype.setOrgType(editForm.getOrgType());
 					 otype.setOrgTypeCode(editForm.getOrgTypeCode());
+					 otype.setOrgTypeIsGovernmental(editForm.getOrgTypeIsGovernmental());
 					 DbUtil.add(otype);
 					 removeSessAttribute(request);
 					 editForm.setReset(Boolean.TRUE);
@@ -80,10 +81,12 @@ public class EditOrgType extends DispatchAction {
 			  		if (null == editForm.getOrgType()) {
 			  			editForm.setOrgType(otype.getOrgType());
 					  	editForm.setOrgTypeCode(otype.getOrgTypeCode());
+					  	editForm.setOrgTypeIsGovernmental(otype.getOrgTypeIsGovernmental());
 					  	return mapping.findForward("forward");
 			  		}
 			  		otype.setOrgType(editForm.getOrgType());
 			  		otype.setOrgTypeCode(editForm.getOrgTypeCode());
+			  		otype.setOrgTypeIsGovernmental(editForm.getOrgTypeIsGovernmental());
 			  		DbUtil.update(otype);
 			  		removeSessAttribute(request);
 					editForm.setReset(Boolean.TRUE); 

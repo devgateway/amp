@@ -10,14 +10,13 @@ import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 
-public class CrDocumentNodeAttributes {
-	private String uuid;
+public class CrDocumentNodeAttributes extends ObjectReferringDocument {
 	private String publicVersionUUID;
 	private Boolean publicDocument;
 	
 	public CrDocumentNodeAttributes() {
-		uuid						= null;
 		publicVersionUUID			= null;
 		publicDocument				= false;
 	}
@@ -33,12 +32,6 @@ public class CrDocumentNodeAttributes {
 	}
 	public void setPublicVersionUUID(String publicVersionUUID) {
 		this.publicVersionUUID = publicVersionUUID;
-	}
-	public String getUuid() {
-		return uuid;
-	}
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
 	}
 	
 	

@@ -50,6 +50,7 @@ import org.digijava.module.contentrepository.exception.NoNodeInVersionNodeExcept
 import org.digijava.module.contentrepository.exception.NoVersionsFoundException;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.DocumentData;
+import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 import org.digijava.module.contentrepository.helper.TeamInformationBeanDM;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 
@@ -405,13 +406,14 @@ public class DocumentManagerUtil {
 				Query query			= session.createQuery(queryString);
 				query.setString("uuid", uuid);
 				
-				Collection objsUsingDoc	= query.list();  
+				Collection<? extends ObjectReferringDocument> objsUsingDoc	= query.list();  
 				
 				if ( objsUsingDoc != null && objsUsingDoc.size() > 0) {
-					number				= objsUsingDoc.size();
-					Iterator iter		= objsUsingDoc.iterator(); 
+					number											= objsUsingDoc.size();
+					Iterator<? extends ObjectReferringDocument> iter	= objsUsingDoc.iterator(); 
 					while( iter.hasNext() ) {
-						session.delete( iter.next() );
+						ObjectReferringDocument obj		= iter.next();
+						obj.remove(session);
 					} 
 				}
 				session.flush();

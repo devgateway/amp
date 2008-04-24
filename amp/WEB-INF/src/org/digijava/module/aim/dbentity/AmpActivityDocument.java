@@ -1,12 +1,14 @@
 package org.digijava.module.aim.dbentity;
+
+import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
+
 /**
  * 
  * @author Alex Gartner
  *
  */
-public class AmpActivityDocument {
+public class AmpActivityDocument extends ObjectReferringDocument {
 	private Long id;
-	private String uuid;
 	private AmpActivity ampActivity;
 	private String documentType;
 	
@@ -29,10 +31,11 @@ public class AmpActivityDocument {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getUuid() {
-		return uuid;
-	}
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
+	
+	
+	@Override
+	protected void detach() {
+		ampActivity.getActivityDocuments().remove(this);
+		this.ampActivity		= null;
 	}
 }

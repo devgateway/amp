@@ -6,18 +6,15 @@
 
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.FeatureTemplates;
-import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.NewIndicatorForm;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.SectorUtil;
 
 public class SelectSectorsForInd extends Action {
@@ -41,23 +38,30 @@ public class SelectSectorsForInd extends Action {
 
 		if (eaForm.getSectorScheme() == null
 				|| eaForm.getSectorScheme().equals(new Long(-1))) {
-			// if sector schemes not loaded or reset, load all sector schemes
-			// and reset the
-			// parent sectors and child sectors.
-			
-			String globalSettingValue = FeaturesUtil.getGlobalSettingValue(Constants.GLOBAL_DEFAULT_SECTOR_SCHEME);
-			
-			Collection secSchemes = SectorUtil.getAllSectorSchemes();
-			eaForm.setSectorSchemes(secSchemes);
-			eaForm.setSectorScheme(new Long(globalSettingValue));
-			Collection parentSectors = SectorUtil
-			.getAllParentSectors(eaForm.getSectorScheme());
-			eaForm.setParentSectors(parentSectors);
-			eaForm.setChildSectorsLevel1(null);
-			eaForm.setChildSectorsLevel2(null);
-			eaForm.setSector(new Long(-1));
-			eaForm.setSubsectorLevel1(new Long(-1));
-			eaForm.setSubsectorLevel2(new Long(-1));			
+            
+                // if sector schemes not loaded or reset, load all sector schemes
+                // and reset the
+                // parent sectors and child sectors.
+                Long primaryConfigClassId = SectorUtil.getPrimaryConfigClassificationId();
+
+               /* Collection secSchemes = SectorUtil.getAllSectorSchemes();
+                eaForm.setSectorSchemes(secSchemes);*/
+                AmpSectorScheme secSchemes = SectorUtil.getAmpSectorScheme(primaryConfigClassId);
+                if (eaForm.getSectorSchemes() == null || eaForm.getSectorSchemes().size() == 0) {
+                    eaForm.setSectorSchemes(new ArrayList());
+                    eaForm.getSectorSchemes().add(secSchemes);
+                }
+
+                eaForm.setSectorScheme(primaryConfigClassId);
+                Collection parentSectors = SectorUtil.getAllParentSectors(eaForm.getSectorScheme());
+                eaForm.setParentSectors(parentSectors);
+                eaForm.setChildSectorsLevel1(null);
+                eaForm.setChildSectorsLevel2(null);
+                eaForm.setSector(new Long(-1));
+                eaForm.setSubsectorLevel1(new Long(-1));
+                eaForm.setSubsectorLevel2(new Long(-1));
+            
+            
 		} else if (eaForm.getSector() == null
 				|| eaForm.getSector().equals(new Long(-1))) {
 			// if a sector scheme is selected and the parent sectors of that

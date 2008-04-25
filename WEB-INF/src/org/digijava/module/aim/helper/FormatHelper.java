@@ -103,7 +103,41 @@ public class FormatHelper {
 	   DecimalFormat formater = getDecimalFormat();                                                     
 	   result = formater.format(number);                                                                                                            
        return result;                                                                                                                               
-    }       
+    }
+   
+   /**
+    * Return a string based on Global Setting Number Format, not rounded. 
+    * The number has the symbols decimal and group separator, but shows all decimal digits
+    * @param number
+    * @return 
+    */
+   public static String formatNumberNotRounded(Double number) {                                                                                                   
+       String result;                                                                                                                               
+       if (number == null) {                                                                                                                        
+               number = new Double(0d);                                                                                                             
+       }                                                                                                                                                             
+	   DecimalFormat formater = getDecimalFormatNotRounded();                                                     
+	   result = formater.format(number);                                                                                                            
+       return result;                                                                                                                               
+    }   
+   
+   public static DecimalFormat getDecimalFormatNotRounded(){
+       String decimalSeparator = ".";                                                                                                               
+       String groupSeparator = ",";                                                                                                                 
+                                                                                                                                                    
+       decimalSeparator = FeaturesUtil                                                                                                              
+                      .getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR);                                                           
+       groupSeparator = FeaturesUtil                                                                                                                
+                       .getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR);                                                             
+                                                                                                                                                                                                                                                                                               
+                                                                                                                                                   
+       DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();                                                                                
+       decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));                                                                                  
+       decSymbols.setGroupingSeparator(groupSeparator.charAt(0));                                                                                   
+       DecimalFormat formater = new DecimalFormat("", decSymbols);    	
+       return formater;
+	   
+   }
    
    public static DecimalFormat getDecimalFormat(){
        String format = "###,###,###,###.##";                                                                                                        

@@ -87,4 +87,12 @@ public class CurrencyRates {
 	    
 	    return null;
 	}
+	public String getRateNotRounded(){
+       if (this.exchangeRate!=null){
+    	   if (this.exchangeRate!=0){
+			   return FormatHelper.formatNumberNotRounded(this.exchangeRate);
+			}    
+		}
+		return null;		
+	}
 }

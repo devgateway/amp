@@ -150,7 +150,7 @@
 								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
-										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
+										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" border=0>
 											<tr>
 												<td bgColor=#ffffff class=box-border>
 													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
@@ -176,9 +176,9 @@
 														<logic:notEmpty name="aimOrgManagerForm" 	property="pagedCol">
 														<tr>
 															<td width="100%">
-																<table width="634" border=0	 bgColor=#f4f4f2>
+																<table width="800" border=0	 bgColor=#f4f4f2 cellpadding="2">
 																	<tr>
-																		<td height="40" width="350">
+																		<td height="60" width="550">
 																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy!='nameAscending'}">
 																				<digi:link href="/organisationManager.do?sortBy=nameAscending&reset=false&orgSelReset=false">
 																					<b><digi:trn key="aim:organizationName">Organization Name</digi:trn></b>
@@ -192,7 +192,7 @@
 																			<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy=='nameAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
 																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='nameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 																		</td>
-																		<td height="40" width="350">																		
+																		<td height="60" width="100">																		
 																			<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='acronymAscending'}">
 																				<digi:link href="/organisationManager.do?sortBy=acronymAscending&reset=false&orgSelReset=false">
 																					<b><digi:trn key="aim:organizationAcronym">Organization Acronym</digi:trn></b>
@@ -206,10 +206,10 @@
 																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='acronymAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
 																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='acronymDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 																		</td>																	
-																	<%--<td height="40" width="171"><b>
+																	<%--<td height="60" width="171"><b>
 																			<digi:trn key="aim:organizationCountry">Country</digi:trn></b>
 																		</td>--%>
-																		<td height="40" width="171"> &nbsp;&nbsp;&nbsp;
+																		<td height="60" width="160">
 																			<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='typeAscending'}">
 																				<digi:link href="/organisationManager.do?sortBy=typeAscending&reset=false&orgSelReset=false">
 																					<b><digi:trn key="aim:organizationType">Type</digi:trn></b>
@@ -223,7 +223,7 @@
 																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='typeAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
 																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='typeDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>																																			
 																		</td>
-																		<td height="40"width="147">
+																		<td height="60" width="140">
 																		<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='groupAscending'}">
 																				<digi:link href="/organisationManager.do?sortBy=groupAscending&reset=false&orgSelReset=false">
 																					<b><digi:trn key="aim:organizationGroup">Organization Group</digi:trn></b>
@@ -240,7 +240,7 @@
 																	</tr>
 																<logic:iterate name="aimOrgManagerForm" property="pagedCol" id="organisation">
                                                            			<tr>
-	                                                           			<td height="40">
+	                                                           			<td height="60" width="550">
 																		  <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																		  <c:set target="${urlParams}" property="mode" value="resetMode" />
 																		  <c:set target="${urlParams}" property="actionFlag" value="edit" />
@@ -251,7 +251,7 @@
 																		  	<bean:write name="organisation" property="name" />
 																		  </digi:link>
 																		</td>
-																		<td height="40">
+																		<td height="60" width="150">
 																		  	<bean:write name="organisation" property="acronym" />																		  
 																		</td>
 																	<%--<td height="30" width="171">
@@ -259,13 +259,13 @@
                                                               					<c:out value="${organisation.countryId.countryName}" />
                                                               				</logic:notEmpty>
 																		</td>--%>
-																		<td height="40">
+																		<td height="60" width="160">
 																			<logic:notEmpty name="organisation" property="orgTypeId">
                                                               					<c:out value="${organisation.orgTypeId.orgType}" />
                                                               					<%--<bean:write name="organisation" property="${organisation.orgTypeId.orgType}" />--%>
                                                               				</logic:notEmpty>
 																		</td>
-																		<td height="40">
+																		<td height="60" width="140">
 																			<logic:notEmpty name="organisation" property="orgGrpId">
                                                               					<c:out value="${organisation.orgGrpId.orgGrpName}" />
                                                               				</logic:notEmpty>

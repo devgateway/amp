@@ -108,7 +108,7 @@ function loadExchangeRate() {
 
 function updateRates()
 {
-	if(confirm("Do you want to update the Currency rates from the uploaded file ?"))
+	if(confirm('<digi:trn key="aim:updateCurrencyFromUploadedFile">Do you want to update the Currency rates from the uploaded file ?</digi:trn>'))
 	{
 		<digi:context name="updateRates" property="context/module/moduleinstance/saveCurrencyRate.do~doAction=file"/>
 		document.aimCurrencyRateForm.action = "<%= updateRates %>";

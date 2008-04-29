@@ -110,10 +110,10 @@
 						<!--<digi:trn key="aim:resultsPerPage">Results per page</digi:trn>&nbsp;-->
 						<!--<html:text property="tempNumResults" size="2" styleClass="inp-text" />-->
 						<html:select property="tempNumResults" styleClass="inp-text">
-							<html:option value="10">10</html:option>
-							<html:option value="20">20</html:option>
-							<html:option value="50">50</html:option>
-							<html:option value="-1">ALL</html:option>
+							<html:option value="10"><digi:trn key="aim:10">10</digi:trn></html:option>
+							<html:option value="20"><digi:trn key="aim:20">20</digi:trn></html:option>
+							<html:option value="50"><digi:trn key="aim:50">50</digi:trn></html:option>
+							<html:option value="-1"><digi:trn key="aim:all">All</digi:trn></html:option>
 						</html:select>
 					</td>
 					<td width="50">

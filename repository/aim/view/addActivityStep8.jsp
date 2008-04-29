@@ -343,7 +343,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<digi:trn key="aim:mofedContactInformation">
 																MOFED contact information</digi:trn>
 															</td>
-															<field:display name="Government First Name" feature="Mofed Contact Information">
+															<field:display name="Government First Name" feature="Government Contact Information">
 															<td align="right">
 																<b>
 																<digi:trn key="aim:firstName">
@@ -355,7 +355,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 															</field:display>
 														</tr>
-														<field:display name="Government Last Name" feature="Mofed Contact Information">
+														<field:display name="Government Last Name" feature="Government Contact Information">
 														<tr>
 															<td>
 															</td>
@@ -370,7 +370,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Government Email" feature="Mofed Contact Information">
+														<field:display name="Government Email" feature="Government Contact Information">
 														<tr>
 															<td>
 															</td>
@@ -385,7 +385,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Government Title" feature="Mofed Contact Information">
+														<field:display name="Government Title" feature="Government Contact Information">
 														<tr>
 															<td>
 															</td>
@@ -400,7 +400,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Government Organization" feature="Mofed Contact Information">
+														<field:display name="Government Organization" feature="Government Contact Information">
 														<tr>
 															<td>
 															</td>
@@ -415,7 +415,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Government Phone Number" feature="Mofed Contact Information">
+														<field:display name="Government Phone Number" feature="Government Contact Information">
 														<tr>
 															<td>
 															</td>
@@ -430,7 +430,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</td>
 														</tr>
 														</field:display>
-														<field:display name="Government Fax Number" feature="Mofed Contact Information">
+														<field:display name="Government Fax Number" feature="Government Contact Information">
 														<tr>
 															<td>
 															</td>

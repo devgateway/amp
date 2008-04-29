@@ -73,7 +73,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display  name="PI report 10a" module="PI Reports"></feature:display>
 
 <feature:display  name="Funding Organizations" module="Funding"></feature:display>
-<feature:display module="Contact Information" name="Mofed Contact Information"></feature:display>
 <feature:display module="Funding" name="Funding Organizations"></feature:display>
 <feature:display module="Funding" name="MTEF Projections"></feature:display>
 <feature:display module="Organizations" name="Beneficiary Agency"></feature:display>
@@ -170,8 +169,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display feature="Identification" name="Purpose"></field:display>
 <field:display feature="Identification" name="Results"></field:display>
 <field:display feature="MTEF Projections" name="MTEFProjections"></field:display>
-<field:display feature="Mofed Contact Information" name="Mofed Email"></field:display>
-<field:display feature="Mofed Contact Information" name="Mofed First Name"></field:display>
 <field:display feature="Planning" name="Line Ministry Rank"></field:display>
 <field:display feature="Preview Activity" name="Preview Button"></field:display>
 <field:display feature="Sectors" name="Level 1 Sectors List"></field:display>
@@ -331,13 +328,13 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Funding Organization Name" feature="Funding Organizations"></field:display>
 <field:display name="Funding Organization" feature="Funding Organizations"></field:display>
 <field:display name="Government Approval Procedures" feature="Budget"></field:display>
-<field:display name="Government Email" feature="Mofed Contact Information"></field:display>
-<field:display name="Government Fax Number" feature="Mofed Contact Information"></field:display>
-<field:display name="Government First Name" feature="Mofed Contact Information"></field:display>
-<field:display name="Government Last Name" feature="Mofed Contact Information"></field:display>
-<field:display name="Government Organization" feature="Mofed Contact Information"></field:display>
-<field:display name="Government Phone Number" feature="Mofed Contact Information"></field:display>
-<field:display name="Government Title" feature="Mofed Contact Information"></field:display>
+<field:display name="Government Email" feature="Government Contact Information"></field:display>
+<field:display name="Government Fax Number" feature="Government Contact Information"></field:display>
+<field:display name="Government First Name" feature="Government Contact Information"></field:display>
+<field:display name="Government Last Name" feature="Government Contact Information"></field:display>
+<field:display name="Government Organization" feature="Government Contact Information"></field:display>
+<field:display name="Government Phone Number" feature="Government Contact Information"></field:display>
+<field:display name="Government Title" feature="Government Contact Information"></field:display>
 <field:display name="Grand Total Commitments" feature="Components"></field:display>
 <field:display name="Grand Total Disbursements" feature="Components"></field:display>
 <field:display name="Implementation Level" feature="Location"></field:display>

@@ -51,8 +51,7 @@
 <module:display name="Reports" parentModule="REPORTING"></module:display> 
 <module:display name="Scenarios" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="TREND ANALYSIS"></module:display> 
-<module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display> 
-<feature:display module="Contact Information" name="Mofed Contact Information"></feature:display> 
+<module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS"></module:display>
 <feature:display module="Contracting" name="Contracting"></feature:display> 
 <feature:display module="Funding" name="Commitments"></feature:display> 
 <feature:display module="Funding" name="Disbursement Orders"></feature:display> 
@@ -166,8 +165,6 @@
 <field:display feature="Identification" name="Purpose"></field:display> 
 <field:display feature="Identification" name="Results"></field:display> 
 <field:display feature="MTEF Projections" name="MTEFProjections"></field:display> 
-<field:display feature="Mofed Contact Information" name="Mofed Email"></field:display> 
-<field:display feature="Mofed Contact Information" name="Mofed First Name"></field:display> 
 <field:display feature="Planning" name="Line Ministry Rank"></field:display> 
 <field:display feature="Preview Activity" name="Preview Button"></field:display> 
 <field:display feature="Project Coordinator" name="Project Coordinator Email"></field:display> 
@@ -389,15 +386,15 @@
 <field:display name="Funding Organization" feature="Funding Organizations"></field:display> 
 <field:display name="Government Agreement Number" feature="Identification"></field:display> 
 <field:display name="Government Approval Procedures" feature="Budget"></field:display> 
-<field:display name="Government Email" feature="Mofed Contact Information"></field:display> 
-<field:display name="Government Fax Number" feature="Mofed Contact Information"></field:display> 
+<field:display name="Government Email" feature="Government Contact Information"></field:display> 
+<field:display name="Government Fax Number" feature="Government Contact Information"></field:display> 
 <field:display name="Government Fax Number" feature="Project Coordinator"></field:display> 
 <field:display name="Government Fax Number" feature="Sector Ministry Contact"></field:display> 
-<field:display name="Government First Name" feature="Mofed Contact Information"></field:display> 
-<field:display name="Government Last Name" feature="Mofed Contact Information"></field:display> 
-<field:display name="Government Organization" feature="Mofed Contact Information"></field:display> 
-<field:display name="Government Phone Number" feature="Mofed Contact Information"></field:display> 
-<field:display name="Government Title" feature="Mofed Contact Information"></field:display> 
+<field:display name="Government First Name" feature="Government Contact Information"></field:display> 
+<field:display name="Government Last Name" feature="Government Contact Information"></field:display> 
+<field:display name="Government Organization" feature="Government Contact Information"></field:display> 
+<field:display name="Government Phone Number" feature="Government Contact Information"></field:display> 
+<field:display name="Government Title" feature="Government Contact Information"></field:display> 
 <field:display name="Grand Total Commitments" feature="Components"></field:display> 
 <field:display name="Grand Total Cost" feature="Costing"></field:display> 
 <field:display name="Grand Total Disbursements" feature="Components"></field:display> 

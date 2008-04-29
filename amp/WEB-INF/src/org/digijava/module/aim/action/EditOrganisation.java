@@ -25,6 +25,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -46,6 +48,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.ParisUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.helper.Constants;
 import java.util.List;
@@ -84,12 +87,12 @@ public class EditOrganisation
       Pledge det = new Pledge();
       det.setIndexId(System.currentTimeMillis());
       if (editForm.getFundingDetails() != null) {
-        ArrayList list = (ArrayList) editForm.getFundingDetails();
+        ArrayList<Pledge> list = (ArrayList<Pledge>) editForm.getFundingDetails();
         list.add(det);
         editForm.setFundingDetails(list);
       }
       else {
-        ArrayList newList = new ArrayList();
+        ArrayList<Pledge> newList = new ArrayList<Pledge>();
         newList.add(det);
         editForm.setFundingDetails(newList);
       }
@@ -98,10 +101,10 @@ public class EditOrganisation
     else
     if (request.getParameter("delPledge") != null) {
       long index = editForm.getTransIndexId();
-      ArrayList list = (ArrayList) editForm.getFundingDetails();
-      Iterator i = list.iterator();
+      ArrayList<Pledge> list = (ArrayList<Pledge>) editForm.getFundingDetails();
+      Iterator<Pledge> i = list.iterator();
       while (i.hasNext()) {
-        Pledge e = (Pledge) i.next();
+        Pledge e = i.next();
         if (e.getIndexId() == index) {
           i.remove();
           break;
@@ -119,14 +122,14 @@ public class EditOrganisation
           "sectorSelected");
       session.removeAttribute("sectorSelected");
 
-      Collection prevSelSectors = editForm.getSectors();
+      Collection<ActivitySector> prevSelSectors = editForm.getSectors();
       if (prevSelSectors != null) {
         if (prevSelSectors.isEmpty())
           sect.setSectorPercentage(new Float(100));
-        Iterator i = prevSelSectors.iterator();
+        Iterator<ActivitySector> i = prevSelSectors.iterator();
         boolean ok = true;
         while (i.hasNext()) {
-          ActivitySector e = (ActivitySector) i.next();
+          ActivitySector e = i.next();
           if (e.getSectorId().equals(sect.getSectorId())) {
             ok = false;
             break;
@@ -137,7 +140,7 @@ public class EditOrganisation
       }
       else {
         sect.setSectorPercentage(new Float(100));
-        prevSelSectors = new ArrayList();
+        prevSelSectors = new ArrayList<ActivitySector>();
         prevSelSectors.add(sect);
       }
       editForm.setSectors(prevSelSectors);
@@ -148,15 +151,15 @@ public class EditOrganisation
     if (request.getParameter("remSectors") != null) {
 
       Long selSectors[] = editForm.getSelSectors();
-      Collection prevSelSectors = editForm.getSectors();
-      Collection newSectors = new ArrayList();
+      Collection<ActivitySector> prevSelSectors = editForm.getSectors();
+      Collection<ActivitySector> newSectors = new ArrayList<ActivitySector>();
 
-      Iterator itr = prevSelSectors.iterator();
+      Iterator<ActivitySector> itr = prevSelSectors.iterator();
 
       boolean flag = false;
 
       while (itr.hasNext()) {
-        ActivitySector asec = (ActivitySector) itr.next();
+        ActivitySector asec = itr.next();
         flag = false;
         for (int i = 0; i < selSectors.length; i++) {
           if (asec.getSectorId().equals(selSectors[i])) {
@@ -452,7 +455,7 @@ public class EditOrganisation
                  else
          editForm.setLevelId(new Long(-1)); 	*/
         //Sectors
-        ArrayList convSect = new ArrayList();
+        ArrayList<ActivitySector> convSect = new ArrayList<ActivitySector>();
         Collection sectors = ampOrg.getSectors();
         Iterator i = sectors.iterator();
         boolean first = true;
@@ -489,11 +492,11 @@ public class EditOrganisation
         editForm.setSectors(convSect);
         //
         //Pledges
-        Collection funding = ampOrg.getFundingDetails();
-        ArrayList fundingDet = new ArrayList();
-        Iterator it = funding.iterator();
+        Collection<AmpPledge> funding = ampOrg.getFundingDetails();
+        ArrayList<Pledge> fundingDet = new ArrayList<Pledge>();
+        Iterator<AmpPledge> it = funding.iterator();
         while (it.hasNext()) {
-          AmpPledge e = (AmpPledge) it.next();
+          AmpPledge e = it.next();
           Pledge fund = new Pledge();
           fund.setAdjustmentType(e.getAdjustmentType().intValue());
           fund.setAmount(String.valueOf(e.getAmount()));
@@ -668,11 +671,11 @@ public class EditOrganisation
                 } */
 
         //Sectors
-        Set sectors = new HashSet();
+        Set<AmpSector> sectors = new HashSet<AmpSector>();
         if (editForm.getSectors() != null) {
-          Iterator itr = editForm.getSectors().iterator();
+          Iterator<ActivitySector> itr = editForm.getSectors().iterator();
           while (itr.hasNext()) {
-            ActivitySector actSect = (ActivitySector) itr.next();
+            ActivitySector actSect = itr.next();
             Long sectorId = null;
             if (actSect.getSubsectorLevel2Id() != null
                 && (!actSect.getSubsectorLevel2Id().equals(new Long( -1)))) {
@@ -697,13 +700,13 @@ public class EditOrganisation
         ampOrg.setSectors(sectors);
         //
         //Pledges
-        Set ampPledges = new HashSet();
+        Set<AmpPledge> ampPledges = new HashSet<AmpPledge>();
         if (editForm.getFundingDetails() != null) {
-          Iterator itr = editForm.getFundingDetails().iterator();
+          Iterator<Pledge> itr = editForm.getFundingDetails().iterator();
           //verify if all fields were completed
           boolean forw = false;
           while (itr.hasNext()) {
-            Pledge e = (Pledge) itr.next();
+            Pledge e = itr.next();
             try {
               double val = Double.parseDouble(e.getAmount());
               if (val == 0)
@@ -734,7 +737,7 @@ public class EditOrganisation
           //
           itr = editForm.getFundingDetails().iterator();
           while (itr.hasNext()) {
-            Pledge el = (Pledge) itr.next();
+            Pledge el = itr.next();
             AmpPledge pledge = new AmpPledge();
             pledge.setAdjustmentType(new Integer(el.getAdjustmentType()));
             pledge.setAmount(Double.valueOf(el.getAmount()));
@@ -839,6 +842,18 @@ public class EditOrganisation
           AmpActivity act = (AmpActivity) actItr.next();
           DbUtil.update(act);
         }
+        
+        for(Iterator<AmpAhsurvey> it= org.getSurvey().iterator();it.hasNext();){
+        	AmpAhsurvey ahsurvey=it.next();
+        	org.getSurvey().remove(ahsurvey); 
+        	for (Iterator<AmpAhsurveyResponse> jt = ahsurvey.getResponses().iterator(); jt.hasNext();) {
+        		AmpAhsurveyResponse ahsurveyResponse = (AmpAhsurveyResponse) jt.next();
+        		ParisUtil.deleteAhResponse(ahsurveyResponse.getAmpReponseId());
+			}
+        	ParisUtil.deleteAhSurvey(ahsurvey.getAmpAHSurveyId());
+        }
+        
+        //org.setSurvey(null);
         DbUtil.delete(org);
         logger.debug("Organisation deleted");
 

@@ -56,9 +56,10 @@ public class AmpReportMeasures  implements Serializable, Comparable<AmpReportMea
 	
 	public Integer getOrder() {
 		try{
+			if(orderId==null) return new Integer(0);
 			return 	Integer.parseInt(orderId);
 		}catch (NumberFormatException e) {
-			logger.error("NumberFormatException:", e);
+			logger.error("NumberFormatException:"+orderId+":", e);
 			return 0;
 		}		
 	}

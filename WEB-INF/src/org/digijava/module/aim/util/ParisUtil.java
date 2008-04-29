@@ -1,36 +1,23 @@
 package org.digijava.module.aim.util;
 
-import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpMECurrValHistory;
-import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpMEIndicators;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
-import org.digijava.module.aim.dbentity.AmpAhsurveyQuestionType;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
-import org.digijava.module.aim.form.ParisIndicatorForm;
-import org.digijava.module.aim.helper.AmpFund;
-import org.digijava.module.aim.helper.ParisIndicatorHelper;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.ParisIndicatorReportHelper;
 
 
@@ -368,6 +355,112 @@ public class ParisUtil {
 		}
 	}
 
+	public static void deleteAhResponse(Long rId)
+	{
+		Session session = null;
+		Transaction tx = null;
+		try 
+		{
+			session = PersistenceManager.getSession();
+			AmpAhsurveyResponse ahr = (AmpAhsurveyResponse) session.load(
+					AmpAhsurveyResponse.class,rId);
+			tx = session.beginTransaction();
+		 	session.delete(ahr);
+			tx.commit();
+		} 
+		catch (Exception e) 
+		{
+			logger.error("Exception from deleteahresponse() :" + e.getMessage());
+			e.printStackTrace(System.out);		
+			if (tx != null) 
+			{
+				try 
+				{
+					tx.rollback();
+				}
+				catch (Exception trbf) 
+				{
+					logger.error("Transaction roll back failed ");
+					e.printStackTrace(System.out);
+				}
+			}
+		} 
+		finally 
+		{
+			if (session != null) 
+			{
+				try 
+				{
+					PersistenceManager.releaseSession(session);
+				} 
+				catch (Exception rsf) 
+				{
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}			
+		}
+	}
+
+	public static void deleteAhSurvey(Long sId)
+	{
+		Session session = null;
+		Transaction tx = null;
+		try 
+		{
+			session = PersistenceManager.getSession();
+			AmpAhsurvey ahs = (AmpAhsurvey) session.load(
+					AmpAhsurvey.class,sId);
+			AmpOrganisation org=(AmpOrganisation) session.load(AmpOrganisation.class,ahs.getAmpDonorOrgId().getAmpOrgId());
+			
+			tx = session.beginTransaction();
+			
+			ahs.getAmpDonorOrgId().getSurvey().remove(ahs);
+			AmpActivity act=ahs.getAmpActivityId();
+			act.getSurvey().remove(ahs);
+			ahs.setAmpActivityId(null);
+			ahs.setPointOfDeliveryDonor(null);
+			org.getSurvey().remove(ahs);
+			
+			//session.save(org);
+		 	session.delete(ahs);
+			tx.commit();
+
+		} 
+		catch (Exception e) 
+		{
+			logger.error("Exception from deleteahsurvey() :" + e.getMessage());
+			e.printStackTrace(System.out);		
+			if (tx != null) 
+			{
+				try 
+				{
+					tx.rollback();
+				}
+				catch (Exception trbf) 
+				{
+					logger.error("Transaction roll back failed ");
+					e.printStackTrace(System.out);
+				}
+			}
+		} 
+		finally 
+		{
+			if (session != null) 
+			{
+				try 
+				{
+					PersistenceManager.releaseSession(session);
+				} 
+				catch (Exception rsf) 
+				{
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}			
+		}
+	}
+
+	
+	
 	public static AmpAhsurveyIndicator findIndicatorId(String name,String code)
 	{
 		Session session = null;

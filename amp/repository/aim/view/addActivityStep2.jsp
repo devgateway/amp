@@ -213,6 +213,9 @@ function validateSectorPercentage(){
         var sum = 0;
         var j;
         var sectorDiV=document.getElementById(id);
+        if(sectorDiV==null){
+            continue;
+        }
         var primaryDiv=sectorDiV.getElementsByTagName("div").length;
         var inputs=sectorDiV.getElementsByTagName("input");
         if(inputs.length==0&&primaryDiv>0){

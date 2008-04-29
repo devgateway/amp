@@ -298,7 +298,6 @@ function addPhyProgess(id,comp) {
 		<digi:context name="addPhyProg" property="context/module/moduleinstance/showAddPhyProg.do~edit=true" />
 
 		if (id == -1) {
-
 			document.aimEditActivityForm.action = "<%= addPhyProg %>~comp=" + comp;
 
 		} else {
@@ -306,11 +305,8 @@ function addPhyProgess(id,comp) {
 			document.aimEditActivityForm.action = "<%= addPhyProg %>~comp=" + comp + "~id=" + id;
 
 		}
-
 		document.aimEditActivityForm.target = popupPointer.name;
-
-		document.aimEditActivityForm.prevId.value = id;
-
+	//	document.aimEditActivityForm.prevId.value = id;
 		document.aimEditActivityForm.submit();
 
 }

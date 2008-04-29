@@ -6,6 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
 
@@ -246,7 +249,9 @@ a.itr:hover {
                                         </c:if>
                                         <tr>
                                           <td colspan="10" align="center">
-                                            <input type="button" value="<digi:trn key="btn:addIndicator">Add Indicators</digi:trn>" id="addBtn" onclick="addIndicator();" style="font-family:verdana;font-size:11px;"/>
+                                          	<field:display name="Add New Indicator" feature="Admin">
+                                            	<input type="button" value="<digi:trn key='btn:addIndicator'>Add Indicators</digi:trn>" id="addBtn" onclick="addIndicator();" style="font-family:verdana;font-size:11px;"/>
+                                            </field:display>
                                           </td>
                                         </tr>
                                       </table>

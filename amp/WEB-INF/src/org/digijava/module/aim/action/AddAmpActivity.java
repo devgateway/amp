@@ -112,10 +112,11 @@ public class AddAmpActivity extends Action {
 
     //return mapping.findForward("publicPreview");
 
-    EditActivityForm eaForm = (EditActivityForm) form;
-
-
-
+    EditActivityForm eaForm = (EditActivityForm) form; 
+    session.setAttribute("selectedSectorsForActivity", eaForm.getActivitySectors());
+    
+   
+    
     if (teamMember != null && teamMember.getTeamType()
        .equalsIgnoreCase("GOVERNMENT")) {
        eaForm.setGovFlag(true);
@@ -277,6 +278,7 @@ public class AddAmpActivity extends Action {
 				}
 				session.removeAttribute("sectorSelected");
 				session.removeAttribute("add");
+                                session.setAttribute("selectedSectorsForActivity", eaForm.getActivitySectors());
 				return mapping.findForward("addActivityStep2");
 
 			} else {
@@ -358,6 +360,7 @@ public class AddAmpActivity extends Action {
                 }
 				eaForm.setActivitySectors(prevSelSectors);
 				session.removeAttribute("sectorSelected");
+                                session.setAttribute("selectedSectorsForActivity", eaForm.getActivitySectors());
 				return mapping.findForward("addActivityStep2");
 
 			}
@@ -401,6 +404,7 @@ public class AddAmpActivity extends Action {
       }
 
       eaForm.setActivitySectors(newSectors);
+      session.setAttribute("selectedSectorsForActivity", eaForm.getActivitySectors());
       return mapping.findForward("addActivityStep2");
     }
     //

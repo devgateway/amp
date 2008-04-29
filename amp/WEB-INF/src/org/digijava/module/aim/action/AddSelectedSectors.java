@@ -4,14 +4,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.helper.ActivitySector;
 import javax.servlet.http.HttpSession;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.util.SectorUtil;
 
 public class AddSelectedSectors
     extends Action {
@@ -28,6 +32,12 @@ public class AddSelectedSectors
 	  HttpSession session = request.getSession();  
 	  
     eaForm = (SelectSectorForm) form;
+    List sectors=new ArrayList();
+    ActionErrors errors = new ActionErrors();
+    if(session.getAttribute("selectedSectorsForActivity")!=null){
+        sectors=(List)session.getAttribute("selectedSectorsForActivity");
+    }
+  
     boolean isDuplicated = false;
     Collection<ActivitySector> sectr = new ArrayList();
     Long[] removedsectorId = (Long[]) session.getAttribute("removedSector"); 
@@ -38,14 +48,22 @@ public class AddSelectedSectors
          }
     }
  
-    if (eaForm.getCols() == null) {
-      eaForm.setCols(new ArrayList());
-    }
+      if (eaForm.getCols() == null || eaForm.getCols().size() == 0) {
+          eaForm.setCols(new ArrayList());
+          eaForm.getCols().addAll(sectors);
+      }
     Long configId=eaForm.getConfigId();
+    AmpClassificationConfiguration config=SectorUtil.getClassificationConfigById(configId);
 
     Long selsearchedSector[] = eaForm.getSelSectors();
     logger.info("size off selected searched sectors: " +
                 selsearchedSector.length);
+     if(!config.isMultisector()&&selsearchedSector.length>1){
+           errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+              "error.aim.addActivity.sectorMultipleSelectionIsOff"));
+          saveErrors(request, errors);
+          return mapping.findForward("forward");  
+     }
     Iterator itr = eaForm.getSearchedSectors().iterator();
     int count = 0;
     ActivitySector sctr = null;
@@ -110,6 +128,13 @@ public class AddSelectedSectors
       session.setAttribute("sectorSelected", sectr);
       request.setAttribute("addButton", "true");
       session.setAttribute("add", "true");
+    }
+    else{
+       
+        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+              "error.aim.sectorAlreadyAddedToActivity"));
+          saveErrors(request, errors);
+          eaForm.getCols().retainAll(sectors);
     }
 
     return mapping.findForward("forward");

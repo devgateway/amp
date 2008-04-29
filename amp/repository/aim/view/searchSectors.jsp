@@ -218,7 +218,12 @@
 								List of Sectors</digi:trn>
 
 							</td>
-						</tr>
+                                                     </tr>
+                                                     <tr>
+                                                         <td>
+                                                             <digi:errors/>
+                                                         </td>
+                                                     </tr>
 <!-- 1 -->
 						<logic:notEmpty name="aimSelectSectorForm" property="pagedCol">
 						<tr>

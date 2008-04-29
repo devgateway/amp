@@ -732,6 +732,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			//assistanceTypes = null;
 			step = "1";
 			activitySectors = null;
+                        selSectors=null;
 //			numResults = 0;
 			cols = null;
 			colsAlpha = null;

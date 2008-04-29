@@ -340,6 +340,9 @@ ${fn:replace(message,quote,escapedQuote)}
 													</table>
 												</td>
 											</tr>
+											</table>
+											</td>
+											</tr>
 											</feature:display>
 										</table>
 									</td>

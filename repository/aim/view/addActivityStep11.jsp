@@ -307,8 +307,8 @@ ${fn:replace(message,quote,escapedQuote)}
 																			<table width="100%" cellSpacing=5 cellPadding=0 border=0
 																			class="box-border-nopadding">
 
-<!--
-																	<tr><td bgColor=#f4f4f2 align="center">
+
+																	<!--tr><td bgColor=#f4f4f2 align="center">
 																		<table cellPadding=3>
 																			<tr>
 																				<td>
@@ -325,8 +325,8 @@ ${fn:replace(message,quote,escapedQuote)}
 																				</td>
 																			</tr>
 																		</table>
-																	</td></tr>
-	-->
+																	</td></tr-->
+	
 	
 																</table>
 															</td>
@@ -335,7 +335,10 @@ ${fn:replace(message,quote,escapedQuote)}
 													</table>
 												</td>
 											</tr>
-											</feature:display>
+											</table>
+											</td>
+											</tr>											
+											</feature:display>											
 										</table>
 									</td>
 									<td width="25%" vAlign="top" align="right">

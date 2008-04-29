@@ -1,0 +1,2 @@
+update amp_team_member_roles  set team_head=false where team_head!=true; 
+update amp_team team set team.team_lead_id = (select m.amp_team_mem_id from amp_team_member m inner join amp_team_member_roles r on m.amp_member_role_id=r.amp_team_mem_role_id where m.amp_team_id=team.amp_team_id and r.team_head=true) where team.team_lead_id is null;

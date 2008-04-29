@@ -1,2 +1,1 @@
-alter table amp_org_role 
-add column (percentage float default NULL);
+alter table amp_org_role modify column percentage float default NULL;

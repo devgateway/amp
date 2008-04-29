@@ -73,7 +73,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Set implementingAgency;
 	private Set beneficiaryAgency;
 	
-	private Set teamAssignedOrgs;
+	private Set teamAssignedOrgs=null;
 
 	private Set financingInstruments=null;
 	private Set<AmpCategoryValue> typeOfAssistance=null;
@@ -125,9 +125,12 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	
 		
 		if(tm!=null){
-		this.setAmpTeams(TeamUtil.getRelatedTeamsForMember(tm));			
-		//set the computed workspace orgs
-		this.setTeamAssignedOrgs(TeamUtil.getComputedOrgs(this.getAmpTeams()));
+			this.setAmpTeams(TeamUtil.getRelatedTeamsForMember(tm));			
+			//set the computed workspace orgs
+			Set teamAO		= TeamUtil.getComputedOrgs(this.getAmpTeams());
+			
+			if ( teamAO!=null && teamAO.size()>0 )
+					this.setTeamAssignedOrgs(teamAO);
 
 			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
 		    

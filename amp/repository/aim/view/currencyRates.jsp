@@ -240,8 +240,8 @@ function fnSubmit() {
 				</tr>
 				<tr>
 					<td height=16 vAlign=center width=571><span class=subtitle-blue>
-						<digi:trn key="aim:exchangeRatesInUSDollars">
-							Exchange Rates in US Dollars(USD)
+						<digi:trn key="aim:exchangeRatesfor1USDollars">
+							Exchange Rates for 1 US Dollars(USD)
 						</digi:trn>
 						</span>
 					</td>
@@ -423,7 +423,7 @@ function fnSubmit() {
 											</a>
 										</td>
 										<td align="right">
-											<c:out value="${cRates.rateNotRounded}"/>
+											<c:out value="${cRates.exchangeRate}"/>
 										</td>
 									</tr>
 									</c:forEach>

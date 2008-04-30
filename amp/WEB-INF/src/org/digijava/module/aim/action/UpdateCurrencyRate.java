@@ -4,14 +4,16 @@
  */
 package org.digijava.module.aim.action;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import java.io.*;
-import java.util.Collection;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.StringTokenizer;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import net.sf.swarmcache.ObjectCache;
 
@@ -27,9 +29,9 @@ import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.form.CurrencyRateForm;
 import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 
@@ -45,7 +47,7 @@ public class UpdateCurrencyRate extends Action {
 
 		CurrencyRateForm crForm = (CurrencyRateForm) form;
 		CurrencyRates currencyRates = null;
-		Collection col = new ArrayList();
+		Collection<CurrencyRates> col = new ArrayList<CurrencyRates>();
 
 		logger.debug("Reset :" + crForm.isReset());
 
@@ -71,7 +73,10 @@ public class UpdateCurrencyRate extends Action {
 
 			while ((line = in.readLine()) != null)
 			{
-				st = new StringTokenizer(line,",");
+				String separator=FeaturesUtil.getGlobalSettingValue("Default Exchange Rate Separator");
+				if(separator==null || "".compareTo(separator)==0)
+					st = new StringTokenizer(line,",");
+				else st = new StringTokenizer(line, separator);
 				if(st.countTokens()==3)
 				{
 					String code = st.nextToken().trim();

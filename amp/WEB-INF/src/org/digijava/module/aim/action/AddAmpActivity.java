@@ -965,9 +965,10 @@ public class AddAmpActivity extends Action {
         Iterator iter = financingInstrValues.iterator();
         while (iter.hasNext()) {
           AmpCategoryValue financingInstrVal = (AmpCategoryValue) iter.next();
-          if ("Project Support".equalsIgnoreCase(financingInstrVal.getValue())) {
-            eaForm.setModality(financingInstrVal.getId());
-          }
+          if(financingInstrVal!=null)
+        	  if ("Project Support".equalsIgnoreCase(financingInstrVal.getValue())) {
+        		  eaForm.setModality(financingInstrVal.getId());
+        	  }
         }
         /*if (modalColl != null && eaForm.getModality() == null) {
          Iterator itr = modalColl.iterator();

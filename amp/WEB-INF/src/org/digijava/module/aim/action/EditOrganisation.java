@@ -611,7 +611,9 @@ public class EditOrganisation
           AmpSectorScheme sector = SectorUtil.getAmpSectorScheme(editForm.
               getAmpSecSchemeId());
           if (sector != null) {
-            ampOrg.setAmpSecSchemeId(sector);
+            //changed in Burkina - error when trying to delete some sectors..
+        	//  ampOrg.setAmpSecSchemeId(sector);
+        	  ampOrg.setAmpSecSchemeId(null);
           }
         }
         else

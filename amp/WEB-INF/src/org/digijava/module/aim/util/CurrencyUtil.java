@@ -112,7 +112,7 @@ public class CurrencyUtil {
 			}
 		}
 
-		logger.info("returning a collection of size " + col.size());
+		logger.info("returning a collection of size get all active rates function" + col.size());
 		return col;
 	}
 
@@ -180,7 +180,7 @@ public class CurrencyUtil {
 			}
 
 		} catch (Exception e) {
-			logger.error("Exception from getAllActiveRates");
+			logger.error("Exception from getActiveRates");
 			e.printStackTrace(System.out);
 		} finally {
 			if (session != null) {
@@ -192,7 +192,7 @@ public class CurrencyUtil {
 			}
 		}
 
-		logger.info("returning a collection of size " + col.size());
+		logger.info("returning a collection of size...get active rates... " + col.size());
 		return col;
 	}
 	/**

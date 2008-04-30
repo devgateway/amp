@@ -9,7 +9,9 @@ public class UserBean {
   private String firstNames;
   private String lastName;
   private String email;
-  private Collection<AmpTeam> teams;
+  @Deprecated private Collection<AmpTeam> teams;
+  private Collection<AmpTeamMember> teamMembers;
+
   private boolean ban;
   
 public UserBean() {
@@ -31,7 +33,7 @@ public UserBean() {
     return lastName;
   }
 
-  public Collection getTeams() {
+@Deprecated  public Collection getTeams() {
     return teams;
   }
 
@@ -55,12 +57,19 @@ public UserBean() {
     this.lastName = lastName;
   }
 
-  public void setTeams(Collection teams) {
+ @Deprecated public void setTeams(Collection teams) {
     this.teams = teams;
   }
 
   public void setBan(boolean ban) {
     this.ban = ban;
   }
+  
+  public Collection<AmpTeamMember> getTeamMembers() {
+        return teamMembers;
+    }
 
+  public void setTeamMembers(Collection<AmpTeamMember> teamMembers) {
+        this.teamMembers = teamMembers;
+    }
 }

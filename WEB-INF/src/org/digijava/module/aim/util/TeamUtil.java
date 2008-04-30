@@ -810,49 +810,27 @@ public class TeamUtil {
         Session session = null;
         Query qry = null;
         String qryStr = null;
-        Iterator itr = null;
-        boolean memberExist = false;
+        boolean memberExist = true;
 
         try {
-            session = PersistenceManager.getSession();
-            qryStr = "select u.id from " + User.class.getName() + " u "
-                + "where (u.email=:email)";
+            session = PersistenceManager.getRequestDBSession();
+            qryStr ="select tm  from "
+                    + AmpTeamMember.class.getName() 
+                    + " tm inner join tm.ampTeam t "+
+                    " inner join tm.user u where u.email=:email and t.ampTeamId=:teamId";
+         
             qry = session.createQuery(qryStr);
-            qry.setParameter("email", email, Hibernate.STRING);
-            itr = qry.list().iterator();
-            logger.debug("Here #1");
-            if(itr.hasNext()) {
-                Long id = (Long) itr.next();
-                logger.debug("Id is " + id);
-                qryStr = "select tm.ampTeam from "
-                    + AmpTeamMember.class.getName() + ""
-                    + " tm where (tm.user=:id)";
-                qry = session.createQuery(qryStr);
-                qry.setParameter("id", id, Hibernate.LONG);
-                Iterator tempItr = qry.list().iterator();
-                logger.debug("Here #2");
-                if(tempItr.hasNext()) {
-                    AmpTeam team = (AmpTeam) tempItr.next();
-                    logger.debug("Got team " + team.getAmpTeamId());
-                    logger.debug("Checking " + team.getAmpTeamId() + " and "
-                                 + teamId);
-                    if(team.getAmpTeamId().equals(teamId)) {
-                        logger.debug("member already exist for the team");
-                        memberExist = true;
-                    }
-                }
+            qry.setString("email", email);
+            qry.setLong("teamId", teamId);
+            if(qry.list()==null||qry.list().size()==0){
+               memberExist=false;
             }
+           
+            
         } catch(Exception e) {
             throw new RuntimeException(e);
 
-        } finally {
-            if(session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch(Exception rsf) {
-                    logger.error("Release session failed");
-                }
-            }
+        
         }
 
         return memberExist;

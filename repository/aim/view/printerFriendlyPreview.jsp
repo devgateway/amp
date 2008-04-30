@@ -856,7 +856,7 @@
                                                                                 <td><digi:trn key='aim:totalcommittment'>
                                                                                 TOTAL:
                                                                                 </digi:trn></td>
-                                                                                      <TD  colspan="4" align="right"><bean:write name="aimEditActivityForm" property="totalCommitted"/>&nbsp;USD</TD>
+                                                                                      <TD  colspan="4" align="right"><bean:write name="aimEditActivityForm" property="totalCommitted"/>&nbsp;<bean:write name="aimEditActivityForm" property="currCode"/></TD>
                                                                                 </tr>
                                                                               </c:if>
                                                                            
@@ -915,7 +915,7 @@
                                                                                 <td><digi:trn key='aim:totalDisbursementOrder'>
                                                                                 TOTAL:
                                                                                 </digi:trn></td>
-                                                                                      <TD  colspan="4" align="right"><bean:write name="aimEditActivityForm" property="totalDisbOrder"/>&nbsp;USD</TD>
+                                                                                      <TD  colspan="4" align="right"><bean:write name="aimEditActivityForm" property="totalDisbOrder"/>&nbsp;<bean:write name="aimEditActivityForm" property="currCode"/></TD>
                                                                                 </tr>
                                                                               </feature:display>
                                                                               <tr bgcolor="#ffffff">
@@ -1115,7 +1115,7 @@
 			                                                                                <td><digi:trn key='aim:totaldisbursement'>
 			                                                                                TOTAL:
 			                                                                                </digi:trn></td>
-			                                                                                      <TD  colspan="4" align="right"><bean:write name="aimEditActivityForm" property="totalDisbursed"/>&nbsp;USD</TD>
+			                                                                                      <TD  colspan="4" align="right"><bean:write name="aimEditActivityForm" property="totalDisbursed"/>&nbsp;<bean:write name="aimEditActivityForm" property="currCode"/></TD>
 			                                                                                </tr>																						
                                                                               </c:if>
 																						<tr bgcolor="#ffffff">

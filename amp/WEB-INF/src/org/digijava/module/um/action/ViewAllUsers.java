@@ -60,7 +60,7 @@ import org.digijava.module.aim.util.TeamUtil;
 	        if(vwForm.getType() == 0) {
 	            for(Iterator ubIter = ubCol.iterator(); ubIter.hasNext(); ) {
 	                UserBean ub = (UserBean) ubIter.next();
-	                if(ub.getTeams() != null) {
+	                if(ub.getTeamMembers() != null) {
 	                    ubIter.remove();
 	                }
 	            }
@@ -68,7 +68,7 @@ import org.digijava.module.aim.util.TeamUtil;
 	        } else if(vwForm.getType() == 1) {
 	            for(Iterator ubIter = ubCol.iterator(); ubIter.hasNext(); ) {
 	                UserBean user = (UserBean) ubIter.next();
-	                if(user.getTeams() == null) {
+	                if(user.getTeamMembers() == null) {
 	                    ubIter.remove();
 	                }
 	            }
@@ -224,7 +224,8 @@ import org.digijava.module.aim.util.TeamUtil;
 	                    ub.setBan(user.isBanned());
 	
 	                    Collection members = TeamMemberUtil.getTeamMembers(user.getEmail());
-	                    if(members != null) {
+                            ub.setTeamMembers(members);
+	                    /*if(members != null) {
 	                        List<AmpTeam> teams = new ArrayList<AmpTeam>();
 	                        for(Iterator teamMemberIter = members.iterator(); teamMemberIter.hasNext(); ) {
 	                            AmpTeamMember teamMember = (AmpTeamMember) teamMemberIter.next();
@@ -236,7 +237,7 @@ import org.digijava.module.aim.util.TeamUtil;
 	                            Collections.sort(teams, new TeamUtil.HelperAmpTeamNameComparator());
 	                            ub.setTeams(teams);
 	                        }
-	                    }
+	                    }*/
 	                    ubCol.add(ub);
 	                }
 	            }

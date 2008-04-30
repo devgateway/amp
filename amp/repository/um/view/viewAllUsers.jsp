@@ -218,12 +218,17 @@ function banUser(txt) {
 																			</td>																	
 																			<td height="30">
 																				<div>
-								                                                  <c:if test="${!empty us.teams}">
-								                                                    <c:forEach var="team" items="${us.teams}">
-								                                                      ${team.name}<br />
-								                                                    </c:forEach>
+								                                                  <c:if test="${!empty us.teamMembers}">
+                                                                                                                       <table>
+                                                                                                                           <c:forEach var="member" items="${us.teamMembers}">
+                                                                                                                               <tr>
+                                                                                                                                   <td nowrap> ${member.ampTeam.name}: &nbsp;</td>
+                                                                                                                                   <td nowrap>${member.ampMemberRole.role} </td>
+                                                                                                                               </tr>
+                                                                                                                           </c:forEach>
+                                                                                                                     </table>
 								                                                  </c:if>
-								                                                  <c:if test="${empty us.teams}">
+								                                                  <c:if test="${empty us.teamMembers}">
 								                                                    <digi:trn key="um:viewAllUsers:UnassignedUser">Unassigned</digi:trn>
 								                                                  </c:if>
 								                                                </div>

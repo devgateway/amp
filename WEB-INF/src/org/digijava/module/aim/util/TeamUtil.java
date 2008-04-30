@@ -767,13 +767,13 @@ public class TeamUtil {
         Transaction tx = null;
 
         try {
-            session = PersistenceManager.getSession();
+            session = PersistenceManager.getRequestDBSession();
             tx = session.beginTransaction();
             session.save(member);
             session.save(appSettings);
             
             
-            if(member.getAmpMemberRole().getTeamHead().booleanValue() == true) {
+            if(member.getAmpMemberRole().getTeamHead()) {
                 AmpTeam team = (AmpTeam) session.load(AmpTeam.class, (Serializable) member.getAmpTeam().getIdentifier());
                 team.setTeamLead(member);
                 session.update(team);
@@ -803,15 +803,7 @@ public class TeamUtil {
             }
             throw new RuntimeException(e);
 
-        } finally {
-            if(session != null) {
-                try {
-                    PersistenceManager.releaseSession(session);
-                } catch(Exception rsf) {
-                    logger.error("Release session failed :" + rsf);
-                }
-            }
-        }
+        } 
     }
 
     public static boolean isMemberExisting(Long teamId, String email) {

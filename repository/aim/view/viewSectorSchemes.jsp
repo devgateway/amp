@@ -117,7 +117,7 @@
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
                                                                                                                
 														<td bgcolor="#ffffff" width="75" align="left">
-                                                                                                                       <c:if test="${!sectorScheme.used}">
+                                                           <c:if test="${!sectorScheme.used}">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams4}" property="ampSecSchemeId">
 																<bean:write name="sectorScheme" property="ampSecSchemeId" />
@@ -130,7 +130,7 @@
 																title="${trnDeleteScheme}" onclick="return onDelete()">
 																 <digi:trn key="aim:delete">Delete</digi:trn>
 															</digi:link>
-                                                                                                                     ]</c:if>&nbsp;</td>
+                                                             ]</c:if>&nbsp;</td>
                                                                                                                         
 
 

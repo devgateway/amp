@@ -397,6 +397,9 @@ public class UserRegisterForm
         setPasswordConfirmation(null);
         setMailingAddress(null);
         setOrganizationName(null);
+        selectedOrganizationId=null;
+        selectedOrgGroup=null;
+        selectedOrgType=null;
  //       setWebSite(null);
 
         organizationTypeOther = null;
@@ -519,15 +522,18 @@ public class UserRegisterForm
                 errors.add(null, error);
             }
         }      
-       
+       if(selectedOrgType==null||selectedOrgType.equals(-1l)){
+           ActionError error = new ActionError("error.registration.enterorganizationother");
+           errors.add(null, error);
+       }
        
         
-        if (null == this.getOrgGrp() || this.getOrgGrp().trim().length() < 1) {
+        if (null == selectedOrgGroup || selectedOrgGroup .equals(-1l)) {
         	ActionError error = new ActionError("error.registration.NoOrgGroup");
         	errors.add(null, error);
         }
 
-        if (null == this.getOrganizationName() || this.getOrganizationName().trim().length() < 1) {
+        if ( selectedOrganizationId==null || selectedOrganizationId .equals(-1l)) {
         	ActionError error = new ActionError("error.registration.NoOrganization");
         	errors.add(null, error);
         }

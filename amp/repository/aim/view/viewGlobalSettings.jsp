@@ -182,10 +182,11 @@ function saveAllSettings(){
                             </b>                          </td>
                           <td bgcolor="#fefefe">&nbsp;                          </td>
 							</tr>
-
+                           <%int g_range=0, g_year=0; %>
                           <logic:notEmpty name="aimGlobalSettingsForm" property="gsfCol">
                             <logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett"
                             type="org.digijava.module.aim.dbentity.AmpGlobalSettings	">
+ 
                             <tr>
                               <td bgcolor="#ffffff">
 
@@ -269,7 +270,6 @@ function saveAllSettings(){
                                     </html:select>
                                     <%} %>										
                                     </logic:notEmpty>
-                                    
                                     <logic:empty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
                                     	<c:set var="type" value="<%=gsType %>" />
                                     	<c:choose>
@@ -313,6 +313,76 @@ function saveAllSettings(){
 	                                    				} 
 	                                    			%>
 	                                    		</select>
+	                                    	</c:when>
+	                                    	<c:when test='${type == "t_static_range"}'>
+	                                    		<% 
+		                                    		String dateValues	= globalSett.getGlobalSettingsValue();
+		                                    		int range		= Integer.parseInt(dateValues);
+		                                    		g_range=range;
+	                                    		%>
+	                                    		<select styleClass="inp-text" name="gsfValue">
+	                                    			<% for (int k=10; k<=100; k+=10) {
+	                                    					if ( k == range ) {
+	                                    			%>
+	                                    					<option value="<%=k %>" selected="selected"><%=k %></option>
+	                                    			<%
+		                                    				}
+		                                    				else {
+		                                    		%>
+		                                    				<option value="<%=k %>"><%=k %></option>
+		                                    		<%
+		                                    				}
+	                                    				} 
+	                                    			%>
+	                                    		</select>
+	                                    	</c:when>
+	                                    	
+	                                    	<c:when test='${type == "t_static_year"}'>
+	                                    		<% 
+		                                    		String dateValues	= globalSett.getGlobalSettingsValue();
+	                                    		    int year				= Integer.parseInt(dateValues);
+	                                    		    g_year = year;
+	                                    		%>
+	                                    		<select styleClass="inp-text" name="gsfValue">
+	                                    			<% for (int k=1980; k<=2020; k++) {
+	                                    					if ( k == year ) {
+	                                    			%>
+	                                    					<option value="<%=k %>" selected="selected"><%=k %></option>
+	                                    			<%
+		                                    				}
+		                                    				else {
+		                                    		%>
+		                                    				<option value="<%=k %>"><%=k %></option>
+		                                    		<%
+		                                    				}
+	                                    				} 
+	                                    			%>
+	                                    		</select>
+	                                    	
+	                                    	</c:when>
+
+	                                    	<c:when test='${type == "t_year_default_start" || type == "t_year_default_end"}'>
+	                                    		<% 
+		                                    		String dateValues	= globalSett.getGlobalSettingsValue();
+		                                    		int default_year		= Integer.parseInt(dateValues);
+	                                    		%>
+	                                    		<select styleClass="inp-text" name="gsfValue">
+	                                    		    <option value="-1"><digi:trn key="aim:globalSettings:Disabled">Disabled</digi:trn></option>
+	                                    			<% for (int k=g_year; k<=g_year+g_range; k++) {
+	                                    					if ( k == default_year ) {
+	                                    			%>
+	                                    					<option value="<%=k %>" selected="selected"><%=k %></option>
+	                                    			<%
+		                                    				}
+		                                    				else {
+		                                    		%>
+		                                    				<option value="<%=k %>"><%=k %></option>
+		                                    		<%
+		                                    				}
+	                                    				} 
+	                                    			%>
+	                                    		</select>
+	                                    	
 	                                    	</c:when>
 	                                    	
 	                                    	<c:when test='${type == "t_Boolean"}'>

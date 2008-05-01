@@ -244,7 +244,7 @@ public class GlobalSettings extends Action {
 	private boolean testCriterion (AmpGlobalSettings ags, String value) {
 		String criterion		= ags.getGlobalSettingsPossibleValues();
 		if ( criterion!=null && criterion.startsWith("t_")  ) {
-			if (criterion.equals("t_Integer")){
+			if (criterion.equals("t_Integer") || criterion.equals("t_static_range") ){
 				try{
 					Integer.parseInt(value);
 					return true;
@@ -255,7 +255,8 @@ public class GlobalSettings extends Action {
 					return false;
 				}
 			}
-			if (criterion.equals("t_Year")){
+			if (criterion.equals("t_Year")||criterion.equals("t_static_year")||criterion.equals("t_static_range")||
+					criterion.equals("t_year_default_start")||criterion.equals("t_year_default_end")){
 				try{
 					int intValue	= Integer.parseInt(value);
 					if (intValue!=-1 && (intValue < 1000 || intValue > 2999  ))

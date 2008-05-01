@@ -693,7 +693,7 @@ public class IndicatorUtil {
 	 * @return set of indicator helper beans.
 	 * @throws DgException
 	 */
-	public static Set<ActivityIndicator> getActivityIndicatorHelperBeans(Long activityId) throws DgException{
+	public static List<ActivityIndicator> getActivityIndicatorHelperBeans(Long activityId) throws DgException{
 		if(activityId == null)
 			return null;
 		AmpActivity activity=ActivityUtil.loadActivity(activityId);
@@ -707,12 +707,12 @@ public class IndicatorUtil {
 	 * @return
 	 * @throws DgException
 	 */
-	public static Set<ActivityIndicator> getActivityIndicatorHelperBeans(AmpActivity activity) throws DgException{
-		Set<ActivityIndicator> result=null;
+	public static List<ActivityIndicator> getActivityIndicatorHelperBeans(AmpActivity activity) throws DgException{
+		List<ActivityIndicator> result=null;
 		if (activity==null) return null;
 		Set<IndicatorActivity> indicators =activity.getIndicators();
 		if (indicators!=null && indicators.size()>0){
-			result=new HashSet<ActivityIndicator>();
+			result=new ArrayList<ActivityIndicator>();
 			for (IndicatorActivity connection : indicators) {
 				ActivityIndicator helper=new ActivityIndicator();
 				

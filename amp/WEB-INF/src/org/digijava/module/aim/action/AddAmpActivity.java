@@ -1379,19 +1379,22 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
         }
       }
       else if (eaForm.getStep().equals("10")) { // show step 9 - M&E page
-
+     
 //          eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorsList(eaForm.getActivityId()));
     	  if (eaForm.getActivityId()!=null && eaForm.getActivityId()!=0){
-              eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorHelperBeans(eaForm.getActivityId()));
-    	  }else{
-    		  eaForm.setIndicatorsME(null);
+              List indicators=IndicatorUtil.getActivityIndicatorHelperBeans(eaForm.getActivityId());
+              eaForm.setIndicatorsME(indicators);
+             
+            
+   
     	  }
-
-          for(Iterator itr = IndicatorUtil.getAllDefaultIndicators(eaForm.getActivityId()).iterator(); itr.hasNext();){
+        
+      
+         /* for(Iterator itr = IndicatorUtil.getAllDefaultIndicators(eaForm.getActivityId()).iterator(); itr.hasNext();){
           	ActivityIndicator actInd = (ActivityIndicator) itr.next();
           	actInd.setActivityId(eaForm.getActivityId());
              eaForm.getIndicatorsME().add(actInd);
-          }
+          }*/
           if (!eaForm.isEditAct()) {
             eaForm.setIndicatorId(null);
             eaForm.setIndicatorValId(null);

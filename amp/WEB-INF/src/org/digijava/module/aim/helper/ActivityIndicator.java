@@ -45,7 +45,7 @@ public class ActivityIndicator {
 	private boolean defaultInd;
 	
 	private String progress;
-	
+
 	
 	/**
 	 * @return Returns the baseVal.

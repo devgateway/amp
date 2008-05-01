@@ -1,7 +1,7 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +36,7 @@ private static Logger logger = Logger.getLogger(AddIndicatorForStepNine.class);
 		String name=null,code=null;
 		Collection  tmpActivityIndicator = 	eaForm.getIndicatorsME();
 		if (tmpActivityIndicator==null){
-			tmpActivityIndicator=new HashSet();
+			tmpActivityIndicator=new ArrayList();
 		}
 
 		

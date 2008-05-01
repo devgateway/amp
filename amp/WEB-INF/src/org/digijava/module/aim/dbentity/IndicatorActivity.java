@@ -22,7 +22,7 @@ public class IndicatorActivity extends IndicatorConnection{
 	 * Actually risk is in each connection of indicator and activity.
 	 */
 	private AmpIndicatorRiskRatings risk;
-
+        
 
 	public AmpActivity getActivity() {
 		return activity;

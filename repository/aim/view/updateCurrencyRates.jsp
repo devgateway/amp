@@ -20,30 +20,30 @@
 
 function validate() {
 	if (isEmpty(document.aimCurrencyRateForm.updateCRateCode.value) == true) {
-		alert("Currency code not entered");
+		alert('<digi:trn key="aim:currencyCodenotEntered">Currency code not entered</digi:trn>');
 		document.aimCurrencyRateForm.updateCRateCode.focus();
 		return false;
 	}
 	if (document.aimCurrencyRateForm.updateCRateCode.value == 'USD') {
-		alert("All exchange rates are saved in terms of USD. Please select a different currency.");
+		alert('<digi:trn key="aim:selectDifferentCurrency">All exchange rates are saved in terms of USD. Please select a different currency.</digi:trn>');
 		document.aimCurrencyRateForm.updateCRateCode.focus();
 		return false;
 	}
 
 	if (isEmpty(document.aimCurrencyRateForm.updateCRateDate.value) == true) {
-		alert("Exchange rate date not entered");
+		alert('<digi:trn key="aim:exchangeRateDateNotEntered">Exchange rate date not entered</digi:trn>');
 		document.aimCurrencyRateForm.updateCRateDate.focus();
 		return false;
 	}
 	if (isEmpty(document.aimCurrencyRateForm.updateCRateAmount.value) == true) {
-		alert("Exchange rate not entered");
+		alert('<digi:trn key="aim:exchangeRateNotEntered">Exchange rate not entered</digi:trn>');
 		document.aimCurrencyRateForm.updateCRateAmount.focus();
 		return false;
 	}
 	
 	if (checkAmountUsingSymbols(document.aimCurrencyRateForm.updateCRateAmount.value,'<%=FormatHelper.getGroupSymbol()%>','<%=FormatHelper.getDecimalSymbol()%>') == false) 
 		{
-			alert("Invalid exchange rate entered");
+			alert('<digi:trn key="aim:invalidExchangeRateEntered">Invalid exchange rate entered</digi:trn>');
 			document.aimCurrencyRateForm.updateCRateAmount.focus();
 			return false;
 		}

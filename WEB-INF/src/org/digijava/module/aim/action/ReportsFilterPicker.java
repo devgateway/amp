@@ -86,8 +86,11 @@ public class ReportsFilterPicker extends MultiAction {
 		//create filter dropdowns		
 		Collection currency = CurrencyUtil.getAmpCurrency();
 		Collection allFisCalenders = DbUtil.getAllFisCalenders();
-		List ampSectors;// = SectorUtil.getAmpSectorsAndSubSectors();
-		ampSectors = SectorUtil.getAllSectorsFromScheme(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_SECTOR_SCHEME));
+		List<AmpSector> ampSectors;// = SectorUtil.getAmpSectorsAndSubSectors();
+		
+		 Long primaryConfigClassId=SectorUtil.getPrimaryConfigClassificationId();
+		 ampSectors = (List)SectorUtil.getAllParentSectors(primaryConfigClassId);
+		//ampSectors = SectorUtil.getAllSectorsFromScheme(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_SECTOR_SCHEME));
 		
 		TreeSet<AmpSector> alphaOrderedSectors	= new TreeSet<AmpSector>( 
 				new Comparator<AmpSector>() {

@@ -9,29 +9,26 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
-
 <script langauage="JavaScript">
 	function onDelete() {
 		var flag = confirm("Delete this Sector?");
 		return flag;
 	}
-	function updateScheme(id) {	
+	function updateScheme(id,flag) {
 	    var sectorCode = document.aimAddSectorForm.sectorCode.value;
-		<c:set var="translation">
-  			<digi:trn key="aim:EnterValidSectorCode">Sector Code must be between 100 and 1000</digi:trn>
-		</c:set>             
-
-		if(!(sectorCode > 100 && sectorCode < 1000))
-		{
-    		alert("${translation}");
+	    	    
+		if(!(sectorCode > 10000 && sectorCode < 100000)){
+			<c:set var="translation">
+       	    	<digi:trn key="aim:EnterValidSubSubSectorCode">Sector Code must be between 10000 and 100000</digi:trn>
+            </c:set>   
+			alert("${translation}");
 		}
 		else{	
-			<digi:context name="updateSector" property="context/module/moduleinstance/editSector.do?event=update2LevelSector" />
-			document.aimAddSectorForm.action = "<%= updateSector%>&id="+id;
+			<digi:context name="updateSector" property="context/module/moduleinstance/editSector.do?event=update3LevelSector" />
+			document.aimAddSectorForm.action = "<%= updateSector%>&id="+id+"&flag="+flag;
 			document.aimAddSectorForm.target = "_self";
 			document.aimAddSectorForm.submit();
-		}
-	
+	    }
 	}
 
 </script>
@@ -71,7 +68,7 @@
 				<tr>
 					<td height=16 vAlign=center width=571><span class=subtitle-blue>
 					<digi:trn key="aim:sectormanager">
-					Sector Manager
+						Sector Manager
 					</digi:trn>
 					</span>
 					</td>
@@ -98,7 +95,7 @@
 														<td>
 														<digi:trn key="aim:sectorManagerLevel">
 															Sector Name : this one
-														</digi:trn>
+														</digi:trn>	
 														</td>
 														<td>
 															<html:textarea  name ="aimAddSectorForm" property="sectorName" rows="1" cols= "35"/> 
@@ -140,18 +137,19 @@
 															&nbsp;
 														</td>
 														<td >&nbsp;&nbsp;
-								<input  type="button" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="sectorId" />')"/>
+								<input  type="button" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="sectorId" />','<bean:write name="aimAddSectorForm" property="jspFlag" />')"/>
 														<td>
 													</tr>
 											</table>
 											</td>
 											
 										</tr>	
-										<field:display name="Level 2 Sectors List" feature="Sectors">
+										<field:display name="Level 3 Sectors List" feature="Sectors">
+										<c:if test="${aimAddSectorForm.jspFlag == false}">
 										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
-											<digi:trn key="aim:LeveltwoSectors">
-												Level Two Sectors
+											<digi:trn key="aim:LevelthreeSectors">
+												Level Three Sectors
 											</digi:trn>
 											<!-- end table title -->										
 										</td></tr>
@@ -176,7 +174,7 @@
 															<c:set target="${urlParams2}" property="ampSectorId">
 															<bean:write name="sectorLevelTwo" property="ampSectorId" />
 															</c:set>
-															<c:set target="${urlParams2}" property="event" value="edit" />
+															<c:set target="${urlParams2}" property="event" value="enough" />
 															<c:set target="${urlParams2}" property="level" value="three" />
 															<c:set var="translation">
 																<digi:trn key="aim:clickToViewSector">Click here to view Sector</digi:trn>
@@ -185,16 +183,13 @@
 															<bean:write name="sectorLevelTwo" property="name"/></digi:link>
 														</td>
 														
-														<td bgcolor="#ffffff" width="75" align="center">
+														<td bgcolor="#ffffff" width="40" align="center">
 															<c:set var="translation">
 																<digi:trn key="aim:clickToEditSector">Click here to Edit Sector</digi:trn>
 															</c:set>
-															<c:set var="edittext">
-																<digi:trn key="aim:edit">Edit</digi:trn>
-															</c:set>
-															[ <digi:link href="/viewSectorDetails.do" name="urlParams2" title="${translation}" >${edittext}</digi:link> ]
+															[ <digi:link href="/viewSectorDetails.do" name="urlParams2" title="${translation}" >Edit </digi:link> ]
 														</td>
-														<td bgcolor="#ffffff" width="60" align="center">
+														<td bgcolor="#ffffff" width="55" align="center">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams4}" property="ampSectorId">
 																<bean:write name="sectorLevelTwo" property="ampSectorId" />
@@ -206,11 +201,8 @@
 															<c:set var="translation">
 																<digi:trn key="aim:clickToDeleteSector">Click here to Delete Sector</digi:trn>
 															</c:set>
-															<c:set var="deletetext">
-																<digi:trn key="aim:delete">Delete</digi:trn>
-															</c:set>
 															[ <digi:link href="/deleteSector.do" name="urlParams4" 
-																title="${translation}" onclick="return onDelete()">${deletetext}</digi:link> ]
+																title="${translation}" onclick="return onDelete()">Delete</digi:link> ]
 														</td>
 													</tr>
 													</logic:iterate>
@@ -221,6 +213,7 @@
 													<!-- end page logic -->													
 											</table>
 										</td></tr>
+										</c:if>
 										</field:display>
 									</table>
 									
@@ -248,17 +241,20 @@
 									</table>
 								</td>
 							</tr>
+							
 							<tr>
 								<td bgColor=#ffffff class=box-border>
 									<table cellPadding=5 cellSpacing=1 width="100%">
-										<field:display name="Add Sector Level 2 Link" feature="Sectors">
+									<field:display name="Add Sector Level 3 Link" feature="Sectors">
+										<c:if test="${aimAddSectorForm.jspFlag == false}">
 										 <tr>
 											<td>
 												<jsp:useBean id="urlParams5" type="java.util.Map" class="java.util.HashMap"/>
 												<c:set target="${urlParams5}" property="ampSecSchemeId">
 													<bean:write name="aimAddSectorForm" property="sectorId" />
 												</c:set>
-												<c:set target="${urlParams5}" property="parent" value="sector"/>
+												<c:set target="${urlParams5}" property="parent" value="sector3"/>
+												<c:set target="${urlParams5}" property="level" value="three"/>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<c:set var="translation">
 													<digi:trn key="aim:clickToAddSector">Click here to Add a Sector</digi:trn>
@@ -271,8 +267,8 @@
 												</digi:link>
 											</td>
 										</tr>
+										</c:if>
 										</field:display>
-										
 										<field:display name="View Schemes Link" feature="Sectors">
 										<tr>
 											<td>

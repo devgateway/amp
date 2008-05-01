@@ -231,6 +231,7 @@
 	<page name="addNewSector" title=" : Add New Sector "/>
 	<page name="addNewLevel2Sector" title=" : Add New Level 2 Sector "/>
 	<page name="addNewLevel3Sector" title=" : Add New Level 3Sector "/>
+	<page name="editLevelEnough" title=" : Edit Level 3Sector "/>
 
 	<!-- for Components Manager -->
 	<page name="viewComponents" title=": - AMP Components"/>

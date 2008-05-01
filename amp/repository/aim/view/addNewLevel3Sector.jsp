@@ -15,11 +15,20 @@
 		return flag;
 	}
 	function updateScheme(id,flag) {
+	    var sectorCode = document.aimAddSectorForm.sectorCode.value;
+	    	    
+		if(!(sectorCode > 1000 && sectorCode < 10000)){
+			<c:set var="translation">
+				<digi:trn key="aim:EnterValidSubSectorCode">Sector Code must be between 1000 and 10000</digi:trn>
+    		</c:set>   
+			alert("${translation}");
+		}
+		else{	
 			<digi:context name="updateSector" property="context/module/moduleinstance/editSector.do?event=update3LevelSector" />
 			document.aimAddSectorForm.action = "<%= updateSector%>&id="+id+"&flag="+flag;
 			document.aimAddSectorForm.target = "_self";
 			document.aimAddSectorForm.submit();
-	
+	    }
 	}
 
 </script>

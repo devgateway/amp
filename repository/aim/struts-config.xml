@@ -397,6 +397,7 @@
       <forward name="levelOne" path="/showLayout.do?layout=addASector" />
       <forward name="levelTwo" path="/showLayout.do?layout=addNewLevel2Sector" />
       <forward name="levelThree" path="/showLayout.do?layout=addNewLevel3Sector" />
+      <forward name="levelEnough" path="/showLayout.do?layout=editLevelEnough" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimSectorClassConfigForm" path="/aim/getSectorClassConfig" scope="session" type="org.digijava.module.aim.action.ManageClassificationConfig" validate="false">

@@ -99,6 +99,9 @@ public class ViewSectorDetails extends Action {
 								viewSectorForm.setSectorId(editSector.getAmpSectorId());
 								logger.debug("Setting jsp Flag==================(true)================");
 								viewSectorForm.setJspFlag(true);
+								if(level.equals("three")){
+									return mapping.findForward("levelEnough");	
+								}								
 								return mapping.findForward("levelThree");
 							}
 						}

@@ -31,7 +31,7 @@ function editComponent(id){
   document.aimUpdateComponentsForm.submit();
 }
 
-function deleteIndicator(id){
+function deleteComponent(id){
   <digi:context name="delComponent" property="context/module/moduleinstance/updateComponents.do?event=delete" />
   document.aimUpdateComponentsForm.action = "<%= delComponent %>&componentId="+id;
   document.aimUpdateComponentsForm.target = "_self";
@@ -137,19 +137,23 @@ function deleteIndicator(id){
 
                               <%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
                                 <td bgcolor="#ffffff" width="55" align="center" nowrap="nowrap">
-                                  <jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
-                                  <c:set target="${urlParams4}" property="componentId">
-                                    <bean:write name="componentlist" property="ampComponentId" />
-                                  </c:set>
-                                  <c:set target="${urlParams4}" property="event" value="delete"/>
-                                  <c:set var="ToEditComponent2">
-                                    <digi:trn key="aim:clickToDeleteComponent">Click here to Delete Component</digi:trn>
-                                  </c:set>
                                   <c:set var="delete">
-                                  <digi:trn key="aim:deleteComponent">Delete</digi:trn>
-                                </c:set>
-                                  [ <digi:link href="/updateComponents.do" name="urlParams4"
-                                    title="${ToEditComponent2}" onclick="return onDelete()"> <c:out value="${delete}"/></digi:link> ]
+                                    <digi:trn key="aim:deleteComponent">Delete</digi:trn>
+                                  </c:set>
+
+                                  <c:set var="ForDeleteComponent">
+                                    <digi:trn key="aim:cantDeleteComponent">Can't delete component because it's assigned to activity</digi:trn>
+                                  </c:set>
+                                  <c:if test="${!empty componentlist.activities}">
+                                    [<a title="${ForDeleteComponent}" >${delete}</a>]
+                                  </c:if>
+
+                                  <c:set var="ForDeleteComponent">
+                                    <digi:trn key="aim:clickToDeleteComponent">Click here to delete component</digi:trn>
+                                  </c:set>
+                                  <c:if test="${empty componentlist.activities}">
+                                    [<a title="${ForDeleteComponent}" href="javascript:deleteComponent(${componentlist.ampComponentId});">${delete}</a>]
+                                  </c:if>
                                 </td>
                             </tr>
                             </logic:iterate>

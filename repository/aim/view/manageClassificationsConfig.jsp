@@ -85,13 +85,11 @@ type="org.digijava.module.aim.dbentity.AmpClassificationConfiguration">
                                                                                 <c:set var="trnEditScheme">
                                                                                     <digi:trn key="aim:clickToEdit">Click here to Edit</digi:trn>
                                                                                 </c:set>
-                                                                                
-                                                                                
-                                                                                
-                                                                                [ <digi:link href="/updateSectorClassConfig.do?event=edit&id=${classConfig.id}"  title="${trnEditScheme}" >
-                                                                                edit
-                                                                                </digi:link>
-                                                                            ]													  </td>
+                                                                                [ <digi:link href="/updateSectorClassConfig.do?event=edit&id=${classConfig.id}"  title="${trnEditScheme}">
+                                                                                <digi:trn key="aim:edit">
+																				edit
+																				</digi:trn>
+                                                                                </digi:link>]													  </td>
                                                                            
                                                                           
                                                                             

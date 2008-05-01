@@ -6,6 +6,8 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpWoreda;
 import org.digijava.module.aim.dbentity.AmpZone;
+import org.digijava.module.aim.dbentity.IndicatorTheme;
+import org.digijava.module.aim.helper.IndicatorThemeBean;
 import org.digijava.module.aim.helper.IndicatorsBean;
 
 
@@ -17,7 +19,8 @@ public class ThemeForm extends ActionForm {
 
 		  private Collection themes;
 		  private Collection subPrograms;
-		  private Collection prgIndicators;
+		  private Collection<IndicatorTheme> prgIndicators;
+		  private Collection<IndicatorThemeBean> programIndicators; 
 		  private Long themeId;
 		  private String programName;
 		  private String sectorName;
@@ -126,6 +129,15 @@ public class ThemeForm extends ActionForm {
 		}
 		
 		
+
+		public Collection<IndicatorThemeBean> getProgramIndicators() {
+			return programIndicators;
+		}
+
+		public void setProgramIndicators(
+				Collection<IndicatorThemeBean> programIndicators) {
+			this.programIndicators = programIndicators;
+		}
 
 		public String getIndicatorName() {
 			return indicatorName;
@@ -254,14 +266,14 @@ public class ThemeForm extends ActionForm {
 		/**
 		 * @return Returns the prgIndicators.
 		 */
-		public Collection getPrgIndicators() {
+		public Collection<IndicatorTheme> getPrgIndicators() {
 			return prgIndicators;
 		}
 
 		/**
 		 * @param prgIndicators The prgIndicators to set.
 		 */
-		public void setPrgIndicators(Collection prgIndicators) {
+		public void setPrgIndicators(Collection<IndicatorTheme> prgIndicators) {
 			this.prgIndicators = prgIndicators;
 		}
 

@@ -6,8 +6,11 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,12 +22,16 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
+import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.IndicatorThemeBean;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
@@ -170,19 +177,44 @@ public class AddThemeIndicator extends Action {
 		themeForm.setFlag("");
 
 
-//		Set<AmpIndicator> themeIndicators=IndicatorUtil.getThemeIndicators(id);
-//		List<AmpIndicator> indicatorList = new ArrayList<AmpIndicator>();
+		Set<IndicatorTheme> themeIndicators=theme.getIndicators();
+		List<IndicatorThemeBean> indList=new ArrayList<IndicatorThemeBean>();
+		
+		Iterator<IndicatorTheme> it=themeIndicators.iterator();
+		while(it.hasNext()){
+			List<AmpPrgIndicatorValue> indValuesList=new ArrayList<AmpPrgIndicatorValue>();
+			IndicatorTheme indTheme=it.next();
+			if(indTheme.getValues()!=null){
+				for (AmpIndicatorValue value : indTheme.getValues()) {
+	            	AmpPrgIndicatorValue bean=new AmpPrgIndicatorValue();
+					bean.setCreationDate(DateConversion.ConvertDateToString(value.getValueDate()));
+					bean.setValAmount(value.getValue());
+					bean.setValueType(value.getValueType());
+					bean.setIndicatorValueId(value.getIndValId());
+					bean.setLocation(value.getLocation());
+					indValuesList.add(bean);
+				}			
+			}			
+			IndicatorThemeBean indThemeBean=new IndicatorThemeBean();
+			indThemeBean.setIndicatorThemeId(indTheme.getId());
+			indThemeBean.setIndicator(indTheme.getIndicator());
+			Collections.sort(indValuesList, new DbUtil.IndicatorValuesComparatorByTypeAndYear());
+			indThemeBean.setProgramIndicatorValues(indValuesList);
+			
+			indList.add(indThemeBean);
+		}
+		Collections.sort(indList, new IndicatorUtil.IndThemeBeanComparatorByIndciatorName());
+		themeForm.setProgramIndicators(indList);
+		
+		
+		
+		
+//		List<IndicatorTheme> indicatorList = new ArrayList<IndicatorTheme>();
 //		if (themeIndicators!=null){
 //			indicatorList.addAll(themeIndicators);
-//			Collections.sort(indicatorList,new IndicatorUtil.IndicatorNameComparator());
-//		}
-		Set<IndicatorTheme> themeIndicators=theme.getIndicators();
-		List<IndicatorTheme> indicatorList = new ArrayList<IndicatorTheme>();
-		if (themeIndicators!=null){
-			indicatorList.addAll(themeIndicators);
-			Collections.sort(indicatorList,new IndicatorUtil.IndThemeIndciatorNameComparator());
-		}
-		themeForm.setPrgIndicators(indicatorList);
+//			Collections.sort(indicatorList,new IndicatorUtil.IndThemeIndciatorNameComparator());
+//		}		
+//		themeForm.setPrgIndicators(indicatorList);
 
 		return mapping.findForward("forward");
 	}

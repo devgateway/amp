@@ -2,14 +2,12 @@
 
 package org.digijava.module.aim.action;
 
-import java.net.ConnectException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,18 +16,13 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpIndicator;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.helper.Indicator;
-import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.util.ProgramUtil;
 
 public class AddEditData
     extends Action {
@@ -62,6 +55,7 @@ public class AddEditData
 					bean.setLocation(value.getLocation());
 					indValuesList.add(bean);
 				}
+            	Collections.sort((List<AmpPrgIndicatorValue>)indValuesList, new DbUtil.IndicatorValuesComparatorByTypeAndYear());
                 themeForm.setPrgIndValues(indValuesList);
             }else{
                 themeForm.setPrgIndValues(null);

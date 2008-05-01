@@ -165,7 +165,7 @@ function validation(){
     </c:forEach>   
   </c:if>
 
-  <c:if test="${empty aimThemeForm.prgIndicators}">
+  <c:if test="${empty aimThemeForm.programIndicators}">
     <tr align="center" bgcolor="#ffffff"><td><b>
       <digi:trn key="aim:noIndicatorsPresent">No data present</digi:trn></b></td>
     </tr>

@@ -325,7 +325,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String totalUnExpended = "";
 	private String totalExpended="";
         private String totalDisbOrder="";
-
+      
     public String getTotalDisbOrder() {
         return totalDisbOrder;
     }
@@ -903,7 +903,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
                       selectedNPOPrograms=null;
                       contracts=null;
                       selContractId=null;
-
+                      indicatorsME=null;
+                     
 
 		}
 

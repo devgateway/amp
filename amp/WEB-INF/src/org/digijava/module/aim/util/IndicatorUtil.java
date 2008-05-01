@@ -41,6 +41,7 @@ import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.IndicatorThemeBean;
 		
 		
 		/**
@@ -746,6 +747,19 @@ public class IndicatorUtil {
 	public static class IndThemeIndciatorNameComparator implements Comparator<IndicatorTheme>{
 
 		public int compare(IndicatorTheme ind0, IndicatorTheme ind1) {
+			return ind0.getIndicator().getName().compareTo(ind1.getIndicator().getName());
+		}
+		
+	}
+	
+	/**
+	 * Compares {@link IndicatorThemeBean} by their indicator's name
+	 * @author Dare Roinishvili
+	 *
+	 */
+	public static class IndThemeBeanComparatorByIndciatorName implements Comparator<IndicatorThemeBean>{
+
+		public int compare(IndicatorThemeBean ind0, IndicatorThemeBean ind1) {
 			return ind0.getIndicator().getName().compareTo(ind1.getIndicator().getName());
 		}
 		

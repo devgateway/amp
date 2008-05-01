@@ -342,19 +342,19 @@ function closeWindow() 
 						 </td>
 					 </tr>
 					 
-				<logic:notEmpty name="aimThemeForm" property="prgIndicators">
+				<logic:notEmpty name="aimThemeForm" property="programIndicators">
 				 <tr>
 					<td>
 						<table  bgColor="#d7eafd" cellPadding=5 cellSpacing=1 border="0" align="center" width=772>
-						 	<c:forEach var="prgIndicatorItr" varStatus="rIndex" items="${aimThemeForm.prgIndicators}">
+						 	<c:forEach var="prgIndicatorItr" varStatus="rIndex" items="${aimThemeForm.programIndicators}">
 								<tr>
 									<td width="1" bgcolor="white" colspan="7">
 									
 									</td>
 								</tr>
 						    	<tr>
-									<td width="9" height="15" bgcolor="#ffffff" id="menu1" onClick="showhide(menu1outline${prgIndicatorItr.id},menu1sign${prgIndicatorItr.id})" >
-												<img id="menu1sign${prgIndicatorItr.id}" src= "../ampTemplate/images/arrow_right.gif" valign="bottom">
+									<td width="9" height="15" bgcolor="#ffffff" id="menu1" onClick="showhide(menu1outline${prgIndicatorItr.indicatorThemeId},menu1sign${prgIndicatorItr.indicatorThemeId})" >
+												<img id="menu1sign${prgIndicatorItr.indicatorThemeId}" src= "../ampTemplate/images/arrow_right.gif" valign="bottom">
 									</td>
 									<td align="left" width="60%" bgcolor="#f4f4f2">
 										<b>${prgIndicatorItr.indicator.name}</b>
@@ -362,7 +362,7 @@ function closeWindow() 
 					                 <td  height="15" width="17%"bgcolor="#f4f4f2" nowrap="nowrap">
 										  <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 												<c:set target="${urlParams}" property="prgIndicatorId">
-														${prgIndicatorItr.id}
+														${prgIndicatorItr.indicatorThemeId}
 												</c:set>
 												<c:set target="${urlParams}" property="themeId">
 														${aimThemeForm.themeId}
@@ -370,35 +370,19 @@ function closeWindow() 
 
 												<bean:define id="translation">
 														<digi:trn key="aim:clickToEditPrgIndicator">Click here to Edit Program Indicator</digi:trn>
-												</bean:define>
-												<!-- 
-												<a href="javascript:editIndicator('${prgIndicatorItr.id}','${aimThemeForm.themeId}','program')">
-														<digi:trn key="aim:subProgramManagerVewEditindicator">View/Edit indicator</digi:trn>
-												</a>
-												&nbsp;|
-											-->
+												</bean:define>												
 									</td>
                   					<td height="10%" width="9%" bgcolor="#f4f4f2" nowrap="nowrap">
                   						<c:set var="trn"><digi:trn key="aim:addIndicator:add">Add/Edit data</digi:trn></c:set>
-												<a href="javascript:addData('${prgIndicatorItr.id}')">${trn}</a>
-									</td>
-									<!-- 
-									<td  bgcolor="#f4f4f2">
-											<bean:define id="translation">
-													<digi:trn key="aim:clickToDeletePrgIndicator">Click here to Delete Program Indicator</digi:trn>
-											</bean:define>
-	
-											<digi:link href="/addThemeIndicator.do?event=Delete" name="urlParams" title="<%=translation%>" onclick="return onDelete();">
-														<img src= "../ampTemplate/images/trash_12.gif" border=0>
-											</digi:link>
-									</td> -->
+												<a href="javascript:addData('${prgIndicatorItr.indicatorThemeId}')">${trn}</a>
+									</td>									
 									<td bgcolor="#f4f4f2" height="2%">
 									 <html:multibox property="indicatorsId">
-									 ${prgIndicatorItr.id}
+									 ${prgIndicatorItr.indicatorThemeId}
 									 </html:multibox>
 									</td>
 								</tr>
-									<td width="25" height="15" bgcolor="#f4f4f2" align="Center" colspan="7" id="menu1outline${prgIndicatorItr.id}" style="display:none">
+									<td width="25" height="15" bgcolor="#f4f4f2" align="Center" colspan="7" id="menu1outline${prgIndicatorItr.indicatorThemeId}" style="display:none">
 										 <table border="0" width="70%" class="box-border">
 											<tr bgcolor="white">
 													  <td  width="20%"></td>
@@ -423,8 +407,8 @@ function closeWindow() 
 													       <b><font color="white">Location</font></b>
 													     </td>
 													</tr>
-														<logic:notEmpty name="prgIndicatorItr" property="values">
-														   <logic:iterate name="prgIndicatorItr" property="values" id="prgIndicatorValues" type="org.digijava.module.aim.dbentity.AmpIndicatorValue">
+														<logic:notEmpty name="prgIndicatorItr" property="programIndicatorValues">
+														   <logic:iterate name="prgIndicatorItr" property="programIndicatorValues" id="prgIndicatorValues" type="org.digijava.module.aim.helper.AmpPrgIndicatorValue">
 																<tr bgcolor="#ffffff">
 																	<td width="40" bgcolor="#f4f4f2" align="center">																		
 																		<c:if test="${prgIndicatorValues.valueType=='0'}">Target</c:if>
@@ -432,10 +416,10 @@ function closeWindow() 
 																		<c:if test="${prgIndicatorValues.valueType=='2'}">Base</c:if>
 																	</td>
 																	<td align="center" width="10%" bgcolor="#f4f4f2"><b>
-																		<bean:write name="prgIndicatorValues" property="value"/></b>
+																		<bean:write name="prgIndicatorValues" property="valAmount"/></b>
 																	</td>
 																	<td bgcolor="#f4f4f2" align="center">
-																		<bean:write name="prgIndicatorValues" property="valueDate"/></b>
+																		<bean:write name="prgIndicatorValues" property="creationDate"/></b>
 																	</td>
 																	<td bgcolor="#f4f4f2" align="center">
 																		<c:if test="${not empty prgIndicatorValues.location}">
@@ -465,7 +449,7 @@ function closeWindow() 
 						 </td>
 					</tr>
 				</logic:notEmpty>
-				<logic:empty name="aimThemeForm" property="prgIndicators">
+				<logic:empty name="aimThemeForm" property="programIndicators">
 						<tr align="center" bgcolor="#ffffff"><td><b>
 								<digi:trn key="aim:noIndicatorsPresent">No Indicators present</digi:trn></b></td>
 						</tr>

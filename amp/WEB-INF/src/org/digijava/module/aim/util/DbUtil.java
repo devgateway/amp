@@ -1,7 +1,3 @@
-
-
-
-
 package org.digijava.module.aim.util;
 
 import java.math.BigDecimal;
@@ -60,6 +56,7 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLevel;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -85,13 +82,16 @@ import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.AmpProjectBySector;
 import org.digijava.module.aim.helper.Assistance;
 import org.digijava.module.aim.helper.BaseCalendar;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.helper.FiscalCalendar;
@@ -103,8 +103,6 @@ import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.common.util.DateTimeUtil;
-import java.util.*;
-import org.digijava.module.aim.helper.CountryBean;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -6596,6 +6594,54 @@ public class DbUtil {
             e.printStackTrace(System.out);
         }
         return obResult;
+	}	
+
+	/**
+	 * Compares Values by type(actual,base,target)
+	 * Used in Multi Program Manager to sort them in order: base,actual,target  of the same year
+	 * @author dare
+	 *
+	 */
+	public static class IndicatorValuesComparatorByTypeAndYear implements Comparator<AmpPrgIndicatorValue>{
+		public int compare(AmpPrgIndicatorValue o1, AmpPrgIndicatorValue o2) {
+			int retValue=0;
+			String  o1Year="";
+			String o2Year="";
+			//getting  year from creation date 
+			if(o1.getCreationDate()!=null){
+				int length=o1.getCreationDate().length();
+				o1Year=o1.getCreationDate().substring(length-4, length);
+			}
+			if(o2.getCreationDate()!=null){
+				int length=o2.getCreationDate().length();
+				o2Year=o2.getCreationDate().substring(length-4, length);
+			}
+			//o1's creation year is greater than o2's
+			if(o1Year.compareTo(o2Year)==1){
+				retValue= 1;
+			}else if(o1Year.compareTo(o2Year)==-1){//creation year of o1 is less than o2's
+				retValue=-1;
+			}else if(o1Year.compareTo(o2Year)==0){ //creation years are equal. So we have to sort them in order:base actual target
+				retValue= -(new Integer(o1.getValueType()).compareTo(new Integer(o2.getValueType())));
+			}
+			return retValue;
+		}
+	}
+	
+	public static class AmpIndicatorValuesComparatorByTypeAndYear implements Comparator<AmpIndicatorValue>{
+
+		public int compare(AmpIndicatorValue o1, AmpIndicatorValue o2) {	
+			AmpPrgIndicatorValue val1=new AmpPrgIndicatorValue();
+			AmpPrgIndicatorValue val2=new AmpPrgIndicatorValue();
+			
+			val1.setValueType(o1.getValueType());
+			val1.setCreationDate(DateConversion.ConvertDateToString(o1.getValueDate()));
+			
+			val2.setValueType(o2.getValueType());
+			val2.setCreationDate(DateConversion.ConvertDateToString(o2.getValueDate()));			
+			return new IndicatorValuesComparatorByTypeAndYear().compare(val1, val2) ;
+		}
+		
 	}
 
 }

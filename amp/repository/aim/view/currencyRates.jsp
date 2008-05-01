@@ -445,13 +445,13 @@ function fnSubmit() {
 									<tr>
 										<td>
 											<bean:size name="aimCurrencyRateForm" property="pages" id="totpages"/>
-											Page <u><c:out value="${aimCurrencyRateForm.currentPage}"/></u> of
+											<digi:trn key="aim:page">Page</digi:trn> <u><c:out value="${aimCurrencyRateForm.currentPage}"/></u> <digi:trn key="aim:of">of</digi:trn>
 											<u><c:out value="${totpages}"/></u>
 										</td>
 									</tr>
 									<tr>
 										<td>
-											Pages :
+											<digi:trn key="aim:pages">Pages</digi:trn> 
 											<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 											<c:forEach var="currPage" items="${aimCurrencyRateForm.pages}">
 												<c:if test="${currPage == aimCurrencyRateForm.currentPage}">

@@ -8,6 +8,10 @@ import org.digijava.module.message.dbentity.SystemMessage;
 import org.digijava.module.message.util.AmpMessageUtil;
 
 public class AmpMessageWorker {
+    public static void processEvent(Event e) {
+	//TODO: implement alert checking and message generation
+    }
+    
 	public static void createAmpMessageForActivityCreation (Long ampActivityId,Long teamId) throws AimException,Exception {
 		Long teamLeaderId=TeamMemberUtil.getTeamHead(teamId).getAmpTeamMemId();
 		SystemMessage message=new SystemMessage();

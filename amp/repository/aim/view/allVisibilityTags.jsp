@@ -102,6 +102,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Costing" module="Activity Costing"></feature:display>
 <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues"></feature:display>
 <feature:display name="Dashboard" module="M & E"></feature:display>
+<field:display name="Multi Sector Configuration" feature="Sectors"></field:display>
+<feature:display name="Activity Dashboard" module="M & E"></feature:display>
 <feature:display name="Donor Contact Information" module="Contact Information"></feature:display>
 <feature:display name="Donor Report" module="Reports"></feature:display>
 <feature:display name="Edit Activity" module="Previews"></feature:display>
@@ -391,8 +393,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Project Code" feature="Budget"></field:display>
 <field:display name="Project Fiche Button" feature="Project Fiche" ></field:display>
 <field:display name="Project Id" feature="Identification"></field:display>
-<field:display name="Project Performance"  feature="Dashboard"></field:display>
-<field:display name="Project Risk" feature="Dashboard"></field:display>
+<field:display name="Activity Performance"  feature="Activity Dashboard"></field:display>
+<field:display name="Project Risk" feature="Activity Dashboard"></field:display>
 <field:display name="Project Title" feature="Identification"></field:display>
 <field:display name="Projection Amount" feature="MTEF Projections"></field:display>
 <field:display name="Projection Currency Code" feature="MTEF Projections"></field:display>
@@ -594,3 +596,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Total Commitments" feature="Measures"></field:display>
 <field:display name="Actual Disbursement Orders" feature="Measures"></field:display>
 <field:display name="Multi Sector Configuration" feature="Sectors"></field:display>
+<field:display name="Activity Printer Friendly Button Performance" feature="Activity Dashboard"></field:display>
+<field:display name="Activity Without Baseline Button Performance" feature="Activity Dashboard"></field:display>
+<field:display name="Activity Printer Friendly Button Risk" feature="Activity Dashboard"></field:display>

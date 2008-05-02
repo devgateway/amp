@@ -238,7 +238,7 @@ method="post">
 
 						<TR>
 
-							<field:display name="Project Performance"  feature="Dashboard">
+							<field:display name="Activity Performance"  feature="Activity Dashboard">
 							<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
 
 								<digi:trn key="aim:meActivityPerformance">
@@ -247,7 +247,7 @@ method="post">
 
 							</TD>
 							</field:display>
-							<field:display name="Project Performance"  feature="Dashboard">
+							<field:display name="Project Risk"  feature="Activity Dashboard">
 
 							<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
 
@@ -261,23 +261,28 @@ method="post">
 						</TR>
 
 						<TR>
-							<field:display name="Project Performance"  feature="Dashboard">
-
+							<field:display name="Activity Performance"  feature="Activity Dashboard">
+							
 							<TD width="50%">
 
 								<% if (actPerfChartUrl != null) { %>
+                                                                
 
 								<img src="<%= actPerfChartUrl %>" width=370 height=450 border=0 usemap="#<%= actPerfChartFileName %>"><br><br>
+                                                                
 
 								<div align="center">
+                                                                     <field:display name="Activity Printer Friendly Button Performance" feature="Activity Dashboard">
 
 							<html:button  styleClass="buton" property="submitButton" 	onclick="javascript:showPrinterFriendly(${actId},'P')">
 								<digi:trn key="btn:printerFriendly">Printer Friendly</digi:trn>
 							</html:button>
-
+                                                         </field:display>
+                                                         <field:display name="Activity Without Baseline Button Performance" feature="Activity Dashboard">
 							<html:button  styleClass="buton" property="submitButton" onclick="javascript:actPerfWithoutBaseline(${actId},'P')">
 								<digi:trn key="btn:withoutBaseline">Without Baseline</digi:trn>
 							</html:button>
+                                                         </field:display>
 								</div>
 
 								<% } else { %>
@@ -292,8 +297,8 @@ method="post">
 
 							</TD>
 							</field:display>
-							<field:display name="Project Performance"  feature="Dashboard">
-
+							<field:display name="Project Risk"  feature="Activity Dashboard">
+							
 							<TD width="50%" valign="top">
 
 								<% if (actRiskChartUrl != null) { %>
@@ -315,12 +320,14 @@ method="post">
 								<img src="<%= actRiskChartUrl %>" width=370 height=350 border=0 usemap="#<%= actRiskChartFileName %>">
 
 								<br><br>
+                    <field:display name="Activity Printer Friendly Button Risk" feature="Activity Dashboard">
 
 								<div align="center">
-
+                                                                    
 							<html:button  styleClass="dr-menu" property="submitButton" onclick="javascript:showPrinterFriendly(${actId},'R')">
 								<digi:trn key="btn:printerFriendly">Printer Friendly</digi:trn>
 							</html:button>
+                                                         </field:display>
 
 								</div>
 
@@ -336,6 +343,7 @@ method="post">
 
 							</TD>
 							</field:display>
+						
 
 						</TR>
 

@@ -478,8 +478,6 @@
 <field:display name="Project Fiche Button" feature="Project Fiche" ></field:display> 
 <field:display name="Project Fiche Button" feature="Project Fiche"></field:display> 
 <field:display name="Project Id" feature="Identification"></field:display> 
-<field:display name="Project Performance" feature="Dashboard"></field:display> 
-<field:display name="Project Risk" feature="Dashboard"></field:display> 
 <field:display name="Project Title" feature="Identification"></field:display> 
 <field:display name="Projection Amount" feature="MTEF Projections"></field:display> 
 <field:display name="Projection Currency Code" feature="MTEF Projections"></field:display> 

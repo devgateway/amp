@@ -8,6 +8,7 @@ package org.digijava.module.message.dbentity;
  */
 public class AmpAlert extends AmpMessage{
 	private Integer alertType;
+	private String alertTriggerClass;
 
 	public Integer getAlertType() {
 		return alertType;
@@ -23,5 +24,13 @@ public class AmpAlert extends AmpMessage{
 	 */
 	public String getClassName() {
 		return "a";
+	}
+
+	public String getAlertTriggerClass() {
+	    return alertTriggerClass;
+	}
+
+	public void setAlertTriggerClass(String alertTriggerClass) {
+	    this.alertTriggerClass = alertTriggerClass;
 	}
 }

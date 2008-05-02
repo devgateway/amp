@@ -7,6 +7,12 @@ package org.digijava.module.message.helper;
  */
 public class MessageConstants {
 	
+    	/**
+    	 * Add here all the other classes that extend Trigger class. Alternatively you can use a singleton for dynamic instantiation, see:
+    	 * @see org.digijava.module.gateperm.util.PermissionUtil#getAvailableGates(javax.servlet.ServletContext)
+    	 */
+    	public static final Class[] availableTriggers=new Class[] {ActivitySaveTrigger.class}; 
+    
 	public static final String PRIORITY_LEVEL_NAME= "Priorty level";
 	public static final String PRIORITY_LEVEL_KEY= "priorty_level";
 	

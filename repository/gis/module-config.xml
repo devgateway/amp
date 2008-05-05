@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module-config>
+	<name>gis</name>
+	<security login-required="true" default="READ">
+		<action login-required="true" pattern="/showGisDashboard" /> 
+	</security>
+</module-config>

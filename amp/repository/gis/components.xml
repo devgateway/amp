@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+	<secondary-pages>
+		<page page="gisDashboard" name="gis_dashboard" title="AMP GIS dashboard"/>
+	</secondary-pages>
+</config>
+
+
+

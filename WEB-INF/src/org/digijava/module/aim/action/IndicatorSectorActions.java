@@ -145,4 +145,12 @@ public class IndicatorSectorActions extends DispatchAction {
 		return mapping.findForward("backToPage");
 	}
 	
+	public ActionForward justSubmit(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+		
+		IndicatorForm indForm=(IndicatorForm)form;
+		indForm.setShowAddInd(true);
+		return mapping.findForward("backToPage");
+	}
+	
 }

@@ -3,6 +3,7 @@ package org.digijava.module.contentrepository.helper;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.jcr.Node;
@@ -13,10 +14,10 @@ import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
+import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.KeyValue;
@@ -37,7 +38,7 @@ public class NodeWrapper {
 	}
 	
 	public NodeWrapper(DocumentManagerForm myForm, HttpServletRequest myRequest, Node parentNode,  
-			boolean isANewVersion, ActionErrors errors) {
+			boolean isANewVersion) {
 		
 		FormFile formFile		= myForm.getFileData();
 		
@@ -67,8 +68,9 @@ public class NodeWrapper {
 			}
 			
 			String contentType			= null;
+			HashMap errors = new HashMap();
 			if ( isAUrl ){
-				String link				= DocumentManagerUtil.processUrl(myForm.getWebLink(), errors);
+				String link				= DocumentManagerUtil.processUrl(myForm.getWebLink(), myForm);
 				if (link != null) {
 					newNode.setProperty ( CrConstants.PROPERTY_WEB_LINK, link );
 					contentType				= CrConstants.URL_CONTENT_TYPE;
@@ -77,6 +79,7 @@ public class NodeWrapper {
 					errorAppeared	= true;
 			}
 			else{
+				System.out.println("NodeWrapper.NodeWrapper() 1");
 				if ( !DocumentManagerUtil.checkFileSize(formFile, errors) ) {
 					errorAppeared	= true;
 				}
@@ -94,13 +97,17 @@ public class NodeWrapper {
 			if ( !errorAppeared ) {			
 				populateNode(newNode, myForm.getDocTitle(), myForm.getDocDescription(), myForm.getDocNotes(), 
 					contentType, myForm.getDocType() , teamMember.getEmail() );
+			} else {
+				if (!errors.isEmpty()) {
+					myForm.getErrors().putAll(errors);
+				}				
 			}
 			
 			this.node		= newNode;
 
 		} catch(RepositoryException e) {
-			ActionError	error	= new ActionError("error.contentrepository.addFile:badPath");
-			errors.add("title", error);
+			myForm.addError("error.contentrepository.addFile:badPath", "Error adding new document. Please make sure you specify a valid path to the local file and the file is not empty.");
+			
 			e.printStackTrace();
 			errorAppeared	= true;
 		} 
@@ -112,7 +119,7 @@ public class NodeWrapper {
 	}
 	
 	public NodeWrapper(TemporaryDocumentData tempDoc, HttpServletRequest myRequest, Node parentNode,  
-			boolean isANewVersion, ActionErrors errors) {
+			boolean isANewVersion, EditActivityForm myForm) {
 		
 		FormFile formFile		= tempDoc.getFormFile(); 
 		
@@ -151,11 +158,13 @@ public class NodeWrapper {
 			}
 			
 			String contentType			= null;
+			HashMap errors = new HashMap();
 			if ( isAUrl ){
 				contentType				= CrConstants.URL_CONTENT_TYPE;
 				newNode.setProperty ( CrConstants.PROPERTY_WEB_LINK, tempDoc.getWebLink() );
 			}
 			else{
+				System.out.println("NodeWrapper.NodeWrapper() 2");
 				if ( !DocumentManagerUtil.checkFileSize(formFile, errors) ) {
 					errorAppeared	= true;
 				}
@@ -172,13 +181,17 @@ public class NodeWrapper {
 			if ( !errorAppeared ) {
 				populateNode(newNode, tempDoc.getTitle(), tempDoc.getDescription(), tempDoc.getNotes(), 
 					contentType, tempDoc.getCmDocTypeId(), teamMember.getEmail() );
+			} else {
+				if (!errors.isEmpty()) {
+					myForm.getErrors().putAll(errors);
+				}				
 			}
 			
 			this.node		= newNode;
 
 		} catch(RepositoryException e) {
-			ActionError	error	= new ActionError("error.contentrepository.addFile.badPath");
-			errors.add("title", error);
+			myForm.addError("error.contentrepository.addFile.badPath", "Error adding new document. Please make sure you specify a valid path to the local file and the file is not empty."); 
+			
 			e.printStackTrace();
 			errorAppeared	= true;
 		} 

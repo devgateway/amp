@@ -46,14 +46,14 @@ public class DocumentManager extends Action {
 	private static Logger logger		= Logger.getLogger(DocumentManager.class);
 	public HttpServletRequest myRequest	= null;
 	DocumentManagerForm myForm			= null;
-	ActionErrors errors					= null;
+	//ActionErrors errors					= null;
 	private boolean showOnlyLinks		= false;
 	private boolean showOnlyDocs		= false;
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
-		errors		= new ActionErrors();
+		//errors		= new ActionErrors();
 		
 		myForm		= (DocumentManagerForm) form;
 		
@@ -81,7 +81,7 @@ public class DocumentManager extends Action {
 
 		showContentRepository(request);
 		
-		this.saveErrors(request, errors);
+		//this.saveErrors(request, errors);
 		
 		return mapping.findForward("forward");
 	}
@@ -170,7 +170,7 @@ public class DocumentManager extends Action {
 			if ( myForm.getType() != null && myForm.getType().equals("private") ) {
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
 					Node userHomeNode			= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
-					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, myRequest, userHomeNode, false, errors);
+					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, myRequest, userHomeNode, false);
 					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() )
 							nodeWrapper.saveNode(jcrWriteSession);
 				}
@@ -178,7 +178,7 @@ public class DocumentManager extends Action {
 			if ( myForm.getType() != null && myForm.getType().equals("team") && teamMember.getTeamHead() ) {
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
 					Node teamHomeNode			= DocumentManagerUtil.getTeamNode(jcrWriteSession, teamMember);
-					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, myRequest, teamHomeNode , false, errors);
+					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, myRequest, teamHomeNode , false);
 					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
 						nodeWrapper.saveNode(jcrWriteSession);
 					}
@@ -187,7 +187,7 @@ public class DocumentManager extends Action {
 			if ( myForm.getType() != null && myForm.getType().equals("version") && myForm.getUuid() != null ) {
 				if (myForm.getFileData() != null || myForm.getWebLink() != null) {
 					Node vNode		= DocumentManagerUtil.getWriteNode(myForm.getUuid(), request);
-					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, myRequest, vNode , true, errors);
+					NodeWrapper nodeWrapper		= new NodeWrapper(myForm, myRequest, vNode , true);
 					if ( nodeWrapper != null && !nodeWrapper.isErrorAppeared() ) {
 						nodeWrapper.saveNode(jcrWriteSession);
 					}

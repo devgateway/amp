@@ -6,6 +6,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -48,6 +49,7 @@ import org.digijava.module.contentrepository.action.SetAttributes;
 import org.digijava.module.contentrepository.exception.CrException;
 import org.digijava.module.contentrepository.exception.NoNodeInVersionNodeException;
 import org.digijava.module.contentrepository.exception.NoVersionsFoundException;
+import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
@@ -357,7 +359,30 @@ public class DocumentManagerUtil {
 		
 	}
 	
-	public static boolean checkFileSize(FormFile formFile, ActionErrors errors) {
+//	public static boolean checkFileSize(FormFile formFile, ActionErrors errors) {
+//		int maxFileSizeInBytes		= Integer.MAX_VALUE;
+//		int maxFileSizeInMBytes		= Integer.MAX_VALUE;
+//		String maxFileSizeGS		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE); // File size in MB
+//		if (maxFileSizeGS != null) {
+//				maxFileSizeInMBytes		= Integer.parseInt( maxFileSizeGS );
+//				maxFileSizeInBytes		= 1024 * 1024 * maxFileSizeInMBytes; 
+//		}
+//		if ( formFile.getFileSize() > maxFileSizeInBytes) {
+//			errors.add("title", 
+//					new ActionError("error.contentrepository.addFile.fileTooLarge", maxFileSizeInMBytes + "")
+//					);
+//			return false;
+//			}
+//		if (formFile.getFileSize()<1){
+//			ActionError	error	= new ActionError("error.contentrepository.addFile.badPath");
+//			errors.add("title", error);
+//			return false;
+//		}
+//		return true;
+//	}
+
+	
+	public static boolean checkFileSize(FormFile formFile, HashMap errors) {
 		int maxFileSizeInBytes		= Integer.MAX_VALUE;
 		int maxFileSizeInMBytes		= Integer.MAX_VALUE;
 		String maxFileSizeGS		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CR_MAX_FILE_SIZE); // File size in MB
@@ -366,14 +391,13 @@ public class DocumentManagerUtil {
 				maxFileSizeInBytes		= 1024 * 1024 * maxFileSizeInMBytes; 
 		}
 		if ( formFile.getFileSize() > maxFileSizeInBytes) {
-			errors.add("title", 
-					new ActionError("error.contentrepository.addFile.fileTooLarge", maxFileSizeInMBytes + "")
-					);
+			errors.put("error.contentrepository.addFile.fileTooLarge", "Error adding new document. The file size is over 2 MB.");
+			
 			return false;
 			}
 		if (formFile.getFileSize()<1){
-			ActionError	error	= new ActionError("error.contentrepository.addFile.badPath");
-			errors.add("title", error);
+			errors.put("error.contentrepository.addFile.badPath", "Error adding new document. Please make sure you specify a valid path to the local file and the file is not empty.");
+			
 			return false;
 		}
 		return true;
@@ -437,14 +461,15 @@ public class DocumentManagerUtil {
 		return number;
 	}
 	
-	public static String processUrl (String urlString, ActionErrors errors) {
+	public static String processUrl (String urlString, DocumentManagerForm formBean) {
 		try {
 			URL url	= new URL( urlString );
 			return url.toString();
 		} catch (MalformedURLException e) {
 			if ( !urlString.startsWith("http://") )
-				return processUrl("http://"+urlString, errors);
-			errors.add("title", new ActionError("error.contentrepository.addFile.malformedWebLink") );
+				return processUrl("http://"+urlString, formBean);
+			formBean.addError("error.contentrepository.addFile.malformedWebLink", "Error adding new document. Web link is malformed.");
+
 			e.printStackTrace();
 			return null;
 		}

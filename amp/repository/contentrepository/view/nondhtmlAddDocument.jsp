@@ -292,12 +292,32 @@ div.fakefile2 input{
 
 <digi:instance property="crDocumentManagerForm" />
 <digi:form action="/addTemporaryDocument.do" method="post" enctype="multipart/form-data" onsubmit="return false;">
-<digi:errors/>
+
 <html:hidden property="webResource" />
 <html:hidden property="pageCloseFlag" />
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
+			<tr>
+				<td align="center" vAlign="top">
+									
+					<span class="error">
+						<logic:iterate id="element" name="crDocumentManagerForm" property="errors">
+						   <digi:trn key="${element.key}">
+						       <bean:write name="element" property="value"/>
+						   </digi:trn>
+						</logic:iterate>
+					</span>
+					<span class="message">
+						<logic:iterate id="element" name="crDocumentManagerForm" property="messages">
+						    <digi:trn key="${element.key}">
+						        <bean:write name="element" property="value"/>
+						    </digi:trn>
+						</logic:iterate>
+					</span>
+				
+				</td>
+			</tr>
 			<tr>
 				<td align=left vAlign=top>
 					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>

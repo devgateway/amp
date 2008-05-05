@@ -112,6 +112,9 @@
 		<digi:context name="addSector" property="context/module/moduleinstance/sectorActions.do?actionType=loadSectors&sectorReset=true" />
 		openURLinWindow('<%= addSector %>',550,400);
 	  
+	    <digi:context name="justSubmit" property="context/module/moduleinstance/sectorActions.do?actionType=justSubmit" /> 
+  		aimIndicatorForm.action = "<%=justSubmit%>";  
+  		aimIndicatorForm.submit();    
 }
 
 	function removeSelSectors() {		 

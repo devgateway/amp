@@ -413,7 +413,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														<bean:write name="indicator" property="indicatorId" />
 													</c:set>
 													<digi:link href="/removeIndFromActivity.do" name="urlParams1">
-														<img src="../ampTemplate/images/trash_12.gif" onclick="return deleteIndicator()"/>
+														<img src="../ampTemplate/images/trash_12.gif" border="0" onclick="return deleteIndicator()"/>
 													</digi:link>												 
 												</td>
 											</tr>

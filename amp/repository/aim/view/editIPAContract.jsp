@@ -5,6 +5,11 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
 
@@ -112,10 +117,9 @@ function selectOrganisation1() {
 		<td>
 		         	<html:text property="contractName" size="30"/> 
 		</td>
-	
 	</tr>
-         </field:display>
-<field:display name="Description" feature="Contracting">
+</field:display>
+<field:display name="Contract Description" feature="Contracting">
 	<tr>
 		<td align="right"  nowrap>
 		<b><digi:trn key="aim:IPA:popup:description">Description:</digi:trn></b>
@@ -125,7 +129,7 @@ function selectOrganisation1() {
 		</td>
 	</tr>
 </field:display>
-	<field:display name="Activity Category" feature="Contracting">
+	<field:display name="Contracting Activity Category" feature="Contracting">
 	<tr>
 		<td align="right"  nowrap>
 		<b><digi:trn key="aim:IPA:popup:actCat">Activity Category:</digi:trn></b>
@@ -144,7 +148,7 @@ function selectOrganisation1() {
 	</tr>
          </field:display>
          
-         <field:display name="Type" feature="Contracting">
+         <field:display name="Contracting Type" feature="Contracting">
 	<tr>
 		<td align="right"  nowrap>
 		<b><digi:trn key="aim:IPA:popup:type">Type</digi:trn>:</b>
@@ -163,7 +167,7 @@ function selectOrganisation1() {
 	</tr>
          </field:display>
          
-	<field:display name="Start of Tendering" feature="Contracting">
+	<field:display name="Contracting Start of Tendering" feature="Contracting">
 		<tr>
 		<td align="right"  nowrap>
 		<b><digi:trn key="aim:IPA:popup">Start of Tendering:</digi:trn></b>
@@ -265,7 +269,7 @@ function selectOrganisation1() {
         </td>
 	</tr>	
          </field:display>
-    <field:display name="Total Amount" feature="Contracting">
+    <field:display name="Contracting Total Amount" feature="Contracting">
 		<tr>
 		<td align="right"  nowrap>
 		<b><digi:trn key="aim:ipa:popup:totalAmount">Total Amount</digi:trn>:</b>
@@ -287,7 +291,7 @@ function selectOrganisation1() {
 		</td>
 		</tr>
                  </field:display>
-	<field:display name="IB" feature="Contracting">
+	<field:display name="Contracting IB" feature="Contracting">
 		<tr>
 		<td align="right"  nowrap>
 		<b><digi:trn key="aim:ipa:popup:ib">IB</digi:trn>:</b>
@@ -301,7 +305,7 @@ function selectOrganisation1() {
 		</td>
 		</tr>
      </field:display>
-<field:display name="INV" feature="Contracting">
+<field:display name="Contracting INV" feature="Contracting">
 		<tr>
 		<td align="right"  nowrap>
 		<b><digi:trn key="aim:ipa:popup:inv">INV</digi:trn>:</b>
@@ -318,14 +322,14 @@ function selectOrganisation1() {
 
 </field:display>
 
-<field:display name="Total National Contribution" feature="Contracting">
+<field:display name="Contracting Total National Contribution" feature="Contracting">
 		<tr>
 		<td align="right"  nowrap>
 		<b><digi:trn key="aim:IPA:popup:totalNationalContribution">Total National Contribution:</digi:trn></b>
 		</td>
 		</tr>
                  </field:display>
-	<field:display name="Central" feature="Contracting">
+	<field:display name="Contracting Central Amount" feature="Contracting">
 		<tr>
 		<td align="right">
 		<b><digi:trn key="aim:ipa:popup:central">Central</digi:trn>:</b>
@@ -339,7 +343,7 @@ function selectOrganisation1() {
 		</td>
 	</tr>
          </field:display>
-<field:display name="Regional" feature="Contracting">
+<field:display name="Contracting Regional Amount" feature="Contracting">
 		<tr>
 		<td align="right"  nowrap>
 		<b><digi:trn key="aim:ipa:popup:regional">Regional</digi:trn>:</b>
@@ -353,7 +357,7 @@ function selectOrganisation1() {
 		</td>
 		</tr>
                  </field:display>
-<field:display name="IFIs" feature="Contracting">
+<field:display name="Contracting IFIs" feature="Contracting">
 	<tr>
 		<td align="right"  nowrap>
 		<b><digi:trn key="aim:ipa:popup:ifis">IFIs</digi:trn>:</b>
@@ -391,7 +395,7 @@ function selectOrganisation1() {
 
 </field:display>
 
- <field:display name="Disbursements Global Currency" feature="Contracting">
+ <field:display name="Contracting Disbursements Global Currency" feature="Contracting">
 		<tr>
 		<td align="right"  nowrap>
 		<b><digi:trn key="aim:ipa:popup:dibusrsementsGlobalCurrency">Disbursements Global Currency</digi:trn>:</b>
@@ -458,7 +462,7 @@ function selectOrganisation1() {
 		</td>
 		<td>
 		<tr><td colspan="2" align="center">
-                         <field:display name="Add Disbursement" feature="Contracting">
+                         <field:display name="Contracting Add Disbursement" feature="Contracting">
 				<html:submit styleClass="buton" property="addFields"><digi:trn key="aim:IPA:popup:addDisbursement">Add Disbursement</digi:trn></html:submit>&nbsp;&nbsp;</field:display>
 				<field:display name="Delete Selected" feature="Contracting"><html:submit styleClass="buton" property="removeFields"><digi:trn key="aim:IPA:popup:deleteSelected">Delete Selected</digi:trn></html:submit></field:display>				
 		</td></tr>
@@ -469,12 +473,12 @@ function selectOrganisation1() {
 
 	<tr>
 		<td colspan="2" align="center">
-                     <field:display name="Save" feature="Contracting">
+                     <field:display name="Contracting Save Button" feature="Contracting">
                          <html:submit styleClass="buton" property="save" onclick="return validate()"><digi:trn key="aim:addEditActivityOK">OK</digi:trn></html:submit>
                  </field:display>
 		
 		&nbsp;&nbsp;
-                  <field:display name="Cancel" feature="Contracting">
+                  <field:display name="Contracting Cancel Saving" feature="Contracting">
 		<html:button styleClass="buton" property="cancel" onclick="window.close();">
 		<digi:trn key="aim:addEditActivityCancel">Cancel</digi:trn>
 		</html:button>

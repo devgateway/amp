@@ -280,6 +280,11 @@ div.fakefile2 input{
 													Overwrite local translations
 												</digi:trn>
 											</option>
+											<option value="nonexisting">
+												<digi:trn key="aim:translationManagerImportNonExistingLocal">
+													Insert the non existing translations
+												</digi:trn>
+											</option>
 										</select>
 	 								</td>
 		 						</tr>

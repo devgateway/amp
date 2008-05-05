@@ -1563,12 +1563,12 @@ public class EditActivity
         Iterator itr = financingInstrValues.iterator();
         while (itr.hasNext()) {
           AmpCategoryValue financingInstr = (AmpCategoryValue) itr.next();
-          if (financingInstr != null) {
-        	  if (financingInstr.getValue().equalsIgnoreCase("Project Support")) {
-                  eaForm.setModality(financingInstr.getId());
-                  break;
-        	  }  
-          }          
+          if(financingInstr!=null)
+        	  if(financingInstr.getValue()!=null)
+        		  if (financingInstr.getValue().equalsIgnoreCase("Project Support")) {
+        			  eaForm.setModality(financingInstr.getId());
+        			  break;
+        		  }
         }
       }
       //Collection levelCol = null;

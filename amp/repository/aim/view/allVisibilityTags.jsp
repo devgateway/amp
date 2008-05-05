@@ -437,6 +437,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Sector Group Add Organizations Button" feature="Sector Group"></field:display>
 <field:display name="Sector Group Remove Organizations Button" feature="Sector Group"></field:display>
 <field:display name="Sector" feature="Sectors"></field:display>
+<field:display name="Secondary Sub-Sector" feature="Sectors">&nbsp;</field:display>
+<field:display name="Secondary Sector" feature="Sectors">&nbsp;</field:display>
 <field:display name="Status" feature="Planning"></field:display>
 <field:display name="Sub Program Level 1" feature="NPD Dashboard"></field:display>
 <field:display name="Sub Program Level 2" feature="NPD Dashboard"></field:display>
@@ -488,21 +490,21 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Total Ordered" feature="Disbursement Orders"></field:display>
 <field:display name="Add Disbursement Order Button" feature="Disbursement Orders"></field:display>
 <field:display name="Contract Name" feature="Contracting"></field:display>
-<field:display name="Description" feature="Contracting"></field:display>
-<field:display name="Activity Category" feature="Contracting"></field:display>
-<field:display name="Start of Tendering" feature="Contracting"></field:display>
+<field:display name="Contract Description" feature="Contracting"></field:display>
+<field:display name="Contracting Activity Category" feature="Contracting"></field:display>
+<field:display name="Contracting Start of Tendering" feature="Contracting"></field:display>
 <field:display name="Signature of Contract" feature="Contracting"></field:display>
 <field:display name="Contract Organization" feature="Contracting"></field:display>
 <field:display name="Contract Completion" feature="Contracting"></field:display>
 <field:display name="Contracting Status" feature="Contracting"></field:display>
 <field:display name="Contracting Tab Status" feature="Contracting"></field:display>
 <field:display name="Total EC Contribution" feature="Contracting"></field:display>
-<field:display name="IB" feature="Contracting"></field:display>
-<field:display name="INV" feature="Contracting"></field:display>
-<field:display name="Total National Contribution" feature="Contracting"></field:display>
-<field:display name="Central" feature="Contracting"></field:display>
-<field:display name="Regional" feature="Contracting"></field:display>
-<field:display name="IFIs" feature="Contracting"></field:display>
+<field:display name="Contracting IB" feature="Contracting"></field:display>
+<field:display name="Contracting INV" feature="Contracting"></field:display>
+<field:display name="Contracting Total National Contribution" feature="Contracting"></field:display>
+<field:display name="Contracting Central Amount" feature="Contracting"></field:display>
+<field:display name="Contracting Regional Amount" feature="Contracting"></field:display>
+<field:display name="Contracting IFIs" feature="Contracting"></field:display>
 <field:display name="Total Private Contribution" feature="Contracting"></field:display>
 <field:display name="Disbursements" feature="Contracting"></field:display>
 <field:display name="Add Regional Funding Link" feature="Regional Funding"></field:display>
@@ -516,20 +518,20 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Add New Indicator" feature="Admin"></field:display>
 
 <field:display name="Contract Name" feature="Contracting"></field:display>
-<field:display name="Description" feature="Contracting"></field:display>
-<field:display name="Activity Category" feature="Contracting"></field:display>
-<field:display name="Start of Tendering" feature="Contracting"></field:display>
+<field:display name="Contract Description" feature="Contracting"></field:display>
+<field:display name="Contracting Activity Category" feature="Contracting"></field:display>
+<field:display name="Contracting Start of Tendering" feature="Contracting"></field:display>
 <field:display name="Signature of Contract" feature="Contracting"></field:display>
 <field:display name="Contract Organization" feature="Contracting"></field:display>
 <field:display name="Contract Completion" feature="Contracting"></field:display>
 <field:display name="Contracting Tab Status" feature="Contracting"></field:display>
 <field:display name="Total EC Contribution" feature="Contracting"></field:display>
-<field:display name="IB" feature="Contracting"></field:display>
-<field:display name="INV" feature="Contracting"></field:display>
-<field:display name="Total National Contribution" feature="Contracting"></field:display>
-<field:display name="Central" feature="Contracting"></field:display>
-<field:display name="Regional" feature="Contracting"></field:display>
-<field:display name="IFIs" feature="Contracting"></field:display>
+<field:display name="Contracting IB" feature="Contracting"></field:display>
+<field:display name="Contracting INV" feature="Contracting"></field:display>
+<field:display name="Contracting Total National Contribution" feature="Contracting"></field:display>
+<field:display name="Contracting Central Amount" feature="Contracting"></field:display>
+<field:display name="Contracting Regional Amount" feature="Contracting"></field:display>
+<field:display name="Contracting IFIs" feature="Contracting"></field:display>
 <field:display name="Total Private Contribution" feature="Contracting"></field:display>
 <field:display name="Contracting Disbursements" feature="Contracting"></field:display>
 <field:display name="Delete Contract" feature="Contracting"></field:display>
@@ -559,22 +561,22 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Proposed Completion Dates" feature="Planning"></field:display>
 <field:display name="Contract Name" feature="Contracting"></field:display>
 <field:display name="Contract Description" feature="Contracting"></field:display>
-<field:display name="Activity Category" feature="Contracting"></field:display>
+<field:display name="Contracting Activity Category" feature="Contracting"></field:display>
 <field:display name="Contract type" feature="Contracting"></field:display>
-<field:display name="Start of Tendering" feature="Contracting"></field:display>
+<field:display name="Contracting Start of Tendering" feature="Contracting"></field:display>
 <field:display name="Signature of Contract" feature="Contracting"></field:display>
 <field:display name="Contract Organization" feature="Contracting"></field:display>
 <field:display name="Contract Completion" feature="Contracting"></field:display>
 <field:display name="Contracting Status" feature="Contracting"></field:display>
 <field:display name="Total EC Contribution" feature="Contracting"></field:display>
-<field:display name="IB" feature="Contracting"></field:display>
-<field:display name="INV" feature="Contracting"></field:display>
-<field:display name="Total National Contribution" feature="Contracting"></field:display>
-<field:display name="Central" feature="Contracting"></field:display>
-<field:display name="Regional" feature="Contracting"></field:display>
-<field:display name="IFIs" feature="Contracting"></field:display>
+<field:display name="Contracting IB" feature="Contracting"></field:display>
+<field:display name="Contracting INV" feature="Contracting"></field:display>
+<field:display name="Contracting Total National Contribution" feature="Contracting"></field:display>
+<field:display name="Contracting Central Amount" feature="Contracting"></field:display>
+<field:display name="Contracting Regional Amount" feature="Contracting"></field:display>
+<field:display name="Contracting IFIs" feature="Contracting"></field:display>
 <field:display name="Total Private Contribution" feature="Contracting"></field:display>
-<field:display name="IB" feature="Contracting"></field:display>
+<field:display name="Contracting IB" feature="Contracting"></field:display>
 <field:display name="Disbursements" feature="Contracting"></field:display>
 <field:display name="Add Component Disbursements Button" feature="Components"></field:display>
 

@@ -32,7 +32,7 @@
 																			<digi:trn key="aim:commitments">Commitments</digi:trn> - (
 																			<digi:trn key="aim:grantTotalActualAllocation">Grand Total actual
 																			allocation</digi:trn> = 
-																				<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getTotalCommitted()%>
+																				<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getTotalCommitments()%>
 																			
 																			<c:out value="${aimEditActivityForm.currCode}"/>)
 																		<br/></field:display>
@@ -41,7 +41,7 @@
 																			<digi:trn key="aim:disbursements">Disbursements</digi:trn> - (
 																			<digi:trn key="aim:totalActualToDate">Total actual to date
 																			</digi:trn> =
-																			<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getTotalDisbursed()%>
+																			<%=((org.digijava.module.aim.form.EditActivityForm) pageContext.getAttribute("aimEditActivityForm")).getTotalDisbursements()%>
 																			
 																			<c:out value="${aimEditActivityForm.currCode}"/>)
 																		<br/>

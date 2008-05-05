@@ -127,6 +127,11 @@
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
 	}
+	
+	function deleteIndicator()
+		{
+			return confirm("Are you sure you want to delete this Indicator?");
+		}
 
 
 -->
@@ -355,27 +360,23 @@ ${fn:replace(message,quote,escapedQuote)}
 									<tr><td>
 										<table width="100%" cellSpacing=2 cellPadding=2 vAlign=top align=left class="box-border-nopadding" border=0>
 											<tr>
-												<td width="32%" align="center" colspan="2"><b>
+												<td width="32%" align="center" colspan="6"><b>
 													<digi:trn key="aim:meIndicators">Indicators</digi:trn>
 													</b>
 												</td>
 											</tr>
 											<logic:empty name="aimEditActivityForm" property="indicatorsME">
 											<tr>
-												<td width="32%" bgcolor=#f4f4f2 align="center" colspan="2"><font color="red"><b>
-													<digi:trn key="aim:meNoActivityGlobalIndicators">
-													No Activity specific Indicators & No Global Indicators present
-													</digi:trn>
+												<td width="32%" bgcolor="#f4f4f2" align="center" colspan="6"><font color="red"><b>
+													<digi:trn key="aim:meNoActivityGlobalIndicators">No Activity specific Indicators & No Global Indicators present</digi:trn>
 													</b></font>
 												</td>
 											</tr>
 											</logic:empty>
 											<logic:notEmpty name="aimEditActivityForm" property="indicatorsME">
-											<logic:iterate name="aimEditActivityForm" property="indicatorsME" id="indicator"
-											type="org.digijava.module.aim.helper.ActivityIndicator">
-
+											<logic:iterate name="aimEditActivityForm" property="indicatorsME" id="indicator"type="org.digijava.module.aim.helper.ActivityIndicator">
 											<tr>
-												<td bgcolor=#f4f4f2 align="left" colspan="2">&nbsp;&nbsp;
+												<td bgcolor="#f4f4f2" align="left" colspan="5">&nbsp;&nbsp;
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 													<c:if test="${aimEditActivityForm.expIndicatorId==indicator.indicatorId}">
 														<digi:link href="/nondetailedIndicator.do~edit=true">
@@ -406,12 +407,21 @@ ${fn:replace(message,quote,escapedQuote)}
 													</field:display>
 
 												</td>
+												<td bgcolor="#f4f4f2" align="right">
+													<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
+													<c:set target="${urlParams1}" property="indId">
+														<bean:write name="indicator" property="indicatorId" />
+													</c:set>
+													<digi:link href="/removeIndFromActivity.do" name="urlParams1">
+														<img src="../ampTemplate/images/trash_12.gif" onclick="return deleteIndicator()"/>
+													</digi:link>												 
+												</td>
 											</tr>
 
 											<c:if test="${aimEditActivityForm.expIndicatorId==indicator.indicatorId}">
 											<tr>
-												<td colspan="2">
-													<table cellspacing="0" cellpadding="3" valign="top" align="center" width="90%">
+												<td colspan="6">
+													<table cellspacing="0" cellpadding="6" valign="top" align="center" width="90%">
 														<field:display name="Logframe Category" feature="Activity">
 															<tr>
 																<td >
@@ -649,7 +659,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														</c:if>
 
 														<logic:notEmpty name="indicator" property="priorValues" >
-															<tr bgColor=#dddddb><td bgColor=#dddddb align="left" colspan="5"><b>
+															<tr bgColor="#dddddb"><td bgColor=#dddddb align="left" colspan="5"><b>
 																<digi:trn key="aim:mePriorValues">Prior Values</digi:trn> :</b>
 															</td></tr>
 															<logic:iterate name="indicator" property="priorValues"
@@ -779,13 +789,13 @@ ${fn:replace(message,quote,escapedQuote)}
 											</logic:iterate>
 											</logic:notEmpty>
 											<tr>
-												<td width="32%" align="center" colspan="2">
+												<td width="32%" align="center" colspan="6">
 													&nbsp;
 												</td>
 											</tr>
 											<field:display name="Add Indicator Button" feature="Activity">
 											<tr>
-												<td width="32%" align="center" colspan="2">
+												<td width="32%" align="center" colspan="6">
 													<input type="button" value="<digi:trn key='btn:addIndicator'>Add Indicator</digi:trn>"  class="dr-menu" onclick="addIndicator()">
 												</td>
 											</tr>

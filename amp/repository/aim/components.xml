@@ -4,6 +4,7 @@
 
     <page name="viewAhSurveyFormulas" title=" - View AhSurvey Formulas" />
 	<page name="viewAhSurveis" title=" - View AhSurveis " />
+	<page name="addSectorToIndicator" title="Add Sector" />
 
 	<page name="viewPortfolioDashboard" title=" - Portfolio Dashboard " />
 	<page name="addQuickLink" title="Add link" />
@@ -378,6 +379,8 @@
     <page page="addDisbOrderToContract" name="aim_addDisbOrderToContractPopupLayout" title="Disbursement Order Contract For Activity" />
     <page page="manageClassificationsConfig" name="manageClassificationsConfig" title="Manage Classifications Configuration" />
     <page page="editSectorClassConfig" name="editSectorClassConfig" title="Add/Edit Classifications Configuration" />
+    
+    
 </secondary-pages>
 <module>
 

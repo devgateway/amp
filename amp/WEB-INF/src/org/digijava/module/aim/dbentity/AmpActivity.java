@@ -175,6 +175,8 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
     
     // Start Bolivia Adds
     private Date convenioDateFilter;
+    private String convenioNumcont;
+    private String clasiNPD;
     // End Bolivia Adds
 
 
@@ -1507,6 +1509,22 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 
 	public void setSecMiCntFaxNumber(String secMiCntFaxNumber) {
 		this.secMiCntFaxNumber = secMiCntFaxNumber;
+	}
+
+	public void setConvenioNumcont(String convenioNumcont) {
+		this.convenioNumcont = convenioNumcont;
+	}
+
+	public String getConvenioNumcont() {
+		return convenioNumcont;
+	}
+
+	public String getClasiNPD() {
+	    return clasiNPD;
+	}
+
+	public void setClasiNPD(String clasiNPD) {
+	    this.clasiNPD = clasiNPD;
 	}
 
 }

@@ -557,7 +557,9 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         session.saveOrUpdate(oldActivity);
         activityId = oldActivity.getAmpActivityId();
         String ampId=generateAmpId(member.getUser(),activityId );
-        oldActivity.setAmpId(ampId);
+        if (oldActivity.getAmpId()==null){
+            oldActivity.setAmpId(ampId);
+        }
         session.update(oldActivity);
         activity = oldActivity;
         /*
@@ -1488,7 +1490,8 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setConditionality(ampActivity.getConditionality());
         activity.setProjectManagement(ampActivity.getProjectManagement());
         activity.setContractDetails(ampActivity.getContractDetails());
-        
+        activity.setConvenioNumcont(ampActivity.getConvenioNumcont());
+       
 
       }
     }

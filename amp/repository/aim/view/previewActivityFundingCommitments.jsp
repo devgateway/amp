@@ -50,7 +50,7 @@
 							<td height="18" align="right" bgcolor="#ffffff">
 							<field:display name="Amount Commitment"
 								feature="Funding Organizations">
-								<font color="blue">*</font>
+								<!-- <font color="blue">*</font> -->
 								<bean:write name="fundingDetail" property="transactionAmount" />
 							</field:display> <field:display name="Currency Commitment"
 								feature="Funding Organizations">
@@ -81,7 +81,7 @@
 							<td height="18" align="right" bgcolor="#ffffff">
 							<field:display name="Amount Commitment"
 								feature="Funding Organizations">
-								<font color="blue">*</font>
+								<!-- <font color="blue">*</font>-->
 								<bean:write name="fundingDetail" property="transactionAmount" />
 							</field:display> <field:display name="Currency Commitment"
 								feature="Funding Organizations">
@@ -145,7 +145,7 @@
 							</field:display></td>
 							<td height="18" align="right"><field:display
 								name="Amount Commitment" feature="Funding Organizations">
-								<font color="blue">*</font>
+								<!-- <font color="blue">*</font>-->
 								<bean:write name="fundingDetail" property="transactionAmount" />
 							</field:display> <field:display name="Currency Commitment"
 								feature="Funding Organizations">
@@ -174,7 +174,7 @@
 							</field:display></td>
 							<td height="18" align="right"><field:display
 								name="Amount Commitment" feature="Funding Organizations">
-								<font color="blue">*</font>
+								<!-- <font color="blue">*</font>-->
 								<bean:write name="fundingDetail" property="transactionAmount" />
 							</field:display> <field:display name="Currency Commitment"
 								feature="Funding Organizations">

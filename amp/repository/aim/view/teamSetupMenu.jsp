@@ -245,7 +245,7 @@ html>body #main {
 							<LI>
 						   		<a name="node">
 						   		<div>
-									<digi:trn key="aim:worskpaceReports">Reports</digi:trn>	
+									<digi:trn key="aim:workspaceReports">Reports</digi:trn>	
 								</div>
 								</a>
 							</LI>
@@ -256,7 +256,7 @@ html>body #main {
 								<span>
 								<digi:link href="/teamReportList.do"> 	
 								<div title='<digi:trn key="aim:clickToViewReports">Click here to view reports</digi:trn>'>	
-									<digi:trn key="aim:worskpaceReports">Reports</digi:trn>	
+									<digi:trn key="aim:workspaceReports">Reports</digi:trn>	
 								</div>
 								</digi:link>
 								</span>	

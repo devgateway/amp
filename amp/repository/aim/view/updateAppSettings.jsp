@@ -178,8 +178,8 @@
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<select class="inp-text" disabled="disabled">
-																<option value="">Validate New Only</option>
-																<option value="">Validate All</option>
+																<option value=""><digi:trn key="aim:defValidationNewOnly">Validate New Only</digi:trn></option>
+																<option value=""><digi:trn key="aim:defValidationAll">Validate All</digi:trn></option>
 															</select>
 														</td>
 													</tr>

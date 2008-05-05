@@ -44,7 +44,7 @@
 						</field:display></td>
 						<td width="25%" align="right" bgcolor="#ffffff"><field:display
 							name="Amount of Disbursement Order" feature="Disbursement Orders">
-							<FONT color=blue>*</FONT>
+							<!--<FONT color=blue>*</FONT>-->
 							<bean:write name="fundingDetail" property="transactionAmount" />
 						</field:display><field:display name="Currency of Disbursement Order"
 							feature="Disbursement Orders">
@@ -112,7 +112,7 @@
 						</field:display></td>
 						<td width="25%" align="right" bgcolor="#ffffff"><field:display
 							name="Amount of Disbursement Order" feature="Disbursement Orders">
-							<FONT color=blue>*</FONT>
+							<!--<FONT color=blue>*</FONT>-->
 							<bean:write name="fundingDetail" property="transactionAmount" />
 						</field:display><field:display name="Currency of Disbursement Order"
 							feature="Disbursement Orders">

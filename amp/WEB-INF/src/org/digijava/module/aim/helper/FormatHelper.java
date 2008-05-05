@@ -191,11 +191,12 @@ public class FormatHelper {
     }
 
    public static GregorianCalendar parseDate(String sDate) throws Exception{
-	  String defaultFormat= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
+	if (sDate==null) return null;
+       String defaultFormat= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_DATE_FORMAT);
 	  SimpleDateFormat formater=new SimpleDateFormat(defaultFormat);
 	  GregorianCalendar result=new GregorianCalendar();
 	try {
-	    if(sDate!=null) result.setTime(formater.parse(sDate));
+	    result.setTime(formater.parse(sDate));
 	} catch (ParseException e) {
 	    // TODO Auto-generated catch block
 	   throw new Exception("The source string has not a format according to globbal setting "+defaultFormat,e );

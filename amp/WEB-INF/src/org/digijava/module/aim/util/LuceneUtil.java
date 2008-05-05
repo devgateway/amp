@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -36,6 +38,9 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpComments;
+import org.digijava.module.aim.dbentity.AmpComponent;
+
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.editor.exception.EditorException;
 
@@ -146,6 +151,8 @@ public class LuceneUtil {
 				String objective;
 				String purpose;
 				String results;
+				String numcont;
+				ArrayList<String> componentcode=new ArrayList<String>();
 			};
 			
 			HashMap list = new HashMap();
@@ -228,13 +235,45 @@ public class LuceneUtil {
 				isNext = rs.next();
 				//
 			}
+			
+			
+			//Bolivia contract number
+			qryStr = "select * from v_convenio_numcont" ;
+			rs = st.executeQuery(qryStr);
+			rs.last();
+			logger.info("Starting iteration of " + rs.getRow() + " results!");
+			isNext = rs.first();
+			while (isNext){
+				int actId = Integer.parseInt(rs.getString("amp_activity_id"));
+				x = (Items) list.get(actId);
+				x.numcont = rs.getString("numcont");
+				isNext = rs.next();
+				//
+			}
+			
+			
+			//Bolivia component code
+			qryStr = "select a.amp_activity_id,c.code  from amp_activity_components a inner join amp_components c on a.amp_component_id=c.amp_component_id;" ;
+			rs = st.executeQuery(qryStr);
+			rs.last();
+			logger.info("Starting iteration of " + rs.getRow() + " amp_activity_components!");
+			isNext = rs.first();
+				
+			while (isNext){
+			    	int currActId = rs.getInt("amp_activity_id");
+			    	x = (Items) list.get(currActId);
+				x.componentcode.add(rs.getString("code"));
+				isNext = rs.next();
+			}
+			
+			
 			conn.close();
 
 			logger.info("Building the index ");
 			Iterator it = list.values().iterator();
 			while (it.hasNext()) {
 				Items el = (Items) it.next();
-				Document doc = activity2Document(String.valueOf(el.id),el.amp_id, el.title, el.description, el.objective, el.purpose, el.results);
+				Document doc = activity2Document(String.valueOf(el.id),el.amp_id, el.title, el.description, el.objective, el.purpose, el.results,el.numcont,el.componentcode);
 				if (doc != null)
 					indexWriter.addDocument(doc);
 			}
@@ -273,7 +312,7 @@ public class LuceneUtil {
 	 * @param request is used to retreive curent site and navigation language
 	 * @param act the activity that will be added
 	 */
-	public static Document activity2Document(String actId, String projectId, String title, String description, String objective, String purpose, String results){
+	public static Document activity2Document(String actId, String projectId, String title, String description, String objective, String purpose, String results,String numcont,ArrayList<String> componentcodes){
 		Document doc = new Document();
 		String all = new String("");
 		if (actId != null){
@@ -303,6 +342,24 @@ public class LuceneUtil {
 		if (results != null && results.length()>0){
 			doc.add(new Field("results", results, Field.Store.NO, Field.Index.TOKENIZED));
 			all = all.concat(" " + results);
+		}
+		
+		//
+		if (numcont != null && numcont.length()>0){
+			doc.add(new Field("numcont", numcont, Field.Store.NO, Field.Index.TOKENIZED));
+			all = all.concat(" " + numcont);
+		}
+		
+		int i =0;
+		if (componentcodes != null && componentcodes.size()>0){
+				
+        		for (String value : componentcodes) {
+        			doc.add(new Field("componentcode_"+String.valueOf(i), value, Field.Store.NO, Field.Index.TOKENIZED));
+        			all = all.concat(" " + value);
+        			i++;
+        		}
+			
+		
 		}
 		
 		if (all.length() == 0)
@@ -351,13 +408,25 @@ public class LuceneUtil {
 			if (act.getInternalIds().size()>0){
 				projectid= String.valueOf(((AmpActivityInternalId)act.getInternalIds().iterator().next()).getInternalId());
 			}
-			doc = activity2Document(String.valueOf(act.getAmpActivityId()), 
+			
+			ArrayList<String> componentsCode=new ArrayList<String>();
+		 	Collection<AmpComponent> componentsList=act.getComponents();
+
+		 	for(AmpComponent c:componentsList){
+		 	   componentsCode.add(c.getCode());
+		 	}
+				
+			
+			doc = activity2Document(
+					String.valueOf(act.getAmpActivityId()), 
 					projectid, 
 					String.valueOf(act.getName()), 
 					Util.getEditorBody(site,act.getDescription(),navigationLanguage), 
 					Util.getEditorBody(site,act.getObjective(),navigationLanguage), 
 					Util.getEditorBody(site,act.getPurpose(),navigationLanguage), 
-					Util.getEditorBody(site,act.getResults(),navigationLanguage));
+					Util.getEditorBody(site,act.getResults(),navigationLanguage),
+					Util.getEditorBody(site,act.getContactName(),navigationLanguage),componentsCode
+			);
 		} catch (EditorException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

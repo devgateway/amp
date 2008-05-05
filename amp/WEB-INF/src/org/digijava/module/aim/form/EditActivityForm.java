@@ -121,6 +121,10 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String totalPlannedDisbursementsOrders;
 	private String totalActualDisbursementsOrders;
 	
+	private String unDisbursementsBalance;
+	
+	
+	
 	private List costs;
         //to check if the current memeber is Team lead
         private boolean teamLead;
@@ -563,6 +567,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
      private Integer selContractId;
 	 private Long creditTypeId;	
 	 private boolean fixerate;
+	 private String convenioNumcont;
          
     private List steps;
     
@@ -5327,6 +5332,22 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		this.messages = messages;
 	}
 	   
+       public void setConvenioNumcont(String convenioNumcont) {
+		this.convenioNumcont = convenioNumcont;
+	}
+	
+
+	public String getConvenioNumcont() {
+		return convenioNumcont;
+	}
+
+	public String getUnDisbursementsBalance() {
+	    return unDisbursementsBalance;
+	}
+
+	public void setUnDisbursementsBalance(String unDisbursementsBalance) {
+	    this.unDisbursementsBalance = unDisbursementsBalance;
+	}
 	   
 }
 

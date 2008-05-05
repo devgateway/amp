@@ -51,6 +51,14 @@ public class DefaultDonorFundingCalculator implements DonorFundingCalculator {
 	    return actual;
 	}
 
+	public DecimalWraper getunDisbursementsBalance(DecimalWraper a,
+		DecimalWraper b) {
+	    DecimalWraper ret=new DecimalWraper();
+	    ret.setValue(a.getValue().subtract(b.getValue()));
+	    ret.setCalculations("value is "+a.getCalculations()+" - "+b.getCalculations());
+	    return ret;
+	}
+
 
 }
 

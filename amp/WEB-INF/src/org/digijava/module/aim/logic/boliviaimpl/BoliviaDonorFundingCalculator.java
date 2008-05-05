@@ -72,4 +72,13 @@ public class BoliviaDonorFundingCalculator implements DonorFundingCalculator {
 	    return total;
 	}
 
+	public DecimalWraper getunDisbursementsBalance(DecimalWraper a,
+		DecimalWraper b) {
+	    // TODO Auto-generated method stub
+	    DecimalWraper ret=new DecimalWraper();
+	    ret.setValue(a.getValue().subtract(b.getValue()));
+	    ret.setCalculations("value is "+a.getCalculations()+" - "+b.getCalculations());
+	    return ret;
+	}
+
 }

@@ -13,16 +13,21 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 
-<tr bgcolor="#ffffff">
-	<td height="20" colspan="4" bgcolor="#FFFFCC"
-		style="text-transform: uppercase"><a
-		title='<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>'>
+<field:display name="Planned Disbursement Preview" feature="Disbursement">
+	<tr bgcolor="#ffffff">
+		<td height="20" colspan="4" bgcolor="#FFFFCC"
+			style="text-transform: uppercase"><a
+			title='<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>'>
+	
+		<digi:trn key="aim:planneddisbursements">PLANNED DISBURSEMENT</digi:trn>
+		</a></td>
+	</tr>
+</field:display>
 
-	<digi:trn key="aim:planneddisbursements">PLANNED DISBURSEMENT</digi:trn>
-	</a></td>
-</tr>
 <c:if test="${!empty funding.fundingDetails}">
 
+	<field:display name="Planned Disbursement Preview" feature="Disbursement">
+	
 	<!-- Start Planned Disbursements -->
 	<logic:iterate name="funding" property="fundingDetails"
 		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
@@ -52,7 +57,7 @@
 						</field:display></td>
 						<td align="right"><field:display
 							name="Amount Disbursement" feature="Funding Organizations">
-							<FONT color=blue>*</FONT>
+							<!-- <FONT color=blue>*</FONT> -->
 							<bean:write name="fundingDetail" property="transactionAmount" />
 						</field:display> <field:display name="Currency Disbursement"
 							feature="Funding Organizations">
@@ -84,7 +89,7 @@
 							</field:display></td>
 							<td align="right"><field:display
 								name="Amount Disbursement" feature="Funding Organizations">
-								<FONT color=blue>*</FONT>
+								<!--<FONT color=blue>*</FONT>-->
 								<bean:write name="fundingDetail" property="transactionAmount" />
 							</field:display> <field:display name="Currency Disbursement"
 								feature="Funding Organizations">
@@ -113,7 +118,7 @@
 							</field:display></td>
 							<td align="right"><field:display
 								name="Amount Disbursement" feature="Funding Organizations">
-								<FONT color=blue>*</FONT>
+								<!--<FONT color=blue>*</FONT>-->
 								<bean:write name="fundingDetail" property="transactionAmount" />
 							</field:display> <field:display name="Currency Disbursement"
 								feature="Funding Organizations">
@@ -130,7 +135,7 @@
 		</logic:equal>
 	</logic:iterate>
 	<!-- End Planned Disbursements -->
-
+	
 	<tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
@@ -143,6 +148,9 @@
 			name="aimEditActivityForm" property="currCode" /></td>
 		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000">&nbsp;</td>
 	</tr>
+	
+	</field:display>
+	
 <tr><td colspan="4" height="7px"></td></tr>
 	<tr bgcolor="#ffffff">
 		<td colspan="4" bgcolor="#FFFFCC"
@@ -178,7 +186,7 @@
 						</field:display></td>
 						<td align="right"><field:display name="Amount Disbursement"
 							feature="Funding Organizations">
-							<FONT color=blue>*</FONT>
+							<!--<FONT color=blue>*</FONT>-->
 							<bean:write name="fundingDetail" property="transactionAmount" />
 						</field:display> <field:display name="Currency Disbursement"
 							feature="Funding Organizations">
@@ -209,7 +217,7 @@
 							</field:display></td>
 							<td align="right"><field:display name="Amount Disbursement"
 								feature="Funding Organizations">
-								<FONT color=blue>*</FONT>
+								<!--<FONT color=blue>*</FONT>-->
 								<bean:write name="fundingDetail" property="transactionAmount" />
 							</field:display> <field:display name="Currency Disbursement"
 								feature="Funding Organizations">
@@ -237,7 +245,7 @@
 							</field:display></td>
 							<td align="right"><field:display name="Amount Disbursement"
 								feature="Funding Organizations">
-								<FONT color=blue>*</FONT>
+								<!--<FONT color=blue>*</FONT>-->
 								<bean:write name="fundingDetail" property="transactionAmount" />
 							</field:display> <field:display name="Currency Disbursement"
 								feature="Funding Organizations">

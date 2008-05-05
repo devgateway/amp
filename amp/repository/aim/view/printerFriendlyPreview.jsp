@@ -57,19 +57,7 @@
                 <tr>
                   <td width="100%" vAlign="top">
 						<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left" border=0>
-                      <tr>
-                        <td width="100%">
-								<table width="98%" cellSpacing=1 cellpadding=0>
-									<tr>
-										<td class="head1-name" width="100%" align="left" bgcolor="#ffffff">
-                                <c:if test="${aimEditActivityForm.ampId!=null}">
-                                ${aimEditActivityForm.ampId}
-                                </c:if>
-										</td>
-									</tr>		
-								</table>														
-                        </td>
-                      </tr>
+
                       <tr>
                         <td width="100%">
 								<table width="98%" cellSpacing=1 cellpadding=2>
@@ -145,7 +133,33 @@
 										</logic:present>
 									</field:display>
 									 </feature:display>
-                                       <feature:display name="Identification" module="Project ID and Planning">                                     
+                                       <feature:display name="Identification" module="Project ID and Planning">   
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+												<digi:trn key="aim:ampId">AMP ID</digi:trn>		
+									  		</b>								
+									  	</td>
+									  	<td bgcolor="#ffffff">
+													<c:if test="${aimEditActivityForm.ampId!=null}">
+														${aimEditActivityForm.ampId}
+													</c:if>
+										</td>
+									</tr>
+                                                             
+									<field:display name="Contract Number" feature="Planning">
+									<tr>
+										<td width="27%" align="right" valign="top" nowrap="nowrap" >
+											<b>
+												<digi:trn key="aim:convenionumcont">Contract Number</digi:trn>		
+									  		</b>								
+									  	</td>
+									  	<td bgcolor="#ffffff">
+                                        	<c:out value="${aimEditActivityForm.convenioNumcont}"/>										
+                                        </td>
+									</tr>
+                                    </field:display>                                    
+                                                                      
 									<field:display feature="Identification" name="Description">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" >

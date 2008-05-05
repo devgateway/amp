@@ -114,6 +114,7 @@
 		
 		<!-- Start Bolivia Specific Fields -->
 		<property name="convenioDateFilter" column="convenio_date_filter" type="java.util.Date" />
+		<property name="convenioNumcont" column="convenio_numcont" type="java.lang.String" />
 		<!-- End Bolivia Specific Fields -->		
 
 <!--

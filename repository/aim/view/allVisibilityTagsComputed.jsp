@@ -581,3 +581,4 @@
 <field:display name="Without Baseline Button Performance" feature="Portfolio Dashboard"></field:display> 
 <field:display name="addMessageButton" feature="Messages"></field:display> 
 <field:display name='Delete Regional Funding Button' feature='Regional Funding'></field:display> 
+<field:display name="Contract Number" feature="Planning"></field:display>

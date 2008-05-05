@@ -729,6 +729,7 @@ public class EditActivity
   	eaForm.setContractDetails(activity.getContractDetails());
 
 
+  		eaForm.setConvenioNumcont(activity.getConvenioNumcont());
           
           if (activity.getObjective() != null)
             eaForm.setObjectives(activity.getObjective().trim());
@@ -1185,6 +1186,8 @@ public class EditActivity
           eaForm.setFundingOrganizations(fundingOrgs);
           //get the total depend of the 
           DecimalWraper totalCommitments=Logic.getInstance().getTotalDonorFundingCalculator().getTotalCommtiments(totPlannedComm, totActualComm);
+       
+          DecimalWraper unDisbursementsBalance=Logic.getInstance().getTotalDonorFundingCalculator().getunDisbursementsBalance(totalCommitments, totActualDisb);
           
           if(debug){
         	  eaForm.setTotalCommitments(totalCommitments.getCalculations());
@@ -1197,6 +1200,7 @@ public class EditActivity
         	  eaForm.setTotalPlannedExpenditures(totPlannedExp.getCalculations());
         	  eaForm.setTotalActualDisbursementsOrders(totActualDisbOrder.getCalculations());
         	  eaForm.setTotalPlannedDisbursementsOrders(totPlannedDisbOrder.getCalculations());
+        	  eaForm.setUnDisbursementsBalance(unDisbursementsBalance.getCalculations());
           }
           else{
               	//actual
@@ -1209,6 +1213,7 @@ public class EditActivity
         	  eaForm.setTotalPlannedCommitments(totPlannedComm.toString());
         	  eaForm.setTotalPlannedExpenditures(totPlannedExp.toString());
         	  eaForm.setTotalPlannedDisbursementsOrders(totPlannedDisbOrder.toString());
+        	  eaForm.setUnDisbursementsBalance(unDisbursementsBalance.toString());
           }
           ArrayList regFunds = new ArrayList(); 
           Iterator rItr = activity.getRegionalFundings().iterator();

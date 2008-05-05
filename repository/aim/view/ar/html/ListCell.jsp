@@ -2,6 +2,8 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <bean:define id="listCell" name="viewable"
 	type="org.dgfoundation.amp.ar.cell.ListCell" scope="request"
 	toScope="page" />
@@ -17,5 +19,9 @@
 </logic:iterate>
 </ul>
 </div>
-<div align="center" onMouseOver="stm(['<bean:write name="listCell" property="column.name"/> List',document.getElementById('<bean:write name="listCell" property="column.name"/>-<bean:write name="listCell" property="ownerId"/>').innerHTML],Style[1])" onMouseOut="htm()">[<u>list...</u>]
+<c:set var="key">
+	aim:reportbuilder:<bean:write name="listCell" property="column.name"/>
+</c:set>
+
+<div align="center" onMouseOver="stm(['<digi:trn key="${key}"><bean:write name="listCell" property="column.name"/></digi:trn>',document.getElementById('<bean:write name="listCell" property="column.name"/>-<bean:write name="listCell" property="ownerId"/>').innerHTML],Style[1])" onMouseOut="htm()">[<u><digi:trn key="aim:reportbuilder:list">list...</digi:trn></u>]
 </div>

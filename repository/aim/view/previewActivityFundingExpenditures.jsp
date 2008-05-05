@@ -51,7 +51,7 @@
 						</field:display></td>
 						<td align="right"><field:display
 							name="Amount Expenditure" feature="Funding Organizations">
-							<FONT color=blue>*</FONT>
+							<!--<FONT color=blue>*</FONT>-->
 							<bean:write name="fundingDetail" property="transactionAmount" />&nbsp;																								</field:display><field:display
 							name="Currency Expenditure" feature="Funding Organizations">
 							<bean:write name="fundingDetail" property="currencyCode" />
@@ -87,7 +87,7 @@
 
 							<td align="right"><field:display name="Amount Expenditure"
 								feature="Funding Organizations">
-								<FONT color=blue>*</FONT>
+								<!-- <FONT color=blue>*</FONT> -->
 								<bean:write name="fundingDetail" property="transactionAmount" />&nbsp;																								</field:display><field:display
 								name="Currency Expenditure" feature="Funding Organizations">
 								<bean:write name="fundingDetail" property="currencyCode" />
@@ -114,7 +114,7 @@
 							</field:display></td>
 							<td align="right"><field:display name="Amount Expenditure"
 								feature="Funding Organizations">
-								<FONT color=blue>*</FONT>
+								<!-- <FONT color=blue>*</FONT> -->
 								<bean:write name="fundingDetail" property="transactionAmount" />&nbsp;																								</field:display><field:display
 								name="Currency Expenditure" feature="Funding Organizations">
 								<bean:write name="fundingDetail" property="currencyCode" />
@@ -185,7 +185,7 @@
 
 						<td align="right"><field:display name="Amount Expenditure"
 							feature="Funding Organizations">
-							<FONT color=blue>*</FONT>
+							<!-- <FONT color=blue>*</FONT> -->
 							<bean:write name="fundingDetail" property="transactionAmount" />&nbsp;																								</field:display><field:display
 							name="Currency Expenditure" feature="Funding Organizations">
 							<bean:write name="fundingDetail" property="currencyCode" />
@@ -218,7 +218,7 @@
 							</field:display></td>
 							<td align="right"><field:display name="Amount Expenditure"
 								feature="Funding Organizations">
-								<FONT color="blue">*</FONT>
+								<!-- <FONT color="blue">*</FONT> -->
 								<bean:write name="fundingDetail" property="transactionAmount" />&nbsp;																								</field:display><field:display
 								name="Currency Expenditure" feature="Funding Organizations">
 								<bean:write name="fundingDetail" property="currencyCode" />
@@ -250,7 +250,7 @@
 							</field:display></td>
 							<td align="right"><field:display name="Amount Expenditure"
 								feature="Funding Organizations">
-								<FONT color=blue>*</FONT>
+								<!-- <FONT color=blue>*</FONT> -->
 								<bean:write name="fundingDetail" property="transactionAmount" />&nbsp;																								</field:display><field:display
 								name="Currency Expenditure" feature="Funding Organizations">
 								<bean:write name="fundingDetail" property="currencyCode" />

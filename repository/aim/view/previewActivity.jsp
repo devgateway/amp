@@ -359,7 +359,19 @@ function collapseAll() {
 										<td class="v-name" bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.ampId}"/>										</td>
 									</tr>
-									<field:display feature="Identification" name="Project Title">
+									
+									<field:display name="Contract Number" feature="Planning">
+                                        <tr>
+	                                        <td align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2"  class="t-name" >                                        
+	                                        	<digi:trn key="aim:convenionumcont">Contract Number</digi:trn>                                       	      
+	                                        </td>
+	                                        <td bgcolor="#FFFFFF">
+	                                        	<c:out value="${aimEditActivityForm.convenioNumcont}"/>
+	                                        </td>
+                                        </tr>
+                                    </field:display>
+                                    
+									<field:display name="Project Title" feature="Identification">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:projectTitle">Project title</digi:trn>										</td>
 										<td class="v-name"  bgcolor="#ffffff">
@@ -1050,7 +1062,7 @@ function collapseAll() {
 																								<digi:trn key="aim:${fd.adjustmentTypeNameTrimmed}">
 																								<c:out value="${fd.adjustmentTypeName}"/></digi:trn></td>
 																							<td align="right" width="100" bgcolor="#ffffff">
-																							<FONT color=blue>*</FONT>
+																							<!-- <FONT color=blue>*</FONT> -->
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							<td bgcolor="#ffffff">
 																								<c:out value="${fd.currencyCode}"/>																							</td>
@@ -1086,7 +1098,7 @@ function collapseAll() {
 																								</digi:trn>
 																						</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
-																							<FONT color=blue>*</FONT>
+																							<!--<FONT color=blue>*</FONT>-->
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							<td bgcolor="#ffffff">
 																								<c:out value="${fd.currencyCode}"/>																							</td>
@@ -1123,7 +1135,7 @@ function collapseAll() {
 																								</digi:trn>
 																							</td>
 																							<td align="right" width="100" bgcolor="#ffffff">
-																							<FONT color=blue>*</FONT>
+																							<!--<FONT color=blue>*</FONT>-->
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							<td bgcolor="#ffffff">
 																								<c:out value="${fd.currencyCode}"/>																							</td>
@@ -1146,9 +1158,10 @@ function collapseAll() {
 													</td></tr>
 												</c:forEach>
 												<tr><td bgcolor="#ffffff">
-													<FONT color=blue>*
+<!-- 													<FONT color=blue>*
 													<digi:trn key="aim:theAmountEnteredAreInThousands">
-													The amount entered are in thousands (000)</digi:trn></FONT>
+													The amount entered are in thousands (000)</digi:trn></FONT> -->
+													
 												</td></tr>
 												</table>
 											</c:if>										</td>
@@ -1200,7 +1213,7 @@ function collapseAll() {
 																							</field:display>
 																							<field:display name="Components Total Amount Commitments" feature="Components">
 																							<td align="right" width="100" bgcolor="#ffffff">
-																								<FONT color="blue">*</FONT>
+																								<!--<FONT color="blue">*</FONT>-->
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Currency Commitments" feature="Components">
@@ -1242,7 +1255,7 @@ function collapseAll() {
 																							</field:display>
 																							<field:display name="Components Total Amount Disbursements" feature="Components">
 																							<td align="right" width="100" bgcolor="#ffffff">
-																								<FONT color="blue">*</FONT>
+																								<!--<FONT color="blue">*</FONT>-->
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Currency Disbursements" feature="Components">
@@ -1284,7 +1297,7 @@ function collapseAll() {
 																							</field:display>
 																							<field:display name="Components Total Amount Expenditures" feature="Components">
 																							<td align="right">
-																								<FONT color=blue>*</FONT>
+																								<!--<FONT color=blue>*</FONT>-->
 																								<c:out value="${fd.transactionAmount}"/>																							</td>
 																							</field:display>
 																							<field:display name="Components Currency Expenditures" feature="Components">
@@ -1309,10 +1322,10 @@ function collapseAll() {
 																</td></tr>
 															</c:if>
 															<tr><td bgcolor="#ffffff">
-																<FONT color="blue">*
+																<!--<FONT color="blue">*
 																	<digi:trn key="aim:theAmountEnteredAreInThousands">
 																		The amount entered are in thousands (000)		  															</digi:trn>
-																</FONT>
+																</FONT>-->
 															</td></tr>
 															<field:display name="Components Physical Progress" feature="Components">
 															<tr><td bgcolor="#f4f4f2">
@@ -1393,7 +1406,7 @@ function collapseAll() {
 																								<digi:trn key="aim:preview_plannedcommitments_sum">Planned Commitments Sum</digi:trn>																							
 																							</td>																							
 																							<td align="right" width="100" bgcolor="#ffffff">																								
-																								<fmt:formatNumber type="number" pattern="0.00" value="${financeByYearInfoMap['MontoProgramado']}" />																						
+																								<aim:formatNumber value="${financeByYearInfoMap['MontoProgramado']}" />	USD																				
 																							</td>																																													
 																						</tr>
 																						<tr>
@@ -1401,7 +1414,7 @@ function collapseAll() {
 																								<digi:trn key="aim:preview_actualcommitments_sum">Actual Commitments Sum</digi:trn>																																															
 																							</td>																							
 																							<td align="right" width="100" bgcolor="#ffffff">																																															
-																								<fmt:formatNumber type="number" pattern="0.00" value="${financeByYearInfoMap['MontoReprogramado']}" />																																														
+																								<aim:formatNumber value="${financeByYearInfoMap['MontoReprogramado']}" />	USD																																														
 																							</td>																						
 																						</tr>																																																																		
 																						<tr>
@@ -1409,7 +1422,7 @@ function collapseAll() {
 																								<digi:trn key="aim:preview_plannedexpenditures_sum">Actual Expenditures Sum</digi:trn>																																															
 																							</td>																							
 																							<td align="right" width="100" bgcolor="#ffffff">																																															
-																								<fmt:formatNumber type="number" pattern="0.00" value="${financeByYearInfoMap['MontoEjecutado']}" />																							
+																								<aim:formatNumber value="${financeByYearInfoMap['MontoEjecutado']}" />		USD																						
 																							</td>																						
 																						</tr>
 																				</fmt:timeZone>
@@ -1511,6 +1524,7 @@ function collapseAll() {
 															<td vAlign="center" align="left">
 																&nbsp;<b><c:out value="${docs.title}"/></b> -
 																&nbsp;&nbsp;&nbsp;<i><c:out value="${docs.fileName}"/></i>
+																
 																<logic:notEqual name="docs" property="docDescription" value=" ">
 																	<br />&nbsp;
 																	<b><digi:trn key="aim:description">Description</digi:trn>:</b>
@@ -1836,7 +1850,8 @@ function collapseAll() {
 															<td><digi:trn key="aim:cost">Cost</digi:trn></td>
                                                         <td bgcolor="#FFFFFF" align="left" >
                                                           <c:if test="${aimEditActivityForm.proProjCost.funAmount!=null}">
-																 	<FONT color=blue>*</FONT> ${aimEditActivityForm.proProjCost.funAmount}                                                          </c:if>&nbsp;
+																 	<!--<FONT color=blue>*</FONT>-->
+																 	 ${aimEditActivityForm.proProjCost.funAmount}                                                          </c:if>&nbsp;
 																<c:if test="${aimEditActivityForm.proProjCost.currencyCode!=null}"> ${aimEditActivityForm.proProjCost.currencyCode} </c:if>                                                        </td>
 												    </tr>
 																		  <tr bgcolor="#ffffff">
@@ -2012,7 +2027,7 @@ function collapseAll() {
                                                                                         </tr>
                                                                                         </field:display>
                                                                                         
-                                                                                        <field:display name="Contracting Total Amount" feature="Contracting">
+                                                                                        <field:display name="Total Amount" feature="Contracting">
                                                                                         	<tr>
                                                                                             	<td align="left">
                                                                                                 	<b><digi:trn key="aim:IPA:popup:totalAmount">Total Amount</digi:trn>:</b>

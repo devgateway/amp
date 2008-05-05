@@ -342,6 +342,7 @@ function checkUncheckAll2() {
 											<field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display>
 											<field:display name="Draft" feature="Identification">&nbsp;</field:display>
 											<field:display name="Credit/Donation" feature="Planning">&nbsp;</field:display>
+											<field:display name="Contract Number" feature="Planning">&nbsp;</field:display>
                                             
                                         							<TR>
 																		<TD>

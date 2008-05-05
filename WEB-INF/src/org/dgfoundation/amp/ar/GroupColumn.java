@@ -142,7 +142,9 @@ public class GroupColumn extends Column {
        //manually add at least one term :(
        
        if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) && ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) {
-    	   metaSet.add(new MetaInfo<String>(ArConstants.TERMS_OF_ASSISTANCE,"Grant"));
+    	   //Commented for Bolivia
+	   if (metaSet.size()==0)
+	   metaSet.add(new MetaInfo<String>(ArConstants.TERMS_OF_ASSISTANCE,"Grant"));
     	//   metaSet.add(new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,"Loan"));
     	//metaSet.add(new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,"In Kind"));
        }

@@ -17,5 +17,7 @@ public interface DonorFundingCalculator {
      DecimalWraper getTotalCommtiments(Long activityId, String currCode, String perspective);
      
      DecimalWraper getTotalCommtiments(DecimalWraper planned, DecimalWraper actual);
+     
+     DecimalWraper getunDisbursementsBalance(DecimalWraper a, DecimalWraper b);
 
 }

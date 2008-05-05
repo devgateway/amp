@@ -375,7 +375,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																	</c:when>
 																	<c:otherwise>
 																		<html:select property="category" styleClass="inp-text" onchange="relTeam()">
-																			<html:option value="-1">-- <digi:trn key="aim:selectCategory">Select Category</digi:trn> --</html:option>
+																			<html:option value="-1">-- <digi:trn key="aim:createWorkspaceSelectCategFirstLine">Select Category</digi:trn> --</html:option>
 																			<html:option value="<%= org.digijava.module.aim.helper.Constants.DEF_GOV_PERSPECTIVE %>">
 																					<digi:trn key="aim:government">Government</digi:trn>
 																			</html:option>

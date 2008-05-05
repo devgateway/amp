@@ -196,7 +196,10 @@ public class SaveActivity extends Action {
                 activity.setCurrencyCode(null);
             }else{
                 activity.setFunAmount(eaForm.getProProjCost().getFunAmountAsDouble());
-                activity.setFunDate(FormatHelper.parseDate(eaForm.getProProjCost().getFunDate()).getTime());
+                //check null for bolivia
+                if (eaForm.getProProjCost().getFunDate()!=null){
+                    activity.setFunDate(FormatHelper.parseDate(eaForm.getProProjCost().getFunDate()).getTime());
+                }
                 activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
             }
 
@@ -500,7 +503,10 @@ public class SaveActivity extends Action {
                     activity.setCurrencyCode(null);
                 }else{
                     activity.setFunAmount(eaForm.getProProjCost().getFunAmountAsDouble());
-                    activity.setFunDate(FormatHelper.parseDate(eaForm.getProProjCost().getFunDate()).getTime());
+                    //check for null on bolivia
+                    if(eaForm.getProProjCost().getFunDate()!=null){
+                	activity.setFunDate(FormatHelper.parseDate(eaForm.getProProjCost().getFunDate()).getTime());
+                    }
                     activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
                 }
 				activity.setAmpId(eaForm.getAmpId());

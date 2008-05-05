@@ -196,8 +196,11 @@ public class AmpARFilter extends PropertyListable implements Filter {
 				"OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("+Util.toCSString(ampTeams,true)+") )";
 		
 		//computed workspace filter -- append it to the team filter so normal team activities are also possible 
-		if(teamAssignedOrgs!=null && teamAssignedOrgs.size() > 0) 
+		if(teamAssignedOrgs!=null && teamAssignedOrgs.size() > 0) {
 			TEAM_FILTER+=" OR amp_activity_id IN (SELECT DISTINCT(activity) FROM amp_org_role WHERE organisation IN ("+Util.toCSString(teamAssignedOrgs, true)+") )";
+			TEAM_FILTER+= "OR amp_activity_id IN (SELECT distinct(amp_activity_id) FROM amp_funding WHERE amp_donor_org_id IN ("+Util.toCSString(teamAssignedOrgs, true)+"))";
+			
+		}
 		
 		String STATUS_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("+Util.toCSString(statuses,true)+")";
 	

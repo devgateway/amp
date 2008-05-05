@@ -1200,7 +1200,7 @@
 									&nbsp;<digi:trn key="aim:npDashboard">National Planing Dashboard</digi:trn>
 								</TD>
 								<TD background="module/aim/images/corner-r.gif" height="17" width="17"></TD>
-                                <feature:display name="Dashboard" module="M & E">
+                                <feature:display name="Portfolio Dashboard" module="M & E">
 									<TD bgColor="#c9c9c7" class="box-title" width="80">
 										<digi:link href="/viewPortfolioDashboard.do~actId=-1~indId=-1">
 											<digi:trn key="aim:portfolioDashboard">Dashboard</digi:trn>

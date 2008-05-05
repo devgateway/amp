@@ -150,7 +150,7 @@
 
 
 	<feature:display name="Activity" module="M & E"></feature:display>
-	<feature:display name="Dashboard" module="M & E"></feature:display>
+	<feature:display name="Activity Dashboard" module="M & E"></feature:display>
 	<feature:display name="Admin" module="M & E"></feature:display>
 	
 	

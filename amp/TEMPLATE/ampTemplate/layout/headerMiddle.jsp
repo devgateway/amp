@@ -132,7 +132,7 @@ if("On".equals(publicView)) { %>
 			<div id="gen"  title='<digi:trn key="aim:viewNPD">View National Plan Dashboard</digi:trn>'>
 			<logic:notEmpty name="TID" scope="session">
                              <c:set var="linkProf">
-                                 <feature:display name="Dashboard" module="M & E">
+                                 <feature:display name="Portfolio Dashboard" module="M & E">
                                      /viewPortfolioDashboard.do~actId=-1~indId=-1
                                  </feature:display>
                                  

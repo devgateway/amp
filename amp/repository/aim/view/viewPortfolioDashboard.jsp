@@ -37,7 +37,7 @@
 <digi:trn key="aim:performance:actual">Actual</digi:trn>
 <digi:trn key="aim:performance:target">Target</digi:trn>
 	<feature:display name="Activity" module="M & E"></feature:display>
-	<feature:display name="Dashboard" module="M & E"></feature:display>
+	<feature:display name="Portfolio Dashboard" module="M & E"></feature:display>
 	<feature:display name="Admin" module="M & E"></feature:display>
 
 </div>
@@ -145,7 +145,7 @@
 
 	                 	<TD background="module/aim/images/corner-r.gif"	height=17 width=17></TD>
                     </module:display>
-                    <feature:display name="Dashboard" module="M & E">
+                    <feature:display name="Portfolio Dashboard" module="M & E">
               			<TD bgColor=#c9c9c7 class=box-title width=80>
 							&nbsp;<digi:trn key="aim:portfolioDashboard">Dashboard</digi:trn>
 						</TD>
@@ -155,7 +155,7 @@
 			</TABLE>
 
 			</TD></TR>
-                         <feature:display name="Dashboard" module="M & E">
+                         <feature:display name="Portfolio Dashboard" module="M & E">
 			<TR><TD bgColor=#ffffff class=box-border align=left>
 
 
@@ -219,11 +219,11 @@
 													<br><br>
 
 													<div align="center">
-													<field:display name="Printer Friendly Button Performance" feature="Dashboard">
+													<field:display name="Printer Friendly Button Performance" feature="Portfolio Dashboard">
 													<input type="button" class="buton" value="<digi:trn key='btn:printerfriendly'>Printer Friendly</digi:trn>"
 													onclick="javascript:showPrinterFriendlyPortPerf()">
 													</field:display>
-													<field:display name="Without Baseline Button Performance" feature="Dashboard">
+													<field:display name="Without Baseline Button Performance" feature="Portfolio Dashboard">
 													<input type="button" class="buton" value="<digi:trn key='btn:withoutBaseline'>Without Baseline</digi:trn>"
 													onclick="javascript:portPerfWithoutBaseline()">
 													</field:display>													
@@ -272,7 +272,7 @@
 													<br><br>
 
 													<div align="center">
-													<field:display name="Printer Friendly Button Risk" feature="Dashboard">
+													<field:display name="Printer Friendly Button Risk" feature="Portfolio Dashboard">
 													<input type="button" class="buton" value="<digi:trn key='btn:printerfriendly'>Printer Friendly</digi:trn>"
 
 													onclick="javascript:showPrinterFriendlyPortRisk()">

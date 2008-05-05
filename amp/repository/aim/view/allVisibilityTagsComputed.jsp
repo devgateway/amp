@@ -87,7 +87,7 @@
 <feature:display name="Costing Tab" module="Activity Costing"></feature:display> 
 <feature:display name="Costing" module="Activity Costing"></feature:display> 
 <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues"></feature:display> 
-<feature:display name="Dashboard" module="M & E"></feature:display> 
+<feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
 <feature:display name="Disbursement Orders" module="Funding"></feature:display> 
 <feature:display name="Documents Tab" module="Document"></feature:display> 
 <feature:display name="Donor Contact Information" module="Contact Information"></feature:display> 
@@ -454,8 +454,8 @@
 <field:display name="Planned Expenditures" feature="Measures"></field:display> 
 <field:display name="Planning Ministry Rank" feature="Planning"></field:display> 
 <field:display name="Primary Program" feature="NPD Programs"></field:display> 
-<field:display name="Printer Friendly Button Performance" feature="Dashboard"></field:display> 
-<field:display name="Printer Friendly Button Risk" feature="Dashboard"></field:display> 
+<field:display name="Printer Friendly Button Performance" feature="Portfolio Dashboard"></field:display> 
+<field:display name="Printer Friendly Button Risk" feature="Portfolio Dashboard"></field:display> 
 <field:display name="Program Background" feature="Admin NPD"></field:display> 
 <field:display name="Program Beneficiaries" feature="Admin NPD"></field:display> 
 <field:display name="Program Code" feature="Admin NPD"></field:display> 
@@ -578,6 +578,6 @@
 <field:display name="Web Resource Description" feature="Web Resources"></field:display> 
 <field:display name="Web Resources Title" feature="Web Resources"></field:display> 
 <field:display name="Web Resources Url" feature="Web Resources"></field:display> 
-<field:display name="Without Baseline Button Performance" feature="Dashboard"></field:display> 
+<field:display name="Without Baseline Button Performance" feature="Portfolio Dashboard"></field:display> 
 <field:display name="addMessageButton" feature="Messages"></field:display> 
 <field:display name='Delete Regional Funding Button' feature='Regional Funding'></field:display> 

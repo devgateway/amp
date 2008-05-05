@@ -6,16 +6,22 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.IndicatorForm;
 import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.helper.ActivitySector;
 import org.apache.log4j.Logger;
 
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
+
+import javax.servlet.http.HttpSession;
 
 public class SearchIndicators extends Action {
 
@@ -27,7 +33,19 @@ public class SearchIndicators extends Action {
 		
 		Logger logger = Logger.getLogger(SearchIndicators.class);
 		
-		IndicatorForm indForm = (IndicatorForm) form;
+		IndicatorForm indForm = (IndicatorForm) form;	
+		//clear form if necessary
+		if(request.getParameter("clear")!=null && request.getParameter("clear").equalsIgnoreCase("true")){
+			indForm.setIndicatorCode(null);
+			indForm.setIndicatorDesc(null);
+			indForm.setIndicatorName(null);
+			indForm.setIndId(null);
+			indForm.setSearchKey(null);
+			indForm.setSearchReturn(null);
+			indForm.setSelectedSectorsForInd(null);
+			indForm.setShowAddInd(false);
+		}
+		
 		Collection searchResult = null;
 		Collection activityInd = null;
 		Collection searchInd = new ArrayList();
@@ -94,7 +112,24 @@ public class SearchIndicators extends Action {
 //				logger.info("yes its NULL......");
 //				indForm.setNoSearchResult(true);
 //			}
-//		}
+//		}		
+				if(request.getParameter("addInd")!=null && request.getParameter("addInd").equalsIgnoreCase("true")){
+					String dateFormat = FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBALSETTINGS_DATEFORMAT);
+			        SimpleDateFormat sdf = null;
+			        //temporary workaround 
+			        if (dateFormat!=null){
+			        	//?????
+			            dateFormat = dateFormat.replace("m", "M");
+			            sdf = new SimpleDateFormat(dateFormat);
+			        }else{
+			        	sdf= new SimpleDateFormat();
+			        }
+					
+			        indForm.setCreationDate(sdf.format(new Date()).toString());
+			        indForm.setShowAddInd(true);
+				}
+				 		
+				
 		return mapping.findForward("forward");
 	}
 }

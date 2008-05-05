@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.digijava.module.aim.helper.ActivitySector;
 
 
 
@@ -37,10 +39,26 @@ public class IndicatorForm extends ActionForm implements Serializable
 	private boolean noSearchResult = false;
 	
 	private Collection <AmpSector> allSectors;
+	private Collection <AmpSector> parentSectors; //<---- this field should be deleted
+	private Collection <ActivitySector> selectedSectorsForInd;
+	private Collection <AmpSectorScheme> sectorSchemes;	
+	private Long selActivitySector[];
+	private Long sectorScheme;
+	private Long sector;
+	private String creationDate;
 	private String sectorName;
 	private String action ;
+	private boolean showAddInd; //show or hide add Indicator fields on add Indicator page
 	
 	private char ascendingInd;
+	
+	
+	public void resetsector(){
+    	this.sector = new Long(-1);    	
+    	this.sectorScheme = new Long(-1);
+    	this.parentSectors = null;  
+    	this.showAddInd=false;
+    }
 	
 	public String getSameIndicatorCode() {
 		return sameIndicatorCode;
@@ -48,6 +66,22 @@ public class IndicatorForm extends ActionForm implements Serializable
 
 	public void setSameIndicatorCode(String sameIndicatorCode) {
 		this.sameIndicatorCode = sameIndicatorCode;
+	}	
+	
+	public Long getSector() {
+		return sector;
+	}
+
+	public void setSector(Long sector) {
+		this.sector = sector;
+	}
+
+	public Long getSectorScheme() {
+		return sectorScheme;
+	}
+
+	public void setSectorScheme(Long sectorScheme) {
+		this.sectorScheme = sectorScheme;
 	}
 
 	public String getSameIndicatorName() {
@@ -108,6 +142,32 @@ public class IndicatorForm extends ActionForm implements Serializable
 
 	public void setMeIndActList(Collection meIndActList) {
 		this.meIndActList = meIndActList;
+	}
+	
+	
+	
+	public Collection<AmpSector> getParentSectors() {
+		return parentSectors;
+	}
+
+	public void setParentSectors(Collection<AmpSector> parentSectors) {
+		this.parentSectors = parentSectors;
+	}
+
+	public Collection<ActivitySector> getSelectedSectorsForInd() {
+		return selectedSectorsForInd;
+	}
+
+	public void setSelectedSectorsForInd(Collection<ActivitySector> selectedSectorsForInd) {
+		this.selectedSectorsForInd = selectedSectorsForInd;
+	}
+
+	public Collection<AmpSectorScheme> getSectorSchemes() {
+		return sectorSchemes;
+	}
+
+	public void setSectorSchemes(Collection<AmpSectorScheme> sectorScheme) {
+		this.sectorSchemes = sectorScheme;
 	}
 
 	public Long getSelectedIndicator() {
@@ -312,5 +372,29 @@ public class IndicatorForm extends ActionForm implements Serializable
 
 	public void setAction(String action) {
 		this.action = action;
+	}
+
+	public Long[] getSelActivitySector() {
+		return selActivitySector;
+	}
+
+	public void setSelActivitySector(Long[] selActivitySector) {
+		this.selActivitySector = selActivitySector;
+	}
+
+	public String getCreationDate() {
+		return creationDate;
+	}
+
+	public void setCreationDate(String creationDate) {
+		this.creationDate = creationDate;
+	}
+
+	public boolean isShowAddInd() {
+		return showAddInd;
+	}
+
+	public void setShowAddInd(boolean showAddInd) {
+		this.showAddInd = showAddInd;
 	}
 }

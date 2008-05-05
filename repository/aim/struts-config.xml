@@ -771,8 +771,11 @@
       <forward name="toAdditionOfIndiForStep9" path="/showLayout.do?layout=aim_selectCreateIndicatorForStep9" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimIndicatorForm" path="/aim/searchIndicators" scope="request" type="org.digijava.module.aim.action.SearchIndicators" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=selectCreateIndicators" />
+    <action name="aimEditActivityForm" path="/aim/removeIndFromActivity" scope="session" type="org.digijava.module.aim.action.RemoveIndicatorFromActivity">
+		 <forward name="forward" path="/aim/getActivityIndicators.do" redirect="true"/>  
+    </action>
+    <action name="aimIndicatorForm" path="/aim/searchIndicators" scope="session" type="org.digijava.module.aim.action.SearchIndicators" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=selectCreateIndicators" />      
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimIndicatorForm" path="/aim/addIndicatorsTL" scope="request" type="org.digijava.module.aim.action.AddIndicatorsTL" validate="false">
@@ -1158,6 +1161,10 @@
      <action name="aimNewIndicatorForm" path="/aim/editSectorForind" scope="session" type="org.digijava.module.aim.action.EditSectorsForInd">
       <forward name="forward" path="/showLayout.do?layout=aim_selectSectorForindEdit" />
       <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+    <action name="aimIndicatorForm" path="/aim/sectorActions" scope="session" parameter="actionType" type="org.digijava.module.aim.action.IndicatorSectorActions">
+    	<forward name="backToPage" path="/aim/searchIndicators.do" redirect="true"/>
+    	<forward name="forward" path="/showLayout.do?layout=addSectorToIndicator" />
     </action>
     <action name="aimEditActivityForm" path="/aim/sectorSelected" scope="session" type="org.digijava.module.aim.action.SectorSelected">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />

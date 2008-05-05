@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,7 +37,8 @@ public class AddNewIndicatorTL extends Action {
         indicator.setDescription(indForm.getIndicatorDesc());
         indicator.setCreationDate(new Date());
         indicator.setCode(indForm.getIndicatorCode());
-        indicator.setType((indForm.getAscendingInd()+"").trim());       
+        indicator.setType((indForm.getAscendingInd()+"").trim());  
+        indicator.setSectors((Set)indForm.getSelectedSectorsForInd());
         
         IndicatorUtil.saveIndicator(indicator);		
 		
@@ -67,6 +69,7 @@ public class AddNewIndicatorTL extends Action {
         indForm.setIndicatorName(null);
         indForm.setIndicatorCode(null);
         indForm.setIndicatorDesc(null);
+        indForm.setSelectedSectorsForInd(null);
         
         Collection indicators=IndicatorUtil.getAllNonDefaultIndicators();
         indForm.setNondefaultindicators(indicators);

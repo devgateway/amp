@@ -6,11 +6,13 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+
 <script language="JavaScript">
 <!--
 	function searchIndicators()
 	{	
-			<digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do" />
+			<digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do?showAddIndPage=false" />
 			document.aimIndicatorForm.action = "<%=searchInd%>";
 			document.aimIndicatorForm.target = "_self";
 			document.aimIndicatorForm.submit();	
@@ -48,6 +50,9 @@
 	function unload(){}
 
 	function validateForm() {
+	
+		// var sectors = document.aimIndicatorForm.selectedSectorsForInd;	
+		
 		if (document.aimIndicatorForm.indicatorName.value.length == 0) {
 			alert("Please enter indicator name");
 			document.aimIndicatorForm.indicatorName.focus();
@@ -59,8 +64,10 @@
 			document.aimIndicatorForm.indicatorCode.focus();
 			return false;
 		}
+		
 		return true;
 	}
+	
 	function isSearchKeyGiven()
 	{
 		if(trim(document.aimIndicatorForm.searchkey.value).length == 0)
@@ -100,6 +107,21 @@
 	 	document.aimIndicatorForm.action = "<%= searchInd %>";
 	  	document.aimIndicatorForm.submit();
 	}
+	
+	function addSectors() {		
+		<digi:context name="addSector" property="context/module/moduleinstance/sectorActions.do?actionType=loadSectors&sectorReset=true" />
+		openURLinWindow('<%= addSector %>',550,400);
+	  
+}
+
+	function removeSelSectors() {		 
+          <digi:context name="remSec" property="context/module/moduleinstance/sectorActions.do?actionType=removeSelectedSectors" />
+          document.aimIndicatorForm.action = "<%= remSec %>";
+          document.aimIndicatorForm.target = "_self"
+          document.aimIndicatorForm.submit();
+          return true;
+	}
+	
 -->
 </script>
 
@@ -179,7 +201,7 @@
                                       											<table width="100%" align="center" border="0" style="font-family:verdana;font-size:11px;">
                                         											<tr bgcolor="#006699">
 	                                        											<td vAlign="center" width="100%" align ="center" class="textalb" height="20" colspan="2">
-																							<b><digi:trn key="aim:PickfrmList">1.   Pick from the List</digi:trn></b>
+																							<b><digi:trn key="aim:PickfromList"> Pick from the List</digi:trn></b>
 																						</td>
 																					</tr>
                                                                     				<tr>
@@ -225,17 +247,27 @@
 										</td>
 									</tr>
 								</table>
-								<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
+								<table bgcolor="#f4f4f2" cellPadding="0" cellSpacing="0" width="100%" class="box-border-nopadding">
 									<tr bgcolor="#006699">
 										<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
-											<b><digi:trn key="aim:NewIndicatorCreation">3.   Create a New Indicator</digi:trn></b>
+											<b><digi:trn key="aim:NewIndicatorCreation">Create a New Indicator</digi:trn></b>
 										</td>
-									</tr>
+									</tr>	
+									<c:if test="${not empty aimIndicatorForm.showAddInd && aimIndicatorForm.showAddInd=='false'}">
+										<tr>
+											<td bgcolor="#ECF3FD" align="center" colspan="2" >
+												<html:button  styleClass="dr-menu" property=""  onclick="gotoCreateIndPage()">
+													<digi:trn key="btn:crtInd">Add new Indicator</digi:trn> 
+												</html:button>
+											</td>
+										</tr>									
+									</c:if>								
+									<c:if test="${not empty aimIndicatorForm.showAddInd && aimIndicatorForm.showAddInd=='true'}">
 									<tr>
-										<td align="center" bgcolor=#ECF3FD>
+										<td align="center" bgcolor="#ECF3FD">
 											<table cellSpacing=2 cellPadding=2>
 												<tr>
-													<td><digi:trn key="aim:indicatorName">Indicator Name</digi:trn></td>
+													<td><digi:trn key="aim:indicatorName">Indicator Name</digi:trn><font color="red">*</font></td>
 													<td>
 														<html:text property="indicatorName" size="20" styleClass="inp-text"/>	
 													</td>
@@ -247,7 +279,7 @@
 													</td>
 												</tr>
 												<tr>
-													<td><digi:trn key="aim:indicatorCode">Indicator Code</digi:trn></td>
+													<td><digi:trn key="aim:indicatorCode">Indicator Code</digi:trn><font color="red">*</font></td>
 													<td>
 														<html:text property="indicatorCode" size="20" styleClass="inp-text"/>
 													</td>
@@ -260,7 +292,94 @@
 															<html:option value="D">Descending</html:option>
 														</html:select>
 													</td>
-												</tr>												
+												</tr>	
+												<tr>
+													<td><digi:trn key="aim:indicatorSector">Sectors</digi:trn><font color="red">*</font></td>
+													<td>	<!-- sectors start -->
+														<table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+															<tr>
+				                                              <td bgcolor="#ECF3FD" width="100%">
+				                                                <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
+				                                                  <c:if test="${empty aimIndicatorForm.selectedSectorsForInd}">
+				                                                    <tr>
+				                                                      <td bgcolor="#ECF3FD">
+				                                                        <input type="button" class="buton" onclick="addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
+				                                                      </td>
+				                                                    </tr>
+				                                                  </c:if>
+				                                                  <c:if test="${!empty aimIndicatorForm.selectedSectorsForInd}">
+				                                                    <tr>
+				                                                      <td>
+				                                                        <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+				                                                          <c:forEach var="activitySectors" items="${aimIndicatorForm.selectedSectorsForInd}">
+				                                                            <tr>
+				                                                              <td>
+				                                                                <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+				                                                                  <tr bgcolor="#ECF3FD">
+				                                                                    <td width="3%" vAlign="center">
+				                                                                      <html:multibox property="selActivitySector">
+					                                                                     <c:if test="${activitySectors.subsectorLevel1Id == -1}">
+					                                                                      ${activitySectors.sectorId}
+					                                                                      </c:if>
+					                                                                      <c:if test="${activitySectors.subsectorLevel1Id != -1 && activitySectors.subsectorLevel2Id == -1}">
+					                                                                      ${activitySectors.subsectorLevel1Id}
+					                                                                      </c:if>
+					                                                                      <c:if test="${activitySectors.subsectorLevel1Id != -1 && activitySectors.subsectorLevel2Id != -1}">
+					                                                                      ${activitySectors.subsectorLevel2Id}
+					                                                                      </c:if>
+					                                                                  </html:multibox>
+				                                                                    </td>
+				                                                                    <td  width="87%" vAlign="center" align="left">
+				                                                                      <c:if test="${!empty activitySectors.sectorName}">
+				                                                                        [${activitySectors.sectorName}]
+				                                                                      </c:if>
+				                                                                      <c:if test="${!empty activitySectors.subsectorLevel1Name}">
+				                                                                        [${activitySectors.subsectorLevel1Name}]
+				                                                                      </c:if>
+				                                                                      <c:if test="${!empty activitySectors.subsectorLevel2Name}">
+				                                                                        [${activitySectors.subsectorLevel2Name}]
+				                                                                      </c:if>
+				                                                                    </td>
+				                                                                   </tr>
+				                                                                </table>
+				                                                              </td>
+				                                                            </tr>
+				                                                          </c:forEach>
+				                                                          <tr bgcolor="#ECF3FD">
+				                                                            <td>
+				                                                              <table cellSpacing=2 cellPadding=2>
+				                                                                <tr>
+				                                                                  <logic:notEmpty name="MS" scope="application">
+				                                                                    <td>
+				                                                                      <input type="button" value="<digi:trn key="btn:addSectors">Add Sectors</digi:trn>" class="buton"  onclick="addSectors();">
+				                                                                    </td>
+				                                                                  </logic:notEmpty>
+				                                                                  <td >
+																					<input type="button" class="buton" onclick="return removeSelSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
+				                                                                  </td>
+				                                                                </tr>
+				                                                              </table>
+				                                                            </td>
+				                                                          </tr>
+				                                                        </table>
+				                                                      </td>
+				                                                    </tr>
+				                                                  </c:if>
+				                                                </table>
+				                                              </td>
+				                                            </tr>
+				                                          </table>
+				                                        <!-- sectors end --> 
+													</td>													
+												</tr>	
+												<tr>
+													<td>
+											            <digi:trn key="aim:creationdate">Creation date:</digi:trn>
+											        </td>
+											        <td>
+											            <html:text property="creationDate" disabled="true" styleId="txtCreationDate" style="font-family:verdana;font-size:11px;width:80px;"/>
+											        </td>
+												</tr>											
 												<tr>
 													<td align="center" colspan=2>&nbsp;														
 														<html:button  styleClass="dr-menu" property="addnewIndicator"  onclick="addNewIndicatorTL()">
@@ -271,6 +390,7 @@
 											</table>
 										</td>
 									</tr>
+									</c:if>								
 								</table>
 							</td>
 						</tr>

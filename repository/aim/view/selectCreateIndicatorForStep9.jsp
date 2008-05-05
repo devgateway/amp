@@ -16,6 +16,13 @@
 			document.aimIndicatorForm.submit();
 		
 	}
+	
+	function gotoCreateIndPage() {
+		<digi:context name="addIndPage" property="context/module/moduleinstance/searchIndicators.do?clear=true&addInd=true"/>
+		document.aimIndicatorForm.action = "<%=addIndPage%>";		
+		document.aimIndicatorForm.submit();
+	}
+	
 	function addIndicatorTL(addbutton)
 	{
 		var emptychk = false;
@@ -182,7 +189,7 @@
                                       											<table width="100%" align="center" border="0" style="font-family:verdana;font-size:11px;">
                                         											<tr bgcolor="#006699">
 	                                        											<td vAlign="center" width="100%" align ="center" class="textalb" height="20" colspan="2">
-																							<b><digi:trn key="aim:PickfrmList">1.   Pick from the List</digi:trn></b>
+																							<b><digi:trn key="aim:PickfromList"> Pick from the List</digi:trn></b>
 																						</td>
 																					</tr>
                                                                     				<tr>
@@ -212,6 +219,20 @@
 																										<td>No Indicators in the List</td>
 																									</tr>
 																								</logic:empty>
+																							</table>
+																							<table bgcolor=#f4f4f2 cellPadding="0" cellSpacing="0" width="100%" class=box-border-nopadding>
+																								<tr bgcolor="#006699">
+																									<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
+																										<b><digi:trn key="aim:NewIndicatorCreation">Create a New Indicator</digi:trn></b>
+																									</td>
+																								</tr>	
+																								<tr>
+																									<td bgcolor="#ECF3FD" align="center" colspan="2" >
+																										<html:button  styleClass="dr-menu" property=""  onclick="gotoCreateIndPage()">
+																											<digi:trn key="btn:crtInd">Add new Indicator</digi:trn> 
+																										</html:button>
+																									</td>
+																								</tr>																							
 																							</table>
 																						</td>
 																					</tr>

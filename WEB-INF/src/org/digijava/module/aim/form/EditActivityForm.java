@@ -5283,7 +5283,51 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		this.selRespOrganisations = selRespOrganisations;
 	}
 
+	private    HashMap<String,String> errors = new HashMap<String, String>();
+	   private    HashMap<String,String> messages = new HashMap<String, String>();
 
+	   public void addMessage(String key, String value) {
+	       this.messages.put(key, value) ;
+	   }
+
+	   public void addError(String key, String value) {
+	       this.errors.put(key, value) ;
+	   }
+
+	   public void clearMessages(){
+	       this.errors.clear();
+	       this.messages.clear();
+	   }
+
+	/**
+	 * @return the errors
+	 */
+	public HashMap<String, String> getErrors() {
+		return errors;
+	}
+
+	/**
+	 * @param errors the errors to set
+	 */
+	public void setErrors(HashMap<String, String> errors) {
+		this.errors = errors;
+	}
+
+	/**
+	 * @return the messages
+	 */
+	public HashMap<String, String> getMessages() {
+		return messages;
+	}
+
+	/**
+	 * @param messages the messages to set
+	 */
+	public void setMessages(HashMap<String, String> messages) {
+		this.messages = messages;
+	}
+	   
+	   
 }
 
 

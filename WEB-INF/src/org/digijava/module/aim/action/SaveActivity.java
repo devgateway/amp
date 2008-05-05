@@ -66,7 +66,6 @@ import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.ActivitySector;
-import org.digijava.module.message.helper.AmpMessageWorker;
 import org.digijava.module.aim.helper.AmpProject;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Components;
@@ -103,6 +102,7 @@ import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
+import org.digijava.module.message.helper.AmpMessageWorker;
 
 /**
  * SaveActivity class creates a 'AmpActivity' object and populate the fields
@@ -165,7 +165,7 @@ public class SaveActivity extends Action {
             Iterator<DocumentData> docIter			= tempDocs.iterator();
             while ( docIter.hasNext() ) {
             	TemporaryDocumentData tempDoc	= (TemporaryDocumentData) docIter.next();
-            	NodeWrapper nodeWrapper			= tempDoc.saveToRepository(request, errors);
+            	NodeWrapper nodeWrapper			= tempDoc.saveToRepository(request, eaForm);
             	if ( nodeWrapper != null )
             			UUIDs.add( nodeWrapper.getUuid() );
             }

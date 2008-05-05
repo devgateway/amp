@@ -9,16 +9,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
-import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
@@ -53,10 +52,10 @@ public class TemporaryDocumentData extends DocumentData {
 		this.formFile = formFile;
 	}
 	
-	public TemporaryDocumentData (DocumentManagerForm dmForm, HttpServletRequest request, ActionErrors errors) {
+	public TemporaryDocumentData (DocumentManagerForm dmForm, HttpServletRequest request) {
 		errorsFound		= false;
+		HashMap errors = new HashMap();
 		if ( dmForm.getFileData() != null ) {
-			
 			FormFile formFile	= dmForm.getFileData();
 			if ( DocumentManagerUtil.checkFileSize(formFile, errors) ) {
 			
@@ -66,13 +65,15 @@ public class TemporaryDocumentData extends DocumentData {
 				this.setContentType( formFile.getContentType() );
 				this.setFormFile( formFile );
 			}
-			else
+			else {
 				errorsFound	= true;
+				dmForm.getErrors().putAll(errors);
+			}
 		}
 		
 		if ( dmForm.getWebLink() != null) {
 			String webLink;
-			if ( (webLink=DocumentManagerUtil.processUrl(dmForm.getWebLink(), errors)) != null ) {
+			if ( (webLink=DocumentManagerUtil.processUrl(dmForm.getWebLink(), dmForm)) != null ) {
 					this.setWebLink( webLink );
 					this.setContentType( CrConstants.URL_CONTENT_TYPE );
 			}
@@ -100,13 +101,13 @@ public class TemporaryDocumentData extends DocumentData {
 		this.setUuid( CrConstants.TEMPORARY_UUID + (list.size()-1) );
 	}
 	
-	public NodeWrapper saveToRepository (HttpServletRequest request, ActionErrors  errors) {
+	public NodeWrapper saveToRepository (HttpServletRequest request, EditActivityForm dmForm) {
 		Session jcrWriteSession		= DocumentManagerUtil.getWriteSession(request);
 		HttpSession	httpSession		= request.getSession();
 		TeamMember teamMember		= (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
 		Node homeNode				= DocumentManagerUtil.getUserPrivateNode(jcrWriteSession, teamMember);
 		
-		NodeWrapper nodeWrapper		= new NodeWrapper(this, request, homeNode, false, errors);
+		NodeWrapper nodeWrapper		= new NodeWrapper(this, request, homeNode, false, dmForm);
 		
 		if ( !nodeWrapper.isErrorAppeared() ) {
 			if ( nodeWrapper.saveNode(jcrWriteSession) ) {

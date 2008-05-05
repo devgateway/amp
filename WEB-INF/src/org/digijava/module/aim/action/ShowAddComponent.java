@@ -443,7 +443,18 @@ public class ShowAddComponent extends Action {
 				compFund.setExpenditures(list);			
 				
 				eaForm.getSelectedComponents().add( compFund );
-			
+				Double totdisbur=0d;
+				for (Iterator iterator = eaForm.getSelectedComponents().iterator(); iterator.hasNext();) {
+					Components object = (Components) iterator.next();
+					if ( object.getDisbursements()!=null){
+					for (Iterator iterator2 = object.getDisbursements().iterator(); iterator2
+							.hasNext();) {
+						FundingDetail disdeatils = (FundingDetail) iterator2.next();
+						totdisbur = totdisbur + FormatHelper.parseDouble(disdeatils.getTransactionAmount());
+						}
+					}
+				}
+				eaForm.setCompTotalDisb(totdisbur);
 				return mapping.findForward("updated");
 			}
 		} 

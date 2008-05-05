@@ -152,7 +152,14 @@ public class AddTeamMember extends Action {
 			newAppSettings.setUseDefault(new Boolean(true));
 
 			Site site = RequestUtils.getSite(request);
-			TeamUtil.addTeamMember(newMember,newAppSettings,site);
+			try{
+				TeamUtil.addTeamMember(newMember,newAppSettings,site);
+			}catch (Exception e){
+					e.printStackTrace();
+					logger.error("error when trying to add a new member: " + newMember.getUser().getEmail() + " from team: "
+							+ newMember.getAmpTeam().getName());
+				}
+			
 			upMemForm.setEmail(null);
 			upMemForm.setRole(null);
 			upMemForm.setTeamName(null);

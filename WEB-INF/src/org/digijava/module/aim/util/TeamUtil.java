@@ -30,6 +30,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -765,21 +766,19 @@ public class TeamUtil {
                                      AmpApplicationSettings appSettings, Site site) {
         Session session = null;
         Transaction tx = null;
-
+       
         try {
             session = PersistenceManager.getRequestDBSession();
             tx = session.beginTransaction();
             session.save(member);
             session.save(appSettings);
             
-            
             if(member.getAmpMemberRole().getTeamHead()) {
                 AmpTeam team = (AmpTeam) session.load(AmpTeam.class, (Serializable) member.getAmpTeam().getIdentifier());
                 team.setTeamLead(member);
                 session.update(team);
             }
-            User user = (User) session.load(User.class, member.getUser()
-                                            .getId());
+            User user = (User) session.load(User.class, member.getUser().getId());
             String qryStr = "select grp from " + Group.class.getName()
                 + " grp " + "where (grp.key=:key) and (grp.site=:sid)";
             Query qry = session.createQuery(qryStr);
@@ -794,6 +793,7 @@ public class TeamUtil {
             logger.debug("User added to group " + group.getName());
         } catch(Exception e) {
             logger.error("Exception from addTeamMember :" + e);
+            e.printStackTrace();
             if(tx != null) {
                 try {
                     tx.rollback();

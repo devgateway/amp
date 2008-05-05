@@ -1911,7 +1911,7 @@ function collapseAll() {
                                                                                   </tr> 
                                                                                   </field:display>
                                                                                   
-                                                                                  <field:display name="Activity Category" feature="Contracting">
+                                                                                  <field:display name="Contracting Activity Category" feature="Contracting">
                                                                                    <tr>
                                                                                      <td align="left">
                                                                                   	     <b><digi:trn key="aim:IPA:popup:actCat">Activity Category:</digi:trn></b>
@@ -1933,7 +1933,7 @@ function collapseAll() {
                                                                                     </tr>
                                                                                     </field:display>
                                                                                     
-                                                                                    <field:display name="Start of Tendering" feature="Contracting">
+                                                                                    <field:display name="Contracting Start of Tendering" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:startOfTendering">Start of Tendering:</digi:trn></b>
@@ -2012,7 +2012,7 @@ function collapseAll() {
                                                                                         </tr>
                                                                                         </field:display>
                                                                                         
-                                                                                        <field:display name="Total Amount" feature="Contracting">
+                                                                                        <field:display name="Contracting Total Amount" feature="Contracting">
                                                                                         	<tr>
                                                                                             	<td align="left">
                                                                                                 	<b><digi:trn key="aim:IPA:popup:totalAmount">Total Amount</digi:trn>:</b>
@@ -2032,7 +2032,7 @@ function collapseAll() {
                                                                                         </tr>
                                                                                         </field:display>
                                                                                         
-                                                                                        <field:display name="IB" feature="Contracting">
+                                                                                        <field:display name="Contracting IB" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:IB">IB</digi:trn>:</b>
@@ -2044,7 +2044,7 @@ function collapseAll() {
                                                                                         </tr>
                                                                                         </field:display>
                                                                                         
-                                                                                        <field:display name="INV" feature="Contracting">
+                                                                                        <field:display name="Contracting INV" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:INV">INV:</digi:trn></b>
@@ -2059,7 +2059,7 @@ function collapseAll() {
                                                                                         
                                                                                         
                                                                                         
-                                                                                        <field:display name="Total National Contribution" feature="Contracting">
+                                                                                        <field:display name="Contracting Total National Contribution" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left" colspan="2">
                                                                                                 <b><digi:trn key="aim:IPA:popup:totalNationalContribution">Total National Contribution:</digi:trn></b>
@@ -2067,7 +2067,7 @@ function collapseAll() {
                                                                                         </tr>
                                                                                         </field:display>
                                                                                         
-                                                                                        <field:display name="Central" feature="Contracting">
+                                                                                        <field:display name="Contracting Central Amount" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:Central">Central</digi:trn>:</b>
@@ -2079,7 +2079,7 @@ function collapseAll() {
                                                                                         </tr>
                                                                                         </field:display>
                                                                                         
-                                                                                        <field:display name="Regional" feature="Contracting">
+                                                                                        <field:display name="Contracting Regional Amount" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:Regional">Regional</digi:trn>:</b>
@@ -2092,7 +2092,7 @@ function collapseAll() {
                                                                                         </tr>
                                                                                         </field:display>
                                                                                         
-                                                                                        <field:display name="IFIs" feature="Contracting">
+                                                                                        <field:display name="Contracting IFIs" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:IFIs">IFIs</digi:trn>:</b>
@@ -2113,7 +2113,7 @@ function collapseAll() {
                                                                                         </tr>
                                                                                         </field:display>
                                                                                         
-                                                                                        <field:display name="IB" feature="Contracting">
+                                                                                        <field:display name="Contracting IB" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:IB">IB:</digi:trn></b>

@@ -1,0 +1,1 @@
+insert into amp_global_settings (settingsName, settingsValue, description) values("Default Exchange Rate Separator",",","Default Exchange Rate Separator used for importing files");

@@ -195,7 +195,7 @@ public class FormatHelper {
 	  SimpleDateFormat formater=new SimpleDateFormat(defaultFormat);
 	  GregorianCalendar result=new GregorianCalendar();
 	try {
-	    result.setTime(formater.parse(sDate));
+	    if(sDate!=null) result.setTime(formater.parse(sDate));
 	} catch (ParseException e) {
 	    // TODO Auto-generated catch block
 	   throw new Exception("The source string has not a format according to globbal setting "+defaultFormat,e );

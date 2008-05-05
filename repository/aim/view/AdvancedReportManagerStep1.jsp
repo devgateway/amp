@@ -290,6 +290,7 @@ function checkUncheckAll2() {
 												<field:display name="Implementation Level" feature="Location">&nbsp;</field:display>
 											<field:display name="Actual Completion Date" feature="Planning">&nbsp;</field:display>
 											<field:display name="Sector" feature="Sectors">&nbsp;</field:display>
+											<field:display name="Secondary Sector" feature="Sectors">&nbsp;</field:display>
 											<field:display name="Componente" feature="Planning">&nbsp;</field:display>											
 												<field:display name="Region" feature="Location">&nbsp;</field:display>
 											<field:display name="Financing Instrument" feature="Funding Organizations">&nbsp;</field:display>
@@ -324,6 +325,7 @@ function checkUncheckAll2() {
 												<field:display name="Indicator Base Value" feature="Activity">&nbsp;</field:display>
 												<field:display name="Indicator Target Value" feature="Activity">&nbsp;</field:display>
 											<field:display name="Sub-Sector" feature="Sectors">&nbsp;</field:display>
+											<field:display name="Secondary Sub-Sector" feature="Sectors">&nbsp;</field:display>
 											<field:display name="Sub-Sub-Sector" feature="Sectors">&nbsp;</field:display>
 			                            	<field:display name="National Planning Objectives" feature="NPD Programs">&nbsp;</field:display>
 			                            	<field:display name="Primary Program" feature="NPD Programs">&nbsp;</field:display>

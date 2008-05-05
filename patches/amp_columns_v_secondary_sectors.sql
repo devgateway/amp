@@ -1,0 +1,1 @@
+insert into amp_columns(columnName, cellType, extractorview) values("Secondary Sector", "org.dgfoundation.amp.ar.cell.MetaTextCell","v_secondary_sectors");

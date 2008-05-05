@@ -245,6 +245,32 @@ public class TranslatorManager extends Action {
 									}
 									
 								}
+								else 
+									if(request.getParameter("LANG:"+tMngForm.getSelectedImportedLanguages()[i]).compareTo("nonexisting")==0)
+									{
+										while(it.hasNext())
+										{
+											TrnHashMap tHP=(TrnHashMap)it.next();
+											if(tHP.getLang().compareTo(tMngForm.getSelectedImportedLanguages()[i])==0)
+											{
+												Iterator iti=tHP.getTranslations().iterator();
+												while(iti.hasNext())
+												{
+													Trn element=(Trn) iti.next();
+												
+													Message msg= new Message();
+													msg.setKey(element.getMessageKey());
+													msg.setLocale(element.getLangIso());
+													msg.setSiteId(element.getSiteId());
+													msg.setMessage(element.getValue());
+													msg.setCreated(new java.sql.Timestamp(element.getCreated().getTime().getTime()));//element.getCreated());
+													this.updateNonExistingTranslationMessage(msg,tMngForm.getSelectedImportedLanguages()[i]);
+													
+												}
+											}
+										}
+										
+									}
 							//ifoverwrite
 							
 							
@@ -447,7 +473,46 @@ public class TranslatorManager extends Action {
 			}
 		}
 	}
+	
+	private void updateNonExistingTranslationMessage(Object o, String lang)
+	{
+		Session session = null;
+		Message msgLocal=(Message)o;
+		Query qry;
+		String qryStr;
+		
+		try{
+				session				= PersistenceManager.getSession();
+				Transaction tx=session.beginTransaction();
+				qryStr	= "select m from "
+					+ Message.class.getName() + " m "
+					+ "where (m.key=:msgKey) and (m.locale=:langIso)";
+				qry= session.createQuery(qryStr);
+				qry.setParameter("msgKey", msgLocal.getKey(), Hibernate.STRING);
+				qry.setParameter("langIso", lang, Hibernate.STRING);
+				
+				if (qry.list().isEmpty()) {
+				session.save(msgLocal);
+				}
+				tx.commit();
+				session.close();
+		}
+		catch (Exception ex) {
+			logger.error("Error...Inserting non existing messages... " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		} 
+		finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+	}
 
+	
 	private void updateNewTranslationMessage(Object o, String lang)
 	{
 		Session session = null;
@@ -507,5 +572,7 @@ public class TranslatorManager extends Action {
 			}
 		}
 	}
+
+	
 	
 }

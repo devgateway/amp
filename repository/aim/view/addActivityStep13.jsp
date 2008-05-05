@@ -305,7 +305,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             
                                                                                         </tr>
                                                                                     </field:display>
-                                                                                        <field:display name="Description" feature="Contracting">
+                                                                                        <field:display name="Contract Description" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:description">Description:</digi:trn></b>
@@ -315,7 +315,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             </td>
                                                                                         </tr>
                                                                                          </field:display>
-                                                                                        <field:display name="Activity Category" feature="Contracting">
+                                                                                        <field:display name="Contracting Activity Category" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:actCat">Activity Category:</digi:trn></b>
@@ -328,7 +328,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             </td>
                                                                                         </tr>
                                                                                          </field:display>
-                                                                                         <field:display name="Type" feature="Contracting">
+                                                                                         <field:display name="Contracting Type" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:type">type</digi:trn>:</b>
@@ -341,7 +341,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             </td>
                                                                                         </tr>
                                                                                          </field:display>
-                                                                                         <field:display name="Start of Tendering" feature="Contracting">
+                                                                                         <field:display name="Contracting Start of Tendering" feature="Contracting">
                                                                                         
                                                                                         <tr>
                                                                                             <td align="left">
@@ -431,7 +431,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             </td>
                                                                                         </tr>
                                                                                          </field:display>
-                                                                                        <field:display name="Total Amount" feature="Contracting">
+                                                                                        <field:display name="Contracting Total Amount" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:ipa:popup:totalAmount">Total Amount</digi:trn>:</b>
@@ -449,7 +449,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             </td>
                                                                                         </tr>
                                                                                          </field:display>
-                                                                                        <field:display name="IB" feature="Contracting">
+                                                                                        <field:display name="Contracting IB" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:ipa:popup:ib">IB</digi:trn>:</b>
@@ -460,7 +460,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             </td>
                                                                                         </tr>
                                                                                          </field:display>
-                                                                                        <field:display name="INV" feature="Contracting">
+                                                                                        <field:display name="Contracting INV" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:ipa:popup:inv">INV</digi:trn>:</b>
@@ -471,14 +471,14 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             </td>
                                                                                         </tr>   
                                                                                          </field:display>
-                                                                                        <field:display name="Total National Contribution" feature="Contracting">
+                                                                                        <field:display name="Contracting Total National Contribution" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left" colspan="2">
                                                                                                 <b><digi:trn key="aim:IPA:popup:totalNationalContribution">Total National Contribution:</digi:trn></b>
                                                                                             </td>
                                                                                         </tr>
                                                                                          </field:display>
-                                                                                        <field:display name="Central" feature="Contracting">
+                                                                                        <field:display name="Contracting Central Amount" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:ipa:popup:central">Central</digi:trn>:</b>
@@ -489,7 +489,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             </td>
                                                                                         </tr>
                                                                                          </field:display>
-                                                                                        <field:display name="Regional" feature="Contracting">
+                                                                                        <field:display name="Contracting Regional Amount" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:ipa:popup:regional">Regional</digi:trn>:</b>
@@ -501,7 +501,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             </td>
                                                                                         </tr>
                                                                                          </field:display>
-                                                                                        <field:display name="IFIs" feature="Contracting">
+                                                                                        <field:display name="Contracting IFIs" feature="Contracting">
                                                                                         <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:ipa:popup:ifis">IFIs</digi:trn>:</b>

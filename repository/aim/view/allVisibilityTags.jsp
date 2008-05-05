@@ -101,7 +101,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <feature:display name="Costing Tab" module="Activity Costing"></feature:display>
 <feature:display name="Costing" module="Activity Costing"></feature:display>
 <feature:display name="Cross Cutting Issues" module="Cross Cutting Issues"></feature:display>
-<feature:display name="Dashboard" module="M & E"></feature:display>
+<feature:display name="Portfolio Dashboard" module="M & E"></feature:display>
 <field:display name="Multi Sector Configuration" feature="Sectors"></field:display>
 <feature:display name="Activity Dashboard" module="M & E"></feature:display>
 <feature:display name="Donor Contact Information" module="Contact Information"></feature:display>
@@ -377,8 +377,8 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Physical progress description" feature="Physical Progress"></field:display>
 <field:display name="Physical progress title" feature="Physical Progress"></field:display>
 <field:display name="Primary Program" feature="NPD Programs"></field:display>
-<field:display name="Printer Friendly Button Performance" feature="Dashboard"></field:display>
-<field:display name="Printer Friendly Button Risk" feature="Dashboard"></field:display>
+<field:display name="Printer Friendly Button Performance" feature="Portfolio Dashboard"></field:display>
+<field:display name="Printer Friendly Button Risk" feature="Portfolio Dashboard"></field:display>
 <field:display name="Program Background" feature="Admin NPD"></field:display>
 <field:display name="Program Beneficiaries" feature="Admin NPD"></field:display>
 <field:display name="Program Code" feature="Admin NPD"></field:display>
@@ -470,7 +470,7 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Web Resource Description" feature="Web Resources"></field:display>
 <field:display name="Web Resources Title" feature="Web Resources"></field:display>
 <field:display name="Web Resources Url" feature="Web Resources"></field:display>
-<field:display name="Without Baseline Button Performance" feature="Dashboard"></field:display>
+<field:display name="Without Baseline Button Performance" feature="Portfolio Dashboard"></field:display>
 <field:display name="Executing Agency" feature="Executing Agency"></field:display>
 <field:display name="Percentage" feature="Sectors"></field:display>
 <field:display name="Implementing Agency" feature="Implementing Agency"></field:display>

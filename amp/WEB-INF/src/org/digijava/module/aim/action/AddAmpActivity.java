@@ -255,6 +255,9 @@ public class AddAmpActivity extends Action {
                                     ActivitySector actSect = (ActivitySector) iter
                                         .next();
                                     if (actSect.getConfigId().equals(selectedSector.getConfigId())) {
+                                    	if(selectedSector.getSectorPercentage()==100f){
+                                    		selectedSector.setSectorPercentage(0f);
+                                    	}	
                                         firstSecForConfig = false;
                                         break;
                                     }
@@ -342,6 +345,9 @@ public class AddAmpActivity extends Action {
                             ActivitySector actSect = (ActivitySector) iter
                                 .next();
                             if (actSect.getConfigId().equals(selectedSector.getConfigId())) {
+                            	if(actSect.getSectorPercentage()==100f){
+                            		actSect.setSectorPercentage(0.0f);
+                            	}                            	
                                 firstSecForConfig = false;
                                 break;
                             }

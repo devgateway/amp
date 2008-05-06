@@ -305,30 +305,22 @@ background-color: yellow;
 		return true;
 	}
 	function rangeReset(){
-	
-	 if(document.aimReportsFilterPickerForm2.fromYear){
-	    document.aimReportsFilterPickerForm2.fromYear.selectedIndex=0;
-	 }
-	 if(document.aimReportsFilterPickerForm2.toYear){
-	 	document.aimReportsFilterPickerForm2.toYear.selectedIndex=0;
-	 }  
+		if(document.aimReportsFilterPickerForm2.fromYear){
+	    	document.aimReportsFilterPickerForm2.fromYear.selectedIndex=0;
+	 	}
+	 	if(document.aimReportsFilterPickerForm2.toYear){
+	 		document.aimReportsFilterPickerForm2.toYear.selectedIndex=0;
+	 	}  
 	}
 	function changeRange(){
-	  //alert(document.getElementsByName('aimReportsFilterPickerForm').length);
-      if(document.aimReportsFilterPickerForm2.countYear){
-        var cant = document.aimReportsFilterPickerForm2.countYear.value;
-        var actualFrom = document.aimReportsFilterPickerForm2.fromYear.value;
-        var actualTo = document.aimReportsFilterPickerForm2.toYear.value;
-        var initialYear = document.aimReportsFilterPickerForm2.countYearFrom.value;
-      	//alert("countYear "+ document.aimReportsFilterPickerForm2.countYear.value+
-      	//		" - From " + actualFrom+" - To "+actualTo + " - countYearFrom "+ initialYear);
-
-      	document.aimReportsFilterPickerForm2.fromYear.length=0;
+		var cant = document.aimReportsFilterPickerForm2.countYear.value;
+		var actualFrom = document.aimReportsFilterPickerForm2.fromYear.value;
+		var actualTo = document.aimReportsFilterPickerForm2.toYear.value;
+		var initialYear = document.aimReportsFilterPickerForm2.countYearFrom.value;
+		document.aimReportsFilterPickerForm2.fromYear.length=0;
       	document.aimReportsFilterPickerForm2.toYear.length=0;
       	var masterFrom=document.aimReportsFilterPickerForm2.fromYear;
       	var masterTo=document.aimReportsFilterPickerForm2.toYear;
-        //alert("countYear "+ document.aimReportsFilterPickerForm2.countYear.value+
-      	//	" - From " + actualFrom+" - To "+actualTo + " - countYearFrom "+ initialYear);
       	masterFrom.options[0]=new Option("All", "-1", false, true);
 		for (i=1; i<=cant; i++){
 		    var year  = parseInt(initialYear)+ i;
@@ -349,9 +341,6 @@ background-color: yellow;
 				masterTo.options[i]=new Option(year, year, false, false);
 			}	
 		}
-		
-      }	
-     	
 	}
 	function hideFilter() {
 		myPanel1.hide();

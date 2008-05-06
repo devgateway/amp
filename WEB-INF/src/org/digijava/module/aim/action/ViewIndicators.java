@@ -59,6 +59,7 @@ public class ViewIndicators
       
       
        allIndForm.setSectors(allSectors);
+       allInds.clear();
        for(AmpIndicator indicator : searchResult){
         	
         	
@@ -99,20 +100,19 @@ public class ViewIndicators
   			}else{
   				addFlag=true;
   			}
-         	 if(addFlag) {
-               if(allIndForm.getKeyword() != null  && (indbean.getName().toLowerCase().indexOf(allIndForm.getKeyword().toLowerCase()) > -1)) {
-            	  if(allIndForm.getKeyword() != ""){
-            	   allInds.clear();
-            	   allInds.add(indbean);
-            	   break;
-            	  }
-            	  allInds.add(indbean);
-               } else {
-                   allInds.add(indbean);
-               }
-           }
-          
-        }
+         	if (addFlag) {
+				if (allIndForm.getKeyword() != ""
+						&& allIndForm.getKeyword() != null) {
+					if (indbean.getName().toLowerCase().indexOf(
+							allIndForm.getKeyword().toLowerCase()) > -1) {
+						allInds.add(indbean);
+					}
+				} else {
+					allInds.add(indbean);
+				}
+			}
+		}
+         	 
  
         switch(allIndForm.getSortBy()) {
             case 0: {

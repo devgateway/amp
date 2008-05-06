@@ -165,6 +165,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setToYears(new ArrayList<BeanWrapperImpl>());
 		filterForm.setFromMonths(new ArrayList<BeanWrapperImpl>());
 		filterForm.setToMonths(new ArrayList<BeanWrapperImpl>());
+		filterForm.setCountYears(new ArrayList<BeanWrapperImpl>());
 		filterForm.setPageSizes(pageSizes);
 		filterForm.setRegionSelectedCollection(regions);
 		filterForm.setDonorTypes(donorTypes);
@@ -183,8 +184,18 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 		
 		Long yearFrom=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.YEAR_RANGE_START));
-		
-		Long countYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));
+		Long countYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));		
+		if(filterForm.getCountYear()==null){
+			filterForm.setCountYear(countYear);
+		}
+
+		if(filterForm.getCountYearFrom()==null){
+			filterForm.setCountYearFrom(yearFrom);
+		}
+
+		for (long i=10; i<=100; i+=10){
+		    filterForm.getCountYears().add(new BeanWrapperImpl(new Long(i)));
+		}
 		
 		for (long i=yearFrom; i <= (yearFrom+countYear);i++){
 		    filterForm.getFromYears().add(new BeanWrapperImpl(new Long(i)));

@@ -11,6 +11,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 	<!-- Disbursement orders-->
+	<!-- Comment added by mouhamad for burkina AMP-3361
 	<tr bgcolor="#ffffff">
 		<td height="25" colspan="5" bgcolor="#FFFFCC" style="text-transform: uppercase"><a
 			title='<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>'>
@@ -59,22 +60,21 @@
 			</logic:equal>
 		</logic:iterate>
 	</c:if>
-	<tr>
+	 -->
+	<!-- tr>
 		<td colspan="2" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;"><digi:trn
 			key='aim:totalPlannedDisbursementOrder'>
-                                                                                TOTAL<a
-				title='&lt;digi:trn key=&quot;aim:FundRelease&quot;&gt;Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor &lt;/digi:trn&gt;'>
+            TOTAL<a title='&lt;digi:trn key=&quot;aim:FundRelease&quot;&gt;Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor &lt;/digi:trn&gt;'>
 			PLANNED <digi:trn key="aim:actualdisbursementOrders"> DISBURSMENT ORDERS</digi:trn>
-			</a>
-	  </digi:trn>
+			</a></digi:trn>
 	  </td><TD align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;"><bean:write
 			name="aimEditActivityForm" property="totalPlannedDisbursementsOrders" />		  <bean:write
 			name="aimEditActivityForm" property="currCode" /></TD>
 	    <TD align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;">&nbsp;</TD>
-	</tr>
+	</tr-->
 	<tr bgcolor="#ffffff">
 		<td height="7" colspan="5" bgcolor="#ffffff"></td>
 	</tr>

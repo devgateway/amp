@@ -696,7 +696,7 @@ function validate()
 }
 
 function checkAmount(val){
-  if(val.match("[^0-9.,]")){
+  if(val.match("[^0-9., ]")){
     return false;
   }
   return true;

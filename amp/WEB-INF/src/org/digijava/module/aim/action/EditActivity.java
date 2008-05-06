@@ -1383,13 +1383,18 @@ public class EditActivity
           eaForm.setReportingOrgs(new ArrayList());
           eaForm.setSectGroups(new ArrayList());
           eaForm.setRegGroups(new ArrayList());
+          eaForm.setRespOrganisations(new ArrayList());
 
           Set relOrgs = activity.getOrgrole();
           if (relOrgs != null) {
             Iterator relOrgsItr = relOrgs.iterator();
             while (relOrgsItr.hasNext()) {
               AmpOrgRole orgRole = (AmpOrgRole) relOrgsItr.next();
-            
+              if (orgRole.getRole().getRoleCode().equals(
+                      Constants.RESPONSIBLE_ORGANISATION)
+                      && (!eaForm.getRespOrganisations().contains(orgRole.getOrganisation()))) {
+                	  eaForm.getRespOrganisations().add(orgRole.getOrganisation());
+                 }          
               if (orgRole.getRole().getRoleCode().equals(
                   Constants.EXECUTING_AGENCY)
                   && (!eaForm.getExecutingAgencies().contains(orgRole))) {

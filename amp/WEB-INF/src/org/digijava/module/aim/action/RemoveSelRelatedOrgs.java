@@ -122,7 +122,17 @@ public class RemoveSelRelatedOrgs extends Action {
 								}
 							}
 						}		
-			
+							else
+								if (eaForm.getItem() == 9) {
+									Long selOrgs[] = eaForm.getSelRespOrganisations();
+									if (selOrgs != null) {
+										for (int i = 0;i < selOrgs.length;i ++) {
+											AmpOrganisation org = new AmpOrganisation();
+											org.setAmpOrgId(selOrgs[i]);
+											eaForm.getRespOrganisations().remove(org);
+									}
+								}
+							}		
 		}
 		return mapping.findForward("forward");
 	}

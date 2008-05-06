@@ -44,6 +44,7 @@ public class SearchIndicators extends Action {
 			indForm.setSearchReturn(null);
 			indForm.setSelectedSectorsForInd(null);
 			indForm.setShowAddInd(false);
+			indForm.setSelectedIndicators(null);
 		}
 		
 		Collection searchResult = null;

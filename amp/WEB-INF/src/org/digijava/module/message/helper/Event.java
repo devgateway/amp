@@ -6,6 +6,7 @@ package org.digijava.module.message.helper;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,6 +37,16 @@ public class Event {
      * the creation date when the event was generated
      */
     private Date creationDate;
+    
+    /**
+     * This may contain extra recipients, created dynamically. The messaging system
+     * will process this and append those to the final message destination. 
+     * This list can hold Teams or Team Members or both. The messaging system needs
+     * to handle this separately, it needs to know how to send a message to several
+     * team members or to an entire Team (which means it will extract the members 
+     * of that team)
+     */
+    private List extraRecipients;
     
     /**
      * the trigger object that generated this event. useful to see who wants to receive
@@ -75,5 +86,13 @@ public class Event {
 
     public void setTrigger(Class trigger) {
         this.trigger = trigger;
+    }
+
+    public List getExtraRecipients() {
+        return extraRecipients;
+    }
+
+    public void setExtraRecipients(List extraRecipients) {
+        this.extraRecipients = extraRecipients;
     }
 }

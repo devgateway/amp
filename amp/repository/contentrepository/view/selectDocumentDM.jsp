@@ -34,7 +34,9 @@
 
 <br />
 <div id="otherDocumentsDiv">&nbsp;</div>
-<button onclick="saveSelectedDocuments()" type="button"><digi:trn key="btn:submitDocumentsFromRepository">Submit this</digi:trn></button> 
+<html:button  styleClass="buton" property="submitButton" onclick="saveSelectedDocuments()" >
+	<digi:trn key="btn:submitDocumentsFromRepository">Submit this</digi:trn>
+</html:button>
 <br /><br />
 &nbsp;&nbsp;
 	<c:set var="translation">

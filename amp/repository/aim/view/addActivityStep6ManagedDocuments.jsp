@@ -78,9 +78,9 @@
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-													
-														<input type="button" value="Add Managed Documents" class="buton" 
-														onclick="addManagedDocuments()" class="buton">
+														<html:button  styleClass="buton" property="submitButton" onclick="addManagedDocuments()">
+																	<digi:trn key="btn:addManagedDocuments">Add Managed Documents</digi:trn>
+														</html:button>
 													</td>
 												</tr>
 											</table>

@@ -1124,7 +1124,7 @@ function collapseAll() {
 																		<tr>
 																			<td valign="top" width="100" bgcolor="#ffffff">
 																				<digi:trn key="aim:expenditures">
-																				Expenditures</digi:trn>																			</td>
+																				Expenditures</digi:trn>																		</td>
 																			<td bgcolor="#ffffff">
 																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																					<c:forEach var="fd" items="${regFunds.expenditures}">

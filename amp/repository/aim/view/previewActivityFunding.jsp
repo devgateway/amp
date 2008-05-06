@@ -142,27 +142,24 @@
 														<jsp:include page="previewActivityFundingExpenditures.jsp" />
 													</feature:display>
 													<tr>
-
-														<feature:display module="Funding"															name="Disbursement Orders">
+														
+														<feature:display module="Funding"
+															name="Disbursement Orders">
 															<jsp:include page="previewActivityFundingDisbursementOrders.jsp" />
 														</feature:display>
 														
 														<td colspan="4" height="18"
 															style="border-bottom: 1px dotted #000000"></td>
 													<tr>
-													
-													<jsp:include page="previewActivityFundingUndisbursedBalance.jsp" />
 												</table>
 												<!-- end funding detail --></td>
 												</tr>
 												<tr>
 
-													<td bgcolor="#ffffff">
-													<!-- <FONT color=blue>* <digi:trn
+													<td bgcolor="#ffffff"><FONT color=blue>* <digi:trn
 														key="aim:theAmountEnteredAreInThousands">
 																				The amount entered are in thousands (000)		  																	</digi:trn>
-													</FONT>-->
-													</td>
+													</FONT></td>
 												</tr>
 											</table>
 											</td>

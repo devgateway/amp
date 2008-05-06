@@ -160,6 +160,9 @@
 <c:set var="translation_validation_filedata">
 			<digi:trn key="contentrepository:plsSpecifyPath">Please select a file path !</digi:trn>
 </c:set>
+<c:set var="translation_unableToRetriveDocuments">
+			<digi:trn key="contentrepository:unableToRetriveDocs">Unable to retrieve requested documents</digi:trn>
+</c:set>
 
 <c:set var="translation_mandatory_fields">
 			<digi:trn key="contentrepository:mandatoryFieldsMsg">The marked fields are mandatory</digi:trn>
@@ -192,12 +195,38 @@
 <c:set var="trans_cmDocType">
 	<digi:trn key="contentrepository:TableHeader:CmDocType">Document Type</digi:trn>  
 </c:set>
+
 <c:set var="trans_headerDescription">
 	 <digi:trn key="contentrepository:TableHeader:Description">Description</digi:trn>
 </c:set>
 
 <c:set var="trans_headerActions">
 	<digi:trn key="contentrepository:TableHeader:Actions">Actions</digi:trn>
+</c:set>
+
+
+<c:set var="trans_teamMemberDocuments">
+	<digi:trn key="contentrepository:MenuItem:TeamMemberDocuments">Team Member Documents</digi:trn>
+</c:set>
+
+<c:set var="trans_teamDocuments">
+	<digi:trn key="contentrepository:MenuItem:TeamDocuments">Team Documents</digi:trn>
+</c:set>
+
+<c:set var="trans_publicDocuments">
+	<digi:trn key="contentrepository:MenuItem:PublicDocuments">Public Documents</digi:trn>
+</c:set>
+
+<c:set var="trans_options">
+	<digi:trn key="contentrepository:MenuItem:Options">Options</digi:trn>
+</c:set>
+
+<c:set var="trans_optionsShowOnlyDocuments">
+	<digi:trn key="contentrepository:MenuItem:Options:ShowOnlyDocs">Show only documents</digi:trn>
+</c:set>
+
+<c:set var="trans_optionsShowOnlyWebLinks">
+	<digi:trn key="contentrepository:MenuItem:Options:ShowOnlyWebLinks">Show only web links</digi:trn>
 </c:set>
 
 <script type="text/javascript">
@@ -611,7 +640,7 @@ function getCallbackForOtherDocuments(containerElement, windowController) {
 					//createToolTips(containerElement);
 				},
 		failure: function(o) {
-					containerElement.innerHTML	= "Unable to retrieve requested documents";
+					containerElement.innerHTML	= "${translation_unableToRetriveDocuments}";
 				}
 	};
 	
@@ -643,7 +672,7 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 		membersMenu.addItem(menuItem); 
 
 	</logic:iterate>
-	menu.addItem(  new YAHOO.widget.MenuItem("Team Member Documents", {submenu: membersMenu})   );
+	menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamMemberDocuments}", {submenu: membersMenu})   );
 	</logic:notEmpty>
 	
 	<logic:notEmpty name="meTeamMember">
@@ -657,7 +686,7 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 			
 		};
 		
-	menu.addItem(  new YAHOO.widget.MenuItem("Team Documents", {onclick: onclickObj} )   );
+	menu.addItem(  new YAHOO.widget.MenuItem("${trans_teamDocuments}", {onclick: onclickObj} )   );
 	</logic:notEmpty>
 	
 		var onclickObj 	= {
@@ -666,7 +695,7 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 			
 		};
 		
-	menu.addItem(  new YAHOO.widget.MenuItem("Public Documents", {onclick: onclickObj} )   );
+	menu.addItem(  new YAHOO.widget.MenuItem("${trans_publicDocuments}", {onclick: onclickObj} )   );
 	
 	var scopeObj	= {
 			mItemDoc			: null,
@@ -678,7 +707,7 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 			scope				: windowController
 			
 	};
-	var showDocItem			= new YAHOO.widget.MenuItem("Show only documents", {onclick: onclickObj} );
+	var showDocItem			= new YAHOO.widget.MenuItem("${trans_optionsShowOnlyDocuments}", {onclick: onclickObj} );
 	scopeObj.mItemDoc		= showDocItem;
 	
 	var onclickObj 	= {
@@ -686,13 +715,13 @@ function addMenuToDocumentList (menuNum, containerElement, windowController) {
 			obj					: scopeObj,
 			scope				: windowController
 	};
-	var showLinkItem		= new YAHOO.widget.MenuItem("Show only web links", {onclick: onclickObj});
+	var showLinkItem		= new YAHOO.widget.MenuItem("${trans_optionsShowOnlyWebLinks}", {onclick: onclickObj});
 	scopeObj.mItemLink		= showLinkItem;
 	
 	optionsMenu.addItem( showDocItem );
 	optionsMenu.addItem( showLinkItem );
 	
-	menu.addItem(  new YAHOO.widget.MenuItem("Options", {submenu: optionsMenu})   );
+	menu.addItem(  new YAHOO.widget.MenuItem("${trans_options}", {submenu: optionsMenu})   );
 	
 	menu.render(containerElement);
 	//menu.show();

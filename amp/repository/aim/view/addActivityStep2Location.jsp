@@ -70,7 +70,7 @@
                                             <field:display name="Implementation Location" feature="Location">
                                             <tr>
                                               <td vAlign="center" colspan=5>
-                                              <digi:trn key="aim:regionZoneWored">Select the appropriate Region, Zone or Woreda as needed.</digi:trn>
+                                              <digi:trn key="aim:regionZoneWored"> Select the appropriate Region, Zone or Woreda as needed.</digi:trn>
                                               </td>
                                             </tr>
                                             <tr>
@@ -83,9 +83,10 @@
                                               </td>
                                               <td vAlign="center">
                                               	<c:set var="translation">
-                                              		<digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn>
-                                              	</c:set>
-                                              	<category:showoptions  firstLine="${translation}" name="aimEditActivityForm" property="implemLocationLevel"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
+														<digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn>
+													</c:set>
+													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="implemLocationLevel" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY %>" styleClass="inp-text" />
+												                                             	
                                               	<script language="Javascript">
 
                                               	var implemLocationLevelSelect = document.getElementsByName("implemLocationLevel")[0];

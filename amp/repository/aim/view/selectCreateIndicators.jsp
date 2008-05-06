@@ -158,6 +158,12 @@
 		return true;	
 	}
 	
+	function gotoCreateIndPage() {
+		<digi:context name="addIndPage" property="context/module/moduleinstance/searchIndicators.do?clear=true&addInd=true"/>
+		document.aimIndicatorForm.action = "<%=addIndPage%>";		
+		document.aimIndicatorForm.submit();
+	}
+	
 -->
 </script>
 

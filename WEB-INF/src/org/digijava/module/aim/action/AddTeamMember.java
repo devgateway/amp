@@ -135,11 +135,12 @@ public class AddTeamMember extends Action {
 			}		
 			
 			
-			/* add the default application settings for the user */
+			// add the default application settings for the user  
 			AmpApplicationSettings ampAppSettings = DbUtil
 					.getTeamAppSettings(ampTeam.getAmpTeamId());
 			AmpApplicationSettings newAppSettings = new AmpApplicationSettings();
-			newAppSettings.setTeam(ampAppSettings.getTeam());
+			//newAppSettings.setTeam(ampAppSettings.getTeam());
+			newAppSettings.setTeam(newMember.getAmpTeam());
 			newAppSettings.setMember(newMember);
 			newAppSettings.setDefaultRecordsPerPage(ampAppSettings
 					.getDefaultRecordsPerPage());
@@ -150,7 +151,7 @@ public class AddTeamMember extends Action {
 			newAppSettings.setDefaultPerspective(ampAppSettings
 					.getDefaultPerspective());
 			newAppSettings.setUseDefault(new Boolean(true));
-
+			//newAppSettings.setDefaultTeamReport(ampAppSettings.getDefaultTeamReport());
 			Site site = RequestUtils.getSite(request);
 			try{
 				TeamUtil.addTeamMember(newMember,newAppSettings,site);

@@ -80,7 +80,7 @@ public class UpdateCurrencyRate extends Action {
 				if(st.countTokens()==3)
 				{
 					String code = st.nextToken().trim();
-					double rate = Double.parseDouble(st.nextToken().trim());
+					double rate = FormatHelper.parseDouble(st.nextToken().trim());
 					String date = st.nextToken().trim();
 					currencyRates = new CurrencyRates();
 					currencyRates.setCurrencyCode(code);

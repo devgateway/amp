@@ -1,0 +1,1 @@
+update amp_columns set columnName="Sub-Sub-Sector" where columnName="Sub-Sub-Sub Sector";

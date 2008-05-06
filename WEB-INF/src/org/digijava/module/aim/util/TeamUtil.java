@@ -762,6 +762,28 @@ public class TeamUtil {
         return member;
     }
 
+    public static void testDan(AmpTeamMember member, AmpApplicationSettings appSettings) {
+			Session session = null;
+			Transaction tx = null;
+			
+			try {
+			session = PersistenceManager.getRequestDBSession();
+			//tx = session.beginTransaction();
+			session.saveOrUpdate(member);
+			session.saveOrUpdate(appSettings);
+			
+			}catch(Exception e) {
+	            logger.error("Exception from addTeamMember :" + e);
+	            e.printStackTrace();
+	            if(tx != null) {
+	                try {
+	                    tx.rollback();
+	                } catch(Exception rbf) {
+	                    logger.error("Rollback failed :" + rbf);
+	                }
+	            }
+			}
+    }
     public static void addTeamMember(AmpTeamMember member,
                                      AmpApplicationSettings appSettings, Site site) {
         Session session = null;
@@ -770,13 +792,13 @@ public class TeamUtil {
         try {
             session = PersistenceManager.getRequestDBSession();
             tx = session.beginTransaction();
-            session.save(member);
-            session.save(appSettings);
+            session.saveOrUpdate(member);
+            session.saveOrUpdate(appSettings);
             
             if(member.getAmpMemberRole().getTeamHead()) {
                 AmpTeam team = (AmpTeam) session.load(AmpTeam.class, (Serializable) member.getAmpTeam().getIdentifier());
                 team.setTeamLead(member);
-                session.update(team);
+                session.saveOrUpdate(team);
             }
             User user = (User) session.load(User.class, member.getUser().getId());
             String qryStr = "select grp from " + Group.class.getName()

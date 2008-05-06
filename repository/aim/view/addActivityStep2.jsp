@@ -194,11 +194,32 @@ function validateSectorPercentage(){
     A sector percentage cannot be equal to 0
     </digi:trn>
     </c:set>
+
     <c:set var="errMsgPrimarySectors">
     <digi:trn key="aim:addPrimarySectorsErrorMessage">
     Please add primary sectors
     </digi:trn>
     </c:set>
+    
+    <c:set var="errInPrimarySector">
+    <digi:trn key="aim:errorInPrimarySector">
+    Error in Primary Sector
+    </digi:trn>
+    </c:set>
+
+    <c:set var="errInSecondarySector">
+    <digi:trn key="aim:errorInSecondarySector">
+    Error in Secondary Sector
+    </digi:trn>
+    </c:set>
+
+    <c:set var="errInBothSector">
+    <digi:trn key="aim:errorInBothSector">
+    Error in Primary and Secondary Sector
+    </digi:trn>
+    </c:set>
+    
+    
     var i;
     var flag = false;
     var primConf=document.getElementById('primaryConfig');
@@ -206,7 +227,8 @@ function validateSectorPercentage(){
         alert("${errMsgPrimarySectors}");
         return false;
      }
-    
+    var sum_prim_sector=false;
+    var sum_sec_sector=false;
     var cnt = document.aimEditActivityForm.sizeSectorConfigs.value;
     for(i=1;i<=cnt;i++) {
         var id="config"+i;
@@ -227,35 +249,62 @@ function validateSectorPercentage(){
             if (inputs[j].type == "text") {
                 var val=inputs[j].value;
                 if (val == "" || val == null) {
-                    alert("${errMsgAddPercentage}");
-                         inputs[j].focus();
-                          return false;
-                        
-                    }
-                    if (val == 0){
-                        alert("${errMsgZeroPercentage}");
-                            inputs[j].focus();
-                            return false;
+                	if(i==1){
+                    	alert("${errInPrimarySector} -  ${errMsgAddPercentage}");
+                	}
+                	else if(i==2){
+                		alert("${errInSecondarySector} -  ${errMsgAddPercentage}");
+                	}
+                	else{
+                	    alert("assert: something goes wrong with %");
+                	}    
+                    inputs[j].focus();
+                    return false;                        
+                }
+                if (val == 0){
+                	if(i==1){
+                    	alert("${errInPrimarySector} -  ${errMsgZeroPercentage}");
+                	}
+                	else if(i==2){
+                		alert("${errInSecondarySector} -  ${errMsgZeroPercentage}");
+                	}
+                	else{
+                	    alert("assert: something goes wrong with %");
+                	}    
+                    inputs[j].focus();
+                    return false;
                             
-                        }
-                     
-                        sum+=parseFloat(val);
-                        
-                    }
                 }
-                    
-                if (sum != 100&&sum>0) {
-                    alert("${errMsgSumPercentage}");
-                        return false;
-                    }
-                  
-                    
-                }
-                
-                return true;
-                
-                
+                sum+=parseFloat(val);
             }
+        }
+                 
+        if (sum!=100&&sum>0) {
+            if(i==1){
+               sum_prim_sector=true;    
+            }
+            else if (i==2){
+               sum_sec_sector=true;
+            }
+            else{
+               alert("assert: something goes wrong");
+            }
+        }
+    }
+    if(sum_prim_sector && sum_sec_sector){
+        alert("${errInBothSector} - ${errMsgSumPercentage}");
+        return false;
+    }
+    else if(sum_prim_sector){
+    	alert("${errInPrimarySector} - ${errMsgSumPercentage}");
+    	return false;
+    }
+    else if(sum_sec_sector){
+		alert("${errInSecondarySector} - ${errMsgSumPercentage}");
+		return false;    
+    }    
+    return true;
+}
             
     
  

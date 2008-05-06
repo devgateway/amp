@@ -4,7 +4,7 @@
 	[ ]  tag "AMP -Home"
 	[ ] 
 	[ ]  // The URL of this page
-	[ ]  const sLocation = "http://amp-staging.code.ro:8080/showLayout.do?layout=login"
+	[ ]  const sLocation = "http://czech.ampdev.net/showLayout.do?layout=login"
 	[ ] 
 	[ ]  // The login user name
 	[ ]  // const sUserName = ?
@@ -526,11 +526,10 @@
 			[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho[6]"
 [ ] 
 [+] window BrowserChild AMPMyDesktop
-	[ ] tag "AMP- My Desktop" //
+	[ ] tag "AMP - My Desktop" //
 	[ ] parent Browser
 	[+] HtmlPushButton AddActivity
 		[-] multitag "&name='addActivity'"
-			[ ] "Add Activity"
 			[ ] "$addActivity[1]"
 	[+] HtmlTable CurrentlySelectedFiltersU
 		[-] multitag "&id='reportTable'"
@@ -542,12 +541,12 @@
 				[ ] tag "Ongoing[13]"
 	[+] HtmlList ProjectManagementPlatformP
 		[ ] tag "Project Management Platform (PMP)"
-		[-] HtmlLink CALENDAR
+		[+] HtmlLink CALENDAR
 			[-] multitag "::: CALENDAR"
-				[ ] "$http:??amp-montenegro.code.ro?calendar?showCalendarView.do"
-		[-] HtmlLink REPORTS
+				[ ] "$http:??*?calendar?showCalendarView.do"
+		[+] HtmlLink REPORTS
 			[-] multitag "::: REPORTS"
-				[ ] "$http:??amp-montenegro.code.ro?aim?viewTeamReports.do"
+				[ ] "$http:??*?aim?viewTeamReports.do"
 [ ] 
 [+] window BrowserChild AMPAddActivityStep2
 	[ ] tag "AMP - Add Activity - References"
@@ -558,7 +557,7 @@
 	[ ] 
 [ ] 
 [+] window BrowserChild AMPSelectOrganizations
-	[ ] tag "AMP - Select Organization"
+	[ ] tag "*AMP - Select Organization"
 	[ ] parent Browser
 	[+] HtmlPushButton Search
 		[-] multitag "&name='submitButton'"
@@ -652,7 +651,7 @@
 	[ ] 
 [ ] 
 [+] window BrowserChild AMPSelectLocation
-	[ ] tag "AMP - Select Location"
+	[ ] tag "*AMP - Select Location"
 	[ ] parent Browser
 	[+] HtmlPopupList Region
 		[-] multitag "&name='impRegion'"
@@ -703,7 +702,7 @@
 	[ ] 
 [ ] 
 [+] window BrowserChild AMPAddSectors
-	[ ] tag "AMP - Select Sector"
+	[ ] tag "*AMP - Select Sector"
 	[ ] parent Browser
 	[-] HtmlPopupList SelectSectors
 		[-] multitag "&name='sectorScheme'"
@@ -867,7 +866,7 @@
 			[ ] "$javascript:gotoStep(10)"
 [ ] 
 [+] window BrowserChild AMPAddPhysicalProgress
-	[ ] tag "AMP - Add Physical Progress"
+	[ ] tag "*AMP - Add Physical Progress"
 	[ ] parent Browser
 	[+] HtmlTextField Title
 		[-] multitag "&name='phyProgTitle'"
@@ -901,7 +900,7 @@
 				[ ] tag "10"
 [ ] 
 [+] window BrowserChild AMPAddComponents
-	[ ] tag "AMP - Add Components"
+	[ ] tag "*AMP - Add Components"
 	[ ] parent Browser
 	[+] HtmlPopupList Component
 		[-] multitag "&name='componentTitle'"
@@ -965,7 +964,7 @@
 				[ ] tag "10"
 [ ] 
 [+] window BrowserChild AMPAddIssue
-	[ ] tag "AMP - Add Issue"
+	[ ] tag "*AMP - Add Issue"
 	[ ] parent Browser
 	[+] HtmlTextField Issue
 		[-] multitag "&name='issue'"
@@ -976,7 +975,7 @@
 	[ ] 
 [ ] 
 [+] window BrowserChild AMPAddMeasure
-	[ ] tag "AMP - Add Measure"
+	[ ] tag "*AMP - Add Measure"
 	[ ] parent Browser
 	[+] HtmlTextField Measure
 		[-] multitag "&name='measure'"
@@ -987,7 +986,7 @@
 	[ ] 
 [ ] 
 [+] window BrowserChild AMPAddFunding
-	[ ] tag "AMP - Add Funding"
+	[ ] tag "*AMP - Add Funding"
 	[ ] parent Browser
 	[+] HtmlPopupList AssistanceType
 		[-] multitag "&name='assistanceType'"
@@ -1152,8 +1151,8 @@
 				[-] multitag "Click to View Calendar"
 					[ ] "$http:??amp-staging.code.ro:8080?TEMPLATE?ampTemplate?images?sho"
 [ ] 
-[+] window BrowserChild AMPRegionalFunding
-	[ ] tag "AMP - Add Activity - Regional Funding"
+[-] window BrowserChild AMPRegionalFunding
+	[ ] tag "*AMP - Add Activity - Regional Funding"
 	[ ] parent Browser
 	[+] HtmlPushButton AddFundings
 		[-] multitag "&name='submitButton'"
@@ -1267,7 +1266,7 @@
 			[ ] "$javascript:gotoStep(10)"
 [ ] 
 [+] window BrowserChild AMPAddDocuments
-	[ ] tag "Popup"
+	[ ] tag "*Popup"
 	[ ] parent Browser
 	[+] HtmlTextField Title
 		[-] multitag "&name='docTitle'"
@@ -1318,7 +1317,7 @@
 			[ ] "$fileData"
 [ ] 
 [+] window BrowserChild AMPAddDocumentsFromRepository
-	[ ] tag "Popup"
+	[ ] tag "*Popup"
 	[ ] parent Browser
 	[+] HtmlTable HtmlTable1
 		[ ] tag "&name='framingTable[0]'"
@@ -1522,7 +1521,7 @@
 		[ ] tag "Add Activity"
 [ ] 
 [+] window BrowserChild AMPAddEditActivity
-	[ ] tag "AMP - Edit Activity"
+	[ ] tag "*AMP - Edit Activity"
 	[ ] parent Browser
 	[+] HtmlTextField ActivityName
 		[-] multitag "&name='name'"
@@ -2568,11 +2567,10 @@
 		[ ] 
 		[ ] 
 [+] window BrowserChild CommentDetail
-	[ ] tag "- Comment Detail"
+	[ ] tag "AMP - Comment Detail"
 	[ ] parent Browser
-	[-] HtmlTextField AddYourCommentHere
+	[+] HtmlTextField AddYourCommentHere
 		[-] multitag "&id='commentText';name='commentText'"
-			[ ] "Add your comment here"
 			[ ] "$commentText"
 	[-] HtmlPushButton Save
 		[ ] tag "Save"
@@ -2601,7 +2599,7 @@
 	[+] HtmlPushButton Submit
 		[ ] tag "Submit"
 [+] window BrowserChild ProposedProjectCost
-	[ ] tag "Proposed Project Cost"
+	[ ] tag "*Proposed Project Cost"
 	[ ] parent Browser
 	[+] HtmlTextField Planned
 		[-] multitag "&id='funAmount';name='proProjCost.funAmount'"
@@ -2663,7 +2661,7 @@
 		[-] TextField TextField1
 			[-] multitag "#1"
 				[ ] "$1"
-[-] window BrowserChild AMPDesktopLinks
+[+] window BrowserChild AMPDesktopLinks
 	[ ] tag "AMP*" //should be generized
 	[ ] parent Browser
 	[+] HtmlList TopMenu

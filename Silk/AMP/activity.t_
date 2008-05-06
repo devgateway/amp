@@ -129,7 +129,8 @@
 	[ ] AMPSelectOrganizations.Add.Click ()
 	[ ] AMPAddActivityStep1.SetActive( )
 	[ ] AMPAddActivityStep1.Org1Id.SetText("123")
-	[ ] AMPAddActivityStep1.LineMinistryRank.Select (2)
+	[-] if (AMPAddActivityStep1.LineMinistryRank.Exists())
+		[ ] AMPAddActivityStep1.LineMinistryRank.Select (2)
 	[-] if (AMPAddActivityStep1.MinistryOfPlanningRank.Exists())
 		[ ] AMPAddActivityStep1.MinistryOfPlanningRank.Select (2)
 	[ ] DATETIME today
@@ -316,7 +317,7 @@
 	[ ] //ChooseFile.SetActive ()
 	[ ] //ChooseFile.ListView1.Select (1)
 	[ ] //ChooseFile.Open.Click ()
-	[ ] 
+	[ ] sleep(2)
 	[ ] AMPAddActivityStep6.AddWebResources.Click ()
 	[ ] sleep(2)
 	[ ] AMPAddDocuments.Title.SetText("title")

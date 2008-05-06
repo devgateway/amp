@@ -129,7 +129,8 @@
 	[ ] AMPSelectOrganizations.Add.Click ()
 	[ ] AMPAddActivityStep1.SetActive( )
 	[ ] AMPAddActivityStep1.Org1Id.SetText("123")
-	[ ] AMPAddActivityStep1.LineMinistryRank.Select (2)
+	[-] if (AMPAddActivityStep1.LineMinistryRank.Exists())
+		[ ] AMPAddActivityStep1.LineMinistryRank.Select (2)
 	[-] if (AMPAddActivityStep1.MinistryOfPlanningRank.Exists())
 		[ ] AMPAddActivityStep1.MinistryOfPlanningRank.Select (2)
 	[ ] DATETIME today

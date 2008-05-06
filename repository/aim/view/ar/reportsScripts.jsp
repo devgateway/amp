@@ -250,6 +250,16 @@ background-color: yellow;
 		    visible:false,
 		    modal:true,
 		    draggable:true} );
+
+		var myPanel3 = new YAHOO.widget.Panel("new3", {
+			width:"300px",
+		    fixedcenter: true,
+		    constraintoviewport: true,
+		    underlay:"none",
+		    close:true,
+		    visible:false,
+		    modal:true,
+		    draggable:true} );
 	
 	myPanel1.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
 		    
@@ -264,6 +274,12 @@ background-color: yellow;
 		myPanel2.setHeader(msgP2);
 		myPanel2.setBody("");
 		myPanel2.render(document.body);
+		
+		var msgP3='\n<digi:trn key="rep:filter:selectRange">Please select range</digi:trn>';
+		myPanel3.setHeader(msgP3);
+		myPanel3.setBody("");
+		myPanel3.render(document.body);
+				
 	}
 	
 	function showFilter() {
@@ -278,6 +294,65 @@ background-color: yellow;
 		
 		
 	}
+	function checkRangeValues(){
+	    var actualFrom = document.aimReportsFilterPickerForm2.fromYear.value;
+        var actualTo = document.aimReportsFilterPickerForm2.toYear.value;
+        var msg='\n<digi:trn key="rep:filter:wrongSelecteRange">Default Start Year must be lesser than Default End Year</digi:trn>';
+		if(actualFrom>actualTo){
+		    alert(msg);
+			return false;
+		}
+		return true;
+	}
+	function rangeReset(){
+	
+	 if(document.aimReportsFilterPickerForm2.fromYear){
+	    document.aimReportsFilterPickerForm2.fromYear.selectedIndex=0;
+	 }
+	 if(document.aimReportsFilterPickerForm2.toYear){
+	 	document.aimReportsFilterPickerForm2.toYear.selectedIndex=0;
+	 }  
+	}
+	function changeRange(){
+	  //alert(document.getElementsByName('aimReportsFilterPickerForm').length);
+      if(document.aimReportsFilterPickerForm2.countYear){
+        var cant = document.aimReportsFilterPickerForm2.countYear.value;
+        var actualFrom = document.aimReportsFilterPickerForm2.fromYear.value;
+        var actualTo = document.aimReportsFilterPickerForm2.toYear.value;
+        var initialYear = document.aimReportsFilterPickerForm2.countYearFrom.value;
+      	//alert("countYear "+ document.aimReportsFilterPickerForm2.countYear.value+
+      	//		" - From " + actualFrom+" - To "+actualTo + " - countYearFrom "+ initialYear);
+
+      	document.aimReportsFilterPickerForm2.fromYear.length=0;
+      	document.aimReportsFilterPickerForm2.toYear.length=0;
+      	var masterFrom=document.aimReportsFilterPickerForm2.fromYear;
+      	var masterTo=document.aimReportsFilterPickerForm2.toYear;
+        //alert("countYear "+ document.aimReportsFilterPickerForm2.countYear.value+
+      	//	" - From " + actualFrom+" - To "+actualTo + " - countYearFrom "+ initialYear);
+      	masterFrom.options[0]=new Option("All", "-1", false, true);
+		for (i=1; i<=cant; i++){
+		    var year  = parseInt(initialYear)+ i;
+		    if(year == actualFrom){
+				masterFrom.options[i]=new Option(year, year, false, true);
+			}
+			else{
+				masterFrom.options[i]=new Option(year, year, false, false);
+			}	
+		}
+		masterTo.options[0]=new Option("All", "-1", false, true);
+		for (i=1; i<=cant; i++){
+			var year  = parseInt(initialYear)+ i;
+		    if(year == actualTo){
+				masterTo.options[i]=new Option(year, year, false, true);
+			}
+			else{
+				masterTo.options[i]=new Option(year, year, false, false);
+			}	
+		}
+		
+      }	
+     	
+	}
 	function hideFilter() {
 		myPanel1.hide();
 	}
@@ -289,6 +364,18 @@ background-color: yellow;
 	}
 	function hideSorter() {
 		myPanel2.hide();
+	}
+	function showRange(){
+		YAHOO.amptab.init();
+		var element = document.getElementById("myRange");
+		element.style.display = "inline";
+		
+		myPanel3.setBody(element);
+		myPanel3.center();
+		myPanel3.show();	
+	}
+	function hideRange() {
+		myPanel3.hide();
 	}
 	
 	function checkProjectId(x){

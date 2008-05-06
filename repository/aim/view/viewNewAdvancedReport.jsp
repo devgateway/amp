@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
+
 <div id="mySorter" style="display: none">
 	<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
         <!--
@@ -29,6 +30,10 @@
 			</a>
 			-->
 	</div>
+	<div id="myRange" style="display: none">
+	          <jsp:include page="/repository/aim/view/ar/RangePicker.jsp" />
+	</div>
+	
 </div>
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
@@ -95,6 +100,9 @@
 			<a style="cursor:pointer"
 				onClick="showFilter(); ">
 			<u><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></u> </a>
+			<a style="cursor:pointer"
+				onClick="showRange(); ">
+			<u><digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn></u> </a>
 		</div>
 		</td>
 	</tr>

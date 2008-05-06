@@ -28,6 +28,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection<BeanWrapperImpl> toYears;
 	private Collection<BeanWrapperImpl> fromMonths;
 	private Collection<BeanWrapperImpl> toMonths;
+	private Collection<BeanWrapperImpl> countYears;
 	private Collection actRankCollection;
 	private Collection pageSizes; //A0,A1,A2,A3,A4
 	private Collection donorTypes; //Ex: Multilateral, Bilateral, Regional Governament
@@ -55,6 +56,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Long toYear;
 	private Integer toMonth;
 	private Integer fromMonth;
+	private Long countYear;
 	private Long currency;
 	private Long calendar;
 	private Long ampReportId;
@@ -71,6 +73,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	//to keep the default currency after user changues 
 	private Long defaultCurrency;
 	private boolean isnewreport;
+	private Long countYearFrom;
 
 
 	public Integer getSelectedBudget() {
@@ -138,6 +141,12 @@ public class ReportsFilterPickerForm extends ActionForm {
 			this.selectedImplementingAgency		= null;
 			this.selectedBudget					= null;
 		}
+	}
+	public Collection<BeanWrapperImpl> getCountYears() {
+		return countYears;
+	}
+	public void setCountYears(Collection<BeanWrapperImpl> countYears) {
+		this.countYears = countYears;
 	}
 	
 	public Long getFromYear() {
@@ -431,6 +440,23 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setSelectedTypeOfAssistance(Long[] selectedTypeOfAssistance) {
 		this.selectedTypeOfAssistance = selectedTypeOfAssistance;
+	}
+
+	public Long getCountYear() {
+		return countYear;
+	}
+
+	public void setCountYear(Long countYear) {
+		this.countYear = countYear;
+	}
+
+	public void setCountYearFrom(Long countYearFrom) {
+		this.countYearFrom = countYearFrom;
+		
+	}
+
+	public Long getCountYearFrom() {
+		return countYearFrom;
 	}
 	
 }

@@ -36,9 +36,9 @@
 	}
 
 
-	function addNewIndicatorTL()
+	function addNewIndicatorTL(selectedSectsSize)
 	{	
-		var valid = validateForm();
+		var valid = validateForm(selectedSectsSize);
 		if (valid == true) {
 			<digi:context name="addNewInd" property="context/module/moduleinstance/addNewIndicatorTL.do"/>
 			document.aimIndicatorForm.action = "<%=addNewInd%>";
@@ -49,9 +49,9 @@
 	}
 	function unload(){}
 
-	function validateForm() {
+	function validateForm(selectedSectsSize) {
 	
-		// var sectors = document.aimIndicatorForm.selectedSectorsForInd;	
+		var values = document.getElementsByTagName("forEach");
 		
 		if (document.aimIndicatorForm.indicatorName.value.length == 0) {
 			alert("Please enter indicator name");
@@ -63,6 +63,11 @@
 			alert("Please enter indicator code");
 			document.aimIndicatorForm.indicatorCode.focus();
 			return false;
+		}
+		
+		if(selectedSectsSize!=1) {
+		alert("Please add Sectors");
+		return false;
 		}
 		
 		return true;
@@ -117,12 +122,40 @@
   		aimIndicatorForm.submit();    
 }
 
-	function removeSelSectors() {		 
-          <digi:context name="remSec" property="context/module/moduleinstance/sectorActions.do?actionType=removeSelectedSectors" />
-          document.aimIndicatorForm.action = "<%= remSec %>";
-          document.aimIndicatorForm.target = "_self"
-          document.aimIndicatorForm.submit();
-          return true;
+	function removeSelSectors() {	
+		if (validateSector()) {
+			<digi:context name="remSec" property="context/module/moduleinstance/sectorActions.do?actionType=removeSelectedSectors" />
+        	document.aimIndicatorForm.action = "<%= remSec %>";
+        	document.aimIndicatorForm.target = "_self"
+        	document.aimIndicatorForm.submit();
+        	return true;			
+		}else {
+			return false;
+		}
+	}
+	
+	function validateSector(){
+		if (document.aimIndicatorForm.selActivitySector.checked != null) {
+			if (document.aimIndicatorForm.selActivitySector.checked == false) {
+				alert("Please choose a sector to remove");
+				return false;
+			}
+		} else {
+			var length = document.aimIndicatorForm.selActivitySector.length;
+			var flag = 0;
+			for (i = 0;i < length;i ++) {
+				if (document.aimIndicatorForm.selActivitySector[i].checked == true) {
+					flag = 1;
+					break;
+				}
+			}
+
+			if (flag == 0) {
+				alert("Please choose a sector to remove");
+				return false;
+			}
+		}
+		return true;	
 	}
 	
 -->
@@ -311,10 +344,11 @@
 				                                                    </tr>
 				                                                  </c:if>
 				                                                  <c:if test="${!empty aimIndicatorForm.selectedSectorsForInd}">
+				                                                  	<c:set var="selectedSectsSize" value="1"></c:set> <!-- used for sectors validation -->
 				                                                    <tr>
 				                                                      <td>
 				                                                        <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
-				                                                          <c:forEach var="activitySectors" items="${aimIndicatorForm.selectedSectorsForInd}">
+				                                                          <c:forEach var="activitySectors" items="${aimIndicatorForm.selectedSectorsForInd}" varStatus="varS">
 				                                                            <tr>
 				                                                              <td>
 				                                                                <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
@@ -385,7 +419,7 @@
 												</tr>											
 												<tr>
 													<td align="center" colspan=2>&nbsp;														
-														<html:button  styleClass="dr-menu" property="addnewIndicator"  onclick="addNewIndicatorTL()">
+														<html:button  styleClass="dr-menu" property="addnewIndicator"  onclick="addNewIndicatorTL(${selectedSectsSize})">
 															<digi:trn key="btn:add">Add</digi:trn> 
 														</html:button>
 													</td>

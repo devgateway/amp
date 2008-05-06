@@ -1553,7 +1553,21 @@ public class DbUtil {
             if (itr.hasNext()) {
                 ampAppSettings = (AmpApplicationSettings) itr.next();
             }
+            if( session.contains(ampAppSettings)) {
+            	System.out.println("o daaaaaaa");
+            	session.evict(ampAppSettings);
+            }
+            else System.out.println("o nuuuuuuuuuu");
+            
+            if( session.contains(ampAppSettings)) {
+            	System.out.println("o daaaaaaa??????");
+            	session.evict(ampAppSettings);
+            }
+            else System.out.println("o nuuuuuuuuuu!!!!!!!!!!!1 :)");
+
+            
         } catch (Exception e) {
+        	e.printStackTrace();
             logger.error("Unable to get TeamAppSettings");
             logger.debug("Exceptiion " + e);
         }

@@ -1,5 +1,5 @@
 use amp_bolivia;
-
+SET FOREIGN_KEY_CHECKS=0;
 /*SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;*/
 
 SET AUTOCOMMIT = 0;
@@ -184,6 +184,8 @@ DROP INDEX old_id ON AMP_LEVEL;
 DROP INDEX region_code on amp_region;
 
 /*removing temporary columnes  */
+DROP TABLE CLASI_PND;
+
 ALTER TABLE amp_terms_assist
 DROP COLUMN old_id;
 
@@ -198,8 +200,8 @@ DROP COLUMN old_id;
 
 ALTER TABLE AMP_ACTIVITY
 DROP COLUMN old_status_id,
-DROP COLUMN old_id;
-
+DROP COLUMN old_id,
+DROP COLUMN classi_code;
 
 ALTER TABLE AMP_LEVEL
 DROP COLUMN old_id;

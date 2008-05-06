@@ -31,6 +31,14 @@ SET @amp_site_id = 'amp';
 SET @subprog_prefix='EBRP';
 select @import_time;
 
+
+CREATE TABLE CLASI_PND(
+  `code` varchar(10) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  PRIMARY KEY(`code`)
+  );
+
+
 ALTER TABLE AMP_ORGANISATION
 ADD COLUMN old_id varchar(255),
 ADD INDEX (old_id);
@@ -46,6 +54,7 @@ ADD INDEX (old_id);
 ALTER TABLE AMP_ACTIVITY
 ADD COLUMN old_id bigint(20),
 ADD COLUMN old_status_id varchar(20),
+ADD COLUMN classi_code varchar(10),
 ADD INDEX (old_id),
 ADD INDEX (old_status_id),
 ADD INDEX (amp_id);
@@ -192,6 +201,9 @@ SELECT lvl.valdato, lvl.interp, lvl.valdato
 FROM sisfin_db.`claves` lvl
 WHERE lvl.nomdato='cvecoop';
 
+/*import Casificacion NPD*/
+insert into CLASI_PND (code,description) select Cod_PND,Descripcion from sisfin_db.Clasif_PND;
+
 /* import activities */
 select 'inserting into AMP_ACTIVITY fom conv';
 
@@ -218,7 +230,8 @@ proj_cost_amount,
 activity_creator,
 totalCost,
 old_status_id,
-draft
+draft,
+classi_code
 )
 SELECT
 c.numconv,
@@ -242,7 +255,8 @@ montorig,
 @activity_creator,
 montous,
 cvealc,
-0
+0,
+Cod_PND
 FROM  sisfin_db.`conv` as c
 where c.STATCONV!='C' and c.STATCONV!='A';
 
@@ -746,6 +760,33 @@ from amp_activity as act, amp_theme as prog, amp_program_settings as progset, si
 where act.amp_id=con.numconv
 and prog.theme_code = concat('EBRP', substring(con.Cod_EBRP,2))
 and progset.name like 'National Plan Objective';
+
+
+/*Adding donor to activities*/
+
+
+insert into amp_org_role (
+  activity ,
+  organisation ,
+  role ,
+  percentage
+)
+
+
+select
+a.amp_activity_id,
+o.amp_org_id,1,null
+ from amp_funding
+a inner join amp_organisation  o on a.amp_donor_org_id=o.amp_org_id
+where a.amp_activity_id not in
+(select x.activity from amp_org_role x
+         where x.activity=a.amp_activity_id
+               and x.role=1
+               and x.organisation=o.amp_org_id
+         );
+
+
+
 
 /*clean duplicated agencies*/
 select 'cleaning duplicated agencies';

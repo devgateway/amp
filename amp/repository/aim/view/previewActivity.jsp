@@ -312,8 +312,10 @@ function collapseAll() {
 								
 									<tr>
 										<td>
-										<c:set var="tran"><digi:trn key="aim:previe:expandAll">Expand all</digi:trn> </c:set>
-										<input type="button" class="buton" onclick="javascript:expandAll()" value="${tran}"/>
+											<c:set var="tran"><digi:trn key="aim:previe:expandAll">Expand all</digi:trn> </c:set>
+											<input type="button" class="buton" onclick="javascript:expandAll()" value="${tran}"/>
+										</td>
+										<td>
 										<c:set var="tran"><digi:trn key="aim:previe:collapseAll">Collapse all</digi:trn> </c:set>
 										<input type="button" class="buton" onclick="javascript:collapseAll()" value="${tran}"/>
 										</td>

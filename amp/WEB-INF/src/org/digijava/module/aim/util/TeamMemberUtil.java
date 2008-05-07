@@ -843,7 +843,8 @@ public class TeamMemberUtil {
 		} catch (Exception e) {
 			logger.error("Unable to get role");
 			logger.debug("Exceptiion " + e);
-		} finally {
+		} 
+		finally {
 			try {
 				if (session != null) {
 					PersistenceManager.releaseSession(session);

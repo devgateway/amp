@@ -142,7 +142,13 @@ function validateForm(){
   var draftStatus=document.getElementById("draftFlag");
   if(draftStatus!=null && draftStatus.value!="true"){
     if (document.aimEditActivityForm.selActivitySectors == null) {
-      alert("${errMsgAddSector}");
+     // alert("${errMsgAddSector}");
+     var primConf=document.getElementById('primaryConfig');
+     var secConf=document.getElementById('secondaryConfig');
+     if(primConf==null || secConf==null){
+         alert("${errMsgAddSector}");
+        return false;
+     }
       document.aimEditActivityForm.addSec.focus();
       return false;
     }
@@ -179,6 +185,11 @@ function popupwin(){
 }
 
 function validateSectorPercentage(){
+  <c:set var="errMsgAddSector">
+  <digi:trn key="aim:addSecorErrorMessage">
+  Please add sectors
+  </digi:trn>
+  </c:set>
     <c:set var="errMsgAddPercentage">
     <digi:trn key="aim:addSecorPercentageErrorMessage">
     Please add sector-percentage
@@ -224,7 +235,7 @@ function validateSectorPercentage(){
     var flag = false;
     var primConf=document.getElementById('primaryConfig');
     if(primConf==null){
-        alert("${errMsgPrimarySectors}");
+         alert("${errMsgAddSector}");
         return false;
      }
     var sum_prim_sector=false;
@@ -240,8 +251,8 @@ function validateSectorPercentage(){
         }
         var primaryDiv=sectorDiV.getElementsByTagName("div").length;
         var inputs=sectorDiV.getElementsByTagName("input");
-        if(inputs.length==0&&primaryDiv>0){
-            alert("${errMsgPrimarySectors}");
+        if(inputs.length==0 && primaryDiv>0){
+            alert("${errMsgAddSector}");
             return false;
         }
         

@@ -61,7 +61,8 @@ public class EditIPAContract extends MultiAction {
         while (i.hasNext()) {
             String element = (String) i.next();
             try {
-               if(!element.equals("")){
+            	if(element==null) return false;
+               if(!"".equals(element)){
                Double.parseDouble(element);
                }
             } catch (NumberFormatException e) {

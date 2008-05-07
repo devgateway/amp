@@ -96,11 +96,10 @@
                                           </c:set>
                                          <tr>
                                              <td  align="left"> 
-                                                 <c:if test="${config.primary}">
+                                                
                                                      <FONT color="red">
                                                          *
                                                      </FONT>
-                                                     </c:if>
                                                      <b><digi:trn key="aim:addActivitySectors:${config.name}">${config.name}</digi:trn></b>
                                                 </td>
                                     </tr>
@@ -114,6 +113,10 @@
                                                            
                                                             <div id="primaryConfig">
                                                         </c:if>
+                                                        <logic:equal name="config" property="primary" value="false">
+                                                        	<div id="secondaryConfig">
+														</logic:equal>
+                                                        
                                                 
                                                     <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
                                                        <tbody>

@@ -151,7 +151,6 @@ public class AddTeamMember extends Action {
 			newAppSettings.setDefaultPerspective(ampAppSettings
 					.getDefaultPerspective());
 			newAppSettings.setUseDefault(new Boolean(true));
-			//newAppSettings.setDefaultTeamReport(ampAppSettings.getDefaultTeamReport());
 			Site site = RequestUtils.getSite(request);
 			try{
 				TeamUtil.addTeamMember(newMember,newAppSettings,site);

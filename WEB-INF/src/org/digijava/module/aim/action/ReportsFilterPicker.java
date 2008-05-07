@@ -30,6 +30,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
@@ -86,13 +87,22 @@ public class ReportsFilterPicker extends MultiAction {
 		//create filter dropdowns		
 		Collection currency = CurrencyUtil.getAmpCurrency();
 		Collection allFisCalenders = DbUtil.getAllFisCalenders();
-		List<AmpSector> ampSectors;// = SectorUtil.getAmpSectorsAndSubSectors();
 		
+		List<AmpSector> ampSectors = SectorUtil.getAmpSectorsAndSubSectors( 
+						AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME );
+		
+		List<AmpSector> secondaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectors( 
+				AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME );
+		
+		 /** This has been moved in SectorUtil.getAmpSectorsAndSubSectors();
+		  * 
 		 Long primaryConfigClassId=SectorUtil.getPrimaryConfigClassificationId();
 		 ampSectors = (List)SectorUtil.getAllParentSectors(primaryConfigClassId);
+		 */
+		 
 		//ampSectors = SectorUtil.getAllSectorsFromScheme(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_SECTOR_SCHEME));
 		
-		TreeSet<AmpSector> alphaOrderedSectors	= new TreeSet<AmpSector>( 
+		/*TreeSet<AmpSector> alphaOrderedSectors	= new TreeSet<AmpSector>( 
 				new Comparator<AmpSector>() {
 
 					public int compare(AmpSector as1, AmpSector as2) {
@@ -108,7 +118,7 @@ public class ReportsFilterPicker extends MultiAction {
 		Iterator<AmpSector> sectIter	= (Iterator<AmpSector>)ampSectors.iterator();
 		while ( sectIter.hasNext() ) {
 			alphaOrderedSectors.add( sectIter.next() );
-		}
+		}*/
 		
 		
 
@@ -160,7 +170,8 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setCalendars(allFisCalenders);
 		//filterForm.setDonors(donors);
 		filterForm.setRisks(allIndicatorRisks);
-		filterForm.setSectors( alphaOrderedSectors );
+		filterForm.setSectors( ampSectors );
+		filterForm.setSecondarySectors( secondaryAmpSectors );
 		filterForm.setFromYears(new ArrayList<BeanWrapperImpl>());
 		filterForm.setToYears(new ArrayList<BeanWrapperImpl>());
 		filterForm.setFromMonths(new ArrayList<BeanWrapperImpl>());
@@ -330,44 +341,32 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		//for each sector we have also to add the subsectors
 		
-		Set selectedSectors		= Util.getSelectedObjects(AmpSector.class,filterForm.getSelectedSectors());
-		Set generatedSectors	= new HashSet();
-		
-		if(selectedSectors!=null) generatedSectors.addAll( selectedSectors);
-		
+		Set selectedSectors				= Util.getSelectedObjects(AmpSector.class,filterForm.getSelectedSectors());
+		Set selectedSecondarySectors	= Util.getSelectedObjects(AmpSector.class,filterForm.getSelectedSecondarySectors());
 		
 		
 		if(selectedSectors!=null && selectedSectors.size() > 0)
 			{
 			arf.setSelectedSectors( new HashSet() );
 			arf.getSelectedSectors().addAll(selectedSectors);
-			Iterator sectorIterator=selectedSectors.iterator();
-		
-			while(sectorIterator.hasNext())
-			{//process each sector and get all its children
-				AmpSector currentSector=(AmpSector)sectorIterator.next();
-				if(currentSector!=null)
-				{
-					Collection childSectors=SectorUtil.getAllChildSectors(currentSector.getAmpSectorId());
-					generatedSectors.addAll(childSectors); //add the children sectors to the filter
-					
-					//add the grand children
-					Iterator childSectorsIterator=childSectors.iterator();
-					while(childSectorsIterator.hasNext())
-					{
-						AmpSector currentChild=(AmpSector)childSectorsIterator.next();
-						Collection grandChildrenSectors=SectorUtil.getAllChildSectors(currentChild.getAmpSectorId());
-						generatedSectors.addAll(grandChildrenSectors);
-					}
-					
-				}
 			
-			}
-			arf.setSectors( generatedSectors );
+			arf.setSectors( SectorUtil.getSectorDescendents(selectedSectors) );
 		}
 		else {
 			arf.setSectors(null);
 			arf.setSelectedSectors(null);
+		}
+		
+		if(selectedSecondarySectors!=null && selectedSecondarySectors.size() > 0)
+		{
+			arf.setSelectedSecondarySectors( new HashSet() );
+			arf.getSelectedSecondarySectors().addAll( selectedSecondarySectors );
+			
+			arf.setSecondarySectors( SectorUtil.getSectorDescendents(selectedSecondarySectors) );
+		}
+		else {
+			arf.setSecondarySectors(null);
+			arf.setSelectedSecondarySectors(null);
 		}
 		
 		

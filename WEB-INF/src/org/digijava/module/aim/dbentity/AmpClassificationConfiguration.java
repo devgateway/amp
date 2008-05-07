@@ -3,6 +3,10 @@ package org.digijava.module.aim.dbentity;
 
 public class AmpClassificationConfiguration {
 	
+	public static final String PRIMARY_CLASSIFICATION_CONFIGURATION_NAME	= "Primary";
+	public static final String SECONDARY_CLASSIFICATION_CONFIGURATION_NAME	= "Secondary";
+	
+	
 	private Long id;
     private String name;
     private AmpSectorScheme classification;

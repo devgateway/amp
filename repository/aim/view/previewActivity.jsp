@@ -1747,8 +1747,27 @@ function collapseAll() {
 											</logic:notEmpty><br/>
 											</field:display>
                                   	</feature:display> 
+                                  	<feature:display name="Responsible Organisation" module="Organizations">
+											<logic:notEmpty name="aimEditActivityForm" property="respOrganisations">
+												<img id="implementing_agency_plus"  onclick="toggleGroup('responsible_organisation')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+                                            	<img id="implementing_agency_minus" onclick="toggleGroup('responsible_organisation')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>											</logic:notEmpty>
+											<b><digi:trn key="aim:responsibleorganisation">Responsible Organisation</digi:trn></b><br/>
+											<logic:notEmpty name="aimEditActivityForm" property="respOrganisations">
+												<div id="responsible_organisation_dots">...</div>
+												<div id="act_responsible_organisation" style="display: none;">
+												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+													<tr><td>
+													<logic:iterate name="aimEditActivityForm" property="respOrganisations"
+													id="respOrganisations" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+															<ul><li> <bean:write name="respOrganisations" property="name" /></li></ul>
+													</logic:iterate>
+													</td></tr>
+												</table>
+												</div>
+											</logic:notEmpty>
+                                            </feature:display>
                                   	</div>
-                                  	                                          </td>
+                                  	</td>
 									</tr>
 									</module:display>
 									

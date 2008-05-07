@@ -1375,7 +1375,7 @@ function commentWin(val) {
 																				</TD>
 																			</TR>
 																		</feature:display>
-																		<feature:display module="Organizations" name="Responsible Organisation">
+																		<field:display name="Responsible Organisation" feature="Responsible Organisation">
 																			<TR>
 																				<TD>
 																				<TABLE width="100%" cellSpacing="1" cellPadding="2"
@@ -1403,7 +1403,7 @@ function commentWin(val) {
 																				</TABLE>
 																				</TD>
 																			</TR>
-																		</feature:display>
+																		</field:display>>
 
 
 																	</module:display>

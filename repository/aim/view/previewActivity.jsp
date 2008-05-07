@@ -1749,7 +1749,7 @@ function collapseAll() {
 											</logic:notEmpty><br/>
 											</field:display>
                                   	</feature:display> 
-                                  	<feature:display name="Responsible Organisation" module="Organizations">
+                                  	<field:display name="Responsible Organisation" feature="Responsible Organisation">
 											<logic:notEmpty name="aimEditActivityForm" property="respOrganisations">
 												<img id="implementing_agency_plus"  onclick="toggleGroup('responsible_organisation')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
                                             	<img id="implementing_agency_minus" onclick="toggleGroup('responsible_organisation')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif"style="display : none"/>											</logic:notEmpty>
@@ -1767,7 +1767,7 @@ function collapseAll() {
 												</table>
 												</div>
 											</logic:notEmpty>
-                                            </feature:display>
+                                            </field:display>
                                   	</div>
                                   	</td>
 									</tr>

@@ -22,6 +22,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection currencies;
 	private Collection calendars;
 	private Collection sectors;
+	private Collection secondarySectors;
 	//private Collection donors;
 	private Collection risks;
 	private Collection<BeanWrapperImpl> fromYears;
@@ -39,6 +40,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Long regionSelected;
 	
 	private Object[] selectedSectors;
+	private Object[] selectedSecondarySectors;
 	private Object[] selectedStatuses;
 	//private Object[] selectedDonors;
 	private Object[] selectedRisks;
@@ -131,6 +133,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 			//this.selectedDonors 				= null;
 			this.selectedRisks	 				= null;
 			this.selectedSectors 				= null;
+			this.selectedSecondarySectors		= null;
 			this.selectedStatuses				= null;
 			this.selectedFinancingInstruments 	= null;
 			this.selectedTypeOfAssistance		= null;
@@ -234,6 +237,15 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setSelectedSectors(Object[] selectedSectors) {
 		this.selectedSectors = selectedSectors;
 	}
+	
+	public Object[] getSelectedSecondarySectors() {
+		return selectedSecondarySectors;
+	}
+
+	public void setSelectedSecondarySectors(Object[] selectedSecondarySectors) {
+		this.selectedSecondarySectors = selectedSecondarySectors;
+	}
+
 	public Object[] getSelectedStatuses() {
 		return selectedStatuses;
 	}
@@ -457,6 +469,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public Long getCountYearFrom() {
 		return countYearFrom;
+	}
+
+	public Collection getSecondarySectors() {
+		return secondarySectors;
+	}
+
+	public void setSecondarySectors(Collection secondarySectors) {
+		this.secondarySectors = secondarySectors;
 	}
 	
 }

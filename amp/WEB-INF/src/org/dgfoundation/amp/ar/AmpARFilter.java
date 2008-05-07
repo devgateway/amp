@@ -64,6 +64,10 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Set sectors=null;
 	private Set selectedSectors	= null;
 	
+	@PropertyListableIgnore
+	private Set secondarySectors=null;
+	private Set selectedSecondarySectors=null;
+	
 	private Set regions=null;
 	private Set risks=null;
 	private Set donorTypes=null;
@@ -205,7 +209,26 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		String STATUS_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("+Util.toCSString(statuses,true)+")";
 	
 		//String ORG_FILTER = "SELECT amp_activity_id FROM v_donor_groups WHERE amp_org_grp_id IN ("+Util.toCSString(donors,true)+")";
-		String SECTOR_FILTER="SELECT amp_activity_id FROM v_sectors WHERE amp_sector_id IN ("+Util.toCSString(sectors,true)+")";
+//		String PARENT_SECTOR_FILTER="SELECT amp_activity_id FROM v_sectors WHERE amp_sector_id IN ("+Util.toCSString(sectors,true)+")";
+//		String SUB_SECTOR_FILTER="SELECT amp_activity_id FROM v_sub_sectors WHERE amp_sector_id IN ("+Util.toCSString(sectors,true)+")";
+//		String SECTOR_FILTER="(("+PARENT_SECTOR_FILTER+") UNION ("+SUB_SECTOR_FILTER+"))";
+		
+		String SECTOR_FILTER=
+			"SELECT aas.amp_activity_id FROM amp_activity_sector aas, amp_sector s, amp_classification_config c " +
+			"WHERE aas.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id " +
+			"AND c.name='Primary' AND aas.amp_sector_id in (" +Util.toCSString(sectors,true)+ ")";
+		
+//		String SECONDARY_PARENT_SECTOR_FILTER=
+//			"SELECT amp_activity_id FROM v_secondary_sectors WHERE amp_sector_id IN ("+Util.toCSString(secondarySectors,true)+")";
+//		String SECONDARY_SUB_SECTOR_FILTER=
+//			"SELECT amp_activity_id FROM v_secondary_sub_sectors WHERE amp_sector_id IN ("+Util.toCSString(secondarySectors,true)+")";
+//		String SECONDARY_SECTOR_FILTER="(("+SECONDARY_PARENT_SECTOR_FILTER+") UNION ("+SECONDARY_SUB_SECTOR_FILTER+"))";
+		String SECONDARY_SECTOR_FILTER=
+			"SELECT aas.amp_activity_id FROM amp_activity_sector aas, amp_sector s, amp_classification_config c " +
+			"WHERE aas.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id " +
+			"AND c.name='Secondary' AND aas.amp_sector_id in (" +Util.toCSString(secondarySectors,true)+ ")";
+		
+		
 		String REGION_FILTER="SELECT amp_activity_id FROM v_regions WHERE name IN ("+Util.toCSString(regions,true)+")";
 		String FINANCING_INSTR_FILTER="SELECT amp_activity_id FROM v_financing_instrument WHERE amp_modality_id IN ("+Util.toCSString(financingInstruments, true)+")";
 		String LINE_MIN_RANK_FILTER="SELECT amp_activity_id FROM amp_activity WHERE line_min_rank="+lineMinRank;
@@ -353,7 +376,12 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		if(ampTeams!=null && ampTeams.size()>0) queryAppend(TEAM_FILTER);
 		if(statuses!=null && statuses.size()>0) queryAppend(STATUS_FILTER);
 		//if(donors!=null && donors.size()>0) queryAppend(ORG_FILTER);
-		if(sectors!=null && sectors.size()!=0) queryAppend(SECTOR_FILTER);
+		if(sectors!=null && sectors.size()!=0) {
+			queryAppend(SECTOR_FILTER);
+		}
+		if (secondarySectors!=null && secondarySectors.size()!=0 ) {
+			queryAppend(SECONDARY_SECTOR_FILTER);
+		}
 		if(regions!=null && regions.size()>0) queryAppend(REGION_FILTER);
 		if(financingInstruments!=null && financingInstruments.size()>0) queryAppend(FINANCING_INSTR_FILTER);
 		if(risks!=null && risks.size()>0) queryAppend(RISK_FILTER);
@@ -798,6 +826,24 @@ public class AmpARFilter extends PropertyListable implements Filter {
 
 	public void setSelectedSectors(Set selectedSectors) {
 		this.selectedSectors = selectedSectors;
+	}
+	
+	
+	@PropertyListableIgnore
+	public Set getSecondarySectors() {
+		return secondarySectors;
+	}
+
+	public void setSecondarySectors(Set secondarySectors) {
+		this.secondarySectors = secondarySectors;
+	}
+
+	public Set getSelectedSecondarySectors() {
+		return selectedSecondarySectors;
+	}
+
+	public void setSelectedSecondarySectors(Set selectedSecondarySectors) {
+		this.selectedSecondarySectors = selectedSecondarySectors;
 	}
 
 	public Set<AmpCategoryValue> getTypeOfAssistance() {

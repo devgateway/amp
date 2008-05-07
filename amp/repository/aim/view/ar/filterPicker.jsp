@@ -336,15 +336,30 @@
 					</html:select></td>
 				</tr>
 				<tr bgcolor="#EEEEEE">
-					<td colspan="5"><digi:trn key="rep:filer:Sector">Sector</digi:trn></td>
+					<td colspan="5"><digi:trn key="rep:filer:primarySector">Primary Sector</digi:trn></td>
 				</tr>
 				<tr bgcolor="#EEEEEE">
-					<td colspan="5" styleClass="inp-text"><html:select
-						multiple="true" property="selectedSectors" size="3"
-						style="width: 300px" styleClass="inp-text">
-						<html:optionsCollection property="sectors" value="ampSectorId"
-							label="name" />
-					</html:select></td>
+					<td colspan="5" styleClass="inp-text">
+						<html:select
+							multiple="true" property="selectedSectors" size="3"
+							style="width: 300px" styleClass="inp-text">
+							<html:optionsCollection property="sectors" value="ampSectorId"
+								label="name" />
+						</html:select>
+					</td>
+				</tr>
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5"><digi:trn key="rep:filer:secondarySector">Secondary Sector</digi:trn></td>
+				</tr>
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5" styleClass="inp-text">
+						<html:select
+							multiple="true" property="selectedSecondarySectors" size="3"
+							style="width: 300px" styleClass="inp-text">
+							<html:optionsCollection property="secondarySectors" value="ampSectorId"
+								label="name" />
+						</html:select>
+					</td>
 				</tr>
 				</table>
 			</td>

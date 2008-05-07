@@ -2,8 +2,10 @@ package org.digijava.module.aim.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.Query;
@@ -308,7 +310,7 @@ public class SectorUtil {
 		return col;
 	}
 	
-	public static Collection getAllChildSectors(Long parSecId) {
+	public static Collection<AmpSector> getAllChildSectors(Long parSecId) {
 		Session session = null;
 		Collection col = null;
 
@@ -911,24 +913,50 @@ public class SectorUtil {
 		return flag;
 	}
 
-	
-	public static List getAmpSectorsAndSubSectors() {
-		List ret = new ArrayList();
-
-		ArrayList dbReturnSet = SectorUtil.getAmpSectors();
-		Iterator iter = dbReturnSet.iterator();
-		while (iter.hasNext()) {
-			AmpSector ampSector = (AmpSector) iter.next();			
-			ret.add(ampSector);
-			dbReturnSet = SectorUtil.getAmpSubSectors(ampSector
-					.getAmpSectorId());
-			Iterator iterSub = dbReturnSet.iterator();
-			while (iterSub.hasNext()) {
-				AmpSector ampSubSector = (AmpSector) iterSub.next();
-				String temp = " -- " + ampSubSector.getName();				
-				ampSubSector.setName(temp);
-				ret.add(ampSubSector);
+	/**
+	 * 
+	 * 
+	 * @return List of sectors and sub-sectors ordered by sectors alphabetically
+	 *  and then by sub-sectors alphabetically (Ex. A, a1, a2, a3, B, b1, b2, etc...). 
+	 *  The names of the sectors are a embelished (upper case, or added some spaces) 
+	 *  for better presentation. 
+	 *  DO NOT save this objects back to the database  !!!! 
+	 */
+	public static List<AmpSector> getAmpSectorsAndSubSectors( String configurationName ) {
+		List<AmpSector> ret 	= new ArrayList<AmpSector>();
+		Long id					= null;
+		try {
+			Collection<AmpClassificationConfiguration> configs	= 
+					 SectorUtil.getAllClassificationConfigs();
+			Iterator<AmpClassificationConfiguration> confIter	= configs.iterator();
+			while ( confIter.hasNext() ) {
+				AmpClassificationConfiguration conf		= confIter.next();
+				if ( configurationName.equals( conf.getName() ) ) {
+					id	= conf.getId();
+				}
 			}
+			if ( id != null ) {
+				Collection<AmpSector> dbReturnSet = SectorUtil.getAllParentSectors(id);
+				Iterator<AmpSector> iter = dbReturnSet.iterator();
+				while (iter.hasNext()) {
+					AmpSector ampSector = iter.next();
+					ampSector.setName( ampSector.getName().toUpperCase() );
+					ret.add(ampSector);
+					Collection<AmpSector> dbChildReturnSet = 
+							SectorUtil.getAllChildSectors( ampSector.getAmpSectorId() );
+					Iterator<AmpSector> iterSub = dbChildReturnSet.iterator();
+					while (iterSub.hasNext()) {
+						AmpSector ampSubSector = (AmpSector) iterSub.next();
+						String temp = " -- " + ampSubSector.getName();				
+						ampSubSector.setName(temp);
+						ret.add(ampSubSector);
+					}
+				}
+			}
+		
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return ret;
@@ -1392,6 +1420,38 @@ public class SectorUtil {
 			}
         	   
            }
+                
+
+    public static Set<AmpSector> getSectorDescendents( Collection<AmpSector> parentSectors ) {
+    	Set<AmpSector> generatedSectors	= new HashSet<AmpSector>();
+    	
+    	generatedSectors.addAll( parentSectors );
+    	Iterator sectorIterator=parentSectors.iterator();
+		
+		while(sectorIterator.hasNext())
+		{//process each sector and get all its children
+			AmpSector currentSector=(AmpSector)sectorIterator.next();
+			if(currentSector!=null)
+			{
+				Collection childSectors=SectorUtil.getAllChildSectors(currentSector.getAmpSectorId());
+				generatedSectors.addAll(childSectors); //add the children sectors to the filter
+				
+				//add the grand children
+				Iterator childSectorsIterator=childSectors.iterator();
+				while(childSectorsIterator.hasNext())
+				{
+					AmpSector currentChild=(AmpSector)childSectorsIterator.next();
+					Collection grandChildrenSectors=SectorUtil.getAllChildSectors(currentChild.getAmpSectorId());
+					generatedSectors.addAll(grandChildrenSectors);
+				}
+				
+			}
+		
+		}
+		
+		return generatedSectors;
+    }
+                
 	/*
 	 * this is to delete a sector
 

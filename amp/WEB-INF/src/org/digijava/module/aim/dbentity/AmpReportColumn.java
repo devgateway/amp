@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.digijava.module.aim.annotations.reports.ColumnLike;
 import org.digijava.module.aim.annotations.reports.Level;
 import org.digijava.module.aim.annotations.reports.Order;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 
 
 public class AmpReportColumn  implements Serializable, Comparable
@@ -15,6 +17,10 @@ public class AmpReportColumn  implements Serializable, Comparable
 	private String orderId;
 	@Level
 	private AmpCategoryValue level;
+	
+	public AmpReportColumn() {
+	    level=CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ACTIVITY_LEVEL_KEY, (long)0);
+	}
 
 	public AmpColumns getColumn() {
 		return column;

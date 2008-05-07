@@ -146,7 +146,7 @@ public class XLSExportAction extends Action {
 			
 			row=sheet.createRow(rowId.shortValue());
 			cell=row.createCell(colId.shortValue());
-			cell.setCellValue(translatedReportName+": "+r.getName());
+			cell.setCellValue(translatedReportName+" "+r.getName());
 			HSSFCellStyle cs = wb.createCellStyle();
 			cs.setFillBackgroundColor(HSSFColor.BROWN.index);
 			HSSFFont font = wb.createFont();

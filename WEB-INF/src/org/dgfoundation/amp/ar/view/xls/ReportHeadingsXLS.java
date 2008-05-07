@@ -54,29 +54,59 @@ public class ReportHeadingsXLS extends XLSExporter {
 	 */
 	public void generate() {
 		ColumnReportData columnReport = (ColumnReportData) item;
-		
 //		requirements for translation purposes
 		TranslatorWorker translator=TranslatorWorker.getInstance();
 		String siteId=this.getMetadata().getSiteId();
 		String locale=this.getMetadata().getLocale();
-	
+		boolean fundingReached = false;
 		
 		// column headings:
 		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false) {
 			columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
 		for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++) {
 			row = sheet.createRow(rowId.shortValue());
+//			if (rowId.value == 8){
+//				row.setHeight((short)(3*row.getHeight()));
+//				System.out.println((short)(3*row.getHeight()));
+//			}
 			Iterator i = columnReport.getItems().iterator();
+			//int cellCount = 0;
 			while (i.hasNext()) {
 				Column col = (Column) i.next();
 				col.setCurrentDepth(curDepth);
 				int rowsp = col.getCurrentRowSpan();
 				Iterator ii = col.getSubColumnList().iterator();
-				if (ii.hasNext())
+				if (ii.hasNext()){
 					while (ii.hasNext()) {
+						//cellCount++;
 						Column element2 = (Column) ii.next();
 						HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(false));
 						String cellValue=element2.getName(metadata.getHideActivities());
+						
+						//if (rowId.value == 8){
+						if (rowId.value < 10 && cellValue.length() > 0){
+							//aici setam lungimea unui cell
+							if (sheet.getColumnWidth((short)colId.value)<cellValue.length()*256){
+								short val;
+								if ((short)((cellValue.length())*256) < 2560)
+									val = 2560; //at least 10 chars
+								else
+									val = (short)((cellValue.length())*256);
+								if (rowId.value == 6 && !fundingReached){
+									if (cellValue == "Funding")
+										fundingReached = true;
+									else
+										val *=3;
+								}
+								System.out.println("R[" + String.valueOf(rowId.value)+"] C[" + String.valueOf(colId.value) + "] from: " + String.valueOf(sheet.getColumnWidth((short)colId.value)) + " to: " + String.valueOf(val) + " content:" + cellValue);
+								sheet.setColumnWidth((short)colId.value, val);
+							}
+							else{
+								System.out.println("---R[" + String.valueOf(rowId.value)+"] C[" + String.valueOf(colId.value) + "] from: " + String.valueOf(sheet.getColumnWidth((short)colId.value)) + " to: " + String.valueOf(cellValue.length()*256) + " content:" + cellValue);
+							}
+
+							
+						}
 						//this value should be translated
 						String translatedCellValue=new String();
 						String prefix="aim:reportBuilder:";
@@ -84,11 +114,11 @@ public class ReportHeadingsXLS extends XLSExporter {
 						try{
 							translatedCellValue=TranslatorWorker.translate(prefix+cellValue,locale,siteId);
 						}catch (WorkerException e)
-							{
+						{
 							e.printStackTrace();
-							}
+						}
 						
-					 
+						
 						if(translatedCellValue.compareTo("")==0)
 							cell.setCellValue(cellValue);
 						else 
@@ -98,13 +128,14 @@ public class ReportHeadingsXLS extends XLSExporter {
 						// depth="+curDepth+" "+element2.getName());
 						// create spanning
 						// if(rowsp>1) makeRowSpan(rowsp);
-
+						
 						if (element2.getWidth() > 1)
 							makeColSpan(element2.getWidth());
 						else
 							colId.inc();
-
+						
 					}
+				}
 				else {
 					HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(true));
 					cell.setCellValue(" ");

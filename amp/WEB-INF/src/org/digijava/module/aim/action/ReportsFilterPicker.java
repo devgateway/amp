@@ -382,8 +382,8 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setIndexText(filterForm.getIndexString());
 		}
 		
-		arf.setFromYear(filterForm.getFromYear()==null || filterForm.getFromYear().longValue()==-1?null:new Integer(filterForm.getFromYear().intValue()));
-		arf.setToYear(filterForm.getToYear()==null || filterForm.getToYear().longValue()==-1?null:new Integer(filterForm.getToYear().intValue()));
+		arf.setYearFrom(filterForm.getFromYear()==null || filterForm.getFromYear().longValue()==-1?null:new Integer(filterForm.getFromYear().intValue()));
+		arf.setYearTo(filterForm.getToYear()==null || filterForm.getToYear().longValue()==-1?null:new Integer(filterForm.getToYear().intValue()));
 		arf.setFromMonth(filterForm.getFromMonth()==null || filterForm.getFromMonth().intValue()==-1?null:new Integer(filterForm.getFromMonth().intValue()));
 		arf.setToMonth(filterForm.getToMonth()==null || filterForm.getToMonth().intValue()==-1?null:new Integer(filterForm.getToMonth().intValue()));
 		

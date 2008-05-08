@@ -224,16 +224,17 @@ public class ProgramUtil {
 			return themes;
 		}
 
-        /**
+		/**
          * Returns All AmpThemes including sub Themes if parameter is true.
          * @param includeSubThemes boolean false - only top level Themes, true - all themes
-         * @return List AmpTheme
-         */
+		 * @return
+		 * @throws DgException
+		 */
         @SuppressWarnings("unchecked")
-		public static List<AmpTheme> getAllThemes(boolean includeSubThemes) throws DgException{
+		public static Collection<AmpTheme> getAllThemes(boolean includeSubThemes) throws DgException{
             Session session = null;
             Query qry = null;
-            List<AmpTheme> themes = new ArrayList<AmpTheme>();
+            Collection<AmpTheme> themes = new ArrayList<AmpTheme>();
 
             try {
                 session = PersistenceManager.getRequestDBSession();
@@ -1506,7 +1507,7 @@ public class ProgramUtil {
 		}
 
 
-        public static String getThemesHierarchyXML(Collection allAmpThemes) {
+        public static String getThemesHierarchyXML(Collection<AmpTheme> allAmpThemes) {
             String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
             result += "<progTree>\n";
             if (allAmpThemes != null && allAmpThemes.size() > 0) {

@@ -62,7 +62,7 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 			boolean filter) throws Exception {
 		NationalPlaningDashboardForm npdForm = (NationalPlaningDashboardForm) form;
 		// load all themes
-		List themes = ProgramUtil.getAllThemes(true);
+		Collection<AmpTheme> themes = ProgramUtil.getAllThemes(true);
 		Collection sortedThemes = CollectionUtils.getFlatHierarchy(themes,
 				true, new ProgramUtil.ProgramHierarchyDefinition(),
 				new ProgramUtil.HierarchicalProgramComparator());
@@ -288,11 +288,11 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 	 *            Long
 	 * @return AmpTheme
 	 */
-	private AmpTheme getCurrentTheme(List themes, Long currentThemeId) {
+	private AmpTheme getCurrentTheme(Collection<AmpTheme> themes, Long currentThemeId) {
 		AmpTheme currentTheme = null;
-		Iterator iter = themes.iterator();
+		Iterator<AmpTheme> iter = themes.iterator();
 		while (iter.hasNext()) {
-			AmpTheme item = (AmpTheme) iter.next();
+			AmpTheme item = iter.next();
 			boolean isEqual = false;
 
 			if (currentTheme == null

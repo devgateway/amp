@@ -1333,7 +1333,7 @@
 		<td align="right">
 			<table>
 				<tr id="paginationPlace">
-					<td>showing all</td>
+					<td>&nbsp;</td>
 				</tr>
 			</table>
 		</td>

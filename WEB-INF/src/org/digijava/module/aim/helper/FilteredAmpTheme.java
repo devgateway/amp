@@ -1,6 +1,7 @@
 package org.digijava.module.aim.helper;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,11 +40,11 @@ public class FilteredAmpTheme extends AmpTheme {
 		this.setBeneficiaries( 	filterString(ampTheme.getBeneficiaries()) );
 		this.setEnvironmentConsiderations( 	filterString(ampTheme.getEnvironmentConsiderations()) );
 	}
-	public static List transformAmpThemeList(List list) {
-		List newList		= new ArrayList();
-		Iterator iterator	= list.iterator();
+	public static List<FilteredAmpTheme> transformAmpThemeList(Collection<AmpTheme> coll) {
+		List<FilteredAmpTheme> newList		= new ArrayList<FilteredAmpTheme>();
+		Iterator<AmpTheme> iterator	= coll.iterator();
 		while ( iterator.hasNext() ) {
-			AmpTheme ampTheme				= (AmpTheme) iterator.next();
+			AmpTheme ampTheme				= iterator.next();
 			FilteredAmpTheme	fAmpTheme	= new FilteredAmpTheme(ampTheme);
 			newList.add(fAmpTheme);
 		}

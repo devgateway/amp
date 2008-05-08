@@ -600,8 +600,12 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 		// if (!(o instanceof AmpActivity)) throw new ClassCastException();
 		//
 		// AmpActivity act = (AmpActivity) o;
-		return (this.name.trim().toLowerCase().compareTo(act.name.trim()
-				.toLowerCase()));
+		
+		//Added cos this method is comparing by Names, 
+		//but many activities have NULL names and running script to correct records only once is temporary solution.
+		String myName=(this.name==null)?"":this.name;
+		String hisName=(act.getName()==null)?"":act.getName();
+		return (myName.trim().toLowerCase().compareTo(hisName.trim().toLowerCase()));
 
 	}
 

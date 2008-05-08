@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,16 +15,16 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.NpdForm;
 import org.digijava.module.aim.helper.FilteredAmpTheme;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * NPD main page.
@@ -58,7 +57,7 @@ public class ViewNPD extends Action {
         npdForm.setDefaultProgram(FeaturesUtil.getGlobalSettingValue("NPD Default Program"));
 		//npdForm.setStatuses(getStatuses());
 
-		List themes = ProgramUtil.getAllThemes(true);
+		Collection<AmpTheme> themes = ProgramUtil.getAllThemes(true);
 		npdForm.setAllThemes( FilteredAmpTheme.transformAmpThemeList(themes) );
 
 		return mapping.findForward("forward");

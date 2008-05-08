@@ -336,6 +336,7 @@ function checkUncheckAll2() {
 			                            	<field:display name="Primary Program" feature="NPD Programs">&nbsp;</field:display>
 											<field:display name="Secondary Program" feature="NPD Programs">&nbsp;</field:display>
 											
+											<field:display name="Responsible Organisation" feature="Responsible Organisation"></field:display>
 											<field:display name="Executing Agency" feature="Executing Agency"></field:display>
 											<field:display name="Implementing Agency" feature="Implementing Agency"></field:display>
 											<field:display name="Contracting Agency" feature="Contracting Agency"></field:display>

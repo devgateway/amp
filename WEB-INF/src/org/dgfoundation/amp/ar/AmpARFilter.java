@@ -93,9 +93,9 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Integer lineMinRank;
 	private Integer planMinRank;
 	private Integer fromMonth;
-	private Integer fromYear;
+	private Integer yearFrom;
 	private Integer toMonth;
-	private Integer toYear;	
+	private Integer yearTo;	
 	private Long regionSelected=null;
 	private boolean approved=false;
 	private boolean draft=false;
@@ -146,11 +146,11 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		    	this.setCurrency(tempSettings.getCurrency());	
 		    
 			
-			if (this.getFromYear()==null && tempSettings.getReportStartYear()!=null && tempSettings.getReportStartYear().intValue()!=0)
-			    this.setFromYear(tempSettings.getReportStartYear());
+			if (this.getYearFrom()==null && tempSettings.getReportStartYear()!=null && tempSettings.getReportStartYear().intValue()!=0)
+			    this.setYearFrom(tempSettings.getReportStartYear());
 			
-			if (this.getToYear()==null && tempSettings.getReportEndYear()!=null && tempSettings.getReportEndYear().intValue()!=0)
-			    this.setToYear(tempSettings.getReportEndYear());
+			if (this.getYearTo()==null && tempSettings.getReportEndYear()!=null && tempSettings.getReportEndYear().intValue()!=0)
+			    this.setYearTo(tempSettings.getReportEndYear());
 			
 		}
 		
@@ -287,29 +287,29 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		}*/
 		
 		if (fromMonth == null){
-			if (fromYear != null){
+			if (yearFrom != null){
 				AmpARFilterHelper filterHelper = Logic.getInstance().getAmpARFilterHelper();
-				String FROM_FUNDING_YEAR_FILTER = filterHelper.createFromYearQuery(fromYear);
+				String FROM_FUNDING_YEAR_FILTER = filterHelper.createFromYearQuery(yearFrom);
 			    queryAppend(FROM_FUNDING_YEAR_FILTER);
 			}
 		}
 		else{
 			AmpARFilterHelper filterHelper = Logic.getInstance().getAmpARFilterHelper();
-			String FROM_FUNDING_YEARMONTH_FILTER = filterHelper.createFromMonthQuery(fromMonth, fromYear);
+			String FROM_FUNDING_YEARMONTH_FILTER = filterHelper.createFromMonthQuery(fromMonth, yearFrom);
 		    queryAppend(FROM_FUNDING_YEARMONTH_FILTER);
 		}
 		
 		
 		if (toMonth == null){
-			if (toYear != null){
+			if (yearTo != null){
 				AmpARFilterHelper filterHelper = Logic.getInstance().getAmpARFilterHelper();
-				String TO_FUNDING_YEAR_FILTER = filterHelper.createToYearQuery(toYear);
+				String TO_FUNDING_YEAR_FILTER = filterHelper.createToYearQuery(yearTo);
 			    queryAppend(TO_FUNDING_YEAR_FILTER);
 			}
 		}
 		else{
 			AmpARFilterHelper filterHelper = Logic.getInstance().getAmpARFilterHelper();
-			String TO_FUNDING_YEARMONTH_FILTER = filterHelper.createToMonthQuery(toMonth, toYear);
+			String TO_FUNDING_YEARMONTH_FILTER = filterHelper.createToMonthQuery(toMonth, yearTo);
 		    queryAppend(TO_FUNDING_YEARMONTH_FILTER);
 		}
 		
@@ -702,20 +702,20 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		return toMonth;
 	}
 
-	public Integer getFromYear() {
-		return fromYear;
+	public Integer getYearFrom() {
+		return yearFrom;
 	}
 
-	public void setFromYear(Integer fromYear) {
-		this.fromYear = fromYear;
+	public void setYearFrom(Integer fromYear) {
+		this.yearFrom = fromYear;
 	}
 
-	public Integer getToYear() {
-		return toYear;
+	public Integer getYearTo() {
+		return yearTo;
 	}
 
-	public void setToYear(Integer toYear) {
-		this.toYear = toYear;
+	public void setYearTo(Integer toYear) {
+		this.yearTo = toYear;
 	}
 
 	public String getPageSize() {

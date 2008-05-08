@@ -156,7 +156,7 @@
                                                                     <FONT color="red">*</FONT><digi:trn key="aim:percentage">Percentage</digi:trn>:&nbsp;</td>
                                                                     <td width="5%" vAlign="center" align="left">
                                                                         <html:text name="activitySectors" indexed="true" property="sectorPercentage"
-                                                                                   size="2" maxlength="3" onkeyup="fnChk(this)" />
+                                                                                   size="2" onkeyup="fnChk(this)" />
                                                                     </td>
                                                                 </tr>
                                                                 <c:set var="sectorAdded">

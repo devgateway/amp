@@ -100,7 +100,7 @@
 			<a style="cursor:pointer"
 				onClick="showFilter(); ">
 			<u><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></u> </a>
-			<a style="cursor:pointer"
+			<a style="cursor:pointer;display:none;"
 				onClick="showRange(); ">
 			<u><digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn></u> </a>
 		</div>

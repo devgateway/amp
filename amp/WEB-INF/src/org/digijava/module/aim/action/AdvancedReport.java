@@ -1728,8 +1728,13 @@ public class AdvancedReport extends Action {
 							for(Iterator kt=ampColumnsOrder.iterator();kt.hasNext();)
 							{
 								AmpColumnsOrder aco=(AmpColumnsOrder) kt.next();
+								System.out.println("----------------"+aco.getColumnName()+":"+aco.getId()+":"+aco.getIndexOrder());
 								if(ampFieldVisibility.getParent().getName().compareTo(aco.getColumnName())==0)
-									ampThemesOrdered.add(aco);
+									{
+										ampThemesOrdered.add(aco);
+										System.out.println("	----------------ADDED!");
+									}
+								
 							}
 						}
 					}
@@ -1752,7 +1757,7 @@ public class AdvancedReport extends Action {
 						if("donor".compareTo(reportType)==0)
 						{
 							aux.add(acv.getAmpColumn());
-							//System.out.println(++jjj+". "+acv.getAmpColumn().getColumnName());
+								System.out.println(++jjj+". "+acv.getAmpColumn().getColumnName());
 							added=true;
 						}
 						//the contribution report doesn't have access to columns 33-38 from amp_columns

@@ -1804,7 +1804,23 @@
 										    Related Organizations</digi:trn>
 									  </b>									</td>
 
-<td bgcolor="#ffffff">
+										<td bgcolor="#ffffff">
+										
+										<feature:display name="Responsible Organisation" module="Organizations">
+											<b><digi:trn key="aim:responsibleOrganisation">Responsible Organisation</digi:trn></b><br/>
+											<logic:notEmpty name="aimEditActivityForm" property="respOrganisations">
+												<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+													<tr><td>
+													<logic:iterate name="aimEditActivityForm" property="respOrganisations"
+													id="respOrg" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+															<ul><li> <bean:write name="respOrg" property="name" /></li></ul>
+													</logic:iterate>
+													</td></tr>
+												</table>
+											</logic:notEmpty>
+											<br/>
+											</feature:display>
+										
                                            <feature:display name="Executing Agency" module="Organizations">
 											<b><digi:trn key="aim:executingAgency">Executing Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="executingAgencies">

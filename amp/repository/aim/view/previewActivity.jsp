@@ -1613,6 +1613,27 @@ function collapseAll() {
 										<td bgcolor="#ffffff">
 											<div id="orgz_dots">...</div>
 											<div id="act_orgz" style="display: none;">
+											
+											   <feature:display name="Responsible Organisation" module="Organizations">
+	                                            <logic:notEmpty name="aimEditActivityForm" property="respOrganisations">
+													<img id="executing_agency_plus"  onclick="toggleGroup('executing_agency')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>
+	                                            	<img id="executing_agency_minus" onclick="toggleGroup('executing_agency')" src="/TEMPLATE/ampTemplate/images/arrow_down.gif" style="display : none"/>											</logic:notEmpty>
+												<b><digi:trn key="aim:responsibleOrganisation">Responsible Organisation</digi:trn></b><br/>
+												<logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
+													<div id="executing_agency_dots">...</div>
+													<div id="act_resp_org" style="display: none;">
+													<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
+														<tr><td>
+														<logic:iterate name="aimEditActivityForm" property="respOrganisations" id="respOrg" type="org.digijava.module.aim.dbentity.AmpOrganisation">
+																	<ul><li> <bean:write name="respOrg" property="name" /></li></ul>
+														</logic:iterate>
+														</td></tr>
+													</table>
+													</div>
+												</logic:notEmpty>
+												<br/>
+												</feature:display>
+											
 	                                           <feature:display name="Executing Agency" module="Organizations">
 	                                            <logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
 													<img id="executing_agency_plus"  onclick="toggleGroup('executing_agency')" src="/TEMPLATE/ampTemplate/images/arrow_right.gif"/>

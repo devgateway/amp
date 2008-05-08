@@ -39,7 +39,7 @@ public class AmpColumnsOrder implements Serializable, Comparable {
 	public int compareTo(Object arg0) {
 		// TODO Auto-generated method stub
 		AmpColumnsOrder obj=(AmpColumnsOrder) arg0;
-		return this.id.compareTo(obj.getId());
+		return this.indexOrder.compareTo(obj.getIndexOrder());
 	}
 	
 		

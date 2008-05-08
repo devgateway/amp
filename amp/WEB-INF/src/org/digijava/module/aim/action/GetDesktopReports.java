@@ -37,7 +37,8 @@ public class GetDesktopReports extends TilesAction {
 				//Adding the default team report
 				AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 				AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
-				ArrayList userReports = TeamMemberUtil.getAllMemberReports(tm.getMemberId());
+				//ArrayList userReports = TeamMemberUtil.getAllMemberReports(tm.getMemberId());
+				ArrayList userReports = (ArrayList) TeamUtil.getAllTeamReports(tm.getTeamId(),null, null,true,tm.getMemberId());
 				if (defaultTeamReport != null){
 					Iterator iter = userReports.iterator();
 					boolean found = false;

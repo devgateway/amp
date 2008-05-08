@@ -932,7 +932,8 @@ public class SectorUtil {
 			while ( confIter.hasNext() ) {
 				AmpClassificationConfiguration conf		= confIter.next();
 				if ( configurationName.equals( conf.getName() ) ) {
-					id	= conf.getId();
+					if ( conf.getClassification()!= null )
+						id	= conf.getClassification().getAmpSecSchemeId();
 				}
 			}
 			if ( id != null ) {

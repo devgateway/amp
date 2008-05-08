@@ -6,9 +6,7 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +24,6 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.RepairDbUtil;
 import org.digijava.module.aim.util.ProgramUtil.ProgramHierarchyDefinition;
@@ -68,7 +65,7 @@ public class ThemeManager extends Action {
 				 * New Code, AMP-
 				 */
 			      // get All themes from DB
-			    List allThemes = ProgramUtil.getAllThemes(true);
+			    Collection<AmpTheme> allThemes = ProgramUtil.getAllThemes(true);
 //				Collection themeFlatTree = CollectionUtils.getFlatHierarchy(
 //						allThemes, 
 //						true,
@@ -199,7 +196,7 @@ public class ThemeManager extends Action {
 //		}
 //		themeForm.setSubPrograms(Subthemes);
 		//themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
-		 List allThemes = ProgramUtil.getAllThemes(true);
+		 Collection<AmpTheme> allThemes = ProgramUtil.getAllThemes(true);
 
 
 			Collection themeFlatTree = CollectionUtils.getHierarchy(

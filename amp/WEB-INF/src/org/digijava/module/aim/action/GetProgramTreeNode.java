@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
 
 /**
@@ -51,12 +52,12 @@ public class GetProgramTreeNode
       outputStream = new OutputStreamWriter(response.
                                             getOutputStream(), "UTF-8");
       // get All themes from DB
-      List themes = ProgramUtil.getAllThemes(true);
+      Collection<AmpTheme> themes = ProgramUtil.getAllThemes(true);
 
       // Construct XML tree
       String xml = ProgramUtil.getThemesHierarchyXML(themes);
 
-      // return xml
+      // return XML
       out = new PrintWriter(outputStream, true);
 
       out.println(xml);

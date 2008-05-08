@@ -76,10 +76,10 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		
 		//we now check if the year filtering is used - we do not want items from other years to be shown
-		if(filter.getFromYear()!=null || filter.getToYear()!=null) {
+		if(filter.getYearFrom()!=null || filter.getYearTo()!=null) {
 			Integer itemYear=(Integer) MetaInfo.getMetaInfo(cac.getMetaData(),ArConstants.YEAR).getValue();
-			if(filter.getFromYear()!=null && filter.getFromYear().intValue()>itemYear.intValue()) showable=false;
-			if(filter.getToYear()!=null && filter.getToYear().intValue()<itemYear.intValue()) showable=false;
+			if(filter.getYearFrom()!=null && filter.getYearFrom().intValue()>itemYear.intValue()) showable=false;
+			if(filter.getYearTo()!=null && filter.getYearTo().intValue()<itemYear.intValue()) showable=false;
 		}
 		return showable;
 	}
@@ -87,9 +87,9 @@ public class CategAmountColWorker extends ColumnWorker {
 	
 	protected boolean isCummulativeShowable(CategAmountCell cac) {
 		AmpARFilter filter=(AmpARFilter) generator.getFilter();
-		if(filter.getToYear()==null) return true;
+		if(filter.getYearTo()==null) return true;
 		int cellYear=Integer.parseInt(cac.getMetaValueString(ArConstants.YEAR));
-		if(cellYear>filter.getToYear().intValue()) return false;
+		if(cellYear>filter.getYearTo().intValue()) return false;
 		return true;
 	}
 

@@ -44,13 +44,18 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 		public final int compare (Object o1, Object o2) {
 			Cell c1=(Cell) o1;
 			Cell c2=(Cell) o2;
-                        if(c1 instanceof TextCell && c2 instanceof TextCell){
-                            String c1Value=c1.comparableToken().toString();
-                            String c2Value=c2.comparableToken().toString();
-                           return c1Value.compareToIgnoreCase(c2Value);
-                        } 
-                        logger.info("3 cell c1 instance : "+c1.getValue());
-                        logger.info("4 cell c2 instance : "+c2.getValue());            
+	        if(c1 instanceof TextCell && c2 instanceof TextCell){
+	            String c1Value=c1.comparableToken().toString();
+	            String c2Value=c2.comparableToken().toString();
+	           return c1Value.compareToIgnoreCase(c2Value);
+	        } 
+	        if(c1 instanceof AmountCell && c2 instanceof AmountCell){
+	        	AmountCell ac1 = (AmountCell) c1;
+	        	AmountCell ac2 = (AmountCell) c2;
+	        	return Double.compare(ac1.getAmount(), ac2.getAmount());
+	        }
+	        logger.info("3 cell c1 instance : "+c1.getValue());
+	        logger.info("4 cell c2 instance : "+c2.getValue());            
 			return c1.comparableToken().toString().compareTo(c2.comparableToken().toString());
 		}
 	}

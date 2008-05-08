@@ -207,8 +207,27 @@ public class ColumnReportData extends ReportData {
 		if(this.getSorterColumn()==null) return allIds;
 		
 		
-		//if we have a sorter column, get all its items:
-		List sorterItems=this.getColumn(this.getSorterColumn()).getItems();
+		// if we have a sorter column, get all its items:
+		Iterator it = items.iterator();
+		Column theColumn = null;
+		while (it.hasNext()) {
+			Column element = (Column) it.next();
+			if (element instanceof CellColumn) {
+				if (element.getColumnId().equals(this.getSorterColumn())) {
+					theColumn = element;
+					break;
+				}
+			} else if (element instanceof GroupColumn) {
+				Column t = ((GroupColumn) element).getColumn(this
+						.getSorterColumn());
+				if (t != null) {
+					theColumn = t;
+					break;
+				}
+			}
+		}
+		
+		List sorterItems = theColumn.getItems();
 		
 		
 		//remove null values

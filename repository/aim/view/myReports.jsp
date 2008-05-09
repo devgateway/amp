@@ -71,7 +71,15 @@ return false;
 					<digi:trn key="aim:clickToViewReport">Click here to view Report</digi:trn>
 
 				</c:set>
+				<logic:empty name="myReports" scope="session">
 
+					<TR><TD bgColor=#ffffff class=box-border align=left>
+
+						<digi:trn key="aim:noPublicReports">No public reports</digi:trn>
+
+					</TD></TR>
+
+				</logic:empty>
 				<logic:notEmpty name="myReports" scope="session">
 
 				<TR><TD bgColor=#ffffff class=box-border align=left>

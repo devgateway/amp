@@ -725,7 +725,10 @@ treeObj.init();
 treeObj.showHideNode(false,'dhtmlgoodies_tree');
 //treeObj.expandAll();
 }
-window.onload=initScripts;
+window.onload = function (){
+	initScripts();
+	assignOriginalValues('aimAdvancedReportForm');
+}
 </script>
 
 

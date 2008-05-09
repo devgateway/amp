@@ -47,9 +47,40 @@ function nope(){
 	alert('<digi:trn key="aim:reportBuilder:ReportSkipValidation">Please do not skip steps!</digi:trn>');
 	return true;
 }
+window.onload = function (){
+	assignOriginalValues('aimAdvancedReportForm');
+}
+
+function assignOriginalValues(formName){
+	var form = document.getElementsByName(formName)[0];
+	var formElements = form.elements;
+	
+	for(idx2 = 0 ; idx2 < formElements.length ; idx2++)
+	{
+		formElements[idx2].originalValue = formElements[idx2].value;
+		if(formElements[idx2].checked != "undefined"){
+		formElements[idx2].originalChecked = formElements[idx2].checked;
+		}
+	}
+	
+}
+function isFormModified(formName)
+{
+	var form = document.getElementsByName(formName)[0];
+	var formElements = form.elements;
+	
+	for(idx2 = 0 ; idx2 < formElements.length ; idx2++)
+	{
+		if(formElements[idx2].originalValue!=formElements[idx2].value){
+			
+			return true;
+		}
+	}
+	return false;
+}
 
 function saveEditedReport(){
-	if (${aimAdvancedReportForm.reportIsModified} == true) {
+	if (${aimAdvancedReportForm.reportIsModified} == true || isFormModified('aimAdvancedReportForm')) {
 		if (confirm('<digi:trn key="aim:reportBuilder:saveReportConfirmation">Do you want to save the changes you made to the report ?</digi:trn>')) {
 			<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SaveReport" />
 			document.aimAdvancedReportForm.action = "<%= step %>";

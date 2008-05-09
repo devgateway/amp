@@ -70,7 +70,6 @@ public class AdvancedReportForm extends ActionForm
 	private Collection adjustType = null;
 	private Collection selAdjustType = null;
 	private Long removeAdjustType[] = null; 
-	private String createdReportId = "";
 	private String imageUrl="";
 
 	private String donor ;
@@ -1312,12 +1311,6 @@ private int yrDiff;
 
 	public void setDimColumns(int i) {
 		dimColumns = i;
-	}
-	public String getCreatedReportId() {
-		return createdReportId;
-	}
-	public void setCreatedReportId(String createdReportId) {
-		this.createdReportId = createdReportId;
 	}
 
 	/**

@@ -70,13 +70,18 @@ public final class AdvancedReportUtil {
 					)
 			{
 				//logger.info(teamMember.getMemberName() + " is Team Leader ");
-				AmpTeamReports ampTeamReports = new AmpTeamReports();
-				
-				ampTeamReports.setTeamView(true);				
-				ampTeamReports.setTeam(ampTeam);
-				ampTeamReports.setReport(ampReports);
-				session.save(ampTeamReports);
-				
+
+				//Check if this assignment was already done.
+				AmpTeamReports teamReports = TeamUtil.getAmpTeamReport(ampTeam.getAmpTeamId(), ampReports.getAmpReportId());
+				if(teamReports == null)
+				{
+					AmpTeamReports ampTeamReports = new AmpTeamReports();
+					
+					ampTeamReports.setTeamView(true);				
+					ampTeamReports.setTeam(ampTeam);
+					ampTeamReports.setReport(ampReports);
+					session.save(ampTeamReports);
+				}
 			}
 //			else
 //			{

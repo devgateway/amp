@@ -61,7 +61,7 @@
 
 
 <logic:notPresent name="firstReportName">
-<digi:trn key="amp:noPublicTabs">
+<digi:trn key="aim:noPublicTabs">
 No Public Tabs
 </digi:trn>
 </logic:notPresent>

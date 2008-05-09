@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
 
@@ -62,13 +63,15 @@ function confirmFunc() {
 						</span>
 					</td>
 				</tr>
-        		<tr>
-        			<td title='<digi:trn key="aim:createReport">Create Report</digi:trn>' align="left">
-						<digi:link href="/advancedReportManager.do?clear=true&reportEdit=false">
-							<b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
-						</digi:link>
-					</td>
-				</tr>
+				<logic:present name="currentMember">
+	        		<tr>
+	        			<td title='<digi:trn key="aim:createReport">Create Report</digi:trn>' align="left">
+							<digi:link href="/advancedReportManager.do?clear=true&reportEdit=false">
+								<b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
+							</digi:link>
+						</td>
+					</tr>
+				</logic:present>
 				<tr>
 					<td noWrap width=650 vAlign="top">
 						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
@@ -135,8 +138,17 @@ function confirmFunc() {
 															</td>
 														<% } %>
 													</tr>
-
-
+													<c:set var="count" value="${fn:length(aimTeamReportsForm.reports)}">
+													</c:set>
+													<c:if test="${count == 0}">
+													<tr>
+														<td colspan="4">
+														<digi:trn key="aim:noreportspresent">
+														No reports present
+														</digi:trn>
+														</td>
+													</tr>
+													</c:if>
 													<logic:iterate name="aimTeamReportsForm"  property="reports" id="report" indexId="idx"
 														type="org.digijava.module.aim.dbentity.AmpReports">
 														<TR bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>">

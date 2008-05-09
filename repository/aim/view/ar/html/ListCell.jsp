@@ -7,8 +7,12 @@
 <bean:define id="listCell" name="viewable"
 	type="org.dgfoundation.amp.ar.cell.ListCell" scope="request"
 	toScope="page" />
+
+<%if(listCell.size() > 3) {%>
 <div style='position:relative;display:none;' id='<bean:write name="listCell" property="column.name"/>-<bean:write name="listCell" property="ownerId"/>'> 
+<%}%>
 <ul>
+
 <logic:iterate name="listCell" property="value" id="subCell"
 	scope="page">
 	<bean:define id="viewable" name="subCell"
@@ -18,10 +22,16 @@
 		<li><jsp:include page="<%=viewable.getViewerPath()%>" /></li>
 </logic:iterate>
 </ul>
+<%if(listCell.size() > 3) {%>
 </div>
+
+<ul>
+</ul>
+
 <c:set var="key">
 	aim:reportbuilder:<bean:write name="listCell" property="column.name"/>
 </c:set>
 
 <div align="center" onMouseOver="stm(['<digi:trn key="${key}"><bean:write name="listCell" property="column.name"/></digi:trn>',document.getElementById('<bean:write name="listCell" property="column.name"/>-<bean:write name="listCell" property="ownerId"/>').innerHTML],Style[1])" onMouseOut="htm()">[<u><digi:trn key="aim:reportbuilder:list">list...</digi:trn></u>]
 </div>
+<%} %>

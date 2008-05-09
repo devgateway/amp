@@ -257,7 +257,8 @@ public class ColumnReportData extends ReportData {
 			if(!referenceIds.containsKey(element)) sortedIds.add(element);
 		}
 		
-		if(!getSortAscending()) Collections.reverse(sortedIds);
+		if(!getSortAscending()) 
+			Collections.reverse(sortedIds);
 		
 		return sortedIds;
 		} catch (Exception e) {

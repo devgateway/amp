@@ -92,7 +92,8 @@ public class ViewNewAdvancedReport extends Action {
 		Session session = PersistenceManager.getSession();
 		String sortBy=request.getParameter("sortBy");
 		String applySorter = request.getParameter("applySorter");
-		if(ampReportId==null) ampReportId=ar.getAmpReportId().toString();
+		if(ampReportId==null) 
+			ampReportId=ar.getAmpReportId().toString();
 		Long reportId=new Long(ampReportId);
 		request.setAttribute("ampReportId",ampReportId);
 		
@@ -120,8 +121,7 @@ public class ViewNewAdvancedReport extends Action {
 			filter.setDraft(false);
 		}
 		
-		
-		if( !cached && ((applySorter==null && sortBy==null ) || ar==null || (arf.getCreatedReportId() == null) || (ampReportId!=null && !ampReportId.equals(arf.getCreatedReportId().toString()))))
+		if( !cached && ( applySorter==null && sortBy==null || ar==null || ampReportId!=null && !ampReportId.equals(ar.getAmpReportId().toString()) ))
 		{
 			rd=ARUtil.generateReport(mapping,form,request,response);
 	

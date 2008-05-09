@@ -561,7 +561,7 @@
 
 						<digi:trn key="aim:useAMPSiteNow">
 
-						Use AMP Ethiopia now
+						Use AMP now
 
 						</digi:trn>
 

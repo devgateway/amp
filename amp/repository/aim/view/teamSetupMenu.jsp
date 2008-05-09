@@ -286,27 +286,6 @@ html>body #main {
 							</span>
 							</LI>		
 						</c:if>
-						<c:if test="${selectedTab == '5'}">
-							<LI>
-						   		<a name="node">
-						   		<div>
-								<digi:trn key="aim:configureTeamPages">Configure Team Pages</digi:trn>	
-								</div>
-								</a>
-							</LI>
-						</c:if>
-						
-						<c:if test="${selectedTab != '5'}">
-							<LI>
-							<span>
-									<digi:link href="/configureTeamPage.do">	
-								<div title='<digi:trn key="aim:clickToConfigureTeamPages">Click here to Configure Team Pages</digi:trn>'>	
-										<digi:trn key="aim:configureTeamPages">Configure Team Pages</digi:trn>	
-								</div>
-									</digi:link>
-							</span>
-							</LI>
-						</c:if>
 
 						<module:display name="Trend Analysis and Forecasting" parentModule="TREND ANALYSIS">
 						

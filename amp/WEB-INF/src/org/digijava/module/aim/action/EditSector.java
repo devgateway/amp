@@ -59,7 +59,8 @@ public class EditSector extends Action {
 										editSectorForm.setSectorId(secId);
 										ampSector.setName(editSectorForm.getSectorName());
 										ampSector.setDescription(editSectorForm.getDescription());
-										ampSector.setSectorCode(editSectorForm.getSectorCode());
+										ampSector.setSectorCode(AddSector.DEFAULT_VALUE_SECTOR);										
+										ampSector.setSectorCodeOfficial(editSectorForm.getSectorCodeOfficial());
 										logger.debug("Updating.............................................");
 										DbUtil.update(ampSector);
 										Long schemeId =ampSector.getAmpSecSchemeId().getAmpSecSchemeId();
@@ -77,7 +78,8 @@ public class EditSector extends Action {
 									editSectorForm.setSectorId(secId);
 									ampSector.setName(editSectorForm.getSectorName());
 									ampSector.setDescription(editSectorForm.getDescription());
-									ampSector.setSectorCode(editSectorForm.getSectorCode());
+									ampSector.setSectorCode(AddSector.DEFAULT_VALUE_SUB_SECTOR);
+									ampSector.setSectorCodeOfficial(editSectorForm.getSectorCodeOfficial());
 									logger.debug("Updating.............................................");
 									DbUtil.update(ampSector);
 									ampSector = SectorUtil.getAmpSector(secId);
@@ -85,6 +87,7 @@ public class EditSector extends Action {
 									Integer schemeID = new Integer(sectorId.intValue());
 									editSectorForm.setSubSectors(SectorUtil.getAllChildSectors(sectorId));
 									editSectorForm.setSectorCode(ampSector.getParentSectorId().getSectorCode());
+									editSectorForm.setSectorCodeOfficial(ampSector.getParentSectorId().getSectorCodeOfficial());
 									editSectorForm.setSectorName(ampSector.getParentSectorId().getName());
 									editSectorForm.setSecSchemeId(ampSector.getAmpSecSchemeId().getAmpSecSchemeId());
 									editSectorForm.setSectorId(ampSector.getParentSectorId().getAmpSectorId());
@@ -105,6 +108,7 @@ public class EditSector extends Action {
 									ampSector.setName(editSectorForm.getSectorName());
 									ampSector.setDescription(editSectorForm.getDescription());
 									ampSector.setSectorCode(editSectorForm.getSectorCode());
+									ampSector.setSectorCodeOfficial(editSectorForm.getSectorCodeOfficial());
 									logger.debug("Updating.............................................");
 									DbUtil.update(ampSector);
 									ampSector = SectorUtil.getAmpSector(secId);
@@ -112,6 +116,7 @@ public class EditSector extends Action {
 									Integer schemeID = new Integer(sectorId.intValue());
 									editSectorForm.setSubSectors(SectorUtil.getAllChildSectors(sectorId));
 									editSectorForm.setSectorCode(ampSector.getParentSectorId().getSectorCode());
+									editSectorForm.setSectorCodeOfficial(ampSector.getParentSectorId().getSectorCodeOfficial());
 									editSectorForm.setSectorName(ampSector.getParentSectorId().getName());
 									editSectorForm.setSecSchemeId(ampSector.getAmpSecSchemeId().getAmpSecSchemeId());
 									editSectorForm.setSectorId(ampSector.getParentSectorId().getAmpSectorId());

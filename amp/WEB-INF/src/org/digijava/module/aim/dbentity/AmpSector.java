@@ -22,6 +22,7 @@ public class AmpSector implements Serializable, Comparable, Identifiable, ARDime
 	private String version ;
 	private Set aidlist ;
     private Set indicators;
+    private String sectorCodeOfficial;
 	
 	private String segmentCode;
 	
@@ -217,6 +218,14 @@ public void setAmpOrgId(AmpOrganisation org) {
 
 	public Class getDimensionClass() {
 	    return SectorDimension.class;
+	}
+
+	public String getSectorCodeOfficial() {
+		return sectorCodeOfficial;
+	}
+
+	public void setSectorCodeOfficial(String sectorCodeOfficial) {
+		this.sectorCodeOfficial = sectorCodeOfficial;
 	}
 	
 }

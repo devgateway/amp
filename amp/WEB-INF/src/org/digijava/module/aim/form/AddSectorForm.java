@@ -38,9 +38,17 @@ public class AddSectorForm extends ActionForm {
 	private String description = null;
 	private HashMap organisationList = null;
 	private String flag = null;
+	private String sectorCodeOfficial = null;
 
 
 
+	public String getSectorCodeOfficial() {
+		return sectorCodeOfficial;
+	}
+
+	public void setSectorCodeOfficial(String sectorCodeOfficial) {
+		this.sectorCodeOfficial = sectorCodeOfficial;
+	}
 
 	public boolean getJspFlag() {
 		return jspFlag;

@@ -15,14 +15,21 @@
 		var flag = confirm("Delete this Sector?");
 		return flag;
 	}
+	
+	
 	function updateScheme(id) {	
-	    var sectorCode = document.aimAddSectorForm.sectorCode.value;
-		<c:set var="translation">
-  			<digi:trn key="aim:EnterValidSectorCode">Sector Code must be between 100 and 1000</digi:trn>
-		</c:set>             
-
-		if(!(sectorCode > 100 && sectorCode < 1000))
+		if(isEmpty(document.aimAddSectorForm.sectorName.value)==true)
 		{
+			<c:set var="translation">
+ 					<digi:trn key="aim:EnterSectorName">Please, enter a sector name</digi:trn>
+			</c:set>   			 
+			alert("${translation}");
+		}	
+		else if(isEmpty(document.aimAddSectorForm.sectorCodeOfficial.value)==true)
+		{
+			<c:set var="translation">
+  				<digi:trn key="aim:EnterSectorCode">Please, enter a Sector Code</digi:trn>
+			</c:set>             		
     		alert("${translation}");
 		}
 		else{	
@@ -111,7 +118,7 @@
 														</digi:trn>
 														</td>
 														<td>
-															<html:text name ="aimAddSectorForm" property="sectorCode" size="5"/> 
+															<html:text name ="aimAddSectorForm" property="sectorCodeOfficial" size="5"/> 
 														</td>
 													</tr>
 													<tr>

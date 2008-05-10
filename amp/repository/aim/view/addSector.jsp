@@ -24,31 +24,29 @@
 
 	function updateScheme(id) {
 
-			 var sectorCode = document.aimAddSectorForm.sectorCode.value; 
-			 <c:set var="translation">
-             	<digi:trn key="aim:EnterValidSectorCode">Sector Code must be between 100 and 1000</digi:trn>
-             </c:set>             
+			 var sectorCode = document.aimAddSectorForm.sectorCodeOfficial.value; 
 
 
 			 if(isEmpty(document.aimAddSectorForm.sectorName.value)==true)
 
 			 {
-
-						alert("please enter a sector name:");
-
-			 }	
-
-			 else if(isEmpty(document.aimAddSectorForm.sectorCode.value)==true)
-
-			 {
-
-						alert("please enter a sector code:");
+				 <c:set var="translation">
+    	         	<digi:trn key="aim:EnterSectorName">Please, enter a sector name</digi:trn>
+        	     </c:set>             
+			 			alert("${translation}");
 
 			 }	
-			 else if(!(sectorCode > 100 && sectorCode < 1000))
+
+			 else if(isEmpty(document.aimAddSectorForm.sectorCodeOfficial.value)==true)
+
 			 {
-			            alert("${translation}");
-			 }
+					 <c:set var="translation">
+    	    	     	<digi:trn key="aim:EnterValidSectorCodeOfficial">Please, enter a Sector Code</digi:trn>
+        	    	 </c:set>             
+
+						alert("${translation}");
+
+			 }	
 
 			 else
 
@@ -255,7 +253,7 @@
 
 																	    <td width="30%">
 
-																           <html:text property="sectorCode" size="10" />
+																           <html:text property="sectorCodeOfficial" size="10" />
 
 																		</td>
 

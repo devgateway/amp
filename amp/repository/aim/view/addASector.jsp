@@ -13,38 +13,27 @@
 	}
 	function updateScheme(id,levelType) {
 			  
-			 var sectorCode = document.aimAddSectorForm.sectorCode.value; 
-			  
+		  
 			 if(isEmpty(document.aimAddSectorForm.sectorName.value)==true)
 			 {
-						alert("please enter a sector name:");
+				<c:set var="translation">
+  					<digi:trn key="aim:EnterSectorName">Please, enter a sector name</digi:trn>
+				</c:set>   			 
+				alert("${translation}");
 			 }	
-			 else if(isEmpty(document.aimAddSectorForm.sectorCode.value)==true)
+			 else if(isEmpty(document.aimAddSectorForm.sectorCodeOfficial.value)==true)
 			 {
-						alert("please enter a sector code:");
+				<c:set var="translation">
+  					<digi:trn key="aim:EnterSectorCode">Please, enter a Sector Code</digi:trn>
+				</c:set>   			 
+				alert("${translation}");
 			 }	
-			 else if(levelType=='sector' && !(sectorCode > 1000 && sectorCode < 10000))
-			 {
-			 		 <c:set var="translation">
-             	       <digi:trn key="aim:EnterValidSubSectorCode">Sector Code must be between 1000 and 10000</digi:trn>
-                     </c:set>   
-			 
-			         alert("${translation}");
-			 }
-			 else if(levelType=='sector3' && !(sectorCode > 10000 && sectorCode < 100000))
-			 {
-			 		 <c:set var="translation">
-             	       <digi:trn key="aim:EnterValidSubSubSectorCode">Sector Code must be between 10000 and 100000</digi:trn>
-                     </c:set>   
-			 
-			         alert("${translation}");
-			 }
 			 else
 			 {
-			<digi:context name="addSector" property="context/module/moduleinstance/addSector.do?event=addSector" />
-			document.aimAddSectorForm.action = "<%= addSector%>&ampSecSchemeIdpoi="+id+"&parent="+levelType;
-			document.aimAddSectorForm.target = "_self";
-			document.aimAddSectorForm.submit();
+				<digi:context name="addSector" property="context/module/moduleinstance/addSector.do?event=addSector" />
+				document.aimAddSectorForm.action = "<%= addSector%>&ampSecSchemeIdpoi="+id+"&parent="+levelType;
+				document.aimAddSectorForm.target = "_self";
+				document.aimAddSectorForm.submit();
 			 }
 	
 	}
@@ -207,7 +196,7 @@ width="100%">
 	    <td width="30%">
 																
 
-           <html:text property="sectorCode" size="10" />
+           <html:text property="sectorCodeOfficial" size="10" />
 																
 
 		</td>

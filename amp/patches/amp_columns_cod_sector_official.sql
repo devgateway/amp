@@ -1,0 +1,1 @@
+ALTER TABLE amp_sector ADD sector_code_official varchar(255);

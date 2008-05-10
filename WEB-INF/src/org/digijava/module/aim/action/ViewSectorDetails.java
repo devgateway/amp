@@ -72,6 +72,7 @@ public class ViewSectorDetails extends Action {
 								AmpSector editSector= new AmpSector();
 								editSector = SectorUtil.getAmpSector(parentId);
 								viewSectorForm.setSectorCode(editSector.getSectorCode());
+								viewSectorForm.setSectorCodeOfficial(editSector.getSectorCodeOfficial());
 								viewSectorForm.setSectorName(editSector.getName());
 								viewSectorForm.setDescription(editSector.getDescription());
 								viewSectorForm.setSectorId(editSector.getAmpSectorId());
@@ -94,6 +95,7 @@ public class ViewSectorDetails extends Action {
 								AmpSector editSector= new AmpSector();
 								editSector = SectorUtil.getAmpSector(parentId);
 								viewSectorForm.setSectorCode(editSector.getSectorCode());
+								viewSectorForm.setSectorCodeOfficial(editSector.getSectorCodeOfficial());
 								viewSectorForm.setSectorName(editSector.getName());
 								viewSectorForm.setDescription(editSector.getDescription());
 								viewSectorForm.setSectorId(editSector.getAmpSectorId());

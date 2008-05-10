@@ -15,11 +15,16 @@
 		return flag;
 	}
 	function updateScheme(id,flag) {
-	    var sectorCode = document.aimAddSectorForm.sectorCode.value;
-	    	    
-		if(!(sectorCode > 10000 && sectorCode < 100000)){
+		if(isEmpty(document.aimAddSectorForm.sectorName.value)==true)
+		{
 			<c:set var="translation">
-       	    	<digi:trn key="aim:EnterValidSubSubSectorCode">Sector Code must be between 10000 and 100000</digi:trn>
+  				<digi:trn key="aim:EnterSectorName">Please, enter a sector name</digi:trn>
+			</c:set>   			 
+			alert("${translation}");
+		}	    	    
+		else if(isEmpty(document.aimAddSectorForm.sectorCodeOfficial.value)==true){
+			<c:set var="translation">
+       	    	<digi:trn key="aim:EnterSubSubSectorCode">Please, enter a Sector Code</digi:trn>
             </c:set>   
 			alert("${translation}");
 		}
@@ -108,7 +113,7 @@
 														</digi:trn>
 														</td>
 														<td>
-															<html:text name ="aimAddSectorForm" property="sectorCode" size="5"/> 
+															<html:text name ="aimAddSectorForm" property="sectorCodeOfficial" size="5"/> 
 														</td>
 													</tr>
 													<tr>

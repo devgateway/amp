@@ -91,7 +91,7 @@
 																	       <digi:trn key="aim:sectorCode">Sector Code : </digi:trn>
 																		</td>
 																	    <td width="30%">
-																           <bean:write name="aimAddSectorForm" property="sectorCode" />
+																           <bean:write name="aimAddSectorForm" property="sectorCodeOfficial" />
 																		</td>
 																	</tr>
 																	<tr>

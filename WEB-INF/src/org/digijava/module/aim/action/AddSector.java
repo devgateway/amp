@@ -26,6 +26,10 @@ import org.digijava.module.aim.util.SectorUtil;
 public class AddSector extends Action {
 
 	private static Logger logger = Logger.getLogger(GetSectors.class);
+	
+	public static final String DEFAULT_VALUE_SECTOR = "101";
+	public static final String DEFAULT_VALUE_SUB_SECTOR = "1001";
+	public static final String DEFAULT_VALUE_SUB_SUB_SECTOR = "10001";
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
@@ -75,7 +79,8 @@ public class AddSector extends Action {
 					newSector.setParentSectorId(null);
 					newSector.setAmpOrgId(null);
 					newSector.setAmpSecSchemeId(SectorUtil.getAmpSectorScheme(addSectorForm.getParentId()));
-					newSector.setSectorCode(addSectorForm.getSectorCode());
+					newSector.setSectorCode(AddSector.DEFAULT_VALUE_SECTOR);
+					newSector.setSectorCodeOfficial(addSectorForm.getSectorCodeOfficial());
 					newSector.setName(addSectorForm.getSectorName());
 					newSector.setDescription(addSectorForm.getDescription());
 					newSector.setType(null);
@@ -118,7 +123,8 @@ public class AddSector extends Action {
 					newSector.setParentSectorId(SectorUtil.getAmpSector(id));
 					newSector.setAmpOrgId(null);
 					newSector.setAmpSecSchemeId(user);
-					newSector.setSectorCode(addSectorForm.getSectorCode());
+					newSector.setSectorCode(AddSector.DEFAULT_VALUE_SUB_SECTOR);
+					newSector.setSectorCodeOfficial(addSectorForm.getSectorCodeOfficial());
 					newSector.setName(addSectorForm.getSectorName());
 					newSector.setDescription(addSectorForm.getDescription());
 					newSector.setType(null);
@@ -147,6 +153,7 @@ public class AddSector extends Action {
 					AmpSector editSector= new AmpSector();
 					editSector = SectorUtil.getAmpSector(parentId);
 					addSectorForm.setSectorCode(editSector.getSectorCode());
+					addSectorForm.setSectorCodeOfficial(editSector.getSectorCodeOfficial());
 					addSectorForm.setSectorName(editSector.getName());
 					addSectorForm.setSectorId(editSector.getAmpSectorId());
 					addSectorForm.setDescription(editSector.getDescription());
@@ -165,7 +172,8 @@ public class AddSector extends Action {
 					newSector.setParentSectorId(SectorUtil.getAmpSector(id));
 					newSector.setAmpOrgId(null);
 					newSector.setAmpSecSchemeId(user);
-					newSector.setSectorCode(addSectorForm.getSectorCode());
+					newSector.setSectorCode(AddSector.DEFAULT_VALUE_SUB_SUB_SECTOR);
+					newSector.setSectorCodeOfficial(addSectorForm.getSectorCodeOfficial());
 					newSector.setName(addSectorForm.getSectorName());
 					newSector.setDescription(addSectorForm.getDescription());
 					newSector.setType(null);
@@ -194,6 +202,7 @@ public class AddSector extends Action {
 					AmpSector editSector= new AmpSector();
 					editSector = SectorUtil.getAmpSector(parentId);
 					addSectorForm.setSectorCode(editSector.getSectorCode());
+					addSectorForm.setSectorCodeOfficial(editSector.getSectorCodeOfficial());
 					addSectorForm.setSectorName(editSector.getName());
 					addSectorForm.setSectorId(editSector.getAmpSectorId());
 					addSectorForm.setDescription(editSector.getDescription());

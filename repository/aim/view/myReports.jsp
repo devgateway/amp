@@ -71,6 +71,7 @@ return false;
 					<digi:trn key="aim:clickToViewReport">Click here to view Report</digi:trn>
 
 				</c:set>
+				<logic:notPresent name="currentMember" scope="session">
 				<logic:empty name="myReports" scope="session">
 
 					<TR><TD bgColor=#ffffff class=box-border align=left>
@@ -80,6 +81,8 @@ return false;
 					</TD></TR>
 
 				</logic:empty>
+				</logic:notPresent>
+				
 				<logic:notEmpty name="myReports" scope="session">
 
 				<TR><TD bgColor=#ffffff class=box-border align=left>

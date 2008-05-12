@@ -193,8 +193,8 @@ public class ActivityManager extends Action {
 				.getActivityRepPhyPerformance(ampActId));
 		ActivityUtil.deleteActivityReportSector(DbUtil
 				.getActivityReportSector(ampActId));
-		ActivityUtil.deleteActivityIndicatorVal(DbUtil
-				.getActivityMEIndValue(ampActId));
+		ActivityUtil.deleteActivityIndicators(DbUtil
+				.getActivityMEIndValue(ampActId), activity);
 		ActivityUtil.deleteActivity(ampActId);
 		actForm.setAllActivityList(ActivityUtil.getAllActivitiesList());
 	}

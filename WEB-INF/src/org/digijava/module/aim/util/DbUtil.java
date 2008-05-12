@@ -81,6 +81,7 @@ import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.AmpProjectBySector;
@@ -6166,31 +6167,25 @@ public class DbUtil {
 
     /* get amp ME indicator value of a particular activity specified by ampActId */
     public static Collection getActivityMEIndValue(Long ampActId) {
-        Session session = null;
-        Collection col = null;
-        Query qry = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select indVal from "
-                + AmpMEIndicatorValue.class.getName()
-                + " indVal "
-                + " where (indVal.activityId=:ampActId)";
-            qry = session.createQuery(queryString);
-            qry.setParameter("ampActId", ampActId, Hibernate.LONG);
-            col = qry.list();
-        } catch (Exception e1) {
-            logger.error("could not retrieve AmpMEIndicatorValues " + e1.getMessage());
-            e1.printStackTrace(System.out);
-        }
-        return col;
-    }
+		try {
+
+			Collection<IndicatorActivity> activityInd = null;
+			AmpActivity activity = ActivityUtil.loadActivity(ampActId);
+			if (activity != null) {
+				activityInd = activity.getIndicators();
+			}
+			return activityInd;
+		} catch (Exception e) {
+			logger.info("Couldn't get activity to delete indicators...");
+			return null;
+		}
+
+	}
 
     /*
-     * Methods called to retrieve data
-     * that have to be deleted
-     * while an activity is deleted by Admin
-     * end here
-     */
+	 * Methods called to retrieve data that have to be deleted while an activity
+	 * is deleted by Admin end here
+	 */
 
     /* To check for Status code
      * modified by Govind

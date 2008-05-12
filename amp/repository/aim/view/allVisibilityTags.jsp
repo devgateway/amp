@@ -317,6 +317,10 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Environment" feature="Cross Cutting Issues"></field:display>
 <field:display name="Equal Opportunity" feature="Cross Cutting Issues"></field:display>
 <field:display name="Exchange Rate" feature="Funding Organizations"></field:display>
+<field:display name="Executing Agency Groups" feature="Executing Agency"></field:display>
+<field:display name="Responsible Organisation Groups" feature="Responsible Organisation"></field:display>
+<field:display name="Implementing Agency Groups" feature="Implementing Agency"></field:display>
+<field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display>
 <field:display name="Executing Agency Add Organizations Button" feature="Executing Agency"></field:display>
 <field:display name="Executing Agency Remove Organizations Button" feature="Executing Agency"></field:display>
 <field:display name="Responsible Organisation Add Organizations Button" feature="Responsible Organisation"></field:display>

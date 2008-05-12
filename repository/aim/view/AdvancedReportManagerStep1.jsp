@@ -337,10 +337,14 @@ function checkUncheckAll2() {
 											<field:display name="Secondary Program" feature="NPD Programs">&nbsp;</field:display>
 											
 											<field:display name="Responsible Organisation" feature="Responsible Organisation"></field:display>
+											<field:display name="Responsible Organisation Groups" feature="Responsible Organisation"></field:display>
 											<field:display name="Executing Agency" feature="Executing Agency"></field:display>
 											<field:display name="Implementing Agency" feature="Implementing Agency"></field:display>
 											<field:display name="Contracting Agency" feature="Contracting Agency"></field:display>
 											<field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display>
+											<field:display name="Executing Agency Groups" feature="Executing Agency"></field:display>
+											<field:display name="Implementing Agency Groups" feature="Implementing Agency"></field:display>
+											<field:display name="Beneficiary Agency Groups" feature="Beneficiary Agency"></field:display>
 											<field:display name="Draft" feature="Identification">&nbsp;</field:display>
 											<field:display name="Credit/Donation" feature="Planning">&nbsp;</field:display>
 											<field:display name="Contract Number" feature="Planning">&nbsp;</field:display>

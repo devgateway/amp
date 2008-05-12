@@ -3114,36 +3114,35 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     }
   }
 
-  public static void deleteActivityIndicatorVal(Collection indVal) {
+  public static void deleteActivityIndicators(Collection activityInd, AmpActivity activity) {
     Session session = null;
     try {
-      session = PersistenceManager.getSession();
-      Transaction tx = session.beginTransaction();
-      if (indVal != null) {
-        Iterator indValItr = indVal.iterator();
-        while (indValItr.hasNext()) {
-          AmpMEIndicatorValue indValue = (AmpMEIndicatorValue) indValItr.next();
-          AmpMEIndicatorValue indicatorVal = (AmpMEIndicatorValue) session.load
-              (AmpMEIndicatorValue.class, indValue.getAmpMeIndValId());
-          session.delete(indicatorVal);
-        }
-      }
-      tx.commit();
-      session.flush();
-    }
-    catch (Exception e1) {
-      logger.error(
-          "could not delete/find the physical component report activities");
-      e1.printStackTrace(System.out);
-    }
-    finally {
-      try {
-        PersistenceManager.releaseSession(session);
-      }
-      catch (Exception e2) {
-        logger.error("Release session failed");
-      }
-    }
+			session = PersistenceManager.getSession();
+			Transaction tx = session.beginTransaction();
+			if (activityInd != null && activityInd.size() > 0) {
+				for (Object indAct : activityInd) {
+
+					AmpIndicator ind = (AmpIndicator) session.get(
+							AmpIndicator.class, ((IndicatorActivity) indAct)
+									.getIndicator().getIndicatorId());
+					IndicatorActivity indConn = IndicatorUtil
+							.findActivityIndicatorConnection(activity, ind);
+					IndicatorUtil.removeConnection(indConn);
+				}
+			}
+			tx.commit();
+			session.flush();
+		} catch (Exception e1) {
+			logger
+					.error("could not delete/find the physical component report activities");
+			e1.printStackTrace(System.out);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception e2) {
+				logger.error("Release session failed");
+			}
+		}
   }
 
   /* functions to DELETE an activity by Admin end here.... */

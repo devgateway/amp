@@ -395,16 +395,16 @@ function closeWindow() 
   											</tr>
 											<tr bgcolor="#003366" class="textalb">
 													     <td align="center" valign="middle" width="75">
-													      <b><font color="white">Actual/Base/<br>Target</font></b>
+													      <b><font color="white"><digi:trn key="aim:addtheme:actualbasetarget">Actual/Base/<br>Target</digi:trn></font></b>
 													     </td>
 													     <td align="center" valign="middle" width="120">
-													       <b><font color="white">Total Amount</font></b>
+													       <b><font color="white"><digi:trn key="aim:addtheme:totalamount">Total Amount</digi:trn></font></b>
 													     </td>
 													     <td align="center" valign="middle" width="120">
-													       <b><font color="white">Creation Date</font></b>
+													       <b><font color="white"><digi:trn key="aim:addtheme:creationdate">Creation Date</digi:trn></font></b>
 													     </td>
 													     <td align="center" valign="middle" width="120" colspan="3">
-													       <b><font color="white">Location</font></b>
+													       <b><font color="white"><digi:trn key="aim:addtheme:location">Location</digi:trn></font></b>
 													     </td>
 													</tr>
 														<logic:notEmpty name="prgIndicatorItr" property="programIndicatorValues">

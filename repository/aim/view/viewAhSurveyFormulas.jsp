@@ -88,14 +88,15 @@ function resetFormula(){
         <c:if test="${!aimViewAhSurveyFormulasForm.formulaEnabled}">
           <input type="checkbox" id="chkEnabled" />
         </c:if>
-        <%--Not Working correctly ->  <html:checkbox property="formulaEnabled" styleId="chkEnabled" /> --%>&nbsp;Enable
+        <%--Not Working correctly ->  <html:checkbox property="formulaEnabled" styleId="chkEnabled" /> --%>
+        &nbsp;<digi:trn key="aim:enable">Enable</digi:trn>
       </td>
       <td>&nbsp;</td>
     </tr>
 
     <tr>
       <td>
-      Baseline value
+      <digi:trn key="aim:baselinevalue">Baseline value</digi:trn>
       </td>
       <td>
         <html:text property="baseLineValue" styleId="txtBaseLineValue" style="font-family:verdana;font-size:8pt;" />
@@ -104,7 +105,7 @@ function resetFormula(){
 
     <tr>
       <td>
-      Target value
+      <digi:trn key="aim:targetvalue">Target value</digi:trn>      
       </td>
       <td>
         <html:text property="targetValue" styleId="txtTargetValue" style="font-family:verdana;font-size:8pt;" />
@@ -113,7 +114,7 @@ function resetFormula(){
 
     <tr>
       <td>
-      Constant
+      <digi:trn key="aim:constant">Constant</digi:trn>      
       </td>
       <td>
         <html:text property="constantName" styleId="txtConstant" style="font-family:verdana;font-size:8pt;" />
@@ -122,7 +123,7 @@ function resetFormula(){
 
     <tr>
       <td>
-      Formula
+      <digi:trn key="aim:formula">Formula</digi:trn>
       </td>
       <td>
         <html:text property="formulaText"  styleId="txtFormula" style="font-family:verdana;font-size:8pt;" />

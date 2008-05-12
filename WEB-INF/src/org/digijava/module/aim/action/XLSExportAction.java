@@ -135,7 +135,7 @@ public class XLSExportAction extends Action {
                 translatedCurrency=TranslatorWorker.translate("aim:currency:" +Constants.DEFAULT_CURRENCY.toLowerCase().replaceAll(" ", ""),locale,siteId);
             }
             
-			cell.setCellValue(translatedNotes+translatedCurrency+"\n");
+			cell.setCellValue(translatedNotes+translatedCurrency/*+"\n"*/);
 			
 			grdx.makeColSpan(rd.getTotalDepth());
 			
@@ -146,7 +146,7 @@ public class XLSExportAction extends Action {
 			
 			row=sheet.createRow(rowId.shortValue());
 			cell=row.createCell(colId.shortValue());
-			cell.setCellValue(translatedReportName+" "+r.getName());
+			cell.setCellValue(/*translatedReportName+" "+*/r.getName());
 			HSSFCellStyle cs = wb.createCellStyle();
 			cs.setFillBackgroundColor(HSSFColor.BROWN.index);
 			HSSFFont font = wb.createFont();
@@ -165,7 +165,7 @@ public class XLSExportAction extends Action {
 			
 			row=sheet.createRow(rowId.shortValue()); 		 
 			cell=row.createCell(colId.shortValue());
-			cell.setCellValue(translatedReportDescription+": "+r.getReportDescription());
+			cell.setCellValue(translatedReportDescription+" "+r.getReportDescription());
 			grdx.makeColSpan(rd.getTotalDepth());
 			rowId.inc();
 			colId.reset();

@@ -1406,38 +1406,7 @@ function commentWin(val) {
 																				</TD>
 																			</TR>
 																		</feature:display>
-																		<field:display name="Responsible Organisation" feature="Responsible Organisation">
-																			<TR>
-																				<TD>
-																				<TABLE width="100%" cellSpacing="1" cellPadding="2"
-																					vAlign="top" align="left" bgcolor="#dddddd">
-																					<TR>
-																						<TD bgcolor="#ffffff"><b><digi:trn
-																							key="aim:responsibleorganisation">Responsible Organisation</digi:trn></b></TD>
-																					</TR>
-																					<TR>
-																						<TD bgcolor="#ffffff"><c:if
-																							test="${!empty activity.relOrgs}">
-																							<c:forEach var="relOrg"
-																								items="${activity.relOrgs}">
-																								<c:if test="${relOrg.role == 'RO'}">
-																									<c:set var="currentOrg" value="${relOrg}"
-																										target="request" scope="request" />
-																									<%--<bean:define id="currentOrg" name="relOrg"
-																											type="org.digijava.module.aim.helper.RelOrganization"
-																											toScope="request" />--%>
-																									<jsp:include page="organizationPopup.jsp" />
-																								</c:if>
-																							</c:forEach>
-																						</c:if></TD>
-																					</TR>
-																				</TABLE>
-																				</TD>
-																			</TR>
-																		</field:display>>
-
-
-																	</module:display>
+													</module:display>
 																</TABLE>
 																</TD>
 															</TR>

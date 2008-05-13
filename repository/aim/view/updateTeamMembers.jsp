@@ -184,10 +184,14 @@
 			<table width="100%" cellspacing="5">
 				<tr>
 					<td width="50%" align="right">
-						<html:submit value="Delete" styleClass="dr-menu"/>
+						<html:submit styleClass="buton"	property="apply">
+							<digi:trn key="btn:delete">Delete</digi:trn>
+						</html:submit>						
 					</td>
 					<td width="50%" align="left">
-						<html:reset value="Cancel" onclick="javascript:history.go(-1)" styleClass="dr-menu" />
+						<html:reset  styleClass="dr-menu" property="submitButton" onclick="javascript:history.go(-1)">
+							<digi:trn key="btn:cancel">Cancel</digi:trn>
+						</html:reset>																					</td>
 					</td>
 				</tr>
 			</table>
@@ -196,10 +200,14 @@
 			<table width="100%" cellspacing="5">
 				<tr>
 					<td width="50%" align="right">
-						<html:submit value="Save" styleClass="dr-menu" />
+						<html:submit styleClass="buton"	property="apply">
+							<digi:trn key="btn:save">Save</digi:trn>
+						</html:submit>						
 					</td>
 					<td width="50%" align="left">
-						<html:reset value="Cancel" onclick="javascript:history.go(-1)" styleClass="dr-menu" />
+						<html:reset  styleClass="dr-menu" property="submitButton" onclick="javascript:history.go(-1)">
+							<digi:trn key="btn:cancel">Cancel</digi:trn>
+						</html:reset>
 					</td>
 				</tr>
 			</table>

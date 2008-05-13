@@ -107,9 +107,12 @@ public class AmpReportGenerator extends ReportGenerator {
 			AmpColumns element = element2.getColumn();
 			if(element.getColumnName().equals(ArConstants.COLUMN_TOTAL))
 				extractableCount--;
-			extractableNames.add(element.getColumnName());
+			
 			if (element.getExtractorView() != null)
-				extractable.add(element2);
+				{
+			    		extractable.add(element2);
+			    		extractableNames.add(element.getColumnName());
+				}
 			else
 				generated.add(element2);
 		}

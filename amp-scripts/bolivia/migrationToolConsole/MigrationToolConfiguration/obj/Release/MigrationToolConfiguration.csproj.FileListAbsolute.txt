@@ -1,0 +1,8 @@
+D:\Projects\AMP\MigrationToolConsole\MigrationToolConfiguration\bin\Release\MigrationToolConfiguration.exe
+D:\Projects\AMP\MigrationToolConsole\MigrationToolConfiguration\bin\Release\MigrationToolConfiguration.pdb
+D:\Projects\AMP\MigrationToolConsole\MigrationToolConfiguration\obj\Release\ResolveAssemblyReference.cache
+D:\Projects\AMP\MigrationToolConsole\MigrationToolConfiguration\obj\Release\MigrationToolConfiguration.Configuration.resources
+D:\Projects\AMP\MigrationToolConsole\MigrationToolConfiguration\obj\Release\MigrationToolConfiguration.Properties.Resources.resources
+D:\Projects\AMP\MigrationToolConsole\MigrationToolConfiguration\obj\Release\MigrationToolConfiguration.csproj.GenerateResource.Cache
+D:\Projects\AMP\MigrationToolConsole\MigrationToolConfiguration\obj\Release\MigrationToolConfiguration.exe
+D:\Projects\AMP\MigrationToolConsole\MigrationToolConfiguration\obj\Release\MigrationToolConfiguration.pdb

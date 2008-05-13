@@ -1,146 +1,194 @@
-USE  amp_bolivia;
-SET @IMPORT_TIME:=UNIX_TIMESTAMP();
-SET @APPROVED='APPROVED';
-SET @TEAM_ID=24; /* THIS IS VIPFE TEAM */
-SET @ACTIVITY_CREATOR=92;  /* THIS IS ATL MEMBER */
-SET @ACTIVITY_CODE='AMP-BOLIVIA';
-SET @COMMITMENT=0;
-SET @DISBURSMENT=1;
-SET @FUNDING_ADJUSMENT_PLANNED=0;
-SET @FUNDING_ADJUSMENT_ACTUAL=1;
-SET @ORG_ROLE_CODE='MA';
-SET @FUNDING_PERSPECTIVE=2;
-SET @FUNDING_CURRENCY_ID=21;
-SET @MAX_ORDER_NO=0;
-SET @MAX_LEVEL_ORDER_NO=0;
-SET @FUNDING_MODALITY=3;
-SET @FINANCING_INSTRUMENT=116;
- /*  THIS SHOULD BE REMOVED BECASE NOW WE HAVE CORRECT QUERY */
-SET @STATUS_CLASS_ID=6;
-SELECT @STATUS_CLASS_ID := C.ID
-FROM AMP_CATEGORY_CLASS C
-WHERE C.KEYNAME = 'ACTIVITY_STATUS';
-SET @LEVEL_CLASS_ID=7;
-SELECT @LEVEL_CLASS_ID := C.ID
-FROM AMP_CATEGORY_CLASS C
-WHERE C.KEYNAME = 'IMPLEMENTATION_LEVEL';
-SELECT @MAX_ORDER_NO := MAX(A.INDEX_COLUMN)
-FROM AMP_CATEGORY_VALUE A
-WHERE A.AMP_CATEGORY_CLASS_ID = @STATUS_CLASS_ID;
-SELECT @MAX_LEVEL_ORDER_NO := MAX(A.INDEX_COLUMN)
-FROM AMP_CATEGORY_VALUE A
-WHERE A.AMP_CATEGORY_CLASS_ID = @LEVEL_CLASS_ID;
-SET @TIMESTMP:=UNIX_TIMESTAMP();
-SET @AVTIVITY_DESC='AIM-DESC-IMPORT-';
-SET @AVTIVITY_OBJ='AIM-OBJ-IMPORT-';
-SET @EDITOR_ORDER=0;
- /*  THIS IS NEEDED FOR KALOSHA'S IMPORT TOOL, JUST SHOULD NOT BE EMPTY COS IT IS PRIMITIVE INT */
-SET @AMP_SITE_ID = 'AMP';
-SET @SUBPROG_PREFIX='EBRP';
+use amp_bolivia;
+/* set up variables */
+SET @import_time:=unix_timestamp();
+SET @approved='approved';
+SET @team_id=24; /* this is VIPFE Team */
+SET @activity_creator=92;  /* this is ATL member */
+SET @activity_code='AMP-BOLIVIA';
+SET @commitment=0;
+SET @disbursment=1;
+SET @funding_adjusment_planned=0;
+SET @funding_adjusment_actual=1;
+SET @org_role_code='MA';
+SET @funding_perspective=2;
+SET @funding_currency_id=21;
+SET @max_order_no=0;
+SET @max_level_order_no=0;
+SET @funding_modality=3;
+SET @financing_instrument=116; /*  This should be removed becase now we have correct query */
+SET @status_class_id=6;
+select @status_class_id:=c.id from amp_category_class c where c.keyName='activity_status';
+SET @level_class_id=7;
+select @level_class_id:=c.id from amp_category_class c where c.keyName='implementation_level';
+select @max_order_no:=max(a.index_column) FROM AMP_CATEGORY_VALUE a WHERE a.amp_category_class_id=@status_class_id;
+select @max_level_order_no:=max(a.index_column) FROM AMP_CATEGORY_VALUE a WHERE a.amp_category_class_id=@level_class_id;
+SET @timestmp:=unix_timestamp();
+SET @avtivity_desc='aim-desc-import-';
+SET @avtivity_obj='aim-obj-import-';
+SET @editor_order=0; /*  This is needed for KALOSHA's import tool, just should not be empty cos it is primitive int */
+SET @amp_site_id = 'amp';
+SET @subprog_prefix='EBRP';
+select @import_time;
 
 
-SELECT '............ UPDATING FROM SIS FIN ...............' AS MSG;
+select 'importing sectors';
 
-SELECT CONCAT('UPDATE STARTED DATABASE AT ', CURRENT_TIME) AS MSG;
-SELECT @AMP_SEC_SCHEME_ID := AMP_SEC_SCHEME_ID
-FROM AMP_SECTOR_SCHEME
-WHERE upper(SEC_SCHEME_CODE) = 'BOL_IMP';
-INSERT INTO AMP_SECTOR(AMP_SEC_SCHEME_ID, SECTOR_CODE, NAME, OLD_ID)
-SELECT @AMP_SEC_SCHEME_ID,
-       C.CODSEC,
-       C.DESCSEC,
-       C.CODSEC
-FROM SISFIN_DB.SEC C
-WHERE C.CODSEC NOT IN (SELECT OLD_ID FROM AMP_SECTOR);
-SELECT CONCAT(ROW_COUNT(), ' SECTORS WERE ADDED') AS MSG;
+insert into AMP_SECTOR (amp_sec_scheme_id,  sector_code,   name,   old_id)
+select sch.amp_sec_scheme_id,   c.codsec,   c.descsec, c.codsec
+from sisfin_db.sec c, AMP_SECTOR_SCHEME sch
+where sch.sec_scheme_code='BOL_IMP'
+ and (SELECT count(*) FROM AMP_SECTOR where OLD_ID =C.CODSEC)=0;
 
 
-INSERT INTO AMP_SECTOR(AMP_SEC_SCHEME_ID, SECTOR_CODE, NAME)
-SELECT SCH.AMP_SEC_SCHEME_ID,
-       C.VALDATO,
-       C.INTERP
-FROM SISFIN_DB.CLAVES AS C,
-     AMP_SECTOR_SCHEME AS SCH
-WHERE upper(SCH.SEC_SCHEME_CODE) = 'BOL_COMPO_IMP' AND
-      upper(C.NOMDATO) = 'CVETIPCOMP' AND
-      (SELECT COUNT(*) FROM AMP_SECTOR WHERE AMP_SEC_SCHEME_ID =
-      SCH.AMP_SEC_SCHEME_ID AND SECTOR_CODE = C.VALDATO AND NAME = C.INTERP) =
-      0;
-SELECT CONCAT(ROW_COUNT(), ' COMPONENTS WERE ADDED') AS MSG;
+
+select 'importing components (sectors)';
+
+INSERT INTO AMP_SECTOR (amp_sec_scheme_id,  sector_code,   name)
+SELECT  sch.amp_sec_scheme_id,  c.valdato, c.interp
+FROM sisfin_db.claves AS c,  AMP_SECTOR_SCHEME AS sch
+WHERE sch.sec_scheme_code='BOL_COMPO_IMP'  AND c.nomdato='cvetipcomp' and
+(SELECT COUNT(*) FROM AMP_SECTOR WHERE AMP_SEC_SCHEME_ID =SCH.AMP_SEC_SCHEME_ID AND SECTOR_CODE = C.VALDATO AND NAME = C.INTERP) =0;
 
 
-INSERT INTO AMP_ORGANISATION(OLD_ID, NAME, ORG_CODE, ACRONYM)
-SELECT CODAGE,
-       NOMAGE,
-       CODAGE,
-       CODAGE
-FROM SISFIN_DB.`AGE` AS O
-WHERE TRIM(CODAGE) NOT IN (SELECT TRIM(OLD_ID) FROM AMP_ORGANISATION);
-SELECT CONCAT(ROW_COUNT(), ' ORGANISATIONS WERE ADDED') AS MSG;
+/* import organizations  from the table AGE, also there are more organizatins on the TABLE ENT*/
+
+select 'importing organisations';
+
+INSERT INTO AMP_ORGANISATION
+(
+old_id,
+name,
+org_code,
+acronym
+)
+SELECT
+codage,
+nomage,
+codage,
+codage
+FROM sisfin_db.`age` as o
+WHERE (SELECT count(*) FROM AMP_ORGANISATION x where TRIM(x.OLD_ID)= TRIM(CODAGE))=0;
+;
+
+/* setting up organization types */
+select 'update AMP_ORGANISATION MUL';
+
+UPDATE AMP_ORGANISATION AS org, sisfin_db.`age` AS o, AMP_ORG_TYPE AS t
+SET org.org_type_id=t.amp_org_type_id
+WHERE org.old_id=o.codage AND o.cvebimulti='M' AND t.org_type_code='MUL';
+
+select 'update AMP_ORGANISATION BIL';
+
+UPDATE AMP_ORGANISATION AS org, sisfin_db.`age` AS o, AMP_ORG_TYPE AS t
+SET org.org_type_id=t.amp_org_type_id
+WHERE org.old_id=o.codage AND o.cvebimulti='B' AND t.org_type_code='BIL';
+
+select 'update AMP_ORGANISATION GROUP';
+
+UPDATE AMP_ORGANISATION AS org, sisfin_db.`age` AS o, AMP_ORG_GROUP AS aog
+SET org.org_grp_id=aog.amp_org_grp_id
+WHERE org.old_id=o.codage and aog.org_grp_code = o.cveorg;
+
+/* AMP-2970 - Multiple codes for Alemania*/
+UPDATE AMP_ORGANISATION AS org, sisfin_db.`age` AS o, AMP_ORG_GROUP AS aog
+SET org.org_grp_id=aog.amp_org_grp_id
+WHERE org.old_id=o.codage and aog.org_grp_code = 'ALEMA' and  o.cveorg = 'ALEM';
 
 
-UPDATE AMP_ORGANISATION AS ORG,
-       SISFIN_DB.`AGE` AS O,
-       AMP_ORG_TYPE AS T
-SET ORG.ORG_TYPE_ID = T.AMP_ORG_TYPE_ID
-WHERE ORG.OLD_ID = O.CODAGE AND
-      upper(O.CVEBIMULTI) = 'B' AND
-      upper(T.ORG_TYPE_CODE) = 'BIL';
-SELECT CONCAT(ROW_COUNT(), ' AMP_ORGANISATION BIL WERE UPDATED') AS MSG;
+/* import organizations  from the table ENT checking if were not already added from the table AGE */
 
+select 'importing executing Agencies';
 
-UPDATE AMP_ORGANISATION AS ORG,
-       SISFIN_DB.`AGE` AS O,
-       AMP_ORG_GROUP AS AOG
-SET ORG.ORG_GRP_ID = AOG.AMP_ORG_GRP_ID
-WHERE ORG.OLD_ID = O.CODAGE AND
-      AOG.ORG_GRP_CODE = O.CVEORG;
-SELECT CONCAT(ROW_COUNT(), ' AMP_ORGANISATION GROUP WERE UPDATED') AS MSG;
+INSERT INTO AMP_ORGANISATION
+(
+old_id,
+name,
+org_code,
+acronym,
+org_type_id
+)
+SELECT
+codent,
+noment,
+codent,
+codent,
+tt.amp_org_type_id
+FROM sisfin_db.`ent` as e,  amp_org_type as tt
+where  tt.org_type_code='OTHER' and not exists
+	(select a.codage from sisfin_db.`age` as a where a.codage=e.codent   and upper(a.nomage)=upper(e.noment))
+and  (SELECT count(*) FROM AMP_ORGANISATION x where E.CODENT=x.OLD_ID )=0;
 
+/* terms and assist */
+select 'amp_terms_assist';
 
-UPDATE AMP_ORGANISATION AS ORG,
-       SISFIN_DB.`AGE` AS O,
-       AMP_ORG_GROUP AS AOG
-SET ORG.ORG_GRP_ID = AOG.AMP_ORG_GRP_ID
-WHERE ORG.OLD_ID = O.CODAGE AND
-      upper(AOG.ORG_GRP_CODE) = 'ALEMA' AND
-      upper(O.CVEORG) = 'ALEM';
-SELECT CONCAT(ROW_COUNT(), ' MULTIPLE CODES  WERE UPDATED') AS MSG;
+INSERT INTO amp_terms_assist(terms_assist_code, terms_assist_name,old_id)
+SELECT lvl.valdato, lvl.interp, lvl.valdato
+FROM sisfin_db.`claves` lvl
+WHERE lvl.nomdato='cvecoop' and   (SELECT count(*) FROM AMP_TERMS_ASSIST x where x.TERMS_ASSIST_CODE=LVL.VALDATO)=0;
 
+/*import Casificacion NPD*/
+insert into CLASI_PND (code,description)
+select Cod_PND,Descripcion from sisfin_db.Clasif_PND where
+(SELECT count(*)  FROM CLASI_PND x where x.CODE=COD_PND)=0;
 
-INSERT INTO AMP_ORGANISATION(OLD_ID, NAME, ORG_CODE, ACRONYM, ORG_TYPE_ID)
-SELECT CODENT,
-       NOMENT,
-       CODENT,
-       CODENT,
-       TT.AMP_ORG_TYPE_ID
-FROM SISFIN_DB.`ENT` AS E,
-     AMP_ORG_TYPE AS TT
-WHERE upper(TT.ORG_TYPE_CODE) = 'OTHER' AND
-      NOT EXISTS (SELECT A.CODAGE FROM SISFIN_DB.`AGE` AS A WHERE A.CODAGE =
-      E.CODENT AND UPPER(A.NOMAGE) = UPPER(E.NOMENT)) AND
-      E.CODENT NOT IN (SELECT OLD_ID FROM AMP_ORGANISATION);
-SELECT CONCAT(ROW_COUNT(), ' EXECUTING AGENCIES  WERE UPDATED') AS MSG;
+/* import activities */
+select 'inserting into AMP_ACTIVITY fom conv';
 
+INSERT INTO AMP_ACTIVITY
+(
+old_id,
+amp_id,
+name,
+description,
+objectives,
+contractors,
+program_description,
+`condition`,
+status_reason,
+proposed_approval_date,
+proposed_start_date,
+actual_completion_date,
+convenio_date_filter, -- AMP-2387
+convenio_numcont,
+actual_start_date,
+amp_team_id,
+approval_status,
+proj_cost_amount,
+activity_creator,
+totalCost,
+old_status_id,
+draft,
+classi_code
+)
+SELECT
+c.numconv,
+c.numconv,
+c.nomconv,
+concat(@avtivity_desc, @timestmp:=@timestmp+1),
+concat(@avtivity_obj, @timestmp:=@timestmp+1),
+' ',
+' ',
+' ',
+' ',
+c.fechprogefec,
+c.fechprogprdes,
+c.fechproguldes,
+c.fechproguldes, -- AMP-2387 I don't want to rewrite actual_completion_date
+numcont,
+c.fechcont,
+@team_id,
+@approved,
+montorig,
+@activity_creator,
+montous,
+cvealc,
+0,
+Cod_PND
+FROM  sisfin_db.`conv` as c
+where c.STATCONV!='C' and c.STATCONV!='A' and
+(SELECT count(*) from AMP_ACTIVITY x where x.old_id=C.NUMCONV) = 0;
+;
 
-INSERT INTO AMP_TERMS_ASSIST(TERMS_ASSIST_CODE, TERMS_ASSIST_NAME, OLD_ID)
-SELECT LVL.VALDATO,
-       LVL.INTERP,
-       LVL.VALDATO
-FROM SISFIN_DB.`CLAVES` LVL
-WHERE upper(LVL.NOMDATO) = 'CVECOOP' AND
-      LVL.VALDATO NOT IN (SELECT TERMS_ASSIST_CODE FROM AMP_TERMS_ASSIST);
-SELECT CONCAT(ROW_COUNT(), ' AMP_TERMS_ASSIST WERE UPDATED') AS MSG;
-
-
-INSERT INTO CLASI_PND(CODE, DESCRIPTION)
-SELECT COD_PND,
-       DESCRIPCION
-FROM SISFIN_DB.CLASIF_PND
-WHERE COD_PND NOT IN (SELECT CODE FROM CLASI_PND);
-SELECT CONCAT(ROW_COUNT(), ' CLASI_PND WERE ADDED') AS MSG;
-
-SELECT ' UPDATING ALL CONVENIOS' AS MSG;
 
 UPDATE AMP_ACTIVITY A, (SELECT * FROM SISFIN_DB.`CONV`) AS C
 	SET A.NAME = C.NOMCONV,
@@ -150,132 +198,72 @@ UPDATE AMP_ACTIVITY A, (SELECT * FROM SISFIN_DB.`CONV`) AS C
     A.CONVENIO_DATE_FILTER = C.FECHPROGULDES,
     A.CONVENIO_NUMCONT = NUMCONT,
     A.ACTUAL_START_DATE = C.FECHCONT,
-    A.APPROVAL_STATUS = @APPROVED,
+    A.APPROVAL_STATUS = @approved,
     A.PROJ_COST_AMOUNT = MONTORIG,
     A.TOTALCOST = MONTOUS,
     A.OLD_STATUS_ID = CVEALC,
     A.DRAFT = 0,
-    A.CLASSI_CODE = COD_PND
-WHERE C.STATCONV != 'C' AND
-      C.STATCONV != 'A' AND
-      C.NUMCONV = A.OLD_ID;
+    A.CLASSI_CODE = COD_PND,
+	A.AMP_ID=NUMCONV
+WHERE C.STATCONV != 'C' AND C.STATCONV != 'A' AND       C.NUMCONV = A.OLD_ID;
 
-SELECT CASE ROW_COUNT() WHEN 0 THEN ' THERE ARE NO CHANGES ON CONVENIOS' else CONCAT( ROW_COUNT(),' CONVENIOS UPDATED') END 	 AS MSG;
-
-
-INSERT INTO AMP_ACTIVITY
-(
-OLD_ID,
-AMP_ID,
-NAME,
-DESCRIPTION,
-OBJECTIVES,
-CONTRACTORS,
-PROGRAM_DESCRIPTION,
-`CONDITION`,
-STATUS_REASON,
-PROPOSED_APPROVAL_DATE,
-PROPOSED_START_DATE,
-ACTUAL_COMPLETION_DATE,
-CONVENIO_DATE_FILTER,
-CONVENIO_NUMCONT,
-ACTUAL_START_DATE,
-AMP_TEAM_ID,
-APPROVAL_STATUS,
-PROJ_COST_AMOUNT,
-ACTIVITY_CREATOR,
-TOTALCOST,
-OLD_STATUS_ID,
-DRAFT,
-CLASSI_CODE
-)
-SELECT
-C.NUMCONV,
-C.NUMCONV,
-C.NOMCONV,
-CONCAT(@AVTIVITY_DESC, @TIMESTMP:=@TIMESTMP+1),
-CONCAT(@AVTIVITY_OBJ, @TIMESTMP:=@TIMESTMP+1),
-' ',
-' ',
-' ',
-' ',
-C.FECHPROGEFEC,
-C.FECHPROGPRDES,
-C.FECHPROGULDES,
-C.FECHPROGULDES, -- AMP-2387 I DON'T WANT TO REWRITE ACTUAL_COMPLETION_DATE
-NUMCONT,
-C.FECHCONT,
-@TEAM_ID,
-@APPROVED,
-MONTORIG,
-@ACTIVITY_CREATOR,
-MONTOUS,
-CVEALC,
-0,
-COD_PND
-FROM  SISFIN_DB.`CONV` AS C WHERE C.STATCONV!='C' AND C.STATCONV!='A' AND C.NUMCONV NOT IN
-(SELECT OLD_ID FROM AMP_ACTIVITY);
-
-SELECT CONCAT(ROW_COUNT(), ' ACTIVITY ADDED') AS MSG;
-
-/* BEGIN - AMP-2387 */
-
-DROP TEMPORARY TABLE IF EXISTS `TMP_TBL_CONVENIO_DATE_FILTER`;
-CREATE TEMPORARY TABLE `TMP_TBL_CONVENIO_DATE_FILTER` (
-  `NUMCONV` VARCHAR(5) NOT NULL,
-  `MAXFECHVIGENM` DATETIME NOT NULL,
-  PRIMARY KEY (`NUMCONV`)
-)ENGINE = INNODB;
+/* START - AMP-2387 */
+DROP TEMPORARY TABLE IF EXISTS `tmp_tbl_convenio_date_filter`;
+CREATE TEMPORARY TABLE `tmp_tbl_convenio_date_filter` (
+  `numconv` VARCHAR(5) NOT NULL,
+  `maxfechvigenm` DATETIME NOT NULL,
+  PRIMARY KEY (`numconv`)
+)ENGINE = InnoDB;
 
 
-INSERT INTO TMP_TBL_CONVENIO_DATE_FILTER
-SELECT E.NUMCONV, MAX(E.FECHVIGENM)
-FROM SISFIN_DB.ENM E
-WHERE  upper(E.TIPENM) = 'PU' AND E.FECHVIGENM IS NOT NULL
-GROUP BY E.NUMCONV;
+insert into tmp_tbl_convenio_date_filter
+select e.numconv, max(e.fechvigenm)
+from sisfin_db.enm e
+where  e.tipenm = 'PU' and e.fechvigenm is not null
+group by e.numconv;
 
-UPDATE AMP_ACTIVITY AS A, TMP_TBL_CONVENIO_DATE_FILTER TMP
-SET A.CONVENIO_DATE_FILTER = TMP.MAXFECHVIGENM
-WHERE A.OLD_ID = TMP.NUMCONV;
+update amp_activity as a, tmp_tbl_convenio_date_filter tmp
+set a.convenio_date_filter = tmp.maxfechvigenm
+where a.old_id = tmp.numconv;
 
-
-SELECT CONCAT(ROW_COUNT(), ' CONVENIO_DATE_FILTER WERE UPDATED') AS MSG;
-
-DROP TEMPORARY TABLE `TMP_TBL_CONVENIO_DATE_FILTER`;
+DROP TEMPORARY TABLE `tmp_tbl_convenio_date_filter`;
 /* END - AMP-2387 */
 
-UPDATE AMP_ACTIVITY AS A,
-       SISFIN_DB.`USU` AS U,
-       SISFIN_DB.`CONV` C
-SET A.MOFED_CNT_LAST_NAME = U.NOMBREUSUARIO
-WHERE A.OLD_ID = C.NUMCONV AND
-      C.CODUSU = U.CODUSU;
 
-SELECT CONCAT(ROW_COUNT(), ' CONTACTS WERE UPDATED') AS MSG;
+/* mapping contacts */
+select 'mapping contacts';
+
+update amp_activity as a, sisfin_db.`usu` as u, sisfin_db.`conv` c
+set a.mofed_cnt_last_name=u.nombreusuario
+where a.old_id=c.numconv and c.codusu=u.codusu;
 
 
-SELECT 'DELETING ALL ORG RELATED TO ACTIVITIES'  AS MSG;
-TRUNCATE TABLE AMP_ORG_ROLE;
+/* mapping executing agencies (organizations) to activities using the ENT-CONVENIO relation */
+select 'mapping executing agencies to activities';
 
-INSERT INTO AMP_ORG_ROLE(ACTIVITY, ORGANISATION, ROLE, PERCENTAGE)
-SELECT A.AMP_ACTIVITY_ID,
-       O.AMP_ORG_ID,
-       AR.AMP_ROLE_ID,
-       M.PORCPART
-FROM SISFIN_DB.`CONV_ENTEJEC` AS M,
-     AMP_ACTIVITY AS A,
-     AMP_ORGANISATION AS O,
-     AMP_ROLE AS AR,
-     SISFIN_DB.`ENT` AS ENT
-WHERE upper(AR.ROLE_CODE) = 'EA' AND
-      A.OLD_ID = M.NUMCONV AND
-      ENT.CODENT = O.OLD_ID AND
-      O.OLD_ID = M.CODENTEJEC AND
-      UPPER(ENT.NOMENT) = UPPER(O.NAME);
+TRUNCATE TABLE amp_org_role;
 
-SELECT CONCAT(ROW_COUNT(), ' ORG ROLE WERE ADDED') AS MSG;
+insert into amp_org_role (activity,organisation,role,percentage)
+select
+	a.amp_activity_id,
+	o.amp_org_id,
+	ar.amp_role_id,
+	m.porcpart
+from
+	sisfin_db.`conv_entejec` as m,
+	amp_activity as a,
+	amp_organisation as o ,
+	amp_role as ar,
+  	sisfin_db.`ent` as ent
 
-SELECT 'ADDING DONNORS TO ACTIVITIES'  AS MSG;
+where
+	ar.role_code='EA'
+	and a.old_id=m.numconv
+    and ent.codent=o.old_id
+	and o.old_id = m.codentejec
+	and upper(ent.noment)=upper(o.name);
+
+
 INSERT INTO AMP_ORG_ROLE(ACTIVITY, ORGANISATION, ROLE, PERCENTAGE)
 SELECT A.AMP_ACTIVITY_ID,
        O.AMP_ORG_ID,
@@ -283,648 +271,587 @@ SELECT A.AMP_ACTIVITY_ID,
        NULL
 FROM AMP_FUNDING A
      INNER JOIN AMP_ORGANISATION O ON A.AMP_DONOR_ORG_ID = O.AMP_ORG_ID;
-
-SELECT CONCAT(ROW_COUNT(), ' DONNORS WERE ADDED') AS MSG;
-
-SELECT 'DELETING ISSUES'  AS MSG;
+     
+/* importing issues */
+select 'importing issues 1';
 TRUNCATE TABLE AMP_ISSUES;
 
-INSERT INTO AMP_ISSUES(NAME, AMP_ACTIVITY_ID)
-SELECT C.SIT_ACTUAL,
-       A.AMP_ACTIVITY_ID
-FROM SISFIN_DB.`CONV` AS C,
-     AMP_ACTIVITY AS A
-WHERE (C.SIT_ACTUAL IS NOT NULL) AND
-      C.NUMCONV = A.OLD_ID;
+INSERT INTO AMP_ISSUES(name, amp_activity_id)
+SELECT c.sit_actual, a.amp_activity_id
+FROM sisfin_db.`conv` AS c, amp_activity AS a
+WHERE (c.sit_actual is not null) AND c.numconv=a.old_id;
 
-SELECT CONCAT(ROW_COUNT(), ' ISSUES 1 WERE ADDED ') AS MSG;
+select 'importing issues 2';
 
+insert into amp_issues(name,amp_activity_id)
+SELECT c.tramite_actual, a.amp_activity_id
+FROM sisfin_db.`conv` c, amp_activity a
+where (c.tramite_actual is not null) and c.numconv=a.old_id;
 
-INSERT INTO AMP_ISSUES(NAME, AMP_ACTIVITY_ID)
-SELECT C.TRAMITE_ACTUAL,
-       A.AMP_ACTIVITY_ID
-FROM SISFIN_DB.`CONV` C,
-     AMP_ACTIVITY A
-WHERE (C.TRAMITE_ACTUAL IS NOT NULL) AND
-      C.NUMCONV = A.OLD_ID;
+select 'importing issues 3';
 
-SELECT CONCAT(ROW_COUNT(), ' ISSUES 2 WERE ADDED ') AS MSG;
+insert into amp_issues(name,amp_activity_id)
+SELECT c.Tip_ejecucion, a.amp_activity_id
+FROM sisfin_db.`conv` c, amp_activity a
+where (c.Tip_ejecucion is not null) and c.numconv=a.old_id ;
 
-INSERT INTO AMP_ISSUES(NAME, AMP_ACTIVITY_ID)
-SELECT C.TIP_EJECUCION,
-       A.AMP_ACTIVITY_ID
-FROM SISFIN_DB.`CONV` C,
-     AMP_ACTIVITY A
-WHERE (C.TIP_EJECUCION IS NOT NULL) AND
-      C.NUMCONV = A.OLD_ID;
+select 'importing issues 4';
 
-SELECT CONCAT(ROW_COUNT(), ' ISSUES 3 WERE ADDED ') AS MSG;
-
-INSERT INTO AMP_ISSUES(NAME, AMP_ACTIVITY_ID)
-SELECT C.MARCA,
-       A.AMP_ACTIVITY_ID
-FROM SISFIN_DB.`CONV` C,
-     AMP_ACTIVITY A
-WHERE (C.MARCA IS NOT NULL) AND
-      C.NUMCONV = A.OLD_ID;
-SELECT CONCAT(ROW_COUNT(), ' ISSUES 4 WERE ADDED ') AS MSG;
+insert into amp_issues(name,amp_activity_id)
+SELECT c.marca, a.amp_activity_id
+FROM sisfin_db.`conv` c, amp_activity a
+where (c.marca is not null) and c.numconv=a.old_id;
 
 
-SELECT 'DELETING ALL SECTOR RELATED TO ACTIVITIES'  AS MSG;
+/* mapping activity and sectors */
+select 'mapping activity and sectors';
 TRUNCATE TABLE AMP_ACTIVITY_SECTOR;
 
-INSERT INTO AMP_ACTIVITY_SECTOR(AMP_ACTIVITY_ID, AMP_SECTOR_ID,
- SECTOR_PERCENTAGE)
-SELECT ACT.AMP_ACTIVITY_ID,
-       SEC.AMP_SECTOR_ID,
-       AC.PORCSEC
-FROM AMP_ACTIVITY AS ACT,
-     AMP_SECTOR AS SEC,
-     SISFIN_DB.CONV_SEC AS AC
-WHERE ACT.OLD_ID = AC.NUMCONV AND
-      SEC.OLD_ID = AC.CODSEC;
+insert into amp_activity_sector
+(amp_activity_id,amp_sector_id,sector_percentage)
+select  act.amp_activity_id, sec.amp_sector_id,  ac.porcsec
+from AMP_ACTIVITY as act, AMP_SECTOR as sec, sisfin_db.conv_sec as ac
+where act.old_id=ac.numconv and sec.old_id=ac.codsec ;
 
-SELECT CONCAT(ROW_COUNT(), ' SECTOR RELATED TO ACTIVITIES WERE ADDED ') AS MSG;
-
-
-SELECT 'DELETING ALL AMP_ACTIVITIES_CATEGORYVALUES'  AS MSG;
+/* mapping activity and statuses */
+select 'mapping activity and statuses';
 TRUNCATE TABLE AMP_ACTIVITIES_CATEGORYVALUES;
 
-INSERT INTO AMP_ACTIVITIES_CATEGORYVALUES (AMP_ACTIVITY_ID, AMP_CATEGORYVALUE_ID)
-SELECT ACT.AMP_ACTIVITY_ID,
-       CAT.ID
-FROM AMP_ACTIVITY AS ACT,
-     AMP_CATEGORY_VALUE AS CAT,
-     SISFIN_DB.`CONV` ACTO,
-     SISFIN_DB.`CLAVES` AS CLA
-WHERE CAT.AMP_CATEGORY_CLASS_ID = @STATUS_CLASS_ID AND
-      CAT.CATEGORY_VALUE = CLA.INTERP AND
-      ACTO.NUMCONV = ACT.OLD_ID AND
-      ACTO.STATCONV = CLA.VALDATO AND
-      upper(CLA.NOMDATO) = 'STATCONV';
-SELECT CONCAT(ROW_COUNT(), ' STATUSES WERE MAPPED ') AS MSG;
+INSERT INTO amp_activities_categoryvalues (amp_activity_id, amp_categoryvalue_id)
+SELECT act.amp_activity_id, cat.id
+FROM AMP_ACTIVITY as act,    AMP_CATEGORY_VALUE as cat,    sisfin_db.`conv` acto, sisfin_db.`claves` as cla
+WHERE cat.amp_category_class_id=@status_class_id and cat.category_value=cla.interp and acto.numconv=act.old_id
+and acto.statconv=cla.valdato and cla.nomdato='statconv';
+
+/*
+FROM AMP_ACTIVITY as act,    AMP_CATEGORY_VALUE as cat,    sisfin_db.`conv` co, sisfin_db.`claves` as cla
+WHERE co.numconv=act.old_id and co.statconv=cat.old_id and cla;
+*/
+
+/* mapping implementation levels */
+select 'mapping implementation levels';
+
+INSERT INTO amp_activities_categoryvalues (amp_activity_id, amp_categoryvalue_id)
+SELECT act.amp_activity_id, cat.id
+FROM AMP_ACTIVITY as act,    AMP_CATEGORY_VALUE as cat,    sisfin_db.`conv` acto, sisfin_db.`claves` as cla
+WHERE cat.amp_category_class_id=@level_class_id and cat.category_value=cla.interp and acto.numconv=act.old_id
+and acto.cvealc=cla.valdato and cla.nomdato='cvealc';
 
 
-
-INSERT INTO AMP_ACTIVITIES_CATEGORYVALUES(AMP_ACTIVITY_ID, AMP_CATEGORYVALUE_ID
-)
-SELECT ACT.AMP_ACTIVITY_ID,
-       CAT.ID
-FROM AMP_ACTIVITY AS ACT,
-     AMP_CATEGORY_VALUE AS CAT,
-     SISFIN_DB.`CONV` ACTO,
-     SISFIN_DB.`CLAVES` AS CLA
-WHERE CAT.AMP_CATEGORY_CLASS_ID = @LEVEL_CLASS_ID AND
-      CAT.CATEGORY_VALUE = CLA.INTERP AND
-      ACTO.NUMCONV = ACT.OLD_ID AND
-      ACTO.CVEALC = CLA.VALDATO AND
-      upper(CLA.NOMDATO) = 'CVEALC';
-
-SELECT CONCAT(ROW_COUNT(), '  IMPLEMENTATION LEVELS  WERE MAPPED ') AS MSG;
-
-
-
-SELECT 'DELETING DESCRIPTIONS '  AS MSG;
+select 'mapping descriptions for english';
 TRUNCATE TABLE DG_EDITOR;
-INSERT INTO DG_EDITOR(EDITOR_KEY, LANGUAGE, SITE_ID, BODY, LAST_MOD_DATE,
- CREATION_IP, ORDER_INDEX)
-SELECT A.DESCRIPTION,
-       'EN',
-       @AMP_SITE_ID,
-       C.DESCCONV,
-       NOW(),
-       '127.0.0.1',
-       @EDITOR_ORDER
-FROM SISFIN_DB.`CONV` AS C,
-     AMP_ACTIVITY AS A
-WHERE C.NUMCONV = A.OLD_ID;
-SELECT CONCAT(ROW_COUNT(), ' EN DESCRIPTIONS WERE MAPPED ') AS MSG;
+INSERT INTO DG_EDITOR
+(EDITOR_KEY, LANGUAGE, SITE_ID, BODY,LAST_MOD_DATE,CREATION_IP,ORDER_INDEX)
+SELECT a.description, 'en', @amp_site_id ,c.descconv,now() ,'127.0.0.1',@editor_order
+FROM sisfin_db.`conv` AS c, AMP_ACTIVITY AS a
+WHERE c.numconv=a.old_id ;
+
+/* mapping descriptions for spanish*/
+select 'mapping descriptions for spanish';
+
+INSERT INTO DG_EDITOR
+(EDITOR_KEY, LANGUAGE, SITE_ID, BODY,LAST_MOD_DATE,CREATION_IP,ORDER_INDEX)
+SELECT a.description, 'es', @amp_site_id ,c.descconv,now() ,'127.0.0.1',@editor_order
+FROM sisfin_db.`conv` AS c, AMP_ACTIVITY AS a
+WHERE c.numconv=a.old_id ;
 
 
-INSERT INTO DG_EDITOR(EDITOR_KEY, LANGUAGE, SITE_ID, BODY, LAST_MOD_DATE,
- CREATION_IP, ORDER_INDEX)
-SELECT A.DESCRIPTION,
-       'ES',
-       @AMP_SITE_ID,
-       C.DESCCONV,
-       NOW(),
-       '127.0.0.1',
-       @EDITOR_ORDER
-FROM SISFIN_DB.`CONV` AS C,
-     AMP_ACTIVITY AS A
-WHERE C.NUMCONV = A.OLD_ID;
 
-SELECT CONCAT(ROW_COUNT(), ' ES DESCRIPTIONS WERE MAPPED ') AS MSG;
-
-SELECT 'DELETING ALL FUNDING ' AS MSG;
+/* mapping fundings activities and organizations */
+select 'mapping fundings activities and organizations';
+TRUNCATE TABLE AMP_FUNDING_DETAIL;
 TRUNCATE TABLE AMP_FUNDING;
 
-INSERT INTO AMP_FUNDING(FINANCING_ID, AMP_DONOR_ORG_ID, AMP_ACTIVITY_ID,
- TYPE_OF_ASSISTANCE_CATEGORY_VALUE_ID, AMP_MODALITY_ID,
- FINANCING_INSTR_CATEGORY_VALUE_ID)
-SELECT O.CODAGE,
-       ORG.AMP_ORG_ID,
-       A.AMP_ACTIVITY_ID,
-       CATVAL.ID,
-       @FUNDING_MODALITY,
-       111
-FROM SISFIN_DB.`CONV` AS C,
-     AMP_ACTIVITY AS A,
-     AMP_ORGANISATION AS ORG,
-     SISFIN_DB.`AGE` AS O,
-     SISFIN_DB.`CLAVES` AS TA,
-     AMP_CATEGORY_VALUE AS CATVAL
-WHERE C.NUMCONV = A.OLD_ID AND
-      ORG.OLD_ID = O.CODAGE AND
-      UPPER(ORG.NAME) = UPPER(O.NOMAGE) AND
-      C.CODAGE = ORG.OLD_ID AND
-      UPPER(TA.NOMDATO) = 'CVECOOP' AND
-      TA.VALDATO = C.CVECOOP AND
-      CATVAL.CATEGORY_VALUE = TA.INTERP AND
-      CATVAL.AMP_CATEGORY_CLASS_ID = 10;
-
-SELECT CONCAT(ROW_COUNT(), ' FUNDING MAPPED ') AS MSG;
-
-
---CURRENCY--
-INSERT INTO AMP_CURRENCY(CURRENCY_CODE, COUNTRY_NAME, CURRENCY_NAME,
- ACTIVE_FLAG)
-SELECT SIGLA_MDA,
-       MONEDA,
-       PAIS,
-       1
-FROM SISFIN_DB.CLASIF_MONEDA
-WHERE SIGLA_MDA NOT IN (SELECT CURRENCY_CODE FROM AMP_CURRENCY);
-
-SELECT CONCAT(ROW_COUNT(), ' CURRENCY ADDED  1 of 3') AS MSG;
+INSERT into AMP_FUNDING (
+financing_id,
+amp_donor_org_id,
+amp_activity_id,
+type_of_assistance_category_value_id,
+amp_modality_id,
+financing_instr_category_value_id)
+SELECT
+o.codage,
+org.amp_org_id ,
+a.amp_activity_id,
+catval.id,
+@funding_modality,
+111
+FROM sisfin_db.`conv` AS c,
+AMP_ACTIVITY AS a,
+AMP_ORGANISATION AS org,
+sisfin_db.`age` AS o,
+sisfin_db.`claves` AS ta,
+amp_category_value AS catval
+WHERE c.numconv=a.old_id AND org.old_id=o.codage  and upper(org.name)=upper(o.nomage)
+AND c.codage=org.old_id AND ta.nomdato='cvecoop'
+AND ta.valdato=c.cvecoop AND catval.category_value=ta.interp
+AND catval.amp_category_class_id=10;
 
 
+/* importing currencies */
+select 'importing currencies (initial) fundings';
+INSERT INTO amp_currency(
+currency_code,
+country_name,
+currency_name,
+active_flag)
+SELECT sigla_mda, moneda, pais, 1
+FROM sisfin_db.clasif_moneda
+WHERE (SELECT count(*) FROM AMP_CURRENCY x where trim(upper(x.CURRENCY_CODE))=trim(upper(SIGLA_MDA)))=0;
 
+select 'importing  old currencies used on the  transactions ';
 /*some currencies could be deleted  so we need check if there is old currencies used on the  transactions*/
-INSERT INTO AMP_CURRENCY(CURRENCY_CODE, COUNTRY_NAME, CURRENCY_NAME,
- ACTIVE_FLAG)
-SELECT CVEMONORIG,
+INSERT INTO AMP_CURRENCY(CURRENCY_CODE, COUNTRY_NAME, CURRENCY_NAME, ACTIVE_FLAG)
+SELECT
+distinct
+CVEMONORIG,
        NULL,
        CVEMONORIG,
        1
 FROM SISFIN_DB.DESEM
-WHERE CVEMONORIG NOT IN (SELECT SIGLA_MDA FROM SISFIN_DB.CLASIF_MONEDA) AND
-      CVEMONORIG NOT IN (SELECT CURRENCY_CODE FROM AMP_CURRENCY)
-GROUP BY CVEMONORIG;
-
-SELECT CONCAT(ROW_COUNT(), ' OLD CURRENCY ADDED  2 of 3') AS MSG;
-
-
-
-INSERT INTO AMP_CURRENCY(CURRENCY_CODE, COUNTRY_NAME, CURRENCY_NAME,
- ACTIVE_FLAG)
-SELECT CVEMONORIG,
-       NULL,
-       CVEMONORIG,
-       1
-FROM SISFIN_DB.ENM
-WHERE CVEMONORIG NOT IN (SELECT SIGLA_MDA FROM SISFIN_DB.CLASIF_MONEDA) AND
-      CVEMONORIG NOT IN (SELECT CURRENCY_CODE FROM AMP_CURRENCY)
-GROUP BY CVEMONORIG;
-
-SELECT CONCAT(ROW_COUNT(), ' OLD CURRENCY ADDED 3 of 3') AS MSG;
-
-
-SELECT '! ........................  IMPORTING FUNDING  ..... ...................!' AS MSG;
-
-SELECT 'DELTETING ALL FUNDING '  AS MSG;
-
-TRUNCATE TABLE AMP_FUNDING_DETAIL;
-
-INSERT INTO AMP_FUNDING_DETAIL(ADJUSTMENT_TYPE, TRANSACTION_TYPE,
- TRANSACTION_DATE, TRANSACTION_AMOUNT, ORG_ROLE_CODE, PERSPECTIVE_ID,
- AMP_FUNDING_ID, AMP_CURRENCY_ID, FIXED_EXCHANGE_RATE)
-SELECT @FUNDING_ADJUSMENT_PLANNED,
-       @COMMITMENT,
-       ENM.FECHVIGENM,
-       ENM.MONTORIG,
-       @ORG_ROLE_CODE,
-       @FUNDING_PERSPECTIVE,
-       F.AMP_FUNDING_ID,
-       CU.AMP_CURRENCY_ID,
-       ENM.TIPCAM
-FROM SISFIN_DB.`ENM` AS ENM,
-     AMP_ACTIVITY AS A,
-     AMP_FUNDING AS F,
-     AMP_CURRENCY AS CU
-
 WHERE
-      A.OLD_ID = ENM.NUMCONV AND
-      A.AMP_ACTIVITY_ID = F.AMP_ACTIVITY_ID AND
-      ENM.CVEMONORIG = CU.CURRENCY_CODE AND
-      ENM.NUMENM = 0;
-SELECT CONCAT(ROW_COUNT(), ' INITIAL FUNDING ADDED ') AS MSG;
+      (SELECT count(*) FROM AMP_CURRENCY x where upper(trim(x.CURRENCY_CODE))=upper((CVEMONORIG)))=0
+              and CVEMONORIG is not null;
+              
+              
+INSERT INTO amp_currency (currency_code,country_name,currency_name,active_flag)
+select
+   distinct
+	cvemonorig,
+	null,
+	cvemonorig,
+	1
+from
+	sisfin_db.enm
+where
+ (SELECT count(*) FROM AMP_CURRENCY x where upper(trim(x.CURRENCY_CODE))=upper((CVEMONORIG)))=0
+              and CVEMONORIG is not null;
+
+select 'end old currencies  ...... ';
+
+/* importing planned fundings */
+select 'importing planned (initial) fundings';
+
+INSERT INTO AMP_FUNDING_DETAIL
+(
+adjustment_type,
+transaction_type,
+transaction_date,
+transaction_amount,
+org_role_code,
+perspective_id,
+AMP_FUNDING_ID,
+amp_currency_id,
+fixed_exchange_rate
+)
+SELECT
+@funding_adjusment_planned,
+@commitment,
+enm.fechvigenm,
+enm.montorig,
+@org_role_code,
+@funding_perspective,
+f.amp_funding_id,
+cu.amp_currency_id,
+enm.tipcam
+FROM sisfin_db.`enm` as enm, AMP_ACTIVITY as a, AMP_FUNDING as f, amp_currency as cu
+WHERE  a.old_id=enm.numconv
+and a.amp_activity_id=f.amp_activity_id
+and enm.cvemonorig=cu.currency_code
+and enm.numenm=0;
+
 
 /* mapping additional commintments from ENM table.*/
-INSERT INTO AMP_FUNDING_DETAIL(ADJUSTMENT_TYPE, TRANSACTION_TYPE,
- TRANSACTION_DATE, TRANSACTION_AMOUNT, ORG_ROLE_CODE, PERSPECTIVE_ID,
- AMP_FUNDING_ID, AMP_CURRENCY_ID, FIXED_EXCHANGE_RATE)
-SELECT @FUNDING_ADJUSMENT_ACTUAL,
-       @COMMITMENT,
-       ENM.FECHVIGENM,
-       ENM.MONTORIG,
-       @ORG_ROLE_CODE,
-       @FUNDING_PERSPECTIVE,
-       F.AMP_FUNDING_ID,
-       CU.AMP_CURRENCY_ID,
-       ENM.TIPCAM
-FROM SISFIN_DB.`ENM` AS ENM,
-     AMP_ACTIVITY AS A,
-     AMP_FUNDING AS F,
-     AMP_CURRENCY AS CU
-WHERE A.OLD_ID = ENM.NUMCONV AND
-      A.AMP_ACTIVITY_ID = F.AMP_ACTIVITY_ID AND
-      ENM.CVEMONORIG = CU.CURRENCY_CODE AND
-      ENM.NUMENM > 0 AND
-      ENM.MONTORIG != 0;
-SELECT CONCAT(ROW_COUNT(), ' ADITIONAL FUNDING ADDED ') AS MSG;
+select 'mapping additional commintments from ENM table.';
+
+INSERT INTO AMP_FUNDING_DETAIL
+(
+adjustment_type,
+transaction_type,
+transaction_date,
+transaction_amount,
+org_role_code,
+perspective_id,
+AMP_FUNDING_ID,
+amp_currency_id,
+fixed_exchange_rate
+)
+SELECT
+@funding_adjusment_actual,
+@commitment,
+enm.fechvigenm,
+enm.montorig,
+@org_role_code,
+@funding_perspective,
+f.amp_funding_id,
+cu.amp_currency_id,
+enm.tipcam
+FROM sisfin_db.`enm` as enm, AMP_ACTIVITY as a, AMP_FUNDING as f, amp_currency as cu
+WHERE  a.old_id=enm.numconv
+and a.amp_activity_id=f.amp_activity_id
+and enm.cvemonorig=cu.currency_code
+and enm.numenm>0
+and enm.montorig!=0;
+
+select 'importing actual disbursments';
+INSERT INTO AMP_FUNDING_DETAIL
+(
+adjustment_type,
+transaction_type,
+transaction_date,
+transaction_amount,
+org_role_code,
+perspective_id,
+AMP_FUNDING_ID,
+amp_currency_id,
+fixed_exchange_rate
+)
+SELECT
+@funding_adjusment_actual,
+@disbursment,
+dsm.fechdesem,
+dsm.montorig,
+@org_role_code,
+@funding_perspective,
+f.amp_funding_id,
+cu.amp_currency_id,
+dsm.tipcam
+FROM sisfin_db.`desem` as dsm, AMP_ACTIVITY as a, AMP_FUNDING as f, amp_currency as cu
+WHERE  a.old_id=dsm.numconv
+and a.amp_activity_id=f.amp_activity_id
+and dsm.cvemonorig=cu.currency_code
+and lower(dsm.tipdesem)='e';
 
 
-INSERT INTO AMP_FUNDING_DETAIL(ADJUSTMENT_TYPE, TRANSACTION_TYPE,
- TRANSACTION_DATE, TRANSACTION_AMOUNT, ORG_ROLE_CODE, PERSPECTIVE_ID,
- AMP_FUNDING_ID, AMP_CURRENCY_ID, FIXED_EXCHANGE_RATE)
-SELECT @FUNDING_ADJUSMENT_ACTUAL,
-       @DISBURSMENT,
-       DSM.FECHDESEM,
-       DSM.MONTORIG,
-       @ORG_ROLE_CODE,
-       @FUNDING_PERSPECTIVE,
-       F.AMP_FUNDING_ID,
-       CU.AMP_CURRENCY_ID,
-       DSM.TIPCAM
-FROM SISFIN_DB.`DESEM` AS DSM,
-     AMP_ACTIVITY AS A,
-     AMP_FUNDING AS F,
-     AMP_CURRENCY AS CU
-WHERE A.OLD_ID = DSM.NUMCONV AND
-      A.AMP_ACTIVITY_ID = F.AMP_ACTIVITY_ID AND
-      DSM.CVEMONORIG = CU.CURRENCY_CODE AND
-      UPPER(DSM.TIPDESEM) = 'E';
-
-SELECT CONCAT(ROW_COUNT(), ' ACTUAL DISBURSMENTS ADDED ') AS MSG;
-
-
-INSERT INTO AMP_FUNDING_DETAIL(ADJUSTMENT_TYPE, TRANSACTION_TYPE,
- TRANSACTION_DATE, TRANSACTION_AMOUNT, ORG_ROLE_CODE, PERSPECTIVE_ID,
- AMP_FUNDING_ID, AMP_CURRENCY_ID, FIXED_EXCHANGE_RATE)
-SELECT @FUNDING_ADJUSMENT_PLANNED,
-       @DISBURSMENT,
-       DSM.FECHDESEM,
-       DSM.MONTORIG,
-       @ORG_ROLE_CODE,
-       @FUNDING_PERSPECTIVE,
-       F.AMP_FUNDING_ID,
-       CU.AMP_CURRENCY_ID,
-       DSM.TIPCAM
-FROM SISFIN_DB.`DESEM` AS DSM,
-     AMP_ACTIVITY AS A,
-     AMP_FUNDING AS F,
-     AMP_CURRENCY AS CU
-WHERE A.OLD_ID = DSM.NUMCONV AND
-      A.AMP_ACTIVITY_ID = F.AMP_ACTIVITY_ID AND
-      DSM.CVEMONORIG = CU.CURRENCY_CODE AND
-      UPPER(DSM.TIPDESEM) = 'P';
-
-SELECT CONCAT(ROW_COUNT(), 'PLANNED DISBURSMENTS ADDED ') AS MSG;
-
-
-SELECT 'CORRECTING INVALID DATES IN FUNDINGS' AS MSG;
-
-SET @TRANSACTION_DATE=CAST('2011-01-01 01:01:01' AS DATE);
-UPDATE AMP_FUNDING_DETAIL SET TRANSACTION_DATE=@TRANSACTION_DATE
-WHERE TRANSACTION_DATE IS NULL OR TRANSACTION_DATE LIKE '0000-00-00%';
-
-SELECT '! ........................  END IMPORTING FUNDING ..... ...................!' AS MSG;
-
-/* CORRECTING ACTIVITY DATES */
-SELECT 'CORRECTING 0000-00-00 DATES IN ACTIVITIES' AS MSG;
-
-UPDATE AMP_ACTIVITY
-SET ACTUAL_START_DATE=NULL
-WHERE ACTUAL_START_DATE='0000-00-00 00:00:00';
-
-UPDATE AMP_ACTIVITY
-SET PROPOSED_START_DATE=NULL
-WHERE PROPOSED_START_DATE='0000-00-00 00:00:00';
-
-UPDATE AMP_ACTIVITY
-SET PROPOSED_APPROVAL_DATE=NULL
-WHERE PROPOSED_APPROVAL_DATE='0000-00-00 00:00:00';
-
-UPDATE AMP_ACTIVITY
-SET ACTUAL_APPROVAL_DATE=NULL
-WHERE ACTUAL_APPROVAL_DATE='0000-00-00 00:00:00';
-
-UPDATE AMP_ACTIVITY
-SET ACTUAL_COMPLETION_DATE=NULL
-WHERE ACTUAL_COMPLETION_DATE='0000-00-00 00:00:00';
+select 'importing planned disbursments';
+INSERT INTO AMP_FUNDING_DETAIL
+(
+adjustment_type,
+transaction_type,
+transaction_date,
+transaction_amount,
+org_role_code,
+perspective_id,
+AMP_FUNDING_ID,
+amp_currency_id,
+fixed_exchange_rate
+)
+SELECT
+@funding_adjusment_planned,
+@disbursment,
+dsm.fechdesem,
+dsm.montorig,
+@org_role_code,
+@funding_perspective,
+f.amp_funding_id,
+cu.amp_currency_id,
+dsm.tipcam
+FROM sisfin_db.`desem` as dsm, AMP_ACTIVITY as a, AMP_FUNDING as f, amp_currency as cu
+WHERE  a.old_id=dsm.numconv
+and a.amp_activity_id=f.amp_activity_id
+and dsm.cvemonorig=cu.currency_code
+and lower(dsm.tipdesem)='p';
 
 
 
-/* REMOVING OLD VALUES, WE ARE GOING TO REPLACE FINANCING INSTRUMENT MEANING, IT WILL BE CALLED TYPE OF CREDIT FOR BOLIVIA */
-SELECT 'REMOVE PREVIOUS CATEGORY VALUES FOR FINANCING INSTRUMENT' MSG;
 
-DELETE CATVAL
-FROM AMP_CATEGORY_VALUE AS CATVAL,
-     AMP_CATEGORY_CLASS AS CATCLASS
-WHERE CATVAL.AMP_CATEGORY_CLASS_ID = CATCLASS.ID AND
-      upper(CATCLASS.KEYNAME) = 'FINANCING_INSTRUMENT' and
-      upper(CATVAL.category_value) not in (SELECT upper(CLA.INTERP) FROM
-      SISFIN_DB.`CLAVES` AS CLA WHERE UPPER(CLA.NOMDATO = 'CVECRED'));
+select 'correcting invalid dates in fundings';
+
+update amp_funding_detail
+set transaction_date='2011-01-01 01:01:01'
+where transaction_date is null or transaction_date like '0000-00-00%';
 
 
-/*  IMPORTING NEW VALUES: THERE ARE JUST 3 RECORDS */
-SELECT 'IMPORTING NEW CATEGORY VALUES FOR TYPE OF CREDIT' as MSG;
 
-SET @TEMP_CAT_VAL=-1;
-INSERT INTO AMP_CATEGORY_VALUE(CATEGORY_VALUE, AMP_CATEGORY_CLASS_ID,
- INDEX_COLUMN)
-SELECT CLA.INTERP,
-       CATCLASS.ID,
-       @TEMP_CAT_VAL:= @TEMP_CAT_VAL + 1
-FROM AMP_CATEGORY_CLASS AS CATCLASS,
-     SISFIN_DB.`CLAVES` AS CLA
-WHERE UPPER(CLA.NOMDATO = 'CVECRED') AND
-      UPPER(CATCLASS.KEYNAME) = 'FINANCING_INSTRUMENT' and
-      upper(CLA.INTERP) not in (select CATVAL.category_value FROM
-      AMP_CATEGORY_VALUE AS CATVAL, AMP_CATEGORY_CLASS AS CATCLASS WHERE
-      CATVAL.AMP_CATEGORY_CLASS_ID = CATCLASS.ID AND upper(CATCLASS.KEYNAME) =
-      'FINANCING_INSTRUMENT');
+/* correcting activity dates */
+select 'correcting 0000-00-00 dates in activities';
 
-/* MAPPING CREDIT TYPES TO ACTIVITIES */
-SELECT 'MAPPING FOUNDING CREDIT TYPES TO ACTIVITY FUNDINGS' AS MSG;
+update amp_activity
+set actual_start_date=null
+where actual_start_date='0000-00-00 00:00:00';
 
-UPDATE AMP_ACTIVITY AS ACT,
-       SISFIN_DB.`CONV` AS CON,
-       AMP_CATEGORY_VALUE AS CATVAL,
-       AMP_CATEGORY_CLASS AS CATCLASS,
-       SISFIN_DB.`CLAVES` AS CLA,
-       AMP_FUNDING AS FND
-SET ACT.CREDIT_TYPE_ID = CATVAL.ID,
-    FND.FINANCING_INSTR_CATEGORY_VALUE_ID = CATVAL.ID
-WHERE ACT.OLD_ID = CON.NUMCONV AND
-      FND.AMP_ACTIVITY_ID = ACT.AMP_ACTIVITY_ID AND
-      UPPER(CATCLASS.KEYNAME) = 'FINANCING_INSTRUMENT' AND
-      CATVAL.AMP_CATEGORY_CLASS_ID = CATCLASS.ID AND
-      UPPER(CLA.NOMDATO) = 'CVECRED' AND
-      CLA.INTERP = CATVAL.CATEGORY_VALUE AND
-      CON.CVECRED = CLA.VALDATO;
+update amp_activity
+set proposed_start_date=null
+where proposed_start_date='0000-00-00 00:00:00';
+
+update amp_activity
+set proposed_approval_date=null
+where proposed_approval_date='0000-00-00 00:00:00';
+
+update amp_activity
+set actual_approval_date=null
+where actual_approval_date='0000-00-00 00:00:00';
+
+update amp_activity
+set actual_completion_date=null
+where actual_completion_date='0000-00-00 00:00:00';
 
 
-/* ==REGIONS== */
-SELECT 'IMPORTIN REGIONS' as MSG;
+select '==type of credit==';
 
-INSERT INTO AMP_REGION(NAME, COUNTRY_ID, REGION_CODE)
-SELECT INTERP,
-       'bo',
-       VALDATO
-FROM SISFIN_DB.`CLAVES` AS C
-WHERE UPPER(C.NOMDATO) = 'CVEDEP' and
-      trim(upper(INTERP)) not in (select trim(upper(NAME)) from AMP_REGION);
-SELECT CONCAT(ROW_COUNT(), ' REGIONS  ADDED ') AS MSG;
+/* removing old values, we are going to replace financing instrument meaning, it will be called Type of credit for Bolivia */
+select 'remove previous category values for financing instrument';
+
+--DELETE catval FROM amp_category_value AS catval, amp_category_class AS catclass where catval.amp_category_class_id=catclass.id  AND catclass.keyName ='financing_instrument';
+
+/*  importing new values: there are just 3 records */
+select 'importing new category values for Type of Credit';
+
+SET @temp_cat_val=-1;
+
+INSERT INTO amp_category_value(category_value,amp_category_class_id,index_column)
+SELECT cla.interp, catclass.id, @temp_cat_val:=@temp_cat_val+1
+FROM amp_category_class AS catclass, sisfin_db.`claves` AS cla
+WHERE cla.nomdato='cvecred' AND catclass.keyName='financing_instrument' and
+(select count(*)FROM  AMP_CATEGORY_VALUE AS CATVAL,
+    AMP_CATEGORY_CLASS AS CATCLASS WHERE
+    CATVAL.AMP_CATEGORY_CLASS_ID = CATCLASS.ID AND upper(CATCLASS.KEYNAME) ='FINANCING_INSTRUMENT'
+	and upper(CATVAL.category_value)=upper(CLA.INTERP))=0;
+;
 
 
-SELECT 'INSERTING LOCATIONS' as MSG;
+/* mapping credit types to activities */
+select 'mapping founding credit types to activity fundings';
 
-INSERT INTO AMP_LOCATION(NAME, COUNTRY, REGION, COUNTRY_ID, REGION_ID)
-SELECT R.NAME,
-       'Bolivia',
-       R.NAME,
-       'bo',
-       R.AMP_REGION_ID
-FROM AMP_REGION R,
-     SISFIN_DB.`CLAVES` AS C
-WHERE UPPER(C.NOMDATO) = 'CVEDEP' AND
-      R.REGION_CODE = C.VALDATO and
-      (select count(*) from AMP_LOCATION where trim(upper(NAME)) = trim(upper(
+UPDATE amp_activity AS act,
+sisfin_db.`conv` AS con,
+amp_category_value AS catval,
+amp_category_class AS catclass,
+sisfin_db.`claves` AS cla,
+amp_funding AS fnd
+SET act.credit_type_id=catval.id, fnd.financing_instr_category_value_id=catval.id
+WHERE act.old_id=con.numconv
+AND fnd.amp_activity_id=act.amp_activity_id
+AND catclass.keyName='financing_instrument'
+AND catval.amp_category_class_id = catclass.id
+AND cla.nomdato='cvecred'
+AND cla.interp=catval.category_value
+AND con.cvecred=cla.valdato;
+
+
+/* ==Regions== */
+select 'importin regions';
+
+insert into amp_region
+(name, country_id, region_code)
+select interp, 'bo', valdato from sisfin_db.`claves` as c
+where c.nomdato='cvedep' and  (select count(*) from AMP_REGION x where trim(upper(x.NAME))=  trim(upper(INTERP)) )=0;
+
+select 'inserting locations';
+
+insert into amp_location
+(name,country,region,country_id,region_id)
+select r.name, 'Bolivia', r.name, 'bo', r.amp_region_id from amp_region r, sisfin_db.`claves` as c
+where c.nomdato='cvedep' and r.region_code=c.valdato
+ and
+      (select count(*) from amp_location where trim(upper(NAME)) = trim(upper(
       R.NAME)) and upper(COUNTRY) = 'BOLIVIA' and upper(COUNTRY_ID) = 'BO' and
       REGION_ID = R.AMP_REGION_ID) = 0;
 
-SELECT CONCAT(ROW_COUNT(), ' LOCATIONS  ADDED ') AS MSG;
+select 'mapping locations to activities';
 
+truncate table amp_activity_location;
 
-
-
-SELECT 'CLEANING ALL LOCATIONS OF ACTIVITIES' AS MSG;
-TRUNCATE TABLE AMP_ACTIVITY_LOCATION;
-
-INSERT INTO AMP_ACTIVITY_LOCATION(AMP_ACTIVITY_ID, AMP_LOCATION_ID,
- LOCATION_PERCENTAGE)
-SELECT ACT.AMP_ACTIVITY_ID,
-       LOC.AMP_LOCATION_ID,
-       CONDEP.PORCDEP
-FROM AMP_ACTIVITY AS ACT,
-     AMP_LOCATION AS LOC,
-     AMP_REGION AS REG,
-     SISFIN_DB.`CLAVES` AS C,
-     SISFIN_DB.`CONV_DEP` AS CONDEP
-WHERE ACT.AMP_ID = CONDEP.NUMCONV AND
-      LOC.REGION_ID = REG.AMP_REGION_ID AND
-      REG.REGION_CODE = C.VALDATO AND
-      UPPER(C.NOMDATO) = 'CVEDEP' AND
-      CONDEP.CVEDEP = C.VALDATO;
-
-SELECT CONCAT(ROW_COUNT(), ' AMP_ACTIVITY_LOCATION  MAPPED ') AS MSG;
-
+insert into amp_activity_location
+(amp_activity_id, amp_location_id,location_percentage)
+select act.amp_activity_id, loc.amp_location_id, condep.porcdep
+from amp_activity as act,
+amp_location as loc,
+amp_region as reg,
+sisfin_db.`claves` as c,
+sisfin_db.`conv_dep` as condep
+where
+act.amp_id=condep.numconv
+and loc.region_id=reg.amp_region_id
+and reg.region_code=c.valdato
+and c.nomdato='cvedep'
+and condep.cvedep=c.valdato;
 
 
 /*  mapping components (sectors) */
-SELECT ' CLEANING ALL AMP_ACTIVITY_COMPONENTE' AS MSG;
+TRUNCATE TABLE AMP_ACTIVITY_COMPONENTE;
 
-TRUNCATE table AMP_ACTIVITY_COMPONENTE;
-
-INSERT INTO AMP_ACTIVITY_COMPONENTE(AMP_ACTIVITY_ID, AMP_SECTOR_ID, PERCENTAGE)
-SELECT ACT.AMP_ACTIVITY_ID,
-       SEC.AMP_SECTOR_ID,
-       BCOMP.PORCCOMP
-FROM AMP_SECTOR AS SEC,
-     AMP_SECTOR_SCHEME AS SCH,
-     SISFIN_DB.COMP AS BCOMP,
-     SISFIN_DB.`CONV` AS CON,
-     AMP_ACTIVITY AS ACT
-WHERE SEC.AMP_SEC_SCHEME_ID = SCH.AMP_SEC_SCHEME_ID AND
-      SCH.SEC_SCHEME_CODE = 'BOL_COMPO_IMP' AND
-      ACT.AMP_ID = CON.NUMCONV AND
-      BCOMP.NUMCONV = CON.NUMCONV AND
-      BCOMP.CVETIPCOMP = SEC.SECTOR_CODE;
-
-SELECT CONCAT(ROW_COUNT(), ' COMPONENTS  MAPPED ') AS MSG;
+select ' mapping components (sectors)';
+INSERT INTO amp_activity_componente (amp_activity_id, amp_sector_id, percentage)
+SELECT act.amp_activity_id, sec.amp_sector_id, bcomp.porccomp
+FROM amp_sector AS sec, amp_sector_scheme AS sch, sisfin_db.comp AS bcomp, sisfin_db.`conv` AS con, amp_activity AS act
+WHERE sec.amp_sec_scheme_id=sch.amp_sec_scheme_id
+AND sch.sec_scheme_code='BOL_COMPO_IMP'
+AND act.amp_id=con.numconv
+AND bcomp.numconv=con.numconv
+AND bcomp.cvetipcomp=sec.sector_code;
 
 /* mapping activities and themes(programs) */
 
-SELECT ' CLEANING ALL  AMP_ACTIVITY_THEME (PROGRAMS)' as MSG;
+select 'mapping activities and themes(programs)';
+TRUNCATE TABLE amp_activity_theme;
 
-TRUNCATE TABLE AMP_ACTIVITY_THEME;
+INSERT INTO amp_activity_theme
+(amp_activity_id,amp_theme_id)
+select act.amp_activity_id, prog.amp_theme_id
+from  amp_activity as act, amp_theme as prog, sisfin_db.`conv` as acto
+where act.old_id=acto.numconv and prog.theme_code = concat('EBRP', substring(acto.Cod_EBRP,2));
 
-INSERT INTO AMP_ACTIVITY_THEME(AMP_ACTIVITY_ID, AMP_THEME_ID)
-SELECT ACT.AMP_ACTIVITY_ID,
-       PROG.AMP_THEME_ID
-FROM AMP_ACTIVITY AS ACT,
-     AMP_THEME AS PROG,
-     SISFIN_DB.`CONV` AS ACTO
-WHERE ACT.OLD_ID = ACTO.NUMCONV AND
-      PROG.THEME_CODE = CONCAT('EBRP', SUBSTRING(ACTO.COD_EBRP, 2));
-
-SELECT CONCAT(ROW_COUNT(), ' AMP_ACTIVITY_THEME  MAPPED ') AS MSG;
-
-SELECT ' CLEANING ALL  AMP_ACTIVITY_PROGRAM' AS MSG;
-TRUNCATE TABLE AMP_ACTIVITY_PROGRAM;
-
-INSERT INTO AMP_ACTIVITY_PROGRAM(AMP_ACTIVITY_ID, AMP_PROGRAM_ID,
- PROGRAM_PERCENTAGE, PROGRAM_SETTING)
-SELECT ACT.AMP_ACTIVITY_ID,
-       PROG.AMP_THEME_ID,
-       100,
-       PROGSET.AMP_PROGRAM_SETTINGS_ID
-FROM AMP_ACTIVITY AS ACT,
-     AMP_THEME AS PROG,
-     AMP_PROGRAM_SETTINGS AS PROGSET,
-     SISFIN_DB.`CONV` AS CON
-WHERE ACT.AMP_ID = CON.NUMCONV AND
-      PROG.THEME_CODE = CONCAT('EBRP', SUBSTRING(CON.COD_EBRP, 2)) AND
-      UPPER(TRIM(PROGSET.NAME)) LIKE 'NATIONAL PLAN OBJECTIVE';
-
-SELECT CONCAT(ROW_COUNT(), ' AMP_ACTIVITY_PROGRAM  MAPPED ') AS MSG;
+TRUNCATE TABLE amp_activity_program;
+insert INTO amp_activity_program
+(amp_activity_id,amp_program_id,program_percentage,program_setting)
+select  act.amp_activity_id, prog.amp_theme_id, 100, progset.amp_program_settings_id
+from amp_activity as act, amp_theme as prog, amp_program_settings as progset, sisfin_db.`conv` as con
+where act.amp_id=con.numconv
+and prog.theme_code = concat('EBRP', substring(con.Cod_EBRP,2))
+and progset.name like 'National Plan Objective';
 
 
 /*Adding donor to activities*/
 
 
-INSERT INTO AMP_ORG_ROLE(ACTIVITY, ORGANISATION, ROLE, PERCENTAGE)
-SELECT A.AMP_ACTIVITY_ID,
-       O.AMP_ORG_ID,
-       1,
-       NULL
-FROM AMP_FUNDING A
-     INNER JOIN AMP_ORGANISATION O ON A.AMP_DONOR_ORG_ID = O.AMP_ORG_ID
-WHERE A.AMP_ACTIVITY_ID NOT IN (SELECT X.ACTIVITY FROM AMP_ORG_ROLE X WHERE
- X.ACTIVITY = A.AMP_ACTIVITY_ID AND X.ROLE = 1 AND X.ORGANISATION =
- O.AMP_ORG_ID);
+insert into amp_org_role (
+  activity ,
+  organisation ,
+  role ,
+  percentage
+)
+
+
+select
+a.amp_activity_id,
+o.amp_org_id,1,null
+ from amp_funding
+a inner join amp_organisation  o on a.amp_donor_org_id=o.amp_org_id
+where a.amp_activity_id not in
+(select x.activity from amp_org_role x
+         where x.activity=a.amp_activity_id
+               and x.role=1
+               and x.organisation=o.amp_org_id
+         );
 
 
 
-SELECT '............ UPDATING FROM SIS SIN ...............' AS MSG;
--- Sebas: Why we are using these ID?
+
+/*clean duplicated agencies*/
+select 'cleaning duplicated agencies';
+
+  delete
+      from
+          amp_organisation
+      where
+           name in
+                (
+                select table1.name from
+                (
+			select count(*), name from amp_organisation group by name having count(*) > 1) as table1
+                )
+                and amp_org_id not in (select  organisation from amp_org_role  )
+                and amp_org_id not in (select amp_donor_org_id from amp_funding);
+
+update amp_activity_sector set classification_config_id=1;
+
+select 'UPDATE FOR SISIN';
+
+
+
+SET @commitment=0;
+SET @disbursment=1;
+SET @expenditure=2;
+
+SET @funding_adjusment_planned=0;
+SET @funding_adjusment_actual=1;
+
 SET @usd_currency_id=48;
-
 SET @mofed_perspective_id=2;
+
 SET @base_url_sisin='http://www.google.com?sisinCode=';
 
 
-SELECT 'INSERTING PROYECTOS REFERENCES INTO COMPONENT TABLE' AS MSG;
 
-INSERT INTO AMP_COMPONENTS(CODIGOSISIN)
-SELECT DISTINCT CODIGOSISIN
-FROM SISIN_DB.SEGUIMIENTO_FINANCIERO S
-WHERE CODCONVEXT != '00000' AND
-      CODCONVEXT != '99999' and
-      CODIGOSISIN not in (select CODIGOSISIN from AMP_COMPONENTS);
-SELECT CONCAT(ROW_COUNT(), ' SISIN CODES ADDED') AS MSG;
+SELECT 'Inserting Proyectos references into Component table';
+INSERT INTO amp_components (CodigoSISIN)
+SELECT distinct CodigoSISIN FROM sisin_db.seguimiento_financiero s
+where CodConvExt != '00000' and CodConvExt != '99999';
 
 
-SELECT 'UPDATING COMPONENTS WITH PROYECTO DATA' AS MSG;
-
-UPDATE AMP_COMPONENTS A,
-       SISIN_DB.PROYECTO P
-SET A.TITLE = P.NOMBREPROYECTO,
-    A.DESCRIPTION = P.DESCRIPCIONPROYECTO,
-    A.CODE = P.CODIGOSISIN,
-    A.URL = CONCAT(@BASE_URL_SISIN, P.CODIGOSISIN)
-WHERE A.CODIGOSISIN = P.CODIGOSISIN;
-
-SELECT CONCAT(ROW_COUNT(), ' SISIN PROYECTOS UPDATE') AS MSG;
+SELECT 'Updating Components with Proyecto data';
+UPDATE amp_components a,
+sisin_db.proyecto p
+SET a.title = p.NombreProyecto,
+a.description = p.DescripcionProyecto,
+a.code = p.CodigoSISIN,
+a.url = CONCAT(@base_url_sisin,p.CodigoSISIN)
+where a.CodigoSISIN = p.CodigoSISIN;
 
 
-SELECT 'UPDATING REFERENCES FROM PROYECTOS TO ACTIVITIES' AS MSG;
+SELECT 'Inserting references from Proyectos to Activities';
 INSERT INTO amp_activity_components(amp_activity_id, amp_component_id)
-SELECT A.AMP_ACTIVITY_ID,
-       C.AMP_COMPONENT_ID
-FROM AMP_COMPONENTS C
-     JOIN SISIN_DB.SEGUIMIENTO_FINANCIERO SF ON C.CODIGOSISIN = SF.CODIGOSISIN
-     JOIN AMP_ACTIVITY A ON A.AMP_ID = SF.CODCONVEXT
-WHERE (SELECT COUNT(*) FROM AMP_ACTIVITY_COMPONENTS WHERE AMP_COMPONENT_ID =
- C.AMP_COMPONENT_ID AND AMP_ACTIVITY_ID = A.AMP_ACTIVITY_ID) = 0
-GROUP BY A.AMP_ACTIVITY_ID,
-         C.AMP_COMPONENT_ID;
-
-SELECT CONCAT(ROW_COUNT(), '  REFERENCES FROM PROYECTOS TO ACTIVITIES ADDED') AS MSG;
-
-SELECT 'CLEANING ALL COMPONENTS FUNDING ...' AS MSG;
-
-TRUNCATE TABLE AMP_COMPONENT_FUNDING;
-
-SELECT 'INSERTING MONTO PROGRAMADO FUNDING DATA' AS MSG;
-
-INSERT INTO AMP_COMPONENT_FUNDING (TRANSACTION_TYPE,ADJUSTMENT_TYPE,CURRENCY_ID,PERSPECTIVE_ID,AMP_COMPONENT_ID,ACTIVITY_ID,TRANSACTION_AMOUNT,TRANSACTION_DATE,REPORTING_DATE,EXCHANGE_RATE)
 SELECT
-@COMMITMENT AS TRANSACTION_TYPE,
-@FUNDING_ADJUSMENT_PLANNED AS ADJUSTMENT_TYPE,
-@USD_CURRENCY_ID AS CURRENCY_ID,
-@MOFED_PERSPECTIVE_ID AS PERSPECTIVE_ID,
-C.AMP_COMPONENT_ID,
-A.AMP_ACTIVITY_ID,
-SF.MONTOPROGRAMADO AS TRANSACTION_AMOUNT,
-STR_TO_DATE(CONCAT(SF.MES, '/01/', SF.ANO),'%m/%d/%Y') AS TRANSACTION_DATE,
-FECHAREGISTRO AS REPORTING_DATE,
-TC.TIPODECAMBIO AS EXCHANGE_RATE
-FROM AMP_COMPONENTS C
-JOIN SISIN_DB.SEGUIMIENTO_FINANCIERO SF ON C.CODIGOSISIN = SF.CODIGOSISIN
-JOIN AMP_ACTIVITY A ON A.AMP_ID = SF.CODCONVEXT AND SF.MONTOPROGRAMADO != 0
-JOIN SISIN_DB.TABLA_TIPOCAMBIOGESTION TC ON TC.ANO = SF.ANO;
+a.amp_activity_id,
+c.amp_component_id
+FROM amp_components c
+join sisin_db.seguimiento_financiero sf on c.CodigoSISIN = sf.CodigoSisin
+join amp_activity a on a.amp_id = sf.CodConvExt
+group by a.amp_activity_id, c.amp_component_id;
 
-SELECT CONCAT(ROW_COUNT(), '  MONTO PROGRAMADO COMMITMENT sADDED') AS MSG;
+DELETE FROM AMP_COMPONENT_FUNDING;
 
-
-SELECT 'INSERTING MONTO REPROGRAMADO FUNDING DATA';
-INSERT INTO AMP_COMPONENT_FUNDING (TRANSACTION_TYPE,ADJUSTMENT_TYPE,CURRENCY_ID,PERSPECTIVE_ID,AMP_COMPONENT_ID,ACTIVITY_ID,TRANSACTION_AMOUNT,TRANSACTION_DATE,REPORTING_DATE,EXCHANGE_RATE)
+SELECT 'Inserting Monto Programado Funding Data';
+INSERT INTO amp_component_funding (transaction_type,adjustment_type,currency_id,perspective_id,amp_component_id,activity_id,transaction_amount,transaction_date,reporting_date,exchange_rate)
 SELECT
-@COMMITMENT AS TRANSACTION_TYPE,
-@FUNDING_ADJUSMENT_ACTUAL AS ADJUSTMENT_TYPE,
-@USD_CURRENCY_ID AS CURRENCY_ID,
-@MOFED_PERSPECTIVE_ID AS PERSPECTIVE_ID,
-C.AMP_COMPONENT_ID,
-A.AMP_ACTIVITY_ID,
-SF.MONTOREPROGRAMADO AS TRANSACTION_AMOUNT,
-STR_TO_DATE(CONCAT(SF.MES, '/01/', SF.ANO),'%m/%d/%Y') AS TRANSACTION_DATE,
-FECHAREGISTRO AS REPORTING_DATE,
-TC.TIPODECAMBIO AS EXCHANGE_RATE
-FROM AMP_COMPONENTS C
-JOIN SISIN_DB.SEGUIMIENTO_FINANCIERO SF ON C.CODIGOSISIN = SF.CODIGOSISIN
-JOIN AMP_ACTIVITY A ON A.AMP_ID = SF.CODCONVEXT AND SF.MONTOREPROGRAMADO != 0
-JOIN SISIN_DB.TABLA_TIPOCAMBIOGESTION TC ON TC.ANO = SF.ANO;
-
-SELECT CONCAT(ROW_COUNT(), '  MONTO PROGRAMADO ADDED COMMITMENT') AS MSG;
+@commitment as transaction_type,
+@funding_adjusment_planned as adjustment_type,
+@usd_currency_id as currency_id,
+@mofed_perspective_id as perspective_id,
+c.amp_component_id,
+a.amp_activity_id,
+sf.MontoProgramado as transaction_amount,
+STR_TO_DATE(CONCAT(sf.Mes, '/01/', sf.Ano), '%m/%d/%Y') as transaction_date,
+FechaRegistro as reporting_date,
+tc.tipodecambio as exchange_rate
+FROM amp_components c
+join sisin_db.seguimiento_financiero sf on c.CodigoSISIN = sf.CodigoSisin
+join amp_activity a on a.amp_id = sf.CodConvExt and sf.MontoProgramado != 0
+join sisin_db.tabla_tipocambiogestion tc on tc.ano = sf.Ano;
 
 
-SELECT 'INSERTING MONTO EJECUTADO FUNDING DATA' as MSG;
-INSERT INTO AMP_COMPONENT_FUNDING (TRANSACTION_TYPE,ADJUSTMENT_TYPE,CURRENCY_ID,PERSPECTIVE_ID,AMP_COMPONENT_ID,ACTIVITY_ID,TRANSACTION_AMOUNT,TRANSACTION_DATE,REPORTING_DATE,EXCHANGE_RATE)
+SELECT 'Inserting Monto Reprogramado Funding Data';
+INSERT INTO amp_component_funding (transaction_type,adjustment_type,currency_id,perspective_id,amp_component_id,activity_id,transaction_amount,transaction_date,reporting_date,exchange_rate)
 SELECT
-@EXPENDITURE,
-@FUNDING_ADJUSMENT_ACTUAL,
-@USD_CURRENCY_ID,
-@MOFED_PERSPECTIVE_ID,
-C.AMP_COMPONENT_ID,
-A.AMP_ACTIVITY_ID,
-SF.MONTOEJECUTADO AS TRANSACTION_AMOUNT,
-STR_TO_DATE(CONCAT(SF.MES, '/01/', SF.ANO),'%m/%d/%Y') AS TRANSACTION_DATE,
-FECHAREGISTRO AS REPORTING_DATE,
-TC.TIPODECAMBIO AS EXCHANGE_RATE
-FROM AMP_COMPONENTS C
-JOIN SISIN_DB.SEGUIMIENTO_FINANCIERO SF ON C.CODIGOSISIN = SF.CODIGOSISIN
-JOIN AMP_ACTIVITY A ON A.AMP_ID = SF.CODCONVEXT AND SF.MONTOEJECUTADO != 0
-JOIN SISIN_DB.TABLA_TIPOCAMBIOGESTION TC ON TC.ANO = SF.ANO;
-SELECT CONCAT(ROW_COUNT(), '  MONTO PROGRAMADO ADDED EXPENDITURE') AS MSG;
+@commitment as transaction_type,
+@funding_adjusment_actual as adjustment_type,
+@usd_currency_id as currency_id,
+@mofed_perspective_id as perspective_id,
+c.amp_component_id,
+a.amp_activity_id,
+sf.MontoReprogramado as transaction_amount,
+STR_TO_DATE(CONCAT(sf.Mes, '/01/', sf.Ano), '%m/%d/%Y') as transaction_date,
+FechaRegistro as reporting_date,
+tc.tipodecambio as exchange_rate
+FROM amp_components c
+join sisin_db.seguimiento_financiero sf on c.CodigoSISIN = sf.CodigoSisin
+join amp_activity a on a.amp_id = sf.CodConvExt and sf.MontoReprogramado != 0
+join sisin_db.tabla_tipocambiogestion tc on tc.ano = sf.Ano;
 
 
+SELECT 'Inserting Monto Ejecutado Funding Data';
+INSERT INTO amp_component_funding (transaction_type,adjustment_type,currency_id,perspective_id,amp_component_id,activity_id,transaction_amount,transaction_date,reporting_date,exchange_rate)
+SELECT
+@expenditure,
+@funding_adjusment_actual,
+@usd_currency_id,
+@mofed_perspective_id,
+c.amp_component_id,
+a.amp_activity_id,
+sf.MontoEjecutado as transaction_amount,
+STR_TO_DATE(CONCAT(sf.Mes, '/01/', sf.Ano), '%m/%d/%Y') as transaction_date,
+FechaRegistro as reporting_date,
+tc.tipodecambio as exchange_rate
+FROM amp_components c
+join sisin_db.seguimiento_financiero sf on c.CodigoSISIN = sf.CodigoSisin
+join amp_activity a on a.amp_id = sf.CodConvExt and sf.MontoEjecutado != 0
+join sisin_db.tabla_tipocambiogestion tc on tc.ano = sf.Ano;
 
-UPDATE AMP_COMPONENTS
-SET CODE = CONCAT(LEFT(CODE,3), '-', MID(CODE,4,5))
-WHERE LENGTH(CODE)= 13;
+
+update amp_components
+set code = concat(left(code,3), '-', mid(code,4,5))
+where LENGTH(code)= 13;
+
+
 COMMIT;
-
-

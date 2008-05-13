@@ -163,7 +163,6 @@ where not exists (select * from amp_activity act where act.amp_activity_id=actlo
 DELETE catval FROM amp_category_value AS catval, amp_category_class AS catclass
 where catval.amp_category_class_id=catclass.id  AND catclass.keyName ='financing_instrument'; 
 
-
 COMMIT;
 
 
@@ -218,9 +217,8 @@ where c.CodigoSisin is not null and acf.amp_component_id = c.amp_component_id;
 
 DELETE FROM amp_components where CodigoSISIN is not null;
 
-COMMIT;
-
 ALTER TABLE amp_components DROP INDEX `Index_CodigoSISIN`;
 ALTER TABLE amp_components DROP COLUMN `CodigoSISIN`;
+
 
 /* end */

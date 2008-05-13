@@ -1,4 +1,7 @@
 use amp_bolivia;
+
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET FOREIGN_KEY_CHECKS=0;
 
 CREATE TABLE CLASI_PND(
@@ -42,3 +45,21 @@ ADD INDEX (region_code);
 
 ALTER TABLE amp_components ADD COLUMN CodigoSISIN VARCHAR(13) AFTER `type`;
 ALTER TABLE amp_components ADD INDEX `Index_CodigoSISIN` USING BTREE(`CodigoSISIN`);
+
+
+insert into AMP_SECTOR_SCHEME (sec_scheme_code, sec_scheme_name)
+values('BOL_IMP', 'Bolivia Import');
+
+update amp_classification_config set classification_id=LAST_INSERT_ID();
+
+DELETE FROM  AMP_GLOBAL_SETTINGS  where settingsName = 'Default Sector Scheme';
+
+INSERT INTO
+AMP_GLOBAL_SETTINGS
+(settingsName,settingsValue)
+values ('Default Sector Scheme',
+(select amp_sec_scheme_id from AMP_SECTOR_SCHEME where sec_scheme_code='BOL_IMP'));
+
+INSERT INTO AMP_SECTOR_SCHEME (sec_scheme_code, sec_scheme_name)
+VALUES ('BOL_COMPO_IMP', 'Components');
+COMMIT; 

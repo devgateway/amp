@@ -382,6 +382,15 @@ function collapseAll() {
 									</field:display>
 								
                                   
+                                  <field:display name="NPD Clasification" feature="Identification">
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name"><digi:trn key="aim:npdClasification">NPD Clasification</digi:trn>										</td>
+										<td class="v-name"  bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.clasiNPD}"/>										
+										</td>
+									</tr>
+									</field:display>
+                                  
                                     
                                     <!--Begin Objectives --->
 			     					<field:display feature="Identification" name="Objectives">

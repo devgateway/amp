@@ -568,6 +568,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 private Long creditTypeId;	
 	 private boolean fixerate;
 	 private String convenioNumcont;
+	 private String clasiNPD;
          
     private List steps;
     
@@ -5347,6 +5348,14 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setUnDisbursementsBalance(String unDisbursementsBalance) {
 	    this.unDisbursementsBalance = unDisbursementsBalance;
+	}
+
+	public String getClasiNPD() {
+	    return clasiNPD;
+	}
+
+	public void setClasiNPD(String clasiNPD) {
+	    this.clasiNPD = clasiNPD;
 	}
 	   
 }

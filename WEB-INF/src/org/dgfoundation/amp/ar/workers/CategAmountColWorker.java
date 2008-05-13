@@ -72,6 +72,13 @@ public class CategAmountColWorker extends ColumnWorker {
 	 */
 	public boolean isShowable(CategAmountCell cac) {
 		boolean showable=true;
+		
+		//proposed cost is by default not showable and should not appear in any funding totals. it is used to ease the use of destination post processed columns
+		if(this.getViewName().equals(ArConstants.VIEW_PROPOSED_COST))
+		    return false;
+		    
+		
+		
 		AmpARFilter filter=(AmpARFilter) generator.getFilter();
 		
 		
@@ -285,6 +292,12 @@ public class CategAmountColWorker extends ColumnWorker {
 		acc.getMetaData().add(qMs);
 		acc.getMetaData().add(mMs);		
 		acc.getMetaData().add(headMeta);
+		
+		if(this.getViewName().equals("v_proposed_cost")) {
+		    //used as a flag, no value needed
+		    MetaInfo costMs = this.getCachedMetaInfo(ArConstants.PROPOSED_COST, null);
+		    acc.getMetaData().add(costMs);
+		}
 		
 		if(donorGroupName!=null) {
 			MetaInfo donorGroupMs = this.getCachedMetaInfo(ArConstants.DONOR_GROUP, donorGroupName);

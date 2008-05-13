@@ -159,7 +159,8 @@ public class GroupColumn extends Column {
 				AmpMeasures element = ampReportMeasurement.getMeasure();
 				if (element.getMeasureName().equals(
 						ArConstants.UNDISBURSED_BALANCE)
-						|| element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS)
+						|| element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS) 
+							|| element.getMeasureName().equals(ArConstants.UNCOMMITTED_BALANCE)
 					) continue;
 				
 				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(
@@ -276,11 +277,17 @@ public class GroupColumn extends Column {
     
     /**
      * Adds a Column to this GroupColumn. The Parent property of the added Column will be set to this GroupColumn.
+     * If the column already exists then the items are appended to the column end so we'll end up with one 
+     * unique column per group
      * @param c
      */
     public void addColumn(Column c) {
-        items.add(c);
+        if(!items.contains(c)) {items.add(c);        
         c.setParent(this);
+        } else {
+            Column older=(Column) items.get(items.indexOf(c));
+            older.getItems().addAll(c.getItems());
+        }
     }
     
     public void addColumn(Integer idx,Column c){

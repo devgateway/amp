@@ -116,7 +116,7 @@ public class ColumnReportData extends ReportData {
 			
 			if(!ARDimension.isLinkedWith(this, cat)) continue;
 			
-			logger.info("Splitting by categorty: "+cat);
+			logger.info("Splitting by category: "+cat);
 			ColumnReportData crd = new ColumnReportData((String) cat
 					.getColumnId()
 					+ ": " + cat.toString());

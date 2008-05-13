@@ -42,6 +42,7 @@ public final class ArConstants {
 	public final static String YEAR="Year";
 	public final static String QUARTER="Quarter";
 	public final static String MONTH="Month";
+	public final static String PROPOSED_COST="Proposed Cost";
 	
 	public final static String PERSPECTIVE="Perspective";
 
@@ -75,9 +76,11 @@ public final class ArConstants {
 	
 
 	public final static String COLUMN_FUNDING="Funding";
+	public final static String COLUMN_PROPOSED_COST="Proposed project cost";
 	
 	//additional measures
 	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";
+	public final static String UNCOMMITTED_BALANCE="Uncommitted Balance";
 	public final static String TOTAL_COMMITMENTS="Total Commitments";
 	
 	//maldives only:
@@ -102,6 +105,7 @@ public final class ArConstants {
 	public final static String HIERARCHY_SORTER_TITLE="Title";
 	
 	
+	public static final String VIEW_PROPOSED_COST="v_proposed_cost";
 	
 	//reportsFilter
 	

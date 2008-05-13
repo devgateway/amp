@@ -85,6 +85,14 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 		return  mi.getValue().toString();
 	}
 
+	
+	public boolean existsMetaString(String category) {
+		MetaInfo mi = MetaInfo.getMetaInfo(metaData,category);
+		if(mi!=null) return true;
+		return false;
+		
+	}
+
 
 	public CategAmountCell() {
 		super();

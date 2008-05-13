@@ -335,6 +335,7 @@
 							label="region" value="regionId" />
 					</html:select></td>
 				</tr>
+				<field:display name="Primary" feature="Sectors">
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5"><digi:trn key="rep:filer:primarySector">Primary Sector</digi:trn></td>
 				</tr>
@@ -348,6 +349,8 @@
 						</html:select>
 					</td>
 				</tr>
+				</field:display>
+				<field:display name="Secondary" feature="Sectors">
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5"><digi:trn key="rep:filer:secondarySector">Secondary Sector</digi:trn></td>
 				</tr>
@@ -361,6 +364,7 @@
 						</html:select>
 					</td>
 				</tr>
+				</field:display>
 				</table>
 			</td>
 		</tr>

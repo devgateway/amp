@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 
 public class NpdForm extends ActionForm {
 
@@ -22,6 +23,8 @@ public class NpdForm extends ActionForm {
 	//private List statuses;
 	//private String[] selectedStatuses;
 	private Long selectedStatuses;
+
+    private AmpCurrency defCurrency;
 
 	private String[] yearTo;
 	private String[] yearFrom;
@@ -156,12 +159,20 @@ public class NpdForm extends ActionForm {
         return defaultProgram;
     }
 
+    public AmpCurrency getDefCurrency() {
+        return defCurrency;
+    }
+
     public void setSelectedStatuses(Long selectedStatuses) {
 		this.selectedStatuses = selectedStatuses;
 	}
 
     public void setDefaultProgram(String defaultProgram) {
         this.defaultProgram = defaultProgram;
+    }
+
+    public void setDefCurrency(AmpCurrency defCurrency) {
+        this.defCurrency = defCurrency;
     }
 
 }

@@ -24,7 +24,7 @@ import org.digijava.module.aim.util.NpdUtil;
 public class ActivityItem {
 
 	public static final String TAG_NAME = "activity";
-	
+
 	public static final String DONORS_TAG_NAME = "donors";
 
 	public static final String PARAM_STATUS = "status";
@@ -36,9 +36,9 @@ public class ActivityItem {
 	public static final String PARAM_PROPOSED_AMOUNT = "proposedAmount";
 
 	public static final String PARAM_ACTUAL_AMOUNT = "actualAmount";
-	
+
 	public static final String PARAM_PLANNED_AMOUNT = "plannedAmount";
-	
+
 	public static final String PARAM_DATE = "date";
 
 	private Long id;
@@ -48,20 +48,20 @@ public class ActivityItem {
 	private String status;
 
 	private String proposedAmount = "error";
-	
+
 	private String plannedAmount = "error";
-	
+
 	private String actualAmount = "error";
 
 	private String startDate;
-	//end date not used 
+	//end date not used
 	private String endDate;
-	
+
 	private List<LabelValueBean> donors;
-	
+
 	private ActivityUtil.ActivityAmounts amounts;
 
-	
+
 	/**
 	 * Default constructor.
 	 * Not very usful.
@@ -77,7 +77,11 @@ public class ActivityItem {
 	 * @see ActivityItem#ActivityItem(AmpActivity, DateFormat)
 	 */
 	public ActivityItem(AmpActivity entity) throws Exception{
-		this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT));
+		this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),"USD");
+	}
+
+    public ActivityItem(AmpActivity entity,String curenncyCode) throws Exception{
+        this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT),curenncyCode);
 	}
 
 	/**
@@ -86,7 +90,7 @@ public class ActivityItem {
 	 * @param entity AmpActivity db entity to construct helper from
 	 * @param frmt date formatter
 	 */
-	public ActivityItem(AmpActivity entity,DateFormat frmt) throws Exception {
+	public ActivityItem(AmpActivity entity,DateFormat frmt,String curenncyCode) throws Exception {
 		if (entity != null) {
 			AmpCategoryValue statusValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, entity.getCategories());
 //			statusValue.setValue("fake status");
@@ -96,7 +100,7 @@ public class ActivityItem {
 			name = entity.getName();
 			name = name.replaceAll("&","&amp;");
 			try {
-				amounts = ActivityUtil.getActivityAmmountIn(entity,"USD");
+				amounts = ActivityUtil.getActivityAmmountIn(entity,curenncyCode);
 				proposedAmount=amounts.proposedAmout();
 				actualAmount=amounts.actualAmount();
 				plannedAmount=amounts.plannedAmount();
@@ -152,7 +156,7 @@ public class ActivityItem {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Converts donor organizations Set from AmpActivity to list of LabelValueBeans
 	 * Organizations name is label, and org Id is value of the bean.
@@ -171,7 +175,7 @@ public class ActivityItem {
 		}
 		return result;
 	}
-	
+
 	private String getStatusValue() {
 		return getStatus();
 	}

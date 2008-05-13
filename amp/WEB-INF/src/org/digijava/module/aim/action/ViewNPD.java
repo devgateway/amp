@@ -25,6 +25,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 
 /**
  * NPD main page.
@@ -45,13 +46,19 @@ public class ViewNPD extends Action {
 		npdForm.setGraphHeight(npdSettings.getHeight().intValue());
 		npdForm.setYears(new ArrayList(ProgramUtil.getYearsBeanList()));
 //		if (npdForm.getSelYears() == null)
-		//  If default years for this team is null, than default years will be last three years from Yearsbean list                 
+		//  If default years for this team is null, than default years will be last three years from Yearsbean list
 		if(npdSettings.getSelectedYearsForTeam()!=null){
 			npdForm.setSelYears(defaulYearsGeneratorForNpdGraph(npdSettings.getSelectedYearsForTeam()));
 		}else {
 			npdForm.setSelYears(selectNYears(ProgramUtil.getYearsBeanList(),3));
 		}
-		
+
+        AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(teamMember.getTeamId());
+        //DbUtil.getMemberAppSettings(teamMember.getMemberId());
+        if(ampAppSettings.getCurrency()!=null){
+          npdForm.setDefCurrency(ampAppSettings.getCurrency());
+        }
+
 		npdForm.setDummyYear("-1");
 		npdForm.setDonors(getDonorsList(30));
         npdForm.setDefaultProgram(FeaturesUtil.getGlobalSettingValue("NPD Default Program"));
@@ -76,7 +83,7 @@ public class ViewNPD extends Action {
 		}
 		return result;
 	}
-	
+
 	private String[] defaulYearsGeneratorForNpdGraph(String selectedYearForTeam){
 		StringTokenizer toka=new StringTokenizer(selectedYearForTeam,",");
 		String[] result=new String[toka.countTokens()];

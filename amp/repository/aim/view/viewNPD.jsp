@@ -44,7 +44,7 @@
 		vertical-align: top;
 	}
 </style>
-
+<digi:instance property="aimNPDForm" />
 <digi:form action="/nationalPlaningDashboard.do">
 
 <c:set var="noProgSelected">
@@ -83,7 +83,7 @@
     var lastTimeStamp;
 	var strNoActivities="<digi:trn key='aim:NPD:noActivitisLabel'>No Activities</digi:trn>";
 	var strTotal="<digi:trn key='aim:NPD:totalLabels'>Totals:</digi:trn>";
-	var strThousands="<digi:trn key='aim:NPD:thousandsOfDollarsLabel'>All amounts are in thousands (000) of dollar</digi:trn>";
+	var strThousands="<digi:trn key='aim:NPD:amountThousandsOfDollarsLabel'>All amounts are in thousands (000) of</digi:trn> ${aimNPDForm.defCurrency}";
 	var strPlanned="<digi:trn key='aim:NPD:sumplanedCommitments'>Planned Commitments</digi:trn>";
 	var strActual="<digi:trn key='aim:NPD:sumactualCommitments'>Actual Commitments</digi:trn>";
 	var strProposed="<digi:trn key='aim:NPD:sumproposedPrjCost'>Proposed Project Cost</digi:trn>";
@@ -98,7 +98,7 @@
 	var title='<digi:trn key="aim:npd:titl">Title</digi:trn>';
 	var strDate='<digi:trn key="aim:npd:strdate">Start Date</digi:trn>';
 	var donor='<digi:trn key="aim:npd:donor">Donor</digi:trn>';
-	
+
 
 	function changeOptions(indics,years,locations){
         selIndicatorIDs=new Array();
@@ -693,51 +693,55 @@
 			var newTR=document.createElement('TR');
 			newTR.innerHTML='<td colspan="8">'+strNoActivities+'</td>';
 			tr.parentNode.appendChild(newTR);
+            var spn=document.getElementById("spnAmountText");
+            if(spn!=null){
+              spn.innerHTML="";
+            }
 			return;
-		}	
-		
-		
-		
+		}
+
+
+
 		//sum labels
-		var labelsTR1 = document.createElement('TR');		
+		var labelsTR1 = document.createElement('TR');
 		var titleLabelTD=document.createElement('TD');
-		titleLabelTD.innerHTML='<strong>'+title+' </strong>';
+		titleLabelTD.innerHTML='<b>'+title+' </b>';
 		labelsTR1.appendChild(titleLabelTD);
-		
+
 		var statusLabelTD=document.createElement('TD');
-		statusLabelTD.innerHTML='<strong>'+status+' </strong>';
+		statusLabelTD.innerHTML='<b>'+status+' </b>';
 		labelsTR1.appendChild(statusLabelTD);
-		
+
 		var donorLabelTD=document.createElement('TD');
-		donorLabelTD.innerHTML='<strong>'+donor+' </strong>';
+		donorLabelTD.innerHTML='<b>'+donor+' </b>';
 		labelsTR1.appendChild(donorLabelTD);
-		
+
 		var strDateLabelTD=document.createElement('TD');
-		strDateLabelTD.innerHTML='<strong>'+strDate+' </strong>';
+		strDateLabelTD.innerHTML='<b>'+strDate+' </b>';
 		labelsTR1.appendChild(strDateLabelTD);
-		
-		
+
+
 		var labelsTD0 = document.createElement('TD');
 		labelsTD0.align='left';
 		labelsTD0.innerHTML='&nbsp;';
 		labelsTR1.appendChild(labelsTD0);
-		
+
 		var labelTD1 = document.createElement('TD');
-		labelTD1.innerHTML='<strong>'+strProposed+' </strong>';
+		labelTD1.innerHTML='<b>'+strProposed+' </b>';
 		labelsTR1.appendChild(labelTD1);
 
 		var labelTD2 = document.createElement('TD');
-		labelTD2.innerHTML='<strong>'+strPlanned+' </strong>';
+		labelTD2.innerHTML='<b>'+strPlanned+' </b>';
 		labelsTR1.appendChild(labelTD2);
 
 		var labelTD3 = document.createElement('TD');
-		labelTD3.innerHTML='<strong>'+strActual+' </strong>';
+		labelTD3.innerHTML='<b>'+strActual+' </b>';
 		labelsTR1.appendChild(labelTD3);
 
 		tbl.appendChild(labelsTR1);
 		//end of sum labels
-		
-		
+
+
 		for (var i=0; i< actList.length; i++) {
 			if (actList[i].tagName=='activity'){
 				var actTR = document.createElement('TR');
@@ -813,19 +817,25 @@
 
 		tbl.appendChild(lastTR);
 
-		
+
 
 		//tousands label
 		if (strThousands==null || strThousands==''){
 			strThousands='All amounts are in thousands (000)';
 		}
-		var lastTR1 = document.createElement('TR');
-		var lastTD1 = document.createElement('TD');
-		lastTD1.colSpan=8;
-		lastTD1.align='right';
-		lastTD1.innerHTML='<font color="blue">'+strThousands+' </font>';
-		lastTR1.appendChild(lastTD1);
-		tbl.appendChild(lastTR1);
+
+        var spn=document.getElementById("spnAmountText");
+        if(spn!=null){
+          spn.innerHTML=strThousands;
+        }
+
+        //var lastTR1 = document.createElement('TR');
+		//var lastTD1 = document.createElement('TD');
+		//lastTD1.colSpan=8;
+		//lastTD1.align='right';
+		//lastTD1.innerHTML='<font color="blue">'+strThousands+' </font>';
+		//lastTR1.appendChild(lastTD1);
+		//tbl.appendChild(lastTR1);
 
 		setupPagination(paginationTr);
 
@@ -1135,7 +1145,7 @@
  	/* Adds the information for a theme to the themeArray array in the corresponding position (=pid). */
  	function addProgramInformation(pid, programName, description, leadAgency, programCode, programType, targetGroups,
  				background, objectives, outputs, beneficiaries, environmentConsiderations) {
- 			var panelBody =	"";                        
+ 			var panelBody =	"";
  			panelBody += '<table border="0">';
  			panelBody += "<tr><td align='left'><b><digi:trn key='aim:NPD:ProgramName'>Program Name</digi:trn>:</b>&nbsp;</td><td>"+ programName +"</td></tr>";
  			panelBody += "<tr><td align='left'><b><digi:trn key='aim:NPD:Description'>Description</digi:trn>:</b>&nbsp;</td><td>"+ description +"</td></tr>";
@@ -1156,7 +1166,6 @@
 	window.onload=loadInitial;
 </script>
 <script language="javascript" type="text/javascript">
-	<digi:instance property="aimNPDForm" />
     <c:forEach var="theme" items="${aimNPDForm.allThemes}">
     <c:set var="name">
     ${theme.name}
@@ -1283,6 +1292,12 @@
 			</table>
 		</td>
 	</tr>
+    <tr>
+      <td>
+        <span id="spnAmountText" style="color:blue">
+        </span>
+      </td>
+    </tr>
 	<tr>
 		<td>
 			<table width="100%" border="0" cellpadding="5" cellspacing="0">
@@ -1317,7 +1332,6 @@
 						</html:select>
 					</td>
 					<td nowrap="nowrap" colspan="3">
-
 						<digi:trn key="aim:NPD:Funding">Funding</digi:trn>
 					</td>
 				</tr>

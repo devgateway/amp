@@ -53,8 +53,9 @@ public class AmountColWorker extends ColumnWorker {
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see org.dgfoundation.amp.ar.workers.ColumnWorker#getCellFromRow(java.sql.ResultSet)
+	 * @deprecated
 	 */
 	@Override
 	protected Cell getCellFromRow(ResultSet rs) throws SQLException {

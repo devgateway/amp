@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,8 +29,6 @@ import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * 
@@ -98,28 +97,29 @@ public class AmpReportGenerator extends ReportGenerator {
 		// divide the column set into those that can be extracted
 		// (extractorView!=null) and those that are to be generated
 		
-		
-		List extractable = new ArrayList();
-		List generated = new ArrayList();
-		List colNames = reportMetadata.getOrderedColumns();
-		Iterator i = colNames.iterator();
+		Set<String> extractableNames=new TreeSet<String>();
+		List<AmpReportColumn> extractable = new ArrayList<AmpReportColumn>();
+		List<AmpReportColumn> generated = new ArrayList<AmpReportColumn>();
+		List<AmpReportColumn> colNames = reportMetadata.getOrderedColumns();
+		Iterator<AmpReportColumn> i = colNames.iterator();
 		while (i.hasNext()) {
 			AmpReportColumn element2 = (AmpReportColumn) i.next();
 			AmpColumns element = element2.getColumn();
 			if(element.getColumnName().equals(ArConstants.COLUMN_TOTAL))
 				extractableCount--;
+			extractableNames.add(element.getColumnName());
 			if (element.getExtractorView() != null)
 				extractable.add(element2);
 			else
 				generated.add(element2);
 		}
 
-		extractableCount += extractable.size();
+		extractableCount += extractableNames.size();
 		
 		// also add hierarchical columns to extractable:
-		i = reportMetadata.getHierarchies().iterator();
-		while (i.hasNext()) {
-			AmpReportHierarchy element = (AmpReportHierarchy) i.next();
+		Iterator<AmpReportHierarchy> ii = reportMetadata.getHierarchies().iterator();
+		while (ii.hasNext()) {
+			AmpReportHierarchy element = (AmpReportHierarchy) ii.next();
 			AmpReportColumn arc = new AmpReportColumn();
 			arc.setColumn(element.getColumn());
 			arc.setOrderId(new String("1"));
@@ -139,21 +139,23 @@ public class AmpReportGenerator extends ReportGenerator {
 	/**
 	 * creates the data structures for the list of columns.
 	 * 
-	 * @param colNames
+	 * @param extractable
 	 */
-	protected void createDataForColumns(List colNames) {
+	protected void createDataForColumns(Collection<AmpReportColumn> extractable) {
 
-		Iterator i = colNames.iterator();
+		Iterator<AmpReportColumn> i = extractable.iterator();
 		try {
 
 			while (i.hasNext()) {
 				AmpReportColumn rcol = (AmpReportColumn) i.next();
 				AmpColumns col = rcol.getColumn();
+				logger.info("Extracting column "+col.getColumnName()+ " with view "+col.getExtractorView());
 				String cellTypeName = col.getCellType();
 				String extractorView = col.getExtractorView();
 				String columnName = col.getColumnName();
 				String relatedContentPersisterClass = col.getRelatedContentPersisterClass();
 
+				
 				logger.debug("Seeking class " + cellTypeName);
 
 				Class cellType = Class.forName(cellTypeName);
@@ -231,7 +233,16 @@ public class AmpReportGenerator extends ReportGenerator {
 				element.setOrderId(Integer.toString(reportMetadata
 						.getOrderedColumns().size() - 1));
 		}
-
+		
+		//attach funding coming from extra sources ... inject funding from proposed project cost, but with isShow=false so it won't be taken into calculations
+		AmpReportColumn arcProp = new AmpReportColumn();
+		AmpColumns acProp = new AmpColumns();
+		arcProp.setColumn(acProp);
+		arcProp.setOrderId(new String("0"));
+		acProp.setCellType("org.dgfoundation.amp.ar.cell.CategAmountCell");
+		acProp.setColumnName(ArConstants.COLUMN_FUNDING);
+		acProp.setExtractorView(ArConstants.VIEW_PROPOSED_COST);
+		reportMetadata.getOrderedColumns().add(arcProp);
 	}
 
 	/**
@@ -258,9 +269,10 @@ public class AmpReportGenerator extends ReportGenerator {
 			while (ii.hasNext()) {
 				AmpReportMeasures ampReportMeasurement = ii.next();
 				AmpMeasures element = ampReportMeasurement.getMeasure();
-				if (element.getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE) || 
-					element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS))
-					continue;
+				if (element.getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE)   || 
+					element.getMeasureName().equals(ArConstants.TOTAL_COMMITMENTS) || 
+					element.getMeasureName().equals(ArConstants.UNCOMMITTED_BALANCE))
+				   continue;
 
 				MetaInfo<FundingTypeSortedString> metaInfo = new MetaInfo<FundingTypeSortedString>(
 						ArConstants.FUNDING_TYPE, new FundingTypeSortedString(
@@ -289,6 +301,21 @@ public class AmpReportGenerator extends ReportGenerator {
 
 			UndisbursedTotalAmountColumn tac = new UndisbursedTotalAmountColumn(
 					ArConstants.UNDISBURSED_BALANCE);
+			Iterator i=funding.iterator();
+			while (i.hasNext()) {
+				AmountCell element = (AmountCell) i.next();
+				//we do not care here about filtering commitments, that is done at UndisbursedAmountCell level
+				tac.addCell(element);
+			}
+
+			newcol.getItems().add(tac);
+		}
+
+		//uncommitted balance
+		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())) {
+
+			UncommittedTotalAmountColumn tac = new UncommittedTotalAmountColumn(
+					ArConstants.UNCOMMITTED_BALANCE);
 			Iterator i=funding.iterator();
 			while (i.hasNext()) {
 				AmountCell element = (AmountCell) i.next();
@@ -394,7 +421,9 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		//perform removal of funding column if no measure except undisbursed balance is selected. in such case,we just need totals
 		//or if widget mode is true...
-		if((reportMetadata.getMeasures().size()==1 && ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures()))
+		if((reportMetadata.getMeasures().size()==1 && (
+			ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures()) ||
+			ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())))
 				|| arf.isWidget()) 
 			reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);
 		

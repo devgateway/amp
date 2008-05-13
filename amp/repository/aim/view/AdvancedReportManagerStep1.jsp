@@ -275,6 +275,7 @@ function checkUncheckAll2() {
 											<feature:display name="Components" module="Components"></feature:display>
 											<feature:display name="Physical Progress" module="Components"></feature:display>
 											
+											<field:display name="Proposed Project Cost" feature="Costing">&nbsp;</field:display>
 											<field:display name="Status" feature="Planning">&nbsp;</field:display>
 											<field:display name="Creation Date" feature="Planning">&nbsp;</field:display>
 											<field:display name="Changed Date" feature="Planning">&nbsp;</field:display>

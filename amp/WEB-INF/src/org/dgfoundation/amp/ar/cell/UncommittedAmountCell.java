@@ -13,14 +13,14 @@ import org.digijava.module.aim.logic.Logic;
  * @author mihai
  *
  */
-public class UndisbursedAmountCell extends AmountCell {
+public class UncommittedAmountCell extends AmountCell {
 
 
-	public UndisbursedAmountCell() {
+	public UncommittedAmountCell() {
 		super();
 	}
 	
-	 	public UndisbursedAmountCell(AmountCell ac) {
+	 	public UncommittedAmountCell(AmountCell ac) {
 	 		super(ac.getOwnerId());
 	 		this.mergedCells=ac.getMergedCells();
 		}
@@ -28,7 +28,7 @@ public class UndisbursedAmountCell extends AmountCell {
 	/**
 	 * @param id
 	 */
-	public UndisbursedAmountCell(Long id) {
+	public UncommittedAmountCell(Long id) {
 		super(id);
 	}
 
@@ -44,7 +44,7 @@ public class UndisbursedAmountCell extends AmountCell {
 		Iterator<CategAmountCell> i = mergedCells.iterator();
 		while (i.hasNext()) {
 			CategAmountCell element = (CategAmountCell) i.next();
-			ret+=ExampleLogicalToken.undisbursedLogicalToken.evaluate(element);	
+			ret+=ExampleLogicalToken.uncommittedLogicalToken.evaluate(element);	
 		}
 		return ret;
 	}
@@ -52,12 +52,12 @@ public class UndisbursedAmountCell extends AmountCell {
 	
 	public Cell merge(Cell c) {
 		AmountCell ac=(AmountCell) super.merge(c);
-		UndisbursedAmountCell uac=new UndisbursedAmountCell(ac);
+		UncommittedAmountCell uac=new UncommittedAmountCell(ac);
 		return uac;		
 	}
 	
 	public Cell newInstance() {
-		return new UndisbursedAmountCell();
+		return new UncommittedAmountCell();
 	}
 	
 }

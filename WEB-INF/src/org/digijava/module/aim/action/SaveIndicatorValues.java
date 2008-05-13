@@ -33,20 +33,8 @@ public class SaveIndicatorValues extends Action
 			while (itr.hasNext()) {
 				ActivityIndicator temp = (ActivityIndicator) itr.next();
 				if (temp.equals(actInd)) {
-					if(!eaForm.isTeamLead())
-					{
-						if (eaForm.getCurrentValDate() != null) {
-							if( eaForm.getCurrentVal() != null) {
-								temp.setCurrentVal(Float.parseFloat(eaForm.getCurrentVal()));
-							}
-							temp.setCurrentValDate(eaForm.getCurrValDate());
-							temp.setCurrentValComments(eaForm.getCurrentValComments());
-						}
-						temp.setRisk(eaForm.getIndicatorRisk());
-						break;
-					}
-					if(eaForm.isTeamLead())
-					{
+					
+				
 						temp.setBaseVal(eaForm.getBaseVal());
 						temp.setBaseValDate(eaForm.getBaseValDate());
 						temp.setBaseValComments(eaForm.getBaseValComments());
@@ -94,7 +82,7 @@ public class SaveIndicatorValues extends Action
 						AmpCategoryValue acv=CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getLogframeCategory());
 						temp.setIndicatorsCategory(acv);
 						break;
-					}
+					
 				}
 			}
 		}

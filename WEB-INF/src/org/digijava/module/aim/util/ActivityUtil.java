@@ -1491,7 +1491,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         activity.setProjectManagement(ampActivity.getProjectManagement());
         activity.setContractDetails(ampActivity.getContractDetails());
         activity.setConvenioNumcont(ampActivity.getConvenioNumcont());
-       
+        activity.setClasiNPD(ampActivity.getClasiNPD());
 
       }
     }

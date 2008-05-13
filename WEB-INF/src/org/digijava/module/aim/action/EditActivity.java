@@ -730,7 +730,7 @@ public class EditActivity
 
 
   		eaForm.setConvenioNumcont(activity.getConvenioNumcont());
-          
+  		eaForm.setClasiNPD(activity.getClasiNPD());
           if (activity.getObjective() != null)
             eaForm.setObjectives(activity.getObjective().trim());
           if (activity.getPurpose() != null)

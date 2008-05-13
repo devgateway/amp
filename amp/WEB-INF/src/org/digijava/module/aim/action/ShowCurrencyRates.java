@@ -33,6 +33,8 @@ public class ShowCurrencyRates extends Action {
 
 	private static final long SEVEN_DAYS = 604800000; // in miliseconds
 	// 7 * 24 * 60 * 60 * 1000
+	
+	private static final int ABSOLUTELY_ALL_ACTIVE_RATES = -1;	
 
 	private static Logger logger = Logger.getLogger(ShowCurrencyRates.class);
 
@@ -82,29 +84,29 @@ public class ShowCurrencyRates extends Action {
                         crForm.setClean(false);
 		}
 
-//        if(!crForm.getFilterByDateFrom().equals(crForm.getPrevFromDate()) || crForm.getAllRates() == null) {
+
 
 			crForm.setPrevFromDate(crForm.getFilterByDateFrom());
             Date toDate = DateConversion.getDate(crForm.getFilterByDateFrom());
-//            long stDt = toDate.getTime();
+
             Calendar cal=Calendar.getInstance();
             cal.setTime(toDate);
-
-            switch (crForm.getTimePeriod()) {
-                case 1:	cal.add(Calendar.DATE,-7);    break;
-                case 2:	cal.add(Calendar.DATE, -14);  break;
-                case 3:	cal.add(Calendar.MONTH,-1);   break;
-                case 4:	cal.add(Calendar.MONTH, -4);  break;
-                case 5:	cal.add(Calendar.YEAR, -1);	  break;
-                default:break;
-			}
-//            stDt -= SEVEN_DAYS;
-//            Date fromDate = new Date(stDt);
-            Date fromDate=cal.getTime();
-            crForm.setAllRates(CurrencyUtil.getActiveRates(fromDate, toDate));
-//        } else {
-//            crForm.setAllRates(CurrencyUtil.getAllActiveRates());
-//        }
+            int timePeriod=crForm.getTimePeriod();
+            if(timePeriod==ShowCurrencyRates.ABSOLUTELY_ALL_ACTIVE_RATES){
+            	crForm.setAllRates(CurrencyUtil.getAllActiveRates());            	
+            }
+            else{
+	           switch (timePeriod) {
+               case 1:	cal.add(Calendar.DATE,-7);    break;
+               case 2:	cal.add(Calendar.DATE, -14);  break;
+               case 3:	cal.add(Calendar.MONTH,-1);   break;
+               case 4:	cal.add(Calendar.MONTH, -4);  break;
+               case 5:	cal.add(Calendar.YEAR, -1);	  break;
+               default:break;
+	           }
+	           Date fromDate=cal.getTime();
+	           crForm.setAllRates(CurrencyUtil.getActiveRates(fromDate, toDate));
+            }
 
 		ArrayList tempList = new ArrayList();
 		Iterator itr = null;
@@ -183,6 +185,7 @@ public class ShowCurrencyRates extends Action {
 		timePeriods.add(new LabelValueBean("Month","3"));
 		timePeriods.add(new LabelValueBean("Quarter","4"));
 		timePeriods.add(new LabelValueBean("Year","5"));
+		timePeriods.add(new LabelValueBean("ALL",String.valueOf(ShowCurrencyRates.ABSOLUTELY_ALL_ACTIVE_RATES)));		
 		return timePeriods;
 	}
 

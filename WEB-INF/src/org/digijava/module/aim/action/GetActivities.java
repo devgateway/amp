@@ -34,14 +34,17 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.NpdUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 
 /**
  * Returns XML of Activities list depending on request parameters. This action
  * is called asynchronously from NPD, but can be used in any other place where
  * Activity list is needed.
- * 
+ *
  * @author Irakli Kobiashvili
- * 
+ *
  */
 public class GetActivities extends Action {
 	public static final String PARAM_PROGRAM_ID = "programId";
@@ -57,7 +60,7 @@ public class GetActivities extends Action {
 	public static final String ROOT_TAG = "activityList";
 
 	private static Logger logger = Logger.getLogger(GetActivities.class);
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -67,7 +70,7 @@ public class GetActivities extends Action {
 		NpdSettings settings = NpdUtil.getCurrentSettings(tm.getTeamId());
 
 		int maxPages=1;
-		
+
 		response.setContentType("text/xml");
 		ActivitiesForm actForm = (ActivitiesForm) form;
 		logger.debug("programId=" + actForm.getProgramId() + " statusCode=" + actForm.getStatusId());
@@ -75,7 +78,7 @@ public class GetActivities extends Action {
 		logger.debug("Setting activties XML in the response");
 		OutputStreamWriter outputStream = new OutputStreamWriter( response.getOutputStream(),"UTF-8");
 		PrintWriter out = new PrintWriter(outputStream, true);
-		
+
 		try {
 			Date fromYear = yearToDate(actForm.getStartYear(), false);
 			Date toYear = yearToDate(actForm.getEndYear(), true);
@@ -94,14 +97,20 @@ public class GetActivities extends Action {
 					maxPages++;
 				}
 			}
-			
+
 			logger.debug("retriving activities");
 			Collection<AmpActivity> activities = getActivities(actForm.getProgramId(),actForm.getStatusId(), actForm.getDonorId(), fromYear,toYear, null, tm, pageStart,rowCount, false);
 
+            AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
+            AmpCurrency curr=ampAppSettings.getCurrency();
+            String currCode="USD";
+            if(curr!=null){
+              currCode=ampAppSettings.getCurrency().toString();
+            }
 			//convert activities to xml
 			logger.debug("Converting activities to XML");
-			String xml = activities2XML(activities,maxPages);
-			
+			String xml = activities2XML(activities,maxPages,currCode);
+
 			out.println(xml);
 //			outputStream.write(xml.getBytes());
 			out.close();
@@ -126,7 +135,7 @@ public class GetActivities extends Action {
 	 * Retrieves Activities filtered according params.
 	 * @param ampThemeId filter activities assigne to programm(Theme) specified ith this id.
 	 * @param statusCode filter activities, get anly with this status.
-	 * @param donorOrgId 
+	 * @param donorOrgId
 	 * @param fromDate
 	 * @param toDate
 	 * @param locationId
@@ -143,7 +152,7 @@ public class GetActivities extends Action {
 			Long locationId,
 			TeamMember teamMember,
 			Integer pageStart,
-			Integer rowCount, 
+			Integer rowCount,
 			boolean recurse) throws AimException, DgException{
 
 
@@ -232,14 +241,14 @@ public class GetActivities extends Action {
 
 		return result;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Converts year represented as String to date. It can create last day or
 	 * first day of the year depending on the second parameter. todo: this
 	 * should be changed to last and first second of the year.
-	 * 
+	 *
 	 * @param year
 	 * @param lastSecondOfYear
 	 * @return
@@ -271,7 +280,7 @@ public class GetActivities extends Action {
 	/**
 	 * Converts Exception stack trace to XML.
 	 * used to display trace instead of results in ajax calls.
-	 * @param e 
+	 * @param e
 	 * @return String representing XML of error
 	 */
 	private String stackTrace2XML(Exception e) {
@@ -294,25 +303,26 @@ public class GetActivities extends Action {
 	 * bean to ActivtyItem helper beans. Then getXml() method of the helper bean
 	 * is used to get portions of the activity xml.
 	 * TODO we should have XML file and velocity here. and probably Schema too...
-	 * 
+	 *
 	 * @param acts
 	 *            Collection of AmpActivity db beans
 	 * @return XML representing list of the activities.
 	 * @see AmpActivity
 	 * @see ActivityItem
 	 */
-	private String activities2XML(Collection<AmpActivity> acts,int maxPages) throws Exception {
-		double proposedSum = 0;
+	private String activities2XML(Collection<AmpActivity> acts,int maxPages, String currencyCode) throws Exception {
+        double proposedSum = 0;
 		double actualSum = 0;
 		double plannedSum = 0;
 		DecimalFormat mf=NpdUtil.getNumberFormatter();
-		String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"; 
+		String result = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 		result += "<" + ROOT_TAG;
 		String temp = "";
 		if (acts != null && acts.size() > 0) {
 			for (AmpActivity activity : acts) {
-				//create helper bean from activity
-				ActivityItem item = new ActivityItem(activity);
+//                activity.
+                //create helper bean from activity
+				ActivityItem item = new ActivityItem(activity,currencyCode);
 				//get already calculated amounts from helper
 				ActivityUtil.ActivityAmounts amounts = item.getAmounts();
 				//calculate totals

@@ -432,87 +432,8 @@ ${fn:replace(message,quote,escapedQuote)}
 																</td>
 															</tr>
 														</field:display>
-														<c:if test="${!aimEditActivityForm.teamLead}">
-															<tr>
-																<field:display name="Base Value" feature="Activity"></field:display>
-																<td><b>
-																	<digi:trn key="aim:meBaseValue">Base Value</digi:trn></b>
-																</td>
-																<td>
-																	<bean:write name="indicator" property="baseVal"/>
-																</td>
-																<td>&nbsp;&nbsp;&nbsp;</td>
-																<field:display name="Date Base Value" feature="Activity"></field:display>
-																<td align="right">
-																	<digi:trn key="aim:meDate">Date</digi:trn>
-																</td>
-																<td align="left">&nbsp;&nbsp;
-																	<bean:write name="indicator" property="baseValDate" />
-																</td>
-															</tr>
-															<field:display name="Comments Base Value" feature="Activity"></field:display>
-															<tr>
-																<td><digi:trn key="aim:meBaseValueComments">Comments</digi:trn>
-																</td>
-																<td colspan="4">
-																	<bean:write name="indicator" property="baseValComments" />
-																</td>
-															</tr>
-															<tr>
-																<field:display name="Target Value" feature="Activity"></field:display>
-																<td><b>
-																	<digi:trn key="aim:meTargetValue">Target Value</digi:trn></b>
-																</td>
-																<td>
-																	<bean:write name="indicator" property="targetVal" />
-																</td>
-																<td>&nbsp;&nbsp;&nbsp;</td>
-																<field:display name="Date Target Value" feature="Activity"></field:display>
-																<td align="right">
-																	<digi:trn key="aim:meDate">Date</digi:trn>
-																</td>
-																<td align="left">&nbsp;&nbsp;
-																	<bean:write name="indicator" property="targetValDate" />
-																</td>
-															</tr>
-															<field:display name="Comments Target Value" feature="Activity"></field:display>
-															<tr>
-																<td><digi:trn key="aim:meTargetValComments">Comments</digi:trn>
-																</td>
-																<td colspan="4">
-																	<bean:write name="indicator" property="targetValComments" />
-																</td>
-															</tr>
-															
-															<tr>
-																<field:display name="Revised Target Value" feature="Activity"></field:display>
-																<td><b>
-																	<digi:trn key="aim:meRevisedTargetValue">Revised Target Value</digi:trn></b>
-																</td>
-																<td>
-																	<bean:write name="indicator" property="revisedTargetVal" />
-																</td>
-																<td>&nbsp;&nbsp;&nbsp;</td>
-																<field:display name="Date Revised Target Value" feature="Activity"></field:display>
-																<td align="right">
-																	<digi:trn key="aim:meDate">Date</digi:trn>
-																</td>
-																<td align="left">&nbsp;&nbsp;
-																	<bean:write name="indicator" property="revisedTargetValDate" />
-																</td>
-															</tr>
-															<field:display name="Comments Revised Target Value" feature="Activity"></field:display>
-															<tr>
-															
-																<td><digi:trn key="aim:meRevisedTargetValComments">Comments</digi:trn>
-																</td>
-																<td colspan="4">
-																	<bean:write name="indicator" property="revisedTargetValComments" />
-																</td>
-															</tr>
-														</c:if>
-
-														<c:if test="${aimEditActivityForm.teamLead}">
+														
+														
 															<tr>
 																<field:display name="Base Value" feature="Activity"></field:display>
 																<td><b>
@@ -656,7 +577,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</tr>
 															</c:if>
 
-														</c:if>
+														
 
 														<logic:notEmpty name="indicator" property="priorValues" >
 															<tr bgColor="#dddddb"><td bgColor=#dddddb align="left" colspan="5"><b>
@@ -689,8 +610,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</logic:iterate>
 														</logic:notEmpty>
 
-														<c:if test="${aimEditActivityForm.teamLead ||
-																indicator.baseValDate!=null}">
+														
 
 														<%--
 														<logic:notEmpty name="indicator" property="baseValDate">
@@ -781,7 +701,7 @@ ${fn:replace(message,quote,escapedQuote)}
 														<%--
 														</logic:notEmpty>
 														--%>
-														</c:if>
+													
 													</table>
 												</td>
 											</tr>

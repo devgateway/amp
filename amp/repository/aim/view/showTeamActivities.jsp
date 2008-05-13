@@ -194,7 +194,7 @@
 													<tr bgcolor="#ffffff">
 														<td colspan="2" align="center">		
 															<html:hidden name="aimTeamActivitiesForm" property="teamId"/>												
-															<input type="submit" value="Remove" class="dr-menu" onclick="return confirmDelete()">
+															<input type="submit" value="<digi:trn key='btn:remove'>Remove</digi:trn>"  class="dr-menu" onclick="return confirmDelete()">
 														</td>
 													</tr>																										
 													</logic:notEmpty>

@@ -93,7 +93,7 @@
 										<tr>
 											<td bgColor=#ffffff class=box-border>
 												<logic:empty name="aimAssignActivityForm" property="activities">
-															<b>No activities to assign</b>
+													<b><digi:trn key="aim:noActivitiesToAssign">No activities to assign</digi:trn></b>
 												</logic:empty>
 												<logic:notEmpty name="aimAssignActivityForm" property="activities">
 														<table width="100%" cellpadding=5 cellspacing=0 border=0>

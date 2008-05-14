@@ -1567,14 +1567,15 @@ public class TeamMemberUtil {
 
                             // delete related information before we delete the report
                             String deleteTeamReports = " select tr from " + AmpTeamReports.class.getName() + " tr where (tr.report=:ampReportId)";
-                            Query qryaux;
-                            qryaux = session.createQuery(deleteTeamReports);
+                            Query qryaux = session.createQuery(deleteTeamReports);
                             qryaux.setParameter("ampReportId", rep.getAmpReportId(), Hibernate.LONG);
-                            Iterator j = qryaux.list().iterator();
-                            if (j.hasNext()) {
-                                AmpTeamReports atr = (AmpTeamReports) j.next();
+
+                            Collection tmReports= qryaux.list();
+                            if(tmReports!=null && !tmReports.isEmpty()){
+                                AmpTeamReports atr = (AmpTeamReports) tmReports.iterator().next();
                                 session.delete(atr);
                             }
+
                             // session.delete(deleteTeamReports);
                             session.delete(rep);
                         }

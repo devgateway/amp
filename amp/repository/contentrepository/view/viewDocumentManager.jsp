@@ -23,7 +23,6 @@
 <bean:define id="meTeamMember" name="myForm" property="teamMember" />
 
 <bean:define id="tMembers" name="myForm" property="teamMembers" />
-
 <%@include file="documentManagerJsHelper.jsp" %>
 
 
@@ -134,18 +133,16 @@ div.fakefile2 input{
                	<digi:trn key="aim:MyDesktop">My Desktop</digi:trn>
                </digi:link> &gt; <digi:trn key="contentrepository:contentRepository">Content Repository</digi:trn>
 			<br />
-			<br />
-		</td>
+			<br />		</td>
 	</tr>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top>
+		<td align=left vAlign=top class=r-dotted-lg>
 				
 		<span class=subtitle-blue> &nbsp;&nbsp; <digi:trn key="contentrepository:contentRepository">
 							Content Repository
 	</digi:trn> </span> <br />
-		<br />
-		<%--
+	<%--
 		<table border="1" cellPadding=5 cellSpacing=0 width="56%"
 			style="position: relative; left: 20px">
 			<tr>
@@ -200,7 +197,7 @@ div.fakefile2 input{
 		<br />
 		<br /> --%>
 		<%-- Table for "My Documents" --%>
-				<table border="0" cellPadding=5 cellSpacing=0 width="95%"
+		  <table border="0" cellPadding=5 cellSpacing=0 width="95%"
 			style="position: relative; left: 20px">
 			<tr>
 				<td style="background-image:url(/repository/contentrepository/view/images/left-side.gif); background-repeat: no-repeat; background-position: top right" 
@@ -214,8 +211,7 @@ div.fakefile2 input{
 					border="0" align="absmiddle"
 					src="module/contentrepository/images/folder_folder.gif" />
 				</a>
-					<digi:trn key="contentrepository:documentManagerMyDocuments">My Documents</digi:trn>
-				</td>
+					<digi:trn key="contentrepository:documentManagerMyDocuments">My Documents</digi:trn>				</td>
 				<td background="/repository/contentrepository/view/images/right-side.gif" width="13" height="20" 
 				style="background-image:url(/repository/contentrepository/view/images/right-side.gif); background-repeat: no-repeat; background-position: top left"> </td>
 			</tr>
@@ -359,10 +355,8 @@ div.fakefile2 input{
 				</logic:notEmpty>
 				<button type="button" class="buton" onClick="setType('private');configPanel(0,'','','', false); showMyPanel(0, 'addDocumentDiv'); ">
 	               <digi:trn key="contentrepository:addResource">
-	 	    	       Add Resource ...
-    				</digi:trn>            
-                </button>
-				</td>
+	 	    	       Add Resource ...    				</digi:trn>            
+                </button>				</td>
 			</tr>
 		</table>
 		<%-- END -- Table for "My Documents" --%>
@@ -383,8 +377,7 @@ div.fakefile2 input{
 					border="0" align="absmiddle"
 					src="module/contentrepository/images/folder_folder.gif" />
 				</a>
-					<digi:trn key="contentrepository:documentManagerTeamDocuments">Team Documents</digi:trn>
-				</td>
+					<digi:trn key="contentrepository:documentManagerTeamDocuments">Team Documents</digi:trn>				</td>
 				<td style="background-image:url(/repository/contentrepository/view/images/right-side.gif); background-repeat: no-repeat; background-position: top left" 
 				width="13" height="20"> </td>
 			</tr>
@@ -522,11 +515,9 @@ div.fakefile2 input{
 				<c:if test="${isTeamLeader}">
 					<button class="buton" type="button" onClick="setType('team'); configPanel(0,'','','', false);showMyPanel(0, 'addDocumentDiv');">						
                             	<digi:trn key="contentrepository:addResource">
-	 	    	       				Add Resource ...
-    							</digi:trn>            
+	 	    	       				Add Resource ...    							</digi:trn>            
 					</button>
-				</c:if>
-				</td>
+				</c:if>				</td>
 			</tr>
 		</table>
 		<br />
@@ -535,12 +526,52 @@ div.fakefile2 input{
 			<digi:trn key="contentrepository:newWindowExplanation">Click here to open a new document window</digi:trn>
 		</c:set>
 		<div id="otherDocumentsDiv"></div>
-		&nbsp;&nbsp;<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue" onClick="newWindow('<digi:trn key="contentrepository:SelectDocuments">Select Documents</digi:trn>', true,'otherDocumentsDiv')" />
+		  <a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue" onClick="newWindow('<digi:trn key="contentrepository:SelectDocuments">Select Documents</digi:trn>', true,'otherDocumentsDiv')" />
 			<digi:trn key="contentrepository:newWindow">New window</digi:trn>
-			
-			</a>
-		</td>
+			</a>		
+            <br />
+            <br />
+            <table width="500" border="0" cellpadding="3" cellspacing="0" style="padding-left:30px;">
+              <tr>
+                <td colspan="3"><strong><digi:trn key="contentrepository:documentManagerReferece">Icons Reference</digi:trn></strong>
+                </td>
+              </tr>
+              <tr>
+                <td nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/contentrepository/view/images/check_out.gif" vspace="2" border="0" align="absmiddle" />
+                    <digi:trn key="contentrepository:documentManagerDownloadHint"> Click here to download document&nbsp;</digi:trn>
+                    <br />
+                </td>
+                <td nowrap="nowrap" bgcolor="#E9E9E9">&nbsp;</td>
+                <td nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/contentrepository/view/images/update.gif" vspace="2" border="0" align="absmiddle" />
+                    <digi:trn key="contentrepository:documentManagerAddVersionHint"> Click here to add a new version of this document</digi:trn>
+                </td>
+              </tr>
+              <tr>
+                <td nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/contentrepository/view/images/link_go.gif" vspace="2" border="0" align="absmiddle"/>
+                    <digi:trn key="contentrepository:documentManagerFollowLinkHint"> Follow link to</digi:trn>
+                    <br />
+                </td>
+                <td nowrap="nowrap" bgcolor="#E9E9E9">&nbsp;</td>
+                <td nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/contentrepository/view/images/make_public.gif" vspace="2" border="0" align="absmiddle" />
+                    <digi:trn key="contentrepository:documentManagerMakePublicHint"> Click here to make this document public</digi:trn>
+                    <br />
+                </td>
+              </tr>
+              <tr>
+                <td nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/contentrepository/view/images/make_private.gif" border="0" align="absmiddle" />
+                    <digi:trn key="contentrepository:documentManagerUnpublishHint"> Click here to unpublish this document</digi:trn>
+                </td>
+                <td nowrap="nowrap" bgcolor="#E9E9E9">&nbsp;</td>
+                <td nowrap="nowrap" bgcolor="#E9E9E9"><img src= "/repository/contentrepository/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
+                    <digi:trn key="contentrepository:documentManagerDeleteHint"> Click here to delete this document</digi:trn>
+                </td>
+              </tr>
+            </table><br />
+            
+      </td>
 	</tr>
+	
+    
 </table>
 
 <div id="addDocumentDiv" style="display: none">

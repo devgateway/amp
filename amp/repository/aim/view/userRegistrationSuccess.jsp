@@ -24,7 +24,7 @@
 					<td width="3%">&nbsp;</td>
 					<td align=left class=title noWrap colspan="2">
 						<b>
-						<digi:trn key="aim:userRegistrationSuccess">Congratualtions your AMP registeration was successfull. Please contact your administrator to be assigned to a team</digi:trn>
+						<digi:trn key="aim:newUserRegistrationSuccess">Congratualtions your AMP registeration was successfull. Please contact your administrator to be assigned to a team</digi:trn>
 						</b>
 					</td>
 				</tr>

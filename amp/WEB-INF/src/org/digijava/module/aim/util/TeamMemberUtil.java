@@ -42,6 +42,7 @@ import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 import java.util.List;
+import java.util.*;
 
 public class TeamMemberUtil {
 
@@ -1516,93 +1517,99 @@ public class TeamMemberUtil {
 	}
 
 
-	public static void removeTeamMembers(Long id[],Long groupId) {
-		Session session = null;
-		Transaction tx = null;
-		String qryStr = null;
-		Query qry = null;
+    public static void removeTeamMembers(Long id[], Long groupId) {
+        Session session = null;
+        Transaction tx = null;
+        String qryStr = null;
+        Query qry = null;
 
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			tx = session.beginTransaction();
-			for (int i = 0;i < id.length;i++) {
-				if (id[i] != null) {
-					AmpTeamMember ampMember = (AmpTeamMember) session.load(AmpTeamMember.class,id[i]);
-					if (isTeamLead(ampMember)) {
-						AmpTeam team = ampMember.getAmpTeam();
-						team.setTeamLead(null);
-						session.update(team);
-					}
-					Collection relatedActivities	= ActivityUtil.getActivitiesRelatedToAmpTeamMember(session, ampMember.getAmpTeamMemId() );
-					removeLinksFromATMToActivity(relatedActivities, ampMember);
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            tx = session.beginTransaction();
+            for (int i = 0; i < id.length; i++) {
+                if (id[i] != null) {
+                    AmpTeamMember ampMember = (AmpTeamMember) session.load(AmpTeamMember.class, id[i]);
+                    if (isTeamLead(ampMember)) {
+                        AmpTeam team = ampMember.getAmpTeam();
+                        team.setTeamLead(null);
+                        session.update(team);
+                    }
+                    Collection relatedActivities = ActivityUtil.getActivitiesRelatedToAmpTeamMember(session, ampMember.getAmpTeamMemId());
+                    removeLinksFromATMToActivity(relatedActivities, ampMember);
 
+                    User user = (User) session.load(User.class, ampMember.getUser().getId());
+                    Group group = (Group) session.load(Group.class, groupId);
+                    user.getGroups().remove(group);
+                    session.update(user);
+                    // Verify for reports that are owned by this user and delete them
+                    //DbUtil.deleteReportsForOwner(ampMember.getAmpTeamMemId());
+                    String queryString = "select rep from " + AmpReports.class.getName() + " rep " + "where rep.ownerId=:oId ";
+                    qry = session.createQuery(queryString);
+                    qry.setParameter("oId", ampMember.getAmpTeamMemId(), Hibernate.LONG);
 
+                    Collection memReports = qry.list();
+                    if (memReports != null && !memReports.isEmpty()) {
+                        for (Iterator rpIter = memReports.iterator(); rpIter.hasNext(); ) {
+                            AmpReports rep = (AmpReports) rpIter.next();
+                            //verify Default Report in App Settings
+                            queryString = "select app from " + AmpApplicationSettings.class.getName() + " app " + "where app.defaultTeamReport=:rId ";
+                            qry = session.createQuery(queryString);
+                            qry.setParameter("rId", rep.getAmpReportId(), Hibernate.LONG);
 
-					User user = (User) session.load(User.class,ampMember.getUser().getId());
-					Group group = (Group) session.load(Group.class,groupId);
-					user.getGroups().remove(group);
-					session.update(user);
-					// Verify for reports that are owned by this user and delete them
-					//DbUtil.deleteReportsForOwner(ampMember.getAmpTeamMemId());
-					String queryString = "select rep from " + AmpReports.class.getName() + " rep " + "where rep.ownerId=:oId ";
-					qry = session.createQuery(queryString);
-					qry.setParameter("oId", ampMember.getAmpTeamMemId(), Hibernate.LONG);
-					Iterator it = qry.list().iterator();
-					while (it.hasNext()) {
-						AmpReports rep = (AmpReports) it.next();
-						//verify Default Report in App Settings
-						queryString = "select app from " + AmpApplicationSettings.class.getName() + " app " + "where app.defaultTeamReport=:rId ";
-						qry = session.createQuery(queryString);
-						qry.setParameter("rId", rep.getAmpReportId(), Hibernate.LONG);
-						Iterator iter = qry.list().iterator();
-						while (iter.hasNext()) {
-							AmpApplicationSettings set = (AmpApplicationSettings) iter.next();
-							set.setDefaultTeamReport(null);
-							session.update(set);
-						}
-						// delete related information before we delete the report
-                         String deleteTeamReports=" select tr from "+AmpTeamReports.class.getName()+ " tr where (tr.report=:ampReportId)";
-                         Query qryaux;
-                         qryaux = session.createQuery(deleteTeamReports);
-                         qryaux.setParameter("ampReportId", rep.getAmpReportId(), Hibernate.LONG);
-             			 Iterator j=qryaux.list().iterator();
-             			 if(j.hasNext())
-             			 {
-             				 AmpTeamReports atr=(AmpTeamReports) j.next();
-             				 session.delete(atr);
-             			 }
-                         // session.delete(deleteTeamReports);
-						session.delete(rep);
-					}
+                            Collection memAppSettings = qry.list();
+                            if (memAppSettings != null && !memAppSettings.isEmpty()) {
+                                for (Iterator appSettIter = memReports.iterator(); appSettIter.hasNext(); ) {
+                                    AmpApplicationSettings set = (AmpApplicationSettings) appSettIter.next();
+                                    set.setDefaultTeamReport(null);
+                                    session.update(set);
+                                }
+                            }
 
-					qryStr = "select a from " + AmpApplicationSettings.class.getName() +
-					" a where (a.member=:memberId)";
-					qry = session.createQuery(qryStr);
-					qry.setParameter("memberId", id[i], Hibernate.LONG);
-					Iterator itr = qry.list().iterator();
-					if (itr.hasNext()) {
-						logger.info("Got the app settings..");
-						AmpApplicationSettings ampAppSettings = (AmpApplicationSettings) itr.next();
-						session.delete(ampAppSettings);
-						logger.info("deleted the app settings..");
-					}
+                            // delete related information before we delete the report
+                            String deleteTeamReports = " select tr from " + AmpTeamReports.class.getName() + " tr where (tr.report=:ampReportId)";
+                            Query qryaux;
+                            qryaux = session.createQuery(deleteTeamReports);
+                            qryaux.setParameter("ampReportId", rep.getAmpReportId(), Hibernate.LONG);
+                            Iterator j = qryaux.list().iterator();
+                            if (j.hasNext()) {
+                                AmpTeamReports atr = (AmpTeamReports) j.next();
+                                session.delete(atr);
+                            }
+                            // session.delete(deleteTeamReports);
+                            session.delete(rep);
+                        }
+                    }
+                    qryStr = "select a from " + AmpApplicationSettings.class.getName() +
+                        " a where (a.member=:memberId)";
+                    qry = session.createQuery(qryStr);
+                    qry.setParameter("memberId", id[i], Hibernate.LONG);
 
-					session.delete(ampMember);
-				}
-			}
-			tx.commit();
-		} catch (Exception e) {
-			logger.error("Unable to removeTeamMembers " + e.getMessage());
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Roll back failed");
-				}
-			}
+                    Collection memAppSettings = qry.list();
+                    if (memAppSettings != null && !memAppSettings.isEmpty()) {
+                        Iterator itr = memAppSettings.iterator();
+                        if (itr.hasNext()) {
+                            logger.info("Got the app settings..");
+                            AmpApplicationSettings ampAppSettings = (AmpApplicationSettings) itr.next();
+                            session.delete(ampAppSettings);
+                            logger.info("deleted the app settings..");
+                        }
+                    }
+                    session.delete(ampMember);
+                }
+            }
+            tx.commit();
+        } catch (Exception e) {
+            logger.error("Unable to removeTeamMembers " + e.getMessage());
+            if (tx != null) {
+                try {
+                    tx.rollback();
+                } catch (Exception rbf) {
+                    logger.error("Roll back failed");
+                }
+            }
             throw new RuntimeException(e);
-		}
-	}
+        }
+    }
 
 	private static boolean isTeamLead(AmpTeamMember member) {
 		Session session = null;

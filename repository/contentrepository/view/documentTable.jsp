@@ -97,7 +97,7 @@
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="D<bean:write name='documentData' property='uuid' />"
 									onClick="window.location='/contentrepository/downloadFile.do?uuid=<bean:write name='documentData' property='uuid' />'"
 	
-									title="${translation}"><img src= "/repository/contentrepository/view/images/check_out.gif" border=0></a>
+									title="${translation}"><img hspace="2" src= "/repository/contentrepository/view/images/check_out.gif" border=0></a>
 								</c:when>
 								<c:otherwise>
 									<c:set var="translation">
@@ -105,7 +105,7 @@
 									</c:set> 
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="D<bean:write name='documentData' property='uuid' />"
 									onclick="window.open('${documentData.webLink }')" 
-									onmouseover="Tip('${translation} ${documentData.webLink}')"><img src= "/repository/contentrepository/view/images/link_go.gif" border=0/></a>
+									onmouseover="Tip('${translation} ${documentData.webLink}')"><img hspace="2" src= "/repository/contentrepository/view/images/link_go.gif" border=0/></a>
 								</c:otherwise>
 								</c:choose>
 								
@@ -116,7 +116,7 @@
 								<logic:equal name="documentData" property="hasVersioningRights" value="true">
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="plus<bean:write name='documentData' property='uuid' />"
 								onClick="setType('version'); configPanel(0,'<%=documentData.getTitle() %>','<%=documentData.getDescription() %>', '<%=documentData.getCmDocType() %>' ,'<%=documentData.getUuid() %>', ${isUrl});showMyPanel(0, 'addDocumentDiv');"
-								title="${translation}"><img src= "/repository/contentrepository/view/images/update.gif" border=0></a>
+								title="${translation}"><img hspace="2" src= "/repository/contentrepository/view/images/update.gif" border=0></a>
 								
 								</logic:equal>
 								
@@ -129,7 +129,7 @@
 								<logic:equal name="documentData" property="hasShowVersionsRights" value="true">
 								<a style="cursor:pointer; text-decoration:underline; color: blue" id="H<bean:write name='documentData' property='uuid' />"
 								onClick="showMyPanelCopy(1,'viewVersions'); requestVersions('<%=documentData.getUuid() %>'); setPanelHeader(1, '${translationForWindowTitle}' +' - '+ '<%= documentData.getTitle() %>');"
-								title="${translation}"><img src= "/repository/contentrepository/view/images/version_history.gif" border=0></a>
+								title="${translation}"><img hspace="2" src= "/repository/contentrepository/view/images/version_history.gif" border=0></a>
 								</logic:equal>
 								
 								
@@ -140,7 +140,7 @@
 									<c:if test="${ (!documentData.isPublic)||(!documentData.lastVersionIsPublic) }">
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Pub<bean:write name='documentData' property='uuid' />"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.MAKE_PUBLIC %>' ,'<%=documentData.getUuid() %>', true);"
-									title="${translation}"><img src= "/repository/contentrepository/view/images/make_public.gif" border=0></a>
+									title="${translation}"><img hspace="2" src= "/repository/contentrepository/view/images/make_public.gif" border=0></a>
 									</c:if>
 								</logic:equal>
 								
@@ -152,7 +152,7 @@
 								<logic:equal name="documentData" property="hasDeleteRightsOnPublicVersion" value="true">
 									<a style="cursor:pointer; text-decoration:underline; color: blue" id="Priv<bean:write name='documentData' property='uuid' />"
 									onClick="setAttributeOnNode('<%= org.digijava.module.contentrepository.helper.CrConstants.UNPUBLISH %>', '<%=documentData.getUuid() %>');"
-									title="${translation}"><img src= "/repository/contentrepository/view/images/make_private.gif" border=0></a>
+									title="${translation}"><img hspace="2" src= "/repository/contentrepository/view/images/make_private.gif" border=0></a>
 								</logic:equal>
 								
 								</logic:equal>
@@ -163,7 +163,7 @@
 								<logic:equal name="documentData" property="hasDeleteRights" value="true">
 									<a  id="a<%=documentData.getUuid() %>" style="cursor:pointer; text-decoration:underline; color: blue"
 									onClick="deleteRow('<%=documentData.getUuid() %>');"
-									title="${translation}"><img src= "/repository/contentrepository/view/images/trash_12.gif" border=0></a>
+									title="${translation}"><img hspace="2" src= "/repository/contentrepository/view/images/trash_12.gif" border=0></a>
 								</logic:equal>
 								</td>
 							</tr>

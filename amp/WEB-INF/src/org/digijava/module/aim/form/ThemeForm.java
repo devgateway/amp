@@ -13,6 +13,7 @@ import org.digijava.module.aim.helper.IndicatorsBean;
 
 import java.util.Collection;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 
 public class ThemeForm extends ActionForm {
@@ -113,6 +114,15 @@ public class ThemeForm extends ActionForm {
        // pop-up organisation selector window
       	private Collection pages;
       	private String[] alphaPages;
+        private String alpha;
+
+        public String getAlpha() {
+            return alpha;
+        }
+
+        public void setAlpha(String alpha) {
+            this.alpha = alpha;
+        }
         
       	
       	private String activitiesUsingTheme	= null;
@@ -942,6 +952,6 @@ public class ThemeForm extends ActionForm {
 	public void setSettingsUsedByTheme(String settingsUsedByTheme) {
 		this.settingsUsedByTheme = settingsUsedByTheme;
 	}
-	
+      
 	
 }

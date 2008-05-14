@@ -128,8 +128,10 @@ function editIndicator(id,type){
 function selectIndicatorsPages(page) {
 		
 	   document.aimThemeForm.selectedindicatorFromPages.value=page;
+           <digi:context name="searchInd" property="context/module/moduleinstance/searchindicators.do?edit=true"/>
+           document.aimThemeForm.action = "<%= searchInd %>";
 	   document.aimThemeForm.submit();
-	   return true;
+	   
 	}	
 
 	function searchindicators() {
@@ -140,7 +142,9 @@ function selectIndicatorsPages(page) {
 				  document.aimThemeForm.tempNumResults.focus();
 				  return false;
 			} else {
-				 <digi:context name="searchInd" property="context/module/moduleinstance/searchindicators.do?edit=true"/>
+				 <digi:context name="searchInd" property="context/module/moduleinstance/searchindicators.do?action=search"/>
+                            document.aimThemeForm.selectedindicatorFromPages.value=1;
+                            document.aimThemeForm.alpha.value="";
 			    document.aimThemeForm.action = "<%= searchInd %>";
 			    document.aimThemeForm.submit();
 				  return true;
@@ -156,8 +160,10 @@ function searchAlpha(val) {
 			  document.aimEditActivityForm.tempNumResults.focus();
 			  return false;
 		} else {
-			 <digi:context name="searchInd" property="context/module/moduleinstance/searchindicators.do"/>
-			 url = "<%= searchInd %>?alpha=" + val + "&orgSelReset=false&edit=true";
+			 <digi:context name="searchInd" property="context/module/moduleinstance/searchindicators.do?"/>
+			 url = "<%= searchInd %>" ;
+                         document.aimThemeForm.alpha.value=val;
+                     document.aimThemeForm.selectedindicatorFromPages.value=1;
 		     document.aimThemeForm.action = url;
 		     document.aimThemeForm.submit();
 			  return true;
@@ -188,6 +194,8 @@ function searchAlpha(val) {
 
 	 function viewall(){
 	  <digi:context name="searchInd" property="context/module/moduleinstance/searchindicators.do?action=viewall"/>
+          document.aimThemeForm.selectedindicatorFromPages.value=1;
+          document.aimThemeForm.alpha.value="";
 	  document.aimThemeForm.action = "<%= searchInd %>";
 	  document.aimThemeForm.submit();
       }
@@ -202,6 +210,7 @@ function closeWindow()
 <html:hidden property="step"/>
 <html:hidden property="item" />
 <html:hidden property="selectedindicatorFromPages" />
+<html:hidden property="alpha" />
 
  
   <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>

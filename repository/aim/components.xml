@@ -206,7 +206,7 @@
 
 	<page page="searchLocation" name="aim_searchlocPopupLayout" title="AMP - Search Location" />
 	<page page="searchSectors" name="aim_searchSectorPopupLayout" title="AMP - Search Sectors" />
-	
+	<page page="showDocumentsInPopup"  name="aim_showDocumentsInPopup"  title="AMP - Related Documents"/>
 
 	<!-- global settings-->
 	<page name="viewGlobalSettings"  title ="- Global Settings " />

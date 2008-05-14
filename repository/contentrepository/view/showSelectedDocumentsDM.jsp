@@ -13,12 +13,12 @@
 <%@include file="documentManagerJsHelper.jsp" %>
 
 <%@include file="documentManagerDivHelper.jsp" %>
-
+<% String documentsType = (String)pageContext.findAttribute("documentsType"); %>
 <logic:notEmpty scope="session" name="<%= org.digijava.module.contentrepository.action.SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>">
 	<logic:notEmpty name="<%= SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>" scope="session"
-			property="<%=ActivityDocumentsConstants.RELATED_DOCUMENTS %>">
+			property="<%=documentsType %>">
 	<bean:define name="<%= SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>" 
-			property="<%=ActivityDocumentsConstants.RELATED_DOCUMENTS %>"  id="relDocs" scope="session" toScope="page"/>
+			property="<%=documentsType %>"  id="relDocs" scope="session" toScope="page"/>
 	</logic:notEmpty>
 	
 	<logic:notEmpty name="<%= SelectDocumentDM.CONTENT_REPOSITORY_HASH_MAP %>" scope="session"
@@ -27,6 +27,11 @@
 			property="<%=ActivityDocumentsConstants.TEMPORARY_DOCUMENTS %>"  id="tempDocs" scope="session" toScope="page"/>
 	</logic:notEmpty>
 
+	<logic:empty name="windowName">
+		<bean:define id="windowName" toScope="page">
+			<digi:trn key="cr:selectedDocs:defaultWindowName">Selection</digi:trn>
+		</bean:define>
+	</logic:empty>
 	<c:if test="${ (!empty relDocs) || (!empty tempDocs) }" >
 
 		<div id="selDocumentsDiv"></div>
@@ -51,7 +56,8 @@
 				};
 				</logic:notEmpty>
 				windowController	= newWindow('<bean:write name="dmWindowTitle"/>',false,'selDocumentsDiv');
-				windowController.populateWithSelDocs('<%= org.digijava.module.aim.helper.ActivityDocumentsConstants.RELATED_DOCUMENTS%>', rights);
+				windowController.setTitle('${windowName}');
+				windowController.populateWithSelDocs('<%=documentsType%>', rights);
 				
 			</script>
 	</c:if>

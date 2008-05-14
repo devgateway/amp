@@ -84,6 +84,9 @@
 		<layout name="popup" file="aimPopupLayout.jsp">
 			<put name="title">Popup</put>
 		</layout>
+		<layout name="noLayout" file="noLayout.jsp">
+			<put name="title">none</put>
+		</layout>
 		<!-- login page Layout -->
 		<layout name="login">
 			<put name="title">-Home</put>
@@ -371,10 +374,7 @@
 		</layout>
 		 <!-- END ADD/EDIT LAYOUT -->
 
-		<layout name="noLayout" file="noLayout.jsp">
-			<put name="title">none</put>
-			<put-item name="body" module="aim" instance="default"/>
-		</layout>
+		
 
 		<!-- TRANSLATE LAYOUT -->
 		<layout name="TranslatorPortlet" extends="single">
@@ -439,7 +439,7 @@
             	<page>viewSelectedMessage</page>
             </module>
 			<module name="aim">
-				
+				<page>aim_showDocumentsInPopup</page>
 				<page>viewStatusDescription</page>
 				<page>viewNpdSettings</page>
 				<page>addSectorToIndicator</page>

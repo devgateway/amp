@@ -538,7 +538,8 @@ function removeSelectedDocuments() {
 }
 
 function doSelectedDocuments(action) {
-	selectedDocs	= getAllSelectedDocuments();
+	selectedDocs			= getAllSelectedDocuments();
+	var updatedDocsAction	= '<%=org.digijava.module.contentrepository.helper.CrConstants.REQUEST_UPDATED_DOCUMENTS_IN_SESSION%>';
 	if (selectedDocs.length == 0) {
 		alert("${translation_no_doc_selected}");
 		return;
@@ -551,7 +552,7 @@ function doSelectedDocuments(action) {
 	if (action == 'set') {
 		callback	= {
 							success:function(o) {
-											window.opener.location.replace(window.opener.location.href); 
+											window.opener.location.replace(window.opener.location.href+"&"+updatedDocsAction+"=true"); 
 											window.close();
 											}
 							};

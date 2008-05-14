@@ -5,12 +5,41 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
+
+<c:if test="${empty firstOrganisationPopupInclusion}">
+	<c:set var="firstOrganisationPopupInclusion" value="true" scope="request"/>
+	<script type="text/javascript">
+	function showDocuments(objId) {
+			var sessionName	= "<%= org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME %>";
+			var url			= "/aim/insertDocumentsInSession.do?objId="+objId+"&sessionName="+sessionName;
+			var popupName	= 'my_popup';
+			window.open(url, popupName, 'width=900, height=300');
+			document.forms[0].action=url;
+			document.forms[0].target=popupName;
+			document.forms[0].submit();
+	}
+	</script>
+</c:if>
+
 <logic:notEmpty name="currentOrg" scope="request">
 <bean:define id="org" name="currentOrg"
 	type="org.digijava.module.aim.helper.RelOrganization" scope="request"
 	toScope="page" />
 <div style='position:relative;display:none;' id='org-<bean:write name="org" property="orgCode"/>'> 
 <ul>
+<c:set var="ampOrg" scope="page" value="${org.ampOrganisation}" />
+<c:set var="onClickText" value="" scope="page" />
+<c:if test="${ (!empty ampOrg) && (!empty ampOrg.uniqueDocumentId) }">
+	<c:set var="onClickText" scope="page">
+	window.location='/contentrepository/downloadFile.do?uuid=${ampOrg.uniqueDocumentId}'
+	</c:set>
+</c:if>
+<c:if test="${(!empty ampOrg) && (empty ampOrg.uniqueDocumentId) && (!empty ampOrg.documents)}">
+	<c:set var="onClickText" scope="page">
+	showDocuments( ${ampOrg.ampOrgId} )
+	</c:set>
+</c:if>
+
 <c:if test="${!empty org.orgName}">
 	<li> Organization Name: <bean:write name="org" property="orgName"/></li>
 </c:if>
@@ -37,8 +66,17 @@
 </div>
 <ul>
 <li>
-<div align="left" width="2" onMouseOver="stm(['<bean:write name="org" property="orgCode"/> Details',document.getElementById('org-<bean:write name="org" property="orgCode"/>').innerHTML],Style[0])" onMouseOut="htm()">[<u><bean:write name="org" property="orgName"/></u>]
-</div>
+	<div align="left" width="2" 
+	style="display: inline"
+	onMouseOver="stm(['<bean:write name="org" property="orgCode"/> Details',document.getElementById('org-<bean:write name="org" property="orgCode"/>').innerHTML],Style[0])" 
+	onMouseOut="htm()">
+	[<u><bean:write name="org" property="orgName"/></u>]
+	</div>
+	<c:if test="${onClickText!=''}">
+	   -&gt; <a style="cursor:pointer; text-decoration:underline; color: blue" onclick="${onClickText}" >
+	   <digi:trn key="aim:organisation:moreInfo">more info</digi:trn>
+	   </a>
+    </c:if>
 </li>
 </ul>
 </logic:notEmpty>

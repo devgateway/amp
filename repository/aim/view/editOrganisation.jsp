@@ -93,6 +93,18 @@
 		}
 		return true;
 	}
+	
+	function addDocumentsDM(documentsType, showTheFollowingDocuments) {
+		if (showTheFollowingDocuments==null){
+			showTheFollowingDocuments="ALL";
+		}
+		var url		= "/contentrepository/selectDocumentDM.do?documentsType="+documentsType+"&showTheFollowingDocuments="+showTheFollowingDocuments;
+		var popupName	= 'my_popup';
+		window.open(url, popupName, 'width=900, height=300');
+		document.forms[0].action=url;
+		document.forms[0].target=popupName;
+		document.forms[0].submit();
+	}
 
 </script>
 <script language="JavaScript">
@@ -855,6 +867,31 @@ function loadPage()
 																		</td>
 																	    <td width="380" height="30" colspan="2">
 																              <html:textarea property="description"  cols="40" rows="3"/>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td colspan="3" align="center" style="padding: 3px">
+																			<bean:define toScope="request" id="windowName">
+																				<digi:trn key="cr:selectedDocs:organizationDocuments:windowName">Documents</digi:trn>
+																			</bean:define>
+																			<bean:define toScope="request" id="showRemoveButton" value="true" />
+																			<bean:define toScope="request" id="documentsType" value="<%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME %>" />
+																			<bean:define toScope="request" id="versioningRights" value="false" />
+																			<bean:define toScope="request" id="makePublicRights" value="false" />
+																			<bean:define toScope="request" id="showVersionsRights" value="false" />
+																			<bean:define toScope="request" id="deleteRights" value="false" />
+																			<bean:define toScope="request" id="crRights" value="true" />
+																			<jsp:include page="/repository/contentrepository/view/showSelectedDocumentsDM.jsp"/>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td colspan="3" align="center">
+																		<c:set var="showTheFollowingDocuments" value="PUBLIC" />
+																		<c:set var="documentsType"><%=org.digijava.module.aim.dbentity.AmpOrganisationDocument.SESSION_NAME%></c:set>
+																		<html:button  styleClass="buton" property="submitButton" onclick="addDocumentsDM('${documentsType}','${showTheFollowingDocuments}')">
+																				<digi:trn key="btn:addDocumentsFromRepository">Add Documents From Repository</digi:trn>
+																		</html:button>
+																		<br /><br />
 																		</td>
 																	</tr>
 																	<tr>

@@ -11,7 +11,7 @@
 
 <%@include file="addDocumentPanel.jsp" %>
 
-<bean:define id="myForm" name="crSelectDocumentForm" toScope="page"
+<bean:define id="myForm" name="crSelectDocumentForm" toScope="request"
 	type="org.digijava.module.contentrepository.form.SelectDocumentForm" />
 
 <bean:define id="teamForm" name="myForm" property="teamInformationBeanDM" toScope="page" />
@@ -26,8 +26,16 @@
 
 <script type="text/javascript">
 	function afterPageLoad(e) {
+		var showTheFollowingDocuments 	= 'ALL';
+		<c:if test="${myForm.showTheFollowingDocuments!=null}">
+			showTheFollowingDocuments		= '${myForm.showTheFollowingDocuments}';
+		</c:if>
 	    var select = '<digi:trn key="contentrepository:SelectDocumentsTitle">Select Documents</digi:trn>';
-		newWindow( select,true,'otherDocumentsDiv');
+		var windowHandler	= newWindow( select,true,'otherDocumentsDiv');
+		
+		if (showTheFollowingDocuments == 'PUBLIC') {
+			windowHandler.populateWithPublicDocs();
+		}
 	}
 	YAHOO.util.Event.on(window, "load", afterPageLoad); 
 </script>	
@@ -39,12 +47,13 @@
 </html:button>
 <br /><br />
 &nbsp;&nbsp;
+<c:if test="${myForm.showTheFollowingDocuments=='ALL'}">
 	<c:set var="translation">
 			<digi:trn key="contentrepository:newWindowExplanation">Click here to open a new document window</digi:trn>
 	</c:set>
-<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue; font-size: x-small" onClick="newWindow('<digi:trn key="contentrepository:SelectDocumentsTitle">Select Documents</digi:trn>', true, 'otherDocumentsDiv')" /> 
-	<digi:trn key="contentrepository:newWindow">New window</digi:trn>
-</a>
-
+	<a title="${translation}" style="cursor:pointer; text-decoration:underline; color: blue; font-size: x-small" onClick="newWindow('<digi:trn key="contentrepository:SelectDocumentsTitle">Select Documents</digi:trn>', true, 'otherDocumentsDiv')" /> 
+		<digi:trn key="contentrepository:newWindow">New window</digi:trn>
+	</a>
+</c:if>
 <%@include file="documentManagerDivHelper.jsp" %>
 	

@@ -3,8 +3,16 @@
  */
 
 package org.digijava.module.aim.helper;
+import java.util.List;
+
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 
 public class RelOrganization {
 	private String orgName;
@@ -97,5 +105,22 @@ public class RelOrganization {
 
 	public void setOrgTypeId(AmpOrgType orgTypeId) {
 		this.orgTypeId = orgTypeId;
+	}
+	
+	public AmpOrganisation getAmpOrganisation() {
+		Session session;
+		if ( this.orgId== null )
+			return null;
+		try{
+			session					= PersistenceManager.getRequestDBSession();
+			AmpOrganisation ampOrg	= (AmpOrganisation)session.load(AmpOrganisation.class, this.orgId);
+			
+			if ( ampOrg!=null )
+				return ampOrg;
+		}
+		catch (Exception ex) {
+			ex.printStackTrace(System.out);
+		}
+		return null;
 	}
 }

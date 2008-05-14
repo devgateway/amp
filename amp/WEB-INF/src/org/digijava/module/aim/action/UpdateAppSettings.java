@@ -98,9 +98,10 @@ public class UpdateAppSettings extends Action {
 			//AMP-3168 Currency conversion in team workspace setup
 			httpSession.setAttribute("reportCurrencyCode",ampAppSettings.getCurrency().getCurrencyCode());
 			AmpARFilter filter = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
-			filter.setCurrency(ampAppSettings.getCurrency());
-			httpSession.setAttribute(ArConstants.REPORTS_FILTER,filter);
-			
+			if (filter!= null){
+				filter.setCurrency(ampAppSettings.getCurrency());
+				httpSession.setAttribute(ArConstants.REPORTS_FILTER,filter);
+			}
 			if (ampAppSettings != null) {
 				uForm.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
 				uForm.setDefRecsPerPage(ampAppSettings

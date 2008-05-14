@@ -103,18 +103,12 @@ public class AddEditData
         }else if(event!=null && event.equals("delIndValue")){
             String index=request.getParameter("index");
             if(indValues!=null){
-                AmpPrgIndicatorValue prgIndVal=indValues.get(Integer.valueOf(index).intValue()); //es value minda rom amovushalo indicators.               
+                AmpPrgIndicatorValue prgIndVal=indValues.get(Integer.valueOf(index).intValue()); //es value minda rom amovushalo indicators.  
+                indValues.remove(Integer.valueOf(index).intValue());
                 if(prgIndVal.getIndicatorValueId()!=null){
-                    indValues.remove(Integer.valueOf(index).intValue());
                     IndicatorUtil.removeProgramIndicatorValue(new Long(prgIndVal.getIndicatorValueId()), new Long(themeForm.getParentId()));
                     //ProgramUtil.deletePrgIndicatorValueById(new Long(themeForm.getParentId()),new Long(prgIndVal.getIndicatorValueId())); //pirvel parametrshi momdis connectiois id da meoreshi tviton romelic unda wavshalo imis
                     
-                }else{
-                    prgIndVal.setIndicatorValueId(null);
-                    prgIndVal.setCreationDate(null);
-                    prgIndVal.setLocation(null);
-                    prgIndVal.setValAmount(null);
-                    prgIndVal.setValueType(AmpIndicatorValue.ACTUAL);                   
                 }
            }
             themeForm.setPrgIndValues(indValues);

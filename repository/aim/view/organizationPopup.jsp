@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
+<%@page import="org.digijava.module.contentrepository.util.DocumentManagerUtil" %>
 
 <c:if test="${empty firstOrganisationPopupInclusion}">
 	<c:set var="firstOrganisationPopupInclusion" value="true" scope="request"/>
@@ -29,10 +30,25 @@
 <ul>
 <c:set var="ampOrg" scope="page" value="${org.ampOrganisation}" />
 <c:set var="onClickText" value="" scope="page" />
-<c:if test="${ (!empty ampOrg) && (!empty ampOrg.uniqueDocumentId) }">
-	<c:set var="onClickText" scope="page">
-	window.location='/contentrepository/downloadFile.do?uuid=${ampOrg.uniqueDocumentId}'
-	</c:set>
+<c:set var="uniqueId" value="" scope="page" />
+<c:if test="${!empty ampOrg}" >
+	<c:set var="uniqueId" value="${ampOrg.uniqueDocumentId}" />
+</c:if>
+	<% 
+	String uuid				= (String)pageContext.findAttribute("uniqueId");
+	pageContext.setAttribute("uniqueWebLink", DocumentManagerUtil.getWebLinkByUuid(uuid, request) );
+	%>
+<c:if test="${ (!empty ampOrg) && (!empty uniqueId) }">
+	<c:if test="${empty uniqueWebLink}" >
+		<c:set var="onClickText" scope="page">
+		window.location='/contentrepository/downloadFile.do?uuid=${ampOrg.uniqueDocumentId}'
+		</c:set>
+	</c:if>
+	<c:if test="${!empty uniqueWebLink}" >
+		<c:set var="onClickText" scope="page">
+		window.open('${uniqueWebLink}');
+		</c:set>
+	</c:if>
 </c:if>
 <c:if test="${(!empty ampOrg) && (empty ampOrg.uniqueDocumentId) && (!empty ampOrg.documents)}">
 	<c:set var="onClickText" scope="page">

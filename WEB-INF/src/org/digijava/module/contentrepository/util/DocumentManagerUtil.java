@@ -52,6 +52,7 @@ import org.digijava.module.contentrepository.exception.NoVersionsFoundException;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.DocumentData;
+import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.ObjectReferringDocument;
 import org.digijava.module.contentrepository.helper.TeamInformationBeanDM;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
@@ -163,6 +164,14 @@ public class DocumentManagerUtil {
 		}
 		
 		return jcrSession;
+	}
+	
+	public static NodeWrapper getReadNodeWrapper(String uuid, HttpServletRequest request) {
+		Node n 	= getReadNode(uuid, request);
+		if ( n!=null ) {
+			return new NodeWrapper (n);
+		}
+		return null;
 	}
 	
 	public static Node getReadNode (String uuid, HttpServletRequest request) {
@@ -494,6 +503,15 @@ public class DocumentManagerUtil {
 		
 		return 
 				DocumentManagerUtil.getNodeByPath(jcrWriteSession, teamMember, "private/"+teamId+"/"+userName);
+	}
+	
+	
+	public static String getWebLinkByUuid(String uuid, HttpServletRequest request) {
+		if ( uuid==null || request==null )
+			return null;
+		NodeWrapper nw		= getReadNodeWrapper(uuid, request);
+		String ret			= nw.getWebLink();
+		return ret;
 	}
 	
 	/**

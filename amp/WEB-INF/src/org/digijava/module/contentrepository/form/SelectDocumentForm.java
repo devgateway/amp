@@ -18,7 +18,8 @@ public class SelectDocumentForm extends ActionForm {
 	private String [] selectedDocs;
 	private String action	= null;
 	
-	private String documentsType	= null;
+	private String documentsType				= null;
+	private String showTheFollowingDocuments	= null;
 	
 	public String getDocumentsType() {
 		return documentsType;
@@ -49,6 +50,12 @@ public class SelectDocumentForm extends ActionForm {
 	}
 	public void setAction(String action) {
 		this.action = action;
+	}
+	public String getShowTheFollowingDocuments() {
+		return showTheFollowingDocuments;
+	}
+	public void setShowTheFollowingDocuments(String showTheFollowingDocuments) {
+		this.showTheFollowingDocuments = showTheFollowingDocuments;
 	}
 	
 		

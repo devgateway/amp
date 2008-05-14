@@ -70,6 +70,11 @@
             <key column="AMP_ORG_ID"/>
             <many-to-many class="org.digijava.module.calendar.dbentity.AmpCalendar" column="CALENDAR_ID"/>
         </set>
+        <set name="documents" cascade="all-delete-orphan" inverse="true" lazy="false">
+			<cache usage="read-write"/>
+			<key column="amp_org_id"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisationDocument" />
+		</set>
 	
 	</class>
 	

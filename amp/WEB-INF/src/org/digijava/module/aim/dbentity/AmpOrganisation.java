@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
@@ -47,6 +48,8 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	
 	private String segmentCode;
 	private Set sectors;
+	
+	private Set<AmpOrganisationDocument> documents;
 
 	//Pledges
 	private Set fundingDetails;
@@ -445,4 +448,29 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	public Class getDimensionClass() {
 	    return DonorDimension.class;
 	}
+
+	public Set<AmpOrganisationDocument> getDocuments() {
+		return documents;
+	}
+
+	public void setDocuments(Set<AmpOrganisationDocument> documents) {
+		this.documents = documents;
+	}
+	
+	/**
+	 * 
+	 * @return If this organization has a SINGLE document attached then it returns the uuid 
+	 * of that document. In any other case it returns null.
+	 * 
+	 */
+	public String getUniqueDocumentId() {
+		if ( ampOrgId!=null && documents!=null && documents.size()==1 ) {
+			Iterator<AmpOrganisationDocument> iter	= documents.iterator();
+			return iter.next().getUuid();
+		}
+		
+			
+		return null;
+	}
+	
 }	

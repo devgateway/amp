@@ -220,8 +220,9 @@ div.fakefile2 input{
 				style="background-image:url(/repository/contentrepository/view/images/right-side.gif); background-repeat: no-repeat; background-position: top left"> </td>
 			</tr>
 			<tr style="display: table-row" id="myDocumentstr">
-				<td colspan="3" bgcolor="#f4f4f2"><logic:notEmpty name="crDocumentManagerForm"
-					property="myPersonalDocuments">
+				<td colspan="3" bgcolor="#f4f4f2" style="border-color: #006699; border-left-style: solid; border-left-width: thin; 
+					border-bottom-style: solid; border-bottom-width: thin; border-right-style: solid; border-right-width: thin; ">
+					<logic:notEmpty name="crDocumentManagerForm" property="myPersonalDocuments">
 					<br />
 					<div id="my_markup" align="center" class="all_markup">
 					<bean:define name="crDocumentManagerForm" property="myPersonalDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />
@@ -388,8 +389,9 @@ div.fakefile2 input{
 				width="13" height="20"> </td>
 			</tr>
 			<tr style="display: table-row" id="teamDocumentstr">
-				<td colspan="3" bgcolor="#f4f4f2"><logic:notEmpty name="crDocumentManagerForm"
-					property="myTeamDocuments">
+				<td colspan="3" bgcolor="#f4f4f2" style="border-color: #006699; border-left-style: solid; border-left-width: thin; 
+					border-bottom-style: solid; border-bottom-width: thin; border-right-style: solid; border-right-width: thin; ">
+					<logic:notEmpty name="crDocumentManagerForm" property="myTeamDocuments">
 					<br />
 					<div id="team_markup" align="center" class="all_markup">
 					<bean:define name="crDocumentManagerForm" property="myTeamDocuments" id="documentDataCollection" type="java.util.Collection" toScope="request" />

@@ -35,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.dbentity.AmpPledge;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -55,6 +56,8 @@ import java.util.List;
 import java.util.Collections;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.contentrepository.action.SelectDocumentDM;
+import org.digijava.module.contentrepository.helper.CrConstants;
 
 public class EditOrganisation
     extends Action {
@@ -418,6 +421,8 @@ public class EditOrganisation
                 getAmpOrgTypeId()))
               editForm.getOrgGroup().add(og);
           }
+          
+          this.putDocumentsInSession(request, ampOrg);
         }
         else
           editForm.setAmpOrgTypeId(new Long( -1));
@@ -764,6 +769,8 @@ public class EditOrganisation
             ampOrg.setFundingDetails(new HashSet());
 
           ampOrg.getFundingDetails().addAll(ampPledges);
+          
+          this.saveDocuments(request, ampOrg);
         }
           	
         //boolean exist= DbUtil.getOrganisationByName(ampOrg.getName()) != null;
@@ -864,4 +871,40 @@ public class EditOrganisation
     }
     return mapping.findForward("index");
   }
+  
+  private boolean saveDocuments(HttpServletRequest request, AmpOrganisation ampOrg) {
+	  HashSet<String> UUIDs = SelectDocumentDM.getSelectedDocsSet(request, AmpOrganisationDocument.SESSION_NAME, false);
+	  if (UUIDs == null)
+		  return false;
+	  
+	  if (ampOrg.getDocuments() == null) {
+		  ampOrg.setDocuments( new HashSet<AmpOrganisationDocument>(UUIDs.size()) );
+	  }
+	  else
+		  ampOrg.getDocuments().clear();
+	  Iterator<String> iter	= UUIDs.iterator();
+	  
+	  while ( iter.hasNext() ) {
+		  AmpOrganisationDocument ampOrgDoc	= new AmpOrganisationDocument();
+		  ampOrgDoc.setUuid(iter.next());
+		  ampOrgDoc.setAmpOrganisation(ampOrg);
+		  
+		  ampOrg.getDocuments().add(ampOrgDoc);
+	  }
+	  return true;
+  }
+  
+  private void putDocumentsInSession(HttpServletRequest request, AmpOrganisation ampOrg) {
+	  HashSet<String> UUIDs		= SelectDocumentDM.getSelectedDocsSet(request, AmpOrganisationDocument.SESSION_NAME, true);
+	  if ( !"true".equals( request.getParameter(CrConstants.REQUEST_UPDATED_DOCUMENTS_IN_SESSION) ) )
+		  	UUIDs.clear();
+	  if (ampOrg!=null && ampOrg.getDocuments()!=null && ampOrg.getDocuments().size()>0 ) {
+		  Iterator<AmpOrganisationDocument> iter	= ampOrg.getDocuments().iterator();
+		  while ( iter.hasNext() ) {
+			  UUIDs.add( iter.next().getUuid() );
+		  }
+	  }
+		  
+  }
+  
 }

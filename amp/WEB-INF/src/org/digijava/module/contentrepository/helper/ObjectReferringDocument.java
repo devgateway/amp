@@ -21,6 +21,13 @@ public abstract class ObjectReferringDocument {
 		session.delete(this);
 	}
 	
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	
 	/**
 	 * This method needs to be implemented by those classes that have relations to other entities.
 	 * In this case this function should delete all relations between 'this' and the other entities.
@@ -28,12 +35,6 @@ public abstract class ObjectReferringDocument {
 	 */
 	protected void detach() {
 		;
-	}
-	public String getUuid() {
-		return uuid;
-	}
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
 	}
 	
 	

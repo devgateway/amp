@@ -292,6 +292,9 @@
 			  org.digijava.module.aim.dbentity.AmpActivityDocument
 	</hibernate-class>
 	<hibernate-class>
+			  org.digijava.module.aim.dbentity.AmpOrganisationDocument
+	</hibernate-class>
+	<hibernate-class>
 			  org.digijava.module.aim.dbentity.AmpIndicator
 	</hibernate-class>
         <hibernate-class>

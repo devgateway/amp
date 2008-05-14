@@ -17,7 +17,15 @@ import org.digijava.module.contentrepository.helper.DocumentData;
 import org.digijava.module.contentrepository.helper.TeamInformationBeanDM;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
-
+/**
+ * 
+ * This action is used whenever there is a need to select 1 or more documents from
+ * the Content Repository. It is also used to remove a document from a list of 
+ * already added documents.
+ * 
+ * @author Alex Gartner
+ *
+ */
 public class SelectDocumentDM extends Action {
 	public static String CONTENT_REPOSITORY_HASH_MAP	= "Content Repository Hash Map";
 	
@@ -35,7 +43,7 @@ public class SelectDocumentDM extends Action {
 	/**
 	 * 
 	 * @param request the HttpRequest
-	 * @param documentsType RELATED_DOCUMENTS / WEB_RESOURCES from ActivityDocumentsConstants
+	 * @param documentsType RELATED_DOCUMENTS / ORGANISATION_DOCUMENTS from ActivityDocumentsConstants
 	 * @param createIfNull if true and the HashSet containing the selcted documents is null than the HashSet will be created
 	 * @return HashSet<String> containing the UUIDs 
 	 */
@@ -96,7 +104,6 @@ public class SelectDocumentDM extends Action {
 					} 
 				}
 			}
-			
 			TemporaryDocumentData.refreshTemporaryUuids(request);
 			
 			return null; 

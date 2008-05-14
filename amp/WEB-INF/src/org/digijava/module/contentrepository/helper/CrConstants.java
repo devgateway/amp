@@ -31,4 +31,6 @@ public class CrConstants {
 	
 	public static final String REQUEST_GET_SHOW_LINKS				= "showOnlyLinks";
 	public static final String REQUEST_GET_SHOW_DOCS				= "showOnlyDocs";
+	
+	public static final String REQUEST_UPDATED_DOCUMENTS_IN_SESSION	= "updatedDocumentList";
 }

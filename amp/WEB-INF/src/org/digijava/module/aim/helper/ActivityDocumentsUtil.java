@@ -27,6 +27,12 @@ import org.digijava.module.contentrepository.action.SelectDocumentDM;
  *
  */
 public class ActivityDocumentsUtil {
+	/**
+	 * 
+	 * @param request
+	 * @param docs - a set of AmpActivityDocument objects
+	 * @throws NoDocumentTypeException
+	 */
 	public static void injectActivityDocuments(HttpServletRequest request, Set<AmpActivityDocument> docs) throws NoDocumentTypeException {
     	Iterator<AmpActivityDocument> iter		= docs.iterator();
     	

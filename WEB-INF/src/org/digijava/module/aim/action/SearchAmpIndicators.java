@@ -4,31 +4,16 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ThemeForm;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
-import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 
-import org.digijava.module.aim.helper.AllActivities;
-import org.digijava.module.aim.helper.AllMEIndicators;
-import org.digijava.module.aim.helper.IndicatorsBean;
-import org.digijava.module.aim.helper.OrgProjectId;
-import java.util.HashSet;
-import java.util.Arrays;
 
 public class SearchAmpIndicators extends Action {
 
@@ -46,16 +31,21 @@ public class SearchAmpIndicators extends Action {
 			eaForm.setCols(null);
 			eaForm.setPagedCol(null);
 			eaForm.setAction("");
+                        eaForm.setAlpha(null);
+                        eaForm.setSelectedindicatorFromPages(1);
+                        eaForm.setTempNumResults(10);
+                        eaForm.setNumResults(10);
+                        return mapping.findForward("forward");
 			
 		}
 		
-		eaForm.setReset(false);
-		eaForm.setIndPopupReset(false);
 		
-        String alpha = request.getParameter("alpha");
-		Collection col = null;
-		Collection colAlpha = null;
-		Collection<AllActivities> coll = null;
+		
+		
+                String alpha = eaForm.getAlpha();
+		List col = null;
+		List colAlpha = null;
+		
 
 		if (alpha == null || alpha.trim().length() == 0) {
 			col = new ArrayList();
@@ -70,14 +60,17 @@ public class SearchAmpIndicators extends Action {
 			 * New code  AMP-2564
 			 */		
 					
-					if (!eaForm.getAction().equals("viewall")) {
+			boolean	searchCriteriaEntered=false;	
+                        if (!eaForm.getAction().equals("viewall")) {
+                                            if(eaForm.getKeyword()!=null&&eaForm.getKeyword().trim().length()>0
+                                                    ||(eaForm.getSectorName()!=null&&!eaForm.getSectorName().equals("-1"))){
 						col = IndicatorUtil.searchIndicators(eaForm.getKeyword(),eaForm.getSectorName());
-					} else if((eaForm.getKeyword()!=null && eaForm.getKeyword().trim().length() > 0) || 
-							(eaForm.getSectorName()!=null && eaForm.getSectorName().trim().length()>0 && !eaForm.getSectorName().trim().equals("-1"))){
-						col = IndicatorUtil.searchIndicators(eaForm.getKeyword(),eaForm.getSectorName());
-					}else {
-						col = IndicatorUtil.getAmpIndicator();
-					}
+                                                searchCriteriaEntered=true;
+                                            }
+                                       }
+                                        if((col==null||col.size() ==0)&&!searchCriteriaEntered){
+                                            col = IndicatorUtil.getAmpIndicator();
+                                        }
 /**
  * Old Code
  */			
@@ -130,9 +123,9 @@ public class SearchAmpIndicators extends Action {
 //				 
 //			}
 			if (col != null && col.size() > 0) {
-				List temp = (List) col;
 				
-				col = (Collection) temp;
+				
+				
 
 				if (eaForm.getCurrentAlpha() != null) {
 					eaForm.setCurrentAlpha(null);
@@ -158,8 +151,8 @@ public class SearchAmpIndicators extends Action {
 			}
 
 		} else {
-			col = eaForm.getCols();
 			eaForm.setCurrentAlpha(alpha);
+                        col=(List)eaForm.getCols();
 			if (!alpha.equals("viewAll")) {
 				eaForm.setStartAlphaFlag(false);
 				colAlpha = new ArrayList();
@@ -170,7 +163,7 @@ public class SearchAmpIndicators extends Action {
 						colAlpha.add(org);
 					}
 				}
-				eaForm.setColsAlpha(colAlpha);
+				
 			}
 			else
 				eaForm.setStartAlphaFlag(true);
@@ -178,36 +171,37 @@ public class SearchAmpIndicators extends Action {
 
    //     OrgProjectId hvOrgs[] = eaForm.getSelectedOrganizations();
 
-        Collection newCol = new ArrayList();
-        newCol=col;
+       
     
 		int stIndex = 1;
-		int edIndex = eaForm.getNumResults();
-		Vector vect = new Vector();
+                if(eaForm.getSelectedindicatorFromPages()!=null){
+                    stIndex=eaForm.getSelectedindicatorFromPages();
+                }
+		int edIndex = stIndex*eaForm.getNumResults();
+		
 		int numPages;
+                 List<AmpIndicator> tempCol = new ArrayList();
 
 		if (alpha == null || alpha.trim().length() == 0 || alpha.equals("viewAll")) {
-			if (edIndex > newCol.size()) {
-				edIndex = newCol.size();
+			if (edIndex > col.size()) {
+				edIndex = col.size();
 			}
-			vect.addAll(newCol);
-			numPages = newCol.size() / eaForm.getNumResults();
-			numPages += (newCol.size() % eaForm.getNumResults() != 0) ? 1 : 0;
+			
+			numPages = col.size() / eaForm.getNumResults();
+			numPages += (col.size() % eaForm.getNumResults() != 0) ? 1 : 0;
+                        tempCol.addAll(col.subList((stIndex-1)*eaForm.getNumResults(),edIndex));
 		} else {
 			if (edIndex > colAlpha.size()) {
 				edIndex = colAlpha.size();
 			}
-			vect.addAll(colAlpha);
+			
 			numPages = colAlpha.size() / eaForm.getNumResults();
 			numPages += (colAlpha.size() % eaForm.getNumResults() != 0) ? 1 : 0;
+                        tempCol.addAll(colAlpha.subList((stIndex-1)*eaForm.getNumResults(),edIndex));
 		}
 
 
-        Collection tempCol = new ArrayList();
-		for (int i = (stIndex - 1); i < edIndex; i++) {
-			tempCol.add(vect.get(i));
-		}
-
+                       
 		Collection pages = null;
 
 		if (numPages > 1) {
@@ -218,12 +212,12 @@ public class SearchAmpIndicators extends Action {
 			}
 		}
 
-        eaForm.setCols(newCol);
+                eaForm.setCols(col);
 		eaForm.setPagedCol(tempCol);
 		
 		eaForm.setPages(pages);
-		eaForm.setCurrentPage(new Integer(1));
-	    eaForm.setAction("");
+		eaForm.setCurrentPage(stIndex);
+	   
     	return mapping.findForward("forward");
 	}
 }

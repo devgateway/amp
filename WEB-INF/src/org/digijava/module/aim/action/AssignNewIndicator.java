@@ -33,6 +33,7 @@ public class AssignNewIndicator
         allIndForm.setSectorName("");
         allIndForm.setKeyword("");
         allIndForm.setPagedCol(null);
+        allIndForm.setSelectedindicatorFromPages(1);
         
         
         

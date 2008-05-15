@@ -120,7 +120,7 @@ public class ThemeManager extends Action {
 			//Iterator itr = DbUtil.getActivityTheme(themeForm.getThemeId()).iterator();
 			logger.info(" theme Id is ... "+themeForm.getThemeId());
 			boolean flagProblemFound	= false;
-			RepairDbUtil.repairThemesHavingNullIndicator();
+		
 			//Iterator itr = DbUtil.getActivityThemeFromAAT(new Long(Long.parseLong(request.getParameter("themeId")))).iterator();
                         Long programId=themeForm.getThemeId();
 			Collection col = ProgramUtil.checkActivitiesUsingProgram(programId);

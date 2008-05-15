@@ -43,6 +43,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 import java.util.List;
 import java.util.*;
+import net.sf.hibernate.FlushMode;
 
 public class TeamMemberUtil {
 
@@ -1525,6 +1526,8 @@ public class TeamMemberUtil {
 
         try {
             session = PersistenceManager.getRequestDBSession();
+            session.setFlushMode(FlushMode.COMMIT);
+
             tx = session.beginTransaction();
             for (int i = 0; i < id.length; i++) {
                 if (id[i] != null) {

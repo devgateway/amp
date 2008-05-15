@@ -2,4 +2,4 @@ CREATE OR REPLACE VIEW v_proposed_cost AS SELECT amp_activity_id as amp_activity
 DELETE FROM amp_report_column WHERE columnId IN (SELECT columnId FROM amp_columns WHERE extractorView='v_proposed_cost');
 DELETE FROM amp_columns WHERE extractorView='v_proposed_cost';
 INSERT INTO amp_columns (columnName,aliasName,cellType,extractorView) VALUES ('Proposed Project Cost','proposed_cost','org.dgfoundation.amp.ar.cell.CategAmountCell','v_proposed_cost');
-INSERT INTO amp_measures (measureName,aliasName) values ('Uncommitted Balance','Uncommitted Balance','A');
+INSERT INTO amp_measures (measureName,aliasName,type) values ('Uncommitted Balance','Uncommitted Balance','A');

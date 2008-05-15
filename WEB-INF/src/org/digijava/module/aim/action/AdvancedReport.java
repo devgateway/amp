@@ -202,7 +202,7 @@ public class AdvancedReport extends Action {
 				formBean.setPublicReport(false);
 				formBean.setDrilldownTab(false);
 				formBean.setHideActivities(false);
-				formBean.setReportOption(null);
+				formBean.setReportOption("A");
 			} 
 			
 			

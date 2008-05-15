@@ -240,14 +240,16 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 		
 		//attach funding coming from extra sources ... inject funding from proposed project cost, but with isShow=false so it won't be taken into calculations
-		AmpReportColumn arcProp = new AmpReportColumn();
-		AmpColumns acProp = new AmpColumns();
-		arcProp.setColumn(acProp);
-		arcProp.setOrderId(new String("0"));
-		acProp.setCellType("org.dgfoundation.amp.ar.cell.CategAmountCell");
-		acProp.setColumnName(ArConstants.COLUMN_FUNDING);
-		acProp.setExtractorView(ArConstants.VIEW_PROPOSED_COST);
-		reportMetadata.getOrderedColumns().add(arcProp);
+		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())) {
+			AmpReportColumn arcProp = new AmpReportColumn();
+			AmpColumns acProp = new AmpColumns();
+			arcProp.setColumn(acProp);
+			arcProp.setOrderId(new String("0"));
+			acProp.setCellType("org.dgfoundation.amp.ar.cell.CategAmountCell");
+			acProp.setColumnName(ArConstants.COLUMN_FUNDING);
+			acProp.setExtractorView(ArConstants.VIEW_PROPOSED_COST);
+			reportMetadata.getOrderedColumns().add(arcProp);
+		}
 	}
 
 	/**

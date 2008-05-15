@@ -7,7 +7,7 @@
 .all_markup table
 {border-collapse:collapse;border: 1px solid #d7eafd;  width: 90%} 
 .all_markup th
-{padding:.25em;background-color:#d7eafd; font-size:12px; color: #666666}
+{padding:.25em;background-color:#d7eafd; font-size:12px; color: #666666; text-align: left;}
 .all_markup th a, .all_markup th a:hover
 {font-size:13px; text-decoration: none;}
 .all_markup td

@@ -111,13 +111,15 @@ public class AmpReportGenerator extends ReportGenerator {
 			if (element.getExtractorView() != null)
 				{
 			    		extractable.add(element2);
-			    		extractableNames.add(element.getColumnName());
+			    		if(!element.getColumnName().equals(ArConstants.COLUMN_PROPOSED_COST)) extractableNames.add(element.getColumnName());
 				}
 			else
 				generated.add(element2);
 		}
 
 		extractableCount += extractableNames.size();
+		
+		
 		
 		// also add hierarchical columns to extractable:
 		Iterator<AmpReportHierarchy> ii = reportMetadata.getHierarchies().iterator();
@@ -388,6 +390,11 @@ public class AmpReportGenerator extends ReportGenerator {
 
 	}
 
+	protected void removeUnselectedHierarchies() {
+		AmpARFilter arf=(AmpARFilter) filter;
+		
+	}
+	
 	protected void prepareData() {
 		
 

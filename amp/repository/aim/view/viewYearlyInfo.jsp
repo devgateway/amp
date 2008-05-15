@@ -697,17 +697,13 @@
 																	</div>
 
    					                       			</td>
-															<!-- Commented by mouhamad for burkina -->
-									                    	<!--td bgcolor="#DDDDDB">
-
-				   					                     <div align="center">
-
-															  		<digi:trn key="aim:plannedAmount">Planned Amount</digi:trn>
-
-																	</div>
-
-				   					              		</td-->
-
+									                    <logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="4">
+									                    	<td bgcolor="#DDDDDB">
+									                    		<div align="center">
+																	<digi:trn key="aim:plannedAmount">Planned Amount</digi:trn>
+																</div>
+															</td>
+														</logic:notEqual>	
 									                 <td bgcolor="#DDDDDB">
 														  <div align="center">
 															<font color="blue">*</font>
@@ -726,17 +722,18 @@
 																		<bean:write name="yearlyInfo" property="fiscalYear" />
 																	</logic:notEqual>
 																</td>
-																<!-- Commented by mouhamad for burkina -->
-																<!--td bgcolor="#F8F8F5">
+																<logic:notEqual  name="aimYearlyInfoForm" property="transactionType" value="4">
+																<td bgcolor="#F8F8F5">
 		         					                 				<div align="right">
 		         					                 					<logic:present name="debug">
-		         					                 						<%//=yearlyInfo.getWrapedPlanned()%>
+		         					                 						<%=yearlyInfo.getWrapedPlanned()%>
 		         					                 					</logic:present>
 		         					                 					<logic:notPresent name="debug">
-		         					                 						<%//=FormatHelper.formatNumber(yearlyInfo.getPlannedAmount())%>
+		         					                 						<%=FormatHelper.formatNumber(yearlyInfo.getPlannedAmount())%>
 		         					                 					</logic:notPresent>
 																	</div>
-																</td-->
+																</td>
+																</logic:notEqual>
 																<td bgcolor="#F8F8F5">
 																	<div align="right">
 																		<logic:present name="debug">
@@ -763,11 +760,13 @@
 														<td>
 															<digi:trn key="aim:total">Total</digi:trn>
 														</td>
-														<!--td>
+														<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="4">
+														<td>
 															<div align="right">
 																<bean:write name="aimYearlyInfoForm" property="totalPlanned" />
 															</div>
-														</td-->
+														</td>
+														</logic:notEqual>
 														<td>
 															<div align="right">
 																<bean:write name="aimYearlyInfoForm" property="totalActual" />

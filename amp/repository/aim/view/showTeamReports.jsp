@@ -9,6 +9,16 @@
 
 <%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
 
+<!-- this is for the nice tooltip widgets -->
+<DIV id="TipLayer"
+	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+
+<script language="JavaScript1.2" type="text/javascript"
+	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript"
+	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+	
+
 <digi:instance property="aimTeamReportsForm" />
 <c:set var="translation">
 	<digi:trn key="aim:confirmDeleteReport">
@@ -87,7 +97,7 @@ function confirmFunc() {
 											<td bgColor=#ffffff class=box-border>
 												<table border=0 cellPadding=3 cellSpacing=3 class=box-border width="100%" >
 													<tr bgColor=#dddddb>
-														<td bgColor=#dddddb align="center" height="20">
+														<td bgColor=#dddddb align="left" height="20">
 															<b>
 															<digi:trn key="aim:publicTeamReportsList">
 																List of public team reports
@@ -103,24 +113,24 @@ function confirmFunc() {
 															</b>
 														</td>
 														 -->
-														<td bgColor=#dddddb align="center" height="20">
+														<td bgColor=#dddddb align="left" height="20">
 															<b>
 															<digi:trn key="aim:reportOwnerName">
 																Owner
 															</digi:trn>
 															</b>
 														</td>
-														<td bgColor=#dddddb align="center" height="20">
+														<td bgColor=#dddddb align="left" height="20">
 															<b>
 															<digi:trn key="aim:reportCreationDate">
-																Creation Date
+																Creation Date 
 															</digi:trn>
 															</b>
 														</td>
-														<td bgColor=#dddddb align="center" height="20">
+														<td bgColor=#dddddb align="left" height="20">
 															<b>
 															<digi:trn key="aim:reportType">
-																Type
+																Type 
 															</digi:trn>
 															</b>
 														</td>
@@ -129,7 +139,7 @@ function confirmFunc() {
 														 if(tm!=null)
 														  {
 														%>
-															<td bgColor=#dddddb align="center" height="20">
+															<td bgColor=#dddddb align="left" height="20">
 																<b>
 																<digi:trn key="aim:reportAction">
 																	Action
@@ -137,6 +147,27 @@ function confirmFunc() {
 																</b>
 															</td>
 														<% } %>
+														<td bgColor=#dddddb align="left" height="20">
+															<b>
+															<digi:trn key="aim:reportColumns">
+															Report Columns
+															</digi:trn>
+															</b>
+														</td>
+														<td bgColor=#dddddb align="left" height="20">
+															<b>
+															<digi:trn key="aim:reportHierarchies">
+															Report Hierarchies
+															</digi:trn>
+															</b>
+														</td>
+														<td bgColor=#dddddb align="left" height="20">
+															<b>
+															<digi:trn key="aim:reportMeasures">
+															Report Measures
+															</digi:trn>
+															</b>
+														</td>
 													</tr>
 													<c:set var="count" value="${fn:length(aimTeamReportsForm.reports)}">
 													</c:set>
@@ -191,7 +222,7 @@ function confirmFunc() {
 														 	</td>
 														 	<td>
 														 		<p style="white-space: nowrap">
-														 		<ul>  <%
+														 		 <%
                                                                              if (report.getType()!=null && report.getType().equals(new Long(1))) {
                                                                          %>
                                                                              <li>
@@ -243,7 +274,22 @@ function confirmFunc() {
 														 					<digi:trn key="aim:typeSummaryReport">Summary Report</digi:trn>
 															 			</li>
 													 				</logic:equal>
-														 		</ul>
+															 		
+															 		<logic:equal name="report" property="options" value="A">
+																 		<li>
+																 			Annual
+																 		</li>
+															 		</logic:equal>
+															 		<logic:equal name="report" property="options" value="Q">
+																 		<li>
+																 			Quarterly
+																 		</li>
+															 		</logic:equal>
+															 		<logic:equal name="report" property="options" value="M">
+																 		<li>
+																 			Monthly
+																 		</li>
+															 		</logic:equal>
 														 		</p>
 														 	</td>
 
@@ -281,7 +327,42 @@ function confirmFunc() {
 																</p>
 															</td>
 															<% } %>														
-
+															<TD>
+																<div style='position:relative;display:none;' id='report-<bean:write name="report" property="ampReportId"/>'> 
+																	<logic:iterate name="report" property="columns" id="column" indexId="index"  >
+																		<%if (index.intValue()%2==0){ %>
+																			<li>																			
+																		 		<bean:write name="column" property="column.columnName" />
+																			
+																		<% } else {%>
+																			,
+																			<bean:write name="column" property="column.columnName" />
+																			</li>
+																		<%} %>
+																 	</logic:iterate>
+															 	</div>
+															 	
+															 	<div align="center" onMouseOver="stm(['<digi:trn key="aim:teamreports:columns">columns</digi:trn>',document.getElementById('report-<bean:write name="report" property="ampReportId"/>').innerHTML],Style[1])" onMouseOut="htm()">[<u><digi:trn key="aim:reportbuilder:list">list...</digi:trn></u>]
+																</div>
+															</TD>
+															
+															<td>
+																<logic:iterate name="report" property="hierarchies" id="hierarchy" >
+																	<%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
+																	<li>
+																	${hierarchy.column.columnName}
+																	</li>
+																</logic:iterate>
+															</td>
+															
+															<td>
+																<logic:iterate name="report" property="measures" id="measure" >
+																	<%-- <bean:write name="hierarchy" property="column.columnName"/> --%>
+																	<li>
+																	${measure.measure.measureName}
+																	</li>
+																</logic:iterate>
+															</td>
 														</TR>
 
 													</logic:iterate>

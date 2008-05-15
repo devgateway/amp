@@ -1339,6 +1339,7 @@ public class SaveActivity extends Action {
 											}
 										}
 								 }
+                                                                boolean regionFlag=false;
 
 								if(eaForm.getFundingRegions()!=null && eaForm.getFundingRegions().size()>0){
 									tmpItr = eaForm.getFundingRegions().iterator();
@@ -1347,6 +1348,7 @@ public class SaveActivity extends Action {
 										if (reg.getAmpRegionId().equals(
 												regFund.getRegionId())) {
 											ampRegFund.setRegion(reg);
+                                                                                        regionFlag=true;
 											break;
 										}
 									}
@@ -1358,7 +1360,9 @@ public class SaveActivity extends Action {
 										.getDate(fd.getTransactionDate()));
 								ampRegFund.setAdjustmentType(new Integer(fd
 										.getAdjustmentType()));
+                                                                if(regionFlag){
 								regFundings.add(ampRegFund);
+                                                                }
 							}
 						}
 
@@ -1398,7 +1402,7 @@ public class SaveActivity extends Action {
 										}
 									}
 								}
-
+                                                                boolean regionFlag=false;
 								if(eaForm.getFundingRegions()!=null && eaForm.getFundingRegions().size()>0){
 									tmpItr = eaForm.getFundingRegions().iterator();
 									while (tmpItr.hasNext()) {
@@ -1406,6 +1410,7 @@ public class SaveActivity extends Action {
 										if (reg.getAmpRegionId().equals(
 												regFund.getRegionId())) {
 											ampRegFund.setRegion(reg);
+                                                                                        regionFlag=true;
 											break;
 										}
 									}
@@ -1418,7 +1423,9 @@ public class SaveActivity extends Action {
 										.getDate(fd.getTransactionDate()));
 								ampRegFund.setAdjustmentType(new Integer(fd
 										.getAdjustmentType()));
+                                                                if(regionFlag){
 								regFundings.add(ampRegFund);
+                                                                }
 							}
 						}
 
@@ -1459,6 +1466,7 @@ public class SaveActivity extends Action {
 										}
 									}
 								}
+                                                                boolean regionFlag=false;
 								if( eaForm.getFundingRegions()!=null && eaForm.getFundingRegions().size()>0){
 									tmpItr = eaForm.getFundingRegions().iterator();
 									while (tmpItr.hasNext()) {
@@ -1466,6 +1474,7 @@ public class SaveActivity extends Action {
 										if (reg.getAmpRegionId().equals(
 												regFund.getRegionId())) {
 											ampRegFund.setRegion(reg);
+                                                                                        regionFlag=true;
 											break;
 										}
 									}
@@ -1478,7 +1487,9 @@ public class SaveActivity extends Action {
 										.getDate(fd.getTransactionDate()));
 								ampRegFund.setAdjustmentType(new Integer(fd
 										.getAdjustmentType()));
+                                                                if(regionFlag){
 								regFundings.add(ampRegFund);
+                                                                }
 							}
 
 						}

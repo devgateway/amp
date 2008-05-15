@@ -677,19 +677,14 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 			                           				</div>
 
 					                          		</td>
-
-					                          		<!-- td bgcolor="#DDDDDB">
-
-			      		                    			<div align="center">
-
-																	<FONT color="blue">*</FONT>
-
-			            		              				<digi:trn key="aim:plannedAmount">Planned Amount</digi:trn>
-
-			                  		        			</div>
-
-			                        		  		</td-->
-
+													<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="4">
+					                          		<td bgcolor="#DDDDDB">
+														<div align="center">
+															<FONT color="blue">*</FONT>
+																<digi:trn key="aim:plannedAmount">Planned Amount</digi:trn>
+														</div>
+													</td>
+													</logic:notEqual>
 			                          				<td bgcolor="#DDDDDB">
 
 					                          			<div align="center">
@@ -811,13 +806,11 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 							                          		</logic:equal>
 
 						                          		</td>
-
-			                   			       		<!-- td valign="baseline" bgcolor="#F8F8F5">
-
-			                          						<div align="right"><bean:write name="qtr" property="plannedAmount" /></div>
-
-						                          		</td-->
-
+													<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="4">
+			                   			       			<td valign="baseline" bgcolor="#F8F8F5">
+															<div align="right"><bean:write name="qtr" property="plannedAmount" /></div>
+														</td>
+													</logic:notEqual>				
 			                          					<td valign="baseline" bgcolor="#F8F8F5">
 
 			                          						<div align="right"><bean:write name="qtr" property="actualAmount" /></div>
@@ -833,11 +826,13 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 														<td colspan="2">
 															<digi:trn key="aim:total">Total</digi:trn>
 														</td>
-														<!--td>
+														<logic:notEqual name="aimYearlyInfoForm" property="transactionType" value="4">
+														<td>
 															<div align="right">
 																<bean:write name="aimQuarterlyInfoForm" property="totalPlanned" />
 															</div>
-														</td-->
+														</td>
+														</logic:notEqual>
 														<td>
 															<div align="right">
 																<bean:write name="aimQuarterlyInfoForm" property="totalActual" />
@@ -1180,9 +1175,6 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 
 			</TABLE>
-
-		<!-- end -->
-
 	</TD>
 
 </TR>

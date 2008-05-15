@@ -180,7 +180,7 @@ function banUser(txt) {
 														</tr>		
  														<tr>
 															<td width="100%">
-																<table width="734" border="0"  bgColor="#f4f4f2">
+																<table width="734" BORDER=1 bordercolor="cccccc" RULES=ALL FRAME=VOID  bgColor="#f4f4f2">
 																	<c:if test="${empty umViewAllUsersForm.pagedUsers}">
 								                                         <tr>
 																			<td colspan="5">
@@ -222,8 +222,8 @@ function banUser(txt) {
                                                                                                                        <table>
                                                                                                                            <c:forEach var="member" items="${us.teamMembers}">
                                                                                                                                <tr>
-                                                                                                                                   <td nowrap> ${member.ampTeam.name}: &nbsp;</td>
-                                                                                                                                   <td nowrap>${member.ampMemberRole.role} </td>
+                                                                                                                                   <td nowrap><li> ${member.ampTeam.name}&nbsp;(${member.ampMemberRole.role})&nbsp;&nbsp;</li></td>
+                                                                                                                               
                                                                                                                                </tr>
                                                                                                                            </c:forEach>
                                                                                                                      </table>
@@ -235,24 +235,22 @@ function banUser(txt) {
 																			</td>
 																			<td height="30" >
 																				<c:set var="translation">
-								                                                  <digi:trn key="um:viewAllUsers:EditUserLink">Edit user</digi:trn>
+								                                                  <digi:trn key="um:viewAllUsers:EditUserLink">Edit user </digi:trn>
 								                                                </c:set>
 								                                                <digi:link href="/viewEditUser.do?id=${us.id}">${translation}</digi:link>
 																			</td>
-																			<td height="30">
-																				&nbsp;&nbsp;
-																			</td>
+																			
 																			<td height="30">
 																				<c:choose>
 								                                                  <c:when test="${us.ban}">
 								                                                    <c:set var="translation">
-								                                                      <digi:trn key="um:viewAllUsers:unBanUserLink">Remove ban</digi:trn>
+								                                                      <digi:trn key="um:viewAllUsers:unBanUserLink">Remove ban </digi:trn>
 								                                                    </c:set>
 								                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=false" onclick="return unbanUser()"  >${translation}</digi:link>
 								                                                  </c:when>
 								                                                  <c:otherwise>
 								                                                    <c:set var="translation">
-								                                                      <digi:trn key="um:viewAllUsers:banUsersLink">Ban user</digi:trn>
+								                                                      <digi:trn key="um:viewAllUsers:banUsersLink">Ban user </digi:trn>
 								                                                    </c:set>
 								
 								                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=true" onclick="return banUser()">${translation}</digi:link>

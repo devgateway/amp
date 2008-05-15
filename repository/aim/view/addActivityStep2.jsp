@@ -339,6 +339,11 @@ function validateProgramsPercentage(cnt,prefix){
   A programs percentage cannot be equal to 0
   </digi:trn>
   </c:set>
+  <c:set var="errMsgFM">
+  <digi:trn key="aim:FMProgPercentageErrorMessage">
+  Couldn't validate program percentages: Either  National Planning Objectives or Primary Program or Seconday Program is disabled in Feature Manager But has values for current activity
+  </digi:trn>
+  </c:set>
   var str = null;
   var val = null;
   var i = 0;
@@ -346,6 +351,10 @@ function validateProgramsPercentage(cnt,prefix){
   var sum = 0;
   while (i < cnt) {
     str   = prefix+"[" + i + "].programPercentage";
+    if((document.aimEditActivityForm.elements)[str]==null){
+        alert("${errMsgFM}");
+        return false;
+    }
     val   = (document.aimEditActivityForm.elements)[str].value;
     if (val == "" || val == null) {
       alert("${errMsgAddPercentage}");

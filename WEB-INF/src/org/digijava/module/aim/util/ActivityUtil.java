@@ -716,13 +716,15 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
           while (itr.hasNext()) {
             IndicatorActivity actInd = (IndicatorActivity) itr.next();
             int count=0;
+            if(indicators!=null){
             for (Object inds : indicators) {
             	ActivityIndicator actIndicator=(ActivityIndicator)inds;
             	if(actIndicator.getIndicatorId().equals(actInd.getIndicator().getIndicatorId())){
             		count++; //if indicators contain actInd then increment count; 
             		break;
             	}
-			}            
+			} 
+            }
             if (count==0){//if activity has indicator,which is not in indicators list,we should remove it from db            	
             	 AmpIndicator ind=(AmpIndicator)session.get(AmpIndicator.class,actInd.getIndicator().getIndicatorId());
             	 IndicatorActivity indConn=IndicatorUtil.findActivityIndicatorConnection(activity, ind);

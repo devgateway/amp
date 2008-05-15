@@ -134,19 +134,7 @@ function confirmFunc() {
 															</digi:trn>
 															</b>
 														</td>
-														<% String s = (String)session.getAttribute("teamLeadFlag");
-														   TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-														 if(tm!=null)
-														  {
-														%>
-															<td bgColor=#dddddb align="left" height="20">
-																<b>
-																<digi:trn key="aim:reportAction">
-																	Action
-																</digi:trn>
-																</b>
-															</td>
-														<% } %>
+														
 														<td bgColor=#dddddb align="left" height="20">
 															<b>
 															<digi:trn key="aim:reportColumns">
@@ -168,6 +156,19 @@ function confirmFunc() {
 															</digi:trn>
 															</b>
 														</td>
+														<% String s = (String)session.getAttribute("teamLeadFlag");
+														   TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+														 if(tm!=null)
+														  {
+														%>
+															<td bgColor=#dddddb align="left" height="20">
+																<b>
+																<digi:trn key="aim:reportAction">
+																	Action
+																</digi:trn>
+																</b>
+															</td>
+														<% } %>
 													</tr>
 													<c:set var="count" value="${fn:length(aimTeamReportsForm.reports)}">
 													</c:set>
@@ -293,40 +294,7 @@ function confirmFunc() {
 														 		</p>
 														 	</td>
 
-														 	<%
-														 	if(tm!=null)
-														 	{ %>
-
-															<td>  
-																<p style="white-space: nowrap">
-																<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-																<c:set target="${urlParams}" property="rid">
-																	<bean:write name="report" property="ampReportId" />
-																</c:set>
-																<c:set target="${urlParams}" property="event" value="edit" />
-																<logic:equal name="teamLeadFlag" scope="session" value="true"> 
-																	[ <digi:link href="/deleteAllReports.do" name="urlParams" title="${translation}" onclick="return confirmFunc()" >
-																		<digi:trn key="aim:reportDelete">Delete</digi:trn>
-																	</digi:link> ]
-																	[ <digi:link href="/editReport.do?reportEdit=true" name="urlParams" title="${translation}" >
-																		<digi:trn key="aim:reportEdit">Edit</digi:trn>
-																	</digi:link> ]
-																</logic:equal>														
-																<logic:equal name="teamLeadFlag" scope="session" value="false">
-																	<logic:present name="report" property="ownerId">
-																		<logic:equal  name="report" property="ownerId.ampTeamMemId" value="${aimTeamReportsForm.currentMemberId}"> 
-																			[ <digi:link href="/deleteAllReports.do" name="urlParams" title="${translation}" onclick="return confirmFunc()" >
-																				<digi:trn key="aim:reportDelete">Delete</digi:trn>
-																			</digi:link> ]
-																			[ <digi:link href="/editReport.do?reportEdit=true" name="urlParams" title="${translation}" >
-																				<digi:trn key="aim:reportEdit">Edit</digi:trn>
-																			</digi:link> ]
-																		</logic:equal>		
-																	</logic:present>																																																
-																</logic:equal>															
-																</p>
-															</td>
-															<% } %>														
+														 												
 															<TD>
 																<div style='position:relative;display:none;' id='report-<bean:write name="report" property="ampReportId"/>'> 
 																	<logic:iterate name="report" property="columns" id="column" indexId="index"  >
@@ -363,6 +331,42 @@ function confirmFunc() {
 																	</li>
 																</logic:iterate>
 															</td>
+															
+																<%
+														 	if(tm!=null)
+														 	{ %>
+
+															<td>  
+																<p style="white-space: nowrap">
+																<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+																<c:set target="${urlParams}" property="rid">
+																	<bean:write name="report" property="ampReportId" />
+																</c:set>
+																<c:set target="${urlParams}" property="event" value="edit" />
+																<logic:equal name="teamLeadFlag" scope="session" value="true"> 
+																	[ <digi:link href="/deleteAllReports.do" name="urlParams" title="${translation}" onclick="return confirmFunc()" >
+																		<digi:trn key="aim:reportDelete">Delete</digi:trn>
+																	</digi:link> ]
+																	[ <digi:link href="/editReport.do?reportEdit=true" name="urlParams" title="${translation}" >
+																		<digi:trn key="aim:reportEdit">Edit</digi:trn>
+																	</digi:link> ]
+																</logic:equal>														
+																<logic:equal name="teamLeadFlag" scope="session" value="false">
+																	<logic:present name="report" property="ownerId">
+																		<logic:equal  name="report" property="ownerId.ampTeamMemId" value="${aimTeamReportsForm.currentMemberId}"> 
+																			[ <digi:link href="/deleteAllReports.do" name="urlParams" title="${translation}" onclick="return confirmFunc()" >
+																				<digi:trn key="aim:reportDelete">Delete</digi:trn>
+																			</digi:link> ]
+																			[ <digi:link href="/editReport.do?reportEdit=true" name="urlParams" title="${translation}" >
+																				<digi:trn key="aim:reportEdit">Edit</digi:trn>
+																			</digi:link> ]
+																		</logic:equal>		
+																	</logic:present>																																																
+																</logic:equal>															
+																</p>
+															</td>
+															<% } %>		
+															
 														</TR>
 
 													</logic:iterate>

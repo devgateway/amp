@@ -392,7 +392,7 @@
 							<td colspan="5"><digi:trn key="rep:filer:DonorType">Donor Type</digi:trn>
 								<br/>
 							
-								<html:select style="width: 190px"
+								<html:select style="width: 250px"
 								multiple="true" property="selectedDonorTypes" size="3"
 								styleClass="inp-text">
 								<html:optionsCollection property="donorTypes" value="ampOrgTypeId"
@@ -408,7 +408,7 @@
 							<td colspan="5">
 								<digi:trn key="rep:filer:DonorGroup">Donor Group</digi:trn>
 								<br />
-								<html:select multiple="true" style="width: 190px"
+								<html:select multiple="true" style="width: 250px"
 								property="selectedDonorGroups" size="3" styleClass="inp-text">
 								<html:optionsCollection property="donorGroups"
 									value="ampOrgGrpId" label="orgGrpName" />
@@ -438,10 +438,10 @@
 				    	</tr>
 				        <tr>
 				                  	<td>
-					                  	<html:select style="width: 190px"
+					                  	<html:select style="width: 300px"
 											multiple="true" property="selectedBeneficiaryAgency" size="3"
 											styleClass="inp-text">
-										<html:optionsCollection property="beneficiaryAgency" label="name"
+										<html:optionsCollection property="beneficiaryAgency" label="acronymAndName"
 											value="ampOrgId" />
 										</html:select>
 										<br />
@@ -457,11 +457,11 @@
 						</tr>
 				        <tr>
 				                <td>
-					                  <html:select style="width: 190px"
+					                  <html:select style="width: 300px"
 									multiple="true" property="selectedExecutingAgency" size="3"
 									styleClass="inp-text">
 								
-											<html:optionsCollection property="executingAgency" label="name"
+											<html:optionsCollection property="executingAgency" label="acronymAndName"
 												value="ampOrgId" />
 										</html:select>
 										<br />
@@ -476,10 +476,10 @@
 						</tr>
 						<tr>
   							<td>	
-  									<html:select style="width: 190px" multiple="true"
+  									<html:select style="width: 300px" multiple="true"
 									property="selectedImplementingAgency" size="3"
 									styleClass="inp-text">
-									<html:optionsCollection property="implementingAgency" label="name"
+									<html:optionsCollection property="implementingAgency" label="acronymAndName"
 										value="ampOrgId" />
 									</html:select>
 							</td>

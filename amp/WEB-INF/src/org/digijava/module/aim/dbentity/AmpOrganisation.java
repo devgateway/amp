@@ -24,6 +24,8 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 	private String orgGroup;  // defunct
 	private AmpFiscalCalendar ampFiscalCalId;
 	private AmpSectorScheme ampSecSchemeId;
+	
+	private String acronymAndName;
 	/**
 	 * @deprecated
 	 */
@@ -472,5 +474,18 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable, 
 			
 		return null;
 	}
+
+	public String getAcronymAndName() {
+	acronymAndName = (acronym != null) ? acronym + " - " + name
+		: name;
+	return acronymAndName;
+    }
+
+    public void setAcronymAndName(String acronymAndName) {
+	this.acronymAndName = acronymAndName;
+    }
+
+	
+	
 	
 }	

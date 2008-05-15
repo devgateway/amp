@@ -11,7 +11,7 @@
 <%if(listCell.size() > 3) {%>
 <div style='position:relative;display:none;' id='<bean:write name="listCell" property="column.name"/>-<bean:write name="listCell" property="ownerId"/>'> 
 <%}%>
-<ul>
+
 
 <logic:iterate name="listCell" property="value" id="subCell"
 	scope="page">
@@ -19,14 +19,11 @@
 		type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request" />
 	<bean:define id="caller" name="listCell"
 		type="org.dgfoundation.amp.ar.cell.ListCell" scope="page" toScope="request" />	
-		<li><jsp:include page="<%=viewable.getViewerPath()%>" /></li>
+		<jsp:include page="<%=viewable.getViewerPath()%>" />
 </logic:iterate>
-</ul>
+
 <%if(listCell.size() > 3) {%>
 </div>
-
-<ul>
-</ul>
 
 <c:set var="key">
 	aim:reportbuilder:<bean:write name="listCell" property="column.name"/>

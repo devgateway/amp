@@ -2100,7 +2100,7 @@ public class TeamUtil {
         return col;
     }
 
-    public static Collection getAllTeams() {
+    public static Collection<AmpTeam> getAllTeams() {
         Session session = null;
         Query qry = null;
         Collection teams = new ArrayList();

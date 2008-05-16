@@ -30,7 +30,12 @@ public class MessageConstants {
 	 * Defines a priority Level for each message	 
 	 */
 	public static final Long PRIORITY_LEVEL_LOW= new Long(1);
-	public static final Long PRIORITY_LEVEL_NORMAL= new Long(2);
-	public static final Long PRIORITY_LEVEL_HIGH= new Long(3);
-	public static final Long PRIORITY_LEVEL_MODERATE= new Long(4);
+	public static final Long PRIORITY_LEVEL_MEDIUM= new Long(2);
+	public static final Long PRIORITY_LEVEL_CRITICAL= new Long(3);	
+	
+	/**
+	 * pagination Elements
+	 */
+	public static final int MESSAGES_PER_PAGE=10;
+	public static final int PAGES_TO_SHOW=5;
 }

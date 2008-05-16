@@ -301,10 +301,10 @@ public class TeamMemberUtil {
 		return members;
 	}
 
-	public static Collection getAllTeamMembers(Long teamId) {
+	public static Collection<TeamMember> getAllTeamMembers(Long teamId) {
 		Session session = null;
 		Query qry = null;
-		Collection members = new ArrayList();
+		Collection<TeamMember> members = new ArrayList<TeamMember>();
 
 		try {
 			session = PersistenceManager.getSession();
@@ -314,7 +314,7 @@ public class TeamMemberUtil {
 
 			qry = session.createQuery(queryString);
 			qry.setParameter("teamId", teamId, Hibernate.LONG);
-			Iterator itr = qry.list().iterator();
+			Iterator<AmpTeamMember> itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				AmpTeamMember ampMem = (AmpTeamMember) itr.next();
 				Long id = ampMem.getAmpTeamMemId();

@@ -10,7 +10,8 @@
      	<forward name="addOrEditAmpMessage" path="/showLayout.do?layout=ampMessageLayout" />
      	<forward name="viewMessage" path="/showLayout.do?layout=viewSelectedMessage" />
      	<forward name="viewMyDesktop" path="/aim/viewMyDesktop.do"  redirect="true"/>
-     	<forward name="showAll" path="/showLayout.do?layout=allMessagesLayout"/> 
+     	<forward name="showAllMessages" path="/showLayout.do?layout=allMessagesLayout"/>  
+     	<forward name="forwardMsgPage" path="/showLayout.do?layout=forwardMessagesLayout"/>   	
      </action> 
      <action path="/message/getMessages" name="messageForm" scope="session" type="org.digijava.module.message.action.ViewMessages" />
 </action-mappings>

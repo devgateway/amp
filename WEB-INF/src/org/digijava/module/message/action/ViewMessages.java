@@ -1,6 +1,5 @@
 package org.digijava.module.message.action;
 
-import org.apache.struts.tiles.actions.TilesAction;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,12 +10,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.message.dbentity.AmpMessage;
+import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.form.AmpMessageForm;
+import org.digijava.module.message.helper.MessageConstants;
 import org.digijava.module.message.util.AmpMessageUtil;
 
 public class ViewMessages extends TilesAction {
@@ -26,15 +24,34 @@ public class ViewMessages extends TilesAction {
 		HttpSession session = request.getSession();
     	TeamMember teamMember = new TeamMember();        	  
     	 // Get the current team member 
-    	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-    	//get from helper teamMember class AmpTeamMember, to see this User's Id 
-    	AmpTeamMember ampTeamMember=TeamMemberUtil.getAmpTeamMember(teamMember.getMemberId());
-    	Long userId=ampTeamMember.getUser().getId();
-		AmpMessageForm messageForm=(AmpMessageForm)form;
-		messageForm.setAllMessages(null);
+    	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);    	
+		AmpMessageForm messageForm=(AmpMessageForm)form;		
 		messageForm.setEditingMessage(false);		
-		List<AmpMessage> messages= AmpMessageUtil.getAllMessagesForCurrentUser(teamMember.getTeamId(),userId,teamMember.getMemberId());
-		messageForm.setAllMessages(messages);
+		List<AmpMessageState> msgstates= AmpMessageUtil.loadReceivedAndSavedMsgStatesForTm(teamMember.getMemberId(),false);
+		messageForm.setMessagesForTm(msgstates);
+		//separate message types: used on myMessages page on desktop
+		int alertType=0;
+		int msgType=0;
+		int approvalType=0;
+		int calEventType=0;
+		for (AmpMessageState state : msgstates) {
+			if(state.getMessage().getClassName().equals("m") && state.getRead()!=null&& state.getRead().equals(false)){
+				msgType++;
+			}else if(state.getMessage().getClassName().equals("a") && state.getRead()!=null&& state.getRead().equals(false)){
+				alertType++;
+			}else if(state.getMessage().getClassName().equals("c") && state.getRead()!=null&& state.getRead().equals(false)){
+				calEventType ++;
+			}else if(state.getMessage().getClassName().equals("p") && state.getRead()!=null && state.getRead().equals(false)){
+				approvalType++;
+			}
+		}
+		messageForm.setMsgType(msgType);
+		messageForm.setAlertType(alertType);
+		messageForm.setCalendarEventType(calEventType);
+		messageForm.setApprovalType(approvalType);
+		
 		return null;
 	}
+	
+	
 }

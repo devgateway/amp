@@ -413,7 +413,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                 </td>
                                                                 </field:display>
                                                                 <field:display name="Proposed Project Amount" feature="Proposed Project Cost">
-                                                                <td bgcolor="#FFFFFF" align="left" width="10">
+                                                                <td bgcolor="#FFFFFF" align="left" width="25">
                                                                   <c:if test="${not empty aimEditActivityForm.proProjCost.funAmount && aimEditActivityForm.proProjCost.funAmount!=''}">
                                                                   ${aimEditActivityForm.proProjCost.funAmount}
                                                                   </c:if>

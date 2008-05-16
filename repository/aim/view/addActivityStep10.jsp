@@ -89,28 +89,47 @@
 	}
 
 	function validateEntryByMember() {
-		/*
-		if (containsValidNumericValue(document.aimEditActivityForm.currentVal) == false) {
-			alert("Invalid Current value or Current value not entered");
-			document.aimEditActivityForm.currentVal.focus();
+        var txt=null;
+
+        txt=document.getElementById("txtBaseValue");
+		if (txt!=null && !containsValidNumericValue(txt)) {
+			alert("Invalid Base value or Base value not entered");
+			txt.focus();
 			return false;
 		}
-		
-		if (isEmpty(document.aimEditActivityForm.currValDate.value) == true) {
-			alert("Current value date not entered");
-			document.aimEditActivityForm.currValDate.focus();
+
+        txt=document.getElementById("txtBaseValDate");
+		if (txt!=null && isEmpty(txt.value)) {
+			alert("Base value date not entered");
+			txt.focus();
 			return false;
 		}
-		*/
+
+        txt=document.getElementById("txtRevTargetVal");
+		if (txt!=null && !containsValidNumericValue(txt)) {
+			alert("Invalid Target value or Target value not entered");
+			txt.focus();
+			return false;
+		}
+
+        txt=document.getElementById("txtRevisedTargetValDate");
+		if (txt!=null && isEmpty(txt.value)) {
+			alert("Target value date not entered");
+			txt.focus();
+			return false;
+		}
+
 		return true;
-	
+
 	}
 
 	function setValues(val) {
 		var valid;
 		if(document.aimEditActivityForm.teamLead.value) {
+            alert("Echo1");
 			valid = validateEntryByMember();
 		} else {
+            alert("Echo2");
 			valid = validateEntryByLeader();
 		}
 		if (valid == true) {
@@ -127,7 +146,7 @@
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
 	}
-	
+
 	function deleteIndicator()
 		{
 			return confirm("Are you sure you want to delete this Indicator?");
@@ -157,8 +176,8 @@
 	<feature:display name="Activity" module="M & E"></feature:display>
 	<feature:display name="Activity Dashboard" module="M & E"></feature:display>
 	<feature:display name="Admin" module="M & E"></feature:display>
-	
-	
+
+
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
@@ -205,38 +224,38 @@ ${fn:replace(message,quote,escapedQuote)}
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
                                                                  <c:forEach var="step" items="${aimEditActivityForm.steps}" end="${stepNm-1}" varStatus="index">
-                                                                     
+
                                                                      <c:set property="translation" var="trans">
                                                                          <digi:trn key="aim:clickToViewAddActivityStep${step.stepActualNumber}">
                                                                              Click here to goto Add Activity Step ${step.stepActualNumber}
                                                                          </digi:trn>
                                                                      </c:set>
-                                                                      
+
                                                                       <c:set var="link">
                                                                           <c:if test="${step.stepNumber==9}">
                                                                               /editSurveyList.do?edit=true
-                                                                              
+
                                                                           </c:if>
-                                                                          
+
                                                                           <c:if test="${step.stepNumber!=9}">
-                                                                          
+
                                                                               /addActivity.do?step=${step.stepNumber}&edit=true
-                                                                              
+
                                                                           </c:if>
                                                                       </c:set>
-                                                                           
-                                                                         
-                                                                         
-                                                                     
-                                                                     
-                                                                     
+
+
+
+
+
+
                                                                      <c:if test="${!index.last}">
-                                                                        
+
                                                                          <c:if test="${index.first}">
-                                                                            
+
                                                                              <digi:link href=" ${link}" styleClass="comment" title="${trans}">
-                                                                                 
-                                                                                 
+
+
                                                                                  <c:if test="${aimEditActivityForm.editAct == true}">
                                                                                      <digi:trn key="aim:editActivityStep1">
                                                                                          Edit Activity - Step 1
@@ -247,7 +266,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                          Add Activity - Step 1
                                                                                      </digi:trn>
                                                                                  </c:if>
-                                                                                 
+
                                                                              </digi:link>
                                                                              &nbsp;&gt;&nbsp;
                                                                          </c:if>
@@ -260,15 +279,15 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                              &nbsp;&gt;&nbsp;
                                                                          </c:if>
                                                                      </c:if>
-                                                                     
-                                                                     
-                                                                     
+
+
+
                                                                      <c:if test="${index.last}">
-                                                                         
+
                                                                          <c:if test="${index.first}">
-                                                                             
-                                                                             
-                                                                             
+
+
+
                                                                              <c:if test="${aimEditActivityForm.editAct == true}">
                                                                                  <digi:trn key="aim:editActivityStep1">
                                                                                      Edit Activity - Step 1
@@ -280,24 +299,24 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                  </digi:trn>
                                                                              </c:if>
                                                                          </c:if>
-                                                                         
-                                                                         
+
+
                                                                          <c:if test="${!index.first}">
                                                                              <digi:trn key="aim:addActivityStep${step.stepActualNumber}"> Step ${step.stepActualNumber}</digi:trn>
                                                                          </c:if>
-                                                                         
-                                                                         
-                                                                         
+
+
+
                                                                      </c:if>
-                                                                     
-                                                                     
-                                                                     
-                                                                     
-                                                                     
-                                                                     
-                                                                     
+
+
+
+
+
+
+
                                                                  </c:forEach>
-                                                                 
+
 								</span>
 							</td>
 						</tr>
@@ -334,7 +353,7 @@ ${fn:replace(message,quote,escapedQuote)}
 											</td>
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
 												<digi:trn key="aim:step${stepNm}of">
-													Step ${stepNm} of  
+													Step ${stepNm} of
 												</digi:trn>
                                                                                                  ${fn:length(aimEditActivityForm.steps)}:
                                                                                                  <digi:trn key="aim:activity:MonitoringAndEvaluation">
@@ -414,7 +433,7 @@ ${fn:replace(message,quote,escapedQuote)}
 													</c:set>
 													<digi:link href="/removeIndFromActivity.do" name="urlParams1">
 														<img src="../ampTemplate/images/trash_12.gif" border="0" onclick="return deleteIndicator()"/>
-													</digi:link>												 
+													</digi:link>
 												</td>
 											</tr>
 
@@ -432,15 +451,15 @@ ${fn:replace(message,quote,escapedQuote)}
 																</td>
 															</tr>
 														</field:display>
-														
-														
+
+
 															<tr>
 																<field:display name="Base Value" feature="Activity"></field:display>
 																<td><b>
 																	<digi:trn key="aim:meBaseValue">Base Value</digi:trn></b>
 																	<font color="red">*</font></td>
 																<td>
-																<html:text property="baseVal" size="10" maxlength="10"/>
+																<html:text property="baseVal" size="10" maxlength="10" styleId="txtBaseValue"/>
 																	<!-- <input type="text" name="baseVal"
 																	value="<bean:write name="indicator" property="baseVal"/>"
 																	class="inp-text" size="10">
@@ -455,7 +474,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<td align="left">
 																	<input type="text" name="baseValDate"
 																	value="<bean:write name="indicator" property="baseValDate" />"
-																	class="inp-text" size="10" readonly="true" id="baseValDate">&nbsp;&nbsp;
+																	class="inp-text" size="10" readonly="true" id="txtBaseValDate">&nbsp;&nbsp;
 																	<a id="clear1" href="javascript:clearDate(document.aimEditActivityForm.baseValDate, 'clear1')">
 																	 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 																	</a>
@@ -480,7 +499,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	</b><font color="red">*</font>
 																</td>
 																<c:if test="${indicator.targetValDate == null}">
-																
+
 																<td>
 																<html:text property="targetVal" size="10" maxlength="10"/>
 																	<!-- <input type="text" name="targetVal"
@@ -509,7 +528,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<td>
 																	<input type="text" name="targetVal"
 																	value="<bean:write name="indicator" property="targetVal" />"
-																	class="inp-text" size="10" disabled="true">
+																	class="inp-text" size="10" disabled="true" id="txtTargetVal">
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
@@ -518,7 +537,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<td align="left">
 																	<input type="text" name="targetValDate"
 																	value="<bean:write name="indicator" property="targetValDate" />"
-																	class="inp-text" size="10" readonly="true" id="targetValDate">&nbsp;&nbsp;
+																	class="inp-text" size="10" readonly="true" id="txtTargetValDate">&nbsp;&nbsp;
 																</td>
 																</c:if>
 															</tr>
@@ -540,7 +559,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																	</b><font color="red">*</font>
 																</td>
 																<td>
-																<html:text property="revTargetVal" size="10" maxlength="10"/>
+																<html:text property="revTargetVal" size="10" maxlength="10" styleId="txtRevTargetVal"/>
 																	<!-- <input type="text" name="revTargetVal"
 																	value="<bean:write name="indicator" property="revisedTargetVal" />"
 																	class="inp-text" size="10">
@@ -555,7 +574,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																<td align="left">
 																	<input type="text" name="revTargetValDate"
 																	value="<bean:write name="indicator" property="revisedTargetValDate" />"
-																	class="inp-text" size="10" readonly="true" id="revisedTargetValDate">&nbsp;&nbsp;
+																	class="inp-text" size="10" readonly="true" id="txtRevisedTargetValDate">&nbsp;&nbsp;
 
 																	<a id="clear3" href="javascript:clearDate(document.aimEditActivityForm.revTargetValDate, 'clear3')">
 																	 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
@@ -577,7 +596,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</tr>
 															</c:if>
 
-														
+
 
 														<logic:notEmpty name="indicator" property="priorValues" >
 															<tr bgColor="#dddddb"><td bgColor=#dddddb align="left" colspan="5"><b>
@@ -610,7 +629,7 @@ ${fn:replace(message,quote,escapedQuote)}
 															</logic:iterate>
 														</logic:notEmpty>
 
-														
+
 
 														<%--
 														<logic:notEmpty name="indicator" property="baseValDate">
@@ -619,21 +638,21 @@ ${fn:replace(message,quote,escapedQuote)}
 																<field:display name="Current Value" feature="Activity">
 																<td><b>
 																	<digi:trn key="aim:meCurrentValue">Current Value</digi:trn>
-																	
+
 																</b></td>
 																<td>
 																	<!--<html:text property="currentVal" size="10" maxlength="10"/>-->
 																	<input type="text" name="currentVal"
 																	value="<bean:write name="indicator" property="actualVal" />"
 																	class="inp-text" size="10">
-																
+
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																</field:display>
 																<field:display name="Date Current Value" feature="Activity">
 																<td align="right">
 																	<digi:trn key="aim:meDate">Date</digi:trn>
-																	
+
 																</td>
 																<td align="left">
 																	<input type="text" name="currValDate"
@@ -662,7 +681,7 @@ ${fn:replace(message,quote,escapedQuote)}
 																</td>
 															</tr>
 															</field:display>
-														<field:display name="Risk" feature="Activity">															
+														<field:display name="Risk" feature="Activity">
 														<tr>
 															<%--
 															<td><b>
@@ -679,13 +698,13 @@ ${fn:replace(message,quote,escapedQuote)}
 															<td>
 																<html:select property="indicatorRisk" styleClass="inp-text">
 																<option value="0"><digi:trn key="help:selectRisk">Select Risk</digi:trn></option>
-																	<logic:iterate id="currRisk" name="aimEditActivityForm" property="riskCollection">																		
+																	<logic:iterate id="currRisk" name="aimEditActivityForm" property="riskCollection">
 																		<c:set var="trn">
 																			<digi:trn key="aim:risk:${currRisk.translatedRatingName}">${currRisk.ratingName}</digi:trn>
 																		</c:set>
-																		<html:option value="${currRisk.ampIndRiskRatingsId}">${trn}</html:option>																		
+																		<html:option value="${currRisk.ampIndRiskRatingsId}">${trn}</html:option>
 																	</logic:iterate>
-																</html:select>															
+																</html:select>
 															</td>
 														</tr>
 														</field:display>
@@ -694,14 +713,14 @@ ${fn:replace(message,quote,escapedQuote)}
 															<td>&nbsp;</td>
 															<td colspan="3" align="center">
 																<input type="button" class="buton" value="<digi:trn key='btn:setValues'>Set Values</digi:trn>"
-																onclick="setValues('<c:out value="${indicator.indicatorId}" />')">
+																onclick="setValues('${indicator.indicatorId}')">
 															</td>
 															<td>&nbsp;</td>
 														</tr>
 														<%--
 														</logic:notEmpty>
 														--%>
-													
+
 													</table>
 												</td>
 											</tr>

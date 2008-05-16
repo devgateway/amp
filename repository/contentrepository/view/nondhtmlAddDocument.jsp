@@ -84,7 +84,7 @@
 	}
 	function usesAllowedCharacters(str) {
 		//var regexp	= new RegExp("[a-zA-Z0-9_/-/ ]+");
-		var regexp	= new RegExp("[A-Za-zàÀèÈéÉïÏîÎôÔêÊçÇ0-9_/-/ ]+");
+		var regexp	= new RegExp("[A-Za-zÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü0-9_/-/ ]+");
 		var found	= regexp.exec(str);
 		if (found != str)
 			return false;

@@ -16,12 +16,15 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.harvest.DBUtil;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ReportsForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AdvancedReportUtil;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.helper.ApplicationSettings;
@@ -93,23 +96,40 @@ public class ShowTeamReports extends Action {
 //				reps.addAll(results);
 //			}		
 			
-			Collection teamLeadResults = null;
-			Collection teamMemberResults = null;
-			
+			ArrayList teamResults = null;
+			//Collection teamMemberResults = null;
+			AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
+			AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
 			if (appSettingSet) {
-				teamLeadResults = TeamUtil.getAllTeamReports(tm.getTeamId(),startReport, reportsPerPage,true,tm.getMemberId());
+				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(),startReport, reportsPerPage,true,tm.getMemberId());
 				Double totalPages = Math.ceil(1.0* TeamUtil.getAllTeamReportsCount(tm.getTeamId(),true,tm.getMemberId()) / appSettings.getDefReportsPerPage());
 				rf.setTotalPages(totalPages.intValue());
+				
 			}else{
-				teamLeadResults = TeamUtil.getAllTeamReports(tm.getTeamId(),null, null,true,tm.getMemberId());				
+				teamResults = (ArrayList)TeamUtil.getAllTeamReports(tm.getTeamId(),null, null,true,tm.getMemberId());
+				}
+			boolean found = false;
+			if (defaultTeamReport != null){
+				Iterator iter = teamResults.iterator();
+				while (iter.hasNext()) {
+					AmpReports el = (AmpReports) iter.next();                                 
+					if (el.compareTo(defaultTeamReport) == 0){
+						found = true;
+						break;
+					}
+				}
 			}
-			
-			if(teamLeadResults!=null){
-				reps.addAll(teamLeadResults);
+			if (!found){
+				teamResults.add(defaultTeamReport);
 			}
+			if(teamResults!=null){
+				reps.addAll(teamResults);
+			}
+			/*
 			if (teamMemberResults!=null){
 				reps.addAll(teamMemberResults);
 			}
+			*/
 			List<AmpReports> sortedReports=new ArrayList<AmpReports>();
 			//do not add this in ArrayList constructor.
 			sortedReports.addAll(reps);
@@ -155,7 +175,7 @@ public class ShowTeamReports extends Action {
 //			}
 //			rf.setReports(dbReturnSet);
 
-		}
+		}                                             
 
 		return mapping.findForward("forward");
 	}

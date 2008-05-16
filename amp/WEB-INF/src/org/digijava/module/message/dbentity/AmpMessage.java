@@ -14,31 +14,29 @@ public class AmpMessage {
 	 * name or subject of message.
 	 */
 	private String name;
-	private Long priorityLevel; //low, high e.t.c. comes from Category Manager
+	private Long priorityLevel; //low, high e.t.c. 
 	private Long messageType; //alert,approvals,system message e.t.c.
 	private String senderType;	
-	private Long senderId;  //if user sends alert, that it is that user's id... vtqvat user daregistrirda,anu User manager agzavnis da romeli useric daregistrirda imis,id iqneba
+	private Long senderId;  //if user sends alert, then it's that user's id... vtqvat user daregistrirda,anu User manager agzavnis da romeli useric daregistrirda imis,id iqneba
 	private Date creationDate; //date when it was created
 	
-	/**
-	 * Is the message alredy read or not.
-	 */
-	private Boolean read;
 	
 	/**
 	 * emails should be sent.
 	 */
 	private Boolean emailable;
 	
-	/**
-	 * Text of the message.
-	 */
 	private String description;
 	
-	private String receiverType; //user,team or team member
-	private Long receiverId;
+	/**
+	 * defines whether message is saved(==it's a draft) or sent
+	 */
+	private Boolean draft;
 	
-	private Long selectedTeamId ; //Used if in add Message page user selected Team Member in receiver Type. This field holds selected teamId
+	/**
+	 * this field holds Id of the forwarded message, if it exists 
+	 */
+	private Long forwardedMessageId;
 	
 	
 	/**
@@ -92,12 +90,7 @@ public class AmpMessage {
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
-	public Boolean getRead() {
-		return read;
-	}
-	public void setRead(Boolean read) {
-		this.read = read;
-	}
+	
 	public Boolean getEmailable() {
 		return emailable;
 	}
@@ -111,23 +104,20 @@ public class AmpMessage {
 		this.description = description;
 	}
 
-	public Long getReceiverId() {
-		return receiverId;
+	public Boolean getDraft() {
+		return draft;
 	}
-	public void setReceiverId(Long receiverId) {
-		this.receiverId = receiverId;
+
+	public void setDraft(Boolean draft) {
+		this.draft = draft;
 	}
-	public String getReceiverType() {
-		return receiverType;
+
+	public Long getForwardedMessageId() {
+		return forwardedMessageId;
 	}
-	public void setReceiverType(String receiverType) {
-		this.receiverType = receiverType;
-	}
-	public Long getSelectedTeamId() {
-		return selectedTeamId;
-	}
-	public void setSelectedTeamId(Long selectedTeamId) {
-		this.selectedTeamId = selectedTeamId;
+
+	public void setForwardedMessageId(Long forwardedMessageId) {
+		this.forwardedMessageId = forwardedMessageId;
 	}
 	
 	

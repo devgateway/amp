@@ -6,6 +6,7 @@ package org.digijava.module.message.dbentity;
  * @author Dare Roinishvili
  *
  */
+@Deprecated //wasashlelia mgonii
 public class SystemMessage extends AmpMessage {
 	private Integer systemMessageType;
 

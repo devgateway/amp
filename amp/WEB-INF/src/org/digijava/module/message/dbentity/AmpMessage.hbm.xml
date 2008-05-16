@@ -18,11 +18,9 @@
 		<property name="senderType" column="sender_type"  type="java.lang.String"/>
 		<property name="senderId" column="sender_id" type="java.lang.Long"/>
 		<property name="creationDate" column="creation_date"  type="java.util.Date"/>		
-		<property name="read" column="is_read"  type="java.lang.Boolean"/>
-		<property name="emailable" column="is_emailable"  type="java.lang.Boolean"/>
-		<property name="receiverType" column="receiver_type" type="java.lang.String"/>
-		<property name="receiverId" column="receiver_id" type="java.lang.Long"/>	
-		<property name="selectedTeamId" column="selected_team_id"  type="java.lang.Long"/>
+		<property name="emailable" column="is_emailable"  type="java.lang.Boolean"/>	
+		<property name="draft" column="is_draft"  type="java.lang.Boolean"/>
+		<property name="forwardedMessageId" column="forwarded_message_Id"  type="java.lang.Long"/>
 		
 		<subclass name="org.digijava.module.message.dbentity.AmpAlert" discriminator-value="a">
 			<property name="alertType" column="alert_type"  type="java.lang.Integer"/>
@@ -35,6 +33,10 @@
 		<subclass name="org.digijava.module.message.dbentity.SystemMessage" discriminator-value="s">
 			<property name="systemMessageType" column="system_message_type"  type="java.lang.Integer"/>
 		</subclass>	
+		
+		<subclass name="org.digijava.module.message.dbentity.Approval" discriminator-value="p">
+			<property name="approvalType" column="approval_type"  type="java.lang.Integer"/>
+		</subclass>
 		
 		
 	</class>

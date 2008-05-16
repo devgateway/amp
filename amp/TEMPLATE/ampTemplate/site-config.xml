@@ -43,7 +43,9 @@
 			<put-item name="body" module="message" page="allMessages"/>
 		</layout>
 		
-		
+		<layout name="forwardMessagesLayout" extends="ampMessageLayout">
+			<put-item name="body" module="message" page="forwardMessage"/>
+		</layout>
 		
 		<layout name="footerLayout" file="footerLayout.jsp">
 			<put name="version">1.10c build 11.May.2008</put>
@@ -374,7 +376,10 @@
 		</layout>
 		 <!-- END ADD/EDIT LAYOUT -->
 
-		
+		<layout name="noLayout" file="noLayout.jsp">
+			<put name="title">none</put>
+			<put-item name="body" module="aim" instance="default"/>
+		</layout>
 
 		<!-- TRANSLATE LAYOUT -->
 		<layout name="TranslatorPortlet" extends="single">

@@ -11,18 +11,18 @@
 <c:set var="contextPath" scope="session">${pageContext.request.contextPath}</c:set>
 
 <script langauage="JavaScript">
-	function edit(id) {	
-		window.opener.location.href='${contextPath}/message/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&messageId='+id;
-		window.close();	
-	}
+//	function edit(id) {	
+//		window.opener.location.href='${contextPath}/message/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true&msgStateId='+id;
+//		window.close();	
+//	}
 	
-	function deleteAlert (id) {
-		messageForm.action="${contextPath}/message/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&messageId="+id;
-  		messageForm.target = "_self";
-  		messageForm.submit();
-  		window.opener.location.reload();
-  		window.close();  					
-	}
+//	function deleteAlert (id) {
+//		messageForm.action="${contextPath}/message/messageActions.do?editingMessage=false&actionType=removeSelectedMessage&msgStateId="+id;
+// 		messageForm.target = "_self";
+//  		messageForm.submit();
+//  		window.opener.location.reload();
+//  		window.close();  					
+//	}
 	
 	function closeWindow() {
 		window.opener.location.reload();
@@ -49,7 +49,7 @@
 														<tr>
 															<td width="13" height="20" background="module/aim/images/left-side.gif"/>
 															<td class="textalb" valign="center" height="20" bgcolor="#006699" align="center">
-																View Message
+																${messageForm.messageName}
 															</td>
 															<td width="13" height="20" background="module/aim/images/right-side.gif"/>
 														</tr>
@@ -67,44 +67,82 @@
 																	</tr>
 																	<tr>
 																		<td>
-																			<table width="100%" cellspacing="1" cellpadding="5" bgcolor="#ffffff">
+																			<table width="100%" cellspacing="1" cellpadding="5" bgcolor="#eeeeee">
+																				<tr><td></td></tr>
 																				<tr>
-																					<td align="right"><b><digi:trn key="message:name">Message Name</digi:trn></b></td>
-																					<td align="left" >${messageForm.messageName}</td>
-																				</tr>																				
-																				<tr>
-																					<td align="right"><b><digi:trn key="message:description">description</digi:trn></b></td>
-																					<td align="left">${messageForm.description}</td>
-																				</tr>
-																				
-																				<tr>
-																					<td align="right"><b><digi:trn key="priorityLevel">Priority Level</digi:trn></b></td>
-																					<td align="left">
+																					<td colspan="3" align="right">priority</td>
+																					<td align="left" bgcolor="#ffffff">
+																						<logic:equal name="messageForm" property="priorityLevel" value="-1">None</logic:equal>
 																						<logic:equal name="messageForm" property="priorityLevel" value="1">low</logic:equal>
-																						<logic:equal name="messageForm" property="priorityLevel" value="2">normal</logic:equal>
-																						<logic:equal name="messageForm" property="priorityLevel" value="3">high</logic:equal>
-																						<logic:equal name="messageForm" property="priorityLevel" value="4">moderate</logic:equal>
+																						<logic:equal name="messageForm" property="priorityLevel" value="2">medium</logic:equal>
+																						<logic:equal name="messageForm" property="priorityLevel" value="3">Critical</logic:equal>
+																						
 																					</td>
-																				</tr>																				
-																					
+																					<td></td>
+																				</tr>
+																				<tr><td></td></tr>
 																				<tr>
-																					<td align="right"><b><digi:trn key="message:creationDate">Creation Date</digi:trn></b></td>
-																					<td align="left">${messageForm.creationDate}</td>
-																				</tr>																																							
+																					<td align="right"><b><digi:trn key="message:from">From</digi:trn></b></td>
+																					<td align="left" bgcolor="#ffffff" >${messageForm.sender}</td>
+																					<td colspan="3"></td>
+																				</tr>
+																				<tr><td></td></tr>		
 																				<tr>
-																					<td colspan="3" align="center">
-																						<c:if test="${messageForm.className=='m'}">
+																					<td align="right"><b><digi:trn key="message:received">Received</digi:trn></b></td>
+																					<td align="left" bgcolor="#ffffff">${messageForm.creationDate}</td>
+																				</tr>
+																				<tr><td></td></tr>	
+																				<tr>																					
+																					<td align="center" colspan="4"><textarea rows="3" cols="45" readonly="readonly">${messageForm.description}</textarea></td>																					
+																				</tr>
+																				<c:if test="${not empty messageForm.forwardedMsg}">
+																			    	<tr>
+																			    		<td></td>																			    		
+																			    		<td >
+																			    			<table width="85%" align="center" border="0" style="border:1px solid; border-color: #484846;">
+																								<tr><td align="center" nowrap="nowrap"><font color="red">**********forwarded Message:*********</font></td></tr>
+																								<tr>
+																									<td width="10%"><digi:trn key="message:from">From</digi:trn></td>
+																									<td>&nbsp;${messageForm.forwardedMsg.from}</td>
+																								</tr>
+																								<tr>
+																									<td><digi:trn key="message:receiver">Received</digi:trn></td>
+																									<td>&nbsp;${messageForm.forwardedMsg.creationDate}</td>
+																								</tr>
+																								<tr>
+																									<td><digi:trn key="message:subject">Subject</digi:trn> </td>
+																									<td>${messageForm.forwardedMsg.name}																						
+																									</td>
+																								</tr>
+																								<tr>
+																									<td>To:</td>
+																									<td>
+																										<c:forEach var="receiver" items="${messageForm.forwardedMsg.receivers}"> ${receiver} ,&nbsp;</c:forEach>
+																									</td>
+																								</tr>
+																								<tr>
+																									<td><digi:trn key="message:msgDetails">Message Details</digi:trn> </td>
+																									<td>&nbsp;${messageForm.forwardedMsg.description}</td>
+																								</tr>
+																							</table>
+																			    		</td>																        	
+													                            	</tr>
+													                            </c:if>																																							
+																				<tr>
+																					<td colspan="4" align="center">
+																						<!-- <c:if test="${messageForm.className=='m'}">
 																							<c:set var="trnEdittBtn">
 																								<digi:trn key="aim:btn:edit">edit</digi:trn>
 																							</c:set> 
-																							<input type="button" value="${trnEdittBtn }" onclick="edit(${messageForm.messageId});" />
+																							<input type="button" value="${trnEdittBtn }" onclick="edit(${messageForm.msgStateId});" />
 																							<c:set var="trnDeletetBtn"><digi:trn key="aim:btn:delete">delete</digi:trn>	</c:set> 
-																						<input type="button" value="${trnDeletetBtn }" onclick="deleteAlert(${messageForm.messageId});" />
-																						</c:if>																						
+																						<input type="button" value="${trnDeletetBtn }" onclick="deleteAlert(${messageForm.msgStateId});" />
+																						</c:if>  --> 																						
 																						<c:set var="trnCloseBtn"><digi:trn key="aim:btn:close">Close</digi:trn>	</c:set>
 																						<input type="button" value="${trnCloseBtn }" onclick="closeWindow()" />
 																					</td>
 																				</tr>
+																				
 																			</table>
 																		</td>
 																	</tr>

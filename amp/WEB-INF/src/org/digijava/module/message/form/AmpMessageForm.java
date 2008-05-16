@@ -1,35 +1,74 @@
 package org.digijava.module.message.form;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.module.aim.helper.Team;
 import org.digijava.module.message.dbentity.AmpMessage;
+import org.digijava.module.message.dbentity.AmpMessageState;
+import org.digijava.module.message.helper.MessageHelper;
 
 public class AmpMessageForm extends ActionForm {
+	/**
+	 * serial version id
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private Long messageId;
+	private Long msgStateId;
 	private String messageName;
 	private Long priorityLevel;
 	private Long messageType;
 	private String senderType; //activity , User e.t.c.
 	private Long senderId;
+	private String sender;
 	private String creationDate;
 	private boolean editingMessage=false;
-	private String description;
-	private String receiverType;
-	private Long receiverId; //here comes Id from the receivers dropdown
+	private String description;	
+	private String[] receiversIds; //here come Ids from the receivers dropdown,like t:teamId or m:memberId
+	private List<LabelValueBean> receivers;
+	private Long receiverId; //I think this should be deleted too
+	private int tabIndex=0;		//which tab we are viewing(messages tab, alerts, approvals ...)
+	private String childTab; //child tab on tabIndex. used to separate received messages from sent of draft 
+	private MessageHelper forwardedMsg;
 	
-	private List<AmpMessage> allMessages;
-	private List<LabelValueBean> receivers; //it's used to hold receivers list loaded according to receiverType(Here Maybe held Teams,Users)
+	private int setAsAlert;
 	
-	private List<LabelValueBean> teamsForTeamMembers; //Used if in add Message page user selects Team Member in receiver Type
-	private Long selectedTeamId; 	//Used if in add Message page user selects Team Member in receiver Type. This field holds selected teamId
+	private String [] allPages;
+	private String page;
+	private String lastPage;
+	private int pagesToShow;
+	private int offset;
+	
+	/**
+	 * used to separate different kinds of messages
+	 */
+	private int msgType=0; 								//holds amount of messages
+	private int approvalType=0;							//holds amount of approvals
+	private int calendarEventType=0;					//holds amount of calendar events
+	private int alertType=0;							//holds amount of alerts
+	
+	
+	private Map<String,Team> teamsMap;	
+	private List<AmpMessageState> messagesForTm;
+	private List<AmpMessageState> pagedMessagesForTm; //used for pagination
 	
 	private String className;
-
+	
 
 	public String getClassName() {
 		return className;
+	}
+	
+	public int getTabIndex() {
+		return tabIndex;
+	}
+
+	public void setTabIndex(int tabIndex) {
+		this.tabIndex = tabIndex;
 	}
 
 	public void setClassName(String className) {
@@ -107,29 +146,34 @@ public class AmpMessageForm extends ActionForm {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
 
-	public List<AmpMessage> getAllMessages() {
-		return allMessages;
+	public String[] getReceiversIds() {
+		return receiversIds;
 	}
 
-	public void setAllMessages(List<AmpMessage> allMessages) {
-		this.allMessages = allMessages;
+	public void setReceiversIds(String[] receiversIds) {
+		this.receiversIds = receiversIds;
 	}
-
-	public String getReceiverType() {
-		return receiverType;
-	}
-
-	public void setReceiverType(String receiverType) {
-		this.receiverType = receiverType;
-	}
-
+	
 	public Long getReceiverId() {
 		return receiverId;
 	}
 
 	public void setReceiverId(Long receiverId) {
 		this.receiverId = receiverId;
+	}
+
+	public Map<String, Team> getTeamsMap() {
+		return teamsMap;
+	}
+
+	public void setTeamsMap(Map<String, Team> teamsMap) {
+		this.teamsMap = teamsMap;
+	}	
+	
+	public Collection<Team> getTeamMapValues(){
+		return (Collection<Team>)teamsMap.values();
 	}
 
 	public List<LabelValueBean> getReceivers() {
@@ -140,20 +184,137 @@ public class AmpMessageForm extends ActionForm {
 		this.receivers = receivers;
 	}
 
-	public List<LabelValueBean> getTeamsForTeamMembers() {
-		return teamsForTeamMembers;
+	public List<AmpMessageState> getMessagesForTm() {
+		return messagesForTm;
 	}
 
-	public void setTeamsForTeamMembers(List<LabelValueBean> teamsForTeamMembers) {
-		this.teamsForTeamMembers = teamsForTeamMembers;
+	public void setMessagesForTm(List<AmpMessageState> messagesForTm) {
+		this.messagesForTm = messagesForTm;
 	}
 
-	public Long getSelectedTeamId() {
-		return selectedTeamId;
+	public Long getMsgStateId() {
+		return msgStateId;
 	}
 
-	public void setSelectedTeamId(Long selectedTeamId) {
-		this.selectedTeamId = selectedTeamId;
+	public void setMsgStateId(Long msgStateId) {
+		this.msgStateId = msgStateId;
 	}
 
+	public String getSender() {
+		return sender;
+	}
+
+	public void setSender(String sender) {
+		this.sender = sender;
+	}
+
+	public int getMsgType() {
+		return msgType;
+	}
+
+	public void setMsgType(int msgType) {
+		this.msgType = msgType;
+	}
+
+	public int getApprovalType() {
+		return approvalType;
+	}
+
+	public void setApprovalType(int approvalType) {
+		this.approvalType = approvalType;
+	}
+
+	public int getCalendarEventType() {
+		return calendarEventType;
+	}
+
+	public void setCalendarEventType(int calendarEventType) {
+		this.calendarEventType = calendarEventType;
+	}
+
+	public int getAlertType() {
+		return alertType;
+	}
+
+	public void setAlertType(int alertType) {
+		this.alertType = alertType;
+	}
+
+	public String getChildTab() {
+		return childTab;
+	}
+
+	public void setChildTab(String childTab) {
+		this.childTab = childTab;
+	}
+
+	public int getSetAsAlert() {
+		return setAsAlert;
+	}
+
+	public void setSetAsAlert(int setAsAlert) {
+		this.setAsAlert = setAsAlert;
+	}
+
+	public MessageHelper getForwardedMsg() {
+		return forwardedMsg;
+	}
+
+	public void setForwardedMsg(MessageHelper forwardedMsg) {
+		this.forwardedMsg = forwardedMsg;
+	}
+
+	public String[] getAllPages() {
+		return allPages;
+	}
+
+	public void setAllPages(String[] allPages) {
+		this.allPages = allPages;
+	}
+
+	public String getPage() {
+		return page;
+	}
+
+	public void setPage(String page) {
+		this.page = page;
+	}
+
+	public List<AmpMessageState> getPagedMessagesForTm() {
+		return pagedMessagesForTm;
+	}
+
+	public void setPagedMessagesForTm(List<AmpMessageState> pagedMessagesForTm) {
+		this.pagedMessagesForTm = pagedMessagesForTm;
+	}
+
+	public String getLastPage() {
+		return lastPage;
+	}
+
+	public void setLastPage(String lastPage) {
+		this.lastPage = lastPage;
+	}
+
+	public int getPagesToShow() {
+		return pagesToShow;
+	}
+
+	public void setPagesToShow(int pagesToShow) {
+		this.pagesToShow = pagesToShow;
+	}
+
+	public int getOffset() {		
+		if (Integer.parseInt(getPage())> (this.getPagesToShow()/2)){
+			setOffset((Integer.parseInt(getPage()) - (this.getPagesToShow()/2))-1);		
+		}
+		else {
+			setOffset(0);
+		}	
+		return offset;
+	}
+
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
 }

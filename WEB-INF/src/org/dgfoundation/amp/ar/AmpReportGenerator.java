@@ -23,12 +23,18 @@ import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
+
+import com.lowagie.text.Font;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfPCell;
 
 /**
  * 
@@ -492,6 +498,22 @@ public class AmpReportGenerator extends ReportGenerator {
 				Long id = (Long) ii.next();
 				Cell fakeC = hc.getWorker().newCellInstance();
 				fakeC.setOwnerId(id);
+				//
+				//requirements for translation purposes
+				TranslatorWorker translator = TranslatorWorker.getInstance();
+				String siteId = rd.getParent().getReportMetadata().getSiteId();
+				String locale = rd.getParent().getReportMetadata().getLocale();				
+				String text = fakeC.getValue().toString();				
+				String translatedText = null;
+				String prefix = "aim:reportGenerator:";
+				try {
+					translatedText = TranslatorWorker.translate(prefix+text.toLowerCase(), locale, siteId);
+				} catch (WorkerException e) {
+					e.printStackTrace();
+				}
+				if (translatedText.compareTo("") == 0) translatedText=text;
+				else fakeC.setValue(translatedText);	
+				//
 				hc.addCell(fakeC);
 			}
 			

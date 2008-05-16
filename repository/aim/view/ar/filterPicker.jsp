@@ -257,7 +257,7 @@
 				</tr>
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5"><html:select property="currency"
-						style="width: 250px" styleClass="inp-text">
+						style="width: 300px" styleClass="inp-text">
 						<html:optionsCollection property="currencies" value="ampCurrencyId"
 							label="currencyName" />
 					</html:select></td>
@@ -268,7 +268,7 @@
 				</tr>
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5"><category:showoptions size="3"
-						outerstyle="width: 250px" styleClass="inp-text"
+						outerstyle="width: 300px" styleClass="inp-text"
 						name="aimReportsFilterPickerForm"
 						property="selectedFinancingInstruments" multiselect="true"
 						keyName="<%=org.digijava.module.aim.helper.CategoryConstants.FINANCING_INSTRUMENT_KEY %>" />
@@ -280,7 +280,7 @@
 				</tr>
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5"><category:showoptions size="3"
-						outerstyle="width: 250px" styleClass="inp-text"
+						outerstyle="width: 300px" styleClass="inp-text"
 						name="aimReportsFilterPickerForm"
 						property="selectedTypeOfAssistance" multiselect="true"
 						keyName="<%=org.digijava.module.aim.helper.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" />
@@ -392,7 +392,7 @@
 							<td colspan="5"><digi:trn key="rep:filer:DonorType">Donor Type</digi:trn>
 								<br/>
 							
-								<html:select style="width: 250px"
+								<html:select style="width: 300px"
 								multiple="true" property="selectedDonorTypes" size="3"
 								styleClass="inp-text">
 								<html:optionsCollection property="donorTypes" value="ampOrgTypeId"
@@ -408,7 +408,7 @@
 							<td colspan="5">
 								<digi:trn key="rep:filer:DonorGroup">Donor Group</digi:trn>
 								<br />
-								<html:select multiple="true" style="width: 250px"
+								<html:select multiple="true" style="width: 300px"
 								property="selectedDonorGroups" size="3" styleClass="inp-text">
 								<html:optionsCollection property="donorGroups"
 									value="ampOrgGrpId" label="orgGrpName" />
@@ -507,7 +507,7 @@
 				
 				<tr bgcolor="#EEEEEE">
 					<td valign="top"><category:showoptions
-						outerstyle="width: 190px" styleClass="inp-text"
+						outerstyle="width: 300px" styleClass="inp-text"
 						property="selectedStatuses" size="3"
 						name="aimReportsFilterPickerForm" multiselect="true"
 						keyName="<%=org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY%>" />
@@ -518,7 +518,7 @@
 				<tr>
 						<td>
 							<b><digi:trn key="rep:filer:RisksTitle">Risks</digi:trn></b> <br />
-							<html:select multiple="true" style="width: 190px"
+							<html:select multiple="true" style="width: 300px"
 								property="selectedRisks" size="3" styleClass="inp-text">
 								<html:optionsCollection property="risks"
 									value="ampIndRiskRatingsId" label="ratingName" />

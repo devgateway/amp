@@ -145,6 +145,13 @@ public class AddAmpActivity extends Action {
 
      // load all the active currencies
       eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
+      
+      
+       if (eaForm.getActivityId()!=null && eaForm.getActivityId()!=0&&eaForm.getIndicatorsME()==null){
+              List indicators=IndicatorUtil.getActivityIndicatorHelperBeans(eaForm.getActivityId());
+              eaForm.setIndicatorsME(indicators);
+             
+    }
 
     //Only currencies havening exchanges rates AMP-2620
       ArrayList<AmpCurrency> validcurrencies = new ArrayList<AmpCurrency>();
@@ -1387,13 +1394,13 @@ Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCo
       else if (eaForm.getStep().equals("10")) { // show step 9 - M&E page
      
 //          eaForm.setIndicatorsME(IndicatorUtil.getActivityIndicatorsList(eaForm.getActivityId()));
-    	  if (eaForm.getActivityId()!=null && eaForm.getActivityId()!=0){
+    	 /* if (eaForm.getActivityId()!=null && eaForm.getActivityId()!=0){
               List indicators=IndicatorUtil.getActivityIndicatorHelperBeans(eaForm.getActivityId());
               eaForm.setIndicatorsME(indicators);
              
             
    
-    	  }
+    	  }*/
         
       
          /* for(Iterator itr = IndicatorUtil.getAllDefaultIndicators(eaForm.getActivityId()).iterator(); itr.hasNext();){

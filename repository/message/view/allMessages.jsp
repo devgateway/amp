@@ -208,7 +208,7 @@
 													<td>&nbsp;${all.message.creationDate}</td>
 												</tr>
 												<tr>
-													<td><digi:trn key="message:priority"></digi:trn> </td>
+													<td><digi:trn key="message:priority">priority</digi:trn> </td>
 													<td>&nbsp;
 														<c:if test="${all.message.priorityLevel==1}">Low</c:if>
 														<c:if test="${all.message.priorityLevel==2}">Medium</c:if>

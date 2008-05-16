@@ -167,18 +167,18 @@
 														<logic:empty name="aimOrgManagerForm" property="pagedCol">
 														<tr>
 															<td colspan="5">
-                                                   		<b><digi:trn key="aim:noOrganization">No
-                                                        organization present</digi:trn>
-                                                       </b>
+		                                                   		<b><digi:trn key="aim:noOrganization">No
+		                                                        organization present</digi:trn>
+		                                                        </b>
 															</td>
 														</tr>
 														</logic:empty>
 														<logic:notEmpty name="aimOrgManagerForm" 	property="pagedCol">
 														<tr>
 															<td width="100%">
-																<table width="800" border=0	 bgColor=#f4f4f2 cellpadding="2">
+																<table  bgColor=#f4f4f2 cellpadding="2">
 																	<tr>
-																		<td height="60" width="550">
+																		<td>
 																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy!='nameAscending'}">
 																				<digi:link href="/organisationManager.do?sortBy=nameAscending&reset=false&orgSelReset=false">
 																					<b><digi:trn key="aim:organizationName">Organization Name</digi:trn></b>
@@ -192,7 +192,7 @@
 																			<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy=='nameAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
 																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='nameDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 																		</td>
-																		<td height="60" width="100">																		
+																		<td>																		
 																			<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='acronymAscending'}">
 																				<digi:link href="/organisationManager.do?sortBy=acronymAscending&reset=false&orgSelReset=false">
 																					<b><digi:trn key="aim:organizationAcronym">Organization Acronym</digi:trn></b>
@@ -209,7 +209,7 @@
 																	<%--<td height="60" width="171"><b>
 																			<digi:trn key="aim:organizationCountry">Country</digi:trn></b>
 																		</td>--%>
-																		<td height="60" width="160">
+																		<td>
 																			<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='typeAscending'}">
 																				<digi:link href="/organisationManager.do?sortBy=typeAscending&reset=false&orgSelReset=false">
 																					<b><digi:trn key="aim:organizationType">Type</digi:trn></b>
@@ -223,7 +223,7 @@
 																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='typeAscending'}"><img  src="/repository/aim/images/up.gif"/></c:if>
 																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='typeDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>																																			
 																		</td>
-																		<td height="60" width="140">
+																		<td>
 																		<c:if test="${empty aimOrgManagerForm.sortBy || aimOrgManagerForm.sortBy!='groupAscending'}">
 																				<digi:link href="/organisationManager.do?sortBy=groupAscending&reset=false&orgSelReset=false">
 																					<b><digi:trn key="aim:organizationGroup">Organization Group</digi:trn></b>
@@ -238,9 +238,9 @@
 																			<c:if test="${not empty aimOrgManagerForm.sortBy && aimOrgManagerForm.sortBy=='groupDescending'}"><img src="/repository/aim/images/down.gif"/></c:if>
 																		</td>
 																	</tr>
-																<logic:iterate name="aimOrgManagerForm" property="pagedCol" id="organisation">
-                                                           			<tr>
-	                                                           			<td height="60" width="550">
+																<logic:iterate name="aimOrgManagerForm" property="pagedCol" id="organisation" indexId="index">
+                                                           			<tr bgcolor=<%=(index%2)==1 ? "f4f4f2" : "cccccc" %>>
+	                                                           			<td>
 																		  <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																		  <c:set target="${urlParams}" property="mode" value="resetMode" />
 																		  <c:set target="${urlParams}" property="actionFlag" value="edit" />
@@ -248,10 +248,10 @@
 																		  	<bean:write name="organisation" property="ampOrgId" />
 																		  </c:set>
 																		  <digi:link href="/editOrganisation.do" name="urlParams">																		  	
-																		  	<bean:write name="organisation" property="name" />
+																		  	<bean:write name="organisation" property="name" /> 
 																		  </digi:link>
 																		</td>
-																		<td height="60" width="150">
+																		<td>
 																		  	<bean:write name="organisation" property="acronym" />																		  
 																		</td>
 																	<%--<td height="30" width="171">
@@ -259,13 +259,13 @@
                                                               					<c:out value="${organisation.countryId.countryName}" />
                                                               				</logic:notEmpty>
 																		</td>--%>
-																		<td height="60" width="160">
+																		<td>
 																			<logic:notEmpty name="organisation" property="orgTypeId">
                                                               					<c:out value="${organisation.orgTypeId.orgType}" />
                                                               					<%--<bean:write name="organisation" property="${organisation.orgTypeId.orgType}" />--%>
                                                               				</logic:notEmpty>
 																		</td>
-																		<td height="60" width="140">
+																		<td>
 																			<logic:notEmpty name="organisation" property="orgGrpId">
                                                               					<c:out value="${organisation.orgGrpId.orgGrpName}" />
                                                               				</logic:notEmpty>
@@ -421,71 +421,8 @@
 							</table>
 						</td>
 						<td noWrap width=100% vAlign="top">
-							<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>
-								<tr>
-									<td>
-										<!-- Other Links -->
-										<table cellPadding=0 cellSpacing=0 width=100>
-											<tr>
-												<td bgColor=#c9c9c7 class=box-title>
-													<digi:trn key="aim:otherLinks">
-													Other links
-													</digi:trn>
-												</td>
-												<td background="module/aim/images/corner-r.gif" 	height="17" width=17>
-												&nbsp;
-												</td>
-											</tr>
-										</table>
-									</td>
-								</tr>
-								<tr>
-									<td bgColor=#ffffff class=box-border>
-										<table cellPadding=5 cellSpacing=1 width="100%">
-											<tr>
-												<td>
-													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
-												<td>
-														<digi:link href="/editOrganisation.do?actionFlag=create&mode=resetMode" >
-															<digi:trn key="aim:addNewOrganization">Add an Organization</digi:trn></digi:link>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
-												<td>
-														<digi:link href="/orgTypeManager.do" >
-															<digi:trn key="aim:orgTypeManager">Organization Type Manager</digi:trn></digi:link>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
-												<td>
-														<digi:link href="/orgGroupManager.do" >
-															<digi:trn key="aim:orgGroupManager">Organization Group Manager</digi:trn></digi:link>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
-												<td>
-													<digi:link href="/admin.do">
-													<digi:trn key="aim:AmpAdminHome">
-													Admin Home
-													</digi:trn>
-													</digi:link>
-												</td>
-											</tr>
-											<!-- end of other links -->
-										</table>
-									</td>
-								</tr>
-							</table>
+							<jsp:include page="orgManagerOtherLinks.jsp" />
 						</td>
-					</tr>
-				</table>
-			</td>
 		</tr>
 	</table>
 	</td>

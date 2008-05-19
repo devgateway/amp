@@ -134,7 +134,7 @@ public class XLSExportAction extends Action {
             {
                 translatedCurrency=TranslatorWorker.translate("aim:currency:" +Constants.DEFAULT_CURRENCY.toLowerCase().replaceAll(" ", ""),locale,siteId);
             }
-            
+            translatedNotes = translatedNotes.replaceAll("\n", " ");
 			cell.setCellValue(translatedNotes+translatedCurrency/*+"\n"*/);
 			
 			grdx.makeColSpan(rd.getTotalDepth());

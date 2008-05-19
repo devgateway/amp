@@ -2,6 +2,7 @@
 <config>
 	<secondary-pages>
 		<page page="gisDashboard" name="gis_dashboard" title="AMP GIS dashboard"/>
+		<page page="mapLoader" name="mapLoader" title="AMP GIS map loader"/>
 	</secondary-pages>
 </config>
 

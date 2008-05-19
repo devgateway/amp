@@ -84,23 +84,25 @@ public final class ArConstants {
 	public final static String TOTAL_COMMITMENTS="Total Commitments";
 	
 	//maldives only:
-	public final static String SECTOR_PERCENTAGE="Sector Percentage";
+//	public final static String SECTOR_PERCENTAGE="Sector Percentage";
+	
+	public final static String PERCENTAGE="Percentage";
 	
 	//draft in title
 	public final static String DRAFT="DRAFT";
 	//bolivia:
-	public final static String LOCATION_PERCENTAGE="Location Percentage";
-	public final static String COMPONENTE_PERCENTAGE="Componente Percentage";
+//	public final static String LOCATION_PERCENTAGE="Location Percentage";
+//	public final static String COMPONENTE_PERCENTAGE="Componente Percentage";
 	
-	public final static String EXECUTING_AGENCY_PERCENTAGE="Eexecuting Agency Percentage";
+//	public final static String EXECUTING_AGENCY_PERCENTAGE="Eexecuting Agency Percentage";
 	
 	
 	//burkina
-	public final static String PROGRAM_PERCENTAGE="Program Percentage";
+//	public final static String PROGRAM_PERCENTAGE="Program Percentage";
 	
 	
 	
-	public final static String NPO_PERCENTAGE="National Planning Objectives Percentage";
+//	public final static String NPO_PERCENTAGE="National Planning Objectives Percentage";
 	//hierarchysorter
 	public final static String HIERARCHY_SORTER_TITLE="Title";
 	

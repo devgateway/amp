@@ -6,6 +6,7 @@
 package org.dgfoundation.amp.ar.cell;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
@@ -13,6 +14,8 @@ import org.dgfoundation.amp.ar.Categorizable;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
+import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 
 /**
  * 
@@ -132,13 +135,13 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	}
 
 	
-public void applyMetaFilter(String columnName,String metaName,Cell metaCell,CategAmountCell ret) {
-	if(metaCell.getColumn().getName().equals(columnName)) {
+public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret) {
+	if(metaCell.getColumn().getName().equals(columnName) && !metaCell.getValue().equals(ArConstants.UNALLOCATED)) {
 		//we need to get the location percentage, it is stored in the MetaText of related to the owner of the current cell
 		CellColumn c=(CellColumn) metaCell.getColumn();
 		MetaTextCell relatedLocation=(MetaTextCell) c.getByOwnerAndValue(this.getOwnerId(),metaCell.getValue());
 		if(relatedLocation!=null) { 
-		MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedLocation.getMetaData(),metaName);
+		MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedLocation.getMetaData(),ArConstants.PERCENTAGE);
 		if(percentMeta!=null) {
 			Double percentage=(Double) percentMeta.getValue() ;
 			ret.setPercentage(percentage.doubleValue());			
@@ -189,14 +192,23 @@ public Cell filter(Cell metaCell,Set ids) {
 		//apply metatext filters
 		if(metaCell instanceof MetaTextCell) {
 			//apply metatext filters for column Sector
-		 applyMetaFilter("Sector", ArConstants.SECTOR_PERCENTAGE, metaCell, ret);
-		 applyMetaFilter("Executing Agency", ArConstants.EXECUTING_AGENCY_PERCENTAGE, metaCell, ret);
-		 applyMetaFilter("Sub-Sector", ArConstants.SECTOR_PERCENTAGE, metaCell, ret);
-		 applyMetaFilter("Region", ArConstants.LOCATION_PERCENTAGE, metaCell, ret);
-		 applyMetaFilter("Componente", ArConstants.COMPONENTE_PERCENTAGE, metaCell, ret);
-		 applyMetaFilter("National Planning Objectives", ArConstants.NPO_PERCENTAGE, metaCell, ret);
-		 applyMetaFilter("Primary Program", ArConstants.PROGRAM_PERCENTAGE, metaCell, ret);
-		 applyMetaFilter("Secondary Program", ArConstants.PROGRAM_PERCENTAGE, metaCell, ret);
+//		 applyMetaFilter("Sector", ArConstants.SECTOR_PERCENTAGE, metaCell, ret);
+//		 applyMetaFilter("Executing Agency", ArConstants.EXECUTING_AGENCY_PERCENTAGE, metaCell, ret);
+//		 applyMetaFilter("Sub-Sector", ArConstants.SECTOR_PERCENTAGE, metaCell, ret);
+//		 applyMetaFilter("Region", ArConstants.LOCATION_PERCENTAGE, metaCell, ret);
+//		 applyMetaFilter("Componente", ArConstants.COMPONENTE_PERCENTAGE, metaCell, ret);
+//		 applyMetaFilter("National Planning Objectives", ArConstants.NPO_PERCENTAGE, metaCell, ret);
+//		 applyMetaFilter("Primary Program", ArConstants.PROGRAM_PERCENTAGE, metaCell, ret);
+//		 applyMetaFilter("Secondary Program", ArConstants.PROGRAM_PERCENTAGE, metaCell, ret);
+			
+			for (Iterator iterator = this.getNearestReportData().getReportMetadata().getHierarchies().iterator(); iterator.hasNext();) {
+				AmpReportHierarchy col = (AmpReportHierarchy) iterator.next();
+				if(col.getColumn().getCellType().contains(MetaTextCell.class.getSimpleName()))
+					applyMetaFilter(col.getColumn().getColumnName(), metaCell, ret);
+			}
+			
+			 
+
 		}
 		
 		//if(ret.getMergedCells().size()>0) 

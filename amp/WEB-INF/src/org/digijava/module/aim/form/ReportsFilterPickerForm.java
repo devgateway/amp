@@ -5,6 +5,7 @@ package org.digijava.module.aim.form;
 
 import java.util.Collection;
 
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
@@ -76,6 +77,65 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Long defaultCurrency;
 	private boolean isnewreport;
 	private Long countYearFrom;
+        
+       
+        private List nationalPlanningObjectives;
+        private List primaryPrograms;
+        private List secondaryPrograms;
+        
+        private Object[] selectedNatPlanObj;
+        private Object[] selectedPrimaryPrograms;
+        private Object[] selectedSecondaryPrograms;
+
+
+        public Object[] getSelectedNatPlanObj() {
+            return selectedNatPlanObj;
+        }
+
+        public void setSelectedNatPlanObj(Object[] selectedNatPlanObj) {
+            this.selectedNatPlanObj = selectedNatPlanObj;
+        }
+
+        public Object[] getSelectedPrimaryPrograms() {
+            return selectedPrimaryPrograms;
+        }
+
+        public void setSelectedPrimaryPrograms(Object[] selectedPrimaryPrograms) {
+            this.selectedPrimaryPrograms = selectedPrimaryPrograms;
+        }
+
+        public Object[] getSelectedSecondaryPrograms() {
+            return selectedSecondaryPrograms;
+        }
+
+        public void setSelectedSecondaryPrograms(Object[] selectedSecondaryPrograms) {
+            this.selectedSecondaryPrograms = selectedSecondaryPrograms;
+        }
+          
+        public List getNationalPlanningObjectives() {
+            return nationalPlanningObjectives;
+        }
+
+        public void setNationalPlanningObjectives(List nationalPlanningObjectives) {
+            this.nationalPlanningObjectives = nationalPlanningObjectives;
+        }
+
+        public List getPrimaryPrograms() {
+            return primaryPrograms;
+        }
+
+        public void setPrimaryPrograms(List primaryPrograms) {
+            this.primaryPrograms = primaryPrograms;
+        }
+
+        public List getSecondaryPrograms() {
+            return secondaryPrograms;
+        }
+
+        public void setSecondaryPrograms(List secondaryPrograms) {
+            this.secondaryPrograms = secondaryPrograms;
+        }
+	
 
 
 	public Integer getSelectedBudget() {
@@ -143,6 +203,9 @@ public class ReportsFilterPickerForm extends ActionForm {
 			this.selectedBeneficiaryAgency		= null;
 			this.selectedImplementingAgency		= null;
 			this.selectedBudget					= null;
+                        this.selectedNatPlanObj=null;
+                        this.selectedPrimaryPrograms=null;
+                        this.selectedSecondaryPrograms=null;
 		}
 	}
 	public Collection<BeanWrapperImpl> getCountYears() {

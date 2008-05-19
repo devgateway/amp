@@ -411,6 +411,14 @@ background-color: yellow;
 			aimReportsFilterPickerForm.selectedSectors.selectedIndex=-1;
 		if (aimReportsFilterPickerForm.selectedSecondarySectors)
 			aimReportsFilterPickerForm.selectedSecondarySectors.selectedIndex=-1;
+                    
+          
+          if (aimReportsFilterPickerForm.selectedNatPlanObj)
+              aimReportsFilterPickerForm.selectedNatPlanObj.selectedIndex=-1;
+          if (aimReportsFilterPickerForm.selectedPrimaryPrograms)
+              aimReportsFilterPickerForm.selectedPrimaryPrograms.selectedIndex=-1;
+          if (aimReportsFilterPickerForm.selectedSecondaryPrograms)
+              aimReportsFilterPickerForm.selectedSecondaryPrograms.selectedIndex=-1;
 			
 		if (aimReportsFilterPickerForm.selectedBudget)
 			aimReportsFilterPickerForm.selectedBudget.checked=false;

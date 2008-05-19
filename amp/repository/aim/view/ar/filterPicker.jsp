@@ -317,7 +317,7 @@
 				<table align="center" cellpadding="1" cellspacing="1" onmouseover="Tip('${tooltip_translation}');">
 						<tr bgcolor="#EEEEEE">
 					<td colspan="5">
-					<b><digi:trn key="rep:filter:RegionAndSectorTitle">Region and Sector</digi:trn></b>
+					<b><digi:trn key="rep:filter:RegionAndSectorAndProgramTitle">Region and Sector and Program</digi:trn></b>
 					<br>
 					</td>
 				</tr>
@@ -360,6 +360,54 @@
 							multiple="true" property="selectedSecondarySectors" size="3"
 							style="width: 300px" styleClass="inp-text">
 							<html:optionsCollection property="secondarySectors" value="ampSectorId"
+								label="name" />
+						</html:select>
+					</td>
+				</tr>
+				</field:display>
+                                
+                            <field:display name="National Planning Objectives" feature="NPD Programs">
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5"><digi:trn key="rep:filer:nationalPlanningObjectives">National Planning Objectives</digi:trn></td>
+				</tr>
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5" styleClass="inp-text">
+						<html:select
+							multiple="true" property="selectedNatPlanObj" size="3"
+							style="width: 300px" styleClass="inp-text">
+							<html:optionsCollection property="nationalPlanningObjectives" value="ampThemeId"
+								label="name" />
+						</html:select>
+					</td>
+				</tr>
+				</field:display>
+                                
+                               <field:display name="Primary Program" feature="NPD Programs">
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5"><digi:trn key="rep:filer:primaryProgram">Primary Program</digi:trn></td>
+				</tr>
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5" styleClass="inp-text">
+						<html:select
+							multiple="true" property="selectedPrimaryPrograms" size="3"
+							style="width: 300px" styleClass="inp-text">
+							<html:optionsCollection property="primaryPrograms" value="ampThemeId"
+								label="name" />
+						</html:select>
+					</td>
+				</tr>
+				</field:display>
+                                
+                                <field:display name="Secondary Program" feature="NPD Programs">
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5"><digi:trn key="rep:filer:secondaryProgram">Secondary Program</digi:trn></td>
+				</tr>
+				<tr bgcolor="#EEEEEE">
+					<td colspan="5" styleClass="inp-text">
+						<html:select
+							multiple="true" property="selectedSecondaryPrograms" size="3"
+							style="width: 300px" styleClass="inp-text">
+							<html:optionsCollection property="secondaryPrograms" value="ampThemeId"
 								label="name" />
 						</html:select>
 					</td>

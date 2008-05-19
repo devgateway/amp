@@ -971,6 +971,112 @@ public class ProgramUtil {
 			}
 			return subThemes;
 		}
+                
+                
+                /**
+		 * Returns all subchildren in the tree
+		 * Recursively iterates on all children programs till the end of the branch.
+                 * The names of children programs will be decorated with dashes.
+                 * Use the method only for better presentation purpose
+		 * @param parentThemeId db ID of the parent program
+                 * @param depth specified the level of program in hierarchy.
+                 * e.i. 0 means first level program, 1 second level, etc. 
+                 * We use it to add "--" to the name of program for better presentation.
+		 * @return collection of AmpTheme beans
+		 * @throws AimException if anything goes wrong
+                 * @see #getAmpThemesAndSubThemes(AmpTheme parent)
+                 * @see #getAllSubThemesFor(Collection parentThemes)
+		 */
+		public static List getAllSubThemesByParentId(Long parentThemeId, int depth) throws AimException
+		{
+			List subThemes = new ArrayList();
+			try
+			{
+				Collection progs = getSubThemes(parentThemeId);
+				if (progs != null && progs.size()>0){
+					for (Iterator iter = progs.iterator(); iter.hasNext();) {
+						AmpTheme child = (AmpTheme) iter.next();
+                                                AmpTheme childWithNewName=new AmpTheme();
+                                                String name="";
+                                                for(int i=0;i<depth;i++){
+                                                name+="--";
+                                                }
+                                                childWithNewName.setName(name+"--"+child.getName());
+                                                childWithNewName.setAmpThemeId(child.getAmpThemeId());
+						List col = getAllSubThemesByParentId(child.getAmpThemeId(),depth+1);
+                                                col.add(childWithNewName);
+                                              
+						subThemes.addAll(col);
+					}
+				}
+			}
+			catch(Exception e1)
+			{
+				logger.error("Unable to get all the sub-themes");
+				logger.debug("Exception : "+e1);
+				throw new AimException("Cannot get sub themes for "+parentThemeId,e1);
+			}
+			return subThemes;
+		}
+                
+                
+    /**
+     * Returns List of programs and sub-programs using {@link #getAllSubThemesByParentId(Long parentThemeId, int depth) } method.
+     *  The names of the programs are embellished 
+     * (The main parent program will be in upper case and  dashes will be added to children programs) 
+     *  for better presentation. 
+     *  
+     * @param parent parent program
+     * @return collection of AmpTheme beans
+     * 
+     */
+    public static List<AmpTheme> getAmpThemesAndSubThemes(AmpTheme parent) {
+        List<AmpTheme> ret = new ArrayList<AmpTheme>();
+
+        try {
+            /* 
+             We must create new program object because if you modify the name of program 
+             the changes will be saved in db even though you don't save collection, strange issue....
+            */
+            AmpTheme parentWithNewName=new AmpTheme();
+            parentWithNewName.setName(parent.getName().toUpperCase());
+            parentWithNewName.setAmpThemeId(parent.getAmpThemeId());
+            ret.add(parentWithNewName);
+            List<AmpTheme> dbChildrenReturnSet =
+                    ProgramUtil.getAllSubThemesByParentId(parent.getAmpThemeId(),0);
+            Collections.reverse(dbChildrenReturnSet);
+            ret.addAll(dbChildrenReturnSet);
+        
+
+        } catch (DgException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return ret;
+    }
+
+                
+                /**
+                 * Return all subchildren of the parent program
+                 * Recursively iterates on all child programs till the end of the branch using {@link #getAmpThemesAndSubThemes(AmpTheme parent)} .
+                 * The method is used for better presentation purpose only
+                 * @param parentThemes collection of  parent programs
+                 * @return collection of AmpTheme beans
+                 * @throws AimException if anything goes wrong
+                 */
+		public static List getAllSubThemesFor(Collection parentThemes) throws AimException
+		{
+                    List<AmpTheme> programs=new ArrayList();
+                    
+                    Iterator <AmpTheme> programsIter=parentThemes.iterator();
+                    while(programsIter.hasNext()){
+                        AmpTheme program=programsIter.next();
+                        programs.addAll(getAmpThemesAndSubThemes(program));
+                    }
+                    return programs;
+			
+		}
 
 		/**
 		 * @deprecated use {@link IndicatorUtil} methods. 

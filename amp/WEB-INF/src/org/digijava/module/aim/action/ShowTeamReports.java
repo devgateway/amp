@@ -119,7 +119,7 @@ public class ShowTeamReports extends Action {
 					}
 				}
 			}
-			if (!found){
+			if (!found && defaultTeamReport!=null){
 				teamResults.add(defaultTeamReport);
 			}
 			if(teamResults!=null){

@@ -68,7 +68,6 @@ codage,
 codage
 FROM sisfin_db.`age` as o
 WHERE (SELECT count(*) FROM AMP_ORGANISATION x where TRIM(x.OLD_ID)= TRIM(CODAGE))=0;
-;
 
 /* setting up organization types */
 select 'update AMP_ORGANISATION MUL';
@@ -154,6 +153,7 @@ actual_start_date,
 amp_team_id,
 approval_status,
 proj_cost_amount,
+proj_cost_date,
 activity_creator,
 totalCost,
 old_status_id,
@@ -179,6 +179,7 @@ c.fechcont,
 @team_id,
 @approved,
 montorig,
+fechcont,
 @activity_creator,
 montous,
 cvealc,
@@ -187,8 +188,6 @@ Cod_PND
 FROM  sisfin_db.`conv` as c
 where c.STATCONV!='C' and c.STATCONV!='A' and
 (SELECT count(*) from AMP_ACTIVITY x where x.old_id=C.NUMCONV) = 0;
-;
-
 
 UPDATE AMP_ACTIVITY A, (SELECT * FROM SISFIN_DB.`CONV`) AS C
 	SET A.NAME = C.NOMCONV,
@@ -199,12 +198,13 @@ UPDATE AMP_ACTIVITY A, (SELECT * FROM SISFIN_DB.`CONV`) AS C
     A.CONVENIO_NUMCONT = NUMCONT,
     A.ACTUAL_START_DATE = C.FECHCONT,
     A.APPROVAL_STATUS = @approved,
-    A.PROJ_COST_AMOUNT = MONTORIG,
     A.TOTALCOST = MONTOUS,
     A.OLD_STATUS_ID = CVEALC,
     A.DRAFT = 0,
     A.CLASSI_CODE = COD_PND,
-	A.AMP_ID=NUMCONV
+	A.AMP_ID=NUMCONV,
+	A.proj_cost_amount=montorig,
+	A.proj_cost_date=fechcont
 WHERE C.STATCONV != 'C' AND C.STATCONV != 'A' AND       C.NUMCONV = A.OLD_ID;
 
 /* START - AMP-2387 */
@@ -271,7 +271,7 @@ SELECT A.AMP_ACTIVITY_ID,
        NULL
 FROM AMP_FUNDING A
      INNER JOIN AMP_ORGANISATION O ON A.AMP_DONOR_ORG_ID = O.AMP_ORG_ID;
-     
+
 /* importing issues */
 select 'importing issues 1';
 TRUNCATE TABLE AMP_ISSUES;
@@ -412,8 +412,8 @@ FROM SISFIN_DB.DESEM
 WHERE
       (SELECT count(*) FROM AMP_CURRENCY x where upper(trim(x.CURRENCY_CODE))=upper((CVEMONORIG)))=0
               and CVEMONORIG is not null;
-              
-              
+
+
 INSERT INTO amp_currency (currency_code,country_name,currency_name,active_flag)
 select
    distinct
@@ -592,7 +592,7 @@ select '==type of credit==';
 /* removing old values, we are going to replace financing instrument meaning, it will be called Type of credit for Bolivia */
 select 'remove previous category values for financing instrument';
 
---DELETE catval FROM amp_category_value AS catval, amp_category_class AS catclass where catval.amp_category_class_id=catclass.id  AND catclass.keyName ='financing_instrument';
+/*DELETE catval FROM amp_category_value AS catval, amp_category_class AS catclass where catval.amp_category_class_id=catclass.id  AND catclass.keyName ='financing_instrument';*/
 
 /*  importing new values: there are just 3 records */
 select 'importing new category values for Type of Credit';
@@ -607,7 +607,6 @@ WHERE cla.nomdato='cvecred' AND catclass.keyName='financing_instrument' and
     AMP_CATEGORY_CLASS AS CATCLASS WHERE
     CATVAL.AMP_CATEGORY_CLASS_ID = CATCLASS.ID AND upper(CATCLASS.KEYNAME) ='FINANCING_INSTRUMENT'
 	and upper(CATVAL.category_value)=upper(CLA.INTERP))=0;
-;
 
 
 /* mapping credit types to activities */
@@ -767,7 +766,7 @@ SET @base_url_sisin='http://www.google.com?sisinCode=';
 SELECT 'Inserting Proyectos references into Component table';
 INSERT INTO amp_components (CodigoSISIN)
 SELECT distinct CodigoSISIN FROM sisin_db.seguimiento_financiero s
-where CodConvExt != '00000' and CodConvExt != '99999';
+where CodConvExt != '00000' and CodConvExt != '99999' and (select count(*) from amp_components x where x.CodigoSISIN=CodigoSISIN)=0 ;
 
 
 SELECT 'Updating Components with Proyecto data';
@@ -779,6 +778,7 @@ a.code = p.CodigoSISIN,
 a.url = CONCAT(@base_url_sisin,p.CodigoSISIN)
 where a.CodigoSISIN = p.CodigoSISIN;
 
+DELETE FROM amp_activity_components;
 
 SELECT 'Inserting references from Proyectos to Activities';
 INSERT INTO amp_activity_components(amp_activity_id, amp_component_id)

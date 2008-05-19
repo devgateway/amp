@@ -4,4 +4,12 @@
 	<security login-required="true" default="READ">
 		<action login-required="true" pattern="/showGisDashboard" /> 
 	</security>
+
+	<hibernate-classes required="false">
+		<hibernate-class>org.digijava.module.gis.dbentity.GisMap</hibernate-class>
+		<hibernate-class>org.digijava.module.gis.dbentity.GisMapPoint</hibernate-class>
+		<hibernate-class>org.digijava.module.gis.dbentity.GisMapSegment</hibernate-class>
+		<hibernate-class>org.digijava.module.gis.dbentity.GisMapShape</hibernate-class>
+	</hibernate-classes>
+
 </module-config>

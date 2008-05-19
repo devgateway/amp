@@ -2,12 +2,19 @@
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
 
 <struts-config>
-	<form-beans>
-		<form-bean name="gisDashboardForm" type="org.digijava.module.gis.form.GisDashboardForm" />
-	</form-beans>	
-	<action-mappings>
-		<action name="gisDashboardForm" path="/gis/showGisDashboard" type="org.digijava.module.gis.action.ShowGisDashboard" validate="false">
-			<forward name="forward" path="/showLayout.do?layout=gis_dashboard"/>
-		</action>
-	</action-mappings>
+  <form-beans>
+    <form-bean name="gisDashboardForm" type="org.digijava.module.gis.form.GisDashboardForm" />
+  </form-beans>
+  <action-mappings>
+    <action name="gisDashboardForm" path="/gis/showGisDashboard" type="org.digijava.module.gis.action.ShowGisDashboard" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=gis_dashboard" />
+    </action>
+    <action name="gisDashboardForm" path="/gis/index" type="org.digijava.module.gis.action.ShowGisDashboard" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=gis_dashboard" />
+    </action>
+    <action name="gisMapLoaderForm" path="/gis/mapLoader" scope="request" type="org.digijava.module.gis.action.MapLoader" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=mapLoader" />
+    </action>
+  </action-mappings>
 </struts-config>
+

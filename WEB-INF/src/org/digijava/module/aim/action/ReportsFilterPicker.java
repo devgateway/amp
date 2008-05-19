@@ -5,12 +5,10 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +26,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.ar.util.ReportsUtil;
+import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -39,16 +38,17 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -93,7 +93,35 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		List<AmpSector> secondaryAmpSectors = SectorUtil.getAmpSectorsAndSubSectors( 
 				AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME );
-		
+                
+                List<AmpTheme> nationalPlanningObjectives;
+                AmpActivityProgramSettings natPlanSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
+                if(natPlanSetting.getDefaultHierarchy()!=null){
+                nationalPlanningObjectives  = ProgramUtil.getAmpThemesAndSubThemes(natPlanSetting.getDefaultHierarchy());
+                }
+                else{
+                     nationalPlanningObjectives =ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
+                }
+
+                List<AmpTheme> primaryPrograms;
+                AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
+                if(primaryPrgSetting.getDefaultHierarchy()!=null){
+                    primaryPrograms = ProgramUtil.getAmpThemesAndSubThemes(primaryPrgSetting.getDefaultHierarchy());
+                }
+                else{
+                    primaryPrograms=ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
+                    
+                }
+
+                List<AmpTheme> secondaryPrograms;
+                AmpActivityProgramSettings secondaryPrg = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
+                if (secondaryPrg.getDefaultHierarchy() != null) {
+                    secondaryPrograms = ProgramUtil.getAmpThemesAndSubThemes(secondaryPrg.getDefaultHierarchy());
+                } else {
+                    secondaryPrograms = ProgramUtil.getAllSubThemesFor(ProgramUtil.getAllThemes(false));
+                }
+
+	
 		 /** This has been moved in SectorUtil.getAmpSectorsAndSubSectors();
 		  * 
 		 Long primaryConfigClassId=SectorUtil.getPrimaryConfigClassificationId();
@@ -171,6 +199,9 @@ public class ReportsFilterPicker extends MultiAction {
 		//filterForm.setDonors(donors);
 		filterForm.setRisks(allIndicatorRisks);
 		filterForm.setSectors( ampSectors );
+                filterForm.setNationalPlanningObjectives(nationalPlanningObjectives);
+                filterForm.setPrimaryPrograms(primaryPrograms);
+                filterForm.setSecondaryPrograms(secondaryPrograms);
 		filterForm.setSecondarySectors( secondaryAmpSectors );
 		filterForm.setFromYears(new ArrayList<BeanWrapperImpl>());
 		filterForm.setToYears(new ArrayList<BeanWrapperImpl>());
@@ -263,6 +294,9 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedRisks(null);
 		filterForm.setSelectedSectors(null);
 		filterForm.setSelectedStatuses(null);
+                filterForm.setSelectedSecondaryPrograms(null);
+                filterForm.setSelectedPrimaryPrograms(null);
+                filterForm.setSelectedNatPlanObj(null);
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession .getAttribute(Constants.CURRENT_MEMBER);
 
@@ -368,9 +402,49 @@ public class ReportsFilterPicker extends MultiAction {
 			arf.setSecondarySectors(null);
 			arf.setSelectedSecondarySectors(null);
 		}
+                
+                
+                
+                Set selectedNatPlanObj				= Util.getSelectedObjects(AmpTheme.class,filterForm.getSelectedNatPlanObj());
+		Set selectedPrimaryPrograms	= Util.getSelectedObjects(AmpTheme.class,filterForm.getSelectedPrimaryPrograms());
+                Set selectedSecondaryPrograms	= Util.getSelectedObjects(AmpTheme.class,filterForm.getSelectedSecondaryPrograms());
 		
 		
-				
+		if(selectedNatPlanObj!=null && selectedNatPlanObj.size() > 0)
+			{
+			arf.setSelectedNatPlanObj(new HashSet());
+			arf.getSelectedNatPlanObj().addAll(selectedNatPlanObj);
+			arf.setNationalPlanningObjectives(new ArrayList(selectedNatPlanObj) );
+		}
+		else {
+			arf.setSelectedNatPlanObj(null);
+			arf.setNationalPlanningObjectives(null);
+		}
+		
+                if(selectedPrimaryPrograms!=null && selectedPrimaryPrograms.size() > 0)
+		{
+			arf.setSelectedPrimaryPrograms(new HashSet());
+			arf.getSelectedPrimaryPrograms().addAll(selectedPrimaryPrograms);
+			arf.setPrimaryPrograms(new ArrayList(selectedPrimaryPrograms));
+		}
+		else {
+			
+			arf.setPrimaryPrograms(null);
+                        arf.setSelectedPrimaryPrograms(null);
+                       
+		}
+                
+                 if(selectedSecondaryPrograms!=null && selectedSecondaryPrograms.size() > 0)
+		{
+			arf.setSelectedSecondaryPrograms(new HashSet());
+			arf.getSelectedSecondaryPrograms().addAll(selectedSecondaryPrograms);
+			arf.setSecondaryPrograms( new ArrayList(selectedSecondaryPrograms) );
+		}
+		else {
+			arf.setSecondaryPrograms(null);
+                        arf.setSelectedSecondaryPrograms(null);
+			
+		}
 		
 		AmpFiscalCalendar selcal=(AmpFiscalCalendar) Util.getSelectedObject(AmpFiscalCalendar.class,filterForm.getCalendar());
 		arf.setCalendarType(selcal);
@@ -485,6 +559,9 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedRisks(null);
 		filterForm.setSelectedSectors(null);
 		filterForm.setSelectedStatuses(null);
+                filterForm.setSelectedNatPlanObj(null);
+                filterForm.setSelectedPrimaryPrograms(null);
+                filterForm.setSelectedSecondarySectors(null);
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession .getAttribute(Constants.CURRENT_MEMBER);
 

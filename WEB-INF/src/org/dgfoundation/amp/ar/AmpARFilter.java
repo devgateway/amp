@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -29,22 +29,18 @@ import org.apache.lucene.store.Directory;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.PropertyListable.PropertyListableIgnore;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LuceneUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 /**
@@ -67,6 +63,74 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	@PropertyListableIgnore
 	private Set secondarySectors=null;
 	private Set selectedSecondarySectors=null;
+        
+        @PropertyListableIgnore
+        private List nationalPlanningObjectives;
+        private Set selectedNatPlanObj;
+        
+        
+        @PropertyListableIgnore
+        private List primaryPrograms;
+        private Set selectedPrimaryPrograms;
+        
+        @PropertyListableIgnore
+        private List secondaryPrograms;
+        private Set selectedSecondaryPrograms;
+        
+       @PropertyListableIgnore
+        public List getNationalPlanningObjectives() {
+            return nationalPlanningObjectives;
+        }
+
+        public void setNationalPlanningObjectives(List nationalPlanningObjectives) {
+            this.nationalPlanningObjectives = nationalPlanningObjectives;
+        }
+        
+        @PropertyListableIgnore
+        public List getPrimaryPrograms() {
+            return primaryPrograms;
+        }
+        
+        
+        public void setPrimaryPrograms(List primaryPrograms) {
+            this.primaryPrograms = primaryPrograms;
+        }
+        
+        @PropertyListableIgnore
+        public List getSecondaryPrograms() {
+            return secondaryPrograms;
+        }
+
+        public void setSecondaryPrograms(List secondaryPrograms) {
+            this.secondaryPrograms = secondaryPrograms;
+        }
+
+        public Set getSelectedNatPlanObj() {
+            return selectedNatPlanObj;
+        }
+
+        public void setSelectedNatPlanObj(Set selectedNatPlanObj) {
+            this.selectedNatPlanObj = selectedNatPlanObj;
+        }
+
+        public Set getSelectedPrimaryPrograms() {
+            return selectedPrimaryPrograms;
+        }
+
+        public void setSelectedPrimaryPrograms(Set selectedPrimaryPrograms) {
+            this.selectedPrimaryPrograms = selectedPrimaryPrograms;
+        }
+
+        public Set getSelectedSecondaryPrograms() {
+            return selectedSecondaryPrograms;
+        }
+
+        public void setSelectedSecondaryPrograms(Set selectedSecondaryPrograms) {
+            this.selectedSecondaryPrograms = selectedSecondaryPrograms;
+        }
+   
+        
+      
 	
 	private Set regions=null;
 	private Set risks=null;
@@ -217,7 +281,22 @@ public class AmpARFilter extends PropertyListable implements Filter {
 			"SELECT aas.amp_activity_id FROM amp_activity_sector aas, amp_sector s, amp_classification_config c " +
 			"WHERE aas.amp_sector_id=s.amp_sector_id AND s.amp_sec_scheme_id=c.classification_id " +
 			"AND c.name='Primary' AND aas.amp_sector_id in (" +Util.toCSString(sectors,true)+ ")";
-		
+                
+                String NATIONAL_PLAN_FILTER=
+			"SELECT aap.amp_activity_id FROM amp_activity_program aap inner join  amp_theme p on aap.amp_program_id=p.amp_theme_id " +
+                        "inner join  AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=aap.program_setting where ps.name='National Plan Objective' AND " +
+			" aap.amp_program_id in (" +Util.toCSString(nationalPlanningObjectives,true)+ ")";
+                
+                String PRIMARY_PROGRAM_FILTER=
+			"SELECT aap.amp_activity_id FROM amp_activity_program aap inner join  amp_theme p on aap.amp_program_id=p.amp_theme_id " +
+                        "inner join  AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=aap.program_setting where ps.name='Primary Program' AND " +
+			" aap.amp_program_id in (" +Util.toCSString(primaryPrograms,true)+ ")";
+                
+                String SECONDARY_PROGRAM_FILTER=
+			"SELECT aap.amp_activity_id FROM amp_activity_program aap inner join  amp_theme p on aap.amp_program_id=p.amp_theme_id " +
+                        "inner join  AMP_PROGRAM_SETTINGS ps on ps.amp_program_settings_id=aap.program_setting where ps.name='Secondary Program' AND " +
+			" aap.amp_program_id in (" +Util.toCSString(secondaryPrograms,true)+ ")";
+                
 //		String SECONDARY_PARENT_SECTOR_FILTER=
 //			"SELECT amp_activity_id FROM v_secondary_sectors WHERE amp_sector_id IN ("+Util.toCSString(secondarySectors,true)+")";
 //		String SECONDARY_SUB_SECTOR_FILTER=
@@ -381,6 +460,15 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		}
 		if (secondarySectors!=null && secondarySectors.size()!=0 ) {
 			queryAppend(SECONDARY_SECTOR_FILTER);
+		}
+                if(nationalPlanningObjectives!=null && nationalPlanningObjectives.size()!=0) {
+			queryAppend(NATIONAL_PLAN_FILTER);
+		}
+		if (primaryPrograms!=null && primaryPrograms.size()!=0 ) {
+			queryAppend(PRIMARY_PROGRAM_FILTER);
+		}
+                if (secondaryPrograms!=null && secondaryPrograms.size()!=0 ) {
+			queryAppend(SECONDARY_PROGRAM_FILTER);
 		}
 		if(regions!=null && regions.size()>0) queryAppend(REGION_FILTER);
 		if(financingInstruments!=null && financingInstruments.size()>0) queryAppend(FINANCING_INSTR_FILTER);

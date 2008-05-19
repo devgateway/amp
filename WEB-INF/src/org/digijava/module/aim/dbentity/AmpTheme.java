@@ -3,8 +3,9 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import org.digijava.module.aim.util.Identifiable;
 
-public class AmpTheme implements Serializable
+public class AmpTheme implements Serializable, Identifiable
 {
 	private static final long serialVersionUID = 1L;
 	private AmpActivity activityId;
@@ -281,5 +282,14 @@ public class AmpTheme implements Serializable
         public void setProgramSettings(Set programSettings) {
                 this.programSettings = programSettings;
         }
+
+        public Object getIdentifier() {
+           return this.getAmpThemeId();
+        }
+        
+        @Override
+        public String toString() {
+		return name;
+	}
 
 }

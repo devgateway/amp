@@ -177,7 +177,7 @@ public class getNPDgraph extends Action {
                                     if (!baseValues.containsKey(year)) {
                                         baseValues.put(year, valueItem.getValue());
                                     } else {
-                                        Double value = targetValues.get(year);
+                                        Double value = baseValues.get(year);
                                         value += valueItem.getValue();
                                         baseValues.put(year, value);
                                     }
@@ -187,6 +187,13 @@ public class getNPDgraph extends Action {
                         List<Integer> actualKeys = new ArrayList(actualValues.keySet());
                         List<Integer> targetKeys = new ArrayList(actualValues.keySet());
                         List<Integer> baseKeys = new ArrayList(actualValues.keySet());
+                        
+                        for(String selectedYear:selectedYears){
+                            Integer selYear=Integer.parseInt(selectedYear);
+                            if(!actualKeys.contains(selYear)){
+                               actualKeys.add(selYear);
+                            }
+                        }
                         Collections.sort(targetKeys); // sort target years asc
                         Collections.sort(baseKeys); // sort base years
                         Collections.sort(actualKeys); // sort actual values years

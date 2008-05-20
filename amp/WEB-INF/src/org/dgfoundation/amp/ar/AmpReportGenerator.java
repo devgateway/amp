@@ -27,14 +27,11 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpMeasures;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
-
-import com.lowagie.text.Font;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPCell;
 
 /**
  * 
@@ -398,8 +395,47 @@ public class AmpReportGenerator extends ReportGenerator {
 
 	}
 
-	protected void removeUnselectedHierarchies() {
+	/**
+	 * Checks to see if a given hierarchy splitter cell value is present between the values of the selected items in the project filter
+	 * popup.
+	 * @param rd the report hierarchy for which the check is performed
+	 * @param filterColumnName the name of the data column that filterValues represents 
+	 * @param filterValues the values selected by the user in the filter popup, for the column specified in filterColumnName
+	 * @return true if the hierarchy splitter is present
+	 * @see ReportData#splitterCell
+	 */
+	protected boolean reportDataInFilter(ReportData rd,String filterColumnName,Set filterValues) {
+		Cell splitterCell = rd.getSplitterCell();
+		if(splitterCell!=null && splitterCell.getColumn().getName().equals(filterColumnName) && 
+				!filterValues.contains(splitterCell.getValue())) return false;
+		return true;
+	}
+	
+	/**
+	 * Reads the filter options and removes any hierarchies of the type identical with the filter property type for which the filter
+	 * values have not been selected. Example: If we choose donor type="Bilateral" in the filters, a hierarchy holding
+	 * Donor Type as a hierarchy will only show the Bilateral hierarchy and nothing else.
+	 * The totals on the rows (traiCells) are calculated after this method finishes, so the totals will show only the items displayed.
+	 */
+	protected void removeHierarchiesUnselectedInFilters() {
 		AmpARFilter arf=(AmpARFilter) filter;
+		List hierarchies=report.getAllChildren();
+		//filter donor type hierarcies
+		if(arf.getDonorTypes()!=null) {
+			Iterator iterator = arf.getDonorTypes().iterator();
+			Set s=new TreeSet();
+			while (iterator.hasNext()) {
+				AmpOrgType ot = (AmpOrgType) iterator.next();
+				s.add(ot.getOrgType());
+			}
+				Iterator i=hierarchies.iterator();
+				while (i.hasNext()) {
+					ReportData rd = (ReportData) i.next();
+					if (!reportDataInFilter(rd, ArConstants.DONOR_TYPE_COL, s)) rd.removeMeFromParent();
+				
+			}
+		}
+		
 		
 	}
 	
@@ -452,9 +488,11 @@ public class AmpReportGenerator extends ReportGenerator {
 			createHierarchies();
 
 		
+		
+		removeHierarchiesUnselectedInFilters();
+		
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
-		
 
 	}
 
@@ -551,11 +589,16 @@ public class AmpReportGenerator extends ReportGenerator {
 			AmpColumns element = ((AmpReportColumn) i.next()).getColumn();
 			String colName = element.getColumnName();
 			List cats = getColumnSubCategories(element.getColumnName());
+			
+			try {
 			CellColumn src = (CellColumn) rawColumns.getColumn(colName);
-			if (cats.size() != 0) {
 				Column newcol = GroupColumn.verticalSplitByCategs(src, cats,
 						true,reportMetadata);
 				rawColumns.replaceColumn(colName, newcol);
+			} catch(Exception e) {
+				System.out.println(e);
+			}
+			if (cats.size() != 0) {
 			}
 		}
 	}

@@ -848,7 +848,7 @@ function setType(typeValue) {
 }
 
 function validateAddDocument() {
-	var regexp	= new RegExp("[a-zA-Z0-9_ ]+");
+	var regexp	= new RegExp("[a-zA-Z0-9_ÀÁÃÄÇÈÉËÌÍÏÑÒÓÕÖÙÚÜàáãäçèéëìíïñòóõöùúü ]+");
 	//alert( document.forms['crDocumentManagerForm'].docTitle.value );
 	//alert( document.forms['crDocumentManagerForm'].fileData.value );
 	var msg	= '';

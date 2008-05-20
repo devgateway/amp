@@ -384,6 +384,12 @@ public class ColumnReportData extends ReportData {
 	}
 
 
+	@Override
+	public List getAllChildren() {
+		return new ArrayList();
+	}
+
+
 
 
 	

@@ -355,74 +355,83 @@ public class ShowActivityPrintPreview
 
                 Collection<AmpActivityLocation> ampLocs = activity.getLocations();
 
-                if(ampLocs != null && ampLocs.size() > 0) {
-                    Collection locs = new TreeSet();
+                if (ampLocs != null && ampLocs.size() > 0) {
+                    Collection locs = new ArrayList();
 
                     Iterator locIter = ampLocs.iterator();
                     boolean maxLevel = false;
-                    while(locIter.hasNext()) {
-                    	AmpActivityLocation ampActLocation=(AmpActivityLocation)locIter.next();
-                        AmpLocation loc = ampActLocation.getLocation();
-                        if(!maxLevel && loc!=null) {
-                            if(loc.getAmpWoreda() != null) {
-                                impLevel = 3;
-                                maxLevel = true;
-                            } else if(loc.getAmpZone() != null
-                                      && impLevel < 2) {
-                                impLevel = 2;
-                            } else if(loc.getAmpRegion() != null
-                                      && impLevel < 1) {
-                                impLevel = 1;
-                            }
+                    while (locIter.hasNext()) {
+                    	AmpActivityLocation actLoc = (AmpActivityLocation) locIter.next();	//AMP-2250
+                    	if (actLoc == null)
+                    		continue;
+                    	AmpLocation loc=actLoc.getLocation();								//AMP-2250
+                      if (!maxLevel) {
+                        if (loc.getAmpWoreda() != null) {
+                          impLevel = 3;
+                          maxLevel = true;
+                        }
+                        else if (loc.getAmpZone() != null
+                                 && impLevel < 2) {
+                          impLevel = 2;
+                        }
+                        else if (loc.getAmpRegion() != null
+                                 && impLevel < 1) {
+                          impLevel = 1;
+                        }
+                      }
+
+                      if (loc != null) {
+                        Location location = new Location();
+                        location.setLocId(loc.getAmpLocationId());
+                        Collection col1 = FeaturesUtil.getDefaultCountryISO();
+                        String ISO = null;
+                        Iterator itr1 = col1.iterator();
+                        while (itr1.hasNext()) {
+                          AmpGlobalSettings ampG = (AmpGlobalSettings) itr1.next();
+                          ISO = ampG.getGlobalSettingsValue();
+                        }
+                        
+                        //Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
+                        Country cntry = DbUtil.getDgCountry(ISO);
+                        location.setCountryId(cntry.getCountryId());
+                        location.setCountry(cntry.getCountryName());
+                        location.setNewCountryId(cntry.getIso());
+                        if (loc.getAmpRegion() != null) {
+                          location.setRegion(loc.getAmpRegion()
+                                             .getName());
+                          location.setRegionId(loc.getAmpRegion()
+                                               .getAmpRegionId());
+                          if (eaForm.getFundingRegions() == null) {
+                            eaForm
+                                .setFundingRegions(new ArrayList());
+                          }
+                          if (eaForm.getFundingRegions().contains(
+                              loc.getAmpRegion()) == false) {
+                            eaForm.getFundingRegions().add(
+                                loc.getAmpRegion());
+                          }
+                        }
+                        if (loc.getAmpZone() != null) {
+                          location
+                              .setZone(loc.getAmpZone().getName());
+                          location.setZoneId(loc.getAmpZone()
+                                             .getAmpZoneId());
+                        }
+                        if (loc.getAmpWoreda() != null) {
+                          location.setWoreda(loc.getAmpWoreda()
+                                             .getName());
+                          location.setWoredaId(loc.getAmpWoreda()
+                                               .getAmpWoredaId());
                         }
 
-                        if(loc != null) {
-                            Location location = new Location();
-                            location.setLocId(loc.getAmpLocationId());
-                            Collection col1 = FeaturesUtil.getDefaultCountryISO();
-                            String ISO = null;
-                            Iterator itr1 = col1.iterator();
-                            while(itr1.hasNext()) {
-                                AmpGlobalSettings ampG = (AmpGlobalSettings) itr1.next();
-                                ISO = ampG.getGlobalSettingsValue();
-                            }
+                        if(actLoc.getLocationPercentage()!=null)
+                        location.setPercent(FormatHelper.formatNumber( actLoc.getLocationPercentage().doubleValue()));
 
-                            //Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
-                            Country cntry = DbUtil.getDgCountry(ISO);
-                            location.setCountryId(cntry.getCountryId());
-                            location.setCountry(cntry.getCountryName());
-                            if(loc.getAmpRegion() != null) {
-                                location.setRegion(loc.getAmpRegion()
-                                    .getName());
-                                location.setRegionId(loc.getAmpRegion()
-                                    .getAmpRegionId());
-                                if(eaForm.getFundingRegions() == null) {
-                                    eaForm
-                                        .setFundingRegions(new ArrayList());
-                                }
-                                if(eaForm.getFundingRegions().contains(
-                                    loc.getAmpRegion()) == false) {
-                                    eaForm.getFundingRegions().add(
-                                        loc.getAmpRegion());
-                                }
-                            }
-                            if(loc.getAmpZone() != null) {
-                                location
-                                    .setZone(loc.getAmpZone().getName());
-                                location.setZoneId(loc.getAmpZone()
-                                    .getAmpZoneId());
-                            }
-                            if(loc.getAmpWoreda() != null) {
-                                location.setWoreda(loc.getAmpWoreda()
-                                    .getName());
-                                location.setWoredaId(loc.getAmpWoreda()
-                                    .getAmpWoredaId());
-                            }
-                            locs.add(location);
-                        }
+                        locs.add(location);
+                      }
                     }
                     eaForm.setSelectedLocs(locs);
-                }
+                  }
 
                 /*switch(impLevel) {
                     case 0:

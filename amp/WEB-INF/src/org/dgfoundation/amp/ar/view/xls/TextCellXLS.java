@@ -6,6 +6,12 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
+import java.io.IOException;
+import java.io.StringReader;
+
+import javax.swing.text.html.HTMLEditorKit.ParserCallback;
+import javax.swing.text.html.parser.ParserDelegator;
+
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -17,9 +23,11 @@ import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.TextCell;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.util.Html2TextCallback;
 
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPCell;
+import com.sun.org.apache.xalan.internal.xsltc.DOM;
 
 /**
  * 
@@ -55,6 +63,16 @@ public class TextCellXLS extends XLSExporter {
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Exporter#generate()
 	 */
+	private boolean columnNeedsHTMLStripping(String columnName){
+		String s = columnName.toLowerCase();
+		if ("objective".compareTo(s) == 0 ||
+			"description".compareTo(s) == 0
+			){
+			return true;
+		}
+		return false;
+	}
+	
 	public void generate() {
 		TextCell c=(TextCell) item;
 		HSSFCell cell=this.getRegularCell();
@@ -90,6 +108,18 @@ public class TextCellXLS extends XLSExporter {
 
 			cell.setCellValue( finalStatus);
 		}
+		else
+			if (columnNeedsHTMLStripping(c.getColumn().getName())){
+				StringReader sr = new StringReader(c.toString());
+				Html2TextCallback h2t = new Html2TextCallback();
+				try {
+					h2t.parse(sr);
+					cell.setCellValue(h2t.getText());
+				} catch (IOException e) {
+					e.printStackTrace();
+					cell.setCellValue(c.toString());
+				}
+			}
 		else 
 			cell.setCellValue(c.toString());
 		

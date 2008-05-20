@@ -126,10 +126,8 @@
 	function setValues(val) {
 		var valid;
 		if(document.aimEditActivityForm.teamLead.value) {
-            alert("Echo1");
 			valid = validateEntryByMember();
 		} else {
-            alert("Echo2");
 			valid = validateEntryByLeader();
 		}
 		if (valid == true) {

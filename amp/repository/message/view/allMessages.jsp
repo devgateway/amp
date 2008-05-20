@@ -66,6 +66,10 @@
 		}
 	}
 	
+	function deleteMsg(){
+		return confirm("Are You Sure You Want To Remove This Message ?");
+	}
+	
 	
 	
 </script>
@@ -238,7 +242,7 @@
 										 </c:if> 
 									</td>															
 									<td width="20%" align="center">
-										<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage" name="urlParams">
+										<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage" name="urlParams" onclick="return deleteMsg()">
 										 	<digi:trn key="message:delete">Delete</digi:trn>
 										 </digi:link>										
 									</td>

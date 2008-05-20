@@ -1004,8 +1004,9 @@ public class ProgramUtil {
                                                 childWithNewName.setName(name+"--"+child.getName());
                                                 childWithNewName.setAmpThemeId(child.getAmpThemeId());
 						List col = getAllSubThemesByParentId(child.getAmpThemeId(),depth+1);
+                                                Collections.reverse(col);        
                                                 col.add(childWithNewName);
-                                              
+                                                Collections.reverse(col);
 						subThemes.addAll(col);
 					}
 				}
@@ -1016,6 +1017,7 @@ public class ProgramUtil {
 				logger.debug("Exception : "+e1);
 				throw new AimException("Cannot get sub themes for "+parentThemeId,e1);
 			}
+                        
 			return subThemes;
 		}
                 
@@ -1044,7 +1046,7 @@ public class ProgramUtil {
             ret.add(parentWithNewName);
             List<AmpTheme> dbChildrenReturnSet =
                     ProgramUtil.getAllSubThemesByParentId(parent.getAmpThemeId(),0);
-            Collections.reverse(dbChildrenReturnSet);
+          //  Collections.reverse(dbChildrenReturnSet);
             ret.addAll(dbChildrenReturnSet);
         
 

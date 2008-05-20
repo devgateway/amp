@@ -315,10 +315,10 @@ function delSubmit(){
                                 </td>
                                 <td>&nbsp;</td>
                                 <td>
-                	       			<a id="clear1" href="javascript:clearDate(selectedStartDate, 'clear1')">
+                	       			<a id="clear1" href="javascript:clearDate(document.getElementById('selectedStartDate'), 'clear1')">
 									 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 									</a>
-                       				 <a id="date1" href='javascript:pickDateById("date1","selectedStartDate","clear1")'>
+                       				 <a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("selectedStartDate"),"clear1")'>
 										<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 									</a>
                                 </td>
@@ -426,13 +426,13 @@ function delSubmit(){
                                 </td>
                                 <td>&nbsp;</td>
                                 <td>
-                                <a id="clear2" href="javascript:clearDate(selectedEndDate,'clear2')">
+                                <a id="clear2" href="javascript:clearDate(document.getElementById('selectedEndDate'),'clear2')">
 									 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 									</a>
                                 </td>
                                 <td>&nbsp;</td>
                                 <td>
-                      				<a id="date2" href='javascript:pickDateById("date2","selectedEndDate","clear2")'>
+                      				<a id="date2" href='javascript:pickDateWithClear("date2",document.getElementById("selectedEndDate"),"clear2")'>
 										<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 									</a>
                                 </td>

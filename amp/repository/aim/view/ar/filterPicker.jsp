@@ -30,6 +30,7 @@
 	<ul class="yui-nav">
 		<li class="selected"><a href="#keyword"><div><digi:trn key="rep:filer:tab:KeywordAndCalendar">Keyword & Calendar</digi:trn></div></a> </li>
 		<li><a href="#financing"><div><digi:trn key="rep:filer:tab:FinancingAndLocation">Financing & Location</digi:trn></div></a> </li>
+                <li><a href="#sectorsprograms"><div><digi:trn key="rep:filer:tab:sectorsAndPrograms">Sectors & Programs</digi:trn></div></a> </li>
 		<li><a href="#donors"><div><digi:trn key="rep:filer:tab:DonorsAndAgencies">Donors & Agencies</digi:trn></div></a> </li>
 		<li><a href="#status"><div><digi:trn key="rep:filer:tab:StatusAndMinistryRank">Status & Ministry Rank</digi:trn></div></a> </li>
 	</ul>
@@ -312,12 +313,12 @@
 			</td>
 			<td align="center">
 				<c:set var="tooltip_translation">
-					<digi:trn key="rep:filter:regionandSector">Specify the region and sectors of interest.</digi:trn>
+					<digi:trn key="rep:filter:regionofinterest">Specify the region  of interest.</digi:trn>
 				</c:set>
 				<table align="center" cellpadding="1" cellspacing="1" onmouseover="Tip('${tooltip_translation}');">
 						<tr bgcolor="#EEEEEE">
 					<td colspan="5">
-					<b><digi:trn key="rep:filter:RegionAndSectorAndProgramTitle">Region and Sector and Program</digi:trn></b>
+					<b><digi:trn key="rep:filter:RegionTitle">Region </digi:trn></b>
 					<br>
 					</td>
 				</tr>
@@ -335,6 +336,30 @@
 							label="region" value="regionId" />
 					</html:select></td>
 				</tr>
+				</table>
+			</td>
+		</tr>
+		</table>
+		</div>
+                <div id="sectorsprograms" style="display: none;">
+		<br />
+		<table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px">
+		
+				
+                        <tr>
+			<td align="center">
+				<c:set var="tooltip_translation">
+					<digi:trn key="rep:filter:sectorOfInterest">Specify the   sectors   of interest.</digi:trn>
+				</c:set>
+				<table align="center" cellpadding="1" cellspacing="1" onmouseover="Tip('${tooltip_translation}');">
+						<tr bgcolor="#EEEEEE">
+					<td colspan="5">
+					<b><digi:trn key="rep:filter:Sectors"> Sectors</digi:trn></b>
+					<br>
+					</td>
+				</tr>
+				
+				
 				<field:display name="Primary" feature="Sectors">
 				<tr bgcolor="#EEEEEE">
 					<td colspan="5"><digi:trn key="rep:filer:primarySector">Primary Sector</digi:trn></td>
@@ -365,6 +390,19 @@
 					</td>
 				</tr>
 				</field:display>
+                            </table>
+                        </td>
+                        <td>
+                            <c:set var="tooltip_translation">
+					<digi:trn key="rep:filter:programOfInterest">Specify the   programs   of interest.</digi:trn>
+			</c:set>
+                            <table align="center" cellpadding="1" cellspacing="1" onmouseover="Tip('${tooltip_translation}');">
+			<tr bgcolor="#EEEEEE">
+					<td colspan="5">
+					<b><digi:trn key="rep:filter:Programs"> Programs</digi:trn></b>
+					<br>
+					</td>
+				</tr>
                                 
                             <field:display name="National Planning Objectives" feature="NPD Programs">
 				<tr bgcolor="#EEEEEE">
@@ -417,6 +455,7 @@
 			</td>
 		</tr>
 		</table>
+          
 		</div>
 		<div id="donors" style="display: none;">
 			<br/>

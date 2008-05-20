@@ -1858,10 +1858,12 @@ public class TeamUtil {
 
                if(team.getAccessType().equalsIgnoreCase(
                    Constants.ACCESS_TYPE_MNGMT)) {
-                   queryString = "select r from " + AmpReports.class.getName()
-                       + " r " + " where r.ownerId=:p.memberid order by r.name ";
+                   queryString = "select DISTINCT r from " + AmpReports.class.getName()
+                       + " r " + " where r.ownerId=:p.memberid or r.ampReportId IN (select r2.report from " + AmpTeamReports.class.getName() 
+                       + " r2 " + " where r2.team=:p.teamid) order by r.name";
                    qry = session.createQuery(queryString);
                    qry.setParameter("p.memberid", ampteammember);
+                   qry.setParameter("p.teamid", teamId);
                    if (currentPage !=null){
                 	   qry.setFirstResult(currentPage);
                    }

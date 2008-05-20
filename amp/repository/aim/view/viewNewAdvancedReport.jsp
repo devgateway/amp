@@ -90,20 +90,25 @@
 
 
 	<tr>
-		<td style="padding-left: 5px;padding-left: 5px;">
-		<div id="menucontainer">
+		<td style="padding-left: 5px;padding-left: 5px; padding-top: 10px;">
+		
 			<logic:notEmpty name="reportMeta" property="hierarchies">
 				<a style="cursor:pointer"
 					onClick="showSorter(); ">
 				<u><digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn></u> </a>&nbsp;
-			</logic:notEmpty>
+			| 
+			</logic:notEmpty> 
+			
 			<a style="cursor:pointer"
 				onClick="showFilter(); ">
 			<u><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></u> </a>
-			<a style="cursor:pointer;display:none;"
-				onClick="showRange(); ">
-			<u><digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn></u> </a>
-		</div>
+			
+			| 
+			
+			<logic:notEqual name="widget" scope="request" value="true">
+				<a style="cursor:pointer"	onClick="showRange(); "><u><digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn></u> </a>
+			</logic:notEqual>
+		
 		</td>
 	</tr>
 	<tr>

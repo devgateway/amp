@@ -262,7 +262,9 @@ public class LuceneUtil {
 			while (isNext){
 			    	int currActId = rs.getInt("amp_activity_id");
 			    	x = (Items) list.get(currActId);
-				x.componentcode.add(rs.getString("code"));
+			    	if (rs.getString("code")!=null){
+			    	    x.componentcode.add(rs.getString("code"));
+			    	}
 				isNext = rs.next();
 			}
 			

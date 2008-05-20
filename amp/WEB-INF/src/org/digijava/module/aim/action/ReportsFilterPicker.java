@@ -227,6 +227,7 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		Long yearFrom=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.YEAR_RANGE_START));
 		Long countYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE));		
+		
 		if(filterForm.getCountYear()==null){
 			filterForm.setCountYear(countYear);
 		}
@@ -264,13 +265,21 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		if (filterForm.getToMonth()==null)
 			filterForm.setToMonth(-1);
-		/*
-		for (int i = (2010 - Constants.FROM_YEAR_RANGE); i <= (2010 + Constants.TO_YEAR_RANGE); i++) {
-			filterForm.getFromYears().add(new BeanWrapperImpl(new Long(i)));
-			filterForm.getToYears().add(new BeanWrapperImpl(new Long(i)));		
+		
+		Integer rStart=(tempSettings.getReportStartYear()==0)?-1:tempSettings.getReportStartYear();
+		Integer rEnd=(tempSettings.getReportEndYear()==0)?-1:tempSettings.getReportEndYear();
+		
+		filterForm.setResetRenderStartYear(rStart); 
+		filterForm.setResetRenderEndYear(rEnd); 
+		  
+		if (filterForm.getRenderStartYear()==null){
+		    filterForm.setRenderStartYear(rStart);   
 		}
-		*/
-	
+		  
+		if (filterForm.getRenderEndYear()==null){
+		    filterForm.setRenderEndYear(rEnd); 
+		}
+		
 		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A0")));
 		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A1")));
 		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A2")));
@@ -299,10 +308,10 @@ public class ReportsFilterPicker extends MultiAction {
                 filterForm.setSelectedNatPlanObj(null);
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession .getAttribute(Constants.CURRENT_MEMBER);
-
+		AmpApplicationSettings tempSettings=null;
 		if (teamMember!= null)
 		{
-			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+			 tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
 			filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
 			String name = "- " + tempSettings.getCurrency().getCurrencyName();
 			httpSession.setAttribute(ArConstants.SELECTED_CURRENCY, name);
@@ -313,6 +322,14 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setFromYear(fromYear);
 
 		Long toYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));
+		
+		 if (tempSettings != null) {
+		     filterForm.setRenderStartYear(tempSettings.getReportStartYear());
+		     filterForm.setRenderStartYear(tempSettings.getReportEndYear());
+		 } else {
+		     filterForm.setRenderStartYear(-1);
+		     filterForm.setRenderStartYear(-1);
+		 }
 		filterForm.setToYear(toYear);
 		filterForm.setFromMonth(-1);
 		filterForm.setToMonth(-1);
@@ -331,9 +348,19 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setBeneficiaryAgency(null);
 		filterForm.setImplementingAgency(null);
 	
+		if (tempSettings!=null){
+		    filterForm.setRenderStartYear(tempSettings.getReportStartYear());   
+		    filterForm.setRenderStartYear(tempSettings.getReportEndYear()); 
+		}else{
+		    filterForm.setRenderStartYear(-1);   
+		    filterForm.setRenderStartYear(-1); 
+		}
+		
 		return modeApply(mapping,form,request,response);
 	}
 	
+
+		
 	public ActionForward modeSelect(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if(request.getParameter("apply")!=null && request.getAttribute("apply")==null) return modeApply(mapping,form,request,response);
 		if(request.getParameter("reset")!=null && request.getAttribute("reset")==null) return modeReset(mapping,form,request,response);
@@ -544,6 +571,9 @@ public class ReportsFilterPicker extends MultiAction {
 				
 			}
 		}
+		
+		arf.setRenderStartYear((filterForm.getRenderStartYear()!=-1)?filterForm.getRenderStartYear():0);
+		arf.setRenderEndYear((filterForm.getRenderEndYear()!=-1)?filterForm.getRenderEndYear():0);
 		
 		arf.setBeneficiaryAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedBeneficiaryAgency() , AmpOrganisation.class ) );
 		arf.setImplementingAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedImplementingAgency() , AmpOrganisation.class ) );

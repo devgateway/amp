@@ -6,13 +6,14 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<%@page import="org.digijava.module.aim.form.ReportsFilterPickerForm"%>
 
 <link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>" />
 <link rel="stylesheet" href="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.css"/>" />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
+
+
 
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
@@ -295,8 +296,8 @@ background-color: yellow;
 		
 	}
 	function checkRangeValues(){
-	    var actualFrom = document.aimReportsFilterPickerForm2.fromYear.value;
-        var actualTo = document.aimReportsFilterPickerForm2.toYear.value;
+	    var actualFrom = document.aimReportsFilterPickerForm2.renderStartYear.value;
+        var actualTo = document.aimReportsFilterPickerForm2.renderEndYear.value;
         var msg='\n<digi:trn key="rep:filter:wrongSelecteRange">Default Start Year must be lesser than Default End Year</digi:trn>';
 		if(actualFrom>actualTo){
 		    alert(msg);
@@ -304,14 +305,8 @@ background-color: yellow;
 		}
 		return true;
 	}
-	function rangeReset(){
-		if(document.aimReportsFilterPickerForm2.fromYear){
-	    	document.aimReportsFilterPickerForm2.fromYear.selectedIndex=0;
-	 	}
-	 	if(document.aimReportsFilterPickerForm2.toYear){
-	 		document.aimReportsFilterPickerForm2.toYear.selectedIndex=0;
-	 	}  
-	}
+	
+	
 	function changeRange(){
 		var cant = document.aimReportsFilterPickerForm2.countYear.value;
 		var actualFrom = document.aimReportsFilterPickerForm2.fromYear.value;

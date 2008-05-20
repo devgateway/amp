@@ -20,30 +20,37 @@
 
 <digi:instance property="aimReportsFilterPickerForm" />
 
-<digi:form action="/reportsFilterPicker.do"
-	name="aimReportsFilterPickerForm2" type="aimReportsFilterPickerForm">
+<digi:form action="/reportsFilterPicker.do" name="aimReportsFilterPickerForm2" type="aimReportsFilterPickerForm">
+
+
+<script type="text/javascript">
+	function  rangeReset(){
+		var start=<bean:write name="aimReportsFilterPickerForm"  property="resetRenderStartYear"/>;
+		var end=<bean:write name="aimReportsFilterPickerForm" property="resetRenderEndYear"/>;
+		
+		document.aimReportsFilterPickerForm2.renderStartYear.value=start;
+		document.aimReportsFilterPickerForm2.renderEndYear.value=end;
+	}
+</script>
+
 <div>	
-	<table width="100%" style="vertical-align: top;" align="center" cellpadding="7px" cellspacing="7px">
+	<table width="100%" align="center" cellpadding="0" cellspacing="0" style="vertical-align: top;">
+		
 		<tr>
-			<td><digi:trn key="rep:filer:NumberYearsInRange">Number of Years in Range</digi:trn><br />
-			<html:select property="countYear" onchange="changeRange();"
-				styleClass="inp-text">
-				<html:optionsCollection property="countYears"
-					label="wrappedInstance" value="wrappedInstance" />
-			</html:select></td>
-			<td><html:hidden property="countYearFrom" /></td>
-		</tr>
+		  <td align="center" nowrap="nowrap"><digi:trn key="rep:filer:rangeStarYear">Range Start Year</digi:trn></td>
+		  <td align="center" nowrap="nowrap"><digi:trn key="rep:filer:rangeEndYear">Range End Year</digi:trn></td>
+	  </tr>
 		<tr>
-			<td><digi:trn key="rep:filer:DefaultStarYear">Default Start Year</digi:trn><br />
-			<html:select property="fromYear" styleClass="inp-text">
+			<td width="50%" align="center" nowrap="nowrap"><br />
+			<html:select property="renderStartYear" styleClass="inp-text">
 				<html:option value="-1">
 					<digi:trn key="rep:filer:All">All</digi:trn>
 				</html:option>
 				<html:optionsCollection property="fromYears" label="wrappedInstance"
 					value="wrappedInstance" />
 			</html:select></td>
-			<td><digi:trn key="rep:filer:DefaultEndYear">Default End Year</digi:trn><br />
-			<html:select property="toYear" styleClass="inp-text">
+			<td width="50%" align="center" nowrap="nowrap"><br />
+			<html:select property="renderEndYear" styleClass="inp-text">
 				<html:option value="-1">
 					<digi:trn key="rep:filer:All">All</digi:trn>
 				</html:option>
@@ -53,11 +60,11 @@
 		</tr>
 	</table>
 	
-	<br />
+	
 	<table width="100%">
 		<tr>
-			<td align="center" colspan="5"><html:hidden
-				property="ampReportId" /> <html:hidden property="defaultCurrency" />
+			<td height="40" colspan="5" align="center"><html:hidden
+				property="ampReportId" /> 
 			<html:submit styleClass="buton" onclick="return checkRangeValues()"
 				property="apply">
 				<digi:trn key="rep:filer:ApplyRanges">Apply Ranges</digi:trn>
@@ -67,5 +74,6 @@
 			</html:button></td>
 		</tr>
 	</table>
-	</div>
+	
+</div>
 </digi:form>

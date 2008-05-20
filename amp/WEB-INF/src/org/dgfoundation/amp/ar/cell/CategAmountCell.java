@@ -228,4 +228,15 @@ public Cell filter(Cell metaCell,Set ids) {
 		else
 			return false;
 	}
+	
+	
+	private  boolean render;
+	public void  setRenderizable(boolean prender) {
+	    // TODO Auto-generated method stub
+	     render=prender;
+	}
+	public boolean isRenderizable() {
+	    // TODO Auto-generated method stub
+	    return render;
+	}
 }

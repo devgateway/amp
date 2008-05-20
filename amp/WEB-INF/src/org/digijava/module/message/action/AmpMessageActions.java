@@ -130,10 +130,10 @@ public class AmpMessageActions extends DispatchAction {
     	}
     	int howManyPages=0;
     	if(messages!=null){
-    		if(messages.size()%2==0){ //<--10 messages will be per page. This should come from settings
-    			howManyPages=messages.size()/2;
+    		if(messages.size()%MessageConstants.MESSAGES_PER_PAGE==0){ //<--10 messages will be per page. This should come from settings
+    			howManyPages=messages.size()/MessageConstants.MESSAGES_PER_PAGE;
     		}else {
-    			howManyPages=(messages.size()/2)+1;
+    			howManyPages=(messages.size()/MessageConstants.MESSAGES_PER_PAGE)+1;
     		}   		
     		
     		

@@ -142,13 +142,94 @@ public class getNPDgraph extends Action {
                     String displayLabel = indicator.getName();
                     try {
                         Collection<AmpIndicatorValue> indValues = item.getValues();  // ProgramUtil.getThemeIndicatorValuesDB(item.getAmpThemeIndId());
-                        Map<String,AmpIndicatorValue> actualValues = new HashMap<String,AmpIndicatorValue>();
+                       
+                        Map<Integer, Double> actualValues = new HashMap<Integer, Double>();
+                        Map<Integer, Double> targetValues = new HashMap<Integer, Double>();
+                        Map<Integer, Double> baseValues = new HashMap<Integer, Double>();
+
                         Double targetValue = null;
                         Double baseValue = null;
+                        for (AmpIndicatorValue valueItem : indValues) {
+                            if (isInSelectedYears(valueItem, selectedYears)) {
+                                if (valueItem.getValueType() == 1) {
+                                    Date actualDate = valueItem.getValueDate();
+                                    Integer year = extractYearInt(actualDate);
+                                    if (actualValues.containsKey(year)) {
+                                        Double value = actualValues.get(year);
+                                        value += valueItem.getValue();
+                                        actualValues.put(year, value);
+                                    } else {
+                                        actualValues.put(year, valueItem.getValue());
+                                    }
+                                } else if (valueItem.getValueType() == 0) {
+                                    Date targetDate = valueItem.getValueDate();
+                                    Integer year = extractYearInt(targetDate);
+                                    if (!targetValues.containsKey(year)) {
+                                        targetValues.put(year, valueItem.getValue());
+                                    } else {
+                                        Double value = targetValues.get(year);
+                                        value += valueItem.getValue();
+                                        targetValues.put(year, value);
+                                    }
+                                } else {
+                                    Date baseDate = valueItem.getValueDate();
+                                    Integer year = extractYearInt(baseDate);
+                                    if (!baseValues.containsKey(year)) {
+                                        baseValues.put(year, valueItem.getValue());
+                                    } else {
+                                        Double value = targetValues.get(year);
+                                        value += valueItem.getValue();
+                                        baseValues.put(year, value);
+                                    }
+                                }
+                            }
+                        }
+                        List<Integer> actualKeys = new ArrayList(actualValues.keySet());
+                        List<Integer> targetKeys = new ArrayList(actualValues.keySet());
+                        List<Integer> baseKeys = new ArrayList(actualValues.keySet());
+                        Collections.sort(targetKeys); // sort target years asc
+                        Collections.sort(baseKeys); // sort base years
+                        Collections.sort(actualKeys); // sort actual values years
+                        
+                       
 
+                        for (Integer actKey : actualKeys) {
+                            Integer baseKey =null;
+                            Integer targetKey = null;
+                            for (Integer basKey : baseKeys) {
+                                if (actKey >= basKey) {
+                                    baseKey = basKey;
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            for (Integer targKey : targetKeys) {
+                                if (actKey >= targKey) {
+                                    targetKey = targKey;
+                                } else {
+                                    break;
+                                }
+                            }
+
+                            Double realActual = actualValues.get(actKey);
+                            targetValue = targetValues.get(targetKey);
+                            baseValue = baseValues.get(baseKey);
+                            if (realActual != null) {
+
+                                dataset.addCustomTooltipValue(new String[]{formatValue(baseValue), formatValue(realActual), formatValue(realActual), formatValue(targetValue)});
+                                realActual = computePercent(indicator, targetValue, realActual, baseValue);
+                                dataset.addValue(realActual.doubleValue(), actKey, displayLabel);
+                            } else {
+                                dataset.addValue(0, actKey, displayLabel);
+                                dataset.addCustomTooltipValue(new String[]{formatValue(baseValue), "", "", formatValue(targetValue)});
+                            }
+                         
+                        }
+                       // TODO remove code below if the code above is correct
                         // Arrange all values by types
 //                        for (Iterator valueIter = indValues.iterator(); valueIter.hasNext();) {
-                        for (AmpIndicatorValue valueItem :indValues) {
+                       /* for (AmpIndicatorValue valueItem :indValues) {
                             //AmpThemeIndicatorValue valueItem = (AmpThemeIndicatorValue) valueIter.next();
 
                             // target value
@@ -183,12 +264,12 @@ public class getNPDgraph extends Action {
                         }
                         if (baseValue == null) {
 
-                        }
+                        }*/
 
                         // now put all values in the dataset
                         // they will appear on the chart in same order as added in dataset
                         // so years should be ordered (done outside of this method) because we are adding data by year. 
-                        if (selectedYears != null) {
+                        /*if (selectedYears != null) {
                             for (int i = 0; i < selectedYears.length; i++) {
                                 AmpIndicatorValue actualValue = actualValues.get(selectedYears[i]);
                                 if (actualValue != null) {
@@ -204,7 +285,7 @@ public class getNPDgraph extends Action {
                                     dataset.addCustomTooltipValue(new String[]{formatValue(baseValue), "", "", formatValue(targetValue)});
                                 }
                             }
-                        }
+                        }*/
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         throw new AimException("Error creating dataset for graph.", ex);

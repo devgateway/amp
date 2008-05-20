@@ -35,7 +35,7 @@ function deleteData(ind){
 
 function saveIndicator(id){
 	if (!validation()){
-	var msg='<digi:trn key="aim:addEditData:pleaseFillAllData">the quantity of actual,base,tagert values must be the same\n Please fill all data</digi:trn>';
+	var msg='<digi:trn key="aim:addEditData:enterBaseAndTargetValues">Please ensure that you enter at least 1 base and 1 target value</digi:trn>';
 	alert(msg);
 	return false;
 	}
@@ -65,9 +65,8 @@ function validation(){
 	var targetValue=0;
 	if(values!=null){
 		for (var i=0;i<values.length;i++){
-			if(values[i].selectedIndex==0){
-				actualValue++;
-			}else if (values[i].selectedIndex==1){
+			
+			if (values[i].selectedIndex==1){
 				baseValue++;
 			}else if(values[i].selectedIndex==2){
 				targetValue++;
@@ -75,7 +74,7 @@ function validation(){
 		}	
 	}
 	//for every actual value we should have base and target values
-	if(targetValue!=actualValue || actualValue!=baseValue || baseValue!=targetValue){
+	if(baseValue==0||targetValue==0){
 		return false;	
 	}
 	return true;
@@ -189,7 +188,7 @@ function validation(){
     </td>
   </tr>
    <tr><td width="100%" colspan="6"><br>
-   		<font color="red"> *<digi:trn key="aim:equalValues">Please ensure that for every actual value,you filled corresponding base and target values</digi:trn></font> 
+   		<font color="red"> *<digi:trn key="aim:addEditData:enterBaseAndTargetValues">Please ensure that you enter at least 1 base and 1 target value</digi:trn></font> 
    </td></tr>
 </table>
 

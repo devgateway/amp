@@ -87,8 +87,29 @@ public class ReportsFilterPickerForm extends ActionForm {
         private Object[] selectedPrimaryPrograms;
         private Object[] selectedSecondaryPrograms;
 
+	private Integer renderStartYear; //the range of dates columns that  has to be render,  years not in range will be computables for totals but wont be  rederisables
+	private Integer renderEndYear;
+	
+	private Integer resetRenderStartYear; 
+	private Integer resetRenderEndYear;
+	
+        public Integer getRenderStartYear() {
+	    return renderStartYear;
+	}
 
-        public Object[] getSelectedNatPlanObj() {
+	public void setRenderStartYear(Integer renderStartYear) {
+	    this.renderStartYear = renderStartYear;
+	}
+
+	public Integer getRenderEndYear() {
+	    return renderEndYear;
+	}
+
+	public void setRenderEndYear(Integer renderEndYear) {
+	    this.renderEndYear = renderEndYear;
+	}
+
+	public Object[] getSelectedNatPlanObj() {
             return selectedNatPlanObj;
         }
 
@@ -540,6 +561,22 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setSecondarySectors(Collection secondarySectors) {
 		this.secondarySectors = secondarySectors;
+	}
+
+	public Integer getResetRenderStartYear() {
+	    return resetRenderStartYear;
+	}
+
+	public void setResetRenderStartYear(Integer resetRenderStartYear) {
+	    this.resetRenderStartYear = resetRenderStartYear;
+	}
+
+	public Integer getResetRenderEndYear() {
+	    return resetRenderEndYear;
+	}
+
+	public void setResetRenderEndYear(Integer resetRenderEndYear) {
+	    this.resetRenderEndYear = resetRenderEndYear;
 	}
 	
 }

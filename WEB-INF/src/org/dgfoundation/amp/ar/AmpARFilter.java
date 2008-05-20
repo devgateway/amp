@@ -57,7 +57,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Set statuses=null;
 	//private Set donors=null; //not used anymore
 	@PropertyListableIgnore
-	private Set sectors=null;
+	private Set sectors=null; 
 	private Set selectedSectors	= null;
 	
 	@PropertyListableIgnore
@@ -164,6 +164,9 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private boolean approved=false;
 	private boolean draft=false;
 	
+	private Integer renderStartYear=null; //the range of dates columns that  has to be render,  years not in range will be computables for totals but wont be  rederisables
+	private Integer renderEndYear=null;
+		
 	private Boolean governmentApprovalProcedures;
 	private Boolean jointCriteria;
 	
@@ -209,14 +212,15 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		    if (this.getCurrency() == null)
 		    	this.setCurrency(tempSettings.getCurrency());	
 		    
+			if (renderStartYear==null){
+    				if ( tempSettings.getReportStartYear()!=null && tempSettings.getReportStartYear().intValue()!=0)
+    				    this.setRenderStartYear(tempSettings.getReportStartYear());
+    			}
+			if(renderEndYear==null)
+			if ( tempSettings.getReportEndYear()!=null && tempSettings.getReportEndYear().intValue()!=0)
+			    this.setRenderEndYear(tempSettings.getReportEndYear());
 			
-			if (this.getYearFrom()==null && tempSettings.getReportStartYear()!=null && tempSettings.getReportStartYear().intValue()!=0)
-			    this.setYearFrom(tempSettings.getReportStartYear());
-			
-			if (this.getYearTo()==null && tempSettings.getReportEndYear()!=null && tempSettings.getReportEndYear().intValue()!=0)
-			    this.setYearTo(tempSettings.getReportEndYear());
-			
-		}
+			}
 		
 
 		
@@ -949,6 +953,24 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	public void setTeamAssignedOrgs(Set teamAssignedOrgs) {
 		this.teamAssignedOrgs = teamAssignedOrgs;
 	}
+
+	public Integer getRenderStartYear() {
+	    return renderStartYear;
+	}
+
+	public void setRenderStartYear(Integer renderStartYear) {
+	    this.renderStartYear = renderStartYear;
+	}
+
+	public Integer getRenderEndYear() {
+	    return renderEndYear;
+	}
+
+	public void setRenderEndYear(Integer renderEndYear) {
+	    this.renderEndYear = renderEndYear;
+	}
+
+
 
 
 }

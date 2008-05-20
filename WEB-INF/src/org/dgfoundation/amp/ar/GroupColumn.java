@@ -7,6 +7,7 @@
 package org.dgfoundation.amp.ar;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -127,7 +128,10 @@ public class GroupColumn extends Column {
             if(!element.isShow()) continue;
             MetaInfo minfo=MetaInfo.getMetaInfo(element.getMetaData(),category);
             if(minfo==null || minfo.getValue()==null) return null;
-            metaSet.add(minfo);
+            	//if the year is not renderizable just not add it to minfo
+        	if (element.isRenderizable()) {
+        	    metaSet.add(minfo);
+        	}
         }
         
         //TODO: ugly stuff... i have no choice

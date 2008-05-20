@@ -313,10 +313,6 @@ public class GroupReportData extends ReportData {
 			
 		}
 	}
-	
-	public void removeChild(ReportData child) {
-		
-	}
 
 	public void removeEmptyChildren() {
 		Iterator i=items.iterator();
@@ -325,21 +321,6 @@ public class GroupReportData extends ReportData {
 			if(element.getItems().size()==0) i.remove(); else element.removeEmptyChildren();
 		}
 	}
-
-	@Override
-	public List getAllChildren() {
-		List ret=new ArrayList();
-		ret.addAll(this.getItems());
-		Iterator i=items.iterator();
-		while (i.hasNext()) {
-			ReportData rd = (ReportData) i.next();
-			List sub=rd.getAllChildren();
-			if(sub!=null) ret.addAll(sub);
-		}
-		return ret;
-	}
-
-	
 
 	
 }

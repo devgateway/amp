@@ -27,10 +27,9 @@ import org.digijava.module.aim.dbentity.AmpReports;
 public abstract class ReportData extends Viewable {
     	
     	/**
-    	 * This property is set with the cell that is responsible of creating the report data (in hierarchy).
+    	 * This property is set with the cell that is responsible of creating the reportdata (in hierarchy).
     	 * a hierarchy is created based on a unique set of cells coming from a column. each cell in this column creates a new sub-report
-    	 * to be able to keep track of dimensions, we remember each cell as the splitterCell for each sub-report.
-    	 * Example: Sector: Agriculture will be a splitter cell for the Agriculture hierarchy. 
+    	 * to be able to keep track of dimensions, we remember this cell as the splitterCell
     	 */
     	protected Cell splitterCell=null;
     
@@ -44,16 +43,6 @@ public abstract class ReportData extends Viewable {
 	public void appendAllSplitterCells(Set<Cell> s) {
 	    if(this.getParent()!=null) this.getParent().appendAllSplitterCells(s);
 	    if(this.getSplitterCell()!=null) s.add(this.getSplitterCell());
-	}
-	
-	public void removeMeFromParent() {
-		ReportData parent=this.getParent();
-		if(parent==null) return;
-		Iterator i=parent.getItems().iterator();
-		while (i.hasNext()) {
-			ReportData rd = (ReportData) i.next();
-			if(rd.equals(this)) i.remove();			
-		}
 	}
 	
 	@Override
@@ -167,9 +156,6 @@ public abstract class ReportData extends Viewable {
 	public abstract void applyLevelSorter();
 	
 	public abstract void removeEmptyChildren();
-	
-	
-	public abstract List getAllChildren();
 	
 	public String getNameTrn(){
 		return this.name.toLowerCase().replaceAll(" ", "");

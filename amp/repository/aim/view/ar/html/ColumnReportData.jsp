@@ -17,8 +17,6 @@
 	<% if (!("".equals(columnReport.getRepName()))){ %>
 		: <digi:trn key="rep:pop:${columnReport.repNameTrn}">${columnReport.repName}</digi:trn>
 	<% } %>
-</b>
-	(<bean:write name="columnReport" property="class.name"/>)
 </td></tr>
 
 <%int rowIdx = 2;%>

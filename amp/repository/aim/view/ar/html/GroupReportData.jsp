@@ -10,7 +10,7 @@
 
 <logic:present name="groupReport" property="parent">
 <tr><td colspan='<bean:write name="groupReport" property="totalDepth"/>'>
-<b><bean:write name="groupReport" property="name"/></b>(<bean:write name="groupReport" property="class.name"/>)
+<b><bean:write name="groupReport" property="name"/></b>
 </td></tr>
 </logic:present>
 <tr id='<bean:write name="groupReport" property="absoluteReportName"/>'><td>

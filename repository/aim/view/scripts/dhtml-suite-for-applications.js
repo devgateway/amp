@@ -296,7 +296,27 @@ DHTMLSuite.common.prototype = {
 	  return returnValue;
 	}
 	// }}}
-	,
+,
+	getTopPosCalendar : function(el){
+		/*
+		if(el.getBoundingClientRect){	// IE
+			var box = el.getBoundingClientRect();
+			return (box.top/1 + Math.max(document.body.scrollTop,document.documentElement.scrollTop));
+		}
+		*/
+		if(document.getBoxObjectFor){
+			if(el.tagName!='INPUT' && el.tagName!='SELECT' && el.tagName!='TEXTAREA')return document.getBoxObjectFor(el).y
+		}
+
+		var returnValue = el.offsetTop;
+		while((el = el.offsetParent) != null){
+			if(el.tagName!='HTML'){
+				returnValue += (el.offsetTop - el.scrollTop);
+				if(document.all)returnValue+=el.clientTop;
+			}
+		} 
+		return returnValue;
+	}	,
 	// {{{ __setOkToMakeTextSelections()
     /**
      * Is it ok to make text selections ?
@@ -16384,7 +16404,7 @@ DHTMLSuite.calendar.prototype =
 	__positionDropDownYears : function()
 	{
 		this.divElementYearDropdown.style.left = DHTMLSuite.commonObj.getLeftPos(this.divElementYearInHeading) + 'px';
-		this.divElementYearDropdown.style.top = (DHTMLSuite.commonObj.getTopPos(this.divElementYearInHeading) + this.divElementYearInHeading.offsetHeight) + 'px';
+		this.divElementYearDropdown.style.top = (DHTMLSuite.commonObj.getTopPosCalendar(this.divElementYearInHeading) + this.divElementYearInHeading.offsetHeight) + 'px';
 		if(this.iframeElementDropDowns){
 			this.iframeElementDropDowns.style.left = this.divElementYearDropdown.style.left;
 			this.iframeElementDropDowns.style.top = this.divElementYearDropdown.style.top;

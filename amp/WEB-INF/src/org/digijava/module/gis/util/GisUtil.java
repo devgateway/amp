@@ -15,12 +15,10 @@ import org.digijava.module.gis.dbentity.GisMap;
 import org.digijava.module.gis.dbentity.GisMapPoint;
 import org.digijava.module.gis.dbentity.GisMapSegment;
 import org.digijava.module.gis.dbentity.GisMapShape;
+import org.apache.ecs.xml.XMLDocument;
+import org.apache.ecs.xml.XML;
 
-/**
- * GIS Utilities.
- * @author Irakli Kobiashvili
- *
- */
+
 public class GisUtil {
 
     private static Map loadedMaps = null;
@@ -52,11 +50,6 @@ public class GisUtil {
 
         float scale = 1f; //Pixels per degree
 
-        float virtualMapLeftX = mapLeftX + 180;
-        float virtualMapRightX = mapRightX + 180;
-        float virtualMapLowY = mapLowY + 90;
-        float virtualMapTopY = mapTopY + 90;
-
         float scaleX = (float) (canvasWidth) / (mapRightX - mapLeftX);
         float scaleY = (float) (canvasHeight) / (mapTopY - mapLowY);
 
@@ -68,44 +61,27 @@ public class GisUtil {
         int xOffset = (int) ( -mapLeftX * scale);
         int yOffset = (int) ( -mapLowY * scale);
 
-        int startSegmentNo = 0;
-        int endSegmentNo = mapData.size();
-
-        if (segmentNo > -1) {
-            startSegmentNo = segmentNo;
-            endSegmentNo = segmentNo + 1;
-        }
-
-        for (int segmentId = startSegmentNo; segmentId < endSegmentNo;
+        for (int segmentId = 0; segmentId < mapData.size();
                              segmentId++) {
+
             GisMapSegment gms = (GisMapSegment) mapData.get(segmentId);
 
-            if (fill) {
-                Color gg = new Color((int) (Math.random() * 255d),
-                                     (int) (Math.random() * 255d),
-                                     (int) (Math.random() * 255d));
-                g2d.setColor(gg);
-            }
+            if (segmentNo < 0 || segmentNo == gms.getSegmentId()) {
 
+
+                /*
             g2d.setColor(new Color(250, 250, 250));
-
             CoordinateRect ccRect = getMapRectForSegment(gms);
-
-
             g2d.drawString(gms.getSegmentName(),
                            xOffset + (ccRect.getLeft() + (ccRect.getRight()-ccRect.getLeft())/2) * scale,
                            canvasHeight - (yOffset + (ccRect.getBottom() + (ccRect.getTop() - ccRect.getBottom()) / 2) * scale));
+*/
 
-    /*
-    g2d.drawString(gms.getSegmentName(),
-                           xOffset + (ccRect.getLeft()) * scale,
-                           canvasHeight - (yOffset + (ccRect.getBottom()) * scale));*/
 
 
             for (int shapeId = 0; shapeId < gms.getShapes().size(); shapeId++) {
 
                 GisMapShape shape = (GisMapShape) gms.getShapes().get(shapeId);
-
                 int[] xCoords = new int[shape.getShapePoints().size()];
                 int[] yCoords = new int[shape.getShapePoints().size()];
 
@@ -115,17 +91,29 @@ public class GisUtil {
                     GisMapPoint gmp = (GisMapPoint) shape.getShapePoints().get(
                             mapPointId);
 
-                    xCoords[mapPointId] = xOffset +
-                                          (int) ((gmp.getLongatude()) *
-                                                 scale);
-                    yCoords[mapPointId] = canvasHeight - (yOffset +
-                            (int) ((gmp.getLatitude()) *
-                                   scale));
+                    int xCoord = xOffset +
+                                 (int) ((gmp.getLongatude()) *
+                                        scale);
+                    int yCoord = canvasHeight - (yOffset +
+                                                 (int) ((gmp.getLatitude()) *
+                                                        scale));
+                    xCoords[mapPointId] = xCoord;
+                    yCoords[mapPointId] = yCoord;
                 }
 
                 if (fill) {
+                    Color gg = new Color(0, 0, 255);
+                    g2d.setColor(gg);
+
+
                     g2d.fillPolygon(xCoords, yCoords,
                                     shape.getShapePoints().size());
+
+                    g2d.setColor(new Color(255, 255, 255));
+                    g2d.drawPolygon(xCoords, yCoords,
+                                    shape.getShapePoints().size());
+
+
                 } else {
                     g2d.setColor(new Color(200, 200, 200));
                     g2d.drawPolygon(xCoords, yCoords,
@@ -135,6 +123,7 @@ public class GisUtil {
                                     shape.getShapePoints().size());
                 }
             }
+        }
         }
 
         //make grid
@@ -283,6 +272,104 @@ public class GisUtil {
                 }
 
             }
+        }
+        return retVal;
+    }
+
+    public XMLDocument getImageMap(List mapData,
+                                   int pointsPerShape,
+                                   int canvasWidth,
+                                   int canvasHeight,
+                                   float mapLeftX,
+                                   float mapRightX,
+                                   float mapTopY,
+                                   float mapLowY) {
+
+        XMLDocument retVal = new XMLDocument();
+        XML imageMapDefRoot = null;
+        imageMapDefRoot = new XML("map");
+        retVal.addElement(imageMapDefRoot);
+
+        float scale = 1f; //Pixels per degree
+
+        float scaleX = (float) (canvasWidth) / (mapRightX - mapLeftX);
+        float scaleY = (float) (canvasHeight) / (mapTopY - mapLowY);
+
+        if (scaleX < scaleY) {
+            scale = scaleX;
+        } else {
+            scale = scaleY;
+        }
+        int xOffset = (int) ( -mapLeftX * scale);
+        int yOffset = (int) ( -mapLowY * scale);
+
+        for (int segmentId = 0; segmentId < mapData.size();
+                             segmentId++) {
+            GisMapSegment gms = (GisMapSegment) mapData.get(segmentId);
+
+            XML segmentNode = null;
+
+            segmentNode = new XML("segment");
+            segmentNode.addAttribute("name", gms.getSegmentName());
+            segmentNode.addAttribute("code", gms.getSegmentCode());
+            if (gms.getSegmentDescription() != null) {
+                segmentNode.addAttribute("desc", gms.getSegmentDescription());
+            }
+            imageMapDefRoot.addElement(segmentNode);
+
+            for (int shapeId = 0; shapeId < gms.getShapes().size(); shapeId++) {
+
+                GisMapShape shape = (GisMapShape) gms.getShapes().get(shapeId);
+
+                XML shapeNode = null;
+                int skipPoints = 0;
+
+                shapeNode = new XML("shape");
+                segmentNode.addElement(shapeNode);
+                skipPoints = shape.getShapePoints().size() / pointsPerShape;
+
+                for (int mapPointId = 0;
+                                      mapPointId < shape.getShapePoints().size();
+                                      mapPointId += skipPoints) {
+
+                    GisMapPoint gmp = (GisMapPoint) shape.getShapePoints().get(
+                            mapPointId);
+
+                    int xCoord = xOffset +
+                                 (int) ((gmp.getLongatude()) *
+                                        scale);
+                    int yCoord = canvasHeight - (yOffset +
+                                                 (int) ((gmp.getLatitude()) *
+                            scale));
+
+                    XML pointNode = new XML("point");
+                    pointNode.addAttribute("x", xCoord);
+                    pointNode.addAttribute("y", yCoord);
+                    shapeNode.addElement(pointNode);
+                }
+            }
+        }
+        return retVal;
+    }
+
+    public XMLDocument getSegmentData(List mapData) {
+
+        XMLDocument retVal = new XMLDocument();
+        XML rootNode = null;
+        rootNode = new XML("segments");
+        retVal.addElement(rootNode);
+
+        for (int segmentId = 0; segmentId < mapData.size();
+                             segmentId++) {
+            GisMapSegment gms = (GisMapSegment) mapData.get(segmentId);
+            XML segmentNode = null;
+            segmentNode = new XML("segment");
+            segmentNode.addAttribute("name", gms.getSegmentName());
+            segmentNode.addAttribute("code", gms.getSegmentCode());
+            if (gms.getSegmentDescription() != null) {
+                segmentNode.addAttribute("desc", gms.getSegmentDescription());
+            }
+            rootNode.addElement(segmentNode);
         }
         return retVal;
     }

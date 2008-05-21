@@ -3,6 +3,8 @@
 	<name>gis</name>
 	<security login-required="true" default="READ">
 		<action login-required="true" pattern="/showGisDashboard" /> 
+		<action login-required="true" pattern="/mapLoader" /> 
+		<action login-required="true" pattern="/gisService" /> 
 	</security>
 
 	<hibernate-classes required="false">

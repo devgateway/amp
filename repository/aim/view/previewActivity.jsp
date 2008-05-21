@@ -1844,7 +1844,7 @@ function collapseAll() {
 									</module:display>
 
 									
-									<field:display name="Project Performance"  feature="Dashboard">
+									<field:display name="Activity Performance"  feature="Activity Dashboard">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:meActivityPerformance">
@@ -1859,7 +1859,7 @@ function collapseAll() {
 											<% } %>										</td>
 									</tr>
 									</field:display>
-									<field:display name="Project Risk" feature="Dashboard">
+									<field:display name="Project Risk" feature="Activity Dashboard">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
 											<digi:trn key="aim:meActivityRisk">

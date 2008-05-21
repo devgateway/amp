@@ -466,7 +466,6 @@ public class LuceneUtil {
 			searchString = searchString.trim();
 			if (searchString.charAt(0) == '*')
 				searchString = searchString.substring(1);
-			logger.info("LUCENE:::::::" + searchString);
 			query = parser.parse(searchString);
 			hits = indexSearcher.search(query);
 		} catch (Exception e1) {

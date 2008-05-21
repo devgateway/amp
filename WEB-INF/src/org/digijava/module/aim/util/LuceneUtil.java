@@ -463,6 +463,9 @@ public class LuceneUtil {
 		Searcher indexSearcher = null;
 		try {
 			indexSearcher = new IndexSearcher(index);
+			searchString = searchString.trim();
+			if (searchString.startsWith("*"))
+				searchString = searchString.replaceFirst("*", "");
 			query = parser.parse(searchString);
 
 			hits = indexSearcher.search(query);

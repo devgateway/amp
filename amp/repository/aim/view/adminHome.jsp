@@ -113,6 +113,17 @@
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="trnSystemSettings">
+                                <digi:trn key="aim:clickToViewSystemSettings">Click here to view the Patches applied</digi:trn>
+                              </c:set>
+                              <digi:link href="/ListAppliedPatches.do" title="${trnSystemSettings}" >
+                                <digi:trn key="aim:ListAppliedPatches">List Applied Patches</digi:trn>
+                              </digi:link>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class=f-names noWrap>
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="trnTranslationManager">
                                 <digi:trn key="aim:clickToViewTranslationManager">Click here to view Translation Manager</digi:trn>
                               </c:set>

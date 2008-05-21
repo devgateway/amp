@@ -210,6 +210,10 @@
 
 	<!-- global settings-->
 	<page name="viewGlobalSettings"  title ="- Global Settings " />
+	
+	<!-- applied patches -->
+	<page name="viewListAppliedPatches"  title ="- List Applied Patches " />
+	<page name="viewShowPatch"  title ="- Show Patch " />
 
 	<!-- category manager  -->
 	<page name="viewCategoryManager"  title ="- Category Manager " />

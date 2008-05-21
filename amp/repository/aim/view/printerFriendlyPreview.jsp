@@ -516,22 +516,28 @@
 											<digi:trn key="aim:location">
 										    Location</digi:trn>
 									  </b>										</td>
-<td bgcolor="#ffffff">
+										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.selectedLocs}">
 												<table width="100%" cellSpacing="2" cellPadding="1">
 												<c:forEach var="locations" items="${aimEditActivityForm.selectedLocs}">
 													<tr>
 													<td>
 													<c:if test="${!empty locations.country}">
-														[<c:out value="${locations.country}"/>]													</c:if>
+														[<c:out value="${locations.country}"/>]													
+													</c:if>
 													<c:if test="${!empty locations.region}">
-														[<c:out value="${locations.region}"/>]													</c:if>
+														[<c:out value="${locations.region}"/>]													
+														</c:if>
 													<c:if test="${!empty locations.zone}">
-														[<c:out value="${locations.zone}"/>]													</c:if>
+														[<c:out value="${locations.zone}"/>]													
+													</c:if>
 													<c:if test="${!empty locations.woreda}">
-														[<c:out value="${locations.woreda}"/>]													</c:if>													</td>
+														[<c:out value="${locations.woreda}"/>]													
+													</c:if>													
+													</td>
 													<td align="right">
-														${locations.percent}%													</td>
+														<c:out value="${locations.percent}"/>%												
+													</td>
 													</tr>
 												</c:forEach>
 												</table>
@@ -1973,17 +1979,7 @@
 									</tr>
 									</feature:display>
 									</module:display>
-							
-									
-
-								  
-
-									
-									
-								  
-                                
-                                
-                               	  <field:display name="Project Performance"  feature="Dashboard">
+							 		<field:display name="Activity Performance"  feature="Activity Dashboard">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b>
@@ -2000,7 +1996,7 @@
 											<% } %>										</td>
 									</tr>
 									</field:display>
-									<field:display name="Project Risk" feature="Dashboard">
+									<field:display name="Project Risk" feature="Activity Dashboard">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b>

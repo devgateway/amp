@@ -129,6 +129,7 @@
     <form-bean name="aimParisIndicatorForm" type="org.digijava.module.aim.form.ParisIndicatorForm" />
     <form-bean name="aimNationalPlaningDashboardForm" type="org.digijava.module.aim.form.NationalPlaningDashboardForm" />
     <form-bean name="aimGlobalSettingsForm" type="org.digijava.module.aim.form.GlobalSettingsForm" />
+    <form-bean name="aimListAppliedPatchesForm" type="org.digijava.module.aim.form.ListAppliedPatchesForm" />
     <form-bean name="aimCategoryManagerForm" type="org.digijava.module.aim.form.CategoryManagerForm" />
     <form-bean name="aimNPDForm" type="org.digijava.module.aim.form.NpdForm" />
     <form-bean name="aimActiityListForm" type="org.digijava.module.aim.form.ActivitiesForm" />
@@ -1472,6 +1473,10 @@
     </action>
     <action name="aimGlobalSettingsForm" path="/aim/GlobalSettings" scope="session" type="org.digijava.module.aim.action.GlobalSettings" validate="false">
       <forward name="viewGS" path="/showLayout.do?layout=viewGlobalSettings" />
+    </action>
+    <action name="aimListAppliedPatchesForm" path="/aim/ListAppliedPatches" scope="session" type="org.digijava.module.aim.action.ListAppliedPatches" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=viewListAppliedPatches" />
+      <forward name="viewPatch" path="/showLayout.do?layout=viewShowPatch" />
     </action>
     <action name="aimTranslatorManagerForm" path="/aim/translationManager" scope="session" type="org.digijava.module.aim.action.TranslatorManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewTranslatorManager" />

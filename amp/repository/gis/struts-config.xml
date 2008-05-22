@@ -4,7 +4,6 @@
 <struts-config>
   <form-beans>
     <form-bean name="gisDashboardForm" type="org.digijava.module.gis.form.GisDashboardForm" />
- 
     <form-bean name="gisMapLoaderForm" type="org.digijava.module.gis.form.GisMapLoaderForm" />
   </form-beans>
   <action-mappings>

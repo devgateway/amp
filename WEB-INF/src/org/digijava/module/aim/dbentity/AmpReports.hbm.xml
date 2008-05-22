@@ -50,7 +50,7 @@
 				</composite-element>
 		</set>						
 
-		<set name="measures" table="AMP_REPORT_MEASURES" lazy="true">
+		<set name="measures" table="AMP_REPORT_MEASURES">
 			<cache usage="read-write"/>
 			<key column="amp_report_id"/>
 			<composite-element class="org.digijava.module.aim.dbentity.AmpReportMeasures">

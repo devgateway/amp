@@ -31,6 +31,7 @@ import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.IndicatorThemeBean;
+import org.digijava.module.aim.helper.IndicatorValuesComparator;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -185,7 +186,9 @@ public class AddThemeIndicator extends Action {
 			List<AmpPrgIndicatorValue> indValuesList=new ArrayList<AmpPrgIndicatorValue>();
 			IndicatorTheme indTheme=it.next();
 			if(indTheme.getValues()!=null){
-				for (AmpIndicatorValue value : indTheme.getValues()) {
+                            List<AmpIndicatorValue> sortedIndicatorValues=new ArrayList(indTheme.getValues());
+                            Collections.sort(sortedIndicatorValues,new IndicatorValuesComparator());
+				for (AmpIndicatorValue value : sortedIndicatorValues) {
 	            	AmpPrgIndicatorValue bean=new AmpPrgIndicatorValue();
 					bean.setCreationDate(DateConversion.ConvertDateToString(value.getValueDate()));
 					bean.setValAmount(value.getValue());

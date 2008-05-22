@@ -21,6 +21,7 @@ import org.digijava.module.aim.dbentity.IndicatorTheme;
 import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.IndicatorValuesComparator;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 
@@ -45,8 +46,10 @@ public class AddEditData
             IndicatorTheme connection=IndicatorUtil.getConnectionToTheme(parentId);
             themeForm.setIndicatorName(connection.getIndicator().getName());
             if (connection.getValues()!=null && connection.getValues().size()>0){
+                List<AmpIndicatorValue> sortedIndicatorValues = new ArrayList(connection.getValues());
+                Collections.sort(sortedIndicatorValues,new IndicatorValuesComparator());
                 List<AmpPrgIndicatorValue> indValuesList=new ArrayList<AmpPrgIndicatorValue>();
-            	for (AmpIndicatorValue value : connection.getValues()) {
+            	for (AmpIndicatorValue value :sortedIndicatorValues) {
                 	AmpPrgIndicatorValue bean=new AmpPrgIndicatorValue();
 					bean.setCreationDate(DateConversion.ConvertDateToString(value.getValueDate()));
 					bean.setValAmount(value.getValue());

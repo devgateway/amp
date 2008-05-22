@@ -377,7 +377,7 @@ ${fn:replace(message,quote,escapedQuote)}
                                                                                             
                                                                                         </tr>	
                                                                                          </field:display>
-                                                                                        <field:display name="Contract Name" feature="Contracting">
+                                                                                        <field:display name="Contract Organization" feature="Contracting">
                                                                                          <tr>
                                                                                             <td align="left">
                                                                                                 <b><digi:trn key="aim:IPA:popup:contractOrg">Contract Organization:</digi:trn></b>

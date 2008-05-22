@@ -551,7 +551,9 @@ public class AmpReportGenerator extends ReportGenerator {
 			AmpColumns element = ((AmpReportColumn) i.next()).getColumn();
 			String colName = element.getColumnName();
 			List cats = getColumnSubCategories(element.getColumnName());
-			CellColumn src = (CellColumn) rawColumns.getColumn(colName);
+			Column c=rawColumns.getColumn(colName);
+			if(c instanceof GroupColumn) continue; //ugly fix to AMP-2793 and the problem created by mauricio after generating GroupColumnS before categorizeData
+			CellColumn src = (CellColumn)c;
 			if (cats.size() != 0) {
 				Column newcol = GroupColumn.verticalSplitByCategs(src, cats,
 						true,reportMetadata);

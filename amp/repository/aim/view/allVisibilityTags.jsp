@@ -582,7 +582,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Total Private Contribution" feature="Contracting"></field:display>
 <field:display name="Contracting IB" feature="Contracting"></field:display>
 <field:display name="Disbursements" feature="Contracting"></field:display>
-<field:display name="Add Component Disbursements Button" feature="Components"></field:display>
 
 
 <logic:iterate id="ampMeasures"  name="list" scope="page" type="org.digijava.module.aim.dbentity.AmpMeasures">

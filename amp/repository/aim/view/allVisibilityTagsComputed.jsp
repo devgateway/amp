@@ -198,7 +198,6 @@
 <field:display name="Actual/Planned Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Add Actors Link" feature="Issues"></field:display> 
 <field:display name="Add Commitment Button" feature="Funding Organizations"></field:display> 
-<field:display name="Add Component Disbursements Button" feature="Components"></field:display> 
 <field:display name="Add Components Button" feature="Components"></field:display> 
 <field:display name="Add Disbursement Button" feature="Funding Organizations"></field:display> 
 <field:display name="Add Disbursement Order Button" feature="Disbursement Orders"></field:display> 

@@ -18,60 +18,60 @@
 	function viewMessage(id) {
 		openURLinWindow('${contextPath}/message/messageActions.do?actionType=viewSelectedMessage&msgStateId='+id,550,400);
 	}
-	
-	function goToPage(page){	
+
+	function goToPage(page){
 		 <digi:context name="searchMsg" property="context/module/moduleinstance/messageActions.do"/>
 		 url = "<%= searchMsg %>?actionType=viewAllMessages&page="+page;
 		 document.forms[0].action =url;
-		 document.forms[0].submit();		 
+		 document.forms[0].submit();
 		 return true;
 	}
-	
+
 	function toggleGroup(group_id){
 		var strId='#'+group_id;
 		$(strId+'_minus').toggle();
-		$(strId+'_plus').toggle();		
-		$('#msg_'+group_id).toggle('fast');		
-		
+		$(strId+'_plus').toggle();
+		$('#msg_'+group_id).toggle('fast');
+
 		var partialUrl=addActionToURL('messageActions.do');
 		var url=getUrl(partialUrl,group_id);
 		var async=new Asynchronous();
 		async.complete=makeRead;
 		async.call(url);
 	}
-	
-	
+
+
 	function addActionToURL(actionName){
 		var fullURL=document.URL;
 		var lastSlash=fullURL.lastIndexOf("/");
 		var partialURL=fullURL.substring(0,lastSlash);
 		return partialURL+"/"+actionName;
 	}
-	
-	function getUrl(url,group_id){				
+
+	function getUrl(url,group_id){
 		var result=url;
 		result+='~actionType=makeMsgRead';
 		result+='~msgStateId='+group_id;
 		return result;
 	}
-	
+
 	function makeRead (status, statusText, responseText, responseXML){
 		activityXML=responseXML;
 		var root=responseXML.getElementsByTagName('Messaging')[0].childNodes[0];
 		var stateId=root.getAttribute('id');
 		var isRead=root.getAttribute('read');
 		if(isRead){
-			var myid='#'+stateId+'_unreadLink';		
-			$(myid).css("color","");		
+			var myid='#'+stateId+'_unreadLink';
+			$(myid).css("color","");
 		}
 	}
-	
+
 	function deleteMsg(){
 		return confirm("Are You Sure You Want To Remove This Message ?");
 	}
-	
-	
-	
+
+
+
 </script>
 
 <TABLE align=center border=0 cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
@@ -83,23 +83,23 @@
               		<TR bgColor=#f4f4f2>
                  		<TD bgColor=#c9c9c7 class=box-title	title='<digi:trn key="message:messagesAssosiatedWithTeam">List of Messages associated with Team</digi:trn>'>
 							<c:if test="${messageForm.tabIndex==1}">
-								<digi:trn key="message:Messages">Messages</digi:trn>							
+								<digi:trn key="message:Messages">Messages</digi:trn>
 							</c:if>
 							<c:if test="${messageForm.tabIndex!=1}">
 								<a href="${contextPath}/message/messageActions.do?actionType=viewAllMessages&tabIndex=1&page=1">
                  					<digi:trn key="message:Messages">Messages</digi:trn>
                  				</a>
-							</c:if>							
+							</c:if>
 						</TD>
                     	<TD background="module/aim/images/corner-r.gif"	height=17 width=17></TD>
                     	<TD bgColor=#c9c9c7 class=box-title	title='<digi:trn key="message:alertsAssosiatedWithTeam">List of Alerts associated with Team</digi:trn>'>
 							<c:if test="${messageForm.tabIndex==2}">
-								<digi:trn key="message:Alerts">Alerts</digi:trn>							
+								<digi:trn key="message:Alerts">Alerts</digi:trn>
 							</c:if>
 							<c:if test="${messageForm.tabIndex!=2}">
 								<a href="${contextPath}/message/messageActions.do?actionType=viewAllMessages&tabIndex=2&page=1">
 									<digi:trn key="message:Alerts">Alerts</digi:trn>
-								</a>							
+								</a>
 							</c:if>
 						</TD>
                     	<TD background="module/aim/images/corner-r.gif"	height=17 width=17></TD>
@@ -122,12 +122,12 @@
 								<a href="${contextPath}/message/messageActions.do?actionType=viewAllMessages&tabIndex=4&page=1">
 									<digi:trn key="message:ebents">Calendar Events</digi:trn>
 								</a>
-							</c:if>							
+							</c:if>
 						</TD>
                     	<TD background="module/aim/images/corner-r.gif"	height=17 width=17></TD>
 						</TR>
 					</TABLE>
-				</TD></TR>				
+				</TD></TR>
 				<TR>
 					<TD width="100%">
 						<table align="center" width="30%" cellpadding="5" cellspacing="5">
@@ -167,10 +167,10 @@
 								</td>
 							</tr>
 						</table>
-					</TD>					
-				</TR>		
+					</TD>
+				</TR>
 				<logic:notEmpty name="messageForm" property="pagedMessagesForTm">
-					<TR><TD bgColor="#ffffff" class="box-border" align="left"> 
+					<TR><TD bgColor="#ffffff" class="box-border" align="left">
 						<TABLE border="0" cellPadding="1" cellSpacing="1" width="100%" >
 						<c:forEach items="${messageForm.pagedMessagesForTm}" var="all" varStatus="status">
 								<c:choose>
@@ -189,16 +189,14 @@
 									<td width="60%">
 										<div id="${all.id}_dots" >
 											<c:if test="${all.read=='false'}">
-												<span>													
-														<A id="${all.id}_unreadLink" href="javascript:viewMessage(${all.id});" style="color:red">								
-															<digi:trn key="${all.message.name}">${all.message.name}</digi:trn>
-														</A>
-												</span>
+                                              <A id="${all.id}_unreadLink" href="javascript:viewMessage(${all.id});" style="color:red;">
+                                                <b><digi:trn key="${all.message.name}">${all.message.name}</digi:trn></b>
+                                              </A>
 											</c:if>
 											<c:if test="${empty all.read || all.read=='true'}">
-												<A href="javascript:viewMessage(${all.id});">
-													<digi:trn key="${all.message.name}">${all.message.name}</digi:trn>									 							
-												</A>
+                                              <A href="javascript:viewMessage(${all.id});">
+                                                <digi:trn key="${all.message.name}">${all.message.name}</digi:trn>
+                                              </A>
 											</c:if>
 										</div>
 										<div id="msg_${all.id}" style="display: none;">
@@ -226,57 +224,57 @@
 												</tr>
 											</table>
 										</div>
-									</td>	
+									</td>
 									<td width="20%" align="right">
 										<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 										 <c:set target="${urlParams}" property="msgStateId" value="${all.id}" />
 										 <c:if test="${messageForm.childTab=='draft'}">
 											<digi:link href="/messageActions.do?actionType=fillTypesAndLevels&editingMessage=true" name="urlParams">
 										 		<digi:trn key="message:Edit">Edit</digi:trn>
-										 	</digi:link>		 
+										 	</digi:link>
 										 </c:if>
 										 <c:if test="${messageForm.childTab!='draft'}">
 											<digi:link href="/messageActions.do?actionType=forwardMessage&fwd=fillForm" name="urlParams">
 										 		<digi:trn key="message:Forward">Forward</digi:trn>
-										 	</digi:link>		 
-										 </c:if> 
-									</td>															
+										 	</digi:link>
+										 </c:if>
+									</td>
 									<td width="20%" align="center">
 										<digi:link href="/messageActions.do?editingMessage=false&actionType=removeSelectedMessage" name="urlParams" onclick="return deleteMsg()">
 										 	<digi:trn key="message:delete">Delete</digi:trn>
-										 </digi:link>										
+										 </digi:link>
 									</td>
 								</tr>
 							</c:forEach>
 						</TABLE>
 					</TD></TR>
-					<TR><TD> 
+					<TR><TD>
 						<digi:trn key="message:pages">Pages</digi:trn>:
 						<c:if test="${messageForm.page>1}">
 							<c:set var="trn">
 								<digi:trn key="message:firstPage">click here to go to first page</digi:trn>
 							</c:set>
 							<a href="javascript:goToPage('1')" title="${trn}" >&lt;&lt;</a>
-							
+
 							<c:set var="trn">
 								<digi:trn key="message:previousPage">click here to go to previous page</digi:trn>
 							</c:set>
 							<a href="javascript:goToPage(${messageForm.page-1})" title="${trn}" > &lt; </a>
-							
+
 						</c:if>
 						&nbsp;
 						<c:if test="${not empty messageForm.allPages}">
-							
+
 							<c:set var="length" value="${messageForm.pagesToShow}"></c:set>
-							<c:set var="start" value="${messageForm.offset}"/>								
-							
+							<c:set var="start" value="${messageForm.offset}"/>
+
 							<logic:iterate id="pg" name="messageForm" property="allPages" offset="${start}" length="${length}">
 								<c:if test="${pg==messageForm.page}"><font color="red">${pg}</font></c:if>
 								<c:if test="${pg!=messageForm.page}">
 									<c:set var="translation">
 										<digi:trn key="aim:clickToGoToNext">Click here to go to next page</digi:trn>
 									</c:set>
-									<a href="javascript:goToPage(${pg})" title="${translation}" >${pg}</a> 
+									<a href="javascript:goToPage(${pg})" title="${translation}" >${pg}</a>
 								</c:if> |&nbsp;
 							</logic:iterate>
 						</c:if>
@@ -285,16 +283,16 @@
 								<digi:trn key="message:previousPage">click here to go to next page</digi:trn>
 							</c:set>
 							<a href="javascript:goToPage(${messageForm.page+1})" title="${trn}" > &gt; </a>
-							
+
 							<c:set var="trn">
 								<digi:trn key="message:firstPage">click here to go to last page</digi:trn>
 							</c:set>
-							<a href="javascript:goToPage(${messageForm.lastPage})" title="${trn}" >&gt;&gt;</a>							
+							<a href="javascript:goToPage(${messageForm.lastPage})" title="${trn}" >&gt;&gt;</a>
 						</c:if>
 						&nbsp; ${messageForm.page}of ${messageForm.lastPage}
 					</TD></TR>
-				</logic:notEmpty>			
-			</TABLE>				
+				</logic:notEmpty>
+			</TABLE>
 		</TD>
 	</TR>
 </TABLE>

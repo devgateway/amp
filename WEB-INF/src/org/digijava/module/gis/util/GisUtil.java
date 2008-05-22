@@ -50,16 +50,18 @@ public class GisUtil {
 
         float scale = 1f; //Pixels per degree
 
-        float scaleX = (float) (canvasWidth) / (mapRightX - mapLeftX);
-        float scaleY = (float) (canvasHeight) / (mapTopY - mapLowY);
+        int border = 10;
+
+        float scaleX = (float) (canvasWidth - border * 2) / (mapRightX - mapLeftX);
+        float scaleY = (float) (canvasHeight - border * 2) / (mapTopY - mapLowY);
 
         if (scaleX < scaleY) {
             scale = scaleX;
         } else {
             scale = scaleY;
         }
-        int xOffset = (int) ( -mapLeftX * scale);
-        int yOffset = (int) ( -mapLowY * scale);
+        int xOffset = (int) ( -mapLeftX * scale) + border;
+        int yOffset = (int) ( -mapLowY * scale) + border;
 
         for (int segmentId = 0; segmentId < mapData.size();
                              segmentId++) {
@@ -94,7 +96,7 @@ public class GisUtil {
                     int xCoord = xOffset +
                                  (int) ((gmp.getLongatude()) *
                                         scale);
-                    int yCoord = canvasHeight - (yOffset +
+                    int yCoord = canvasHeight - border - (yOffset +
                                                  (int) ((gmp.getLatitude()) *
                                                         scale));
                     xCoords[mapPointId] = xCoord;
@@ -127,22 +129,28 @@ public class GisUtil {
         }
 
         //make grid
-        g2d.setColor(new Color(200, 200, 200, 40));
-        for (float paralels = -90; paralels < 90; paralels += 10) {
-            g2d.drawLine(0, canvasHeight - yOffset + (int) (paralels * scale),
-                         canvasWidth,
-                         canvasHeight - yOffset + (int) (paralels * scale));
+        if (segmentNo < 0) {
+            g2d.setColor(new Color(200, 200, 200, 40));
+            for (float paralels = -90; paralels < 90; paralels += 10) {
+                g2d.drawLine(0, (canvasHeight - border * 2) - yOffset + (int) (paralels * scale),
+                             (canvasWidth - border * 2),
+                             (canvasHeight - border * 2) - yOffset + (int) (paralels * scale));
+            }
+
+            for (float meridians = -180; meridians < 180; meridians += 10) {
+                g2d.drawLine(xOffset + (int) (meridians * scale), 0,
+                             xOffset + (int) (meridians * scale), canvasHeight - border * 2);
+            }
+
+            g2d.setColor(new Color(200, 200, 200, 77));
+            g2d.drawLine(0, canvasHeight - border * 2 - yOffset, canvasWidth - border * 2,
+                         canvasHeight - border * 2 - yOffset);
+            g2d.drawLine(xOffset, 0, xOffset, canvasHeight - border * 2);
         }
 
-        for (float meridians = -180; meridians < 180; meridians += 10) {
-            g2d.drawLine(xOffset + (int) (meridians * scale), 0,
-                         xOffset + (int) (meridians * scale), canvasHeight);
-        }
-
-        g2d.setColor(new Color(200, 200, 200, 77));
-        g2d.drawLine(0, canvasHeight - yOffset, canvasWidth,
-                     canvasHeight - yOffset);
-        g2d.drawLine(xOffset, 0, xOffset, canvasHeight);
+        //make border
+        g2d.setColor(new Color(200, 200, 200, 255));
+        g2d.drawRect(border, border, canvasWidth - border * 2, canvasHeight - border * 2);
 
     }
 
@@ -291,17 +299,19 @@ public class GisUtil {
         retVal.addElement(imageMapDefRoot);
 
         float scale = 1f; //Pixels per degree
+        int border = 10;
 
-        float scaleX = (float) (canvasWidth) / (mapRightX - mapLeftX);
-        float scaleY = (float) (canvasHeight) / (mapTopY - mapLowY);
+
+        float scaleX = (float) (canvasWidth - border * 2) / (mapRightX - mapLeftX);
+        float scaleY = (float) (canvasHeight - border * 2) / (mapTopY - mapLowY);
 
         if (scaleX < scaleY) {
             scale = scaleX;
         } else {
             scale = scaleY;
         }
-        int xOffset = (int) ( -mapLeftX * scale);
-        int yOffset = (int) ( -mapLowY * scale);
+        int xOffset = (int) ( -mapLeftX * scale) + border;
+        int yOffset = (int) ( -mapLowY * scale) + border;
 
         for (int segmentId = 0; segmentId < mapData.size();
                              segmentId++) {
@@ -338,7 +348,7 @@ public class GisUtil {
                     int xCoord = xOffset +
                                  (int) ((gmp.getLongatude()) *
                                         scale);
-                    int yCoord = canvasHeight - (yOffset +
+                    int yCoord = canvasHeight - border - (yOffset +
                                                  (int) ((gmp.getLatitude()) *
                             scale));
 

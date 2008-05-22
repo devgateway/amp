@@ -18,12 +18,11 @@
 	<tr>
 		<td>
 			<div id="mapHolder" style="border:1px solid black; width:500px; height:500px"></div>
-			<div id="imageMapContainer"></div>
+			<div id="imageMapContainer" style="visibility:hidden;"></div>
 		</td>
 	</tr>
 	<tr>
-		<td><div id="regionComboContainer" style="border:1px solid black; width:500px; height:20px"></div></td>
-	</tr>
+		<td><select id="regionCombo" onChange="hilightRegion(this.value)"></select></tr>
 	<tr>
 		<td><input type="Button" value="Load map" onClick="updateMap()"></td>
 	</tr>
@@ -44,6 +43,7 @@
 	function initMap() {
 		mapImg = document.createElement("IMG");
 		mapImg.onLoad = imageLoaded(); 
+		mapImg.border=0;
 		mapImg.useMap="#areaMap";
 	}
 	
@@ -85,19 +85,18 @@
 	function addRegionList() {
 		if (xmlhttp.readyState == 4) {
 			var segments = xmlhttp.responseXML.getElementsByTagName('segment');
+			var combo = document.getElementById("regionCombo");
 			var segmentIndex = 0;
-			var comboSrc = "<select onChange=\"hilightRegion(this.value)\">";
 			
 			for (segmentIndex = 0; segmentIndex < segments.length; segmentIndex ++) {
 				var segment = segments[segmentIndex];
-				
-				comboSrc += "<option value=\"" + segment.attributes.getNamedItem("code").value + "\">";
-				comboSrc += segment.attributes.getNamedItem("name").value;
-				comboSrc += "</option>";
+				var comboOption = document.createElement("OPTION");
+				comboOption.value = segment.attributes.getNamedItem("code").value;
+				comboOption.text = segment.attributes.getNamedItem("name").value;
+				comboOption.innerText = segment.attributes.getNamedItem("name").value;
+				combo.appendChild(comboOption);
 			}
 	
-			comboSrc += "</select>";
-			document.getElementById("regionComboContainer").innerHTML = comboSrc;
 		}
 		
 	}
@@ -107,6 +106,7 @@
 			getImageMap();
 		}
 	}
+	
 	
 	function generateImageMap (XmlObj) {
 		var retVal = "<map name=\"areaMap\">";
@@ -137,8 +137,8 @@
 				}
 				retVal += "\"";
 				retVal += " title=\"" + segment.attributes.getNamedItem("name").value + "\"";
-				retVal += ">";
-				//retVal += " onClick=\"alert('" + segment.attributes.getNamedItem("name").value + "')\">";
+				//retVal += ">";
+				retVal += " onClick=\"setRegionCombo('" + segment.attributes.getNamedItem("code").value + "')\">";
 			}
 		}
 		retVal += "</map>";
@@ -149,6 +149,17 @@
 		mapImg.src = "../../gis/gisService.do?action=paintMap&canvasWidth=500&canvasHeight=500&autoRect=true&mapCode=TZA&hilight="+regionCode;
 	}
 	
+	function setRegionCombo (regionCode) {
+		var regCombo = document.getElementById("regionCombo");
+		var optionIndex;
+		for (optionIndex = 0; optionIndex < regCombo.childNodes.length; optionIndex ++) {
+			if (regCombo.childNodes[optionIndex].value == regionCode) {
+				regCombo.childNodes[optionIndex].selected=true;
+				break;
+			}
+		}
+		hilightRegion (regionCode)
+	}
 
 	
 </script>

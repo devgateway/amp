@@ -246,13 +246,13 @@ public class ReportsFilterPicker extends MultiAction {
 		}
 		
 		if (filterForm.getFromYear()==null){
-		    Long fromYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE));
-    			filterForm.setFromYear(fromYear);
+		   // Long fromYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE));
+    			filterForm.setFromYear(-1l);
 		}
 		
 		if (filterForm.getToYear()==null){
-		    Long toYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));
-		    filterForm.setToYear(toYear);
+		   // Long toYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));
+		    filterForm.setToYear(-1l);
 		}
 		
 		for (int i=1; i<=12; i++) {
@@ -266,8 +266,30 @@ public class ReportsFilterPicker extends MultiAction {
 		if (filterForm.getToMonth()==null)
 			filterForm.setToMonth(-1);
 		
-		Integer rStart=(tempSettings.getReportStartYear()==0)?-1:tempSettings.getReportStartYear();
-		Integer rEnd=(tempSettings.getReportEndYear()==0)?-1:tempSettings.getReportEndYear();
+		/*--------------------------*/
+    		Integer rStart = -1;
+        	if (tempSettings != null && tempSettings.getReportStartYear() != null
+        		&& tempSettings.getReportStartYear().intValue() != 0) {
+        	    rStart = tempSettings.getReportStartYear();
+        	} else {
+        	    String gvalue = FeaturesUtil
+        		    .getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
+        	    if (gvalue != null && !"".equalsIgnoreCase(gvalue)
+        		    && Integer.parseInt(gvalue) > 0) {
+        		rStart = Integer.parseInt(gvalue);
+        	    }
+        	}
+        	/*--------------------------*/
+    		Integer rEnd=-1;
+    		if ( tempSettings!=null&& tempSettings.getReportEndYear()!=null && tempSettings.getReportEndYear().intValue()!=0){
+    		rEnd=tempSettings.getReportEndYear();
+		}else{
+			  String gvalue=FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
+			  if (gvalue!=null && !"".equalsIgnoreCase(gvalue) && Integer.parseInt(gvalue) > 0){
+			      rEnd=Integer.parseInt(gvalue); 
+			  }
+		}
+    		/*--------------------------*/
 		
 		filterForm.setResetRenderStartYear(rStart); 
 		filterForm.setResetRenderEndYear(rEnd); 
@@ -318,10 +340,10 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
 		}
 		
-		Long fromYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE));
-		filterForm.setFromYear(fromYear);
+		//Long fromYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE));
+		filterForm.setFromYear(-1l);
 
-		Long toYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));
+		//Long toYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));
 		
 		 if (tempSettings != null) {
 		     filterForm.setRenderStartYear(tempSettings.getReportStartYear());
@@ -330,7 +352,7 @@ public class ReportsFilterPicker extends MultiAction {
 		     filterForm.setRenderStartYear(-1);
 		     filterForm.setRenderStartYear(-1);
 		 }
-		filterForm.setToYear(toYear);
+		filterForm.setToYear(-1l);
 		filterForm.setFromMonth(-1);
 		filterForm.setToMonth(-1);
 		
@@ -604,11 +626,11 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
 		}
 		
-		Long fromYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE));
-		filterForm.setFromYear(fromYear);
+		//Long fromYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE));
+		filterForm.setFromYear(-1l);
 
-		Long toYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));
-		filterForm.setToYear(toYear);
+		//Long toYear=Long.parseLong(FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE));
+		filterForm.setToYear(-1l);
 		filterForm.setFromMonth(-1);
 		filterForm.setToMonth(-1);
 		

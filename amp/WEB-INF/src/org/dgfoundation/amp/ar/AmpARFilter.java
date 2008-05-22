@@ -40,6 +40,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -194,7 +195,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 				
 		this.setAmpTeams(new TreeSet());
 	
-		
+		AmpApplicationSettings tempSettings=null;
 		if(tm!=null){
 			this.setAmpTeams(TeamUtil.getRelatedTeamsForMember(tm));			
 			//set the computed workspace orgs
@@ -203,7 +204,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 			if ( teamAO!=null && teamAO.size()>0 )
 					this.setTeamAssignedOrgs(teamAO);
 
-			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
+			 tempSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
 		    
 			if(tempSettings==null)
 				if(tm!=null)
@@ -212,16 +213,34 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		    if (this.getCurrency() == null)
 		    	this.setCurrency(tempSettings.getCurrency());	
 		    
-			if (renderStartYear==null){
-    				if ( tempSettings.getReportStartYear()!=null && tempSettings.getReportStartYear().intValue()!=0)
-    				    this.setRenderStartYear(tempSettings.getReportStartYear());
-    			}
-			if(renderEndYear==null)
-			if ( tempSettings.getReportEndYear()!=null && tempSettings.getReportEndYear().intValue()!=0)
-			    this.setRenderEndYear(tempSettings.getReportEndYear());
-			
-			}
+		}
 		
+		if (renderStartYear==null){
+		    // Check if there is value on workspace setting
+				if (tempSettings!=null&& tempSettings.getReportStartYear()!=null && tempSettings.getReportStartYear().intValue()!=0){
+				    this.setRenderStartYear(tempSettings.getReportStartYear());
+				}
+				else{ // if not check if the value exist on
+					// global setting
+				  String gvalue=FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
+				  if (gvalue!=null && !"".equalsIgnoreCase(gvalue)&& Integer.parseInt(gvalue) > 0){
+				  renderStartYear=Integer.parseInt(gvalue); 
+				  }
+				
+		}
+		}
+		if(renderEndYear==null){
+		    // Check if there is value on workspace setting
+			if ( tempSettings!=null&& tempSettings.getReportEndYear()!=null && tempSettings.getReportEndYear().intValue()!=0){
+			    this.setRenderEndYear(tempSettings.getReportEndYear());
+			}else{
+				  String gvalue=FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
+				  if (gvalue!=null && !"".equalsIgnoreCase(gvalue) && Integer.parseInt(gvalue) > 0){
+				  renderEndYear=Integer.parseInt(gvalue); 
+				  }
+			}
+		}
+	
 
 		
 		String widget=(String) request.getAttribute("widget");

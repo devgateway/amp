@@ -61,7 +61,7 @@ public class GisUtil {
             scale = scaleY;
         }
         int xOffset = (int) ( -mapLeftX * scale) + border;
-        int yOffset = (int) ( -mapLowY * scale) + border;
+        int yOffset = (int) ( -mapLowY * scale);
 
         for (int segmentId = 0; segmentId < mapData.size();
                              segmentId++) {
@@ -70,87 +70,94 @@ public class GisUtil {
 
             if (segmentNo < 0 || segmentNo == gms.getSegmentId()) {
 
-
                 /*
-            g2d.setColor(new Color(250, 250, 250));
-            CoordinateRect ccRect = getMapRectForSegment(gms);
-            g2d.drawString(gms.getSegmentName(),
-                           xOffset + (ccRect.getLeft() + (ccRect.getRight()-ccRect.getLeft())/2) * scale,
+                             g2d.setColor(new Color(250, 250, 250));
+                             CoordinateRect ccRect = getMapRectForSegment(gms);
+                             g2d.drawString(gms.getSegmentName(),
+                 xOffset + (ccRect.getLeft() + (ccRect.getRight()-ccRect.getLeft())/2) * scale,
                            canvasHeight - (yOffset + (ccRect.getBottom() + (ccRect.getTop() - ccRect.getBottom()) / 2) * scale));
-*/
+                 */
 
 
 
-            for (int shapeId = 0; shapeId < gms.getShapes().size(); shapeId++) {
+                for (int shapeId = 0; shapeId < gms.getShapes().size(); shapeId++) {
 
-                GisMapShape shape = (GisMapShape) gms.getShapes().get(shapeId);
-                int[] xCoords = new int[shape.getShapePoints().size()];
-                int[] yCoords = new int[shape.getShapePoints().size()];
+                    GisMapShape shape = (GisMapShape) gms.getShapes().get(shapeId);
+                    int[] xCoords = new int[shape.getShapePoints().size()];
+                    int[] yCoords = new int[shape.getShapePoints().size()];
 
-                for (int mapPointId = 0;
-                                      mapPointId < shape.getShapePoints().size();
-                                      mapPointId++) {
-                    GisMapPoint gmp = (GisMapPoint) shape.getShapePoints().get(
-                            mapPointId);
+                    for (int mapPointId = 0;
+                                          mapPointId < shape.getShapePoints().size();
+                                          mapPointId++) {
+                        GisMapPoint gmp = (GisMapPoint) shape.getShapePoints().get(
+                                mapPointId);
 
-                    int xCoord = xOffset +
-                                 (int) ((gmp.getLongatude()) *
-                                        scale);
-                    int yCoord = canvasHeight - border - (yOffset +
-                                                 (int) ((gmp.getLatitude()) *
-                                                        scale));
-                    xCoords[mapPointId] = xCoord;
-                    yCoords[mapPointId] = yCoord;
-                }
+                        int xCoord = xOffset +
+                                     (int) ((gmp.getLongatude()) *
+                                            scale);
+                        int yCoord = canvasHeight - border - (yOffset +
+                                (int) ((gmp.getLatitude()) *
+                                       scale));
+                        xCoords[mapPointId] = xCoord;
+                        yCoords[mapPointId] = yCoord;
+                    }
 
-                if (fill) {
-                    Color gg = new Color(0, 0, 255);
-                    g2d.setColor(gg);
+                    if (fill) {
+                        Color gg = new Color(0, 0, 255);
+                        g2d.setColor(gg);
 
+                        g2d.fillPolygon(xCoords, yCoords,
+                                        shape.getShapePoints().size());
 
-                    g2d.fillPolygon(xCoords, yCoords,
-                                    shape.getShapePoints().size());
+                        g2d.setColor(new Color(255, 255, 255));
+                        g2d.drawPolygon(xCoords, yCoords,
+                                        shape.getShapePoints().size());
 
-                    g2d.setColor(new Color(255, 255, 255));
-                    g2d.drawPolygon(xCoords, yCoords,
-                                    shape.getShapePoints().size());
-
-
-                } else {
-                    g2d.setColor(new Color(200, 200, 200));
-                    g2d.drawPolygon(xCoords, yCoords,
-                                    shape.getShapePoints().size());
-                    g2d.setColor(new Color(200, 200, 200, 50));
-                    g2d.fillPolygon(xCoords, yCoords,
-                                    shape.getShapePoints().size());
+                    } else {
+                        g2d.setColor(new Color(200, 200, 200));
+                        g2d.drawPolygon(xCoords, yCoords,
+                                        shape.getShapePoints().size());
+                        g2d.setColor(new Color(200, 200, 200, 50));
+                        g2d.fillPolygon(xCoords, yCoords,
+                                        shape.getShapePoints().size());
+                    }
                 }
             }
-        }
         }
 
         //make grid
         if (segmentNo < 0) {
             g2d.setColor(new Color(200, 200, 200, 40));
-            for (float paralels = -90; paralels < 90; paralels += 10) {
-                g2d.drawLine(0, (canvasHeight - border * 2) - yOffset + (int) (paralels * scale),
-                             (canvasWidth - border * 2),
-                             (canvasHeight - border * 2) - yOffset + (int) (paralels * scale));
+            for (float paralels = -90; paralels <= 90; paralels += 10) {
+                g2d.drawLine(border,
+                             canvasHeight - border - (yOffset + (int) ((paralels) * scale)),
+                             canvasWidth - border,
+                             canvasHeight - border - (yOffset + (int) ((paralels) * scale)));
             }
 
-            for (float meridians = -180; meridians < 180; meridians += 10) {
-                g2d.drawLine(xOffset + (int) (meridians * scale), 0,
-                             xOffset + (int) (meridians * scale), canvasHeight - border * 2);
+            for (float meridians = -180; meridians <= 180; meridians += 10) {
+                g2d.drawLine(xOffset + (int) (meridians * scale),
+                             border,
+                             xOffset + (int) (meridians * scale),
+                             canvasHeight - border);
             }
 
             g2d.setColor(new Color(200, 200, 200, 77));
-            g2d.drawLine(0, canvasHeight - border * 2 - yOffset, canvasWidth - border * 2,
-                         canvasHeight - border * 2 - yOffset);
-            g2d.drawLine(xOffset, 0, xOffset, canvasHeight - border * 2);
+
+            g2d.drawLine(border,
+                         canvasHeight - border - yOffset,
+                         canvasWidth - border,
+                         canvasHeight - border - yOffset);
+
+            g2d.drawLine(xOffset,
+                         border,
+                         xOffset,
+                         canvasHeight - border);
         }
 
         //make border
         g2d.setColor(new Color(200, 200, 200, 255));
-        g2d.drawRect(border, border, canvasWidth - border * 2, canvasHeight - border * 2);
+        g2d.drawRect(border - 3, border - 3, canvasWidth - border * 2 + 5, canvasHeight - border * 2 + 5);
 
     }
 
@@ -311,7 +318,7 @@ public class GisUtil {
             scale = scaleY;
         }
         int xOffset = (int) ( -mapLeftX * scale) + border;
-        int yOffset = (int) ( -mapLowY * scale) + border;
+        int yOffset = (int) ( -mapLowY * scale);
 
         for (int segmentId = 0; segmentId < mapData.size();
                              segmentId++) {

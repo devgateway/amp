@@ -492,10 +492,10 @@ public class ShowActivityPrintPreview
                                 parent = sec;
                             }
                             ActivitySector actSect = new ActivitySector();
+                            actSect.setConfigId(ampActSect.getClassificationConfig().getId());
                             if(parent != null) {
                                 actSect.setId(parent.getAmpSectorId());
                                 actSect.setSectorId(parent.getAmpSectorId());
-                                actSect.setSectorName(parent.getName());
                                 if(subsectorLevel1 != null) {
                                     actSect.setSubsectorLevel1Id(
                                         subsectorLevel1.getAmpSectorId());

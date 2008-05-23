@@ -928,11 +928,20 @@ function collapseAll() {
                                       <td bgcolor="#ffffff">
                                                     <div id="sector_dots">...</div>
                                                     <div id="act_sector" style="display: none;">
-                                                    <c:if test="${!empty aimEditActivityForm.activitySectors}">
-                                                        <table width="100%" cellSpacing="2" cellPadding="1">
-                                                        <c:forEach var="sectors" items="${aimEditActivityForm.activitySectors}">
-                                                            <tr>
-                                                            	<td>
+
+
+
+												                            <c:forEach var="config" items="${aimEditActivityForm.classificationConfigs}" varStatus="ind">
+												                               <field:display name="${config.name}" feature="Sectors">
+												                               <strong>
+												                               <digi:trn key="aim:addactivitysectors:${config.name }">
+												                                <c:out value="${config.name }"/>
+												                                </digi:trn>
+												                                </strong><br/>
+										                                        <c:if test="${!empty aimEditActivityForm.activitySectors}">
+						                                                        <table width="100%" cellSpacing="2" cellPadding="1">
+																						<c:forEach var="sectors" items="${aimEditActivityForm.activitySectors}">
+						                                                            		<c:if test="${sectors.configId==config.id}">
                                                             			<field:display name="Sector Scheme Name" feature="Sectors">
                                                                      		<c:out value="${sectors.sectorScheme}" />      
                                                                      	</field:display>                                                    
@@ -955,7 +964,25 @@ function collapseAll() {
                                                                             <c:if test="${sector.sectorPercentage!='0'}">
                                                                                     (<c:out value="${sectors.sectorPercentage}" />)%
                                                                             </c:if>
-                                                                        </c:if>
+                                                                        </c:if><br/>
+
+																								</c:if>
+																						</c:forEach>
+																					</ul>
+										                                        </c:if>
+											                                    </field:display>
+																			</c:forEach>
+											
+
+
+
+
+
+                                                    <c:if test="${!empty aimEditActivityForm.activitySectors}">
+                                                        <table width="100%" cellSpacing="2" cellPadding="1">
+                                                        <c:forEach var="sectors" items="${aimEditActivityForm.activitySectors}">
+                                                            <tr>
+                                                            	<td>
                                                             </td>
                                                             </tr>
                                                         </c:forEach>

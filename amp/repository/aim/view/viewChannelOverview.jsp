@@ -530,39 +530,51 @@ function commentWin(val) {
 																		</TR>
 																		<TR>
 																			<TD bgcolor="#ffffff">
-																			<ul>
-																				<c:forEach var="actSect" items="${activity.sectors}">
-																					<li>
+												                            <c:forEach var="config" items="${aimChannelOverviewForm.classificationConfigs}" varStatus="ind">
+												                               <field:display name="${config.name}" feature="Sectors">
+												                               <strong>
+												                               <digi:trn key="aim:addactivitysectors:${config.name }">
+												                                <c:out value="${config.name }"/>
+												                                </digi:trn>
+												                                </strong>
+										                                        <c:if test="${!empty activity.sectors}">
+																					<ul>
+																						<c:forEach var="actSect" items="${activity.sectors}">
+						                                                            		<c:if test="${actSect.configId==config.id}">
+																							<li>
+																								<field:display name="Sector Scheme Name" feature="Sectors">
+																									<c:out value="${actSect.sectorScheme}" />
+																									<br/>&nbsp;
+																									<IMG src="../ampTemplate/images/link_out_bot.gif"/>
+																								</field:display>
+																								<c:out value="${actSect.sectorName}" />
 																					
-																					<field:display name="Sector Scheme Name" feature="Sectors">
-																						<c:out value="${actSect.sectorScheme}" />
-																						<br/>&nbsp;
-																						<IMG src="../ampTemplate/images/link_out_bot.gif"/>
-																					</field:display>
-																					<c:out value="${actSect.sectorName}" />
-																		
-																					<c:if test="${!empty actSect.subsectorLevel1Name}">
-																						<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
-																							src="../ampTemplate/images/link_out_bot.gif"/>
-																						<c:out value="${actSect.subsectorLevel1Name}" />
-																					
-																						<c:if test="${!empty actSect.subsectorLevel2Name}">
-																							 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
-																								src="../ampTemplate/images/link_out_bot.gif"/>
-																							<c:out value="${actSect.subsectorLevel2Name}" />
-																							&nbsp;
-																						</c:if>
-																					</c:if>
-                                                                                                                                                                         <logic:present name="actSect"
-																						property="sectorPercentage">
-																						<c:if test="${actSect.sectorPercentage!=0}">
-																							(<c:out value="${actSect.sectorPercentage}" />%)
-																						</c:if>
-																					</logic:present>
-                                                                                                                                                                         </li>
-
-																				</c:forEach>
-																			</ul>
+																								<c:if test="${!empty actSect.subsectorLevel1Name}">
+																									<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
+																										src="../ampTemplate/images/link_out_bot.gif"/>
+																									<c:out value="${actSect.subsectorLevel1Name}" />
+																								
+																									<c:if test="${!empty actSect.subsectorLevel2Name}">
+																										 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<IMG
+																											src="../ampTemplate/images/link_out_bot.gif"/>
+																										<c:out value="${actSect.subsectorLevel2Name}" />
+																										&nbsp;
+																									</c:if>
+																								</c:if>
+			                                                                                    <logic:present name="actSect"
+																									property="sectorPercentage">
+																									<c:if test="${actSect.sectorPercentage!=0}">
+																										(<c:out value="${actSect.sectorPercentage}" />%)
+																									</c:if>
+																								</logic:present>
+																								</li>
+																								</c:if>
+																						</c:forEach>
+																					</ul>
+										                                        </c:if>
+											                                    </field:display>
+																			</c:forEach>
+																			
 																			</TD>
 																		</TR>
 																	</TABLE>

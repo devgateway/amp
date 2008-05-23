@@ -42,6 +42,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
@@ -83,8 +84,18 @@ public class ViewChannelOverview extends TilesAction {
 			if ( implLocationLevels != null)
 					formBean.setNumImplLocationLevels( implLocationLevels.size() );
 
-			Activity activity = ActivityUtil.getChannelOverview(id);
+			try{
+			    if(formBean.getClassificationConfigs()==null){
+			    	formBean.setClassificationConfigs(SectorUtil.getAllClassificationConfigs());
+			    }
+			}
+			catch(Exception e)
+			{
+			    logger.debug("Classification Config Not Found.");
+			}
 			
+			Activity activity = ActivityUtil.getChannelOverview(id);
+
 			formBean.clearMessages();
 
 			createWarnings(activity,teamMember.getTeamHead(), formBean);

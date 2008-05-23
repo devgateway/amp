@@ -91,12 +91,15 @@ import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.helper.Issues;
 import java.util.Iterator;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.logic.FundingCalculationsHelper;
+
 import javax.servlet.http.HttpSession;
 
 public class ShowActivityPrintPreview
     extends Action {
 
-    public ActionForward execute(ActionMapping mapping, ActionForm form,
+    @SuppressWarnings("unchecked")
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         EditActivityForm eaForm = (EditActivityForm) form;
@@ -532,12 +535,10 @@ public class ShowActivityPrintPreview
                 if(activity.getProgramDescription()!=null){
                 	 eaForm.setProgramDescription(activity.getProgramDescription().trim()); 	
                 }
-               
+                
+                FundingCalculationsHelper calculations=new FundingCalculationsHelper();  
 
-                double totComm = 0;
-                double totDisb = 0;
-                double totExp = 0;
-
+          
                 ArrayList fundingOrgs = new ArrayList();
                 Iterator fundItr=null;
                 if(activity.getFunding()!=null) {
@@ -565,92 +566,18 @@ public class ShowActivityPrintPreview
                         //fund.setModality(ampFunding.getModalityId());
                         fund.setFinancingInstrument(ampFunding.getFinancingInstrument());
                         fund.setConditions(ampFunding.getConditions());
-                        Collection fundDetails = ampFunding.getFundingDetails();
+                        Collection<AmpFundingDetail> fundDetails = ampFunding.getFundingDetails();
+                       
                         if(fundDetails != null && fundDetails.size() > 0) {
-                            Iterator fundDetItr = fundDetails.iterator();
-                            List fundDetail = new ArrayList();
+                          
+                            String toCurrCode=null;
+                            if (tm != null)
+                                toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 
-                            long indexId = System.currentTimeMillis();
-                            while(fundDetItr.hasNext()) {
-                                AmpFundingDetail fundDet = (AmpFundingDetail)
-                                    fundDetItr
-                                    .next();
-                                FundingDetail fundingDetail = new FundingDetail();
-                                fundingDetail.setIndexId(indexId++);
-                                int adjType = fundDet.getAdjustmentType()
-                                    .intValue();
-                                fundingDetail.setAdjustmentType(adjType);
-                                if(adjType == Constants.PLANNED) {
-                                    fundingDetail
-                                        .setAdjustmentTypeName("Planned");
-                                } else if(adjType == Constants.ACTUAL) {
-                                    fundingDetail.setAdjustmentTypeName("Actual");
-                                    java.sql.Date dt =  new java.sql.Date(fundDet.getTransactionDate().getTime());
-                                    double frmExRt = Util.getExchange(fundDet.getAmpCurrencyId().getCurrencyCode(), dt);
-                                    String toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
-                                    double toExRt = Util.getExchange(toCurrCode, dt);
-                                    double amt = CurrencyWorker.convert1(fundDet.getTransactionAmount().doubleValue(), frmExRt,toExRt);
-                                    eaForm.setCurrCode(toCurrCode);
-                                    if(fundDet.getTransactionType().intValue() ==Constants.COMMITMENT) {
-                                    		totComm += amt;
-                                    } else if(fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-                                        totDisb += amt;
-                                    } else if(fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
-                                        totExp += amt;
-                                    }
-                                }
-                                if (fundDet.getFixedExchangeRate() != null &&
-                                        fundDet.getFixedExchangeRate().doubleValue() != 1) {
-                                      fundingDetail.setFixedExchangeRate(fundDet.
-                                                                         getFixedExchangeRate());
-                                      fundingDetail.setUseFixedRate(true);
-                                    }
-                                
-                                if(fundDet.getTransactionType().intValue() ==
-                                   Constants.EXPENDITURE) {
-                                    fundingDetail.setClassification(fundDet
-                                        .getExpCategory());
-                                }
-                                fundingDetail.setCurrencyCode(fundDet
-                                    .getAmpCurrencyId().getCurrencyCode());
-                                fundingDetail.setCurrencyName(fundDet
-                                    .getAmpCurrencyId().getCountryName());
-
-                                fundingDetail
-                                    .setTransactionAmount(CurrencyWorker
-                                    .convert(fundDet
-                                             .getTransactionAmount()
-                                             .doubleValue(), 1, 1));
-                                fundingDetail.setTransactionDate(DateConversion
-                                    .ConvertDateToString(fundDet
-                                    .getTransactionDate()));
-
-                                fundingDetail.setPerspectiveCode(fundDet.
-                                    getPerspectiveId().getCode());
-                                fundingDetail.setPerspectiveName(fundDet.
-                                    getPerspectiveId().getName());
-
-                                /*
-                                 fundingDetail.setPerspectiveCode(fundDet
-                                  .getOrgRoleCode());
-
-                                 Iterator itr1 = eaForm.getPerspectives()
-                                  .iterator();
-                                         while (itr1.hasNext()) {
-                                 AmpPerspective pers = (AmpPerspective) itr1
-                                   .next();
-                                 if (pers.getCode().equals(
-                                   fundDet.getOrgRoleCode())) {
-                                  fundingDetail.setPerspectiveName(pers
-                                    .getName());
-                                 }
-                                         }
-                                 */
-
-                                fundingDetail.setTransactionType(fundDet
-                                    .getTransactionType().intValue());
-                                fundDetail.add(fundingDetail);
-                            }
+                            calculations.doCalculations(fundDetails, toCurrCode);
+    			            
+    			            List<FundingDetail> fundDetail = calculations.getFundDetailList();
+    			            
                             if(fundDetail != null)
                                 Collections.sort(fundDetail,
                                                  FundingValidator.dateComp);
@@ -672,11 +599,17 @@ public class ShowActivityPrintPreview
                             //	logger.info("Adding new fund org object");
                         }
                     }
-                    //logger.info("size = " + fundingOrgs);
-                    eaForm.setFundingOrganizations(fundingOrgs);
-                    eaForm.setTotalCommitments(FormatHelper.formatNumber(totComm));
-                    eaForm.setTotalDisbursements(FormatHelper.formatNumber(totDisb));
-                    eaForm.setTotalExpenditures(FormatHelper.formatNumber(totExp));
+
+                  eaForm.setFundingOrganizations(fundingOrgs);
+                  eaForm.setTotalCommitments(calculations.getTotalCommitments().toString());
+              	  eaForm.setTotalDisbursements(calculations.getTotActualDisb().toString());
+              	  eaForm.setTotalExpenditures(calculations.getTotActualExp().toString());
+              	  eaForm.setTotalActualDisbursementsOrders(calculations.getTotActualDisbOrder().toString());
+              	  eaForm.setTotalPlannedDisbursements(calculations.getTotPlanDisb().toString());
+              	  eaForm.setTotalPlannedCommitments(calculations.getTotPlannedComm().toString());
+              	  eaForm.setTotalPlannedExpenditures(calculations.getTotPlannedExp().toString());
+              	  eaForm.setTotalPlannedDisbursementsOrders(calculations.getTotPlannedDisbOrder().toString());
+              	  eaForm.setUnDisbursementsBalance(calculations.getUnDisbursementsBalance().toString());
                 }
                 
 

@@ -142,7 +142,7 @@
 			key='aim:totalplanneddisbursement'>
                                                                                 		    TOTAL PLANNED DISBURSEMENT:	                                                                                	</digi:trn>
 		</td>
-		<td align="right" bgcolor="#eeeeee"
+		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000"><bean:write
 			name="aimEditActivityForm" property="totalPlannedDisbursements" /> <bean:write
 			name="aimEditActivityForm" property="currCode" /></td>
@@ -269,7 +269,7 @@
 			key='aim:totalActualdisbursement'>
                                                                                     TOTAL ACTUAL DISBURSEMENT </digi:trn>
 		</td>
-		<td align="right" bgcolor="#eeeeee"
+		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000"><bean:write
 			name="aimEditActivityForm" property="totalDisbursements" /> <bean:write
 			name="aimEditActivityForm" property="currCode" /></td>

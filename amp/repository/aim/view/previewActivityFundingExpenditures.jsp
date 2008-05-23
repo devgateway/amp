@@ -141,7 +141,7 @@
 			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
 			key="aim:totalActualExpenditures">
            	  TOTAL PLANED EXPENDITURES             </digi:trn></td>
-		<td align="right" bgcolor="#eeeeee"
+		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000"><bean:write
 			name="aimEditActivityForm" property="totalPlannedExpenditures" /> <bean:write
 			name="aimEditActivityForm" property="currCode" /></td>
@@ -276,7 +276,7 @@
 			style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn
 			key="aim:totalplannedExpenditures">
        	 	 	TOTAL ACTUAL EXPENDITURES       	 	 </digi:trn></td>
-		<td align="right" bgcolor="#eeeeee"
+		<td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000"><bean:write
 			name="aimEditActivityForm" property="totalExpenditures" /> <bean:write
 			name="aimEditActivityForm" property="currCode" /></td>

@@ -565,11 +565,11 @@
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" class="t-name">
 											<b>
-									  <digi:trn key="aim:sector">	 Sector</digi:trn>
-									  	</b>									</td>
-<td bgcolor="#ffffff">
+									  			<digi:trn key="aim:sector">Sector</digi:trn>
+									  		</b>
+										</td>
+										<td bgcolor="#ffffff">
 			                            <c:forEach var="config" items="${aimEditActivityForm.classificationConfigs}" varStatus="ind">
-			                            	
 			                               <field:display name="${config.name}" feature="Sectors">
 											<c:set var="hasSectors">
 												false
@@ -593,20 +593,22 @@
 												<table width="100%" cellSpacing="2" cellPadding="1">
 												<c:forEach var="sectors" items="${aimEditActivityForm.activitySectors}">
                                                  	<c:if test="${sectors.configId==config.id}">
-													<tr><td>
-													<c:if test="${!empty sectors.sectorName}">
-																				<c:out value="${sectors.sectorName}" />
-																			</c:if>&nbsp;&nbsp; <c:if
-																				test="${sector.sectorPercentage!=''}">
-																				<c:if test="${sector.sectorPercentage!='0'}">
-																			(<c:out value="${sectors.sectorPercentage}" />)%																			</c:if>
-																			</c:if> <c:if test="${!empty sectors.subsectorLevel1Name}">
-														[<c:out value="${sectors.subsectorLevel1Name}"/>]
-													</c:if>
-													<c:if test="${!empty sectors.subsectorLevel2Name}">
-														[<c:out value="${sectors.subsectorLevel2Name}"/>]													</c:if>
-													</td>
-													</tr>
+														<tr><td>
+														<c:if test="${!empty sectors.sectorName}">
+															<c:out value="${sectors.sectorName}" />
+														</c:if>&nbsp;&nbsp; 
+														<c:if test="${!empty sectors.subsectorLevel1Name}">
+															[<c:out value="${sectors.subsectorLevel1Name}"/>]
+														</c:if>
+														<c:if test="${!empty sectors.subsectorLevel2Name}">
+															[<c:out value="${sectors.subsectorLevel2Name}"/>]
+														</c:if>
+														<c:if test="${sector.sectorPercentage!=''}">
+															<c:if test="${sector.sectorPercentage!='0'}">
+																(<c:out value="${sectors.sectorPercentage}" />)%
+															</c:if>
+														</c:if>
+														</td></tr>
 													</c:if>
 												</c:forEach>
 												</table>

@@ -568,9 +568,31 @@
 									  <digi:trn key="aim:sector">	 Sector</digi:trn>
 									  	</b>									</td>
 <td bgcolor="#ffffff">
-											<c:if test="${!empty aimEditActivityForm.activitySectors}">
+			                            <c:forEach var="config" items="${aimEditActivityForm.classificationConfigs}" varStatus="ind">
+			                            	
+			                               <field:display name="${config.name}" feature="Sectors">
+											<c:set var="hasSectors">
+												false
+											</c:set>
+
+											<c:forEach var="actSect" items="${aimEditActivityForm.activitySectors}">
+												<c:if test="${actSect.configId==config.id}">
+													<c:set var="hasSectors">
+														true
+													</c:set>
+												</c:if>
+											</c:forEach>
+											<c:if test="${hasSectors}">
+			                                <strong>
+				                               	<digi:trn key="aim:addactivitysectors:${config.name }">
+				                                <c:out value="${config.name }"/>
+				                                </digi:trn>
+				                                </strong><br/>
+			                                </c:if>
+	                                        <c:if test="${!empty aimEditActivityForm.activitySectors}">
 												<table width="100%" cellSpacing="2" cellPadding="1">
 												<c:forEach var="sectors" items="${aimEditActivityForm.activitySectors}">
+                                                 	<c:if test="${sectors.configId==config.id}">
 													<tr><td>
 													<c:if test="${!empty sectors.sectorName}">
 																				<c:out value="${sectors.sectorName}" />
@@ -585,9 +607,12 @@
 														[<c:out value="${sectors.subsectorLevel2Name}"/>]													</c:if>
 													</td>
 													</tr>
+													</c:if>
 												</c:forEach>
 												</table>
 											</c:if>
+		                                    </field:display>
+										</c:forEach>
 										</td>
 									</tr>
 									</feature:display>

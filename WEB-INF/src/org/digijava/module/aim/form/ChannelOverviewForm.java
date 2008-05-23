@@ -56,6 +56,8 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
     private OrgProjectId selectedOrganizations[]; //To Show organitations name in channel overview
 	private    HashMap<String,String> errors = new HashMap<String, String>();
 	private    HashMap<String,String> messages = new HashMap<String, String>();
+
+	private List classificationConfigs;
 	
 	public void addMessage(String key, String value) {
 	    this.messages.put(key, value) ;
@@ -546,5 +548,17 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 				public void setMessages(HashMap<String, String> messages) {
 					this.messages = messages;
 				}
-        
+
+
+			    public List getClassificationConfigs() {
+			        return classificationConfigs;
+			    }
+
+			    public void setClassificationConfigs(List classificationConfigs) {
+			        this.classificationConfigs = classificationConfigs;
+			    }
+
+
+				
+				
 }

@@ -48,7 +48,9 @@ public class EditSectorsForInd extends Action {
 			
 			Collection secSchemes = SectorUtil.getAllSectorSchemes();
 			eaForm.setSectorSchemes(secSchemes);
-			eaForm.setSectorScheme(new Long(globalSettingValue));
+			if (globalSettingValue!=null){
+				eaForm.setSectorScheme(new Long(globalSettingValue));
+			}
 			Collection parentSectors = SectorUtil
 			.getAllParentSectors(eaForm.getSectorScheme());
 			eaForm.setParentSectors(parentSectors);

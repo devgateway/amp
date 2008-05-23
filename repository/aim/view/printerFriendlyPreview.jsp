@@ -1463,13 +1463,6 @@
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							</field:display>
-																							<field:display name="Components Perspective Commitments" feature="Components">
-																							<td bgcolor="#ffffff">
-																								<digi:trn key="aim:commitments:${fd.perspectiveNameTrimmed}">
-																									<c:out value="${fd.perspectiveName}"/>	
-																								</digi:trn>
-																							</td>
-																							</field:display>
 																						</tr>
 																					</c:forEach>
 																				</table>																			</td>
@@ -1508,13 +1501,6 @@
 																							<td bgcolor="#ffffff" width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							</field:display>
-																							<field:display name="Components Perspective Disbursements" feature="Components">
-																							<td bgcolor="#ffffff">
-																								<digi:trn key="aim:disbursements:${fd.perspectiveNameTrimmed}">
-																									<c:out value="${fd.perspectiveName}"/>	
-																								</digi:trn>	
-																																													</td>
-																							</field:display>
 																						</tr>
 																					</c:forEach>
 																				</table>																			</td>
@@ -1552,12 +1538,7 @@
 																							<td width="70">
 																								<c:out value="${fd.transactionDate}"/>																							</td>
 																							</field:display>
-																							<field:display name="Components Perspective Expenditures" feature="Components">
-																							<td>
-																								<digi:trn key="aim:expenditures:${fd.perspectiveNameTrimmed}">
-																									<c:out value="${fd.perspectiveName}"/>	
-																								</digi:trn>																						</td>
-																							</field:display>
+																							
 																						</tr>
 																					</c:forEach>
 																				</table>																			</td>
@@ -2028,20 +2009,24 @@
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b>
-									  <digi:trn key="aim:proposedPrjectCost"> Proposed Project Cost</digi:trn>	
-									  </b>									</td>
-<td bgcolor="#ffffff">
+									  <digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn></b>
+									  </td>
+									<td bgcolor="#ffffff">
 											<c:if test="${aimEditActivityForm.proProjCost!=null}">
                                                   <table cellSpacing=1 cellPadding="3" bgcolor="#aaaaaa" width="100%">
                                                       <tr bgcolor="#ffffff">
-															<td>Cost</td>
+															<td>
+															<digi:trn key="aim:cost">Cost</digi:trn> 
+															</td>
                                                         <td bgcolor="#FFFFFF" align="left" >
                                                           <c:if test="${aimEditActivityForm.proProjCost.funAmount!=null}">
 																 	<FONT color=blue>*</FONT> ${aimEditActivityForm.proProjCost.funAmount}                                                          </c:if>&nbsp;
 																<c:if test="${aimEditActivityForm.proProjCost.currencyCode!=null}"> ${aimEditActivityForm.proProjCost.currencyCode} </c:if>                                                        </td>
 												    </tr>
-																		  <tr bgcolor="#ffffff">
-															<td>Proposed Completion Date  </td>
+													<tr bgcolor="#ffffff">
+														<td>
+															<digi:trn key="aim:proposedcompletiondate">Proposed Completion Date</digi:trn>  
+														</td>
                                                         <td bgcolor="#FFFFFF" align="left" width="150">
                                                           <c:if test="${aimEditActivityForm.proProjCost.funDate!=null}">
                                                              ${aimEditActivityForm.proProjCost.funDate}                                                          </c:if>                                                        </td>

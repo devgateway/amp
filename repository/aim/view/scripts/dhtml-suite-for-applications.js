@@ -297,13 +297,12 @@ DHTMLSuite.common.prototype = {
 	}
 	// }}}
 ,
+
 	getTopPosCalendar : function(el){
-		/*
 		if(el.getBoundingClientRect){	// IE
 			var box = el.getBoundingClientRect();
 			return (box.top/1 + Math.max(document.body.scrollTop,document.documentElement.scrollTop));
 		}
-		*/
 		if(document.getBoxObjectFor){
 			if(el.tagName!='INPUT' && el.tagName!='SELECT' && el.tagName!='TEXTAREA')return document.getBoxObjectFor(el).y
 		}
@@ -16382,7 +16381,7 @@ DHTMLSuite.calendar.prototype =
 	__positionDropDownMonths : function()
 	{
 		this.divElementMonthDropdown.style.left = DHTMLSuite.commonObj.getLeftPos(this.divElementMonthNameInHeading) + 'px';
-		this.divElementMonthDropdown.style.top = (DHTMLSuite.commonObj.getTopPos(this.divElementMonthNameInHeading) + this.divElementMonthNameInHeading.offsetHeight) + 'px';
+		this.divElementMonthDropdown.style.top = (DHTMLSuite.commonObj.getTopPosCalendar(this.divElementMonthNameInHeading) + this.divElementMonthNameInHeading.offsetHeight) + 'px';
 		
 		if(this.iframeElementDropDowns){
 			this.iframeElementDropDowns.style.left = this.divElementMonthDropdown.style.left;

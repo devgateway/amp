@@ -139,7 +139,7 @@
 			services valued at the cost to the donor</digi:trn>'>
 	  TOTAL ACTUAL DISBURSMENT ORDERS </a></digi:trn>
 	</td>
-	  <td align="right" bgcolor="#eeeeee"
+	  <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
 			style="border-top: 1px solid #000000; text-transform: uppercase;"><bean:write
 			name="aimEditActivityForm" property="totalActualDisbursementsOrders" />	<bean:write
 			name="aimEditActivityForm" property="currCode" /></td>

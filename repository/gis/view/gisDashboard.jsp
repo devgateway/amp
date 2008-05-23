@@ -16,6 +16,10 @@
 
 <table width="100%">
 	<tr>
+		<td><img onLoad="updateMap()" src = "../../gis/gisService.do?action=paintMap&canvasWidth=1000&canvasHeight=500&autoRect=true&mapCode=WORLD&hilight=TZA">
+		</td>
+	</tr>
+	<tr>
 		<td>
 			<div id="mapHolder" style="border:1px solid black; width:500px; height:500px"></div>
 			<div id="imageMapContainer" style="visibility:hidden;"></div>

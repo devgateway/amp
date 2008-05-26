@@ -9,7 +9,8 @@ package org.digijava.module.aim.helper;
 import java.io.Serializable;
 
 
-public class ActivitySector implements Serializable{
+
+public class ActivitySector implements Comparable<ActivitySector>, Serializable{
 
 	private Long id;
 
@@ -214,4 +215,12 @@ public class ActivitySector implements Serializable{
         public void setSectorScheme(String sectorScheme) {
             this.sectorScheme = sectorScheme;
         }
+
+		public int compareTo(ActivitySector o) {
+			String completeSectorPathObject = o.sectorName + " " + ((o.subsectorLevel1Name == null)?"":o.subsectorLevel1Name + " ") + ((o.subsectorLevel2Name == null)?"":o.subsectorLevel2Name);
+			String completeSectorPathCurrent = sectorName + " " + ((subsectorLevel1Name == null)?"":subsectorLevel1Name) + " " + ((subsectorLevel2Name == null)?"":subsectorLevel2Name);
+			
+			return (completeSectorPathCurrent.compareTo(completeSectorPathObject));
+		
+		}
 }

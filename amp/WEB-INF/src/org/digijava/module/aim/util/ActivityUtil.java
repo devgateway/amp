@@ -1737,35 +1737,67 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
         }
         activity.setRelOrgs(relOrgs);
 
-        Collection sectors = new ArrayList();
+        List<ActivitySector> sectors = new ArrayList<ActivitySector>();
+
         if (ampAct.getSectors() != null) {
           Iterator sectItr = ampAct.getSectors().iterator();
-          while (sectItr.hasNext()) {
-            //AmpSector sec = (AmpSector) sectItr.next();
-            AmpActivitySector ampActSect = (AmpActivitySector) sectItr.next();
-            AmpSector sec = ampActSect.getSectorId();
-            ActivitySector actSect = new ActivitySector();
-            actSect.setConfigId(ampActSect.getClassificationConfig().getId());
-            actSect.setSectorPercentage(ampActSect.getSectorPercentage());
-            actSect.setSectorScheme(sec.getAmpSecSchemeId().getSecSchemeName());
-            if (sec.getParentSectorId() == null) {
-              actSect.setSectorName(sec.getName());
-            }
-            else if (sec.getParentSectorId().getParentSectorId() == null) {
-              actSect.setSectorName(sec.getParentSectorId().getName());
-              actSect.setSubsectorLevel1Name(sec.getName());
-            }
-            else {
-              actSect.setSectorName(sec.getParentSectorId().getParentSectorId().
-                                    getName());
-              actSect.setSubsectorLevel1Name(sec.getParentSectorId().getName());
-              actSect.setSubsectorLevel2Name(sec.getName());
-            }
-            sectors.add(actSect);
+			while (sectItr.hasNext()) {
+				AmpActivitySector ampActSect = (AmpActivitySector) sectItr.next();
+				if (ampActSect != null) {
+					AmpSector sec = ampActSect.getSectorId();
+					if (sec != null) {
+						AmpSector parent = null;
+						AmpSector subsectorLevel1 = null;
+						AmpSector subsectorLevel2 = null;
+						if (sec.getParentSectorId() != null) {
+							if (sec.getParentSectorId().getParentSectorId() != null) {
+								subsectorLevel2 = sec;
+								subsectorLevel1 = sec.getParentSectorId();
+								parent = sec.getParentSectorId().getParentSectorId();
+							} else {
+								subsectorLevel1 = sec;
+								parent = sec.getParentSectorId();
+							}
+						} else {
+							parent = sec;
+						}
+						ActivitySector actSect = new ActivitySector();
+                                                actSect.setConfigId(ampActSect.getClassificationConfig().getId());
+						if (parent != null) {
+							actSect.setId(parent.getAmpSectorId());
+							String view = FeaturesUtil.getGlobalSettingValue("Allow Multiple Sectors");
+							if (view != null)
+								if (view.equalsIgnoreCase("On")) {
+									actSect.setCount(1);
+								} else {
+									actSect.setCount(2);
+								}
+
+							actSect.setSectorId(parent.getAmpSectorId());
+							actSect.setSectorName(parent.getName());
+							if (subsectorLevel1 != null) {
+								actSect.setSubsectorLevel1Id(subsectorLevel1.getAmpSectorId());
+								actSect.setSubsectorLevel1Name(subsectorLevel1.getName());
+								if (subsectorLevel2 != null) {
+									actSect.setSubsectorLevel2Id(subsectorLevel2.getAmpSectorId());
+									actSect.setSubsectorLevel2Name(subsectorLevel2.getName());
+								}
+							}
+							actSect.setSectorPercentage(ampActSect.getSectorPercentage());
+                                                        actSect.setSectorScheme(parent.getAmpSecSchemeId().getSecSchemeName());
+                                                        
+						}
+                                               
+						sectors.add(actSect);
+					}
+				}
           }
         }
+        
+        Collections.sort(sectors);
         activity.setSectors(sectors);
-
+        
+        
         if (ampAct.getActivityPrograms() != null) {
           Collection programs = new ArrayList();
           programs.addAll(ampAct.getActivityPrograms());

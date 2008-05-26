@@ -280,6 +280,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String currentAlpha;
 	private boolean startAlphaFlag;
 	private Long selOrganisations[]; // list of org selected from
+	private Long prevOrg;
 	private TreeSet selectedOrganisationPaged;
 	private Integer selectedOrganisationFromPages;
 
@@ -5356,6 +5357,14 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setClasiNPD(String clasiNPD) {
 	    this.clasiNPD = clasiNPD;
+	}
+
+	public void setPrevOrg(Long prevOrg) {
+		this.prevOrg = prevOrg;
+	}
+
+	public Long getPrevOrg() {
+		return prevOrg;
 	}
 	   
 }

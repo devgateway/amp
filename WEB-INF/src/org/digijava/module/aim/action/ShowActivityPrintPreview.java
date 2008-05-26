@@ -470,7 +470,7 @@ public class ShowActivityPrintPreview
         		Collection sectors = activity.getSectors();
 
         		if (sectors != null && sectors.size() > 0) {
-        			Collection activitySectors = new ArrayList();
+        			List<ActivitySector> activitySectors = new ArrayList<ActivitySector>();
         			Iterator sectItr = sectors.iterator();
         			while (sectItr.hasNext()) {
         				AmpActivitySector ampActSect = (AmpActivitySector) sectItr.next();
@@ -523,7 +523,7 @@ public class ShowActivityPrintPreview
         					}
         				}
         			}
-
+        			Collections.sort(activitySectors);
         			eaForm.setActivitySectors(activitySectors);
         		}
         		

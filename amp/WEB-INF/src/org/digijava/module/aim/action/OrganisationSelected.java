@@ -108,32 +108,51 @@ public class OrganisationSelected extends Action {
 			return mapping.findForward("forward");
 		} else if (eaForm.getStep().equals("3")) {
 			if (eaForm.getSelOrganisations() == null ||
-					eaForm.getSelOrganisations().length == 0) return mapping.findForward("step3");				
-			for (int i = 0; i < selOrgs.length; i++) {
-				boolean flag = false;
+				eaForm.getSelOrganisations().length == 0) return mapping.findForward("step3");
+			
+			Long prevOrg = eaForm.getPrevOrg();
+			if(prevOrg==null){ // Add Organizations			
+				for (int i = 0; i < selOrgs.length; i++) {
+					boolean flag = false;				
+					if (prevSelOrgs != null) {
+						Iterator itr = prevSelOrgs.iterator();
+						while (itr.hasNext()) {
+							FundingOrganization org = (FundingOrganization) itr
+									.next();
+							if (org.getAmpOrgId().equals(selOrgs[i])) {
+								flag = true;
+								break;
+							}
+						}
+					}
+	
+					if (!flag) {
+						AmpOrganisation org = DbUtil.getOrganisation(selOrgs[i]);
+						if (org != null) {
+							FundingOrganization fOrg = new FundingOrganization();
+							fOrg.setAmpOrgId(org.getAmpOrgId());
+							fOrg.setOrgName(org.getName());
+							orgs.add(fOrg);
+						}
+					}
+	
+				}
+			}else{
 				if (prevSelOrgs != null) {
 					Iterator itr = prevSelOrgs.iterator();
 					while (itr.hasNext()) {
 						FundingOrganization org = (FundingOrganization) itr
 								.next();
-						if (org.getAmpOrgId().equals(selOrgs[i])) {
-							flag = true;
+						if (org.getAmpOrgId().equals(prevOrg)) {
+							AmpOrganisation orgSelected = DbUtil.getOrganisation(selOrgs[0]);
+							org.setAmpOrgId(orgSelected.getAmpOrgId());
+							org.setOrgName(orgSelected.getName());
 							break;
 						}
 					}
 				}
-
-				if (!flag) {
-					AmpOrganisation org = DbUtil.getOrganisation(selOrgs[i]);
-					if (org != null) {
-						FundingOrganization fOrg = new FundingOrganization();
-						fOrg.setAmpOrgId(org.getAmpOrgId());
-						fOrg.setOrgName(org.getName());
-						orgs.add(fOrg);
-					}
-				}
-
 			}
+			eaForm.setPrevOrg(null);
 			eaForm.setFundingOrganizations(orgs);
 			return mapping.findForward("step3");
 

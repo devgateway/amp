@@ -24,9 +24,13 @@ public class SelectOrganization extends Action {
 			eaForm.setOrgSelReset(false);
 		} else {
 			eaForm.setOrgSelReset(true);
-			eaForm.setPagedCol(null);
+			eaForm.setPagedCol(null);			
 			eaForm.reset(mapping, request);
 		}
+		
+		if(request.getParameter("changeOrganisation") == null)
+			eaForm.setPrevOrg(null);
+			
 		eaForm.setPagesToShow(10);
 		int page = 0;
 		if (request.getParameter("page") == null) {

@@ -72,6 +72,15 @@
             document.aimEditActivityForm.submit();
 	}
 
+	function changeOrganisation(orgId){
+			openNewWindow(650, 420);
+			<digi:context name="selectOrganization" property="context/module/moduleinstance/selectOrganization.do?orgSelReset=true&changeOrganisation=true&step=3" />		
+			document.aimEditActivityForm.action = "<%= selectOrganization %>";
+			document.aimEditActivityForm.prevOrg.value = orgId;
+			document.aimEditActivityForm.target = popupPointer.name;
+			document.aimEditActivityForm.submit();	
+	}
+
 	function selectOrganisation() {
 			openNewWindow(650, 420);
 			<digi:context name="selectOrganization" property="context/module/moduleinstance/selectOrganization.do?orgSelReset=true&edit=true&step=3" />
@@ -512,6 +521,9 @@ ${fn:replace(message,quote,escapedQuote)}
 	                                                              <bean:write name="fundingOrganization" property="ampOrgId"/>
 	                                                            </html:multibox>
                                                             <bean:write name="fundingOrganization" property="orgName"/>
+																<html:button  styleClass="buton" property="submitButton" onclick="changeOrganisation(${fundingOrganization.ampOrgId})">
+																		<digi:trn key="btn:changeOrganizations">Change Organizations</digi:trn>
+																</html:button>
                                                             </td>
 
                                                             <field:display name="Active Funding Organization" feature="Funding Organizations">

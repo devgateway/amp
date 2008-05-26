@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.digijava.module.aim.annotations.reports.ColumnLike;
 import org.digijava.module.aim.annotations.reports.Level;
 import org.digijava.module.aim.annotations.reports.Order;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 
 
 public class AmpReportHierarchy implements Serializable, Comparable
@@ -15,6 +17,10 @@ public class AmpReportHierarchy implements Serializable, Comparable
 	private String levelId;
 	@Level
 	private AmpCategoryValue level;
+	
+	public AmpReportHierarchy(){
+	    level=CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ACTIVITY_LEVEL_KEY, (long)0);
+	}
 
 	public AmpColumns getColumn() {
 		return column;

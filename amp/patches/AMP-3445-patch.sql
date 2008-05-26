@@ -1,0 +1,1 @@
+UPDATE amp_report_hierarchy SET cv_level_id = (select v.id from amp_category_value v, amp_category_class c where c.keyName="activity_level" AND v.amp_category_class_id=c.id AND v.index_column=0);

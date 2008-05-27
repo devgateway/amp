@@ -178,17 +178,7 @@ function showUserProfile(id){
 												</digi:link>
 											</td>
 										</tr>
-										<tr>
-											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<c:set var="clickToAddRoles">
-												<digi:trn key="aim:clickToAddRoles">Click here to Add Roles</digi:trn>
-												</c:set>
-												<digi:link href="/roles.do" title="${clickToAddRoles}" >
-												<digi:trn key="aim:roles">Add Roles</digi:trn>
-												</digi:link>
-											</td>
-										</tr>
+										
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

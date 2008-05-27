@@ -122,51 +122,7 @@ function clearForms()
 			</html:select>
 		</td>
 	</tr>
-	<tr bgcolor="#ffffff" align="center">
-		<td align="center" colspan="2">
-			<table cellspacing="5">
-				<tr>
-					<td>
-						<html:radio property="permissions" value="default"
-						onclick="defaultPermsSelected()">
-						<digi:trn key="aim:defaultPermission">
-							Set default permissions based on the roles</digi:trn>
-						</html:radio>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<html:radio property="permissions" value="userSpecific"
-						onclick="userSpecificPermsSelected()">
-							<digi:trn key="aim:userSpecificPermission">
-								Manually set permissions for this user</digi:trn>
-						</html:radio>
-					</td>
-				</tr>
-				<tr>	
-					<td>
-						<html:checkbox property="readPerms" disabled="true">
-							<digi:trn key="aim:readPerms">Read</digi:trn>
-						</html:checkbox>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<html:checkbox property="writePerms" disabled="true">
-							<digi:trn key="aim:writePerms">Add / Update</digi:trn>
-						</html:checkbox>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<html:checkbox property="deletePerms" disabled="true">
-							<digi:trn key="aim:deletePerms">Delete</digi:trn>	
-						</html:checkbox>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
+	
 	<tr bgcolor="#ffffff">
 		<td colspan="2" width="60%">
 			<table width="100%" cellspacing="5">

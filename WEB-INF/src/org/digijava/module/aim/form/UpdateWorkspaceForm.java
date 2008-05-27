@@ -18,6 +18,8 @@ import org.digijava.module.aim.dbentity.AmpCategoryValue;
 public class UpdateWorkspaceForm extends ValidatorForm {
 
 	private Long selectedOrgId;
+	private Boolean addActivity=null;
+	private Boolean computation=null;
 	private Collection organizations;
 	private String id = null;
 	private String teamName = null;
@@ -424,6 +426,9 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 			selChildOrgs=null;
 			addFlag = false;
 			reset	= false;
+			addActivity=null;
+			computation=null;
+			
 		}		
 		if (popupReset) {
 			availChildWorkspaces = null;
@@ -440,11 +445,11 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 		if ("no".equals(relatedTeamFlag)) {
 			errors = super.validate(mapping, request);
 			
-			if(("DONOR".equalsIgnoreCase(category) &&("Team".equalsIgnoreCase(workspaceType)|| "Management".equalsIgnoreCase(workspaceType)))
-					||("GOVERNMENT".equalsIgnoreCase(category) && ("Donor".equals(workspaceType))) ){
-				ActionError error = new ActionError("error.aim.updateWorkspace.incorrectWorkspaceType");
-				errors.add("workspaceType", error);
-			}
+//			if(("DONOR".equalsIgnoreCase(category) &&("Team".equalsIgnoreCase(workspaceType)|| "Management".equalsIgnoreCase(workspaceType)))
+//					||("GOVERNMENT".equalsIgnoreCase(category) && ("Donor".equals(workspaceType))) ){
+//				ActionError error = new ActionError("error.aim.updateWorkspace.incorrectWorkspaceType");
+//				errors.add("workspaceType", error);
+//			}
 			
 			if ("DONOR".equalsIgnoreCase(category) && "Donor".equalsIgnoreCase(workspaceType)) {
 				if ("edit".equalsIgnoreCase(actionEvent)) {
@@ -631,6 +636,24 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 	public void setOrgPopupReset(boolean orgPopupReset) {
 		this.orgPopupReset = orgPopupReset;
 	}
+
+	public Boolean getAddActivity() {
+		return addActivity;
+	}
+
+	public void setAddActivity(Boolean addActivity) {
+		this.addActivity = addActivity;
+	}
+
+	public Boolean getComputation() {
+		return computation;
+	}
+
+	public void setComputation(Boolean computation) {
+		this.computation = computation;
+	}
+
+
 
 
 

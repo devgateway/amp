@@ -124,7 +124,9 @@ public class UpdateTeamMembers extends Action {
             } else {
                 ampMember.setDeletePermission(new Boolean(false));
             }
-
+            ampMember.setReadPermission(new Boolean(true));
+            ampMember.setWritePermission(new Boolean(true));
+            ampMember.setDeletePermission(new Boolean(true));
             ampMember.setUser(UserUtils.getUser(upForm.getUserId()));
             ampMember.setAmpTeam(ampTeam);
             Collection col = TeamMemberUtil.getAllMemberAmpActivities(upForm

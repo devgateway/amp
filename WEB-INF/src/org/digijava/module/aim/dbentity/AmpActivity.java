@@ -46,7 +46,7 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
     private String documentSpace;
 
     private Boolean draft;
-
+    
     private String equalOpportunity;
     private String environment;
     private String minorities;
@@ -1530,5 +1530,11 @@ public class AmpActivity extends Permissible implements Comparable<AmpActivity>,
 	public void setClasiNPD(String clasiNPD) {
 	    this.clasiNPD = clasiNPD;
 	}
+	
+	public String toString(){
+		if(name!=null) return name;
+		return super.toString();
+	}
+
 
 }

@@ -37,7 +37,10 @@ public class MetaTextColWorker extends TextColWorker {
 		MetaTextCell mtc=new MetaTextCell(tc);
 		
 		if(columnName.equals("Project Title")) 
-			mtc.getMetaData().add(new MetaInfo(ArConstants.DRAFT,rs.getBoolean(4))); else
+			{
+				mtc.getMetaData().add(new MetaInfo(ArConstants.DRAFT,rs.getBoolean(4)));
+				mtc.getMetaData().add(new MetaInfo(ArConstants.STATUS,rs.getString(5)));
+			}else
 		if(columnName.equals("National Planning Objectives")) 
 			mtc.getMetaData().add(new MetaInfo(ArConstants.PERCENTAGE,rs.getDouble(4))); else
 		if(columnName.equals("Sector") || columnName.equals("Sub-Sector")) 

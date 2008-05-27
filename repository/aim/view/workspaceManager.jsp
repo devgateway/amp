@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 
+
 <script langauage="JavaScript">
 	function onDelete() {
 		var flag = confirm("Delete this workspace?");
@@ -24,7 +25,9 @@
 		return partialURL+"/"+actionName;
 	}
 </script>
-
+<DIV id="TipLayer"
+	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+	
 <digi:instance property="aimWorkspaceForm" />
 <digi:context name="digiContext" property="context" />
 
@@ -100,17 +103,8 @@
 													id="workspaces" type="org.digijava.module.aim.dbentity.AmpTeam">
 													<tr>
 														<td bgcolor="#ffffff">
-															<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
-															<c:set target="${urlParams2}" property="tId">
-															<bean:write name="workspaces" property="ampTeamId" />
-															</c:set>
-															<c:set target="${urlParams2}" property="event" value="edit" />
-															<c:set target="${urlParams2}" property="dest" value="admin" />
-															<c:set var="translation">
-																<digi:trn key="aim:clickToViewWorkspace">Click here to view Workspace</digi:trn>
-															</c:set>
-															<digi:link href="/getWorkspace.do" name="urlParams2" title="${translation}" >
-															<bean:write name="workspaces" property="name"/></digi:link>
+															<c:set var="teamWrk" value="${workspaces}" target="request" scope="request" />
+															<jsp:include page="teamDetailsPopup.jsp" />
 														</td>
 														<td bgcolor="#ffffff" width="70" align="center">
 										 					<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
@@ -141,12 +135,17 @@
 															</digi:link> ]
 														</td>
 														<td bgcolor="#ffffff" width="65" align="center">
-															<%--
-															<c:set target="${urlParams2}" property="actionEvent" value="edit" />--%>
+															<jsp:useBean id="urlParams22" type="java.util.Map" class="java.util.HashMap"/>
+															<c:set target="${urlParams22}" property="tId">
+																<bean:write name="workspaces" property="ampTeamId" />
+															</c:set>
+															<c:set target="${urlParams22}" property="event" value="edit" />
+															<c:set target="${urlParams22}" property="dest" value="admin" />
+															
 															<c:set var="translation">
 																<digi:trn key="aim:clickToEditWorkspace">Click here to Edit Workspace</digi:trn>
 															</c:set>
-															[ <digi:link href="/getWorkspace.do" name="urlParams2" title="${translation}" >
+															[ <digi:link href="/getWorkspace.do" name="urlParams22" title="${translation}" >
 																<digi:trn key="aim:workspaceManagerEditLink">
 																Edit
 																</digi:trn>
@@ -257,19 +256,7 @@
 												</digi:link>
 											</td>
 										</tr>
-										<tr>
-											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<c:set var="translation">
-													<digi:trn key="aim:clickToAddRoles">Click here to Add Roles</digi:trn>
-												</c:set>
-												<digi:link href="/updateRole.do" title="${translation}" >
-												<digi:trn key="aim:addRole">
-												Add Roles
-												</digi:trn>
-												</digi:link>
-											</td>
-										</tr>
+										
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

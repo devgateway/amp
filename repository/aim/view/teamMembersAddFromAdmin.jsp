@@ -131,16 +131,7 @@
 												</digi:link>
 											</td>
 										</tr>
-										<tr>
-											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<digi:link href="/updateRole.do" title="Click here to Add Roles" >
-												<digi:trn key="aim:addRole">
-												Add Roles
-												</digi:trn>
-												</digi:link>
-											</td>
-										</tr>
+										
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

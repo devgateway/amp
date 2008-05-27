@@ -177,7 +177,7 @@
 <field:display name="Accession Instrument" feature="Identification"></field:display> 
 <field:display name="Active Funding Organization" feature="Funding Organizations"></field:display> 
 <field:display name="Activity Budget" feature="Identification"></field:display> 
-<field:display name="Activity Category" feature="Contracting"></field:display> 
+<field:display name="Contracting Activity Category" feature="Contracting"></field:display> 
 <field:display name="Activity Created By" feature="Identification"></field:display> 
 <field:display name="Activity Created On" feature="Identification"></field:display> 
 <field:display name="Activity Creator" feature="Identification"></field:display> 
@@ -201,7 +201,7 @@
 <field:display name="Add Components Button" feature="Components"></field:display> 
 <field:display name="Add Disbursement Button" feature="Funding Organizations"></field:display> 
 <field:display name="Add Disbursement Order Button" feature="Disbursement Orders"></field:display> 
-<field:display name="Add Disbursement" feature="Contracting"></field:display> 
+<field:display name="Contracting Add Disbursement" feature="Contracting"></field:display> 
 <field:display name="Add Documents Button" feature="Related Documents"></field:display> 
 <field:display name="Add Expenditure Button" feature="Expenditures"></field:display> 
 <field:display name="Add Funding Button - Proposed Project Cost" feature="Proposed Project Cost"></field:display> 
@@ -240,8 +240,8 @@
 <field:display name="Beneficiary Agency Add Organizations Button" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency Remove Organizations Button" feature="Beneficiary Agency"></field:display> 
 <field:display name="Beneficiary Agency" feature="Beneficiary Agency"></field:display> 
-<field:display name="Cancel" feature="Contracting"></field:display> 
-<field:display name="Central" feature="Contracting"></field:display> 
+<field:display name="Contracting Cancel Saving" feature="Contracting"></field:display> 
+<field:display name="Contracting Central Amount" feature="Contracting"></field:display> 
 <field:display name="Changed Date" feature="Planning"></field:display> 
 <field:display name="Classification Expenditure" feature="Funding Organizations"></field:display> 
 <field:display name="Comments Base Value" feature="Activity"></field:display> 
@@ -338,12 +338,12 @@
 <field:display name="Delete Regional Funding Button" feature="Regional Funding"></field:display> 
 <field:display name="Delete Selected" feature="Contracting"></field:display> 
 <field:display name="Description" feature="Admin"></field:display> 
-<field:display name="Description" feature="Contracting"></field:display> 
+<field:display name="Contract Description" feature="Contracting"></field:display> 
 <field:display name="Description" feature="Identification"></field:display> 
 <field:display name="Disbursement Order Contract ID" feature="Disbursement Orders"></field:display> 
 <field:display name="Disbursement Order Number" feature="Disbursement Orders"></field:display> 
 <field:display name="Disbursement Orders Tab" feature="Disbursement Orders"></field:display> 
-<field:display name="Disbursements Global Currency" feature="Contracting"></field:display> 
+<field:display name="Contracting Disbursements Global Currency" feature="Contracting"></field:display> 
 <field:display name="Disbursements" feature="Contracting"></field:display> 
 <field:display name="Document Comment" feature="Related Documents"></field:display> 
 <field:display name="Document Date" feature="Related Documents"></field:display> 
@@ -397,9 +397,9 @@
 <field:display name="Grand Total Commitments" feature="Components"></field:display> 
 <field:display name="Grand Total Cost" feature="Costing"></field:display> 
 <field:display name="Grand Total Disbursements" feature="Components"></field:display> 
-<field:display name="IB" feature="Contracting"></field:display> 
-<field:display name="IFIs" feature="Contracting"></field:display> 
-<field:display name="INV" feature="Contracting"></field:display> 
+<field:display name="Contracting IB" feature="Contracting"></field:display> 
+<field:display name="Contracting IFIs" feature="Contracting"></field:display> 
+<field:display name="Contracting INV" feature="Contracting"></field:display> 
 <field:display name="Implementation Level" feature="Location"></field:display> 
 <field:display name="Implementation Location" feature="Location"></field:display> 
 <field:display name="Implementing Agency Add Organizations Button" feature="Implementing Agency"></field:display> 
@@ -499,7 +499,7 @@
 <field:display name="Regional Group Remove Organizations Button" feature="Regional Group"></field:display> 
 <field:display name="Regional Group" feature="Regional Group"></field:display> 
 <field:display name="Regional Percentage" feature="Location"></field:display> 
-<field:display name="Regional" feature="Contracting"></field:display> 
+<field:display name="Contracting Regional Amount" feature="Contracting"></field:display> 
 <field:display name="Remove Actors Button" feature="Issues"></field:display> 
 <field:display name="Remove Components Button" feature="Components"></field:display> 
 <field:display name="Remove Documents Button" feature="Related Documents"></field:display> 
@@ -519,7 +519,7 @@
 <field:display name="Risk" feature="Activity"></field:display> 
 <field:display name="Same as Proposed Approval Date" feature="Planning"></field:display> 
 <field:display name="Same as Proposed Start Date" feature="Planning"></field:display> 
-<field:display name="Save" feature="Contracting"></field:display> 
+<field:display name="Contracting Save Button" feature="Contracting"></field:display> 
 <field:display name="Secondary Program" feature="NPD Programs"></field:display> 
 <field:display name="Sector Group Add Organizations Button" feature="Sector Group"></field:display> 
 <field:display name="Sector Group Remove Organizations Button" feature="Sector Group"></field:display> 
@@ -534,7 +534,7 @@
 <field:display name="Sector" feature="Sectors"></field:display> 
 <field:display name="Sectors Percentage" feature="Sectors"></field:display> 
 <field:display name="Signature of Contract" feature="Contracting"></field:display> 
-<field:display name="Start of Tendering" feature="Contracting"></field:display> 
+<field:display name="Contracting Start of Tendering" feature="Contracting"></field:display> 
 <field:display name="Status" feature="Planning"></field:display> 
 <field:display name="Sub Program Level 1" feature="NPD Dashboard"></field:display> 
 <field:display name="Sub Program Level 2" feature="NPD Dashboard"></field:display> 
@@ -553,7 +553,7 @@
 <field:display name="Total Amount Commitments" feature="Regional Funding"></field:display> 
 <field:display name="Total Amount Disbursements" feature="Regional Funding"></field:display> 
 <field:display name="Total Amount Expenditures" feature="Regional Funding"></field:display> 
-<field:display name="Total Amount" feature="Contracting"></field:display> 
+<field:display name="Contracting Total Amount" feature="Contracting"></field:display> 
 <field:display name="Total Commitments" feature="Measures"></field:display> 
 <field:display name="Total Committed" feature="Funding Organizations"></field:display> 
 <field:display name="Total Disbursed" feature="Funding Organizations"></field:display> 
@@ -563,11 +563,11 @@
 <field:display name="Total Donor Expenditures" feature="Regional Funding"></field:display> 
 <field:display name="Total EC Contribution" feature="Contracting"></field:display> 
 <field:display name="Total Expended" feature="Funding Organizations"></field:display> 
-<field:display name="Total National Contribution" feature="Contracting"></field:display> 
+<field:display name="Contracting Total National Contribution" feature="Contracting"></field:display> 
 <field:display name="Total Ordered" feature="Disbursement Orders"></field:display> 
 <field:display name="Total Private Contribution" feature="Contracting"></field:display> 
 <field:display name="Type Of Assistance" feature="Funding Organizations"></field:display> 
-<field:display name="Type" feature="Contracting"></field:display> 
+<field:display name="Contracting Type" feature="Contracting"></field:display> 
 <field:display name="Undisbursed Balance" feature="Measures"></field:display> 
 <field:display name="Undisbursed Funds" feature="Funding Organizations"></field:display> 
 <field:display name="Unexpended Funds" feature="Funding Organizations"></field:display> 

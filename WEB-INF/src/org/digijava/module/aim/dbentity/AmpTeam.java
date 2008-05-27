@@ -5,6 +5,7 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Set;
 
 import org.digijava.module.aim.util.Identifiable;
@@ -13,6 +14,9 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	private Long ampTeamId;
 
 	private String name;
+	
+	private Boolean addActivity;
+	private Boolean computation;
 
 	private String description;
 
@@ -24,6 +28,8 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	
 
 	private AmpTeam parentTeamId;
+	
+	private Collection childrenWorkspaces;
 	
 	private String accessType;  	// Management or Team
 	
@@ -213,4 +219,30 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	public void setOrganizations(Set organizations) {
 		this.organizations = organizations;
 	}
+
+	public Boolean getAddActivity() {
+		return addActivity;
+	}
+
+	public void setAddActivity(Boolean addActivity) {
+		this.addActivity = addActivity;
+	}
+
+	public Boolean getComputation() {
+		return computation;
+	}
+
+	public void setComputation(Boolean computation) {
+		this.computation = computation;
+	}
+
+	public Collection getChildrenWorkspaces() {
+		return childrenWorkspaces;
+	}
+
+	public void setChildrenWorkspaces(Collection childrenWorkspaces) {
+		this.childrenWorkspaces = childrenWorkspaces;
+	}
+
+
 }

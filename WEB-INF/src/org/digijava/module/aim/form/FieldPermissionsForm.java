@@ -24,7 +24,9 @@ public class FieldPermissionsForm extends ActionForm {
     //guest
     private String guRead;
     private String guEdit;
-  
+    //owner
+    private String owRead;
+    private String owEdit;
     
     private String baRead;
     private String baEdit;
@@ -176,6 +178,18 @@ public class FieldPermissionsForm extends ActionForm {
 	}
 	public void setFieldNameTrimmed(String fieldNameTrimmed) {
 		this.fieldNameTrimmed = fieldNameTrimmed;
+	}
+	public String getOwRead() {
+		return owRead;
+	}
+	public void setOwRead(String owRead) {
+		this.owRead = owRead;
+	}
+	public String getOwEdit() {
+		return owEdit;
+	}
+	public void setOwEdit(String owEdit) {
+		this.owEdit = owEdit;
 	}
 	
 }

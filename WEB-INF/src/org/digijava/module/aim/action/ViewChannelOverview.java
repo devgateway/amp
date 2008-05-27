@@ -57,13 +57,13 @@ public class ViewChannelOverview extends TilesAction {
 
 		HttpSession session = request.getSession();
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
-		//PermissionUtil.resetScope(session);
-		//PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
+		PermissionUtil.resetScope(session);
+		PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
+		
 		ChannelOverviewForm formBean = (ChannelOverviewForm) form;
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
 		
 		boolean debug = (request.getParameter("debug")!=null)?true:false;
-		
 		
 		if (teamMember == null) {
 			formBean.setValidLogin(false);
@@ -101,6 +101,8 @@ public class ViewChannelOverview extends TilesAction {
 			createWarnings(activity,teamMember.getTeamHead(), formBean);
 
 			AmpActivity ampact = ActivityUtil.getAmpActivity(id);
+			
+			PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.ACTIVITY, ampact);
 
 			Set orgProjIdsSet = ampact.getInternalIds();
 	          if (orgProjIdsSet != null) {
@@ -141,7 +143,7 @@ public class ViewChannelOverview extends TilesAction {
 				formBean.setImplemLocationLevel(ampCategoryValue.getValue());
 
 
-			PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.ACTIVITY,activity);
+			//PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.ACTIVITY,activity);
 			ArrayList colAux=new ArrayList();
 			Collection ampFields=DbUtil.getAmpFields();
 			HashMap allComments=new HashMap();

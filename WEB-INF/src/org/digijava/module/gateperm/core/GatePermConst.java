@@ -54,4 +54,6 @@ public final class GatePermConst {
 	}
 	
 	public static final String SCOPE="GATEPERM_SCOPE";
+	
+	public static final String ACTION_MODE="ACTION_MODE";
 }

@@ -183,7 +183,8 @@ function commentWin(val) {
                                                                                <c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">    
                                                                                        <input type="button" value="<digi:trn key='btn:edit'>Edit</digi:trn>" 
                                                                                        class="dr-menu" onclick="fnEditProject(${activity.activityId})">      
-                                                                               </c:if>                                                                       
+                                                                               </c:if>                                                                 
+                                                                                     
                                                                                </c:if> &nbsp;                                                                
                                                                        </td>      
 														</field:display>

@@ -103,7 +103,9 @@ public abstract class Gate extends PropertyListable {
 
 		try {
 		     	boolean b=logic();
-		     	logger.debug("Gate "+this.getClass().getSimpleName()+" "+(b?"approves":"rejects")+" access. Gate state is: "+state);
+		     	logger.info("Gate "+this.getClass().getSimpleName()+" "+(b?"approves":"rejects")+" access. Gate state is: "+state);
+		     	if(scope.get(GatePermConst.ScopeKeys.PERMISSIBLE)!=null)
+		     		logger.info("Permissible = "+scope.get(GatePermConst.ScopeKeys.PERMISSIBLE));
 			return b;
 		} catch (Exception e) {
 			logger.error("Gate "+this.getClass().getName()+" logic has thrown an exception: ", e);

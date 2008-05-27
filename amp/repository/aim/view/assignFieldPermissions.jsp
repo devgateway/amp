@@ -42,6 +42,11 @@
 			<td align="center"><html:checkbox property="guEdit" /></td>
 		</tr>
 		<tr>
+			<td><digi:trn key="aim:gateperm:owner">Owner</digi:trn></td>
+			<td align="center"><html:checkbox property="owRead" /></td>
+			<td align="center"><html:checkbox property="owEdit" /></td>
+		</tr>
+		<tr>
 			<td><digi:trn key="aim:gateperm:beneficiaryAgency">Beneficiary Agency</digi:trn></td>
 			<td align="center"><html:checkbox property="baRead" /></td>
 			<td align="center"><html:checkbox property="baEdit" /></td>

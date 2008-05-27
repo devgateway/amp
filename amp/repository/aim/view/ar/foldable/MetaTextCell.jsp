@@ -5,8 +5,10 @@
 <bean:define id="metaTextCell" name="viewable"
 	type="org.dgfoundation.amp.ar.cell.MetaTextCell" scope="request"
 	toScope="page" />
-
+<!-- 
 <c:if test="${metaTextCell.draftFlag eq true}">
 <font color="RED">
 </c:if>
+ -->
+ <font color="${metaTextCell.colour}">
 <%@ include file="TextCell.jsp"%>

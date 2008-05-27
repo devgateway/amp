@@ -108,7 +108,8 @@ public class AssignFieldPermissions extends Action {
 		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Regional Group Permission","RG",OrgRoleGate.class,fpf.getRgRead(),fpf.getRgEdit());	
 		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Sector Group Permission","SG",OrgRoleGate.class,fpf.getSgRead(),fpf.getSgEdit());
 		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Everyone Permission",UserLevelGate.PARAM_EVERYONE,UserLevelGate.class,fpf.getEvRead(),fpf.getEvEdit());
-		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Guest Permission",UserLevelGate.PARAM_GUEST,UserLevelGate.class,fpf.getGuRead(),fpf.getGuEdit());		
+		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Guest Permission",UserLevelGate.PARAM_GUEST,UserLevelGate.class,fpf.getGuRead(),fpf.getGuEdit());
+		initializeAndSaveGatePermission(session,cp,afv.getName()+ " - Owner Permission",UserLevelGate.PARAM_OWNER,UserLevelGate.class,fpf.getOwRead(),fpf.getOwEdit());
 		session.save(cp);
 		
 		permissionMap.setPermission(cp);
@@ -161,7 +162,12 @@ public class AssignFieldPermissions extends Action {
 		    if(agencyPerm.hasParameter(UserLevelGate.PARAM_GUEST)) {
 				if(agencyPerm.hasAction(GatePermConst.Actions.EDIT)) fpf.setGuEdit("on");
 				if(agencyPerm.hasAction(GatePermConst.Actions.VIEW)) fpf.setGuRead("on");			
-			}    
+			}
+
+		    if(agencyPerm.hasParameter(UserLevelGate.PARAM_OWNER)) {
+				if(agencyPerm.hasAction(GatePermConst.Actions.EDIT)) fpf.setOwEdit("on");
+				if(agencyPerm.hasAction(GatePermConst.Actions.VIEW)) fpf.setOwRead("on");			
+			} 
 
 		}
 	    } else { 
@@ -170,7 +176,8 @@ public class AssignFieldPermissions extends Action {
 		fpf.setGuEdit(null);
 		fpf.setEvRead("on");
 		fpf.setGuRead("on");
-		
+		fpf.setOwEdit("on");
+		fpf.setOwRead("on");
 		
 		//get the global for the fields:
 		Permission globalPermissionForPermissibleClass = PermissionUtil.getGlobalPermissionForPermissibleClass(AmpFieldsVisibility.class);

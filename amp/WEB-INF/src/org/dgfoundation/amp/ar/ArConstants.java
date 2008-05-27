@@ -90,6 +90,7 @@ public final class ArConstants {
 	
 	//draft in title
 	public final static String DRAFT="DRAFT";
+	public final static String STATUS="STATUS";
 	//bolivia:
 //	public final static String LOCATION_PERCENTAGE="Location Percentage";
 //	public final static String COMPONENTE_PERCENTAGE="Componente Percentage";

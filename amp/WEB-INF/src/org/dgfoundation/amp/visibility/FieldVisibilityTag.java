@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -160,7 +161,10 @@ public class FieldVisibilityTag extends BodyTagSupport {
    				//TODO AMP-2579 this IF was added to fix null pointer temporary.
    				if (teamMember!=null){
    	   			    PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
-   	   			    if(ampFieldFromTree.getPermission(false)!=null && !ampFieldFromTree.canDo(GatePermConst.Actions.VIEW,scope))
+   	   			    ServletRequest request = pageContext.getRequest();
+   	   			    String actionMode = (String) request.getAttribute(GatePermConst.ACTION_MODE);
+   	   			    if(ampFieldFromTree.getPermission(false)!=null && PermissionUtil.getFromScope(session, GatePermConst.ScopeKeys.ACTIVITY)!=null &&
+   	   			    		!ampFieldFromTree.canDo(GatePermConst.Actions.EDIT.equals(actionMode)?actionMode:GatePermConst.Actions.VIEW,scope))
    	   			    return SKIP_BODY;
    				}
 
@@ -218,8 +222,8 @@ public class FieldVisibilityTag extends BodyTagSupport {
 				{
 					if(featureByNameFromRoot.getItems().containsKey(this.getName())) return true;
 				}
-			else System.out.println("errror in FM - field: "+this.getFeature());
-		else System.out.println("errror in FM - field: "+this.getFeature());
+			else System.out.println("errror in FM - field: "+this.getName() + " -- feature:"+this.getFeature());
+		else System.out.println("errror in FM - field: "+this.getName() + " -- feature:"+this.getFeature());
 		return false;
 	}
 	

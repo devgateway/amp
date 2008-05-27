@@ -12,6 +12,9 @@
 		<property name="name" column="name" type="java.lang.String"/>
 		<property name="accessType" column="access_type" type="java.lang.String"/>
 		<property name="description" column="description"  type="org.digijava.kernel.db.SafeClobType"/>
+		
+		<property name="addActivity" column="add_activity" type="java.lang.Boolean"/>
+		<property name="computation" column="computation" type="java.lang.Boolean"/>
 
 		<many-to-one name="teamLead" column="team_lead_id" class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none"/>
 		

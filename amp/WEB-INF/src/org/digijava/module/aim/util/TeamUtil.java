@@ -213,6 +213,32 @@ public class TeamUtil {
         return col;
     }
 
+    public static Collection getAllChildrenWorkspaces(Long id) {
+        Session session = null;
+        Collection col = new ArrayList();
+        try {
+            session = PersistenceManager.getSession();
+            String query = "select team from " + AmpTeam.class.getName()
+                + " team where (team.parentTeamId=:pid)";
+            Query qry = session.createQuery(query);
+            qry.setParameter("pid", id);
+            col = qry.list();
+
+        } catch(Exception e) {
+            throw new RuntimeException(e);
+
+        } finally {
+            if(session != null) {
+                try {
+                    PersistenceManager.releaseSession(session);
+                } catch(Exception rsf) {
+                    logger.error("Release session failed");
+                }
+            }
+        }
+       return col;
+    }
+    
     public static Collection getAllRelatedTeamsByType(String type) {
         Session session = null;
         Collection col = new ArrayList();
@@ -394,6 +420,8 @@ public class TeamUtil {
                 workspace.setTeamCategory(team.getTeamCategory());
                 workspace.setType(team.getType());
                 workspace.setWorkspaceType(team.getAccessType());
+                workspace.setAddActivity(team.getAddActivity());
+                workspace.setComputation(team.getComputation());
                 if(null == team.getRelatedTeamId())
                     workspace.setRelatedTeam(null);
                 else
@@ -509,6 +537,8 @@ public class TeamUtil {
                 updTeam.setType(team.getType());
                 updTeam.setRelatedTeamId(team.getRelatedTeamId());
                 updTeam.setOrganizations(team.getOrganizations());
+                updTeam.setAddActivity(team.getAddActivity());
+                updTeam.setComputation(team.getComputation());
                 session.saveOrUpdate(updTeam);
 
                 qryStr = "select t from " + AmpTeam.class.getName() + " t "

@@ -80,7 +80,6 @@ public class GetWorkspace extends Action {
 					uwForm.setAddFlag(true);
 				}
 				uwForm.setActionEvent("add");
-				//System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
 				return mapping.findForward("showAddWorkspace");				
 			}
 		} catch (NumberFormatException nfe) {
@@ -101,7 +100,8 @@ public class GetWorkspace extends Action {
 			uwForm.setWorkspaceType(workspace.getWorkspaceType());
 			uwForm.setDescription(workspace.getDescription());
 			uwForm.setOrganizations(workspace.getChildOrgs());
-			
+			uwForm.setAddActivity(workspace.getAddActivity());
+			uwForm.setComputation(workspace.getComputation());
 			uwForm.setRelatedTeam(workspace.getRelatedTeam());
 			if (null == uwForm.getRelatedTeam()) {
 				if ("DONOR".equalsIgnoreCase(uwForm.getCategory()) && "Donor".equalsIgnoreCase(uwForm.getWorkspaceType())) {

@@ -11,6 +11,7 @@ import net.sf.hibernate.Session;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.gateperm.core.Gate;
@@ -24,8 +25,9 @@ public class UserLevelGate extends Gate {
 
 	public static final String PARAM_EVERYONE="everyone";
 	public static final String PARAM_GUEST="guest";
+	public static final String PARAM_OWNER="owner";
 	
-	public static final MetaInfo[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER };
+	public static final MetaInfo[] SCOPE_KEYS  = new MetaInfo[] { GatePermConst.ScopeKeys.CURRENT_MEMBER, GatePermConst.ScopeKeys.ACTIVITY  };
 	
 	public static final MetaInfo[] PARAM_INFO  = new MetaInfo[] { new MetaInfo("Level",
     "The name of the user level. Eg: everyone(public user), guest(user logged in but no rights)") };
@@ -69,7 +71,11 @@ public class UserLevelGate extends Gate {
 			if(PARAM_EVERYONE.equals(param)) return true; else return false;
 		
 		if(PARAM_GUEST.equals(param)) return true;
-		
+		if(PARAM_OWNER.equals(param)) {
+			AmpActivity act = (AmpActivity) scope.get(GatePermConst.ScopeKeys.ACTIVITY);
+			if( act.getCreatedBy().getAmpTeamMemId().equals(tm.getMemberId()) ) return true;
+			else return false;
+		}
 		//the rest of the levels are not clearly defined yet.
 		
 		/*

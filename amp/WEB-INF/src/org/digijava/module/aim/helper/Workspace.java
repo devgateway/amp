@@ -23,6 +23,25 @@ public class Workspace {
 	private boolean hasMembers;
 	private Collection childWorkspaces; 
 	
+	private Boolean addActivity;
+	private Boolean computation;
+	
+	public Boolean getAddActivity() {
+		return addActivity;
+	}
+
+	public void setAddActivity(Boolean addActivity) {
+		this.addActivity = addActivity;
+	}
+
+	public Boolean getComputation() {
+		return computation;
+	}
+
+	public void setComputation(Boolean computation) {
+		this.computation = computation;
+	}
+
 	public Workspace() {
 	}
 	

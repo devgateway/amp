@@ -35,6 +35,19 @@ public class MetaTextCell extends TextCell {
 		return false;
 	}
 	
+	public String getStatusFlag() {
+		MetaInfo metaInfo = getMetaInfo(ArConstants.STATUS);
+		if(metaInfo!=null) return (String) metaInfo.getValue();
+		return "";
+	}
+	
+	public String getColour(){
+		if( getDraftFlag() && "started".compareTo(getStatusFlag())==0 ) return "RED";
+		if( !getDraftFlag() && "started".compareTo(getStatusFlag())==0 ) return "GREEN";
+		if( getDraftFlag()) return "RED";
+		return "";
+	}
+	
 	public MetaInfo getMetaInfo(String category) {
 		return MetaInfo.getMetaInfo(metaData, category);
 	}

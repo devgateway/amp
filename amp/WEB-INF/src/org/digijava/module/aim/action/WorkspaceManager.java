@@ -1,12 +1,21 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Vector;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
-import org.apache.struts.action.*;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.TeamUtil;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.WorkspaceForm;
-import javax.servlet.http.*;
-import java.util.*;
+import org.digijava.module.aim.util.TeamUtil;
 
 public class WorkspaceManager extends Action {
 
@@ -38,8 +47,7 @@ public class WorkspaceManager extends Action {
 			wsForm.setPage(1);
 		}
 		
-		Collection ampWorkspaces = (Collection) session
-				.getAttribute("ampWorkspaces");
+		Collection<AmpTeam> ampWorkspaces = (Collection<AmpTeam>) session.getAttribute("ampWorkspaces");
 		if (ampWorkspaces == null) {
 			ampWorkspaces = TeamUtil.getAllTeams();
 			session.setAttribute("ampWorkspaces", ampWorkspaces);
@@ -59,8 +67,14 @@ public class WorkspaceManager extends Action {
 		if (edIndex > ampWorkspaces.size()) {
 			edIndex = ampWorkspaces.size();
 		}
+		Collection colAt=new ArrayList();
+		for (AmpTeam at : ampWorkspaces) {
+			at.setChildrenWorkspaces(TeamUtil.getAllChildrenWorkspaces(at.getAmpTeamId()));
+			colAt.add(at);
+		}
 		Vector vect = new Vector();
-		vect.addAll(ampWorkspaces);
+		//vect.addAll(ampWorkspaces);
+		vect.addAll(colAt);
 
 		for (int i = (stIndex - 1); i < edIndex; i++) {
 			workspaces.add(vect.get(i));

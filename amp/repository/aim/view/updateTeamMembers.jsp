@@ -113,69 +113,7 @@
 		<td align="left" width="50%">
 			<html:select property="role">
 				<%@include file="teamMemberRolesDropDown.jsp" %>
-				<%-- <html:option value="">------ Select role ------</html:option>
-				<html:optionsCollection name="aimTeamMemberForm" property="ampRoles" value="ampTeamMemRoleId" label="role" /> --%>
 			</html:select>
-		</td>
-	</tr>
-	<tr>
-		<td align="center" colspan="2">
-			<logic:equal name="aimTeamMemberForm" property="action" value="edit">
-				<table cellspacing="5">
-					<tr>
-						<td>
-							<html:checkbox property="readPerms">
-								<digi:trn key="aim:readPerms">&nbsp;&nbsp; Read &nbsp;&nbsp;
-								</digi:trn>
-							</html:checkbox>					
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<html:checkbox property="writePerms">
-								<digi:trn key="aim:writePerms">&nbsp;&nbsp; Add / Update &nbsp;&nbsp;
-								</digi:trn>
-							</html:checkbox>					
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<html:checkbox property="deletePerms">
-								<digi:trn key="aim:deletePerms">&nbsp;&nbsp; Delete &nbsp;&nbsp;
-								</digi:trn>
-							</html:checkbox>					
-						</td>
-					</tr>
-				</table>
-			</logic:equal>
-			<logic:equal name="aimTeamMemberForm" property="action" value="delete">
-				<table cellspacing="5">
-					<tr>
-						<td>
-							<html:checkbox property="readPerms">
-								<digi:trn key="aim:readPerms">&nbsp;&nbsp; Read &nbsp;&nbsp;
-								</digi:trn>
-							</html:checkbox>					
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<html:checkbox property="writePerms">
-								<digi:trn key="aim:writePerms">&nbsp;&nbsp; Add / Update &nbsp;&nbsp;
-								</digi:trn>
-							</html:checkbox>					
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<html:checkbox property="deletePerms">
-								<digi:trn key="aim:deletePerms">&nbsp;&nbsp; Delete &nbsp;&nbsp;
-								</digi:trn>
-							</html:checkbox>					
-						</td>
-					</tr>
-				</table>
-			</logic:equal>
 		</td>
 	</tr>
 	<tr>
@@ -288,19 +226,7 @@
 												</digi:link>
 											</td>
 										</tr>
-										<tr>
-											<td>
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<c:set var="clickToAddRoles">
-												<digi:trn key="aim:clickToAddRoles">Click here to Add Roles</digi:trn>
-												</c:set>
-												<digi:link href="/updateRole.do" title="${clickToAddRoles}" >
-												<digi:trn key="aim:addRole">
-												Add Roles
-												</digi:trn>
-												</digi:link>
-											</td>
-										</tr>
+										
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

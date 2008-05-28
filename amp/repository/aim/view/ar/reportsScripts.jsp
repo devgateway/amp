@@ -293,7 +293,7 @@ background-color: yellow;
 		myPanel3.render(document.body);
 		
 		var msgP4='\n<digi:trn key="rep:filter:SetFormat">Please select format</digi:trn>';
-		myPanel4.setHeader(msgP3);
+		myPanel4.setHeader(msgP4);
 		myPanel4.setBody("");
 		myPanel4.render(document.body);
 				
@@ -580,7 +580,7 @@ function validateFormat(){
 	var customGroupSize=document.aimReportsFilterPickerForm3.customGroupSize.value;
 	
 	if ((decimalSymbol==customGroupCharacter)&&(customUseGrouping)){
-	        var msg='<digi:trn key="rep:format:equalsSymbols">Decimal Symbok and group symbol must be diferents</digi:trn>';
+	        var msg='<digi:trn key="rep:format:equalsSymbol">Decimal Symbol and group symbol must be diferents</digi:trn>';
 			alert(msg);
 			return false;
 	}
@@ -617,9 +617,6 @@ function validateFormat(){
 
 
 
-
-
-
 <style type="text/css">
 .mask {
   -moz-opacity: 0.8;
@@ -628,6 +625,15 @@ function validateFormat(){
   background-color:#2f2f2f;
 }
 </style>
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE hibernate-mapping PUBLIC	"-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 <hibernate-mapping>
 	<class name="org.digijava.module.message.dbentity.AmpMessageState" table="AMP_MESSAGE_STATE">
 		
@@ -14,6 +14,7 @@
 		<property name="senderId" column="sender_Id"  type="java.lang.Long"/>	
 		<property name="read" column="is_read"  type="java.lang.Boolean"/>		
 		
-		<many-to-one name="message" column="message_id" class="org.digijava.module.message.dbentity.AmpMessage" cascade="none"/>	
+		<many-to-one name="message" column="message_id" class="org.digijava.module.message.dbentity.AmpMessage" cascade="none"/>
+		
 	</class>
 </hibernate-mapping>

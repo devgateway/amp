@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.helper.Team;
-import org.digijava.module.message.dbentity.AmpMessage;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.helper.MessageHelper;
 
@@ -58,6 +57,105 @@ public class AmpMessageForm extends ActionForm {
 	
 	private String className;
 	
+	/**
+	 * Fields for Admin Side(Message Settings) 
+	 */
+	private Long msgRefreshTimeCurr; //current value
+	private String msgRefreshTimeNew;  //new value
+	
+	private Long msgStoragePerMsgTypeCurr;
+	private String msgStoragePerMsgTypeNew;
+	
+	private Long daysForAdvanceAlertsWarningsCurr;
+	private String daysForAdvanceAlertsWarningsNew;
+	
+	private Long maxValidityOfMsgCurr;
+	private String maxValidityOfMsgNew;
+	
+	private Long emailMsgsCurrent;
+	private Long emailMsgsNew;
+	
+
+	public Long getMsgRefreshTimeCurr() {
+		return msgRefreshTimeCurr;
+	}
+
+	public void setMsgRefreshTimeCurr(Long msgRefreshTimeCurr) {
+		this.msgRefreshTimeCurr = msgRefreshTimeCurr;
+	}
+
+	public String getMsgRefreshTimeNew() {
+		return msgRefreshTimeNew;
+	}
+
+	public void setMsgRefreshTimeNew(String msgRefreshTimeNew) {
+		this.msgRefreshTimeNew = msgRefreshTimeNew;
+	}
+
+	public Long getMsgStoragePerMsgTypeCurr() {
+		return msgStoragePerMsgTypeCurr;
+	}
+
+	public void setMsgStoragePerMsgTypeCurr(Long msgStoragePerMsgTypeCurr) {
+		this.msgStoragePerMsgTypeCurr = msgStoragePerMsgTypeCurr;
+	}
+
+	public String getMsgStoragePerMsgTypeNew() {
+		return msgStoragePerMsgTypeNew;
+	}
+
+	public void setMsgStoragePerMsgTypeNew(String msgStoragePerMsgTypeNew) {
+		this.msgStoragePerMsgTypeNew = msgStoragePerMsgTypeNew;
+	}
+
+	public Long getDaysForAdvanceAlertsWarningsCurr() {
+		return daysForAdvanceAlertsWarningsCurr;
+	}
+
+	public void setDaysForAdvanceAlertsWarningsCurr(
+			Long daysForAdvanceAlertsWarningsCurr) {
+		this.daysForAdvanceAlertsWarningsCurr = daysForAdvanceAlertsWarningsCurr;
+	}
+
+	public String getDaysForAdvanceAlertsWarningsNew() {
+		return daysForAdvanceAlertsWarningsNew;
+	}
+
+	public void setDaysForAdvanceAlertsWarningsNew(String daysForAdvanceAlertsWarningsNew) {
+		this.daysForAdvanceAlertsWarningsNew = daysForAdvanceAlertsWarningsNew;
+	}
+
+	public Long getMaxValidityOfMsgCurr() {
+		return maxValidityOfMsgCurr;
+	}
+
+	public void setMaxValidityOfMsgCurr(Long maxValidityOfMsgCurr) {
+		this.maxValidityOfMsgCurr = maxValidityOfMsgCurr;
+	}
+
+	public String getMaxValidityOfMsgNew() {
+		return maxValidityOfMsgNew;
+	}
+
+	public void setMaxValidityOfMsgNew(String maxValidityOfMsgNew) {
+		this.maxValidityOfMsgNew = maxValidityOfMsgNew;
+	}
+
+	public Long getEmailMsgsCurrent() {
+		return emailMsgsCurrent;
+	}
+
+	public void setEmailMsgsCurrent(Long emailMsgsCurrent) {
+		this.emailMsgsCurrent = emailMsgsCurrent;
+	}
+
+	public Long getEmailMsgsNew() {
+		return emailMsgsNew;
+	}
+
+	public void setEmailMsgsNew(Long emailMsgsNew) {
+		this.emailMsgsNew = emailMsgsNew;
+	}
 
 	public String getClassName() {
 		return className;

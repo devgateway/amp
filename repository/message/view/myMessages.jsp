@@ -48,7 +48,7 @@ function viewMessage(id) {
 							<TR>
 								<TD title="${trn}">
 									<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>									
-									<a href="${contextPath}/message/messageActions.do?actionType=viewAllMessages&tabIndex=1">
+									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">
 										${messageForm.msgType}New Messages
 									</a>									 
 								</TD>
@@ -56,7 +56,7 @@ function viewMessage(id) {
 							<TR>
 								<TD title="${trn}">
 								<IMG alt="Link" height="10" src="../ampTemplate/images/arrow-gr.gif" width="10">
-									<a href="${contextPath}/message/messageActions.do?actionType=viewAllMessages&tabIndex=2">
+									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=2">
 										${messageForm.alertType} New Alerts
 									</a>
 								</TD>
@@ -64,7 +64,7 @@ function viewMessage(id) {
 							<TR>
 								<TD title="${trn}">
 								<IMG alt="Link" height="10" src="../ampTemplate/images/arrow-gr.gif" width="10">
-									<a href="${contextPath}/message/messageActions.do?actionType=viewAllMessages&tabIndex=3">
+									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=3">
 										${messageForm.approvalType}New Approvals
 									</a>									 
 								</TD>
@@ -72,13 +72,13 @@ function viewMessage(id) {
 							<TR>
 								<TD title="${trn}">
 								<IMG alt="Link" height="10" src="../ampTemplate/images/arrow-gr.gif" width="10">
-									<a href="${contextPath}/message/messageActions.do?actionType=viewAllMessages&tabIndex=4">
+									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=4">
 										${messageForm.calendarEventType} New Events
 									</a>									 
 								</TD>
 							</TR>						
 							<TR><TD title='<digi:trn key="message:clickToViewMoreMessages">Click here to view More Messages</digi:trn>'>
-									<a href="${contextPath}/message/messageActions.do?actionType=viewAllMessages&tabIndex=1">
+									<a href="${contextPath}/message/messageActions.do?actionType=gotoMessagesPage&tabIndex=1">
 										<digi:trn key="message:more">..more</digi:trn>
 									</a>
 							</TD></TR>

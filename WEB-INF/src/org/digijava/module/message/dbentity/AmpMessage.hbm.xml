@@ -38,6 +38,9 @@
 			<property name="approvalType" column="approval_type"  type="java.lang.Integer"/>
 		</subclass>
 		
+		<subclass name="org.digijava.module.message.dbentity.UserMessage" discriminator-value="u">
+			<property name="userMessageType" column="user_message_type"  type="java.lang.Integer"/>
+		</subclass>
 		
 	</class>
 </hibernate-mapping>

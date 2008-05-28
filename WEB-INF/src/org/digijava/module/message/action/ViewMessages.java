@@ -14,7 +14,6 @@ import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.form.AmpMessageForm;
-import org.digijava.module.message.helper.MessageConstants;
 import org.digijava.module.message.util.AmpMessageUtil;
 
 public class ViewMessages extends TilesAction {
@@ -35,7 +34,7 @@ public class ViewMessages extends TilesAction {
 		int approvalType=0;
 		int calEventType=0;
 		for (AmpMessageState state : msgstates) {
-			if(state.getMessage().getClassName().equals("m") && state.getRead()!=null&& state.getRead().equals(false)){
+			if(state.getMessage().getClassName().equals("u") && state.getRead()!=null&& state.getRead().equals(false)){
 				msgType++;
 			}else if(state.getMessage().getClassName().equals("a") && state.getRead()!=null&& state.getRead().equals(false)){
 				alertType++;

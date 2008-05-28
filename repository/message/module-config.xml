@@ -20,6 +20,13 @@
 			</hibernate-class>	
 			<hibernate-class>
 					  org.digijava.module.message.dbentity.Approval	
-			</hibernate-class>	
+			</hibernate-class>
+			<hibernate-class>
+					  org.digijava.module.message.dbentity.UserMessage	
+			</hibernate-class>
+			<hibernate-class>
+					  org.digijava.module.message.dbentity.AmpMessageSettings	
+			</hibernate-class>		
+			
 		</hibernate-classes>
 </module-config>

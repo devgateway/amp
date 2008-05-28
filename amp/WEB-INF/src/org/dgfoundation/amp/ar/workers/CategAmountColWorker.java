@@ -148,7 +148,6 @@ public class CategAmountColWorker extends ColumnWorker {
 		    currencyCode=rs.getString("currency_code");
 		}
 		
-		String perspectiveCode=null; 
 		String donorGroupName=null;
 		String donorTypeName=null;
 		Double fixedExchangeRate = null;;
@@ -159,11 +158,6 @@ public class CategAmountColWorker extends ColumnWorker {
 
 		if (columnsMetaData.contains("fixed_exchange_rate")){
 		    fixedExchangeRate=rs.getDouble("fixed_exchange_rate");
-		}
-				
-		if (columnsMetaData.contains("perspective_code")){
-			perspectiveCode=rs.getString("perspective_code");
-		
 		}
 
 		if (columnsMetaData.contains("adjustment_type")){
@@ -285,17 +279,6 @@ public class CategAmountColWorker extends ColumnWorker {
 				year=new Integer(calendarHelper.getEthiopianYear());				
 				quarter=new String("Q"+calendarHelper.getEthiopianQuarter());
 				month = calendarHelper.getEthiopianMonth();				
-		}
-
-		
-		
-		
-		if(perspectiveCode!=null) {
-//			we eliminate the perspective items that do not match the filter one
-			MetaInfo perspMs=this.getCachedMetaInfo(ArConstants.PERSPECTIVE,perspectiveCode);
-			if(filter.getPerspective()!=null && !filter.getPerspective().getCode().equals(perspMs.getValue())) return null;
-			
-			acc.getMetaData().add(perspMs);
 		}
 
 		

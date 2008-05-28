@@ -33,7 +33,6 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -151,7 +150,6 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private AmpCurrency currency=null;
 	private Set ampTeams=null;
 	private AmpFiscalCalendar calendarType=null;
-	private AmpPerspective perspective;
 	private boolean widget=false;
 	private boolean publicView=false;
 	private Boolean budget=null;
@@ -189,8 +187,6 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		this.generatedFilterQuery = initialFilterQuery;
 		TeamMember tm = (TeamMember) request.getSession().getAttribute(
 				Constants.CURRENT_MEMBER);
-
-		selectPerspective(tm);
 		
 				
 		this.setAmpTeams(new TreeSet());
@@ -254,27 +250,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 			
 		this.setAmpReportId(new Long(ampReportId));
 		
-	}
-
-	public void selectPerspective(TeamMember tm) {
-		String perspectiveCode = null;
-		if (tm != null) {
-			String perspective = tm.getAppSettings().getPerspective();
-			if (perspective != null) {
-				if (perspective.equals("Donor"))
-					perspectiveCode = "DN";
-				if (perspective.equals("MOFED"))
-					perspectiveCode = "MA";
-			} else {
-				perspectiveCode = "MA";
-			}
-		} else {
-			perspectiveCode = "MA";
-		}
-
-		this.setPerspective(DbUtil.getPerspective(perspectiveCode));
-	}
-	
+	}	
 
 	public AmpARFilter() {
 		super();	
@@ -668,20 +644,6 @@ public class AmpARFilter extends PropertyListable implements Filter {
 		this.statuses = statuses;
 	}
 
-	/**
-	 * @return Returns the perspectiveCode.
-	 */
-	@PropertyListableIgnore
-	public AmpPerspective getPerspective() {
-		return perspective;
-	}
-
-	/**
-	 * @param perspectiveCode The perspectiveCode to set.
-	 */
-	public void setPerspective(AmpPerspective perspective) {
-		this.perspective = perspective;
-	}
 
 	@PropertyListableIgnore
 	public boolean isPublicView() {

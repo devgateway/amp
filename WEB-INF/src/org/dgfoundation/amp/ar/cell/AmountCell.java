@@ -10,7 +10,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.workers.AmountColWorker;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -43,6 +46,11 @@ public class AmountCell extends Cell {
 	
 	protected Date currencyDate;
 	
+	/**
+	 * We apply percentage only if there were no other percentages applied
+	 */
+	protected Set<String> percentageSourceColumnName;
+	
 	
 		/**
 	 * @return Returns the toExchangeRate.
@@ -64,12 +72,14 @@ public class AmountCell extends Cell {
 	public AmountCell() {
 		super();
 		mergedCells = new HashSet();
+		percentageSourceColumnName=new TreeSet<String>();
 		// TODO Auto-generated constructor stub
 	}
 
 	public AmountCell(int ensureCapacity) {
 		super();
 		mergedCells = new HashSet(ensureCapacity);
+		percentageSourceColumnName=new TreeSet<String>();
 	}
 
 	
@@ -79,6 +89,7 @@ public class AmountCell extends Cell {
 	public AmountCell(Long id) {
 		super(id);
 		mergedCells = new HashSet();
+		percentageSourceColumnName=new TreeSet<String>();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -279,7 +290,12 @@ public class AmountCell extends Cell {
 		return percentage;
 	}
 
-	public void setPercentage(double percentage) {
+	public void setPercentage(double percentage, CellColumn source) {
+		if(percentageSourceColumnName.contains(source.getName())) return;
+		
+		//ugly check, if sector is already added, do not add sub-sector percentage because it is redundant ...
+		if(percentageSourceColumnName.contains(ArConstants.COLUMN_SECTOR) && source.getName().equals(ArConstants.COLUMN_SUB_SECTOR)) return;
+		percentageSourceColumnName.add(source.getName());
 		if(this.percentage>0){
 			this.percentage = this.percentage * percentage / 100;
 		}
@@ -311,4 +327,6 @@ public class AmountCell extends Cell {
 		}
 
 	    }
+
+	
 }

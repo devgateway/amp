@@ -9,6 +9,7 @@ public class AmpMessageState {
 	 */	
 	private AmpMessage message;
 	
+	
 	/**
 	 * team member Id
 	 */
@@ -75,6 +76,5 @@ public class AmpMessageState {
 	public void setRead(Boolean read) {
 		this.read = read;
 	}
-	
 	
 }

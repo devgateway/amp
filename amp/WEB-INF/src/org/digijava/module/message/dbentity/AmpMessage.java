@@ -7,7 +7,7 @@ import java.util.Date;
  * @author Dare Roinishvili
  *
  */
-public class AmpMessage {
+public abstract class AmpMessage {
 	private Long id;
 	
 	/**

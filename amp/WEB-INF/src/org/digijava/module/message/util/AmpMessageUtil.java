@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.message.dbentity.AmpMessage;
+import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.dbentity.AmpMessageState;
 
 public class AmpMessageUtil {
@@ -122,6 +123,8 @@ public class AmpMessageUtil {
 			throw new AimException("delete failed",ex);
 		}
 	}
+	
+	//***********************************************Message State functions************************************************
 	
 	/**
 	 * loads AmpMessageState with the given state id
@@ -241,17 +244,35 @@ public class AmpMessageUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<AmpMessageState> loadAllMessagesStates(Long teamMemberId) throws Exception{
+	public static <E extends AmpMessage> List<AmpMessageState> loadAllMessagesStates(Class<E> clazz,Long teamMemberId,AmpMessageSettings setting) throws Exception{		
+		List<AmpMessageState> returnValue=new ArrayList<AmpMessageState>();
+		if(setting==null || setting.getMsgStoragePerMsgType()==null){
+			returnValue.addAll(loadAllInboxMessagesStates(clazz,teamMemberId,-1));
+			returnValue.addAll(loadAllSentOrDraftMessagesStates(clazz, teamMemberId,-1,true));
+			returnValue.addAll(loadAllSentOrDraftMessagesStates(clazz, teamMemberId,-1,false));
+		}else{
+			returnValue.addAll(loadAllInboxMessagesStates(clazz,teamMemberId,setting.getMsgStoragePerMsgType().intValue()));
+			returnValue.addAll(loadAllSentOrDraftMessagesStates(clazz, teamMemberId,setting.getMsgStoragePerMsgType().intValue(),true));
+			returnValue.addAll(loadAllSentOrDraftMessagesStates(clazz, teamMemberId,setting.getMsgStoragePerMsgType().intValue(),false));
+		}
+		return returnValue;
+	}	
+	
+	public static <E extends AmpMessage> List<AmpMessageState> loadAllInboxMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage) throws Exception{
 		Session session=null;
 		String queryString =null;
 		Query query=null;
 		List<AmpMessageState> returnValue=null;		
 		try {
 			session=PersistenceManager.getRequestDBSession();	
-			queryString="select state from "+AmpMessageState.class.getName()+" state inner join state.message as msg where"+
-			" msg.id=state.message.id and (state.memberId=:tmId || state.senderId=:tmId)";
-			query=session.createQuery(queryString);	
-			query.setParameter("tmId", teamMemberId);
+			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			" msg.id=state.message.id and state.memberId=:tmId and msg.draft="+false+" order by msg.creationDate desc";
+			if(maxStorage!=-1){
+				query=session.createQuery(queryString).setMaxResults(maxStorage);
+			}else{
+				query=session.createQuery(queryString);
+			}			 				
+			query.setParameter("tmId", teamMemberId);			
 			returnValue=query.list();			
 		}catch(Exception ex) {
 			logger.error("couldn't load Messages" + ex.getMessage());	
@@ -260,6 +281,95 @@ public class AmpMessageUtil {
 			
 		}
 		return returnValue;
-	}	
+	}
+	
+	public static <E extends AmpMessage> List<AmpMessageState> loadAllSentOrDraftMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage,Boolean draft) throws Exception{
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		List<AmpMessageState> returnValue=null;		
+		try {
+			session=PersistenceManager.getRequestDBSession();	
+			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+draft+" order by msg.creationDate desc";
+			if(maxStorage!=-1){
+				query=session.createQuery(queryString).setMaxResults(maxStorage);
+			}else{
+				query=session.createQuery(queryString);
+			}		
+			query.setParameter("tmId", teamMemberId);			
+			returnValue=query.list();			
+		}catch(Exception ex) {
+			logger.error("couldn't load Messages" + ex.getMessage());	
+			ex.printStackTrace();
+			throw new AimException("Unable to Load Messages", ex);
+			
+		}
+		return returnValue;
+	}
+	
+	public static <E extends AmpMessage> List<AmpMessageState> loadAllDraftMessagesStates(Class<E> clazz,Long teamMemberId,int maxStorage) throws Exception{
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		List<AmpMessageState> returnValue=null;		
+		try {
+			session=PersistenceManager.getRequestDBSession();	
+			queryString="select state from "+AmpMessageState.class.getName()+" state, msg from "+clazz.getName()+" msg where"+
+			" msg.id=state.message.id and state.senderId=:tmId and msg.draft="+true+"order by msg.creationDate desc";
+			if(maxStorage!=-1){
+				query=session.createQuery(queryString).setMaxResults(maxStorage);
+			}else{
+				query=session.createQuery(queryString);
+			}		
+			query.setParameter("tmId", teamMemberId);			
+			returnValue=query.list();			
+		}catch(Exception ex) {
+			logger.error("couldn't load Messages" + ex.getMessage());	
+			ex.printStackTrace();
+			throw new AimException("Unable to Load Messages", ex);
+			
+		}
+		return returnValue;
+	}
+	
+	//***************************************************Message Settings***********************************************
+	
+	public static AmpMessageSettings getMessageSettings() throws Exception{ //for this moment(according to requirements)for whole AMP there is one setting,So it's one record in table;
+		Session session=null;
+		String queryString =null;
+		Query query=null;
+		AmpMessageSettings returnValue=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();			
+			queryString= "select a from " + AmpMessageSettings.class.getName()+ " a";
+			query=session.createQuery(queryString);
+			returnValue=(AmpMessageSettings)query.uniqueResult();
+		}catch(Exception ex) {
+			logger.error("couldn't load Settings" + ex.getMessage());			
+		}
+		return returnValue;
+	}
+	
+	public static void saveOrUpdateSettings(AmpMessageSettings setting) throws Exception{
+		Session session= null;
+		Transaction tx=null;
+		try {
+			session=PersistenceManager.getRequestDBSession();
+			tx=session.beginTransaction();
+			session.saveOrUpdate(setting);
+			tx.commit();
+		}catch(Exception ex) {
+			if(tx!=null) {
+				try {
+					tx.rollback();					
+				}catch(Exception e ) {
+					logger.error("...Rollback failed");
+					throw new AimException("Can't rollback", e);
+				}			
+			}
+			throw new AimException("update failed",ex);
+		}
+	}
 	
 }

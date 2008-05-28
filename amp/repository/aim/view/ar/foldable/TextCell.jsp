@@ -6,8 +6,13 @@
 
 <bean:define id="textCell" name="viewable" type="org.dgfoundation.amp.ar.cell.TextCell" scope="request" toScope="page" />
 <bean:define id="caller" name="caller" scope="request" toScope="page" />
-<bean:define id="starFlagLocal" name="starFlag" scope="request" toScope="page" />
-<div align="left"><logic:equal name="starFlagLocal" value="true">*</logic:equal>
+<logic:present name="starFlag" scope="request">
+	<bean:define id="starFlagLocal" name="starFlag" scope="request" toScope="page" />
+</logic:present>
+	<div align="left">
+	<logic:present name="starFlag" scope="request">
+		<logic:equal name="starFlagLocal" value="true">*</logic:equal>
+	</logic:present>
 <bean:write name="textCell" property="shortTextVersion" filter="false"/>&nbsp;</div>
 
 <logic:notEqual name="caller" property="class.name" value="org.dgfoundation.amp.ar.cell.ListCell">

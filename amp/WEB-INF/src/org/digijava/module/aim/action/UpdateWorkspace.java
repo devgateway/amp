@@ -70,6 +70,14 @@ public class UpdateWorkspace extends Action {
             	saveErrors(request, errors);   
             	return mapping.getInputForward();
             }
+            if( "Management".compareTo(uwForm.getWorkspaceType()) == 0 )
+            	{
+            		uwForm.setOrganizations(new ArrayList());
+            		uwForm.setComputation(false);
+            		uwForm.setAddActivity(false);
+            	}
+            if( "Team".compareTo(uwForm.getWorkspaceType()) == 0 )
+            	uwForm.setChildWorkspaces(new ArrayList());
             
             AmpTeam newTeam = null;
             newTeam = null;

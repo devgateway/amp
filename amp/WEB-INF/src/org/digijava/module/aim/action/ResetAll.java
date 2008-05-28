@@ -461,14 +461,6 @@ public class ResetAll extends Action
 							fundingDetail.setCurrencyName(fundDet.getAmpCurrencyId().getCountryName());
 							fundingDetail.setTransactionAmount(CurrencyWorker.convert(fundDet.getTransactionAmount().doubleValue(),1, 1));
 							fundingDetail.setTransactionDate(DateConversion.ConvertDateToString(fundDet.getTransactionDate()));
-							fundingDetail.setPerspectiveCode(fundDet.getOrgRoleCode());
-							if (fundDet.getOrgRoleCode().equals(Constants.DONOR))
-								fundingDetail.setPerspectiveName("Donor");
-							else if (fundDet.getOrgRoleCode().equals(Constants.MOFED))
-								fundingDetail.setPerspectiveName("MOFED");
-							else if (fundDet.getOrgRoleCode().equals(Constants.IMPLEMENTING_AGENCY))
-								fundingDetail.setPerspectiveName("Implementing Agency");
-							fundingDetail.setPerspectiveCode(fundDet.getOrgRoleCode());
 							fundingDetail.setTransactionType(fundDet.getTransactionType().intValue());
 							fundDetail.add(fundingDetail);
 						}

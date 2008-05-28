@@ -323,14 +323,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
             eaForm.setSteps(steps);
         }
 
-      if (tm != null && tm.getTeamType()
-          .equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
-        eaForm.setDonorFlag(true);
-      }
-      else {
-        eaForm.setDonorFlag(false);
-      }
-
       // checking its the activity is already opened for editing...
       if (activityMap != null && activityMap.containsValue(activityId)) {
         //logger.info("activity is in activityMap " + activityId);
@@ -592,14 +584,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
           }
         }
         /* END - Clearing session information about comments */
-
-        if (tm != null && tm.getTeamType()
-            .equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
-          eaForm.setDonorFlag(true);
-        }
-        else {
-          eaForm.setDonorFlag(false);
-        }
 
         // load the activity details
         String actApprovalStatus = DbUtil.getActivityApprovalStatus(
@@ -1140,10 +1124,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
                                .getCurrencyCode());
             fd.setCurrencyName(ampRegFund.getCurrency()
                                .getCurrencyName());
-            fd.setPerspectiveCode(ampRegFund.getPerspective()
-                                  .getCode());
-            fd.setPerspectiveName(ampRegFund.getPerspective()
-                                  .getName());
             fd.setTransactionAmount(FormatHelper.formatNumber(
                                         ampRegFund
                                         .getTransactionAmount().doubleValue()));
@@ -1770,8 +1750,6 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
 				fd.setAmpComponentFundingId(ampCompFund.getAmpComponentFundingId());
 				fd.setCurrencyCode(ampCompFund.getCurrency().getCurrencyCode());
 				fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
-				fd.setPerspectiveCode(ampCompFund.getPerspective().getCode());
-				fd.setPerspectiveName(ampCompFund.getPerspective().getName());
 				fd.setTransactionAmount(FormatHelper.formatNumber(ampCompFund.getTransactionAmount().doubleValue()));
 				fd.setTransactionDate(DateConversion.ConvertDateToString(ampCompFund.getTransactionDate()));
 				fd.setTransactionType(ampCompFund.getTransactionType().intValue());

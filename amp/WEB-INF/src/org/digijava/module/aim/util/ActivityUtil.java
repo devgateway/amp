@@ -1998,8 +1998,6 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             }
             fd.setCurrencyCode(cf.getCurrency().getCurrencyCode());
             fd.setCurrencyName(cf.getCurrency().getCurrencyName());
-            fd.setPerspectiveCode(cf.getPerspective().getCode());
-            fd.setPerspectiveName(cf.getPerspective().getName());
             fd.setTransactionAmount(FormatHelper.formatNumber(cf.getTransactionAmount().doubleValue()));
             fd.setTransactionDate(
                 DateConversion.ConvertDateToString(

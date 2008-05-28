@@ -31,7 +31,7 @@
 		<logic:equal name="fundingDetail" property="transactionType" value="0">
 			<logic:equal name="fundingDetail" property="adjustmentType" value="0">
 				<c:if test="${aimEditActivityForm.donorFlag == false}">
-					<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
+
 						<tr bgcolor="#ffffff">
 							<td height="18" width="40%" align="right" bgcolor="#ffffff"><field:display
 								name="Adjustment Type Commitment"
@@ -61,38 +61,7 @@
 								<bean:write name="fundingDetail" property="formattedRate" />
 							</field:display> &nbsp;</td>
 						</tr>
-					</c:if>
-					<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
-						<tr bgcolor="#ffffff">
-							<td height="18" width="40%" align="right"  bgcolor="#ffffff"><field:display
-								name="Adjustment Type Commitment"
-								feature="Funding Organizations">
-								<digi:trn
-									key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-									<bean:write name="fundingDetail" property="adjustmentTypeName" />
-								</digi:trn>
-							</field:display></td>
 
-
-							<td height="18" align="right"><field:display
-								name="Date Commitment" feature="Funding Organizations">
-								<bean:write name="fundingDetail" property="transactionDate" />
-							</field:display></td>
-							<td height="18" align="right" bgcolor="#ffffff">
-							<field:display name="Amount Commitment"
-								feature="Funding Organizations">
-								<!-- <font color="blue">*</font>-->
-								<bean:write name="fundingDetail" property="transactionAmount" />
-							</field:display> <field:display name="Currency Commitment"
-								feature="Funding Organizations">
-								<bean:write name="fundingDetail" property="currencyCode" />
-							</field:display></td>
-							<td height="18"><field:display
-								name="Exchange Rate" feature="Funding Organizations">
-								<bean:write name="fundingDetail" property="formattedRate" />
-							</field:display></td>
-						</tr>
-					</c:if>
 				</c:if>
 			</logic:equal>
 		</logic:equal>
@@ -127,7 +96,6 @@
 		<logic:equal name="fundingDetail" property="transactionType" value="0">
 			<logic:equal name="fundingDetail" property="adjustmentType" value="1">
 				<c:if test="${aimEditActivityForm.donorFlag == false}">
-					<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
 						<tr bgcolor="#ffffff">
 							<td width="40%" align="right"  bgcolor="#FFFFFF"><field:display
 								name="Adjustment Type Commitment"
@@ -156,36 +124,6 @@
 								<bean:write name="fundingDetail" property="formattedRate" />
 							</field:display> &nbsp;</td>
 						</tr>
-					</c:if>
-					<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
-						<tr bgcolor="#ffffff">
-							<td height="18" width="40%" align="right"  bgcolor="#FFFFFF"><field:display
-								name="Adjustment Type Commitment"
-								feature="Funding Organizations">
-								<digi:trn
-									key='<%="aim:commitments:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-									<bean:write name="fundingDetail" property="adjustmentTypeName" />
-								</digi:trn>
-							</field:display></td>
-
-							<td height="18" align="right"><field:display name="Date Commitment"
-								feature="Funding Organizations">
-								<bean:write name="fundingDetail" property="transactionDate" />
-							</field:display></td>
-							<td height="18" align="right"><field:display
-								name="Amount Commitment" feature="Funding Organizations">
-								<!-- <font color="blue">*</font>-->
-								<bean:write name="fundingDetail" property="transactionAmount" />
-							</field:display> <field:display name="Currency Commitment"
-								feature="Funding Organizations">
-								<bean:write name="fundingDetail" property="currencyCode" />
-							</field:display></td>
-							<td height="18"><field:display name="Exchange Rate"
-								feature="Funding Organizations">
-								<bean:write name="fundingDetail" property="formattedRate" />
-							</field:display> &nbsp;&nbsp;</td>
-						</tr>
-					</c:if>
 				</c:if>
 			</logic:equal>
 		</logic:equal>

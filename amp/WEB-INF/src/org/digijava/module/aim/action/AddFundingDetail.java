@@ -136,7 +136,6 @@ public class AddFundingDetail extends Action {
 		fundingDetail.setAdjustmentType(Constants.ACTUAL);
                 fundingDetail.setIndexId(System.currentTimeMillis());
 		fundingDetail.setIndex(fundingDetails.size());
-		fundingDetail.setPerspectiveCode(perspCode);
 		return fundingDetail;
 	}
 }

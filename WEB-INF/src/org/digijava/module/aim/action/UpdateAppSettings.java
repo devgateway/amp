@@ -274,9 +274,6 @@ public class UpdateAppSettings extends Action {
 			}
 
 			AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
-			if (arf != null) {
-				arf.selectPerspective(tm);
-			}
 
 			logger.debug("settings updated");
 

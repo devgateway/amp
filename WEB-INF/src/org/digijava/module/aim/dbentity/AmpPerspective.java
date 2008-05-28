@@ -5,7 +5,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.Identifiable;
 
 
-
+@Deprecated
 public class AmpPerspective implements Identifiable {
         private Long ampPerspectiveId;
         private String name;

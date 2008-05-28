@@ -58,7 +58,6 @@ public class ShowAddComponent extends Action {
 			List<org.digijava.module.aim.dbentity.AmpComponent> ampComponents=new ArrayList<org.digijava.module.aim.dbentity.AmpComponent>();
 			eaForm.setStep("5");
 			
-			boolean perspectiveEnabled = FeaturesUtil.isPerspectiveEnabled();
 			
 			if( action != null && action.equalsIgnoreCase("show") )
 			{
@@ -84,17 +83,6 @@ public class ShowAddComponent extends Action {
 				eaForm.setComponentId(new Long(-1));
 				eaForm.setComponentTitle(null);
 				eaForm.setComponentDesc(null);
-				if(perspectiveEnabled){
-					if (tm.getAppSettings().getPerspective()
-							.equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
-						request.setAttribute("defPerspective",Constants.DONOR);
-					} else if (tm.getAppSettings().getPerspective().
-							equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
-						request.setAttribute("defPerspective",Constants.MOFED);
-					}
-				}else{
-					request.setAttribute("defPerspective",Constants.MOFED);
-				}
 				
 				String defCurr = CurrencyUtil.getCurrency(
 						tm.getAppSettings().getCurrencyId()).getCurrencyCode();
@@ -132,18 +120,6 @@ public class ShowAddComponent extends Action {
 						eaForm.setComponentDesc(comp.getDescription());
 						break;
 					}
-				}
-				
-				if(perspectiveEnabled){
-					if (tm.getAppSettings().getPerspective()
-							.equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
-						request.setAttribute("defPerspective",Constants.DONOR);
-					} else if (tm.getAppSettings().getPerspective().
-							equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
-						request.setAttribute("defPerspective",Constants.MOFED);
-					}
-				}else{
-					request.setAttribute("defPerspective",Constants.MOFED);
 				}
 				
 				String defCurr = CurrencyUtil.getCurrency(
@@ -189,11 +165,6 @@ public class ShowAddComponent extends Action {
 							comm.put(new Integer(index),new FundingDetail());	
 						}
 						FundingDetail fd = (FundingDetail) comm.get(new Integer(index));
-						
-						if(!perspectiveEnabled){
-							fd.setPerspectiveName("MOFED");
-							fd.setPerspectiveCode(Constants.MOFED);
-						}
 
 						if( fd != null )
 						{
@@ -219,18 +190,6 @@ public class ShowAddComponent extends Action {
 								case 4:
 									fd.setTransactionDate( val );
 									break;
-								case 5:
-									fd.setPerspectiveCode( val );
-									Iterator itr1 = eaForm.getPerspectives().iterator();
-									while( itr1.hasNext() ) 
-									{
-										AmpPerspective pers = ( AmpPerspective ) itr1.next();
-										if ( pers.getCode().equals(val) ) 
-										{
-											fd.setPerspectiveName( pers.getName() );
-										}
-									}
-									break;
 								case 6:
 									if(!"".equals(val)){
 										fd.setAmpComponentFundingId(Long.valueOf(val));
@@ -254,10 +213,6 @@ public class ShowAddComponent extends Action {
 
 						FundingDetail fd = ( FundingDetail ) disb.get( new Integer( index ) );
 						
-						if(!perspectiveEnabled){
-							fd.setPerspectiveName("MOFED");
-							fd.setPerspectiveCode(Constants.MOFED);
-						}
 						
 						if ( fd != null ) 
 						{
@@ -284,18 +239,6 @@ public class ShowAddComponent extends Action {
 								case 4:
 									fd.setTransactionDate( val );
 									break;
-								case 5:
-									fd.setPerspectiveCode( val );
-									Iterator itr1 = eaForm.getPerspectives().iterator();
-									while ( itr1.hasNext() ) 
-									{
-										AmpPerspective pers = ( AmpPerspective ) itr1.next();
-										if ( pers.getCode().equals( val ) ) 
-										{
-											fd.setPerspectiveName( pers.getName() );
-										}
-									}
-									break;
 								case 6:
 									if(!"".equals(val)){
 										fd.setAmpComponentFundingId(Long.valueOf(val));
@@ -319,10 +262,6 @@ public class ShowAddComponent extends Action {
 
 						FundingDetail fd = ( FundingDetail ) exp.get( new Integer( index ) );
 						
-						if(!perspectiveEnabled){
-							fd.setPerspectiveName("MOFED");
-							fd.setPerspectiveCode(Constants.MOFED);
-						}
 						
 						if ( fd != null ) 
 						{
@@ -348,18 +287,6 @@ public class ShowAddComponent extends Action {
 									break;
 								case 4:
 									fd.setTransactionDate( val );
-									break;
-								case 5:
-									fd.setPerspectiveCode( val );
-									Iterator itr1 = eaForm.getPerspectives().iterator();
-									while ( itr1.hasNext() ) 
-									{
-										AmpPerspective pers = ( AmpPerspective ) itr1.next();
-										if ( pers.getCode().equals( val ) ) 
-										{
-											fd.setPerspectiveName( pers.getName() );
-										}
-									}
 									break;
 								case 6:
 									if(!"".equals(val)){

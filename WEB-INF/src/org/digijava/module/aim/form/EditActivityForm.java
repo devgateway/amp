@@ -3335,13 +3335,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	}
 
 	/**
-	 * @param donorFlag The donorFlag to set.
-	 */
-	public void setDonorFlag(boolean donorFlag) {
-		this.donorFlag = donorFlag;
-	}
-
-	/**
 	 * @return Returns the fundDonor.
 	 */
 	public Long getFundDonor() {

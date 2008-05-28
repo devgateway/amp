@@ -128,10 +128,6 @@ public class AddRegionalFunding extends Action {
 
 					FundingDetail fd = (FundingDetail) comm.get(new Integer(index));
 					
-					if(!perspectiveEnabled){
-						fd.setPerspectiveName("MOFED");
-						fd.setPerspectiveCode(Constants.MOFED);
-					}
 					
 					if (fd != null) {
 						switch (num) {
@@ -152,15 +148,6 @@ public class AddRegionalFunding extends Action {
 						case 4:
 							fd.setTransactionDate(val);
 							break;
-						case 5:
-							fd.setPerspectiveCode(val);
-							Iterator itr1 = eaForm.getPerspectives().iterator();
-							while (itr1.hasNext()) {
-								AmpPerspective pers = (AmpPerspective) itr1.next();
-								if (pers.getCode().equals(val)) {
-									fd.setPerspectiveName(pers.getName());
-								}
-							}
 						}
 						comm.put(new Integer(index),fd);
 					}
@@ -177,10 +164,6 @@ public class AddRegionalFunding extends Action {
 
 					FundingDetail fd = (FundingDetail) disb.get(new Integer(index));
 					
-					if(!perspectiveEnabled){
-						fd.setPerspectiveName("MOFED");
-						fd.setPerspectiveCode(Constants.MOFED);
-					}
 					
 					if (fd != null) {
 						switch (num) {
@@ -202,15 +185,6 @@ public class AddRegionalFunding extends Action {
 						case 4:
 							fd.setTransactionDate(val);
 							break;
-						case 5:
-							fd.setPerspectiveCode(val);
-							Iterator itr1 = eaForm.getPerspectives().iterator();
-							while (itr1.hasNext()) {
-								AmpPerspective pers = (AmpPerspective) itr1.next();
-								if (pers.getCode().equals(val)) {
-									fd.setPerspectiveName(pers.getName());
-								}
-							}
 						}
 						disb.put(new Integer(index),fd);					
 					}
@@ -227,10 +201,6 @@ public class AddRegionalFunding extends Action {
 
 					FundingDetail fd = (FundingDetail) exp.get(new Integer(index));
 					
-					if(!perspectiveEnabled){
-						fd.setPerspectiveName("MOFED");
-						fd.setPerspectiveCode(Constants.MOFED);
-					}
 					
 					if (fd != null) {
 						switch (num) {
@@ -252,15 +222,6 @@ public class AddRegionalFunding extends Action {
 						case 4:
 							fd.setTransactionDate(val);
 							break;
-						case 5:
-							fd.setPerspectiveCode(val);
-							Iterator itr1 = eaForm.getPerspectives().iterator();
-							while (itr1.hasNext()) {
-								AmpPerspective pers = (AmpPerspective) itr1.next();
-								if (pers.getCode().equals(val)) {
-									fd.setPerspectiveName(pers.getName());
-								}
-							}
 						}
 						exp.put(new Integer(index),fd);					
 					}					

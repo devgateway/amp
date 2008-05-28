@@ -650,10 +650,6 @@ public class ShowActivityPrintPreview
                                            .getCurrencyCode());
                         fd.setCurrencyName(ampRegFund.getCurrency()
                                            .getCurrencyName());
-                        fd.setPerspectiveCode(ampRegFund.getPerspective()
-                                              .getCode());
-                        fd.setPerspectiveName(ampRegFund.getPerspective()
-                                              .getName());
                         fd.setTransactionAmount(DecimalToText
                                                 .ConvertDecimalToText(
                                                     ampRegFund
@@ -1214,8 +1210,6 @@ public class ShowActivityPrintPreview
 				fd.setAmpComponentFundingId(ampCompFund.getAmpComponentFundingId());
 				fd.setCurrencyCode(ampCompFund.getCurrency().getCurrencyCode());
 				fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
-				fd.setPerspectiveCode(ampCompFund.getPerspective().getCode());
-				fd.setPerspectiveName(ampCompFund.getPerspective().getName());
 				fd.setTransactionAmount(FormatHelper.formatNumber(ampCompFund.getTransactionAmount().doubleValue()));
 				fd.setTransactionDate(DateConversion.ConvertDateToString(ampCompFund.getTransactionDate()));
 				fd.setTransactionType(ampCompFund.getTransactionType().intValue());

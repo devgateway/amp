@@ -18,9 +18,6 @@ public class FundingDetail implements Serializable
 	private String adjustmentTypeNameTrimmed;
 	private String transactionDate;
 	private String transactionAmount;
-	private String perspectiveCode;
-	private String perspectiveName;
-	private String perspectiveNameTrimmed;
 	private Long reportingOrganizationId;
 	private String reportingOrganizationName;
 	private String currencyCode;
@@ -94,21 +91,6 @@ public class FundingDetail implements Serializable
 		this.logger = logger;
 	}
 */
-	public String getPerspectiveCode() {
-		return perspectiveCode;
-	}
-
-	public void setPerspectiveCode(String perspectiveCode) {
-		this.perspectiveCode = perspectiveCode;
-	}
-
-	public String getPerspectiveName() {
-		return perspectiveName;
-	}
-
-	public void setPerspectiveName(String perspectiveName) {
-		this.perspectiveName = perspectiveName;
-	}
 
 	public String getReportingOrganizationName() {
 		return reportingOrganizationName;
@@ -239,14 +221,6 @@ public class FundingDetail implements Serializable
 		setFixedExchangeRate(null);
 	    }
 		this.useFixedRate = useFixedRate;
-	}
-
-	public String getPerspectiveNameTrimmed() {
-		return perspectiveName.replaceAll(" ","");
-	}
-
-	public void setPerspectiveNameTrimmed(String perspectiveNameTrimmed) {
-		this.perspectiveNameTrimmed = perspectiveNameTrimmed;
 	}
 
 	public Long getAmpComponentFundingId() {

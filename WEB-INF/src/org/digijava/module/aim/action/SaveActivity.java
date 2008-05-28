@@ -53,7 +53,6 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
@@ -265,10 +264,6 @@ public class SaveActivity extends Action {
 															fundDet
 																	.getTransactionType()));
 											ampFundDet
-													.setPerspectiveId(DbUtil
-															.getPerspective(fundDet
-																	.getPerspectiveCode()));
-											ampFundDet
 													.setAdjustmentType(new Integer(
 															fundDet
 																	.getAdjustmentType()));
@@ -276,8 +271,6 @@ public class SaveActivity extends Action {
 													.setTransactionDate(DateConversion
 															.getDate(fundDet
 																	.getTransactionDate()));
-											ampFundDet.setOrgRoleCode(fundDet
-													.getPerspectiveCode());
                                                                                         ampFundDet.setContract(fundDet.getContract());
 
 
@@ -1212,12 +1205,9 @@ public class SaveActivity extends Action {
 										AmpFundingDetail ampFundDet = new AmpFundingDetail();
 										ampFundDet.setTransactionType(new Integer(fundDet.getTransactionType()));
 										// ampFundDet.setPerspectiveId(DbUtil.getPerspective(Constants.MOFED));
-										ampFundDet.setPerspectiveId(DbUtil.getPerspective(fundDet.getPerspectiveCode()));
 										ampFundDet.setAdjustmentType(new Integer(fundDet.getAdjustmentType()));
 										ampFundDet.setTransactionDate(DateConversion.getDate(fundDet
 																.getTransactionDate()));
-										ampFundDet.setOrgRoleCode(fundDet
-												.getPerspectiveCode());
 										boolean useFixedRate = false;
 										if (fundDet.getTransactionType() == Constants.COMMITMENT) {
 											if (fundDet.isUseFixedRate()
@@ -1327,19 +1317,8 @@ public class SaveActivity extends Action {
 										}
 									}
 								}
-								 if(eaForm.getPerspectives()!=null && eaForm.getPerspectives().size()>0){
-									 tmpItr = eaForm.getPerspectives().iterator();
-										while (tmpItr.hasNext()) {
-											AmpPerspective pers = (AmpPerspective) tmpItr
-													.next();
-											if (pers.getCode().equals(
-													fd.getPerspectiveCode())) {
-												ampRegFund.setPerspective(pers);
-												break;
-											}
-										}
-								 }
-                                                                boolean regionFlag=false;
+								
+								boolean regionFlag=false;
 
 								if(eaForm.getFundingRegions()!=null && eaForm.getFundingRegions().size()>0){
 									tmpItr = eaForm.getFundingRegions().iterator();
@@ -1386,18 +1365,6 @@ public class SaveActivity extends Action {
 										if (curr.getCurrencyCode().equals(
 												fd.getCurrencyCode())) {
 											ampRegFund.setCurrency(curr);
-											break;
-										}
-									}
-								}
-								if(eaForm.getPerspectives()!=null && eaForm.getPerspectives().size()>0){
-									tmpItr = eaForm.getPerspectives().iterator();
-									while (tmpItr.hasNext()) {
-										AmpPerspective pers = (AmpPerspective) tmpItr
-												.next();
-										if (pers.getCode().equals(
-												fd.getPerspectiveCode())) {
-											ampRegFund.setPerspective(pers);
 											break;
 										}
 									}
@@ -1450,18 +1417,6 @@ public class SaveActivity extends Action {
 										if (curr.getCurrencyCode().equals(
 												fd.getCurrencyCode())) {
 											ampRegFund.setCurrency(curr);
-											break;
-										}
-									}
-								}
-								if(eaForm.getPerspectives()!=null && eaForm.getPerspectives().size()>0){
-									tmpItr = eaForm.getPerspectives().iterator();
-									while (tmpItr.hasNext()) {
-										AmpPerspective pers = (AmpPerspective) tmpItr
-												.next();
-										if (pers.getCode().equals(
-												fd.getPerspectiveCode())) {
-											ampRegFund.setPerspective(pers);
 											break;
 										}
 									}
@@ -1636,9 +1591,8 @@ public class SaveActivity extends Action {
             /**
              * @todo give name to document space
              */
-            boolean surveyFlag = eaForm.isDonorFlag();
+            boolean surveyFlag = false;
 
-			eaForm.setDonorFlag(false);
 			eaForm.setFundDonor(null);
 			eaForm.setStep("1");
 			eaForm.setReset(true);
@@ -1766,16 +1720,6 @@ public class SaveActivity extends Action {
 								break;
 							}
 						}
-						tmpItr = eaForm.getPerspectives().iterator();
-						while (tmpItr.hasNext()) {
-							AmpPerspective pers = (AmpPerspective) tmpItr
-									.next();
-							if (pers.getCode().equals(
-									fd.getPerspectiveCode())) {
-								ampCompFund.setPerspective(pers);
-								break;
-							}
-						}
 
 						ampCompFund.setAmpComponentFundingId(fd.getAmpComponentFundingId());
 						ampCompFund.setReportingOrganization(null);
@@ -1810,16 +1754,6 @@ public class SaveActivity extends Action {
 							if (curr.getCurrencyCode().equals(
 									fd.getCurrencyCode())) {
 								ampCompFund.setCurrency(curr);
-								break;
-							}
-						}
-						tmpItr = eaForm.getPerspectives().iterator();
-						while (tmpItr.hasNext()) {
-							AmpPerspective pers = (AmpPerspective) tmpItr
-									.next();
-							if (pers.getCode().equals(
-									fd.getPerspectiveCode())) {
-								ampCompFund.setPerspective(pers);
 								break;
 							}
 						}
@@ -1858,16 +1792,6 @@ public class SaveActivity extends Action {
 							if (curr.getCurrencyCode().equals(
 									fd.getCurrencyCode())) {
 								ampCompFund.setCurrency(curr);
-								break;
-							}
-						}
-						tmpItr = eaForm.getPerspectives().iterator();
-						while (tmpItr.hasNext()) {
-							AmpPerspective pers = (AmpPerspective) tmpItr
-									.next();
-							if (pers.getCode().equals(
-									fd.getPerspectiveCode())) {
-								ampCompFund.setPerspective(pers);
 								break;
 							}
 						}

@@ -57,8 +57,6 @@ public class RegionalFundingsHelper {
 			
 			fd.setCurrencyName(regFund.getCurrency().getCurrencyName());
 			fd.setCurrencyCode(regFund.getCurrency().getCurrencyCode());
-			fd.setPerspectiveCode(regFund.getPerspective().getCode());
-			fd.setPerspectiveName(regFund.getPerspective().getName());
 			fd.setTransactionAmount(FormatHelper.formatNumber(regFund.getTransactionAmount().doubleValue()));
 			
 			String tsDate = DateConversion.ConvertDateToString(regFund.getTransactionDate());

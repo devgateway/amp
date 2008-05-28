@@ -117,9 +117,6 @@ public class FundingCalculationsHelper {
 			fundingDetail.setTransactionAmount(CurrencyWorker.convert(fundDet.getTransactionAmount().doubleValue(), 1, 1));
 			fundingDetail.setTransactionDate(DateConversion.ConvertDateToString(fundDet.getTransactionDate()));
 
-			fundingDetail.setPerspectiveCode(fundDet.getPerspectiveId().getCode());
-			fundingDetail.setPerspectiveName(fundDet.getPerspectiveId().getName());
-
 			fundingDetail.setTransactionType(fundDet.getTransactionType().intValue());
 			fundingDetail.setDisbOrderId(fundDet.getDisbOrderId());
 

@@ -2,9 +2,13 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+
 <bean:define id="textCell" name="viewable" type="org.dgfoundation.amp.ar.cell.TextCell" scope="request" toScope="page" />
 <bean:define id="caller" name="caller" scope="request" toScope="page" />
-<div align="left"><bean:write name="textCell" property="shortTextVersion" filter="false"/>&nbsp;</div>
+<bean:define id="starFlagLocal" name="starFlag" scope="request" toScope="page" />
+<div align="left"><logic:equal name="starFlagLocal" value="true">*</logic:equal>
+<bean:write name="textCell" property="shortTextVersion" filter="false"/>&nbsp;</div>
 
 <logic:notEqual name="caller" property="class.name" value="org.dgfoundation.amp.ar.cell.ListCell">
 <logic:equal name="textCell" property="hasLongVersion" value="true">

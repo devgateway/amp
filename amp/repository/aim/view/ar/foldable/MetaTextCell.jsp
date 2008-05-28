@@ -10,5 +10,10 @@
 <font color="RED">
 </c:if>
  -->
+ <c:set var="starFlag" value="false" target="request" scope="request" />
  <font color="${metaTextCell.colour}">
-<%@ include file="TextCell.jsp"%>
+ 		<c:if test="${metaTextCell.colour == 'GREEN' && metaTextCell.statusFlag == 'started'}">
+	 		<c:set var="starFlag" value="true" target="request" scope="request" />
+ 		</c:if>
+ 
+ <%@ include file="TextCell.jsp"%>

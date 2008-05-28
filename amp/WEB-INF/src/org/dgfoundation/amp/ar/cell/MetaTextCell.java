@@ -44,6 +44,7 @@ public class MetaTextCell extends TextCell {
 	public String getColour(){
 		if( getDraftFlag() && "started".compareTo(getStatusFlag())==0 ) return "RED";
 		if( !getDraftFlag() && "started".compareTo(getStatusFlag())==0 ) return "GREEN";
+		if( !getDraftFlag() && "edited".compareTo(getStatusFlag())==0 ) return "GREEN";
 		if( getDraftFlag()) return "RED";
 		return "";
 	}

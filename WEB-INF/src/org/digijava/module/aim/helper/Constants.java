@@ -153,6 +153,7 @@ public class Constants
 
 	public static final String APPROVED_STATUS 	= "approved";
 	public static final String STARTED_STATUS 	= "started";
+	public static final String EDITED_STATUS 	= "edited";
 	public static final String NOT_APPRVED = "not_approved";
 	//TODO better to have APPROVAL_APROVED, APPROVAL_NOT_APROVED and something like that
 

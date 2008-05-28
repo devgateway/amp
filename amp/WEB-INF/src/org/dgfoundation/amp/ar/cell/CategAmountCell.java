@@ -144,7 +144,7 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret)
 		MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedLocation.getMetaData(),ArConstants.PERCENTAGE);
 		if(percentMeta!=null) {
 			Double percentage=(Double) percentMeta.getValue() ;
-			ret.setPercentage(percentage.doubleValue());			
+			ret.setPercentage(percentage.doubleValue(), c);			
 		}
 		}
 	}

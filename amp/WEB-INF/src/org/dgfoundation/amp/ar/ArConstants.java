@@ -77,6 +77,8 @@ public final class ArConstants {
 
 	public final static String COLUMN_FUNDING="Funding";
 	public final static String COLUMN_PROPOSED_COST="Proposed Project Cost";
+	public final static String COLUMN_SECTOR="Sector";
+	public final static String COLUMN_SUB_SECTOR="Sub-Sector";
 	
 	//additional measures
 	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";

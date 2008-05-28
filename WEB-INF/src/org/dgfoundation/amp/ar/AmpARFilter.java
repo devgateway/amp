@@ -13,6 +13,7 @@ import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +36,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
@@ -166,6 +168,7 @@ public class AmpARFilter extends PropertyListable implements Filter {
 	private Integer renderStartYear=null; //the range of dates columns that  has to be render,  years not in range will be computables for totals but wont be  rederisables
 	private Integer renderEndYear=null;
 		
+	private DecimalFormat currentFormat=null;
 	private Boolean governmentApprovalProcedures;
 	private Boolean jointCriteria;
 	
@@ -235,6 +238,13 @@ public class AmpARFilter extends PropertyListable implements Filter {
 				  renderEndYear=Integer.parseInt(gvalue); 
 				  }
 			}
+		}
+		
+		if (currentFormat==null){
+			currentFormat=FormatHelper.getDefaultFormat();
+			FormatHelper.tlocal.set(null);
+		}else{
+			FormatHelper.tlocal.set(currentFormat);
 		}
 	
 
@@ -949,6 +959,15 @@ public class AmpARFilter extends PropertyListable implements Filter {
 
 	public void setRenderEndYear(Integer renderEndYear) {
 	    this.renderEndYear = renderEndYear;
+	}
+	
+	@PropertyListableIgnore
+	public DecimalFormat getCurrentFormat() {
+		return currentFormat;
+	}
+
+	public void setCurrentFormat(DecimalFormat currentFormat) {
+		this.currentFormat = currentFormat;
 	}
 
 

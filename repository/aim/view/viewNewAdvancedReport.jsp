@@ -7,7 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 <div id="mySorter" style="display: none">
 	<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
         <!--
@@ -22,18 +22,14 @@
 <div id="myFilterWrapper" style="display: none;" >
 	<div id="myFilter" style="display: none;" >
 			<jsp:include page="/aim/reportsFilterPicker.do" />
-	        <!--
-			<a href='#' onclick='hideFilter();return false'>
-				<b>
-					<digi:trn key="rep:pop:Close">Close</digi:trn>
-				</b>
-			</a>
-			-->
+	 
 	</div>
 	<div id="myRange" style="display: none">
 	          <jsp:include page="/repository/aim/view/ar/RangePicker.jsp" />
 	</div>
-	
+	<div id="customFormat" style="display: none">
+	          <jsp:include page="/repository/aim/view/ar/customFormatPicker.jsp" />
+	</div>
 </div>
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
@@ -99,15 +95,15 @@
 			| 
 			</logic:notEmpty> 
 			
-			<a style="cursor:pointer"
-				onClick="showFilter(); ">
-			<u><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></u> </a>
+			<a style="cursor:pointer" onClick="showFilter(); "> <u><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></u> </a>
 			
-			| 
+			 
 			
-			<logic:notEqual name="widget" scope="request" value="true">
-				<a style="cursor:pointer"	onClick="showRange(); "><u><digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn></u> </a>
+			<logic:notEqual name="widget" scope="request" value="true">| <a style="cursor:pointer"	onClick="showRange(); ">
+			
+			<u><digi:trn key="rep:pop:ChangeRange">Change Range</digi:trn></u> </a>
 			</logic:notEqual>
+			| <a style="cursor:pointer"	onClick="showFormat(); "><u><digi:trn key="rep:pop:ChangeFormat">Change Format</digi:trn></u> </a>
 		
 		</td>
 	</tr>

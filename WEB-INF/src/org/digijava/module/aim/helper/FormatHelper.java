@@ -19,6 +19,8 @@ public class FormatHelper {
 
     private static Logger logger = Logger.getLogger(FormatHelper.class);
 
+    
+    public static ThreadLocal<DecimalFormat> tlocal = new ThreadLocal<DecimalFormat>();
 
            /**                                                                                                                                                  
             * Parse a String tring based on Global Setting Format to Double                                                                                     
@@ -33,23 +35,9 @@ public class FormatHelper {
                    if("".equalsIgnoreCase(number)){
                 	   return new Double(0);
                    }
-                   String format = "###,###,###,###.##";                                                                                                        
-                   String decimalSeparator = ".";                                                                                                               
-                   String groupSeparator = ",";                                                                                                                 
-                                                                                                                                                                
-                   // get setting from global setting                                                                                                           
-                   format = FeaturesUtil                                                                                                                        
-                                  .getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);                                                               
-                   decimalSeparator = FeaturesUtil                                                                                                              
-                                   .getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR);                                                           
-                   groupSeparator = FeaturesUtil                                                                                                                
-                                  .getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR);                                                             
-                                                                                                                                                                
+                                                                                    
                    Double result;                                                                                                                               
-                   DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();                                                                                
-                   decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));                                                                                  
-                   decSymbols.setGroupingSeparator(groupSeparator.charAt(0));                                                                                   
-                   DecimalFormat formater = new DecimalFormat(format, decSymbols);                                                                              
+                   DecimalFormat formater = getDecimalFormat();                                                                              
                    try {                                                                                                                                        
                            result = formater.parse(number).doubleValue();                                                                                       
                    } catch (ParseException e) {                                                                                                                 
@@ -67,25 +55,16 @@ public class FormatHelper {
     
     public static String formatNumber(double nr) {
     	
-    	String format = "###,###,###,###.##";
-    	String decimalSeparator = ".";
-    	String groupSeparator = ",";
-
-    	// get setting from global setting
-    	format = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
-    	decimalSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR);
-    	groupSeparator = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR);
-    	Double number;
+    	
+    		Double number;
     	String result;
     	if (nr == 0) {
     	    number = new Double(0d);
     	}
     	else number = new Double(nr);
 
-    	DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();
-    	decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));
-    	decSymbols.setGroupingSeparator(groupSeparator.charAt(0));
-    	DecimalFormat formater = new DecimalFormat(format, decSymbols);
+    	
+    	DecimalFormat formater = getDecimalFormat();
     	result = formater.format(number);
     	return result;
         }
@@ -104,6 +83,18 @@ public class FormatHelper {
 	   result = formater.format(number);                                                                                                            
        return result;                                                                                                                               
     }
+   
+   public static String formatNumberUsingCustomFormat(double number){
+	   DecimalFormat formater = null;     
+	   String result;  
+	   if (tlocal.get()!=null){
+		   formater=tlocal.get();
+		   result = formater.format(number);  
+		   return result;
+	   }else{
+		   return formatNumber(number);
+	   }
+  }
    
    /**
     * Return a string based on Global Setting Number Format, not rounded. 
@@ -140,24 +131,7 @@ public class FormatHelper {
    }
    
    public static DecimalFormat getDecimalFormat(){
-       String format = "###,###,###,###.##";                                                                                                        
-       String decimalSeparator = ".";                                                                                                               
-       String groupSeparator = ",";                                                                                                                 
-                                                                                                                                                    
-       // get setting from global setting                                                                                                           
-       format = FeaturesUtil                                                                                                                        
-                       .getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);                                                               
-       decimalSeparator = FeaturesUtil                                                                                                              
-                      .getGlobalSettingValue(GlobalSettingsConstants.DECIMAL_SEPARATOR);                                                           
-       groupSeparator = FeaturesUtil                                                                                                                
-                       .getGlobalSettingValue(GlobalSettingsConstants.GROUP_SEPARATOR);                                                             
-                                                                                                                                                                                                                                                                                               
-                                                                                                                                                   
-       DecimalFormatSymbols decSymbols = new DecimalFormatSymbols();                                                                                
-       decSymbols.setDecimalSeparator(decimalSeparator.charAt(0));                                                                                  
-       decSymbols.setGroupingSeparator(groupSeparator.charAt(0));                                                                                   
-       DecimalFormat formater = new DecimalFormat(format, decSymbols);    	
-       return formater;
+       return getDefaultFormat();
    }
                        
     

@@ -106,7 +106,7 @@ public class AmountCell extends Cell {
 		if (am == 0)
 			return "";
 		else
-			return FormatHelper.formatNumber(getAmount());
+			return FormatHelper.formatNumberUsingCustomFormat(getAmount());
 	}
 
 	/*
@@ -179,7 +179,7 @@ public class AmountCell extends Cell {
 
     public String getWrappedAmount() {
 	if (id != null)
-	    return FormatHelper.formatNumber(convert() * percentage / 100);
+	    return FormatHelper.formatNumberUsingCustomFormat(convert() * percentage / 100);
 	else
 	    return "";
 	}

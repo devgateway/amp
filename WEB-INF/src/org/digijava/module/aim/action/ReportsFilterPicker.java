@@ -3,6 +3,8 @@
  */
 package org.digijava.module.aim.action;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -42,6 +44,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -74,6 +77,11 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.setIsnewreport(true);
 			filterForm.setAmpReportId(new Long(ampReportId));
 			filterForm.setIsnewreport(false);
+		}
+		
+		
+		if (("true").equalsIgnoreCase(filterForm.getResetFormat())){
+			resetFormat(form, request, mapping);
 		}
 		
 		HttpSession httpSession = request.getSession();
@@ -315,7 +323,18 @@ public class ReportsFilterPicker extends MultiAction {
 			httpSession.setAttribute("filterCurrentReport", rep);
 		}
 		
+		
+		if (filterForm.getCustomDecimalSymbol()==null){
+			filterForm.setCustomDecimalSymbol(String.valueOf((FormatHelper.getDecimalFormat().getDecimalFormatSymbols().getDecimalSeparator())));
+			filterForm.setCustomDecimalPlaces(FormatHelper.getDecimalFormat().getMaximumFractionDigits());
+			filterForm.setCustomGroupCharacter(String.valueOf(FormatHelper.getDecimalFormat().getDecimalFormatSymbols().getGroupingSeparator()));
+			filterForm.setCustomUseGrouping(FormatHelper.getDecimalFormat().isGroupingUsed());
+			filterForm.setCustomGroupSize(FormatHelper.getDecimalFormat().getGroupingSize());
+		}
+		
+	
 		return modeSelect(mapping,form,request,response);
+	
 	}
 
 	public ActionForward modeReset(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -597,6 +616,17 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setRenderStartYear((filterForm.getRenderStartYear()!=-1)?filterForm.getRenderStartYear():0);
 		arf.setRenderEndYear((filterForm.getRenderEndYear()!=-1)?filterForm.getRenderEndYear():0);
 		
+		DecimalFormat custom=new DecimalFormat();
+		DecimalFormatSymbols ds=new DecimalFormatSymbols();
+		ds.setDecimalSeparator((!"CUSTOM".equalsIgnoreCase(filterForm.getCustomDecimalSymbol())?filterForm.getCustomDecimalSymbol().charAt(0):filterForm.getCustomDecimalSymbolTxt().charAt(0)));
+		ds.setGroupingSeparator((!"CUSTOM".equalsIgnoreCase(filterForm.getCustomGroupCharacter())?filterForm.getCustomGroupCharacter().charAt(0):filterForm.getCustomGroupCharacterTxt().charAt(0)));
+		custom.setMaximumFractionDigits((filterForm.getCustomDecimalPlaces()!=-1)?filterForm.getCustomDecimalPlaces():99);
+		custom.setGroupingUsed(filterForm.getCustomUseGrouping());
+		custom.setGroupingSize(filterForm.getCustomGroupSize());
+		custom.setDecimalFormatSymbols(ds);
+		arf.setCurrentFormat(custom);
+		
+		
 		arf.setBeneficiaryAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedBeneficiaryAgency() , AmpOrganisation.class ) );
 		arf.setImplementingAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedImplementingAgency() , AmpOrganisation.class ) );
 		arf.setExecutingAgency( ReportsUtil.processSelectedFilters( filterForm.getSelectedExecutingAgency(), AmpOrganisation.class ) );
@@ -647,6 +677,19 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setBeneficiaryAgency(null);
 		filterForm.setImplementingAgency(null);
 		filterForm.reset(mapping, request);
+		}
+	
+	public void resetFormat( ActionForm form, HttpServletRequest request,ActionMapping mapping){
+		HttpSession httpSession = request.getSession();
+		ReportsFilterPickerForm filterForm=(ReportsFilterPickerForm) form;
+		AmpARFilter arf = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
+		arf.setCurrentFormat(null);
+		filterForm.setCustomDecimalSymbol(null);
+		filterForm.setCustomDecimalPlaces(null);
+		filterForm.setCustomGroupCharacter(null);
+		filterForm.setCustomUseGrouping(null);
+		filterForm.setCustomGroupSize(null);
+		filterForm.setResetFormat(null);
 	}
 	
 }

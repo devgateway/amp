@@ -6,9 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
 <link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>" />
 <link rel="stylesheet" href="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.css"/>" />
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
@@ -261,6 +261,17 @@ background-color: yellow;
 		    visible:false,
 		    modal:true,
 		    draggable:true} );
+		    
+		    var myPanel4 = new YAHOO.widget.Panel("new3", {
+			width:"450px",
+		    fixedcenter: true,
+		    constraintoviewport: true,
+		    underlay:"none",
+		    close:true,
+		    visible:false,
+		    modal:true,
+		    draggable:true}
+		     );
 	
 	myPanel1.beforeHideEvent.subscribe(YAHOO.amptab.handleClose);
 		    
@@ -280,6 +291,12 @@ background-color: yellow;
 		myPanel3.setHeader(msgP3);
 		myPanel3.setBody("");
 		myPanel3.render(document.body);
+		
+		var msgP4='\n<digi:trn key="rep:filter:SetFormat">Please select format</digi:trn>';
+		myPanel4.setHeader(msgP3);
+		myPanel4.setBody("");
+		myPanel4.render(document.body);
+				
 				
 	}
 	
@@ -306,6 +323,17 @@ background-color: yellow;
 		return true;
 	}
 	
+	function showFormat(){
+		initFormatPopup();
+		YAHOO.amptab.init();
+		var element = document.getElementById("customFormat");
+		element.style.display = "inline";
+		myPanel4.setBody(element);
+		myPanel4.center();
+		myPanel4.show();
+		
+		
+	}
 	
 	function changeRange(){
 		var cant = document.aimReportsFilterPickerForm2.countYear.value;
@@ -362,6 +390,9 @@ background-color: yellow;
 		myPanel3.hide();
 	}
 	
+	function hideFilter() {
+		myPanel1.hide();
+	}
 	function checkProjectId(x){
 		var s_len = x.value.length;
 		var s_charcode = 0;
@@ -465,10 +496,127 @@ background-color: yellow;
 		}
 	}
 	
+
+
+function resetFormat(){
+	document.aimReportsFilterPickerForm3.action=document.aimReportsFilterPickerForm3.action+'&resetFormat=true';
+	alert(document.aimReportsFilterPickerForm3.action);
+	document.aimReportsFilterPickerForm3.submit();
+}
+
+
+function initFormatPopup(){
+		
+		
+		var decimalSymbol=document.aimReportsFilterPickerForm3.customDecimalSymbol.value;
+		
+		if (decimalSymbol=="CUSTOM"){
+			document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.disabled=false;
+		
+		}else{
+			document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.value="";
+			document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.disabled=true;
+		}
+	
+		var customDecimalPlaces=document.aimReportsFilterPickerForm3.customDecimalPlaces.value;
+		
+		if (customDecimalPlaces=="CUSTOM"){
+			document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled=false;
+		}else{
+			document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value="";
+			document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.disabled=true;
+		}
+
+	
+		var customUseGrouping=document.aimReportsFilterPickerForm3.customUseGrouping.checked;
+	
+		document.aimReportsFilterPickerForm3.customGroupCharacter.disabled=!customUseGrouping;
+		var customGroupCharacter=document.aimReportsFilterPickerForm3.customGroupCharacter.value;
+		document.aimReportsFilterPickerForm3.customGroupSize.disabled=!customUseGrouping;
+		document.aimReportsFilterPickerForm3.customGroupCharacterTxt.disabled=((!customUseGrouping) || ("CUSTOM"!=customGroupCharacter));
+	
+		changeFormat();
+}
+
+function changeFormat(){
+	var decimalSymbol=document.aimReportsFilterPickerForm3.customDecimalSymbol.value;
+		decimalSymbol=("CUSTOM"==decimalSymbol)?document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.value:decimalSymbol;
+	
+	var customDecimalPlaces=document.aimReportsFilterPickerForm3.customDecimalPlaces.value;
+		customDecimalPlaces=("CUSTOM"==customDecimalPlaces)?document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value:customDecimalPlaces;
+	
+	var customUseGrouping=document.aimReportsFilterPickerForm3.customUseGrouping.checked;
+
+	
+	var customGroupCharacter=document.aimReportsFilterPickerForm3.customGroupCharacter.value;
+		customGroupCharacter=("CUSTOM"==customGroupCharacter)?document.aimReportsFilterPickerForm3.customGroupCharacterTxt.value:customGroupCharacter;
 	
 	
+	var customGroupSize=document.aimReportsFilterPickerForm3.customGroupSize.value;
+	
+	
+	var num=Number(123456789.928);
+
+
+	var format=new Format(decimalSymbol,customDecimalPlaces,customUseGrouping,customGroupCharacter,customGroupSize);
+	document.getElementById("number").innerHTML="<B>"+num.format(format)+"</B>";
+	//alert(num.format(format));
+	return true;
+}
+
+function validateFormat(){
+
+	var decimalSymbol=document.aimReportsFilterPickerForm3.customDecimalSymbol.value;
+		decimalSymbol=("CUSTOM"==decimalSymbol)?document.aimReportsFilterPickerForm3.customDecimalSymbolTxt.value:decimalSymbol;
+	
+	var customDecimalPlaces=document.aimReportsFilterPickerForm3.customDecimalPlaces.value;
+		customDecimalPlaces=("CUSTOM"==customDecimalPlaces)?document.aimReportsFilterPickerForm3.customDecimalPlacesTxt.value:customDecimalPlaces;
+	
+	var customUseGrouping=document.aimReportsFilterPickerForm3.customUseGrouping.checked;
+	
+	var customGroupCharacter=document.aimReportsFilterPickerForm3.customGroupCharacter.value;
+		customGroupCharacter=("CUSTOM"==customGroupCharacter)?document.aimReportsFilterPickerForm3.customGroupCharacterTxt.value:customGroupCharacter;
+	
+	var customGroupSize=document.aimReportsFilterPickerForm3.customGroupSize.value;
+	
+	if ((decimalSymbol==customGroupCharacter)&&(customUseGrouping)){
+	        var msg='<digi:trn key="rep:format:equalsSymbols">Decimal Symbok and group symbol must be diferents</digi:trn>';
+			alert(msg);
+			return false;
+	}
+	var validNumbers="0123456789";
+	
+	if (decimalSymbol=="" || customGroupCharacter==""){
+		 var msg='<digi:trn key="rep:format:badSymbolEmpty">Symbols can not be a empty, you can use the space character</digi:trn>';
+		alert(msg)
+		return false;
+	}
+	
+	
+	if ((validNumbers.indexOf(decimalSymbol)!=-1)||(validNumbers.indexOf(customGroupCharacter)!=-1)){
+		     var msg='<digi:trn key="rep:format:badSymbolNumber">Symbols can not be a number</digi:trn>';
+			alert(msg);
+			return false;
+	}
+	
+	if (customGroupSize < 1){
+		  var msg='<digi:trn key="rep:format:badGorupSize">The value should be greater than zero</digi:trn>';
+			alert(msg);
+			return false;
+	}
+	
+	
+	
+	return true;
+}
+
 	window.onload=initScripts;
 </script>
+
+
+
+
+
 
 
 
@@ -480,3 +628,19 @@ background-color: yellow;
   background-color:#2f2f2f;
 }
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -10,9 +10,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
-<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
-<%@page import="org.digijava.module.aim.dbentity.AmpGlobalSettings"%>
-<%@page import="java.util.Collections"%>
+
 <bean:define id="reportMeta" name="reportMeta"
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
 	toScope="page" />

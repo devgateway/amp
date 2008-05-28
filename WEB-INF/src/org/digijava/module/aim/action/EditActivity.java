@@ -388,7 +388,8 @@ public ActionForward execute(ActionMapping mapping, ActionForm form,
       }
 
       //logger.info("CanEdit = " + canEdit);
-      if (!canEdit) {
+      //AMP-3461 When an activity is open by a user, an other user should be able to preview it
+      if (!canEdit && !isPreview) {
         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
             "error.aim.activityAlreadyOpenedForEdit"));
         saveErrors(request, errors);

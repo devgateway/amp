@@ -141,7 +141,7 @@ public class ActivityManager extends Action {
 					if ( s2 == null )
 						s2	= "";
 					
-					return s1.trim().compareTo(s2.trim());
+					return s1.toUpperCase().trim().compareTo(s2.toUpperCase().trim());
 					//return a1.getName().compareTo(a2.getName());
 				}
 			});

@@ -2730,7 +2730,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
     try {
       session = PersistenceManager.getSession();
       String queryString = "select ampAct from " + AmpActivity.class.getName() +
-          " ampAct where ampAct.name like (:name)";
+          " ampAct where upper(ampAct.name) like upper(:name)";
       qry = session.createQuery(queryString);
       qry.setParameter("name", "%" + name + "%", Hibernate.STRING);
       col = qry.list();

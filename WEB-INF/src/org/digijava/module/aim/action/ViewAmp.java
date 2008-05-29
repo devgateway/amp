@@ -282,6 +282,7 @@ public class ViewAmp
             tm.setTeamName(member.getAmpTeam().getName());
             tm.setTeamType(member.getAmpTeam().getTeamCategory());
             tm.setTeamAccessType(member.getAmpTeam().getAccessType());
+            tm.setComputation(member.getAmpTeam().getComputation());
             tm.setRead(member.getReadPermission().booleanValue());
             tm.setWrite(member.getWritePermission().booleanValue());
             tm.setDelete(member.getDeletePermission().booleanValue());

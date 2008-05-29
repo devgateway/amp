@@ -142,7 +142,9 @@ public class TeamUtil {
     	Iterator i=relatedTeams.iterator();
 		while (i.hasNext()) {
 			AmpTeam team = (AmpTeam) i.next();
-			if("Computed".equals(team.getAccessType())) {
+			//if("Computed".equals(team.getAccessType())) {
+			if(team.getComputation()!=null)
+			if(team.getComputation()) {
 				teamAssignedOrgs.addAll(team.getOrganizations());
 			}
 		}
@@ -534,6 +536,7 @@ public class TeamUtil {
                 updTeam.setDescription(team.getDescription());
                 updTeam.setTeamCategory(team.getTeamCategory());
                 updTeam.setAccessType(team.getAccessType());
+                updTeam.setComputation(team.getComputation());
                 updTeam.setType(team.getType());
                 updTeam.setRelatedTeamId(team.getRelatedTeamId());
                 updTeam.setOrganizations(team.getOrganizations());
@@ -2178,7 +2181,8 @@ public class TeamUtil {
             list.addAll(qry.list());
             while(list.size() > 0) {
                 ampTeam = (AmpTeam) list.removeFirst();
-                if(ampTeam.getAccessType().equals("Team") || ampTeam.getAccessType().equals("Computed") )
+                //if(ampTeam.getAccessType().equals("Team") || ampTeam.getAccessType().equals("Computed") )
+                if(ampTeam.getAccessType().equals("Team") || ampTeam.getComputation() )
                     teams.add(ampTeam);
                 else {
                     queryString = "select t from " + AmpTeam.class.getName()

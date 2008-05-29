@@ -212,12 +212,15 @@ function workspaceChangeType(){
 	if(document.aimUpdateWorkspaceForm.workspaceType.value == "Team"){
 		$("div[@id^='management_']").hide();
 		$("div[@id^='team_']").show('fast');
+		document.aimUpdateWorkspaceForm.addActivity.checked = true;
 		if(document.aimUpdateWorkspaceForm.computation.checked == true)
 			$("div[@id^='computation_']").show('fast');
 		else $("div[@id^='computation_']").hide();
 	}
 
 	if(document.aimUpdateWorkspaceForm.workspaceType.value == "Management"){
+		document.aimUpdateWorkspaceForm.addActivity.checked = false;
+		document.aimUpdateWorkspaceForm.computation.checked = false;
 			$("div[@id^='team_']").hide();
 			$("div[@id^='management_']").show('fast');
 			$("div[@id^='computation_']").hide()
@@ -445,25 +448,6 @@ function cancel()
 													
 													<tr>
 														<td align="right" bgcolor="#f4f4f2">
-															<digi:trn key="aim:description">Descriptions</digi:trn>
-														</td>
-														<td align="left" bgcolor="#f4f4f2">
-															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="delete">
-																<b><bean:write name="aimUpdateWorkspaceForm" property="description" /></b>
-															</logic:equal>
-															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="view">
-																<b><bean:write name="aimUpdateWorkspaceForm" property="description" /></b>
-															</logic:equal>
-															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="edit">
-																<html:textarea property="description" rows="3" cols="50" styleClass="inp-text"/>
-															</logic:equal>
-															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
-																<html:textarea property="description" rows="3" cols="50" styleClass="inp-text"/>
-															</logic:equal>
-														</td>
-													</tr>
-													<tr>
-														<td align="right" bgcolor="#f4f4f2">
 															<font color="red"><b>*</b></font>
 															<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>
 														</td>
@@ -502,6 +486,25 @@ function cancel()
 													</tr>
 													
 													
+													<tr>
+														<td align="right" bgcolor="#f4f4f2">
+															<digi:trn key="aim:description">Description</digi:trn>
+														</td>
+														<td align="left" bgcolor="#f4f4f2">
+															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="delete">
+																<b><bean:write name="aimUpdateWorkspaceForm" property="description" /></b>
+															</logic:equal>
+															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="view">
+																<b><bean:write name="aimUpdateWorkspaceForm" property="description" /></b>
+															</logic:equal>
+															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="edit">
+																<html:textarea property="description" rows="3" cols="50" styleClass="inp-text"/>
+															</logic:equal>
+															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
+																<html:textarea property="description" rows="3" cols="50" styleClass="inp-text"/>
+															</logic:equal>
+														</td>
+													</tr>
 													
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
 														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'no'}">

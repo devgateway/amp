@@ -467,19 +467,7 @@ function unload() {}
               </digi:link>
             </td>
           </tr>
-          <tr>
-            <td>
-              <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-              <c:set var="translation">
-                <digi:trn key="aim:clickToViewRoles">Click here to view Roles</digi:trn>
-              </c:set>
-              <digi:link href="/roles.do" title="${translation}" >
-                <digi:trn key="aim:roles">
-                Roles
-                </digi:trn>
-              </digi:link>
-            </td>
-          </tr>
+          
           <tr>
             <td>
               <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

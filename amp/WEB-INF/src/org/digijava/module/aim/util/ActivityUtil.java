@@ -897,7 +897,7 @@ public static Long saveActivity(AmpActivity activity, Long oldActivityId,
             queryString += " and con.id not in (" + ids + ")";
         }
        session.delete(queryString);
-       session.flush();
+       //session.flush();
 			tx.commit(); // commit the transcation
 			logger.debug("Activity saved");
     }

@@ -138,9 +138,7 @@
 																						<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 																							<field:display name="Components Perspective Commitments" feature="Components">
 																								<td>
-																									<digi:trn key='<%="aim:"+commitment.getPerspectiveNameTrimmed() %>'>
-																											<bean:write name="commitment" property="perspectiveName"/>
-																									</digi:trn>
+																									
 																								</td>
 																							</field:display>
 																						</logic:equal>
@@ -193,9 +191,6 @@
 																						<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 																							<field:display name="Components Perspective Disbursements" feature="Components">
 																							<td>
-																								<digi:trn key='<%="aim:"+disbursement.getPerspectiveNameTrimmed() %>'>
-																									<bean:write name="disbursement" property="perspectiveName"/>
-																								</digi:trn>
 																							</td></field:display>
 																						</logic:equal>
 																					</tr>
@@ -246,9 +241,6 @@
 																					<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 																						<field:display name="Components Perspective Expenditures" feature="Components">
 																						<td>
-																								<digi:trn key='<%="aim:"+expenditure.getPerspectiveNameTrimmed() %>'>
-																									<bean:write name="expenditure" property="perspectiveName"/>
-																								</digi:trn>
 																						</td></field:display>
 																					</logic:equal>
 																				</tr>

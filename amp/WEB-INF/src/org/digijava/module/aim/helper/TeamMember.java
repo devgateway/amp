@@ -22,6 +22,8 @@ public class TeamMember {
 	
 	private String teamAccessType; // indicates whether MANAGEMENT or WORKING TEAM
 	
+	private Boolean computation;
+	
 	private boolean teamHead;
 
 	private boolean read; /* read permission */
@@ -240,5 +242,13 @@ public class TeamMember {
 	
 	public String toString() {
 		return memberName;
+	}
+
+	public Boolean getComputation() {
+		return computation;
+	}
+
+	public void setComputation(Boolean computation) {
+		this.computation = computation;
 	}
 }

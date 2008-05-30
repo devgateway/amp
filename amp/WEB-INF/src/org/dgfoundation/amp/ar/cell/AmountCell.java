@@ -291,11 +291,16 @@ public class AmountCell extends Cell {
 	}
 
 	public void setPercentage(double percentage, CellColumn source) {
-		if(percentageSourceColumnName.contains(source.getName())) return;
-		
-		//ugly check, if sector is already added, do not add sub-sector percentage because it is redundant ...
-		if(percentageSourceColumnName.contains(ArConstants.COLUMN_SECTOR) && source.getName().equals(ArConstants.COLUMN_SUB_SECTOR)) return;
+		//never apply percentage coming from a column twice
+	//	if(percentageSourceColumnName.contains(source.getName())) return;
 		percentageSourceColumnName.add(source.getName());
+		
+		
+		if(percentageSourceColumnName.contains(ArConstants.COLUMN_SECTOR) && source.getName().equals(ArConstants.COLUMN_SUB_SECTOR))  {
+			//we forget the sector percentage, and apply the sub-sector percentage:
+			this.percentage=percentage;
+			return;
+		}
 		if(this.percentage>0){
 			this.percentage = this.percentage * percentage / 100;
 		}

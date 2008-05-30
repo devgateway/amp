@@ -7,7 +7,7 @@
 <div align="right">
 </logic:notPresent>
 <logic:present name="debug">
-<div align="center" onMouseOver="stm(['AmountCell Properties',document.getElementById('<bean:write name="amountCell" property="column.name"/>-<bean:write name="amountCell" property="ownerId"/>').innerHTML],Style[1])" onMouseOut="htm()">
+<div align="center" onMouseOver="stm(['AmountCell Properties',document.getElementById('cellId-<bean:write name="amountCell" property="objectId"/>').innerHTML],Style[1])" onMouseOut="htm()">
 </logic:present>
 <bean:write name="amountCell"/>&nbsp;
 <logic:present name="debug">
@@ -18,7 +18,7 @@
 </logic:notPresent>
 <logic:present name="debug">
 
-<div style='position:relative;display:none;' id='<bean:write name="amountCell" property="column.name"/>-<bean:write name="amountCell" property="ownerId"/>'> 
+<div style='position:relative;display:none;' id='cellId-<bean:write name="amountCell" property="objectId"/>'> 
 <ul>
 <li>From Rate=<bean:write name="amountCell" property="fromExchangeRate"/></li>
 <li>To Rate=<bean:write name="amountCell" property="toExchangeRate"/></li>

@@ -139,9 +139,9 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret)
 	if(metaCell.getColumn().getName().equals(columnName) && !metaCell.getValue().equals(ArConstants.UNALLOCATED)) {
 		//we need to get the location percentage, it is stored in the MetaText of related to the owner of the current cell
 		CellColumn c=(CellColumn) metaCell.getColumn();
-		MetaTextCell relatedLocation=(MetaTextCell) c.getByOwnerAndValue(this.getOwnerId(),metaCell.getValue());
-		if(relatedLocation!=null) { 
-		MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedLocation.getMetaData(),ArConstants.PERCENTAGE);
+		MetaTextCell relatedHierarchyCell=(MetaTextCell) c.getByOwnerAndValue(this.getOwnerId(),metaCell.getValue());
+		if(relatedHierarchyCell!=null) { 
+		MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedHierarchyCell.getMetaData(),ArConstants.PERCENTAGE);
 		if(percentMeta!=null) {
 			Double percentage=(Double) percentMeta.getValue() ;
 			ret.setPercentage(percentage.doubleValue(), c);			

@@ -52,7 +52,6 @@ public class ViewFinancingBreakdown extends TilesAction {
 					.getTeamId(), "FP");
 			formBean.setCalendarPresent(ff.isCalendarPresent());
 			formBean.setCurrencyPresent(ff.isCurrencyPresent());
-			formBean.setPerspectivePresent(ff.isPerspectivePresent());
 			formBean.setYearRangePresent(ff.isYearRangePresent());
 			formBean.setGoButtonPresent(ff.isGoButtonPresent());
 			formBean.setFiscalYears(new ArrayList());
@@ -98,8 +97,6 @@ public class ViewFinancingBreakdown extends TilesAction {
 				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
 				fp.setToYear(year+Constants.TO_YEAR_RANGE);
 			}
-			formBean.setPerspective(fp.getPerspective());
-			formBean.setPerpsectiveName(apps.getPerspective());
 			formBean.setCurrency(fp.getCurrencyCode());
 			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
 			formBean.setFromYear(fp.getFromYear());
@@ -113,7 +110,6 @@ public class ViewFinancingBreakdown extends TilesAction {
 			formBean.setFinancingBreakdown(fb);
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
-			formBean.setPerspectives(DbUtil.getAmpPerspective());
 
 			overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(
 					fb, Constants.COMMITMENT,false);

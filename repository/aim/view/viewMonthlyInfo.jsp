@@ -352,13 +352,6 @@
                                                             <digi:trn key="aim:MonthlyExpenditures">Monthly Expenditures</digi:trn>
                                                             
                                                         </logic:equal>
-                                                        <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-                                                        
-                                                            &gt;
-                                                            <digi:trn key="aim:${aimMonthlyInfoForm.perpsectiveName}">
-                                                            <bean:write name="aimMonthlyInfoForm" property="perpsectiveName"/></digi:trn>&nbsp;
-                                                            <digi:trn key="aim:perspective">Perspective</digi:trn>
-                                                        </logic:equal>
                                                     </SPAN>
                                                     
                                                 </TD>
@@ -439,7 +432,6 @@
                                                             
                                                             <TD vAlign="top" align="right">
                                                                 
-                                                                <logic:equal name="aimMonthlyInfoForm" property="perspectivePresent" value="true">
                                                                 
                                                                     <TABLE cellSpacing="2" cellPadding="0" vAlign="top" bgColor=#f4f4f2>
                                                                         
@@ -447,19 +439,12 @@
                                                                             
                                                                             <TD>
                                                                                 
-                                                                                <STRONG>Perspective:</STRONG>
                                                                                 
                                                                             </TD>
                                                                             
                                                                             <TD>
                                                                                 
-                                                                                <html:select property="perspective" styleClass="dr-menu">
-                                                                                    
-                                                                                    <html:optionsCollection name="aimMonthlyInfoForm"
 
-property="perspectives" value="code" label="name"/>
-                                                                                    
-                                                                                </html:select>
                                                                                 
                                                                             </TD>
                                                                             
@@ -467,7 +452,7 @@ property="perspectives" value="code" label="name"/>
                                                                         
                                                                     </TABLE>
                                                                     
-                                                                </logic:equal>
+
                                                                 
                                                             </TD>
                                                             

@@ -65,13 +65,6 @@ public class YearlyComparisonsFilter extends TilesAction	{
 				fp.setFiscalCalId(apps.getFisCalId());
 			}
 
-			if ( formBean.getPerspective() != null )
-				fp.setPerspective(formBean.getPerspective());
-			else	{
-				String perspective = CommonWorker.getPerspective(apps.getPerspective());
-				fp.setPerspective(perspective);
-			}
-
 			if ( formBean.getFromYear()==0 || formBean.getToYear()==0 )	{
 				int year = new GregorianCalendar().get(Calendar.YEAR);
 				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
@@ -82,10 +75,8 @@ public class YearlyComparisonsFilter extends TilesAction	{
 				fp.setFromYear(formBean.getFromYear());
 			}
 			session.setAttribute("filterParams",fp);
-			formBean.setPerpsectiveName(apps.getPerspective());
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
-			formBean.setPerspectives(DbUtil.getAmpPerspective());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 			if ( fp.getPerspective().equals("DI") )	{

@@ -56,7 +56,6 @@ public class ViewMonthlyInfo extends TilesAction {
         FinancialFilters ff = CommonWorker.getFilters(teamMember.getTeamId(), "FP");
         monthlyForm.setCalendarPresent(ff.isCalendarPresent());
         monthlyForm.setCurrencyPresent(ff.isCurrencyPresent());
-        monthlyForm.setPerspectivePresent(ff.isPerspectivePresent());
         monthlyForm.setYearRangePresent(ff.isYearRangePresent());
         monthlyForm.setGoButtonPresent(ff.isGoButtonPresent());
         FilterParams fp = (FilterParams) session.getAttribute("filterParams");
@@ -76,14 +75,6 @@ public class ViewMonthlyInfo extends TilesAction {
 
         }
 
-        if (monthlyForm.getPerspective() != null) {
-            fp.setPerspective(monthlyForm.getPerspective());
-        } else {
-            String perspective = CommonWorker.getPerspective(apps.getPerspective());
-            fp.setPerspective(perspective);
-        }
-        monthlyForm.setPerpsectiveName(DbUtil.getPerspective(fp.getPerspective()).getName());
-
         if (monthlyForm.getFromYear() == 0 || monthlyForm.getToYear() == 0) {
             int year = new GregorianCalendar().get(Calendar.YEAR);
             fp.setFromYear(year - Constants.FROM_YEAR_RANGE);
@@ -96,15 +87,12 @@ public class ViewMonthlyInfo extends TilesAction {
         }
         session.setAttribute("filterParams", fp);
 
-        monthlyForm.setPerspective(fp.getPerspective());
-        monthlyForm.setPerpsectiveName(apps.getPerspective());
         monthlyForm.setCurrency(fp.getCurrencyCode());
         monthlyForm.setFiscalCalId(fp.getFiscalCalId().longValue());
         monthlyForm.setFromYear(fp.getFromYear());
         monthlyForm.setToYear(fp.getToYear());
         monthlyForm.setYears(YearUtil.getYears());
         monthlyForm.setCurrencies(CurrencyUtil.getAmpCurrency());
-        monthlyForm.setPerspectives(DbUtil.getAmpPerspective());
             List monthlyInfos = new ArrayList();
             try {
                 if (mapping.getInput().equals("/aim/viewMonthlyComparisons")) {

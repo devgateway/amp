@@ -281,11 +281,6 @@
 				</feature:display>
               	</logic:equal>	
 
-								<digi:link href="/viewYearlyDiscrepancy.do" name="urlDiscrepancy" styleClass="sub-nav2" title="${translation}" >
-
-									<digi:trn key="aim:discrepancy">DISCREPANCY</digi:trn>
-
-								</digi:link>		|
 
 			<c:set var="translation">
 
@@ -362,15 +357,6 @@
                      	<digi:trn key="aim:yearlyExpenditures">Yearly Expenditures</digi:trn>
 
 							</logic:equal>
-
-
-<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-&gt;
-
-								<digi:trn key="aim:${aimYearlyInfoForm.perpsectiveName}">
-                                                                <bean:write name="aimYearlyInfoForm" property="perpsectiveName"/></digi:trn>&nbsp;
-                                                                <digi:trn key="aim:perspective">Perspective</digi:trn>
-                                                                </logic:equal>
 
 						</SPAN>
 
@@ -456,7 +442,6 @@
 
 											<TD vAlign="top" align="right">
 
-												<logic:equal name="aimYearlyInfoForm" property="perspectivePresent" value="true">
 
 												<TABLE cellSpacing="2" cellPadding="0" vAlign="top" bgColor=#f4f4f2>
 
@@ -464,21 +449,11 @@
 
 														<TD>
 
-						                         	<STRONG><digi:trn key="aim:perspective">Perspective</digi:trn>:</STRONG>
 
 														</TD>
 
 														<TD>
 
-															<html:select property="perspective" styleClass="dr-menu">
-																<logic:iterate name="aimYearlyInfoForm" property="perspectives" id="perspectiveId">
-																<bean:define name="perspectiveId" property="name" id="perspectiveName"/>
-																	<html:option value="${perspectiveId.code}">
-																		<digi:trn key='<%="aim:"+perspectiveName %>' >
-																			<bean:write name="perspectiveId" property="name"/></digi:trn>
-																	</html:option>
-																</logic:iterate>
-															</html:select>
 
 														</TD>
 
@@ -486,7 +461,7 @@
 
 												</TABLE>
 
-												</logic:equal>
+
 
 											</TD>
 
@@ -635,9 +610,6 @@
 										<TR><TD>
 
 
-
-   	                       		<logic:notEqual name="aimYearlyInfoForm" property="perspective" value="DI">
-
 											<TABLE cellSpacing=0 cellPadding=0 border=0 bgColor=#ffffff width="100%" vAlign="top" align="left">
 
 	   	                     		<TR>
@@ -672,7 +644,6 @@
 
 											</TABLE>
 
-	                          		</logic:notEqual>
 
 										</TD></TR>
 
@@ -681,8 +652,6 @@
 						            	<TABLE cellSpacing=0 cellPadding=0 border=0 bgColor=#ffffff width="100%" vAlign="top" align="left">
 
 												<TR><TD>
-
-						                     <logic:notEqual name="aimYearlyInfoForm" property="perspective" value="DI">
 
                       							<TABLE width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding">
 
@@ -775,180 +744,10 @@
 													</tr>
 												</TABLE>
 
-													</logic:notEqual>
 
 												</TD></TR>
 
 												<TR><TD>
-
-									<logic:equal name="aimYearlyInfoForm" property="perspective" value="DI">
-
-									<table width="100%"  border="0" cellpadding="3" cellspacing="1" class="box-border">
-
-										<tr bgcolor="#DDDDDB" >
-
-											<td height="30" bgcolor="#DDDDDB">
-
-												<div align="center">
-
-				              					Year
-
-				              				</div>
-
-				                  	</td>
-
-							            <td bgcolor="#DDDDDB">
-
-												<div align="center">
-
-							               	<p>Donor Planned</p>
-
-							               </div>
-
-											</td>
-
-							            <td bgcolor="#DDDDDB">
-
-							            	<div align="center">Impl. Agency Planned</div>
-
-							            </td>
-
-							            <td bgcolor="#DDDDDB">
-
-							            	<div align="center">
-
-							              		<digi:trn key="aim:MOFED">Mofed</digi:trn> Planned
-
-							             	</div>
-
-							            </td>
-
-							            <td bgcolor="#DDDDDB">
-
-							            	<div align="center">
-
-							              		Donor Actuals
-
-							              	</div>
-
-							            </td>
-
-							            <td bgcolor="#DDDDDB">
-
-							            	<div align="center">Impl. Agency Actuals</div>
-
-							            </td>
-
-							            <td bgcolor="#DDDDDB">
-
-							            	<div align="center">
-
-							              		<digi:trn key="aim:MOFED">Mofed</digi:trn> Actuals
-
-							            	</div>
-
-							            </td>
-
-				            		</tr>
-
-				            		<logic:empty name="aimYearlyInfoForm" property="discrepancies">
-
-                        		<tr valign="top">
-
-                         			<td colspan="8" align="center"><span class="note"><digi:trn key="aim:noRecords">No records</digi:trn>!</td>
-
-	                          	</tr>
-
-			                     </logic:empty>
-
-				            		<logic:notEmpty name="aimYearlyInfoForm" property="discrepancies">
-
-										<logic:iterate name="aimYearlyInfoForm" property="discrepancies" id="discrepancy"
-
-										type="org.digijava.module.aim.helper.YearlyDiscrepancy">
-
-							         <tr valign="top">
-
-							         	<td height="30">
-
-							            	<logic:equal name="discrepancy" property="fiscalYear" value="0">NA</logic:equal>
-
-				                        <logic:notEqual  name="discrepancy" property="fiscalYear" value="0">
-
-													<bean:write name="discrepancy" property="fiscalYear" />
-
-												</logic:notEqual>
-
-											</td>
-
-							            <td>
-
-							            	<div align="right">
-
-							              		<bean:write name="discrepancy" property="donorPlanned"/>
-
-							              	</div>
-
-							            </td>
-
-							            <td>
-
-							              	<div align="center">
-
-							              		<bean:write name="discrepancy" property="implAgencyPlanned"/>
-
-							              	</div>
-
-							            </td>
-
-							            <td>
-
-							            	<div align="right">
-
-							                  <bean:write name="discrepancy" property="mofedPlanned"/>
-
-							                </div></td>
-
-							            <td>
-
-							              	<div align="right">
-
-							              		<bean:write name="discrepancy" property="donorActual"/>
-
-							              	</div>
-
-							            </td>
-
-							            <td>
-
-							              	<div align="center">
-
-							              		<bean:write name="discrepancy" property="implAgencyActual"/>
-
-							              	</div>
-
-							            </td>
-
-							            <td>
-
-							              	<div align="right">
-
-							                  <bean:write name="discrepancy" property="mofedActual"/>
-
-							                </div>
-
-							            </td>
-
-										</tr>
-
-							         </logic:iterate>
-
-							         </logic:notEmpty>
-
-				       			</table>
-
-                     	</logic:equal>
-
 
 
 												</TD></TR>

@@ -55,7 +55,6 @@ public class ViewQuarterlyGrouping extends TilesAction	{
 			FinancialFilters ff = CommonWorker.getFilters(teamMember.getTeamId(),"FP");
 			formBean.setCalendarPresent(ff.isCalendarPresent());
 			formBean.setCurrencyPresent(ff.isCurrencyPresent());
-			formBean.setPerspectivePresent(ff.isPerspectivePresent());
 			formBean.setYearRangePresent(ff.isYearRangePresent());
 			formBean.setGoButtonPresent(ff.isGoButtonPresent());
 			FilterParams fp = (FilterParams)session.getAttribute("filterParams");
@@ -85,8 +84,6 @@ public class ViewQuarterlyGrouping extends TilesAction	{
 				fp.setToYear(year+Constants.TO_YEAR_RANGE);
 			}
 
-			formBean.setPerspective(fp.getPerspective());
-			formBean.setPerpsectiveName(apps.getPerspective());
 			formBean.setCurrency(fp.getCurrencyCode());
 			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
 			formBean.setFromYear(fp.getFromYear());
@@ -94,7 +91,6 @@ public class ViewQuarterlyGrouping extends TilesAction	{
 			session.setAttribute("filterParams",fp);
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
-			formBean.setPerspectives(DbUtil.getAmpPerspective());
 
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());

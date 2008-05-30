@@ -62,7 +62,6 @@ public class ViewYearlyInfo extends TilesAction {
 					.getTeamId(), "FP");
 			formBean.setCalendarPresent(ff.isCalendarPresent());
 			formBean.setCurrencyPresent(ff.isCurrencyPresent());
-			formBean.setPerspectivePresent(ff.isPerspectivePresent());
 			formBean.setYearRangePresent(ff.isYearRangePresent());
 			formBean.setGoButtonPresent(ff.isGoButtonPresent());
 			FilterParams fp = (FilterParams) session
@@ -93,8 +92,6 @@ public class ViewYearlyInfo extends TilesAction {
 				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
 				fp.setToYear(year+Constants.TO_YEAR_RANGE);
 			}
-			formBean.setPerspective(fp.getPerspective());
-			formBean.setPerpsectiveName(apps.getPerspective());
 			formBean.setCurrency(fp.getCurrencyCode());
 			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
 			formBean.setFromYear(fp.getFromYear());
@@ -143,8 +140,6 @@ public class ViewYearlyInfo extends TilesAction {
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 			logger.info("Loading perspectives") ;
-			formBean.setPerspectives(DbUtil.getAmpPerspective());
-			logger.info("loaded " + formBean.getPerspectives().size() + " entries");
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 		}

@@ -51,7 +51,6 @@ public class QuarterlyComparisonsFilter extends Action	{
 			FinancialFilters ff = CommonWorker.getFilters(teamMember.getTeamId(),"FP");
 			formBean.setCalendarPresent(ff.isCalendarPresent());
 			formBean.setCurrencyPresent(ff.isCurrencyPresent());
-			formBean.setPerspectivePresent(ff.isPerspectivePresent());
 			formBean.setYearRangePresent(ff.isYearRangePresent());
 			formBean.setGoButtonPresent(ff.isGoButtonPresent());
 
@@ -76,13 +75,6 @@ public class QuarterlyComparisonsFilter extends Action	{
 				fp.setFiscalCalId(apps.getFisCalId());
 			}
 
-			if ( formBean.getPerspective() != null )
-				fp.setPerspective(formBean.getPerspective());
-			else	{
-				String perspective = CommonWorker.getPerspective(apps.getPerspective());
-				fp.setPerspective(perspective);
-			}
-
 			if ( formBean.getFromYear()==0 || formBean.getToYear()==0 )	{
 				int year = new GregorianCalendar().get(Calendar.YEAR);
 				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
@@ -93,10 +85,8 @@ public class QuarterlyComparisonsFilter extends Action	{
 				fp.setFromYear(formBean.getFromYear());
 			}
 			session.setAttribute("filterParams",fp);
-			formBean.setPerpsectiveName(apps.getPerspective());
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
-			formBean.setPerspectives(DbUtil.getAmpPerspective());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 

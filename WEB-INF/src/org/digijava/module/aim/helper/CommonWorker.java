@@ -27,7 +27,6 @@ public  class CommonWorker	{
 		Iterator iter = c.iterator();
 		ff.setCalendarPresent(false);
 		ff.setCurrencyPresent(false);
-		ff.setPerspectivePresent(false);
 		ff.setYearRangePresent(false);
 		ff.setGoButtonPresent(false);
 		while ( iter.hasNext() )	{
@@ -43,10 +42,6 @@ public  class CommonWorker	{
 				ff.setGoButtonPresent(true);
 			}
 				
-			if (ampFilterId.equals(Constants.PERSPECTIVE)
-				&& FeaturesUtil.isPerspectiveEnabled()) {
-				ff.setPerspectivePresent(true);
-			}
 		}
 		return ff;
 	}

@@ -54,7 +54,6 @@ public class ViewQuarterlyInfo extends TilesAction	{
 			FinancialFilters ff = CommonWorker.getFilters(teamMember.getTeamId(),"FP");
 			formBean.setCalendarPresent(ff.isCalendarPresent());
 			formBean.setCurrencyPresent(ff.isCurrencyPresent());
-			formBean.setPerspectivePresent(ff.isPerspectivePresent());
 			formBean.setYearRangePresent(ff.isYearRangePresent());
 			formBean.setGoButtonPresent(ff.isGoButtonPresent());
 			FilterParams fp = (FilterParams)session.getAttribute("filterParams");
@@ -83,8 +82,6 @@ public class ViewQuarterlyInfo extends TilesAction	{
 				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
 				fp.setToYear(year+Constants.TO_YEAR_RANGE);
 			}
-			formBean.setPerspective(fp.getPerspective());
-			formBean.setPerpsectiveName(apps.getPerspective());
 			formBean.setCurrency(fp.getCurrencyCode());
 			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
 			formBean.setFromYear(fp.getFromYear());
@@ -93,7 +90,6 @@ public class ViewQuarterlyInfo extends TilesAction	{
 
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
-			formBean.setPerspectives(DbUtil.getAmpPerspective());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 
@@ -102,35 +98,30 @@ public class ViewQuarterlyInfo extends TilesAction	{
 			formBean.setDisbursementTabColor(tc.getDisbursementTabColor());
 			formBean.setExpenditureTabColor(tc.getExpenditureTabColor());
 
-			if ( formBean.getPerspective().equals("DI") ) 	{
-				Collection c = QuarterlyDiscrepancyWorker.getDiscrepancy(fp);
-				formBean.setDiscrepancies(c);
-			}
-			else	{
-				Collection c = QuarterlyInfoWorker.getQuarterlyInfo(fp);
-				if ( c.size() != 0 )	{
-					formBean.setQuarterlyInfo(c);
-					TotalsQuarterly tq; 
-					if(!debug){
-						 tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode(),false);
-					}
-					else{
-						tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode(),true);
-					}
-					formBean.setTotalCommitted(tq.getTotalCommitted());
-					formBean.setTotalDisbursed(tq.getTotalDisbursed());
-                                        formBean.setTotalDisbOrdered(tq.getTotalDisbOrdered());
-					formBean.setTotalUnExpended(tq.getTotalUnExpended());
-					formBean.setTotalRemaining(tq.getTotalRemaining());
-                                        Collection yearlyInfo = YearlyInfoWorker.getYearlyInfo(fp);
-                                        String strTotalPlanned = YearlyInfoWorker.getTotalYearly(
-							yearlyInfo, Constants.PLANNED);
-					formBean.setTotalPlanned(strTotalPlanned);
-					String strTotalActual = YearlyInfoWorker.getTotalYearly(
-							yearlyInfo, Constants.ACTUAL);
-					formBean.setTotalActual(strTotalActual);
+			Collection c = QuarterlyInfoWorker.getQuarterlyInfo(fp);
+			if ( c.size() != 0 )	{
+				formBean.setQuarterlyInfo(c);
+				TotalsQuarterly tq; 
+				if(!debug){
+					 tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode(),false);
 				}
+				else{
+					tq = QuarterlyInfoWorker.getTotalsQuarterly(fp.getAmpFundingId(),fp.getPerspective(),fp.getCurrencyCode(),true);
+				}
+				formBean.setTotalCommitted(tq.getTotalCommitted());
+				formBean.setTotalDisbursed(tq.getTotalDisbursed());
+                                    formBean.setTotalDisbOrdered(tq.getTotalDisbOrdered());
+				formBean.setTotalUnExpended(tq.getTotalUnExpended());
+				formBean.setTotalRemaining(tq.getTotalRemaining());
+                                    Collection yearlyInfo = YearlyInfoWorker.getYearlyInfo(fp);
+                                    String strTotalPlanned = YearlyInfoWorker.getTotalYearly(
+						yearlyInfo, Constants.PLANNED);
+				formBean.setTotalPlanned(strTotalPlanned);
+				String strTotalActual = YearlyInfoWorker.getTotalYearly(
+						yearlyInfo, Constants.ACTUAL);
+				formBean.setTotalActual(strTotalActual);
 			}
+			
 		}
 		return null;
 	}

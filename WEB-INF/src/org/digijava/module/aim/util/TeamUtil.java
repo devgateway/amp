@@ -142,7 +142,7 @@ public class TeamUtil {
 		while (i.hasNext()) {
 			AmpTeam team = (AmpTeam) i.next();
 			//if("Computed".equals(team.getAccessType())) {
-			if(team.getComputation()!=null)
+			if(team.getComputation()!=null && team.getComputation()==true)
 			if(team.getComputation()) {
 				teamAssignedOrgs.addAll(team.getOrganizations());
 			}

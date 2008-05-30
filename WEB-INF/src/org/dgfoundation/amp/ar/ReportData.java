@@ -363,8 +363,9 @@ public abstract class ReportData extends Viewable {
 	}
 	
 	
-
-	
+	public String toString() {
+		return name;
+	}
 	
 	
 }

@@ -246,6 +246,8 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 		this.show = show;
 	}
 
-
+	public String getObjectId() {
+		return super.toString();
+	}
 	
 }

@@ -32,10 +32,6 @@
 
 
 				<c:if test="${aimEditActivityForm.donorFlag == true}">
-					<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
-					</c:if>
-					<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
-					</c:if>
 					<tr>
 						<td align="right" bgcolor="#FFFFFF"><field:display
 							name="Adjustment Type Expenditure"
@@ -70,7 +66,6 @@
 				</c:if>
 
 				<c:if test="${aimEditActivityForm.donorFlag == false}">
-					<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
 						<tr bgcolor="#ffffff">
 							<td align="right" bgcolor="#FFFFFF"><field:display
 								name="Adjustment Type Expenditure"
@@ -97,39 +92,6 @@
 						<tr>
 							<td colspan="4"></td>
 						</tr>
-					</c:if>
-					<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
-						<tr>
-							<td align="right" bgcolor="#FFFFFF"><field:display
-								name="Adjustment Type Expenditure"
-								feature="Funding Organizations">
-								<digi:trn
-									key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-									<bean:write name="fundingDetail" property="adjustmentTypeName" />
-								</digi:trn>
-							</field:display></td>
-							<td align="right"><field:display name="Date Expenditure"
-								feature="Funding Organizations">
-								<bean:write name="fundingDetail" property="transactionDate" />
-							</field:display></td>
-							<td align="right"><field:display name="Amount Expenditure"
-								feature="Funding Organizations">
-								<!-- <FONT color=blue>*</FONT> -->
-								<bean:write name="fundingDetail" property="transactionAmount" />&nbsp;																								</field:display><field:display
-								name="Currency Expenditure" feature="Funding Organizations">
-								<bean:write name="fundingDetail" property="currencyCode" />
-							</field:display></td>
-							<td align="left" bgcolor="#ffffff"></td>
-
-						</tr>
-						<field:display name="Classification Expenditure"
-							feature="Funding Organizations">
-							<tr>
-								<td colspan="4"><bean:write name="fundingDetail"
-									property="classification" /></td>
-							</tr>
-						</field:display>
-					</c:if>
 				</c:if>
 			</logic:equal>
 		</logic:equal>
@@ -165,10 +127,6 @@
 			<logic:equal name="fundingDetail" property="adjustmentType" value="1">
 
 				<c:if test="${aimEditActivityForm.donorFlag == true}">
-					<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
-					</c:if>
-					<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
-					</c:if>
 					<tr>
 						<td align="right" bgcolor="#FFFFFF"><field:display
 							name="Adjustment Type Expenditure"
@@ -202,7 +160,6 @@
 				</c:if>
 
 				<c:if test="${aimEditActivityForm.donorFlag == false}">
-					<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
 						<tr bgcolor="#ffffff">
 							<td align="right" bgcolor="#FFFFFF"><field:display
 								name="Adjustment Type Expenditure"
@@ -233,39 +190,6 @@
 									property="classification" /></td>
 							</tr>
 						</field:display>
-					</c:if>
-					<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
-						<tr bgcolor="#ffffff">
-							<td align="right" bgcolor="#FFFFFF"><field:display
-								name="Adjustment Type Expenditure"
-								feature="Funding Organizations">
-								<digi:trn
-									key='<%="aim:expenditures:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
-									<bean:write name="fundingDetail" property="adjustmentTypeName" />
-								</digi:trn>
-							</field:display></td>
-							<td align="right"><field:display name="Date Expenditure"
-								feature="Funding Organizations">
-								<bean:write name="fundingDetail" property="transactionDate" />
-							</field:display></td>
-							<td align="right"><field:display name="Amount Expenditure"
-								feature="Funding Organizations">
-								<!-- <FONT color=blue>*</FONT> -->
-								<bean:write name="fundingDetail" property="transactionAmount" />&nbsp;																								</field:display><field:display
-								name="Currency Expenditure" feature="Funding Organizations">
-								<bean:write name="fundingDetail" property="currencyCode" />
-							</field:display></td>
-							<td align="left" bgcolor="#ffffff"></td>
-
-						</tr>
-						<field:display name="Classification Expenditure"
-							feature="Funding Organizations">
-							<tr>
-								<td colspan="4"><bean:write name="fundingDetail"
-									property="classification" /></td>
-							</tr>
-						</field:display>
-					</c:if>
 				</c:if>
 
 			</logic:equal>

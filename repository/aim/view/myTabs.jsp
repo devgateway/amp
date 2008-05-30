@@ -7,6 +7,57 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <script language="JavaScript">
+    var continueExecution = true;
+    function checkstatus(){
+
+    	var statusDiv = document.getElementById("statusValue");
+    	var offsetByServerSide = 44;
+    	var xmlhttp; 
+
+    	if(window.ActiveXObject)
+    		xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
+    	else
+    		xmlhttp = new XMLHttpRequest();
+
+		xmlhttp.open("GET","/aim/viewNewAdvancedReport.do~loadstatus=true&"+new Date().getTime(),true);
+
+		xmlhttp.onreadystatechange=function()
+		{
+		   if(xmlhttp.readyState == 4 && xmlhttp.status == 200)
+		   {
+ 			  	var rowCount = (xmlhttp.responseText.split(",")[1]).replace(/\r\n|\n|\r/g, "");
+ 			  	if(rowCount == "null"){
+ 			  		rowCount = -1;
+ 			  	}
+		  		rowCount = Number(rowCount);
+ 			  	var currentCount = Number(xmlhttp.responseText.split(",")[0]);
+
+ 		   		var percentage =  currentCount * 100 / (rowCount + offsetByServerSide);
+		   		if(percentage == "") percentage = 0;
+			    try{
+		    		statusDiv.style.display = "";
+		    		if(percentage.toFixed(0) > 0 && percentage.toFixed(0) < 100)
+		    		{
+			    		if(statusDiv.innerText != undefined)
+			    			statusDiv.innerText = "(" + percentage.toFixed(0) + "%)";
+			    		else
+				    		statusDiv.textContent = "(" + percentage.toFixed(0) + "%)";
+				    }
+			    	if(percentage>99 || percentage == -1){
+			    		continueExecution = false;
+			    		//statusDiv.style.display = "none";
+			    	}
+				}catch(e){}
+				if(continueExecution)
+		    		setTimeout("checkstatus()", 1000);
+		   }
+		}
+		xmlhttp.send(null);
+    }
+    
+</script>
+
+<script language="JavaScript">
 /*	function addActivity() {
 		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create";	
 	}
@@ -53,10 +104,13 @@ Click on one of the tabs to display activities. You can create more tabs by usin
 	<digi:trn key="aim:loadstatustext">Requesting Content</digi:trn>
 </c:set>
 <script type="text/javascript">
-	loadstatustext='<img src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /> <%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%>';
+	loadstatustext='<img src="/repository/aim/view/scripts/ajaxtabs/loading.gif" /> <%=((String) pageContext.getAttribute("loadstatustext")).replaceAll("\r\n"," ")%> <span id="statusValue">...</span>';
 	//Start Ajax tabs script for UL with id="maintab" Separate multiple ids each with a comma.
 	startajaxtabs("MyTabs");
-	reloadTab("MyTabs",tabName);
+	if(document.getElementById(tabName)){
+		checkstatus(true);
+		reloadTab("MyTabs",tabName);
+	}
 </script>
 
 <div id="debug"></div>

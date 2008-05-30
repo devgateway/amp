@@ -258,4 +258,7 @@
 
 </table>
 </div>
-
+<%
+	session.setAttribute("progressTotalRows", null);
+	session.setAttribute("progressValue", -1);
+%>

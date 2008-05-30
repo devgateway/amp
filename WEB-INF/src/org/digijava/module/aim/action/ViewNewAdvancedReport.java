@@ -10,6 +10,7 @@ package org.digijava.module.aim.action;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -57,6 +58,21 @@ public class ViewNewAdvancedReport extends Action {
 			{
 		AdvancedReportForm arf=(AdvancedReportForm) form;
 		HttpSession httpSession = request.getSession();
+
+		
+		String loadStatus=request.getParameter("loadstatus");
+		Integer progressValue = (httpSession.getAttribute("progressValue") != null) ? (Integer)httpSession.getAttribute("progressValue") :null;
+		if(progressValue == null)
+			progressValue = 0;
+
+		if(loadStatus != null){
+			ServletOutputStream os = response.getOutputStream();
+			os.println(progressValue + ","+httpSession.getAttribute("progressTotalRows"));
+			os.flush();
+			return null;
+		}
+
+		progressValue = 0;
 
 		String widget=request.getParameter("widget");
 		request.setAttribute("widget",widget);
@@ -121,11 +137,21 @@ public class ViewNewAdvancedReport extends Action {
 			filter.setDraft(false);
 		}
 		
+		httpSession.setAttribute("progressValue", ++progressValue); 
+		httpSession.setAttribute("progressTotalRows", request.getAttribute("recordsPerPage"));
+		
 		if( !cached && ( applySorter==null && sortBy==null || ar==null || ampReportId!=null && !ampReportId.equals(ar.getAmpReportId().toString()) ))
 		{
+			progressValue = progressValue + 20;// 20 is the weight of this process on the progress bar
+			httpSession.setAttribute("progressValue", progressValue); 
+
 			rd=ARUtil.generateReport(mapping,form,request,response);
+			progressValue = progressValue + 10;// 20 is the weight of this process on the progress bar
+			httpSession.setAttribute("progressValue", progressValue); 
 	
 			ar = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));	
+			progressValue = progressValue + 3;// 3 is the weight of this process on the progress bar
+			httpSession.setAttribute("progressValue", progressValue); 
 		}
 		
 		
@@ -173,6 +199,15 @@ public class ViewNewAdvancedReport extends Action {
 		httpSession.setAttribute("reportMeta",ar);
 		
 		session.close();
+
+		progressValue = progressValue + 10;// 20 is the weight of this process on the progress bar
+		httpSession.setAttribute("progressValue", progressValue);
+		
+		httpSession.setAttribute("progressTotalRows", endRow);
+		
+		httpSession.setAttribute("progressValue", progressValue);
+
+
 		
 		return mapping.findForward("forward");
 	}

@@ -27,6 +27,14 @@
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
 
 <logic:equal name="columnReport" property="canDisplayRow" value="true">
+
+
+<%
+	Integer counter = (Integer)session.getAttribute("progressValue");
+	counter++;
+	session.setAttribute("progressValue", counter);
+%>
+
 <% 
 		if(bckColor.equals("true")) {
 %>

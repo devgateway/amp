@@ -43,8 +43,15 @@ page_request.send(null)
 }
 
 function loadpage(page_request, containerid){
-if (page_request.readyState == 4 && (page_request.status==200 || window.location.href.indexOf("http")==-1))
-document.getElementById(containerid).innerHTML=page_request.responseText
+if (page_request.readyState == 4 && (page_request.status==200 || window.location.href.indexOf("http")==-1)){
+document.getElementById(containerid).innerHTML=page_request.responseText;
+	try
+	{
+		continueExecution = false;
+	}catch(e)
+	{
+	}
+}
 }
 
 function loadobjs(revattribute){
@@ -121,15 +128,29 @@ else
 ulistlink.setAttribute("href", modifiedurl) //replace URL's root domain with dynamic root domain, for ajax security sake
 savedefaultcontent(ulistlink.getAttribute("rel")) //save default ajax tab content
 ulistlink.onclick=function(){
+startProgressCheck()
 ajaxpage(this.getAttribute("href"), this.getAttribute("rel"), this)
 loadobjs(this.getAttribute("rev"))
 return false
 }
 if (ulist[x].className=="selected"){
+startProgressCheck();
 ajaxpage(ulistlink.getAttribute("href"), ulistlink.getAttribute("rel"), ulistlink) //auto load currenly selected tab content
 loadobjs(ulistlink.getAttribute("rev")) //auto load any accompanying .js and .css files
 }
 }
 }
 }
+}
+
+function startProgressCheck(){
+	try
+	{
+		continueExecution = true;
+		checkstatus();
+	}
+	catch(e)
+	{
+		//Fail silently
+	}
 }

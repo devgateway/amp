@@ -62,6 +62,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Long toYear;
 	private Integer toMonth;
 	private Integer fromMonth;
+	private String fromDate;
+	private String toDate;
 	private Long countYear;
 	private Long currency;
 	private Long calendar;
@@ -705,6 +707,22 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setCustomGroupSize(Integer customGroupSize) {
 		this.customGroupSize = customGroupSize;
+	}
+
+	public String getFromDate() {
+		return fromDate;
+	}
+
+	public void setFromDate(String fromDate) {
+		this.fromDate = fromDate;
+	}
+
+	public String getToDate() {
+		return toDate;
+	}
+
+	public void setToDate(String toDate) {
+		this.toDate = toDate;
 	}
 
 	

@@ -1647,6 +1647,25 @@ function commentWin(val) {
 																	</TR>
 																</c:if>
 															</field:display>
+															<TR>
+																		<TD bgcolor="#ffffff">
+																			<i>
+																				<digi:trn key="aim:workspaceOfCreator">Worskpace of creator</digi:trn>
+																			</i>:
+																			<c:out value="${activity.createdBy.ampTeam.accessType}" />
+																			<br/>
+																			<i>
+																				<digi:trn key="aim:computation">Computation</digi:trn>
+																			</i>:
+																				<c:if test="${activity.createdBy.ampTeam.computation == 'true'}">
+																				  <digi:trn key="aim:yes">Yes</digi:trn>
+																				</c:if>
+																				<c:if test="${activity.createdBy.ampTeam.computation == 'false'}">
+																				  <digi:trn key="aim:no">No</digi:trn>
+																				</c:if>
+																			<br/>
+																		</TD>
+															</TR>
 															<field:display name="Activity Updated On"
 																feature="Identification">
 																<c:if test="${!empty activity.updatedDate}">

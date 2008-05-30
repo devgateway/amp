@@ -515,7 +515,7 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
       <forward name="added" path="/aim/orgTypeManager.do" redirect="true" />
     </action>
-    <action name="aimOrgGroupManagerForm" path="/aim/orgGroupManager" scope="request" type="org.digijava.module.aim.action.OrgGroupManager" validate="false">
+    <action name="aimOrgGroupManagerForm" path="/aim/orgGroupManager" scope="session" type="org.digijava.module.aim.action.OrgGroupManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=orgGroupManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>

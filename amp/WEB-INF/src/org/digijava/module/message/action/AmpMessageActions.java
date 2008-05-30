@@ -333,13 +333,13 @@ public class AmpMessageActions extends DispatchAction {
     	String[] messageReceivers=messageForm.getReceiversIds();
     	
     	if(messageForm.getMessageId()==null) {
-    		if(messageForm.getSetAsAlert()==2){
+    		if(messageForm.getSetAsAlert()==0){
     			message=new UserMessage();
     		}else {
     			message=new AmpAlert();    			
     		}    		    		
     	}else {
-    		if(messageForm.getSetAsAlert()==2){
+    		if(messageForm.getSetAsAlert()==0){
     			message=new UserMessage();
     		}else {    			
     			message=new AmpAlert();     			

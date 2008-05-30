@@ -205,7 +205,7 @@
 																					<td align="right"><digi:trn key="message:setAsAlert">Set as alert</digi:trn></td>
 																					<td align="left"> 
 																						<html:select property="setAsAlert" styleClass="inp-text">																							
-																							<html:option value="2"><digi:trn key="message:no">No</digi:trn> </html:option>
+																							<html:option value="0"><digi:trn key="message:no">No</digi:trn> </html:option>
 																							<html:option value="1"><digi:trn key="message:yes">Yes</digi:trn> </html:option>																																														
 																						</html:select>																												                                                																																												
 																					</td>													 																			

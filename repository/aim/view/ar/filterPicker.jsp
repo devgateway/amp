@@ -10,15 +10,13 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
-
-
 <%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@page import="org.digijava.module.aim.dbentity.AmpGlobalSettings"%>
 <%@page import="java.util.Collections"%>
+
 <bean:define id="reportMeta" name="reportMeta"
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
 	toScope="page" />
-
 
 <digi:instance property="aimReportsFilterPickerForm" />
 
@@ -122,115 +120,29 @@
 						&nbsp;
 					</td>
 				</tr>
-				<tr>	
-					<%
-					if (filterByMonths==1) {
-					%>
-						<td align="center">
-							<digi:trn key="rep:filer:FromMonth">From Month</digi:trn>
-						</td>
-					<%
-					}
-					%>
-					<td align="center">
-						<digi:trn key="rep:filer:FromYear"> From Year</digi:trn>
+				<tr>
+					<td align="left" colspan="2">
+						<digi:trn key="rep:filer:From"> From </digi:trn>
 					</td>
-		
-					<%			
-					if (filterByMonths==1) {
-					%>
-						<td align="center">
-							<digi:trn key="rep:filer:ToMonth">To Month</digi:trn>
-						</td>
-					<%
-					}
-					%>
-					<td align="center">
-						<digi:trn key="rep:filer:ToYear">To Year</digi:trn>
+					<td align="left" colspan="2">
+						<digi:trn key="rep:filer:To"> To </digi:trn>
 					</td>
-					<%
-					if (filterByMonths == 0)
-					{
-					%>
-						<td align="center">
-						&nbsp;
-						</td>	
-						<td align="center">
-						&nbsp;
-						</td>	
-					<%
-					}
-					%>
-					
 				</tr>
 				<tr bgcolor="#EEEEEE">
-					<%
-					if (filterByMonths==1) {
-					%>
-					<td>
-					<html:select property="fromMonth"
-						styleClass="inp-text">
-						<html:option value="-1">
-							<digi:trn key="rep:filer:All">All</digi:trn>
-						</html:option>
-						<html:optionsCollection property="fromMonths" label="wrappedInstance"
-							value="wrappedInstance" />
-					</html:select>
-					</td>
-					<%
-					}
-					%>			
-					<td>
-					<html:select property="fromYear"
-						styleClass="inp-text">
-						<html:option value="-1">
-							<digi:trn key="rep:filer:All">All</digi:trn>
-						</html:option>
-						<html:optionsCollection property="fromYears" label="wrappedInstance"
-							value="wrappedInstance" />
-					</html:select>
+					<td colspan="2" align="left">
+					<html:text  property="fromDate" size="10" styleId="fromDate" styleClass="inp-text" readonly="true" />
+					<a id="date1" href='javascript:pickDateById("date1","fromDate")'>
+						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+					</a>
 					</td>
 					
 					
-					<%			
-					if (filterByMonths==1) {
-					%>
-					<td>
-					<html:select property="toMonth"
-						styleClass="inp-text">
-						<html:option value="-1">
-							<digi:trn key="rep:filer:All">All</digi:trn>
-						</html:option>
-						<html:optionsCollection property="toMonths" label="wrappedInstance"
-							value="wrappedInstance" />
-					</html:select>
+					<td colspan="2" align="left">
+					<html:text  property="toDate" size="10" styleId="toDate" styleClass="inp-text" readonly="true" />
+					<a id="date2" href='javascript:pickDateById("date2","toDate")'>
+						<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+					</a>
 					</td>
-					<%
-					}
-					%>
-					<td>
-					<html:select property="toYear"
-						styleClass="inp-text">
-						<html:option value="-1">
-							<digi:trn key="rep:filer:All">All</digi:trn>
-						</html:option>
-						<html:optionsCollection property="toYears" label="wrappedInstance"
-							value="wrappedInstance" />
-					</html:select>
-					</td>
-					<%
-					if (filterByMonths == 0)
-					{
-					%>
-						<td align="center">
-						&nbsp;
-						</td>	
-						<td align="center">
-						&nbsp;
-						</td>	
-					<%
-					}
-					%>
 				</tr>
 		</table>
 			</td> </tr>

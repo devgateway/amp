@@ -17239,7 +17239,6 @@ DHTMLSuite.calendar.prototype =
 		// Disable text selection in the heading
 		this.divElementHeading.onselectstart = DHTMLSuite.commonObj.cancelEvent;
 		DHTMLSuite.commonObj.__addEventElement(this.divElementHeading);
-		
 		DHTMLSuite.commonObj.addEvent(document.documentElement,'click',function(e){ DHTMLSuite.variableStorage.arrayOfDhtmlSuiteObjects[ind].__autoHideDropDownBoxes(e); },ind+'');
 		
 	}

@@ -6,6 +6,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<%@ include file="/repository/aim/view/scripts/newCalendar.jsp"  %>
+
 <link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>" />
 <link rel="stylesheet" href="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.css"/>" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/util.js"/>"></script>
@@ -305,10 +307,11 @@ background-color: yellow;
 		var element = document.getElementById("myFilter");
 		element.style.display = "inline";
 		
-		
 		myPanel1.setBody(element);
 		myPanel1.center();
 		myPanel1.show();
+		
+		initCalendar();
 		
 		
 	}
@@ -417,7 +420,12 @@ background-color: yellow;
 		if (aimReportsFilterPickerForm.indexString)
 			aimReportsFilterPickerForm.indexString.value="";
 			
+		if (aimReportsFilterPickerForm.fromDate)
+			aimReportsFilterPickerForm.fromDate.value="";
 		
+		if (aimReportsFilterPickerForm.toDate)
+			aimReportsFilterPickerForm.toDate.value="";
+			
 		if (aimReportsFilterPickerForm.currency)
 			aimReportsFilterPickerForm.currency.value=aimReportsFilterPickerForm.defaultCurrency.value;
 		

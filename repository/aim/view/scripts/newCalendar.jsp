@@ -14,20 +14,30 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
 
-
 <!-- code for rendering that nice calendar -->
 <bean:define id="langBean" name="org.digijava.kernel.navigation_language" scope="request" type="org.digijava.kernel.entity.Locale" toScope="page" />
 <bean:define id="lang" name="langBean" property="code" scope="page" toScope="page" />
 
 <script type="text/javascript">
-
-	var myCalendarModel = new DHTMLSuite.calendarModel();
+	var myCalendarModel;
+	var calendarObjForForm;
+	myCalendarModel = new DHTMLSuite.calendarModel();
 	myCalendarModel.setLanguageCode('<bean:write name="lang" />'); 
-	var calendarObjForForm = new DHTMLSuite.calendar({callbackFunctionOnDayClick:'getDateFromCalendar',isDragable:false,displayTimeBar:false}); 
+	calendarObjForForm = new DHTMLSuite.calendar({callbackFunctionOnDayClick:'getDateFromCalendar',isDragable:false,displayTimeBar:false}); 
 	calendarObjForForm.setCalendarModelReference(myCalendarModel);
 	
-	
 	calendarObjForForm.setCallbackFunctionOnClose("userCloseEvt");
+
+	function initCalendar(){
+		//due to problems in the initialization that is done before this function
+		//in the filters we need to initialize the calendar when showing it!
+		myCalendarModel = new DHTMLSuite.calendarModel();
+		myCalendarModel.setLanguageCode('<bean:write name="lang" />'); 
+		calendarObjForForm = new DHTMLSuite.calendar({callbackFunctionOnDayClick:'getDateFromCalendar',isDragable:false,displayTimeBar:false}); 
+		calendarObjForForm.setCalendarModelReference(myCalendarModel);
+		
+		calendarObjForForm.setCallbackFunctionOnClose("userCloseEvt");
+	}
 	
 	function userCloseEvt(obj) {		
 		DHTMLSuite.variableStorage.arrayOfDhtmlSuiteObjects[ind].hide();
@@ -165,10 +175,13 @@
 		var butt = document.getElementById(buttonObj);
 		var inputObject = document.getElementById(objectId);
 		var intY = (document.all?document.body.scrollTop:window.pageYOffset);
+		
+		//alert(butt);
+		//alert(inputObject);
+		
 		calendarObjForForm.setCalendarPositionByHTMLElement(butt,-160,intY+butt.offsetHeight-80);	// Position the calendar right below the form input
 		calendarObjForForm.setInitialDateFromInput(inputObject,format);	// Specify that the calendar should set it's initial date from the value of the input field.
 		calendarObjForForm.addHtmlElementReference('myDate',inputObject);	// Adding a reference to this element so that I can pick it up in the getDateFromCalendar below(myInput is a unique key)
-		
 		if(calendarObjForForm.isVisible()){
 			calendarObjForForm.hide();
 		}else{

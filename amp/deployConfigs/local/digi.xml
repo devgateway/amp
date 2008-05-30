@@ -72,6 +72,7 @@
 		<hibernate-class>org.digijava.module.common.dbentity.ModuleTeaser</hibernate-class>
                 <hibernate-class>org.digijava.kernel.entity.MailSpool</hibernate-class>
 	</hibernate-classes>
+
 	
 	 <service id="digiFeedService" class="org.digijava.module.digifeed.core.DigifeedService">
             <description>Digi's feed publishing service</description>
@@ -82,7 +83,6 @@
             <property name="patchesDir">patches</property>
      </service>
 
-	
 	
 	
     <!--
@@ -142,6 +142,11 @@
         <property name="allowedAgents">agent.indexOf("mozilla") != -1</property> 
         <property name="ignoredAgents">agent.indexOf("googlebot") != -1</property>
     </service>
+
+	 <service id="digiCurrencyRatesService" class="org.digijava.module.currencyrates.CurrencyRatesService">
+            <description>Daily Currency Rates Service</description>
+     </service>
+
 <!--
     <service id="jcrRespositoryService" class="org.digijava.module.dm.service.RMIDocumentManagementService">
         <description>This service provides RMI access to external JCR repository</description>

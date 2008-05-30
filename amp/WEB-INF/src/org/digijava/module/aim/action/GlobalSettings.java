@@ -5,6 +5,7 @@ package org.digijava.module.aim.action;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Time;
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Date;
@@ -40,6 +41,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.currencyrates.CurrencyRatesService;
+import org.digijava.module.currencyrates.DailyCurrencyRateSingleton;
 import org.digijava.module.aim.helper.CountryBean;
 
 public class GlobalSettings extends Action {
@@ -51,6 +54,7 @@ public class GlobalSettings extends Action {
 	
 	}
 	
+	@SuppressWarnings("unchecked")
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 	HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
@@ -72,6 +76,7 @@ public class GlobalSettings extends Action {
 			flushSessionObjects(session);
 	
 			logger.info(" id is "+gsForm.getGlobalId()+"   name is "+gsForm.getGlobalSettingsName()+ "  value is... "+gsForm.getGsfValue());
+			dailyCurrencyRatesChanges(gsForm);
 			this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
 			//ActionErrors errors = new ActionErrors();
 			refreshGlobalSettingsCache	= true;
@@ -92,6 +97,7 @@ public class GlobalSettings extends Action {
 			//this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
 			//ActionErrors errors = new ActionErrors();
 			refreshGlobalSettingsCache	= true;
+			dailyCurrencyRatesChanges(null);
 		}
 		
 		Collection col = FeaturesUtil.getGlobalSettings();
@@ -144,6 +150,72 @@ public class GlobalSettings extends Action {
 		saveErrors(request, errors);
 		return mapping.findForward("viewGS");
 	}
+
+	@SuppressWarnings("unchecked")
+	private void dailyCurrencyRatesChanges() {
+		Collection <AmpGlobalSettings> col = FeaturesUtil.getGlobalSettings();
+		boolean update=false;
+		String name;
+		String value;
+		String hour=null;
+		for(AmpGlobalSettings amp: col){			
+			name =amp.getGlobalSettingsName();
+			value = amp.getGlobalSettingsValue();
+			if(name.compareToIgnoreCase("Enabled Daily Currency Rates Update")==0
+					&& value.compareToIgnoreCase("On")==0){
+				update=true;
+			}
+			if(name.compareToIgnoreCase("Daily Currency Rates Update Hour")==0){
+				hour=amp.getGlobalSettingsValue();
+			}			
+		}
+		if(update){
+			CurrencyRatesService.startCurrencyRatesService(hour);
+		}
+		else{
+			CurrencyRatesService.stopCurrencyRatesService();
+		}
+	}
+
+	/**
+	 * @param gsForm
+	 */
+	@SuppressWarnings("unchecked")
+	private void dailyCurrencyRatesChanges(GlobalSettingsForm gsForm) {
+		if(gsForm==null){
+			dailyCurrencyRatesChanges();
+		}
+		else{
+			if(gsForm.getGlobalSettingsName().compareTo("Enabled Daily Currency Rates Update")==0){
+				if(gsForm.getGsfValue().compareTo("On")==0){
+					Collection<AmpGlobalSettings> ampGSCollection = (Collection<AmpGlobalSettings>)gsForm.getGsfCol();
+					for(AmpGlobalSettings ampGS : ampGSCollection)
+					{
+						int val = ampGS.getGlobalSettingsName().compareTo("Daily Currency Rates Update Hour");
+						if(val==0){
+							CurrencyRatesService.startCurrencyRatesService(ampGS.getGlobalSettingsValue());
+						}
+					}
+					
+				}else{
+					CurrencyRatesService.stopCurrencyRatesService();
+				}
+			}
+			if(gsForm.getGlobalSettingsName().compareTo("Daily Currency Rates Update Hour")==0){
+				Collection<AmpGlobalSettings> ampGSCollection = (Collection<AmpGlobalSettings>)gsForm.getGsfCol();
+				for(AmpGlobalSettings ampGS : ampGSCollection)
+				{
+					int val = ampGS.getGlobalSettingsName().compareTo("Enabled Daily Currency Rates Update");
+					if(val==0){
+						if(ampGS.getGlobalSettingsValue().compareTo("On")==0){
+							CurrencyRatesService.startCurrencyRatesService(gsForm.getGsfValue());
+						}
+					}
+				}
+			}
+		}
+	}
+
 
 
 	private Collection getPossibleValues(String tableName)

@@ -78,6 +78,9 @@
             <property name="patchesDir">patches</property>
      </service>
 	
+	 <service id="digiCurrencyRatesService" class="org.digijava.module.currencyrates.CurrencyRatesService">
+            <description>Daily Currency Rates Service</description>
+     </service>
 	
     <!--
     <service id="urlTouchService" class="org.digijava.kernel.services.UrlTouchService">

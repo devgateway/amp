@@ -65,7 +65,31 @@ function populateWithDays(monthId, targetId) {
 	}
 	
 }
+function createHourString(hourId, minId, ampmId){
+	hourElement		= document.getElementById(hourId);
+	minElement		= document.getElementById(minId);
+	ampmElement		= document.getElementById(ampmId);
+	
+	hourValue		= hourElement.value;
+	if (hourValue.length == 1)
+		hourValue	= '' + 0 + hourValue;
+	
+	minValue		= minElement.value;
+	if (minValue.length == 1)
+		minValue	= '' + 0 + minValue;
+		
+	ampmValue       =ampmElement.value==0?"AM":"PM";	
+	var hour		= hourValue + ":" + minValue + " " + ampmValue ;
+	
+	els				= hourElement.form.elements;
+	
+	for (j=0; j<els.length; j++ ) {
+		if (els[j].name != null && els[j].name == 'gsfValue') {
+			els[j].value	= hour;
+		}
+	}
 
+}
 function createDateString(monthId, dayId) {
 	monthElement	= document.getElementById(monthId);
 	dayElement		= document.getElementById(dayId);
@@ -313,6 +337,71 @@ function saveAllSettings(){
 	                                    				} 
 	                                    			%>
 	                                    		</select>
+	                                    	</c:when>
+	                                    	<c:when test='${type == "t_daily_currency_update_hour"}'>
+	                                    		<% 
+	                                    			String hourId		= "hour" + globalSett.getGlobalId() ;
+		                                    		String minId		= "min" + globalSett.getGlobalId() ;
+		                                    		String ampmId       = "ampm"+ globalSett.getGlobalId() ;
+		                                    		String [] timeValues    = globalSett.getGlobalSettingsValue().split(" ") ;
+		                                    		String [] hourValues	= timeValues[0].split(":") ;
+		                                    		int hourNum		= Integer.parseInt(hourValues[0]);
+		                                    		int minNum      = Integer.parseInt(hourValues[1]);
+		                                    		String ampmNum  = timeValues[1];
+	                                    		%>
+	                                    		<html:hidden property="gsfValue" value='<%= globalSett.getGlobalSettingsValue() %>'/>
+	                                    		<digi:trn key="aim:globalSettings:hour">Hour</digi:trn>: 
+	                                    		<select styleClass="inp-text" id="<%= hourId %>" onchange="createHourString('<%=hourId %>','<%=minId %>','<%=ampmId %>');">
+	                                    			<% for (int k=1; k<=12; k++) {
+	                                    					String val = (k<10)? "0"+k : String.valueOf(k);
+	                                    					if ( k == hourNum ) {
+	                                    			%>
+	                                    					<option selected="selected" value="<%=k %>"><%=val %></option>
+	                                    			<%
+		                                    				}
+		                                    				else {
+		                                    		%>
+		                                    				<option  value="<%=k %>"><%=val %></option>
+		                                    		<%
+		                                    				}
+	                                    				} 
+	                                    			%>
+	                                    		</select>
+	                                    		<digi:trn key="aim:globalSettings:min">Min</digi:trn>: 
+	                                    		<select styleClass="inp-text" id="<%= minId %>" onchange="createHourString('<%=hourId %>','<%=minId %>','<%=ampmId %>');">
+	                                    			<% for (int k=0; k<60; k+=5) {
+	                                    				    String val = (k<10)? "0"+k : String.valueOf(k);
+	                                    					if ( k == minNum ) {
+	                                    			%>
+	                                    					<option value="<%=k %>" selected="selected"><%=val %></option>
+	                                    			<%
+		                                    				}
+		                                    				else {
+		                                    		%>
+		                                    				<option value="<%=k %>"><%=val %></option>
+		                                    		<%
+		                                    				}
+	                                    				} 
+	                                    			%>
+	                                    		</select>
+	                                    		<select styleClass="inp-text" id="<%= ampmId %>" onchange="createHourString('<%=hourId %>','<%=minId %>','<%=ampmId %>');">
+	                                    			<%
+	                                    				String[] ampm={"AM","PM"}; 
+	                                    				for (int k=0; k<=1; k++) {
+	                                    					if ( ampm[k].compareToIgnoreCase(ampmNum)==0 ) {
+	                                    			%>
+	                                    					<option value="<%=k %>" selected="selected"><%=ampm[k] %></option>
+	                                    			<%
+		                                    				}
+		                                    				else {
+		                                    		%>
+		                                    				<option value="<%=k %>"><%=ampm[k] %></option>
+		                                    		<%
+		                                    				}
+	                                    				} 
+	                                    			%>
+	                                    		</select>
+	                                    	
 	                                    	</c:when>
 	                                    	<c:when test='${type == "t_static_range"}'>
 	                                    		<% 

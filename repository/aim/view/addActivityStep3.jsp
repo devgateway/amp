@@ -847,7 +847,6 @@ ${fn:replace(message,quote,escapedQuote)}
 																						<logic:equal name="fundingDetail" property="transactionType" value="2">																						
 
 																							<c:if test="${aimEditActivityForm.donorFlag == false}">
-																								<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
 																								<tr bgcolor="#ffffff">
 																									<td width="50">
 																									<field:display name="Adjustment Type Expenditure" feature="Funding Organizations">
@@ -880,7 +879,6 @@ ${fn:replace(message,quote,escapedQuote)}
 																										</field:display>
 																									</td>
 																								</tr>
-																								</c:if>
 																							</c:if>																						
 																						</logic:equal>
 																						</logic:iterate>

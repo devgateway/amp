@@ -4692,6 +4692,7 @@ public class DbUtil {
         return comment;
     }
 
+    @Deprecated
     public static ArrayList getAmpPerspective() {
         Session session = null;
         Query q = null;

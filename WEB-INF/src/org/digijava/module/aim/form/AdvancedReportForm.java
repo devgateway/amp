@@ -351,7 +351,6 @@ public class AdvancedReportForm extends ActionForm
 	private String filterFlag;
 	private String adjustmentFlag;
 	private boolean calendarFlag;
-	private boolean perspectiveFlag;
 	private boolean yearFlag;
 	private String goFlag;
 // for reports	
@@ -971,14 +970,8 @@ private int yrDiff;
 	public void setCalendarFlag(boolean b) {
 		calendarFlag = b;
 	}
-	public boolean isPerspectiveFlag() {
-		return perspectiveFlag;
-	}
 	public boolean isYearFlag() {
 		return yearFlag;
-	}
-	public void setPerspectiveFlag(boolean b) {
-		perspectiveFlag = b;
 	}
 	public void setYearFlag(boolean b) {
 		yearFlag = b;

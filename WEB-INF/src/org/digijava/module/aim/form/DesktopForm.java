@@ -14,7 +14,6 @@ public class DesktopForm extends ActionForm {
 	private long fltrStatus[];
 	private int fltrFrmYear;
 	private int fltrToYear;
-	private long fltrPrespective;
 	private Integer fltrActivityRisks;
 
 	private int activityCount;
@@ -27,7 +26,6 @@ public class DesktopForm extends ActionForm {
 	private Collection donors;
 	private Collection sectors;
 	private Collection status;
-	private Collection perspectives;
 	private int[] yearRange;
 	private Collection activityRisks;
 
@@ -195,18 +193,6 @@ public class DesktopForm extends ActionForm {
 		this.fltrFrmYear = fltrFrmYear;
 	}
 	/**
-	 * @return Returns the fltrPrespective.
-	 */
-	public long getFltrPrespective() {
-		return fltrPrespective;
-	}
-	/**
-	 * @param fltrPrespective The fltrPrespective to set.
-	 */
-	public void setFltrPrespective(long fltrPrespective) {
-		this.fltrPrespective = fltrPrespective;
-	}
-	/**
 	 * @return Returns the fltrSector.
 	 */
 	public long[] getFltrSector() {
@@ -253,18 +239,6 @@ public class DesktopForm extends ActionForm {
 	 */
 	public void setPages(Collection pages) {
 		this.pages = pages;
-	}
-	/**
-	 * @return Returns the perspectives.
-	 */
-	public Collection getPerspectives() {
-		return perspectives;
-	}
-	/**
-	 * @param perspectives The perspectives to set.
-	 */
-	public void setPerspectives(Collection perspectives) {
-		this.perspectives = perspectives;
 	}
 	/**
 	 * @return Returns the searchKey.

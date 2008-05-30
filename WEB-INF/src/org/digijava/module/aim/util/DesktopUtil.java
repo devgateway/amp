@@ -417,8 +417,7 @@ public class DesktopUtil {
 		return col;
 	}
 
-	public static double updateProjectTotals(Collection activities,Long persId,
-			String currCode) {
+	public static double updateProjectTotals(Collection activities,String currCode) {
 
 		logger.info("updateProjectTotals called with currcode =" + currCode);
 
@@ -434,11 +433,9 @@ public class DesktopUtil {
 					Iterator cItr = project.getCommitmentList().iterator();
 					while (cItr.hasNext()) {
 						Commitments comm = (Commitments) cItr.next();
-						if (comm.getPerspectiveId().equals(persId)) {
-							double toCurrency = Util.getExchange(currCode, new java.sql.Date( comm.getTransactionDate().getTime()));
-							double fromCurrency = Util.getExchange(comm.getCurrencyCode(),new java.sql.Date(comm.getTransactionDate().getTime()));
-							totAmount += CurrencyWorker.convert1(comm.getAmount(),fromCurrency, toCurrency);
-						}
+						double toCurrency = Util.getExchange(currCode, new java.sql.Date( comm.getTransactionDate().getTime()));
+						double fromCurrency = Util.getExchange(comm.getCurrencyCode(),new java.sql.Date(comm.getTransactionDate().getTime()));
+						totAmount += CurrencyWorker.convert1(comm.getAmount(),fromCurrency, toCurrency);
 					}
 				}
 				grandTotal += totAmount;

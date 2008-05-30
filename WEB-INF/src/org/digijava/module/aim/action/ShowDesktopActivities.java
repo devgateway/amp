@@ -98,7 +98,6 @@ public class ShowDesktopActivities extends TilesAction {
 			dForm.setDonors(null);
 			dForm.setSectors(null);
 			dForm.setStatus(null);
-			dForm.setPerspectives(null);
 
 			Collection filters = DbUtil.getFilters(tm.getTeamId(),Constants.DESKTOP);
 			if (filters != null && filters.size() > 0) {
@@ -178,8 +177,6 @@ public class ShowDesktopActivities extends TilesAction {
 					} else if (filter.getFilterName().equalsIgnoreCase(Constants.STATUS_FILTER)) {
 						dForm.setStatus(DbUtil.getAmpStatus());
 						dForm.setFltrStatus(null);
-					} else if (filter.getFilterName().equalsIgnoreCase(Constants.PERSPECTIVE_FILTER)) {
-						dForm.setPerspectives(DbUtil.getAmpPerspective());
 					} else if (filter.getFilterName().equalsIgnoreCase(Constants.ACTIVITY_RISK_FILTER)) {
 						if (ampContext.getAttribute(Constants.ME_FEATURE) != null) {
 							dForm.setActivityRisks(MEIndicatorsUtil.getAllIndicatorRisks());
@@ -266,33 +263,10 @@ public class ShowDesktopActivities extends TilesAction {
 				}
 			}
 
-
-			String perspCode = null;
-			if (tm.getAppSettings().getPerspective().equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
-				perspCode = Constants.MOFED;
-			} else {
-				perspCode = Constants.DONOR;
-			}
 			itr = null;
-			if (dForm.getPerspectives() != null) {
-				itr = dForm.getPerspectives().iterator();
-			} else {
-				itr = DbUtil.getAmpPerspective().iterator();
-			}
-			AmpPerspective pers = null;
-			while (itr.hasNext()) {
-				pers = (AmpPerspective) itr.next();
-				if (pers.getCode().equalsIgnoreCase(perspCode)) {
-					break;
-				}
-			}
-
-			//add perspective name to seession
-			session.setAttribute("currentPerspective",tm.getAppSettings().getPerspective());
 
 			double grandTotal = DesktopUtil.updateProjectTotals(
-					dForm.getActivities(),pers.getAmpPerspectiveId(),
-					currCode);
+					dForm.getActivities(),currCode);
 
 			dForm.setTotalCommitments(mf.format(grandTotal));
 			dForm.setDefCurrency(currCode);

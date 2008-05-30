@@ -71,8 +71,7 @@ public class TeamUtil {
      * @return The collection of all teams
      */
 
-    public static Collection getUnassignedWorkspaces(String workspaceType,
-        Long teamCategoryId, String team) {
+    public static Collection getUnassignedWorkspaces(String workspaceType, String team) {
 
         Session session = null;
         Collection col = new ArrayList();
@@ -87,7 +86,7 @@ public class TeamUtil {
                 + " where t.parentTeamId is null and (t.teamCategory=:team) ";
 
             boolean wTypeFlag = false;
-            boolean tCatFlag = false;
+           // boolean tCatFlag = false;
 
             // if user has specified a workspaceType filter
             if(workspaceType != null && workspaceType.trim().length() != 0) {
@@ -95,19 +94,19 @@ public class TeamUtil {
                 wTypeFlag = true;
             }
             // if user has specified team category filter
-            if(teamCategoryId != null && teamCategoryId.longValue() != 0) {
-                qryStr += " and (t.type=:typeId)";
-                tCatFlag = true;
-            }
+//            if(teamCategoryId != null && teamCategoryId.longValue() != 0) {
+//                qryStr += " and (t.type=:typeId)";
+//                tCatFlag = true;
+//            }
 
             Query qry = session.createQuery(qryStr);
             qry.setParameter("team", team, Hibernate.STRING);
             if(wTypeFlag) {
                 qry.setParameter("wType", workspaceType, Hibernate.STRING);
             }
-            if(tCatFlag) {
-                qry.setParameter("typeId", teamCategoryId, Hibernate.LONG);
-            }
+//            if(tCatFlag) {
+//                qry.setParameter("typeId", teamCategoryId, Hibernate.LONG);
+//            }
 
             col = qry.list();
 

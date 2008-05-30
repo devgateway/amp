@@ -65,11 +65,11 @@
 
 		var wsType = document.aimUpdateWorkspaceForm.childWorkspaceType.value;
 
-		var tCat   = document.aimUpdateWorkspaceForm.childTeamTypeId.value;
+		//var tCat   = document.aimUpdateWorkspaceForm.childTeamTypeId.value;
 
 		<digi:context name="getChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
 
-		document.aimUpdateWorkspaceForm.action = "<%= getChild %>?wType="+wsType+"&tCategory="+tCat+"&popupReset=true&dest="+dest;
+		document.aimUpdateWorkspaceForm.action = "<%= getChild %>?wType="+wsType+"&popupReset=true&dest="+dest;
 
 		document.aimUpdateWorkspaceForm.target = "_self"
 
@@ -145,42 +145,32 @@ function childOrgsAdded() {
 					<table width="100%" cellPadding=2 cellSpacing=1 vAlign="top"
 						align="left" bgcolor="#006699">
 						<tr>
-							<td width="20%" bgcolor="#ECF3FD"><digi:trn
+							<td width="33%" bgcolor="#ECF3FD" align="right"><digi:trn
 								key="aim:workspaceType">
 
 									Workspace Type
 
 								</digi:trn></td>
-							<td width="20%" bgcolor="#ECF3FD"><html:select
+							<td width="33%" bgcolor="#ECF3FD" align="center"><html:select
 								property="childWorkspaceType" styleClass="inp-text">
 								<html:option value="">
 									<digi:trn key="aim:addChildWorkspaceTypeAll">
 										ALL
 									</digi:trn>
 								</html:option>
-								<html:option value="management">
+								<html:option value="Management">
 									<digi:trn key="aim:addChildWorkspaceTypeManagement">
 										Management
 									</digi:trn>
 								</html:option>
-								<html:option value="team">
+								<html:option value="Team">
 									<digi:trn key="aim:addChildWorkspaceTypeTeam">
 										Team
 									</digi:trn>
 								</html:option>
 							</html:select></td>
-							<td width="20%" bgcolor="#ECF3FD"><digi:trn key="aim:teamType">
-
-									Team Type
-
-								</digi:trn></td>
-							<c:set var="translation">
-								<digi:trn key="aim:allTeamTypes">ALL</digi:trn>
-							</c:set>
-							<td width="20%" bgcolor="#ECF3FD">
-								<category:showoptions name="aimUpdateWorkspaceForm" property="childTeamTypeId" firstLine="${translation}"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>" styleClass="inp-text" />
-							</td>
-							<td width="20%" align="right" bgcolor="#ECF3FD">
+							
+							<td width="33%" align="left" bgcolor="#ECF3FD">
 								<c:set var="translation">
 										<digi:trn key="btn:addChildWorkspaceGo">
 											GO

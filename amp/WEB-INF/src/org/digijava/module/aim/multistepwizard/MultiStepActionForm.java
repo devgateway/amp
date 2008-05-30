@@ -70,8 +70,10 @@ public abstract class MultiStepActionForm extends ActionForm {
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 		try {
 			String stepStr	= request.getParameter("stepInWizard");
-			int step 		= Integer.parseInt(stepStr);
-			clearCheckboxes(step);
+			if ( stepStr!=null ) {
+				int step 		= Integer.parseInt(stepStr);
+				clearCheckboxes(step);
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

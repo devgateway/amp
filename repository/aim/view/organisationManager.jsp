@@ -91,7 +91,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td width="201">
+					<td width="250">
 						<digi:trn key="aim:orgManagerType">Type</digi:trn>&nbsp;
 						<html:select property="ampOrgTypeId" styleClass="inp-text">
 							<html:option value="-1"><digi:trn key="aim:all">All</digi:trn></html:option>
@@ -101,7 +101,7 @@
 							</logic:notEmpty>
 						</html:select>
 					</td>
-					<td width="195">
+					<td width="210">
 						<digi:trn key="aim:keyword">Keyword</digi:trn>&nbsp;
 						<html:text property="keyword" styleClass="inp-text" />
 					</td>
@@ -122,7 +122,7 @@
                     </c:set>
                     <input type="button" value="${trnResetBtn}" class="buton" onclick="return resetSearch()">
 					</td>
-					<td width="260">					
+					<td width="300">					
                     <c:set var="trnGoBtn">
                       <digi:trn key="aim:btnGo"> GO </digi:trn>
                     </c:set>

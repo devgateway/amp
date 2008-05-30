@@ -1,13 +1,24 @@
 package org.digijava.module.aim.action ;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
-import org.apache.struts.action.*;
-import org.digijava.module.aim.util.DbUtil;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.form.OrgGroupManagerForm;
-import javax.servlet.http.*;
-import java.util.*;
+import org.digijava.module.aim.util.DbUtil;
 
 public class OrgGroupManager extends Action {
 
@@ -27,13 +38,32 @@ public class OrgGroupManager extends Action {
 										  return mapping.findForward("index");
 								}
 					 }					 
-
-					 final int NUM_RECORDS = 10;
+					 
+					 int NUM_RECORDS =10;
 
 					 Collection<AmpOrgGroup> org = new ArrayList<AmpOrgGroup>();
 					 OrgGroupManagerForm orgForm = (OrgGroupManagerForm) form;
 					 int page = 0;
 					 
+					 if (request.getParameter("orgSelReset") != null
+						        && request.getParameter("orgSelReset").equals("false")) {
+						 		orgForm.setOrgSelReset(false);
+						    }
+						    else {
+						    	orgForm.setOrgSelReset(true);
+						    	orgForm.reset(mapping, request);
+						    }
+					 
+					 if (orgForm.getTempNumResults() !=0){
+						 orgForm.setNumResults(orgForm.getTempNumResults()); 
+					 }
+					 
+					 if (orgForm.getNumResults() !=0){
+						 NUM_RECORDS = orgForm.getNumResults();
+					 }else{
+						 NUM_RECORDS = 10;
+					 }
+				
 					 logger.debug("In organisation group manager action");
 					 
 					 if (request.getParameter("page") == null) {
@@ -44,10 +74,32 @@ public class OrgGroupManager extends Action {
 								 */
 								page = Integer.parseInt(request.getParameter("page"));
 					 }
-
-					 Collection<AmpOrgGroup> ampOrg = (Collection<AmpOrgGroup>)session.getAttribute("ampOrgGrp");
+					 
+				      
+					 Collection<AmpOrgGroup> ampOrg = null;
 					 if (ampOrg == null) {
-					 	ampOrg = DbUtil.getAllOrganisationGroup();
+						 if (orgForm.getAmpOrgTypeId() != null &&
+					              !orgForm.getAmpOrgTypeId().equals(new Long( -1))) {
+					            if (orgForm.getKeyword().trim().length() != 0) {
+					              // serach for organisations based on the keyword and the
+					              // organisation type
+					              ampOrg = DbUtil.searchForOrganisationGroup(orgForm.getKeyword().trim(),orgForm.getAmpOrgTypeId());
+					            }
+					            else {
+					              // search for organisations based on organisation type only
+					            	ampOrg = DbUtil.searchForOrganisationGroupByType(orgForm.getAmpOrgTypeId());
+					            }
+					          }
+					          else if (orgForm.getKeyword() != null &&
+					        		  orgForm.getKeyword().trim().length() != 0) {
+					            // search based on the given keyword only.
+					        	  ampOrg = DbUtil.searchForOrganisationGroup(orgForm.getKeyword().trim());
+					          }
+					          else {
+					            // get all organisations since keyword field is blank and org type field has 'ALL'.
+					        	  ampOrg = DbUtil.getAllOrganisationGroup();
+					          }
+					 	
 						session.setAttribute("ampOrgGrp",ampOrg);
 					 }
 					 // sorting!!!
@@ -75,7 +127,7 @@ public class OrgGroupManager extends Action {
 			            }else {
 			            	Collections.sort((List)ampOrg, new DbUtil.HelperAmpOrgGroupNameComparator());
 			            }
-			            
+			            orgForm.setOrgTypes(DbUtil.getAllOrgTypes()); 
 			            //pagination
 			            String alpha = orgForm.getAlpha();
 			            Collection<AmpOrgGroup> orgsForCurrentAlpha=null;
@@ -118,7 +170,9 @@ public class OrgGroupManager extends Action {
 			            	orgForm.setOrgsForCurrentAlpha(orgsForCurrentAlpha);
 			            }			            
 			            
-			        
+			            if (NUM_RECORDS ==-1){
+			            	NUM_RECORDS = ampOrg.size();
+			            }
 			            int stIndex = ((page - 1) * NUM_RECORDS) + 1;
 			            int edIndex=page * NUM_RECORDS ;
 			            int numPages;

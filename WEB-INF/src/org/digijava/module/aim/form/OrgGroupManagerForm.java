@@ -5,8 +5,16 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 
 import java.util.Collection;
 
-public class OrgGroupManagerForm extends ActionForm {
+import javax.servlet.http.HttpServletRequest;
 
+public class OrgGroupManagerForm extends ActionForm {
+   
+	private Long ampOrgTypeId;
+	private String orgType;
+	private String keyword;
+	private int numResults;
+	private int tempNumResults;
+	private Collection orgTypes = null;
 	private Collection<AmpOrgGroup> organisation;
 	private Collection pages;
 	private Integer currentPage=new Integer(1);
@@ -15,6 +23,43 @@ public class OrgGroupManagerForm extends ActionForm {
 	private String[] alphaPages = null;
 	private String alpha;
 	private Collection<AmpOrgGroup> orgsForCurrentAlpha;
+	private boolean reset;
+	private boolean orgSelReset;
+	
+	public OrgGroupManagerForm(){
+		reset = false;
+		numResults = 0;
+		tempNumResults = 0;
+	}
+	
+	public void reset(ActionMapping mapping, HttpServletRequest request) {
+		if (reset) {
+		      numResults = 0;
+		      orgTypes = null;
+		      pages = null;
+		      alphaPages = null;
+		      reset = false;
+		      currentPage = new Integer(0);
+		      currentAlpha = null;
+		     
+		    }
+
+		    if (orgSelReset) {
+		      keyword = null;
+		      setOrgType("");
+		      setAmpOrgTypeId(null);
+		      setTempNumResults(10);
+		    }
+		
+	}
+	
+	public boolean isOrgSelReset() {
+	    return orgSelReset;
+	  }
+
+	public void setOrgSelReset(boolean orgSelReset) {
+	    this.orgSelReset = orgSelReset;
+	  }
 	
 	public Collection<AmpOrgGroup> getOrgsForCurrentAlpha() {
 		return orgsForCurrentAlpha;
@@ -79,6 +124,54 @@ public class OrgGroupManagerForm extends ActionForm {
 
 	public void setAlpha(String alpha) {
 		this.alpha = alpha;
+	}
+
+	public Long getAmpOrgTypeId() {
+		return ampOrgTypeId;
+	}
+
+	public void setAmpOrgTypeId(Long ampOrgTypeId) {
+		this.ampOrgTypeId = ampOrgTypeId;
+	}
+
+	public String getOrgType() {
+		return orgType;
+	}
+
+	public void setOrgType(String orgType) {
+		this.orgType = orgType;
+	}
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+	public int getNumResults() {
+		return numResults;
+	}
+
+	public void setNumResults(int numResults) {
+		this.numResults = numResults;
+	}
+
+	public int getTempNumResults() {
+		return tempNumResults;
+	}
+
+	public void setTempNumResults(int tempNumResults) {
+		this.tempNumResults = tempNumResults;
+	}
+
+	public Collection getOrgTypes() {
+		return orgTypes;
+	}
+
+	public void setOrgTypes(Collection orgTypes) {
+		this.orgTypes = orgTypes;
 	}
 	
 }

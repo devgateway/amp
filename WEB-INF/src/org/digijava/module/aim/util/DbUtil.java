@@ -58,7 +58,6 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpLevel;
-import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgType;
@@ -4359,7 +4358,61 @@ public class DbUtil {
         }
         return grp;
     }
+   
+    public static Collection<AmpOrgGroup> searchForOrganisationGroupByType(Long orgType) {
+        Session session = null;
+        Collection col = null;
 
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select distinct org from "
+                + AmpOrgGroup.class.getName() + " org "
+                + " where org.orgType=:orgType";
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("orgType", orgType, Hibernate.LONG);
+            col = qry.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to search " + ex);
+        }
+        return col;
+    }
+    
+    public static Collection<AmpOrgGroup> searchForOrganisationGroup(String keyword, Long orgType) {
+        Session session = null;
+        Collection col = null;
+        keyword = keyword.toLowerCase();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select distinct org from "
+                + AmpOrgGroup.class.getName() + " org "
+                + " where (lower(org.orgGrpName) like '%" + keyword + "%') and org.orgType=:orgType";
+            Query qry = session.createQuery(queryString);
+            qry.setParameter("orgType", orgType, Hibernate.LONG);
+            col = qry.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to search " + ex);
+        }
+        return col;
+    }
+    public static Collection<AmpOrgGroup> searchForOrganisationGroup(String keyword) {
+        Session session = null;
+        Collection col = null;
+        keyword=keyword.toLowerCase();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select distinct org from "
+                + AmpOrgGroup.class.getName() + " org "
+                + " where lower(org.orgGrpName) like '%" + keyword + "%'";
+            Query qry = session.createQuery(queryString);
+            col = qry.list();
+        } catch (Exception ex) {
+            logger.debug("Unable to search " + ex);
+        }
+        return col;
+    }
+    
     public static Collection<AmpOrgGroup> getAllOrganisationGroup() {
         Session session = null;
         Query qry = null;

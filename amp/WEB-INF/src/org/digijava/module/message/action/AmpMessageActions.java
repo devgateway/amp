@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.mail.Address;
+import javax.mail.internet.InternetAddress;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,6 +19,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
+import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.DateConversion;
@@ -327,7 +330,10 @@ public class AmpMessageActions extends DispatchAction {
     	HttpSession session = request.getSession();
     	TeamMember teamMember = new TeamMember();        	  
     	 // Get the current member who has logged in from the session
-    	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);    	
+    	teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+    	//getting settings for message
+    	AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
+    	
     	AmpMessageForm messageForm=(AmpMessageForm)form;    	
     	AmpMessage message=null; 
     	String[] messageReceivers=messageForm.getReceiversIds();
@@ -403,28 +409,33 @@ public class AmpMessageActions extends DispatchAction {
 				statesMemberIds.add(mId.getMemberId());
 			}    			    			
     	}	
-		if(messageReceivers!=null && messageReceivers.length>0){
-			for (String receiver : messageReceivers) {	
+		if(messageReceivers!=null && messageReceivers.length>0){			
+			for (String receiver : messageReceivers) {				
 				if(receiver.startsWith("t")){//<--this means that receiver is team
 					List<TeamMember> teamMembers=(List<TeamMember>)TeamMemberUtil.getAllTeamMembers(new Long(receiver.substring(2)));
 					if(teamMembers!=null && teamMembers.size()>0){
 						for (TeamMember tm : teamMembers) {
 							if(! statesMemberIds.contains(tm.getMemberId())){
-								createMessageState(message,tm.getMemberId(),teamMember.getMemberName());
+								createMessageState(message,tm.getMemberId(),teamMember.getMemberName());								
 							}
 						}
 					}
+					
 				}else {//<--receiver is team member
 					if(! statesMemberIds.contains(new Long(receiver.substring(2)))){
 						Long memId=new Long(receiver.substring(2));
-						createMessageState(message,memId,teamMember.getMemberName());
+						createMessageState(message,memId,teamMember.getMemberName());						
 					}
-				}
-			}
+				}				
+			}	
+			
 		}
+		
     	//cleaning form values
     	setDefaultValues(messageForm);
 		return mapping.findForward("viewMyDesktop");	
+		
+		
 	}   
     
     
@@ -456,12 +467,12 @@ public class AmpMessageActions extends DispatchAction {
 		 form.setMsgStateId(null);
 		 form.setReceivers(null);
 		 form.setSender(null);
-		 form.setTabIndex(0);
+		 form.setTabIndex(1);
 		 form.setMsgType(0);
 		 form.setAlertType(0);
 		 form.setCalendarEventType(0);
 		 form.setApprovalType(0);
-		 form.setChildTab(null);
+		 form.setChildTab("inbox");
 		 form.setSetAsAlert(0);
 		 form.setForwardedMsg(null);
 		 form.setPage(null);
@@ -486,9 +497,9 @@ public class AmpMessageActions extends DispatchAction {
 			 form.setSender(AmpMessageUtil.getMessageState(stateId).getSender());
 			 //is alert or not
 			 if(message.getClassName().equals("a")){
-				 form.setSetAsAlert(2);
-			 }else {
 				 form.setSetAsAlert(1);
+			 }else {
+				 form.setSetAsAlert(0);
 			 }
 			 //getting forwarded message,if exists
 			 AmpMessage msg=AmpMessageUtil.getMessage(message.getForwardedMessageId());

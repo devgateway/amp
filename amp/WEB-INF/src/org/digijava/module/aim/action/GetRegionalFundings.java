@@ -138,7 +138,6 @@ public class GetRegionalFundings extends TilesAction {
 				rfForm.setTotUnDisbursed(totUnDisb);
 				rfForm.setTotUnExpended(totUnExp);
 				rfForm.setRegionalFundings(temp);
-				rfForm.setPerspective(tm.getAppSettings().getPerspective());
 			}
 			return null;
 

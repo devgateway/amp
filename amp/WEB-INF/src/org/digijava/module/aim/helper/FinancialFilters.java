@@ -3,7 +3,6 @@ package org.digijava.module.aim.helper;
 public class FinancialFilters {
 	private boolean calendarPresent;
 	private boolean currencyPresent;
-	private boolean perspectivePresent;
 	private boolean yearRangePresent;
 	private boolean goButtonPresent; 
 	
@@ -19,13 +18,6 @@ public class FinancialFilters {
 	 */
 	public boolean isCurrencyPresent() {
 		return currencyPresent;
-	}
-
-	/**
-	 * @return
-	 */
-	public boolean isPerspectivePresent() {
-		return perspectivePresent;
 	}
 
 	/**
@@ -47,13 +39,6 @@ public class FinancialFilters {
 	 */
 	public void setCurrencyPresent(boolean b) {
 		currencyPresent = b;
-	}
-
-	/**
-	 * @param b
-	 */
-	public void setPerspectivePresent(boolean b) {
-		perspectivePresent = b;
 	}
 
 	/**

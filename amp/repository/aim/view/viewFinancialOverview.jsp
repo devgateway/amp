@@ -101,10 +101,7 @@
 							<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 						</digi:link>|
 					</feature:display>
-                    
-                    <digi:link href="/viewYearlyDiscrepancy.do" name="urlDiscrepancy" styleClass="sub-nav2" title="${translation}" >
-					<digi:trn key="aim:discrepancy">DISCREPANCY</digi:trn>
-					</digi:link> |
+
 					<c:set var="translation">
 						<digi:trn key="aim:clickToViewAll">Click here to view All</digi:trn>
 					</c:set>

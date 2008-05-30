@@ -55,7 +55,6 @@ public class ViewYearlyComparisons extends TilesAction
 			FinancialFilters ff = CommonWorker.getFilters(teamMember.getTeamId(),"FP");
 			formBean.setCalendarPresent(ff.isCalendarPresent());
 			formBean.setCurrencyPresent(ff.isCurrencyPresent());
-			formBean.setPerspectivePresent(ff.isPerspectivePresent());
 			formBean.setYearRangePresent(ff.isYearRangePresent());
 			formBean.setGoButtonPresent(ff.isGoButtonPresent());
 			FilterParams fp = (FilterParams)session.getAttribute("filterParams");
@@ -84,8 +83,6 @@ public class ViewYearlyComparisons extends TilesAction
 				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
 				fp.setToYear(year+Constants.TO_YEAR_RANGE);
 			}
-			formBean.setPerspective(fp.getPerspective());
-			formBean.setPerpsectiveName(apps.getPerspective());
 			formBean.setCurrency(fp.getCurrencyCode());
 			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
 			formBean.setFromYear(fp.getFromYear());
@@ -93,24 +90,19 @@ public class ViewYearlyComparisons extends TilesAction
 			session.setAttribute("filterParams",fp);
 
 			formBean.setYears(YearUtil.getYears());
-			if ( formBean.getPerspective().equals("DI") )	{
-				Collection c  = YearlyDiscrepancyAllWorker.getDiscrepancy(fp);
-				formBean.setYearlyDiscrepanciesAll(c);
+
+			Collection c = YearlyComparisonsWorker.getYearlyComparisons(fp);
+			if ( c.size() > 0 )	{
+				AllTotals allTotals = YearlyComparisonsWorker.getAllTotals(c);
+				formBean.setTotalActualCommitment(allTotals.getTotalActualCommitment());
+				formBean.setTotalPlannedDisbursement(allTotals.getTotalPlannedDisbursement());
+				formBean.setTotalActualDisbursement(allTotals.getTotalActualDisbursement());
+				formBean.setTotalActualExpenditure(allTotals.getTotalActualExpenditure());
+                                    formBean.setTotalDisbOrder(allTotals.getTotalDisbOrder());
 			}
-			else	{
-				Collection c = YearlyComparisonsWorker.getYearlyComparisons(fp);
-				if ( c.size() > 0 )	{
-					AllTotals allTotals = YearlyComparisonsWorker.getAllTotals(c);
-					formBean.setTotalActualCommitment(allTotals.getTotalActualCommitment());
-					formBean.setTotalPlannedDisbursement(allTotals.getTotalPlannedDisbursement());
-					formBean.setTotalActualDisbursement(allTotals.getTotalActualDisbursement());
-					formBean.setTotalActualExpenditure(allTotals.getTotalActualExpenditure());
-                                        formBean.setTotalDisbOrder(allTotals.getTotalDisbOrder());
-				}
-				formBean.setYearlyComparisons(c);
-			}
+			formBean.setYearlyComparisons(c);
+			
 			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
-			formBean.setPerspectives(DbUtil.getAmpPerspective());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 		}

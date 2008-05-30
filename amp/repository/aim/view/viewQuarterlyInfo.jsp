@@ -379,13 +379,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
                      	<digi:trn key="aim:quarterlyExpenditures">Quarterly Expenditures</digi:trn>
 
 							</logic:equal>
-<logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
 
-							&gt;
-                                                        <digi:trn key="aim:${aimQuarterlyInfoForm.perpsectiveName}">
-                                                                <bean:write name="aimQuarterlyInfoForm" property="perpsectiveName"/></digi:trn>&nbsp;
-                                                            <digi:trn key="aim:perspective">Perspective</digi:trn>
-</logic:equal>
 						</SPAN>
 
 								</TD>
@@ -466,7 +460,6 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 											<TD vAlign="top" align="right">
 
-			                  			<logic:equal name="aimQuarterlyInfoForm" property="perspectivePresent" value="true">
 
 												<TABLE cellSpacing="2" cellPadding="0" vAlign="top" bgColor=#f4f4f2>
 
@@ -474,19 +467,10 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 														<TD>
 
-						                         	<STRONG>Perspective:</STRONG>
 
 														</TD>
 
 														<TD>
-
-															<html:select property="perspective" styleClass="dr-menu">
-
-																<html:optionsCollection name="aimQuarterlyInfoForm"
-
-																property="perspectives" value="code" label="name"/>
-
-															</html:select>
 
 														</TD>
 
@@ -494,7 +478,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 												</TABLE>
 
-												</logic:equal>
+
 
 											</TD>
 
@@ -652,7 +636,6 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 
 
-													<logic:notEqual name="aimQuarterlyInfoForm" property="perspective" value="DI">
 
 					                      	<TABLE width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding">
 
@@ -843,8 +826,6 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 														</logic:notEmpty>
 
 					                        </TABLE>
-
-					                        </logic:notEqual>
 
 												</TD></TR>
 

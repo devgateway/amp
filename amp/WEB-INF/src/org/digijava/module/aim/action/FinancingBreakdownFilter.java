@@ -52,7 +52,6 @@ public class FinancingBreakdownFilter extends TilesAction	{
 		FinancialFilters ff = CommonWorker.getFilters(teamMember.getTeamId(),"FP");
 		formBean.setCalendarPresent(ff.isCalendarPresent());
 		formBean.setCurrencyPresent(ff.isCurrencyPresent());
-		formBean.setPerspectivePresent(ff.isPerspectivePresent());
 		formBean.setYearRangePresent(ff.isYearRangePresent());
 		formBean.setGoButtonPresent(ff.isGoButtonPresent());
 		FilterParams fp = (FilterParams)session.getAttribute("filterParams");
@@ -76,13 +75,6 @@ public class FinancingBreakdownFilter extends TilesAction	{
 			fp.setFiscalCalId(apps.getFisCalId());
 		}
 
-		if ( formBean.getPerspective() != null )
-			fp.setPerspective(formBean.getPerspective());
-		else	{
-			String perspective = CommonWorker.getPerspective(apps.getPerspective());
-			fp.setPerspective(perspective);
-		}
-
 		if ( formBean.getFromYear()==0 || formBean.getToYear()==0 )	{
 			int year = new GregorianCalendar().get(Calendar.YEAR);
 			fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
@@ -93,7 +85,6 @@ public class FinancingBreakdownFilter extends TilesAction	{
 			fp.setFromYear(formBean.getFromYear());
 		}
 		session.setAttribute("filterParams",fp); 
-		formBean.setPerpsectiveName(DbUtil.getPerspective(fp.getPerspective()).getName());
 		Long id = new Long(formBean.getAmpActivityId());
 		Collection ampFundings = DbUtil.getAmpFunding(id);
 		Collection fb = FinancingBreakdownWorker.getFinancingBreakdownList(id,ampFundings,fp,false);
@@ -102,7 +93,6 @@ public class FinancingBreakdownFilter extends TilesAction	{
 		formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 		formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
-		formBean.setPerspectives(DbUtil.getAmpPerspective());
 		overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(fb,Constants.COMMITMENT,false);
 		formBean.setTotalCommitted(overallTotalCommitted);
 		overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(fb,Constants.DISBURSEMENT,false);

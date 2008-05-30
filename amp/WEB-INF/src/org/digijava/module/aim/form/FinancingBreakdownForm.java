@@ -144,11 +144,6 @@ public class FinancingBreakdownForm extends MainProjectDetailsForm
 	}
 
 
-
-	public String getPerpsectiveNameTrimmed() {
-		return super.getPerpsectiveName().replaceAll(" ","");
-	}
-
         public String getTotalDisbOrdered() {
                 return totalDisbOrdered;
         }

@@ -102,13 +102,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 													styleClass="comment" title="${translation}" >
 													<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
-													<digi:trn key="aim:actOverview">Overview</digi:trn><logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">&nbsp;&gt;&nbsp;
-
-
-													<digi:trn key="aim:${aimFinancingBreakdownForm.perpsectiveName}">
-														<bean:write name="aimFinancingBreakdownForm" property="perpsectiveName"/></digi:trn>&nbsp;
-										<digi:trn key="aim:perspective">Perspective</digi:trn>
-                                                                                                                </logic:equal>
+													<digi:trn key="aim:actOverview">Overview</digi:trn>
 												</SPAN>
 											</TD>
 											<TD align="right">&nbsp;
@@ -167,13 +161,6 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 									<TD vAlign="top" align="left" width="750">
 										<TABLE cellPadding=2 cellSpacing=0 vAlign="top" align="left" border=0>
 											<TR>
-												<logic:equal name="aimFinancingBreakdownForm" property="perspectivePresent" value="true">
-												<TD align="center">
-													<STRONG>
-														<digi:trn key="aim:perspective">Perspective</digi:trn>
-													</STRONG>
-												</TD>
-												</logic:equal>
 												<logic:equal name="aimFinancingBreakdownForm" property="currencyPresent" value="true">
 												<TD align="center">
 													<STRONG>
@@ -200,18 +187,6 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 												</TD>
 											</TR>
 											<TR>
-		                     		<logic:equal name="aimFinancingBreakdownForm" property="perspectivePresent" value="true">
-												<TD>
-													<html:select property="perspective" styleClass="dr-menu">
-														<logic:iterate id="persp" name="aimFinancingBreakdownForm" property="perspectives">
-															<bean:define id="code" name="persp" property="code" />
-															<bean:define id="name" name="persp" property="name" />
-															<option value="<%=code %>"  <logic:equal name="aimFinancingBreakdownForm" property="perspective" value="<%=(String)code%>">selected</logic:equal> ><digi:trn key="<%="aim:persp:"+code %>"><%=name %></digi:trn></option>
-														</logic:iterate>
-
-													</html:select>
-												</TD>
-											</logic:equal>
 			               			<logic:equal name="aimFinancingBreakdownForm" property="currencyPresent" value="true">
 												<TD>
                          					<html:select property="currency" styleClass="dr-menu">

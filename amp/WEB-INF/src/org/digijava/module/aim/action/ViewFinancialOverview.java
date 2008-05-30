@@ -65,10 +65,6 @@ public class ViewFinancialOverview extends TilesAction {
 			formBean.setCurrency(Constants.DEFAULT_CURRENCY);
 			//AMP-2212
 			formBean.setFiscalCalId(DbUtil.getGregorianCalendar().getAmpFiscalCalId());
-			if (teamMember != null) {
-				String str = teamMember.getAppSettings().getPerspective();
-				formBean.setPerspective(CommonWorker.getPerspective(str));
-			}
 			formBean.setFromYear(Constants.FROM_YEAR);
 			formBean.setToYear(Constants.TO_YEAR);
 

@@ -234,14 +234,6 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 								<digi:trn key="aim:monthlyAll">Monthly All</digi:trn>
 
 
-                                                                <logic:equal name="globalSettings" scope="application" property="perspectiveEnabled" value="true">
-&gt;
-								<digi:trn key="aim:${aimMonthlyInfoForm.perpsectiveName}">
-                                                                <bean:write name="aimMonthlyInfoForm" property="perpsectiveName"/></digi:trn>&nbsp;
-                                                            <digi:trn key="aim:perspective">Perspective</digi:trn>
-
-                                                             </logic:equal >
-
 
 						</SPAN>
 
@@ -301,8 +293,6 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 											<TD vAlign="top" align="right">
 
-	                              	<logic:equal name="aimMonthlyInfoForm" property="perspectivePresent" value="true">
-
 												<TABLE cellSpacing="2" cellPadding="0" vAlign="top" bgColor=#f4f4f2>
 
 													<TR>
@@ -315,21 +305,12 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 														<TD>
 
-															<html:select property="perspective" styleClass="dr-menu">
-
-																<html:optionsCollection name="aimMonthlyInfoForm"
-
-																property="perspectives" value="code" label="name"/>
-
-															</html:select>
-
 														</TD>
 
 													</TR>
 
 												</TABLE>
 
-												</logic:equal>
 
 											</TD>
 
@@ -517,9 +498,6 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 												<TR><TD>
 
-
-
-                          					<logic:notEqual name="aimMonthlyInfoForm" property="perspective" value="DI">
 
 				                          		<table width="100%"  border="0" cellpadding="4" cellspacing="1" class="box-border-nopadding">
 
@@ -808,7 +786,6 @@ type="org.digijava.module.aim.form.MonthlyInfoForm" method="post">
 
 		                       					</table>
 
-		                       				</logic:notEqual>
 
 												</TD></TR>
 

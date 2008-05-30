@@ -38,18 +38,13 @@ public class MainProjectDetailsForm extends ValidatorForm
 	private int flag;
 	private long ampFundingId ;
 	private String currency ;
-	private String perspective ;
-	private String perpsectiveName;
-	private String perpsectiveNameTrimmed;
 	private long fiscalCalId ;
 	private int fromYear ;
 	private int toYear ;
 	private Collection years ;
 	private Collection currencies;
-	private Collection perspectives;
 	private boolean calendarPresent;
 	private boolean currencyPresent;
-	private boolean perspectivePresent;
 	private boolean yearRangePresent;
 	private boolean goButtonPresent;
 	private boolean sessionExpired;
@@ -206,12 +201,6 @@ public class MainProjectDetailsForm extends ValidatorForm
 		return fromYear;
 	}
 
-	/**
-	 * @return
-	 */
-	public String getPerspective() {
-		return perspective;
-	}
 
 	/**
 	 * @return
@@ -246,13 +235,6 @@ public class MainProjectDetailsForm extends ValidatorForm
 	 */
 	public void setFromYear(int i) {
 		fromYear = i;
-	}
-
-	/**
-	 * @param string
-	 */
-	public void setPerspective(String string) {
-		perspective = string;
 	}
 
 	/**
@@ -292,7 +274,6 @@ public class MainProjectDetailsForm extends ValidatorForm
 			  FinancialFilters ff = CommonWorker.getFilters(teamMember.getTeamId(),"FP");
 			  setCalendarPresent(ff.isCalendarPresent());
 			  setCurrencyPresent(ff.isCurrencyPresent());
-			  setPerspectivePresent(ff.isPerspectivePresent());
 			  setYearRangePresent(ff.isYearRangePresent());
 			  setGoButtonPresent(ff.isGoButtonPresent());
 			  FilterParams fp = new FilterParams();
@@ -314,13 +295,6 @@ public class MainProjectDetailsForm extends ValidatorForm
 				  fp.setFiscalCalId(new Long( getFiscalCalId() ));
 			  else	{
 				  fp.setFiscalCalId(apps.getFisCalId());
-			  }
-
-			  if ( getPerspective() != null )
-				  fp.setPerspective(getPerspective());
-			  else	{
-				  String perspective = CommonWorker.getPerspective(apps.getPerspective());
-				  fp.setPerspective(perspective);
 			  }
 
 			  if ( getFromYear()==0 || getToYear()==0 )	{
@@ -354,13 +328,6 @@ public class MainProjectDetailsForm extends ValidatorForm
 	/**
 	 * @return
 	 */
-	public boolean isPerspectivePresent() {
-		return perspectivePresent;
-	}
-
-	/**
-	 * @return
-	 */
 	public boolean isYearRangePresent() {
 		return yearRangePresent;
 	}
@@ -377,13 +344,6 @@ public class MainProjectDetailsForm extends ValidatorForm
 	 */
 	public void setCurrencyPresent(boolean b) {
 		currencyPresent = b;
-	}
-
-	/**
-	 * @param b
-	 */
-	public void setPerspectivePresent(boolean b) {
-		perspectivePresent = b;
 	}
 
 	/**
@@ -458,34 +418,6 @@ public class MainProjectDetailsForm extends ValidatorForm
         this.type = type;
     }
 
-	/**
-	 * @return Returns the perspectives.
-	 */
-	public Collection getPerspectives() {
-		return perspectives;
-	}
-
-	/**
-	 * @param perspectives The perspectives to set.
-	 */
-	public void setPerspectives(Collection perspectives) {
-		this.perspectives = perspectives;
-	}
-
-	/**
-	 * @return Returns the perpsectiveName.
-	 */
-	public String getPerpsectiveName() {
-		return perpsectiveName;
-	}
-
-	/**
-	 * @param perpsectiveName The perpsectiveName to set.
-	 */
-	public void setPerpsectiveName(String perpsectiveName) {
-		this.perpsectiveName = perpsectiveName;
-	}
-
 	public String getPurpose() {
 		return purpose;
 	}
@@ -501,12 +433,5 @@ public class MainProjectDetailsForm extends ValidatorForm
 	public void setResults(String results) {
 		this.results = results;
 	}
-
-	public String getPerpsectiveNameTrimmed() {
-		return perpsectiveName.replaceAll(" ", "");
-	}
-
-	public void setPerpsectiveNameTrimmed(String perpsectiveNameTrimmed) {
-		this.perpsectiveNameTrimmed = perpsectiveNameTrimmed;
-	}
+	
 }

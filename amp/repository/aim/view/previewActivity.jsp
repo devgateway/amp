@@ -2313,6 +2313,26 @@ function collapseAll() {
 											<c:out value="${aimEditActivityForm.actAthEmail}"/>										</td>
 									</tr>
 									</field:display>
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+											<digi:trn key="aim:workspaceOfCreator">Worskpace of creator</digi:trn>										</td>
+										<td width="69%" bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.createdBy.ampTeam.accessType}"/>
+										</td>
+									</tr>
+									<tr>
+										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">
+											<digi:trn key="aim:computation">Computation</digi:trn>
+										</td>
+										<td width="69%" bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.createdBy.ampTeam.computation == 'true'}">
+												  <digi:trn key="aim:yes">Yes</digi:trn>
+											</c:if>
+											<c:if test="${aimEditActivityForm.createdBy.ampTeam.computation == 'false'}">
+												  <digi:trn key="aim:no">No</digi:trn>
+											</c:if>
+										</td>
+									</tr>
 									<field:display feature="Identification" name="Data Source">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap" bgcolor="#f4f4f2" class="t-name">

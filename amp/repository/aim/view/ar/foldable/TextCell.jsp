@@ -12,8 +12,10 @@
 	<div align="left">
 	<logic:present name="starFlag" scope="request">
 		<logic:equal name="starFlagLocal" value="true">*</logic:equal>
+		<bean:define id="starFlag" value="" scope="page" toScope="request" />
 	</logic:present>
 <bean:write name="textCell" property="shortTextVersion" filter="false"/>&nbsp;</div>
+
 
 <logic:notEqual name="caller" property="class.name" value="org.dgfoundation.amp.ar.cell.ListCell">
 <logic:equal name="textCell" property="hasLongVersion" value="true">

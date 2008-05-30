@@ -128,6 +128,7 @@ public class SelectTeam extends Action {
             tm.setEmail(member.getUser().getEmail());
             tm.setTeamAccessType(member.getAmpTeam().getAccessType());
             tm.setComputation(member.getAmpTeam().getComputation());
+            tm.setAddActivity(member.getAmpTeam().getAddActivity());
             if (DbUtil.isUserTranslator(member.getUser().getId()) == true) {
                 tm.setTranslator(true);
             } else {

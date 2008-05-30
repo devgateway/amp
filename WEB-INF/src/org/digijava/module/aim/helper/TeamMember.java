@@ -24,6 +24,8 @@ public class TeamMember {
 	
 	private Boolean computation;
 	
+	private Boolean addActivity;
+	
 	private boolean teamHead;
 
 	private boolean read; /* read permission */
@@ -250,5 +252,13 @@ public class TeamMember {
 
 	public void setComputation(Boolean computation) {
 		this.computation = computation;
+	}
+
+	public Boolean getAddActivity() {
+		return addActivity;
+	}
+
+	public void setAddActivity(Boolean addActivity) {
+		this.addActivity = addActivity;
 	}
 }

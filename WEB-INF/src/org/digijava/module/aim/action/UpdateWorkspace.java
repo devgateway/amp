@@ -27,7 +27,7 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 
 public class UpdateWorkspace extends Action {
 
-	private static Logger logger = Logger.getLogger(UpdateWorkspace.class);
+	private static Logger logger = Logger.getLogger(Copy_2_of_UpdateWorkspace.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
@@ -62,19 +62,19 @@ public class UpdateWorkspace extends Action {
             String tId1 = request.getParameter("tId");
             	
             //System.out.println("Am primit parametrul " + tId1 +" *****************************8");
-            logger.debug("event : " + event + " dest : " + dest);
+            logger.info("event : " + event + " dest : " + dest);
             ActionErrors errors = new ActionErrors();
-            if(!("Management".compareTo(uwForm.getWorkspaceType())==0))
-            if(uwForm.getComputation()!=null && uwForm.getOrganizations()==null){
-            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.updateWorkspace.noChildOrg"));
-            	saveErrors(request, errors);   
-            	return mapping.getInputForward();
-            }
+            if( "Team".compareTo(uwForm.getWorkspaceType()) ==0 )
+	            if( (uwForm.getComputation()!=null && uwForm.getComputation()==true)  && (uwForm.getOrganizations()==null || uwForm.getOrganizations().size()==0)){
+	            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.updateWorkspace.noChildOrg"));
+	            	saveErrors(request, errors);   
+	            	return mapping.getInputForward();
+	            }
             if( "Management".compareTo(uwForm.getWorkspaceType()) == 0 )
             	{
             		uwForm.setOrganizations(new ArrayList());
-            		uwForm.setComputation(false);
-            		uwForm.setAddActivity(false);
+            		uwForm.setComputation(null);
+            		uwForm.setAddActivity(null);
             	}
             if( "Team".compareTo(uwForm.getWorkspaceType()) == 0 )
             	uwForm.setChildWorkspaces(new ArrayList());

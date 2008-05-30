@@ -66,8 +66,11 @@
 			</TABLE>	
 					<br/><br/>
 					<c:if test="${not empty sessionScope.currentMember}">
+						<!-- 
 						<c:if test="${sessionScope.currentMember.teamType != 'DONOR'}">
 						<c:if test="${sessionScope.currentMember.teamAccessType != 'Management'}">
+						 -->
+						 <c:if test="${sessionScope.currentMember.addActivity == 'true'}">
 							<c:set var="trnClickToAddNewActivit">
 								<digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
 							</c:set>
@@ -87,7 +90,10 @@
 							
 							</div>
 						</c:if>
-					</c:if>
+						<!--
+							</c:if>
+							</c:if>
+						-->
 					</c:if>
 					<c:if test="${sessionScope.currentMember.teamHead == true}">
 							<br/>

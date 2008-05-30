@@ -208,9 +208,9 @@ public class FinancingBreakdownWorker
 				financingBreakdown.setDonor(donor);
 
 				AmpOrganisation ampOrg = ampFunding.getAmpDonorOrgId();
-				String goeId = DbUtil.getGoeId(ampActivityId);
-				financingBreakdown.setGoeId(goeId);
-				financingBreakdown.setOrganisation(ampOrg);
+				//String goeId = DbUtil.getGoeId(ampActivityId);
+				//financingBreakdown.setGoeId(goeId);
+				//financingBreakdown.setOrganisation(ampOrg);
 
 				financingBreakdown.setSignatureDate(DateConversion.
 						ConvertDateToString(ampFunding.getSignatureDate()));

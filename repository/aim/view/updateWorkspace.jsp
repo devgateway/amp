@@ -120,7 +120,8 @@ function chekingWorkspaceTypeAndCatValue(action){
 }
 
 function update(action) {
-	//alert("comput: "+document.aimUpdateWorkspaceForm.computation.checked);
+	//alert("comput: "+document.aimUpdateWorkspaceForm.computation.value);
+	//alert("addact: "+document.aimUpdateWorkspaceForm.addActivity.checked);
 	//alert("orgs: "+document.aimUpdateWorkspaceForm.organizations.value);
 	if(chekingWorkspaceTypeAndCatValue(action)==true){	
 		var event	= document.aimUpdateWorkspaceForm.actionEvent.value;
@@ -133,6 +134,7 @@ function update(action) {
 				return false;
 			}
 			else {
+			
 				document.aimUpdateWorkspaceForm.relatedTeamFlag.value = "no";
 				document.aimUpdateWorkspaceForm.addFlag.value = false;
 				<digi:context name="update" property="context/module/moduleinstance/updateWorkspace.do" />
@@ -212,7 +214,7 @@ function workspaceChangeType(){
 	if(document.aimUpdateWorkspaceForm.workspaceType.value == "Team"){
 		$("div[@id^='management_']").hide();
 		$("div[@id^='team_']").show('fast');
-		document.aimUpdateWorkspaceForm.addActivity.checked = true;
+		//document.aimUpdateWorkspaceForm.addActivity.checked = true;
 		if(document.aimUpdateWorkspaceForm.computation.checked == true)
 			$("div[@id^='computation_']").show('fast');
 		else $("div[@id^='computation_']").hide();
@@ -286,6 +288,8 @@ function cancel()
 <html:hidden property="actionEvent" />
 <html:hidden property="id" />
 <html:hidden property="mainAction" />
+
+<html:hidden property="stepInWizard" value="1" />
 
 <html:hidden property="relatedTeamFlag" />
 <html:hidden property="addFlag" />
@@ -646,12 +650,12 @@ function cancel()
 															<table>
 																<tr>
 																	<td>
-																		<html:checkbox property="addActivity">Add Activity</html:checkbox>
+																		<html:checkbox property="addActivity" value="true">Add Activity</html:checkbox>
 																	</td>
 																</tr>
 																<tr>
 																	<td>
-																		<html:checkbox property="computation" onchange="computationChange()">Computation</html:checkbox>
+																		<html:checkbox property="computation"  value="true" onchange="computationChange()">Computation</html:checkbox>
 																	</td>
 																</tr>
 															</table>

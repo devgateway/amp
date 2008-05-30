@@ -9,16 +9,18 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.validator.ValidatorForm;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.multistepwizard.MultiStepActionForm;
+import org.digijava.module.aim.multistepwizard.annotation.Checkbox;
 
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
-
-public class UpdateWorkspaceForm extends ValidatorForm {
-
+//public class UpdateWorkspaceForm extends ValidatorForm {
+public class UpdateWorkspaceForm extends MultiStepActionForm{
 	private Long selectedOrgId;
+	@Checkbox(step=1, resetValue="false")
 	private Boolean addActivity=null;
+	@Checkbox(step=1, resetValue="false")
 	private Boolean computation=null;
 	private Collection organizations;
 	private String id = null;
@@ -393,6 +395,7 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 	}
 	
 	public void reset(ActionMapping mapping,HttpServletRequest request) {
+		super.reset(mapping, request);
 		if (reset) {
 			id = null;
 			teamName = null;
